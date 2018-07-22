@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, glib, pkgconfig, python, scons, pythonPackages }:
+{ stdenv, fetchgit, glib, pkgconfig, python, scons }:
 
 stdenv.mkDerivation rec {
   name = "hammer-${version}";

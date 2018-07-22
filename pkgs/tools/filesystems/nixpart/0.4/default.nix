@@ -1,8 +1,6 @@
 { stdenv, fetchurl, python, buildPythonApplication
 # Propagated to blivet
 , useNixUdev ? true
-# No longer needed, but kept for backwards-compatibility with older NixOps.
-, udevSoMajor ? null
 # Propagated dependencies
 , pkgs, urlgrabber
 }:
@@ -18,13 +16,11 @@ let
 
   cryptsetup = import ./cryptsetup.nix {
     inherit stdenv fetchurl python;
-    inherit (pkgs) pkgconfig libgcrypt libuuid popt;
-    devicemapper = lvm2;
+    inherit (pkgs) pkgconfig libgcrypt libuuid popt lvm2;
   };
 
   dmraid = import ./dmraid.nix {
-    inherit stdenv fetchurl;
-    devicemapper = lvm2;
+    inherit stdenv fetchurl lvm2;
   };
 
   lvm2 = import ./lvm2.nix {
@@ -39,8 +35,7 @@ let
 
   parted = import ./parted.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) utillinux readline libuuid gettext check;
-    devicemapper = lvm2;
+    inherit (pkgs) utillinux readline libuuid gettext check lvm2;
   };
 
   pyblock = import ./pyblock.nix {

@@ -7,16 +7,6 @@ let
 
   cfg = config.services.disnix;
 
-  dysnomia = pkgs.dysnomia.override (origArgs: {
-    enableApacheWebApplication = config.services.httpd.enable;
-    enableAxis2WebService = config.services.tomcat.axis2.enable;
-    enableEjabberdDump = config.services.ejabberd.enable;
-    enableMySQLDatabase = config.services.mysql.enable;
-    enablePostgreSQLDatabase = config.services.postgresql.enable;
-    enableSubversionRepository = config.services.svnserve.enable;
-    enableTomcatWebApplication = config.services.tomcat.enable;
-    enableMongoDatabase = config.services.mongodb.enable;
-  });
 in
 
 {

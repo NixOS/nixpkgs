@@ -1,12 +1,10 @@
 { stdenv
 , fetch
-, fetchpatch
 , cmake
 , python
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , release_version
@@ -15,7 +13,6 @@
 , enableManpages ? false
 , enableSharedLibraries ? true
 , enableWasm ? true
-, darwin
 }:
 
 let

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gnum4 }:
+{ stdenv, fetchurl, pkgconfig, gnum4 }:
 let
   ver_maj = "2.10"; # odd major numbers are unstable
   ver_min = "0";

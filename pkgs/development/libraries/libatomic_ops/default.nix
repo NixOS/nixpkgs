@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, hostPlatform }:
+{ stdenv, fetchurl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   name = "libatomic_ops-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, libobjc, IOKit }:
+{ stdenv, buildGoPackage, fetchFromGitHub, libobjc, IOKit }:
 
 buildGoPackage rec {
   name = "go-ethereum-${version}";

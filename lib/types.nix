@@ -8,7 +8,7 @@ with lib.trivial;
 with lib.strings;
 let
 
-  inherit (lib.modules) mergeDefinitions filterOverrides;
+  inherit (lib.modules) mergeDefinitions;
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -309,7 +309,6 @@ rec {
               }
           else
             def;
-        listOnly = listOf elemType;
         attrOnly = attrsOf elemType;
       in mkOptionType rec {
         name = "loaOf";

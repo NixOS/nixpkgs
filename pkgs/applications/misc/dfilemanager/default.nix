@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, file, qtbase, qttools, qtx11extras, solid }:
+{ stdenv, fetchgit, cmake, file, qtbase, qttools, solid }:
 
 let
   version = "git-2016-01-10";

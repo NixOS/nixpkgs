@@ -1,4 +1,4 @@
-{ stdenv, autoconf, automake, pkgconfig, gettext, intltool, libtool, bison
+{ stdenv, autoconf, automake, pkgconfig, gettext, libtool, bison
 , flex, which, subversion, fetchsvn, makeWrapper, libftdi, libusb, readline
 , python3
 , svfSupport ? false

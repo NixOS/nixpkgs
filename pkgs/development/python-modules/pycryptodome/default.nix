@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, gmp }:
+{ stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   version = "3.6.2";

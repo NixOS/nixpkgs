@@ -1,5 +1,5 @@
 {lib, pkgs}:
-let inherit (lib) nv nvs; in
+let inherit (lib) nvs; in
 {
 
   # composableDerivation basically mixes these features:

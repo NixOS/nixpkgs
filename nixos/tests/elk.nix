@@ -11,7 +11,7 @@ let
     };
     nodes = {
       one =
-        { config, pkgs, ... }: {
+        { pkgs, ... }: {
             # Not giving the machine at least 2060MB results in elasticsearch failing with the following error:
             #
             #   OpenJDK 64-Bit Server VM warning:

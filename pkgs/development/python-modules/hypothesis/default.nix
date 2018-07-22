@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python
+{ lib, buildPythonPackage, fetchFromGitHub
 , isPy3k, attrs, coverage, enum34
-, doCheck ? true, pytest, pytest_xdist, flake8, flaky, mock
+, doCheck ? true, pytest, pytest_xdist, flaky, mock
 }:
 buildPythonPackage rec {
   # http://hypothesis.readthedocs.org/en/latest/packaging.html

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python }:
+{ stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
   name = "geos-3.6.2";

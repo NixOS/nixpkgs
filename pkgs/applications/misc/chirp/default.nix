@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libxml2Python, libxslt, makeWrapper
-, python, pyserial, pygtk }:
+, pyserial, pygtk }:
 
 stdenv.mkDerivation rec {
   name = "chirp-daily-${version}";

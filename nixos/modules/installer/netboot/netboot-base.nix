@@ -1,7 +1,7 @@
 # This module contains the basic configuration for building netboot
 # images
 
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 with lib;
 

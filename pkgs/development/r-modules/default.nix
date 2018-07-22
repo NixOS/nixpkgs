@@ -47,11 +47,11 @@ let
                                              "mirror://bioc/${biocVersion}/bioc/src/contrib/Archive/${name}_${version}.tar.gz" ];
   };
   deriveBiocAnn = mkDerive {
-    mkHomepage = {name, biocVersion}: "http://www.bioconductor.org/packages/${name}.html";
+    mkHomepage = {name}: "http://www.bioconductor.org/packages/${name}.html";
     mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveBiocExp = mkDerive {
-    mkHomepage = {name, biocVersion}: "http://www.bioconductor.org/packages/${name}.html";
+    mkHomepage = {name}: "http://www.bioconductor.org/packages/${name}.html";
     mkUrls = {name, version, biocVersion}: [ "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
   };
   deriveCran = mkDerive {

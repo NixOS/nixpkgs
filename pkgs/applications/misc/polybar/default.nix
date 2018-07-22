@@ -1,6 +1,6 @@
 { cairo, cmake, fetchgit, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
 , python2 , stdenv, xcbproto, xcbutil, xcbutilimage, xcbutilrenderutil
-, xcbutilwm, xcbutilxrm, fetchpatch, makeWrapper
+, xcbutilwm, xcbutilxrm, makeWrapper
 
 # optional packages-- override the variables ending in 'Support' to enable or
 # disable modules

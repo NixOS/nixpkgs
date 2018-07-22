@@ -4,7 +4,7 @@
 #
 
 { stdenv, lib, fetchurl,
-  python2, pkgconfig, yasm, harfbuzz, zlib,
+  python2, pkgconfig, yasm, zlib,
   autoconf, automake, libtool, m4, jansson,
   libass, libiconv, libsamplerate, fribidi, libxml2, bzip2,
   libogg, libopus, libtheora, libvorbis, libdvdcss, a52dec,

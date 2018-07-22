@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, file, gnome3, itstool, libxml2, intltool }:
+{ stdenv, fetchurl, pkgconfig, gnome3, itstool, libxml2, intltool }:
 
 stdenv.mkDerivation rec {
   name = "gnome-user-docs-${version}";

@@ -2,7 +2,7 @@ import ./make-test.nix {
   name = "prometheus";
 
   nodes = {
-    one = { config, pkgs, ... }: {
+    one = { ... }: {
       services.prometheus = {
         enable = true;
         scrapeConfigs = [{

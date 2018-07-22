@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, patchelf, makeWrapper
+{ stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
-, dbus_libs, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped, at-spi2-atk
+, dbus, gtk2, gtk3, gdk_pixbuf, gcc-unwrapped, at-spi2-atk
 , kerberos
 
 # command line arguments which are always set e.g "--disable-gpu"
@@ -52,7 +52,7 @@ let
     glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
     libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite libxcb
     alsaLib libXdamage libXtst libXrandr expat cups
-    dbus_libs gdk_pixbuf gcc-unwrapped.lib
+    dbus gdk_pixbuf gcc-unwrapped.lib
     systemd
     libexif
     liberation_ttf curl utillinux xdg_utils wget

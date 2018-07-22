@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, hostPlatform }:
+{ stdenv, lib, fetchurl }:
 rec {
 
   luajit = luajit_2_1;

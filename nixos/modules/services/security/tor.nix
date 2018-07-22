@@ -578,7 +578,7 @@ in
             ];
           }
         '';
-        type = types.loaOf (types.submodule ({name, config, ...}: {
+        type = types.loaOf (types.submodule ({name, ...}: {
           options = {
 
              name = mkOption {
@@ -638,7 +638,7 @@ in
              authorizeClient = mkOption {
                default = null;
                description = "If configured, the hidden service is accessible for authorized clients only.";
-               type = types.nullOr (types.submodule ({config, ...}: {
+               type = types.nullOr (types.submodule ({...}: {
 
                  options = {
 

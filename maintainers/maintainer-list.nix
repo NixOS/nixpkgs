@@ -4420,6 +4420,11 @@
     email = "zef@zef.me";
     name = "Zef Hemel";
   };
+  zgrannan = {
+    email = "zgrannan@gmail.com";
+    github = "zgrannan";
+    name = "Zack Grannan";
+  };
   zimbatm = {
     email = "zimbatm@zimbatm.com";
     github = "zimbatm";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, python3Packages, zbar, fetchpatch }:
+{ stdenv, fetchurl, python3, python3Packages, zbar }:
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";

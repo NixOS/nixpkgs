@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, bash, jre8 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jre8 }:
 
 stdenv.mkDerivation rec {
   name = "gpsprune-${version}";

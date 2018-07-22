@@ -27,7 +27,7 @@ in stdenv.mkDerivation (args // {
 
   buildInputs =
     buildInputs ++
-    optional stdenv.isLinux glibcLocales ++
+    optional (stdenv.hostPlatform.libc == "glibc") glibcLocales ++
     [ ghc pkgconfig stack ];
 
   STACK_PLATFORM_VARIANT="nix";

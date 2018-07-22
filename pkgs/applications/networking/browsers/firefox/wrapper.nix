@@ -8,7 +8,7 @@
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , esteidfirefoxplugin
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration
-, libudev
+, udev
 , kerberos
 }:
 
@@ -66,7 +66,7 @@ let
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
           ++ extraNativeMessagingHosts
         );
-      libs = [ libudev ]
+      libs =   lib.optional stdenv.isLinux udev
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
             ++ lib.optionals (cfg.enableQuakeLive or false)

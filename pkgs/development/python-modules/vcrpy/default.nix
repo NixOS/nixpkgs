@@ -7,7 +7,6 @@
 , contextlib2
 , wrapt
 , pytest
-, httpbin
 , pytest-httpbin
 , yarl
 , pythonOlder

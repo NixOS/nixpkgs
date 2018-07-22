@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, pkgconfig, bash
+{ stdenv, intltool, fetchurl, pkgconfig
 , itstool, libxml2, libxslt, gnome3 }:
 
 stdenv.mkDerivation rec {

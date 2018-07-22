@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ pythonPackages, fetchFromGitHub }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "dosage";

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, nim, htslib, patchelf, pcre}:
+{stdenv, fetchFromGitHub, nim, htslib, pcre}:
 
 let
   hts-nim = fetchFromGitHub {

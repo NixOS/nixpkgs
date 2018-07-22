@@ -1,4 +1,4 @@
-{ callPackage, stdenv }:
+{ callPackage }:
 
 let
   mkScons = args: callPackage (import ./common.nix args) { };

@@ -19,8 +19,6 @@ let
   libStr = lib.strings;
   libAttr = lib.attrsets;
 
-  flipMapAttrs = flip libAttr.mapAttrs;
-
   inherit (lib) isFunction;
 in
 

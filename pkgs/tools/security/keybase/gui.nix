@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildFHSUserEnv, writeTextFile, alsaLib, atk, cairo, cups
+{ stdenv, fetchurl, alsaLib, atk, cairo, cups
 , dbus, expat, fontconfig, freetype, gcc, gdk_pixbuf, glib, gnome2, gtk3
-, libnotify, nspr, nss, pango, systemd, xorg, utillinuxMinimal }:
+, libnotify, nspr, nss, pango, systemd, xorg }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
@@ -70,10 +70,9 @@ stdenv.mkDerivation rec {
       checkFailed
     fi
 
-    ${utillinuxMinimal}/bin/mountpoint /keybase &>/dev/null
-    if [ "\$?" -ne "0" ]; then
-      echo "Keybase is not mounted to /keybase." >&2
-      echo "You might need to run: kbfsfuse /keybase" >&2
+    if [ -z "\$(keybase status | grep kbfsfuse)" ]; then
+      echo "Could not find kbfsfuse client in keybase status." >&2
+      echo "You might need to run: kbfsfuse" >&2
       checkFailed
     fi
 

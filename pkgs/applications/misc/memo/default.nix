@@ -1,4 +1,4 @@
-{ fetchFromGitHub, ag, tree, man, stdenv, 
+{ fetchFromGitHub, silver-searcher, tree, man, stdenv,
   pandocSupport ? true, pandoc ? null
   , ... }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -p $out/{bin,share/man/man1,share/bash-completion/completions}
     substituteInPlace memo \
-      --replace "ack_cmd=ack"       "ack_cmd=${ag}/bin/ag" \
+      --replace "ack_cmd=ack"       "ack_cmd=${silver-searcher}/bin/ag" \
       --replace "tree_cmd=tree"     "tree_cmd=${tree}/bin/tree" \
       --replace "man_cmd=man"       "man_cmd=${man}/bin/man" \
       --replace "pandoc_cmd=pandoc" "${pandocReplacement}"

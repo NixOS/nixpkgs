@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, libxkbcommon, pango, which, git
-, cairo, glib, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
+, cairo, libxcb, xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification
 , bison, flex, librsvg, check
 }:
 

@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchurl, copyPathsToStore
-, hostPlatform
+{ stdenv, fetchurl
 , pkgconfig, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
@@ -10,7 +9,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optional optionalString;
 
 in stdenv.mkDerivation rec {
   name = "freetype-${version}";

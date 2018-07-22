@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, boost, gmp, procps, fetchpatch, patchutils }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, openssl, boost, gmp, procps }:
 
 let
   rev = "9e6b19ff15bc19fba5da1707ba18e7f160e5ed07";

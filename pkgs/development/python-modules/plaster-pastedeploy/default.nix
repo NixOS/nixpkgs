@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, python
+{ buildPythonPackage, fetchPypi
 , plaster, PasteDeploy
 , pytest, pytestcov
 }:

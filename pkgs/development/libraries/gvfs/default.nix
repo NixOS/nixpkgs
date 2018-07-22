@@ -1,4 +1,4 @@
-{ stdenv, meson, ninja, fetchurl, pkgconfig, gettext, gnome3
+{ stdenv, fetchurl, pkgconfig, gettext, gnome3
 , glib, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp

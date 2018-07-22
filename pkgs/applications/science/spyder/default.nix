@@ -1,7 +1,7 @@
-{ stdenv, fetchPypi, unzip, buildPythonApplication, makeDesktopItem
+{ stdenv, fetchPypi, buildPythonApplication, makeDesktopItem
 # mandatory
 , numpydoc, qtconsole, qtawesome, jedi, pycodestyle, psutil
-, pyflakes, rope, sphinx, nbconvert, mccabe, pyopengl, cloudpickle
+, pyflakes, rope, nbconvert, mccabe, pyopengl, cloudpickle
 # optional
 , numpy ? null, scipy ? null, matplotlib ? null
 # optional

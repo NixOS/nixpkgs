@@ -11,8 +11,7 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  inherit (stdenv.lib) concatStringsSep makeBinPath makeLibraryPath
-    makeSearchPath optional optionalString;
+  inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
   version = "2.2.128200.0702";
   srcs = {

@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, lib
-, unzip, cmake, kodiPlain, steam, libcec_platform, tinyxml
-, libusb, pcre-cpp, jsoncpp, libhdhomerun }:
+{ stdenv, fetchFromGitHub
+, cmake, kodiPlain, libcec_platform, tinyxml }:
 
 rec {
 

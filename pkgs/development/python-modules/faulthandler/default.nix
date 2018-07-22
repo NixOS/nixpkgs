@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, fetchpatch }:
+{ stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "faulthandler";

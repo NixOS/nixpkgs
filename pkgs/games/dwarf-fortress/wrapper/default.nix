@@ -22,8 +22,6 @@ let
     then builtins.getAttr theme themes
     else theme;
 
-  twbtOnlyWithDFHack = assert (enableDFHack || !enableTWBT); true;
-
   unBool = b: if b then "YES" else "NO";
 
   # These are in inverse order for first packages to override the next ones.

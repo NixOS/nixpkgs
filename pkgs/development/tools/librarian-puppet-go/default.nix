@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
   name = "librarian-puppet-go-${version}";

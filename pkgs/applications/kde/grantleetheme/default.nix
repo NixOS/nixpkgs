@@ -1,7 +1,7 @@
 {
   mkDerivation, copyPathsToStore, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
-  grantlee5, ki18n, kiconthemes, knewstuff, kservice, kxmlgui, qtbase,
+  grantlee, ki18n, kiconthemes, knewstuff, kservice, kxmlgui, qtbase,
 }:
 
 mkDerivation {
@@ -14,7 +14,7 @@ mkDerivation {
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    grantlee5 ki18n kiconthemes knewstuff kservice kxmlgui qtbase
+    grantlee ki18n kiconthemes knewstuff kservice kxmlgui qtbase
   ];
-  propagatedBuildInputs = [ grantlee5 kiconthemes knewstuff ];
+  propagatedBuildInputs = [ grantlee kiconthemes knewstuff ];
 }

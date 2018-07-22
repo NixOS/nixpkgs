@@ -51,9 +51,6 @@ in {
     # Where the communication sockets live
     runDir = "/var/run/openvswitch";
 
-    # Where the config database live (can't be in nix-store)
-    stateDir = "/var/db/openvswitch";
-
     # The path to the an initialized version of the database
     db = pkgs.stdenv.mkDerivation {
       name = "vswitch.db";

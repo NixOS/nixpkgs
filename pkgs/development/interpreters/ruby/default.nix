@@ -32,8 +32,6 @@ let
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
-    isRuby20 = ver.majMin == "2.0";
-    isRuby21 = ver.majMin == "2.1";
     isRuby25 = ver.majMin == "2.5";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (

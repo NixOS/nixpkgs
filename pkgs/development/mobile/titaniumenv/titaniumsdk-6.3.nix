@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, makeWrapper, python, jdk}:
+{stdenv, fetchurl, unzip, makeWrapper}:
 
 stdenv.mkDerivation {
   name = "mobilesdk-6.3.1.GA";

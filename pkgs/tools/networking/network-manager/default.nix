@@ -2,7 +2,7 @@
 , systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables
 , libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, iputils, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
+, ethtool, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
 , python3Packages, docbook_xsl, openconnect, curl, autoreconfHook }:
 
 let

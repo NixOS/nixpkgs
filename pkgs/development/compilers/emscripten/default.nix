@@ -1,5 +1,5 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, pkgs
-, jre, binaryen, enableWasm ? true ,  python2Packages, cmake
+{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
+, jre, binaryen, enableWasm ? true ,  cmake
 }:
 
 let

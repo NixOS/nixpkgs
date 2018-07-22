@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , python
 , glibcLocales
 , pkgconfig

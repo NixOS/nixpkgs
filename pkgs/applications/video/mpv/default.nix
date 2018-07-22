@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, makeWrapper
+{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
@@ -38,9 +38,6 @@
 , vapoursynthSupport ? false, vapoursynth   ? null
 , archiveSupport     ? false, libarchive    ? null
 , jackaudioSupport   ? false, libjack2      ? null
-
-# scripts you want to be loaded by default
-, scripts ? []
 }:
 
 with stdenv.lib;
@@ -180,7 +177,6 @@ in stdenv.mkDerivation rec {
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
     # Ensure youtube-dl is available in $PATH for MPV
     wrapProgram $out/bin/mpv \
-      --add-flags "--scripts=${concatStringsSep "," scripts}" \
       --prefix LUA_PATH : "${luaPath}" \
       --prefix LUA_CPATH : "${luaCPath}" \
   '' + optionalString youtubeSupport ''

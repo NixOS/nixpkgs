@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, libevent, openssl
+{ stdenv, fetchurl, libevent, openssl
 , bind8Stats       ? false
 , checking         ? false
 , ipv6             ? true

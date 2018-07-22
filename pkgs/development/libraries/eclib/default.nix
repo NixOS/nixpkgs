@@ -2,8 +2,6 @@
 , fetchFromGitHub
 , fetchpatch
 , autoreconfHook
-, libtool
-, gettext
 , pari
 , ntl
 , gmp

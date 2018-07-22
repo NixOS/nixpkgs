@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qmake, qtbase, qtsvg, pkgconfig, poppler_qt5, djvulibre, libspectre, cups
+{stdenv, fetchurl, qmake, qtbase, qtsvg, pkgconfig, poppler, djvulibre, libspectre, cups
 , file, ghostscript
 }:
 let
@@ -12,7 +12,7 @@ let
   };
   nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [
-    qtbase qtsvg poppler_qt5 djvulibre libspectre cups file ghostscript
+    qtbase qtsvg poppler djvulibre libspectre cups file ghostscript
   ];
 in
 stdenv.mkDerivation {

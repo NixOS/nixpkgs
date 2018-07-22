@@ -1,10 +1,9 @@
-{ config, pkgs, lib, mono, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
 let
   cfg = config.services.emby;
-  emby = pkgs.emby;
 in
 {
   options = {

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch
+{ stdenv, lib, fetchurl
 , zlib, xz, python2, findXMLCatalogs, libiconv
 , buildPlatform, hostPlatform
 , pythonSupport ? buildPlatform == hostPlatform
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
     homepage = http://xmlsoft.org/;
     description = "An XML parsing library for C";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.eelco ];
   };
 }

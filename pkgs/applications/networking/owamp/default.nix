@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchFromGitHub
+{stdenv, fetchFromGitHub
 , autoconf, automake, mandoc }:
 
 stdenv.mkDerivation rec {

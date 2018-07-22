@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, bash, which, vorbis-tools, id3v2, eyeD3
-, lame, flac, eject, mkcue, glyr
-, perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
+{ stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
+, lame, flac, glyr
+, perl, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
 
 let version = "2.8.1";
@@ -35,7 +35,7 @@ in
 
     buildInputs = [ makeWrapper ];
 
-    propagatedBuildInputs = [ perl DigestSHA MusicBrainz MusicBrainzDiscID ];
+    propagatedBuildInputs = [ perl MusicBrainz MusicBrainzDiscID ];
 
     installFlags = [ "sysconfdir=$(out)/etc" ];
 

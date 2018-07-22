@@ -10,7 +10,6 @@ let
     let
       pkgName = drv: (builtins.parseDrvName drv.name).name;
       ysNames = map pkgName ys;
-      res = (filter (x: !(builtins.elem (pkgName x) ysNames)) xs);
     in
       filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
 

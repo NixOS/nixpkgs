@@ -442,7 +442,7 @@ self: super: builtins.intersectAttrs super {
     then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
     else dontCheck super.fsnotify;
 
-  hidapi = addExtraLibrary super.hidapi pkgs.libudev;
+  hidapi = addExtraLibrary super.hidapi pkgs.udev;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
 
@@ -494,7 +494,7 @@ self: super: builtins.intersectAttrs super {
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
-  manifolds = super.manifolds.override { spatial-rotations = dontCheck self.spatial-rotations; };
+  spatial-rotations = dontCheck super.spatial-rotations;
 
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];

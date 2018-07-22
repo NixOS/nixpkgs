@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchFromGitHub, docutils, meson, ninja, pkgconfig
+{ stdenv, fetchFromGitHub, docutils, meson, ninja, pkgconfig
 , dbus, glib, linuxHeaders, systemd }:
 
 stdenv.mkDerivation rec {

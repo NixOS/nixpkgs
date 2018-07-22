@@ -676,12 +676,12 @@
   ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/hitch/default.nix
+  ./services/web-servers/hydron.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/cgit.nix
   ./services/web-servers/lighttpd/collectd.nix
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
-  ./services/web-servers/lighttpd/inginious.nix
   ./services/web-servers/meguca.nix
   ./services/web-servers/mighttpd2.nix
   ./services/web-servers/minio.nix

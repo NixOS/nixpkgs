@@ -1,4 +1,4 @@
-{ config, pkgs, lib, nodes, ... }:
+{ config, pkgs, lib, ... }:
 with lib;
 let
   cfg = config.services.zerobin;

@@ -1,4 +1,4 @@
-{ stdenv, lib, vscode-utils
+{ lib, vscode-utils
 
 , pythonUseFixed ? false, python  # When `true`, the python default setting will be fixed to specified.
                                   # Use version from `PATH` for default setting otherwise.

@@ -36,9 +36,6 @@ let
     })}
   '';
 
-  skipAttrs = attrs: map (filterAttrs (k: v: k != "enable"))
-    (filter (v: !(hasAttr "enable" v) || v.enable) attrs);
-
   infraContainer = pkgs.dockerTools.buildImage {
     name = "pause";
     tag = "latest";
@@ -1116,6 +1113,7 @@ in {
         wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
         environment.ADDON_PATH = "/etc/kubernetes/addons/";
+        path = [ pkgs.gawk ];
         serviceConfig = {
           Slice = "kubernetes.slice";
           ExecStart = "${cfg.package}/bin/kube-addons";

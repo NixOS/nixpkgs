@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2, desktop-file-utils, wrapGAppsHook
-, gtk, gnome3, gnome-autoar, glib, dbus-glib, shared-mime-info, libnotify, libexif
+, gtk, gnome3, gnome-autoar, dbus-glib, shared-mime-info, libnotify, libexif
 , exempi, librsvg, tracker, tracker-miners, gnome-desktop, gexiv2, libselinux, gdk_pixbuf }:
 
 let

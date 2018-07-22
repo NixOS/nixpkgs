@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libmikmod, ncurses, alsaLib }:
+{ stdenv, fetchurl, libmikmod, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "mikmod-3.2.8";

@@ -1,4 +1,4 @@
-{ zsh, stdenv, callPackage, buildFHSUserEnv, undaemonize }:
+{ callPackage, buildFHSUserEnv, undaemonize }:
 
 let
   houdini-runtime = callPackage ./runtime.nix { };

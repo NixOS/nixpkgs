@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, ucl, zlib, perl }:
+{ stdenv, fetchurl, ucl, zlib, perl }:
 
 stdenv.mkDerivation rec {
   name = "upx-${version}";

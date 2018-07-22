@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, lib
-, pkgconfig, intltool, autoreconfHook, substituteAll
+{ stdenv, fetchurl, lib
+, pkgconfig, intltool, autoreconfHook
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, valgrind-light, python2

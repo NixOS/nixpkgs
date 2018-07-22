@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, sane-backends, qtbase, qtsvg, libXext, libX11, libXdmcp, libXau, libxcb, autoPatchelfHook }:
+{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, autoPatchelfHook }:
 let
   version = "4.3.89";
 in stdenv.mkDerivation {

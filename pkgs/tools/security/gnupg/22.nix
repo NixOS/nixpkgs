@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba
 , libiconv, npth, gettext, texinfo, pcsclite, sqlite
 
 # Each of the dependencies below are optional.

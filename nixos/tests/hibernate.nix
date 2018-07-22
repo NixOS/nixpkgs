@@ -16,7 +16,7 @@ import ./make-test.nix (pkgs: {
       systemd.services.listener.serviceConfig.ExecStart = "${pkgs.netcat}/bin/nc -l 4444 -k";
     };
 
-    probe = { config, lib, pkgs, ...}: {
+    probe = { pkgs, ...}: {
       environment.systemPackages = [ pkgs.netcat ];
     };
   };

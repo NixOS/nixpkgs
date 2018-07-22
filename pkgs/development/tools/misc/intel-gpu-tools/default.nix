@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libdrm, libpciaccess, cairo, dri2proto, udev
 , libX11, libXext, libXv, libXrandr, glib, bison, libunwind, python3, kmod
-, procps, autoreconfHook, utilmacros, gnome2 }:
+, procps, utilmacros, gnome2 }:
 
 stdenv.mkDerivation rec {
   name = "intel-gpu-tools-1.22";

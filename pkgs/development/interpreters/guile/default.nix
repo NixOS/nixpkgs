@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform
 , fetchurl, makeWrapper, gawk, pkgconfig
 , libffi, libtool, readline, gmp, boehmgc, libunistring
-, coverageAnalysis ? null, gnu ? null
+, coverageAnalysis ? null
 }:
 
 # Do either a coverage analysis build or a standard build.

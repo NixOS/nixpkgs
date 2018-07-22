@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchurl, fetchFromGitHub, buildEnv
+{ stdenv, lib, pkgs, fetchurl, buildEnv
 , coreutils, gnused, getopt, git, tree, gnupg, which, procps, qrencode
 , makeWrapper
 

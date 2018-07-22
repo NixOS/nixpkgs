@@ -3,9 +3,9 @@
 mkXfceDerivation rec {
   category = "xfce";
   pname = "libxfce4util";
-  version = "4.13.1";
+  version = "4.13.2";
 
-  sha256 = "001ls90an2pi9l04g3r6syfa4lhyvjymp0r9djxrkc2q493mcv3d";
+  sha256 = "0sb6pzhmh0qzfdhixj1ard56zi68318k86z3a1h3f2fhqy7gyf98";
 
   buildInputs = [ gobjectIntrospection ];
 

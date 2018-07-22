@@ -1,12 +1,5 @@
 { stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK }:
 
-let
-  lib_suffix =
-  if stdenv.system == "x86_64-linux" then
-    "64"
-  else
-    "";
-in
 stdenv.mkDerivation rec {
   name = "tqsl-${version}";
   version = "2.3.1";

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper, gettext, git }:
+{ stdenv, fetchFromGitHub, pythonPackages, gettext, git }:
 
 let
-  inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify python mock;
+  inherit (pythonPackages) buildPythonApplication pyqt5 sip pyinotify;
 in buildPythonApplication rec {
   name = "git-cola-${version}";
   version = "3.1";

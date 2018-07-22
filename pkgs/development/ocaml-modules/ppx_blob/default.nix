@@ -1,15 +1,26 @@
-{ stdenv, buildOcaml, fetchurl, ppx_tools }:
+{ stdenv, fetchurl, ocaml, findlib, jbuilder, alcotest
+, ocaml-migrate-parsetree
+}:
 
-buildOcaml rec {
-  name = "ppx_blob";
-  version = "0.2";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-ppx_blob-${version}";
+  version = "0.4.0";
 
   src = fetchurl {
-    url = "https://github.com/johnwhitington/ppx_blob/archive/v${version}.tar.gz";
-    sha256 = "0kvqfm47f4xbgz0cl7ayz29myyb24xskm35svqrgakjq12nkpsss";
+    url = "https://github.com/johnwhitington/ppx_blob/releases/download/${version}/ppx_blob-${version}.tbz";
+    sha256 = "1xmslk1mwdzhy1bydgsjlcb7h544c39hvxa8lywp8w72gaggjl16";
   };
 
-  buildInputs = [ ppx_tools ];
+  unpackCmd = "tar xjf $curSrc";
+
+  buildInputs = [ ocaml findlib jbuilder alcotest ocaml-migrate-parsetree ];
+
+  buildPhase = "dune build -p ppx_blob";
+
+  doCheck = true;
+  checkPhase = "dune runtest -p ppx_blob";
+
+  inherit (jbuilder) installPhase;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/johnwhitington/ppx_blob;

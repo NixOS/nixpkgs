@@ -1,6 +1,5 @@
-{ lowPrio, newScope, stdenv, targetPlatform, cmake, libstdcxxHook
+{ lowPrio, newScope, stdenv, cmake, libstdcxxHook
 , libxml2, python2, isl, fetchurl, overrideCC, wrapCCWith
-, darwin
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:

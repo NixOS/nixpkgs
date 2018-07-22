@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit }:
+{ stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "mop-${version}";

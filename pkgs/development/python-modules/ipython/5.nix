@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 # Build dependencies
 , glibcLocales
 # Test dependencies
@@ -13,7 +12,6 @@
 , mock
 # Runtime dependencies
 , backports_shutil_get_terminal_size
-, jedi
 , decorator
 , pathlib2
 , pickleshare

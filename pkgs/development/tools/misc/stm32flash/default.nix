@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "stm32flash-0.5";

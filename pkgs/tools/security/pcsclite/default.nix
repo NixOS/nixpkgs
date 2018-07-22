@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl, python2
+{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python2
 , IOKit ? null }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig perl python2 ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ udev dbus_libs ]
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
              ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {

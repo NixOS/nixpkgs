@@ -5,7 +5,7 @@
 , bootPkgs, hscolour
 , coreutils, fetchpatch, fetchurl, perl, sphinx
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
 , useLLVM ? !targetPlatform.isx86
 , # LLVM is conceptually a run-time-only depedendency, but for

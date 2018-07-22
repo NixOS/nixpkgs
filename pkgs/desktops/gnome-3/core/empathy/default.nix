@@ -1,12 +1,12 @@
 { stdenv, intltool, fetchurl, webkitgtk, pkgconfig, gtk3, glib
 , file, librsvg, gnome3, gdk_pixbuf
-, dbus-glib, dbus_libs, telepathy-glib, telepathy-farstream
+, telepathy-glib, telepathy-farstream
 , clutter-gtk, clutter-gst, gst_all_1, cogl, gnome-online-accounts
 , gcr, libsecret, folks, libpulseaudio, telepathy-mission-control
 , telepathy-logger, libnotify, clutter, libsoup, gnutls
 , evolution-data-server, yelp-xsl
 , libcanberra-gtk3, p11-kit, farstream, libtool, shared-mime-info
-, bash, wrapGAppsHook, itstool, libxml2, libxslt, icu, libgee
+, wrapGAppsHook, itstool, libxml2, libxslt, icu, libgee
 , isocodes, enchant, libchamplain, geoclue2, geocode-glib, cheese, libgudev }:
 
 stdenv.mkDerivation rec {

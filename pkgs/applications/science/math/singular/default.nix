@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, bison, perl, autoconf, ncurses, readline, coreutils, pkgconfig
+{ stdenv, fetchurl, gmp, bison, perl, ncurses, readline, coreutils, pkgconfig
 , autoreconfHook
 , file
 , flint

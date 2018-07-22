@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 let
-  common = { versiona, sha256 } @ args: stdenv.mkDerivation (rec {
+  common = { versiona, sha256 }: stdenv.mkDerivation (rec {
 
     name= "owncloud-${version}";
     version= versiona;

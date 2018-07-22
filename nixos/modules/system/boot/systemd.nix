@@ -188,14 +188,12 @@ let
       "timers.target"
     ];
 
-  boolToString = value: if value then "yes" else "no";
-
   makeJobScript = name: text:
     let mkScriptName =  s: (replaceChars [ "\\" ] [ "-" ] (shellEscape s) );
         x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${mkScriptName name}"; inherit text; };
     in "${x}/bin/${mkScriptName name}";
 
-  unitConfig = { name, config, ... }: {
+  unitConfig = { config, ... }: {
     config = {
       unitConfig =
         optionalAttrs (config.requires != [])
@@ -277,7 +275,7 @@ let
       ];
   };
 
-  mountConfig = { name, config, ... }: {
+  mountConfig = { config, ... }: {
     config = {
       mountConfig =
         { What = config.what;
@@ -290,7 +288,7 @@ let
     };
   };
 
-  automountConfig = { name, config, ... }: {
+  automountConfig = { config, ... }: {
     config = {
       automountConfig =
         { Where = config.where;
@@ -515,7 +513,7 @@ in
     };
 
     systemd.globalEnvironment = mkOption {
-      type = with types; attrsOf (nullOr (either str package));
+      type = with types; attrsOf (nullOr (either str (either path package)));
       default = {};
       example = { TZ = "CET"; };
       description = ''

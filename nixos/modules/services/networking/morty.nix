@@ -6,8 +6,6 @@ let
 
   cfg = config.services.morty;
 
-  configFile = cfg.configFile;
-
 in
 
 {

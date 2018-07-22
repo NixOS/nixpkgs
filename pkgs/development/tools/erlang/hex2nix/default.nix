@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildRebar3, buildHex,
+{ fetchFromGitHub, buildRebar3,
 
   # Erlang dependencies:
   ibrowse_4_2_2,

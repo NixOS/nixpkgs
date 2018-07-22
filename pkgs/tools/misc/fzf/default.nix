@@ -1,4 +1,4 @@
-{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub, writeText }:
+{ stdenv, ncurses, buildGoPackage, fetchFromGitHub, writeText }:
 
 buildGoPackage rec {
   name = "fzf-${version}";

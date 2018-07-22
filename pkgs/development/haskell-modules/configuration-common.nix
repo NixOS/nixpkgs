@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0q9z5q7vrcqa831wni972kchcdivqp55x1z2fgmdp8jfq4pidvyb";
+      sha256 = "1l6xgvn3l0kkly5jvg57msx09bf1jwdff7m61w8yf2pxsrh5ybxl";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -244,19 +244,21 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # https://github.com/jwiegley/hnix/issues/98 - tied to an older deriving-compat
-  hnix = (overrideCabal super.hnix (old: {
+  # dontCheck: Can be removed once https://github.com/haskell-nix/hnix/commit/471712f is in (5.2 probably)
+  #   This is due to GenList having been removed from generic-random in 1.2.0.0
+  # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
+  #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
+  hnix = dontCheck (doJailbreak (overrideCabal super.hnix (old: {
     patches = old.patches or [] ++ [
       # should land in hnix-5.2
       (pkgs.fetchpatch {
         url = "https://github.com/haskell-nix/hnix/commit/9cfe060a9dbe9e7c64867956a0523eed9661803a.patch";
         sha256 = "0ci4n7nw2pzqw0gkmkp4szzvxjyb143a4znjm39jmb0s397a68sh";
         name = "disable-hpack-test-by-default.patch";
-       })
+      })
     ];
     testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
-    broken = true;   # can't cope with deriving-compat 0.5.x.
-  }));
+  })));
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -1100,4 +1102,10 @@ self: super: {
   unix-time = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.unix-time else super.unix-time;
   # dontCheck: printf double rounding behavior
   prettyprinter = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.prettyprinter else super.prettyprinter;
+
+  # Fix with Cabal 2.2, https://github.com/guillaume-nargeot/hpc-coveralls/pull/73
+  hpc-coveralls = appendPatch super.hpc-coveralls (pkgs.fetchpatch {
+    url = "https://github.com/guillaume-nargeot/hpc-coveralls/pull/73/commits/344217f513b7adfb9037f73026f5d928be98d07f.patch";
+    sha256 = "056rk58v9h114mjx62f41x971xn9p3nhsazcf9zrcyxh1ymrdm8j";
+  });
 }

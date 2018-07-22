@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoPatchelfHook, makeWrapper, makeDesktopItem
-, atk, cairo, freetype, gdk_pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem
+, atk, cairo, gdk_pixbuf, glib, gnome2, gtk2, libGLU_combined, pango, xorg
 , lsb-release }:
 
 let

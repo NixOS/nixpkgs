@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libao, readline, json_c, libgcrypt, libav, curl }:
+{ fetchurl, stdenv, pkgconfig, libao, json_c, libgcrypt, libav, curl }:
 
 stdenv.mkDerivation rec {
   name = "pianobar-2016.06.02";

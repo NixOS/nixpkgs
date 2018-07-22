@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.plex;
-  plex = pkgs.plex;
 in
 {
   options = {

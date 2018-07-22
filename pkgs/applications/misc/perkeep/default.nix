@@ -1,4 +1,4 @@
-{ stdenv, lib, go, fetchzip, git, fetchpatch, fetchFromGitHub, fetchgit }:
+{ stdenv, go, fetchzip, git, fetchFromGitHub, fetchgit }:
 
 # When perkeep is updated all deps in the let block should be removed
 let

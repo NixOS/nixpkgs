@@ -6,7 +6,6 @@
 , libuuid
 , zlib
 , curl
-, patchelf
 }:
 
 let

@@ -27,7 +27,6 @@
 , git
 , libgit2
 , fetchFromGitHub
-, fetchpatch
 , paxctl
 , findutils
 , makeWrapper

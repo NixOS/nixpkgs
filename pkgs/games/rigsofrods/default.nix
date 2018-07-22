@@ -1,5 +1,5 @@
-{ fetchurl, fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU_combined, boost,
-  pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, pixman, mygui, unzip,
+{ fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU_combined, boost,
+  pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, mygui, unzip,
   angelscript, ogrepaged, mysocketw, libxcb
   }:
 

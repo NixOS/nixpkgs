@@ -1,8 +1,7 @@
-{ stdenv, lib, requireFile, makeWrapper, substituteAll, p7zip
+{ stdenv, lib, makeWrapper, p7zip
 , gawk, utillinux, xorg, glib, dbus-glib, zlib
 , kernel ? null, libsOnly ? false
 , undmg, fetchurl
-, libelf
 }:
 
 assert (!libsOnly) -> kernel != null;

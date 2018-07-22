@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgs, ...  }:
+{ stdenv, pkgs }:
 
 stdenv.mkDerivation rec {
   version = "2014-07-16";

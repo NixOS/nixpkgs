@@ -1,4 +1,4 @@
-{lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, nose, pytest, numpy}:
+{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy}:
 
 buildPythonPackage rec {
   pname = "scipy";

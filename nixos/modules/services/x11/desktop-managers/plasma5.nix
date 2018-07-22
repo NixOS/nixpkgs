@@ -7,7 +7,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5 xorg;
+  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
 
 in
 

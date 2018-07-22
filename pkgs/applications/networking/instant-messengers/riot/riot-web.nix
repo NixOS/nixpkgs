@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, writeText, conf ? null }:
+{ lib, stdenv, fetchurl, writeText, conf ? null }:
 
 let configFile = writeText "riot-config.json" conf; in
 stdenv.mkDerivation rec {

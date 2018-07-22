@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, wrapGAppsHook, intltool, libgpod, curl, flac,
-  gnome3, gtk3, glib, gettext, perl, perlXMLParser, flex, libid3tag,
-  libvorbis, hicolor-icon-theme, gdk_pixbuf }:
+  gnome3, gtk3, gettext, perl, perlXMLParser, flex, libid3tag,
+  libvorbis, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
   version = "2.1.5";

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gnome3,
-  pango, gsettings-desktop-schemas, gobjectIntrospection, wrapGAppsHook,
+  pango, gobjectIntrospection, wrapGAppsHook,
 # Optional packages:
  enableOSM ? true, osm-gps-map
  }:

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fetchFromGitHub, bctoolbox, belr }:
+{ stdenv, cmake, fetchFromGitHub, bctoolbox, belr }:
 
 stdenv.mkDerivation rec {
   baseName = "belcard";

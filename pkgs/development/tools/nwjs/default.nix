@@ -1,9 +1,9 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
 
-, xorg, alsaLib, dbus, glib, gtk2, gtk3, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, systemd, libcap
+, xorg, alsaLib, dbus, glib, gtk3, atk, pango, freetype, fontconfig
+, gdk_pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify
-, ffmpeg, libxcb, libXScrnSaver, cups
+, ffmpeg, libxcb, cups
 , sqlite, udev
 }:
 let

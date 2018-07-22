@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, python, stdenv, nose
+{ buildPythonPackage, fetchPypi, stdenv
 }:
 
 buildPythonPackage rec {
