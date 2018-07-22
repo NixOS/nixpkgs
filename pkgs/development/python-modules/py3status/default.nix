@@ -18,10 +18,10 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.8";
+  version = "3.11";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1izjpf9q768m3j95y328vbdh7rycglqlslyd777b12c13i6zs6cb";
+    sha256 = "ba6930427d57b79cf344262494fdcbddbf75f6e37794489d445f2ebb8bc53ec5";
   };
   doCheck = false;
   propagatedBuildInputs = [ pytz requests tzlocal ];
