@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl }:
+{ stdenv, fetchFromGitHub, perl, file }:
 
 stdenv.mkDerivation rec {
   name = "lesspipe-${version}";
