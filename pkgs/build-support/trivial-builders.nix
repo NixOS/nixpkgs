@@ -206,20 +206,35 @@ rec {
   # Copy a list of paths to the Nix store.
   copyPathsToStore = builtins.map copyPathToStore;
 
-  # Create a wrapped binary from a file
-  wrapCommand = name: # the name of the command
-    { version
-    , executable
-    , ...
-    }@args: runCommand "${name}-${version}" (
-    (builtins.removeAttrs args ["version" "executable"]) // {
+  # Wrap an executable with makeWrapper.
+  wrapExecutable = name: { executable
+                         , makeWrapperArgs ? [], ... }@args: runCommand name
+    ((builtins.removeAttrs args ["executable" "makeWrapperArgs"]) // {
       nativeBuildInputs = [makeWrapper];
+      inherit makeWrapperArgs;
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
     }) ''
       local -a args="($makeWrapperArgs)"
-      makeWrapper ${executable} $out/bin/${name} ''${args[@]}
-  '';
+      makeWrapper ${executable} $out ''${args[@]}
+    '';
 
+  # Build a tree from an attribute mapping of paths to files.
+  buildTree = name: tree: args: runCommand name (args // {
+    # Pointless to do this on a remote machine.
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  }) (lib.concatStringsSep "\n" (lib.attrValues (lib.mapAttrs (path: file: ''
+      mkdir -p $(dirname $out${path})
+      ln -s ${file} $out${path}
+    '') tree)));
+
+  # Create a wrapped binary from a file
+  wrapCommand = name: { version, executable, makeWrapperArgs ? [], ... }@args:
+    buildTree "${name}-${version}" {
+      "/bin/${name}" = wrapExecutable "${name}-wrapper" ({
+        inherit executable makeWrapperArgs;
+      } // (removeAttrs args ["version" "executable" "makeWrapperArgs"]));
+    } (removeAttrs args ["version" "executable" "makeWrapperArgs"]);
 }
