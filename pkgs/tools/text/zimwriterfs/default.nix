@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = http://git.wikimedia.org/log/openzim;
     maintainers = with stdenv.lib.maintainers; [ robbinch ];
     license = stdenv.lib.licenses.gpl3;
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; [ linux ];
   };
 }
