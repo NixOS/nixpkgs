@@ -199,6 +199,10 @@ let
         Comment=
         EODESKTOP
       '') names}
+
+      ${concatMapStrings (pkg: ''
+        ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+      '') cfg.displayManager.extraSessionFilePackages}
     '';
 
 in
@@ -242,6 +246,14 @@ in
         default = [ "nobody" ];
         description = ''
           A list of users which will not be shown in the display manager.
+        '';
+      };
+
+      extraSessionFilePackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+          A list of packages containing xsession files to be passed to the display manager.
         '';
       };
 
