@@ -14,6 +14,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1q0izb8ajzxl36fjpy4rn63sz01055r9s33fga99jprdmkkfzz6x";
   };
 
+  outputs = [ "bin" "out" "dev" "doc" ];
+
   dontDisableStatic = true;
 
   enableParallelBuilding = true;
@@ -29,6 +31,11 @@ in stdenv.mkDerivation rec {
   ]
   ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
   ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+
+  postInstall = ''
+    mkdir -p $doc/share/html/execline
+    mv doc/* $doc/share/html/execline
+  '';
 
   meta = {
     homepage = http://skarnet.org/software/execline/;
