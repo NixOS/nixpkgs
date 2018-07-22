@@ -1,6 +1,6 @@
 { stdenv, lib, zlib, glib, alsaLib, dbus, gtk2, atk, pango, freetype, fontconfig
 , libgnome-keyring3, gdk_pixbuf, cairo, cups, expat, libgpgerror, nspr
-, nss, xorg, libcap, systemd, libnotify, libsecret, gnome3 }:
+, nss, xorg, libcap, systemd, libnotify, libsecret, gnome2 }:
 
 let
   packages = [
