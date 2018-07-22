@@ -304,7 +304,7 @@ let
         serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
         script = let
-          netcat = "${pkgs.netcat-openbsd}/bin/nc";
+          netcat = "${pkgs.libressl.nc}/bin/nc";
           portCheck = "${netcat} -z 127.0.0.1 ${toString attrs.waitForPort}";
         in "while ! ${portCheck}; do :; done";
       };
@@ -435,7 +435,7 @@ in {
         serviceConfig.RemainAfterExit = true;
         script = let
           ports = lib.range 8000 8005 ++ lib.singleton 80;
-          netcat = "${pkgs.netcat-openbsd}/bin/nc";
+          netcat = "${pkgs.libressl.nc}/bin/nc";
           mkPortCheck = port: "${netcat} -z 127.0.0.1 ${toString port}";
           checks = "(${lib.concatMapStringsSep " && " mkPortCheck ports})";
         in "while ! ${checks}; do :; done";
