@@ -71,6 +71,8 @@ let
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
+    bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
+
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
     bitv = callPackage ../development/ocaml-modules/bitv { };
