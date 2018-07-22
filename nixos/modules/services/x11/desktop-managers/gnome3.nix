@@ -162,9 +162,6 @@ in {
           # Find the mouse
           export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
 
-          # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-          ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
-
           ${pkgs.gnome3.gnome-session}/bin/gnome-session ${optionalString cfg.debug "--debug"} &
           waitPID=$!
         '';
@@ -176,7 +173,9 @@ in {
                                                 "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
                                                 "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
-      ++ (removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages);
+      ++ (removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [
+      pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+    ];
 
     # Use the correct gnome3 packageSet
     networking.networkmanager.basePackages =
