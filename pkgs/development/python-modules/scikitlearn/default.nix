@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.19.1";
+  version = "0.19.2";
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5ca0ad32ee04abe0d4ba02c8d89d501b4e5e0304bdf4d45c2e9875a735b323a0";
+    sha256 = "b276739a5f863ccacb61999a3067d0895ee291c95502929b2ae56ea1f882e888";
   };
 
   # basically https://github.com/scikit-learn/scikit-learn/pull/10723,
