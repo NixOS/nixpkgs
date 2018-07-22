@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Advanced IRC bouncer";
     homepage = https://wiki.znc.in/ZNC;
-    maintainers = with maintainers; [ viric schneefux lnl7 ];
+    maintainers = with maintainers; [ schneefux lnl7 ];
     license = licenses.asl20;
     platforms = platforms.unix;
   };

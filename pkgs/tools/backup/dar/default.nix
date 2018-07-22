@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://dar.linux.free.fr;
     description = "Disk ARchiver, allows backing up files into indexed archives";
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

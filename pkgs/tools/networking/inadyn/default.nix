@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = http://troglobit.com/project/inadyn/;
     description = "Free dynamic DNS client";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }
