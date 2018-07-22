@@ -234,7 +234,7 @@ rec {
     enableSharedExecutables = false;
     isLibrary = false;
     doHaddock = false;
-    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
+    postFixup = "rm -rf $out/ghc* $out/nix-support $out/share/doc";
   });
 
   /* Build a source distribution tarball instead of using the source files
