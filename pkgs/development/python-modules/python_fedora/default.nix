@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "python-fedora";
-  version = "0.9.0";
+  version = "0.10.0";
   name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sf468scw52sw9pzxrnmqs54rix9c4fp1mi2r5k5n7mgjrmf6j0x";
+    sha256 = "5516b8c066bb2eb5d604ae8e84c3d31e27753795c5d84f6a792979363756405c";
   };
   propagatedBuildInputs = [ kitchen requests bunch paver lockfile
     six munch urllib3 beautifulsoup4 openidc-client ];
