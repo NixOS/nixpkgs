@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "circleci-cli";
-  version = "2018-05-12";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "circleci";
     repo = "local-cli";
-    rev = "2c7c1a74e3c3ffb8eebc03fccd782b1bfe9e940a";
-    sha256 = "0fp0fz0xr7ynp32lqcmaigl9p45wk1hd2gv9i5q5bj9syj3g7qzm";
+    rev = "v${version}";
+    sha256 = "1bv1ck5zvyl6pyvbfglizg8ybna4yg2nz441kiv5rmp4g27n6db2";
   };
 
   nativeBuildInputs = [ makeWrapper ];
