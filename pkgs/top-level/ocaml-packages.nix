@@ -319,6 +319,8 @@ let
 
     hex = callPackage ../development/ocaml-modules/hex { };
 
+    httpaf = callPackage ../development/ocaml-modules/httpaf { };
+
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
     iri = callPackage ../development/ocaml-modules/iri { };
