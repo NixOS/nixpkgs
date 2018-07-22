@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    parslet (1.8.2)
+    travis-conditions (1.0.2)
+      parslet (~> 1.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  travis-conditions
+
+BUNDLED WITH
+   1.16.2

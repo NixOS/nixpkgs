@@ -8592,6 +8592,8 @@ with pkgs;
 
   travis = callPackage ../development/tools/misc/travis { };
 
+  travis-conditions = callPackage ../development/tools/misc/travis-conditions { };
+
   tweak = callPackage ../applications/editors/tweak { };
 
   uhd = callPackage ../development/tools/misc/uhd { };
