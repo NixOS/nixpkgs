@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "paramz";
-  version = "0.9.1";
+  version = "0.9.2";
   name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8a5a2fe5cdb033eb869c49e81fde2a9d0055fadb53a8af1665a7f48f320179cf";
+    sha256 = "7b38c2487602c423ac402214c3b3fa6bbe22b294e2f9e5f9f3842182e1541599";
   };
 
   propagatedBuildInputs = [ numpy scipy six decorator ];
