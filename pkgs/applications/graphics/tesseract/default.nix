@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     sha256 = "11wrpcfl118wxsv2c3w2scznwb48c4547qml42s2bpdz079g8y30";
   };
 
+  outputs = [ "bin" "lib" "data" "dev" "man" "out" ];
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -52,8 +54,9 @@ stdenv.mkDerivation rec {
   LIBLEPT_HEADERSDIR = "${leptonica}/include";
 
   postInstall = ''
+    mkdir -p $data/share/tessdata
     for i in ${tessdata}/share/tessdata/*; do
-      ln -s $i $out/share/tessdata;
+      ln -s $i $data/share/tessdata;
     done
   '';
 
