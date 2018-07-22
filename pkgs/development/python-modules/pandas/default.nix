@@ -29,11 +29,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.23.1";
+  version = "0.23.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50b52af2af2e15f4aeb2fe196da073a8c131fa02e433e105d95ce40016df5690";
+    sha256 = "9cd3614b4e31a0889388ff1bd19ae857ad52658b33f776065793c293a29cf612";
   };
 
   LC_ALL = "en_US.UTF-8";
