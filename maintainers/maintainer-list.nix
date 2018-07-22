@@ -1902,6 +1902,11 @@
     github = "jluttine";
     name = "Jaakko Luttinen";
   };
+  jmagoon = {
+    email = "js.magoon@gmail.com";
+    github = "jmagoon";
+    name = "Jon Magoon";
+  };
   jmettes = {
     email = "jonathan@jmettes.com";
     github = "jmettes";
