@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
+    maintainers = with stdenv.lib.maintainers; [ pmahoney Profpatsch ];
   };
 
 }
