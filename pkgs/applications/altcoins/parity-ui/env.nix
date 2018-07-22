@@ -9,7 +9,7 @@ let
     xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
     xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
     xorg.libXcursor xorg.libxkbfile xorg.libXScrnSaver libcap systemd libnotify
-    xorg.libxcb libsecret gnome3.gconf
+    xorg.libxcb libsecret gnome2.GConf
   ];
 
   libPathNative = lib.makeLibraryPath packages;
