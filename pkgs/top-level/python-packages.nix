@@ -17971,6 +17971,10 @@ EOF
   qasm2image = callPackage ../development/python-modules/qasm2image { };
 
   simpy = callPackage ../development/python-modules/simpy { };
+
+  z3 = (toPythonModule (pkgs.z3.override {
+    inherit python;
+  })).python;
 });
 
 in fix' (extends overrides packages)
