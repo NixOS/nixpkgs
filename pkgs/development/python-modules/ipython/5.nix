@@ -25,11 +25,11 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "5.7.0";
+  version = "6.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g1jm06qriq48m58311cs7askp83ipq3yq96hv4kg431nxzkmd4d";
+    sha256 = "eca537aa61592aca2fef4adea12af8e42f5c335004dfa80c78caf80e8b525e5c";
   };
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''

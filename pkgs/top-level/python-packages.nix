@@ -264,6 +264,10 @@ in {
 
   discordpy = callPackage ../development/python-modules/discordpy { };
 
+  parver = callPackage ../development/python-modules/parver { };
+  arpeggio = callPackage ../development/python-modules/arpeggio { };
+  invoke = callPackage ../development/python-modules/invoke { };
+
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
   dogtail = callPackage ../development/python-modules/dogtail { };
@@ -571,22 +575,7 @@ in {
 
   application = callPackage ../development/python-modules/application { };
 
-  appnope = buildPythonPackage rec {
-    version = "0.1.0";
-    name = "appnope-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/appnope/${name}.tar.gz";
-      sha256 = "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71";
-    };
-
-    meta = {
-      description = "Disable App Nap on macOS";
-      homepage    = https://pypi.python.org/pypi/appnope;
-      platforms   = platforms.darwin;
-      license     = licenses.bsd3;
-    };
-  };
+  appnope = callPackage ../development/python-modules/appnope { };
 
   apsw = callPackage ../development/python-modules/apsw {};
 
@@ -649,51 +638,12 @@ in {
 
   audioread = callPackage ../development/python-modules/audioread { };
 
-  audiotools = buildPythonPackage rec {
-    name = "audiotools-${version}";
-    version = "3.1.1";
-
-    buildInputs = optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [
-      AudioToolbox
-      AudioUnit
-      CoreServices
-    ]);
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/tuffy/python-audio-tools/archive/v${version}.tar.gz";
-      sha256 = "0ymlxvqkqhzk4q088qwir3dq0zgwqlrrdfnq7f0iq97g05qshm2c";
-    };
-
-    meta = {
-      description = "Utilities and Python modules for handling audio";
-      homepage = "http://audiotools.sourceforge.net/";
-      license = licenses.gpl2Plus;
-    };
-  };
+  audiotools = callPackage ../development/python-modules/audiotools { };
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
-  av = buildPythonPackage rec {
-    name = "av-${version}";
-    version = "0.2.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/av/${name}.tar.gz";
-      sha256 = "bdc7e2e213cb9041d9c5c0497e6f8c47e84f89f1f2673a46d891cca0fb0d19a0";
-    };
-
-    buildInputs
-      =  (with self; [ nose pillow numpy ])
-      ++ (with pkgs; [ ffmpeg_2 git libav pkgconfig ]);
-
-    # Because of https://github.com/mikeboers/PyAV/issues/152
-    doCheck = false;
-
-    meta = {
-      description = "Pythonic bindings for FFmpeg/Libav";
-      homepage = https://github.com/mikeboers/PyAV/;
-      license = licenses.bsd2;
-    };
+  av = callPackage ../development/python-modules/av {
+    inherit (pkgs) ffmpeg_2 git libav pkgconfig;
   };
 
   avro = callPackage ../development/python-modules/avro {};
@@ -16619,29 +16569,6 @@ EOF
     '';
   };
 
-  ghp-import = buildPythonPackage rec {
-    version = "0.4.1";
-    name = "ghp-import-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/ghp-import/${name}.tar.gz";
-      sha256 = "6058810e1c46dd3b5b1eee87e203bdfbd566e10cfc77566edda7aa4dbf6a3053";
-    };
-    disabled = isPyPy;
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    # No tests available
-    doCheck = false;
-
-    meta = {
-      description = "Copy your docs directly to the gh-pages branch";
-      homepage = "https://github.com/davisp/ghp-import";
-      license = "Tumbolia Public License";
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
   typogrify = buildPythonPackage rec {
     name = "typogrify-2.0.7";
     src = pkgs.fetchurl {
@@ -17598,8 +17525,6 @@ EOF
     };
   };
 
-  moreItertools = self.more-itertools;
-
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
   jaraco_functools = buildPythonPackage rec {
@@ -17743,32 +17668,7 @@ EOF
 
   yarl = callPackage ../development/python-modules/yarl { };
 
-  suseapi = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "suseapi";
-    version = "0.24-31-g0fcbe96";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "openSUSE";
-      repo = "python-${pname}";
-      rev = version;
-      sha256 = "0hyzq0h1w8gp0zfvhqh7qsgcg1wp05a14371m6bn5a7gss93rbv4";
-    };
-
-    propagatedBuildInputs = with self; [
-      django suds-jurko ldap mechanize beautifulsoup4 pyxdg dateutil requests
-    ];
-
-    buildInputs = with self; [ httpretty ];
-
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/openSUSE/python-suseapi/";
-      description = "Python module to work with various SUSE services";
-      license = licenses.gpl3Plus;
-    };
-  };
+  suseapi = callPackage ../development/python-modules/suseapi { };
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 
