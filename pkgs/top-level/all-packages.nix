@@ -5066,6 +5066,8 @@ with pkgs;
 
   siege = callPackage ../tools/networking/siege {};
 
+  sieve-connect = callPackage ../applications/networking/sieve-connect {};
+
   sigal = callPackage ../applications/misc/sigal {
     inherit (pythonPackages) buildPythonApplication fetchPypi;
   };
