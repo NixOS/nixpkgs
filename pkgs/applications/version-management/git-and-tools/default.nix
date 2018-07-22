@@ -38,6 +38,7 @@ let
     svnSupport = true;
     guiSupport = true;
     sendEmailSupport = !stdenv.isDarwin;
+    withLibsecret = !stdenv.isDarwin;
   };
 
   # Git with SVN support, but without GUI.
