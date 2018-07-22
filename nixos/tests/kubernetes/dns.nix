@@ -71,7 +71,7 @@ let
 
   base = {
     name = "dns";
-    inherit domain certs extraConfiguration;
+    inherit domain extraConfiguration;
   };
 
   singleNodeTest = {
@@ -99,8 +99,11 @@ let
 
   multiNodeTest = {
     test = ''
+      # Node token exchange
+      $machine1->waitUntilSucceeds("cp -f /var/lib/cfssl/apitoken.secret /tmp/shared/apitoken.secret");
+      $machine2->waitUntilSucceeds("cat /tmp/shared/apitoken.secret | nixos-kubernetes-node-join");
+
       # prepare machines for test
-      $machine1->waitUntilSucceeds("kubectl get node machine1.${domain} | grep -w Ready");
       $machine1->waitUntilSucceeds("kubectl get node machine2.${domain} | grep -w Ready");
       $machine2->execute("docker load < ${redisImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisPod}");
