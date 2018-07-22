@@ -604,6 +604,11 @@ self: super: {
         url = https://github.com/wjt/bustle/commit/bcc3d56d367635c0dfdb4eab0d1265829aba6400.patch;
         sha256 = "1ybviivfbs5janiyw01ww365vxckni6fk0j10609clxk4na2nvb9";
       })
+      # No instance for (Semigroup Marquee)
+      (pkgs.fetchpatch {
+        url = https://github.com/wjt/bustle/commit/95393cb17c2fe5f0903470a449e36728471759eb.patch;
+        sha256 = "1n7h1rh62731kg9jjs2mn49nx033ds0l33mpgfl75hrjqblz44m1";
+      })
     ];
     postInstall = ''
       make install PREFIX=$out
