@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "http://labltk.forge.ocamlcore.org/";
     license = stdenv.lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
+    maintainers = [ stdenv.lib.maintainers.vbgl ];
   };
 }
