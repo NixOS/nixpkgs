@@ -21,7 +21,7 @@ diff --git a/Makerules b/Makerules
 -SYS_GLUT_CFLAGS :=
 -SYS_GLUT_LIBS := -lglut -lGL
 -
- ifeq "$(shell pkg-config --exists 'libcrypto <= 1.0.1t' && echo yes)" "yes"
+ ifeq "$(shell pkg-config --exists 'libcrypto >= 1.1.0' && echo yes)" "yes"
  HAVE_LIBCRYPTO := yes
  SYS_LIBCRYPTO_CFLAGS := -DHAVE_LIBCRYPTO $(shell pkg-config --cflags libcrypto)
 @@ -113,7 +101,7 @@ SYS_CURL_CFLAGS += $(shell pkg-config --cflags openssl)
@@ -33,3 +33,15 @@ diff --git a/Makerules b/Makerules
  
  ifeq "$(shell pkg-config --exists x11 xext && echo yes)" "yes"
  HAVE_X11 := yes
+diff --git a/platform/gl/gl-main.c b/platform/gl/gl-main.c
+index d58f7ba..808af18 100644
+--- a/platform/gl/gl-main.c
++++ b/platform/gl/gl-main.c
+@@ -16,6 +16,7 @@ void glutExit(void) {}
+ void glutMouseWheelFunc(void *fn) {}
+ void glutInitErrorFunc(void *fn) {}
+ void glutInitWarningFunc(void *fn) {}
++#define glutSetOption(X,Y)
+ #endif
+ 
+ enum
