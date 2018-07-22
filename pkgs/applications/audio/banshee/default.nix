@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     description = "A music player written in C# using GNOME technologies";
     platforms = platforms.linux;
     maintainers = [ maintainers.zohl ];
+    license = licenses.mit;
   };
 }
