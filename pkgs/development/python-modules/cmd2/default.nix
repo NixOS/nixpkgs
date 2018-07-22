@@ -5,11 +5,11 @@
 }:
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wpw4f9zix30hfncm0hwxjjdx78zq26x3r8s9nvsq9vnxf41xb49";
+    sha256 = "cffc94ad46425f80dfb243f53f456b11cea3f45e683504a60b64618a6d28b417";
   };
 
   LC_ALL="en_US.UTF-8";
