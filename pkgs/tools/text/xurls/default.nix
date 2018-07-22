@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/mvdan/xurls;
     maintainers = with maintainers; [ koral ndowens ];
     platforms = platforms.unix;
+    license = licenses.bsd3;
   };
 }
