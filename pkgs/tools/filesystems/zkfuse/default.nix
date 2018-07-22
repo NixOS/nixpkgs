@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];
+    license = licenses.asl20;
   };
 }
