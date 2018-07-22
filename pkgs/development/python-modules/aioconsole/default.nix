@@ -10,11 +10,11 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5d2c60c0cbf87c663ef3a0b394980ff86f56ebd3c47cc87df6c410e774216c50";
+    sha256 = "f263eb4f5eaee9f5e86f7b34fea3b50b3a4ff77b9f23ffcd3c4cb204c3b3fccc";
   };
 
   # hardcodes a test dependency on an old version of pytest-asyncio
