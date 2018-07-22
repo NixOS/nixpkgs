@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     downloadPage = "http://ftp.gnu.org/gnu/barcode/";
     updateWalker = true;
     homepage = http://ftp.gnu.org/gnu/barcode/;
+    license = licenses.gpl3;
   };
 }
