@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     description = "A suite of small networking utilities for Unix systems";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
+    maintainers = with stdenv.lib.maintainers; [ pmahoney Profpatsch ];
   };
 
 }
