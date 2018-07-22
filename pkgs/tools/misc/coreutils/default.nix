@@ -1,5 +1,6 @@
 { stdenv, lib, buildPackages
 , autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
+, openssl ? null
 , hostPlatform, buildPlatform
 , aclSupport ? false, acl ? null
 , attrSupport ? false, attr ? null
@@ -37,8 +38,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ];
-  configureFlags =
-    optional (singleBinary != false)
+  configureFlags = optional (openssl != null) "--with-openssl"
+    ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     ];
 
 
-  buildInputs = [ gmp ]
+  buildInputs = [ gmp openssl ]
     ++ optional aclSupport acl
     ++ optional attrSupport attr
     ++ optionals hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
@@ -71,7 +72,7 @@ stdenv.mkDerivation rec {
 
   # Saw random failures like ‘help2man: can't get '--help' info from
   # man/sha512sum.td/sha512sum’.
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString hostPlatform.isSunOS "1";
