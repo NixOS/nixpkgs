@@ -23,6 +23,7 @@ should look like:
 | Apple MacBook Air 4,X       | ~<nixos-hardware/apple/macbook-air/4>~        |
 | Apple MacBook Air 6,X       | ~<nixos-hardware/apple/macbook-air/6>~        |
 | [[file:apple/macbook-pro/10-1][Apple MacBook Pro 10,1]]      | ~<nixos-hardware/apple/macbook-pro/10-1>~     |
+| [[file:apple/macbook-pro/11-5][Apple MacBook Pro 11,5]]      | ~<nixos-hardware/apple/macbook-pro/11-5>~     |
 | Apple MacBook Pro 12,1      | ~<nixos-hardware/apple/macbook-pro/12-1>~     |
 | [[file:dell/xps/15-9550][Dell XPS 15 9550]]            | ~<nixos-hardware/dell/xps/15-9550>~           |
 | [[file:inversepath/usbarmory][Inverse Path USB armory]]     | ~<nixos-hardware/inversepath/usbarmory>~      |
