@@ -1,6 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, bison, flex, intltool, gtk, libical, dbus-glib, tzdata
-, libnotify, popt, xfce
-}:
+, libnotify, popt, xfce, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
@@ -34,8 +33,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk libical dbus-glib libnotify popt xfce.libxfce4util
     xfce.xfce4-panel ];
-
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache ";
 
   meta = {
     homepage = http://www.xfce.org/projects/;

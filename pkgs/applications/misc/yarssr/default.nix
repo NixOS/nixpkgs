@@ -16,7 +16,7 @@ let
     ClassSingleton
     URI
     AnyEvent AnyEventHTTP
-    CommonSense
+    commonsense
     FileSlurp
     JSON
     Guard

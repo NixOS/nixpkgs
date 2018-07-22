@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = http://xmlsoft.org/XSLT/;
     description = "A C library and tools to do XSL transformations";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.all;
     maintainers = [ maintainers.eelco ];
   };
 }

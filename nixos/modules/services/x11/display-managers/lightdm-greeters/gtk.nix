@@ -68,8 +68,8 @@ in
 
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome3.gnome-themes-standard;
-          defaultText = "pkgs.gnome3.gnome-themes-standard";
+          default = pkgs.gnome3.gnome-themes-extra;
+          defaultText = "pkgs.gnome3.gnome-themes-extra";
           description = ''
             The package path that contains the theme given in the name option.
           '';

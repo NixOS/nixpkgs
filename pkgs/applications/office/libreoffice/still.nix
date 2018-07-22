@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip
-, CompressZlib, zlib, libjpeg, expat, freetype, libwpd
+, IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, carlito
@@ -248,7 +248,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = with xorg;
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
-      CompressZlib cppunit cups curl db dbus-glib expat file flex fontconfig
+      IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gtk3 gtk2
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, file, zlib }:
+{ stdenv, fetchurl, file, zlib, libgnurx }:
 
 stdenv.mkDerivation rec {
   name = "file-${version}";
@@ -13,10 +13,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ]
+              ++ stdenv.lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   doCheck = true;
 
+  makeFlags = if stdenv.hostPlatform.isWindows then "FILE_COMPILE=file"
+              else null;
 
   meta = with stdenv.lib; {
     homepage = http://darwinsys.com/file;

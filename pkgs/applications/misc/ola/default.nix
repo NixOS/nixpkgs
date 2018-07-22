@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "ola-${version}";
-  version = "0.10.6";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "OpenLightingProject";
     repo = "ola";
     rev = version;
-    sha256 = "1qazhkcakvzkf1dvav0alk33aaklawf8vckgwpf6fvwf7g2kyh63";
+    sha256 = "18krwrw7w1qzwih8gnmv7r4sah5ppvq7ax65r7l5yjxn3ihwp2kf";
   };
 
   nativeBuildInputs = [ autoreconfHook bison flex pkgconfig perl ];

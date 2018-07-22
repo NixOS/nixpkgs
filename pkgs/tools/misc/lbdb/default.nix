@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "16fx02xk98k3friigq2lcgk535xagp3kfnmngni5kw61f7yj6gxi";
   };
 
-  buildInputs = [ goobook makeWrapper perl ConvertASN1 NetLDAP AuthenSASL ]
+  buildInputs = [ goobook makeWrapper perl ConvertASN1 perlldap AuthenSASL ]
     ++ optional (!stdenv.isDarwin) finger_bsd
     ++ optional   (abook != null) abook
     ++ optional   (gnupg != null) gnupg
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   postFixup = "wrapProgram $out/lib/mutt_ldap_query --prefix PERL5LIB : "
     + "${AuthenSASL}/${perl.libPrefix}"
     + ":${ConvertASN1}/${perl.libPrefix}"
-    + ":${NetLDAP}/${perl.libPrefix}";
+    + ":${perlldap}/${perl.libPrefix}";
 
   meta = {
     homepage = http://www.spinnaker.de/lbdb/;

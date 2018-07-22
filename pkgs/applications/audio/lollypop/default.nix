@@ -2,7 +2,7 @@
 , appstream-glib, desktop-file-utils, gobjectIntrospection
 , python36Packages, gnome3, glib, gst_all_1 }:
 
-stdenv.mkDerivation rec  {  
+stdenv.mkDerivation rec  {
   version = "0.9.521";
   name = "lollypop-${version}";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec  {
   ];
 
   buildInputs = [ glib ] ++ (with gnome3; [
-    gsettings_desktop_schemas gtk3 libsecret libsoup totem-pl-parser
+    gsettings-desktop-schemas gtk3 libsecret libsoup totem-pl-parser
   ]) ++ (with gst_all_1; [
     gst-libav gst-plugins-bad gst-plugins-base gst-plugins-good gst-plugins-ugly
     gstreamer

@@ -1925,11 +1925,8 @@ in {
   pytest = self.pytest_36;
 
   pytest_36 = callPackage ../development/python-modules/pytest {
-    hypothesis = self.hypothesis.override {
-      # hypothesis requires pytest that causes dependency cycle
-      doCheck = false;
-      pytest = null;
-    };
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
   };
 
   # Needed for celery
@@ -17917,6 +17914,10 @@ EOF
   qasm2image = callPackage ../development/python-modules/qasm2image { };
 
   simpy = callPackage ../development/python-modules/simpy { };
+
+  z3 = (toPythonModule (pkgs.z3.override {
+    inherit python;
+  })).python;
 });
 
 in fix' (extends overrides packages)

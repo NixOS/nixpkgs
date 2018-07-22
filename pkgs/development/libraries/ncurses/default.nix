@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
     "--enable-symlinks"
   ] ++ lib.optional unicode "--enable-widec"
     ++ lib.optional (!withCxx) "--without-cxx"
-    ++ lib.optional (abiVersion == "5") "--with-abi-version=5";
+    ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
+    ++ lib.optionals hostPlatform.isWindows [
+      "--enable-sp-funcs"
+      "--enable-term-driver"
+    ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
