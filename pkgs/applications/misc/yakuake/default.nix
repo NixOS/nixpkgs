@@ -65,5 +65,6 @@ mkDerivation rec {
     homepage = https://yakuake.kde.org;
     description = "Quad-style terminal emulator for KDE";
     maintainers = with lib.maintainers; [ fridh ];
+    licenses = lib.licenses.gpl2;
   };
 }
