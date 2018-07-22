@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = http://xmoto.tuxfamily.org;
     maintainers = with maintainers; [ raskin viric pSub ];
     platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }
