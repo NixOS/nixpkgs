@@ -362,6 +362,15 @@ inherit (pkgs.nixos {
       The module <option>services.networking.hostapd</option> now uses WPA2 by default.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <varname>s6Dns</varname>, <varname>s6Networking</varname>,
+      <varname>s6LinuxUtils</varname> and <varname>s6PortableUtils</varname>
+      renamed to
+      <varname>s6-dns</varname>, <varname>s6-networking</varname>,
+      <varname>s6-linux-utils</varname> and <varname>s6-portable-utils</varname> respectively.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
