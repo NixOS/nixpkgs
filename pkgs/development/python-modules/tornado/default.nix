@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tornado";
-  version = "5.0.2";
+  version = "5.1";
 
 
   propagatedBuildInputs = [ backports_abc  certifi singledispatch ]
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b83d5c10550f2653380b4c77331d6f8850f287c4f67d7ce1e1c639d9222fbc7";
+    sha256 = "4f66a2172cb947387193ca4c2c3e19131f1c70fa8be470ddbbd9317fd0801582";
   };
 
   meta = {
