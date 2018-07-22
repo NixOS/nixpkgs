@@ -89,6 +89,23 @@ with lib;
             Create the repository if it doesn't exist.
           '';
         };
+
+        pruneOpts = mkOption {
+          type = types.listOf types.str;
+          default = [];
+          description = ''
+            A list of options (--keep-* et al.) for 'restic forget
+            --prune', to automatically prune old snapshots.  The
+            'forget' command is run *after* the 'backup' command, so
+            keep that in mind when constructing the --keep-* options.
+          '';
+          example = [
+            "--keep-daily 7"
+            "--keep-weekly 5"
+            "--keep-monthly 12"
+            "--keep-yearly 75"
+          ];
+        };
       };
     }));
     default = {};
@@ -121,6 +138,11 @@ with lib;
           extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
           connectTo = elemAt (splitString ":" backup.repository) 1;
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
+          pruneCmd = if (builtins.length backup.pruneOpts > 0)
+                     then [ ( resticCmd + " forget --prune " +
+                              (concatStringsSep " " backup.pruneOpts) )
+                            ( resticCmd + " check" ) ]
+                     else [];
         in nameValuePair "restic-backups-${name}" ({
           environment = {
             RESTIC_PASSWORD_FILE = backup.passwordFile;
@@ -132,7 +154,7 @@ with lib;
           restartIfChanged = false;
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${concatStringsSep " " backup.paths}";
+            ExecStart = [ "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${concatStringsSep " " backup.paths}" ] ++ pruneCmd;
             User = backup.user;
           };
         } // optionalAttrs backup.initialize {
