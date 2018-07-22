@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       pkgs.alsaLib
       pkgs.cairo
       pkgs.cups
-      pkgs.dbus_daemon.lib
+      pkgs.dbus.daemon.lib
       pkgs.expat
       pkgs.gdk_pixbuf
       pkgs.glib

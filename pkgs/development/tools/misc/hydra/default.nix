@@ -22,7 +22,7 @@ let
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginStackTrace
-        CatalystPluginUnicodeEncoding
+        CatalystRuntime
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
@@ -52,7 +52,6 @@ let
         SetScalar
         Starman
         SysHostnameLong
-        TestMore
         TextDiff
         TextTable
         XMLSimple

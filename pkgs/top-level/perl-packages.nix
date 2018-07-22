@@ -10983,7 +10983,6 @@ let self = _self // overrides; _self = with self; {
     patchPhase = ''sed -ie 's/`which pkg-config`/"pkg-config"/' Build.PL'';
     doCheck = false; # The main test performs network access
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    #buildInputs = [ TestMore TestPod ];
     propagatedBuildInputs = [ pkgs.libdiscid ];
   };
 

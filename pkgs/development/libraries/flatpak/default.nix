@@ -5,7 +5,7 @@
 
 let
   version = "0.99.3";
-  desktop_schemas = gnome3.gsettings_desktop_schemas;
+  desktop_schemas = gnome3.gsettings-desktop-schemas;
 in stdenv.mkDerivation rec {
   name = "flatpak-${version}";
 
