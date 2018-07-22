@@ -4929,13 +4929,13 @@ with pkgs;
 
   s3gof3r = callPackage ../tools/networking/s3gof3r { };
 
-  s6Dns = callPackage ../tools/networking/s6-dns { };
+  s6-dns = callPackage ../tools/networking/s6-dns { };
 
-  s6LinuxUtils = callPackage ../os-specific/linux/s6-linux-utils { };
+  s6-linux-utils = callPackage ../os-specific/linux/s6-linux-utils { };
 
-  s6Networking = callPackage ../tools/networking/s6-networking { };
+  s6-networking = callPackage ../tools/networking/s6-networking { };
 
-  s6PortableUtils = callPackage ../tools/misc/s6-portable-utils { };
+  s6-portable-utils = callPackage ../tools/misc/s6-portable-utils { };
 
   sablotron = callPackage ../tools/text/xml/sablotron { };
 
