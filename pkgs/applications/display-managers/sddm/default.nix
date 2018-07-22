@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "0.17.0";
+  version = "0.18.0";
 
 in mkDerivation rec {
   name = "sddm-${version}";
@@ -13,12 +13,11 @@ in mkDerivation rec {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "1m35ly6miwy8ivsln3j1bfv0nxbc4gyqnj7f847zzp53jsqrm3mq";
+    sha256 = "16xnm02iqgy4hydzd6my0widq981glbazbhxnihhclgsaczh8mfq";
   };
 
   patches = [
     ./sddm-ignore-config-mtime.patch
-    ./qt511.patch
   ];
 
   postPatch =
