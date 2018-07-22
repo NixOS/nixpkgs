@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "racer-${version}";
-  version = "2.0.12";
+  version = "2.0.14";
 
   src = fetchFromGitHub {
     owner = "racer-rust";
     repo = "racer";
     rev = version;
-    sha256 = "0y1xlpjr8y8gsmmrjlykx4vwzf8akk42g35kg3kc419ry4fli945";
+    sha256 = "0kgax74qa09axq7b175ph3psprgidwgsml83wm1qwdq16gpxiaif";
   };
 
-  cargoSha256 = "1h3jv4hajdv6k309kjr6b6298kxmd0faw081i3788sl794k9mp0j";
+  cargoSha256 = "1j3fviimdxn6xa75z0l9wkgdnznp8q20jjs42mql6ql782dga5lk";
 
   # rustup is required for test
   buildInputs = [ makeWrapper rustup ];
