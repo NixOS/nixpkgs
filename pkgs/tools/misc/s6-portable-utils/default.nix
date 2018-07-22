@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "A set of tiny general Unix utilities optimized for simplicity and small size";
     platforms = platforms.all;
     license = licenses.isc;
-    maintainers = with maintainers; [ pmahoney ];
+    maintainers = with maintainers; [ pmahoney Profpatsch ];
   };
 
 }
