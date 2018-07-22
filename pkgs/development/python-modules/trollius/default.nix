@@ -1,11 +1,11 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPy27, isPyPy, mock, futures  }:
 buildPythonPackage rec {
   pname = "trollius";
-  version = "1.0.4";
+  version = "2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xny8y12x3wrflmyn6xi8a7n3m3ac80fgmgzphx5jbbaxkjcm148";
+    sha256 = "b35b9a9079c3c06a04cedf27dd833982b5d58401722da63d2c7c6384063a6924";
   };
 
   checkInputs = [ mock ];
