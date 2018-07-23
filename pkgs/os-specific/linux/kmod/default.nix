@@ -15,8 +15,6 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
   buildInputs = [ xz ];
-  # HACK until BUG issue #21191 is addressed
-  crossAttrs.preUnpack = ''PATH="${buildPackages.xz}/bin''${PATH:+:}$PATH"'';
 
   configureFlags = [
     "--sysconfdir=/etc"
