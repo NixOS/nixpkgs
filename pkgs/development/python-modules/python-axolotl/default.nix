@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, python-axolotl-curve25519, protobuf, pycrypto }:
+{ lib, buildPythonPackage, fetchPypi, cryptography, python-axolotl-curve25519, protobuf }:
 
 buildPythonPackage rec {
   pname = "python-axolotl";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "ef78c2efabcd4c33741669334bdda04710a3ef0e00b653f00127acff6460a7f0";
   };
 
-  propagatedBuildInputs = [ python-axolotl-curve25519 protobuf pycrypto ];
+  propagatedBuildInputs = [ cryptography python-axolotl-curve25519 protobuf ];
   # IV == 0 in tests is not supported by pycryptodome (our pycrypto drop-in)
   doCheck = false;
 
