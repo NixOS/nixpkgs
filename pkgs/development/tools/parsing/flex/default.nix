@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison ];
   propagatedBuildInputs = [ m4 ];
 
-  preConfigure = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    export ac_cv_func_malloc_0_nonnull=yes
-    export ac_cv_func_realloc_0_nonnull=yes
-  '';
+  preConfigure = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   postConfigure = stdenv.lib.optionalString (stdenv.isDarwin || stdenv.isCygwin) ''
     sed -i Makefile -e 's/-no-undefined//;'
