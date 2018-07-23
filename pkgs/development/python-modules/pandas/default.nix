@@ -98,7 +98,8 @@ in buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
-    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
+    # pandas no longer seems to distribute datasets for IO tests
+    py.test $out/${python.sitePackages}/pandas --ignore=io --skip-slow --skip-network -k "$disabledTests"
     runHook postCheck
   '';
 
