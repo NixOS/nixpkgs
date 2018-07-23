@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig, zlib, shadow
-, ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
+, ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 let
   version = lib.concatStringsSep "." ([ majorVersion ]
@@ -28,12 +28,6 @@ in stdenv.mkDerivation rec {
       --replace "/bin/umount" "$out/bin/umount"
   '';
 
-  crossAttrs = {
-    # Work around use of `AC_RUN_IFELSE'.
-    preConfigure = "export scanf_cv_type_modifier=ms" + lib.optionalString (systemd != null)
-      "\nconfigureFlags+=\" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/\"";
-  };
-
   preConfigure = lib.optionalString (systemd != null) ''
     configureFlags+=" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/"
   '';
@@ -49,8 +43,10 @@ in stdenv.mkDerivation rec {
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
-  ]
-    ++ lib.optional (ncurses == null) "--without-ncurses";
+  ] ++ lib.optional (ncurses == null) "--without-ncurses"
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       "scanf_cv_type_modifier=ms"
+  ;
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 
