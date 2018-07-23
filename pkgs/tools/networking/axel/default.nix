@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://axel.alioth.debian.org/;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;
+    license = licenses.gpl2;
   };
 }

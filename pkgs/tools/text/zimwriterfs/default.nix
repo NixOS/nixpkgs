@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     description = "A console tool to create ZIM files";
     homepage = http://git.wikimedia.org/log/openzim;
     maintainers = with stdenv.lib.maintainers; [ robbinch ];
-    platforms = with stdenv.lib.platforms; linux;
+    license = stdenv.lib.licenses.gpl3;
+    platforms = with stdenv.lib.platforms; [ linux ];
   };
 }

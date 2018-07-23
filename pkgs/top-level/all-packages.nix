@@ -4910,6 +4910,8 @@ with pkgs;
 
   rubocop = callPackage ../development/tools/rubocop { };
 
+  runelite = callPackages ../games/runelite { };
+
   runningx = callPackage ../tools/X11/runningx { };
 
   runzip = callPackage ../tools/archivers/runzip { };
@@ -11826,6 +11828,8 @@ with pkgs;
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
+  soil = callPackage ../development/libraries/soil { };
+  
   sonic = callPackage ../development/libraries/sonic { };
 
   soprano = callPackage ../development/libraries/soprano { };
@@ -13769,11 +13773,6 @@ with pkgs;
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
         kernelPatches.bcm2835_mmal_v4l2_camera_driver # Only needed for 4.16!
-        # https://github.com/NixOS/nixpkgs/issues/42755
-        # Remove these xen-netfront patches once they're included in
-        # upstream! Fixes https://github.com/NixOS/nixpkgs/issues/42755
-        kernelPatches.xen-netfront_fix_mismatched_rtnl_unlock
-        kernelPatches.xen-netfront_update_features_after_registering_netdev
       ];
   };
 
@@ -20909,6 +20908,8 @@ with pkgs;
 
   spyder = pythonPackages.spyder;
 
+  openspace = callPackage ../applications/science/astronomy/openspace { };
+  
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {

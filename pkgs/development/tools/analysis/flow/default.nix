@@ -3,14 +3,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.76.0";
+  version = "0.77.0";
   name = "flow-${version}";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "0r3yl4m7dhm1h4c431zp8hd2gg6k1d9bwd2371xav5q7hviwmjl6";
+    sha256 = "1wcbqw5vwb3wsz9dkhi2k159ms98kn1nw3g9lc2j9w1m8ki41lql";
   };
 
   installPhase = ''
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libelf
   ] ++ (with ocamlPackages; [
-    ocaml findlib camlp4 sedlex ocamlbuild lwt_ppx lwt_log wtf8 dtoa
+    ocaml findlib camlp4 sedlex ocamlbuild lwt_ppx ppx_deriving ppx_gen_rec lwt_log wtf8 dtoa
   ]) ++ optionals stdenv.isDarwin [ cf-private CoreServices ];
 
   meta = with stdenv.lib; {

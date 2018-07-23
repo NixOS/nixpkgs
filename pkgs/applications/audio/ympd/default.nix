@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
     maintainers = [ stdenv.lib.maintainers.siddharthist ];
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

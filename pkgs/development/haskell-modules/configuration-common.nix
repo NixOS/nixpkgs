@@ -416,6 +416,9 @@ self: super: {
   # https://github.com/bos/snappy/issues/1
   snappy = dontCheck super.snappy;
 
+  # https://github.com/kim/snappy-framing/issues/3
+  snappy-framing = dontHaddock super.snappy-framing;
+
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
 
@@ -603,6 +606,11 @@ self: super: {
       (pkgs.fetchpatch {
         url = https://github.com/wjt/bustle/commit/bcc3d56d367635c0dfdb4eab0d1265829aba6400.patch;
         sha256 = "1ybviivfbs5janiyw01ww365vxckni6fk0j10609clxk4na2nvb9";
+      })
+      # No instance for (Semigroup Marquee)
+      (pkgs.fetchpatch {
+        url = https://github.com/wjt/bustle/commit/95393cb17c2fe5f0903470a449e36728471759eb.patch;
+        sha256 = "1n7h1rh62731kg9jjs2mn49nx033ds0l33mpgfl75hrjqblz44m1";
       })
     ];
     postInstall = ''
@@ -1077,6 +1085,9 @@ self: super: {
 
   # https://github.com/phadej/tree-diff/issues/19
   tree-diff = doJailbreak super.tree-diff;
+
+  # https://github.com/haskell-hvr/hgettext/issues/14
+  hgettext = doJailbreak super.hgettext;
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);

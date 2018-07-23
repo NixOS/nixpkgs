@@ -32,6 +32,7 @@ let auctex = stdenv.mkDerivation ( rec {
     description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
     homepage = http://www.gnu.org/software/auctex;
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl3;
   };
 });
 
