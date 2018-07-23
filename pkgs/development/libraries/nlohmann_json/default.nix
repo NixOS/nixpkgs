@@ -15,17 +15,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
   checkTarget = "test";
 
   enableParallelBuilding = true;
 
-  crossAttrs = {
-    cmakeFlags = "-DBuildTests=OFF";
-    doCheck = false;
-  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
-    cmakeFlags = "-DBuildTests=OFF -DCMAKE_SYSTEM_NAME=Windows";
-  };
+  cmakeFlags = [
+    "-DBuildTests=${if doCheck then "ON" else "OFF"}"
+  ] ++ stdenv.lib.optionals (hostPlatform.libc == "msvcrt") [
+    "-DCMAKE_SYSTEM_NAME=Windows"
+  ];
 
   meta = with stdenv.lib; {
     description = "Header only C++ library for the JSON file format";
