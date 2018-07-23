@@ -689,7 +689,7 @@ overrides = super: self: rec {
     plugins = with availablePlugins; [
             (python.withPackages (ps: with ps; [ pycrypto python-dbus ]))
         ];
-    }
+    };
 }
 </programlisting>
   </para>
