@@ -110,6 +110,7 @@ rec {
   vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
+    w64 = {}; # mingw-w64
 
     unknown = {};
   };
