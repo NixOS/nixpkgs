@@ -507,4 +507,8 @@ self: super: builtins.intersectAttrs super {
   blank-canvas = dontCheck super.blank-canvas;
   blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
 
+  # Missing file in source distribution:
+  # - https://github.com/karun012/doctest-discover/issues/22
+  # - https://github.com/karun012/doctest-discover/issues/23
+  doctest-discover = dontCheck super.doctest-discover;
 }
