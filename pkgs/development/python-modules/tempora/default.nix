@@ -1,6 +1,6 @@
-{ buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , setuptools_scm
-, six, pytz}:
+, six, pytz, jaraco_functools }:
 
 buildPythonPackage rec {
   pname = "tempora";
@@ -15,5 +15,11 @@ buildPythonPackage rec {
 
   buildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ six pytz ];
+  propagatedBuildInputs = [ six pytz jaraco_functools ];
+
+  meta = with lib; {
+    description = "Objects and routines pertaining to date and time";
+    homepage = https://github.com/jaraco/tempora;
+    license = licenses.mit;
+  };
 }
