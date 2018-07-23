@@ -1,10 +1,10 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest, tox }:
+{ stdenv, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   version = "0.3.0";
   pname = "node-semver";
 
-  buildInputs = [ pytest tox ];
+  checkInputs = [ pytest ];
 
   src = fetchPypi {
     inherit pname version;
