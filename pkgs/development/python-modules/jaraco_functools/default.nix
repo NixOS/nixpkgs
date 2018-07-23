@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "jaraco.functools";
-  version = "1.15.1";
+  version = "1.20";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nhl0pjc7acxznhadg9wq1a6ls17ja2np8vf9psq8j66716mk2ya";
+    sha256 = "bad775f06e58bb8de5563bc2a8bf704168919e6779d6e849b1ca58b443e97f3b";
   };
 
   propagatedBuildInputs = [ more-itertools backports_functools_lru_cache ];
