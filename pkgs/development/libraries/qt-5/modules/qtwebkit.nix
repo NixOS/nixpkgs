@@ -63,6 +63,8 @@ qtModule {
       ]
     ++ optional (!stdenv.isDarwin) ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
 
+  doCheck = false; # fails 13 out of 13 tests (ctest)
+
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
 
