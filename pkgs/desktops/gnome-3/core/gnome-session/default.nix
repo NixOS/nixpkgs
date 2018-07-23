@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, meson, ninja, pkgconfig, gnome3, glib, gtk, gsettings-desktop-schemas
+{ fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412
 , libxslt, gettext, makeWrapper, systemd, xorg, epoxy }:
 
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gnome-session/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "14nmbirgrp2nm16khbz109saqdlinlbrlhjnbjydpnrlimfgg4xq";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      # FIXME: glib binaries shouldn't be in .dev!
+      gsettings = "${glib.dev}/bin/gsettings";
+      dbusLaunch = "${dbus.lib}/bin/dbus-launch";
+    })
+  ];
 
   mesonFlags = [ "-Dsystemd=true" ];
 
@@ -29,15 +38,13 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  # FIXME: glib binaries shouldn't be in .dev!
   preFixup = ''
     for desktopFile in $(grep -rl "Exec=gnome-session" $out/share)
     do
       echo "Patching gnome-session path in: $desktopFile"
-      sed -i "s,^Exec=gnome-session,Exec=$out/bin/gnome-session," $desktopFile
+      sed -i "s,Exec=gnome-session,Exec=$out/bin/gnome-session," $desktopFile
     done
     wrapProgram "$out/bin/gnome-session" \
-      --prefix PATH : "${glib.dev}/bin" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --suffix XDG_DATA_DIRS : "${gnome3.gnome-shell}/share"\
