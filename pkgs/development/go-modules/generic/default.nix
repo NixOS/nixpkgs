@@ -2,6 +2,7 @@
 , removeReferencesTo, fetchFromGitHub }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
+, shellHook ? ""
 
 # We want parallel builds by default
 , enableParallelBuilding ? true
@@ -198,7 +199,7 @@ go.stdenv.mkDerivation (
   ''
   ) goPath) + ''
     export GOPATH=${lib.concatStringsSep ":" ( ["$d"] ++ ["$GOPATH"] ++ ["$PWD"] ++ extraSrcPaths)}
-  '';
+  '' + shellHook;
 
   disallowedReferences = lib.optional (!allowGoReference) go
     ++ lib.optional (!dontRenameImports) govers;
