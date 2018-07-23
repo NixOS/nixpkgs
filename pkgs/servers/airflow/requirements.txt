@@ -1,0 +1,7 @@
+python-daemon>=2.1.1, <2.1.2
+librabbitmq==1.6.1
+impyla==0.13.3
+httplib2==0.9.2
+google-cloud-dataflow==2.4.0
+dill=0.2.6
+apache-airflow[async,devel,celery,crypto,druid,gcp_api,jdbc,hdfs,hive,password,postgres,mysql,qds,rabbitmq,s3,samba,slack,jira,docker,kubernetes,elasticsearch]

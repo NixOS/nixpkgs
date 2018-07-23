@@ -12930,6 +12930,8 @@ with pkgs;
 
   rdf4store = callPackage ../servers/http/4store { };
 
+  airflow = callPackage ../servers/airflow { };
+
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = pkgs.apacheHttpd_2_4;
 
