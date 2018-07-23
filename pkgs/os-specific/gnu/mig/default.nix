@@ -21,13 +21,11 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  crossAttrs = {
-    postInstall =
-      # Fix the shebang to point to the cross-built shell.
-      '' sed -i "$out/bin/mig" \
-             -e 's|^#!/.*|#!${bash.crossDrv}/bin/sh|g'
-      '';
-  };
+  # Fix the shebang to point to the cross-built shell. Won't be needed
+  # after #43833.
+  postInstall = ''
+    sed -i "$out/bin/mig" -e 's|^#!/.*|#!${bash}/bin/sh|g'
+  '';
 
   meta = {
     description = "GNU MIG, the Mach interface generator";
