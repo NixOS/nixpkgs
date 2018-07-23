@@ -1074,6 +1074,8 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
+  cplex = callPackage ../applications/science/math/cplex { };
+
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
   codesearch = callPackage ../tools/text/codesearch { };
