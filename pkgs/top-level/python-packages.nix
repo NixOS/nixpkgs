@@ -13788,21 +13788,7 @@ in {
     };
   };
 
-  testresources = buildPythonPackage rec {
-    name = "testresources-${version}";
-    version = "0.2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/testresources/${name}.tar.gz";
-      sha256 = "0cbj3plbllyz42c4b5xxgwaa7mml54lakslrn4kkhinxhdri22md";
-    };
-
-    meta = {
-      description = "Pyunit extension for managing expensive test resources";
-      homepage = https://pypi.python.org/pypi/testresources/;
-      license = licenses.bsd2;
-    };
-  };
+  testresources = callPackage ../development/python-modules/testresources { };
 
   testtools = callPackage ../development/python-modules/testtools { };
 
