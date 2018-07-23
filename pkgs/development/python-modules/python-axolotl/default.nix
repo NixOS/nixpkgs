@@ -10,8 +10,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ cryptography python-axolotl-curve25519 protobuf ];
-  # IV == 0 in tests is not supported by pycryptodome (our pycrypto drop-in)
-  doCheck = false;
 
   meta = with lib; {
     homepage = https://github.com/tgalal/python-axolotl;
