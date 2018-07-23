@@ -2007,6 +2007,13 @@
     email = "tierpluspluslists@gmail.com";
     name = "Karn Kallio";
   };
+
+  kmeakin = {
+    email = "karlwfmeakin@gmail.com";
+    name = "Karl Meakin";
+    github = "Kmeakin";
+  };
+
   knedlsepp = {
     email = "josef.kemetmueller@gmail.com";
     github = "knedlsepp";
