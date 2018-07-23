@@ -471,6 +471,9 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
+  # https://github.com/plow-technologies/servant-streaming/issues/12
+  servant-streaming-server = dontCheck super.servant-streaming-server;
+
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
   intero = overrideCabal super.intero (drv: {
