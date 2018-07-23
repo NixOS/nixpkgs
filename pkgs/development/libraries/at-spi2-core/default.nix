@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
   buildInputs = [ dbus glib libX11 libXtst libXi ];
 
+  doCheck = false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
