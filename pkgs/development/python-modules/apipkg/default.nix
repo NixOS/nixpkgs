@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest }:
+, pytest, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "apipkg";
@@ -11,7 +11,8 @@ buildPythonPackage rec {
     sha256 = "2e38399dbe842891fe85392601aab8f40a8f4cc5a9053c326de35a1cc0297ac6";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [ setuptools_scm ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
     py.test
