@@ -658,7 +658,7 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        TimeoutSec = "infinity";
+        TimeoutSec = "1day";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/unicorn -c ${cfg.statePath}/config/unicorn.rb -E production";
