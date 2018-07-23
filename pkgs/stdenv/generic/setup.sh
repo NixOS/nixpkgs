@@ -504,6 +504,10 @@ activatePackage() {
         addToSearchPath _PATH "$pkg/bin"
     fi
 
+    if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
+        addToSearchPath HOST_PATH "$pkg/bin"
+    fi
+
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
         local oldOpts="$(shopt -po nounset)"
         set +u
