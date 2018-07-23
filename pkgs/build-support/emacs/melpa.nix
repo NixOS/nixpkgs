@@ -5,7 +5,15 @@
 
 with lib;
 
-{ pname
+{ /*
+    pname: Nix package name without special symbols and without version or
+    "emacs-" prefix.
+  */
+  pname
+  /*
+    ename: Original Emacs package name, possibly containing special symbols.
+  */
+, ename ? pname
 , version
 , recipe
 , meta ? {}
@@ -35,7 +43,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
   preUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/recipes"
     if [ -n "$recipe" ]; then
-      cp "$recipe" "$NIX_BUILD_TOP/recipes/$pname"
+      cp "$recipe" "$NIX_BUILD_TOP/recipes/$ename"
     fi
 
     ln -s "$melpa/package-build" "$NIX_BUILD_TOP/package-build"
@@ -45,7 +53,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
 
   postUnpack = ''
     mkdir -p "$NIX_BUILD_TOP/working"
-    ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$pname"
+    ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
   '';
 
   buildPhase =
@@ -58,7 +66,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
           -L "$melpa/package-build" \
           -l "$melpa2nix" \
           -f melpa2nix-build-package \
-          $pname $version
+          $ename $version
 
       runHook postBuild
     '';
@@ -66,9 +74,9 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
   installPhase = ''
     runHook preInstall
 
-    archive="$NIX_BUILD_TOP/packages/$pname-$version.el"
+    archive="$NIX_BUILD_TOP/packages/$ename-$version.el"
     if [ ! -f "$archive" ]; then
-        archive="$NIX_BUILD_TOP/packages/$pname-$version.tar"
+        archive="$NIX_BUILD_TOP/packages/$ename-$version.tar"
     fi
 
     emacs --batch -Q \
