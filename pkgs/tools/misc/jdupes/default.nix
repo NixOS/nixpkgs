@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # broken Makefile, the above also removes tests
+
   postInstall = ''
     install -Dm644 -t $out/share/doc/jdupes CHANGES LICENSE README
-
   '';
 
   meta = with stdenv.lib; {
