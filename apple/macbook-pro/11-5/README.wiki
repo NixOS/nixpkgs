@@ -6,3 +6,7 @@ The [https://support.apple.com/kb/SP719 MacBookPro11,4 and MacBookPro11,5] model
 
 You may wish to look into dynamic switching between integrated and discrete graphics, but this config doesn't attempt it.
 
+== Additional resources ==
+
+* Arch linux wiki: [https://wiki.archlinux.org/index.php/MacBookPro11,x MacBookPro11,x]
+* Kernel patches: [https://bugzilla.kernel.org/buglist.cgi?quicksearch=macbookpro11 MacBookPro11,x]
