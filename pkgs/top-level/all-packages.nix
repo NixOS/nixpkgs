@@ -20987,6 +20987,8 @@ with pkgs;
 
   ### MISC
 
+  android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
+
   antimicro = libsForQt5.callPackage ../tools/misc/antimicro { };
 
   atari800 = callPackage ../misc/emulators/atari800 { };
