@@ -7,6 +7,8 @@
 , automat
 , constantly
 , hyperlink
+, pyhamcrest
+, attrs
 , pyopenssl
 , service-identity
 , idna
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     sha256 = "95ae985716e8107816d8d0df249d558dbaabb677987cc2ace45272c166b267e4";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink ];
+  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs ];
 
   passthru.extras.tls = [ pyopenssl service-identity idna ];
 
