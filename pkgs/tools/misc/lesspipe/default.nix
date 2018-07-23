@@ -1,11 +1,12 @@
-{ stdenv, fetchFromGitHub, perl, file }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, perl, file, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "lesspipe-${version}";
   version = "1.82";
 
-  buildInputs = [ perl ];
+  buildInputs = [ makeWrapper perl ];
   preConfigure = "patchShebangs .";
+  preFixupPhases = ["wrapWithDepsPhase"];
 
   src = fetchFromGitHub {
     owner = "wofr06";
@@ -13,6 +14,10 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0vb7bpap8vy003ha10hc7hxl17y47sgdnrjpihgqxkn8k0bfqbbq";
   };
+
+  wrapWithDepsPhase = ''
+    wrapProgram $out/bin/lesspipe.sh --prefix PATH ":" ${lib.makeBinPath [ file ncurses ]}
+  '';
 
   meta = with stdenv.lib; {
     description = "A preprocessor for less";
