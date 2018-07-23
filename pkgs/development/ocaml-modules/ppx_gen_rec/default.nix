@@ -4,7 +4,7 @@ assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
 stdenv.mkDerivation rec {
   pname = "ppx_gen_rec";
-  name = "ocaml-${pname}-${version}";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
   version = "1.0.0";
 
   src = fetchurl {
@@ -20,13 +20,11 @@ stdenv.mkDerivation rec {
 
   inherit (jbuilder) installPhase;
 
-  createFindLibDestdir = true;
-
   meta = with stdenv.lib; {
     homepage = https://github.com/flowtype/ocaml-ppx_gen_rec;
     description = "ocaml preprocessor that generates a recursive module";
     license = licenses.mit;
     platforms = ocaml.meta.platforms or [];
-    maintainers = [];
+    maintainers = [ maintainers.frontsideair ];
   };
 }
