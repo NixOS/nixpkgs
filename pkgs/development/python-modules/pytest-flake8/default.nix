@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   checkPhase = ''
-    pytest .
+    pytest . -k "not test_mtime_caching"
   '';
 
   meta = {
