@@ -192,14 +192,14 @@ rec {
           depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
           nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
           depsBuildTarget             = lib.elemAt (lib.elemAt dependencies 0) 2;
-          depsHostBuild               = lib.elemAt (lib.elemAt dependencies 1) 0;
+          depsHostHost                = lib.elemAt (lib.elemAt dependencies 1) 0;
           buildInputs                 = lib.elemAt (lib.elemAt dependencies 1) 1;
           depsTargetTarget            = lib.elemAt (lib.elemAt dependencies 2) 0;
 
           depsBuildBuildPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 0) 0;
           propagatedNativeBuildInputs = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
           depsBuildTargetPropagated   = lib.elemAt (lib.elemAt propagatedDependencies 0) 2;
-          depsHostBuildPropagated     = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
+          depsHostHostPropagated      = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
           propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
           depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
 
