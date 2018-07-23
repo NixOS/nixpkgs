@@ -17490,21 +17490,7 @@ EOF
 
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
-  jaraco_functools = buildPythonPackage rec {
-    name = "jaraco.functools-${version}";
-    version = "1.15.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.functools/${name}.tar.gz";
-      sha256 = "1nhl0pjc7acxznhadg9wq1a6ls17ja2np8vf9psq8j66716mk2ya";
-    };
-
-    propagatedBuildInputs = with self; [ more-itertools backports_functools_lru_cache ];
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-  };
+  jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
 
   jaraco_classes = buildPythonPackage rec {
     name = "jaraco.classes-${version}";
