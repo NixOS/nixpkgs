@@ -858,7 +858,12 @@ with pkgs;
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
 
-  libtensorflow = callPackage ../development/libraries/libtensorflow { };
+  libtensorflow = callPackage ../development/libraries/libtensorflow {
+    cudaSupport = config.cudaSupport or false;
+    inherit (linuxPackages) nvidia_x11;
+    cudatoolkit = cudatoolkit_9_0;
+    cudnn = cudnn_cudatoolkit_9_0;
+  };
 
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
