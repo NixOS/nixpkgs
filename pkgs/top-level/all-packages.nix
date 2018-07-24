@@ -22,6 +22,21 @@ with pkgs;
 
   stdenvNoCC = stdenv.override { cc = null; };
 
+  stdenvNoLibs = let
+    bintools = stdenv.cc.bintools.override {
+      libc = null;
+      noLibc = true;
+    };
+  in stdenv.override {
+    cc = stdenv.cc.override {
+      libc = null;
+      noLibc = true;
+      extraPackages = [];
+      inherit bintools;
+    };
+    allowedRequisites = stdenv.allowedRequisites ++ [ bintools ];
+  };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -8015,6 +8030,8 @@ with pkgs;
   libcxxabi = llvmPackages.libcxxabi;
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
+
+  libgcc = callPackage ../development/libraries/gcc/libgcc { };
 
   libstdcxx5 = callPackage ../development/libraries/gcc/libstdc++/5.nix { };
 
