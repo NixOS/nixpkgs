@@ -82,6 +82,11 @@ in
         --set-rpath "${rpath}" \
         $out/lib/vscode/resources/app/node_modules.asar.unpacked/keytar/build/Release/keytar.node
 
+      patchelf \
+        --set-rpath "${rpath}" \
+        "$out/lib/vscode/resources/app/node_modules.asar.unpacked/native-keymap/build/Release/\
+      keymapping.node"
+
       ln -s ${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0 $out/lib/vscode/libsecret-1.so.0
     '';
 
