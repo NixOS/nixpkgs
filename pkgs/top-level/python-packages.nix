@@ -4840,8 +4840,7 @@ in {
       sha256 = "01iv8w6lmmq98qjhxmnp8ddjxifmhxcmp612ijd91wc8nv8lk12w";
     };
 
-    propagatedBuildInputs = with self; [ django ] ++
-      (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
+    propagatedBuildInputs = with self; [ django ];
 
     meta = {
       description = "An extension to the Django web framework that provides comprehensive version control facilities";
@@ -6469,17 +6468,6 @@ in {
       description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
       homepage = http://imageio.github.io/;
       license = licenses.bsd2;
-    };
-  };
-
-  importlib = buildPythonPackage rec {
-    name = "importlib-1.0.2";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/importlib/importlib-1.0.2.tar.gz";
-      sha256 = "131jvp6ahllcqblszjg6fxrzh4k50w8g60sq924b4nb8lxm9dl14";
     };
   };
 
