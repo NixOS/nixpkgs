@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   name = "yaxg-${version}";
-  version = "unstable-2018-07-20";
+  version = "unstable-2018-05-03";
 
   src = fetchFromGitHub {
     owner = "DanielFGray";
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin/
     mv yaxg $out/bin/
     chmod +x $out/bin/yaxg
-    wrapProgram $out/bin/yaxg --prefix PATH : ${
-      stdenv.lib.makeBinPath [ maim slop ffmpeg byzanz libnotify xdpyinfo ]}
+    wrapProgram $out/bin/yaxg --prefix PATH : ${ stdenv.lib.makeBinPath [ maim slop ffmpeg byzanz libnotify xdpyinfo ]}
   '';
 
   meta = with stdenv.lib; {
