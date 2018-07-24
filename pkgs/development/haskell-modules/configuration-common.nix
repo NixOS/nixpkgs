@@ -506,11 +506,20 @@ self: super: {
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
+  # Missing file in source distribution:
+  # - https://github.com/karun012/doctest-discover/issues/22
+  # - https://github.com/karun012/doctest-discover/issues/23
+  #
+  # When these are fixed the following needs to be enabled again:
+  #
+  # # Depends on itself for testing
+  # doctest-discover = addBuildTool super.doctest-discover
+  #   (if pkgs.buildPlatform != pkgs.hostPlatform
+  #    then self.buildHaskellPackages.doctest-discover
+  #    else dontCheck super.doctest-discover);
+  doctest-discover = dontCheck super.doctest-discover;
+
   # Depends on itself for testing
-  doctest-discover = addBuildTool super.doctest-discover
-    (if pkgs.buildPlatform != pkgs.hostPlatform
-     then self.buildHaskellPackages.doctest-discover
-     else dontCheck super.doctest-discover);
   tasty-discover = addBuildTool super.tasty-discover
     (if pkgs.buildPlatform != pkgs.hostPlatform
      then self.buildHaskellPackages.tasty-discover
@@ -1119,4 +1128,8 @@ self: super: {
     url = "https://github.com/guillaume-nargeot/hpc-coveralls/pull/73/commits/344217f513b7adfb9037f73026f5d928be98d07f.patch";
     sha256 = "056rk58v9h114mjx62f41x971xn9p3nhsazcf9zrcyxh1ymrdm8j";
   });
+
+  # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
+  blank-canvas = dontCheck super.blank-canvas;
+  blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
 }

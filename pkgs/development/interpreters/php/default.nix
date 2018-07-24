@@ -1,10 +1,10 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
 
 { lib, stdenv, fetchurl, composableDerivation, flex, bison
-, mysql, libxml2, readline, zlib, curl, postgresql, gettext
+, mysql, libxml2, readline, zlib, curl, postgresql, gettext, html-tidy
 , openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, libtidy }:
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium }:
 
 let
 
@@ -232,8 +232,8 @@ let
         };
 
         tidy = {
-          configureFlags = [ "--with-tidy=${libtidy}" ];
-          buildInputs = [ libtidy ];
+          configureFlags = [ "--with-tidy=${html-tidy}" ];
+          buildInputs = [ html-tidy ];
         };
       };
 
