@@ -173,7 +173,7 @@ in
       ${optionalString cfg.gdm.debug "Enable=true"}
     '';
 
-    environment.etc."gdm/Xsession".source = "${pkgs.gnome3.gdm}/etc/gdm/Xsession";
+    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.session.wrapper;
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {

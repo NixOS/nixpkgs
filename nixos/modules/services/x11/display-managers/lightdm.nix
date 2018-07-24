@@ -49,7 +49,7 @@ let
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
-      session-wrapper = ${dmcfg.session.script}
+      session-wrapper = ${dmcfg.session.wrapper}
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
