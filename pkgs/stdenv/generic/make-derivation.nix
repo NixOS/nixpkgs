@@ -164,7 +164,7 @@ rec {
 
       derivationArg =
         (removeAttrs attrs
-          ["meta" "passthru" "crossAttrs" "pos"
+          ["meta" "passthru" "pos"
            "doCheck" "doInstallCheck"
            "checkInputs" "installCheckInputs"
            "__impureHostDeps" "__propagatedImpureHostDeps"

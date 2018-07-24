@@ -87,7 +87,7 @@ rec {
                  (hostPlatform.isAarch64 || hostPlatform.isMips || hostPlatform.libc == "musl")
                  pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
-        } // args.crossAttrs or {});
+        });
   };
 
 
