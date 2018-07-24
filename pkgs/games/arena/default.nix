@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     '';
     license = stdenv.lib.licenses.unfree;
     platforms = ["x86_64-linux"];
-    hydryPlatforms = stdenv.lib.platforms.none;
+    hydraPlatforms = stdenv.lib.platforms.none;
   };
 
 }
