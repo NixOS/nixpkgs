@@ -35,20 +35,20 @@
 }:
 
 let
-  version = "3.4.1";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "08yahgf427d2qbs2mw02xww6bv5yjkfc1hihihh7fhqgfz0jnj1h";
+    sha256 = "0q752s1ir6iyqbp3pn425fi215fi7bzjl4aa3arvgh6sridda9lx";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "00x1x53qv2pnc7i56244b5nf44wm2mp77hj486i5697r6hikk8n3";
+    sha256 = "1fbgbf9xdby9a5yy6bmnkzchdsfii0jagfd373y015cjpr1mrlvz";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -59,16 +59,16 @@ let
     src = fetchFromGitHub {
       owner  = "opencv";
       repo   = "opencv_3rdparty";
-      rev    = "dfe3162c237af211e98b8960018b564bc209261d";
-      sha256 = "1k5xiwdi5r2y3fs5g70lpknxqi4pj32w6l311gfwng3q1cb2crif";
+      rev    = "bdb7bb85f34a8cb0d35e40a81f58da431aa1557a";
+      sha256 = "1ys9mshfpm8iy8h4ml792gnqrq959dsrcv26axx14niivxyjbji8";
     } + "/ippicv";
-    files = let name = platform : "ippicv_2017u3_${platform}_general_20170822.tgz"; in
+    files = let name = platform : "ippicv_2017u3_${platform}_general_20180518.tgz"; in
       if stdenv.system == "x86_64-linux" then
-      { ${name "lnx_intel64"} = "4e0352ce96473837b1d671ce87f17359"; }
+      { ${name "lnx_intel64"} = "b7cc351267db2d34b9efa1cd22ff0572"; }
       else if stdenv.system == "i686-linux" then
-      { ${name "lnx_ia32"}    = "dcdb0ba4b123f240596db1840cd59a76"; }
+      { ${name "lnx_ia32"}    = "ea72de74dae3c604eb6348395366e78e"; }
       else if stdenv.system == "x86_64-darwin" then
-      { ${name "mac_intel64"} = "c1ebb5dfa5b7f54b0c44e1917805a463"; }
+      { ${name "mac_intel64"} = "3ae52b9be0fe73dd45bc5e9429cd3732"; }
       else
       throw "ICV is not available for this platform (or not yet supported by this package)";
     dst = ".cache/ippicv";
@@ -132,17 +132,6 @@ let
     ln -s "${extra.src}/${name}" "${extra.dst}/${md5}-${name}"
   '') extra.files);
 
-  # See opencv_contrib/modules/dnn_modern/CMakeLists.txt
-  tinyDnn = rec {
-    src = fetchurl {
-      url    = "https://github.com/tiny-dnn/tiny-dnn/archive/${name}";
-      sha256 = "12x1b984cn0psn6kz1fy75zljgzqvkdyjy8i292adfnyqpl1rip2";
-    };
-    name = "v1.0.0a3.tar.gz";
-    md5  = "adb1c512e09ca2c7a6faef36f9c53e59";
-    dst  = ".cache/tiny_dnn";
-  };
-
   opencvFlag = name: enabled: "-DWITH_${name}=${printEnabled enabled}";
 
   printEnabled = enabled : if enabled then "ON" else "OFF";
@@ -155,6 +144,11 @@ stdenv.mkDerivation rec {
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
+
+  # TODO: remove the following patch once commit
+  # https://github.com/opencv/opencv/commit/e2b5d112909b9dfd764f14833b82e38e4bc2f81f
+  # is released.
+  patches = [ ./fix-dnn.patch ];
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
@@ -174,9 +168,6 @@ stdenv.mkDerivation rec {
       ${installExtraFiles vgg}
       ${installExtraFiles boostdesc}
       ${installExtraFiles face}
-
-      mkdir -p "${tinyDnn.dst}"
-      ln -s "${tinyDnn.src}" "${tinyDnn.dst}/${tinyDnn.md5}-${tinyDnn.name}"
     '');
 
   buildInputs =
@@ -243,9 +234,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
-
-    # On OS X the tiny-dnn-1.0.0a3 dependency of dnn_modern fails to build.
-    "-DBUILD_opencv_dnn_modern=OFF"
   ];
 
   enableParallelBuilding = true;
@@ -273,11 +261,11 @@ stdenv.mkDerivation rec {
 
   passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = https://opencv.org/;
-    license = with stdenv.lib.licenses; if enableUnfree then unfree else bsd3;
-    maintainers = with stdenv.lib.maintainers; [viric mdaiter basvandijk];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = with licenses; if enableUnfree then unfree else bsd3;
+    maintainers = with maintainers; [viric mdaiter basvandijk];
+    platforms = with platforms; linux ++ darwin;
   };
 }
