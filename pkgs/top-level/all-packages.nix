@@ -19357,6 +19357,8 @@ with pkgs;
 
   armagetronad = callPackage ../games/armagetronad { };
 
+  arena = callPackage ../games/arena {};
+
   arx-libertatis = callPackage ../games/arx-libertatis {
     stdenv = overrideCC stdenv gcc6;
   };
