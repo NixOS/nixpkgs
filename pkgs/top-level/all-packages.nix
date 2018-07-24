@@ -16943,6 +16943,8 @@ with pkgs;
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
+  kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
+
   kupfer = callPackage ../applications/misc/kupfer { };
 
   lame = callPackage ../development/libraries/lame { };
