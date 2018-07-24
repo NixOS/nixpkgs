@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, makeWrapper, gvfs, atomEnv}:
+{ stdenv, pkgs, fetchurl, makeWrapper, gvfs, gtk3, atomEnv}:
 
 let
   common = pname: {version, sha256}: stdenv.mkDerivation rec {
@@ -24,7 +24,9 @@ let
       sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
       # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
       wrapProgram $out/bin/${pname} \
-        --prefix "PATH" : "${gvfs}/bin"
+        --prefix "PATH" : "${gvfs}/bin" \
+        --suffix "XDG_DATA_DIRS" : "${gtk3}/share/gsettings-schemas/${gtk3.name}/";
+
 
       fixupPhase
 
