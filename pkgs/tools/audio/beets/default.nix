@@ -97,7 +97,7 @@ let
   };
 
 in pythonPackages.buildPythonApplication rec {
-  name = "beets-${version}";
+  pname = "beets";
   version = "1.4.7";
 
   src = fetchFromGitHub {
@@ -114,7 +114,6 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.munkres
     pythonPackages.musicbrainzngs
     pythonPackages.mutagen
-    pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
     pythonPackages.gst-python
