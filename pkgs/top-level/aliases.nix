@@ -314,6 +314,11 @@ mapAliases ({
   forceSystem = system: _:
     (import self.path { localSystem = { inherit system; }; });
 
+  arm-frc-linux-gnueabi-eglibc = pkgsCross.arm-frc-linux-gnueabi.stdenv.cc.libc;
+  arm-frc-linux-gnueabi-linux-api-headers = pkgsCross.arm-frc-linux-gnueabi.buildPackages.linuxHeaders;
+  arm-frc-linux-gnueabi-binutils = pkgsCross.arm-frc-linux-gnueabi.buildPackages.binutils;
+  arm-frc-linux-gnueabi-gcc = pkgsCross.arm-frc-linux-gnueabi.stdenv.cc.cc;
+
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
