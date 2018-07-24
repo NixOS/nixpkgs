@@ -1,7 +1,7 @@
 {fetchFromGitHub, stdenv, gtk3, python34Packages, gobjectIntrospection}:
 python34Packages.buildPythonApplication rec {
-  name = "solaar-${version}";
-  version = "master";
+  name = "solaar-unstable-${version}";
+  version = "2018-02-02";
   namePrefix = "";
   src = fetchFromGitHub {
     owner = "pwr";
