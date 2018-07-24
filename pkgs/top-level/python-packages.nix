@@ -13381,8 +13381,6 @@ in {
     };
   });
 
-  spyder = callPackage ../applications/science/spyder { };
-
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   SQLAlchemy-ImageAttach = buildPythonPackage rec {

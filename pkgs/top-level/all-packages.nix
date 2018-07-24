@@ -20909,7 +20909,7 @@ with pkgs;
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
-  spyder = pythonPackages.spyder;
+  spyder = callPackage ../applications/science/spyder { };
 
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
