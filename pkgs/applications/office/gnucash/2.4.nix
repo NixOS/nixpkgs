@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk2, libgnomeui, libofx
 , libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
 , intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper, libglade
-, libgsf, libart_lgpl, perlPackages, aqbanking, gwenhywfar
+, libgsf, libart_lgpl, perlPackages, aqbanking, gwenhywfar, hicolor-icon-theme
 }:
 
 /* If you experience GConf errors when running GnuCash on NixOS, see
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     libgnomeprint goffice enchant gettext intltool perl guile slibGuile
     swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
     perlPackages.DateManip perlPackages.FinanceQuote aqbanking gwenhywfar
+    hicolor-icon-theme
   ];
   propagatedUserEnvPkgs = [ gconf ];
 
@@ -49,8 +50,6 @@ stdenv.mkDerivation rec {
         --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
         --prefix PATH ":" "$out/bin:${stdenv.lib.makeBinPath [ perl gconf ]}"
     done
-
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   # The following settings fix failures in the test suite. It's not required otherwise.
