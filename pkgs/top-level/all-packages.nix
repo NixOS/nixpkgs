@@ -15649,6 +15649,8 @@ with pkgs;
 
   docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
 
+  amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
+
   docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
 
   doodle = callPackage ../applications/search/doodle { };
