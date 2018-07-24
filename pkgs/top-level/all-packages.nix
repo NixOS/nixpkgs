@@ -6335,13 +6335,7 @@ with pkgs;
     { substitutions = { gcc = gcc-unwrapped; }; }
     ../development/compilers/gcc/libstdc++-hook.sh;
 
-  # Can't just overrideCC, because then the stdenv-cross mkDerivation will be
-  # thrown away. TODO: find a better solution for this.
-  crossLibcStdenv = buildPackages.makeStdenvCross {
-    inherit (buildPackages.buildPackages) stdenv;
-    inherit buildPlatform hostPlatform targetPlatform;
-    cc = buildPackages.gccCrossStageStatic;
-  };
+  crossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
