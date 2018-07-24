@@ -8997,6 +8997,8 @@ with pkgs;
   db60 = callPackage ../development/libraries/db/db-6.0.nix { };
   db62 = callPackage ../development/libraries/db/db-6.2.nix { };
 
+  dbxml = callPackage ../development/libraries/dbxml { };
+
   dbus = callPackage ../development/libraries/dbus { };
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus-glib       = callPackage ../development/libraries/dbus-glib { };
