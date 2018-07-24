@@ -1128,4 +1128,8 @@ self: super: {
     url = "https://github.com/guillaume-nargeot/hpc-coveralls/pull/73/commits/344217f513b7adfb9037f73026f5d928be98d07f.patch";
     sha256 = "056rk58v9h114mjx62f41x971xn9p3nhsazcf9zrcyxh1ymrdm8j";
   });
+
+  # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
+  blank-canvas = dontCheck super.blank-canvas;
+  blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
 }
