@@ -20980,7 +20980,7 @@ with pkgs;
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
-  spyder = pythonPackages.spyder;
+  spyder = callPackage ../applications/science/spyder { };
 
   openspace = callPackage ../applications/science/astronomy/openspace { };
 
