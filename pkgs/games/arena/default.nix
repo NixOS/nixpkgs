@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    synopsis = "Chess GUI for analyzing with and playing against various engines";
-    description = ''
+    description = "Chess GUI for analyzing with and playing against various engines";
+    longDescription = ''
       A free Graphical User Interface (GUI) for chess. Arena assists you in
       analyzing and playing games as well as in testing chess engines. It runs
       on Linux or Windows. Arena is compatible to Winboard protocol I, II and
