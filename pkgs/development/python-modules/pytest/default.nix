@@ -27,9 +27,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  # Don't create .pytest-cache when using py.test in a Nix build
+  # Remove .pytest-cache when using py.test in a Nix build
   setupHook = writeText "pytest-hook" ''
-    export PYTEST_ADDOPTS="-p no:cacheprovider"
+    postFixupHooks+=(
+        'find $out -name .pytest-cache -type d -exec rm -rf {} +'
+    )
   '';
 
   meta = with stdenv.lib; {
