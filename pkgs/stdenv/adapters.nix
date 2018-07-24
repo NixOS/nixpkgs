@@ -63,33 +63,24 @@ rec {
                       # with this run on a different platform, so disable by
                       # default.
                       overrides ? _: _: {}
-                    } @ overrideArgs: let
-    stdenv = overrideArgs.stdenv.override {
+                    } @ overrideArgs:
+    overrideArgs.stdenv.override (old: {
       inherit
         buildPlatform hostPlatform targetPlatform
         cc overrides;
 
       allowedRequisites = null;
+      extraNativeBuildInputs = old.extraNativeBuildInputs
+           # without proper `file` command, libtool sometimes fails
+           # to recognize 64-bit DLLs
+        ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
+        ++ stdenv.lib.optional
+             (hostPlatform.isAarch64 || hostPlatform.isMips || hostPlatform.libc == "musl")
+             pkgs.updateAutotoolsGnuConfigScriptsHook
+        ;
+
       extraBuildInputs = [ ]; # Old ones run on wrong platform
-    };
-  in stdenv // {
-    mkDerivation =
-      { nativeBuildInputs ? []
-      , ...
-      } @ args:
-
-        stdenv.mkDerivation (args // {
-          nativeBuildInputs = nativeBuildInputs
-              # without proper `file` command, libtool sometimes fails
-              # to recognize 64-bit DLLs
-            ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
-            ++ stdenv.lib.optional
-                 (hostPlatform.isAarch64 || hostPlatform.isMips || hostPlatform.libc == "musl")
-                 pkgs.updateAutotoolsGnuConfigScriptsHook
-            ;
-        });
-  };
-
+    });
 
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.
