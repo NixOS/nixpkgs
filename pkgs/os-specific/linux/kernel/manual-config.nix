@@ -90,9 +90,6 @@ let
 
       inherit src;
 
-      preUnpack = ''
-      '';
-
       patches = map (p: p.patch) kernelPatches;
 
       prePatch = ''
