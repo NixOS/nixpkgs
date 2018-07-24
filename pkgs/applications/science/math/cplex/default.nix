@@ -34,12 +34,17 @@ stdenv.mkDerivation rec {
       ln -s $pgm $out/bin;
     done
 
-    for pgm in $out/cplex/bin/x86-64_linux/cplex $out/cpoptimizer/bin/x86-64_linux/cpoptimizer  $out/opl/oplide/jre/bin/*; 
+    for pgm in $out/cplex/bin/x86-64_linux/cplex $out/cpoptimizer/bin/x86-64_linux/cpoptimizer; 
     do
-      if grep ELF $pgm;
+      patchelf --set-interpreter "$interpreter" $pgm;
+      ln -s $pgm $out/bin;
+    done
+
+    for pgm in $out/opl/oplide/jre/bin/*; 
+    do
+      if grep ELF $pgm > /dev/null;
       then
         patchelf --set-interpreter "$interpreter" $pgm;
-        ln -s $pgm $out/bin;
       fi
     done
   '';
