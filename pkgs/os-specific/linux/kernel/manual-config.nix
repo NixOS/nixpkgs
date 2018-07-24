@@ -109,11 +109,6 @@ let
 
         echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
 
-        if [[ -z "$buildRoot" || ! -d "$buildRoot" ]]; then
-          echo "set $buildRoot to the build folder please"
-          exit 1
-        fi
-
         if [ -f "$buildRoot/.config" ]; then
           echo "Could not link $buildRoot/.config : file exists"
           exit 1
