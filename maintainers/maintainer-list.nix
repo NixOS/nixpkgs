@@ -862,6 +862,11 @@
     github = "danharaj";
     name = "Dan Haraj";
   };
+  danieldk = {
+    email = "me@danieldk.eu";
+    github = "danieldk";
+    name = "Daniël de Kok";
+  };
   danielfullmer = {
     email = "danielrf12@gmail.com";
     github = "danielfullmer";
