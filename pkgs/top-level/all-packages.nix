@@ -5252,7 +5252,7 @@ with pkgs;
 
   solaar = callPackage ../applications/misc/solaar {};
 
-  solaar-master = callPackage ../applications/misc/solaar-master {};
+  solaar-unstable = callPackage ../applications/misc/solaar-unstable {};
 
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
