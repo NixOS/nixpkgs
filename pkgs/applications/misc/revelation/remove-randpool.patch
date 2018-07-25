@@ -1,0 +1,133 @@
+diff --git a/src/bundle/AfSplitter.py b/src/bundle/AfSplitter.py
+index e82c21b..007fd2a 100644
+--- a/src/bundle/AfSplitter.py
++++ b/src/bundle/AfSplitter.py
+@@ -42,14 +42,14 @@ import hashlib, string, math, struct
+ 
+ # will need changed to use Crypto.Random (now in python-crypt git)
+ # see: http://lists.dlitz.net/pipermail/pycrypto/2008q3/000020.html
+-from Crypto.Util.randpool import RandomPool
+-from Crypto.Cipher import XOR
++import Crypto.Random
++import Crypto.Util.strxor
++
+ 
+ def _xor(a, b):
+ 	"""Internal function to performs XOR on two strings a and b"""
+ 
+-	xor = XOR.new(a)
+-	return xor.encrypt(b)
++        return Crypto.Util.strxor.strxor(a, b)
+ 
+ def _diffuse(block, size, digest):
+ 	"""Internal function to diffuse information inside a buffer"""
+@@ -81,24 +81,19 @@ def AFSplit(data, stripes, digesttype='sha1'):
+ 
+ 	blockSize = len(data)
+ 
+-	rand = RandomPool()
+-
+ 	bufblock = "\x00" * blockSize
+ 
+ 	ret = ""
+ 	for i in range(0, stripes-1):
+ 
+ 		# Get some random data
+-		rand.randomize()
+-		rand.stir()
+-		r = rand.get_bytes(blockSize)
++		r = Crypto.Random.get_random_bytes(blockSize)
+ 		if rand.entropy < 0:
+ 			print "Warning: RandomPool entropy dropped below 0"
+ 
+ 		ret += r
+ 		bufblock = _xor(r, bufblock)
+ 		bufblock = _diffuse(bufblock, blockSize, digesttype)
+-		rand.add_event(bufblock)
+ 
+ 	ret += _xor(bufblock, data)
+ 	return ret
+diff --git a/src/bundle/PBKDFv2.py b/src/bundle/PBKDFv2.py
+index 8a79a6f..5b9fd0aa 100644
+--- a/src/bundle/PBKDFv2.py
++++ b/src/bundle/PBKDFv2.py
+@@ -32,7 +32,7 @@ http://www.gnu.org/copyleft/gpl.html
+ """
+ 
+ import struct, string, math, hashlib, hmac # RFC2104
+-from Crypto.Cipher import XOR
++import Crypto.Util.strxor
+ 
+ ################ PBKDFv2
+ class PBKDFv2:
+@@ -145,5 +145,4 @@ class PBKDFv2:
+         if len(a) != len(b):
+             raise ValueError("ERROR: Strings are of different size! %s %s" % (len(a), len(b)))
+ 
+-	xor = XOR.new(a)
+-	return xor.encrypt(b)
++        return Crypto.Util.strxor.strxor(a, b)
+diff --git a/src/bundle/luks.py b/src/bundle/luks.py
+index 073977b..d5aa9c3 100644
+--- a/src/bundle/luks.py
++++ b/src/bundle/luks.py
+@@ -65,7 +65,7 @@ import os, math, struct, stat, hashlib
+ 
+ # will need changed to use Crypto.Random (now in python-crypt git)
+ # see: http://lists.dlitz.net/pipermail/pycrypto/2008q3/000020.html
+-from Crypto.Util.randpool import RandomPool
++import Crypto.Random
+ from Crypto.Cipher import *
+ import PBKDFv2, AfSplitter
+ 
+@@ -178,13 +178,11 @@ class LuksFile:
+ 		self.keyBytes = masterSize
+ 		self.hashSpec = hashSpec
+ 
+-		rand = RandomPool(self.SALT_SIZE + 16 + masterSize)
+-
+ 		# Generate the salt
+-		self.mkDigestSalt = rand.get_bytes(self.SALT_SIZE)
++                self.mkDigestSalt = Crypto.Random.get_random_bytes(self.SALT_SIZE)
+ 
+ 		# Generate a random master key
+-		self.masterKey = rand.get_bytes(self.keyBytes)
++		self.masterKey = Crypto.Random.get_random_bytes(self.keyBytes)
+ 		self.ivGen.set_key(self.masterKey)
+ 
+ 		# generate the master key digest
+@@ -210,7 +208,7 @@ class LuksFile:
+ 		self.payloadOffset = currentSector
+ 
+ 		# Generate a UUID for this file
+-		self._uuidgen(rand)
++		self._uuidgen()
+ 
+ 		# Create a new file, and save the header into it
+ 		self.file = file
+@@ -263,8 +261,7 @@ class LuksFile:
+ 		key.passwordIterations = iterations
+ 
+ 		# Generate a random salt for this key
+-		rand = RandomPool(self.SALT_SIZE)
+-		key.passwordSalt = rand.get_bytes(self.SALT_SIZE)
++		key.passwordSalt = Crypto.Random.get_random_bytes(self.SALT_SIZE)
+ 
+ 		# Hash the key using PBKDFv2
+ 		pbkdf = PBKDFv2.PBKDFv2()
+@@ -594,13 +591,13 @@ class LuksFile:
+ 		self.cipherName = cipherName
+ 		self.cipherMode = cipherMode
+ 
+-	def _uuidgen(self, rand):
++	def _uuidgen(self):
+ 		"""Internal function to generate a UUID"""
+ 
+ 		# I copied this code (and slightly modified it) from a module written
+ 		# by Denys Duchier http://ofxsuite.berlios.de/uuid.py  (which is under the GPL)
+ 
+-		buf = rand.get_bytes(16)
++		buf = Crypto.Random.get_random_bytes(16)
+ 		low,mid,hi_and_version,seq,node = struct.unpack(">IHHH6s",buf)
+ 		seq = (seq & 0x3FFF) | 0x8000
+ 		hi_and_version = (hi_and_version & 0x0FFF) | 0x4000
