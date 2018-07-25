@@ -11135,12 +11135,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetDNS = buildPerlPackage rec {
-    name = "Net-DNS-1.15";
+    name = "Net-DNS-1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NL/NLNETLABS/${name}.tar.gz";
-      sha256 = "1ad46ba6438b846a94b4f50d53ecfda55f504a17e11b94effb087ff9329e61d0";
+      sha256 = "8163eebaf46d1a870b6f596684f345da7c3a7461d7dba2b85f23e02d8982ea37";
     };
-    propagatedBuildInputs = [ DigestHMAC ];
+    propagatedBuildInputs = [ DigestHMAC IOSocketIP ];
     makeMakerFlags = "--noonline-tests";
     meta = {
       description = "Perl Interface to the Domain Name System";
