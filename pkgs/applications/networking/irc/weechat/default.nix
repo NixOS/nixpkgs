@@ -2,7 +2,6 @@
 , ncurses, openssl, aspell, gnutls
 , zlib, curl, pkgconfig, libgcrypt
 , cmake, makeWrapper, libobjc, libresolv, libiconv
-, writeScriptBin # for withPlugins
 , asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
@@ -10,9 +9,7 @@
 , pythonSupport ? true, pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
-, extraBuildInputs ? []
-, configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
-, runCommand }:
+, extraBuildInputs ? [] }:
 
 let
   inherit (pythonPackages) python;
@@ -26,7 +23,7 @@ let
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
-  weechat =
+  in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
       version = "2.1";
@@ -81,49 +78,4 @@ let
         maintainers = with stdenv.lib.maintainers; [ lovek323 garbas the-kenny lheckemann ];
         platforms = stdenv.lib.platforms.unix;
       };
-    };
-in if configure == null then weechat else
-  let
-    perlInterpreter = perl;
-    config = configure {
-      availablePlugins = let
-          simplePlugin = name: {pluginFile = "${weechat.${name}}/lib/weechat/plugins/${name}.so";};
-        in rec {
-          python = {
-            pluginFile = "${weechat.python}/lib/weechat/plugins/python.so";
-            withPackages = pkgsFun: (python // {
-              extraEnv = ''
-                export PYTHONHOME="${pythonPackages.python.withPackages pkgsFun}"
-              '';
-            });
-          };
-          perl = (simplePlugin "perl") // {
-            extraEnv = ''
-              export PATH="${perlInterpreter}/bin:$PATH"
-            '';
-          };
-          tcl = simplePlugin "tcl";
-          ruby = simplePlugin "ruby";
-          guile = simplePlugin "guile";
-          lua = simplePlugin "lua";
-        };
-      };
-
-    inherit (config) plugins;
-
-    pluginsDir = runCommand "weechat-plugins" {} ''
-      mkdir -p $out/plugins
-      for plugin in ${lib.concatMapStringsSep " " (p: p.pluginFile) plugins} ; do
-        ln -s $plugin $out/plugins
-      done
-    '';
-  in (writeScriptBin "weechat" ''
-    #!${stdenv.shell}
-    export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
-    ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
-    exec ${weechat}/bin/weechat "$@"
-  '') // {
-    name = weechat.name;
-    unwrapped = weechat;
-    meta = weechat.meta;
-  }
+    }
