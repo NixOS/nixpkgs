@@ -37,7 +37,7 @@ in
 
     preBuild = ''
       # The build process uses ./rebar. Link it to the nixpkgs rebar
-      rm -v rebar
+      rm -vf rebar
       ln -s ${rebar}/bin/rebar rebar
 
       substituteInPlace Makefile \
