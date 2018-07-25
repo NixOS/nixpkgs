@@ -8,10 +8,7 @@
 assert httpServer -> libpng != null;
 assert client -> libX11 != null;
 with stdenv;
-let
-  # Enable/Disable Feature
-  edf = enabled: flag: if enabled then "--enable-" + flag else "--disable-" + flag;
-in
+
 mkDerivation rec {
   name = "aMule-2.3.2";
 
@@ -27,15 +24,15 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = ''
-    --with-crypto-prefix=${cryptopp}
-    --disable-debug
-    --enable-optimize
-    ${edf monolithic "monolithic"}
-    ${edf daemon "amule-daemon"}
-    ${edf client "amule-gui"}
-    ${edf httpServer "webserver"}
-  '';
+  configureFlags = [
+    "--with-crypto-prefix=${cryptopp}"
+    "--disable-debug"
+    "--enable-optimize"
+    (stdenv.lib.enableFeature monolithic "monolithic")
+    (stdenv.lib.enableFeature daemon "amule-daemon")
+    (stdenv.lib.enableFeature client "amule-gui")
+    (stdenv.lib.enableFeature httpServer "webserver")
+  ];
 
   postConfigure = ''
     sed -i "src/libs/ec/file_generator.pl"     \

@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = "sh autogen.sh";
 
-  configureFlags = ''
-    --enable-nls
-    --enable-safe-mode
-  '';
+  configureFlags = [
+    "--enable-nls"
+    "--enable-safe-mode"
+  ];
 
   meta = with stdenv.lib; {
     description = "A fast, lightweight terminal emulator";

@@ -7,7 +7,6 @@
 , libintl }:
 
 let
-  edf = flag: feature: (if flag then "--with-" else "--without-") + feature;
   optional = cond: elem: assert cond -> elem != null; if cond then [elem] else [];
 
 in stdenv.mkDerivation rec {
@@ -28,14 +27,14 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gnutls ];
 
-  configureFlags = ''
-    ${if documentation then "--enable-gtk-doc" else "--disable-gtk-doc"}
-    ${edf gtkWidgets "inftextgtk"}
-    ${edf gtkWidgets "infgtk"}
-    ${edf daemon "infinoted"}
-    ${edf daemon "libdaemon"}
-    ${edf avahiSupport "avahi"}
-  '';
+  configureFlags = [
+    (stdenv.lib.enableFeature documentation "gtk-doc")
+    (stdenv.lib.withFeature gtkWidgets "inftextgtk")
+    (stdenv.lib.withFeature gtkWidgets "infgtk")
+    (stdenv.lib.withFeature daemon "infinoted")
+    (stdenv.lib.withFeature daemon "libdaemon")
+    (stdenv.lib.withFeature avahiSupport "avahi")
+  ];
 
   passthru = {
     inherit version;

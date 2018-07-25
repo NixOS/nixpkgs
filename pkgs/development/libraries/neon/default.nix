@@ -28,13 +28,12 @@ stdenv.mkDerivation rec {
   buildInputs = [libxml2 openssl]
     ++ stdenv.lib.optional compressionSupport zlib;
 
-  configureFlags = ''
-    ${if shared then "--enable-shared" else "--disable-shared"}
-    ${if static then "--enable-static" else "--disable-static"}
-    ${if compressionSupport then "--with-zlib" else "--without-zlib"}
-    ${if sslSupport then "--with-ssl" else "--without-ssl"}
-    --enable-shared
-  '';
+  configureFlags = [
+    (stdenv.lib.enableFeature shared "shared")
+    (stdenv.lib.enableFeature static "static")
+    (stdenv.lib.withFeature compressionSupport "zlib")
+    (stdenv.lib.withFeature sslSupport "ssl")
+  ];
 
   passthru = {inherit compressionSupport sslSupport;};
 

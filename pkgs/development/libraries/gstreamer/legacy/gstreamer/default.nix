@@ -26,9 +26,13 @@ stdenv.mkDerivation rec {
     patch -p1 < ${./darwin.patch}
   '';
 
-  configureFlags = ''
-    --disable-examples --enable-failing-tests --localstatedir=/var --disable-gtk-doc --disable-docbook
-  '';
+  configureFlags = [
+    "--disable-examples"
+    "--enable-failing-tests"
+    "--localstatedir=/var"
+    "--disable-gtk-doc"
+    "--disable-docbook"
+  ];
 
   postInstall = ''
     # Hm, apparently --disable-gtk-doc is ignored...
