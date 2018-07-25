@@ -7711,10 +7711,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   IOSocketSSL = buildPerlPackage rec {
-    name = "IO-Socket-SSL-2.056";
+    name = "IO-Socket-SSL-2.058";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SU/SULLR/${name}.tar.gz";
-      sha256 = "91451ecc28b243a78b438f0a42db24c4b60a86f088879b38e40bdbd697818259";
+      sha256 = "746cd17c292cfc206b394497a060b0582d0b06a1040e6bb27e6530d56786e40b";
     };
     propagatedBuildInputs = [ NetSSLeay ];
     # Fix path to default certificate store.
