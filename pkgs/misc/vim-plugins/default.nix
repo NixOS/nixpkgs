@@ -33,7 +33,7 @@ let
 # Documentation & usage see vim-utils.nix.
 # attribute names should be the same as used by vim-pi to make dependency
 # resolution work
-  self = rec {
+self = rec {
   # This is not a plugin, it provides bin/vim-open-buffer-with-plugins-derivations
   # which recreates this the following derivations based on ./vim-plugin-names
   pluginnames2nix = vimUtils.pluginnames2Nix {
@@ -450,17 +450,6 @@ let
       url = "https://github.com/Rykka/riv.vim";
       rev = "fb6d6f8c9d85128fd69c74f11bb7413addc002e8";
       sha256 = "1mjp90lz6jf3w9j4h1sidz7kfxhi9hk27pdnvb0hrvxw0q3bj9ch";
-    };
-    dependencies = [];
-
-  };
-
-  deoplete-nvim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "deoplete-nvim-2018-07-22";
-    src = fetchgit {
-      url = "https://github.com/Shougo/deoplete.nvim";
-      rev = "59fbd61d492b0a1728f34b8958d8e4dbce165c73";
-      sha256 = "06x46dhyy9bix0svl2c0jxxk7rs8ahzl18yq6hmfb1j45jlv5qiz";
     };
     dependencies = [];
 
@@ -1050,6 +1039,20 @@ let
     };
     dependencies = [];
 
+  };
+
+  vim-isort = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-isort-2017-03-12";
+    src = fetchgit {
+      url = "https://github.com/fisadev/vim-isort";
+      rev = "65bd9fecd5412c8c127de86f8dcf6cfe4dd70fda";
+      sha256 = "0d9r2p557czrqhn3z35jsrzp3iw6n0vjhxcgkk6l0y79ni3dar1m";
+    };
+    dependencies = [];
+    postPatch = ''
+      substituteInPlace ftplugin/python_vimisort.vim \
+          --replace 'import vim' 'import vim; import sys; sys.path.append("${pythonPackages.isort}/${python.sitePackages}")'
+    '';
   };
 
   vim-colorschemes = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -2345,6 +2348,17 @@ let
 
   };
 
+  deoplete-nvim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "deoplete-nvim-2018-07-22";
+    src = fetchgit {
+      url = "https://github.com/shougo/deoplete.nvim";
+      rev = "59fbd61d492b0a1728f34b8958d8e4dbce165c73";
+      sha256 = "06x46dhyy9bix0svl2c0jxxk7rs8ahzl18yq6hmfb1j45jlv5qiz";
+    };
+    dependencies = [];
+
+  };
+
   echodoc-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "echodoc-vim-2018-03-26";
     src = fetchgit {
@@ -2485,12 +2499,34 @@ let
     '';
   };
 
+  fugitive-gitlab-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "fugitive-gitlab-vim-2018-07-04";
+    src = fetchgit {
+      url = "https://github.com/shumphrey/fugitive-gitlab.vim";
+      rev = "b8e7b6986c5d13f3e2de2163816af06f74a6f838";
+      sha256 = "1lvll9hjqsm79f0ls84d8b8s12043b9p5qa4i6iwf3v1qbq7kb8d";
+    };
+    dependencies = [];
+
+  };
+
   gundo-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "gundo-vim-2017-05-09";
     src = fetchgit {
       url = "https://github.com/sjl/gundo.vim";
       rev = "46c443ee9d5854320eb965a1fdee781ba83a070e";
       sha256 = "0adk7agzmbfv342zw6lc8jad6yjs1wap4c0ca98s0qm2bs0r1hl2";
+    };
+    dependencies = [];
+
+  };
+
+  splice-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "splice-vim-2017-09-03";
+    src = fetchgit {
+      url = "https://github.com/sjl/splice.vim";
+      rev = "b31cb25eea8a92a037e9da9a98b2e6147294c37d";
+      sha256 = "0mqnrmkyms2z5lqy90cy076x3fr9xmd63962wd8n6n6mbin97ihx";
     };
     dependencies = [];
 
@@ -2661,6 +2697,17 @@ let
 
   };
 
+  vim-abolish = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-abolish-2017-03-10";
+    src = fetchgit {
+      url = "https://github.com/tpope/vim-abolish";
+      rev = "b6a8b49e2173ba5a1b34d00e68e0ed8addac3ebd";
+      sha256 = "0i9q3l7r5p8mk4in3c1j4x0jbln7ir9lg1cqjxci0chjjzfzc53m";
+    };
+    dependencies = [];
+
+  };
+
   vim-commentary = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-commentary-2018-07-11";
     src = fetchgit {
@@ -2694,6 +2741,17 @@ let
 
   };
 
+  vim-flagship = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-flagship-2018-07-24";
+    src = fetchgit {
+      url = "https://github.com/tpope/vim-flagship";
+      rev = "5e70829913900eb3a37dd6c055ac660c33fa6bff";
+      sha256 = "1v2kaisydi1vjfy66bwq2whllbickr3ppp9wqxjqv2qhfsnqny8f";
+    };
+    dependencies = [];
+
+  };
+
   vim-fugitive = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-fugitive-2018-07-25";
     src = fetchgit {
@@ -2716,6 +2774,17 @@ let
 
   };
 
+  vim-projectionist = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-projectionist-2018-07-24";
+    src = fetchgit {
+      url = "https://github.com/tpope/vim-projectionist";
+      rev = "873e492b4bb92834beb186028fbf6d4e5edfca5a";
+      sha256 = "0np7vm97y5ga8gz6qma15awcmgxi41hljp50bgy49sz62z8h0psz";
+    };
+    dependencies = [];
+
+  };
+
   vim-repeat = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-repeat-2018-07-02";
     src = fetchgit {
@@ -2733,6 +2802,17 @@ let
       url = "https://github.com/tpope/vim-rhubarb";
       rev = "848841083d5d4550b5ebbd3bd67dfb3e5146b64a";
       sha256 = "19b36lbsry994y78lnnnjl83q2laz7j6xvk6h6xbl8kj10v6m4l9";
+    };
+    dependencies = [];
+
+  };
+
+  vim-scriptease = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-scriptease-2018-07-18";
+    src = fetchgit {
+      url = "https://github.com/tpope/vim-scriptease";
+      rev = "baea08bb5fff63cd2adf6e46429cad1f75bc7300";
+      sha256 = "01xfnda5paywfsb6ziq00zcgia7ls0v2924i1mcnvnqg4md890x4";
     };
     dependencies = [];
 
@@ -2777,6 +2857,17 @@ let
       url = "https://github.com/tpope/vim-surround";
       rev = "597068870b8f093a8b2d11536c62ff31222ee8d0";
       sha256 = "080kcgb5ayxs49q1p1cms6k1byf2fzzy8bglnspr511m9fql5a9x";
+    };
+    dependencies = [];
+
+  };
+
+  vim-tbone = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-tbone-2018-06-27";
+    src = fetchgit {
+      url = "https://github.com/tpope/vim-tbone";
+      rev = "8bc7348f658c32bea57365aa6acf3a7dde12e737";
+      sha256 = "17s2b66xxkvv17pzf3xrw6ba7y9awpd2k2d21v0pag924c5hi6d4";
     };
     dependencies = [];
 
