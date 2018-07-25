@@ -47,8 +47,6 @@ in {
       type = types.string;
       description = "Url for hoogle logo";
       default = "https://hoogle.haskell.org";
-      defaultText = "https://hoogle.haskell.org";
-
     };
 
   };
