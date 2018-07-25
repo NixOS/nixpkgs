@@ -34,7 +34,8 @@ with pkgs;
       extraPackages = [];
       inherit bintools;
     };
-    allowedRequisites = stdenv.allowedRequisites ++ [ bintools ];
+    allowedRequisites =
+      lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
   };
 
   # For convenience, allow callers to get the path to Nixpkgs.

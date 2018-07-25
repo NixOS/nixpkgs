@@ -43,6 +43,7 @@ in lib.init bootStages ++ [
       # a different platform, and so are disabled.
       overrides = _: _: {};
       extraBuildInputs = [ ]; # Old ones run on wrong platform
+      allowedRequisites = null;
 
       cc = if crossSystem.useiOSPrebuilt or false
              then buildPackages.darwin.iosSdkPkgs.clang
