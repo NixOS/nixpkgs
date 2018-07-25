@@ -677,6 +677,8 @@ with pkgs;
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  httperf = callPackage ../tools/networking/httperf { };
+
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
