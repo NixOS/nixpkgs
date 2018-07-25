@@ -1,4 +1,4 @@
-{stdenv, fetchurl, buildPackages}:
+{stdenv, fetchurl}:
 
 let version = "1.6.2"; in
 
