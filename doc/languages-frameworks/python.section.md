@@ -1032,7 +1032,7 @@ self: super:
 {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
-      bepasty-server = python-super.bepasty-server.overrideAttrs ( oldAttrs: {
+      bepasty-server = python-super.bepasty-server.overrideAttrs (oldAttrs: {
         src = self.pkgs.fetchgit {
           url = "https://github.com/bepasty/bepasty-server";
           sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
@@ -1041,7 +1041,6 @@ self: super:
       });
     };
   };
-  pythonPackages = self.python.pkgs;
 }
 ```
 
