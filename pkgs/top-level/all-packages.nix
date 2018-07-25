@@ -1439,6 +1439,8 @@ with pkgs;
 
   s2png = callPackage ../tools/graphics/s2png { };
 
+  simg2img = callPackage ../tools/filesystems/simg2img { };
+
   socklog = callPackage ../tools/system/socklog { };
 
   staccato = callPackage ../tools/text/staccato { };
