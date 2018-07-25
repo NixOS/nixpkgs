@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "02qc6zaf7ams6qcc470fwb6jvr4abv3lrlx16clqpn36501rkn4f";
   };
 
-  configureFlags = "--sysconfdir=/etc";
+  configureFlags = [ "--sysconfdir=/etc" ];
 
   preConfigure =
     ''

@@ -27,7 +27,13 @@ stdenv.mkDerivation rec {
   ];
   propagatedUserEnvPkgs = [ gconf ];
 
-  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx --enable-aqbanking";
+  configureFlags = [
+    "CFLAGS=-O3"
+    "CXXFLAGS=-O3"
+    "--disable-dbi"
+    "--enable-ofx"
+    "--enable-aqbanking"
+  ];
 
   postInstall = ''
     # Auto-updaters don't make sense in Nix.

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool ];
   buildInputs = [ libmad libid3tag ];
 
-  configureFlags = "--disable-pcre";
+  configureFlags = [ "--disable-pcre" ];
 
   meta = with stdenv.lib; {
     homepage    = https://sourceforge.net/projects/mp3splt/;

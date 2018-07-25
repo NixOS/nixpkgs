@@ -13,9 +13,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-var-prefix.patch ];
 
-  configureFlags = "--without-permcheck --with-cgi-ext=.cgi --with-var-prefix=/var/lib/mailman";
+  configureFlags = [
+    "--without-permcheck"
+    "--with-cgi-ext=.cgi"
+    "--with-var-prefix=/var/lib/mailman"
+  ];
 
-  installTargets = "doinstall";         # Leave out the 'update' target that's implied by 'install'.
+  installTargets = "doinstall"; # Leave out the 'update' target that's implied by 'install'.
 
   makeFlags = [ "DIRSETGID=:" ];
 

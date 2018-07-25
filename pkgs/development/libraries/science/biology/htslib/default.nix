@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib bzip2 lzma curl ];
 
-  configureFlags = "--enable-libcurl"; # optional but strongly recommended
+  configureFlags = [ "--enable-libcurl" ]; # optional but strongly recommended
 
   installFlags = "prefix=$(out)";
 

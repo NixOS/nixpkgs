@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiodbc postgresql openssl ];
 
-  configureFlags = "--with-iodbc=${libiodbc}";
+  configureFlags = [ "--with-iodbc=${libiodbc}" ];
 
   meta = with stdenv.lib; {
     homepage = http://psqlodbc.projects.postgresql.org/;

@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap.sh";
 
-  configureFlags = ""
-    + stdenv.lib.optionalString withCrypto "--with-crypto "
-    + stdenv.lib.optionalString enableMagic "--enable-magic "
-    + stdenv.lib.optionalString enableCuckoo "--enable-cuckoo "
-  ;
+  configureFlags = [
+    (stdenv.lib.withFeature withCrypto "crypto")
+    (stdenv.lib.enableFeature enableMagic "magic")
+    (stdenv.lib.enableFeature enableCuckoo "cuckoo")
+  ];
 
   meta = with stdenv.lib; {
     description = "The pattern matching swiss knife for malware researchers";

@@ -7,10 +7,11 @@ stdenv.mkDerivation {
     sha256 = "0ggjxyvgp4pxc0b88v40xj9daz90518ydnycw7qax011gxpr12d3";
   };
 
-  configureFlags = "
-    --disable-shm
-    --x-includes=${libX11.dev}/include
-    --x-libraries=${libX11.out}/lib";
+  configureFlags = [
+    "--disable-shm"
+    "--x-includes=${libX11.dev}/include"
+    "--x-libraries=${libX11.out}/lib"
+  ];
 
   buildInputs = [libjpeg libXext libX11 xextproto libtiff libungif libpng];
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  configureFlags = "--enable-systemd";
+  configureFlags = [ "--enable-systemd" ];
 
   meta = with stdenv.lib; {
     description = "System monitor for the MATE desktop";
