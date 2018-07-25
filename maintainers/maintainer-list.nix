@@ -926,6 +926,11 @@
     github = "deepfire";
     name = "Kosyrev Serge";
   };
+  deltaevo = {
+    email = "deltaduartedavid@gmail.com";
+    github = "DeltaEvo";
+    name = "Duarte David";
+  };
   demin-dmitriy = {
     email = "demindf@gmail.com";
     github = "demin-dmitriy";
