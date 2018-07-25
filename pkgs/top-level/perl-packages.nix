@@ -6129,6 +6129,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileTemp = buildPerlPackage {
+    name = "File-Temp-0.2308";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/E/ET/ETHER/File-Temp-0.2308.tar.gz;
+      sha256 = "1m6iz26znn85r7pnnwlqsda0x5mm2c8qcz5ickl945dbw8icp88w";
+    };
+    meta = {
+      description = "return name and handle of a temporary file safely";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/Perl-Toolchain-Gang/File-Temp";
+    };
+  };
+
   FileTouch = buildPerlPackage rec {
     name = "File-Touch-0.11";
     src = fetchurl {
@@ -15726,16 +15739,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestTempDirTiny = buildPerlPackage rec {
-    name = "Test-TempDir-Tiny-0.017";
+    name = "Test-TempDir-Tiny-0.018";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-TempDir-Tiny-0.017.tar.gz;
-      sha256 = "0y2km1lbvp4hhsah2yc8vacp705zi1ijflsf7lkvqh640q6p5m55";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Test-TempDir-Tiny-0.018.tar.gz;
+      sha256 = "10ay3zbihyxn4nbb1f0fmr4szag8iy8pd27v8j6idq6cgzys3dyp";
     };
     meta = {
       description = "Temporary directories that stick around when tests fail";
       license = with stdenv.lib.licenses; [ asl20 ];
       homepage = "https://github.com/dagolden/Test-TempDir-Tiny";
     };
+    propagatedBuildInputs = [ FileTemp ];
   };
 
   TestTCP = buildPerlPackage rec {
