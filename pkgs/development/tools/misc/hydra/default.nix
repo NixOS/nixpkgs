@@ -40,6 +40,7 @@ let
         FileSlurp
         IOCompress
         IPCRun
+        JSON
         JSONAny
         JSONXS
         LWP
