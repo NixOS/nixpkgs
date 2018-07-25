@@ -829,9 +829,6 @@ self: super: {
   # https://github.com/fizruk/http-api-data/issues/49
   http-api-data = dontCheck super.http-api-data;
 
-  # https://github.com/snoyberg/yaml/issues/106
-  yaml = disableCabalFlag super.yaml "system-libyaml";
-
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
 
