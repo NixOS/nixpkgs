@@ -13546,10 +13546,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SQLAbstract = buildPerlPackage rec {
-    name = "SQL-Abstract-1.85";
+    name = "SQL-Abstract-1.86";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/${name}.tar.gz";
-      sha256 = "9f44afe031a0cc63a6ccabaa46ba7ec58ef4db940559cee7fbc2dfbbf37bccab";
+      sha256 = "e7a7f7da5e6fa42f495860e92e9138b8a0964ca7674c95bd6ff1b1ce21aa8cdf";
     };
     buildInputs = [ TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ HashMerge MROCompat Moo ];
