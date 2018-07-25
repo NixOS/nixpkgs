@@ -131,7 +131,7 @@ in
     services.xserver.displayManager.job.logToJournal = true;
 
     # set default stateVersion to avoid warnings during eval
-    system.nixos.stateVersion = mkDefault "18.03";
+    system.stateVersion = mkDefault "18.03";
   };
 
 }

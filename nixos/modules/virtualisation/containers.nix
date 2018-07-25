@@ -607,7 +607,7 @@ in
                   { services.postgresql.enable = true;
                     services.postgresql.package = pkgs.postgresql96;
 
-                    system.nixos.stateVersion = "17.03";
+                    system.stateVersion = "17.03";
                   };
               };
           }

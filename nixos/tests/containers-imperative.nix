@@ -18,7 +18,7 @@ import ./make-test.nix ({ pkgs, ...} : {
           inherit (config.nixpkgs.localSystem) system;
           modules = lib.singleton {
             containers.foo.config = {
-              system.nixos.stateVersion = "18.03";
+              system.stateVersion = "18.03";
             };
           };
         };

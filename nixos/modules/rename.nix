@@ -222,8 +222,6 @@ with lib;
     (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [ "system" "nixos" "versionSuffix" ])
     (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
     (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
-    (mkRenamedOptionModule [ "system" "stateVersion" ] [ "system" "nixos" "stateVersion" ])
-    (mkRenamedOptionModule [ "system" "defaultChannel" ] [ "system" "nixos" "defaultChannel" ])
 
     # Users
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
