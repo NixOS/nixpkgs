@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchFromGitHub, pythonOlder, python }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, python }:
 
 buildPythonPackage rec {
   pname = "asynctest";

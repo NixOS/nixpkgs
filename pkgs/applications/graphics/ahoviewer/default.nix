@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, fetchFromGitHub, pkgconfig, libconfig,
+{ stdenv, fetchFromGitHub, pkgconfig, libconfig,
   gtkmm2, glibmm, libxml2, libsecret, curl, libzip,
   librsvg, gst_all_1, autoreconfHook, makeWrapper,
   useUnrar ? false, unrar

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, git, mono, v8 }:
+{ stdenv, fetchFromGitHub, git, mono, v8 }:
 
 # There are some similarities with the pinta derivation. We should
 # have a helper to make it easy to package these Mono apps.

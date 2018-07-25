@@ -1,6 +1,6 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh
 , unzip, gnutar, jdk, python, wrapPython
-, setuptools, boto, pythonProtobuf, apr, subversion, gzip, systemd
+, setuptools, boto, pythonProtobuf, apr, subversion, gzip
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
 , ethtool, coreutils, which, iptables, maven
 , bash, autoreconfHook

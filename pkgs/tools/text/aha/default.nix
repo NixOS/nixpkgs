@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/theZiz/aha;
     license = with licenses; [ lgpl2Plus mpl11 ];
+    maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
   };
 }

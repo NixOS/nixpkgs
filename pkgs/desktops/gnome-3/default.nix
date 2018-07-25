@@ -1,4 +1,4 @@
-{ pkgs, lib }:
+{ config, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
   # Convert a version to branch (3.26.18 → 3.26)
@@ -45,10 +45,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     easytag meld orca rhythmbox shotwell gnome-usage
     clutter clutter-gst clutter-gtk cogl gtkvnc libdazzle;
 
-  inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
-  orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   gtk = gtk3;
   gtkmm = gtkmm3;
@@ -79,8 +77,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
   evolution-data-server = callPackage ./core/evolution-data-server { };
-
-  gconf = callPackage ./core/gconf { };
 
   geocode-glib = callPackage ./core/geocode-glib { };
 
@@ -293,6 +289,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-power-manager = callPackage ./apps/gnome-power-manager { };
 
+  gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
+
   gnome-weather = callPackage ./apps/gnome-weather { };
 
   nautilus-sendto = callPackage ./apps/nautilus-sendto { };
@@ -389,6 +387,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 
+} // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
 
   evolution_data_server = evolution-data-server; # added 2018-02-25

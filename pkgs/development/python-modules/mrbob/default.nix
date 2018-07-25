@@ -1,5 +1,5 @@
 { buildPythonPackage, stdenv, glibcLocales, mock, nose, isPy3k, argparse, jinja2, six
-, fetchPypi, lib
+, fetchPypi
 }:
 
 buildPythonPackage rec {

@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, dbus, mono, makeWrapper, nant
-, shared-mime-info, gtksourceview, gtk2
-, targetVersion ? "4.5" }:
+{ stdenv, fetchFromGitHub, pkgconfig, mono, makeWrapper, nant
+, shared-mime-info, gtksourceview, gtk2 }:
 
 let
   release = "alpha";

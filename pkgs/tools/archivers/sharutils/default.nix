@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  crossAttrs = {
-    patches = [ ./sharutils-4.11.1-cross-binary-mode-popen.patch ];
-  };
-
   meta = with stdenv.lib; {
     description = "Tools for remote synchronization and `shell archives'";
     longDescription =

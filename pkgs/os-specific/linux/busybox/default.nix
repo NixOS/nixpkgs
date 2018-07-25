@@ -1,9 +1,8 @@
-{ stdenv, lib, buildPackages, fetchurl, fetchpatch
+{ stdenv, lib, buildPackages, fetchurl
 , enableStatic ? false
 , enableMinimal ? false
 , useMusl ? stdenv.hostPlatform.libc == "musl", musl
 , extraConfig ? ""
-, buildPlatform, hostPlatform
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -33,14 +32,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.28.4";
+  name = "busybox-1.29.1";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "0smfn8hlds6nx8war62kyaykg3n7mxbjjfcpsgz84znwk4v4mhg3";
+    sha256 = "1hqlr5b3bsyb6avadz1z4za6pyl32r1krnpcpwwqilhnx8q0f9gw";
   };
 
   hardeningDisable = [ "format" ] ++ lib.optionals enableStatic [ "fortify" ];

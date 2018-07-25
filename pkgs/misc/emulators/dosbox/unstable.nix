@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchsvn, SDL, SDL_net, SDL_sound, libpng, makeDesktopItem, libGLU_combined, autoreconfHook }:
+{ stdenv, fetchsvn, SDL, SDL_net, SDL_sound, libpng, makeDesktopItem, libGLU_combined, autoreconfHook }:
 
 let revision = "4025";
     revisionDate = "2017-07-02";

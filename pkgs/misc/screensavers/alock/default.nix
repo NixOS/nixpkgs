@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix; # Cygwin had problems at one point
     maintainers = with maintainers; [ ftrvxmtrx chris-martin ];
+    license = licenses.mit;
   };
 }

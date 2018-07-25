@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, glib, sqlite
+{ stdenv, fetchurl, pkgconfig, intltool, sqlite
 , gnome3, libxml2, gupnp, gssdp, lua5, liboauth, gupnp-av
 , gmime, json-glib, avahi, tracker, dleyna-server, itstool }:
 

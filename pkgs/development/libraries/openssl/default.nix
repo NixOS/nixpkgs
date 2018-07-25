@@ -1,8 +1,8 @@
 { stdenv, fetchurl, buildPackages, perl
 , buildPlatform, hostPlatform
-, fetchpatch
 , withCryptodev ? false, cryptodevHeaders
 , enableSSL2 ? false
+, static ? false
 }:
 
 with stdenv.lib;
@@ -45,7 +45,9 @@ let
         if hostPlatform == buildPlatform
           then "./config"
         else if hostPlatform.isMinGW
-          then "./Configure mingw${toString hostPlatform.parsed.cpu.bits}"
+          then "./Configure mingw${optionalString
+                                     (hostPlatform.parsed.cpu.bits != 32)
+                                     (toString hostPlatform.parsed.cpu.bits)}"
         else if hostPlatform.isLinux
           then "./Configure linux-generic${toString hostPlatform.parsed.cpu.bits}"
         else if hostPlatform.isiOS
@@ -62,7 +64,7 @@ let
     '';
 
     configureFlags = [
-      "shared"
+      "shared" # "shared" builds both shared and static libraries
       "--libdir=lib"
       "--openssldir=etc/ssl"
     ] ++ stdenv.lib.optionals withCryptodev [
@@ -75,13 +77,16 @@ let
 
     enableParallelBuilding = true;
 
-    postInstall = ''
+    postInstall =
+    stdenv.lib.optionalString (!static) ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
           rm "$out/lib/"*.a
       fi
 
+    '' +
+    ''
       mkdir -p $bin
       mv $out/bin $bin/
 

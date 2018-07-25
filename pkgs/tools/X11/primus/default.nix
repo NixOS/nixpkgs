@@ -6,7 +6,6 @@
 { stdenv
 , stdenv_i686
 , lib
-, bumblebee
 , primusLib
 , writeScriptBin
 , primusLib_i686 ? null

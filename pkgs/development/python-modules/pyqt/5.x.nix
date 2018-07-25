@@ -1,5 +1,5 @@
-{ lib, fetchurl, fetchpatch, pythonPackages, pkgconfig, makeWrapper
-, qmake, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
+{ lib, fetchurl, fetchpatch, pythonPackages, pkgconfig
+, qmake, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus
 , withWebSockets ? false, qtwebsockets
 , withConnectivity ? false, qtconnectivity
 }:
@@ -32,7 +32,7 @@ in buildPythonPackage {
 
   nativeBuildInputs = [ pkgconfig qmake lndir ];
 
-  buildInputs = [ dbus_libs ];
+  buildInputs = [ dbus ];
 
   propagatedBuildInputs = [
     sip qtbase qtsvg qtwebkit qtwebengine
@@ -53,7 +53,7 @@ in buildPythonPackage {
 
     ${python.executable} configure.py  -w \
       --confirm-license \
-      --dbus=${dbus_libs.dev}/include/dbus-1.0 \
+      --dbus=${dbus.dev}/include/dbus-1.0 \
       --no-qml-plugin \
       --bindir=$out/bin \
       --destdir=$out/${python.sitePackages} \

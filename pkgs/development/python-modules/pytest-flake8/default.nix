@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, fetchPypi, fetchpatch, pytest, flake8}:
+{lib, buildPythonPackage, fetchPypi, pytest, flake8}:
 
 buildPythonPackage rec {
   pname = "pytest-flake8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   checkPhase = ''
-    pytest .
+    pytest . -k "not test_mtime_caching"
   '';
 
   meta = {

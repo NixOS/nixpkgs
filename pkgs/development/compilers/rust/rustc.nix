@@ -13,7 +13,7 @@
 , doCheck ? true
 , broken ? false
 , buildPlatform, hostPlatform
-} @ args:
+}:
 
 let
   inherit (stdenv.lib) optional optionalString;

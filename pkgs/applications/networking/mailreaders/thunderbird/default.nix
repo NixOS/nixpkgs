@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip
 , hunspell, libevent, libstartup_notification
-, cairo, gstreamer, gst-plugins-base, icu, libpng, jemalloc
+, icu, libpng, jemalloc
 , autoconf213, which, m4
 , writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper

@@ -1,6 +1,4 @@
-{ lib
-, stdenv
-, buildEnv
+{ buildEnv
 , libwebcam
 , makeWrapper
 , runCommand

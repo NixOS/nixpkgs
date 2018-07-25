@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, lib, autoreconfHook, targetPlatform
+{ stdenv, appleDerivation, lib, targetPlatform
 , enableStatic ? targetPlatform.isiOS
 , enableShared ? !targetPlatform.isiOS
 }:
@@ -10,8 +10,10 @@ appleDerivation {
     sed -i 's/darwin\*/ios\*/g' configure libcharset/configure
   '';
 
-  configureFlags = lib.optional enableStatic "--enable-static"
-                ++ lib.optional (!enableShared) "--disable-shared";
+  configureFlags = [
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+  ];
 
   postInstall = lib.optionalString (!enableStatic) ''
     mv $out/lib/libiconv.dylib $out/lib/libiconv-nocharset.dylib

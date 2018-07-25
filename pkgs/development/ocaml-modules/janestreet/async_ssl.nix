@@ -1,5 +1,5 @@
-{ stdenv, ocaml, buildOcamlJane, fetchurl, async, comparelib, core, ctypes
-, openssl, fieldslib, herelib, pipebang, sexplib, ocaml_oasis, integers
+{ stdenv, buildOcamlJane, async, comparelib, core, ctypes
+, openssl, fieldslib, herelib, pipebang, sexplib, ocaml_oasis
 }:
 
 buildOcamlJane rec {

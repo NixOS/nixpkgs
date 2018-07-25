@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, automake, autoconf, libtool
-, zlib, openssl, zip, zimlib, cxxtools, tntnet
+, zimlib, cxxtools, tntnet
 }:
 
 stdenv.mkDerivation rec {

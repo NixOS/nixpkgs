@@ -1,11 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
 , sphinx
 , numpydoc
-, isPy3k
-, stdenv
 , pytest
 }:
 

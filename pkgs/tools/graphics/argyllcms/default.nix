@@ -1,6 +1,6 @@
 { stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
-, libXdmcp, libXau, lib, openssl, zlib }:
+, libXdmcp, libXau, lib, openssl }:
 let
   version = "2.0.0";
  in

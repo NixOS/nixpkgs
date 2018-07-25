@@ -1,7 +1,7 @@
 { stdenv, fetchurl
 , vala, gobjectIntrospection, intltool, python2Packages, glib
 , pkgconfig
-, libgee, json_glib, marisa, libkkc-data
+, libgee, json-glib, marisa, libkkc-data
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ marisa libkkc-data ];
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [ libgee json_glib ];
+  propagatedBuildInputs = [ libgee json-glib ];
 
   postInstall = ''
     ln -s ${libkkc-data}/lib/libkkc/models $out/share/libkkc/models

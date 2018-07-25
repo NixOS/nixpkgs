@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ buildPythonPackage, fetchPypi
 , setuptools_scm
 , six, pytz}:
 

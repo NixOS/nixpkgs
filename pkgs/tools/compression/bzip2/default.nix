@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv, fetchurl
 , linkStatic ? (stdenv.system == "i686-cygwin")
 }:
 

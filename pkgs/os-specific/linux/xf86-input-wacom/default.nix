@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, file, inputproto, libX11, libXext, libXi, libXrandr, libXrender
+, inputproto, libX11, libXext, libXi, libXrandr, libXrender
 , ncurses, pkgconfig, randrproto, xorgserver, xproto, udev, libXinerama, pixman }:
 
 stdenv.mkDerivation rec {

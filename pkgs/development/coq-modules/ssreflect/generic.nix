@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coq, ncurses, which
+{ stdenv, coq, ncurses, which
 , graphviz, withDoc ? false
 , src, name, patches ? []
 }:

@@ -1,7 +1,7 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
 
-{ lib, stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
-, mysql, libxml2, readline, zlib, curl, postgresql, gettext
+{ lib, stdenv, fetchurl, composableDerivation, flex, bison
+, mysql, libxml2, readline, zlib, curl, postgresql, gettext, html-tidy
 , openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium }:
@@ -230,6 +230,11 @@ let
           configureFlags = ["--with-sodium=${libsodium.dev}"];
           buildInputs = [libsodium];
         };
+
+        tidy = {
+          configureFlags = [ "--with-tidy=${html-tidy}" ];
+          buildInputs = [ html-tidy ];
+        };
       };
 
       cfg = {
@@ -270,6 +275,7 @@ let
         ztsSupport = config.php.zts or false;
         calendarSupport = config.php.calendar or true;
         sodiumSupport = (lib.versionAtLeast version "7.2") && config.php.sodium or true;
+        tidySupport = php7 && config.php.tidy or true;
       };
 
       hardeningDisable = [ "bindnow" ];

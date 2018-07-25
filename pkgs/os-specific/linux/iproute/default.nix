@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, config, lib, flex, bash, bison, db, iptables, pkgconfig }:
+{ fetchurl, stdenv, config, flex, bash, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "iproute2-${version}";

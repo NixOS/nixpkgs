@@ -1,5 +1,4 @@
 { lib
-, python
 , buildPythonPackage
 , fetchPypi
 , ipython

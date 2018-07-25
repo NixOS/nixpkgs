@@ -1,7 +1,6 @@
 {
   stdenv, lib,
   fetchFromGitHub, fetchurl,
-  runCommand, writeText,
   nodejs, ttfautohint-nox, otfcc,
 
   # Custom font set options.

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoconf, automake, libtool, pkgconfig, zlib, ilmbase }:
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, zlib, ilmbase }:
 
 stdenv.mkDerivation rec {
   name = "openexr-${lib.getVersion ilmbase}";

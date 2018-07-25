@@ -78,7 +78,7 @@ in
 
         # Allow execution of "/home/root/secret.sh" by user `backup`, `database`
         # and the group with GID `1006` without a password.
-        { users = [ "backup" ]; groups = [ 1006 ];
+        { users = [ "backup" "database" ]; groups = [ 1006 ];
           commands = [ { command = "/home/root/secret.sh"; options = [ "SETENV" "NOPASSWD" ]; } ]; }
 
         # Allow all users of group `bar` to run two executables as user `foo`

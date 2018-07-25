@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gobjectIntrospection
-, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
+, gnutls, cairo, libtool, glib, pkgconfig
 , libffi, cyrus_sasl, intltool, perl, perlPackages, libpulseaudio
-, kbproto, libX11, libXext, xextproto, libgcrypt, gtk3, vala_0_32
+, libgcrypt, gtk3, vala_0_32
 , libogg, libgpgerror, pythonPackages }:
 
 let

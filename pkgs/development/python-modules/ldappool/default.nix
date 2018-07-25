@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi
 , pbr, ldap, fixtures, testresources, testtools }:
 
 buildPythonPackage rec {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, requireFile, makeWrapper, unzip, jre }:
+{ stdenv, requireFile, makeWrapper, unzip, jre }:
 
 stdenv.mkDerivation rec {
   name = "yEd-${version}";

@@ -1,6 +1,5 @@
 { stdenv, fetchurl, freeglut, gtk2, gtkglext, libjpeg_turbo, libtheora, libXmu
-, lua, libGLU_combined, pkgconfig, perl, autoreconfHook, glib, cairo
-, pango, gdk_pixbuf, atk
+, lua, libGLU_combined, pkgconfig, perl, autoreconfHook
 }:
 
 let

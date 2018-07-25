@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, glibcLocales, python3 }:
+{ stdenv, fetchurl, glibcLocales, python3 }:
 
 let
   python = python3.override {

@@ -1,4 +1,4 @@
-{ lib, pkgs, stdenv, pythonPackages, fetchurl, fetchFromGitHub, fetchpatch }:
+{ stdenv, pythonPackages, fetchurl, fetchFromGitHub }:
 let
   matrix-angular-sdk = pythonPackages.buildPythonPackage rec {
     name = "matrix-angular-sdk-${version}";

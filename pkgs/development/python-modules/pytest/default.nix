@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy26, argparse, attrs, hypothesis, py
+{ stdenv, buildPythonPackage, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock
+, atomicwrites, mock, writeText
 }:
 buildPythonPackage rec {
   version = "3.6.2";
@@ -19,13 +19,17 @@ buildPythonPackage rec {
   checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites]
-    ++ (stdenv.lib.optional (!isPy3k) funcsigs)
-    ++ (stdenv.lib.optional isPy26 argparse);
+    ++ (stdenv.lib.optional (!isPy3k) funcsigs);
 
   checkPhase = ''
     runHook preCheck
     $out/bin/py.test -x testing/
     runHook postCheck
+  '';
+
+  # Don't create .pytest-cache when using py.test in a Nix build
+  setupHook = writeText "pytest-hook" ''
+    export PYTEST_ADDOPTS="-p no:cacheprovider"
   '';
 
   meta = with stdenv.lib; {

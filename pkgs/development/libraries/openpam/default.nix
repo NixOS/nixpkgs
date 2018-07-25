@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, hostPlatform, fetchurl, lib }:
+{ stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation rec {
   name = "openpam-${version}";

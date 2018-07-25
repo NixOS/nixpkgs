@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, glibc, buildPlatform }:
+{ stdenv, fetchurl, glibc, buildPlatform }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";

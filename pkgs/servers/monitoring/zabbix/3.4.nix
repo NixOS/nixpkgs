@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, pcre, libevent, libiconv }:
+{ stdenv, fetchurl, pcre, libiconv }:
 
 
 let

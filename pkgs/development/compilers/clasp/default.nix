@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub
   , llvmPackages
   , cmake, boehmgc, gmp, zlib, ncurses, boost
-  , waf, python, git, sbcl
+  , python, git, sbcl
 }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";

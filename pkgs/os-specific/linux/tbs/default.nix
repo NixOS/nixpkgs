@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel, kmod, perl, patchutils, perlPackages, libelf }:
+{ stdenv, lib, fetchFromGitHub, kernel, kmod, perl, patchutils, perlPackages }:
 let
 
   media = fetchFromGitHub rec {

@@ -1,4 +1,4 @@
-{ stdenv, fetchbzr, x11 }:
+{ stdenv, fetchbzr, xlibsWrapper }:
 
 let
   version = "4";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    x11
+    xlibsWrapper
   ];
 
   buildPhase = if stdenv.system == "x86_64-linux" then ''

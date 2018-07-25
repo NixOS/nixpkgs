@@ -121,7 +121,7 @@ rec {
 
      Example:
        pkgs = import <nixpkgs> { }
-       makePerlPath [ pkgs.perlPackages.NetSMTP ]
+       makePerlPath [ pkgs.perlPackages.libnet ]
        => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
   */
   makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";

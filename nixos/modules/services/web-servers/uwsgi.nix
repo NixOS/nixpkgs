@@ -27,10 +27,6 @@ let
         else if hasPython3 then uwsgi.python3
         else null;
 
-      pythonPackages = pkgs.pythonPackages.override {
-        inherit python;
-      };
-
       pythonEnv = python.withPackages (c.pythonPackages or (self: []));
 
       uwsgiCfg = {

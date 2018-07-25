@@ -11,7 +11,7 @@
 let
 
   inherit (lib) extends makeExtensible;
-  inherit (haskellLib) overrideCabal makePackageSet;
+  inherit (haskellLib) makePackageSet;
 
   haskellPackages = pkgs.callPackage makePackageSet {
     package-set = initialPackages;

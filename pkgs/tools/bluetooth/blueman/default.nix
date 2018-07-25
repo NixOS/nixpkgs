@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
+{ stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, gtk3
 , obex_data_server, xdg_utils, libnotify, dnsmasq, dhcp
 , hicolor-icon-theme, librsvg, wrapGAppsHook, gobjectIntrospection
 , withPulseAudio ? true, libpulseaudio }:

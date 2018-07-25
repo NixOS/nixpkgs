@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , Carbon ? null
 , libjpeg ? null
 , libpng ? null

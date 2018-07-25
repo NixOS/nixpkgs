@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, ruby, curl }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv {
   inherit ruby;

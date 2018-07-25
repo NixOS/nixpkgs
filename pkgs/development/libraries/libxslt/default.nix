@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2
+{ stdenv, fetchurl, libxml2, findXMLCatalogs, python2
 , buildPlatform, hostPlatform
 , cryptoSupport ? false
 , pythonSupport ? buildPlatform == hostPlatform
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = http://xmlsoft.org/XSLT/;
     description = "A C library and tools to do XSL transformations";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.all;
     maintainers = [ maintainers.eelco ];
   };
 }

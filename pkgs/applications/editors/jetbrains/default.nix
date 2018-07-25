@@ -1,6 +1,6 @@
-{ lib, stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
-, coreutils, gnugrep, which, git, python, unzip, p7zip
-, androidsdk, jdk, cmake, libxml2, zlib, python3, ncurses
+{ lib, stdenv, callPackage, fetchurl
+, python
+, jdk, cmake, libxml2, zlib, python3, ncurses
 }:
 
 with stdenv.lib;
@@ -10,7 +10,7 @@ let
 
   # Sorted alphabetically
 
-  buildClion = { name, version, src, license, description, wmClass, update-channel }:
+  buildClion = { name, version, src, license, description, wmClass, ... }:
     lib.overrideDerivation (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "CLion";
@@ -66,7 +66,7 @@ let
       '';
     });
 
-  buildDataGrip = { name, version, src, license, description, wmClass, update-channel }:
+  buildDataGrip = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "DataGrip";
@@ -83,7 +83,7 @@ let
       };
     });
 
-  buildGoland = { name, version, src, license, description, wmClass, update-channel }:
+  buildGoland = { name, version, src, license, description, wmClass, ... }:
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Goland";
@@ -108,7 +108,7 @@ let
       '';
     });
 
-  buildIdea = { name, version, src, license, description, wmClass, update-channel }:
+  buildIdea = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "IDEA";
@@ -125,7 +125,7 @@ let
       };
     });
 
-  buildPhpStorm = { name, version, src, license, description, wmClass, update-channel }:
+  buildPhpStorm = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "PhpStorm";
@@ -142,7 +142,7 @@ let
       };
     });
 
-  buildPycharm = { name, version, src, license, description, wmClass, update-channel }:
+  buildPycharm = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "PyCharm";
@@ -169,7 +169,7 @@ let
       propagatedUserEnvPkgs = [ python ];
     };
 
-  buildRider = { name, version, src, license, description, wmClass, update-channel }:
+  buildRider = { name, version, src, license, description, wmClass, ... }:
     lib.overrideDerivation (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "Rider";
@@ -195,7 +195,7 @@ let
       '';
     });
 
-  buildRubyMine = { name, version, src, license, description, wmClass, update-channel }:
+  buildRubyMine = { name, version, src, license, description, wmClass, ... }:
     (mkJetBrainsProduct rec {
       inherit name version src wmClass jdk;
       product = "RubyMine";
@@ -208,7 +208,7 @@ let
       };
     });
 
-  buildWebStorm = { name, version, src, license, description, wmClass, update-channel }:
+  buildWebStorm = { name, version, src, license, description, wmClass, ... }:
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "WebStorm";

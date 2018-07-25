@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchgit, fetchNuGet
-, autoconf, automake, cmake, pkgconfig, shared-mime-info, intltool
-, glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip, libssh2
-, dotnetPackages, fsharp, dotnetbuildhelpers, buildDotnetPackage, dotnet-sdk
+{ stdenv, fetchurl
+, autoconf, automake, pkgconfig, shared-mime-info, intltool
+, glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
+, dotnetPackages
 }:
 
 buildDotnetPackage rec {

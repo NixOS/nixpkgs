@@ -47,10 +47,10 @@ import ./make-test.nix ({ pkgs, ... }:
 
   nodes =
     { client = 
-      { config, pkgs, ... }: { };
+      { ... }: { };
 
       serverALSA =
-        { config, pkgs, ... }: (mkServer {
+        { ... }: (mkServer {
           mpd = defaultMpdCfg // {
             network.listenAddress = "any";
             extraConfig = ''
@@ -66,7 +66,7 @@ import ./make-test.nix ({ pkgs, ... }:
         }) // { networking.firewall.allowedTCPPorts = [ 6600 ]; };
 
       serverPulseAudio =
-        { config, pkgs, ... }: (mkServer {
+        { ... }: (mkServer {
           mpd = defaultMpdCfg // {
             extraConfig = ''
               audio_output {

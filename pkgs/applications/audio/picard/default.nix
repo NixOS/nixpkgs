@@ -1,4 +1,4 @@
-{ stdenv, python2Packages, fetchurl, gettext, chromaprint }:
+{ stdenv, python2Packages, fetchurl, gettext }:
 
 let
   pythonPackages = python2Packages;

@@ -62,9 +62,6 @@ let
       cd $out
 
       ${concatMapStrings (containerName:
-        let
-          components = cfg.components."${containerName}";
-        in
         linkMutableComponents { inherit containerName; }
       ) (builtins.attrNames cfg.components)}
     '';

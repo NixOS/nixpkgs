@@ -1,4 +1,4 @@
-{ config, lib, pkgs, services, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.matomo;

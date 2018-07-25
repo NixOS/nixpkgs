@@ -1,10 +1,10 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  baloo, baloo-widgets, dolphin-plugins, kactivities, kbookmarks, kcmutils,
+  baloo, baloo-widgets, kactivities, kbookmarks, kcmutils,
   kcompletion, kconfig, kcoreaddons, kdelibs4support, kdbusaddons,
   kfilemetadata, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications,
-  konsole, kparts, ktexteditor, kwindowsystem, phonon, solid
+  kparts, ktexteditor, kwindowsystem, phonon, solid
 }:
 
 mkDerivation {

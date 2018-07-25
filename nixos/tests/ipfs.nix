@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     adder =
-      { config, pkgs, ... }:
+      { ... }:
       {
         services.ipfs = {
           enable = true;
@@ -18,7 +18,7 @@ import ./make-test.nix ({ pkgs, ...} : {
         networking.firewall.allowedTCPPorts = [ 4001 ];
       };
     getter =
-      { config, pkgs, ... }:
+      { ... }:
       {
         services.ipfs = {
           enable = true;

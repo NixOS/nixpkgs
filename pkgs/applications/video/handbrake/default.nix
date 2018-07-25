@@ -4,7 +4,7 @@
 #
 
 { stdenv, lib, fetchurl,
-  python2, pkgconfig, yasm, harfbuzz, zlib,
+  python2, pkgconfig, yasm, zlib,
   autoconf, automake, libtool, m4, jansson,
   libass, libiconv, libsamplerate, fribidi, libxml2, bzip2,
   libogg, libopus, libtheora, libvorbis, libdvdcss, a52dec,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
-    libgudev
+    libgudev hicolor-icon-theme
   ] ++ (if useFfmpeg then [ ffmpeg ] else [ patched_libav_12 ])
   ++ lib.optional useFdk fdk_aac;
 
@@ -80,11 +80,6 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd build
-  '';
-
-  # icon-theme.cache belongs in the icon theme, not in individual packages
-  postInstall = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

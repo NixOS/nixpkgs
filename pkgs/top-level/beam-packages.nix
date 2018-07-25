@@ -1,4 +1,4 @@
-{ pkgs, stdenv, callPackage, wxGTK30, darwin }:
+{ callPackage, wxGTK30 }:
 
 rec {
   lib = callPackage ../development/beam-modules/lib.nix {};

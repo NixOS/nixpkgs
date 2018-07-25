@@ -1,4 +1,4 @@
-{ lib, buildRubyGem, makeWrapper, ruby }:
+{ lib, buildRubyGem, ruby }:
 
 # Cannot use bundleEnv because bundleEnv create stub with
 # BUNDLE_FROZEN='1' environment variable set, which broke everything

@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   nodes = {
-    one = { config, pkgs, ... }: {
+    one = { ... }: {
       services.rabbitmq.enable = true;
     };
   };

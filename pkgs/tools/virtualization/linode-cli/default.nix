@@ -14,7 +14,7 @@ buildPerlPackage rec {
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = with perlPackages; [
     JSON
-    LWPUserAgent
+    LWP
     MozillaCA
     TryTiny
     WebServiceLinode

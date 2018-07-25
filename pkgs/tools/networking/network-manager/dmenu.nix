@@ -1,5 +1,5 @@
 { stdenv, glib, fetchFromGitHub, networkmanager, python3Packages
-, gobjectIntrospection, dmenu }:
+, gobjectIntrospection }:
 
 let inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {

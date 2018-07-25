@@ -1,4 +1,4 @@
-{ stdenv, lib, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv, gtk2 }:
+{ stdenv, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv, gtk2 }:
 
 let
   version = "1.8.2";

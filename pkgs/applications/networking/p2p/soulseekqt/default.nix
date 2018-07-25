@@ -1,8 +1,8 @@
 { stdenv
 , fetchurl
 , dbus
-, expat, zlib, fontconfig
-, libpng, libX11, libxcb, libXau, libXdmcp, freetype, libbsd
+, zlib, fontconfig
+, libX11, libxcb, libXau, libXdmcp, freetype, libbsd
 }:
 
 with stdenv.lib;

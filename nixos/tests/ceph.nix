@@ -5,7 +5,7 @@ import ./make-test.nix ({pkgs, ...}: rec {
   };
 
   nodes = {
-    aio = { config, pkgs, ... }: {
+    aio = { pkgs, ... }: {
       virtualisation = {
         emptyDiskImages = [ 20480 20480 ];
         vlans = [ 1 ];
@@ -55,7 +55,7 @@ import ./make-test.nix ({pkgs, ...}: rec {
     };
   };
   
-  testScript = { nodes, ... }: ''
+  testScript = { ... }: ''
     startAll;
 
     $aio->waitForUnit("network.target");

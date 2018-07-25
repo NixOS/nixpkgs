@@ -1,5 +1,5 @@
 { mkDerivation, lib, fetchFromGitHub
-, cmake, freetype, libpng, libGLU_combined, gettext, openssl, perl, libiconv
+, cmake, freetype, libpng, libGLU_combined, openssl, perl, libiconv
 , qtscript, qtserialport, qttools
 , qtmultimedia, qtlocation, makeWrapper, qtbase
 }:

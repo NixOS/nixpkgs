@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ fetchFromGitHub, makeWrapper
 , cmake, llvmPackages, ncurses }:
 
 let

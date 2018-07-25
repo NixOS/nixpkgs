@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   version = "1.3";

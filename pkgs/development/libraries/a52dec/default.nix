@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "ATSC A/52 stream decoder";
     homepage = http://liba52.sourceforge.net/;
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl2;
   };
 }

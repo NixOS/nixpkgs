@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , libGLU
-, x11
+, xlibsWrapper
 , xorg
 , xinput_calibrator
 , doxygen
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       libao
       libpthreadstubs
       libGLU
-      x11
+      xlibsWrapper
       xinput_calibrator
       xorg.libXrandr
       xorg.libXi

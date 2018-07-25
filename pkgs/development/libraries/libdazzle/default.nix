@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, ninja, meson, pkgconfig, vala, gobjectIntrospection, libxml2
+{ stdenv, fetchurl, ninja, meson, pkgconfig, vala, gobjectIntrospection, libxml2
 , gtk-doc, docbook_xsl, dbus, xvfb_run, glib, gtk3, gnome3 }:
 
 let

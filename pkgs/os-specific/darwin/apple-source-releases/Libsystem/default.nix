@@ -1,6 +1,6 @@
-{ stdenv, appleDerivation, cpio, bootstrap_cmds, xnu, Libc, Libm, libdispatch, cctools, Libinfo,
+{ stdenv, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo,
   dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto, copyfile,
-  removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil, version }:
+  removefile, libresolv, Libnotify, libplatform, libpthread, mDNSResponder, launchd, libutil }:
 
 appleDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];

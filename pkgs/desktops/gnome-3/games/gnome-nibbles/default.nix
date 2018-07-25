@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , librsvg, libcanberra-gtk3, clutter-gtk, intltool, itstool
-, libxml2, libgee, libgames-support }:
+, libxml2, libgee, libgnome-games-support }:
 
 stdenv.mkDerivation rec {
   name = "gnome-nibbles-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3 wrapGAppsHook intltool itstool libxml2
     librsvg libcanberra-gtk3 clutter-gtk gnome3.defaultIconTheme
-    libgee libgames-support
+    libgee libgnome-games-support
   ];
 
   meta = with stdenv.lib; {

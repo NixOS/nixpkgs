@@ -10,7 +10,7 @@ let
 
   # interface options
 
-  interfaceOpts = { name, ... }: {
+  interfaceOpts = { ... }: {
 
     options = {
 

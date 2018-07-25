@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pythonPackages, bash }:
+{ stdenv, pythonPackages, bash }:
  
 pythonPackages.buildPythonApplication rec {
   pname = "simp_le-client";

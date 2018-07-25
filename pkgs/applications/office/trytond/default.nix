@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages
+{ stdenv, python2Packages
 , withPostgresql ? true }:
 
 with stdenv.lib;

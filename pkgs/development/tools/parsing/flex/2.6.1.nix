@@ -12,22 +12,19 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ m4 ];
 
+  preConfigure = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
+
   postConfigure = stdenv.lib.optionalString (stdenv.isDarwin || stdenv.isCygwin) ''
     sed -i Makefile -e 's/-no-undefined//;'
   '';
 
-  crossAttrs = {
-
-    # disable tests which can't run on build machine
-    postPatch = ''
-      substituteInPlace Makefile.in --replace "tests" " ";
-    '';
-
-    preConfigure = ''
-      export ac_cv_func_malloc_0_nonnull=yes
-      export ac_cv_func_realloc_0_nonnull=yes
-    '';
-  };
+  # disable tests which can't run on build machine
+  postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    substituteInPlace Makefile.in --replace "tests" " ";
+  '';
 
   meta = {
     homepage = https://github.com/westes/flex;

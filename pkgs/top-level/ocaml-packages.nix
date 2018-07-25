@@ -640,6 +640,8 @@ let
 
     ppx_deriving_yojson = callPackage ../development/ocaml-modules/ppx_deriving_yojson {};
 
+    ppx_gen_rec = callPackage ../development/ocaml-modules/ppx_gen_rec {};
+
     ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
 
     ppx_tools =
@@ -748,14 +750,14 @@ let
     # Jane Street
 
     janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
-    
+
     janeStreet = import ../development/ocaml-modules/janestreet {
-      inherit lib janePackage ocaml ocamlbuild angstrom ctypes cryptokit;
+      inherit janePackage ocamlbuild angstrom ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
       inherit ppx_deriving re zarith ppxlib;
       inherit (pkgs) stdenv openssl;
     };
-    
+
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
       janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix { defaultVersion = "0.9.0"; };
       inherit lib ocaml ocamlbuild ctypes cryptokit;
@@ -1067,7 +1069,7 @@ in rec
 
   ocamlPackages_4_07 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.07.nix { }) (self: super: { });
 
-  ocamlPackages_latest = ocamlPackages_4_06;
+  ocamlPackages_latest = ocamlPackages_4_07;
 
   ocamlPackages =
     # OCaml 4.05 is broken on aarch64

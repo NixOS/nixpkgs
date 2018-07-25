@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k }:
+{ buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "JPype1";

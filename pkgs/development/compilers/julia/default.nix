@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl
+{ stdenv, fetchurl
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2, paxctl
 # libjulia dependencies

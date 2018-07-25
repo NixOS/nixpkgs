@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils, qtbase
+{ stdenv, fetchFromGitHub, qtbase
 , qtdeclarative, cmake, texlive, ninja }:
 
 stdenv.mkDerivation rec {

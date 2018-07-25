@@ -1,4 +1,4 @@
-{ pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
+{ stdenv, lib, fetchurl, fetchFromGitHub, bundlerEnv
 , ruby, tzdata, git, procps, nettools
 }:
 

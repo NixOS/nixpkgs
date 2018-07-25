@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python2Packages, makeWrapper, docutils, unzip
+{ stdenv, fetchurl, python2Packages, makeWrapper, unzip
 , guiSupport ? false, tk ? null
-, ApplicationServices, cf-private }:
+, ApplicationServices }:
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
@@ -56,8 +56,8 @@ in python2Packages.buildPythonApplication {
   meta = {
     inherit version;
     description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = http://mercurial.selenic.com/;
-    downloadPage = "http://mercurial.selenic.com/release/";
+    homepage = https://www.mercurial-scm.org;
+    downloadPage = https://www.mercurial-scm.org/release/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     updateWalker = true;

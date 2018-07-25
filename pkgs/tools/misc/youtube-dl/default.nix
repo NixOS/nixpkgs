@@ -1,4 +1,4 @@
-{ stdenv, lib, targetPlatform, fetchurl, buildPythonPackage
+{ lib, fetchurl, buildPythonPackage
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the

@@ -15,7 +15,7 @@
 , CF, configd
 , python-setup-hook
 # For the Python package set
-, pkgs, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -29,7 +29,6 @@ let
   majorVersion = "3.4";
   minorVersion = "8";
   minorVersionSuffix = "";
-  pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
   sitePackages = "lib/${libPrefix}/site-packages";

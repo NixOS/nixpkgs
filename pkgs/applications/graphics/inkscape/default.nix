@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, libXft
+{ stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, potrace, cmake
+, libvisio, libcdr, libexif, potrace, cmake, hicolor-icon-theme
 }:
 
 let
@@ -44,15 +44,13 @@ stdenv.mkDerivation rec {
     libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
     gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif potrace
+    libvisio libcdr libexif potrace hicolor-icon-theme
   ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    # Make sure PyXML modules can be found at run-time.
-    rm -f "$out/share/icons/hicolor/icon-theme.cache"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  # Make sure PyXML modules can be found at run-time.
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';

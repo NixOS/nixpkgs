@@ -1,4 +1,5 @@
-{ stdenv, mkDerivation, fetchFromGitHub, boost, qtbase, qtwebkit, poppler_qt5, qmake, hunspell, html-tidy}:
+{ stdenv, mkDerivation, fetchFromGitHub, boost
+, qtbase, qtwebkit, poppler, qmake, hunspell, html-tidy}:
 
 mkDerivation rec {
   name = "nixnote2-${version}";
@@ -11,7 +12,7 @@ mkDerivation rec {
     sha256 = "0cfq95mxvcgby66r61gclm1a2c6zck5aln04xmg2q8kg6p9d31fr";
   };
 
-  buildInputs = [ boost qtbase qtwebkit poppler_qt5 hunspell ];
+  buildInputs = [ boost qtbase qtwebkit poppler hunspell ];
 
   enableParallelBuilding = true;
 
@@ -28,7 +29,7 @@ mkDerivation rec {
 
     substituteInPlace nixnote.cpp --replace 'tidyProcess.start("tidy' 'tidyProcess.start("${html-tidy}/bin/tidy'
   '';
-  
+
   postInstal = ''
     cp images/windowIcon.png $out/share/pixmaps/nixnote2.png
   '';

@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, config, makeWrapper,
+  mkDerivation, lib, makeWrapper,
 
   extra-cmake-modules, kdoctools,
 

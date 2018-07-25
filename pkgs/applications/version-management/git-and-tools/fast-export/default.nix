@@ -1,4 +1,4 @@
-{stdenv, fetchgit, mercurial, coreutils, git, makeWrapper, subversion}:
+{stdenv, fetchgit, mercurial, makeWrapper, subversion}:
 
 with stdenv.lib;
 stdenv.mkDerivation {

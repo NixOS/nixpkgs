@@ -1,7 +1,6 @@
 { stdenv 
 , fetchFromGitHub
 , qttools
-, qtbase
 , qtmultimedia
 , liblo
 , gst_all_1

@@ -13,7 +13,7 @@ let
   wmDefault = xcfg.windowManager.default;
   hasDefaultUserSession = dmDefault != "none" || wmDefault != "none";
 
-  inherit (pkgs) stdenv lightdm writeScript writeText;
+  inherit (pkgs) lightdm writeScript writeText;
 
   # lightdm runs with clearenv(), but we need a few things in the enviornment for X to startup
   xserverWrapper = writeScript "xserver-wrapper"

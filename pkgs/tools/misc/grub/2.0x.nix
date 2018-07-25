@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb, freetype, qemu, devicemapper, unifont, pkgconfig
+{ stdenv, fetchurl, flex, bison, python
+, gettext, ncurses, libusb, freetype, qemu, lvm2, unifont, pkgconfig
 , fuse # only needed for grub-mount
 , zfs ? null
 , efiSupport ? false
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bison flex python pkgconfig ];
-  buildInputs = [ ncurses libusb freetype gettext devicemapper fuse ]
+  buildInputs = [ ncurses libusb freetype gettext lvm2 fuse ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 

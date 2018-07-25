@@ -5,7 +5,6 @@
 , lxml
 , libxml2
 , libxslt
-, pytest
 , nose
 , rednose
 }:

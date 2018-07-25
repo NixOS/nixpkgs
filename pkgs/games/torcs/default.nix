@@ -1,6 +1,6 @@
 { fetchpatch, fetchurl, stdenv, libGLU, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
-libpng, zlib, bash, makeWrapper }:
+libpng, zlib, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "torcs-1.3.7";

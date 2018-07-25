@@ -6,7 +6,6 @@
 , fetchNuGet
 , pkgconfig
 , mono
-, monodevelop
 , fsharp
 , unzip
 , overrides ? {}

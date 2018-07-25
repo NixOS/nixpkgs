@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, fetchurl, xcbuildHook }:
+{ stdenv, appleDerivation, xcbuildHook }:
 
 appleDerivation rec {
   nativeBuildInputs = [ xcbuildHook ];

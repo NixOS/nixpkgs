@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, nose }:
+{ buildPythonPackage, fetchPypi, isPy3k, nose }:
 
 buildPythonPackage rec {
   pname = "anyjson";

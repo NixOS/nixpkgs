@@ -220,7 +220,6 @@ isScript() {
     local fn="$1"
     local fd
     local magic
-    if ! [ -x /bin/sh ]; then return 0; fi
     exec {fd}< "$fn"
     read -r -n 2 -u "$fd" magic
     exec {fd}<&-
@@ -659,6 +658,10 @@ substituteStream() {
                 # check if the used nix attribute name is a valid bash name
                 if ! [[ "$varName" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
                     echo "substituteStream(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
+                    return 1
+                fi
+                if [ -z ${!varName+x} ]; then
+                    echo "substituteStream(): ERROR: variable \$$varName is unset" >&2
                     return 1
                 fi
                 pattern="@$varName@"

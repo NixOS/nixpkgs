@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, xproto, xdotool, unzip }:
+{ stdenv, fetchurl, libX11, xproto, unzip }:
 
 stdenv.mkDerivation {
   name = "seturgent-2012-08-17";

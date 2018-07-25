@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext
+{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib
 , net_snmp , libssh2, openldap
 , enableJabber ? false, minmay ? null
 , enableSnmp ? false

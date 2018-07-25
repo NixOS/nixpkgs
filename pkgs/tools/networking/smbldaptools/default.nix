@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, NetLDAP, makeWrapper, CryptSmbHash, DigestSHA1}:
+{stdenv, fetchurl, perl, perlldap, makeWrapper, CryptSmbHash, DigestSHA1}:
 
 let
   version = "0.9.11";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1xcxmpz74r82vjp731axyac3cyksfiarz9jk5g5m2bzfdixkq9mz";
   };
 
-  buildInputs = [ perl NetLDAP makeWrapper CryptSmbHash DigestSHA1 ];
+  buildInputs = [ perl perlldap makeWrapper CryptSmbHash DigestSHA1 ];
 
   preConfigure = ''
     export configureFlags="$configureFlags --with-perl-libdir=$out/lib/perl5/site_perl"

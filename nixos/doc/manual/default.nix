@@ -209,13 +209,13 @@ let
         --stringparam collect.xref.targets only \
         --stringparam targets.filename "$out/manual.db" \
         --nonet \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
         ${manual-combined}/manual-combined.xml
 
       cat > "$out/olinkdb.xml" <<EOF
       <?xml version="1.0" encoding="utf-8"?>
       <!DOCTYPE targetset SYSTEM
-        "file://${docbook5_xsl}/xml/xsl/docbook/common/targetdatabase.dtd" [
+        "file://${docbook_xsl_ns}/xml/xsl/docbook/common/targetdatabase.dtd" [
         <!ENTITY manualtargets SYSTEM "file://$out/manual.db">
       ]>
       <targetset>
@@ -264,11 +264,11 @@ in rec {
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --output $dst/ \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/images/callouts
-      cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
+      cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
 
       cp ${../../../doc/style.css} $dst/style.css
       cp ${../../../doc/overrides.css} $dst/overrides.css
@@ -292,11 +292,11 @@ in rec {
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --xinclude --output $dst/epub/ \
-        ${docbook5_xsl}/xml/xsl/docbook/epub/docbook.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/epub/OEBPS/images/callouts
-      cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
+      cp -r ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
       echo "application/epub+zip" > mimetype
       manual="$dst/nixos-manual.epub"
       zip -0Xq "$manual" mimetype
@@ -324,7 +324,7 @@ in rec {
         --param man.endnotes.are.numbered 0 \
         --param man.break.after.slash 1 \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
-        ${docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl \
         ${manual-combined}/man-pages-combined.xml
     '';
 

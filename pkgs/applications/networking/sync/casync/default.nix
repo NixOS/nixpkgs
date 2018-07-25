@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, sphinx
 , acl, curl, fuse, libselinux, udev, xz, zstd
 , fuseSupport ? true

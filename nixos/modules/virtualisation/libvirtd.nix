@@ -104,7 +104,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ libvirt netcat-openbsd cfg.qemuPackage ];
+    environment.systemPackages = with pkgs; [ libvirt libressl.nc cfg.qemuPackage ];
 
     boot.kernelModules = [ "tun" ];
 

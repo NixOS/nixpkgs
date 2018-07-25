@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       --replace "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
   '' + lib.optionalString (pcsclite != null) ''
     substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
-      --replace "libpcsclite.so" "${pcsclite}/lib/libpcsclite.so"
+      --replace "libpcsclite.so" "${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so"
   '';
 
   buildInputs = with lib; [

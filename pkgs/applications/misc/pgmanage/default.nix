@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, runCommand, postgresql, openssl } :
+{ stdenv, fetchFromGitHub, postgresql, openssl } :
 
 stdenv.mkDerivation rec {
   name = "pgmanage-${version}";
