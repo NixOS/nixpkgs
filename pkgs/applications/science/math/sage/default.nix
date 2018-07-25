@@ -119,16 +119,7 @@ let
   giac = nixpkgs.giac.override { inherit ntl; };
   arb = nixpkgs.arb.override { inherit flint; };
 
-  # update causes issues
-  # https://groups.google.com/forum/#!topic/sage-packaging/cS3v05Q0zso
-  # https://trac.sagemath.org/ticket/24735
-  singular = (nixpkgs.singular.override { inherit ntl flint; }).overrideAttrs (oldAttrs: {
-    name = "singular-4.1.0p3";
-    src = fetchurl {
-      url = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/4-1-0/singular-4.1.0p3.tar.gz";
-      sha256 = "105zs3zk46b1cps403ap9423rl48824ap5gyrdgmg8fma34680a4";
-    };
-  });
+  singular = nixpkgs.singular.override { inherit ntl flint; };
 
   # *not* to confuse with the python package "pynac"
   pynac = nixpkgs.pynac.override { inherit singular flint; };
