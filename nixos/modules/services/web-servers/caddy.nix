@@ -66,7 +66,7 @@ in {
       description = "Caddy web server";
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = mkIf (versionAtLeast config.system.nixos.stateVersion "17.09")
+      environment = mkIf (versionAtLeast config.system.stateVersion "17.09")
         { CADDYPATH = cfg.dataDir; };
       serviceConfig = {
         ExecStart = ''
