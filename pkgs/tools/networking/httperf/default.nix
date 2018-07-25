@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, openssl }:
 
 stdenv.mkDerivation rec {
   baseName = "httperf";
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+  propagatedBuildInputs = [ openssl ];
 
   configurePhase = ''
     autoreconf -i
