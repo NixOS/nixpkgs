@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, buildPackages}:
 
 let version = "1.6.2"; in
 
@@ -11,6 +11,12 @@ stdenv.mkDerivation {
   };
 
   configureFlags = stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+
+  patches = [ ./shtool.patch ];
+
+  preConfigure = ''
+  export ac_cv_va_copy=yes
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.ossp.org/pkg/lib/uuid/;
