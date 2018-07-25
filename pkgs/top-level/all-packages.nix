@@ -21825,6 +21825,8 @@ with pkgs;
 
   yara = callPackage ../tools/security/yara { };
 
+  yaxg = callPackage ../tools/graphics/yaxg {};
+
   zap = callPackage ../tools/networking/zap { };
 
   zdfmediathk = callPackage ../applications/video/zdfmediathk { };
