@@ -44,7 +44,7 @@ in {
     };
 
     home = mkOption {
-      type = types.string;
+      type = types.str;
       description = "Url for hoogle logo";
       default = "https://hoogle.haskell.org";
     };
