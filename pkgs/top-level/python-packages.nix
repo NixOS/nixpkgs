@@ -16935,24 +16935,7 @@ EOF
     };
   };
 
-  potr = buildPythonPackage rec {
-    version = "1.0.1";
-    name = "potr-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-potr/python-${name}.zip";
-      sha256 = "1b3vjbv8hvynwj6amw3rg5zj8bagynbj0ipy09xwksf1mb0kz8m8";
-    };
-
-    propagatedBuildInputs = with self ; [ pycrypto ];
-
-    meta = {
-      description = "A pure Python OTR implementation";
-      homepage = "http://python-otr.pentabarf.de/";
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ globin ];
-    };
-  };
+  potr = callPackage ../development/python-modules/potr {};
 
   pluggy = callPackage ../development/python-modules/pluggy {};
 
