@@ -6,8 +6,8 @@ let
   };
 in {
   fuse_2 = mkFuse {
-    version = "2.9.7";
-    sha256Hash = "1wyjjfb7p4jrkk15zryzv33096a5fmsdyr2p4b00dd819wnly2n2";
+    version = "2.9.8";
+    sha256Hash = "0s04ln4k9zvvbjih8ybaa19fxg8xv7dcsz2yrlbk35psnf3l67af";
   };
 
   fuse_3 = mkFuse {
