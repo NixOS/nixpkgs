@@ -572,10 +572,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   AuthenRadius = buildPerlPackage rec {
-    name = "Authen-Radius-0.26";
+    name = "Authen-Radius-0.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PO/PORTAONE/Authen-Radius-0.26.tar.gz;
-      sha256 = "4f272c19b8a9f6514a1107e98efae6773208233df4db11f2dc4764b4784b17c3";
+      url = mirror://cpan/authors/id/P/PO/PORTAONE/Authen-Radius-0.27.tar.gz;
+      sha256 = "e5a3052fe46dc38424c1947da92e623e8996216f97bd7be72221eb6c5f7c09f8";
     };
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [ DataHexDump NetIP ];
