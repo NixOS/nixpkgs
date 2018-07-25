@@ -4018,6 +4018,11 @@
     github = "hmuehlhans";
     name = "Hubert Mühlhans";
   };
+  trizinix = {
+    email = "trizinix@gmail.com";
+    github = "trizinix";
+    name = "Trizinix";
+  };
   troydm = {
     email = "d.geurkov@gmail.com";
     github = "troydm";
