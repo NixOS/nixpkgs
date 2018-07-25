@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2
-, polkit, intltool }:
+, polkit, intltool, python }:
 
 stdenv.mkDerivation rec {
   name = "gconf-${version}";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib dbus-glib ];
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool python ];
 
   configureFlags =
     # fixes the "libgconfbackend-oldxml.so is not portable" error on darwin
