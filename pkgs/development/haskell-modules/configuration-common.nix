@@ -737,9 +737,6 @@ self: super: {
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
 
-  # broken test suite
-  servant-server = dontCheck super.servant-server;
-
   # build servant docs from the repository
   servant =
     let
@@ -763,9 +760,6 @@ self: super: {
         ln -s ${docs} $doc/share/doc/servant
       '';
     });
-
-  # Glob == 0.7.x
-  servant-auth = doJailbreak super.servant-auth;
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
@@ -1078,6 +1072,9 @@ self: super: {
 
   # Test suite depends on cabal-install
   doctest = dontCheck super.doctest;
+
+  # https://github.com/haskell-servant/servant-auth/issues/113
+  servant-auth-client = dontCheck super.servant-auth-client;
 
   # Over-specified constraint on X11 ==1.8.*.
   xmonad = doJailbreak super.xmonad;
