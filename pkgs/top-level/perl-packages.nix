@@ -5602,17 +5602,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  FCGIClient = buildPerlPackage rec {
-     name = "FCGI-Client-0.08";
+  FCGIClient = buildPerlModule rec {
+     name = "FCGI-Client-0.09";
      src = fetchurl {
-       url = mirror://cpan/authors/id/T/TO/TOKUHIROM/FCGI-Client-0.08.tar.gz;
-       sha256 = "1rvhfnyhib1aslr06x8s0yfykaf44j5glj0rxz9ani7z6l0p2vqa";
+       url = mirror://cpan/authors/id/T/TO/TOKUHIROM/FCGI-Client-0.09.tar.gz;
+       sha256 = "1s11casbv0jmkcl5dk8i2vhfy1nc8rg43d3bg923zassrq4wndym";
      };
-     propagatedBuildInputs = [ AnyMoose ];
+     propagatedBuildInputs = [ Moo TypeTiny ];
      meta = {
        description = "client library for fastcgi protocol";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
+    buildInputs = [ ModuleBuildTiny ];
   };
 
   FCGIProcManager = buildPerlPackage {
