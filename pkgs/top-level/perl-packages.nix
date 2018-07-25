@@ -8689,10 +8689,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogAny = buildPerlPackage rec {
-    name = "Log-Any-1.705";
+    name = "Log-Any-1.706";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PR/PREACTION/${name}.tar.gz";
-      sha256 = "85c7c5189a8bfc2ffb6f879b4cd04dd77f94bc5abc3800b4330f42f43fb9a696";
+      sha256 = "3ed0e5a4b7d490ab00624b7f905421239261f1dc976192aad2c0d1509bec08be";
     };
     # Syslog test fails.
     preCheck = "rm t/syslog.t";
