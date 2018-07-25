@@ -2737,6 +2737,11 @@
     github = "neeasade";
     name = "Nathan Isom";
   };
+  neonfuz = {
+    email = "neonfuz@gmail.com";
+    github = "neonfuz";
+    name = "Sage Raflik";
+  };
   nequissimus = {
     email = "tim@nequissimus.com";
     github = "nequissimus";
