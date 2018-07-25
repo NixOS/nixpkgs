@@ -8866,10 +8866,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LWP = buildPerlPackage rec {
-    name = "libwww-perl-6.34";
+    name = "libwww-perl-6.35";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/libwww-perl-6.34.tar.gz;
-      sha256 = "260363fd4204c0ddf7cd76f7b70e22beb3b5186e4c346f250a59288b52dc114c";
+      url = mirror://cpan/authors/id/E/ET/ETHER/libwww-perl-6.35.tar.gz;
+      sha256 = "dda2578d7b32152c4afce834761a61d117de286c705a9f7972c7ac6032ca5953";
     };
     propagatedBuildInputs = [ FileListing HTMLParser HTTPCookies HTTPDaemon HTTPNegotiate NetHTTP TryTiny WWWRobotRules ];
     meta = with stdenv.lib; {
@@ -8877,7 +8877,7 @@ let self = _self // overrides; _self = with self; {
       license = with licenses; [ artistic1 gpl1Plus ];
       platforms = platforms.unix;
     };
-    buildInputs = [ TestFatal TestRequiresInternet ];
+    buildInputs = [ TestFatal TestNeeds TestRequiresInternet ];
   };
 
   LWPAuthenOAuth = buildPerlPackage rec {
