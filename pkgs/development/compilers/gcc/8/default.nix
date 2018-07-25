@@ -113,15 +113,15 @@ let version = "8.2.0";
           "--enable-nls"
           "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
         ]));
-    stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
-    crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
+    stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
+    crossNameAddon = stdenv.lib.optionalString (targetPlatform != hostPlatform) "${stageNameAddon}-";
 
     bootstrap = targetPlatform == hostPlatform;
 
 in
 
 stdenv.mkDerivation ({
-  name = "${name}${if stripped then "" else "-debug"}-${version}" + crossNameAddon;
+  name = targetPlatform.config + "-" + crossNameAddon + "${name}${if stripped then "" else "-debug"}-${version}";
 
   builder = ../builder.sh;
 
