@@ -7722,6 +7722,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PH/PHRED/IO-SessionData-1.03.tar.gz;
       sha256 = "1p9d77pqy9a8dbgw7h7vmmkg0rlckk19dchd4c8gvcyv7qm73934";
     };
+    outputs = [ "out" "dev" ]; # no "devdoc"
     meta = {
       description = "supporting module for SOAP::Lite";
     };
@@ -17910,7 +17911,6 @@ let self = _self // overrides; _self = with self; {
   TextAbbrev = null; # part of Perl 5.22
   TextTabsWrap = null; # part of Perl 5.22
   DigestSHA = null;
-  FileTemp = null;
   "if" = null;
   TestSimple = null;
 
