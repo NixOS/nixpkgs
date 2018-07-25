@@ -16509,10 +16509,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ThreadQueue = buildPerlPackage rec {
-    name = "Thread-Queue-3.12";
+    name = "Thread-Queue-3.13";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
-      sha256 = "0wpqdbdfa4mw8lpcaw1lp2d553gl65cl8mli1srj8wrg0kaxshhx";
+      sha256 = "1s6wpxy07mr03krkzjr5r02cswsj18dd38aa5f16dfrgvp6xm8vb";
     };
     meta = {
       description = "Thread-safe queues";
