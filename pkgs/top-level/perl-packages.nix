@@ -11671,10 +11671,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ParallelForkManager = buildPerlPackage rec {
-    name = "Parallel-ForkManager-1.19";
+    name = "Parallel-ForkManager-1.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YA/YANICK/${name}.tar.gz";
-      sha256 = "f1de2e9875eeb77d65f80338905dedd522f3913822502982f805aa71cde5a472";
+      sha256 = "7cc4c1c3b0e676b61ffa90f82f4128e8057327449ca86a9beb2f39217023f289";
     };
     buildInputs = [ TestWarn ];
     meta = {
