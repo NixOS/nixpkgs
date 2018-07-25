@@ -1,4 +1,4 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper }:
+{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper, tzdata, symlinkJoin }:
 
 let
 
@@ -14,8 +14,15 @@ let
     outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
+    combinedLibXML2 = symlinkJoin {
+      name = "libxml2-combined";
+      paths = [ libxml2 libxml2.dev ];
+    };
+
+    nativeBuildInputs = [ combinedLibXML2 ];
+
     buildInputs =
-      [ zlib readline openssl libxml2 makeWrapper ]
+      [ zlib readline openssl makeWrapper ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     enableParallelBuilding = true;
@@ -28,8 +35,9 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
     ]
-      ++ lib.optional (stdenv.isDarwin)  "--with-uuid=e2fs"
-      ++ lib.optional (!stdenv.isDarwin) "--with-ossp-uuid";
+      ++ lib.optional stdenv.isDarwin  "--with-uuid=e2fs"
+      ++ lib.optional (!stdenv.isDarwin) "--with-ossp-uuid"
+      ++ lib.optional stdenv.isCross "--with-system-tzdata=${tzdata}";
 
     patches =
       [ (if atLeast "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
