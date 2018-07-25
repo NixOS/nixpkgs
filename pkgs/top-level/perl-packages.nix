@@ -878,10 +878,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   BusinessISMN = buildPerlPackage rec {
-    name = "Business-ISMN-1.131";
+    name = "Business-ISMN-1.132";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
-      sha256 = "1xyc7x4c4xl930rz7grs1l52f1vg4rbiv0c6xlxdsim8qsh7k94g";
+      sha256 = "009dbkjx1s918qn6hm5qmc0rlqagiazhwg3m7rrfci7mw80hyb6g";
     };
     propagatedBuildInputs = [ TieCycle ];
     meta = {
