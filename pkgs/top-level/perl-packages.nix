@@ -9634,10 +9634,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ModuleCoreList = buildPerlPackage {
-    name = "Module-CoreList-5.20180626";
+    name = "Module-CoreList-5.20180720";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/Module-CoreList-5.20180626.tar.gz;
-      sha256 = "1x9r0s4rlqziccb05p4k3aljx242ssx1abw5yl5ixn2c0g9ykll1";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/Module-CoreList-5.20180720.tar.gz;
+      sha256 = "0l6dyj4m4qgv2yzq3pp0bkvg1j9nh9mcm1p4x3g3j93gkba7whws";
     };
     meta = {
       homepage = http://dev.perl.org/;
