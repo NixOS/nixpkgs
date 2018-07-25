@@ -32,12 +32,13 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ] ++ lib.optional icuSupport icu;
 
-  configureFlags =
-       lib.optional pythonSupport "--with-python=${python}"
-    ++ lib.optional icuSupport    "--with-icu"
-    ++ [ "--exec_prefix=$dev" ]
-    ++ lib.optional enableStatic "--enable-static"
-    ++ lib.optional (!enableShared) "--disable-shared";
+  configureFlags = [
+    "--exec_prefix=$dev"
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+    (lib.withFeature icuSupport "icu")
+    (lib.withFeatureAs pythonSupport "python" python)
+  ];
 
   enableParallelBuilding = true;
 
