@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
   ];
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
+
+    # musl enforce long double to be 64bits when ppc64le glibc enforce long double to be 128bits
+    # for bootstraping busybox for ppc64le, we need to enforce long double 64bits for musl compilation
+    ${if (stdenv.isppc64le or false) then ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -mlong-double-64"'' else ''''}
   '';
 
   configureFlags = [

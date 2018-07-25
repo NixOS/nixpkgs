@@ -75,7 +75,7 @@ let version = "7.3.0";
         "--enable-sjlj-exceptions"
         "--enable-threads=win32"
         "--disable-win32-registry"
-      ] else if crossStageStatic then [
+      ] else if crossStageStatic then ([
         "--disable-libssp"
         "--disable-nls"
         "--without-headers"
@@ -88,7 +88,10 @@ let version = "7.3.0";
         # maybe only needed on musl, PATH_MAX
         # https://github.com/richfelker/musl-cross-make/blob/0867cdf300618d1e3e87a0a939fa4427207ad9d7/litecross/Makefile#L62
         "--disable-libmpx"
-      ] else [
+      ] ++ stdenv.lib.optionals ( targetPlatform.config == "powerpc64le-unknown-linux-gnu" )  [
+	"--with-long-double-128"
+	"--enable-softfloat"
+      ]) else [
         (if crossDarwin then "--with-sysroot=${getLib libcCross}/share/sysroot"
          else                "--with-headers=${getDev libcCross}/include")
         "--enable-__cxa_atexit"
