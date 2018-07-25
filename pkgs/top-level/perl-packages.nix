@@ -15251,10 +15251,10 @@ let self = _self // overrides; _self = with self; {
 
 
   TestMockObject = buildPerlPackage rec {
-    name = "Test-MockObject-1.20161202";
+    name = "Test-MockObject-1.20180705";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHROMATIC/${name}.tar.gz";
-      sha256 = "14b225fff3645338697976dbbe2c39e44c1c93536855b78b3bbc6e9bfe94a0a2";
+      sha256 = "4516058d5d511155c1c462dab4027d762d6a474b99f73bf7da20b5ffbd024518";
     };
     buildInputs = [ CGI TestException TestWarn ];
     propagatedBuildInputs = [ UNIVERSALcan UNIVERSALisa ];
