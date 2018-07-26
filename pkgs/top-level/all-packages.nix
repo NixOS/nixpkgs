@@ -1549,7 +1549,7 @@ with pkgs;
   beegfs = callPackage ../os-specific/linux/beegfs { };
 
   beets = callPackage ../tools/audio/beets {
-    pythonPackages = python2Packages;
+    pythonPackages = python3Packages;
   };
 
   bepasty = callPackage ../tools/misc/bepasty { };
@@ -9295,6 +9295,8 @@ with pkgs;
   givaro = callPackage ../development/libraries/givaro {};
   givaro_3 = callPackage ../development/libraries/givaro/3.nix {};
   givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix {};
+
+  ghp-import = callPackage ../development/tools/ghp-import { };
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
@@ -20907,7 +20909,7 @@ with pkgs;
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
-  spyder = pythonPackages.spyder;
+  spyder = callPackage ../applications/science/spyder { };
 
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
