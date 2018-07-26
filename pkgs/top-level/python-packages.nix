@@ -20468,6 +20468,8 @@ EOF
   prometheus_client = callPackage ../development/python-modules/prometheus_client { };
 
   simpy = callPackage ../development/python-modules/simpy { };
+
+  rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 });
 
 in fix' (extends overrides packages)
