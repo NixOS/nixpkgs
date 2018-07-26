@@ -7,16 +7,14 @@
 buildPythonPackage rec {
   pname = "scikit-learn";
   version = "0.19.2";
-  disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
+  # UnboundLocalError: local variable 'message' referenced before assignment
+  disabled = true;
+#   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "b276739a5f863ccacb61999a3067d0895ee291c95502929b2ae56ea1f882e888";
   };
-
-  # basically https://github.com/scikit-learn/scikit-learn/pull/10723,
-  # but rebased onto 0.19.1
-  patches = [ ./n_iter-should-be-less-than-max_iter-using-lbgfs.patch ];
 
   buildInputs = [ nose pillow gfortran glibcLocales ];
   propagatedBuildInputs = [ numpy scipy numpy.blas ];
@@ -29,10 +27,12 @@ buildPythonPackage rec {
     HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests --doctest-options=+SKIP $out/${python.sitePackages}/sklearn/
   '';
 
+
+
   meta = with stdenv.lib; {
     description = "A set of python modules for machine learning and data mining";
     homepage = http://scikit-learn.org;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    maintainers = with maintainers; [ ];
   };
 }
