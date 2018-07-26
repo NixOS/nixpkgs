@@ -8,6 +8,7 @@
 , dateutil
 , funcsigs
 , future
+, futures
 , mock
 , networkx
 , nibabel
@@ -46,6 +47,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
+
+    rm pytest.ini
   '';
 
   propagatedBuildInputs = [
@@ -53,6 +56,7 @@ buildPythonPackage rec {
     dateutil
     funcsigs
     future
+    futures
     networkx
     nibabel
     numpy
