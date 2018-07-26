@@ -907,10 +907,10 @@ index dd9e304d..49d456e9 100644
 -    }
  fi
  
- kstartupconfig5
+-kstartupconfig5
++@CMAKE_INSTALL_FULL_BINDIR@/kstartupconfig5
  returncode=$?
--if test $returncode -ne 0; then
-+if ! @CMAKE_INSTALL_FULL_BINDIR@/kstartupconfig5; then
+ if test $returncode -ne 0; then
      exit 1
  fi
 -[ -r $configDir/startupconfig ] && . $configDir/startupconfig
