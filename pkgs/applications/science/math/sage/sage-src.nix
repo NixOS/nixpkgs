@@ -53,10 +53,6 @@ stdenv.mkDerivation rec {
       sha256 = "1k3afq3qlzmgqwx6rzs5wv153vv9dsf5rk8pi61g57l3r3npbjmc";
     })
 
-    # Pari upstream has since accepted a patch, so this patch won't be necessary once sage updates pari.
-    # https://trac.sagemath.org/ticket/25312
-    ./patches/pari-stackwarn.patch
-
     # https://trac.sagemath.org/ticket/25345
     # (upstream patch doesn't apply on 8.2 source)
     ./patches/dochtml-optional.patch
@@ -87,6 +83,7 @@ stdenv.mkDerivation rec {
 
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
     # https://trac.sagemath.org/ticket/24824
+    ./patches/pari-stackwarn.patch # not actually necessary since tha pari upgrade, but necessary for the glpk patch to apply
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
       sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
@@ -102,6 +99,18 @@ stdenv.mkDerivation rec {
 
     # https://trac.sagemath.org/ticket/24735
     ./patches/singular-4.1.1p2.patch
+
+    # https://trac.sagemath.org/ticket/25567 and dependency #25635
+    (fetchpatch {
+      name = "pari-upgrade-dependency.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=6995e7cae1b3476ad0145f8dfc897cf91f0c3c4d";
+      sha256 = "1dvhabl1c9pwd9xkjvbjjg15mvb14b24p1f3cby1mlqk34d4lrs6";
+    })
+    (fetchpatch {
+      name = "pari-2.11.0.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=7af4748cab37d651eaa88be501db88f4a5ffc584";
+      sha256 = "13f740ly3c19gcmhjngiycvmc3mcfj61y00i6jv0wmfgpm2z3ank";
+    })
   ];
 
   patches = nixPatches ++ packageUpgradePatches ++ [
