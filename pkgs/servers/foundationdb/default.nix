@@ -85,6 +85,7 @@ let
             --replace 'LDFLAGS :=' 'LDFLAGS := -ltls -lssl -lcrypto'
         '';
 
+        separateDebugInfo = true;
         enableParallelBuilding = true;
 
         makeFlags = [ "all" "fdb_java" ]
@@ -92,7 +93,9 @@ let
           # it gets statically linked in
           ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
           # Needed environment overrides
-          ++ [ "KVRELEASE=1" ];
+          ++ [ "KVRELEASE=1"
+               "NOSTRIP=1"
+             ];
 
         # on 6.0 and later, we can specify all this information manually
         configurePhase = lib.optionalString (lib.versionAtLeast version "6.0") ''
