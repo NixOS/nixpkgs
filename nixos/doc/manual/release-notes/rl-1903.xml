@@ -370,6 +370,12 @@
    </listitem>
    <listitem>
     <para>
+     <literal>composableDerivation</literal> along with supporting library functions
+     has been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The deprecated <literal>truecrypt</literal> package has been removed
      and <literal>truecrypt</literal> attribute is now an alias for
      <literal>veracrypt</literal>. VeraCrypt is backward-compatible with
