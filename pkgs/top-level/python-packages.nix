@@ -9976,22 +9976,6 @@ in {
 
   prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit { };
 
-  prompt_toolkit_52 = self.prompt_toolkit.overridePythonAttrs(oldAttrs: rec {
-    name = "${oldAttrs.pname}-${version}";
-    version = "0.52";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "00h9ldqmb33nhg2kpks7paldf3n3023ipp124alwp96yz16s7f1m";
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    #Only <3.4 expressly supported.
-    disabled = isPy35;
-
-  });
-
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
