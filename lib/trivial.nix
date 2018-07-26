@@ -188,6 +188,26 @@ rec {
   warn = msg: builtins.trace "WARNING: ${msg}";
   info = msg: builtins.trace "INFO: ${msg}";
 
+  /* Print a trace message if pred is false.
+     Intended to be used to augment asserts with helpful error messages.
+
+     Example:
+       assertMsg false "nope"
+       => false
+       stderr> trace: nope
+
+       assert (assertMsg ("foo" == "bar") "foo is not bar, silly"); ""
+       stderr> trace: foo is not bar, silly
+       stderr> assert failed at …
+
+     Type:
+       assertMsg :: Bool -> String -> Bool
+  */
+  assertMsg = pred: msg:
+    if pred
+    then true
+    else builtins.trace msg false;
+
 
   ## Function annotations
 
