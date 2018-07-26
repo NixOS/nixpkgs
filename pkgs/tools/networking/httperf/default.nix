@@ -17,18 +17,14 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     autoreconf -i
-  '';
-
-  buildPhase = ''
-    mkdir build
+    mkdir -pv build
     cd build
     ../configure
-    make
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv src/httperf $out/bin
+    mkdir -vp $out/bin
+    mv -v src/httperf $out/bin
   '';
 
   meta = with stdenv.lib; {
