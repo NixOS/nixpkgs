@@ -156,15 +156,7 @@ let
   # https://trac.sagemath.org/ticket/22191
   ecl = nixpkgs.ecl_16_1_2;
 
-  # sage currently uses an unreleased version of pari
-  # https://trac.sagemath.org/ticket/25567
-  pari = (nixpkgs.pari.override { withThread = false; }).overrideAttrs (attrs: rec {
-    version = "2.10-1280-g88fb5b3"; # on update remove pari-stackwarn patch from `sage-src.nix`
-    src = fetchurl {
-      url = "mirror://sageupstream/pari/pari-${version}.tar.gz";
-      sha256 = "19gbsm8jqq3hraanbmsvzkbh88iwlqbckzbnga3y76r7k42akn7m";
-    };
-  });
+  pari = nixpkgs.pari.override { withThread = false; };
 in
   python.pkgs.sage-wrapper // {
     doc = python.pkgs.sagedoc;
