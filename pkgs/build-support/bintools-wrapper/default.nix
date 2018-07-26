@@ -185,6 +185,8 @@ stdenv.mkDerivation {
           "mips64"   = "btsmip";
           "mips64el" = "ltsmip";
         }.${targetPlatform.parsed.cpu.name}
+      else if targetPlatform.isPowerPC then "powerpc"
+      else if targetPlatform.isSparc then "sparc"
       else throw "unknown emulation for platform: " + targetPlatform.config;
     in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
