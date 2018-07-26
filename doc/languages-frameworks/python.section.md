@@ -424,7 +424,7 @@ available.
 
 At some point you'll likely have multiple packages which you would
 like to be able to use in different projects. In order to minimise unnecessary
-duplication we now look at how you can maintain yourself a repository with your
+duplication we now look at how you can maintain a repository with your
 own packages. The important functions here are `import` and `callPackage`.
 
 ### Including a derivation using `callPackage`
@@ -647,7 +647,7 @@ in python.withPackages(ps: [ps.blaze])).env
 
 The `buildPythonApplication` function is practically the same as `buildPythonPackage`.
 The difference is that `buildPythonPackage` by default prefixes the names of the packages with the version of the interpreter.
-Because with an application we're not interested in multiple version the prefix is dropped.
+Because this is irrelevant for applications, the prefix is omitted.
 
 #### `toPythonApplication` function
 
@@ -1021,7 +1021,7 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   };
 ```
 
-`pythonPackages.zerobin` is now globally overriden. All packages and also the
+`pythonPackages.zerobin` is now globally overridden. All packages and also the
 `zerobin` NixOS service use the new definition.
 Note that `python-super` refers to the old package set and `python-self`
 to the new, overridden version.
