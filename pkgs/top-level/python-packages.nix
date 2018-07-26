@@ -17954,6 +17954,8 @@ EOF
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;
   })).python;
+
+  rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 });
 
 in fix' (extends overrides packages)
