@@ -34,7 +34,8 @@ with pkgs;
       extraPackages = [];
       inherit bintools;
     };
-    allowedRequisites = stdenv.allowedRequisites ++ [ bintools ];
+    allowedRequisites =
+      lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
   };
 
   # For convenience, allow callers to get the path to Nixpkgs.
@@ -692,6 +693,8 @@ with pkgs;
   gopass = callPackage ../tools/security/gopass { };
 
   browserpass = callPackage ../tools/security/browserpass { };
+
+  passff-host = callPackage ../tools/security/passff-host { };
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
@@ -1438,6 +1441,8 @@ with pkgs;
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
   s2png = callPackage ../tools/graphics/s2png { };
+
+  simg2img = callPackage ../tools/filesystems/simg2img { };
 
   socklog = callPackage ../tools/system/socklog { };
 
@@ -8282,6 +8287,8 @@ with pkgs;
   kcov = callPackage ../development/tools/analysis/kcov { };
 
   kube-aws = callPackage ../development/tools/kube-aws { };
+
+  kustomize = callPackage ../development/tools/kustomize { };
 
   Literate = callPackage ../development/tools/literate-programming/Literate {};
 
@@ -16967,6 +16974,8 @@ with pkgs;
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
+  kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
+
   kupfer = callPackage ../applications/misc/kupfer { };
 
   lame = callPackage ../development/libraries/lame { };
@@ -21823,6 +21832,8 @@ with pkgs;
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   yara = callPackage ../tools/security/yara { };
+
+  yaxg = callPackage ../tools/graphics/yaxg {};
 
   zap = callPackage ../tools/networking/zap { };
 
