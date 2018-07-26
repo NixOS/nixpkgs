@@ -1,6 +1,5 @@
-{ autoconf, automake, cmake, curl, fetchFromGitHub, gcc, git, gmp, libsigsegv,
-  libtool, meson, ncurses, ninja, openssl, pkgconfig, python2, ragel, re2c,
-  stdenv, zlib }:
+{ curl, fetchFromGitHub, gcc, git, gmp, libsigsegv, meson, ncurses, ninja,
+  openssl, pkgconfig, re2c, stdenv, zlib }:
 
 stdenv.mkDerivation rec {
   name = "urbit-${version}";
@@ -14,33 +13,22 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ pkgconfig ninja meson ];
+
   buildInputs = with stdenv.lib; [
-    autoconf automake cmake curl gcc git gmp libsigsegv libtool
-    meson ncurses ninja openssl pkgconfig python2 ragel re2c zlib
+    curl gcc git gmp libsigsegv ncurses openssl re2c zlib
   ];
 
   # uses 'readdir_r' deprecated by glibc 2.24
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  configurePhase = ''
-    :
-  '';
-
   postPatch = ''
     patchShebangs .
-    substituteInPlace scripts/build --replace 'meson .' 'meson --prefix $out .'
   '';
 
-  buildPhase = ''
-    git init .
-    ./scripts/bootstrap
-    ./scripts/build
-    ninja -C ./build/ install
-  '';
-
-  installPhase = ''
-    :
-  '';
+  mesonFlags = [
+    "--buildtype=release"
+  ];
 
   meta = with stdenv.lib; {
     description = "An operating function";
