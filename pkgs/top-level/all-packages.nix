@@ -9364,6 +9364,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  libgit2_0_27 = callPackage ../development/libraries/git2/0.27.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   glbinding = callPackage ../development/libraries/glbinding { };
 
   gle = callPackage ../development/libraries/gle { };
