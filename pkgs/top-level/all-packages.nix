@@ -20744,6 +20744,7 @@ with pkgs;
 
   kicad = callPackage ../applications/science/electronics/kicad {
     wxGTK = wxGTK30;
+    inherit (pythonPackages) wxPython;
     boost = boost160;
   };
 
