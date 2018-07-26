@@ -1006,14 +1006,14 @@ folder and not downloaded again.
 If you need to change a package's attribute(s) from `configuration.nix` you could do:
 
 ```nix
-  nixpkgs.config.packageOverrides = superP: {
-    pythonPackages = superP.pythonPackages.override {
-      overrides = self: super: {
-        bepasty-server = super.bepasty-server.overrideAttrs ( oldAttrs: {
-          src = pkgs.fetchgit {
-            url = "https://github.com/bepasty/bepasty-server";
-            sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
-            rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+  nixpkgs.config.packageOverrides = super: {
+    python = super.python.override {
+      packageOverrides = python-self: python-super: {
+        zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
+          src = super.fetchgit {
+            url = "https://github.com/sametmax/0bin";
+            rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
+            sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
           };
         });
       };
@@ -1021,27 +1021,39 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   };
 ```
 
-If you are using the `bepasty-server` package somewhere, for example in `systemPackages` or indirectly from `services.bepasty`, then a `nixos-rebuild switch` will rebuild the system but with the `bepasty-server` package using a different `src` attribute. This way one can modify `python` based software/libraries easily. Using `self` and `super` one can also alter dependencies (`buildInputs`) between the old state (`self`) and new state (`super`).
+`pythonPackages.zerobin` is now globally overriden. All packages and also the
+`zerobin` NixOS service use the new definition.
+Note that `python-super` refers to the old package set and `python-self`
+to the new, overridden version.
+
+To modify only a Python package set instead of a whole Python derivation, use this snippet:
+
+```nix
+  myPythonPackages = pythonPackages.override {
+    overrides = self: super: {
+      zerobin = ...;
+    };
+  }
+```
 
 ### How to override a Python package using overlays?
 
-To alter a python package using overlays, you would use the following approach:
+Use the following overlay template:
 
 ```nix
 self: super:
 {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
-      bepasty-server = python-super.bepasty-server.overrideAttrs ( oldAttrs: {
-        src = self.pkgs.fetchgit {
-          url = "https://github.com/bepasty/bepasty-server";
-          sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
-          rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+      zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
+        src = super.fetchgit {
+          url = "https://github.com/sametmax/0bin";
+          rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
+          sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
         };
       });
     };
   };
-  pythonPackages = self.python.pkgs;
 }
 ```
 

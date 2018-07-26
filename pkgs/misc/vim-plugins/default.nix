@@ -2848,11 +2848,11 @@ let
   };
 
   youcompleteme = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "youcompleteme-2018-06-20";
+    name = "youcompleteme-2018-07-24";
     src = fetchgit {
       url = "https://github.com/valloric/youcompleteme";
-      rev = "e1ead995c13fe20989ee3d69fd76b20c5fff5d5b";
-      sha256 = "01my9m7a5m24zrh6i867fhqz42jxs0ai2pl4pra8wzvyk4ai1p5f";
+      rev = "459b3e620e45191b15c48c66b02ff89f1a0674db";
+      sha256 = "0s4sndx0mm13xcb559agfcqqdwhp2sr7kpp4ksc9gx41k7626rdr";
     };
     dependencies = [];
     buildPhase = ''
@@ -3259,7 +3259,7 @@ let
       sha256 = "0hj5bhfhd9am11ixaxad370p982bjig53mbm74fi6slhjpikdrdq";
     };
     dependencies = [];
-    buildInputs = [ python3 ]; 
+    buildInputs = [ python3 ];
     buildPhase = ''
       pushd ./rplugin/python3/deoplete/ujson
       python3 setup.py build --build-base=$PWD/build --build-lib=$PWD/build
