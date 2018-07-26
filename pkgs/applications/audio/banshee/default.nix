@@ -48,8 +48,10 @@ stdenv.mkDerivation rec {
         -i $out/bin/banshee
   '';
   meta = with lib; {
+    homepage = "http://banshee.fm/";
     description = "A music player written in C# using GNOME technologies";
     platforms = platforms.linux;
     maintainers = [ maintainers.zohl ];
+    license = licenses.mit;
   };
 }

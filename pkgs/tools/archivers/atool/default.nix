@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.nongnu.org/atool;
     description = "Archive command line helper";
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl3;
   };
 }

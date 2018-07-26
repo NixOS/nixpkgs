@@ -416,6 +416,9 @@ self: super: {
   # https://github.com/bos/snappy/issues/1
   snappy = dontCheck super.snappy;
 
+  # https://github.com/kim/snappy-framing/issues/3
+  snappy-framing = dontHaddock super.snappy-framing;
+
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
 
@@ -503,11 +506,20 @@ self: super: {
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
+  # Missing file in source distribution:
+  # - https://github.com/karun012/doctest-discover/issues/22
+  # - https://github.com/karun012/doctest-discover/issues/23
+  #
+  # When these are fixed the following needs to be enabled again:
+  #
+  # # Depends on itself for testing
+  # doctest-discover = addBuildTool super.doctest-discover
+  #   (if pkgs.buildPlatform != pkgs.hostPlatform
+  #    then self.buildHaskellPackages.doctest-discover
+  #    else dontCheck super.doctest-discover);
+  doctest-discover = dontCheck super.doctest-discover;
+
   # Depends on itself for testing
-  doctest-discover = addBuildTool super.doctest-discover
-    (if pkgs.buildPlatform != pkgs.hostPlatform
-     then self.buildHaskellPackages.doctest-discover
-     else dontCheck super.doctest-discover);
   tasty-discover = addBuildTool super.tasty-discover
     (if pkgs.buildPlatform != pkgs.hostPlatform
      then self.buildHaskellPackages.tasty-discover
@@ -603,6 +615,11 @@ self: super: {
       (pkgs.fetchpatch {
         url = https://github.com/wjt/bustle/commit/bcc3d56d367635c0dfdb4eab0d1265829aba6400.patch;
         sha256 = "1ybviivfbs5janiyw01ww365vxckni6fk0j10609clxk4na2nvb9";
+      })
+      # No instance for (Semigroup Marquee)
+      (pkgs.fetchpatch {
+        url = https://github.com/wjt/bustle/commit/95393cb17c2fe5f0903470a449e36728471759eb.patch;
+        sha256 = "1n7h1rh62731kg9jjs2mn49nx033ds0l33mpgfl75hrjqblz44m1";
       })
     ];
     postInstall = ''
@@ -720,9 +737,6 @@ self: super: {
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
 
-  # broken test suite
-  servant-server = dontCheck super.servant-server;
-
   # build servant docs from the repository
   servant =
     let
@@ -746,9 +760,6 @@ self: super: {
         ln -s ${docs} $doc/share/doc/servant
       '';
     });
-
-  # Glob == 0.7.x
-  servant-auth = doJailbreak super.servant-auth;
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
@@ -817,9 +828,6 @@ self: super: {
 
   # https://github.com/fizruk/http-api-data/issues/49
   http-api-data = dontCheck super.http-api-data;
-
-  # https://github.com/snoyberg/yaml/issues/106
-  yaml = disableCabalFlag super.yaml "system-libyaml";
 
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
@@ -1062,6 +1070,9 @@ self: super: {
   # Test suite depends on cabal-install
   doctest = dontCheck super.doctest;
 
+  # https://github.com/haskell-servant/servant-auth/issues/113
+  servant-auth-client = dontCheck super.servant-auth-client;
+
   # Over-specified constraint on X11 ==1.8.*.
   xmonad = doJailbreak super.xmonad;
 
@@ -1077,6 +1088,9 @@ self: super: {
 
   # https://github.com/phadej/tree-diff/issues/19
   tree-diff = doJailbreak super.tree-diff;
+
+  # https://github.com/haskell-hvr/hgettext/issues/14
+  hgettext = doJailbreak super.hgettext;
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
@@ -1108,4 +1122,8 @@ self: super: {
     url = "https://github.com/guillaume-nargeot/hpc-coveralls/pull/73/commits/344217f513b7adfb9037f73026f5d928be98d07f.patch";
     sha256 = "056rk58v9h114mjx62f41x971xn9p3nhsazcf9zrcyxh1ymrdm8j";
   });
+
+  # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
+  blank-canvas = dontCheck super.blank-canvas;
+  blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
 }

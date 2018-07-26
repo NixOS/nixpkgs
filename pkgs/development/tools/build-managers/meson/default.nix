@@ -2,12 +2,12 @@
   targetPrefix = lib.optionalString stdenv.isCross
                    (targetPlatform.config + "-");
 in python3Packages.buildPythonApplication rec {
-  version = "0.47.0";
+  version = "0.46.1";
   pname = "meson";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1mxsvsw7mg3q4yj8qrkrwv79qwws14qnbihryn2i7504b3r204h6";
+    sha256 = "1jdxs2mkniy1hpdjc4b4jb95axsjp6j5fzphmm6d4gqmqyykjvqc";
   };
 
   postFixup = ''

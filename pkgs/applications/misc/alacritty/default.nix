@@ -49,18 +49,18 @@ let
   ];
 in buildRustPackage rec {
   name = "alacritty-unstable-${version}";
-  version = "2018-05-09";
+  version = "2018-07-20";
 
   # At the moment we cannot handle git dependencies in buildRustPackage.
   # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
   src = fetchgit {
     url = https://github.com/Mic92/alacritty.git;
     rev = "rev-${version}";
-    sha256 = "0mgi4niy40zz80k2ammbzdw9d8flvfkwlxkjnbpwrrldd0sj8dlz";
+    sha256 = "1vhjmysfra6dsbv35qbvsf76rhkj990lgns0k0gpbcrf47gsvx1n";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0d6bqfnwqfxqllrf00p1djlxdvnhrahgnyqv842qjn94j3wf0fym";
+  cargoSha256 = "0rs2p4sik25ynx6ri2wlg8v6vrdmf10xxnw9f2aqyps9m038i9di";
 
   nativeBuildInputs = [
     cmake
@@ -87,7 +87,7 @@ in buildRustPackage rec {
     mkdir $out/Applications
     cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
   '' else ''
-    install -D Alacritty.desktop $out/share/applications/alacritty.desktop
+    install -D alacritty.desktop $out/share/applications/alacritty.desktop
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
   '') + ''
 
