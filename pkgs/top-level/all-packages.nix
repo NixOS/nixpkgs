@@ -6223,6 +6223,7 @@ with pkgs;
   };
 
   clang = llvmPackages.clang;
+  clang-manpages = llvmPackages.clang-manpages;
 
   clang-sierraHack = clang.override {
     name = "clang-wrapper-with-reexport-hack";
@@ -6856,6 +6857,7 @@ with pkgs;
   lldb_6 = llvmPackages_6.lldb;
 
   llvm = llvmPackages.llvm;
+  llvm-manpages = llvmPackages.llvm-manpages;
 
   llvm_6  = llvmPackages_6.llvm;
   llvm_5  = llvmPackages_5.llvm;
@@ -11892,7 +11894,7 @@ with pkgs;
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
   soil = callPackage ../development/libraries/soil { };
-  
+
   sonic = callPackage ../development/libraries/sonic { };
 
   soprano = callPackage ../development/libraries/soprano { };
@@ -20985,7 +20987,7 @@ with pkgs;
   spyder = pythonPackages.spyder;
 
   openspace = callPackage ../applications/science/astronomy/openspace { };
-  
+
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
