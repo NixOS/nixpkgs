@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.3.0.3";
+  version = "2.5.0.0";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/execline";
     rev = "refs/tags/v${version}";
-    sha256 = "1q0izb8ajzxl36fjpy4rn63sz01055r9s33fga99jprdmkkfzz6x";
+    sha256 = "19vd8252g5bmzm4i9gybpj7i2mhsflcgfl4ns5k3g1vv7f69i1dn";
   };
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
