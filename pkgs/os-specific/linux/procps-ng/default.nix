@@ -1,10 +1,20 @@
 { lib, stdenv, fetchurl, ncurses, pkgconfig
 
+# `ps` with systemd support is able to properly report different
+# attributes like unit name, so we want to have it on linux.
+# The strange `boostrap` condition is here because `procps` can be
+# pulled in to early in bootstrap process, when `stdenv` is not yet
+# functional enought to build `systemd` (or its dependencies).
+# See https://github.com/NixOS/nixpkgs/pull/43817#issuecomment-408346135
+, withSystemd ? stdenv.isLinux && !(lib.hasPrefix "bootstrap" stdenv.name)
+, systemd
+
 # procps is mostly Linux-only. Most commands require a running Linux
 # system (or very similar like that found in Cygwin). The one
 # exception is ‘watch’ which is portable enough to run on pretty much
 # any UNIX-compatible system.
-, watchOnly ? !(stdenv.isLinux || stdenv.isCygwin) }:
+, watchOnly ? !(stdenv.isLinux || stdenv.isCygwin)
+}:
 
 stdenv.mkDerivation rec {
   name = "procps-${version}";
@@ -16,7 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "0r84kwa5fl0sjdashcn4vh7hgfm7ahdcysig3mcjvpmkzi7p9g8h";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses ]
+    ++ lib.optional withSystemd systemd;
   nativeBuildInputs = [ pkgconfig ];
 
   makeFlags = [ "usrbin_execdir=$(out)/bin" ]
@@ -26,6 +37,7 @@ stdenv.mkDerivation rec {
 
   # Too red
   configureFlags = [ "--disable-modern-top" ]
+    ++ lib.optional withSystemd "--with-systemd"
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
     [ "ac_cv_func_malloc_0_nonnull=yes"
       "ac_cv_func_realloc_0_nonnull=yes" ];
