@@ -1,10 +1,25 @@
-{ stdenv, execline, fetchgit, s6, s6-dns, skalibs }:
+{ stdenv, execline, fetchgit, s6, s6-dns, skalibs
+
+# Whether to build the TLS/SSL tools and what library to use
+# acceptable values: "libressl", false
+# TODO: add bearssl
+, sslSupport ? "libressl" , libressl
+}:
 
 let
+  inherit (stdenv) lib;
 
   version = "2.3.0.2";
 
-in stdenv.mkDerivation rec {
+  sslSupportEnabled = sslSupport != false;
+  sslLibs = {
+    "libressl" = libressl;
+  };
+
+in
+assert sslSupportEnabled -> sslLibs ? ${sslSupport};
+
+stdenv.mkDerivation rec {
 
   name = "s6-networking-${version}";
 
@@ -41,7 +56,12 @@ in stdenv.mkDerivation rec {
     "--with-dynlib=${s6.out}/lib"
     "--with-dynlib=${s6-dns.lib}/lib"
   ]
-  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+  ++ (lib.optionals sslSupportEnabled [
+       "--enable-ssl=${sslSupport}"
+       "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
+       "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
+     ])
+  ++ (lib.optional stdenv.isDarwin "--build=${stdenv.system}");
 
   postInstall = ''
     mkdir -p $doc/share/doc/s6-networking/
@@ -51,8 +71,8 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.skarnet.org/software/s6-networking/;
     description = "A suite of small networking utilities for Unix systems";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.isc;
+    platforms = lib.platforms.all;
+    license = lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ pmahoney Profpatsch ];
   };
 
