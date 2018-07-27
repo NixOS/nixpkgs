@@ -224,6 +224,16 @@
     };
   };
 
+  upstream-tarantool = {
+    src = fetchFromGitHub {
+      owner = "tarantool";
+      repo = "nginx_upstream_module";
+      rev = "v2.7";
+      sha256 = "05dwj0caj910p7kan2qjvm6x2x601igryhny2xzr47hhsk5q1cnx";
+    };
+    inputs = [ pkgs.msgpuck.dev pkgs.yajl ];
+  };
+
   vts = {
     src = fetchFromGitHub {
       owner = "vozlt";
