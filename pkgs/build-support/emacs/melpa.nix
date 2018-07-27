@@ -13,7 +13,7 @@ with lib;
   /*
     ename: Original Emacs package name, possibly containing special symbols.
   */
-, ename ? pname
+, ename ? null
 , version
 , recipe
 , meta ? {}
@@ -29,6 +29,11 @@ let
 in
 
 import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+
+  ename =
+    if isNull(ename)
+    then pname
+    else ename;
 
   melpa = fetchFromGitHub {
     owner = "melpa";
