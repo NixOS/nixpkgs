@@ -5065,6 +5065,8 @@ with pkgs;
 
   siege = callPackage ../tools/networking/siege {};
 
+  sieve-connect = callPackage ../applications/networking/sieve-connect {};
+
   sigal = callPackage ../applications/misc/sigal {
     inherit (pythonPackages) buildPythonApplication fetchPypi;
   };
@@ -11718,6 +11720,8 @@ with pkgs;
   rote = callPackage ../development/libraries/rote { };
 
   ronn = callPackage ../development/tools/ronn { };
+
+  rshell = python3.pkgs.callPackage ../development/tools/rshell { };
 
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
