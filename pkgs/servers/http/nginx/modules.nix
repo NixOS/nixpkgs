@@ -214,4 +214,13 @@
       sha256 = "1cjisxw1wykll683nw09k0i1nvzslp4dr59x58cvarpk43paim2y";
     };
   };
+
+  vts = {
+    src = fetchFromGitHub {
+      owner = "vozlt";
+      repo = "nginx-module-vts";
+      rev = "v0.1.18";
+      sha256 = "1jq2s9k7hah3b317hfn9y3g1q4g4x58k209psrfsqs718a9sw8c7";
+    };
+  };
 }
