@@ -479,6 +479,8 @@ in {
 
   rx = callPackage ../development/python-modules/rx { };
 
+  sabyenc = callPackage ../development/python-modules/sabyenc { };
+
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   seekpath = callPackage ../development/python-modules/seekpath { };
