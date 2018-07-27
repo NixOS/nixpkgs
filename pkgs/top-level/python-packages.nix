@@ -499,6 +499,8 @@ in {
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
+  slackclient = callPackage ../development/python-modules/slackclient { };
+
   spglib = callPackage ../development/python-modules/spglib { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
@@ -17536,18 +17538,6 @@ EOF
     buildInputs = with self; [ setuptools_scm ];
 
     propagatedBuildInputs = with self; [ six ];
-  };
-
-  slackclient = buildPythonPackage rec {
-    name = "slackclient-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/slackclient/${name}.tar.gz";
-      sha256 = "063cbzp1fbdipv53gb0hnban1pg80pls0lbld98lhnykzkcb6vf0";
-    };
-
-    propagatedBuildInputs = with self; [ websocket_client requests ];
   };
 
   tempora= callPackage ../development/python-modules/tempora { };
