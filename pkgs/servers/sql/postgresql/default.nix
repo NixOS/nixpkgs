@@ -14,21 +14,17 @@ let
     outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
-    combinedLibXML2 = symlinkJoin {
-      name = "libxml2-combined";
-      paths = [ libxml2 libxml2.dev ];
-    };
-
-    nativeBuildInputs = [ combinedLibXML2 ];
-
     buildInputs =
-      [ zlib readline openssl makeWrapper ]
+      [ zlib readline openssl makeWrapper libxml2 ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     enableParallelBuilding = true;
 
     makeFlags = [ "world" ];
 
+    preConfigure = ''
+    export CFLAGS="$CFLAGS -I${libxml2.dev}/include/libxml2"
+    '';
     configureFlags = [
       "--with-openssl"
       "--with-libxml"
