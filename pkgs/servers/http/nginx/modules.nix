@@ -161,6 +161,15 @@
     inputs = [ pkgs.pam ];
   };
 
+  push-stream ={
+    src = fetchFromGitHub {
+      owner = "wandenberg";
+      repo = "nginx-push-stream-module";
+      rev = "0.5.4";
+      sha256 = "0izn7lqrp2zfl738aqa9i8c5lba97wkhcnqg8qbw3ipp5cysb2hr";
+    };
+  };
+
   rtmp ={
     src = fetchFromGitHub {
       owner = "arut";
