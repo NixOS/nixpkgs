@@ -112,12 +112,9 @@ in stdenv.mkDerivation rec {
     "--enable-luainterp"
   ]
   ++ stdenv.lib.optionals pythonSupport [
-    "--enable-python${if isPython3 then "3" else ""}"
-  ]
-  ++ stdenv.lib.optionals (pythonSupport && stdenv.isDarwin) [  # Why only for Darwin?
-    "--enable-python${if isPython3 then "3" else ""}interp=yes" # Duplicate?
+    "--enable-python${if isPython3 then "3" else ""}interp=yes"
     "--with-python${if isPython3 then "3" else ""}-config-dir=${python}/lib"
-    "--disable-python${if isPython3 then "" else "3"}interp"
+    "--disable-python${if (!isPython3) then "3" else ""}interp"
   ]
   ++ stdenv.lib.optional nlsSupport          "--enable-nls"
   ++ stdenv.lib.optional perlSupport         "--enable-perlinterp"
