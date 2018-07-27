@@ -8362,6 +8362,8 @@ with pkgs;
 
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
+  msgpuck = callPackage ../development/libraries/msgpuck { };
+
   msitools = callPackage ../development/tools/misc/msitools { };
 
   multi-ghc-travis = haskell.lib.justStaticExecutables haskellPackages.multi-ghc-travis;
