@@ -7,7 +7,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p4cv99jaszhfam9qj6parij94n7yzwz4bawfl9qh5syx77wkxg2";
+    sha256 = "e2f5c9cfe95e178813755c2df2f9f7c792246356d7489caa72f06b2553da8cdc";
   };
 
   checkInputs = [ nose jinja2 mock ];

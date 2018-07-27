@@ -14,29 +14,46 @@ in stdenv.mkDerivation rec {
     sha256 = "162hng8xcwjp8pr4d78zq3f82lm9c6ldbcfll0mjsmnxdds5hrsg";
   };
 
+  # NOTE lib: cannot split lib from bin at the moment,
+  # since some parts of lib depend on executables in bin.
+  # (the `*_startf` functions in `libs6`)
+
+  outputs = [ /*"bin" "lib"*/ "out" "dev" "doc" ];
+
   dontDisableStatic = true;
 
   enableParallelBuilding = true;
 
   configureFlags = [
     "--enable-absolute-paths"
-    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs}/include"
-    "--with-include=${execline}/include"
-    "--with-lib=${skalibs}/lib"
-    "--with-lib=${execline}/lib"
-    "--with-dynlib=${skalibs}/lib"
-    "--with-dynlib=${execline}/lib"
+    "--libdir=\${out}/lib"
+    "--libexecdir=\${out}/libexec"
+    "--dynlibdir=\${out}/lib"
+    "--bindir=\${out}/bin"
+    "--includedir=\${dev}/include"
+    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs.dev}/include"
+    "--with-include=${execline.dev}/include"
+    "--with-lib=${skalibs.lib}/lib"
+    "--with-lib=${execline.lib}/lib"
+    "--with-dynlib=${skalibs.lib}/lib"
+    "--with-dynlib=${execline.lib}/lib"
   ]
   ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
   ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+
+  postInstall = ''
+    mkdir -p $doc/share/doc/s6/
+    mv doc $doc/share/doc/s6/html
+    mv examples $doc/share/doc/s6/examples
+  '';
 
   meta = {
     homepage = http://www.skarnet.org/software/s6/;
     description = "skarnet.org's small & secure supervision software suite";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
+    maintainers = with stdenv.lib.maintainers; [ pmahoney Profpatsch ];
   };
 
 }

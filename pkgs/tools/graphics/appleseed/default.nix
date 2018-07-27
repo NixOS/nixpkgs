@@ -3,7 +3,10 @@ eigen3_3, libpng, python, libGLU, qt4, openexr, openimageio,
 opencolorio, xercesc, ilmbase, osl, seexpr
 }:
 
-let boost_static = boost165.override { enableStatic = true; };
+let boost_static = boost165.override {
+  enableStatic = true;
+  enablePython = true;
+};
 in stdenv.mkDerivation rec {
 
   name = "appleseed-${version}";
@@ -28,9 +31,7 @@ in stdenv.mkDerivation rec {
       "-DUSE_EXTERNAL_OSL=ON" "-DWITH_CLI=ON" "-DWITH_STUDIO=ON" "-DWITH_TOOLS=ON"
       "-DUSE_EXTERNAL_PNG=ON" "-DUSE_EXTERNAL_ZLIB=ON"
       "-DUSE_EXTERNAL_EXR=ON" "-DUSE_EXTERNAL_SEEXPR=ON"
-      "-DWITH_PYTHON2_BINDINGS=ON"
-      # TODO: Look further into this if someone needs Python 3.x:
-      # "-DWITH_PYTHON3_BINDINGS=ON"
+      "-DWITH_PYTHON=ON"
       "-DWITH_DISNEY_MATERIAL=ON"
       "-DUSE_SSE=ON"
       "-DUSE_SSE42=ON"
@@ -44,6 +45,11 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
   };
+
+  # Work around a bug in the CMake build:
+  postInstall = ''
+    chmod a+x $out/bin/*
+  '';
 }
 
 # TODO: Is the below problematic?

@@ -1,11 +1,6 @@
-{ stdenv, fetchurl, makeDesktopItem
-, jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
-, openjdk
-, libGLU_combined, openal
-, useAlsa ? false, alsaOss ? null }:
-with stdenv.lib;
-
-assert useAlsa -> alsaOss != null;
+{ stdenv, fetchurl, makeDesktopItem, makeWrapper
+, jdk, jre, libpulseaudio
+}:
 
 let
   desktopItem = makeDesktopItem {
@@ -19,41 +14,33 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "minecraft-2015.07.24";
+  name = "minecraft-2015-07-24";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/Minecraft.Download/launcher/Minecraft.jar";
     sha256 = "04pj4l5q0a64jncm2kk45r7nxnxa2z9n110dcxbbahdi6wk0png8";
   };
 
-  phases = "installPhase";
+  nativeBuildInputs = [ makeWrapper ];
+
+  unpackPhase = "${jdk}/bin/jar xf $src favicon.png";
 
   installPhase = ''
-    set -x
-    mkdir -pv $out/bin
-    cp -v $src $out/minecraft.jar
+    mkdir -p $out/bin $out/share/minecraft
 
-    cat > $out/bin/minecraft << EOF
-    #!${stdenv.shell}
+    makeWrapper ${jre}/bin/java $out/bin/minecraft \
+      --add-flags "-jar $out/share/minecraft/minecraft.jar" \
+      --suffix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libpulseaudio ]}
 
-    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libGLU_combined openal ]}
-    ${if useAlsa then "${alsaOss}/bin/aoss" else "" } \
-      ${jre}/bin/java -jar $out/minecraft.jar
-    EOF
-
-    chmod +x $out/bin/minecraft
-
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-
-    ${openjdk}/bin/jar xf $out/minecraft.jar favicon.png
+    cp $src $out/share/minecraft/minecraft.jar
+    cp -r ${desktopItem}/share/applications $out/share
     install -D favicon.png $out/share/icons/hicolor/32x32/apps/minecraft.png
   '';
 
-  meta = {
-      description = "A sandbox-building game";
-      homepage = http://www.minecraft.net;
-      maintainers = with stdenv.lib.maintainers; [ cpages ryantm ];
-      license = stdenv.lib.licenses.unfreeRedistributable;
+  meta = with stdenv.lib; {
+    description = "A sandbox-building game";
+    homepage = https://minecraft.net;
+    maintainers = with maintainers; [ cpages ryantm infinisil ];
+    license = licenses.unfreeRedistributable;
   };
 }
