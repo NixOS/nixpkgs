@@ -6796,7 +6796,6 @@ with pkgs;
 
   julia_05 = callPackage ../development/compilers/julia/0.5.nix {
     gmp = gmp6;
-    libgit2 = libgit2_0_25;
     openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
     llvm = llvm_38;
@@ -9335,10 +9334,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  libgit2_0_25 = callPackage ../development/libraries/git2/0.25.nix {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   libgit2_0_27 = callPackage ../development/libraries/git2/0.27.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -11868,7 +11863,7 @@ with pkgs;
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
   soil = callPackage ../development/libraries/soil { };
-  
+
   sonic = callPackage ../development/libraries/sonic { };
 
   soprano = callPackage ../development/libraries/soprano { };
@@ -20943,7 +20938,7 @@ with pkgs;
   spyder = pythonPackages.spyder;
 
   openspace = callPackage ../applications/science/astronomy/openspace { };
-  
+
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
