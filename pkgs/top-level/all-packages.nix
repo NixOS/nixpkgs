@@ -19954,6 +19954,11 @@ with pkgs;
 
   teeworlds = callPackage ../games/teeworlds { };
 
+  tengine = callPackage ../servers/http/tengine {
+    stdenv = overrideCC stdenv gcc6;
+    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders nginxModules.modsecurity-nginx];
+  };
+
   tennix = callPackage ../games/tennix { };
 
   terraria-server = callPackage ../games/terraria-server { };
