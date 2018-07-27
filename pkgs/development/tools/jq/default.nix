@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256="0g29kyz4ykasdcrb0zmbrp2jqs9kv1wz9swx849i2d1ncknbzln4";
   };
 
+  outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
+
   buildInputs = [ oniguruma ];
 
   patches = [
@@ -25,11 +27,19 @@ stdenv.mkDerivation rec {
   ];
   patchFlags = [ "-p2" ]; # `src` subdir was introduced after v1.5 was released
 
+  configureFlags =
+    [
+    "--bindir=\${bin}/bin"
+    "--sbindir=\${bin}/bin"
+    "--datadir=\${doc}/share"
+    "--mandir=\${man}/share/man"
+    ]
   # jq is linked to libjq:
-  configureFlags = stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+    ++ stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
-  installCheckPhase = "$out/bin/jq --help";
+  installCheckPhase = "$bin/bin/jq --help >/dev/null";
   doInstallCheck = true;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = ''A lightweight and flexible command-line JSON processor'';
