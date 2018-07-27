@@ -2,6 +2,13 @@
   git, subversion, mercurial, bazaar, cvs, gnused, coreutils, nix
 }:
 
+# these scripts should only be run on the build machine
+# and as such the target and host for these scripts should
+# be identical.
+assert stdenv.targetPlatform == stdenv.hostPlatform;
+# these scripts are also only supported on Linux and Darwin
+assert stdenv.targetPlatform.isUnix;
+
 let mkPrefetchScript = tool: src: deps:
   stdenv.mkDerivation {
     name = "nix-prefetch-${tool}";
