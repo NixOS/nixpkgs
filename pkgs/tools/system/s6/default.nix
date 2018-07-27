@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.6.1.1";
+  version = "2.7.1.1";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6";
     rev = "refs/tags/v${version}";
-    sha256 = "162hng8xcwjp8pr4d78zq3f82lm9c6ldbcfll0mjsmnxdds5hrsg";
+    sha256 = "0dncw3h9wc4cgc9q8zjwicgbcqcn6722yhk8g9bvrhs7h4fkfqav";
   };
 
   # NOTE lib: cannot split lib from bin at the moment,
