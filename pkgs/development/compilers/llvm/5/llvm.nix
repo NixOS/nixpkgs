@@ -12,7 +12,7 @@
 , libcxxabi
 , debugVersion ? false
 , enableManpages ? false
-, enableSharedLibraries ? true
+, enableSharedLibraries ? !enableManpages
 }:
 
 let
