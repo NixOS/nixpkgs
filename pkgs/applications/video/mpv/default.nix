@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    patchShebangs ./TOOLS/
+    patchShebangs ./TOOLS/ version.sh
   '';
 
   NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext "
@@ -156,7 +156,8 @@ in stdenv.mkDerivation rec {
       CoreFoundation libiconv Cocoa CoreAudio
     ]);
 
-  enableParallelBuilding = true;
+  # TODO: remove me when I found out where macOS failed
+  enableParallelBuilding = false;
 
   buildPhase = ''
     python3 ${waf} build
