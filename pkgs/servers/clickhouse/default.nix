@@ -1,29 +1,34 @@
-{ stdenv, fetchFromGitHub, cmake, libtool, boost, cctz, double-conversion, gperftools
-, icu, lz4, mysql, openssl, poco, re2, rdkafka, readline, sparsehash, unixODBC, zstd
+{ stdenv, fetchFromGitHub, cmake, libtool
+, boost, capnproto, cctz, clang-unwrapped, double-conversion, gperftools, icu
+, libcpuid, libxml2, lld, llvm, lz4 , mysql, openssl, poco, re2, rdkafka
+, readline, sparsehash, unixODBC, zstd
 }:
 
 stdenv.mkDerivation rec {
   name = "clickhouse-${version}";
 
-  version = "1.1.54385";
+  version = "18.1.0";
 
   src = fetchFromGitHub {
     owner = "yandex";
     repo = "ClickHouse";
     rev = "v${version}-stable";
-    sha256 = "0s290xnx9dil2lbxdir5p5zmakvq5h523gdwax2cb37606wg8yj7";
+    sha256 = "1vsfnggf69xh91ndycdxwfz6m2bs7psaxf2bh04svgk1vzj2z4l0";
   };
-
-  patches = [ ./find-mysql.patch ./termcap.patch ];
 
   nativeBuildInputs = [ cmake libtool ];
 
   buildInputs = [
-    boost cctz double-conversion gperftools icu lz4 mysql.connector-c openssl poco
-    re2 rdkafka readline sparsehash unixODBC zstd
+    boost capnproto cctz clang-unwrapped double-conversion gperftools icu
+    libcpuid libxml2 lld llvm lz4 mysql.connector-c openssl poco re2 rdkafka
+    readline sparsehash unixODBC zstd
   ];
 
   cmakeFlags = [ "-DENABLE_TESTS=OFF" "-DUNBUNDLED=ON" "-DUSE_STATIC_LIBRARIES=OFF" ];
+
+  postInstall = ''
+    rm -rf $out/share/clickhouse-test
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://clickhouse.yandex/;
