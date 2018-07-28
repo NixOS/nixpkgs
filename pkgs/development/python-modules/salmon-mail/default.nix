@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "salmon-mail";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "452557172901d6227a325bbc72fcf61002a53c2342d935457b729303dce71f7e";
+    sha256 = "1p4cv99jaszhfam9qj6parij94n7yzwz4bawfl9qh5syx77wkxg2";
   };
 
   checkInputs = [ nose jinja2 mock ];

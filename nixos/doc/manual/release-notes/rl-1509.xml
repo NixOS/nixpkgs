@@ -433,9 +433,9 @@ system.autoUpgrade.enable = true;
      default. If you have existing systems with such host keys and want to
      continue to use them, please set
 <programlisting>
-system.nixos.stateVersion = "14.12";
+system.stateVersion = "14.12";
 </programlisting>
-     The new option <option>system.nixos.stateVersion</option> ensures that
+     The new option <option>system.stateVersion</option> ensures that
      certain configuration changes that could break existing systems (such as
      the <command>sshd</command> host key setting) will maintain compatibility
      with the specified NixOS release. NixOps sets the state version of

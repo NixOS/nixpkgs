@@ -75,27 +75,15 @@ self:
       # upstream issue: missing file header
       elmine = markBroken super.elmine;
 
-      # upstream issue: missing dependency redshank
-      emr = markBroken super.emr;
-
       ess-R-data-view = super.ess-R-data-view.override {
         inherit (self.melpaPackages) ess ctable popup;
       };
-
-      # upstream issue: missing dependency highlight
-      evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
-
-      # upstream issue: missing dependency highlight
-      floobits  = markBroken super.floobits;
 
       # missing OCaml
       flycheck-ocaml = markBroken super.flycheck-ocaml;
 
       # Expects bash to be at /bin/bash
       flycheck-rtags = markBroken super.flycheck-rtags;
-
-      # upstream issue: missing dependency
-      fold-dwim-org = markBroken super.fold-dwim-org;
 
       # build timeout
       graphene = markBroken super.graphene;
@@ -105,6 +93,14 @@ self:
 
       # Expects bash to be at /bin/bash
       helm-rtags = markBroken super.helm-rtags;
+
+      # Build same version as Haskell package
+      hindent = super.hindent.overrideAttrs (attrs: {
+        version = external.hindent.version;
+        src = external.hindent.src;
+        packageRequires = [ self.haskell-mode ];
+        propagatedUserEnvPkgs = [ external.hindent ];
+      });
 
       # upstream issue: missing file header
       ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
@@ -158,9 +154,6 @@ self:
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
          }));
 
-      # upstream issue: missing dependency
-      org-readme = markBroken super.org-readme;
-
       # upstream issue: truncated file
       powershell = markBroken super.powershell;
 
@@ -172,9 +165,6 @@ self:
 
       # upstream issue: missing file footer
       seoul256-theme = markBroken super.seoul256-theme;
-
-      # upstream issue: missing dependency highlight
-      sonic-pi  = markBroken super.sonic-pi;
 
       spaceline = super.spaceline.override {
         inherit (self.melpaPackages) powerline;
@@ -198,9 +188,6 @@ self:
       # upstream issue: missing file header
       voca-builder = markBroken super.voca-builder;
 
-      # upstream issue: missing dependency
-      weechat-alert = markBroken super.weechat-alert;
-
       # upstream issue: missing file header
       window-numbering = markBroken super.window-numbering;
 
@@ -216,6 +203,10 @@ self:
       });
     };
 
-    melpaPackages = super // overrides;
+    melpaPackages =
+      removeAttrs (super // overrides)
+      [
+        "show-marks"  # missing dependency: fm
+      ];
   in
     melpaPackages // { inherit melpaPackages; }

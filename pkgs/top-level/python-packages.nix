@@ -256,6 +256,8 @@ in {
 
   ewmh = callPackage ../development/python-modules/ewmh { };
 
+  exchangelib = callPackage ../development/python-modules/exchangelib { };
+
   dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
@@ -411,6 +413,8 @@ in {
     inherit (pkgs.llvmPackages) openmp;
   };
 
+  pykerberos = callPackage ../development/python-modules/pykerberos { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
@@ -470,6 +474,8 @@ in {
   rlp = callPackage ../development/python-modules/rlp { };
 
   rx = callPackage ../development/python-modules/rx { };
+
+  sabyenc = callPackage ../development/python-modules/sabyenc { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
@@ -568,6 +574,11 @@ in {
   apipkg = callPackage ../development/python-modules/apipkg {};
 
   appdirs = callPackage ../development/python-modules/appdirs { };
+
+  appleseed = disabledIf isPy3k
+    (toPythonModule (pkgs.appleseed.override {
+      inherit (self) python;
+    }));
 
   application = callPackage ../development/python-modules/application { };
 
@@ -1925,11 +1936,8 @@ in {
   pytest = self.pytest_36;
 
   pytest_36 = callPackage ../development/python-modules/pytest {
-    hypothesis = self.hypothesis.override {
-      # hypothesis requires pytest that causes dependency cycle
-      doCheck = false;
-      pytest = null;
-    };
+    # hypothesis tests require pytest that causes dependency cycle
+    hypothesis = self.hypothesis.override { doCheck = false; };
   };
 
   # Needed for celery
@@ -2097,6 +2105,8 @@ in {
   datashape = callPackage ../development/python-modules/datashape { };
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
+
+  requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket {};
 
@@ -17921,6 +17931,8 @@ EOF
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;
   })).python;
+
+  rfc7464 = callPackage ../development/python-modules/rfc7464 { };
 });
 
 in fix' (extends overrides packages)

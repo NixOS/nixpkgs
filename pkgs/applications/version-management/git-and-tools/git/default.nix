@@ -244,6 +244,7 @@ EOF
 
   ## InstallCheck
 
+  doCheck = false;
   doInstallCheck = true;
 
   installCheckTarget = "test";

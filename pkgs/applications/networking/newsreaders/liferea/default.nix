@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, python3Packages, wrapGAppsHook
 , glib, libxml2, libxslt, sqlite, libsoup , webkitgtk, json-glib, gst_all_1
 , libnotify, gtk3, gsettings-desktop-schemas, libpeas, dconf, librsvg
-, gobjectIntrospection, glib-networking
+, gobjectIntrospection, glib-networking, hicolor-icon-theme
 }:
 
 let
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     glib gtk3 webkitgtk libxml2 libxslt sqlite libsoup gsettings-desktop-schemas
     libpeas gsettings-desktop-schemas json-glib dconf gobjectIntrospection
-    librsvg glib-networking libnotify
+    librsvg glib-networking libnotify hicolor-icon-theme
   ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
   ]);
@@ -28,7 +28,6 @@ in stdenv.mkDerivation rec {
   pythonPath = with python3Packages; [ pygobject3 pycairo ];
 
   preFixup = ''
-    rm "$out/share/icons/hicolor/icon-theme.cache"
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
