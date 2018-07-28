@@ -10509,6 +10509,8 @@ with pkgs;
 
   libksi = callPackage ../development/libraries/libksi { };
 
+  liblinear = callPackage ../development/libraries/liblinear { };
+
   libmad = callPackage ../development/libraries/libmad { };
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
