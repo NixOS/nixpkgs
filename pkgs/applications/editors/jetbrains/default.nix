@@ -29,36 +29,48 @@ let
         (
           cd $out/clion-${version}
           # bundled cmake does not find libc
-          rm -rf bin/cmake
-          ln -s ${cmake} bin/cmake
+          rm -rf bin/cmake/linux
+          ln -s ${cmake} bin/cmake/linux
 
-          lldbLibPath=$out/clion-${version}/bin/lldb/lib
+          lldbLibPath=$out/clion-${version}/bin/lldb/linux/lib
           interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
           ln -s ${ncurses.out}/lib/libncurses.so $lldbLibPath/libtinfo.so.5
 
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/bin/lldb-server
+            bin/lldb/linux/bin/lldb-server
 
           for i in LLDBFrontend lldb lldb-argdumper; do
             patchelf --set-interpreter $interp \
               --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-              "bin/lldb/bin/$i"
+              "bin/lldb/linux/bin/$i"
           done
 
           patchelf \
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
+            bin/lldb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
 
           patchelf \
             --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python3 ]}:$lldbLibPath" \
-            bin/lldb/lib/liblldb.so
+            bin/lldb/linux/lib/liblldb.so
 
-          patchelf --set-interpreter $interp bin/gdb/bin/gdb
-          patchelf --set-interpreter $interp bin/gdb/bin/gdbserver
+          gdbLibPath=$out/clion-${version}/bin/gdb/linux/lib
+          patchelf \
+            --set-rpath "$gdbLibPath" \
+            bin/gdb/linux/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
           patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$lldbLibPath" \
-            bin/clang/clang-tidy
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$gdbLibPath" \
+            bin/gdb/linux/bin/gdb
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$gdbLibPath" \
+            bin/gdb/linux/bin/gdbserver
+
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+            bin/clang/linux/clangd
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}" \
+            bin/clang/linux/clang-tidy
 
           wrapProgram $out/bin/clion \
             --set CL_JDK "${jdk}"
