@@ -1,6 +1,5 @@
 { stdenv, lib, buildPackages
-, autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
-, openssl ? null
+, autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, openssl, gmp ? null
 , hostPlatform, buildPlatform
 , aclSupport ? false, acl ? null
 , attrSupport ? false, attr ? null
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ];
-  configureFlags = optional (openssl != null) "--with-openssl"
+  configureFlags = [ "--with-openssl" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
