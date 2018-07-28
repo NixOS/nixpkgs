@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, fetchpatch
 # Build dependencies
 , glibcLocales
 # Test dependencies
@@ -34,12 +33,6 @@ buildPythonPackage rec {
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
-
-  # Upgrade to prompt_toolkit 2.0
-  patches = fetchpatch {
-    url = https://github.com/ipython/ipython/commit/8e256bd37373f98580ba1ef1d3fcfd7976802238.patch;
-    sha256 = "1d9qy2z21n4frf15g4aj7xi011d1d3qc31gs27f2v23j0gv69r9h";
-  };
 
   buildInputs = [ glibcLocales ];
 
