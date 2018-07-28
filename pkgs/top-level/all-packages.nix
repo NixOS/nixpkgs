@@ -19541,6 +19541,8 @@ with pkgs;
 
   eternity = callPackage ../games/eternity-engine { };
 
+  eureka-editor = callPackage ../games/eureka-editor { };
+
   extremetuxracer = callPackage ../games/extremetuxracer {
     libpng = libpng12;
   };
