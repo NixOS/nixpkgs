@@ -334,6 +334,8 @@ in {
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
+  ordered-set = callPackage ../development/python-modules/ordered-set { };
+
   outcome = callPackage ../development/python-modules/outcome {};
 
   pdf2image = callPackage ../development/python-modules/pdf2image { };
