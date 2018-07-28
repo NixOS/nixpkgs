@@ -35,8 +35,6 @@ in buildPythonPackage rec {
     sha256 = "9cd3614b4e31a0889388ff1bd19ae857ad52658b33f776065793c293a29cf612";
   };
 
-  LC_ALL = "en_US.UTF-8";
-
   checkInputs = [ pytest glibcLocales moto ];
 
   buildInputs = [] ++ optional isDarwin libcxx;
@@ -80,6 +78,8 @@ in buildPythonPackage rec {
     "test_datetime_name_accessors"
     # Can't import from test folder
     "test_oo_optimizable"
+    # Disable IO related tests because IO data is no longer distributed
+    "io"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
@@ -97,8 +97,7 @@ in buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
-    # pandas no longer seems to distribute datasets for IO tests
-    py.test $out/${python.sitePackages}/pandas --ignore=io --skip-slow --skip-network -k "$disabledTests"
+    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
     runHook postCheck
   '';
 
