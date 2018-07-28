@@ -13,7 +13,7 @@
 , compiler-rt_src
 , debugVersion ? false
 , enableManpages ? false
-, enableSharedLibraries ? true
+, enableSharedLibraries ? !enableManpages
 }:
 
 let
