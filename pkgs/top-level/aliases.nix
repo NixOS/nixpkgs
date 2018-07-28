@@ -229,6 +229,10 @@ mapAliases ({
   ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
+  s6Dns = s6-dns; # added 2018-07-23
+  s6Networking = s6-networking; # added 2018-07-23
+  s6LinuxUtils = s6-linux-utils; # added 2018-07-23
+  s6PortableUtils = s6-portable-utils; # added 2018-07-23
   sam = deadpixi-sam; # added 2018-04-25
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
@@ -309,6 +313,7 @@ mapAliases ({
   # added 2018-07-16
   forceSystem = system: _:
     (import self.path { localSystem = { inherit system; }; });
+  callPackage_i686 = pkgsi686Linux.callPackage;
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1

@@ -298,23 +298,6 @@ let
 
   helm-words = callPackage ../applications/editors/emacs-modes/helm-words { };
 
-  hindent = melpaBuild rec {
-    pname = "hindent";
-    version = external.hindent.version;
-    src = external.hindent.src;
-    packageRequires = [ haskell-mode ];
-    propagatedUserEnvPkgs = [ external.hindent ];
-    recipe = writeText "recipe" ''
-      (hindent
-       :repo "commercialhaskell/hindent" :fetcher github
-       :files ("elisp/*.el"))
-    '';
-    meta = {
-      description = "Indent haskell code using the \"hindent\" program";
-      license = bsd3;
-    };
-  };
-
   icicles = callPackage ../applications/editors/emacs-modes/icicles { };
 
   redshank = callPackage ../applications/editors/emacs-modes/redshank { };

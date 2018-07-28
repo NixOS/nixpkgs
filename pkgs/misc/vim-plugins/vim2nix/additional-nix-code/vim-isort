@@ -1,0 +1,4 @@
+    postPatch = ''
+      substituteInPlace ftplugin/python_vimisort.vim \
+          --replace 'import vim' 'import vim; import sys; sys.path.append("${pythonPackages.isort}/${python.sitePackages}")'
+    '';

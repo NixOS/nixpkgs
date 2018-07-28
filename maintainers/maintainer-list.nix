@@ -589,6 +589,11 @@
     github = "c0bw3b";
     name = "Renaud";
   };
+  c0deaddict = {
+    email = "josvanbakel@protonmail.com";
+    github = "c0deaddict";
+    name = "Jos van Bakel";
+  };
   c0dehero = {
     email = "codehero@nerdpol.ch";
     name = "CodeHero";
@@ -861,6 +866,11 @@
     email = "dan@obsidian.systems";
     github = "danharaj";
     name = "Dan Haraj";
+  };
+  danieldk = {
+    email = "me@danieldk.eu";
+    github = "danieldk";
+    name = "Daniël de Kok";
   };
   danielfullmer = {
     email = "danielrf12@gmail.com";
@@ -2731,6 +2741,11 @@
     email = "nathanisom27@gmail.com";
     github = "neeasade";
     name = "Nathan Isom";
+  };
+  neonfuz = {
+    email = "neonfuz@gmail.com";
+    github = "neonfuz";
+    name = "Sage Raflik";
   };
   nequissimus = {
     email = "tim@nequissimus.com";

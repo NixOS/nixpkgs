@@ -249,14 +249,6 @@ self: super: {
   # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
   #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
   hnix = dontCheck (doJailbreak (overrideCabal super.hnix (old: {
-    patches = old.patches or [] ++ [
-      # should land in hnix-5.2
-      (pkgs.fetchpatch {
-        url = "https://github.com/haskell-nix/hnix/commit/9cfe060a9dbe9e7c64867956a0523eed9661803a.patch";
-        sha256 = "0ci4n7nw2pzqw0gkmkp4szzvxjyb143a4znjm39jmb0s397a68sh";
-        name = "disable-hpack-test-by-default.patch";
-      })
-    ];
     testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
   })));
 
@@ -737,9 +729,6 @@ self: super: {
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
 
-  # broken test suite
-  servant-server = dontCheck super.servant-server;
-
   # build servant docs from the repository
   servant =
     let
@@ -763,9 +752,6 @@ self: super: {
         ln -s ${docs} $doc/share/doc/servant
       '';
     });
-
-  # Glob == 0.7.x
-  servant-auth = doJailbreak super.servant-auth;
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
@@ -834,9 +820,6 @@ self: super: {
 
   # https://github.com/fizruk/http-api-data/issues/49
   http-api-data = dontCheck super.http-api-data;
-
-  # https://github.com/snoyberg/yaml/issues/106
-  yaml = disableCabalFlag super.yaml "system-libyaml";
 
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
@@ -1078,6 +1061,9 @@ self: super: {
 
   # Test suite depends on cabal-install
   doctest = dontCheck super.doctest;
+
+  # https://github.com/haskell-servant/servant-auth/issues/113
+  servant-auth-client = dontCheck super.servant-auth-client;
 
   # Over-specified constraint on X11 ==1.8.*.
   xmonad = doJailbreak super.xmonad;

@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2
-, polkit, intltool }:
+{ stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2, polkit, python2, intltool }:
 
 stdenv.mkDerivation rec {
   name = "gconf-${version}";
@@ -12,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  buildInputs = [ ORBit2 libxml2 ]
+  buildInputs = [ ORBit2 libxml2 python2 ]
     # polkit requires pam, which requires shadow.h, which is not available on
     # darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) polkit;

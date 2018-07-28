@@ -1,9 +1,10 @@
 { stdenv, lib, fetchurl
-, zlib, xz, python2, findXMLCatalogs, libiconv
+, zlib, xz, python2, findXMLCatalogs
 , buildPlatform, hostPlatform
 , pythonSupport ? buildPlatform == hostPlatform
 , icuSupport ? false, icu ? null
-, enableStatic ? false
+, enableShared ? hostPlatform.libc != "msvcrt"
+, enableStatic ? !enableShared,
 }:
 
 let
@@ -35,21 +36,13 @@ in stdenv.mkDerivation rec {
        lib.optional pythonSupport "--with-python=${python}"
     ++ lib.optional icuSupport    "--with-icu"
     ++ [ "--exec_prefix=$dev" ]
-    ++ lib.optional enableStatic "--enable-static";
+    ++ lib.optional enableStatic "--enable-static"
+    ++ lib.optional (!enableShared) "--disable-shared";
 
   enableParallelBuilding = true;
 
   doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
     hostPlatform.libc != "musl";
-
-  crossAttrs = lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
-    # creating the DLL is broken ATM
-    dontDisableStatic = true;
-    configureFlags = configureFlags ++ [ "--disable-shared" ];
-
-    # libiconv is a header dependency - propagating is enough
-    propagatedBuildInputs =  [ findXMLCatalogs libiconv ];
-  };
 
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
