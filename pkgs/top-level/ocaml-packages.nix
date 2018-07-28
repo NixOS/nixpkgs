@@ -644,6 +644,8 @@ let
 
     ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
 
+    ppx_sqlexpr = callPackage ../development/ocaml-modules/sqlexpr/ppx.nix {};
+
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
