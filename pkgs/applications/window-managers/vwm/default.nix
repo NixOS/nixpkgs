@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = http://vwm.sourceforge.net/;
     description = "Dynamic window manager for the console";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

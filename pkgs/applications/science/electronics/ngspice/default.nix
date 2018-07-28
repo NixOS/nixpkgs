@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";
     homepage = http://ngspice.sourceforge.net;
     license = with licenses; [ "BSD" gpl2 ];
-    maintainers = with maintainers; [ bgamari viric rongcuid ];
+    maintainers = with maintainers; [ bgamari rongcuid ];
     platforms = platforms.linux;
   };
 }

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = https://st.suckless.org/;
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
-    maintainers = with maintainers; [viric andsild];
+    maintainers = with maintainers; [andsild];
     platforms = platforms.linux;
   };
 }

@@ -77,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.qgis.org;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [viric mpickering];
+    maintainers = with stdenv.lib.maintainers; [mpickering];
   };
 }

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/commoncpp/;
     license = stdenv.lib.licenses.lgpl3Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
