@@ -12,11 +12,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "botocore";
-  version = "1.10.64";
+  version = "1.10.65";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "977e8ab657747b3e60f4b597b9f732cbe467b12ecc52a9c5b2121c0006d41a63";
+    sha256 = "35f626029a6b17bfd503ce3379b121606e3f965edcab2612bc75ce8603fdf08c";
   };
 
   propagatedBuildInputs = [
