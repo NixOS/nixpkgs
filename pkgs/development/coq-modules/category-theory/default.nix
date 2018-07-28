@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 coq.findlib ];
-  propagatedBuildInputs = [ coq ssreflect equations ];
+  propagatedBuildInputs = [ coq ssreflect ];
 
   enableParallelBuilding = false;
 
