@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   # Saw random failures like ‘help2man: can't get '--help' info from
   # man/sha512sum.td/sha512sum’.
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString hostPlatform.isSunOS "1";
