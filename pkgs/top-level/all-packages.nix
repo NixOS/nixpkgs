@@ -12978,11 +12978,9 @@ with pkgs;
   };
 
   pulseaudioFull = pulseaudio.override {
-    gconf = gnome2.GConf;
     x11Support = true;
     jackaudioSupport = true;
     airtunesSupport = true;
-    gconfSupport = true;
     bluetoothSupport = true;
     remoteControlSupport = true;
     zeroconfSupport = true;
@@ -17725,9 +17723,7 @@ with pkgs;
 
   panotools = callPackage ../applications/graphics/panotools { };
 
-  paprefs = callPackage ../applications/audio/paprefs {
-    inherit (gnome2) libglademm gconfmm GConf;
-  };
+  paprefs = callPackage ../applications/audio/paprefs { };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
