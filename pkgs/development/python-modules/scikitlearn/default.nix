@@ -8,8 +8,8 @@ buildPythonPackage rec {
   pname = "scikit-learn";
   version = "0.19.2";
   # UnboundLocalError: local variable 'message' referenced before assignment
-  disabled = true;
-#   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
+  doCheck = false;
+  disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
