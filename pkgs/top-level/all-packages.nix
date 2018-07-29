@@ -14205,6 +14205,8 @@ with pkgs;
 
   golint = callPackage ../development/tools/golint { };
 
+  golangci-lint = callPackage ../development/tools/golangci-lint { };
+
   godef = callPackage ../development/tools/godef { };
 
   goimports = callPackage ../development/tools/goimports { };
