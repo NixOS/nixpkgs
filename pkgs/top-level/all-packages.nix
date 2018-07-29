@@ -2728,6 +2728,8 @@ with pkgs;
     inherit (gnome2) gnome_python gnome_python_desktop;
   };
 
+  gnome-builder = callPackage ../applications/editors/gnome-builder { };
+
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
