@@ -6806,13 +6806,6 @@ with pkgs;
     llvm = llvm_39;
   };
 
-  julia-git = lowPrio (callPackage ../development/compilers/julia/git.nix {
-    gmp = gmp6;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    llvm = llvm_39;
-  });
-
   jwasm =  callPackage ../development/compilers/jwasm { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
