@@ -57,6 +57,18 @@ stdenv.mkDerivation rec {
 
     # based on gentoos makefile patch -- fix paths, adhere to flags
     ./makefile.patch
+
+    # (fetchpatch {
+    #   name = "default-double.patch";
+    #   url = "https://github.com/dimpase/lcalc/pull/1/commits/0500c67b6aa1f492715591669f6647c8f7a3ea59.patch";
+    #   sha256 = "0dqwmxpm9wb53qbypsyfkgsvk2f8nf67sydphd4dkc2vw4yz6vla";
+    # })
+
+    (fetchpatch {
+      name = "c++11.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/lcalc-c++11.patch?h=packages/lcalc&id=3607b97df5a8c231191115b0cb5c62426b339e71";
+      sha256 = "1ccrl61lv2vvx8ggldq54m5d0n1iy6mym7qz0i8nj6yj0dshnpk3";
+    })
   ];
 
   installFlags = [
