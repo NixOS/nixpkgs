@@ -51,7 +51,7 @@ let
   , ztsSupport ? config.php.zts or false
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
-  , tidySupport ? false
+  , tidySupport ? (config.php.tidy or false)
   }:
 
     let
