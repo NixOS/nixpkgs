@@ -689,9 +689,7 @@ let
 
     ssl = callPackage ../development/ocaml-modules/ssl { };
 
-    stog = callPackage ../applications/misc/stog {
-      ocaml_lwt = lwt2;
-    };
+    stog = callPackage ../applications/misc/stog { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
 
