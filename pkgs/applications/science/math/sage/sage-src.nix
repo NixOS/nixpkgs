@@ -110,6 +110,12 @@ stdenv.mkDerivation rec {
       name = "pari-2.11.0.patch";
       url = "https://git.sagemath.org/sage.git/patch/?id=7af4748cab37d651eaa88be501db88f4a5ffc584";
       sha256 = "13f740ly3c19gcmhjngiycvmc3mcfj61y00i6jv0wmfgpm2z3ank";
+
+    # ntl upgrade
+    (fetchpatch {
+      name = "lcalc-c++11.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
+      sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
     })
   ];
 
