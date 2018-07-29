@@ -17687,6 +17687,8 @@ EOF
 
   ephem = callPackage ../development/python-modules/ephem { };
 
+  ephemeral_port_reserve = callPackage ../development/python-modules/ephemeral-port-reserve { };
+
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 
   voluptuous-serialize = callPackage ../development/python-modules/voluptuous-serialize { };
