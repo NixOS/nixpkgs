@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.73.2";
+  version = "0.74.0";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -16,6 +16,7 @@
     "alarm_control_panel.demo" = ps: with ps; [  ];
     "alarm_control_panel.egardia" = ps: with ps; [  ];
     "alarm_control_panel.envisalink" = ps: with ps; [  ];
+    "alarm_control_panel.homematicip_cloud" = ps: with ps; [  ];
     "alarm_control_panel.ialarm" = ps: with ps; [  ];
     "alarm_control_panel.ifttt" = ps: with ps; [  ];
     "alarm_control_panel.manual" = ps: with ps; [  ];
@@ -45,7 +46,7 @@
     "asterisk_mbox" = ps: with ps; [  ];
     "august" = ps: with ps; [  ];
     "auth" = ps: with ps; [ aiohttp-cors ];
-    "auth.client" = ps: with ps; [  ];
+    "auth.indieauth" = ps: with ps; [  ];
     "automation" = ps: with ps; [  ];
     "automation.event" = ps: with ps; [  ];
     "automation.homeassistant" = ps: with ps; [  ];
@@ -181,6 +182,7 @@
     "camera.netatmo" = ps: with ps; [  ];
     "camera.onvif" = ps: with ps; [ ha-ffmpeg ];
     "camera.proxy" = ps: with ps; [ pillow ];
+    "camera.push" = ps: with ps; [  ];
     "camera.ring" = ps: with ps; [ ha-ffmpeg ];
     "camera.rpi_camera" = ps: with ps; [  ];
     "camera.skybell" = ps: with ps; [  ];
@@ -237,9 +239,12 @@
     "cloud.const" = ps: with ps; [  ];
     "cloud.http_api" = ps: with ps; [  ];
     "cloud.iot" = ps: with ps; [  ];
+    "cloudflare" = ps: with ps; [  ];
     "coinbase" = ps: with ps; [  ];
     "comfoconnect" = ps: with ps; [  ];
     "config" = ps: with ps; [ aiohttp-cors ];
+    "config.auth" = ps: with ps; [  ];
+    "config.auth_provider_homeassistant" = ps: with ps; [  ];
     "config.automation" = ps: with ps; [  ];
     "config.config_entries" = ps: with ps; [ voluptuous-serialize ];
     "config.core" = ps: with ps; [  ];
@@ -384,7 +389,7 @@
     "frontend" = ps: with ps; [ aiohttp-cors ];
     "gc100" = ps: with ps; [  ];
     "goalfeed" = ps: with ps; [  ];
-    "google" = ps: with ps; [ google_api_python_client oauth2client ];
+    "google" = ps: with ps; [ google_api_python_client httplib2 oauth2client ];
     "google_assistant" = ps: with ps; [ aiohttp-cors ];
     "google_assistant.auth" = ps: with ps; [  ];
     "google_assistant.const" = ps: with ps; [  ];
@@ -408,6 +413,11 @@
     "homekit_controller" = ps: with ps; [  ];
     "homematic" = ps: with ps; [ pyhomematic ];
     "homematicip_cloud" = ps: with ps; [  ];
+    "homematicip_cloud.config_flow" = ps: with ps; [  ];
+    "homematicip_cloud.const" = ps: with ps; [  ];
+    "homematicip_cloud.device" = ps: with ps; [  ];
+    "homematicip_cloud.errors" = ps: with ps; [  ];
+    "homematicip_cloud.hap" = ps: with ps; [  ];
     "http" = ps: with ps; [ aiohttp-cors ];
     "http.auth" = ps: with ps; [  ];
     "http.ban" = ps: with ps; [  ];
@@ -515,6 +525,7 @@
     "light.tikteck" = ps: with ps; [  ];
     "light.tplink" = ps: with ps; [  ];
     "light.tradfri" = ps: with ps; [  ];
+    "light.tuya" = ps: with ps; [  ];
     "light.velbus" = ps: with ps; [  ];
     "light.vera" = ps: with ps; [  ];
     "light.wemo" = ps: with ps; [  ];
@@ -711,6 +722,9 @@
     "nuheat" = ps: with ps; [  ];
     "nuimo_controller" = ps: with ps; [  ];
     "octoprint" = ps: with ps; [  ];
+    "onboarding" = ps: with ps; [ aiohttp-cors ];
+    "onboarding.const" = ps: with ps; [  ];
+    "onboarding.views" = ps: with ps; [  ];
     "panel_custom" = ps: with ps; [ aiohttp-cors ];
     "panel_iframe" = ps: with ps; [ aiohttp-cors ];
     "persistent_notification" = ps: with ps; [  ];
@@ -812,6 +826,7 @@
     "sensor.dsmr" = ps: with ps; [  ];
     "sensor.dte_energy_bridge" = ps: with ps; [  ];
     "sensor.dublin_bus_transport" = ps: with ps; [  ];
+    "sensor.duke_energy" = ps: with ps; [  ];
     "sensor.dwd_weather_warnings" = ps: with ps; [  ];
     "sensor.dweet" = ps: with ps; [  ];
     "sensor.dyson" = ps: with ps; [  ];
@@ -1123,6 +1138,7 @@
     "switch.toon" = ps: with ps; [  ];
     "switch.tplink" = ps: with ps; [  ];
     "switch.transmission" = ps: with ps; [ transmissionrpc ];
+    "switch.tuya" = ps: with ps; [  ];
     "switch.upcloud" = ps: with ps; [  ];
     "switch.velbus" = ps: with ps; [  ];
     "switch.vera" = ps: with ps; [  ];
@@ -1165,6 +1181,7 @@
     "tts.picotts" = ps: with ps; [  ];
     "tts.voicerss" = ps: with ps; [  ];
     "tts.yandextts" = ps: with ps; [  ];
+    "tuya" = ps: with ps; [  ];
     "twilio" = ps: with ps; [ aiohttp-cors twilio ];
     "upcloud" = ps: with ps; [  ];
     "updater" = ps: with ps; [ distro ];
