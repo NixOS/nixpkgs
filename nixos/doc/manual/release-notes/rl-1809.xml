@@ -370,7 +370,9 @@ inherit (pkgs.nixos {
       <varname>s6-dns</varname>, <varname>s6-networking</varname>,
       <varname>s6-linux-utils</varname> and <varname>s6-portable-utils</varname> respectively.
     </para>
-   </listitem>
+  </listitem>
+  <listitem>
+    <para>The module option <option>nix.useSandbox</option> is now defaulted to <literal>true</literal>.
   </itemizedlist>
  </section>
 </section>
