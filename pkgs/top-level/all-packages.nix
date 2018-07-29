@@ -898,7 +898,7 @@ with pkgs;
   blockdiag = pythonPackages.blockdiag;
 
   blsd = callPackage ../tools/misc/blsd {
-    libgit2 = libgit2_0_25;
+    libgit2 = libgit2_0_27;
   };
 
   bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
@@ -1576,7 +1576,7 @@ with pkgs;
   beegfs = callPackage ../os-specific/linux/beegfs { };
 
   beets = callPackage ../tools/audio/beets {
-    pythonPackages = python2Packages;
+    pythonPackages = python3Packages;
   };
 
   bepasty = callPackage ../tools/misc/bepasty { };
@@ -2254,12 +2254,15 @@ with pkgs;
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   elk5Version = "5.6.9";
-  elk6Version = "6.2.4";
+  elk6Version = "6.3.2";
 
   elasticsearch = callPackage ../servers/search/elasticsearch { };
   elasticsearch2 = callPackage ../servers/search/elasticsearch/2.x.nix { };
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
   elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix { };
+  elasticsearch6-oss = callPackage ../servers/search/elasticsearch/6.x.nix {
+    enableUnfree = false;
+  };
 
   elasticsearchPlugins = recurseIntoAttrs (
     callPackage ../servers/search/elasticsearch/plugins.nix { }
@@ -3364,6 +3367,9 @@ with pkgs;
   kibana  = callPackage ../development/tools/misc/kibana { };
   kibana5 = callPackage ../development/tools/misc/kibana/5.x.nix { };
   kibana6 = callPackage ../development/tools/misc/kibana/6.x.nix { };
+  kibana6-oss = callPackage ../development/tools/misc/kibana/6.x.nix {
+    enableUnfree = false;
+  };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
@@ -3443,6 +3449,9 @@ with pkgs;
   logstash  = callPackage ../tools/misc/logstash { };
   logstash5 = callPackage ../tools/misc/logstash/5.x.nix { };
   logstash6 = callPackage ../tools/misc/logstash/6.x.nix { };
+  logstash6-oss = callPackage ../tools/misc/logstash/6.x.nix {
+    enableUnfree = false;
+  };
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
@@ -6213,6 +6222,7 @@ with pkgs;
   };
 
   clang = llvmPackages.clang;
+  clang-manpages = llvmPackages.clang-manpages;
 
   clang-sierraHack = clang.override {
     name = "clang-wrapper-with-reexport-hack";
@@ -6789,36 +6799,12 @@ with pkgs;
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  julia_04 = callPackage ../development/compilers/julia {
-    gmp = gmp6;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    llvm = llvm_37;
-  };
-
-  julia_05 = callPackage ../development/compilers/julia/0.5.nix {
-    gmp = gmp6;
-    libgit2 = libgit2_0_25;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    llvm = llvm_38;
-  };
-
-  julia_06 = callPackage ../development/compilers/julia/0.6.nix {
+  julia = callPackage ../development/compilers/julia {
     gmp = gmp6;
     openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
     llvm = llvm_39;
   };
-
-  julia-git = lowPrio (callPackage ../development/compilers/julia/git.nix {
-    gmp = gmp6;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-    llvm = llvm_39;
-  });
-
-  julia = julia_06;
 
   jwasm =  callPackage ../development/compilers/jwasm { };
 
@@ -6845,6 +6831,7 @@ with pkgs;
   lldb_6 = llvmPackages_6.lldb;
 
   llvm = llvmPackages.llvm;
+  llvm-manpages = llvmPackages.llvm-manpages;
 
   llvm_6  = llvmPackages_6.llvm;
   llvm_5  = llvmPackages_5.llvm;
@@ -9331,13 +9318,15 @@ with pkgs;
   givaro_3 = callPackage ../development/libraries/givaro/3.nix {};
   givaro_3_7 = callPackage ../development/libraries/givaro/3.7.nix {};
 
+  ghp-import = callPackage ../development/tools/ghp-import { };
+
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/git2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  libgit2_0_25 = callPackage ../development/libraries/git2/0.25.nix {
+  libgit2_0_27 = callPackage ../development/libraries/git2/0.27.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -11866,7 +11855,7 @@ with pkgs;
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
   soil = callPackage ../development/libraries/soil { };
-  
+
   sonic = callPackage ../development/libraries/sonic { };
 
   soprano = callPackage ../development/libraries/soprano { };
@@ -18251,7 +18240,7 @@ with pkgs;
 
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
-    patches = config.st.patches or null;
+    patches = config.st.patches or [];
     extraLibs = config.st.extraLibs or [];
   };
 
@@ -20938,10 +20927,10 @@ with pkgs;
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
-  spyder = pythonPackages.spyder;
+  spyder = callPackage ../applications/science/spyder { };
 
   openspace = callPackage ../applications/science/astronomy/openspace { };
-  
+
   stellarium = libsForQt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
@@ -21011,6 +21000,8 @@ with pkgs;
   });
 
   ### MISC
+
+  android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
 
   antimicro = libsForQt5.callPackage ../tools/misc/antimicro { };
 

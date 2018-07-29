@@ -43,7 +43,7 @@ in
             });
           })
         ];
-        system.nixos.stateVersion = "17.03";
+        system.stateVersion = "17.03";
       };
       radicale1_export = lib.recursiveUpdate radicale1 {
         services.radicale.extraArgs = [
@@ -54,7 +54,7 @@ in
         services.radicale.extraArgs = [ "--verify-storage" ];
       };
       radicale2 = lib.recursiveUpdate (common args) {
-        system.nixos.stateVersion = "17.09";
+        system.stateVersion = "17.09";
       };
     };
 

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "greenlet";
-  version = "0.4.13";
+  version = "0.4.14";
   disabled = isPyPy;  # builtin for pypy
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fef83d43bf87a5196c91e73cb9772f945a4caaff91242766c5916d1dd1381e4";
+    sha256 = "f1cc268a15ade58d9a0c04569fe6613e19b8b0345b64453064e2c3c6d79051af";
   };
 
   propagatedBuildInputs = [ six ];

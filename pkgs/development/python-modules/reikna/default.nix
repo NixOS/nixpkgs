@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "reikna";
-  version = "0.6.8";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "34d92786237bef9ab5d37d78f01c155d0dcd1fc24df7782af9498a9f1786890c";
+    sha256 = "e27af9a202b8cdedd07793abbd3282806ec724aba091a27c76d7ba8284cfd8ba";
   };
 
   checkInputs = [ sphinx pytestcov pytest ];

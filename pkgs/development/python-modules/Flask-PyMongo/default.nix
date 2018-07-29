@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-PyMongo";
-  version = "0.5.2";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aab5ddab8f443e8a011e024f618bb89e078bdcc2274597079469fdf5ddc032b5";
+    sha256 = "6a02add52ac245064720c2bb8b02074b9a5a0d9498279510ea2a537512fd3fa5";
   };
 
   checkInputs = [ pytest ];
