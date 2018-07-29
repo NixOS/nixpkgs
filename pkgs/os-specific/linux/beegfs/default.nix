@@ -1,36 +1,37 @@
 { stdenv, fetchurl, pkgconfig, unzip, which
 , libuuid, attr, xfsprogs, cppunit, rdma-core
 , zlib, openssl, sqlite, jre, openjdk, ant
-, openssh, perl, gfortran
+, openssh, perl, gfortran, influxdb, curl
 } :
 
 let
-  version = "6.18";
+  version = "7.0";
 
   subdirs = [
     "beeond_thirdparty/build"
     "beeond_thirdparty_gpl/build"
-    "beegfs_thirdparty/build"
-    "beegfs_opentk_lib/build"
-    "beegfs_common/build"
-    "beegfs_admon/build"
-    "beegfs_java_lib/build"
-    "beegfs_ctl/build"
-    "beegfs_fsck/build"
-    "beegfs_helperd/build"
-    "beegfs_meta/build"
-    "beegfs_mgmtd/build"
-    "beegfs_online_cfg/build"
-    "beegfs_storage/build"
-    "beegfs_utils/build"
+    "thirdparty/build"
+    "opentk_lib/build"
+    "common/build"
+    "admon/build"
+    "java_lib/build"
+    "ctl/build"
+    "fsck/build"
+    "helperd/build"
+    "meta/build"
+    "mgmtd/build"
+    "storage/build"
+    "utils/build"
+    "mon/build"
+    "upgrade/beegfs_mirror_md/build"
   ];
 
 in stdenv.mkDerivation rec {
   name = "beegfs-${version}";
 
   src = fetchurl {
-    url = "https://git.beegfs.com/pub/v6/repository/archive.tar.bz2?ref=${version}";
-    sha256 = "1g874qyxh4v53ah3lzchrqi0jci7wngr54q3f4d9q0kzvvifripn";
+    url = "https://git.beegfs.com/pub/v7/repository/archive.tar.bz2?ref=${version}";
+    sha256 = "1wsljd5ybyhl94aqrdfvcs8a0l8w4pr0bs1vhjrf4y7ldhw35m3k";
   };
 
   nativeBuildInputs = [ which unzip pkgconfig cppunit openjdk ant perl ];
@@ -45,7 +46,10 @@ in stdenv.mkDerivation rec {
     jre
     rdma-core
     openssh
-    gfortran ];
+    gfortran
+    influxdb
+    curl
+  ];
 
   hardeningDisable = [ "format" ]; # required for building beeond
 
@@ -65,10 +69,12 @@ in stdenv.mkDerivation rec {
 
   buildPhase = ''
     for i in ${toString subdirs}; do
-      make -C $i BEEGFS_OPENTK_IBVERBS=1
+      make -C $i BEEGFS_OPENTK_IBVERBS=1 ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
     done
-    make -C beegfs_admon/build admon_gui BEEGFS_OPENTK_IBVERBS=1
+    make -C admon/build admon_gui BEEGFS_OPENTK_IBVERBS=1
   '';
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     binDir=$out/bin
@@ -79,43 +85,45 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $binDir $libDir $libDirPkg $docDir $includeDir
 
-    cp beegfs_admon/build/beegfs-admon $binDir
-    cp beegfs_admon/build/dist/usr/bin/beegfs-admon-gui $binDir
-    cp beegfs_admon_gui/dist/beegfs-admon-gui.jar $libDirPkg
-    cp beegfs_admon/build/dist/etc/beegfs-admon.conf $docDir
+    cp admon/build/beegfs-admon $binDir
+    cp admon/build/dist/usr/bin/beegfs-admon-gui $binDir
+    cp admon_gui/dist/beegfs-admon-gui.jar $libDirPkg
+    cp admon/build/dist/etc/beegfs-admon.conf $docDir
 
-    cp beegfs_java_lib/build/jbeegfs.jar $libDirPkg
-    cp beegfs_java_lib/build/libjbeegfs.so $libDir
+    cp java_lib/build/jbeegfs.jar $libDirPkg
+    cp java_lib/build/libjbeegfs.so $libDir
 
-    cp beegfs_ctl/build/beegfs-ctl $binDir
-    cp beegfs_fsck/build/beegfs-fsck $binDir
+    cp ctl/build/beegfs-ctl $binDir
+    cp fsck/build/beegfs-fsck $binDir
 
-    cp beegfs_utils/scripts/beegfs-check-servers $binDir
-    cp beegfs_utils/scripts/beegfs-df $binDir
-    cp beegfs_utils/scripts/beegfs-net $binDir
+    cp utils/scripts/beegfs-check-servers $binDir
+    cp utils/scripts/beegfs-df $binDir
+    cp utils/scripts/beegfs-net $binDir
 
-    cp beegfs_helperd/build/beegfs-helperd $binDir
-    cp beegfs_helperd/build/dist/etc/beegfs-helperd.conf $docDir
+    cp helperd/build/beegfs-helperd $binDir
+    cp helperd/build/dist/etc/beegfs-helperd.conf $docDir
 
-    cp beegfs_client_module/build/dist/sbin/beegfs-setup-client $binDir
-    cp beegfs_client_module/build/dist/etc/beegfs-client.conf $docDir
+    cp client_module/build/dist/sbin/beegfs-setup-client $binDir
+    cp client_module/build/dist/etc/beegfs-client.conf $docDir
 
-    cp beegfs_meta/build/beegfs-meta $binDir
-    cp beegfs_meta/build/dist/sbin/beegfs-setup-meta $binDir
-    cp beegfs_meta/build/dist/etc/beegfs-meta.conf $docDir
+    cp meta/build/beegfs-meta $binDir
+    cp meta/build/dist/sbin/beegfs-setup-meta $binDir
+    cp meta/build/dist/etc/beegfs-meta.conf $docDir
 
-    cp beegfs_mgmtd/build/beegfs-mgmtd $binDir
-    cp beegfs_mgmtd/build/dist/sbin/beegfs-setup-mgmtd $binDir
-    cp beegfs_mgmtd/build/dist/etc/beegfs-mgmtd.conf $docDir
+    cp mgmtd/build/beegfs-mgmtd $binDir
+    cp mgmtd/build/dist/sbin/beegfs-setup-mgmtd $binDir
+    cp mgmtd/build/dist/etc/beegfs-mgmtd.conf $docDir
 
-    cp beegfs_storage/build/beegfs-storage $binDir
-    cp beegfs_storage/build/dist/sbin/beegfs-setup-storage $binDir
-    cp beegfs_storage/build/dist/etc/beegfs-storage.conf $docDir
+    cp storage/build/beegfs-storage $binDir
+    cp storage/build/dist/sbin/beegfs-setup-storage $binDir
+    cp storage/build/dist/etc/beegfs-storage.conf $docDir
 
-    cp beegfs_opentk_lib/build/libbeegfs-opentk.so $libDir
+    cp opentk_lib/build/libbeegfs-opentk.so $libDir
 
-    cp beegfs_client_devel/build/dist/usr/share/doc/beegfs-client-devel/examples/* $docDir
-    cp -r beegfs_client_devel/include/* $includeDir
+    cp upgrade/beegfs_mirror_md/build/beegfs-mirror-md $binDir
+
+    cp client_devel/build/dist/usr/share/doc/beegfs-client-devel/examples/* $docDir
+    cp -r client_devel/include/* $includeDir
 
     cp beeond_thirdparty_gpl/build/parallel $out/bin
     cp beeond_thirdparty/build/pcopy/p* $out/bin
@@ -137,7 +145,8 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-    beegfs_common/build/test-runner --text
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`/opentk_lib/build/ \
+      common/build/test-runner --text
   '';
 
   meta = with stdenv.lib; {
