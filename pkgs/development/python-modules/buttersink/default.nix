@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "buttersink";
-  version = "0.6.8";
+  version = "0.6.9";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04gc63kfcqkw4qba5rijqk01xiphf04yk7hky9180ii64v2ip0j3";
+    sha256 = "c9c05982c44fbb85f17b7ef0e8bee11f375c03d89bcba50cbc2520013512107a";
   };
 
   propagatedBuildInputs = [ boto crcmod psutil ];

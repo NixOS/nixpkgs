@@ -1,19 +1,32 @@
-{ stdenv, buildOcaml, fetchurl, batteries, csv, ocaml_lwt, ocaml_sqlite3, estring }:
+{ stdenv, fetchurl, ocaml, findlib, jbuilder, ocaml_lwt
+, lwt_ppx, ocaml-migrate-parsetree, ppx_tools_versioned, csv, ocaml_sqlite3
+}:
 
-buildOcaml rec {
-  name = "sqlexpr";
-  version = "0.5.5";
+stdenv.mkDerivation rec {
+  version = "0.9.0";
+  name = "ocaml${ocaml.version}-sqlexpr-${version}";
 
   src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1203/ocaml-sqlexpr-${version}.tar.gz";
-    sha256 = "02pi0xxr3xzalwpvcaq96k57wz2vxj20l2mga1a4d2ddvhran8kr";
+  url = "https://github.com/mfp/ocaml-sqlexpr/releases/download/${version}/ocaml-sqlexpr-${version}.tar.gz";
+  sha256 = "0z0bkzi1mh0m39alzr2ds7hjpfxffx6azpfsj2wpaxrg64ks8ypd";
   };
 
-  propagatedBuildInputs = [ batteries csv ocaml_lwt ocaml_sqlite3 estring ];
+  buildInputs = [ ocaml findlib jbuilder lwt_ppx ocaml-migrate-parsetree ppx_tools_versioned ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mfp/ocaml-sqlexpr;
+  propagatedBuildInputs = [ ocaml_lwt csv ocaml_sqlite3 ];
+
+  buildPhase = "dune build -p sqlexpr";
+
+  doCheck = true;
+  checkPhase = "dune runtest -p sqlexpr";
+
+  inherit (jbuilder) installPhase;
+
+  meta = {
     description = "Type-safe, convenient SQLite database access";
-    license = licenses.lgpl21;
+    homepage = "https://github.com/mfp/ocaml-sqlexpr";
+    license = stdenv.lib.licenses.lgpl21;
+    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    inherit (ocaml.meta) platforms;
   };
 }

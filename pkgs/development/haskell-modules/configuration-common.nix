@@ -249,14 +249,6 @@ self: super: {
   # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
   #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
   hnix = dontCheck (doJailbreak (overrideCabal super.hnix (old: {
-    patches = old.patches or [] ++ [
-      # should land in hnix-5.2
-      (pkgs.fetchpatch {
-        url = "https://github.com/haskell-nix/hnix/commit/9cfe060a9dbe9e7c64867956a0523eed9661803a.patch";
-        sha256 = "0ci4n7nw2pzqw0gkmkp4szzvxjyb143a4znjm39jmb0s397a68sh";
-        name = "disable-hpack-test-by-default.patch";
-      })
-    ];
     testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
   })));
 

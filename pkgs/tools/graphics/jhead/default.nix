@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.sentex.net/~mwandel/jhead/;
     description = "Exif Jpeg header manipulation tool";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ viric rycee ];
+    maintainers = with maintainers; [ rycee ];
     platforms = platforms.all;
   };
 }

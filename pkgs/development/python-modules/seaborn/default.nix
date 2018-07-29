@@ -8,10 +8,10 @@
 
 buildPythonPackage rec {
   pname = "seaborn";
-  version = "0.8.1";
+  version = "0.9.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6702978b903d0284446e935916b980dfebae4063c18ad8eb6e8f9e76d0257eae";
+    sha256 = "76c83f794ca320fb6b23a7c6192d5e185a5fcf4758966a0c0a54baee46d41e2f";
   };
 
   checkInputs = [ nose ];

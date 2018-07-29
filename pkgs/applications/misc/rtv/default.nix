@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-with pythonPackages;
+with python3Packages;
 buildPythonApplication rec {
   version = "1.23.0";
-  name = "rtv-${version}";
+  pname = "rtv";
 
   src = fetchFromGitHub {
     owner = "michael-lazar";
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     py.test
   '';
 
-  buildInputs = [
+  checkInputs = [
     coverage
     coveralls
     docopt
@@ -30,18 +30,11 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    backports_functools_lru_cache
     beautifulsoup4
-    configparser
-    contextlib2
     decorator
     kitchen
-    mailcap-fix
-    mccabe
     requests
     six
-    tornado
-    pyyaml
   ];
 
   meta = with stdenv.lib; {

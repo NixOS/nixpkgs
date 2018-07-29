@@ -278,7 +278,7 @@ in stdenv.mkDerivation rec {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = https://libreoffice.org/;
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ viric raskin ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
 }

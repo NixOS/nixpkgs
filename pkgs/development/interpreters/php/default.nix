@@ -17,7 +17,7 @@ let
   , ldapSupport ? config.php.ldap or true
   , mhashSupport ? config.php.mhash or true
   , mysqlSupport ? (config.php.mysql or true) && (!php7)
-  , mysqlndSupport ? config.php.mysqlnd or false
+  , mysqlndSupport ? config.php.mysqlnd or true
   , mysqliSupport ? config.php.mysqli or true
   , pdo_mysqlSupport ? config.php.pdo_mysql or true
   , libxml2Support ? config.php.libxml2 or true
