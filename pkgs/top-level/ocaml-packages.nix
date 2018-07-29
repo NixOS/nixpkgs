@@ -370,6 +370,8 @@ let
       gtkmathview = callPackage ../development/libraries/gtkmathview { };
     };
 
+    labltk = callPackage ../development/ocaml-modules/labltk { };
+
     lambdaTerm-1_6 = callPackage ../development/ocaml-modules/lambda-term/1.6.nix { lwt = lwt2; };
     lambdaTerm =
       if lib.versionOlder "4.02" ocaml.version
