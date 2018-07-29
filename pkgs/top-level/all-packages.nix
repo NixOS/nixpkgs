@@ -2995,6 +2995,8 @@ with pkgs;
 
   halibut = callPackage ../tools/typesetting/halibut { };
 
+  halide = callPackage ../development/compilers/halide {};
+
   hardinfo = callPackage ../tools/system/hardinfo { };
 
   hdapsd = callPackage ../os-specific/linux/hdapsd { };
