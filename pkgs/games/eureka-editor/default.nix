@@ -22,7 +22,12 @@ stdenv.mkDerivation rec {
       --replace "-o root " ""
   '';
 
-  preInstall = "mkdir -p $out/bin";
+  preInstall = ''
+    mkdir -p $out/bin $out/share/applications $out/share/icons $out/man/man6
+    cp misc/eureka.desktop $out/share/applications
+    cp misc/eureka.ico $out/share/icons
+    cp misc/eureka.6 $out/man/man6
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://eureka-editor.sourceforge.net;
