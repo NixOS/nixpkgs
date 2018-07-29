@@ -262,15 +262,15 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2018.1.5"; /* updated by script */
+    version = "2018.2"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "0jqkqiml7v1m9hkcjwmx866vrn5myxcg4zqzyghviyx5i7jrvx3c"; /* updated by script */
+      sha256 = "1byf46vni8s6qf3wlsnscxipgndl6ic48nizwiaqasnhhszqssxs"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
-    update-channel = "DataGrip 2018.1";
+    update-channel = "DataGrip 2018.2";
   };
 
   goland = buildGoland rec {
