@@ -2715,6 +2715,8 @@ with pkgs;
     inherit (gnome2) gnome_python gnome_python_desktop;
   };
 
+  gnome-builder = callPackage ../applications/editors/gnome-builder { };
+
   gnokii = callPackage ../tools/misc/gnokii { };
 
   gnuapl = callPackage ../development/interpreters/gnu-apl { };
@@ -9459,7 +9461,7 @@ with pkgs;
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
     inherit (darwin) cctools;
-    python = python2;
+    python = python3;
   };
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
@@ -9850,6 +9852,8 @@ with pkgs;
   jsonnet = callPackage ../development/compilers/jsonnet {
     emscripten = emscripten.override {python=python2;};
   };
+
+  jsonrpc-glib = callPackage ../development/libraries/jsonrpc-glib { };
 
   libjson = callPackage ../development/libraries/libjson { };
 
@@ -18527,6 +18531,8 @@ with pkgs;
   telepathy-salut = callPackage ../applications/networking/instant-messengers/telepathy/salut {};
 
   telepathy-idle = callPackage ../applications/networking/instant-messengers/telepathy/idle {};
+
+  template-glib = callPackage ../development/libraries/template-glib {};
 
   termdown = (newScope pythonPackages) ../applications/misc/termdown { };
 
