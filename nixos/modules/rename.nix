@@ -4,6 +4,11 @@ with lib;
 
 {
   imports = [
+    # !!! These were renamed the other way, but got reverted later.
+    # !!! Drop these before 18.09 is released.
+    (mkRenamedOptionModule [ "system" "nixos" "stateVersion" ] [ "system" "stateVersion" ])
+    (mkRenamedOptionModule [ "system" "nixos" "defaultChannel" ] [ "system" "defaultChannel" ])
+
     (mkRenamedOptionModule [ "dysnomia" ] [ "services" "dysnomia" ])
     (mkRenamedOptionModule [ "environment" "x11Packages" ] [ "environment" "systemPackages" ])
     (mkRenamedOptionModule [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ])
@@ -222,8 +227,6 @@ with lib;
     (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [ "system" "nixos" "versionSuffix" ])
     (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
     (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
-    (mkRenamedOptionModule [ "system" "stateVersion" ] [ "system" "nixos" "stateVersion" ])
-    (mkRenamedOptionModule [ "system" "defaultChannel" ] [ "system" "nixos" "defaultChannel" ])
 
     # Users
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])

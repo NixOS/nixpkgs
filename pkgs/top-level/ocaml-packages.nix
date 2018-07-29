@@ -71,6 +71,8 @@ let
 
     batteries = callPackage ../development/ocaml-modules/batteries { };
 
+    bigstringaf = callPackage ../development/ocaml-modules/bigstringaf { };
+
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
     bitv = callPackage ../development/ocaml-modules/bitv { };
@@ -316,6 +318,8 @@ let
     gtktop = callPackage ../development/ocaml-modules/gtktop { };
 
     hex = callPackage ../development/ocaml-modules/hex { };
+
+    httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
@@ -643,6 +647,8 @@ let
     ppx_gen_rec = callPackage ../development/ocaml-modules/ppx_gen_rec {};
 
     ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
+
+    ppx_sqlexpr = callPackage ../development/ocaml-modules/sqlexpr/ppx.nix {};
 
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"

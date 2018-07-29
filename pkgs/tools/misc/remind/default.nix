@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.roaringpenguin.com/products/remind;
     description = "Sophisticated calendar and alarm program for the console";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [viric raskin kovirobi];
+    maintainers = with stdenv.lib.maintainers; [raskin kovirobi];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

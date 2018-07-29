@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = http://pjsip.org/;
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric olynch];
+    maintainers = with stdenv.lib.maintainers; [olynch];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

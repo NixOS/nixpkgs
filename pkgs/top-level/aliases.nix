@@ -313,6 +313,7 @@ mapAliases ({
   # added 2018-07-16
   forceSystem = system: _:
     (import self.path { localSystem = { inherit system; }; });
+  callPackage_i686 = pkgsi686Linux.callPackage;
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
