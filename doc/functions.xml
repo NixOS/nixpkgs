@@ -169,6 +169,71 @@
    </note>
   </section>
 
+  <section xml:id="sec-pkg-overrideWithScope">
+   <title>&lt;pkg&gt;.override</title>
+
+   <para>
+    The function <varname>overrideWithScope</varname> is usually available for all the
+    derivations in the nixpkgs expression (<varname>pkgs</varname>).
+   </para>
+
+   <para>
+    It is used to override the arguments passed to a function, by extracting the
+    arguments from a larger set, similar to the default argument provided by the
+    <varname>callPackage</varname> function.
+   </para>
+
+   <para>
+    This function is useful to deeply override a package within a set of
+    packages, such as making compilation stages or to build packages which rely
+    on having the same interpreter (i-e: python, haskell, emacs, …).
+   </para>
+
+   <para>
+    Example usages:
+<programlisting>pkgs.foo.overrideWithScope pkgs.fooDependencies</programlisting>
+<programlisting>import pkgs.path { overlays = [
+  (self: super: {
+    # The interpreter would be overriden in the following packages too.
+    myInterpreterPackages = super.lib.mapAttrs (n: v: v.overrideWithScope self.myInterpreterPackages) {
+      interpreter = super.interpreter.overrideDerivation (prev: { ... });
+      inherit (super) foo bar baz qux;
+    };
+  })
+  (self: super: {
+    # baz changes would be visible by all packages within myInterpreterPackages set.
+    myInterpreterPackages = super.myInterpreterPackages // {
+      baz = super.myInterpreterPackages.baz.override { ... };
+    };
+  })
+  ]};</programlisting>
+   </para>
+
+   <para>
+    In the first example, <varname>pkgs.foo</varname> is the result of a
+    function call with some default arguments, usually a derivation. Using
+    <varname>pkgs.foo.overrideWithScope</varname> will call the same function
+    with the given new arguments. This is similar to how
+    <varname>pkgs.foo.override</varname> would behave, except that
+    <varname>overrideWithScope</varname> will not raise an error if an argument
+    is given, but not expected by the package.
+   </para>
+
+   <para>
+    In the second example, two overlays are added. The first overlay create a
+    custom version of an interpreter, and replaces it in all packages included
+    in the <varname>myInterpreterPackages</varname> set, as well as replacing
+    <varname>foo</varname> in <varname>myInterpreterPackages.bar</varname>. The
+    second overlay replaces <varname>baz</varname> in all packages under
+    <varname>myInterpreterPackages</varname>, such as
+    <varname>myInterpreterPackages.qux</varname>. Note, the second overlay did
+    not had a re-use <varname>overrideWithScope</varname> as the argument of it
+    in the first overlay is the fix-point result of
+    <varname>myInterpreterSet</varname>, which includes the custom
+    <varname>baz</varname>.
+   </para>
+  </section>
+
   <section xml:id="sec-lib-makeOverridable">
    <title>lib.makeOverridable</title>
 
