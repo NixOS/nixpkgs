@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
       name = "pari-2.11.0.patch";
       url = "https://git.sagemath.org/sage.git/patch/?id=7af4748cab37d651eaa88be501db88f4a5ffc584";
       sha256 = "13f740ly3c19gcmhjngiycvmc3mcfj61y00i6jv0wmfgpm2z3ank";
+    })
 
     # ntl upgrade
     (fetchpatch {
