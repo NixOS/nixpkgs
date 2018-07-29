@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, autoreconfHook, openssl }:
 
 stdenv.mkDerivation rec {
-  baseName = "httperf";
-  name = "${baseName}-${version}";
+  pname = "httperf";
+  name = "${pname}-${version}";
   version = "0.9.1";
 
   src = fetchFromGitHub {
-    repo = "httperf";
-    owner = "httperf";
+    repo = pname;
+    owner = pname;
     rev = "3209c7f9b15069d4b79079e03bafba5b444569ff";
     sha256 = "0p48z9bcpdjq3nsarl26f0xbxmqgw42k5qmfy8wv5bcrz6b3na42";
   };
