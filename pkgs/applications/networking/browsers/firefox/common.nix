@@ -41,7 +41,7 @@
 
 # macOS dependencies
 , xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
-, CoreLocation, Foundation, libobjc
+, CoreLocation, Foundation, AddressBook, libobjc, cups, rsync
 
 ## other
 
@@ -64,7 +64,6 @@
 # > the experience of Firefox users, you won't have any issues using the
 # > official branding.
 , enableOfficialBranding ? true
-, gcc
 }:
 
 assert stdenv.cc.libc or null != null;
@@ -74,6 +73,11 @@ let
 
   default-toolkit = if stdenv.isDarwin then "cairo-cocoa"
                     else "cairo-gtk${if gtk3Support then "3" else "2"}";
+
+  execdir = if stdenv.isDarwin
+            then "/Applications/${browserName}.app/Contents/MacOS"
+            else "/bin";
+  browserName = if stdenv.isDarwin then "Firefox" else "firefox";
 in
 
 stdenv.mkDerivation (rec {
@@ -100,7 +104,7 @@ stdenv.mkDerivation (rec {
   ++ lib.optional  gssSupport kerberos
   ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
                                      AVFoundation MediaToolbox CoreLocation
-                                     Foundation libobjc ];
+                                     Foundation libobjc AddressBook cups ];
 
   NIX_CFLAGS_COMPILE = [ "-I${nspr.dev}/include/nspr"
                          "-I${nss.dev}/include/nss"
@@ -116,7 +120,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
     ++ lib.optional gtk3Support wrapGAppsHook
-    ++ lib.optional stdenv.isDarwin xcbuild
+    ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
     ++ extraNativeBuildInputs;
 
   preConfigure = ''
@@ -139,7 +143,15 @@ stdenv.mkDerivation (rec {
     # uses LLVM's libclang. To make sure all necessary flags are
     # included we need to look in a few places.
     # TODO: generalize this process for other use-cases.
-    echo "ac_add_options BINDGEN_CFLAGS='$(< ${stdenv.cc}/nix-support/libc-cflags) $(< ${stdenv.cc}/nix-support/cc-cflags) ${stdenv.cc.default_cxx_stdlib_compile} -idirafter ${llvmPackages.clang.cc}/lib/clang/${lib.getVersion llvmPackages.clang}/include $NIX_CFLAGS_COMPILE'" >> $MOZCONFIG
+
+    BINDGEN_CFLAGS="$(< ${stdenv.cc}/nix-support/libc-cflags) \
+      $(< ${stdenv.cc}/nix-support/cc-cflags) \
+      ${stdenv.cc.default_cxx_stdlib_compile} \
+      ${lib.optionalString stdenv.cc.isClang "-idirafter ${stdenv.cc.cc}/lib/clang/${lib.getVersion stdenv.cc.cc}/include"} \
+      ${lib.optionalString stdenv.cc.isGNU "-isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc} -isystem ${stdenv.cc.cc}/include/c++/${lib.getVersion stdenv.cc.cc}/$(cc -dumpmachine)"} \
+      $NIX_CFLAGS_COMPILE"
+
+    echo "ac_add_options BINDGEN_CFLAGS='$BINDGEN_CFLAGS'" >> $MOZCONFIG
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
@@ -249,7 +261,12 @@ stdenv.mkDerivation (rec {
     paxmark m dist/bin/xpcshell
   '';
 
-  postInstall = ''
+  installPhase = if stdenv.isDarwin then ''
+    mkdir -p $out/Applications
+    cp -RL Firefox.app $out/Applications
+  '' else null;
+
+  postInstall = lib.optionalString stdenv.isLinux ''
     # For grsecurity kernels
     paxmark m $out/lib/firefox*/{firefox,firefox-bin,plugin-container}
 
@@ -260,7 +277,7 @@ stdenv.mkDerivation (rec {
     gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # Fix notifications. LibXUL uses dlopen for this, unfortunately; see #18712.
     patchelf --set-rpath "${lib.getLib libnotify
       }/lib:$(patchelf --print-rpath "$out"/lib/firefox*/libxul.so)" \
@@ -270,11 +287,10 @@ stdenv.mkDerivation (rec {
   doInstallCheck = true;
   installCheckPhase = ''
     # Some basic testing
-    "$out/bin/firefox" --version
+    "$out${execdir}/${browserName}" --version
   '';
 
   passthru = {
-    browserName = "firefox";
     inherit version updateScript;
     isFirefox3Like = true;
     inherit isTorBrowserLike;
@@ -282,6 +298,8 @@ stdenv.mkDerivation (rec {
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;
+    inherit execdir;
+    inherit browserName;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
 } // overrides)

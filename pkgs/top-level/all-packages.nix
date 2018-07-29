@@ -16308,7 +16308,7 @@ with pkgs;
       icu = icu59;
       inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
                                             Kerberos AVFoundation MediaToolbox
-                                            CoreLocation Foundation;
+                                            CoreLocation Foundation AddressBook;
       inherit (darwin) libobjc;
     };
   });
