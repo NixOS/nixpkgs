@@ -1,0 +1,41 @@
+--- gnome-builder-3.28.4/meson_options.txt.orig	2018-07-29 15:36:03.605081188 -0700
++++ gnome-builder-3.28.4/meson_options.txt	2018-07-29 15:36:19.877608836 -0700
+@@ -15,6 +15,8 @@
+ option('with_help', type: 'boolean')
+ option('with_docs', type: 'boolean', value: false)
+ 
++option('python_libprefix', type: 'string')
++
+ # Plugins
+ # Ideally we want many of these to be defined in the plugin dir:
+ #   https://github.com/mesonbuild/meson/issues/707
+--- gnome-builder-3.28.4/src/libide/meson.build.orig	2018-07-29 15:36:03.605081188 -0700
++++ gnome-builder-3.28.4/src/libide/meson.build	2018-07-29 15:36:43.237365710 -0700
+@@ -161,6 +161,10 @@
+ endif
+ 
+ # We want to find the subdirectory to install our override into:
++python_libprefix = get_option('python_libprefix')
++if python_libprefix != ''
++  pygobject_override_dir = join_paths(get_option('libdir'), python_libprefix, 'site_packages', 'gi', 'overrides')
++else
+ python3 = find_program('python3')
+ 
+ get_overridedir = '''
+@@ -190,6 +194,7 @@
+ else
+   pygobject_override_dir = join_paths(get_option('libdir'), ret.stdout().strip())
+ endif
++endif
+ 
+ install_data('Ide.py', install_dir: pygobject_override_dir)
+ 
+@@ -222,7 +227,7 @@
+   dependencies: libide_deps,
+         c_args: libide_args,
+        install: true,
+-   install_dir: pkglibdir,
++   install_dir: pkglibdir_abs,
+  install_rpath: pkglibdir_abs,
+ )
+ 
