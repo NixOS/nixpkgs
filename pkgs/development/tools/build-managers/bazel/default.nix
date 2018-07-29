@@ -5,7 +5,7 @@
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
 # Apple dependencies
-, libcxx, CoreFoundation, CoreServices, Foundation
+, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
 }:
 
 let
@@ -75,7 +75,34 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Disable Bazel's Xcode toolchain detection which would configure compilers
+    # and linkers from Xcode instead of from PATH
+    export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
+
+    # Framework search paths aren't added by bintools hook
+    # https://github.com/NixOS/nixpkgs/pull/41914
     export NIX_LDFLAGS="$NIX_LDFLAGS -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
+
+    # libcxx includes aren't added by libcxx hook
+    # https://github.com/NixOS/nixpkgs/pull/41589
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
+
+    # don't use system installed Xcode to run clang, use Nix clang instead
+    sed -i -e "s;/usr/bin/xcrun clang;${clang}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
+      scripts/bootstrap/compile.sh \
+      src/tools/xcode/realpath/BUILD \
+      src/tools/xcode/stdredirect/BUILD \
+      tools/osx/BUILD
+
+    # clang installed from Xcode has a compatibility wrapper that forwards
+    # invocations of gcc to clang, but vanilla clang doesn't
+    sed -i -e 's;_find_generic(repository_ctx, "gcc", "CC", overriden_tools);_find_generic(repository_ctx, "clang", "CC", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
+
+    sed -i -e 's;/usr/bin/libtool;${cctools}/bin/libtool;g' tools/cpp/unix_cc_configure.bzl
+    wrappers=( tools/cpp/osx_cc_wrapper.sh tools/cpp/osx_cc_wrapper.sh.tpl )
+    for wrapper in "''${wrappers[@]}"; do
+      sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
+    done
   '' + ''
     find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
       substituteInPlace "$path" \
@@ -119,7 +146,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     which
     customBash
-  ] ++ lib.optionals (stdenv.isDarwin) [ libcxx CoreFoundation CoreServices Foundation ];
+  ] ++ lib.optionals (stdenv.isDarwin) [ cctools clang libcxx CoreFoundation CoreServices Foundation ];
 
   # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
   # detector (see com.google.devtools.build.lib.skyframe.FileFunction).
