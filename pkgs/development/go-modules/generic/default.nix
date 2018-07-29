@@ -152,6 +152,10 @@ go.stdenv.mkDerivation (
       fi
     }
 
+    if (( "''${NIX_DEBUG:-0}" >= 1 )); then
+      buildFlagsArray+=(-x)
+    fi
+
     if [ ''${#buildFlagsArray[@]} -ne 0 ]; then
       declare -p buildFlagsArray > $TMPDIR/buildFlagsArray
     else
