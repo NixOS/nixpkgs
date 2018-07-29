@@ -2,6 +2,8 @@
 , libintl, cctools, cairo, gnome3
 , substituteAll, nixStoreDir ? builtins.storeDir
 , x11Support ? true
+# remove these after the next upstream release:
+, runCommand, patchutils, autoreconfHook
 }:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
@@ -24,7 +26,10 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
   outputMan = "dev"; # tiny pages
 
-  nativeBuildInputs = [ pkgconfig libintl ];
+  # autoreconfHook is only required with upstream patch a41abe1, which touches
+  # a Makefile.am. It can be removed along with the patch below after the next
+  # upstream release.
+  nativeBuildInputs = [ autoreconfHook pkgconfig libintl ];
   buildInputs = [ flex bison python setupHook/*move .gir*/ ]
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
@@ -39,10 +44,14 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   patches = [
-    (substituteAll {
-      src = ./absolute_shlib_path.patch;
-      inherit nixStoreDir;
-    })
+    # backport upstream patch a41abe1 to 1.56.*, which didn't use Meson
+    # https://gitlab.gnome.org/GNOME/gobject-introspection/commit/a41abe1868a693387cd5cf85567cf2e0fd6c62df
+    (runCommand "parse-ldd-output.patch" { } ''
+      ${patchutils}/bin/filterdiff --clean --exclude="*/meson.build" ${fetchurl {
+        url = "https://gitlab.gnome.org/GNOME/gobject-introspection/commit/a41abe1868a693387cd5cf85567cf2e0fd6c62df.diff";
+        sha256 = "0b3ighkr3gyhhvbm2vhipgdlcx7yvxrrf0kqgl182h8k6ygn5ydv";
+      }} > $out
+    '')
   ] ++ stdenv.lib.optional x11Support # https://github.com/NixOS/nixpkgs/issues/34080
     (substituteAll {
       src = ./absolute_gir_path.patch;
