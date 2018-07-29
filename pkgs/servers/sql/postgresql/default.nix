@@ -23,7 +23,7 @@ let
     makeFlags = [ "world" ];
 
     preConfigure = ''
-    export CFLAGS="$CFLAGS -I${libxml2.dev}/include/libxml2"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2.dev}/include/libxml2"
     '';
     configureFlags = [
       "--with-openssl"
