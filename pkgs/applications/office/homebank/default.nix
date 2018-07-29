@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Free, easy, personal accounting for everyone";
     homepage = http://homebank.free.fr/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric pSub ];
+    maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
   };
 }

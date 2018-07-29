@@ -19,6 +19,9 @@ buildPythonPackage rec {
     pytest . -k "not test_mtime_caching"
   '';
 
+  # https://github.com/tholo/pytest-flake8/issues/49
+  doCheck = false;
+
   meta = {
     description = "py.test plugin for efficiently checking PEP8 compliance";
     homepage = https://github.com/tholo/pytest-flake8;
