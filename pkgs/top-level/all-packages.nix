@@ -7419,14 +7419,6 @@ with pkgs;
   php = php72;
   phpPackages = php72Packages;
 
-  php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php56;
-  });
-
-  php70Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php70;
-  });
-
   php71Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php71;
   });
@@ -7437,8 +7429,6 @@ with pkgs;
 
 
   inherit (callPackages ../development/interpreters/php { })
-    php56
-    php70
     php71
     php72;
 
