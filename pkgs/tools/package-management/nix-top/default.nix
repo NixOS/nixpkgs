@@ -33,11 +33,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ruby
   ];
-  
+
   installPhase = ''
-    mkdir -p $out/bin $out/libexec/nix-top
-    cp ./nix-top $out/bin/nix-top
-    chmod +x $out/bin/nix-top
+    mkdir -p $out/libexec/nix-top
+    install -D -m755 ./nix-top $out/bin/nix-top
     wrapProgram $out/bin/nix-top \
       --prefix PATH : "$out/libexec/nix-top:${additionalPath}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
