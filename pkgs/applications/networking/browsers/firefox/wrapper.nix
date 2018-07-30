@@ -7,7 +7,7 @@
 , trezor-bridge, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , esteidfirefoxplugin
-, browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration
+, browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
 , udev
 , kerberos
 }:
@@ -61,6 +61,7 @@ let
       nativeMessagingHosts =
         ([ ]
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
+          ++ lib.optional (cfg.enableBukubrow or false) bukubrow
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
