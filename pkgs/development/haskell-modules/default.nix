@@ -26,13 +26,19 @@ let
   # referencing GHC itself.
   mkCoreLib = ghc: pkg: rec {
     inherit (builtins.parseDrvName pkg) name;
-    value = pkgs.runCommand pkg {} ''
+    value = pkgs.runCommand pkg (lib.optionalAttrs (name == "base") {
+      propagatedBuildInputs = [ self.rts ];
+    }) ''
       install -D ${ghc}/lib/${ghc.name}/package.conf.d/${pkg}.conf \
                  $out/lib/${ghc.name}/package.conf.d/${pkg}.conf
       cp -r ${ghc}/lib/${ghc.name}/${pkg} $out/lib/${ghc.name}
+      ${lib.optionalString (name == "rts")
+            "cp -r ${ghc}/lib/${ghc.name}/include $out/lib/${ghc.name}"}
       for conf in $out/lib/${ghc.name}/package.conf.d/*.conf; do
         substituteInPlace $conf --replace ${ghc} $out
       done
+
+      eval fixupPhase
     '';
   }; in builtins.listToAttrs (map (mkCoreLib ghc) (super.ghc.libraries or []));
 
