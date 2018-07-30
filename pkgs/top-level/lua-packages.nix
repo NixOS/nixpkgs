@@ -347,6 +347,28 @@ let
     };
   };
 
+  luaossl = buildLuaPackage rec {
+    name = "luaossl-${version}";
+    version = "20170903";
+
+    src = fetchurl {
+      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
+      sha256 = "10392bvd0lzyibipblgiss09zlqh3a5zgqg1b9lgbybpqb9cv2k3";
+    };
+
+    preConfigure = ''export prefix=$out'';
+
+    buildInputs = [ openssl ];
+
+    meta = with stdenv.lib; {
+      description = "Comprehensive binding to OpenSSL for Lua 5.1+";
+      homepage = "https://www.25thandclement.com/~william/projects/luaossl.html";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.unix;
+    };
+  };
+
   luaposix = buildLuaPackage rec {
     name = "posix-${version}";
     version = "34.0.4";
