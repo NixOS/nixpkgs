@@ -7,7 +7,7 @@
 
 { fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
-, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, glib, gobjectIntrospection, libevent, zlib, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
 }:
@@ -68,6 +68,29 @@ let
       homepage = "http://www.lua.org/manual/5.2/manual.html#6.7";
       license = licenses.mit;
       maintainers = with maintainers; [ lblasc ];
+      platforms = platforms.unix;
+    };
+  };
+
+  cqueues = buildLuaPackage rec {
+    name = "cqueues-${version}";
+    version = "20171014";
+
+    src = fetchurl {
+      url = "http://www.25thandclement.com/~william/projects/releases/${name}.tgz";
+      sha256 = "1dabhpn6r0hlln8vx9hxm34pfcm46qzgpb2apmziwg5z51fi4ksb";
+    };
+
+    preConfigure = ''export prefix=$out'';
+
+    nativeBuildInputs = [ gnum4 ];
+    buildInputs = [ openssl ];
+
+    meta = with stdenv.lib; {
+      description = "A type of event loop for Lua";
+      homepage = "https://www.25thandclement.com/~william/projects/cqueues.html";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
       platforms = platforms.unix;
     };
   };
