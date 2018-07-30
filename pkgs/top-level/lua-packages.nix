@@ -72,6 +72,44 @@ let
     };
   };
 
+  compat53 = buildLuaPackage rec {
+    version = "0.7";
+    name = "compat53-${version}";
+
+    src = fetchFromGitHub {
+      owner = "keplerproject";
+      repo = "lua-compat-5.3";
+      rev = "v${version}";
+      sha256 = "02a14nvn7aggg1yikj9h3dcf8aqjbxlws1bfvqbpfxv9d5phnrpz";
+    };
+
+    nativeBuildInputs = [ pkgconfig ];
+
+    postConfigure = ''
+      CFLAGS+=" -shared $(pkg-config --libs ${if isLuaJIT then "luajit" else "lua"})"
+    '';
+
+    buildPhase = ''
+      cc lstrlib.c $CFLAGS -o string.so
+      cc ltablib.c $CFLAGS -o table.so
+      cc lutf8lib.c $CFLAGS -o utf8.so
+    '';
+
+    # There's no need to separate *.lua and *.so, I guess?  TODO: conventions?
+    installPhase = ''
+      install -Dt "$out/lib/lua/${lua.luaversion}/compat53" \
+        compat53/*.lua *.so
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1";
+      homepage = "https://github.com/keplerproject/lua-compat-5.3";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.all;
+    };
+  };
+
   cqueues = buildLuaPackage rec {
     name = "cqueues-${version}";
     version = "20171014";
