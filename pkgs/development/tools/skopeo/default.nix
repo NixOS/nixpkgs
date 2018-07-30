@@ -5,13 +5,13 @@
 with stdenv.lib;
 
 let
-  version = "0.1.30";
+  version = "0.1.31";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "projectatomic";
     repo = "skopeo";
-    sha256 = "10lpiiki7mlhrp4bid40wys3lch7fars1whxsa5gy0frfgp89ghn";
+    sha256 = "02z46wxhms8yph03ksl7i4hbqy15v3y1r43js9dxn0a45vxkm7lb";
   };
 
   defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
