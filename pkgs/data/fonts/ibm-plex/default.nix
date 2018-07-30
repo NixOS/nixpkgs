@@ -1,23 +1,19 @@
-{ lib, fetchFromGitHub }:
+{ lib, fetchzip }:
 
-let version = "0.5.3";
-in fetchFromGitHub rec {
+let
+  version = "1.0.2";
+in fetchzip rec {
   name = "ibm-plex-${version}";
-
-  owner = "IBM";
-  repo = "type";
-  rev = "v${version}";
-  sha256 = "1im7sid3qsk4wnm0yhq9h7i50bz46jksqxv60svdfnsrwq0krd1h";
-
+  url = "https://github.com/IBM/plex/releases/download/v${version}/OpenType.zip";
   postFetch = ''
-    tar --strip-components=1 -xzvf $downloadedFile
-    mkdir -p $out/share/fonts/opentype
-    cp fonts/*/desktop/mac/*.otf $out/share/fonts/opentype/
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
+  sha256 = "1ixxm47lwsrc136z6cxkk5dm3svmvcvq0ya8q8ayvn68q5ijbh5m";
 
   meta = with lib; {
     description = "IBM Plex Typeface";
-    homepage = https://ibm.github.io/type/;
+    homepage = https://www.ibm.com/plex/;
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

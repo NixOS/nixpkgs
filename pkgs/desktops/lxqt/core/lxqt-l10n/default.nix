@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = "lxqt-l10n";
     rev = version;
     sha256 = "0q1hzj6sa4wc8sgqqqsqfldjpnvihacfq73agvc2li3q6qi5rr0k";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "Translations of LXQt";
-    homepage = https://github.com/lxde/lxqt-l10n;
+    homepage = https://github.com/lxqt/lxqt-l10n;
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

@@ -161,6 +161,15 @@
     inputs = [ pkgs.pam ];
   };
 
+  push-stream ={
+    src = fetchFromGitHub {
+      owner = "wandenberg";
+      repo = "nginx-push-stream-module";
+      rev = "0.5.4";
+      sha256 = "0izn7lqrp2zfl738aqa9i8c5lba97wkhcnqg8qbw3ipp5cysb2hr";
+    };
+  };
+
   rtmp ={
     src = fetchFromGitHub {
       owner = "arut";
@@ -212,6 +221,25 @@
       repo = "nginx_upstream_check_module";
       rev = "9aecf15ec379fe98f62355c57b60c0bc83296f04";
       sha256 = "1cjisxw1wykll683nw09k0i1nvzslp4dr59x58cvarpk43paim2y";
+    };
+  };
+
+  upstream-tarantool = {
+    src = fetchFromGitHub {
+      owner = "tarantool";
+      repo = "nginx_upstream_module";
+      rev = "v2.7";
+      sha256 = "05dwj0caj910p7kan2qjvm6x2x601igryhny2xzr47hhsk5q1cnx";
+    };
+    inputs = [ pkgs.msgpuck.dev pkgs.yajl ];
+  };
+
+  vts = {
+    src = fetchFromGitHub {
+      owner = "vozlt";
+      repo = "nginx-module-vts";
+      rev = "v0.1.18";
+      sha256 = "1jq2s9k7hah3b317hfn9y3g1q4g4x58k209psrfsqs718a9sw8c7";
     };
   };
 }
