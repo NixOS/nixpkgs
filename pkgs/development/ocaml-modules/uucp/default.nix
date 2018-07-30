@@ -2,7 +2,7 @@
 
 let
   pname = "uucp";
-  version = "10.0.1";
+  version = "11.0.0";
   webpage = "http://erratique.ch/software/${pname}";
 in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "0qgbrx3lnrzii8a9f0hv4kp73y57q6fr79hskxxxs70q68j2xpfm";
+    sha256 = "0pidg2pmqsifmk4xx9cc5p5jprhg26xb68g1xddjm7sjzbdzhlm4";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild topkg uutf uunf ];
