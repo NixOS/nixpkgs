@@ -31,9 +31,9 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}"
-    ]
-      ++ lib.optional stdenv.isDarwin  "--with-uuid=e2fs"
-      ++ lib.optional (!stdenv.isDarwin) "--with-ossp-uuid";
+    ] ++ (
+      if stdenv.isDarwin then [ "--with-uuid=e2fs" ] else [ "--with-ossp-uuid" ]
+    );
 
     patches =
       [ (if atLeast "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
