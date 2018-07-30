@@ -1,0 +1,12 @@
+diff --git a/src/plugins/flatpak/meson.build b/src/plugins/flatpak/meson.build
+index 657f7939b..28982bb74 100644
+--- a/src/plugins/flatpak/meson.build
++++ b/src/plugins/flatpak/meson.build
+@@ -52,6 +52,7 @@ flatpak_sources = [
+ 
+ gnome_builder_plugins_deps += [
+   dependency('flatpak', version: '>= 0.8.0'),
++  dependency('ostree-1'),
+   dependency('libsoup-2.4', version: '>= 2.52.0'),
+   libgit_dep,
+ ]
