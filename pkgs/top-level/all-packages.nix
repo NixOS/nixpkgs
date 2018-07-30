@@ -969,6 +969,8 @@ with pkgs;
 
   buildah = callPackage ../development/tools/buildah { };
 
+  bukubrow = callPackage ../tools/networking/bukubrow { };
+
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
   c3d = callPackage ../applications/graphics/c3d {
