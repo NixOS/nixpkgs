@@ -222,6 +222,38 @@ let
     };
   };
 
+  http = buildLuaPackage rec {
+    version = "0.2";
+    name = "http-${version}";
+
+    src = fetchFromGitHub {
+      owner = "daurnimator";
+      repo = "lua-http";
+      rev = "v${version}";
+      sha256 = "0a8vsj49alaf1fkhv51n5mgpjq8izfff3shcjs8xk7p2bc46vd7i";
+    };
+
+    /* TODO: separate docs derivation? (pandoc is heavy)
+    nativeBuildInputs = [ pandoc ];
+    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
+    */
+
+    buildPhase = ":";
+    installPhase = ''
+      install -Dt "$out/lib/lua/${lua.luaversion}/http" \
+        http/*.lua
+      install -Dt "$out/lib/lua/${lua.luaversion}/http/compat" \
+        http/compat/*.lua
+    '';
+
+    meta = with stdenv.lib; {
+      description = "HTTP library for lua";
+      homepage = "https://daurnimator.github.io/lua-http/${version}/";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+    };
+  };
+
   luacheck = buildLuaPackage rec {
     pname = "luacheck";
     version = "0.20.0";
