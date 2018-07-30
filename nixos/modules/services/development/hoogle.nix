@@ -43,6 +43,12 @@ in {
       defaultText = "pkgs.haskellPackages";
     };
 
+    home = mkOption {
+      type = types.str;
+      description = "Url for hoogle logo";
+      default = "https://hoogle.haskell.org";
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -53,7 +59,7 @@ in {
 
       serviceConfig = {
         Restart = "always";
-        ExecStart = ''${hoogleEnv}/bin/hoogle server --local -p ${toString cfg.port}'';
+        ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home}'';
 
         User = "nobody";
         Group = "nogroup";
