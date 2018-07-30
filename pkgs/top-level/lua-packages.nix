@@ -77,7 +77,7 @@ let
     version = "20171014";
 
     src = fetchurl {
-      url = "http://www.25thandclement.com/~william/projects/releases/${name}.tgz";
+      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
       sha256 = "1dabhpn6r0hlln8vx9hxm34pfcm46qzgpb2apmziwg5z51fi4ksb";
     };
 
