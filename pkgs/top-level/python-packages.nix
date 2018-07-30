@@ -2546,6 +2546,8 @@ in {
     };
   };
 
+  fluent-logger = callPackage ../development/python-modules/fluent-logger {};
+
   python-forecastio = callPackage ../development/python-modules/python-forecastio { };
 
   fpdf = callPackage ../development/python-modules/fpdf { };
