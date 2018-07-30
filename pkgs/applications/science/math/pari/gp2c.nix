@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
 
   name = "gp2c-${version}";
-  version = "0.0.10pl1";
+  version = "0.0.11";
 
   src = fetchurl {
     url = "https://pari.math.u-bordeaux.fr/pub/pari/GP2C/${name}.tar.gz";
-    sha256 = "16hgmdvzxbmv63x1f72q1xgfyh0qhx7kaf9nbaamy0gdawxjxcav";
+    sha256 = "1z69xj2dpd8yyi8108rz26c50xpv0k2j8qnk0bzy1c5lw3pd1adm";
   };
 
   buildInputs = [ pari perl ];
