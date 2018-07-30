@@ -3056,6 +3056,8 @@ in {
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
 
+  identify = callPackage ../development/python-modules/identify { };
+
   ijson = callPackage ../development/python-modules/ijson {};
 
   imagesize = buildPythonPackage rec {
