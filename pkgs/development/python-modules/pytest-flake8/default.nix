@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-flake8";
-  version = "1.0.1";
+  version = "1.0.2";
 
   # although pytest is a runtime dependency, do not add it as
   # propagatedBuildInputs in order to allow packages depend on another version
@@ -12,15 +12,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s5fdivrmhjf6ybr6m2qb1h8hndv2jh2ir29qv36lhy9b7sc9kg5";
+    sha256 = "c740ad6aa19e3958947d2118f70bed218caf1d2097039fb7318573a2a72f89a1";
   };
 
   checkPhase = ''
-    pytest . -k "not test_mtime_caching"
+    pytest .
   '';
-
-  # https://github.com/tholo/pytest-flake8/issues/49
-  doCheck = false;
 
   meta = {
     description = "py.test plugin for efficiently checking PEP8 compliance";
