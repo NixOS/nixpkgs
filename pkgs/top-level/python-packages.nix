@@ -8469,6 +8469,8 @@ in {
     inherit (pkgs) which;
   };
 
+  nodeenv = callPackage ../development/python-modules/nodeenv { };
+
   nose = buildPythonPackage rec {
     version = "1.3.7";
     name = "nose-${version}";
