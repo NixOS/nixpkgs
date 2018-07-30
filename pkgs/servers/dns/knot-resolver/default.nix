@@ -65,7 +65,8 @@ wrapped-full = with luajitPackages; let
     luaPkgs =  [
       luasec luasocket # trust anchor bootstrap, prefill module
       lfs # prefill module
-      # TODO: cqueues and others for http2 module
+      # Almost all is for the 'http' module:
+      http cqueues fifo lpeg lpeg_patterns luaossl compat53 basexx
     ];
   in runCommand unwrapped.name
   {
