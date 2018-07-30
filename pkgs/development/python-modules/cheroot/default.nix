@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ stdenv, fetchPypi, buildPythonPackage, fetchpatch
 , more-itertools, six
 , pytest, pytestcov, portend
 , backports_unittest-mock
@@ -13,9 +13,15 @@ buildPythonPackage rec {
     sha256 = "8e3ac15e1efffc81425a693e99b3c09d7ea4bf947255d8d4c38e2cf76f3a4d25";
   };
 
-  propagatedBuildInputs = [ more-itertools six ];
+  patches = fetchpatch {
+    name = "cheroot-fix-setup-python3.patch";
+    url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/cheroot-fix-setup-python3.patch?h=packages/python-cheroot";
+    sha256 = "1rlgz0qln536y00mfqlf0i9hz3f53id73wh47cg5q2vcsw1w2bpc";
+  };
 
-  checkInputs = [ pytest pytestcov portend backports_unittest-mock backports_functools_lru_cache ];
+  propagatedBuildInputs = [ more-itertools six backports_functools_lru_cache ];
+
+  checkInputs = [ pytest pytestcov portend backports_unittest-mock ];
 
 # Disable testmon, it needs pytest-testmon, which we do not currently have in nikpkgs,
 # and is only used to skip some tests that are already known to work.
