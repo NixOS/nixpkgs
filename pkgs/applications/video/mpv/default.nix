@@ -21,6 +21,7 @@
 , sdl2Support        ? true,  SDL2          ? null
 , alsaSupport        ? true,  alsaLib       ? null
 , screenSaverSupport ? true,  libXScrnSaver ? null
+, cmsSupport         ? true,  lcms2         ? null
 , vdpauSupport       ? true,  libvdpau      ? null
 , dvdreadSupport     ? true,  libdvdread    ? null
 , dvdnavSupport      ? true,  libdvdnav     ? null
@@ -53,6 +54,7 @@ assert xvSupport          -> x11Support && available libXv;
 assert sdl2Support        -> available SDL2;
 assert alsaSupport        -> available alsaLib;
 assert screenSaverSupport -> available libXScrnSaver;
+assert cmsSupport         -> available lcms2;
 assert vdpauSupport       -> available libvdpau;
 assert dvdreadSupport     -> available libdvdread;
 assert dvdnavSupport      -> available libdvdnav;
@@ -136,6 +138,7 @@ in stdenv.mkDerivation rec {
     ++ optional pulseSupport       libpulseaudio
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
+    ++ optional cmsSupport        lcms2
     ++ optional vdpauSupport       libvdpau
     ++ optional speexSupport       speex
     ++ optional bs2bSupport        libbs2b
