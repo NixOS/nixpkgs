@@ -15469,6 +15469,8 @@ with pkgs;
     inherit (pythonPackages) pyserial pygtk;
   };
 
+  browsh = callPackage ../applications/networking/browsers/browsh { };
+
   chromium = callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
     pulseSupport = config.pulseaudio or true;
