@@ -678,6 +678,8 @@ with pkgs;
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  httperf = callPackage ../tools/networking/httperf { };
+
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
@@ -18278,10 +18280,7 @@ with pkgs;
 
   insync = callPackage ../applications/networking/insync { };
 
-  lightdm = libsForQt5.callPackage ../applications/display-managers/lightdm {
-    qt4 = null;
-    withQt5 = false;
-  };
+  lightdm = libsForQt5.callPackage ../applications/display-managers/lightdm { };
 
   lightdm_qt = lightdm.override { withQt5 = true; };
 

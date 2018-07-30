@@ -4,11 +4,13 @@
   rustPlatform,
   cmake,
   makeWrapper,
+  ncurses,
   expat,
   pkgconfig,
   freetype,
   fontconfig,
   libX11,
+  gzip,
   libXcursor,
   libXxf86vm,
   libXi,
@@ -66,10 +68,14 @@ in buildRustPackage rec {
     cmake
     makeWrapper
     pkgconfig
+    ncurses
+    gzip
   ];
 
   buildInputs = rpathLibs
              ++ lib.optionals stdenv.isDarwin darwinFrameworks;
+
+ outputs = [ "out" "terminfo" ];
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \
@@ -94,6 +100,14 @@ in buildRustPackage rec {
     install -D alacritty-completions.zsh "$out/share/zsh/site-functions/_alacritty"
     install -D alacritty-completions.bash "$out/etc/bash_completion.d/alacritty-completions.bash"
     install -D alacritty-completions.fish "$out/share/fish/vendor_completions.d/alacritty.fish"
+
+    install -dm 755 "$out/share/man/man1"
+    gzip -c alacritty.man > "$out/share/man/man1/alacritty.1.gz"
+
+    install -dm 755 "$terminfo/share/terminfo/a/"
+    tic -x -o "$terminfo/share/terminfo" alacritty.info
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
     runHook postInstall
   '';
