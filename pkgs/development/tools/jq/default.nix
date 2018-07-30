@@ -39,7 +39,9 @@ stdenv.mkDerivation rec {
 
   installCheckPhase = "$bin/bin/jq --help >/dev/null";
   doInstallCheck = true;
-  doCheck = true;
+
+  # tests are broken on darwin
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     description = ''A lightweight and flexible command-line JSON processor'';
