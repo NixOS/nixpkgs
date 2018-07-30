@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gnome3, gobjectIntrospection, meson, ninja, pkgconfig
 , appstream-glib, desktop-file-utils, python3, python3Packages, wrapGAppsHook
-, gspell, gtk3, gtksourceview3, json-glib, jsonrpc-glib, libdazzle, libxml2, pcre
-, sysprof, template-glib, vala, webkitgtk
+, flatpak, gspell, gtk3, gtksourceview3, json-glib, jsonrpc-glib, libdazzle
+, libxml2, ostree, pcre , sysprof, template-glib, vala, webkitgtk
 }:
 let
   version = "3.28.4";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     sha256 = "0ibb74jlyrl5f6rj1b74196zfg2qaf870lxgi76qzpkgwq0iya05";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     python3Packages.wrapPython
     wrapGAppsHook
     gobjectIntrospection
@@ -24,7 +24,10 @@ in stdenv.mkDerivation {
 
     appstream-glib
     desktop-file-utils
+  ];
 
+  buildInputs = [
+    flatpak
     gnome3.devhelp
     gnome3.libgit2-glib
     gnome3.libpeas
@@ -36,7 +39,9 @@ in stdenv.mkDerivation {
     jsonrpc-glib
     libdazzle
     libxml2
+    ostree
     pcre
+    python3
     sysprof
     template-glib
     vala
@@ -44,17 +49,17 @@ in stdenv.mkDerivation {
   ];
 
   prePatch = ''
-    sed -i 's@/usr/bin/env python3@${python3}/bin/python3@g' build-aux/meson/post_install.py
+    patchShebangs build-aux/meson/post_install.py
   '';
 
   patches = [
     ./python-libprefix.patch
+    ./flatpak-deps.patch
   ];
 
   mesonFlags = [
     "-Dpython_libprefix=${python3.libPrefix}"
     "-Dwith_clang=false"
-    "-Dwith_flatpak=false"
   ];
 
   pythonPath = with python3Packages; requiredPythonModules [ pygobject3 ];
@@ -62,7 +67,6 @@ in stdenv.mkDerivation {
   preFixup = ''
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
-      --prefix PATH : "$program_PATH"
       --prefix PYTHONPATH : "$program_PYTHONPATH"
     )
 
@@ -77,7 +81,8 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "An IDE for writing GNOME-based software";
     homepage = https://wiki.gnome.org/Apps/Builder;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   }; 
 }
