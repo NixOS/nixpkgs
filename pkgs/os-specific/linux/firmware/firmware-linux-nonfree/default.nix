@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, runCommand, git, cacert, gnupg }:
+{ stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
   name = "firmware-linux-nonfree-${version}";

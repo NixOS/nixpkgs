@@ -17,7 +17,7 @@ import ./make-test.nix ({ pkgs, ...} : rec {
       networking.firewall.allowedUDPPorts = [ 8472 ];
     };
   in {
-    etcd = { config, pkgs, ... }: {
+    etcd = { ... }: {
       services = {
         etcd = {
           enable = true;
@@ -31,11 +31,11 @@ import ./make-test.nix ({ pkgs, ...} : rec {
       networking.firewall.allowedTCPPorts = [ 2379 ];
     };
 
-    node1 = { config, ... }: {
+    node1 = { ... }: {
       require = [flannelConfig];
     };
 
-    node2 = { config, ... }: {
+    node2 = { ... }: {
       require = [flannelConfig];
     };
   };

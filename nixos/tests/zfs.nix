@@ -17,7 +17,7 @@ let
         maintainers = [ adisbladis ];
       };
 
-      machine = { config, lib, pkgs, ... }:
+      machine = { pkgs, ... }:
         {
           virtualisation.emptyDiskImages = [ 4096 ];
           networking.hostId = "deadbeef";

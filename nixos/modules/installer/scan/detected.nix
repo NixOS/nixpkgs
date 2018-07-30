@@ -1,6 +1,6 @@
 # List all devices which are detected by nixos-generate-config.
 # Common devices are enabled by default.
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 with lib;
 

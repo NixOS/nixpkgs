@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt5, poppler_qt5, zlib, pkgconfig}:
+{ stdenv, fetchFromGitHub, qt5, poppler, zlib, pkgconfig}:
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ qt5.qmake pkgconfig ];
-  buildInputs = [ qt5.qtbase qt5.qtscript qt5.qtsvg poppler_qt5 zlib ];
+  buildInputs = [ qt5.qtbase qt5.qtscript qt5.qtsvg poppler zlib ];
 
   qmakeFlags = [ "NO_APPDATA=True" ];
 

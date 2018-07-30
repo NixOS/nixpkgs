@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cscope, tk, makeWrapper }:
+{ fetchurl, stdenv, tk, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "cbrowser-0.8";

@@ -53,7 +53,7 @@ let makeDeps = dependencies:
     '';
 
     configureCrate =
-      { crateName, crateVersion, crateAuthors, build, libName, crateFeatures, colors, libPath, release, buildDependencies, completeDeps, completeBuildDeps, verbose, dependencies, workspace_member, extraLinkFlags }:
+      { crateName, crateVersion, crateAuthors, build, libName, crateFeatures, colors, libPath, release, buildDependencies, completeDeps, completeBuildDeps, verbose, workspace_member, extraLinkFlags }:
       let version_ = lib.splitString "-" crateVersion;
           versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
           version = lib.splitString "." (lib.head version_);
@@ -181,26 +181,18 @@ let makeDeps = dependencies:
       runHook postConfigure
     '';
 
-    buildCrate = { crateName, crateVersion, crateAuthors,
-                   dependencies, completeDeps, completeBuildDeps,
-                   crateFeatures, libName, build, release, libPath,
+    buildCrate = { crateName,
+                   dependencies,
+                   crateFeatures, libName, release, libPath,
                    crateType, metadata, crateBin, finalBins,
                    extraRustcOpts, verbose, colors }:
 
-      let depsDir = lib.concatStringsSep " " dependencies;
-          completeDepsDir = lib.concatStringsSep " " completeDeps;
-          completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
-          deps = makeDeps dependencies;
-          optLevel = if release then 3 else 0;
+      let deps = makeDeps dependencies;
           rustcOpts =
             lib.lists.foldl' (opts: opt: opts + " " + opt)
               (if release then "-C opt-level=3" else "-C debuginfo=2")
               (["-C codegen-units=1"] ++ extraRustcOpts);
           rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
-          version_ = lib.splitString "-" crateVersion;
-          versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
-          version = lib.splitString "." (lib.head version_);
-          authors = lib.concatStringsSep ":" crateAuthors;
       in ''
       runHook preBuild
       norm=""
@@ -348,7 +340,6 @@ crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, cr
   preConfigure, postConfigure, preBuild, postBuild, preInstall, postInstall }:
 
 let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_);
-    release_ = release;
     dependencies_ = dependencies;
     buildDependencies_ = buildDependencies;
     processedAttrs = [
@@ -431,16 +422,16 @@ stdenv.mkDerivation (rec {
     colors = lib.attrByPath [ "colors" ] "always" crate;
     extraLinkFlags = builtins.concatStringsSep " " (crate.extraLinkFlags or []);
     configurePhase = configureCrate {
-      inherit crateName dependencies buildDependencies completeDeps completeBuildDeps
+      inherit crateName buildDependencies completeDeps completeBuildDeps
               crateFeatures libName build workspace_member release libPath crateVersion
               extraLinkFlags
               crateAuthors verbose colors;
     };
     extraRustcOpts = if crate ? extraRustcOpts then crate.extraRustcOpts else [];
     buildPhase = buildCrate {
-      inherit crateName dependencies completeDeps completeBuildDeps
-              crateFeatures libName build release libPath crateType
-              crateVersion crateAuthors metadata crateBin finalBins verbose colors
+      inherit crateName dependencies
+              crateFeatures libName release libPath crateType
+              metadata crateBin finalBins verbose colors
               extraRustcOpts;
     };
     installPhase = installCrate crateName metadata;

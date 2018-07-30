@@ -1,12 +1,12 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "prometheus_client";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r3510jq6iryd2a8jln2qpvqy112y5502ncbfkn116xl7gj74r6r";
+    sha256 = "69494dc1ac967c0f626c8193e439755c2b95dd4ed22ef31c277601778a50c7ff";
   };
 
   doCheck = false;

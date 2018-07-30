@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, glib, intltool, gnome_vfs, libbonobo, ORBit2}:
+{stdenv, fetchurl, pkgconfig, glib, intltool, gnome_vfs, libbonobo}:
 
 stdenv.mkDerivation {
   name = "gnome-vfs-monikers-2.15.3";

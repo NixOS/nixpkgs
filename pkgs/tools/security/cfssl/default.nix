@@ -1,16 +1,16 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, pkgs }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "cfssl-${version}";
-  version = "20170527";
+  version = "1.3.2";
 
   goPackagePath = "github.com/cloudflare/cfssl";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cfssl";
-    rev = "114dc9691ec7bf3dac49d5953eccf7d91a0e0904";
-    sha256 = "1ijq43mrzrf1gkgj5ssxq7sgy6sd4rl706dzqkq9krqv5f6kwhj1";
+    rev = version;
+    sha256 = "0j2gz2vl2pf7ir7sc7jrwmjnr67hk4qhxw09cjx132jbk337jc9x";
   };
 
   meta = with stdenv.lib; {

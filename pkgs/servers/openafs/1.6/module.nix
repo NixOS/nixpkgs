@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, autoconf, automake, flex, yacc
+{ stdenv, fetchurl, which, autoconf, automake, flex, bison
 , kernel, glibc, perl }:
 
 with (import ./srcs.nix { inherit fetchurl; });
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   name = "openafs-${version}-${kernel.version}";
   inherit version src;
 
-  nativeBuildInputs = [ autoconf automake flex perl yacc which ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ autoconf automake flex perl bison which ] ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
 

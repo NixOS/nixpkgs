@@ -309,6 +309,9 @@ self: super: builtins.intersectAttrs super {
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary super.pcap pkgs.libpcap;
 
+  # https://github.com/snoyberg/yaml/issues/106
+  yaml = disableCabalFlag super.yaml "system-libyaml";
+
   # The cabal files for these libraries do not list the required system dependencies.
   miniball = overrideCabal super.miniball (drv: {
     librarySystemDepends = [ pkgs.miniball ];
@@ -442,7 +445,7 @@ self: super: builtins.intersectAttrs super {
     then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
     else dontCheck super.fsnotify;
 
-  hidapi = addExtraLibrary super.hidapi pkgs.libudev;
+  hidapi = addExtraLibrary super.hidapi pkgs.udev;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
 
@@ -471,6 +474,9 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
+  # https://github.com/plow-technologies/servant-streaming/issues/12
+  servant-streaming-server = dontCheck super.servant-streaming-server;
+
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
   intero = overrideCabal super.intero (drv: {
@@ -494,14 +500,9 @@ self: super: builtins.intersectAttrs super {
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
-  manifolds = super.manifolds.override { spatial-rotations = dontCheck self.spatial-rotations; };
+  spatial-rotations = dontCheck super.spatial-rotations;
 
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
-
-  # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
-  blank-canvas = dontCheck super.blank-canvas;
-  blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
-
 }

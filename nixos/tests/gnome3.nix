@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, pkgs, ... }:
+    { ... }:
 
     { imports = [ ./common/user-account.nix ];
 

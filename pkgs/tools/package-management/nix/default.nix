@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
-, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
+, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
 , busybox-sandbox-shell
 , hostPlatform, buildPlatform
 , storeDir ? "/nix/store"
@@ -26,7 +26,7 @@ let
     nativeBuildInputs =
       [ pkgconfig ]
       ++ lib.optionals (!is20) [ curl perl ]
-      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
+      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns ];
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
@@ -71,7 +71,9 @@ let
     doInstallCheck = true; # not cross
 
     # socket path becomes too long otherwise
-    preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
+    preInstallCheck = lib.optional stdenv.isDarwin ''
+      export TMPDIR=$NIX_BUILD_TOP
+    '';
 
     separateDebugInfo = stdenv.isLinux;
 

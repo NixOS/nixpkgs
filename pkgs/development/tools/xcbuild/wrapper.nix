@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, makeWrapper, writeText, runCommand
+{ lib, buildPackages, makeWrapper, writeText, runCommand
 , CoreServices, ImageIO, CoreGraphics
 , targetPlatform
 , xcodePlatform ? targetPlatform.xcodePlatform or "MacOSX"
@@ -6,8 +6,6 @@
 , sdkVer ? targetPlatform.sdkVer or "10.10" }:
 
 let
-
-  inherit (lib) toLower;
 
   toolchainName = "com.apple.dt.toolchain.XcodeDefault";
   sdkName = "${xcodePlatform}${sdkVer}";

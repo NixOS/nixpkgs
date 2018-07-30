@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, cmake, dos2unix, glib, gst_all_1, makeWrapper, pkgconfig
+{ stdenv, fetchhg, cmake, glib, gst_all_1, makeWrapper, pkgconfig
 , python, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib
 }:
 

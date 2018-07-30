@@ -12,6 +12,8 @@
 , withpcre2 ? true
 , sendEmailSupport
 , darwin
+, withLibsecret ? false
+, pkgconfig, glib, libsecret
 }:
 
 assert sendEmailSupport -> perlSupport;
@@ -64,7 +66,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals perlSupport [ perl ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
     ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ]
+    ++ stdenv.lib.optionals withLibsecret [ pkgconfig glib libsecret ];
 
   # required to support pthread_cancel()
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
@@ -90,12 +93,14 @@ stdenv.mkDerivation {
   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
   ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1";
 
-  # build git-credential-osxkeychain if darwin
-  postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
-    pushd $PWD/contrib/credential/osxkeychain/
-    make
-    popd
-  '';
+
+  postBuild = ''
+    make -C contrib/subtree
+  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+    make -C contrib/credential/osxkeychain
+  '') + (stdenv.lib.optionalString withLibsecret ''
+    make -C contrib/credential/libsecret
+  '');
 
 
   ## Install
@@ -105,11 +110,15 @@ stdenv.mkDerivation {
 
   installFlags = "NO_INSTALL_HARDLINKS=1";
 
-  preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  preInstall = (stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin
-    cp -a $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin
+    ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/bin/
     rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
-  '';
+  '') + (stdenv.lib.optionalString withLibsecret ''
+    mkdir -p $out/bin
+    ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/bin/
+    rm -f $PWD/contrib/credential/libsecret/git-credential-libsecret.o
+  '');
 
   postInstall =
     ''
@@ -118,10 +127,7 @@ stdenv.mkDerivation {
       }
 
       # Install git-subtree.
-      pushd contrib/subtree
-      make
-      make install ${stdenv.lib.optionalString withManual "install-doc"}
-      popd
+      make -C contrib/subtree install ${stdenv.lib.optionalString withManual "install-doc"}
       rm -rf contrib/subtree
 
       # Install contrib stuff.
@@ -238,6 +244,7 @@ EOF
 
   ## InstallCheck
 
+  doCheck = false;
   doInstallCheck = true;
 
   installCheckTarget = "test";

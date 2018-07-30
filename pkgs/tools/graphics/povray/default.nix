@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, boost
-, zlib, libpng, libjpeg, libtiff, x11, SDL
+, zlib, libpng, libjpeg, libtiff, xlibsWrapper, SDL
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
 
-  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff x11 SDL ];
+  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff xlibsWrapper SDL ];
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "COMPILED_BY='nix'" "--with-boost-thread=boost_thread" "--with-x" ];
 
   enableParallelBuilding = true;
-  
+
   preInstall = ''
     mkdir "$TMP/bin"
     for i in chown chgrp; do

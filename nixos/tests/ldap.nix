@@ -37,7 +37,7 @@ let
     memberUid: ${ldapUser}
   '';
   mkClient = useDaemon:
-    { config, pkgs, lib, ... }:
+    { lib, ... }:
     {
       virtualisation.memorySize = 256;
       virtualisation.vlans = [ 1 ];
@@ -61,7 +61,7 @@ in
   nodes = {
 
     server =
-      { config, pkgs, lib, ... }:
+      { pkgs, ... }:
       {
         virtualisation.memorySize = 256;
         virtualisation.vlans = [ 1 ];

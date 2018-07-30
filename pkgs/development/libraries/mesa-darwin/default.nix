@@ -1,7 +1,5 @@
-{ stdenv, stdenvAdapters, fetchurl, pkgconfig, intltool, flex, bison
-, python, libxml2Python, file, expat, makedepend, xorg, llvm, libffi, libvdpau
-, enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
-, enableExtraFeatures ? false # not maintained
+{ stdenv, fetchurl, pkgconfig, intltool, flex, bison
+, python, libxml2Python, expat, makedepend, xorg, llvm, libffi, libvdpau
 , OpenGL, apple_sdk, Xplugin
 }:
 

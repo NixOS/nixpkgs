@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "manul-unstable-2016-09-30";

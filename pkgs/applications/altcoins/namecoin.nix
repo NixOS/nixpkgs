@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkgconfig, qt4, protobuf, libqrencode
+{ stdenv, fetchFromGitHub, openssl, boost, libevent, autoreconfHook, db4, miniupnpc, eject, pkgconfig, qt4, protobuf, libqrencode
 , withGui }:
 
 with stdenv.lib;

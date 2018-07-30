@@ -3,14 +3,14 @@
   src, patches, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby, which,
+  which,
   # darwin support
-  darwin, libiconv, libcxx,
+  darwin, libiconv,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
-  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xorg,
+  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
   zlib,
 
   # optional dependencies

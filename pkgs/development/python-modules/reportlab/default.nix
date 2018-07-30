@@ -1,9 +1,7 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
 , freetype
 , pillow
-, pip
 , glibcLocales
 , python
 , isPyPy
@@ -13,11 +11,11 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.4.0";
+  version = "3.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5beaf35e59dfd5ebd814fdefd76908292e818c982bd7332b5d347dfd2f01c343";
+    sha256 = "08986267eaf25d62c3802512f0a97dc3426d0c82f52c8beb576689582eb85b7f";
   };
 
   checkInputs = [ glibcLocales ];

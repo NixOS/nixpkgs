@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, collectd }:
+{ stdenv, collectd }:
 with stdenv.lib;
 
 collectd.overrideAttrs (oldAttrs: {

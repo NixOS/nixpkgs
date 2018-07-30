@@ -1,9 +1,9 @@
-{ stdenv, lib, pkgconfig, fetchurl, buildPythonApplication
+{ lib, pkgconfig, fetchurl, buildPythonApplication
 , autoreconfHook, wrapGAppsHook, gobjectIntrospection
 , intltool, yelp-tools, itstool, libxmlxx3
 , python, pygobject3, gtk3, gnome3, substituteAll
 , at-spi2-atk, at-spi2-core, pyatspi, dbus, dbus-python, pyxdg
-, xkbcomp, gsettings-desktop-schemas, liblouis
+, xkbcomp, gsettings-desktop-schemas
 , speechd, brltty, setproctitle, gst_all_1, gst-python
 }:
 

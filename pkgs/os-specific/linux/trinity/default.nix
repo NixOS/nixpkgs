@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, linuxHeaders }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "trinity-${version}";

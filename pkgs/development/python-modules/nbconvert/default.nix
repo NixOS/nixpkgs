@@ -13,7 +13,6 @@
 , testpath
 , jupyter_core
 , nbformat
-, nbconvert
 , ipykernel
 , pandocfilters
 , tornado

@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 let
-  mkNixBackground = { name, src, description } @ attrs:
+  mkNixBackground = { name, src, description }:
 
     stdenv.mkDerivation {
       inherit name src;

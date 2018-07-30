@@ -94,7 +94,7 @@ let
     };
   });
 
-  mkSubModule = { name, port, extraOpts, serviceOpts }: {
+  mkSubModule = { name, port, extraOpts, ... }: {
     ${name} = mkOption {
       type = types.submodule {
         options = (mkExporterOpts {

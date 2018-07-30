@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, python, gettext
 , boost, libpng, zlib, glew, lua, doxygen, icu
-, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf, SDL2_gfx
+, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 }:
 
 stdenv.mkDerivation rec {

@@ -6,19 +6,18 @@
 , libuuid
 , zlib
 , curl
-, patchelf
 }:
 
 let
   rpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc libunwind libuuid icu openssl zlib curl ];
 in
   stdenv.mkDerivation rec {
-    version = "2.0.3";
+    version = "2.1.302";
     name = "dotnet-sdk-${version}";
 
     src = fetchurl {
-      url = "https://dotnetcli.azureedge.net/dotnet/Sdk/2.0.3-servicing-007037/dotnet-sdk-2.0.3-servicing-007037-linux-x64.tar.gz";
-      sha256 = "0kqk1f0vfdfyb9mp7d4y83airkxyixmxb7lrx0h0hym2a9661ch8";
+      url = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/dotnet-sdk-${version}-linux-x64.tar.gz";
+      sha256 = "1a8z9q69cd9a33j7fr7907abm5z4qiivw5k379cgsjmmvxwyvjia";
     };
 
     unpackPhase = "tar xvzf $src";

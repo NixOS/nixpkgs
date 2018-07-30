@@ -1,4 +1,4 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem, enableUnfree ? false }:
 with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
 let
@@ -11,7 +11,7 @@ let
     };
     nodes = {
       one =
-        { config, pkgs, ... }: {
+        { pkgs, ... }: {
             # Not giving the machine at least 2060MB results in elasticsearch failing with the following error:
             #
             #   OpenJDK 64-Bit Server VM warning:
@@ -99,9 +99,16 @@ in mapAttrs mkElkTest {
     logstash      = pkgs.logstash5;
     kibana        = pkgs.kibana5;
   };
-  "ELK-6" = {
-    elasticsearch = pkgs.elasticsearch6;
-    logstash      = pkgs.logstash6;
-    kibana        = pkgs.kibana6;
-  };
+  "ELK-6" =
+    if enableUnfree
+    then {
+      elasticsearch = pkgs.elasticsearch6;
+      logstash      = pkgs.logstash6;
+      kibana        = pkgs.kibana6;
+    }
+    else {
+      elasticsearch = pkgs.elasticsearch6-oss;
+      logstash      = pkgs.logstash6-oss;
+      kibana        = pkgs.kibana6-oss;
+    };
 }

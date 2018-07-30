@@ -1,4 +1,4 @@
-{ config, stdenv, substituteAll, fetchFromGitHub, glib, glib_networking, libgtop, pkgs }:
+{ stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-system-monitor-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    glib_networking
+    glib-networking
     libgtop
   ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./paths_and_nonexisting_dirs.patch;
       gtop_path = "${libgtop}/lib/girepository-1.0";
-      glib_net_path = "${glib_networking}/lib/girepository-1.0";
+      glib_net_path = "${glib-networking}/lib/girepository-1.0";
     })
   ];
 

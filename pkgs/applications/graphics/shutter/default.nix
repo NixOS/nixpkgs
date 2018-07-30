@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg
+{ stdenv, fetchurl, perl, perlPackages, makeWrapper, imagemagick, gdk_pixbuf, librsvg
 , hicolor-icon-theme
 }:
 
@@ -7,9 +7,9 @@ let
     [ Gnome2 Gnome2Canvas Gtk2 Glib Pango Gnome2VFS Gnome2Wnck Gtk2ImageView
       Gtk2Unique FileWhich FileCopyRecursive XMLSimple NetDBus XMLTwig
       XMLParser HTTPMessage ProcSimple SortNaturally LocaleGettext
-      ProcProcessTable URI ImageExifTool Gtk2AppIndicator LWPUserAgent JSON
+      ProcProcessTable URI ImageExifTool Gtk2AppIndicator LWP JSON
       PerlMagick WWWMechanize HTTPDate HTMLForm HTMLParser HTMLTagset JSONXS
-      CommonSense HTTPCookies NetOAuth PathClass GooCanvas X11Protocol Cairo
+      commonsense HTTPCookies NetOAuth PathClass GooCanvas X11Protocol Cairo
       EncodeLocale TryTiny TypesSerialiser LWPMediaTypes
     ];
 in

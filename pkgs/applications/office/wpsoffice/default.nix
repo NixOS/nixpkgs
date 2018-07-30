@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, fetchurl
 , libX11, glib, xorg, fontconfig, freetype
 , zlib, libpng12, libICE, libXrender, cups }:
 

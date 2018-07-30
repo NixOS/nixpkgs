@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "lastfmsubmitd";

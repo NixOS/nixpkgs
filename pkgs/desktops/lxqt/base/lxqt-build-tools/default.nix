@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = "lxqt-build-tools";
     rev = version;
     sha256 = "0dcwzrijmn4sgivmy2zwz3xa4y69pwhranyw0m90g0pp55di2psz";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Various packaging tools and scripts for LXQt applications";
-    homepage = https://github.com/lxde/lxqt-build-tools;
+    homepage = https://github.com/lxqt/lxqt-build-tools;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

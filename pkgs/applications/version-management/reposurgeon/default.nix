@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, python27Packages, git
-, docbook_xml_dtd_412, docbook_xml_xslt, asciidoc, xmlto
+, docbook_xml_dtd_412, docbook_xsl, asciidoc, xmlto
 , bazaar ? null, cvs ? null, darcs ? null, fossil ? null
-, mercurial ? null, monotone ? null, rcs ? null, src ? null
+, mercurial ? null, monotone ? null, rcs ? null
 , subversion ? null, cvs_fast_export ? null }:
 
 with stdenv; with lib;
@@ -24,16 +24,16 @@ in mkDerivation rec {
   };
 
   # See https://gitlab.com/esr/reposurgeon/issues/17
-  patches = [ ./fix-preserve-type.patch ];  
+  patches = [ ./fix-preserve-type.patch ];
 
   buildInputs =
-    [ docbook_xml_dtd_412 docbook_xml_xslt asciidoc xmlto makeWrapper ] ++
+    [ docbook_xml_dtd_412 docbook_xsl asciidoc xmlto makeWrapper ] ++
     optional (cython != null) cython
   ;
 
   preBuild = ''
     makeFlagsArray=(
-      XML_CATALOG_FILES="${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml ${docbook_xml_xslt}/xml/xsl/docbook/catalog.xml"
+      XML_CATALOG_FILES="${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml"
       prefix="$out"
       pyinclude="-I${python}/include/python2.7"
       pylib="-L${python}/lib -lpython2.7"
@@ -64,5 +64,5 @@ in mkDerivation rec {
           --prefix PYTHONPATH : "${pythonpath}"
       done
     ''
-  ;    
+  ;
 }

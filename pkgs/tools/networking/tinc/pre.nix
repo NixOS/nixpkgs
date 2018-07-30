@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchpatch, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+{ stdenv, fetchgit, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
 
 stdenv.mkDerivation rec {
   name = "tinc-${version}";

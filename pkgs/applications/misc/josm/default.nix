@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, bash, jre10 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jre10 }:
 
 stdenv.mkDerivation rec {
   name = "josm-${version}";

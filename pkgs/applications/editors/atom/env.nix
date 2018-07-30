@@ -1,5 +1,5 @@
 { stdenv, lib, zlib, glib, alsaLib, dbus, gtk3, atk, pango, freetype, fontconfig
-, libgnome-keyring3, gdk_pixbuf, gvfs, cairo, cups, expat, libgpgerror, nspr
+, libgnome-keyring3, gdk_pixbuf, cairo, cups, expat, libgpgerror, nspr
 , gconf, nss, xorg, libcap, systemd, libnotify, libsecret
 }:
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, bash, help2man, pkgconfig, xlibsWrapper, python3
+{ stdenv, fetchurl, alsaLib, help2man, pkgconfig, xlibsWrapper, python3
 , libxslt, systemd, libusb, libftdi1 }:
 
 stdenv.mkDerivation rec {

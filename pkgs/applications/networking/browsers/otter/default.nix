@@ -1,4 +1,4 @@
-{ stdenv, cmake, openssl, gst_all_1, fetchFromGitHub
+{ stdenv, cmake, fetchFromGitHub
 , qtbase, qtmultimedia, qtwebengine
 , version ? "0.9.96"
 , sourceSha ? "1xzfy3jjx9sskwwbk7l8hnwnjf8af62p4kjkydp0ld0j50apc39p"

@@ -9,7 +9,7 @@ import ./make-test.nix ({ pkgs, ...} : rec {
   foo = pkgs.writeText "foo" "Hello World";
 
   machine =
-    { config, lib, pkgs, ... }:
+    { lib, ... }:
     with lib;
     { swapDevices = mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];

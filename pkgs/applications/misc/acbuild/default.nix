@@ -1,4 +1,4 @@
-{ stdenv, lib, go, fetchFromGitHub }:
+{ stdenv, go, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "acbuild-${version}";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchbzr, cmake, libGLU_combined, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen }:
+{ stdenv, fetchurl, cmake, libGLU_combined, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen }:
 
 stdenv.mkDerivation rec {
   name = "kicad-${version}";

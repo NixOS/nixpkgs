@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test.nix ({ pkgs, ... }:
 
 {
   name = "atd";
@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, lib, ... }:
   };
 
   machine =
-    { config, pkgs, ... }:
+    { ... }:
     { services.atd.enable = true;
       users.users.alice = { isNormalUser = true; };
     };

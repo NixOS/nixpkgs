@@ -5,9 +5,6 @@
 , sbc, bluez5, udev, openssl, fftwFloat
 , speexdsp, systemd, webrtc-audio-processing, gconf ? null
 
-# Database selection
-, tdb ? null, gdbm ? null
-
 , x11Support ? false
 
 , useSystemd ? true

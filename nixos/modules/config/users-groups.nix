@@ -120,8 +120,8 @@ let
 
       shell = mkOption {
         type = types.either types.shellPackage types.path;
-        default = pkgs.nologin;
-        defaultText = "pkgs.nologin";
+        default = pkgs.shadow;
+        defaultText = "pkgs.shadow";
         example = literalExample "pkgs.bashInteractive";
         description = ''
           The path to the user's shell. Can use shell derivations,
@@ -282,7 +282,7 @@ let
 
   };
 
-  groupOpts = { name, config, ... }: {
+  groupOpts = { name, ... }: {
 
     options = {
 

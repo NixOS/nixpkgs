@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchFromGitLab, pkgconfig, gtk3, defaultIconTheme
-, glib, desktop-file-utils, bash, appdata-tools, gtk-doc, autoconf, automake, libtool
+, glib, desktop-file-utils, appdata-tools, gtk-doc, autoconf, automake, libtool
 , wrapGAppsHook, gnome3, itstool, libxml2
 , callPackage, unzip, gobjectIntrospection }:
 

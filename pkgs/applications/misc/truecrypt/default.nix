@@ -40,7 +40,7 @@ library, use the 'NOGUI' parameter:
    $ make NOGUI=1
 */
 
-{ fetchurl, stdenv, pkgconfig, nasm, fuse, wxGTK, devicemapper,
+{ fetchurl, stdenv, pkgconfig, nasm, fuse, wxGTK, lvm2,
   wxGUI ? true
 }:
 
@@ -86,13 +86,13 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fuse devicemapper wxGTK nasm ];
+  buildInputs = [ fuse lvm2 wxGTK nasm ];
 
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = http://www.truecrypt.org/;
     license = "TrueCrypt License Version 2.6";
-    maintainers = with stdenv.lib.maintainers; [ viric ryantm ];
+    maintainers = with stdenv.lib.maintainers; [ ryantm ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

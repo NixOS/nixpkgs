@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, staticBuild ? false }:
+{ stdenv, buildPackages, staticBuild ? false }:
 
 let inherit (buildPackages.buildPackages) gcc; in
 

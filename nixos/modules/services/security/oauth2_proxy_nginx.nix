@@ -1,4 +1,4 @@
-{ pkgs, config, lib, ... }:
+{ config, lib, ... }:
 with lib;
 let
   cfg = config.services.oauth2_proxy.nginx;

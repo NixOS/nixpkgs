@@ -28,7 +28,6 @@
 , # Strip kills static libs of other archs (hence no cross)
   stripped ? hostPlatform == buildPlatform && targetPlatform == hostPlatform
 , gnused ? null
-, darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
 , buildPackages
 }:
@@ -53,9 +52,6 @@ with stdenv.lib;
 with builtins;
 
 let version = "4.9.4";
-
-    # Whether building a cross-compiler for GNU/Hurd.
-    crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
 
     enableParallelBuilding = true;
 
@@ -466,7 +462,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ viric peti ];
+    maintainers = with stdenv.lib.maintainers; [ peti ];
 
     platforms =
       stdenv.lib.platforms.linux ++

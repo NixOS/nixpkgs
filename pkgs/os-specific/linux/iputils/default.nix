@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, libsysfs, gnutls, openssl
+, sysfsutils, openssl
 , libcap, opensp, docbook_sgml_dtd_31
 , libidn, nettle
 , SGMLSpm, libgcrypt }:
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ opensp SGMLSpm docbook_sgml_dtd_31 ];
   buildInputs = [
-    libsysfs openssl libcap libgcrypt nettle
+    sysfsutils openssl libcap libgcrypt nettle
   ] ++ stdenv.lib.optional (!stdenv.hostPlatform.isMusl) libidn;
 
   # ninfod probably could build on cross, but the Makefile doesn't pass --host etc to the sub configure...

@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "outcome";
-  version = "0.1.0a0";
+  version = "0.1.0";
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cqwakzigw0602dxlb7c1882jwr8hn5nrxk1l8iwlmzc9whh48wn";
+    sha256 = "d54e5d469088af53022f64a753b288d6bab0fe42e513eb7146137d560e2e516e";
   };
 
   checkInputs = [ pytest ];

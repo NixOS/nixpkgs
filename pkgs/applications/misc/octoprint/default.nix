@@ -1,10 +1,16 @@
-{ stdenv, fetchFromGitHub, python2, fetchurl }:
+{ stdenv, fetchFromGitHub, python2 }:
 
 let
 
   pythonPackages = python2.pkgs.override {
     overrides = self: super: with self; {
-      backports_ssl_match_hostname = self.backports_ssl_match_hostname_3_4_0_2;
+      backports_ssl_match_hostname = super.backports_ssl_match_hostname.overridePythonAttrs (oldAttrs: rec {
+        version = "3.4.0.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "07410e7fb09aab7bdaf5e618de66c3dac84e2e3d628352814dc4c37de321d6ae";
+        };
+      });
 
       flask = super.flask.overridePythonAttrs (oldAttrs: rec {
         version = "0.12.4";

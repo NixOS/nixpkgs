@@ -1,8 +1,7 @@
-{ stdenv, fetchzip, fetchFromGitHub, newScope, haxe, neko, nodejs, wine, php, python3, jdk, mono, haskellPackages, fetchpatch }:
+{ stdenv, fetchzip, fetchFromGitHub, haxe, neko, jdk, mono }:
 
 let
   self = haxePackages;
-  callPackage = newScope self;
   haxePackages = with self; {
 
     withCommas = stdenv.lib.replaceChars ["."] [","];

@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, boost, cairo, fontsConf, gettext, glibmm, gtk3, gtkmm3
-, libjack2, libsigcxx, libtool, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
+{ stdenv, fetchFromGitHub, boost, cairo, gettext, glibmm, gtk3, gtkmm3
+, libjack2, libsigcxx, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
 , imagemagick, intltool, autoreconfHook, which, defaultIconTheme
 }:
 

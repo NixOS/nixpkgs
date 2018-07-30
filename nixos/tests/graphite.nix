@@ -1,9 +1,9 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test.nix ({ ... } :
 {
   name = "graphite";
   nodes = {
     one =
-      { config, pkgs, ... }: {
+      { ... }: {
         virtualisation.memorySize = 1024;
         time.timeZone = "UTC";
         services.graphite = {

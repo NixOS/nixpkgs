@@ -1,9 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, requests
-, nose
-, mock
 }:
 
 buildPythonPackage rec {

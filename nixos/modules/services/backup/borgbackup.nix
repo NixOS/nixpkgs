@@ -510,7 +510,7 @@ in {
     '';
     default = { };
     type = types.attrsOf (types.submodule (
-      { name, config, ... }: {
+      { ... }: {
         options = {
           
           path = mkOption {

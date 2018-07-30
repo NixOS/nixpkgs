@@ -222,7 +222,7 @@ in rec {
   runInMachineWithX = { require ? [], ... } @ args:
     let
       client =
-        { config, pkgs, ... }:
+        { ... }:
         {
           inherit require;
           virtualisation.memorySize = 1024;

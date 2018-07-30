@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, lib
-, pkgconfig, intltool, autoreconfHook, substituteAll
+{ stdenv, fetchurl, lib
+, pkgconfig, intltool, autoreconfHook
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, valgrind-light, python2
@@ -92,7 +92,7 @@ let self = stdenv.mkDerivation {
   patches = [
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
-    ./missing-include.patch # dev_t needs sys/stat.h, fixes build w/musl
+    ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
   ];
 
   outputs = [ "out" "dev" "drivers" "osmesa" ];

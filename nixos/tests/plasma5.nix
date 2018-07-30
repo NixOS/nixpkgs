@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ...} :
     maintainers = [ ttuegel ];
   };
 
-  machine = { lib, ... }:
+  machine = { ... }:
   let
     sddm_theme = pkgs.stdenv.mkDerivation {
       name = "breeze-ocr-theme";

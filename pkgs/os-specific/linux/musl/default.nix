@@ -1,5 +1,4 @@
 { stdenv, lib, fetchurl
-, buildPackages
 , linuxHeaders ? null
 , useBSDCompatHeaders ? true
 }:

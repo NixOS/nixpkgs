@@ -60,7 +60,7 @@ let
     config.Entrypoint = "/bin/tail";
   };
 
-  extraConfiguration = { config, pkgs, lib, nodes, ... }: {
+  extraConfiguration = { config, pkgs, ... }: {
     environment.systemPackages = [ pkgs.bind.host ];
     # virtualisation.docker.extraOptions = "--dns=${config.services.kubernetes.addons.dns.clusterIp}";
     services.dnsmasq.enable = true;

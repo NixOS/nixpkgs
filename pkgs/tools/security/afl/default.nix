@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, callPackage, makeWrapper
+{ stdenv, fetchurl, callPackage, makeWrapper
 , clang, llvm, which, libcgroup
 }:
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, makeDesktopItem, gnome3, gtk2, atk, cairo, pango, gdk_pixbuf, glib
+{ stdenv, lib, fetchurl, dpkg, makeDesktopItem, gnome2, gtk2, atk, cairo, pango, gdk_pixbuf, glib
 , freetype, fontconfig, dbus, libnotify, libX11, xorg, libXi, libXcursor, libXdamage
 , libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver
 , nss, nspr, alsaLib, cups, expat, udev, xdg_utils, hunspell
@@ -15,7 +15,7 @@ let
     freetype
     gdk_pixbuf
     glib
-    gnome3.gconf
+    gnome2.GConf
     gtk2
     pango
     hunspell
@@ -93,7 +93,7 @@ in
       mkdir -p $out/share/applications
       cp ${desktopItem}/share/applications/* $out/share/applications
     '';
-    
+
     meta = {
       description = "A modern, secure messenger";
       homepage    = https://wire.com/;

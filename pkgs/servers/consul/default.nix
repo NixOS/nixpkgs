@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, consul-ui, fetchFromGitHub }:
+{ stdenv, buildGoPackage, consul-ui, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "consul-${version}";

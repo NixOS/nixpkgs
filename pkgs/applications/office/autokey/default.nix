@@ -1,5 +1,5 @@
 { lib, python3Packages, fetchFromGitHub, wrapGAppsHook, gobjectIntrospection
-, gtksourceview, gnome3, libappindicator-gtk3, libnotify }:
+, gnome3, libappindicator-gtk3, libnotify }:
 
 python3Packages.buildPythonApplication rec {
   name = "autokey-${version}";

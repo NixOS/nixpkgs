@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, fetchurl, cups, zlib }:
+{ stdenv, fetchsvn, cups, zlib }:
 let rev = "315"; in
 stdenv.mkDerivation rec {
   name = "splix-svn-${rev}";

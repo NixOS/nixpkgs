@@ -1,4 +1,4 @@
-{stdenv, lib, buildPythonPackage, fetchPypi, bash, which, writeText}:
+{stdenv, lib, buildPythonPackage, fetchPypi, bash, which}:
 
 buildPythonPackage rec {
   version = "0.7";

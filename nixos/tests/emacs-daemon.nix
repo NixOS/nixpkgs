@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   enableOCR = true;
 
   machine =
-    { config, pkgs, ... }:
+    { ... }:
 
     { imports = [ ./common/x11.nix ];
       services.emacs = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, python, perl, textual-window-manager }:
+{ stdenv, fetchurl, python, perl, textual-window-manager }:
 
 stdenv.mkDerivation rec {
   version = "5.125";

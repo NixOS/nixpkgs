@@ -2,7 +2,7 @@
 , cairo
 , fetchurl
 , base, gui
-, x11
+, xlibsWrapper
 , freetype
 , pkgconfig
 , libXmu
@@ -17,7 +17,7 @@ gsmakeDerivation {
     sha256 = "012gsc7x66gmsw6r5w65a64krcigf7rzqzd5x86d4gv94344knlf";
   };
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cairo base gui freetype x11 libXmu ];
+  buildInputs = [ cairo base gui freetype xlibsWrapper libXmu ];
   meta = {
     description = "A generic backend for GNUstep";
   };

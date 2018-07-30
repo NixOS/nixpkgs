@@ -6,7 +6,6 @@
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsaLib ? null
 , libopus ? null
-, darwin
 
 # Extra options
 , prefix ? ""

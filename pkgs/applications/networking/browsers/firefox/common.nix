@@ -8,7 +8,7 @@
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, icu, libpng, jemalloc, glib
+, icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , debugBuild ? false
 

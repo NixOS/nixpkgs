@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages, makeWrapper, chromaprint }:
+{ stdenv, fetchFromGitHub, python2Packages, chromaprint }:
 
 python2Packages.buildPythonApplication rec {
   pname = "puddletag";

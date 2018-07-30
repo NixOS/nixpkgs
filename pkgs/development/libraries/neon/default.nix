@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, pkgconfig
+{ stdenv, fetchurl, libxml2, pkgconfig, perl
 , compressionSupport ? true, zlib ? null
 , sslSupport ? true, openssl ? null
 , static ? false
@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {inherit compressionSupport sslSupport;};
+
+  checkInputs = [ perl ];
+  doCheck = false; # fails, needs the net
 
   meta = {
     description = "An HTTP and WebDAV client library";

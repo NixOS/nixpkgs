@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zdoom, makeWrapper
+{ stdenv, fetchFromGitHub, cmake, makeWrapper
 , openal, fluidsynth, soundfont-fluid, libGL, SDL2
 , bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 

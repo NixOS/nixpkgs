@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "1r187fx1vivzq1gcwwawax36mnlmfig5j1ba4s4wfdi3q2wcq7mw";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GUI configuration tool for compton X composite manager";
-    homepage = https://github.com/lxde/compton-conf;
+    homepage = https://github.com/lxqt/compton-conf;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

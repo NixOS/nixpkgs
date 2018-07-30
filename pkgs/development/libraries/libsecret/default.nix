@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl, gtk-doc
+{ stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl
 , libgcrypt, gobjectIntrospection, vala_0_38, gnome3, libintl }:
 let
   pname = "libsecret";

@@ -1,4 +1,4 @@
-{ pkgs, ctags, writeScriptBin }:
+{ pkgs, ctags }:
 
 with pkgs.stdenv.lib;
 

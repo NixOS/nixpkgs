@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, fetchurl, xcbuild, ncurses, libutil-new }:
+{ stdenv, appleDerivation, xcbuild, ncurses, libutil-new }:
 
 appleDerivation {
   # We can't just run the root build, because https://github.com/facebook/xcbuild/issues/264

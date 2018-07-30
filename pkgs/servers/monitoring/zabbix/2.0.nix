@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext
+{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib
 , enableJabber ? false, minmay ? null }:
 
 assert enableJabber -> minmay != null;

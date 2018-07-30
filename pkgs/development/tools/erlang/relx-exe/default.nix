@@ -1,4 +1,4 @@
-{ stdenv, beamPackages, buildRebar3, buildHex, fetchHex
+{ stdenv, buildHex
 
 , getopt_0_8_2, erlware_commons_1_0_0, cf_0_2_2 }:
 

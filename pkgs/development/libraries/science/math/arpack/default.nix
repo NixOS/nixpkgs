@@ -1,4 +1,4 @@
-{ stdenv, lib, copyPathsToStore, fetchurl, autoconf, automake, gettext, libtool
+{ stdenv, fetchurl, autoconf, automake, gettext, libtool
 , gfortran, openblas }:
 
 with stdenv.lib;

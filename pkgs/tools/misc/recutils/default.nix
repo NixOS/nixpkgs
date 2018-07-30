@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gettext, emacs, curl, check, bc }:
+{ fetchurl, stdenv, emacs, curl, check, bc }:
 
 stdenv.mkDerivation rec {
   name = "recutils-1.7";

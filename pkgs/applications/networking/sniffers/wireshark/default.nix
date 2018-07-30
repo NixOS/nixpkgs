@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
-, gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
+{ stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
+, gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python, libcap, glib
 , libssh, zlib, cmake, extra-cmake-modules, fetchpatch, makeWrapper
 , withGtk ? false, gtk3 ? null, librsvg ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
 , withQt ? false, qt5 ? null
@@ -12,7 +12,7 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.6.1";
+  version = "2.6.2";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "126dvd6myjbxjr69dy9vzzdda2lmjy1wwwc6gcs5djb46jy5nvmb";
+    sha256 = "153h6prxamv5a62f3pfadkry0y57696xrgxfy2gfy5xswdg8kcj9";
   };
 
   cmakeFlags = [

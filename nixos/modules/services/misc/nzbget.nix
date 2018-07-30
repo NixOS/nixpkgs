@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.nzbget;
-  nzbget = pkgs.nzbget; in {
+in {
   options = {
     services.nzbget = {
       enable = mkEnableOption "NZBGet";

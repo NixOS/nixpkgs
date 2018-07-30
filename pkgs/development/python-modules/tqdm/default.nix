@@ -5,8 +5,6 @@
 , coverage
 , glibcLocales
 , flake8
-, matplotlib
-, pandas
 }:
 
 buildPythonPackage rec {

@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, stdenv, path, cacert, git, rust, cargo-vendor }:
+{ stdenv, cacert, git, rust, cargo-vendor }:
 let
   fetchcargo = import ./fetchcargo.nix {
     inherit stdenv cacert git rust cargo-vendor;
@@ -20,8 +20,6 @@ in
 assert cargoVendorDir == null -> cargoSha256 != "unset";
 
 let
-  lib = stdenv.lib;
-
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
         inherit name src srcs sourceRoot cargoUpdateHook;

@@ -1,4 +1,4 @@
-args @ { fetchurl, ... }:
+{ fetchurl, ... }:
 rec {
   baseName = ''trivial-utf-8'';
   version = ''20111001-darcs'';

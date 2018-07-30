@@ -4,7 +4,7 @@ import ./make-test.nix ({ pkgs, ... } : {
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ grahamc ];
   };
-  machine = { config, pkgs, ... }: {
+  machine = { pkgs, ... }: {
     services.hound = {
       enable = true;
       config = ''

@@ -1,5 +1,5 @@
 
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata }:
+{ stdenv, buildGoPackage, fetchFromGitHub, go-bindata }:
 
 buildGoPackage rec {
   name = "kops-${version}";

@@ -6,7 +6,7 @@ stdenv, fetchFromGitHub, cmake, makeWrapper
 
 stdenv.mkDerivation rec {
   name = "paraview-${version}";
-  version = "5.4.1";
+  version = "5.5.2";
 
   # fetching from GitHub instead of taking an "official" source
   # tarball because of missing submodules there
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "Kitware";
     repo = "ParaView";
     rev = "v${version}";
-    sha256 = "1ma02sdkz2apxnwcsyvxb26ibwnjh60p71gicw6nlp042acs6v74";
+    sha256 = "1jivph7lppnflmjsiirhgv0mnh8mxx41i1vzkk78ynn00rzacx3j";
     fetchSubmodules = true;
   };
 
@@ -22,13 +22,14 @@ stdenv.mkDerivation rec {
     "-DPARAVIEW_ENABLE_PYTHON=ON"
     "-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON"
     "-DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF"
+    "-DOpenGL_GL_PREFERENCE=GLVND"
   ];
 
   # During build, binaries are called that rely on freshly built
   # libraries.  These reside in build/lib, and are not found by
   # default.
   preBuild = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
   '';
 
   enableParallelBuilding = true;
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.paraview.org/;
     description = "3D Data analysis and visualization application";
     license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [viric guibert];
+    maintainers = with stdenv.lib.maintainers; [guibert];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

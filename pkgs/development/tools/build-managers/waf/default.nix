@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python2 }:
+{ stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   name = "waf-${version}";

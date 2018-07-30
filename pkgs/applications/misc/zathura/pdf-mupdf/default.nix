@@ -1,6 +1,5 @@
 { stdenv, lib, meson, ninja, fetchurl, pkgconfig, zathura_core, cairo,
-gtk-mac-integration, girara, mupdf, openssl , libjpeg, jbig2dec,
-openjpeg, fetchpatch }:
+gtk-mac-integration, girara, mupdf }:
 
 stdenv.mkDerivation rec {
   version = "0.3.3";

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
-, w3m, which, gnugrep, gnused, coreutils, xset
+, w3m, gnugrep, gnused, coreutils, xset
 , mimiSupport ? false, gawk ? null }:
 
 assert mimiSupport -> gawk != null;

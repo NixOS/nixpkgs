@@ -247,7 +247,7 @@ let
         makeWrapper "$ICAInstDir/wfica" "$out/bin/wfica" \
           --add-flags "-icaroot $ICAInstDir" \
           --set ICAROOT "$ICAInstDir" \
-          --set GTK_PATH "${gtk2.out}/lib/gtk-2.0:${gnome3.gnome-themes-standard}/lib/gtk-2.0" \
+          --set GTK_PATH "${gtk2.out}/lib/gtk-2.0:${gnome3.gnome-themes-extra}/lib/gtk-2.0" \
           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
           --set LD_LIBRARY_PATH "$libPath" \

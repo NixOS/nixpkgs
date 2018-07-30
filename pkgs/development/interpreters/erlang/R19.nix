@@ -1,4 +1,4 @@
-{ mkDerivation, fetchurl, fetchpatch }:
+{ mkDerivation, fetchpatch }:
 
 mkDerivation rec {
   version = "19.3.6.6";

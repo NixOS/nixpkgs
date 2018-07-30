@@ -32,9 +32,12 @@ stdenv.mkDerivation rec {
     "--enable-pc-files"
     "--enable-symlinks"
   ] ++ lib.optional unicode "--enable-widec"
-    ++ lib.optional enableStatic "--enable-static"
     ++ lib.optional (!withCxx) "--without-cxx"
-    ++ lib.optional (abiVersion == "5") "--with-abi-version=5";
+    ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
+    ++ lib.optionals hostPlatform.isWindows [
+      "--enable-sp-funcs"
+      "--enable-term-driver"
+    ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
@@ -109,6 +112,11 @@ stdenv.mkDerivation rec {
         for statictype in a dll.a la; do
           if [ -e "$out/lib/lib''${library}$suffix.$statictype" ]; then
             ln -svf lib''${library}$suffix.$statictype $out/lib/lib$library$newsuffix.$statictype
+            if [ "ncurses" = "$library" ]
+            then
+              # make libtinfo symlinks
+              ln -svf lib''${library}$suffix.$statictype $out/lib/libtinfo$newsuffix.$statictype
+            fi
           fi
         done
         ln -svf ''${library}$suffix.pc $dev/lib/pkgconfig/$library$newsuffix.pc
@@ -127,7 +135,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/infotocap" "$out"
   '';
 
-  preFixup = lib.optionalString (!hostPlatform.isCygwin) ''
+  preFixup = lib.optionalString (!hostPlatform.isCygwin && !enableStatic) ''
     rm "$out"/lib/*.a
   '';
 

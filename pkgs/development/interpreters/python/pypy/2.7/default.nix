@@ -4,7 +4,7 @@
 , makeWrapper, callPackage, self, gdbm, db
 , python-setup-hook
 # For the Python package set
-, pkgs, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
 }:
 
 assert zlibSupport -> zlib != null;

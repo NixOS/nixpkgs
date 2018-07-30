@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, openssl, zlib, python2Packages, readline, cmake, python }:
+, openssl, zlib, readline, cmake, python }:
 
 let
 in stdenv.mkDerivation rec {

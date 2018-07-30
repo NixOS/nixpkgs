@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
-, buildPlatform, hostPlatform
+, hostPlatform
 }:
 
 let

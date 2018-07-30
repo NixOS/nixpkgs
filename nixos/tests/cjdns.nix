@@ -2,10 +2,9 @@ let
   carolKey = "2d2a338b46f8e4a8c462f0c385b481292a05f678e19a2b82755258cf0f0af7e2";
   carolPubKey = "n932l3pjvmhtxxcdrqq2qpw5zc58f01vvjx01h4dtd1bb0nnu2h0.k";
   carolPassword = "678287829ce4c67bc8b227e56d94422ee1b85fa11618157b2f591de6c6322b52";
-  carolIp4 = "192.168.0.9";
 
   basicConfig =
-    { config, pkgs, ... }:
+    { ... }:
     { services.cjdns.enable = true;
 
       # Turning off DHCP isn't very realistic but makes
@@ -30,7 +29,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   nodes = rec
     { # Alice finds peers over over ETHInterface.
       alice =
-        { config, ... }:
+        { ... }:
         { imports = [ basicConfig ];
 
           services.cjdns.ETHInterface.bind = "eth1";
@@ -42,11 +41,9 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       # Bob explicitly connects to Carol over UDPInterface.
       bob =
-        { config, lib, nodes, ... }:
+        { ... }:
 
-        let carolIp4 = lib.mkForce nodes.carol.config.networking.interfaces.eth1; in
-
-          { imports = [ basicConfig ];
+        { imports = [ basicConfig ];
 
           networking.interfaces.eth1.ipv4.addresses = [
             { address = "192.168.0.2"; prefixLength = 24; }
@@ -66,11 +63,8 @@ import ./make-test.nix ({ pkgs, ...} : {
       # Carol listens on ETHInterface and UDPInterface,
       # but knows neither Alice or Bob.
       carol =
-        { config, lib, nodes, ... }:
-          let
-            carolIp4 = (lib.mkForce nodes.carol.config.networking.interfaces.eth1);
-          in
-          { imports = [ basicConfig ];
+        { ... }:
+        { imports = [ basicConfig ];
 
           environment.etc."cjdns.keys".text = ''
             CJDNS_PRIVATE_KEY=${carolKey}

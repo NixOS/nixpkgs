@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, gnome3, gtk2, pango, atk, cairo, gdk_pixbuf, glib,
+{ stdenv, lib, fetchurl, gnome2, gtk2, pango, atk, cairo, gdk_pixbuf, glib,
 freetype, fontconfig, dbus, libX11, xorg, libXi, libXcursor, libXdamage,
 libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst,
 libXScrnSaver, nss, nspr, alsaLib, cups, expat, udev }:
@@ -14,7 +14,7 @@ let
     freetype
     gdk_pixbuf
     glib
-    gnome3.gconf
+    gnome2.GConf
     gtk2
     pango
     libX11

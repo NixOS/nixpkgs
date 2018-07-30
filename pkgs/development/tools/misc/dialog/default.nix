@@ -1,10 +1,9 @@
-{ stdenv, fetchurl, ncurses, gettext
+{ stdenv, fetchurl, ncurses
 , withLibrary ? false, libtool
 , unicodeSupport ? true
 }:
 
-let optional = stdenv.lib.optional;
-    optStr = stdenv.lib.optionalString;
+let optStr = stdenv.lib.optionalString;
     buildShared = !stdenv.isDarwin;
 in
 

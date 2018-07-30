@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, readline }:
+{ stdenv, fetchurl, readline }:
 
 let
   dsoPatch = fetchurl {

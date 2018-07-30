@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, fetchNuGet
+{ stdenv, fetchurl
 , autoconf, automake, pkgconfig, shared-mime-info, intltool
 , glib, mono, gtk-sharp-2_0, gnome2, gnome-sharp, unzip
 , dotnetPackages

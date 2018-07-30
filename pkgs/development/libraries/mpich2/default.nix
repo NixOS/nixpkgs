@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, perl, gfortran
+{ stdenv, fetchurl, perl, gfortran
 , slurm, openssh, hwloc
 } :
 

@@ -1,8 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, substituteAll
-, hostPlatform
-, libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
+{ stdenv, lib, fetchurl, fetchpatch, substituteAll
+, libXrender, libXinerama, libXcursor, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
-, libmng, which, libGLSupported, libGL, libGLU, openssl, dbus, cups, pkgconfig
+, libmng, which, libGLSupported, libGLU, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
@@ -16,8 +15,6 @@
 # darwin support
 , cf-private, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
 }:
-
-with stdenv.lib;
 
 let
   v_maj = "4.8";
@@ -51,12 +48,12 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     # remove impure reference to /usr/lib/libstdc++.6.dylib
     # there might be more references, but this is the only one I could find
     substituteInPlace tools/macdeployqt/tests/tst_deployment_mac.cpp \
       --replace /usr/lib/libstdc++.6.dylib "${stdenv.cc}/lib/libstdc++.6.dylib"
-  '' + stdenv.lib.optionalString stdenv.cc.isClang ''
+  '' + lib.optionalString stdenv.cc.isClang ''
     substituteInPlace src/3rdparty/webkit/Source/WebCore/html/HTMLImageElement.cpp \
       --replace 'optionalHeight > 0' 'optionalHeight != NULL'
 
@@ -65,14 +62,15 @@ stdenv.mkDerivation rec {
   '';
 
   patches =
-    [ ./glib-2.32.patch
+    lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+      ./glib-2.32.patch
       ./libressl.patch
       ./parallel-configure.patch
       ./clang-5-darwin.patch
       ./qt-4.8.7-unixmake-darwin.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
-        cups = if cups != null then stdenv.lib.getLib cups else null;
+        cups = if cups != null then lib.getLib cups else null;
         icu = icu.out;
         libXfixes = libXfixes.out;
         glibc = stdenv.cc.libc.out;
@@ -89,25 +87,25 @@ stdenv.mkDerivation rec {
         sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
       })
     ]
-    ++ stdenv.lib.optional gtkStyle (substituteAll ({
+    ++ lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
         # substituteAll ignores env vars starting with capital letter
         gtk = gtk2.out;
-      } // stdenv.lib.optionalAttrs gnomeStyle {
+      } // lib.optionalAttrs gnomeStyle {
         gconf = GConf.out;
         libgnomeui = libgnomeui.out;
         gnome_vfs = gnome_vfs.out;
       }))
-    ++ stdenv.lib.optional flashplayerFix (substituteAll {
+    ++ lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
         gtk = gtk2.out;
         gdk_pixbuf = gdk_pixbuf.out;
       })
-    ++ stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
+    ++ lib.optional stdenv.isAarch64 (fetchpatch {
         url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
         sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";
       })
-    ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
         ./qt-musl.patch
         ./qt-musl-iconv-no-bom.patch
         ./patch-qthread-stacksize.diff
@@ -127,15 +125,27 @@ stdenv.mkDerivation rec {
       --jobs=$NIX_BUILD_CORES
     "
     unset LD # Makefile uses gcc for linking; setting LD interferes
-  '' + optionalString stdenv.cc.isClang ''
+  '' + lib.optionalString stdenv.cc.isClang ''
     sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
+  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
+    sed -i -e 's/ g++/ ${stdenv.cc.targetPrefix}g++/' \
+      -e 's/ gcc/ ${stdenv.cc.targetPrefix}gcc/' \
+      -e 's/ ar/ ${stdenv.cc.targetPrefix}ar/' \
+      -e 's/ strip/ ${stdenv.cc.targetPrefix}strip/' \
+      -e 's/ windres/ ${stdenv.cc.targetPrefix}windres/' \
+      mkspecs/win32-g++/qmake.conf
   '';
 
   prefixKey = "-prefix ";
 
-  configureFlags =
-    ''
+  ${if stdenv.hostPlatform == stdenv.buildPlatform then null else "configurePlatforms"} = [];
+  configureFlags = let
+    platformFlag =
+      if stdenv.hostPlatform != stdenv.buildPlatform
+      then "-xplatform"
+      else "-platform";
+    in (if stdenv.hostPlatform == stdenv.buildPlatform then ''
       -v -no-separate-debug-info -release -fast -confirm-license -opensource
 
       -${if stdenv.isFreeBSD then "no-" else ""}opengl -xrender -xrandr -xinerama -xcursor -xinput -xfixes -fontconfig
@@ -152,23 +162,30 @@ stdenv.mkDerivation rec {
 
       -no-phonon ${if buildWebkit then "" else "-no"}-webkit ${if buildMultimedia then "" else "-no"}-multimedia -audio-backend
       ${if developerBuild then "-developer-build" else ""}
-    '' + optionalString stdenv.isDarwin "-platform unsupported/macx-clang-libc++";
+    '' else ''
+      -static -release -confirm-license -opensource
+      -no-opengl -no-phonon
+      -no-svg
+      -make qmake -make libs -nomake tools
+      -nomake demos -nomake examples -nomake docs
+    '') + lib.optionalString stdenv.hostPlatform.isDarwin "${platformFlag} unsupported/macx-clang-libc++"
+        + lib.optionalString stdenv.hostPlatform.isMinGW  "${platformFlag} win32-g++-4.6";
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
       libSM zlib libpng openssl dbus freetype fontconfig glib ]
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
-    ++ optional libGLSupported libGLU
-    ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
-    ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst-plugins-base ];
+    ++ lib.optional libGLSupported libGLU
+    ++ lib.optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
+    ++ lib.optionals (buildWebkit || buildMultimedia) [ gstreamer gst-plugins-base ];
 
   # The following libraries are only used in plugins
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
-    ++ optionals (mysql != null) [ mysql.connector-c ]
-    ++ optionals gtkStyle [ gtk2 gdk_pixbuf ]
-    ++ optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
+    ++ lib.optionals (mysql != null) [ mysql.connector-c ]
+    ++ lib.optionals gtkStyle [ gtk2 gdk_pixbuf ]
+    ++ lib.optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
@@ -177,14 +194,14 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE =
     # with gcc7 the warnings blow the log over Hydra's limit
     [ "-Wno-expansion-to-defined" "-Wno-unused-local-typedefs" ]
-    ++ optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
-    ++ optionals (stdenv.isFreeBSD || stdenv.isDarwin)
+    ++ lib.optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
+    ++ lib.optionals (stdenv.isFreeBSD || stdenv.isDarwin)
       [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
-    ++ optional stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+    ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1";
 
-  NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
+  NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
-  preBuild = optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
     # resolve "extra qualification on member" error
     sed -i 's/struct ::TabletProximityRec;/struct TabletProximityRec;/' \
       src/gui/kernel/qt_cocoa_helpers_mac_p.h
@@ -196,44 +213,19 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -rf $out/tests
+  ''
+  # I don't know why it does not install qmake
+  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    cp bin/qmake* $out/bin
   '';
 
-  crossAttrs = {
-    # I've not tried any case other than i686-pc-mingw32.
-    # -nomake tools:   it fails linking some asian language symbols
-    # -no-svg: it fails to build on mingw64
-    configureFlags = ''
-      -static -release -confirm-license -opensource
-      -no-opengl -no-phonon
-      -no-svg
-      -make qmake -make libs -nomake tools
-      -nomake demos -nomake examples -nomake docs
-    '' + optionalString hostPlatform.isMinGW " -xplatform win32-g++-4.6";
-    patches = [];
-    preConfigure = ''
-      sed -i -e 's/ g++/ ${stdenv.cc.targetPrefix}g++/' \
-        -e 's/ gcc/ ${stdenv.cc.targetPrefix}gcc/' \
-        -e 's/ ar/ ${stdenv.cc.targetPrefix}ar/' \
-        -e 's/ strip/ ${stdenv.cc.targetPrefix}strip/' \
-        -e 's/ windres/ ${stdenv.cc.targetPrefix}windres/' \
-        mkspecs/win32-g++/qmake.conf
-    '';
-
-    # I don't know why it does not install qmake
-    postInstall = ''
-      cp bin/qmake* $out/bin
-    '';
-    configurePlatforms = [];
-    dontStrip = true;
-  } // optionalAttrs hostPlatform.isMinGW {
-    propagatedBuildInputs = [ ];
-  };
+  dontStrip = if stdenv.hostPlatform == stdenv.buildPlatform then null else true;
 
   meta = {
     homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
-    license     = licenses.lgpl21Plus; # or gpl3
-    maintainers = with maintainers; [ orivej lovek323 phreedom sander ];
-    platforms   = platforms.unix;
+    license     = lib.licenses.lgpl21Plus; # or gpl3
+    maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];
+    platforms   = lib.platforms.unix;
   };
 }

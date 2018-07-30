@@ -47,12 +47,6 @@
 , debug ? false
 }:
 
-let
-  arch =
-    if stdenv.system == "x86_64-linux" then
-      "x86_64"
-    else throw "Flash Player is not supported on this platform";
-in
 stdenv.mkDerivation rec {
   name = "flashplayer-standalone-${version}";
   version = "30.0.0.134";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, htslib, zlib, autoreconfHook, pkgconfig, perl }:
+{ stdenv, fetchFromGitHub, zlib, autoreconfHook, pkgconfig, perl }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";

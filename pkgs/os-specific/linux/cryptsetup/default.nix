@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, devicemapper, json_c, openssl, libuuid, pkgconfig, popt
+{ stdenv, fetchurl, fetchpatch, lvm2, json_c
+, openssl, libuuid, pkgconfig, popt
 , enablePython ? false, python2 ? null }:
 
 assert enablePython -> python2 != null;
@@ -28,14 +29,14 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional enablePython "--enable-python";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ devicemapper json_c openssl libuuid popt ]
+  buildInputs = [ lvm2 json_c openssl libuuid popt ]
     ++ stdenv.lib.optional enablePython python2;
 
   meta = {
     homepage = https://gitlab.com/cryptsetup/cryptsetup/;
     description = "LUKS for dm-crypt";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ viric chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

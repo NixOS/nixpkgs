@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, curl, dmd, libevent, rsync }:
+{ stdenv, fetchFromGitHub, curl, dmd, libevent, rsync }:
 
 let
 

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, db, boost, gmp, mpfr, miniupnpc, qt4, qmake4Hook, unzip }:
+{ fetchFromGitHub, stdenv, db, boost, gmp, mpfr, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   version = "0.8.6-2";

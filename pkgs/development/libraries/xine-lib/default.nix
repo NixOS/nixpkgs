@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, xorg, alsaLib, libGLU_combined, aalib
-, libvorbis, libtheora, speex, zlib, libdvdcss, perl, ffmpeg
+, libvorbis, libtheora, speex, zlib, perl, ffmpeg
 , flac, libcaca, libpulseaudio, libmng, libcdio, libv4l, vcdimager
 , libmpcdec
 }:

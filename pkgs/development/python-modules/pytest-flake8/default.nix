@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, fetchPypi, fetchpatch, pytest, flake8}:
+{lib, buildPythonPackage, fetchPypi, pytest, flake8}:
 
 buildPythonPackage rec {
   pname = "pytest-flake8";
@@ -16,8 +16,11 @@ buildPythonPackage rec {
   };
 
   checkPhase = ''
-    pytest .
+    pytest . -k "not test_mtime_caching"
   '';
+
+  # https://github.com/tholo/pytest-flake8/issues/49
+  doCheck = false;
 
   meta = {
     description = "py.test plugin for efficiently checking PEP8 compliance";

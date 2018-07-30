@@ -1,8 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, dbus-glib, libxml2Python, libxslt, libxklavier, cairo, popt, which, python
+{ stdenv, fetchurl, pkgconfig, dbus-glib, libxml2Python, libxslt, libxklavier, popt, which, python
 , shared-mime-info, desktop-file-utils, libunique, libtool, bzip2
-, glib, gtk, pango, atk, gnome-doc-utils, intltool, GConf, libglade, libgnome, libgnomeui, libgnomekbd
+, gtk, gnome-doc-utils, intltool, GConf, libglade, libgnomeui, libgnomekbd
 , librsvg, gnome_menus, gnome-desktop, gnome_panel, metacity, gnome-settings-daemon
-, libbonobo, libbonoboui, libgnomecanvas, libart_lgpl, gnome_vfs, ORBit2
 , libSM, docbook_xml_dtd_412 }:
 
 stdenv.mkDerivation {

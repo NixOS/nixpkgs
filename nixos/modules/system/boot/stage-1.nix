@@ -11,7 +11,6 @@ let
 
   udev = config.systemd.package;
 
-  kernelPackages = config.boot.kernelPackages;
   modulesTree = config.system.modulesTree;
   firmware = config.hardware.firmware;
 

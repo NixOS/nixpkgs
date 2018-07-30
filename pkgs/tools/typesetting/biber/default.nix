@@ -2,7 +2,7 @@
 , BusinessISMN, BusinessISSN, ConfigAutoConf, DataCompare, DataDump, DateSimple
 , DateTime, DateTimeFormatBuilder, DateTimeCalendarJulian
 , EncodeEUCJPASCII, EncodeHanExtra, EncodeJIS2K, ExtUtilsLibBuilder
-, FileSlurp, FileWhich, IPCRun3, Log4Perl, LWPProtocolHttps, ListAllUtils, ListMoreUtils
+, FileSlurp, FileWhich, IPCRun3, LogLog4perl, LWPProtocolHttps, ListAllUtils, ListMoreUtils
 , MozillaCA, ReadonlyXS, RegexpCommon, TextBibTeX, UnicodeCollate
 , UnicodeLineBreak, URI, XMLLibXMLSimple, XMLLibXSLT, XMLWriter, ClassAccessor
 , TextCSV, TextCSV_XS, TextRoman, DataUniqid, LinguaTranslit, UnicodeNormalize, SortKey
@@ -22,7 +22,7 @@ buildPerlModule rec {
     autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
     DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
     DateTime DateTimeFormatBuilder DateTimeCalendarJulian
-    ExtUtilsLibBuilder FileSlurp FileWhich IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
+    ExtUtilsLibBuilder FileSlurp FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
     ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
     UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
     ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey

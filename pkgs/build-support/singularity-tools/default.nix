@@ -8,8 +8,7 @@
 , vmTools
 , gawk
 , utillinux
-, e2fsprogs
-, squashfsTools }:
+, e2fsprogs }:
 
 rec {
   shellScript = name: text:

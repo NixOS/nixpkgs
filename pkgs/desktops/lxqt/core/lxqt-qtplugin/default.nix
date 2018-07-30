@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "19y5dvbj7gwyh8glc6vi6hb5snvkd3jwvss6j0sn2sy2gp9g9ryb";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LXQt Qt platform integration plugin";
-    homepage = https://github.com/lxde/lxqt-qtplugin;
+    homepage = https://github.com/lxqt/lxqt-qtplugin;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

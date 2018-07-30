@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, apacheHttpd, nautilus
-, pkgconfig, gtk3, glib, libxml2, gnused, systemd
-, bash, wrapGAppsHook, itstool, libnotify, libtool, mod_dnssd
+, pkgconfig, gtk3, glib, libxml2, systemd
+, wrapGAppsHook, itstool, libnotify, libtool, mod_dnssd
 , gnome3, librsvg, gdk_pixbuf, file, libcanberra-gtk3 }:
 
 stdenv.mkDerivation rec {

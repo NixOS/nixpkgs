@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchFromGitHub, fetchurl, ocaml, findlib, erm_xml, nocrypto }:
+{ stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib, erm_xml, nocrypto }:
 
 buildOcaml rec {
   version = "0.3";

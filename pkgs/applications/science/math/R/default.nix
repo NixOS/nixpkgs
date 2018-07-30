@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, cf-private, libobjc, libcxx, tzdata, fetchpatch
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 }:

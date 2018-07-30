@@ -22,9 +22,10 @@ stdenv.mkDerivation rec {
     unset CPP
   '';
 
-  crossAttrs = {
-    makeFlags = "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
-  };
+  # Use `lib.optionalString` next mass rebuild.
+  makeFlags = if stdenv.buildPlatform == stdenv.hostPlatform
+              then null
+              else "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
 
   meta = with stdenv.lib; {
     homepage = https://fedorahosted.org/newt/;

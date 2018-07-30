@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, dmd, gnome3, dbus
-, gsettings-desktop-schemas, libsecret, desktop-file-utils, gettext, gtkd
+, gsettings-desktop-schemas, desktop-file-utils, gettext, gtkd
 , perlPackages, wrapGAppsHook, xdg_utils }:
 
 stdenv.mkDerivation rec {

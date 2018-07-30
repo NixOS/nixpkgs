@@ -8,14 +8,12 @@
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , zlib
 , compiler-rt_src
 , debugVersion ? false
 , enableSharedLibraries ? (buildPlatform == hostPlatform)
-, darwin
 , buildPackages
 , buildPlatform
 , hostPlatform
@@ -171,7 +169,7 @@ in stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

@@ -1,5 +1,4 @@
 {
-  callPackage,
   coreutils,
   docker,
   e2fsprogs,
@@ -37,10 +36,11 @@ rec {
   in
     { imageName
       # To find the digest of an image, you can use skopeo:
-      # skopeo inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'
-      # sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
+      # see doc/functions.xml
     , imageDigest
     , sha256
+    , os ? "linux"
+    , arch ? "x86_64"
       # This used to set a tag to the pulled image
     , finalImageTag ? "latest"
     , name ? fixName "docker-image-${imageName}-${finalImageTag}.tar"
@@ -60,7 +60,7 @@ rec {
       sourceURL = "docker://${imageName}@${imageDigest}";
       destNameTag = "${imageName}:${finalImageTag}";
     } ''
-      skopeo copy "$sourceURL" "docker-archive://$out:$destNameTag"
+      skopeo --override-os ${os} --override-arch ${arch} copy "$sourceURL" "docker-archive://$out:$destNameTag"
     '';
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.

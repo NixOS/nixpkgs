@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, glib, glib-networking, gtk2, libsoup, libX11, perl,
+{ stdenv, fetchurl, makeWrapper, glib-networking, gtk2, libsoup, libX11, perl,
   pkgconfig, webkit, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {

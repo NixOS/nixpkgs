@@ -1,6 +1,6 @@
 { mkDerivation, ansi-terminal, base, bytestring, Cabal, containers
 , deepseq, Diff, directory, filepath, ShellCheck, stdenv, tasty
-, tasty-golden, transformers, fetchFromGitHub, fetchpatch
+, tasty-golden, transformers, fetchFromGitHub
 }:
 
 mkDerivation {

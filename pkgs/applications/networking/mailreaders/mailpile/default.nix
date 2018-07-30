@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python2Packages, gnupg1orig, makeWrapper, openssl, git }:
+{ stdenv, fetchFromGitHub, python2Packages, gnupg1orig, openssl, git }:
 
 python2Packages.buildPythonApplication rec {
   name = "mailpile-${version}";
