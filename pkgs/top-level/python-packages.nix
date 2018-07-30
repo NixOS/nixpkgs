@@ -1520,6 +1520,8 @@ in {
 
   cherrypy = callPackage ../development/python-modules/cherrypy {};
 
+  cfgv = callPackage ../development/python-modules/cfgv { };
+
   cftime = callPackage ../development/python-modules/cftime {};
 
   cjson = callPackage ../development/python-modules/cjson { };
