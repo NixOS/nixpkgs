@@ -502,7 +502,7 @@ in {
     };
 
     systemd.services.gitlab-workhorse = {
-      after = [ "network.target" "gitlab.service" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment.HOME = gitlabEnv.HOME;
       environment.GITLAB_SHELL_CONFIG_PATH = gitlabEnv.GITLAB_SHELL_CONFIG_PATH;
