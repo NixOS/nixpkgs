@@ -11,6 +11,13 @@ let
       inherit sha256;
     };
 
+    patches = [
+      # fix notmuch build, see https://notmuchmail.org/faq/#index12h2
+      # cannot fetchpatch this because base directory differs
+      # TODO: remove on next xapian update
+      ./fix-notmuch-tagging.patch
+    ];
+
     outputs = [ "out" "man" "doc" ];
 
     buildInputs = [ libuuid zlib ];
