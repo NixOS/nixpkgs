@@ -4,7 +4,7 @@ with pkgs;
 
 runCommand "nixpkgs-metrics"
   { buildInputs = [ nix time ];
-    # requiredSystemFeatures = [ "benchmark" ]; # TODO: a 1-job machine for this on Hydra?
+    requiredSystemFeatures = [ "benchmark" ];
   }
   ''
     export NIX_DB_DIR=$TMPDIR
