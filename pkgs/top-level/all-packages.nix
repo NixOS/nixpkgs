@@ -21367,6 +21367,8 @@ with pkgs;
 
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
 
+  nix-top = callPackage ../tools/package-management/nix-top { };
+
   nix-repl = callPackage ../tools/package-management/nix-repl { nix = nix1; };
 
   nix-review = callPackage ../tools/package-management/nix-review { };
