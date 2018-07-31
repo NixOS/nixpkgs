@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ghostwriter";
-  version = "1.7.0";
+  version = "1.7.2";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "wereturtle";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00nlk5gazlfnndanhhjj5hlvkkp9yfx5mj6jq0jz37mk8mn6rzln";
+    sha256 = "1zhzibn4g79i98mjfqspf3iac2biz3r18jf29g0izq5snn7xj0fc";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];

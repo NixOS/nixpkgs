@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "postman-${version}";
-  version = "5.5.3";
+  version = "6.1.4";
 
   src = fetchurl {
     url = "https://dl.pstmn.io/download/version/${version}/linux64";
-    sha1 = "BC0C6117BEC6D1638FD18A0E2A580617669A9297";
+    sha256 = "2f93a860f87d842c0e0433b55cd7c46e04d1d20c0adcae8680332585dffd86eb";
     name = "${name}.tar.gz";
   };
 
@@ -16,15 +16,10 @@ stdenv.mkDerivation rec {
 
   buildPhase = ":";   # nothing to build
 
-  icon = fetchurl {
-    url = "https://www.getpostman.com/img/v2/media-kit/Logo/PNG/pm-logo-horiz.png";
-    sha256 = "271b88317bd787f4a30ab374148e73314d60fb1b220ef791611774a061c49f30";
-  };
-
   desktopItem = makeDesktopItem {
     name = "postman";
     exec = "postman";
-    icon = "${icon}";
+    icon = "postman";
     comment = "API Development Environment";
     desktopName = "Postman";
     genericName = "Postman";
@@ -33,13 +28,17 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/postman
-    cp -R * $out/share/postman
+    cp -R app/* $out/share/postman
 
     mkdir -p $out/bin
     ln -s $out/share/postman/Postman $out/bin/postman
 
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
+
+    iconDir=$out/share/icons/hicolor/128x128/apps
+    mkdir -p $iconDir
+    ln -s $out/share/postman/resources/app/assets/icon.png $iconDir/postman.png
   '';
 
   preFixup = let

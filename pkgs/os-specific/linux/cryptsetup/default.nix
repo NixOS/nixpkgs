@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = https://gitlab.com/cryptsetup/cryptsetup/;
     description = "LUKS for dm-crypt";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ viric chaoflow ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

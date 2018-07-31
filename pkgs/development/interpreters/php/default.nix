@@ -51,7 +51,7 @@ let
   , ztsSupport ? config.php.zts or false
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
-  , tidySupport ? false
+  , tidySupport ? (config.php.tidy or false)
   }:
 
     let
@@ -231,12 +231,12 @@ in {
   };
 
   php71 = generic {
-    version = "7.1.19";
-    sha256 = "1wvhsxzmb78pcr36ginz93iv7rcrxp3p01rb34zxa2h4wdxkxi0k";
+    version = "7.1.20";
+    sha256 = "0i8xd6p4zdg8fl6f0j430raanlshsshr3s3jlm72b0gvi1n4f6rs";
   };
 
   php72 = generic {
-    version = "7.2.7";
-    sha256 = "18ymjqy8vpmwlzzfrxvaz2nsn8n66rmg40pwiy6x2kdgjrd6g0fc";
+    version = "7.2.8";
+    sha256 = "1rky321gcvjm0npbfd4bznh36an0y14viqcvn4yzy3x643sni00z";
   };
 }

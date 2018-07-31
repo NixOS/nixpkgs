@@ -3,13 +3,13 @@
 } :
 
 let
-  version = "6.18";
+  version = "7.0";
 in stdenv.mkDerivation {
   name = "beegfs-module-${version}-${kernel.version}";
 
   src = fetchurl {
-    url = "https://git.beegfs.com/pub/v6/repository/archive.tar.bz2?ref=${version}";
-    sha256 = "1g874qyxh4v53ah3lzchrqi0jci7wngr54q3f4d9q0kzvvifripn";
+    url = "https://git.beegfs.com/pub/v7/repository/archive.tar.bz2?ref=${version}";
+    sha256 = "1wsljd5ybyhl94aqrdfvcs8a0l8w4pr0bs1vhjrf4y7ldhw35m3k";
   };
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
     find -type f -name "*.mk" -exec sed -i "s:/bin/true:true:" \{} \;
   '';
 
-  preBuild = "cd beegfs_client_module/build";
+  preBuild = "cd client_module/build";
 
   installPhase = ''
     instdir=$out/lib/modules/${kernel.modDirVersion}/extras/fs/beegfs
