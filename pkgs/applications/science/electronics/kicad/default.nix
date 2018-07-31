@@ -1,10 +1,10 @@
 { wxGTK, lib, stdenv, fetchurl, cmake, libGLU_combined, zlib
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp
-
+, wrapGAppsHook
 , oceSupport ? true, opencascade
 , ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python, wxPython
+, scriptingSupport ? true, swig, python, pythonPackages
 }:
 
 assert ngspiceSupport -> libngspice != null;
@@ -34,17 +34,36 @@ stdenv.mkDerivation rec {
       "-DKICAD_SCRIPTING_WXPYTHON=ON"
       # nix installs wxPython headers in wxPython package, not in wxwidget
       # as assumed. We explicitely set the header location.
-      "-DCMAKE_CXX_FLAGS=-I${wxPython}/include/wx-3.0"
+      "-DCMAKE_CXX_FLAGS=-I${pythonPackages.wxPython}/include/wx-3.0"
     ];
 
-  # https://www.mail-archive.com/kicad-developers@lists.launchpad.net/msg29840.html
-  nativeBuildInputs = [ (cmake.override {majorVersion = "3.10";}) doxygen  pkgconfig ];
+  nativeBuildInputs = [
+    # https://www.mail-archive.com/kicad-developers@lists.launchpad.net/msg29840.html
+    (cmake.override {majorVersion = "3.10";})
+    doxygen
+    pkgconfig
+    wrapGAppsHook
+    pythonPackages.wrapPython
+  ];
+  pythonPath = [ pythonPackages.wxPython ];
+  propagatedBuildInputs = [ pythonPackages.wxPython ];
+
   buildInputs = [
     libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
     cairo curl openssl boost
   ] ++ optional (oceSupport) opencascade
     ++ optional (ngspiceSupport) libngspice
-    ++ optionals (scriptingSupport) [ swig python wxPython ];
+    ++ optionals (scriptingSupport) [ swig python ];
+
+  # this breaks other applications in kicad
+  dontWrapGApps = true;
+
+  preFixup = ''
+    buildPythonPath "$out $pythonPath"
+    gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
+
+    wrapProgram "$out/bin/kicad" "''${gappsWrapperArgs[@]}"
+  '';
 
   meta = {
     description = "Free Software EDA Suite";
