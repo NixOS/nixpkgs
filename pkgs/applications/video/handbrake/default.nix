@@ -10,7 +10,7 @@
   libogg, libopus, libtheora, libvorbis, libdvdcss, a52dec,
   lame, libdvdread, libdvdnav, libbluray,
   mp4v2, mpeg2dec, x264, x265, libmkv,
-  fontconfig, freetype,
+  fontconfig, freetype, hicolor-icon-theme,
   glib, gtk3, intltool, libnotify,
   gst_all_1, dbus-glib, udev, libgudev, libvpx,
   useGtk ? true, wrapGAppsHook ? null, libappindicator-gtk3 ? null,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals useGtk [
     glib gtk3 libappindicator-gtk3 libnotify
     gst_all_1.gstreamer gst_all_1.gst-plugins-base dbus-glib udev
-    libgudev
+    libgudev hicolor-icon-theme
   ] ++ (if useFfmpeg then [ ffmpeg ] else [ patched_libav_12 ])
   ++ lib.optional useFdk fdk_aac;
 
@@ -80,11 +80,6 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cd build
-  '';
-
-  # icon-theme.cache belongs in the icon theme, not in individual packages
-  postInstall = ''
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with stdenv.lib; {

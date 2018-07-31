@@ -2,22 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "zeromq-${version}";
-  version = "4.2.3";
+  version = "4.2.5";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "libzmq";
     rev = "v${version}";
-    sha256 = "1yadf4vz4m49lpwwwscxs6wf4v9dgqgxkwgwpby9lvb4pv8qbmaf";
+    sha256 = "18mjmbhvfhr4463dqayl5hdjfy5rx7na1xsq9dsvlaz9qlr5fskw";
   };
 
   nativeBuildInputs = [ cmake asciidoc ];
 
   enableParallelBuilding = true;
-
-  postPatch = ''
-    sed -i 's,''${PACKAGE_PREFIX_DIR}/,,g' ZeroMQConfig.cmake.in
-  '';
 
   doCheck = false; # fails all the tests (ctest)
 

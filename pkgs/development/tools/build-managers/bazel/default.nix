@@ -26,7 +26,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.15.1";
+  version = "0.15.2";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0v7wdwbxy4bcx488lm1glf4iv3wfdwbkg8fh6kmmmfn1lhgkaay6";
+    sha256 = "1w83zi6d9npi1jmiy022v92xp1cwdvn2qqgghlnl2v9sprryqlxz";
   };
 
   sourceRoot = ".";
@@ -128,10 +128,10 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     export TMPDIR=/tmp/.bazel-$UID
     ./compile.sh
-    ./output/bazel --output_user_root=$TMPDIR/.bazel build //scripts:bash_completion \
-      --spawn_strategy=standalone \
-      --genrule_strategy=standalone
-    cp bazel-bin/scripts/bazel-complete.bash output/
+    scripts/generate_bash_completion.sh \
+        --bazel=./output/bazel \
+        --output=output/bazel-complete.bash \
+        --prepend=scripts/bazel-complete-template.bash
   '';
 
   # Build the CPP and Java examples to verify that Bazel works.
@@ -149,7 +149,7 @@ stdenv.mkDerivation rec {
     mv output/bazel $out/bin
     wrapProgram "$out/bin/bazel" --set JAVA_HOME "${jdk}"
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
-    mv output/bazel-complete.bash $out/share/bash-completion/completions/
+    mv output/bazel-complete.bash $out/share/bash-completion/completions/bazel
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 

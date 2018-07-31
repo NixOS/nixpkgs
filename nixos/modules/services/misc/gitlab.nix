@@ -560,6 +560,7 @@ in {
         mkdir -p ${cfg.statePath}/tmp/sockets
         mkdir -p ${cfg.statePath}/shell
         mkdir -p ${cfg.statePath}/db
+        mkdir -p ${cfg.statePath}/uploads
 
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
@@ -570,6 +571,7 @@ in {
         mkdir -p ${cfg.statePath}/log
         ln -sf ${cfg.statePath}/log /run/gitlab/log
         ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
+        ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
         ln -sf $GITLAB_SHELL_CONFIG_PATH /run/gitlab/shell-config.yml
         chown -R ${cfg.user}:${cfg.group} /run/gitlab
 
@@ -584,7 +586,9 @@ in {
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}
         ln -sf ${cfg.statePath}/config /run/gitlab/config
-        rm ${cfg.statePath}/lib
+        if [ -e ${cfg.statePath}/lib ]; then
+          rm ${cfg.statePath}/lib
+        fi
         ln -sf ${pkgs.gitlab}/share/gitlab/lib ${cfg.statePath}/lib
         cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
 
@@ -608,10 +612,11 @@ in {
             ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} ${config.services.postgresql.package}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName}
             touch "${cfg.statePath}/db-created"
           fi
+
+          # enable required pg_trgm extension for gitlab
+          ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql ${cfg.databaseName} -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         fi
 
-        # enable required pg_trgm extension for gitlab
-        ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql ${cfg.databaseName} -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         # Always do the db migrations just to be sure the database is up-to-date
         ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
 

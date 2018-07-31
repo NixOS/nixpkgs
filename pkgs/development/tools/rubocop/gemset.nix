@@ -7,6 +7,14 @@
     };
     version = "2.4.0";
   };
+  jaro_winkler = {
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0rr797nqz081bfk30m2apj5h24bg5d1jr1c8p3xwx4hbwsrbclah";
+      type = "gem";
+    };
+    version = "1.5.1";
+  };
   parallel = {
     source = {
       remotes = ["https://rubygems.org"];
@@ -19,18 +27,18 @@
     dependencies = ["ast"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1af7aa1c2npi8dkshgm3f8qyacabm94ckrdz7b8vd3f8zzswqzp9";
+      sha256 = "1zp89zg7iypncszxsjp8kiccrpbdf728jl449g6cnfkz990fyb5k";
       type = "gem";
     };
-    version = "2.5.1.0";
+    version = "2.5.1.2";
   };
   powerpack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1fnn3fli5wkzyjl4ryh0k90316shqjfnhydmc7f8lqpi0q21va43";
+      sha256 = "1r51d67wd467rpdfl6x43y84vwm8f5ql9l9m85ak1s2sp3nc5hyv";
       type = "gem";
     };
-    version = "0.1.1";
+    version = "0.1.2";
   };
   rainbow = {
     source = {
@@ -49,13 +57,13 @@
     version = "12.3.1";
   };
   rubocop = {
-    dependencies = ["parallel" "parser" "powerpack" "rainbow" "ruby-progressbar" "unicode-display_width"];
+    dependencies = ["jaro_winkler" "parallel" "parser" "powerpack" "rainbow" "ruby-progressbar" "unicode-display_width"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "17qnk66q4diny1bvzbwsl1d5a26nj0mjzc2425h6nyp3xqjipz11";
+      sha256 = "0s2qlrdx2f7653kmzwm58c8izyvgyjrzjrz76l2b005f2816kji6";
       type = "gem";
     };
-    version = "0.55.0";
+    version = "0.58.1";
   };
   ruby-progressbar = {
     source = {
@@ -68,9 +76,9 @@
   unicode-display_width = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0x31fgv1acywbb50prp7y4fr677c2d9gsl6wxmfcrlxbwz7nxn5n";
+      sha256 = "0040bsdpcmvp8w31lqi2s9s4p4h031zv52401qidmh25cgyh4a57";
       type = "gem";
     };
-    version = "1.3.2";
+    version = "1.4.0";
   };
 }

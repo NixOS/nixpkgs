@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage    = https://www.qbittorrent.org/;
     license     = licenses.gpl2;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ Anton-Latukha viric ];
+    maintainers = with maintainers; [ Anton-Latukha ];
   };
 }

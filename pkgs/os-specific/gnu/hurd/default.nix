@@ -52,7 +52,8 @@ stdenv.mkDerivation ({
        done
     '';
 
-  crossAttrs.dontPatchShebangs = true;
+  # Not needed after https://github.com/NixOS/nixpkgs/pull/43833
+  dontPatchShebangs = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
     description = "The GNU Hurd, GNU project's replacement for the Unix kernel";

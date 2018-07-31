@@ -504,6 +504,10 @@ activatePackage() {
         addToSearchPath _PATH "$pkg/bin"
     fi
 
+    if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
+        addToSearchPath HOST_PATH "$pkg/bin"
+    fi
+
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
         local oldOpts="$(shopt -po nounset)"
         set +u
@@ -658,6 +662,10 @@ substituteStream() {
                 # check if the used nix attribute name is a valid bash name
                 if ! [[ "$varName" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
                     echo "substituteStream(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
+                    return 1
+                fi
+                if [ -z ${!varName+x} ]; then
+                    echo "substituteStream(): ERROR: variable \$$varName is unset" >&2
                     return 1
                 fi
                 pattern="@$varName@"

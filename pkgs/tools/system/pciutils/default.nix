@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, zlib, kmod, which }:
 
 stdenv.mkDerivation rec {
-  name = "pciutils-3.6.0"; # with database from 2018-06-29
+  name = "pciutils-3.6.1"; # with database from 2018-06-29
 
   src = fetchurl {
     url = "mirror://kernel/software/utils/pciutils/${name}.tar.xz";
-    sha256 = "17g9rvjknj2yqwxldnz8m5kaabbdvkcjnfic4sbx88kh0s81197j";
+    sha256 = "1q39hh8scgvqppk1clzjh7yiq5p2r0knv52g3qzmdhsir4f47h7w";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -21,16 +21,6 @@ stdenv.mkDerivation rec {
   ];
 
   installTargets = "install install-lib";
-
-  # Use standardized and equivalent realpath(path, NULL) instead of canonicalize_file_name(path).
-  # This is documented to be equivalent, see `man 3 canonicalize_file_name`.
-  # Fixes w/musl.
-  # Upstream PR: https://github.com/pciutils/pciutils/pull/6
-  postPatch = ''
-    substituteInPlace lib/sysfs.c \
-      --replace "canonicalize_file_name(path)" \
-                "realpath(path, NULL)"
-  '';
 
   # Get rid of update-pciids as it won't work.
   postInstall = "rm $out/sbin/update-pciids $out/man/man8/update-pciids.8";
