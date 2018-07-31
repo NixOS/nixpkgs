@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
+    broken = stdenv.isAarch64;
   };
 }
