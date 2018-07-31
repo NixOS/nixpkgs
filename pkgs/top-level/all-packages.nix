@@ -15227,6 +15227,8 @@ with pkgs;
 
   avocode = callPackage ../applications/graphics/avocode {};
 
+  cadence =  libsForQt5.callPackage ../applications/audio/cadence { };
+
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
