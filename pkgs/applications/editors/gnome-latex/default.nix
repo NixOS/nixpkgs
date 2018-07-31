@@ -1,14 +1,14 @@
 { stdenv, fetchurl, wrapGAppsHook
 , tepl, amtk, gnome3, glib, pkgconfig, intltool, itstool, libxml2 }:
 let
-  version = "3.28.1";
+  version = "3.30.1";
   pname = "gnome-latex";
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1z481izrx057wraphnr82kxnpmmi8nvl7jswyylzm22kfs0mw402";
+    sha256 = "0yvkp311ikmiypzj2q6ypvyw5migxiqp8lwhyl3qq6mk6p0x66w8";
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
