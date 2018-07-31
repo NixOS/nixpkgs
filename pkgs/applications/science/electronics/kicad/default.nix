@@ -4,7 +4,7 @@
 , wrapGAppsHook
 , oceSupport ? true, opencascade
 , ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python, pythonPackages
+, swig, python, pythonPackages
 }:
 
 assert ngspiceSupport -> libngspice != null;
@@ -25,17 +25,15 @@ stdenv.mkDerivation rec {
       --replace no-vcs-found ${version}
   '';
 
-  cmakeFlags =
-    optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
-    ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON"
-    ++ optionals (scriptingSupport) [
-      "-DKICAD_SCRIPTING=ON"
-      "-DKICAD_SCRIPTING_MODULES=ON"
-      "-DKICAD_SCRIPTING_WXPYTHON=ON"
-      # nix installs wxPython headers in wxPython package, not in wxwidget
-      # as assumed. We explicitely set the header location.
-      "-DCMAKE_CXX_FLAGS=-I${pythonPackages.wxPython}/include/wx-3.0"
-    ];
+  cmakeFlags = [
+    "-DKICAD_SCRIPTING=ON"
+    "-DKICAD_SCRIPTING_MODULES=ON"
+    "-DKICAD_SCRIPTING_WXPYTHON=ON"
+    # nix installs wxPython headers in wxPython package, not in wxwidget
+    # as assumed. We explicitely set the header location.
+    "-DCMAKE_CXX_FLAGS=-I${pythonPackages.wxPython}/include/wx-3.0"
+  ] ++ optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
+    ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON";
 
   nativeBuildInputs = [
     # https://www.mail-archive.com/kicad-developers@lists.launchpad.net/msg29840.html
@@ -51,9 +49,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
     cairo curl openssl boost
+    swig python
   ] ++ optional (oceSupport) opencascade
-    ++ optional (ngspiceSupport) libngspice
-    ++ optionals (scriptingSupport) [ swig python ];
+    ++ optional (ngspiceSupport) libngspice;
 
   # this breaks other applications in kicad
   dontWrapGApps = true;
