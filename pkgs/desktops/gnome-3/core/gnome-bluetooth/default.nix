@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-bluetooth-${version}";
-  version = "3.28.0";
+  version = "3.28.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-bluetooth/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0q7yzklrlayj99risj096mr5x35anx94wvr6nbf6pwbvvzv7453p";
+    sha256 = "1g3yrq5792qvc5rxnf26cgciawrca27hqn6wxfcf63bpa2dsjcsn";
   };
 
   passthru = {
