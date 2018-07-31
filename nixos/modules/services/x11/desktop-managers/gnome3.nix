@@ -55,6 +55,14 @@ in {
         description = "Enable Gnome 3 desktop manager.";
       };
 
+      sessionPath = mkOption {
+        default = [];
+        example = literalExample "[ pkgs.gnome3.gpaste ]";
+        description = "Additional list of packages to be added to the session search path.
+                       Useful for gnome shell extensions or gsettings-conditionated autostart.";
+        apply = list: list ++ [ pkgs.gnome3.gnome-shell pkgs.gnome3.gnome-shell-extensions ];
+      };
+
       extraGSettingsOverrides = mkOption {
         default = "";
         type = types.lines;
@@ -121,6 +129,22 @@ in {
 
     services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ];
 
+    services.xserver.displayManager.sessionCommands = ''
+      if test "$XDG_CURRENT_DESKTOP" = "GNOME"; then
+          ${concatMapStrings (p: ''
+            if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
+              export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
+            fi
+
+            if [ -d "${p}/lib/girepository-1.0" ]; then
+              export GI_TYPELIB_PATH=$GI_TYPELIB_PATH''${GI_TYPELIB_PATH:+:}${p}/lib/girepository-1.0
+              export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
+            fi
+          '') cfg.sessionPath}
+      fi
+    '';
+
+
     # Override default mimeapps
     environment.variables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
 
@@ -134,7 +158,7 @@ in {
     environment.variables.GIO_EXTRA_MODULES = [ "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
                                                 "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
                                                 "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
-    environment.systemPackages = pkgs.gnome3.corePackages
+    environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
       ++ (removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [
       pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
     ];

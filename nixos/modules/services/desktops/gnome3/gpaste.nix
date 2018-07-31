@@ -21,6 +21,7 @@ with lib;
   config = mkIf config.services.gnome3.gpaste.enable {
     environment.systemPackages = [ pkgs.gnome3.gpaste ];
     services.dbus.packages = [ pkgs.gnome3.gpaste ];
+    services.xserver.desktopManager.gnome3.sessionPath = [ pkgs.gnome3.gpaste ];
     systemd.packages = [ pkgs.gnome3.gpaste ];
   };
 }
