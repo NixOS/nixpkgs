@@ -14625,6 +14625,8 @@ with pkgs;
 
   cantarell-fonts = callPackage ../data/fonts/cantarell-fonts { };
 
+  capitaine-cursors = callPackage ../data/icons/capitaine-cursors { };
+
   carlito = callPackage ../data/fonts/carlito {};
 
   comfortaa = callPackage ../data/fonts/comfortaa {};
