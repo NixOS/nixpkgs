@@ -8140,6 +8140,8 @@ with pkgs;
 
   epm = callPackage ../development/tools/misc/epm { };
 
+  eresi = callPackage ../development/tools/analysis/eresi { };
+
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
   eztrace = callPackage ../development/tools/profiling/EZTrace { };
