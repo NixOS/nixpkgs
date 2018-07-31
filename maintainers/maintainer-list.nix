@@ -1565,6 +1565,11 @@
     github = "havvy";
     name = "Ryan Scheel";
   };
+  hax404 = {
+    email = "hax404foogit@hax404.de";
+    github = "hax404";
+    name = "Georg Haas";
+  };
   hbunke = {
     email = "bunke.hendrik@gmail.com";
     github = "hbunke";
