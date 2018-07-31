@@ -3,9 +3,10 @@
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
 
-# this is just for tests (not in closure of any regular package)
-, coreutils, dbus, libxml2, tzdata, desktop-file-utils
-, shared-mime-info, doCheck ? false
+# this is just for tests (not in the closure of any regular package)
+, doCheck ? stdenv.config.doCheckByDefault or false
+, coreutils, dbus, libxml2, tzdata
+, desktop-file-utils, shared-mime-info
 }:
 
 with stdenv.lib;
@@ -66,8 +67,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   buildInputs = [ libelf setupHook pcre ]
-    ++ optionals stdenv.isLinux [ utillinuxMinimal ] # for libmount
-    ++ optionals doCheck [ tzdata libxml2 desktop-file-utils shared-mime-info ];
+    ++ optionals stdenv.isLinux [ utillinuxMinimal ]; # for libmount
 
   nativeBuildInputs = [ pkgconfig perl python gettext ];
 
@@ -114,7 +114,8 @@ stdenv.mkDerivation rec {
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
   '';
 
-  inherit doCheck;
+  checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
+
   preCheck = optionalString doCheck ''
     export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
@@ -138,6 +139,8 @@ stdenv.mkDerivation rec {
     # Needed because of libtool wrappers
     sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
   '';
+
+  inherit doCheck;
 
   passthru = {
     gioModuleDir = "lib/gio/modules";

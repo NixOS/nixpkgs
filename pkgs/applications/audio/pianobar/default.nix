@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     homepage = http://6xq.net/projects/pianobar/;
     platforms = platforms.linux;
     license = licenses.mit; # expat version
-    maintainers = with maintainers; [ eduarrrd ];
   };
 }
