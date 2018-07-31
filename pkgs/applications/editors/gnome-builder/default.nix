@@ -1,8 +1,10 @@
 { stdenv
 , desktop-file-utils
 , docbook_xsl
+, docbook_xml_dtd_43
 , fetchurl
 , flatpak
+, glibcLocales
 , gnome3
 , gobjectIntrospection
 , gspell
@@ -41,6 +43,8 @@ in stdenv.mkDerivation {
     #appstream-glib # tests fail if these tools are available
     desktop-file-utils
     docbook_xsl
+    docbook_xml_dtd_43
+    glibcLocales # for Meson's gtkdochelper
     gobjectIntrospection
     gtk-doc
     hicolor-icon-theme
@@ -90,6 +94,10 @@ in stdenv.mkDerivation {
     "-Dwith_clang=false"
     "-Dwith_docs=true"
   ];
+
+  preInstall = ''
+    export LC_ALL="en_US.utf-8"
+  '';
 
   pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
 
