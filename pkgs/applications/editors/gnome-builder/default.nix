@@ -1,7 +1,30 @@
-{ stdenv, fetchurl, gnome3, gobjectIntrospection, meson, ninja, pkgconfig
-, appstream-glib, desktop-file-utils, python3, python3Packages, wrapGAppsHook
-, flatpak, gspell, gtk3, gtksourceview3, json-glib, jsonrpc-glib, libdazzle
-, libxml2, ostree, pcre , sysprof, template-glib, vala, webkitgtk
+{ stdenv
+, desktop-file-utils
+, docbook_xsl
+, fetchurl
+, flatpak
+, gnome3
+, gobjectIntrospection
+, gspell
+, gtk-doc
+, gtk3
+, gtksourceview3
+, hicolor-icon-theme
+, json-glib
+, jsonrpc-glib
+, libdazzle
+, libxml2
+, meson
+, ninja
+, ostree
+, pcre
+, pkgconfig
+, python3
+, sysprof
+, template-glib
+, vala
+, webkitgtk
+, wrapGAppsHook
 }:
 let
   version = "3.28.4";
@@ -15,15 +38,17 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    python3Packages.wrapPython
-    wrapGAppsHook
+    #appstream-glib # tests fail if these tools are available
+    desktop-file-utils
+    docbook_xsl
     gobjectIntrospection
+    gtk-doc
+    hicolor-icon-theme
     meson
     ninja
     pkgconfig
-
-    appstream-glib
-    desktop-file-utils
+    python3.pkgs.wrapPython
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -53,16 +78,18 @@ in stdenv.mkDerivation {
   '';
 
   patches = [
-    ./python-libprefix.patch
-    ./flatpak-deps.patch
+    ./0001-Make-libide-s-install_dir-an-absolute-path.patch
+    ./0002-Allow-packagers-to-specify-the-Python-libprefix.patch
+    ./0003-Add-missing-ostree-1-dependency-to-flatpak-plugin.patch
   ];
 
   mesonFlags = [
     "-Dpython_libprefix=${python3.libPrefix}"
     "-Dwith_clang=false"
+    "-Dwith_docs=true"
   ];
 
-  pythonPath = with python3Packages; requiredPythonModules [ pygobject3 ];
+  pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"
@@ -75,6 +102,8 @@ in stdenv.mkDerivation {
       chmod a+x "$f"
     done
   '';
+
+  #doCheck = true;
 
   passthru.updateScript = gnome3.updateScript { packageName = pname; };
 
