@@ -284,8 +284,9 @@ rec {
   };
 
   core_kernel = janePackage {
+    version = "0.11.1";
     name = "core_kernel";
-    hash = "0xaw8189i9z72fvzbxfv1qrf4wvj8v45bl7g3z7ynsqkvh6smr7d";
+    hash = "1dg7ygy7i64c5gaakb1cp1b26p9ks81vbxmb8fd7jff2q60j2z2g";
     propagatedBuildInputs = [ configurator jane-street-headers sexplib splittable_random ];
     meta.description = "Jane Street's standard library overlay (kernel)";
   };
