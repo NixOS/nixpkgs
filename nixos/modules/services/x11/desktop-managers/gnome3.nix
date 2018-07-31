@@ -144,6 +144,7 @@ in {
       fi
     '';
 
+    environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
 
     # Override default mimeapps
     environment.variables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
