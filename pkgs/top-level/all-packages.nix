@@ -18400,6 +18400,8 @@ with pkgs;
 
   stp = callPackage ../applications/science/logic/stp {};
 
+  stumpish = callPackage ../applications/window-managers/stumpish {};
+
   stumpwm = callPackage ../applications/window-managers/stumpwm {
     version = "latest";
   };
