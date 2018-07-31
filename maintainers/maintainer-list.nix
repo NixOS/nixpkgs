@@ -2264,6 +2264,11 @@
     github = "luispedro";
     name = "Luis Pedro Coelho";
   };
+  lukeadams = {
+    email = "luke.adams@belljar.io";
+    github = "lukeadams";
+    name = "Luke Adams";
+  };
   lukego = {
     email = "luke@snabb.co";
     github = "lukego";
