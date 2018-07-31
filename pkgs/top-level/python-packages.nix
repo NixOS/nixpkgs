@@ -5289,6 +5289,8 @@ in {
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
+  fastpair = callPackage ../development/python-modules/fastpair { };
+
   fastrlock = callPackage ../development/python-modules/fastrlock {};
 
   feedgen = callPackage ../development/python-modules/feedgen { };
