@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl, fetchpatch
+{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -8,7 +8,7 @@
 }:
 
 let # beware: updates often break cups-filters build
-  version = "0.66.0";
+  version = "0.67.0";
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "1rzar5f27xzkjih07yi8kxcinvk4ny4nhimyacpvqx7vmlqn829c";
+    sha256 = "1yb6agmcxf0ixqm65d4aknl0hgmswf94x0k59ic0qqav1wd4yjm3";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,11 +32,6 @@ stdenv.mkDerivation rec {
     ++ optional introspectionSupport gobjectIntrospection;
 
   nativeBuildInputs = [ cmake ninja pkgconfig ];
-
-  patches = lib.optional stdenv.isDarwin (fetchpatch {
-    url = "https://cgit.freedesktop.org/poppler/poppler/patch/?id=267228bb071016621c80fc8514927905164aaeea";
-    sha256 = "0i2sbxz1mrsnj75qgqaadayjgs48ay2mhrbkij95djy6am44m54k";
-  });
 
   # Not sure when and how to pass it.  It seems an upstream bug anyway.
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";

@@ -34,12 +34,15 @@ stdenv.mkDerivation rec {
     "--datadir=\${doc}/share"
     "--mandir=\${man}/share/man"
     ]
-  # jq is linked to libjq:
+    # jq is linked to libjq:
     ++ stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
-  installCheckPhase = "$bin/bin/jq --help >/dev/null";
   doInstallCheck = true;
-  doCheck = true;
+  installCheckTarget = "check";
+
+  postInstallCheck = ''
+    $bin/bin/jq --help >/dev/null
+  '';
 
   meta = with stdenv.lib; {
     description = ''A lightweight and flexible command-line JSON processor'';

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, libusb1 }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, libusb1 }:
 
 buildPythonPackage rec {
   pname = "libusb1";
@@ -16,6 +16,10 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ libusb1 ];
+
+  checkPhase = ''
+    ${python.interpreter} -m usb1.testUSB1
+  '';
 
   meta = with stdenv.lib; {
     homepage    = https://github.com/vpelletier/python-libusb1;
