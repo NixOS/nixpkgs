@@ -23,12 +23,17 @@ in buildPythonPackage rec {
   buildInputs = [ ft pillow ];
 
   postPatch = ''
-    rm tests/test_graphics_barcode.py
+    # Remove all the test files that require access to the internet to pass.
+    rm tests/test_lib_utils.py
+    rm tests/test_platypus_general.py
+
+    # Remove the tests that require Vera fonts installed
     rm tests/test_graphics_render.py
   '';
 
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" ${python.interpreter} tests/runAll.py
+    cd tests
+    LC_ALL="en_US.UTF-8" ${python.interpreter} runAll.py
   '';
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit

@@ -2211,6 +2211,8 @@ in {
 
   easydict = callPackage ../development/python-modules/easydict { };
 
+  easygui = callPackage ../development/python-modules/easygui { };
+
   EasyProcess = callPackage ../development/python-modules/easyprocess { };
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
@@ -2545,6 +2547,8 @@ in {
       license = licenses.asl20;
     };
   };
+
+  fluent-logger = callPackage ../development/python-modules/fluent-logger {};
 
   python-forecastio = callPackage ../development/python-modules/python-forecastio { };
 
@@ -3947,6 +3951,8 @@ in {
 
   pylama = callPackage ../development/python-modules/pylama { };
 
+  pymediainfo = callPackage ../development/python-modules/pymediainfo { };
+
   pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
@@ -4010,6 +4016,8 @@ in {
       license = licenses.gpl3Plus;
     };
   };
+
+  pyprind = callPackage ../development/python-modules/pyprind { };
 
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
@@ -4197,6 +4205,8 @@ in {
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
+
+  rawkit = callPackage ../development/python-modules/rawkit { };
 
   rethinkdb = buildPythonPackage rec {
     name = "rethinkdb-${version}";
@@ -6158,6 +6168,10 @@ in {
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
 
   gpgme = toPythonModule (pkgs.gpgme.override { withPython=true; });
+
+  gphoto2 = callPackage ../development/python-modules/gphoto2 {
+    inherit (pkgs) pkgconfig;
+  };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 

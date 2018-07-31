@@ -546,7 +546,7 @@ in
     };
 
     services.journald.rateLimitInterval = mkOption {
-      default = "10s";
+      default = "30s";
       type = types.str;
       description = ''
         Configures the rate limiting interval that is applied to all
@@ -559,7 +559,7 @@ in
     };
 
     services.journald.rateLimitBurst = mkOption {
-      default = 100;
+      default = 1000;
       type = types.int;
       description = ''
         Configures the rate limiting burst limit (number of messages per

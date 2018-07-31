@@ -8330,6 +8330,8 @@ with pkgs;
 
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
+  msgpuck = callPackage ../development/libraries/msgpuck { };
+
   msitools = callPackage ../development/tools/misc/msitools { };
 
   multi-ghc-travis = haskell.lib.justStaticExecutables haskellPackages.multi-ghc-travis;
@@ -9824,6 +9826,8 @@ with pkgs;
   jsonnet = callPackage ../development/compilers/jsonnet {
     emscripten = emscripten.override {python=python2;};
   };
+
+  jsonrpc-glib = callPackage ../development/libraries/jsonrpc-glib { };
 
   libjson = callPackage ../development/libraries/libjson { };
 
@@ -14205,6 +14209,8 @@ with pkgs;
 
   golint = callPackage ../development/tools/golint { };
 
+  golangci-lint = callPackage ../development/tools/golangci-lint { };
+
   godef = callPackage ../development/tools/godef { };
 
   goimports = callPackage ../development/tools/goimports { };
@@ -15016,6 +15022,8 @@ with pkgs;
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) {};
 
   theano = callPackage ../data/fonts/theano { };
+
+  template-glib = callPackage ../development/libraries/template-glib { };
 
   tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
 
@@ -18036,6 +18044,8 @@ with pkgs;
   };
 
   rapcad = libsForQt5.callPackage ../applications/graphics/rapcad { boost = boost159; };
+
+  rapid-photo-downloader = libsForQt5.callPackage ../applications/graphics/rapid-photo-downloader { };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
@@ -21366,6 +21376,8 @@ with pkgs;
   nix-update-source = callPackage ../tools/package-management/nix-update-source {};
 
   nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
+
+  nix-top = callPackage ../tools/package-management/nix-top { };
 
   nix-repl = callPackage ../tools/package-management/nix-repl { nix = nix1; };
 
