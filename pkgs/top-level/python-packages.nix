@@ -186,6 +186,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
+
   astral = callPackage ../development/python-modules/astral { };
 
   astropy = callPackage ../development/python-modules/astropy {  };
@@ -1519,6 +1521,8 @@ in {
   cheetah = callPackage ../development/python-modules/cheetah { };
 
   cherrypy = callPackage ../development/python-modules/cherrypy {};
+
+  cfgv = callPackage ../development/python-modules/cfgv { };
 
   cftime = callPackage ../development/python-modules/cftime {};
 
@@ -3049,6 +3053,8 @@ in {
   };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
+
+  identify = callPackage ../development/python-modules/identify { };
 
   ijson = callPackage ../development/python-modules/ijson {};
 
@@ -8439,6 +8445,8 @@ in {
   nipype = callPackage ../development/python-modules/nipype {
     inherit (pkgs) which;
   };
+
+  nodeenv = callPackage ../development/python-modules/nodeenv { };
 
   nose = buildPythonPackage rec {
     version = "1.3.7";
