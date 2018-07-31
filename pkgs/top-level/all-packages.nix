@@ -1438,6 +1438,8 @@ with pkgs;
 
   pbzx = callPackage ../tools/compression/pbzx { };
 
+  photon = callPackage ../tools/networking/photon { };
+
   playerctl = callPackage ../tools/audio/playerctl { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
