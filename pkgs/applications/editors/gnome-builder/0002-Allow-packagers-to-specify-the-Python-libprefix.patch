@@ -1,0 +1,70 @@
+From 4c5d544772920c774e99388ca4e8457f0c0a4ba4 Mon Sep 17 00:00:00 2001
+From: Jamey Sharp <jamey@minilop.net>
+Date: Mon, 30 Jul 2018 13:30:15 -0700
+Subject: [PATCH 2/3] Allow packagers to specify the Python libprefix.
+
+When packaging for Nix, the directory that pygobject finds its overrides
+in is not writable. It'll usually look something like this, and can only
+contain files built by the pygobject package itself:
+
+/nix/store/58qam3zgdcvvsz4g081pp98kg9i5v7rb-python3.6-pygobject-3.26.1/lib/python3.6/site-packages/gi/overrides
+
+This makes Builder's pygobject_override_dir heuristic fail, because
+Builder's libdir is not a prefix of pygobject's libdir.
+
+Fortunately, what Builder actually needs is for its overrides to be on
+the Python import path when it runs, and that's easier to arrange. We
+just need to be sure that Ide.py gets installed to
+
+<libdir>/python<version>/site-packages/gi/overrides
+
+So this patch allows packagers to optionally specify the
+"python<version>" portion of the path, and just constructs the rest of
+the path using Builder's libdir.
+
+The existing auto-detection code is still used unless the
+-Dpython_libprefix option is explicitly specified to override it.
+---
+ meson_options.txt      | 2 ++
+ src/libide/meson.build | 5 +++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/meson_options.txt b/meson_options.txt
+index 1ee96f23e..ca94bcd62 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -19,6 +19,8 @@ option('with_docs', type: 'boolean', value: false)
+ 
+ option('ctags_path', type: 'string', value: '')
+ 
++option('python_libprefix', type: 'string')
++
+ # Plugins
+ # Ideally we want many of these to be defined in the plugin dir:
+ #   https://github.com/mesonbuild/meson/issues/707
+diff --git a/src/libide/meson.build b/src/libide/meson.build
+index e27e0e43a..b245c855a 100644
+--- a/src/libide/meson.build
++++ b/src/libide/meson.build
+@@ -164,6 +164,10 @@ if get_option('with_editorconfig')
+ endif
+ 
+ # We want to find the subdirectory to install our override into:
++python_libprefix = get_option('python_libprefix')
++if python_libprefix != ''
++  pygobject_override_dir = join_paths(get_option('libdir'), python_libprefix, 'site-packages', 'gi', 'overrides')
++else
+ python3 = find_program('python3')
+ 
+ get_overridedir = '''
+@@ -193,6 +197,7 @@ if ret.returncode() != 0
+ else
+   pygobject_override_dir = join_paths(get_option('libdir'), ret.stdout().strip())
+ endif
++endif
+ 
+ install_data('Ide.py', install_dir: pygobject_override_dir)
+ 
+-- 
+2.16.4
+
