@@ -20393,6 +20393,8 @@ with pkgs;
 
   star = callPackage ../applications/science/biology/star { };
 
+  strelka = callPackage ../applications/science/biology/strelka { };
+
   varscan = callPackage ../applications/science/biology/varscan { };
 
   hmmer = callPackage ../applications/science/biology/hmmer { };
