@@ -14776,6 +14776,9 @@ with pkgs;
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
+  inriafonts = callPackage ../data/fonts/inriafonts { };
+
+
   iosevka = callPackage ../data/fonts/iosevka {
     nodejs = nodejs-8_x;
   };
