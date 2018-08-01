@@ -137,6 +137,16 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An IDE for writing GNOME-based software";
+    longDescription = ''
+      Global search, auto-completion, source code map, documentation
+      reference, and other features expected in an IDE, but with a focus
+      on streamlining GNOME-based development projects.
+
+      This package does not pull in the dependencies needed for every
+      plugin. If you find that a plugin you wish to use doesn't work, we
+      currently recommend running gnome-builder inside a nix-shell with
+      appropriate dependencies loaded.
+    '';
     homepage = https://wiki.gnome.org/Apps/Builder;
     license = licenses.gpl3Plus;
     maintainers = gnome3.maintainers;
