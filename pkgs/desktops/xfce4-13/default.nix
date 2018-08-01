@@ -56,6 +56,8 @@ makeScope newScope (self: with self; {
 
   xfce4-mixer = callPackage ./xfce4-mixer { };
 
+  xfce4-netload-plugin = callPackage ./xfce4-netload-plugin { };
+
   xfce4-notifyd = callPackage ./xfce4-notifyd { };
 
   xfce4-panel = callPackage ./xfce4-panel { };
