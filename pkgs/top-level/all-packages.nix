@@ -589,6 +589,8 @@ with pkgs;
 
   awless = callPackage ../tools/virtualization/awless { };
 
+  brakeman = callPackage ../development/tools/analysis/brakeman { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
