@@ -58,8 +58,12 @@ in {
       sessionPath = mkOption {
         default = [];
         example = literalExample "[ pkgs.gnome3.gpaste ]";
-        description = "Additional list of packages to be added to the session search path.
-                       Useful for gnome shell extensions or gsettings-conditionated autostart.";
+        description = ''
+          Additional list of packages to be added to the session search path.
+          Useful for GNOME Shell extensions or GSettings-conditional autostart.
+
+          Note that this should be a last resort; patching the package is preferred (see GPaste).
+        '';
         apply = list: list ++ [ pkgs.gnome3.gnome-shell pkgs.gnome3.gnome-shell-extensions ];
       };
 
