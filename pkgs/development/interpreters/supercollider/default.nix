@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig
+{ stdenv, fetchurl, cmake, pkgconfig, alsaLib
 , libjack2, libsndfile, fftw, curl, gcc
 , libXt, qtbase, qttools, qtwebkit, readline
 , useSCEL ? false, emacs
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig qttools ];
 
   buildInputs = [
-    gcc libjack2 libsndfile fftw curl libXt qtbase qtwebkit readline ]
+    gcc libjack2 libsndfile alsaLib fftw curl libXt qtbase qtwebkit readline ]
       ++ optional useSCEL emacs;
 
   meta = {
