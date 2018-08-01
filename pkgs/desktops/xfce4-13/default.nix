@@ -62,6 +62,8 @@ makeScope newScope (self: with self; {
 
   xfce4-power-manager = callPackage ./xfce4-power-manager { };
 
+  xfce4-pulseaudio-plugin = callPackage ./xfce4-pulseaudio-plugin { };
+
   xfce4-screenshooter = callPackage ./xfce4-screenshooter {
     inherit (gnome3) libsoup;
   };
