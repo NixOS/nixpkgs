@@ -76,5 +76,7 @@ makeScope newScope (self: with self; {
 
   xfce4-volumed-pulse = callPackage ./xfce4-volumed-pulse { };
 
+  xfce4-whiskermenu-plugin = callPackage ./xfce4-whiskermenu-plugin { };
+
   xfwm4 = callPackage ./xfwm4 { };
 })
