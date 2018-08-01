@@ -16945,6 +16945,8 @@ EOF
 
   ed25519 = callPackage ../development/python-modules/ed25519 { };
 
+  eduvpn-client = callPackage ../tools/networking/python-eduvpn-client { };
+
   trezor = callPackage ../development/python-modules/trezor { };
 
   trezor_agent = buildPythonPackage rec{

@@ -1226,6 +1226,8 @@ with pkgs;
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
 
+  eduvpn-client = python3Packages.eduvpn-client;
+
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   elementary-icon-theme = callPackage ../data/icons/elementary-icon-theme { };
