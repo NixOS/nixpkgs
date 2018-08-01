@@ -684,6 +684,8 @@ with pkgs;
 
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
+  ipgrep = callPackage ../tools/networking/ipgrep { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   pacparser = callPackage ../tools/networking/pacparser { };
