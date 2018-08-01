@@ -1,4 +1,5 @@
-{ pname, version, build, sha256Hash, meta }:
+{ channel, pname, version, build, sha256Hash }:
+
 { bash
 , buildFHSUserEnv
 , coreutils
@@ -128,4 +129,18 @@ in
       #!${bash}/bin/bash
       ${fhsEnv}/bin/${pname}-fhs-env ${androidStudio}/bin/studio.sh
     '';
-  } // { inherit meta; }
+  } // {
+    meta = with stdenv.lib; {
+      description = "The Official IDE for Android (${channel} channel)";
+      longDescription = ''
+        Android Studio is the official IDE for Android app development, based on
+        IntelliJ IDEA.
+      '';
+      homepage = if channel == "stable"
+        then https://developer.android.com/studio/index.html
+        else https://developer.android.com/studio/preview/index.html;
+      license = licenses.asl20;
+      platforms = [ "x86_64-linux" ];
+      maintainers = with maintainers; [ primeos ];
+    };
+  }
