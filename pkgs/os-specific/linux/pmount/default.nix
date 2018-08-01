@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/Makefile --replace '-o root -g root -m 4755 ' '-m 755 '
   '';
 
+  doCheck = false; # fails 1 out of 1 tests with "Error: could not open fstab-type file: No such file or directory"
+
   meta = {
     homepage = http://pmount.alioth.debian.org/;
     description = "Mount removable devices as normal user";
