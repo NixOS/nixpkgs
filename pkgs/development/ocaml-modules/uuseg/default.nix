@@ -8,11 +8,11 @@ in
 stdenv.mkDerivation rec {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "10.0.0";
+  version = "11.0.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "01q8ljjgi7d73x7ms489b5my83xds4jax1vbjhwwjdai01friscc";
+    sha256 = "17mn8p9pn340kmvfgnl1m64zbpy60r6svkwsdn2lcg3yi2jlbrwp";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild cmdliner topkg uutf ];
