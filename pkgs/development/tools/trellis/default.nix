@@ -14,9 +14,12 @@ stdenv.mkDerivation rec {
 
   blah = trellisdb;
 
+  buildInputs = [
+    (boost.override { python = python3; enablePython = true; })
+  ];
+
   nativeBuildInputs = [
     cmake python3
-    (boost.override { python = python3; enablePython = true; })
   ];
 
   src = fetchFromGitHub {
