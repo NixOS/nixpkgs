@@ -266,7 +266,7 @@ in
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
-          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
+          sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${pkgs.gitea.bin}/bin/gitea,g' ${cfg.stateDir}/.ssh/authorized_keys
         fi
       '' + optionalString (usePostgresql && cfg.database.createDatabase) ''
         if ! test -e "${cfg.stateDir}/db-created"; then
