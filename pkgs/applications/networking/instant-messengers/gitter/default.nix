@@ -1,5 +1,5 @@
 { stdenv, alsaLib, atk, cairo, cups, dbus, dpkg, expat, fetchurl
-, fontconfig, freetype, gdk_pixbuf, glib, gnome3, gtk3, libX11
+, fontconfig, freetype, gdk_pixbuf, glib, gnome2, gtk3, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libappindicator-gtk3, libcxx
 , libnotify, libpulseaudio, libxcb, makeDesktopItem, makeWrapper, nspr, nss
@@ -13,7 +13,7 @@ let gitterDirectorySuffix = "opt/gitter";
        '';
    libPath = stdenv.lib.makeLibraryPath [
      alsaLib atk cairo cups dbus expat fontconfig freetype gdk_pixbuf glib
-     gnome3.gconf gtk3 libX11 libXScrnSaver libXcomposite libXcursor libXdamage
+     gnome2.GConf gtk3 libX11 libXScrnSaver libXcomposite libXcursor libXdamage
      libXext libXfixes libXi libXrandr libXrender libXtst libappindicator-gtk3
      libcxx libnotify libpulseaudio libxcb nspr nss pango stdenv.cc.cc systemd
   ];
