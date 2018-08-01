@@ -7110,6 +7110,7 @@ with pkgs;
   cargo-release = callPackage ../tools/package-management/cargo-release { };
   cargo-tree = callPackage ../tools/package-management/cargo-tree { };
 
+  cargo-asm = callPackage ../development/tools/rust/cargo-asm { };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
