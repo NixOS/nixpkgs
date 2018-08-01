@@ -14766,6 +14766,8 @@ with pkgs;
 
   hanazono = callPackage ../data/fonts/hanazono { };
 
+  ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
+
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
   iconpack-obsidian = callPackage ../data/icons/iconpack-obsidian { };
