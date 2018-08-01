@@ -12,8 +12,6 @@ stdenv.mkDerivation rec {
   name = "trellis-${version}";
   version = "2018.08.01";
 
-  blah = trellisdb;
-
   buildInputs = [
     (boost.override { python = python3; enablePython = true; })
   ];
