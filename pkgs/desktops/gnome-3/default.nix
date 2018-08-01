@@ -309,6 +309,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gdl = callPackage ./devtools/gdl { };
 
+  gnome-builder = callPackage ./devtools/gnome-builder { };
+
   gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
 
   nemiver = callPackage ./devtools/nemiver { };

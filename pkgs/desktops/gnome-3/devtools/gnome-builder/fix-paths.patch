@@ -1,0 +1,250 @@
+--- a/doc/help/examples/format_on_save.py
++++ b/doc/help/examples/format_on_save.py
+@@ -40,7 +40,7 @@
+                            Gio.SubprocessFlags.STDOUT_PIPE)
+ 
+         # Setup our cmdline arguments
+-        launcher.push_argv('indent')
++        launcher.push_argv('@indent@/bin/indent')
+ 
+         # If your target program is installed on the host (and not bundled
+         # or found in the build environment runtime) you might need to set
+--- a/src/libide/meson.build
++++ b/src/libide/meson.build
+@@ -188,7 +188,7 @@
+ if ret.returncode() != 0
+   error('Failed to determine pygobject overridedir')
+ else
+-  pygobject_override_dir = join_paths(get_option('libdir'), ret.stdout().strip())
++  pygobject_override_dir = join_paths(get_option('prefix'), '@sitePackages@', 'gi', 'overrides')
+ endif
+ 
+ install_data('Ide.py', install_dir: pygobject_override_dir)
+--- a/src/libide/projects/ide-project.c
++++ b/src/libide/projects/ide-project.c
+@@ -665,7 +665,7 @@
+ 
+       launcher = ide_subprocess_launcher_new (0);
+       ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+-      ide_subprocess_launcher_push_argv (launcher, "gio");
++      ide_subprocess_launcher_push_argv (launcher, "@glibDev@/bin/gio");
+       ide_subprocess_launcher_push_argv (launcher, "trash");
+       ide_subprocess_launcher_push_argv (launcher, uri);
+ 
+--- a/src/libide/runtimes/ide-runtime.c
++++ b/src/libide/runtimes/ide-runtime.c
+@@ -107,7 +107,7 @@
+           g_autoptr(IdeSubprocess) subprocess = NULL;
+ 
+           ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+-          ide_subprocess_launcher_push_argv (launcher, "which");
++          ide_subprocess_launcher_push_argv (launcher, "@which@/bin/which");
+           ide_subprocess_launcher_push_argv (launcher, program);
+ 
+           if (NULL != (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL)))
+--- a/src/libide/transfers/ide-pkcon-transfer.c
++++ b/src/libide/transfers/ide-pkcon-transfer.c
+@@ -140,7 +140,7 @@
+ 
+   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
+   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+-  ide_subprocess_launcher_push_argv (launcher, "pkcon");
++  ide_subprocess_launcher_push_argv (launcher, "@packagekit@/bin/pkcon");
+   ide_subprocess_launcher_push_argv (launcher, "install");
+   ide_subprocess_launcher_push_argv (launcher, "-y");
+   ide_subprocess_launcher_push_argv (launcher, "-p");
+--- a/src/plugins/autotools/ide-autotools-autogen-stage.c
++++ b/src/plugins/autotools/ide-autotools-autogen-stage.c
+@@ -94,7 +94,7 @@
+     }
+   else
+     {
+-      ide_subprocess_launcher_push_argv (launcher, "autoreconf");
++      ide_subprocess_launcher_push_argv (launcher, "@autoconf@/bin/autoreconf");
+       ide_subprocess_launcher_push_argv (launcher, "-fiv");
+     }
+ 
+--- a/src/plugins/autotools/ide-autotools-make-stage.c
++++ b/src/plugins/autotools/ide-autotools-make-stage.c
+@@ -96,7 +96,7 @@
+       if (ide_runtime_contains_program_in_path (runtime, "gmake", cancellable))
+         self->make = "gmake";
+       else
+-        self->make = "make";
++        self->make = "@gnumake@/bin/make";
+     }
+ 
+   if (NULL == (launcher = ide_build_pipeline_create_launcher (pipeline, error)))
+--- a/src/plugins/autotools/ide-makecache.c
++++ b/src/plugins/autotools/ide-makecache.c
+@@ -1042,7 +1042,7 @@
+ {
+   DZL_COUNTER_INC (instances);
+ 
+-  self->make_name = "make";
++  self->make_name = "@gnumake@/bin/make";
+ 
+   self->file_targets_cache = dzl_task_cache_new ((GHashFunc)g_file_hash,
+                                                  (GEqualFunc)g_file_equal,
+--- a/src/plugins/beautifier/gb-beautifier-process.c
++++ b/src/plugins/beautifier/gb-beautifier-process.c
+@@ -210,7 +210,7 @@
+     return NULL;
+ 
+   args = g_ptr_array_new ();
+-  g_ptr_array_add (args, "clang-format");
++  g_ptr_array_add (args, "@clang-tools@/bin/clang-format");
+   g_ptr_array_add (args, "-style=file");
+   g_ptr_array_add (args, tmp_src_path);
+   g_ptr_array_add (args, NULL);
+--- a/src/plugins/clang/ide-clang-service.c
++++ b/src/plugins/clang/ide-clang-service.c
+@@ -213,7 +213,7 @@
+ 
+   subprocess = g_subprocess_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE,
+                                  &error,
+-                                 "clang",
++                                 "@clang@/bin/clang",
+                                  "-print-file-name=include",
+                                  NULL);
+ 
+--- a/src/plugins/cmake/gbp-cmake-pipeline-addin.c
++++ b/src/plugins/cmake/gbp-cmake-pipeline-addin.c
+@@ -29,7 +29,7 @@
+   IdeObject parent_instance;
+ };
+ 
+-static const gchar *ninja_names[] = { "ninja-build", "ninja" };
++static const gchar *ninja_names[] = { "@ninja@/bin/ninja", "ninja" };
+ 
+ static void build_pipeline_addin_iface_init (IdeBuildPipelineAddinInterface *iface);
+ 
+@@ -106,7 +106,7 @@
+   g_assert (srcdir != NULL);
+ 
+   if (!(cmake = ide_configuration_getenv (configuration, "CMAKE")))
+-    cmake = "cmake";
++    cmake = "@cmake@/bin/cmake";
+ 
+   for (guint i = 0; i < G_N_ELEMENTS (ninja_names); i++)
+     {
+--- a/src/plugins/flatpak/gbp-flatpak-sources.c
++++ b/src/plugins/flatpak/gbp-flatpak-sources.c
+@@ -281,7 +281,7 @@
+   va_list ap;
+ 
+   va_start (ap, error);
+-  res = archive_spawn (dir, NULL, error, "unzip", ap);
++  res = archive_spawn (dir, NULL, error, "@unzip@/bin/unzip", ap);
+   va_end (ap);
+ 
+   return res;
+--- a/src/plugins/gjs-symbols/gjs_symbols.py
++++ b/src/plugins/gjs-symbols/gjs_symbols.py
+@@ -270,7 +270,7 @@
+         runtime = context.get_configuration_manager().get_current().get_runtime()
+         launcher = runtime.create_launcher()
+         launcher.set_flags(Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE)
+-        launcher.push_args(('gjs', '-c', script))
++        launcher.push_args(('@gjs@/bin/gjs', '-c', script))
+         if unsaved_file is not None:
+             launcher.push_argv(unsaved_file.get_content().get_data().decode('utf-8'))
+         else:
+--- a/src/plugins/jhbuild/jhbuild_plugin.py
++++ b/src/plugins/jhbuild/jhbuild_plugin.py
+@@ -98,7 +98,7 @@
+             try:
+                 launcher = Ide.SubprocessLauncher.new(Gio.SubprocessFlags.STDOUT_SILENCE |
+                                                       Gio.SubprocessFlags.STDERR_SILENCE)
+-                launcher.push_argv('which')
++                launcher.push_argv('@which@/bin/which')
+                 launcher.push_argv(jhbuild_bin)
+ 
+                 launcher.set_run_on_host(True)
+--- a/src/plugins/meson/gbp-meson-build-target-provider.c
++++ b/src/plugins/meson/gbp-meson-build-target-provider.c
+@@ -282,7 +282,7 @@
+   pipeline = ide_build_manager_get_pipeline (build_manager);
+   cancellable = g_task_get_cancellable (task);
+ 
+-  ide_subprocess_launcher_push_argv (launcher, "meson");
++  ide_subprocess_launcher_push_argv (launcher, "@meson@/bin/meson");
+   ide_subprocess_launcher_push_argv (launcher, "introspect");
+   ide_subprocess_launcher_push_argv (launcher, "--installed");
+   ide_subprocess_launcher_push_argv (launcher, ide_build_pipeline_get_builddir (pipeline));
+@@ -359,7 +359,7 @@
+       IDE_EXIT;
+     }
+ 
+-  ide_subprocess_launcher_push_argv (launcher, "meson");
++  ide_subprocess_launcher_push_argv (launcher, "@meson@/bin/meson");
+   ide_subprocess_launcher_push_argv (launcher, "introspect");
+   ide_subprocess_launcher_push_argv (launcher, "--targets");
+ 
+--- a/src/plugins/meson/gbp-meson-pipeline-addin.c
++++ b/src/plugins/meson/gbp-meson-pipeline-addin.c
+@@ -115,7 +115,7 @@
+   parallel = ide_configuration_get_parallelism (config);
+ 
+   if (NULL == (meson = ide_configuration_getenv (config, "MESON")))
+-    meson = "meson";
++    meson = "@meson@/bin/meson";
+ 
+   /* Setup our meson configure stage. */
+ 
+--- a/src/plugins/meson/gbp-meson-test-provider.c
++++ b/src/plugins/meson/gbp-meson-test-provider.c
+@@ -205,7 +205,7 @@
+   builddir = ide_build_pipeline_get_builddir (pipeline);
+   ide_subprocess_launcher_set_cwd (launcher, builddir);
+ 
+-  ide_subprocess_launcher_push_argv (launcher, "meson");
++  ide_subprocess_launcher_push_argv (launcher, "@meson@/bin/meson");
+   ide_subprocess_launcher_push_argv (launcher, "introspect");
+   ide_subprocess_launcher_push_argv (launcher, "--tests");
+ 
+--- a/src/plugins/phpize/phpize_plugin.py
++++ b/src/plugins/phpize/phpize_plugin.py
+@@ -116,7 +116,7 @@
+             launcher.set_flags(Gio.SubprocessFlags.STDIN_PIPE |
+                                Gio.SubprocessFlags.STDOUT_PIPE |
+                                Gio.SubprocessFlags.STDERR_PIPE)
+-            launcher.push_argv('make')
++            launcher.push_argv('@gnumake@/bin/make')
+             launcher.push_argv('-f')
+             launcher.push_argv('-')
+             launcher.push_argv('print-CFLAGS')
+@@ -228,11 +228,11 @@
+ 
+         # Build the project using make.
+         build_launcher = pipeline.create_launcher()
+-        build_launcher.push_argv('make')
++        build_launcher.push_argv('@gnumake@/bin/make')
+         if config.props.parallelism > 0:
+             build_launcher.push_argv('-j{}'.format(config.props.parallelism))
+         clean_launcher = pipeline.create_launcher()
+-        clean_launcher.push_argv('make')
++        clean_launcher.push_argv('@gnumake@/bin/make')
+         clean_launcher.push_argv('clean')
+         build_stage = Ide.BuildStageLauncher.new(context, build_launcher)
+         build_stage.set_name(_("Building project"))
+@@ -242,7 +242,7 @@
+ 
+         # Use "make install" to install the project.
+         install_launcher = pipeline.create_launcher()
+-        install_launcher.push_argv('make')
++        install_launcher.push_argv('@gnumake@/bin/make')
+         install_launcher.push_argv('install')
+         install_stage = Ide.BuildStageLauncher.new(context, install_launcher)
+         install_stage.set_name(_("Installing project"))
+--- a/src/plugins/vala-pack/ide-vala-index.vala
++++ b/src/plugins/vala-pack/ide-vala-index.vala
+@@ -550,7 +550,7 @@
+ 				var pkgname = "libvala-%s".printf (Config.VALA_VERSION);
+ 				string outstr = null;
+ 				var subprocess = new GLib.Subprocess (GLib.SubprocessFlags.STDOUT_PIPE,
+-					                                  "pkg-config",
++					                                  "@pkgconfig@/bin/pkg-config",
+ 					                                  "--variable=vapidir",
+ 					                                  pkgname,
+ 					                                  null);
