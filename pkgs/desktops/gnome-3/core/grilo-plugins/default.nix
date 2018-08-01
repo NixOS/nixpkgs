@@ -4,14 +4,14 @@
 
 let
   pname = "grilo-plugins";
-  version = "0.3.5";
+  version = "0.3.7";
   major = gnome3.versionBranch version;
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${major}/${name}.tar.xz";
-    sha256 = "1yv8a0mfd5qmdbdrnd0is5c51s1mvibhw61na99iagnbirxq4xr9";
+    sha256 = "0838mm7sdfwsiw022rjb27dlbbxncpx5jrpv3qzfadli66y3nbzw";
   };
 
   installFlags = [ "GRL_PLUGINS_DIR=$(out)/lib/grilo-${major}" ];
