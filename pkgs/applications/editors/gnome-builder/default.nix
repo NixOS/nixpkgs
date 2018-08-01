@@ -104,9 +104,16 @@ in stdenv.mkDerivation {
 
   mesonFlags = [
     "-Dpython_libprefix=${python3.libPrefix}"
-    "-Dwith_clang=false"
     "-Dwith_docs=true"
+
+    # Making the build system correctly detect clang header and library paths
+    # is difficult. Somebody should look into fixing this.
+    "-Dwith_clang=false"
   ];
+
+  # Some tests fail due to being unable to find the Vte typelib, and I don't
+  # understand why. Somebody should look into fixing this.
+  doCheck = false;
 
   preInstall = ''
     export LC_ALL="en_US.utf-8"
@@ -125,8 +132,6 @@ in stdenv.mkDerivation {
       chmod a+x "$f"
     done
   '';
-
-  #doCheck = true;
 
   passthru.updateScript = gnome3.updateScript { packageName = pname; };
 
