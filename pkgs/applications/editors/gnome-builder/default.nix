@@ -151,5 +151,5 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;
-  }; 
+  };
 }
