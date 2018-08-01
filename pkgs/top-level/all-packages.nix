@@ -11464,6 +11464,8 @@ with pkgs;
 
   pugixml = callPackage ../development/libraries/pugixml { };
 
+  pybind11 = callPackage ../development/libraries/pybind11 { };
+
   re2 = callPackage ../development/libraries/re2 { };
 
   qbs = callPackage ../development/tools/build-managers/qbs { };
