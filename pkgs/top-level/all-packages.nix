@@ -2801,6 +2801,8 @@ with pkgs;
 
   gparted = callPackage ../tools/misc/gparted { };
 
+  ldmtool = callPackage ../tools/misc/ldmtool { };
+
   gpodder = callPackage ../applications/audio/gpodder { };
 
   gpp = callPackage ../development/tools/gpp { };
