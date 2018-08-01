@@ -1,12 +1,12 @@
 { stdenv, fetchurl, p7zip }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.2";
+  version = "0.6.0";
   name = "sarasa-gothic-${version}";
 
   package = fetchurl {
     url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/sarasa-gothic-ttf-${version}.7z";
-    sha256 = "18ycw57k7yhrbb8njzhzk6x32xnjal61wr48qxkqy4lh9zfy0p22";
+    sha256 = "00kyx03lpgycxaw0cyx96hhrx8gwkcmy3qs35q7r09y60vg5i0nv";
   };
 
   nativeBuildInputs = [ p7zip ];
