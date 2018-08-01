@@ -26,18 +26,16 @@ in rec {
   # Old alias
   preview = beta;
 
-  # Attributes are named by the corresponding release channels
+  # Attributes are named by their corresponding release channels
 
   stable = mkStudio (stableVersion // {
     channel = "stable";
     pname = "android-studio";
-    #pname = "android-studio-stable"; # TODO: Rename and provide symlink
   });
 
   beta = mkStudio (betaVersion // {
     channel = "beta";
     pname = "android-studio-preview";
-    #pname = "android-studio-beta"; # TODO: Rename and provide symlink
   });
 
   dev = mkStudio (latestVersion // {
