@@ -8680,6 +8680,8 @@ with pkgs;
 
   xpwn = callPackage ../development/mobile/xpwn {};
 
+  scrcpy = callPackage ../development/mobile/scrcpy {};
+
   xxdiff = callPackage ../development/tools/misc/xxdiff {
     bison = bison2;
   };
