@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql55, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, curl, libuuid }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql55, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, curl, libuuid, autoPatchelfHook }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -133,19 +133,18 @@
       sha256 = "1966ymbbk0jsacqwzi3dmhxv2n8hfgnpjsx3hr3n7s9d88chgpx5";
     };
 
-    buildInputs = [ unixODBC dpkg];
+    nativeBuildInputs = [ autoPatchelfHook ];
+    buildInputs = [ unixODBC dpkg openssl kerberos curl libuuid stdenv.cc.cc ];
 
     unpackPhase = "dpkg -x $src ./";
     buildPhase = "";
 
     installPhase = ''
       mkdir -p $out
-      mkdir -p $out/libshim
-      ln -s ${lib.makeLibraryPath [openssl]}/libssl.so.1.0.0 $out/libshim/libssl.so.1.0.2
-      ln -s ${lib.makeLibraryPath [openssl]}/libcrypto.so.1.0.0 $out/libshim/libcrypto.so.1.0.2
+      mkdir -p $out/lib
+      ln -s ${lib.makeLibraryPath [openssl]}/libssl.so.1.0.0 $out/lib/libssl.so.1.0.2
+      ln -s ${lib.makeLibraryPath [openssl]}/libcrypto.so.1.0.0 $out/lib/libcrypto.so.1.0.2
       cp -r opt/microsoft/msodbcsql${versionMajor}/lib64 opt/microsoft/msodbcsql${versionMajor}/share $out/
-      patchelf --set-rpath ${lib.makeLibraryPath [ openssl unixODBC kerberos curl libuuid stdenv.cc.cc]}:$out/libshim \
-        $out/lib64/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}
     '';
 
     passthru = {
