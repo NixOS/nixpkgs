@@ -23,8 +23,12 @@ let
     sha256Hash = "0r93yzw87cgzz60p60gknij5vaqmv1a1kyd4cr9gx8cbxw46lhwh";
   };
 in rec {
-  # Old alias
-  preview = beta;
+  # TODO: Drop old alias after 18.09
+  preview = mkStudio (betaVersion // {
+    channel = "beta";
+    pname = "android-studio-preview";
+    deprecated = true;
+  });
 
   # Attributes are named by their corresponding release channels
 
