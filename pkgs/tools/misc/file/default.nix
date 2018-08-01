@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ]
               ++ stdenv.lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
+  patches = [ ./file-5.33-CVE-2018-10360.patch ];
+
   doCheck = true;
 
   makeFlags = if stdenv.hostPlatform.isWindows then "FILE_COMPILE=file"
