@@ -372,7 +372,10 @@ inherit (pkgs.nixos {
     </para>
   </listitem>
   <listitem>
-    <para>The module option <option>nix.useSandbox</option> is now defaulted to <literal>true</literal>.
+    <para>
+      The module option <option>nix.useSandbox</option> is now defaulted to <literal>true</literal>.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>
