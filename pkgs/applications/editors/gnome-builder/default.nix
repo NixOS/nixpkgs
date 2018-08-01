@@ -78,7 +78,7 @@ in stdenv.mkDerivation {
     webkitgtk
   ];
 
-  outputDevdoc = "out";
+  outputs = [ "out" "devdoc" ];
 
   prePatch = ''
     patchShebangs build-aux/meson/post_install.py
