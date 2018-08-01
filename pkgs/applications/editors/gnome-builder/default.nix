@@ -2,6 +2,7 @@
 , desktop-file-utils
 , docbook_xsl
 , docbook_xml_dtd_43
+, fetchpatch
 , fetchurl
 , flatpak
 , glibcLocales
@@ -84,9 +85,21 @@ in stdenv.mkDerivation {
   '';
 
   patches = [
-    ./0001-Make-libide-s-install_dir-an-absolute-path.patch
-    ./0002-Allow-packagers-to-specify-the-Python-libprefix.patch
-    ./0003-Add-missing-ostree-1-dependency-to-flatpak-plugin.patch
+    (fetchpatch {
+      name = "absolute-shared-library-path.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/1011cabc519fd7322e2d695c79bfce3e18ff6200.patch";
+      sha256 = "1g12zziidzrphp527aa8sklfaln4qpjprkz73f0c9w5ph6k252fw";
+    })
+    (fetchpatch {
+      name = "python-libprefix.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/43494ce83a347f369ed4cfb8dd71d3b93452736b.patch";
+      sha256 = "0kgi3n3g13n1j4xa61ln9xiahcfdc43bxi5mw4yva2d5px445msf";
+    })
+    (fetchpatch {
+      name = "ostree-dependency.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/8b11773b65c95f464a0de16b91318c1ca73deeae.patch";
+      sha256 = "18r4hd90id0w6r0lzqpw83bcj45nm9jhr46a0ffi1mcayb18mgbk";
+    })
   ];
 
   mesonFlags = [
