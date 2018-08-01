@@ -21331,6 +21331,8 @@ with pkgs;
     nixStable
     nixUnstable;
 
+  nixConfig = callPackage ../tools/package-management/nix/config.nix { };
+
   nixops = callPackage ../tools/package-management/nixops { };
 
   nixopsUnstable = lowPrio (callPackage ../tools/package-management/nixops/unstable.nix { });
