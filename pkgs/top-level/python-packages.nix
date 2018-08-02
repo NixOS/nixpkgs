@@ -11845,6 +11845,8 @@ in {
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
+  readlike = callPackage ../development/python-modules/readlike { };
+
   rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
     python2 = python;
   }));
