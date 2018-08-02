@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   name = "xca-${version}";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner  = "chris2511";
     repo   = "xca";
     rev    = "RELEASE.${version}";
-    sha256 = "0906xnmqzd9q5irxzm19361vhzig9yqsmf6wsc3rggniix5bk3a8";
+    sha256 = "039qz6hh43hx8dcw2bq71mgy95zk09jyd3xxpldmxxd5d69zcr8m";
   };
 
   postPatch = ''
@@ -22,8 +22,6 @@ mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig which ];
 
   enableParallelBuilding = true;
-
-  configureFlags = [ "CXXFLAGS=-std=c++11" ];
 
   meta = with lib; {
     description = "Interface for managing asymetric keys like RSA or DSA";
