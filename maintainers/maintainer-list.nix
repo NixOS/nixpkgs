@@ -2174,6 +2174,11 @@
     github = "nathanielbaxter";
     name = "Nathaniel Baxter";
   };
+  lightdiscord = {
+    email = "arnaud@lightdiscord.me";
+    github = "lightdiscord";
+    name = "Arnaud Pascal";
+  };
   lihop = {
     email = "nixos@leroy.geek.nz";
     github = "lihop";
