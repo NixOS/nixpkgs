@@ -142,8 +142,8 @@
     installPhase = ''
       mkdir -p $out
       mkdir -p $out/lib
-      ln -s ${lib.makeLibraryPath [openssl]}/libssl.so.1.0.0 $out/lib/libssl.so.1.0.2
-      ln -s ${lib.makeLibraryPath [openssl]}/libcrypto.so.1.0.0 $out/lib/libcrypto.so.1.0.2
+      ln -s ${lib.getLib openssl}/lib/libssl.so.1.0.0 $out/lib/libssl.so.1.0.2
+      ln -s ${lib.getLib openssl}/lib/libcrypto.so.1.0.0 $out/lib/libcrypto.so.1.0.2
       cp -r opt/microsoft/msodbcsql${versionMajor}/lib64 opt/microsoft/msodbcsql${versionMajor}/share $out/
     '';
 
