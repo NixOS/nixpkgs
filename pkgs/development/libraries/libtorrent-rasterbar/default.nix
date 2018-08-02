@@ -2,7 +2,7 @@
 , boost, openssl, libtool, python, libiconv, geoip }:
 
 let
-  version = "1.1.7";
+  version = "1.1.9";
   formattedVersion = lib.replaceChars ["."] ["_"] version;
 
   boostPython = boost.override { enablePython = true; };
@@ -14,19 +14,8 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "libtorrent-${formattedVersion}";
-    sha256 = "073nb7yca5jg1i8z5h76qrmddl2hdy8fc1pnchkg574087an31r3";
+    sha256 = "04w3pjzd6q9wplj1dcphylxn1i2b2x0iw1l0ma58ymh14swdah7a";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/arvidn/libtorrent/commit/64d6b4900448097b0157abb328621dd211e2947d.patch";
-      sha256 = "1bdv0icqzbg1il60sckcly4y22lkdbkkwdjadwdzxv7cdj586bzd";
-    })
-    (fetchpatch {
-      url = "https://github.com/arvidn/libtorrent/commit/9cd0ae67e74a507c1b9ff9c057ee97dda38ccb81.patch";
-      sha256 = "1cscqpc6fq9iwspww930dsxf0yb01bgrghzf5hdhl09a87r6q2zg";
-    })
-  ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
