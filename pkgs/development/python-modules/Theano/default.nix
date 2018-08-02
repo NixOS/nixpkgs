@@ -50,12 +50,15 @@ in buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i 's,g++,${gcc_}/bin/g++,g' theano/configdefaults.py
-  '' + lib.optionalString cudnnSupport ''
-    sed -i \
-      -e "s,ctypes.util.find_library('cudnn'),'${cudnn}/lib/libcudnn.so',g" \
-      -e "s/= _dnn_check_compile()/= (True, None)/g" \
-      theano/gpuarray/dnn.py
+    substituteInPlace theano/configdefaults.py \
+      --replace 'StrParam(param, is_valid=warn_cxx)' 'StrParam('\'''${gcc_}/bin/g++'\''', is_valid=warn_cxx)' \
+      --replace 'rc == 0 and config.cxx != ""' 'config.cxx != ""'
+  '' + stdenv.lib.optionalString cudaSupport ''
+    substituteInPlace theano/configdefaults.py \
+      --replace 'StrParam(get_cuda_root)' 'StrParam('\'''${cudatoolkit}'\''')'
+  '' + stdenv.lib.optionalString cudnnSupport ''
+    substituteInPlace theano/configdefaults.py \
+      --replace 'StrParam(default_dnn_base_path)' 'StrParam('\'''${cudnn}'\''')'
   '';
 
   preCheck = ''
