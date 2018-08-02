@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, automake, autoreconfHook, asciidoc, libxml2, libxslt }:
+{ stdenv, fetchFromGitHub, automake, autoreconfHook, asciidoc, libxml2,
+  libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec{
   name = "tinyproxy-${version}";
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec{
     owner = "tinyproxy";
   };
 
-  nativeBuildInputs = [ autoreconfHook asciidoc libxml2 libxslt ];
+  nativeBuildInputs = [ autoreconfHook asciidoc libxml2 libxslt docbook_xsl ];
 
   # -z flag is not supported in darwin
   preAutoreconf = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -24,11 +25,13 @@ stdenv.mkDerivation rec{
   postConfigure = ''
     substituteInPlace docs/man5/Makefile --replace \
           "-f manpage" \
-          "-f manpage \\
+          "--xsltproc-opts=--nonet \\
+           -f manpage \\
            -L"
     substituteInPlace docs/man8/Makefile --replace \
           "-f manpage" \
-          "-f manpage \\
+          "--xsltproc-opts=--nonet \\
+           -f manpage \\
            -L"
   '';
 
