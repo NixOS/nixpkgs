@@ -172,9 +172,6 @@ self:
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
          }));
 
-      # upstream issue: truncated file
-      powershell = markBroken super.powershell;
-
       # upstream issue: mismatched filename
       processing-snippets = markBroken super.processing-snippets;
 
