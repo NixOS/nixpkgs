@@ -2526,6 +2526,7 @@ let
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
+    meta.license = stdenv.lib.licenses.mit;
   }) // {inherit libX11 xproto ;};
 
   xmag = (mkDerivation "xmag" {
