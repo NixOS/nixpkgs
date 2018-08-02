@@ -36,7 +36,7 @@ let
     exec ${gcc}/bin/g++ "$@"
   '';
 
-  libgpuarray_ = libgpuarray.override { inherit cudaSupport; };
+  libgpuarray_ = libgpuarray.override { inherit cudaSupport cudatoolkit; };
 
 in buildPythonPackage rec {
   pname = "Theano";
