@@ -48,6 +48,8 @@ makeScope newScope (self: with self; {
 
   xfce4-cpufreq-plugin = callPackage ./xfce4-cpufreq-plugin { };
 
+  xfce4-clipman-plugin = callPackage ./xfce4-clipman-plugin { };
+
   xfce4-dev-tools = callPackage ./xfce4-dev-tools {
     mkXfceDerivation = mkXfceDerivation.override {
       xfce4-dev-tools = null;
