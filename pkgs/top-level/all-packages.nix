@@ -22113,4 +22113,5 @@ with pkgs;
 
   powershell = callPackage ../shells/powershell { };
 
+  doing = callPackage ../applications/misc/doing  { };
 }
