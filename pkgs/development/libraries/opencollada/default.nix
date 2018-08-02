@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/KhronosGroup/OpenCOLLADA/;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.mit;
   };
 }
