@@ -473,7 +473,7 @@ let
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
-              ip link set "${n}" up
+              ip link set "${n}" up || true
             '';
             postStop = ''
               ip link delete "${n}" || true
