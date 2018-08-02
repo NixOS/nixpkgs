@@ -13,21 +13,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "polkit-0.114";
+  name = "polkit-0.115";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/polkit/releases/${name}.tar.gz";
-    sha256 = "1rpdx1vymkn5d8g2vrb7c8h4v60mq5smjjg29mwzsn6pcxrh1x5x";
+    sha256 = "0c91y61y4gy6p91cwbzg32dhavw4b7fflg370rimqhdxpzdfr1rg";
   };
 
-  patches = [
-    # to remove on 0.115 release
-    (fetchpatch {
-      name = "format-security.patch";
-      url = "https://cgit.freedesktop.org/polkit/patch/?id=373705b35e7f6c7dc83de5e0a3ce11ecd15d0409";
-      sha256 = "03fb5039d62cljxi84ir4420p4m1455q022dxamql1mvq3n38mwg";
-    })
-  ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i -e "s/-Wl,--as-needed//" configure.ac
