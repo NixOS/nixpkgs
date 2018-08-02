@@ -11,7 +11,19 @@ let
     if cfg.extraPlugins == [] then pg
     else pkgs.buildEnv {
       name = "postgresql-and-plugins-${(builtins.parseDrvName pg.name).version}";
-      paths = [ pg pg.lib ] ++ cfg.extraPlugins;
+      paths = [ pg pg.lib ] ++
+        # Plugins need to link with the configured version of postgresql
+        # otherwise the server will crash with an error like:
+        #
+        #   FATAL:  incompatible library
+        #     "/nix/store/...-postgresql-and-plugins-10.4/lib/pg_journal.so":
+        #     version mismatch
+        #   DETAIL:  Server is version 10, library is version 9.6.
+        #
+        # To fix this we'll override every plugin by setting postgresql to the
+        # configured package. Note that this does require every plugin to have
+        # postgresql in its arguments but every plugin already needs this.
+        map (plugin: plugin.override { postgresql = pg; }) cfg.extraPlugins;
       buildInputs = [ pkgs.makeWrapper ];
       postBuild =
         ''
