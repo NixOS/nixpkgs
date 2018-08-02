@@ -115,6 +115,11 @@ self:
       # upstream issue: missing file header
       initsplit = super.initsplit;
 
+      # tries to write a log file to $HOME
+      insert-shebang = super.insert-shebang.overrideAttrs (attrs: {
+        HOME = "/tmp";
+      });
+
       # Expects bash to be at /bin/bash
       ivy-rtags = markBroken super.ivy-rtags;
 
