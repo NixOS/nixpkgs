@@ -52,10 +52,6 @@ self:
       # part of a larger package
       caml = dontConfigure super.caml;
 
-      # part of a larger package
-      # upstream issue: missing package version
-      cmake-mode = markBroken (dontConfigure super.cmake-mode);
-
       # Expects bash to be at /bin/bash
       company-rtags = markBroken super.company-rtags;
 
