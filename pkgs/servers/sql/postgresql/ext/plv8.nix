@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   buildPhase = "make -f Makefile.shared all";
 
   installPhase = ''
-    mkdir -p $out/bin
     install -D plv8*.so                                        -t $out/lib
     install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/extension
   '';

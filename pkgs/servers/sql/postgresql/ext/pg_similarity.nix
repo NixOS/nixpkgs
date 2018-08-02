@@ -13,7 +13,6 @@ stdenv.mkDerivation {
   buildInputs = [ postgresql gcc ];
   buildPhase = "USE_PGXS=1 make";
   installPhase = ''
-    mkdir -p $out/bin   # for buildEnv to setup proper symlinks
     install -D pg_similarity.so -t $out/lib/
     install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/extension
   '';
