@@ -127,9 +127,6 @@ self:
       jsfmt = markBroken super.jsfmt;
 
       # upstream issue: missing file header
-      link = markBroken super.link;
-
-      # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
 
       magit =
