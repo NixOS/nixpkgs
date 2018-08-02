@@ -186,6 +186,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
+
   astral = callPackage ../development/python-modules/astral { };
 
   astropy = callPackage ../development/python-modules/astropy {  };
@@ -256,6 +258,8 @@ in {
 
   ewmh = callPackage ../development/python-modules/ewmh { };
 
+  exchangelib = callPackage ../development/python-modules/exchangelib { };
+
   dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
@@ -263,6 +267,10 @@ in {
   discid = callPackage ../development/python-modules/discid { };
 
   discordpy = callPackage ../development/python-modules/discordpy { };
+
+  parver = callPackage ../development/python-modules/parver { };
+  arpeggio = callPackage ../development/python-modules/arpeggio { };
+  invoke = callPackage ../development/python-modules/invoke { };
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
@@ -411,6 +419,8 @@ in {
     inherit (pkgs.llvmPackages) openmp;
   };
 
+  pykerberos = callPackage ../development/python-modules/pykerberos { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
@@ -471,6 +481,8 @@ in {
 
   rx = callPackage ../development/python-modules/rx { };
 
+  sabyenc = callPackage ../development/python-modules/sabyenc { };
+
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   seekpath = callPackage ../development/python-modules/seekpath { };
@@ -482,6 +494,8 @@ in {
   sip = callPackage ../development/python-modules/sip { };
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
+
+  slackclient = callPackage ../development/python-modules/slackclient { };
 
   spglib = callPackage ../development/python-modules/spglib { };
 
@@ -576,22 +590,7 @@ in {
 
   application = callPackage ../development/python-modules/application { };
 
-  appnope = buildPythonPackage rec {
-    version = "0.1.0";
-    name = "appnope-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/appnope/${name}.tar.gz";
-      sha256 = "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71";
-    };
-
-    meta = {
-      description = "Disable App Nap on macOS";
-      homepage    = https://pypi.python.org/pypi/appnope;
-      platforms   = platforms.darwin;
-      license     = licenses.bsd3;
-    };
-  };
+  appnope = callPackage ../development/python-modules/appnope { };
 
   apsw = callPackage ../development/python-modules/apsw {};
 
@@ -654,51 +653,12 @@ in {
 
   audioread = callPackage ../development/python-modules/audioread { };
 
-  audiotools = buildPythonPackage rec {
-    name = "audiotools-${version}";
-    version = "3.1.1";
-
-    buildInputs = optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [
-      AudioToolbox
-      AudioUnit
-      CoreServices
-    ]);
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/tuffy/python-audio-tools/archive/v${version}.tar.gz";
-      sha256 = "0ymlxvqkqhzk4q088qwir3dq0zgwqlrrdfnq7f0iq97g05qshm2c";
-    };
-
-    meta = {
-      description = "Utilities and Python modules for handling audio";
-      homepage = "http://audiotools.sourceforge.net/";
-      license = licenses.gpl2Plus;
-    };
-  };
+  audiotools = callPackage ../development/python-modules/audiotools { };
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
-  av = buildPythonPackage rec {
-    name = "av-${version}";
-    version = "0.2.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/av/${name}.tar.gz";
-      sha256 = "bdc7e2e213cb9041d9c5c0497e6f8c47e84f89f1f2673a46d891cca0fb0d19a0";
-    };
-
-    buildInputs
-      =  (with self; [ nose pillow numpy ])
-      ++ (with pkgs; [ ffmpeg_2 git libav pkgconfig ]);
-
-    # Because of https://github.com/mikeboers/PyAV/issues/152
-    doCheck = false;
-
-    meta = {
-      description = "Pythonic bindings for FFmpeg/Libav";
-      homepage = https://github.com/mikeboers/PyAV/;
-      license = licenses.bsd2;
-    };
+  av = callPackage ../development/python-modules/av {
+    inherit (pkgs) ffmpeg_2 git libav pkgconfig;
   };
 
   avro = callPackage ../development/python-modules/avro {};
@@ -1564,6 +1524,8 @@ in {
 
   cherrypy = callPackage ../development/python-modules/cherrypy {};
 
+  cfgv = callPackage ../development/python-modules/cfgv { };
+
   cftime = callPackage ../development/python-modules/cftime {};
 
   cjson = callPackage ../development/python-modules/cjson { };
@@ -2100,6 +2062,8 @@ in {
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
 
+  requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
+
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket {};
 
   howdoi = callPackage ../development/python-modules/howdoi {};
@@ -2252,6 +2216,8 @@ in {
   dyn = callPackage ../development/python-modules/dyn { };
 
   easydict = callPackage ../development/python-modules/easydict { };
+
+  easygui = callPackage ../development/python-modules/easygui { };
 
   EasyProcess = callPackage ../development/python-modules/easyprocess { };
 
@@ -2587,6 +2553,8 @@ in {
       license = licenses.asl20;
     };
   };
+
+  fluent-logger = callPackage ../development/python-modules/fluent-logger {};
 
   python-forecastio = callPackage ../development/python-modules/python-forecastio { };
 
@@ -3087,6 +3055,8 @@ in {
   };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
+
+  identify = callPackage ../development/python-modules/identify { };
 
   ijson = callPackage ../development/python-modules/ijson {};
 
@@ -3989,6 +3959,8 @@ in {
 
   pylama = callPackage ../development/python-modules/pylama { };
 
+  pymediainfo = callPackage ../development/python-modules/pymediainfo { };
+
   pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
@@ -4052,6 +4024,8 @@ in {
       license = licenses.gpl3Plus;
     };
   };
+
+  pyprind = callPackage ../development/python-modules/pyprind { };
 
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
@@ -4239,6 +4213,8 @@ in {
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
+
+  rawkit = callPackage ../development/python-modules/rawkit { };
 
   rethinkdb = buildPythonPackage rec {
     name = "rethinkdb-${version}";
@@ -4895,8 +4871,7 @@ in {
       sha256 = "01iv8w6lmmq98qjhxmnp8ddjxifmhxcmp612ijd91wc8nv8lk12w";
     };
 
-    propagatedBuildInputs = with self; [ django ] ++
-      (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
+    propagatedBuildInputs = with self; [ django ];
 
     meta = {
       description = "An extension to the Django web framework that provides comprehensive version control facilities";
@@ -5315,6 +5290,8 @@ in {
   };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
+
+  fastpair = callPackage ../development/python-modules/fastpair { };
 
   fastrlock = callPackage ../development/python-modules/fastrlock {};
 
@@ -6202,6 +6179,10 @@ in {
 
   gpgme = toPythonModule (pkgs.gpgme.override { withPython=true; });
 
+  gphoto2 = callPackage ../development/python-modules/gphoto2 {
+    inherit (pkgs) pkgconfig;
+  };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = callPackage ../development/python-modules/greenlet { };
@@ -6524,17 +6505,6 @@ in {
       description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats";
       homepage = http://imageio.github.io/;
       license = licenses.bsd2;
-    };
-  };
-
-  importlib = buildPythonPackage rec {
-    name = "importlib-1.0.2";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/importlib/importlib-1.0.2.tar.gz";
-      sha256 = "131jvp6ahllcqblszjg6fxrzh4k50w8g60sq924b4nb8lxm9dl14";
     };
   };
 
@@ -8480,6 +8450,8 @@ in {
     inherit (pkgs) which;
   };
 
+  nodeenv = callPackage ../development/python-modules/nodeenv { };
+
   nose = buildPythonPackage rec {
     version = "1.3.7";
     name = "nose-${version}";
@@ -10002,22 +9974,6 @@ in {
 
   prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit { };
 
-  prompt_toolkit_52 = self.prompt_toolkit.overridePythonAttrs(oldAttrs: rec {
-    name = "${oldAttrs.pname}-${version}";
-    version = "0.52";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "00h9ldqmb33nhg2kpks7paldf3n3023ipp124alwp96yz16s7f1m";
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    #Only <3.4 expressly supported.
-    disabled = isPy35;
-
-  });
-
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
@@ -11021,25 +10977,7 @@ in {
     };
   };
 
-  PyStemmer = buildPythonPackage (rec {
-    name = "PyStemmer-1.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyStemmer/${name}.tar.gz";
-      sha256 = "d1ac14eb64978c1697fcfba76e3ac7ebe24357c9428e775390f634648947cb91";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} runtests.py
-    '';
-
-    meta = {
-      description = "Snowball stemming algorithms, for information retrieval";
-      homepage = http://snowball.tartarus.org/;
-      license = licenses.mit;
-      platforms = platforms.unix;
-    };
-  });
+  PyStemmer = callPackage ../development/python-modules/pystemmer {};
 
   Pyro = callPackage ../development/python-modules/pyro { };
 
@@ -12646,26 +12584,7 @@ in {
     };
   };
 
-  snowballstemmer = buildPythonPackage rec {
-    name = "snowballstemmer-1.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/snowballstemmer/${name}.tar.gz";
-      sha256 = "919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128";
-    };
-
-    # No tests included
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ PyStemmer ];
-
-    meta = {
-      description = "16 stemmer algorithms (15 + Poerter English stemmer) generated from Snowball algorithms";
-      homepage = http://sigal.saimon.org/en/latest/index.html;
-      license = licenses.bsd3;
-      platforms = platforms.unix;
-    };
-  };
+  snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
 
   spake2 = callPackage ../development/python-modules/spake2 { };
 
@@ -13485,8 +13404,6 @@ in {
     };
   });
 
-  spyder = callPackage ../applications/science/spyder { };
-
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   SQLAlchemy-ImageAttach = buildPythonPackage rec {
@@ -13880,21 +13797,7 @@ in {
     };
   };
 
-  testresources = buildPythonPackage rec {
-    name = "testresources-${version}";
-    version = "0.2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/testresources/${name}.tar.gz";
-      sha256 = "0cbj3plbllyz42c4b5xxgwaa7mml54lakslrn4kkhinxhdri22md";
-    };
-
-    meta = {
-      description = "Pyunit extension for managing expensive test resources";
-      homepage = https://pypi.python.org/pypi/testresources/;
-      license = licenses.bsd2;
-    };
-  };
+  testresources = callPackage ../development/python-modules/testresources { };
 
   testtools = callPackage ../development/python-modules/testtools { };
 
@@ -16624,29 +16527,6 @@ EOF
     '';
   };
 
-  ghp-import = buildPythonPackage rec {
-    version = "0.4.1";
-    name = "ghp-import-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/ghp-import/${name}.tar.gz";
-      sha256 = "6058810e1c46dd3b5b1eee87e203bdfbd566e10cfc77566edda7aa4dbf6a3053";
-    };
-    disabled = isPyPy;
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    # No tests available
-    doCheck = false;
-
-    meta = {
-      description = "Copy your docs directly to the gh-pages branch";
-      homepage = "https://github.com/davisp/ghp-import";
-      license = "Tumbolia Public License";
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
   typogrify = buildPythonPackage rec {
     name = "typogrify-2.0.7";
     src = pkgs.fetchurl {
@@ -16816,24 +16696,7 @@ EOF
     };
   };
 
-  potr = buildPythonPackage rec {
-    version = "1.0.1";
-    name = "potr-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-potr/python-${name}.zip";
-      sha256 = "1b3vjbv8hvynwj6amw3rg5zj8bagynbj0ipy09xwksf1mb0kz8m8";
-    };
-
-    propagatedBuildInputs = with self ; [ pycrypto ];
-
-    meta = {
-      description = "A pure Python OTR implementation";
-      homepage = "http://python-otr.pentabarf.de/";
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ globin ];
-    };
-  };
+  potr = callPackage ../development/python-modules/potr {};
 
   pluggy = callPackage ../development/python-modules/pluggy {};
 
@@ -17603,25 +17466,9 @@ EOF
     };
   };
 
-  moreItertools = self.more-itertools;
-
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
-  jaraco_functools = buildPythonPackage rec {
-    name = "jaraco.functools-${version}";
-    version = "1.15.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.functools/${name}.tar.gz";
-      sha256 = "1nhl0pjc7acxznhadg9wq1a6ls17ja2np8vf9psq8j66716mk2ya";
-    };
-
-    propagatedBuildInputs = with self; [ more-itertools backports_functools_lru_cache ];
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-  };
+  jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
 
   jaraco_classes = buildPythonPackage rec {
     name = "jaraco.classes-${version}";
@@ -17651,18 +17498,6 @@ EOF
     buildInputs = with self; [ setuptools_scm ];
 
     propagatedBuildInputs = with self; [ six ];
-  };
-
-  slackclient = buildPythonPackage rec {
-    name = "slackclient-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/slackclient/${name}.tar.gz";
-      sha256 = "063cbzp1fbdipv53gb0hnban1pg80pls0lbld98lhnykzkcb6vf0";
-    };
-
-    propagatedBuildInputs = with self; [ websocket_client requests ];
   };
 
   tempora= callPackage ../development/python-modules/tempora { };
@@ -17748,32 +17583,7 @@ EOF
 
   yarl = callPackage ../development/python-modules/yarl { };
 
-  suseapi = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "suseapi";
-    version = "0.24-31-g0fcbe96";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "openSUSE";
-      repo = "python-${pname}";
-      rev = version;
-      sha256 = "0hyzq0h1w8gp0zfvhqh7qsgcg1wp05a14371m6bn5a7gss93rbv4";
-    };
-
-    propagatedBuildInputs = with self; [
-      django suds-jurko ldap mechanize beautifulsoup4 pyxdg dateutil requests
-    ];
-
-    buildInputs = with self; [ httpretty ];
-
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/openSUSE/python-suseapi/";
-      description = "Python module to work with various SUSE services";
-      license = licenses.gpl3Plus;
-    };
-  };
+  suseapi = callPackage ../development/python-modules/suseapi { };
 
   typed-ast = callPackage ../development/python-modules/typed-ast { };
 

@@ -4,7 +4,7 @@ let
   packages = self: with self; {
 
     # For compiling information, see:
-    # - https://github.com/lxde/lxqt/wiki/Building-from-source
+    # - https://github.com/lxqt/lxqt/wiki/Building-from-source
 
     ### BASE
     libqtxdg = callPackage ./base/libqtxdg { };

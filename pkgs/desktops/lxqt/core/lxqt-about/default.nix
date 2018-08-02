@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-about";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "13knjxbnq0mh9jgkllarf6rjxkvj2c93l0srnlrqp3939gcpwxh3";
+    sha256 = "03f53rnn4rkd1xc2q9abnw37aq4sgvpbwhmcnckqyzc87lj6ici0";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dialogue window providing information about LXQt and the system it's running on";
-    homepage = https://github.com/lxde/lxqt-about;
+    homepage = https://github.com/lxqt/lxqt-about;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

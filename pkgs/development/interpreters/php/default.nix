@@ -9,14 +9,13 @@
 with lib;
 
 let
-  php7 = versionAtLeast version "7.0";
   generic =
   { version
   , sha256
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
   , mhashSupport ? config.php.mhash or true
-  , mysqlSupport ? (config.php.mysql or true) && (!php7)
+  , mysqlSupport ? (config.php.mysql or true)
   , mysqlndSupport ? config.php.mysqlnd or true
   , mysqliSupport ? config.php.mysqli or true
   , pdo_mysqlSupport ? config.php.pdo_mysql or true
@@ -26,7 +25,7 @@ let
   , bcmathSupport ? config.php.bcmath or true
   , socketsSupport ? config.php.sockets or true
   , curlSupport ? config.php.curl or true
-  , curlWrappersSupport ? (config.php.curlWrappers or true) && (!php7)
+  , curlWrappersSupport ? config.php.curlWrappers or true
   , gettextSupport ? config.php.gettext or true
   , pcntlSupport ? config.php.pcntl or true
   , postgresqlSupport ? config.php.postgresql or true
@@ -47,11 +46,11 @@ let
   , ftpSupport ? config.php.ftp or true
   , fpmSupport ? config.php.fpm or true
   , gmpSupport ? config.php.gmp or true
-  , mssqlSupport ? (config.php.mssql or (!stdenv.isDarwin)) && (!php7)
+  , mssqlSupport ? config.php.mssql or (!stdenv.isDarwin)
   , ztsSupport ? config.php.zts or false
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
-  , tidySupport ? false
+  , tidySupport ? (config.php.tidy or false)
   }:
 
     let
@@ -207,7 +206,7 @@ let
         outputsToInstall = [ "out" "dev" ];
       };
 
-      patches = if !php7 then [ ./fix-paths.patch ] else [ ./fix-paths-php7.patch ];
+      patches = [ ./fix-paths-php7.patch ];
 
       postPatch = optional stdenv.isDarwin ''
         substituteInPlace configure --replace "-lstdc++" "-lc++"
@@ -220,23 +219,13 @@ let
     };
 
 in {
-  php56 = generic {
-    version = "5.6.36";
-    sha256 = "0ahp9vk33dpsqgld0gg4npff67v0l39hs3wk5dm6h3lablzhwsk2";
-  };
-
-  php70 = generic {
-    version = "7.0.30";
-    sha256 = "0l0bhnlgxmfl7mrdykmxfl53simxsksdcnbg5ymqz6r31i03hgr1";
-  };
-
   php71 = generic {
-    version = "7.1.19";
-    sha256 = "1wvhsxzmb78pcr36ginz93iv7rcrxp3p01rb34zxa2h4wdxkxi0k";
+    version = "7.1.20";
+    sha256 = "0i8xd6p4zdg8fl6f0j430raanlshsshr3s3jlm72b0gvi1n4f6rs";
   };
 
   php72 = generic {
-    version = "7.2.7";
-    sha256 = "18ymjqy8vpmwlzzfrxvaz2nsn8n66rmg40pwiy6x2kdgjrd6g0fc";
+    version = "7.2.8";
+    sha256 = "1rky321gcvjm0npbfd4bznh36an0y14viqcvn4yzy3x643sni00z";
   };
 }

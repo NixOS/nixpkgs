@@ -44,6 +44,10 @@ makeScope newScope (self: with self; {
 
   xfce4-appfinder = callPackage ./xfce4-appfinder { };
 
+  xfce4-battery-plugin = callPackage ./xfce4-battery-plugin { };
+
+  xfce4-cpufreq-plugin = callPackage ./xfce4-cpufreq-plugin { };
+
   xfce4-dev-tools = callPackage ./xfce4-dev-tools {
     mkXfceDerivation = mkXfceDerivation.override {
       xfce4-dev-tools = null;
@@ -54,11 +58,15 @@ makeScope newScope (self: with self; {
 
   xfce4-mixer = callPackage ./xfce4-mixer { };
 
+  xfce4-netload-plugin = callPackage ./xfce4-netload-plugin { };
+
   xfce4-notifyd = callPackage ./xfce4-notifyd { };
 
   xfce4-panel = callPackage ./xfce4-panel { };
 
   xfce4-power-manager = callPackage ./xfce4-power-manager { };
+
+  xfce4-pulseaudio-plugin = callPackage ./xfce4-pulseaudio-plugin { };
 
   xfce4-screenshooter = callPackage ./xfce4-screenshooter {
     inherit (gnome3) libsoup;
@@ -73,6 +81,8 @@ makeScope newScope (self: with self; {
   };
 
   xfce4-volumed-pulse = callPackage ./xfce4-volumed-pulse { };
+
+  xfce4-whiskermenu-plugin = callPackage ./xfce4-whiskermenu-plugin { };
 
   xfwm4 = callPackage ./xfwm4 { };
 })

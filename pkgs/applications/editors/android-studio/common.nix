@@ -1,4 +1,5 @@
-{ pname, version, build, sha256Hash, meta }:
+{ channel, pname, version, build, sha256Hash, deprecated ? false }:
+
 { bash
 , buildFHSUserEnv
 , coreutils
@@ -36,8 +37,21 @@
 }:
 
 let
+  # TODO: This is a bit stupid to be honest...
+  # The problem is that we have to make sure this is only executed if the
+  # derivation is actually build to avoid always printing this warning (e.g.
+  # "nix-env -qaP"). Since this will always evaluate to "" it won't actually
+  # change the derivation (only generate a side-effect) but we have to make
+  # sure this expression is evaluated lazily!
+  printDeprecationWarning = if deprecated then (builtins.trace ''
+    android-studio-preview and androidStudioPackages.preview are old aliases
+    and will be dropped at some point, please use androidStudioPackages.beta
+    instead (corresponds to the correct channel name).''
+    "")
+    else "";
+  drvName = "android-studio-${channel}-${version}";
   androidStudio = stdenv.mkDerivation {
-    name = "${pname}-${version}";
+    name = drvName;
 
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
@@ -115,17 +129,32 @@ let
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
   fhsEnv = buildFHSUserEnv {
-    name = "${pname}-fhs-env";
+    name = "${drvName}-fhs-env";
     multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
 
 in
   writeTextFile {
-    name = "${pname}-${version}";
+    name = "${drvName}-wrapper";
+    # TODO: Rename preview -> beta (and add -stable suffix?):
     destination = "/bin/${pname}";
     executable = true;
     text = ''
       #!${bash}/bin/bash
-      ${fhsEnv}/bin/${pname}-fhs-env ${androidStudio}/bin/studio.sh
-    '';
-  } // { inherit meta; }
+      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh
+    '' + printDeprecationWarning;
+  } // {
+    meta = with stdenv.lib; {
+      description = "The Official IDE for Android (${channel} channel)";
+      longDescription = ''
+        Android Studio is the official IDE for Android app development, based on
+        IntelliJ IDEA.
+      '';
+      homepage = if channel == "stable"
+        then https://developer.android.com/studio/index.html
+        else https://developer.android.com/studio/preview/index.html;
+      license = licenses.asl20;
+      platforms = [ "x86_64-linux" ];
+      maintainers = with maintainers; [ primeos ];
+    };
+  }

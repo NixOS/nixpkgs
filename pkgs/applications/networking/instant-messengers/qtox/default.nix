@@ -44,7 +44,7 @@ in mkDerivation rec {
     description = "Qt Tox client";
     homepage    = https://tox.chat;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ viric jgeerds akaWolf peterhoeg ];
+    maintainers = with maintainers; [ jgeerds akaWolf peterhoeg ];
     platforms   = platforms.all;
   };
 }

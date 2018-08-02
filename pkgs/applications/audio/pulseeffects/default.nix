@@ -3,6 +3,7 @@
 , meson
 , ninja
 , pkgconfig
+, itstool
 , libxml2
 , desktop-file-utils
 , wrapGAppsHook
@@ -20,6 +21,7 @@
 , libbs2b
 , libsamplerate
 , libsndfile
+, libebur128
 , boost
 , fftwFloat
 , calf
@@ -40,13 +42,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   name = "pulseeffects-${version}";
-  version = "4.1.7";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "13yj1958jsz76zxi3ag133i4337cicvm5b58l22g2xvbqa5vraq9";
+    sha256 = "0s3lc0xkr48wzk0b6akq4yw19n0iwfi9jyji8bpdgj5y7kjg5mqm";
   };
 
   nativeBuildInputs = [
@@ -54,6 +56,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkgconfig
     libxml2
+    itstool
     desktop-file-utils
     wrapGAppsHook
   ];
@@ -70,6 +73,7 @@ in stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     lilv lv2 serd sord sratom
     libbs2b
+    libebur128
     libsamplerate
     libsndfile
     boost
