@@ -1,4 +1,4 @@
-{ channel, pname, version, build, sha256Hash, deprecated ? false }:
+{ channel, pname, version, build, sha256Hash }:
 
 { bash
 , buildFHSUserEnv
@@ -37,18 +37,6 @@
 }:
 
 let
-  # TODO: This is a bit stupid to be honest...
-  # The problem is that we have to make sure this is only executed if the
-  # derivation is actually build to avoid always printing this warning (e.g.
-  # "nix-env -qaP"). Since this will always evaluate to "" it won't actually
-  # change the derivation (only generate a side-effect) but we have to make
-  # sure this expression is evaluated lazily!
-  printDeprecationWarning = if deprecated then (builtins.trace ''
-    android-studio-preview and androidStudioPackages.preview are old aliases
-    and will be dropped at some point, please use androidStudioPackages.beta
-    instead (corresponds to the correct channel name).''
-    "")
-    else "";
   drvName = "android-studio-${channel}-${version}";
   androidStudio = stdenv.mkDerivation {
     name = drvName;
@@ -142,7 +130,7 @@ in
     text = ''
       #!${bash}/bin/bash
       ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh
-    '' + printDeprecationWarning;
+    '';
   } // {
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (${channel} channel)";
