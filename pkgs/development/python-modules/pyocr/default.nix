@@ -18,9 +18,9 @@ buildPythonPackage rec {
 
   NIX_CUNEIFORM_CMD = "${cuneiform}/bin/cuneiform";
   NIX_CUNEIFORM_DATA = "${cuneiform}/share/cuneiform";
-  NIX_LIBTESSERACT_PATH = "${tesseract}/lib/libtesseract.so";
-  NIX_TESSDATA_PREFIX = "${tesseract}/share/tessdata";
-  NIX_TESSERACT_CMD = "${tesseract}/bin/tesseract";
+  NIX_LIBTESSERACT_PATH = "${tesseract.lib}/lib/libtesseract.so";
+  NIX_TESSDATA_PREFIX = "${tesseract.data}/share/tessdata";
+  NIX_TESSERACT_CMD = "${tesseract.bin}/bin/tesseract";
 
   patches = [ ./paths.patch ];
 
