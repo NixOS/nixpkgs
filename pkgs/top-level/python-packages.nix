@@ -340,11 +340,15 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  palettable = callPackage ../development/python-modules/palettable { };
+
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
+
+  phonopy = callPackage ../development/python-modules/phonopy { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
@@ -420,6 +424,8 @@ in {
   };
 
   pykerberos = callPackage ../development/python-modules/pykerberos { };
+  
+  pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
 
@@ -498,6 +504,8 @@ in {
   slackclient = callPackage ../development/python-modules/slackclient { };
 
   spglib = callPackage ../development/python-modules/spglib { };
+
+  sumo = callPackage ../development/python-modules/sumo { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
