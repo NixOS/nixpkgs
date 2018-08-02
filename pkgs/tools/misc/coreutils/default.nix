@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    platforms = platforms.all;
+    platforms = platforms.unix;
 
     maintainers = [ maintainers.eelco ];
   };
