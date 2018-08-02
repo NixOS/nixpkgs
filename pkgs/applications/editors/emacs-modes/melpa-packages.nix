@@ -81,6 +81,11 @@ self:
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
       });
 
+      # missing dependencies
+      evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
+        packageRequires = with self; [ evil highlight ];
+      });
+
       # missing OCaml
       flycheck-ocaml = markBroken super.flycheck-ocaml;
 
