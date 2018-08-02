@@ -3019,6 +3019,8 @@ with pkgs;
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
+  hangups = callPackage ../applications/networking/instant-messengers/hangups { };
+
   hdapsd = callPackage ../os-specific/linux/hdapsd { };
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
