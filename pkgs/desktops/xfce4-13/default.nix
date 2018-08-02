@@ -74,9 +74,12 @@ makeScope newScope (self: with self; {
     inherit (gnome3) libsoup;
   };
 
-  xfce4-taskmanager = callPackage ./xfce4-taskmanager { };
+  xfce4-session = callPackage ./xfce4-session { };
+  xinitrc = "${xfce4-session}/etc/xdg/xfce4/xinitrc";
 
   xfce4-settings = callPackage ./xfce4-settings { };
+
+  xfce4-taskmanager = callPackage ./xfce4-taskmanager { };
 
   xfce4-terminal = callPackage ./xfce4-terminal {
     inherit (gnome3) vte;
