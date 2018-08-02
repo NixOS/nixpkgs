@@ -37,5 +37,6 @@ For pull-requests, please rebase onto nixpkgs `master`.
 
 Communication:
 
+* [Discourse Forum](https://discourse.nixos.org/)
 * [Mailing list](https://groups.google.com/forum/#!forum/nix-devel)
 * [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)
