@@ -56,7 +56,7 @@ let
       ) dependencies);
 
   # Recursively composes the dependencies of a package
-  composePackage = { name, packageName, src, dependencies ? [], ... }:
+  composePackage = { name, packageName, src, dependencies ? [], ... }@args:
     ''
       DIR=$(pwd)
       cd $TMPDIR
@@ -176,7 +176,7 @@ let
   # dependencies in the package.json file to the versions that are actually
   # being used.
 
-  pinpointDependenciesOfPackage = { packageName, dependencies ? [], production ? true, ... }:
+  pinpointDependenciesOfPackage = { packageName, dependencies ? [], production ? true, ... }@args:
     ''
       if [ -d "${packageName}" ]
       then
