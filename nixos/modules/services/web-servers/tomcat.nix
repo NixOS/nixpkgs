@@ -118,8 +118,15 @@ in
         type = types.listOf (types.submodule {
           options = {
             name = mkOption {
-              type = types.listOf types.str;
+              type = types.str;
               description = "name of the virtualhost";
+            };
+            webapps = mkOption {
+              type = types.listOf types.path;
+              description = ''
+                List containing web application WAR files and/or directories containing
+                web applications and configuration files for the virtual host.
+              '';
               default = [];
             };
           };
