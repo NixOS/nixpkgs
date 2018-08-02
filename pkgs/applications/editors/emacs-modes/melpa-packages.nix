@@ -55,9 +55,6 @@ self:
       # Expects bash to be at /bin/bash
       company-rtags = markBroken super.company-rtags;
 
-      # upstream issue: missing file header
-      connection = markBroken super.connection;
-
       easy-kill-extras = super.easy-kill-extras.override {
         inherit (self.melpaPackages) easy-kill;
       };
