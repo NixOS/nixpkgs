@@ -1324,6 +1324,8 @@ with pkgs;
 
   glide = callPackage ../development/tools/glide { };
 
+  globalarrays = callPackage ../development/libraries/globalarrays { };
+
   glock = callPackage ../development/tools/glock { };
 
   glslviewer = callPackage ../development/tools/glslviewer {
@@ -20319,6 +20321,8 @@ with pkgs;
   molden = callPackage ../applications/science/chemistry/molden { };
 
   octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
+
+  openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
   pymol = callPackage ../applications/science/chemistry/pymol { };
 
