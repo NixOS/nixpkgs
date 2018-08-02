@@ -163,6 +163,11 @@ self:
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
          }));
 
+      # tries to write to $HOME
+      php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
+        HOME = "/tmp";
+      });
+
       # upstream issue: mismatched filename
       processing-snippets = markBroken super.processing-snippets;
 
