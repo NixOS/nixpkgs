@@ -5448,6 +5448,8 @@ with pkgs;
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
+  tinyproxy = callPackage ../tools/networking/tinyproxy {};
+
   tio = callPackage ../tools/misc/tio { };
 
   tldr = callPackage ../tools/misc/tldr { };
