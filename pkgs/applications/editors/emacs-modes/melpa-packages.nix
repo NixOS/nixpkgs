@@ -75,6 +75,12 @@ self:
         inherit (self.melpaPackages) ess ctable popup;
       };
 
+      evil-magit = super.evil-magit.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       # missing OCaml
       flycheck-ocaml = markBroken super.flycheck-ocaml;
 
