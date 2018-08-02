@@ -58,9 +58,6 @@ self:
       # upstream issue: missing file header
       connection = markBroken super.connection;
 
-      # upstream issue: missing file header
-      dictionary = markBroken super.dictionary;
-
       easy-kill-extras = super.easy-kill-extras.override {
         inherit (self.melpaPackages) easy-kill;
       };
