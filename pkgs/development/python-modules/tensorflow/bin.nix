@@ -61,6 +61,15 @@ in buildPythonPackage rec {
   # bleach) Hence we disable dependency checking for now.
   installFlags = lib.optional isPy36 "--no-dependencies";
 
+
+  # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
+  # and the propageted input tensorflow-tensorboard which causes environment collisions.
+  #
+  # https://github.com/tensorflow/tensorflow/blob/v1.7.1/tensorflow/tools/pip_package/setup.py#L79
+  postInstall = ''
+    rm $out/bin/tensorboard
+  '';
+
   # Note that we need to run *after* the fixup phase because the
   # libraries are loaded at runtime. If we run in preFixup then
   # patchelf --shrink-rpath will remove the cuda libraries.
