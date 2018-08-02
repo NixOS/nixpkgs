@@ -84,5 +84,7 @@ makeScope newScope (self: with self; {
 
   xfce4-whiskermenu-plugin = callPackage ./xfce4-whiskermenu-plugin { };
 
+  xfce4-xkb-plugin = callPackage ./xfce4-xkb-plugin { };
+
   xfwm4 = callPackage ./xfwm4 { };
 })
