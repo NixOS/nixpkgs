@@ -15661,6 +15661,7 @@ with pkgs;
   });
 
   firefox-unwrapped = firefoxPackages.firefox;
+  firefox-esr-unwrapped = firefox-esr-52-unwrapped;
   firefox-esr-52-unwrapped = firefoxPackages.firefox-esr-52;
   firefox-esr-60-unwrapped = firefoxPackages.firefox-esr-60;
   tor-browser-unwrapped = firefoxPackages.tor-browser;
