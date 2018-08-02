@@ -314,7 +314,7 @@ xindy = stdenv.mkDerivation {
   inherit (common) src;
 
   # If unset, xindy will try to mkdir /homeless-shelter
-  HOME = "/tmp/homeless-shelter";
+  HOME = ".";
 
   prePatch = "cd utils/xindy";
   # hardcode clisp location
