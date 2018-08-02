@@ -24,6 +24,10 @@ let
         # configured package. Note that this does require every plugin to have
         # postgresql in its arguments but every plugin already needs this.
         map (plugin: plugin.override { postgresql = pg; }) cfg.extraPlugins;
+      # We include /bin to ensure the $out/bin directory is created which is
+      # needed because we'll be removing files from that directory in postBuild
+      # below.
+      pathsToLink = ["/" "/bin"];
       buildInputs = [ pkgs.makeWrapper ];
       postBuild =
         ''
