@@ -1,46 +1,62 @@
-{ stdenv, coreutils, requireFile, patchelf, makeWrapper, openjdk, gtk2, xorg, glibcLocales }:
+{ stdenv, coreutils, requireFile, patchelf, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
+
+# To use this package, you need to download your own cplex installer from IBM
+# and override the releasePath attribute to point to the location of the file.  
+#
+# Note: cplex creates an individual build for each license which screws
+# somewhat with the use of functions like requireFile as the hash will be
+# different for every user.
 
 stdenv.mkDerivation rec {
   name = "cplex-${version}";
   version = "128";
-  installer = "cplex_studio${version}.linux-x86-64.bin";
   
-  src = requireFile rec {
-    name = "${installer}";
-    message = ''
-      This nix expression requires that ${name} is
-      already part of the store. Download it from IBM  
-      and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
-    '';
-    sha256 = "ce8a597a11c73a0a3d49f3fa82930c47b6ac2adf7bc6779ad197ff0355023838";
-  };
+  src =
+    if builtins.isNull releasePath then
+      throw ''
+        This nix expression requires that the cplex installer is already
+        downloaded to your machine. Get it from IBM and override the
+        releasePath attribute to point to the location of the file. 
+      ''
+    else
+      releasePath;
 
   nativeBuildInputs = [ coreutils makeWrapper ];
   buildInputs = [ openjdk gtk2 xorg.libXtst glibcLocales ];
 
-  phases = "installPhase";
-  
-  installPhase = ''
-    sed -e 's|/usr/bin/tr"|tr"         |' $src > $installer
-    sh $installer -i silent -DLICENSE_ACCEPTED=TRUE -DUSER_INSTALL_DIR=$out
+  phases = "patchPhase buildPhase installPhase fixupPhase";
 
-    interpreter=${stdenv.glibc}/lib/ld-linux-x86-64.so.2
+  patchPhase = ''
+    sed -e 's|/usr/bin/tr"|tr"         |' $src > $name
+  '';
+
+  buildPhase = ''
+    sh $name -i silent -DLICENSE_ACCEPTED=TRUE -DUSER_INSTALL_DIR=$out
+  '';
+
+  installPhase = ''
     mkdir -p $out/bin
+    for pgm in $out/opl/bin/x86-64_linux/oplrun $out/opl/bin/x86-64_linux/oplrunjava $out/opl/oplide/oplide $out/cplex/bin/x86-64_linux/cplex $out/cpoptimizer/bin/x86-64_linux/cpoptimizer;
+    do
+      ln -s $pgm $out/bin;
+    done
+  '';
+
+  fixupPhase = 
+  let 
+    libraryPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc gtk2 xorg.libXtst ];
+  in ''
+    interpreter=${stdenv.glibc}/lib/ld-linux-x86-64.so.2
 
     for pgm in $out/opl/bin/x86-64_linux/oplrun $out/opl/bin/x86-64_linux/oplrunjava $out/opl/oplide/oplide;
     do
       patchelf --set-interpreter "$interpreter" $pgm;
-      wrapProgram $pgm --prefix LD_LIBRARY_PATH : $out/opl/bin/x86-64_linux:${stdenv.lib.makeLibraryPath [ stdenv.cc.cc gtk2 xorg.libXtst ]} --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
-      ln -s $pgm $out/bin;
+      wrapProgram $pgm \
+        --prefix LD_LIBRARY_PATH : $out/opl/bin/x86-64_linux:${libraryPath} \
+        --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
     done
 
-    for pgm in $out/cplex/bin/x86-64_linux/cplex $out/cpoptimizer/bin/x86-64_linux/cpoptimizer; 
-    do
-      patchelf --set-interpreter "$interpreter" $pgm;
-      ln -s $pgm $out/bin;
-    done
-
-    for pgm in $out/opl/oplide/jre/bin/*; 
+    for pgm in $out/cplex/bin/x86-64_linux/cplex $out/cpoptimizer/bin/x86-64_linux/cpoptimizer $out/opl/oplide/jre/bin/*; 
     do
       if grep ELF $pgm > /dev/null;
       then
