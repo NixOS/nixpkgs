@@ -21558,6 +21558,8 @@ with pkgs;
 
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
+  run-scaled = callPackage ../tools/X11/run-scaled { };
+
   runit = callPackage ../tools/system/runit { };
 
   refind = callPackage ../tools/bootloaders/refind { };
