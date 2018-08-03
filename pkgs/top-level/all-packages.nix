@@ -18176,6 +18176,8 @@ with pkgs;
     tcl = tcl-8_5;
   };
 
+  reaper = callPackage ../applications/audio/reaper { };
+
   recode = callPackage ../tools/text/recode { };
 
   rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
