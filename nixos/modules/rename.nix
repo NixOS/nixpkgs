@@ -9,7 +9,7 @@ with lib;
     (mkRenamedOptionModule [ "system" "nixos" "stateVersion" ] [ "system" "stateVersion" ])
     (mkRenamedOptionModule [ "system" "nixos" "defaultChannel" ] [ "system" "defaultChannel" ])
 
-    (mkRenamedOptionModule [ "dysnomia" ] [ "services" "dysnomia" ])
+    (mkRenamedOptionModule [ "services" "dysnomia" ] [ "dysnomia" ])
     (mkRenamedOptionModule [ "environment" "x11Packages" ] [ "environment" "systemPackages" ])
     (mkRenamedOptionModule [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ])
     (mkRenamedOptionModule [ "environment" "nix" ] [ "nix" "package" ])
