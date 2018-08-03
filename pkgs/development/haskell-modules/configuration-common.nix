@@ -1125,4 +1125,14 @@ self: super: {
   # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
   blank-canvas = dontCheck super.blank-canvas;
   blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
+
+  # needed because of testing-feat >=0.4.0.2 && <1.1
+  language-ecmascript = doJailbreak super.language-ecmascript;
+
+  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can. 
+  sexpr =
+    appendPatch (overrideCabal super.sexpr (drv: {
+      isExecutable = false;
+      libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
+    })) ./patches/sexpr-0.2.1.patch;
 }

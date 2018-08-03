@@ -539,6 +539,11 @@
     github = "boothead";
     name = "Ben Ford";
   };
+  borisbabic = {
+    email = "boris.ivan.babic@gmail.com";
+    github = "borisbabic";
+    name = "Boris Babić";
+  };
   bosu = {
     email = "boriss@gmail.com";
     github = "bosu";
@@ -920,6 +925,11 @@
     email = "_deepfire@feelingofgreen.ru";
     github = "deepfire";
     name = "Kosyrev Serge";
+  };
+  deltaevo = {
+    email = "deltaduartedavid@gmail.com";
+    github = "DeltaEvo";
+    name = "Duarte David";
   };
   demin-dmitriy = {
     email = "demindf@gmail.com";
@@ -2259,6 +2269,11 @@
     github = "luispedro";
     name = "Luis Pedro Coelho";
   };
+  lukeadams = {
+    email = "luke.adams@belljar.io";
+    github = "lukeadams";
+    name = "Luke Adams";
+  };
   lukego = {
     email = "luke@snabb.co";
     github = "lukego";
@@ -3181,6 +3196,11 @@
   pxc = {
     email = "patrick.callahan@latitudeengineering.com";
     name = "Patrick Callahan";
+  };
+  q3k = {
+    email = "q3k@q3k.org";
+    github = "q3k";
+    name = "Serge Bazanski";
   };
   qknight = {
     email = "js@lastlog.de";
