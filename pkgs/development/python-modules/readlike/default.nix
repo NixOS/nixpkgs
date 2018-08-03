@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python }:
+{ stdenv, buildPythonPackage, fetchPypi, lib }:
 
 buildPythonPackage rec {
   pname = "readlike";
@@ -16,5 +16,6 @@ buildPythonPackage rec {
     description = "GNU Readline-like line editing module";
     license = stdenv.lib.licenses.mit;
     homepage = https://github.com/jangler/readlike;
+    maintainers = with lib.maintainers; [ aswan89 ];
   };
 }

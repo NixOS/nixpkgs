@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k}:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, lib}:
 
 buildPythonPackage rec {
   pname = "ReParser";
@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Simple regex-based lexer/parser for inline markup";
     license = stdenv.lib.licenses.mit;
     homepage = https://github.com/xmikos/reparser;
+    maintainers = with lib.maintainers; [ aswan89 ];
   };
 }

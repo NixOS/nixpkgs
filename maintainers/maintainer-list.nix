@@ -356,6 +356,11 @@
     github = "astsmtl";
     name = "Alexander Tsamutali";
   };
+  aswan89 = {
+    email = "andrew@swanso.net";
+    github = "aswan89";
+    name = "Andrew Swanson";
+  };
   asymmetric = {
     email = "lorenzo@mailbox.org";
     github = "asymmetric";

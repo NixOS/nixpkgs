@@ -16659,6 +16659,8 @@ with pkgs;
   hamster-time-tracker = callPackage ../applications/misc/hamster-time-tracker {
     inherit (gnome2) gnome_python;
   };
+  
+  hangups = callPackage ../applications/networking/instant-messengers/hangups { };
 
   hello = callPackage ../applications/misc/hello { };
   hello-unfree = callPackage ../applications/misc/hello-unfree { };
