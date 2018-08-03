@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl clang libzip ];
   nativeBuildInputs = [ pkgconfig ];
 
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "gcc" "$CC"
+    substituteInPlace Makefile --replace "gcc" "$CC"
+  '';
+
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://tldr-pages.github.io;
     license = licenses.mit;
-    maintainers = with maintainers; [ taeer ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ taeer carlosdagos ];
+    platforms = platforms.all;
   };
 }
