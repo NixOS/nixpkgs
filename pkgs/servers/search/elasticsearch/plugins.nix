@@ -26,10 +26,10 @@ in {
   elasticsearch_analysis_lemmagen = esPlugin rec {
     name = "elasticsearch-analysis-lemmagen-${version}";
     pluginName = "elasticsearch-analysis-lemmagen";
-    version = "0.1";
+    version = "${elk6Version}";
     src = fetchurl {
       url = "https://github.com/vhyza/elasticsearch-analysis-lemmagen/releases/download/v${version}/${name}-plugin.zip";
-      sha256 = "bf7bf5ce3ccdd3afecd0e18cd6fce1ef56f824e41f4ef50553ae598caa5c366d";
+      sha256 = "1m4z05wixjrq4nlbdjyhvprkrwxjym8aba18scmzfn25fhbjgvkz";
     };
     meta = {
       homepage = https://github.com/vhyza/elasticsearch-analysis-lemmagen;
