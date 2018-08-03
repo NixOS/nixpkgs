@@ -936,6 +936,11 @@
     github = "demin-dmitriy";
     name = "Dmitriy Demin";
   };
+  demize = {
+    email = "johannes@kyriasis.com";
+    github = "kyrias";
+    name = "Johannes Löthberg";
+  };
   demyanrogozhin = {
     email = "demyan.rogozhin@gmail.com";
     github = "demyanrogozhin";
