@@ -4270,8 +4270,6 @@ with pkgs;
 
   objconv = callPackage ../development/tools/misc/objconv {};
 
-  obnam = callPackage ../tools/backup/obnam { };
-
   odpdown = callPackage ../tools/typesetting/odpdown { };
 
   odpic = callPackage ../development/libraries/odpic { };
