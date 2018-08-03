@@ -42,10 +42,10 @@ in {
   search_guard = esPlugin rec {
     name = "elastic-search-guard-${version}";
     pluginName = "search-guard";
-    version = "0.5";
-    src = fetchurl {
-      url = "https://github.com/floragunncom/search-guard/releases/download/v${version}/${pluginName}-${version}.zip";
-      sha256 = "1zima4jmq1rrcqxhlrp2xian80vp244d2splby015n5cgqrp39fl";
+    version = "${elk6Version}-22.3";
+    src = fetchurl rec {
+      url = "mirror://maven/com/floragunn/search-guard-6/${version}/search-guard-6-${version}.zip";
+      sha256 = "1r71h4h9bmxak1mq5gpm19xq5ji1gry1kp3sjmm8azy4ykdqdncx";
     };
     meta = {
       homepage = https://github.com/floragunncom/search-guard;
