@@ -12540,7 +12540,7 @@ with pkgs;
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
 
-  perlPackages = perl524Packages;
+  perlPackages = perl528Packages;
   inherit (perlPackages) perl buildPerlPackage;
 
   perlXMLParser = perlPackages.XMLParser;
