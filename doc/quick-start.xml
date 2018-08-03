@@ -9,7 +9,7 @@
     <para>
      Checkout the Nixpkgs source tree:
 <screen>
-$ git clone git://github.com/NixOS/nixpkgs.git 
+$ git clone https://github.com/NixOS/nixpkgs
 $ cd nixpkgs</screen>
     </para>
    </listitem>

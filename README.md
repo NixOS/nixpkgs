@@ -8,7 +8,7 @@ build daemon as so-called channels. To get channel information via git, add
 [nixpkgs-channels](https://github.com/NixOS/nixpkgs-channels.git) as a remote:
 
 ```
-% git remote add channels git://github.com/NixOS/nixpkgs-channels.git
+% git remote add channels https://github.com/NixOS/nixpkgs-channels.git
 ```
 
 For stability and maximum binary package support, it is recommended to maintain
