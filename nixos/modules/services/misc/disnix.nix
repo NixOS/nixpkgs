@@ -57,7 +57,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.dysnomia.enable = true;
+    dysnomia.enable = true;
 
     environment.systemPackages = [ pkgs.disnix ] ++ optional cfg.useWebServiceInterface pkgs.DisnixWebService;
 
