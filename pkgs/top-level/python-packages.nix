@@ -2216,7 +2216,7 @@ in {
   });
 
   elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
-
+  
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
   enzyme = callPackage ../development/python-modules/enzyme {};
@@ -11846,6 +11846,8 @@ in {
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
   readlike = callPackage ../development/python-modules/readlike { };
+
+  ReParser = callPackage ../development/python-modules/ReParser { };
 
   rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
     python2 = python;
