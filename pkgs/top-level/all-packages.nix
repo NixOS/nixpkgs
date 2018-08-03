@@ -1698,6 +1698,8 @@ with pkgs;
   ceph = callPackage ../tools/filesystems/ceph { boost = boost165; };
   ceph-dev = ceph;
 
+  certmgr = callPackage ../tools/security/certmgr { };
+
   cfdg = callPackage ../tools/graphics/cfdg {
     ffmpeg = ffmpeg_2;
   };
