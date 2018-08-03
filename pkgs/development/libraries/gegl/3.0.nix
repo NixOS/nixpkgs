@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # needs fonts otherwise  don't know how to pass them
-  configureFlags = "--disable-docs";
+  configureFlags = [ "--disable-docs" ];
 
   enableParallelBuilding = true;
 

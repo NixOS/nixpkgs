@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional withAlsa alsaLib;
 
-  configureFlags = "--disable-oss";
+  configureFlags = [ "--disable-oss" ];
 
   patchFlags = "-p0";
   patches = stdenv.lib.optional stdenv.isDarwin

@@ -67,15 +67,15 @@ stdenv.mkDerivation rec {
     substituteInPlace modules/bindings/glibc/linux.lisp --replace "(def-c-type __swblk_t)" ""
   '';
 
-  configureFlags = "builddir"
-  + stdenv.lib.optionalString (!dllSupport) " --without-dynamic-modules"
-  + stdenv.lib.optionalString (readline != null) " --with-readline"
+  configureFlags = [ "builddir" ]
+  ++ stdenv.lib.optional (!dllSupport) "--without-dynamic-modules"
+  ++ stdenv.lib.optional (readline != null) "--with-readline"
   # --with-dynamic-ffi can only exist with --with-ffcall - foreign.d does not compile otherwise
-  + stdenv.lib.optionalString (ffcallAvailable && (libffi != null)) " --with-dynamic-ffi"
-  + stdenv.lib.optionalString ffcallAvailable " --with-ffcall"
-  + stdenv.lib.optionalString (!ffcallAvailable) " --without-ffcall"
-  + stdenv.lib.concatMapStrings (x: " --with-module=" + x) withModules
-  + stdenv.lib.optionalString threadSupport " --with-threads=POSIX_THREADS";
+  ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
+  ++ stdenv.lib.optional ffcallAvailable "--with-ffcall"
+  ++ stdenv.lib.optional (!ffcallAvailable) "--without-ffcall"
+  ++ builtins.map (x: "--with-module=" + x) withModules
+  ++ stdenv.lib.optional threadSupport "--with-threads=POSIX_THREADS";
 
   preBuild = ''
     sed -e '/avcall.h/a\#include "config.h"' -i src/foreign.d

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [
   ];
 
-  configureFlags = "--with-ssl=openssl";
+  configureFlags = [ "--with-ssl=openssl" ];
 
   propagatedBuildInputs = [ openssl libidn glib zlib ];
 

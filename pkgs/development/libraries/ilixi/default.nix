@@ -14,9 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ directfb libsigcxx libxml2 fontconfig ];
 
-  configureFlags = ''
-    --enable-log-debug --enable-debug --enable-trace --with-examples
-  '';
+  configureFlags = [
+    "--enable-log-debug"
+    "--enable-debug"
+    "--enable-trace"
+    "--with-examples"
+  ];
 
   meta = with stdenv.lib; {
     description = "Lightweight C++ GUI toolkit for embedded Linux systems";

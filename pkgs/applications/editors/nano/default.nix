@@ -32,11 +32,11 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
-  configureFlags = ''
-    --sysconfdir=/etc
-    ${optionalString (!enableNls) "--disable-nls"}
-    ${optionalString enableTiny "--enable-tiny"}
-  '';
+  configureFlags = [
+    "--sysconfdir=/etc"
+    (stdenv.lib.enableFeature enableNls "nls")
+    (stdenv.lib.enableFeature enableTiny "tiny")
+  ];
 
   postInstall = ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/

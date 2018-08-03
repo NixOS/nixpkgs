@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ coq ];
   propagatedBuildInputs = [ ssreflect ];
 
-  configureFlags = "--libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Coquelicot";
+  configureFlags = [ "--libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Coquelicot" ];
   buildPhase = "./remake";
   installPhase = "./remake install";
 

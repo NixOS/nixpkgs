@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0gfcyj5anckjn030wcxx5v2xk2s219nyf99s9m833275b5wz2piw";
   };
 
-  configureFlags = ''
-    --with-hotplug-dir=$(out)/lib/firmware
-  '';
+  configureFlags = [
+    "--with-hotplug-dir=$(out)/lib/firmware"
+  ];
 
   dontStrip = true;
 

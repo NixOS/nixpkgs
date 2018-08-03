@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit zlib; };
 
-  configureFlags = "--enable-static";
+  configureFlags = [ "--enable-static" ];
 
   postInstall = ''mv "$out/bin" "$dev/bin"'';
 

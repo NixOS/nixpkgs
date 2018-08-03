@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
     sha256 = "028cklfqaab24glva1ks2aqa1zxa6w6xmc8q34zs1sb7h22dxspg";
   };
-  configureFlags = "--target=avr --enable-languages=c,c++";
+  configureFlags = [ "--target=avr" "--enable-languages=c,c++" ];
 
   meta = with stdenv.lib; {
     description = "the GNU Binutils for AVR microcontrollers";

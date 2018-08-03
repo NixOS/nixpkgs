@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${linux}/lib/modules/${linux.modDirVersion}/build"
   '';
 
-  configureFlags="--prefix=";
-  NIX_LDFLAGS="-lgcc_s";
+  configureFlags= [ "--prefix=" ];
+
+  NIX_LDFLAGS = "-lgcc_s";
 
   makeFlags = "SUID_ROOT= DESTDIR=\$(out) PREFIX=";
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "--without-python";
+  configureFlags = [ "--without-python" ];
 
   prePatch = ''
     sed -i -e '/$(LDCONFIG)/d' common/include/lib.mak.in

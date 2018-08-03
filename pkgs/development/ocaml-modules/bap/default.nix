@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   disableIda = "--disable-ida --disable-fsi-benchmark";
 
-  configureFlags = "--enable-everything ${disableIda} --with-llvm-config=${llvm_38}/bin/llvm-config";
+  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm_38}/bin/llvm-config" ];
 
   BAPBUILDFLAGS = "-j $(NIX_BUILD_CORES)";
 

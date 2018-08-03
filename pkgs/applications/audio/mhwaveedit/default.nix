@@ -20,7 +20,7 @@ stdenv.mkDerivation  rec {
      pkgconfig libpulseaudio makeWrapper
   ];
 
-  configureFlags = "--with-default-ladspa-path=${ladspaPlugins}/lib/ladspa";
+  configureFlags = [ "--with-default-ladspa-path=${ladspaPlugins}/lib/ladspa" ];
 
   postInstall = ''
     wrapProgram $out/bin/mhwaveedit \

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = "--localstatedir=/var --enable-lvm2";
+  configureFlags = [ "--localstatedir=/var" "--enable-lvm2" ];
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/udisks;
