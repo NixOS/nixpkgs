@@ -21,11 +21,7 @@ python2Packages.buildPythonApplication rec {
   patches = [
     # Bazaar can't find the certificates alone
     ./add_certificates.patch
-    (fetchpatch {
-      url = "https://bazaar.launchpad.net/~brz/brz/trunk/diff/6754?context=3";
-      sha256 = "1z1cj082lj6qkklhyza804y8bqy87vgmjb4xpybsb04ar0s7a1cx";
-      name = "CVE-2017-14176.patch";
-    })
+    ./CVE-2017-14176.patch
   ];
   postPatch = ''
     substituteInPlace bzrlib/transport/http/_urllib2_wrappers.py \
