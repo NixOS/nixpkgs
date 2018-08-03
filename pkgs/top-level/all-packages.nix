@@ -567,7 +567,7 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  awscli = callPackage ../tools/admin/awscli { };
+  awscli = with python3Packages; toPythonApplication awscli;
 
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 

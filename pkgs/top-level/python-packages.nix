@@ -200,6 +200,8 @@ in {
 
   automat = callPackage ../development/python-modules/automat { };
 
+  awscli = callPackage ../development/python-modules/awscli { };
+
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
