@@ -3386,12 +3386,13 @@ with pkgs;
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
-  kibana  = callPackage ../development/tools/misc/kibana { };
   kibana5 = callPackage ../development/tools/misc/kibana/5.x.nix { };
-  kibana6 = callPackage ../development/tools/misc/kibana/6.x.nix { };
-  kibana6-oss = callPackage ../development/tools/misc/kibana/6.x.nix {
+  kibana6 = callPackage ../development/tools/misc/kibana/default.nix { };
+  kibana6-oss = callPackage ../development/tools/misc/kibana/default.nix {
     enableUnfree = false;
   };
+  kibana = kibana6;
+  kibana-oss = kibana6-oss;
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 

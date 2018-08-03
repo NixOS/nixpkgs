@@ -5,43 +5,7 @@ with lib;
 let
   cfg = config.services.kibana;
 
-  atLeast54 = versionAtLeast (builtins.parseDrvName cfg.package.name).version "5.4";
-
-  cfgFile = if atLeast54 then cfgFile5 else cfgFile4;
-
-  cfgFile4 = pkgs.writeText "kibana.json" (builtins.toJSON (
-    (filterAttrsRecursive (n: v: v != null) ({
-      host = cfg.listenAddress;
-      port = cfg.port;
-      ssl_cert_file = cfg.cert;
-      ssl_key_file = cfg.key;
-
-      kibana_index = cfg.index;
-      default_app_id = cfg.defaultAppId;
-
-      elasticsearch_url = cfg.elasticsearch.url;
-      kibana_elasticsearch_username = cfg.elasticsearch.username;
-      kibana_elasticsearch_password = cfg.elasticsearch.password;
-      kibana_elasticsearch_cert = cfg.elasticsearch.cert;
-      kibana_elasticsearch_key = cfg.elasticsearch.key;
-      ca = cfg.elasticsearch.ca;
-
-      bundled_plugin_ids = [
-        "plugins/dashboard/index"
-        "plugins/discover/index"
-        "plugins/doc/index"
-        "plugins/kibana/index"
-        "plugins/markdown_vis/index"
-        "plugins/metric_vis/index"
-        "plugins/settings/index"
-        "plugins/table_vis/index"
-        "plugins/vis_types/index"
-        "plugins/visualize/index"
-      ];
-    } // cfg.extraConf)
-  )));
-
-  cfgFile5 = pkgs.writeText "kibana.json" (builtins.toJSON (
+  cfgFile = pkgs.writeText "kibana.json" (builtins.toJSON (
     (filterAttrsRecursive (n: v: v != null) ({
       server.host = cfg.listenAddress;
       server.port = cfg.port;
