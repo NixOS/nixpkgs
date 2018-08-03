@@ -571,13 +571,13 @@ let
         sha512 = "awiTDstwQfX6026T7oC01AoP7knJoM5IT1tgx9STIM4hQzNQlkW8keTxNC+/xxpMgP657ebHMTqrsQ4qtfSJKg==";
       };
     };
-    "@types/lodash-4.14.115" = {
+    "@types/lodash-4.14.116" = {
       name = "_at_types_slash_lodash";
       packageName = "@types/lodash";
-      version = "4.14.115";
+      version = "4.14.116";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.115.tgz";
-        sha512 = "9K/P4XMQxk61omAzQh3bbbFiqnG17eLcFysjlAYz0aPcYrVo8T+ujaCeIeY0Gpzux7x1YbxtEtLKB7ZWf79qdg==";
+        url = "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.116.tgz";
+        sha512 = "lRnAtKnxMXcYYXqOiotTmJd74uawNWuPnsnPrrO7HiFuE3npE2iQhfABatbYDyxTNqZNuXzcKGhw37R7RjBFLg==";
       };
     };
     "@types/make-dir-1.0.3" = {
@@ -2245,13 +2245,13 @@ let
         sha1 = "559be18376d08a4ec4dbe80877d27818639b2df7";
       };
     };
-    "asn1-0.2.3" = {
+    "asn1-0.2.4" = {
       name = "asn1";
       packageName = "asn1";
-      version = "0.2.3";
+      version = "0.2.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/asn1/-/asn1-0.2.3.tgz";
-        sha1 = "dac8787713c9966849fc8180777ebe9c1ddf3b86";
+        url = "https://registry.npmjs.org/asn1/-/asn1-0.2.4.tgz";
+        sha512 = "jxwzQpLQjSmWXgwaCZE9Nz+glAG01yF1QnWgbhGwHI5A6FRIEY6IVqtHhIepHqI7/kyEyQEagBC5mBEFlIYvdg==";
       };
     };
     "asn1.js-4.10.1" = {
@@ -2542,22 +2542,22 @@ let
         sha1 = "00f35b2d27ac91b1f0d3ef2084c98cf1d1f0adc3";
       };
     };
-    "aws-sdk-2.285.1" = {
+    "aws-sdk-2.286.2" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
-      version = "2.285.1";
+      version = "2.286.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.285.1.tgz";
-        sha512 = "lkroCYcnb7UWR/jbaW6wyjAeGROrsBFWyqUukQjICuCV4a0Mapnjsxefl2A/z+0SX3gnBN7owUb/60UjQSHpzA==";
+        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.286.2.tgz";
+        sha512 = "46a/2+rGEgIlmUz08vZOkYFmZIgj+An/cc+Ngz9XBLkAZbx+3sBzOrxexrlVV69MPkMbckbeZjIq8NEJWV5gPw==";
       };
     };
-    "aws-sign-0.2.0" = {
+    "aws-sign-0.2.1" = {
       name = "aws-sign";
       packageName = "aws-sign";
-      version = "0.2.0";
+      version = "0.2.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sign/-/aws-sign-0.2.0.tgz";
-        sha1 = "c55013856c8194ec854a0cbec90aab5a04ce3ac5";
+        url = "https://registry.npmjs.org/aws-sign/-/aws-sign-0.2.1.tgz";
+        sha512 = "cQFl6jK/Lq416OqpT+lb1RIay1wShuQjHF3/kAJbyMvruV8vSpDahaGNkbeupdGRgXR8Ii0O/ZIbTQPdp+l3pA==";
       };
     };
     "aws-sign2-0.6.0" = {
@@ -2947,13 +2947,13 @@ let
         sha1 = "bdc4b378292490ce77e788ee189f291ce5ae25a6";
       };
     };
-    "azure-storage-2.10.0" = {
+    "azure-storage-2.10.1" = {
       name = "azure-storage";
       packageName = "azure-storage";
-      version = "2.10.0";
+      version = "2.10.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/azure-storage/-/azure-storage-2.10.0.tgz";
-        sha1 = "020ac343262c5552ef86516cbb7679241e95e4de";
+        url = "https://registry.npmjs.org/azure-storage/-/azure-storage-2.10.1.tgz";
+        sha512 = "rnFo1uMIPtilusRCpK91tfY3P4Q7qRsDNwriXdp+OeTIGkGt0cTxL4mhqYfNPYPK+WBQmBdGWhOk+iROM05dcw==";
       };
     };
     "babel-code-frame-6.26.0" = {
@@ -5267,6 +5267,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/clean-css/-/clean-css-4.1.11.tgz";
         sha1 = "2ecdf145aba38f54740f26cefd0ff3e03e125d6a";
+      };
+    };
+    "clean-css-4.2.0" = {
+      name = "clean-css";
+      packageName = "clean-css";
+      version = "4.2.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/clean-css/-/clean-css-4.2.0.tgz";
+        sha1 = "0a9d62040cddc7904c5edaee9bdeca642d9b9c1c";
       };
     };
     "clean-stack-1.3.0" = {
@@ -14974,13 +14983,13 @@ let
         sha512 = "GMxXOiUirWg1xTKRipM0Ek07rX+ubx4nNVElTJdNLYmNO/2YrDkgJGw9CljXn+r4EWiDQg/8lsRdHyg2PJuUaA==";
       };
     };
-    "isbinaryfile-3.0.2" = {
+    "isbinaryfile-3.0.3" = {
       name = "isbinaryfile";
       packageName = "isbinaryfile";
-      version = "3.0.2";
+      version = "3.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/isbinaryfile/-/isbinaryfile-3.0.2.tgz";
-        sha1 = "4a3e974ec0cba9004d3fc6cde7209ea69368a621";
+        url = "https://registry.npmjs.org/isbinaryfile/-/isbinaryfile-3.0.3.tgz";
+        sha512 = "8cJBL5tTd2OS0dM4jz07wQd5g0dCCqIhUxPIGtZfa5L6hWlvV5MHTITy/DBAsF+Oe2LS1X3krBUhNwaGUWpWxw==";
       };
     };
     "isexe-1.1.2" = {
@@ -22686,13 +22695,13 @@ let
         sha1 = "f052a28da70e618917ef0a8ac34c1ae5a68286b3";
       };
     };
-    "psl-1.1.28" = {
+    "psl-1.1.29" = {
       name = "psl";
       packageName = "psl";
-      version = "1.1.28";
+      version = "1.1.29";
       src = fetchurl {
-        url = "https://registry.npmjs.org/psl/-/psl-1.1.28.tgz";
-        sha512 = "+AqO1Ae+N/4r7Rvchrdm432afjT9hqJRyBN3DQv9At0tPz4hIFSGKbq64fN9dVoCow4oggIIax5/iONx0r9hZw==";
+        url = "https://registry.npmjs.org/psl/-/psl-1.1.29.tgz";
+        sha512 = "AeUmQ0oLN02flVHXWh9sSJF7mcdFq0ppid/JkErufc3hGIV/AMa8Fo9VgDo/cT2jFdOWoFvHp90qqBH54W+gjQ==";
       };
     };
     "pstree.remy-1.1.0" = {
@@ -24693,13 +24702,13 @@ let
         sha1 = "741e245e231f07cafb6fdf0f133adfa216a502ad";
       };
     };
-    "sanitize-html-1.18.3" = {
+    "sanitize-html-1.18.4" = {
       name = "sanitize-html";
       packageName = "sanitize-html";
-      version = "1.18.3";
+      version = "1.18.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/sanitize-html/-/sanitize-html-1.18.3.tgz";
-        sha512 = "xoXC9dV3SrfhJDPo9XkLCgLDC5yQ5TQwIpIC8bc/qOCH6DvHwMGYNI2qrdb/EX8RQA7PMYL4th5B+XvijTbVEQ==";
+        url = "https://registry.npmjs.org/sanitize-html/-/sanitize-html-1.18.4.tgz";
+        sha512 = "hjyDYCYrQuhnEjq+5lenLlIfdPBtnZ7z0DkQOC8YGxvkuOInH+1SrkNTj30t4f2/SSv9c5kLniB+uCIpBvYuew==";
       };
     };
     "sax-0.3.5" = {
@@ -29707,13 +29716,13 @@ let
         sha1 = "5fa912d81eb7d0c74afc140de7317f0ca7df437e";
       };
     };
-    "validator-10.4.0" = {
+    "validator-10.5.0" = {
       name = "validator";
       packageName = "validator";
-      version = "10.4.0";
+      version = "10.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/validator/-/validator-10.4.0.tgz";
-        sha512 = "Q/wBy3LB1uOyssgNlXSRmaf22NxjvDNZM2MtIQ4jaEOAB61xsh1TQxsq1CgzUMBV1lDrVMogIh8GjG1DYW0zLg==";
+        url = "https://registry.npmjs.org/validator/-/validator-10.5.0.tgz";
+        sha512 = "6OOi+eV2mOxCFLq0f2cJDrdB6lrtLXEUxabhNRGjgOLT/l3SSll9J49Cl+LIloUqkWWTPraK/mucEQ3dc2jStQ==";
       };
     };
     "validator-5.2.0" = {
@@ -31511,7 +31520,7 @@ in
     dependencies = [
       sources."abbrev-1.1.1"
       sources."ajv-5.5.2"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.7.0"
@@ -31628,7 +31637,7 @@ in
       sources."ansi-styles-2.2.1"
       sources."applicationinsights-0.16.0"
       sources."asap-2.0.6"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."async-1.4.2"
       sources."asynckit-0.4.0"
@@ -31745,7 +31754,7 @@ in
           sources."request-2.74.0"
         ];
       })
-      (sources."azure-storage-2.10.0" // {
+      (sources."azure-storage-2.10.1" // {
         dependencies = [
           sources."extend-1.2.1"
           sources."readable-stream-2.0.6"
@@ -32374,7 +32383,7 @@ in
       sources."array-shuffle-1.0.1"
       sources."ascli-0.3.0"
       sources."async-0.2.10"
-      sources."aws-sign-0.2.0"
+      sources."aws-sign-0.2.1"
       sources."balanced-match-1.0.0"
       sources."base64-js-1.3.0"
       sources."bencode-2.0.0"
@@ -32729,13 +32738,13 @@ in
   clean-css = nodeEnv.buildNodePackage {
     name = "clean-css";
     packageName = "clean-css";
-    version = "4.1.11";
+    version = "4.2.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/clean-css/-/clean-css-4.1.11.tgz";
-      sha1 = "2ecdf145aba38f54740f26cefd0ff3e03e125d6a";
+      url = "https://registry.npmjs.org/clean-css/-/clean-css-4.2.0.tgz";
+      sha1 = "0a9d62040cddc7904c5edaee9bdeca642d9b9c1c";
     };
     dependencies = [
-      sources."source-map-0.5.7"
+      sources."source-map-0.6.1"
     ];
     buildInputs = globalBuildInputs;
     meta = {
@@ -32871,7 +32880,7 @@ in
       sources."array-flatten-1.1.1"
       sources."array-map-0.0.0"
       sources."array-reduce-0.0.0"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."asn1.js-4.10.1"
       (sources."assert-1.4.1" // {
         dependencies = [
@@ -33571,7 +33580,7 @@ in
       sources."arr-flatten-1.1.0"
       sources."array-lru-1.1.1"
       sources."array-unique-0.2.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-0.9.2"
       sources."asynckit-0.4.0"
@@ -34326,11 +34335,11 @@ in
     dependencies = [
       sources."JSONStream-1.3.3"
       sources."ajv-5.5.2"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-2.6.1"
       sources."asynckit-0.4.0"
-      sources."aws-sdk-2.285.1"
+      sources."aws-sdk-2.286.2"
       sources."aws-sign2-0.7.0"
       sources."aws4-1.7.0"
       sources."base64-js-1.3.0"
@@ -34439,7 +34448,7 @@ in
       sources."arr-diff-2.0.0"
       sources."arr-flatten-1.1.0"
       sources."array-unique-0.2.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."async-each-1.0.1"
       sources."asynckit-0.4.0"
@@ -35261,7 +35270,7 @@ in
       sources."ansi-regex-2.1.1"
       sources."ansi-styles-2.2.1"
       sources."array-find-index-1.0.2"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.7.0"
@@ -35706,7 +35715,7 @@ in
       })
       sources."argparse-1.0.10"
       sources."array-flatten-1.1.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-2.6.1"
       sources."asynckit-0.4.0"
@@ -36071,7 +36080,7 @@ in
       sources."proxy-addr-2.0.4"
       sources."prr-1.0.1"
       sources."pseudomap-1.0.2"
-      sources."psl-1.1.28"
+      sources."psl-1.1.29"
       sources."punycode-1.4.1"
       sources."qs-6.5.1"
       sources."range-parser-1.2.0"
@@ -36185,7 +36194,7 @@ in
       sources."utils-merge-1.0.1"
       sources."uuid-3.3.2"
       sources."validate-npm-package-license-3.0.3"
-      sources."validator-10.4.0"
+      sources."validator-10.5.0"
       sources."vary-1.1.2"
       sources."verror-1.10.0"
       sources."wcwidth-1.0.1"
@@ -36889,7 +36898,7 @@ in
       sources."@types/glob-5.0.35"
       sources."@types/inquirer-0.0.42"
       sources."@types/klaw-2.1.1"
-      sources."@types/lodash-4.14.115"
+      sources."@types/lodash-4.14.116"
       sources."@types/make-dir-1.0.3"
       sources."@types/minimatch-3.0.3"
       sources."@types/minimist-1.2.0"
@@ -37496,7 +37505,7 @@ in
     };
     dependencies = [
       sources."ajv-5.5.2"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-1.0.0"
       sources."asynckit-0.4.0"
@@ -37812,7 +37821,7 @@ in
       sources."ansi-regex-3.0.0"
       sources."ansi-styles-3.2.1"
       sources."array-flatten-1.1.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.7.0"
@@ -38118,7 +38127,7 @@ in
       sources."array-slice-0.2.3"
       sources."array-unique-0.3.2"
       sources."arraybuffer.slice-0.0.7"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."assign-symbols-1.0.0"
       sources."ast-types-0.11.5"
@@ -38165,6 +38174,9 @@ in
           sources."is-extendable-0.1.1"
         ];
       })
+      sources."buffer-alloc-1.2.0"
+      sources."buffer-alloc-unsafe-1.1.0"
+      sources."buffer-fill-1.0.0"
       sources."buffer-more-ints-0.0.2"
       sources."buildmail-4.0.1"
       sources."bytes-3.0.0"
@@ -38392,7 +38404,7 @@ in
       sources."is-typedarray-1.0.0"
       sources."is-windows-1.0.2"
       sources."isarray-1.0.0"
-      sources."isbinaryfile-3.0.2"
+      sources."isbinaryfile-3.0.3"
       sources."isobject-3.0.1"
       sources."isstream-0.1.2"
       sources."jsbn-0.1.1"
@@ -38977,7 +38989,7 @@ in
       sources."ajv-5.5.2"
       sources."ansi-regex-2.1.1"
       sources."ansi-styles-3.2.0"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-1.5.2"
       sources."asynckit-0.4.0"
@@ -39127,7 +39139,7 @@ in
       sources."prelude-ls-1.1.2"
       sources."prompt-1.0.0"
       sources."pseudomap-1.0.2"
-      sources."psl-1.1.28"
+      sources."psl-1.1.29"
       sources."punycode-1.4.1"
       sources."qs-6.5.2"
       sources."read-1.0.7"
@@ -39300,7 +39312,7 @@ in
       sources."array-unique-0.3.2"
       sources."arrify-1.0.1"
       sources."asap-2.0.6"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."assign-symbols-1.0.0"
       sources."async-1.5.2"
@@ -39992,7 +40004,7 @@ in
     dependencies = [
       sources."ajv-5.5.2"
       sources."asap-2.0.6"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.7.0"
@@ -40259,7 +40271,7 @@ in
       sources."array-flatten-1.1.1"
       sources."array-unique-0.2.1"
       sources."arraybuffer.slice-0.0.7"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-each-1.0.1"
       sources."async-limiter-1.0.0"
@@ -40598,7 +40610,7 @@ in
       sources."array-uniq-1.0.3"
       sources."array-unique-0.3.2"
       sources."asap-2.0.6"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."assign-symbols-1.0.0"
       sources."asynckit-0.4.0"
@@ -41391,7 +41403,7 @@ in
       sources."ansi-regex-2.1.1"
       sources."aproba-1.2.0"
       sources."are-we-there-yet-1.1.5"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.7.0"
@@ -41544,7 +41556,7 @@ in
       sources."ansi-regex-2.1.1"
       sources."aproba-1.2.0"
       sources."are-we-there-yet-1.1.5"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.6.0"
@@ -41703,7 +41715,7 @@ in
       sources."are-we-there-yet-1.1.5"
       sources."array-find-index-1.0.2"
       sources."array-flatten-1.1.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."async-0.9.2"
       sources."asynckit-0.4.0"
@@ -42447,7 +42459,7 @@ in
       sources."argparse-1.0.10"
       sources."array-flatten-1.1.1"
       sources."array-indexofobject-0.0.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-0.1.22"
       sources."async-limiter-1.0.0"
@@ -43005,7 +43017,7 @@ in
       sources."aproba-1.2.0"
       sources."are-we-there-yet-1.1.5"
       sources."argparse-0.1.15"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.7.0"
@@ -43497,7 +43509,7 @@ in
       sources."argparse-1.0.10"
       sources."array-flatten-1.1.1"
       sources."asap-2.0.6"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-0.9.2"
       sources."asynckit-0.4.0"
@@ -44134,7 +44146,7 @@ in
       sources."after-0.8.2"
       sources."arraybuffer.slice-0.0.6"
       sources."async-0.2.10"
-      sources."aws-sign-0.2.0"
+      sources."aws-sign-0.2.1"
       sources."backo2-1.0.2"
       sources."balanced-match-1.0.0"
       sources."base64-arraybuffer-0.1.5"
@@ -44502,7 +44514,7 @@ in
     dependencies = [
       sources."ansi-regex-2.1.1"
       sources."ansi-styles-2.2.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."async-2.6.1"
       sources."aws-sign2-0.6.0"
@@ -45134,7 +45146,7 @@ in
       sources."are-we-there-yet-1.1.5"
       sources."array-flatten-1.1.1"
       sources."asap-2.0.6"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.6.0"
@@ -45158,7 +45170,11 @@ in
       sources."center-align-0.1.3"
       sources."character-parser-2.2.0"
       sources."chownr-1.0.1"
-      sources."clean-css-4.1.11"
+      (sources."clean-css-4.2.0" // {
+        dependencies = [
+          sources."source-map-0.6.1"
+        ];
+      })
       sources."cliui-2.1.0"
       sources."co-4.6.0"
       sources."code-point-at-1.1.0"
@@ -45558,7 +45574,7 @@ in
     };
     dependencies = [
       sources."ajv-5.5.2"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."asynckit-0.4.0"
       sources."aws-sdk-1.18.0"
@@ -45808,7 +45824,7 @@ in
       sources."ajv-5.5.2"
       sources."array-flatten-1.1.1"
       sources."arraybuffer.slice-0.0.6"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."asynckit-0.4.0"
       sources."aws-sign2-0.7.0"
@@ -46032,7 +46048,7 @@ in
       sources."argparse-1.0.10"
       sources."array-flatten-2.1.1"
       sources."array-uniq-1.0.3"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-0.9.2"
       sources."asynckit-0.4.0"
@@ -46217,7 +46233,7 @@ in
       sources."safe-buffer-5.1.2"
       sources."safe-json-stringify-1.2.0"
       sources."safer-buffer-2.1.2"
-      sources."sanitize-html-1.18.3"
+      sources."sanitize-html-1.18.4"
       sources."semver-4.3.6"
       (sources."send-0.15.6" // {
         dependencies = [
@@ -46390,6 +46406,7 @@ in
       sources."rimraf-2.4.5"
       sources."safe-buffer-5.1.2"
       sources."safe-json-stringify-1.2.0"
+      sources."safer-buffer-2.1.2"
       sources."semver-4.3.6"
       (sources."smartdc-auth-2.3.1" // {
         dependencies = [
@@ -46419,7 +46436,7 @@ in
       sources."spdy-1.32.5"
       (sources."sshpk-1.7.1" // {
         dependencies = [
-          sources."asn1-0.2.3"
+          sources."asn1-0.2.4"
           sources."assert-plus-0.2.0"
           (sources."dashdash-1.14.1" // {
             dependencies = [
@@ -46761,7 +46778,7 @@ in
       sources."amdefine-1.0.1"
       sources."ansi-regex-2.1.1"
       sources."ansi-styles-2.2.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."async-2.1.2"
       sources."asynckit-0.4.0"
@@ -47093,7 +47110,7 @@ in
       sources."process-nextick-args-2.0.0"
       sources."promise-finally-3.0.0"
       sources."pseudomap-1.0.2"
-      sources."psl-1.1.28"
+      sources."psl-1.1.29"
       sources."punycode-1.4.1"
       sources."rc-1.2.8"
       sources."readable-stream-2.3.6"
@@ -47208,7 +47225,7 @@ in
       })
       sources."array-flatten-1.1.1"
       sources."arraybuffer.slice-0.0.7"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-0.9.2"
       sources."async-limiter-1.0.0"
@@ -47643,7 +47660,7 @@ in
       sources."array-union-1.0.2"
       sources."array-uniq-1.0.3"
       sources."arrify-1.0.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."async-2.6.1"
       sources."asynckit-0.4.0"
@@ -47932,7 +47949,7 @@ in
       sources."adm-zip-0.4.11"
       sources."ansi-regex-2.1.1"
       sources."ansi-styles-2.2.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-0.2.0"
       sources."async-2.6.1"
       sources."aws-sign2-0.6.0"
@@ -48086,10 +48103,10 @@ in
   webpack = nodeEnv.buildNodePackage {
     name = "webpack";
     packageName = "webpack";
-    version = "4.16.3";
+    version = "4.16.4";
     src = fetchurl {
-      url = "https://registry.npmjs.org/webpack/-/webpack-4.16.3.tgz";
-      sha512 = "3VcrVoFgzSz1IYgga71YpU3HO89Al5bSnDOj9RJQPsy+FNyI1sFsUyJITn3pktNuaRBlQT0usvKZE3GgkPGAIw==";
+      url = "https://registry.npmjs.org/webpack/-/webpack-4.16.4.tgz";
+      sha512 = "RqUfwp4qMqv3oFwBQQOoK69C2tdu2FHJEqPABPqgjGDvOIOLqkTOhmmdJjpiRabzNAAH1ahmkA3z4xowlHN+VA==";
     };
     dependencies = [
       sources."@webassemblyjs/ast-1.5.13"
@@ -48867,7 +48884,7 @@ in
       sources."array-unique-0.3.2"
       sources."arrify-1.0.1"
       sources."asap-2.0.6"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."assign-symbols-1.0.0"
       sources."ast-types-0.11.5"
@@ -50034,7 +50051,7 @@ in
       sources."array-uniq-1.0.3"
       sources."array-unique-0.3.2"
       sources."arrify-1.0.1"
-      sources."asn1-0.2.3"
+      sources."asn1-0.2.4"
       sources."assert-plus-1.0.0"
       sources."assign-symbols-1.0.0"
       sources."astral-regex-1.0.0"
@@ -50466,7 +50483,7 @@ in
       sources."process-nextick-args-2.0.0"
       sources."proto-list-1.2.4"
       sources."pseudomap-1.0.2"
-      sources."psl-1.1.28"
+      sources."psl-1.1.29"
       sources."punycode-1.4.1"
       sources."qs-6.5.2"
       sources."query-string-5.1.1"
