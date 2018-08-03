@@ -22,20 +22,6 @@ let
       };
     });
 in {
-  elasticsearch_river_jdbc = esPlugin rec {
-    name = "elasticsearch-river-jdbc-${version}";
-    pluginName = "elasticsearch-river-jdbc";
-    version = "1.5.0.5";
-    src = fetchurl {
-      url = "http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-river-jdbc/${version}/${name}-plugin.zip";
-      sha256 = "1p75l3vcnb90ar4j3dci2xf8dqnqyy31kc1r075fa2xqlsxgigcp";
-    };
-    meta = {
-      homepage = https://github.com/jprante/elasticsearch-river-jdbc;
-      description = "Plugin to fetch data from JDBC sources for indexing into Elasticsearch";
-      license = licenses.asl20;
-    };
-  };
 
   elasticsearch_analysis_lemmagen = esPlugin rec {
     name = "elasticsearch-analysis-lemmagen-${version}";
@@ -68,26 +54,6 @@ in {
       homepage = https://github.com/Asquera/elasticsearch-http-basic;
       description = "HTTP Basic Authentication for Elasticsearch";
       license = licenses.mit;
-      platforms = elasticsearch.meta.platforms;
-    };
-  };
-
-  elasticsearch_river_twitter = esPlugin rec {
-    name = pname + "-" + version;
-    pname = "elasticsearch-river-twitter";
-    pluginName = "elasticsearch/" + pname + "/" + version;
-    version = "2.5.0";
-
-    src = fetchurl {
-      url = "http://download.elasticsearch.org/elasticsearch/${pname}/${name}.zip";
-      sha256 = "0851yrmyrpp6whyxk34ykcj7b28f90w0nvkrhvl49dwqgr5s4mn4";
-    };
-
-    meta = {
-      homepage = https://github.com/elasticsearch/elasticsearch-river-twitter;
-      description = "Twitter River Plugin for ElasticSearch";
-      license = licenses.asl20;
-      maintainers = [ maintainers.edwtjo ];
       platforms = elasticsearch.meta.platforms;
     };
   };
