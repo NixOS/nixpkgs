@@ -39,21 +39,6 @@ in {
   };
 
 
-  elasticsearch_kopf = esPlugin rec {
-    name = "elasticsearch-kopf-${version}";
-    pluginName = "elasticsearch-kopf";
-    version = "2.1.1";
-    src = fetchurl {
-      url = "https://github.com/lmenezes/elasticsearch-kopf/archive/v${version}.zip";
-      sha256 = "1nwwd92g0jxhfpkxb1a9z5a62naa1y7hvlx400dm6mwwav3mrf4v";
-    };
-    meta = {
-      homepage = https://github.com/lmenezes/elasticsearch-kopf;
-      description = "Web administration tool for ElasticSearch";
-      license = licenses.mit;
-    };
-  };
-
   search_guard = esPlugin rec {
     name = "elastic-search-guard-${version}";
     pluginName = "search-guard";
