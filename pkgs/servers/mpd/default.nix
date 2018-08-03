@@ -26,6 +26,8 @@
 , clientSupport ? true, mpd_clientlib
 , opusSupport ? true, libopus
 , soundcloudSupport ? true, yajl
+, nfsSupport ? true, libnfs
+, smbSupport ? true, smbclient
 }:
 
 assert avahiSupport -> avahi != null && dbus != null;
@@ -81,7 +83,9 @@ in stdenv.mkDerivation rec {
     ++ opt icuSupport icu
     ++ opt clientSupport mpd_clientlib
     ++ opt opusSupport libopus
-    ++ opt soundcloudSupport yajl;
+    ++ opt soundcloudSupport yajl
+    ++ opt (!stdenv.isDarwin && nfsSupport) libnfs
+    ++ opt (!stdenv.isDarwin && smbSupport) smbclient;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
@@ -116,6 +120,8 @@ in stdenv.mkDerivation rec {
       (mkFlag clientSupport "libmpdclient")
       (mkFlag opusSupport "opus")
       (mkFlag soundcloudSupport "soundcloud")
+      (mkFlag (!stdenv.isDarwin && nfsSupport) "libnfs")
+      (mkFlag (!stdenv.isDarwin && smbSupport) "smbclient")
       "--enable-debug"
       "--with-zeroconf=avahi"
     ]
