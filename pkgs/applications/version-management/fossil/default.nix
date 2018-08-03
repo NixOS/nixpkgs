@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   preCheck = stdenv.lib.optional doCheck ''
     export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
   '';
-  configureFlags = if withJson then  "--json" else  "";
+  configureFlags = stdenv.lib.optional withJson "--json";
 
   preBuild=''
     export USER=nonexistent-but-specified-user
