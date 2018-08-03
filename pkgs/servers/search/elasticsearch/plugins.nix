@@ -38,6 +38,20 @@ in {
     };
   };
 
+  discovery-ec2 = esPlugin {
+    name = "elasticsearch-discovery-ec2-${version}";
+    pluginName = "discovery-ec2";
+    version = "${elk6Version}";
+    src = pkgs.fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/discovery-ec2/discovery-ec2-${elk6Version}.zip";
+      sha256 = "1i7ksy69132sr84h51lamgq967yz3a3dw0b54nckxpqwad9pcpj0";
+    };
+    meta = {
+      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2;
+      description = "The EC2 discovery plugin uses the AWS API for unicast discovery.";
+      license = licenses.asl20;
+    };
+  };
 
   search_guard = esPlugin rec {
     name = "elastic-search-guard-${version}";
