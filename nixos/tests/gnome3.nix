@@ -15,6 +15,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       services.xserver.displayManager.lightdm.autoLogin.enable = true;
       services.xserver.displayManager.lightdm.autoLogin.user = "alice";
       services.xserver.desktopManager.gnome3.enable = true;
+      services.xserver.desktopManager.default = "gnome";
 
       virtualisation.memorySize = 1024;
     };

@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-plymouth=yes"
+    "--enable-gdm-xsession"
     "--with-initial-vt=7"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
   ];
