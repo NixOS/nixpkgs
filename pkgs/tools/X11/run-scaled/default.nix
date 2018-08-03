@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/kaueraal/run_scaled;
     maintainers = [ maintainers.snaar ];
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
