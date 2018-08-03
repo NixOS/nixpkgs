@@ -3468,12 +3468,12 @@ with pkgs;
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
-  logstash  = callPackage ../tools/misc/logstash { };
   logstash5 = callPackage ../tools/misc/logstash/5.x.nix { };
-  logstash6 = callPackage ../tools/misc/logstash/6.x.nix { };
-  logstash6-oss = callPackage ../tools/misc/logstash/6.x.nix {
+  logstash6 = callPackage ../tools/misc/logstash { };
+  logstash6-oss = callPackage ../tools/misc/logstash {
     enableUnfree = false;
   };
+  logstash = logstash6;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
