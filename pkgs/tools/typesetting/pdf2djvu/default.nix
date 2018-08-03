@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, djvulibre, poppler, fontconfig, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.9";
+  version = "0.9.10";
   name = "pdf2djvu-${version}";
 
   src = fetchurl {
     url = "https://github.com/jwilk/pdf2djvu/releases/download/${version}/${name}.tar.xz";
-    sha256 = "0v1his9ph04dllzyxkirc8kd23l41qc41bwg9bfsbzkri16b7xik";
+    sha256 = "026vgg4v6wsq8j091yxg3xzh5953kqg5cyay87y7yidnzn39livn";
   };
 
   nativeBuildInputs = [ pkgconfig ];
