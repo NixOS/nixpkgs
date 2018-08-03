@@ -17132,6 +17132,8 @@ EOF
 
   Keras = callPackage ../development/python-modules/keras { };
 
+  keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
+
   Lasagne = buildPythonPackage rec {
     name = "Lasagne-${version}";
     version = "0.1";
