@@ -2272,9 +2272,7 @@ with pkgs;
   elk5Version = "5.6.9";
   elk6Version = "6.3.2";
 
-  elasticsearch2 = callPackage ../servers/search/elasticsearch/2.x.nix { };
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
-
   elasticsearch6 = callPackage ../servers/search/elasticsearch { };
   elasticsearch6-oss = callPackage ../servers/search/elasticsearch {
     enableUnfree = false;
