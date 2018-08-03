@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/bakape/thumbnailer";
-      rev = "fa88f595f3882773bc425b382eee71e3e2fa1291";
-      sha256 = "19xfn8aj1nhh5dj93hskzrhaa07sayd8agmz1vkkh6varqrldanf";
+      rev = "93664eb81b19dcb232062bf55f92cf4d7c805a7f";
+      sha256 = "0jdkb776f6gk0g8zi7r1vcfs6w0i33mn2327x6960jybli7bcfsp";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/gorilla/handlers";
-      rev = "13a38d26174b16d5b4bf6f1094c1389ec9879572";
-      sha256 = "0zg43blpyyy667y0kpiifk5a2w35jh8qkk4zwlabb365c0lzrv6v";
+      rev = "7e0847f9db758cdebd26c149d0ae9d5d0b9c98ce";
+      sha256 = "0mnw81ayjm4d8462qg8spmcwxmchn24158bf93zxjab51pg8n9gm";
     };
   }
   {
@@ -55,12 +55,21 @@
     };
   }
   {
+    goPackagePath = "github.com/lib/pq";
+    fetch = {
+      type = "git";
+      url = "https://github.com/lib/pq";
+      rev = "90697d60dd844d5ef6ff15135d0203f65d2f53b8";
+      sha256 = "0hb4bfsk8g5473yzbf3lzrb373xicakjznkf0v085xgimz991i9r";
+    };
+  }
+  {
     goPackagePath = "github.com/mailru/easyjson";
     fetch = {
       type = "git";
       url = "https://github.com/mailru/easyjson";
-      rev = "3fdea8d05856a0c8df22ed4bc71b3219245e4485";
-      sha256 = "0g3crph77yhv4ipdnwqc32z4cp87ahi4ikad5kyy6q4znnxliz74";
+      rev = "03f2033d19d5860aef995fe360ac7d395cd8ce65";
+      sha256 = "0r62ym6m1ijby7nwplq0gdnhak8in63njyisrwhr3xpx9vkira97";
     };
   }
   {
@@ -68,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-sqlite3";
-      rev = "3aefd9f0a162514f66d0e4ceda3edc44e66b502e";
-      sha256 = "0as2kqmlvd21r481vxl457n5lxxp4i1jdjkmyqsjf5vg6xr9gd2d";
+      rev = "b3511bfdd742af558b54eb6160aca9446d762a19";
+      sha256 = "1v41is0h05p4jgv8nal3l8lcdcggylsyblq0ihycnprkdzwls808";
     };
   }
   {
@@ -88,6 +97,15 @@
       url = "https://github.com/valyala/quicktemplate";
       rev = "a91e0946457b6583004fbfc159339b8171423aed";
       sha256 = "1z89ang5pkq5qs5b2nwhzyrw0zjlsas539l9kix374fhka49n8yc";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/net";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/net";
+      rev = "49c15d80dfbc983ea25246ee959d970efe09ec09";
+      sha256 = "1knkww5jfn73frm8m939ck91jkjfapk798xwscm4g991mpcd6j4v";
     };
   }
 ]
