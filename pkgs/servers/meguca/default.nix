@@ -1,30 +1,26 @@
-{ stdenv, buildGoPackage, fetchgit, pkgconfig, cmake, ffmpeg-full, ghostscript
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, cmake, ffmpeg-full, ghostscript
 , graphicsmagick, quicktemplate, go-bindata, easyjson, nodePackages, emscripten }:
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-07-01";
-  rev = "80db8298b6546c93944251c17fe03371e521671f";
+  version = "2018-08-02";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/bakape/meguca";
-    sha256 = "1yix0kxsjm9f3zw9jx2nb3pl8pbqjfhbvbrz42m1h20b1h02s5ml";
+  src = fetchFromGitHub {
+    owner = "bakape";
+    repo = "meguca";
+    rev = "9224ab13f6c08bcfee5a930088c35bbfbf7491e1";
+    sha256 = "1cp7d8a216nap1fzxcb58dgkbxdazs14hs9705h1xgly86cvwgv0";
     fetchSubmodules = true;
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig cmake ];
-
-  buildInputs = [
-    ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson
-    emscripten
-  ];
+  buildInputs = [ ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson emscripten ];
 
   buildPhase = ''
-    export HOME=$PWD
+    export HOME=`pwd`
     export GOPATH=$GOPATH:$HOME/go/src/github.com/bakape/meguca/go
     cd $HOME/go/src/github.com/bakape/meguca
     ln -sf ${nodePackages.meguca}/lib/node_modules/meguca/node_modules
