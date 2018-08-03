@@ -16,10 +16,5 @@ let
       # if the versions are not provided via file paths.
       postBuild = "mv go/bin/${repo}{,_v${version}}";
     };
-
-  maybeDrv = name: data:
-    # azure-classic is an archived repo
-    if name == "azure-classic" then null
-    else toDrv data;
 in
-  lib.mapAttrs maybeDrv list
+  lib.mapAttrs (n: v: toDrv v) list

@@ -35,13 +35,6 @@
       version = "1.30.0";
       sha256  = "1si2fm5nm7gad90lf410zwjf2q5kd8mv6nkkbfnfdzkpkchavr95";
     };
-  azure-classic =
-    {
-      owner   = "terraform-providers";
-      repo    = "terraform-provider-azure-classic";
-      version = "0.1.1";
-      sha256  = "11myqq3wnxvpysjycvwg7b14ll8d9vkn06xb3r26kmc42fkl5xv1";
-    };
   azurerm =
     {
       owner   = "terraform-providers";
