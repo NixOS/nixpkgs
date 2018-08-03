@@ -18,9 +18,6 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtkmm2 gsasl gtksourceview libxmlxx libinf intltool ]
     ++ stdenv.lib.optional gnomeSupport gnome_vfs;
-  
-  configureFlags = ''
-  '';
 
   meta = with stdenv.lib; {
     homepage = http://gobby.0x539.de/;
