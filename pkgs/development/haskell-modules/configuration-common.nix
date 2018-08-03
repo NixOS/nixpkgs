@@ -1128,4 +1128,11 @@ self: super: {
 
   # needed because of testing-feat >=0.4.0.2 && <1.1
   language-ecmascript = doJailbreak super.language-ecmascript;
+
+  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can. 
+  sexpr =
+    appendPatch (overrideCabal super.sexpr (drv: {
+      isExecutable = false;
+      libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
+    })) ./patches/sexpr-0.2.1.patch;
 }
