@@ -1,4 +1,4 @@
-{ pkgs,  stdenv, fetchurl, unzip, elasticsearch }:
+{ pkgs,  stdenv, fetchurl, unzip, elasticsearch-oss, javaPackages, elk6Version }:
 
 with pkgs.lib;
 
@@ -6,8 +6,9 @@ let
   esPlugin = a@{
     pluginName,
     installPhase ? ''
-      mkdir -p $out/bin
-      ES_HOME=$out ${elasticsearch}/bin/elasticsearch-plugin --install ${pluginName} --url file://$src
+      mkdir -p $out/config
+      mkdir -p $out/plugins
+      ES_HOME=$out ${elasticsearch-oss}/bin/elasticsearch-plugin install --batch -v file://$src
     '',
     ...
   }:
@@ -16,7 +17,7 @@ let
       unpackPhase = "true";
       buildInputs = [ unzip ];
       meta = a.meta // {
-        platforms = elasticsearch.meta.platforms;
+        platforms = elasticsearch-oss.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.offline ];
       };
     });
