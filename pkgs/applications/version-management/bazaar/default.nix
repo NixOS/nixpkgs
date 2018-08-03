@@ -22,8 +22,8 @@ python2Packages.buildPythonApplication rec {
     # Bazaar can't find the certificates alone
     ./add_certificates.patch
     (fetchpatch {
-      url = "https://bazaar.launchpad.net/~brz/brz/trunk/revision/6754";
-      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+      url = "https://bazaar.launchpad.net/~brz/brz/trunk/diff/6754?context=3";
+      sha256 = "1z1cj082lj6qkklhyza804y8bqy87vgmjb4xpybsb04ar0s7a1cx";
       name = "CVE-2017-14176.patch";
     })
   ];
