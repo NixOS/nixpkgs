@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, clang, curl, libzip, pkgconfig }:
+{ stdenv, fetchFromGitHub, curl, libzip, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "tldr-${version}";
@@ -11,13 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "10ylpiqc06p0qpma72vwksd7hd107s0vlx9c6s9rz4vc3i274lb6";
   };
 
-  buildInputs = [ curl clang libzip ];
+  buildInputs = [ curl libzip ];
   nativeBuildInputs = [ pkgconfig ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace "gcc" "$CC"
-    substituteInPlace Makefile --replace "gcc" "$CC"
-  '';
+  makeFlags = ["CC=cc" "LD=cc" "CFLAGS="];
 
   installFlags = [ "PREFIX=$(out)" ];
 
