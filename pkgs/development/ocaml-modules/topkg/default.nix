@@ -17,7 +17,7 @@ let
  * Packages that use `topkg` may call this command as part of
  *  their `buildPhase` or `checkPhase`.
 */
-  run = "ocaml -I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/ pkg/pkg.ml";
+  run = "ocaml pkg/pkg.ml";
 in
 
 stdenv.mkDerivation rec {

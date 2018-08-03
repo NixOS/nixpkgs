@@ -60,6 +60,12 @@ stdenv.mkDerivation rec {
     }
 
     addEnvHooks "$targetOffset" addOCamlPath
+
+    substUseTopfind () {
+        find . -name '*.ml' -print0 | xargs -r -0 -- sed -s -i -E -e '0,/^#[^!]/ s%^#use "topfind"%#use "@out@/lib/ocaml/${ocaml.version}/site-lib/topfind"%'
+    }
+
+    postPatchHooks+=("substUseTopfind")
   '';
 
   meta = {
