@@ -61,7 +61,9 @@ let
         }
 
         # Publish access credentials in the root window.
-        ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
+        if ${config.hardware.pulseaudio.package.out}/bin/pulseaudio --dump-modules | grep module-x11-publish &> /dev/null; then
+          ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
+        fi
       ''}
 
       # Tell systemd about our $DISPLAY and $XAUTHORITY.
