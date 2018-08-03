@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.elasticsearch;
 
-  es6 = builtins.compareVersions (builtins.parseDrvName cfg.package.name).version "6" >= 0;
+  es6 = builtins.compareVersions cfg.package.version "6" >= 0;
 
   esConfig = ''
     network.host: ${cfg.listenAddress}
