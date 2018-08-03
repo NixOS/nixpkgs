@@ -841,22 +841,22 @@ with pkgs;
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  inherit (callPackages ../misc/logging/beats/5.x.nix { })
-    filebeat
-    heartbeat
-    metricbeat
-    packetbeat;
-
-  inherit (let beats6 = callPackages ../misc/logging/beats/6.x.nix { }; in {
-    filebeat6   = beats6.filebeat;
-    heartbeat6  = beats6.heartbeat;
-    metricbeat6 = beats6.metricbeat;
-    packetbeat6 = beats6.packetbeat;
-  })
+  inherit (callPackages ../misc/logging/beats/6.x.nix { })
     filebeat6
     heartbeat6
     metricbeat6
     packetbeat6;
+
+  filebeat = filebeat6;
+  heartbeat = heartbeat6;
+  metricbeat = metricbeat6;
+  packetbeat = packetbeat6;
+
+  inherit (callPackages ../misc/logging/beats/5.x.nix { })
+    filebeat5
+    heartbeat5
+    metricbeat5
+    packetbeat5;
 
   bfr = callPackage ../tools/misc/bfr { };
 

@@ -23,10 +23,10 @@ let beat = package : extraArgs : buildGoPackage (rec {
       };
     } // extraArgs);
 in {
-  filebeat   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
-  heartbeat  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
-  metricbeat = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
-  packetbeat = beat "packetbeat" {
+  filebeat6   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
+  heartbeat6  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
+  metricbeat6 = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
+  packetbeat6 = beat "packetbeat" {
     buildInputs = [ libpcap ];
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
     meta.longDescription = ''
