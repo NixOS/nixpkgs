@@ -429,7 +429,7 @@ with pkgs;
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
-  actdiag = pythonPackages.actdiag;
+  actdiag = with python3.pkgs; toPythonApplication actdiag;
 
   actkbd = callPackage ../tools/system/actkbd { };
 
