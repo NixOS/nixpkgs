@@ -14,6 +14,6 @@ buildPythonPackage rec {
     description = "Use Rust failures as Python exceptions";
     homepage = https://github.com/untitaker/shippai;
     license = licenses.mit;
-    maintainer = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner ];
   };
 }
