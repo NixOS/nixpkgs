@@ -1,5 +1,5 @@
 diff --git a/.cargo/config b/.cargo/config
-index 72652ad2f..b21c6aa7b 100644
+index 72652ad2f..57c5c2f8f 100644
 --- a/.cargo/config
 +++ b/.cargo/config
 @@ -1,3 +1,108 @@
@@ -52,19 +52,19 @@ index 72652ad2f..b21c6aa7b 100644
 +branch = "master"
 +replace-with = "vendored-sources"
 +
++[source."https://github.com/paritytech/daemonize"]
++git = "https://github.com/paritytech/daemonize"
++branch = "master"
++replace-with = "vendored-sources"
++
 +[source."https://github.com/paritytech/hidapi-rs"]
 +git = "https://github.com/paritytech/hidapi-rs"
 +branch = "master"
 +replace-with = "vendored-sources"
 +
-+[source."https://github.com/paritytech/hyper"]
-+git = "https://github.com/paritytech/hyper"
-+branch = "master"
-+replace-with = "vendored-sources"
-+
 +[source."https://github.com/paritytech/jsonrpc.git"]
 +git = "https://github.com/paritytech/jsonrpc.git"
-+branch = "parity-1.10"
++branch = "parity-1.11"
 +replace-with = "vendored-sources"
 +
 +[source."https://github.com/paritytech/libusb-rs"]
@@ -74,6 +74,11 @@ index 72652ad2f..b21c6aa7b 100644
 +
 +[source."https://github.com/paritytech/libusb-sys"]
 +git = "https://github.com/paritytech/libusb-sys"
++branch = "master"
++replace-with = "vendored-sources"
++
++[source."https://github.com/paritytech/ring"]
++git = "https://github.com/paritytech/ring"
 +branch = "master"
 +replace-with = "vendored-sources"
 +
@@ -102,13 +107,7 @@ index 72652ad2f..b21c6aa7b 100644
 +branch = "master"
 +replace-with = "vendored-sources"
 +
-+[source."https://github.com/tailhook/rotor"]
-+git = "https://github.com/tailhook/rotor"
-+branch = "master"
-+replace-with = "vendored-sources"
-+
 +[source."https://github.com/tomusdrw/ws-rs"]
 +git = "https://github.com/tomusdrw/ws-rs"
 +branch = "master"
 +replace-with = "vendored-sources"
-+
