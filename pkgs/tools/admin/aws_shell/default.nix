@@ -1,14 +1,8 @@
 { stdenv
-, buildPythonPackage
-, fetchPypi
-, awscli
-, prompt_toolkit
-, boto3
-, configobj
-, pygments
+, python3
 }:
 
-buildPythonPackage rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "aws-shell";
   version = "0.2.0";
 

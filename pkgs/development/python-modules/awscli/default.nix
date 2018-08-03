@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , botocore, colorama, docutils, rsa, s3transfer, pyyaml
 , groff, less
 }:
