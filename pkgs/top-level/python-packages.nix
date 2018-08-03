@@ -426,7 +426,7 @@ in {
   };
 
   pykerberos = callPackage ../development/python-modules/pykerberos { };
-  
+
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
@@ -12478,6 +12478,8 @@ in {
       platforms   = platforms.all;
     };
   };
+
+  shippai = callPackage ../development/python-modules/shippai {};
 
   simanneal = callPackage ../development/python-modules/simanneal { };
 
