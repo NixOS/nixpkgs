@@ -3688,6 +3688,11 @@
     github = "s-na";
     name = "S. Nordin Abouzahra";
   };
+  snaar = {
+    email = "snaar@snaar.net";
+    github = "snaar";
+    name = "Serguei Narojnyi";
+  };
   snyh = {
     email = "snyh@snyh.org";
     github = "snyh";
