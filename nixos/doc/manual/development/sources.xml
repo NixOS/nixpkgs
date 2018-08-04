@@ -11,9 +11,9 @@
   modify NixOS, however, you should check out the latest sources from Git. This
   is as follows:
 <screen>
-$ git clone git://github.com/NixOS/nixpkgs.git
+$ git clone https://github.com/NixOS/nixpkgs
 $ cd nixpkgs
-$ git remote add channels git://github.com/NixOS/nixpkgs-channels.git
+$ git remote add channels https://github.com/NixOS/nixpkgs-channels
 $ git remote update channels
 </screen>
   This will check out the latest Nixpkgs sources to

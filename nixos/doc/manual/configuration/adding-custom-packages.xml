@@ -14,7 +14,7 @@
 xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs
   manual</link>. In short, you clone Nixpkgs:
 <screen>
-$ git clone git://github.com/NixOS/nixpkgs.git
+$ git clone https://github.com/NixOS/nixpkgs
 $ cd nixpkgs
 </screen>
   Then you write and test the package as described in the Nixpkgs manual.

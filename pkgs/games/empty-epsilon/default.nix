@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python }:
+{ lib, stdenv, fetchFromGitHub, cmake, sfml, libX11, glew, python3 }:
 
 let
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ serious-proton sfml glew libX11 python ];
+  buildInputs = [ serious-proton sfml glew libX11 python3 ];
 
   cmakeFlags = [
     "-DSERIOUS_PROTON_DIR=${serious-proton.src}"

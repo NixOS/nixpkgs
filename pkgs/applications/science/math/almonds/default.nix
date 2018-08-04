@@ -1,11 +1,9 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, ncurses, pillow, pytest }:
+{ stdenv, python3, fetchFromGitHub, ncurses }:
 
-let
+with python3.pkgs; buildPythonApplication rec {
+  pname = "almonds";
   version = "1.25b";
-in
 
-buildPythonApplication {
-  name = "almonds-${version}";
   src = fetchFromGitHub {
     owner = "Tenchi2xh";
     repo = "Almonds";

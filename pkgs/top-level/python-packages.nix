@@ -69,8 +69,6 @@ let
   # See build-setupcfg/default.nix for documentation.
   buildSetupcfg = import ../build-support/build-setupcfg self;
 
-  graphiteVersion = "1.0.2";
-
   fetchPypi = makeOverridable( {format ? "setuptools", ... } @attrs:
     let
       fetchWheel = {pname, version, sha256, python ? "py2.py3", abi ? "none", platform ? "any"}:
@@ -185,6 +183,8 @@ in {
   asana = callPackage ../development/python-modules/asana { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
+
+  aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
 
   astral = callPackage ../development/python-modules/astral { };
 
@@ -338,11 +338,15 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  palettable = callPackage ../development/python-modules/palettable { };
+
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
+
+  phonopy = callPackage ../development/python-modules/phonopy { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
@@ -419,6 +423,8 @@ in {
 
   pykerberos = callPackage ../development/python-modules/pykerberos { };
 
+  pymatgen = callPackage ../development/python-modules/pymatgen { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
@@ -493,7 +499,11 @@ in {
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
+  slackclient = callPackage ../development/python-modules/slackclient { };
+
   spglib = callPackage ../development/python-modules/spglib { };
+
+  sumo = callPackage ../development/python-modules/sumo { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
@@ -1519,6 +1529,8 @@ in {
   cheetah = callPackage ../development/python-modules/cheetah { };
 
   cherrypy = callPackage ../development/python-modules/cherrypy {};
+
+  cfgv = callPackage ../development/python-modules/cfgv { };
 
   cftime = callPackage ../development/python-modules/cftime {};
 
@@ -3049,6 +3061,8 @@ in {
   };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
+
+  identify = callPackage ../development/python-modules/identify { };
 
   ijson = callPackage ../development/python-modules/ijson {};
 
@@ -4766,13 +4780,14 @@ in {
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_tagging_0_4_3 = if
-       self.django != self.django_1_8
+       self.django.version != "1.8.18"
   then throw "django_tagging_0_4_3 should be build with django_1_8"
   else (callPackage ../development/python-modules/django_tagging {}).overrideAttrs (attrs: rec {
-    name = "django-tagging-0.4.3";
+    pname = "django-tagging";
+    version = "0.4.3";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "0617azpmp6jpg3d88v2ir97qrc9aqcs2s9gyvv9bgf2cp55khxhs";
     };
     propagatedBuildInputs = with self; [ django ];
@@ -5282,6 +5297,8 @@ in {
   };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
+
+  fastpair = callPackage ../development/python-modules/fastpair { };
 
   fastrlock = callPackage ../development/python-modules/fastrlock {};
 
@@ -6497,6 +6514,8 @@ in {
       license = licenses.bsd2;
     };
   };
+
+  imgaug = callPackage ../development/python-modules/imgaug { };
 
   inflection = callPackage ../development/python-modules/inflection { };
 
@@ -8439,6 +8458,8 @@ in {
   nipype = callPackage ../development/python-modules/nipype {
     inherit (pkgs) which;
   };
+
+  nodeenv = callPackage ../development/python-modules/nodeenv { };
 
   nose = buildPythonPackage rec {
     version = "1.3.7";
@@ -12430,6 +12451,8 @@ in {
     };
   };
 
+  shippai = callPackage ../development/python-modules/shippai {};
+
   simanneal = callPackage ../development/python-modules/simanneal { };
 
   simplebayes = buildPythonPackage rec {
@@ -15381,24 +15404,7 @@ EOF
 
   whichcraft = callPackage ../development/python-modules/whichcraft { };
 
-  whisper = buildPythonPackage rec {
-    name = "whisper-${version}";
-    version = graphiteVersion;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/whisper/${name}.tar.gz";
-      sha256 = "1v1bi3fl1i6p4z4ki692bykrkw6907dn3mfq0151f70lvi3zpns3";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://graphite.wikidot.com/;
-      description = "Fixed size round-robin style database";
-      maintainers = with maintainers; [ rickynils offline ];
-    };
-  };
+  whisper = callPackage ../development/python-modules/whisper { };
 
   worldengine = buildPythonPackage rec {
     name = "worldengine-${version}";
@@ -15448,27 +15454,7 @@ EOF
     };
   };
 
-  carbon = buildPythonPackage rec {
-    name = "carbon-${version}";
-    version = graphiteVersion;
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/carbon/${name}.tar.gz";
-      sha256 = "142smpmgbnjinvfb6s4ijazish4vfgzyd8zcmdkh55y051fkixkn";
-    };
-
-    propagatedBuildInputs = with self; [ whisper txamqp zope_interface twisted ];
-
-    meta = {
-      homepage = http://graphite.wikidot.com/;
-      description = "Backend data caching and persistence daemon for Graphite";
-      maintainers = with maintainers; [ rickynils offline ];
-      license = licenses.asl20;
-    };
-  };
-
+  carbon = callPackage ../development/python-modules/carbon { };
 
   ujson = buildPythonPackage rec {
     name = "ujson-1.35";
@@ -15596,126 +15582,15 @@ EOF
     };
   };
 
-  graphite_web = if
-          self.django != self.django_1_8
-       || self.django_tagging != self.django_tagging_0_4_3
-  then throw "graphite_web should be build with django_1_8 and django_tagging_0_4_3"
-  else buildPythonPackage rec {
-    name = "graphite-web-${version}";
-    disabled = isPy3k;
-    version = graphiteVersion;
-
-    src = pkgs.fetchurl rec {
-      url = "mirror://pypi/g/graphite-web/${name}.tar.gz";
-      sha256 = "0q8bwlj75jqyzmazfsi5sa26xl58ssa8wdxm2l4j0jqyn8xpfnmc";
-    };
-
-    propagatedBuildInputs = with self; [
-      django django_tagging whisper pycairo cairocffi
-      ldap memcached pytz urllib3 scandir
-    ];
-
-    postInstall = ''
-      wrapProgram $out/bin/run-graphite-devel-server.py \
-        --prefix PATH : ${pkgs.which}/bin
-    '';
-
-    preConfigure = ''
-      # graphite is configured by storing a local_settings.py file inside the
-      # graphite python package. Since that package is stored in the immutable
-      # Nix store we can't modify it. So how do we configure graphite?
-      #
-      # First of all we rename "graphite.local_settings" to
-      # "graphite_local_settings" so that the settings are not looked up in the
-      # graphite package anymore. Secondly we place a directory containing a
-      # graphite_local_settings.py on the PYTHONPATH in the graphite module
-      # <nixpkgs/nixos/modules/services/monitoring/graphite.nix>.
-      substituteInPlace webapp/graphite/settings.py \
-        --replace "graphite.local_settings" " graphite_local_settings"
-
-      substituteInPlace webapp/graphite/settings.py \
-        --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
-    '';
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://graphite.wikidot.com/;
-      description = "Enterprise scalable realtime graphing";
-      maintainers = with maintainers; [ rickynils offline ];
-    };
-  };
+  graphite-web = callPackage ../development/python-modules/graphite-web { };
 
   graphite_api = callPackage ../development/python-modules/graphite-api { };
 
-  graphite_beacon = buildPythonPackage rec {
-    name = "graphite_beacon-0.27.0";
+  graphite_beacon = callPackage ../development/python-modules/graphite_beacon { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/graphite_beacon/${name}.tar.gz";
-      sha256 = "03bp4wyfn3xhcqyvs5hnk1n87m4smsmm1p7qp459m7j8hwpbq2ks";
-    };
+  influxgraph = callPackage ../development/python-modules/influxgraph { };
 
-    propagatedBuildInputs = [ self.tornado self.pyyaml self.funcparserlib ];
-
-    preBuild = "> requirements.txt";
-
-    meta = {
-      description = "A simple alerting application for Graphite metrics";
-      homepage = https://github.com/klen/graphite-beacon;
-      maintainers = [ maintainers.offline ];
-      license = licenses.mit;
-    };
-  };
-
-  graphite_influxdb = buildPythonPackage rec {
-    name = "graphite-influxdb-0.3";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/vimeo/graphite-influxdb.git";
-      rev = "2273d12a24e1d804685a36debfd4224b7416b62f";
-      sha256 = "1v00fgrnmsd9c0ahggyw9sia5m7dyzz16i5pa4vy6w2sbfyrmm4v";
-    };
-
-    propagatedBuildInputs = with self; [ influxdb graphite_api ];
-
-    passthru.moduleName = "graphite_influxdb.InfluxdbFinder";
-
-    meta = {
-      description = "An influxdb backend for Graphite-web and graphite-api";
-      homepage = https://github.com/vimeo/graphite-influxdb;
-      license = licenses.asl20;
-    };
-  };
-
-  graphite_pager = buildPythonPackage rec {
-    name = "graphite-pager-${version}";
-    version = "2bbfe91220ec1e0ca1cdf4b5564386482a44ed7d";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/offlinehacker/graphite-pager.git";
-      sha256 = "0ylal0vkc2yrjvssfz1gls84yk9vkvvkx3pyv4lx15jm2qqzdmxd";
-      rev = version;
-    };
-
-    buildInputs = with self; [ nose mock ];
-    propagatedBuildInputs = with self; [
-      jinja2 pyyaml redis requests pagerduty
-      python-simple-hipchat pushbullet
-    ];
-
-    patchPhase = "> requirements.txt";
-    checkPhase = "nosetests";
-
-    meta = {
-      description = "A simple alerting application for Graphite metrics";
-      homepage = https://github.com/seatgeek/graphite-pager;
-      maintainers = with maintainers; [ offline ];
-      license = licenses.bsd2;
-    };
-  };
-
+  graphitepager = callPackage ../development/python-modules/graphitepager { };
 
   pyspotify = buildPythonPackage rec {
     name = "pyspotify-${version}";
@@ -17070,6 +16945,10 @@ EOF
 
   Keras = callPackage ../development/python-modules/keras { };
 
+  keras-applications = callPackage ../development/python-modules/keras-applications { };
+
+  keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
+
   Lasagne = buildPythonPackage rec {
     name = "Lasagne-${version}";
     version = "0.1";
@@ -17486,18 +17365,6 @@ EOF
     buildInputs = with self; [ setuptools_scm ];
 
     propagatedBuildInputs = with self; [ six ];
-  };
-
-  slackclient = buildPythonPackage rec {
-    name = "slackclient-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/slackclient/${name}.tar.gz";
-      sha256 = "063cbzp1fbdipv53gb0hnban1pg80pls0lbld98lhnykzkcb6vf0";
-    };
-
-    propagatedBuildInputs = with self; [ websocket_client requests ];
   };
 
   tempora= callPackage ../development/python-modules/tempora { };

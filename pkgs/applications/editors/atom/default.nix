@@ -1,12 +1,15 @@
 { stdenv, pkgs, fetchurl, makeWrapper, gvfs, atomEnv}:
 
 let
-  common = pname: {version, sha256}: stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
-    inherit version;
+  common = pname: {version, sha256, beta ? null}:
+      let fullVersion = version + stdenv.lib.optionalString (beta != null) "-beta${toString beta}";
+      name = "${pname}-${fullVersion}";
+  in stdenv.mkDerivation {
+    inherit name;
+    version = fullVersion;
 
     src = fetchurl {
-      url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
+      url = "https://github.com/atom/atom/releases/download/v${fullVersion}/atom-amd64.deb";
       name = "${name}.deb";
       inherit sha256;
     };
@@ -61,12 +64,13 @@ let
   };
 in stdenv.lib.mapAttrs common {
   atom = {
-    version = "1.28.2";
-    sha256 = "07lz4lj07dbfz952l3q9vplvg41pxl1cx89gzy8bzzr3ay7kn6za";
+    version = "1.29.0";
+    sha256 = "0f0qpn8aw2qlqk8ah71xvk4vcmwsnsf2f3g4hz0rvaqnhb9ri9fz";
   };
 
   atom-beta = {
-    version = "1.29.0-beta1";
-    sha256 = "121y716pnq4vpjrymr505prskvi5a2lnn8hw79q8b4hf7yz0j6rb";
+    version = "1.30.0";
+    beta = 1;
+    sha256 = "0ygqj81xlwhzmmci0d0rd2q7xfskxd1k7h6db3zvvjdxjcnyqp1z";
   };
 }

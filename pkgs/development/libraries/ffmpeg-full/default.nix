@@ -68,6 +68,7 @@
 , ladspaH ? null # LADSPA audio filtering
 , lame ? null # LAME MP3 encoder
 , libass ? null # (Advanced) SubStation Alpha subtitle rendering
+, libaom ? null # AV1 encoder
 , libbluray ? null # BluRay reading
 , libbs2b ? null # bs2b DSP library
 , libcaca ? null # Textual display (ASCII art)
@@ -232,11 +233,11 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "4.0.1";
+  version = "4.0.2";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "1vn04n0n46zdxq14cma3w8ml2ckh5jxwlybsc4xmvcqdqq0mqpv0";
+    sha256 = "15rgzcmdccy4flajs63gkz4n3k24wkkg50r13l1r83lrxg4hqp59";
   };
 
   prePatch = ''
@@ -334,6 +335,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (ilbc != null) "libilbc")
     (enableFeature (ladspaH !=null) "ladspa")
     (enableFeature (lame != null) "libmp3lame")
+    (enableFeature (libaom != null) "libaom")
     (enableFeature (libass != null) "libass")
     #(enableFeature (libavc1394 != null) null null)
     (enableFeature (libbluray != null) "libbluray")
@@ -407,7 +409,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 celt fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
-    libjack2 ladspaH lame libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
+    libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus libssh libtheora libvdpau libvorbis libvpx libwebp libX11
     libxcb libXv lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
     samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore

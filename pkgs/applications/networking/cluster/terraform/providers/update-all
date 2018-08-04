@@ -71,7 +71,7 @@ fi
 
 org=terraform-providers
 
-repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | grep -v terraform-provider-telefonicaopencloud | sort)
+repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | grep -v terraform-provider-azure-classic | sort)
 
 
 # Get all the providers with index
