@@ -17946,6 +17946,8 @@ with pkgs;
     gtksharp = gtk-sharp-2_0;
   };
 
+  plex-media-player = libsForQt59.callPackage ../applications/video/plex-media-player { };
+
   plover = recurseIntoAttrs (callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
