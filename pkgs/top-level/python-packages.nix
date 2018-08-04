@@ -937,37 +937,7 @@ in {
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
-  beaker = buildPythonPackage rec {
-    name = "Beaker-${version}";
-    version = "1.8.0";
-
-    # The pypy release do not contains the tests
-    src = pkgs.fetchFromGitHub {
-      owner = "bbangert";
-      repo = "beaker";
-      rev = "${version}";
-      sha256 = "17yfr7a307n8rdl09was4j60xqk2s0hk0hywdkigrpj4qnw0is7g";
-    };
-
-    buildInputs =
-      [ self.nose
-        self.mock
-        self.webtest
-      ];
-    propagatedBuildInputs = [
-      self.sqlalchemy
-      self.pycrypto
-    ] ++ optionals (isPy27) [
-      self.funcsigs
-      self.pycryptopp
-    ];
-
-    meta = {
-      description = "A Session and Caching library with WSGI Middleware";
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
+  beaker = callPackage ../development/python-modules/beaker { };
 
   betamax = callPackage ../development/python-modules/betamax {};
 
