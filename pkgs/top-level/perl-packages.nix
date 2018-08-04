@@ -214,6 +214,11 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ApacheTest URI ];
     propagatedBuildInputs = [ ClassLoad HTTPBody HashMultiValue WWWFormUrlEncoded ];
+
+    # Fails because /etc/protocols is not available in sandbox and make
+    # getprotobyname('tcp') in ApacheTest fail.
+    doCheck = !stdenv.isLinux;
+
     meta = {
       homepage = http://search.cpan.org/dist/Apache-AuthCookie/;
       description = "Perl Authentication and Authorization via cookies";
