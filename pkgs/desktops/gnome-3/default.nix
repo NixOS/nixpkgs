@@ -30,7 +30,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
-    gnome-power-manager gnome-usage
+    gnome-power-manager gnome-todo gnome-usage
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -290,6 +290,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-power-manager = callPackage ./apps/gnome-power-manager { };
 
   gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
+
+  gnome-todo = callPackage ./apps/gnome-todo {};
 
   gnome-weather = callPackage ./apps/gnome-weather { };
 

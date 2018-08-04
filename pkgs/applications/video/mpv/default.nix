@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ stdenv, fetchpatch, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
@@ -35,7 +35,7 @@
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
 , drmSupport         ? true,  libdrm        ? null
-, openalSupport      ? true,  openalSoft   ? null
+, openalSupport      ? false, openalSoft    ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , archiveSupport     ? false, libarchive    ? null
 , jackaudioSupport   ? false, libjack2      ? null
@@ -93,6 +93,13 @@ in stdenv.mkDerivation rec {
     sha256 = "0i2nl65diqsjyz28dj07h6d8gq6ix72ysfm0nhs8514hqccaihs3";
   };
 
+  # FIXME: Remove this patch for building on macOS if it gets released in
+  # the future.
+  patches = optional stdenv.isDarwin (fetchpatch {
+    url = https://github.com/mpv-player/mpv/commit/dc553c8cf4349b2ab5d2a373ad2fac8bdd229ebb.patch;
+    sha256 = "0pa8vlb8rsxvd1s39c4iv7gbaqlkn3hx21a6xnpij99jdjkw3pg8";
+  });
+
   postPatch = ''
     patchShebangs ./TOOLS/
   '';
@@ -107,6 +114,7 @@ in stdenv.mkDerivation rec {
     "--disable-libmpv-static"
     "--disable-static-build"
     "--disable-build-date" # Purity
+    "--disable-macos-cocoa-cb" # Disable whilst Swift isn't supported
     (enableFeature archiveSupport "libarchive")
     (enableFeature dvdreadSupport "dvdread")
     (enableFeature dvdnavSupport "dvdnav")
@@ -143,7 +151,6 @@ in stdenv.mkDerivation rec {
     ++ optional speexSupport       speex
     ++ optional bs2bSupport        libbs2b
     ++ optional openalSupport      openalSoft
-    ++ optional (openalSupport && stdenv.isDarwin) darwin.apple_sdk.frameworks.OpenAL
     ++ optional libpngSupport      libpng
     ++ optional youtubeSupport     youtube-dl
     ++ optional sdl2Support        SDL2
@@ -152,11 +159,12 @@ in stdenv.mkDerivation rec {
     ++ optional drmSupport         libdrm
     ++ optional vapoursynthSupport vapoursynth
     ++ optional archiveSupport     libarchive
+    ++ optional stdenv.isDarwin    libiconv
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      CoreFoundation libiconv Cocoa CoreAudio
+      CoreFoundation Cocoa CoreAudio
     ]);
 
   enableParallelBuilding = true;

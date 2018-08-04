@@ -45,11 +45,11 @@ let
         greeter-user = ${config.users.users.lightdm.name}
         greeters-directory = ${cfg.greeter.package}
       ''}
-      sessions-directory = ${dmcfg.session.desktops}
+      sessions-directory = ${dmcfg.session.desktops}/share/xsessions
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
-      session-wrapper = ${dmcfg.session.script}
+      session-wrapper = ${dmcfg.session.wrapper}
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
@@ -176,19 +176,11 @@ in
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
+      { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
           services.xserver.windowMananger.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
-        '';
-      }
-      { assertion = hasDefaultUserSession -> elem defaultSessionName dmcfg.session.names;
-        message = ''
-          services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are not set to valid
-          values. The current default session: ${defaultSessionName}
-          is not valid.
         '';
       }
       { assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);

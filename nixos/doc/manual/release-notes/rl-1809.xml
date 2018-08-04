@@ -81,6 +81,22 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      routing tables for instance.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <varname>services.strongswan-swanctl</varname>
+      is a modern replacement for <varname>services.strongswan</varname>.
+      You can use either one of them to setup IPsec VPNs but not both at the same time.
+    </para>
+    <para>
+      <varname>services.strongswan-swanctl</varname> uses the
+      <link xlink:href="https://wiki.strongswan.org/projects/strongswan/wiki/swanctl">swanctl</link>
+      command which uses the modern
+      <link xlink:href="https://github.com/strongswan/strongswan/blob/master/src/libcharon/plugins/vici/README.md">vici</link>
+      <emphasis>Versatile IKE Configuration Interface</emphasis>.
+      The deprecated <literal>ipsec</literal> command used in <varname>services.strongswan</varname> is using the legacy
+      <link xlink:href="https://github.com/strongswan/strongswan/blob/master/README_LEGACY.md">stroke configuration interface</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

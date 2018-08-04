@@ -74,7 +74,7 @@ let
 
     installXDGAppLauncher = ''
       launcher="$out/share/applications/cataclysm-dda.desktop"
-      install -D -m 444 data/xdg/com.cataclysmdda.cataclysm-dda.desktop -T "$launcher"
+      install -D -m 444 data/xdg/*cataclysm-dda.desktop -T "$launcher"
       sed -i "$launcher" -e "s,\(Exec=\)\(cataclysm-tiles\),\1$out/bin/\2,"
       install -D -m 444 data/xdg/cataclysm-dda.svg -t $out/share/icons/hicolor/scalable/apps
     '';

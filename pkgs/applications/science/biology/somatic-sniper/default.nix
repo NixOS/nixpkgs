@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake zlib ncurses ];
 
+  enableParallelBuilding = false;
+
   meta = with stdenv.lib; {
     description = "Identify single nucleotide positions that are different between tumor and normal";
     license = licenses.mit;
