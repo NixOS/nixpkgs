@@ -96,6 +96,7 @@ let
       homepage = http://subversion.apache.org/;
       maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
       platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+      license = stdenv.lib.licenses.asl20;
     };
 
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {
