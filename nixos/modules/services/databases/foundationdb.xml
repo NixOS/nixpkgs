@@ -295,7 +295,6 @@ only undergone fairly basic testing of all the available functionality.</para>
       individual <command>fdbserver</command> processes. Currently, all server
       processes inherit all the global <command>fdbmonitor</command> settings.
       </para></listitem>
-  <listitem><para>Python bindings are not currently installed.</para></listitem>
   <listitem><para>Ruby bindings are not currently installed.</para></listitem>
   <listitem><para>Go bindings are not currently installed.</para></listitem>
 </itemizedlist>

@@ -88,7 +88,7 @@ let
         separateDebugInfo = true;
         enableParallelBuilding = true;
 
-        makeFlags = [ "all" "fdb_java" ]
+        makeFlags = [ "all" "fdb_java" "fdb_python" ]
           # Don't compile FDBLibTLS if we don't need it in 6.0 or later;
           # it gets statically linked in
           ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
@@ -106,17 +106,28 @@ let
 
         installPhase = ''
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
+          mkdir -vp $python/lib/${python.libPrefix}/site-packages
 
-          cp -v ./lib/libfdb_c.so     $lib/lib
         '' + lib.optionalString (!lib.versionAtLeast version "6.0") ''
+          # we only copy the TLS library on < 6.0, since it's compiled-in otherwise
           cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
         '' + ''
 
+          # C API
+          cp -v ./lib/libfdb_c.so                           $lib/lib
           cp -v ./bindings/c/foundationdb/fdb_c.h           $dev/include/foundationdb
           cp -v ./bindings/c/foundationdb/fdb_c_options.g.h $dev/include/foundationdb
 
+          # java
           cp -v ./bindings/java/foundationdb-client.jar     $lib/share/java/fdb-java.jar
 
+          # python
+          rm -f ./bindings/python/fdb/*.pth # remove useless files
+          cp -R ./bindings/python/fdb                       $python/lib/${python.libPrefix}/site-packages/fdb
+          # symlink a copy of the shared object into place, so that impl.py can load it
+          ln -sv $lib/lib/libfdb_c.so                       $python/lib/${python.libPrefix}/site-packages/fdb/libfdb_c.so
+
+          # binaries
           for x in fdbbackup fdbcli fdbserver fdbmonitor; do
             cp -v "./bin/$x" $out/bin;
           done
@@ -128,7 +139,7 @@ let
           ln -sfv $out/bin/fdbbackup $out/libexec/backup_agent
         '';
 
-        outputs = [ "out" "lib" "dev" ];
+        outputs = [ "out" "lib" "dev" "python" ];
 
         meta = with stdenv.lib; {
           description = "Open source, distributed, transactional key-value store";
