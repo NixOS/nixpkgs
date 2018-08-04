@@ -1458,6 +1458,8 @@ with pkgs;
 
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
+  scour = callPackage ../tools/graphics/scour { };
+
   s2png = callPackage ../tools/graphics/s2png { };
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
