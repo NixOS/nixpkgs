@@ -148,10 +148,9 @@ in with builtins; {
   };
 
   foundationdb52 = makeFdb rec {
-    version = "5.2.6";
+    version = "5.2.8";
     branch  = "release-5.2";
-    rev     = "refs/tags/v5.2.6"; # seemed to be tagged incorrectly
-    sha256  = "1q3lq1hqq0f53n51gd4cw5cpayyw65dmkfplhsw1m5mghymzmskk";
+    sha256  = "1kbmmhk2m9486r4kyjlc7bb3wd50204i0p6dxcmvl6pbp1bs0wlb";
   };
 
   foundationdb60 = makeFdb rec {
