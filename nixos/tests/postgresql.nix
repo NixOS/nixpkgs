@@ -22,10 +22,17 @@ let
       maintainers = [ zagy ];
     };
 
-    machine = {...}:
+    machine = { pkgs, ... }:
       {
         services.postgresql.package=postgresql-package;
         services.postgresql.enable = true;
+
+        services.postgresql.extraPlugins = [ pkgs.pg_journal ];
+        services.postgresql.extraConfig = ''
+          shared_preload_libraries = 'pg_journal'
+          log_statement = all
+        '';
+        environment.systemPackages = [ pkgs.jq ];
 
         services.postgresqlBackup.enable = true;
         services.postgresqlBackup.databases = [ "postgres" ];
@@ -49,6 +56,10 @@ let
       $machine->succeed(check_count("SELECT * FROM sth;", 5));
       $machine->fail(check_count("SELECT * FROM sth;", 4));
       $machine->succeed(check_count("SELECT xpath(\'/test/text()\', doc) FROM xmltest;", 1));
+
+      # Check that pg_journal plugin is outputting structured logs to the journal
+      $machine->succeed('journalctl -u postgresql -r -o json | \
+        \jq \'select(.PGDATABASE == "postgres") | .MESSAGE | test(".*SELECT \\\\* FROM sth")\' | grep true');
 
       # Check backup service
       $machine->succeed("systemctl start postgresqlBackup-postgres.service");

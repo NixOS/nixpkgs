@@ -2976,6 +2976,8 @@ with pkgs;
 
   pg_cron = callPackage ../servers/sql/postgresql/pg_cron {};
 
+  pg_journal = callPackage ../servers/sql/postgresql/pg_journal {};
+
   pgtap = callPackage ../servers/sql/postgresql/pgtap {};
 
   pg_topn = callPackage ../servers/sql/postgresql/topn {};
