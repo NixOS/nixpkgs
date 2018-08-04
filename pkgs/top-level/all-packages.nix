@@ -13898,6 +13898,8 @@ with pkgs;
 
     amdgpu-pro = callPackage ../os-specific/linux/amdgpu-pro { };
 
+    inherit (callPackage ../applications/virtualization/anbox { }) ashmem binder;
+
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bcc = callPackage ../os-specific/linux/bcc {
@@ -15207,6 +15209,8 @@ with pkgs;
     (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
   android-studio-preview = androidStudioPackages.beta;
+
+  inherit (callPackage ../applications/virtualization/anbox { }) anbox anbox-image;
 
   antfs-cli = callPackage ../applications/misc/antfs-cli {};
 
