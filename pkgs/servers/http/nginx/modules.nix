@@ -94,6 +94,16 @@
     '';
   };
 
+  lua-upstream = {
+    src = fetchFromGitHub {
+      owner = "openresty";
+      repo = "lua-upstream-nginx-module";
+      rev = "v0.07";
+      sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
+    };
+    inputs = [ pkgs.luajit ];
+  };
+
   modsecurity = {
     src = "${pkgs.modsecurity_standalone.nginx}/nginx/modsecurity";
     inputs = [ pkgs.curl pkgs.apr pkgs.aprutil pkgs.apacheHttpd pkgs.yajl ];
