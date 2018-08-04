@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     description = "Free IMAP and MailDir mailbox synchronizer";
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ the-kenny viric ];
+    maintainers = with maintainers; [ the-kenny ];
     platforms = platforms.unix;
   };
 }

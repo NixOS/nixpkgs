@@ -20,6 +20,25 @@ in stdenv.mkDerivation rec {
       url = https://gitlab.gnome.org/GNOME/network-manager-applet/merge_requests/12.patch;
       sha256 = "0q5qbjpbrfvhqsprnwjwz4c42nly59cgnbn41w2zlxvqf29gjvwk";
     })
+
+    # following 3 patches:
+    # https://gitlab.gnome.org/GNOME/network-manager-applet/issues/11
+    # should be fixed in 1.8.16
+    (fetchpatch {
+      name = "0001-connection-editor-hold-GApplication-while-the-import.patch";
+      url = https://gitlab.gnome.org/GNOME/network-manager-applet/commit/419c459e70ac752eb9226b0db1192fb0433d5d5e.patch;
+      sha256 = "0zi4fn2ynymi6ckkdrj8vcl78pwmkan4n8l53axaqb4kn0wnahdj";
+    })
+    (fetchpatch {
+      name = "0002-connection-list-attempt-a-VPN-import-first.patch";
+      url = https://gitlab.gnome.org/GNOME/network-manager-applet/commit/9d79ffdb148b31c7194c66946c87b6cd57ed54a3.patch;
+      sha256 = "1v0pdvkglrcfl1khp9j17cw0gvwg8scdha0wfziy054s1r6kyj23";
+    })
+    (fetchpatch {
+       name = "0003-bluetooth-fix-an-assert-failure-on-creation-cancella.patch";
+       url = https://gitlab.gnome.org/GNOME/network-manager-applet/commit/516f3f6c70ef9694d6004c64d50a9f3cd2725ab7.patch;
+       sha256 = "1msk4hmri3x5chmclxm7sdj1v9jg7pxqqrarlvsmfmshdwq4ljwk";
+    })
   ];
 
   mesonFlags = [

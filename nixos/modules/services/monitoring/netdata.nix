@@ -14,6 +14,10 @@ let
     global = {
       "plugins directory" = "${wrappedPlugins}/libexec/netdata/plugins.d ${pkgs.netdata}/libexec/netdata/plugins.d";
     };
+    web = {
+      "web files owner" = "root";
+      "web files group" = "root";
+    };
   };
   mkConfig = generators.toINI {} (recursiveUpdate localConfig cfg.config);
   configFile = pkgs.writeText "netdata.conf" (if cfg.configText != null then cfg.configText else mkConfig);

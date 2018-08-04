@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256="0g29kyz4ykasdcrb0zmbrp2jqs9kv1wz9swx849i2d1ncknbzln4";
   };
 
+  outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
+
   buildInputs = [ oniguruma ];
 
   patches = [
@@ -22,14 +24,27 @@ stdenv.mkDerivation rec {
       url = https://patch-diff.githubusercontent.com/raw/stedolan/jq/pull/1214.diff;
       sha256 = "1w8bapnyp56di6p9casbfczfn8258rw0z16grydavdjddfm280l9";
     })
-  ];
+  ]
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-strptime-test.patch;
+
   patchFlags = [ "-p2" ]; # `src` subdir was introduced after v1.5 was released
 
-  # jq is linked to libjq:
-  configureFlags = stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+  configureFlags =
+    [
+    "--bindir=\${bin}/bin"
+    "--sbindir=\${bin}/bin"
+    "--datadir=\${doc}/share"
+    "--mandir=\${man}/share/man"
+    ]
+    # jq is linked to libjq:
+    ++ stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
-  installCheckPhase = "$out/bin/jq --help";
   doInstallCheck = true;
+  installCheckTarget = "check";
+
+  postInstallCheck = ''
+    $bin/bin/jq --help >/dev/null
+  '';
 
   meta = with stdenv.lib; {
     description = ''A lightweight and flexible command-line JSON processor'';

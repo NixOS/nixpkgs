@@ -10,7 +10,7 @@
 assert zlibSupport -> zlib != null;
 
 let
-  majorVersion = "5.10";
+  majorVersion = "6.0";
   minorVersion = "0";
   minorVersionSuffix = "";
   pythonVersion = "2.7";
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-    sha256 = "10j1s6r6iv80nvpi6gv8w05v505h2ndj9xx31yz7d50ab04dfg23";
+    sha256 = "1qjwpc8n68sxxlfg36s5vn1h2gdfvvd6lxvr4lzbvfwhzrgqahsw";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];

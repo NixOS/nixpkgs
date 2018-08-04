@@ -117,9 +117,9 @@ let
         ];
         postBuild = ''
           mkdir -p $out/nix-support
-          echo "file ${kernelTarget} $out/${kernelTarget}" >> $out/nix-support/hydra-build-products
-          echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
-          echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
+          echo "file ${kernelTarget} ${build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
+          echo "file initrd ${build.netbootRamdisk}/initrd" >> $out/nix-support/hydra-build-products
+          echo "file ipxe ${build.netbootIpxeScript}/netboot.ipxe" >> $out/nix-support/hydra-build-products
         '';
         preferLocalBuild = true;
       };
@@ -198,7 +198,7 @@ in rec {
         modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
-            system.nixos.stateVersion = mkDefault "18.03";
+            system.stateVersion = mkDefault "18.03";
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;
@@ -256,6 +256,7 @@ in rec {
   tests.buildbot = callTest tests/buildbot.nix {};
   tests.cadvisor = callTestOnMatchingSystems ["x86_64-linux"] tests/cadvisor.nix {};
   tests.ceph = callTestOnMatchingSystems ["x86_64-linux"] tests/ceph.nix {};
+  tests.cfssl = callTestOnMatchingSystems ["x86_64-linux"] tests/cfssl.nix {};
   tests.chromium = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};

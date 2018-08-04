@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     platforms = with platforms; linux ++ cygwin;
-    maintainers = with maintainers; [ viric vrthra ];
+    maintainers = with maintainers; [ vrthra ];
   };
 }

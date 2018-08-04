@@ -91,13 +91,15 @@ let
     doInstallCheck = false;
   });
 
+  pluginArgs = externalTestArgs // { inherit pythonPackages; };
+
   plugins = {
-    alternatives = callPackage ./alternatives-plugin.nix externalTestArgs;
-    copyartifacts = callPackage ./copyartifacts-plugin.nix externalTestArgs;
+    alternatives = callPackage ./alternatives-plugin.nix pluginArgs;
+    copyartifacts = callPackage ./copyartifacts-plugin.nix pluginArgs;
   };
 
 in pythonPackages.buildPythonApplication rec {
-  name = "beets-${version}";
+  pname = "beets";
   version = "1.4.7";
 
   src = fetchFromGitHub {
@@ -114,7 +116,6 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.munkres
     pythonPackages.musicbrainzngs
     pythonPackages.mutagen
-    pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
     pythonPackages.gst-python

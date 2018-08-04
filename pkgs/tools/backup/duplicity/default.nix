@@ -37,7 +37,7 @@ python2Packages.buildPythonApplication rec {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = http://www.nongnu.org/duplicity;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric peti ];
+    maintainers = with maintainers; [ peti ];
     platforms = platforms.unix;
   };
 }

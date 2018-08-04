@@ -4,7 +4,7 @@ let
 in stdenv.mkDerivation {
   name = "masterpdfeditor-${version}";
   src = fetchurl {
-    url = "https://get.code-industry.net/public/master-pdf-editor-${version}_qt5.amd64.tar.gz";
+    url = "https://code-industry.net/public/master-pdf-editor-${version}_qt5.amd64.tar.gz";
     sha256 = "0k5bzlhqglskiiq86nmy18mnh5bf2w3mr9cq3pibrwn5pisxnxxc";
   };
 

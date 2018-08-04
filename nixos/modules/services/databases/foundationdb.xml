@@ -2,7 +2,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
-         xml:id="module-foundationdb">
+         xml:id="module-services-foundationdb">
 
 <title>FoundationDB</title>
 
@@ -12,7 +12,7 @@
 
 <para><emphasis>Maintainer:</emphasis> Austin Seipp</para>
 
-<para><emphasis>Available version(s):</emphasis> 5.1.x</para>
+<para><emphasis>Available version(s):</emphasis> 5.1.x, 5.2.x, 6.0.x</para>
 
 <para>FoundationDB (or "FDB") is a distributed, open source, high performance,
 transactional key-value store. It can store petabytes of data and deliver
@@ -26,7 +26,7 @@ exceptional performance while maintaining consistency and ACID semantics
 
 <programlisting>
 services.foundationdb.enable = true;
-services.foundationdb.package = pkgs.foundationdb51; # FoundationDB 5.1.x
+services.foundationdb.package = pkgs.foundationdb52; # FoundationDB 5.2.x
 </programlisting>
 </para>
 
@@ -67,6 +67,41 @@ Cluster:
 ...
 
 fdb>
+</programlisting>
+</para>
+
+<para>You can also now write programs using the available client libraries.
+For example, the following Python program can be run in order to grab the cluster status,
+as a quick example. (This example uses <command>nix-shell</command> shebang
+support to automatically supply the necessary Python modules).
+
+<programlisting>
+a@link> cat fdb-status.py
+#! /usr/bin/env nix-shell
+#! nix-shell -i python -p python pythonPackages.foundationdb52
+
+from __future__ import print_function
+
+import fdb
+import json
+
+def main():
+    fdb.api_version(520)
+    db = fdb.open()
+
+    @fdb.transactional
+    def get_status(tr):
+        return str(tr['\xff\xff/status/json'])
+
+    obj = json.loads(get_status(db))
+    print('FoundationDB available: %s' % obj['client']['database_status']['available'])
+
+if __name__ == "__main__":
+    main()
+a@link> chmod +x fdb-status.py
+a@link> ./fdb-status.py
+FoundationDB available: True
+a@link>
 </programlisting>
 </para>
 
@@ -295,7 +330,6 @@ only undergone fairly basic testing of all the available functionality.</para>
       individual <command>fdbserver</command> processes. Currently, all server
       processes inherit all the global <command>fdbmonitor</command> settings.
       </para></listitem>
-  <listitem><para>Python bindings are not currently installed.</para></listitem>
   <listitem><para>Ruby bindings are not currently installed.</para></listitem>
   <listitem><para>Go bindings are not currently installed.</para></listitem>
 </itemizedlist>
