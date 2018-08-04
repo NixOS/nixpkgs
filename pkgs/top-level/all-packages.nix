@@ -744,6 +744,8 @@ with pkgs;
 
   inherit (androidenv) androidndk;
 
+  android-simg2img = callPackage ../tools/filesystems/android-simg2img { };
+
   androidsdk = androidenv.androidsdk_8_0;
 
   androidsdk_extras = self.androidenv.androidsdk_8_0_extras;
