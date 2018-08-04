@@ -113,9 +113,8 @@ in rec {
         (all nixos.tests.networking.scripted.macvlan)
         (all nixos.tests.networking.scripted.sit)
         (all nixos.tests.networking.scripted.vlan)
-        # FIXME: temporarily disabled, see #43473
-        #(all nixos.tests.nfs3)
-        #(all nixos.tests.nfs4)
+        (all nixos.tests.nfs3)
+        (all nixos.tests.nfs4)
         (all nixos.tests.openssh)
         (all nixos.tests.php-pcre)
         (all nixos.tests.predictable-interface-names.vm-test-run-predictableInterfaceNames)
