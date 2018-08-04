@@ -206,6 +206,26 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Moose Mouse ];
   };
 
+  ApacheAuthCookie = buildPerlPackage rec {
+    name = "Apache-AuthCookie-3.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MS/MSCHOUT/${name}.tar.gz";
+      sha256 = "58daeb3e44c681ff88f8fb00e4aabaa7a40cbee73dbdb84fcf6c285b15d357bd";
+    };
+    buildInputs = [ ApacheTest URI ];
+    propagatedBuildInputs = [ ClassLoad HTTPBody HashMultiValue WWWFormUrlEncoded ];
+
+    # Fails because /etc/protocols is not available in sandbox and make
+    # getprotobyname('tcp') in ApacheTest fail.
+    doCheck = !stdenv.isLinux;
+
+    meta = {
+      homepage = http://search.cpan.org/dist/Apache-AuthCookie/;
+      description = "Perl Authentication and Authorization via cookies";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ApacheLogFormatCompiler = buildPerlModule rec {
     name = "Apache-LogFormat-Compiler-0.35";
     src = fetchurl {
