@@ -62,5 +62,6 @@ in mkDerivation rec {
     homepage    = https://github.com/sddm/sddm;
     maintainers = with maintainers; [ abbradar ttuegel ];
     platforms   = platforms.linux;
+    license     = licenses.gpl2Plus;
   };
 }
