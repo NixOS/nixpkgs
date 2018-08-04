@@ -53,12 +53,12 @@ in
       };
 
       shellAliases = mkOption {
-        default = config.environment.shellAliases;
+        default = {};
         description = ''
-          Set of aliases for fish shell. See <option>environment.shellAliases</option>
-          for an option format description.
+          Set of aliases for fish shell, which overrides <option>environment.shellAliases</option>.
+          See <option>environment.shellAliases</option> for an option format description.
         '';
-        type = types.attrs;
+        type = with types; attrsOf (either str path);
       };
 
       shellInit = mkOption {
@@ -98,6 +98,8 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    programs.fish.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
     environment.etc."fish/foreign-env/shellInit".text = cfge.shellInit;
     environment.etc."fish/foreign-env/loginShellInit".text = cfge.loginShellInit;

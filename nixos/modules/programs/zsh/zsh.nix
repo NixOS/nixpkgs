@@ -34,13 +34,12 @@ in
       };
 
       shellAliases = mkOption {
-        default = config.environment.shellAliases;
+        default = {};
         description = ''
-          Set of aliases for zsh shell. Overrides the default value taken from
-           <option>environment.shellAliases</option>.
+          Set of aliases for zsh shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
         '';
-        type = types.attrs; # types.attrsOf types.stringOrPath;
+        type = with types; attrsOf (either str path);
       };
 
       shellInit = mkOption {
@@ -105,6 +104,8 @@ in
   };
 
   config = mkIf cfg.enable {
+
+    programs.zsh.shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
     environment.etc."zshenv".text =
       ''

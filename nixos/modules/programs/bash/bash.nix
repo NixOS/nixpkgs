@@ -59,12 +59,12 @@ in
       */
 
       shellAliases = mkOption {
-        default = config.environment.shellAliases;
+        default = {};
         description = ''
-          Set of aliases for bash shell. See <option>environment.shellAliases</option>
-          for an option format description.
+          Set of aliases for bash shell, which overrides <option>environment.shellAliases</option>.
+          See <option>environment.shellAliases</option> for an option format description.
         '';
-        type = types.attrs; # types.attrsOf types.stringOrPath;
+        type = with types; attrsOf (either str path);
       };
 
       shellInit = mkOption {
@@ -124,6 +124,8 @@ in
   config = /* mkIf cfg.enable */ {
 
     programs.bash = {
+
+      shellAliases = mapAttrs (name: mkDefault) cfge.shellAliases;
 
       shellInit = ''
         if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
