@@ -26,6 +26,7 @@
 <xref linkend="opt-services.xserver.desktopManager.plasma5.enable"/> = true;
 <xref linkend="opt-services.xserver.desktopManager.xfce.enable"/> = true;
 <xref linkend="opt-services.xserver.desktopManager.gnome3.enable"/> = true;
+<xref linkend="opt-services.xserver.desktopManager.mate.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.xmonad.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.twm.enable"/> = true;
 <xref linkend="opt-services.xserver.windowManager.icewm.enable"/> = true;
