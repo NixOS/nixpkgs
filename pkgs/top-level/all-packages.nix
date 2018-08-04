@@ -5173,6 +5173,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
   };
 
+  smarty3 = callPackage ../development/libraries/smarty3 { };
+
   smbldaptools = callPackage ../tools/networking/smbldaptools {
     inherit (perlPackages) perlldap CryptSmbHash DigestSHA1;
   };
