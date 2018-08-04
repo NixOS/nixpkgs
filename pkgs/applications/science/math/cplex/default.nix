@@ -1,4 +1,4 @@
-{ stdenv, coreutils, requireFile, patchelf, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
+{ stdenv, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
 
 # To use this package, you need to download your own cplex installer from IBM
 # and override the releasePath attribute to point to the location of the file.  
@@ -14,20 +14,24 @@ stdenv.mkDerivation rec {
   src =
     if builtins.isNull releasePath then
       throw ''
+       
         This nix expression requires that the cplex installer is already
-        downloaded to your machine. Get it from IBM and override the
-        releasePath attribute to point to the location of the file. 
+        downloaded to your machine. Get it from IBM 
+        https://developer.ibm.com/docloud/blog/2017/12/20/cplex-optimization-studio-12-8-now-available/ 
+        and override the releasePath attribute to point to the location of the
+        file. 
+
       ''
     else
       releasePath;
 
-  nativeBuildInputs = [ coreutils makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ openjdk gtk2 xorg.libXtst glibcLocales ];
 
-  phases = "patchPhase buildPhase installPhase fixupPhase";
+  unpackPhase = "cp $src $name";
 
   patchPhase = ''
-    sed -e 's|/usr/bin/tr"|tr"         |' $src > $name
+    sed -i -e 's|/usr/bin/tr"|tr"         |' $name
   '';
 
   buildPhase = ''
@@ -36,10 +40,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    for pgm in $out/opl/bin/x86-64_linux/oplrun $out/opl/bin/x86-64_linux/oplrunjava $out/opl/oplide/oplide $out/cplex/bin/x86-64_linux/cplex $out/cpoptimizer/bin/x86-64_linux/cpoptimizer;
-    do
-      ln -s $pgm $out/bin;
-    done
+    ln -s $out/opl/bin/x86-64_linux/oplrun\
+      $out/opl/bin/x86-64_linux/oplrunjava\
+      $out/opl/oplide/oplide\
+      $out/cplex/bin/x86-64_linux/cplex\
+      $out/cpoptimizer/bin/x86-64_linux/cpoptimizer\
+      $out/bin
   '';
 
   fixupPhase = 
