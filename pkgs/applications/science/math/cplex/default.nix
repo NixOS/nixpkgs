@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, openjdk, gtk2, xorg, glibcLocales, config, pkgs, releasePath }:
+{ stdenv, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath }:
 
 # To use this package, you need to download your own cplex installer from IBM
 # and override the releasePath attribute to point to the location of the file.  
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "128";
   
   src =
-    if builtins.isNull releasePath then 
+    if builtins.isNull releasePath then
       throw ''
         This nix expression requires that the cplex installer is already
         downloaded to your machine. Get it from IBM: 
