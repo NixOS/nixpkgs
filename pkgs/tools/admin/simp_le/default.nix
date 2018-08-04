@@ -1,10 +1,10 @@
-{ stdenv, pythonPackages, bash }:
+{ stdenv, python3Packages, bash }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "simp_le-client";
   version = "0.9.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
     sha256 = "1yxfznd78zkg2f657v520zj5w4dvq5n594d0kpm4lra8xnpg4zcv";
   };
@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
     $out/bin/simp_le --test
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ acme setuptools_scm josepy idna ];
+  propagatedBuildInputs = with python3Packages; [ acme setuptools_scm josepy idna ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/zenhack/simp_le;
