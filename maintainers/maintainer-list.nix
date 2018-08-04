@@ -4518,6 +4518,11 @@
     github = "y0no";
     name = "Yoann Ono";
   };
+  yarny = {
+    email = "41838844+Yarny0@users.noreply.github.com";
+    github = "Yarny0";
+    name = "Yarny";
+  };
   yarr = {
     email = "savraz@gmail.com";
     github = "Eternity-Yarr";
