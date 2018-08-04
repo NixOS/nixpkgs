@@ -1111,7 +1111,7 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
-  cplex = callPackage ../applications/science/math/cplex { };
+  cplex = callPackage ../applications/science/math/cplex { releasePath = config.cplex.releasePath or null; };
 
   cpulimit = callPackage ../tools/misc/cpulimit { };
 

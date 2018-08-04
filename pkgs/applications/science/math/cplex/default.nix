@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
+{ stdenv, makeWrapper, openjdk, gtk2, xorg, glibcLocales, config, pkgs, releasePath }:
 
 # To use this package, you need to download your own cplex installer from IBM
 # and override the releasePath attribute to point to the location of the file.  
@@ -12,15 +12,16 @@ stdenv.mkDerivation rec {
   version = "128";
   
   src =
-    if builtins.isNull releasePath then
+    if builtins.isNull releasePath then 
       throw ''
-       
         This nix expression requires that the cplex installer is already
-        downloaded to your machine. Get it from IBM 
+        downloaded to your machine. Get it from IBM: 
         https://developer.ibm.com/docloud/blog/2017/12/20/cplex-optimization-studio-12-8-now-available/ 
-        and override the releasePath attribute to point to the location of the
-        file. 
 
+        Set `cplex.releasePath = /path/to/download;` in your
+        ~/.config/nixpkgs/config.nix for `nix-*` commands, or
+        `config.cplex.releasePath = /path/to/download;` in your
+        `configuration.nix` for NixOS.
       ''
     else
       releasePath;
