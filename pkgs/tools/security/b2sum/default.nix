@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, openmp }:
+{ stdenv, fetchurl, openmp ? null }:
 
 stdenv.mkDerivation rec {
-  version = "20160619";
+  version = "unstable-2018-06-11";
+  rev = "320c325437539ae91091ce62efec1913cd8093c2";
   name = "b2sum-${version}";
 
   src = fetchurl {
-    url = "https://github.com/BLAKE2/BLAKE2/archive/${version}.tar.gz";
-    sha256 = "0csnlp6kwlyla5s4r6bsrx2jgcwrm9qzisnvfdhmqsz5r8y87b6b";
+    url = "https://github.com/BLAKE2/BLAKE2/archive/${rev}.tar.gz";
+    sha256 = "19f07dwli9ymlc87ikn84j4h5fv57afwj9ni7s0jkaym5l0q6nqw";
   };
   postUnpack = "sourceRoot=$sourceRoot/b2sum";
 
