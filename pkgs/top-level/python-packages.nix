@@ -925,26 +925,8 @@ in {
 
   babelfish = callPackage ../development/python-modules/babelfish {};
 
-  basiciw = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    version = "0.2.2";
-    pname = "basiciw";
-    disabled = isPy27 || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "1ajmflvvlkflrcmqmkrx0zaira84z8kv4ssb2jprfwvjh8vfkysb";
-    };
-
-    buildInputs = [ pkgs.gcc ];
-    propagatedBuildInputs = [ pkgs.wirelesstools ];
-
-    meta = {
-      description = "Get info about wireless interfaces using libiw";
-      homepage = https://github.com/enkore/basiciw;
-      platforms = platforms.linux;
-      license = licenses.gpl2;
-    };
+  basiciw = callPackage ../development/python-modules/basiciw {
+    inherit (pkgs) gcc wirelesstools;
   };
 
   batinfo = callPackage ../development/python-modules/batinfo {};
