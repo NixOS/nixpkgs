@@ -40,5 +40,6 @@ stdenv.mkDerivation {
     homepage = http://www.nongnu.org/sysvinit/;
     description = "Utilities related to booting and shutdown";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }
