@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/sboli/twmn;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = [ stdenv.lib.maintainers.matejc ];
+    license = stdenv.lib.licenses.lgpl3;
   };
 }
