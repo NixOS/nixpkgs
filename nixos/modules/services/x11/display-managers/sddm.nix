@@ -59,6 +59,7 @@ let
 
     [Wayland]
     EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
+    SessionDir=${dmcfg.session.desktops}/share/wayland-sessions
 
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
