@@ -1,6 +1,6 @@
 { fetchurl, stdenv, substituteAll, meson, ninja, pkgconfig, gnome3, glib, gtk, gsettings-desktop-schemas
 , gnome-desktop, dbus, json-glib, libICE, xmlto, docbook_xsl, docbook_xml_dtd_412, python3
-, libxslt, gettext, makeWrapper, systemd, xorg, epoxy }:
+, libxslt, gettext, makeWrapper, systemd, xorg, epoxy, gnugrep, bash }:
 
 stdenv.mkDerivation rec {
   name = "gnome-session-${version}";
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       gsettings = "${glib.bin}/bin/gsettings";
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
+      grep = "${gnugrep}/bin/grep";
+      bash = "${bash}/bin/bash";
     })
   ];
 
@@ -37,8 +39,11 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
+  # `bin/gnome-session` will reset the environment when run in wayland, we
+  # therefor wrap `libexec/gnome-session-binary` instead which is the actual
+  # binary needing wrapping
   preFixup = ''
-    wrapProgram "$out/bin/gnome-session" \
+    wrapProgram "$out/libexec/gnome-session-binary" \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
       --suffix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --suffix XDG_DATA_DIRS : "${gnome3.gnome-shell}/share"\
