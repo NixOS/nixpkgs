@@ -426,6 +426,10 @@ in
     '';
   };
 
+  xlsfonts = attrs: attrs // {
+    meta = attrs.meta // { license = lib.licenses.mit; };
+  };
+
   xorgserver = with xorg; attrs_passed:
     # exchange attrs if abiCompat is set
     let
