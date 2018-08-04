@@ -215,6 +215,15 @@
     };
   };
 
+  sts = {
+    src = fetchFromGitHub {
+      owner = "vozlt";
+      repo = "nginx-module-sts";
+      rev = "v0.1.1";
+      sha256 = "0nvb29641x1i7mdbydcny4qwlvdpws38xscxirajd2x7nnfdflrk";
+    };
+  };
+
   upstream-check = {
     src = fetchFromGitHub {
       owner = "yaoweibin";
