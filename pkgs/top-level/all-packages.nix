@@ -18407,7 +18407,7 @@ with pkgs;
     inherit (pkgs.vamp) vampSDK;
   };
 
-  soulseekqt = callPackage ../applications/networking/p2p/soulseekqt { };
+  soulseekqt = libsForQt5.callPackage ../applications/networking/p2p/soulseekqt { };
 
   sox = callPackage ../applications/misc/audio/sox {
     enableLame = config.sox.enableLame or false;
