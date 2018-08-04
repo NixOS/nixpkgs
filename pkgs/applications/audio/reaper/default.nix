@@ -31,11 +31,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "reaper-${version}";
-  version = "5.93";
+  version = "5.94";
 
   src = fetchurl {
     url = "https://www.reaper.fm/files/${stdenv.lib.versions.major version}.x/reaper${builtins.replaceStrings ["."] [""] version}_linux_x86_64.tar.xz";
-    sha256 = "17ciysyqp4by0yy08avk7z16inrmfwrmzh5l1r6fdni0y4ax65iq";
+    sha256 = "16g5q12wh1cfbl9wq03vb7vpsd870k7i7883z0wn492x7y9syz8z";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
@@ -63,11 +63,11 @@ in stdenv.mkDerivation rec {
 
     cp ${libSwell.out} $out/opt/REAPER/libSwell.so
 
-    wrapProgram $out/opt/REAPER/reaper5 \
+    wrapProgram $out/opt/REAPER/reaper \
       --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib
 
     mkdir $out/bin
-    ln -s $out/opt/REAPER/reaper5 $out/bin/
+    ln -s $out/opt/REAPER/reaper $out/bin/
     ln -s $out/opt/REAPER/reamote-server $out/bin/
   '';
 
