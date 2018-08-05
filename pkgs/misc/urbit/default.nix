@@ -1,5 +1,6 @@
-{ curl, fetchFromGitHub, gcc, git, gmp, libsigsegv, meson, ncurses, ninja,
-  openssl, pkgconfig, re2c, stdenv, zlib }:
+{ stdenv, fetchFromGitHub, curl, git, gmp, libsigsegv, meson, ncurses, ninja
+, openssl, pkgconfig, re2c, zlib
+}:
 
 stdenv.mkDerivation rec {
   name = "urbit-${version}";
@@ -14,21 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ninja meson ];
-
-  buildInputs = with stdenv.lib; [
-    curl gcc git gmp libsigsegv ncurses openssl re2c zlib
-  ];
-
-  # uses 'readdir_r' deprecated by glibc 2.24
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  buildInputs = [ curl git gmp libsigsegv ncurses openssl re2c zlib ];
 
   postPatch = ''
     patchShebangs .
   '';
-
-  mesonFlags = [
-    "--buildtype=release"
-  ];
 
   meta = with stdenv.lib; {
     description = "An operating function";
