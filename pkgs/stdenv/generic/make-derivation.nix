@@ -83,6 +83,10 @@ rec {
       doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
       doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
 
+      outputs' =
+        outputs ++
+        (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
+
       fixedOutputDrv = attrs ? outputHash;
       noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                       ++ depsHostHost ++ depsHostHostPropagated
@@ -104,6 +108,8 @@ rec {
     else let
       doCheck = doCheck';
       doInstallCheck = doInstallCheck';
+
+      outputs = outputs';
 
       references = nativeBuildInputs ++ buildInputs
                 ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
@@ -140,10 +146,6 @@ rec {
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
         ]
       ];
-
-      outputs' =
-        outputs ++
-        (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
 
       computedSandboxProfile =
         lib.concatMap (input: input.__propagatedSandboxProfile or [])
@@ -215,10 +217,10 @@ rec {
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
           inherit doCheck doInstallCheck;
+
+          inherit outputs;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
-        } // lib.optionalAttrs (outputs' != [ "out" ]) {
-          outputs = outputs';
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
@@ -259,9 +261,8 @@ rec {
           #   unless they are comfortable with this default.
           outputsToInstall =
             let
-              outs = outputs'; # the value passed to derivation primitive
-              hasOutput = out: builtins.elem out outs;
-            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
+              hasOutput = out: builtins.elem out outputs;
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )];
         }
         // attrs.meta or {}
         # Fill `meta.position` to identify the source location of the package.
