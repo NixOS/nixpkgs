@@ -46,9 +46,10 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [ zlib expat ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.exiv2.org/;
     description = "A library and command-line utility to manage image metadata";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.gpl2;
   };
 }
