@@ -8,7 +8,12 @@ let
   addAttributeName = mapAttrs (a: v: v // {
     text = ''
       #### Activation script snippet ${a}:
+      _localstatus=0
       ${v.text}
+
+      if (( _localstatus > 0 )); then
+        printf "Activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
+      fi
     '';
   });
 
@@ -71,7 +76,7 @@ in
             done
 
             _status=0
-            trap "_status=1" ERR
+            trap "_status=1 _localstatus=\$?" ERR
 
             # Ensure a consistent umask.
             umask 0022
