@@ -8,10 +8,6 @@ let
   # https://trac.sagemath.org/ticket/15980 for tracking of python3 support
   python = nixpkgs.python2.override {
     packageOverrides = self: super: {
-      cypari2 = super.cypari2.override { inherit pari; };
-
-      cysignals = super.cysignals.override { inherit pari; };
-
       # python packages that appear unmaintained and were not accepted into the nixpkgs
       # tree because of that. These packages are only dependencies of the more-or-less
       # deprecated sagenb. However sagenb is still a default dependency and the doctests
@@ -24,7 +20,7 @@ let
       pybrial = self.callPackage ./pybrial.nix {};
 
       sagelib = self.callPackage ./sagelib.nix {
-        inherit flint ecl pari eclib arb;
+        inherit flint ecl arb;
         inherit sage-src openblas-blas-pc openblas-cblas-pc openblas-lapack-pc pynac singular;
         linbox = nixpkgs.linbox.override { withSage = true; };
       };
@@ -38,19 +34,19 @@ let
       };
 
       env-locations = self.callPackage ./env-locations.nix {
-        inherit pari_data ecl pari;
+        inherit pari_data ecl;
         inherit singular;
         three = nodePackages_8_x.three;
         mathjax = nodePackages_8_x.mathjax;
       };
 
       sage-env = self.callPackage ./sage-env.nix {
-        inherit sage-src python rWrapper openblas-cblas-pc ecl singular eclib pari palp flint pynac pythonEnv;
+        inherit sage-src python rWrapper openblas-cblas-pc ecl singular palp flint pynac pythonEnv;
         pkg-config = nixpkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
       };
 
       sage-with-env = self.callPackage ./sage-with-env.nix {
-        inherit pari eclib pythonEnv;
+        inherit pythonEnv;
         inherit sage-src openblas-blas-pc openblas-cblas-pc openblas-lapack-pc pynac singular;
         pkg-config = nixpkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
         three = nodePackages_8_x.three;
@@ -113,8 +109,6 @@ let
   # *not* to confuse with the python package "pynac"
   pynac = nixpkgs.pynac.override { inherit singular flint; };
 
-  eclib = nixpkgs.eclib.override { inherit pari; };
-
   # With openblas (64 bit), the tests fail the same way as when sage is build with
   # openblas instead of openblasCompat. Apparently other packages somehow use flints
   # blas when it is available. Alternative would be to override flint to use
@@ -144,8 +138,6 @@ let
 
   # https://trac.sagemath.org/ticket/22191
   ecl = nixpkgs.ecl_16_1_2;
-
-  pari = nixpkgs.pari.override { withThread = false; };
 in
   python.pkgs.sage-wrapper // {
     doc = python.pkgs.sagedoc;
