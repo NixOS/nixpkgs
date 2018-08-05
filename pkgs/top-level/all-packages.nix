@@ -20511,6 +20511,9 @@ with pkgs;
 
   jags = callPackage ../applications/science/math/jags { };
 
+  libbraiding = callPackage ../development/libraries/science/math/libbraiding { };
+
+  libhomfly = callPackage ../development/libraries/science/math/libhomfly { };
 
   # We have essentially 4 permutations of liblapack: version 3.4.1 or 3.5.0,
   # and with or without atlas as a dependency. The default `liblapack` is 3.4.1
