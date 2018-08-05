@@ -5,7 +5,7 @@
 , qtbase, qtmultimedia
 , libjson, libgpgerror
 , libX11, libxcb, libXau, libXdmcp, freetype, libbsd
-, pythonPackages, squashfsTools, makeDesktopItem
+, pythonPackages, squashfsTools, desktop_file_utils
 }:
 
 with stdenv.lib;
@@ -23,16 +23,6 @@ let
     };
   };
 
-  desktopItem = makeDesktopItem {
-    name = "SoulseekQt";
-    exec = "soulseekqt";
-    icon = "$out/share/soulseekqt/";
-    comment = "Official Qt SoulSeek client"; 
-    desktopName = "SoulseekQt";
-    genericName = "SoulseekQt";
-    categories = "Network;";
-  };
-
 in stdenv.mkDerivation rec {
 
   name = "soulseekqt-${version}";
@@ -41,26 +31,36 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  buildInputs = [ pythonPackages.binwalk squashfsTools ];
+  buildInputs = [ pythonPackages.binwalk squashfsTools desktop_file_utils ];
 
-  # avoid usage of appimagetool
+  # avoid usage of appimage's runner option --appimage-extract 
   unpackCmd = ''
     export HOME=$(pwd) # workaround for binwalk
-    tar xvf $curSrc && binwalk --quiet \
-       ${mainbin}.AppImage -D 'squashfs:.squashfs:unsquashfs %e'
+    appimage=$(tar xvf $curSrc) && binwalk --quiet \
+       $appimage -D 'squashfs:squashfs:unsquashfs %e'
     '';
+  
+  patchPhase = ''
+    cd squashfs-root/
+    binary="$(readlink AppRun)"
+  
+    # fixup desktop file
+    desktop-file-edit --set-key Exec --set-value $binary default.desktop
+    desktop-file-edit --set-key Comment --set-value "${meta.description}" default.desktop
+    desktop-file-edit --set-key Categories --set-value Network default.desktop   
+  '';
 
   installPhase = ''
-    mkdir -p $out/{bin,share/soulseekqt}
-    cd squashfs-root/
-    cp -R soulseek.png translations $out/share/soulseekqt
-    cp SoulseekQt $out/bin/soulseekqt
+    mkdir -p $out/{bin,share/applications,share/icons/}
+    cp default.desktop $out/share/applications/$binary.desktop
+    cp soulseek.png $out/share/icons/
+    cp $binary $out/bin/
   '';
 
   fixupPhase = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
              --set-rpath ${libPath} \
-             $out/bin/soulseekqt
+             $out/bin/$binary
   '';
 
   meta = with stdenv.lib; {
