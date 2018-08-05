@@ -78,6 +78,11 @@ rec {
     , ... } @ attrs:
 
     let
+      # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
+      # no package has `doCheck = true`.
+      doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+      doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+
       fixedOutputDrv = attrs ? outputHash;
       noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                       ++ depsHostHost ++ depsHostHostPropagated
@@ -97,6 +102,9 @@ rec {
       inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
     })
     else let
+      doCheck = doCheck';
+      doInstallCheck = doInstallCheck';
+
       references = nativeBuildInputs ++ buildInputs
                 ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
 
@@ -111,7 +119,7 @@ rec {
         [
           (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
           (map (drv: drv.crossDrv or drv) (buildInputs
-             ++ lib.optionals doCheck' checkInputs
+             ++ lib.optionals doCheck checkInputs
              ++ lib.optionals doInstallCheck' installCheckInputs))
         ]
         [
@@ -132,11 +140,6 @@ rec {
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
         ]
       ];
-
-      # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
-      # no package has `doCheck = true`.
-      doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
-      doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
 
       outputs' =
         outputs ++
@@ -165,7 +168,6 @@ rec {
       derivationArg =
         (removeAttrs attrs
           ["meta" "passthru" "pos"
-           "doCheck" "doInstallCheck"
            "checkInputs" "installCheckInputs"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
@@ -212,15 +214,11 @@ rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+          inherit doCheck doInstallCheck;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (outputs' != [ "out" ]) {
           outputs = outputs';
-        } // lib.optionalAttrs doCheck' {
-          doCheck = true;
-        } // lib.optionalAttrs doInstallCheck' {
-          doInstallCheck = true;
-
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
