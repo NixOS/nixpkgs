@@ -100,6 +100,15 @@ in rec {
     dependencies = [ pkgs.fpp ];
   };
 
+  fzf-tmux-url = buildTmuxPluginFrom2Nix {
+    pluginName = "fzf-tmux-url";
+    src = fetchgit {
+      url = "https://github.com/wfxr/tmux-fzf-url";
+      rev = "ecd518eec1067234598c01e655b048ff9d06ef2f";
+      sha256 = "0png8hdv91y2nivq5vdii2192mb2qcrkwwn69lzxrdnbfa27qrgv";
+    };
+  };
+
   logging = buildTmuxPluginFrom2Nix {
     pluginName = "logging";
     src = fetchgit {
