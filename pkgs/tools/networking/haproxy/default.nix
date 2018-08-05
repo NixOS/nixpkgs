@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
     "USE_LUA=yes"
     "LUA_LIB=${lua5_3}/lib"
     "LUA_INC=${lua5_3}/include"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "CC=cc";
+  ] ++ stdenv.lib.optional stdenv.isDarwin "CC=cc"
+    ++ stdenv.lib.optional stdenv.isLinux "USE_GETADDRINFO=1";
 
   meta = {
     description = "Reliable, high performance TCP/HTTP load balancer";
