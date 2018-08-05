@@ -11,5 +11,6 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.lgpl2;
   };
 }
