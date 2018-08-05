@@ -75,6 +75,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
+     There is a new <varname>services.foundationdb</varname> module for deploying
+     <link xlink:href="https://www.foundationdb.org">FoundationDB</link> clusters.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      When enabled the <literal>iproute2</literal> will copy the files expected
      by ip route (e.g., <filename>rt_tables</filename>) in
      <filename>/run/iproute2</filename>. This allows to write aliases for
