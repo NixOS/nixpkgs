@@ -19,7 +19,6 @@ let
     preFixup = ''
       gappsWrapperArgs+=(
         --prefix "PATH" : "${gvfs}/bin" \
-        --suffix "XDG_DATA_DIRS" : "${gsettings_desktop_schemas}/share/gsettings-schemas/${gsettings_desktop_schemas.name}"
       )
     '';
 
@@ -32,10 +31,6 @@ let
       rm -r $out/share/lintian
       rm -r $out/usr/
       sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
-      # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
-      #wrapProgram $out/bin/${pname} \
-      #  --prefix "PATH" : "${gvfs}/bin"
-
 
       fixupPhase
 
