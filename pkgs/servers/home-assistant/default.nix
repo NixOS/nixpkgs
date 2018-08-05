@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3
+{ lib, fetchFromGitHub, fetchpatch, python3
 
 # Look up dependencies of specified components in component-packages.nix
 , extraComponents ? []
@@ -29,10 +29,10 @@ let
         };
       });
       voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
-        version = "0.11.1";
+        version = "0.11.5";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "af7315c9fa99e0bfd195a21106c82c81619b42f0bd9b6e287b797c6b6b6a9918";
+          sha256 = "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef";
         };
       });
       attrs = super.attrs.overridePythonAttrs (oldAttrs: rec {
@@ -74,7 +74,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.74.2";
+  hassVersion = "0.75.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -89,7 +89,16 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "02wdvkcl4zjw009a5ylblk5blpf5rhlvch8vsg4cx07sj9xgjzmw";
+    sha256 = "1slm2r48yh4l57wnvalin6mnk3id2phsaqpd4qy0c0ksqc61ffqk";
+  };
+
+  # Upgrade voluptuous to 0.11.5
+  # Needed because voluptuous-0.11.3 requires pypandoc
+  # See https://github.com/home-assistant/home-assistant/pull/15830#issuecomment-410485197
+  patches = fetchpatch {
+    name = "upgrade-voluptuous.patch";
+    url = https://github.com/home-assistant/home-assistant/commit/9ea3be4dc112fb45544fa089cb367c7f4f91b5f0.patch;
+    sha256 = "0wacs9aifdysw6jpz86d6cqah8spi48pwwcbydj9l8zxndzqp6na";
   };
 
   propagatedBuildInputs = [
