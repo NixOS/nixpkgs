@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.exiv2.org/;
     description = "A library and command-line utility to manage image metadata";
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }
