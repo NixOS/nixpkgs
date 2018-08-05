@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;
     hydraPlatforms = stdenv.lib.platforms.linux; # darwin times out
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }
