@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, makeWrapper, gvfs, gtk3, atomEnv}:
+{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, atomEnv, gsettings_desktop_schemas, gtk3}:
 
 let
   common = pname: {version, sha256}: stdenv.mkDerivation rec {
@@ -11,7 +11,17 @@ let
       inherit sha256;
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [
+      wrapGAppsHook  # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+      gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+    ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix "PATH" : "${gvfs}/bin" \
+        --suffix "XDG_DATA_DIRS" : "${gsettings_desktop_schemas}/share/gsettings-schemas/${gsettings_desktop_schemas.name}"
+      )
+    '';
 
     buildCommand = ''
       mkdir -p $out/usr/
@@ -23,9 +33,8 @@ let
       rm -r $out/usr/
       sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
       # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
-      wrapProgram $out/bin/${pname} \
-        --prefix "PATH" : "${gvfs}/bin" \
-        --suffix "XDG_DATA_DIRS" : "${gtk3}/share/gsettings-schemas/${gtk3.name}/";
+      #wrapProgram $out/bin/${pname} \
+      #  --prefix "PATH" : "${gvfs}/bin"
 
 
       fixupPhase
