@@ -52,7 +52,8 @@ let
   #   allowUnfree = false;
   #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayer-" x.name);
   # }
-  allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
+  allowUnfreeDefaultPredicate = x: builtins.elem x.name (config.permittedUnfreePackages or []);
+  allowUnfreePredicate = x: (config.allowUnfreePredicate or allowUnfreeDefaultPredicate) x;
 
   # Check whether unfree packages are allowed and if not, whether the
   # package has an unfree license and is not explicitely allowed by the
