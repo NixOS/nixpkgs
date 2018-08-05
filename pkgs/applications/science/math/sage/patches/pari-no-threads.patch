@@ -1,0 +1,18 @@
+diff --git a/src/sage/libs/pari/__init__.py b/src/sage/libs/pari/__init__.py
+index e451766474..77eda66097 100644
+--- a/src/sage/libs/pari/__init__.py
++++ b/src/sage/libs/pari/__init__.py
+@@ -205,6 +205,13 @@ def _get_pari_instance():
+     # messages in Sage.
+     P.default("debugmem", 0)
+ 
++    # Make sure pari doesn't use threads, regardless of how it was compiled.
++    # Threads cause some doctest failures (memory issues). Those could probably
++    # be solved without disabling threads. But that would require figuring out
++    # some sensible values for `threadsizemax`. See
++    # https://pari.math.u-bordeaux.fr/dochtml/html/GP_defaults.html
++    P.default("nbthreads", 1)
++
+     return P
+ 
+ pari = _get_pari_instance()

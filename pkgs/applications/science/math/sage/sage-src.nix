@@ -56,6 +56,10 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/25345
     # (upstream patch doesn't apply on 8.2 source)
     ./patches/dochtml-optional.patch
+
+    # work with pari with threads enabled at compile time (disable them at runtime)
+    # https://trac.sagemath.org/ticket/26002
+    ./patches/pari-no-threads.patch
   ];
 
   packageUpgradePatches = [
