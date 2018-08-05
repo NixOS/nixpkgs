@@ -22179,4 +22179,7 @@ with pkgs;
   powershell = callPackage ../shells/powershell { };
 
   doing = callPackage ../applications/misc/doing  { };
+  
+  pmdk = callPackage ../development/libraries/pmdk { };
+
 }
