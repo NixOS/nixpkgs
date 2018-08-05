@@ -3,32 +3,17 @@
 , fetchpatch
 }:
 stdenv.mkDerivation rec {
-  version = "8.3";
+  version = "8.4.beta0";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0mbm99m5xry21xpi4q3q96gx392liwbifywf5awvl0j85a7rkfyx";
+    sha256 = "1jph4slscpni0smp2fxs3s12282c9r3mdfbgxpyx67gic0d9iya8";
   };
 
   nixPatches = [
-    # https://trac.sagemath.org/ticket/25809
-    ./patches/spkg-scripts.patch
-
-    # https://trac.sagemath.org/ticket/25309
-    (fetchpatch {
-      name = "spkg-paths.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=97f06fddee920399d4fcda65aa9b0925774aec69&id=a86151429ccce1ddd085e8090ada8ebdf02f3310";
-      sha256 = "1xb9108rzzkdhn71vw44525620d3ww9jv1fph5a77v9y7nf9wgr7";
-    })
-    (fetchpatch {
-      name = "maxima-fas.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=97f06fddee920399d4fcda65aa9b0925774aec69";
-      sha256 = "14s50yg3hpw9cp3v581dx7zfmpm2j972im7x30iwki8k45mjvk3i";
-    })
-
     # https://trac.sagemath.org/ticket/25722
     ./patches/test-in-tmpdir.patch
 
@@ -63,12 +48,6 @@ stdenv.mkDerivation rec {
   ];
 
   packageUpgradePatches = [
-    (fetchpatch {
-      name = "cypari2-1.2.1.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=62fe6eb15111327d930336d4252d5b23cbb22ab9";
-      sha256 = "1xax7vvs8h4xip16xcsp47xdb6lig6f2r3pl8cksvlz8lhgbyxh2";
-    })
-
     # matplotlib 2.2.2 deprecated `normed` (replaced by `density`).
     # This patch only ignores the warning. It would be equally easy to fix it
     # (by replacing all mentions of `normed` by `density`), but its better to
@@ -104,12 +83,7 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/24735
     ./patches/singular-4.1.1p2.patch
 
-    # https://trac.sagemath.org/ticket/25567 and dependency #25635
-    (fetchpatch {
-      name = "pari-upgrade-dependency.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=6995e7cae1b3476ad0145f8dfc897cf91f0c3c4d";
-      sha256 = "1dvhabl1c9pwd9xkjvbjjg15mvb14b24p1f3cby1mlqk34d4lrs6";
-    })
+    # https://trac.sagemath.org/ticket/25567
     (fetchpatch {
       name = "pari-2.11.0.patch";
       url = "https://git.sagemath.org/sage.git/patch/?id=7af4748cab37d651eaa88be501db88f4a5ffc584";
@@ -121,13 +95,6 @@ stdenv.mkDerivation rec {
       name = "lcalc-c++11.patch";
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
       sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
-    })
-
-    # cddlib 0.94i -> 0.94j
-    (fetchpatch {
-      name = "cddlib-0.94j.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=2ab1546b3e21d1d0ab3b4fcd58576848b3a2d888";
-      sha256 = "1c5gnasq7y9xxj762bn79bis0zi8d9bgg7jzlf64ifixsrc5cymb";
     })
   ];
 
