@@ -278,6 +278,8 @@ in {
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
+  fire = callPackage ../development/python-modules/fire { };
+
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
