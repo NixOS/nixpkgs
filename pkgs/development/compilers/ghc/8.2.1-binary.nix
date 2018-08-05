@@ -169,6 +169,5 @@ stdenv.mkDerivation rec {
   };
 
   meta.license = stdenv.lib.licenses.bsd3;
-  # AArch64 should work in theory but eventually some builds start segfaulting
-  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux" /* "aarch64-linux" */];
+  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux" "aarch64-linux"];
 }
