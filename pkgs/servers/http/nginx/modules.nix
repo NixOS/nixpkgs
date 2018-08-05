@@ -94,6 +94,16 @@
     '';
   };
 
+  lua-upstream = {
+    src = fetchFromGitHub {
+      owner = "openresty";
+      repo = "lua-upstream-nginx-module";
+      rev = "v0.07";
+      sha256 = "1gqccg8airli3i9103zv1zfwbjm27h235qjabfbfqk503rjamkpk";
+    };
+    inputs = [ pkgs.luajit ];
+  };
+
   modsecurity = {
     src = "${pkgs.modsecurity_standalone.nginx}/nginx/modsecurity";
     inputs = [ pkgs.curl pkgs.apr pkgs.aprutil pkgs.apacheHttpd pkgs.yajl ];
@@ -215,6 +225,33 @@
     };
   };
 
+  stream-sts = {
+    src = fetchFromGitHub {
+      owner = "vozlt";
+      repo = "nginx-module-stream-sts";
+      rev = "v0.1.1";
+      sha256 = "1jdj1kik6l3rl9nyx61xkqk7hmqbncy0rrqjz3dmjqsz92y8zaya";
+    };
+  };
+
+  sts = {
+    src = fetchFromGitHub {
+      owner = "vozlt";
+      repo = "nginx-module-sts";
+      rev = "v0.1.1";
+      sha256 = "0nvb29641x1i7mdbydcny4qwlvdpws38xscxirajd2x7nnfdflrk";
+    };
+  };
+
+  sysguard = {
+    src = fetchFromGitHub {
+      owner = "vozlt";
+      repo = "nginx-module-sysguard";
+      rev = "e512897f5aba4f79ccaeeebb51138f1704a58608";
+      sha256 = "19c6w6wscbq9phnx7vzbdf4ay6p2ys0g7kp2rmc9d4fb53phrhfx";
+    };
+  };
+
   upstream-check = {
     src = fetchFromGitHub {
       owner = "yaoweibin";
@@ -232,6 +269,15 @@
       sha256 = "05dwj0caj910p7kan2qjvm6x2x601igryhny2xzr47hhsk5q1cnx";
     };
     inputs = [ pkgs.msgpuck.dev pkgs.yajl ];
+  };
+
+  url = {
+    src = fetchFromGitHub {
+      owner = "vozlt";
+      repo = "nginx-module-url";
+      rev = "9299816ca6bc395625c3683fbd2aa7b916bfe91e";
+      sha256 = "0mk1gjmfnry6hgdsnlavww9bn7223idw50jlkhh5k00q5509w4ip";
+    };
   };
 
   vts = {
