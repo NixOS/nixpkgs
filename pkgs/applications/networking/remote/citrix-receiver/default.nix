@@ -156,7 +156,7 @@ let
         '';
       };
 
-      phases = [ "unpackPhase" "installPhase" ];
+      dontBuild = true;
 
       sourceRoot = ".";
 
@@ -203,6 +203,8 @@ let
       };
 
       installPhase = ''
+        runHook preInstall
+
         export ICAInstDir="$out/opt/citrix-icaclient"
 
         sed -i \
@@ -262,13 +264,15 @@ let
 
         # We introduce a dependency on the source file so that it need not be redownloaded everytime
         echo $src >> "$out/share/nix_dependencies.pin"
+
+        runHook postInstall
       '';
 
       meta = with stdenv.lib; {
         license     = stdenv.lib.licenses.unfree;
         inherit homepage;
         description = "Citrix Receiver";
-        maintainers = with maintainers; [ obadz a1russell ];
+        maintainers = with maintainers; [ obadz a1russell ma27 ];
         platforms   = platforms.linux;
       };
     };
