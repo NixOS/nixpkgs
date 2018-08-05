@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xz.bin ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
-    ++ optionals interactive [ ncurses procps ];
+    ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
     ++ stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     installFlags="TEXMF=$out/texmf-dist";
     installTargets="install install-tex";
   '';
+
+  checkInputs = [ procps ];
 
   doCheck = interactive
     && !stdenv.isDarwin
