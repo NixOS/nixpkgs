@@ -27,10 +27,10 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  # Remove .pytest-cache when using py.test in a Nix build
+  # Remove .pytest_cache when using py.test in a Nix build
   setupHook = writeText "pytest-hook" ''
     postFixupHooks+=(
-        'find $out -name .pytest-cache -type d -exec rm -rf {} +'
+        'find $out -name .pytest_cache -type d -exec rm -rf {} +'
     )
   '';
 
