@@ -19,6 +19,13 @@ in stdenv.mkDerivation rec {
     sha256 = "0ci7is75bwqqw2p32vxvrk6ds51ik7qgx73m920rakv5jlayax0b";
   };
 
+  patches = [
+    (fetchurl { # CVE-2018-9251
+      url = https://gitlab.gnome.org/GNOME/libxml2/commit/2240fbf5912054af025fb6e01e26375100275e74.diff;
+      sha256 = "01c5dnipz2rmv2dgma1ycvhyiyfvy9makyn6ywahm10jwk5chn3i";
+    })
+  ];
+
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional enableStatic "static";
