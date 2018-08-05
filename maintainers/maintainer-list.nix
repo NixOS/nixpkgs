@@ -1689,6 +1689,11 @@
     github = "imalsogreg";
     name = "Greg Hale";
   };
+  imuli = {
+    email = "i@imu.li";
+    github = "imuli";
+    name = "Imuli";
+  };
   infinisil = {
     email = "infinisil@icloud.com";
     github = "infinisil";
