@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, atomEnv, gsettings_desktop_schemas, gtk3}:
+{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, atomEnv, gtk3}:
 
 let
   common = pname: {version, sha256}: stdenv.mkDerivation rec {
