@@ -18787,6 +18787,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
     inherit (darwin) libobjc cf-private;
     inherit lua;
+    guiSupport = "gtk3";
   });
 
   vimNox = lowPrio (vim_configurable.override {
