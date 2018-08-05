@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     description = "A Gnome CD/DVD Burner";
     homepage = https://wiki.gnome.org/Apps/Brasero;
     maintainers = [ maintainers.bdimcheff ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }
