@@ -60,7 +60,7 @@ let
       boolToString mergeAttrs flip mapNullable inNixShell min max
       importJSON warn info nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction
-      assertMsg;
+      assertMsg assertOneOf;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
