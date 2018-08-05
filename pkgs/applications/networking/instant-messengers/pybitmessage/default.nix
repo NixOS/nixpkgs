@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages, openssl }:
 
 python2Packages.buildPythonApplication rec {
-  name = "pybitmessage-${version}";
+  pname = "pybitmessage";
 
   version = "0.6.3.2";
 
