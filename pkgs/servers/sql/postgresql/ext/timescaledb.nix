@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    versionCheck = builtins.compareVersions postgresql.version "9.6" >= 0;
+    versionCheck = postgresql.compareVersion "9.6" >= 0;
   };
 
   meta = with stdenv.lib; {
