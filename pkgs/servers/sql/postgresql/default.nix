@@ -48,10 +48,10 @@ let
     ] ++ lib.optionals icuEnabled [ "--with-icu" ];
 
     patches =
-      [ (if atLeast "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
-        (if atLeast "9.6" then ./less-is-more-96.patch             else ./less-is-more.patch)
-        (if atLeast "9.6" then ./hardcode-pgxs-path-96.patch       else ./hardcode-pgxs-path.patch)
-        ./specify_pkglibdir_at_runtime.patch
+      [ (if atLeast "9.4" then ./patches/disable-resolve_symlinks-94.patch else ./patches/disable-resolve_symlinks.patch)
+        (if atLeast "9.6" then ./patches/less-is-more-96.patch             else ./patches/less-is-more.patch)
+        (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
+        ./patches/specify_pkglibdir_at_runtime.patch
       ];
 
     installTargets = [ "install-world" ];
