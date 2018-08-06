@@ -13329,7 +13329,7 @@ with pkgs;
   ## ----- POSTGRESQL -------------------------------------------------------------------
 
   # all postgresql packages, including extensions
-  inherit (import ../servers/sql/postgresql/packages.nix { inherit pkgs; })
+  inherit (import ../servers/sql/postgresql/packages.nix { inherit pkgs lib; })
     postgresql93Packages
     postgresql94Packages
     postgresql95Packages

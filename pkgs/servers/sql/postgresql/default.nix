@@ -5,6 +5,7 @@ let
   common = { version, sha256, psqlSchema }:
    let atLeast = lib.versionAtLeast version; in stdenv.mkDerivation (rec {
     name = "postgresql-${version}";
+    inherit version;
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";

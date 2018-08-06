@@ -1,13 +1,16 @@
-{ pkgs }:
+{ pkgs, lib }:
 
 let
   postgresqlPackages = pkgs.callPackages ./default.nix {};
+
+  # Filter out any versions which fail a version check.
+  filterPackages = lib.filterAttrs (_: drv: drv.versionCheck or true);
 
   makePackageSet = postgresql:
     let
       callPackage = p: args: pkgs.callPackage p (args // { inherit postgresql; });
     in
-    {
+    filterPackages {
       # Convenience function for end-users to easily build packages against a specific
       # version.
       inherit callPackage;
