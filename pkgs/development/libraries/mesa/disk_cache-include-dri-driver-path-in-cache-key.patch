@@ -1,0 +1,52 @@
+From 9c9df280b318c26aece9873cf77b32e4f95634c1 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Mon, 6 Aug 2018 15:52:11 -0300
+Subject: [PATCH] disk_cache: include dri driver path in cache key
+
+This fixes invalid cache hits on NixOS where all shared library
+timestamps in /nix/store are zero.
+---
+ src/util/Makefile.am  | 3 +++
+ src/util/disk_cache.c | 3 +++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/src/util/Makefile.am b/src/util/Makefile.am
+index 07bf052175..aea09f60b3 100644
+--- a/src/util/Makefile.am
++++ b/src/util/Makefile.am
+@@ -30,6 +30,9 @@ noinst_LTLIBRARIES = \
+ 	libmesautil.la \
+ 	libxmlconfig.la
+ 
++AM_CFLAGS = \
++	-DDISK_CACHE_KEY=\"$(drivers)\"
++
+ AM_CPPFLAGS = \
+ 	$(PTHREAD_CFLAGS) \
+ 	-I$(top_srcdir)/include
+diff --git a/src/util/disk_cache.c b/src/util/disk_cache.c
+index 4a762eff20..8086c0be75 100644
+--- a/src/util/disk_cache.c
++++ b/src/util/disk_cache.c
+@@ -388,8 +388,10 @@ disk_cache_create(const char *gpu_name, const char *timestamp,
+ 
+    /* Create driver id keys */
+    size_t ts_size = strlen(timestamp) + 1;
++   size_t key_size = strlen(DISK_CACHE_KEY) + 1;
+    size_t gpu_name_size = strlen(gpu_name) + 1;
+    cache->driver_keys_blob_size += ts_size;
++   cache->driver_keys_blob_size += key_size;
+    cache->driver_keys_blob_size += gpu_name_size;
+ 
+    /* We sometimes store entire structs that contains a pointers in the cache,
+@@ -410,6 +412,7 @@ disk_cache_create(const char *gpu_name, const char *timestamp,
+    uint8_t *drv_key_blob = cache->driver_keys_blob;
+    DRV_KEY_CPY(drv_key_blob, &cache_version, cv_size)
+    DRV_KEY_CPY(drv_key_blob, timestamp, ts_size)
++   DRV_KEY_CPY(drv_key_blob, DISK_CACHE_KEY, key_size)
+    DRV_KEY_CPY(drv_key_blob, gpu_name, gpu_name_size)
+    DRV_KEY_CPY(drv_key_blob, &ptr_size, ptr_size_size)
+    DRV_KEY_CPY(drv_key_blob, &driver_flags, driver_flags_size)
+-- 
+2.18.0
+
