@@ -143,13 +143,7 @@ stdenv.mkDerivation {
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
 
-    + ''
-      # Create a symlink to as (the assembler).
-      if [ -e $ldPath/${inPrefix}as ]; then
-        ln -s $ldPath/${inPrefix}as $out/bin/${targetPrefix}as
-      fi
-
-    '' + (if !useMacosReexportHack then ''
+    + (if !useMacosReexportHack then ''
       wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${inPrefix}ld}
     '' else ''
       ldInner="${targetPrefix}ld-reexport-delegate"
