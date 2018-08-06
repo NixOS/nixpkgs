@@ -38,5 +38,7 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  inherit (rambox-bare) meta;
+  inherit (rambox-bare.meta // {
+    platforms = [ "i686-linux" "x86_64-linux" ];
+  });
 }
