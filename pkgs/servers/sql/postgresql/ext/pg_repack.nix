@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/extension
   '';
 
+  passthru = {
+    versionCheck = postgresql.compareVersion "11" < 0;
+  };
+
   meta = with stdenv.lib; {
     description = "Reorganize tables in PostgreSQL databases with minimal locks";
     longDescription = ''

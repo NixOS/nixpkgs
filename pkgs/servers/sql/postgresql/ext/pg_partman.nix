@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    versionCheck = postgresql.compareVersion "9.4" >= 0;
+    versionCheck = postgresql.compareVersion "9.4" >= 0 && postgresql.compareVersion "11" < 0;
   };
 
   meta = with stdenv.lib; {

@@ -62,4 +62,5 @@ with postgresqlPackages; {
   postgresql95Packages = makePackageSet postgresql95;
   postgresql96Packages = makePackageSet postgresql96;
   postgresql10Packages = makePackageSet postgresql10;
+  postgresql11Packages = makePackageSet postgresql11;
 }

@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/extension
   '';
 
+  passthru = {
+    versionCheck = postgresql.compareVersion "11" < 0;
+  };
+
   meta = with stdenv.lib; {
     description = "Columnar storage for PostgreSQL";
     homepage    = https://www.citusdata.com/;

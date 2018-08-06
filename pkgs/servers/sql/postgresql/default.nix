@@ -138,4 +138,10 @@ in {
     psqlSchema = "10.0";
     sha256 = "04a07jkvc5s6zgh6jr78149kcjmsxclizsqabjw44ld4j5n633kc";
   };
+
+  postgresql11 = common {
+    version    = "11beta2";
+    psqlSchema = "11.0";
+    sha256     = "0qxlfh1a7bhhamrbs3msk71pny7jxx0c0fs26zlmp7jjn138zqii";
+  };
 }

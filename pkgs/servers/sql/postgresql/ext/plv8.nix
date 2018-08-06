@@ -19,10 +19,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
     install -D plv8.so                                         -t $out/lib
     install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/extension
   '';
+
+  passthru = {
+    versionCheck = postgresql.compareVersion "11" < 0;
+  };
 
   meta = with stdenv.lib; {
     description = "PL/v8 - A Procedural Language in JavaScript powered by V8";

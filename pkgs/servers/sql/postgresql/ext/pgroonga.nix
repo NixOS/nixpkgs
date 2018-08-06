@@ -15,10 +15,13 @@ stdenv.mkDerivation rec {
   makeFlags = [ "HAVE_MSGPACK=1" ];
 
   installPhase = ''
-    mkdir -p $out/bin
     install -D pgroonga.so -t $out/lib/
     install -D ./{pgroonga-*.sql,pgroonga.control} -t $out/share/extension
   '';
+
+  passthru = {
+    versionCheck = postgresql.compareVersion "11" < 0;
+  };
 
   meta = with stdenv.lib; {
     description = "A PostgreSQL extension to use Groonga as the index";

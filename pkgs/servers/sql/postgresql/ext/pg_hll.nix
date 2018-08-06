@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/extension
   '';
 
+  passthru = {
+    versionCheck = postgresql.compareVersion "11" < 0;
+  };
+
   meta = with stdenv.lib; {
     description = "HyperLogLog for PostgreSQL";
     homepage    = https://www.citusdata.com/;

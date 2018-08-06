@@ -13334,7 +13334,8 @@ with pkgs;
     postgresql94Packages
     postgresql95Packages
     postgresql96Packages
-    postgresql10Packages;
+    postgresql10Packages
+    postgresql11Packages;
 
   # the default postgres version + package set
   postgresqlPackages = postgresql10Packages;
@@ -13346,6 +13347,7 @@ with pkgs;
   postgresql95 = postgresql95Packages.postgresql;
   postgresql96 = postgresql96Packages.postgresql;
   postgresql10 = postgresql10Packages.postgresql;
+  postgresql11 = postgresql11Packages.postgresql;
 
   ## -- miscellaneous postgresql-related packages.
 
