@@ -95,6 +95,10 @@ in stdenv.mkDerivation rec {
         "raster/scripts/python/Makefile";
   '';
 
+  passthru = {
+    versionCheck = postgresql.hasJitSupport == false;
+  };
+
   meta = with stdenv.lib; {
     description = "Geographic Objects for PostgreSQL";
     homepage = http://postgis.refractions.net;

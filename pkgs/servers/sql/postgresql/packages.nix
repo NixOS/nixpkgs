@@ -1,14 +1,16 @@
 { pkgs, lib }:
 
 let
-  postgresqlPackages = pkgs.callPackages ./default.nix {};
+  llvmPackages = pkgs.llvmPackages_6;
+  postgresqlPackages = pkgs.callPackages ./default.nix { inherit llvmPackages; };
 
   # Filter out any versions which fail a version check.
   filterPackages = lib.filterAttrs (_: drv: drv.versionCheck or true);
 
   makePackageSet = postgresql:
     let
-      callPackage = p: args: pkgs.callPackage p (args // { inherit postgresql; });
+      stdenv = postgresql.stdenv; # Use the stdenv for the particular version of Postgres
+      callPackage = p: args: pkgs.callPackage p (args // { inherit postgresql stdenv; });
     in
     filterPackages {
       # Convenience function for end-users to easily build packages against a specific

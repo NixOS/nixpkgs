@@ -1,11 +1,27 @@
 { stdenv, lib, fetchurl, makeWrapper
 , glibc, zlib, readline, libossp_uuid, openssl, libxml2, tzdata, systemd
-}:
+
+# Gate JIT support right now behind a flag; it increases closure size
+# dramatically due to the PostgreSQL build system requiring a hard dependency
+# on clang-wrapper (~140MB -> 1.4GB). This must be worked around before it can
+# be enabled by default by making clang-wrapper a build-time only dependency.
+, llvmPackages, enableJitSupport ? false
+}@deps:
 
 let
 
   common = { version, sha256, psqlSchema }:
-   let atLeast = lib.versionAtLeast version; in stdenv.mkDerivation (rec {
+   let
+     atLeast = lib.versionAtLeast version;
+
+     # JIT is only supported on Linux, for now. (Darwin may build, but must be
+     # tested).
+     jitEnabled = atLeast "11" && enableJitSupport && deps.stdenv.isLinux;
+
+     # Note: use deps.stdenv, not just 'stdenv', otherwise infinite recursion
+     # will occur due to lexical scoping rules.
+     stdenv = if jitEnabled then llvmPackages.stdenv else deps.stdenv;
+   in stdenv.mkDerivation (rec {
     name = "postgresql-${version}";
     inherit version;
 
@@ -20,7 +36,8 @@ let
     buildInputs =
       [ zlib readline openssl libxml2 makeWrapper ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ]
-      ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ];
+      ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ]
+      ++ lib.optionals jitEnabled (with llvmPackages; [ clang llvm ]);
 
     enableParallelBuilding = true;
 
@@ -39,6 +56,7 @@ let
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       (lib.optionalString (atLeast "9.6" && !stdenv.isDarwin) "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
+      (lib.optionalString jitEnabled "--with-llvm")
     ];
 
     patches =
@@ -87,11 +105,14 @@ let
 
     doInstallCheck = false; # needs a running daemon?
 
-    disallowedReferences = [ stdenv.cc ];
+    disallowedReferences = lib.optionals (!jitEnabled) [ stdenv.cc ];
 
     passthru = {
-      inherit readline psqlSchema;
+      # Note: we export 'stdenv', because the chosen stdenv *might* be a llvmPackages-based
+      # one, and we want to propagate that to all extensions.
+      inherit readline psqlSchema stdenv;
       compareVersion = builtins.compareVersions version;
+      hasJitSupport  = jitEnabled;
     };
 
     meta = with lib; {
