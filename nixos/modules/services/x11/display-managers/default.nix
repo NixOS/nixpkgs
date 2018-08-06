@@ -244,7 +244,10 @@ in
           ''
             xmessage "Hello World!" &
           '';
-        description = "Shell commands executed just before the window or desktop manager is started.";
+        description = ''
+          Shell commands executed just before the window or desktop manager is
+          started. These commands are not currently sourced for Wayland sessions.
+        '';
       };
 
       hiddenUsers = mkOption {
