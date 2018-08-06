@@ -299,9 +299,9 @@ rec {
   };
 
   core = janePackage {
-    version = "0.11.1";
+    version = "0.11.2";
     name = "core";
-    hash = "0wa2dsfk5m5wlhz915664y9h08idijj5s41hyg8n54dhihvxw2ci";
+    hash = "0vpsvd75lxb09il2rnzyib9mlr51v1hzqdc9fdxgx353pb5agh8a";
     propagatedBuildInputs = [ core_kernel spawn ];
     meta.description = "Jane Street's standard library overlay";
   };
