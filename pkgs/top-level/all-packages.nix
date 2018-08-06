@@ -1740,10 +1740,6 @@ with pkgs;
   citrix_receiver_unwrapped_13_9_1  = citrix_receiver_unwrapped.override { version = "13.9.1";  };
   citrix_receiver_unwrapped_13_9_0  = citrix_receiver_unwrapped.override { version = "13.9.0";  };
   citrix_receiver_unwrapped_13_8_0  = citrix_receiver_unwrapped.override { version = "13.8.0";  };
-  citrix_receiver_unwrapped_13_7_0  = citrix_receiver_unwrapped.override { version = "13.7.0";  };
-  citrix_receiver_unwrapped_13_6_0  = citrix_receiver_unwrapped.override { version = "13.6.0";  };
-  citrix_receiver_unwrapped_13_5_0  = citrix_receiver_unwrapped.override { version = "13.5.0";  };
-  citrix_receiver_unwrapped_13_4_0  = citrix_receiver_unwrapped.override { version = "13.4.0";  };
 
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
     citrix_receiver = citrix_receiver_unwrapped;
@@ -1759,18 +1755,6 @@ with pkgs;
   };
   citrix_receiver_13_8_0 = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
     citrix_receiver = citrix_receiver_unwrapped_13_8_0;
-  };
-  citrix_receiver_13_7_0 = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
-    citrix_receiver = citrix_receiver_unwrapped_13_7_0;
-  };
-  citrix_receiver_13_6_0 = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
-    citrix_receiver = citrix_receiver_unwrapped_13_6_0;
-  };
-  citrix_receiver_13_5_0 = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
-    citrix_receiver = citrix_receiver_unwrapped_13_5_0;
-  };
-  citrix_receiver_13_4_0 = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
-    citrix_receiver = citrix_receiver_unwrapped_13_4_0;
   };
 
   citra = libsForQt5.callPackage ../misc/emulators/citra { };
