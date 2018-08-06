@@ -73,15 +73,6 @@ in stdenv.mkDerivation rec {
 
   src = builtins.getAttr source {
     "default" = common.src; # latest release
-
-    "vim-nox" =
-      {
-        # vim nox branch: client-server without X by uing sockets
-        # REGION AUTO UPDATE: { name="vim-nox"; type="hg"; url="https://code.google.com/r/yukihironakadaira-vim-cmdsrv-nox/"; branch="cmdsrv-nox"; }
-        src = (fetchurl { url = "http://mawercer.de/~nix/repos/vim-nox-hg-2082fc3.tar.bz2"; sha256 = "293164ca1df752b7f975fd3b44766f5a1db752de6c7385753f083499651bd13a"; });
-        name = "vim-nox-hg-2082fc3";
-        # END
-      }.src;
   };
 
   patches = [ ./cflags-prune.diff ] ++ stdenv.lib.optional ftNixSupport ./ft-nix-support.patch;
