@@ -83,9 +83,6 @@ let
         moveToOutput "lib/*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
-        # Prevent a retained dependency on gcc-wrapper.
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
-
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
           for i in $out/lib/*.a; do
@@ -95,6 +92,12 @@ let
             fi
           done
         fi
+
+        # Prevent a retained dependency on gcc-wrapper.
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
+      '' + lib.optionalString jitEnabled ''
+        # In the case of JIT support, prevent a retained dependency on clang-wrapper, too
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/clang clang
       '';
 
     postFixup = lib.optionalString (!stdenv.isDarwin && stdenv.hostPlatform.libc == "glibc")
@@ -105,7 +108,7 @@ let
 
     doInstallCheck = false; # needs a running daemon?
 
-    disallowedReferences = lib.optionals (!jitEnabled) [ stdenv.cc ];
+    disallowedReferences = [ stdenv.cc ];
 
     passthru = {
       # Note: we export 'stdenv', because the chosen stdenv *might* be a llvmPackages-based
