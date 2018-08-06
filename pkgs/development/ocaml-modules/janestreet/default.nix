@@ -370,8 +370,9 @@ rec {
   };
 
   async_extra = janePackage {
+    version = "0.11.1";
     name = "async_extra";
-    hash = "1qac95zlvq34fh2wbwbw0vdzxnba6si8lkal7n09y2lzpwvsifx3";
+    hash = "0dmplvqf41820rm5i0l9bx1xmmdlq8zsszi36y2rkjna8991f7s2";
     propagatedBuildInputs = [ async_rpc_kernel async_unix ];
     meta.description = "Jane Street's asynchronous execution library (extra)";
   };
