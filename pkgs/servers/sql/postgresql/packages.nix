@@ -87,7 +87,14 @@ let
           v8 = pkgs.v8_6_x;
         };
 
-        postgis = callPackage ./ext/postgis.nix {};
+        postgis = callPackage ./ext/postgis.nix {
+          ## NOTE: set postgresql to the version we use, so we don't end up in
+          ## the odd case where 'gdal' pulls in a different postgresql version and
+          ## causes various versions to depend on each other. e.g. if 9.6 is the
+          ## default and this is not overridden, and you choose 10, then psql 10's
+          ## closure will depend on psql 9.6
+          gdal = pkgs.gdal.override { inherit postgresql; };
+        };
 
         timescaledb = callPackage ./ext/timescaledb.nix {};
 
