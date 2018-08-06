@@ -20,6 +20,30 @@
   <itemizedlist>
    <listitem>
      <para>
+       The PostgreSQL server infrastructure has been greatly improved and is
+       much easier to use. Extensions are always built against the correct
+       version of the server without overrides. Server versions are exposed as
+       "sets" of packages along with their compatible extensions, which are all
+       compiled and checked continuously. This means you can now use extensions
+       like plv8 with any PostgreSQL version without compiling anything.
+       Extensions expressions are easier to write, and new extensions are
+       available: <literal>cstore_fdw</literal>, <literal>pg_cron</literal>,
+       <literal>postgres-hll</literal>, and <literal>postgres-topn</literal>.
+     </para>
+     <para>
+       NixOS 18.09 is the last release that will offer PostgreSQL 9.3 as a
+       server option. 9.3 will reach its 5-year End of Life in September 2018;
+       the NixOS 18.09 branch will see no updates at all to PostgreSQL 9.3. It
+       will only be available to keep existing servers running, so they may be
+       migrated to new versions.
+     </para>
+     <para>
+       PostgreSQL 10 is now the default option for new NixOS 18.09
+       installations.
+     </para>
+   </listitem>
+   <listitem>
+     <para>
        Support for wrapping binaries using <literal>firejail</literal> has been
        added through <varname>programs.firejail.wrappedBinaries</varname>.
      </para>
