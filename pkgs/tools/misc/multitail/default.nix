@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "tail on Steroids";
     maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }
