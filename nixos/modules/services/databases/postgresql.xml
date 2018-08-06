@@ -6,16 +6,60 @@
 
 <title>PostgreSQL</title>
 
-<!-- FIXME: render nicely -->
-
-<!-- FIXME: source can be added automatically -->
 <para><emphasis>Source:</emphasis> <filename>modules/services/databases/postgresql.nix</filename></para>
 
 <para><emphasis>Upstream documentation:</emphasis> <link xlink:href="http://www.postgresql.org/docs/"/></para>
 
-<!-- FIXME: more stuff, like maintainer? -->
+<para><emphasis>Maintainer:</emphasis> Austin Seipp</para>
 
-<para>PostgreSQL is an advanced, free relational database.<!-- MORE --></para>
+<para><emphasis>Default version:</emphasis> 10.x</para>
+
+<para>PostgreSQL is an advanced, free, feature-rich relational database. NixOS
+provides multiple versions of PostgreSQL, as well as a set of extensions that
+provide powerful features on top of the default installation.</para>
+
+<section xml:id="module-services-postgres-intro-packaging-infra">
+<title>Introduction to the PostgreSQL packaging infrastructure</title>
+
+<para>NixOS provides multiple versions of PostgreSQL, available as
+<emphasis>sets</emphasis> of packages, which you use to configure the
+PostgreSQL system services and specify extensions. Extensions are available
+only for the correct PostgreSQL versions that they are compatible with, and
+they are automatically built against the proper PostgreSQL server for
+you.</para>
+
+<para>The available set of PostgreSQL packages are available under the name
+<literal>pkgs.postgresqlXXPackages</literal>, where <literal>XX</literal>
+contains the major version number, without any bugfix releases. For example,
+the following are all available:
+
+<programlisting>
+pkgs.postgresql93Packages
+pkgs.postgresql94Packages
+pkgs.postgresql95Packages
+pkgs.postgresql96Packages
+pkgs.postgresql10Packages
+
+# points to default version specified by Nixpkgs
+pkgs.postgresqlPackages
+</programlisting>
+</para>
+
+<para>These names are each attribute sets containing A) the
+<literal>.postgresql</literal> attribute, pointing to the derivation for the
+PostgreSQL server, and an assorted set of other attributes which specify
+extensions that can be installed into the server. Because extensions are tied
+to the version of PostgreSQL they're built against, they must all be bundled
+together. For example, the following attributes yield the derivations for
+PostgreSQL 9.6, and the PostGIS extension built against PostgreSQL 9.6:
+
+<programlisting>
+pkgs.postgresql96Packages.postgres
+pkgs.postgresql96Packages.postgis
+</programlisting>
+</para>
+
+</section>
 
 <section xml:id="module-services-postgres-configuring"><title>Configuring</title>
 
@@ -27,25 +71,23 @@
 <xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql94;
 </programlisting>
 
-Note that you are required to specify the desired version of
-PostgreSQL (e.g. <literal>pkgs.postgresql94</literal>). Since
-upgrading your PostgreSQL version requires a database dump and reload
-(see below), NixOS cannot provide a default value for
-<xref linkend="opt-services.postgresql.package"/> such as the most recent
-release of PostgreSQL.</para>
+Note that you are required to specify the desired version of PostgreSQL (e.g.
+<literal>pkgs.postgresql96Packages</literal>). Since upgrading your PostgreSQL
+version requires a database dump and reload (see below), NixOS cannot provide a
+default value for <xref linkend="opt-services.postgresql.package"/> such as the
+most recent release of PostgreSQL.</para>
 
-<!--
 <para>After running <command>nixos-rebuild</command>, you can verify
 whether PostgreSQL works by running <command>psql</command>:
 
-<screen>
-$ psql
+<programlisting>
+$ sudo -u postgres psql
 psql (9.2.9)
 Type "help" for help.
 
-alice=>
-</screen>
--->
+postgres=>
+</programlisting>
+</para>
 
 <para>By default, PostgreSQL stores its databases in
 <filename>/var/db/postgresql</filename>. You can override this using
@@ -59,6 +101,35 @@ alice=>
 
 </section>
 
+<section xml:id="module-services-postgres-extensions"><title>Enabling and installing extensions</title>
+
+<para>In order to install extensions, use the
+<option>services.postgresql.plugins</option> option. This option should contain
+a function which takes an attribute set, and from that attribute set, returns a
+list of the extensions the user wishes to enable. This extension set is the
+same one specified by <option>services.postgresql.packages</option>.</para>
+
+<para>For example, to enable the PostGIS and TimescaleDB extension, you can
+say:
+
+<programlisting>
+services.postgresql.plugins = p: with p;
+  [ postgis
+    timescaledb
+  ];
+</programlisting>
+</para>
+
+<para>This example imports the set of PostgreSQL attributes into scope and
+selects the <literal>postgis</literal> and <literal>timescaledb</literal>
+attributes. Note that not all of these attributes are available for every
+version of PostgreSQL, e.g. TimescaleDB does not work with PostgreSQL 9.5.
+Should you specify v9.5 (using <option>services.postgresql.packages</option>),
+the above example would fail with an evaluation error.</para>
+
+<para>FIXME: talk about <literal>CREATE EXTENSION</literal>.</para>
+
+</section>
 
 <section xml:id="module-services-postgres-upgrading"><title>Upgrading</title>
 
@@ -66,12 +137,11 @@ alice=>
 
 </section>
 
-
 <section xml:id="module-services-postgres-options"><title>Options</title>
 
-  <para>A complete list of options for the PostgreSQL module may be found <link linkend="opt-services.postgresql.enable">here</link>.</para>
+<para>A complete list of options for the PostgreSQL module may be found <link
+linkend="opt-services.postgresql.enable">here</link>.</para>
 
 </section>
-
 
 </chapter>
