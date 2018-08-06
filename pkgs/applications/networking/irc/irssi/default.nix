@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     description = "A terminal based IRC client";
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];
+    license     = stdenv.lib.licenses.gpl2Plus;
   };
 }
