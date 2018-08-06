@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.asl20;
   };
 }
