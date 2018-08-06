@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/extension
   '';
 
+  passthru = {
+    versionCheck = builtins.compareVersions postgresql.version "9.4" >= 0;
+  };
+
   meta = with stdenv.lib; {
     description = "Efficient querying of 'top values' for PostgreSQL";
     homepage    = https://www.citusdata.com/;
