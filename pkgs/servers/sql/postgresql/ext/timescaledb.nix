@@ -34,13 +34,6 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postInstall = ''
-    # work around an annoying bug, by creating $out/bin, so buildEnv doesn't freak out later
-    # see https://github.com/NixOS/nixpkgs/issues/22653
-
-    mkdir -p $out/bin
-  '';
-
   passthru = {
     versionCheck = builtins.compareVersions postgresql.version "9.6" >= 0;
   };

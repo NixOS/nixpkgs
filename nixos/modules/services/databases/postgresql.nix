@@ -15,6 +15,10 @@ let
     else pkgs.buildEnv {
       name = "postgresql-and-plugins-${pg.version}";
       paths = [ pg pg.lib ] ++ plugins;
+      # We include /bin to ensure the $out/bin directory is created, which is
+      # needed because we'll be removing the files from that directory in postBuild
+      # below. See #22653
+      pathsToLink = ["/" "/bin"];
       buildInputs = [ pkgs.makeWrapper ];
       postBuild =
         ''
