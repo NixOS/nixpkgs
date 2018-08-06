@@ -11,36 +11,6 @@
 , file
 }:
 
-  /*
-
-  ### NixOS - usage:
-  ==================
-
-    services.postgresql.extraPlugins = [ (pkgs.postgis.override { postgresql = pkgs.postgresql95; }) ];
-
-
-  ### important Postgis implementation details:
-  =============================================
-
-    Postgis provides a shared library implementing many operations. They are
-    exposed to the Postgres SQL interpreter by special SQL queries eg:
-
-      CREATE FUNCTION [...]
-              AS '[..]liblwgeom', 'lwhistogram2d_in' LANGUAGE 'C' IMMUTABLE STRICT; -- WITH (isstrict);
-
-   where liblwgeom is the shared library.
-   Postgis < 1.5 used absolute paths, in NixOS $libdir is always used.
-
-   Thus if you want to use postgresql dumps which were created by non NixOS
-   systems you have to adopt the library path.
-
-
-   ### TODO:
-   =========
-   the bin commands to have gtk gui:
-  */
-
-
 let
   version = "2.4.4";
   sha256 = "1hm8migjb53cymp4qvg1h20yqllmy9f7x0awv5450391i6syyqq6";

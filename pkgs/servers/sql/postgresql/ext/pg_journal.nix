@@ -1,11 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, postgresql, systemd, openssl }:
 
-# # To enable on NixOS:
-# config.services.postgresql = {
-#   extraPlugins = [ pkgs.pg_journal ];
-#   extraConfig = "shared_preload_libraries = 'pg_journal'";
-# }
-
 stdenv.mkDerivation rec {
   name = "pg_journal-${version}";
   version = "0.2.0";
