@@ -13,13 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "09izh6j1rpkllmy2kjhd9pwzld6lryp7825129k5jbbvnavxv6g8";
   };
 
-  installPhase = ''
-    mkdir -p $out/share/extension
-
-    cp -v updates/*.sql $out/share/extension
-    cp -v sql/*.sql     $out/share/extension
-    cp -v *.control     $out/share/extension
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Log and monitor PostgreSQL jobs";

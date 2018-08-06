@@ -13,11 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mmd22nfaxjwnbl3i95f3ivmjvfqwdflgaczlg3129dbpwg265xr";
   };
 
-  installPhase = ''
-    install -D bin/pg_repack -t $out/bin/
-    install -D lib/pg_repack.so -t $out/lib/
-    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/extension
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   passthru = {
     versionCheck = postgresql.compareVersion "11" < 0;

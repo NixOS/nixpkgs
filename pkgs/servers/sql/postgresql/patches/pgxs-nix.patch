@@ -1,0 +1,29 @@
+--- Makefile.global	2018-08-06 02:21:37.865065005 -0500
++++ Makefile.global.new	2018-08-06 02:30:17.063261754 -0500
+@@ -153,16 +153,16 @@
+ PG_CONFIG = pg_config
+ endif
+ 
+-bindir := $(shell $(PG_CONFIG) --bindir)
+-datadir := $(shell $(PG_CONFIG) --sharedir)
+-sysconfdir := $(shell $(PG_CONFIG) --sysconfdir)
+-libdir := $(shell $(PG_CONFIG) --libdir)
+-pkglibdir := $(shell $(PG_CONFIG) --pkglibdir)
+-includedir := $(shell $(PG_CONFIG) --includedir)
+-pkgincludedir := $(shell $(PG_CONFIG) --pkgincludedir)
+-mandir := $(shell $(PG_CONFIG) --mandir)
+-docdir := $(shell $(PG_CONFIG) --docdir)
+-localedir := $(shell $(PG_CONFIG) --localedir)
++bindir := $(PREFIX)/bin
++datadir := $(PREFIX)/share
++sysconfdir := $(PREFIX)/etc
++libdir := $(PREFIX)/lib
++pkglibdir := $(PREFIX)/lib
++includedir := $(PREFIX)/include
++pkgincludedir := @NIX_POSTGRES_INCLUDE@
++mandir := $(PREFIX)/share/man
++docdir := $(PREFIX)/share/doc
++localedir := $(PREFIX)/share/locale
+ 
+ endif # PGXS
+ 

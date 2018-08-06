@@ -12,12 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ postgresql msgpack groonga ];
 
-  makeFlags = [ "HAVE_MSGPACK=1" ];
-
-  installPhase = ''
-    install -D pgroonga.so -t $out/lib/
-    install -D ./{pgroonga-*.sql,pgroonga.control} -t $out/share/extension
-  '';
+  makeFlags = [ "HAVE_MSGPACK=1" "PREFIX=$(out)" ];
 
   passthru = {
     versionCheck = postgresql.compareVersion "11" < 0;

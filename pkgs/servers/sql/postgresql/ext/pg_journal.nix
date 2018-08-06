@@ -27,10 +27,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  installPhase = ''
-    mkdir -p $out/lib
-    cp pg_journal.so $out/lib
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Log PostgreSQL messages to systemd journal";

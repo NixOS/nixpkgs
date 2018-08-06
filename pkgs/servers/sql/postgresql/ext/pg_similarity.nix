@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, gcc, postgresql }:
+{ stdenv, lib, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation {
 
@@ -10,12 +10,10 @@ stdenv.mkDerivation {
     sha256 = "1z4v4r2yccdr8kz3935fnk1bc5vj0qj0apscldyap4wxlyi89xim";
   };
 
-  buildInputs = [ postgresql gcc ];
-  buildPhase = "USE_PGXS=1 make";
-  installPhase = ''
-    install -D pg_similarity.so -t $out/lib/
-    install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/extension
-  '';
+  buildInputs = [ postgresql ];
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  USE_PGXS=1; # needed for 'make' to work
 
   meta = {
     description = ''

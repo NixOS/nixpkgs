@@ -93,6 +93,11 @@ let
           done
         fi
 
+        # Fix the PGXS installation paths, since they can't write into the Nix store
+	patch -d "$out/lib/pgxs/src" < ${./patches/pgxs-nix.patch}
+	substituteInPlace "$out/lib/pgxs/src/Makefile.global" \
+	  --subst-var-by NIX_POSTGRES_INCLUDE "$out/include"
+
         # Prevent a retained dependency on gcc-wrapper.
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
       '' + lib.optionalString jitEnabled ''

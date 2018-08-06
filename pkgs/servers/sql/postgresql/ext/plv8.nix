@@ -14,13 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1sfpxz0zcbinn6822j12lkwgrw9kfacrs83ic968rm489rl9w241";
   };
 
-  preConfigure = ''
-    substituteInPlace Makefile --replace '-lv8_libplatform' '-lv8_libplatform -lv8_libbase'
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
-  installPhase = ''
-    install -D plv8.so                                         -t $out/lib
-    install -D {plls,plcoffee,plv8}{--${version}.sql,.control} -t $out/share/extension
+  preConfigure = ''
+    substituteInPlace Makefile \
+      --replace '-lv8_libplatform' '-lv8_libplatform -lv8_libbase'
   '';
 
   passthru = {

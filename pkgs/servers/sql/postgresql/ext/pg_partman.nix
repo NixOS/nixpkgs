@@ -13,14 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "069m2y20pkpk7lw7d2spaa1zpkb47dmm76rxi1d4qvq3vgfd739m";
   };
 
-  installPhase = ''
-    mkdir -p $out/{lib,share/extension}
-
-    cp -v src/*.so      $out/lib
-    cp -v updates/*.sql $out/share/extension
-    cp -v sql/*.sql     $out/share/extension
-    cp -v *.control     $out/share/extension
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   passthru = {
     versionCheck = postgresql.compareVersion "9.4" >= 0 && postgresql.compareVersion "11" < 0;

@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ postgresql perl perlPackages.TAPParserSourceHandlerpgTAP which ];
 
-  installPhase = ''
-    install -D {sql/pgtap--${version}.sql,pgtap.control} -t $out/share/extension
-  '';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "pgTAP is a unit testing framework for PostgreSQL";

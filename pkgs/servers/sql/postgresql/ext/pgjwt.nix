@@ -11,11 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1riz0xvwb6y02j0fljbr9hcbqb2jqs4njlivmavy9ysbcrrv1vrf";
   };
 
-  buildPhase = ":";
-  installPhase = ''
-    mkdir -p $out/share/extension
-    cp pg*sql *.control $out/share/extension
-  '';
+  buildInputs = [ postgresql ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "PostgreSQL implementation of JSON Web Tokens";
