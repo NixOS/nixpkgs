@@ -925,26 +925,8 @@ in {
 
   babelfish = callPackage ../development/python-modules/babelfish {};
 
-  basiciw = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    version = "0.2.2";
-    pname = "basiciw";
-    disabled = isPy27 || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-      sha256 = "1ajmflvvlkflrcmqmkrx0zaira84z8kv4ssb2jprfwvjh8vfkysb";
-    };
-
-    buildInputs = [ pkgs.gcc ];
-    propagatedBuildInputs = [ pkgs.wirelesstools ];
-
-    meta = {
-      description = "Get info about wireless interfaces using libiw";
-      homepage = https://github.com/enkore/basiciw;
-      platforms = platforms.linux;
-      license = licenses.gpl2;
-    };
+  basiciw = callPackage ../development/python-modules/basiciw {
+    inherit (pkgs) gcc wirelesstools;
   };
 
   batinfo = callPackage ../development/python-modules/batinfo {};
@@ -955,37 +937,7 @@ in {
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
-  beaker = buildPythonPackage rec {
-    name = "Beaker-${version}";
-    version = "1.8.0";
-
-    # The pypy release do not contains the tests
-    src = pkgs.fetchFromGitHub {
-      owner = "bbangert";
-      repo = "beaker";
-      rev = "${version}";
-      sha256 = "17yfr7a307n8rdl09was4j60xqk2s0hk0hywdkigrpj4qnw0is7g";
-    };
-
-    buildInputs =
-      [ self.nose
-        self.mock
-        self.webtest
-      ];
-    propagatedBuildInputs = [
-      self.sqlalchemy
-      self.pycrypto
-    ] ++ optionals (isPy27) [
-      self.funcsigs
-      self.pycryptopp
-    ];
-
-    meta = {
-      description = "A Session and Caching library with WSGI Middleware";
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
+  beaker = callPackage ../development/python-modules/beaker { };
 
   betamax = callPackage ../development/python-modules/betamax {};
 
@@ -17602,6 +17554,18 @@ EOF
   })).python;
 
   rfc7464 = callPackage ../development/python-modules/rfc7464 { };
+
+  foundationdb51 = (toPythonModule (pkgs.fdbPackages.override {
+    inherit python;
+  }).foundationdb51).python;
+
+  foundationdb52 = (toPythonModule (pkgs.fdbPackages.override {
+    inherit python;
+  }).foundationdb52).python;
+
+  foundationdb60 = (toPythonModule (pkgs.fdbPackages.override {
+    inherit python;
+  }).foundationdb60).python;
 });
 
 in fix' (extends overrides packages)

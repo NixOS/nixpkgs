@@ -1147,7 +1147,7 @@ with pkgs;
 
   dateutils = callPackage ../tools/misc/dateutils { };
 
-  ddar = pythonPackages.callPackage ../tools/backup/ddar { };
+  ddar = callPackage ../tools/backup/ddar { };
 
   ddate = callPackage ../tools/misc/ddate { };
 
@@ -1456,6 +1456,8 @@ with pkgs;
 
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
+  scour = callPackage ../tools/graphics/scour { };
+
   s2png = callPackage ../tools/graphics/s2png { };
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
@@ -1605,17 +1607,7 @@ with pkgs;
 
   bgs = callPackage ../tools/X11/bgs { };
 
-  biber = callPackage ../tools/typesetting/biber {
-    inherit (perlPackages) buildPerlModule
-      autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
-      DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
-      DateTime DateTimeFormatBuilder DateTimeCalendarJulian
-      ExtUtilsLibBuilder FileSlurp FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
-      ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-      UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-      ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
-      TestDifferences;
-  };
+  biber = callPackage ../tools/typesetting/biber { };
 
   blueman = callPackage ../tools/bluetooth/blueman {
     withPulseAudio = config.pulseaudio or true;
@@ -4681,6 +4673,8 @@ with pkgs;
   projectm = callPackage ../applications/audio/projectm { };
 
   proot = callPackage ../tools/system/proot { };
+
+  prototypejs = callPackage ../development/libraries/prototypejs { };
 
   proxychains = callPackage ../tools/networking/proxychains { };
 
@@ -10105,6 +10099,10 @@ with pkgs;
 
   libdbiDrivers = callPackage ../development/libraries/libdbi-drivers { };
 
+  libunity = callPackage ../development/libraries/libunity {
+    inherit (gnome3) gnome-common;
+  };
+
   libdbusmenu = callPackage ../development/libraries/libdbusmenu { };
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
   libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
@@ -15268,6 +15266,8 @@ with pkgs;
 
   avocode = callPackage ../applications/graphics/avocode {};
 
+  cadence =  libsForQt5.callPackage ../applications/audio/cadence { };
+
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
@@ -17884,6 +17884,8 @@ with pkgs;
     gtksharp = gtk-sharp-2_0;
   };
 
+  plex-media-player = libsForQt59.callPackage ../applications/video/plex-media-player { };
+
   plover = recurseIntoAttrs (callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
@@ -18404,7 +18406,7 @@ with pkgs;
     inherit (pkgs.vamp) vampSDK;
   };
 
-  soulseekqt = callPackage ../applications/networking/p2p/soulseekqt { };
+  soulseekqt = libsForQt5.callPackage ../applications/networking/p2p/soulseekqt { };
 
   sox = callPackage ../applications/misc/audio/sox {
     enableLame = config.sox.enableLame or false;
@@ -18774,6 +18776,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
     inherit (darwin) libobjc cf-private;
     inherit lua;
+    guiSupport = "gtk3";
   });
 
   vimNox = lowPrio (vim_configurable.override {
@@ -20497,6 +20500,9 @@ with pkgs;
 
   jags = callPackage ../applications/science/math/jags { };
 
+  libbraiding = callPackage ../development/libraries/science/math/libbraiding { };
+
+  libhomfly = callPackage ../development/libraries/science/math/libhomfly { };
 
   # We have essentially 4 permutations of liblapack: version 3.4.1 or 3.5.0,
   # and with or without atlas as a dependency. The default `liblapack` is 3.4.1

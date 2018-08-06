@@ -1,0 +1,46 @@
+commit f02714d4aea80e17cb8df62bab75d7c1a1b61a8e
+Author: Timo Kaufmann <timokau@zoho.com>
+Date:   Mon Jul 9 18:26:18 2018 +0200
+
+    Don't attempt to create dirs when showing pkg info
+    
+    The script dir cannot be assumed to be writeable after installation.
+
+diff --git a/build/bin/sage-spkg b/build/bin/sage-spkg
+index f3e02aeae5..190d558ad1 100755
+--- a/build/bin/sage-spkg
++++ b/build/bin/sage-spkg
+@@ -167,14 +167,6 @@ if [ -z "$SAGE_BUILD_DIR" ]; then
+     export SAGE_BUILD_DIR="$SAGE_LOCAL/var/tmp/sage/build"
+ fi
+ 
+-for dir in "$SAGE_SPKG_INST" "$SAGE_SPKG_SCRIPTS"; do
+-    mkdir -p "$dir"
+-    if [ $? -ne 0 ]; then
+-        error_msg "Error creating directory $dir"
+-        exit 1
+-    fi
+-done
+-
+ 
+ # Remove '.' from PYTHONPATH, which may also come from SAGE_PATH, to avoid
+ # trouble with setuptools / easy_install (cf. #10192, #10176):
+@@ -563,11 +555,13 @@ fi
+ # Setup directories
+ ##################################################################
+ 
+-mkdir -p "$SAGE_BUILD_DIR"
+-if [ $? -ne 0 ]; then
+-    error_msg "Error creating directory $SAGE_BUILD_DIR"
+-    exit 1
+-fi
++for dir in "$SAGE_SPKG_INST" "$SAGE_SPKG_SCRIPTS" "$SAGE_BUILD_DIR"; do
++    mkdir -p "$dir"
++    if [ $? -ne 0 ]; then
++        error_msg "Error creating directory $dir"
++        exit 1
++    fi
++done
+ 
+ # Trac #5852: check write permissions
+ if [ ! -w "$SAGE_BUILD_DIR" ]; then

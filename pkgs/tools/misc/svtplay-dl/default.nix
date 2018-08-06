@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, makeWrapper, pythonPackages, perl, zip
+{ stdenv, fetchFromGitHub, makeWrapper, python3Packages, perl, zip
 , rtmpdump }:
 
 let
-  inherit (pythonPackages) python nose pycrypto requests mock;
+  inherit (python3Packages) python nose pycrypto requests mock;
 in stdenv.mkDerivation rec {
   name = "svtplay-dl-${version}";
   version = "1.9.11";

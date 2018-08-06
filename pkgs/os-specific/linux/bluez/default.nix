@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  pythonPackages, readline, udev, libical,
+  python3, readline, udev, libical,
   systemd, enableWiimote ? false, enableMidi ? false }:
 
 stdenv.mkDerivation rec {
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "048r91vx9gs5nwwbah2s0xig04nwk14c5s0vb7qmaqdvighsmz2z";
   };
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python3.pkgs; [
     dbus-python pygobject2 pygobject3 recursivePthLoader
   ];
 
   buildInputs = [
-    dbus glib alsaLib pythonPackages.python pythonPackages.wrapPython
+    dbus glib alsaLib python3 python3.pkgs.wrapPython
     readline udev libical
   ];
 
