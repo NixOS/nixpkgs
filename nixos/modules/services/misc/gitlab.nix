@@ -14,6 +14,10 @@ let
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
   pgSuperUser = config.services.postgresql.superUser;
 
+  pgBinaryDir = if (config.services.postgresql.package != null)
+    then config.services.postgresql.package
+    else config.services.postgresql.packages.postgresql;
+
   databaseYml = ''
     production:
       adapter: postgresql
@@ -162,7 +166,7 @@ let
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar pgBinaryDir ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
      '';
@@ -465,7 +469,7 @@ in {
       partOf = [ "gitlab.service" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        config.services.postgresql.package
+        pgBinaryDir
         gitAndTools.git
         ruby
         openssh
@@ -541,7 +545,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        config.services.postgresql.package
+        pgBinaryDir
         gitAndTools.git
         openssh
         nodejs
@@ -609,7 +613,7 @@ in {
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
           if ! test -e "${cfg.statePath}/db-created"; then
             ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.databasePassword}'"
-            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} ${config.services.postgresql.package}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName}
+            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} ${pgBinaryDir}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName}
             touch "${cfg.statePath}/db-created"
           fi
 
