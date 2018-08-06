@@ -267,5 +267,6 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = stdenv.lib.platforms.unix;
     hydraPlatforms = [];
+    license = stdenv.lib.licenses.unfree;
   };
 }
