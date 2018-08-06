@@ -69,7 +69,7 @@ let
     configureFlags =
       (if crossCompiling
        then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" ]
-       else [ "-de" "-Dcc=cc" ])
+       else [ "-de" "-Dcc=${stdenv.cc.targetPrefix}cc" ])
       ++ [
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
