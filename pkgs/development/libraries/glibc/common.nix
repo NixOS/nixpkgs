@@ -27,7 +27,7 @@
 }:
 
 { name
-, withLinuxHeaders ? false
+, withLinuxHeaders ? true
 , profilingLibraries ? false
 , installLocales ? false
 , withGd ? false
