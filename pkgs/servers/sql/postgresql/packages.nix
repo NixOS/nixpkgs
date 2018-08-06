@@ -101,19 +101,28 @@ let
         tsearch_extras = callPackage ./ext/tsearch_extras.nix { };
       };
     in self;
-in
-with postgresqlPackages; {
-  postgresql93Packages = makePackageSet postgresql93;
-  postgresql94Packages = makePackageSet postgresql94;
-  postgresql95Packages = makePackageSet postgresql95;
-  postgresql96Packages = makePackageSet postgresql96;
-  postgresql10Packages = makePackageSet postgresql10;
-  postgresql11Packages = makePackageSet postgresql11;
 
-  # HEADS UP: do NOT export this from the top level of all-packages.nix!
-  # it is only used by the NixOS module for PostgreSQL in order to reduce
-  # some of the duplicated logic needed for withPackages. this should
-  # _only_ be used by postgresql.nix, and nothing more. Do not taunt
-  # Happy Fun Ball.
+    allPostgresqlPackages = with postgresqlPackages; {
+      postgresql93Packages = makePackageSet postgresql93;
+      postgresql94Packages = makePackageSet postgresql94;
+      postgresql95Packages = makePackageSet postgresql95;
+      postgresql96Packages = makePackageSet postgresql96;
+      postgresql10Packages = makePackageSet postgresql10;
+      postgresql11Packages = makePackageSet postgresql11;
+    };
+in
+{
+  # HEADS UP: do NOT export this from the top level of all-packages.nix!  it is
+  # only used by the NixOS module for PostgreSQL in order to reduce some of the
+  # duplicated logic needed for withPackages. this should _only_ be used by
+  # postgresql.nix, and nothing more. Do not taunt Happy Fun Ball.
   inherit withPackages;
-}
+
+  # This expression is useful primarily for NixOS tests: they run the basic
+  # tests with every version of PostgreSQL available, so they use this in order
+  # to enumerate them. It should also not be exported from all-packages.nix.
+  inherit allPostgresqlPackages;
+
+  # Finally, include all of the package sets directly as well, so they can
+  # be exposed in all-packages.nix
+} // allPostgresqlPackages
