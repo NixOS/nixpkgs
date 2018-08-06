@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.75.1";
+  version = "0.75.2";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
