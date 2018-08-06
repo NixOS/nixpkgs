@@ -19483,6 +19483,8 @@ with pkgs;
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
+  crispyDoom = callPackage ../games/crispy-doom { };
+
   ckan = callPackage ../games/ckan { };
 
   cockatrice = libsForQt5.callPackage ../games/cockatrice {  };
