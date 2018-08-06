@@ -17,7 +17,6 @@ import ./make-test.nix ({ pkgs, ... }: {
     postgresql =
       { pkgs, ... }:
       { services.postgresql.enable = true;
-        services.postgresql.package = pkgs.postgresql;
         services.postgresql.enableTCPIP = true;
         services.postgresql.authentication = ''
           # Generated file; do not edit!
