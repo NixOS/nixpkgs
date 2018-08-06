@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, gfortran
-, slurm, openssh, hwloc
+,  openssh, hwloc
 } :
 
 stdenv.mkDerivation  rec {
@@ -16,7 +16,9 @@ stdenv.mkDerivation  rec {
     "--enable-sharedlib"
   ];
 
-  buildInputs = [ perl gfortran slurm openssh hwloc ];
+  enableParallelBuilding = true;
+
+  buildInputs = [ perl gfortran openssh hwloc ];
 
   doCheck = true;
 
@@ -26,8 +28,12 @@ stdenv.mkDerivation  rec {
       echo "fix rpath: $entry"
       patchelf --set-rpath "$out/lib" $entry
     done
-  '';
 
+    # Ensure the default compilers are the ones mpich was built with
+    sed -i 's:CC="gcc":CC=${stdenv.cc}/bin/gcc:' $out/bin/mpicc
+    sed -i 's:CXX="g++":CXX=${stdenv.cc}/bin/g++:' $out/bin/mpicxx
+    sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' $out/bin/mpifort
+  '';
 
   meta = with stdenv.lib; {
     description = "Implementation of the Message Passing Interface (MPI) standard";
@@ -43,6 +49,6 @@ stdenv.mkDerivation  rec {
       fullName = "MPICH license (permissive)";
     };
     maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
