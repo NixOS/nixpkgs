@@ -49,6 +49,6 @@ stdenv.mkDerivation  rec {
       fullName = "MPICH license (permissive)";
     };
     maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
