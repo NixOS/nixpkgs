@@ -127,13 +127,83 @@ version of PostgreSQL, e.g. TimescaleDB does not work with PostgreSQL 9.5.
 Should you specify v9.5 (using <option>services.postgresql.packages</option>),
 the above example would fail with an evaluation error.</para>
 
-<para>FIXME: talk about <literal>CREATE EXTENSION</literal>.</para>
+<para>Once this has been done and <command>nixos-rebuild</command> has been
+run, you may run <literal>CREATE EXTENSION></literal> in order to
+install the extension for the given database you've selected:
 
+<programlisting>
+postgres=> CREATE EXTENSION IF NOT EXISTS timescaledb CASCADE;
+</programlisting>
+</para>
+
+<para>Any functions, types, etc that are provided by the extension should
+now be available.</para>
 </section>
 
 <section xml:id="module-services-postgres-upgrading"><title>Upgrading</title>
 
-<para>FIXME: document dump/upgrade/load cycle.</para>
+<para>This section will be brief. Be sure to read the
+<link xlink:href="https://www.postgresql.org/docs/current/static/upgrading.html">official
+PostgreSQL Upgrading documentation</link> for more detailed information
+about the steps below. This section will use the <command>pg_dumpall</command>
+method.</para>
+
+<para>First, you must dump all data from the server using
+<command>pg_dumpall</command>, but this must be executed by the
+<emphasis>new</emphasis> version of the PostgreSQL tools. This can be done
+easily using the existing Postgres infrastructure, by using <command>nix-shell</command>
+in order to install the tools:
+
+<programlisting>
+a@link> nix-shell -p 'postgresql10Packages.withPackages (_: [])'
+[nix-shell:~]$ sudo -u postgres pg_dumpall > dumpfile
+</programlisting>
+</para>
+
+<para>At this point, the file <literal>dumpfile</literal> contains a dump of
+the entire server, and can be backed up or transported elsewhere. Also note
+that the above command is analagous to the NixOS module configuration: you
+can enter a shell with extensions available, by selecting them from the
+attribute set provided to the lambda. The above example uses no extensions.
+</para>
+
+<para>Next, stop the PostgreSQL service using <command>systemctl stop</command>:
+
+<programlisting>
+[nix-shell:~]$ sudo systemctl stop postgres
+</programlisting>
+</para>
+
+<para>At this point, you may move the data directory out of the way, so that
+the database will be re-initialized in a clean manner once the new
+server version is installed. By default, the NixOS module for
+PostgreSQL installs each database by default into its own directory
+under <literal>/var/lib/postgresql</literal> with a unique name based
+on the version number, so installing a new version will not overwrite
+data from the old one. However, you may wish to do this anyway at this
+point, and you <emphasis>must</emphasis> do it if you changed the data
+directory yourself:
+
+<programlisting>
+[nix-shell:~]$ sudo mv /var/lib/postgresql/* ...
+</programlisting>
+</para>
+
+<para>Finally, upgrade your <literal>configuration.nix</literal> to point the
+<xref linkend="opt-services.postgresql.packages"/> option to point to the new
+version of PostgreSQL; for example, <literal>postgresql10Packages</literal>.
+Then start the new service using <command>nixos-rebuild switch</command>. Note
+that you do not need to keep a backup or resupply copies of any configuration
+files, since they're managed by Nix. However, you might want to make some tweaks
+for the new version of the server, as well.</para>
+
+<para>At this point, you can simply use <command>psql</command> in order to load
+the old data into the new server, including roles, databases, etc:
+
+<programlisting>
+[nix-shell:~]$ sudo -u postgres psql -d postgres -f dumpfile
+</programlisting>
+</para>
 
 </section>
 
@@ -141,6 +211,12 @@ the above example would fail with an evaluation error.</para>
 
 <para>A complete list of options for the PostgreSQL module may be found <link
 linkend="opt-services.postgresql.enable">here</link>.</para>
+
+</section>
+
+<section><title>Authoring new extensions</title>
+
+<para>FIXME: document how to write an extension</para>
 
 </section>
 
