@@ -1,10 +1,12 @@
 import ./make-test.nix ({ pkgs, lib, ...}:
 let
+  pgsql = pkgs.postgresqlPackages;
+
   test = with pkgs; runCommand "patch-test" {
-    nativeBuildInputs = [ pgjwt ];
+    nativeBuildInputs = [ pgsql.pgjwt ];
   }
   ''
-    sed -e '12 i CREATE EXTENSION pgcrypto;\nCREATE EXTENSION pgtap;\nSET search_path TO tap,public;' ${pgjwt.src}/test.sql > $out;
+    sed -e '12 i CREATE EXTENSION pgcrypto;\nCREATE EXTENSION pgtap;\nSET search_path TO tap,public;' ${pgsql.pgjwt.src}/test.sql > $out;
   '';
 in
 with pkgs; {
@@ -18,7 +20,8 @@ with pkgs; {
     {
       services.postgresql = {
         enable = true;
-        extraPlugins = [ pgjwt pgtap ];
+        packages = pgsql;
+        plugins = p: [ p.pgjwt p.pgtap ];
       };
     };
   };
