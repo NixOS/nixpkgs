@@ -83,7 +83,7 @@ stdenv.mkDerivation {
   shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
-  inherit targetPrefix infixSalt;
+  inherit inPrefix targetPrefix infixSalt;
 
   outputs = [ "out" ] ++ optionals propagateDoc [ "man" "info" ];
 
