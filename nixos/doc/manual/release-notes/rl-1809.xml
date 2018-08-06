@@ -27,8 +27,11 @@
        compiled and checked continuously. This means you can now use extensions
        like plv8 with any PostgreSQL version without compiling anything.
        Extensions expressions are easier to write, and new extensions are
-       available: <literal>cstore_fdw</literal>, <literal>pg_cron</literal>,
-       <literal>postgres-hll</literal>, and <literal>postgres-topn</literal>.
+       available: <literal>pg_cron</literal>, <literal>postgres-hll</literal>,
+       <literal>postgres-topn</literal>, <literal>pg_journal</literal>,
+       <literal>pg_jobmon</literal>, <literal>pg_partman</literal>,
+       and <literal>citus</literal>. (Almost all existing extensions have seen
+       version updates, as well.)
      </para>
      <para>
        NixOS 18.09 is the last release that will offer PostgreSQL 9.3 as a
