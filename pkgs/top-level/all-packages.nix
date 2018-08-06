@@ -13337,7 +13337,7 @@ with pkgs;
     postgresql10Packages;
 
   # the default postgres version + package set
-  postgresqlPackages = postgresql96Packages;
+  postgresqlPackages = postgresql10Packages;
   postgresql         = postgresqlPackages.postgresql;
 
   # named attributes for non-default versions of postgresql by itself.

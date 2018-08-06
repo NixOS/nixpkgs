@@ -233,7 +233,8 @@ in
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql96Packages
+      mkDefault (if versionAtLeast config.system.stateVersion "18.09" then pkgs.postgresql10Packages
+            else if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql96Packages
             else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql95Packages
             else pkgs.postgresql94Packages);
 
