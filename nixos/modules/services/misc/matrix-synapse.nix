@@ -5,6 +5,11 @@ with lib;
 let
   cfg = config.services.matrix-synapse;
   pg = config.services.postgresql;
+
+  pgBinaryDir = if (config.services.postgresql.package != null)
+    then config.services.postgresql.package
+    else config.services.postgresql.packages.postgresql;
+
   usePostgresql = cfg.database_type == "psycopg2";
   logConfigFile = pkgs.writeText "log_config.yaml" cfg.logConfig;
   mkResource = r: ''{names: ${builtins.toJSON r.names}, compress: ${boolToString r.compress}}'';
@@ -663,14 +668,14 @@ in {
       '' + optionalString (usePostgresql && cfg.create_local_database) ''
         if ! test -e "${cfg.dataDir}/db-created"; then
           ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pg.package}/bin/createuser \
+            ${pgBinaryDir}/bin/createuser \
             --login \
             --no-createdb \
             --no-createrole \
             --encrypted \
             ${cfg.database_user}
           ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pg.package}/bin/createdb \
+            ${pgBinaryDir}/bin/createdb \
             --owner=${cfg.database_user} \
             --encoding=UTF8 \
             --lc-collate=C \
