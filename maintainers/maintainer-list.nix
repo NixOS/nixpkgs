@@ -2190,7 +2190,7 @@
     name = "Nathaniel Baxter";
   };
   lightdiscord = {
-    email = "arnaud@lightdiscord.me";
+    email = "root@arnaud.sh";
     github = "lightdiscord";
     name = "Arnaud Pascal";
   };
