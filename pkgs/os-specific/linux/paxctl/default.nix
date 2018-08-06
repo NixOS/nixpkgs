@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-    sed "s|--owner 0 --group 0||g" -i Makefile
+    sed -i Makefile \
+      -e 's|--owner 0 --group 0||g' \
+      -e '/CC:=gcc/d'
   '';
 
   makeFlags = [
