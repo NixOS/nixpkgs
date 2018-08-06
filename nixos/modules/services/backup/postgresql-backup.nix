@@ -3,46 +3,44 @@
 with lib;
 
 let
-
   cfg = config.services.postgresqlBackup;
 
-  postgresqlBackupService = db :
-    {
-      enable = true;
+  postgresqlBackupService = db: {
+    description = "Backup of database ${db}";
+    enable = true;
+    requires = [ "postgresql.service" ];
+    startAt = cfg.startAt;
 
-      description = "Backup of database ${db}";
+    preStart = ''
+      mkdir -m 0700 -p ${cfg.location}
+      chown postgres ${cfg.location}
+    '';
 
-      requires = [ "postgresql.service" ];
+    script = ''
+      # Use the same PATH as the PostgreSQL instance, as it's configured
+      # with plugins and extensions. This is a bit of a hack; we can't easily
+      # set the nixos systemd options to do this, because the path is already
+      # constructed and is too long by the time the systemd.nix module examines
+      # it
+      export PATH="${config.systemd.services.postgresql.environment.PATH}"
 
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.location}
-        chown postgres ${cfg.location}
-      '';
+      if [ -e ${cfg.location}/${db}.sql.gz ]; then
+        mv ${cfg.location}/${db}.sql.gz ${cfg.location}/${db}.prev.sql.gz
+      fi
 
-      script = ''
-        if [ -e ${cfg.location}/${db}.sql.gz ]; then
-          ${pkgs.coreutils}/bin/mv ${cfg.location}/${db}.sql.gz ${cfg.location}/${db}.prev.sql.gz
-        fi
+      pg_dump ${cfg.pgdumpOptions} ${db} | ${pkgs.gzip}/bin/gzip -c > ${cfg.location}/${db}.sql.gz
+    '';
 
-        ${config.services.postgresql.package}/bin/pg_dump ${cfg.pgdumpOptions} ${db} | \
-          ${pkgs.gzip}/bin/gzip -c > ${cfg.location}/${db}.sql.gz
-      '';
-
-      serviceConfig = {
-        Type = "oneshot";
-        PermissionsStartOnly = "true";
-        User = "postgres";
-      };
-
-      startAt = cfg.startAt;
+    serviceConfig = {
+      Type = "oneshot";
+      PermissionsStartOnly = "true";
+      User = "postgres";
     };
+  };
 
 in {
-
   options = {
-
     services.postgresqlBackup = {
-
       enable = mkOption {
         default = false;
         description = ''
@@ -81,14 +79,14 @@ in {
         '';
       };
     };
-
   };
 
   config = mkIf config.services.postgresqlBackup.enable {
 
-    systemd.services = listToAttrs (map (db : {
-          name = "postgresqlBackup-${db}";
-          value = postgresqlBackupService db; } ) cfg.databases);
-  };
+    systemd.services = listToAttrs (map (db: {
+      name = "postgresqlBackup-${db}";
+      value = postgresqlBackupService db;
+    }) cfg.databases);
 
+  };
 }
