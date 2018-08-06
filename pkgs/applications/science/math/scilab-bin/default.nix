@@ -3,7 +3,7 @@
 let
   name = "scilab-bin-${ver}";
 
-  ver = "5.5.2";
+  ver = "6.0.1";
 
   majorVer = builtins.elemAt (lib.splitString "." ver) 0;
 
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
     url = "https://www.scilab.org/download/${ver}/scilab-${ver}.bin.linux-${architecture}.tar.gz";
     sha256 =
       if stdenv.system == "i686-linux" then
-        "6143a95ded40411a35630a89b365875a6526cd4db1e2865ac5612929a7db937a"
+        "0fgjc2ak3b2qi6yin3fy50qwk2bcj0zbz1h4lyyic9n1n1qcliib"
       else if stdenv.system == "x86_64-linux" then
-        "c0dd7a5f06ec7a1df7a6b1b8b14407ff7f45e56821dff9b3c46bd09d4df8d350"
+        "1scswlznc14vyzg0gqa1q9gcpwx05kz1sbn563463mzkdp7nd35d"
       else
         badArch;
   };

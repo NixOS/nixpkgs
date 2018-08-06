@@ -40,6 +40,8 @@ in
       rm -vf rebar
       ln -s ${rebar}/bin/rebar rebar
 
+      patchShebangs lib/elixir/generate_app.escript || true
+
       substituteInPlace Makefile \
         --replace "/usr/local" $out
     '';

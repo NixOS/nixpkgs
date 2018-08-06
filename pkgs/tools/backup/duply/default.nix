@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, python, duplicity, gawk, gnupg1, bash
+{ stdenv, fetchurl, coreutils, python2, duplicity, gawk, gnupg1, bash
 , gnugrep, txt2man, makeWrapper, which
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     mkdir -p "$out/share/man/man1"
     install -vD duply "$out/bin"
     wrapProgram "$out/bin/duply" --set PATH \
-        ${stdenv.lib.makeBinPath [ coreutils python duplicity gawk gnupg1 bash gnugrep txt2man which ]}
+        ${stdenv.lib.makeBinPath [ coreutils python2 duplicity gawk gnupg1 bash gnugrep txt2man which ]}
     "$out/bin/duply" txt2man > "$out/share/man/man1/duply.1"
   '';
 

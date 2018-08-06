@@ -1,22 +1,26 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  version = "1.0.1";
+  version = "2.1.0";
   name = "oxipng-${version}";
 
   src = fetchFromGitHub {
     owner = "shssoichiro";
     repo = "oxipng";
     rev = "v${version}";
-    sha256 = "0w39f0dhq9cxk25vy0wh8vicxyckvj1vmglx5va4550i3q0hsrws";
+    sha256 = "13rzkfb025y4i9dj66fgc74whgs90gyw861dccsj16cpfl6kh5z0";
   };
 
-  cargoSha256 = "00nbx6n73yl4ax05pqkmim1vhy0pymgz5la1cc4y18gjbjjj9w4h";
+  cargoSha256 = "0l6ad8rnifd5hkv6x2cr0frdddsfwm1xd1v56imlglsjkgz56cva";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/shssoichiro/oxipng;
     description = "A lossless PNG compression optimizer";
     license = licenses.mit;
+    maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
+
+    # macro is_arm_feature_detected! is unstable
+    broken = stdenv.isAarch64;
   };
 }

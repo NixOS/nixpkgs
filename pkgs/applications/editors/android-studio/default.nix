@@ -18,17 +18,13 @@ let
     sha256Hash = "016nyn1pqviy089hg0dq7m4cqb39fdxdcy4zknkaq7dmgv1dj6x9";
   };
   latestVersion = { # canary & dev
-    version = "3.3.0.2"; # "Android Studio 3.3 Canary 3"
-    build = "181.4884283";
-    sha256Hash = "0r93yzw87cgzz60p60gknij5vaqmv1a1kyd4cr9gx8cbxw46lhwh";
+    version = "3.3.0.3"; # "Android Studio 3.3 Canary 4"
+    build = "182.4924367";
+    sha256Hash = "03fxjxlsbrpklsss1nvlkb41skr5ymmq9vdns8iikcm1ng925vfd";
   };
 in rec {
-  # TODO: Drop old alias after 18.09
-  preview = mkStudio (betaVersion // {
-    channel = "beta";
-    pname = "android-studio-preview";
-    deprecated = true;
-  });
+  # Old alias
+  preview = beta;
 
   # Attributes are named by their corresponding release channels
 

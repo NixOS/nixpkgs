@@ -1,9 +1,10 @@
-{ stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, gtk3
+{ stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
 , obex_data_server, xdg_utils, libnotify, dnsmasq, dhcp
 , hicolor-icon-theme, librsvg, wrapGAppsHook, gobjectIntrospection
 , withPulseAudio ? true, libpulseaudio }:
 
 let
+  pythonPackages = python3Packages;
   binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp ];
 
 in stdenv.mkDerivation rec {
