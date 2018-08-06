@@ -1,9 +1,9 @@
 { stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, gnome3
-, gtk-doc, gtk2, python2Packages, lua, libX11, libXext, libXrender, gobjectIntrospection
+, gtk-doc, gtk2, python2Packages, lua, gobjectIntrospection
 }:
 
 let
-  inherit (python2Packages) python pygobject3 pygtk;
+  inherit (python2Packages) python pygtk;
 in stdenv.mkDerivation rec {
   name = "keybinder-${version}";
   version = "0.3.0";
@@ -16,8 +16,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake libtool gnome3.gnome-common gtk-doc gnome3.gtk3
-    python pygobject3 pygtk lua libX11 libXext libXrender gobjectIntrospection gtk2
+    autoconf automake libtool gnome3.gnome-common gtk-doc gtk2
+    python pygtk lua gobjectIntrospection
   ];
 
   preConfigure = ''
