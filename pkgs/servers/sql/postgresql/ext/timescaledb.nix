@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
+  passthru = {
+    versionCheck = builtins.compareVersions postgresql.version "9.6" >= 0;
+  };
+
   meta = with stdenv.lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage    = https://www.timescale.com/;
