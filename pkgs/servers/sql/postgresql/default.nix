@@ -98,6 +98,11 @@ let
       '' + lib.optionalString jitEnabled ''
         # In the case of JIT support, prevent a retained dependency on clang-wrapper, too
         substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/clang clang
+
+        # Move the bitcode and libllvmjit.so library out of $lib; otherwise, every client that
+        # depends on libpq.so will also have libLLVM.so in its closure too, bloating it
+        moveToOutput "lib/bitcode" "$out"
+        moveToOutput "lib/llvmjit*" "$out"
       '';
 
     postFixup = lib.optionalString (!stdenv.isDarwin && stdenv.hostPlatform.libc == "glibc")
