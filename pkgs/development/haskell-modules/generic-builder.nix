@@ -117,7 +117,9 @@ let
   # We cannot enable -j<n> parallelism for libraries because GHC is far more
   # likely to generate a non-determistic library ID in that case. Further
   # details are at <https://github.com/peti/ghc-library-id-bug>.
-  enableParallelBuilding = (versionOlder "7.8" ghc.version && !hasActiveLibrary) || versionOlder "8.0.1" ghc.version;
+  #
+  # Currently disabled for aarch64. See https://ghc.haskell.org/trac/ghc/ticket/15449.
+  enableParallelBuilding = ((versionOlder "7.8" ghc.version && !hasActiveLibrary) || versionOlder "8.0.1" ghc.version) && !(buildPlatform.isAarch64);
 
   crossCabalFlags = [
     "--with-ghc=${ghc.targetPrefix}ghc"
