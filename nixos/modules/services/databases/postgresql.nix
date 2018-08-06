@@ -6,12 +6,15 @@ let
 
   cfg = config.services.postgresql;
 
+  packageSetPlugins = cfg.plugins cfg.packages;
+  plugins = if cfg.extraPlugins != [] then cfg.extraPlugins else packageSetPlugins;
+
   # see description of extraPlugins
   postgresqlAndPlugins = pg:
-    if cfg.extraPlugins == [] then pg
+    if plugins == [] then pg
     else pkgs.buildEnv {
       name = "postgresql-and-plugins-${pg.version}";
-      paths = [ pg pg.lib ] ++ cfg.extraPlugins;
+      paths = [ pg pg.lib ] ++ plugins;
       buildInputs = [ pkgs.makeWrapper ];
       postBuild =
         ''
@@ -22,7 +25,10 @@ let
         '';
     };
 
-  postgresql = postgresqlAndPlugins cfg.package;
+  postgresqlPackage = if (cfg.package != null) then cfg.package else
+    cfg.packages.postgresql;
+
+  postgresql = postgresqlAndPlugins postgresqlPackage;
 
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeText "postgresql.conf"
@@ -54,10 +60,22 @@ in
       };
 
       package = mkOption {
-        type = types.package;
+        type = types.nullOr types.package;
         example = literalExample "pkgs.postgresql96";
+        default = null;
         description = ''
-          PostgreSQL package to use.
+          PostgreSQL package to use. Deprecated. Use services.postgresql.packages instead
+          to specify an entire package set (including compatible extensions) at once.
+        '';
+      };
+
+      packages = mkOption {
+        type = types.nullOr (types.attrsOf types.package);
+        default = null;
+        example = literalExample "pkgs.postgresql96Packages";
+        description = ''
+          The set of PostgreSQL packages to use, including the database
+          server and all available extensions.
         '';
       };
 
@@ -120,11 +138,30 @@ in
         default = [];
         example = literalExample "[ (pkgs.postgis.override { postgresql = pkgs.postgresql94; }) ]";
         description = ''
-          When this list contains elements a new store path is created.
+          Deprecated. When this list contains elements a new store path is created.
           PostgreSQL and the elements are symlinked into it. Then pg_config,
           postgres and pg_ctl are copied to make them use the new
           $out/lib directory as pkglibdir. This makes it possible to use postgis
           without patching the .sql files which reference $libdir/postgis-1.5.
+
+          This attribute is hard to use, and is deprecated in favor of the more general
+          services.postgresql.plugins attribute, which will correctly override the specified
+          packages for you.
+        '';
+      };
+
+      plugins = mkOption {
+        default = _: [];
+        example = literalExample "p: with p; [ postgis timescaledb ]";
+        description = ''
+          A function that selects plugins to include in the PostgreSQL server.
+          When this function returns a non-empty list, a new store path is created.
+          PostgreSQL and the elements are symlinked into it. Then pg_config,
+          postgres and pg_ctl are copied to make them use the new
+          $out/lib directory as pkglibdir.
+
+          The value provided as an argument to the function is the set of available
+          PostgreSQL plugins, specified by the services.postgresql.packages argument.
         '';
         # Note: the duplication of executables is about 4MB size.
         # So a nicer solution was patching postgresql to allow setting the
@@ -163,16 +200,45 @@ in
 
   config = mkIf config.services.postgresql.enable {
 
-    services.postgresql.package =
+    assertions =
+      [ # The user specified both 'package' and 'packages', which are mutually exclusive
+        { assertion = (cfg.package != null -> cfg.packages != null);
+          message = ''
+            The option services.postgresql.{package,packages} cannot both be set. Please use the 'packages' option
+            to specify the entire set of PostgreSQL packages.
+          '';
+        }
+
+        # The user specified the old extraPlugins attribute, but they *also* specified some 'plugins' function
+        # which returned a non-empty list. These are mutually exclusive.
+        { assertion = (cfg.extraPlugins != [] -> packageSetPlugins == []);
+          message = ''
+            The option services.postgresql.extraPlugins and .plugins cannot both be non-empty at the same time; please remove
+            uses of .extraPlugins.
+          '';
+        }
+      ];
+
+    warnings =
+      (optional (cfg.package != null)
+        ''The services.postgresql.package attribute is deprecated. Please use services.postgresql.packages (with an 's') instead.
+          See the NixOS manual ('nixos-help') for more information.'') ++
+      (optional (cfg.extraPlugins != [])
+        ''The services.postgresql.extraPlugins attribute is deprecated. Please use services.postgresql.plugins instead,
+          which will correctly override PostgreSQL attributes for you and will provide a list of compatible plugins for
+          the given server version.
+        '');
+
+    services.postgresql.packages =
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql96
-            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql95
-            else pkgs.postgresql94);
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql96Packages
+            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql95Packages
+            else pkgs.postgresql94Packages);
 
     services.postgresql.dataDir =
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${postgresqlPackage.psqlSchema}"
                  else "/var/db/postgresql");
 
     services.postgresql.authentication = mkAfter
