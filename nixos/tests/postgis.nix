@@ -11,7 +11,6 @@ import ./make-test.nix ({ pkgs, ...} : {
       {
         services.postgresql = {
           enable = true;
-          packages = pkgs.postgresqlPackages;
           plugins = p: with p; [ postgis ];
         };
       };
