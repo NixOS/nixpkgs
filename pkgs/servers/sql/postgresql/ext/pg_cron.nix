@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/extension
   '';
 
+  passthru = {
+    versionCheck = builtins.compareVersions postgresql.version "9.5" >= 0;
+  };
+
   meta = with stdenv.lib; {
     description = "Run Cron jobs through PostgreSQL";
     homepage    = https://www.citusdata.com/;
