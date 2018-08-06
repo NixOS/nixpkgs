@@ -1,35 +1,35 @@
 { stdenv, fetchFromGitHub, postgresql, openssl, zlib, readline }:
 
 stdenv.mkDerivation rec {
-    name = "pg_repack-${version}";
-    version = "1.4.3";
+  name = "pg_repack-${version}";
+  version = "1.4.3";
 
-    buildInputs = [ postgresql openssl zlib readline ];
+  buildInputs = [ postgresql openssl zlib readline ];
 
-    src = fetchFromGitHub {
-      owner  = "reorg";
-      repo   = "pg_repack";
-      rev    = "refs/tags/ver_${version}";
-      sha256 = "1mmd22nfaxjwnbl3i95f3ivmjvfqwdflgaczlg3129dbpwg265xr";
-    };
+  src = fetchFromGitHub {
+    owner  = "reorg";
+    repo   = "pg_repack";
+    rev    = "refs/tags/ver_${version}";
+    sha256 = "1mmd22nfaxjwnbl3i95f3ivmjvfqwdflgaczlg3129dbpwg265xr";
+  };
 
-    installPhase = ''
-      install -D bin/pg_repack -t $out/bin/
-      install -D lib/pg_repack.so -t $out/lib/
-      install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/extension
+  installPhase = ''
+    install -D bin/pg_repack -t $out/bin/
+    install -D lib/pg_repack.so -t $out/lib/
+    install -D lib/{pg_repack--${version}.sql,pg_repack.control} -t $out/share/extension
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Reorganize tables in PostgreSQL databases with minimal locks";
+    longDescription = ''
+      pg_repack is a PostgreSQL extension which lets you remove bloat from tables and indexes, and optionally restore
+      the physical order of clustered indexes. Unlike CLUSTER and VACUUM FULL it works online, without holding an
+      exclusive lock on the processed tables during processing. pg_repack is efficient to boot,
+      with performance comparable to using CLUSTER directly.
     '';
-
-    meta = with stdenv.lib; {
-      description = "Reorganize tables in PostgreSQL databases with minimal locks";
-      longDescription = ''
-        pg_repack is a PostgreSQL extension which lets you remove bloat from tables and indexes, and optionally restore
-        the physical order of clustered indexes. Unlike CLUSTER and VACUUM FULL it works online, without holding an
-        exclusive lock on the processed tables during processing. pg_repack is efficient to boot,
-        with performance comparable to using CLUSTER directly.
-      '';
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ danbst ];
-      inherit (postgresql.meta) platforms;
-      inherit (src.meta) homepage;
-    };
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ danbst ];
+    inherit (postgresql.meta) platforms;
+    inherit (src.meta) homepage;
+  };
 }
