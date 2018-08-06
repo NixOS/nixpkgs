@@ -10,7 +10,7 @@ let
   postgresqlAndPlugins = pg:
     if cfg.extraPlugins == [] then pg
     else pkgs.buildEnv {
-      name = "postgresql-and-plugins-${(builtins.parseDrvName pg.name).version}";
+      name = "postgresql-and-plugins-${pg.version}";
       paths = [ pg pg.lib ] ++ cfg.extraPlugins;
       buildInputs = [ pkgs.makeWrapper ];
       postBuild =
