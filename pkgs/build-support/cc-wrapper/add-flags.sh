@@ -16,6 +16,9 @@ var_templates_bool=(
 
 accumulateRoles
 
+cppInclude="$1"
+noLibc="$2"
+
 # We need to mangle names for hygiene, but also take parameters/overrides
 # from the environment.
 for var in "${var_templates_list[@]}"; do
@@ -31,7 +34,7 @@ NIX_@infixSalt@_CFLAGS_COMPILE="-B@out@/bin/ $NIX_@infixSalt@_CFLAGS_COMPILE"
 # Export and assign separately in order that a failing $(..) will fail
 # the script.
 
-if [ -e @out@/nix-support/libc-cflags ]; then
+if [ -e @out@/nix-support/libc-cflags ] && ([ $cppInclude -ne 0 ]); then
     NIX_@infixSalt@_CFLAGS_COMPILE="$(< @out@/nix-support/libc-cflags) $NIX_@infixSalt@_CFLAGS_COMPILE"
 fi
 

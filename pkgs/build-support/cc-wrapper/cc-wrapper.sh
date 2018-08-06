@@ -17,21 +17,12 @@ fi
 
 source @out@/nix-support/utils.bash
 
-# Flirting with a layer violation here.
-if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
-    source @bintools@/nix-support/add-flags.sh
-fi
-
-# Put this one second so libc ldflags take priority.
-if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
-    source @out@/nix-support/add-flags.sh
-fi
-
 
 # Parse command line options and set several variables.
 # For instance, figure out if linker flags should be passed.
 # GCC prints annoying warnings when they are not needed.
 dontLink=0
+noLibc=0
 nonFlagArgs=0
 # shellcheck disable=SC2193
 [[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
@@ -61,6 +52,8 @@ while (( "$n" < "$nParams" )); do
         isCpp=1
     elif [ "$p" = -nostdlib ]; then
         isCpp=-1
+    elif [ "$p" = -nolibc ]; then
+        noLibc=1
     elif [ "$p" = -nostdinc ]; then
         cppInclude=0
     elif [ "$p" = -nostdinc++ ]; then
@@ -71,6 +64,17 @@ while (( "$n" < "$nParams" )); do
     fi
     n+=1
 done
+
+# Flirting with a layer violation here.
+if [ -z "${NIX_BINTOOLS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+    source @bintools@/nix-support/add-flags.sh
+fi
+
+# Put this one second so libc ldflags take priority.
+if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+    source @out@/nix-support/add-flags.sh $cppInclude $noLibc
+fi
+
 
 # If we pass a flag like -Wl, then gcc will call the linker unless it
 # can figure out that it has to do something else (e.g., because of a
