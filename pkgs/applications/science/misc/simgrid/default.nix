@@ -87,14 +87,8 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    if [ "$enableParallelBuilding" = 1 ]; then
-      if [ ''${NIX_BUILD_CORES:-0} = 0 ]; then
-        NB_CORES="$(nproc)"
-      else
-        NB_CORES="$NIX_BUILD_CORES"
-      fi
-    fi
-    ctest -j $NB_CORES --output-on-failure -E smpi-replay-multiple
+    ctest -j $NIX_BUILD_CORES --output-on-failure -E smpi-replay-multiple
+
     runHook postCheck
   '';
 
