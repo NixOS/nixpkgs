@@ -341,8 +341,9 @@ rec {
   };
 
   async_kernel = janePackage {
+    version = "0.11.1";
     name = "async_kernel";
-    hash = "1drxawih7vhhb1mhd291698ly7yb38qzif82jk1adqcvwdb547af";
+    hash = "1ssv0gqbdns6by1wdjrrs35cj1c1n1qcfkxs8hj04b7x89wzvf1q";
     propagatedBuildInputs = [ core_kernel ];
     meta.description = "Jane Street Capital's asynchronous execution library (core)";
   };
