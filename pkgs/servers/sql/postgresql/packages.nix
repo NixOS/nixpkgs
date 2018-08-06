@@ -57,6 +57,8 @@ let
 
         # PostgreSQL extensions follow from here.
 
+        citus = callPackage ./ext/citus.nix {};
+
         cstore_fdw = callPackage ./ext/cstore_fdw.nix {};
 
         pg_cron = callPackage ./ext/pg_cron.nix {};
