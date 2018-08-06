@@ -214,6 +214,19 @@ mapAliases ({
   pltScheme = racket; # just to be sure
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   procps-ng = procps; # added 2018-06-08
+
+  # added 2018-04-11, remove after 18.09 release
+  postgresql100 = throw "deprecated: 'postgresql100' was badly misnamed, use 'postgresql10' instead";
+  postgis = throw "deprecated: use 'postgresqlPackages.postgis' instead";
+  pgjwt = throw "deprecated: use 'postgresqlPackages.pgjwt' instead";
+  pg_repack = throw "deprecated: use 'postgresqlPackages.pg_repack' instead";
+  pgroonga = throw "deprecated: use 'postgresqlPackages.pgroonga' instead";
+  pg_similarity = throw "deprecated: use 'postgresqlPackages.pg_similarity' instead";
+  pgtap = throw "deprecated: use 'postgresqlPackages.pgtap' instead";
+  plv8 = throw "deprecated: use 'postgresqlPackages.plv8' instead";
+  timescaledb = throw "deprecated: use 'postgresqlPackages.timescaledb' instead";
+  tsearch_extras = throw "deprecated: use 'postgresqlPackages.tsearch_extras' instead";
+
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19

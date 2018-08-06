@@ -13347,40 +13347,11 @@ with pkgs;
   postgresql96 = postgresql96Packages.postgresql;
   postgresql10 = postgresql10Packages.postgresql;
 
-  # TODO FIXME: this name is a misnomer (see #38616), but might be in use in
-  # the wild. leave it for now, but remove this after 18.09 is released; it was
-  # already in 18.03 and it's too late for that, so we should keep it around
-  # for at least one more release as the 10.x series sees more updates.
-  postgresql100 = builtins.trace "The 'postgresql100' attribute was badly misnamed, and is deprecated; use 'postgresql10' instead"
-    postgresql10Packages.postgresql;
-
   ## -- miscellaneous postgresql-related packages.
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
-
-  ## -- deprecated top-level names for extensions. TODO FIXME: remove after 18.09
-
-  postgis = postgresqlPackages.callPackageWithDeprecation "postgis" ../servers/sql/postgresql/ext/postgis.nix {};
-
-  pgjwt = postgresqlPackages.callPackageWithDeprecation "pgjwt" ../servers/sql/postgresql/ext/pgjwt.nix {};
-
-  pg_repack = postgresqlPackages.callPackageWithDeprecation "pg_repack" ../servers/sql/postgresql/ext/pg_repack.nix {};
-
-  pgroonga = postgresqlPackages.callPackageWithDeprecation "pgroonga" ../servers/sql/postgresql/ext/pgroonga.nix {};
-
-  pg_similarity = postgresqlPackages.callPackageWithDeprecation "pg_similarity" ../servers/sql/postgresql/ext/pg_similarity.nix {};
-
-  pgtap = postgresqlPackages.callPackageWithDeprecation "pgtap" ../servers/sql/postgresql/ext/pgtap.nix {};
-
-  plv8 = postgresqlPackages.callPackageWithDeprecation "plv8" ../servers/sql/postgresql/ext/plv8.nix {
-    v8 = v8_6_x;
-  };
-
-  timescaledb = postgresqlPackages.callPackageWithDeprecation "timescaledb" ../servers/sql/postgresql/ext/timescaledb.nix {};
-
-  tsearch_extras = postgresqlPackages.callPackageWithDeprecation "tsearch_extras" ../servers/sql/postgresql/ext/tsearch_extras.nix { };
 
   ## ----- END: POSTGRESQL --------------------------------------------------------------
 

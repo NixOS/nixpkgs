@@ -15,17 +15,6 @@ let
       # version.
       inherit callPackage;
 
-      # Convenience function for top-level attributes that were previously available,
-      # but are deprecated and renamed. TODO FIXME: remove this after 18.09 is released.
-      # see all-packages.nix (in the postgresql section) for more
-      callPackageWithDeprecation = name: p: args:
-        builtins.trace ''
-          The PostgreSQL-related attribute '${name}' is deprecated. Please use the
-          'postgresqlPackages.${name}' attribute instead (to use the default version of
-          PostgreSQL in Nixpkgs), or use 'postgresql<XX>Packages.${name}' for a given
-          version <XX>.
-        '' (callPackage p args);
-
       # Convenience attribute that exports the postgres derivation used for builds. We
       # export these from all-packages.nix to consolidate everything here.
       inherit postgresql;
