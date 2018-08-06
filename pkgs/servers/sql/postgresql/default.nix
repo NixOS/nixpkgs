@@ -1,4 +1,6 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper, tzdata }:
+{ stdenv, lib, fetchurl, makeWrapper
+, glibc, zlib, readline, libossp_uuid, openssl, libxml2, tzdata, systemd
+}:
 
 let
 
@@ -17,7 +19,8 @@ let
 
     buildInputs =
       [ zlib readline openssl libxml2 makeWrapper ]
-      ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
+      ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ]
+      ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ];
 
     enableParallelBuilding = true;
 
@@ -34,6 +37,7 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
+      (lib.optionalString (atLeast "9.6" && !stdenv.isDarwin) "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ];
 

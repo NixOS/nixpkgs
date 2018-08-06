@@ -316,6 +316,8 @@ in
             # Give Postgres a decent amount of time to clean up after
             # receiving systemd's SIGINT.
             TimeoutSec = 120;
+
+            Type = if versionAtLeast postgresqlPackage.psqlSchema "9.6" then "notify" else "simple";
           };
 
         # Wait for PostgreSQL to be ready to accept connections.
