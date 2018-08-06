@@ -31,6 +31,8 @@ let
 
       cstore_fdw = callPackage ./ext/cstore_fdw.nix {};
 
+      postgis = callPackage ./ext/postgis.nix {};
+
       pg_cron = callPackage ./ext/pg_cron.nix {};
 
       pg_hll = callPackage ./ext/pg_hll.nix {};
