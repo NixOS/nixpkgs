@@ -17568,6 +17568,10 @@ EOF
   foundationdb60 = (toPythonModule (pkgs.fdbPackages.override {
     inherit python;
   }).foundationdb60).python;
+
+  libtorrentRasterbar = (toPythonModule (pkgs.libtorrentRasterbar.override {
+    inherit python;
+  })).python;
 });
 
 in fix' (extends overrides packages)
