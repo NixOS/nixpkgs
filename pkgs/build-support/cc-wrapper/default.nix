@@ -134,16 +134,23 @@ stdenv.mkDerivation {
       ccPath="${cc}/bin"
     '')
 
+    # Additionally switch back to the old prefix so the C compiler picks it up with -B
     + ''
-      # Create symlinks to everything in the bintools wrapper.
-      for bbin in $bintools/bin/*; do
-        mkdir -p "$out/bin"
-        ln -s "$bbin" "$out/bin/$(basename $bbin)"
+      mkdir -p "$out/libexec"
+      for prog in ${bintools.bintools or "/nonexistent"}/bin/${bintools.bintools.inPrefix or ""}{as,ld}; do
+        prog_suffix=$(basename $prog ${optionalString (bintools.bintools.inPrefix or "" != "") "| sed 's/${bintools.bintools.inPrefix}/${inPrefix}/'"})
+        ln -s "$prog" "$out/libexec/$prog_suffix"
       done
+      for prog in $bintools/bin/*; do
+        prog_suffix=$(basename $prog | sed 's/${targetPrefix}/${inPrefix}/')
+        ln -fs "$prog" "$out/libexec/$prog_suffix"
+      done
+    ''
 
-      # We export environment variables pointing to the wrapped nonstandard
-      # cmds, lest some lousy configure script use those to guess compiler
-      # version.
+    # We export environment variables pointing to the wrapped nonstandard
+    # cmds, lest some lousy configure script use those to guess compiler
+    # version.
+    + ''
       export named_cc=${targetPrefix}cc
       export named_cxx=${targetPrefix}c++
 
