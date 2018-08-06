@@ -44,6 +44,8 @@ let
 
       pg_jobmon = callPackage ./ext/pg_jobmon.nix {};
 
+      pg_partman = callPackage ./ext/pg_partman.nix {};
+
       pg_repack = callPackage ./ext/pg_repack.nix {};
 
       pgroonga = callPackage ./ext/pgroonga.nix {};
