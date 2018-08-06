@@ -5858,6 +5858,8 @@ with pkgs;
 
   xsensors = callPackage ../os-specific/linux/xsensors { };
 
+  xtrigger = callPackage ../tools/X11/xtrigger {};
+
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
   xxkb = callPackage ../applications/misc/xxkb { };
