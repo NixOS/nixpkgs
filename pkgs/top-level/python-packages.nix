@@ -1104,6 +1104,8 @@ in {
 
   cheroot = callPackage ../development/python-modules/cheroot {};
 
+  cli-helpers = callPackage ../development/python-modules/cli-helpers {};
+
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
   circus = callPackage ../development/python-modules/circus {};
