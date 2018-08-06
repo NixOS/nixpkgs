@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # Unpack the debian package
   unpackCmd = ''
     if ! [[ "$curSrc" =~ \.deb$ ]]; then return 1; fi
-    ar -xf "$curSrc"
+    $AR -xf "$curSrc"
     tar -xf data.tar.xz
   '';
 
