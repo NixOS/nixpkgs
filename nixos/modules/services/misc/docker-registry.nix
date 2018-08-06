@@ -5,6 +5,43 @@ with lib;
 let
   cfg = config.services.dockerRegistry;
 
+  blobCache = if cfg.enableRedisCache
+    then "redis"
+    else "inmemory";
+
+  registryConfig = {
+    version =  "0.1";
+    log.fields.service = "registry";
+    storage = {
+      cache.blobdescriptor = blobCache;
+      filesystem.rootdirectory = cfg.storagePath;
+      delete.enabled = cfg.enableDelete;
+    };
+    http = {
+      addr = ":${builtins.toString cfg.port}";
+      headers.X-Content-Type-Options = ["nosniff"];
+    };
+    health.storagedriver = {
+      enabled = true;
+      interval = "10s";
+      threshold = 3;
+    };
+  };
+
+  registryConfig.redis = mkIf cfg.enableRedisCache {
+    addr = "${cfg.redisUrl}";
+    password = "${cfg.redisPassword}";
+    db = 0;
+    dialtimeout = "10ms";
+    readtimeout = "10ms";
+    writetimeout = "10ms";
+    pool = {
+      maxidle = 16;
+      maxactive = 64;
+      idletimeout = "300s";
+    };
+  };
+
   configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
 
 in {
