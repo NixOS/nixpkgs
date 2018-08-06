@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "postgis";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ lsix ];
+    maintainers = [ thoughtpolice lsix ];
   };
 
   nodes = {
@@ -9,10 +9,10 @@ import ./make-test.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
-        services.postgresql = let mypg = pkgs.postgresql10; in {
-            enable = true;
-            package = mypg;
-            extraPlugins = [ (pkgs.postgis.override { postgresql = mypg; }) ];
+        services.postgresql = {
+          enable = true;
+          packages = pkgs.postgresqlPackages;
+          plugins = p: with p; [ postgis ];
         };
       };
   };
