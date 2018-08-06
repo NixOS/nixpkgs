@@ -27,9 +27,6 @@ in
   boot.consoleLogLevel = lib.mkDefault 7;
   boot.kernelPackages = pkgs.linuxPackages_rpi;
 
-  # FIXME: this probably should be in installation-device.nix
-  users.users.root.initialHashedPassword = "";
-
   sdImage = {
     populateBootCommands = let
       configTxt = pkgs.writeText "config.txt" ''

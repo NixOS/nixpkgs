@@ -29,8 +29,5 @@ with lib;
   # Add Memtest86+ to the CD.
   boot.loader.grub.memtest86.enable = true;
 
-  # Allow the user to log in as root without a password.
-  users.users.root.initialHashedPassword = "";
-
   system.stateVersion = mkDefault "18.03";
 }
