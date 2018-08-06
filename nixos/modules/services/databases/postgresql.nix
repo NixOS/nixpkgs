@@ -11,23 +11,9 @@ let
 
   # see description of extraPlugins
   postgresqlAndPlugins = pg:
-    if plugins == [] then pg
-    else pkgs.buildEnv {
-      name = "postgresql-and-plugins-${pg.version}";
-      paths = [ pg pg.lib ] ++ plugins;
-      # We include /bin to ensure the $out/bin directory is created, which is
-      # needed because we'll be removing the files from that directory in postBuild
-      # below. See #22653
-      pathsToLink = ["/" "/bin"];
-      buildInputs = [ pkgs.makeWrapper ];
-      postBuild =
-        ''
-          mkdir -p $out/bin
-          rm $out/bin/{pg_config,postgres,pg_ctl}
-          cp --target-directory=$out/bin ${pg}/bin/{postgres,pg_config,pg_ctl}
-          wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
-        '';
-    };
+    # See the note about withPackages in postgresql/packages.nix for more
+    let ps = import ../../../../pkgs/servers/sql/postgresql/packages.nix { inherit pkgs lib; };
+    in ps.withPackages pg plugins;
 
   postgresqlPackage = if (cfg.package != null) then cfg.package else
     cfg.packages.postgresql;
