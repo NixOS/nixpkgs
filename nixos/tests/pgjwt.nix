@@ -1,40 +1,30 @@
 import ./make-test.nix ({ pkgs, lib, ...}:
-let
-  pgsql = pkgs.postgresqlPackages;
 
-  test = with pkgs; runCommand "patch-test" {
-    nativeBuildInputs = [ pgsql.pgjwt ];
-  }
-  ''
-    sed -e '12 i CREATE EXTENSION pgcrypto;\nCREATE EXTENSION pgtap;\nSET search_path TO tap,public;' ${pgsql.pgjwt.src}/test.sql > $out;
+let
+  pgjwt = pkgs.postgresqlPackages.pgjwt;
+  pg_prove = "${pkgs.perlPackages.TAPParserSourceHandlerpgTAP}/bin/pg_prove";
+
+  test = pkgs.runCommand "test.sql" {} ''
+    sed -e '12 i CREATE EXTENSION pgcrypto;\nCREATE EXTENSION pgtap;\nSET search_path TO tap,public;' ${pgjwt.src}/test.sql > $out;
   '';
 in
-with pkgs; {
+{
   name = "pgjwt";
-  meta = with lib.maintainers; {
-    maintainers = [ spinus willibutz ];
-  };
+  meta.maintainers = with lib.maintainers; [ thoughtpolice spinus willibutz ];
 
   nodes = {
-    master = { ... }:
-    {
+    master = { ... }: {
       services.postgresql = {
         enable = true;
-        packages = pgsql;
-        plugins = p: [ p.pgjwt p.pgtap ];
+        plugins = p: with p; [ pgjwt pgtap ];
       };
     };
   };
 
-  testScript = { nodes, ... }:
-  let
-    sqlSU = "${nodes.master.config.services.postgresql.superUser}";
-    pgProve = "${pkgs.perlPackages.TAPParserSourceHandlerpgTAP}";
-  in
-  ''
+  testScript = { nodes, ... }: ''
     startAll;
     $master->waitForUnit("postgresql");
     $master->copyFileFromHost("${test}","/tmp/test.sql");
-    $master->succeed("${pkgs.sudo}/bin/sudo -u ${sqlSU} PGOPTIONS=--search_path=tap,public ${pgProve}/bin/pg_prove -d postgres -v -f /tmp/test.sql");
+    $master->succeed("${pkgs.sudo}/bin/sudo -u postgres PGOPTIONS=--search_path=tap,public ${pg_prove} -v -d postgres -f /tmp/test.sql");
   '';
 })
