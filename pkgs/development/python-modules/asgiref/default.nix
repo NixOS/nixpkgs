@@ -1,7 +1,9 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, async-timeout, pytest, pytest-asyncio }:
+{ stdenv, buildPythonPackage, pythonOlder, fetchFromGitHub, async-timeout, pytest, pytest-asyncio }:
 buildPythonPackage rec {
   version = "2.3.2";
   pname = "asgiref";
+
+  disabled = pythonOlder "3.5";
 
   # PyPI tarball doesn't include tests directory
   src = fetchFromGitHub {
