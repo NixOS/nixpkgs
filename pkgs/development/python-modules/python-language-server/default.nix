@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "0ig34bc0qm6gdj8xakmm3877lmf8ms7qg0xj8hay9gpgf8cz894s";
+    sha256 = "0glnhnjmsnnh1vs73n9dglknfkhcgp03nkjbpz0phh1jlqrkrwm6";
   };
 
   checkInputs = [
