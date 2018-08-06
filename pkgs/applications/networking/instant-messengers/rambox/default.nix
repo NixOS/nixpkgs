@@ -37,4 +37,6 @@ stdenv.mkDerivation {
     mkdir -p $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
+
+  inherit (rambox-bare) meta;
 }
