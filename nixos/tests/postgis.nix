@@ -9,7 +9,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
-        services.postgresql = let mypg = pkgs.postgresql100; in {
+        services.postgresql = let mypg = pkgs.postgresql10; in {
             enable = true;
             package = mypg;
             extraPlugins = [ (pkgs.postgis.override { postgresql = mypg; }) ];

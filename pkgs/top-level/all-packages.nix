@@ -13357,7 +13357,14 @@ with pkgs;
     postgresql94
     postgresql95
     postgresql96
-    postgresql100;
+    postgresql10;
+
+  # TODO FIXME: this name is a misnomer (see #38616), but might be in use in
+  # the wild. leave it for now, but remove this after 18.09 is released; it was
+  # already in 18.03 and it's too late for that, so we should keep it around
+  # for at least one more release as the 10.x series sees more updates.
+  postgresql100 = builtins.trace "The 'postgresql100' attribute was badly misnamed, and is deprecated; use 'postgresql10' instead"
+    postgresql10;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 

@@ -123,7 +123,11 @@ in {
     sha256 = "09l4zqs74fqnazdsyln9x657mq3wsbgng9wpvq71yh26cv2sq5c6";
   };
 
-  postgresql100 = common {
+  # NOTE: starting with PostgreSQL 10, the versioning scheme changed from
+  # <supermajor>.<major>.<minor> to <major>.<minor>. Thus there is no longer a
+  # 3rd component, and we should name attributes following only the major
+  # number.
+  postgresql10 = common {
     version = "10.5";
     psqlSchema = "10.0";
     sha256 = "04a07jkvc5s6zgh6jr78149kcjmsxclizsqabjw44ld4j5n633kc";
