@@ -508,6 +508,8 @@ with pkgs;
 
   appimage-run = callPackage ../tools/package-management/appimage-run {};
 
+  appimagekit = callPackage ../tools/package-management/appimagekit {};
+
   apt-cacher-ng = callPackage ../servers/http/apt-cacher-ng { };
 
   apt-offline = callPackage ../tools/misc/apt-offline { };
