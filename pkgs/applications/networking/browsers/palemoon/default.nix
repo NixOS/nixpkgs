@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner  = "MoonchildProductions";
     repo   = "Pale-Moon";
     rev    = version + "_Release";
-    sha256 = "0xfkbxa8618zb379m3aaycmbz0lj1s5f2mlwgykp8d5qyvd35bdj";
+    sha256 = "0ir5gzhw98gfn15x58g1fwi11jd7gysvacqxg1v0jdjhgdl4m5sx";
   };
 
   desktopItem = makeDesktopItem {
