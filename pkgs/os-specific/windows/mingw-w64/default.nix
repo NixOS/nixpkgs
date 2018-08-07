@@ -5,4 +5,5 @@ stdenv.mkDerivation {
   buildInputs = [ windows.mingw_w64_headers ];
   dontStrip = true;
   hardeningDisable = [ "stackprotector" "fortify" ];
+  patches = [ ./osvi.patch ];
 }

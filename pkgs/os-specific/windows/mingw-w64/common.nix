@@ -8,9 +8,4 @@ rec {
     url = "mirror://sourceforge/mingw-w64/mingw-w64-v${version}.tar.bz2";
     sha256 = "00zq3z1hbzd5yzmskskjg79xrzwsqx7ihyprfaxy4hb897vf29sm";
   };
-
-  configureFlags = [
-    "--enable-idl"
-    "--enable-secure-api"
-  ];
 }

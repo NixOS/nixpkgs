@@ -1,0 +1,11 @@
+--- a/mingw-w64-headers/include/multimon.h
++++ b/mingw-w64-headers/include/multimon.h
+@@ -127,7 +127,7 @@
+   WINBOOL IsPlatformNT() {
+     OSVERSIONINFOA oi = { 0 };
+ 
+-    oi.dwOSVersionInfoSize = sizeof (osvi);
++    oi.dwOSVersionInfoSize = sizeof (oi);
+     GetVersionExA ((OSVERSIONINFOA *) &oi);
+     return (oi.dwPlatformId == VER_PLATFORM_WIN32_NT);
+   }
