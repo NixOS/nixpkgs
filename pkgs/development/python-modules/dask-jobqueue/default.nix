@@ -30,6 +30,5 @@ buildPythonPackage rec {
     description = "Easy deployment of Dask Distributed on job queuing systems such as PBS, Slurm, or SGE.*";
     homepage = https://github.com/dask/dask-jobqueue;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ costrouc ];
   };
 }
