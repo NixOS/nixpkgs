@@ -15231,6 +15231,8 @@ with pkgs;
   android-studio = androidStudioPackages.stable;
   android-studio-preview = androidStudioPackages.beta;
 
+  animbar = callPackage ../applications/graphics/animbar { };
+
   antfs-cli = callPackage ../applications/misc/antfs-cli {};
 
   antimony = libsForQt5.callPackage ../applications/graphics/antimony {};
