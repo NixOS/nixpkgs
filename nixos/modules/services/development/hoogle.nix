@@ -25,6 +25,7 @@ in {
     };
 
     packages = mkOption {
+      type = with types; functionTo (listOf package);
       default = hp: [];
       defaultText = "hp: []";
       example = "hp: with hp; [ text lens ]";

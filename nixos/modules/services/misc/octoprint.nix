@@ -66,6 +66,7 @@ in
       };
 
       plugins = mkOption {
+        type = with types; functionTo (listOf package);
         default = plugins: [];
         defaultText = "plugins: []";
         example = literalExample "plugins: [ m3d-fio ]";
