@@ -162,8 +162,13 @@ in
         /bin/sh
       '';
 
-    system.build.setEnvironment = pkgs.writeText "set-environment"
+    environment.etc."set-environment".text =
        ''
+         # DO NOT EDIT -- this file has been generated automatically.
+
+         # Prevent this file from being sourced by child shells.
+         export __NIXOS_SET_ENVIRONMENT_DONE=1
+
          ${exportedEnvVars}
 
          ${cfg.extraInit}

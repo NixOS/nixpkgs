@@ -126,7 +126,9 @@ in
     programs.bash = {
 
       shellInit = ''
-        ${config.system.build.setEnvironment.text}
+        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+          . /etc/set-environment
+        fi
 
         ${cfge.shellInit}
       '';
