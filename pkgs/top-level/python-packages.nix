@@ -1320,6 +1320,8 @@ in {
 
   brother = callPackage ../development/python-modules/brother { };
 
+  brother-ql = callPackage ../development/python-modules/brother-ql { };
+
   brotli = callPackage ../development/python-modules/brotli { };
 
   brotlicffi = callPackage ../development/python-modules/brotlicffi {
