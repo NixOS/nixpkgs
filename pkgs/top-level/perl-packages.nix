@@ -13087,6 +13087,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  RESTClient = buildPerlPackage rec {
+    name = "REST-Client-273";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KK/KKANE/${name}.tar.gz";
+      sha256 = "a8652a2214308faff2c68be5ce64c904dcccc5e86be7f32376c1590869d01844";
+    };
+    propagatedBuildInputs = [ LWP LWPProtocolhttps URI ];
+    meta = {
+      description = "A simple client for interacting with RESTful http/https resources";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   RESTUtils = buildPerlModule {
     name = "REST-Utils-0.6";
     src = fetchurl {
