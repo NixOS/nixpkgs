@@ -79,6 +79,8 @@ stdenv.mkDerivation rec {
     chmod u+w .
   '';
 
+  hardeningDisable = [ "format" ];
+  
   buildPhase = ''
     cd $builddir
     $src/mach build
