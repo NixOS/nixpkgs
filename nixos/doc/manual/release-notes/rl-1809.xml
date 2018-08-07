@@ -121,6 +121,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
+     The installer is no longer running the graphical session as root.
+     To gain root privileges in the graphical session use <literal>sudo</literal> without a password.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      <literal>lib.strict</literal> is removed. Use
      <literal>builtins.seq</literal> instead.
     </para>
