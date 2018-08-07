@@ -1502,7 +1502,6 @@ with pkgs;
     libdbi = null;
     net_snmp = null;
     libuuid = null;
-    curl = null;
     gnutls = null;
     libgcrypt = null;
     liblognorm = null;
