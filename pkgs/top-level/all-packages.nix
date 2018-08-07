@@ -13585,6 +13585,8 @@ in
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
   };
 
+  fusiondirectory = callPackage ../servers/fusiondirectory { };
+
   fusionInventory = callPackage ../servers/monitoring/fusion-inventory { };
 
   gatling = callPackage ../servers/http/gatling { };

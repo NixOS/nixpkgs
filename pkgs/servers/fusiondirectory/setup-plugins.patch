@@ -1,0 +1,38 @@
+--- a/fusiondirectory/contrib/bin/fusiondirectory-setup	1070-01-01 00:00:00.000000000 +0000
++++ b/fusiondirectory/contrib/bin/fusiondirectory-setup	1070-01-01 00:00:00.000000000 +0000
+@@ -1110,32 +1110,13 @@
+ 
+ # function that install all the FD's plugins from a directory
+ sub install_plugins {
+-  # ask for the plugins archive
+-  my $plugins_archive = ask_user_input ("Where is your plugins archive ?");
+-  die ("! ".$plugins_archive." doesn't exists") if (!-e $plugins_archive);
+-
+-  # check the archive format
+-  $plugins_archive =~ /^.*\/(.*).tar.gz$/;
+-  my $name = $1 or die ("! Unkwnow archive $plugins_archive");
+-
+-  # where the extract files will go
+-  my $tmp_plugins_dir = "/tmp";
+-
+-  print ("Installing plugins into $vars{fd_home}, please wait...\n");
+-
+-  my $dir = dir ($tmp_plugins_dir."/".$name);
+-
+-  # extract the plugins archive
+-  my $archive = Archive::Extract->new (archive => $plugins_archive);
+-  my $extract = $archive->extract( to => "$tmp_plugins_dir" ) or die ("! Unable to extract $plugins_archive\n");
+-
+-  my @plugins = $dir->children;
++  my $dir = "/build/plugins";
++  my @plugins = (@@plugins@@);
+
+   chdir ($dir) or die ("! Unable to move to $dir\n");
+
+-  foreach my $plugin_path (@plugins) {
+-    $plugin_path =~ /^$tmp_plugins_dir\/$name\/(.*)$/;
+-    my $plugin = $1;
++  foreach my $plugin (@plugins) {
++    my $plugin_path = $dir."/".$plugin;
+
+     # copy addons into plugins
