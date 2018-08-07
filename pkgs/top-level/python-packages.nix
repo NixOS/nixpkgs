@@ -3915,6 +3915,8 @@ in {
 
   pydotplus = callPackage ../development/python-modules/pydotplus { };
 
+  pyfxa = callPackage ../development/python-modules/pyfxa { };
+
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 
   pylama = callPackage ../development/python-modules/pylama { };
