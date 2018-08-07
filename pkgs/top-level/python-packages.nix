@@ -352,6 +352,8 @@ in {
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
+  pymysql = callPackage ../development/python-modules/pymysql { };
+
   Pmw = callPackage ../development/python-modules/Pmw { };
 
   py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
@@ -1103,6 +1105,8 @@ in {
   channels = callPackage ../development/python-modules/channels {};
 
   cheroot = callPackage ../development/python-modules/cheroot {};
+
+  cli-helpers = callPackage ../development/python-modules/cli-helpers {};
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
@@ -8095,25 +8099,6 @@ in {
       homepage = https://pythonhosted.org/Pympler/;
       license = licenses.asl20;
     };
-  };
-
-  pymysql = buildPythonPackage rec {
-    name = "pymysql-${version}";
-    version = "0.6.6";
-    src = pkgs.fetchgit {
-      url = https://github.com/PyMySQL/PyMySQL.git;
-      rev = "refs/tags/pymysql-${version}";
-      sha256 = "0kpw11rxpyyhs9b139hxhbnx9n5kzjjw10wgwvhnf9m3mv7j4n71";
-    };
-
-    buildInputs = with self; [ unittest2 ];
-
-    checkPhase = ''
-      ${python.interpreter} runtests.py
-    '';
-
-    # Wants to connect to MySQL
-    doCheck = false;
   };
 
   pymysqlsa = self.buildPythonPackage rec {
