@@ -340,6 +340,8 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  packbits = callPackage ../development/python-modules/packbits { };
+
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
