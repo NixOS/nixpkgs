@@ -465,6 +465,19 @@ rec {
       description = "option set";
     };
 
+    # Function that takes an attribute set (usually containing packages / plugins)
+    # and returns a list containing a selection of the values in this set.
+    # This is most often used for options that specify plugins.
+    selectorFunction = mkOptionType {
+      name = "selectorFunction";
+      description =
+        "function that takes an attribute set and returns a list " +
+        "containing a selection of the values of the input set";
+      check = select: isFunction select;
+      merge = _loc: defs:
+        as: concatMap (select: select as) (getValues defs);
+    };
+
     # Augment the given type with an additional type check function.
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
