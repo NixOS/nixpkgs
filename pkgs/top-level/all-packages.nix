@@ -6447,14 +6447,6 @@ with pkgs;
       libc = libcCross1;
   };
 
-  # Only needed for mingw builds
-  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCWith {
-    name = "gcc-cross-wrapper";
-    cc = gccCrossStageStatic.gcc;
-    libc = windows.mingw_headers2;
-    inherit binutils;
-  };
-
   gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
 
