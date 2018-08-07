@@ -31,6 +31,18 @@ let
       ${cfg.extraConfig}
     '';
 
+  # TODO: propose to move this to lib/types.nix
+  # since selector functions are used in at least 6 other options in NixOS.
+  selectorFunction = mkOptionType {
+    name = "selectorFunction";
+    description =
+      "function that takes an attribute set and returns a list " +
+      "containing a selection of the values of the input set";
+    check = select: isFunction select;
+    merge = _loc: defs:
+      as: concatMap (select: select as) (getValues defs);
+  };
+
 in
 
 {
@@ -142,6 +154,7 @@ in
 
       plugins = mkOption {
         default = _: [];
+        type = selectorFunction;
         example = literalExample "p: with p; [ postgis timescaledb ]";
         description = ''
           A function that selects plugins to include in the PostgreSQL server.
