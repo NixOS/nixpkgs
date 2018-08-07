@@ -550,8 +550,9 @@ rec {
   };
 
   incremental_kernel = janePackage {
+    version = "0.11.1";
     name = "incremental_kernel";
-    hash = "02arw8blpmnzlw5jlvavyvpgh3s9q0j9mhi2byz0x8cxknqvvasg";
+    hash = "1qp9dqncx2h0np0rndqaic4dna8f1dlkqnbjfcdhcim5dp2vg4x6";
     propagatedBuildInputs = [ core_kernel ];
     meta.description = "Library for incremental computations depending only on core_kernel";
   };
