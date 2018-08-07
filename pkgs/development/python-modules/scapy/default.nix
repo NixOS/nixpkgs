@@ -6,6 +6,7 @@
 , withVoipSupport ? true, sox
 , withPlottingSupport ? true, matplotlib
 , withGraphicsSupport ? false, pyx, texlive, graphviz, imagemagick
+, withManufDb ? false, wireshark
 # 2D/3D graphics and graphs TODO: VPython
 # TODO: nmap, numpy
 }:
@@ -25,6 +26,10 @@ buildPythonPackage rec {
 
   # TODO: Temporary workaround
   patches = [ ./fix-version-1.patch ./fix-version-2.patch ];
+
+  postPatch = lib.optionalString withManufDb ''
+    substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
+  '';
 
   propagatedBuildInputs = [ pycrypto ecdsa ]
     ++ lib.optional withOptionalDeps [ tcpdump ipython ]
