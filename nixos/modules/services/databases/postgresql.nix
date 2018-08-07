@@ -258,6 +258,8 @@ in
         uid = config.ids.uids.postgres;
         group = "postgres";
         description = "PostgreSQL server user";
+        home = "${cfg.dataDir}";
+        useDefaultShell = true;
       };
 
     users.groups.postgres.gid = config.ids.gids.postgres;
