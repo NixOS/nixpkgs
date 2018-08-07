@@ -6076,6 +6076,19 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestSharedFork ];
   };
 
+  FilesysDiskUsage = buildPerlPackage rec {
+    name = "Filesys-DiskUsage-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MANWAR/${name}.tar.gz";
+      sha256 = "e69237c035e18a6ed69e36e058d7b3491d54a803a308f756e62a8e7f48b2a281";
+    };
+    buildInputs = [ TestWarn ];
+    meta = {
+      description = "Estimate file space usage (similar to `du`)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileSlurp = buildPerlPackage {
     name = "File-Slurp-9999.19";
     # WARNING: check on next update if deprecation warning is gone
