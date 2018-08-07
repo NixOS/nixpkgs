@@ -47,8 +47,8 @@ let
         ${optionalString (keyFile != null) ''
         ${optionalString fallbackToPassword "if [ -e ${keyFile} ]; then"}
             echo " --key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}" \
-                   ${optionalString (keyFileOffset != null) "--keyfile-offset=${toString keyFileOffset}"}" \
-              >> /.luksopen_args
+                 "${optionalString (keyFileOffset != null) "--keyfile-offset=${toString keyFileOffset}"}" \
+                 >> /.luksopen_args
         ${optionalString fallbackToPassword ''
         else
             echo "keyfile ${keyFile} not found -- fallback to interactive unlocking"
