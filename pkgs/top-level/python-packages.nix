@@ -232,6 +232,8 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
+  brother_ql = callPackage ../development/python-modules/brother_ql { };
+
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
