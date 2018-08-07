@@ -133,4 +133,6 @@ in
       ];
 
     };
+
+    meta.doc = ./oh-my-zsh.xml;
   }
