@@ -8,9 +8,9 @@ let
     inherit (gnome2) GConf gnome_vfs;
   };
   stableVersion = {
-    version = "3.1.3.0"; # "Android Studio 3.1.3"
-    build = "173.4819257";
-    sha256Hash = "196yaswbxh2nd83gimjxr8ggr5xkdxq7n3xlh6ax73v59pj4hryq";
+    version = "3.1.4.0"; # "Android Studio 3.1.4"
+    build = "173.4907809";
+    sha256Hash = "0xx6yprylmcb32ipmwdcfkgddlm1nrxi1w68miclvgrbk015brf2";
   };
   betaVersion = {
     version = "3.2.0.22"; # "Android Studio 3.2 Beta 5"
