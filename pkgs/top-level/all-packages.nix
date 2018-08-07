@@ -13355,6 +13355,8 @@ with pkgs;
 
   psqlodbc = callPackage ../development/libraries/psqlodbc { };
 
+  timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
+
   ## ----- END: POSTGRESQL --------------------------------------------------------------
 
   inherit (callPackage ../servers/monitoring/prometheus {
