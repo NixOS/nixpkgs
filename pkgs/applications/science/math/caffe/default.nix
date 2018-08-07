@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/python
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = false; # build takes more than 30 min otherwise
   installCheckPhase = ''
     model=bvlc_reference_caffenet
     m_path="$out/share/Caffe/models/$model"
