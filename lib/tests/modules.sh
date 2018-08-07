@@ -262,6 +262,9 @@ checkConfigOutput true config.value.mkbefore ./types-anything/mk-mods.nix
 checkConfigOutput 1 config.value.nested.foo ./types-anything/mk-mods.nix
 checkConfigOutput baz config.value.nested.bar.baz ./types-anything/mk-mods.nix
 
+# Check the merge behaviour of the functionTo type.
+checkConfigOutput "a b" config.result ./functionTo.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
