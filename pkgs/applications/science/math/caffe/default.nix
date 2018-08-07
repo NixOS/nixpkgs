@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
                 ++ lib.optional ncclSupport nccl
                 ++ lib.optionals leveldbSupport [ leveldb snappy ]
                 ++ lib.optionals pythonSupport [ python numpy ]
-                ++ lib.optionals stdenv.isDarwin [ macblas Accelerate ] #CoreGraphics CoreVideo ]
+                ++ lib.optionals stdenv.isDarwin [ macblas Accelerate CoreGraphics CoreVideo ]
                 ++ lib.optionals (!stdenv.isDarwin) [ openblas ]
                 ;
 
