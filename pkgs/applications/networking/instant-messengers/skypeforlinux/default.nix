@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, dpkg, makeWrapper
+{ stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, glibc, gnome2, gnome3
-, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, xorg }:
+, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg }:
 
 let
 
@@ -68,7 +68,12 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  buildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    wrapGAppsHook
+    glib # For setup hook populating GSETTINGS_SCHEMA_PATH
+  ];
+
+  buildInputs = [ dpkg ];
 
   unpackPhase = "true";
   installPhase = ''
@@ -89,6 +94,10 @@ in stdenv.mkDerivation {
     done
 
     ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
+
+    wrapProgram $out/bin/skypeforlinux \
+      --suffix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/skypeforlinux.desktop \
