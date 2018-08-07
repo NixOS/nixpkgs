@@ -14,7 +14,9 @@ let
     then postgresql
     else pkgs.buildEnv {
       name = "postgresql-and-plugins-${postgresql.version}";
-      paths = [ postgresql postgresql.lib ] ++ plugins;
+      # Make sure we include .man so that manual pages work for the user in their
+      # environment
+      paths = [ postgresql postgresql.lib postgresql.man ] ++ plugins;
 
       # We include /bin to ensure the $out/bin directory is created, which is
       # needed because we'll be removing the files from that directory in postBuild
