@@ -178,6 +178,12 @@ in buildFHSUserEnv rec {
   '';
 
   profile = ''
+    # Workaround for issue #44254 (Steam cannot connect to friends network)
+    # https://github.com/NixOS/nixpkgs/issues/44254
+    test -z ''${TZ+x} &&
+    new_TZ="$(readlink -f /etc/localtime | grep -o '(?<=/zoneinfo/).*$' -P)" &&
+    export TZ="$new_TZ"
+
     export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
   '' + extraProfile;
 
