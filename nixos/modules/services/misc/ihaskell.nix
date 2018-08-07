@@ -20,6 +20,7 @@ in
       };
 
       extraPackages = mkOption {
+        type = with types; functionTo (listOf package);
         default = self: [];
         example = literalExample ''
           haskellPackages: [
