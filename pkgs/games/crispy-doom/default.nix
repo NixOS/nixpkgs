@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     longDescription = "Crispy Doom is a limit-removing enhanced-resolution Doom source port based on Chocolate Doom. Its name means that 640x400 looks \"crisp\" and is also a slight reference to its origin.";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
-    hydraPlatforms = stdenv.lib.platforms.linux; # darwin times out
     maintainers = with stdenv.lib.maintainers; [ neonfuz ];
   };
 }
