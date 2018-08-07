@@ -42,7 +42,7 @@
     '';
     homepage = https://github.com/philpennock/sieve-connect;
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = platforms.all;
     maintainers = with maintainers; [ das_j ];
   };
 }
