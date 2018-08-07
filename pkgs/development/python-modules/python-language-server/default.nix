@@ -1,28 +1,36 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
+{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
 , configparser, futures, future, jedi, pluggy
 , pytest, mock, pytestcov, coverage
-# The following packages are optional and
-# can be overwritten with null as your liking.
-# This also requires to disable tests.
-, rope ? null
-, mccabe ? null
-, pyflakes ? null
-, pycodestyle ? null
+, # Allow building a limited set of providers, e.g. ["pycodestyle"].
+  providers ? ["*"]
+  # The following packages are optional and
+  # can be overwritten with null as your liking.
 , autopep8 ? null
-, yapf ? null
+, mccabe ? null
+, pycodestyle ? null
 , pydocstyle ? null
+, pyflakes ? null
+, rope ? null
+, yapf ? null
 }:
+
+let
+  withProvider = p: builtins.elem "*" providers || builtins.elem p providers;
+in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "0ig34bc0qm6gdj8xakmm3877lmf8ms7qg0xj8hay9gpgf8cz894s";
+    sha256 = "0glnhnjmsnnh1vs73n9dglknfkhcgp03nkjbpz0phh1jlqrkrwm6";
   };
+
+  # The tests require all the providers, disable otherwise.
+  doCheck = providers == ["*"];
 
   checkInputs = [
     pytest mock pytestcov coverage
@@ -30,16 +38,23 @@ buildPythonPackage rec {
     # already have jedi, which is the preferred option
     rope
   ];
+
   checkPhase = ''
     HOME=$TEMPDIR pytest
   '';
 
-  propagatedBuildInputs = [
-    jedi pluggy mccabe pyflakes pycodestyle yapf pydocstyle future autopep8
-  ] ++ lib.optional (isPy27) [ configparser ]
-    ++ lib.optional (pythonOlder "3.2") [ futures ];
+  propagatedBuildInputs = [ jedi pluggy future ]
+    ++ stdenv.lib.optional (withProvider "autopep8") autopep8
+    ++ stdenv.lib.optional (withProvider "mccabe") mccabe
+    ++ stdenv.lib.optional (withProvider "pycodestyle") pycodestyle
+    ++ stdenv.lib.optional (withProvider "pydocstyle") pydocstyle
+    ++ stdenv.lib.optional (withProvider "pyflakes") pyflakes
+    ++ stdenv.lib.optional (withProvider "rope") rope
+    ++ stdenv.lib.optional (withProvider "yapf") yapf
+    ++ stdenv.lib.optional isPy27 configparser
+    ++ stdenv.lib.optional (pythonOlder "3.2") futures;
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     homepage = https://github.com/palantir/python-language-server;
     description = "An implementation of the Language Server Protocol for Python";
     license = licenses.mit;
