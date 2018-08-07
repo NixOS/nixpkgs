@@ -68,6 +68,8 @@ in stdenv.mkDerivation {
 
   inherit src;
 
+  nativeBuildInputs = [ gtk3 ];
+
   buildInputs = [ dpkg makeWrapper ];
 
   unpackPhase = "true";
@@ -89,6 +91,10 @@ in stdenv.mkDerivation {
     done
 
     ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
+
+    wrapProgram $out/bin/skypeforlinux \
+      --suffix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/skypeforlinux.desktop \
