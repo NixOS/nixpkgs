@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, pkgconfig, ninja, glib, fuse3
-, docutils
+, docutils, which, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
+  '';
+
+  checkInputs = [ which ] ++ (with python3Packages; [ python pytest ]);
+
+  checkPhase = ''
+    python3 -m pytest test/
   '';
 
   meta = with stdenv.lib; {
