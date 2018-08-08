@@ -373,6 +373,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gexiv2 = callPackage ./misc/gexiv2 { };
 
+  gnome-applets = callPackage ./misc/gnome-applets { };
+
   gnome-flashback = callPackage ./misc/gnome-flashback { };
 
   gnome-panel = callPackage ./misc/gnome-panel { };
