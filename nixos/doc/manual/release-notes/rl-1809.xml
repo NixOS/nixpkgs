@@ -190,6 +190,16 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
       which indicates that the nix output hash will be used as tag.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      Options
+      <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.ramfsMountPoint</literal>
+      <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.storage.mountPoint</literal>
+      were removed. <literal>luksroot.nix</literal> module never supported more than one YubiKey at
+      a time anyway, hence those options never had any effect. You should be able to remove them
+      from your config without any issues.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
