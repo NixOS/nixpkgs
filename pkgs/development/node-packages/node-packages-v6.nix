@@ -46763,6 +46763,23 @@ in
     production = true;
     bypassCache = false;
   };
+  tiddlywiki = nodeEnv.buildNodePackage {
+    name = "tiddlywiki";
+    packageName = "tiddlywiki";
+    version = "5.1.17";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/tiddlywiki/-/tiddlywiki-5.1.17.tgz";
+      sha1 = "bd3311146ba67fb4beee9933dd2e6d55e92665ed";
+    };
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "a non-linear personal web notebook";
+      homepage = "https://github.com/Jermolene/TiddlyWiki5#readme";
+      license = "BSD";
+    };
+    production = true;
+    bypassCache = false;
+  };
   titanium = nodeEnv.buildNodePackage {
     name = "titanium";
     packageName = "titanium";
