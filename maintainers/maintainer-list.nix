@@ -3134,6 +3134,11 @@
     github = "pneumaticat";
     name = "Kevin Liu";
   };
+  poelzi = {
+    email = "nixos@poelzi.org";
+    github = "poelzi";
+    name = "Daniel Poelzleithner";
+  };
   polyrod = {
     email = "dc1mdp@gmail.com";
     github = "polyrod";
