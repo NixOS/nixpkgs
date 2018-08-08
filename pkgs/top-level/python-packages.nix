@@ -250,6 +250,8 @@ in {
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
 
+  docrep = callPackage ../development/python-modules/docrep { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
