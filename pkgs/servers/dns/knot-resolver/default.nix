@@ -83,4 +83,3 @@ wrapped-full = with luajitPackages; let
   '';
 
 in result
-
