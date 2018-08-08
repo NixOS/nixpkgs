@@ -93,8 +93,6 @@ let overridden = set // overrides; set = with overridden; {
 
   zenity = callPackage ./desktop/zenity { };
 
-  gnome_menus = callPackage ./desktop/gnome-menus { };
-
   gnome-desktop = callPackage ./desktop/gnome-desktop { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
