@@ -19284,7 +19284,7 @@ with pkgs;
   };
 
   xmonad_log_applet = callPackage ../applications/window-managers/xmonad/log-applet {
-    desktopSupport = "gnome3";
+    desktopSupport = "gnomeflashback";
     inherit (xfce) libxfce4util xfce4-panel;
   };
 
