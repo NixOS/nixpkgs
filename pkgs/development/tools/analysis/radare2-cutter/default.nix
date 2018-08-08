@@ -13,8 +13,10 @@ let
     src = fetchFromGitHub {
       owner = "radare";
       repo = "radare2";
-      rev = "a98557bfbfa96e9f677a8c779ee78085ee5a23bb";
-      sha256 = "04jl1lq3dqljb6vagzlym4wc867ayhx1v52f75rkfz0iybsh249r";
+      # XXX: The revision used here should match what Cutter uses as submodule.
+      # For now it's the revision cutter-git uses for r2.
+      rev = "c9ec8b54b9ba32ba6712f319825f8d032e573e68";
+      sha256 = "04ri3wis8l1mbcp2gx419x7yfimljn7xa01izch71jy2h2mzk3z6";
     };
   });
   version = "1.6";
