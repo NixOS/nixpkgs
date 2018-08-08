@@ -807,6 +807,11 @@
     github = "coroa";
     name = "Jonas Hörsch";
   };
+  costrouc = {
+    email = "chris.ostrouchov@gmail.com";
+    github = "costrouc";
+    name = "Chris Ostrouchov";
+  };
   couchemar = {
     email = "couchemar@yandex.ru";
     github = "couchemar";
