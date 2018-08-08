@@ -65,8 +65,6 @@ let overridden = set // overrides; set = with overridden; {
 
   libbonoboui = callPackage ./platform/libbonoboui { };
 
-  at_spi = callPackage ./platform/at-spi { };
-
   gtkhtml = callPackage ./platform/gtkhtml { };
 
   gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { };
