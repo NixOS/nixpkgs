@@ -1,6 +1,6 @@
 { stdenv, buildPackages
 , fetchurl, zlib, autoreconfHook264
-, hostPlatform, targetPlatform
+, hostPlatform, buildPlatform, targetPlatform
 , noSysDirs, gold ? true, bison ? null
 }:
 
@@ -120,6 +120,9 @@ stdenv.mkDerivation rec {
   ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
 
   doCheck = false; # fails
+
+  # else fails with "./sanity.sh: line 36: $out/bin/size: not found"
+  doInstallCheck = buildPlatform == hostPlatform && hostPlatform == targetPlatform;
 
   enableParallelBuilding = true;
 
