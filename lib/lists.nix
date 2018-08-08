@@ -509,7 +509,7 @@ rec {
        => 3
   */
   last = list:
-    assert assertMsg (list != []) "lists.last: list must not be empty!";
+    assert lib.assertMsg (list != []) "lists.last: list must not be empty!";
     elemAt list (length list - 1);
 
   /* Return all elements but the last
@@ -519,7 +519,7 @@ rec {
        => [ 1 2 ]
   */
   init = list:
-    assert assertMsg (list != []) "lists.init: list must not be empty!";
+    assert lib.assertMsg (list != []) "lists.init: list must not be empty!";
     take (length list - 1) list;
 
 

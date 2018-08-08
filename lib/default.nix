@@ -38,10 +38,11 @@ let
     systems = callLibs ./systems;
 
     # misc
+    asserts = callLibs ./asserts.nix;
     debug = callLibs ./debug.nix;
-
     generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
+
     # domain-specific
     fetchers = callLibs ./fetchers.nix;
 
@@ -59,9 +60,7 @@ let
     inherit (trivial) id const concat or and bitAnd bitOr bitXor bitNot
       boolToString mergeAttrs flip mapNullable inNixShell min max
       importJSON warn info nixpkgsVersion version mod compare
-      splitByAndCompare functionArgs setFunctionArgs isFunction
-      assertMsg assertOneOf;
-
+      splitByAndCompare functionArgs setFunctionArgs isFunction;
     inherit (fixedPoints) fix fix' extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
     inherit (attrsets) attrByPath hasAttrByPath setAttrByPath
@@ -118,6 +117,8 @@ let
       unknownModule mkOption;
     inherit (types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
+    inherit (asserts)
+      assertMsg assertOneOf;
     inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
       traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal

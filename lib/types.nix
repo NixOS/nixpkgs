@@ -441,7 +441,7 @@ rec {
     # Either value of type `finalType` or `coercedType`, the latter is
     # converted to `finalType` using `coerceFunc`.
     coercedTo = coercedType: coerceFunc: finalType:
-      assert assertMsg (coercedType.getSubModules == null)
+      assert lib.assertMsg (coercedType.getSubModules == null)
         "coercedTo: coercedType must not have submodules (it’s a ${
           coercedType.description})";
       mkOptionType rec {
