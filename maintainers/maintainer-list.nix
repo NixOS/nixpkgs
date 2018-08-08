@@ -1842,6 +1842,11 @@
     github = "jluttine";
     name = "Jaakko Luttinen";
   };
+  jmettes = {
+    email = "jonathan@jmettes.com";
+    github = "jmettes";
+    name = "Jonathan Mettes";
+  };
   Jo = {
     email = "0x4A6F@shackspace.de";
     name = "Joachim Ernst";
