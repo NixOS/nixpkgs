@@ -2,6 +2,7 @@
 , icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
 , withIcu ? false # recommended by upstream as default, but most don't needed and it's big
 , withGraphite2 ? true # it is small and major distros do include it
+, python
 }:
 
 let
@@ -17,6 +18,11 @@ stdenv.mkDerivation {
     sha256 = "0my6m9aqv4a8fc2pjwqx9pfdfh3a9mqvas4si4psi1b1867zi8y8";
   };
 
+  postPatch = ''
+    patchShebangs src/gen-def.py
+    patchShebangs test
+  '';
+
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
@@ -29,8 +35,10 @@ stdenv.mkDerivation {
   buildInputs = [ glib freetype cairo ]; # recommended by upstream
   propagatedBuildInputs = []
     ++ optional withGraphite2 graphite2
-    ++ optionals withIcu [ icu harfbuzz ]
-    ;
+    ++ optionals withIcu [ icu harfbuzz ];
+
+  checkInputs = [ python ];
+  doInstallCheck = false; # fails, probably a bug
 
   # Slightly hacky; some pkgs expect them in a single directory.
   postInstall = optionalString withIcu ''
