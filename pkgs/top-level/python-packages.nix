@@ -4114,6 +4114,8 @@ in {
 
   pyspf = callPackage ../development/python-modules/pyspf { };
 
+  pysrim = callPackage ../development/python-modules/pysrim { };
+
   pysrt = callPackage ../development/python-modules/pysrt { };
 
   pytools = callPackage ../development/python-modules/pytools { };
