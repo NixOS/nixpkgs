@@ -15421,10 +15421,10 @@ with pkgs;
     (callPackage ../applications/science/electronics/bitscope/packages.nix { });
 
   bitwig-studio1 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio1.nix {
-    inherit (gnome2) zenity;
+    inherit (gnome3) zenity;
   };
   bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
-    inherit (gnome2) zenity;
+    inherit (gnome3) zenity;
     inherit (self) bitwig-studio1;
   };
   bitwig-studio = bitwig-studio2;
@@ -21832,7 +21832,7 @@ with pkgs;
   });
 
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
-    inherit (gnome2) zenity;
+    inherit (gnome3) zenity;
   };
 
   with-shell = callPackage ../applications/misc/with-shell { };

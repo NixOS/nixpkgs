@@ -84,8 +84,6 @@ let overridden = set // overrides; set = with overridden; {
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
 
-  zenity = callPackage ./desktop/zenity { };
-
   gnome-desktop = callPackage ./desktop/gnome-desktop { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
