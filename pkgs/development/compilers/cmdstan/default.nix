@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
 
   buildFlags = "build";
   enableParallelBuilding = true;
-  nativeBuildInputs = stdenv.lib.optional doCheck python;
 
   doCheck = true;
-  checkPhase = "python ./runCmdStanTests.py src/test/interface";  # see #5368
+  checkInputs = [ python ];
+  checkPhase = "python ./runCmdStanTests.py src/test/interface"; # see #5368
 
   installPhase = ''
     mkdir -p $out/opt $out/bin
