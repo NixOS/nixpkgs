@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "05qdmbmrrn88ii9f66rkcmcyzp1kb1ymkx7g040lfkd1nkp7w1da";
   };
 
-  patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
+  # The patch st-0.7.patch needs to be removed, if ncurses is upgraded in the future.
+  # It is necessary for the 6.1 version of ncurses.
+  patches = [ ./st-0.7.patch ] ++ lib.optional (!stdenv.cc.isClang) ./clang.patch;
 
   outputs = [ "out" "dev" "man" ];
   setOutputFlags = false; # some aren't supported
