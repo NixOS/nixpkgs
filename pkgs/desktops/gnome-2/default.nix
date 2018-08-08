@@ -13,7 +13,6 @@ let overridden = set // overrides; set = with overridden; {
   gnome_keyring = gnome-keyring;
   gnome_desktop = gnome-desktop;
   gnome_settings_daemon = gnome-settings-daemon;
-  gnome_control_center = gnome-control-center;
   inherit rarian;
 
 #### PLATFORM
@@ -105,8 +104,6 @@ let overridden = set // overrides; set = with overridden; {
   gnome_panel = callPackage ./desktop/gnome-panel { };
 
   gnome-settings-daemon = callPackage ./desktop/gnome-settings-daemon { };
-
-  gnome-control-center = callPackage ./desktop/gnome-control-center { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
 
