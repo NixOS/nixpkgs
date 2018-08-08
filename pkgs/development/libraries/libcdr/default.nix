@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "A library providing ability to interpret and import Corel Draw drawings into various applications";
     homepage = http://www.freedesktop.org/wiki/Software/libcdr;
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.mpl20;
   };
 }
