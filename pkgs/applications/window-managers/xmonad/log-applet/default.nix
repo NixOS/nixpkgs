@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, glib, dbus-glib
 , desktopSupport, xlibs
 , gtk2
-, gtk3, gnome3
+, gtk3, gnome3, mate
 , libxfce4util, xfce4-panel
 }:
 
-assert desktopSupport == "gnomeflashback" || desktopSupport == "xfce4";
+assert desktopSupport == "gnomeflashback" || desktopSupport == "mate"  || desktopSupport == "xfce4";
 
 stdenv.mkDerivation rec {
   version = "unstable-2017-09-15";
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib dbus-glib xlibs.xcbutilwm ]
     ++ stdenv.lib.optionals (desktopSupport == "gnomeflashback") [ gtk3 gnome3.gnome-panel ]
+    ++ stdenv.lib.optionals (desktopSupport == "mate") [ gtk3 mate.mate-panel ]
     ++ stdenv.lib.optionals (desktopSupport == "xfce4") [ gtk2 libxfce4util xfce4-panel ]
   ;
 

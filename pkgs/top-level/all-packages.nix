@@ -19288,6 +19288,11 @@ with pkgs;
     inherit (xfce) libxfce4util xfce4-panel;
   };
 
+  xmonad_log_applet_mate = xmonad_log_applet.override {
+    desktopSupport = "mate";
+    inherit (xfce) libxfce4util xfce4-panel;
+  };
+
   xmonad_log_applet_xfce = xmonad_log_applet.override {
     desktopSupport = "xfce4";
     inherit (xfce) libxfce4util xfce4-panel;
