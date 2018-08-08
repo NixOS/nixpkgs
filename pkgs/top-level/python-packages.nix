@@ -461,6 +461,8 @@ in {
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
+  python-lz4 = callPackage ../development/python-modules/python-lz4 { };
+
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
