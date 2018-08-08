@@ -30,12 +30,12 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nwjs-${version}";
-  version = "0.23.6";
+  version = "0.32.0";
 
   src = fetchurl {
     url = "https://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "0ppyjspdvacarhdn4xd5i1pqgmf4z1bxnh1cry780489h25rcjgj" else
+      "06r7kj1hg21vhhh60cyl9cafqak5jzh13hin9hv211998knm6g8r" else
       "0c0j73vnzhsry5rdx41d954a29jmjnvzli728cfbjybfr51zdybg";
   };
 
