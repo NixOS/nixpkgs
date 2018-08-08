@@ -2,7 +2,7 @@
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
 , cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
 , withPolkit ? true, polkit, acl, usbutils
-, vala, gtk3, epoxy, libdrm, gst_all_1, phodav }:
+, vala, gtk3, epoxy, libdrm, gst_all_1, phodav, opusfile }:
 
 # If this package is built with polkit support (withPolkit=true),
 # usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
@@ -30,13 +30,13 @@ with stdenv.lib;
 let
   inherit (python2Packages) python pygtk;
 in stdenv.mkDerivation rec {
-  name = "spice-gtk-0.34";
+  name = "spice-gtk-0.35";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/gtk/${name}.tar.bz2";
-    sha256 = "1vknp72pl6v6nf3dphhwp29hk6gv787db2pmyg4m312z2q0hwwp9";
+    sha256 = "11lymg467gvj5ys8k22ihnfbxjn4x34ygyzirpg2nphjwlyhgrml";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     spice-protocol celt_0_5_1 openssl libpulseaudio gst_all_1.gst-plugins-base pixman
-    libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy libdrm phodav
+    libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy libdrm phodav opusfile
   ] ++ optionals withPolkit [ polkit acl usbutils ] ;
 
   nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobjectIntrospection ];
@@ -58,6 +58,7 @@ in stdenv.mkDerivation rec {
     "--with-gtk3"
     "--enable-introspection"
     "--enable-vala"
+    "--enable-celt051"
   ];
 
   dontDisableStatic = true; # Needed by the coroutine test
