@@ -77,8 +77,6 @@ let overridden = set // overrides; set = with overridden; {
 
   gvfs = gvfs.override { gnome = self; };
 
-  libgnomekbd = callPackage ./desktop/libgnomekbd { };
-
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
 
