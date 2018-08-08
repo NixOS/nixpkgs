@@ -18864,6 +18864,8 @@ with pkgs;
     headless = true;
   });
 
+  virtualbox-extpack = callPackage ../applications/virtualization/virtualbox/extpack.nix { };
+
   virtualglLib = callPackage ../tools/X11/virtualgl/lib.nix {
     fltk = fltk13;
   };
