@@ -9,7 +9,6 @@ let overridden = set // overrides; set = with overridden; {
   gnomedocutils = self.gnome-doc-utils;
   gnomeicontheme = self.gnome_icon_theme;
   gnome_common = gnome-common;
-  gnome_desktop = gnome-desktop;
   inherit rarian;
 
 #### PLATFORM
@@ -79,8 +78,6 @@ let overridden = set // overrides; set = with overridden; {
 
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
-
-  gnome-desktop = callPackage ./desktop/gnome-desktop { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
 
