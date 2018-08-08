@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # fails, wants DRI access for OpenGL
+
   patches = [
     (fetchpatch {
         url = "https://bug794856.bugzilla-attachments.gnome.org/attachment.cgi?id=370414";
