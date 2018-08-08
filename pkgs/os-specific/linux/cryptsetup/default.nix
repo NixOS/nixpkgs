@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    patchShebangs tests
+  '';
+
   NIX_LDFLAGS = "-lgcc_s";
 
   configureFlags = [
