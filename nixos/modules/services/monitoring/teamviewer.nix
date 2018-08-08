@@ -33,8 +33,8 @@ in
 
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.teamviewer}/bin/teamviewerd -d";
-        PIDFile = "/run/teamviewerd.pid";
+        ExecStart = "${pkgs.teamviewer}/bin/teamviewerd daemon start";
+        GuessMainPID = true;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-abort";
         StartLimitInterval = "60";
