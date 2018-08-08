@@ -8,7 +8,6 @@ let overridden = set // overrides; set = with overridden; {
   startupnotification = libstartup_notification;
   gnomedocutils = self.gnome-doc-utils;
   gnomeicontheme = self.gnome_icon_theme;
-  gnomepanel = self.gnome_panel;
   gnome_common = gnome-common;
   gnome_keyring = gnome-keyring;
   gnome_desktop = gnome-desktop;
@@ -99,8 +98,6 @@ let overridden = set // overrides; set = with overridden; {
   gnome_menus = callPackage ./desktop/gnome-menus { };
 
   gnome-desktop = callPackage ./desktop/gnome-desktop { };
-
-  gnome_panel = callPackage ./desktop/gnome-panel { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
 
