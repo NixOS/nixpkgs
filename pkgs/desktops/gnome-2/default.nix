@@ -9,7 +9,6 @@ let overridden = set // overrides; set = with overridden; {
   gnomedocutils = self.gnome-doc-utils;
   gnomeicontheme = self.gnome_icon_theme;
   gnome_common = gnome-common;
-  gnome_keyring = gnome-keyring;
   gnome_desktop = gnome-desktop;
   inherit rarian;
 
@@ -75,8 +74,6 @@ let overridden = set // overrides; set = with overridden; {
   gtkglextmm = callPackage ./platform/gtkglextmm { };
 
 #### DESKTOP
-
-  gnome-keyring = callPackage ./desktop/gnome-keyring { };
 
   libgweather = callPackage ./desktop/libgweather { };
 
