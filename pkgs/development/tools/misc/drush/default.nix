@@ -1,7 +1,7 @@
 { stdenv, fetchurl, php, which, makeWrapper, bash, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "drush-6.1.0";
+  name = "drush-8.1.16";
 
   meta = with stdenv.lib; {
     description = "Command-line shell and Unix scripting interface for Drupal";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url    = https://github.com/drush-ops/drush/archive/6.1.0.tar.gz;
-    sha256 = "1jgnc4jjyapyn04iczvcz92ic0vq8d1w8xi55ismqyy5cxhqj6bp";
+    url    = https://github.com/drush-ops/drush/archive/8.1.16.tar.gz;
+    sha256 = "0k8b57dq7arw102mbmws2q6f9bz4pmnba768n5qbfqw1r92yligi";
   };
 
   consoleTable = fetchurl {
