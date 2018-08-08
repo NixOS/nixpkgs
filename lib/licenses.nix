@@ -613,6 +613,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Vim License";
   };
 
+  virtualbox-puel = {
+    fullName = "Oracle VM VirtualBox Extension Pack Personal Use and Evaluation License (PUEL)";
+    url = "https://www.virtualbox.org/wiki/VirtualBox_PUEL";
+    free = false;
+  };
+
   vsl10 = spdx {
     spdxId = "VSL-1.0";
     fullName = "Vovida Software License v1.0";
