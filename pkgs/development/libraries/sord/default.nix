@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sord-${version}";
-  version = "0.16.0";
+  version = "0.16.2";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "0nh3i867g9z4kdlnk82cg2kcw8r02qgifxvkycvzb4vfjv4v4g4x";
+    sha256 = "13fshxwpipjrvsah1m2jw1kf022z2q5vpw24bzcznglgvms13x89";
   };
 
   nativeBuildInputs = [ pkgconfig ];
