@@ -501,6 +501,8 @@ in {
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
+  singledispatch = callPackage ../development/python-modules/singledispatch { };
+
   sip = callPackage ../development/python-modules/sip { };
 
   sortedcontainers = callPackage ../development/python-modules/sortedcontainers { };
@@ -2546,21 +2548,6 @@ in {
       homepage = https://code.google.com/p/funcparserlib/;
       license = licenses.mit;
       platforms = platforms.unix;
-    };
-  };
-
-  singledispatch = buildPythonPackage rec {
-    name = "singledispatch-3.4.0.3";
-
-    propagatedBuildInputs = with self; [ six ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/singledispatch/${name}.tar.gz";
-      sha256 = "5b06af87df13818d14f08a028e42f566640aef80805c3b50c5056b086e3c2b9c";
-    };
-
-    meta = {
-      homepage = https://docs.python.org/3/library/functools.html;
     };
   };
 
