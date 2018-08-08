@@ -272,6 +272,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  distributed = callPackage ../development/python-modules/distributed { };
+
   dogtail = callPackage ../development/python-modules/dogtail { };
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
@@ -1981,34 +1983,6 @@ in {
   heapdict = callPackage ../development/python-modules/heapdict { };
 
   zict = callPackage ../development/python-modules/zict { };
-
-  distributed = buildPythonPackage rec {
-
-    name = "distributed-${version}";
-    version = "1.15.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/distributed/${name}.tar.gz";
-      sha256 = "037a07sdf2ch1d360nqwqz3b4ld8msydng7mw4i5s902v7xr05l6";
-    };
-
-    buildInputs = with self; [ pytest docutils ];
-    propagatedBuildInputs = with self; [
-      dask six boto3 s3fs tblib locket msgpack-python click cloudpickle tornado
-      psutil botocore zict lz4 sortedcollections sortedcontainers
-    ] ++ (if !isPy3k then [ singledispatch ] else []);
-
-    # py.test not picking up local config file, even when running
-    # manually: E ValueError: no option named '--runslow'
-    doCheck = false;
-
-    meta = {
-      description = "Distributed computation in Python.";
-      homepage = "http://distributed.readthedocs.io/en/latest/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ teh ];
-    };
-  };
 
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
