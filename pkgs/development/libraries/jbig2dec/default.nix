@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
   name = "jbig2dec-0.14";
@@ -7,6 +7,13 @@ stdenv.mkDerivation rec {
     url = "http://downloads.ghostscript.com/public/jbig2dec/${name}.tar.gz";
     sha256 = "0k01hp0q4275fj4rbr1gy64svfraw5w7wvwl08yjhvsnpb1rid11";
   };
+
+  postPatch = ''
+    patchShebangs test_jbig2dec.py
+  '';
+
+  checkInputs = [ python ];
+  doCheck = false; # fails 1 of 4 tests
 
   meta = {
     homepage = https://www.ghostscript.com/jbig2dec.html;
