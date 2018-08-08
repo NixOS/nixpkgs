@@ -75,8 +75,6 @@ let overridden = set // overrides; set = with overridden; {
 
 #### DESKTOP
 
-  libgweather = callPackage ./desktop/libgweather { };
-
   gvfs = gvfs.override { gnome = self; };
 
   libgnomekbd = callPackage ./desktop/libgnomekbd { };
