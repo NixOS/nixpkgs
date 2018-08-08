@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "15i9bs2i25l7ibv530ghy8280kklcgm5kr6j86s7iwcqqckd0czp";
   };
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   buildInputs = [ perl ];
 
   makeFlags = "PREFIX=$(out)";
