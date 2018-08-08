@@ -1885,6 +1885,8 @@ in {
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
+  pytest-faulthandler = callPackage ../development/python-modules/pytest-faulthandler { };
+
   pytest-fixture-config = callPackage ../development/python-modules/pytest-fixture-config { };
 
   pytest-forked = callPackage ../development/python-modules/pytest-forked { };
