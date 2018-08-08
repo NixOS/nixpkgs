@@ -42,7 +42,7 @@ in
         protocol = "tcp";
         user = "root";
         server = "${pkgs.tcp_wrappers}/bin/tcpd";
-        serverArgs = "${pkgs.heimdalFull}/bin/kadmind";
+        serverArgs = "${pkgs.heimdalFull}/libexec/heimdal/kadmind";
       };
 
     systemd.services.kdc = {
@@ -51,13 +51,13 @@ in
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
       '';
-      script = "${heimdalFull}/bin/kdc";
+      script = "${heimdalFull}/libexec/heimdal/kdc";
     };
 
     systemd.services.kpasswdd = {
       description = "Kerberos Password Changing daemon";
       wantedBy = [ "multi-user.target" ];
-      script = "${heimdalFull}/bin/kpasswdd";
+      script = "${heimdalFull}/libexec/heimdal/kpasswdd";
     };
   };
 
