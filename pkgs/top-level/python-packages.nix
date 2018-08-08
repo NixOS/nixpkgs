@@ -272,6 +272,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  docrep = callPackage ../development/python-modules/docrep { };
+
   dogtail = callPackage ../development/python-modules/dogtail { };
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
@@ -1935,6 +1937,8 @@ in {
 
   dask = callPackage ../development/python-modules/dask { };
 
+  dask-jobqueue = callPackage ../development/python-modules/dask-jobqueue { };
+
   datrie = callPackage ../development/python-modules/datrie { };
 
   heapdict = callPackage ../development/python-modules/heapdict { };
@@ -1944,17 +1948,17 @@ in {
   distributed = buildPythonPackage rec {
 
     name = "distributed-${version}";
-    version = "1.15.1";
+    version = "1.22.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/distributed/${name}.tar.gz";
-      sha256 = "037a07sdf2ch1d360nqwqz3b4ld8msydng7mw4i5s902v7xr05l6";
+      sha256 = "eefdd511912a001077bf1e00e2c3989dcfa853d68d14a8cd5b688c6175389e3a";
     };
 
     buildInputs = with self; [ pytest docutils ];
     propagatedBuildInputs = with self; [
-      dask six boto3 s3fs tblib locket msgpack-python click cloudpickle tornado
-      psutil botocore zict lz4 sortedcollections sortedcontainers
+      dask six boto3 s3fs tblib locket msgpack click cloudpickle tornado
+      psutil botocore zict lz4 sortedcollections sortedcontainers pyyaml
     ] ++ (if !isPy3k then [ singledispatch ] else []);
 
     # py.test not picking up local config file, even when running
