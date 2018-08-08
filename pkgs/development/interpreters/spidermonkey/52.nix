@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
     "--with-intl-api"
     "--enable-readline"
     "--enable-shared-js"
-  ];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc";
 
   enableParallelBuilding = true;
 
