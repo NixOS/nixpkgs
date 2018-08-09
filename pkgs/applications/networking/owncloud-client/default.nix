@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = https://owncloud.org;
     maintainers = [ maintainers.qknight ];
     platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 }
