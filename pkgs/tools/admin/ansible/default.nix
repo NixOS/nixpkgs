@@ -47,6 +47,11 @@ in rec {
     sha256  = "1r9sq30xz3jrvx6yqssj5wmkml1f75rx1amd7g89f3ryngrq6m59";
   };
 
-  ansible2 = ansible_2_5;
+  ansible_2_6 = generic {
+    version = "2.6.2";
+    sha256  = "1y5gd9h641p6pphwd7j99yyqglyj23rkmid7wgzk62611754qzkl";
+  };
+
+  ansible2 = ansible_2_6;
   ansible  = ansible2;
 }
