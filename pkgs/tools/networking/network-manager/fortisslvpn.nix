@@ -38,6 +38,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "NetworkManager's FortiSSL plugin";
     inherit (networkmanager.meta) maintainers platforms;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }
 
