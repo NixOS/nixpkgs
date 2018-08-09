@@ -262,8 +262,8 @@ stdenv.mkDerivation {
       ##
 
       mkdir -p $man/nix-support $info/nix-support
-      printWords ${cc.man or ""}  >> $man/nix-support/propagated-build-inputs
-      printWords ${cc.info or ""}  >> $info/nix-support/propagated-build-inputs
+      printWords ${cc.man or ""}  > $man/nix-support/propagated-user-env-packages
+      printWords ${cc.info or ""}  > $info/nix-support/propagated-user-env-packages
     ''
 
     + ''
