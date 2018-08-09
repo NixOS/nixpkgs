@@ -18,21 +18,25 @@ let
   // optionalAttrs (cfg.tags != null ) { tags = concatStringsSep ", " cfg.tags; }
   // cfg.extraConfig;
 
-  makeConfigDir = entries: mapAttrsToList (name: conf: {
-    source = pkgs.writeText (baseNameOf name) (builtins.toJSON conf);
-    target = "datadog-agent/" + name;
-  }) (filterAttrs (name: conf: conf != null) entries);
+  # Generate Datadog configuration files for each configured checks.
+  # This works because check configurations have predictable paths,
+  # and because JSON is a valid subset of YAML.
+  makeCheckConfigs = entries: mapAttrsToList (name: conf: {
+    source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);
+    target = "datadog-agent/conf.d/${name}.d/conf.yaml";
+  }) entries;
 
-  etcfiles = makeConfigDir
-    { "datadog.yaml" = ddConf;
-      "conf.d/disk.yaml" = cfg.diskConfig;
-      "conf.d/network.yaml" = cfg.networkConfig;
-      "conf.d/postgres.d/conf.yaml" = cfg.postgresqlConfig;
-      "conf.d/nginx.d/conf.yaml" = cfg.nginxConfig;
-      "conf.d/mongo.d/conf.yaml" = cfg.mongoConfig;
-      "conf.d/process.yaml" = cfg.processConfig;
-      "conf.d/jmx.yaml" = cfg.jmxConfig;
-    };
+  defaultChecks = {
+    disk = cfg.diskCheck;
+    network = cfg.networkCheck;
+  };
+
+  # Assemble all check configurations and the top-level agent
+  # configuration.
+  etcfiles = with pkgs; with builtins; [{
+    source = writeText "datadog.yaml" (toJSON ddConf);
+    target = "datadog-agent/datadog.yaml";
+  }] ++ makeCheckConfigs (cfg.checks // defaultChecks);
 
 in {
   options.services.datadog-agent = {
@@ -93,62 +97,65 @@ in {
       '';
      };
 
-    diskConfig = mkOption {
+    checks = mkOption {
+      description = ''
+        Configuration for all Datadog checks. Keys of this attribute
+        set will be used as the name of the check to create the
+        appropriate configuration in `conf.d/$check.d/conf.yaml`.
+
+        The configuration is converted into JSON from the plain Nix
+        language configuration, meaning that you should write
+        configuration adhering to Datadog's documentation - but in Nix
+        language.
+
+        Refer to the implementation of this module (specifically the
+        definition of `defaultChecks`) for an example.
+
+        Note: The 'disk' and 'network' check are configured in
+        separate options because they exist by default. Attempting to
+        override their configuration here will have no effect.
+      '';
+
+      example = {
+        http_check = {
+          init_config = null; # sic!
+          instances = [
+            {
+              name = "some-service";
+              url = "http://localhost:1337/healthz";
+              tags = [ "some-service" ];
+            }
+          ];
+        };
+      };
+
+      default = {};
+
+      # sic! The structure of the values is up to the check, so we can
+      # not usefully constrain the type further.
+      type = with types; attrsOf attrs;
+    };
+
+    diskCheck = mkOption {
       description = "Disk check config";
       type = types.attrs;
       default = {
         init_config = {};
         instances = [ { use-mount = "no"; } ];
       };
-     };
+    };
 
-    networkConfig = mkOption {
+    networkCheck = mkOption {
       description = "Network check config";
       type = types.attrs;
       default = {
         init_config = {};
         # Network check only supports one configured instance
         instances = [ { collect_connection_state = false;
-                        excluded_interfaces = [ "lo" "lo0" ]; } ];
+          excluded_interfaces = [ "lo" "lo0" ]; } ];
       };
     };
-
-    postgresqlConfig = mkOption {
-      description = "Datadog PostgreSQL integration configuration";
-      default = null;
-      type = types.nullOr types.attrs;
-    };
-
-    nginxConfig = mkOption {
-      description = "Datadog nginx integration configuration";
-      default = null;
-      type = types.nullOr types.attrs;
-    };
-
-    mongoConfig = mkOption {
-      description = "MongoDB integration configuration";
-      default = null;
-      type = types.nullOr types.attrs;
-    };
-
-    jmxConfig = mkOption {
-      description = "JMX integration configuration";
-      default = null;
-      type = types.nullOr types.attrs;
-    };
-
-    processConfig = mkOption {
-      description = ''
-        Process integration configuration
-
-        See http://docs.datadoghq.com/integrations/process/
-      '';
-      default = null;
-      type = types.nullOr types.attrs;
-    };
-
   };
-
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package pkgs.sysstat pkgs.procps ];
 
@@ -189,7 +196,7 @@ in {
         serviceConfig.PermissionsStartOnly = true;
       };
 
-      dd-jmxfetch = lib.mkIf (cfg.jmxConfig != null) (makeService {
+      dd-jmxfetch = lib.mkIf (lib.hasAttr "jmx" cfg.checks) (makeService {
         description = "Datadog JMX Fetcher";
         path = [ cfg.package pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
         serviceConfig.ExecStart = "${cfg.package}/bin/dd-jmxfetch";
