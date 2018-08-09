@@ -1114,10 +1114,13 @@ self: super: {
   # needed because of testing-feat >=0.4.0.2 && <1.1
   language-ecmascript = doJailbreak super.language-ecmascript;
 
-  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can. 
+  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can.
   sexpr =
     appendPatch (overrideCabal super.sexpr (drv: {
       isExecutable = false;
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
     })) ./patches/sexpr-0.2.1.patch;
+
+  # Can be removed once yi-language >= 0.18 is in the LTS
+  yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
 }
