@@ -38,6 +38,12 @@ let
     target = "datadog-agent/datadog.yaml";
   }] ++ makeCheckConfigs (cfg.checks // defaultChecks);
 
+  # Apply the configured extraIntegrations to the provided agent
+  # package. See the documentation of `dd-agent/integrations-core.nix`
+  # for detailed information on this.
+  datadogPkg = cfg.package.overrideAttrs(_: {
+    python = (pkgs.datadog-integrations-core cfg.extraIntegrations).python;
+  });
 in {
   options.services.datadog-agent = {
     enable = mkOption {
@@ -52,9 +58,10 @@ in {
       default = pkgs.datadog-agent;
       defaultText = "pkgs.datadog-agent";
       description = ''
-        Which DataDog v6 agent package to use.
-        Override the <literal>pythonPackages</literal> argument
-        of this derivation to include more checks.
+        Which DataDog v6 agent package to use. Note that the provided
+        package is expected to have an overridable `python`-attribute
+        which configures the Python environment with the Datadog
+        checks.
       '';
       type = types.package;
     };
@@ -86,6 +93,27 @@ in {
       description = "Logging verbosity.";
       default = null;
       type = types.nullOr (types.enum ["DEBUG" "INFO" "WARN" "ERROR"]);
+    };
+
+    extraIntegrations = mkOption {
+      default = {};
+      type    = types.attrs;
+
+      description = ''
+        Extra integrations from the Datadog core-integrations
+        repository that should be built and included.
+
+        By default the included integrations are disk, mongo, network,
+        nginx and postgres.
+
+        To include additional integrations the name of the derivation
+        and a function to filter its dependencies from the Python
+        package set must be provided.
+      '';
+
+      example = {
+        ntp = (pythonPackages: [ pythonPackages.ntplib ]);
+      };
     };
 
     extraConfig = mkOption {
@@ -157,7 +185,7 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package pkgs.sysstat pkgs.procps ];
+    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps ];
 
     users.extraUsers.datadog = {
       description = "Datadog Agent User";
@@ -171,7 +199,7 @@ in {
 
     systemd.services = let
       makeService = attrs: recursiveUpdate {
-        path = [ cfg.package pkgs.python pkgs.sysstat pkgs.procps ];
+        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "datadog";
@@ -180,7 +208,7 @@ in {
           RestartSec = 2;
           PrivateTmp = true;
         };
-        restartTriggers = [ cfg.package ] ++ map (etc: etc.source) etcfiles;
+        restartTriggers = [ datadogPkg ] ++ map (etc: etc.source) etcfiles;
       } attrs;
     in {
       datadog-agent = makeService {
@@ -190,16 +218,16 @@ in {
           rm -f /etc/datadog-agent/auth_token
         '';
         script = ''
-          export DD_API_KEY=$(head -n1 ${cfg.apiKeyFile})
-          exec ${cfg.package}/bin/agent start -c /etc/datadog-agent/datadog.yaml
+          export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
+          exec ${datadogPkg}/bin/agent start -c /etc/datadog-agent/datadog.yaml
         '';
         serviceConfig.PermissionsStartOnly = true;
       };
 
       dd-jmxfetch = lib.mkIf (lib.hasAttr "jmx" cfg.checks) (makeService {
         description = "Datadog JMX Fetcher";
-        path = [ cfg.package pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
-        serviceConfig.ExecStart = "${cfg.package}/bin/dd-jmxfetch";
+        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
+        serviceConfig.ExecStart = "${datadogPkg}/bin/dd-jmxfetch";
       });
     };
 
