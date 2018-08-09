@@ -1,8 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig }:
 
 let
-  inherit (pythonPackages) python;
-
   # keep this in sync with github.com/DataDog/agent-payload dependency
   payloadVersion = "4.7";
 
@@ -26,6 +24,9 @@ in buildGoPackage rec {
   ];
   goDeps = ./deps.nix;
   goPackagePath = "github.com/${owner}/${repo}";
+
+  # Explicitly set this here to allow it to be overridden.
+  python = pythonPackages.python;
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
