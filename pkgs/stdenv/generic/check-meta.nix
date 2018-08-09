@@ -52,11 +52,12 @@ let
   #   allowUnfree = false;
   #   allowUnfreePredicate = (x: pkgs.lib.hasPrefix "flashplayer-" x.name);
   # }
-  allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
+  allowUnfreeDefaultPredicate = x: builtins.elem x.name (config.permittedUnfreePackages or []);
+  allowUnfreePredicate = x: (config.allowUnfreePredicate or allowUnfreeDefaultPredicate) x;
 
   # Check whether unfree packages are allowed and if not, whether the
   # package has an unfree license and is not explicitely allowed by the
-  # `allowUNfreePredicate` function.
+  # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense = attrs:
     !allowUnfree &&
     hasLicense attrs &&
@@ -76,54 +77,56 @@ let
   pos_str = meta.position or "«unknown-file»";
 
   remediation = {
-    unfree = remediate_whitelist "Unfree";
-    broken = remediate_whitelist "Broken";
-    unsupported = remediate_whitelist "UnsupportedSystem";
     blacklisted = x: "";
+    broken = remediate_whitelist "Broken";
     insecure = remediate_insecure;
+    unfree = remediate_unfree;
     unknown-meta = x: "";
+    unsupported = remediate_whitelist "UnsupportedSystem";
   };
-  remediate_whitelist = allow_attr: attrs:
-    ''
-      a) For `nixos-rebuild` you can set
-        { nixpkgs.config.allow${allow_attr} = true; }
-      in configuration.nix to override this.
 
-      b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-        { allow${allow_attr} = true; }
-      to ~/.config/nixpkgs/config.nix.
-    '';
+  remediate_nix = allow_attr: attrs: let
+    name = attrs.name or "«name-missing»";
+  in ''
+    a) For `nixos-rebuild` you can ‘${name}’ to
+       `nixpkgs.config.permitted${allow_attr}Packages` in the configuration.nix,
+       like so:
+
+       {
+         nixpkgs.config.permitted${allow_attr}Packages = [
+           "${name}"
+         ];
+       }
+
+    b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+       ‘${name}’ to `permitted${allow_attr}Packages` in
+       ~/.config/nixpkgs/config.nix, like so:
+
+       {
+         permitted${allow_attr}Packages = [
+           "${name}"
+         ];
+       }
+  '';
+
+  remediate_whitelist = allow_attr: attrs:
+      "You can whitelist all packages marked as ${allow_attr}, using the following methods:\n\n"
+    + remediate_nix allow_attr attrs;
+
+  remediate_predicate = allow_attr: attrs:
+      "You can install it anyway by whitelisting this package, using the following methods:\n\n"
+    + remediate_nix allow_attr attrs;
 
   remediate_insecure = attrs:
-    ''
+      "\nKnown issues:\n"
+    + (lib.concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities))
+    + "\n"
+    + remediate_predicate "Insecure" attrs;
 
-      Known issues:
-    '' + (lib.concatStrings (map (issue: " - ${issue}\n") attrs.meta.knownVulnerabilities)) + ''
-
-        You can install it anyway by whitelisting this package, using the
-        following methods:
-
-        a) for `nixos-rebuild` you can add ‘${attrs.name or "«name-missing»"}’ to
-           `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
-           like so:
-
-             {
-               nixpkgs.config.permittedInsecurePackages = [
-                 "${attrs.name or "«name-missing»"}"
-               ];
-             }
-
-        b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-        ‘${attrs.name or "«name-missing»"}’ to `permittedInsecurePackages` in
-        ~/.config/nixpkgs/config.nix, like so:
-
-             {
-               permittedInsecurePackages = [
-                 "${attrs.name or "«name-missing»"}"
-               ];
-             }
-
-      '';
+  remediate_unfree = attrs:
+      remediate_predicate "Unfree" attrs
+    + "\n"
+    + remediate_whitelist "Unfree" attrs;
 
   handleEvalIssue = attrs: { reason , errormsg ? "" }:
     let
