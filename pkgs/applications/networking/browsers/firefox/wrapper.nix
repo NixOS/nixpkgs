@@ -101,7 +101,11 @@ let
       nativeBuildInputs = [ makeWrapper lndir ];
       buildInputs = lib.optional (browser ? gtk3) browser.gtk3;
 
-      buildCommand = ''
+      buildCommand = lib.optionalString stdenv.isDarwin ''
+        mkdir -p $out/Applications
+        cp -R --no-preserve=mode,ownership ${browser}/Applications/${browserName}.app $out/Applications
+        rm -f $out${browser.execdir}/${browserName}
+      '' + ''
         if [ ! -x "${browser}${browser.execdir}/${browserName}" ]
         then
             echo "cannot find executable file \`${browser}${browser.execdir}/${browserName}'"

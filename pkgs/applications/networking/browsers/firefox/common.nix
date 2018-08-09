@@ -263,7 +263,7 @@ stdenv.mkDerivation (rec {
 
   installPhase = if stdenv.isDarwin then ''
     mkdir -p $out/Applications
-    cp -RL Firefox.app $out/Applications
+    cp -LR dist/Firefox.app $out/Applications
   '' else null;
 
   postInstall = lib.optionalString stdenv.isLinux ''

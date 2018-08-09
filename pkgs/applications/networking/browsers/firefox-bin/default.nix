@@ -174,6 +174,7 @@ stdenv.mkDerivation {
       gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
     '';
 
+  passthru.execdir = "/bin";
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;
   # update with:
