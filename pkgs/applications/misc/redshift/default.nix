@@ -61,6 +61,15 @@ stdenv.mkDerivation rec {
 
   postFixup = "wrapPythonPrograms";
 
+  # the geoclue agent may inspect these paths and expect them to be
+  # valid without having the correct $PATH set
+  postInstall = ''
+    substituteInPlace $out/share/applications/redshift.desktop \
+      --replace 'Exec=redshift' "Exec=$out/bin/redshift"
+    substituteInPlace $out/share/applications/redshift.desktop \
+      --replace 'Exec=redshift-gtk' "Exec=$out/bin/redshift-gtk"
+  '';
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
