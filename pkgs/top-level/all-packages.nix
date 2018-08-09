@@ -7638,6 +7638,8 @@ with pkgs;
 
   ruby = ruby_2_4;
 
+  mruby = callPackage ../development/compilers/mruby { };
+
   scsh = callPackage ../development/interpreters/scsh { };
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
