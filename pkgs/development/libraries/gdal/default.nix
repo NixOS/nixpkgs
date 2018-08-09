@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"
     "--with-python"               # optional
-    "--with-proj4=${proj}" # optional
+    "--with-proj=${proj}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
     "--with-hdf4=${hdf4.dev}" # optional
     (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
