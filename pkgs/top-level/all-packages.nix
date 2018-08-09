@@ -4132,7 +4132,7 @@ with pkgs;
 
   networkmanager-l2tp = callPackage ../tools/networking/network-manager/l2tp.nix { };
 
-  networkmanager-vpnc = callPackage ../tools/networking/network-manager/vpnc.nix { };
+  networkmanager-vpnc = callPackage ../tools/networking/network-manager/vpnc { };
 
   networkmanager-openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
 
