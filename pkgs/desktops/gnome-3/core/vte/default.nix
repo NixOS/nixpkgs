@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnome3.glib gnome3.gtk3 ncurses ];
 
   propagatedBuildInputs = [
-    # Needed because Vte-2.91.gir depends on Gtk-3.0.gir
+    # Required by vte-2.91.pc.
     gnome3.gtk3
     gnutls
     pcre2
