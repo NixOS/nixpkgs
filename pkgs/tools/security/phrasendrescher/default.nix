@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, openssl, libssh2, gpgme }:
 
 stdenv.mkDerivation rec {
   name = "phrasendrescher-${version}";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0bkiy9dlc1rqicl7g5sbfhgqlyqms4s66lcawwhhbl9d60y72ghs";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl libssh2 gpgme ];
+
+  configureFlags = "--with-plugins";
 
   meta = with stdenv.lib; {
     description = "Cracking tool that finds passphrases of SSH keys";
