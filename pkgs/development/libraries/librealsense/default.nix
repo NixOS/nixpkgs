@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/IntelRealSense/librealsense;
     license = licenses.asl20;
     maintainers = with maintainers; [ brian-dawn ];
-    platforms = platforms.unix;
+    platforms = intersectLists platforms.unix platforms.x86_64;
   };
 }
