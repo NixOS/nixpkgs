@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, openconnect, intltool, pkgconfig, networkmanager, libsecret
-, withGnome ? true, gnome3, sysctl, kmod }:
+{ stdenv, fetchurl, substituteAll, openconnect, intltool, pkgconfig, networkmanager, libsecret
+, withGnome ? true, gnome3, kmod }:
 
 let
   pname   = "NetworkManager-openconnect";
@@ -12,23 +12,21 @@ in stdenv.mkDerivation rec {
     sha256 = "15j98wwspv6mcmy91w30as5qc1bzsnhlk060xhjy4qrvd37y0xx1";
   };
 
-  buildInputs = [ openconnect networkmanager libsecret ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome-keyring ];
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit kmod openconnect;
+    })
+  ];
+
+  buildInputs = [ openconnect networkmanager ]
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
   configureFlags = [
-    "${if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome"}"
-    "--disable-static"
+    "--with-gnome=${if withGnome then "yes" else "no"}"
   ];
-
-  preConfigure = ''
-     substituteInPlace "configure" \
-       --replace "/sbin/sysctl" "${sysctl}/bin/sysctl"
-     substituteInPlace "src/nm-openconnect-service.c" \
-       --replace "/usr/sbin/openconnect" "${openconnect}/bin/openconnect" \
-       --replace "/sbin/modprobe" "${kmod}/bin/modprobe"
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -37,8 +35,9 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "NetworkManager's OpenConnect plugin";
     inherit (networkmanager.meta) maintainers platforms;
+    license = licenses.gpl2Plus;
   };
 }

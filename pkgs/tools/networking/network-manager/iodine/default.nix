@@ -1,28 +1,31 @@
-{ stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkgconfig, networkmanager, libsecret
-, withGnome ? true, gnome3, kmod }:
+{ stdenv, fetchurl, substituteAll, iodine, intltool, pkgconfig, networkmanager, libsecret
+, withGnome ? true, gnome3 }:
 
 let
-  pname = "NetworkManager-openvpn";
-  version = "1.8.4";
+  pname = "NetworkManager-iodine";
+  version = "1.2.0";
 in stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0gyrv46h9k17qym48qacq4zpxbap6hi17shn921824zm98m2bdvr";
+    sha256 = "0njdigakidji6mfmbsp8lfi8wl88z1dk8cljbva2w0xazyddbwyh";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit kmod openvpn;
+      inherit iodine;
     })
   ];
 
-  buildInputs = [ openvpn networkmanager ]
+  buildInputs = [ iodine networkmanager ]
     ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret gnome3.networkmanagerapplet ];
 
-  nativeBuildInputs = [ intltool pkgconfig libxml2 ];
+  nativeBuildInputs = [ intltool pkgconfig ];
+
+  # Fixes deprecation errors with networkmanager 1.10.2
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
@@ -32,12 +35,12 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "networkmanager-openvpn";
+      attrPath = "networkmanager-iodine";
     };
   };
 
   meta = with stdenv.lib; {
-    description = "NetworkManager's OpenVPN plugin";
+    description = "NetworkManager's iodine plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;
   };
