@@ -9589,12 +9589,16 @@ with pkgs;
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
-  glib = callPackage ../development/libraries/glib {
-  };
-  glib-tested = glib.override { # checked version separate to break cycles
-    doCheck = true;
-    libffi = libffi.override { doCheck = true; };
-  };
+  glib = callPackage ../development/libraries/glib (let
+    glib-untested = glib.override { doCheck = false; };
+  in {
+    # break dependency cycles
+    # these things are only used for tests, they don't get into the closure
+    shared-mime-info = shared-mime-info.override { glib = glib-untested; };
+    desktop-file-utils = desktop-file-utils.override { glib = glib-untested; };
+    dbus = dbus.override { systemd = null; };
+  });
+
   glibmm = callPackage ../development/libraries/glibmm { };
 
   glib-networking = callPackage ../development/libraries/glib-networking {};
@@ -11030,19 +11034,16 @@ with pkgs;
   libGLDarwinOr = alternative: if stdenv.isDarwin then libGLDarwin else alternative;
 
   mesa_noglu = callPackage ../development/libraries/mesa {
-    # makes it slower, but during runtime we link against just mesa_drivers
-    # through /run/opengl-driver*, which is overriden according to config.grsecurity
-    # grsecEnabled = true; # no more support in nixpkgs ATM
     llvmPackages = llvmPackages_6;
   };
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu { };
-  mesa_drivers =
-    let mo = mesa_noglu.override {
-      grsecEnabled = config.grsecurity or false;
-      enableTextureFloats = true;
-    };
-    in mo.drivers;
+
+  # NOTE: 2018-07-12: legacy alias:
+  # gcsecurity bussiness is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
+  # floating point textures patents are expired,
+  # so package reduced to alias
+  mesa_drivers = mesa_noglu.drivers;
 
   ## End libGL/libGLU/Mesa stuff
 
@@ -13009,11 +13010,9 @@ with pkgs;
   };
 
   pulseaudioFull = pulseaudio.override {
-    gconf = gnome2.GConf;
     x11Support = true;
     jackaudioSupport = true;
     airtunesSupport = true;
-    gconfSupport = true;
     bluetoothSupport = true;
     remoteControlSupport = true;
     zeroconfSupport = true;
@@ -17777,9 +17776,7 @@ with pkgs;
 
   panotools = callPackage ../applications/graphics/panotools { };
 
-  paprefs = callPackage ../applications/audio/paprefs {
-    inherit (gnome2) libglademm gconfmm GConf;
-  };
+  paprefs = callPackage ../applications/audio/paprefs { };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
