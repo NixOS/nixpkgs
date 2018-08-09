@@ -16856,6 +16856,10 @@ with pkgs;
 
   inherit (nodePackages) imapnotify;
 
+  img2pdf = callPackage ../applications/misc/img2pdf {
+    inherit (python3Packages) buildPythonApplication fetchPypi;
+  };
+
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
 
