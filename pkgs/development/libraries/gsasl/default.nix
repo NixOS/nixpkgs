@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libidn kerberos ];
 
-  configureFlags = "--with-gssapi-impl=mit";
+  configureFlags = [ "--with-gssapi-impl=mit" ];
 
   doCheck = true;
 

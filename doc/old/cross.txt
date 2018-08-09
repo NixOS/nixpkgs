@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     sha256 = "1ian3kwh2vg6hr3ymrv48s04gijs539vzrq62xr76bxbhbwnz2np";
   };
   inherit noSysDirs;
-  configureFlags = "--target=arm-linux";
+  configureFlags = [ "--target=arm-linux" ];
 }
 ---
 

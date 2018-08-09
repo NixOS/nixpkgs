@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (!stdenv.hostPlatform.isMusl) libidn;
 
   # ninfod probably could build on cross, but the Makefile doesn't pass --host etc to the sub configure...
-  buildFlags = "man all" + stdenv.lib.optionalString (!stdenv.isCross) " ninfod";
+  buildFlags = "man all" + stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) " ninfod";
 
   installPhase =
     ''

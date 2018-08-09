@@ -30,31 +30,38 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ which ];
-  propagatedBuildInputs = [libpng xlibsWrapper libXft libXrender zlib libjpeg];
+  buildInputs = [
+    xextproto
+  ] ++ stdenv.lib.optionals openglSupport [
+    libGLU_combined libXmu
+  ] ++ stdenv.lib.optionals xftSupport [
+    libXft libXft.freetype libXft.fontconfig
+  ] ++ stdenv.lib.optional xrenderSupport libXrender
+    ++ stdenv.lib.optional xineramaSupport libXinerama
+    ++ stdenv.lib.optional xrandrSupport libXrandr
+    ++ stdenv.lib.optional xineramaSupport libXinerama;
+
+  propagatedBuildInputs = [ libpng xlibsWrapper libXft libXrender zlib libjpeg ];
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "
-    -v
-    -system-zlib -system-libpng -system-libjpeg
-    -qt-gif
-    -I${xextproto}/include
-    ${if openglSupport then "-dlopen-opengl
-      -L${libGLU_combined}/lib -I${libGLU_combined}/include
-      -L${libXmu.out}/lib -I${libXmu.dev}/include" else ""}
-    ${if threadSupport then "-thread" else "-no-thread"}
-    ${if xrenderSupport then "-xrender -L${libXrender.out}/lib -I${libXrender.dev}/include" else "-no-xrender"}
-    ${if xrandrSupport then "-xrandr
-      -L${libXrandr.out}/lib -I${libXrandr.dev}/include
-      -I${randrproto}/include" else "-no-xrandr"}
-    ${if xineramaSupport then "-xinerama -L${libXinerama.out}/lib -I${libXinerama.dev}/include" else "-no-xinerama"}
-    ${if cursorSupport then "-L${libXcursor.out}/lib -I${libXcursor.dev}/include" else ""}
-    ${if mysqlSupport then "-qt-sql-mysql -L${mysql.connector-c}/lib/mysql -I${mysql.connector-c}/include/mysql" else ""}
-    ${if xftSupport then "-xft
-      -L${libXft.out}/lib -I${libXft.dev}/include
-      -L${libXft.freetype.out}/lib -I${libXft.freetype.dev}/include
-      -L${libXft.fontconfig.lib}/lib -I${libXft.fontconfig.dev}/include" else "-no-xft"}
-  ";
+  configurePlatforms = [];
+  configureFlags = let
+    mk = cond: name: "-${stdenv.lib.optionalString cond "no-"}${name}";
+  in [
+    "-v"
+    "-system-zlib" "-system-libpng" "-system-libjpeg"
+    "-qt-gif"
+    (mk xftSupport "xft")
+    (mk xrenderSupport "xrender")
+    (mk xrandrSupport "xrandr")
+    (mk xineramaSupport "xinerama")
+    (mk threadSupport "thread")
+  ] ++ stdenv.lib.optionals mysqlSupport [
+    "-qt-sql-mysql"
+    "-L${mysql.connector-c}/lib/mysql"
+    "-I${mysql.connector-c}/include/mysql"
+  ] ++ stdenv.lib.optional openglSupport "-dlopen-opengl";
 
   patches = [
     # Don't strip everything so we can get useful backtraces.

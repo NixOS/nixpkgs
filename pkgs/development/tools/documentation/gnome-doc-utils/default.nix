@@ -13,7 +13,7 @@ python2Packages.buildPythonApplication {
   nativeBuildInputs = [ intltool pkgconfig ];
   buildInputs = [ libxslt ];
 
-  configureFlags = "--disable-scrollkeeper";
+  configureFlags = [ "--disable-scrollkeeper" ];
 
   preBuild = ''
     substituteInPlace xml2po/xml2po/Makefile --replace '-e "s+^#!.*python.*+#!$(PYTHON)+"' '-e "s\"^#!.*python.*\"#!$(PYTHON)\""'

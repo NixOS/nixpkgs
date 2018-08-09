@@ -2,9 +2,9 @@
 , pkgconfig, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, python
 , gawk
-, perl
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && perl.meta.available or false, perl
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && python.meta.available or false, python
 , swig
 , ncurses
 , pam
@@ -76,10 +76,9 @@ let
       perl
     ];
 
-    buildInputs = stdenv.lib.optionals (!stdenv.isCross) [
-      perl
-      python
-    ];
+    buildInputs = []
+      ++ stdenv.lib.optional withPerl perl
+      ++ stdenv.lib.optional withPython python;
 
     # required to build apparmor-parser
     dontDisableStatic = true;
@@ -92,11 +91,14 @@ let
 
     postPatch = "cd ./libraries/libapparmor";
     # https://gitlab.com/apparmor/apparmor/issues/1
-    configureFlags = stdenv.lib.optionalString (!stdenv.isCross) "--with-python --with-perl";
+    configureFlags = [
+      (stdenv.lib.withFeature withPerl "perl")
+      (stdenv.lib.withFeature withPython "python")
+    ];
 
-    outputs = if stdenv.isCross then [ "out" ] else [ "out" "python" ];
+    outputs = [ "out" ] ++ stdenv.lib.optional withPython "python";
 
-    postInstall = stdenv.lib.optionalString (!stdenv.isCross) ''
+    postInstall = stdenv.lib.optionalString withPython ''
       mkdir -p $python/lib
       mv $out/lib/python* $python/lib/
     '';
@@ -137,7 +139,9 @@ let
 
     inherit doCheck;
 
-    meta = apparmor-meta "user-land utilities";
+    meta = apparmor-meta "user-land utilities" // {
+      broken = !(withPython && withPerl);
+    };
   };
 
   apparmor-bin-utils = stdenv.mkDerivation {

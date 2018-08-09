@@ -1,12 +1,12 @@
 { lib, buildPythonPackage, isPy3k, fetchPypi, ipython_genutils, jupyterlab_launcher, notebook }:
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "0.32.1";
+  version = "0.33.7";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "88290656a2db2e38ef913a257ec283f3b5bd99144ed3d52899c9af7030077554";
+    sha256 = "ab9f7bcbc3b4e107897f368aa0527cdc1b4ccf0c370e218ae03ac1d75fac261c";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Jupyter lab environment notebook server extension.";
     license = with licenses; [ bsd3 ];
     homepage = "http://jupyter.org/";
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [ zimbatm costrouc ];
   };
 }

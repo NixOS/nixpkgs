@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline gmp zlib ];
 
-  configureFlags = "--enable-tabling=yes";
+  configureFlags = [ "--enable-tabling=yes" ];
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 

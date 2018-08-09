@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = "--localstatedir=/var";
+  configureFlags = [ "--localstatedir=/var" ];
   installFlags = "CONTAINER_MOUNTDIR=dummy CONTAINER_FINALDIR=dummy CONTAINER_OVERLAY=dummy SESSIONDIR=dummy";
 
   fixupPhase = ''

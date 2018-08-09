@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, libpng, gd, geoip, db}:
+{ stdenv, fetchurl, zlib, libpng, gd, geoip, db }:
 
 stdenv.mkDerivation {
   name = "webalizer-2.23-05";
@@ -16,7 +16,12 @@ stdenv.mkDerivation {
 
   buildInputs = [zlib libpng gd geoip db]; 
 
-  configureFlags = "--enable-dns --enable-geoip --disable-static --enable-shared";
+  configureFlags = [
+    "--enable-dns"
+    "--enable-geoip"
+    "--disable-static"
+    "--enable-shared"
+  ];
 
   meta = {
     platforms = stdenv.lib.platforms.unix;

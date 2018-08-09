@@ -601,19 +601,7 @@ self: super: {
   # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
-    buildTools = with pkgs.buildPackages; [ gettext perl help2man intltool ];
-    patches = [
-      # Add missing gio-unix-2.0 dependency
-      (pkgs.fetchpatch {
-        url = https://github.com/wjt/bustle/commit/bcc3d56d367635c0dfdb4eab0d1265829aba6400.patch;
-        sha256 = "1ybviivfbs5janiyw01ww365vxckni6fk0j10609clxk4na2nvb9";
-      })
-      # No instance for (Semigroup Marquee)
-      (pkgs.fetchpatch {
-        url = https://github.com/wjt/bustle/commit/95393cb17c2fe5f0903470a449e36728471759eb.patch;
-        sha256 = "1n7h1rh62731kg9jjs2mn49nx033ds0l33mpgfl75hrjqblz44m1";
-      })
-    ];
+    buildTools = with pkgs.buildPackages; [ gettext perl help2man ];
     postInstall = ''
       make install PREFIX=$out
     '';
@@ -1071,9 +1059,6 @@ self: super: {
 
   # https://github.com/haskell-servant/servant-auth/issues/113
   servant-auth-client = dontCheck super.servant-auth-client;
-
-  # Over-specified constraint on X11 ==1.8.*.
-  xmonad = doJailbreak super.xmonad;
 
   # Test has either build errors or fails anyway, depending on the compiler.
   vector-algorithms = dontCheck super.vector-algorithms;

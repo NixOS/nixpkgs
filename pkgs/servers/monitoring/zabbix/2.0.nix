@@ -77,7 +77,7 @@ in
 
     inherit src preConfigure;
 
-    configureFlags = "--enable-agent";
+    configureFlags = [ "--enable-agent" ];
 
     meta = with stdenv.lib; {
       inherit branch;

@@ -28,19 +28,19 @@ stdenv.mkDerivation rec {
   # fix build with newer gcc versions
   preConfigure = ''substituteInPlace configure --replace "-Werror" "" '';
 
-  configureFlags = ''
-    --sysconfdir=/etc --localstatedir=/var
-    --with-kernel-headers=${linuxHeaders}/include
-    --disable-security-context
-    --enable-adminport
-    --enable-dpd
-    --enable-frag
-    --enable-gssapi
-    --enable-hybrid
-    --enable-natt
-    --enable-shared
-    --enable-stats
-  '';
+  configureFlags = [
+    "--sysconfdir=/etc --localstatedir=/var"
+    "--with-kernel-headers=${linuxHeaders}/include"
+    "--disable-security-context"
+    "--enable-adminport"
+    "--enable-dpd"
+    "--enable-frag"
+    "--enable-gssapi"
+    "--enable-hybrid"
+    "--enable-natt"
+    "--enable-shared"
+    "--enable-stats"
+  ];
 
   meta = {
     homepage = http://ipsec-tools.sourceforge.net/;

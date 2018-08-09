@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ scheme48 ];
-  configureFlags = ''--with-scheme48=${scheme48}'';
+  configureFlags = [ "--with-scheme48=${scheme48}" ];
 
   meta = with stdenv.lib; {
     description = "A Scheme shell";

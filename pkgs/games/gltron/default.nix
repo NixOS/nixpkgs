@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   # The build fails, unless we disable the default -Wall -Werror
-  configureFlags = "--disable-warn";
+  configureFlags = [ "--disable-warn" ];
 
   buildInputs = [ SDL libGLU_combined zlib libpng libvorbis libmikmod SDL_sound ];
 

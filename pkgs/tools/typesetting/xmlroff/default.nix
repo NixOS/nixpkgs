@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
 
   configureScript = "./autogen.sh";
 
-  configureFlags = "--disable-pangoxsl --disable-gp";
+  configureFlags = [
+    "--disable-pangoxsl"
+    "--disable-gp"
+  ];
 
   hardeningDisable = [ "format" ];
 

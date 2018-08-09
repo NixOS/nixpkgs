@@ -29,35 +29,29 @@ stdenv.mkDerivation rec {
 /*
   --with-atlas-library=DIR  Atlas library files are in DIR and we use Atlas
 */
-  configureFlags = ""
-  # use gcc C compiler and gnu Fortran compiler (g77 or gfortran)
-  + " --with-gcc --with-g77"
-  # use Xaw3d widgets given with Scilab
-  + (lib.optionalString (!withXaw3d) " --with-local-xaw")
-  # do not compile with PVM library
-  + " --without-pvm"
-  # compile with GTK
-  + (if withGtk then "
-       --with-gtk --with-gtk2
-    " else "
-       --without-gtk --without-gtk2
-    ")
-  # compile with TCL/TK
-  + (lib.optionalString withTk "
-       --with-tk
-       --with-tcl-library=${tcl}/lib
-       --with-tcl-include=${tcl}/include
-       --with-tk-library=${tk}/lib
-       --with-tk-include=${tk}/include
-    ")
-  # do not use Gtk widgets
-  + " --without-gtk --without-gtk2"
-  # compile with ocaml
-  + (if withOCaml then " --with-ocaml" else " --without-ocaml")
-  # do not compile Java interface
-  + " --without-java"
-  # use the X Window System
-  + lib.optionalString withX "--with-x"
+  configureFlags = [
+    # use gcc C compiler and gnu Fortran compiler (g77 or gfortran)
+    "--with-gcc" "--with-g77"
+    # do not compile with PVM library
+    "--without-pvm"
+    # compile with GTK
+    (stdenv.lib.enableFeature withGtk "gtk")
+    (stdenv.lib.enableFeature withGtk "gtk2")
+    # compile with ocaml
+    (stdenv.lib.withFeature withOCaml "ocaml")
+    # do not compile Java interface
+    "--without-java"
+    # use the X Window System
+    (stdenv.lib.withFeature withX "x")
+    # compile with TCL/TK
+  ] ++ lib.optionals withTk [
+    "--with-tk"
+    "--with-tcl-library=${tcl}/lib"
+    "--with-tcl-include=${tcl}/include"
+    "--with-tk-library=${tk}/lib"
+    "--with-tk-include=${tk}/include"
+  ]    # use Xaw3d widgets given with Scilab
+    ++ lib.optional (!withXaw3d) "--with-local-xaw"
   ;
 
   makeFlags = "all";

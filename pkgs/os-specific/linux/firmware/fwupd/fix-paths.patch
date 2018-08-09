@@ -6,7 +6,7 @@
 -)
 --- a/data/meson.build
 +++ b/data/meson.build
-@@ -7,16 +7,12 @@
+@@ -8,16 +8,12 @@
    subdir('installed-tests')
  endif
  
@@ -26,8 +26,8 @@
  install_data(['metadata.xml'],
 --- a/data/pki/meson.build
 +++ b/data/pki/meson.build
-@@ -3,13 +3,13 @@
-       'GPG-KEY-Hughski-Limited',
+@@ -4,14 +4,14 @@
+       'GPG-KEY-Linux-Foundation-Firmware',
        'GPG-KEY-Linux-Vendor-Firmware-Service',
      ],
 -    install_dir : join_paths(sysconfdir, 'pki', 'fwupd')
@@ -35,6 +35,7 @@
    )
  
    install_data([
+       'GPG-KEY-Linux-Foundation-Metadata',
        'GPG-KEY-Linux-Vendor-Firmware-Service',
      ],
 -    install_dir : join_paths(sysconfdir, 'pki', 'fwupd-metadata')
@@ -42,7 +43,7 @@
    )
  endif
  
-@@ -17,12 +17,12 @@
+@@ -19,12 +19,12 @@
    install_data([
        'LVFS-CA.pem',
      ],
@@ -66,9 +67,9 @@
 -    install_dir : join_paths(sysconfdir, 'fwupd', 'remotes.d')
 +    install_dir : join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d')
    )
- endif
- 
-@@ -19,12 +19,12 @@
+   i18n.merge_file(
+     input: 'lvfs.metainfo.xml',
+@@ -37,12 +37,12 @@
    output : 'fwupd.conf',
    configuration : con2,
    install: true,
@@ -92,13 +93,3 @@
 -    echo 'Creating stateful directory'
 -    mkdir -p ${DESTDIR}${LOCALSTATEDIR}/lib/fwupd
  #fi
---- a/po/make-images.sh
-+++ b/po/make-images.sh
-@@ -7,6 +7,7 @@
- #
- install -m 0755 -d ${MESON_INSTALL_DESTDIR_PREFIX}/share/locale/
- ${MESON_SOURCE_ROOT}/po/make-images "Installing firmware update…" ${MESON_INSTALL_DESTDIR_PREFIX}/share/locale/ ${MESON_SOURCE_ROOT}/po/LINGUAS
-+shopt -s nullglob
- for x in ${MESON_INSTALL_DESTDIR_PREFIX}/share/locale/*/LC_IMAGES/*.bmp ; do
-     gzip -f ${x}
- done

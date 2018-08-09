@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib libsoup gobjectIntrospection];
 
-  configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
+  configureFlags = [ "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt" ];
 
   passthru = {
     updateScript = gnome3.updateScript {

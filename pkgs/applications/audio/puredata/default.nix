@@ -15,13 +15,12 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [ alsaLib libjack2 fftw ];
 
-  configureFlags = ''
-    --enable-alsa
-    --enable-jack
-    --enable-fftw
-    --disable-portaudio
-
-  '';
+  configureFlags = [
+    "--enable-alsa"
+    "--enable-jack"
+    "--enable-fftw"
+    "--disable-portaudio"
+  ];
 
   # https://github.com/pure-data/pure-data/issues/188
   # --disable-oss

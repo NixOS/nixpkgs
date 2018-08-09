@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "17bkng6ay37n3492lr9wpb49kms6gh554rn9gbjs27zygvvfrjsm";
   };
 
-  configureFlags = "--disable-scrollkeeper";
+  configureFlags = [ "--disable-scrollkeeper" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python libxml2Python libxslt which libX11 gtk
                   intltool GConf gnome-doc-utils ];

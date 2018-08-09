@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libXt libXaw libXres utilmacros ];
 
-  configureFlags = "--with-appdefaultdir=$(out)/share/X11/app-defaults/editres";
+  configureFlags = [ "--with-appdefaultdir=$(out)/share/X11/app-defaults/editres" ];
 
   hardeningDisable = [ "format" ];
 

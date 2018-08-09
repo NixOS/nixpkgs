@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/libgweather/2.30/${name}.tar.bz2";
     sha256 = "0k16lpdyy8as8wgc5dqpy5b8i9i4mrl77qx8db23fgs2c533fddq";
   };
-  configureFlags = "--with-zoneinfo-dir=${stdenv.glibc}/share/zoneinfo";
+  configureFlags = [ "--with-zoneinfo-dir=${stdenv.glibc}/share/zoneinfo" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libxml2 gtk intltool GConf libsoup libtasn1 nettle gmp ];
 }

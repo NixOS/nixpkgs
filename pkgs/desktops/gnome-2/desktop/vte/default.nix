@@ -32,9 +32,9 @@ in stdenv.mkDerivation rec {
   buildInputs = [ intltool glib gtk ncurses ] ++
                 stdenv.lib.optionals pythonSupport [python pygtk];
 
-  configureFlags = ''
-    ${if pythonSupport then "--enable-python" else "--disable-python"}
-  '';
+  configureFlags = [
+    (stdenv.lib.enableFeature pythonSupport "python")
+  ];
 
   postInstall = stdenv.lib.optionalString pythonSupport ''
     cd $(toPythonPath $out)/gtk-2.0

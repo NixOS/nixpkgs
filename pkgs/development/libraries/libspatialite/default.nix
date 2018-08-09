@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libxml2 sqlite zlib proj geos libiconv ];
 
-  configureFlags = "--disable-freexl";
+  configureFlags = [ "--disable-freexl" ];
 
   enableParallelBuilding = true;
 

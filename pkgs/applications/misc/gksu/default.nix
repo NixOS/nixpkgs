@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|/usr/bin/x-terminal-emulator|-l gnome-terminal|g' gksu.desktop
   '';
 
-  configureFlags = "--disable-nautilus-extension";
+  configureFlags = [ "--disable-nautilus-extension" ];
 
   meta = {
     description = "A graphical frontend for libgksu";

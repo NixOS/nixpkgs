@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext ];
   buildInputs = [ alsaLib ncurses libsamplerate fftw ];
 
-  configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
+  configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 
   installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
 

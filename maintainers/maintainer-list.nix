@@ -807,6 +807,11 @@
     github = "coroa";
     name = "Jonas Hörsch";
   };
+  costrouc = {
+    email = "chris.ostrouchov@gmail.com";
+    github = "costrouc";
+    name = "Chris Ostrouchov";
+  };
   couchemar = {
     email = "couchemar@yandex.ru";
     github = "couchemar";
@@ -1841,6 +1846,11 @@
     email = "jaakko.luttinen@iki.fi";
     github = "jluttine";
     name = "Jaakko Luttinen";
+  };
+  jmettes = {
+    email = "jonathan@jmettes.com";
+    github = "jmettes";
+    name = "Jonathan Mettes";
   };
   Jo = {
     email = "0x4A6F@shackspace.de";

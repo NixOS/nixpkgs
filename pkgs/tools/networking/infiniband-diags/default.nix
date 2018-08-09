@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  configureFlags = "--with-perl-installdir=\${out}/lib/perl5/site_perl --sbindir=\${out}/bin";
+  configureFlags = [ "--with-perl-installdir=\${out}/lib/perl5/site_perl" "--sbindir=\${out}/bin" ];
 
   postInstall = ''
     rmdir $out/var/run $out/var

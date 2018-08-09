@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -lmnl -lnftnl"
   '';
 
-  configureFlags = ''
-    --enable-devel
-    --enable-shared
-  '';
+  configureFlags = [
+    "--enable-devel"
+    "--enable-shared"
+  ];
 
   outputs = [ "out" "dev" ];
 

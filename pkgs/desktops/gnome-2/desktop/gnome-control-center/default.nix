@@ -18,5 +18,5 @@ stdenv.mkDerivation {
                   libgnomeui librsvg gnome_menus gnome-desktop gnome_panel metacity gnome-settings-daemon
                   libSM docbook_xml_dtd_412
   ];
-  configureFlags = "--disable-scrollkeeper";
+  configureFlags = [ "--disable-scrollkeeper" ];
 }

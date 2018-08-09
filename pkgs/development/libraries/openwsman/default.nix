@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cmakeFlags="$cmakeFlags -DPACKAGE_ARCHITECTURE=$(uname -m)";
   '';
 
-  configureFlags = "--disable-more-warnings";
+  configureFlags = [ "--disable-more-warnings" ];
 
   meta = with stdenv.lib; {
     description  = "Openwsman server implementation and client API with bindings";

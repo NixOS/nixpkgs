@@ -18,13 +18,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool utillinux ];
 
-  configureFlags = ""
-  + " --with-media-dir=${mediaDir}"
-  + " --with-lock-dir=${lockDir}"
-  + " --with-whitelist=${whiteList}"
-  + " --with-mount-prog=${utillinux}/bin/mount"
-  + " --with-umount-prog=${utillinux}/bin/umount"
-  + " --with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g";
+  configureFlags = [
+    "--with-media-dir=${mediaDir}"
+    "--with-lock-dir=${lockDir}"
+    "--with-whitelist=${whiteList}"
+    "--with-mount-prog=${utillinux}/bin/mount"
+    "--with-umount-prog=${utillinux}/bin/umount"
+    "--with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g"
+  ];
 
   postConfigure = ''
     # etc/Mafile.am is hardcoded and it does not respect the --prefix option.

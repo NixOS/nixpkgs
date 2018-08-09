@@ -12,7 +12,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex perl ];
 
-  configureFlags = "--without-distro --without-pacemaker --localstatedir=/var --sysconfdir=/etc";
+  configureFlags = [
+    "--without-distro"
+    "--without-pacemaker"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
 
   preConfigure =
     ''

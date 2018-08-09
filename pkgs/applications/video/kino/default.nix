@@ -66,7 +66,7 @@ stdenv.mkDerivation {
   buildInputs = [ gtk2 libglade libxml2 libraw1394 libsamplerate libdv
       pkgconfig perl perlXMLParser libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ffmpeg libv4l ]; # TODOoptional packages 
 
-  configureFlags = "--enable-local-ffmpeg=no";
+  configureFlags = [ "--enable-local-ffmpeg=no" ];
 
   hardeningDisable = [ "format" ];
 

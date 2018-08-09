@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # 'make check' uses boost and tcl
   buildInputs = stdenv.lib.optionals doCheck [ boost tcl ];
 
-  configureFlags = "--disable-ccache";
+  configureFlags = [ "--disable-ccache" ];
 
   meta = {
     description = "Interface compiler that connects C/C++ code to higher-level languages";
