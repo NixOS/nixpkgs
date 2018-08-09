@@ -1,4 +1,6 @@
-{ stdenv, buildPythonApplication, fetchPypi, python3Packages }:
+{ stdenv, python3Packages }:
+
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "img2pdf";
@@ -11,7 +13,7 @@ buildPythonApplication rec {
 
   doCheck = false; # needs pdfrw
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     pillow
   ];
 
