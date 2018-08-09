@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256  = "0pw72acbqgs4n1qa297nnja23v9hxz9g7190yfx9kwm7mgbllmww";
   };
 
+  patches = [
+    ./0001-Disables-IO-isatty-test-for-sandboxed-builds.patch
+  ];
+
   nativeBuildInputs = [ ruby bison ];
 
   # Necessary so it uses `gcc` instead of `ld` for linking.
@@ -21,6 +25,8 @@ stdenv.mkDerivation rec {
     mkdir $out
     cp -R build/host/{bin,lib} $out
   '';
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "An embeddable implementation of the Ruby language";
