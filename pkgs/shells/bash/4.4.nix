@@ -1,3 +1,4 @@
+let self =
 { stdenv, buildPackages
 , fetchurl, binutils ? null, bison, autoconf
 , buildPlatform, hostPlatform
@@ -5,6 +6,8 @@
 # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin, readline70 ? null
 , withDocs ? false, texinfo ? null
+
+, callPackage
 }:
 
 with stdenv.lib;
@@ -127,6 +130,10 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
+    interactive = callPackage self {
+      interactive = true;
+      withDocs = true;
+    };
     shellPath = "/bin/bash";
   };
-}
+}; in self

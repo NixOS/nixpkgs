@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, bashInteractive
+{ lib, fetchFromGitHub, bash
 , python3, vim
 }:
 
@@ -44,7 +44,7 @@ in python.pkgs.buildPythonApplication rec {
 
     export HOME=$(pwd)/check-phase
     make test
-    SH=${bashInteractive}/bin/bash make test-non-pythonic
+    SH=${bash.interactive}/bin/bash make test-non-pythonic
   '';
 
   meta = {

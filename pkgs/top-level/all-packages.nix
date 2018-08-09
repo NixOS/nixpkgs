@@ -6148,13 +6148,7 @@ with pkgs;
   runtimeShell = "${runtimeShellPackage}/bin/bash";
   runtimeShellPackage = bash;
 
-  bash = lowPrio (callPackage ../shells/bash/4.4.nix { });
-
-  # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
-  bashInteractive = callPackage ../shells/bash/4.4.nix {
-    interactive = true;
-    withDocs = true;
-  };
+  bash = callPackage ../shells/bash/4.4.nix { };
 
   bash-completion = callPackage ../shells/bash/bash-completion { };
 
@@ -8620,9 +8614,6 @@ with pkgs;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.5.nix { };
   texinfo = texinfo6;
-  texinfoInteractive = appendToName "interactive" (
-    texinfo.override { interactive = true; }
-  );
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 

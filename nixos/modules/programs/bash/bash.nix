@@ -204,7 +204,7 @@ in
     # priority to allow user override using both .text and .source.
     environment.etc."inputrc".source = mkOptionDefault ./inputrc;
 
-    users.defaultUserShell = mkDefault pkgs.bashInteractive;
+    users.defaultUserShell = mkDefault pkgs.bash.interactive;
 
     environment.pathsToLink = optionals cfg.enableCompletion [
       "/etc/bash_completion.d"
@@ -219,8 +219,8 @@ in
         "/var/run/current-system/sw/bin/bash"
         "/run/current-system/sw/bin/sh"
         "/var/run/current-system/sw/bin/sh"
-        "${pkgs.bashInteractive}/bin/bash"
-        "${pkgs.bashInteractive}/bin/sh"
+        "${pkgs.bash.interactive}/bin/bash"
+        "${pkgs.bash.interactive}/bin/sh"
       ];
 
   };

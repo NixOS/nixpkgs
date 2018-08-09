@@ -33,6 +33,9 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
+  bashInteractive = bash.interactive;
+
   PPSSPP = ppsspp; # added 2017-10-01
   QmidiNet = qmidinet;  # added 2016-05-22
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
@@ -275,6 +278,7 @@ mapAliases ({
   tex-gyre-pagella-math = tex-gyre-math.pagella; # added 2018-04-03
   tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
+  texinfoInteractive = texinfo.interactive; # added 2018-03-25
   tftp_hpa = tftp-hpa; # added 2015-04-03
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06

@@ -1,9 +1,12 @@
 { version, sha256 }:
 
+let self =
 { stdenv, buildPackages, fetchurl, perl, xz
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
+
+, callPackage
 }:
 
 with stdenv.lib;
@@ -23,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xz.bin ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
-    ++ optionals interactive [ ncurses procps ];
+    ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
     ++ stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
@@ -33,9 +36,17 @@ stdenv.mkDerivation rec {
     installTargets="install install-tex";
   '';
 
+  checkInputs = [ procps ];
+
   doCheck = interactive
     && !stdenv.isDarwin
     && !stdenv.isSunOS; # flaky
+
+  passthru = {
+    interactive = callPackage self {
+      interactive = true;
+    };
+  };
 
   meta = {
     homepage = http://www.gnu.org/software/texinfo/;
@@ -61,4 +72,4 @@ stdenv.mkDerivation rec {
     '';
     branch = version;
   };
-}
+}; in self
