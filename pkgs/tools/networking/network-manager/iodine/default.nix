@@ -1,20 +1,26 @@
-{ stdenv, fetchurl, iodine, intltool, pkgconfig, networkmanager, libsecret
+{ stdenv, fetchurl, substituteAll, iodine, intltool, pkgconfig, networkmanager, libsecret
 , withGnome ? true, gnome3 }:
 
 let
-  pname   = "NetworkManager-iodine";
+  pname = "NetworkManager-iodine";
   version = "1.2.0";
 in stdenv.mkDerivation rec {
-  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0njdigakidji6mfmbsp8lfi8wl88z1dk8cljbva2w0xazyddbwyh";
   };
 
-  buildInputs = [ iodine networkmanager libsecret ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome-keyring
-                                        gnome3.networkmanagerapplet ];
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit iodine;
+    })
+  ];
+
+  buildInputs = [ iodine networkmanager ]
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
@@ -22,15 +28,9 @@ in stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   configureFlags = [
-    "${if withGnome then "--with-gnome" else "--without-gnome"}"
-    "--disable-static"
+    "--with-gnome=${if withGnome then "yes" else "no"}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
   ];
-
-  preConfigure = ''
-     substituteInPlace "src/nm-iodine-service.c" \
-       --replace "/usr/bin/iodine" "${iodine}/bin/iodine"
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -39,8 +39,9 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "NetworkManager's iodine plugin";
     inherit (networkmanager.meta) maintainers platforms;
+    license = licenses.gpl2Plus;
   };
 }
