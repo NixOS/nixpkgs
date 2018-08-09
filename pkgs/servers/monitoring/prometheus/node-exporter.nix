@@ -1,5 +1,7 @@
 { stdenv, buildGo19Package, fetchFromGitHub }:
 
+# Go 1.10 causes segfaults:
+# https://github.com/prometheus/node_exporter/issues/870
 buildGo19Package rec {
   name = "node_exporter-${version}";
   version = "0.16.0";
