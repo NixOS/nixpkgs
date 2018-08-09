@@ -4742,7 +4742,6 @@ dont-distribute-packages:
   gi-gtkosxapplication:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   gi-notify:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   gi-poppler:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
-  gi-vte:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   gi-wnck:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   giak:                                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   Gifcurry:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
