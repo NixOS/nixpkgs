@@ -1,34 +1,30 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool, intltool, pkgconfig
+{ stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkgconfig
 , networkmanager, ppp, xl2tpd, strongswan, libsecret
 , withGnome ? true, gnome3, networkmanagerapplet }:
 
 stdenv.mkDerivation rec {
-  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
-  pname   = "NetworkManager-l2tp";
-  version = "1.2.8";
+  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  pname = "NetworkManager-l2tp";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
-    owner  = "nm-l2tp";
-    repo   = "network-manager-l2tp";
-    rev    = "${version}";
-    sha256 = "110157dpamgr7r5kb8aidi0a2ap9z2m52bff94fb4nhxacz69yv8";
+    owner = "nm-l2tp";
+    repo = "network-manager-l2tp";
+    rev = "${version}";
+    sha256 = "1vm004nj2n5abpywr7ji6r28scf7xs45zw4rqrm8jn7mysf96h0x";
   };
 
-  buildInputs = [ networkmanager ppp libsecret ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome-keyring networkmanagerapplet ];
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit strongswan xl2tpd;
+    })
+  ];
+
+  buildInputs = [ networkmanager ppp ]
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret networkmanagerapplet ];
 
   nativeBuildInputs = [ autoreconfHook libtool intltool pkgconfig ];
-
-  postPatch = ''
-    sed -i -e 's%"\(/usr/sbin\|/usr/pkg/sbin\|/usr/local/sbin\)/[^"]*",%%g' ./src/nm-l2tp-service.c
-
-    substituteInPlace ./Makefile.am \
-      --replace '$(sysconfdir)/dbus-1/system.d' "$out/etc/dbus-1/system.d"
-
-    substituteInPlace ./src/nm-l2tp-service.c \
-      --replace /sbin/ipsec  ${strongswan}/bin/ipsec \
-      --replace /sbin/xl2tpd ${xl2tpd}/bin/xl2tpd
-  '';
 
   preConfigure = ''
     intltoolize -f
