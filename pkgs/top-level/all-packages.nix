@@ -4136,7 +4136,7 @@ with pkgs;
 
   networkmanager-openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
 
-  networkmanager-fortisslvpn = callPackage ../tools/networking/network-manager/fortisslvpn.nix { };
+  networkmanager-fortisslvpn = callPackage ../tools/networking/network-manager/fortisslvpn { };
 
   networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan.nix { };
 
