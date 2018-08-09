@@ -578,6 +578,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  AuthenModAuthPubTkt = buildPerlPackage rec {
+    name = "Authen-ModAuthPubTkt-0.1.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AG/AGORDON/${name}.tar.gz";
+      sha256 = "7996e1a42c51216003ccf03c4b5250286b4c55684257971851f5ece9161dc7dd";
+    };
+    propagatedBuildInputs = [ pkgs.openssl IPCRun3 ];
+    patchPhase = ''
+      sed -i 's|my $openssl_bin = "openssl";|my $openssl_bin = "${pkgs.openssl}/bin/openssl";|' lib/Authen/ModAuthPubTkt.pm
+    '';
+    meta = {
+      description = "Generate Tickets (Signed HTTP Cookies) for mod_auth_pubtkt protected websites";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AuthenPassphrase = buildPerlModule rec {
     name = "Authen-Passphrase-0.008";
     src = fetchurl {
