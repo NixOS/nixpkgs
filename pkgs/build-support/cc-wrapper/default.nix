@@ -6,10 +6,8 @@
 # compiler and the linker just "work".
 
 { name ? ""
-, stdenvNoCC
+, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
-, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, propagateDoc ? !nativeTools && cc != null && cc ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
@@ -263,8 +261,9 @@ stdenv.mkDerivation {
       ## Man page and info support
       ##
 
-      ln -s ${cc.man} $man
-      ln -s ${cc.info} $info
+      mkdir -p $man/nix-support $info/nix-support
+      printWords ${cc.man or ""}  >> $man/nix-support/propagated-build-inputs
+      printWords ${cc.info or ""}  >> $info/nix-support/propagated-build-inputs
     ''
 
     + ''

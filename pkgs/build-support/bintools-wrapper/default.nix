@@ -6,10 +6,9 @@
 # compiler and the linker just "work".
 
 { name ? ""
-, stdenvNoCC
-, bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
-, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, propagateDoc ? !nativeTools && bintools != null && bintools ? man
+, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, bintools ? null, libc ? null
+, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , extraPackages ? [], extraBuildCommands ? ""
 , buildPackages ? {}
 , useMacosReexportHack ? false
@@ -268,8 +267,9 @@ stdenv.mkDerivation {
       ## Man page and info support
       ##
 
-      ln -s ${bintools.man} $man
-      ln -s ${bintools.info} $info
+      mkdir -p $man/nix-support $info/nix-support
+      printWords ${bintools.man or ""} >> $man/nix-support/propagated-build-inputs
+      printWords ${bintools.info or ""} >> $info/nix-support/propagated-build-inputs
     ''
 
     + ''
