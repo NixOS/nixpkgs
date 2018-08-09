@@ -4126,7 +4126,7 @@ with pkgs;
 
   networkmanager = callPackage ../tools/networking/network-manager { };
 
-  networkmanager-iodine = callPackage ../tools/networking/network-manager/iodine.nix { };
+  networkmanager-iodine = callPackage ../tools/networking/network-manager/iodine { };
 
   networkmanager-openvpn = callPackage ../tools/networking/network-manager/openvpn { };
 
