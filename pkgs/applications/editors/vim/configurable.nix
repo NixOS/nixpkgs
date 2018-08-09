@@ -6,6 +6,7 @@ args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, ge
 , libICE
 , vimPlugins
 , makeWrapper
+, wrapGAppsHook
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
@@ -122,6 +123,7 @@ in stdenv.mkDerivation rec {
   ++ stdenv.lib.optional wrapPythonDrv makeWrapper
   ++ stdenv.lib.optional nlsSupport gettext
   ++ stdenv.lib.optional perlSupport perl
+  ++ stdenv.lib.optional (guiSupport == "gtk3") wrapGAppsHook
   ;
 
   buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
