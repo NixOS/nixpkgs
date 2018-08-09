@@ -19,7 +19,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gobjectIntrospection intltool pkgconfig vala gperf libxml2 ];
   buildInputs = [ gnome3.glib gnome3.gtk3 ncurses ];
 
-  propagatedBuildInputs = [ gnutls pcre2 ];
+  propagatedBuildInputs = [
+    # Needed because Vte-2.91.gir depends on Gtk-3.0.gir
+    gnome3.gtk3
+    gnutls
+    pcre2
+  ];
 
   preConfigure = "patchShebangs .";
 
