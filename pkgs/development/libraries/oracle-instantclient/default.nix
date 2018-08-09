@@ -52,6 +52,9 @@ in stdenv.mkDerivation rec {
     install -Dm644 *.jar $out/share/java
     install -Dm644 sdk/include/* $out/include
     install -Dm644 sdk/demo/* $out/share/${name}/demo
+
+    # PECL::oci8 will not build without this
+    ln -s $out/lib/libclntsh.so.12.1 $out/lib/libclntsh.so
   '';
 
   meta = with stdenv.lib; {

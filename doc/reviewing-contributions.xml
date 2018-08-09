@@ -103,8 +103,9 @@
     <itemizedlist>
      <listitem>
       <para>
-       mention-bot usually notifies GitHub users based on the submitted changes,
-       but it can happen that it misses some of the package maintainers.
+       <link xlink:href="https://help.github.com/articles/about-codeowners/">CODEOWNERS</link>
+       will make GitHub notify users based on the submitted changes, but it can
+       happen that it misses some of the package maintainers.
       </para>
      </listitem>
     </itemizedlist>
@@ -376,8 +377,9 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
     <itemizedlist>
      <listitem>
       <para>
-       Mention-bot notify GitHub users based on the submitted changes, but it
-       can happen that it miss some of the package maintainers.
+       <link xlink:href="https://help.github.com/articles/about-codeowners/">CODEOWNERS</link>
+       will make GitHub notify users based on the submitted changes, but it can
+       happen that it misses some of the package maintainers.
       </para>
      </listitem>
     </itemizedlist>

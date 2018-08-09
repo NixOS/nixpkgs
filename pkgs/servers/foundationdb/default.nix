@@ -88,7 +88,7 @@ let
         separateDebugInfo = true;
         enableParallelBuilding = true;
 
-        makeFlags = [ "all" "fdb_java" ]
+        makeFlags = [ "all" "fdb_java" "fdb_python" ]
           # Don't compile FDBLibTLS if we don't need it in 6.0 or later;
           # it gets statically linked in
           ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
@@ -106,17 +106,28 @@ let
 
         installPhase = ''
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
+          mkdir -vp $python/lib/${python.libPrefix}/site-packages
 
-          cp -v ./lib/libfdb_c.so     $lib/lib
         '' + lib.optionalString (!lib.versionAtLeast version "6.0") ''
+          # we only copy the TLS library on < 6.0, since it's compiled-in otherwise
           cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
         '' + ''
 
+          # C API
+          cp -v ./lib/libfdb_c.so                           $lib/lib
           cp -v ./bindings/c/foundationdb/fdb_c.h           $dev/include/foundationdb
           cp -v ./bindings/c/foundationdb/fdb_c_options.g.h $dev/include/foundationdb
 
+          # java
           cp -v ./bindings/java/foundationdb-client.jar     $lib/share/java/fdb-java.jar
 
+          # python
+          rm -f ./bindings/python/fdb/*.pth # remove useless files
+          cp -R ./bindings/python/fdb                       $python/lib/${python.libPrefix}/site-packages/fdb
+          # symlink a copy of the shared object into place, so that impl.py can load it
+          ln -sv $lib/lib/libfdb_c.so                       $python/lib/${python.libPrefix}/site-packages/fdb/libfdb_c.so
+
+          # binaries
           for x in fdbbackup fdbcli fdbserver fdbmonitor; do
             cp -v "./bin/$x" $out/bin;
           done
@@ -128,7 +139,7 @@ let
           ln -sfv $out/bin/fdbbackup $out/libexec/backup_agent
         '';
 
-        outputs = [ "out" "lib" "dev" ];
+        outputs = [ "out" "lib" "dev" "python" ];
 
         meta = with stdenv.lib; {
           description = "Open source, distributed, transactional key-value store";
@@ -148,16 +159,15 @@ in with builtins; {
   };
 
   foundationdb52 = makeFdb rec {
-    version = "5.2.6";
+    version = "5.2.8";
     branch  = "release-5.2";
-    rev     = "refs/tags/v5.2.6"; # seemed to be tagged incorrectly
-    sha256  = "1q3lq1hqq0f53n51gd4cw5cpayyw65dmkfplhsw1m5mghymzmskk";
+    sha256  = "1kbmmhk2m9486r4kyjlc7bb3wd50204i0p6dxcmvl6pbp1bs0wlb";
   };
 
   foundationdb60 = makeFdb rec {
-    version = "6.0.3pre2446_${substring 0 8 rev}";
+    version = "6.0.4pre2497_${substring 0 8 rev}";
     branch  = "release-6.0";
-    rev     = "dd5481fb60ee1652986b2a028b31dcbb6cb171b5";
-    sha256  = "0mhlb728badk1h3410jbhy7f48m3jjnjna26wwyw5680xz72d6dm";
+    rev     = "73d64cb244714c19bcc651122f6e7a9236aa11b5";
+    sha256  = "1jzmrf9kj0brqddlmxvzhj27r6843790jnqwkv1s3ri21fqb3hs7";
   };
 }

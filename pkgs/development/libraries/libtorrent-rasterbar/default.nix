@@ -1,11 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, automake, autoconf, zlib
-, boost, openssl, libtool, python, libiconv, geoip }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, automake, autoconf
+, zlib, boost, openssl, libtool, python, libiconv, geoip, ncurses
+}:
 
 let
   version = "1.1.9";
   formattedVersion = lib.replaceChars ["."] ["_"] version;
 
-  boostPython = boost.override { enablePython = true; };
+  # Make sure we override python, so the correct version is chosen
+  # for the bindings, if overridden
+  boostPython = boost.override { enablePython = true; inherit python; };
 
 in stdenv.mkDerivation {
   name = "libtorrent-rasterbar-${version}";
@@ -19,8 +22,15 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
-  buildInputs = [ boostPython openssl zlib python libiconv geoip ];
+  buildInputs = [ boostPython openssl zlib python libiconv geoip ncurses ];
   preConfigure = "./autotool.sh";
+
+  postInstall = ''
+    moveToOutput "include" "$dev"
+    moveToOutput "lib/${python.libPrefix}" "$python"
+  '';
+
+  outputs = [ "out" "dev" "python" ];
 
   configureFlags = [
     "--enable-python-binding"

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.74.2";
+  version = "0.75.2";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -47,6 +47,7 @@
     "august" = ps: with ps; [  ];
     "auth" = ps: with ps; [ aiohttp-cors ];
     "auth.indieauth" = ps: with ps; [  ];
+    "auth.login_flow" = ps: with ps; [  ];
     "automation" = ps: with ps; [  ];
     "automation.event" = ps: with ps; [  ];
     "automation.homeassistant" = ps: with ps; [  ];
@@ -128,6 +129,7 @@
     "binary_sensor.skybell" = ps: with ps; [  ];
     "binary_sensor.sleepiq" = ps: with ps; [  ];
     "binary_sensor.spc" = ps: with ps; [  ];
+    "binary_sensor.tahoma" = ps: with ps; [  ];
     "binary_sensor.tapsaff" = ps: with ps; [  ];
     "binary_sensor.tcp" = ps: with ps; [  ];
     "binary_sensor.tellduslive" = ps: with ps; [  ];
@@ -225,10 +227,12 @@
     "climate.proliphix" = ps: with ps; [  ];
     "climate.radiotherm" = ps: with ps; [  ];
     "climate.sensibo" = ps: with ps; [  ];
+    "climate.spider" = ps: with ps; [  ];
     "climate.tado" = ps: with ps; [  ];
     "climate.tesla" = ps: with ps; [  ];
     "climate.toon" = ps: with ps; [  ];
     "climate.touchline" = ps: with ps; [  ];
+    "climate.tuya" = ps: with ps; [  ];
     "climate.venstar" = ps: with ps; [  ];
     "climate.vera" = ps: with ps; [  ];
     "climate.wink" = ps: with ps; [  ];
@@ -259,6 +263,8 @@
     "counter" = ps: with ps; [  ];
     "cover" = ps: with ps; [  ];
     "cover.abode" = ps: with ps; [  ];
+    "cover.aladdin_connect" = ps: with ps; [  ];
+    "cover.brunt" = ps: with ps; [  ];
     "cover.command_line" = ps: with ps; [  ];
     "cover.demo" = ps: with ps; [  ];
     "cover.garadget" = ps: with ps; [  ];
@@ -282,6 +288,7 @@
     "cover.tellduslive" = ps: with ps; [  ];
     "cover.tellstick" = ps: with ps; [  ];
     "cover.template" = ps: with ps; [  ];
+    "cover.tuya" = ps: with ps; [  ];
     "cover.velbus" = ps: with ps; [  ];
     "cover.vera" = ps: with ps; [  ];
     "cover.wink" = ps: with ps; [  ];
@@ -375,6 +382,7 @@
     "fan.isy994" = ps: with ps; [  ];
     "fan.mqtt" = ps: with ps; [ paho-mqtt ];
     "fan.template" = ps: with ps; [  ];
+    "fan.tuya" = ps: with ps; [  ];
     "fan.velbus" = ps: with ps; [  ];
     "fan.wink" = ps: with ps; [  ];
     "fan.xiaomi_miio" = ps: with ps; [ construct ];
@@ -482,6 +490,7 @@
     "light.enocean" = ps: with ps; [  ];
     "light.eufy" = ps: with ps; [  ];
     "light.flux_led" = ps: with ps; [  ];
+    "light.futurenow" = ps: with ps; [  ];
     "light.greenwave" = ps: with ps; [  ];
     "light.group" = ps: with ps; [  ];
     "light.hive" = ps: with ps; [  ];
@@ -518,6 +527,7 @@
     "light.rpi_gpio_pwm" = ps: with ps; [  ];
     "light.scsgate" = ps: with ps; [  ];
     "light.sensehat" = ps: with ps; [  ];
+    "light.sisyphus" = ps: with ps; [  ];
     "light.skybell" = ps: with ps; [  ];
     "light.tellduslive" = ps: with ps; [  ];
     "light.tellstick" = ps: with ps; [  ];
@@ -620,6 +630,7 @@
     "media_player.russound_rio" = ps: with ps; [  ];
     "media_player.russound_rnet" = ps: with ps; [  ];
     "media_player.samsungtv" = ps: with ps; [ wakeonlan ];
+    "media_player.sisyphus" = ps: with ps; [  ];
     "media_player.snapcast" = ps: with ps; [  ];
     "media_player.songpal" = ps: with ps; [  ];
     "media_player.sonos" = ps: with ps; [ soco ];
@@ -770,6 +781,7 @@
     "scene.litejet" = ps: with ps; [  ];
     "scene.lutron_caseta" = ps: with ps; [  ];
     "scene.tahoma" = ps: with ps; [  ];
+    "scene.tuya" = ps: with ps; [  ];
     "scene.velux" = ps: with ps; [  ];
     "scene.vera" = ps: with ps; [  ];
     "scene.wink" = ps: with ps; [  ];
@@ -896,6 +908,7 @@
     "sensor.loopenergy" = ps: with ps; [  ];
     "sensor.luftdaten" = ps: with ps; [ luftdaten ];
     "sensor.lyft" = ps: with ps; [  ];
+    "sensor.magicseaweed" = ps: with ps; [  ];
     "sensor.melissa" = ps: with ps; [  ];
     "sensor.metoffice" = ps: with ps; [  ];
     "sensor.mfi" = ps: with ps; [  ];
@@ -1048,6 +1061,7 @@
     "shell_command" = ps: with ps; [  ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
     "shopping_list" = ps: with ps; [ aiohttp-cors ];
+    "sisyphus" = ps: with ps; [  ];
     "skybell" = ps: with ps; [  ];
     "sleepiq" = ps: with ps; [  ];
     "smappee" = ps: with ps; [  ];
@@ -1055,6 +1069,7 @@
     "sonos" = ps: with ps; [ soco ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
     "spc" = ps: with ps; [ websockets ];
+    "spider" = ps: with ps; [  ];
     "splunk" = ps: with ps; [  ];
     "statsd" = ps: with ps; [ statsd ];
     "sun" = ps: with ps; [  ];
@@ -1128,6 +1143,7 @@
     "switch.skybell" = ps: with ps; [  ];
     "switch.smappee" = ps: with ps; [  ];
     "switch.snmp" = ps: with ps; [ pysnmp ];
+    "switch.spider" = ps: with ps; [  ];
     "switch.tahoma" = ps: with ps; [  ];
     "switch.tellduslive" = ps: with ps; [  ];
     "switch.tellstick" = ps: with ps; [  ];

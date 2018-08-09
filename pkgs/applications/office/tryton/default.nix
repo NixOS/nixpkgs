@@ -14,10 +14,10 @@ with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "4.8.3";
+  version = "4.8.4";
   src = python2Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1e2862bbe7c943afbbdf2232cdc55f75d2357640115c7f1483f0814b2c5a6882";
+    sha256 = "6cf3091424853e1270d61f3a9b15ad8e6b36a44c28becf216c324ca8dc1474b0";
   };
   nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
   propagatedBuildInputs = with python2Packages; [

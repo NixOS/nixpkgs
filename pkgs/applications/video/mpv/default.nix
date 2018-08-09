@@ -171,9 +171,12 @@ in stdenv.mkDerivation rec {
 
   buildPhase = ''
     python3 ${waf} build
+  '' + optionalString stdenv.isDarwin ''
+    python3 TOOLS/osxbundle.py -s build/mpv
   '';
 
-  installPhase =
+  # Ensure youtube-dl is available in $PATH for mpv
+  wrapperFlags = 
   let
     getPath  = type : "${luasocket}/lib/lua/${lua.luaversion}/?.${type};" +
                       "${luasocket}/share/lua/${lua.luaversion}/?.${type}";
@@ -181,24 +184,32 @@ in stdenv.mkDerivation rec {
     luaCPath = getPath "so";
   in
   ''
-    python3 ${waf} install
-
-    # Use a standard font
-    mkdir -p $out/share/mpv
-    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
-    # Ensure youtube-dl is available in $PATH for MPV
-    wrapProgram $out/bin/mpv \
       --prefix LUA_PATH : "${luaPath}" \
       --prefix LUA_CPATH : "${luaCPath}" \
   '' + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
       --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
-  '' + ''
+  '';
+
+  installPhase = ''
+    python3 ${waf} install
+
+    # Use a standard font
+    mkdir -p $out/share/mpv
+    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
+    wrapProgram "$out/bin/mpv" \
+      ${wrapperFlags}
 
     cp TOOLS/umpv $out/bin
     wrapProgram $out/bin/umpv \
       --set MPV "$out/bin/mpv"
+
+  '' + optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r build/mpv.app $out/Applications
+    wrapProgram "$out/Applications/mpv.app/Contents/MacOS/mpv" \
+      ${wrapperFlags}
   '';
 
   meta = with stdenv.lib; {

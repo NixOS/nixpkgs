@@ -15,7 +15,7 @@ assert stdenv.isDarwin -> !enableGtk2Plugins;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.20.3";
+  version = "2.20.4";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "1n0dy94bm7wvxln4jis1gp8plv8n4a01g41724zsf5psg1yk16sp";
+    sha256 = "0cmfjbfxssgrwhgqmk7kqws91k6pha519bnyjrfsgy640max2zfc";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -37,12 +37,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-  '';
-
-  postConfigure = ''
-    # A stopgap for a non-deterministic build failure when using only one core
-    # Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=183788#c4
-    ninja JavaScriptCoreForwardingHeaders WTFForwardingHeaders
   '';
 
   cmakeFlags = [

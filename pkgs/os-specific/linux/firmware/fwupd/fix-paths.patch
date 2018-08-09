@@ -1,0 +1,95 @@
+--- a/data/builder/meson.build
++++ b/data/builder/meson.build
+@@ -1,3 +0,0 @@
+-install_data('README.md',
+-  install_dir : join_paths(localstatedir, 'lib', 'fwupd', 'builder')
+-)
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -8,16 +8,12 @@
+   subdir('installed-tests')
+ endif
+ 
+-install_data(['daemon.conf'],
+-  install_dir : join_paths(sysconfdir, 'fwupd')
+-)
+-
+ install_data(['org.freedesktop.fwupd.metainfo.xml'],
+   install_dir: join_paths(datadir, 'metainfo')
+ )
+ 
+ install_data(['org.freedesktop.fwupd.conf'],
+-  install_dir : join_paths(sysconfdir, 'dbus-1', 'system.d')
++  install_dir : join_paths(get_option('prefix'), 'etc', 'dbus-1', 'system.d')
+ )
+ 
+ install_data(['metadata.xml'],
+--- a/data/pki/meson.build
++++ b/data/pki/meson.build
+@@ -4,14 +4,14 @@
+       'GPG-KEY-Linux-Foundation-Firmware',
+       'GPG-KEY-Linux-Vendor-Firmware-Service',
+     ],
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd')
+   )
+ 
+   install_data([
+       'GPG-KEY-Linux-Foundation-Metadata',
+       'GPG-KEY-Linux-Vendor-Firmware-Service',
+     ],
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd-metadata')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd-metadata')
+   )
+ endif
+ 
+@@ -19,12 +19,12 @@
+   install_data([
+       'LVFS-CA.pem',
+     ],
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd')
+   )
+   install_data([
+       'LVFS-CA.pem',
+     ],
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd-metadata')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd-metadata')
+   )
+ endif
+ 
+--- a/data/remotes.d/meson.build
++++ b/data/remotes.d/meson.build
+@@ -3,7 +3,7 @@
+       'lvfs.conf',
+       'lvfs-testing.conf',
+     ],
+-    install_dir : join_paths(sysconfdir, 'fwupd', 'remotes.d')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d')
+   )
+   i18n.merge_file(
+     input: 'lvfs.metainfo.xml',
+@@ -37,12 +37,12 @@
+   output : 'fwupd.conf',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++  install_dir: join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d'),
+ )
+ configure_file(
+   input : 'vendor.conf',
+   output : 'vendor.conf',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
++  install_dir: join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d'),
+ )
+--- a/meson_post_install.sh
++++ b/meson_post_install.sh
+@@ -11,6 +11,4 @@
+     echo 'Updating systemd deps'
+     mkdir -p ${DESTDIR}${SYSTEMDUNITDIR}/system-update.target.wants
+     ln -sf ../fwupd-offline-update.service ${DESTDIR}${SYSTEMDUNITDIR}/system-update.target.wants/fwupd-offline-update.service
+-    echo 'Creating stateful directory'
+-    mkdir -p ${DESTDIR}${LOCALSTATEDIR}/lib/fwupd
+ #fi

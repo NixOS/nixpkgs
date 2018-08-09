@@ -19,8 +19,12 @@ import ./make-test.nix ({ pkgs, ...} : {
     startAll;
 
     $netdata->waitForUnit("netdata.service");
-    # check if netdata can read disk ops for root owned processes. 
-    # if > 0, successful. verifies both netdata working and 
+
+    # check if the netdata main page loads.
+    $netdata->succeed("curl --fail http://localhost:19999/");
+
+    # check if netdata can read disk ops for root owned processes.
+    # if > 0, successful. verifies both netdata working and
     # apps.plugin has elevated capabilities.
     my $cmd = <<'CMD';
     curl -s http://localhost:19999/api/v1/data\?chart=users.pwrites | \

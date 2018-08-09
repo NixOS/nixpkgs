@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "bear-${version}";
-  version = "2.3.11";
+  version = "2.3.12";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = "Bear";
     rev = version;
-    sha256 = "0r6ykvclq9ws055ssd8w33dicmk5l9pisv0fpzkks700n8d3z9f3";
+    sha256 = "1zzz2yiiny9pm4h6ayb82xzxc2j5djcpf8va2wagcw92m7w6miqw";
   };
 
   nativeBuildInputs = [ cmake ];

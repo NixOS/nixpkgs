@@ -19,7 +19,15 @@ stdenv.mkDerivation rec {
   # remaps /etc/passwd to a trivial file, but we can't do that on Darwin so I do this
   # instead. In this case, I pass in the very imaginative "submitter" as the submitter name
 
-  patchPhase = let
+  patches = [
+    # CVE-2018-1000097
+    (fetchurl {
+      url = "https://sources.debian.org/data/main/s/sharutils/1:4.15.2-2+deb9u1/debian/patches/01-fix-heap-buffer-overflow-cve-2018-1000097.patch";
+      sha256 = "19g0sxc8g79aj5gd5idz5409311253jf2q8wqkasf0handdvsbxx";
+    })
+  ];
+
+  postPatch = let
       # This evaluates to a string containing:
       #
       #     substituteInPlace tests/shar-2 --replace '${SHAR}' '${SHAR} -s submitter'

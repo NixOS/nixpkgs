@@ -508,6 +508,8 @@ with pkgs;
 
   appimage-run = callPackage ../tools/package-management/appimage-run {};
 
+  appimagekit = callPackage ../tools/package-management/appimagekit {};
+
   apt-cacher-ng = callPackage ../servers/http/apt-cacher-ng { };
 
   apt-offline = callPackage ../tools/misc/apt-offline { };
@@ -1147,7 +1149,7 @@ with pkgs;
 
   dateutils = callPackage ../tools/misc/dateutils { };
 
-  ddar = pythonPackages.callPackage ../tools/backup/ddar { };
+  ddar = callPackage ../tools/backup/ddar { };
 
   ddate = callPackage ../tools/misc/ddate { };
 
@@ -1456,6 +1458,8 @@ with pkgs;
 
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
+  scour = callPackage ../tools/graphics/scour { };
+
   s2png = callPackage ../tools/graphics/s2png { };
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
@@ -1498,7 +1502,6 @@ with pkgs;
     libdbi = null;
     net_snmp = null;
     libuuid = null;
-    curl = null;
     gnutls = null;
     libgcrypt = null;
     liblognorm = null;
@@ -1579,6 +1582,10 @@ with pkgs;
 
   asynk = callPackage ../tools/networking/asynk { };
 
+  b2sum = callPackage ../tools/security/b2sum {
+    inherit (llvmPackages) openmp;
+  };
+
   bacula = callPackage ../tools/backup/bacula { };
 
   bareos = callPackage ../tools/backup/bareos { };
@@ -1605,17 +1612,7 @@ with pkgs;
 
   bgs = callPackage ../tools/X11/bgs { };
 
-  biber = callPackage ../tools/typesetting/biber {
-    inherit (perlPackages) buildPerlModule
-      autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
-      DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
-      DateTime DateTimeFormatBuilder DateTimeCalendarJulian
-      ExtUtilsLibBuilder FileSlurp FileWhich IPCRun3 LogLog4perl LWPProtocolHttps ListAllUtils
-      ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-      UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-      ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
-      TestDifferences;
-  };
+  biber = callPackage ../tools/typesetting/biber { };
 
   blueman = callPackage ../tools/bluetooth/blueman {
     withPulseAudio = config.pulseaudio or true;
@@ -1733,15 +1730,27 @@ with pkgs;
 
   circleci-cli = callPackage ../development/tools/misc/circleci-cli { };
 
-  citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
-  citrix_receiver_13_10_0 = citrix_receiver.override { version = "13.10.0"; };
-  citrix_receiver_13_9_1  = citrix_receiver.override { version = "13.9.1";  };
-  citrix_receiver_13_9_0  = citrix_receiver.override { version = "13.9.0";  };
-  citrix_receiver_13_8_0  = citrix_receiver.override { version = "13.8.0";  };
-  citrix_receiver_13_7_0  = citrix_receiver.override { version = "13.7.0";  };
-  citrix_receiver_13_6_0  = citrix_receiver.override { version = "13.6.0";  };
-  citrix_receiver_13_5_0  = citrix_receiver.override { version = "13.5.0";  };
-  citrix_receiver_13_4_0  = citrix_receiver.override { version = "13.4.0";  };
+  citrix_receiver_unwrapped = callPackage ../applications/networking/remote/citrix-receiver { };
+  citrix_receiver_unwrapped_13_10_0 = citrix_receiver_unwrapped.override { version = "13.10.0"; };
+  citrix_receiver_unwrapped_13_9_1  = citrix_receiver_unwrapped.override { version = "13.9.1";  };
+  citrix_receiver_unwrapped_13_9_0  = citrix_receiver_unwrapped.override { version = "13.9.0";  };
+  citrix_receiver_unwrapped_13_8_0  = citrix_receiver_unwrapped.override { version = "13.8.0";  };
+
+  citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
+    citrix_receiver = citrix_receiver_unwrapped;
+  };
+  citrix_receiver_13_10_0 = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
+    citrix_receiver = citrix_receiver_unwrapped_13_10_0;
+  };
+  citrix_receiver_13_9_1 = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
+    citrix_receiver = citrix_receiver_unwrapped_13_9_1;
+  };
+  citrix_receiver_13_9_0 = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
+    citrix_receiver = citrix_receiver_unwrapped_13_9_0;
+  };
+  citrix_receiver_13_8_0 = callPackage ../applications/networking/remote/citrix-receiver/wrapper.nix {
+    citrix_receiver = citrix_receiver_unwrapped_13_8_0;
+  };
 
   citra = libsForQt5.callPackage ../misc/emulators/citra { };
 
@@ -4213,9 +4222,7 @@ with pkgs;
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
-  nox = callPackage ../tools/package-management/nox {
-    pythonPackages = python3Packages;
-  };
+  nox = callPackage ../tools/package-management/nox { };
 
   nq = callPackage ../tools/system/nq { };
 
@@ -4682,6 +4689,8 @@ with pkgs;
 
   proot = callPackage ../tools/system/proot { };
 
+  prototypejs = callPackage ../development/libraries/prototypejs { };
+
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
@@ -5020,7 +5029,7 @@ with pkgs;
 
   sasview = callPackage ../applications/science/misc/sasview {};
 
-  scallion = callPackage ../tools/security/scallion { };
+  scallion = callPackage ../tools/security/scallion { mono = mono4; };
 
   scanbd = callPackage ../tools/graphics/scanbd { };
 
@@ -5174,6 +5183,7 @@ with pkgs;
   };
 
   smarty3 = callPackage ../development/libraries/smarty3 { };
+  smarty3-i18n = callPackage ../development/libraries/smarty3-i18n { };
 
   smbldaptools = callPackage ../tools/networking/smbldaptools {
     inherit (perlPackages) perlldap CryptSmbHash DigestSHA1;
@@ -6136,7 +6146,6 @@ with pkgs;
   zssh = callPackage ../tools/networking/zssh { };
 
   zstd = callPackage ../tools/compression/zstd { };
-  zstdmt = callPackage ../tools/compression/zstdmt { };
 
   zsync = callPackage ../tools/compression/zsync { };
 
@@ -7290,7 +7299,7 @@ with pkgs;
   inherit (beam.interpreters)
     erlang erlangR18 erlangR19 erlangR20 erlangR21
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
-    elixir elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3
+    elixir elixir_1_7 elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3
     lfe lfe_1_2;
 
   inherit (beam.packages.erlang)
@@ -7775,6 +7784,7 @@ with pkgs;
   inherit (callPackages ../tools/admin/ansible {})
     ansible_2_4
     ansible_2_5
+    ansible_2_6
     ansible2
     ansible;
 
@@ -10104,6 +10114,10 @@ with pkgs;
 
   libdbiDrivers = callPackage ../development/libraries/libdbi-drivers { };
 
+  libunity = callPackage ../development/libraries/libunity {
+    inherit (gnome3) gnome-common;
+  };
+
   libdbusmenu = callPackage ../development/libraries/libdbusmenu { };
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
   libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
@@ -11028,7 +11042,7 @@ with pkgs;
   # gcsecurity bussiness is done: https://www.theregister.co.uk/2018/02/08/bruce_perens_grsecurity_anti_slapp/
   # floating point textures patents are expired,
   # so package reduced to alias
-  mesa_drivers = mesa_noglu;
+  mesa_drivers = mesa_noglu.drivers;
 
   ## End libGL/libGLU/Mesa stuff
 
@@ -11077,9 +11091,7 @@ with pkgs;
 
   libmpc = callPackage ../development/libraries/libmpc { };
 
-  mpich2 = callPackage ../development/libraries/mpich2 {
-    gfortran = gfortran5;
-  };
+  mpich = callPackage ../development/libraries/mpich { };
 
   mstpd = callPackage ../os-specific/linux/mstpd { };
 
@@ -11169,6 +11181,10 @@ with pkgs;
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
   nvidia-video-sdk = callPackage ../development/libraries/nvidia-video-sdk { };
+
+  nvtop = callPackage ../tools/system/nvtop {
+    nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
+  };
 
   ocl-icd-oclhGen = oclh: callPackage ../development/libraries/ocl-icd { opencl-headers = oclh; };
   ocl-icd-oclh_1_2 = ocl-icd-oclhGen opencl-headers_1_2;
@@ -11260,7 +11276,8 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_2_6
-    libressl_2_7;
+    libressl_2_7
+    libressl_2_8;
 
   libressl = libressl_2_7;
 
@@ -13340,6 +13357,8 @@ with pkgs;
   torque = callPackage ../servers/computing/torque { };
 
   tt-rss = callPackage ../servers/tt-rss { };
+  tt-rss-plugin-tumblr-gdpr = callPackage ../servers/tt-rss/plugin-tumblr-gdpr { };
+  tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
 
   searx = callPackage ../servers/web-apps/searx { };
 
@@ -13852,7 +13871,6 @@ with pkgs;
         # when adding a new linux version
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.bcm2835_mmal_v4l2_camera_driver # Only needed for 4.16!
       ];
   };
 
@@ -15226,6 +15244,8 @@ with pkgs;
   android-studio = androidStudioPackages.stable;
   android-studio-preview = androidStudioPackages.beta;
 
+  animbar = callPackage ../applications/graphics/animbar { };
+
   antfs-cli = callPackage ../applications/misc/antfs-cli {};
 
   antimony = libsForQt5.callPackage ../applications/graphics/antimony {};
@@ -15280,6 +15300,8 @@ with pkgs;
   autotrace = callPackage ../applications/graphics/autotrace {};
 
   avocode = callPackage ../applications/graphics/avocode {};
+
+  cadence =  libsForQt5.callPackage ../applications/audio/cadence { };
 
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
@@ -16921,11 +16943,6 @@ with pkgs;
 
   jbrout = callPackage ../applications/graphics/jbrout { };
 
-  jumanji = callPackage ../applications/networking/browsers/jumanji {
-    webkitgtk = webkitgtk24x-gtk3;
-    gtk = gtk3;
-  };
-
   jwm = callPackage ../applications/window-managers/jwm { };
 
   k3d = callPackage ../applications/graphics/k3d {
@@ -17643,6 +17660,8 @@ with pkgs;
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
 
+  ncview = callPackage ../tools/X11/ncview { } ;
+
   ne = callPackage ../applications/editors/ne { };
 
   nedit = callPackage ../applications/editors/nedit { };
@@ -17896,6 +17915,8 @@ with pkgs;
   pinta = callPackage ../applications/graphics/pinta {
     gtksharp = gtk-sharp-2_0;
   };
+
+  plex-media-player = libsForQt59.callPackage ../applications/video/plex-media-player { };
 
   plover = recurseIntoAttrs (callPackage ../applications/misc/plover { });
 
@@ -18417,7 +18438,7 @@ with pkgs;
     inherit (pkgs.vamp) vampSDK;
   };
 
-  soulseekqt = callPackage ../applications/networking/p2p/soulseekqt { };
+  soulseekqt = libsForQt5.callPackage ../applications/networking/p2p/soulseekqt { };
 
   sox = callPackage ../applications/misc/audio/sox {
     enableLame = config.sox.enableLame or false;
@@ -18658,6 +18679,8 @@ with pkgs;
 
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
+  toggldesktop = libsForQt5.callPackage ../applications/misc/toggldesktop { };
+
   tomahawk = callPackage ../applications/audio/tomahawk {
     taglib = taglib_1_9;
     enableXMPP      = config.tomahawk.enableXMPP      or true;
@@ -18787,11 +18810,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
     inherit (darwin) libobjc cf-private;
     inherit lua;
-  });
-
-  vimNox = lowPrio (vim_configurable.override {
-    source = "vim-nox";
-    lua = pkgs.lua5_1; # vimNox source is from 2012, requires older lua
+    gtk2 = if stdenv.isDarwin then gtk2-x11 else gtk2;
+    guiSupport = if stdenv.isDarwin then "gtk2" else "gtk3";
   });
 
   qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
@@ -19378,9 +19398,9 @@ with pkgs;
 
   yoshimi = callPackage ../applications/audio/yoshimi { };
 
-  youtube-dl = with pythonPackages; toPythonApplication youtube-dl;
+  youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 
-  youtube-dl-light = with pythonPackages; toPythonApplication youtube-dl-light;
+  youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
 
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
@@ -19514,6 +19534,8 @@ with pkgs;
   chessx = libsForQt5.callPackage ../games/chessx { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
+
+  crispyDoom = callPackage ../games/crispy-doom { };
 
   ckan = callPackage ../games/ckan { };
 
@@ -20023,6 +20045,10 @@ with pkgs;
 
   teeworlds = callPackage ../games/teeworlds { };
 
+  tengine = callPackage ../servers/http/tengine {
+    modules = with nginxModules; [ rtmp dav moreheaders modsecurity-nginx ];
+  };
+
   tennix = callPackage ../games/tennix { };
 
   terraria-server = callPackage ../games/terraria-server { };
@@ -20510,6 +20536,9 @@ with pkgs;
 
   jags = callPackage ../applications/science/math/jags { };
 
+  libbraiding = callPackage ../development/libraries/science/math/libbraiding { };
+
+  libhomfly = callPackage ../development/libraries/science/math/libhomfly { };
 
   # We have essentially 4 permutations of liblapack: version 3.4.1 or 3.5.0,
   # and with or without atlas as a dependency. The default `liblapack` is 3.4.1
@@ -21110,6 +21139,8 @@ with pkgs;
   brightnessctl = callPackage ../misc/brightnessctl { };
 
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
+
+  ccemux = callPackage ../misc/emulators/ccemux { };
 
   click = callPackage ../applications/networking/cluster/click { };
 
