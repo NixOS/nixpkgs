@@ -18498,7 +18498,7 @@ with pkgs;
     })
     subversion18 subversion19 subversion_1_10;
 
-  subversion = pkgs.subversion19;
+  subversion = subversion_1_10;
 
   subversionClient = appendToName "client" (pkgs.subversion.override {
     bdbSupport = false;
