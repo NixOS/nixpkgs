@@ -1,4 +1,4 @@
-version=1.7.1
+version=1.9.0
 hashfile=tf${version}-hashes.nix
 rm -f $hashfile
 echo "{" >> $hashfile
@@ -27,3 +27,4 @@ for sys in "linux" "mac"; do
         done
     done
 done
+echo "}" >> $hashfile

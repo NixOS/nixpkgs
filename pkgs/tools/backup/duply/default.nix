@@ -2,12 +2,13 @@
 , gnugrep, txt2man, makeWrapper, which
 }:
 
-stdenv.mkDerivation {
-  name = "duply-1.9.2";
+stdenv.mkDerivation rec {
+  name = "duply-${version}";
+  version = "2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/1.9.x/duply_1.9.2.tgz";
-    sha256 = "1ay50rsr90dcnjncjclzfckqmxxnizmi4jhb5rsybfn0xdj0kz1b";
+    url = "mirror://sourceforge/project/ftplicity/duply%20%28simple%20duplicity%29/2.1.x/duply_${version}.tgz";
+    sha256 = "0i5j7h7h6ssrwhll0sfhymisshg54kx7j45zcqffzjxa0ylvzlm8";
   };
 
   buildInputs = [ txt2man makeWrapper ];

@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "110vxgahyx5dvylqrxsm5cmx4a32cl2zchvm6cgc270jz75fg7wd";
   };
 
-  preInstall = ''
-    mkdir -p $out
-  '';
-
   installFlags = [ "DESTDIR=$(out)" ];
 
   # Firmware blobs do not need fixing and should not be modified
   dontFixup = true;
+
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "0r2g91hc7csp2fbp2ny4s4rwv0mw2m130gpnisxnhzi05hkwki66";
 
   meta = with stdenv.lib; {
     description = "Binary firmware collection packaged by kernel.org";

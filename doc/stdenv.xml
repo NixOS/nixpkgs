@@ -836,9 +836,10 @@ passthru = {
         These can optionally be compressed using <command>gzip</command>
         (<filename>.tar.gz</filename>, <filename>.tgz</filename> or
         <filename>.tar.Z</filename>), <command>bzip2</command>
-        (<filename>.tar.bz2</filename> or <filename>.tbz2</filename>) or
-        <command>xz</command> (<filename>.tar.xz</filename> or
-        <filename>.tar.lzma</filename>).
+        (<filename>.tar.bz2</filename>, <filename>.tbz2</filename> or
+        <filename>.tbz</filename>) or <command>xz</command>
+        (<filename>.tar.xz</filename>, <filename>.tar.lzma</filename> or
+        <filename>.txz</filename>).
        </para>
       </listitem>
      </varlistentry>

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "deepin-gtk-theme-${version}";
-  version = "17.10.6";
+  version = "17.10.8";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-gtk-theme";
     rev = version;
-    sha256 = "01mfn3i234ynjvxl0yddsqqadwh6zmiibzrjm9xd1f78rj4xxkll";
+    sha256 = "1z5f5dnda18gixkjcxpvsavhv9m5l2kq61958fdfm1idi0cbr7fp";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];

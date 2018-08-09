@@ -807,6 +807,11 @@
     github = "coroa";
     name = "Jonas Hörsch";
   };
+  costrouc = {
+    email = "chris.ostrouchov@gmail.com";
+    github = "costrouc";
+    name = "Chris Ostrouchov";
+  };
   couchemar = {
     email = "couchemar@yandex.ru";
     github = "couchemar";
@@ -1842,6 +1847,11 @@
     github = "jluttine";
     name = "Jaakko Luttinen";
   };
+  jmettes = {
+    email = "jonathan@jmettes.com";
+    github = "jmettes";
+    name = "Jonathan Mettes";
+  };
   Jo = {
     email = "0x4A6F@shackspace.de";
     name = "Joachim Ernst";
@@ -2190,7 +2200,7 @@
     name = "Nathaniel Baxter";
   };
   lightdiscord = {
-    email = "arnaud@lightdiscord.me";
+    email = "root@arnaud.sh";
     github = "lightdiscord";
     name = "Arnaud Pascal";
   };
