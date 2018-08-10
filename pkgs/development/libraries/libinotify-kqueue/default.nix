@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  doCheck = true;
+  checkFlags = [ "test" ];
+
   meta = with stdenv.lib; {
     description = "Inotify shim for macOS and BSD";
     homepage = https://github.com/libinotify-kqueue/libinotify-kqueue;
