@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   name = "gildas-${version}";
 
   src = fetchurl {
-    url = "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.gz";
+    url = "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.gz";
     sha256 = "0kl3zf6b1kv8hgsfrarsnm2gnrdax3vi8f856249y4nxsa7lbv2i";
   };
 
