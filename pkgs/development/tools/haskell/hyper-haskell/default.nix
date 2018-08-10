@@ -5,13 +5,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "hyper-haskell-${version}";
-  version = "0.1.0.2";
+  version = "0.2.1.0";
 
   src = fetchFromGitHub {
     owner = "HeinrichApfelmus";
     repo = "hyper-haskell";
     rev = "v${version}";
-    sha256 = "1k38h7qx12z7463z8466pji0nwfkp4qkg7q83kns2mzmwmw5jnmb";
+    sha256 = "14ll7n1lbj4dqdwjq7kg5js97qca2wi2lsbq25h99z77njqf3c3n";
   };
 
   propagatedBuildInputs = extra-packages;
