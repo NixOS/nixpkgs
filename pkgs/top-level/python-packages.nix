@@ -509,6 +509,8 @@ in {
 
   spglib = callPackage ../development/python-modules/spglib { };
 
+  statistics = callPackage ../development/python-modules/statistics { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
