@@ -782,6 +782,8 @@ in {
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ cfg.path;
         serviceConfig = {
           Slice = "kubernetes.slice";
+          CPUAccounting = true;
+          MemoryAccounting = true;
           ExecStart = ''${cfg.package}/bin/kubelet \
             ${optionalString cfg.kubelet.applyManifests
               "--pod-manifest-path=${manifests}"} \

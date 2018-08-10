@@ -5,7 +5,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "vlc-plugin-${version}";
-  version = "2.2.2"; # This 2.2.2 builds fine with vlc 2.2.4
+  version = "2.2.2"; # This 2.2.2 builds fine with vlc 3.0.3
 
   src = fetchgit {
     url = "https://code.videolan.org/videolan/npapi-vlc.git";

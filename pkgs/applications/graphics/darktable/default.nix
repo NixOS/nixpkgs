@@ -3,15 +3,16 @@
 , ilmbase, gtk3, intltool, lcms2, lensfun, libX11, libexif, libgphoto2, libjpeg
 , libpng, librsvg, libtiff, openexr, osm-gps-map, pkgconfig, sqlite, libxslt
 , openjpeg, lua, pugixml, colord, colord-gtk, libwebp, libsecret, gnome3
+, ocl-icd
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.1";
+  version = "2.4.4";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "014pq80i5k1kdvvrl7xrgaaq3i4fzv09h7a3pwzlp2ahkczwcm32";
+    sha256 = "0kdhmiw4wxk2w9v2hms9yk8nl4ymdshnqyj0l07nivzzr6w20hwn";
   };
 
   nativeBuildInputs = [ cmake ninja llvm pkgconfig intltool perl desktop-file-utils wrapGAppsHook ];
@@ -21,9 +22,9 @@ stdenv.mkDerivation rec {
     libgphoto2 libjpeg libpng librsvg libtiff openexr sqlite libxslt
     libsoup graphicsmagick json-glib openjpeg lua pugixml
     colord colord-gtk libwebp libsecret gnome3.adwaita-icon-theme
-    osm-gps-map
+    osm-gps-map ocl-icd
   ];
-
+    
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
   ];
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   # the wrappers:
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH ":" "$out/lib/darktable"
+      --prefix LD_LIBRARY_PATH ":" "$out/lib/darktable:${ocl-icd}/lib"
     )
   '';
 
