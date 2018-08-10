@@ -344,6 +344,8 @@ in {
 
   palettable = callPackage ../development/python-modules/palettable { };
 
+  pathlib = callPackage ../development/python-modules/pathlib { };
+
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
@@ -9457,27 +9459,6 @@ in {
   };
 
   patator = callPackage ../development/python-modules/patator { };
-
-  pathlib = buildPythonPackage rec {
-    name = "pathlib-${version}";
-    version = "1.0.1";
-    disabled = pythonAtLeast "3.4"; # Was added to std library in Python 3.4
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pathlib/${name}.tar.gz";
-      sha256 = "17zajiw4mjbkkv6ahp3xf025qglkj0805m9s41c45zryzj6p2h39";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
-    meta = {
-      description = "Object-oriented filesystem paths";
-      homepage = "https://pathlib.readthedocs.org/";
-      license = licenses.mit;
-    };
-  };
 
   pathlib2 = callPackage ../development/python-modules/pathlib2 { };
 
