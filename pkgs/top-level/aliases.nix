@@ -318,8 +318,6 @@ mapAliases ({
     (import self.path { localSystem = { inherit system; }; });
   callPackage_i686 = pkgsi686Linux.callPackage;
 
-  inherit (nixos {}) nixos-rebuild;
-
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
