@@ -6307,10 +6307,10 @@ with pkgs;
 
   fpc = callPackage ../development/compilers/fpc { };
 
-  gambit = callPackage ../development/compilers/gambit { };
-  gambit-unstable = callPackage ../development/compilers/gambit/unstable.nix { };
-  gerbil = callPackage ../development/compilers/gerbil { };
-  gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { };
+  gambit = callPackage ../development/compilers/gambit { stdenv = gccStdenv; };
+  gambit-unstable = callPackage ../development/compilers/gambit/unstable.nix { stdenv = gccStdenv; };
+  gerbil = callPackage ../development/compilers/gerbil { stdenv = gccStdenv; };
+  gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { stdenv = gccStdenv; };
 
   gccFun = callPackage ../development/compilers/gcc/7;
   gcc = gcc7;
