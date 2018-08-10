@@ -623,6 +623,7 @@
   ./services/search/hound.nix
   ./services/search/kibana.nix
   ./services/search/solr.nix
+  ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
   ./services/security/fail2ban.nix
