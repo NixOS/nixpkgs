@@ -6,4 +6,8 @@ stdenv.mkDerivation {
   dontStrip = true;
   hardeningDisable = [ "stackprotector" "fortify" ];
   patches = [ ./osvi.patch ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.windows;
+  };
 }
