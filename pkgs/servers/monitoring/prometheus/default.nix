@@ -17,8 +17,6 @@ let
           inherit sha256;
         };
 
-        doCheck = true;
-
         buildFlagsArray = let t = "${goPackagePath}/vendor/github.com/prometheus/common/version"; in ''
           -ldflags=
              -X ${t}.Version=${version}
