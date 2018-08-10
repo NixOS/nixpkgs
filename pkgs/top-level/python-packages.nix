@@ -182,6 +182,8 @@ in {
 
   asana = callPackage ../development/python-modules/asana { };
 
+  ase = callPackage ../development/python-modules/ase { };
+
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
   aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
