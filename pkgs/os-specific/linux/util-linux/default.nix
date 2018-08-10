@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
-    (lib.withFeature (ncurses != null) "ncurses")
+    (lib.withFeature (ncurses != null) "ncursesw")
     (lib.withFeature (systemd != null) "systemd")
     (lib.withFeatureAs (systemd != null)
        "systemdsystemunitdir" "$bin/lib/systemd/system/")
