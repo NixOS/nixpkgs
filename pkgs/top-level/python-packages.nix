@@ -384,6 +384,8 @@ in {
 
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
+  py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
+
   pydbus = callPackage ../development/python-modules/pydbus { };
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
