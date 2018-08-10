@@ -71,8 +71,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "ga" ];
 
-  patches = [ ./no-etc-install.patch ]
-    ++ optional nixosTestRunner ./force-uid0-on-9p.patch
+  patches = [
+    ./no-etc-install.patch
+    ./fix-qemu-ga.patch
+  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optional pulseSupport ./fix-hda-recording.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
