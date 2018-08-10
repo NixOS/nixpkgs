@@ -1,19 +1,19 @@
-{stdenv, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc}:
+{stdenv, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "sysdig-${version}";
-  version = "0.21.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "0dakxv2pkbsivavz09fwvav4dla7qzklnv45zb7x306gankkjgi1";
+    sha256 = "1wbvpsalm2ccwh8xz6fa4gqviilvjd8lnwvdryixhsdsf7j8w0j0";
   };
 
   buildInputs = [
-    cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc
+    cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc elfutils
   ] ++ optional (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
