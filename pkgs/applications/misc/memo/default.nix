@@ -1,4 +1,5 @@
 { fetchFromGitHub, silver-searcher, tree, man, stdenv,
+  git,
   pandocSupport ? true, pandoc ? null
   , ... }:
 
@@ -8,13 +9,13 @@ stdenv.mkDerivation rec {
 
   name = "memo-${version}";
 
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner  = "mrVanDalo";
     repo   = "memo";
     rev    = "${version}";
-    sha256 = "1kq8hmq4lgvkk717nhmdryr90g61xm0jm7y8dzya8jsxsn531gm8";
+    sha256 = "1cvjs36f6vxzfz5d63yhyw8j7gdw5hn6cfzccf7ag08lamjhfhbr";
   };
 
   installPhase = let
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
       --replace "ack_cmd=ack"       "ack_cmd=${silver-searcher}/bin/ag" \
       --replace "tree_cmd=tree"     "tree_cmd=${tree}/bin/tree" \
       --replace "man_cmd=man"       "man_cmd=${man}/bin/man" \
+      --replace "git_cmd=git"       "git_cmd=${git}/bin/git" \
       --replace "pandoc_cmd=pandoc" "${pandocReplacement}"
     mv memo $out/bin/
     mv doc/memo.1 $out/share/man/man1/memo.1
