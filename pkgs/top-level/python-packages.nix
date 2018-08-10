@@ -308,6 +308,10 @@ in {
 
   jira = callPackage ../development/python-modules/jira { };
 
+  lammps-cython = callPackage ../development/python-modules/lammps-cython {
+    mpi = pkgs.openmpi;
+  };
+
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   logster = callPackage ../development/python-modules/logster { };
