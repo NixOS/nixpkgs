@@ -1,22 +1,25 @@
 { cairo, cmake, fetchgit, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
-, python2 , stdenv, xcbproto, xcbutil, xcbutilimage, xcbutilrenderutil
-, xcbutilwm, xcbutilxrm, makeWrapper
+, python2, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
+, xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
 
 # optional packages-- override the variables ending in 'Support' to enable or
 # disable modules
 , alsaSupport   ? true,  alsaLib       ? null
-, iwSupport     ? true,  wirelesstools ? null
 , githubSupport ? false, curl          ? null
 , mpdSupport    ? false, mpd_clientlib ? null
 , pulseSupport  ? false, libpulseaudio ? null
+, iwSupport     ? false, wirelesstools ? null
+, nlSupport     ? true,  libnl         ? null
 , i3Support ? false, i3GapsSupport ? false, i3 ? null, i3-gaps ? null, jsoncpp ? null
 }:
 
 assert alsaSupport   -> alsaLib       != null;
 assert githubSupport -> curl          != null;
-assert iwSupport     -> wirelesstools != null;
 assert mpdSupport    -> mpd_clientlib != null;
 assert pulseSupport  -> libpulseaudio != null;
+
+assert iwSupport     -> ! nlSupport && wirelesstools != null;
+assert nlSupport     -> ! iwSupport && libnl         != null;
 
 assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
 assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
@@ -44,13 +47,15 @@ stdenv.mkDerivation rec {
 
     buildInputs = [
       cairo libXdmcp libpthreadstubs libxcb pcre python2 xcbproto xcbutil
-      xcbutilimage xcbutilrenderutil xcbutilwm xcbutilxrm
+      xcbutilcursor xcbutilimage xcbutilrenderutil xcbutilwm xcbutilxrm
 
       (if alsaSupport   then alsaLib       else null)
       (if githubSupport then curl          else null)
-      (if iwSupport     then wirelesstools else null)
       (if mpdSupport    then mpd_clientlib else null)
       (if pulseSupport  then libpulseaudio else null)
+
+      (if iwSupport     then wirelesstools else null)
+      (if nlSupport     then libnl         else null)
 
       (if i3Support || i3GapsSupport then jsoncpp else null)
       (if i3Support then i3 else null)
