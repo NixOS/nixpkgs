@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = licenses.gpl2;
     maintainers = [maintainers.raskin];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = ["x86_64-linux"] ++ platforms.darwin;
     downloadPage = "https://github.com/draios/sysdig/releases";
   };
 }
