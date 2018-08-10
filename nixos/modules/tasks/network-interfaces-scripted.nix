@@ -473,6 +473,9 @@ let
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
+              # Try to bring up vlan interface
+              # Note: When master interface is down, we cannot bring vlan interfaces up (#28620)
+              #       Vlan interfaces will be automatically bring up when master is up
               ip link set "${n}" up || true
             '';
             postStop = ''
