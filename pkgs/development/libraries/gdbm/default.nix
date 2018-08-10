@@ -2,6 +2,8 @@
 
 stdenv.mkDerivation rec {
   name = "gdbm-1.17";
+  # FIXME: remove on update to > 1.17
+  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-Wno-error=return-type" else null;
 
   src = fetchurl {
     url = "mirror://gnu/gdbm/${name}.tar.gz";
