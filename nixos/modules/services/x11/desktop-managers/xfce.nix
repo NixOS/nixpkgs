@@ -59,6 +59,8 @@ in
       tango-icon-theme
       xfce4-icon-theme
 
+      # having these utilities on the path makes the system 
+      # path builder update mime entries
       desktop-file-utils
       shared-mime-info
 
