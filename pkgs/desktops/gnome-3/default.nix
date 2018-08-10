@@ -11,8 +11,11 @@ lib.makeScope pkgs.newScope (self: with self; {
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
 
   corePackages = with gnome3; [
+    # having these utilities on the path makes the system 
+    # path builder update mime entries
     pkgs.desktop-file-utils
-    pkgs.shared-mime-info # for update-mime-database
+    pkgs.shared-mime-info 
+
     glib # for gsettings
     gtk3.out # for gtk-update-icon-cache
     glib-networking gvfs dconf gnome-backgrounds gnome-control-center
