@@ -1,22 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3, gmime3, webkitgtk24x-gtk3
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, gnome3, gmime3, protobuf
 , libsass, notmuch, boost, wrapGAppsHook, glib-networking }:
 
 stdenv.mkDerivation rec {
   name = "astroid-${version}";
-  version = "0.11.1";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "astroidmail";
     repo = "astroid";
     rev = "v${version}";
-    sha256 = "1z48rvlzwi7bq7j55rnb0gg1a4k486yj910z2cxz1p46lxk332j1";
+    sha256 = "105x5g44hng3fi03h67j3an53088148jbq8726nmcp0zs0cy9gac";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook ];
 
-  buildInputs = [ gnome3.gtkmm gmime3 webkitgtk24x-gtk3 libsass gnome3.libpeas
-                  notmuch boost gnome3.gsettings-desktop-schemas
-                  glib-networking ];
+  buildInputs = [
+    boost glib-networking gmime3 gnome3.gsettings-desktop-schemas gnome3.gtkmm
+    gnome3.libpeas gnome3.webkitgtk libsass notmuch protobuf
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://astroidmail.github.io/;
