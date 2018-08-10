@@ -41,6 +41,7 @@
 , "ios-deploy"
 , "istanbul"
 , "imapnotify"
+, "jake"
 , "javascript-typescript-langserver"
 , "jayschema"
 , "jsdoc"
