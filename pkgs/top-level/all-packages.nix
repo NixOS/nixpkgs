@@ -5027,7 +5027,7 @@ with pkgs;
 
   sasview = callPackage ../applications/science/misc/sasview {};
 
-  scallion = callPackage ../tools/security/scallion { mono = mono4; };
+  scallion = callPackage ../tools/security/scallion { };
 
   scanbd = callPackage ../tools/graphics/scanbd { };
 
