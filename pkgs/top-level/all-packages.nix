@@ -10371,6 +10371,8 @@ with pkgs;
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
   libindicator = callPackage ../development/libraries/libindicator { };
 
+  libinotify-kqueue = callPackage ../development/libraries/libinotify-kqueue { };
+
   libiodbc = callPackage ../development/libraries/libiodbc {
     useGTK = config.libiodbc.gtk or false;
   };
