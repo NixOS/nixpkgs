@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, cmake, gettext, makeWrapper, pkgconfig, libdigidocpp
-, opensc, openldap, openssl, pcsclite, qtbase, qttranslations }:
+{ stdenv, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
+, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations }:
 
 stdenv.mkDerivation rec {
   name = "qdigidoc-${version}";
@@ -12,12 +12,22 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  tsl = fetchurl {
+    url = "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml";
+    sha256 = "0llr2fj8vd097hcr1d0xmzdy4jydv0b5j5qlksbjffs22rqgal14";
+  };
+
+  nativeBuildInputs = [ cmake darkhttpd gettext makeWrapper pkgconfig ];
+
+  postPatch = ''
+    substituteInPlace client/CMakeLists.txt \
+      --replace $\{TSL_URL} file://${tsl}
+  '';
+
   patches = [
     # https://github.com/open-eid/qdigidoc/pull/163
     ./qt511.patch
   ];
-
-  nativeBuildInputs = [ cmake gettext makeWrapper pkgconfig ];
 
   buildInputs = [
     libdigidocpp
