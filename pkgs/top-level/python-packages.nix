@@ -1844,6 +1844,8 @@ in {
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
+  pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
+
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
   pytest-catchlog = callPackage ../development/python-modules/pytest-catchlog { };
