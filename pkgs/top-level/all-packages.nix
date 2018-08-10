@@ -5937,7 +5937,7 @@ with pkgs;
 
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
-  waf = callPackage ../development/tools/build-managers/waf { };
+  waf = callPackage ../development/tools/build-managers/waf { python = python3; };
 
   wakelan = callPackage ../tools/networking/wakelan { };
 
