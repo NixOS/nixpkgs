@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ];
 
+  patches = [ ./file-5.33-CVE-2018-10360.patch ];
+
   doCheck = true;
 
 
