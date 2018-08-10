@@ -439,6 +439,8 @@ in {
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
+  pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
