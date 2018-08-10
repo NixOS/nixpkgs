@@ -1,3 +1,6 @@
+Fix `error:  osvi  undeclared (first use in this function)' issue.
+
+See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=863064
 --- a/mingw-w64-headers/include/multimon.h
 +++ b/mingw-w64-headers/include/multimon.h
 @@ -127,7 +127,7 @@
