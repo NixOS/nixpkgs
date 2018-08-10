@@ -264,6 +264,8 @@ in {
     dbus = pkgs.dbus;
   };
 
+  dftfit = callPackage ../development/python-modules/dftfit { };
+
   discid = callPackage ../development/python-modules/discid { };
 
   discordpy = callPackage ../development/python-modules/discordpy { };
