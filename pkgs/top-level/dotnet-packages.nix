@@ -871,40 +871,11 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  NewtonsoftJson = buildDotnetPackage rec {
+  NewtonsoftJson = fetchNuGet {
     baseName = "Newtonsoft.Json";
-    version = "6.0.8";
-
-    src = fetchurl {
-      name = "${baseName}-${version}.tar.gz";
-      url = "https://github.com/JamesNK/Newtonsoft.Json/archive/${version}.tar.gz";
-      sha256 = "14znf5mycka578bxjnlnz6a3f9nfkc682hgmgg42gdzksnarvhlm";
-    };
-
-    buildInputs = [
-      fsharp
-      dotnetPackages.NUnit
-      dotnetPackages.SystemCollectionsImmutable
-      dotnetPackages.Autofac
-    ];
-
-    patches = [ ../development/dotnet-modules/patches/newtonsoft-json.references.patch ];
-
-    postConfigure = ''
-       # Just to make sure there's no attempt to call these executables
-       rm -rvf Tools
-    '';
-
-    xBuildFiles = [ "Src/Newtonsoft.Json.sln" ];
-    outputFiles = [ "Src/Newtonsoft.Json/bin/Release/Net45/*" ];
-
-    meta = {
-      description = "Popular high-performance JSON framework for .NET";
-      homepage = "https://www.newtonsoft.com/json";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
-    };
+    version = "11.0.2";
+    sha256 = "07na27n4mlw77f3hg5jpayzxll7f4gyna6x7k9cybmxpbs6l77k7";
+    outputFiles = [ "*" ];
   };
 
   Nuget = buildDotnetPackage {
