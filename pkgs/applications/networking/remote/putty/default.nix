@@ -1,5 +1,6 @@
 { stdenv, fetchurl, autoconf, automake, pkgconfig, libtool
-, gtk2, halibut, ncurses, perl }:
+, gtk2, halibut, ncurses, perl
+, hostPlatform, lib }:
 
 stdenv.mkDerivation rec {
   version = "0.70";
@@ -13,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gmhwwj1y7b5hgkrkxpf4jddjpk9l5832zq5ibhsiicndsfs92mv";
   };
 
-  preConfigure = ''
+  preConfigure = lib.optionalString hostPlatform.isUnix ''
     perl mkfiles.pl
     ( cd doc ; make );
     sed -e '/AM_PATH_GTK(/d' \
@@ -21,13 +22,25 @@ stdenv.mkDerivation rec {
         -e '/AC_OUTPUT/iAM_PROG_AR' -i configure.ac
     ./mkauto.sh
     cd unix
+  '' + lib.optionalString hostPlatform.isWindows ''
+    cd windows
   '';
 
+  TOOLPATH = stdenv.cc.targetPrefix;
+  makefile = if hostPlatform.isWindows then "Makefile.mgw" else null;
+
+  installPhase = if hostPlatform.isWindows then ''
+    for exe in *.exe; do
+       install -D $exe $out/bin/$exe
+    done
+  '' else null;
+
   nativeBuildInputs = [ autoconf automake halibut libtool perl pkgconfig ];
-  buildInputs = [ gtk2 ncurses ];
+  buildInputs = []
+              ++ lib.optionals hostPlatform.isUnix [ gtk2 ncurses ];
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
@@ -36,6 +49,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.chiark.greenend.org.uk/~sgtatham/putty/;
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

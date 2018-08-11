@@ -2,8 +2,6 @@
 , hostPlatform
 }:
 
-assert hostPlatform.isWindows;
-
 stdenv.mkDerivation {
   name = "wxMSW-2.8.11";
 
@@ -32,4 +30,8 @@ stdenv.mkDerivation {
   ";
 
   passthru = {inherit compat24 compat26 unicode;};
+
+  meta = {
+    platforms = stdenv.lib.platforms.windows;
+  };
 }

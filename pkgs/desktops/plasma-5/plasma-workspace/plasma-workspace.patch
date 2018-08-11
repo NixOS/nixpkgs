@@ -526,7 +526,7 @@ index f9e2e429..0a4267a9 100644
  
  echo 'startkde: Done.'  1>&2
 diff --git a/startkde/startplasma.cmake b/startkde/startplasma.cmake
-index a5d09fa7..d42c284b 100644
+index f7330ab3..5eedbb11 100644
 --- a/startkde/startplasma.cmake
 +++ b/startkde/startplasma.cmake
 @@ -1,6 +1,6 @@
@@ -663,8 +663,8 @@ index a5d09fa7..d42c284b 100644
    exit 1
  fi
  
--qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
-+@NIXPKGS_QDBUS@ org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
+-qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
++@NIXPKGS_QDBUS@ org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
  
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
@@ -718,7 +718,7 @@ index a5d09fa7..d42c284b 100644
  
  echo 'startplasma: Done.'  1>&2
 diff --git a/startkde/startplasmacompositor.cmake b/startkde/startplasmacompositor.cmake
-index dd9e304d..49d456e9 100644
+index dd9e304d..12132f9e 100644
 --- a/startkde/startplasmacompositor.cmake
 +++ b/startkde/startplasmacompositor.cmake
 @@ -1,118 +1,165 @@

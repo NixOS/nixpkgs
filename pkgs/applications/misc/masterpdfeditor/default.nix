@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, autoPatchelfHook }:
+{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook }:
 let
-  version = "4.3.89";
+  version = "5.1.00";
 in stdenv.mkDerivation {
   name = "masterpdfeditor-${version}";
   src = fetchurl {
     url = "https://code-industry.net/public/master-pdf-editor-${version}_qt5.amd64.tar.gz";
-    sha256 = "0k5bzlhqglskiiq86nmy18mnh5bf2w3mr9cq3pibrwn5pisxnxxc";
+    sha256 = "1s2zhx9xr1ny5s8hmlb99v3z1v26vmx87iixk8cdgndz046p9bg9";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  buildInputs = [ sane-backends qtbase qtsvg ];
+  buildInputs = [ nss qtbase qtsvg sane-backends stdenv.cc.cc ];
 
   dontStrip = true;
 
@@ -18,15 +18,15 @@ in stdenv.mkDerivation {
    p=$out/opt/masterpdfeditor
    mkdir -p $out/bin $p $out/share/applications $out/share/pixmaps
 
-   substituteInPlace masterpdfeditor4.desktop \
-     --replace 'Exec=/opt/master-pdf-editor-4' "Exec=$out/bin" \
-     --replace 'Path=/opt/master-pdf-editor-4' "Path=$out/bin" \
-     --replace 'Icon=/opt/master-pdf-editor-4' "Icon=$out/share/pixmaps"
-   cp -v masterpdfeditor4.png $out/share/pixmaps/
-   cp -v masterpdfeditor4.desktop $out/share/applications
+   substituteInPlace masterpdfeditor5.desktop \
+     --replace 'Exec=/opt/master-pdf-editor-5' "Exec=$out/bin" \
+     --replace 'Path=/opt/master-pdf-editor-5' "Path=$out/bin" \
+     --replace 'Icon=/opt/master-pdf-editor-5' "Icon=$out/share/pixmaps"
+   cp -v masterpdfeditor5.png $out/share/pixmaps/
+   cp -v masterpdfeditor5.desktop $out/share/applications
 
-   cp -v masterpdfeditor4 $p/
-   ln -s $p/masterpdfeditor4 $out/bin/masterpdfeditor4
+   cp -v masterpdfeditor5 $p/
+   ln -s $p/masterpdfeditor5 $out/bin/masterpdfeditor5
    cp -v -r stamps templates lang fonts $p
 
    install -D license.txt $out/share/$name/LICENSE

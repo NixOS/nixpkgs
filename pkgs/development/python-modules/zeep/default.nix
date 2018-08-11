@@ -20,6 +20,7 @@
 , pytestcov
 , requests-mock
 , tornado
+, attrs
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    attrs
     appdirs
     cached-property
     defusedxml

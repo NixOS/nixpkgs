@@ -11003,9 +11003,11 @@ in {
 
   python-language-server = callPackage ../development/python-modules/python-language-server {};
 
-  pyls-mypy = callPackage ../development/python-modules/pyls-mypy {};
+  pyls-black = callPackage ../development/python-modules/pyls-black {};
 
   pyls-isort = callPackage ../development/python-modules/pyls-isort {};
+
+  pyls-mypy = callPackage ../development/python-modules/pyls-mypy {};
 
   pyudev = callPackage ../development/python-modules/pyudev {
     inherit (pkgs) systemd;
