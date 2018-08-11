@@ -122,5 +122,6 @@ stdenv.mkDerivation {
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ gleber tazjin ];
+    license = stdenv.lib.licenses.asl20;
   };
 }

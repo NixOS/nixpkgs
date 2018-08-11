@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     repositories.git = git://daniel-baumann.ch/git/software/dosfstools.git;
     homepage = https://www.daniel-baumann.ch/software/dosfstools/;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license = stdenv.lib.licenses.gpl3;
   };
 }

@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , boto }:
 
 buildPythonPackage rec {
@@ -14,4 +14,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ boto ];
+
+  meta = with lib; {
+    description = "Python Interface to Route53";
+    homepage = https://github.com/mariusv/Area53;
+    license = licenses.unfree; # unspecified
+  };
 }

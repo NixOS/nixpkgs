@@ -37,6 +37,7 @@ rec {
       homepage = http://www.mozilla.com/en-US/firefox/;
       maintainers = with lib.maintainers; [ eelco ];
       platforms = lib.platforms.linux;
+      license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
@@ -138,6 +139,7 @@ rec {
       '';
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
+      license = lib.licenses.bsd3;
     };
   };
 

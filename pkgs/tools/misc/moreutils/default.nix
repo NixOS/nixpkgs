@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = https://joeyh.name/code/moreutils/;
     maintainers = with maintainers; [ koral pSub ];
     platforms = platforms.all;
+    license = licenses.gpl2Plus;
   };
 }
