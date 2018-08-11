@@ -1390,6 +1390,8 @@ with pkgs;
 
   libndtypes = callPackages ../development/libraries/libndtypes { };
 
+  libxnd = callPackages ../development/libraries/libxnd { };
+
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
