@@ -222,7 +222,7 @@ in rec {
   };
 
   nn = buildDict {
-    shortName = "nn-0.50.1-0";
+    shortName = "nn-0.50.1-1";
     fullName = "Norwegian Nynorsk";
     src = fetchurl {
       url = "mirror://gnu/aspell/dict/nn/aspell-nn-0.50.1-1.tar.bz2";
@@ -240,7 +240,7 @@ in rec {
   };
 
   pt_BR = buildDict {
-    shortName = "pt_BR-20090702";
+    shortName = "pt_BR-20090702-0";
     fullName = "Brazilian Portuguese";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/pt_BR/aspell6-pt_BR-20090702-0.tar.bz2;
@@ -249,7 +249,7 @@ in rec {
   };
 
   pt_PT = buildDict {
-    shortName = "pt_PT-20070510";
+    shortName = "pt_PT-20070510-0";
     fullName = "Portuguese";
     src = fetchurl {
       url = mirror://gnu/aspell/dict/pt_PT/aspell6-pt_PT-20070510-0.tar.bz2;
