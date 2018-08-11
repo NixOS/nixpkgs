@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ makeWrapper xorg.libXt ]
-    ++ optionals doCheck [ perlPackages.TestCommand perlPackages.TestHarness ];
+  nativeBuildInputs = [ makeWrapper xorg.libXt ];
 
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
@@ -36,8 +35,9 @@ stdenv.mkDerivation rec {
     install -D -m 644 man/*.1 $out/share/man/man1
   '';
 
-  checkPhase = ''
-    PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl" make test
+  checkInputs = [ perlPackages.TestCommand perlPackages.TestHarness ];
+  preCheck = ''
+    export PERL5LIB="${perlPackages.TestCommand}/lib/perl5/site_perl"
   '';
 
   doCheck = true;

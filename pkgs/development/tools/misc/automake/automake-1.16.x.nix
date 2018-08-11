@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, autoconf, doCheck ? false }:
+{ stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
   name = "automake-1.16.1";
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.
   preCheck = "unset NIX_INDENT_MAKE";
-  inherit doCheck;
+  doCheck = false; # takes _a lot_ of time, fails 3 out of 2698 tests, all seem to be related to paths
+  doInstallCheck = false; # runs the same thing, fails the same tests
 
   # The test suite can run in parallel.
   enableParallelBuilding = true;

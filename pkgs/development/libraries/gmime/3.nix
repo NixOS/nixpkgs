@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, zlib, gpgme, libidn, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, glib, zlib, gnupg, gpgme, libidn, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   version = "3.2.0";
@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib ];
   configureFlags = [ "--enable-introspection=yes" ];
+
+  postPatch = ''
+    substituteInPlace tests/testsuite.c \
+      --replace /bin/rm rm
+  '';
+
+  checkInputs = [ gnupg ];
 
   enableParallelBuilding = true;
 

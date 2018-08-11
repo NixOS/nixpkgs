@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Makefile.am --replace "ansi2knr" ""
   '';
 
-  #doCheck = true; # doesn't work yet
+  doCheck = false; # fails 10 out of 16 tests
 
   preCheck = ''
     checkFlagsArray=(CPPFLAGS="-I../lib" LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")

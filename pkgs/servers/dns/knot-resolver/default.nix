@@ -27,10 +27,11 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns luajit libuv gnutls nettle lmdb ]
-    ++ optional doCheck cmocka
     ++ optional stdenv.isLinux systemd # sd_notify
     ## optional dependencies; TODO: libedit, dnstap
     ;
+
+  checkInputs = [ cmocka ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -83,4 +84,3 @@ wrapped-full = with luajitPackages; let
   '';
 
 in result
-

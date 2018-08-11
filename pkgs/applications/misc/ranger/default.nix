@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
 
     # give image previews out of the box when building with w3m
     substituteInPlace ranger/config/rc.conf \
-      --replace "set preview_images false" "set preview_images true" \
+      --replace "set preview_images false" "set preview_images true"
   '';
 
   meta =  with stdenv.lib; {

@@ -8,12 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0jr8ppdm80c533nzmrpz3iffnpc6nhvsria1di9f4jg1l19a03fd";
   };
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libcddb ncurses help2man ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
 
-  # Disabled due to several spurious test failures.
-  # doCheck = true;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "A library for OS-independent CD-ROM and CD image access";

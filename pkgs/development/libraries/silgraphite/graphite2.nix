@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freetype, cmake }:
+{ stdenv, fetchurl, pkgconfig, freetype, cmake, python }:
 
 stdenv.mkDerivation rec {
   version = "1.3.6";
@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ freetype ];
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./macosx.patch ];
+
+  checkInputs = [ python ];
+  doCheck = false; # fails, probably missing something
 
   meta = {
     description = "An advanced font engine";

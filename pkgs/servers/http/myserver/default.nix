@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
   patches =
     [ ./disable-dns-lookup-in-chroot.patch ];
 
-  buildInputs =
-    [ libgcrypt libevent libidn gnutls libxml2 zlib guile texinfo ]
-    ++ lib.optional doCheck cppunit;
+  buildInputs = [
+    libgcrypt libevent libidn gnutls libxml2 zlib guile texinfo
+  ];
+
+  checkInputs = [ cppunit ];
 
   makeFlags = [ "V=1" ];
 

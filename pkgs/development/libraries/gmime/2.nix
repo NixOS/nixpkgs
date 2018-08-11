@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, zlib, libgpgerror, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig, glib, zlib, gnupg, libgpgerror, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   version = "2.6.23";
@@ -14,6 +14,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
   propagatedBuildInputs = [ glib zlib libgpgerror ];
   configureFlags = [ "--enable-introspection=yes" ];
+
+  postPatch = ''
+    substituteInPlace tests/testsuite.c \
+      --replace /bin/rm rm \
+      --replace /bin/mkdir mkdir
+
+    substituteInPlace tests/test-pkcs7.c \
+      --replace /bin/mkdir mkdir
+  '';
+
+  checkInputs = [ gnupg ];
 
   enableParallelBuilding = true;
 

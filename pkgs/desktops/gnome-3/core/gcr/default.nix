@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnupg, p11-kit, glib
 , libgcrypt, libtasn1, dbus-glib, gtk, pango, gdk_pixbuf, atk
-, gobjectIntrospection, makeWrapper, libxslt, vala, gnome3 }:
+, gobjectIntrospection, makeWrapper, libxslt, vala, gnome3
+, python2 }:
 
 stdenv.mkDerivation rec {
   name = "gcr-${version}";
@@ -15,6 +16,10 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = "gcr"; attrPath = "gnome3.gcr"; };
   };
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection libxslt makeWrapper vala ];
@@ -27,7 +32,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib gtk p11-kit ];
 
-  #doCheck = true;
+  checkInputs = [ python2 ];
+  doCheck = false; # fails 21 out of 603 tests, needs dbus daemon
 
   #enableParallelBuilding = true; issues on hydra
 

@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
 
   CFLAGS = [ "-O2" "-DNDEBUG" ];
 
-  #doCheck = true; problems in combination with dynamic linking
+  doCheck = true;
+  doInstallCheck = false; # needs pykeymgr?
 
   postInstall = ''rm -r "$out"/var "$out"/lib/*.la'';
 

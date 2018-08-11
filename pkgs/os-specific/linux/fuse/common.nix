@@ -4,6 +4,7 @@
 , fusePackages, utillinux, gettext
 , meson, ninja, pkgconfig
 , autoreconfHook
+, python3Packages, which
 }:
 
 let
@@ -57,6 +58,14 @@ in stdenv.mkDerivation rec {
       sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
       ./makeconf.sh
     '');
+
+  checkInputs = [ which ] ++ (with python3Packages; [ python pytest ]);
+
+  checkPhase = ''
+    python3 -m pytest test/
+  '';
+
+  doCheck = false; # v2: no tests, v3: all tests get skipped in a sandbox
 
   postFixup = "cd $out\n" + (if isFuse3 then ''
     install -D -m444 etc/fuse.conf $common/etc/fuse.conf

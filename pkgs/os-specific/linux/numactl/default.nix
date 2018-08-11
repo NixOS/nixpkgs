@@ -23,6 +23,15 @@ stdenv.mkDerivation rec {
       sha256 = "080b0sygmg7104qbbh1amh3b322yyiajwi2d3d0vayffgva0720v";
     });
 
+  postPatch = ''
+    patchShebangs test
+  '';
+
+  # You probably shouldn't ever run these! They will reconfigure Linux
+  # NUMA settings, which on my build machine makes the rest of package
+  # building ~5% slower until reboot. Ugh!
+  doCheck = false; # never ever!
+
   meta = with stdenv.lib; {
     description = "Library and tools for non-uniform memory access (NUMA) machines";
     homepage = http://oss.sgi.com/projects/libnuma/;

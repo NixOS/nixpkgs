@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig m4 ];
-  buildInputs = [ libxcb xcbutil ]
-    ++ stdenv.lib.optional doCheck libX11;
   doCheck = true;
+  buildInputs = [ libxcb xcbutil ];
+  checkInputs = [ libX11 ];
 
   meta = with stdenv.lib; {
     description = "XCB utility functions for the X resource manager";
