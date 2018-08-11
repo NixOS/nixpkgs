@@ -8984,6 +8984,8 @@ with pkgs;
 
   coredumper = callPackage ../development/libraries/coredumper { };
 
+  criterion = callPackage ../development/libraries/criterion { };
+
   ctl = callPackage ../development/libraries/ctl { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
