@@ -9013,6 +9013,8 @@ with pkgs;
 
   cryptominisat = callPackage ../applications/science/logic/cryptominisat { };
 
+  csptr = callPackage ../development/libraries/csptr { };
+
   curlcpp = callPackage ../development/libraries/curlcpp { };
 
   cutee = callPackage ../development/libraries/cutee { };
