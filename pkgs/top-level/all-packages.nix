@@ -19499,7 +19499,7 @@ with pkgs;
 
   crafty = callPackage ../games/crafty { };
 
-  crawlTiles = crawl.override {
+  crawlTiles = callPackage ../games/crawl {
     tileMode = true;
   };
 
