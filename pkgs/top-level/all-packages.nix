@@ -21423,6 +21423,8 @@ with pkgs;
 
   nix-top = callPackage ../tools/package-management/nix-top { };
 
+  nix-repl = callPackage ../tools/package-management/nix-repl { nix = nix1; };
+
   nix-review = callPackage ../tools/package-management/nix-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
