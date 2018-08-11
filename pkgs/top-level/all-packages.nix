@@ -7921,6 +7921,8 @@ with pkgs;
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
+  ats-pkg = callPackage ../development/tools/ats-pkg { };
+
   awf = callPackage ../development/tools/misc/awf { };
 
   electron = callPackage ../development/tools/electron { };
