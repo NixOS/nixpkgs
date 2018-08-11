@@ -1,6 +1,7 @@
-{ stdenv, buildPythonPackage, fetchPypi, lib
-, six, protobuf3_5, enum34, futures, isPy26, isPy27, isPy34 }:
+{ stdenv, buildPythonPackage, fetchPypi, lib, darwin
+, six, protobuf3_5, enum34, futures, isPy26, isPy27, isPy34, pkgconfig }:
 
+with stdenv.lib;
 buildPythonPackage rec {
   pname = "grpcio";
   version = "1.9.1";
@@ -13,6 +14,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six protobuf3_5 ]
                         ++ lib.optionals (isPy26 || isPy27 || isPy34) [ enum34 ]
                         ++ lib.optionals (isPy26 || isPy27) [ futures ];
+
+  nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin darwin.cctools;
+
+  preBuild = optionalString stdenv.isDarwin "unset AR";
 
   meta = with stdenv.lib; {
     description = "HTTP/2-based RPC framework";
