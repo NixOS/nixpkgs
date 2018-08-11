@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin perl;
 
   configureFlags = [ 
-    (stdenv.lib.withFeatureAs (openssl != null) "ssl" openssl)
+    (stdenv.lib.withFeatureAs (openssl != null) "ssl" "openssl")
   ];
 
   doCheck = false;
