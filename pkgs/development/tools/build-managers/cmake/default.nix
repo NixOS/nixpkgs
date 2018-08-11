@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
-, majorVersion ? "3.11"
+, majorVersion ? "3.12"
 # darwin attributes
 , ps
 , isBootstrap ? false
@@ -17,6 +17,10 @@ with stdenv.lib;
 
 with (
   {
+    "3.12" = {
+      minorVersion = "1";
+      sha256 = "1ckswlaid3p2is1a80fmr4hgwpfsiif66giyx1z9ayhxx0n5qgf5";
+    };
     "3.11" = {
       minorVersion = "2";
       sha256 = "0j2jpx94lnqx5w59i9xihl56hf6ghk04438rqhh7lk1bryxj5g2y";
@@ -64,6 +68,7 @@ stdenv.mkDerivation rec {
     })
     # Don't depend on frameworks.
     ++ optional (useSharedLibraries && majorVersion == "3.11") ./application-services.patch  # TODO: remove conditional
+    ++ optional (useSharedLibraries && majorVersion == "3.12") ./application-services-3.12.patch
     ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];
