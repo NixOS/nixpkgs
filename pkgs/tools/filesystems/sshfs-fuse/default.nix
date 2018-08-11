@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     platforms = platforms.linux;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ primeos ];
   };
 }
