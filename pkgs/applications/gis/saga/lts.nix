@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   # for why the have additional buildInputs on darwin
   buildInputs = [ autoreconfHook gdal wxGTK30 proj libharu opencv vigra
                   postgresql libiodbc lzma jasper
-                  Cocoa unixODBC poppler hdf4.out hdf5 netcdf sqlite ];
+                  unixODBC poppler hdf4.out hdf5 netcdf sqlite ]
+                ++ stdenv.lib.optional stdenv.isDarwin Cocoa ;
 
   enableParallelBuilding = true;
 
