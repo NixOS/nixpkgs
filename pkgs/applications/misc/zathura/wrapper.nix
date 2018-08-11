@@ -6,12 +6,12 @@ let
 in symlinkJoin {
   name = "zathura-with-plugins-${zathura_core.version}";
 
-  paths = [ zathura_core ];
+  paths = with zathura_core; [ man dev out ];
 
   buildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/zathura \
+    makeWrapper ${zathura_core.bin}/bin/zathura $out/bin/zathura \
       --prefix PATH ":" "${lib.makeBinPath [ file ]}" \
       --add-flags --plugins-dir=${pluginsPath}
   '';

@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "1znr3psqda06xklzj8mn452w908llapcg1rj468jwpg0wzv6pxfn";
   };
 
+  outputs = [ "bin" "man" "dev" "out" ];
+
   nativeBuildInputs = [
     meson ninja pkgconfig appstream-glib desktop-file-utils python3.pkgs.sphinx
     gettext makeWrapper libxml2
