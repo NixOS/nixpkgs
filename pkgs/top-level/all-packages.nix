@@ -8871,6 +8871,8 @@ with pkgs;
   botan = callPackage ../development/libraries/botan { };
   botan2 = callPackage ../development/libraries/botan/2.0.nix { };
 
+  boxfort = callPackage ../development/libraries/boxfort { };
+
   box2d = callPackage ../development/libraries/box2d { };
 
   buddy = callPackage ../development/libraries/buddy { };
