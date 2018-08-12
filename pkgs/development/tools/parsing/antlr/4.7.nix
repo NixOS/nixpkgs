@@ -28,6 +28,7 @@ let
       meta = with stdenv.lib; {
         description = "C++ target for ANTLR 4";
         homepage = http://www.antlr.org/;
+        license = licenses.bsd3;
         platforms = platforms.unix;
       };
     };
@@ -73,6 +74,7 @@ let
         walk parse trees.
       '';
       homepage = http://www.antlr.org/;
+      license = licenses.bsd3;
       platforms = platforms.unix;
     };
   };
