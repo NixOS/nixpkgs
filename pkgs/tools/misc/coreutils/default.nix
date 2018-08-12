@@ -49,8 +49,9 @@ stdenv.mkDerivation rec {
     ];
 
 
-  buildInputs = [ gmp openssl ]
+  buildInputs = [ gmp ]
     ++ optional aclSupport acl
+    ++ optional stdenv.isLinux openssl
     ++ optional attrSupport attr
     ++ optionals hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
     ++ optionals selinuxSupport [ libselinux libsepol ]
