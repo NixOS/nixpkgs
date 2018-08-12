@@ -17980,7 +17980,7 @@ with pkgs;
 
   qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
 
-  qstopmotion = callPackage ../applications/video/qstopmotion { };
+  qstopmotion = libsForQt5.callPackage ../applications/video/qstopmotion { };
 
   qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
 
