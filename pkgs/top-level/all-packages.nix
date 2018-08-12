@@ -16869,7 +16869,9 @@ with pkgs;
 
   jalv = callPackage ../applications/audio/jalv { };
 
-  jameica = callPackage ../applications/office/jameica { };
+  jameica = callPackage ../applications/office/jameica {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   jamin = callPackage ../applications/audio/jamin { };
 
