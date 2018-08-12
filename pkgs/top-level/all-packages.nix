@@ -18700,6 +18700,8 @@ with pkgs;
 
   udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
 
+  undervolt = pythonPackages.callPackage ../tools/misc/undervolt { };
+
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
   inherit (ocamlPackages) unison;

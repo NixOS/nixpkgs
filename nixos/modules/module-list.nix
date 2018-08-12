@@ -277,6 +277,7 @@
   ./services/hardware/u2f.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
+  ./services/hardware/undervolt.nix
   ./services/hardware/upower.nix
   ./services/hardware/usbmuxd.nix
   ./services/hardware/thermald.nix
