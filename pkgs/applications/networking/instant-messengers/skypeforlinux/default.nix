@@ -68,9 +68,9 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  nativeBuildInputs = [ gtk3 wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ dpkg makeWrapper ];
+  buildInputs = [ dpkg gtk3 makeWrapper ];
 
   unpackPhase = "true";
   installPhase = ''
