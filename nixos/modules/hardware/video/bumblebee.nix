@@ -55,6 +55,14 @@ in
         '';
       };
 
+      package = mkOption {
+        default = kernel.nvidia_x11;
+        type = types.package;
+        description  = ''
+          Name of the driver package to use
+        '';
+      };
+
       driver = mkOption {
         default = "nvidia";
         type = types.enum [ "nvidia" "nouveau" ];
@@ -77,7 +85,7 @@ in
   config = mkIf cfg.enable {
     boot.blacklistedKernelModules = [ "nvidia-drm" "nvidia" "nouveau" ];
     boot.kernelModules = optional useBbswitch "bbswitch";
-    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia kernel.nvidia_x11.bin;
+    boot.extraModulePackages = optional useBbswitch kernel.bbswitch ++ optional useNvidia cfg.package.bin;
 
     environment.systemPackages = [ bumblebee primus ];
 
