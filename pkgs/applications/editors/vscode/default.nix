@@ -1,21 +1,22 @@
 { stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
-  gtk2, makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
+  gtk2, makeWrapper, libXScrnSaver, libxkbfile, libsecret
+, version ? "1.25.1"
+, channel ? "stable"
+, sha256hashes ? {
+    "i686-linux" = "1qljnajk4h9ki5gvydh1b557fvhvcryvkrvypvz0pr804lpdqsmg";
+    "x86_64-linux" = "0f1lpwyxfchmbymzzxv97w9cy1z5pdljhwm49mc5v84aygmvnmjq";
+    "x86_64-darwin" = "1dgda1drij1c114xzv4hs44k7rx4x1vzghlxgii0h2rg641n6pbn";
+  }
+}:
 
 let
-  version = "1.25.1";
-  channel = "stable";
-
   plat = {
     "i686-linux" = "linux-ia32";
     "x86_64-linux" = "linux-x64";
     "x86_64-darwin" = "darwin";
   }.${stdenv.system};
 
-  sha256 = {
-    "i686-linux" = "1qljnajk4h9ki5gvydh1b557fvhvcryvkrvypvz0pr804lpdqsmg";
-    "x86_64-linux" = "0f1lpwyxfchmbymzzxv97w9cy1z5pdljhwm49mc5v84aygmvnmjq";
-    "x86_64-darwin" = "1dgda1drij1c114xzv4hs44k7rx4x1vzghlxgii0h2rg641n6pbn";
-  }.${stdenv.system};
+  sha256 = sha256hashes.${stdenv.system};
 
   archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
 
