@@ -17438,6 +17438,8 @@ in
     poppler = poppler_0_61;
   };
 
+  calls = callPackage ../applications/networking/calls { };
+
   perkeep = callPackage ../applications/misc/perkeep { };
 
   canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
