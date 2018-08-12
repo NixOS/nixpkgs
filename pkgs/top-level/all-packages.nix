@@ -8315,6 +8315,8 @@ with pkgs;
 
   kube-aws = callPackage ../development/tools/kube-aws { };
 
+  kubectx = callPackage ../development/tools/kubectx { };
+
   kustomize = callPackage ../development/tools/kustomize { };
 
   Literate = callPackage ../development/tools/literate-programming/Literate {};
