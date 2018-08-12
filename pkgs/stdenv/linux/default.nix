@@ -348,7 +348,7 @@ in
           ]
         # Library dependencies
         ++ map getLib (
-            [ attr acl zlib pcre ]
+            [ attr acl zlib pcre openssl ]
             ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
           )
         # More complicated cases
