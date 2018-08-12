@@ -15,6 +15,7 @@ let
     goPackagePath = "github.com/${owner}/${repo}";
     inherit src;
     postInstall = ''
+      mkdir $out
       cp go/src/github.com/sensu/uchiwa/public/index.html $out/
     '';
   };

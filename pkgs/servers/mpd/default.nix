@@ -27,7 +27,7 @@
 , opusSupport ? true, libopus
 , soundcloudSupport ? true, yajl
 , nfsSupport ? true, libnfs
-, smbSupport ? true, smbclient
+, smbSupport ? true, samba
 }:
 
 assert avahiSupport -> avahi != null && dbus != null;
@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
     ++ opt opusSupport libopus
     ++ opt soundcloudSupport yajl
     ++ opt (!stdenv.isDarwin && nfsSupport) libnfs
-    ++ opt (!stdenv.isDarwin && smbSupport) smbclient;
+    ++ opt (!stdenv.isDarwin && smbSupport) samba;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 

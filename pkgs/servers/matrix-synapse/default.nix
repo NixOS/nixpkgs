@@ -1,6 +1,6 @@
-{ stdenv, pythonPackages, fetchurl, fetchFromGitHub }:
+{ stdenv, python2Packages, fetchurl, fetchFromGitHub }:
 let
-  matrix-angular-sdk = pythonPackages.buildPythonPackage rec {
+  matrix-angular-sdk = python2Packages.buildPythonPackage rec {
     name = "matrix-angular-sdk-${version}";
     version = "0.6.8";
 
@@ -9,7 +9,7 @@ let
       sha256 = "0gmx4y5kqqphnq3m7xk2vpzb0w2a4palicw7wfdr1q2schl9fhz2";
     };
   };
-  matrix-synapse-ldap3 = pythonPackages.buildPythonPackage rec {
+  matrix-synapse-ldap3 = python2Packages.buildPythonPackage rec {
     pname = "matrix-synapse-ldap3";
     version = "0.1.3";
 
@@ -20,11 +20,11 @@ let
       sha256 = "0ss7ld3bpmqm8wcs64q1kb7vxlpmwk9lsgq0mh21a9izyfc7jb2l";
     };
 
-    propagatedBuildInputs = with pythonPackages; [ service-identity ldap3 twisted ];
+    propagatedBuildInputs = with python2Packages; [ service-identity ldap3 twisted ];
 
-    checkInputs = with pythonPackages; [ ldaptor mock ];
+    checkInputs = with python2Packages; [ ldaptor mock ];
   };
-in pythonPackages.buildPythonApplication rec {
+in python2Packages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
   version = "0.33.0";
 
@@ -39,7 +39,7 @@ in pythonPackages.buildPythonApplication rec {
     ./matrix-synapse.patch
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     blist canonicaljson daemonize dateutil frozendict pillow pyasn1
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests
     signedjson systemd twisted ujson unpaddedbase64 pyyaml prometheus_client
@@ -51,7 +51,7 @@ in pythonPackages.buildPythonApplication rec {
   # Checks fail because of Tox.
   doCheck = false;
 
-  buildInputs = with pythonPackages; [
+  buildInputs = with python2Packages; [
     mock setuptoolsTrial
   ];
 

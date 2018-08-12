@@ -75,6 +75,20 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
+     The <varname>services.cassandra</varname> module has been reworked and
+     was rewritten from scratch. The service has succeeding tests for
+     the versions 2.1, 2.2, 3.0 and 3.11 of <link
+     xlink:href="https://cassandra.apache.org/">Apache Cassandra</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     There is a new <varname>services.foundationdb</varname> module for deploying
+     <link xlink:href="https://www.foundationdb.org">FoundationDB</link> clusters.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      When enabled the <literal>iproute2</literal> will copy the files expected
      by ip route (e.g., <filename>rt_tables</filename>) in
      <filename>/run/iproute2</filename>. This allows to write aliases for
@@ -113,6 +127,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     The deprecated <varname>services.cassandra</varname> module has
+     seen a complete rewrite. (See above.)
+    </para>
+   </listitem>
    <listitem>
     <para>
      <literal>lib.strict</literal> is removed. Use
@@ -168,6 +188,16 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
     <para>
       <varname>dockerTools.buildImage</varname> now uses <literal>null</literal> as default value for <varname>tag</varname>,
       which indicates that the nix output hash will be used as tag.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Options
+      <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.ramfsMountPoint</literal>
+      <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.storage.mountPoint</literal>
+      were removed. <literal>luksroot.nix</literal> module never supported more than one YubiKey at
+      a time anyway, hence those options never had any effect. You should be able to remove them
+      from your config without any issues.
     </para>
    </listitem>
   </itemizedlist>

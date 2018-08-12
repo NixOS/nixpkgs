@@ -14,10 +14,8 @@
 
 <para><emphasis>Available version(s):</emphasis> 5.1.x, 5.2.x, 6.0.x</para>
 
-<para>FoundationDB (or "FDB") is a distributed, open source, high performance,
-transactional key-value store. It can store petabytes of data and deliver
-exceptional performance while maintaining consistency and ACID semantics
-(serializable transactions) over a large cluster.</para>
+<para>FoundationDB (or "FDB") is an open source, distributed, transactional
+key-value store.</para>
 
 <section><title>Configuring and basic setup</title>
 
@@ -31,7 +29,7 @@ services.foundationdb.package = pkgs.foundationdb52; # FoundationDB 5.2.x
 </para>
 
 <para>The <option>services.foundationdb.package</option> option is required,
-and must always be specified. Because FoundationDB network protocols and
+and must always be specified. Due to the fact FoundationDB network protocols and
 on-disk storage formats may change between (major) versions, and upgrades must
 be explicitly handled by the user, you must always manually specify this
 yourself so that the NixOS module will use the proper version. Note that minor,
@@ -70,17 +68,16 @@ fdb>
 </programlisting>
 </para>
 
-<para>You can also now write programs using the available client libraries.
-For example, the following Python program can be run in order to grab the cluster status,
-as a quick example. (This example uses <command>nix-shell</command> shebang
-support to automatically supply the necessary Python modules).
+<para>You can also write programs using the available client libraries.
+For example, the following Python program can be run in order to grab the
+cluster status, as a quick example. (This example uses
+<command>nix-shell</command> shebang support to automatically supply the
+necessary Python modules).
 
 <programlisting>
 a@link> cat fdb-status.py
 #! /usr/bin/env nix-shell
 #! nix-shell -i python -p python pythonPackages.foundationdb52
-
-from __future__ import print_function
 
 import fdb
 import json
@@ -340,8 +337,9 @@ only undergone fairly basic testing of all the available functionality.</para>
 
 <para>NixOS's FoundationDB module allows you to configure all of the most
 relevant configuration options for <command>fdbmonitor</command>, matching it
-quite closely. For a complete list of all options, check <command>man
-configuration.nix</command>.</para>
+quite closely. A complete list of options for the FoundationDB module may be
+found <link linkend="opt-services.foundationdb.enable">here</link>. You should
+also read the FoundationDB documentation as well.</para>
 
 </section>
 

@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib }:
+import ./make-test.nix ({ pkgs, lib, ... }:
 
 with lib;
 

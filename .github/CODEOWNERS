@@ -21,7 +21,8 @@
 /pkgs/top-level/default.nix           @nbp @Ericson2314
 /pkgs/top-level/impure.nix            @nbp @Ericson2314
 /pkgs/top-level/stage.nix             @nbp @Ericson2314
-/pkgs/stdenv
+/pkgs/stdenv/generic                  @Ericson2314
+/pkgs/stdenv/cross                    @Ericson2314
 /pkgs/build-support/cc-wrapper        @Ericson2314 @orivej
 /pkgs/build-support/bintools-wrapper  @Ericson2314 @orivej
 /pkgs/build-support/setup-hooks       @Ericson2314

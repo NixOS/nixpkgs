@@ -160,6 +160,13 @@ let
     buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
+  oci8 = buildPecl rec {
+    name = "oci8-2.1.8";
+    sha256 = "1bp6fss2f2qmd5bdk7x22j8vx5qivrdhz4x7csf29vjgj6gvchxy";
+    buildInputs = [ pkgs.re2c pkgs.oracle-instantclient ];
+    configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
+  };
+
   pcs = buildPecl rec {
     name = "pcs-1.3.3";
 

@@ -6,6 +6,7 @@ args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, ge
 , libICE
 , vimPlugins
 , makeWrapper
+, wrapGAppsHook
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
@@ -73,15 +74,6 @@ in stdenv.mkDerivation rec {
 
   src = builtins.getAttr source {
     "default" = common.src; # latest release
-
-    "vim-nox" =
-      {
-        # vim nox branch: client-server without X by uing sockets
-        # REGION AUTO UPDATE: { name="vim-nox"; type="hg"; url="https://code.google.com/r/yukihironakadaira-vim-cmdsrv-nox/"; branch="cmdsrv-nox"; }
-        src = (fetchurl { url = "http://mawercer.de/~nix/repos/vim-nox-hg-2082fc3.tar.bz2"; sha256 = "293164ca1df752b7f975fd3b44766f5a1db752de6c7385753f083499651bd13a"; });
-        name = "vim-nox-hg-2082fc3";
-        # END
-      }.src;
   };
 
   patches = [ ./cflags-prune.diff ] ++ stdenv.lib.optional ftNixSupport ./ft-nix-support.patch;
@@ -131,6 +123,7 @@ in stdenv.mkDerivation rec {
   ++ stdenv.lib.optional wrapPythonDrv makeWrapper
   ++ stdenv.lib.optional nlsSupport gettext
   ++ stdenv.lib.optional perlSupport perl
+  ++ stdenv.lib.optional (guiSupport == "gtk3") wrapGAppsHook
   ;
 
   buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
@@ -161,6 +154,10 @@ in stdenv.mkDerivation rec {
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + stdenv.lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python}/bin"
+  '' + stdenv.lib.optionalString (guiSupport == "gtk3") ''
+    rm "$out/bin/gvim"
+    echo -e '#!${stdenv.shell}\n"'"$out/bin/vim"'" -g "$@"' > "$out/bin/gvim"
+    chmod a+x "$out/bin/gvim"
   '';
 
   preInstall = ''

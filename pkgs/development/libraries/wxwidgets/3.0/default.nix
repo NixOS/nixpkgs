@@ -14,17 +14,15 @@ assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk) != null
 
 with stdenv.lib;
 
-let
-  version = "3.0.3.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  version = "3.0.4";
   name = "wxwidgets-${version}";
 
   src = fetchFromGitHub {
     owner = "wxWidgets";
     repo = "wxWidgets";
     rev = "v${version}";
-    sha256 = "1b90in65k1ij6kyk41knxs86i6hx5lkz30gpvzdvh0cbjagv5asq";
+    sha256 = "19mqglghjjqjgz4rbybn3qdgn2cz9xc511nq1pvvli9wx2k8syl1";
   };
 
   buildInputs =
@@ -44,11 +42,7 @@ stdenv.mkDerivation {
           + "fix_assertion_using_hide_in_destroy.diff";
       sha256 = "009y3dav79wiig789vkkc07g1qdqprg1544lih79199kb1h64lvy";
     })
-    # "Add support for WebKit2GTK+ in wxWebView". Will be in 3.0.4
-  ] ++ optional (!withGtk2) (fetchpatch {
-      url = "https://github.com/wxWidgets/wxWidgets/commit/ec6e54bc893fb7516731ca9c71e0d0bbc5ae9ff7.patch";
-      sha256 = "0gxd83xajm7gdv9rdzyvqwa2p5nz29nr23i0zx2dgfpsvz2qjp3q";
-    });
+  ];
 
   configureFlags =
     [ "--disable-precomp-headers" "--enable-mediactrl"
@@ -87,7 +81,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  
+
   meta = {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;

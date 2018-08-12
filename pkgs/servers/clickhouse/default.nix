@@ -1,30 +1,37 @@
 { stdenv, fetchFromGitHub, cmake, libtool
 , boost, capnproto, cctz, clang-unwrapped, double-conversion, gperftools, icu
 , libcpuid, libxml2, lld, llvm, lz4 , mysql, openssl, poco, re2, rdkafka
-, readline, sparsehash, unixODBC, zstd
+, readline, sparsehash, unixODBC, zstd, ninja
 }:
 
 stdenv.mkDerivation rec {
   name = "clickhouse-${version}";
-
-  version = "18.1.0";
+  version = "18.5.1";
 
   src = fetchFromGitHub {
-    owner = "yandex";
-    repo = "ClickHouse";
-    rev = "v${version}-stable";
-    sha256 = "1vsfnggf69xh91ndycdxwfz6m2bs7psaxf2bh04svgk1vzj2z4l0";
+    owner  = "yandex";
+    repo   = "ClickHouse";
+    rev    = "v${version}-stable";
+    sha256 = "1bw1hx3ssd1jcg6jj85nmp6dnyhvaaphjpcr6x4xs410k140qx31";
   };
 
-  nativeBuildInputs = [ cmake libtool ];
-
+  nativeBuildInputs = [ cmake libtool ninja ];
   buildInputs = [
     boost capnproto cctz clang-unwrapped double-conversion gperftools icu
     libcpuid libxml2 lld llvm lz4 mysql.connector-c openssl poco re2 rdkafka
     readline sparsehash unixODBC zstd
   ];
 
-  cmakeFlags = [ "-DENABLE_TESTS=OFF" "-DUNBUNDLED=ON" "-DUSE_STATIC_LIBRARIES=OFF" ];
+  cmakeFlags = [
+    "-DENABLE_TESTS=OFF"
+    "-DUNBUNDLED=ON"
+    "-DUSE_STATIC_LIBRARIES=OFF"
+  ];
+  hardeningDisable = [ "format" ];
+
+  patchPhase = ''
+    patchShebangs .
+  '';
 
   postInstall = ''
     rm -rf $out/share/clickhouse-test

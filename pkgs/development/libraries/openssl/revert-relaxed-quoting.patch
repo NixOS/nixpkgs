@@ -1,0 +1,37 @@
+From 7ee2a43069913fb7c444c656048996ea92cc465e Mon Sep 17 00:00:00 2001
+From: Richard Levitte <levitte@openssl.org>
+Date: Wed, 28 Mar 2018 14:46:27 +0200
+Subject: [PATCH] Revert "util/dofile.pl: only quote stuff that actually needs
+ quoting"
+
+This wasn't a good solution, too many things depend on the quotes being
+there consistently.
+
+This reverts commit 49cd47eaababc8c57871b929080fc1357e2ad7b8.
+
+Fixes #5772
+
+Reviewed-by: Rich Salz <rsalz@openssl.org>
+(Merged from https://github.com/openssl/openssl/pull/5773)
+
+(cherry picked from commit 00701e5ea84861b74d9d624f21a6b3fcb12e8acd)
+---
+ util/dofile.pl | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/util/dofile.pl b/util/dofile.pl
+index fc72989b0fd..a932941cd5a 100644
+--- a/util/dofile.pl
++++ b/util/dofile.pl
+@@ -99,9 +99,9 @@ package main;
+ # This adds quotes (") around the given string, and escapes any $, @, \,
+ # " and ' by prepending a \ to them.
+ sub quotify1 {
+-    my $s = my $orig = shift @_;
++    my $s = shift @_;
+     $s =~ s/([\$\@\\"'])/\\$1/g;
+-    $s ne $orig || $s =~ /\s/ ? '"'.$s.'"' : $s;
++    '"'.$s.'"';
+ }
+ 
+ # quotify_l LIST

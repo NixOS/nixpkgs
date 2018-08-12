@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "skydns-${version}";
@@ -15,4 +15,8 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
+
+  meta = {
+    license = stdenv.lib.licenses.mit;
+  };
 }

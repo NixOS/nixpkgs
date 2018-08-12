@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     homepage = http://linuxlibertine.sf.net;
     platforms = platforms.linux;
     maintainers = [ maintainers.volth ];
+    license = licenses.ofl;
   };
 }

@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, jansson
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 }:
@@ -16,30 +16,30 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${name}.tar.xz";
-        sha256 = "02dbfyi80im37gdsxglb4fja78q63b8ahmgdc5kh8lx51kf5xsg7";
+        sha256 = "0rj0azi766g0xdxydvkq9nj95hhsiwqgclzzmyxvk2axhb8nrb5l";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "0ija9a02znajsa2pbxamrmz87zwpmba9s29vdzzqqqw5c1rdpcr6";
+        sha256 = "1lv1s93k056wylrlc7j4q45zir9z4qshzcl454spy2wb8cdn3h4s";
         fetchSubmodules = true;
       };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap jansson
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
-    libpciaccess lvm2 lvm2 utillinux systemd libnl numad zfs
+    libpciaccess lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
@@ -59,6 +59,10 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
 
+    [ -f ${jansson}/lib/libjansson.so.4 ] || exit 1
+    substituteInPlace src/util/virjsoncompat.c \
+      --replace '"libjansson.so.4"' '"${jansson}/lib/libjansson.so.4"'
+
     patchShebangs . # fixes /usr/bin/python references
   '';
 
@@ -66,6 +70,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/var/lib"
     "--with-libpcap"
+    "--with-qemu"
     "--with-vmware"
     "--with-vbox"
     "--with-test"

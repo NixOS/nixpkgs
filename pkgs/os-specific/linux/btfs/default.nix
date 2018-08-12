@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig,
-  python, boost, fuse, libtorrentRasterbar, curl }:
+  python3, boost, fuse, libtorrentRasterbar, curl }:
 
 stdenv.mkDerivation rec {
   name = "btfs-${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace scripts/btplay \
-      --replace "/usr/bin/env python" "${python}/bin/python"
+      --replace "/usr/bin/env python" "${python3.interpreter}"
   '';
 
   meta = with stdenv.lib; {

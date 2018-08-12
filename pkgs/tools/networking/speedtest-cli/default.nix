@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "speedtest-cli-${version}";
   version = "2.0.2";
 
