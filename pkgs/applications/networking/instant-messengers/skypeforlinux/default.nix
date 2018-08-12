@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, makeWrapper
+{ stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, glibc, gnome3
 , gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg }:
 
@@ -70,7 +70,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  buildInputs = [ dpkg gtk3 makeWrapper ];
+  buildInputs = [ dpkg gtk3 ];
 
   unpackPhase = "true";
   installPhase = ''
