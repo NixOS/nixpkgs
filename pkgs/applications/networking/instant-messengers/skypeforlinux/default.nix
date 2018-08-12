@@ -68,9 +68,10 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  # For setup hook populating GSETTINGS_SCHEMA_PATH
+  nativeBuildInputs = [ wrapGAppsHook glib ];
 
-  buildInputs = [ dpkg gtk3 ];
+  buildInputs = [ dpkg ];
 
   unpackPhase = "true";
   installPhase = ''
