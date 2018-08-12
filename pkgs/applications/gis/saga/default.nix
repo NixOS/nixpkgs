@@ -1,13 +1,13 @@
 { stdenv, fetchurl, gdal, wxGTK30, proj, libiodbc, lzma, jasper,
   libharu, opencv, vigra, postgresql, Cocoa,
-  unixODBC , poppler, hdf4, hdf5, netcdf, sqlite }:
+  unixODBC , poppler, hdf4, hdf5, netcdf, sqlite, qhull }:
 
 stdenv.mkDerivation rec {
   name = "saga-6.3.0";
 
   # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
   # for why the have additional buildInputs on darwin
-  buildInputs = [ gdal wxGTK30 proj libharu opencv vigra postgresql libiodbc lzma jasper ]
+  buildInputs = [ gdal wxGTK30 proj libharu opencv vigra postgresql libiodbc lzma jasper qhull ]
                 ++ stdenv.lib.optionals stdenv.isDarwin
                   [ Cocoa unixODBC poppler hdf4.out hdf5 netcdf sqlite ];
 
