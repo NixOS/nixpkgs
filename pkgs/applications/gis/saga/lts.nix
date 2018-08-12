@@ -1,6 +1,6 @@
 { stdenv, fetchgit, gdal, wxGTK30, proj, libiodbc, lzma, jasper,
   libharu, opencv, vigra, postgresql, autoreconfHook, Cocoa
-  , unixODBC , poppler, hdf4, hdf5, netcdf, sqlite }:
+  , unixODBC , poppler, hdf4, hdf5, netcdf, sqlite, qhull, giflib }:
 
 stdenv.mkDerivation rec {
   name = "saga-2.3.2";
@@ -9,14 +9,18 @@ stdenv.mkDerivation rec {
   # for why the have additional buildInputs on darwin
   buildInputs = [ autoreconfHook gdal wxGTK30 proj libharu opencv vigra
                   postgresql libiodbc lzma jasper
-                  unixODBC poppler hdf4.out hdf5 netcdf sqlite ]
+                  unixODBC poppler hdf4.out hdf5 netcdf sqlite qhull giflib ]
                 ++ stdenv.lib.optional stdenv.isDarwin Cocoa ;
 
   enableParallelBuilding = true;
 
+  GDAL_CFLAGS = "-std=c++11";
+
+  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
+
   sourceRoot = "code-b6f474f/saga-gis";
 
-  patches = [ ./clang_patch.patch ];
+  patches = [ ./clang_patch.patch ./finite.patch];
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/saga-gis/code.git";
