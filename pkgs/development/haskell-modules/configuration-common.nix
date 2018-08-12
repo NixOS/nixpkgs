@@ -1080,13 +1080,19 @@ self: super: {
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
-  # The test suite does not know how to find the 'cabal2nix' binary.
-  cabal2nix = overrideCabal super.cabal2nix (drv: {
-    preCheck = ''
-      export PATH="$PWD/dist/build/cabal2nix:$PATH"
-      export HOME="$TMPDIR/home"
-    '';
-  });
+  cabal2nix =
+    let
+      # The test suite does not know how to find the 'cabal2nix' binary.
+      drv1 = overrideCabal super.cabal2nix (drv: {
+               preCheck = ''
+                 export PATH="$PWD/dist/build/cabal2nix:$PATH"
+                 export HOME="$TMPDIR/home"
+               '';
+             });
+       # cabal2nix requires hpack >= 0.29.6 but the LTS has hpack-0.28.2.
+       # Lets remove this once the LTS has upraded to 0.29.6.
+       drv2 = drv1.override { hpack = self.hpack_0_29_6; };
+    in drv2;
 
   # Break out of "aeson <1.3, temporary <1.3".
   stack = doJailbreak super.stack;
@@ -1114,10 +1120,13 @@ self: super: {
   # needed because of testing-feat >=0.4.0.2 && <1.1
   language-ecmascript = doJailbreak super.language-ecmascript;
 
-  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can. 
+  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can.
   sexpr =
     appendPatch (overrideCabal super.sexpr (drv: {
       isExecutable = false;
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
     })) ./patches/sexpr-0.2.1.patch;
+
+  # Can be removed once yi-language >= 0.18 is in the LTS
+  yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
 }

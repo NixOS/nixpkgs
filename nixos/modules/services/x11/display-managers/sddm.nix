@@ -265,6 +265,7 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
+    environment.pathsToLink = [ "/share/sddm/themes" ];
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 

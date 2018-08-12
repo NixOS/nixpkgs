@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
 
     platforms = platforms.unix;
     maintainers = with maintainers; [ ebzzry codyopel ];
+    license = licenses.gpl2Plus;
   };
 }

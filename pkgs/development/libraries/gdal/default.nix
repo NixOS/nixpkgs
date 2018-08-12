@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchpatch, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
-, libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib
+, libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
 , libiconv
-, netcdfSupport ? true, netcdf, hdf5 , curl
+, netcdfSupport ? true, netcdf, hdf5, curl
 }:
 
 with stdenv.lib;
@@ -17,12 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
-    libspatialite poppler hdf4 qhull giflib ]
+    libspatialite poppler hdf4 qhull giflib expat ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ stdenv.lib.optional stdenv.isDarwin libiconv
   ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
   configureFlags = [
+    "--with-expat=${expat.dev}"
     "--with-jpeg=${libjpeg.dev}"
     "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
     "--with-png=${libpng.dev}"      # optional

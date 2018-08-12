@@ -76,9 +76,6 @@ in
 
   config = {
 
-    warnings = lib.optional (options.system.stateVersion.highestPrio > 1000)
-      "You don't have `system.stateVersion` explicitly set. Expect things to break.";
-
     system.nixos = {
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual

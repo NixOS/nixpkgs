@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     homepage = http://findbugs.sourceforge.net/;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;
+    license = licenses.lgpl3;
   };
 }

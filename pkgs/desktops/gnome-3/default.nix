@@ -187,31 +187,31 @@ lib.makeScope pkgs.newScope (self: with self; {
   nautilus = callPackage ./core/nautilus { };
 
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-vpnc = pkgs.networkmanager-vpnc.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-openconnect = pkgs.networkmanager-openconnect.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-fortisslvpn = pkgs.networkmanager-fortisslvpn.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-l2tp = pkgs.networkmanager-l2tp.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-iodine = pkgs.networkmanager-iodine.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanagerapplet = pkgs.networkmanagerapplet.override {
-    inherit gnome3 gsettings-desktop-schemas glib-networking;
+    withGnome = true;
   };
 
   rest = callPackage ./core/rest { };
@@ -373,9 +373,17 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gexiv2 = callPackage ./misc/gexiv2 { };
 
+  gnome-applets = callPackage ./misc/gnome-applets { };
+
+  gnome-flashback = callPackage ./misc/gnome-flashback { };
+
+  gnome-panel = callPackage ./misc/gnome-panel { };
+
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
   gpaste = callPackage ./misc/gpaste { };
+
+  metacity = callPackage ./misc/metacity { };
 
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
 

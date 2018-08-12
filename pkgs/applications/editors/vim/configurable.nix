@@ -154,6 +154,10 @@ in stdenv.mkDerivation rec {
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + stdenv.lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python}/bin"
+  '' + stdenv.lib.optionalString (guiSupport == "gtk3") ''
+    rm "$out/bin/gvim"
+    echo -e '#!${stdenv.shell}\n"'"$out/bin/vim"'" -g "$@"' > "$out/bin/gvim"
+    chmod a+x "$out/bin/gvim"
   '';
 
   preInstall = ''

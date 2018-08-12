@@ -19,5 +19,6 @@ multiStdenv.mkDerivation {
   meta = with multiStdenv.lib; {
     description = "Tool for creating static Linux binaries";
     platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }
