@@ -157,7 +157,6 @@ let
             --hybrid 2 \
             --recompute-chs /dev/vda
           . /sys/class/block/vda2/uevent
-          mknod /dev/vda2 b $MAJOR $MINOR
           . /sys/class/block/vda/uevent
           ${pkgs.dosfstools}/bin/mkfs.fat -F16 /dev/vda2
           export MTOOLS_SKIP_CHECK=1
