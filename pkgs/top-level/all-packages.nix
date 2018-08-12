@@ -11751,6 +11751,8 @@ with pkgs;
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
+  qradiolink = callPackage ../applications/misc/qradiolink { };
+
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
