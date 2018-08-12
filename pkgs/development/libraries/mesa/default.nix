@@ -63,7 +63,7 @@ let
 in
 
 let
-  version = "18.1.5";
+  version = "18.1.2";
   branch  = head (splitString "." version);
 in
 
@@ -77,7 +77,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "69dbe6f1a6660386f5beb85d4fcf003ee23023ed7b9a603de84e9a37e8d98dea";
+    sha256 = "1ydivzm4c2k53b65lvm11d62z140xlmd7viw63bl5cm5idjg02q7";
   };
 
   prePatch = "patchShebangs .";
