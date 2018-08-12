@@ -190,7 +190,6 @@ in rec {
   stage1 = prevStage: let
     persistent = self: super: with prevStage; {
       cmake = super.cmake.override {
-        majorVersion = "3.9";  # FIXME: update ApplicationServices patch
         isBootstrap = true;
         useSharedLibraries = false;
       };
