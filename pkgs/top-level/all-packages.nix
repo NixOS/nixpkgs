@@ -5401,6 +5401,8 @@ in
 
   phodav = callPackage ../tools/networking/phodav { };
 
+  phosh = callPackage ../applications/window-managers/phosh { };
+
   pinentry = callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
     gcr = null;

@@ -1,0 +1,10 @@
+--- a/data/phosh.in
++++ b/data/phosh.in
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ 
+-ROOTSTON="/usr/bin/rootston"
++ROOTSTON="@rootston@"
+ ROOTSTON_INI="@pkgdatadir@/rootston.ini"
+ 
+ if [ -x @wlrootsdir@/rootston ]; then
