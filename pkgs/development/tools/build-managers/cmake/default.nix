@@ -1,6 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig
 , bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
-, majorVersion ? "3.12"
 # darwin attributes
 , ps
 , isBootstrap ? false
@@ -15,31 +14,12 @@ assert useQt4 -> withQt5 == false;
 
 with stdenv.lib;
 
-with (
-  {
-    "3.12" = {
-      minorVersion = "1";
-      sha256 = "1ckswlaid3p2is1a80fmr4hgwpfsiif66giyx1z9ayhxx0n5qgf5";
-    };
-    "3.11" = {
-      minorVersion = "2";
-      sha256 = "0j2jpx94lnqx5w59i9xihl56hf6ghk04438rqhh7lk1bryxj5g2y";
-    };
-    "3.10" = {
-      minorVersion = "2";
-      sha256 = "80d0faad4ab56de07aa21a7fc692c88c4ce6156d42b0579c6962004a70a3218b";
-    };
-    "3.9" = {
-      minorVersion = "6";
-      sha256 = "7410851a783a41b521214ad987bb534a7e4a65e059651a2514e6ebfc8f46b218";
-    };
-
-  }.${majorVersion}
-    or (abort ''Unsupported configuration for cmake: majorVersion = "${majorVersion}";'')
-);
-
 let
   os = stdenv.lib.optionalString;
+  majorVersion = "3.12";
+  minorVersion = "1";
+  # from https://cmake.org/files/v3.12/cmake-3.12.1-SHA-256.txt
+  sha256 = "1ckswlaid3p2is1a80fmr4hgwpfsiif66giyx1z9ayhxx0n5qgf5";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -50,7 +30,6 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    # from https://cmake.org/files/v3.10/cmake-3.10.2-SHA-256.txt
     inherit sha256;
   };
 
@@ -59,17 +38,13 @@ stdenv.mkDerivation rec {
       --replace '"-framework CoreServices"' '""'
   '';
 
-  # Don't search in non-Nix locations such as /usr, but do search in our libc.
-  patches = [ ./search-path-3.9.patch ]
-    ++ optional (versionOlder version "3.12") (fetchpatch {
-      name = "cmake-3.11-libuv-1.21.patch";
-      url = https://gitlab.kitware.com/cmake/cmake/commit/889033b5c6847cf1f7bd789384405d59dc333bf6.patch;
-      sha256 = "0683zbyb3bicaxqzrj4wgdan6x08k30m20kkmpjvw30nr6a8r6xq";
-    })
+  patches = [
+    # Don't search in non-Nix locations such as /usr, but do search in our libc.
+    ./search-path.patch
+
     # Don't depend on frameworks.
-    ++ optional (useSharedLibraries && majorVersion == "3.11") ./application-services.patch  # TODO: remove conditional
-    ++ optional (useSharedLibraries && majorVersion == "3.12") ./application-services-3.12.patch
-    ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
+    ./application-services.patch
+  ] ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];
   setOutputFlags = false;
