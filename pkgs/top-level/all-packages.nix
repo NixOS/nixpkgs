@@ -7808,6 +7808,8 @@ with pkgs;
 
   wasm = callPackage ../development/interpreters/wasm { };
 
+  wasm-gc = callPackage ../development/interpreters/wasm-gc { };
+
 
   ### DEVELOPMENT / MISC
 
