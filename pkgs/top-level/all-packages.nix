@@ -10674,6 +10674,8 @@ with pkgs;
 
   libpgf = callPackage ../development/libraries/libpgf { };
 
+  libphonenumber = callPackage ../development/libraries/libphonenumber { };
+
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
