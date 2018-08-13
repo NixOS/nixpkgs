@@ -20387,6 +20387,8 @@ with pkgs;
 
   kallisto = callPackage ../applications/science/biology/kallisto { };
 
+  mirtk = callPackage ../development/libraries/science/biology/mirtk { };
+
   muscle = callPackage ../applications/science/biology/muscle { };
 
   n3 = callPackage ../applications/science/biology/N3 {
