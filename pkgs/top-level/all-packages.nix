@@ -14990,6 +14990,8 @@ with pkgs;
 
   stix-two = callPackage ../data/fonts/stix-two { };
 
+  terminfo-extra = callPackage ../data/misc/terminfo-extra { };
+
   inherit (callPackages ../data/fonts/gdouros { })
     symbola aegyptus akkadian anatolian maya unidings musica analecta textfonts aegan abydos;
 
