@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     homepage = http://gf2x.gforge.inria.fr;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
