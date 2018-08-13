@@ -24,7 +24,7 @@ let
   kernel = config.boot.kernelPackages;
 
   packages = if config.boot.zfs.enableUnstable then {
-    spl = kernel.splUnstable;
+    spl = null;
     zfs = kernel.zfsUnstable;
     zfsUser = pkgs.zfsUnstable;
   } else {
@@ -325,12 +325,12 @@ in
       virtualisation.lxd.zfsSupport = true;
 
       boot = {
-        kernelModules = [ "spl" "zfs" ] ;
-        extraModulePackages = with packages; [ spl zfs ];
+        kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
+        extraModulePackages = with packages; [ zfs ] ++ optional (!cfgZfs.enableUnstable) spl;
       };
 
       boot.initrd = mkIf inInitrd {
-        kernelModules = [ "spl" "zfs" ];
+        kernelModules = [ "zfs" ] ++ optional (!cfgZfs.enableUnstable) "spl";
         extraUtilsCommands =
           ''
             copy_bin_and_libs ${packages.zfsUser}/sbin/zfs
