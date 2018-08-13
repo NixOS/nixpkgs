@@ -1679,6 +1679,11 @@
     github = "ikervagyok";
     name = "Balázs Lengyel";
   };
+  illegalprime = {
+    email = "themichaeleden@gmail.com";
+    github = "illegalprime";
+    name = "Michael Eden";
+  };
   ilya-kolpakov = {
     email = "ilya.kolpakov@gmail.com";
     github = "ilya-kolpakov";
