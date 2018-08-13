@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "2.0.3";
+  version = "2.4.0";
 
   # Tests require network connectivity and there's no easy way to disable
   # them. ~ C.
@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17a618541c19a48d5591f4011a282cbcbbe2d05c361109f8f5381aeec05eb270";
+    sha256 = "02c63cec551bba9b4785d156b518699e8ff0e6e6f96d00a72daa075683487202";
   };
 
   checkInputs = [ unittest2 mock ];
