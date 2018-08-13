@@ -1,17 +1,17 @@
-{lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, nose, blas, hostPlatform }:
+{lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas, hostPlatform }:
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.14.5";
+  version = "1.15.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "a4a433b3a264dbc9aa9c7c241e87c0358a503ea6394f8737df1683c7c9a102ac";
+    sha256 = "f28e73cf18d37a413f7d5de35d024e6b98f14566a10d82100f9dc491a7d449f9";
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran nose blas ];
+  buildInputs = [ gfortran pytest blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -54,10 +54,6 @@ buildPythonPackage rec {
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck
-  '';
-
-  postInstall = ''
-    ln -s $out/bin/f2py* $out/bin/f2py
   '';
 
   passthru = {
