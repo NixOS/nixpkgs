@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.6.6";
+  version = "2.6.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "97c1f7fa409439ae933494014cd41d43de84cfe6c98b7f93392f94d54de1b453";
+    sha256 = "3d007946b6c042fc9feb1db52dd0847d2f9b7f3175ae0591476ea80dcd664771";
   };
 
   propagatedBuildInputs = [ numpy ];
