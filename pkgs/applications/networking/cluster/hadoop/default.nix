@@ -123,8 +123,8 @@ let
 
 in {
   hadoop_2_7 = common {
-    version = "2.7.6";
-    sha256 = "0wmg0iy0qxrf43fzajzmx03gxp4yx197vxacqwkxaj45clqwl010";
+    version = "2.7.7";
+    sha256 = "1ahv67f3lwak3kbjvnk1gncq56z6dksbajj872iqd0awdsj3p5rf";
     dependencies-sha256 = "1lsr9nvrynzspxqcamb10d596zlnmnfpxhkd884gdiva0frm0b1r";
     tomcat = tomcat_6_0_48;
   };
