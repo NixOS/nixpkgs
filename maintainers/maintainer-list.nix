@@ -1382,6 +1382,11 @@
     github = "fps";
     name = "Florian Paul Schmidt";
   };
+  freepotion = {
+    email = "freepotion@protonmail.com";
+    github = "freepotion";
+    name = "Free Potion";
+  };
   Fresheyeball = {
     email = "fresheyeball@gmail.com";
     github = "fresheyeball";
