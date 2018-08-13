@@ -1832,15 +1832,15 @@ in {
     };
   };
 
-  pytest = self.pytest_36;
+  pytest = self.pytest_37;
 
-  pytest_36 = callPackage ../development/python-modules/pytest {
+  pytest_37 = callPackage ../development/python-modules/pytest {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
 
   # Needed for celery
-  pytest_32 = self.pytest_36.overridePythonAttrs( oldAttrs: rec {
+  pytest_32 = self.pytest_37.overridePythonAttrs( oldAttrs: rec {
     version = "3.2.5";
     src = oldAttrs.src.override {
       inherit version;
