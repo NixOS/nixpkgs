@@ -18956,7 +18956,9 @@ with pkgs;
     inherit (luaPackages) cjson;
   };
 
-  weechat-xmpp = callPackage ../applications/networking/instant-messengers/weechat-xmpp {};
+  weechat-xmpp = callPackage ../applications/networking/instant-messengers/weechat-xmpp {
+    inherit (pythonPackages) pydns;
+  };
 
   westonLite = weston.override {
     pango = null;
