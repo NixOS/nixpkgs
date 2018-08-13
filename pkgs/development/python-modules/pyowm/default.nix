@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyowm";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y2r322pcamabar70513pbyiq26x33l1aq9cim6k30lk9p4aq310";
+    sha256 = "ed175873823a2fedb48e453505c974ca39f3f75006ef1af54fdbcf72e6796849";
   };
 
   propagatedBuildInputs = [ requests ];
