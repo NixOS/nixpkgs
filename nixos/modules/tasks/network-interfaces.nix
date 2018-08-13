@@ -395,16 +395,15 @@ in
 
     networking.nameservers = mkOption {
       type = types.listOf types.str;
-      default =
-        let
-          dnsmasqResolve = config.services.dnsmasq.enable &&
-                           config.services.dnsmasq.resolveLocalQueries;
-          # This hosts runs a full-blown DNS resolver.
-          hasLocalResolver = config.services.bind.enable ||
-                             config.services.unbound.enable ||
-                           dnsmasqResolve;
-        in
-          if hasLocalResolver then ["127.0.0.1"] else [];
+      default =  # Check if this host runs a full-blown DNS resolver.
+        if config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries then
+          [ "127.0.0.1" ]
+        else if config.services.bind.enable then
+          [ "127.0.0.1" ]
+        else if config.services.unbound.enable then
+          config.services.unbound.interfaces
+        else
+          [];
       example = ["130.161.158.4" "130.161.33.17"];
       description = ''
         The list of nameservers.  It can be left empty if it is auto-detected through DHCP.
