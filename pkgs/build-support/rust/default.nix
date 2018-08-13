@@ -7,7 +7,6 @@ in
 { name, cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
-, patches ? []
 , sourceRoot ? null
 , logLevel ? ""
 , buildInputs ? []
@@ -23,7 +22,7 @@ assert cargoVendorDir == null -> cargoSha256 != "unset";
 let
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
-        inherit name src srcs patches sourceRoot cargoUpdateHook;
+        inherit name src srcs sourceRoot cargoUpdateHook;
         sha256 = cargoSha256;
       }
     else null;
