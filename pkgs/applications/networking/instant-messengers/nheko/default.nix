@@ -98,5 +98,6 @@ stdenv.mkDerivation rec {
     description = "Desktop client for the Matrix protocol";
     maintainers = with maintainers; [ ekleog ];
     platforms = platforms.all;
+    license = licenses.gpl3Plus;
   };
 }

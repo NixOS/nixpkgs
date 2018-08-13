@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--with-iptables=${iptables}/sbin/iptables"
     (stdenv.lib.enableFeature buildServer "server")
     (stdenv.lib.enableFeature buildClient "client")
-    (stdenv.lib.withFeatureAs wgetSupport wget "${wget}/bin/wget")
+    (stdenv.lib.withFeatureAs wgetSupport "wget" "${wget}/bin/wget")
   ] ++ stdenv.lib.optionalString gnupgSupport [
     "--with-gpgme"
     "--with-gpgme-prefix=${gpgme.dev}"

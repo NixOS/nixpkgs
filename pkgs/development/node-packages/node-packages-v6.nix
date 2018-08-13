@@ -3154,6 +3154,15 @@ let
         sha1 = "31ab1ac8b129363463e35b3ebb69f4dfcfba7947";
       };
     };
+    "backoff-2.4.1" = {
+      name = "backoff";
+      packageName = "backoff";
+      version = "2.4.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/backoff/-/backoff-2.4.1.tgz";
+        sha1 = "2f68c50e0dd789dbefe24200a62efb04d2456d68";
+      };
+    };
     "backoff-2.5.0" = {
       name = "backoff";
       packageName = "backoff";
@@ -3467,6 +3476,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/big.js/-/big.js-3.2.0.tgz";
         sha512 = "+hN/Zh2D08Mx65pZ/4g5bsmNiZUuChDiQfTUQ7qJr4/kuopCr88xZsAXv6mBoZEsUI4OuGHlX59qE94K2mMW8Q==";
+      };
+    };
+    "bigspinner-3.1.0" = {
+      name = "bigspinner";
+      packageName = "bigspinner";
+      version = "3.1.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/bigspinner/-/bigspinner-3.1.0.tgz";
+        sha1 = "dd3a862b2fedf66fee8471320069428d0d84427a";
       };
     };
     "bin-version-2.0.0" = {
@@ -5627,6 +5645,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/cmdln/-/cmdln-3.2.1.tgz";
         sha1 = "8d21967625b25ee35fca8e8453ccf10fccd04e45";
+      };
+    };
+    "cmdln-4.1.2" = {
+      name = "cmdln";
+      packageName = "cmdln";
+      version = "4.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/cmdln/-/cmdln-4.1.2.tgz";
+        sha1 = "4345bb5498f2b096ba85ec8c5579a8cb252f7c70";
       };
     };
     "co-3.1.0" = {
@@ -10356,6 +10383,15 @@ let
         sha1 = "4d58b815ace5bebfc4ebf03cf98b0a7604a99b86";
       };
     };
+    "extsprintf-1.0.2" = {
+      name = "extsprintf";
+      packageName = "extsprintf";
+      version = "1.0.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/extsprintf/-/extsprintf-1.0.2.tgz";
+        sha1 = "e1080e0658e300b06294990cc70e1502235fd550";
+      };
+    };
     "extsprintf-1.2.0" = {
       name = "extsprintf";
       packageName = "extsprintf";
@@ -11616,6 +11652,15 @@ let
         sha1 = "1b0ab3bd553b2a0d6399d29c0e3ea0b252078327";
       };
     };
+    "fuzzyset.js-0.0.1" = {
+      name = "fuzzyset.js";
+      packageName = "fuzzyset.js";
+      version = "0.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/fuzzyset.js/-/fuzzyset.js-0.0.1.tgz";
+        sha1 = "979e22f9451b4b38f051f7937c919dbacc692958";
+      };
+    };
     "fx-runner-1.0.9" = {
       name = "fx-runner";
       packageName = "fx-runner";
@@ -11839,6 +11884,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/getmac/-/getmac-1.4.3.tgz";
         sha512 = "bOZafIX+19cCS5KUjHtlJPZW+4joMa5tISIk5CugjmlZE0zZtjwB59wm56JPXVy5ELivw7g4Z9TEI0EDa2CSwQ==";
+      };
+    };
+    "getpass-0.1.6" = {
+      name = "getpass";
+      packageName = "getpass";
+      version = "0.1.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/getpass/-/getpass-0.1.6.tgz";
+        sha1 = "283ffd9fc1256840875311c1b60e8c40187110e6";
       };
     };
     "getpass-0.1.7" = {
@@ -15676,6 +15730,15 @@ let
         sha1 = "cd13466ea2480dbd8396a570d47d31dda476f8b1";
       };
     };
+    "jsprim-1.4.0" = {
+      name = "jsprim";
+      packageName = "jsprim";
+      version = "1.4.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/jsprim/-/jsprim-1.4.0.tgz";
+        sha1 = "a3b87e40298d8c380552d8cc7628a0bb95a22918";
+      };
+    };
     "jsprim-1.4.1" = {
       name = "jsprim";
       packageName = "jsprim";
@@ -17216,6 +17279,15 @@ let
         sha1 = "6952722ffa3049a55a5e1c10ee4a0947a3e5e19b";
       };
     };
+    "lomstream-1.1.0" = {
+      name = "lomstream";
+      packageName = "lomstream";
+      version = "1.1.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lomstream/-/lomstream-1.1.0.tgz";
+        sha1 = "2a7f8066ec3ab40bef28ca384842e75340183bf0";
+      };
+    };
     "long-2.4.0" = {
       name = "long";
       packageName = "long";
@@ -17430,6 +17502,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/lru-queue/-/lru-queue-0.1.0.tgz";
         sha1 = "2738bd9f0d3cf4f84490c5736c48699ac632cda3";
+      };
+    };
+    "lstream-0.0.4" = {
+      name = "lstream";
+      packageName = "lstream";
+      version = "0.0.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/lstream/-/lstream-0.0.4.tgz";
+        sha1 = "d637764ea33a929bd00f34d2a23c2256d0d5fb5b";
       };
     };
     "ltgt-1.0.2" = {
@@ -18573,6 +18654,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/mongoose-lifecycle/-/mongoose-lifecycle-1.0.0.tgz";
         sha1 = "3bac3f3924a845d147784fc6558dee900b0151e2";
+      };
+    };
+    "mooremachine-2.2.1" = {
+      name = "mooremachine";
+      packageName = "mooremachine";
+      version = "2.2.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/mooremachine/-/mooremachine-2.2.1.tgz";
+        sha1 = "0d9891aa7c2cf32ca73e72f52a3561ed787e2e8c";
       };
     };
     "morgan-1.6.1" = {
@@ -20550,6 +20640,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/once/-/once-1.3.0.tgz";
         sha1 = "151af86bfc1f08c4b9f07d06ab250ffcbeb56581";
+      };
+    };
+    "once-1.3.2" = {
+      name = "once";
+      packageName = "once";
+      version = "1.3.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/once/-/once-1.3.2.tgz";
+        sha1 = "d8feeca93b039ec1dcdee7741c92bdac5e28081b";
       };
     };
     "once-1.3.3" = {
@@ -24324,6 +24423,33 @@ let
         sha1 = "e1e5b7ad9d4f6aeacd20e28f44a045f26c146dbc";
       };
     };
+    "restify-clients-1.5.2" = {
+      name = "restify-clients";
+      packageName = "restify-clients";
+      version = "1.5.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/restify-clients/-/restify-clients-1.5.2.tgz";
+        sha1 = "d4b13d82f287e77e2eb5daae14e6ef8534aa7389";
+      };
+    };
+    "restify-errors-3.0.0" = {
+      name = "restify-errors";
+      packageName = "restify-errors";
+      version = "3.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/restify-errors/-/restify-errors-3.0.0.tgz";
+        sha1 = "3b17177d43954acece4291465a97ce1b58cf3d57";
+      };
+    };
+    "restify-errors-3.1.0" = {
+      name = "restify-errors";
+      packageName = "restify-errors";
+      version = "3.1.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/restify-errors/-/restify-errors-3.1.0.tgz";
+        sha1 = "06b5479477874c0856d782a12c8707dcdad53f16";
+      };
+    };
     "restore-cursor-1.0.1" = {
       name = "restore-cursor";
       packageName = "restore-cursor";
@@ -24430,6 +24556,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/rimraf/-/rimraf-2.2.8.tgz";
         sha1 = "e439be2aaee327321952730f99a8929e4fc50582";
+      };
+    };
+    "rimraf-2.4.4" = {
+      name = "rimraf";
+      packageName = "rimraf";
+      version = "2.4.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/rimraf/-/rimraf-2.4.4.tgz";
+        sha1 = "b528ce2ebe0e6d89fb03b265de11d61da0dbcf82";
       };
     };
     "rimraf-2.4.5" = {
@@ -24862,6 +24997,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/semver/-/semver-5.0.3.tgz";
         sha1 = "77466de589cd5d3c95f138aa78bc569a3cb5d27a";
+      };
+    };
+    "semver-5.1.0" = {
+      name = "semver";
+      packageName = "semver";
+      version = "5.1.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/semver/-/semver-5.1.0.tgz";
+        sha1 = "85f2cf8550465c4df000cf7d86f6b054106ab9e5";
       };
     };
     "semver-5.1.1" = {
@@ -25690,6 +25834,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/smartdc-auth/-/smartdc-auth-2.3.1.tgz";
         sha1 = "96568a565e9d9feb03b93a50651eee14d23adf44";
+      };
+    };
+    "smartdc-auth-2.5.7" = {
+      name = "smartdc-auth";
+      packageName = "smartdc-auth";
+      version = "2.5.7";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/smartdc-auth/-/smartdc-auth-2.5.7.tgz";
+        sha1 = "42d45710e791deb92df91326c8eed1bd5a842cb6";
       };
     };
     "smtp-connection-1.3.8" = {
@@ -26601,6 +26754,15 @@ let
         sha1 = "512675a28f08f1e581779e1989ab1e13effb49e4";
       };
     };
+    "sshpk-1.14.1" = {
+      name = "sshpk";
+      packageName = "sshpk";
+      version = "1.14.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/sshpk/-/sshpk-1.14.1.tgz";
+        sha1 = "130f5975eddad963f1d56f92b9ac6c51fa9f83eb";
+      };
+    };
     "sshpk-1.14.2" = {
       name = "sshpk";
       packageName = "sshpk";
@@ -26626,6 +26788,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/sshpk-agent/-/sshpk-agent-1.2.1.tgz";
         sha1 = "62e143c18530fda103320b3403e8ad42786d9718";
+      };
+    };
+    "sshpk-agent-1.7.0" = {
+      name = "sshpk-agent";
+      packageName = "sshpk-agent";
+      version = "1.7.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/sshpk-agent/-/sshpk-agent-1.7.0.tgz";
+        sha512 = "zR4GV5XYSypCusFzfTeTSXVqrFJJsK79Ec2KXZdo/x7qxBGSJPPZFtqMcqpXPaJ9VCK7Zn/vI+/kMrqeQILv4w==";
       };
     };
     "ssri-5.3.0" = {
@@ -27330,6 +27501,15 @@ let
         sha1 = "f7fb93758a69a571140181277eea0c2eb1301fa3";
       };
     };
+    "strsplit-1.0.0" = {
+      name = "strsplit";
+      packageName = "strsplit";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/strsplit/-/strsplit-1.0.0.tgz";
+        sha1 = "0fdedc68e91addcfcb2e6be9c262581a6e8c28aa";
+      };
+    };
     "subarg-1.0.0" = {
       name = "subarg";
       packageName = "subarg";
@@ -27536,6 +27716,15 @@ let
         url = "https://github.com/mixu/node-tabtab.git";
         rev = "94af2b878b174527b6636aec88acd46979247755";
         sha256 = "c824206b33da96cf5c01c21f1b133a0e3568e07ee4dcc9beefa8226864cd0272";
+      };
+    };
+    "tabula-1.10.0" = {
+      name = "tabula";
+      packageName = "tabula";
+      version = "1.10.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/tabula/-/tabula-1.10.0.tgz";
+        sha1 = "2ed67caf8cad091de80e43622850d899713b2f47";
       };
     };
     "taffydb-2.6.2" = {
@@ -29851,6 +30040,15 @@ let
         sha1 = "8a6a4ac3a8c774b6f687fece49bdffd78552e2cd";
       };
     };
+    "verror-1.3.6" = {
+      name = "verror";
+      packageName = "verror";
+      version = "1.3.6";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/verror/-/verror-1.3.6.tgz";
+        sha1 = "cff5df12946d297d2baaefaa2689e25be01c005c";
+      };
+    };
     "verror-1.6.0" = {
       name = "verror";
       packageName = "verror";
@@ -30101,6 +30299,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/vscode-uri/-/vscode-uri-1.0.5.tgz";
         sha1 = "3b899a8ef71c37f3054d79bdbdda31c7bf36f20d";
+      };
+    };
+    "vstream-0.1.0" = {
+      name = "vstream";
+      packageName = "vstream";
+      version = "0.1.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vstream/-/vstream-0.1.0.tgz";
+        sha1 = "13587190f34e72ba7a07ebbaa7e70ac147b1fb7d";
       };
     };
     "walk-2.3.14" = {
@@ -46942,6 +47149,189 @@ in
       description = "Appcelerator Titanium Command line";
       homepage = "https://github.com/appcelerator/titanium#readme";
       license = "Apache-2.0";
+    };
+    production = true;
+    bypassCache = false;
+  };
+  triton = nodeEnv.buildNodePackage {
+    name = "triton";
+    packageName = "triton";
+    version = "6.1.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/triton/-/triton-6.1.2.tgz";
+      sha1 = "1f4376383ea07de8bffbfd00b445719d57a5f474";
+    };
+    dependencies = [
+      sources."asn1-0.2.4"
+      sources."assert-plus-0.2.0"
+      sources."backoff-2.4.1"
+      sources."balanced-match-1.0.0"
+      sources."bcrypt-pbkdf-1.0.2"
+      sources."bigspinner-3.1.0"
+      sources."brace-expansion-1.1.11"
+      sources."bunyan-1.8.12"
+      sources."clone-0.1.5"
+      (sources."cmdln-4.1.2" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+          sources."extsprintf-1.4.0"
+        ];
+      })
+      sources."concat-map-0.0.1"
+      sources."core-util-is-1.0.2"
+      (sources."dashdash-1.14.1" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      sources."dtrace-provider-0.8.7"
+      sources."ecc-jsbn-0.1.2"
+      sources."extsprintf-1.0.2"
+      sources."fast-safe-stringify-1.2.3"
+      sources."fuzzyset.js-0.0.1"
+      (sources."getpass-0.1.6" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      sources."glob-5.0.15"
+      (sources."http-signature-1.2.0" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      sources."inflight-1.0.6"
+      sources."inherits-2.0.3"
+      sources."is-absolute-0.1.7"
+      sources."is-relative-0.1.3"
+      sources."isarray-1.0.0"
+      sources."isexe-1.1.2"
+      sources."jsbn-0.1.1"
+      sources."json-schema-0.2.3"
+      (sources."jsprim-1.4.0" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+          sources."verror-1.3.6"
+        ];
+      })
+      sources."keep-alive-agent-0.0.1"
+      sources."lodash-4.17.10"
+      (sources."lomstream-1.1.0" // {
+        dependencies = [
+          sources."assert-plus-0.1.5"
+          sources."extsprintf-1.3.0"
+        ];
+      })
+      sources."lru-cache-4.1.3"
+      sources."lstream-0.0.4"
+      sources."mime-1.6.0"
+      sources."minimatch-3.0.4"
+      sources."minimist-0.0.8"
+      sources."mkdirp-0.5.1"
+      sources."moment-2.22.2"
+      sources."mooremachine-2.2.1"
+      sources."mute-stream-0.0.7"
+      sources."mv-2.1.1"
+      sources."nan-2.10.0"
+      sources."ncp-2.0.0"
+      sources."once-1.3.2"
+      sources."path-is-absolute-1.0.1"
+      sources."precond-0.2.3"
+      sources."process-nextick-args-2.0.0"
+      sources."pseudomap-1.0.2"
+      sources."read-1.0.7"
+      sources."readable-stream-2.3.6"
+      (sources."restify-clients-1.5.2" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+          (sources."restify-errors-3.1.0" // {
+            dependencies = [
+              sources."assert-plus-0.2.0"
+              sources."lodash-3.10.1"
+            ];
+          })
+        ];
+      })
+      (sources."restify-errors-3.0.0" // {
+        dependencies = [
+          sources."assert-plus-0.1.5"
+          sources."lodash-3.10.1"
+        ];
+      })
+      sources."rimraf-2.4.4"
+      sources."safe-buffer-5.1.2"
+      sources."safe-json-stringify-1.2.0"
+      sources."safer-buffer-2.1.2"
+      sources."semver-5.1.0"
+      (sources."smartdc-auth-2.5.7" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+          (sources."dashdash-1.10.1" // {
+            dependencies = [
+              sources."assert-plus-0.1.5"
+            ];
+          })
+          sources."extsprintf-1.0.0"
+          sources."json-schema-0.2.2"
+          (sources."jsprim-0.3.0" // {
+            dependencies = [
+              sources."verror-1.3.3"
+            ];
+          })
+          sources."once-1.3.0"
+          sources."vasync-1.4.3"
+          sources."verror-1.1.0"
+        ];
+      })
+      (sources."sshpk-1.14.1" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      (sources."sshpk-agent-1.7.0" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      sources."string_decoder-1.1.1"
+      sources."strsplit-1.0.0"
+      (sources."tabula-1.10.0" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      sources."tunnel-agent-0.6.0"
+      sources."tweetnacl-0.14.5"
+      sources."util-deprecate-1.0.2"
+      sources."uuid-3.3.2"
+      (sources."vasync-1.6.3" // {
+        dependencies = [
+          sources."extsprintf-1.2.0"
+          sources."verror-1.6.0"
+        ];
+      })
+      (sources."verror-1.10.0" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+          sources."extsprintf-1.4.0"
+        ];
+      })
+      (sources."vstream-0.1.0" // {
+        dependencies = [
+          sources."assert-plus-0.1.5"
+          sources."extsprintf-1.2.0"
+        ];
+      })
+      sources."which-1.2.4"
+      sources."wordwrap-1.0.0"
+      sources."wrappy-1.0.2"
+      sources."yallist-2.1.2"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Joyent Triton CLI and client (https://www.joyent.com/triton)";
+      homepage = https://github.com/joyent/node-triton;
+      license = "MPL-2.0";
     };
     production = true;
     bypassCache = false;

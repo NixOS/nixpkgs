@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Masses and springs simulation game";
     homepage = http://fs.fsf.org/construo/;
+    license = stdenv.lib.licenses.gpl3;
   };
 }

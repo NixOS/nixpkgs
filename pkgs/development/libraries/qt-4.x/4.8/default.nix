@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [];
   configureFlags = let
-    mk = cond: name: "-${lib.optionalString cond "no-"}${name}";
+    mk = cond: name: "-${lib.optionalString (!cond) "no-"}${name}";
     platformFlag =
       if stdenv.hostPlatform != stdenv.buildPlatform
       then "-xplatform"
@@ -167,9 +167,9 @@ stdenv.mkDerivation rec {
     "-make" "libs" "-make" "tools" "-make" "translations"
     "-no-phonon" (mk buildWebkit "webkit") (mk buildMultimedia "multimedia") "-audio-backend"
   ]) ++ [
-    (mk demos "make") "demos"
-    (mk examples "make") "examples"
-    (mk docs "make") "docs"
+    "-${if demos then "" else "no"}make" "demos"
+    "-${if examples then "" else "no"}make" "examples"
+    "-${if docs then "" else "no"}make" "docs"
   ] ++ lib.optional developerBuild "-developer-build"
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ platformFlag "unsupported/macx-clang-libc++" ]
     ++ lib.optionals stdenv.hostPlatform.isWindows [ platformFlag "win32-g++-4.6" ];
