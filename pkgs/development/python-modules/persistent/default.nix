@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "persistent";
-  version = "4.2.4.2";
+  version = "4.3.0";
 
   propagatedBuildInputs = [ zope_interface ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf264cd55866c7ffbcbe1328f8d8b28fd042a5dd0c03a03f68c0887df3aa1964";
+    sha256 = "d8e2253a35f46ae318e65f0e3b51cdce16d4646e284a26f88a2d84b4d2507f81";
   };
 
   meta = {
