@@ -1940,6 +1940,11 @@
     github = "jpotier";
     name = "Martin Potier";
   };
+  jpathy = {
+    email = "github@lazycons.xyz";
+    github = "jpathy";
+    name = "Jiten Pathy";
+  };
   jraygauthier = {
     email = "jraygauthier@gmail.com";
     github = "jraygauthier";
