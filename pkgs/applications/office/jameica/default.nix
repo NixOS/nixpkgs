@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, xmlstarlet, gtk2, glib, xorg }:
+{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, ant, jdk, jre, xmlstarlet, gtk2, glib, xorg, Cocoa }:
 
 let
   _version = "2.8.1";
@@ -8,11 +8,12 @@ let
 
   swtSystem = if stdenv.system == "i686-linux" then "linux"
   else if stdenv.system == "x86_64-linux" then "linux64"
+  else if stdenv.system == "x86_64-darwin" then "macos64"
   else throw "Unsupported system: ${stdenv.system}";
 
   launcher = ''
     #!${stdenv.shell}
-    exec ${jre}/bin/java -Xmx512m de.willuhn.jameica.Main "$@"
+    exec ${jre}/bin/java -Xmx512m ${ stdenv.lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''} de.willuhn.jameica.Main "$@"
   '';
 
   desktopItem = makeDesktopItem {
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
   inherit name version;
 
   nativeBuildInputs = [ ant jdk makeWrapper xmlstarlet ];
-  buildInputs = [ gtk2 glib xorg.libXtst ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ gtk2 glib xorg.libXtst ]
+                ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
   src = fetchFromGitHub {
     owner = "willuhn";
@@ -82,7 +84,7 @@ stdenv.mkDerivation rec {
       SynTAX (accounting) and JVerein (club management).
     '';
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ flokli ];
   };
 }
