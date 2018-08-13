@@ -5,11 +5,11 @@
 }:
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "18.6.1";
+  version = "18.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2f41bfc512ec482044fa8cfa74182118dedd87e03b3494472d9ff1b5a1e27d24";
+    sha256 = "163dd329c2a29f4ef82f7fe85a6f6e654a2aa6837bd83834cf537e4efa9204be";
   };
 
   # Upstream claim python2 support, but tests require pytest-asyncio which
