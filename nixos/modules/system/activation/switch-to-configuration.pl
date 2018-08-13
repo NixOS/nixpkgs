@@ -412,6 +412,18 @@ system("@systemd@/bin/systemctl", "reset-failed");
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
+# Reload user units
+open my $listActiveUsers, '-|', '@systemd@/bin/loginctl', 'list-users', '--no-legend';
+while (my $f = <$listActiveUsers>) {
+    next unless $f =~ /^\s*(?<uid>\d+)\s+(?<user>\S+)/;
+    my ($uid, $name) = ($+{uid}, $+{user});
+    print STDERR "reloading user units for $name...\n";
+
+    system("su", "-l", $name, "-c", "XDG_RUNTIME_DIR=/run/user/$uid @systemd@/bin/systemctl --user daemon-reload");
+}
+
+close $listActiveUsers;
+
 # Set the new tmpfiles
 print STDERR "setting up tmpfiles\n";
 system("@systemd@/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
