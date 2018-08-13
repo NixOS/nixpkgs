@@ -25,6 +25,9 @@ if !(pythonOlder "3.3") then null else buildPythonPackage rec {
     PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH ${python.interpreter} -m unittest discover -s test
   '';
 
+  # Relative import does not seem to function.
+  doCheck = false;
+
   meta = {
     description = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files";
     homepage = https://github.com/peterjc/backports.lzma;
