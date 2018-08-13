@@ -7,13 +7,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "jul18a";
-  version = "20180701_a";
+  srcVersion = "aug18a";
+  version = "20180801_a";
   name = "gildas-${version}";
 
   src = fetchurl {
-    url = "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.gz";
-    sha256 = "0kl3zf6b1kv8hgsfrarsnm2gnrdax3vi8f856249y4nxsa7lbv2i";
+    url = "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.gz";
+    sha256 = "0mg3wijrj8x1p912vkgrhxbypjx7aj9b1492yxvq2y3fxban6bj1";
   };
 
   enableParallelBuilding = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2-x11 lesstif cfitsio python27Env ];
 
-  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ./mod.patch ./aarch64.patch ];
+  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ./aarch64.patch ];
 
   configurePhase=''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
