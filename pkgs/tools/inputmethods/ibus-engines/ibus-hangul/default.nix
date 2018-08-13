@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "ibus-hangul-${version}";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${name}.tar.gz";
-    sha256 = "120p9w7za6hi521hz8q235fkl4i3p1qqr8nqm4a3kxr0pcq40bd2";
+    sha256 = "0gha8dfdf54rx8fv3yfikbgdg6lqq6l883lhg7q68ybvkjx9bwbs";
   };
 
   buildInputs = [ gtk3 ibus libhangul python3 ];

@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1l6xgvn3l0kkly5jvg57msx09bf1jwdff7m61w8yf2pxsrh5ybxl";
+      sha256 = "0a7h21cwfvprj5xfyivjzg2hbs71xp85l9v6kyp58mlqvwy3zffl";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -727,7 +727,7 @@ self: super: {
           owner = "haskell-servant";
           repo = "servant";
           rev = "v${ver}";
-          sha256 = "0bwd5dy3crn08dijn06dr3mdsww98kqxfp8v5mvrdws5glvcxdsg";
+          sha256 = "0kqglih3rv12nmkzxvalhfaaafk4b2irvv9x5xmc48i1ns71y23l";
         }}/doc";
         buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";

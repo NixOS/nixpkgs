@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "cstore_fdw-${version}";
-  version = "1.6.0";
+  version = "1.6.1";
 
   nativeBuildInputs = [ protobufc ];
   buildInputs = [ postgresql ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "cstore_fdw";
     rev    = "refs/tags/v${version}";
-    sha256 = "08jbx4hs2r742flilydp0ajjwv8ffnvq82nidh48irrfa4i7n0l0";
+    sha256 = "1cpkpbv4c82l961anzwp74r1jc8f0n5z5cvwy4lyrqg5jr501nd4";
   };
 
   installPhase = ''
