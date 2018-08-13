@@ -1129,4 +1129,5 @@ self: super: {
 
   # Can be removed once yi-language >= 0.18 is in the LTS
   yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
-}
+
+} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
