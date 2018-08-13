@@ -21,7 +21,7 @@ let
 
       elasticsearch_url = cfg.elasticsearch.url;
       kibana_elasticsearch_username = cfg.elasticsearch.username;
-      kibana_elasticsearch_password = cfg.elasticsearch.password;
+      kibana_elasticsearch_password = "PASSWORD_REPLACED_PRESTART";
       kibana_elasticsearch_cert = cfg.elasticsearch.cert;
       kibana_elasticsearch_key = cfg.elasticsearch.key;
       ca = cfg.elasticsearch.ca;
@@ -53,7 +53,7 @@ let
 
       elasticsearch.url = cfg.elasticsearch.url;
       elasticsearch.username = cfg.elasticsearch.username;
-      elasticsearch.password = cfg.elasticsearch.password;
+      elasticsearch.password = "PASSWORD_REPLACED_PRESTART";
 
       elasticsearch.ssl.certificate = cfg.elasticsearch.cert;
       elasticsearch.ssl.key = cfg.elasticsearch.key;
@@ -115,9 +115,15 @@ in {
       };
 
       password = mkOption {
-        description = "Password for elasticsearch basic auth.";
+        description = "Password for elasticsearch basic auth. Warning: This secret is stored in the world-readable Nix store!";
         default = null;
         type = types.nullOr types.str;
+      };
+
+      passwordFile = mkOption {
+        description = "File containing the password for elasticsearch basic auth.";
+        default = null;
+        type = types.nullOr types.path;
       };
 
       ca = mkOption {
@@ -182,10 +188,22 @@ in {
     systemd.services.kibana = {
       description = "Kibana Service";
       wantedBy = [ "multi-user.target" ];
+      preStart = let
+        cfgFileRun = "${cfg.dataDir}/config.json";
+      in ''
+        cp -f ${cfgFile} ${cfgFileRun}
+        ${optionalString (cfg.elasticsearch.passwordFile == null) ''
+          sed -e 's,"password":"PASSWORD_REPLACED_PRESTART"\,,,g' -i ${cfgFileRun}
+        ''}
+        ${optionalString (cfg.elasticsearch.passwordFile != null) ''
+          ELASTIC_PASSWORD=$(head -n1 ${cfg.elasticsearch.passwordFile})
+          sed -e "s,PASSWORD_REPLACED_PRESTART,$ELASTIC_PASSWORD,g" -i ${cfgFileRun}
+        ''}
+      '';
       after = [ "network.target" "elasticsearch.service" ];
       environment = { BABEL_CACHE_PATH = "${cfg.dataDir}/.babelcache.json"; };
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/kibana --config ${cfgFile}";
+        ExecStart = "${cfg.package}/bin/kibana --config ${cfg.dataDir}/config.json";
         User = "kibana";
         WorkingDirectory = cfg.dataDir;
       };
@@ -200,5 +218,14 @@ in {
       home = cfg.dataDir;
       createHome = true;
     };
+
+    warnings = optional (cfg.elasticsearch.password != null)
+      ''config.services.kibana.elasticsearch.password will be stored as plaintext in the Nix store. Use config.services.kibana.elasticsearch.passwordFile instead.'';
+
+    services.kibana.elasticsearch.passwordFile = mkIf(cfg.elasticsearch.password != null)
+      (mkDefault (toString (pkgs.writeTextFile {
+        name = "kibana-elasticsearch-password";
+        text = cfg.elasticsearch.password;
+    })));
   };
 }
