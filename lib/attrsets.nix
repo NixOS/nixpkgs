@@ -145,7 +145,7 @@ rec {
   foldAttrs = op: nul: list_of_attrs:
     fold (n: a:
         fold (name: o:
-          o // (listToAttrs [{inherit name; value = op n.${name} (a.${name} or nul); }])
+          o // { ${name} = op n.${name} (a.${name} or nul); }
         ) a (attrNames n)
     ) {} list_of_attrs;
 
