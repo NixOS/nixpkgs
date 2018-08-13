@@ -32,17 +32,17 @@ in {
     enable = mkEnableOption "nextcloud";
     hostName = mkOption {
       type = types.str;
-      description = "fqdn";
+      description = "FQDN for the nextcloud instance.";
     };
     home = mkOption {
       type = types.str;
       default = "/var/lib/nextcloud";
-      description = "storage";
+      description = "Storage path of nextcloud.";
     };
     https = mkOption {
       type = types.bool;
       default = false;
-      description = "";
+      description = "Enable if there is a TLS terminating proxy in front of nextcloud.";
     };
 
     maxUploadSize = mkOption {
@@ -82,6 +82,7 @@ in {
         "opcache.fast_shutdown" = "1";
         "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
         "sendmail_path" = "/var/setuid-wrappers/sendmail -t -i";
+        "catch_workers_output" = "yes";
       };
       description = ''
         Options for PHP's php.ini file for nextcloud.
@@ -92,42 +93,41 @@ in {
       dbtype = mkOption {
         type = types.str;
         default = "sqlite";
-        description = "";
+        description = "Database Type";
       };
       dbname = mkOption {
         type = types.str;
         default = "nextcloud";
-        description = "";
+        description = "Database Name";
       };
       dbuser = mkOption {
         type = types.str;
         default = "nextcloud";
-        description = "";
+        description = "Database User";
       };
       dbpass = mkOption {
         type = types.str;
         default = "";
-        description = "";
+        description = "Database Password";
       };
       dbhost = mkOption {
         type = types.str;
         default = "localhost";
-        description = "";
+        description = "Database Host";
       };
       dbtableprefix = mkOption {
         type = types.str;
         default = "";
-        description = "";
+        description = "Table Prefix in Nextlcoud Database";
       };
       adminlogin = mkOption {
         type = types.str;
         default = "root";
-        description = "";
+        description = "Admin Username";
       };
       adminpass = mkOption {
         type = types.str;
-        default = "root";
-        description = "";
+        description = "Admin Password";
       };
     };
   };
@@ -279,6 +279,7 @@ in {
                   fastcgi_pass unix:/run/phpfpm/nextcloud;
                   fastcgi_intercept_errors on;
                   fastcgi_request_buffering off;
+                  fastcgi_read_timeout 120s;
                 '';
               };
               "~ ^/(?:updater|ocs-provider)(?:$|/)".extraConfig = ''
