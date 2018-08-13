@@ -11,10 +11,15 @@ let
           inherit sha256;
         };
 
+        postUnpack = stdenv.lib.optionalString (tomcat != null) ''
+          install -D ${tomcat.src} $sourceRoot/hadoop-hdfs-project/hadoop-hdfs-httpfs/downloads/apache-tomcat-${tomcat.version}.tar.gz
+          install -D ${tomcat.src} $sourceRoot/hadoop-common-project/hadoop-kms/downloads/apache-tomcat-${tomcat.version}.tar.gz
+        '';
+
         # perform fake build to make a fixed-output derivation of dependencies downloaded from maven central (~100Mb in ~3000 files)
         fetched-maven-deps = stdenv.mkDerivation {
           name = "hadoop-${version}-maven-deps";
-          inherit src nativeBuildInputs buildInputs configurePhase;
+          inherit src postUnpack nativeBuildInputs buildInputs configurePhase;
           buildPhase = ''
             while mvn package -Dmaven.repo.local=$out/.m2 ${mavenFlags} -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
               echo "timeout, restart maven to continue downloading"
@@ -48,11 +53,6 @@ let
         '';
         configurePhase = "true"; # do not trigger cmake hook
         mavenFlags = "-Drequire.snappy -Drequire.bzip2 -DskipTests -Pdist,native -e";
-        # prevent downloading tomcat during the build
-        preBuild = stdenv.lib.optionalString (tomcat != null) ''
-          install -D ${tomcat.src} hadoop-hdfs-project/hadoop-hdfs-httpfs/downloads/apache-tomcat-${tomcat.version}.tar.gz
-          install -D ${tomcat.src} hadoop-common-project/hadoop-kms/downloads/apache-tomcat-${tomcat.version}.tar.gz
-        '';
         buildPhase = ''
           # 'maven.repo.local' must be writable
           mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetched-maven-deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2 ${mavenFlags}
