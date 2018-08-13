@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "1f98mkailn75gz5fvhjhnyr0gwa0r8mm3f2sbvgl0yvys8qi08wr";
   };
 
-  nativeBuildInputs = [ cmake python3Packages.python3 qt5.qttools ];
+  nativeBuildInputs = [ cmake python3Packages.python qt5.qttools ];
   buildInputs = [
     python3Packages.boost
     qt5.qtbase
