@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
 
     # Don't depend on frameworks.
     ./application-services.patch
+
+    # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
+    ./libuv-application-services.patch
   ] ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];
