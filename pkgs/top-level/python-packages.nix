@@ -230,6 +230,8 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
+  browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
+
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
