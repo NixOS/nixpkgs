@@ -147,9 +147,9 @@ in {
     tomcat = null;
   };
   hadoop_3_1 = common {
-    version = "3.1.0";
-    sha256 = "0lig25jkffkzc2bfgyrnm3wymapgyw9fkai8sk9fnmp7cljia314";
-    dependencies-sha256 = "1ri6a7lrijh538vy7v0fzgvkw603pf8jkh3ldl1kl7l0dvszd70d";
+    version = "3.1.1";
+    sha256 = "04hhdbyd4x1hy0fpy537f8mi0864hww97zap29x7dk1smrffwabd";
+    dependencies-sha256 = "1q63jsxg3d31x0p8hvhpvbly2b07almyzsbhwphbczl3fhlqgiwn";
     tomcat = null;
   };
 }
