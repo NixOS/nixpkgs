@@ -1,14 +1,17 @@
-{ mkDerivation, ansi-wl-pprint, base, binary, bytestring, bzlib
+{ ansi-wl-pprint, base, binary, bytestring, bzlib
 , Cabal, cli-setup, composition-prelude, containers, cpphs
-, dependency, dhall, directory, file-embed, filemanip, filepath
-, http-client, http-client-tls, lzma, microlens, mtl
+, dependency, dhall, directory, fetchFromGitHub, file-embed, filemanip
+, filepath, http-client, http-client-tls, lzma, microlens, mtl
 , optparse-applicative, parallel-io, process, shake, shake-ats
 , shake-c, shake-ext, stdenv, tar, temporary, text, unix
 , zip-archive, zlib
 }:
-mkDerivation {
-  pname = "ats-pkg";
+let
   version = "3.2.1.8";
+in
+stdenv.mkDerivation {
+  pname = "ats-pkg";
+  version = "${version}";
   src = fetchFromGitHub {
     owner = "vmchale";
     repo = "atspkg";
@@ -33,5 +36,5 @@ mkDerivation {
   doHaddock = false;
   description = "A build tool for ATS";
   license = stdenv.lib.licenses.bsd3;
-  maintainers = with maintainers; [ vmchale bbarker ];
+  maintainers = with stdenv.lib.maintainers; [ vmchale bbarker ];
 }
