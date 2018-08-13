@@ -395,15 +395,7 @@ in
 
     networking.nameservers = mkOption {
       type = types.listOf types.str;
-      default =  # Check if this host runs a full-blown DNS resolver.
-        if config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries then
-          [ "127.0.0.1" ]
-        else if config.services.bind.enable then
-          [ "127.0.0.1" ]
-        else if config.services.unbound.enable then
-          config.services.unbound.interfaces
-        else
-          [];
+      default = [];
       example = ["130.161.158.4" "130.161.33.17"];
       description = ''
         The list of nameservers.  It can be left empty if it is auto-detected through DHCP.
@@ -1170,6 +1162,18 @@ in
             ACTION=="move", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", NAME=="${device}", ${systemdAttrs curInterface._iName}
           '');
       }) ];
+
+    # Check if this host runs a full-blown DNS resolver.
+    networking.nameservers = mkDefault (
+      if config.services.dnsmasq.enable && config.services.dnsmasq.resolveLocalQueries then
+        [ "127.0.0.1" ]
+      else if config.services.bind.enable then
+        [ "127.0.0.1" ]
+      else if config.services.unbound.enable then
+        config.services.unbound.interfaces
+      else
+        []
+    );
 
   };
 
