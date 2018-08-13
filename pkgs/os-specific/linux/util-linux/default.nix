@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     (lib.withFeature (ncurses != null) "ncursesw")
     (lib.withFeature (systemd != null) "systemd")
     (lib.withFeatureAs (systemd != null)
-       "systemdsystemunitdir" "$bin/lib/systemd/system/")
+       "systemdsystemunitdir" "$(bin)/lib/systemd/system/")
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
   ;
