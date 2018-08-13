@@ -73,11 +73,4 @@ in
       sha256 = "07qlx7l23y696gzyy7ynly7n1141w66y21gkmxiia2xwldj8klkx";
       patches = [ ./install_prefix.patch ];
     };
-
-    splLegacyCrypto = common {
-      version = "2018-01-24";
-      rev = "23602fdb39e1254c669707ec9d2d0e6bcdbf1771";
-      sha256 = "09py2dwj77f6s2qcnkwdslg5nxb3hq2bq39zpxpm6msqyifhl69h";
-      patches = [ ./install_prefix.patch ];
-    };
 }

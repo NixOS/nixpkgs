@@ -9,7 +9,7 @@
 , gawk, gnugrep, gnused, systemd
 
 # Kernel dependencies
-, kernel ? null, spl ? null, splUnstable ? null, splLegacyCrypto ? null
+, kernel ? null, spl ? null, splUnstable ? null
 }:
 
 with stdenv.lib;
@@ -194,28 +194,4 @@ in {
 
     spl = splUnstable;
   };
-
-  # TODO: Remove this module before 18.09
-  # also remove boot.zfs.enableLegacyCrypto
-  zfsLegacyCrypto = common {
-    # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = null;
-
-    # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2018-02-01";
-
-    rev = "4c46b99d24a6e71b3c72462c11cb051d0930ad60";
-    sha256 = "011lcp2x44jgfzqqk2gjmyii1v7rxcprggv20prxa3c552drsx3c";
-    isUnstable = true;
-
-    extraPatches = [
-      (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/4c46b99d24a6e71b3c72462c11cb051d0930ad60...nixos-zfs-2018-02-01.patch";
-        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
-      })
-    ];
-
-    spl = splLegacyCrypto;
-  };
-
 }
