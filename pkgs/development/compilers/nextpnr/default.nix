@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/YosysHQ/nextpnr;
     license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ jpathy ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ jpathy ];
+    platforms = platforms.linux;
   };
 }
