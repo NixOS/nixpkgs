@@ -7921,7 +7921,7 @@ with pkgs;
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
-  ats-pkg = callPackage ../development/tools/ats-pkg { };
+  ats-pkg = haskellPackages.callPackage ../development/tools/ats-pkg { };
 
   awf = callPackage ../development/tools/misc/awf { };
 

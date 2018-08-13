@@ -9,7 +9,7 @@
 let
   version = "3.2.1.8";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "ats-pkg";
   version = "${version}";
   src = fetchFromGitHub {
