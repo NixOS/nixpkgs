@@ -7,15 +7,15 @@
 , zip-archive, zlib
 }:
 let
-  version = "3.2.1.8";
+  ats-pkg-version = "3.2.1.8";
 in
 stdenv.mkDerivation rec {
-  pname = "ats-pkg";
-  version = "${version}";
+  name = "ats-pkg";
+  version = "${ats-pkg-version}";
   src = fetchFromGitHub {
     owner = "vmchale";
     repo = "atspkg";
-    rev = "${version}";
+    rev = "${ats-pkg-version}";
     sha256 = "10ncx90dd4z0hsb0rfr5lvsp8293s8h90k6q0xrfjs67gy0v20c7";
   };
   isLibrary = true;
@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
     optparse-applicative parallel-io shake shake-ats temporary text
   ];
   doHaddock = false;
-  description = "A build tool for ATS";
-  license = stdenv.lib.licenses.bsd3;
-  maintainers = with stdenv.lib.maintainers; [ vmchale bbarker ];
+  meta = with stdenv.lib; {
+    description = "A build tool for ATS";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ vmchale bbarker ];
+    homepage = "https://hackage.haskell.org/package/ats-pkg";
+  };
 }
