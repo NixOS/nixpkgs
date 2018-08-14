@@ -1,10 +1,13 @@
-{ stdenv, fetchFromGitHub, libGLU, qtbase, qtscript, qtxmlpatterns }:
+{ fetchFromGitHub, libGLU, llvmPackages, qtbase, qtscript, qtxmlpatterns }:
 
 let
-  meshlabRev = "5700f5474c8f90696a8925e2a209a0a8ab506662";
-  vcglibRev = "a8e87662b63ee9f4ded5d4699b28d74183040803";
+  meshlabRev = "d596d7c086c51fbdfb56050f9c30b55dd0286d4c";
+  vcglibRev = "6c3c940e34327322507c703889f9f1cfa73ab183";
+  # ^ this should be the latest commit in the vcglib devel branch at the time of the meshlab revision
+
+  stdenv = llvmPackages.stdenv; # only building with clang seems to be tested upstream
 in stdenv.mkDerivation {
-  name = "meshlab-2016.12";
+  name = "meshlab-20180627-beta";
 
   srcs =
     [
@@ -12,24 +15,24 @@ in stdenv.mkDerivation {
         owner = "cnr-isti-vclab";
         repo = "meshlab";
         rev = meshlabRev;
-        sha256 = "0srrp7zhi86dsg4zsx1615gr26barz38zdl8s03zq6vm1dgzl3cc";
+        sha256 = "0xi7wiyy0yi545l5qvccbqahlcsf70mhx829gf7bq29640si4rax";
         name = "meshlab-${meshlabRev}";
       })
       (fetchFromGitHub {
         owner = "cnr-isti-vclab";
         repo = "vcglib";
         rev = vcglibRev;
-        sha256 = "0jh8jc8rn7rci8qr3q03q574fk2hsc3rllysck41j8xkr3rmxz2f";
+        sha256 = "0jfgjvf21y9ncmyr7caipy3ardhig7hh9z8miy885c99b925hhwd";
         name = "vcglib-${vcglibRev}";
       })
     ];
 
   sourceRoot = "meshlab-${meshlabRev}";
 
-  patches = [ ./fix-2016.02.patch ];
-
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
+
+  patches = [ ./fix-20180627-beta.patch ];
 
   buildPhase = ''
     # MeshLab has ../vcglib hardcoded everywhere, so move the source dir
@@ -37,6 +40,7 @@ in stdenv.mkDerivation {
 
     cd src
     export NIX_LDFLAGS="-rpath $out/opt/meshlab $NIX_LDFLAGS"
+    export QMAKESPEC="linux-clang"
 
     pushd external
     qmake -recursive external.pro
@@ -53,7 +57,7 @@ in stdenv.mkDerivation {
     ln -s $out/opt/meshlab/meshlabserver $out/bin/meshlabserver
   '';
 
-  buildInputs = [ libGLU qtbase qtscript qtxmlpatterns ];
+  buildInputs = [ libGLU llvmPackages.openmp qtbase qtscript qtxmlpatterns ];
 
   meta = {
     description = "A system for processing and editing 3D triangular meshes.";
@@ -61,6 +65,5 @@ in stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
-    broken = true; # 2018-04-11
   };
 }
