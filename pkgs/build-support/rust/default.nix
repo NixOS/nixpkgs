@@ -7,6 +7,8 @@ in
 { name, cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
+, cargoPatches ? []
+, patches ? []
 , sourceRoot ? null
 , logLevel ? ""
 , buildInputs ? []
@@ -23,6 +25,7 @@ let
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
         inherit name src srcs sourceRoot cargoUpdateHook;
+        patches = cargoPatches;
         sha256 = cargoSha256;
       }
     else null;
@@ -43,6 +46,8 @@ in stdenv.mkDerivation (args // {
   patchRegistryDeps = ./patch-registry-deps;
 
   buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
+
+  patches = cargoPatches ++ patches;
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
