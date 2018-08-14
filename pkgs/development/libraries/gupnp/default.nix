@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gupnp-${version}";
-  version = "1.0.2";
+  version = "1.0.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${stdenv.lib.versions.majorMinor version}/gupnp-${version}.tar.xz";
-    sha256 = "043nqxlj030a3wvd6x4c9z8fjarjjjsl2pjarl0nn70ig6kzswsi";
+    sha256 = "1fyb6yn75vf2y1b8nbc1df572swzr74yiwy3v3g5xn36wlp1cjvr";
   };
 
   patches = [
