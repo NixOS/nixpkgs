@@ -5369,6 +5369,8 @@ in {
 
   flask-babel = callPackage ../development/python-modules/flask-babel { };
 
+  flask-bootstrap = callPackage ../development/python-modules/flask-bootstrap { };
+
   flask-caching = callPackage ../development/python-modules/flask-caching { };
 
   flask-common = callPackage ../development/python-modules/flask-common { };
