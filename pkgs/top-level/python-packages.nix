@@ -254,6 +254,8 @@ in {
 
   docrep = callPackage ../development/python-modules/docrep { };
 
+  dominate = callPackage ../development/python-modules/dominate { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
