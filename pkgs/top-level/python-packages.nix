@@ -5363,6 +5363,8 @@ in {
 
   flask = callPackage ../development/python-modules/flask { };
 
+  flask-api = callPackage ../development/python-modules/flask-api { };
+
   flask_assets = callPackage ../development/python-modules/flask-assets { };
 
   flask-autoindex = callPackage ../development/python-modules/flask-autoindex { };
