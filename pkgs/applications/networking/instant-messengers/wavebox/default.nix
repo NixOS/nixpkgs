@@ -29,11 +29,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
   buildInputs = (with xorg; [
-    libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
-    libXrender libX11 libXtst libXScrnSaver
+    libX11 libXcomposite libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender libXScrnSaver libXtst
   ]) ++ [
-    gtk2 gtk3 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
-    gnome3.gconf nss nspr alsaLib cups expat stdenv.cc.cc
+    alsaLib atk cairo cups dbus expat fontconfig freetype gconf gdk_pixbuf glib gnome3.gconf gtk2 gtk3 nspr nss pango stdenv.cc.cc
   ];
 
   runtimeDependencies = [ udev.lib libnotify ];
