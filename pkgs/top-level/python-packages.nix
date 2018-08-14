@@ -17303,6 +17303,8 @@ EOF
 
   vine = callPackage ../development/python-modules/vine { };
 
+  visitor = callPackage ../development/python-modules/visitor { };
+
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 
   XlsxWriter = callPackage ../development/python-modules/XlsxWriter { };
