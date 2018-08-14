@@ -143,6 +143,6 @@ in releaseTools.nixBuild rec {
     description = "Nix-based continuous build system";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ domenkozar ma27 ];
+    maintainers = with maintainers; [ ma27 ];
   };
 }
