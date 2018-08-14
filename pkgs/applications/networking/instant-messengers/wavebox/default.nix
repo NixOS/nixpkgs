@@ -56,6 +56,7 @@ in stdenv.mkDerivation rec {
     description = "Wavebox messaging application";
     homepage = https://wavebox.io;
     license = licenses.mpl20;
+    maintainers = with maintainers; [ rawkode ];
     platforms = ["x86_64-linux"];
     hydraPlatforms = [];
   };
