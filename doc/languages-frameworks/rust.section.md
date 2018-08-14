@@ -59,6 +59,11 @@ all crate sources of this package. Currently it is obtained by inserting a
 fake checksum into the expression and building the package once. The correct
 checksum can be then take from the failed build.
 
+When the `Cargo.lock`, provided by upstream, is not in sync with the
+`Cargo.toml`, it is possible to use `cargoPatches` to update it. All patches
+added in `cargoPatches` will also be prepended to the patches in `patches` at
+build-time.
+
 To install crates with nix there is also an experimental project called
 [nixcrates](https://github.com/fractalide/nixcrates).
 
