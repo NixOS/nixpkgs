@@ -1,0 +1,696 @@
+<?xml version="1.0"?>
+<configuration>
+	<special>
+		<special-widget name="PropertiesDlg" type="dialog" parent="MainDlg">
+			<button name="PropOK_button" type="OK"/>
+			<button name="PropRestore_button" type="Restore"/>
+			<button name="PropCancel_button" type="Cancel"/>
+		</special-widget>
+		<special-widget name="FinDetail_dialog" type="dialog" parent="PropertiesDlg">
+			<button name="FinDetail_OK_button" type="OK"/>
+			<button name="FinDetail_Cancel_button" type="Cancel"/>
+		</special-widget>
+		<special-widget name="GutterSettingDlg" type="dialog" parent="PropertiesDlg">
+			<button name="GutterSettingOK_button" type="OK"/>
+			<button name="GutterSettingCancel_button" type="Cancel"/>
+		</special-widget>
+		<special-widget name="PropDlg_notebook" type="notebook"></special-widget>
+	</special>
+	<function name="FinDetail">
+		<show-widget name="FinDetail_hbox"/>
+		<widget name="FinDetail_button" type="button">
+			<signal name="clicked" widget="FinDetail_dialog"/>
+		</widget>
+	</function>
+	<function name="PrintStyle">
+		<ID name="ID_CNPRINTSTYLE"/>
+		<widget name="PrintStyle_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+		<ui-conflict id="ID_CNPRINTSTYLE" value="1-sided Printing">
+			<widget name="table30" type="table">
+				<property name="visible" value="True"/>
+			</widget>
+		</ui-conflict>
+	</function>
+	<function name="BindEdge">
+		<ID name="ID_BINDEDGE"/>
+		<show-widget name="BindingLocation_label"/>
+		<show-widget name="BindingLocation_combo"/>
+		<show-widget name="Gutter_button"/>
+		<widget name="BindingLocation_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+		<widget name="Gutter_button" type="button">
+			<signal name="clicked" widget="GutterSettingDlg"/>
+		</widget>
+	</function>
+	<function name="GutterSpinbutton">
+		<ID name="ID_GUTTER"/>
+		<widget name="GutterSettingDlg_spinbutton" type="spinbutton">
+			<property name="digit" id="ID_USTYPE" value="1"/>
+			<property name="max" id="ID_MAX_GUTTER" def="30"/>
+			<property name="text" id="ID_GUTTER" def="0"/>
+			<signal name="value_changed" id="ID_GUTTER"/>
+		</widget>
+		<widget name="GutterValue_label" type="label">
+			<property name="digit" id="ID_USTYPE"/>
+			<property name="max" id="ID_MAX_GUTTER" def="30"/>
+			<property name="text" value="int" res="GutterValue"/>
+			<property name="text" value="double" res="GutterValue_d"/>
+		</widget>
+	</function>
+	<function name="SpecialPrintMode">
+		<ID name="ID_CNSPECIALPRINTINGMODE"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="SpecialPrintMode_label"/>
+		<show-widget name="SpecialPrintMode_combo"/>
+		<widget name="SpecialPrintMode_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+		<widget name="SpecialPrintMode_label" type="label">
+			<property name="text" res="CNSpecialPrintMode"/>
+		</widget>
+	</function>
+	<function name="SpecialPrintModeA">
+		<ID name="ID_CNSPECIALPRINTINGMODEA"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="SpecialPrintModeA_label"/>
+		<show-widget name="SpecialPrintModeA_combo"/>
+		<widget name="SpecialPrintModeA_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="SpecialPrintModeB">
+		<ID name="ID_CNSPECIALPRINTINGMODEB"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="SpecialPrintModeB_label"/>
+		<show-widget name="SpecialPrintModeB_combo"/>
+		<widget name="SpecialPrintModeB_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="SpecialPrintAdjustmentA">
+		<ID name="ID_CNSPECIALPRINTADJUSTMENTA"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="SpecialPrintAdjustmentA_label"/>
+		<show-widget name="SpecialPrintAdjustmentA_combo"/>
+		<widget name="SpecialPrintAdjustmentA_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="SpecialPrintAdjustmentB">
+		<ID name="ID_CNSPECIALPRINTADJUSTMENTB"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="SpecialPrintAdjustmentB_label"/>
+		<show-widget name="SpecialPrintAdjustmentB_combo"/>
+		<widget name="SpecialPrintAdjustmentB_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="SpecialSmooth">
+		<ID name="ID_CNSPECIALSMOOTH"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="SpecialSmoothMode_label"/>
+		<show-widget name="SpecialSmoothMode_combo"/>
+		<widget name="SpecialSmoothMode_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="GlossyPlainPaperProc">
+		<ID name="ID_CNGLOSSYPLAINPAPERPROC"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="GlossyPlainPaperProc_label"/>
+		<show-widget name="GlossyPlainPaperProc_combo"/>
+		<widget name="GlossyPlainPaperProc_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="OutputAdjustmentMode">
+		<ID name="ID_CNOUTPUTADJUSTMENT"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="OutputAdjustmentMode_label"/>
+		<show-widget name="OutputAdjustmentMode_combo"/>
+		<widget name="OutputAdjustmentMode_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="PrintImageAdjustment">
+		<ID name="ID_CNPRINTIMAGEADJUSTMENT"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="PrintImageAdjustment_label"/>
+		<show-widget name="PrintImageAdjustment_combo"/>
+		<widget name="PrintImageAdjustment_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="OutputBin">
+		<ID name="ID_OUTPUTBIN"/>
+		<show-widget name="scrolledwindow1"/>
+		<show-widget name="PaperOutput_label"/>
+		<show-widget name="PaperDisti_combo"/>
+		<widget name="PaperDisti_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="Collate">
+		<ID name="ID_COLLATE"/>
+		<show-widget name="FinCollate_combo"/>
+		<show-widget name="Finishing_label"/>
+		<widget name="FinCollate_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="SuperSmooth">
+		<ID name="ID_CNSUPERSMOOTH"/>
+		<show-widget name="FinDetail_AdvancedSetting_table"/>
+		<show-widget name="FinDetail_ImageRefinement_label"/>
+		<show-widget name="FinDetail_Img_combo"/>
+		<widget name="FinDetail_Img_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="FixingMode">
+		<ID name="ID_CNFIXINGMODE"/>
+		<show-widget name="FinDetail_AdvancedSetting_table"/>
+		<show-widget name="FinDetail_FixingMode_label"/>
+		<show-widget name="FinDetail_Fix_combo"/>
+		<widget name="FinDetail_Fix_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="RevicePostcard">
+		<ID name="ID_CNREVICEPOSTCARD"/>
+		<show-widget name="FinDetail_AdvancedSetting_table"/>
+		<show-widget name="FinDetail_RevicePostcard_label"/>
+		<show-widget name="FinDetail_RevicePostcard_combo"/>
+		<widget name="FinDetail_RevicePostcard_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="WrinklesCorrectionOutput">
+		<ID name="ID_CNWRINKLESCORRECTIONOUTPUT"/>
+		<show-widget name="FinDetail_AdvancedSetting_table"/>
+		<show-widget name="CaptFinDetail_Wrinkles_label"/>
+		<show-widget name="CaptFinDetail_Wrinkles_combo"/>
+		<widget name="CaptFinDetail_Wrinkles_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="CurlCorrection">
+		<ID name="ID_CNCURLCORRECTION"/>
+		<show-widget name="CaptFinishingCurlCorrection_hbox"/>
+		<widget name="CaptFinishingCurlCorrection_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="PaperType">
+		<ID name="ID_MEDIATYPE"/>
+		<show-widget name="PaperType_hbox"/>
+		<widget name="PaperType_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="FeedA5formShortEdge">
+		<ID name="ID_CNFEEDAFIVEVERTICALLY"/>
+		<show-widget name="FeedA5fromShortEdge_hbox"/>
+		<show-widget name="FeedA5fromShortEdge_label"/>
+		<show-widget name="FeedA5fromShortEdge_combo"/>
+		<widget name="FeedA5fromShortEdge_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+
+	</function>
+	<function name="PaperSource">
+		<ID name="ID_INPUTSLOT"/>
+		<show-widget name="PaperSource_hbox"/>
+		<widget name="PaperSource_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="PaperSize">
+		<ID name="ID_PAGESIZE"/>
+		<show-widget name="PaperSize_combo" type="combo"/>
+		<widget name="PaperSize_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="SelectBy">
+		<ID name="ID_SELECTBY" value="0" type="no"/>
+		<show-widget name="SelectBy_frame"/>
+		<widget name="PaperSource_radiobutton" type="radiobutton">
+			<signal name="toggled">
+				<condition value="True" update="1"/>
+			</signal>
+		</widget>
+		<widget name="PaperType_radiobutton" type="radiobutton">
+			<signal name="toggled">
+				<condition value="True" update="2"/>
+			</signal>
+		</widget>
+		<ui-conflict id="ID_SELECTBY" value="1">
+			<widget name="PaperSource_radiobutton" type="radiobutton">
+				<property name="toggled" value="True"/>
+			</widget>
+			<widget name="PaperSource_hbox" type="hbox">
+				<property name="visible" value="True"/>
+			</widget>
+			<widget name="PaperType_hbox" type="hbox">
+				<property name="visible" value="False"/>
+			</widget>
+			<widget name="PaperSource_combo" type="combo">
+				<property name="update" id="ID_INPUTSLOT"/>
+			</widget>
+		</ui-conflict>
+		<ui-conflict id="ID_SELECTBY" value="2">
+			<widget name="PaperType_radiobutton" type="radiobutton">
+				<property name="toggled" value="True"/>
+			</widget>
+			<widget name="PaperSource_hbox" type="hbox">
+				<property name="visible" value="False"/>
+			</widget>
+			<widget name="PaperType_hbox" type="hbox">
+				<property name="visible" value="True"/>
+			</widget>
+			<widget name="PaperType_combo" type="combo">
+				<property name="update" id="ID_MEDIATYPE"/>
+			</widget>
+		</ui-conflict>
+	</function>
+	<function name="RotatePrint">
+		<ID name="ID_CNROTATEPRINT"/>
+		<show-widget name="FinDetail_RotatePrint_checkbutton"/>
+		<widget name="FinDetail_RotatePrint_checkbutton" type="checkbutton">
+			<signal name="toggled"/>
+		</widget>
+	</function>
+	<function name="BackPrint">
+		<ID name="ID_CNBACKPAPERPRINT"/>
+		<show-widget name="FinDetail_BackPrint_checkbutton"/>
+		<widget name="FinDetail_BackPrint_checkbutton" type="checkbutton">
+			<property name="text" res="CNBackPaperPrint"/>
+			<signal name="toggled"/>
+		</widget>
+	</function>
+	<function name="DetectPaper">
+		<ID name="ID_CNDETECTPAPERSIZE"/>
+		<show-widget name="FinDetail_DetectPaper_checkbutton"/>
+		<widget name="FinDetail_DetectPaper_checkbutton" type="checkbutton">
+			<property name="text" res="CNDetectPaperSize"/>
+			<signal name="toggled"/>
+		</widget>
+	</function>
+	<function name="SkipBlank">
+		<ID name="ID_CNSKIPBLANK"/>
+		<show-widget name="FinDetail_SkipBlank_checkbutton"/>
+		<widget name="FinDetail_SkipBlank_checkbutton" type="checkbutton">
+			<signal name="toggled"/>
+		</widget>
+	</function>
+	<function name="Resolution">
+		<ID name="ID_RESOLUTION"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="Resolution_label"/>
+		<show-widget name="QualityReso_combo"/>
+		<widget name="QualityReso_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="ColorMode">
+		<ID name="ID_CNCOLORMODE"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="ColorMode_label"/>
+		<show-widget name="ColorMode_combo"/>
+		<widget name="ColorMode_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+		<ui-conflict id="ID_CNCOLORMODE" value="mono">
+			<widget name="ColorHalftones_label" type="label">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="QualityClrHalftone_combo" type="combo">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="CyanTonerDensity_label" type="label">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="CyanTonerDensity_combo" type="combo">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="MagentaTonerDensity_label" type="label">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="MagentaTonerDensity_combo" type="combo">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="YellowTonerDensity_label" type="label">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="YellowTonerDensity_combo" type="combo">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="UsePureBlack_label" type="label">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="QualityKeepGray_combo" type="combo">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="BWHalftones_label" type="label">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="QualityHalftone_combo" type="combo">
+				<property name="sensitive" value="True"/>
+			</widget>
+		</ui-conflict>
+		<ui-conflict id="ID_CNCOLORMODE" value="mono" type="no">
+			<widget name="ColorHalftones_label" type="label">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="QualityClrHalftone_combo" type="combo">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="CyanTonerDensity_label" type="label">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="CyanTonerDensity_combo" type="combo">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="MagentaTonerDensity_label" type="label">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="MagentaTonerDensity_combo" type="combo">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="YellowTonerDensity_label" type="label">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="YellowTonerDensity_combo" type="combo">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="UsePureBlack_label" type="label">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="QualityKeepGray_combo" type="combo">
+				<property name="sensitive" value="True"/>
+			</widget>
+			<widget name="BWHalftones_label" type="label">
+				<property name="sensitive" value="False"/>
+			</widget>
+			<widget name="QualityHalftone_combo" type="combo">
+				<property name="sensitive" value="False"/>
+			</widget>
+		</ui-conflict>
+	</function>
+	<function name="ColorHalftone">
+		<ID name="ID_CNCOLORHALFTONE"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="ColorHalftones_label"/>
+		<show-widget name="QualityClrHalftone_combo"/>
+		<widget name="QualityClrHalftone_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="Halftone">
+		<ID name="ID_CNHALFTONE"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="BWHalftones_label"/>
+		<show-widget name="QualityHalftone_combo"/>
+		<widget name="QualityHalftone_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+		<ui-conflict id="ID_COLOR_MODE" value="1">
+			<widget name="BWHalftones_label" type="label">
+				<property name="text" res="BWHalftone"/>
+			</widget>
+		</ui-conflict>
+		<ui-conflict id="ID_COLOR_MODE" value="0">
+			<widget name="BWHalftones_label" type="label">
+				<property name="text" res="Halftone"/>
+			</widget>
+		</ui-conflict>
+	</function>
+	<function name="TonerSave">
+		<ID name="ID_CNTONERSAVING"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="Capt21TonerSave_checkbutton"/>
+		<widget name="Capt21TonerSave_checkbutton" type="checkbutton">
+			<signal name="toggled"/>
+		</widget>
+	</function>
+	<function name="DraftMode">
+		<ID name="ID_CNDRAFTMODE"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="QualityDraftMode_label"/>
+		<show-widget name="QualityDraftMode_combo"/>
+		<widget name="QualityDraftMode_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+		<widget name="QualityDraftMode_label" type="label">
+			<property name="text" res="CNDraftMode"/>
+		</widget>
+	</function>
+	<function name="ImageRefinement">
+		<ID name="ID_CNIMAGEREFINEMENT"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="ImageRefinement_label"/>
+		<show-widget name="QualityImgRefine_combo"/>
+		<widget name="QualityImgRefine_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="CyanTonerDensity">
+		<ID name="ID_CNCTONERDENSITY"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="CyanTonerDensity_label"/>
+		<show-widget name="CyanTonerDensity_combo"/>
+		<widget name="CyanTonerDensity_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="MagentaTonerDensity">
+		<ID name="ID_CNMTONERDENSITY"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="MagentaTonerDensity_label"/>
+		<show-widget name="MagentaTonerDensity_combo"/>
+		<widget name="MagentaTonerDensity_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="YellowTonerDensity">
+		<ID name="ID_CNYTONERDENSITY"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="YellowTonerDensity_label"/>
+		<show-widget name="YellowTonerDensity_combo"/>
+		<widget name="YellowTonerDensity_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="BlackTonerDensity">
+		<ID name="ID_CNTONERDENSITY"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="BlackTonerDensity_label"/>
+		<show-widget name="BlackTonerDensity_combo"/>
+		<widget name="BlackTonerDensity_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+		<ui-conflict id="ID_CNCTONERDENSITY">
+			<widget name="BlackTonerDensity_label" type="label">
+				<property name="text" res="BlackTonerDensity"/>
+			</widget>
+		</ui-conflict>
+		<ui-conflict id="ID_CNCTONERDENSITY" type="no">
+			<widget name="BlackTonerDensity_label" type="label">
+				<property name="text" res="TonerDensity"/>
+			</widget>
+		</ui-conflict>
+	</function>
+	<function name="KeepGray">
+		<ID name="ID_CNKEEPGRAY"/>
+		<show-widget name="scrolledwindow2"/>
+		<show-widget name="UsePureBlack_label"/>
+		<show-widget name="QualityKeepGray_combo"/>
+		<widget name="QualityKeepGray_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="SourceOption">
+		<ID name="ID_CNSRCOPTION"/>
+		<show-widget name="SourceOption_label"/>
+		<show-widget name="SourceOption_combo"/>
+		<widget name="SourceOption_combo" type="combo">
+			<signal name="changed"/>
+			<signal name="event"/>
+			<signal name="down-up"/>
+		</widget>
+	</function>
+	<function name="DuplexUnit">
+		<ID name="ID_CNDUPLEXUNIT"/>
+		<show-widget name="DuplexUnit_checkbutton"/>
+		<widget name="DuplexUnit_checkbutton" type="checkbutton">
+			<signal name="toggled"/>
+		</widget>
+	</function>
+	<common>
+		<function name="Orientation">
+			<ID name="ID_ORIENTATION_REQUESTED"/>
+			<widget name="Landscape_radiobutton" type="radiobutton">
+				<signal name="toggled">
+					<condition value="True" update="4"/>
+				</signal>
+			</widget>
+			<widget name="Portrait_radiobutton" type="radiobutton">
+				<signal name="toggled">
+					<condition value="True" update="3"/>
+				</signal>
+			</widget>
+			<widget name="ReversePortrait_radiobutton" type="radiobutton">
+				<signal name="toggled">
+					<condition value="True" update="6"/>
+				</signal>
+			</widget>
+			<widget name="ReverseLandscape_radiobutton" type="radiobutton">
+				<signal name="toggled">
+					<condition value="True" update="5"/>
+				</signal>
+			</widget>
+			<ui-conflict id="ID_ORIENTATION_REQUESTED" value="4">
+				<widget name="Landscape_radiobutton" type="radiobutton">
+					<property name="toggled" value="True"/>
+				</widget>
+				<widget name="BindingLocation_combo" type="combo">
+					<property name="update" id="ID_BINDEDGE"/>
+				</widget>
+			</ui-conflict>
+			<ui-conflict id="ID_ORIENTATION_REQUESTED" value="3">
+				<widget name="Portrait_radiobutton" type="radiobutton">
+					<property name="toggled" value="True"/>
+				</widget>
+				<widget name="BindingLocation_combo" type="combo">
+					<property name="update" id="ID_BINDEDGE"/>
+				</widget>
+			</ui-conflict>
+			<ui-conflict id="ID_ORIENTATION_REQUESTED" value="6">
+				<widget name="ReversePortrait_radiobutton" type="radiobutton">
+					<property name="toggled" value="True"/>
+				</widget>
+				<widget name="BindingLocation_combo" type="combo">
+					<property name="update" id="ID_BINDEDGE"/>
+				</widget>
+			</ui-conflict>
+			<ui-conflict id="ID_ORIENTATION_REQUESTED" value="5">
+				<widget name="ReverseLandscape_radiobutton" type="radiobutton">
+					<property name="toggled" value="True"/>
+				</widget>
+				<widget name="BindingLocation_combo" type="combo">
+					<property name="update" id="ID_BINDEDGE"/>
+				</widget>
+			</ui-conflict>
+		</function>
+		<function name="Nup">
+			<ID name="ID_NUMBER_UP"/>
+			<widget name="Nup_combo" type="combo">
+				<signal name="changed"/>
+				<signal name="event"/>
+				<signal name="down-up"/>
+			</widget>
+		</function>
+		<function name="Brightness">
+			<ID name="ID_BRIGHTNESS"/>
+			<widget name="Brightness_spinbutton" type="spinbutton">
+				<property name="digit" value="0"/>
+				<property name="text" id="ID_BRIGHTNESS" def="100"/>
+				<signal name="value_changed"/>
+			</widget>
+		</function>
+		<function name="Gamma">
+			<ID name="ID_GAMMA"/>
+			<widget name="Gamma_spinbutton" type="spinbutton">
+				<property name="digit" value="0"/>
+				<property name="text" id="ID_GAMMA" def="1000"/>
+				<signal name="value_changed"/>
+			</widget>
+		</function>
+		<function name="BannerStart">
+			<ID name="ID_JOB_SHEETS_START"/>
+			<widget name="BannerStart_combo" type="combo">
+				<signal name="changed"/>
+				<signal name="event"/>
+				<signal name="down-up"/>
+			</widget>
+		</function>
+		<function name="BannerEnd">
+			<ID name="ID_JOB_SHEETS_END"/>
+			<widget name="BannerEnd_combo" type="combo">
+				<signal name="changed"/>
+				<signal name="event"/>
+				<signal name="down-up"/>
+			</widget>
+		</function>
+	</common>
+</configuration>

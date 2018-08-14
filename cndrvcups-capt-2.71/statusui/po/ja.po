@@ -1,0 +1,1421 @@
+#  Status monitor for Canon CAPT Printer.
+#  Copyright (C) 2004-2013 Canon Inc.
+#  All rights reserved.
+msgid ""
+msgstr ""
+"Project-Id-Version: captstatutsui 1.50\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-26 18:24+0900\n"
+"PO-Revision-Date: 2004-04-12 09:44+0900\n"
+"Last-Translator: CANON INC.\n"
+"Language-Team: CANON INC.\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=euc-jp\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/interface.c:125
+msgid "Job"
+msgstr "ジョブ"
+
+#: src/interface.c:132 src/interface.c:323
+msgid "Pause Job"
+msgstr "一時停止"
+
+#: src/interface.c:136 src/interface.c:328
+msgid "Resume Job"
+msgstr "再開"
+
+#: src/interface.c:140 src/interface.c:333
+msgid "Cancel Job"
+msgstr "印刷中止"
+
+#: src/interface.c:144
+msgid "Options"
+msgstr "オプション"
+
+#: src/interface.c:151
+msgid "Consumables/Counters..."
+msgstr "消耗品/カウンタ情報..."
+
+#: src/interface.c:154
+msgid "Consumables Information..."
+msgstr "消耗品情報..."
+
+#: src/interface.c:157
+msgid "Counter Information..."
+msgstr "カウンタ情報..."
+
+#: src/interface.c:160 src/interface.c:3983 src/msgdlg.c:50 src/msgdlg.c:62
+#: src/msgdlg.c:69
+msgid "Cleaning"
+msgstr "クリーニング"
+
+#: src/interface.c:163
+msgid "Utility"
+msgstr "ユーティリティ"
+
+#: src/interface.c:169
+msgid "Cleaning 1..."
+msgstr "クリーニング1..."
+
+#: src/interface.c:172
+msgid "Cleaning 2..."
+msgstr "クリーニング2..."
+
+#: src/interface.c:175
+msgid "Printing Position Adjustment Print..."
+msgstr "印字位置調整プリント..."
+
+#: src/interface.c:178
+msgid "Calibration..."
+msgstr "キャリブレーション..."
+
+#: src/interface.c:181
+msgid "Out-of-Register Colors Correction..."
+msgstr "色ずれ補正..."
+
+#: src/interface.c:184
+msgid "Color Mismatch Correction..."
+msgstr "色ずれ補正..."
+
+#: src/interface.c:187
+msgid "Cleaning..."
+msgstr "クリーニング..."
+
+#: src/interface.c:190
+msgid "Toner Cartridge Replacement..."
+msgstr "トナーカートリッジ交換..."
+
+#: src/interface.c:193
+msgid "Device Settings..."
+msgstr "デバイス設定..."
+
+#: src/interface.c:196 src/interface.c:759
+msgid "Device Settings"
+msgstr "デバイス設定"
+
+#: src/interface.c:202
+msgid "Register Paper Size in Cassettes..."
+msgstr "カセット用紙サイズの登録..."
+
+#: src/interface.c:205
+msgid "Drawer Settings..."
+msgstr "カセット設定..."
+
+#: src/interface.c:208
+msgid "Cassette Settings..."
+msgstr "カセット設定..."
+
+#: src/interface.c:211
+msgid "Cassette Settings 1..."
+msgstr "カセット設定1..."
+
+#: src/interface.c:214
+msgid "Drawer Settings 1..."
+msgstr "カセット設定1..."
+
+#: src/interface.c:217
+msgid "Cassette Settings 2..."
+msgstr "カセット設定2..."
+
+#: src/interface.c:220
+msgid "Drawer Settings 2..."
+msgstr "カセット設定2..."
+
+#: src/interface.c:223
+msgid "Multi-purpose Tray Settings..."
+msgstr "手差しトレイ設定..."
+
+#: src/interface.c:226
+msgid "Printing Position Adjustment..."
+msgstr "印字位置調整..."
+
+#: src/interface.c:229
+msgid "Settings of the Cancel Job Key..."
+msgstr "ジョブキャンセルキー設定..."
+
+#: src/interface.c:232
+msgid "Sleep Settings..."
+msgstr "スリープ設定..."
+
+#: src/interface.c:235
+msgid "Power Save Settings..."
+msgstr "スリープ設定..."
+
+#: src/interface.c:238
+msgid "Reset Part Counters..."
+msgstr "部品カウンタリセット..."
+
+#: src/interface.c:241
+msgid "Startup Settings..."
+msgstr "プリンタ起動時の設定..."
+
+#: src/interface.c:244
+msgid "Network Settings..."
+msgstr "ネットワーク設定..."
+
+#: src/interface.c:247
+msgid "Assisting Print Settings..."
+msgstr "印刷補助設定..."
+
+#: src/interface.c:250
+msgid "Calibration Settings..."
+msgstr "キャリブレーション設定..."
+
+#: src/interface.c:258 src/interface.c:268
+msgid "Hide Statusmonitor"
+msgstr "ステータスモニタを隠す"
+
+#: src/interface.c:289
+msgid "Message"
+msgstr "メッセージ"
+
+#: src/interface.c:555
+msgid "Printing Position Adjustment Print"
+msgstr "印字位置調整プリント"
+
+#: src/interface.c:578 src/ppapdlg.c:58
+msgid ""
+"Print a pattern for Printing Position Adjustment.\n"
+"Select the paper source to check and click [OK].\n"
+"When adjusting the printing position after printing,\n"
+"adjust it in the [Device Settings] dialog in the [Option] menu.\n"
+msgstr ""
+"印字位置調整用のパターンを印刷します。\n"
+"確認する給紙部を選択し[OK]をクリックしてください。\n"
+"印刷後に位置調整するときは、[オプション]-\n"
+"[デバイス設定]で行ってください。\n"
+
+#: src/interface.c:594 src/ppapdlg.c:65
+msgid "Multi-purpose Tray"
+msgstr "手差し(トレイ)"
+
+#: src/interface.c:601 src/ppapdlg.c:71
+msgid "Cassette 1"
+msgstr "カセット1"
+
+#: src/interface.c:607 src/ppapdlg.c:77
+msgid "Cassette 2"
+msgstr "カセット2"
+
+#: src/interface.c:613 src/ppapdlg.c:83
+msgid "Cassette 3"
+msgstr "カセット3"
+
+#: src/interface.c:619 src/ppapdlg.c:89
+msgid "Cassette 4"
+msgstr "カセット4"
+
+#: src/interface.c:625
+msgid "Paper Source"
+msgstr "給紙部"
+
+#: src/interface.c:629
+msgid "Check Duplex Unit Also"
+msgstr "両面ユニットも確認する"
+
+#: src/interface.c:642 src/interface.c:944 src/interface.c:1082
+#: src/interface.c:1282 src/interface.c:1762 src/interface.c:1918
+#: src/interface.c:2029 src/interface.c:2335 src/interface.c:2624
+#: src/interface.c:2783 src/interface.c:2915 src/interface.c:3076
+#: src/interface.c:3169 src/interface.c:3635 src/interface.c:4071
+#: src/interface.c:4213
+msgid "OK"
+msgstr ""
+
+#: src/interface.c:647 src/interface.c:949 src/interface.c:1087
+#: src/interface.c:1287 src/interface.c:1923 src/interface.c:2034
+#: src/interface.c:2340 src/interface.c:2629 src/interface.c:2788
+#: src/interface.c:2920 src/interface.c:3081 src/interface.c:3174
+#: src/interface.c:3640 src/interface.c:4076 src/interface.c:4218
+msgid "Cancel "
+msgstr "キャンセル"
+
+#: src/interface.c:781
+msgid "2-sided Special Mode"
+msgstr "両面特殊処理"
+
+#: src/interface.c:785
+msgid "Graphics Special Mode"
+msgstr "グラフィックス特殊処理"
+
+#: src/interface.c:789
+msgid "Lighten Flicker Mode"
+msgstr "ちらつき軽減処理"
+
+#: src/interface.c:801 src/interface.c:3269
+msgid "Printing Position Adjustment"
+msgstr "印字位置調整"
+
+#: src/interface.c:819
+msgid "Multi-purpose Tray:"
+msgstr "手差し(トレイ) :"
+
+#: src/interface.c:830 src/interface.c:850 src/interface.c:870
+#: src/interface.c:890 src/interface.c:910 src/interface.c:930
+msgid "  mm (-5.0 to 5.0)  "
+msgstr "   mm (-5.0〜5.0)   "
+
+#: src/interface.c:839 src/interface.c:1175 src/regipaperdlg.c:475
+msgid "Cassette 1:"
+msgstr "カセット1 :"
+
+#: src/interface.c:859 src/interface.c:1200 src/regipaperdlg.c:481
+msgid "Cassette 2:"
+msgstr "カセット2 :"
+
+#: src/interface.c:879 src/interface.c:1224 src/regipaperdlg.c:487
+msgid "Cassette 3:"
+msgstr "カセット3 :"
+
+#: src/interface.c:899 src/interface.c:1248 src/regipaperdlg.c:493
+msgid "Cassette 4:"
+msgstr "カセット4 :"
+
+#: src/interface.c:919
+msgid "Duplex Unit:"
+msgstr "両面ユニット :"
+
+#: src/interface.c:1152 src/regipaperdlg.c:54
+msgid "Register Paper Size in Cassettes"
+msgstr "用紙サイズ設定"
+
+#: src/interface.c:1269
+msgid "Register Paper Sizes"
+msgstr "用紙サイズの登録"
+
+#: src/interface.c:1406
+msgid "Consumables/Counters"
+msgstr "消耗品/カウンタ情報"
+
+#: src/interface.c:1428
+msgid "Magenta:"
+msgstr "マゼンタ :"
+
+#: src/interface.c:1437
+msgid "Black:"
+msgstr "ブラック :"
+
+#: src/interface.c:1446
+msgid "Yellow:"
+msgstr "イエロー :"
+
+#: src/interface.c:1455
+msgid "Cyan:"
+msgstr "シアン :"
+
+#: src/interface.c:1523
+msgid "Toner Cartridge Information"
+msgstr "トナーカートリッジ情報"
+
+#: src/interface.c:1560
+msgid "Waste Toner Container Information"
+msgstr "回収トナー容器情報"
+
+#: src/interface.c:1597
+msgid "Drum Cartridge Information"
+msgstr "ドラムカートリッジ情報"
+
+#: src/interface.c:1610
+msgid "Black & White:"
+msgstr "モノクロ :"
+
+#: src/interface.c:1619
+msgid "Color:"
+msgstr "カラー :"
+
+#: src/interface.c:1644
+msgid "Black & White S:"
+msgstr "モノクロS :"
+
+#: src/interface.c:1652
+msgid "Black & White L:"
+msgstr "モノクロL :"
+
+#: src/interface.c:1660
+msgid "Color S:"
+msgstr "カラーS :"
+
+#: src/interface.c:1668
+msgid "Color L:"
+msgstr "カラーL :"
+
+#: src/interface.c:1704
+msgid "Number of 2-sided Printing Sheets:"
+msgstr "両面印刷枚数 :"
+
+#: src/interface.c:1712
+msgid "Number of Jobs:"
+msgstr "ジョブ数 :"
+
+#: src/interface.c:1741
+msgid "Total Printed Pages:"
+msgstr "総印刷ページ数 :"
+
+#: src/interface.c:1749
+msgid "Number of Total Printed Pages"
+msgstr "総印刷ページ数"
+
+#: src/interface.c:1856 src/sleepsdlg.c:72 src/sleepsdlg.c:74
+msgid "Sleep Settings"
+msgstr "スリープ設定"
+
+#: src/interface.c:1875 src/sleepsdlg.c:57
+msgid "Use Sleep Mode"
+msgstr "スリープ機能を使用する"
+
+#: src/interface.c:1883
+msgid "Time to Enter Sleep Mode:   "
+msgstr "移行時間 :"
+
+#: src/interface.c:1903
+msgid "minutes"
+msgstr "分"
+
+#: src/interface.c:1983
+msgid "Settings of the Cancel Job Key"
+msgstr "ジョブキャンセルキー設定"
+
+#: src/interface.c:2002
+msgid "Enable to Cancel Error Jobs"
+msgstr "エラー中のジョブをキャンセル可能にする"
+
+#: src/interface.c:2016
+msgid "Enable to Cancel Any Processing Print Job"
+msgstr "印刷中のジョブもキャンセル可能にする"
+
+#: src/interface.c:2117
+msgid "Network Settings"
+msgstr "ネットワーク設定"
+
+#: src/interface.c:2135
+msgid "IP Address Setting with:"
+msgstr "IPアドレス設定方法 :"
+
+#: src/interface.c:2143
+msgid "RARP"
+msgstr ""
+
+#: src/interface.c:2149
+msgid "BOOTP"
+msgstr ""
+
+#: src/interface.c:2155
+msgid "DHCP"
+msgstr ""
+
+#: src/interface.c:2161
+msgid "IP Address:"
+msgstr "IPアドレス :"
+
+#: src/interface.c:2169
+msgid "Subnet Mask:"
+msgstr "サブネットマスク :"
+
+#: src/interface.c:2177
+msgid "Gateway Address:"
+msgstr "ゲートウェイアドレス :"
+
+#: src/interface.c:2303
+msgid "TCP/IP"
+msgstr ""
+
+#: src/interface.c:2312
+msgid "Password:"
+msgstr "パスワード :"
+
+#: src/interface.c:2491
+msgid "Assisting Print Settings"
+msgstr "印刷補助設定"
+
+#: src/interface.c:2510
+msgid "Print Mixed Color/B&W Documents at High Speed   "
+msgstr "カラー/モノクロ混在原稿を高速で印刷する"
+
+#: src/interface.c:2518
+msgid "Print Mode:       "
+msgstr "印刷モード :"
+
+#: src/interface.c:2537
+msgid "          "
+msgstr ""
+
+#: src/interface.c:2542
+msgid "Reduce Vertical Streaks on Outputs"
+msgstr "印刷時に付着するすじ状の汚れを抑制する"
+
+#: src/interface.c:2546
+msgid "Prevent Poor Quality after Long Idle"
+msgstr "長時間休止後の印字不良を抑制する"
+
+#: src/interface.c:2550
+msgid "Clean Every 2 Sheets in Continuous Print"
+msgstr "連続印刷時に２枚ごとにクリーニングする"
+
+#: src/interface.c:2554
+msgid "Adjust Temperature during Standby"
+msgstr "スタンバイ時に温度調節を行う"
+
+#: src/interface.c:2557
+msgid "Adjust Output When Printing Plain 16K"
+msgstr ""
+
+#: src/interface.c:2564
+msgid "Print Quiet Mode"
+msgstr "静音モードで印刷する"
+
+#: src/interface.c:2574
+msgid "Color Mismatch Correction Frequency:       "
+msgstr "色ずれ補正する頻度 :              "
+
+#: src/interface.c:2596
+msgid "Paper Jam Reduction(Plain L, 2-sided):        "
+msgstr "紙づまり低減モード(普通紙L 両面) : "
+
+#: src/interface.c:2730
+msgid "Startup Settings"
+msgstr "プリンタ起動時の設定"
+
+#: src/interface.c:2749
+msgid "Quality Correction:"
+msgstr "画質調整 :"
+
+#: src/interface.c:2846 src/cassetteset2dlg.c:61
+msgid "Cassette Settings 2"
+msgstr "カセット設定2"
+
+#: src/interface.c:2864 src/interface.c:2871 src/interface.c:3000
+#: src/interface.c:3007
+msgid " "
+msgstr ""
+
+#: src/interface.c:2878 src/cassetteset2dlg.c:72
+msgid "Use Cassette 1 as Target of Auto Select"
+msgstr "カセット1を自動選択の対象にする"
+
+#: src/interface.c:2884 src/cassetteset2dlg.c:78
+msgid "Use Cassette 2 as Target of Auto Select"
+msgstr "カセット2を自動選択の対象にする"
+
+#: src/interface.c:2890 src/cassetteset2dlg.c:84
+msgid "Use Cassette 3 as Target of Auto Select"
+msgstr "カセット3を自動選択の対象にする"
+
+#: src/interface.c:2896 src/cassetteset2dlg.c:90
+msgid "Use Cassette 4 as Target of Auto Select"
+msgstr "カセット4を自動選択の対象にする"
+
+#: src/interface.c:2902
+msgid "Auto Select Settings"
+msgstr "自動選択設定"
+
+#: src/interface.c:2982 src/msgdlg.c:79
+msgid "Reset Part Counters"
+msgstr "部品カウンタリセット"
+
+#: src/interface.c:3014
+msgid "Fixing Unit"
+msgstr "定着器"
+
+#: src/interface.c:3020
+msgid "ITB Unit"
+msgstr "ITBユニット"
+
+#: src/interface.c:3026
+msgid "Secondary Transfer Roller"
+msgstr "二次転写ローラ"
+
+#: src/interface.c:3032 src/resetunitdlg.c:56
+msgid "Paper Feed Roller (Multi-purpose Tray)"
+msgstr "給紙ローラ(手差しトレイ)"
+
+#: src/interface.c:3038 src/resetunitdlg.c:62
+msgid "Paper Feed Roller (Cassette 1)"
+msgstr "給紙ローラ(カセット1)"
+
+#: src/interface.c:3044 src/resetunitdlg.c:68
+msgid "Paper Feed Roller (Cassette 2)"
+msgstr "給紙ローラ(カセット2)"
+
+#: src/interface.c:3050 src/resetunitdlg.c:74
+msgid "Paper Feed Roller (Cassette 3)"
+msgstr "給紙ローラ(カセット3)"
+
+#: src/interface.c:3056 src/resetunitdlg.c:80
+msgid "Paper Feed Roller (Cassette 4)"
+msgstr "給紙ローラ(カセット4)"
+
+#: src/interface.c:3062
+msgid "Select parts and click [OK] to reset the counter after replacing parts."
+msgstr ""
+"部品交換した後、カウンタをリセットする部品を選択し、[OK]をクリックしてくださ"
+"い。"
+
+#: src/interface.c:3137
+msgid "Multi-purpose Tray Settings"
+msgstr "手差しトレイ設定"
+
+#: src/interface.c:3156
+msgid "Prioritize Using Multi-purpose Tray"
+msgstr "手差しトレイの使用を優先する"
+
+#: src/interface.c:3282
+msgid "Vertical Adjustment"
+msgstr "縦位置の調整"
+
+#: src/interface.c:3289 src/ppavhdlg.c:66
+msgid "Vertical Adjustment with Multi-purpose Tray:"
+msgstr "手差し(トレイ)での縦位置の調整 :"
+
+#: src/interface.c:3296 src/ppavhdlg.c:72
+msgid "Vertical Adjustment with Cassette 1:"
+msgstr "カセット1での縦位置の調整 :"
+
+#: src/interface.c:3303 src/ppavhdlg.c:78
+msgid "Vertical Adjustment with Cassette 2:"
+msgstr "カセット2での縦位置の調整 :"
+
+#: src/interface.c:3310 src/ppavhdlg.c:84
+msgid "Vertical Adjustment with Cassette 3:"
+msgstr "カセット3での縦位置の調整 :"
+
+#: src/interface.c:3317 src/ppavhdlg.c:90
+msgid "Vertical Adjustment with Cassette 4:"
+msgstr "カセット4での縦位置の調整 :"
+
+#: src/interface.c:3324
+msgid "Vertical Adjustment with Duplex Unit:"
+msgstr "両面ユニットでの縦位置の調整 :"
+
+#: src/interface.c:3337
+msgid "Horizontal Adjustment"
+msgstr "横位置の調整"
+
+#: src/interface.c:3344 src/ppavhdlg.c:96
+msgid "Horizontal Adjustment with Multi-purpose Tray:"
+msgstr "手差し(トレイ)での横位置の調整 :"
+
+#: src/interface.c:3351 src/ppavhdlg.c:102
+msgid "Horizontal Adjustment with Cassette 1:"
+msgstr "カセット1での横位置の調整 :"
+
+#: src/interface.c:3358 src/ppavhdlg.c:108
+msgid "Horizontal Adjustment with Cassette 2:"
+msgstr "カセット2での横位置の調整 :"
+
+#: src/interface.c:3365 src/ppavhdlg.c:114
+msgid "Horizontal Adjustment with Cassette 3:"
+msgstr "カセット3での横位置の調整 :"
+
+#: src/interface.c:3372 src/ppavhdlg.c:120
+msgid "Horizontal Adjustment with Cassette 4:"
+msgstr "カセット4での横位置の調整 :"
+
+#: src/interface.c:3379
+msgid "Horizontal Adjustment with Duplex Unit:"
+msgstr "両面ユニットでの横位置の調整 :"
+
+#: src/interface.c:3542 src/interface.c:3549 src/interface.c:3556
+#: src/interface.c:3563 src/interface.c:3570 src/interface.c:3577
+#: src/interface.c:3584 src/interface.c:3591 src/interface.c:3598
+#: src/interface.c:3605 src/interface.c:3612 src/interface.c:3619
+msgid "mm"
+msgstr ""
+
+#: src/interface.c:3783
+msgid "Toner Cartridge Replacement"
+msgstr "トナーカートリッジ交換"
+
+#: src/interface.c:3815
+msgid "Replaceable Toner Cartridge:"
+msgstr "交換できるトナーカートリッジ :"
+
+#: src/interface.c:3826
+msgid "Toner Cartridge:"
+msgstr "トナーカートリッジ :"
+
+#: src/interface.c:3860 src/tonerreplacementdlg.c:60
+msgid "Magenta"
+msgstr "マゼンタ"
+
+#: src/interface.c:3869 src/tonerreplacementdlg.c:61
+msgid "Yellow"
+msgstr "イエロー"
+
+#: src/interface.c:3878 src/tonerreplacementdlg.c:62
+msgid "Black"
+msgstr "ブラック"
+
+#: src/interface.c:3887 src/tonerreplacementdlg.c:59
+msgid "Cyan"
+msgstr "シアン"
+
+#: src/interface.c:3905
+msgid "Finish Replacing"
+msgstr "交換終了"
+
+#: src/interface.c:4016
+msgid "Fixing Unit Cleaning 1"
+msgstr "定着クリーニング1"
+
+#: src/interface.c:4023
+msgid "Fixing Unit Cleaning 2"
+msgstr "定着クリーニング2"
+
+#: src/interface.c:4029
+msgid "Drum Cleaning 1"
+msgstr "ドラムクリーニング1"
+
+#: src/interface.c:4035
+msgid "Drum Cleaning 2"
+msgstr "ドラムクリーニング2"
+
+#: src/interface.c:4041
+msgid "Cleaning Type"
+msgstr "クリーニングの種類"
+
+#: src/interface.c:4050
+msgid ""
+"Performs Cleaning.\n"
+"To perform Fixing Unit Cleaning, check that the correct size paper is loaded "
+"in the paper source, and then click [OK]."
+msgstr ""
+"クリーニングを実行します。\n"
+"定着クリーニングを行う場合は、給紙部に正しいサイズの用紙がセットされているこ"
+"とを確認し、[OK]をクリックしてください。"
+
+#: src/interface.c:4056
+msgid "See the instruction manual for more information about cleaning."
+msgstr "クリーニングについての詳細は、取扱説明書をご覧ください。"
+
+#: src/interface.c:4142
+msgid "Calibration Settings"
+msgstr "キャリブレーション設定"
+
+#: src/interface.c:4155
+msgid "Use Periodical Calibration Timer"
+msgstr "定刻キャリブレーションタイマーを使用する"
+
+#: src/interface.c:4163
+msgid "Time:"
+msgstr "時刻 :"
+
+#: src/interface.c:4173
+msgid ":"
+msgstr ""
+
+#: src/interface.c:4185
+msgid "Startup Calibration:"
+msgstr "プリンター起動時のキャリブレーション :"
+
+#: src/support.c:110 src/support.c:134
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr ""
+
+#: src/msgdlg.c:45 src/msgdlg.c:75
+msgid "Performs Cleaning 1."
+msgstr "クリーニング1を実行します。"
+
+#: src/msgdlg.c:45 src/msgdlg.c:75
+msgid "Cleaning 1"
+msgstr "クリーニング1"
+
+#: src/msgdlg.c:46 src/msgdlg.c:76
+msgid "Performs Cleaning 2."
+msgstr "クリーニング2を実行します。"
+
+#: src/msgdlg.c:46 src/msgdlg.c:76
+msgid "Cleaning 2"
+msgstr "クリーニング2"
+
+#: src/msgdlg.c:47
+msgid "Printing <Print position adjustment>"
+msgstr "現在＜印字位置調整＞を印刷中です。"
+
+#: src/msgdlg.c:47
+msgid "Printing"
+msgstr "印刷中"
+
+#: src/msgdlg.c:48
+msgid "A communication error has occured."
+msgstr "通信エラーが発生しました。"
+
+#: src/msgdlg.c:48
+msgid "Printer Infomation"
+msgstr "プリンタ情報"
+
+#: src/msgdlg.c:49
+msgid "Hides Statusmonitor window."
+msgstr "ステータスモニタを隠します。"
+
+#: src/msgdlg.c:49
+msgid "Hide Status Monitor"
+msgstr "ステータスモニタを隠す"
+
+#: src/msgdlg.c:50 src/msgdlg.c:69
+msgid "Performs Cleaning."
+msgstr "クリーニングを実行します。"
+
+#: src/msgdlg.c:51
+msgid "Could not set information to printer."
+msgstr "プリンタに情報を設定できませんでした。"
+
+#: src/msgdlg.c:51 src/msgdlg.c:52 src/msgdlg.c:53 src/msgdlg.c:54
+#: src/msgdlg.c:55 src/msgdlg.c:56 src/msgdlg.c:58 src/msgdlg.c:59
+#: src/msgdlg.c:60 src/msgdlg.c:61 src/msgdlg.c:63 src/msgdlg.c:64
+#: src/msgdlg.c:65 src/msgdlg.c:66 src/msgdlg.c:67 src/msgdlg.c:68
+#: src/msgdlg.c:72 src/msgdlg.c:73 src/msgdlg.c:74 src/msgdlg.c:78
+msgid "Warning"
+msgstr "警告"
+
+#: src/msgdlg.c:52
+msgid "Could not get printer information."
+msgstr "プリンタの情報を取得できませんでした。"
+
+#: src/msgdlg.c:53
+msgid "Could not perform calibration."
+msgstr "キャリブレーションを実行できませんでした"
+
+#: src/msgdlg.c:54
+msgid ""
+"Could not get counter information or information about remaining amount of "
+"consumables."
+msgstr "消耗品の残量または印刷のカウンタ情報を取得できませんでした。"
+
+#: src/msgdlg.c:55
+msgid "Could not get information about remaining amount of consumables."
+msgstr "消耗品の残量情報を取得できませんでした。"
+
+#: src/msgdlg.c:56
+msgid "Could not get print counter information."
+msgstr "印刷のカウンタ情報を取得できませんでした。"
+
+#: src/msgdlg.c:57 src/msgdlg.c:71
+msgid "Performs Calibration."
+msgstr "キャリブレーションを実行します。"
+
+#: src/msgdlg.c:57 src/msgdlg.c:71
+msgid "Calibration"
+msgstr "キャリブレーション"
+
+#: src/msgdlg.c:58
+msgid "The entered IP address is incorrect."
+msgstr "IPアドレスが正しく入力されていません。"
+
+#: src/msgdlg.c:59
+msgid "The entered gateway address is incorrect."
+msgstr "ゲートウェイアドレスが正しく入力されていません。"
+
+#: src/msgdlg.c:60
+msgid "The entered subnet mask is incorrect."
+msgstr "サブネットマスクが正しく入力されていません。"
+
+#: src/msgdlg.c:61
+msgid "The password is incorrect. Enter the password again."
+msgstr "パスワードが正しくありません。もう一度入力しなおしてください。"
+
+#: src/msgdlg.c:62
+msgid ""
+"Performs Cleaning.\n"
+"Load A4 (or Letter) paper in the paper source."
+msgstr ""
+"クリーニングを実行します。\n"
+"給紙部にA４(またはレター)をセットしてください。"
+
+#: src/msgdlg.c:63
+msgid ""
+"To use A4 paper for 2-sided printing, set the paper size switch lever on the "
+"back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+"A４で両面印刷する場合は、本体背面の用紙サイズ切り替えレバーを正しくセットして"
+"ください。\n"
+"正しくセットされていないと、紙づまりの原因になる可能性があります。\n"
+"詳細は取扱説明書をご覧ください。"
+
+#: src/msgdlg.c:64
+msgid ""
+"To use Letter paper for 2-sided printing, set the paper size switch lever on "
+"the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+"レターで両面印刷する場合は、本体背面の用紙サイズ切り替えレバーを正しくセット"
+"してください。\n"
+"正しくセットされていないと、紙づまりの原因になる可能性があります。\n"
+"詳細は取扱説明書をご覧ください。"
+
+#: src/msgdlg.c:65
+msgid ""
+"To use Legal paper for 2-sided printing, set the paper size switch lever on "
+"the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+"リーガルで両面印刷する場合は、本体背面の用紙サイズ切り替えレバーを正しくセッ"
+"トしてください。\n"
+"正しくセットされていないと、紙づまりの原因になる可能性があります。\n"
+"詳細は取扱説明書をご覧ください。"
+
+#: src/msgdlg.c:66
+msgid ""
+"To use A4 or Letter paper for 2-sided printing, set the paper size switch "
+"lever on the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+"A４またはレターで両面印刷する場合は、本体背面の用紙サイズ切り替えレバーを正し"
+"くセットしてください。\n"
+"正しくセットされていないと、紙づまりの原因になる可能性があります。\n"
+"詳細は取扱説明書をご覧ください。"
+
+#: src/msgdlg.c:67
+msgid ""
+"To use A4 or Legal paper for 2-sided printing, set the paper size switch "
+"lever on the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+"A４またはリーガルで両面印刷する場合は、本体背面の用紙サイズ切り替えレバーを正"
+"しくセットしてください。\n"
+"正しくセットされていないと、紙づまりの原因になる可能性があります。\n"
+"詳細は取扱説明書をご覧ください。"
+
+#: src/msgdlg.c:68
+msgid ""
+"To use Letter or Legal paper for 2-sided printing, set the paper size switch "
+"lever on the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+"レターまたはリーガルで両面印刷する場合は、本体背面の用紙サイズ切り替えレバー"
+"を正しくセットしてください。\n"
+"正しくセットされていないと、紙づまりの原因になる可能性があります。\n"
+"詳細は取扱説明書をご覧ください。"
+
+#: src/msgdlg.c:70
+msgid "Performs out-of-register colors correction.        "
+msgstr "色ずれ補正を実行します。                    "
+
+#: src/msgdlg.c:70
+msgid "Out-of-Register Colors Correction"
+msgstr "色ずれ補正"
+
+#: src/msgdlg.c:72
+msgid "Could not perform Out-of-Register Colors Correction."
+msgstr "色ずれ補正を実行できませんでした"
+
+#: src/msgdlg.c:73
+msgid ""
+"Could not perform cleaning.\n"
+"Check the connection to the printer and the printer status, and then try "
+"again."
+msgstr ""
+"クリーニングを実行できませんでした。\n"
+"プリンタとの接続、およびプリンタの状態を確認してから実行しなおしてください。"
+
+#: src/msgdlg.c:74
+msgid ""
+"To make the changed setting in [Reduce Vertical Streaks on Outputs] "
+"effective,\n"
+"you need to turn the printer off, and then back on again."
+msgstr ""
+"[印刷時に付着するすじ状の汚れを抑制する]の変更を有効にするには、\n"
+"プリンタの電源を入れなおす必要があります。"
+
+#: src/msgdlg.c:78
+msgid ""
+"To make the change of network settings effective, you need to turn off the "
+"printer and then turn it back on again after a moment."
+msgstr ""
+"ネットワーク設定の変更を有効にするには、プリンターの電源をいったん切り、しば"
+"らく待ってから電源を入れなおしてください。"
+
+#: src/msgdlg.c:79
+msgid "Part counters will be reset. Are you sure you want to reset them?"
+msgstr "部品カウンタをリセットします。よろしいですか?"
+
+#: src/msgdlg.c:80
+msgid "Performs Color Mismatch Correction."
+msgstr "色ずれ補正を実行します。"
+
+#: src/msgdlg.c:80
+msgid "Color Mismatch Correction"
+msgstr "色ずれ補正"
+
+#: src/data_process.c:52
+msgid "Unknown Error"
+msgstr "不明なエラーです。"
+
+#: src/data_process.c:53
+msgid "Cannot Open FIFO"
+msgstr "FIFOがオープンできません。"
+
+#: src/data_process.c:54
+msgid "No Specified Printer"
+msgstr "指定されたプリンタはありません。"
+
+#: src/data_process.c:55
+msgid "Printer Error"
+msgstr "プリンタエラー"
+
+#: src/data_process.c:56
+msgid "Check the <Printer ***> of /etc/ccpd.conf"
+msgstr "/etc/ccpd.conf の <Printer ***>を確認してください。"
+
+#: src/data_process.c:57
+msgid "Check the DevicePath of /etc/ccpd.conf"
+msgstr "/etc/ccpd.conf の DevicePath を確認してください。"
+
+#: src/data_process.c:58
+msgid ""
+"Check the fifo path\n"
+" - ccp:/var/ccpd/fifo<*>"
+msgstr ""
+"fifoパスを確認してください。\n"
+" - ccp:/var/ccpd/fifo<*>"
+
+#: src/regipaperdlg.c:55
+msgid "Cassette Settings 1"
+msgstr "カセット設定1"
+
+#: src/regipaperdlg.c:56
+msgid "Cassette Settings"
+msgstr "カセット設定"
+
+#: src/regipaperdlg.c:57
+msgid "Drawer Settings 1"
+msgstr "カセット設定1"
+
+#: src/regipaperdlg.c:58
+msgid "Drawer Settings"
+msgstr "カセット設定"
+
+#: src/regipaperdlg.c:75 src/regipaperdlg.c:102 src/regipaperdlg.c:136
+msgid "Letter"
+msgstr "レター"
+
+#: src/regipaperdlg.c:76 src/regipaperdlg.c:103 src/regipaperdlg.c:137
+msgid "Legal"
+msgstr "リーガル"
+
+#: src/regipaperdlg.c:77 src/regipaperdlg.c:104 src/regipaperdlg.c:138
+msgid "Ledger"
+msgstr "レジャー"
+
+#: src/regipaperdlg.c:78 src/regipaperdlg.c:105 src/regipaperdlg.c:139
+msgid "Statement"
+msgstr "ステイトメント"
+
+#: src/regipaperdlg.c:79 src/regipaperdlg.c:106 src/regipaperdlg.c:140
+msgid "Executive"
+msgstr "エグゼクティブ"
+
+#: src/regipaperdlg.c:80 src/regipaperdlg.c:107 src/regipaperdlg.c:141
+msgid "A3"
+msgstr ""
+
+#: src/regipaperdlg.c:81 src/regipaperdlg.c:108 src/regipaperdlg.c:142
+msgid "B4"
+msgstr ""
+
+#: src/regipaperdlg.c:82 src/regipaperdlg.c:109 src/regipaperdlg.c:143
+msgid "A4"
+msgstr ""
+
+#: src/regipaperdlg.c:83 src/regipaperdlg.c:110 src/regipaperdlg.c:144
+msgid "B5"
+msgstr ""
+
+#: src/regipaperdlg.c:84 src/regipaperdlg.c:111 src/regipaperdlg.c:145
+msgid "A5"
+msgstr ""
+
+#: src/regipaperdlg.c:85 src/regipaperdlg.c:112 src/regipaperdlg.c:147
+msgid "Postcard"
+msgstr "はがき"
+
+#: src/regipaperdlg.c:86 src/regipaperdlg.c:113 src/regipaperdlg.c:148
+msgid "Relay Postcard"
+msgstr "往復はがき"
+
+#: src/regipaperdlg.c:87 src/regipaperdlg.c:114 src/regipaperdlg.c:149
+msgid "4 on 1 Postcard"
+msgstr "4面はがき"
+
+#: src/regipaperdlg.c:88 src/regipaperdlg.c:115 src/regipaperdlg.c:150
+msgid "Envelope YOUGATA4"
+msgstr "封筒 洋形４号"
+
+#: src/regipaperdlg.c:89 src/regipaperdlg.c:116 src/regipaperdlg.c:151
+msgid "Envelope YOUGATA2"
+msgstr "封筒 洋形２号"
+
+#: src/regipaperdlg.c:90 src/regipaperdlg.c:117 src/regipaperdlg.c:154
+msgid "Envelope Monarch"
+msgstr ""
+
+#: src/regipaperdlg.c:91 src/regipaperdlg.c:118 src/regipaperdlg.c:155
+msgid "Envelope COM10"
+msgstr ""
+
+#: src/regipaperdlg.c:92 src/regipaperdlg.c:119 src/regipaperdlg.c:156
+msgid "Envelope C5"
+msgstr ""
+
+#: src/regipaperdlg.c:93 src/regipaperdlg.c:120 src/regipaperdlg.c:157
+msgid "Envelope DL"
+msgstr ""
+
+#: src/regipaperdlg.c:94 src/regipaperdlg.c:121 src/regipaperdlg.c:158
+msgid "Envelope B5"
+msgstr ""
+
+#: src/regipaperdlg.c:95 src/regipaperdlg.c:122 src/regipaperdlg.c:159
+msgid "Index Card"
+msgstr ""
+
+#: src/regipaperdlg.c:96 src/regipaperdlg.c:123 src/regipaperdlg.c:160
+msgid "16K"
+msgstr ""
+
+#: src/regipaperdlg.c:97 src/regipaperdlg.c:124 src/regipaperdlg.c:161
+msgid "12x18"
+msgstr ""
+
+#: src/regipaperdlg.c:125 src/regipaperdlg.c:162
+msgid "Envelope KAKUGATA2"
+msgstr "封筒 角形２号"
+
+#: src/regipaperdlg.c:126 src/regipaperdlg.c:163
+msgid "8K"
+msgstr ""
+
+#: src/regipaperdlg.c:128 src/regipaperdlg.c:164
+msgid "Foolscap"
+msgstr ""
+
+#: src/regipaperdlg.c:135 src/asstprtsdlg.c:57
+msgid "Auto"
+msgstr "自動"
+
+#: src/regipaperdlg.c:146
+msgid "A6"
+msgstr ""
+
+#: src/regipaperdlg.c:152
+msgid "Envelope NAGAGATA3"
+msgstr "封筒 長形３号"
+
+#: src/regipaperdlg.c:153
+msgid "Envelope YOUGATANAGA3"
+msgstr "封筒 洋形長３号"
+
+#: src/regipaperdlg.c:476
+msgid "Paper Size in Drawer 1:"
+msgstr "カセット1の用紙サイズ :"
+
+#: src/regipaperdlg.c:482
+msgid "Paper Size in Drawer 2:"
+msgstr "カセット2の用紙サイズ :"
+
+#: src/regipaperdlg.c:488
+msgid "Paper Size in Drawer 3:"
+msgstr "カセット3の用紙サイズ :"
+
+#: src/regipaperdlg.c:494
+msgid "Paper Size in Drawer 4:"
+msgstr "カセット4の用紙サイズ :"
+
+#: src/ccinfodlg.c:43 src/ccinfodlg.c:54 src/tonerreplacementdlg.c:76
+msgid "Available"
+msgstr "使用できます"
+
+#: src/ccinfodlg.c:44 src/ccinfodlg.c:55 src/tonerreplacementdlg.c:77
+msgid "Replacement Needed Soon"
+msgstr "交換時期が近づいています"
+
+#: src/ccinfodlg.c:45
+msgid "Check Cartridge"
+msgstr "確認してください"
+
+#: src/ccinfodlg.c:46 src/tonerreplacementdlg.c:78
+msgid "Replace Cartridge"
+msgstr "交換してください"
+
+#: src/ccinfodlg.c:47 src/tonerreplacementdlg.c:79
+msgid "Insert Cartridge"
+msgstr "セットしてください"
+
+#: src/ccinfodlg.c:48 src/ccinfodlg.c:59 src/tonerreplacementdlg.c:80
+msgid "Unknown"
+msgstr "不明"
+
+#: src/ccinfodlg.c:56
+msgid "Check Container"
+msgstr "確認してください"
+
+#: src/ccinfodlg.c:57
+msgid "Replace Container"
+msgstr "交換してください"
+
+#: src/ccinfodlg.c:58
+msgid "Insert Container"
+msgstr "セットしてください"
+
+#: src/ccinfodlg.c:63
+msgid "pages"
+msgstr "ページ"
+
+#: src/ccinfodlg.c:64
+msgid "sheets"
+msgstr "枚"
+
+#: src/ccinfodlg.c:65
+msgid "jobs"
+msgstr "ジョブ"
+
+#: src/ccinfodlg.c:689 src/ccinfodlg.c:696 src/ccinfodlg.c:700
+#: src/ccinfodlg.c:707 src/ccinfodlg.c:881 src/ccinfodlg.c:945
+msgid "Counter Information"
+msgstr "カウンタ情報"
+
+#: src/ccinfodlg.c:690 src/ccinfodlg.c:697 src/ccinfodlg.c:701
+#: src/ccinfodlg.c:708 src/ccinfodlg.c:713 src/ccinfodlg.c:882
+#: src/ccinfodlg.c:946
+msgid "Counter"
+msgstr "カウンタ"
+
+#: src/ccinfodlg.c:702
+msgid "Color Print Pages:"
+msgstr "印刷ページ数 :"
+
+#: src/ccinfodlg.c:703
+msgid "B&W Print Pages:"
+msgstr "モノクロ印刷ページ数 :"
+
+#: src/ccinfodlg.c:866 src/ccinfodlg.c:907 src/ccinfodlg.c:1031
+msgid "Consumables Information"
+msgstr "消耗品情報"
+
+#: src/ccinfodlg.c:948
+msgid "B&W S Print Pages:"
+msgstr "白黒S印刷ページ数 :"
+
+#: src/ccinfodlg.c:949
+msgid "B&W L Print Pages:"
+msgstr "白黒L印刷ページ数 :"
+
+#: src/ccinfodlg.c:950
+msgid "Color S Print Pages:"
+msgstr "カラーS印刷ページ数 :"
+
+#: src/ccinfodlg.c:951
+msgid "Color L Print Pages:"
+msgstr "カラーL印刷ページ数 :"
+
+#: src/networksdlg.c:42
+msgid "Auto Detect"
+msgstr "自動検出"
+
+#: src/networksdlg.c:43
+msgid "Manual Settings"
+msgstr "手動設定"
+
+#: src/asstprtsdlg.c:49 src/asstprtsdlg.c:65
+msgid "Mode 1"
+msgstr "モード1"
+
+#: src/asstprtsdlg.c:50 src/asstprtsdlg.c:66
+msgid "Mode 2"
+msgstr "モード2"
+
+#: src/asstprtsdlg.c:51 src/asstprtsdlg.c:67
+msgid "Mode 3"
+msgstr "モード3"
+
+#: src/asstprtsdlg.c:58
+msgid "Low"
+msgstr "少ない"
+
+#: src/asstprtsdlg.c:59
+msgid "High"
+msgstr "多い"
+
+#: src/asstprtsdlg.c:64
+msgid "Off"
+msgstr "使わない"
+
+#: src/startupsettingsdlg.c:45 src/calibrationsettingsdlg.c:57
+msgid "Execute Later"
+msgstr "あとで行う"
+
+#: src/startupsettingsdlg.c:46
+msgid "Execute Immediately (Level 1)"
+msgstr "すぐに行う(レベル1)"
+
+#: src/startupsettingsdlg.c:47
+msgid "Execute Immediately (Level 2)"
+msgstr "すぐに行う(レベル2)"
+
+#: src/sleepsdlg.c:58
+msgid "Enter Power Save Mode after Fixed Period"
+msgstr "一定時間後にスリープモードへ移行する"
+
+#: src/sleepsdlg.c:59
+msgid "Enter Sleep Mode after Fixed Period"
+msgstr "一定時間後にスリープモードへ移行する"
+
+#: src/sleepsdlg.c:64 src/sleepsdlg.c:66
+msgid "Time to Enter Sleep Mode:"
+msgstr "移行時間 :"
+
+#: src/sleepsdlg.c:65
+msgid "Time to Enter Power Save Mode:"
+msgstr "移行時間 :"
+
+#: src/sleepsdlg.c:73
+msgid "Power Save Settings"
+msgstr "スリープ設定"
+
+#: src/ppapdlg.c:59
+msgid ""
+"Prints a pattern for Printing Position Adjustment.\n"
+"Select the paper source to check and click [OK].\n"
+"After printing the pattern, adjust the printing position in [Options] - "
+"[Device Settings] - [Printing Position Adjustment].\n"
+msgstr ""
+"印字位置調整用パターンを印刷します。\n"
+"確認する給紙部を選択し、[OK]をクリックしてください。\n"
+"印刷後に位置を調整するときは、[オプション]-[デバイス設定]-[印字位置調整]で"
+"行ってください。\n"
+
+#: src/ppapdlg.c:66
+msgid "Multi-purpose Tray "
+msgstr "手差し"
+
+#: src/ppapdlg.c:72
+msgid "Drawer 1"
+msgstr "カセット1"
+
+#: src/ppapdlg.c:78
+msgid "Drawer 2"
+msgstr "カセット2"
+
+#: src/ppapdlg.c:84
+msgid "Drawer 3"
+msgstr "カセット3"
+
+#: src/ppapdlg.c:90
+msgid "Drawer 4"
+msgstr "カセット4"
+
+#: src/cassetteset2dlg.c:62
+msgid "Drawer Settings 2"
+msgstr "カセット設定2"
+
+#: src/cassetteset2dlg.c:73
+msgid "Use Drawer 1 as Target of Auto Select"
+msgstr "カセット1を自動選択の対象にする"
+
+#: src/cassetteset2dlg.c:79
+msgid "Use Drawer 2 as Target of Auto Select"
+msgstr "カセット2を自動選択の対象にする"
+
+#: src/cassetteset2dlg.c:85
+msgid "Use Drawer 3 as Target of Auto Select"
+msgstr "カセット3を自動選択の対象にする"
+
+#: src/cassetteset2dlg.c:91
+msgid "Use Drawer 4 as Target of Auto Select"
+msgstr "カセット4を自動選択の対象にする"
+
+#: src/resetunitdlg.c:57
+msgid "Paper Feed Roller (Multi-purpose Tray) "
+msgstr "給紙ローラ(手差し)"
+
+#: src/resetunitdlg.c:63
+msgid "Paper Feed Roller (Drawer 1)"
+msgstr "給紙ローラ(カセット1)"
+
+#: src/resetunitdlg.c:69
+msgid "Paper Feed Roller (Drawer 2)"
+msgstr "給紙ローラ(カセット2)"
+
+#: src/resetunitdlg.c:75
+msgid "Paper Feed Roller (Drawer 3)"
+msgstr "給紙ローラ(カセット3)"
+
+#: src/resetunitdlg.c:81
+msgid "Paper Feed Roller (Drawer 4)"
+msgstr "給紙ローラ(カセット4)"
+
+#: src/ppavhdlg.c:67
+msgid "Vertical Adjustment with Multi-purpose Tray: "
+msgstr "手差しでの縦位置の調整 :"
+
+#: src/ppavhdlg.c:73
+msgid "Vertical Adjustment with Drawer 1:"
+msgstr "カセット1での縦位置の調整 :"
+
+#: src/ppavhdlg.c:79
+msgid "Vertical Adjustment with Drawer 2:"
+msgstr "カセット2での縦位置の調整 :"
+
+#: src/ppavhdlg.c:85
+msgid "Vertical Adjustment with Drawer 3:"
+msgstr "カセット3での縦位置の調整 :"
+
+#: src/ppavhdlg.c:91
+msgid "Vertical Adjustment with Drawer 4:"
+msgstr "カセット4での縦位置の調整 :"
+
+#: src/ppavhdlg.c:97
+msgid "Horizontal Adjustment with Multi-purpose Tray: "
+msgstr "手差しでの横位置の調整 :"
+
+#: src/ppavhdlg.c:103
+msgid "Horizontal Adjustment with Drawer 1:"
+msgstr "カセット1での横位置の調整 :"
+
+#: src/ppavhdlg.c:109
+msgid "Horizontal Adjustment with Drawer 2:"
+msgstr "カセット2での横位置の調整 :"
+
+#: src/ppavhdlg.c:115
+msgid "Horizontal Adjustment with Drawer 3:"
+msgstr "カセット3での横位置の調整 :"
+
+#: src/ppavhdlg.c:121
+msgid "Horizontal Adjustment with Drawer 4:"
+msgstr "カセット4での横位置の調整 :"
+
+#: src/tonerreplacementdlg.c:56
+msgid ""
+"If you click the button of the color of the toner cartridge, the cartridge "
+"will rotate to the replacement position."
+msgstr ""
+"交換したいトナーカートリッジの色のボタンをクリックすると、交換位置に移動しま"
+"す。"
+
+#: src/tonerreplacementdlg.c:57
+msgid ""
+"Do not open the top cover while the toner cartridges are rotating.\n"
+"When the rotation stops, open the top cover and replace the toner cartridge."
+msgstr ""
+"トナーカートリッジの移動中は上カバーを開けないでください。\n"
+"移動が完了したら上カバーを開け、トナーカートリッジを交換してください。"
+
+#: src/tonerreplacementdlg.c:58
+msgid "Wait a moment."
+msgstr "しばらくお待ちください。"
+
+#: src/tonerreplacementdlg.c:63
+msgid "Rotating..."
+msgstr "移動中です..."
+
+#: src/calibrationsettingsdlg.c:58
+msgid "Execute Immediately"
+msgstr "すぐに行う"

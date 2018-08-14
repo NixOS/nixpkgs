@@ -1,0 +1,5 @@
+AC_INIT(cngplp_capt.glade)
+AM_INIT_AUTOMAKE(filescapt, 1.0.0, no-define)
+AC_PROG_INSTALL
+
+AC_OUTPUT(Makefile)

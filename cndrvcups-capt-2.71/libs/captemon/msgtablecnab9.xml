@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PswMsgTable>
+ <MsgList locale="en">
+  <Item key="s_warn_toner_mem">Ready to Print	 There may be a connection problem with the toner cartridge.</Item>
+  <Item key="s_printing">Printing	 </Item>
+  <Item key="s_check_paper">Check the Paper	%s</Item>
+  <Item key="s_check_paper_sub1">Load the specified paper.</Item>
+  <Item key="s_check_paper_sub2">Load the specified paper, and then click [Resume Job].
+To print with the current loaded paper, click [Resume Job].</Item>
+  <Item key="s_canceled">Canceling	  </Item>
+  <Item key="s_cleaning">Cleaning	Wait a moment.</Item>
+  <Item key="s_ready">Ready to Print	  </Item>
+  <Item key="s_servernotready">Cannot Communicate with Server	The server may be down.
+Check the server.</Item>
+  <Item key="s_invalid_port">Incorrect Port	The port to which the printer is connected is not supported.
+Check the port.</Item>
+  <Item key="s_check_status">Getting Status 	Wait a moment. </Item>
+  <Item key="s_busy">Port Busy	The port is being used by another device.</Item>
+  <Item key="s_adapter">Network Board Error 	The network cable is not connected, or the printer is not turned on. Check these items.</Item>
+  <Item key="s_cant_comm">Communication Error 	Check the following:
+- Is the printer turned on?
+- Is the cable properly connected?</Item>
+  <Item key="s_incompatible">Incompatible Printer	 The connected printer cannot be used.</Item>
+  <Item key="s_invalid_data">Incompatible Printer 	The connected printer cannot be used. </Item>
+  <Item key="s_disk_full">Insufficient Disk Space	Delete unnecessary files on the computer or server connected to the printer, and then click [Resume Job].</Item>
+  <Item key="s_disk_full2">Insufficient Disk Space	Delete unnecessary files on the computer or server connected to the printer.</Item>
+  <Item key="s_service_call">Service Error	Printer error. 
+Turn off the printer, and then turn it back on again after a moment. If the same error occurs, turn off the printer, then contact the store where you purchased the printer, or a service representative. When contacting the service representative, inform them of the error code displayed and symptoms.
+Error Code: %04X %04X</Item>
+<Item key="s_jam2">Paper Jam inside Printer	Do not pull the jammed paper out forcibly. Remove it by following the steps below:
+1. Open the top cover and remove the toner cartridge.
+2. Check the paper feed area, the output area, or inside the printer, and then remove the jammed paper.
+ - When removing the jammed paper, make sure not to touch the transfer roller.
+3. Reset the toner cartridge, and then close the top cover.
+</Item>
+  <Item key="s_xfer_error">Could Not Print	Data transfer to the printer timed out, or a transfer error has occurred.
+%s</Item>
+  <Item key="s_xfer_error2">Click [Resume Job] to resume printing, or click [Cancel Job], and then try to print again.</Item>
+  <Item key="s_change_paper">Check the Paper	Load the specified paper, and then click [Resume Job].
+To print with the currently loaded paper, click [Resume Job].</Item>
+  <Item key="s_change_paper2">Check the Paper	Load the specified paper.</Item>
+  <Item key="s_no_paper2_5">Out of Paper or Paper Could Not be Fed	Load %s paper again, and then press [Paper] to print.</Item>
+  <Item key="s_no_memory">Insufficient Memory 	The computer or server connected to the printer does not have enough memory. 
+Quit all unnecessary applications. </Item>
+  <Item key="s_waiting">Processing	Wait a moment.</Item>
+  <Item key="s_processing">Processing	Please wait a moment.</Item>
+  <Item key="s_ip_block">Cannot Print	Contact the administrator.</Item>
+  <Item key="s_missprint">Check the Printed Output	 The printed output may be printed incorrectly.
+%s</Item>
+  <Item key="s_missprint2">Click [Rasume Job], or try to print again.</Item>
+  <Item key="s_missprint3">Try to print again.</Item>
+  <Item key="s_no_cartridge">Check the Printer	No toner cartridge or the paper is left inside the printer.
+
+- No toner cartridge
+Open the top cover and insert a toner cartridge.
+
+- The paper is left inside the printer
+Open the top cover and remove the toner cartridge. Check the paper feed area, the paper delivery area, or inside the printer, and then remove the paper.</Item>
+  <Item key="s_door_open">Top Cover Open	Close the top cover.</Item>
+  <Item key="s_ill_fuser">Fixing Unit Error	Fixing unit error.
+Turn off and unplug the printer, then contact the store where you purchased the printer, or a service representative. When contacting the service representative, inform them of the error code displayed and symptoms.
+Error Code: %04X %04X</Item>
+  <Item key="s_ill_scanner">Scanner Error	Laser scanner unit error.
+Turn off the printer, and then turn it back on again after a moment. If the same error occurs, turn off the printer, then contact the store where you purchased the printer, or a service representative. When contacting the service representative, inform them of the error code displayed and symptoms.
+Error Code: %04X %04X</Item>
+  <Item key="s_size_unknown">Paper </Item>
+  <Item key="s_size_a4">[A4] </Item>
+  <Item key="s_size_a5">[A5] </Item>
+  <Item key="s_size_b5">[B5] </Item>
+  <Item key="s_size_executive">[Executive] </Item>
+  <Item key="s_size_legal">[Legal] </Item>
+  <Item key="s_size_letter">[Letter] </Item>
+  <Item key="s_size_postcard">[Postcard] </Item>
+  <Item key="s_size_dbl_postcard">[Double Postcard] </Item>
+  <Item key="s_size_env_c5">[Envelope C5] </Item>
+  <Item key="s_size_env_10">[Envelope COM10] </Item>
+  <Item key="s_size_env_monarch">[Envelope Monarch] </Item>
+  <Item key="s_size_env_dl">[Envelope DL] </Item>
+  <Item key="s_size_env_y4">[Envelope YOUGATA 4] </Item>
+  <Item key="s_size_env_y2">[Envelope YOUGATA 2] </Item>
+  <Item key="s_size_env_k2">[Envelope KAKUGATA 2] </Item>
+  <Item key="s_size_4x1_postcard">[4 on 1 Postcard]</Item>
+  <Item key="s_size_indexcard">[Index Card] </Item>
+  <Item key="s_size_16K">[16K] </Item>
+  <Item key="s_size_custom">[Custom Paper] </Item>
+  <Item key="s_str_1">1</Item>
+  <Item key="s_str_2">2</Item>
+  <Item key="s_str_3">3</Item>
+  <Item key="s_str_4">4</Item>
+  <Item key="s_comma">, </Item>
+ </MsgList>
+ <MsgList locale="ja">
+  <Item key="s_warn_toner_mem">印刷できます	 トナーカートリッジとの接続に問題がある可能性があります。</Item>
+  <Item key="s_printing">印刷中です	 </Item>
+  <Item key="s_check_paper">用紙を確認してください	%s</Item>
+  <Item key="s_check_paper_sub1">指定したサイズの用紙をセットしてください。</Item>
+  <Item key="s_check_paper_sub2">指定したサイズの用紙をセットし、[再開]をクリックしてください。
+現在セットされている用紙で印刷する場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_canceled">印刷中止中です	  </Item>
+  <Item key="s_cleaning">クリーニング中です	しばらくお待ちください。</Item>
+  <Item key="s_ready">印刷できます	 </Item>
+  <Item key="s_servernotready">サーバと通信できません	サーバーがダウンしている可能性があります。
+サーバーを確認してください。</Item>
+  <Item key="s_invalid_port">ポートが違います	プリンタがサポートしていないポートに接続されています。
+ポートを確認してください。</Item>
+  <Item key="s_check_status">ステータス取得中です	しばらくお待ちください。</Item>
+  <Item key="s_busy">ポートが使用されています	ポートが他のデバイスに使用されています。</Item>
+  <Item key="s_adapter">ネットワークボードエラー	ネットワークケーブルが接続されていないか、プリンタの電源が入っていません。確認してください。</Item>
+  <Item key="s_cant_comm">通信エラー	以下の項目を確認してください。
+· プリンタの電源は入っていますか?
+· ケーブルは正しく接続されていますか?</Item>
+  <Item key="s_incompatible">互換性のないプリンタです	 接続されているプリンタは使用できません。</Item>
+  <Item key="s_invalid_data">互換性のないプリンタです	接続されているプリンタは使用できません。</Item>
+  <Item key="s_disk_full">ディスク容量が不足しています	プリンタが接続されているコンピュータまたはサーバにある不要なファイルを削除し、[再開]をクリックしてください。</Item>
+  <Item key="s_disk_full2">ディスク容量が不足しています	プリンタが接続されているコンピュータまたはサーバにある不要なファイルを削除してください。</Item>
+  <Item key="s_service_call">サービスエラー	プリンタに異常があります。
+電源をいったん切り、しばらく待ってから電源を入れなおしてください。電源を入れなおしてもサービスエラーが表示される場合は、電源を切り、お買い求めの販売店またはサービス店にご連絡ください。ご連絡の際には、表示されたエラーコードと症状をお知らせください。
+エラーコード : %04X %04X</Item>
+  <Item key="s_jam2">紙がつまりました	つまった用紙を無理に引き抜かないで、以下の手順にしたがって取り除いてください。
+1. 上カバーを開け、トナーカートリッジを取り外す。
+2. 給紙部、排紙部、または本体内部を確認して、つまった用紙を取り除く。
+ · 用紙を取り除くとき、転写ローラに触れないようにしてください。
+3. トナーカートリッジを取り付け、上カバーを閉じる。</Item>
+  <Item key="s_xfer_error">印刷できませんでした	プリンタへのデータ転送が間に合わなかったか、転送エラーが発生しました。
+%s</Item>
+  <Item key="s_xfer_error2">[再開]をクリックして印刷を再開するか、[印刷中止]をクリックして印刷しなおしてください。</Item>
+  <Item key="s_change_paper">用紙を確認してください	指定したサイズの用紙をセットし、[再開]をクリックしてください。
+現在セットされている用紙で印刷する場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_change_paper2">用紙を確認してください。	指定したサイズの用紙をセットしてください。</Item>
+  <Item key="s_no_paper2_5">用紙がないか、給紙できませんでした	%sをセットしなおし、[Paper]キーを押して印刷してください。</Item>
+  <Item key="s_no_memory">メモリが不足しています	プリンタが接続されているコンピュータまたはサーバのメモリが不足しています。
+不要なアプリケーションを終了させてください。</Item>
+  <Item key="s_waiting">準備中です	しばらくお待ちください。</Item>
+  <Item key="s_processing">準備中です	しばらくお待ちください。</Item>
+  <Item key="s_ip_block">印刷ができません	管理者に連絡してください。</Item>
+  <Item key="s_missprint">印刷を確認してください	 正しい印刷結果にならない場合があります。
+%s</Item>
+  <Item key="s_missprint2">[再開]をクリックするか印刷しなおしてください。</Item>
+  <Item key="s_missprint3">印刷しなおしてください。</Item>
+  <Item key="s_no_cartridge">プリンタを確認してください	トナーカートリッジがないか、またはプリンタの内部に用紙が残っています。
+
+· トナーカートリッジがない場合
+上カバーを開けて、トナーカートリッジをセットしてください。
+· 用紙が残っている場合
+上カバーを開けてトナーカートリッジを取り外し、給紙部、排紙部、または本体内部を確認して、残っている用紙を取り除いてください。</Item>
+  <Item key="s_door_open">上カバーが開いています	上カバーをきちんと閉じてください。</Item>
+  <Item key="s_ill_fuser">定着器エラー	定着器に異常があります。
+電源を切り、電源プラグをコンセントから抜いて、お買い求めの販売店またはサービス店にご連絡ください。ご連絡の際には、表示されたエラーコードと症状をお知らせください。
+エラーコード : %04X %04X</Item>
+  <Item key="s_ill_scanner">スキャナエラー	スキャナに異常があります。
+電源をいったん切り、しばらく待ってから電源を入れなおしてください。電源を入れなおしてもスキャナエラーが表示される場合は、電源を切り、お買い求めの販売店またはサービス店にご連絡ください。ご連絡の際には、表示されたエラーコードと症状をお知らせください。
+エラーコード : %04X %04X</Item>
+  <Item key="s_size_unknown">用紙</Item>
+  <Item key="s_size_a4">[A4]</Item>
+  <Item key="s_size_a5">[A5]</Item>
+  <Item key="s_size_b5">[B5]</Item>
+  <Item key="s_size_executive">[エグゼクティブ]</Item>
+  <Item key="s_size_legal">[リーガル]</Item>
+  <Item key="s_size_letter">[レター]</Item>
+  <Item key="s_size_postcard">[はがき]</Item>
+  <Item key="s_size_dbl_postcard">[往復はがき]</Item>
+  <Item key="s_size_env_c5">[Envelope C5]</Item>
+  <Item key="s_size_env_10">[Envelope COM10]</Item>
+  <Item key="s_size_env_monarch">[Envelope Monarch]</Item>
+  <Item key="s_size_env_dl">[Envelope DL]</Item>
+  <Item key="s_size_env_y4">[封筒 洋形4号]</Item>
+  <Item key="s_size_env_y2">[封筒 洋形2号]</Item>
+  <Item key="s_size_4x1_postcard">[4面はがき]</Item>
+  <Item key="s_size_indexcard">[Index Card]</Item>
+  <Item key="s_size_16K">[16K]</Item>
+  <Item key="s_size_custom">[カスタム用紙]</Item>
+  <Item key="s_str_1">1</Item>
+  <Item key="s_str_2">2</Item>
+  <Item key="s_str_3">3</Item>
+  <Item key="s_str_4">4</Item>
+  <Item key="s_comma">、</Item>
+ </MsgList>
+</PswMsgTable>
+

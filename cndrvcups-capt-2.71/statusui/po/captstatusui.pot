@@ -1,0 +1,1372 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-26 18:24+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/interface.c:125
+msgid "Job"
+msgstr ""
+
+#: src/interface.c:132 src/interface.c:323
+msgid "Pause Job"
+msgstr ""
+
+#: src/interface.c:136 src/interface.c:328
+msgid "Resume Job"
+msgstr ""
+
+#: src/interface.c:140 src/interface.c:333
+msgid "Cancel Job"
+msgstr ""
+
+#: src/interface.c:144
+msgid "Options"
+msgstr ""
+
+#: src/interface.c:151
+msgid "Consumables/Counters..."
+msgstr ""
+
+#: src/interface.c:154
+msgid "Consumables Information..."
+msgstr ""
+
+#: src/interface.c:157
+msgid "Counter Information..."
+msgstr ""
+
+#: src/interface.c:160 src/interface.c:3983 src/msgdlg.c:50 src/msgdlg.c:62
+#: src/msgdlg.c:69
+msgid "Cleaning"
+msgstr ""
+
+#: src/interface.c:163
+msgid "Utility"
+msgstr ""
+
+#: src/interface.c:169
+msgid "Cleaning 1..."
+msgstr ""
+
+#: src/interface.c:172
+msgid "Cleaning 2..."
+msgstr ""
+
+#: src/interface.c:175
+msgid "Printing Position Adjustment Print..."
+msgstr ""
+
+#: src/interface.c:178
+msgid "Calibration..."
+msgstr ""
+
+#: src/interface.c:181
+msgid "Out-of-Register Colors Correction..."
+msgstr ""
+
+#: src/interface.c:184
+msgid "Color Mismatch Correction..."
+msgstr ""
+
+#: src/interface.c:187
+msgid "Cleaning..."
+msgstr ""
+
+#: src/interface.c:190
+msgid "Toner Cartridge Replacement..."
+msgstr ""
+
+#: src/interface.c:193
+msgid "Device Settings..."
+msgstr ""
+
+#: src/interface.c:196 src/interface.c:759
+msgid "Device Settings"
+msgstr ""
+
+#: src/interface.c:202
+msgid "Register Paper Size in Cassettes..."
+msgstr ""
+
+#: src/interface.c:205
+msgid "Drawer Settings..."
+msgstr ""
+
+#: src/interface.c:208
+msgid "Cassette Settings..."
+msgstr ""
+
+#: src/interface.c:211
+msgid "Cassette Settings 1..."
+msgstr ""
+
+#: src/interface.c:214
+msgid "Drawer Settings 1..."
+msgstr ""
+
+#: src/interface.c:217
+msgid "Cassette Settings 2..."
+msgstr ""
+
+#: src/interface.c:220
+msgid "Drawer Settings 2..."
+msgstr ""
+
+#: src/interface.c:223
+msgid "Multi-purpose Tray Settings..."
+msgstr ""
+
+#: src/interface.c:226
+msgid "Printing Position Adjustment..."
+msgstr ""
+
+#: src/interface.c:229
+msgid "Settings of the Cancel Job Key..."
+msgstr ""
+
+#: src/interface.c:232
+msgid "Sleep Settings..."
+msgstr ""
+
+#: src/interface.c:235
+msgid "Power Save Settings..."
+msgstr ""
+
+#: src/interface.c:238
+msgid "Reset Part Counters..."
+msgstr ""
+
+#: src/interface.c:241
+msgid "Startup Settings..."
+msgstr ""
+
+#: src/interface.c:244
+msgid "Network Settings..."
+msgstr ""
+
+#: src/interface.c:247
+msgid "Assisting Print Settings..."
+msgstr ""
+
+#: src/interface.c:250
+msgid "Calibration Settings..."
+msgstr ""
+
+#: src/interface.c:258 src/interface.c:268
+msgid "Hide Statusmonitor"
+msgstr ""
+
+#: src/interface.c:289
+msgid "Message"
+msgstr ""
+
+#: src/interface.c:555
+msgid "Printing Position Adjustment Print"
+msgstr ""
+
+#: src/interface.c:578 src/ppapdlg.c:58
+msgid ""
+"Print a pattern for Printing Position Adjustment.\n"
+"Select the paper source to check and click [OK].\n"
+"When adjusting the printing position after printing,\n"
+"adjust it in the [Device Settings] dialog in the [Option] menu.\n"
+msgstr ""
+
+#: src/interface.c:594 src/ppapdlg.c:65
+msgid "Multi-purpose Tray"
+msgstr ""
+
+#: src/interface.c:601 src/ppapdlg.c:71
+msgid "Cassette 1"
+msgstr ""
+
+#: src/interface.c:607 src/ppapdlg.c:77
+msgid "Cassette 2"
+msgstr ""
+
+#: src/interface.c:613 src/ppapdlg.c:83
+msgid "Cassette 3"
+msgstr ""
+
+#: src/interface.c:619 src/ppapdlg.c:89
+msgid "Cassette 4"
+msgstr ""
+
+#: src/interface.c:625
+msgid "Paper Source"
+msgstr ""
+
+#: src/interface.c:629
+msgid "Check Duplex Unit Also"
+msgstr ""
+
+#: src/interface.c:642 src/interface.c:944 src/interface.c:1082
+#: src/interface.c:1282 src/interface.c:1762 src/interface.c:1918
+#: src/interface.c:2029 src/interface.c:2335 src/interface.c:2624
+#: src/interface.c:2783 src/interface.c:2915 src/interface.c:3076
+#: src/interface.c:3169 src/interface.c:3635 src/interface.c:4071
+#: src/interface.c:4213
+msgid "OK"
+msgstr ""
+
+#: src/interface.c:647 src/interface.c:949 src/interface.c:1087
+#: src/interface.c:1287 src/interface.c:1923 src/interface.c:2034
+#: src/interface.c:2340 src/interface.c:2629 src/interface.c:2788
+#: src/interface.c:2920 src/interface.c:3081 src/interface.c:3174
+#: src/interface.c:3640 src/interface.c:4076 src/interface.c:4218
+msgid "Cancel "
+msgstr ""
+
+#: src/interface.c:781
+msgid "2-sided Special Mode"
+msgstr ""
+
+#: src/interface.c:785
+msgid "Graphics Special Mode"
+msgstr ""
+
+#: src/interface.c:789
+msgid "Lighten Flicker Mode"
+msgstr ""
+
+#: src/interface.c:801 src/interface.c:3269
+msgid "Printing Position Adjustment"
+msgstr ""
+
+#: src/interface.c:819
+msgid "Multi-purpose Tray:"
+msgstr ""
+
+#: src/interface.c:830 src/interface.c:850 src/interface.c:870
+#: src/interface.c:890 src/interface.c:910 src/interface.c:930
+msgid "  mm (-5.0 to 5.0)  "
+msgstr ""
+
+#: src/interface.c:839 src/interface.c:1175 src/regipaperdlg.c:475
+msgid "Cassette 1:"
+msgstr ""
+
+#: src/interface.c:859 src/interface.c:1200 src/regipaperdlg.c:481
+msgid "Cassette 2:"
+msgstr ""
+
+#: src/interface.c:879 src/interface.c:1224 src/regipaperdlg.c:487
+msgid "Cassette 3:"
+msgstr ""
+
+#: src/interface.c:899 src/interface.c:1248 src/regipaperdlg.c:493
+msgid "Cassette 4:"
+msgstr ""
+
+#: src/interface.c:919
+msgid "Duplex Unit:"
+msgstr ""
+
+#: src/interface.c:1152 src/regipaperdlg.c:54
+msgid "Register Paper Size in Cassettes"
+msgstr ""
+
+#: src/interface.c:1269
+msgid "Register Paper Sizes"
+msgstr ""
+
+#: src/interface.c:1406
+msgid "Consumables/Counters"
+msgstr ""
+
+#: src/interface.c:1428
+msgid "Magenta:"
+msgstr ""
+
+#: src/interface.c:1437
+msgid "Black:"
+msgstr ""
+
+#: src/interface.c:1446
+msgid "Yellow:"
+msgstr ""
+
+#: src/interface.c:1455
+msgid "Cyan:"
+msgstr ""
+
+#: src/interface.c:1523
+msgid "Toner Cartridge Information"
+msgstr ""
+
+#: src/interface.c:1560
+msgid "Waste Toner Container Information"
+msgstr ""
+
+#: src/interface.c:1597
+msgid "Drum Cartridge Information"
+msgstr ""
+
+#: src/interface.c:1610
+msgid "Black & White:"
+msgstr ""
+
+#: src/interface.c:1619
+msgid "Color:"
+msgstr ""
+
+#: src/interface.c:1644
+msgid "Black & White S:"
+msgstr ""
+
+#: src/interface.c:1652
+msgid "Black & White L:"
+msgstr ""
+
+#: src/interface.c:1660
+msgid "Color S:"
+msgstr ""
+
+#: src/interface.c:1668
+msgid "Color L:"
+msgstr ""
+
+#: src/interface.c:1704
+msgid "Number of 2-sided Printing Sheets:"
+msgstr ""
+
+#: src/interface.c:1712
+msgid "Number of Jobs:"
+msgstr ""
+
+#: src/interface.c:1741
+msgid "Total Printed Pages:"
+msgstr ""
+
+#: src/interface.c:1749
+msgid "Number of Total Printed Pages"
+msgstr ""
+
+#: src/interface.c:1856 src/sleepsdlg.c:72 src/sleepsdlg.c:74
+msgid "Sleep Settings"
+msgstr ""
+
+#: src/interface.c:1875 src/sleepsdlg.c:57
+msgid "Use Sleep Mode"
+msgstr ""
+
+#: src/interface.c:1883
+msgid "Time to Enter Sleep Mode:   "
+msgstr ""
+
+#: src/interface.c:1903
+msgid "minutes"
+msgstr ""
+
+#: src/interface.c:1983
+msgid "Settings of the Cancel Job Key"
+msgstr ""
+
+#: src/interface.c:2002
+msgid "Enable to Cancel Error Jobs"
+msgstr ""
+
+#: src/interface.c:2016
+msgid "Enable to Cancel Any Processing Print Job"
+msgstr ""
+
+#: src/interface.c:2117
+msgid "Network Settings"
+msgstr ""
+
+#: src/interface.c:2135
+msgid "IP Address Setting with:"
+msgstr ""
+
+#: src/interface.c:2143
+msgid "RARP"
+msgstr ""
+
+#: src/interface.c:2149
+msgid "BOOTP"
+msgstr ""
+
+#: src/interface.c:2155
+msgid "DHCP"
+msgstr ""
+
+#: src/interface.c:2161
+msgid "IP Address:"
+msgstr ""
+
+#: src/interface.c:2169
+msgid "Subnet Mask:"
+msgstr ""
+
+#: src/interface.c:2177
+msgid "Gateway Address:"
+msgstr ""
+
+#: src/interface.c:2303
+msgid "TCP/IP"
+msgstr ""
+
+#: src/interface.c:2312
+msgid "Password:"
+msgstr ""
+
+#: src/interface.c:2491
+msgid "Assisting Print Settings"
+msgstr ""
+
+#: src/interface.c:2510
+msgid "Print Mixed Color/B&W Documents at High Speed   "
+msgstr ""
+
+#: src/interface.c:2518
+msgid "Print Mode:       "
+msgstr ""
+
+#: src/interface.c:2537
+msgid "          "
+msgstr ""
+
+#: src/interface.c:2542
+msgid "Reduce Vertical Streaks on Outputs"
+msgstr ""
+
+#: src/interface.c:2546
+msgid "Prevent Poor Quality after Long Idle"
+msgstr ""
+
+#: src/interface.c:2550
+msgid "Clean Every 2 Sheets in Continuous Print"
+msgstr ""
+
+#: src/interface.c:2554
+msgid "Adjust Temperature during Standby"
+msgstr ""
+
+#: src/interface.c:2557
+msgid "Adjust Output When Printing Plain 16K"
+msgstr ""
+
+#: src/interface.c:2564
+msgid "Print Quiet Mode"
+msgstr ""
+
+#: src/interface.c:2574
+msgid "Color Mismatch Correction Frequency:       "
+msgstr ""
+
+#: src/interface.c:2596
+msgid "Paper Jam Reduction(Plain L, 2-sided):        "
+msgstr ""
+
+#: src/interface.c:2730
+msgid "Startup Settings"
+msgstr ""
+
+#: src/interface.c:2749
+msgid "Quality Correction:"
+msgstr ""
+
+#: src/interface.c:2846 src/cassetteset2dlg.c:61
+msgid "Cassette Settings 2"
+msgstr ""
+
+#: src/interface.c:2864 src/interface.c:2871 src/interface.c:3000
+#: src/interface.c:3007
+msgid " "
+msgstr ""
+
+#: src/interface.c:2878 src/cassetteset2dlg.c:72
+msgid "Use Cassette 1 as Target of Auto Select"
+msgstr ""
+
+#: src/interface.c:2884 src/cassetteset2dlg.c:78
+msgid "Use Cassette 2 as Target of Auto Select"
+msgstr ""
+
+#: src/interface.c:2890 src/cassetteset2dlg.c:84
+msgid "Use Cassette 3 as Target of Auto Select"
+msgstr ""
+
+#: src/interface.c:2896 src/cassetteset2dlg.c:90
+msgid "Use Cassette 4 as Target of Auto Select"
+msgstr ""
+
+#: src/interface.c:2902
+msgid "Auto Select Settings"
+msgstr ""
+
+#: src/interface.c:2982 src/msgdlg.c:79
+msgid "Reset Part Counters"
+msgstr ""
+
+#: src/interface.c:3014
+msgid "Fixing Unit"
+msgstr ""
+
+#: src/interface.c:3020
+msgid "ITB Unit"
+msgstr ""
+
+#: src/interface.c:3026
+msgid "Secondary Transfer Roller"
+msgstr ""
+
+#: src/interface.c:3032 src/resetunitdlg.c:56
+msgid "Paper Feed Roller (Multi-purpose Tray)"
+msgstr ""
+
+#: src/interface.c:3038 src/resetunitdlg.c:62
+msgid "Paper Feed Roller (Cassette 1)"
+msgstr ""
+
+#: src/interface.c:3044 src/resetunitdlg.c:68
+msgid "Paper Feed Roller (Cassette 2)"
+msgstr ""
+
+#: src/interface.c:3050 src/resetunitdlg.c:74
+msgid "Paper Feed Roller (Cassette 3)"
+msgstr ""
+
+#: src/interface.c:3056 src/resetunitdlg.c:80
+msgid "Paper Feed Roller (Cassette 4)"
+msgstr ""
+
+#: src/interface.c:3062
+msgid "Select parts and click [OK] to reset the counter after replacing parts."
+msgstr ""
+
+#: src/interface.c:3137
+msgid "Multi-purpose Tray Settings"
+msgstr ""
+
+#: src/interface.c:3156
+msgid "Prioritize Using Multi-purpose Tray"
+msgstr ""
+
+#: src/interface.c:3282
+msgid "Vertical Adjustment"
+msgstr ""
+
+#: src/interface.c:3289 src/ppavhdlg.c:66
+msgid "Vertical Adjustment with Multi-purpose Tray:"
+msgstr ""
+
+#: src/interface.c:3296 src/ppavhdlg.c:72
+msgid "Vertical Adjustment with Cassette 1:"
+msgstr ""
+
+#: src/interface.c:3303 src/ppavhdlg.c:78
+msgid "Vertical Adjustment with Cassette 2:"
+msgstr ""
+
+#: src/interface.c:3310 src/ppavhdlg.c:84
+msgid "Vertical Adjustment with Cassette 3:"
+msgstr ""
+
+#: src/interface.c:3317 src/ppavhdlg.c:90
+msgid "Vertical Adjustment with Cassette 4:"
+msgstr ""
+
+#: src/interface.c:3324
+msgid "Vertical Adjustment with Duplex Unit:"
+msgstr ""
+
+#: src/interface.c:3337
+msgid "Horizontal Adjustment"
+msgstr ""
+
+#: src/interface.c:3344 src/ppavhdlg.c:96
+msgid "Horizontal Adjustment with Multi-purpose Tray:"
+msgstr ""
+
+#: src/interface.c:3351 src/ppavhdlg.c:102
+msgid "Horizontal Adjustment with Cassette 1:"
+msgstr ""
+
+#: src/interface.c:3358 src/ppavhdlg.c:108
+msgid "Horizontal Adjustment with Cassette 2:"
+msgstr ""
+
+#: src/interface.c:3365 src/ppavhdlg.c:114
+msgid "Horizontal Adjustment with Cassette 3:"
+msgstr ""
+
+#: src/interface.c:3372 src/ppavhdlg.c:120
+msgid "Horizontal Adjustment with Cassette 4:"
+msgstr ""
+
+#: src/interface.c:3379
+msgid "Horizontal Adjustment with Duplex Unit:"
+msgstr ""
+
+#: src/interface.c:3542 src/interface.c:3549 src/interface.c:3556
+#: src/interface.c:3563 src/interface.c:3570 src/interface.c:3577
+#: src/interface.c:3584 src/interface.c:3591 src/interface.c:3598
+#: src/interface.c:3605 src/interface.c:3612 src/interface.c:3619
+msgid "mm"
+msgstr ""
+
+#: src/interface.c:3783
+msgid "Toner Cartridge Replacement"
+msgstr ""
+
+#: src/interface.c:3815
+msgid "Replaceable Toner Cartridge:"
+msgstr ""
+
+#: src/interface.c:3826
+msgid "Toner Cartridge:"
+msgstr ""
+
+#: src/interface.c:3860 src/tonerreplacementdlg.c:60
+msgid "Magenta"
+msgstr ""
+
+#: src/interface.c:3869 src/tonerreplacementdlg.c:61
+msgid "Yellow"
+msgstr ""
+
+#: src/interface.c:3878 src/tonerreplacementdlg.c:62
+msgid "Black"
+msgstr ""
+
+#: src/interface.c:3887 src/tonerreplacementdlg.c:59
+msgid "Cyan"
+msgstr ""
+
+#: src/interface.c:3905
+msgid "Finish Replacing"
+msgstr ""
+
+#: src/interface.c:4016
+msgid "Fixing Unit Cleaning 1"
+msgstr ""
+
+#: src/interface.c:4023
+msgid "Fixing Unit Cleaning 2"
+msgstr ""
+
+#: src/interface.c:4029
+msgid "Drum Cleaning 1"
+msgstr ""
+
+#: src/interface.c:4035
+msgid "Drum Cleaning 2"
+msgstr ""
+
+#: src/interface.c:4041
+msgid "Cleaning Type"
+msgstr ""
+
+#: src/interface.c:4050
+msgid ""
+"Performs Cleaning.\n"
+"To perform Fixing Unit Cleaning, check that the correct size paper is loaded "
+"in the paper source, and then click [OK]."
+msgstr ""
+
+#: src/interface.c:4056
+msgid "See the instruction manual for more information about cleaning."
+msgstr ""
+
+#: src/interface.c:4142
+msgid "Calibration Settings"
+msgstr ""
+
+#: src/interface.c:4155
+msgid "Use Periodical Calibration Timer"
+msgstr ""
+
+#: src/interface.c:4163
+msgid "Time:"
+msgstr ""
+
+#: src/interface.c:4173
+msgid ":"
+msgstr ""
+
+#: src/interface.c:4185
+msgid "Startup Calibration:"
+msgstr ""
+
+#: src/support.c:110 src/support.c:134
+#, c-format
+msgid "Couldn't find pixmap file: %s"
+msgstr ""
+
+#: src/msgdlg.c:45 src/msgdlg.c:75
+msgid "Performs Cleaning 1."
+msgstr ""
+
+#: src/msgdlg.c:45 src/msgdlg.c:75
+msgid "Cleaning 1"
+msgstr ""
+
+#: src/msgdlg.c:46 src/msgdlg.c:76
+msgid "Performs Cleaning 2."
+msgstr ""
+
+#: src/msgdlg.c:46 src/msgdlg.c:76
+msgid "Cleaning 2"
+msgstr ""
+
+#: src/msgdlg.c:47
+msgid "Printing <Print position adjustment>"
+msgstr ""
+
+#: src/msgdlg.c:47
+msgid "Printing"
+msgstr ""
+
+#: src/msgdlg.c:48
+msgid "A communication error has occured."
+msgstr ""
+
+#: src/msgdlg.c:48
+msgid "Printer Infomation"
+msgstr ""
+
+#: src/msgdlg.c:49
+msgid "Hides Statusmonitor window."
+msgstr ""
+
+#: src/msgdlg.c:49
+msgid "Hide Status Monitor"
+msgstr ""
+
+#: src/msgdlg.c:50 src/msgdlg.c:69
+msgid "Performs Cleaning."
+msgstr ""
+
+#: src/msgdlg.c:51
+msgid "Could not set information to printer."
+msgstr ""
+
+#: src/msgdlg.c:51 src/msgdlg.c:52 src/msgdlg.c:53 src/msgdlg.c:54
+#: src/msgdlg.c:55 src/msgdlg.c:56 src/msgdlg.c:58 src/msgdlg.c:59
+#: src/msgdlg.c:60 src/msgdlg.c:61 src/msgdlg.c:63 src/msgdlg.c:64
+#: src/msgdlg.c:65 src/msgdlg.c:66 src/msgdlg.c:67 src/msgdlg.c:68
+#: src/msgdlg.c:72 src/msgdlg.c:73 src/msgdlg.c:74 src/msgdlg.c:78
+msgid "Warning"
+msgstr ""
+
+#: src/msgdlg.c:52
+msgid "Could not get printer information."
+msgstr ""
+
+#: src/msgdlg.c:53
+msgid "Could not perform calibration."
+msgstr ""
+
+#: src/msgdlg.c:54
+msgid ""
+"Could not get counter information or information about remaining amount of "
+"consumables."
+msgstr ""
+
+#: src/msgdlg.c:55
+msgid "Could not get information about remaining amount of consumables."
+msgstr ""
+
+#: src/msgdlg.c:56
+msgid "Could not get print counter information."
+msgstr ""
+
+#: src/msgdlg.c:57 src/msgdlg.c:71
+msgid "Performs Calibration."
+msgstr ""
+
+#: src/msgdlg.c:57 src/msgdlg.c:71
+msgid "Calibration"
+msgstr ""
+
+#: src/msgdlg.c:58
+msgid "The entered IP address is incorrect."
+msgstr ""
+
+#: src/msgdlg.c:59
+msgid "The entered gateway address is incorrect."
+msgstr ""
+
+#: src/msgdlg.c:60
+msgid "The entered subnet mask is incorrect."
+msgstr ""
+
+#: src/msgdlg.c:61
+msgid "The password is incorrect. Enter the password again."
+msgstr ""
+
+#: src/msgdlg.c:62
+msgid ""
+"Performs Cleaning.\n"
+"Load A4 (or Letter) paper in the paper source."
+msgstr ""
+
+#: src/msgdlg.c:63
+msgid ""
+"To use A4 paper for 2-sided printing, set the paper size switch lever on the "
+"back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+
+#: src/msgdlg.c:64
+msgid ""
+"To use Letter paper for 2-sided printing, set the paper size switch lever on "
+"the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+
+#: src/msgdlg.c:65
+msgid ""
+"To use Legal paper for 2-sided printing, set the paper size switch lever on "
+"the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+
+#: src/msgdlg.c:66
+msgid ""
+"To use A4 or Letter paper for 2-sided printing, set the paper size switch "
+"lever on the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+
+#: src/msgdlg.c:67
+msgid ""
+"To use A4 or Legal paper for 2-sided printing, set the paper size switch "
+"lever on the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+
+#: src/msgdlg.c:68
+msgid ""
+"To use Letter or Legal paper for 2-sided printing, set the paper size switch "
+"lever on the back of the printer correctly.\n"
+"Failure to do so may result in paper jams.\n"
+"See the instruction manual for more information."
+msgstr ""
+
+#: src/msgdlg.c:70
+msgid "Performs out-of-register colors correction.        "
+msgstr ""
+
+#: src/msgdlg.c:70
+msgid "Out-of-Register Colors Correction"
+msgstr ""
+
+#: src/msgdlg.c:72
+msgid "Could not perform Out-of-Register Colors Correction."
+msgstr ""
+
+#: src/msgdlg.c:73
+msgid ""
+"Could not perform cleaning.\n"
+"Check the connection to the printer and the printer status, and then try "
+"again."
+msgstr ""
+
+#: src/msgdlg.c:74
+msgid ""
+"To make the changed setting in [Reduce Vertical Streaks on Outputs] "
+"effective,\n"
+"you need to turn the printer off, and then back on again."
+msgstr ""
+
+#: src/msgdlg.c:78
+msgid ""
+"To make the change of network settings effective, you need to turn off the "
+"printer and then turn it back on again after a moment."
+msgstr ""
+
+#: src/msgdlg.c:79
+msgid "Part counters will be reset. Are you sure you want to reset them?"
+msgstr ""
+
+#: src/msgdlg.c:80
+msgid "Performs Color Mismatch Correction."
+msgstr ""
+
+#: src/msgdlg.c:80
+msgid "Color Mismatch Correction"
+msgstr ""
+
+#: src/data_process.c:52
+msgid "Unknown Error"
+msgstr ""
+
+#: src/data_process.c:53
+msgid "Cannot Open FIFO"
+msgstr ""
+
+#: src/data_process.c:54
+msgid "No Specified Printer"
+msgstr ""
+
+#: src/data_process.c:55
+msgid "Printer Error"
+msgstr ""
+
+#: src/data_process.c:56
+msgid "Check the <Printer ***> of /etc/ccpd.conf"
+msgstr ""
+
+#: src/data_process.c:57
+msgid "Check the DevicePath of /etc/ccpd.conf"
+msgstr ""
+
+#: src/data_process.c:58
+msgid ""
+"Check the fifo path\n"
+" - ccp:/var/ccpd/fifo<*>"
+msgstr ""
+
+#: src/regipaperdlg.c:55
+msgid "Cassette Settings 1"
+msgstr ""
+
+#: src/regipaperdlg.c:56
+msgid "Cassette Settings"
+msgstr ""
+
+#: src/regipaperdlg.c:57
+msgid "Drawer Settings 1"
+msgstr ""
+
+#: src/regipaperdlg.c:58
+msgid "Drawer Settings"
+msgstr ""
+
+#: src/regipaperdlg.c:75 src/regipaperdlg.c:102 src/regipaperdlg.c:136
+msgid "Letter"
+msgstr ""
+
+#: src/regipaperdlg.c:76 src/regipaperdlg.c:103 src/regipaperdlg.c:137
+msgid "Legal"
+msgstr ""
+
+#: src/regipaperdlg.c:77 src/regipaperdlg.c:104 src/regipaperdlg.c:138
+msgid "Ledger"
+msgstr ""
+
+#: src/regipaperdlg.c:78 src/regipaperdlg.c:105 src/regipaperdlg.c:139
+msgid "Statement"
+msgstr ""
+
+#: src/regipaperdlg.c:79 src/regipaperdlg.c:106 src/regipaperdlg.c:140
+msgid "Executive"
+msgstr ""
+
+#: src/regipaperdlg.c:80 src/regipaperdlg.c:107 src/regipaperdlg.c:141
+msgid "A3"
+msgstr ""
+
+#: src/regipaperdlg.c:81 src/regipaperdlg.c:108 src/regipaperdlg.c:142
+msgid "B4"
+msgstr ""
+
+#: src/regipaperdlg.c:82 src/regipaperdlg.c:109 src/regipaperdlg.c:143
+msgid "A4"
+msgstr ""
+
+#: src/regipaperdlg.c:83 src/regipaperdlg.c:110 src/regipaperdlg.c:144
+msgid "B5"
+msgstr ""
+
+#: src/regipaperdlg.c:84 src/regipaperdlg.c:111 src/regipaperdlg.c:145
+msgid "A5"
+msgstr ""
+
+#: src/regipaperdlg.c:85 src/regipaperdlg.c:112 src/regipaperdlg.c:147
+msgid "Postcard"
+msgstr ""
+
+#: src/regipaperdlg.c:86 src/regipaperdlg.c:113 src/regipaperdlg.c:148
+msgid "Relay Postcard"
+msgstr ""
+
+#: src/regipaperdlg.c:87 src/regipaperdlg.c:114 src/regipaperdlg.c:149
+msgid "4 on 1 Postcard"
+msgstr ""
+
+#: src/regipaperdlg.c:88 src/regipaperdlg.c:115 src/regipaperdlg.c:150
+msgid "Envelope YOUGATA4"
+msgstr ""
+
+#: src/regipaperdlg.c:89 src/regipaperdlg.c:116 src/regipaperdlg.c:151
+msgid "Envelope YOUGATA2"
+msgstr ""
+
+#: src/regipaperdlg.c:90 src/regipaperdlg.c:117 src/regipaperdlg.c:154
+msgid "Envelope Monarch"
+msgstr ""
+
+#: src/regipaperdlg.c:91 src/regipaperdlg.c:118 src/regipaperdlg.c:155
+msgid "Envelope COM10"
+msgstr ""
+
+#: src/regipaperdlg.c:92 src/regipaperdlg.c:119 src/regipaperdlg.c:156
+msgid "Envelope C5"
+msgstr ""
+
+#: src/regipaperdlg.c:93 src/regipaperdlg.c:120 src/regipaperdlg.c:157
+msgid "Envelope DL"
+msgstr ""
+
+#: src/regipaperdlg.c:94 src/regipaperdlg.c:121 src/regipaperdlg.c:158
+msgid "Envelope B5"
+msgstr ""
+
+#: src/regipaperdlg.c:95 src/regipaperdlg.c:122 src/regipaperdlg.c:159
+msgid "Index Card"
+msgstr ""
+
+#: src/regipaperdlg.c:96 src/regipaperdlg.c:123 src/regipaperdlg.c:160
+msgid "16K"
+msgstr ""
+
+#: src/regipaperdlg.c:97 src/regipaperdlg.c:124 src/regipaperdlg.c:161
+msgid "12x18"
+msgstr ""
+
+#: src/regipaperdlg.c:125 src/regipaperdlg.c:162
+msgid "Envelope KAKUGATA2"
+msgstr ""
+
+#: src/regipaperdlg.c:126 src/regipaperdlg.c:163
+msgid "8K"
+msgstr ""
+
+#: src/regipaperdlg.c:128 src/regipaperdlg.c:164
+msgid "Foolscap"
+msgstr ""
+
+#: src/regipaperdlg.c:135 src/asstprtsdlg.c:57
+msgid "Auto"
+msgstr ""
+
+#: src/regipaperdlg.c:146
+msgid "A6"
+msgstr ""
+
+#: src/regipaperdlg.c:152
+msgid "Envelope NAGAGATA3"
+msgstr ""
+
+#: src/regipaperdlg.c:153
+msgid "Envelope YOUGATANAGA3"
+msgstr ""
+
+#: src/regipaperdlg.c:476
+msgid "Paper Size in Drawer 1:"
+msgstr ""
+
+#: src/regipaperdlg.c:482
+msgid "Paper Size in Drawer 2:"
+msgstr ""
+
+#: src/regipaperdlg.c:488
+msgid "Paper Size in Drawer 3:"
+msgstr ""
+
+#: src/regipaperdlg.c:494
+msgid "Paper Size in Drawer 4:"
+msgstr ""
+
+#: src/ccinfodlg.c:43 src/ccinfodlg.c:54 src/tonerreplacementdlg.c:76
+msgid "Available"
+msgstr ""
+
+#: src/ccinfodlg.c:44 src/ccinfodlg.c:55 src/tonerreplacementdlg.c:77
+msgid "Replacement Needed Soon"
+msgstr ""
+
+#: src/ccinfodlg.c:45
+msgid "Check Cartridge"
+msgstr ""
+
+#: src/ccinfodlg.c:46 src/tonerreplacementdlg.c:78
+msgid "Replace Cartridge"
+msgstr ""
+
+#: src/ccinfodlg.c:47 src/tonerreplacementdlg.c:79
+msgid "Insert Cartridge"
+msgstr ""
+
+#: src/ccinfodlg.c:48 src/ccinfodlg.c:59 src/tonerreplacementdlg.c:80
+msgid "Unknown"
+msgstr ""
+
+#: src/ccinfodlg.c:56
+msgid "Check Container"
+msgstr ""
+
+#: src/ccinfodlg.c:57
+msgid "Replace Container"
+msgstr ""
+
+#: src/ccinfodlg.c:58
+msgid "Insert Container"
+msgstr ""
+
+#: src/ccinfodlg.c:63
+msgid "pages"
+msgstr ""
+
+#: src/ccinfodlg.c:64
+msgid "sheets"
+msgstr ""
+
+#: src/ccinfodlg.c:65
+msgid "jobs"
+msgstr ""
+
+#: src/ccinfodlg.c:689 src/ccinfodlg.c:696 src/ccinfodlg.c:700
+#: src/ccinfodlg.c:707 src/ccinfodlg.c:881 src/ccinfodlg.c:945
+msgid "Counter Information"
+msgstr ""
+
+#: src/ccinfodlg.c:690 src/ccinfodlg.c:697 src/ccinfodlg.c:701
+#: src/ccinfodlg.c:708 src/ccinfodlg.c:713 src/ccinfodlg.c:882
+#: src/ccinfodlg.c:946
+msgid "Counter"
+msgstr ""
+
+#: src/ccinfodlg.c:702
+msgid "Color Print Pages:"
+msgstr ""
+
+#: src/ccinfodlg.c:703
+msgid "B&W Print Pages:"
+msgstr ""
+
+#: src/ccinfodlg.c:866 src/ccinfodlg.c:907 src/ccinfodlg.c:1031
+msgid "Consumables Information"
+msgstr ""
+
+#: src/ccinfodlg.c:948
+msgid "B&W S Print Pages:"
+msgstr ""
+
+#: src/ccinfodlg.c:949
+msgid "B&W L Print Pages:"
+msgstr ""
+
+#: src/ccinfodlg.c:950
+msgid "Color S Print Pages:"
+msgstr ""
+
+#: src/ccinfodlg.c:951
+msgid "Color L Print Pages:"
+msgstr ""
+
+#: src/networksdlg.c:42
+msgid "Auto Detect"
+msgstr ""
+
+#: src/networksdlg.c:43
+msgid "Manual Settings"
+msgstr ""
+
+#: src/asstprtsdlg.c:49 src/asstprtsdlg.c:65
+msgid "Mode 1"
+msgstr ""
+
+#: src/asstprtsdlg.c:50 src/asstprtsdlg.c:66
+msgid "Mode 2"
+msgstr ""
+
+#: src/asstprtsdlg.c:51 src/asstprtsdlg.c:67
+msgid "Mode 3"
+msgstr ""
+
+#: src/asstprtsdlg.c:58
+msgid "Low"
+msgstr ""
+
+#: src/asstprtsdlg.c:59
+msgid "High"
+msgstr ""
+
+#: src/asstprtsdlg.c:64
+msgid "Off"
+msgstr ""
+
+#: src/startupsettingsdlg.c:45 src/calibrationsettingsdlg.c:57
+msgid "Execute Later"
+msgstr ""
+
+#: src/startupsettingsdlg.c:46
+msgid "Execute Immediately (Level 1)"
+msgstr ""
+
+#: src/startupsettingsdlg.c:47
+msgid "Execute Immediately (Level 2)"
+msgstr ""
+
+#: src/sleepsdlg.c:58
+msgid "Enter Power Save Mode after Fixed Period"
+msgstr ""
+
+#: src/sleepsdlg.c:59
+msgid "Enter Sleep Mode after Fixed Period"
+msgstr ""
+
+#: src/sleepsdlg.c:64 src/sleepsdlg.c:66
+msgid "Time to Enter Sleep Mode:"
+msgstr ""
+
+#: src/sleepsdlg.c:65
+msgid "Time to Enter Power Save Mode:"
+msgstr ""
+
+#: src/sleepsdlg.c:73
+msgid "Power Save Settings"
+msgstr ""
+
+#: src/ppapdlg.c:59
+msgid ""
+"Prints a pattern for Printing Position Adjustment.\n"
+"Select the paper source to check and click [OK].\n"
+"After printing the pattern, adjust the printing position in [Options] - "
+"[Device Settings] - [Printing Position Adjustment].\n"
+msgstr ""
+
+#: src/ppapdlg.c:66
+msgid "Multi-purpose Tray "
+msgstr ""
+
+#: src/ppapdlg.c:72
+msgid "Drawer 1"
+msgstr ""
+
+#: src/ppapdlg.c:78
+msgid "Drawer 2"
+msgstr ""
+
+#: src/ppapdlg.c:84
+msgid "Drawer 3"
+msgstr ""
+
+#: src/ppapdlg.c:90
+msgid "Drawer 4"
+msgstr ""
+
+#: src/cassetteset2dlg.c:62
+msgid "Drawer Settings 2"
+msgstr ""
+
+#: src/cassetteset2dlg.c:73
+msgid "Use Drawer 1 as Target of Auto Select"
+msgstr ""
+
+#: src/cassetteset2dlg.c:79
+msgid "Use Drawer 2 as Target of Auto Select"
+msgstr ""
+
+#: src/cassetteset2dlg.c:85
+msgid "Use Drawer 3 as Target of Auto Select"
+msgstr ""
+
+#: src/cassetteset2dlg.c:91
+msgid "Use Drawer 4 as Target of Auto Select"
+msgstr ""
+
+#: src/resetunitdlg.c:57
+msgid "Paper Feed Roller (Multi-purpose Tray) "
+msgstr ""
+
+#: src/resetunitdlg.c:63
+msgid "Paper Feed Roller (Drawer 1)"
+msgstr ""
+
+#: src/resetunitdlg.c:69
+msgid "Paper Feed Roller (Drawer 2)"
+msgstr ""
+
+#: src/resetunitdlg.c:75
+msgid "Paper Feed Roller (Drawer 3)"
+msgstr ""
+
+#: src/resetunitdlg.c:81
+msgid "Paper Feed Roller (Drawer 4)"
+msgstr ""
+
+#: src/ppavhdlg.c:67
+msgid "Vertical Adjustment with Multi-purpose Tray: "
+msgstr ""
+
+#: src/ppavhdlg.c:73
+msgid "Vertical Adjustment with Drawer 1:"
+msgstr ""
+
+#: src/ppavhdlg.c:79
+msgid "Vertical Adjustment with Drawer 2:"
+msgstr ""
+
+#: src/ppavhdlg.c:85
+msgid "Vertical Adjustment with Drawer 3:"
+msgstr ""
+
+#: src/ppavhdlg.c:91
+msgid "Vertical Adjustment with Drawer 4:"
+msgstr ""
+
+#: src/ppavhdlg.c:97
+msgid "Horizontal Adjustment with Multi-purpose Tray: "
+msgstr ""
+
+#: src/ppavhdlg.c:103
+msgid "Horizontal Adjustment with Drawer 1:"
+msgstr ""
+
+#: src/ppavhdlg.c:109
+msgid "Horizontal Adjustment with Drawer 2:"
+msgstr ""
+
+#: src/ppavhdlg.c:115
+msgid "Horizontal Adjustment with Drawer 3:"
+msgstr ""
+
+#: src/ppavhdlg.c:121
+msgid "Horizontal Adjustment with Drawer 4:"
+msgstr ""
+
+#: src/tonerreplacementdlg.c:56
+msgid ""
+"If you click the button of the color of the toner cartridge, the cartridge "
+"will rotate to the replacement position."
+msgstr ""
+
+#: src/tonerreplacementdlg.c:57
+msgid ""
+"Do not open the top cover while the toner cartridges are rotating.\n"
+"When the rotation stops, open the top cover and replace the toner cartridge."
+msgstr ""
+
+#: src/tonerreplacementdlg.c:58
+msgid "Wait a moment."
+msgstr ""
+
+#: src/tonerreplacementdlg.c:63
+msgid "Rotating..."
+msgstr ""
+
+#: src/calibrationsettingsdlg.c:58
+msgid "Execute Immediately"
+msgstr ""

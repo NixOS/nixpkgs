@@ -1,0 +1,16 @@
+Source: cndrvcups-capt
+Section: net
+Priority: optional
+Maintainer: CANON INC. <sup-debian@list.canon.co.jp>
+Build-Depends: debhelper (>= 4.0.0)
+Standards-Version: 3.6.1
+
+Package: cndrvcups-capt
+Architecture: i386 amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, cndrvcups-common (>= 3.21)
+Replaces: cndrvcups-lipslx, cndrvcups-ufr2-uk, cndrvcups-ufr2-us
+Description: Canon CAPT Printer Driver for Linux
+ Canon CAPT Printer Driver for Linux.
+ This CAPT printer driver provides printing functions for Canon LBP printers
+ operating under the CUPS (Common UNIX Printing System) environment.
+

@@ -1,0 +1,13 @@
+Source: cndrvcups-common
+Section: net
+Priority: optional
+Maintainer: CANON INC. <sup-debian@list.canon.co.jp>
+Build-Depends: debhelper (>= 4.0.0), libglib2.0-dev
+Standards-Version: 3.6.1
+
+Package: cndrvcups-common
+Architecture: i386 amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, cupsys | cups, gs-esp | ghostscript (>=9.00), libcups2 | libcupsys2 (>= 1.2.7)
+Replaces: cndrvcups-ufr2-us, cndrvcups-lipslx, cndrvcups-ufr2-uk
+Description: Canon Printer Driver Common Modules Ver.3.21
+ Canon Printer Driver Common Modules.

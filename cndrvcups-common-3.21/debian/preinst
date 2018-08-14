@@ -1,0 +1,10 @@
+#!/bin/sh
+	
+#if [ ! -f /usr/lib/libcups.so.2 ]
+#then
+#	printf "Package libcupsys2 is not installed in default directory.\n"
+#	printf "Before you install the driver, you need to install package libcupsys2 to your system.\n"
+#	exit 1
+#fi
+
+exit 0

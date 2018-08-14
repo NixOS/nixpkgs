@@ -1,0 +1,27 @@
+#!/bin/sh
+
+#if [ ! -d /var/ccpd ] ; then
+#    mkdir /var/ccpd
+#    mkfifo -m 660 /var/ccpd/fifo0
+#    mkfifo -m 660 /var/ccpd/fifo1
+#    mkfifo -m 660 /var/ccpd/fifo2
+#    mkfifo -m 660 /var/ccpd/fifo3
+#    mkfifo -m 660 /var/ccpd/fifo4
+#    mkfifo -m 660 /var/ccpd/fifo5
+#    mkfifo -m 660 /var/ccpd/fifo6
+#    mkfifo -m 660 /var/ccpd/fifo7
+#
+#    chown lp.lp /var/ccpd/*
+#fi
+if [ ! -d /var/captmon ] ; then
+    mkdir /var/captmon
+    chown lp.lp /var/captmon
+fi
+
+if [ -d /usr/share/ppd ] ; then
+	cd /usr/share/cups/model
+	for fn in CN*CAPT*.ppd ; do \
+		ln -sf "/usr/share/cups/model/"$fn /usr/share/ppd/$fn ;
+	done
+fi
+exit 0

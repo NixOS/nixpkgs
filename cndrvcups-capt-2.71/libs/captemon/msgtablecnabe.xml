@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PswMsgTable>
+ <MsgList locale="en">
+  <Item key="s_warn_paperout">Ready to Print	No %s in %s.</Item>
+  <Item key="s_warn_paperout2">Ready to Print	No %s in %s.
+No %s in %s.</Item>
+  <Item key="s_warn_toner1">Ready to Print	The toner cartridge needs to be replaced soon.
+See the instruction manual for more information on how to replace the toner cartridge.</Item>
+  <Item key="s_warn_outputtray">Ready to Print	Remove the paper from the output tray.</Item>
+  <Item key="s_warn_toner_mem">Ready to Print	There may be a connection problem with the toner cartridge.</Item>
+  <Item key="s_printing">Printing	 </Item>
+  <Item key="s_check_paper">Check the Paper	Check if %s paper is loaded in the Multi-purpose Tray.
+%s</Item>
+  <Item key="s_check_paper_sub1">Load the paper again to resume printing.</Item>
+  <Item key="s_check_paper_sub2">Click [Resume Job], or load the paper again to resume printing.</Item>
+  <Item key="s_canceled">Canceling	 </Item>
+  <Item key="s_cleaning">Cleaning	Wait a moment.</Item>
+  <Item key="s_ready">Ready to Print	 </Item>
+  <Item key="s_servernotready">Cannot Communicate with Server	The server may be down.
+Check the server.</Item>
+  <Item key="s_invalid_port">Incorrect Port	The port to which the printer is connected is not supported.
+Check the port.</Item>
+  <Item key="s_check_status">Getting Status	Wait a moment.</Item>
+  <Item key="s_adapter">Network Board Error	The network cable is not connected, or the printer is not turned on. Check these items.</Item>
+  <Item key="s_cant_comm">Communication Error	Check the following:
+- Is the printer turned on?
+- Is the cable properly connected?</Item>
+  <Item key="s_incompatible">Incompatible Printer	The connected printer cannot be used.</Item>
+  <Item key="s_disk_full">Insufficient Disk Space	Delete unnecessary files on the computer or server connected to the printer, and then click [Resume Job].</Item>
+  <Item key="s_disk_full2">Insufficient Disk Space	Delete unnecessary files on the computer or server connected to the printer.</Item>
+  <Item key="s_jam2">Paper Jam inside Printer	Check the following locations and remove jammed paper:
+- Multi-purpose Tray
+- Cassettes
+- Inside the output area
+- Inside the front cover
+See the instruction manual for more information on how to remove jammed paper.
+
+How to check the area inside the output area:
+Open the rear cover on the back of the printer.
+
+How to check the area inside the front cover:
+Open the front cover to remove the toner cartridge, and then open the transport guide.</Item>
+  <Item key="s_xfer_error">Could Not Print	Data transfer to the printer timed out, or a transfer error has occurred.
+%s</Item>
+  <Item key="s_xfer_error2">Click [Resume Job] to resume printing, or click [Cancel Job], and then try to print again.</Item>
+  <Item key="s_change_size">Specified Paper Different from Set Paper	Load %s paper in %s.
+See the instruction manual for more information on how to load paper.
+%s</Item>
+ <Item key="s_change_size_sub">To print with the currently loaded paper, click [Resume Job].</Item>
+ <Item key="s_change_paper">Specified Paper Different from Set Paper	Load %s paper in %s.
+If the specified paper is already loaded in any of the cassettes, register the paper size again in [Options]-[Device Settings]-[Cassette Settings].
+See the instruction manual for more information on how to change the paper size setting.
+%s</Item>
+  <Item key="s_change_paper2">Specified Paper Different from Set Paper	Load %s paper in %s.
+See the instruction manual for more information on how to load paper.
+%s</Item>
+  <Item key="s_change_paper3">Specified Paper Different from Set Paper	Load %s paper in the Multi-purpose Tray.
+See the instruction manual for more information on how to load paper.
+%s</Item>
+  <Item key="s_change_paper_sub">To print with the currently loaded paper, click [Resume Job].</Item>
+  <Item key="s_change_paper_sub2">To print with the currently loaded paper, click [Resume Job].</Item>
+  <Item key="s_no_paper2">Out of Paper	- To feed paper from the cassette
+Load %s paper in the cassette. If the specified paper is properly loaded in the cassette, change the paper size setting in [Options]-[Device Settings]-[Cassette Settings] to resume printing.
+See the instruction manual for more information on how to change the paper size setting.
+
+- To feed paper from the Multi-purpose Tray
+Load the paper in the Multi-purpose Tray to resume printing.</Item>
+  <Item key="s_no_paper2_2">Out of Paper	Load %s paper in %s.
+See the instruction manual for more information on how to load paper.</Item>
+  <Item key="s_no_paper2_3">Out of Paper	Load the paper in the Multi-purpose Tray to resume printing.
+
+- To feed paper from the cassette
+Specify in the printer driver the cassette loaded with the type of paper to use, and then try to print again.</Item>
+  <Item key="s_no_paper2_4">Out of Paper	Load %s paper in %s.
+See the instruction manual for more information on how to load paper.
+To print with the paper currently loaded in the Multi-purpose Tray, click [Resume Job].</Item>
+
+  <Item key="s_no_memory">Insufficient Memory 	The computer or server connected to the printer does not have enough memory.
+Quit all unnecessary applications.</Item>
+  <Item key="s_output_full">Output Tray Is Full	Remove the paper from the output tray.</Item>
+  <Item key="s_waiting">Processing		Wait a moment.</Item>  
+  <Item key="s_ip_block">Cannot Print	Contact the administrator.</Item>
+  <Item key="s_missprint">Check the Printed Output	The printed output may be printed incorrectly.
+%s</Item>
+  <Item key="s_missprint2">Click [Resume Job], or try to print again.</Item>
+  <Item key="s_missprint3">Try to print again.</Item>
+  <Item key="s_no_cartridge">No Toner Cartridge	Open the front cover and insert a toner cartridge, and then close the front cover.
+See the instruction manual for more information on how to insert a toner cartridge.</Item>
+  <Item key="s_door_open">Front Cover Open	Close the front cover.</Item>
+  <Item key="s_firm_update">Updating Firmware	Wait a moment.</Item>
+  <Item key="s_printing_cs">Printing a Cleaning Page	Wait a moment.</Item>
+  <Item key="s_service_call">Service Error	Printer error.
+Turn off the printer, and then turn it back on again after a moment. If the same error occurs, turn off the printer, then contact the store where you purchased the printer, or a service representative. When contacting the service representative, inform them of the error code displayed and symptoms.
+Error Code: %04X %04X</Item>
+  <Item key="s_set_cleaningpaper">Start Cleaning	Remove any paper that is loaded in the Multi-purpose Tray.
+Place the print side of the cleaning page face up in the Multi-purpose Tray to start cleaning.</Item>
+  <Item key="s_size_unknown">Paper </Item>
+  <Item key="s_size_a4">[A4] </Item>
+  <Item key="s_size_a5">[A5] </Item>
+  <Item key="s_size_b5">[B5] </Item>
+  <Item key="s_size_a6">[A6] </Item>
+  <Item key="s_size_executive">[Executive] </Item>
+  <Item key="s_size_legal">[Legal] </Item>
+  <Item key="s_size_letter">[Letter] </Item>
+  <Item key="s_size_postcard">[Postcard] </Item>
+  <Item key="s_size_dbl_postcard">[Double Postcard] </Item>
+  <Item key="s_size_env_b5">[Envelope B5] </Item>
+  <Item key="s_size_env_c5">[Envelope C5] </Item>
+  <Item key="s_size_env_10">[Envelope COM10] </Item>
+  <Item key="s_size_env_monarch">[Envelope Monarch] </Item>
+  <Item key="s_size_env_dl">[Envelope DL] </Item>
+  <Item key="s_size_env_t3">[Envelope NAGAGATA3] </Item>
+  <Item key="s_size_env_yt3">[Envelope YOUGATANAGA3] </Item>
+  <Item key="s_size_4x1_postcard">[4 on 1 Postcard]</Item>
+  <Item key="s_size_indexcard">[Index Card] </Item>
+  <Item key="s_size_16K">[16K] </Item>
+  <Item key="s_size_custom">[Custom Paper] </Item> 
+  <Item key="s_slot_tray">[the Multi-purpose Tray]</Item>
+  <Item key="s_slot_MFS">[the Multi-purpose Tray]</Item>
+  <Item key="s_slot_cassette1">[Cassette 1]</Item>
+  <Item key="s_slot_cassette2">[Cassette 2]</Item>
+  <Item key="s_str_1">1</Item>
+  <Item key="s_str_2">2</Item>
+  <Item key="s_str_3">3</Item>
+  <Item key="s_str_4">4</Item>
+  <Item key="s_comma">,</Item>
+ </MsgList>
+ <MsgList locale="ja">
+  <Item key="s_warn_paperout">印刷できます	%sに%sがありません。</Item>
+  <Item key="s_warn_paperout2">印刷できます	%sに%sがありません。
+%sに%sがありません。</Item>
+  <Item key="s_warn_toner1">印刷できます	トナーカートリッジの交換時期が近づいています。
+交換方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_warn_outputtray">印刷できます	排紙トレイから紙を取り除いてください。</Item>
+  <Item key="s_warn_toner_mem">印刷できます	トナーカートリッジとの接続に問題がある可能性があります。</Item>
+  <Item key="s_printing">印刷中です	 </Item>
+  <Item key="s_check_paper">用紙を確認してください	手差しトレイに%sがセットされているか確認してください。
+%s</Item>
+  <Item key="s_check_paper_sub1">用紙をセットしなおすと、印刷を再開します。</Item>
+  <Item key="s_check_paper_sub2">[再開]をクリックするか、用紙をセットしなおすと、印刷を再開します。</Item>
+  <Item key="s_canceled">印刷中止中です	 </Item>
+  <Item key="s_cleaning">クリーニング中です	しばらくお待ちください。</Item>
+  <Item key="s_ready">印刷できます	 </Item>
+  <Item key="s_servernotready">サーバと通信できません	サーバがダウンしている可能性があります。
+サーバを確認してください。</Item>
+  <Item key="s_invalid_port">ポートが違います	プリンタがサポートしていないポートに接続されています。
+ポートを確認してください。</Item>
+  <Item key="s_check_status">ステータス取得中です	しばらくお待ちください。</Item>
+  <Item key="s_adapter">ネットワークボードエラー	ネットワークケーブルが接続されていないか、プリンタの電源が入っていません。確認してください。</Item>
+  <Item key="s_cant_comm">通信エラー	以下の項目を確認してください。
+· プリンタの電源は入っていますか?
+· ケーブルは正しく接続されていますか?</Item>
+  <Item key="s_incompatible">互換性のないプリンタです	接続されているプリンタは使用できません。</Item>
+  <Item key="s_disk_full">ディスク容量が不足しています	プリンタが接続されているコンピュータまたはサーバにある不要なファイルを削除し、[再開]をクリックしてください。</Item>
+  <Item key="s_disk_full2">ディスク容量が不足しています	プリンタが接続されているコンピュータまたはサーバにある不要なファイルを削除してください。</Item>
+  <Item key="s_jam2">紙がつまりました	以下の箇所を確認し、つまった用紙を取り除いてください。
+· 手差しトレイ
+· カセット
+· 排紙部内
+· 前カバー内
+取り除き方の詳細は、取扱説明書をご覧ください。
+
+排紙部内の確認方法 :
+本体背面の後カバーを開けてください。
+
+前カバー内の確認方法 :
+前カバーを開けてトナーカートリッジを取り出し、搬送ガイドを開けてください。</Item>
+  <Item key="s_xfer_error">印刷できませんでした	プリンタへのデータ転送が間に合わなかったか、転送エラーが発生しました。
+%s</Item>
+  <Item key="s_xfer_error2">[再開]をクリックして印刷を再開するか、[印刷中止]をクリックして印刷しなおしてください。</Item>
+  <Item key="s_change_size">用紙が指定と異なります	%sに、%sをセットしてください。
+セット方法の詳細は、取扱説明書をご覧ください。
+%s</Item>
+  <Item key="s_change_size_sub">現在セットされている用紙で印刷する場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_change_paper">用紙が指定と異なります	%sに、%sをセットしてください。
+指定したサイズの用紙がセットされている場合は、[オプション]-[デバイス設定]-[カセット設定]で用紙サイズを登録しなおしてください。
+登録方法の詳細は、取扱説明書をご覧ください。
+%s</Item>
+  <Item key="s_change_paper2">用紙が指定と異なります	%sに、%sをセットしてください。
+セット方法の詳細は、取扱説明書をご覧ください。
+%s</Item>
+  <Item key="s_change_paper3">用紙が指定と異なります	手差しトレイに、%sをセットしてください。
+セット方法の詳細は、取扱説明書をご覧ください。
+%s</Item>
+  <Item key="s_change_paper_sub">現在セットされている用紙で印刷する場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_change_paper_sub2">現在セットされている用紙で印刷する場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_no_paper2">用紙がありません	· カセットから給紙する場合
+カセットに、%sをセットしてください。指定したサイズの用紙が正しくセットされているときは、[オプション]-[デバイス設定]-[カセット設定]で用紙サイズを登録しなおすと、自動的に印刷を再開します。
+登録方法の詳細は、取扱説明書をご覧ください。
+
+· 手差しトレイから給紙する場合
+手差しトレイに用紙をセットすると、印刷を再開します。</Item>
+  <Item key="s_no_paper2_2">用紙がありません	%sに、%sをセットしてください。
+セット方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_no_paper2_3">用紙がありません	手差しトレイに用紙をセットすると、印刷を再開します。
+
+· カセットから給紙する場合
+使用する用紙をセットしたカセットをプリンタドライバで給紙部に指定してから、印刷しなおしてください。</Item>
+  <Item key="s_no_paper2_4">用紙がありません	%sに、%sをセットしてください。
+セット方法の詳細は、取扱説明書をご覧ください。
+現在手差しトレイにセットされている用紙で印刷する場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_no_memory">メモリが不足しています	プリンタが接続されているコンピュータまたはサーバのメモリが不足しています。
+不要なアプリケーションを終了させてください。</Item>
+  <Item key="s_output_full">排紙トレイがいっぱいです	排紙トレイから紙を取り除いてください。</Item>
+  <Item key="s_waiting">準備中です	しばらくお待ちください。</Item>  
+  <Item key="s_ip_block">印刷ができません	管理者に連絡してください。</Item>
+  <Item key="s_missprint">印刷を確認してください	正しい印刷結果にならない場合があります。
+%s</Item>
+  <Item key="s_missprint2">[再開]をクリックするか、印刷しなおしてください。</Item>
+  <Item key="s_missprint3">印刷しなおしてください。</Item>
+  <Item key="s_no_cartridge">トナーカートリッジがありません	前カバーを開けて、トナーカートリッジをセットし、前カバーを閉じてください。
+セット方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_door_open">前カバーが開いています	前カバーを閉じてください。</Item>
+  <Item key="s_firm_update">ファームウェアを更新しています	しばらくお待ちください。</Item>
+  <Item key="s_printing_cs">クリーニングページを印刷しています	しばらくお待ちください。</Item>
+  <Item key="s_service_call">サービスエラー	プリンタに異常があります。
+電源をいったん切り、しばらく待ってから電源を入れなおしてください。電源を入れなおしてもサービスエラーが表示される場合は、電源を切り、お買い求めの販売店またはサービス店にご連絡ください。ご連絡の際には、表示されたエラーコードと症状をお知らせください。
+エラーコード : %04X %04X</Item>
+  <Item key="s_set_cleaningpaper">クリーニングを開始します	現在手差しトレイに用紙がある場合は、いったんこれらを取り除いてください。
+クリーニングページのプリント面を上向きにして手差しトレイにセットすると、クリーニングを開始します。</Item>
+  <Item key="s_size_unknown">用紙</Item>
+  <Item key="s_size_a4">[A4]</Item>
+  <Item key="s_size_a5">[A5]</Item>
+  <Item key="s_size_b5">[B5]</Item>
+  <Item key="s_size_a6">[A6]</Item>
+  <Item key="s_size_executive">[エグゼクティブ]</Item>
+  <Item key="s_size_legal">[リーガル]</Item>
+  <Item key="s_size_letter">[レター]</Item>
+  <Item key="s_size_postcard">[はがき]</Item>
+  <Item key="s_size_dbl_postcard">[往復はがき]</Item>
+  <Item key="s_size_env_b5">[Envelope B5]</Item>
+  <Item key="s_size_env_c5">[Envelope C5]</Item>
+  <Item key="s_size_env_10">[Envelope COM10]</Item>
+  <Item key="s_size_env_monarch">[Envelope Monarch]</Item>
+  <Item key="s_size_env_dl">[Envelope DL]</Item>
+  <Item key="s_size_env_t3">[封筒 長形3号]</Item>
+  <Item key="s_size_env_yt3">[封筒 洋形長3号]</Item>
+  <Item key="s_size_4x1_postcard">[4面はがき]</Item>
+  <Item key="s_size_indexcard">[Index Card]</Item>
+  <Item key="s_size_16K">[16K]</Item>
+  <Item key="s_size_custom">[カスタム用紙]</Item>
+  <Item key="s_slot_tray">[手差しトレイ]</Item>
+  <Item key="s_slot_MFS">[手差しトレイ]</Item>
+  <Item key="s_slot_cassette1">[カセット1]</Item>
+  <Item key="s_slot_cassette2">[カセット2]</Item>
+  <Item key="s_str_1">1</Item>
+  <Item key="s_str_2">2</Item>
+  <Item key="s_str_3">3</Item>
+  <Item key="s_str_4">4</Item>
+  <Item key="s_comma">、</Item>
+ </MsgList>
+</PswMsgTable>
+

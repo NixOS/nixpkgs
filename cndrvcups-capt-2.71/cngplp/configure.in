@@ -1,0 +1,52 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(libuictlcapt, 1.0.0, no-define)
+AM_CONFIG_HEADER(config.h)
+AM_MAINTAINER_MODE
+AC_DEFINE(__FOR_CAPT__,, "define the capt printer macro")
+
+LT_VERSION=1:0:1
+LT_RELEASE=1
+AC_SUBST(LT_VERSION)
+AC_SUBST(LT_RELEASE)
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+gtk_modules="gtk+-2.0 >= 2.0.0"
+PKG_CHECK_MODULES(PACKAGE,[$gtk_modules])
+AC_SUBST(PACKAGE_CFLAGS)
+AC_SUBST(PACKAGE_LIBS)
+
+libglade_modules="libglade-2.0 >= 2.0.0"
+PKG_CHECK_MODULES(GLADE_PACKAGE,[$libglade_modules])
+AC_SUBST(GLADE_PACKAGE_CFLAGS)
+AC_SUBST(GLADE_PACKAGE_LIBS)
+
+GETTEXT_PACKAGE=libuictlcapt.1.0
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
+
+dnl Add the languages which your application supports here.
+ALL_LINGUAS="fr it de es ja"
+AM_GLIB_GNU_GETTEXT
+
+AM_DISABLE_STATIC
+AC_PROG_LIBTOOL
+
+AC_OUTPUT([Makefile
+                 cngplpmod/Makefile
+                 controls/Makefile
+                 controls/combo/Makefile
+                 controls/checkbutton/Makefile
+                 controls/dialog/Makefile
+                 controls/radiobutton/Makefile
+		 controls/button/Makefile
+		 controls/spinbutton/Makefile
+		 controls/entry/Makefile
+		 controls/textview/Makefile
+		 controls/label/Makefile
+		 po/Makefile.in])

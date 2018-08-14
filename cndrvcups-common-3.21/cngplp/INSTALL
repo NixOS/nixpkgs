@@ -1,0 +1,17 @@
+To build and install cngplp with the new automake and autoconf enviroment:
+	./autogen.sh
+	make
+	make install
+
+	* New automake is 1.6.x or above
+	* New autoconf is xxxx
+
+To build and install cngplp with the old automake and autoconf envirment:
+	./autogen-old.sh
+	make
+	make install
+
+	* Old automake is 1.4.x
+	* Old autoconf is 2.13.x
+
+

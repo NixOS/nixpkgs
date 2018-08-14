@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PswMsgTable>
+ <MsgList locale="en">
+  <Item key="s_size_unknown"></Item>
+  <Item key="s_size_a4">[A4] </Item>
+  <Item key="s_size_a5">[A5] </Item>
+  <Item key="s_size_b5">[B5] </Item>
+  <Item key="s_size_executive">[Executive] </Item>
+  <Item key="s_size_legal">[Legal] </Item>
+  <Item key="s_size_letter">[Letter] </Item>
+  <Item key="s_size_postcard">[Postcard] </Item>
+  <Item key="s_size_dbl_postcard">[Double Postcard] </Item>
+  <Item key="s_size_env_c5">[Envelope C5] </Item>
+  <Item key="s_size_env_10">[Envelope COM10] </Item>
+  <Item key="s_size_env_monarch">[Envelope Monarch] </Item>
+  <Item key="s_size_env_dl">[Envelope DL] </Item>
+  <Item key="s_size_env_y4">[Envelope YOUGATA 4] </Item>
+  <Item key="s_size_env_y2">[Envelope YOUGATA 2] </Item>
+  <Item key="s_size_indexcard">[Index Card] </Item>
+  <Item key="s_printing">Printing</Item>
+  <Item key="s_pause">Printing Paused</Item>
+  <Item key="s_offline">Offline</Item>
+  <Item key="s_cleaning">Cleaning	Please wait a moment.</Item>
+  <Item key="s_ready">Ready to Print </Item>
+  <Item key="s_check_status">Getting Status 	Please wait a moment. </Item>
+  <Item key="s_busy">Port Busy	The port is being used by another device.</Item>
+  <Item key="s_cant_comm">Communication Error 	Check the followings:
+-Is the printer turned on?
+-Is the cable correctly connected?</Item>
+  <Item key="s_service_call">Service Error	Printer error. 
+Turn off the printer and then turn it on again.
+If the same error is displayed with the printer turned off and then on again, turn off the printer and contact the store where you purchased the printer or your service representative.</Item>
+  <Item key="s_invalid_data">Incompatible Printer 	The connected printer cannot be used. </Item>
+  <Item key="s_jam">Paper Jam	Remove the jammed paper by following the steps below:
+1. Open the front cover.
+2. Check the paper feed area, the paper delivery area, or inside the printer, and remove jammed paper.
+3. Close the front cover.</Item>
+  <Item key="s_door_open">Front Cover Open	Completely close the front cover.</Item>
+  <Item key="s_no_cartridge">No Toner Cartridge	Open the front cover and insert a toner cartridge.</Item>
+  <Item key="s_change_size">Specified Paper Incorrect	Load %spaper.
+If you use the current paper to print, click Resume.</Item>
+  <Item key="s_no_paper">Out of Paper	Load %spaper.</Item>
+  <Item key="s_xfer_error">Printing Interrupted	Could not transfer data to the printer because of the large amount of data, or a data transfer error occurred.
+Click Resume to resume printing from the top of the page which was not printed completely.</Item>
+  <Item key="s_no_memory">Insufficient Memory 	The PC or server connected to the printer, has insufficient memory. 
+Exit all unnecessary applications. </Item>
+ </MsgList>
+ <MsgList locale="ja">
+  <Item key="s_size_unknown">用紙</Item>
+  <Item key="s_size_a4">[A4]</Item>
+  <Item key="s_size_a5">[A5]</Item>
+  <Item key="s_size_b5">[B5]</Item>
+  <Item key="s_size_executive">[エグゼクティブ]</Item>
+  <Item key="s_size_legal">[リーガル]</Item>
+  <Item key="s_size_letter">[レター]</Item>
+  <Item key="s_size_postcard">[はがき]</Item>
+  <Item key="s_size_dbl_postcard">[往復はがき]</Item>
+  <Item key="s_size_env_c5">[Envelope C5]</Item>
+  <Item key="s_size_env_10">[Envelope COM10]</Item>
+  <Item key="s_size_env_monarch">[Envelope Monarch]</Item>
+  <Item key="s_size_env_dl">[Envelope DL]</Item>
+  <Item key="s_size_env_y4">[封筒 洋形4号]</Item>
+  <Item key="s_size_env_y2">[封筒 洋形2号]</Item>
+  <Item key="s_size_indexcard">[Index Card]</Item>
+  <Item key="s_printing">印刷中です</Item>
+  <Item key="s_pause">一時停止中です</Item>
+  <Item key="s_offline">オフラインです</Item>
+  <Item key="s_cleaning">クリーニング中です	しばらくお待ちください。</Item>
+  <Item key="s_ready">印刷できます</Item>
+  <Item key="s_check_status">ステータス取得中です	しばらくお待ちください。</Item>
+  <Item key="s_busy">ポートが使用されています	ポートが他のデバイスに使用されています。</Item>
+  <Item key="s_cant_comm">通信エラー	以下の項目を確認してください。
+・プリンタの電源は入っていますか？
+・ケーブルは正しく接続されていますか？</Item>
+  <Item key="s_service_call">サービスエラー	プリンタに異常があります。
+電源をいったん切り、電源を入れなおしてください。それでも同じエラーが発生する場合は、電源を切り、お買い求めの販売店またはサービス店にご連絡ください。</Item>
+  <Item key="s_invalid_data">互換性のないプリンタです	接続されているプリンタは使用できません。</Item>
+  <Item key="s_jam">紙がつまりました	以下の手順にしたがって、つまった紙を取り除いてください。
+1. フロントカバーを開ける。
+2. 給紙部、排紙部、または本体内部を確認して、つまった紙を取り除く。
+3. フロントカバーを閉める。</Item>
+  <Item key="s_door_open">フロントカバーが開いてます	フロントカバーをきちんと閉めてください。</Item>
+  <Item key="s_no_cartridge">トナーカートリッジがありません	フロントカバーを開けて、トナーカートリッジをセットしてください。</Item>
+  <Item key="s_change_size">用紙が指定と異なります	%sをセットしてください。
+現在セットされている用紙で印刷する場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_no_paper">用紙がありません	%sを補給してください。</Item>
+  <Item key="s_xfer_error">印刷を中断しました	プリンタへのデータ転送が間に合わなかった、または転送エラーが発生しました。
+[再開]をクリックすると、中断されたページの先頭から印刷します。</Item>
+  <Item key="s_no_memory">メモリが不足しています	プリンタが接続されているパソコンまたはサーバのメモリが不足しています。
+不要なアプリケーションを終了させてください。</Item>
+ </MsgList>
+</PswMsgTable>
+

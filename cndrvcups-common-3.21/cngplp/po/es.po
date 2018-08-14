@@ -1,0 +1,99 @@
+# Print Dialog for Canon LIPS/PS/LIPSLX/UFR2/CAPT Printer.
+# Copyright CANON INC. 2004
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cngplp 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-02-25 16:05+0900\n"
+"PO-Revision-Date: 2004-04-14 20:28+0900\n"
+"Last-Translator: CANON INC.\n"
+"Language-Team: CANON INC.\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gladestr.h:1
+msgid "(1 to 9999)"
+msgstr "(1 a 9.999)"
+
+#: gladestr.h:2
+msgid "*"
+msgstr ""
+
+#: gladestr.h:3
+msgid "All Pages"
+msgstr "Todas las páginas"
+
+#: gladestr.h:4
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: gladestr.h:5
+msgid "Copies:"
+msgstr "Copias:"
+
+#: gladestr.h:6
+msgid "Even Number Pages"
+msgstr "Páginas pares"
+
+#: gladestr.h:7
+msgid "Name:"
+msgstr "Nombre:"
+
+#: gladestr.h:8
+msgid "Odd Number Pages"
+msgstr "Páginas impares"
+
+#: gladestr.h:9
+msgid "Options"
+msgstr "Opciones"
+
+#: gladestr.h:10
+msgid "Page Range"
+msgstr "Intervalo de páginas"
+
+#: gladestr.h:11
+msgid "Print"
+msgstr "Imprimir"
+
+#: gladestr.h:12
+msgid "Print Pages"
+msgstr "Imprimir páginas"
+
+#: gladestr.h:13
+msgid "Print Range"
+msgstr "Rango de impresión"
+
+#: gladestr.h:14
+msgid "Printer"
+msgstr "Impresora"
+
+#: gladestr.h:15
+msgid "Properties..."
+msgstr "Configuración..."
+
+#: gladestr.h:16
+msgid "Reverse Order"
+msgstr "Invertir orden"
+
+#: gladestr.h:17
+msgid "Save"
+msgstr "Almacenar"
+
+#: gladestr.h:18
+msgid "Set as Default"
+msgstr "Establecer como valor predeterminado"
+
+#: gladestr.h:19
+msgid "cngplp"
+msgstr ""
+
+#: src/mainwnd.c:589 src/mainwnd.c:592
+msgid "Print and Save Settings"
+msgstr "Imprimir y guardar configuración"
+
+#: src/mainwnd.c:596 src/mainwnd.c:599
+msgid "Save Settings"
+msgstr "Guardar configuración"

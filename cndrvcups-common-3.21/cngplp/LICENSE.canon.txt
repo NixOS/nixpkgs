@@ -1,0 +1,4 @@
+LICENSE
+    * These programs are licensed under the terms of the GNU General Public
+      License.  (See the file COPYING.)
+

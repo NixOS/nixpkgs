@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#rm -Rf /var/ccpd
+rm -Rf /var/captmon
+
+if [ -d /usr/share/ppd ] ; then
+	rm -rf /usr/share/ppd/CN*CAPT*.ppd
+fi
+
+exit 0

@@ -1,0 +1,40 @@
+;=====================================================================
+; Canon Advanced Printing Technology
+; Printer DATA Text for Microsoft Windows 2000/XP/Vista/Server 2003, 2008 (x86)
+; Copyright CANON INC. 2009
+; CNAC9INK.DAT
+;=====================================================================
+[CAPTFileConfig]
+CNAP2LMK.DLL=1,1,1,W32_3,SYS32,0
+CNAC9EMK.DLL=1,1,1,W32_3,SYS32,0
+CNAP1NSK.DLL=1,1,1,W32_3,SYS32,0
+
+[CNAC9 Sound]
+NumItems =0
+
+[CNAC9 ShortCutName]
+NumItems=1
+CAPTItem1=Canon LBP7200C Uninstaller,Canon Printer Uninstaller
+
+[VersionInfo]
+AboutDLGVersion=1.00
+AboutDLGYear=2009
+
+[ResourceDLL]
+LocaleID=411
+
+[CMYKThreshold]
+Fill=C0,C0,C0,C0
+TextLarge=80,80,80,80
+TextSmall=1,1,1,1
+LineThick=80,80,80,80
+LineThin=1,1,1,1
+BmpImg=C0,C0,C0,C0
+BmpEdge=C0,C0,C0,C0
+BmpIsolation=C0,C0,C0,C0
+
+[Threshold]
+Fill=0
+Text=E
+Line=21
+Bmp=5F

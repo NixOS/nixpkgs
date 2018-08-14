@@ -1,0 +1,34 @@
+;=====================================================================
+; Canon Advanced Printing Technology
+; Printer DATA Text for Microsoft Windows (x86)
+; Copyright CANON INC. 2012
+; CNABFINK.DAT
+;=====================================================================
+[CAPTFileConfig]
+CNAP2LMK.DLL=1,1,1,W32_3,SYS32,0
+CNABFEMK.DLL=1,1,1,W32_3,SYS32,0
+
+[CNABF Sound]
+NumItems =0
+
+[CNABF ShortCutName]
+NumItems=1
+CAPTItem1=Canon LBP6020 Uninstaller,Canon Printer Uninstaller
+
+[VersionInfo]
+AboutDLGVersion=1.00
+AboutDLGYear=2012
+
+[ResourceDLL]
+LocaleID=809
+
+[CN_PDL_SLC]
+CN_PDL_SLC_QU_PA_NL_MK=3,12,6,1,0,0
+CN_PDL_SLC_QU_PB_NL_MK=3,12,6,8,0,0
+CN_PDL_SLC_QU_SL_NL_MK=2,12,1,8,0,0
+CN_PDL_SLC_QU_DR_NL_MK=6,3,6,6,0,-3
+CN_PDL_SLC_FI_PA_HHA_MK=4,2,8,4,0,-1
+CN_PDL_SLC_FI_PB_HHA_MK=6,2,8,1,0,0
+CN_PDL_SLC_FI_SL_HHA_MK=4,12,1,8,0,0
+CN_PDL_SLC_FI_DR_HHA_MK=6,12,6,1,0,0
+

@@ -1,0 +1,92 @@
+#!/bin/sh
+# startup script for Canon Printer Daemon for CUPS (ccpd)
+
+if [ `ps awx | grep cupsd | grep -v grep | wc -l` -eq 0 ]; then
+	while [ `ps awx | grep cupsd | grep -v grep | wc -l` -eq 0 ]
+	do
+		sleep 3
+	done
+	sleep 5
+fi
+
+if [ -f /etc/rc.d/init.d/functions ]; then
+	if [ -f /etc/slackware-version ]; then
+		SYS_F="SL"
+	else
+		. /etc/rc.d/init.d/functions 
+		SYS_F="RH"
+	fi
+elif [ -x /sbin/startproc ]; then
+	SYS_F="Su"
+elif [ -x /sbin/start-stop-daemon ]; then
+	SYS_F="De"
+fi
+
+DAEMON=/usr/sbin/ccpd
+LOCKFILE=/var/lock/subsys/ccpd
+
+export PATH=$PATH:/usr/local/sbin:/usr/local/bin
+
+ccpd_start ()
+{
+	echo -n "Starting ${DAEMON}: "
+
+	if [ "$SYS_F" = "RH" ]; then	
+		daemon ${DAEMON}
+		[ "$?" = "0" ] && touch ${LOCKFILE}
+		echo "."
+	elif [ "$SYS_F" = "Su" ]; then
+		startproc ${DAEMON}
+		echo "."
+	elif [ "$SYS_F" = "De" ]; then
+		start-stop-daemon --start --quiet --oknodo --exec ${DAEMON}
+		echo "."
+	else
+		`${DAEMON}`
+	fi
+}
+
+ccpd_stop ()
+{
+	echo -n "Shutting down ${DAEMON}: "
+
+	if [ "$SYS_F" = "De" ]; then
+		start-stop-daemon --stop --quiet --oknodo --signal 15 --exec ${DAEMON}
+		echo "."
+	elif [ "$SYS_F" = "SL" ]; then
+		kill -KILL `pidof ${DAEMON}`
+		[ "$?" = "0" ] && rm -f ${LOCKFILE}
+		echo 
+	else
+		killproc ${DAEMON}
+		[ "$?" = "0" ] && rm -f ${LOCKFILE}
+		echo	
+	fi
+}
+
+
+case $1 in
+
+	start)
+		ccpd_start
+		;;
+		
+	stop)
+		ccpd_stop
+		;;
+	
+	status)
+		echo "${DAEMON}:" `pidof ${DAEMON}`
+		;;
+	
+	restart)
+		ccpd_stop
+		ccpd_start
+		;;
+	
+	*)
+		echo "Usage: ccpd {start|stop|status}"
+		exit 1
+		;;
+esac
+exit 0

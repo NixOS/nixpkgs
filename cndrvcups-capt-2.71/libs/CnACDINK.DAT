@@ -1,0 +1,40 @@
+;=====================================================================
+; Canon Advanced Printing Technology
+; Printer DATA Text for Microsoft Windows (x86)
+; Copyright CANON INC. 2012
+; CNACDINK.DAT
+;=====================================================================
+[CAPTFileConfig]
+CNAP2LMK.DLL=1,1,1,W32_3,SYS32,0
+CNACDEMK.DLL=1,1,1,W32_3,SYS32,0
+CNAP1NSK.DLL=1,1,1,W32_3,SYS32,0
+
+[CNACD Sound]
+NumItems =0
+
+[CNACD ShortCutName]
+NumItems=1
+CAPTItem1=Canon LBP7210C Uninstaller,Canon Printer Uninstaller
+
+[VersionInfo]
+AboutDLGVersion=1.00
+AboutDLGYear=2012
+
+[ResourceDLL]
+LocaleID=809
+
+[CMYKThreshold]
+Fill=C0,C0,C0,C0
+TextLarge=80,80,80,80
+TextSmall=1,1,1,1
+LineThick=80,80,80,80
+LineThin=1,1,1,1
+BmpImg=C0,C0,C0,C0
+BmpEdge=C0,C0,C0,C0
+BmpIsolation=C0,C0,C0,C0
+
+[Threshold]
+Fill=0
+Text=E
+Line=21
+Bmp=5F

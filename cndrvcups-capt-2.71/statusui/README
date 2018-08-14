@@ -1,0 +1,39 @@
+captstatusui --- Status monitor for Canon CAPT Printer.
+
+DESCRIPTION
+	The "captstatusui" is the status monitoring program for Canon CAPT
+	Printer. This program offers graphical user interface to obtain the
+	printer status. When you start printing, you can pause, resume and 
+	cancel a printing job for this program. 
+
+	This program can be used with CUPS (Common Unix Printing System)
+	and manipulate print attributes that is managed by CUPS. This 
+	program	also handles print attributes that is described in PPD
+	(Postscript Printer Description) files that correspond to each 
+	printers.
+
+REQUIREMENTS
+	* aclocal    (1.4.x)
+	* automake   (1.4.x)
+	* Gtk+       (2.4.x or above)
+	* libcups    (1.1.17 or above)
+	* libxml2    (2.6.x or above)
+	* libbuftool (1.00 or above)
+
+LICENSE
+	This package consists of only one module as described above. This
+	module is subject to GNU General Public License(GPL). See COPYING
+	file for more detail.
+	
+	Note that licensing term may vary from file to file. Please consult
+	each files for the exact licensing conditions.
+
+LANGUAGES SUPPORTED
+	* English and Japanese
+
+INSTALLATION
+	$ ./autogen.sh
+	$ make
+	# make install
+
+

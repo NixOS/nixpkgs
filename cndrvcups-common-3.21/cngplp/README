@@ -1,0 +1,36 @@
+cngplp --- Print dialog for Canon LIPS/PS/LIPSLX/UFR2/CAPT Printer.
+
+DESCRIPTION
+    This "cngplp" is a print dialog program for Canon LIPS/PS/UFR2/CAPT
+    printers. This program prepares a graphical user interface for setting
+	the default printing attributes for each printer. You can also execute
+    this program with a file name for printing.
+
+	This program can be used with CUPS (Common Unix Printing System)
+	and manipulates the printing attributes that are managed by CUPS.
+    This program also handles the print attributes that are described in
+    the PPD(Postscript Printer Description) file for each printer.
+
+LICENSE
+	This package consists of only one module as described above. This
+	module is subject to GNU General Public License(GPL). See COPYING
+	file for more detail.
+
+REQUIREMENTS
+	* aclocal   (1.4.x or above)
+	* automake  (1.4.x or above)
+	* Gtk+      (2.4.x or above)
+	* libcups   (1.1.17 or above)
+	* libxml2   (2.6.x or above)
+	* libglade2 (2.4.x or above)
+
+
+LANGUAGES SUPPORTED
+	* English and Japanese
+
+
+INSTALLATION
+	$ ./autogen.sh
+	$ make
+	# make install
+

@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PswMsgTable>
+ <MsgList locale="en">
+  <Item key="s_warn_calib">Ready to Print	Calibration has not been finished correctly. Perform calibration again.
+See the instruction manual for more information about calibration.
+</Item>
+  <Item key="s_warn_toner1">Ready to Print	The toner cartridges need to be replaced soon.
+(%s%s%s%s%s%s%s)
+See the instruction manual for more information on how to replace a toner cartridge.
+</Item>
+  <Item key="s_warn_toner2">Ready to Print	Cannot guarantee print quality because the toner cartridges are reaching the end of their lifetime, etc.
+(%s%s%s%s%s%s%s)
+Replacing these toner cartridges with new toner cartridges is recommended.
+See the instruction manual for more information on how to replace a toner cartridge.
+</Item>
+  <Item key="s_warn_tonerout1">Ready to Print	Toner cartridges reached lifetime.
+(%s%s%s%s%s%s%s)
+Replace the toner cartridges with new toner cartridges.
+See the instruction manual for more information on how to replace a toner cartridge.
+</Item>
+  <Item key="s_warn_drum1">Ready to Print	The drum cartridge needs to be replaced soon.
+See the instruction manual for more information on how to replace a drum cartridge.
+</Item>
+  <Item key="s_warn_drum2">Ready to Print	Cannot guarantee print quality because the drum cartridge is reaching the end of its lifetime.
+Replacing the drum cartridge with a new drum cartridge is recommended.
+See the instruction manual for more information on how to replace a drum cartridge.
+</Item>
+  <Item key="s_warn_etb">Ready to Print	Cleaning... Wait a moment.
+</Item>
+  <Item key="s_w_waitcleaning">Ready to Print	Perform Fixing Unit Cleaning 1.</Item>
+  <Item key="s_w_overtoner">Ready to Print	Toner cartridges reached lifetime.
+(%s%s%s%s%s%s%s)
+To prevent a device malfunction, replacing these toner cartridges with new toner cartridges is recommended.
+See the instruction manual for more information on how to replace a toner cartridge.
+</Item>
+  <Item key="s_w_accesstoner">Ready to Print	Checking the status of the toner cartridges... Wait a moment.
+</Item>
+  <Item key="s_printing">Printing	 </Item>
+  <Item key="s_printing3">Printing	Cleaning... Wait a moment.
+</Item>
+  <Item key="s_printing4">Printing	Checking the status of the toner cartridges... Wait a moment.
+</Item>
+  <Item key="s_sleep">Sleeping	 </Item>
+  <Item key="s_canceled">Canceling	 </Item>
+  <Item key="s_cleaning">Cleaning	Wait a moment.</Item>
+  <Item key="s_ready">Ready to Print	 </Item>
+  <Item key="s_servernotready">Cannot Communicate with Server	The server may be down.
+Check the server.</Item>
+  <Item key="s_invalid_port">Incorrect Port	The port to which the printer is connected is not supported.
+Check the port.</Item>
+  <Item key="s_check_status">Getting Status	Wait a moment.</Item>
+  <Item key="s_adapter">Network Board Error	The network cable is not connected, or the printer is not turned on. Check these items.</Item>
+  <Item key="s_cant_comm">Communication Error	Check the following:
+- Is the printer turned on?
+- Is the cable properly connected?</Item>
+  <Item key="s_incompatible">Incompatible Printer	The connected printer cannot be used.</Item>
+  <Item key="s_disk_full">Insufficient Disk Space	Delete unnecessary files on the computer or server connected to the printer, and then click [Resume Job].</Item>
+  <Item key="s_disk_full2">Insufficient Disk Space	Delete unnecessary files on the computer or server connected to the printer.</Item>
+  <Item key="s_jam2">Paper Jam inside Printer	Check the following locations and remove jammed paper:
+%s</Item>
+  <Item key="s_jam2_info">- Multi-purpose Tray
+- Output area
+- Inside the rear cover
+
+Remove the paper from the Multi-purpose Tray, and then open the rear cover on the back of the printer.
+See the instruction manual for more information on how to remove jammed paper.</Item>
+  <Item key="s_jam2_info2">- Output area
+- Inside the rear cover
+
+Open the rear cover on the back of the printer.
+See the instruction manual for more information on how to remove jammed paper.</Item>
+  <Item key="s_no_drum">No Drum Cartridge	Open the front cover and insert a drum cartridge.
+See the instruction manual for more information on how to insert a drum cartridge.</Item>
+  <Item key="s_tonerout">Replace Toner Cartridges	Toner cartridges reached lifetime.
+(%s%s%s%s%s%s%s)
+
+Operable Toner Slot Color:
+- %s
+
+To prevent a device malfunction, replacing these toner cartridges with new toner cartridges is recommended.
+See the instruction manual for more information on how to replace a toner cartridge.</Item>
+  <Item key="s_tonerout1">Replace Toner Cartridges	Cannot guarantee print quality because the toner cartridges are reaching the end of their lifetime, etc.
+(%s%s%s%s%s%s%s)
+
+Operable Toner Slot Color:
+- %s
+
+Replacing these toner cartridges with new toner cartridges is recommended.
+See the instruction manual for more information on how to replace a toner cartridge.</Item>
+  <Item key="s_drumout1">Replace Drum Cartridge	Cannot guarantee print quality because the drum cartridge is reaching the end of its lifetime.
+Replacing the drum cartridge with a new drum cartridge is recommended.
+See the instruction manual for more information on how to replace a drum cartridge.</Item>
+  <Item key="s_xfer_error">Could Not Print	Data transfer to the printer timed out, or a transfer error has occurred.%s</Item>
+  <Item key="s_xfer_error2">
+Click [Resume Job] to resume printing, or click [Cancel Job], and then try to print again.</Item>
+  <Item key="s_change_paper">Check the Paper	Load %s paper, and then press the Paper key on the printer to print.
+See the instruction manual for more information on how to load paper.%s</Item>
+  <Item key="s_change_paper2">Check the Paper	Load A5 paper with the short edge side pointing toward the interior of the paper source, and then press the Paper key on the printer to print.
+See the instruction manual for more information on how to load paper.%s</Item>
+  <Item key="s_change_paper3">Check the Paper	Load A5 paper with the long edge side pointing toward the interior of the paper source, and then press the Paper key on the printer to print.
+See the instruction manual for more information on how to load paper.%s</Item>
+  <Item key="s_change_paper_sub">
+To print with the currently loaded paper, click [Resume Job].</Item>
+  <Item key="s_no_paper2">Out of Paper or Paper Could Not be Fed	Load %s paper, and then press the Paper key on the printer to print.
+See the instruction manual for more information on how to load paper.</Item>
+  <Item key="s_no_paper2_2">Out of Paper or Paper Could Not be Fed	Load A5 paper with the short edge side pointing toward the interior of the paper source, and then press the Paper key on the printer to print.
+See the instruction manual for more information on how to load paper.</Item>
+  <Item key="s_no_paper2_3">Out of Paper or Paper Could Not be Fed	Load A5 paper with the long edge side pointing toward the interior of the paper source, and then press the Paper key on the printer to print.
+See the instruction manual for more information on how to load paper.</Item>
+  <Item key="s_no_memory">Insufficient Memory	The computer or server connected to the printer does not have enough memory.
+Quit all unnecessary applications.</Item>
+  <Item key="s_calib_error">Calibration Error	Could not finish calibration correctly. Cancel the jobs, and then try to perform calibration again.
+See the instruction manual for more information about calibration.
+To continue printing, click [Resume Job].</Item>
+  <Item key="s_calib_error2">Calibration Error	Could not finish calibration correctly.</Item>
+  <Item key="s_waiting">Processing	%s
+%s
+%s</Item>
+  <Item key="s_waiting_2">Wait a moment until one or more of the following processes are finished:</Item>
+  <Item key="s_wt_init">- Printer initialization</Item>
+  <Item key="s_wt_calib">- Calibration</Item>
+  <Item key="s_ip_block">Cannot Print	Contact the administrator.</Item>
+  <Item key="s_missprint">Check the Printed Output	The printed output may be printed incorrectly.
+%s</Item>
+  <Item key="s_missprint2">Click [Resume Job], or try to print again.</Item>
+  <Item key="s_missprint3">Try to print again.</Item>
+  <Item key="s_no_cartridge">No Toner Cartridge	(%s%s%s%s%s%s%s)
+
+Operable Toner Slot Color:
+- %s
+
+Open the top cover and insert a toner cartridge, and then close the top cover.
+See the instruction manual for more information on how to insert a toner cartridge.</Item>
+  <Item key="s_door_open">Cover Open	%s
+%s</Item>
+  <Item key="s_door_open_rear">Close the rear cover.</Item>
+  <Item key="s_door_open_top">Close the top cover.</Item>
+  <Item key="s_firm_update">Updating Firmware	Wait a moment.</Item>
+  <Item key="s_rotatetoneropen">Incorrect Toner Cartridge Position	To rotate the toner cartridge to the replacement position, close the top cover.</Item>
+  <Item key="s_rotatetonerclose">Rotating Toner Cartridge	Wait a moment.</Item>
+  <Item key="s_readytoner">Toner Cartridge Replacement Possible	- %s
+
+Open the top cover and replace the toner cartridge.
+See the instruction manual for more information on how to replace a toner cartridge.</Item>
+  <Item key="s_drumcartridge_error">Check the Drum Cartridge	There may be a connection problem with the drum cartridge.
+Remove the drum cartridge and insert it back into the printer, or turn off the printer and then turn it back on again after a moment.
+If this message is displayed again, replace the drum cartridge.</Item>
+  <Item key="s_tonerout3">Replace Toner Cartridges	Toner cartridges reached lifetime.
+(%s%s%s%s%s%s%s)
+
+Operable Toner Slot Color:
+- %s
+
+To prevent a device malfunction, replacing these toner cartridges with new toner cartridges is recommended.
+See the instruction manual for more information on how to replace a toner cartridge.</Item>
+  <Item key="s_waitcleaning">Cleaning Required	Perform Fixing Unit Cleaning 1.
+To continue printing, click [Resume Job].</Item>
+  <Item key="s_waitcleaning2">Waiting for Cleaning	Wait until cleaning is finished.</Item>
+  <Item key="s_waitprinting">Resume Printing	Load the correct size paper, and then click [Resume Job] or press the Paper key on the printer to resume printing.</Item>
+  <Item key="s_waitprinting2">Resume Printing	Load the correct size paper, and then press the Paper key on the printer to resume printing.</Item>
+  <Item key="s_cooldown">Cooling Down	This process may take several minutes.</Item>
+  <Item key="s_waiting2">Processing	Completing print processing. You can continue with the next print.</Item>
+  <Item key="s_printing_cs">Printing a Cleaning Page	Wait a moment.</Item>
+  <Item key="s_service_call">Service Error	Printer error.
+Turn off the printer, and then turn it back on again after a moment. If the same error occurs, turn off the printer, then contact the store where you purchased the printer, or a service representative. When contacting the service representative, inform them of the error code displayed and symptoms.
+Error Code: %04X %04X</Item>
+  <Item key="s_cartridge_error">Check the Toner Cartridges	(%s%s%s%s%s%s%s)
+
+Operable Toner Slot Color:
+- %s
+
+There may be a connection problem with the toner cartridges.
+Remove the toner cartridges and insert them back into the printer, or turn off the printer and then turn it back on again after a moment.
+If this message is displayed again, replace the toner cartridges.</Item>
+  <Item key="s_missplace">Wrong Color Toner Cartridges	The wrong color toner cartridge is set in the following positions.
+(%s%s%s%s%s%s%s)
+
+Operable Toner Slot Color:
+- %s
+
+Open the top cover, and then set each toner cartridge in its correct color position.
+See the instruction manual for more information on how to insert a toner cartridge.</Item>
+  <Item key="s_not_ready">Printer Not Ready	The packing material (sheet) is left in the output area.
+Turn off the printer, remove it, and then turn on the printer again.</Item>
+  <Item key="s_set_cleaningpaper">Start Cleaning	Place the print side of the cleaning page face down in the Multi-purpose Tray.
+To continue the cleaning, press the Paper key on the printer.</Item>
+  <Item key="s_size_unknown">Paper </Item>
+  <Item key="s_size_a4">[A4]</Item>
+  <Item key="s_size_a5">[A5]</Item>
+  <Item key="s_size_b5">[B5]</Item>
+  <Item key="s_size_executive">[Executive]</Item>
+  <Item key="s_size_legal">[Legal]</Item>
+  <Item key="s_size_letter">[Letter]</Item>
+  <Item key="s_size_statement">[Statement]</Item>
+  <Item key="s_size_postcard">[Postcard]</Item>
+  <Item key="s_size_dbl_postcard">[Double Postcard]</Item>
+  <Item key="s_size_env_b5">[Envelope B5]</Item>
+  <Item key="s_size_env_c5">[Envelope C5]</Item>
+  <Item key="s_size_env_10">[Envelope COM10]</Item>
+  <Item key="s_size_env_monarch">[Envelope Monarch]</Item>
+  <Item key="s_size_env_dl">[Envelope DL]</Item>
+  <Item key="s_size_4x1_postcard">[4 on 1 Postcard]</Item>
+  <Item key="s_size_indexcard">[Index Card]</Item>
+  <Item key="s_size_16K">[16K]</Item>
+  <Item key="s_size_folio">[Foolscap]</Item>
+  <Item key="s_size_env_t3">[Envelope NAGAGATA 3]</Item>
+  <Item key="s_size_env_yt3">[Envelope YOUGATANAGA 3]</Item>
+  <Item key="s_size_custom">[Custom Paper]</Item>
+  <Item key="s_comma">,</Item>
+  <Item key="s_toner_k">Black</Item>
+  <Item key="s_toner_y">Yellow</Item>
+  <Item key="s_toner_m">Magenta</Item>
+  <Item key="s_toner_c">Cyan</Item>
+ </MsgList>
+ <MsgList locale="ja">
+  <Item key="s_warn_calib">印刷できます	キャリブレーションが正しく終了していません。キャリブレーションしなおしてください。
+キャリブレーションの詳細は、取扱説明書をご覧ください。
+</Item>
+  <Item key="s_warn_toner1">印刷できます	%s%s%s%s%s%s%sのトナーカートリッジは交換時期が近づいています。
+交換方法の詳細は、取扱説明書をご覧ください。
+</Item>
+  <Item key="s_warn_toner2">印刷できます	トナーカートリッジの寿命などの原因により印字品質が保証できなくなりました。
+(%s%s%s%s%s%s%s)
+新しいトナーカートリッジに交換することをおすすめします。
+交換方法の詳細は、取扱説明書をご覧ください。
+</Item>
+  <Item key="s_warn_tonerout1">印刷できます	トナーカートリッジが寿命になりました。
+(%s%s%s%s%s%s%s)
+新しいトナーカートリッジに交換してください。
+交換方法の詳細は、取扱説明書をご覧ください。
+</Item>
+  <Item key="s_warn_drum1">印刷できます	ドラムカートリッジは交換時期が近づいています。
+交換方法の詳細は、取扱説明書をご覧ください。
+</Item>
+  <Item key="s_warn_drum2">印刷できます	ドラムカートリッジの寿命により印字品質が保証できなくなりました。
+新しいドラムカートリッジに交換することをおすすめします。
+交換方法の詳細は、取扱説明書をご覧ください。
+</Item>
+  <Item key="s_warn_etb">印刷できます	クリーニング中です。しばらくお待ちください。
+</Item>
+  <Item key="s_w_waitcleaning">印刷できます	定着クリーニング1を実行してください。</Item>
+  <Item key="s_w_overtoner">印刷できます	トナーカートリッジが寿命になりました。
+(%s%s%s%s%s%s%s)
+本体の故障の原因となることがありますので、新しいトナーカートリッジに交換することをおすすめします。
+交換方法の詳細は、取扱説明書をご覧ください。
+</Item>
+  <Item key="s_w_accesstoner">印刷できます	トナーカートリッジの状態を確認しています。しばらくお待ちください。
+</Item>
+  <Item key="s_printing">印刷中です	 </Item>
+  <Item key="s_printing3">印刷中です	クリーニング中です。しばらくお待ちください。
+</Item>
+  <Item key="s_printing4">印刷中です	トナーカートリッジの状態を確認しています。しばらくお待ちください。
+</Item>
+  <Item key="s_sleep">スリープ中です	 </Item>
+  <Item key="s_canceled">印刷中止中です	 </Item>
+  <Item key="s_cleaning">クリーニング中です	しばらくお待ちください。</Item>
+  <Item key="s_ready">印刷できます	  </Item>
+  <Item key="s_servernotready">サーバと通信できません	サーバがダウンしている可能性があります。
+サーバを確認してください。</Item>
+  <Item key="s_invalid_port">ポートが違います	プリンタがサポートしていないポートに接続されています。
+ポートを確認してください。</Item>
+  <Item key="s_check_status">ステータス取得中です	しばらくお待ちください。</Item>
+  <Item key="s_adapter">ネットワークボードエラー	ネットワークケーブルが接続されていないか、プリンタの電源が入っていません。確認してください。</Item>
+  <Item key="s_cant_comm">通信エラー	以下の項目を確認してください。
+・プリンタの電源は入っていますか?
+・ケーブルは正しく接続されていますか?</Item>
+  <Item key="s_incompatible">互換性のないプリンタです	接続されているプリンタは使用できません。</Item>
+  <Item key="s_disk_full">ディスク容量が不足しています	プリンタが接続されているコンピュータまたはサーバにある不要なファイルを削除し、[再開]をクリックしてください。</Item>
+  <Item key="s_disk_full2">ディスク容量が不足しています	プリンタが接続されているコンピュータまたはサーバにある不要なファイルを削除してください。</Item>
+  <Item key="s_jam2">紙がつまりました	以下の箇所を確認し、つまった用紙を取り除いてください。
+%s</Item>
+  <Item key="s_jam2_info">・給紙トレイ
+・排紙部
+・後ろカバー内
+
+給紙トレイ上の用紙を取り除いてから、本体背面の後ろカバーを開けてください。
+取り除き方の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_jam2_info2">・排紙部
+・後ろカバー内
+
+本体背面の後ろカバーを開けてください。
+取り除き方の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_no_drum">ドラムカートリッジがありません	前カバーを開けて、ドラムカートリッジをセットしてください。
+セット方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_tonerout">トナーカートリッジを交換してください	トナーカートリッジが寿命になりました。
+(%s%s%s%s%s%s%s)
+
+操作できるセット位置 :
+・%s
+
+本体の故障の原因となることがありますので、新しいトナーカートリッジに交換することをおすすめします。
+交換方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_tonerout1">トナーカートリッジを交換してください	トナーカートリッジの寿命などの原因により印字品質が保証できなくなりました。
+(%s%s%s%s%s%s%s)
+
+操作できるセット位置 :
+・%s
+
+新しいトナーカートリッジに交換することをおすすめします。
+交換方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_drumout1">ドラムカートリッジを交換してください	ドラムカートリッジの寿命により印字品質が保証できなくなりました。
+新しいドラムカートリッジに交換することをおすすめします。
+交換方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_xfer_error">印刷できませんでした	プリンタへのデータ転送が間に合わなかったか、転送エラーが発生しました。%s</Item>
+  <Item key="s_xfer_error2">
+[再開]をクリックして印刷を再開するか、[印刷中止]をクリックして印刷しなおしてください。</Item>
+  <Item key="s_change_paper">用紙を確認してください	%sをセットし、プリンタのPaperキーを押してください。
+セット方法の詳細は、取扱説明書をご覧ください。%s</Item>
+  <Item key="s_change_paper2">用紙を確認してください	A5の短辺側を奥(縦送り方向)にセットし、プリンタのPaperキーを押してください。
+セット方法の詳細は、取扱説明書をご覧ください。%s</Item>
+  <Item key="s_change_paper3">用紙を確認してください	A5の長辺側を奥(横送り方向)にセットし、プリンタのPaperキーを押してください。
+セット方法の詳細は、取扱説明書をご覧ください。%s</Item>
+  <Item key="s_change_paper_sub">
+現在セットされている用紙で印刷する場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_no_paper2">用紙がないか、給紙できませんでした	%sをセットし、プリンタのPaperキーを押してください。
+セット方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_no_paper2_2">用紙がないか、給紙できませんでした	A5の短辺側を奥(縦送り方向)にセットし、プリンタのPaperキーを押してください。
+セット方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_no_paper2_3">用紙がないか、給紙できませんでした	A5の長辺側を奥(横送り方向)にセットし、プリンタのPaperキーを押してください。
+セット方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_no_memory">メモリが不足しています	プリンタが接続されているコンピュータまたはサーバのメモリが不足しています。
+不要なアプリケーションを終了させてください。</Item>
+  <Item key="s_calib_error">キャリブレーションエラー	キャリブレーションを正しく終了できませんでした。ジョブをキャンセルし、キャリブレーションしなおしてください。
+キャリブレーションの詳細は、取扱説明書をご覧ください。
+印刷を続ける場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_calib_error2">キャリブレーションエラー	キャリブレーションを正しく終了できませんでした。</Item>
+  <Item key="s_waiting">準備中です	%s
+%s
+%s</Item>
+  <Item key="s_waiting_2">次の動作が終了するまで、しばらくお待ちください。</Item>
+  <Item key="s_wt_init">・プリンタの初期化中</Item>
+  <Item key="s_wt_calib">・キャリブレーションの実行中</Item>
+  <Item key="s_ip_block">印刷ができません	管理者に連絡してください。</Item>
+  <Item key="s_missprint">印刷を確認してください	正しい印刷結果にならない場合があります。
+%s</Item>
+  <Item key="s_missprint2">[再開]をクリックするか、印刷しなおしてください。</Item>
+  <Item key="s_missprint3">印刷しなおしてください。</Item>
+  <Item key="s_no_cartridge">トナーカートリッジがありません	(%s%s%s%s%s%s%s)
+
+操作できるセット位置 :
+・%s
+
+上カバーを開けて、トナーカートリッジをセットし、上カバーを閉じてください。
+セット方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_door_open">カバーが開いています	%s
+%s</Item>
+  <Item key="s_door_open_rear">後ろカバーを閉じてください。</Item>
+  <Item key="s_door_open_top">上カバーを閉じてください。</Item>
+  <Item key="s_firm_update">ファームウェアを更新しています	しばらくお待ちください。</Item>
+  <Item key="s_rotatetoneropen">トナーカートリッジの位置が正しくありません	トナーカートリッジを交換位置に移動するには、上カバーを閉じてください。</Item>
+  <Item key="s_rotatetonerclose">トナーカートリッジを移動しています	しばらくお待ちください。</Item>
+  <Item key="s_readytoner">トナーカートリッジを交換できます	・%s
+
+上カバーを開けて、トナーカートリッジを交換してください。
+交換方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_drumcartridge_error">ドラムカートリッジの接続を確認してください	ドラムカートリッジとの接続に問題がある可能性があります。
+ドラムカートリッジをセットしなおすか、または電源をいったん切り、しばらく待ってから電源を入れなおしてください。
+それでもこのメッセージが表示される場合は、新しいドラムカートリッジに交換してください。</Item>
+  <Item key="s_tonerout3">トナーカートリッジを交換してください	トナーカートリッジが寿命になりました。
+(%s%s%s%s%s%s%s)
+
+操作できるセット位置 :
+・%s
+
+本体の故障の原因となることがありますので、新しいトナーカートリッジに交換することをおすすめします。
+交換方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_waitcleaning">クリーニングが必要です	定着クリーニング1を実行してください。
+印刷を続ける場合は、[再開]をクリックしてください。</Item>
+  <Item key="s_waitcleaning2">クリーニングの実行を待っています	クリーニングが終了するまでお待ちください。</Item>
+  <Item key="s_waitprinting">印刷を再開できます	給紙部に正しいサイズの用紙をセットし、[再開]をクリックするか、プリンタのPaperキーを押してください。</Item>
+  <Item key="s_waitprinting2">印刷を再開できます	給紙部に正しいサイズの用紙をセットし、プリンタのPaperキーを押してください。</Item>
+  <Item key="s_cooldown">冷却中です	処理には時間がかかることがあります。しばらくお待ちください。</Item>
+  <Item key="s_waiting2">準備中です	印刷処理の終了中です。続けて印刷できます。</Item>
+  <Item key="s_printing_cs">クリーニングページを印刷しています	しばらくお待ちください。</Item>
+  <Item key="s_service_call">サービスエラー	プリンタに異常があります。
+電源をいったん切り、しばらく待ってから電源を入れなおしてください。電源を入れなおしてもサービスエラーが表示される場合は、電源を切り、お買い求めの販売店またはサービス店にご連絡ください。ご連絡の際には、表示されたエラーコードと症状をお知らせください。
+エラーコード : %04X %04X</Item>
+  <Item key="s_cartridge_error">トナーカートリッジの接続を確認してください	(%s%s%s%s%s%s%s)
+
+操作できるセット位置 :
+・%s
+
+トナーカートリッジとの接続に問題がある可能性があります。
+トナーカートリッジをセットしなおすか、または電源をいったん切り、しばらく待ってから電源を入れなおしてください。
+それでもこのメッセージが表示される場合は、新しいトナーカートリッジに交換してください。</Item>
+  <Item key="s_missplace">異なる色のトナーカートリッジがセットされています	次のセット位置に、異なる色のトナーカートリッジがセットされています。
+(%s%s%s%s%s%s%s)
+
+操作できるセット位置 :
+・%s
+
+上カバーを開けて、トナーカートリッジをそれぞれの色に対応した位置にセットしなおしてください。
+セット方法の詳細は、取扱説明書をご覧ください。</Item>
+  <Item key="s_not_ready">プリンタが使用可能な状態になっていません	排紙部に梱包材(シート)が残っています。
+電源をいったん切り、これを取り除いてから電源を入れなおしてください。</Item>
+  <Item key="s_set_cleaningpaper">クリーニングを開始します	クリーニングページのプリント面を下向きにして給紙トレイにセットしてください。
+プリンタのPaperキーを押すと、クリーニングを続行します。</Item>
+  <Item key="s_size_unknown">用紙</Item>
+  <Item key="s_size_a4">[A4]</Item>
+  <Item key="s_size_a5">[A5]</Item>
+  <Item key="s_size_b5">[B5]</Item>
+  <Item key="s_size_executive">[エグゼクティブ]</Item>
+  <Item key="s_size_legal">[リーガル]</Item>
+  <Item key="s_size_letter">[レター]</Item>
+  <Item key="s_size_statement">[ステートメント]</Item>
+  <Item key="s_size_postcard">[はがき]</Item>
+  <Item key="s_size_dbl_postcard">[往復はがき]</Item>
+  <Item key="s_size_env_b5">[Envelope B5]</Item>
+  <Item key="s_size_env_c5">[Envelope C5]</Item>
+  <Item key="s_size_env_10">[Envelope COM10]</Item>
+  <Item key="s_size_env_monarch">[Envelope Monarch]</Item>
+  <Item key="s_size_env_dl">[Envelope DL]</Item>
+  <Item key="s_size_4x1_postcard">[4面はがき]</Item>
+  <Item key="s_size_indexcard">[Index Card]</Item>
+  <Item key="s_size_16K">[16K]</Item>
+  <Item key="s_size_folio">[Foolscap]</Item>
+  <Item key="s_size_env_t3">[封筒 長形3号]</Item>
+  <Item key="s_size_env_yt3">[封筒 洋形長3号]</Item>
+  <Item key="s_size_custom">[カスタム用紙]</Item>
+  <Item key="s_comma">、</Item>
+  <Item key="s_toner_k">ブラック</Item>
+  <Item key="s_toner_y">イエロー</Item>
+  <Item key="s_toner_m">マゼンタ</Item>
+  <Item key="s_toner_c">シアン</Item>
+ </MsgList>
+</PswMsgTable>
+

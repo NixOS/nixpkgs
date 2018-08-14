@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#chmod 4755 /usr/bin/cnpkmodule
+mkdir -p   /etc/cngplp/account
+chmod 777  /etc/cngplp/account
+
+exit 0

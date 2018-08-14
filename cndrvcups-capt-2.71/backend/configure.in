@@ -1,0 +1,30 @@
+AC_INIT(ccp.c, 1.0.0, )
+# AC_CONFIG_SRCDIR([ccp.c])
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE(ccp, 1.0.0, no-define)
+
+AC_ARG_ENABLE(progpath)
+if test "${enable_progpath}" = "" ; then
+   enable_progpath="$prefix/bin"
+fi
+
+AC_DEFINE_UNQUOTED(PROG_PATH, "$enable_progpath")
+AC_SUBST(PROG_PATH)
+
+# Checks for programs.
+AC_PROG_CC
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_HEADER_SYS_WAIT
+AC_CHECK_HEADERS([fcntl.h limits.h stdlib.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+AC_CHECK_FUNCS([memset strchr])
+
+# AC_CONFIG_FILES([Makefile])
+AC_OUTPUT(Makefile)

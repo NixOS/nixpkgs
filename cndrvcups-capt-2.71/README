@@ -1,0 +1,77 @@
+ This file gives a brief description on how to build and install CAPT driver
+modules.
+
+Introduction:
+=============
+  This package is the printer driver modules for Canon CAPT printers. These
+ modules are used with CUPS (Common UNIX Printing System) and convert
+ Postscript files into the printer readable form.
+
+ This package consists of four modules:
+
+* ccp module 
+  This is a CUPS backend module for a named pipe. 
+
+* captstatusui application
+  This is a Graphical-User-Interface application for CAPT printers.
+
+* pstocapt filter module
+  This is a CUPS filter module to convert Postscript file into the CAPT
+ printer readable form.
+
+* PPD files
+   PPD (PostScript Printer Description) files for CAPT printers.
+ This package supports the printers; 
+  (see README-capt-x.xx.txt file)
+
+Licensing:
+==========
+  This package consists of four modules as described above. These modules
+ are subject to GNU General Public License (GPL) (see COPYING file).
+
+  Note that licensing term may vary from file to file. Please consult
+ each files for the exact licensing conditions.
+
+
+Requirments:
+============
+    * aclocal		(1.4.x or above)
+    * automake		(1.4.x or above)
+    * libcups		(1.1.17 or above)
+    * libbuftool	(1.00 or above)
+
+<statusui>
+    * aclocal    (1.4.x)
+    * automake   (1.4.x)
+    * Gtk+       (2.4.x or above)
+    * libcups    (1.1.17 or above)
+    * libxml2    (2.6.x or above)
+    * libbuftool (1.00 or above)
+
+<cngplp>
+    * aclocal   (1.4.x or above)
+    * automake  (1.4.x or above)
+    * Gtk+      (2.4.x or above)
+    * libcups   (1.1.17 or above)
+    * libxml2   (2.6.x or above)
+    * libglade2 (2.4.x or above)
+
+
+Quick install:
+==============
+  To build and install CAPT modules, run make at the top-level
+ directory of this pakage source trees as follows:
+
+ $ make gen
+       or
+ $ ./allgen.sh
+       or
+ $ ./allgen.sh -deb
+ $ su
+ # make install
+
+
+Trademark:
+==============
+  CUPS and the CUPS logo are trademarks of Apple Inc.
+

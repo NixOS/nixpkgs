@@ -1,0 +1,10 @@
+#!/bin/sh
+
+/etc/init.d/ccpd stop > /dev/null 2>&1
+while [ `ps awx | grep -e ccpd -e captmon | grep -v grep | wc -l` -ne 0 ]
+do
+	kill -9 `ps awx | grep -e ccpd -e captmon | grep -v grep | cut -c 1-5` > /dev/null 2>&1
+	sleep 3
+done
+
+exit 0

@@ -1,0 +1,1 @@
+#undef PROG_PATH

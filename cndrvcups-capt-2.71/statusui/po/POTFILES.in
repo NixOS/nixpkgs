@@ -1,0 +1,24 @@
+# List of source files containing translatable strings.
+
+src/main.c
+src/uimain.c
+src/interface.c
+src/callbacks.c
+src/support.c
+src/msgdlg.c
+src/data_process.c
+src/regipaperdlg.c
+src/ccinfodlg.c
+src/networksdlg.c
+src/asstprtsdlg.c
+src/startupsettingsdlg.c
+src/sleepsdlg.c
+src/ppapdlg.c
+src/cassetteset2dlg.c
+src/resetunitdlg.c
+src/ppavhdlg.c
+src/multitraydlg.c
+src/cleaningdlg.c
+src/tonerreplacementdlg.c
+src/calibrationsettingsdlg.c
+

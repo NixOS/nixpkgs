@@ -1,0 +1,2399 @@
+# Print Dialog for Canon LIPS/PS/LIPSLX/UFR2/CAPT Printer.
+# Copyright (C) 2004-2013 Canon Inc.
+# All rights reserved.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cngplp 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-10 15:50+0900\n"
+"PO-Revision-Date: 2004-04-14 20:28+0900\n"
+"Last-Translator: CANON INC.\n"
+"Language-Team: CANON INC.\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gladestr.h:2
+#, no-c-format
+msgid "(0 to 200)%"
+msgstr "(0〜200) %"
+
+#: gladestr.h:3
+msgid "(1 to 10000)"
+msgstr "(1〜10000)"
+
+#: gladestr.h:4
+msgid "*"
+msgstr ""
+
+#: gladestr.h:5 keystr.h:55
+msgid "B & W Halftones:"
+msgstr "モノクロ中間調 :"
+
+#: gladestr.h:6
+msgid "Banner"
+msgstr "バナーページ印刷設定"
+
+#: gladestr.h:7
+msgid "Binding Location:"
+msgstr "とじ方向 :"
+
+#: gladestr.h:8
+msgid "Brightness and Gamma"
+msgstr "明るさ/ガンマ補正設定"
+
+#: gladestr.h:9
+msgid "Brightness:"
+msgstr "明るさ :"
+
+#: gladestr.h:10
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: gladestr.h:11
+msgid "Color Halftones:"
+msgstr "カラー中間調 :"
+
+#: gladestr.h:12
+msgid "Color Mode:"
+msgstr "カラーモード :"
+
+#: gladestr.h:13 keystr.h:75
+msgid "Detect Paper Size"
+msgstr "用紙サイズのチェックを行う"
+
+#: gladestr.h:14
+msgid "Device Settings"
+msgstr "デバイス設定"
+
+#: gladestr.h:15 keystr.h:76
+msgid "Draft Mode:"
+msgstr "ドラフトモード :"
+
+#: gladestr.h:16
+msgid "Duplex Unit"
+msgstr "両面ユニット"
+
+#: gladestr.h:17
+msgid "End:"
+msgstr "印刷終了 :"
+
+#: gladestr.h:18
+msgid "Feed A5 from Short Edge:"
+msgstr "A5を縦送り :"
+
+#: gladestr.h:19
+msgid "Finishing"
+msgstr "仕上げ"
+
+#: gladestr.h:20
+msgid "Finishing Details"
+msgstr "仕上げ詳細"
+
+#: gladestr.h:21
+msgid "Finishing Details..."
+msgstr "仕上げ詳細..."
+
+#: gladestr.h:22
+msgid "Finishing:"
+msgstr "排紙方法 :"
+
+#: gladestr.h:23
+msgid "Fixing Correction for Postcards:"
+msgstr "はがき定着補正 :"
+
+#: gladestr.h:24
+msgid "Fixing Mode:"
+msgstr "特殊定着モード :"
+
+#: gladestr.h:25
+msgid "Gamma:"
+msgstr "ガンマ補正 :"
+
+#: gladestr.h:26
+msgid "General"
+msgstr "印刷全般"
+
+#: gladestr.h:27
+msgid "Glossy Plain Paper Processing:"
+msgstr "普通紙光沢処理 :"
+
+#: gladestr.h:28
+msgid "Gutter Settings"
+msgstr "とじしろ指定"
+
+#: gladestr.h:29
+msgid "Gutter..."
+msgstr "とじしろ..."
+
+#: gladestr.h:30
+msgid "Gutter:"
+msgstr "とじしろ :"
+
+#: gladestr.h:31
+msgid "Image Refinement:"
+msgstr "スーパースムーズを使う :"
+
+#: gladestr.h:32
+msgid "Image Refinement: "
+msgstr "スーパースムーズ :"
+
+#: gladestr.h:33
+msgid "Landscape"
+msgstr "ランドスケープ"
+
+#: gladestr.h:34
+msgid "OK"
+msgstr ""
+
+#: gladestr.h:35
+msgid "Orientation"
+msgstr "印刷の向き"
+
+#: gladestr.h:36
+msgid "Output Adjustment Mode:"
+msgstr "出力調整モード :"
+
+#: gladestr.h:37
+msgid "Page Layout"
+msgstr "ページレイアウト"
+
+#: gladestr.h:38
+msgid "Page Size:"
+msgstr "原稿サイズ :"
+
+#: gladestr.h:39
+msgid "Paper Curl Correction at Output:"
+msgstr "排紙時の用紙のカール補正 :"
+
+#: gladestr.h:40
+msgid "Paper Output:"
+msgstr "排紙先 :"
+
+#: gladestr.h:41
+msgid "Paper Source"
+msgstr "給紙"
+
+#: gladestr.h:42
+msgid "Paper Source  "
+msgstr "給紙部で指定"
+
+#: gladestr.h:43
+msgid "Paper Source Options:"
+msgstr "給紙オプション :"
+
+#: gladestr.h:44
+msgid "Paper Source:"
+msgstr "給紙部 :"
+
+#: gladestr.h:45
+msgid "Paper Type"
+msgstr "用紙種類で指定"
+
+#: gladestr.h:46
+msgid "Paper Type:"
+msgstr "用紙種類 :"
+
+#: gladestr.h:47
+msgid "Portrait"
+msgstr "ポートレート"
+
+#: gladestr.h:48
+msgid "Print Image Adjustment:"
+msgstr "画像調整モード :"
+
+#: gladestr.h:49
+msgid "Print Style:"
+msgstr "印刷方法 :"
+
+#: gladestr.h:50 keystr.h:153
+msgid "Print on the Back of Printed Paper from the Multi-purpose Tray"
+msgstr "印刷済み用紙の裏面に手差しで印刷する"
+
+#: gladestr.h:51
+msgid "Quality"
+msgstr "印刷品質"
+
+#: gladestr.h:52
+msgid "Resolution:"
+msgstr "解像度 :"
+
+#: gladestr.h:53
+msgid "Restore Defaults"
+msgstr "標準に戻す"
+
+#: gladestr.h:54
+msgid "Reverse Landscape"
+msgstr "反転ランドスケープ"
+
+#: gladestr.h:55
+msgid "Reverse Portrait"
+msgstr "反転ポートレート"
+
+#: gladestr.h:56
+msgid "Rotate Print Data 180 Degrees"
+msgstr "印刷の向きを180度回転する"
+
+#: gladestr.h:57
+msgid "Select by"
+msgstr "用紙の指定方法"
+
+#: gladestr.h:58
+msgid "Special Print Adjustment A:"
+msgstr "特殊印字モードA :"
+
+#: gladestr.h:59
+msgid "Special Print Adjustment B:"
+msgstr "特殊印字モードB :"
+
+#: gladestr.h:60
+msgid "Special Print Mode A:"
+msgstr "特殊印字処理A :"
+
+#: gladestr.h:61
+msgid "Special Print Mode B:"
+msgstr "特殊印字処理B :"
+
+#: gladestr.h:62
+msgid "Special Print Mode:"
+msgstr "特殊印字モード :"
+
+#: gladestr.h:63
+msgid "Special Smoothing Mode:"
+msgstr "特殊スムージングモード :"
+
+#: gladestr.h:64
+msgid "Start:"
+msgstr "印刷開始 :"
+
+#: gladestr.h:65 keystr.h:214
+msgid "Toner Density (Black):"
+msgstr "トナー濃度(ブラック) :"
+
+#: gladestr.h:66
+msgid "Toner Density (Cyan):"
+msgstr "トナー濃度(シアン) :"
+
+#: gladestr.h:67
+msgid "Toner Density (Magenta):"
+msgstr "トナー濃度(マゼンタ) :"
+
+#: gladestr.h:68
+msgid "Toner Density (Yellow):"
+msgstr "トナー濃度(イエロー) :"
+
+#: gladestr.h:69
+msgid "Use Pure Black:"
+msgstr "グレー補償 :"
+
+#: gladestr.h:70
+msgid "Use Skip Blank Pages Mode"
+msgstr "白紙節約モードを使う"
+
+#: gladestr.h:71
+msgid "Use Toner Save"
+msgstr "トナー節約モードを使う"
+
+#: gladestr.h:72
+msgid "Wrinkles Correction at Output:"
+msgstr "排紙時のしわ補正 :"
+
+#: gladestr.h:73
+msgid "mm (0 to 30)"
+msgstr ""
+
+#: keystr.h:1
+msgid "-1 (Light)"
+msgstr "-1(薄く)"
+
+#: keystr.h:2
+msgid "-2 (Light)"
+msgstr "-2(薄く)"
+
+#: keystr.h:3
+msgid "-3 (Light)"
+msgstr "-3(薄く)"
+
+#: keystr.h:4
+msgid "-4 (Light)"
+msgstr "-4(薄く)"
+
+#: keystr.h:5
+msgid "-5 (Light)"
+msgstr "-5(薄く)"
+
+#: keystr.h:6
+msgid "-6 (Light)"
+msgstr "-6(薄く)"
+
+#: keystr.h:7
+msgid "-7 (Light)"
+msgstr "-7(薄く)"
+
+#: keystr.h:8
+msgid "-8 (Light)"
+msgstr "-8(薄く)"
+
+#: keystr.h:9
+msgid "0 (Standard)"
+msgstr "0(標準)"
+
+#: keystr.h:10
+msgid "1 (Dark)"
+msgstr "1(濃く)"
+
+#: keystr.h:11
+msgid "1 Page per Sheet"
+msgstr "1ページ/枚"
+
+#: keystr.h:12
+msgid "1-sided Printing"
+msgstr "片面印刷"
+
+#: keystr.h:13
+msgid "11x17 "
+msgstr "レジャー "
+
+#: keystr.h:14
+msgid "11x17"
+msgstr "レジャー"
+
+#: keystr.h:15
+msgid "1200 dpi"
+msgstr ""
+
+#: keystr.h:16
+msgid "12x18"
+msgstr ""
+
+#: keystr.h:17
+msgid "13x19"
+msgstr ""
+
+#: keystr.h:18
+msgid "16 Pages per Sheet"
+msgstr "16ページ/枚"
+
+#: keystr.h:19
+msgid "16K"
+msgstr ""
+
+#: keystr.h:20
+msgid "2 (Dark)"
+msgstr "2(濃く)"
+
+#: keystr.h:21
+msgid "2 Pages per Sheet"
+msgstr "2ページ/枚"
+
+#: keystr.h:22
+msgid "2-sided Printing"
+msgstr "両面印刷"
+
+#: keystr.h:23
+msgid "250 Sheet Drawer x 2"
+msgstr "250枚カセットx2"
+
+#: keystr.h:24
+msgid "250 Sheet Drawer x 3"
+msgstr "250枚カセットx3"
+
+#: keystr.h:25
+msgid "250 Sheet Drawer"
+msgstr "250枚カセット"
+
+#: keystr.h:26
+msgid "3 (Dark)"
+msgstr "3(濃く)"
+
+#: keystr.h:27
+msgid "300 dpi"
+msgstr ""
+
+#: keystr.h:28
+msgid "4 (Dark)"
+msgstr "4(濃く)"
+
+#: keystr.h:29
+msgid "4 Pages per Sheet"
+msgstr "4ページ/枚"
+
+#: keystr.h:30
+msgid "4 on 1 Postcard"
+msgstr "4面はがき"
+
+#: keystr.h:31
+msgid "5 (Dark)"
+msgstr "5(濃く)"
+
+#: keystr.h:32
+msgid "500 Sheet Cassette"
+msgstr "500枚カセット"
+
+#: keystr.h:33
+msgid "500 Sheet Drawer"
+msgstr "500枚カセット"
+
+#: keystr.h:34
+msgid "550 Sheet Cassette x 2"
+msgstr "550枚カセットx2"
+
+#: keystr.h:35
+msgid "550 Sheet Cassette x 3"
+msgstr "550枚カセットx3"
+
+#: keystr.h:36
+msgid "550 Sheet Cassette"
+msgstr "550枚カセット"
+
+#: keystr.h:37
+msgid "550 Sheet Drawer x 2"
+msgstr "550枚カセットx2"
+
+#: keystr.h:38
+msgid "550 Sheet Drawer x 3"
+msgstr "550枚カセットx3"
+
+#: keystr.h:39
+msgid "550 Sheet Drawer"
+msgstr "550枚カセット"
+
+#: keystr.h:40
+msgid "6 (Dark)"
+msgstr "6(濃く)"
+
+#: keystr.h:41
+msgid "6 Pages per Sheet"
+msgstr "6ページ/枚"
+
+#: keystr.h:42
+msgid "600 dpi"
+msgstr ""
+
+#: keystr.h:43
+msgid "7 (Dark)"
+msgstr "7(濃く)"
+
+#: keystr.h:44
+msgid "8 (Dark)"
+msgstr "8(濃く)"
+
+#: keystr.h:45
+msgid "8K"
+msgstr ""
+
+#: keystr.h:46
+msgid "9 Pages per Sheet"
+msgstr "9ページ/枚"
+
+#: keystr.h:47
+msgid "A3"
+msgstr ""
+
+#: keystr.h:48
+msgid "A4"
+msgstr ""
+
+#: keystr.h:49
+msgid "A5"
+msgstr ""
+
+#: keystr.h:50
+msgid "A6"
+msgstr ""
+
+#: keystr.h:51
+msgid "Always"
+msgstr "すべて"
+
+#: keystr.h:52
+msgid "Auto "
+msgstr "自動"
+
+#: keystr.h:53
+msgid "Auto Detect"
+msgstr "カラー/モノクロ自動切替"
+
+#: keystr.h:54
+msgid "Auto"
+msgstr "自動"
+
+#: keystr.h:56
+msgid "B4"
+msgstr ""
+
+#: keystr.h:57
+msgid "B5"
+msgstr ""
+
+#: keystr.h:58
+msgid "Back Side Correction(Plus Curl)"
+msgstr "裏面側の反り(プラスのカール)補正"
+
+#: keystr.h:59
+msgid "Black and White"
+msgstr "モノクロ"
+
+#: keystr.h:60
+msgid "Cassette 1"
+msgstr "カセット1"
+
+#: keystr.h:61
+msgid "Cassette 2"
+msgstr "カセット2"
+
+#: keystr.h:62
+msgid "Cassette 3"
+msgstr "カセット3"
+
+#: keystr.h:63
+msgid "Cassette 4"
+msgstr "カセット4"
+
+#: keystr.h:64
+msgid "Coated Paper 1"
+msgstr "コート紙1"
+
+#: keystr.h:65
+msgid "Coated Paper 2"
+msgstr "コート紙2"
+
+#: keystr.h:66
+msgid "Coated Paper 3"
+msgstr "コート紙3"
+
+#: keystr.h:67
+msgid "Coated Paper 4"
+msgstr "コート紙4"
+
+#: keystr.h:68
+msgid "Coated Paper"
+msgstr "コート紙"
+
+#: keystr.h:69
+msgid "Collate "
+msgstr "ソート"
+
+#: keystr.h:70
+msgid "Color Tone"
+msgstr "色調"
+
+#: keystr.h:71
+msgid "Color"
+msgstr "カラー"
+
+#: keystr.h:72
+msgid "Detect Paper Size When 1-sided Printing is Set"
+msgstr "片面印刷時の用紙サイズのチェックを行う"
+
+#: keystr.h:73
+msgid "Detect Paper Size in Cassette"
+msgstr "カセット用紙サイズのチェックを行う"
+
+#: keystr.h:74
+msgid "Detect Paper Size in Multi-purpose Tray"
+msgstr "給紙トレイ用紙サイズのチェックを行う"
+
+#: keystr.h:77
+msgid "Drawer 1"
+msgstr "カセット1"
+
+#: keystr.h:78
+msgid "Drawer 2"
+msgstr "カセット2"
+
+#: keystr.h:79
+msgid "Drawer 3"
+msgstr "カセット3"
+
+#: keystr.h:80
+msgid "Drawer 4"
+msgstr "カセット4"
+
+#: keystr.h:81
+msgid "Envelope B5"
+msgstr ""
+
+#: keystr.h:82
+msgid "Envelope C5"
+msgstr ""
+
+#: keystr.h:83
+msgid "Envelope COM10"
+msgstr ""
+
+#: keystr.h:84
+msgid "Envelope DL"
+msgstr ""
+
+#: keystr.h:85
+msgid "Envelope H"
+msgstr "封筒H"
+
+#: keystr.h:86
+msgid "Envelope KAKUGATA 2"
+msgstr "封筒 角形2号"
+
+#: keystr.h:87
+msgid "Envelope KAKUGATA 4"
+msgstr "封筒 角形4号"
+
+#: keystr.h:88
+msgid "Envelope L"
+msgstr "封筒L"
+
+#: keystr.h:89
+msgid "Envelope Monarch"
+msgstr ""
+
+#: keystr.h:90
+msgid "Envelope NAGAGATA 2"
+msgstr "封筒 長形2号"
+
+#: keystr.h:91
+msgid "Envelope NAGAGATA 3"
+msgstr "封筒 長形3号"
+
+#: keystr.h:92
+msgid "Envelope No.10 (COM10)"
+msgstr ""
+
+#: keystr.h:93
+msgid "Envelope YOUGATA 2"
+msgstr "封筒 洋形2号"
+
+#: keystr.h:94
+msgid "Envelope YOUGATA 4"
+msgstr "封筒 洋形4号"
+
+#: keystr.h:95
+msgid "Envelope YOUGATANAGA 3"
+msgstr "封筒 洋形長3号"
+
+#: keystr.h:96
+msgid "Envelope"
+msgstr "封筒"
+
+#: keystr.h:97
+msgid "Executive"
+msgstr "エグゼクティブ"
+
+#: keystr.h:98
+msgid "Foolscap"
+msgstr ""
+
+#: keystr.h:99
+msgid "Front Side Correction(Minus Curl)"
+msgstr "表面側の反り(マイナスのカール)補正"
+
+#: keystr.h:100
+msgid "Glossy Film"
+msgstr "光沢フィルム"
+
+#: keystr.h:101
+msgid "Gradation"
+msgstr "階調"
+
+#: keystr.h:102
+msgid "Group"
+msgstr "グループ"
+
+#: keystr.h:103
+msgid "Halftones:"
+msgstr "中間調 :"
+
+#: keystr.h:104
+msgid "Heavy Paper "
+msgstr "厚紙 "
+
+#: keystr.h:105
+msgid "Heavy Paper 1"
+msgstr "厚紙1"
+
+#: keystr.h:106
+msgid "Heavy Paper 2"
+msgstr "厚紙2"
+
+#: keystr.h:107
+msgid "Heavy Paper 3 "
+msgstr "厚紙3 "
+
+#: keystr.h:108
+msgid "Heavy Paper 3"
+msgstr "厚紙3"
+
+#: keystr.h:109
+msgid "Heavy Paper H"
+msgstr "厚紙H"
+
+#: keystr.h:110
+msgid "Heavy Paper L "
+msgstr "厚紙 L "
+
+#: keystr.h:111
+msgid "Heavy Paper L"
+msgstr "厚紙L"
+
+#: keystr.h:112
+msgid "Heavy Paper"
+msgstr "厚紙"
+
+#: keystr.h:113
+msgid "Heavy/HeavyL"
+msgstr "厚紙/厚紙 L"
+
+#: keystr.h:114
+msgid "Index Card"
+msgstr ""
+
+#: keystr.h:115
+msgid "Label"
+msgstr "ラベル用紙"
+
+#: keystr.h:116
+msgid "Legal"
+msgstr "リーガル"
+
+#: keystr.h:117
+msgid "Letter"
+msgstr "レター"
+
+#: keystr.h:118
+msgid "Level 1"
+msgstr "レベル1"
+
+#: keystr.h:119
+msgid "Level 2"
+msgstr "レベル2"
+
+#: keystr.h:120
+msgid "Level 3"
+msgstr "レベル3"
+
+#: keystr.h:121
+msgid "Long Edge (Bottom)"
+msgstr "長辺とじ(下)"
+
+#: keystr.h:122
+msgid "Long Edge (Left)"
+msgstr "長辺とじ(左)"
+
+#: keystr.h:123
+msgid "Long Edge (Right)"
+msgstr "長辺とじ(右)"
+
+#: keystr.h:124
+msgid "Long Edge (Top)"
+msgstr "長辺とじ(上)"
+
+#: keystr.h:125
+msgid "Mode 1"
+msgstr "モード1"
+
+#: keystr.h:126
+msgid "Mode 2"
+msgstr "モード2"
+
+#: keystr.h:127
+msgid "Mode 3"
+msgstr "モード3"
+
+#: keystr.h:128
+msgid "Mode 4"
+msgstr "モード4"
+
+#: keystr.h:129
+msgid "Mode 5"
+msgstr "モード5"
+
+#: keystr.h:130
+msgid "Mode 6"
+msgstr "モード6"
+
+#: keystr.h:131
+msgid "Multi-purpose Tray "
+msgstr "手差し(トレイ)"
+
+#: keystr.h:132
+msgid "Multi-purpose Tray"
+msgstr "手差し"
+
+#: keystr.h:133
+msgid "Never"
+msgstr "使わない"
+
+#: keystr.h:134
+msgid "None "
+msgstr "なし "
+
+#: keystr.h:135
+msgid "None (Solid)"
+msgstr "なし(黒ベタ)"
+
+#: keystr.h:136
+msgid "Off  "
+msgstr "指定しない"
+
+#: keystr.h:137
+msgid "Off "
+msgstr "しない"
+
+#: keystr.h:138
+msgid "Off"
+msgstr "使わない"
+
+#: keystr.h:139
+msgid "On "
+msgstr "する"
+
+#: keystr.h:140
+msgid "On"
+msgstr "使う"
+
+#: keystr.h:141
+msgid "Output Tray"
+msgstr "排紙トレイ"
+
+#: keystr.h:142
+msgid "Pattern 1"
+msgstr "パターン1"
+
+#: keystr.h:143
+msgid "Pattern 2"
+msgstr "パターン2"
+
+#: keystr.h:144
+msgid "Pattern 3"
+msgstr "パターン3"
+
+#: keystr.h:145
+msgid "Plain Paper H "
+msgstr "普通紙H"
+
+#: keystr.h:146
+msgid "Plain Paper L "
+msgstr "普通紙L "
+
+#: keystr.h:147
+msgid "Plain Paper L"
+msgstr "普通紙L"
+
+#: keystr.h:148
+msgid "Plain Paper L2"
+msgstr "普通紙L2"
+
+#: keystr.h:149
+msgid "Plain Paper"
+msgstr "普通紙"
+
+#: keystr.h:150
+msgid "Postcard H"
+msgstr "はがき H"
+
+#: keystr.h:151
+msgid "Postcard L"
+msgstr "はがき L"
+
+#: keystr.h:152
+msgid "Postcard"
+msgstr "はがき"
+
+#: keystr.h:154
+msgid "Print on the Other Side"
+msgstr "印刷済み用紙の裏面に印刷する"
+
+#: keystr.h:155
+msgid "Printer Default"
+msgstr "パネル優先"
+
+#: keystr.h:156
+msgid "Reply Postcard"
+msgstr "往復はがき"
+
+#: keystr.h:157
+msgid "Resolution"
+msgstr "解像度"
+
+#: keystr.h:158
+msgid "Rough Paper 1"
+msgstr "ラフ紙1"
+
+#: keystr.h:159
+msgid "Rough Paper 2"
+msgstr "ラフ紙2"
+
+#: keystr.h:160
+msgid "Rough Paper"
+msgstr "ラフ紙"
+
+#: keystr.h:161
+msgid "SRA3"
+msgstr ""
+
+#: keystr.h:162
+msgid "Service Settings"
+msgstr "サービス特殊設定"
+
+#: keystr.h:163
+msgid "Short Edge (Bottom)"
+msgstr "短辺とじ(下)"
+
+#: keystr.h:164
+msgid "Short Edge (Left)"
+msgstr "短辺とじ(左)"
+
+#: keystr.h:165
+msgid "Short Edge (Right)"
+msgstr "短辺とじ(右)"
+
+#: keystr.h:166
+msgid "Short Edge (Top)"
+msgstr "短辺とじ(上)"
+
+#: keystr.h:167
+msgid "Special Print Mode: "
+msgstr "特殊印字処理 :"
+
+#: keystr.h:168
+msgid "Special Settings 1"
+msgstr "特殊設定1"
+
+#: keystr.h:169
+msgid "Special Settings 10"
+msgstr "特殊設定10"
+
+#: keystr.h:170
+msgid "Special Settings 11"
+msgstr "特殊設定11"
+
+#: keystr.h:171
+msgid "Special Settings 12"
+msgstr "特殊設定12"
+
+#: keystr.h:172
+msgid "Special Settings 13"
+msgstr "特殊設定13"
+
+#: keystr.h:173
+msgid "Special Settings 14"
+msgstr "特殊設定14"
+
+#: keystr.h:174
+msgid "Special Settings 15"
+msgstr "特殊設定15"
+
+#: keystr.h:175
+msgid "Special Settings 2"
+msgstr "特殊設定2"
+
+#: keystr.h:176
+msgid "Special Settings 3"
+msgstr "特殊設定3"
+
+#: keystr.h:177
+msgid "Special Settings 4"
+msgstr "特殊設定4"
+
+#: keystr.h:178
+msgid "Special Settings 5"
+msgstr "特殊設定5"
+
+#: keystr.h:179
+msgid "Special Settings 6"
+msgstr "特殊設定6"
+
+#: keystr.h:180
+msgid "Special Settings 7"
+msgstr "特殊設定7"
+
+#: keystr.h:181
+msgid "Special Settings 8"
+msgstr "特殊設定8"
+
+#: keystr.h:182
+msgid "Special Settings 9"
+msgstr "特殊設定9"
+
+#: keystr.h:183
+msgid "Special Settings A1"
+msgstr "特殊設定A1"
+
+#: keystr.h:184
+msgid "Special Settings A2"
+msgstr "特殊設定A2"
+
+#: keystr.h:185
+msgid "Special Settings A5"
+msgstr "特殊設定A5"
+
+#: keystr.h:186
+msgid "Special Settings A6"
+msgstr "特殊設定A6"
+
+#: keystr.h:187
+msgid "Special Settings B4"
+msgstr "特殊設定B4"
+
+#: keystr.h:188
+msgid "Special Settings B5"
+msgstr "特殊設定B5"
+
+#: keystr.h:189
+msgid "Special Settings B6"
+msgstr "特殊設定B6"
+
+#: keystr.h:190
+msgid "Special Settings C1"
+msgstr "特殊設定C1"
+
+#: keystr.h:191
+msgid "Special Settings C2"
+msgstr "特殊設定C2"
+
+#: keystr.h:192
+msgid "Special Settings C3"
+msgstr "特殊設定C3"
+
+#: keystr.h:193
+msgid "Special Settings C4"
+msgstr "特殊設定C4"
+
+#: keystr.h:194
+msgid "Special Settings C7"
+msgstr "特殊設定C7"
+
+#: keystr.h:195
+msgid "Special Settings D1"
+msgstr "特殊設定D1"
+
+#: keystr.h:196
+msgid "Special Settings D2"
+msgstr "特殊設定D2"
+
+#: keystr.h:197
+msgid "Special Settings D3"
+msgstr "特殊設定D3"
+
+#: keystr.h:198
+msgid "Special Settings D7"
+msgstr "特殊設定D7"
+
+#: keystr.h:199
+msgid "Special Settings E1"
+msgstr "特殊設定E1"
+
+#: keystr.h:200
+msgid "Special Settings G2"
+msgstr "特殊設定G2"
+
+#: keystr.h:201
+msgid "Special Settings H1"
+msgstr "特殊設定H1"
+
+#: keystr.h:202
+msgid "Special Settings H2"
+msgstr "特殊設定H2"
+
+#: keystr.h:203
+msgid "Special Settings H7"
+msgstr "特殊設定H7"
+
+#: keystr.h:204
+msgid "Special Settings I1"
+msgstr "特殊設定I1"
+
+#: keystr.h:205
+msgid "Special Settings J2"
+msgstr "特殊設定J2"
+
+#: keystr.h:206
+msgid "Special Settings J5"
+msgstr "特殊設定J5"
+
+#: keystr.h:207
+msgid "Special Settings J6"
+msgstr "特殊設定J6"
+
+#: keystr.h:208
+msgid "Standard"
+msgstr "テキストとグラフィックス"
+
+#: keystr.h:209
+msgid "Staple & Collate"
+msgstr "ステイプルソート"
+
+#: keystr.h:210
+msgid "Staple & Group"
+msgstr "ステイプルグループ"
+
+#: keystr.h:211
+msgid "Staple"
+msgstr "ステイプル"
+
+#: keystr.h:212
+msgid "Statement"
+msgstr "ステートメント"
+
+#: keystr.h:213
+msgid "Sub-output Tray"
+msgstr "サブ排紙トレイ"
+
+#: keystr.h:215
+msgid "Toner Density:"
+msgstr "トナー濃度 :"
+
+#: keystr.h:216
+msgid "Toner Save: "
+msgstr "ドラフトモード :"
+
+#: keystr.h:217
+msgid "Transparency"
+msgstr "OHPフィルム"
+
+#: keystr.h:218
+#, c-format
+msgid "\" (0 to %.1f)"
+msgstr ""
+
+#: keystr.h:219
+#, c-format
+msgid "mm (0 to %d)"
+msgstr "mm (0〜%d)"
+
+#~ msgid "Print"
+#~ msgstr "印刷"
+
+#~ msgid "Booklet..."
+#~ msgstr "製本詳細..."
+
+#~ msgid "Booklet Printing"
+#~ msgstr "製本印刷"
+
+#~ msgid "Hole Punch"
+#~ msgstr "パンチ穴"
+
+#~ msgid "Offset"
+#~ msgstr "シフト"
+
+#~ msgid "Rotate"
+#~ msgstr "回転"
+
+#~ msgid "Z-fold"
+#~ msgstr "Z折り"
+
+#~ msgid "C-fold"
+#~ msgstr "C折り"
+
+#~ msgid "Staple Position:"
+#~ msgstr "ステイプル位置 :"
+
+#~ msgid "Number of Copies for Offset:  "
+#~ msgstr "シフト単位 :"
+
+#~ msgid "(1 to 9999)"
+#~ msgstr "(1〜9999)"
+
+#~ msgid "Saddle Stitch"
+#~ msgstr "中とじ"
+
+#~ msgid "Use Trimmer"
+#~ msgstr "トリマーを使って用紙を裁断する"
+
+#~ msgid "Device Setting "
+#~ msgstr "デバイスの設定を使用"
+
+#~ msgid "Manual Setting"
+#~ msgstr "手動で設定"
+
+#~ msgid "Adjust Trim Width by"
+#~ msgstr "断裁幅の調整"
+
+#~ msgid "Trim Width:"
+#~ msgstr "断裁幅 :"
+
+#~ msgid "Face Up/Face Down:"
+#~ msgstr "排紙面指定 :"
+
+#~ msgid "Image Special Process:"
+#~ msgstr "画像特殊処理"
+
+#~ msgid "Advanced Settings"
+#~ msgstr "処理オプション"
+
+#~ msgid "Transparency Printing:"
+#~ msgstr "OHPフィルムの印刷方法 :"
+
+#~ msgid "Insert Interleaf Sheets:"
+#~ msgstr "用紙を中差しする :"
+
+#~ msgid "Print on Interleaf Sheets"
+#~ msgstr "中差し用紙にも印刷する"
+
+#~ msgid "Use Document Insertion Unit"
+#~ msgstr "インサーターを使って表紙をつける"
+
+#~ msgid "Front/Back Cover Settings..."
+#~ msgstr "表紙/裏表紙の設定..."
+
+#~ msgid "Toner Save:"
+#~ msgstr "トナー節約モード :"
+
+#~ msgid "Gray Compensation:"
+#~ msgstr "グレー補償 :"
+
+#~ msgid "Toner Volume Adjustment:"
+#~ msgstr "トナー印字量補正 :"
+
+#~ msgid "Line Control:"
+#~ msgstr "ライン処理 :"
+
+#~ msgid "Gradation Smoothing:"
+#~ msgstr "グラデーションスムージング :"
+
+#~ msgid "Line Refinement:"
+#~ msgstr "細線補正 :"
+
+#~ msgid "Image Compression:"
+#~ msgstr "画像圧縮 :"
+
+#~ msgid "Spot Color Matching:"
+#~ msgstr "スポットカラーマッチング"
+
+#~ msgid "Advanced Smoothing:"
+#~ msgstr "アドバンスドスムージング :"
+
+#~ msgid "Profile Settings..."
+#~ msgstr "プロファイル設定..."
+
+#~ msgid "Light"
+#~ msgstr "薄く"
+
+#~ msgid "Dark"
+#~ msgstr "濃く"
+
+#~ msgid "Toner Density"
+#~ msgstr "トナー濃度"
+
+#~ msgid "Black:"
+#~ msgstr "ブラック :"
+
+#~ msgid "Yellow:"
+#~ msgstr "イエロー :"
+
+#~ msgid "Magenta:"
+#~ msgstr "マゼンタ :"
+
+#~ msgid "Cyan:"
+#~ msgstr "シアン :"
+
+#~ msgid "Small-size Curl Adjustment:"
+#~ msgstr "小サイズカール処理 :"
+
+#~ msgid "Sharpness:"
+#~ msgstr "シャープネス :"
+
+#~ msgid "High"
+#~ msgstr "強く"
+
+#~ msgid "Low"
+#~ msgstr "弱く"
+
+#~ msgid "Output Method:"
+#~ msgstr "出力方法 :"
+
+#~ msgid "Setting"
+#~ msgstr "設定"
+
+#~ msgid "Output Options:"
+#~ msgstr "排紙オプション :"
+
+#~ msgid "Saddle Finisher-G1"
+#~ msgstr "サドルフィニッシャー･G1"
+
+#~ msgid "Paper Folding Unit"
+#~ msgstr "ペーパーフォールディングユニット"
+
+#~ msgid "Puncher Unit"
+#~ msgstr "パンチャーユニット"
+
+#~ msgid "Trimmer"
+#~ msgstr "トリマー"
+
+#~ msgid "Document Insertion Unit"
+#~ msgstr "インサーター"
+
+#~ msgid "Secure Watermark Function of Device"
+#~ msgstr "デバイスの地紋印字機能"
+
+#~ msgid "Job Accounting"
+#~ msgstr "部門管理機能を使う"
+
+#~ msgid "Settings..."
+#~ msgstr "設定..."
+
+#~ msgid "Allow Password Setting"
+#~ msgstr "パスワードの設定を許可する"
+
+#~ msgid "Disable Job Accounting When B&W Print"
+#~ msgstr "モノクロ指定時は部門管理を行わない"
+
+#~ msgid "Device Setting"
+#~ msgstr "デバイス設定"
+
+#~ msgid "Collate"
+#~ msgstr "部単位で印刷する"
+
+#~ msgid " Finishing "
+#~ msgstr "仕上げ"
+
+#~ msgid " Quality "
+#~ msgstr "印刷品質"
+
+#~ msgid "Image Refinement"
+#~ msgstr "スーパースムーズを使う"
+
+#~ msgid "Detailed Settings"
+#~ msgstr "詳細設定"
+
+#~ msgid "Paper/Quality"
+#~ msgstr "給紙/印刷品質"
+
+#~ msgid "Filter:"
+#~ msgstr "フィルタ指定 :"
+
+#~ msgid "Filter"
+#~ msgstr "フィルタオプション"
+
+#~ msgid "Detailed Settings for Booklet"
+#~ msgstr "製本詳細"
+
+#~ msgid "Book Opening:"
+#~ msgstr "開き方向 :"
+
+#~ msgid "Use Creep (Displacement) Correction"
+#~ msgstr "クリープ(ずれ)補正機能を使う"
+
+#~ msgid "Apply Device Settings"
+#~ msgstr "デバイスの設定を使用"
+
+#~ msgid "Automatic Correction"
+#~ msgstr "自動補正"
+
+#~ msgid "Manual Correction"
+#~ msgstr "手動補正"
+
+#~ msgid "Displacement Correction Method"
+#~ msgstr "補正方法"
+
+#~ msgid "Correction Width:"
+#~ msgstr "補正量 :"
+
+#~ msgid "mm (0.00 to 10.00)"
+#~ msgstr "mm (0.00〜10.00)"
+
+#~ msgid "User Name:"
+#~ msgstr "ユーザ名 :"
+
+#~ msgid "Password:"
+#~ msgstr "パスワード :"
+
+#~ msgid "(Max. 32 characters)"
+#~ msgstr "(全角16文字以内)"
+
+#~ msgid "(1 to 9999999)"
+#~ msgstr "(1〜9999999)"
+
+#~ msgid "Document Name:"
+#~ msgstr "ドキュメント名 :"
+
+#~ msgid "Store Destination"
+#~ msgstr "保存先"
+
+#~ msgid "Enter Name"
+#~ msgstr "手入力で指定"
+
+#~ msgid "Name: "
+#~ msgstr "名称 :"
+
+#~ msgid "Use File Name"
+#~ msgstr "ファイル名を使用"
+
+#~ msgid "Data Name"
+#~ msgstr "保存するデータの名称"
+
+#~ msgid "User Inboxes:"
+#~ msgstr "ユーザボックス :"
+
+#~ msgid "0 to 99"
+#~ msgstr "0〜99"
+
+#~ msgid "Job Note:"
+#~ msgstr "ジョブメモ :"
+
+#~ msgid "Details:"
+#~ msgstr "詳細 :"
+
+#~ msgid "Use Secure Watermark Function of Device"
+#~ msgstr "デバイスの地紋印字機能を使う"
+
+#~ msgid "Copy Set Numbering"
+#~ msgstr "部数印字を行う"
+
+#~ msgid "Starting Number:"
+#~ msgstr "印字開始数字 :"
+
+#~ msgid "Profile Settings"
+#~ msgstr "プロファイル設定"
+
+#~ msgid "Pure Black Text:"
+#~ msgstr "テキストに純ブラックを使用 :"
+
+#~ msgid "Black Overprint:"
+#~ msgstr "ブラックオーバープリント :"
+
+#~ msgid "Source Profile:"
+#~ msgstr "入力プロファイル :"
+
+#~ msgid "Matching Method:"
+#~ msgstr "マッチング方法 :"
+
+#~ msgid "Pure Black Process"
+#~ msgstr "墨版処理を実行する"
+
+#~ msgid "Simulation Profile:"
+#~ msgstr "シミュレーションプロファイル :"
+
+#~ msgid "Use Grayscale Profile"
+#~ msgstr "グレースケールプロファイルを使う"
+
+#~ msgid "Grayscale"
+#~ msgstr "グレースケール"
+
+#~ msgid "Output Profile:"
+#~ msgstr "出力プロファイル :"
+
+#~ msgid "Front/Back Cover Settings"
+#~ msgstr "表紙/裏表紙の設定"
+
+#~ msgid "Set Front Cover"
+#~ msgstr "表紙の設定を行う"
+
+#~ msgid "Print on:"
+#~ msgstr "印刷面 :"
+
+#~ msgid "Set Back Cover"
+#~ msgstr "裏表紙の設定を行う"
+
+#~ msgid "Name Setting"
+#~ msgstr "名称の設定"
+
+#~ msgid "Name:  "
+#~ msgstr "名称 :"
+
+#~ msgid "Name of Data to Hold"
+#~ msgstr "ホールドするデータの名称"
+
+#~ msgid "Shift the Position to Start Printing"
+#~ msgstr "印字開始位置をずらす"
+
+#~ msgid "Short Edge:"
+#~ msgstr "短辺方向 :"
+
+#~ msgid "mm (-50 to 50)"
+#~ msgstr "mm (-50〜50)"
+
+#~ msgid "Long Edge:"
+#~ msgstr "長辺方向 :"
+
+#~ msgid "Front Side"
+#~ msgstr "表面"
+
+#~ msgid "Back Side"
+#~ msgstr "裏面"
+
+#~ msgid "Ledger"
+#~ msgstr "レジャー"
+
+#~ msgid "Envelope NAGAGATA 3/YOUGATANAGA 3"
+#~ msgstr "封筒 長形3号/洋形長3号"
+
+#~ msgid "Manual"
+#~ msgstr "手差しトレイ"
+
+#~ msgid "Drawer 5"
+#~ msgstr "カセット5"
+
+#~ msgid "Drawer 6"
+#~ msgstr "カセット6"
+
+#~ msgid "Side Paper Deck"
+#~ msgstr "サイドペーパーデッキ"
+
+#~ msgid "Envelope Feeder"
+#~ msgstr "封筒フィーダ"
+
+#~ msgid "Cassette 5"
+#~ msgstr "カセット5"
+
+#~ msgid "Cassette 6"
+#~ msgstr "カセット6"
+
+#~ msgid "Manual "
+#~ msgstr "手差し"
+
+#~ msgid "Drawer 1 "
+#~ msgstr "デッキ1"
+
+#~ msgid "Drawer 2 "
+#~ msgstr "デッキ2"
+
+#~ msgid "Plain Paper H"
+#~ msgstr "普通紙H"
+
+#~ msgid "Recycled Paper"
+#~ msgstr "再生紙"
+
+#~ msgid "Color Paper"
+#~ msgstr "色紙"
+
+#~ msgid "Heavy Paper 4"
+#~ msgstr "厚紙4"
+
+#~ msgid "Heavy Paper 5"
+#~ msgstr "厚紙5"
+
+#~ msgid "Tab Paper"
+#~ msgstr "インデックス紙"
+
+#~ msgid "Tab Paper 1"
+#~ msgstr "インデックス紙1"
+
+#~ msgid "Tab Paper 2"
+#~ msgstr "インデックス紙2"
+
+#~ msgid "Bond Paper"
+#~ msgstr "ボンド紙"
+
+#~ msgid "Washi (Japanese Paper)"
+#~ msgstr "和紙"
+
+#~ msgid "Letterhead"
+#~ msgstr "レターヘッド"
+
+#~ msgid "Letterhead (Plain)"
+#~ msgstr "レターヘッド(普通紙)"
+
+#~ msgid "Letterhead (Heavy)"
+#~ msgstr "レターヘッド(厚紙)"
+
+#~ msgid "Glossy Paper"
+#~ msgstr "光沢紙"
+
+#~ msgid "Tracing Paper"
+#~ msgstr "第2原図"
+
+#~ msgid "Pre-punched Paper"
+#~ msgstr "パンチ済み紙"
+
+#~ msgid "Recycled Paper 1"
+#~ msgstr "再生紙1"
+
+#~ msgid "Recycled Paper 2"
+#~ msgstr "再生紙2"
+
+#~ msgid "Recycled Paper 3"
+#~ msgstr "再生紙3"
+
+#~ msgid "Recycled Paper 4"
+#~ msgstr "再生紙4"
+
+#~ msgid "Pre-punched Paper 1"
+#~ msgstr "パンチ済み紙1"
+
+#~ msgid "Pre-punched Paper 2"
+#~ msgstr "パンチ済み紙2"
+
+#~ msgid "Thin Paper"
+#~ msgstr "薄紙"
+
+#~ msgid "1-sided Coated 1"
+#~ msgstr "片面コート紙1"
+
+#~ msgid "1-sided Coated 2"
+#~ msgstr "片面コート紙2"
+
+#~ msgid "1-sided Coated 3"
+#~ msgstr "片面コート紙3"
+
+#~ msgid "1-sided Coated 4"
+#~ msgstr "片面コート紙4"
+
+#~ msgid "1-sided Coated 5"
+#~ msgstr "片面コート紙5"
+
+#~ msgid "2-sided Coated 1"
+#~ msgstr "両面コート紙1"
+
+#~ msgid "2-sided Coated 2"
+#~ msgstr "両面コート紙2"
+
+#~ msgid "2-sided Coated 3"
+#~ msgstr "両面コート紙3"
+
+#~ msgid "2-sided Coated 4"
+#~ msgstr "両面コート紙4"
+
+#~ msgid "2-sided Coated 5"
+#~ msgstr "両面コート紙5"
+
+#~ msgid "Texture Paper 1"
+#~ msgstr "エンボス紙1"
+
+#~ msgid "Texture Paper 2"
+#~ msgstr "エンボス紙2"
+
+#~ msgid "Texture Paper 3"
+#~ msgstr "エンボス紙3"
+
+#~ msgid "Texture Paper 4"
+#~ msgstr "エンボス紙4"
+
+#~ msgid "Texture Paper 5"
+#~ msgstr "エンボス紙5"
+
+#~ msgid "Texture Paper 6"
+#~ msgstr "エンボス紙6"
+
+#~ msgid "Vellum 1"
+#~ msgstr "ベラム紙1"
+
+#~ msgid "Vellum 2"
+#~ msgstr "ベラム紙2"
+
+#~ msgid "Plain Paper [Thin]"
+#~ msgstr "普通紙(薄め)"
+
+#~ msgid "Plain Paper [Standard]"
+#~ msgstr "普通紙(標準)"
+
+#~ msgid "Plain Paper [Heavy]"
+#~ msgstr "普通紙(厚め)"
+
+#~ msgid "Labels"
+#~ msgstr "ラベル用紙"
+
+#~ msgid "Bin 1"
+#~ msgstr "ビン1"
+
+#~ msgid "Bin 2"
+#~ msgstr "ビン2"
+
+#~ msgid "Bin 3"
+#~ msgstr "ビン3"
+
+#~ msgid "Bin 4"
+#~ msgstr "ビン4"
+
+#~ msgid "Bin 5"
+#~ msgstr "ビン5"
+
+#~ msgid "Bin 6"
+#~ msgstr "ビン6"
+
+#~ msgid "Bin 7"
+#~ msgstr "ビン7"
+
+#~ msgid "Tray A"
+#~ msgstr "トレイA"
+
+#~ msgid "Tray B"
+#~ msgstr "トレイB"
+
+#~ msgid "Tray C"
+#~ msgstr "トレイC"
+
+#~ msgid "Stack Compartment"
+#~ msgstr "スタック部"
+
+#~ msgid "OFF"
+#~ msgstr "なし"
+
+#~ msgid "Finisher-C1"
+#~ msgstr "フィニッシャー･C1"
+
+#~ msgid "Finisher-E1"
+#~ msgstr "フィニッシャー･E1"
+
+#~ msgid "Finisher-F1"
+#~ msgstr "フィニッシャー･F1"
+
+#~ msgid "Finisher-J1"
+#~ msgstr "フィニッシャー･J1"
+
+#~ msgid "Finisher-K1"
+#~ msgstr "フィニッシャー･K1"
+
+#~ msgid "Finisher-K2"
+#~ msgstr "フィニッシャー･K2"
+
+#~ msgid "Finisher-L1"
+#~ msgstr "フィニッシャー･L1"
+
+#~ msgid "Finisher-M1"
+#~ msgstr "フィニッシャー･M1"
+
+#~ msgid "Finisher-N1"
+#~ msgstr "フィニッシャー･N1"
+
+#~ msgid "Finisher-N2"
+#~ msgstr "フィニッシャー･N2"
+
+#~ msgid "Finisher-P1"
+#~ msgstr "フィニッシャー･P1"
+
+#~ msgid "Finisher-Q1"
+#~ msgstr "フィニッシャー･Q1"
+
+#~ msgid "Finisher-R1"
+#~ msgstr "フィニッシャー･R1"
+
+#~ msgid "Finisher-S1"
+#~ msgstr "フィニッシャー･S1"
+
+#~ msgid "Finisher-Q3"
+#~ msgstr "フィニッシャー･Q3"
+
+#~ msgid "Finisher-U1"
+#~ msgstr "フィニッシャー･U1"
+
+#~ msgid "Finisher-Q1/Q3"
+#~ msgstr "フィニッシャー･Q1/Q3"
+
+#~ msgid "Finisher-T1"
+#~ msgstr "フィニッシャー･T1"
+
+#~ msgid "Saddle Finisher-C2"
+#~ msgstr "サドルフィニッシャー･C2"
+
+#~ msgid "Saddle Finisher-F2"
+#~ msgstr "サドルフィニッシャー･F2"
+
+#~ msgid "Saddle Finisher-K3"
+#~ msgstr "サドルフィニッシャー･K3"
+
+#~ msgid "Saddle Finisher-K3N"
+#~ msgstr "サドルフィニッシャー･K3N"
+
+#~ msgid "Saddle Finisher-K4"
+#~ msgstr "サドルフィニッシャー･K4"
+
+#~ msgid "Saddle Finisher-N2"
+#~ msgstr "サドルフィニッシャー･N2"
+
+#~ msgid "Saddle Finisher-Q2"
+#~ msgstr "サドルフィニッシャー･Q2"
+
+#~ msgid "Saddle Finisher-R2"
+#~ msgstr "サドルフィニッシャー･R2"
+
+#~ msgid "Saddle Finisher-Q4"
+#~ msgstr "サドルフィニッシャー･Q4"
+
+#~ msgid "Saddle Finisher-Q2/Q4"
+#~ msgstr "サドルフィニッシャー･Q2/Q4"
+
+#~ msgid "Saddle Finisher-T2"
+#~ msgstr "サドルフィニッシャー･T2"
+
+#~ msgid "Stacker-A1"
+#~ msgstr "スタッカー･A1"
+
+#~ msgid "Stapler Stacker"
+#~ msgstr "ステイプルスタッカ"
+
+#~ msgid "Inner 2way Tray"
+#~ msgstr "インナー2ウェイトレイ"
+
+#~ msgid "Inner 2way Tray-C1"
+#~ msgstr "インナー2ウェイトレイ･C1"
+
+#~ msgid "Shift Tray"
+#~ msgstr "シフトトレイ"
+
+#~ msgid "Multi Tray-3"
+#~ msgstr "マルチトレイ3"
+
+#~ msgid "Copy Tray"
+#~ msgstr "コピートレイ"
+
+#~ msgid "Option Tray"
+#~ msgstr "オプショントレイ"
+
+#~ msgid "7-bin Sorter"
+#~ msgstr "７ビンソータ"
+
+#~ msgid "Finisher Tray"
+#~ msgstr "フィニッシャー用追加トレイ"
+
+#~ msgid "Finisher-V1/V1L"
+#~ msgstr "フィニッシャー･V1/V1L"
+
+#~ msgid "Finisher-V1/V1L + Perfect Binder-A1"
+#~ msgstr "フィニッシャー･V1/V1L+パーフェクトバインダー･A1"
+
+#~ msgid "Finisher-V1/V1L + High Capacity Stacker-A1 + Perfect Binder-A1"
+#~ msgstr "フィニッシャー･V1/V1L+大容量スタッカー･A1+パーフェクトバインダー･A1"
+
+#~ msgid "Saddle Finisher-V2/V2L"
+#~ msgstr "サドルフィニッシャー･V2/V2L"
+
+#~ msgid "Saddle Finisher-V2/V2L + Perfect Binder-A1"
+#~ msgstr "サドルフィニッシャー･V2/V2L+パーフェクトバインダー･A1"
+
+#~ msgid ""
+#~ "Saddle Finisher-V2/V2L + High Capacity Stacker-A1 + Perfect Binder-A1"
+#~ msgstr ""
+#~ "サドルフィニッシャー･V2/V2L+大容量スタッカー･A1+パーフェクトバインダー･A1"
+
+#~ msgid "High Capacity Stacker-A1"
+#~ msgstr "大容量スタッカー･A1"
+
+#~ msgid "High Capacity Stacker-A1 + Perfect Binder-A1"
+#~ msgstr "大容量スタッカー･A1+パーフェクトバインダー･A1"
+
+#~ msgid "Perfect Binder-A1"
+#~ msgstr "パーフェクトバインダー･A1"
+
+#~ msgid "Finisher-X1"
+#~ msgstr "フィニッシャー･X1"
+
+#~ msgid "Finisher-W1"
+#~ msgstr "フィニッシャー･W1"
+
+#~ msgid "Saddle Finisher-W2"
+#~ msgstr "サドルフィニッシャー･W2"
+
+#~ msgid "Finisher-AA1"
+#~ msgstr "フィニッシャー･AA1"
+
+#~ msgid "Saddle Finisher-AA2"
+#~ msgstr "サドルフィニッシャー･AA2"
+
+#~ msgid "Inner 2way Tray + Copy Tray"
+#~ msgstr "インナー2ウェイトレイ+コピートレイ"
+
+#~ msgid "Finisher-Z1"
+#~ msgstr "フィニッシャー･Z1"
+
+#~ msgid "Finisher-Z1 + Copy Tray"
+#~ msgstr "フィニッシャー･Z1+コピートレイ"
+
+#~ msgid "Finisher-Y1"
+#~ msgstr "フィニッシャー･Y1"
+
+#~ msgid "Saddle Finisher-Y2"
+#~ msgstr "サドルフィニッシャー･Y2"
+
+#~ msgid "Finisher-S1 + Copy Tray"
+#~ msgstr "フィニッシャー･S1+コピートレイ"
+
+#~ msgid "Finisher-S1 + Finisher Tray"
+#~ msgstr "フィニッシャー･S1+フィニッシャー用追加トレイ"
+
+#~ msgid "Finisher-S1 + Copy Tray + Finisher Tray"
+#~ msgstr "フィニッシャー･S1+コピートレイ+フィニッシャー用追加トレイ"
+
+#~ msgid "Finisher-AE1"
+#~ msgstr "フィニッシャー･AE1"
+
+#~ msgid "Saddle Finisher-AE2"
+#~ msgstr "サドルフィニッシャー･AE2"
+
+#~ msgid "Finisher-AD1"
+#~ msgstr "フィニッシャー･AD1"
+
+#~ msgid "Saddle Finisher-AD2"
+#~ msgstr "サドルフィニッシャー･AD2"
+
+#~ msgid "Finisher-U2"
+#~ msgstr "フィニッシャー･U2"
+
+#~ msgid "Finisher-U2 + Finisher Tray"
+#~ msgstr "フィニッシャー･U2+フィニッシャー用追加トレイ"
+
+#~ msgid "Finisher-R1 + Finisher Tray"
+#~ msgstr "フィニッシャー･R1+フィニッシャー用追加トレイ"
+
+#~ msgid "Saddle Finisher-R2 + Finisher Tray"
+#~ msgstr "サドルフィニッシャー･R2+フィニッシャー用追加トレイ"
+
+#~ msgid "Finisher-AC1"
+#~ msgstr "フィニッシャー･AC1"
+
+#~ msgid "Saddle Finisher-AC2"
+#~ msgstr "サドルフィニッシャー･AC2"
+
+#~ msgid "Finisher-P1 + Copy Tray"
+#~ msgstr "フィニッシャー･P1+コピートレイ"
+
+#~ msgid "Finisher-Q3 + Finisher Tray"
+#~ msgstr "フィニッシャー･Q3+フィニッシャー用追加トレイ"
+
+#~ msgid "Saddle Finisher-Q4 + Finisher Tray"
+#~ msgstr "サドルフィニッシャー･Q4+フィニッシャー用追加トレイ"
+
+#~ msgid "Finisher-AE1 + Finisher Tray"
+#~ msgstr "フィニッシャー･AE1+フィニッシャー用追加トレイ"
+
+#~ msgid "Saddle Finisher-AE2 + Finisher Tray"
+#~ msgstr "サドルフィニッシャー･AE2+フィニッシャー用追加トレイ"
+
+#~ msgid "Left Binding"
+#~ msgstr "左開き"
+
+#~ msgid "Right Binding"
+#~ msgstr "右開き"
+
+#~ msgid "Top Binding"
+#~ msgstr "上開き"
+
+#~ msgid "Bottom Binding"
+#~ msgstr "下開き"
+
+#~ msgid "No Stapling"
+#~ msgstr "しない"
+
+#~ msgid "Upper Left (Single)"
+#~ msgstr "左上(1ヵ所)"
+
+#~ msgid "Top (Double)"
+#~ msgstr "上辺(2ヵ所)"
+
+#~ msgid "Upper Right (Single)"
+#~ msgstr "右上(1ヵ所)"
+
+#~ msgid "Left (Double)"
+#~ msgstr "左辺(2ヵ所)"
+
+#~ msgid "Right (Double)"
+#~ msgstr "右辺(2ヵ所)"
+
+#~ msgid "Lower Left (Single)"
+#~ msgstr "左下(1ヵ所)"
+
+#~ msgid "Bottom (Double)"
+#~ msgstr "下辺(2ヵ所)"
+
+#~ msgid "Lower Right (Single)"
+#~ msgstr "右下(1ヵ所)"
+
+#~ msgid "High Resolution"
+#~ msgstr "高解像度"
+
+#~ msgid "Error Diffusion"
+#~ msgstr "誤差拡散"
+
+#~ msgid "Pattern 4"
+#~ msgstr "パターン4"
+
+#~ msgid "Pattern 5"
+#~ msgstr "パターン5"
+
+#~ msgid "Pattern 6"
+#~ msgstr "パターン6"
+
+#~ msgid "Pattern 7"
+#~ msgstr "パターン7"
+
+#~ msgid "Secured Print"
+#~ msgstr "セキュアプリント"
+
+#~ msgid "Store"
+#~ msgstr "保存"
+
+#~ msgid "Hold"
+#~ msgstr "ホールド"
+
+#~ msgid "ID/Password Settings"
+#~ msgstr "ID/パスワードの設定"
+
+#~ msgid "Secured Print Settings"
+#~ msgstr "セキュアプリント設定"
+
+#~ msgid "[1 to %d]"
+#~ msgstr "[1〜%d]"
+
+#~ msgid "(1 to %d)"
+#~ msgstr "部ごと (1〜%d)"
+
+#~ msgid "mm (%d to %d)"
+#~ msgstr "mm (%d〜%d)"
+
+#~ msgid "mm (%.1f to %.1f)"
+#~ msgstr "mm (%.1f〜%.1f)"
+
+#~ msgid "mm (%.2f to %.2f)"
+#~ msgstr "mm (%.2f〜%.2f)"
+
+#~ msgid "mm (%.1f to %.1f) "
+#~ msgstr "mm (%.1f〜%.1f)"
+
+#~ msgid "Face Up (Reverse Output Order)"
+#~ msgstr "フェースアップ(逆順排紙)"
+
+#~ msgid "Face Down (Normal Output Order)"
+#~ msgstr "フェースダウン(正順排紙)"
+
+#~ msgid "500 Sheet Cassette x 2"
+#~ msgstr "500枚カセットx2"
+
+#~ msgid "500 Sheet Cassette x 3"
+#~ msgstr "500枚カセットx3"
+
+#~ msgid "Saturation"
+#~ msgstr "鮮やかな色に"
+
+#~ msgid "Perceptual"
+#~ msgstr "写真調"
+
+#~ msgid "Colorimetric"
+#~ msgstr "色差最小"
+
+#~ msgid "Smooth 1"
+#~ msgstr "スムーズ1"
+
+#~ msgid "Smooth 2"
+#~ msgstr "スムーズ2"
+
+#~ msgid "Only Front Side"
+#~ msgstr "表面のみ"
+
+#~ msgid "Only Back Side"
+#~ msgstr "裏面のみ"
+
+#~ msgid "Both Sides"
+#~ msgstr "両面"
+
+#~ msgid "Drawer1"
+#~ msgstr "デッキ1"
+
+#~ msgid "Drawer2"
+#~ msgstr "デッキ2"
+
+#~ msgid "Drawer3"
+#~ msgstr "カセット3"
+
+#~ msgid "Drawer4"
+#~ msgstr "カセット4"
+
+#~ msgid "Inserter 1"
+#~ msgstr "インサーター1"
+
+#~ msgid "Inserter 2"
+#~ msgstr "インサーター2"
+
+#~ msgid "Transmissive Projector"
+#~ msgstr "透過型OHP用"
+
+#~ msgid "Reflective Projector"
+#~ msgstr "反射型OHP用"
+
+#~ msgid "Special Print Adjustment:"
+#~ msgstr "特殊印字モード :"
+
+#~ msgid "Image Priority"
+#~ msgstr "画質優先"
+
+#~ msgid "Normal"
+#~ msgstr "標準"
+
+#~ msgid "Speed Priority"
+#~ msgstr "スピード優先"
+
+#~ msgid "Face Down + Portrait"
+#~ msgstr "フェースダウン+縦"
+
+#~ msgid "Face Down + Landscape"
+#~ msgstr "フェースダウン+横"
+
+#~ msgid "Face Up + Portrait"
+#~ msgstr "フェースアップ+縦"
+
+#~ msgid "Face Up + Landscape"
+#~ msgstr "フェースアップ+横"
+
+#~ msgid "Resolution Priority"
+#~ msgstr "解像度優先"
+
+#~ msgid "Gradation Priority"
+#~ msgstr "階調優先"
+
+#~ msgid "Text Priority"
+#~ msgstr "テキスト優先"
+
+#~ msgid "2 Holes"
+#~ msgstr "2穴"
+
+#~ msgid "2 Holes (French)"
+#~ msgstr "2穴(フランス式)"
+
+#~ msgid "2/3 Holes"
+#~ msgstr "2/3穴"
+
+#~ msgid "4 Holes (French)"
+#~ msgstr "4穴(フランス式)"
+
+#~ msgid "4 Holes (Swedish)"
+#~ msgstr "4穴(スウェーデン式)"
+
+#~ msgid "Multi Holes"
+#~ msgstr "多穴"
+
+#~ msgid "Use Secure Printing Function of Device"
+#~ msgstr "デバイスのセキュリティ印刷機能を使う"
+
+#~ msgid "Drawer 7"
+#~ msgstr "カセット7"
+
+#~ msgid "Plain Paper 1"
+#~ msgstr "普通紙1"
+
+#~ msgid "Plain Paper 2"
+#~ msgstr "普通紙2"
+
+#~ msgid "Tracing"
+#~ msgstr "第2原図"
+
+#~ msgid "Thin"
+#~ msgstr "薄紙"
+
+#~ msgid "Glossy 1"
+#~ msgstr "コート紙1"
+
+#~ msgid "Glossy 2"
+#~ msgstr "コート紙2"
+
+#~ msgid "Glossy 3"
+#~ msgstr "コート紙3"
+
+#~ msgid "Glossy 4"
+#~ msgstr "コート紙4"
+
+#~ msgid "Insertion Unit"
+#~ msgstr "インサーター"
+
+#~ msgid "250 Sheet Cassette"
+#~ msgstr "250枚カセット"
+
+#~ msgid "Paper Deck Unit-B1"
+#~ msgstr "ペーパーデッキユニット･B1"
+
+#~ msgid "Inner Finisher-A1 + Copy Tray"
+#~ msgstr "インナーフィニッシャー･A1+コピートレイ"
+
+#~ msgid "Inner Finisher-A1 + Inner Finisher Additional Tray"
+#~ msgstr "インナーフィニッシャー･A1+インナーフィニッシャー用追加トレイ"
+
+#~ msgid "Inner Finisher-A1 + Copy Tray + Inner Finisher Additional Tray"
+#~ msgstr ""
+#~ "インナーフィニッシャー･A1+コピートレイ+インナーフィニッシャー用追加トレイ"
+
+#~ msgid "Secure Printing Function of Device"
+#~ msgstr "デバイスのセキュリティ印刷機能"
+
+#~ msgid "Finisher-AB1"
+#~ msgstr "フィニッシャー･AB1"
+
+#~ msgid "Saddle Finisher-AB2"
+#~ msgstr "サドルフィニッシャー･AB2"
+
+#~ msgid "ID:"
+#~ msgstr "ID :"
+
+#~ msgid "Booklet Finisher-A1"
+#~ msgstr "中綴じフィニッシャー･A1"
+
+#~ msgid "Booklet Finisher-B1"
+#~ msgstr "中綴じフィニッシャー･B1"
+
+#~ msgid "Booklet Finisher-C1"
+#~ msgstr "中綴じフィニッシャー･C1"
+
+#~ msgid "Staple Finisher-A1"
+#~ msgstr "ステイプルフィニッシャー･A1"
+
+#~ msgid "Staple Finisher-B1"
+#~ msgstr "ステイプルフィニッシャー･B1"
+
+#~ msgid "Staple Finisher-C1"
+#~ msgstr "ステイプルフィニッシャー･C1"
+
+#~ msgid "Paper Deck Unit-A1"
+#~ msgstr "ペーパーデッキユニット･A1"
+
+#~ msgid "POD Deck Lite-A1"
+#~ msgstr "PODデッキライト･A1"
+
+#~ msgid "Multi Drawer Paper Deck-A1"
+#~ msgstr "多段デッキ･A1"
+
+#~ msgid "Inner Finisher-A1"
+#~ msgstr "インナーフィニッシャー･A1"
+
+#~ msgid "Advanced Settings..."
+#~ msgstr "処理オプション..."
+
+#~ msgid "Booklet Finisher-D1"
+#~ msgstr "中綴じフィニッシャー･D1"
+
+#~ msgid "Booklet Finisher-E1"
+#~ msgstr "中綴じフィニッシャー･E1"
+
+#~ msgid "Staple Finisher-D1"
+#~ msgstr "ステイプルフィニッシャー･D1"
+
+#~ msgid "Staple Finisher-E1"
+#~ msgstr "ステイプルフィニッシャー･E1"
+
+#~ msgid "Inner Finisher-B1"
+#~ msgstr "インナーフィニッシャー･B1"
+
+#~ msgid "Inner Finisher-B1 + Inner Finisher Additional Tray"
+#~ msgstr "インナーフィニッシャー･B1+インナーフィニッシャー用追加トレイ"
+
+#~ msgid "Special Print Mode (Plain Paper):"
+#~ msgstr "特殊印字処理(普通紙) :"
+
+#~ msgid "Device Type:"
+#~ msgstr "デバイスの種類 :"
+
+#~ msgid "Half Fold"
+#~ msgstr "2つ折り"
+
+#~ msgid "Accordion Z-fold"
+#~ msgstr "外3つ折り"
+
+#~ msgid "Double Parallel Fold"
+#~ msgstr "4つ折り"
+
+#~ msgid "Landscape "
+#~ msgstr "横"
+
+#~ msgid "Portrait "
+#~ msgstr "縦"
+
+#~ msgid "Fold Only"
+#~ msgstr "折りのみ"
+
+#~ msgid "Vivid Photo"
+#~ msgstr "VIVIDフォト"
+
+#~ msgid "Perceptual (Monitor Color Matched)"
+#~ msgstr "モニタの色に合わせる"
+
+#~ msgid "Perceptual (Photographic)"
+#~ msgstr "写真調 "
+
+#~ msgid "Envelope Feeder "
+#~ msgstr "封筒フィーダ "
+
+#~ msgid "Standard "
+#~ msgstr "標準"
+
+#~ msgid "Drawer 5 "
+#~ msgstr "カセット5 "
+
+#~ msgid "Drawer 5  "
+#~ msgstr "カセット5  "
+
+#~ msgid "-3 (Low)"
+#~ msgstr "-3(弱く)"
+
+#~ msgid "-2 (Low)"
+#~ msgstr "-2(弱く)"
+
+#~ msgid "-1 (Low)"
+#~ msgstr "-1(弱く)"
+
+#~ msgid "1 (High)"
+#~ msgstr "1(強く)"
+
+#~ msgid "2 (High)"
+#~ msgstr "2(強く)"
+
+#~ msgid "3 (High)"
+#~ msgstr "3(強く)"
+
+#~ msgid "Fold:"
+#~ msgstr "折り :"
+
+#~ msgid "Fold Details:"
+#~ msgstr "折り詳細 :"
+
+#~ msgid "Saddle Stitch Setting:"
+#~ msgstr "中とじの設定 :"
+
+#~ msgid "Fold + Saddle Stitch"
+#~ msgstr "折り+中とじ"
+
+#~ msgid "Fold + Saddle Stitch + Trim"
+#~ msgstr "折り+中とじ+断裁"
+
+#~ msgid "Saddle Stitch + Trim"
+#~ msgstr "中とじ+断裁"
+
+#~ msgid "Staple Finisher-F1"
+#~ msgstr "ステイプルフィニッシャー･F1"
+
+#~ msgid "Booklet Finisher-F1"
+#~ msgstr "中綴じフィニッシャー･F1"
+
+#~ msgid "Inner Finisher-C1"
+#~ msgstr "インナーフィニッシャー･C1"
+
+#~ msgid "Inner Finisher-C1 + Copy Tray"
+#~ msgstr "インナーフィニッシャー･C1+コピートレイ"
+
+#~ msgid "Inner Finisher-C1 + Inner Finisher Additional Tray"
+#~ msgstr "インナーフィニッシャー･C1+インナーフィニッシャー用追加トレイ"
+
+#~ msgid "Inner Finisher-C1 + Copy Tray + Inner Finisher Additional Tray"
+#~ msgstr ""
+#~ "インナーフィニッシャー･C1+コピートレイ+インナーフィニッシャー用追加トレイ"
+
+#~ msgid "Plain Paper 3"
+#~ msgstr "普通紙3"
+
+#~ msgid "Rough Paper 3"
+#~ msgstr "ラフ紙3"
+
+#~ msgid "0 to %d"
+#~ msgstr "0〜%d"
+
+#~ msgid "Insertion Unit "
+#~ msgstr "インサーター"
+
+#~ msgid "Inner Finisher-D1"
+#~ msgstr "インナーフィニッシャー･D1"
+
+#~ msgid "Inner Finisher-D1 + Inner Finisher Additional Tray"
+#~ msgstr "インナーフィニッシャー･D1+インナーフィニッシャー用追加トレイ"
+
+#~ msgid "Staple Finisher-G1"
+#~ msgstr "ステイプルフィニッシャー･G1"
+
+#~ msgid "Booklet Finisher-G1"
+#~ msgstr "中綴じフィニッシャー･G1"
+
+#~ msgid "Staple Finisher-H1"
+#~ msgstr "ステイプルフィニッシャー･H1"
+
+#~ msgid "Standard Drawer x 1 + Optional 250 Sheet Drawer x 3"
+#~ msgstr "標準1段カセット+250枚カセットx3"
+
+#~ msgid "Standard Drawer x 2 + Optional 250 Sheet Drawer x 2"
+#~ msgstr "標準2段カセット+250枚カセットx2"
+
+#~ msgid "(1 to 9999) "
+#~ msgstr "部ごと (1〜9999)"

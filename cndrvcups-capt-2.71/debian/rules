@@ -1,0 +1,184 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+
+
+
+CFLAGS = -Wall -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	# Add here commands to configure the package.
+	for d in driver ppd backend pstocapt pstocapt2 pstocapt3 statusui; do \
+		(cd $$d && ./autogen.sh --prefix=/usr --enable-progpath=/usr/bin --disable-static); \
+	done
+
+	(cd cngplp && ./autogen.sh --prefix=/usr --libdir=/usr/lib);
+	(cd cngplp/files && ./autogen.sh);
+
+	touch configure-stamp
+
+
+build: build-stamp
+
+build-stamp: configure-stamp 
+	dh_testdir
+
+	# Add here commands to compile the package.
+	for d in driver ppd backend pstocapt pstocapt2 pstocapt3 statusui cngplp; do \
+		(cd $$d && $(MAKE)); \
+	done
+	#$(MAKE)
+	#docbook-to-man debian/cndrvcups-capt.sgml > cndrvcups-capt.1
+
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+
+	# Add here commands to clean up after the build process.
+	#-$(MAKE) clean
+	-for d in driver ppd backend pstocapt pstocapt2 pstocapt3 statusui cngplp; do \
+		(cd $$d && $(MAKE) distclean); \
+	done
+
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+
+	# Add here commands to install the package into debian/cndrvcups-capt.
+	#$(MAKE) install DESTDIR=$(CURDIR)/debian/cndrvcups-capt
+	#for d in driver ppd backend pstocapt pstocapt2 pstocapt3 statusui cngplp; do \
+	#	(cd $$d && $(MAKE) install DESTDIR=$(CURDIR)/debian/cndrvcups-capt); \
+	#done
+	for d in driver ppd backend pstocapt pstocapt2 pstocapt3 statusui; do \
+		(cd $$d && $(MAKE) install DESTDIR=$(CURDIR)/debian/cndrvcups-capt); \
+	done
+	
+	for d in cngplp; do \
+		(cd $$d && $(MAKE) install DESTDIR=$(CURDIR)/debian/cndrvcups-capt); \
+	done
+
+	dh_install -s
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/lib
+	install -c libs/libcaptfilter.so.1.0.0 	$(CURDIR)/debian/cndrvcups-capt/usr/lib
+	install -c libs/libcaiocaptnet.so.1.0.0	$(CURDIR)/debian/cndrvcups-capt/usr/lib
+	install -c libs/libcncaptnpm.so.2.0.1 	$(CURDIR)/debian/cndrvcups-capt/usr/lib
+	install -c -m 755 libs/libcnaccm.so.1.0 	$(CURDIR)/debian/cndrvcups-capt/usr/lib
+
+	ln -sf /usr/lib/libcaptfilter.so.1.0.0	$(CURDIR)/debian/cndrvcups-capt/usr/lib/libcaptfilter.so.1
+	ln -sf /usr/lib/libcaptfilter.so.1.0.0	$(CURDIR)/debian/cndrvcups-capt/usr/lib/libcaptfilter.so
+	ln -sf /usr/lib/libcaiocaptnet.so.1.0.0 $(CURDIR)/debian/cndrvcups-capt/usr/lib/libcaiocaptnet.so.1
+	ln -sf /usr/lib/libcaiocaptnet.so.1.0.0 $(CURDIR)/debian/cndrvcups-capt/usr/lib/libcaiocaptnet.so
+	ln -sf /usr/lib/libcncaptnpm.so.2.0.1 	$(CURDIR)/debian/cndrvcups-capt/usr/lib/libcncaptnpm.so.2
+	ln -sf /usr/lib/libcncaptnpm.so.2.0.1 	$(CURDIR)/debian/cndrvcups-capt/usr/lib/libcncaptnpm.so
+
+	ln -sf /usr/lib/libcnaccm.so.1.0		$(CURDIR)/debian/cndrvcups-capt/usr/lib/libcnaccm.so.1
+	ln -sf /usr/lib/libcnaccm.so.1.0		$(CURDIR)/debian/cndrvcups-capt/usr/lib/libcnaccm.so
+
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/bin
+	install -c libs/captdrv         	$(CURDIR)/debian/cndrvcups-capt/usr/bin
+	install -c libs/captfilter      	$(CURDIR)/debian/cndrvcups-capt/usr/bin
+	install -c libs/captmon/captmon 	$(CURDIR)/debian/cndrvcups-capt/usr/bin
+	install -c libs/captmon2/captmon2 	$(CURDIR)/debian/cndrvcups-capt/usr/bin
+	install -c libs/captemon/captmon*	$(CURDIR)/debian/cndrvcups-capt/usr/bin
+
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/sbin
+ifeq "$(shell uname -m)" "x86_64"
+	install -c libs64/ccpd               $(CURDIR)/debian/cndrvcups-capt/usr/sbin
+	install -c libs64/ccpdadmin          $(CURDIR)/debian/cndrvcups-capt/usr/sbin
+else
+	install -c libs/ccpd                    $(CURDIR)/debian/cndrvcups-capt/usr/sbin
+	install -c libs/ccpdadmin               $(CURDIR)/debian/cndrvcups-capt/usr/sbin
+endif
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/etc  
+	install -c samples/ccpd.conf        	$(CURDIR)/debian/cndrvcups-capt/etc  
+	
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/etc/init.d
+	install -c samples/ccpd	        	$(CURDIR)/debian/cndrvcups-capt/etc/init.d
+	
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/share/ccpd  
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/share/captfilter
+	install -c libs/ccpddata/CNA*L.BIN	$(CURDIR)/debian/cndrvcups-capt/usr/share/ccpd  
+	install -c libs/ccpddata/CNA*LS.BIN	$(CURDIR)/debian/cndrvcups-capt/usr/share/ccpd  
+	install -c libs/ccpddata/cnab6cl.bin	$(CURDIR)/debian/cndrvcups-capt/usr/share/ccpd  
+	install -c libs/CnA*INK.DAT		$(CURDIR)/debian/cndrvcups-capt/usr/share/captfilter
+	install -c libs/captemon/CNAC*.BIN	$(CURDIR)/debian/cndrvcups-capt/usr/share/ccpd  
+	
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/share/captmon
+	install -c libs/captmon/msgtable.xml	$(CURDIR)/debian/cndrvcups-capt/usr/share/captmon
+
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/share/captmon2
+	install -c libs/captmon2/msgtable2.xml	$(CURDIR)/debian/cndrvcups-capt/usr/share/captmon2
+
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/share/captemon
+	install -c libs/captemon/msgtablelbp* 	$(CURDIR)/debian/cndrvcups-capt/usr/share/captemon
+	install -c libs/captemon/msgtablecn* 	$(CURDIR)/debian/cndrvcups-capt/usr/share/captemon
+
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/share/caepcm
+	install -c -m 644 data/C*   $(CURDIR)/debian/cndrvcups-capt/usr/share/caepcm
+	
+	dh_install -s
+	mkdir -p $(CURDIR)/debian/cndrvcups-capt/usr/share/doc/cndrvcups-capt
+#	install *capt*.txt $(CURDIR)/debian/cndrvcups-capt/usr/share/doc/cndrvcups-capt
+	install LICENSE-*.txt $(CURDIR)/debian/cndrvcups-capt/usr/share/doc/cndrvcups-capt
+	install README-*.txt $(CURDIR)/debian/cndrvcups-capt/usr/share/doc/cndrvcups-capt
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs 
+	dh_installdocs
+	dh_installexamples
+#	dh_install
+#	dh_installmenu
+#	dh_installdebconf	
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+#	dh_installinit
+#	dh_installcron
+#	dh_installinfo
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+#	dh_perl
+#	dh_python
+#	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure

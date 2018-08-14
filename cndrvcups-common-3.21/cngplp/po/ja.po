@@ -1,0 +1,99 @@
+# Print Dialog for Canon LIPS/PS/LIPSLX/UFR2/CAPT Printer.
+# Copyright CANON INC. 2004
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cngplp 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-06 17:05+0900\n"
+"PO-Revision-Date: 2004-04-14 20:28+0900\n"
+"Last-Translator: CANON INC.\n"
+"Language-Team: CANON INC.\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gladestr.h:1
+msgid "(1 to 9999)"
+msgstr "(1〜9999)"
+
+#: gladestr.h:2
+msgid "*"
+msgstr ""
+
+#: gladestr.h:3
+msgid "All Pages"
+msgstr "すべてのページ"
+
+#: gladestr.h:4
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: gladestr.h:5
+msgid "Copies:"
+msgstr "印刷部数 :"
+
+#: gladestr.h:6
+msgid "Even Number Pages"
+msgstr "偶数ページ"
+
+#: gladestr.h:7
+msgid "Name:"
+msgstr "プリンタ名称 :"
+
+#: gladestr.h:8
+msgid "Odd Number Pages"
+msgstr "奇数ページ"
+
+#: gladestr.h:9
+msgid "Options"
+msgstr "オプション"
+
+#: gladestr.h:10
+msgid "Page Range"
+msgstr "ページ範囲"
+
+#: gladestr.h:11
+msgid "Print"
+msgstr "印刷"
+
+#: gladestr.h:12
+msgid "Print Pages"
+msgstr "印刷ページ"
+
+#: gladestr.h:13
+msgid "Print Range"
+msgstr "印刷範囲"
+
+#: gladestr.h:14
+msgid "Printer"
+msgstr "プリンタ選択"
+
+#: gladestr.h:15
+msgid "Properties..."
+msgstr "設定..."
+
+#: gladestr.h:16
+msgid "Reverse Order"
+msgstr "逆順印刷"
+
+#: gladestr.h:17
+msgid "Save"
+msgstr "保存"
+
+#: gladestr.h:18
+msgid "Set as Default"
+msgstr "デフォルトに設定"
+
+#: gladestr.h:19
+msgid "cngplp"
+msgstr ""
+
+#: src/mainwnd.c:588 src/mainwnd.c:591
+msgid "Print and Save Settings"
+msgstr "印刷/設定保存"
+
+#: src/mainwnd.c:595 src/mainwnd.c:598
+msgid "Save Settings"
+msgstr "設定保存"

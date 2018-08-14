@@ -1,0 +1,53 @@
+ This file gives a brief description on how to build and install
+Canon printer driver modules.
+
+Introduction:
+=============
+  This package is the common printer driver modules for Canon printers.
+ This package consists of three modules:
+
+* libcnpk.so shared libraty module
+  This is a shared library module to load cpca library.
+
+* cngplp application
+  This is a command to print files with Graphical-User-Interface.
+
+* buftool library module
+  This is a library to access the byte-order independent buffer.
+
+
+Licensing:
+==========
+  This package consists of three modules as described above. "cngplp" is
+ subject to GNU General Public License (GPL) (see COPYING file), and other
+ two modules are subject to MIT License.
+
+  Note that licensing term may vary from file to file. Please consult
+ each files for the exact licensing conditions.
+
+
+Requirments:
+============
+
+<common>
+    * aclocal	(1.4.x or above)
+    * automake	(1.4.x or above)
+
+<cngplp>
+    * aclocal   (1.4.x or above)
+    * automake  (1.4.x or above)
+    * Gtk+      (2.4.x or above)
+    * libcups   (1.1.17 or above)
+    * libxml2   (2.6.x or above)
+    * libglade2 (2.4.x or above)
+
+
+Quick install:
+==============
+  To build and install modules, run make at the top-level
+ directory of this pakage source trees as follows:
+
+ $ make gen
+ $ su
+ # make install
+

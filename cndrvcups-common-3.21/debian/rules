@@ -1,0 +1,172 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+
+
+
+CFLAGS = -Wall -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+	CFLAGS += -O0
+else
+	CFLAGS += -O2
+endif
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	# Add here commands to configure the package.
+###	for d in buftool; do \
+###		(cd $$d && ./autogen.sh --prefix=/usr); \ 
+###	done
+	#for d in cpca; do \
+	#	(cd $$d && ./autogen.sh --prefix=/usr --disable-static --enable-shared); \
+	#done
+
+	# 
+	(cd buftool && ./autogen.sh --prefix=/usr);
+	(cd cngplp && ./autogen.sh --prefix=/usr --libdir=/usr/local/lib);
+	(cd backend && ./autogen.sh --prefix=/usr);
+
+	touch configure-stamp
+
+
+build: build-stamp
+
+build-stamp: configure-stamp 
+	dh_testdir
+
+	# Add here commands to compile the package.
+	for d in buftool cngplp backend; do \
+		(cd $$d && $(MAKE)); \
+	done
+	for d in c3plmod_ipc ; do \
+		(cd $$d && $(MAKE)); \
+	done
+	#$(MAKE)
+	#docbook-to-man debian/cndrvcups-common.sgml > cndrvcups-common.1
+
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+
+	# Add here commands to clean up after the build process.
+	#-$(MAKE) clean
+	-for d in buftool cngplp backend ; do \
+		(cd $$d && $(MAKE) distclean); \
+	done
+	-for d in c3plmod_ipc ; do \
+		(cd $$d && $(MAKE) distclean); \
+	done
+
+	dh_clean 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+
+	# Add here commands to install the package into debian/cndrvcups-common.
+	#$(MAKE) install DESTDIR=$(CURDIR)/debian/cndrvcups-common
+	for d in buftool cngplp backend ; do \
+		(cd $$d && $(MAKE) install DESTDIR=$(CURDIR)/debian/cndrvcups-common); \
+	done
+	for d in c3plmod_ipc ; do \
+		(cd $$d && $(MAKE) install DESTDIR=$(CURDIR)/debian/cndrvcups-common LIBDIR=/usr/lib); \
+	done
+
+	dh_install -s
+	mkdir -p $(CURDIR)/debian/cndrvcups-common/usr/bin
+	#install -c -m 4755 libs/cnpkmodule $(CURDIR)/debian/cndrvcups-common/usr/bin
+	install -c -m 755 libs/c3pldrv    $(CURDIR)/debian/cndrvcups-common/usr/bin
+
+	mkdir -p $(CURDIR)/debian/cndrvcups-common/usr/lib
+	install -c -m 755 libs/libcaiowrap.so.1.0.0 $(CURDIR)/debian/cndrvcups-common/usr/lib
+	install -c -m 755 libs/libcaiousb.so.1.0.0 $(CURDIR)/debian/cndrvcups-common/usr/lib
+	install -c -m 755 libs/libc3pl.so.0.0.1 $(CURDIR)/debian/cndrvcups-common/usr/lib
+	#install -c -m 755 libs/libcnaccm.so.1.0 $(CURDIR)/debian/cndrvcups-common/usr/lib
+	install -c -m 755 libs/libcaepcm.so.1.0 $(CURDIR)/debian/cndrvcups-common/usr/lib
+	#install -c -m 755 libs/libcnlbcm.so.1.0 $(CURDIR)/debian/cndrvcups-common/usr/lib
+
+	install -c -m 755 libs/libColorGear.so.0.0.0 $(CURDIR)/debian/cndrvcups-common/usr/lib
+	install -c -m 755 libs/libColorGearC.so.0.0.0 $(CURDIR)/debian/cndrvcups-common/usr/lib
+
+	install -c -m 755 libs/libcanon_slim.so.1.0.0 $(CURDIR)/debian/cndrvcups-common/usr/lib
+	
+	dh_link /usr/lib/libc3pl.so.0.0.1	/usr/lib/libc3pl.so.0
+	dh_link /usr/lib/libc3pl.so.0.0.1	/usr/lib/libc3pl.so
+	#dh_link /usr/lib/libcnaccm.so.1.0	/usr/lib/libcnaccm.so.1
+	#dh_link /usr/lib/libcnaccm.so.1.0	/usr/lib/libcnaccm.so
+	dh_link /usr/lib/libcaepcm.so.1.0	/usr/lib/libcaepcm.so.1
+	dh_link /usr/lib/libcaepcm.so.1.0	/usr/lib/libcaepcm.so
+	#dh_link /usr/lib/libcnlbcm.so.1.0	/usr/lib/libcnlbcm.so.1
+	#dh_link /usr/lib/libcnlbcm.so.1.0	/usr/lib/libcnlbcm.so
+	dh_link /usr/lib/libcaiowrap.so.1.0.0	/usr/lib/libcaiowrap.so.1
+	dh_link /usr/lib/libcaiowrap.so.1.0.0	/usr/lib/libcaiowrap.so
+	dh_link /usr/lib/libcaiousb.so.1.0.0	/usr/lib/libcaiousb.so.1
+	dh_link /usr/lib/libcaiousb.so.1.0.0	/usr/lib/libcaiousb.so
+	dh_link /usr/lib/libcanonc3pl.so.1.0.0	/usr/lib/libcanonc3pl.so.1
+	dh_link /usr/lib/libcanonc3pl.so.1.0.0	/usr/lib/libcanonc3pl.so
+	dh_link /usr/lib/libcanon_slim.so.1.0.0	/usr/lib/libcanon_slim.so.1
+	dh_link /usr/lib/libcanon_slim.so.1.0.0	/usr/lib/libcanon_slim.so
+
+	dh_link /usr/lib/libColorGear.so.0.0.0	/usr/lib/libColorGear.so.0
+	dh_link /usr/lib/libColorGear.so.0.0.0	/usr/lib/libColorGear.so
+	dh_link /usr/lib/libColorGearC.so.0.0.0	/usr/lib/libColorGearC.so.0
+	dh_link /usr/lib/libColorGearC.so.0.0.0	/usr/lib/libColorGearC.so
+
+	mkdir -p $(CURDIR)/debian/cndrvcups-common/usr/share/caepcm
+	#install -c -m 644 data/CA*    $(CURDIR)/debian/cndrvcups-common/usr/share/caepcm
+	#install -c -m 644 data/CNZ0*  $(CURDIR)/debian/cndrvcups-common/usr/share/caepcm
+	install -c -m 644 data/*.ICC    $(CURDIR)/debian/cndrvcups-common/usr/share/caepcm
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs 
+	dh_installdocs
+	dh_installexamples
+#	dh_install
+#	dh_installmenu
+#	dh_installdebconf	
+#	dh_installlogrotate
+#	dh_installemacsen
+#	dh_installpam
+#	dh_installmime
+#	dh_installinit
+#	dh_installcron
+#	dh_installinfo
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+#	dh_perl
+#	dh_python
+#	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure
+

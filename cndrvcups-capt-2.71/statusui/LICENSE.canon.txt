@@ -1,0 +1,5 @@
+LICENSE
+    * These programs except for cnsktmodule are licensed under the terms of 
+    the GNU General Public License.  (See the file COPYING.)
+    * cnsktmodule is subject to MIT License.
+     (See the file cnsktmodule/LICENSE.txt).

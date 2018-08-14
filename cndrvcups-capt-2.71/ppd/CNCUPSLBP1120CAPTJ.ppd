@@ -1,0 +1,209 @@
+*PPD-Adobe: "4.3"
+*%
+*%  Copyright (C) 2004-2013 CANON INC.
+*%  CUPS printer driver for Canon printer devices
+*%
+*%  This program is free software; you can redistribute it and/or modify
+*%  it under the terms of the GNU General Public License as published by
+*%  the Free Software Foundation; either version 2 of the License, or
+*%  (at your option) any later version.
+*%
+*%  This program is distributed in the hope that it will be useful,
+*%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*%  GNU General Public License for more details.
+*%
+*%  You should have received a copy of the GNU General Public License
+*%  along with this program; if not, write to the Free Software
+*%  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*%
+*FormatVersion: "4.3"
+*FileVersion: "1.2"
+*LanguageVersion: English
+*LanguageEncoding: ISOLatin1
+*PCFileName: "CNL112CJ.PPD"
+*Manufacturer: "Canon"
+*Product: "(LBP1120)"
+*cupsVersion: 1.1
+*cupsManualCopies: True
+*cupsModelNumber: 36
+*cupsFilter: "application/vnd.cups-postscript 0 pstocapt"
+*ModelName: "Canon LBP1120 CAPT Japanese"
+*ShortNickName: "LBP1120"
+*NickName: "Canon LBP1120 CAPT ver.1.5"
+*PSVersion: "(3010.000) 550"
+*PSVersion: "(3010.000) 651"
+*LanguageLevel: "3"
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*FileSystem: False
+*Throughput: "10"
+*LandscapeOrientation: Plus90
+*TTRasterizer: Type42
+*%CNGPLPLIBNAME: "uictlcapt"
+*%CNGPLPLIBNAMEVER: "1.0.0"
+
+*MaxMediaWidth: "612"
+*MaxMediaHeight: "1008"
+*CenterRegistered: False
+*HWMargins: 11.34 17.01 11.34 14.17
+*LeadingEdge Short: ""
+*DefaultLeadingEdge: Short
+*VariablePaperSize: False
+
+*opbidiPlugin: "captmon"
+*opbidiReadInterval: "2"
+*ccpdReady: "True"
+
+*statusuiCleaning: "0"
+*statusuiPPAPDlg: "0"
+*statusuiDevDlg: "0"
+
+*%CNPrintLang: CAPT
+*CNTblHalftone: "1"
+*CNTblModel: "0"
+*CNMaxCopies: "999"
+
+*OpenUI *Resolution/Resolution : PickOne
+*DefaultResolution: 600
+*Resolution 600/600 dpi: "<</HWResolution[600 600]>>setpagedevice"
+*CloseUI: *Resolution
+
+*OpenUI *BitsPerPixel/Bits Per Pixel: PickOne
+*DefaultBitsPerPixel: 8
+*BitsPerPixel 8/8 bpp: "<< >>setpagedevice"
+*CloseUI: *BitsPerPixel
+
+*OpenUI *CNTonerSaving/Toner Save : PickOne
+*DefaultCNTonerSaving: False
+*CNTonerSaving True/ON: "<< >>setpagedevice"
+*CNTonerSaving False/OFF: "<< >>setpagedevice"
+*CloseUI: *CNTonerSaving
+
+*OpenUI *MediaType/Media Type : PickOne
+*DefaultMediaType: PlainPaper
+*MediaType PlainPaper/Plain Paper: "<</MediaType(PlainPaper)>>setpagedevice"
+*MediaType ThickPaper/Heavy Paper: "<</MediaType(ThickPaper)>>setpagedevice"
+*MediaType ThickPaperH/Heavy Paper H: "<</MediaType(ThickPaperH)>>setpagedevice"
+*CloseUI: *MediaType
+
+*OpenUI *InputSlot/Paper Source: PickOne
+*DefaultInputSlot: 0
+*InputSlot 0/Auto : ""
+*CloseUI: *InputSlot
+
+*OpenUI *Collate/Collate : PickOne
+*DefaultCollate: False
+*Collate True/ON: "<< >>setpagedevice"
+*Collate False/OFF: "<< >>setpagedevice"
+*CloseUI: *Collate
+
+*OpenUI *CNHalftone/Halftones : PickOne
+*DefaultCNHalftone: pattern1
+*CNHalftone pattern1/Pattern1: "<< >>setpagedevice"
+*CNHalftone pattern2/Pattern2: "<< >>setpagedevice"
+*CloseUI: *CNHalftone
+
+*OpenUI *CNTonerDensity/Toner Density : PickOne
+*DefaultCNTonerDensity: 3
+*CNTonerDensity 1/1: "<< >>setpagedevice"
+*CNTonerDensity 2/2: "<< >>setpagedevice"
+*CNTonerDensity 3/3: "<< >>setpagedevice"
+*CNTonerDensity 4/4: "<< >>setpagedevice"
+*CNTonerDensity 5/5: "<< >>setpagedevice"
+*CloseUI: *CNTonerDensity
+
+*OpenUI *CNSuperSmooth/Image Refinement : PickOne
+*DefaultCNSuperSmooth: True
+*CNSuperSmooth True/ON: "<< >>setpagedevice"
+*CNSuperSmooth False/OFF: "<< >>setpagedevice"
+*CloseUI: *CNSuperSmooth
+
+*OpenUI *PageSize/Page Size: PickOne
+*DefaultPageSize: A4
+*PageSize A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
+*PageSize B5: "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
+*PageSize A5: "<</PageSize[420 595]/ImagingBBox null>>setpagedevice"
+*PageSize Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
+*PageSize Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
+*PageSize Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
+*PageSize Postcard: "<</PageSize[283 420]/ImagingBBox null>>setpagedevice"
+*PageSize jenv_you4: "<</PageSize[298 666]/ImagingBBox null>>setpagedevice"
+*PageSize jenv_you2: "<</PageSize[323 459]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion: PickOne
+*DefaultPageRegion: A4
+*PageRegion A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
+*PageRegion B5: "<</PageSize[516 729]/ImagingBBox null>>setpagedevice"
+*PageRegion A5: "<</PageSize[420 595]/ImagingBBox null>>setpagedevice"
+*PageRegion Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
+*PageRegion Legal: "<</PageSize[612 1008]/ImagingBBox null>>setpagedevice"
+*PageRegion Executive: "<</PageSize[522 756]/ImagingBBox null>>setpagedevice"
+*PageRegion Postcard: "<</PageSize[283 420]/ImagingBBox null>>setpagedevice"
+*PageRegion jenv_you4: "<</PageSize[298 666]/ImagingBBox null>>setpagedevice"
+*PageRegion jenv_you2: "<</PageSize[323 459]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageRegion
+
+*DefaultImageableArea: A4
+*ImageableArea A4: "14.160 14.160 580.840 827.840"
+*ImageableArea B5: "14.160 14.160 501.840 714.840"
+*ImageableArea A5: "14.160 14.160 405.840 580.840"
+*ImageableArea Letter: "14.160 14.160 597.840 777.840"
+*ImageableArea Legal: "14.160 14.160 597.840 993.840"
+*ImageableArea Executive: "14.160 14.160 507.840 741.840"
+*ImageableArea Postcard: "14.160 14.160 268.840 405.840"
+*ImageableArea jenv_you4: "28.320 28.320 276.500 637.680"
+*ImageableArea jenv_you2: "28.320 28.320 301.500 430.680"
+
+*DefaultPaperDimension: A4
+*PaperDimension A4: "595 842"
+*PaperDimension B5: "516 729"
+*PaperDimension A5: "420 595"
+*PaperDimension Letter: "612 792"
+*PaperDimension Legal: "612 1008"
+*PaperDimension Executive: "522 756"
+*PaperDimension Postcard: "283 420"
+*PaperDimension jenv_you4: "298 666"
+*PaperDimension jenv_you2: "323 459"
+
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
+*Font Bookman-Light: Standard "(001.004S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Standard ROM
+
+*%
+*% End of PPD file.
+*%

@@ -1,0 +1,38 @@
+;=====================================================================
+; Canon Advanced Printing Technology
+; Printer DATA Text for Windows 2000/XP/Server 2003/Vista
+; Copyright CANON INC. 2008
+; CNAC8INK.DAT
+;=====================================================================
+[CAPTFileConfig]
+CNAP2LMK.DLL=1,1,1,W32_3,SYS32,0
+CNAC8EMK.DLL=1,1,1,W32_3,SYS32,0
+CNAP1NSK.DLL=1,1,1,W32_3,SYS32,0
+
+[CNAC8 Sound]
+NumItems =0
+
+[CNAC8 ShortCutName]
+NumItems=1
+CAPTItem1=Canon LBP5050 Uninstaller,Canon Printer Uninstaller
+
+[VersionInfo]
+AboutDLGVersion=1.00
+
+[ResourceDLL]
+LocaleID=411
+
+[CMYKThreshold]
+Fill=C0,C0,C0,C0
+TextLarge=80,80,80,80
+TextSmall=1,1,1,1
+LineThick=80,80,80,80
+LineThin=1,1,1,1
+BmpImg=C0,C0,C0,C0
+BmpEdge=C0,C0,C0,C0
+BmpIsolation=C0,C0,C0,C0
+
+[Threshold]
+Text=E
+Line=21
+Bmp=5F
