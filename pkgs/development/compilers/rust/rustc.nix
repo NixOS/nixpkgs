@@ -32,8 +32,8 @@ stdenv.mkDerivation {
 
   __darwinAllowLocalNetworking = true;
 
-  # The build will fail at the very end on AArch64 without this.
-  dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then true else null;
+  # rustc complains about modified source files otherwise
+  dontUpdateAutotoolsGnuConfigScripts = true;
 
   # Running the default `strip -S` command on Darwin corrupts the
   # .rlib files in "lib/".
