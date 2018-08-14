@@ -22,14 +22,8 @@ in {
   config = mkIf cfg.enable {
     services.geoclue2.enable = true;
 
-    security.polkit.extraConfig = ''
-     polkit.addRule(function(action, subject) {
-       if (action.id == "org.freedesktop.timedate1.set-timezone"
-           && subject.user == "localtimed") {
-         return polkit.Result.YES;
-       }
-     });
-    '';
+    # so polkit will pick up the rules
+    environment.systemPackages = [ pkgs.localtime ];
 
     users.users = [{
       name = "localtimed";
