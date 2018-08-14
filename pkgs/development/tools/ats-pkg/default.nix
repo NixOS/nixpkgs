@@ -7,7 +7,7 @@
 , zip-archive, zlib
 }:
 let
-  ats-pkg-version = "3.2.1.8";
+  ats-pkg-version = "3.2.1.9";
 in
 stdenv.mkDerivation rec {
   name = "ats-pkg";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "vmchale";
     repo = "atspkg";
     rev = "${ats-pkg-version}";
-    sha256 = "10ncx90dd4z0hsb0rfr5lvsp8293s8h90k6q0xrfjs67gy0v20c7";
+    sha256 = "0yzvnrnrdxyfx4h6r77qfb4vkzmx6x16p77bpfx1vr67z64krbaf";
   };
   isLibrary = true;
   isExecutable = true;
