@@ -213,6 +213,30 @@ runTests {
   };
 
 
+# ATTRSETS
+
+  # code from the example
+  testRecursiveUpdateUntil = {
+    expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
+      # first attribute set
+      foo.bar = 1;
+      foo.baz = 2;
+      bar = 3;
+    } {
+      #second attribute set
+      foo.bar = 1;
+      foo.quz = 2;
+      baz = 4;
+    };
+    expected = {
+      foo.bar = 1; # 'foo.*' from the second set
+      foo.quz = 2; #
+      bar = 3;     # 'bar' from the first set
+      baz = 4;     # 'baz' from the second set
+    };
+  };
+
+
 # GENERATORS
 # these tests assume attributes are converted to lists
 # in alphabetical order
