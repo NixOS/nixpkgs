@@ -1121,6 +1121,8 @@ with pkgs;
 
   codesearch = callPackage ../tools/text/codesearch { };
 
+  codec2 = callPackage ../development/libraries/codec2 { };
+
   contacts = callPackage ../tools/misc/contacts {
     inherit (darwin.apple_sdk.frameworks) Foundation AddressBook;
   };
@@ -11755,6 +11757,8 @@ with pkgs;
   lv2Unstable = callPackage ../development/libraries/audio/lv2/unstable.nix { };
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
+
+  qradiolink = callPackage ../applications/misc/qradiolink { };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
