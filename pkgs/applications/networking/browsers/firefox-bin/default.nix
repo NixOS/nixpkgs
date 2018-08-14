@@ -162,6 +162,10 @@ stdenv.mkDerivation {
         fi
       done
 
+      if [ -e "$out/usr/lib/firefox-bin-${version}/" ]; then
+        ln -s $out/usr/lib/firefox-bin-${version} $out/usr/lib/firefox
+      fi
+
       find . -executable -type f -exec \
         patchelf --set-rpath "$libPath" \
           "$out/usr/lib/firefox-bin-${version}/{}" \;
