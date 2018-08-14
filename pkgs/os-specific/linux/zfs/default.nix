@@ -177,7 +177,7 @@ in {
 
   zfsUnstable = common rec {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.18";
+    incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "2018-08-13";
