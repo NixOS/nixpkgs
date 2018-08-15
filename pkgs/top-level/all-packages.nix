@@ -16695,9 +16695,7 @@ with pkgs;
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
-  wrapSlackCli = callPackage ../tools/networking/slack-cli/wrapper.nix { };
-  slack-cli-unwrapped = callPackage ../tools/networking/slack-cli { };
-  slack-cli = wrapSlackCli slack-cli-unwrapped;
+  slack-cli = callPackage ../tools/networking/slack-cli { };
 
   singularity = callPackage ../applications/virtualization/singularity { };
 
