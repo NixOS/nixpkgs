@@ -88,6 +88,7 @@ in {
         StandardOutput = "null";
         Restart = "on-failure";
         ExecStart = "${cfg.package}/sbin/syslog-ng ${concatStringsSep " " syslogngOptions}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP ${pidFile}";
       };
     };
   };
