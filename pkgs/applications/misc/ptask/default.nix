@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
-  patches = [ ./tw-version.patch ];
+  patches = [ ./tw-version.patch ./json_c_is_error.patch ];
 
   preFixup = ''
     wrapProgram "$out/bin/ptask" \
