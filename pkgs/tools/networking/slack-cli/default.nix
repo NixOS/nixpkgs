@@ -2,15 +2,17 @@
 # variable. Using `slack init` will not work because it tries to write
 # to the Nix store.
 
-{ stdenv, lib, fetchurl, makeWrapper, curl, jq }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, jq }:
 
 stdenv.mkDerivation rec {
   name = "slack-cli";
   version = "0.18.0";
 
-  src = fetchurl {
-    url = "https://github.com/rockymadden/slack-cli/archive/v${version}.tar.gz";
-    sha256 = "0q19l88c1mvnzya58q21pc3v6mff56z43288kzk50000ri286wq2";
+  src = fetchFromGitHub {
+    owner = "rockymadden";
+    repo = "slack-cli";
+    rev = "v${version}";
+    sha256 = "022yr3cpfg0v7cxi62zzk08vp0l3w851qpfh6amyfgjiynnfyddl";
   };
 
   buildInputs = [ makeWrapper ];
