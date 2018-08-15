@@ -7026,6 +7026,8 @@ with pkgs;
 
   neko = callPackage ../development/compilers/neko { };
 
+  nextpnr = libsForQt5.callPackage ../development/compilers/nextpnr { };
+
   nasm = callPackage ../development/compilers/nasm { };
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
