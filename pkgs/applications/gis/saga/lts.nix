@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  GDAL_CFLAGS = "-std=c++11";
-
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
 
   sourceRoot = "code-b6f474f/saga-gis";
