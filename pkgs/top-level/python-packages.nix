@@ -2537,6 +2537,8 @@ in {
     };
   };
 
+  fastcache = callPackage ../development/python-modules/fastcache { };
+
   functools32 = if isPy3k then null else buildPythonPackage rec {
     name = "functools32-${version}";
     version = "3.2.3-2";
