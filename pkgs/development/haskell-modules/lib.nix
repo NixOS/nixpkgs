@@ -298,7 +298,7 @@ rec {
   getHaskellBuildInputs = p:
     (overrideCabal p (args: {
       passthru = (args.passthru or {}) // {
-        _getHaskellBuildInputs = extractBuildInputs p.compiler args;
+        _getHaskellBuildInputs = (extractBuildInputs p.compiler args).haskellBuildInputs;
       };
     }))._getHaskellBuildInputs;
 
