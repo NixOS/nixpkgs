@@ -1,6 +1,5 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, autoPatchelfHook
-, xorg, atk, glib, pango, gdk_pixbuf, cairo, freetype, fontconfig, gtk2, gtk3
-, gnome3, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
+, xorg, gtk2, gtk3 , gnome2, gnome3, nss, alsaLib, udev, libnotify, xdg_utils }:
 
 with stdenv.lib;
 
@@ -17,10 +16,13 @@ let
     genericName = name;
     categories = "Network;";
   };
+
+  tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
+
 in stdenv.mkDerivation rec {
   name = "wavebox-${version}";
   src = fetchurl {
-    url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
+    url = "https://github.com/wavebox/waveboxapp/releases/download/v${version}/${tarball}";
     sha256 = "06ce349f561c6122b2d326e9a1363fb358e263c81a7d1d08723ec567235bbd74";
   };
 
@@ -28,10 +30,11 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
-  buildInputs = (with xorg; [
-    libX11 libXcomposite libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender libXScrnSaver libXtst
-  ]) ++ [
-    alsaLib atk cairo cups dbus expat fontconfig freetype gconf gdk_pixbuf glib gnome3.gconf gtk2 gtk3 nspr nss pango stdenv.cc.cc
+
+  buildInputs = with xorg; [
+    libXScrnSaver libXtst
+  ] ++ [
+    gtk3 nss gtk2 alsaLib gnome2.GConf
   ];
 
   runtimeDependencies = [ udev.lib libnotify ];
@@ -39,7 +42,6 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/opt/wavebox
     cp -r * $out/opt/wavebox
-    ln -s $out/opt/wavebox/Wavebox-linux-x64/Wavebox $out/bin/
 
     # provide desktop item and icon
     mkdir -p $out/share/applications $out/share/pixmaps
@@ -48,8 +50,9 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    paxmark m $out/opt/wavebox/Wavebox-linux-x64/Wavebox
-    wrapProgram $out/opt/wavebox/Wavebox-linux-x64/Wavebox --prefix PATH : ${xdg_utils}/bin
+    paxmark m $out/opt/wavebox/Wavebox
+    makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
+      --prefix PATH : ${xdg_utils}/bin
   '';
 
   meta = with stdenv.lib; {
