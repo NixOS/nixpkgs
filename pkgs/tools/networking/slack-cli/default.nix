@@ -24,4 +24,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     cp src/slack "$out/bin"
   '';
+
+  meta = {
+    license = stdenv.lib.licenses.mit;
+    maintainers = [ stdenv.lib.maintainers.qyliss ];
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

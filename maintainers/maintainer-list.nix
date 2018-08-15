@@ -3247,6 +3247,11 @@
     github = "qoelet";
     name = "Kenny Shen";
   };
+  qyliss = {
+    email = "hi@alyssa.is";
+    github = "alyssais";
+    name = "Alyssa Ross";
+  };
   ragge = {
     email = "r.dahlen@gmail.com";
     github = "ragnard";

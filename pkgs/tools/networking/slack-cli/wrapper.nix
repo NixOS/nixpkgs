@@ -2,7 +2,7 @@
 
 slack-cli:
 
-writeShellScriptBin "slack" ''
+(writeShellScriptBin "slack" ''
   [ "$1" = "init" -a -z "$SLACK_CLI_TOKEN" ] && cat >&2 <<-'MESSAGE'
   WARNING: slack-cli must be configured using the SLACK_CLI_TOKEN environment
   variable. Using `slack init` will not work because it tries to write to the
@@ -12,4 +12,10 @@ writeShellScriptBin "slack" ''
 
   export PATH=${lib.makeBinPath [ curl jq ]}:"$PATH"
   exec ${slack-cli}/bin/slack "$@"
-''
+'') // {
+  unwrapped = slack-cli;
+
+  meta = slack-cli.meta;
+  name = slack-cli.name;
+  version = slack-cli.version;
+}
