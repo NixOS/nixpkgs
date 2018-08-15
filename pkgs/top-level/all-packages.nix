@@ -7021,6 +7021,8 @@ with pkgs;
   mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
   mozart = mozart-binary;
 
+  nextpnr = callPackage ../development/compilers/nextpnr { };
+  
   nim = callPackage ../development/compilers/nim { };
   nrpl = callPackage ../development/tools/nrpl { };
 
