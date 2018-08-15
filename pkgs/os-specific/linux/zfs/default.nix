@@ -9,7 +9,7 @@
 , gawk, gnugrep, gnused, systemd
 
 # Kernel dependencies
-, kernel ? null, spl ? null, splUnstable ? null, splLegacyCrypto ? null
+, kernel ? null, spl ? null
 }:
 
 with stdenv.lib;
@@ -51,7 +51,7 @@ let
       '';
 
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
-         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
+        ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
       buildInputs =
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
@@ -93,7 +93,7 @@ let
 
       configureFlags = [
         "--with-config=${configFile}"
-        ] ++ optionals buildUser [
+      ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
         "--with-systemdunitdir=$(out)/etc/systemd/system"
@@ -103,10 +103,11 @@ let
         "--sysconfdir=/etc"
         "--localstatedir=/var"
         "--enable-systemd"
-        ] ++ optionals buildKernel [
-        "--with-spl=${spl}/libexec/spl"
+      ] ++ optionals buildKernel [
         "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
         "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      ] ++ optionals (buildKernel && spl != null) [
+        "--with-spl=${spl}/libexec/spl"
       ];
 
       enableParallelBuilding = true;
@@ -157,7 +158,7 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = null;
+    incompatibleKernelVersion = "4.18";
 
     # this package should point to the latest release.
     version = "0.7.9";
@@ -179,43 +180,19 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2018-05-22";
+    version = "2018-08-13";
 
-    rev = "ba863d0be4cbfbea938b10e49fb6ff459ac9ec20";
-    sha256 = "11dhigw1gybalwg2m6si148b6w195dj2lw38snqf6576wb5zndd0";
+    rev = "64e96969a88c21aebb2f8d982a8c345e55a2ae6c";
+    sha256 = "164fvsf9zqvq3vafnvjxafjl8gihmfqfsjwsmky16i90a6hs96gf";
     isUnstable = true;
 
     extraPatches = [
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/${rev}...nixos-zfs-2018-02-02.patch";
-        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
+        url = "https://github.com/Mic92/zfs/compare/${rev}...nixos-zfs-2018-08-13.patch";
+        sha256 = "1sdcr1w2jp3djpwlf1f91hrxxmc34q0jl388smdkxh5n5bpw5gzw";
       })
     ];
 
-    spl = splUnstable;
+    spl = null;
   };
-
-  # TODO: Remove this module before 18.09
-  # also remove boot.zfs.enableLegacyCrypto
-  zfsLegacyCrypto = common {
-    # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = null;
-
-    # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2018-02-01";
-
-    rev = "4c46b99d24a6e71b3c72462c11cb051d0930ad60";
-    sha256 = "011lcp2x44jgfzqqk2gjmyii1v7rxcprggv20prxa3c552drsx3c";
-    isUnstable = true;
-
-    extraPatches = [
-      (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/4c46b99d24a6e71b3c72462c11cb051d0930ad60...nixos-zfs-2018-02-01.patch";
-        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
-      })
-    ];
-
-    spl = splLegacyCrypto;
-  };
-
 }

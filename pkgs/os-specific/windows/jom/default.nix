@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ flex qmake4Hook ];
 
   QTDIR = qt48;
-  
+
   # cmakeFlags = "-DWIN32=1 -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_RC_COMPILER=${stdenv.cc.targetPrefix}windres";
 
   preBuild = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''

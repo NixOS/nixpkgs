@@ -6,6 +6,7 @@ args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, ge
 , libICE
 , vimPlugins
 , makeWrapper
+, wrapGAppsHook
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
@@ -122,6 +123,7 @@ in stdenv.mkDerivation rec {
   ++ stdenv.lib.optional wrapPythonDrv makeWrapper
   ++ stdenv.lib.optional nlsSupport gettext
   ++ stdenv.lib.optional perlSupport perl
+  ++ stdenv.lib.optional (guiSupport == "gtk3") wrapGAppsHook
   ;
 
   buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
@@ -152,6 +154,10 @@ in stdenv.mkDerivation rec {
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + stdenv.lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python}/bin"
+  '' + stdenv.lib.optionalString (guiSupport == "gtk3") ''
+    rm "$out/bin/gvim"
+    echo -e '#!${stdenv.shell}\n"'"$out/bin/vim"'" -g "$@"' > "$out/bin/gvim"
+    chmod a+x "$out/bin/gvim"
   '';
 
   preInstall = ''

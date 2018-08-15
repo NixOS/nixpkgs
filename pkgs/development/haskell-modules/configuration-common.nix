@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1l6xgvn3l0kkly5jvg57msx09bf1jwdff7m61w8yf2pxsrh5ybxl";
+      sha256 = "0a7h21cwfvprj5xfyivjzg2hbs71xp85l9v6kyp58mlqvwy3zffl";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -727,7 +727,7 @@ self: super: {
           owner = "haskell-servant";
           repo = "servant";
           rev = "v${ver}";
-          sha256 = "0bwd5dy3crn08dijn06dr3mdsww98kqxfp8v5mvrdws5glvcxdsg";
+          sha256 = "0kqglih3rv12nmkzxvalhfaaafk4b2irvv9x5xmc48i1ns71y23l";
         }}/doc";
         buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";
@@ -857,9 +857,6 @@ self: super: {
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
-
-  # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
-  stack2nix = doJailbreak super.stack2nix;
 
   # Work around https://github.com/haskell/c2hs/issues/192.
   c2hs = dontCheck super.c2hs;
@@ -1080,13 +1077,18 @@ self: super: {
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
-  # The test suite does not know how to find the 'cabal2nix' binary.
-  cabal2nix = overrideCabal super.cabal2nix (drv: {
-    preCheck = ''
-      export PATH="$PWD/dist/build/cabal2nix:$PATH"
-      export HOME="$TMPDIR/home"
-    '';
-  });
+  # cabal2nix requires hpack >= 0.29.6 but the LTS has hpack-0.28.2.
+  # Lets remove this once the LTS has upraded to 0.29.6.
+  hpack = super.hpack_0_29_6;
+
+  cabal2nix =
+    # The test suite does not know how to find the 'cabal2nix' binary.
+    overrideCabal super.cabal2nix (drv: {
+      preCheck = ''
+        export PATH="$PWD/dist/build/cabal2nix:$PATH"
+        export HOME="$TMPDIR/home"
+      '';
+    });
 
   # Break out of "aeson <1.3, temporary <1.3".
   stack = doJailbreak super.stack;
@@ -1114,10 +1116,14 @@ self: super: {
   # needed because of testing-feat >=0.4.0.2 && <1.1
   language-ecmascript = doJailbreak super.language-ecmascript;
 
-  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can. 
+  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can.
   sexpr =
     appendPatch (overrideCabal super.sexpr (drv: {
       isExecutable = false;
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
     })) ./patches/sexpr-0.2.1.patch;
-}
+
+  # Can be removed once yi-language >= 0.18 is in the LTS
+  yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
+
+} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

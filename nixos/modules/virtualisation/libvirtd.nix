@@ -17,6 +17,10 @@ let
     ${optionalString cfg.qemuOvmf ''
       nvram = ["/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd"]
     ''}
+    ${optionalString (!cfg.qemuRunAsRoot) ''
+      user = "qemu-libvirtd"
+      group = "qemu-libvirtd"
+    ''}
     ${cfg.qemuVerbatimConfig}
   '';
 
@@ -53,6 +57,18 @@ in {
       description = ''
         Extra contents appended to the libvirtd configuration file,
         libvirtd.conf.
+      '';
+    };
+
+    virtualisation.libvirtd.qemuRunAsRoot = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        If true,  libvirtd runs qemu as root.
+        If false, libvirtd runs qemu as unprivileged user qemu-libvirtd.
+        Changing this option to false may cause file permission issues
+        for existing guests. To fix these, manually change ownership
+        of affected files in /var/lib/libvirt/qemu to qemu-libvirtd.
       '';
     };
 
@@ -109,6 +125,14 @@ in {
     boot.kernelModules = [ "tun" ];
 
     users.groups.libvirtd.gid = config.ids.gids.libvirtd;
+
+    # libvirtd runs qemu as this user and group by default
+    users.extraGroups.qemu-libvirtd.gid = config.ids.gids.qemu-libvirtd;
+    users.extraUsers.qemu-libvirtd = {
+      uid = config.ids.uids.qemu-libvirtd;
+      isNormalUser = false;
+      group = "qemu-libvirtd";
+    };
 
     systemd.packages = [ pkgs.libvirt ];
 

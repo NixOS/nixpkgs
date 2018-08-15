@@ -27,4 +27,8 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/acme";
+
+  meta = certbot.meta // {
+    description = "ACME protocol implementation in Python";
+  };
 }

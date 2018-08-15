@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.virtualisation.virtualbox.host;
 
-  virtualbox = pkgs.virtualbox.override {
+  virtualbox = cfg.package.override {
     inherit (cfg) enableHardening headless;
     extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
@@ -37,6 +37,15 @@ in
           You must set <literal>nixpkgs.config.allowUnfree = true</literal> in
           order to use this.  This requires you accept the VirtualBox PUEL.
         </para></important>
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.virtualbox;
+      defaultText = "pkgs.virtualbox";
+      description = ''
+        Which VirtualBox package to use.
       '';
     };
 

@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "04avzmqflx2a33n7v9jj32g83p7m6z712fg1mw308jk5ca2qp489";
   };
 
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace DoConfig --replace g++ c++
+  '';
+
   buildInputs = [
     gmp
   ];

@@ -10,11 +10,11 @@ let
 in stdenv.mkDerivation rec {
   pname = "msmtp";
   name = "${pname}-${version}";
-  version = "1.6.6";
+  version = "1.6.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/msmtp/${name}.tar.xz";
-    sha256 = "0ppvww0sb09bnsrpqnvlrn8vx231r24xn2iiwpy020mxc8gxn5fs";
+    url = "https://marlam.de/msmtp/releases/${name}.tar.xz";
+    sha256 = "1ysrnshvwhzwmvb2walw5i9jdzlvmckj7inr0xnvb26q0jirbzsm";
   };
 
   patches = [
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
-    homepage = http://msmtp.sourceforge.net/;
+    homepage = https://marlam.de/msmtp/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ garbas peterhoeg ];
     platforms = platforms.unix;

@@ -19,8 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru.rustc = rustc;
 
-  # changes hash of vendor directory otherwise on aarch64
-  dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then "1" else null;
+  # changes hash of vendor directory otherwise
+  dontUpdateAutotoolsGnuConfigScripts = true;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cacert file curl python openssl cmake zlib makeWrapper libgit2 ]

@@ -230,6 +230,8 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
+  browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
+
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
@@ -501,7 +503,11 @@ in {
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
+  singledispatch = callPackage ../development/python-modules/singledispatch { };
+
   sip = callPackage ../development/python-modules/sip { };
+
+  sortedcontainers = callPackage ../development/python-modules/sortedcontainers { };
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
@@ -2446,22 +2452,6 @@ in {
 
   flit = callPackage ../development/python-modules/flit { };
 
-  Flootty = buildPythonPackage rec {
-    name = "Flootty-3.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flootty/${name}.tar.gz";
-      sha256 = "14n2q2k388xbmp5rda5ss879bg5cbibk4zzz7c8mrjsmxhgagmmg";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Floobits collaborative terminal";
-      homepage = "https://github.com/Floobits/flootty/";
-      maintainers = with maintainers; [ garbas ];
-      license = licenses.asl20;
-    };
-  };
-
   flowlogs_reader = buildPythonPackage rec {
     name = "flowlogs_reader-1.0.0";
 
@@ -2544,21 +2534,6 @@ in {
       homepage = https://code.google.com/p/funcparserlib/;
       license = licenses.mit;
       platforms = platforms.unix;
-    };
-  };
-
-  singledispatch = buildPythonPackage rec {
-    name = "singledispatch-3.4.0.3";
-
-    propagatedBuildInputs = with self; [ six ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/singledispatch/${name}.tar.gz";
-      sha256 = "5b06af87df13818d14f08a028e42f566640aef80805c3b50c5056b086e3c2b9c";
-    };
-
-    meta = {
-      homepage = https://docs.python.org/3/library/functools.html;
     };
   };
 
@@ -4113,6 +4088,8 @@ in {
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
   pyspf = callPackage ../development/python-modules/pyspf { };
+
+  pysrim = callPackage ../development/python-modules/pysrim { };
 
   pysrt = callPackage ../development/python-modules/pysrt { };
 
@@ -7561,26 +7538,6 @@ in {
 
   brotlipy = callPackage ../development/python-modules/brotlipy { };
 
-  sortedcontainers = buildPythonPackage rec {
-    name = "sortedcontainers-${version}";
-    version = "1.5.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sortedcontainers/${name}.tar.gz";
-      sha256 = "1sjh8lccbmvwna91mlhl5m3z4320p07h063b8x8br4p4cll49w0g";
-    };
-
-    # tries to run tests for all python versions and uses virtualenv weirdly
-    doCheck = false;
-    #buildInputs = with self; [ tox nose ];
-
-    meta = {
-      description = "Python Sorted Container Types: SortedList, SortedDict, and SortedSet";
-      homepage = "http://www.grantjenks.com/docs/sortedcontainers/";
-      license = licenses.asl20;
-    };
-  };
-
   sortedcollections = buildPythonPackage rec {
     name = "sortedcollections-${version}";
     version = "0.4.2";
@@ -8870,6 +8827,8 @@ in {
       maintainers = with maintainers; [ garbas ];
     };
   };
+
+  orderedset = callPackage ../development/python-modules/orderedset { };
 
   python-otr = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -11032,9 +10991,11 @@ in {
 
   python-language-server = callPackage ../development/python-modules/python-language-server {};
 
-  pyls-mypy = callPackage ../development/python-modules/pyls-mypy {};
+  pyls-black = callPackage ../development/python-modules/pyls-black {};
 
   pyls-isort = callPackage ../development/python-modules/pyls-isort {};
+
+  pyls-mypy = callPackage ../development/python-modules/pyls-mypy {};
 
   pyudev = callPackage ../development/python-modules/pyudev {
     inherit (pkgs) systemd;

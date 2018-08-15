@@ -1,11 +1,11 @@
 { stdenv, cacert, git, rust, cargo-vendor }:
-{ name ? "cargo-deps", src, srcs, sourceRoot, sha256, cargoUpdateHook ? "" }:
+{ name ? "cargo-deps", src, srcs, patches, sourceRoot, sha256, cargoUpdateHook ? "" }:
 stdenv.mkDerivation {
   name = "${name}-vendor";
   nativeBuildInputs = [ cacert cargo-vendor git rust.cargo ];
-  inherit src srcs sourceRoot;
+  inherit src srcs patches sourceRoot;
 
-  phases = "unpackPhase installPhase";
+  phases = "unpackPhase patchPhase installPhase";
 
   installPhase = ''
     if [[ ! -f Cargo.lock ]]; then

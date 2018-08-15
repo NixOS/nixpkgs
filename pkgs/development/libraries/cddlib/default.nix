@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = ''An implementation of the Double Description Method for generating all vertices of a convex polyhedron'';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [raskin timokau];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     homepage = https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html;
   };
 }

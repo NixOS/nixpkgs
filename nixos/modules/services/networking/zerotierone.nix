@@ -17,6 +17,15 @@ in
     '';
   };
 
+  options.services.zerotierone.port = mkOption {
+    default = 9993;
+    example = 9993;
+    type = types.int;
+    description = ''
+      Network port used by ZeroTier.
+    '';
+  };
+
   options.services.zerotierone.package = mkOption {
     default = pkgs.zerotierone;
     defaultText = "pkgs.zerotierone";
@@ -40,7 +49,7 @@ in
         touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
       '') cfg.joinNetworks);
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/zerotier-one";
+        ExecStart = "${cfg.package}/bin/zerotier-one -p${toString cfg.port}";
         Restart = "always";
         KillMode = "process";
       };
@@ -49,8 +58,8 @@ in
     # ZeroTier does not issue DHCP leases, but some strangers might...
     networking.dhcpcd.denyInterfaces = [ "zt*" ];
 
-    # ZeroTier receives UDP transmissions on port 9993 by default
-    networking.firewall.allowedUDPPorts = [ 9993 ];
+    # ZeroTier receives UDP transmissions
+    networking.firewall.allowedUDPPorts = [ cfg.port ];
 
     environment.systemPackages = [ cfg.package ];
   };
