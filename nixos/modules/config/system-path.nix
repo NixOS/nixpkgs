@@ -81,6 +81,12 @@ in
         description = "List of additional package outputs to be symlinked into <filename>/run/current-system/sw</filename>.";
       };
 
+      extraSetup = mkOption {
+        type = types.lines;
+        default = [ ];
+        description = "Shell fragments to be run after the system environment has been created. This should only be used for things that need to modify the internals of the environment, e.g. generating MIME caches. The environment being built can be accessed at $out.";
+      };
+
     };
 
     system = {
@@ -134,17 +140,8 @@ in
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi
-
-          if [ -x $out/bin/install-info -a -w $out/share/info ]; then
-            shopt -s nullglob
-            for i in $out/share/info/*.info $out/share/info/*.info.gz; do
-                $out/bin/install-info $i $out/share/info/dir
-            done
-          fi
-        '' ++ optionalString config.xdg.mime.enable ''
-          XDG_DATA_DIRS=$out/share ${pkgs.shared-mime-info}/bin/update-mime-database -V $out/share/mime > /dev/null
-
-          ${pkgs.desktop-file-utils}/bin/update-desktop-database $out/share/applications
+          
+          ${config.environment.extraSetup}
         '';
     };
 

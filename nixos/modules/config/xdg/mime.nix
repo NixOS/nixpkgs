@@ -21,6 +21,16 @@ with lib;
       # this package also installs some useful data, as well as its utilities 
       pkgs.shared-mime-info 
     ];
+
+    environment.extraSetup = ''
+      if [ -w $out/share/mime ]; then
+        XDG_DATA_DIRS=$out/share ${pkgs.shared-mime-info}/bin/update-mime-database -V $out/share/mime > /dev/null
+      fi
+
+      if [ -w $out/share/applications ]; then
+        ${pkgs.desktop-file-utils}/bin/update-desktop-database $out/share/applications
+      fi
+    '';
   };
 
 }
