@@ -28,6 +28,7 @@ in
   apple-macbook-air-4 = buildProfile ./apple/macbook-air/4;
   apple-macbook-air-6 = buildProfile ./apple/macbook-air/6;
   apple-macbook-pro-10-1 = buildProfile ./apple/macbook-pro/10-1;
+  apple-macbook-pro-11-5 = buildProfile ./apple/macbook-pro/11-5;
   apple-macbook-pro-12-1 = buildProfile ./apple/macbook-pro/12-1;
 
   dell-xps-15-9550 = buildProfile ./dell/xps/15-9550;
