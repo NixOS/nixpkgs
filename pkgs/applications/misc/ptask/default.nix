@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     description = "GTK-based GUI for taskwarrior";
     license = licenses.gpl2;
     maintainers = [ maintainers.spacefrogg ];
+    platforms = platforms.linux;
   };
 }
