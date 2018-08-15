@@ -104,22 +104,22 @@ let
       buildCommand = lib.optionalString stdenv.isDarwin ''
         mkdir -p $out/Applications
         cp -R --no-preserve=mode,ownership ${browser}/Applications/${browserName}.app $out/Applications
-        rm -f $out${browser.execdir}/${browserName}
+        rm -f $out${browser.execdir or "/bin"}/${browserName}
       '' + ''
-        if [ ! -x "${browser}${browser.execdir}/${browserName}" ]
+        if [ ! -x "${browser}${browser.execdir or "/bin"}/${browserName}" ]
         then
             echo "cannot find executable file \`${browser}${browser.execdir}/${browserName}'"
             exit 1
         fi
 
         makeWrapper "$(readlink -v --canonicalize-existing "${browser}${browser.execdir}/${browserName}")" \
-          "$out${browser.execdir}/${browserName}${nameSuffix}" \
+          "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
             --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
             --suffix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
             --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
             --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
-            --suffix PATH ':' "$out${browser.execdir}" \
+            --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             ${lib.optionalString (browser ? gtk3)
