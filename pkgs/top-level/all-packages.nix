@@ -18301,6 +18301,8 @@ with pkgs;
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
+  wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
+
   sonic-pi = callPackage ../applications/audio/sonic-pi {
     ruby = ruby_2_3;
   };

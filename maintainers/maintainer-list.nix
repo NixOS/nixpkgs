@@ -3281,6 +3281,11 @@
     email = "ravloony@gmail.com";
     name = "Tom Macdonald";
   };
+  rawkode = {
+    email = "david.andrew.mckay@gmail.com";
+    github = "rawkode";
+    name = "David McKay";
+  };
   razvan = {
     email = "razvan.panda@gmail.com";
     github = "razvan-panda";
