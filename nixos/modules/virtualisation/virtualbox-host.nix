@@ -6,7 +6,8 @@ let
   cfg = config.virtualisation.virtualbox.host;
 
   virtualbox = cfg.package.override {
-    inherit (cfg) enableExtensionPack enableHardening headless;
+    inherit (cfg) enableHardening headless;
+    extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
 
   kernelModules = config.boot.kernelPackages.virtualbox.override {
@@ -28,6 +29,17 @@ in
       '';
     };
 
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack" // {
+      description = ''
+        Whether to install the Oracle Extension Pack for VirtualBox.
+
+        <important><para>
+          You must set <literal>nixpkgs.config.allowUnfree = true</literal> in
+          order to use this.  This requires you accept the VirtualBox PUEL.
+        </para></important>
+      '';
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.virtualbox;
@@ -44,8 +56,6 @@ in
         Automatically set up a vboxnet0 host-only network interface.
       '';
     };
-
-    enableExtensionPack = mkEnableOption "VirtualBox extension pack";
 
     enableHardening = mkOption {
       type = types.bool;
