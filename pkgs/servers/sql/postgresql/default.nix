@@ -1,11 +1,10 @@
 { stdenv, lib, fetchurl, makeWrapper
 , glibc, zlib, readline, libossp_uuid, openssl, libxml2, tzdata, systemd
 
-# Gate JIT support right now behind a flag; it increases closure size
-# dramatically due to the PostgreSQL build system requiring a hard dependency
-# on clang-wrapper (~140MB -> 1.4GB). This must be worked around before it can
-# be enabled by default by making clang-wrapper a build-time only dependency.
-, llvmPackages, enableJitSupport ? false
+# For now, keep JIT support behind a conditional flag, even though it is on by
+# default -- so we can turn all features (and impacts to closure size,
+# dependencies, etc) off easily, if we need to.
+, llvmPackages, enableJitSupport ? true
 }@deps:
 
 let
