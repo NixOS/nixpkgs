@@ -616,8 +616,12 @@ in
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
-    environment.pathsToLink =
-      [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
+    xdg = { 
+      autostart.enable = true;
+      menus.enable = true;
+      mime.enable = true;
+      icons.enable = true;
+    };
 
     # The default max inotify watches is 8192.
     # Nowadays most apps require a good number of inotify watches,

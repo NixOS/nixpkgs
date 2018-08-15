@@ -107,12 +107,7 @@ in
         "/etc/gtk-3.0"
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"
-        "/share/applications"
-        "/share/desktop-directories"
         "/share/emacs"
-        "/share/icons"
-        "/share/menus"
-        "/share/mime"
         "/share/nano"
         "/share/org"
         "/share/themes"
@@ -132,10 +127,6 @@ in
       # outputs TODO: note that the tools will often not be linked by default
       postBuild =
         ''
-          if [ -x $out/bin/update-mime-database -a -w $out/share/mime ]; then
-              XDG_DATA_DIRS=$out/share $out/bin/update-mime-database -V $out/share/mime > /dev/null
-          fi
-
           if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
               $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
           fi
@@ -144,16 +135,16 @@ in
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi
 
-          if [ -x $out/bin/update-desktop-database -a -w $out/share/applications ]; then
-              $out/bin/update-desktop-database $out/share/applications
-          fi
-
           if [ -x $out/bin/install-info -a -w $out/share/info ]; then
             shopt -s nullglob
             for i in $out/share/info/*.info $out/share/info/*.info.gz; do
                 $out/bin/install-info $i $out/share/info/dir
             done
           fi
+        '' ++ optionalString config.xdg.mime.enable ''
+          XDG_DATA_DIRS=$out/share ${pkgs.shared-mime-info}/bin/update-mime-database -V $out/share/mime > /dev/null
+
+          ${pkgs.desktop-file-utils}/bin/update-desktop-database $out/share/applications
         '';
     };
 

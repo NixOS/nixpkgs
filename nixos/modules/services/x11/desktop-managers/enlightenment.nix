@@ -33,12 +33,17 @@ in
       pkgs.xorg.xauth # used by kdesu
       pkgs.gtk2 # To get GTK+'s themes.
       pkgs.tango-icon-theme
-      pkgs.shared-mime-info
+
       pkgs.gnome2.gnomeicontheme
       pkgs.xorg.xcursorthemes
     ];
 
-    environment.pathsToLink = [ "/etc/enlightenment" "/etc/xdg" "/share/enlightenment" "/share/elementary" "/share/applications" "/share/locale" "/share/icons" "/share/themes" "/share/mime" "/share/desktop-directories" ];
+    environment.pathsToLink = [ 
+      "/etc/enlightenment" 
+      "/share/enlightenment" 
+      "/share/elementary" 
+      "/share/locale"
+    ];
 
     services.xserver.desktopManager.session = [
     { name = "Enlightenment";
