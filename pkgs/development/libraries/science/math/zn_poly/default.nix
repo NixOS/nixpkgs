@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   libname = "libzn_poly${stdenv.targetPlatform.extensions.sharedLibrary}";
 
+  makeFlags = [ "CC=cc" ];
+
   # Tuning (either autotuning or with hand-written paramters) is possible
   # but not implemented here.
   # It seems buggy anyways (see homepage).
@@ -45,6 +47,6 @@ stdenv.mkDerivation rec {
     description = "Polynomial arithmetic over Z/nZ";
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

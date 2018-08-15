@@ -13,7 +13,11 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
-  buildInputs = [ glib gtk3 libgee libintl ];
+  buildInputs = [ libintl ];
+  propagatedBuildInputs = [
+    # Required by libgnome-games-support-1.pc
+    glib gtk3 libgee
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {

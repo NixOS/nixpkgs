@@ -14,7 +14,4 @@ with lib;
       ../../profiles/base.nix
       ../../profiles/installation-device.nix
     ];
-
-  # Allow the user to log in as root without a password.
-  users.users.root.initialHashedPassword = "";
 }

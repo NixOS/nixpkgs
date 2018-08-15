@@ -1,13 +1,11 @@
 { lib, python3Packages, fetchFromGitHub, glibcLocales }:
 
-let
-  pythonPackages = python3Packages;
-in pythonPackages.buildPythonApplication rec {
-  name = "asciinema-${version}";
+python3Packages.buildPythonApplication rec {
+  pname = "asciinema";
   version = "2.0.1";
 
-  buildInputs = with pythonPackages; [ nose ];
-  propagatedBuildInputs = with pythonPackages; [ requests ];
+  buildInputs = with python3Packages; [ nose ];
+  propagatedBuildInputs = with python3Packages; [ requests ];
 
   src = fetchFromGitHub {
     owner = "asciinema";

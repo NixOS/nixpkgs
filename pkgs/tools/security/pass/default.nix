@@ -29,12 +29,12 @@ let
     };
 
   generic = extensionsEnv: extraPassthru: stdenv.mkDerivation rec {
-    version = "1.7.2";
+    version = "1.7.3";
     name    = "password-store-${version}";
 
     src = fetchurl {
       url    = "https://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-      sha256 = "1sl0d7nc85c6c2bmmmyb8rpmn47vhkj831l153mjlkawjvhwas27";
+      sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
     };
 
     patches = [ ./set-correct-program-name-for-sleep.patch

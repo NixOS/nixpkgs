@@ -807,6 +807,11 @@
     github = "coroa";
     name = "Jonas Hörsch";
   };
+  costrouc = {
+    email = "chris.ostrouchov@gmail.com";
+    github = "costrouc";
+    name = "Chris Ostrouchov";
+  };
   couchemar = {
     email = "couchemar@yandex.ru";
     github = "couchemar";
@@ -1377,6 +1382,11 @@
     github = "fps";
     name = "Florian Paul Schmidt";
   };
+  freepotion = {
+    email = "freepotion@protonmail.com";
+    github = "freepotion";
+    name = "Free Potion";
+  };
   Fresheyeball = {
     email = "fresheyeball@gmail.com";
     github = "fresheyeball";
@@ -1674,6 +1684,11 @@
     github = "ikervagyok";
     name = "Balázs Lengyel";
   };
+  illegalprime = {
+    email = "themichaeleden@gmail.com";
+    github = "illegalprime";
+    name = "Michael Eden";
+  };
   ilya-kolpakov = {
     email = "ilya.kolpakov@gmail.com";
     github = "ilya-kolpakov";
@@ -1688,6 +1703,11 @@
     email = "imalsogreg@gmail.com";
     github = "imalsogreg";
     name = "Greg Hale";
+  };
+  imuli = {
+    email = "i@imu.li";
+    github = "imuli";
+    name = "Imuli";
   };
   infinisil = {
     email = "infinisil@icloud.com";
@@ -1836,6 +1856,11 @@
     email = "jaakko.luttinen@iki.fi";
     github = "jluttine";
     name = "Jaakko Luttinen";
+  };
+  jmettes = {
+    email = "jonathan@jmettes.com";
+    github = "jmettes";
+    name = "Jonathan Mettes";
   };
   Jo = {
     email = "0x4A6F@shackspace.de";
@@ -2185,7 +2210,7 @@
     name = "Nathaniel Baxter";
   };
   lightdiscord = {
-    email = "arnaud@lightdiscord.me";
+    email = "root@arnaud.sh";
     github = "lightdiscord";
     name = "Arnaud Pascal";
   };
@@ -2851,11 +2876,6 @@
     email = "nocoolnametom@gmail.com";
     github = "nocoolnametom";
     name = "Tom Doggett";
-  };
-  nonfreeblob = {
-    email = "nonfreeblob@yandex.com";
-    github = "nonfreeblob";
-    name = "nonfreeblob";
   };
   notthemessiah = {
     email = "brian.cohen.88@gmail.com";

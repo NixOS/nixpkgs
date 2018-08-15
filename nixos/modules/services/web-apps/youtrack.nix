@@ -118,14 +118,14 @@ in
 
     systemd.services.youtrack = {
       environment.HOME = cfg.statePath;
-      environment.YOUTRACK_JVM_OPTS = "-Xmx${cfg.maxMemory} -XX:MaxMetaspaceSize=${cfg.maxMetaspaceSize} ${cfg.jvmOpts} ${extraAttr}";
+      environment.YOUTRACK_JVM_OPTS = "${extraAttr}";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
         User = "youtrack";
         Group = "youtrack";
-        ExecStart = ''${cfg.package}/bin/youtrack ${cfg.address}:${toString cfg.port}'';
+        ExecStart = ''${cfg.package}/bin/youtrack --J-Xmx${cfg.maxMemory} --J-XX:MaxMetaspaceSize=${cfg.maxMetaspaceSize} ${cfg.jvmOpts} ${cfg.address}:${toString cfg.port}'';
       };
     };
 

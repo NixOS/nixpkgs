@@ -81,8 +81,6 @@ stdenv.mkDerivation rec {
   ];
 
 
-  buildInputs = [ gnome2.gnome-keyring ];
-
   nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''

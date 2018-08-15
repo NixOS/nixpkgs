@@ -9,5 +9,6 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.epl10;
   };
 }

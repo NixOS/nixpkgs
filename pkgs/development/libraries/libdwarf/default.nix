@@ -12,6 +12,7 @@ let
   meta = {
     homepage = https://www.prevanders.net/dwarf.html;
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.lgpl21Plus;
   };
 
 in rec {

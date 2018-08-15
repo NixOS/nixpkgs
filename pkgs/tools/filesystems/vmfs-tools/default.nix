@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "FUSE-based VMFS (vmware) mounting tools";
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

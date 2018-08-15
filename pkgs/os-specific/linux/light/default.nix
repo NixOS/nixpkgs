@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, help2man }:
+{ stdenv, fetchFromGitHub, help2man }:
 
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.1.2";
   name = "light-${version}";
-  src = fetchurl {
-    url = "https://github.com/haikarainen/light/archive/v${version}.tar.gz";
-    sha256 = "974608ee42ffe85cfd23184306d56d86ec4e6f4b0518bafcb7b3330998b1af64";
+  src = fetchFromGitHub {
+    owner = "haikarainen";
+    repo = "light";
+    rev = version;
+    sha256 = "0c934gxav9cgdf94li6dp0rfqmpday9d33vdn9xb2mfp4war9n4w";
   };
+
   buildInputs = [ help2man ];
 
   installPhase = "mkdir -p $out/bin; cp light $out/bin/";

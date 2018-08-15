@@ -1,14 +1,14 @@
 { stdenv, fetchurl, gmp, mpfr, libmpc, zlib, avrbinutils, texinfo }:
 
 let
-  version = "8.1.0";
+  version = "8.2.0";
 in
 stdenv.mkDerivation {
 
   name = "avr-gcc-${version}";
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "0lxil8x0jjx7zbf90cy1rli650akaa6hpk8wk8s62vk2jbwnc60x";
+    sha256 = "10007smilswiiv2ymazr3b6x2i933c0ycxrr529zh4r6p823qv0r";
   };
 
   patches = [

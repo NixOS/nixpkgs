@@ -7,17 +7,19 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "geoclue-${version}";
-  version = "2.4.10";
+  version = "2.4.12";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/geoclue/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0h4n8jf7w457sglfdhghkyf8n4v4a5jrx8dgdy5zn35nbscx24l4";
+    sha256 = "1jnad1f3rf8h05sz1lc172jnqdhqdpz76ff6m7i5ss3s0znf5l05";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig intltool gtk-doc docbook_xsl docbook_xml_dtd_412 wrapGAppsHook gobjectIntrospection
+    pkgconfig intltool wrapGAppsHook gobjectIntrospection
+    # devdoc
+    gtk-doc docbook_xsl docbook_xml_dtd_412 
   ];
 
   buildInputs = [
@@ -40,11 +42,6 @@ stdenv.mkDerivation rec {
     "--disable-modem-gps-source"
     "--disable-nmea-source"
   ];
-
-  # https://gitlab.freedesktop.org/geoclue/geoclue/issues/73
-  postInstall = ''
-    sed -i $dev/lib/pkgconfig/libgeoclue-2.0.pc -e "s|includedir=.*|includedir=$dev/include|"
-  '';
 
   meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";

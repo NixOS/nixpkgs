@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     homepage    = http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases;
     maintainers = [ maintainers.tstrobel ];
     platforms   = [ "x86_64-linux" ]; # Broken on i686
+    license     = licenses.gpl3;
   };
 }
 
