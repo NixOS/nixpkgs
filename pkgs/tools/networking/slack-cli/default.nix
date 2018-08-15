@@ -1,8 +1,11 @@
-# slack-cli must be configured using the SLACK_CLI_TOKEN environment
-# variable. Using `slack init` will not work because it tries to write
-# to the Nix store.
+# slack-cli must be configured using the SLACK_CLI_TOKEN environment variable.
+# Using `slack init` will not work because it tries to write to the Nix store.
+#
+# There is no reason that we couldn't change the file path that slack-cli uses
+# for token storage, except that it would make the Nix package inconsistent with
+# upstream and other distributions.
 
-{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, jq }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "slack-cli-${version}";
@@ -15,13 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "022yr3cpfg0v7cxi62zzk08vp0l3w851qpfh6amyfgjiynnfyddl";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
   dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
     cp src/slack "$out/bin"
-    wrapProgram "$out/bin/slack" --prefix PATH : ${lib.makeBinPath [ curl jq ]}
   '';
 }
