@@ -326,6 +326,8 @@
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;
+      # kvm = 302; # unused
+      # render = 303; # unused
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -612,6 +614,8 @@
       cfssl = 299;
       cassandra = 300;
       qemu-libvirtd = 301;
+      kvm = 302; # default udev rules from systemd requires these
+      render = 303; # default udev rules from systemd requires these
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

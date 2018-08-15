@@ -524,6 +524,8 @@ in {
       utmp.gid = ids.gids.utmp;
       adm.gid = ids.gids.adm;
       input.gid = ids.gids.input;
+      kvm.gid = ids.gids.kvm;
+      render.gid = ids.gids.render;
     };
 
     system.activationScripts.users = stringAfter [ "stdio" ]
