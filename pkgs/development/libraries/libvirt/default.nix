@@ -59,10 +59,6 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
 
-    [ -f ${jansson}/lib/libjansson.so.4 ] || exit 1
-    substituteInPlace src/util/virjsoncompat.c \
-      --replace '"libjansson.so.4"' '"${jansson}/lib/libjansson.so.4"'
-
     patchShebangs . # fixes /usr/bin/python references
   '';
 
