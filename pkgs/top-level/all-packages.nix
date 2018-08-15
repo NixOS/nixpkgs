@@ -15652,7 +15652,14 @@ with pkgs;
 
   dbvisualizer = callPackage ../applications/misc/dbvisualizer {};
 
-  dd-agent = callPackage ../tools/networking/dd-agent { };
+  dd-agent = callPackage ../tools/networking/dd-agent/5.nix { };
+  datadog-agent = callPackage ../tools/networking/dd-agent/6.nix {
+    pythonPackages = datadog-integrations-core {};
+  };
+  datadog-integrations-core = extras: callPackage ../tools/networking/dd-agent/integrations-core.nix {
+    python = python27;
+    extraIntegrations = extras;
+  };
 
   ddgr = callPackage ../applications/misc/ddgr { };
 
