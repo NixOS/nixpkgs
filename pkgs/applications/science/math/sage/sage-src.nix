@@ -3,20 +3,17 @@
 , fetchpatch
 }:
 stdenv.mkDerivation rec {
-  version = "8.4.beta0";
+  version = "8.4.beta1";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "1jph4slscpni0smp2fxs3s12282c9r3mdfbgxpyx67gic0d9iya8";
+    sha256 = "0yk5ndjr1kap7vhd2i6i5bpcfgmr4fhypn6x7myiymiy9s93d37j";
   };
 
   nixPatches = [
-    # https://trac.sagemath.org/ticket/25722
-    ./patches/test-in-tmpdir.patch
-
     # https://trac.sagemath.org/ticket/25358
     (fetchpatch {
       name = "safe-directory-test-without-patch.patch";
@@ -30,21 +27,6 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/25316
     # https://github.com/python/cpython/pull/7476
     ./patches/python-5755-hotpatch.patch
-
-    # https://trac.sagemath.org/ticket/25315
-    (fetchpatch {
-      name = "find-libraries-in-dyld-library-path.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?h=20d4593876ce9c6004eac2ab6fd61786d0d96a06";
-      sha256 = "1k3afq3qlzmgqwx6rzs5wv153vv9dsf5rk8pi61g57l3r3npbjmc";
-    })
-
-    # https://trac.sagemath.org/ticket/25345
-    # (upstream patch doesn't apply on 8.2 source)
-    ./patches/dochtml-optional.patch
-
-    # work with pari with threads enabled at compile time (disable them at runtime)
-    # https://trac.sagemath.org/ticket/26002
-    ./patches/pari-no-threads.patch
   ];
 
   packageUpgradePatches = [
@@ -95,20 +77,6 @@ stdenv.mkDerivation rec {
       name = "lcalc-c++11.patch";
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
       sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
-    })
-
-    # cddlib 0.94i -> 0.94j
-    (fetchpatch {
-      name = "cddlib-0.94j.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=2ab1546b3e21d1d0ab3b4fcd58576848b3a2d888";
-      sha256 = "1c5gnasq7y9xxj762bn79bis0zi8d9bgg7jzlf64ifixsrc5cymb";
-    })
-
-    # arb 2.13.0 -> 2.14.0
-    (fetchpatch {
-      name = "arb-2.14.0.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id2=8.4.beta0&id=8bef4fd2876a61969b516fe4eb3b8ad7cc076c5e";
-      sha256 = "00p3hfsfn3w2vxgd9fjd23mz7xfxjfravf8ysjxkyd657jbkpjmk";
     })
   ];
 
