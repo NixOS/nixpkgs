@@ -29,6 +29,11 @@ rec {
     platform = platforms.aarch64-multiplatform;
   };
 
+  mips64el-multiplatform = rec {
+    config = "mips64el-unknown-linux-gnu";
+    platform = platforms.mips64el-multiplatform;
+  };
+
   armv5te-android-prebuilt = rec {
     config = "armv5tel-unknown-linux-androideabi";
     sdkVer = "21";

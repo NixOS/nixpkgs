@@ -106,7 +106,7 @@ in with pkgs; rec {
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
 
-        cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib || true # needed by grep
 
         # Copy what we need of GCC.
         cp -d ${gcc.cc.out}/bin/gcc $out/bin
@@ -131,9 +131,9 @@ in with pkgs; rec {
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
 
-        cp -d ${gmpxx.out}/lib/libgmp*.so* $out/lib
-        cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
-        cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
+        cp -d ${gmpxx.out}/lib/libgmp*.so* $out/lib   || true
+        cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib   || true
+        cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib  || true
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 

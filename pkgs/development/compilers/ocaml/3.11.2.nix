@@ -2,7 +2,7 @@
 
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
-   useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips;
+   useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips32;
    inherit (stdenv.lib) optionals optionalString;
 in
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   # Needed to avoid a SIGBUS on the final executable on mips
-  NIX_CFLAGS_COMPILE = if stdenv.isMips then "-fPIC" else "";
+  NIX_CFLAGS_COMPILE = if stdenv.isMips32 then "-fPIC" else "";
 
   patches = optionals stdenv.isDarwin [ ./gnused-on-osx-fix.patch ] ++
     [ (fetchurl {

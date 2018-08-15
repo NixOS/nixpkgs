@@ -14,7 +14,8 @@ in rec {
   x86     = [ patterns.isx86 ];
   i686    = [ patterns.isi686 ];
   x86_64  = [ patterns.isx86_64 ];
-  mips    = [ patterns.isMips ];
+  mips32  = [ patterns.isMips32 ];
+  mips64  = [ patterns.isMips64 ];
   riscv   = [ patterns.isRiscV ];
 
   cygwin  = [ patterns.isCygwin ];
