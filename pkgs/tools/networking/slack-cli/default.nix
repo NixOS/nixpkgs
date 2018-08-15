@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp src/slack $out/bin
-    wrapProgram $out/bin/slack --prefix PATH : ${lib.makeBinPath [ curl jq ]}
+    mkdir -p "$out/bin"
+    cp src/slack "$out/bin"
+    wrapProgram "$out/bin/slack" --prefix PATH : ${lib.makeBinPath [ curl jq ]}
   '';
 }
