@@ -48,6 +48,9 @@ let
     # Eval-time filesystem handling
     filesystem = callLibs ./filesystem.nix;
 
+    # Alternate version comparison strategies
+    versioning = callLibs ./versioning;
+
     # back-compat aliases
     platforms = systems.forMeta;
 
