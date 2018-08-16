@@ -17292,6 +17292,10 @@ with pkgs;
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
+  mimic = callPackage ../applications/audio/mimic { 
+    pulseaudioSupport = config.pulseaudio or false;
+  };
+
   mimms = callPackage ../applications/audio/mimms {};
 
   meh = callPackage ../applications/graphics/meh {};

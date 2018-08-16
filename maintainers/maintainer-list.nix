@@ -2877,6 +2877,11 @@
     github = "nocoolnametom";
     name = "Tom Doggett";
   };
+  noneucat = {
+    email = "andy@lolc.at";
+    github = "noneucat";
+    name = "Andy Chun";
+  };
   notthemessiah = {
     email = "brian.cohen.88@gmail.com";
     github = "notthemessiah";
