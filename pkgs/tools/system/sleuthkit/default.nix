@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, libewf, afflib, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "4.6.1";
+  version = "4.6.2";
   name = "sleuthkit-${version}";
 
   src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = name;
-    sha256 = "1hf783mwa5ws9qvjpj6zgvivi0cfhs8r8m1869ajz5m80lv8fggw";
+    sha256 = "1ykl6ijf15mjfvmkk9b4gj18kspdairn7ms4wsi2v9kb25776skx";
   };
 
   postPatch = ''
