@@ -30,6 +30,10 @@
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
+, # Whether to backport https://phabricator.haskell.org/D4388 for
+  # deterministic profiling symbol names, at the cost of a slightly
+  # non-standard GHC API
+  deterministicProfiling ? false
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -94,7 +98,11 @@ stdenv.mkDerivation (rec {
     sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
     extraPrefix = "utils/hsc2hs/";
     stripLen = 1;
-  })]
+  })] ++ stdenv.lib.optional deterministicProfiling
+    (fetchpatch {
+      url = "https://phabricator-files.haskell.org/file/data/yd2fclrwulila2quki5q/PHID-FILE-lr2j63hkglwauprxycrt/D4388.diff";
+      sha256 = "0w6sdcvnqjlnlzpvnzw20b80v150ijjyjvs9548ildc1928j0w7s";
+    })
     ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
 
   postPatch = "patchShebangs .";
