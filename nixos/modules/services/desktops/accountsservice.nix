@@ -32,6 +32,9 @@ with lib;
 
     environment.systemPackages = [ pkgs.accountsservice ];
 
+    # Accounts daemon looks for dbus interfaces in $XDG_DATA_DIRS/accountsservice
+    environment.pathsToLink = [ "/share/accountsservice" ];
+
     services.dbus.packages = [ pkgs.accountsservice ];
 
     systemd.packages = [ pkgs.accountsservice ];
@@ -39,6 +42,9 @@ with lib;
     systemd.services.accounts-daemon = {
 
       wantedBy = [ "graphical.target" ];
+
+      # Accounts daemon looks for dbus interfaces in $XDG_DATA_DIRS/accountsservice
+      environment.XDG_DATA_DIRS = "${config.system.path}/share";
 
     } // (optionalAttrs (!config.users.mutableUsers) {
       environment.NIXOS_USERS_PURE = "true";

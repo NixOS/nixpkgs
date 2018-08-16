@@ -212,6 +212,9 @@ in
     # lightdm uses the accounts daemon to remember language/window-manager per user
     services.accounts-daemon.enable = true;
 
+    # Enable the accounts daemon to find lightdm's dbus interface
+    environment.systemPackages = [ lightdm ];
+
     security.pam.services.lightdm = {
       allowNullPassword = true;
       startSession = true;
