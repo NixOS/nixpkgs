@@ -46,13 +46,14 @@ stdenv.mkDerivation rec {
     name = "${name}-deps";
     inherit src patches;
     nativeBuildInputs = [ jdk maven ];
-    buildPhase = ''
+    installPhase = ''
+      # Download the dependencies
       while ! mvn package "-Dmaven.repo.local=$out/.m2" -Dmaven.wagon.rto=5000; do
         echo "timeout, restart maven to continue downloading"
       done
-    '';
-    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-    installPhase = ''
+
+      # And keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files
+      # with lastModified timestamps inside
       find "$out/.m2" -type f \
         -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' \
         -delete
