@@ -19,16 +19,20 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = with stdenv.lib; ''
-    install -D spectre-meltdown-checker.sh $out/bin/spectre-meltdown-checker
+    runHook preInstall
+
+    install -Dm755 spectre-meltdown-checker.sh $out/bin/spectre-meltdown-checker
     wrapProgram $out/bin/spectre-meltdown-checker \
       --prefix PATH : ${makeBinPath [ binutils-unwrapped ]}
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "Spectre & Meltdown vulnerability/mitigation checker for Linux";
     homepage = https://github.com/speed47/spectre-meltdown-checker;
     license = licenses.gpl3;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }
