@@ -50,7 +50,8 @@ stdenv.mkDerivation {
 
   passthru.grubTarget = "";
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }
