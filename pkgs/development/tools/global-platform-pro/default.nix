@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
         sha256 = "0rk81x2y7vx1caxm6wa59fjrfxmjn7s8yxaxm764p8m2qxk3m4y2";
     };
 
+    # This patch hardcodes the return of a git command the build system tries to
+    # run. As `fetchFromGitHub` doesn't fetch a full-fledged git repository,
+    # this command can only fail at build-time. As a consequence, we include the
+    # `describeVersion` variable defined above here.
     patches = [ (writeText "${name}-version.patch" ''
         diff --git a/pom.xml b/pom.xml
         index 1e5a82d..1aa01fe 100644
@@ -43,12 +47,16 @@ stdenv.mkDerivation rec {
         inherit src patches;
         nativeBuildInputs = [ jdk maven ];
         buildPhase = ''
-            while mvn package -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
+            while ! mvn package "-Dmaven.repo.local=$out/.m2" -Dmaven.wagon.rto=5000; do
                 echo "timeout, restart maven to continue downloading"
             done
         '';
         # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-        installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
+        installPhase = ''
+            find "$out/.m2" -type f \
+                -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' \
+                -delete
+        '';
         outputHashAlgo = "sha256";
         outputHashMode = "recursive";
         outputHash = "15bbi7z9v601all9vr2azh8nk8rpz2vd91yvvw8id6birnbhn3if";
@@ -57,19 +65,17 @@ stdenv.mkDerivation rec {
     nativeBuildInputs = [ jdk maven makeWrapper ];
 
     buildPhase = ''
-        mvn package --offline -Dmaven.repo.local=$( \
-            cp -dpR ${deps}/.m2 ./ && \
-            chmod +w -R .m2 && \
-            pwd \
-        )/.m2
+        cp -dpR "${deps}/.m2" ./
+        chmod -R +w .m2
+        mvn package --offline -Dmaven.repo.local="$(pwd)/.m2"
     '';
 
     installPhase = ''
-        mkdir -p $out/lib/java $out/share/java
-        cp -R target/apidocs $out/doc
-        cp target/gp.jar $out/share/java
-        makeWrapper ${jre_headless}/bin/java $out/bin/gp \
-            --add-flags "-jar $out/share/java/gp.jar" \
+        mkdir -p "$out/lib/java" "$out/share/java"
+        cp -R target/apidocs "$out/doc"
+        cp target/gp.jar "$out/share/java"
+        makeWrapper "${jre_headless}/bin/java" "$out/bin/gp" \
+            --add-flags "-jar '$out/share/java/gp.jar'" \
             --prefix LD_LIBRARY_PATH : "${pcsclite.out}/lib"
     '';
 
