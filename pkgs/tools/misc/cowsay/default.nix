@@ -15,10 +15,11 @@ stdenv.mkDerivation {
     bash ./install.sh $out
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A program which generates ASCII pictures of a cow with a message";
-    homepage = http://www.nog.net/~tony/warez/cowsay.shtml;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.rob ];
+    homepage = https://en.wikipedia.org/wiki/Cowsay;
+    license = licenses.gpl1;
+    platforms = platforms.all;
+    maintainers = [ maintainers.rob ];
   };
 }
