@@ -15,7 +15,7 @@ let
 
   inherit (pkgs) lightdm writeScript writeText;
 
-  # lightdm runs with clearenv(), but we need a few things in the enviornment for X to startup
+  # lightdm runs with clearenv(), but we need a few things in the environment for X to startup
   xserverWrapper = writeScript "xserver-wrapper"
     ''
       #! ${pkgs.bash}/bin/bash
@@ -209,7 +209,7 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
-    # lightdm uses the accounts daemon to rember language/window-manager per user
+    # lightdm uses the accounts daemon to remember language/window-manager per user
     services.accounts-daemon.enable = true;
 
     security.pam.services.lightdm = {
