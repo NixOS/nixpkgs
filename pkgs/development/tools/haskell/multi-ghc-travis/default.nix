@@ -3,14 +3,14 @@
 , tasty-golden, transformers, fetchFromGitHub
 }:
 
-mkDerivation {
+mkDerivation rec {
   pname = "haskell-ci";
-  version = "0";
+  version = "v0.1.0.0";
   src = fetchFromGitHub {
     owner = "haskell-CI";
     repo = "haskell-ci";
-    rev = "f7ab8c794d7a957370d89f9b4e285a6d20bf8af8";
-    sha256 = "0w8qjdy8hzdrwmqnkf4y967r9xh0k21w3hxqlsjp66cay1vby2s8";
+    rev = version;
+    sha256 = "1r79dbgjq97h30xa3xhf75l0bivag8an9ag00mgzgpglvgc96czm";
   };
   isLibrary = true;
   isExecutable = true;
