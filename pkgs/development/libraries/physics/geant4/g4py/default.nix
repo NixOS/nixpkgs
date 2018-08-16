@@ -11,6 +11,7 @@
 let
   # g4py does not support MT and will fail to build against MT geant
   geant4_nomt = geant4.override { enableMultiThreading = false; };
+  boost_python = boost.override { enablePython = true; inherit python; };
 in
 
 stdenv.mkDerivation rec {
@@ -20,9 +21,19 @@ stdenv.mkDerivation rec {
   sourceRoot = "geant4.10.04.p01/environments/g4py";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ geant4_nomt xercesc boost python ];
+  buildInputs = [ geant4_nomt xercesc boost_python python ];
 
   GEANT4_INSTALL = geant4_nomt;
+
+  preConfigure = ''
+    # Fix for boost 1.67+
+    substituteInPlace CMakeLists.txt \
+    --replace "find_package(Boost)" "find_package(Boost 1.40 REQUIRED COMPONENTS python${builtins.replaceStrings ["."] [""] python.majorVersion})"
+    for f in `find . -name CMakeLists.txt`; do
+      substituteInPlace "$f" \
+        --replace "boost_python" "\''${Boost_LIBRARIES}"
+    done
+  '';
 
   enableParallelBuilding = true;
 
