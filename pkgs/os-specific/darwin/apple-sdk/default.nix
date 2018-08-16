@@ -201,13 +201,6 @@ in rec {
   };
 
   overrides = super: {
-    Accelerate = stdenv.lib.overrideDerivation super.Accelerate (drv: {
-      __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
-        "/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework"
-        "/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework"
-      ];
-    });
-
     AppKit = stdenv.lib.overrideDerivation super.AppKit (drv: {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/PrivateFrameworks/"
