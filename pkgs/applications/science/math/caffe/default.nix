@@ -32,17 +32,6 @@ let
     sha256 = "472d4a06035497b180636d8a82667129960371375bd10fcb6df5c6c7631f25e0";
   };
 
-  # work around /usr/lib having different lib names than the framework
-  macblas = runCommand "macblas" {
-    propagatedBuildInputs = [ Accelerate ];
-  } ''
-    mkdir -p $out/lib
-    ln -s /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib $out/lib/libblas.dylib
-    ln -s /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib $out/lib/libcblas.dylib
-    ln -s /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib $out/lib/libclapack.dylib
-    ln -s /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib $out/lib/libf77lapack.dylib
-    ln -s /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib $out/lib/liblapack.dylib
-  '';
 in
 
 stdenv.mkDerivation rec {
@@ -71,21 +60,22 @@ stdenv.mkDerivation rec {
       ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
       ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
 
-  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp opencv3 ]
+  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp opencv3 openblas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
                 ++ lib.optional lmdbSupport lmdb
                 ++ lib.optional ncclSupport nccl
                 ++ lib.optionals leveldbSupport [ leveldb snappy ]
                 ++ lib.optionals pythonSupport [ python numpy ]
-                ++ lib.optionals stdenv.isDarwin [ macblas Accelerate CoreGraphics CoreVideo ]
-                ++ lib.optionals (!stdenv.isDarwin) [ openblas ]
+                ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ]
                 ;
 
   propagatedBuildInputs = lib.optional pythonSupport python.pkgs.protobuf;
 
   outputs = [ "bin" "out"];
   propagatedBuildOutputs = []; # otherwise propagates out -> bin cycle
+
+  patches = [ ./darwin.patch ];
 
   preConfigure = lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
     # CUDA 9.0 doesn't support sm_20
