@@ -6,7 +6,7 @@ buildLinux (args // rec {
   # modDirVersion needs to be x.y.z.
   modDirVersion = "4.14.55";
 
-  # branchVersion needs to be x.y. 
+  # branchVersion needs to be x.y.
   extraMeta.branch = "4.14";
 
   src = fetchFromGitHub {
@@ -27,5 +27,7 @@ buildLinux (args // rec {
     #GATOR_MALI_MIDGARD_PATH ${src}/drivers/gpu/arm/midgard
 
   '' + (args.extraConfig or "");
+
+  extraMeta.platforms = [ "armv7l-linux" ];
 
 } // (args.argsOverride or {}))
