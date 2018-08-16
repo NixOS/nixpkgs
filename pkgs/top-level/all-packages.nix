@@ -12939,6 +12939,8 @@ with pkgs;
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
 
+  iucode-tool = callPackage ../os-specific/linux/microcode/iucode-tool.nix { };
+
   inherit (callPackages ../os-specific/linux/apparmor { python = python3; })
     libapparmor apparmor-utils apparmor-bin-utils apparmor-parser apparmor-pam
     apparmor-profiles apparmor-kernel-patches;
