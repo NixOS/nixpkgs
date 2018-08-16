@@ -3,15 +3,15 @@
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-08-02";
+  version = "2018-08-13";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
 
   src = fetchFromGitHub {
     owner = "bakape";
     repo = "meguca";
-    rev = "9224ab13f6c08bcfee5a930088c35bbfbf7491e1";
-    sha256 = "1cp7d8a216nap1fzxcb58dgkbxdazs14hs9705h1xgly86cvwgv0";
+    rev = "f8b54370ba74b90f2814e6b42ac003a51fe02ce9";
+    sha256 = "1036qlvvz0la3fp514kw5qrplm1zsh23ywn2drigniacmqz4m7dv";
     fetchSubmodules = true;
   };
 
