@@ -9561,6 +9561,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MLDBM = buildPerlPackage rec {
+    name = "MLDBM-2.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CH/CHORNY/${name}.tar.gz";
+      sha256 = "586880ed0c20801abbf6734747e13e0203edefece6ebc4f20ddb5059f02a17a2";
+    };
+    meta = {
+      description = "Store multi-level Perl hash structure in single level tied hash";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MNI-Perllib = pkgs.callPackage ../development/perl-modules/MNI {};
 
   Mo = buildPerlPackage rec {
