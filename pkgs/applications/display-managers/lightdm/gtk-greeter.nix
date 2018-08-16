@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ lightdm exo intltool makeWrapper ]
+  buildInputs = [ lightdm exo intltool makeWrapper hicolor-icon-theme ]
     ++ (if useGTK2 then [ gtk2 ] else [ gtk3 ]);
 
   configureFlags = [
