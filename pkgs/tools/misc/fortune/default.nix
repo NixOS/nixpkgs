@@ -23,8 +23,9 @@ stdenv.mkDerivation {
     rmdir $out/games
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A program that displays a pseudorandom message from a database of quotations";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsdOriginal;
+    platforms = platforms.unix;
   };
 }

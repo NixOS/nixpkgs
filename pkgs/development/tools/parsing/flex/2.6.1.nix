@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.in --replace "tests" " ";
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/westes/flex;
     description = "A fast lexical analyser generator";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd2;
+    platforms = platforms.unix;
   };
 }

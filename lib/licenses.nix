@@ -210,6 +210,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Common Public License 1.0";
   };
 
+  curl = {
+    fullName = "MIT/X11 derivate";
+    url = "https://curl.haxx.se/docs/copyright.html";
+  };
+
   doc = spdx {
     spdxId = "DOC";
     fullName = "DOC License";
