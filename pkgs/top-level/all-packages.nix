@@ -1823,6 +1823,10 @@ with pkgs;
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
 
+  libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix {
+    inherit (xorg) libXaw;
+  };
+
   skktools = callPackage ../tools/inputmethods/skk/skktools { };
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
