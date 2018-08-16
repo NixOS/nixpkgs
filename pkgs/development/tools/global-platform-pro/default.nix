@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, jdk, maven, writeText, makeWrapper, jre_headless, pcsclite }:
 
-# TODO: This is quite a bit of duplicated logic with gephy. Factor it out?
+# TODO: This is quite a bit of duplicated logic with gephi. Factor it out?
 stdenv.mkDerivation rec {
   pname = "global-platform-pro";
   version = "0.3.10-rc11";
