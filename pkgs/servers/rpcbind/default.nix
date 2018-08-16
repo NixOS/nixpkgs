@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "rpcbind-${version}";
-  version = "0.2.4";
+  version = "1.2.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/rpcbind/${version}/${name}.tar.bz2";
-    sha256 = "0rjc867mdacag4yqvs827wqhkh27135rp9asj06ixhf71m9rljh7";
+    sha256 = "0ynszy5hpc7wbz8xngqwyhgbi9cay73y43izqhcmrcv375l61qrc";
   };
 
   patches = [
