@@ -94,9 +94,10 @@ let
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
       "Description" "DHCP" "DHCPServer" "IPForward" "IPMasquerade" "IPv4LL" "IPv4LLRoute"
-      "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond" "IPv6PrivacyExtensions"
+      "LLMNR" "MulticastDNS" "Domains" "IPv6PrivacyExtensions"
+      "IPv6AcceptRA" "LinkLocalAddressing"
     ])
-    (assertValueOneOf "DHCP" ["both" "none" "v4" "v6"])
+    (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6"])
     (assertValueOneOf "DHCPServer" boolValues)
     (assertValueOneOf "IPForward" ["yes" "no" "ipv4" "ipv6"])
     (assertValueOneOf "IPMasquerade" boolValues)
@@ -105,6 +106,8 @@ let
     (assertValueOneOf "LLMNR" boolValues)
     (assertValueOneOf "MulticastDNS" boolValues)
     (assertValueOneOf "IPv6PrivacyExtensions" ["yes" "no" "prefer-public" "kernel"])
+    (assertValueOneOf "IPv6AcceptRA" boolValues)
+    (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6"])
   ];
 
   checkAddress = checkUnitConfig "Address" [
@@ -461,6 +464,36 @@ let
       '';
     };
 
+    bridge = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of bridge interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    bond = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of bond interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vrf = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of vrf interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -619,6 +652,9 @@ let
           ${concatStringsSep "\n" (map (s: "Gateway=${s}") def.gateway)}
           ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
           ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
+          ${concatStringsSep "\n" (map (s: "Bridge=${s}") def.bridge)}
+          ${concatStringsSep "\n" (map (s: "Bond=${s}") def.bond)}
+          ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
           ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
           ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
           ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
