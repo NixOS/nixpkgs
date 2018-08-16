@@ -55,6 +55,20 @@ let
     (assertMacAddress "MACAddress")
   ];
 
+  checkWireGuard = checkUnitConfig "WireGuard" [
+    (assertOnlyFields [
+      "PrivateKey" "PrivateKeyFile" "ListenPort" "FwMark"
+    ])
+    #(assertRange "ListenPort" 1 65535) # Or "auto"
+  ];
+
+  checkWireGuardPeer = checkUnitConfig "WireGuardPeer" [
+    (assertOnlyFields [
+      "PublicKey" "PresharedKey" "AllowedIPs" "Endpoint" "PersistentKeepalive"
+    ])
+    # (assertRange "PersistentKeepalive" 1 65535) # defined as "nullOr int"
+  ];
+
   checkVlan = checkUnitConfig "VLAN" [
     (assertOnlyFields ["Id" "GVRP" "MVRP" "LooseBinding" "ReorderHeader"])
     (assertRange "Id" 0 4094)
@@ -320,6 +334,29 @@ let
       '';
     };
 
+    wireguardConfig = mkOption {
+      default = {};
+      example = { ListenPort="auto"; };
+      type = types.addCheck (types.attrsOf unitOption) checkWireGuard;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[WireGuard]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    wireguardPeers = mkOption {
+      default = [ ];
+      type = with types; listOf (submodule wireguardPeerOptions);
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[WireGuardPeer]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vlanConfig = mkOption {
       default = {};
       example = { Id = "4"; };
@@ -449,6 +486,23 @@ let
       };
     };
   };
+
+  wireguardPeerOptions = {
+    options = {
+      wireguardPeerConfig = mkOption {
+        default = {};
+        example = { };
+        type = types.addCheck (types.attrsOf unitOption) checkWireGuardPeer;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[WireGuardPeer]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
 
   networkOptions = commonNetworkOptions // {
 
@@ -732,6 +786,16 @@ let
             ${attrsToSection def.bondConfig}
 
           ''}
+          ${optionalString (def.wireguardConfig != { }) ''
+            [WireGuard]
+            ${attrsToSection def.wireguardConfig}
+
+          ''}
+          ${flip concatMapStrings def.wireguardPeers (x: ''
+            [WireGuardPeer]
+            ${attrsToSection x.wireguardPeerConfig}
+
+          '')}
           ${def.extraConfig}
         '';
     };
