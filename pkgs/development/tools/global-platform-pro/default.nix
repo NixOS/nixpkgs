@@ -3,7 +3,7 @@
 # TODO: This is quite a bit of duplicated logic with gephi. Factor it out?
 stdenv.mkDerivation rec {
   pname = "global-platform-pro";
-  version = "0.3.10-rc11";
+  version = "0.3.10-rc11"; # Waiting for release https://github.com/martinpaljak/GlobalPlatformPro/issues/128
   describeVersion = "v0.3.10-rc11-0-g8923747"; # git describe --tags --always --long --dirty
   name = "${pname}-${version}";
 
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
   # run. As `fetchFromGitHub` doesn't fetch a full-fledged git repository,
   # this command can only fail at build-time. As a consequence, we include the
   # `describeVersion` variable defined above here.
+  #
+  # See upstream issue https://github.com/martinpaljak/GlobalPlatformPro/issues/129
   patches = [ (writeText "${name}-version.patch" ''
     diff --git a/pom.xml b/pom.xml
     index 1e5a82d..1aa01fe 100644
