@@ -18,8 +18,8 @@
 
 with stdenv.lib;
 let
-  version = "2.11.1";
-  sha256 = "1jrcff0szyjxc3vywyiclwdzk0xgq4cxvjbvmcfyjcpdrq9j5pyr";
+  version = "2.11.2";
+  sha256 = "17xz3j17sndz1z8hl3qcci50bz4qk6xb60hy1f61486jhx2vhbyw";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
