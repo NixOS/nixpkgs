@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "infiniband-diags-${version}";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "infiniband-diags";
     rev = version;
-    sha256 = "06x8yy3ly1vzraznc9r8pfsal9mjavxzhgrla3q2493j5jz0sx76";
+    sha256 = "1qgyyvnig28x1m47df0zx6b2rcb5nm1k8r02zx7wzfb5pn9k2zh1";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig makeWrapper ];
