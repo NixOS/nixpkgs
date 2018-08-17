@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     cp ${./beta__init__.py} $out/google-cloud-sdk/lib/surface/beta/__init__.py
 
     # create wrappers with correct env
-    for program in gcloud bq gsutil git-credential-gcloud.sh; do
+    for program in gcloud bq gsutil git-credential-gcloud.sh docker-credential-gcloud; do
         programPath="$out/google-cloud-sdk/bin/$program"
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
