@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "ninja-${version}";
-  version = "1.8.2";
+  version = "2018-04-10";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
-    rev = "v${version}";
-    sha256 = "16scq9hcq6c5ap6sy8j4qi75qps1zvrf3p79j1vbrvnqzp928i5f";
+    rev = "ca041d88f4d610332aa48c801342edfafb622ccb";
+    sha256 = "05wipm7cvhyf1fsd5awi44yzndllfsmg0i3xzdmml545ypdimk3m";
   };
 
   nativeBuildInputs = [ python asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin re2c ];
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = https://ninja-build.org/;
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice bjornfor orivej ];
+    maintainers = with maintainers; [ thoughtpolice bjornfor orivej twey ];
   };
 }
