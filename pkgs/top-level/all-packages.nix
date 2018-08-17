@@ -12773,6 +12773,7 @@ with pkgs;
   gsignondPlugins = {
     sasl = callPackage ../development/libraries/gsignond/plugins/sasl.nix { };
     oauth = callPackage ../development/libraries/gsignond/plugins/oauth.nix { };
+    lastfm = callPackage ../development/libraries/gsignond/plugins/lastfm.nix { };
   };
 
   ### DEVELOPMENT / LIBRARIES / AGDA
