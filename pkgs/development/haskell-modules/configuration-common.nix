@@ -1125,4 +1125,7 @@ self: super: {
 
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
+
+  # https://github.com/snapframework/xmlhtml/pull/37
+  xmlhtml = doJailbreak super.xmlhtml;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
