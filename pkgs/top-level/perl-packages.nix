@@ -8948,12 +8948,21 @@ let self = _self // overrides; _self = with self; {
       sha256 = "dda2578d7b32152c4afce834761a61d117de286c705a9f7972c7ac6032ca5953";
     };
     propagatedBuildInputs = [ FileListing HTMLParser HTTPCookies HTTPDaemon HTTPNegotiate NetHTTP TryTiny WWWRobotRules ];
+    buildInputs = [ TestFatal TestNeeds TestRequiresInternet ];
+
+    # It fixes cross-compilation error by commenting out `has_module` call:
+    # > Can't load module B, dynamic loading not available in this perl.
+    # > (You may need to build a new perl executable which either supports
+    # > dynamic loading or has the B module statically linked into it.)
+    preConfigure = ''
+      sed -r -i "s@(requires\('HTTP::Status', '[0-9.]+'\)) if has_module@\\1; # @" Makefile.PL
+    '';
+
     meta = with stdenv.lib; {
       description = "The World-Wide Web library for Perl";
       license = with licenses; [ artistic1 gpl1Plus ];
       platforms = platforms.unix;
     };
-    buildInputs = [ TestFatal TestNeeds TestRequiresInternet ];
   };
 
   LWPAuthenOAuth = buildPerlPackage rec {
