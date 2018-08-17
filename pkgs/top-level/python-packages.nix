@@ -2537,6 +2537,8 @@ in {
     };
   };
 
+  fastcache = callPackage ../development/python-modules/fastcache { };
+
   functools32 = if isPy3k then null else buildPythonPackage rec {
     name = "functools32-${version}";
     version = "3.2.3-2";
@@ -7776,26 +7778,7 @@ in {
 
   multipledispatch = callPackage ../development/python-modules/multipledispatch { };
 
-  multiprocess = buildPythonPackage rec {
-    name = "multiprocess-${version}";
-    version = "0.70.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/multiprocess/${name}.tgz";
-      sha256 = "73f8b9b7009860e3c3c8b9bdcad7e8366b130929775f89c114d4346a9cfcb31b";
-    };
-
-    propagatedBuildInputs = with self; [ dill ];
-
-    # Python-version dependent tests
-    doCheck = false;
-
-    meta = {
-      description = "Better multiprocessing and multithreading in python";
-      homepage = https://github.com/uqfoundation;
-      license = licenses.bsd3;
-    };
-  };
+  multiprocess = callPackage ../development/python-modules/multiprocess { };
 
   munkres = buildPythonPackage rec {
     name = "munkres-1.0.6";
@@ -8827,6 +8810,8 @@ in {
       maintainers = with maintainers; [ garbas ];
     };
   };
+
+  orderedset = callPackage ../development/python-modules/orderedset { };
 
   python-otr = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -17296,6 +17281,8 @@ EOF
   twilio = callPackage ../development/python-modules/twilio { };
 
   uranium = callPackage ../development/python-modules/uranium { };
+
+  uuid = callPackage ../development/python-modules/uuid { };
 
   versioneer = callPackage ../development/python-modules/versioneer { };
 

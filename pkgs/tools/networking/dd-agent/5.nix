@@ -89,7 +89,10 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Event collector for the DataDog analysis service";
+    description = ''
+      Event collector for the DataDog analysis service
+      -- v5 Python implementation
+    '';
     homepage    = https://www.datadoghq.com;
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.all;

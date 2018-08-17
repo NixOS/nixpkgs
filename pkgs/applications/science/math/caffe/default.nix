@@ -1,26 +1,38 @@
-{ stdenv, lib
+{ stdenv, lib, runCommand
 , fetchFromGitHub
+, fetchurl
 , cmake
 , boost
 , google-gflags
 , glog
 , hdf5-cpp
-, leveldb
-, lmdb
 , opencv3
 , protobuf
-, snappy
 , doxygen
 , openblas
-, cudaSupport ? true, cudatoolkit
+, Accelerate, CoreGraphics, CoreVideo
+, lmdbSupport ? true, lmdb
+, leveldbSupport ? true, leveldb, snappy
+, cudaSupport ? stdenv.isLinux, cudatoolkit
 , cudnnSupport ? false, cudnn ? null
 , ncclSupport ? false, nccl ? null
 , pythonSupport ? false, python ? null, numpy ? null
 }:
 
+assert leveldbSupport -> (leveldb != null && snappy != null);
 assert cudnnSupport -> cudaSupport;
 assert ncclSupport -> cudaSupport;
 assert pythonSupport -> (python != null && numpy != null);
+
+let
+  toggle = bool: if bool then "ON" else "OFF";
+
+  test_model_weights = fetchurl {
+    url = "http://dl.caffe.berkeleyvision.org/bvlc_reference_caffenet.caffemodel";
+    sha256 = "472d4a06035497b180636d8a82667129960371375bd10fcb6df5c6c7631f25e0";
+  };
+
+in
 
 stdenv.mkDerivation rec {
   name = "caffe-${version}";
@@ -44,18 +56,26 @@ stdenv.mkDerivation rec {
            "-DCUDA_ARCH_NAME=All"
            "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
          ] else [ "-DCPU_ONLY=ON" ])
-      ++ lib.optional ncclSupport "-DUSE_NCCL=ON";
+      ++ ["-DUSE_NCCL=${toggle ncclSupport}"]
+      ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
+      ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
 
-  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp lmdb leveldb snappy opencv3 openblas ]
+  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp opencv3 openblas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
+                ++ lib.optional lmdbSupport lmdb
                 ++ lib.optional ncclSupport nccl
-                ++ lib.optionals pythonSupport [ python numpy ];
+                ++ lib.optionals leveldbSupport [ leveldb snappy ]
+                ++ lib.optionals pythonSupport [ python numpy ]
+                ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ]
+                ;
 
   propagatedBuildInputs = lib.optional pythonSupport python.pkgs.protobuf;
 
   outputs = [ "bin" "out"];
   propagatedBuildOutputs = []; # otherwise propagates out -> bin cycle
+
+  patches = [ ./darwin.patch ];
 
   preConfigure = lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
     # CUDA 9.0 doesn't support sm_20
@@ -71,11 +91,24 @@ stdenv.mkDerivation rec {
     # Internal static library.
     rm $out/lib/libproto.a
 
+    # Install models
+    cp -a ../models $out/share/Caffe/models
+
     moveToOutput "bin" "$bin"
   '' + lib.optionalString pythonSupport ''
     mkdir -p $out/${python.sitePackages}
     mv $out/python/caffe $out/${python.sitePackages}
     rm -rf $out/python
+  '';
+
+  doInstallCheck = false; # build takes more than 30 min otherwise
+  installCheckPhase = ''
+    model=bvlc_reference_caffenet
+    m_path="$out/share/Caffe/models/$model"
+    $bin/bin/caffe test \
+      -model "$m_path/deploy.prototxt" \
+      -solver "$m_path/solver.prototxt" \
+      -weights "${test_model_weights}"
   '';
 
   meta = with stdenv.lib; {
@@ -88,6 +121,6 @@ stdenv.mkDerivation rec {
     homepage = http://caffe.berkeleyvision.org/;
     maintainers = with maintainers; [ jb55 ];
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

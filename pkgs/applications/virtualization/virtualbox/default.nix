@@ -6,7 +6,7 @@
 , xorriso, makeself, perl
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python2 ? null
-, enableExtensionPack ? false, requireFile ? null, fakeroot ? null
+, extensionPack ? null, fakeroot ? null
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
@@ -19,30 +19,9 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-  # Manually sha256sum the extensionPack file, must be hex!
-  # Do not forget to update the hash in ./guest-additions/default.nix!
-  extpack = "d90c1b0c89de19010f7c7fe7a675ac744067baf29a9966b034e97b5b2053b37e";
-  extpackRev = "123301";
+  # Remember to change the extpackRev and version in extpack.nix as well.
   main = "ee3af129a581ec4c1a3e777e98247f8943e976ce6edd24962bcaa5c53ed1f644";
   version = "5.2.14";
-
-  # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extensionPack = requireFile rec {
-    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${toString extpackRev}.vbox-extpack";
-    sha256 = extpack;
-    message = ''
-      In order to use the extension pack, you need to comply with the VirtualBox Personal Use
-      and Evaluation License (PUEL) available at:
-
-      https://www.virtualbox.org/wiki/VirtualBox_PUEL
-
-      Once you have read and if you agree with the license, please use the
-      following command and re-run the installation:
-
-      nix-prefetch-url http://download.virtualbox.org/virtualbox/${version}/${name}
-    '';
-  };
-
 in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 
@@ -174,7 +153,7 @@ in stdenv.mkDerivation {
         ln -s "$libexec/$file" $out/bin/$file
     done
 
-    ${optionalString enableExtensionPack ''
+    ${optionalString (extensionPack != null) ''
       mkdir -p "$share"
       "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EXTHELPER
       "$libexec/VBoxExtPackHelperApp" install \

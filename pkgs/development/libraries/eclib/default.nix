@@ -16,7 +16,7 @@ assert withFlint -> flint != null;
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "eclib";
-  version = "20180710"; # upgrade might break the sage interface
+  version = "20180815"; # upgrade might break the sage interface
   # sage tests to run:
   # src/sage/interfaces/mwrank.py
   # src/sage/libs/eclib
@@ -25,16 +25,8 @@ stdenv.mkDerivation rec {
     owner = "JohnCremona";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "1kmwpw971sipb4499c9b35q5pz6sms5qndqrvq7396d8hhwjg1i2";
+    sha256 = "12syn83lnzx0xc4r1v3glfimbzndyilkpdmx50xrihbjz1hzczif";
   };
-  patches = [
-    # One of the headers doesn't get installed.
-    # See https://github.com/NixOS/nixpkgs/pull/43476.
-    (fetchpatch {
-      url = "https://github.com/JohnCremona/eclib/pull/42/commits/c9b96429815e31a6e3372c106e31eef2a96431f9.patch";
-      sha256 = "0cw26h94m66rbh8jjsfnb1bvc6z7ybh8zcp8xl5nhxjxiawhcl73";
-    })
-  ];
   buildInputs = [
     pari
     ntl

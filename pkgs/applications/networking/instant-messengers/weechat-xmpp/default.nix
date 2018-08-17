@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, xmpppy }:
+{ stdenv, fetchFromGitHub, xmpppy, pydns, substituteAll, buildEnv }:
 
 stdenv.mkDerivation {
   name = "weechat-jabber-2017-08-30";
@@ -15,15 +15,14 @@ stdenv.mkDerivation {
     cp jabber.py $out/share/jabber.py
   '';
 
-  buildInputs = [ xmpppy ];
-
-  postPatch = ''
-    substituteInPlace jabber.py \
-      --replace "__NIX_OUTPUT__" "${xmpppy}/lib/python2.7/site-packages"
-  '';
-
   patches = [
-    ./libpath.patch
+    (substituteAll {
+      src = ./libpath.patch;
+      env = "${buildEnv {
+        name = "weechat-xmpp-env";
+        paths = [ pydns xmpppy ];
+      }}/lib/python2.7/site-packages";
+    })
   ];
 
   meta = with stdenv.lib; {

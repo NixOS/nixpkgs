@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gtk-doc, pkgconfig, gobjectIntrospection, intltool
+{ stdenv, fetchurl, gtk-doc, pkgconfig, gobjectIntrospection, intltool
 , libgudev, polkit, appstream-glib, gusb, sqlite, libarchive, glib-networking
 , libsoup, help2man, gpgme, libxslt, elfutils, libsmbios, efivar, glibcLocales
 , gnu-efi, libyaml, valgrind, meson, libuuid, colord, docbook_xml_dtd_43, docbook_xsl
@@ -7,7 +7,7 @@
 }:
 let
   # Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
-  version = "1.1.0";
+  version = "1.1.1";
   python = python3.withPackages (p: with p; [ pygobject3 pycairo pillow ]);
   installedTestsPython = python3.withPackages (p: with p; [ pygobject3 requests ]);
 
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
   name = "fwupd-${version}";
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "0flfpzb0fxgixxddpwak4s63i35kr915pdfq5mfrnxq4bwcj24yd";
+    sha256 = "0szakfnp6pl8vv3ivb40p5j8pxapfp724a55s2dr1qzzdlbjd08s";
   };
 
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
@@ -37,13 +37,6 @@ in stdenv.mkDerivation {
 
   patches = [
     ./fix-paths.patch
-
-    # Allow localedir in lib output
-    # https://github.com/hughsie/fwupd/pull/626
-    (fetchpatch {
-      url = https://github.com/hughsie/fwupd/commit/9822c387ea13419a0eb2624fcd13d50735cb89f8.patch;
-      sha256 = "12bk6ga2hvsswpc4gal95l2z5a6gp3vdjq16zm2npligcvf37b6i";
-    })
   ];
 
   postPatch = ''

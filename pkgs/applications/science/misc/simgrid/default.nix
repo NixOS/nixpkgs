@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, elfutils, perl, python3, boost, valgrind
+{ stdenv, fetchFromGitHub, cmake, perl, python3, boost, valgrind
 # Optional requirements
 # Lua 5.3 needed and not available now
 #, luaSupport ? false, lua5
 , fortranSupport ? false, gfortran
 , buildDocumentation ? false, transfig, ghostscript, doxygen
 , buildJavaBindings ? false, openjdk
-, modelCheckingSupport ? false, libunwind, libevent # Inside elfutils - , libelf, libevent, libdw
+, modelCheckingSupport ? false, libunwind, libevent, elfutils # Inside elfutils: libelf and libdw
 , debug ? false
 , moreTests ? false
 }:
@@ -18,20 +18,20 @@ in
 
 stdenv.mkDerivation rec {
   name = "simgrid-${version}";
-  version = "3.19.1";
+  version = "3.20";
 
   src = fetchFromGitHub {
     owner = "simgrid";
     repo = "simgrid";
     rev = "v${version}";
-    sha256 = "0vpgcp40xv20hcpslx5wz2mf2phaq41f7x8yr0bm7mknqd3zwxih";
+    sha256 = "0xb20qhvsah2dz2hvn850i3w9a5ghsbcx8vka2ap6xsdkxf593gy";
   };
 
-  nativeBuildInputs = [ cmake perl elfutils python3 boost valgrind ]
+  nativeBuildInputs = [ cmake perl python3 boost valgrind ]
       ++ optionals fortranSupport [ gfortran ]
       ++ optionals buildJavaBindings [ openjdk ]
       ++ optionals buildDocumentation [ transfig ghostscript doxygen ]
-      ++ optionals modelCheckingSupport [ libunwind libevent ];
+      ++ optionals modelCheckingSupport [ libunwind libevent elfutils ];
 
   #buildInputs = optional luaSupport lua5;
 
@@ -83,13 +83,15 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  
+
   checkPhase = ''
     runHook preCheck
-    ctest --output-on-failure -E smpi-replay-multiple
+
+    ctest -j $NIX_BUILD_CORES --output-on-failure -E smpi-replay-multiple
+
     runHook postCheck
   '';
-    
+
   enableParallelBuilding = true;
 
   meta = {

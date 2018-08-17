@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     branch = "2.5.35";
     homepage = http://flex.sourceforge.net/;
     description = "A fast lexical analyser generator";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd2;
+    platforms = platforms.unix;
   };
 }

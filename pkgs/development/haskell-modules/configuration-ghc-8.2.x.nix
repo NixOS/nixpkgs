@@ -96,4 +96,4 @@ self: super: {
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
   }));
 
-} // import ./configuration-tensorflow-ghc-8.2.x.nix {inherit pkgs haskellLib;} self super
+}

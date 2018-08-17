@@ -9541,6 +9541,18 @@ let
     };
   };
 
+  MLDBM = buildPerlPackage rec {
+    name = "MLDBM-2.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CH/CHORNY/${name}.tar.gz";
+      sha256 = "586880ed0c20801abbf6734747e13e0203edefece6ebc4f20ddb5059f02a17a2";
+    };
+    meta = {
+      description = "Store multi-level Perl hash structure in single level tied hash";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   MNI-Perllib = callPackage ../development/perl-modules/MNI {};
 
   Mo = buildPerlPackage rec {
@@ -11181,8 +11193,9 @@ let
       url = "mirror://cpan/authors/id/D/DA/DANBERR/${name}.tar.gz";
       sha256 = "8391696db9e96c374b72984c0bad9c7d1c9f3b4efe68f9ddf429a77548e0e269";
     };
-    buildInputs = [ TestPod TestPodCoverage ];
-    propagatedBuildInputs = [ pkgs.pkgconfig pkgs.dbus XMLTwig ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ TestPod TestPodCoverage pkgs.dbus ];
+    propagatedBuildInputs = [ XMLTwig ];
     meta = {
       homepage = http://www.freedesktop.org/wiki/Software/dbus;
       description = "Extension for the DBus bindings";

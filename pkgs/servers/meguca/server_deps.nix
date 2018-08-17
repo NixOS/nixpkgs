@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/Masterminds/squirrel";
-      rev = "cebd809c54c4812b96aadd528be66e01bbe81437";
-      sha256 = "0xfbxn921h95b5di9cay3bjb8ygam3h718z0plqjdnrqlvqxfbzx";
+      rev = "8a7e65843414bc07f3d85bebaa10d7cc96253c29";
+      sha256 = "0n7msdji0h7iysyqsi0iiq9i1hdgyyz9cwzxpc6qppz7cllnfpnn";
     };
   }
   {
@@ -55,6 +55,15 @@
     };
   }
   {
+    goPackagePath = "github.com/badoux/goscraper";
+    fetch = {
+      type = "git";
+      url = "https://github.com/badoux/goscraper";
+      rev = "0213ced7087832e81e8892e8d044150cfc153856";
+      sha256 = "0bw5g6h0hypd38z8gfbh40pbw824n4qhk3c0kasw6gn4darx972w";
+    };
+  }
+  {
     goPackagePath = "github.com/bakape/mnemonics";
     fetch = {
       type = "git";
@@ -68,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/bakape/thumbnailer";
-      rev = "93664eb81b19dcb232062bf55f92cf4d7c805a7f";
-      sha256 = "0jdkb776f6gk0g8zi7r1vcfs6w0i33mn2327x6960jybli7bcfsp";
+      rev = "326c44736983c316d20c036ce34ca79ce9b96b01";
+      sha256 = "1a1dniz0zbihk7971z2ln6hlsbvkk13lghgjz346lw4lfc105kxk";
     };
   }
   {
@@ -176,8 +185,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/lann/builder";
-      rev = "1b87b36280d04fe7882d1512bf038ea2967ad534";
-      sha256 = "015q46awbyp47vld07yi7d27i0lkd82r7qn5230bb9qxl4mcfiqc";
+      rev = "47ae307949d02aa1f1069fdafc00ca08e1dbabac";
+      sha256 = "1kg9jy1rciznj627hafpq2mi7hr5d3ssgqcpwrm3bnlk9sqnydil";
     };
   }
   {
@@ -248,8 +257,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/otium/ytdl";
-      rev = "325bc9755fb5979d67b65939b8ff88f480424c0e";
-      sha256 = "0r6b9y2jb1cz1q2w722174lk3qvb3ipsi9jj3cizmhq2n6qqfpmk";
+      rev = "b071cb3eb1579608df3b52084a017c5753b325e6";
+      sha256 = "01ankrjgdcw0ncwv0xzqh74xy22vdl2nza0arga72zrakpgk8nw0";
     };
   }
   {
@@ -275,8 +284,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/sirupsen/logrus";
-      rev = "d329d24db4313262a3b0a24d8aeb1dc4bd294fb0";
-      sha256 = "1jjmh1nd7lcsrxgr6ycv9m9iwmr8dfn5cxynnj16vw3qazihajk7";
+      rev = "e4b0c6d7829bcf64435536c4a88f4088a3c76203";
+      sha256 = "1s3m83wv1wjv95nhkbvml56c12z75x85wlmqill3zqvlm9az6bzg";
     };
   }
   {
@@ -311,8 +320,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "c126467f60eb25f8f27e5a981f32a87e3965053f";
-      sha256 = "0xvvzwxqi1dbrnsvq00klx4bnjalf90haf1slnxzrdmbadyp992q";
+      rev = "de0752318171da717af4ce24d0a2e8626afaeb11";
+      sha256 = "1ps1dl2a5lwr3vbwcy8n4i1v73m567y024sk961fk281phrzp13i";
     };
   }
   {
@@ -320,8 +329,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "f4c29de78a2a91c00474a2e689954305c350adf9";
-      sha256 = "02nibjrr1il8sxnr0w1s5fj7gz6ayhg3hsywf948qhc68n5adv8x";
+      rev = "c39426892332e1bb5ec0a434a079bf82f5d30c54";
+      sha256 = "1w26avkg623xilnwnad0cq6768cfbs4mxk875382xh0da6ai50s3";
     };
   }
   {
@@ -329,8 +338,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "3dc4335d56c789b04b0ba99b7a37249d9b614314";
-      sha256 = "1105b7jqzz8g2bfkdbkj2pdzq4vhfmhm42khir88vjqfd1l7ha31";
+      rev = "14742f9018cd6651ec7364dc6ee08af0baaa1031";
+      sha256 = "17k06vwhnlb18n9rb1cdcdqyjcn353znfrr4c90xb3carz1sqfq5";
     };
   }
   {
@@ -338,8 +347,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/text";
-      rev = "96e34ec0e18a62a1e59880c7bf617b655efecb66";
-      sha256 = "1n1p5zz0vyvlhac40hxml6c5xwpsw8rjx1pbls9381a0s19ncbdg";
+      rev = "6e3c4e7365ddcc329f090f96e4348398f6310088";
+      sha256 = "1r511ncipn7sdlssn06fpzcpy4mp4spagni4ryxq86p2b0bi8pn4";
     };
   }
   {

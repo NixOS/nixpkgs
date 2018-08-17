@@ -11,17 +11,29 @@ let
   checkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
       "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name"
-      "MTUBytes" "BitsPerSecond" "Duplex" "WakeOnLan"
+      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port"
+      "TCPSegmentationOffload" "TCP6SegmentationOffload" "GenericSegmentationOffload"
+      "GenericReceiveOffload" "LargeReceiveOffload" "RxChannels" "TxChannels"
+      "OtherChannels" "CombinedChannels"
     ])
-    (assertValueOneOf "MACAddressPolicy" ["persistent" "random"])
+    (assertValueOneOf "MACAddressPolicy" ["persistent" "random" "none"])
     (assertMacAddress "MACAddress")
-    (assertValueOneOf "NamePolicy" [
-      "kernel" "database" "onboard" "slot" "path" "mac"
-    ])
     (assertByteFormat "MTUBytes")
     (assertByteFormat "BitsPerSecond")
     (assertValueOneOf "Duplex" ["half" "full"])
-    (assertValueOneOf "WakeOnLan" ["phy" "magic" "off"])
+    (assertValueOneOf "AutoNegotiation" boolValues)
+    (assertValueOneOf "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon" "off"])
+    (assertValueOneOf "Port" ["tp" "aui" "bnc" "mii" "fibre"])
+    (assertValueOneOf "TCPSegmentationOffload" boolValues)
+    (assertValueOneOf "TCP6SegmentationOffload" boolValues)
+    (assertValueOneOf "GenericSegmentationOffload" boolValues)
+    (assertValueOneOf "UDPSegmentationOffload" boolValues)
+    (assertValueOneOf "GenericReceiveOffload" boolValues)
+    (assertValueOneOf "LargeReceiveOffload" boolValues)
+    (range "RxChannels" 1 4294967295)
+    (range "TxChannels" 1 4294967295)
+    (range "OtherChannels" 1 4294967295)
+    (range "CombinedChannels" 1 4294967295)
   ];
 
   checkNetdev = checkUnitConfig "Netdev" [
@@ -31,16 +43,21 @@ let
     (assertHasField "Name")
     (assertHasField "Kind")
     (assertValueOneOf "Kind" [
-      "bridge" "bond" "vlan" "macvlan" "vxlan" "ipip"
-      "gre" "sit" "vti" "veth" "tun" "tap" "dummy"
+      "bond" "bridge" "dummy" "gre" "gretap" "ip6gre" "ip6tnl" "ip6gretap" "ipip"
+      "ipvlan" "macvlan" "macvtap" "sit" "tap" "tun" "veth" "vlan" "vti" "vti6"
+      "vxlan" "geneve" "vrf" "vcan" "vxcan" "wireguard" "netdevsim"
     ])
     (assertByteFormat "MTUBytes")
     (assertMacAddress "MACAddress")
   ];
 
   checkVlan = checkUnitConfig "VLAN" [
-    (assertOnlyFields ["Id"])
+    (assertOnlyFields ["Id" "GVRP" "MVRP" "LooseBinding" "ReorderHeader"])
     (assertRange "Id" 0 4094)
+    (assertValueOneOf "GVRP" boolValues)
+    (assertValueOneOf "MVRP" boolValues)
+    (assertValueOneOf "LooseBinding" boolValues)
+    (assertValueOneOf "ReorderHeader" boolValues)
   ];
 
   checkMacvlan = checkUnitConfig "MACVLAN" [
@@ -49,15 +66,41 @@ let
   ];
 
   checkVxlan = checkUnitConfig "VXLAN" [
-    (assertOnlyFields ["Id" "Group" "TOS" "TTL" "MacLearning"])
+    (assertOnlyFields [
+      "Id" "Remote" "Local" "TOS" "TTL" "MacLearning" "FDBAgeingSec"
+      "MaximumFDBEntries" "ReduceARPProxy" "L2MissNotification"
+      "L3MissNotification" "RouteShortCircuit" "UDPChecksum"
+      "UDP6ZeroChecksumTx" "UDP6ZeroChecksumRx" "RemoteChecksumTx"
+      "RemoteChecksumRx" "GroupPolicyExtension" "DestinationPort" "PortRange"
+      "FlowLabel"
+    ])
     (assertRange "TTL" 0 255)
     (assertValueOneOf "MacLearning" boolValues)
+    (assertValueOneOf "ReduceARPProxy" boolValues)
+    (assertValueOneOf "L2MissNotification" boolValues)
+    (assertValueOneOf "L3MissNotification" boolValues)
+    (assertValueOneOf "RouteShortCircuit" boolValues)
+    (assertValueOneOf "UDPChecksum" boolValues)
+    (assertValueOneOf "UDP6ZeroChecksumTx" boolValues)
+    (assertValueOneOf "UDP6ZeroChecksumRx" boolValues)
+    (assertValueOneOf "RemoteChecksumTx" boolValues)
+    (assertValueOneOf "RemoteChecksumRx" boolValues)
+    (assertValueOneOf "GroupPolicyExtension" boolValues)
+    (assertRange "FlowLabel" 0 1048575)
   ];
 
   checkTunnel = checkUnitConfig "Tunnel" [
-    (assertOnlyFields ["Local" "Remote" "TOS" "TTL" "DiscoverPathMTU"])
+    (assertOnlyFields [
+      "Local" "Remote" "TOS" "TTL" "DiscoverPathMTU" "IPv6FlowLabel" "CopyDSCP"
+      "EncapsulationLimit" "Key" "InputKey" "OutputKey" "Mode" "Independent"
+      "AllowLocalRemote"
+    ])
     (assertRange "TTL" 0 255)
     (assertValueOneOf "DiscoverPathMTU" boolValues)
+    (assertValueOneOf "CopyDSCP" boolValues)
+    (assertValueOneOf "Mode" ["ip6ip6" "ipip6" "any"])
+    (assertValueOneOf "Independent" boolValues)
+    (assertValueOneOf "AllowLocalRemote" boolValues)
   ];
 
   checkPeer = checkUnitConfig "Peer" [
@@ -66,10 +109,11 @@ let
   ];
 
   tunTapChecks = [
-    (assertOnlyFields ["OneQueue" "MultiQueue" "PacketInfo" "User" "Group"])
+    (assertOnlyFields ["OneQueue" "MultiQueue" "PacketInfo" "VNetHeader" "User" "Group"])
     (assertValueOneOf "OneQueue" boolValues)
     (assertValueOneOf "MultiQueue" boolValues)
     (assertValueOneOf "PacketInfo" boolValues)
+    (assertValueOneOf "VNetHeader" boolValues)
   ];
 
   checkTun = checkUnitConfig "Tun" tunTapChecks;
@@ -79,67 +123,121 @@ let
   checkBond = checkUnitConfig "Bond" [
     (assertOnlyFields [
       "Mode" "TransmitHashPolicy" "LACPTransmitRate" "MIIMonitorSec"
-      "UpDelaySec" "DownDelaySec" "GratuitousARP"
+      "UpDelaySec" "DownDelaySec" "LearnPacketIntervalSec" "AdSelect"
+      "FailOverMACPolicy" "ARPValidate" "ARPIntervalSec" "ARPIPTargets"
+      "ARPAllTargets" "PrimaryReselectPolicy" "ResendIGMP" "PacketsPerSlave"
+      "GratuitousARP" "AllSlavesActive" "MinLinks"
     ])
     (assertValueOneOf "Mode" [
       "balance-rr" "active-backup" "balance-xor"
       "broadcast" "802.3ad" "balance-tlb" "balance-alb"
     ])
     (assertValueOneOf "TransmitHashPolicy" [
-      "layer2" "layer3+4" "layer2+3" "encap2+3" "802.3ad" "encap3+4"
+      "layer2" "layer3+4" "layer2+3" "encap2+3" "encap3+4"
     ])
     (assertValueOneOf "LACPTransmitRate" ["slow" "fast"])
+    (assertValueOneOf "AdSelect" ["stable" "bandwidth" "count"])
+    (assertValueOneOf "FailOverMACPolicy" ["none" "active" "follow"])
+    (assertValueOneOf "ARPValidate" ["none" "active" "backup" "all"])
+    (assertValueOneOf "ARPAllTargets" ["any" "all"])
+    (assertValueOneOf "PrimaryReselectPolicy" ["always" "better" "failure"])
+    (assertRange "ResendIGMP" 0 255)
+    (assertRange "PacketsPerSlave" 0 65535)
+    (assertRange "GratuitousARP" 0 255)
+    (assertValueOneOf "AllSlavesActive" boolValues)
   ];
 
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
-      "Description" "DHCP" "DHCPServer" "IPForward" "IPMasquerade" "IPv4LL" "IPv4LLRoute"
-      "LLMNR" "MulticastDNS" "Domains" "Bridge" "Bond" "IPv6PrivacyExtensions"
+      "Description" "DHCP" "DHCPServer" "LinkLocalAddressing" "IPv4LLRoute"
+      "IPv6Token" "LLMNR" "MulticastDNS" "DNSOverTLS" "DNSSEC"
+      "DNSSECNegativeTrustAnchors" "LLDP" "EmitLLDP" "BindCarrier" "Address"
+      "Gateway" "DNS" "Domains" "NTP" "IPForward" "IPMasquerade"
+      "IPv6PrivacyExtensions" "IPv6AcceptRA" "IPv6DuplicateAddressDetection"
+      "IPv6HopLimit" "IPv4ProxyARP" "IPv6ProxyNDP" "IPv6ProxyNDPAddress"
+      "IPv6PrefixDelegation" "IPv6MTUBytes" "Bridge" "Bond" "VRF" "VLAN"
+      "IPVLAN" "MACVLAN" "VXLAN" "Tunnel" "ActiveSlave" "PrimarySlave"
+      "ConfigureWithoutCarrier"
     ])
-    (assertValueOneOf "DHCP" ["both" "none" "v4" "v6"])
+    # Note: For DHCP the values both, none, v4, v6 are deprecated
+    (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6"])
     (assertValueOneOf "DHCPServer" boolValues)
+    (assertValueOneOf "LinkLocalAddressing" ["yes" "no" "ipv4" "ipv6"])
+    (assertValueOneOf "IPv4LLRoute" boolValues)
+    (assertValueOneOf "LLMNR" ["yes" "resolve" "no"])
+    (assertValueOneOf "MulticastDNS" ["yes" "resolve" "no"])
+    (assertValueOneOf "DNSOverTLS" ["opportunistic" "no"])
+    (assertValueOneOf "DNSSEC" ["yes" "allow-downgrade" "no"])
+    (assertValueOneOf "LLDP" ["yes" "routers-only" "no"])
+    (assertValueOneOf "EmitLLDP" ["yes" "no" "nearest-bridge" "non-tpmr-bridge" "customer-bridge"])
     (assertValueOneOf "IPForward" ["yes" "no" "ipv4" "ipv6"])
     (assertValueOneOf "IPMasquerade" boolValues)
-    (assertValueOneOf "IPv4LL" boolValues)
-    (assertValueOneOf "IPv4LLRoute" boolValues)
-    (assertValueOneOf "LLMNR" boolValues)
-    (assertValueOneOf "MulticastDNS" boolValues)
     (assertValueOneOf "IPv6PrivacyExtensions" ["yes" "no" "prefer-public" "kernel"])
+    (assertValueOneOf "IPv6AcceptRA" boolValues)
+    (assertValueOneOf "IPv4ProxyARP" boolValues)
+    (assertValueOneOf "IPv6ProxyNDP" boolValues)
+    (assertValueOneOf "IPv6PrefixDelegation" boolValues)
+    (assertValueOneOf "ActiveSlave" boolValues)
+    (assertValueOneOf "PrimarySlave" boolValues)
+    (assertValueOneOf "ConfigureWithoutCarrier" boolValues)
   ];
 
   checkAddress = checkUnitConfig "Address" [
-    (assertOnlyFields ["Address" "Peer" "Broadcast" "Label"])
+    (assertOnlyFields [
+      "Address" "Peer" "Broadcast" "Label" "PreferredLifetime" "Scope"
+      "HomeAddress" "DuplicateAddressDetection" "ManageTemporaryAddress"
+      "PrefixRoute" "AutoJoin"
+    ])
     (assertHasField "Address")
+    (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
+    (assertValueOneOf "HomeAddress" boolValues)
+    (assertValueOneOf "DuplicateAddressDetection" boolValues)
+    (assertValueOneOf "ManageTemporaryAddress" boolValues)
+    (assertValueOneOf "PrefixRoute" boolValues)
+    (assertValueOneOf "AutoJoin" boolValues)
   ];
 
   checkRoute = checkUnitConfig "Route" [
-    (assertOnlyFields ["Gateway" "Destination" "Metric"])
+    (assertOnlyFields [
+      "Gateway" "GatewayOnlink" "Destination" "Source" "Metric"
+      "IPv6Preference" "Scope" "PreferredSource" "Table" "Protocol" "Type"
+      "InitialCongestionWindow" "InitialAdvertisedReceiveWindow" "QuickAck"
+      "MTUBytes"
+    ])
     (assertHasField "Gateway")
   ];
 
   checkDhcp = checkUnitConfig "DHCP" [
     (assertOnlyFields [
-      "UseDNS" "UseMTU" "SendHostname" "UseHostname" "UseDomains" "UseRoutes"
-      "CriticalConnections" "VendorClassIdentifier" "RequestBroadcast"
-      "RouteMetric"
+      "UseDNS" "UseNTP" "UseMTU" "Anonymize" "SendHostname" "UseHostname"
+      "Hostname" "UseDomains" "UseRoutes" "UseTimezone" "CriticalConnection"
+      "ClientIdentifier" "VendorClassIdentifier" "UserClass" "DUIDType"
+      "DUIDRawData" "IAID" "RequestBroadcast" "RouteMetric" "RouteTable"
+      "ListenPort" "RapidCommit"
     ])
     (assertValueOneOf "UseDNS" boolValues)
+    (assertValueOneOf "UseNTP" boolValues)
     (assertValueOneOf "UseMTU" boolValues)
+    (assertValueOneOf "Anonymize" boolValues)
     (assertValueOneOf "SendHostname" boolValues)
     (assertValueOneOf "UseHostname" boolValues)
-    (assertValueOneOf "UseDomains" boolValues)
+    (assertValueOneOf "UseDomains" ["yes" "no" "route"])
     (assertValueOneOf "UseRoutes" boolValues)
-    (assertValueOneOf "CriticalConnections" boolValues)
+    (assertValueOneOf "UseTimezone" boolValues)
+    (assertValueOneOf "CriticalConnection" boolValues)
     (assertValueOneOf "RequestBroadcast" boolValues)
+    (assertRange "RouteTable" 0 4294967295)
+    (assertValueOneOf "RapidCommit" boolValues)
   ];
 
   checkDhcpServer = checkUnitConfig "DHCPServer" [
     (assertOnlyFields [
       "PoolOffset" "PoolSize" "DefaultLeaseTimeSec" "MaxLeaseTimeSec"
-      "EmitDNS" "DNS" "EmitNTP" "NTP" "EmitTimezone" "Timezone"
+      "EmitDNS" "DNS" "EmitNTP" "NTP" "EmitRouter" "EmitTimezone" "Timezone"
     ])
     (assertValueOneOf "EmitDNS" boolValues)
     (assertValueOneOf "EmitNTP" boolValues)
+    (assertValueOneOf "EmitRouter" boolValues)
     (assertValueOneOf "EmitTimezone" boolValues)
   ];
 
@@ -461,6 +559,36 @@ let
       '';
     };
 
+    bridge = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of bridge interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    bond = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of bond interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vrf = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of vrf interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     vlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -619,6 +747,9 @@ let
           ${concatStringsSep "\n" (map (s: "Gateway=${s}") def.gateway)}
           ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
           ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
+          ${concatStringsSep "\n" (map (s: "Bridge=${s}") def.bridge)}
+          ${concatStringsSep "\n" (map (s: "Bond=${s}") def.bond)}
+          ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
           ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
           ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
           ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
