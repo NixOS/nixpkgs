@@ -31,8 +31,8 @@ with lib;
     #services.rogue.enable = true;
 
     # Disable some other stuff we don't need.
-    security.sudo.enable = false;
-    services.udisks2.enable = false;
+    security.sudo.enable = mkDefault false;
+    services.udisks2.enable = mkDefault false;
 
     # Automatically log in at the virtual consoles.
     services.mingetty.autologinUser = "root";
