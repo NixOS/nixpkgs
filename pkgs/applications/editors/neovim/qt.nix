@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, doxygen, makeWrapper
-, libmsgpack, neovim, pythonPackages, qtbase }:
+, msgpack, neovim, pythonPackages, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "neovim-qt-${version}";
@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DMSGPACK_INCLUDE_DIRS=${libmsgpack}/include"
-    "-DMSGPACK_LIBRARIES=${libmsgpack}/lib/libmsgpackc.so"
+    "-DMSGPACK_INCLUDE_DIRS=${msgpack}/include"
+    "-DMSGPACK_LIBRARIES=${msgpack}/lib/msgpackc.so"
   ];
 
   buildInputs = with pythonPackages; [
-    neovim qtbase libmsgpack
+    neovim qtbase msgpack
   ] ++ (with pythonPackages; [
     jinja2 msgpack python
   ]);
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preConfigure = ''
-    # avoid cmake trying to download libmsgpack
+    # avoid cmake trying to download msgpack
     echo "" > third-party/CMakeLists.txt
     # we rip out a number of tests that fail in the build env
     # the GUI tests will never work but the others should - they did before neovim 0.2.0

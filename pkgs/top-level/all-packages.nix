@@ -10437,8 +10437,6 @@ with pkgs;
 
   libmtp = callPackage ../development/libraries/libmtp { };
 
-  libmsgpack = callPackage ../development/libraries/libmsgpack { };
-
   libmypaint = callPackage ../development/libraries/libmypaint { };
 
   libmysofa = callPackage ../development/libraries/audio/libmysofa { };
@@ -11117,6 +11115,8 @@ with pkgs;
   mpeg2dec = libmpeg2;
 
   mqtt-bench = callPackage ../applications/misc/mqtt-bench {};
+
+  msgpack = callPackage ../development/libraries/msgpack { };
 
   msilbc = callPackage ../development/libraries/msilbc { };
 

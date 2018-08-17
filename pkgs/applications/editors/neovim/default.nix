@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey, libiconv
+{ stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
 , libuv, luaPackages, ncurses, pkgconfig
 , unibilium, xsel, gperf
 , libvterm-neovim
@@ -25,7 +25,7 @@ let
     buildInputs = [
       libtermkey
       libuv
-      libmsgpack
+      msgpack
       ncurses
       libvterm-neovim
       unibilium
