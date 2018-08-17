@@ -1122,4 +1122,7 @@ self: super: {
 
   # https://github.com/MarcWeber/hasktags/issues/52
   hasktags = dontCheck super.hasktags;
+
+  # https://github.com/haskell/hoopl/issues/50
+  hoopl = dontCheck super.hoopl;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
