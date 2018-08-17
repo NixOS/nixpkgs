@@ -12770,6 +12770,10 @@ with pkgs;
     plugins = [];
   };
 
+  gsignondPlugins = {
+    sasl = callPackage ../development/libraries/gsignond/plugins/sasl.nix { };
+  };
+
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agda = callPackage ../build-support/agda {
