@@ -232,7 +232,7 @@ in
               # Options as described in resolv.conf(5)
               resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
             '' + optionalString (cfg.nameservers != []) ''
-              name_servers='${lib.concatStringsSep " " cfg.nameservers}'
+              name_servers_append='${lib.concatStringsSep " " cfg.nameservers}'
             '' + optionalString dnsmasqResolve ''
               dnsmasq_conf=/etc/dnsmasq-conf.conf
               dnsmasq_resolv=/etc/dnsmasq-resolv.conf
