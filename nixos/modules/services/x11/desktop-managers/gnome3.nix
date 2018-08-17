@@ -97,6 +97,8 @@ in {
     services.udisks2.enable = true;
     services.accounts-daemon.enable = true;
     services.geoclue2.enable = mkDefault true;
+    # GNOME should have its own geoclue agent
+    services.geoclue2.enableDemoAgent = false;
     services.dleyna-renderer.enable = mkDefault true;
     services.dleyna-server.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;

@@ -29,7 +29,7 @@ let
       "--with-libxml"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
-      "--with-system-tzdata=${tzdata}"
+      "--with-system-tzdata=${tzdata}/share/zoneinfo"
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ];
 

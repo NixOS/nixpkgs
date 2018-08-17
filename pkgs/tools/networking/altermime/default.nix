@@ -21,12 +21,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "MIME alteration tool";
-    maintainers = with stdenv.lib.maintainers; [
-      raskin
-    ];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
+    license.fullName = "alterMIME LICENSE";
     downloadPage = "http://www.pldaniels.com/altermime/";
   };
 }

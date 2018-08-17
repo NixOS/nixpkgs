@@ -278,11 +278,20 @@ inherit (pkgs.nixos {
      <literal>lib.traceCallXml</literal> has been deprecated. Please complain
      if you use the function regularly.
     </para>
+   </listitem>
+   <listitem>
     <para>
      The attribute <literal>lib.nixpkgsVersion</literal> has been deprecated in
      favor of <literal>lib.version</literal>. Please refer to the discussion in
      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/39416#discussion_r183845745">NixOS/nixpkgs#39416</link>
      for further reference.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>lib.recursiveUpdateUntil</literal> was not acting according to its
+     specification. It has been fixed to act according to the docstring, and a
+     test has been added.
     </para>
    </listitem>
    <listitem>

@@ -6,7 +6,9 @@ let
 
   description = ''
     An application that runs on your computer in the background and seamlessly encrypts
-    and decrypts your mail as it enters and leaves your computer
+    and decrypts your mail as it enters and leaves your computer.
+
+    To work, gnome-keyring service must be enabled.
   '';
 
   desktopItem = makeDesktopItem {

@@ -3,19 +3,17 @@
 # Updater dependencies
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix
 , gnupg
-, darwin ? null
+, darwin, xcbuild
 , procps
 }:
 
 with stdenv.lib;
 
-{ enableNpm ? true, version, sha256, patches } @args:
+{ enableNpm ? true, version, sha256, patches ? [] } @args:
 
 let
 
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-
-
 
   baseName = if enableNpm then "nodejs" else "nodejs-slim";
 
@@ -49,9 +47,10 @@ in
     };
 
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-    ++ [ python2 which zlib libuv openssl ]
-    ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig darwin.cctools ];
+      ++ [ python2 zlib libuv openssl http-parser ];
+
+    nativeBuildInputs = [ which utillinux ]
+      ++ optionals stdenv.isDarwin [ pkgconfig xcbuild ];
 
     configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
 

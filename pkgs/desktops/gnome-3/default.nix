@@ -34,7 +34,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
-    tali quadrapassel gnome-sudoku aisleriot five-or-more
+    tali quadrapassel gnome-sudoku atomix aisleriot five-or-more
     four-in-a-row gnome-chess gnome-klotski gnome-mahjongg
     gnome-mines gnome-nibbles gnome-robots gnome-tetravex
     hitori gnome-taquin
@@ -318,6 +318,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 #### Games
 
   aisleriot = callPackage ./games/aisleriot { };
+
+  atomix = callPackage ./games/atomix { };
 
   five-or-more = callPackage ./games/five-or-more { };
 

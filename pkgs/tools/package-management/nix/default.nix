@@ -132,7 +132,7 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
-  }) // { perl-bindings = nixStable; };
+  }) // { perl-bindings = nix1; };
 
   nixStable = (common rec {
     name = "nix-2.0.4";

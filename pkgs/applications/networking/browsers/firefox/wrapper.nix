@@ -43,6 +43,9 @@ let
 
       plugins =
         assert !(jre && icedtea);
+        if builtins.hasAttr "enableVLC" cfg
+        then throw "The option \"${browserName}.enableVLC\" has been removed since Firefox no longer supports npapi plugins"
+        else
         ([ ]
           ++ lib.optional enableAdobeFlash flashplayer
           ++ lib.optional (cfg.enableDjvu or false) (djview4)
