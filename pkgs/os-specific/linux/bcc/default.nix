@@ -4,14 +4,14 @@
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.6.0";
+  version = "0.6.1";
   name = "bcc-${version}";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bcc";
     rev    = "v${version}";
-    sha256 = "1fk2kvbdvm87rkha2cigz2qhhlrni4g0dcnmiiyya79y85ahfvga";
+    sha256 = "1rfqjbq8ah8zrsnpbx0h5irq3h2snncfvi4pvaxl7574kciprjxj";
   };
 
   format = "other";
