@@ -105,13 +105,9 @@ let
                 ${optionalString (!config.environment.etc?"resolv.conf") ''
                   # Set the static DNS configuration, if given.
                   ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-                  ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
-                    domain ${cfg.domain}
-                  ''}
-                  ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
-                  ${flip concatMapStrings cfg.nameservers (ns: ''
-                    nameserver ${ns}
-                  '')}
+                    ${optionalString (cfg.domain != null) ''
+                      domain ${cfg.domain}
+                    ''}
                   EOF
                 ''}
 
