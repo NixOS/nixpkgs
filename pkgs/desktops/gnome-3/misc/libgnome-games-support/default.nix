@@ -3,13 +3,13 @@
 
 let
   pname = "libgnome-games-support";
-  version = "1.4.1";
+  version = "1.4.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1j7lfcnc29lgn8ppn13wkn9w2y1n3lsapagwp91zh3bf0h2h4hv1";
+    sha256 = "02hirpk885jndwarbl3cl5fk7w2z5ziv677csyv1wi2n6rmpn088";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
