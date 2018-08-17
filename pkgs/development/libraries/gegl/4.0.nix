@@ -3,13 +3,13 @@
 , libwebp, gnome3, libintl }:
 
 let
-  version = "0.4.4";
+  version = "0.4.6";
 in stdenv.mkDerivation rec {
   name = "gegl-${version}";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "143qwn92xc5wm09p9iwrpw9y0ahha5lcyx1bb0lzwcb1fgd4bjzq";
+    sha256 = "1rcsa60z09jjayk0q6jam4w8rivh400a08bv2xykiv5qyr1yp5zk";
   };
 
   # needs fonts otherwise, don't know how to pass them
