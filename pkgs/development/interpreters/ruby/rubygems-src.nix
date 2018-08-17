@@ -3,6 +3,6 @@
 , sha256 ? "1jsmmd31j8j066b83lin4bbqz19jhrirarzb41f3sjhfdjiwkcjc"
 }:
 fetchurl {
-  url = "http://production.cf.rubygems.org/rubygems/rubygems-${version}.tgz";
+  url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
   sha256 = sha256;
 }
