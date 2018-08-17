@@ -15,13 +15,17 @@ stdenv.mkDerivation {
   buildPhase = "ant";
 }
 </programlisting>
-  Note that <varname>jdk</varname> is an alias for the OpenJDK.
- </para>
+  Note that <varname>jdk</varname> is an alias for the OpenJDK (self-built
+  where available, or pre-built via Zulu).
+  Platforms with OpenJDK not (yet) in Nixpkgs (<literal>Aarch32</literal>,
+  <literal>Aarch64</literal>) point to the (unfree)
+  <literal>oraclejdk</literal>.
+</para>
 
  <para>
   JAR files that are intended to be used by other packages should be installed
-  in <filename>$out/share/java</filename>. The OpenJDK has a stdenv setup hook
-  that adds any JARs in the <filename>share/java</filename> directories of the
+  in <filename>$out/share/java</filename>. JDKs have a stdenv setup hook
+  that add any JARs in the <filename>share/java</filename> directories of the
   build inputs to the <envar>CLASSPATH</envar> environment variable. For
   instance, if the package <literal>libfoo</literal> installs a JAR named
   <filename>foo.jar</filename> in its <filename>share/java</filename>
