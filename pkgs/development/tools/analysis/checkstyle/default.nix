@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "8.11";
+  version = "8.12";
   name = "checkstyle-${version}";
 
   src = fetchurl {
     url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "13x4m4rn7rix64baclcm2jqbizkj38njif2ba0ycmvyjm62smfwv";
+    sha256 = "000048flqhkwnjn37bh07wgn6q4m12s3h3p9piqgvxswrjc95x3y";
   };
 
   phases = [ "installPhase" ];
