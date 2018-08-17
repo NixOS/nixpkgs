@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ alsaLib ncurses libsamplerate ];
   nativeBuildInputs = [ gettext ];
 
-  configureFlags = "--disable-xmlto";
+  configureFlags = [ "--disable-xmlto" ];
 
   installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
 

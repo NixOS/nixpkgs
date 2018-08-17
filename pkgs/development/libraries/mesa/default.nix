@@ -88,6 +88,7 @@ let self = stdenv.mkDerivation {
   patches = [
     ./symlink-drivers.patch
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
+    ./disk_cache-include-dri-driver-path-in-cache-key.patch
   ];
 
   outputs = [ "out" "dev" "drivers" "osmesa" ];

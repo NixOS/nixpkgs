@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs ginsh";
 
-  configureFlags = "--disable-rpath";
+  configureFlags = [ "--disable-rpath" ];
 
   meta = with stdenv.lib; {
     description = "GiNaC is Not a CAS";

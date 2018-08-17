@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     mate.mate-settings-daemon
   ];
 
-  configureFlags = "--disable-update-mimedb";
+  configureFlags = [ "--disable-update-mimedb" ];
 
   meta = with stdenv.lib; {
     description = "Utilities to configure the MATE desktop";

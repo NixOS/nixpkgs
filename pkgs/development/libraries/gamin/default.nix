@@ -14,7 +14,11 @@ stdenv.mkDerivation (rec {
 
   # `_GNU_SOURCE' is needed, e.g., to get `struct ucred' from
   # <sys/socket.h> with Glibc 2.9.
-  configureFlags = "--disable-debug --with-python=${python} CPPFLAGS=-D_GNU_SOURCE";
+  configureFlags = [
+    "--disable-debug"
+    "--with-python=${python}"
+    "CPPFLAGS=-D_GNU_SOURCE"
+  ];
 
   patches = [ ./deadlock.patch ]
     ++ map fetchurl (import ./debian-patches.nix)

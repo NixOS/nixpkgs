@@ -17,14 +17,14 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ perl procps fftw.dev ];
   buildInputs = [ libyaml gfortran libxc openblas gsl fftw.out netcdf arpack ];
 
-  configureFlags = ''
-    --with-yaml-prefix=${libyaml}
-    --with-blas=-lopenblas
-    --with-lapack=-lopenblas
-    --with-fftw-prefix=${fftwAll}
-    --with-gsl-prefix=${gsl}
-    --with-libxc-prefix=${libxc}
-  '';
+  configureFlags = [
+    "--with-yaml-prefix=${libyaml}"
+    "--with-blas=-lopenblas"
+    "--with-lapack=-lopenblas"
+    "--with-fftw-prefix=${fftwAll}"
+    "--with-gsl-prefix=${gsl}"
+    "--with-libxc-prefix=${libxc}"
+  ];
 
   doCheck = false;
   checkTarget = "check-short";

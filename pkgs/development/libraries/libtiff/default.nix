@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
 
   prePatch = let
       debian = fetchurl {
-        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.9-5.debian.tar.xz;
-        sha256 = "15lwcsd46gini27akms2ngyxnwi1hs2yskrv5x2wazs5fw5ii62w";
+        # When the URL disappears, it typically means that Debian has new patches
+        # (probably security) and updating to new tarball will apply them as well.
+        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.9-6.debian.tar.xz;
+        sha256 = "10yk5npchxscgsnd7ihd3bbbw2fxkl7ni0plm43c9q4nwp6ms52f";
       };
     in ''
       tar xf ${debian}

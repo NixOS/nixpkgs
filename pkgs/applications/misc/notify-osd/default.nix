@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     gnome3.gsettings-desktop-schemas
   ];
 
-  configureFlags = "--libexecdir=$(out)/bin";
+  configureFlags = [ "--libexecdir=$(out)/bin" ];
 
   preFixup = ''
     wrapProgram "$out/bin/notify-osd" \

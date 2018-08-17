@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext autoconf automake libtool bison flex which
     subversion makeWrapper readline libftdi libusb python3 ];
 
-  configureFlags = ''
-    ${if svfSupport then "--enable-svf" else "--disable-svf"}
-    ${if bsdlSupport then "--enable-bsdl" else "--disable-bsdl"}
-    ${if staplSupport then "--enable-stapl" else "--disable-stapl"}
-    ${if jedecSupport then "--enable-jedec-exp" else "--disable-jedec-exp"}
-  '';
+  configureFlags = [
+    (stdenv.lib.enableFeature svfSupport   "svf")
+    (stdenv.lib.enableFeature bsdlSupport  "bsdl")
+    (stdenv.lib.enableFeature staplSupport "stapl")
+    (stdenv.lib.enableFeature jedecSupport "jedec-exp")
+  ];
 
   preConfigure = "./autogen.sh";
 

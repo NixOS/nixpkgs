@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ udev ncurses bluez ];
 
-  configureFlags = "--with-doxygen=no";
+  configureFlags = [ "--with-doxygen=no" ];
 
   meta = {
     homepage = http://dvdhrm.github.io/xwiimote;

@@ -20,13 +20,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "shadow-${version}";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     rev = "${version}";
-    sha256 = "1aj7s2arnsfqf34ak40is2zmwm666l28pay6rv1ffx46j0wj4hws";
+    sha256 = "1llcv77lvpc4h3rgww9ms736kbdisiylcr2z02863f41afxbwl82";
   };
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;

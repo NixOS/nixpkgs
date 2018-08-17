@@ -21,7 +21,11 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "--with-world --enable-gmp --enable-shared";
+  configureFlags = [
+    "--with-world"
+    "--enable-gmp"
+    "--enable-shared"
+  ];
 
   buildFlags = "world";
 

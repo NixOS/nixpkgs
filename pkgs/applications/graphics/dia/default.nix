@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh # autoreconfHook is not enough
   '';
-  configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
+  configureFlags = stdenv.lib.optional withGNOME "--enable-gnome";
 
   hardeningDisable = [ "format" ];
 

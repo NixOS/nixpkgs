@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   #
   # I wrote this testing for the nanonote.
 
-  buildPhase = if stdenv.hostPlatform == stdenv.buildPlatform then null else ''
+  buildPhase = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     pushd libebl
     make
     popd
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  installPhase = if stdenv.hostPlatform == stdenv.buildPlatform then null else ''
+  installPhase = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     pushd libelf
     make install
     popd

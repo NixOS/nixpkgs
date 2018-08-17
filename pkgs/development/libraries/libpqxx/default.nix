@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = "--enable-shared";
+  configureFlags = [ "--enable-shared" ];
 
   meta = {
     description = "A C++ library to access PostgreSQL databases";

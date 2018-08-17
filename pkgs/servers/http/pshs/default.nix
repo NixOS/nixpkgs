@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent file qrencode miniupnpc ];
 
   # SSL requires libevent at 2.1 with ssl support
-  configureFlags = "--disable-ssl";
+  configureFlags = [ "--disable-ssl" ];
 
   meta = {
     description = "Pretty small HTTP server - a command-line tool to share files";
