@@ -1,14 +1,14 @@
 { stdenv, lib, fetchpatch, fetchFromGitHub, autoconf, automake, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "1.21.0";
+  version = "1.22.0";
   name = "libuv-${version}";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${version}";
-    sha256 = "1jjg34ppnlrnb634q9mla7whl7rm9xmjgnzckrznqcycwzir074b";
+    sha256 = "00gagrb6qyvdafycir64l1z7pzksbf4cakrfwnlx6w4xrh8j1hff";
   };
 
   patches = [
