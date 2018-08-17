@@ -5059,7 +5059,7 @@ with pkgs;
 
   tokei = callPackage ../development/tools/misc/tokei { };
 
-  tor = callPackage ../tools/security/tor { };
+  tor = callPackage ../tools/security/tor { openssl = openssl_1_1_0; };
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
