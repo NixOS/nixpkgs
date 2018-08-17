@@ -9136,6 +9136,10 @@ with pkgs;
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
+  aravis = callPackage ../development/libraries/aravis {
+    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad;
+  };
+
   arb = callPackage ../development/libraries/arb {};
   arb-git = callPackage ../development/libraries/arb/git.nix {};
 
