@@ -111,11 +111,11 @@ let
       '' + ''
         if [ ! -x "${browser}${browser.execdir or "/bin"}/${browserName}" ]
         then
-            echo "cannot find executable file \`${browser}${browser.execdir}/${browserName}'"
+            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${browserName}'"
             exit 1
         fi
 
-        makeWrapper "$(readlink -v --canonicalize-existing "${browser}${browser.execdir}/${browserName}")" \
+        makeWrapper "$(readlink -v --canonicalize-existing "${browser}${browser.execdir or "/bin"}/${browserName}")" \
           "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
             --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
             --suffix LD_LIBRARY_PATH ':' "$libs" \
