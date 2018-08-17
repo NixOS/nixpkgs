@@ -41,7 +41,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An interactive drawing tool for X11";
-    homepage = http://xfig.org;
+    homepage = http://mcj.sourceforge.net/;
+    license = {
+      url = "http://mcj.sourceforge.net/authors.html#xfig";
+    };
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;         # arbitrary choice
   };
 }
