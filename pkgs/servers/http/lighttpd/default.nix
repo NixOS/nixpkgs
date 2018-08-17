@@ -9,11 +9,11 @@ assert enableMysql -> mysql != null;
 assert enableLdap -> openldap != null;
 
 stdenv.mkDerivation rec {
-  name = "lighttpd-1.4.49";
+  name = "lighttpd-1.4.50";
 
   src = fetchurl {
     url = "http://download.lighttpd.net/lighttpd/releases-1.4.x/${name}.tar.xz";
-    sha256 = "02ff77cpvy1006cwfym38vf78xm18plyj636ll74r7kx2bblkpxf";
+    sha256 = "1sr9avcnld22a5wl5s8vgrz8r86mybggm9z8zwabqz48v0986dr9";
   };
 
   nativeBuildInputs = [ pkgconfig ];
