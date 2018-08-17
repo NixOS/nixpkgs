@@ -25,14 +25,6 @@ let self = _self // overrides; _self = with self; {
       checkPhase = "./Build test";
     });
 
-  # Helper function to make a PERL5LIB environment variable for a list of perlPackages and all associated runtime dependencies
-  makePerl5Lib = deps:
-    with stdenv;
-    lib.concatStringsSep ":" [
-      (lib.makePerlPath deps)
-      (lib.concatStringsSep ":" (map (dep: dep + "/lib/perl5/site_perl") (builtins.filter (dep: dep != null) (lib.flatten (map (dep: lib.getOutput "propagatedBuildInputs" dep) deps)))))
-    ]
-  ;
 
   ack = buildPerlPackage rec {
     name = "ack-2.24";
