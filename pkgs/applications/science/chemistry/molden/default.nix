@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
   buildInputs = [ gfortran libGLU xorg.libX11 xorg.libXmu ];
 
+  patches = [ ./dont_register_file_types.patch ];
+
   postPatch = ''
      substituteInPlace ./makefile --replace '-L/usr/X11R6/lib'  "" \
                                   --replace '-I/usr/X11R6/include' "" \
