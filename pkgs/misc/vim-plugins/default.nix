@@ -2085,6 +2085,17 @@ self = rec {
 
   };
 
+  vim-qml = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-qml-2018-07-22";
+    src = fetchgit {
+      url = "https://github.com/peterhoeg/vim-qml";
+      rev = "8af43da6950ce5483704bb97f5b24471d8ffda1a";
+      sha256 = "1y1xvbfr1ffxyyk3zzf50xn87a85i1zszj4fqlq5ka8zhgdrnhvc";
+    };
+    dependencies = [];
+
+  };
+
   vim-markdown = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-markdown-2018-06-05";
     src = fetchgit {

@@ -168,6 +168,7 @@
 "github:osyo-manga/vim-textobj-multiblock"
 "github:osyo-manga/vim-watchdogs"
 "github:pangloss/vim-javascript"
+"github:peterhoeg/vim-qml"
 "github:plasticboy/vim-markdown"
 "github:python-mode/python-mode"
 "github:Quramy/tsuquyomi"
