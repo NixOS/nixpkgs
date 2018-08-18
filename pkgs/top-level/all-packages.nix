@@ -51,6 +51,11 @@ with pkgs;
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
+  # Similarly to the above, but optional.
+  recurseIntoAttrsMaybe = name: let
+    allow = e: lib.elem e (config.recurseIntoAttrs or []);
+  in if allow "all" || allow name then recurseIntoAttrs else (attrs: attrs);
+
   # for documentation purposes
   dontRecurseIntoAttrs = x: x;
 
@@ -3702,7 +3707,7 @@ with pkgs;
     nodejs = pkgs.nodejs-6_x;
   });
 
-  nodePackages = nodePackages_8_x;
+  nodePackages = recurseIntoAttrsMaybe "nodePackages" nodePackages_8_x;
 
   npm2nix = nodePackages.npm2nix;
 
@@ -6707,7 +6712,7 @@ with pkgs;
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = dontRecurseIntoAttrs (haskell.packages.ghc843.override {
+  haskellPackages = recurseIntoAttrsMaybe "haskellPackages" (haskell.packages.ghc843.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   });
 
@@ -12765,7 +12770,7 @@ with pkgs;
   };
   quicklispPackagesClisp = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp clisp));
   quicklispPackagesSBCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp sbcl));
-  quicklispPackages = quicklispPackagesSBCL;
+  quicklispPackages = recurseIntoAttrsMaybe "quicklispPackages" quicklispPackagesSBCL;
   quicklispPackages_asdf_3_1 = quicklispPackagesFor
     ((wrapLisp sbcl).override { asdf = asdf_3_1; });
 
@@ -12836,7 +12841,7 @@ with pkgs;
     packages = [];
   };
 
-  rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
+  rPackages = recurseIntoAttrsMaybe "rPackages" (callPackage ../development/r-modules {
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
   });
 
@@ -16189,8 +16194,8 @@ with pkgs;
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
-  emacs25Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs25 pkgs.emacs25Packages);
-  emacs26Packages = dontRecurseIntoAttrs (emacsPackagesFor emacs26 pkgs.emacs26Packages);
+  emacs25Packages = recurseIntoAttrsMaybe "emacsPackages" (emacsPackagesFor emacs25 pkgs.emacs25Packages);
+  emacs26Packages = recurseIntoAttrsMaybe "emacsPackages" (emacsPackagesFor emacs26 pkgs.emacs26Packages);
 
   emacsPackagesNgFor = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
@@ -16214,8 +16219,8 @@ with pkgs;
     };
   };
 
-  emacs25PackagesNg = dontRecurseIntoAttrs (emacsPackagesNgFor emacs25);
-  emacs26PackagesNg = dontRecurseIntoAttrs (emacsPackagesNgFor emacs26);
+  emacs25PackagesNg = recurseIntoAttrsMaybe "emacsPackages" (emacsPackagesNgFor emacs25);
+  emacs26PackagesNg = recurseIntoAttrsMaybe "emacsPackages" (emacsPackagesNgFor emacs26);
 
   emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
   emacs26WithPackages = emacs26PackagesNg.emacsWithPackages;
