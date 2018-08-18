@@ -16022,7 +16022,7 @@ with pkgs;
       ImageCaptureCore GSS ImageIO;
   };
 
-  emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
+  emacsPackagesFor = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
@@ -16165,10 +16165,10 @@ with pkgs;
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
-  emacs25Packages = emacsPackagesGen emacs25 pkgs.emacs25Packages;
-  emacs26Packages = emacsPackagesGen emacs26 pkgs.emacs26Packages;
+  emacs25Packages = emacsPackagesFor emacs25 pkgs.emacs25Packages;
+  emacs26Packages = emacsPackagesFor emacs26 pkgs.emacs26Packages;
 
-  emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
+  emacsPackagesNgFor = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl fetchpatch;
     inherit emacs texinfo makeWrapper runCommand writeText;
@@ -16190,9 +16190,9 @@ with pkgs;
     };
   };
 
-  emacs25PackagesNg = emacsPackagesNgGen emacs25;
+  emacs25PackagesNg = emacsPackagesNgFor emacs25;
   emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
-  emacs26PackagesNg = emacsPackagesNgGen emacs26;
+  emacs26PackagesNg = emacsPackagesNgFor emacs26;
   emacs26WithPackages = emacs26PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 

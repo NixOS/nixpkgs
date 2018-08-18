@@ -81,6 +81,8 @@ mapAliases ({
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   emacs25Macport_25_1 = emacs25Macport; # added 2018-04-25
   emacsMelpa = emacs25PackagesNg; # for backward compatibility
+  emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
+  emacsPackagesNgGen = emacsPackagesNgFor; # added 2018-08-18
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
