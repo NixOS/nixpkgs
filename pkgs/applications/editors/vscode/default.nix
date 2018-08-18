@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
-  gtk2, makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
+  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret }:
 
 let
   version = "1.26.1";
@@ -49,8 +49,8 @@ in
     };
 
     buildInputs = if stdenv.system == "x86_64-darwin"
-      then [ unzip makeWrapper libXScrnSaver libsecret ]
-      else [ makeWrapper libXScrnSaver libxkbfile libsecret ];
+      then [ unzip libXScrnSaver libsecret ]
+      else [ wrapGAppsHook libXScrnSaver libxkbfile libsecret ];
 
     installPhase =
       if stdenv.system == "x86_64-darwin" then ''
