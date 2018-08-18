@@ -20642,6 +20642,10 @@ with pkgs;
 
   petsc = callPackage ../development/libraries/science/math/petsc { };
 
+  scs = callPackage ../development/libraries/science/math/scs {
+    liblapack = liblapackWithoutAtlas;
+  };
+
   sage = callPackage ../applications/science/math/sage {
     nixpkgs = pkgs;
   };
