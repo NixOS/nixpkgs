@@ -152,7 +152,7 @@ let
     meta = {
       homepage = https://www.perl.org/;
       description = "The standard implementation of the Perl 5 programmming language";
-      license = licenses.gpl1;
+      license = licenses.artistic1;
       maintainers = [ maintainers.eelco ];
       platforms = platforms.all;
     };
