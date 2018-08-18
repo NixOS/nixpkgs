@@ -14,10 +14,11 @@ assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
   name = "ntl-${version}";
-  version = "11.2.1";
+  version = "11.3.0";
+
   src = fetchurl {
     url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "04avzmqflx2a33n7v9jj32g83p7m6z712fg1mw308jk5ca2qp489";
+    sha256 = "1pcib3vz1sdqlk0n561wbf7fwq44jm5cpx710w4vqljxgrjd7q1s";
   };
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -66,6 +67,8 @@ stdenv.mkDerivation rec {
       length integers, and for vectors, matrices, and polynomials over
       the integers and over finite fields.
     '';
+    # Upstream contact: maintainer is victorshoup on GitHub. Alternatively the
+    # email listed on the homepage.
     homepage = http://www.shoup.net/ntl/;
     maintainers = with maintainers; [ timokau ];
     license = licenses.gpl2Plus;
