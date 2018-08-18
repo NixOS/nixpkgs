@@ -2310,7 +2310,7 @@ with pkgs;
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
-  emscriptenfastcompPackages = dontRecurseIntoAttrs (callPackage ../development/compilers/emscripten/fastcomp { });
+  emscriptenfastcompPackages = recurseIntoAttrs (callPackage ../development/compilers/emscripten/fastcomp { });
 
   emscriptenfastcomp = emscriptenfastcompPackages.emscriptenfastcomp;
 
@@ -2630,7 +2630,7 @@ with pkgs;
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
-  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb {
+  fdbPackages = recurseIntoAttrs (callPackage ../servers/foundationdb {
     stdenv49 = overrideCC stdenv gcc49;
   });
 
@@ -4674,7 +4674,7 @@ with pkgs;
 
   plan9port = callPackage ../tools/system/plan9port { };
 
-  platformioPackages = dontRecurseIntoAttrs (callPackage ../development/arduino/platformio { });
+  platformioPackages = recurseIntoAttrs (callPackage ../development/arduino/platformio { });
   platformio = platformioPackages.platformio-chrootenv;
 
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
@@ -6797,7 +6797,7 @@ with pkgs;
 
   icedtea_web = icedtea8_web;
 
-  idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
+  idrisPackages = recurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
   });
 
@@ -8657,7 +8657,7 @@ with pkgs;
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
-  sconsPackages = dontRecurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
+  sconsPackages = recurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_3_0_1;
   scons_2_5_1 = sconsPackages.scons_2_5_1;
 
@@ -9599,7 +9599,7 @@ with pkgs;
   # A GMP fork
   mpir = callPackage ../development/libraries/mpir {};
 
-  gns3Packages = dontRecurseIntoAttrs (callPackage ../applications/networking/gns3 { });
+  gns3Packages = recurseIntoAttrs (callPackage ../applications/networking/gns3 { });
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
@@ -12873,7 +12873,7 @@ with pkgs;
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
   };
 
-  apacheHttpdPackages_2_4 = dontRecurseIntoAttrs (apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4);
+  apacheHttpdPackages_2_4 = recurseIntoAttrs (apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4);
   apacheHttpdPackages = apacheHttpdPackages_2_4;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
@@ -13807,7 +13807,7 @@ with pkgs;
     inherit (linuxPackages) kernel;
   };
 
-  fusePackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/fuse {
+  fusePackages = recurseIntoAttrs (callPackage ../os-specific/linux/fuse {
     utillinux = utillinuxMinimal;
   });
   fuse = lowPrio fusePackages.fuse_2;
@@ -14146,7 +14146,7 @@ with pkgs;
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidiaPackages = dontRecurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
+    nvidiaPackages = recurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
 
     nvidia_x11_legacy304 = nvidiaPackages.legacy_304;
     nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
@@ -15225,12 +15225,12 @@ with pkgs;
 
   source-han-code-jp = callPackage ../data/fonts/source-han-code-jp { };
 
-  sourceHanSansPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han-sans { });
+  sourceHanSansPackages = recurseIntoAttrs (callPackage ../data/fonts/source-han-sans { });
   source-han-sans-japanese = sourceHanSansPackages.japanese;
   source-han-sans-korean = sourceHanSansPackages.korean;
   source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
   source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
-  sourceHanSerifPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han-serif { });
+  sourceHanSerifPackages = recurseIntoAttrs (callPackage ../data/fonts/source-han-serif { });
   source-han-serif-japanese = sourceHanSerifPackages.japanese;
   source-han-serif-korean = sourceHanSerifPackages.korean;
   source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
@@ -15427,7 +15427,7 @@ with pkgs;
     gconf = gnome2.GConf;
   };
 
-  atomPackages = dontRecurseIntoAttrs (callPackage ../applications/editors/atom { });
+  atomPackages = recurseIntoAttrs (callPackage ../applications/editors/atom { });
 
   inherit (atomPackages) atom atom-beta;
 
@@ -18787,7 +18787,7 @@ with pkgs;
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  tdesktopPackages = dontRecurseIntoAttrs (callPackage ../applications/networking/instant-messengers/telegram/tdesktop { });
+  tdesktopPackages = recurseIntoAttrs (callPackage ../applications/networking/instant-messengers/telegram/tdesktop { });
   tdesktop = tdesktopPackages.stable;
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
@@ -20206,7 +20206,7 @@ with pkgs;
 
   stockfish = callPackage ../games/stockfish { };
 
-  steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam { });
+  steamPackages = recurseIntoAttrs (callPackage ../games/steam { });
 
   steam = steamPackages.steam-chrootenv.override {
     # DEPRECATED
@@ -20308,7 +20308,7 @@ with pkgs;
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
-  ut2004Packages = dontRecurseIntoAttrs (callPackage ../games/ut2004 { });
+  ut2004Packages = recurseIntoAttrs (callPackage ../games/ut2004 { });
 
   ut2004demo = self.ut2004Packages.ut2004 [ self.ut2004Packages.ut2004-demo ];
 
@@ -20417,7 +20417,7 @@ with pkgs;
 
   keen4 = callPackage ../games/keen4 { };
 
-  zeroadPackages = dontRecurseIntoAttrs (callPackage ../games/0ad {
+  zeroadPackages = recurseIntoAttrs (callPackage ../games/0ad {
     wxGTK = wxGTK30;
   });
 
