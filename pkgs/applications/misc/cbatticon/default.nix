@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "16g26vin1693dbdr9qsnw36fdchx394lp79gvp7gcbw0w1ny9av6";
   };
 
+  patchPhase = ''
+    sed -i -e 's/ -Wno-format//g' Makefile
+  '';
+
   makeFlags = "PREFIX=$(out)";
 
   nativeBuildInputs = [ pkgconfig gettext ];

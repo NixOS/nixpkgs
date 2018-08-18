@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   preCheck = "export HOME=$TMPDIR";
 
   meta = {
-    homepage = http://rr-project.org/;
+    homepage = https://rr-project.org/;
     description = "Records nondeterministic executions and debugs them deterministically";
     longDescription = ''
       rr aspires to be your primary debugging tool, replacing -- well,
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
 
     license = "custom";
     maintainers = with stdenv.lib.maintainers; [ pierron thoughtpolice ];
-    platforms = ["x86_64-linux"];
+    platforms = stdenv.lib.platforms.x86;
   };
 }

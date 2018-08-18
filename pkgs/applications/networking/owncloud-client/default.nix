@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "owncloud-client-${version}";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://download.owncloud.com/desktop/stable/owncloudclient-${version}.tar.xz";
-    sha256 = "4462ae581c281123dc62f3604f1aa54c8f4a60cd8157b982e2d76faac0f7aa23";
+    sha256 = "0pxga45fi7iyayy278hgl8x099isz6d7x1jq57p2m9qlsvfx8ap5";
   };
 
   patches = [ ./find-sql.patch ];
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = https://owncloud.org;
     maintainers = [ maintainers.qknight ];
     platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 }

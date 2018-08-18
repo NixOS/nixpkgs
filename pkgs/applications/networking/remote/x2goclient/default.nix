@@ -3,18 +3,20 @@ makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon }:
 
 stdenv.mkDerivation rec {
   name = "x2goclient-${version}";
-  version = "4.1.1.1";
+  version = "4.1.2.1";
 
   src = fetchurl {
-    url = "http://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
-    sha256 = "0jzlwn0v8b123h5l7hrhs35x2z6mb98zg1s0shqb4yfp2g641yp3";
+    url = "https://code.x2go.org/releases/source/x2goclient/${name}.tar.gz";
+    sha256 = "1bzjzz2m9bqqndnk1p9p522cfapsqgkb0wllvqj9d4ir18grh60w";
   };
 
   buildInputs = [ cups libssh libXpm nxproxy openldap openssh
                   qtbase qtsvg qtx11extras qttools phonon ];
   nativeBuildInputs = [ makeWrapper ];
 
-  patchPhase = ''
+  patches = [ ./qt511.patch ];
+
+  postPatch = ''
      substituteInPlace Makefile \
        --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
        --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \

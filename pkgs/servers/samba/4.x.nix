@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
 , fetchpatch
-, docbook_xml_dtd_42, docbook_xml_dtd_45, readline, talloc
+, docbook_xml_dtd_42, readline, talloc
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
 , krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls, libgcrypt, libgpgerror
+, gnutls
 , ncurses, libunwind, libibverbs, librdmacm, systemd
 
 , enableInfiniband ? false
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.samba.org/;
+    homepage = https://www.samba.org/;
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     maintainers = with maintainers; [ wkennington ];

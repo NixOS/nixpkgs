@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.3.0";
 
   src = fetchurl {
-    url = "http://pwmt.org/projects/girara/download/${name}.tar.xz";
+    url = "https://pwmt.org/projects/girara/download/${name}.tar.xz";
     sha256 = "18j1gv8pi4cpndvnap88pcfacdz3lnw6pxmw7dvzm359y1gzllmp";
   };
 

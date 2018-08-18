@@ -1,4 +1,4 @@
-{ stdenv, perl, fetchurl, Error, MailDKIM, MIMEtools, NetServer }:
+{ stdenv, perl, fetchurl, Error, MailDKIM, MIMETools, NetServer }:
 
 let
   pkg = "dkimproxy";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ perl ];
-  propagatedBuildInputs = [ Error MailDKIM MIMEtools NetServer ];
+  propagatedBuildInputs = [ Error MailDKIM MIMETools NetServer ];
 
   meta = with stdenv.lib; {
     description = "SMTP-proxy that signs and/or verifies emails";

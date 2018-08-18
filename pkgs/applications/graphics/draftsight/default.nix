@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg, makeWrapper, gcc, libGLU_combined, xdg_utils,
-  dbus_tools, alsaLib, cups, fontconfig, glib, icu, libpng12,
+  dbus, alsaLib, cups, fontconfig, glib, icu, libpng12,
   xkeyboard_config, zlib, libxslt, libxml2, sqlite, orc,
   libX11, libXcursor, libXrandr, libxcb, libXi, libSM, libICE,
   libXrender, libXcomposite }:
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   };
 
   libPath = stdenv.lib.makeLibraryPath [ gcc.cc libGLU_combined xdg_utils
-    dbus_tools alsaLib cups.lib fontconfig glib icu libpng12
+    dbus alsaLib cups.lib fontconfig glib icu libpng12
     xkeyboard_config zlib libxslt libxml2 sqlite orc libX11
     libXcursor libXrandr libxcb libXi libSM libICE libXrender
     libXcomposite ];

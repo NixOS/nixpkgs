@@ -6,21 +6,17 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
+  dynamicHostsEnabled =
+    cfg.dynamicHosts.enable && cfg.dynamicHosts.hostsDirs != {};
+
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
-
-  dns =
-    if cfg.dns == "none" then "none"
-    else if cfg.dns == "dnsmasq" then "dnsmasq"
-    else if config.services.resolved.enable then "systemd-resolved"
-    else if config.services.unbound.enable then "unbound"
-    else "default";
 
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
     dhcp=${cfg.dhcp}
-    dns=${dns}
+    dns=${cfg.dns}
 
     [keyfile]
     ${optionalString (cfg.unmanaged != [])
@@ -38,6 +34,8 @@ let
 
     [device]
     wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
+
+    ${cfg.extraConfig}
   '';
 
   /*
@@ -117,6 +115,14 @@ in {
           configured. If enabled, a group <literal>networkmanager</literal>
           will be created. Add all users that should have permission
           to change network settings to this group.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Configuration appended to the generated NetworkManager.conf.
         '';
       };
 
@@ -207,19 +213,73 @@ in {
       };
 
       dns = mkOption {
-        type = types.enum [ "auto" "dnsmasq" "none" ];
-        default = "auto";
+        type = types.enum [ "default" "dnsmasq" "unbound" "systemd-resolved" "none" ];
+        default = "default";
         description = ''
+          Set the DNS (<literal>resolv.conf</literal>) processing mode.
+          </para>
+          <para>
           Options:
-            - auto: Check for systemd-resolved, unbound, or use default.
-            - dnsmasq:
-              Enable NetworkManager's dnsmasq integration. NetworkManager will run
-              dnsmasq as a local caching nameserver, using a "split DNS"
-              configuration if you are connected to a VPN, and then update
-              resolv.conf to point to the local nameserver.
-            - none:
-              Disable NetworkManager's DNS integration completely.
-              It will not touch your /etc/resolv.conf.
+          <variablelist>
+          <varlistentry>
+            <term><literal>"default"</literal></term>
+            <listitem><para>
+              NetworkManager will update <literal>/etc/resolv.conf</literal> to
+              reflect the nameservers provided by currently active connections.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"dnsmasq"</literal></term>
+            <listitem>
+              <para>
+                Enable NetworkManager's dnsmasq integration. NetworkManager will
+                run dnsmasq as a local caching nameserver, using a "split DNS"
+                configuration if you are connected to a VPN, and then update
+                <literal>resolv.conf</literal> to point to the local nameserver.
+              </para>
+              <para>
+                It is possible to pass custom options to the dnsmasq instance by
+                adding them to files in the
+                <literal>/etc/NetworkManager/dnsmasq.d/</literal> directory.
+              </para>
+              <para>
+                When multiple upstream servers are available, dnsmasq will
+                initially contact them in parallel and then use the fastest to
+                respond, probing again other servers after some time.  This
+                behavior can be modified passing the
+                <literal>all-servers</literal> or <literal>strict-order</literal>
+                options to dnsmasq (see the manual page for more details).
+              </para>
+              <para>
+                Note that this option causes NetworkManager to launch and manage
+                its own instance of the dnsmasq daemon, which is
+                <emphasis>not</emphasis> the same as setting
+                <literal>services.dnsmasq.enable = true;</literal>.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"unbound"</literal></term>
+            <listitem><para>
+              NetworkManager will talk to unbound and dnssec-triggerd,
+              providing a "split DNS" configuration with DNSSEC support.
+              <literal>/etc/resolv.conf</literal> will be managed by
+              dnssec-trigger daemon.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"systemd-resolved"</literal></term>
+            <listitem><para>
+              NetworkManager will push the DNS configuration to systemd-resolved.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>"none"</literal></term>
+            <listitem><para>
+              NetworkManager will not modify resolv.conf.
+            </para></listitem>
+          </varlistentry>
+          </variablelist>
         '';
       };
 
@@ -260,6 +320,52 @@ in {
           so you don't need to to that yourself.
         '';
       };
+
+      dynamicHosts = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enabling this option requires the
+            <option>networking.networkmanager.dns</option> option to be
+            set to <literal>dnsmasq</literal>. If enabled, the directories
+            defined by the
+            <option>networking.networkmanager.dynamicHosts.hostsDirs</option>
+            option will be set up when the service starts. The dnsmasq instance
+            managed by NetworkManager will then watch those directories for
+            hosts files (see the <literal>--hostsdir</literal> option of
+            dnsmasq). This way a non-privileged user can add or override DNS
+            entries on the local system (depending on what hosts directories
+            that are configured)..
+          '';
+        };
+        hostsDirs = mkOption {
+          type = with types; attrsOf (submodule {
+            options = {
+              user = mkOption {
+                type = types.str;
+                default = "root";
+                description = ''
+                  The user that will own the hosts directory.
+                '';
+              };
+              group = mkOption {
+                type = types.str;
+                default = "root";
+                description = ''
+                  The group that will own the hosts directory.
+                '';
+              };
+            };
+          });
+          default = {};
+          description = ''
+            Defines a set of directories (relative to
+            <literal>/run/NetworkManager/hostdirs</literal>) that dnsmasq will
+            watch for hosts files.
+          '';
+        };
+      };
     };
   };
 
@@ -268,10 +374,17 @@ in {
 
   config = mkIf cfg.enable {
 
-    assertions = [{
-      assertion = config.networking.wireless.enable == false;
-      message = "You can not use networking.networkmanager with networking.wireless";
-    }];
+    assertions = [
+      { assertion = config.networking.wireless.enable == false;
+        message = "You can not use networking.networkmanager with networking.wireless";
+      }
+      { assertion = !dynamicHostsEnabled || (dynamicHostsEnabled && cfg.dns == "dnsmasq");
+        message = ''
+          To use networking.networkmanager.dynamicHosts you also need to set
+          networking.networkmanager.dns = "dnsmasq"
+        '';
+      }
+    ];
 
     environment.etc = with cfg.basePackages; [
       { source = configFile;
@@ -305,11 +418,17 @@ in {
       ++ lib.imap1 (i: s: {
         inherit (s) source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
-      }) cfg.dispatcherScripts;
+      }) cfg.dispatcherScripts
+      ++ optional (dynamicHostsEnabled)
+           { target = "NetworkManager/dnsmasq.d/dyndns.conf";
+             text = concatMapStrings (n: ''
+               hostsdir=/run/NetworkManager/hostsdirs/${n}
+             '') (attrNames cfg.dynamicHosts.hostsDirs);
+           };
 
     environment.systemPackages = cfg.packages;
 
-    users.extraGroups = [{
+    users.groups = [{
       name = "networkmanager";
       gid = config.ids.gids.networkmanager;
     }
@@ -317,7 +436,7 @@ in {
       name = "nm-openvpn";
       gid = config.ids.gids.nm-openvpn;
     }];
-    users.extraUsers = [{
+    users.users = [{
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
       extraGroups = [ "networkmanager" ];
@@ -339,6 +458,21 @@ in {
         mkdir -m 700 -p /etc/ipsec.d
         mkdir -m 755 -p ${stateDirs}
       '';
+    };
+
+    systemd.services.nm-setup-hostsdirs = mkIf dynamicHostsEnabled {
+      wantedBy = [ "network-manager.service" ];
+      before = [ "network-manager.service" ];
+      partOf = [ "network-manager.service" ];
+      script = concatStrings (mapAttrsToList (n: d: ''
+        mkdir -p "/run/NetworkManager/hostsdirs/${n}"
+        chown "${d.user}:${d.group}" "/run/NetworkManager/hostsdirs/${n}"
+        chmod 0775 "/run/NetworkManager/hostsdirs/${n}"
+      '') cfg.dynamicHosts.hostsDirs);
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExist = true;
+      };
     };
 
     # Turn off NixOS' network management

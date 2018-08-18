@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ocaml zlib which eprover makeWrapper coq];
   src = fetchurl {
-    url = "http://www.ps.uni-saarland.de/~cebrown/satallax/downloads/${name}.tar.gz";
+    url = "https://www.ps.uni-saarland.de/~cebrown/satallax/downloads/${name}.tar.gz";
     sha256 = "1kvxn8mc35igk4vigi5cp7w3wpxk2z3bgwllfm4n3h2jfs0vkpib";
   };
 

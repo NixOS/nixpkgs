@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qttools, qmake }:
+{ stdenv, fetchurl, qtbase, qttools, qmake }:
 
 let inherit (stdenv.lib) getDev; in
 

@@ -1,7 +1,7 @@
 { stdenv, glib, fetchurl, fetchpatch, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
 , perl, perlXMLParser, evolution-data-server, gnome-doc-utils, avahi, autoreconfHook
 , libsigcxx, gtk, dbus-glib, libnotify, libXext, xextproto, gnome3, boost, libsecret
-, pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib, hicolor-icon-theme
+, pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib
 , libXrandr, randrproto, which, libxslt, libtasn1, gmp, nettle, sqlite, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     description = "VOIP/Videoconferencing app with full SIP and H.323 support";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 
   passthru = {

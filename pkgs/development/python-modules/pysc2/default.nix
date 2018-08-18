@@ -4,7 +4,6 @@
 , absl-py
 , enum34
 , future
-, futures
 , mock
 , mpyq
 , numpy

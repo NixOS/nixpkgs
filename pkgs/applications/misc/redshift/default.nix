@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, autoconf, automake, gettext, intltool
+{ stdenv, fetchFromGitHub, autoconf, automake, gettext, intltool
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobjectIntrospection
 , gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
 

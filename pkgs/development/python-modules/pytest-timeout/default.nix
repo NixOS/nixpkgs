@@ -7,12 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-timeout";
-  version = "1.2.1";
-  name = "${pname}-${version}";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kdp6qbh5v1168l99rba5yfzvy05gmzkmkhldgp36p9xcdjd5dv8";
+    sha256 = "4b261bec5782b603c98b4bb803484bc96bf1cdcb5480dae0999d21c7e0423a23";
   };
   buildInputs = [ pytest ];
   checkInputs = [ pytest pexpect ];
@@ -20,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib;{
     description = "py.test plugin to abort hanging tests";
-    homepage = http://bitbucket.org/pytest-dev/pytest-timeout/;
+    homepage = https://bitbucket.org/pytest-dev/pytest-timeout/;
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];
   };

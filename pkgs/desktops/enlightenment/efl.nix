@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig
 , fribidi, SDL2, SDL, libGL, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
-, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit
+, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
-, dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
+, dbus, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
 , curl, libinput, systemd, mesa_noglu, writeText
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
     bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
     xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
-    harfbuzz jbig2dec librsvg dbus_libs alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
+    harfbuzz jbig2dec librsvg dbus alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
     libinput utillinux fribidi SDL2 ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++

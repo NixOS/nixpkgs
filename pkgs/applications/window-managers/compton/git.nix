@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, asciidoc, dbus, docbook_xml_dtd_45,
-  docbook_xml_xslt, libconfig, libdrm, libxml2, libxslt, libGLU_combined, pcre,
+  docbook_xsl, libconfig, libdrm, libxml2, libxslt, libGLU_combined, pcre,
   pkgconfig, libXcomposite, libXdamage, libXext, libXfixes, libXinerama,
   libXrandr, libXrender, xwininfo }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     asciidoc
     docbook_xml_dtd_45
-    docbook_xml_xslt
+    docbook_xsl
     pkgconfig
   ];
 

@@ -4,14 +4,11 @@
 , db48
 , fetchurl
 , libevent
-, libtool
 , miniupnpc
 , openssl
 , pkgconfig
-, utillinux
 , zeromq
 , zlib
-, withGui
 , unixtools
 }:
 
@@ -19,11 +16,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "particl-core-${version}";
-  version     = "0.16.0.5";
+  version     = "0.16.1.0";
 
   src = fetchurl {
     url = "https://github.com/particl/particl-core/archive/v${version}.tar.gz";
-    sha256 = "070crn6nnzrbcaj30w0qbybpm9kfd2ghnvmxp29gckgknw6n0vam";
+    sha256 = "0rfqywyrl6cgxn3ba91zsa88ph2yf9d1vn706xpyz19pfb6mjfbg";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

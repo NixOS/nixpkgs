@@ -1,31 +1,38 @@
-{ lib, fetchFromGitHub, python3
+{ lib, fetchFromGitHub, fetchpatch, python3
+
+# Look up dependencies of specified components in component-packages.nix
 , extraComponents ? []
+
+# Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
+
+# Skip pip install of required packages on startup
 , skipPip ? true }:
 
 let
 
   py = python3.override {
+    # Override the version of some packages pinned in Home Assistant's setup.py
     packageOverrides = self: super: {
       aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "3.1.3";
+        version = "3.3.2";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "9fcef0489e3335b200d31a9c1fb6ba80fdafe14cd82b971168c2f9fa1e4508ad";
+          sha256 = "f20deec7a3fbaec7b5eb7ad99878427ad2ee4cc16a46732b705e8121cbb3cc12";
         };
       });
-      pytest = super.pytest.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.2";
+      requests = super.requests.overridePythonAttrs (oldAttrs: rec {
+        version = "2.19.1";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "117bad36c1a787e1a8a659df35de53ba05f9f3398fb9e4ac17e80ad5903eb8c5";
+          sha256 = "ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a";
         };
       });
       voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
-        version = "0.11.1";
+        version = "0.11.5";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "af7315c9fa99e0bfd195a21106c82c81619b42f0bd9b6e287b797c6b6b6a9918";
+          sha256 = "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef";
         };
       });
       attrs = super.attrs.overridePythonAttrs (oldAttrs: rec {
@@ -40,13 +47,6 @@ let
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "ab0c08f2467d35fcaeb7bad15274743d3ac1ad18b5391f64a0058a9cd192d37d";
-        };
-      });
-      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "00cff4d2dce744607335cba84e9929c3165632da2d27970dbc55802a0c7873d0";
         };
       });
       # used by check_config script
@@ -74,7 +74,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.69.1";
+  hassVersion = "0.75.2";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -89,7 +89,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "1y74zq1nah9k6rif8k384ri11h1f23ggr613f7qnn0107b23asr4";
+    sha256 = "1ib76wz3f6jfi7a0w2v561g8vf5w4p2b2d79667api6ynvbw2l9d";
   };
 
   propagatedBuildInputs = [
@@ -108,8 +108,8 @@ in with py.pkgs; buildPythonApplication rec {
     py.test --ignore tests/components
     # Some basic components should be tested however
     py.test \
-      tests/components/{group,http} \
-      tests/components/test_{api,configurator,demo,discovery,frontend,init,introduction,logger,script,shell_command,system_log,websocket_api}.py
+      tests/components/{group,http,frontend} \
+      tests/components/test_{api,configurator,demo,discovery,init,introduction,logger,script,shell_command,system_log,websocket_api}.py
   '';
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";

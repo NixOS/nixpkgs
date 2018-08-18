@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, substituteAll, libudev, pkgconfig, qtbase, qmake, zlib, kmod }:
+{ stdenv, fetchFromGitHub, substituteAll, udev
+, pkgconfig, qtbase, qmake, zlib, kmod }:
 
 stdenv.mkDerivation rec {
   version = "0.2.9";
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libudev
+    udev
     qtbase
     zlib
   ];

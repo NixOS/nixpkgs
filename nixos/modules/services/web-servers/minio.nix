@@ -101,11 +101,11 @@ in
       };
     };
 
-    users.extraUsers.minio = {
+    users.users.minio = {
       group = "minio";
       uid = config.ids.uids.minio;
     };
 
-    users.extraGroups.minio.gid = config.ids.uids.minio;
+    users.groups.minio.gid = config.ids.uids.minio;
   };
 }

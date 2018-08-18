@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   version = "2016-1_196";
-  dfVersion = "0.44.10";
+  dfVersion = "0.44.11";
   inherit soundPack;
   name = "soundsense-${version}";
   src = fetchzip {

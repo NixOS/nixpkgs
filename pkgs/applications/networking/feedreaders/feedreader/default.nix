@@ -24,8 +24,8 @@ in stdenv.mkDerivation {
   buildInputs = [
     curl glib json-glib libnotify libsecret sqlite
   ] ++ (with gnome3; [
-    gtk libgee libpeas libsoup rest webkitgtk gnome_online_accounts
-    gsettings_desktop_schemas
+    gtk libgee libpeas libsoup rest webkitgtk gnome-online-accounts
+    gsettings-desktop-schemas
   ]) ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good
   ]);

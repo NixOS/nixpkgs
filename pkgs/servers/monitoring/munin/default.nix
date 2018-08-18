@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "10niyzckx90dwdr4d7vj07d1qjy3nk7xzp30nqnlxzbaww7n5v78";
   };
 
-  buildInputs = [ 
+  buildInputs = [
     makeWrapper
     which
     coreutils
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     perlPackages.NetCIDR
     perlPackages.NetSSLeay
     perlPackages.NetServer
-    perlPackages.Log4Perl
+    perlPackages.LogLog4perl
     perlPackages.IOSocketInet6
     perlPackages.Socket6
     perlPackages.URI
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     perlPackages.NetServer
     perlPackages.ListMoreUtils
     perlPackages.TimeHiRes
-    perlPackages.LWPUserAgent
+    perlPackages.LWP
     perlPackages.DBDPg
     python
     ruby
@@ -116,9 +116,9 @@ stdenv.mkDerivation rec {
         esac
         wrapProgram "$file" \
           --set PERL5LIB "$out/lib/perl5/site_perl:${with perlPackages; stdenv.lib.makePerlPath [
-                Log4Perl IOSocketInet6 Socket6 URI DBFile DateManip
+                LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
-                ListMoreUtils TimeHiRes DBDPg LWPUserAgent rrdtool
+                ListMoreUtils TimeHiRes DBDPg LWP rrdtool
                 ]}"
     done
   '';

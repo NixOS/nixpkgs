@@ -4,7 +4,6 @@
 , fetchPypi
 , cachetools
 , cld2-cffi
-, cython
 , cytoolz
 , ftfy
 , ijson
@@ -23,13 +22,12 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "textacy";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "32ffb796f2abf0577af480d482608cca2baf85d366a4e2981ffd3e632ebeb76c";
+    sha256 = "6019f32719c0661f41fa93c2fdd9714504d443119bf4f6426ee690bdda90835b";
   };
 
   disabled = isPy27; # 2.7 requires backports.csv

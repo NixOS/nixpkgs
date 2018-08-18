@@ -1,17 +1,15 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonOlder
-, pyperclip, six, pyparsing, vim
-, contextlib2 ? null, subprocess32 ? null
-, pytest, mock, which, fetchFromGitHub, glibcLocales
+{ stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
+, pyperclip, six, pyparsing, vim, wcwidth, colorama
+, contextlib2 ? null
+, pytest, mock, which, glibcLocales
 }:
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.8.0";
+  version = "0.9.3";
 
-  src = fetchFromGitHub {
-    owner = "python-cmd2";
-    repo = "cmd2";
-    rev = version;
-    sha256 = "0nw2b7n7zg51bc3glxw0l9fn91mwjnjshklhmxhyvjbsg7khf64z";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "cffc94ad46425f80dfb243f53f456b11cea3f45e683504a60b64618a6d28b417";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -31,14 +29,16 @@ buildPythonPackage rec {
     py.test -k 'not test_path_completion_user_expansion'
   '';
   doCheck = !stdenv.isDarwin;
+  disabled = !isPy3k;
 
   propagatedBuildInputs = [
+    colorama
     pyperclip
     six
     pyparsing
+    wcwidth
   ]
   ++ stdenv.lib.optional (pythonOlder "3.5") contextlib2
-  ++ stdenv.lib.optional (pythonOlder "3.0") subprocess32
   ;
 
   meta = with stdenv.lib; {

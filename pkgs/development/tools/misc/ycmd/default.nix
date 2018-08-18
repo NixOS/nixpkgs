@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   name = "ycmd-${version}";
-  version = "2017-11-05";
+  version = "2018-07-24";
 
   src = fetchgit {
-    url = "git://github.com/Valloric/ycmd.git";
-    rev = "0ca16e7ba3a9078b697befdce64104e61829aa3b";
-    sha256 = "0bs94iv521ac2n53n3k8mw3s6v0hi3hhxhjsr0ips3n99al8wndi";
+    url = "https://github.com/Valloric/ycmd.git";
+    rev = "f8a8b04892b925efeee24298a957cc6d6a69ad06";
+    sha256 = "1br2sh6bs0fg1axq2hq9f48fz8klkzydi1mf0j0jdsh3zjzkmxbn";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
     ${python.interpreter} build.py --system-libclang --clang-completer --system-boost
   '';
-
-  patches = [ ./dont-symlink-clang.patch ];
 
   configurePhase = ":";
 
@@ -53,8 +51,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib/ycmd/third_party/{gocode,godef,racerd/target/release}
 
-    cp -r third_party/JediHTTP $out/lib/ycmd/third_party
-    for p in waitress frozendict bottle python-future argparse requests; do
+    for p in jedi waitress frozendict bottle parso python-future requests; do
       cp -r third_party/$p $out/lib/ycmd/third_party
     done
 

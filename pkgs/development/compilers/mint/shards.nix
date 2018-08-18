@@ -2,32 +2,44 @@
   admiral = {
     owner = "jwaldrip";
     repo = "admiral.cr";
-    rev = "v1.6.1";
-    sha256 = "0y30b9b9rkz43afd3b9l24hs0r170qyc07r05kvydbv89376c53i";
+    rev = "v1.7.2";
+    sha256 = "1j2cr4p3d44848v0gfl97p9kw2dslscnb1piyb7b3374iy345i0k";
   };
   ameba = {
     owner = "veelenga";
     repo = "ameba";
-    rev = "v0.6.0";
-    sha256 = "16jfyrkfc909h16si513lw944qp3dyapymczcqc2ic0jaal0af5b";
+    rev = "v0.7.0";
+    sha256 = "01h0a1ba5l254r04mgkqhjdfn21cs0q7fmvk4gj35cj5lpr2bp17";
   };
   baked_file_system = {
     owner = "schovi";
     repo = "baked_file_system";
-    rev = "v0.9.6";
-    sha256 = "06cpriaizp5pcqwdq3jl2lm4sz9b2gcxg3a9q3lh0fqk2acajzmx";
+    rev = "24dbaf2180b872c0f0fc777b34e3759108959e6e";
+    sha256 = "01p7hzsvms9cywdgs0rcs6mxdi94491wk55823fw2vxv24hvxnvk";
+  };
+  diff = {
+    owner = "MakeNowJust";
+    repo = "crystal-diff";
+    rev = "51962dc36f9bbb1b926d557f7cb8993a6c73cc63";
+    sha256 = "1nwnsxm8srfw8jg0yfi2v19x6j3dadx62hq0xpxra40qcqz9dbnp";
   };
   duktape = {
     owner = "jessedoyle";
     repo = "duktape.cr";
-    rev = "v0.13.0";
-    sha256 = "0v0nckprgr7idmsx97g98as1a7z4hmlmwl924dbbaqvyslv5ls6w";
+    rev = "v0.14.1";
+    sha256 = "0fkay3qspzych050xl8xjkrphmxpzaj0dcf9jl22xwz8cx1l89f1";
+  };
+  exception_page = {
+    owner = "crystal-loot";
+    repo = "exception_page";
+    rev = "v0.1.1";
+    sha256 = "0pimjm64p21cjhp0jhcgdmbgisx7amk8hhbkcprkbr44bj6rv9ay";
   };
   kemal = {
     owner = "kemalcr";
     repo = "kemal";
-    rev = "v0.22.0";
-    sha256 = "0gq3c27grgh90fykbj9fdsz507lwd41gk686qfnig6npndqv1v10";
+    rev = "09bb1fcd4073a374b3a61c99e48e05a866b23c08";
+    sha256 = "0yyb59i897gr8cqjbf48d6s0znq68ibpxarxkxkgrqk7lbvrqqr7";
   };
   kilt = {
     owner = "jeromegn";
@@ -50,8 +62,8 @@
   time_format = {
     owner = "vladfaust";
     repo = "time_format.cr";
-    rev = "v0.1.0";
-    sha256 = "1f3rssdlcw2a5f74qa8bzlf1rh5dzvyg1d32w9qlisf2cc4lkh9g";
+    rev = "v0.1.1";
+    sha256 = "0mmssnabf476i07sajm7s3rlvfcav4lkh0n8g12rybxr6c9f683v";
   };
   tree_template = {
     owner = "anykeyh";

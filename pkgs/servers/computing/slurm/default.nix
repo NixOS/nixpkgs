@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libtool, curl
+{ stdenv, fetchFromGitHub, pkgconfig, libtool, curl
 , python, munge, perl, pam, openssl
 , ncurses, mysql, gtk2, lua, hwloc, numactl
 , readline, freeipmi, libssh2, xorg
@@ -8,11 +8,16 @@
 
 stdenv.mkDerivation rec {
   name = "slurm-${version}";
-  version = "17.11.5";
+  version = "17.11.7";
 
-  src = fetchurl {
-    url = "https://download.schedmd.com/slurm/${name}.tar.bz2";
-    sha256 = "07ghyyz12k4rksm06xf7dshwp1ndm13zphdbqja99401q4xwbx9r";
+  # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
+  # because the latter does not keep older releases.
+  src = fetchFromGitHub {
+    owner = "SchedMD";
+    repo = "slurm";
+    # The release tags use - instead of ., and have an extra -1 suffix.
+    rev = "${builtins.replaceStrings ["."] ["-"] name}-1";
+    sha256 = "00dgirjd75i1x6pj80avp18hx5gr3dsnh13vbkqbf0iwpd72qyhp";
   };
 
   outputs = [ "out" "dev" ];

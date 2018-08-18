@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools, makeWrapper,
+  mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools, makeWrapper,
   boost, qtwebkit, qtx11extras, shared-mime-info,
   breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets,
   kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n,
@@ -22,6 +22,8 @@ mkDerivation rec {
     url = "mirror://kde/stable/${pname}/${version}/${name}.tar.xz";
     sha256 = "0w782k0hprpb6viixnqz34sp0z5csv3prdby46z22qqkcipcs638";
   };
+
+  patches = [ ./qt5_11.patch ];
 
   enableParallelBuilding = true;
 

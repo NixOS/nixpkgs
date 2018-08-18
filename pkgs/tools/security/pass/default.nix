@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fetchurl, fetchFromGitHub, buildEnv
+{ stdenv, lib, pkgs, fetchurl, buildEnv
 , coreutils, gnused, getopt, git, tree, gnupg, which, procps, qrencode
 , makeWrapper
 
@@ -29,12 +29,12 @@ let
     };
 
   generic = extensionsEnv: extraPassthru: stdenv.mkDerivation rec {
-    version = "1.7.1";
+    version = "1.7.3";
     name    = "password-store-${version}";
 
     src = fetchurl {
-      url    = "http://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
-      sha256 = "0scqkpll2q8jhzcgcsh9kqz0gwdpvynivqjmmbzax2irjfaiklpn";
+      url    = "https://git.zx2c4.com/password-store/snapshot/${name}.tar.xz";
+      sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
     };
 
     patches = [ ./set-correct-program-name-for-sleep.patch

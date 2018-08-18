@@ -1,9 +1,4 @@
 { lib }:
-let
-
-  inherit (builtins) attrNames;
-
-in
 
 rec {
 

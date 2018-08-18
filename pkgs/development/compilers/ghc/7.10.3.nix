@@ -3,10 +3,10 @@
 
 # build-tools
 , bootPkgs, hscolour
-, coreutils, fetchurl, fetchpatch, perl
+, coreutils, fetchurl, perl
 , docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, libxml2, libxslt
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
 , useLLVM ? !targetPlatform.isx86
 , # LLVM is conceptually a run-time-only depedendency, but for
@@ -177,6 +177,7 @@ stdenv.mkDerivation rec {
     inherit bootPkgs targetPrefix;
 
     inherit llvmPackages;
+    inherit enableShared;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-7.10.3";

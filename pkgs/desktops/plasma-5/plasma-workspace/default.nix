@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, fetchpatch,
 
   extra-cmake-modules, kdoctools,
 
@@ -9,8 +9,9 @@
   baloo, kactivities, kcmutils, kconfig, kcrash, kdbusaddons, kdeclarative,
   kdelibs4support, kdesu, kglobalaccel, kidletime, kinit, kjsembed, knewstuff,
   knotifyconfig, kpackage, krunner, kscreenlocker, ktexteditor, ktextwidgets,
-  kwallet, kwayland, kwin, kxmlrpcclient, libkscreen, libksysguard,
-  networkmanager-qt, phonon, plasma-framework, prison, solid,
+  kwallet, kwayland, kwin, kxmlrpcclient, libkscreen, libksysguard, libqalculate,
+  networkmanager-qt, phonon, plasma-framework, prison, solid, kholidays,
+  breeze-qt5,
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
   qtwayland, qtx11extras,
@@ -28,8 +29,8 @@ mkDerivation {
     baloo kactivities kcmutils kconfig kcrash kdbusaddons kdeclarative
     kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
     knotifyconfig kpackage krunner kscreenlocker ktexteditor ktextwidgets
-    kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard
-    networkmanager-qt phonon plasma-framework prison solid
+    kwallet kwayland kwin kxmlrpcclient libkscreen libksysguard libqalculate
+    networkmanager-qt phonon plasma-framework prison solid kholidays
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
   ];
@@ -51,6 +52,7 @@ mkDerivation {
     "-DNIXPKGS_GREP=${getBin gnugrep}/bin/grep"
     "-DNIXPKGS_KDEINIT5_SHUTDOWN=${getBin kinit}/bin/kdeinit5_shutdown"
     "-DNIXPKGS_SED=${getBin gnused}/bin/sed"
+    "-DNIXPKGS_WALLPAPER_INSTALL_DIR=${getBin breeze-qt5}/share/wallpapers/"
   ];
 
   # To regenerate ./plasma-workspace.patch,
@@ -64,7 +66,13 @@ mkDerivation {
   # Add upstream patches to the list below. For new patchs, particularly if not
   # submitted upstream, please make a pull request and add it to
   # ./plasma-workspace.patch.
-  patches = [ ./plasma-workspace.patch ];
+  patches = [
+    ./plasma-workspace.patch
+    (fetchpatch {
+      url = "https://github.com/KDE/plasma-workspace/commit/11e570d861858f3b3e2694e5f9ec242d7f9f12b9.patch";
+      sha256 = "1vk9yacb59k0v5mgbpgmciflca9r0ll4wh1d83ffx2y2v8sqwiv2";
+    })
+  ];
 
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_KDOSTARTUPCONFIG5=\"''${!outputBin}/bin/kdostartupconfig5\""

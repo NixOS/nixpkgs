@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, autoreconfHook, libkrb5 }:
+{ fetchurl, stdenv, autoreconfHook, libkrb5 }:
 
 stdenv.mkDerivation rec {
   name = "libtirpc-1.0.3";

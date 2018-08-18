@@ -380,10 +380,6 @@ runTests {
 
           resRem7 = res6.replace (a: removeAttrs a ["a"]);
 
-          resReplace6 = let x = defaultOverridableDelayableArgs id { a = 7; mergeAttrBy = { a = builtins.add; }; };
-                            x2 = x.merge { a = 20; }; # now we have 27
-                        in (x2.replace) { a = 10; }; # and override the value by 10
-
           # fixed tests (delayed args): (when using them add some comments, please)
           resFixed1 =
                 let x = defaultOverridableDelayableArgs id ( x: { a = 7; c = x.fixed.b; });

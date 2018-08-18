@@ -1,11 +1,11 @@
 { stdenv, fetchurl, iptables, libuuid, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "miniupnpd-2.1";
+  name = "miniupnpd-2.1.20180706";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "1hg0zzvvzfgpnmngmd3ffnsk9x18lwlxlpw5jgh7y6b1jrvr824m";
+    sha256 = "01mhv3lgpj2shs3666zwlhvfiv1mpf4h9mv35g8gihyq8k82ybgw";
     name = "${name}.tar.gz";
   };
 

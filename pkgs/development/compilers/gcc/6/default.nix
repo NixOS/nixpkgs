@@ -29,7 +29,6 @@
   stripped ? hostPlatform == buildPlatform && targetPlatform == hostPlatform
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
-, darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
 , buildPackages
 }:
@@ -51,9 +50,6 @@ with stdenv.lib;
 with builtins;
 
 let version = "6.4.0";
-
-    # Whether building a cross-compiler for GNU/Hurd.
-    crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
 
     enableParallelBuilding = true;
 
@@ -473,7 +469,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ viric peti ];
+    maintainers = with stdenv.lib.maintainers; [ peti ];
 
     platforms =
       stdenv.lib.platforms.linux ++

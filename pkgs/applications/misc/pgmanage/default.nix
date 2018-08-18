@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, runCommand, postgresql, openssl } :
+{ stdenv, fetchFromGitHub, postgresql, openssl } :
 
 stdenv.mkDerivation rec {
   name = "pgmanage-${version}";
-  version = "10.1.1";
+  version = "10.3.1";
 
   src = fetchFromGitHub {
     owner  = "pgManage";
     repo   = "pgManage";
     rev    = "v${version}";
-    sha256 = "1gv96an1ff9amh16lf71wknshmxl3l4hsl3ga7wb106c10i14zzc";
+    sha256 = "0ym1arla9wfkmr5n6h6dfyd680vlnng5s5j5nyxi2gl2wxqqhxzz";
   };
 
   patchPhase = ''

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "blink1-${version}";
-  version = "1.98";
+  version = "1.98a";
 
   src = fetchurl {
     url = "https://github.com/todbot/blink1/archive/v${version}.tar.gz";
-    sha256 = "05hbnp20cdvyyqf6jr01waz1ycis20qzsd8hn27snmn6qd48igrb";
+    sha256 = "1waci6hccv5i50v5d3z7lx4h224fbkj66ywfynnsgn46w0jm6imv";
   };
 
   nativeBuildInputs = [ pkgconfig ];

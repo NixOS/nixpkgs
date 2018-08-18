@@ -5,10 +5,10 @@ let
          then "linux-amd64"
          else "darwin-amd64";
   checksum = if isLinux
-             then "0bnjpiivhsxhl45ab32vzf6crv4z8nbq5kcjkvlbcbswdbgp0pq6"
-             else "0smwhj4pmd4k7csz82akbkrkb0j2jxnmb33ifhkqw7n33jhl3aqp";
+             then "1fk6w6sajdi6iphxrzi9r7xfyaf923nxcqnl01s6x3f611fjvbjn"
+             else "1jzgy641hm3khj0bakfbr5wd5zl3s7w5jb622fjv2jxwmnv7dxiv";
   pname = "helm";
-  version = "2.9.0";
+  version = "2.9.1";
 in
 stdenv.mkDerivation {
   name = "${pname}-${version}";
@@ -45,6 +45,6 @@ stdenv.mkDerivation {
     description = "A package manager for kubernetes";
     license = licenses.asl20;
     maintainers = [ maintainers.rlupton20 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, libGLU
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, xorg, libGLU
 , libGL, glew, ocl-icd, python3
 , cudaSupport ? false, cudatoolkit
 , darwin
@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "opensubdiv-${version}";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     rev = "v${lib.replaceChars ["."] ["_"] version}";
-    sha256 = "1s96038yvf8wch5gv537iigqflxx7rh9wwn3wlrk8f9yfdwv1mk1";
+    sha256 = "0j3vh52w1pnld2a2cm6z7iicni1f617qzg0d8xh3p7l0s2dxjibh";
   };
 
   outputs = [ "out" "dev" ];

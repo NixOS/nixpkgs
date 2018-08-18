@@ -1,67 +1,53 @@
-{ stdenv, fetchgit, intltool, itstool, meson, ninja, pkgconfig, wrapGAppsHook
-, glib, glib-networking, gsettings-desktop-schemas, gst_all_1, gtk3, gobjectIntrospection
-, gtkspell3, libsecret, python36, python36Packages, webkitgtk }:
+{ stdenv, fetchgit, meson, ninja, pkgconfig, wrapGAppsHook
+, desktop-file-utils, gobjectIntrospection, python36Packages
+, gnome3, gst_all_1, gtkspell3, hunspell }:
 
 stdenv.mkDerivation rec {
   name = "eolie-${version}";
-  version = "0.9.16";
+  version = "0.9.35";
 
   src = fetchgit {
-    url = https://gitlab.gnome.org/gnumdk/eolie;
-    rev = version;
-    sha256 = "0mvhr6hy4nx7xaq9r9qp5rb0y293kjjryw5ykzb473cr3iwzk25b";
+    url = "https://gitlab.gnome.org/World/eolie";
+    rev = "refs/tags/${version}";
+    fetchSubmodules = true;
+    sha256 = "0x3p1fgx1fhrnr7vkkpnl34401r6k6xg2mrjff7ncb1k57q522k7";
   };
 
-  nativeBuildInputs = [
-    intltool
-    itstool
+  nativeBuildInputs = with python36Packages; [
+    desktop-file-utils
+    gobjectIntrospection
     meson
     ninja
     pkgconfig
     wrapGAppsHook
-    gobjectIntrospection
+    wrapPython
   ];
 
-  buildInputs = [
-    glib
-    glib-networking
-    gsettings-desktop-schemas
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav
-    gtk3
-    gtkspell3
-    libsecret
-    python36
-    python36Packages.pygobject3
-    python36Packages.pycairo
-    python36Packages.dateutil
-    python36Packages.dbus-python
-    python36Packages.beautifulsoup4
-    python36Packages.pycrypto
-    python36Packages.requests
-    webkitgtk
+  buildInputs = [ gtkspell3 hunspell python36Packages.pygobject3 ] ++ (with gnome3; [
+    glib glib-networking gsettings-desktop-schemas gtk3 webkitgtk libsecret
+  ]) ++ (with gst_all_1; [
+    gst-libav gst-plugins-base gst-plugins-ugly gstreamer
+  ]);
+
+  pythonPath = with python36Packages; [
+    beautifulsoup4
+    pycairo
+    pygobject3
+    python-dateutil
   ];
 
-  wrapPrefixVariables = [ "PYTHONPATH" ];
+  postFixup = "wrapPythonPrograms";
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
   '';
 
-  patches = [
-    ./0001-Extend-the-python-path-rather-than-replacing-it.patch
-  ];
-
   meta = with stdenv.lib; {
     description = "A new GNOME web browser";
-    homepage = https://wiki.gnome.org/Apps/Eolie;
-    license = licenses.gpl3;
-    maintainers = [ maintainers.samdroid-apps ];
-    platforms = platforms.linux;
+    homepage    = https://wiki.gnome.org/Apps/Eolie;
+    license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ samdroid-apps worldofpeace ];
+    platforms   = platforms.linux;
   };
 }

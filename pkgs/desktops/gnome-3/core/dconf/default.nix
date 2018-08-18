@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, python3, vala, libxslt, pkgconfig, glib, dbus-glib, gnome3
-, libxml2, docbook_xsl, makeWrapper }:
+, libxml2, docbook_xsl }:
 
 let
   pname = "dconf";

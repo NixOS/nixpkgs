@@ -12,12 +12,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ m4 ];
 
-  crossAttrs = {
-    preConfigure = ''
-      export ac_cv_func_malloc_0_nonnull=yes
-      export ac_cv_func_realloc_0_nonnull=yes
-    '';
-  };
+  preConfigure = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   meta = {
     branch = "2.5.35";

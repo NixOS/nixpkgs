@@ -28,16 +28,12 @@ buildPythonPackage rec {
     "test_editable_package"
     "test_input_file_without_extension"
     "test_locally_available_editable_package_is_not_archived_in_cache_dir"
+    "test_no_candidates"
+    "test_no_candidates_pre"
   ];
 
   checkPhase = ''
     export HOME=$(mktemp -d) VIRTUAL_ENV=1
-    tests_without_network_access="
-      not test_realistic_complex_sub_dependencies
-      and not test_editable_package_vcs
-      and not test_generate_hashes_all_platforms
-      and not test_generate_hashes_without_interfering_with_each_other
-    "
     py.test -k "${disabledTests}"
   '';
 

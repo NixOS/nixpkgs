@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://octave.org/;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [viric raskin];
+    maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = if overridePlatforms == null then
       (with stdenv.lib.platforms; linux ++ darwin)
     else overridePlatforms;

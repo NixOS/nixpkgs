@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.3-4";
 
   src = fetchurl {
-    url = "http://src.fedoraproject.org/cgit/rpms/hardlink.git/snapshot/hardlink-aa6325ac4e8100b8ac7d38c7f0bc2708e69bd855.tar.xz";
+    url = "https://src.fedoraproject.org/cgit/rpms/hardlink.git/snapshot/hardlink-aa6325ac4e8100b8ac7d38c7f0bc2708e69bd855.tar.xz";
     sha256 = "0g4hyrnd9hpykbf06qvvp3s4yyk7flbd95gilkf7r3w9vqiagvs2";
   };
 

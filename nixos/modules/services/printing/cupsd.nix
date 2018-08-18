@@ -124,6 +124,16 @@ in
         '';
       };
 
+      startWhenNeeded = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, CUPS is socket-activated; that is,
+          instead of having it permanently running as a daemon,
+          systemd will start it on the first incoming connection.
+        '';
+      };
+
       listenAddresses = mkOption {
         type = types.listOf types.str;
         default = [ "localhost:631" ];
@@ -268,7 +278,7 @@ in
 
   config = mkIf config.services.printing.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "cups";
         uid = config.ids.uids.cups;
         group = "lp";
@@ -287,8 +297,13 @@ in
 
     systemd.packages = [ cups.out ];
 
+    systemd.sockets.cups = mkIf cfg.startWhenNeeded {
+      wantedBy = [ "sockets.target" ];
+      listenStreams = map (x: replaceStrings ["localhost"] ["127.0.0.1"] (removePrefix "*:" x)) cfg.listenAddresses;
+    };
+
     systemd.services.cups =
-      { wantedBy = [ "multi-user.target" ];
+      { wantedBy = optionals (!cfg.startWhenNeeded) [ "multi-user.target" ];
         wants = [ "network.target" ];
         after = [ "network.target" ];
 

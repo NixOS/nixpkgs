@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchurl
 , isPy3k
 , docutils
 , requests

@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, gnutls, glib, pkgconfig, check, libotr, python,
+{ fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr, python,
 enableLibPurple ? false, pidgin ? null }:
 
 with stdenv.lib;

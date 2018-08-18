@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, glib, cairo, Carbon, fontconfig
-, libtiff, giflib, libjpeg, libpng, monoDLLFixer
+, libtiff, giflib, libjpeg, libpng
 , libXrender, libexif }:
 
 stdenv.mkDerivation rec {
   name = "libgdiplus-2.10.9";
 
   src = fetchurl {
-    url = "http://download.mono-project.com/sources/libgdiplus/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/libgdiplus/${name}.tar.bz2";
     sha256 = "0klnbly2q0yx5p0l5z8da9lhqsjj9xqj06kdw2v7rnms4z1vdpkd";
   };
 

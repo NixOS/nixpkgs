@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   name = "opendht-${version}";
-  version = "1.7.2";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
     rev = "${version}";
-    sha256 = "0nia3gkn5jqs7lf0v6jkhh1c0czdx9743imgi77kcvn98k2n6sjc";
+    sha256 = "1wqib5plak9bw2bla7y4qyjqi0b00kf8mfwlml16qj3i0aq6h2cp";
   };
 
   buildInputs = [

@@ -8,13 +8,13 @@
 # Should use buildPythonPackage here somehow
 stdenv.mkDerivation rec {
   pname = "setuptools";
-  version = "39.0.1";
+  version = "40.0.0";
   name = "${python.libPrefix}-${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "bec7badf0f60e7fc8153fac47836edc41b74e5d541d7692e614e635720d6a7c7";
+    sha256 = "012adb8e25fbfd64c652e99e7bab58799a3aaf05d39ab38561f69190a909015f";
   };
 
   nativeBuildInputs = [ unzip wrapPython ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Utilities to facilitate the installation of Python packages";
     homepage = https://pypi.python.org/pypi/setuptools;
     license = with licenses; [ psfl zpl20 ];
-    platforms = platforms.all;
+    platforms = python.meta.platforms;
     priority = 10;
   };
 }

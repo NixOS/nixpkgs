@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -37,8 +37,8 @@ with lib;
       NTP=${concatStringsSep " " config.services.timesyncd.servers}
     '';
 
-    users.extraUsers.systemd-timesync.uid = config.ids.uids.systemd-timesync;
-    users.extraGroups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
+    users.users.systemd-timesync.uid = config.ids.uids.systemd-timesync;
+    users.groups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
 
   };
 

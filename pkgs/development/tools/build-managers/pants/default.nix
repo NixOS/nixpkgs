@@ -1,10 +1,10 @@
-{ stdenv, pythonPackages, runCommand, curl }:
+{ stdenv, pythonPackages }:
 
 with stdenv.lib;
 with pythonPackages;
 
 let
-  version = "1.6.0";
+  version = "1.7.0";
 in buildPythonApplication rec {
   inherit version;
   pname = "pantsbuild.pants";
@@ -12,7 +12,7 @@ in buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ahvcj33xribypgyh515mb3ack1djr0cq27nlyk0qhwgwv6acfnj";
+    sha256 = "1d7ff1383287c8e72f2c9855cfef982d362274a64e2707a93c070f988ba80a37";
   };
 
   prePatch = ''

@@ -72,6 +72,24 @@ rec {
       '';
     };
 
+  # Create a C binary
+  writeCBin = name: code:
+    runCommandCC name
+    {
+      inherit name code;
+      executable = true;
+      passAsFile = ["code"];
+      # Pointless to do this on a remote machine.
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ''
+    n=$out/bin/$name
+    mkdir -p "$(dirname "$n")"
+    mv "$codePath" code.c
+    $CC -x c code.c -o "$n"
+    '';
+
   # Create a forest of symlinks to the files in `paths'.
   symlinkJoin =
     args_@{ name
@@ -163,6 +181,7 @@ rec {
       outputHashAlgo = hashAlgo;
       outputHash = hash;
       preferLocalBuild = true;
+      allowSubstitutes = false;
       builder = writeScript "restrict-message" ''
         source ${stdenvNoCC}/setup
         cat <<_EOF_

@@ -95,13 +95,13 @@ in
       };
     };
 
-    users.extraUsers.restic = {
+    users.users.restic = {
       group = "restic";
       home = cfg.dataDir;
       createHome = true;
       uid = config.ids.uids.restic;
     };
 
-    users.extraGroups.restic.gid = config.ids.uids.restic;
+    users.groups.restic.gid = config.ids.uids.restic;
   };
 }

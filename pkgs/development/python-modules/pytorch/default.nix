@@ -1,7 +1,7 @@
 { buildPythonPackage, pythonOlder,
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
-  fetchFromGitHub, fetchpatch, lib, numpy, pyyaml, cffi, typing, cmake,
-  stdenv, linkFarm, symlinkJoin,
+  fetchFromGitHub, lib, numpy, pyyaml, cffi, typing, cmake,
+  linkFarm, symlinkJoin,
   utillinux, which }:
 
 assert cudnn == null || cudatoolkit != null;
@@ -27,7 +27,6 @@ let
 in buildPythonPackage rec {
   version = "0.4.0";
   pname = "pytorch";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner  = "pytorch";
@@ -62,7 +61,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration.";
-    homepage = http://pytorch.org/;
+    homepage = https://pytorch.org/;
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ teh ];

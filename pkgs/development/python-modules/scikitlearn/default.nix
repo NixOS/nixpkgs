@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchpatch, fetchPypi, python
+{ stdenv, buildPythonPackage, fetchPypi, python
 , nose, pillow
 , gfortran, glibcLocales
 , numpy, scipy
@@ -6,13 +6,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.19.1";
-  name = "${pname}-${version}";
+  version = "0.19.2";
+  # UnboundLocalError: local variable 'message' referenced before assignment
+  doCheck = false;
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5ca0ad32ee04abe0d4ba02c8d89d501b4e5e0304bdf4d45c2e9875a735b323a0";
+    sha256 = "b276739a5f863ccacb61999a3067d0895ee291c95502929b2ae56ea1f882e888";
   };
 
   buildInputs = [ nose pillow gfortran glibcLocales ];
@@ -26,10 +27,12 @@ buildPythonPackage rec {
     HOME=$TMPDIR OMP_NUM_THREADS=1 nosetests --doctest-options=+SKIP $out/${python.sitePackages}/sklearn/
   '';
 
+
+
   meta = with stdenv.lib; {
     description = "A set of python modules for machine learning and data mining";
     homepage = http://scikit-learn.org;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ fridh ];
+    maintainers = with maintainers; [ ];
   };
 }

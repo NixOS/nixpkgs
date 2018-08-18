@@ -22,7 +22,6 @@
   stripped ? hostPlatform == buildPlatform && targetPlatform == hostPlatform
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
-, darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
 , buildPackages
 }:
@@ -40,9 +39,6 @@ with stdenv.lib;
 with builtins;
 
 let version = "7.3.0";
-
-    # Whether building a cross-compiler for GNU/Hurd.
-    crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
 
     enableParallelBuilding = true;
 
@@ -253,6 +249,9 @@ stdenv.mkDerivation ({
     ++ (optional hostPlatform.isDarwin gnused)
     ++ (optional hostPlatform.isDarwin targetPackages.stdenv.cc.bintools)
     ;
+
+  # TODO: Use optionalString with next rebuild.
+  ${if (stdenv.cc.isClang && langFortran) then "NIX_CFLAGS_COMPILE" else null} = "-Wno-unused-command-line-argument";
 
   NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 

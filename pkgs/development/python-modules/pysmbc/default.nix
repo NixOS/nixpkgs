@@ -5,7 +5,6 @@
 buildPythonPackage rec {
   version = "1.0.15.8";
   pname = "pysmbc";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

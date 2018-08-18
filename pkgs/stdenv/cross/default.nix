@@ -34,19 +34,32 @@ in lib.init bootStages ++ [
   (buildPackages: {
     inherit config overlays;
     selfBuild = false;
-    stdenv = buildPackages.makeStdenvCross {
-      inherit (buildPackages) stdenv;
+    stdenv = buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;
       hostPlatform = crossSystem;
       targetPlatform = crossSystem;
+
+      # Prior overrides are surely not valid as packages built with this run on
+      # a different platform, and so are disabled.
+      overrides = _: _: {};
+      extraBuildInputs = [ ]; # Old ones run on wrong platform
+      allowedRequisites = null;
+
       cc = if crossSystem.useiOSPrebuilt or false
              then buildPackages.darwin.iosSdkPkgs.clang
-           else if (crossSystem.useAndroidPrebuilt && crossSystem.is32bit)
-             then buildPackages.androidenv.androidndkPkgs_10e.gcc
-           else if (crossSystem.useAndroidPrebuilt && crossSystem.is64bit)
-             then buildPackages.androidenv.androidndkPkgs.gcc
+           else if crossSystem.useAndroidPrebuilt
+             then buildPackages.androidenv."androidndkPkgs_${crossSystem.ndkVer}".gcc
            else buildPackages.gcc;
-    };
+
+      extraNativeBuildInputs = old.extraNativeBuildInputs
+           # without proper `file` command, libtool sometimes fails
+           # to recognize 64-bit DLLs
+        ++ lib.optional (hostPlatform.config == "x86_64-w64-mingw32") buildPackages.file
+        ++ lib.optional
+             (hostPlatform.isAarch64 || hostPlatform.isMips || hostPlatform.libc == "musl")
+             buildPackages.updateAutotoolsGnuConfigScriptsHook
+        ;
+    });
   })
 
 ]

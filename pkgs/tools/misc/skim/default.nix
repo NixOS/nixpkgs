@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "skim-${version}";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "lotabout";
     repo = "skim";
     rev = "v${version}";
-    sha256 = "067ds1sdi9ya1yqz9saczj1vml8arwzd46w35gmvdxgmxx4wmihs";
+    sha256 = "0hk19mqfmrsyx28lb8h1hixivl6zrc8dg3imygk1ppgn66c0zf00";
   };
 
   outputs = [ "out" "vim" ];
@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
 
   patchPhase = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
+    # fix Cargo.lock version
+    sed -i -e '168s|0.4.0|0.5.0|' Cargo.lock
   '';
 
   postInstall = ''

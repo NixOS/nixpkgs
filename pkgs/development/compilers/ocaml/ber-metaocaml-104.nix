@@ -2,8 +2,7 @@
 
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
-   useNativeCompilers = stdenv.isi686 || stdenv.isx86_64 || stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+   inherit (stdenv.lib) optionals;
 in
 
 stdenv.mkDerivation rec {
@@ -12,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "104";
 
   src = fetchurl {
-    url = "http://caml.inria.fr/pub/distrib/ocaml-4.04/ocaml-4.04.0.tar.gz";
+    url = "https://caml.inria.fr/pub/distrib/ocaml-4.04/ocaml-4.04.0.tar.gz";
     sha256 = "1pi2hdm9lxhn45qvfqfss1hpa4jijm14qgmrgajsadxqdiplhqyb";
   };
 

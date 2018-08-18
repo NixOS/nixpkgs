@@ -2,7 +2,6 @@
 
 { stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, utillinux, gettext
-, autoconf, automake, libtool
 , meson, ninja, pkgconfig
 , autoreconfHook
 }:
@@ -53,22 +52,18 @@ in stdenv.mkDerivation rec {
       # The configure phase will delete these files (temporary workaround for
       # ./fuse3-install_man.patch)
       install -D -m444 doc/fusermount3.1 $out/share/man/man1/fusermount3.1
-      install -D -m444 doc/mount.fuse.8 $out/share/man/man8/mount.fuse.8
+      install -D -m444 doc/mount.fuse3.8 $out/share/man/man8/mount.fuse3.8
     '' else ''
       sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
       ./makeconf.sh
     '');
 
   postFixup = "cd $out\n" + (if isFuse3 then ''
-    mv bin/mount.fuse3 bin/mount.fuse
-
     install -D -m444 etc/fuse.conf $common/etc/fuse.conf
     install -D -m444 etc/udev/rules.d/99-fuse3.rules $common/etc/udev/rules.d/99-fuse.rules
-    install -D -m444 share/man/man8/mount.fuse.8.gz $common/share/man/man8/mount.fuse.8.gz
   '' else ''
     cp ${fusePackages.fuse_3.common}/etc/fuse.conf etc/fuse.conf
     cp ${fusePackages.fuse_3.common}/etc/udev/rules.d/99-fuse.rules etc/udev/rules.d/99-fuse.rules
-    cp ${fusePackages.fuse_3.common}/share/man/man8/mount.fuse.8.gz share/man/man8/mount.fuse.8.gz
   '');
 
   enableParallelBuilding = true;

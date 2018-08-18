@@ -6,7 +6,7 @@ import ./make-test.nix ({ lib, ... }:
     maintainers = [ willibutz ];
   };
 
-  machine = { config, pkgs, ... }: {
+  machine = { ... }: {
     services.grafana = {
       enable = true;
       addr = "localhost";

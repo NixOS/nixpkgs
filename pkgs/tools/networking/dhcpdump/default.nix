@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
-    homepage = http://packages.ubuntu.com/ru/lucid/dhcpdump;
+    homepage = https://packages.ubuntu.com/ru/lucid/dhcpdump;
     platforms = stdenv.lib.platforms.linux;
   };
 }

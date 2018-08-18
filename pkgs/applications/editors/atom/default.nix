@@ -1,17 +1,32 @@
-{ stdenv, pkgs, fetchurl, lib, makeWrapper, gvfs, atomEnv}:
+{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, gtk3, atomEnv }:
 
 let
-  common = pname: {version, sha256}: stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
-    inherit version;
+  common = pname: {version, sha256, beta ? null}:
+      let fullVersion = version + stdenv.lib.optionalString (beta != null) "-beta${toString beta}";
+      name = "${pname}-${fullVersion}";
+  in stdenv.mkDerivation {
+    inherit name;
+    version = fullVersion;
 
     src = fetchurl {
-      url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
+      url = "https://github.com/atom/atom/releases/download/v${fullVersion}/atom-amd64.deb";
       name = "${name}.deb";
       inherit sha256;
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [
+      wrapGAppsHook  # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+    ];
+
+    buildInputs = [
+      gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+    ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix "PATH" : "${gvfs}/bin" \
+      )
+    '';
 
     buildCommand = ''
       mkdir -p $out/usr/
@@ -21,9 +36,7 @@ let
       mv $out/usr/* $out/
       rm -r $out/share/lintian
       rm -r $out/usr/
-      # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
-      wrapProgram $out/bin/${pname} \
-        --prefix "PATH" : "${gvfs}/bin"
+      sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
 
       fixupPhase
 
@@ -36,7 +49,7 @@ let
         --set-rpath "${atomEnv.libPath}" \
         $share/resources/app/apm/bin/node
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        $out/share/atom/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
+        $share/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
 
       dugite=$share/resources/app.asar.unpacked/node_modules/dugite
       rm -f $dugite/git/bin/git
@@ -60,12 +73,13 @@ let
   };
 in stdenv.lib.mapAttrs common {
   atom = {
-    version = "1.27.2";
-    sha256 = "0xriv142asc82mjxzkqsafaqalxa3icz4781z2fsgyfkkw6zbz2v";
+    version = "1.29.0";
+    sha256 = "0f0qpn8aw2qlqk8ah71xvk4vcmwsnsf2f3g4hz0rvaqnhb9ri9fz";
   };
 
   atom-beta = {
-    version = "1.28.0-beta3";
-    sha256 = "07mmzkbc7xzcwh6ylrs2w1g3l5gmyfk0gdmr2kzr6jdr00cq73y0";
+    version = "1.30.0";
+    beta = 1;
+    sha256 = "0ygqj81xlwhzmmci0d0rd2q7xfskxd1k7h6db3zvvjdxjcnyqp1z";
   };
 }

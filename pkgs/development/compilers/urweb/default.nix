@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, file, openssl, mlton
+{ stdenv, fetchurl, file, openssl, mlton
 , mysql, postgresql, sqlite, gcc
 }:
 

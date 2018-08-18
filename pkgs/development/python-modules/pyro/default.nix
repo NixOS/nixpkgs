@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Distributed object middleware for Python (IPC/RPC)";
-    homepage = http://pythonhosted.org/Pyro/;
+    homepage = https://pythonhosted.org/Pyro/;
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor ];

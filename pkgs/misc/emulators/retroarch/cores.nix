@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchFromGitLab, cmake, pkgconfig, makeWrapper, python27, retroarch
 , alsaLib, fluidsynth, curl, hidapi, libGLU_combined, gettext, glib, gtk2, portaudio, SDL
-, ffmpeg, pcre, libevdev, libpng, libjpeg, libudev, libvorbis
+, ffmpeg, pcre, libevdev, libpng, libjpeg, udev, libvorbis
 , miniupnpc, sfml, xorg, zlib }:
 
 let
@@ -149,7 +149,7 @@ in with stdenv.lib.licenses;
     extraBuildInputs = [
       cmake curl libGLU_combined pcre pkgconfig sfml miniupnpc
       gettext glib gtk2 hidapi
-      libevdev libudev
+      libevdev udev
     ] ++ (with xorg; [ libSM libX11 libXi libpthreadstubs libxcb xcbutil ]);
   }).override {
     cmakeFlags = [

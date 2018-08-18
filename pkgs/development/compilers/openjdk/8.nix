@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, bash, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib, lndir
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor
+, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
@@ -21,42 +21,42 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "172";
-  build = "11";
+  update = "181";
+  build = "13";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
   repover = "jdk8u${update}-b${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "08mgfqbbgnx9n6prczwm4m8pgsakya45iai1gfslqnb0adh33jpi";
+             sha256 = "0rlbf3v55d45fl9gigawghd0vs0cr3k48zj48qlv3k9yxg1knq9a";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "0dph17mpr5ni280z8rmiwlw0v46dnzyph6fq132xvxiw2i1203zg";
+             sha256 = "1sk5f45ndxj8ch9pqfwmis5hnb09an7nvz3n1wyd5la42jprmwaf";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "181ixh75xjvlj0l3a58d9iqf50ivq77993yzfv0463dm44h6b8pp";
+             sha256 = "0pvx5hwmx61sbyi02pngfbky219raqqjw2xjms01nz18mzr77c84";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "097azhdmr7ph1gvlzjgx6s2hyxmi2s5293d5hs23dl5i9f55b6x8";
+             sha256 = "1b0r3fjv9q85j74lgzr2vv4z5gl13bb46zvh36mfks6j74z7ki1z";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "1lvk2brd9yclzd7cdk1kvnv4mbdxzjxd595pqhdaxdxxr5anhsvm";
+             sha256 = "1a5gm4w4f79wj0ciwcv8l8m4ha8hjs2r62bvj0vls2kwr5c8znn4";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "0cl4b4c2qjyhlsa5khlxinilfaj6ai1mzji3y0263klc8q6bglwa";
+             sha256 = "1f92s3mpbqxzgh5pazqm8pn5swqkmdrkm7mnmga2kgshzlknh6pm";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "00s6wm62v7gmkwy46js0lisijng40lnxscndczbgfvvz2q9zz4q1";
+             sha256 = "0fwdqr031yyyjrpsk9fwp4y1vlfmdr1rdzgk44gyypwjdap7a11d";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "0ab0rrmmf145nh4mibvknjni4whvzmk6fsnl7ihcn8m0zi6zyfra";
+             sha256 = "0j5f98pa6746m1xq4842qq5d1ql5x8wvcrjmjk433slgma9hf8pj";
           };
   openjdk8 = stdenv.mkDerivation {
     name = "openjdk-8u${update}b${build}";
@@ -70,7 +70,7 @@ let
     buildInputs = [
       cpio file which unzip zip perl bootjdk zlib cups freetype alsaLib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
-      libXi libXinerama libXcursor lndir fontconfig
+      libXi libXinerama libXcursor libXrandr lndir fontconfig
     ] ++ lib.optionals (!minimal && enableGnome2) [
       gtk2 gnome_vfs GConf glib
     ];
@@ -206,7 +206,7 @@ let
 
     # FIXME: this is unnecessary once the multiple-outputs branch is merged.
     preFixup = ''
-      prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
+      prefix=$jre stripDirs "$STRIP" "$stripDebugList" "''${stripDebugFlags:--S}"
       patchELF $jre
       propagatedBuildInputs+=" $jre"
 

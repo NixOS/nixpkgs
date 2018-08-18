@@ -1,27 +1,29 @@
-{ stdenv, rustPlatform, fetchFromGitHub, dbus, gdk_pixbuf, libnotify, pkgconfig }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, dbus, gdk_pixbuf, libnotify, makeWrapper, pkgconfig, xorg
+, enableAlsaUtils ? true, alsaUtils }:
 
 rustPlatform.buildRustPackage rec {
   name = "dwm-status-${version}";
-  version = "0.4.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = "dwm-status";
     rev = version;
-    sha256 = "0nw0iz78mnrmgpc471yjv7yzsaf7346mwjp6hm5kbsdclvrdq9d7";
+    sha256 = "1nyi0p9snx9hddb4hliihskj4gdp933xs0f8kydyiprckikwiyjk";
   };
 
-  buildInputs = [
-    dbus
-    gdk_pixbuf
-    libnotify
-    pkgconfig
-  ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "0169k91pb7ipvi0m71cmkppp1klgp5ghampa7x0fxkyrvrf0dvqg";
+  cargoSha256 = "1ngdzzxnv4y6xprmkawf6s2696zgwiwgb6ykj5adb4knlx5c634d";
+
+  postInstall = lib.optionalString enableAlsaUtils ''
+    wrapProgram $out/bin/dwm-status \
+      --prefix "PATH" : "${alsaUtils}/bin"
+  '';
 
   meta = with stdenv.lib; {
-    description = "DWM status service which dynamically updates when needed";
+    description = "Highly performant and configurable DWM status service";
     homepage = https://github.com/Gerschtli/dwm-status;
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ gerschtli ];

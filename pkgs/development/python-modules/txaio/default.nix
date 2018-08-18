@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "txaio";
-  version = "2.9.0";
+  version = "2.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dfc3a7d04b4b484ae5ff241affab5bb01306b1e950dd6f54fd036cfca94345d0";
+    sha256 = "4797f9f6a9866fe887c96abc0110a226dd5744c894dc3630870542597ad30853";
   };
 
   checkInputs = [ pytest mock ];
@@ -22,6 +22,5 @@ buildPythonPackage rec {
     homepage    = "https://github.com/crossbario/txaio";
     license     = licenses.mit;
     maintainers = with maintainers; [ nand0p ];
-    platforms   = platforms.all;
   };
 }

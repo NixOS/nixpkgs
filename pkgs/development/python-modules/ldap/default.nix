@@ -1,14 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi
+{ buildPythonPackage, fetchPypi
 , pyasn1, pyasn1-modules, pytest
 , openldap, cyrus_sasl }:
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "86746b912a2cd37a54b06c694f021b0c8556d4caeab75ef50435ada152e2fbe1";
+    sha256 = "41975e79406502c092732c57ef0c2c2eb318d91e8e765f81f5d4ab6c1db727c5";
   };
 
   propagatedBuildInputs = [ pyasn1 pyasn1-modules ];

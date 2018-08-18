@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.13.0.6";
 
   src = fetchurl {
-    url = "http://www.colm.net/files/colm/${name}.tar.gz";
+    url = "https://www.colm.net/files/colm/${name}.tar.gz";
     sha256 = "0jd3qmqdm8yszy0yysbp3syk7pcbxvwzv9mibdwz7v9bv1nrai26";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "bazel-buildtools";
+  name = "bazel-buildtools-unstable-${version}";
   version = "2018-05-24";
 
   goPackagePath = "github.com/bazelbuild/buildtools";

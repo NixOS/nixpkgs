@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   postInstall = "wrapProgram $out/bin/dylan-compiler --suffix PATH : ${gcc}/bin";
 
   meta = {
-    homepage = http://opendylan.org;
+    homepage = https://opendylan.org;
     description = "A multi-paradigm functional and object-oriented programming language";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;

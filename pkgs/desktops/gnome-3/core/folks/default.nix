@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, glib, gnome3, nspr, intltool
-, vala, sqlite, libxml2, dbus-glib, libsoup, nss, dbus_libs
+, vala, sqlite, libxml2, dbus-glib, libsoup, nss, dbus
 , telepathy-glib, evolution-data-server, libsecret, db }:
 
 # TODO: enable more folks backends
@@ -16,14 +16,14 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ glib gnome3.libgee sqlite ];
   # dbus_daemon needed for tests
-  buildInputs = [ dbus-glib telepathy-glib evolution-data-server dbus_libs
+  buildInputs = [ dbus-glib telepathy-glib evolution-data-server dbus
                   vala libsecret libxml2 libsoup nspr nss intltool db ];
   nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = "--disable-fatal-warnings";
 
   NIX_CFLAGS_COMPILE = ["-I${nss.dev}/include/nss"
-                        "-I${dbus-glib.dev}/include/dbus-1.0" "-I${dbus_libs.dev}/include/dbus-1.0"];
+                        "-I${dbus-glib.dev}/include/dbus-1.0" "-I${dbus.dev}/include/dbus-1.0"];
 
   enableParallelBuilding = true;
 

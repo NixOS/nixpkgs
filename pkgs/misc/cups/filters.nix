@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pkgconfig, cups, poppler, poppler_utils, fontconfig
-, libjpeg, libpng, perl, ijs, qpdf, dbus, substituteAll, bash, avahi
+, libjpeg, libpng, perl, ijs, qpdf, dbus, avahi
 , makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which, ghostscript
 , mupdf
+, fetchpatch
 }:
 
 let
@@ -9,12 +10,22 @@ let
 
 in stdenv.mkDerivation rec {
   name = "cups-filters-${version}";
-  version = "1.20.3";
+  version = "1.20.4";
 
   src = fetchurl {
-    url = "http://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "1g18qkvl9zdxickiblgs2vvkip4b6p2jalw4d30zzz3hh8f1g6iv";
+    url = "https://openprinting.org/download/cups-filters/${name}.tar.xz";
+    sha256 = "0sjkmclcb1r77015wllsyz26272br3s17v6b1q2xwb2nm2gnwx9k";
   };
+
+  patches = [
+    # This patch fixes cups-filters when compiled with poppler-0.67.0.
+    # Issue: https://github.com/OpenPrinting/cups-filters/pull/50
+    # PR: https://github.com/OpenPrinting/cups-filters/pull/51
+    (fetchpatch {
+      url = "https://github.com/OpenPrinting/cups-filters/commit/219de01c61f3b1ec146abf142d0dfc8c560cc58e.patch";
+      sha256 = "0f0lql3rbm2g8mxrpigfyi8fb4i2g4av20g417jzdilp60jq0ny8";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3
 , mysqlSupport ? false, mysql ? null
 , postgresSupport ? false, postgresql ? null
 }:

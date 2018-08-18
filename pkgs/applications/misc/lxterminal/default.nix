@@ -1,5 +1,5 @@
 { stdenv, fetchurl, automake, autoconf, intltool, pkgconfig, gtk3, vte
-, libxslt, docbook_xml_dtd_412, docbook_xml_xslt, libxml2, findXMLCatalogs
+, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
 }:
 
 let version = "0.3.1"; in
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     automake autoconf intltool pkgconfig
-    libxslt docbook_xml_dtd_412 docbook_xml_xslt libxml2 findXMLCatalogs
+    libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
   ];
 
   buildInputs = [ gtk3 vte ];

@@ -2,7 +2,6 @@
 , cairo, gd, libcerf, pango, readline, zlib
 , withTeXLive ? false, texlive
 , withLua ? false, lua
-, emacs ? null
 , libX11 ? null
 , libXt ? null
 , libXpm ? null

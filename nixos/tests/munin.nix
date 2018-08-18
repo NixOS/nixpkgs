@@ -9,7 +9,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     one =
-      { config, pkgs, ... }:
+      { config, ... }:
         {
           services = {
            munin-node.enable = true;

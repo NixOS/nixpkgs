@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "0.9.3";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/plymouth/releases/${name}.tar.xz";
+    url = "https://www.freedesktop.org/software/plymouth/releases/${name}.tar.xz";
     sha256 = "0x2a9s5jdvfcrdnwbdhm5x4ck3zimmcpghnqvhl65byfj25d13cz";
   };
 

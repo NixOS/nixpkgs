@@ -86,5 +86,9 @@ with lib;
     networking.firewall.logRefusedConnections = mkDefault false;
 
     environment.systemPackages = [ pkgs.vim ];
+
+
+    # Allow the user to log in as root without a password.
+    users.users.root.initialHashedPassword = "";
   };
 }

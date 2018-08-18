@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, file, findutils, binutils, glibc, procps, coreutils, sysctl }:
+{ stdenv, fetchurl, file, findutils, binutils, glibc, coreutils, sysctl }:
 
 stdenv.mkDerivation rec {
   name = "checksec-${version}";
   version = "1.5";
 
   src = fetchurl {
-    url    = "http://www.trapkit.de/tools/checksec.sh";
+    url    = "https://www.trapkit.de/tools/checksec.sh";
     sha256 = "0iq9v568mk7g7ksa1939g5f5sx7ffq8s8n2ncvphvlckjgysgf3p";
   };
 

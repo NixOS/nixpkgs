@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool, autoconf, automake
+{ stdenv, fetchFromGitHub, pkgconfig, libtool, autoconf, automake
 , libjpeg, libexif
 }:
 

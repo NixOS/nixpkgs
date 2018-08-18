@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  inherit (pkgs) chrony;
-
   stateDir = "/var/lib/chrony";
 
   keyFile = "/etc/chrony.keys";
@@ -96,12 +94,12 @@ in
     # Make chronyc available in the system path
     environment.systemPackages = [ pkgs.chrony ];
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = "chrony";
         gid = config.ids.gids.chrony;
       };
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "chrony";
         uid = config.ids.uids.chrony;
         group = "chrony";
@@ -109,7 +107,7 @@ in
         home = stateDir;
       };
 
-    systemd.services.timesyncd.enable = mkForce false;
+    services.timesyncd.enable = mkForce false;
 
     systemd.services.chronyd =
       { description = "chrony NTP daemon";

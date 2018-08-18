@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgs, ...  }:
+{ stdenv, pkgs }:
 
 stdenv.mkDerivation rec {
   version = "2014-07-16";
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.asl20;
   };
 }

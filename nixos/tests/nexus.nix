@@ -12,7 +12,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   nodes = {
 
     server =
-      { config, pkgs, ... }:
+      { ... }:
       { virtualisation.memorySize = 2047; # qemu-system-i386 has a 2047M limit
         virtualisation.diskSize = 2048;
 

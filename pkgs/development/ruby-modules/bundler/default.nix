@@ -1,11 +1,11 @@
-{ buildRubyGem, makeWrapper, ruby, coreutils }:
+{ buildRubyGem, ruby }:
 
 buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "bundler";
-  version = "1.16.1";
-  source.sha256 = "42b8e0f57093e1d10c15542f956a871446b759e7969d99f91caf3b6731c156e8";
+  version = "1.16.3";
+  source.sha256 = "0spddjiq6yscl4sywwcj5zrjk3lq02zacigrz2fh78yfdzyi34fq";
   dontPatchShebangs = true;
 
   postFixup = ''

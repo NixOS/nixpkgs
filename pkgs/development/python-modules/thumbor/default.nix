@@ -1,25 +1,18 @@
 { buildPythonPackage, stdenv, tornado, pycrypto, pycurl, pytz
 , pillow, derpconf, python_magic, pexif, libthumbor, opencv, webcolors
-, piexif, futures, statsd, thumborPexif, fetchPypi, fetchpatch, isPy3k, lib
+, piexif, futures, statsd, thumborPexif, fetchPypi, isPy3k, lib
 }:
 
 buildPythonPackage rec {
   pname = "thumbor";
-  version = "6.4.2";
+  version = "6.5.1";
 
   disabled = isPy3k; # see https://github.com/thumbor/thumbor/issues/1004
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y9mf78j80vjh4y0xvgnybc1wqfcwm5s19xhsfgkn12hh8pmh14d";
+    sha256 = "0yalqwpxb6m0dz2qfnyv1pqqd5dd020wl7hc0n0bvsvxg1ib9if0";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/thumbor/thumbor/commit/4f2bc99451409e404f7fa0f3e4a3bdaea7b49869.patch";
-      sha256 = "0qqw1n1pfd8f8cn168718gzwf4b35j2j9ajyw643xpf92s0iq2cc";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace "setup.py" \

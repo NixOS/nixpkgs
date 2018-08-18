@@ -4,19 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "quiterss-${version}";
-  version = "0.18.11";
+  version = "0.18.12";
 
   src = fetchFromGitHub {
     owner = "QuiteRSS";
     repo = "quiterss";
     rev = "${version}";
-    sha256 = "0n9byhibi2qpgrb7x08knvqnmyn5c7vm24cl6y3zcvz52pz8y2yc";
+    sha256 = "0xav9qr8n6310636nfbgx4iix65fs3ya5rz2isxsf38bkjm7r3pa";
   };
-
-  # Revert this commit until qt5.qtwebkit (currently an older version) from
-  # nixpkgs supports it (the commit states WebKit 602.1 while the current
-  # version in nixos-unstable is 538.1)
-  patches = [ ./0001-Revert-change-WebKit-602.1-c2f.patch ];
 
   nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [ qtbase qttools qtwebkit sqlite.dev ];

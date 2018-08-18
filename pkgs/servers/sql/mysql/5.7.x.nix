@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, cmake, bison, ncurses, openssl, readline, zlib, perl
-, boost, cctools, CoreServices, developer_cmds }:
+{ stdenv, fetchurl, cmake, bison
+, boost, libedit, libevent, lz4, ncurses, openssl, protobuf, readline, zlib, perl
+, cctools, CoreServices, developer_cmds }:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
 let
 self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.7.22";
+  version = "5.7.23";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${name}.tar.gz";
-    sha256 = "1wng15j5caz6fsv28avlcxjgq3c5n90ifk79xa0h7jws19dl1f2f";
+    sha256 = "0rbc3xsc11lq2dm0ip6gxa16c06hi74scb97x5cw7yhbabaz4c07";
   };
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
@@ -18,7 +19,9 @@ self = stdenv.mkDerivation rec {
     export PATH=$PATH:$TMPDIR
   '';
 
-  buildInputs = [ cmake bison ncurses openssl readline zlib boost ]
+  nativeBuildInputs = [ cmake bison ];
+
+  buildInputs = [ boost libedit libevent lz4 ncurses openssl protobuf readline zlib ]
      ++ stdenv.lib.optionals stdenv.isDarwin [ perl cctools CoreServices developer_cmds ];
 
   enableParallelBuilding = true;
@@ -30,7 +33,11 @@ self = stdenv.mkDerivation rec {
     "-DWITH_SSL=yes"
     "-DWITH_EMBEDDED_SERVER=yes"
     "-DWITH_UNIT_TESTS=no"
-    "-DWITH_ZLIB=yes"
+    "-DWITH_EDITLINE=system"
+    "-DWITH_LIBEVENT=system"
+    "-DWITH_LZ4=system"
+    "-DWITH_PROTOBUF=system"
+    "-DWITH_ZLIB=system"
     "-DWITH_ARCHIVE_STORAGE_ENGINE=yes"
     "-DWITH_BLACKHOLE_STORAGE_ENGINE=yes"
     "-DWITH_FEDERATED_STORAGE_ENGINE=yes"

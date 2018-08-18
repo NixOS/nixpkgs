@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, check, cmake, pkgconfig
 , libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
-, libXrender, fontconfig, libXext, libXft, utillinux, libsodium, libopus }:
+, libXrender, fontconfig, libXext, libXft, libsodium, libopus }:
 
 stdenv.mkDerivation rec {
   name = "utox-${version}";

@@ -9,8 +9,6 @@ let
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
-  canCreateMailUserGroup = cfg.mailUser != null && cfg.mailGroup != null;
-
   dovecotConf = concatStrings [
     ''
       base_dir = ${baseDir}
@@ -112,7 +110,7 @@ let
       special_use = \${toString mailbox.specialUse}
   '' + "}";
 
-  mailboxes = { lib, pkgs, ... }: {
+  mailboxes = { ... }: {
     options = {
       name = mkOption {
         type = types.strMatching ''[^"]+'';
@@ -309,7 +307,7 @@ in
      ++ optional cfg.enablePop3 "pop3"
      ++ optional cfg.enableLmtp "lmtp";
 
-    users.extraUsers = [
+    users.users = [
       { name = "dovenull";
         uid = config.ids.uids.dovenull2;
         description = "Dovecot user for untrusted logins";
@@ -328,7 +326,7 @@ in
            group = cfg.mailGroup;
          });
 
-    users.extraGroups = optional (cfg.group == "dovecot2")
+    users.groups = optional (cfg.group == "dovecot2")
       { name = "dovecot2";
         gid = config.ids.gids.dovecot2;
       }

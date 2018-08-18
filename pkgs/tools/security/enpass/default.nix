@@ -1,7 +1,7 @@
 {stdenv, system, fetchurl, dpkg, openssl, xorg
 , glib, libGLU_combined, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk2, pango, atk, cairo, gdk_pixbuf, jasper, xkeyboardconfig
-, makeWrapper , makeDesktopItem, python, pythonPackages, lib
+, makeWrapper , python, pythonPackages, lib
 , libredirect, lsof}:
 
 let

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgcrypt, fetchFromGitHub, ocamlPackages, perl }:
+{ stdenv, libgcrypt, fetchFromGitHub, ocamlPackages, perl }:
 stdenv.mkDerivation rec {
   name = "obliv-c-${version}";
   version = "0.0pre20170827";

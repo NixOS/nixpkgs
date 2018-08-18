@@ -36,7 +36,6 @@
 
 let
   arch32 = "i686-linux";
-  arch64 = "x86_64-linux";
 
   arch = if stdenv.system == arch32
     then "i386"

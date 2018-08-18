@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, fetchurl,
   extra-cmake-modules,
-  qtbase, qtdeclarative, qtwebkit, kconfig, kcoreaddons, kwidgetsaddons, kguiaddons, kproperty, marble, python2
+  qtdeclarative, qtwebkit, kconfig, kcoreaddons, kwidgetsaddons, kguiaddons, kproperty, marble, python2
 }:
 
 mkDerivation rec {

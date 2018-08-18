@@ -3,11 +3,11 @@
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   name = "elfutils-${version}";
-  version = "0.170";
+  version = "0.173";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${name}.tar.bz2";
-    sha256 = "0rp0r54z44is49c594qy7hr211nhb00aa5y7z74vsybbaxslg10z";
+    sha256 = "1zq0l12k64hrbjmdjc4llrad96c25i427hpma1id9nk87w9qqvdp";
   };
 
   patches = ./debug-info-from-env.patch;
@@ -28,46 +28,40 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  crossAttrs = {
+  # This program does not cross-build fine. So I only cross-build some parts
+  # I need for the linux perf tool.
+  # On the awful cross-building:
+  # http://comments.gmane.org/gmane.comp.sysutils.elfutils.devel/2005
+  #
+  # I wrote this testing for the nanonote.
 
-    /* Having bzip2 will harm, because anything using elfutils
-       as buildInput cross-building, will not be able to run 'bzip2' */
-    propagatedBuildInputs = [ zlib.crossDrv ];
+  buildPhase = if stdenv.hostPlatform == stdenv.buildPlatform then null else ''
+    pushd libebl
+    make
+    popd
+    pushd libelf
+    make
+    popd
+    pushd libdwfl
+    make
+    popd
+    pushd libdw
+    make
+    popd
+  '';
 
-    # This program does not cross-build fine. So I only cross-build some parts
-    # I need for the linux perf tool.
-    # On the awful cross-building:
-    # http://comments.gmane.org/gmane.comp.sysutils.elfutils.devel/2005
-    #
-    # I wrote this testing for the nanonote.
-    buildPhase = ''
-      pushd libebl
-      make
-      popd
-      pushd libelf
-      make
-      popd
-      pushd libdwfl
-      make
-      popd
-      pushd libdw
-      make
-      popd
-    '';
-
-    installPhase = ''
-      pushd libelf
-      make install
-      popd
-      pushd libdwfl
-      make install
-      popd
-      pushd libdw
-      make install
-      popd
-      cp version.h $out/include
-    '';
-  };
+  installPhase = if stdenv.hostPlatform == stdenv.buildPlatform then null else ''
+    pushd libelf
+    make install
+    popd
+    pushd libdwfl
+    make install
+    popd
+    pushd libdw
+    make install
+    popd
+    cp version.h $out/include
+  '';
 
   meta = {
     homepage = https://sourceware.org/elfutils/;

@@ -14,16 +14,6 @@ rec {
 
   qemu = pkgs.qemu_kvm;
 
-  qemu-220 = lib.overrideDerivation pkgs.qemu_kvm (attrs: rec {
-    version = "2.2.0";
-    src = fetchurl {
-      url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-      sha256 = "1703c3scl5n07gmpilg7g2xzyxnr7jczxgx6nn4m8kv9gin9p35n";
-    };
-    patches = [ ../../../nixos/modules/virtualisation/azure-qemu-220-no-etc-install.patch ];
-  });
-
-
   modulesClosure = makeModulesClosure {
     inherit kernel rootModules;
     firmware = kernel;
@@ -31,7 +21,6 @@ rec {
 
 
   hd = "vda"; # either "sda" or "vda"
-
 
   initrdUtils = runCommand "initrd-utils"
     { buildInputs = [ nukeReferences ];
@@ -45,6 +34,7 @@ rec {
       cp -p ${pkgs.stdenv.glibc.out}/lib/ld-linux*.so.? $out/lib
       cp -p ${pkgs.stdenv.glibc.out}/lib/libc.so.* $out/lib
       cp -p ${pkgs.stdenv.glibc.out}/lib/libm.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc.out}/lib/libresolv.so.* $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
@@ -975,22 +965,22 @@ rec {
     };
 
     debian8i386 = {
-      name = "debian-8.10-jessie-i386";
-      fullName = "Debian 8.10 Jessie (i386)";
+      name = "debian-8.11-jessie-i386";
+      fullName = "Debian 8.11 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "1w1gm195dcrndy5486kcv0h9l3br9dqnqyyhmavp4vr5w2zk7amk";
+        sha256 = "0adblarhx50yga900il6m25ng0csa81i3wid1dxxmydbdmri7v7d";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.10-jessie-amd64";
-      fullName = "Debian 8.10 Jessie (amd64)";
+      name = "debian-8.11-jessie-amd64";
+      fullName = "Debian 8.11 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "045700qsrmd3lng2rw8nfs5ci7pf660lwl6alpzkyjikyp6pg7k8";
+        sha256 = "09y1mv4kqllhxpk1ibjsyl5jig5bp0qxw6pp4sn56rglrpygmn5x";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, wrapGAppsHook
+{ stdenv, fetchFromGitLab, cmake, pkgconfig, wrapGAppsHook
 , glib, gtk3, gettext, libxkbfile, libgnome-keyring, libX11
 , freerdp, libssh, libgcrypt, gnutls, makeDesktopItem
 , pcre, webkitgtk, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
 , libsecret, spice-protocol, spice-gtk, epoxy, at-spi2-core
-, openssl, gsettings-desktop-schemas
+, openssl, gsettings-desktop-schemas, json-glib
 # The themes here are soft dependencies; only icons are missing without them.
 , hicolor-icon-theme, adwaita-icon-theme
 }:
 
 let
-  version = "1.2.0-rcgit.24";
+  version = "1.2.31.2";
 
   desktopItem = makeDesktopItem {
     name = "remmina";
@@ -25,11 +25,11 @@ let
 in stdenv.mkDerivation {
   name = "remmina-${version}";
 
-  src = fetchFromGitHub {
-    owner  = "FreeRDP";
+  src = fetchFromGitLab {
+    owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "1x7kygl9a5nh7rf2gfrk0wwv23mbw7rrjms402l3zp1w53hrhwmg";
+    sha256 = "09jdrs2hbr9wyd5yqw5bri41rnfnxxyh98mlv6ig2phlvs9cg73d";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
                   pcre webkitgtk libdbusmenu-gtk3 libappindicator-gtk3
                   libvncserver libpthreadstubs libXdmcp libxkbcommon
                   libsecret spice-protocol spice-gtk epoxy at-spi2-core
-                  openssl hicolor-icon-theme adwaita-icon-theme ];
+                  openssl hicolor-icon-theme adwaita-icon-theme json-glib ];
 
   cmakeFlags = [
     "-DWITH_VTE=OFF"
@@ -64,9 +64,9 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     license = stdenv.lib.licenses.gpl2;
-    homepage = http://remmina.sourceforge.net/;
+    homepage = https://gitlab.com/Remmina/Remmina;
     description = "Remote desktop client written in GTK+";
-    maintainers = [];
+    maintainers = with maintainers; [ melsigl ryantm ];
     platforms = platforms.linux;
   };
 }

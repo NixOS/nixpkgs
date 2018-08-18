@@ -1,9 +1,9 @@
 { stdenv, nix, perlPackages, buildEnv, releaseTools, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
-, guile, perl, postgresql, aws-sdk-cpp, nukeReferences, git, boehmgc
+, guile, perl, postgresql, nukeReferences, git, boehmgc
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
-, rpm, dpkg, cdrkit, fetchpatch, pixz }:
+, rpm, dpkg, cdrkit, pixz }:
 
 with stdenv;
 
@@ -22,7 +22,7 @@ let
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginStackTrace
-        CatalystPluginUnicodeEncoding
+        CatalystRuntime
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
@@ -40,6 +40,7 @@ let
         FileSlurp
         IOCompress
         IPCRun
+        JSON
         JSONAny
         JSONXS
         LWP
@@ -52,7 +53,6 @@ let
         SetScalar
         Starman
         SysHostnameLong
-        TestMore
         TextDiff
         TextTable
         XMLSimple

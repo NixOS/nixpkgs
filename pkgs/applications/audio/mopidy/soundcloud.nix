@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-soundcloud-${version}";
-
-  version = "2.0.2";
+  pname = "mopidy-soundcloud";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-soundcloud";
     rev = "v${version}";
-    sha256 = "13n44975n1wwcf7qg1c7drc2bavhjnr9hnq1v0n5hdgyx8ji67gi";
+    sha256 = "131qdm9i0j3ayff0js11qcmbjv50ws5s6iiqr6x5b66ymjl4scfv";
   };
 
   propagatedBuildInputs = [ mopidy ];

@@ -72,14 +72,14 @@ in
   config = mkIf config.services.prayer.enable {
     environment.systemPackages = [ prayer ];
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = prayerUser;
         uid = config.ids.uids.prayer;
         description = "Prayer daemon user";
         home = stateDir;
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = prayerGroup;
         gid = config.ids.gids.prayer;
       };

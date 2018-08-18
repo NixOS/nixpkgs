@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
-, zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
+, xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , iptables, gnu-efi
-, autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
+, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
 , getent

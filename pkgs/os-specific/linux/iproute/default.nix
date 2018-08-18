@@ -1,12 +1,12 @@
-{ fetchurl, stdenv, config, lib, flex, bash, bison, db, iptables, pkgconfig }:
+{ fetchurl, stdenv, config, flex, bash, bison, db, iptables, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "iproute2-${version}";
-  version = "4.16.0";
+  version = "4.17.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "02pfalg319jpbjz273ph725br8dnkzpfvi98azi9yd6p1w128p0c";
+    sha256 = "0vmynikcamfhakvwyk5dsffy0ymgi5mdqiwybdvqfn1ijaq93abg";
   };
 
   preConfigure = ''

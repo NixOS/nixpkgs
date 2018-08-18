@@ -1,11 +1,11 @@
-{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, bash, jre8 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jre8 }:
 
 stdenv.mkDerivation rec {
   name = "gpsprune-${version}";
   version = "19";
 
   src = fetchurl {
-    url = "http://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
+    url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
     sha256 = "0n08fg55zgpfg1f6lq0n3ngi0n8af1r0rhmbnpik5mjng4m9g3x5";
   };
 

@@ -29,7 +29,7 @@ let
     ctrl_interface_group=${cfg.group}
 
     ${if cfg.wpa then ''
-      wpa=1
+      wpa=2
       wpa_passphrase=${cfg.wpaPassphrase}
       '' else ""}
 

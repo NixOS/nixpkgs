@@ -1,11 +1,11 @@
-{ lib, buildPythonPackage, fetchurl }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  name = "scandir-${version}";
+  pname = "scandir";
   version = "1.7";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/scandir/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 ="0gbnhjzg42rj87ljv9kb648rfxph69ly3c8r9841dxy4d7l5pmdj";
   };
 

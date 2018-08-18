@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The user-friendly, lightweight, and fast email client";
-    homepage = http://www.claws-mail.org/;
+    homepage = https://www.claws-mail.org/;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin ];

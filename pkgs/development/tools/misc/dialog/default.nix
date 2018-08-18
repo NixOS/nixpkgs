@@ -1,10 +1,9 @@
-{ stdenv, fetchurl, ncurses, gettext
+{ stdenv, fetchurl, ncurses
 , withLibrary ? false, libtool
 , unicodeSupport ? true
 }:
 
-let optional = stdenv.lib.optional;
-    optStr = stdenv.lib.optionalString;
+let optStr = stdenv.lib.optionalString;
     buildShared = !stdenv.isDarwin;
 in
 
@@ -13,14 +12,14 @@ assert unicodeSupport -> ncurses.unicode && ncurses != null;
 
 stdenv.mkDerivation rec {
   name = "dialog-${version}";
-  version = "1.3-20171209";
+  version = "1.3-20180621";
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/dialog/${name}.tgz"
       "https://invisible-mirror.net/archives/dialog/${name}.tgz"
     ];
-    sha256 = "1rk72as52f5br3wcr74d00wib41w65g8wvi36mfgybly251984r0";
+    sha256 = "0yjqczlf64yppgvk4i6s0jm06mdr0mb5m6sj39nf891dnbi5jj2a";
   };
 
   buildInputs = [ ncurses ];

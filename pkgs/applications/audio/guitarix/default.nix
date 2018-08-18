@@ -12,11 +12,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "guitarix-${version}";
-  version = "0.37.0";
+  version = "0.37.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/guitarix/guitarix2-${version}.tar.xz";
-    sha256 = "17dsd32yd92l7xq1x0b8jsws5yif2pk4zbfjbc560hgarym6r8x6";
+    sha256 = "064k0jzxqgx9gwf8za6jziansabzrwzjaim3qx1743ify5g3gaai";
   };
 
   nativeBuildInputs = [ gettext intltool wrapGAppsHook pkgconfig python2 ];

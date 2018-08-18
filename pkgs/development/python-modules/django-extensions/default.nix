@@ -1,25 +1,36 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, vobject, mock, tox, pytestcov, pytest-django, pytest, shortuuid
-, django, six
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+, six, typing
+, django, shortuuid, python-dateutil, pytest
+, pytest-django, pytestcov, mock, vobject
+, werkzeug, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "1.8.1";
-  name = "${pname}-${version}";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
-    owner = "${pname}";
-    repo = "${pname}";
-    rev = "${version}";
-    sha256 = "08rd9zswvjb9dixzyd3p3l3hw3wwhqkgyjvid65niybzjl1xdb5h";
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "1xf84wq7ab1zfb3nmf4qgw6mjf5xafjwr3175dyrqrrn6cpvcr4a";
   };
 
-  buildInputs = [ vobject mock tox pytestcov pytest-django pytest shortuuid ];
+  postPatch = ''
+    substituteInPlace setup.py --replace "'tox'," ""
+  '';
 
-  propagatedBuildInputs = [ django six ];
+  propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") typing;
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    django shortuuid python-dateutil pytest
+    pytest-django pytestcov mock vobject
+    werkzeug glibcLocales
+  ];
+
+  LC_ALL = "en_US.UTF-8";
+
+  meta = with lib; {
     description = "A collection of custom extensions for the Django Framework";
     homepage = https://github.com/django-extensions/django-extensions;
     license = licenses.mit;

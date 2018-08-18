@@ -5,16 +5,23 @@ class PrefetchJSON
   JSON.mapping(sha256: String)
 end
 
+class ShardLock
+  YAML.mapping(
+    version: Float32,
+    shards: Hash(String, Hash(String, String))
+  )
+end
+
 File.open "shards.nix", "w+" do |file|
   file.puts %({)
-  yaml = YAML.parse(File.read("shard.lock"))
-  yaml["shards"].each do |key, value|
-    owner, repo = value["github"].as_s.split("/")
+  yaml = ShardLock.from_yaml(File.read("shard.lock"))
+  yaml.shards.each do |key, value|
+    owner, repo = value["github"].split("/")
     url = "https://github.com/#{value["github"]}"
     rev = if value["version"]?
             "v#{value["version"]}"
           else
-            value["commit"].as_s
+            value["commit"]
           end
 
     sha256 = ""

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , cmake, pkgconfig, asciidoc, libxslt, docbook_xsl
-, wayland, wlc, libxkbcommon, pcre, json_c, dbus_libs
+, wayland, wlc, libxkbcommon, pcre, json_c, dbus
 , pango, cairo, libinput, libcap, pam, gdk_pixbuf, libpthreadstubs
 , libXdmcp
 , buildDocs ? true
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cmake pkgconfig
   ] ++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl ];
   buildInputs = [
-    wayland wlc libxkbcommon pcre json_c dbus_libs
+    wayland wlc libxkbcommon pcre json_c dbus
     pango cairo libinput libcap pam gdk_pixbuf libpthreadstubs
     libXdmcp
   ];

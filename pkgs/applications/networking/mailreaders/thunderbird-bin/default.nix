@@ -7,7 +7,7 @@
 , cups
 , curl
 , dbus-glib
-, dbus_libs
+, dbus
 , fontconfig
 , freetype
 , gdk_pixbuf
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
+    url = "https://download-installer.cdn.mozilla.net/pub/thunderbird/releases/${version}/${source.arch}/${source.locale}/thunderbird-${version}.tar.bz2";
     inherit (source) sha512;
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation {
       cups
       curl
       dbus-glib
-      dbus_libs
+      dbus
       fontconfig
       freetype
       gdk_pixbuf

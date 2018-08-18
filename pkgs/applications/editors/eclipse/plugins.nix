@@ -470,17 +470,40 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.7.3a";
+    version = "4.8";
 
     src = fetchzip {
       stripRoot = false;
-      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.3a-201803300640/org.eclipse.jdt-4.7.3a.zip;
-      sha256 = "10dndhqz894xf79zz07dlmkn7k33mn42nbmycr78xz6d2jy8cscx";
+      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.8-201806110500/org.eclipse.jdt-4.8.zip;
+      sha256 = "1my0d1114mx5gzxmwqlx0rcny39ly97ixlwx53ljk6qcryhdnr88";
     };
 
     meta = with stdenv.lib; {
       homepage = https://www.eclipse.org/jdt/;
       description = "Eclipse Java development tools";
+      license = licenses.epl10;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  jdt-codemining = buildEclipsePlugin rec {
+    name = "jdt-codemining-${version}";
+    version = "1.0.0.201806221018";
+
+    srcFeature = fetchurl {
+      url = "http://oss.opensagres.fr/jdt-codemining/snapshot/features/jdt-codemining-feature_${version}.jar";
+      sha256 = "1vy30rsb9xifn4r1r2n84d48g6riadzli1xvhfs1mf5pkm5ljwl6";
+    };
+
+    srcPlugin = fetchurl {
+      url = "http://oss.opensagres.fr/jdt-codemining/snapshot/plugins/org.eclipse.jdt.codemining_${version}.jar";
+      sha256 = "0qdzlqcjcm2i4mwhmcdml0am83z1dayrcmf37ji7vmw6iwdk1xmp";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/angelozerr/jdt-codemining;
+      description = "Provides JDT Java CodeMining";
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
@@ -532,11 +555,12 @@ rec {
 
   spotbugs = buildEclipseUpdateSite rec {
     name = "spotbugs-${version}";
-    version = "3.1.3";
+    version = "3.1.6";
 
     src = fetchzip {
+      stripRoot = false;
       url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
-      sha256 = "01zrmk497bxzqgwgbpsvi5iz5qk9b4q949h4918abm54zvkgndlg";
+      sha256 = "1qsams12n64slp00nfc9v943sy9bzffzm7anqqaz2hjw64iia7fh";
     };
 
     meta = with stdenv.lib; {

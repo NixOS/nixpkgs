@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pam, python3, libxslt, perl, ArchiveZip
-, CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
+, IOCompress, zlib, libjpeg, expat, freetype, libwpd
 , libxml2, db, sablotron, curl, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, cups, xorg, libcmis, carlito
@@ -8,11 +8,11 @@
 , autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
 , libwpg, dbus-glib, glibc, qt4, clucene_core, libcdr, lcms, vigra
 , unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
-, fontsConf, pkgconfig, libzip, bluez5, libtool, maven
+, fontsConf, pkgconfig, bluez5, libtool
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, defaultIconTheme, glib, ncurses, xmlsec, epoxy, gpgme
+, defaultIconTheme, glib, ncurses, epoxy, gpgme
 , langs ? [ "ca" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "nl" "pl" "ru" "sl" ]
 , withHelp ? true
 , kdeIntegration ? false
@@ -42,14 +42,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "16g85bn6qkql81a0k9iv3nwrpg2kpvz5nk4r7lab5jzlcl20qplc";
+      sha256 = "05ixmqbs3pkdpyqcwadz9i3wg797vimsm75rmfby7z71wc3frcyk";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "02382d09svcgmp5q2xglhbx1na9ycd77f5cbcj9jgs8lpkgwbxxc";
+      sha256 = "0ifyh4m8mwpkb16g6883ivk2s2qybr4s4s7pdjzp4cpx1nalzibl";
     };
 
   };
@@ -238,6 +238,7 @@ in stdenv.mkDerivation rec {
     "--without-system-libstaroffice"
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
+    "--without-system-xmlsec"
   ];
 
   checkPhase = ''
@@ -247,7 +248,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = with xorg;
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
-      CompressZlib cppunit cups curl db dbus-glib expat file flex fontconfig
+      IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gtk3 gtk2
       hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
@@ -258,12 +259,11 @@ in stdenv.mkDerivation rec {
       python3 sablotron sane-backends unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw libzmf libtool
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme
-      librevenge libe-book libmwaw glm glew ncurses xmlsec epoxy
+      librevenge libe-book libmwaw glm glew ncurses epoxy
       libodfgen CoinMP librdf_rasqal defaultIconTheme
-      gdb
     ]
     ++ lib.optional kdeIntegration kdelibs4;
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook gdb ];
 
   passthru = {
     inherit srcs jdk;
@@ -275,7 +275,7 @@ in stdenv.mkDerivation rec {
     description = "Comprehensive, professional-quality productivity suite (Still/stable release)";
     homepage = https://libreoffice.org/;
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ viric raskin ];
+    maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
 }

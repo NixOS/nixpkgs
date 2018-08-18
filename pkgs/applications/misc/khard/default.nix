@@ -1,6 +1,22 @@
-{ stdenv, fetchurl, fetchFromGitHub, glibcLocales, python3Packages }:
+{ stdenv, fetchurl, glibcLocales, python3 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+
+      # https://github.com/pimutils/khal/issues/780
+      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.6.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
+        };
+      });
+
+    };
+  };
+
+in with python.pkgs; buildPythonApplication rec {
   version = "0.12.2";
   name = "khard-${version}";
   namePrefix = "";
@@ -14,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     atomicwrites
     configobj
     vobject

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
 
-    url = "http://download.osgeo.org/liblas/${name}.tar.bz2";
+    url = "https://download.osgeo.org/liblas/${name}.tar.bz2";
     sha256 = "0xjfxb3ydvr2258ji3spzyf81g9caap19ql2pk91wiivqsc4mnws";
   };
 

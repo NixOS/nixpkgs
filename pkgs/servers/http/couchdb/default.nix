@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey, curl, help2man, python
+{ stdenv, fetchurl, erlang, icu, openssl, spidermonkey, curl, help2man
 , sphinx, which, file, pkgconfig, getopt }:
 
 stdenv.mkDerivation rec {

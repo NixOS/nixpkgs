@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, fetchurl, requireFile, patchelf, perl, ncurses, expat, python27, zlib
+{ lib, stdenv, makeWrapper, fetchurl, requireFile, perl, ncurses, expat, python27, zlib
 , gcc48, gcc49, gcc5, gcc6
 , xorg, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 }:

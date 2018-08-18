@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl, lib, file
 , pkgconfig, autoconf
-, glib, dbus-glib, libdbusmenu-glib
+, glib, dbus-glib, libdbusmenu
 , gtkVersion ? "3", gtk2 ? null, gtk3 ? null
 , pythonPackages, gobjectIntrospection, vala, gnome-doc-utils
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf gobjectIntrospection vala gnome-doc-utils ];
 
   buildInputs = [
-    glib dbus-glib libdbusmenu-glib
+    glib dbus-glib libdbusmenu
     python pygobject2 pygtk
   ] ++ (if gtkVersion == "2"
     then [ gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]

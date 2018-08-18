@@ -128,14 +128,14 @@ in
       systemPackages = [ pkgs.spamassassin ];
     };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "spamd";
       description = "Spam Assassin Daemon";
       uid = config.ids.uids.spamd;
       group = "spamd";
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = "spamd";
       gid = config.ids.gids.spamd;
     };

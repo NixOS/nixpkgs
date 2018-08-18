@@ -3,7 +3,6 @@
 , decorator }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "moretools";
   version = "0.1.8";
 

@@ -12,11 +12,11 @@ assert withMediaPlayback -> gst_all_1 != null;
 let
   pdfjs = stdenv.mkDerivation rec {
     name = "pdfjs-${version}";
-    version = "1.7.225";
+    version = "1.10.100";
 
     src = fetchzip {
-      url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-      sha256 = "0bsmbz7bbh0zpd70dlhss4fjdw7zq356091wld9s7kxnb2rixqd8";
+      url = "https://github.com/mozilla/pdf.js/releases/download/${version}/${name}-dist.zip";
+      sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
       stripRoot = false;
     };
 
@@ -27,15 +27,13 @@ let
   };
 
 in python3Packages.buildPythonApplication rec {
-  name = "qutebrowser-${version}${versionPostfix}";
-  namePrefix = "";
-  version = "1.3.1";
-  versionPostfix = "";
+  pname = "qutebrowser";
+  version = "1.4.1";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
-    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "121fz549vlxdasw0lcx6v394x8g34nadvrfs4svw3b65n0shv1ky";
+    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "0n2z92vb91gpfchdm9wsm712r9grbvxwdp4npl5c1nbq247dxwm3";
   };
 
   # Needs tox

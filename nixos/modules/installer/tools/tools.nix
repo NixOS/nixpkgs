@@ -1,13 +1,11 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-generate-config, etc.
 
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
-  cfg = config.installer;
-
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
     isExecutable = true;

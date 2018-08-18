@@ -1,6 +1,6 @@
 { stdenv
 , fetchurl, perl, gcc, llvm_39
-, ncurses5, gmp, libiconv
+, ncurses5, gmp, glibc, libiconv
 }:
 
 # Prebuilt only does native
@@ -13,6 +13,13 @@ let
 
   libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
     + "LD_LIBRARY_PATH";
+
+  glibcDynLinker = assert stdenv.isLinux;
+    if stdenv.hostPlatform.libc == "glibc" then
+       # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
+       ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
+    else
+      "${stdenv.lib.getLib glibc}/lib/ld-linux*";
 
 in
 
@@ -95,7 +102,7 @@ stdenv.mkDerivation rec {
       find . -type f -perm -0100 -exec patchelf \
           --replace-needed libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5 libncurses.so \
           --replace-needed libtinfo.so libtinfo.so.5 \
-          --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \;
+          --interpreter ${glibcDynLinker} {} \;
 
       paxmark m ./ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
 
@@ -107,7 +114,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
     "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}";
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # Stripping combined with patchelf breaks the executables (they die
   # with a segfault or the kernel even refuses the execve). (NIXPKGS-85)
@@ -155,7 +163,10 @@ stdenv.mkDerivation rec {
     [ $(./main) == "yes" ]
   '';
 
-  passthru = { targetPrefix = ""; };
+  passthru = {
+    targetPrefix = "";
+    enableShared = true;
+  };
 
   meta.license = stdenv.lib.licenses.bsd3;
   # AArch64 should work in theory but eventually some builds start segfaulting

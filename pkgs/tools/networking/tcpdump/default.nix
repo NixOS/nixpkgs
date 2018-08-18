@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libpcap }:
+{ stdenv, fetchurl, libpcap }:
 
 stdenv.mkDerivation rec {
   name = "tcpdump-${version}";

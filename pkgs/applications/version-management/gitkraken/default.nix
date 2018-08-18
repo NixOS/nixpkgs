@@ -1,4 +1,4 @@
-{ stdenv, lib, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
+{ stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
 , libXfixes, atk, gtk2, libXrender, pango, gnome2, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchurl, expat, gdk_pixbuf, libXdamage, libXrandr, dbus
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gitkraken-${version}";
-  version = "3.6.3";
+  version = "3.6.6";
 
   src = fetchurl {
     url = "https://release.gitkraken.com/linux/v${version}.deb";
-    sha256 = "1bl4zz4k9whv5q6bkf6hyki26dkjhm19rzx2800zzadbrdgs7iz4";
+    sha256 = "01ir325ls1fb6ml79c02c7dyi910lxw0avlwc0nzv8fy4aqavl6p";
   };
 
   libPath = makeLibraryPath [

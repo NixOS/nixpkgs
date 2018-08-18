@@ -1,23 +1,39 @@
-{ qtModule, stdenv, lib
-, qtbase, qtdeclarative, qtlocation, qtsensors
+{ qtModule, stdenv, lib, fetchurl
+, qtbase, qtdeclarative, qtlocation, qtsensors, qtwebchannel
 , fontconfig, gdk_pixbuf, gtk2, libwebp, libxml2, libxslt
-, sqlite, systemd, glib, gst_all_1
+, sqlite, systemd, glib, gst_all_1, cmake
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin
-, substituteAll
 , flashplayerFix ? false
+, src ? null
+, version ? null
 }:
 
-let inherit (lib) optional optionals getLib; in
-
+let
+  inherit (lib) optional optionals getLib;
+  hyphen = stdenv.mkDerivation rec {
+    name = "hyphen-2.8.8";
+    src = fetchurl {
+      url = "http://dev-www.libreoffice.org/src/5ade6ae2a99bc1e9e57031ca88d36dad-${name}.tar.gz";
+      sha256 = "304636d4eccd81a14b6914d07b84c79ebb815288c76fe027b9ebff6ff24d5705";
+    };
+    buildInputs = [ perl ];
+  };
+in
 qtModule {
   name = "qtwebkit";
-  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ];
+  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ qtwebchannel ];
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
-    ++ optionals (stdenv.isDarwin) (with darwin.apple_sdk.frameworks; [ OpenGL ]);
+    ++ optionals (stdenv.isDarwin) (with darwin.apple_sdk.frameworks; [ OpenGL ])
+    ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ hyphen ];
   nativeBuildInputs = [
     bison2 flex gdb gperf perl pkgconfig python2 ruby
-  ];
+  ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ cmake ];
+
+  cmakeFlags = optionals (lib.versionAtLeast qtbase.version "5.11.0") [ "-DPORT=Qt" ];
+
+  inherit src;
+  inherit version;
 
   __impureHostDeps = optionals (stdenv.isDarwin) [
     "/usr/lib/libicucore.dylib"

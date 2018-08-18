@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, Libinfo, configd, mDNSResponder }:
+{ appleDerivation, Libinfo, configd, mDNSResponder }:
 
 appleDerivation {
   buildInputs = [ Libinfo configd mDNSResponder ];

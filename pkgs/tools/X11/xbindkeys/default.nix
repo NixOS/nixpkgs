@@ -4,7 +4,7 @@ let version = "1.8.6"; in
 stdenv.mkDerivation {
   name = "xbindkeys-${version}";
   src = fetchurl {
-    url = "http://www.nongnu.org/xbindkeys/xbindkeys-${version}.tar.gz";
+    url = "https://www.nongnu.org/xbindkeys/xbindkeys-${version}.tar.gz";
     sha256 = "060df6d8y727jp1inp7blp44cs8a7jig7vcm8ndsn6gw36z1h3bc";
   };
 

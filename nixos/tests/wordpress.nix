@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ... }:
 
   nodes =
     { web =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
         {
           services.mysql = {
             enable = true;
@@ -41,7 +41,7 @@ import ./make-test.nix ({ pkgs, ... }:
     };
 
   testScript =
-    { nodes, ... }:
+    { ... }:
     ''
       startAll;
 

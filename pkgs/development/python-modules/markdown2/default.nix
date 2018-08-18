@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchurl }:
+{ stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "markdown2";
   version = "2.3.5";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/m/markdown2/${name}.zip";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
     sha256 = "8bb9a24eb2aa02f1427aabe46483f0f0215ab18c8a345315ae8e2ee3c3a09c03";
   };
 

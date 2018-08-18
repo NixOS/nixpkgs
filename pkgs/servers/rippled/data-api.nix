@@ -1,4 +1,4 @@
-{ lib, fetchgit, fetchurl, nodePackages }:
+{ lib, fetchgit, nodePackages }:
 
 with lib;
 

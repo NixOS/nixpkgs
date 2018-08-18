@@ -2,7 +2,6 @@
 , jre
 , gtk2, glib
 , libXtst
-, git, mercurial, subversion
 , which
 }:
 

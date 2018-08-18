@@ -1,27 +1,37 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy3k,
-  discid, six, parsedatetime, isodate, Babel, pytimeparse,
-  leather, python-slugify }:
+{ lib, fetchFromGitHub, buildPythonPackage, isPy3k
+, six, pytimeparse, parsedatetime, Babel
+, isodate, python-slugify, leather
+, glibcLocales, nose, lxml, cssselect, unittest2 }:
 
 buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "agate";
-    version = "1.6.1";
+  pname = "agate";
+  version = "1.6.1";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "c93aaa500b439d71e4a5cf088d0006d2ce2c76f1950960c8843114e5f361dfd3";
-    };
+  # PyPI tarball does not include all test files
+  # https://github.com/wireservice/agate/pull/716
+  src = fetchFromGitHub {
+    owner = "wireservice";
+    repo = pname;
+    rev = version;
+    sha256 = "077zj8xad8hsa3nqywvf7ircirmx3krxdipl8wr3dynv3l3khcpl";
+  };
 
-    propagatedBuildInputs = [ discid six parsedatetime
-         isodate Babel pytimeparse leather python-slugify ];
+  propagatedBuildInputs = [
+    six pytimeparse parsedatetime Babel
+    isodate python-slugify leather
+  ];
 
-    doCheck = !isPy3k;
-    # (only) on python3 unittest loader (loadTestsFromModule) fails
+  checkInputs = [ glibcLocales nose lxml cssselect ]
+    ++ lib.optional (!isPy3k) unittest2;
 
-    meta = with stdenv.lib; {
-      description = "A Python data analysis library that is optimized for humans instead of machines";
-      homepage    = https://github.com/wireservice/agate;
-      license     = with licenses; [ mit ];
-      maintainers = with maintainers; [ vrthra ];
-    };
+  checkPhase = ''
+    LC_ALL="en_US.UTF-8" nosetests tests
+  '';
+
+  meta = with lib; {
+    description = "A Python data analysis library that is optimized for humans instead of machines";
+    homepage    = https://github.com/wireservice/agate;
+    license     = with licenses; [ mit ];
+    maintainers = with maintainers; [ vrthra ];
+  };
 }

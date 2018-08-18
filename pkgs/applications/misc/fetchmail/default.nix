@@ -29,5 +29,6 @@ stdenv.mkDerivation {
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

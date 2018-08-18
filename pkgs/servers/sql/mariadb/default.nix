@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
 , libiconv, openssl, pcre, boost, judy, bison, libxml2
-, libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
+, libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
 , asio, buildEnv, check, scons
 }:
@@ -22,11 +22,14 @@ galeraLibs = buildEnv {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.15";
+  version = "10.2.16";
 
   src = fetchurl {
-    url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "04ds6vkb7k2lqpcdz663z4ll1jx1zz2hqxz5nj7gs8pwb18j1pik";
+    urls = [
+      "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
+      "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
+    ];
+    sha256 = "1i2dwpp96ywjk147qqpcad8vqcy4rxmfbv2cb8ww3sffpa9yx0n1";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -177,11 +180,11 @@ everything = stdenv.mkDerivation (common // {
 
 connector-c = stdenv.mkDerivation rec {
   name = "mariadb-connector-c-${version}";
-  version = "2.3.5";
+  version = "2.3.6";
 
   src = fetchurl {
-    url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "0vvlfs56hxin130vh8pcs5w7jpv1yc6g76bhpzg88hnp4v1z8frg";
+    url = "https://downloads.mariadb.org/interstitial/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz/from/http%3A//nyc2.mirrors.digitalocean.com/mariadb/";
+    sha256 = "15iy5iqp0njbwbn086x2dq8qnbkaci7ydvi84cf5z8fxvljis9vb";
     name   = "mariadb-connector-c-${version}-src.tar.gz";
   };
 

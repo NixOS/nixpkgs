@@ -1,7 +1,8 @@
-{ stdenv, appleDerivation, fetchurl, xcbuild, ncurses, bzip2, zlib, lzma }:
+{ stdenv, appleDerivation, xcbuildHook, ncurses, bzip2, zlib, lzma }:
 
 appleDerivation {
-  buildInputs = [ xcbuild ncurses bzip2 zlib lzma ];
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ ncurses bzip2 zlib lzma ];
 
   # patches to use ncursees
   # disables md5

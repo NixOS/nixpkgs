@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchurl
+{ stdenv, fetchurl
 , texlive
-, zlib, bzip2, ncurses, libiconv, libpng, flex, bison, libX11, libICE, xproto
-, freetype, t1lib, gd, libXaw, icu, ghostscript, ed, libXt, libXpm, libXmu, libXext
-, xextproto, perl, libSM, ruby, expat, curl, libjpeg, python, fontconfig, pkgconfig
-, poppler, libpaper, graphite2, zziplib, harfbuzz, texinfo, potrace, gmp, mpfr
-, xpdf, cairo, pixman, xorg, clisp
+, zlib, libiconv, libpng, libX11
+, freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
+, perl, pkgconfig
+, poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
+, cairo, pixman, xorg, clisp, biber
 , makeWrapper
 }:
 
@@ -261,6 +261,7 @@ dvipng = stdenv.mkDerivation {
 };
 
 
+inherit biber;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {
   name = "texlive-bibtex-x.bin-${version}";

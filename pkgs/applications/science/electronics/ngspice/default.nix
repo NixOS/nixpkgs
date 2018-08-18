@@ -1,4 +1,5 @@
-{stdenv, fetchurl, readline, bison, flex, libX11, libICE, libXaw, libXext, fftw}:
+{stdenv, fetchurl, bison, flex
+, readline, libX11, libICE, libXaw, libXmu, libXext, libXt, fftw }:
 
 stdenv.mkDerivation {
   name = "ngspice-28";
@@ -9,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ flex bison ];
-  buildInputs = [ readline libX11 libICE libXaw libXext fftw ];
+  buildInputs = [ readline libX11 libICE libXaw libXmu libXext libXt fftw ];
 
   configureFlags = [ "--enable-x" "--with-x" "--with-readline" "--enable-xspice" "--enable-cider" ];
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation {
     description = "The Next Generation Spice (Electronic Circuit Simulator)";
     homepage = http://ngspice.sourceforge.net;
     license = with licenses; [ "BSD" gpl2 ];
-    maintainers = with maintainers; [ bgamari viric rongcuid ];
+    maintainers = with maintainers; [ bgamari rongcuid ];
     platforms = platforms.linux;
   };
 }

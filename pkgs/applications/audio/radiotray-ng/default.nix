@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "radiotray-ng-${version}";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     rev = "v${version}";
-    sha256 = "0q8k7nsjm6m0r0zs1br60niaqlwvd3myqalb5sqijzanx41aq2l6";
+    sha256 = "1sq7bc0dswv3vv56w527z268ib0pyhdxyf25388vnj1fv0c146wc";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];

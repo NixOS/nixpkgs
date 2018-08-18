@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "requests_download";
   version = "0.1.1";
-  name = "${pname}-${version}";
 
   format = "wheel";
 

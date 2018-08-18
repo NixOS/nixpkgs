@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, zdoom, makeWrapper
+{ stdenv, fetchFromGitHub, cmake, makeWrapper
 , openal, fluidsynth, soundfont-fluid, libGL, SDL2
 , bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
 stdenv.mkDerivation rec {
   name = "gzdoom-${version}";
-  version = "3.3.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "0zlkja0jcqi3s4iw5h076iwqxa3haradqksjnx9jxcbkvaw75p3k";
+    sha256 = "04wdcm7jky8bm01ndx46q3pq7ma6npjwmp204gxidmdwjhn0bfyp";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

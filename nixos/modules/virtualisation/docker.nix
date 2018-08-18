@@ -141,7 +141,7 @@ in
 
   config = mkIf cfg.enable (mkMerge [{
       environment.systemPackages = [ cfg.package ];
-      users.extraGroups.docker.gid = config.ids.gids.docker;
+      users.groups.docker.gid = config.ids.gids.docker;
       systemd.packages = [ cfg.package ];
 
       systemd.services.docker = {

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libcdr-0.1.4";
 
   src = fetchurl {
-    url = "http://dev-www.libreoffice.org/src/${name}.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/${name}.tar.xz";
     sha256 = "0vd6likgk51j46llybkx4wq3674xzrhp0k82220pkx9x1aqfi9z7";
   };
 
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "A library providing ability to interpret and import Corel Draw drawings into various applications";
     homepage = http://www.freedesktop.org/wiki/Software/libcdr;
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.mpl20;
   };
 }

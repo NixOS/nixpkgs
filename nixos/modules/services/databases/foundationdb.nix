@@ -320,19 +320,16 @@ in
   };
 
   config = mkIf cfg.enable {
-    meta.doc         = ./foundationdb.xml;
-    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
-
     environment.systemPackages = [ pkg ];
 
-    users.extraUsers = optionalAttrs (cfg.user == "foundationdb") (singleton
+    users.users = optionalAttrs (cfg.user == "foundationdb") (singleton
       { name        = "foundationdb";
         description = "FoundationDB User";
         uid         = config.ids.uids.foundationdb;
         group       = cfg.group;
       });
 
-    users.extraGroups = optionalAttrs (cfg.group == "foundationdb") (singleton
+    users.groups = optionalAttrs (cfg.group == "foundationdb") (singleton
       { name = "foundationdb";
         gid  = config.ids.gids.foundationdb;
       });
@@ -413,4 +410,7 @@ in
       '';
     };
   };
+
+  meta.doc         = ./foundationdb.xml;
+  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 }

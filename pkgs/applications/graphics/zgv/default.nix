@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "zgv-${version}";
   version = "5.9";
   src = fetchurl {
-    url = "http://www.svgalib.org/rus/zgv/${name}.tar.gz";
+    url = "https://www.svgalib.org/rus/zgv/${name}.tar.gz";
     sha256 = "1fk4i9x0cpnpn3llam0zy2pkmhlr2hy3iaxhxg07v9sizd4dircj";
   };
 

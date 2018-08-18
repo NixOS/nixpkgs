@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qttools }:
+{ stdenv, fetchFromGitHub, qmake, qttools }:
 
 stdenv.mkDerivation rec {
   name = "gpxsee-${version}";

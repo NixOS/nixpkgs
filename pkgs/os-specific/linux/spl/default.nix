@@ -12,7 +12,7 @@ let
     , rev ? "spl-${version}"
     , broken ? false
     , patches ? []
-    } @ args : stdenv.mkDerivation rec {
+    }: stdenv.mkDerivation rec {
       name = "spl-${version}-${kernel.version}";
 
       src = fetchFromGitHub {
@@ -25,7 +25,7 @@ let
 
       nativeBuildInputs = [ autoreconfHook ] ++ kernel.moduleBuildDependencies;
 
-      hardeningDisable = [ "pic" ];
+      hardeningDisable = [ "fortify" "stackprotector" "pic" ];
 
       preConfigure = ''
         substituteInPlace ./module/spl/spl-generic.c --replace /usr/bin/hostid hostid

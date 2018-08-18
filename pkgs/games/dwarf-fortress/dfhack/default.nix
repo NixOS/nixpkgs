@@ -1,15 +1,16 @@
-{ stdenv, hostPlatform, lib, fetchFromGitHub, cmake, writeScriptBin, callPackage
+{ stdenv, buildEnv, lib, fetchFromGitHub, cmake, writeScriptBin
 , perl, XMLLibXML, XMLLibXSLT, zlib
 , enableStoneSense ? false,  allegro5, libGLU_combined
+, enableTWBT ? true, twbt
 , SDL
 }:
 
 let
-  dfVersion = "0.44.10";
-  version = "${dfVersion}-r1";
+  dfVersion = "0.44.11";
+  version = "${dfVersion}-alpha1";
 
   # revision of library/xml submodule
-  xmlRev = "3c0bf63674d5430deadaf7befaec42f0ec1e8bc5";
+  xmlRev = "853bd161270f50b21fe4b751de339458f78f56d6";
 
   arch =
     if stdenv.system == "x86_64-linux" then "64"
@@ -33,45 +34,53 @@ let
     fi
   '';
 
-in stdenv.mkDerivation rec {
+  dfhack = stdenv.mkDerivation rec {
+    name = "dfhack-base-${version}";
+
+    # Beware of submodules
+    src = fetchFromGitHub {
+      owner = "DFHack";
+      repo = "dfhack";
+      sha256 = "1vzrpdw0pn18calayf9dwqpyg37cb7wkzkvskxjx9nak5ilxzywm";
+      rev = version;
+      fetchSubmodules = true;
+    };
+
+    patches = [ ./fix-stonesense.patch ];
+    nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
+    # We don't use system libraries because dfhack needs old C++ ABI.
+    buildInputs = [ zlib SDL ]
+               ++ lib.optionals enableStoneSense [ allegro5 libGLU_combined ];
+
+    preConfigure = ''
+      # Trick build system into believing we have .git
+      mkdir -p .git/modules/library/xml
+      touch .git/index .git/modules/library/xml/index
+    '';
+
+    preBuild = ''
+      export LD_LIBRARY_PATH="$PWD/depends/protobuf:$LD_LIBRARY_PATH"
+    '';
+
+    cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
+              ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
+
+    enableParallelBuilding = true;
+  };
+in
+
+buildEnv {
   name = "dfhack-${version}";
 
-  # Beware of submodules
-  src = fetchFromGitHub {
-    owner = "DFHack";
-    repo = "dfhack";
-    sha256 = "15hz90lfg7asgm4bqa2yi2lkwzrljphb42q6616sriwzs66xia6h";
-    rev = version;
-    fetchSubmodules = true;
-  };
-
-  nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
-  # We don't use system libraries because dfhack needs old C++ ABI.
-  buildInputs = [ zlib SDL ]
-             ++ lib.optionals enableStoneSense [ allegro5 libGLU_combined ];
-
-  preConfigure = ''
-    # Trick build system into believing we have .git
-    mkdir -p .git/modules/library/xml
-    touch .git/index .git/modules/library/xml/index
-  '';
-
-  preBuild = ''
-    export LD_LIBRARY_PATH="$PWD/depends/protobuf:$LD_LIBRARY_PATH"
-  '';
-
-  cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
-            ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
-
-  enableParallelBuilding = true;
-
   passthru = { inherit version dfVersion; };
+
+  paths = [ dfhack ] ++ lib.optionals enableTWBT [ twbt.lib ];
 
   meta = with stdenv.lib; {
     description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
     homepage = https://github.com/DFHack/dfhack/;
     license = licenses.zlib;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ robbinch a1russell abbradar ];
+    maintainers = with maintainers; [ robbinch a1russell abbradar numinit ];
   };
 }

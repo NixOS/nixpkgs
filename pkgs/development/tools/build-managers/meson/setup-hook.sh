@@ -17,6 +17,7 @@ mesonConfigurePhase() {
         --includedir=${!outputInclude}/include \
         --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
         --localedir=${!outputLib}/share/locale \
+        -Dauto_features=disabled \
         $mesonFlags"
 
     mesonFlags="${crossMesonFlags+$crossMesonFlags }--buildtype=${mesonBuildType:-release} $mesonFlags"

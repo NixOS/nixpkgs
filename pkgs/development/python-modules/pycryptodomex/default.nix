@@ -2,8 +2,7 @@
 
 buildPythonPackage rec {
   pname = "pycryptodomex";
-  name = "${pname}-${version}";
-  version = "3.5.1";
+  version = "3.6.4";
 
   meta = {
     description = "A self-contained cryptographic library for Python";
@@ -13,6 +12,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb60d38111ebc383a5a1c909545562926c66c846d03fc65ba7b8a3487cb23078";
+    sha256 = "4daabe7c0404e673b9029aa43761c779b9b4df2cbe11ccd94daded6a0acd8808";
   };
 }

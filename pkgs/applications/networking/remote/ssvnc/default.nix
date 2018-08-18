@@ -1,5 +1,5 @@
 { stdenv, fetchurl, imake, zlib, jdk, libX11, libXt, libXmu
-, libXaw, libXext, libXpm, openjpeg, openssl, tcl, tk, perl }:
+, libXaw, libXext, libXpm, openjpeg, openssl, tk, perl }:
 
 stdenv.mkDerivation rec {
   name = "ssvnc-${version}";

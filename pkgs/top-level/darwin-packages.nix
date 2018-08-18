@@ -44,10 +44,10 @@ in
 
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
-  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/ios-sdk-pkgs {
+  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
     buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
     targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
-    xcode = darwin.xcode_8_2;
+    xcode = darwin.xcode;
     inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
@@ -71,7 +71,8 @@ in
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
-  inherit (callPackages ../os-specific/darwin/xcode { } ) xcode_8_1 xcode_8_2 xcode_9_1 xcode_9_2;
+  inherit (callPackages ../os-specific/darwin/xcode { } )
+          xcode_8_1 xcode_8_2 xcode_9_1 xcode_9_2 xcode_9_4 xcode;
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 

@@ -3,7 +3,6 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   version = "2.0.3";
   pname = "ofxclient";
 

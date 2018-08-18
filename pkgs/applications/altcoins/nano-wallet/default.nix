@@ -1,15 +1,15 @@
-{lib, pkgs, stdenv, fetchFromGitHub, cmake, pkgconfig, boost, libGL, qtbase}:
+{lib, stdenv, fetchFromGitHub, cmake, pkgconfig, boost, libGL, qtbase}:
 
 stdenv.mkDerivation rec {
 
   name = "nano-wallet-${version}";
-  version = "12.1";
+  version = "14.2";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "raiblocks";
     rev = "V${version}";
-    sha256 = "10ng7qn6y31s2bjahmpivw2plx90ljjjzb87j3l7zmppsjd2iq03";
+    sha256 = "0jbv5a8sz403a1pqcgl32idk6y0z510h7ikjg1dcxla0rsch6ipl";
     fetchSubmodules = true;
   };
 

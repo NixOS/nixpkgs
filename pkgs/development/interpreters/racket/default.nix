@@ -5,7 +5,7 @@
 , readline, sqlite
 , disableDocs ? false
 , CoreFoundation
-, gsettings_desktop_schemas
+, gsettings-desktop-schemas
 }:
 
 let
@@ -20,7 +20,7 @@ let
     glib
     gmp
     gtk3
-    gsettings_desktop_schemas
+    gsettings-desktop-schemas
     libedit
     libjpeg
     libpng
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
-  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite gsettings_desktop_schemas gtk3 ]
+  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite gsettings-desktop-schemas gtk3 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ];
 
   preConfigure = ''

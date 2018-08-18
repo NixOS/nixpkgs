@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, mate, gnome3, gtk2, gtk_engines,
+{ stdenv, fetchurl, pkgconfig, intltool, mate, gtk2, gtk_engines,
   gtk-engine-murrine, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {

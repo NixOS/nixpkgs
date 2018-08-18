@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk, wrapGAppsHook
 , webkitgtk, json-glib, rest, libsecret, dbus-glib, gtk-doc
-, telepathy-glib, gettext, dbus_libs, icu, glib-networking
+, telepathy-glib, gettext, icu, glib-networking
 , libsoup, docbook_xsl, docbook_xsl_ns, gnome3, gcr, kerberos
 }:
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex, perl, libpng, giflib, libjpeg, alsaLib, readline, libGLU_combined, libX11, libXaw
+{ stdenv, fetchurl, bison, flex, perl, libpng, giflib, libjpeg, alsaLib, readline, libGLU_combined, libXaw
 , pkgconfig, gtk2, SDL, autoreconfHook, makeDesktopItem
 }:
 

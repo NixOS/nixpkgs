@@ -51,5 +51,6 @@ stdenv.mkDerivation {
 
     maintainers = with maintainers; [ pierron ];
     platforms = platforms.unix;
+    hydraPlatforms = stdenv.lib.platforms.linux; # sdl-config times out on darwin
   };
 }

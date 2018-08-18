@@ -1,8 +1,8 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch, requests, zeroconf, netifaces, pytest }:
+{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, requests, zeroconf, netifaces, pytest }:
 
 buildPythonPackage rec {
   pname = "netdisco";
-  version = "1.4.0";
+  version = "1.5.0";
 
   disabled = !isPy3k;
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "home-assistant";
     repo = pname;
     rev = version;
-    sha256 = "0q1cl76a0fwxm80lkk7cpd4p23r2bvf1a45nb7n61cgzrqcv43q1";
+    sha256 = "1lr0zpzdjkhcaihyxq8wv7c1wjm7xgx2sl8xmwp1kyivkgybk6n9";
   };
 
   propagatedBuildInputs = [ requests zeroconf netifaces ];

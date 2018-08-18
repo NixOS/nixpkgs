@@ -9,7 +9,7 @@ import ./make-test.nix ({ pkgs, ... }:
   nodes =
     { mortyProxyWithKey =
 
-      { config, pkgs, ... }:
+      { ... }:
       { services.morty = {
         enable = true;
 	key = "78a9cd0cfee20c672f78427efb2a2a96036027f0";
@@ -20,11 +20,11 @@ import ./make-test.nix ({ pkgs, ... }:
     };
 
   testScript =
-    { nodes , ... }:
+    { ... }:
     ''
-      startAll;
+      $mortyProxyWithKey->waitForUnit("default.target");
 
-      $mortyProxyWithKey->waitForUnit("morty");
+      $mortyProxyWithKey->waitForOpenPort(3001);
       $mortyProxyWithKey->succeed("curl -L 127.0.0.1:3001 | grep MortyProxy");
 
     '';

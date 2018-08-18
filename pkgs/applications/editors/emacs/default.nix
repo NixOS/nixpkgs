@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
+, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO
 , withX ? !stdenv.isDarwin
 , withGTK2 ? false, gtk2 ? null
 , withGTK3 ? true, gtk3 ? null, gsettings-desktop-schemas ? null

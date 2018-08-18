@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "mopidy-gmusic-${version}";
-  version = "2.0.0";
+  pname = "mopidy-gmusic";
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://github.com/mopidy/mopidy-gmusic/archive/v${version}.tar.gz";
-    sha256 = "1xryw2aixfza3brxlgjdlg0lghlb17g7kay9zy56mlzp0jr7m87j";
+    sha256 = "0a2s4xrrhnkv85rx4w5bj6ih9xm34jy0q71fdvbzmi827g9dw5sz";
   };
 
   propagatedBuildInputs = [

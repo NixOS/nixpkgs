@@ -1,41 +1,31 @@
 {
-  stdenv, python2Packages, openssl,
+  stdenv, pythonPackages, openssl,
 
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
   extraInputs ? []
 }:
 
-let
-  # Use tornado-4.x until https://github.com/saltstack/salt/issues/45790 is resolved
-  tornado = python2Packages.tornado.overridePythonAttrs (oldAttrs: rec {
-    version = "4.5.3";
-    name = "${oldAttrs.pname}-${version}";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d";
-    };
-  });
-in
-python2Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "salt";
-  version = "2018.3.0";
+  version = "2018.3.2";
 
-  src = python2Packages.fetchPypi {
+  src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "0cbbnmaynnpfknmppzlz04mqw4d3d2ay1dqrli11b5pnzli5v950";
+    sha256 = "d86eeea2e5387f4a64bbf0a11d103bfc8aac1122e19d39cc0945d33efdc797bd";
   };
 
-  propagatedBuildInputs = with python2Packages; [
-    futures
+  propagatedBuildInputs = with pythonPackages; [
     jinja2
     markupsafe
-    msgpack-python
+    msgpack
     pycrypto
     pyyaml
     pyzmq
     requests
     tornado
+  ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) [
+    futures
   ] ++ extraInputs;
 
   patches = [ ./fix-libcrypto-loading.patch ];

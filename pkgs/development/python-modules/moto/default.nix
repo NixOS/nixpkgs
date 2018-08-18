@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
+{ buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
 , requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker, responses
 , six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml }:
 
@@ -17,7 +17,8 @@ buildPythonPackage rec {
     # regarding aws-xray-sdk: https://github.com/spulec/moto/commit/31eac49e1555c5345021a252cb0c95043197ea16
     substituteInPlace setup.py \
       --replace "python-dateutil<2.7.0" "python-dateutil<3.0.0" \
-      --replace "aws-xray-sdk<0.96," "aws-xray-sdk"
+      --replace "aws-xray-sdk<0.96," "aws-xray-sdk" \
+      --replace "jsondiff==1.1.1" "jsondiff>=1.1.1"
   '';
 
   propagatedBuildInputs = [

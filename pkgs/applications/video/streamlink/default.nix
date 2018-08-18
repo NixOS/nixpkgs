@@ -1,19 +1,19 @@
 { stdenv, pythonPackages, fetchFromGitHub, rtmpdump, ffmpeg }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.12.1";
+  version = "0.14.2";
   name = "streamlink-${version}";
 
   src = fetchFromGitHub {
     owner = "streamlink";
     repo = "streamlink";
     rev = "${version}";
-    sha256 = "0r63fjp5qhnbp5kr4w2nn3gnj0wr0ik1pw1gyry8jl9rp2jq9db5";
+    sha256 = "1njwfy1h8a9n5z6crrfnknlw4ys0bap2jam6ga6njgkd10aly9qr";
   };
 
-  checkInputs = with pythonPackages; [ pytest mock requests-mock ];
+  checkInputs = with pythonPackages; [ pytest mock requests-mock freezegun ];
 
-  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 websocket_client ]) ++ [ rtmpdump ffmpeg ];
+  propagatedBuildInputs = (with pythonPackages; [ pycryptodome requests iso-639 iso3166 websocket_client isodate ]) ++ [ rtmpdump ffmpeg ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/streamlink/streamlink;
@@ -26,7 +26,7 @@ pythonPackages.buildPythonApplication rec {
       Streamlink is a fork of the livestreamer project.
     '';
     license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dezgeg zraexy ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ dezgeg zraexy enzime ];
   };
 }

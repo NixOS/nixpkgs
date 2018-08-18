@@ -42,17 +42,15 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  default_cxx_stdlib_compile = optionalString (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools)
+  default_cxx_stdlib_compile = optionalString (targetPlatform.isLinux && !(cc.isGNU or false) && !nativeTools && cc ? gcc)
     "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)";
-
-  dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
 
   # The "infix salt" is a arbitrary string added in the middle of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
   # without interfering. For the moment, it is defined as the target triple,
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
-  infixSalt = dashlessTarget;
+  infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
     if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
@@ -278,6 +276,10 @@ stdenv.mkDerivation {
 
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
+    ''
+
+    + optionalString targetPlatform.isMinGW ''
+      hardening_unsupported_flags+=" stackprotector"
     ''
 
     + ''

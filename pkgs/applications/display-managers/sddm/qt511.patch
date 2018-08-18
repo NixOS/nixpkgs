@@ -1,0 +1,28 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 005c9ad..71b46d7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -93,7 +93,7 @@ find_package(XCB REQUIRED)
+ find_package(XKB REQUIRED)
+ 
+ # Qt 5
+-find_package(Qt5 5.6.0 CONFIG REQUIRED Core DBus Gui Qml Quick LinguistTools)
++find_package(Qt5 5.6.0 CONFIG REQUIRED Core DBus Gui Qml Quick LinguistTools Test)
+ 
+ # find qt5 imports dir
+ get_target_property(QMAKE_EXECUTABLE Qt5::qmake LOCATION)
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index c9d935a..bb85ddd 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -2,9 +2,8 @@ set(QT_USE_QTTEST TRUE)
+ 
+ include_directories(../src/common)
+ 
+-
+ set(ConfigurationTest_SRCS ConfigurationTest.cpp ../src/common/ConfigReader.cpp)
+ add_executable(ConfigurationTest ${ConfigurationTest_SRCS})
+ add_test(NAME Configuration COMMAND ConfigurationTest)
+ 
+-qt5_use_modules(ConfigurationTest Test)
++target_link_libraries(ConfigurationTest Qt5::Core Qt5::Test)

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "libpcap-1.8.1";
 
   src = fetchurl {
-    url = "http://www.tcpdump.org/release/${name}.tar.gz";
+    url = "https://www.tcpdump.org/release/${name}.tar.gz";
     sha256 = "07jlhc66z76dipj4j5v3dig8x6h3k6cb36kmnmpsixf3zmlvqgb7";
   };
 

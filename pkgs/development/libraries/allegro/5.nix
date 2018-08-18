@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A game programming library";
-    homepage = http://liballeg.org/;
+    homepage = https://liballeg.org/;
     license = licenses.zlib;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

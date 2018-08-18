@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libao, readline, json_c, libgcrypt, libav, curl }:
+{ fetchurl, stdenv, pkgconfig, libao, json_c, libgcrypt, libav, curl }:
 
 stdenv.mkDerivation rec {
   name = "pianobar-2016.06.02";
@@ -23,6 +23,5 @@ stdenv.mkDerivation rec {
     homepage = http://6xq.net/projects/pianobar/;
     platforms = platforms.linux;
     license = licenses.mit; # expat version
-    maintainers = with maintainers; [ eduarrrd ];
   };
 }

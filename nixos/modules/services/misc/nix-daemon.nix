@@ -127,16 +127,16 @@ in
 
       useSandbox = mkOption {
         type = types.either types.bool (types.enum ["relaxed"]);
-        default = false;
+        default = true;
         description = "
           If set, Nix will perform builds in a sandboxed environment that it
           will set up automatically for each build. This prevents impurities
-          in builds by disallowing access to dependencies outside of the Nix 
-          store by using network and mount namespaces in a chroot environment. 
-          This isn't enabled by default for possible performance impacts due to 
-          the initial setup time of a sandbox for each build. It doesn't affect 
-          derivation hashes, so changing this option will not trigger a rebuild
-          of packages.
+          in builds by disallowing access to dependencies outside of the Nix
+          store by using network and mount namespaces in a chroot environment.
+          This is enabled by default even though it has a possible performance
+          impact due to the initial setup time of a sandbox for each build. It
+          doesn't affect derivation hashes, so changing this option will not
+          trigger a rebuild of packages.
         ";
       };
 
@@ -450,7 +450,7 @@ in
 
     nix.nrBuildUsers = mkDefault (lib.max 32 cfg.maxJobs);
 
-    users.extraUsers = nixbldUsers;
+    users.users = nixbldUsers;
 
     services.xserver.displayManager.hiddenUsers = map ({ name, ... }: name) nixbldUsers;
 

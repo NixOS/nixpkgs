@@ -1,5 +1,5 @@
-{ lib, fetchurl, pythonPackages, pkgconfig, makeWrapper, qmake, fetchpatch
-, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
+{ lib, fetchurl, fetchpatch, pythonPackages, pkgconfig
+, qmake, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus
 , withWebSockets ? false, qtwebsockets
 , withConnectivity ? false, qtconnectivity
 }:
@@ -32,7 +32,7 @@ in buildPythonPackage {
 
   nativeBuildInputs = [ pkgconfig qmake lndir ];
 
-  buildInputs = [ dbus_libs ];
+  buildInputs = [ dbus ];
 
   propagatedBuildInputs = [
     sip qtbase qtsvg qtwebkit qtwebengine
@@ -53,7 +53,7 @@ in buildPythonPackage {
 
     ${python.executable} configure.py  -w \
       --confirm-license \
-      --dbus=${dbus_libs.dev}/include/dbus-1.0 \
+      --dbus=${dbus.dev}/include/dbus-1.0 \
       --no-qml-plugin \
       --bindir=$out/bin \
       --destdir=$out/${python.sitePackages} \
@@ -72,6 +72,16 @@ in buildPythonPackage {
       name = "pyqt5-cura-crash.patch";
       url = https://git.archlinux.org/svntogit/packages.git/plain/repos/extra-x86_64/pyqt5-cura-crash.patch?id=6cfe64a3d1827e0ed9cc62f1683a53b582315f4f;
       sha256 = "02a0mw1z8p9hhqhl4bgjrmf1xq82xjmpivn5bg6r4yv6pidsh7ck";
+    })
+    (fetchpatch {
+      name = "pyqt-qt5.11.patch";
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/pyqt-qt5.11.patch?h=packages/pyqt5&id=d01240b801203d3865b2f61fa19090cc20e55a97";
+      sha256 = "0qa7w1agjg9da99lvnqwwxnm3pp7qd683h7zggq4c269y2km812h";
+    })
+    (fetchpatch {
+      name = "pyqt-support-new-qt.patch";
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/pyqt-support-new-qt.patch?h=packages/pyqt5&id=d01240b801203d3865b2f61fa19090cc20e55a97";
+      sha256 = "1nkl96f4bki37zw6iwvd4vq8z8gg45q5m1cbkbaw72395i0m7p5j";
     })
   ];
 

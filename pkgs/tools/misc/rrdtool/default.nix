@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "rrdtool-1.7.0";
 
   src = fetchurl {
-    url = "http://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
+    url = "https://oss.oetiker.ch/rrdtool/pub/${name}.tar.gz";
     sha256 = "0ssjqpa0dwwzbylc0drmlbq922qcw8crffc0rpr805xr6n4k8zgr";
   };
 

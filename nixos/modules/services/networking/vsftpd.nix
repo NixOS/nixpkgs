@@ -193,7 +193,7 @@ in
         message = "vsftpd: If forceLocalLoginsSSL or forceLocalDataSSL is true then a rsaCertFile must be provided!";
       };
 
-    users.extraUsers =
+    users.users =
       [ { name = "vsftpd";
           uid = config.ids.uids.vsftpd;
           description = "VSFTPD user";
@@ -207,7 +207,7 @@ in
           home = cfg.anonymousUserHome;
         };
 
-    users.extraGroups.ftp.gid = config.ids.gids.ftp;
+    users.groups.ftp.gid = config.ids.gids.ftp;
 
     # If you really have to access root via FTP use mkOverride or userlistDeny
     # = false and whitelist root

@@ -1,7 +1,7 @@
 import ./make-test.nix {
   name = "prosody";
 
-  machine = { config, pkgs, ... }: {
+  machine = { pkgs, ... }: {
     services.prosody = {
       enable = true;
       # TODO: use a self-signed certificate

@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, fetchpatch, shadow
-, ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
+{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow
+, ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 let
   version = lib.concatStringsSep "." ([ majorVersion ]
     ++ lib.optional (patchVersion != "") patchVersion);
   majorVersion = "2.32";
-  patchVersion = "";
+  patchVersion = "1";
 
 in stdenv.mkDerivation rec {
   name = "util-linux-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
-    sha256 = "0d2758kjll5xqm5fpp3sww1h66aahx161sf2b60jxqv4qymrfwvc";
+    sha256 = "1ck7d8srw5szpjq7v0gpmjahnjs6wgqzm311ki4gazww6xx71rl6";
   };
 
   patches = [
@@ -27,12 +27,6 @@ in stdenv.mkDerivation rec {
     substituteInPlace sys-utils/eject.c \
       --replace "/bin/umount" "$out/bin/umount"
   '';
-
-  crossAttrs = {
-    # Work around use of `AC_RUN_IFELSE'.
-    preConfigure = "export scanf_cv_type_modifier=ms" + lib.optionalString (systemd != null)
-      "\nconfigureFlags+=\" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/\"";
-  };
 
   preConfigure = lib.optionalString (systemd != null) ''
     configureFlags+=" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/"
@@ -49,8 +43,10 @@ in stdenv.mkDerivation rec {
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
-  ]
-    ++ lib.optional (ncurses == null) "--without-ncurses";
+  ] ++ lib.optional (ncurses == null) "--without-ncurses"
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       "scanf_cv_type_modifier=ms"
+  ;
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 

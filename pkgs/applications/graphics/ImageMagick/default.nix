@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw
+, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
 , ApplicationServices
-, buildPlatform, hostPlatform
+, hostPlatform
 }:
 
 let
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2
+      libpng libtiff libxml2 libheif libde265
     ]
     ++ lib.optionals (!hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]

@@ -1,8 +1,8 @@
-{ stdenv, pkgs, fetchurl, ninja, meson, pkgconfig, vala, gobjectIntrospection, libxml2
+{ stdenv, fetchurl, ninja, meson, pkgconfig, vala, gobjectIntrospection, libxml2
 , gtk-doc, docbook_xsl, dbus, xvfb_run, glib, gtk3, gnome3 }:
 
 let
-  version = "3.28.2";
+  version = "3.28.5";
   pname = "libdazzle";
 in
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libdazzle/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1kfxnyqjwb1r8d4bpr59j1cikd94m6nxf1641hlg7dqlpl9rwlan";
+    sha256 = "08qdwv2flywnh6kibkyv0pnm67pk8xlmjh4yqx6hf13hyhkxkqgg";
   };
 
   nativeBuildInputs = [ ninja meson pkgconfig vala gobjectIntrospection libxml2 gtk-doc docbook_xsl dbus xvfb_run ];

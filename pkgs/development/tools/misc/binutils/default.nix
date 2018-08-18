@@ -1,6 +1,6 @@
 { stdenv, buildPackages
 , fetchurl, zlib, autoreconfHook264
-, buildPlatform, hostPlatform, targetPlatform
+, hostPlatform, targetPlatform
 , noSysDirs, gold ? true, bison ? null
 }:
 
@@ -10,7 +10,7 @@ let
   # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
   version = "2.30";
   basename = "binutils-${version}";
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optionals optionalString;
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
@@ -26,11 +26,6 @@ stdenv.mkDerivation rec {
   });
 
   patches = [
-    # Turn on --enable-new-dtags by default to make the linker set
-    # RUNPATH instead of RPATH on binaries.  This is important because
-    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
-    ./new-dtags.patch
-
     # Since binutils 2.22, DT_NEEDED flags aren't copied for dynamic outputs.
     # That requires upstream changes for things to work. So we can patch it to
     # get the old behaviour by now.
@@ -103,6 +98,8 @@ stdenv.mkDerivation rec {
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
+  hardeningDisable = [ "format" ];
+
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
@@ -115,6 +112,11 @@ stdenv.mkDerivation rec {
     "--enable-deterministic-archives"
     "--disable-werror"
     "--enable-fix-loongson2f-nop"
+
+    # Turn on --enable-new-dtags by default to make the linker set
+    # RUNPATH instead of RPATH on binaries.  This is important because
+    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
+    "--enable-new-dtags"
   ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
 
   doCheck = false; # fails

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchPypi
 , fetchFromGitHub
 , buildPythonPackage
 , geckodriver
@@ -22,12 +22,11 @@ in
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "3.6.0";
-  name = pname + "-" + version;
+  version = "3.8.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/selenium/${name}.tar.gz";
-    sha256 = "15qpvz0bdwjvpcj11fm0rw6r5inr66sqw89ww50l025sbhf04qwm";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1lqm2md84g11g7lqi94xqb5lydm93vgmlznfhf27g6sy9ayjvgcs";
   };
 
   buildInputs = [xorg.libX11];

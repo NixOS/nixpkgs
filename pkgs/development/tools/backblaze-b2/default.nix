@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper
+{ lib, buildPythonApplication, fetchFromGitHub
 , arrow, futures, logfury, requests, six, tqdm
 }:
 

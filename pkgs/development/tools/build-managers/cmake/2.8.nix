@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, replace, curl, expat, zlib, bzip2
+{ stdenv, fetchurl, fetchpatch, curl, expat, zlib, bzip2
 , useNcurses ? false, ncurses, useQt4 ? false, qt4, ps
 , buildPlatform, hostPlatform
 }:
@@ -84,5 +84,6 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Makefile Generator";
     platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ ];
+    license = stdenv.lib.licenses.bsd3;
   };
 }

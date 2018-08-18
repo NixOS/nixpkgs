@@ -1,6 +1,6 @@
 {
 fetchFromGitHub, stdenv, lib,
-autoreconfHook, intltool, pkgconfig, makeWrapper, pkgs,
+makeWrapper, pkgs,
 perl, perlPackages,
 gnome2 }:
 
@@ -16,7 +16,7 @@ let
     ClassSingleton
     URI
     AnyEvent AnyEventHTTP
-    CommonSense
+    commonsense
     FileSlurp
     JSON
     Guard

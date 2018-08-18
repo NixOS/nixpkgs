@@ -6,9 +6,6 @@ with import ./systemd-lib.nix { inherit config lib pkgs; };
 
 let
   cfg = config.systemd.nspawn;
-  assertions = [
-    # boot = true -> processtwo != true
-  ];
 
   checkExec = checkUnitConfig "Exec" [
     (assertOnlyFields [

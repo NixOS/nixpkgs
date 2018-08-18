@@ -35,7 +35,6 @@
 , temporalDenoisingSupport ? true # use temporal denoising instead of spatial denoising
 , coefficientRangeCheckingSupport ? false # decoder checks if intermediate transform coefficients are in valid range
 , vp9HighbitdepthSupport ? true # 10/12 bit color support in VP9
-, experimentalSupport ? false # experimental features
 # Experimental features
 , experimentalSpatialSvcSupport ? false # Spatial scalable video coding
 , experimentalFpMbStatsSupport ? false

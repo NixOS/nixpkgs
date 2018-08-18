@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
+
 let
   cfg = config.services.vault;
 
@@ -24,14 +25,21 @@ let
           ${cfg.telemetryConfig}
         }
       ''}
+    ${cfg.extraConfig}
   '';
 in
+
 {
   options = {
-
     services.vault = {
-
       enable = mkEnableOption "Vault daemon";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.vault;
+        defaultText = "pkgs.vault";
+        description = "This option specifies the vault package to use.";
+      };
 
       address = mkOption {
         type = types.str;
@@ -58,7 +66,7 @@ in
         default = ''
           tls_min_version = "tls12"
         '';
-        description = "extra configuration";
+        description = "Extra text appended to the listener section.";
       };
 
       storageBackend = mkOption {
@@ -84,6 +92,12 @@ in
         default = "";
         description = "Telemetry configuration";
       };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Extra text appended to <filename>vault.hcl</filename>.";
+      };
     };
   };
 
@@ -97,13 +111,13 @@ in
       }
     ];
 
-    users.extraUsers.vault = {
+    users.users.vault = {
       name = "vault";
       group = "vault";
       uid = config.ids.uids.vault;
       description = "Vault daemon user";
     };
-    users.extraGroups.vault.gid = config.ids.gids.vault;
+    users.groups.vault.gid = config.ids.gids.vault;
 
     systemd.services.vault = {
       description = "Vault server daemon";
@@ -122,7 +136,7 @@ in
         User = "vault";
         Group = "vault";
         PermissionsStartOnly = true;
-        ExecStart = "${pkgs.vault}/bin/vault server -config ${configFile}";
+        ExecStart = "${cfg.package}/bin/vault server -config ${configFile}";
         PrivateDevices = true;
         PrivateTmp = true;
         ProtectSystem = "full";

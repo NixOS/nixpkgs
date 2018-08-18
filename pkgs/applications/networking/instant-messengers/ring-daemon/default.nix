@@ -30,7 +30,6 @@
 , openssl
 , perl
 , python3
-, bash
 , libupnp
 , speexdsp
 , fetchFromGitHub

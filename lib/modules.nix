@@ -493,7 +493,7 @@ rec {
       inherit priority content;
     };
 
-  mkOptionDefault = mkOverride 1001; # priority of option defaults
+  mkOptionDefault = mkOverride 1500; # priority of option defaults
   mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
@@ -532,9 +532,7 @@ rec {
   #
   mkAliasDefinitions = mkAliasAndWrapDefinitions id;
   mkAliasAndWrapDefinitions = wrap: option:
-    mkMerge
-      (optional (isOption option && option.isDefined)
-        (wrap (mkMerge option.definitions)));
+    mkIf (isOption option && option.isDefined) (wrap (mkMerge option.definitions));
 
 
   /* Compatibility. */
@@ -669,22 +667,25 @@ rec {
   };
 
   doRename = { from, to, visible, warn, use }:
+    { config, options, ... }:
     let
+      fromOpt = getAttrFromPath from options;
       toOf = attrByPath to
         (abort "Renaming error: option `${showOption to}' does not exist.");
     in
-      { config, options, ... }:
-      { options = setAttrByPath from (mkOption {
-          inherit visible;
-          description = "Alias of <option>${showOption to}</option>.";
-          apply = x: use (toOf config);
-        });
-        config = {
-          warnings =
-            let opt = getAttrFromPath from options; in
-            optional (warn && opt.isDefined)
-              "The option `${showOption from}' defined in ${showFiles opt.files} has been renamed to `${showOption to}'.";
-        } // setAttrByPath to (mkAliasDefinitions (getAttrFromPath from options));
-      };
+    {
+      options = setAttrByPath from (mkOption {
+        inherit visible;
+        description = "Alias of <option>${showOption to}</option>.";
+        apply = x: use (toOf config);
+      });
+      config = mkMerge [
+        {
+          warnings = optional (warn && fromOpt.isDefined)
+            "The option `${showOption from}' defined in ${showFiles fromOpt.files} has been renamed to `${showOption to}'.";
+        }
+        (mkAliasAndWrapDefinitions (setAttrByPath to) fromOpt)
+      ];
+    };
 
 }

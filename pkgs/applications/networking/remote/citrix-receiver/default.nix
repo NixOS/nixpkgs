@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchurl
 , requireFile
 , makeWrapper
 , libredirect
@@ -23,55 +24,21 @@
 , alsaLib
 , libidn
 , zlib
-, version ? "13.9.1"
+, version ? "13.10.0"
 }:
 
 let
+  # In 56e1bdc7f9c (libidn: 1.34 -> 1.35), libidn.so.11 became libidn.so.12.
+  # Citrix looks for the former so we build version 1.34 to please the binary
+  libidn_134 = libidn.overrideDerivation (_: rec {
+    name = "libidn-1.34";
+    src = fetchurl {
+      url = "mirror://gnu/libidn/${name}.tar.gz";
+      sha256 = "0g3fzypp0xjcgr90c5cyj57apx1cmy0c6y9lvw2qdcigbyby469p";
+    };
+  });
+
   versionInfo = {
-    "13.4.0" = rec {
-      major     = "13";
-      minor     = "4";
-      patch     = "0";
-      x64hash   = "133brs0sq6d0mgr19rc6ig1n9ahm3ryi23v5nrgqfh0hgxqcrrjb";
-      x86hash   = "0r7jfl5yqv1s2npy8l9gsn0gbb82f6raa092ppkc8xy5pni5sh7l";
-      x64suffix = "10109380";
-      x86suffix = x64suffix;
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-latest-13-4.html;
-    };
-
-    "13.5.0" = rec {
-      major     = "13";
-      minor     = "5";
-      patch     = "0";
-      x64hash   = "1r24mhkpcc0z95n597p07fz92pd1b8qqzp2z6w07rmb9wb8mpd4x";
-      x86hash   = "0pwxshlryzhkl86cj9ryybm54alhzjx0gpp67fnvdn5r64wy1nd1";
-      x64suffix = "10185126";
-      x86suffix = x64suffix;
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-latest-13-5.html;
-    };
-
-    "13.6.0" = rec {
-      major     = "13";
-      minor     = "6";
-      patch     = "0";
-      x64hash   = "6e423be41d5bb8186bcca3fbb4ede54dc3f00b8d2aeb216ae4aabffef9310d34";
-      x86hash   = "0ba3eba208b37844904d540b3011075ed5cecf429a0ab6c6cd52f2d0fd841ad2";
-      x64suffix = "10243651";
-      x86suffix = x64suffix;
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-136.html;
-    };
-
-    "13.7.0" = {
-      major     = "13";
-      minor     = "7";
-      patch     = "0";
-      x64hash   = "18fb374b9fb8e249b79178500dddca7a1f275411c6537e7695da5dcf19c5ba91";
-      x86hash   = "4c68723b0327cf6f12da824056fce2b7853c38e6163a48c9d222b93dd8da75b6";
-      x64suffix = "10276927";
-      x86suffix = "10276925";
-      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-137.html;
-    };
-
     "13.8.0" = {
       major     = "13";
       minor     = "8";
@@ -102,6 +69,17 @@ let
       x86hash   = "A93E9770FD10FDD3586A2D47448559EA037265717A7000B9BD2B1DCCE7B0A483";
       x64suffix = "6";
       x86suffix = "6";
+      homepage  = https://www.citrix.com/downloads/citrix-receiver/legacy-receiver-for-linux/receiver-for-linux-1391.html;
+    };
+
+    "13.10.0" = {
+      major     = "13";
+      minor     = "10";
+      patch     = "0";
+      x64hash   = "7025688C7891374CDA11C92FC0BA2FA8151AEB4C4D31589AD18747FAE943F6EA";
+      x86hash   = "2DCA3C8EDED11C5D824D579BC3A6B7D531EAEDDCBFB16E91B5702C72CAE9DEE4";
+      x64suffix = "20";
+      x86suffix = "20";
       homepage  = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html;
     };
   };
@@ -134,7 +112,7 @@ let
         '';
       };
 
-      phases = [ "unpackPhase" "installPhase" ];
+      dontBuild = true;
 
       sourceRoot = ".";
 
@@ -160,7 +138,7 @@ let
         xorg.libXinerama
         xorg.libXfixes
         libpng12
-        libidn
+        libidn_134
         zlib
         gtk_engines
         freetype
@@ -181,6 +159,8 @@ let
       };
 
       installPhase = ''
+        runHook preInstall
+
         export ICAInstDir="$out/opt/citrix-icaclient"
 
         sed -i \
@@ -225,7 +205,7 @@ let
         makeWrapper "$ICAInstDir/wfica" "$out/bin/wfica" \
           --add-flags "-icaroot $ICAInstDir" \
           --set ICAROOT "$ICAInstDir" \
-          --set GTK_PATH "${gtk2.out}/lib/gtk-2.0:${gnome3.gnome-themes-standard}/lib/gtk-2.0" \
+          --set GTK_PATH "${gtk2.out}/lib/gtk-2.0:${gnome3.gnome-themes-extra}/lib/gtk-2.0" \
           --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
           --set LD_LIBRARY_PATH "$libPath" \
@@ -240,13 +220,15 @@ let
 
         # We introduce a dependency on the source file so that it need not be redownloaded everytime
         echo $src >> "$out/share/nix_dependencies.pin"
+
+        runHook postInstall
       '';
 
       meta = with stdenv.lib; {
         license     = stdenv.lib.licenses.unfree;
         inherit homepage;
         description = "Citrix Receiver";
-        maintainers = with maintainers; [ obadz a1russell ];
+        maintainers = with maintainers; [ obadz a1russell ma27 ];
         platforms   = platforms.linux;
       };
     };

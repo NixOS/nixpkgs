@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     # license = stdenv.lib.licenses.lgpl21Plus; + "unRAR restriction"
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.raskin ];
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

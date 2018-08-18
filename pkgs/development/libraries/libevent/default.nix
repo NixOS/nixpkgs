@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, findutils, fixDarwinDylibNames
+{ stdenv, fetchurl, fetchpatch, findutils, fixDarwinDylibNames
 , sslSupport? true, openssl
 }:
 
@@ -12,6 +12,18 @@ stdenv.mkDerivation rec {
     url = "https://github.com/libevent/libevent/releases/download/release-${version}-stable/libevent-${version}-stable.tar.gz";
     sha256 = "1hhxnxlr0fsdv7bdmzsnhdz16fxf3jg2r6vyljcl3kj6pflcap4n";
   };
+
+  #NOTE: Patches to support libressl-2.7. These are taken from libevent upstream, and can both be dropped with the next release.
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/libevent/libevent/commit/22dd14945c25600de3cf8b91000c66703b551e4f.patch";
+      sha256 = "0fzcb241cp9mm7j6baw22blcglbc083ryigzyjaij8r530av10kd";
+    })
+    (fetchpatch {
+      url = "https://github.com/libevent/libevent/commit/28b8075400c70b2d2da2ce07e590c2ec6d11783d.patch";
+      sha256 = "0dkzlk44033xksg2iq5w90r3lnziwl1mgz291nzqq906zrya0sdb";
+    })
+  ];
 
   # libevent_openssl is moved into its own output, so that openssl isn't present
   # in the default closure.
@@ -37,6 +49,8 @@ stdenv.mkDerivation rec {
       --replace "$out" "$openssl"
     sed "/^libdir=/s|$out|$openssl|" -i "$openssl"/lib/libevent_openssl.la
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Event notification library";

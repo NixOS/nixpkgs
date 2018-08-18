@@ -16,7 +16,6 @@ let
 in buildPythonPackage rec {
   pname = "Wand";
   version = "0.4.4";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, libXft
+{ stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, potrace, cmake
+, libvisio, libcdr, libexif, potrace, cmake, hicolor-icon-theme
 }:
 
 let
@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
     url = "https://media.inkscape.org/dl/resources/file/${name}.tar.bz2";
     sha256 = "1chng2yw8dsjxc9gf92aqv7plj11cav8ax321wmakmv5bb09cch6";
   };
+
+  # Inkscape hits the ARGMAX when linking on macOS. It appears to be
+  # CMake’s ARGMAX check doesn’t offer enough padding for NIX_LDFLAGS.
+  # Setting strictDeps it avoids duplicating some dependencies so it
+  # will leave us under ARGMAX.
+  strictDeps = true;
 
   unpackPhase = ''
     cp $src ${name}.tar.bz2
@@ -33,20 +39,18 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env perl perlXMLParser ];
   buildInputs = [
-    perl perlXMLParser libXft libpng zlib popt boehmgc
+    libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
-    makeWrapper gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif potrace cmake python2Env
+    gsl poppler imagemagick libwpg librevenge
+    libvisio libcdr libexif potrace hicolor-icon-theme
   ];
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    # Make sure PyXML modules can be found at run-time.
-    rm "$out/share/icons/hicolor/icon-theme.cache"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  # Make sure PyXML modules can be found at run-time.
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';

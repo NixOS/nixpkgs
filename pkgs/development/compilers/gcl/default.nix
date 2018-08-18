@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mpfr, m4, binutils, fetchcvs, emacs, zlib, which
+{ stdenv, fetchurl, mpfr, m4, binutils, emacs, zlib, which
 , texinfo, libX11, xproto, inputproto, libXi, gmp
 , libXext, xextproto, libXt, libXaw, libXmu } :
 

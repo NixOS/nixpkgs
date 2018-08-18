@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "picoLisp-${version}";
   version = "16.12";
   src = fetchurl {
-    url = "http://www.software-lab.de/${name}.tgz";
+    url = "https://www.software-lab.de/${name}.tgz";
     sha256 = "1k3x6mvk9b34iiyml142bzh3gf241f25ywjlaagbxzb9vklpws75";
   };
   buildInputs = optional stdenv.is64bit jdk;
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     homepage = https://picolisp.com/;
     license = licenses.mit;
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # times out
     maintainers = with maintainers; [ raskin tohl ];
   };
 

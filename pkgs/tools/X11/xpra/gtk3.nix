@@ -1,7 +1,7 @@
 { stdenv, fetchurl, buildPythonApplication
 , python, cython, pkgconfig
 , xorg, gtk3, glib, pango, cairo, gdk_pixbuf, atk, pygobject3, pycairo, gobjectIntrospection
-, makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf
+, makeWrapper, xorgserver, getopt, xauth, utillinux, which, fontsConf
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama, pam }:
 
@@ -10,7 +10,7 @@ buildPythonApplication rec {
   version = "2.2.5";
 
   src = fetchurl {
-    url = "http://xpra.org/src/${name}.tar.xz";
+    url = "https://xpra.org/src/${name}.tar.xz";
     sha256 = "1q2l00nc3bgwlhjzkbk4a8x2l8z9w1799yn31icsx5hrgh98a1js";
   };
 

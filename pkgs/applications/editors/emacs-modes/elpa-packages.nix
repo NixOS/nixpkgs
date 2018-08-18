@@ -25,7 +25,7 @@ self:
     super = removeAttrs imported [ "dash" ];
 
     elpaBuild = import ../../../build-support/emacs/elpa.nix {
-      inherit fetchurl lib stdenv texinfo;
+      inherit lib stdenv texinfo;
       inherit (self) emacs;
     };
 

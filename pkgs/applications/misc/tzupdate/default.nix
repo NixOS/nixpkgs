@@ -4,7 +4,6 @@ let
   inherit (python.pkgs) buildPythonApplication fetchPypi requests;
 in
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "tzupdate";
   version = "1.2.0";
 

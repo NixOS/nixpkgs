@@ -28,21 +28,19 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  version = "0.0.3";
+  version = "0.2.0";
   name = "mint-${version}";
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
-    rev = "0.0.3";
-    sha256 = "15aawhpagpaqrs64jnz3g6iw3dhq0rlqm92cvfd5a3hbwvxg7lm0";
+    rev = "0.2.0";
+    sha256 = "1ds9zrvbmnfy744i9ri6v4w37aw7ccmdxzxmy8l97h045hzz9cp3";
   };
 
   buildInputs = [ crystal zlib openssl duktape ];
 
   buildPhase = ''
-    mkdir -p $out/bin
-
-    mkdir tmp
+    mkdir -p $out/bin tmp
     cd tmp
     ln -s ${crystalLib} lib
     cp -r $src/* .

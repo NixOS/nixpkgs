@@ -9,13 +9,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "fwknop";
-  version = "2.6.9";
+  version = "2.6.10";
 
   src = fetchFromGitHub {
     owner = "mrash";
     repo = pname;
     rev = version;
-    sha256 = "1509d1lzfmhavdwi65dwb0jaglpy8ciccgpcnhx9ks6s7irn923c";
+    sha256 = "05kvqhmxj9p2y835w75f3jvhr38bb96cd58mvfd7xil9dhmhn9ra";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

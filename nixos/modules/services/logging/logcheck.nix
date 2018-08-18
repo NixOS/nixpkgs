@@ -213,7 +213,7 @@ in
         mapAttrsToList writeIgnoreRule cfg.ignore
         ++ mapAttrsToList writeIgnoreCronRule cfg.ignoreCron;
 
-    users.extraUsers = optionalAttrs (cfg.user == "logcheck") (singleton
+    users.users = optionalAttrs (cfg.user == "logcheck") (singleton
       { name = "logcheck";
         uid = config.ids.uids.logcheck;
         shell = "/bin/sh";

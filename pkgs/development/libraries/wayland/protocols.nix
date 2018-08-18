@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "wayland-protocols-${version}";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchurl {
-    url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1xknjcfhqvdi1s4iq4kk1q61fg2rar3g8q4vlqarpd324imqjj4n";
+    url = "https://wayland.freedesktop.org/releases/${name}.tar.xz";
+    sha256 = "1qlyf9cllr2p339xxplznh023qcwj5iisp02ikx7ps349dx75fys";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Wayland protocol extensions";
-    homepage    = http://wayland.freedesktop.org/;
+    homepage    = https://wayland.freedesktop.org/;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];

@@ -4,28 +4,6 @@ with lib;
 
 let
   version = "1.14.10";
-
-  k8s-dns-kube-dns = pkgs.dockerTools.pullImage {
-    imageName = "k8s.gcr.io/k8s-dns-kube-dns-amd64";
-    imageDigest = "sha256:b99fc3eee2a9f052f7eb4cc00f15eb12fc405fa41019baa2d6b79847ae7284a8";
-    finalImageTag = version;
-    sha256 = "0x583znk9smqn0fix7ld8sm5jgaxhqhx3fq97b1wkqm7iwhvl3pj";
-  };
-
-  k8s-dns-dnsmasq-nanny = pkgs.dockerTools.pullImage {
-    imageName = "k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64";
-    imageDigest = "sha256:bbb2a290a568125b3b996028958eb773f33b5b87a6b37bf38a28f8b62dddb3c8";
-    finalImageTag = version;
-    sha256 = "1fihml7s2mfwgac51cbqpylkwbivc8nyhgi4vb820s83zvl8a6y1";
-  };
-
-  k8s-dns-sidecar = pkgs.dockerTools.pullImage {
-    imageName = "k8s.gcr.io/k8s-dns-sidecar-amd64";
-    imageDigest = "sha256:4f1ab957f87b94a5ec1edc26fae50da2175461f00afecf68940c4aa079bd08a4";
-    finalImageTag = version;
-    sha256 = "08l1bv5jgrhvjzpqpbinrkgvv52snc4fzyd8ya9v18ns2klyz7m0";
-  };
-
   cfg = config.services.kubernetes.addons.dns;
 in {
   options.services.kubernetes.addons.dns = {
@@ -48,13 +26,46 @@ in {
       default = "cluster.local";
       type = types.str;
     };
+
+    kube-dns = mkOption {
+      description = "Docker image to seed for the kube-dns main container.";
+      type = types.attrs;
+      default = {
+        imageName = "k8s.gcr.io/k8s-dns-kube-dns-amd64";
+        imageDigest = "sha256:b99fc3eee2a9f052f7eb4cc00f15eb12fc405fa41019baa2d6b79847ae7284a8";
+        finalImageTag = version;
+        sha256 = "0x583znk9smqn0fix7ld8sm5jgaxhqhx3fq97b1wkqm7iwhvl3pj";
+      };
+    };
+
+    dnsmasq-nanny = mkOption {
+      description = "Docker image to seed for the kube-dns dnsmasq container.";
+      type = types.attrs;
+      default = {
+        imageName = "k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64";
+        imageDigest = "sha256:bbb2a290a568125b3b996028958eb773f33b5b87a6b37bf38a28f8b62dddb3c8";
+        finalImageTag = version;
+        sha256 = "1fihml7s2mfwgac51cbqpylkwbivc8nyhgi4vb820s83zvl8a6y1";
+      };
+    };
+
+    sidecar = mkOption {
+      description = "Docker image to seed for the kube-dns sidecar container.";
+      type = types.attrs;
+      default = {
+        imageName = "k8s.gcr.io/k8s-dns-sidecar-amd64";
+        imageDigest = "sha256:4f1ab957f87b94a5ec1edc26fae50da2175461f00afecf68940c4aa079bd08a4";
+        finalImageTag = version;
+        sha256 = "08l1bv5jgrhvjzpqpbinrkgvv52snc4fzyd8ya9v18ns2klyz7m0";
+      };
+    };
   };
 
   config = mkIf cfg.enable {
-    services.kubernetes.kubelet.seedDockerImages = [
-      k8s-dns-kube-dns
-      k8s-dns-dnsmasq-nanny
-      k8s-dns-sidecar
+    services.kubernetes.kubelet.seedDockerImages = with pkgs.dockerTools; [
+      (pullImage cfg.kube-dns)
+      (pullImage cfg.dnsmasq-nanny)
+      (pullImage cfg.sidecar)
     ];
 
     services.kubernetes.addonManager.addons = {
@@ -88,7 +99,7 @@ in {
               containers = [
                 {
                   name = "kubedns";
-                  image = "k8s.gcr.io/k8s-dns-kube-dns-amd64:${version}";
+                  image = with cfg.kube-dns; "${imageName}:${finalImageTag}";
                   resources = {
                     limits.memory = "170Mi";
                     requests = {
@@ -154,7 +165,7 @@ in {
                 }
                 {
                   name = "dnsmasq";
-                  image = "k8s.gcr.io/k8s-dns-dnsmasq-nanny-amd64:${version}";
+                  image = with cfg.dnsmasq-nanny; "${imageName}:${finalImageTag}";
                   livenessProbe = {
                     httpGet = {
                       path = "/healthcheck/dnsmasq";
@@ -206,7 +217,7 @@ in {
                 }
                 {
                   name = "sidecar";
-                  image = "k8s.gcr.io/k8s-dns-sidecar-amd64:${version}";
+                  image = with cfg.sidecar; "${imageName}:${finalImageTag}";
                   livenessProbe = {
                     httpGet = {
                       path = "/metrics";

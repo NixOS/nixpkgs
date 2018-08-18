@@ -1,4 +1,4 @@
-{ newScope, stdenv, libstdcxxHook, isl, fetchurl, overrideCC, wrapCCWith, darwin
+{ newScope, stdenv, libstdcxxHook, isl, fetchurl, overrideCC, wrapCCWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
@@ -15,12 +15,11 @@ let
   compiler-rt_src = fetch "compiler-rt" "0p0y85c7izndbpg2l816z7z7558axq11d5pwkm4h11sdw7d13w0d";
   clang-tools-extra_src = fetch "clang-tools-extra" "15n39r4ssphpaq4a0wzyjm7ilwxb0bch6nrapy8c5s8d49h5qjk6";
 
-  tools = let
+  tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv isl version fetch; });
  in {
     llvm = callPackage ./llvm.nix {
       inherit compiler-rt_src;
-      inherit (targetLlvmLibraries) libcxxabi;
     };
 
     clang-unwrapped = callPackage ./clang {
@@ -42,9 +41,9 @@ let
     };
 
     lldb = callPackage ./lldb.nix {};
-  };
+  });
 
-  libraries = let
+  libraries = stdenv.lib.makeExtensible (libraries: let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv isl version fetch; });
   in {
 
@@ -55,6 +54,6 @@ let
     libcxx = callPackage ./libc++ {};
 
     libcxxabi = callPackage ./libc++abi.nix {};
-  };
+  });
 
 in { inherit tools libraries; } // libraries // tools

@@ -4,7 +4,6 @@
 , python
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "plac";
   version = "0.9.6";
 

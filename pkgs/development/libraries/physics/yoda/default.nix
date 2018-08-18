@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, python2Packages, root, makeWrapper, zlib, withRootSupport ? false }:
+{ stdenv, fetchurl, python2Packages, root, makeWrapper, zlib, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "yoda-${version}";
   version = "1.7.0";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
+    url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
     sha256 = "0fyf6ld1klzlfmr5sl1jxzck4a0h14zfkrff8397rn1fqnqbzmmk";
   };
 

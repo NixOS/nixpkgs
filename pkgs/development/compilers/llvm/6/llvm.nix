@@ -1,26 +1,22 @@
 { stdenv
 , fetch
-, fetchpatch
 , cmake
 , python
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , release_version
 , zlib
-, libcxxabi
 , debugVersion ? false
 , enableManpages ? false
 , enableSharedLibraries ? true
 , enableWasm ? true
-, darwin
 }:
 
 let
-  src = fetch "llvm" "0224xvfg6h40y5lrbnb9qaq3grmdc5rg00xq03s1wxjfbf8krx8z";
+  src = fetch "llvm" "1qpls3vk85lydi5b4axl0809fv932qgsqgdgrk098567z4jc7mmn";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
@@ -40,8 +36,7 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+  buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -78,6 +73,12 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
+
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
+
+    "-DLLVM_ENABLE_DUMP=ON"
   ]
   ++ stdenv.lib.optional enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
@@ -94,11 +95,7 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ]
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
-  ] ++ stdenv.lib.optional enableWasm
+  ++ stdenv.lib.optional enableWasm
    "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly"
   ;
 
@@ -145,7 +142,7 @@ in stdenv.mkDerivation (rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric dtzWill ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {

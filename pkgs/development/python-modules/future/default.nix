@@ -1,22 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy26
-, importlib
-, argparse
 }:
 
 buildPythonPackage rec {
   pname = "future";
   version = "0.16.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
   };
 
-  propagatedBuildInputs = lib.optionals isPy26 [ importlib argparse ];
   doCheck = false;
 
   meta = {

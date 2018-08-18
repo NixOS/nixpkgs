@@ -28,6 +28,10 @@ in {
 
       serviceConfig.ExecStart = "${pkgs.iwd}/libexec/iwd";
     };
+
+    systemd.tmpfiles.rules = [
+      "d /var/lib/iwd 0700 root root -"
+    ];
   };
 
   meta.maintainers = with lib.maintainers; [ mic92 ];

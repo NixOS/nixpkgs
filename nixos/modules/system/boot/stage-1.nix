@@ -11,7 +11,6 @@ let
 
   udev = config.systemd.package;
 
-  kernelPackages = config.boot.kernelPackages;
   modulesTree = config.system.modulesTree;
   firmware = config.hardware.firmware;
 
@@ -56,6 +55,12 @@ let
       left=("''${left[@]:3}")
       if [ -z ''${seen[$next]+x} ]; then
         seen[$next]=1
+
+        # Ignore the dynamic linker which for some reason appears as a DT_NEEDED of glibc but isn't in glibc's RPATH.
+        case "$next" in
+          ld*.so.?) continue;;
+        esac
+
         IFS=: read -ra paths <<< $rpath
         res=
         for path in "''${paths[@]}"; do
@@ -158,7 +163,7 @@ let
 
       # Strip binaries further than normal.
       chmod -R u+w $out
-      stripDirs "lib bin" "-s"
+      stripDirs "$STRIP" "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
@@ -242,6 +247,14 @@ let
     shell = "${extraUtils}/bin/ash";
 
     isExecutable = true;
+
+    postInstall = ''
+      echo checking syntax
+      # check both with bash
+      ${pkgs.bash}/bin/sh -n $target
+      # and with ash shell, just in case
+      ${extraUtils}/bin/ash -n $target
+    '';
 
     inherit udevRules extraUtils modulesClosure;
 

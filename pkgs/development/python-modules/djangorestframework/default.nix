@@ -1,11 +1,10 @@
-{ stdenv, buildPythonPackage, fetchurl, django }:
+{ stdenv, buildPythonPackage, fetchPypi, django }:
 buildPythonPackage rec {
   version = "3.8.2";
   pname = "djangorestframework";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/djangorestframework/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "b6714c3e4b0f8d524f193c91ecf5f5450092c2145439ac2769711f7eba89a9d9";
   };
 

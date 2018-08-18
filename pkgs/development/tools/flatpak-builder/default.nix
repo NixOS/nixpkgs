@@ -19,12 +19,13 @@
 , bzip2
 , coreutils
 , cpio
+, curl
 , elfutils
 , flatpak
 , gitMinimal
 , glib
 , gnutar
-, json_glib
+, json-glib
 , libcap
 , libdwarf
 , libsoup
@@ -35,7 +36,7 @@
 }:
 
 let
-  version = "0.10.10";
+  version = "0.99.3";
 in stdenv.mkDerivation rec {
   name = "flatpak-builder-${version}";
 
@@ -43,7 +44,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${name}.tar.xz";
-    sha256 = "0b0c2rmf2vj596600blbhsiv2dg7qwpr33lgdcn0bnqc4ddri6f2";
+    sha256 = "0sq3rcy3vwa36p6wq63wdvkk0hrs3qj1ngk26j9947nc14z39plk";
   };
 
   nativeBuildInputs = [
@@ -62,10 +63,11 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     acl
     bzip2
+    curl
     elfutils
     flatpak
     glib
-    json_glib
+    json-glib
     libcap
     libdwarf
     libsoup

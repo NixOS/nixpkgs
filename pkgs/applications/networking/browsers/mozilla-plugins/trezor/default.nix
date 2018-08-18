@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, zlib }:
+{ stdenv, fetchurl, dpkg }:
 
 stdenv.mkDerivation {
   name = "TREZOR-bridge-1.0.5";

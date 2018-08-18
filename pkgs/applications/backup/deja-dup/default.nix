@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "deja-dup-${version}";
-  version = "36.3";
+  version = "38.0";
 
   src = fetchurl {
-    url = "https://launchpad.net/deja-dup/36/${version}/+download/deja-dup-${version}.tar.xz";
-    sha256 = "08pwybzp7ynfcf0vqxfc3p8ir4gnzcv4v4cq5bwidbff9crklhrc";
+    url = "https://launchpad.net/deja-dup/${stdenv.lib.versions.major version}/${version}/+download/deja-dup-${version}.tar.xz";
+    sha256 = "1l3sa24v0v6xf312h36jikfi8zyx6z3nmc7pjzgdp7l89gkdm65v";
   };
 
   patches = [
@@ -19,7 +19,12 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit coreutils;
     })
+    ./hardcode-gsettings.patch
   ];
+
+  postPatch = ''
+    substituteInPlace deja-dup/nautilus/NautilusExtension.c --subst-var-by DEJA_DUP_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
+  '';
 
   nativeBuildInputs = [
     meson ninja pkgconfig vala_0_40 gettext itstool

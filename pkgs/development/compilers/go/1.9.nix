@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, procps
 , pcre, cacert, llvm
-, Security, Foundation, bash
+, Security, Foundation
 , makeWrapper, git, subversion, mercurial, bazaar }:
 
 let
 
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optionals optionalString;
 
   clangHack = writeScriptBin "clang" ''
     #!${stdenv.shell}

@@ -26,7 +26,7 @@ index f4e119d..d9775bd 100644
 +  std::string full_env = std::string("NIX_CHROMIUM_PLUGIN_PATH_") + ident;
 +  const char* value = getenv(full_env.c_str());
 +  if (value == NULL)
-+      return PathService::Get(base::DIR_MODULE, result);
++      return base::PathService::Get(base::DIR_MODULE, result);
 +  else
 +      *result = base::FilePath(value);
  }

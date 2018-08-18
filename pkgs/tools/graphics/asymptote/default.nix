@@ -9,11 +9,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="asymptote";
-    version="2.44";
+    version="2.46";
     name="${baseName}-${version}";
-    hash="1rs9v95g19ri6ra2m921jf2yr9avqnzfybrqxilsld98xpqx56vg";
-    url="https://freefr.dl.sourceforge.net/project/asymptote/2.44/asymptote-2.44.src.tgz";
-    sha256="1rs9v95g19ri6ra2m921jf2yr9avqnzfybrqxilsld98xpqx56vg";
+    hash="06nvvgpyrjwd3pd7q2j6qj5fjv3yvdqb0k9859i1lghjm0bg5kkq";
+    url="https://freefr.dl.sourceforge.net/project/asymptote/2.46/asymptote-2.46.src.tgz";
+    sha256="06nvvgpyrjwd3pd7q2j6qj5fjv3yvdqb0k9859i1lghjm0bg5kkq";
   };
   buildInputs = [
    ghostscriptX imagemagick fftw

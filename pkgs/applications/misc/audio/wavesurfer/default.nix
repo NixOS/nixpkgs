@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "wavesurfer-1.8.5";
 
   src = fetchurl {
-    url = http://www.speech.kth.se/wavesurfer/wavesurfer-1.8.5.tar.gz;
+    url = https://www.speech.kth.se/wavesurfer/wavesurfer-1.8.5.tar.gz;
     sha256 = "1yx9s1j47cq0v40cwq2gn7bdizpw46l95ba4zl9z4gg31mfvm807";
   };
 

@@ -305,7 +305,7 @@
   </section>
 
   <section>
-   <title>Cross packagaing cookbook</title>
+   <title>Cross packaging cookbook</title>
 
    <para>
     Some frequently problems when packaging for cross compilation are good to

@@ -1,40 +1,39 @@
-{ stdenv, buildPythonPackage, fetchurl, glibcLocales, mock, pytest, botocore,
+{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, mock, pytest, botocore,
   testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
   service-identity, parsel, pydispatcher, cssselect, lib }:
 buildPythonPackage rec {
-    version = "1.5.0";
-    pname = "Scrapy";
-    name = "${pname}-${version}";
+  version = "1.5.1";
+  pname = "Scrapy";
 
-    buildInputs = [ glibcLocales mock pytest botocore testfixtures pillow ];
-    propagatedBuildInputs = [
-      six twisted w3lib lxml cssselect queuelib pyopenssl service-identity parsel pydispatcher
-    ];
+  checkInputs = [ glibcLocales mock pytest botocore testfixtures pillow ];
+  propagatedBuildInputs = [
+    six twisted w3lib lxml cssselect queuelib pyopenssl service-identity parsel pydispatcher
+  ];
 
-    # Scrapy is usually installed via pip where copying all
-    # permissions makes sense. In Nix the files copied are owned by
-    # root and readonly. As a consequence scrapy can't edit the
-    # project templates.
-    patches = [ ./permissions-fix.patch ];
+  # Scrapy is usually installed via pip where copying all
+  # permissions makes sense. In Nix the files copied are owned by
+  # root and readonly. As a consequence scrapy can't edit the
+  # project templates.
+  patches = [ ./permissions-fix.patch ];
 
-    LC_ALL="en_US.UTF-8";
+  LC_ALL="en_US.UTF-8";
 
-    checkPhase = ''
-      py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py ${lib.optionalString stdenv.isDarwin "--ignore=tests/test_utils_iterators.py"}
-      # The ignored tests require mitmproxy, which depends on protobuf, but it's disabled on Python3
-      # Ignore iteration test, because lxml can't find encodings on darwin https://bugs.launchpad.net/lxml/+bug/707396
-    '';
+  checkPhase = ''
+    py.test --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py ${lib.optionalString stdenv.isDarwin "--ignore=tests/test_utils_iterators.py"}
+    # The ignored tests require mitmproxy, which depends on protobuf, but it's disabled on Python3
+    # Ignore iteration test, because lxml can't find encodings on darwin https://bugs.launchpad.net/lxml/+bug/707396
+  '';
 
-    src = fetchurl {
-      url = "mirror://pypi/S/Scrapy/${name}.tar.gz";
-      sha256 = "31a0bf05d43198afaf3acfb9b4fb0c09c1d7d7ff641e58c66e36117f26c4b755";
-    };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "5a398bf6818f87dcc817c919408a195f19ba46414ae12f259119336cfa862bb6";
+  };
 
-    meta = with lib; {
-      description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
-      homepage = http://scrapy.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ drewkett ];
-      platforms = platforms.unix;
-    };
+  meta = with lib; {
+    description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
+    homepage = https://scrapy.org/;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ drewkett ];
+    platforms = platforms.unix;
+  };
 }

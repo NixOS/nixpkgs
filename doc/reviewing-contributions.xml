@@ -6,18 +6,22 @@
  <title>Reviewing contributions</title>
  <warning>
   <para>
-   The following section is a draft and reviewing policy is still being
-   discussed.
+   The following section is a draft, and the policy for reviewing is still being
+   discussed in issues such as <link
+	   xlink:href="https://github.com/NixOS/nixpkgs/issues/11166">#11166
+   </link> and <link
+	   xlink:href="https://github.com/NixOS/nixpkgs/issues/20836">#20836
+   </link>.
   </para>
  </warning>
  <para>
-  The nixpkgs projects receives a fairly high number of contributions via
+  The nixpkgs project receives a fairly high number of contributions via
   GitHub pull-requests. Reviewing and approving these is an important task and
   a way to contribute to the project.
  </para>
  <para>
-  The high change rate of nixpkgs make any pull request that is open for long
-  enough subject to conflicts that will require extra work from the submitter
+  The high change rate of nixpkgs makes any pull request that remains open for
+  too long subject to conflicts that will require extra work from the submitter
   or the merger. Reviewing pull requests in a timely manner and being
   responsive to the comments is the key to avoid these. GitHub provides sort
   filters that can be used to see the
@@ -33,34 +37,34 @@
  <para>
   When reviewing a pull request, please always be nice and polite.
   Controversial changes can lead to controversial opinions, but it is important
-  to respect every community members and their work.
+  to respect every community member and their work.
  </para>
  <para>
-  GitHub provides reactions, they are a simple and quick way to provide
+  GitHub provides reactions as a simple and quick way to provide
   feedback to pull-requests or any comments. The thumb-down reaction should be
-  used with care and if possible accompanied with some explanations so the
-  submitter has directions to improve his contribution.
+  used with care and if possible accompanied with some explanation so the
+  submitter has directions to improve their contribution.
  </para>
  <para>
-  Pull-requests reviews should include a list of what has been reviewed in a
+  Pull-request reviews should include a list of what has been reviewed in a
   comment, so other reviewers and mergers can know the state of the review.
  </para>
  <para>
   All the review template samples provided in this section are generic and
   meant as examples. Their usage is optional and the reviewer is free to adapt
-  them to his liking.
+  them to their liking.
  </para>
  <section>
   <title>Package updates</title>
 
   <para>
    A package update is the most trivial and common type of pull-request. These
-   pull-requests mainly consist in updating the version part of the package
+   pull-requests mainly consist of updating the version part of the package
    name and the source hash.
   </para>
 
   <para>
-   It can happen that non trivial updates include patches or more complex
+   It can happen that non-trivial updates include patches or more complex
    changes.
   </para>
 
@@ -84,12 +88,12 @@
    </listitem>
    <listitem>
     <para>
-     Ensure that the package versioning is fitting the guidelines.
+     Ensure that the package versioning fits the guidelines.
     </para>
    </listitem>
    <listitem>
     <para>
-     Ensure that the commit text is fitting the guidelines.
+     Ensure that the commit text fits the guidelines.
     </para>
    </listitem>
    <listitem>
@@ -99,21 +103,22 @@
     <itemizedlist>
      <listitem>
       <para>
-       mention-bot usually notify GitHub users based on the submitted changes,
-       but it can happen that it misses some of the package maintainers.
+       <link xlink:href="https://help.github.com/articles/about-codeowners/">CODEOWNERS</link>
+       will make GitHub notify users based on the submitted changes, but it can
+       happen that it misses some of the package maintainers.
       </para>
      </listitem>
     </itemizedlist>
    </listitem>
    <listitem>
     <para>
-     Ensure that the meta field contains correct information.
+     Ensure that the meta field information is correct.
     </para>
     <itemizedlist>
      <listitem>
       <para>
-       License can change with version updates, so it should be checked to be
-       fitting upstream license.
+       License can change with version updates, so it should be checked to match
+       the upstream license.
       </para>
      </listitem>
      <listitem>
@@ -137,9 +142,9 @@
     <itemizedlist>
      <listitem>
       <para>
-       Pull-requests are often targeted to the master or staging branch so
-       building the pull-request locally as it is submitted can trigger a large
-       amount of source builds.
+       Pull-requests are often targeted to the master or staging branch, and
+       building the pull-request locally when it is submitted can trigger
+       many source builds.
       </para>
       <para>
        It is possible to rebase the changes on nixos-unstable or
@@ -372,8 +377,9 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
     <itemizedlist>
      <listitem>
       <para>
-       Mention-bot notify GitHub users based on the submitted changes, but it
-       can happen that it miss some of the package maintainers.
+       <link xlink:href="https://help.github.com/articles/about-codeowners/">CODEOWNERS</link>
+       will make GitHub notify users based on the submitted changes, but it can
+       happen that it misses some of the package maintainers.
       </para>
      </listitem>
     </itemizedlist>

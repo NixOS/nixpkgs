@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to discover, browse and manipulate Digital Media Servers";
-    homepage = http://01.org/dleyna;
+    homepage = https://01.org/dleyna;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.linux;
     license = licenses.lgpl21;

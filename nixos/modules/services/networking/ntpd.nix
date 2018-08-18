@@ -67,7 +67,7 @@ in
     environment.systemPackages = [ pkgs.ntp ];
     services.timesyncd.enable = mkForce false;
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = ntpUser;
         uid = config.ids.uids.ntp;
         description = "NTP daemon user";

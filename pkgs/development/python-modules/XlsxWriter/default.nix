@@ -1,13 +1,12 @@
 {lib, buildPythonPackage, fetchPypi}:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "XlsxWriter";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ad947fd9e8edfb64f25e0ccfb161e109f279e5a5520b3dd22ddc03b7f8220887";
+    sha256 = "bd4661c04a68621cb2ebc07c38b8b2e98e30bf213a16e1cf3675b61e26ca9bf2";
   };
 
   meta = {

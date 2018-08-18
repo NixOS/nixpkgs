@@ -9,13 +9,12 @@
 
 buildPythonPackage rec {
   pname = "subprocess32";
-  version = "3.2.7";
-  name = "${pname}-${version}";
+  version = "3.5.2";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e450a4a4c53bf197ad6402c564b9f7a53539385918ef8f12bdf430a61036590";
+    sha256 = "eb2b989cf03ffc7166339eb34f1aa26c5ace255243337b1e22dab7caa1166687";
   };
 
   buildInputs = [ bash ];

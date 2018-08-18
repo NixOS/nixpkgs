@@ -68,6 +68,18 @@ ibus.engines = with pkgs.ibus-engines; [ table table-others ];
 <para>To use any input method, the package must be added in the configuration,
   as shown above, and also (after running <literal>nixos-rebuild</literal>) the
   input method must be added from IBus' preference dialog.</para>
+
+<simplesect>
+  <title>Troubleshooting</title>
+  <para>If IBus works in some applications but not others, a likely cause of
+  this is that IBus is depending on a different version of
+  <literal>glib</literal> to what the applications are depending on. This can
+  be checked by running <literal>nix-store -q --requisites &lt;path&gt; | grep
+  glib</literal>, where <literal>&lt;path&gt;</literal> is the path of either
+  IBus or an application in the Nix store. The <literal>glib</literal>
+  packages must match exactly. If they do not, uninstalling and reinstalling
+  the application is a likely fix.</para>
+</simplesect>
 </section>
 
 <section><title>Fcitx</title>

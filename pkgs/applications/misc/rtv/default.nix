@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgs, pythonPackages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-with pythonPackages;
+with python3Packages;
 buildPythonApplication rec {
-  version = "1.22.1";
-  name = "rtv-${version}";
+  version = "1.23.0";
+  pname = "rtv";
 
   src = fetchFromGitHub {
     owner = "michael-lazar";
     repo = "rtv";
     rev = "v${version}";
-    sha256 = "1jil8cwhnpf2mclgah7s79j4c38hzm0j6di2mffrqhlsnn2vxbf4";
+    sha256 = "0i6iqj3ly1bgsfa9403m5190mfl9yk1x4ific3v31wqfja985nsr";
   };
 
   # Tests try to access network
@@ -19,7 +19,7 @@ buildPythonApplication rec {
     py.test
   '';
 
-  buildInputs = [
+  checkInputs = [
     coverage
     coveralls
     docopt
@@ -30,18 +30,11 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    backports_functools_lru_cache
     beautifulsoup4
-    configparser
-    contextlib2
     decorator
     kitchen
-    mailcap-fix
-    mccabe
     requests
     six
-    tornado
-    pyyaml
   ];
 
   meta = with stdenv.lib; {

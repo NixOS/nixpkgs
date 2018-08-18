@@ -1,5 +1,5 @@
-{ newScope, stdenv, libstdcxxHook, cmake, libxml2, python2, isl, fetchurl
-, overrideCC, wrapCCWith, darwin
+{ newScope, stdenv, libstdcxxHook, isl, fetchurl
+, overrideCC, wrapCCWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
@@ -16,7 +16,7 @@ let
   compiler-rt_src = fetch "compiler-rt" "10c1mz2q4bdq9bqfgr3dirc6hz1h3sq8573srd5q5lr7m7j6jiwx";
   clang-tools-extra_src = fetch "clang-tools-extra" "0sxw2l3q5msbrwxv1ck72arggdw6n5ysi929gi69ikniranfv4aa";
 
-  tools = let
+  tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv isl version fetch; });
   in {
     llvm = callPackage ./llvm.nix {
@@ -41,9 +41,9 @@ let
     };
 
     lldb = callPackage ./lldb.nix {};
-  };
+  });
 
-  libraries = let
+  libraries = stdenv.lib.makeExtensible (libraries: let
     callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv isl version fetch; });
   in {
 
@@ -54,6 +54,6 @@ let
     libcxx = callPackage ./libc++ {};
 
     libcxxabi = callPackage ./libc++abi.nix {};
-  };
+  });
 
 in { inherit tools libraries; } // libraries // tools

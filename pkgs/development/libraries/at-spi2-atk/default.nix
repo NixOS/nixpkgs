@@ -1,24 +1,45 @@
-{ stdenv, fetchurl, python, pkgconfig, popt, atk, libX11, libICE, xorg, libXi
-, intltool, dbus-glib, at-spi2-core, libSM }:
+{ stdenv
+, fetchurl
+
+, meson
+, ninja
+, pkgconfig
+
+, at-spi2-core
+, atk
+, dbus
+, glib
+, libxml2
+
+, gnome3 # To pass updateScript
+}:
 
 stdenv.mkDerivation rec {
-  versionMajor = "2.26";
-  versionMinor = "1";
-  moduleName   = "at-spi2-atk";
-  name = "${moduleName}-${versionMajor}.${versionMinor}";
+  name = "${pname}-${version}";
+  pname = "at-spi2-atk";
+  version = "2.26.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "0x9vc99ni46fg5dzlx67vbw0zqffr24gz8jvbdxbmzyvc5xw5w5l";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0vkan52ab9vrkknnv8y4f1cspk8x7xd10qx92xk9ys71p851z2b1";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
-  buildInputs = [ python popt atk libX11 libICE xorg.libXtst libXi
-                  dbus-glib at-spi2-core libSM ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
+  buildInputs = [ at-spi2-core atk dbus glib libxml2 ];
 
-  doCheck = false; # needs dbus daemon
+  doCheck = false; # fails with "No test data file provided"
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
+    description = "D-Bus bridge for Assistive Technology Service Provider Interface (AT-SPI) and Accessibility Toolkit (ATK)";
+    homepage = https://gitlab.gnome.org/GNOME/at-spi2-atk;
+    license = licenses.lgpl2Plus; # NOTE: 2018-06-06: Please check the license when upstream sorts-out licensing: https://gitlab.gnome.org/GNOME/at-spi2-atk/issues/2
+    maintainers = with maintainers; [ jtojnar gnome3.maintainers ];
     platforms = platforms.unix;
   };
 }

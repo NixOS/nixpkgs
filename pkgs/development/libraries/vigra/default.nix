@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cmake, doxygen, fftw, fftwSinglePrec, hdf5, ilmbase
+{ stdenv, fetchurl, boost, cmake, fftw, fftwSinglePrec, hdf5, ilmbase
 , libjpeg, libpng, libtiff, openexr, python2Packages }:
 
 let

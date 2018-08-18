@@ -31,7 +31,7 @@ in {
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
 
     {
       virtualisation.memorySize = 1024;

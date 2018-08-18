@@ -1,14 +1,14 @@
-{ stdenv, binutils, cmake, zlib, fetchFromGitHub }:
+{ stdenv, cmake, zlib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2018-05-22";
+  version = "1.0";
   name = "bloaty-${version}";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "bloaty";
-    rev = "054788b091ccfd43b05b9817062139145096d440";
-    sha256 = "0pmv66137ipzsjjdz004n61pz3aipjhh3b0w0y1406clqpwkvpjm";
+    rev = "v${version}";
+    sha256 = "0fck83zyh9bwlwdk3fkhv3337g9nii6rzf96gyghmnrsp9rzxs3l";
     fetchSubmodules = true;
   };
 
@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
-
-  checkPhase = "ctest";
 
   installPhase = ''
     install -Dm755 {.,$out/bin}/bloaty

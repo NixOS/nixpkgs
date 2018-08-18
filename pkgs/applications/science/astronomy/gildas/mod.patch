@@ -1,0 +1,17 @@
+diff -ruN gildas-src-jul18a/admin/Makefile.build gildas-src-jul18a.mod/admin/Makefile.build
+--- gildas-src-jul18a/admin/Makefile.build	2018-06-14 14:36:54.000000000 +0200
++++ gildas-src-jul18a.mod/admin/Makefile.build	2018-07-06 13:31:46.000000000 +0200
+@@ -291,6 +291,13 @@
+ 	win-$(LIB_IDENTITY)-und.def -o $@ $(FLDLIBS) $(LIB_DEPENDS) $(ADD_LIBS) $(SYS_LIBS))
+ endif
+ 
++# Dummy rules for modules just so that make consider the module a
++# valid dependency when first parsing the makefiles. This rule should
++# never be applied as the modules are a by-product of the compilation
++# of the object
++$(builddir)/%.mod:
++	echo "dummy" > /dev/null
++
+ # Fortran executables
+ $(bindir)/% : $(builddir)/%.o | $(bindir)
+ 	$(FC) $(ALL_FLDFLAGS) $< $(OBJECTS) -o $@ \

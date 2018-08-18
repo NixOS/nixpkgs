@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
+{ stdenv, qtbase, qmake, inkscape, imagemagick, wpa_supplicant }:
 
 stdenv.mkDerivation {
   name = "wpa_gui-${wpa_supplicant.version}";

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls =
-      [ "http://www.zlib.net/fossils/${name}.tar.gz"  # stable archive path
+      [ "https://www.zlib.net/fossils/${name}.tar.gz"  # stable archive path
         "mirror://sourceforge/libpng/zlib/${version}/${name}.tar.gz"
       ];
     sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1";
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    homepage = https://zlib.net;
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;

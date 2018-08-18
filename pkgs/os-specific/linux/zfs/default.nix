@@ -6,6 +6,7 @@
 , zlib, libuuid, python, attr, openssl
 , libtirpc
 , nfs-utils
+, gawk, gnugrep, gnused, systemd
 
 # Kernel dependencies
 , kernel ? null, spl ? null, splUnstable ? null, splLegacyCrypto ? null
@@ -23,7 +24,7 @@ let
     , rev ? "zfs-${version}"
     , isUnstable ? false
     , isLegacyCrypto ? false
-    , incompatibleKernelVersion ? null } @ args:
+    , incompatibleKernelVersion ? null }:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
         versionAtLeast kernel.version incompatibleKernelVersion then
@@ -60,7 +61,7 @@ let
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
 
-      hardeningDisable = [ "pic" ];
+      hardeningDisable = [ "fortify" "stackprotector" "pic" ];
 
       preConfigure = ''
         substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "umount -t zfs"           "${utillinux}/bin/umount -t zfs"
@@ -76,12 +77,15 @@ let
         substituteInPlace ./cmd/zed/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
         substituteInPlace ./module/Makefile.in        --replace "/bin/cp"                 "cp"
         substituteInPlace ./etc/systemd/system/zfs-share.service.in \
-          --replace "@bindir@/rm " "${coreutils}/bin/rm "
+          --replace "/bin/rm " "${coreutils}/bin/rm "
 
         for f in ./udev/rules.d/*
         do
           substituteInPlace "$f" --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
         done
+        substituteInPlace ./cmd/vdev_id/vdev_id \
+          --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
+          "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
 
         ./autogen.sh
         configureFlagsArray+=("--libexecdir=$out/libexec")
@@ -153,7 +157,7 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
     version = "0.7.9";
@@ -172,7 +176,7 @@ in {
 
   zfsUnstable = common rec {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "2018-05-22";
@@ -195,7 +199,7 @@ in {
   # also remove boot.zfs.enableLegacyCrypto
   zfsLegacyCrypto = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     version = "2018-02-01";

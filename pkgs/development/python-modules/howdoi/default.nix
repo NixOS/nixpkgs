@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "howdoi";
-  version = "1.1.7";
+  version = "1.1.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dx9ms0b3z3bx02paj78cyi788d8l6cpd3jqbn3j88w736i4jknz";
+    sha256 = "96f5e057fd45a84379d77e46233165d95211e6b3ea869cb5c0df172aa322b566";
   };
 
   propagatedBuildInputs = [ six requests-cache pygments pyquery ];

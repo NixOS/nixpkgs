@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
-, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
+, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
 , busybox-sandbox-shell
 , hostPlatform, buildPlatform
 , storeDir ? "/nix/store"
@@ -26,7 +26,7 @@ let
     nativeBuildInputs =
       [ pkgconfig ]
       ++ lib.optionals (!is20) [ curl perl ]
-      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
+      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns ];
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
@@ -34,7 +34,7 @@ let
       ++ lib.optional withLibseccomp libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
-            apis = ["s3"];
+            apis = ["s3" "transfer"];
             customMemoryManagement = false;
           })
       ++ lib.optional fromGit boost;
@@ -71,7 +71,9 @@ let
     doInstallCheck = true; # not cross
 
     # socket path becomes too long otherwise
-    preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
+    preInstallCheck = lib.optional stdenv.isDarwin ''
+      export TMPDIR=$NIX_BUILD_TOP
+    '';
 
     separateDebugInfo = stdenv.isLinux;
 
@@ -142,12 +144,12 @@ in rec {
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.1${suffix}";
-    suffix = "pre6148_a4aac7f";
+    suffix = "pre6338_45bcf541";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "a4aac7f88c59c97299027c9668461c637bbc6a72";
-      sha256 = "1250fg1rgzcd0qy960nhl2bw9hsc1a6pyz11rmxasr0h3j1a2z53";
+      rev = "45bcf5416a0ce53361fd37c6b27ba4ef6a34ce96";
+      sha256 = "0ps45n78wnczz99dd9fs54ydxwh2cjq73zbvmak0y49nhc3p0vvv";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings {

@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchurl }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "expat-2.2.5";

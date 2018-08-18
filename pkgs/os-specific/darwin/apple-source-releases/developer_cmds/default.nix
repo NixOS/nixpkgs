@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, appleDerivation, xcbuild }:
+{ stdenv, appleDerivation, xcbuildHook }:
 
 appleDerivation rec {
-  buildInputs = [ xcbuild ];
+  nativeBuildInputs = [ xcbuildHook ];
 
   patchPhase = ''
     substituteInPlace rpcgen/rpc_main.c \

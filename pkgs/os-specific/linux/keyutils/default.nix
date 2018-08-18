@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, gnumake, file }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "keyutils-${version}";
   version = "1.5.10";
 
   src = fetchurl {
-    url = "http://people.redhat.com/dhowells/keyutils/${name}.tar.bz2";
+    url = "https://people.redhat.com/dhowells/keyutils/${name}.tar.bz2";
     sha256 = "1dmgjcf7mnwc6h72xkvpaqpzxw8vmlnsmzz0s27pg0giwzm3sp0i";
   };
 

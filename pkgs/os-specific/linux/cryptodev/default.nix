@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, kernel, onlyHeaders ? false }:
+{ fetchurl, stdenv, kernel ? false }:
 
 stdenv.mkDerivation rec {
   pname = "cryptodev-linux-1.9";

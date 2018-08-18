@@ -1,20 +1,17 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , effects
 , lib
-, idris
 , SDL
 , SDL_gfx
 }:
-
 build-idris-package  {
   name = "sdl";
   version = "2017-03-24";
 
-  idrisDeps = [ prelude effects ];
+  idrisDeps = [ effects ];
 
-  extraBuildInputs = [ idris SDL SDL_gfx ];
+  extraBuildInputs = [ SDL SDL_gfx ];
 
   src = fetchFromGitHub {
     owner = "edwinb";
@@ -27,6 +24,7 @@ build-idris-package  {
     description = "SDL-idris framework for Idris";
     homepage = https://github.com/edwinb/SDL-idris;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
+    # Can't find file sdlrun.o
+    broken = true;
   };
 }

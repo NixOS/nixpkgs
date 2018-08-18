@@ -1,9 +1,22 @@
-{ stdenv, pkgs, python3Packages }:
+{ stdenv, pkgs, python3 }:
 
-with python3Packages;
+let
+  python = python3.override {
+    packageOverrides = self: super: {
 
-buildPythonApplication rec {
-  name = "${pname}-${version}";
+      # https://github.com/pimutils/khal/issues/780
+      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.6.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
+        };
+      });
+
+    };
+  };
+
+in with python.pkgs; buildPythonApplication rec {
   pname = "khal";
   version = "0.9.9";
 
@@ -30,10 +43,11 @@ buildPythonApplication rec {
     pkginfo
     freezegun
   ];
-  buildInputs = [ setuptools_scm pytest pkgs.glibcLocales ];
+  nativeBuildInputs = [ setuptools_scm pkgs.glibcLocales ];
+  checkInputs = [ pytest ];
 
   checkPhase = ''
-    # py.test
+    py.test
   '';
 
   meta = with stdenv.lib; {

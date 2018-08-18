@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "smem-1.4";
 
   src = fetchurl {
-    url = "http://www.selenic.com/smem/download/${name}.tar.gz";
+    url = "https://www.selenic.com/smem/download/${name}.tar.gz";
     sha256 = "1v31vy23s7szl6vdrllq9zbg58bp36jf5xy3fikjfg6gyiwgia9f";
   };
 
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     description = "A memory usage reporting tool that takes shared memory into account";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.eelco ];
+    license = lib.licenses.gpl2Plus;
   };
 }

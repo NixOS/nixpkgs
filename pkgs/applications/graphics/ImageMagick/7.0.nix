@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
+, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
-, buildPlatform, hostPlatform
+, hostPlatform
 }:
 
 let
@@ -14,8 +14,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.7-35";
-    sha256 = "1gn4frzxa1v712pcwwkmi0m2a6gbrg2564dbxxr7130zc66licpz";
+    version = "7.0.8-6";
+    sha256 = "1v7m1g9a7fqc8nravvv3dy54nzd3ip75hcnkdrpb5wbiz9pqgzi3";
     patches = [];
   };
 in
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib fontconfig freetype ghostscript
-      libpng libtiff libxml2
+      libpng libtiff libxml2 libheif
     ]
     ++ lib.optionals (!hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]

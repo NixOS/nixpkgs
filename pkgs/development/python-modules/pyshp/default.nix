@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   version = "1.2.12";
   pname = "pyshp";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

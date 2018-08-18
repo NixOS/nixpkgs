@@ -2,17 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.5";
+  version = "1.1.7";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "4356e6c712871f389e3cb1d6382e341ea635f9e5c65de1cd8fcd103d0fb66d3d";
+    sha256 = "f7b51a132e9edfbe1cacb4f478b28caf3622d79fffcb369bdae9f92d8c8a7fdc";
   };
-
-  postPatch = ''
-    # loosen constraint on msgpack version, only 0.5.0 had problems
-    sed -i "s/'msgpack-python.*'/'msgpack-python'/g" setup.py
-  '';
 
   nativeBuildInputs = with python3Packages; [
     # For building documentation:
@@ -55,11 +50,22 @@ python3Packages.buildPythonApplication rec {
     cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
   '';
 
+  checkInputs = with python3Packages; [
+    pytest
+  ];
+
+  checkPhase = ''
+    HOME=$(mktemp -d) py.test --pyargs borg.testsuite
+  '';
+
+  # 63 failures, needs pytest-benchmark
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
     homepage = https://www.borgbackup.org;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli dotlambda ];
   };
 }

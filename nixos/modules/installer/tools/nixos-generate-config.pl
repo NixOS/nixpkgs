@@ -537,6 +537,13 @@ if ($showHardwareConfig) {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 EOF
+        } elsif (-e "/boot/extlinux") {
+            $bootLoaderConfig = <<EOF;
+  # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
+  boot.loader.grub.enable = false;
+  # Enables the generation of /boot/extlinux/extlinux.conf
+  boot.loader.generic-extlinux-compatible.enable = true;
+EOF
         } elsif ($virt ne "systemd-nspawn") {
             $bootLoaderConfig = <<EOF;
   # Use the GRUB 2 boot loader.
@@ -619,7 +626,7 @@ $bootLoaderConfig
   # services.xserver.desktopManager.plasma5.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.extraUsers.guest = {
+  # users.users.guest = {
   #   isNormalUser = true;
   #   uid = 1000;
   # };
@@ -628,7 +635,7 @@ $bootLoaderConfig
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.nixos.stateVersion = "${\(qw(@release@))}"; # Did you read the comment?
+  system.stateVersion = "${\(qw(@release@))}"; # Did you read the comment?
 
 }
 EOF

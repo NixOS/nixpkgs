@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, requests }:
+{ lib, buildPythonPackage, fetchPypi, requests }:
 
 buildPythonPackage rec {
   pname = "pyowm";
@@ -10,6 +10,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ requests ];
+
+  # This may actually break the package.
+  postPatch = ''
+    substituteInPlace setup.py --replace "requests>=2.18.2,<2.19" "requests"
+  '';
+
+  # No tests in archive
+  doCheck = false;
 
   meta = with lib; {
     description = "A Python wrapper around the OpenWeatherMap web API";

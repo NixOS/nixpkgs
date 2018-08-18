@@ -12,7 +12,7 @@ in {
 
   nodes = {
     hass =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
       {
         environment.systemPackages = with pkgs; [
           mosquitto

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, pkgconfig
 , gnome3, ncurses, gobjectIntrospection, vala, libxml2, gnutls
-, fetchFromGitHub, autoconf, automake, libtool, gtk-doc, gperf, pcre2
+, gperf, pcre2
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gobjectIntrospection intltool pkgconfig vala gperf libxml2 ];
   buildInputs = [ gnome3.glib gnome3.gtk3 ncurses ];
 
-  propagatedBuildInputs = [ gnutls pcre2 ];
+  propagatedBuildInputs = [
+    # Required by vte-2.91.pc.
+    gnome3.gtk3
+    gnutls
+    pcre2
+  ];
 
   preConfigure = "patchShebangs .";
 

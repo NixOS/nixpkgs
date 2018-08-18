@@ -1,15 +1,21 @@
-{ stdenv, appleDerivation, autoreconfHook, targetPlatform, enableStatic ? targetPlatform.isiOS }:
+{ stdenv, appleDerivation, lib, targetPlatform
+, enableStatic ? targetPlatform.isiOS
+, enableShared ? !targetPlatform.isiOS
+}:
 
 appleDerivation {
   postUnpack = "sourceRoot=$sourceRoot/libiconv";
 
-  preConfigure = stdenv.lib.optionalString stdenv.hostPlatform.isiOS ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isiOS ''
     sed -i 's/darwin\*/ios\*/g' configure libcharset/configure
   '';
 
-  configureFlags = stdenv.lib.optionals enableStatic [ "--enable-static" "--disable-shared" ];
+  configureFlags = [
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+  ];
 
-  postInstall = stdenv.lib.optionalString (!enableStatic) ''
+  postInstall = lib.optionalString (!enableStatic) ''
     mv $out/lib/libiconv.dylib $out/lib/libiconv-nocharset.dylib
     ${stdenv.cc.bintools.targetPrefix}install_name_tool -id $out/lib/libiconv-nocharset.dylib $out/lib/libiconv-nocharset.dylib
 
@@ -26,6 +32,6 @@ appleDerivation {
   ];
 
   meta = {
-    platforms = stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }

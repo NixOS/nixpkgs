@@ -1,27 +1,29 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, glibcLocales, vega, pandas, ipython, traitlets }:
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+, pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
+, entrypoints, jsonschema, numpy, pandas, six, toolz, typing }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "1.2.1";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c1303f77f1ba4d632f2958c83c0f457b2b969860b1ac9adfb872aefa1780baa7";
+    sha256 = "e8b222588dde98ec614e6808357fde7fa321118db44cc909df2bf30158d931c0";
   };
 
-  postPatch = ''
-    sed -i "s/vega==/vega>=/g" setup.py
-  '';
+  patches = fetchpatch {
+    url = https://github.com/altair-viz/altair/commit/bfca8aecce9593c48aa5834e3f8f841deb58391c.patch;
+    sha256 = "01izc5d8c6ry3mh0k0hfasb6jc4720g75yw2qdlp9ja8mnjsp4k3";
+  };
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales ];
 
   checkPhase = ''
     export LANG=en_US.UTF-8
     py.test altair --doctest-modules
   '';
 
-  propagatedBuildInputs = [ vega pandas ipython traitlets ];
+  propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz typing ];
 
   meta = with stdenv.lib; {
     description = "A declarative statistical visualization library for Python.";

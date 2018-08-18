@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.0.0";
 
   src = fetchurl {
-    url = "http://downloads.mixxx.org/${name}/${name}-src.tar.gz";
+    url = "https://downloads.mixxx.org/${name}/${name}-src.tar.gz";
     sha256 = "0vb71w1yq0xwwsclrn2jj9bk8w4n14rfv5c0aw46c11mp8xz7f71";
   };
 

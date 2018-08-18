@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pony-stable-${version}";
-  version = "0.1.2";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "pony-stable";
     rev = version;
-    sha256 = "1g0508r66qjx857cb1cycq98b0gw7s1zn1l7bplyj1psk8mqh7kz";
+    sha256 = "18ncxdk37r9sp2wnrgqj29nvqljqq9m154pkdv8b6b5k9knpradx";
   };
 
   buildInputs = [ ponyc ];

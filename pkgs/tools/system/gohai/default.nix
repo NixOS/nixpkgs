@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "gohai-${version}";

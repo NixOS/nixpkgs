@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, dmd, gnome3, dbus
-, gsettings-desktop-schemas, libsecret, desktop-file-utils, gettext, gtkd
+, gsettings-desktop-schemas, desktop-file-utils, gettext, gtkd
 , perlPackages, wrapGAppsHook, xdg_utils }:
 
 stdenv.mkDerivation rec {
   name = "tilix-${version}";
-  version = "1.7.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
     rev = "${version}";
-    sha256 = "0x0bnb26hjvxmvvd7c9k8fw97gcm3z5ssr6r8x90xbyyw6h58hhh";
+    sha256 = "19dx3hlj40cqwph98pcifkm6axfszfr0v9k6sr3caw4ycml84ci1";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnome3.dconf gettext gsettings-desktop-schemas gtkd dbus ];
 
   preBuild = ''
-    makeFlagsArray=(PERL5LIB="${perlPackages.Po4a}/lib/perl5")
+    makeFlagsArray=(
+      PERL5LIB="${perlPackages.Po4a}/lib/perl5"
+      DCFLAGS='-O -inline -release -version=StdLoggerDisableTrace'
+    )
   '';
 
   postInstall = with gnome3; ''

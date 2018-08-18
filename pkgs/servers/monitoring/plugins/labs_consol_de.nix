@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, buildPerlPackage, autoreconfHook, makeWrapper
+{ stdenv, fetchFromGitHub, fetchurl, autoreconfHook, makeWrapper
 , perl, DBDsybase, NetSNMP, coreutils, gnused, gnugrep }:
 
 let

@@ -1,4 +1,4 @@
-{ lib, pkgs }:
+{ config, lib, pkgs }:
 
 lib.makeScope pkgs.newScope (self: with self; {
   #### NixOS support
@@ -159,6 +159,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4_power_manager_gtk3 = xfce4-power-manager.override { withGtk3 = true; };
 
+} // lib.optionalAttrs (config.allowAliases or true) {
   #### ALIASES - added 2018-01
 
   terminal = xfce4-terminal;

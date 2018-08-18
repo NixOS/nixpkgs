@@ -1,17 +1,17 @@
 { stdenv, lib, fetchFromGitHub, removeReferencesTo
-, go, libapparmor, apparmor-parser, libseccomp, btrfs-progs }:
+, go, btrfs-progs }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   name = "containerd-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "0nknqprmi04jfiivrk158jyddc95q4jggfsm7cg7rpvjamkzn6c8";
+    sha256 = "0pk1kii8bmlvziblrqwb88w5cd486pmb7vw8p7kcyn9lqsw32ria";
   };
 
   hardeningDisable = [ "fortify" ];

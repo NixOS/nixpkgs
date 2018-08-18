@@ -1,21 +1,15 @@
-{stdenv, lib, fetchFromGitHub}:
+{lib, fetchFromGitHub}:
 
 with builtins;
 
 listToAttrs (map (v: {
   inherit (v) name;
-  value = stdenv.mkDerivation {
+  value = fetchFromGitHub {
     name = "${v.name}-${v.version}";
-    src = fetchFromGitHub {
-      owner = "DFgraphics";
-      repo = v.name;
-      rev = v.version;
-      sha256 = v.sha256;
-    };
-    installPhase = ''
-      mkdir -p $out
-      cp -r data raw $out
-    '';
+    owner = "DFgraphics";
+    repo = v.name;
+    rev = v.version;
+    sha256 = v.sha256;
     meta = with lib; {
       platforms = platforms.all;
       maintainers = [ maintainers.matthewbauer ];

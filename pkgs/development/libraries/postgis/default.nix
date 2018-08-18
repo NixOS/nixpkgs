@@ -1,12 +1,10 @@
 { fetchurl
-, fetchpatch
 , stdenv
 , perl
 , libxml2
 , postgresql
 , geos
 , proj
-, flex
 , gdal
 , json_c
 , pkgconfig
@@ -50,7 +48,7 @@ in stdenv.mkDerivation rec {
   name = "postgis-${version}";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/postgis/source/postgis-${builtins.toString version}.tar.gz";
+    url = "https://download.osgeo.org/postgis/source/postgis-${builtins.toString version}.tar.gz";
     inherit sha256;
   };
 

@@ -2,11 +2,11 @@
 , gnome3, gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash
 , expat, libxslt, docbook_xsl, utillinux, mdadm, libgudev, libblockdev, parted
 , gobjectIntrospection, docbook_xml_dtd_412, docbook_xml_dtd_43
-, libxfs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, udftools, ntfs3g
+, libxfs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
 }:
 
 let
-  version = "2.7.6";
+  version = "2.7.7";
 in stdenv.mkDerivation rec {
   name = "udisks-${version}";
 
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
     owner = "storaged-project";
     repo = "udisks";
     rev = name;
-    sha256 = "16kf104vv2xbk8cdgaqygszcl69d7lz9gf3vmi7ggywn7nfbp2ks";
+    sha256 = "13a7810izfhz729kwij584vsrzz9jdyfzvbl9magl0nfyj8zj8m8";
   };
 
   outputs = [ "out" "man" "dev" "devdoc" ];
@@ -41,6 +41,12 @@ in stdenv.mkDerivation rec {
     pkgconfig gnome3.gnome-common libtool intltool gobjectIntrospection
     gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
+
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace udisks/udisksclient.c \
+        --replace 'defined( __GNUC_PREREQ)' 1 \
+        --replace '__GNUC_PREREQ(4,6)' 1
+  '';
 
   buildInputs = [
     expat libgudev libblockdev acl systemd glib libatasmart polkit

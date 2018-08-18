@@ -1,10 +1,15 @@
-{ stdenv, lib, pkgconfig, buildGoPackage, fetchFromGitHub
-, makeWrapper, coreutils, gnupg, gnutar, squashfsTools}:
+{ stdenv, pkgconfig, buildGoPackage, fetchFromGitHub
+, makeWrapper, coreutils, gnupg, gnutar, squashfsTools, debootstrap
+}:
 
+let binPath = stdenv.lib.makeBinPath [
+  coreutils gnupg gnutar squashfsTools debootstrap
+];
+in
 buildGoPackage rec {
   name = "distrobuilder-${version}";
-  version = "2018_04_28";
-  rev = "406fd5fe7dec4a969ec08bdf799c8ae483d37489";
+  version = "2018_06_29";
+  rev = "e5acd73f81ad37151f3a2088fde650cea9b6a7e6";
 
   goPackagePath = "github.com/lxc/distrobuilder";
 
@@ -12,17 +17,14 @@ buildGoPackage rec {
     inherit rev;
     owner = "lxc";
     repo = "distrobuilder";
-    sha256 = "11bd600g36pf89vza9jl7fp7cjy5h67nfvhxlnwghb3z40pq9lnc";
+    sha256 = "19rc11s0paqga72jr8bziixihfv7dlkszmfk6xkg0349hzdg0gac";
   };
 
   goDeps = ./deps.nix;
 
   postInstall = ''
-    wrapProgram $bin/bin/distrobuilder --prefix PATH ":" ${stdenv.lib.makeBinPath [
-      coreutils gnupg gnutar squashfsTools
-    ]}
+    wrapProgram $bin/bin/distrobuilder --prefix PATH ":" ${binPath}
   '';
-
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   meta = with stdenv.lib; {

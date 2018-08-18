@@ -19,22 +19,21 @@
 , pytest
 , pytestcov
 , requests-mock
-, testtools
 , tornado
+, attrs
 }:
 
-let
+buildPythonPackage rec {
   pname = "zeep";
-  version = "2.5.0";
-in buildPythonPackage {
-  name = "${pname}-${version}";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4f9db52c7d269813fc6251da4cb050869158858aeea75a055b4550f19e52ac84";
+    sha256 = "faab59d57275ce35845f42371cca83b3957982cdca9621228153fb99c770c4fc";
   };
 
   propagatedBuildInputs = [
+    attrs
     appdirs
     cached-property
     defusedxml

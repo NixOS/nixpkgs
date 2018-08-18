@@ -36,6 +36,12 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # These are now core libraries in GHC 8.4.x.
+  mtl = self.mtl_2_2_2;
+  parsec = self.parsec_3_1_13_0;
+  stm = self.stm_2_4_5_0;
+  text = self.text_1_2_3_0;
+
   # Make sure we can still build Cabal 1.x.
   Cabal_1_24_2_0 = overrideCabal super.Cabal_1_24_2_0 (drv: {
     prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";
@@ -49,10 +55,6 @@ self: super: {
     url = "https://patch-diff.githubusercontent.com/raw/bmillwood/applicative-quoters/pull/7.patch";
     sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
   });
-
-  # http://hub.darcs.net/dolio/vector-algorithms/issue/9#comment-20170112T145715
-  vector-algorithms = dontCheck super.vector-algorithms;
-
 
   # https://github.com/nominolo/ghc-syb/issues/20
   ghc-syb-utils = dontCheck super.ghc-syb-utils;
@@ -94,4 +96,4 @@ self: super: {
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
   }));
 
-}
+} // import ./configuration-tensorflow-ghc-8.2.x.nix {inherit pkgs haskellLib;} self super

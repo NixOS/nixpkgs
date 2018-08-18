@@ -7,11 +7,11 @@ assert gtkSupport -> glib != null && gtk3 != null;
 assert videoSupport -> ffmpeg != null && libmpeg2 != null;
 
 stdenv.mkDerivation rec {
-  name = "libextractor-1.6";
+  name = "libextractor-1.7";
 
   src = fetchurl {
     url = "mirror://gnu/libextractor/${name}.tar.gz";
-    sha256 = "17gnpgspdhfgcr27j8sn9105vb4lw22yqdrhic62l79q5v5avm16";
+    sha256 = "13wf6vj7mkv6gw8h183cnk7m24ir0gyf198pyb2148ng4klgv9p0";
   };
 
   preConfigure =

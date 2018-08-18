@@ -5,7 +5,7 @@
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
 , xdg_utils, yasm, minizip, libwebp
-, libusb1, pciutils, nss, re2, zlib, libvpx
+, libusb1, pciutils, nss, re2, zlib
 
 , python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
@@ -14,15 +14,13 @@
 , glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
+, ffmpeg, libxslt, libxml2
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
-, libexif ? null # only needed for Chromium before version 51
 
 # package customization
 , enableNaCl ? false
-, enableHotwording ? false
 , enableWideVine ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
@@ -44,10 +42,6 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
-  gentooPatch = name: sha256: fetchpatch {
-    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/${name}";
-    inherit sha256;
-  };
   githubPatch = commit: sha256: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
     inherit sha256;
@@ -143,12 +137,14 @@ let
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-      ./patches/fix-openh264.patch
       ./patches/fix-freetype.patch
-    ]  ++ optionals (versionRange "66" "68") [
-      ./patches/nix_plugin_paths_52.patch
-    ]  ++ optionals (versionAtLeast version "68") [
       ./patches/nix_plugin_paths_68.patch
+    ]  ++ optionals (versionRange "68" "69") [
+      ./patches/remove-webp-include-68.patch
+      (githubPatch "4d10424f9e2a06978cdd6cdf5403fcaef18e49fc" "11la1jycmr5b5rw89mzcdwznmd2qh28sghvz9klr1qhmsmw1vzjc")
+      (githubPatch "56cb5f7da1025f6db869e840ed34d3b98b9ab899" "04mp5r1yvdvdx6m12g3lw3z51bzh7m3gr73mhblkn4wxdbvi3dcs")
+    ]  ++ optionals (versionAtLeast version "69") [
+      ./patches/remove-webp-include-69.patch
     ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
@@ -214,11 +210,8 @@ let
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
-      ## FIXME remove use_gconf after chromium 65 has become stable
-      use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
       enable_nacl = enableNaCl;
-      enable_hotwording = enableHotwording;
       enable_widevine = enableWideVine;
       use_cups = cupsSupport;
 
@@ -258,7 +251,10 @@ let
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
-      gn gen --args=${escapeShellArg gnFlags} out/Release
+      gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+
+      # Fail if `gn gen` contains a WARNING.
+      grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1
 
       runHook postConfigure
     '';

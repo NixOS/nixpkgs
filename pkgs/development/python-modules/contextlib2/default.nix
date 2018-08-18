@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "contextlib2";
   version = "0.5.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi rec {
     inherit pname version;

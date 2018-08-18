@@ -226,7 +226,7 @@ in
       default = [];
       example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
       type = types.listOf (types.submodule (
-        { options, ... }: {
+        { ... }: {
           options.original = mkOption {
             type = types.package;
             description = "The original package to override.";

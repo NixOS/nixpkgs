@@ -19,6 +19,27 @@
 
   <itemizedlist>
    <listitem>
+     <para>
+       Support for wrapping binaries using <literal>firejail</literal> has been
+       added through <varname>programs.firejail.wrappedBinaries</varname>.
+     </para>
+     <para>
+       For example
+     </para>
+<programlisting>
+programs.firejail = {
+  enable = true;
+  wrappedBinaries = {
+    firefox = "${lib.getBin pkgs.firefox}/bin/firefox";
+    mpv = "${lib.getBin pkgs.mpv}/bin/mpv";
+  };
+};
+</programlisting>
+      <para>
+        This will place <literal>firefox</literal> and <literal>mpv</literal> binaries in the global path wrapped by firejail.
+      </para>
+   </listitem>
+   <listitem>
     <para>
      User channels are now in the default <literal>NIX_PATH</literal>, allowing
      users to use their personal <command>nix-channel</command> defined
@@ -54,10 +75,40 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
+     The <varname>services.cassandra</varname> module has been reworked and
+     was rewritten from scratch. The service has succeeding tests for
+     the versions 2.1, 2.2, 3.0 and 3.11 of <link
+     xlink:href="https://cassandra.apache.org/">Apache Cassandra</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     There is a new <varname>services.foundationdb</varname> module for deploying
+     <link xlink:href="https://www.foundationdb.org">FoundationDB</link> clusters.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      When enabled the <literal>iproute2</literal> will copy the files expected
      by ip route (e.g., <filename>rt_tables</filename>) in
      <filename>/run/iproute2</filename>. This allows to write aliases for
      routing tables for instance.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <varname>services.strongswan-swanctl</varname>
+      is a modern replacement for <varname>services.strongswan</varname>.
+      You can use either one of them to setup IPsec VPNs but not both at the same time.
+    </para>
+    <para>
+      <varname>services.strongswan-swanctl</varname> uses the
+      <link xlink:href="https://wiki.strongswan.org/projects/strongswan/wiki/swanctl">swanctl</link>
+      command which uses the modern
+      <link xlink:href="https://github.com/strongswan/strongswan/blob/master/src/libcharon/plugins/vici/README.md">vici</link>
+      <emphasis>Versatile IKE Configuration Interface</emphasis>.
+      The deprecated <literal>ipsec</literal> command used in <varname>services.strongswan</varname> is using the legacy
+      <link xlink:href="https://github.com/strongswan/strongswan/blob/master/README_LEGACY.md">stroke configuration interface</link>.
     </para>
    </listitem>
   </itemizedlist>
@@ -76,6 +127,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     The deprecated <varname>services.cassandra</varname> module has
+     seen a complete rewrite. (See above.)
+    </para>
+   </listitem>
    <listitem>
     <para>
      <literal>lib.strict</literal> is removed. Use
@@ -125,6 +182,22 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
     <para>
      <varname>services.munge</varname> now runs as user (and group) <literal>munge</literal> instead of root.
      Make sure the key file is accessible to the daemon.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <varname>dockerTools.buildImage</varname> now uses <literal>null</literal> as default value for <varname>tag</varname>,
+      which indicates that the nix output hash will be used as tag.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Options
+      <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.ramfsMountPoint</literal>
+      <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.storage.mountPoint</literal>
+      were removed. <literal>luksroot.nix</literal> module never supported more than one YubiKey at
+      a time anyway, hence those options never had any effect. You should be able to remove them
+      from your config without any issues.
     </para>
    </listitem>
   </itemizedlist>
@@ -288,11 +361,67 @@ inherit (pkgs.nixos {
    </listitem>
    <listitem>
     <para>
-     Recommented way to access the Kubernetes Dashboard is with HTTPS (TLS)
+     Recommended way to access the Kubernetes Dashboard is via HTTPS (TLS)
      Therefore; public service port for the dashboard has changed to 443
      (container port 8443) and scheme to https.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The option <varname>services.kubernetes.apiserver.address</varname>
+     was renamed to <varname>services.kubernetes.apiserver.bindAddress</varname>.
+     Note that the default value has changed from 127.0.0.1 to 0.0.0.0.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <varname>services.kubernetes.apiserver.publicAddress</varname>
+     was not used and thus has been removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The option <varname>services.kubernetes.addons.dashboard.enableRBAC</varname>
+     was renamed to <varname>services.kubernetes.addons.dashboard.rbac.enable</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The Kubernetes Dashboard now has only minimal RBAC permissions by default.
+     If dashboard cluster-admin rights are desired,
+     set <varname>services.kubernetes.addons.dashboard.rbac.clusterAdmin</varname> to true.
+     On existing clusters, in order for the revocation of privileges to take effect,
+     the current ClusterRoleBinding for kubernetes-dashboard must be manually removed:
+     <literal>kubectl delete clusterrolebinding kubernetes-dashboard</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <varname>programs.screen</varname> module provides allows to configure
+     <literal>/etc/screenrc</literal>, however the module behaved fairly counterintuitive as
+     the config exists, but the package wasn't available. Since 18.09 <literal>pkgs.screen</literal>
+     will be added to <literal>environment.systemPackages</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The module <option>services.networking.hostapd</option> now uses WPA2 by default.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      <varname>s6Dns</varname>, <varname>s6Networking</varname>,
+      <varname>s6LinuxUtils</varname> and <varname>s6PortableUtils</varname>
+      renamed to
+      <varname>s6-dns</varname>, <varname>s6-networking</varname>,
+      <varname>s6-linux-utils</varname> and <varname>s6-portable-utils</varname> respectively.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The module option <option>nix.useSandbox</option> is now defaulted to <literal>true</literal>.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>

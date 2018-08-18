@@ -84,7 +84,7 @@ in {
 
   config = mkIf config.services.dnscache.enable {
     environment.systemPackages = [ pkgs.djbdns ];
-    users.extraUsers.dnscache = {};
+    users.users.dnscache = {};
 
     systemd.services.dnscache = {
       description = "djbdns dnscache server";

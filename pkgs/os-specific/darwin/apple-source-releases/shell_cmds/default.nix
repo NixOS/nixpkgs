@@ -1,7 +1,7 @@
-{ stdenv, appleDerivation, xcbuild }:
+{ stdenv, appleDerivation, xcbuildHook }:
 
 appleDerivation rec {
-  buildInputs = [ xcbuild ];
+  nativeBuildInputs = [ xcbuildHook ];
 
   patchPhase = ''
     # NOTE: these hashes must be recalculated for each version change

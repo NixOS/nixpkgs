@@ -1,4 +1,4 @@
-{ stdenv, lib, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv }:
+{ stdenv, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv, gtk2 }:
 
 let
   version = "1.8.2";
@@ -47,7 +47,7 @@ let
 
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:$out/lib/electron" \
+        --set-rpath "${atomEnv.libPath}:${gtk2}/lib:$out/lib/electron" \
         $out/lib/electron/electron
 
       wrapProgram $out/lib/electron/electron \

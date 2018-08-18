@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
@@ -21,7 +21,7 @@ import ./make-test.nix ({ pkgs, ...} : {
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
               networking.firewall.allowPing = true;
-              system.nixos.stateVersion = "18.03";
+              system.stateVersion = "18.03";
             };
         };
 

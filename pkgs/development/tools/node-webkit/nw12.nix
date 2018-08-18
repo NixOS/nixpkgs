@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
 , xorg, alsaLib, dbus, glib, gtk2, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, systemd, libcap
+, gdk_pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify}:
 let
   bits = if stdenv.system == "x86_64-linux" then "x64"
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   version = "0.12.3";
 
   src = fetchurl {
-    url = "http://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
+    url = "https://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
       "1i5ipn5x188cx54pbbmjj1bz89vvcfx5z1c7pqy2xzglkyb2xsyg" else
       "117gx6yjbcya64yg2vybcfyp591sid209pg8a33k9afbsmgz684c";

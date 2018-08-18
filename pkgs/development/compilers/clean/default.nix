@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
       sha256 = "1w8vvmkwzq8g51639r62apcy75sj69nm08082a34xvqm9ymfgkq5";
     })
     else if stdenv.system == "x86_64-linux" then (fetchurl {
-        url = "http://clean.cs.ru.nl/download/Clean24/linux/clean2.4_64_boot.tar.gz";
+        url = "https://clean.cs.ru.nl/download/Clean24/linux/clean2.4_64_boot.tar.gz";
         sha256 = "08gsa1pjl5wyzh4ah8ccfx8a7mdcn6ycsn1lzkrr9adygv1gmm7r";
     })
     else throw "Architecture not supported";

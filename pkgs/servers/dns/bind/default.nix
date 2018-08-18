@@ -8,14 +8,14 @@
 assert enableSeccomp -> libseccomp != null;
 assert enablePython -> python3 != null;
 
-let version = "9.12.1-P2"; in
+let version = "9.12.2"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
-    url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0a9dvyg1dk7vpqn9gz7p5jas3bz7z22bjd66b98g1qk16i2w7rqd";
+    url = "https://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
+    sha256 = "0ll46igs9xfq2qclc5wzqsnj3zv7ssga0544gm24s1m7765lqslz";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "Domain name server";
     license = stdenv.lib.licenses.mpl20;
 
-    maintainers = with stdenv.lib.maintainers; [viric peti];
+    maintainers = with stdenv.lib.maintainers; [peti];
     platforms = with stdenv.lib.platforms; unix;
 
     outputsToInstall = [ "out" "dnsutils" "host" ];

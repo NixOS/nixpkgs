@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, file, intltool, gobjectIntrospection, glib
-, clutter-gtk, clutter-gst, gnome3, gtksourceview, libmusicbrainz
+, clutter-gtk, clutter-gst, gnome3, gtksourceview
 , webkitgtk, libmusicbrainz5, icu, makeWrapper, gst_all_1
 , gdk_pixbuf, librsvg, gtk3, harfbuzz }:
 

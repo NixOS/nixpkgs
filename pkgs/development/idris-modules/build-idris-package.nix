@@ -1,23 +1,29 @@
 # Build an idris package
-{ stdenv, idrisPackages, gmp }:
+{ stdenv, lib, idrisPackages, gmp }:
   { idrisDeps ? []
+  , noPrelude ? false
+  , noBase ? false
   , name
   , version
-  , src
-  , meta
   , extraBuildInputs ? []
-  , postUnpack ? ""
-  , doCheck ? true
-  }:
+  , ...
+  }@attrs:
 let
-  idris-with-packages = idrisPackages.with-packages idrisDeps;
+  allIdrisDeps = idrisDeps
+    ++ lib.optional (!noPrelude) idrisPackages.prelude
+    ++ lib.optional (!noBase) idrisPackages.base;
+  idris-with-packages = idrisPackages.with-packages allIdrisDeps;
+  newAttrs = builtins.removeAttrs attrs [ "idrisDeps" "extraBuildInputs" "name" "version" ] // {
+    meta = attrs.meta // {
+      platforms = attrs.meta.platforms or idrisPackages.idris.meta.platforms;
+    };
+  };
 in
 stdenv.mkDerivation ({
+  name = "idris-${name}-${version}";
 
-  name = "${name}-${version}";
-
-  inherit postUnpack src doCheck meta;
-
+  buildInputs = [ idris-with-packages gmp ] ++ extraBuildInputs;
+  propagatedBuildInputs = allIdrisDeps;
 
   # Some packages use the style
   # opts = -i ../../path/to/package
@@ -27,20 +33,18 @@ stdenv.mkDerivation ({
   '';
 
   buildPhase = ''
-    ${idris-with-packages}/bin/idris --build *.ipkg
+    idris --build *.ipkg
   '';
 
   checkPhase = ''
     if grep -q test *.ipkg; then
-      ${idris-with-packages}/bin/idris --testpkg *.ipkg
+      idris --testpkg *.ipkg
     fi
   '';
 
   installPhase = ''
-    ${idris-with-packages}/bin/idris --install *.ipkg --ibcsubdir $out/libs
+    idris --install *.ipkg --ibcsubdir $out/libs
+    IDRIS_DOC_PATH=$out/doc idris --installdoc *.ipkg || true
   '';
 
-  buildInputs = [ gmp ] ++ extraBuildInputs;
-
-  propagatedBuildInputs = idrisDeps;
-})
+} // newAttrs)

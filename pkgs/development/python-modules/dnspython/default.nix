@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "dnspython";
   version = "1.15.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

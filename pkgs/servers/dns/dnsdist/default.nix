@@ -2,11 +2,11 @@
 , boost, libsodium, libedit, re2
 , net_snmp, lua, protobuf, openssl }: stdenv.mkDerivation rec {
   name = "dnsdist-${version}";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
-    sha256 = "025sgvpi3ps0n4mzfwkk6a5ang90a3c7s2fi9vni6jj0p16wsrxa";
+    sha256 = "1i3b1vpk9a8zbx9aby2s1ckkzhlvzgn11hcgj3b8x2j1b9771rqb";
   };
 
   nativeBuildInputs = [ pkgconfig ];

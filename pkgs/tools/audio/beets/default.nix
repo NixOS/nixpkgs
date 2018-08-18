@@ -17,6 +17,7 @@
 , enableLastfm         ? true
 , enableMpd            ? true
 , enableReplaygain     ? true, bs1770gain ? null
+, enableSonosUpdate    ? true
 , enableThumbnails     ? true
 , enableWeb            ? true
 
@@ -37,6 +38,7 @@ assert enableKeyfinder   -> keyfinder-cli != null;
 assert enableLastfm      -> pythonPackages.pylast         != null;
 assert enableMpd         -> pythonPackages.mpd2           != null;
 assert enableReplaygain  -> bs1770gain                    != null;
+assert enableSonosUpdate -> pythonPackages.soco           != null;
 assert enableThumbnails  -> pythonPackages.pyxdg          != null;
 assert enableWeb         -> pythonPackages.flask          != null;
 
@@ -59,6 +61,7 @@ let
     mpdstats = enableMpd;
     mpdupdate = enableMpd;
     replaygain = enableReplaygain;
+    sonosupdate = enableSonosUpdate;
     thumbnails = enableThumbnails;
     web = enableWeb;
   };
@@ -88,20 +91,22 @@ let
     doInstallCheck = false;
   });
 
+  pluginArgs = externalTestArgs // { inherit pythonPackages; };
+
   plugins = {
-    alternatives = callPackage ./alternatives-plugin.nix externalTestArgs;
-    copyartifacts = callPackage ./copyartifacts-plugin.nix externalTestArgs;
+    alternatives = callPackage ./alternatives-plugin.nix pluginArgs;
+    copyartifacts = callPackage ./copyartifacts-plugin.nix pluginArgs;
   };
 
 in pythonPackages.buildPythonApplication rec {
-  name = "beets-${version}";
-  version = "1.4.6";
+  pname = "beets";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     rev = "v${version}";
-    sha256 = "0m8macydkn1fp4ymig0rg7bzw77rrm454q763gxdpq2kg08yl5py";
+    sha256 = "17gfz0g7pqm6wha8zf63zpw07zgi787w1bjwdcxdh1l3z4m7jc9l";
   };
 
   propagatedBuildInputs = [
@@ -111,7 +116,6 @@ in pythonPackages.buildPythonApplication rec {
     pythonPackages.munkres
     pythonPackages.musicbrainzngs
     pythonPackages.mutagen
-    pythonPackages.pathlib
     pythonPackages.pyyaml
     pythonPackages.unidecode
     pythonPackages.gst-python
@@ -129,6 +133,7 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableKeyfinder     keyfinder-cli
     ++ optional enableLastfm        pythonPackages.pylast
     ++ optional enableMpd           pythonPackages.mpd2
+    ++ optional enableSonosUpdate   pythonPackages.soco
     ++ optional enableThumbnails    pythonPackages.pyxdg
     ++ optional enableWeb           pythonPackages.flask
     ++ optional enableAlternatives  plugins.alternatives

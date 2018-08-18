@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   version = "17.11.2";
 
   src = fetchurl {
-    url = "http://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
+    url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
     sha256 = "19m5l3jkrns8r1zbjb6ry18w50ff36kbl5b5g6pfcp9p57sfisd2";
   };
 

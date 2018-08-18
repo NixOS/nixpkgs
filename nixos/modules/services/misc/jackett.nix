@@ -1,4 +1,4 @@
-{ config, pkgs, lib, mono, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -36,12 +36,12 @@ in
       };
     };
 
-    users.extraUsers.jackett = {
+    users.users.jackett = {
       uid = config.ids.uids.jackett;
       home = "/var/lib/jackett";
       group = "jackett";
     };
-    users.extraGroups.jackett.gid = config.ids.gids.jackett;
+    users.groups.jackett.gid = config.ids.gids.jackett;
 
   };
 }

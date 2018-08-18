@@ -1,4 +1,4 @@
-{ stdenv, substituteAll, fetchurl, fetchpatch
+{ stdenv, substituteAll, fetchurl
 , pkgconfig, freetype, expat, libxslt, gperf, dejavu_fonts
 , hostPlatform
 }:

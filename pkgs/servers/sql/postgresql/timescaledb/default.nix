@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   name = "timescaledb-${version}";
-  version = "0.9.2";
+  version = "0.10.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "1zgyd407skqbsw2zj3l9hixwlisnj82yb6hbq5khjg9k0ifvvgyp";
+    sha256 = "07qkkf7lbwaig26iia54vdakwmv33f71p8saqifz9lf0zy6xn0w0";
   };
 
   # Fix the install phase which tries to install into the pgsql extension dir,
@@ -32,6 +32,13 @@ stdenv.mkDerivation rec {
       substituteInPlace "$x" \
         --replace 'DESTINATION ''${PG_PKGLIBDIR}' "DESTINATION \"$out/lib\""
     done
+  '';
+
+  postInstall = ''
+    # work around an annoying bug, by creating $out/bin, so buildEnv doesn't freak out later
+    # see https://github.com/NixOS/nixpkgs/issues/22653
+
+    mkdir -p $out/bin
   '';
 
   meta = with stdenv.lib; {

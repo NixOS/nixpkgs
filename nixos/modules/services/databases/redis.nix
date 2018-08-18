@@ -217,7 +217,7 @@ in
       allowedTCPPorts = [ cfg.port ];
     };
 
-    users.extraUsers.redis =
+    users.users.redis =
       { name = cfg.user;
         description = "Redis database user";
       };

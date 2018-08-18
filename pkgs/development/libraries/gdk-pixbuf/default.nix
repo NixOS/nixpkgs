@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, fetchpatch, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
+{ stdenv, fetchurl, fetchFromGitLab, fetchpatch, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
 , docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
 , jasper, gobjectIntrospection, doCheck ? false, makeWrapper }:
 
@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
   #   url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
   #   sha256 = "0d534ysa6n9prd17wwzisq7mj6qkhwh8wcf8qgin1ar3hbs5ry7z";
   # };
-  src = fetchgit {
-    url = https://gitlab.gnome.org/GNOME/gdk-pixbuf.git;
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gdk-pixbuf";
     rev = version;
     sha256 = "18lwqg63vyap2m1mw049rnb8fm869429xbf7636a2n21gs3d3jwv";
   };

@@ -1,13 +1,14 @@
 { pname, version, updateScript ? null
-, src, patches ? [], extraConfigureFlags ? [], extraMakeFlags ? [], overrides ? {}, meta
+, src, patches ? [], extraConfigureFlags ? [], extraMakeFlags ? []
+, overrides ? {}, extraNativeBuildInputs ? [], meta
 , isTorBrowserLike ? false }:
 
-{ lib, stdenv, pkgconfig, pango, perl, python, zip, libIDL
+{ lib, stdenv, pkgconfig, pango, perl, python2, zip, libIDL
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, icu, libpng, jemalloc
+, icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
 , debugBuild ? false
 
@@ -75,27 +76,27 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [
     gtk2 perl zip libIDL libjpeg zlib bzip2
-    dbus dbus-glib pango freetype fontconfig xorg.libXi
+    dbus dbus-glib pango freetype fontconfig xorg.libXi xorg.libXcursor
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     nspr libnotify xorg.pixman yasm libGLU_combined
     xorg.libXScrnSaver xorg.scrnsaverproto
     xorg.libXext xorg.xextproto sqlite unzip makeWrapper
-    hunspell libevent libstartup_notification libvpx /* cairo */
-    icu libpng jemalloc
+    libevent libstartup_notification libvpx /* cairo */
+    icu libpng jemalloc glib
   ]
   ++ lib.optionals (!isTorBrowserLike) [ nss ]
-
+  ++ lib.optional (lib.versionOlder version "61") hunspell
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos;
 
-  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
+  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 
   nativeBuildInputs =
-    [ autoconf213 which gnused pkgconfig perl python cargo rustc ]
-    ++ lib.optional gtk3Support wrapGAppsHook;
+    [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
+    ++ lib.optional gtk3Support wrapGAppsHook ++ extraNativeBuildInputs;
 
   preConfigure = ''
     # remove distributed configuration files
@@ -113,7 +114,7 @@ stdenv.mkDerivation (rec {
     cxxLib=$( echo -n ${gcc}/include/c++/* )
     archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
 
-    test -f layout/style/ServoBindings.toml && sed -i -e '/"-DMOZ_STYLO"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
+    test -f layout/style/ServoBindings.toml && sed -i -e '/"-DRUST_BINDGEN"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
     # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
@@ -134,7 +135,6 @@ stdenv.mkDerivation (rec {
     "--with-system-png" # needs APNG support
     "--with-system-icu"
     "--enable-system-ffi"
-    "--enable-system-hunspell"
     "--enable-system-pixman"
     "--enable-system-sqlite"
     #"--enable-system-cairo"
@@ -148,6 +148,7 @@ stdenv.mkDerivation (rec {
     "--disable-gconf"
     "--enable-default-toolkit=cairo-gtk${if gtk3Support then "3" else "2"}"
   ]
+  ++ lib.optional (lib.versionOlder version "61") "--enable-system-hunspell"
   ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
     "--with-libclang-path=${llvmPackages.libclang}/lib"

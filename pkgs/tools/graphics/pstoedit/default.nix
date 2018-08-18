@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "147jkgvm9n6mbkl6ndqnm9x74x5y9agbxkfwj0jrw6yxyhxx2cdd";
   };
 
+  #
+  # Turn on "-rdb" option (REALLYDELAYBIND) by default to ensure compatibility with gs-9.22
+  #
+  patches = [ ./pstoedit-gs-9.22-compat.patch  ];
+
   outputs = [ "out" "dev" ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib ghostscript imagemagick plotutils gd libjpeg libwebp ]

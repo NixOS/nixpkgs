@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, libiconv
+{ stdenv, fetchurl, pkgconfig, libiconv
 , libintl, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   name = "cairo-${version}";
 
   src = fetchurl {
-    url = "http://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${name}.tar.xz";
+    url = "https://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${name}.tar.xz";
     sha256 = "1jcl0mnqq6j2xip8p506g2cj54sfycm339rrd3p4g2jljhdhh8vn";
   };
 

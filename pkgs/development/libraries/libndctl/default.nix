@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, autoconf, automake, asciidoc, docbook_xsl, docbook_xml_dtd_45, libxslt, xmlto, pkgconfig, json_c, kmod, which, systemd, utillinux
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, asciidoc, docbook_xsl, docbook_xml_dtd_45, libxslt, xmlto, pkgconfig, json_c, kmod, which, systemd, utillinux
 }:
 
 let
-  version = "60.3";
+  version = "61.2";
 in stdenv.mkDerivation rec {
   name = "libndctl-${version}";
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
     owner = "pmem";
     repo = "ndctl";
     rev = "v${version}";
-    sha256 = "0w19yh6f9skf5zy4bhdjlrn3wdx5xx9cq8j6h04cmw4nla6zj9ar";
+    sha256 = "0vid78jzhmzh505bpwn8mvlamfhcvl6rlfjc29y4yn7zslpydxl7";
   };
 
   outputs = [ "out" "man" "dev" ];
@@ -21,6 +21,14 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     json_c kmod systemd utillinux
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "add-missing-include-for-ssize_t.patch";
+      url = "https://github.com/pmem/ndctl/commit/8f1798d14dda367c659b87362edb312739830ddf.patch";
+      sha256 = "1jr5kh087938msl22hgjngbf025n9iplz0czmybfp7lavl73m0pm";
+    })
   ];
 
   preAutoreconf = ''

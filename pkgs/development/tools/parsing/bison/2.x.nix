@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, m4, perl }:
+{ stdenv, lib, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
-  name = "bison-2.7";
+  name = "bison-2.7.1";
 
   src = fetchurl {
     url = "mirror://gnu/bison/${name}.tar.gz";
-    sha256 = "0cd8s2g7zjshya7kwjc9rh3drsssl4hiq4sccnkgf0nn9wvygfqr";
+    sha256 = "0c9li3iaslzzr3zig6m3zlmb4r8i0wfvkcrvdyiqxasb09mjkqh8";
   };
 
   nativeBuildInputs = [ m4 ] ++ stdenv.lib.optional doCheck perl;
   propagatedBuildInputs = [ m4 ];
+
+  patches = lib.optional stdenv.isDarwin ./darwin-vasnprintf.patch;
 
   doCheck = true;
   # M4 = "${m4}/bin/m4";

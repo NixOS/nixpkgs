@@ -1,5 +1,4 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
 , pytest
 }:
@@ -7,7 +6,6 @@
 buildPythonPackage rec {
   pname = "plumbum";
   version = "1.6.6";
-  name = "${pname}-${version}";
 
   checkInputs = [ pytest ];
 

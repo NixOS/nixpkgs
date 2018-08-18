@@ -1,18 +1,14 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-let
-  rev      = "966f3c5f45ba18b2225c5b06918e41f56e223e73";
-  revCount = "240";
-  sha256   = "1m70a5rpycrfwrrc83745mamgpg54pc0n75qpzr9jbvicbp8g66p";
-in
 buildGoPackage rec {
   name = "wal-g-${version}";
-  version = "0.1.8pre${revCount}_${builtins.substring 0 9 rev}";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
-    owner = "wal-g";
-    repo  = "wal-g";
-    inherit rev sha256;
+    owner  = "wal-g";
+    repo   = "wal-g";
+    rev    = "v${version}";
+    sha256 = "0klqnrrjzzxcj3clg7vapmbga1vqsfh8mkci5r2ir1bjp0z1xfnp";
   };
 
   goPackagePath = "github.com/wal-g/wal-g";

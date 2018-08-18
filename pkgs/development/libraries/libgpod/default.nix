@@ -1,5 +1,5 @@
 {stdenv, lib, fetchurl, gettext, perl, perlXMLParser, intltool, pkgconfig, glib,
-  libxml2, sqlite, libusb1, zlib, sg3_utils, gdk_pixbuf, taglib,
+  libxml2, sqlite, zlib, sg3_utils, gdk_pixbuf, taglib,
   libimobiledevice, pythonPackages, mutagen,
   monoSupport ? true, mono, gtk-sharp-2_0
 }:

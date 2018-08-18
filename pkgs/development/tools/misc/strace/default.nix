@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "strace-${version}";
-  version = "4.22";
+  version = "4.23";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${name}.tar.xz";
-    sha256 = "17dkpnsjxmys1ydidm9wcvc3wscsz44fmlxw3dclspn9cj9d1306";
+    sha256 = "1bcsq2gbpcb81ayryvn56a6kjx42fc21la6qgds35n0xbybacq3q";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) "--enable-mpers=check";
 
   meta = with stdenv.lib; {
-    homepage = http://strace.io/;
+    homepage = https://strace.io/;
     description = "A system call tracer for Linux";
     license = licenses.bsd3;
     platforms = platforms.linux;

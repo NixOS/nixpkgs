@@ -1,35 +1,36 @@
-{ stdenv, buildGoPackage, fetchgit, pkgconfig, ffmpeg-full, graphicsmagick, ghostscript, quicktemplate,
-  go-bindata, easyjson, nodePackages, cmake, emscripten }:
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, cmake, ffmpeg-full, ghostscript
+, graphicsmagick, quicktemplate, go-bindata, easyjson, nodePackages, emscripten }:
 
 buildGoPackage rec {
   name = "meguca-unstable-${version}";
-  version = "2018-05-26";
-  rev = "9f3d902fb899dbc874c1a91298d86fda7da59b1e";
+  version = "2018-08-02";
   goPackagePath = "github.com/bakape/meguca";
   goDeps = ./server_deps.nix;
+
+  src = fetchFromGitHub {
+    owner = "bakape";
+    repo = "meguca";
+    rev = "9224ab13f6c08bcfee5a930088c35bbfbf7491e1";
+    sha256 = "1cp7d8a216nap1fzxcb58dgkbxdazs14hs9705h1xgly86cvwgv0";
+    fetchSubmodules = true;
+  };
+
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata easyjson emscripten ];
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/bakape/meguca";
-    sha256 = "0qblllf23pxcwi5fhaq8xc77iawll7v7xpk2mf9ngks3h8p7gddq";
-    fetchSubmodules = true;
-  };
-
-  configurePhase = ''
-    export HOME=$PWD
-    export GOPATH=$GOPATH:$HOME/go
+  buildPhase = ''
+    export HOME=`pwd`
+    export GOPATH=$GOPATH:$HOME/go/src/github.com/bakape/meguca/go
+    cd $HOME/go/src/github.com/bakape/meguca
     ln -sf ${nodePackages.meguca}/lib/node_modules/meguca/node_modules
     sed -i "/npm install --progress false --depth 0/d" Makefile
     make generate_clean
     go generate meguca/...
-  '';
-
-  buildPhase = ''
-    go build -p $NIX_BUILD_CORES meguca
-    make -j $NIX_BUILD_CORES client wasm
+    go build -v -p $NIX_BUILD_CORES meguca
+    make -j $NIX_BUILD_CORES client
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    make -j $NIX_BUILD_CORES wasm
   '';
 
   installPhase = ''
@@ -40,7 +41,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/bakape/meguca";
-    description = "Anonymous realtime imageboard focused on high performance, free speech and transparent moderation";
+    description = "High performance anonymous realtime imageboard";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chiiruno ];
     platforms = platforms.all;

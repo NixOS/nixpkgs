@@ -47,7 +47,7 @@ rec {
       machinesNumbered = zipLists machines (range 1 254);
 
       nodes_ = flip map machinesNumbered (m: nameValuePair m.fst
-        [ ( { config, pkgs, nodes, ... }:
+        [ ( { config, nodes, ... }:
             let
               interfacesNumbered = zipLists config.virtualisation.vlans (range 1 255);
               interfaces = flip map interfacesNumbered ({ fst, snd }:

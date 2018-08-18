@@ -8,7 +8,7 @@ let
       name = "ragel-${version}";
 
       src = fetchurl {
-        url = "http://www.colm.net/files/ragel/${name}.tar.gz";
+        url = "https://www.colm.net/files/ragel/${name}.tar.gz";
         inherit sha256;
       };
 

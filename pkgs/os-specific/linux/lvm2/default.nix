@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid
+{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, udev, utillinux, libuuid
 , thin-provisioning-tools, enable_dmeventd ? false }:
 
 let
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libudev libuuid thin-provisioning-tools ];
+  buildInputs = [ udev libuuid thin-provisioning-tools ];
 
   preConfigure =
     ''

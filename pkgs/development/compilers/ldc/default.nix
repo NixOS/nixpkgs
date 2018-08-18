@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl, cmake, llvm, curl, tzdata
+{ stdenv, fetchurl, cmake, llvm, curl, tzdata
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, targetPackages
 , bootstrapVersion ? false

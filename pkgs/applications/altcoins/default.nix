@@ -6,6 +6,7 @@ rec {
 
   bitcoin  = libsForQt5.callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
+  clightning = callPackage ./clightning.nix { };
 
   bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { boost = boost165; withGui = true; };
   bitcoind-abc = callPackage ./bitcoin-abc.nix { boost = boost165; withGui = false; };
@@ -85,7 +86,8 @@ rec {
   };
 
   parity = callPackage ./parity { };
+  parity-beta = callPackage ./parity/beta.nix { };
   parity-ui = callPackage ./parity-ui { };
 
-  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; withGui = false; };
+  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; };
 }

@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
     ( cd $dev/include ; ln -s ../lib/libzip/include/zipconf.h zipconf.h )
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.nih.at/libzip;
     description = "A C library for reading, creating and modifying zip archives";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
   };
 }

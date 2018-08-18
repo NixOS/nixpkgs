@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, piqi, ulex, easy-format, xmlm, camlp4 }:
+{ stdenv, fetchurl, ocaml, findlib, piqi, camlp4 }:
 
 stdenv.mkDerivation rec {
   version = "0.7.5";

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, lib
+{ stdenv, fetchurl, lib
 , ncurses, openssl, aspell, gnutls
 , zlib, curl, pkgconfig, libgcrypt
 , cmake, makeWrapper, libobjc, libresolv, libiconv
-, writeScriptBin, symlinkJoin # for withPlugins
+, writeScriptBin # for withPlugins
 , asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
@@ -15,7 +15,7 @@
 , runCommand }:
 
 let
-  inherit (pythonPackages) python pycrypto pync;
+  inherit (pythonPackages) python;
   plugins = [
     { name = "perl"; enabled = perlSupport; cmakeFlag = "ENABLE_PERL"; buildInputs = [ perl ]; }
     { name = "tcl"; enabled = tclSupport; cmakeFlag = "ENABLE_TCL"; buildInputs = [ tcl ]; }
@@ -117,12 +117,13 @@ in if configure == null then weechat else
         ln -s $plugin $out/plugins
       done
     '';
-  in (writeScriptBin weechat.name ''
+  in (writeScriptBin "weechat" ''
     #!${stdenv.shell}
     export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
     ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
     exec ${weechat}/bin/weechat "$@"
   '') // {
+    name = weechat.name;
     unwrapped = weechat;
     meta = weechat.meta;
   }

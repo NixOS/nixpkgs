@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "twine";
   version = "1.11.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

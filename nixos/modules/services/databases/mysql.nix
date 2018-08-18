@@ -218,16 +218,16 @@ in
   config = mkIf config.services.mysql.enable {
 
     services.mysql.dataDir =
-      mkDefault (if versionAtLeast config.system.nixos.stateVersion "17.09" then "/var/lib/mysql"
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql"
                  else "/var/mysql");
 
-    users.extraUsers.mysql = {
+    users.users.mysql = {
       description = "MySQL server user";
       group = "mysql";
       uid = config.ids.uids.mysql;
     };
 
-    users.extraGroups.mysql.gid = config.ids.gids.mysql;
+    users.groups.mysql.gid = config.ids.gids.mysql;
 
     environment.systemPackages = [mysql];
 

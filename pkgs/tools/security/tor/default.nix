@@ -3,7 +3,6 @@
 
 # for update.nix
 , writeScript
-, runCommand
 , common-updater-scripts
 , bash
 , coreutils
@@ -15,11 +14,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.3.3.6";
+  name = "tor-0.3.3.9";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${name}.tar.gz";
-    sha256 = "1drk2h8zd05xrfpx7xn77pcxz0hs4nrq6figw56qk5gkvgv5kg4r";
+    sha256 = "0vyf5z0dn5jghp2qjp076aq62lsz9g32qv9jiqf08skf096nnd45";
   };
 
   outputs = [ "out" "geoip" ];
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
     inherit (stdenv) lib;
     inherit
       writeScript
-      runCommand
       common-updater-scripts
       bash
       coreutils

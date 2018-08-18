@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-notification-daemon-${version}";
-  version = "1.20.0";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0dq457npzid20yfwigdh8gfqgf5wv8p6jhbxfnzybam9xidlqc5f";
+    sha256 = "0hwswgc3i6d7zvmj0as95xjjw431spxkf1d37mxwaf6j80gx0p78";
   };
 
   nativeBuildInputs = [

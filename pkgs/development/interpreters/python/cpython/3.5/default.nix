@@ -15,7 +15,7 @@
 , CF, configd
 , python-setup-hook
 # For the Python package set
-, pkgs, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -27,9 +27,8 @@ with stdenv.lib;
 
 let
   majorVersion = "3.5";
-  minorVersion = "5";
+  minorVersion = "6";
   minorVersionSuffix = "";
-  pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
   sitePackages = "lib/${libPrefix}/site-packages";
@@ -50,7 +49,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "02ahsijk3a42sdzfp2il49shx0v4birhy7kkj0dikmh20hxjqg86";
+    sha256 = "0pqmf51zy2lzhbaj4yya2py2qr653j9152d0rg3p7wi1yl2dwp7m";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";

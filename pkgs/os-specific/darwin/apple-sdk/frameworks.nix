@@ -86,7 +86,6 @@ with frameworks; with libs; {
   QTKit                   = [ CoreMediaIO CoreMedia MediaToolbox QuickTime VideoToolbox ];
   QuickLook               = [ ApplicationServices CF ];
   QuickTime               = [ ApplicationServices AudioUnit Carbon CoreAudio CoreServices OpenGL QuartzCore ];
-  Ruby                    = [];
   SceneKit                = [];
   ScreenSaver             = [];
   Scripting               = [];

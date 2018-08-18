@@ -13,7 +13,6 @@ let
     + optionalString (val != null && cond != false) "=${val}";
   mkEnable = mkFlag "enable-" "disable-";
   mkWith = mkFlag "with-" "without-";
-  mkOther = mkFlag "" "" true;
 
   shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
 

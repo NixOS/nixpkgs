@@ -20,7 +20,7 @@
 { stdenv, lib
 , buildPlatform, hostPlatform
 , buildPackages
-, fetchurl, fetchpatch ? null
+, fetchurl ? null
 , linuxHeaders ? null
 , gd ? null, libpng ? null
 , bison

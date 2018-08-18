@@ -1,5 +1,5 @@
 let
-  commonConfig = { config, lib, pkgs, nodes, ... }: {
+  commonConfig = { lib, nodes, ... }: {
     networking.nameservers = [
       nodes.letsencrypt.config.networking.primaryIPAddress
     ];
@@ -12,7 +12,9 @@ let
         '';
       });
 
-      pythonPackages = (super.python.override {
+      # Override certifi so that it accepts fake certificate for Let's Encrypt
+      # Need to override the attribute used by simp_le, which is python3Packages
+      python3Packages = (super.python3.override {
         packageOverrides = lib.const (pysuper: {
           certifi = pysuper.certifi.overridePythonAttrs (attrs: {
             postPatch = (attrs.postPatch or "") + ''
@@ -29,7 +31,7 @@ in import ./make-test.nix {
   name = "acme";
 
   nodes = {
-    letsencrypt = ./common/letsencrypt.nix;
+    letsencrypt = ./common/letsencrypt;
 
     webserver = { config, pkgs, ... }: {
       imports = [ commonConfig ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg
+{ stdenv, fetchurl, pkgconfig, babl, libpng, cairo, libjpeg
 , librsvg, pango, gtk2, bzip2, intltool, libintl
 , OpenGL ? null }:
 

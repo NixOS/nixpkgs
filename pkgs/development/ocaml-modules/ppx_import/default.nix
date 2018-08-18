@@ -1,5 +1,5 @@
-{stdenv, fetchFromGitHub, buildOcaml, ocaml, opaline,
- cppo, ppx_tools, ounit, ppx_deriving}:
+{stdenv, fetchFromGitHub, buildOcaml, opaline,
+ cppo, ounit, ppx_deriving}:
 
 buildOcaml rec {
   name = "ppx_import";

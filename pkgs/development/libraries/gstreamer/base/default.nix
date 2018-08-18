@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib
 , pkgconfig, meson, ninja, gettext, gobjectIntrospection
-, python, gstreamer, orc, pango, libtheora, libvisual
+, python, gstreamer, orc, pango, libtheora
 , libintl, libopus
 , enableX11 ? stdenv.isLinux, libXv
 , enableWayland ? stdenv.isLinux, wayland

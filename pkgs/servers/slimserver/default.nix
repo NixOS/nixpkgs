@@ -45,8 +45,8 @@ buildPerlPackage rec {
     perlPackages.IOSocketSSL
     perlPackages.IOString
     perlPackages.JSONXSVersionOneAndTwo
-    perlPackages.Log4Perl
-    perlPackages.LWPUserAgent
+    perlPackages.LogLog4perl
+    perlPackages.LWP
     perlPackages.NetHTTP
     perlPackages.ProcBackground
     perlPackages.SubName

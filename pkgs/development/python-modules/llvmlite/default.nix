@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.22.0";
+  version = "0.24.0";
 
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a0a875f3d502f41f4a24444aa98fbf076a6bf36e2a0b3b4481b22e1c4a3acdc2";
+    sha256 = "320de4c4a1c105b91629305be069d217f3a9d7fbe32cb22bcfb016361895fc07";
   };
 
   propagatedBuildInputs = [ llvm ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;

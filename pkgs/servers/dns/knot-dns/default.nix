@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn
+{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl
 }:
 
@@ -7,18 +7,18 @@ let inherit (stdenv.lib) optional optionals; in
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   name = "knot-dns-${version}";
-  version = "2.6.7";
+  version = "2.6.8";
 
   src = fetchurl {
-    url = "http://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "1c2a004b05c161f7b36d5eeccebd9d4cdf60aa09930a7cc766514e468ca92243";
+    url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
+    sha256 = "0daee8efd6262f10c54ee6f5fb99ca4d0f72e275513ec0902032af594cac1b15";
   };
 
   outputs = [ "bin" "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls liburcu libidn
+    gnutls liburcu libidn2 libunistring
     nettle libedit
     libiconv lmdb libintl
     # without sphinx &al. for developer documentation

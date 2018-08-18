@@ -2,18 +2,18 @@
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
-, harfbuzz, mypaint-brushes, libwebp, libgudev, openexr
+, harfbuzz, mypaint-brushes, libwebp, libheif, libgudev, openexr
 , AppKit, Cocoa, gtk-mac-integration }:
 
 let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   name = "gimp-${version}";
-  version = "2.10.2";
+  version = "2.10.4";
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "1srkqd9cx1xmny7cyk3b6f14dknb3fd77whm38vlvr7grnpbmc0w";
+    sha256 = "14pi0q3wwkapy0inqxk1hjsa2h8lff1z4wgdsyrk29jaw66pdc7z";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig intltool gettext wrapPython ];
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     babl gegl gtk2 glib gdk_pixbuf pango cairo gexiv2 harfbuzz isocodes
     freetype fontconfig lcms libpng libjpeg poppler poppler_data libtiff openexr
-    libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp
+    libmng librsvg libwmf zlib libzip ghostscript aalib shared-mime-info libwebp libheif
     python pygtk libexif xorg.libXpm glib-networking libmypaint mypaint-brushes
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Cocoa gtk-mac-integration ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libgudev ];

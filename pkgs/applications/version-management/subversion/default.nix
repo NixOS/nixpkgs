@@ -91,11 +91,12 @@ let
 
     doCheck = false; # fails 10 out of ~2300 tests
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
+      license = licenses.asl20;
       homepage = http://subversion.apache.org/;
-      maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
-      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+      maintainers = with maintainers; [ eelco lovek323 ];
+      platforms = platforms.linux ++ platforms.darwin;
     };
 
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {
@@ -117,8 +118,8 @@ in {
   };
 
   subversion_1_10 = common {
-    version = "1.10.0";
-    sha256 = "115mlvmf663w16mc3xyypnaizq401vbypc56hl2ylzc3pcx3zwic";
+    version = "1.10.2";
+    sha256 = "127dysfc31q4dhbbxaznh9kqixy9jd44kgwji2gdwj6rb2lf6dav";
     extraBuildInputs = [ lz4 utf8proc ];
   };
 }

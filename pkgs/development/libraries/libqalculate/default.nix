@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, mpfr, libxml2, intltool, pkgconfig, doxygen,
+{ stdenv, fetchFromGitHub, mpfr, libxml2, intltool, pkgconfig, doxygen,
   autoreconfHook, readline, libiconv, icu, curl, gnuplot, gettext }:
 
 stdenv.mkDerivation rec {
   name = "libqalculate-${version}";
-  version = "2.5.0";
+  version = "2.6.0b";
 
-  src = fetchurl {
-    url = "https://github.com/Qalculate/libqalculate/archive/v${version}.tar.gz";
-    sha256 = "0xs2qjr93k43p6j126xj20fgb1n2jv56rhgc211yv1l46crbqxfv";
+  src = fetchFromGitHub {
+    owner = "qalculate";
+    repo = "libqalculate";
+    rev = "v${version}";
+    sha256 = "1g0pmf33vrjabxmx6lyysgkxa6hg8qmwk0n5ncl4pr8sdkimswxw";
   };
 
   outputs = [ "out" "dev" "doc" ];

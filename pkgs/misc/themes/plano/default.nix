@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "plano-theme-${version}";
-  version = "3.28-1";
+  version = "3.28-2";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = "plano-theme";
     rev = "v${version}";
-    sha256 = "1862nx7c8786vfa0qdg4aqa13whsk3j5n93v9m91wpccv19n0ryn";
+    sha256 = "1xd8xpd8pxxsx6nqrxv2scm9fy6vig8qyxdydgkzhpscrjg9iq9f";
   };
 
   buildInputs = [ gdk_pixbuf gtk_engines ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -dm 755 $out/share/themes/Plano
     cp -a * $out/share/themes/Plano/
-    rm $out/share/themes/Plano/{LICENSE,README.md}
+    rm $out/share/themes/Plano/LICENSE
   '';
 
   meta = {

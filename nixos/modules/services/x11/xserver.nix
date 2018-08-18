@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -244,6 +244,13 @@ in
           "ati_unfree" "amdgpu" "amdgpu-pro"
           "nv" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304"
         ];
+        # TODO(@oxij): think how to easily add the rest, like those nvidia things
+        relatedPackages = concatLists
+          (mapAttrsToList (n: v:
+            optional (hasPrefix "xf86video" n) {
+              path  = [ "xorg" n ];
+              title = removePrefix "xf86video" n;
+            }) pkgs.xorg);
         description = ''
           The names of the video drivers the configuration
           supports. They will be tried in order until one that

@@ -170,7 +170,7 @@ in
 
   config = mkIf config.services.bind.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = bindUser;
         uid = config.ids.uids.bind;
         description = "BIND daemon user";

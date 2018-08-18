@@ -1,18 +1,6 @@
-{ pkgs, lib }:
+{ config, pkgs, lib }:
 
-let
-
-  pkgsFun = overrides:
-    let
-      self = self_ // overrides;
-      self_ = with self; {
-
-  overridePackages = f:
-    let newself = pkgsFun (f newself self);
-    in newself;
-
-  callPackage = pkgs.newScope self;
-
+lib.makeScope pkgs.newScope (self: with self; {
   # Convert a version to branch (3.26.18 → 3.26)
   # Used for finding packages on GNOME mirrors
   versionBranch = version: builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
@@ -42,7 +30,7 @@ let
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
     gnome-getting-started-docs gnome-packagekit gnome-software
-    gnome-power-manager gnome-usage
+    gnome-power-manager gnome-todo gnome-usage
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -52,15 +40,13 @@ let
     hitori gnome-taquin
   ];
 
-  inherit (pkgs) atk glib gobjectIntrospection webkitgtk gtk3 gtkmm3
+  inherit (pkgs) atk glib gobjectIntrospection gspell webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
     clutter clutter-gst clutter-gtk cogl gtkvnc libdazzle;
 
-  inherit (pkgs.gnome2) ORBit2;
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
-  orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
   gtk = gtk3;
   gtkmm = gtkmm3;
@@ -91,8 +77,6 @@ let
   evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
 
   evolution-data-server = callPackage ./core/evolution-data-server { };
-
-  gconf = callPackage ./core/gconf { };
 
   geocode-glib = callPackage ./core/geocode-glib { };
 
@@ -203,31 +187,31 @@ let
   nautilus = callPackage ./core/nautilus { };
 
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-vpnc = pkgs.networkmanager-vpnc.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-openconnect = pkgs.networkmanager-openconnect.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-fortisslvpn = pkgs.networkmanager-fortisslvpn.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-l2tp = pkgs.networkmanager-l2tp.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanager-iodine = pkgs.networkmanager-iodine.override {
-    inherit gnome3;
+    withGnome = true;
   };
 
   networkmanagerapplet = pkgs.networkmanagerapplet.override {
-    inherit gnome3 gsettings-desktop-schemas glib-networking;
+    withGnome = true;
   };
 
   rest = callPackage ./core/rest { };
@@ -305,6 +289,10 @@ let
 
   gnome-power-manager = callPackage ./apps/gnome-power-manager { };
 
+  gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
+
+  gnome-todo = callPackage ./apps/gnome-todo {};
+
   gnome-weather = callPackage ./apps/gnome-weather { };
 
   nautilus-sendto = callPackage ./apps/nautilus-sendto { };
@@ -375,8 +363,6 @@ let
 
   gitg = callPackage ./misc/gitg { };
 
-  gspell = callPackage ./misc/gspell { };
-
   libgnome-games-support = callPackage ./misc/libgnome-games-support { };
 
   libgda = callPackage ./misc/libgda { };
@@ -387,9 +373,17 @@ let
 
   gexiv2 = callPackage ./misc/gexiv2 { };
 
+  gnome-applets = callPackage ./misc/gnome-applets { };
+
+  gnome-flashback = callPackage ./misc/gnome-flashback { };
+
+  gnome-panel = callPackage ./misc/gnome-panel { };
+
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
   gpaste = callPackage ./misc/gpaste { };
+
+  metacity = callPackage ./misc/metacity { };
 
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
 
@@ -403,6 +397,7 @@ let
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 
+} // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
 
   evolution_data_server = evolution-data-server; # added 2018-02-25
@@ -433,7 +428,4 @@ let
   yelp_xsl = yelp-xsl; # added 2018-02-25
   yelp_tools = yelp-tools; # added 2018-02-25
 
-    };
-  in self; # pkgsFun
-
-in pkgsFun {}
+})

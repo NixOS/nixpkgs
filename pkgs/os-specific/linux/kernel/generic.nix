@@ -15,8 +15,11 @@
 , # Allows overriding the default defconfig
   defconfig ? null
 
-, # Overrides to the kernel config.
+, # Legacy overrides to the intermediate kernel config, as string
   extraConfig ? ""
+
+, # kernel intermediate config overrides, as a set
+ structuredExtraConfig ? {}
 
 , # The version number used for the module directory
   modDirVersion ? version
@@ -42,8 +45,9 @@
 , preferBuiltin ? hostPlatform.platform.kernelPreferBuiltin or false
 , kernelArch ? hostPlatform.platform.kernelArch
 
+, mkValueOverride ? null
 , ...
-} @ args:
+}:
 
 assert stdenv.isLinux;
 
@@ -57,10 +61,13 @@ let
     efiBootStub = true;
     needsCifsUtils = true;
     netfilterRPFilter = true;
+    grsecurity = false;
+    xen_dom0 = false;
   } // features) kernelPatches;
 
-  config = import ./common-config.nix {
-    inherit stdenv version ;
+  intermediateNixConfig = import ./common-config.nix {
+    inherit stdenv version structuredExtraConfig mkValueOverride;
+
     # append extraConfig for backwards compatibility but also means the user can't override the kernelExtraConfig part
     extraConfig = extraConfig + lib.optionalString (hostPlatform.platform ? kernelExtraConfig) hostPlatform.platform.kernelExtraConfig;
 
@@ -79,7 +86,7 @@ let
 
     generateConfig = ./generate-config.pl;
 
-    kernelConfig = kernelConfigFun config;
+    kernelConfig = kernelConfigFun intermediateNixConfig;
     passAsFile = [ "kernelConfig" ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -98,7 +105,9 @@ let
       sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
     '';
 
-    inherit (kernel) src patches preUnpack;
+    preUnpack = kernel.preUnpack or "";
+
+    inherit (kernel) src patches;
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.98";
 
   src = fetchurl {
-    url = http://www.lri.fr/~filliatr/ftp/bibtex2html/bibtex2html-1.98.tar.gz;
+    url = https://www.lri.fr/~filliatr/ftp/bibtex2html/bibtex2html-1.98.tar.gz;
     sha256 = "1mh6hxmc9qv05hgjc11m2zh5mk9mk0kaqp59pny18ypqgfws09g9";
   };
 

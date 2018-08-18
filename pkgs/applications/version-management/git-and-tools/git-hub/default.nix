@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, docutils, gitMinimal, python2Packages }:
+{ stdenv, fetchFromGitHub, gitMinimal, python2Packages }:
 
 stdenv.mkDerivation rec {
   name = "git-hub-${version}";

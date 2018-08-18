@@ -3,7 +3,9 @@ with stdenv.lib;
 let
   # Sanitizers are not supported on Darwin.
   # Sanitizer headers aren't available in older libc++ stdenvs due to a bug
-  sanitizersBroken = stdenv.isDarwin || stdenv.cc.isClang && builtins.compareVersions (getVersion stdenv.cc.name) "6.0.0" < 0;
+  sanitizersWorking =
+       (stdenv.cc.isClang && versionAtLeast (getVersion stdenv.cc.name) "5.0.0")
+    || (stdenv.cc.isGNU && stdenv.isLinux);
 in stdenv.mkDerivation {
   name = "cc-wrapper-test";
 
@@ -43,7 +45,7 @@ in stdenv.mkDerivation {
     NIX_LDFLAGS="-L$NIX_BUILD_TOP/foo/lib -rpath $NIX_BUILD_TOP/foo/lib" $CC -lfoo -o ldflags-check ${./ldflags-main.c}
     ./ldflags-check
 
-    ${optionalString (!sanitizersBroken) ''
+    ${optionalString sanitizersWorking ''
       printf "checking whether sanitizers are fully functional... ">&2
       $CC -o sanitizers -fsanitize=address,undefined ${./sanitizers.c}
       ./sanitizers

@@ -1,17 +1,18 @@
-{ stdenv, version, fetch, cmake, python, llvm }:
+{ stdenv, version, fetch, cmake, python, llvm, libcxxabi }:
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "compiler-rt-${version}";
   inherit version;
-  src = fetch "compiler-rt" "16m7rvh3w6vq10iwkjrr1nn293djld3xm62l5zasisaprx117k6h";
+  src = fetch "compiler-rt" "1fcr3jn24yr8lh36nc0c4ikli4744i2q9m1ik67p1jymwwaixkgl";
 
   nativeBuildInputs = [ cmake python llvm ];
+  buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
   configureFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
   ];
 
-  outputs = [ "dev" "out" ];
+  outputs = [ "out" "dev" ];
 
   patches = [
     ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
@@ -25,6 +26,11 @@ stdenv.mkDerivation rec {
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
+  '';
+
+  # Hack around weird upsream RPATH bug
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    ln -s "$out/lib"/*/* "$out/lib"
   '';
 
   enableParallelBuilding = true;

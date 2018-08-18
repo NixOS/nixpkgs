@@ -6,10 +6,6 @@
 with lib;
 with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
-let
-  kernel = config.boot.kernelPackages.kernel;
-in
-
 {
 
   # This option is a dummy that if used in conjunction with
@@ -126,12 +122,12 @@ in
     networking.usePredictableInterfaceNames = false;
 
     # Make it easy to log in as root when running the test interactively.
-    users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
+    users.users.root.initialHashedPassword = mkOverride 150 "";
 
     services.xserver.displayManager.job.logToJournal = true;
 
     # set default stateVersion to avoid warnings during eval
-    system.nixos.stateVersion = mkDefault "18.03";
+    system.stateVersion = mkDefault "18.03";
   };
 
 }

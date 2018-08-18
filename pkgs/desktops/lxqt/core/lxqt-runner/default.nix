@@ -4,13 +4,13 @@ menu-cache, muparser, pcre }:
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-runner";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1354vdaskhch1n8v3kdy15nszgqb1092csr84nbhymzgrhrq1093";
+    sha256 = "0w6r9lby35p0lf5klasa5l2lscx6dmv16kzfhl4lc6w2qfwjb9vi";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool used to launch programs quickly by typing their names";
-    homepage = https://github.com/lxde/lxqt-runner;
+    homepage = https://github.com/lxqt/lxqt-runner;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

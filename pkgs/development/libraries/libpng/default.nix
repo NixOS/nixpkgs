@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, zlib, apngSupport ? true
-, buildPlatform, hostPlatform
-}:
+{ stdenv, fetchurl, zlib, apngSupport ? true }:
 
 assert zlib != null;
 

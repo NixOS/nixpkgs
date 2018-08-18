@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg, dbus
+{ stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
 , intltool, accountsservice, libX11, gnome3, systemd, autoreconfHook
 , gtk, libcanberra-gtk3, pam, libtool, gobjectIntrospection, plymouth
 , librsvg, coreutils, xwayland }:
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-plymouth=yes"
+    "--enable-gdm-xsession"
     "--with-initial-vt=7"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
   ];

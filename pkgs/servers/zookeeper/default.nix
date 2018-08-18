@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "zookeeper-${version}";
-  version = "3.4.12";
+  version = "3.4.13";
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${name}/${name}.tar.gz";
-    sha256 = "1fcljn2741jw1jvjrk5a0xr8rk69wjwrq522wrc5nmjhj0qzk1n6";
+    sha256 = "0karf13zks3ba2rdmma2lyabvmasc04cjmgxp227f0nj8677kvbw";
   };
 
   buildInputs = [ makeWrapper jre ];
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     cp -R conf docs lib ${name}.jar $out
     mkdir -p $out/bin
     cp -R bin/{zkCli,zkCleanup,zkEnv,zkServer}.sh $out/bin
-    for i in $out/bin/{zkCli,zkCleanup}.sh; do
+    patchShebangs $out/bin
+    for i in $out/bin/{zkCli,zkCleanup,zkServer}.sh; do
       wrapProgram $i \
         --set JAVA_HOME "${jre}" \
         --prefix PATH : "${bash}/bin"

@@ -4,14 +4,14 @@ with python.pkgs;
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "2.9.6";
+  version = "2.9.8";
 
   buildInputs = [ intervaltree lxml requests pyflakes ];
   propagatedBuildInputs = [ intervaltree lxml requests six ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wr161lx6f1b3fq14ddr3y4jl0myrcmqs1s3fzsighvlmqfdihj7";
+    sha256 = "b50ce2f98bc431cadbcef0523213497049b78c2829ee81c399976f1e4832afc6";
   };
 
   meta = with stdenv.lib; {

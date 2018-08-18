@@ -1,22 +1,18 @@
 { stdenv
 , fetch
-, fetchpatch
 , cmake
 , python
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , release_version
 , zlib
-, compiler-rt_src
 , libcxxabi
 , debugVersion ? false
 , enableManpages ? false
-, enableSharedLibraries ? true
-, darwin
+, enableSharedLibraries ? !enableManpages
 }:
 
 let
@@ -32,8 +28,6 @@ in stdenv.mkDerivation (rec {
     unpackFile ${src}
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
-    unpackFile ${compiler-rt_src}
-    mv compiler-rt-* $sourceRoot/projects/compiler-rt
   '';
 
   outputs = [ "out" "python" ]
@@ -43,19 +37,12 @@ in stdenv.mkDerivation (rec {
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+    # TODO(@Ericson2314): Remove next mass rebuild
+    ++ stdenv.lib.optionals (stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [ libcxxabi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
-  # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
-  # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
-  # can build this. If we didn't do it, basically the entire nixpkgs on Darwin would have an unfree dependency and we'd
-  # get no binary cache for the entire platform. If you really find yourself wanting the TSAN, make this controllable by
-  # a flag and turn the flag off during the stdenv build.
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace ./projects/compiler-rt/cmake/config-ix.cmake \
-      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
-
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir INSTALL_NAME_DIR "$lib/lib")" \
       --replace 'set(_install_rpath "@loader_path/../lib" ''${extra_libdir})' ""
@@ -69,9 +56,6 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "Path.cpp" ""
     rm unittests/Support/Path.cpp
-
-    # Revert compiler-rt commit that makes codesign mandatory
-    patch -p1 -i ${./compiler-rt-codesign.patch} -d projects/compiler-rt
   '' + stdenv.lib.optionalString stdenv.isAarch64 ''
     patch -p0 < ${../aarch64.patch}
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -79,7 +63,6 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
-    patch -p1 -i ${./sanitizers-nongnu.patch} -d projects/compiler-rt
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -94,7 +77,10 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_BUILD_TESTS=ON"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
-    "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
+
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ]
   ++ stdenv.lib.optional enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
@@ -110,11 +96,6 @@ in stdenv.mkDerivation (rec {
   ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ]
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
   ];
 
   postBuild = ''
@@ -160,7 +141,7 @@ in stdenv.mkDerivation (rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric dtzWill ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {

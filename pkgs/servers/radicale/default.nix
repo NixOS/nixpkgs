@@ -1,11 +1,34 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchFromGitHub, python3 }:
 
 let
   version = "2.1.9";
   sha256 = "1sywxn7j9bq39qwq74h327crc44j9049cykai1alv44agx8s1nhz";
+
+  python = python3.override {
+    packageOverrides = self: super: {
+
+      # Packages pinned in setup.py.
+      # Starting with next release, a vendored version of vobject will be used.
+      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
+        version = "2.6.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
+        };
+      });
+      vobject = super.vobject.overridePythonAttrs (oldAttrs: rec {
+        version = "0.9.5";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0f56cae196303d875682b9648b4bb43ffc769d2f0f800958e0a506af867b1243";
+        };
+      });
+
+    };
+  };
 in
 
-python3Packages.buildPythonApplication {
+python.pkgs.buildPythonApplication {
   name = "radicale-${version}";
   inherit version;
 
@@ -18,7 +41,7 @@ python3Packages.buildPythonApplication {
 
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     vobject
     passlib
     pytz

@@ -1,17 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi, pytz, pytest, freezegun }:
+{ lib, buildPythonPackage, fetchPypi, pytz, pytest, freezegun, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "Babel";
-  version = "2.5.3";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ce4cb6fdd4393edd323227cba3a077bceb2a6ce5201c902c65e730046f41f14";
+    sha256 = "8cba50f48c529ca3fa18cf81fa9403be176d374ac4d60738b839122dfaaa3d23";
   };
 
   propagatedBuildInputs = [ pytz ];
 
-  checkInputs = [ pytest freezegun ];
+  checkInputs = [ pytest freezegun glibcLocales ];
+
+  preCheck = ''
+    export LC_ALL="en_US.UTF-8"
+  '';
 
   meta = with lib; {
     homepage = http://babel.edgewall.org;

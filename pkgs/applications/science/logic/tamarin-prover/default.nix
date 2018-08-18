@@ -1,4 +1,4 @@
-{ haskell, haskellPackages, mkDerivation, fetchFromGitHub, lib
+{ haskellPackages, mkDerivation, fetchFromGitHub, lib
 # the following are non-haskell dependencies
 , makeWrapper, which, maude, graphviz, sapic
 }:

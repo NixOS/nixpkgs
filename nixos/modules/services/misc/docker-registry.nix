@@ -42,7 +42,7 @@ let
     };
   };
 
-  configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (registryConfig // cfg.extraConfig));
+  configFile = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (recursiveUpdate registryConfig cfg.extraConfig));
 
 in {
   options.services.dockerRegistry = {
@@ -91,7 +91,7 @@ in {
         Docker extra registry configuration via environment variables.
       '';
       default = {};
-      type = types.attrsOf types.str;
+      type = types.attrs;
     };
 
     enableGarbageCollect = mkEnableOption "garbage collect";
@@ -120,6 +120,7 @@ in {
       serviceConfig = {
         User = "docker-registry";
         WorkingDirectory = cfg.storagePath;
+        AmbientCapabilities = mkIf (cfg.port < 1024) "cap_net_bind_service";
       };
     };
 
@@ -139,7 +140,7 @@ in {
       startAt = optional cfg.enableGarbageCollect cfg.garbageCollectDates;
     };
 
-    users.extraUsers.docker-registry = {
+    users.users.docker-registry = {
       createHome = true;
       home = cfg.storagePath;
     };

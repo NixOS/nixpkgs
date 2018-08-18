@@ -1,18 +1,13 @@
-{ stdenv, fetchurl, fetchpatch, fixDarwinDylibNames, oracle-instantclient, libaio }:
+{ stdenv, fetchurl, fixDarwinDylibNames, oracle-instantclient, libaio }:
 
 stdenv.mkDerivation rec {
   name = "odpic-${version}";
-  version = "2.4.0";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://github.com/oracle/odpi/archive/v${version}.tar.gz";
-    sha256 = "1z793mg8hmy067xhllip7ca84xy07ca1cqilnr35mbvhmydp03zz";
+    sha256 = "0hw6b38vnh0cgm1iwpgkqa2am86baal6irp9bglacblwh8sshqdi";
   };
-
-  patches = [ (fetchpatch {
-    url = https://github.com/oracle/odpi/commit/31fdd70c06be711840a2668f572c7ee7c4434d18.patch;
-    sha256 = "1f00zp4w7l4vnkg0fmvnkga20ih8kjd5bxvr1nryziibjh1xp41j";
-  }) ];
 
   nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
 

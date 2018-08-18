@@ -5,16 +5,16 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{ fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
-, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
-, perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+{ fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
+, pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
+, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
 }:
 
 let
-  isLua51 = lua.luaversion == "5.1";
   isLua52 = lua.luaversion == "5.2";
+  isLua53 = lua.luaversion == "5.3";
   isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
 
   platformString =
@@ -82,6 +82,8 @@ let
     };
 
     buildFlags = stdenv.lib.optionalString stdenv.isDarwin "macosx";
+
+    disabled = isLua53;
 
     postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace Makefile --replace 10.4 10.5
@@ -220,7 +222,7 @@ let
         EXPAT_INC="-I${expat.dev}/include");
     '';
 
-    disabled = isLuaJIT;
+    disabled = isLua53 || isLuaJIT;
 
     meta = with stdenv.lib; {
       description = "SAX XML parser based on the Expat library";
@@ -500,7 +502,7 @@ let
     patches = [ ../development/lua-modules/zip.patch ];
 
     # Does not currently work under Lua 5.2 or LuaJIT.
-    disabled = isLua52 || isLuaJIT;
+    disabled = isLua52 || isLua53 || isLuaJIT;
 
     meta = with stdenv.lib; {
       description = "Lua library to read files stored inside zip files";
@@ -621,6 +623,8 @@ let
       sha256 = "05k8zs8nsdmlwja3hdhckwknf7ww5cvbp3sxhk2xd1i3ij6aa10b";
     };
 
+    disabled = isLua53;
+
     buildInputs = [ sqlite ];
 
     patches = [ ../development/lua-modules/luasql.patch ];
@@ -634,13 +638,33 @@ let
     };
   };
 
+  lfs = buildLuaPackage rec {
+    name = "lfs-${version}";
+    version = "1.7.0.2";
+
+    src = fetchFromGitHub {
+      owner = "keplerproject";
+      repo = "luafilesystem";
+      rev = "v" + stdenv.lib.replaceStrings ["."] ["_"] version;
+      sha256 = "0zmprgkm9zawdf9wnw0v3w6ibaj442wlc6alp39hmw610fl4vghi";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Portable library for filesystem operations";
+      homepage = https://keplerproject.github.com/luafilesystem;
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.all;
+    };
+  };
+
   lpeg = buildLuaPackage rec {
     name = "lpeg-${version}";
-    version = "0.12";
+    version = "1.0.1";
 
     src = fetchurl {
       url = "http://www.inf.puc-rio.br/~roberto/lpeg/${name}.tar.gz";
-      sha256 = "0xlbfw1w7l65a5qhnx5sfw327hkq1zcj8xmg4glfw6fj9ha4b9gg";
+      sha256 = "62d9f7a9ea3c1f215c77e0cadd8534c6ad9af0fb711c3f89188a8891c72f026b";
     };
 
     preBuild = ''

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "django-hijack-admin";
   version = "2.1.5";
-  name = "${pname}-${version}";
 
   # the pypi packages don't include everything required for the tests
   src = fetchFromGitHub {

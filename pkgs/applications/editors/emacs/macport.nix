@@ -6,7 +6,7 @@
 stdenv.mkDerivation rec {
   emacsVersion = "26.1";
   emacsName = "emacs-${emacsVersion}";
-  macportVersion = "7.0";
+  macportVersion = "7.1";
   name = "emacs-mac-${emacsVersion}-${macportVersion}";
 
   builder = ./builder.sh;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "02dbasiv1szvlzi0avb7bi9xwpw2lssj3kzbn8pi5vmziqhvgfhz";
+    sha256 = "0d2ny54f68v3hjc2g3pkj83xv3yzv0hrwvn2cmpyb0jxjbsb2frc";
   };
 
   hiresSrc = fetchurl {
@@ -75,10 +75,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    description = "GNU Emacs 25, the extensible, customizable text editor";
+    description = "The extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with maintainers; [ jwiegley matthewbauer ];
     platforms   = platforms.darwin;
 
     longDescription = ''
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       extensions are distributed with GNU Emacs; others are available
       separately.
 
-      This is "Mac port" addition to GNU Emacs 25. This provides a native
+      This is the "Mac port" addition to GNU Emacs 26. This provides a native
       GUI support for Mac OS X 10.6 - 10.12. Note that Emacs 23 and later
       already contain the official GUI support via the NS (Cocoa) port for
       Mac OS X 10.4 and later. So if it is good enough for you, then you

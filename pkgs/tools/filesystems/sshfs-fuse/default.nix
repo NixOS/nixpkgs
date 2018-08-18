@@ -2,17 +2,15 @@
 , docutils
 }:
 
-let
-  inherit (stdenv.lib) optional;
-in stdenv.mkDerivation rec {
-  version = "3.3.2";
+stdenv.mkDerivation rec {
+  version = "3.4.0";
   name = "sshfs-fuse-${version}";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "01nrdprkqynk20yw6zdn6w8xv4hdw47g5d0v5qvfw0wls2kmadyr";
+    sha256 = "1mbhjgw6797bln579pfwmn79gs8isnv57z431lbfw7j8xkh75awl";
   };
 
   nativeBuildInputs = [ meson pkgconfig ninja docutils ];
@@ -31,6 +29,7 @@ in stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     platforms = platforms.linux;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ primeos ];
   };
 }

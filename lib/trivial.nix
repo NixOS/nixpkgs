@@ -1,42 +1,8 @@
 { lib }:
-let
-  zipIntBits = f: x: y:
-    let
-      # (intToBits 6) -> [ 0 1 1 ]
-      intToBits = x:
-        if x == 0 || x == -1 then
-          []
-        else
-          let
-            headbit  = if (x / 2) * 2 != x then 1 else 0;          # x & 1
-            tailbits = if x < 0 then ((x + 1) / 2) - 1 else x / 2; # x >> 1
-          in
-            [headbit] ++ (intToBits tailbits);
 
-      # (bitsToInt [ 0 1 1 ] 0) -> 6
-      # (bitsToInt [ 0 1 0 ] 1) -> -6
-      bitsToInt = l: signum:
-        if l == [] then
-          (if signum == 0 then 0 else -1)
-        else
-          (builtins.head l) + (2 * (bitsToInt (builtins.tail l) signum));
-
-      xsignum = if x < 0 then 1 else 0;
-      ysignum = if y < 0 then 1 else 0;
-      zipListsWith' = fst: snd:
-        if fst==[] && snd==[] then
-          []
-        else if fst==[] then
-          [(f xsignum             (builtins.head snd))] ++ (zipListsWith' []                  (builtins.tail snd))
-        else if snd==[] then
-          [(f (builtins.head fst) ysignum            )] ++ (zipListsWith' (builtins.tail fst) []                 )
-        else
-          [(f (builtins.head fst) (builtins.head snd))] ++ (zipListsWith' (builtins.tail fst) (builtins.tail snd));
-    in
-      assert (builtins.isInt x) && (builtins.isInt y);
-      bitsToInt (zipListsWith' (intToBits x) (intToBits y)) (f xsignum ysignum);
-in
 rec {
+
+  ## Simple (higher order) functions
 
   /* The identity function
      For when you need a function that does “nothing”.
@@ -59,7 +25,7 @@ rec {
 
   ## Named versions corresponding to some builtin operators.
 
-  /* Concat two strings */
+  /* Concatenate two lists */
   concat = x: y: x ++ y;
 
   /* boolean “or” */
@@ -69,13 +35,19 @@ rec {
   and = x: y: x && y;
 
   /* bitwise “and” */
-  bitAnd = builtins.bitAnd or zipIntBits (a: b: if a==1 && b==1 then 1 else 0);
+  bitAnd = builtins.bitAnd
+    or import ./zip-int-bits.nix
+      (a: b: if a==1 && b==1 then 1 else 0);
 
   /* bitwise “or” */
-  bitOr = builtins.bitOr or zipIntBits (a: b: if a==1 || b==1 then 1 else 0);
+  bitOr = builtins.bitOr
+    or import ./zip-int-bits.nix
+      (a: b: if a==1 || b==1 then 1 else 0);
 
   /* bitwise “xor” */
-  bitXor = builtins.bitXor or zipIntBits (a: b: if a!=b then 1 else 0);
+  bitXor = builtins.bitXor
+    or import ./zip-int-bits.nix
+      (a: b: if a!=b then 1 else 0);
 
   /* bitwise “not” */
   bitNot = builtins.sub (-1);
@@ -93,31 +65,53 @@ rec {
   */
   mergeAttrs = x: y: x // y;
 
-  # Flip the order of the arguments of a binary function.
+  /* Flip the order of the arguments of a binary function.
+
+     Example:
+       flip concat [1] [2]
+       => [ 2 1 ]
+  */
   flip = f: a: b: f b a;
 
-  # Apply function if argument is non-null
+  /* Apply function if argument is non-null.
+
+     Example:
+       mapNullable (x: x+1) null
+       => null
+       mapNullable (x: x+1) 22
+       => 23
+  */
   mapNullable = f: a: if isNull a then a else f a;
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
     pathExists readFile isBool
-    isInt add sub lessThan
+    isInt isFloat add sub lessThan
     seq deepSeq genericClosure;
 
-  inherit (lib.strings) fileContents;
 
-  release = fileContents ../.version;
-  versionSuffix = let suffixFile = ../.version-suffix; in
-    if pathExists suffixFile then fileContents suffixFile else "pre-git";
+  ## nixpks version strings
 
-  # Return the Nixpkgs version number.
+  # The current full nixpkgs version number.
   version = release + versionSuffix;
+
+  # The current nixpkgs version number as string.
+  release = lib.strings.fileContents ../.version;
+
+  # The current nixpkgs version suffix as string.
+  versionSuffix =
+    let suffixFile = ../.version-suffix;
+    in if pathExists suffixFile
+    then lib.strings.fileContents suffixFile
+    else "pre-git";
 
   nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
   # Whether we're being called by nix-shell.
   inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
+
+
+  ## Integer operations
 
   # Return minimum/maximum of two numbers.
   min = x: y: if x < y then x else y;
@@ -132,6 +126,9 @@ rec {
        => 1
   */
   mod = base: int: base - (int * (builtins.div base int));
+
+
+  ## Comparisons
 
   /* C-style comparisons
 
@@ -162,16 +159,19 @@ rec {
        cmp "fooa" "a" => -1
        # while
        compare "fooa" "a" => 1
-
   */
   splitByAndCompare = p: yes: no: a: b:
     if p a
     then if p b then yes a b else -1
     else if p b then 1 else no a b;
 
+
   /* Reads a JSON file. */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
+
+
+  ## Warnings and asserts
 
   /* See https://github.com/NixOS/nix/issues/749. Eventually we'd like these
      to expand to Nix builtins that carry metadata so that Nix can filter out
@@ -188,28 +188,36 @@ rec {
   warn = msg: builtins.trace "WARNING: ${msg}";
   info = msg: builtins.trace "INFO: ${msg}";
 
-  # | Add metadata about expected function arguments to a function.
-  # The metadata should match the format given by
-  # builtins.functionArgs, i.e. a set from expected argument to a bool
-  # representing whether that argument has a default or not.
-  # setFunctionArgs : (a → b) → Map String Bool → (a → b)
-  #
-  # This function is necessary because you can't dynamically create a
-  # function of the { a, b ? foo, ... }: format, but some facilities
-  # like callPackage expect to be able to query expected arguments.
+
+  ## Function annotations
+
+  /* Add metadata about expected function arguments to a function.
+     The metadata should match the format given by
+     builtins.functionArgs, i.e. a set from expected argument to a bool
+     representing whether that argument has a default or not.
+     setFunctionArgs : (a → b) → Map String Bool → (a → b)
+
+     This function is necessary because you can't dynamically create a
+     function of the { a, b ? foo, ... }: format, but some facilities
+     like callPackage expect to be able to query expected arguments.
+  */
   setFunctionArgs = f: args:
     { # TODO: Should we add call-time "type" checking like built in?
       __functor = self: f;
       __functionArgs = args;
     };
 
-  # | Extract the expected function arguments from a function.
-  # This works both with nix-native { a, b ? foo, ... }: style
-  # functions and functions with args set with 'setFunctionArgs'. It
-  # has the same return type and semantics as builtins.functionArgs.
-  # setFunctionArgs : (a → b) → Map String Bool.
+  /* Extract the expected function arguments from a function.
+     This works both with nix-native { a, b ? foo, ... }: style
+     functions and functions with args set with 'setFunctionArgs'. It
+     has the same return type and semantics as builtins.functionArgs.
+     setFunctionArgs : (a → b) → Map String Bool.
+  */
   functionArgs = f: f.__functionArgs or (builtins.functionArgs f);
 
+  /* Check whether something is a function or something
+     annotated with function args.
+  */
   isFunction = f: builtins.isFunction f ||
     (f ? __functor && isFunction (f.__functor f));
 }

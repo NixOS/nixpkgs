@@ -5,16 +5,15 @@
 , numpy
 , pandas
 , python
-, fetchurl
 }:
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "0.10.3";
+  version = "0.10.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "72fafe29ba00633483aed39e405442226ef66d2ddc1021a39527ae1522b7067a";
+    sha256 = "6a1f2c5dc5f639f8343f70ed08d0afbb477a3867298ef38f0d9bf4aafa0fb750";
   };
 
   checkInputs = [ pytest ];

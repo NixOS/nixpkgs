@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
 , qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2
 , faad2, rtl-sdr, soapysdr-with-plugins, libusb, fftwSinglePrec }:
 let
@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A DAB/DAB+ Software Radio";
-    homepage = http://www.welle.io/;
+    homepage = https://www.welle.io/;
     maintainers = with maintainers; [ ck3d ];
     license = licenses.gpl2;
     platforms = with platforms; [ "x86_64-linux" "i686-linux" ] ++ darwin;

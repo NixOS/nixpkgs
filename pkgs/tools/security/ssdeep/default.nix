@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name    = "ssdeep-${version}";

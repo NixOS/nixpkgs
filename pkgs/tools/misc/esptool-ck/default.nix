@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "esptool-ck-${version}";
-  version = "0.4.11";
+  version = "0.4.13";
 
   src = fetchFromGitHub {
     owner = "igrr";
     repo = "esptool-ck";
-    rev = "0.4.11";
-    sha256 = "086x68jza24xkaap8nici18kj78id2p2lzbasin98wilvpjc8d7f";
+    rev = "0.4.13";
+    sha256 = "1cb81b30a71r7i0gmkh2qagfx9lhq0myq5i37fk881bq6g7i5n2k";
   };
 
   makeFlags = [ "VERSION=${version}" ];

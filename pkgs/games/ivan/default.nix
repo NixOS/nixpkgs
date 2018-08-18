@@ -1,23 +1,23 @@
-{stdenv, fetchFromGitHub, libpng, cmake, SDL2, SDL2_mixer, pkgconfig, pcre}:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, SDL2, SDL2_mixer, alsaLib, libpng, pcre }:
 
 stdenv.mkDerivation rec {
 
   name = "ivan-${version}";
-  version = "052";
+  version = "053";
 
   src = fetchFromGitHub {
     owner = "Attnam";
     repo = "ivan";
     rev = "v${version}";
-    sha256 = "1vvwb33jw4ppwsqlvaxq3b8npdzh9j9jfangyzszp5sfnnd7fj5b";
+    sha256 = "1r3fcccgpjmzzkg0lfmq76igjapr01kh97vz671z60jg7gyh301b";
   };
 
-  buildInputs = [SDL2 SDL2_mixer libpng pcre];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
-  nativeBuildInputs = [cmake pkgconfig];
+  buildInputs = [ SDL2 SDL2_mixer alsaLib libpng pcre ];
 
   hardeningDisable = ["all"];
-  
+
   # To store bone and high score files in ~/.ivan of the current user
   patches = [./homedir.patch];
 
@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = https://attnam.com/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [nonfreeblob];
+    maintainers = with maintainers; [];
   };
 }

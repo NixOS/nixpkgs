@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
+{ stdenv, targetPackages, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
@@ -22,7 +22,6 @@
   stripped ? hostPlatform == buildPlatform && targetPlatform == hostPlatform
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
-, darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
 , buildPackages
 }:
@@ -39,10 +38,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "8.1.0";
-
-    # Whether building a cross-compiler for GNU/Hurd.
-    crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
+let version = "8.2.0";
 
     enableParallelBuilding = true;
 
@@ -131,7 +127,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "0lxil8x0jjx7zbf90cy1rli650akaa6hpk8wk8s62vk2jbwnc60x";
+    sha256 = "10007smilswiiv2ymazr3b6x2i933c0ycxrr529zh4r6p823qv0r";
   };
 
   inherit patches;

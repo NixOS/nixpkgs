@@ -5,9 +5,9 @@
 , bootPkgs, alex, happy, hscolour
 , autoconf, automake, coreutils, fetchgit, perl, python3, m4
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
-, useLLVM ? !targetPlatform.isx86
+, useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -50,7 +50,8 @@ let
   '' + stdenv.lib.optionalString enableIntegerSimple ''
     INTEGER_LIBRARY = integer-simple
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    Stage1Only = YES
+    Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
+    CrossCompilePrefix = ${targetPrefix}
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
     BUILD_SPHINX_PDF = NO
@@ -166,9 +167,9 @@ stdenv.mkDerivation rec {
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
-  hardeningDisable = [ "format" ];
-
   checkTarget = "test";
+
+  hardeningDisable = [ "format" ];
 
   postInstall = ''
     for bin in "$out"/lib/${name}/bin/*; do
@@ -191,6 +192,7 @@ stdenv.mkDerivation rec {
     inherit bootPkgs targetPrefix;
 
     inherit llvmPackages;
+    inherit enableShared;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-8.5";

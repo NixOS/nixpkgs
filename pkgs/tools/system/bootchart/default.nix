@@ -1,4 +1,4 @@
-{stdenv, fetchurl, lib, pkgconfig, glib, gtk2, python27, python2Packages }:
+{stdenv, fetchurl, pkgconfig, glib, gtk2, python2Packages }:
 
 stdenv.mkDerivation rec {
   version = "0.14.7";

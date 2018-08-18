@@ -25,7 +25,7 @@ in
 
     meta = with stdenv.lib; {
       description = "A command line interface to Jira";
-      homepage = http://github.com/alisaifee/jira-cli;
+      homepage = https://github.com/alisaifee/jira-cli;
       maintainers = with maintainers; [ nyarly ];
       license = licenses.mit;
     };

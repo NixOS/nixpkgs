@@ -1,26 +1,26 @@
-{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome3, gtk3, atk, cairo, pango
+{ stdenv, fetchurl, dpkg, lib, glib, dbus, makeWrapper, gnome2, gnome3, gtk3, atk, cairo, pango
 , gdk_pixbuf, freetype, fontconfig, nspr, nss, xorg, alsaLib, cups, expat, udev, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "typora-${version}";
-  version = "0.9.48";
+  version = "0.9.53";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-        sha256 = "36a7c5f855306bcbe3364d12aca94c2f6d013a013e59b46f89df81496ec11800";
+        sha256 = "02k6x30l4mbjragqbq5rn663xbw3h4bxzgppfxqf5lwydswldklb";
       }
     else
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_i386.deb";
-        sha256 = "7197c526918a791b15b701846f9f2f1747a5b8ceac77c4cba691ee6d74d07d1d";
+        sha256 = "1wyq1ri0wwdy7slbd9dwyrdynsaa644x44c815jl787sg4nhas6y";
       }
     ;
 
     rpath = stdenv.lib.makeLibraryPath [
       alsaLib
-      gnome3.gconf
+      gnome2.GConf
       gdk_pixbuf
       pango
       gnome3.defaultIconTheme
@@ -80,7 +80,6 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/typora \
       "''${gappsWrapperArgs[@]}" \
       --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-      --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR" \
       --prefix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share"
 
     # Fix the desktop link

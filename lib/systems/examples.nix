@@ -32,13 +32,15 @@ rec {
   armv5te-android-prebuilt = rec {
     config = "armv5tel-unknown-linux-androideabi";
     sdkVer = "21";
+    ndkVer = "10e";
     platform = platforms.armv5te-android;
     useAndroidPrebuilt = true;
   };
 
   armv7a-android-prebuilt = rec {
     config = "armv7a-unknown-linux-androideabi";
-    sdkVer = "21";
+    sdkVer = "24";
+    ndkVer = "17";
     platform = platforms.armv7a-android;
     useAndroidPrebuilt = true;
   };
@@ -46,6 +48,7 @@ rec {
   aarch64-android-prebuilt = rec {
     config = "aarch64-unknown-linux-android";
     sdkVer = "24";
+    ndkVer = "17";
     platform = platforms.aarch64-multiplatform;
     useAndroidPrebuilt = true;
   };
@@ -97,6 +100,8 @@ rec {
     config = "aarch64-apple-ios";
     # config = "aarch64-apple-darwin14";
     sdkVer = "10.2";
+    xcodeVer = "8.2";
+    xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
   };
@@ -105,6 +110,8 @@ rec {
     config = "armv7a-apple-ios";
     # config = "arm-apple-darwin10";
     sdkVer = "10.2";
+    xcodeVer = "8.2";
+    xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
   };
@@ -113,8 +120,9 @@ rec {
     config = "x86_64-apple-ios";
     # config = "x86_64-apple-darwin14";
     sdkVer = "10.2";
+    xcodeVer = "8.2";
+    xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
-    isiPhoneSimulator = true;
     platform = {};
   };
 
@@ -122,8 +130,9 @@ rec {
     config = "i686-apple-ios";
     # config = "i386-apple-darwin11";
     sdkVer = "10.2";
+    xcodeVer = "8.2";
+    xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
-    isiPhoneSimulator = true;
     platform = {};
   };
 

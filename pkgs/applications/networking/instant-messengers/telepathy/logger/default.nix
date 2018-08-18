@@ -1,12 +1,12 @@
 { stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, pkgconfig
-, gnome3, makeWrapper, intltool, libxslt, gobjectIntrospection, dbus_libs }:
+, gnome3, makeWrapper, intltool, libxslt, gobjectIntrospection, dbus }:
 
 stdenv.mkDerivation rec {
   project = "telepathy-logger";
   name = "${project}-0.8.2";
 
   src = fetchurl {
-    url = "http://telepathy.freedesktop.org/releases/${project}/${name}.tar.bz2";
+    url = "https://telepathy.freedesktop.org/releases/${project}/${name}.tar.bz2";
     sha256 = "1bjx85k7jyfi5pvl765fzc7q2iz9va51anrc2djv7caksqsdbjlg";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     dbus-glib libxml2 sqlite telepathy-glib
-    dbus_libs telepathy-glib.python
+    dbus telepathy-glib.python
   ];
 
   configureFlags = "--enable-call";

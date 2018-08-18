@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "s2clientprotocol";
   version = "3.19.1.58600.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

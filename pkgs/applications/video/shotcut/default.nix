@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, pkgconfig, qtbase
 , qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquickcontrols
 , qtgraphicaleffects, libmlt
-, qmake, makeWrapper }:
+, qmake, makeWrapper, qttools }:
 
 assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
 assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
 
 stdenv.mkDerivation rec {
   name = "shotcut-${version}";
-  version = "18.05.08";
+  version = "18.08";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1qm1ycsx93qpw2vga25m3cr82vzqla1qqardjiln3iqfa0m93qsk";
+    sha256 = "1p2s4avm3bl5ippmgfzkkbb2w0xs4vhk2wbcd22g7bh1zq9w190n";
   };
 
   enableParallelBuilding = true;
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-I${libmlt}/include/mlt++ -I${libmlt}/include/mlt";
+  qmakeFlags = [ "QMAKE_LRELEASE=${stdenv.lib.getDev qttools}/bin/lrelease" "SHOTCUT_VERSION=${version}" ];
 
   prePatch = ''
     sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp

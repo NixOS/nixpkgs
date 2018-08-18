@@ -1,6 +1,6 @@
 --- a/tests/libtest.sh
 +++ b/tests/libtest.sh
-@@ -322,7 +322,7 @@
+@@ -315,7 +315,7 @@
          # running installed-tests: assume we know what we're doing
          :
      elif ! "$FLATPAK_BWRAP" --unshare-ipc --unshare-net --unshare-pid \
@@ -9,7 +9,7 @@
          sed -e 's/^/# /' < bwrap-result
          echo "1..0 # SKIP Cannot run bwrap"
          exit 0
-@@ -330,7 +330,7 @@
+@@ -323,7 +323,7 @@
  }
  
  skip_without_python2 () {
@@ -18,7 +18,7 @@
          echo "1..0 # SKIP this test requires /usr/bin/python2 (2.7) support"
          exit 0
      fi
-@@ -350,12 +350,12 @@
+@@ -335,12 +335,12 @@
  export DBUS_SESSION_BUS_ADDRESS="$(cat dbus-session-bus-address)"
  DBUS_SESSION_BUS_PID="$(cat dbus-session-bus-pid)"
  
@@ -28,30 +28,51 @@
  fi
  
  cleanup () {
--    /bin/kill $DBUS_SESSION_BUS_PID ${FLATPAK_HTTP_PID:-}
-+    @coreutils@/bin/kill $DBUS_SESSION_BUS_PID ${FLATPAK_HTTP_PID:-}
+-    /bin/kill -9 $DBUS_SESSION_BUS_PID ${FLATPAK_HTTP_PID:-}
++    @coreutils@/bin/kill -9 $DBUS_SESSION_BUS_PID ${FLATPAK_HTTP_PID:-}
      gpg-connect-agent --homedir "${FL_GPG_HOMEDIR}" killagent /bye || true
      fusermount -u $XDG_RUNTIME_DIR/doc || :
      if test -n "${TEST_SKIP_CLEANUP:-}"; then
 --- a/tests/make-test-runtime.sh
 +++ b/tests/make-test-runtime.sh
-@@ -21,6 +21,7 @@
- cat ${DIR}/metadata
+@@ -26,6 +26,7 @@
+ PATH="$PATH:/usr/sbin:/sbin"
  
  # Add bash and dependencies
 +mkdir -p ${DIR}/nix/store
  mkdir -p ${DIR}/usr/bin
  mkdir -p ${DIR}/usr/lib
  ln -s ../lib ${DIR}/usr/lib64
-@@ -30,47 +31,27 @@
+@@ -35,73 +36,27 @@
  else
      cp `which ldconfig` ${DIR}/usr/bin
  fi
--T=`mktemp`
--for i in $@; do
+-LIBS=`mktemp`
+-BINS=`mktemp`
+-
+-add_bin() {
+-    local f=$1
+-    shift
+-
+-    if grep -qFe "${f}" $BINS; then
+-        # Already handled
+-        return 0
+-    fi
+-
+-    echo $f >> $BINS
+-
+-    # Add library dependencies
+-    (ldd "${f}" | sed "s/.* => //"  | awk '{ print $1}' | grep ^/ | sort -u -o $LIBS $LIBS -)  || true
+-
+-    local shebang=$(sed -n '1s/^#!\([^ ]*\).*/\1/p' "${f}")
+-    if [ x$shebang != x ]; then
+-        add_bin "$shebang"
+-    fi
+-}
+-
+ for i in $@; do
 -    I=`which $i`
--    cp $I ${DIR}/usr/bin
--    ldd $I | sed "s/.* => //"  | awk '{ print $1}' | grep ^/ | grep ^/ >> $T
+-    add_bin $I
 -    if test $i == python2; then
 -        mkdir -p ${DIR}/usr/lib/python2.7/lib-dynload
 -        # This is a hardcoded minimal set of modules we need in the current tests.
@@ -78,10 +99,13 @@
 -        done
 -    fi
 -done
- ln -s bash ${DIR}/usr/bin/sh
--for i in `sort -u $T`; do
+-for i in `cat $BINS`; do
+-    echo Adding binary $i 1>&2
+-    cp "$i" ${DIR}/usr/bin/
+-done
+-for i in `cat $LIBS`; do
+-    echo Adding library $i 1>&2
 -    cp "$i" ${DIR}/usr/lib/
-+for i in $@; do
 +    I=$(readlink -f $(which $i))
 +    requisites=$(nix-store --query --requisites "$I")
 +    for r in $requisites; do
@@ -92,6 +116,7 @@
 +    done
 +    ln -s $I ${DIR}/usr/bin/$i
  done
+ ln -s bash ${DIR}/usr/bin/sh
  
 -# We copy the C.UTF8 locale and call it en_US. Its a bit of a lie, but
 -# the real en_US locale is often not available, because its in the
@@ -110,12 +135,12 @@
      collection_args=--collection-id=${COLLECTION_ID}
 --- a/tests/testlibrary.c
 +++ b/tests/testlibrary.c
-@@ -378,7 +378,7 @@
+@@ -584,7 +584,7 @@
      {
        gint exit_code = 0;
-       char *argv[] = { (char *)bwrap, "--unshare-ipc", "--unshare-net",
--          "--unshare-pid", "--ro-bind", "/", "/", "/bin/true", NULL };
-+          "--unshare-pid", "--ro-bind", "/", "/", "@coreutils@/bin/true", NULL };
+       char *argv[] = { (char *) bwrap, "--unshare-ipc", "--unshare-net",
+-                       "--unshare-pid", "--ro-bind", "/", "/", "/bin/true", NULL };
++                       "--unshare-pid", "--ro-bind", "/", "/", "@coreutils@/bin/true", NULL };
        g_autofree char *argv_str = g_strjoinv (" ", argv);
        g_test_message ("Spawning %s", argv_str);
        g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL, &exit_code, &error);

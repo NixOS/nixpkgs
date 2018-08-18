@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "hevea-2.31";
+  name = "hevea-2.32";
 
   src = fetchurl {
     url = "http://pauillac.inria.fr/~maranget/hevea/distri/${name}.tar.gz";
-    sha256 = "15xrnnqlacz8dpr09h7jgijm65wss99rmy9mb1zmapplmwhavmzv";
+    sha256 = "1s4yqphfcr1pf5mcj5c84mvmd107k525iiym5jdwsxz0ka0ccmfy";
   };
 
   buildInputs = with ocamlPackages; [ ocaml ocamlbuild ];

@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "dpkt";
   version = "1.9.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -19,17 +19,6 @@ let
 
   Xsetup = pkgs.writeScript "Xsetup" ''
     #!/bin/sh
-
-    # Prior to Qt 5.9.2, there is a QML cache invalidation bug which sometimes
-    # strikes new Plasma 5 releases. If the QML cache is not invalidated, SDDM
-    # will segfault without explanation. We really tore our hair out for awhile
-    # before finding the bug:
-    # https://bugreports.qt.io/browse/QTBUG-62302
-    # We work around the problem by deleting the QML cache before startup. It
-    # will be regenerated, causing a small but perceptible delay when SDDM
-    # starts.
-    rm -fr /var/lib/sddm/.cache/sddm-greeter/qmlcache
-
     ${cfg.setupScript}
   '';
 
@@ -60,8 +49,8 @@ let
     MinimumVT=${toString (if xcfg.tty != null then xcfg.tty else 7)}
     ServerPath=${xserverWrapper}
     XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
-    SessionCommand=${dmcfg.session.script}
-    SessionDir=${dmcfg.session.desktops}
+    SessionCommand=${dmcfg.session.wrapper}
+    SessionDir=${dmcfg.session.desktops}/share/xsessions
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
@@ -268,7 +257,7 @@ in
       '';
     };
 
-    users.extraUsers.sddm = {
+    users.users.sddm = {
       createHome = true;
       home = "/var/lib/sddm";
       group = "sddm";
@@ -276,8 +265,9 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
+    environment.pathsToLink = [ "/share/sddm/themes" ];
 
-    users.extraGroups.sddm.gid = config.ids.gids.sddm;
+    users.groups.sddm.gid = config.ids.gids.sddm;
 
     environment.systemPackages = [ sddm ];
     services.dbus.packages = [ sddm ];
@@ -285,5 +275,20 @@ in
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;
     services.xserver.display = null;
+
+    systemd.tmpfiles.rules = [
+      # Prior to Qt 5.9.2, there is a QML cache invalidation bug which sometimes
+      # strikes new Plasma 5 releases. If the QML cache is not invalidated, SDDM
+      # will segfault without explanation. We really tore our hair out for awhile
+      # before finding the bug:
+      # https://bugreports.qt.io/browse/QTBUG-62302
+      # We work around the problem by deleting the QML cache before startup.
+      # This was supposedly fixed in Qt 5.9.2 however it has been reported with
+      # 5.10 and 5.11 as well. The initial workaround was to delete the directory
+      # in the Xsetup script but that doesn't do anything.
+      # Instead we use tmpfiles.d to ensure it gets wiped.
+      # This causes a small but perceptible delay when SDDM starts.
+      "e ${config.users.users.sddm.home}/.cache - - - 0"
+    ];
   };
 }

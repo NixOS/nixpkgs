@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, readline }:
+{ stdenv, fetchurl, readline }:
 
 let
   dsoPatch = fetchurl {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   luaversion = "5.1";
 
   src = fetchurl {
-    url = "http://www.lua.org/ftp/${name}.tar.gz";
+    url = "https://www.lua.org/ftp/${name}.tar.gz";
     sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
   };
 

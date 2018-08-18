@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt5, libIDL, SDL, libcap, zlib, libpng, glib, lvm2
-, libXrandr, libXinerama
+{ stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
+, libX11, xproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
+, libpng, glib, lvm2, libXrandr, libXinerama
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, gawk, nettools, dbus
+, alsaLib, curl, libvpx, nettools, dbus
 , xorriso, makeself, perl
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python2 ? null
-, enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
+, enableExtensionPack ? false, requireFile ? null, fakeroot ? null
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
@@ -21,10 +21,10 @@ let
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
   # Do not forget to update the hash in ./guest-additions/default.nix!
-  extpack = "4c36d129f17dcab2bb37292022f1b1adfefa5f32a3161b0d5d40784bc8acf4d0";
-  extpackRev = "122591";
-  main = "0n1lip8lkz4qqq5ml47xldsx41919ncfh060i7yj51bhas604q6s";
-  version = "5.2.12";
+  extpack = "d90c1b0c89de19010f7c7fe7a675ac744067baf29a9966b034e97b5b2053b37e";
+  extpackRev = "123301";
+  main = "ee3af129a581ec4c1a3e777e98247f8943e976ce6edd24962bcaa5c53ed1f644";
+  version = "5.2.14";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -47,7 +47,7 @@ in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 
   src = fetchurl {
-    url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
+    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
     sha256 = main;
   };
 
@@ -94,9 +94,14 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
-  ++ [ ./qtx11extras.patch ];
-
-
+  ++ [
+    ./qtx11extras.patch
+    (fetchpatch {
+      name = "010-qt-5.11.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/010-qt-5.11.patch?h=packages/virtualbox";
+      sha256 = "0hjx99pg40wqyggnrpylrp5zngva4xrnk7r90i0ynrqc7n84g9pn";
+    })
+  ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \

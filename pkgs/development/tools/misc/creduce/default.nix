@@ -8,18 +8,18 @@
 
 stdenv.mkDerivation rec {
   name = "creduce-${version}";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchurl {
-    url = "http://embed.cs.utah.edu/creduce/${name}.tar.gz";
-    sha256 = "0h8s4d54q6cl6i45x3143l2xmr29b2yhr3m0n5qqx63sr5csip1n";
+    url = "https://embed.cs.utah.edu/creduce/${name}.tar.gz";
+    sha256 = "1vqx73ymfscvlyig03972a5m7ar3gx2yv6m8c6h2mibz792j5xkp";
   };
 
+  nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [
     # Ensure stdenv's CC is on PATH before clang-unwrapped
     stdenv.cc
     # Actual deps:
-    cmake makeWrapper
     llvm clang-unwrapped
     flex zlib
     perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey

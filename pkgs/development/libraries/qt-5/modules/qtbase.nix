@@ -3,14 +3,14 @@
   src, patches, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby, which,
+  which,
   # darwin support
-  darwin, libiconv, libcxx,
+  darwin, libiconv,
 
   dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite,
   libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng, libtiff,
   libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev,
-  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm, xorg,
+  xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm,
   zlib,
 
   # optional dependencies
@@ -191,7 +191,7 @@ stdenv.mkDerivation {
     [
       "-Wno-error=sign-compare" # freetype-2.5.4 changed signedness of some struct fields
       ''-DNIXPKGS_QTCOMPOSE="${libX11.out}/share/X11/locale"''
-      ''-DNIXPKGS_LIBRESOLV="${stdenv.cc.libc.out}/lib/libresolv"''
+      ''-D${if compareVersion "5.11.0" >= 0 then "LIBRESOLV_SO" else "NIXPKGS_LIBRESOLV"}="${stdenv.cc.libc.out}/lib/libresolv"''
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ]
 
@@ -243,9 +243,12 @@ stdenv.mkDerivation {
       "-gui"
       "-widgets"
       "-opengl desktop"
-      "-qml-debug"
       "-icu"
       "-pch"
+    ]
+    ++ lib.optionals (compareVersion "5.11.0" < 0)
+    [
+      "-qml-debug"
     ]
     ++ lib.optionals (compareVersion "5.9.0" < 0)
     [
@@ -387,7 +390,7 @@ stdenv.mkDerivation {
     homepage = http://www.qt.io;
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ qknight ttuegel periklis ];
+    maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
   };
 

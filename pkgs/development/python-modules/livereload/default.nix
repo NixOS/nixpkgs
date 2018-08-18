@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "livereload";
   version = "2.5.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "lepture";

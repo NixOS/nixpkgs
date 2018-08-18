@@ -49,11 +49,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "uwsgi-${version}";
-  version = "2.0.17";
+  version = "2.0.17.1";
 
   src = fetchurl {
-    url = "http://projects.unbit.it/downloads/${name}.tar.gz";
-    sha256 = "1wlbaairsmhp6bx5wv282q9pgh6w7w6yrb8vxjznfaxrinsfkhix";
+    url = "https://projects.unbit.it/downloads/${name}.tar.gz";
+    sha256 = "0xxjb9dyivq5531birvxq2gnyxf2x5q7gz54440acra6qwsq4cfj";
   };
 
   nativeBuildInputs = [ python3 pkgconfig ];

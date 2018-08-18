@@ -46,7 +46,6 @@ rec {
       # Misc boolean options
       useAndroidPrebuilt = false;
       useiOSPrebuilt = false;
-      isiPhoneSimulator = false;
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;

@@ -3,14 +3,14 @@
 }:
 
 let
-  version = "11.29.3";
+  version = "11.29.7";
 in stdenv.mkDerivation rec {
 
   name = "monetdb-${version}";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "18l4jkkryki5az5n7gnalfdxz6ibnkg3q2z4cwh1010b313wqi8s";
+    sha256 = "19f9zfg94k8hr9qc7jp1iwl8av08mibzgmid0gbqplyhf6x1j0r7";
   };
 
   nativeBuildInputs = [ pkgconfig ];

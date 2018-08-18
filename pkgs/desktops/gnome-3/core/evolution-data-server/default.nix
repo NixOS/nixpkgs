@@ -1,18 +1,25 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, python3, gobjectIntrospection
-, intltool, libsoup, libxml2, libsecret, icu, sqlite
+{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobjectIntrospection
+, intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata
 , p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking
 , vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
 
 stdenv.mkDerivation rec {
   name = "evolution-data-server-${version}";
-  version = "3.28.2";
+  version = "3.28.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1azk8zh167a6hyxzz73yh36gbpf7i52b7zi10hnnnsywh80pj6jk";
+    sha256 = "1247gv0ggwnd1i2n7iglb3crfapx6s9nrl896bzy9k87fb94hlyr";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit tzdata;
+    })
+  ];
 
   nativeBuildInputs = [
     cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobjectIntrospection vala

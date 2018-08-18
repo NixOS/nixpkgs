@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, libuuid, libselinux }:
-let 
+let
   sourceInfo = rec {
     version = "2.2.7";
     url = "http://nilfs.sourceforge.net/download/nilfs-utils-${version}.tar.bz2";
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
       sha256 = "1ycq83c6jjy74aif47v075k5y2szzwhq6mbcrpd1z4b4i1x6yhpn";
     })
   ];
+
+  configureFlags = [ "--with-libmount" ];
 
   # FIXME: https://github.com/NixOS/patchelf/pull/98 is in, but stdenv
   # still doesn't use it

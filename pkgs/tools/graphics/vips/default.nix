@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxml2, flex, bison, vips, expat,
+{ stdenv, fetchurl, pkgconfig, glib, libxml2, expat,
   fftw, orc, lcms, imagemagick, openexr, libtiff, libjpeg, libgsf, libexif,
-  python27, libpng, matio ? null, cfitsio ? null, libwebp ? null
+  python27, libpng ? null
 }:
 
 stdenv.mkDerivation rec {
   name = "vips-${version}";
-  version = "8.6.3";
+  version = "8.6.5";
 
   src = fetchurl {
     url = "https://github.com/jcupitt/libvips/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "14h9w61gaimldmqaym0zhf9fkxjj1pkd5lhglhs6pxphynwxnnpq";
+    sha256 = "1nymm4vzscb68aifin9q742ff64b4k4ddppq1060w8hf6h7ay0l7";
   };
 
   buildInputs =

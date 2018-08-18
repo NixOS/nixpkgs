@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     (optionalString (!imwriSupport) "--disable-imwri")
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";
     homepage    = http://www.vapoursynth.com/;

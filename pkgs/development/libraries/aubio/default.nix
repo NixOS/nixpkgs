@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "aubio-0.4.6";
 
   src = fetchurl {
-    url = "http://aubio.org/pub/${name}.tar.bz2";
+    url = "https://aubio.org/pub/${name}.tar.bz2";
     sha256 = "1yvwskahx1bf3x2fvi6cwah1ay11iarh79fjlqz8s887y3hkpixx";
   };
 

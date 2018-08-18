@@ -1,6 +1,6 @@
 { stdenv, fetchurl, meson, ninja, makeWrapper, pkgconfig
 , appstream-glib, desktop-file-utils, python3
-, gtk, girara, ncurses, gettext, libxml2
+, gtk, girara, gettext, libxml2
 , file, sqlite, glib, texlive, libintl, libseccomp
 , gtk-mac-integration, synctexSupport ? true
 }:

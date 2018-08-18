@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   version = "0.7.5";
   pname = "pyfiglet";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

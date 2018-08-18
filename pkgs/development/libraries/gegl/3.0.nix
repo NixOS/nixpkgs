@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "gegl-0.3.34";
 
   src = fetchurl {
-    url = "http://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
+    url = "https://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
     sha256 = "010k86wn8cmr07rqwa4lccrmiiqrwbnkxvic4lpapwgbamv258jw";
   };
 

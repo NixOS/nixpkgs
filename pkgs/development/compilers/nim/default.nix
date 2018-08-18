@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "45c74adb35f08dfa9add1112ae17330e5d902ebb4a36e7046caee8b79e6f3bd0";
   };
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
 

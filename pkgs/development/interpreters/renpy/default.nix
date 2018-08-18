@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ren'Py Visual Novel Engine";
-    homepage = http://renpy.org/;
+    homepage = https://renpy.org/;
     license = licenses.mit;
     platforms = platforms.linux;
   };

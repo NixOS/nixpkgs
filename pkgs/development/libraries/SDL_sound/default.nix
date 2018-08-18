@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.0.3";
 
   src = fetchurl {
-    url = "http://icculus.org/SDL_sound/downloads/${name}.tar.gz";
+    url = "https://icculus.org/SDL_sound/downloads/${name}.tar.gz";
     sha256 = "1pz6g56gcy7pmmz3hhych3iq9jvinml2yjz15fjqjlj8pc5zv69r";
   };
 

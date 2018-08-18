@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi, six, mock }:
 buildPythonPackage rec {
   pname = "hiro";
-  version = "0.1.4";
+  version = "0.5";
   src = fetchPypi {
     inherit pname version;
 
-    sha256 = "1340lhg7k522bqpz5iakl51qb47mjw804mfwwzm77i7qcm5cwiz8";
+    sha256 = "57d9dac63077f24c3d0132c02ac5c71e4bd1d79bdac30dccad4c83fadd49fa1c";
   };
 
   propagatedBuildInputs = [ six mock ];

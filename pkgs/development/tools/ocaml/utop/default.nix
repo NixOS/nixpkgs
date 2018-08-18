@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, camlp4
-, lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools, makeWrapper
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, jbuilder
+, lambdaTerm, cppo, makeWrapper
 }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
@@ -7,30 +7,20 @@ then throw "utop is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "1.19.3";
+  version = "2.2.0";
   name = "utop-${version}";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "16z02vp9n97iax4fqpbi7v86r75vbabxvnd1rirh8w2miixs1g4x";
+    sha256 = "1414snwmqaxs1x8wbpjf6fn3jsl01hq0phrr7639xmb5vh15mgd4";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml findlib ocamlbuild cppo camlp4 ppx_tools ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo jbuilder ];
 
-  propagatedBuildInputs = [ lambdaTerm ocaml_lwt ];
+  propagatedBuildInputs = [ lambdaTerm ];
 
-  createFindlibDestdir = true;
-
-  configureFlags = [ "--enable-camlp4" ]
-  ++ stdenv.lib.optional (ppx_tools != null && !stdenv.lib.versionAtLeast ocaml.version "4.04") "--enable-interact";
-
-  buildPhase = ''
-    make
-    make doc
-    '';
-
-  dontStrip = true;
+  inherit (jbuilder) installPhase;
 
   postFixup =
    let

@@ -5,9 +5,18 @@ stdenv.mkDerivation rec {
   name = "c-ares-1.14.0";
 
   src = fetchurl {
-    url = "http://c-ares.haxx.se/download/${name}.tar.gz";
+    url = "https://c-ares.haxx.se/download/${name}.tar.gz";
     sha256 = "0vnwmbvymw677k780kpb6sb8i3szdp89rzy8mz1fwg1657yw3ls5";
   };
+
+  # ares_android.h header is missing
+  # see issue https://github.com/c-ares/c-ares/issues/216
+  postPatch = if stdenv.hostPlatform.isAndroid then ''
+    cp ${fetchurl {
+      url = "https://raw.githubusercontent.com/c-ares/c-ares/cares-1_14_0/ares_android.h";
+      sha256 = "1aw8y6r5c8zq6grjwf4mcm2jj35r5kgdklrp296214s1f1827ps8";
+    }} ares_android.h
+  '' else null;
 
   meta = with stdenv.lib; {
     description = "A C library for asynchronous DNS requests";

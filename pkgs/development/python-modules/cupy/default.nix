@@ -1,4 +1,4 @@
-{ stdenv, python, buildPythonPackage
+{ stdenv, buildPythonPackage
 , fetchPypi, isPy3k, linuxPackages, gcc5
 , fastrlock, numpy, six, wheel, pytest, mock
 , cudatoolkit, cudnn, nccl
@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "cupy";
-  version = "2.5.0";
+  version = "4.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "60e36add95b0bc15f0863e7b4a425c00111dab0985075a96ede689510a9c56be";
+    sha256 = "ea818ff7f36cf6e5b3d3faef5af36a501c8bdeb78805820afa2999789ed698d5";
   };
 
   checkInputs = [

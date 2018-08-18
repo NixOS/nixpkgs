@@ -4,7 +4,7 @@
 
 let
   pname = "tracker";
-  version = "2.0.3";
+  version = "2.0.4";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1005w90vhk1cl8g6kxpy2vdzbskw2jskfjcl42lngv18q5sb4bss";
+    sha256 = "1mfc5lv820kr7ssi7hldn25gmshh65k19kh478qjsnb64sshsbyf";
   };
 
   enableParallelBuilding = true;

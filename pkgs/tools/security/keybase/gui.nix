@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildFHSUserEnv, writeTextFile, alsaLib, atk, cairo, cups
-, dbus, expat, fontconfig, freetype, gcc, gdk_pixbuf, glib, gnome2, gtk2
-, libnotify, nspr, nss, pango, systemd, xorg, utillinuxMinimal }:
+{ stdenv, fetchurl, alsaLib, atk, cairo, cups
+, dbus, expat, fontconfig, freetype, gcc, gdk_pixbuf, glib, gnome2, gtk3
+, libnotify, nspr, nss, pango, systemd, xorg }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
@@ -16,7 +16,7 @@ let
     gdk_pixbuf
     glib
     gnome2.GConf
-    gtk2
+    gtk3
     libnotify
     nspr
     nss
@@ -38,10 +38,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "keybase-gui-${version}";
-  version = "1.0.44-20180223200436.9a9ccec79";
+  version = "2.5.0-20180807164805.0fda758997";
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version}_amd64.deb";
-    sha256 = "0dmi0fw39924kpahlsk853hbmpy8a6nj78lrh1wharayjpvj6jv3";
+    sha256 = "135sm3h5i2h9j06py827psjbhhiqy1mb133s92p7jp6q1mhr8j1x";
   };
   phases = ["unpackPhase" "installPhase" "fixupPhase"];
   unpackPhase = ''
@@ -70,10 +70,9 @@ stdenv.mkDerivation rec {
       checkFailed
     fi
 
-    ${utillinuxMinimal}/bin/mountpoint /keybase &>/dev/null
-    if [ "\$?" -ne "0" ]; then
-      echo "Keybase is not mounted to /keybase." >&2
-      echo "You might need to run: kbfsfuse /keybase" >&2
+    if [ -z "\$(keybase status | grep kbfsfuse)" ]; then
+      echo "Could not find kbfsfuse client in keybase status." >&2
+      echo "You might need to run: kbfsfuse" >&2
       checkFailed
     fi
 
@@ -93,5 +92,6 @@ stdenv.mkDerivation rec {
     description = "The Keybase official GUI.";
     platforms = platforms.linux;
     maintainers = with maintainers; [ puffnfresh np ];
+    license = licenses.bsd3;
   };
 }

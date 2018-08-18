@@ -1,31 +1,48 @@
-{ stdenv, fetchurl, python, pkgconfig, popt, gettext, dbus-glib
-, libX11, xextproto, libSM, libICE, libXtst, libXi, gobjectIntrospection }:
+{ stdenv
+, fetchurl
+
+, meson
+, ninja
+, pkgconfig
+, gobjectIntrospection
+
+, dbus
+, glib
+, libX11
+, libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
+, libXi
+
+, gnome3 # To pass updateScript
+}:
 
 stdenv.mkDerivation rec {
-  versionMajor = "2.26";
-  versionMinor = "2";
-  moduleName   = "at-spi2-core";
-  name = "${moduleName}-${versionMajor}.${versionMinor}";
+  name = "${pname}-${version}";
+  pname = "at-spi2-core";
+  version = "2.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "0596ghkamkxgv08r4a1pdhm06qd5zzgcfqsv64038w9xbvghq3n8";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "11qwdxxx4jm0zj04xydlwah41axiz276dckkiql3rr0wn5x4i8j2";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection ];
-  buildInputs = [
-    python popt dbus-glib
-    libX11 xextproto libSM libICE libXtst libXi
-  ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
+  buildInputs = [ dbus glib libX11 libXtst libXi ];
 
-  # ToDo: on non-NixOS we create a symlink from there?
-  configureFlags = "--with-dbus-daemondir=/run/current-system/sw/bin/";
+  doCheck = false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
 
-  doCheck = false; # needs dbus daemon
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
+    description = "Assistive Technology Service Provider Interface protocol definitions and daemon for D-Bus";
+    homepage = https://gitlab.gnome.org/GNOME/at-spi2-core;
+    license = licenses.lgpl2Plus; # NOTE: 2018-06-06: Please check the license when upstream sorts-out licensing: https://gitlab.gnome.org/GNOME/at-spi2-core/issues/2
+    maintainers = with maintainers; [ jtojnar gnome3.maintainers ];
     platforms = platforms.unix;
   };
 }

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "aircrack-ng-1.2";
 
   src = fetchurl {
-    url = "http://download.aircrack-ng.org/${name}.tar.gz";
+    url = "https://download.aircrack-ng.org/${name}.tar.gz";
     sha256 = "0z7sl1ihgrnc98bpqa1mmkh51w26fnsanvj6ydwcnd8g83azwkvr";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Wireless encryption cracking tools";
     homepage = http://www.aircrack-ng.org/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar viric garbas chaoflow ];
+    maintainers = with maintainers; [ domenkozar garbas chaoflow ];
     platforms = platforms.linux;
   };
 }

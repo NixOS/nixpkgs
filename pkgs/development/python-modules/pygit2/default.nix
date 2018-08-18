@@ -1,7 +1,6 @@
 { stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, libgit2, six, cffi }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pygit2";
   version = "0.26.4";
 

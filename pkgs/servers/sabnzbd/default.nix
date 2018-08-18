@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, python2, par2cmdline, unzip, unrar, p7zip, makeWrapper}:
 
 let
-  pythonEnv = python2.withPackages(ps: with ps; [ cryptography cheetah yenc ]);
+  pythonEnv = python2.withPackages(ps: with ps; [ cryptography cheetah yenc sabyenc ]);
   path = stdenv.lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
   version = "2.3.3";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Usenet NZB downloader, par2 repairer and auto extracting server";
-    homepage = http://sabnzbd.org;
+    homepage = https://sabnzbd.org;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ fridh ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, lib, file, licenseFile, optgamsFile}:
+{ stdenv, fetchurl, unzip, file, licenseFile, optgamsFile}:
 
 assert licenseFile != null;
 
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin" "$out/share/gams"
     cp -a * "$out/share/gams"
 
-    cp ${licenseFile} $out/share/gamslice.txt
+    cp ${licenseFile} $out/share/gams/gamslice.txt
   '' + stdenv.lib.optionalString (optgamsFile != null) ''
-    cp ${optgamsFile} $out/share/optgams.def
+    cp ${optgamsFile} $out/share/gams/optgams.def
     ln -s $out/share/gams/optgams.def $out/bin/optgams.def
   '';
 

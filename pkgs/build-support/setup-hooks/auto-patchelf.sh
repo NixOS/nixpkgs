@@ -172,4 +172,14 @@ autoPatchelf() {
     done
 }
 
-fixupOutputHooks+=(autoPatchelf)
+# XXX: This should ultimately use fixupOutputHooks but we currently don't have
+# a way to enforce the order. If we have $runtimeDependencies set, the setup
+# hook of patchelf is going to ruin everything and strip out those additional
+# RPATHs.
+#
+# So what we do here is basically run in postFixup and emulate the same
+# behaviour as fixupOutputHooks because the setup hook for patchelf is run in
+# fixupOutput and the postFixup hook runs later.
+postFixupHooks+=(
+    'for output in $outputs; do prefix="${!output}" autoPatchelf; done'
+)

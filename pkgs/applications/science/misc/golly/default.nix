@@ -1,11 +1,11 @@
 {stdenv, fetchurl, wxGTK, perl, python2, zlib, libGLU_combined, libX11}:
 stdenv.mkDerivation rec {
   baseName="golly";
-  version = "3.1";
+  version = "3.2";
   name="${baseName}-${version}";
 
   src = fetchurl {
-    sha256 = "0dn74k3rylhx023n047lz4z6qrqijfcxi0b6jryqklhmm2n532f7";
+    sha256 = "0cg9mbwmf4q6qxhqlnzrxh9y047banxdb8pd3hgj3smmja2zf0jd";
     url="mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
   };
 

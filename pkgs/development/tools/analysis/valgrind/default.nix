@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, perl, gdb, llvm, cctools, xnu, bootstrap_cmds }:
+{ stdenv, fetchurl, perl, gdb, llvm, cctools, xnu, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
   name = "valgrind-3.13.0";

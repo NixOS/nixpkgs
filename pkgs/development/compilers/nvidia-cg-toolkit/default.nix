@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, patchelf }:
+{ lib, stdenv, fetchurl }:
 
 assert stdenv ? glibc;
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://developer.download.nvidia.com/cg/Cg_${version}/Cg-${version}_${date}_x86_64.tgz";
+        url = "https://developer.download.nvidia.com/cg/Cg_${version}/Cg-${version}_${date}_x86_64.tgz";
         sha256 = "e8ff01e6cc38d1b3fd56a083f5860737dbd2f319a39037528fb1a74a89ae9878";
       }
     else if stdenv.system == "i686-linux" then

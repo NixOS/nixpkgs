@@ -19,11 +19,11 @@ let
 
 in py.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.15.10";
+  version = "1.15.66";
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0nwpanbfx5h0bad8wwvvbhpjf9r6n885bbv2w8mw7vijdgclkq8x";
+    sha256 = "004fbd3bb8932465205675a7de94460b5c2d45ddd6916138a2c867e4d0f2a4c4";
   };
 
   # No tests included

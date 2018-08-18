@@ -1,6 +1,6 @@
 {stdenv, fetchurl, lib, gfortran
 , ncurses
-, Xaw3d, withXaw3d ? false
+, withXaw3d ? false
 #, withPVMlib ? false
 , tcl, tk, withTk ? false
 , gtk2, withGtk ? false # working ?
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "4.1.2";
   name = "scilab-${version}";
   src = fetchurl {
-    url = "http://www.scilab.org/download/${version}/${name}-src.tar.gz";
+    url = "https://www.scilab.org/download/${version}/${name}-src.tar.gz";
     sha256 = "1adk6jqlj7i3gjklvlf1j3il1nb22axnp4rvwl314an62siih0sc";
   };
 

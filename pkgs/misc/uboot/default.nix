@@ -1,16 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, bc, dtc, openssl, python2, swig
+{ stdenv, fetchurl, fetchpatch, bc, bison, dtc, flex, openssl, python2, swig
 , armTrustedFirmwareAllwinner
-, hostPlatform, buildPackages
+, buildPackages
 }:
 
 let
-  # Various changes for 64-bit sunxi boards, (hopefully) destined for 2018.05
-  sunxiPatch = fetchpatch {
-    name = "sunxi.patch";
-    url = "https://github.com/u-boot/u-boot/compare/v2018.05...dezgeg:2018-05-sunxi.patch";
-    sha256 = "1dfv4s1f71iv80vjxgyghv4pcwjv4mjphk75a8hfl3jdbpd66d36";
-  };
-
   buildUBoot = { filesToInstall
             , installDir ? "$out"
             , defconfig
@@ -21,25 +14,17 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2018.05";
+    version = "2018.07";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "0j60p4iskzb4hamxgykc6gd7xchxfka1zwh8hv08r9rrc4m3r8ad";
+      sha256 = "1m7nw64mxflpc6sqvnz2kb5fxfkb4mrpy8b1wi15dcwipj4dy44z";
     };
 
     patches = [
       (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/rpi-2018-05-patch1.patch;
-        sha256 = "0xvw16mp6mm36987rd5yb8bw0n5b3p1gq35wch2gbj15wx55450p";
-      })
-      (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/rpi-2018-05-patch2.patch;
-        sha256 = "0q1a5l5rfgddncxrjk59qr1f5587dwbvcf6z15bsfl2invs19m2b";
-      })
-      (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/pythonpath-2018-03.patch;
-        sha256 = "1rhhlhrwhv7ic1n5i720jfh2cxwrkssrkvinllyjy3j9k9bpzcqd";
+        url = https://github.com/dezgeg/u-boot/commit/pythonpath-2018-07.patch;
+        sha256 = "096zqrlr8m9lxjma0iv7y6x78qswfs3q1w2irjkbmcvniz1azbs8";
       })
       (fetchpatch {
         url = https://github.com/dezgeg/u-boot/commit/extlinux-path-length-2018-03.patch;
@@ -51,7 +36,7 @@ let
       patchShebangs tools
     '';
 
-    nativeBuildInputs = [ bc dtc openssl python2 swig ];
+    nativeBuildInputs = [ bc bison dtc flex openssl python2 swig ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
     hardeningDisable = [ "all" ];
@@ -155,6 +140,12 @@ in rec {
     '';
   };
 
+  ubootNovena = buildUBoot rec {
+    defconfig = "novena_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin" "SPL"];
+  };
+
   ubootOdroidXU3 = buildUBoot rec {
     defconfig = "odroid-xu3_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -174,7 +165,6 @@ in rec {
   };
 
   ubootPine64 = buildUBoot rec {
-    extraPatches = [sunxiPatch];
     defconfig = "pine64_plus_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -230,7 +220,6 @@ in rec {
   };
 
   ubootSopine = buildUBoot rec {
-    extraPatches = [sunxiPatch];
     defconfig = "sopine_baseboard_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";

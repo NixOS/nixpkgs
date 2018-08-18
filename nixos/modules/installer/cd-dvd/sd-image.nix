@@ -16,6 +16,8 @@ let
     inherit pkgs;
     inherit (config.sdImage) storePaths;
     volumeLabel = "NIXOS_SD";
+  } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
+    uuid = config.sdImage.rootPartitionUUID;
   };
 in
 {
@@ -39,6 +41,24 @@ in
       example = literalExample "[ pkgs.stdenv ]";
       description = ''
         Derivations to be included in the Nix store in the generated SD image.
+      '';
+    };
+
+    bootPartitionID = mkOption {
+      type = types.string;
+      default = "0x2178694e";
+      description = ''
+        Volume ID for the /boot partition on the SD card. This value must be a
+        32-bit hexadecimal number.
+      '';
+    };
+
+    rootPartitionUUID = mkOption {
+      type = types.nullOr types.string;
+      default = null;
+      example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
+      description = ''
+        UUID for the main NixOS partition on the SD card.
       '';
     };
 
@@ -95,7 +115,7 @@ in
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
         sfdisk $img <<EOF
             label: dos
-            label-id: 0x2178694e
+            label-id: ${config.sdImage.bootPartitionID}
 
             start=8M, size=$bootSizeBlocks, type=b, bootable
             start=${toString (8 + config.sdImage.bootSize)}M, type=83
@@ -108,7 +128,7 @@ in
         # Create a FAT32 /boot partition of suitable size into bootpart.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)
         truncate -s $((SECTORS * 512)) bootpart.img
-        faketime "1970-01-01 00:00:00" mkfs.vfat -i 0x2178694e -n NIXOS_BOOT bootpart.img
+        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.bootPartitionID} -n NIXOS_BOOT bootpart.img
 
         # Populate the files intended for /boot
         mkdir boot

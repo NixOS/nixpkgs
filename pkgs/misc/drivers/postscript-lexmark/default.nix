@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, rpmextract }:
+{ stdenv, fetchurl, rpmextract }:
 let
   version = "20160218";
 in
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "postscript-lexmark-${version}";
 
   src = fetchurl {
-    url = "http://www.openprinting.org/download/printdriver/components/lsb3.2/main/RPMS/noarch/openprinting-ppds-postscript-lexmark-${version}-1lsb3.2.noarch.rpm";
+    url = "https://www.openprinting.org/download/printdriver/components/lsb3.2/main/RPMS/noarch/openprinting-ppds-postscript-lexmark-${version}-1lsb3.2.noarch.rpm";
     sha256 = "0wbhvypdr96a5ddg6kj41dn9sbl49n7pfi2vs762ij82hm2gvwcm";
   };
 

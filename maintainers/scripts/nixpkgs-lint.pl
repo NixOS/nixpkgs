@@ -1,4 +1,5 @@
-#! /run/current-system/sw/bin/perl -w
+#! /usr/bin/env nix-shell
+#! nix-shell -i perl -p perl perlPackages.XMLSimple
 
 use strict;
 use List::Util qw(min);

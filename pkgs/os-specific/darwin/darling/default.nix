@@ -1,4 +1,4 @@
-{stdenv, lib, fetchzip, cmake, bison, flex}:
+{stdenv, lib, fetchzip}:
 
 stdenv.mkDerivation rec {
   pname = "darling";

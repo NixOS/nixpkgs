@@ -4,7 +4,7 @@
 , beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, google-gflags
 , thrift, boost, rocksdb_lite, glog, gbenchmark, snappy
 , openssl, file, doxygen
-, gtest, sqlite, fpm, zstd, rdkafka, rapidjson, path
+, gtest, sqlite, fpm, zstd, rdkafka, rapidjson
 }:
 
 let
@@ -12,25 +12,25 @@ let
   thirdparty = fetchFromGitHub {
     owner = "osquery";
     repo = "third-party";
-    rev = "4ef099c31a1165c5e7e3a699f9e4b3eb68c3c3d9";
-    sha256 = "1vm0prw4dix0m51vkw9z0vwfd8698gqjw499q8h604hs1rvn6132";
+    rev = "32e01462fbea75d3b1904693f937dfd62eaced15";
+    sha256 = "0va24gmgk43a1lyjs63q9qrhvpv8gmqjzpjr5595vhr16idv8wyf";
   };
 
 in
 
 stdenv.mkDerivation rec {
   name = "osquery-${version}";
-  version = "3.2.2";
+  version = "3.2.9";
 
   # this is what `osquery --help` will show as the version.
   OSQUERY_BUILD_VERSION = version;
-  OSQUERY_PLATFORM = "nixos;${stdenv.lib.version}";
+  OSQUERY_PLATFORM = "NixOS;";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "osquery";
     rev = version;
-    sha256 = "0qwj4cy6m25sqwb0irqfqinipx50l4imnz1gqxx147vzfwb52jlq";
+    sha256 = "1fac0yj1701469qhbsp38ab2fmavm3jw6x278bf78yvxdi99ivai";
   };
 
   patches = [ ./misc.patch ];

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library of utility functions that are used by the higher level dLeyna";
-    homepage = http://01.org/dleyna;
+    homepage = https://01.org/dleyna;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.linux;
     license = licenses.lgpl21;

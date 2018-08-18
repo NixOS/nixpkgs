@@ -5,7 +5,6 @@
 # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin, readline70 ? null
 , withDocs ? false, texinfo ? null
-, self
 }:
 
 with stdenv.lib;

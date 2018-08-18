@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cppcms-${version}";
-  version = "1.0.5";
+  version = "1.2.1";
 
   src = fetchurl {
       url = "mirror://sourceforge/cppcms/${name}.tar.bz2";
-      sha256 = "0r8qyp102sq4lw8xhrjhan0dnslhsmxj4zs9jzlw75yagfbqbdl4";
+      sha256 = "0lmcdjzicmzhnr8pa0q3f5lgapz2cnh9w0dr56i4kj890iqwgzhh";
   };
 
   enableParallelBuilding = true;

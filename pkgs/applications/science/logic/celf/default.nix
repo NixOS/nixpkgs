@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Linear logic programming system";
-    homepage = http://github.com/clf/celf;
+    homepage = https://github.com/clf/celf;
     license = licenses.gpl3;
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

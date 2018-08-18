@@ -77,8 +77,13 @@ rec {
 
     , ... } @ attrs:
 
-    # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
+      fixedOutputDrv = attrs ? outputHash;
+      noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
+                                      ++ depsHostHost ++ depsHostHostPropagated
+                                      ++ buildInputs ++ propagatedBuildInputs
+                                      ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
+      runtimeSensativeIfFixedOutput = fixedOutputDrv -> !noNonNativeDeps;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
       defaultHardeningFlags = lib.remove "pie" supportedHardeningFlags;
       enabledHardeningOptions =
@@ -159,7 +164,7 @@ rec {
 
       derivationArg =
         (removeAttrs attrs
-          ["meta" "passthru" "crossAttrs" "pos"
+          ["meta" "passthru" "pos"
            "doCheck" "doInstallCheck"
            "checkInputs" "installCheckInputs"
            "__impureHostDeps" "__propagatedImpureHostDeps"
@@ -168,7 +173,11 @@ rec {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
           name = assert validity.handled; name + lib.optionalString
-            (stdenv.hostPlatform != stdenv.buildPlatform)
+            # Fixed-output derivations like source tarballs shouldn't get a host
+            # suffix. But we have some weird ones with run-time deps that are
+            # just used for their side-affects. Those might as well since the
+            # hash can't be the same. See #32986.
+            (stdenv.hostPlatform != stdenv.buildPlatform && runtimeSensativeIfFixedOutput)
             ("-" + stdenv.hostPlatform.config);
 
           builder = attrs.realBuilder or stdenv.shell;
@@ -183,14 +192,14 @@ rec {
           depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
           nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
           depsBuildTarget             = lib.elemAt (lib.elemAt dependencies 0) 2;
-          depsHostBuild               = lib.elemAt (lib.elemAt dependencies 1) 0;
+          depsHostHost                = lib.elemAt (lib.elemAt dependencies 1) 0;
           buildInputs                 = lib.elemAt (lib.elemAt dependencies 1) 1;
           depsTargetTarget            = lib.elemAt (lib.elemAt dependencies 2) 0;
 
           depsBuildBuildPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 0) 0;
           propagatedNativeBuildInputs = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
           depsBuildTargetPropagated   = lib.elemAt (lib.elemAt propagatedDependencies 0) 2;
-          depsHostBuildPropagated     = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
+          depsHostHostPropagated      = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
           propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
           depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
 

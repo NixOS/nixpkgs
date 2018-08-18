@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ruby, bundler, libiconv, libxslt, libxml2, pkgconfig, libffi, glibc, imagemagickBig, postgresql }:
+{ stdenv, fetchurl, ruby, bundler, libiconv, libxslt, libxml2, pkgconfig, libffi, imagemagickBig, postgresql }:
 
 let
   gemspec = map (gem: fetchurl { url=gem.url; sha256=gem.hash; }) (import ./Gemfile.nix);
@@ -7,7 +7,7 @@ in stdenv.mkDerivation rec {
   name = "redmine-${version}";
 
   src = fetchurl {
-    url = "http://www.redmine.org/releases/${name}.tar.gz";
+    url = "https://www.redmine.org/releases/${name}.tar.gz";
     sha256 = "0x0zwxyj4dwbk7l64s3lgny10mjf0ba8jwrbafsm4d72sncmacv0";
   };
 

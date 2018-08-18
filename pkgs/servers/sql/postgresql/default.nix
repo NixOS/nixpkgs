@@ -1,8 +1,8 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper }:
+{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper, tzdata }:
 
 let
 
-  common = { version, sha256, psqlSchema } @ args:
+  common = { version, sha256, psqlSchema }:
    let atLeast = lib.versionAtLeast version; in stdenv.mkDerivation (rec {
     name = "postgresql-${version}";
 
@@ -22,14 +22,16 @@ let
 
     makeFlags = [ "world" ];
 
+    NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
+
     configureFlags = [
       "--with-openssl"
       "--with-libxml"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
-    ]
-      ++ lib.optional (stdenv.isDarwin)  "--with-uuid=e2fs"
-      ++ lib.optional (!stdenv.isDarwin) "--with-ossp-uuid";
+      "--with-system-tzdata=${tzdata}"
+      (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
+    ];
 
     patches =
       [ (if atLeast "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
@@ -95,33 +97,33 @@ let
 in {
 
   postgresql93 = common {
-    version = "9.3.22";
+    version = "9.3.23";
     psqlSchema = "9.3";
-    sha256 = "06p9rk2bav41ybp8ra1bpf44avw9kl5s1wyql21n5awvlm5fs60v";
+    sha256 = "1jzncs7b6zrcgpnqjbjcc4y8303a96zqi3h31d3ix1g3vh31160x";
   };
 
   postgresql94 = common {
-    version = "9.4.17";
+    version = "9.4.18";
     psqlSchema = "9.4";
-    sha256 = "1inpkwbr2xappz3kq3jr3hsn6mwn167nijcx406q8aq56p9hqcks";
+    sha256 = "1h64yjyrlz3ppsp9k6sm4jihg6n9i7mqhkx4p0hymqzmnbr3g0s2";
   };
 
   postgresql95 = common {
-    version = "9.5.12";
+    version = "9.5.13";
     psqlSchema = "9.5";
-    sha256 = "167nlrpsnqz63gafgn21j4yc2f5g1mpfkz8qxjxk2xs6crf6zs02";
+    sha256 = "1vm55q9apja6lg672m9xl1zq3iwv2zwnn0d0qr003zan1dmbh22l";
   };
 
   postgresql96 = common {
-    version = "9.6.8";
+    version = "9.6.9";
     psqlSchema = "9.6";
-    sha256 = "0w7bwf19wbdd3jjbjv03cnx56qka4801srcbsayk9v792awv7zga";
+    sha256 = "0biy8j69dbvdmrag55pdszpc0702agzqhhcwdx21xp02mzim4ydr";
   };
 
   postgresql100 = common {
-    version = "10.3";
+    version = "10.4";
     psqlSchema = "10.0";
-    sha256 = "06lkcwsf851z49zqcws5yc77s2yrbaazf2nvbk38hpp31rw6i8kf";
+    sha256 = "0j000bcs9w8wrllg8m7j1lxsd3n2x0yzkack5p35cmxx20iq2q0v";
   };
 
 }

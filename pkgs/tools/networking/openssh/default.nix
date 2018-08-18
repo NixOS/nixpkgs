@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, zlib, openssl, perl, libedit, pkgconfig, pam, autoreconfHook
+{ stdenv, fetchurl, fetchpatch, zlib, openssl, libedit, pkgconfig, pam, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? true

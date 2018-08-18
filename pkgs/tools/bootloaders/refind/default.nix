@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gnu-efi }:
+{ stdenv, fetchurl, gnu-efi }:
 
 let
   archids = {
@@ -13,12 +13,12 @@ in
 
 stdenv.mkDerivation rec {
   name = "refind-${version}";
-  version = "0.11.2";
+  version = "0.11.3";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "1k0xpm4y0gk1rxqdyprqyqpg5j16xw3l2gm3d9zpi5n9id43jkzn";
+    sha256 = "13q1yap9r4lzm5xjx1zi434gckd3gk5p8n4vh6jav0h3r3ayp633";
   };
 
   buildInputs = [ gnu-efi ];
@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
     homepage = http://refind.sourceforge.net/;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    license = licenses.gpl3Plus;
   };
 
 }

@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals withBlas [
     "--with-blas=${openblas}"
   ];
+
+  # issues with ntl -- https://github.com/wbhart/flint2/issues/487
+  NIX_CFLAGS_COMPILE = [ "-std=c++11" ];
+
   patches = [
     (fetchpatch {
       # Always produce libflint.so.MAJOR; will be included in the next flint version

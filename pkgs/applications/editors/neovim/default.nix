@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
-, libtool, libuv, luaPackages, ncurses, perl, pkgconfig
-, unibilium, vimUtils, xsel, gperf, callPackage
+{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey, libiconv
+, libuv, luaPackages, ncurses, pkgconfig
+, unibilium, xsel, gperf
 , libvterm-neovim
 , withJemalloc ? true, jemalloc
 }:
@@ -11,13 +11,13 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-unwrapped-${version}";
-    version = "0.2.2";
+    version = "0.3.1";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "1dxr29d0hyag7snbww5s40as90412qb61rgj7gd9rps1iccl9gv4";
+      sha256 = "19jy9nr2ffscli6wsysqkdvqvh7sgkkwhzkw3yypfrvg4pj9rl56";
     };
 
     enableParallelBuilding = true;
@@ -32,6 +32,7 @@ let
       luaPackages.lua
       gperf
     ] ++ optional withJemalloc jemalloc
+      ++ optional stdenv.isDarwin libiconv
       ++ lualibs;
 
     nativeBuildInputs = [
@@ -59,7 +60,7 @@ let
     '';
 
     postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" $out/share/nvim/runtime/autoload/provider/clipboard.vim
+      sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '' + stdenv.lib.optionalString (withJemalloc && stdenv.isDarwin) ''
       install_name_tool -change libjemalloc.1.dylib \
                 ${jemalloc}/lib/libjemalloc.1.dylib \

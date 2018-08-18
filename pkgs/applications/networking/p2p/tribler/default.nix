@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, makeWrapper, nettools, libtorrentRasterbar, imagemagick
+{ stdenv, fetchurl, pythonPackages, makeWrapper, libtorrentRasterbar, imagemagick
 , enablePlayer ? true, vlc ? null, qt5 }:
 
 stdenv.mkDerivation rec {

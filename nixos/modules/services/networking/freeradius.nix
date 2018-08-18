@@ -59,7 +59,7 @@ in
   config = mkIf (cfg.enable) {
 
     users = {
-      extraUsers.radius = {
+      users.radius = {
         /*uid = config.ids.uids.radius;*/
         description = "Radius daemon user";
       };

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
+{ stdenv, fetchFromGitHub, makeWrapper
 , pkgconfig, cmake, libxml2, vala_0_26, intltool, libmx, gnome3, gtk3, gtk-doc
 , keybinder3, clutter-gtk, libnotify
 , libxkbcommon, xorg, udev

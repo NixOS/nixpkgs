@@ -3,13 +3,12 @@
 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "libagent";
-  version = "0.9.8";
+  version = "0.11.3";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "7e7d62cedef9d1291b8e77abc463d50b3d685dfd953611d55a0414c12276aa78";
+    sha256 = "cb6199c3572e1223756465e758fb525e7f406a4808e9d7cfdddf089bec710047";
   };
 
   buildInputs = [

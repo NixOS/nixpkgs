@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl, fetchFromGitHub
+{ stdenv, fetchurl, fetchFromGitHub
 , ncurses
 , texinfo
 , gettext ? null
@@ -20,11 +20,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.9.7";
+  version = "2.9.8";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "1ga4sdk3ikx1ilggc6c77vyfpbmq3nrhg6svgglpf5sv60bv0jmn";
+    sha256 = "122lm0z97wk3mgnbn8m4d769d4j9rxyc9z7s89xd4gsdp8qsrpn2";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;

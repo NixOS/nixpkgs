@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub }:
+{ stdenv, rustPlatform, fetchFromGitHub }:
 
 with rustPlatform;
 

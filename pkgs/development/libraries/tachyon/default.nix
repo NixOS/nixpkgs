@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , Carbon ? null
 , libjpeg ? null
 , libpng ? null
@@ -38,6 +37,7 @@ stdenv.mkDerivation rec {
   arch = if stdenv.system == "x86_64-linux"   then "linux-64-thr"  else
          if stdenv.system == "i686-linux"     then "linux-thr"     else
          if stdenv.system == "aarch64-linux"  then "linux-arm-thr" else
+         if stdenv.system == "armv7l-linux"   then "linux-arm-thr" else
          if stdenv.system == "x86_64-darwin"  then "macosx-thr"    else
          if stdenv.system == "i686-darwin"    then "macosx-64-thr" else
          if stdenv.system == "i686-cygwin"    then "win32"         else

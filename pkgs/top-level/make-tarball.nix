@@ -42,7 +42,7 @@ releaseTools.sourceTarball rec {
 
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
 
-    # Make sure that Nixpkgs does not use <nixpkgs>
+    # Make sure that Nixpkgs does not use <nixpkgs>.
     badFiles=$(find pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs\/' || true)
     if [[ -n $badFiles ]]; then
         echo "Nixpkgs is not allowed to use <nixpkgs> to refer to itself."
@@ -101,7 +101,7 @@ releaseTools.sourceTarball rec {
     stopNest
 
     header "checking find-tarballs.nix"
-    nix-instantiate --eval --strict --show-trace --json \
+    nix-instantiate --readonly-mode --eval --strict --show-trace --json \
        ./maintainers/scripts/find-tarballs.nix \
       --arg expr 'import ./maintainers/scripts/all-tarballs.nix' > $TMPDIR/tarballs.json
     nrUrls=$(jq -r '.[].url' < $TMPDIR/tarballs.json | wc -l)

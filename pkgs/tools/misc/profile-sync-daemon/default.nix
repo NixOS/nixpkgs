@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rsync, glibc, gawk }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "5.53";

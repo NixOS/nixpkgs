@@ -5,7 +5,6 @@
 
 # Optional Arguments
 , snappy ? null, google-gflags ? null, zlib ? null, bzip2 ? null, lz4 ? null
-, numactl ? null
 
 # Malloc implementation
 , jemalloc ? null, gperftools ? null
@@ -78,7 +77,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://rocksdb.org;
+    homepage = https://rocksdb.org;
     description = "A library that provides an embeddable, persistent key-value store for fast storage";
     license = licenses.bsd3;
     platforms = platforms.x86_64;

@@ -257,7 +257,7 @@ let
 
   system = config.nixpkgs.localSystem.system;
 
-  bindMountOpts = { name, config, ... }: {
+  bindMountOpts = { name, ... }: {
 
     options = {
       mountPoint = mkOption {
@@ -284,7 +284,7 @@ let
 
   };
 
-  allowedDeviceOpts = { name, config, ... }: {
+  allowedDeviceOpts = { ... }: {
     options = {
       node = mkOption {
         example = "/dev/net/tun";
@@ -607,7 +607,7 @@ in
                   { services.postgresql.enable = true;
                     services.postgresql.package = pkgs.postgresql96;
 
-                    system.nixos.stateVersion = "17.03";
+                    system.stateVersion = "17.03";
                   };
               };
           }

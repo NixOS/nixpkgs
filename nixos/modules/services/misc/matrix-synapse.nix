@@ -342,7 +342,7 @@ in {
       };
       database_type = mkOption {
         type = types.enum [ "sqlite3" "psycopg2" ];
-        default = if versionAtLeast config.system.nixos.stateVersion "18.03"
+        default = if versionAtLeast config.system.stateVersion "18.03"
           then "psycopg2"
           else "sqlite3";
         description = ''
@@ -635,7 +635,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = [
+    users.users = [
       { name = "matrix-synapse";
         group = "matrix-synapse";
         home = cfg.dataDir;
@@ -644,7 +644,7 @@ in {
         uid = config.ids.uids.matrix-synapse;
       } ];
 
-    users.extraGroups = [
+    users.groups = [
       { name = "matrix-synapse";
         gid = config.ids.gids.matrix-synapse;
       } ];

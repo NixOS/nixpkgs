@@ -23,9 +23,14 @@ self: super:
       };
   in stage1 // stage2 // {
 
-  network = addBuildTools super.network (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
-  zlib = addBuildTools super.zlib (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
-  unix-compat = addBuildTools super.unix-compat (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
+  # GHCJS does not ship with the same core packages as GHC.
+  # https://github.com/ghcjs/ghcjs/issues/676
+  stm = self.stm_2_4_5_0;
+  ghc-compact = self.ghc-compact_0_1_0_0;
+
+  network = addBuildTools super.network (pkgs.lib.optional pkgs.buildPlatform.isDarwin pkgs.buildPackages.darwin.libiconv);
+  zlib = addBuildTools super.zlib (pkgs.lib.optional pkgs.buildPlatform.isDarwin pkgs.buildPackages.darwin.libiconv);
+  unix-compat = addBuildTools super.unix-compat (pkgs.lib.optional pkgs.buildPlatform.isDarwin pkgs.buildPackages.darwin.libiconv);
 
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
@@ -121,7 +126,6 @@ self: super:
   });
 
   ghcjs-dom-jsffi = overrideCabal super.ghcjs-dom-jsffi (drv: {
-    setupHaskellDepends = (drv.setupHaskellDepends or []) ++ [ self.Cabal_1_24_2_0 ];
     libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ [ self.ghcjs-base self.text ];
     isLibrary = true;
   });
@@ -197,4 +201,11 @@ self: super:
 
   base-orphans = dontCheck super.base-orphans;
   distributive = dontCheck super.distributive;
+
+  # https://github.com/glguy/th-abstraction/issues/53
+  th-abstraction = dontCheck super.th-abstraction;
+  # https://github.com/dreixel/syb/issues/21
+  syb = dontCheck super.syb;
+  # https://github.com/ghcjs/ghcjs/issues/677
+  hspec-core = dontCheck super.hspec-core;
 }

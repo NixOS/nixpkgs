@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, file, curl, pkgconfig, python, openssl, cmake, zlib
+{ stdenv, file, curl, pkgconfig, python, openssl, cmake, zlib
 , makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2, darwin
 , version
 , patches ? []

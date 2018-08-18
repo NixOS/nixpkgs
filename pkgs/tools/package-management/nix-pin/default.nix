@@ -1,12 +1,12 @@
 { lib, pkgs, stdenv, fetchFromGitHub, mypy, python3, nix, git, makeWrapper }:
 let self = stdenv.mkDerivation rec {
   name = "nix-pin-${version}";
-  version = "0.3.1";
+  version = "0.3.4";
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "nix-pin";
-    rev = "version-0.3.1";
-    sha256 = "1sldbrz33wz30d3vv3d2clyqyd6x1y6h6xjz1xv55fa97ig1h481";
+    rev = "version-0.3.4";
+    sha256 = "03wdxai3hpv2v9jp7r91x8y36ryz6v1cczmx3d26g1bf0ij5svb8";
   };
   buildInputs = [ python3 mypy makeWrapper ];
   checkPhase = ''

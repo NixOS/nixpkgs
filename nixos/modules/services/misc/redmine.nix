@@ -128,13 +128,13 @@ in {
       }
     ];
 
-    users.extraUsers = [
+    users.users = [
       { name = "redmine";
         group = "redmine";
         uid = config.ids.uids.redmine;
       } ];
 
-    users.extraGroups = [
+    users.groups = [
       { name = "redmine";
         gid = config.ids.gids.redmine;
       } ];

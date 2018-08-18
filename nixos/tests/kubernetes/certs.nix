@@ -1,9 +1,9 @@
 {
   pkgs ? import <nixpkgs> {},
-  internalDomain ? "cloud.yourdomain.net",
   externalDomain ? "myawesomecluster.cluster.yourdomain.net",
   serviceClusterIp ? "10.0.0.1",
-  kubelets
+  kubelets,
+  ...
 }:
 let
    runWithCFSSL = name: cmd:

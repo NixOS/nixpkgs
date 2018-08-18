@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, devicemapper, libuuid, gettext, readline, perl, python2
+{ stdenv, fetchurl, fetchpatch, lvm2, libuuid, gettext, readline, perl, python2
 , utillinux, check, enableStatic ? false, hurd ? null }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://git.alpinelinux.org/cgit/aports/plain/main/parted/fix-includes.patch?id=9c5cd3c329a40ba4559cc1d8c7d17a9bf95c237b";
       sha256 = "117ypyiwvzym6pi8xmy16wa5z3sbpx7gh6haabs6kfb1x2894z7q";
+    })
+    ++ stdenv.lib.optional (lvm2 == null)
+    (fetchpatch {
+      url = https://git.savannah.gnu.org/cgit/parted.git/patch/?id=7e87ca3c531228d35e13e802d2622006138b104c;
+      sha256 = "0i29lfg8cwj342q5s7qwqhncz2bkifj5rjc7cx6jd4zqb6ykkndj";
     });
 
   postPatch = stdenv.lib.optionalString doCheck ''
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ]
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext
-    ++ stdenv.lib.optional (devicemapper != null) devicemapper
+    ++ stdenv.lib.optional (lvm2 != null) lvm2
     ++ stdenv.lib.optional (hurd != null) hurd
     ++ stdenv.lib.optionals doCheck [ check perl python2 ];
 
@@ -33,7 +38,7 @@ stdenv.mkDerivation rec {
        (if (readline != null)
         then [ "--with-readline" ]
         else [ "--without-readline" ])
-    ++ stdenv.lib.optional (devicemapper == null) "--disable-device-mapper"
+    ++ stdenv.lib.optional (lvm2 == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 
   # Tests were previously failing due to Hydra running builds as uid 0.

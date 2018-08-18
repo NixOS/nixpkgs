@@ -1,12 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi, scipy, ffmpeg-full }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pydub";
-  version = "0.21.0";
+  version = "0.22.1";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "27acc5977b0f5220682175d44fda737bbf818143b0832c0c3863b5dde38e197a";
+    sha256 = "20beff39e9959a3b2cb4392802aecb9b2417837fff635d2b00b5ef5f5326d313";
   };
 
   patches = [

@@ -8,18 +8,6 @@ let
   malloc0ReturnsNullCrossFlag = stdenv.lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
     "--enable-malloc0returnsnull";
-
-  gitRelease = { libName, version, rev, sha256 } : attrs : attrs // {
-    name = libName + "-" + version;
-    src = args.fetchgit {
-      url = git://anongit.freedesktop.org/xorg/lib/ + libName;
-      inherit rev sha256;
-    };
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros  ];
-    preConfigure = (attrs.preConfigure or "") + "\n./autogen.sh";
-  };
-
-  compose = f: g: x: f (g x);
 in
 {
   bdftopcf = attrs: attrs // {
@@ -436,6 +424,10 @@ in
       ln -s share "$out/etc"
       mkdir -p "$out/lib" && ln -s ../share/pkgconfig "$out/lib/"
     '';
+  };
+
+  xlsfonts = attrs: attrs // {
+    meta = attrs.meta // { license = lib.licenses.mit; };
   };
 
   xorgserver = with xorg; attrs_passed:

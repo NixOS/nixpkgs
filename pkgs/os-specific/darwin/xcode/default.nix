@@ -1,4 +1,4 @@
-{ stdenv, requireFile }:
+{ stdenv, requireFile, targetPlatform, lib }:
 
 let requireXcode = version: sha256:
   let
@@ -40,9 +40,11 @@ let requireXcode = version: sha256:
 
   in app.overrideAttrs ( oldAttrs: oldAttrs // { inherit meta; });
 
-in {
+in lib.makeExtensible (self: {
   xcode_8_1 = requireXcode "8.1" "18xjvfipwzia66gm3r9p770xdd4r375vak7chw5vgqnv9yyjiq2n";
   xcode_8_2 = requireXcode "8.2" "13nd1zsfqcp9hwp15hndr0rsbb8rgprrz7zr2ablj4697qca06m2";
   xcode_9_1 = requireXcode "9.1" "0ab1403wy84ys3yn26fj78cazhpnslmh3nzzp1wxib3mr1afjvic";
   xcode_9_2 = requireXcode "9.2" "1bgfgdp266cbbqf2axcflz92frzvhi0qw0jdkcw6r85kdpc8dj4c";
-}
+  xcode_9_4 = requireXcode "9.4" "6731381785075602a52489f7ea47ece8f6daf225007ba3ffae1fd59b1c0b5f01";
+  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if targetPlatform.useiOSPrebuilt then targetPlatform.xcodeVer else "8.2")}";
+})

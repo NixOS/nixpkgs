@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   name = "prosody-${version}";
 
   src = fetchurl {
-    url = "http://prosody.im/downloads/source/${name}.tar.gz";
+    url = "https://prosody.im/downloads/source/${name}.tar.gz";
     sha256 = "13knr7izscw0zx648b9582dx11aap4cq9bzfiqh5ykd7wwsz1dbm";
   };
 

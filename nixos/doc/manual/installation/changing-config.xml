@@ -66,7 +66,7 @@ $ ./result/bin/run-*-vm
   <literal>mutableUsers = false</literal>. Another way is to temporarily add
   the following to your configuration:
 <screen>
-<link linkend="opt-users.users._name__.initialHashedPassword">users.extraUsers.your-user.initialHashedPassword</link> = "test";
+<link linkend="opt-users.users._name__.initialHashedPassword">users.users.your-user.initialHashedPassword</link> = "test";
 </screen>
   <emphasis>Important:</emphasis> delete the $hostname.qcow2 file if you have
   started the virtual machine at least once without the right users, otherwise

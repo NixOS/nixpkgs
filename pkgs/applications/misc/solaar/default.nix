@@ -1,11 +1,13 @@
-{fetchurl, stdenv, gtk3, python34Packages, gobjectIntrospection}:
+{fetchFromGitHub, stdenv, gtk3, python34Packages, gobjectIntrospection}:
 python34Packages.buildPythonApplication rec {
-  name = "solaar-${version}";
-  version = "0.9.2";
+  name = "solaar-unstable-${version}";
+  version = "2018-02-02";
   namePrefix = "";
-  src = fetchurl {
-    sha256 = "0954grz2adggfzcj4df4mpr4d7qyl7w8rb4j2s0f9ymawl92i05j";
-    url = "https://github.com/pwr/Solaar/archive/${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "pwr";
+    repo = "Solaar";
+    rev = "59b7285fdfc875119f0c92cfd5f5909e8a8e578c";
+    sha256 = "0zy5vmjzdybnjf0mpp8rny11sc43gmm8172svsm9s51h7x0v83y3";
   };
 
   propagatedBuildInputs = [python34Packages.pygobject3 python34Packages.pyudev gobjectIntrospection gtk3];
@@ -35,6 +37,6 @@ python34Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     homepage = https://pwr.github.io/Solaar/;
     platforms = platforms.linux;
-    maintainers = [maintainers.spinus];
+    maintainers = [maintainers.spinus maintainers.ysndr];
   };
 }
