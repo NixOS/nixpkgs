@@ -7024,6 +7024,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  mono514 = callPackage ../development/compilers/mono/5.14.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
   mosml = callPackage ../development/compilers/mosml { };
