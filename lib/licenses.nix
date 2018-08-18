@@ -654,6 +654,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "wxWindows Library Licence, Version 3.1";
   };
 
+  xfig = {
+    fullName = "xfig";
+    url = "http://mcj.sourceforge.net/authors.html#xfig";
+  };
+
   zlib = spdx {
     spdxId = "Zlib";
     fullName = "zlib License";
