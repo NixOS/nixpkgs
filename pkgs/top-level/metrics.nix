@@ -49,6 +49,9 @@ runCommand "nixpkgs-metrics"
     run nix-env.qa nix-env -f ${nixpkgs} -qa
     run nix-env.qaDrv nix-env -f ${nixpkgs} -qa --drv-path --meta --xml
 
+    num=$(nix-env -f ${nixpkgs} -qa | wc -l)
+    echo "nix-env.qaCount $num" >> $out/nix-support/hydra-metrics
+
     export GC_INITIAL_HEAP_SIZE=128k
     run nix-env.qaAggressive nix-env -f ${nixpkgs} -qa
     run nix-env.qaDrvAggressive nix-env -f ${nixpkgs} -qa --drv-path --meta --xml
