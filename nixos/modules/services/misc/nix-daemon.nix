@@ -88,7 +88,7 @@ in
       };
 
       maxJobs = mkOption {
-        type = types.int;
+        type = types.either types.int (types.enum ["auto"]);
         default = 1;
         example = 64;
         description = ''
