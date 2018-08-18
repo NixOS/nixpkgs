@@ -67,7 +67,7 @@ let
               # jobs.gimp.x86_64-darwin
               jobs.emacs.x86_64-darwin
               # jobs.wireshark.x86_64-darwin
-              jobs.transmision-gtk.x86_64-darwin
+              jobs.transmission-gtk.x86_64-darwin
 
               # Tests
               jobs.tests.cc-wrapper.x86_64-darwin
