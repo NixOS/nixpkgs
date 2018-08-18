@@ -8496,7 +8496,7 @@ with pkgs;
   gn = callPackage ../development/tools/build-managers/gn { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
-      pythonPackages = python3Packages;
+    pythonPackages = python3Packages;
   };
 
   nexus = callPackage ../development/tools/repository-managers/nexus { };
@@ -12827,8 +12827,8 @@ with pkgs;
 
   rdf4store = callPackage ../servers/http/4store { };
 
-  apacheHttpd = pkgs.apacheHttpd_2_4;
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
+  apacheHttpd = pkgs.apacheHttpd_2_4;
 
   apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
     inherit apacheHttpd;
@@ -12852,8 +12852,8 @@ with pkgs;
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
   };
 
-  apacheHttpdPackages = apacheHttpdPackagesFor pkgs.apacheHttpd pkgs.apacheHttpdPackages;
   apacheHttpdPackages_2_4 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4;
+  apacheHttpdPackages = apacheHttpdPackages_2_4;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
 
