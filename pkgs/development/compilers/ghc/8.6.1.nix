@@ -85,7 +85,9 @@ stdenv.mkDerivation (rec {
     sha256 = "0b3nyjs4lsh67lfw7wh7r7kkf4g2xiypdxd77aycmwd3pdxj09yw";
   };
 
-  enableParallelBuilding = true;
+  # We cannot use concurrent GHC on aarch64, see:
+  # <https://ghc.haskell.org/trac/ghc/ticket/15449>
+  enableParallelBuilding = !(stdenv.isAarch64);
 
   outputs = [ "out" "doc" ];
 
