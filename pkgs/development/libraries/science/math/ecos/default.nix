@@ -11,12 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "11v958j66wq30gxpjpkgl7n3rvla845lygz8fl39pgf1vk9sdyc7";
   };
 
-  doCheck = true;
-
   buildPhase = ''
     make all shared
   '';
 
+  doCheck = true;
   checkPhase = ''
     make test
     ./runecos
@@ -32,6 +31,7 @@ stdenv.mkDerivation rec {
     description = "A lightweight conic solver for second-order cone programming";
     homepage = https://www.embotech.com/ECOS;
     license = licenses.gpl3;
+    platforms = platforms.all;
     maintainers = [ maintainers.bhipple ];
   };
 }
