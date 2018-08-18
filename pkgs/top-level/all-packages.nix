@@ -20559,6 +20559,8 @@ with pkgs;
 
   cliquer = callPackage ../development/libraries/science/math/cliquer { };
 
+  ecos = callPackage ../development/libraries/science/math/ecos { };
+
   flintqs = callPackage ../development/libraries/science/math/flintqs { };
 
   gurobi = callPackage ../applications/science/math/gurobi { };
