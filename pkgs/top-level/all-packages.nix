@@ -18045,6 +18045,8 @@ with pkgs;
     qt = qt4;
   };
 
+  qsstv = qt5.callPackage ../applications/misc/qsstv { };
+
   qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
 
   qstopmotion = libsForQt5.callPackage ../applications/video/qstopmotion { };
