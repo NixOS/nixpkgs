@@ -20858,6 +20858,10 @@ with pkgs;
 
   m4rie = callPackage ../development/libraries/science/math/m4rie { };
 
+  mkl = callPackage ../development/libraries/science/math/mkl {
+    inherit (llvmPackages) openmp;
+  };
+
   nasc = callPackage ../applications/science/math/nasc { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
