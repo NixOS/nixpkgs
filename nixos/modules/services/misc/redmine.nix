@@ -197,7 +197,7 @@ in
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${pkgs.redmine}/share/redmine";
-        ExecStart="${bundle} exec rails server webrick -e production -P ${cfg.stateDir}/redmine.pid --binding=0.0.0.0";
+        ExecStart="${bundle} exec rails server webrick -e production -P ${cfg.stateDir}/redmine.pid";
       };
 
     };
