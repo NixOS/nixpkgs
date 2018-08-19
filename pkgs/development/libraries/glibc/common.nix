@@ -158,7 +158,9 @@ stdenv.mkDerivation ({
   };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.
-  preConfigure = ''
+  preConfigure = (if hostPlatform != buildPlatform && hostPlatform.isPower && hostPlatform.isLittleEndian then ''
+    sed 's/-mfloat128/-mfloat128-type -mfloat128/g' -i sysdeps/powerpc/powerpc64le/configure
+  '' else "") + ''
     export PWD_P=$(type -tP pwd)
     for i in configure io/ftwtest-sh; do
         # Can't use substituteInPlace here because replace hasn't been

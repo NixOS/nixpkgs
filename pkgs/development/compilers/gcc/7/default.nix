@@ -54,7 +54,8 @@ let version = "7.3.0";
         url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
         sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
       })
-      ++ optional langFortran ../gfortran-driving.patch;
+      ++ optional langFortran ../gfortran-driving.patch
+      ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -260,7 +261,12 @@ stdenv.mkDerivation ({
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
     export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-  '';
+  '' + (if hostPlatform != targetPlatform && targetPlatform.isPower then ''
+    # the float128 detection in cross-gcc and glibc is a little busted. since glibc doesn't compile without float128 support, fix it.
+    sed 's/-mfloat128/-mfloat128-type -mfloat128/g' -i libgcc/configure
+    # this file also includes totally unneeded headers which are not available in cross-compilation. remove them.
+    sed -E 's/#include <(string|stdlib|ctype).h>//' -i libgcc/config/rs6000/float128-ifunc.c
+  '' else "");
 
   dontDisableStatic = true;
 
