@@ -8593,6 +8593,11 @@ with pkgs;
     gconf = pkgs.gnome2.GConf;
   };
 
+  nwjs-sdk = callPackage ../development/tools/nwjs {
+    gconf = pkgs.gnome2.GConf;
+    sdk = true;
+  };
+
   # only kept for nixui, see https://github.com/matejc/nixui/issues/27
   nwjs_0_12 = callPackage ../development/tools/node-webkit/nw12.nix {
     gconf = pkgs.gnome2.GConf;
