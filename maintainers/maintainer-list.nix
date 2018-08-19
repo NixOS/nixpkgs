@@ -3868,6 +3868,11 @@
     github = "swarren83";
     name = "Shawn Warren";
   };
+  swdunlop = {
+    email = "swdunlop@gmail.com";
+    github = "swdunlop";
+    name = "Scott W. Dunlop";
+  };
   swflint = {
     email = "swflint@flintfam.org";
     github = "swflint";
