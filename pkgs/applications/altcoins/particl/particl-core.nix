@@ -10,6 +10,7 @@
 , zeromq
 , zlib
 , unixtools
+, DiskArbitration ? null
 , qtbase ? null
 , qttools ? null
 , qrencode ? null
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
     ++ optionals withGui [ qtbase qttools qrencode protobuf hidapi ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
+    ++ optionals stdenv.isDarwin [ DiskArbitration ]
     ++ optionals withGui [
     "--with-gui=qt5"
     "--enable-usbdevice=yes"

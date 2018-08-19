@@ -90,5 +90,9 @@ rec {
   parity-ui = callPackage ./parity-ui { };
 
   particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; withGui = false; };
-  particl-qt = libsForQt5.callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; withGui = true; };
+  particl-qt = libsForQt5.callPackage ./particl/particl-core.nix {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration;
+    boost = boost165;
+    miniupnpc = miniupnpc_2;
+    withGui = true; };
 }
