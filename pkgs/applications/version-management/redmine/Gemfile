@@ -58,8 +58,11 @@ end
 # configuration file
 require 'erb'
 require 'yaml'
+
+# NixOS - manually added to ensure mysql and postgres will always be include
 gem "mysql2", "~> 0.4.6", :platforms => [:mri, :mingw, :x64_mingw]
 gem "pg", "~> 0.18.1", :platforms => [:mri, :mingw, :x64_mingw]
+
 database_file = File.join(File.dirname(__FILE__), "config/database.yml")
 if File.exist?(database_file)
   database_config = YAML::load(ERB.new(IO.read(database_file)).result)
@@ -88,6 +91,7 @@ else
   warn("Please configure your config/database.yml first")
 end
 
+# NixOS - manually removed because I couldn't figure out how to get "bundle exec rails server webrick -e production" to ignore these groups
 #group :development do
 #  gem "rdoc", "~> 4.3"
 #  gem "yard"
