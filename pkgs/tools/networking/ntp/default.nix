@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://www.ntp.org/;
     description = "An implementation of the Network Time Protocol";
+    license = {
+      # very close to isc and bsd2
+      url = https://www.eecis.udel.edu/~mills/ntp/html/copyright.html;
+    };
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;
   };

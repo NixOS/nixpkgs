@@ -12,7 +12,8 @@ stdenv.mkDerivation {
     substituteInPlace Makefile.in --replace /usr "$out"
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }
