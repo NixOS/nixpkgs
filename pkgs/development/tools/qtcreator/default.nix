@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake makeWrapper ];
 
-  patches = optional (stdenv.isAarch64 || stdenv.isAarch32) ./0001-Fix-Allow-qt-creator-to-build-on-arm-aarch32-and-aar.patch;
+  patches = optional stdenv.hostPlatform.isArm ./0001-Fix-Allow-qt-creator-to-build-on-arm-aarch32-and-aar.patch;
 
   doCheck = true;
 
