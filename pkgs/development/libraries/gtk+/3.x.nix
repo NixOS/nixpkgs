@@ -38,10 +38,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libxkbcommon epoxy json-glib ]
-    ++ optionals stdenv.isDarwin [ AppKit Cocoa ];
+    ++ optional stdenv.isDarwin AppKit;
   propagatedBuildInputs = with xorg; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at-spi2-atk gnome3.gsettings-desktop-schemas
       libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
+    ++ optional stdenv.isDarwin Cocoa  # explicitly propagated, always needed
     ++ optionals waylandSupport [ mesa_noglu wayland wayland-protocols ]
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
