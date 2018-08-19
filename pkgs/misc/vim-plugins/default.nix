@@ -192,11 +192,11 @@ self = rec {
   };
 
   vim-nix = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-nix-2018-07-01";
+    name = "vim-nix-2018-08-19";
     src = fetchgit {
       url = "https://github.com/LnL7/vim-nix";
-      rev = "7d71026ba7c2d0a4bdb915e884c4ac8dbdc45bf0";
-      sha256 = "084vs1p0qpkc4cx049v3mkyylj1n1yvd45i1sc9qafgp4x5va457";
+      rev = "ab3c4d52d08e9e8d2a0919e38f98ba25a2b8ad18";
+      sha256 = "1waan5vgba8qx3107hdrnmbnq5kr1n49q43p7m2g7wmj81v050yb";
     };
     dependencies = [];
 
