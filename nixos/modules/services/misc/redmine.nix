@@ -5,100 +5,120 @@ with lib;
 let
   cfg = config.services.redmine;
 
-  databaseYml = ''
+  bundle = "${pkgs.redmine}/share/redmine/bin/bundle";
+
+  databaseYml = pkgs.writeText "database.yml" ''
     production:
-      adapter: mysql2 # postgresql
-      database: ${cfg.databaseName}
-      host: ${cfg.databaseHost}
-      password: ${cfg.databasePassword}
-      username: ${cfg.databaseUsername}
-      encoding: utf8
+      adapter: ${cfg.database.type}
+      database: ${cfg.database.name}
+      host: ${cfg.database.host}
+      port: ${toString cfg.database.port}
+      username: ${cfg.database.user}
+      password: #dbpass#
   '';
 
-  configurationYml = ''
+  configurationYml = pkgs.writeText "configuration.yml" ''
     default:
-      # Absolute path to the directory where attachments are stored.
-      # The default is the 'files' directory in your Redmine instance.
-      # Your Redmine instance needs to have write permission on this
-      # directory.
-      # Examples:
-      # attachments_storage_path: /var/redmine/files
-      # attachments_storage_path: D:/redmine/files
-      attachments_storage_path: ${cfg.stateDir}/files
+      scm_subversion_command: ${pkgs.subversion}/bin/svn
+      scm_mercurial_command: ${pkgs.mercurial}/bin/hg
+      scm_git_command: ${pkgs.gitAndTools.git}/bin/git
+      scm_cvs_command: ${pkgs.cvs}/bin/cvs
+      scm_bazaar_command: ${pkgs.bazaar}/bin/bzr
+      scm_darcs_command: ${pkgs.darcs}/bin/darcs
 
-      # Absolute path to the SCM commands errors (stderr) log file.
-      # The default is to log in the 'log' directory of your Redmine instance.
-      # Example:
-      # scm_stderr_log_file: /var/log/redmine_scm_stderr.log
-      scm_stderr_log_file: ${cfg.stateDir}/log/redmine_scm_stderr.log
-
-      ${cfg.extraConfig}
+    ${cfg.extraConfig}
   '';
 
-in {
+in
 
+{
   options = {
     services.redmine = {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Enable the redmine service.
-        '';
+        description = "Enable the Redmine service.";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "redmine";
+        description = "User under which Redmine is ran.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "redmine";
+        description = "Group under which Redmine is ran.";
       };
 
       stateDir = mkOption {
         type = types.str;
         default = "/var/lib/redmine";
-        description = "The state directory, logs and plugins are stored here";
+        description = "The state directory, logs and plugins are stored here.";
       };
 
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra configuration in configuration.yml";
+        description = ''
+          Extra configuration in configuration.yml.
+
+          See https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+        '';
       };
 
-      themes = mkOption {
-        type = types.attrsOf types.path;
-        default = {};
-        description = "Set of themes";
-      };
+      database = {
+        type = mkOption {
+          type = types.enum [ "mysql2" "postgresql" ];
+          example = "postgresql";
+          default = "mysql2";
+          description = "Database engine to use.";
+        };
 
-      plugins = mkOption {
-        type = types.attrsOf types.path;
-        default = {};
-        description = "Set of plugins";
-      };
+        host = mkOption {
+          type = types.str;
+          default = "127.0.0.1";
+          description = "Database host address.";
+        };
 
-      #databaseType = mkOption {
-      #  type = types.str;
-      #  default = "postgresql";
-      #  description = "Type of database";
-      #};
+        port = mkOption {
+          type = types.int;
+          default = 3306;
+          description = "Database host port.";
+        };
 
-      databaseHost = mkOption {
-        type = types.str;
-        default = "127.0.0.1";
-        description = "Database hostname";
-      };
+        name = mkOption {
+          type = types.str;
+          default = "redmine";
+          description = "Database name.";
+        };
 
-      databasePassword = mkOption {
-        type = types.str;
-        default = "";
-        description = "Database user password";
-      };
+        user = mkOption {
+          type = types.str;
+          default = "redmine";
+          description = "Database user.";
+        };
 
-      databaseName = mkOption {
-        type = types.str;
-        default = "redmine";
-        description = "Database name";
-      };
+        password = mkOption {
+          type = types.str;
+          default = "";
+          description = ''
+            The password corresponding to <option>database.user</option>.
+            Warning: this is stored in cleartext in the Nix store!
+            Use <option>database.passwordFile</option> instead.
+          '';
+        };
 
-      databaseUsername = mkOption {
-        type = types.str;
-        default = "redmine";
-        description = "Database user";
+        passwordFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/run/keys/redmine-dbpassword";
+          description = ''
+            A file containing the password corresponding to
+            <option>database.user</option>.
+          '';
+        };
       };
     };
   };
@@ -106,82 +126,105 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.databasePassword != "";
-        message = "services.redmine.databasePassword must be set";
+      { assertion = cfg.database.passwordFile != null || cfg.database.password != "";
+        message = "either services.redmine.database.passwordFile or services.redmine.database.password must be set";
       }
     ];
 
-    users.users = [
-      { name = "redmine";
-        group = "redmine";
-        uid = config.ids.uids.redmine;
-      } ];
-
-    users.groups = [
-      { name = "redmine";
-        gid = config.ids.gids.redmine;
-      } ];
+    environment.systemPackages = [ pkgs.redmine ];
 
     systemd.services.redmine = {
-      after = [ "network.target" "mysql.service" ]; # postgresql.service
+      after = [ "network.target" (if cfg.database.type == "mysql2" then "mysql.service" else "postgresql.service") ];
       wantedBy = [ "multi-user.target" ];
+      environment.HOME = "${pkgs.redmine}/share/redmine";
       environment.RAILS_ENV = "production";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
-      environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
-      environment.HOME = "${pkgs.redmine}/share/redmine";
       environment.REDMINE_LANG = "en";
+      environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       path = with pkgs; [
         imagemagickBig
-        subversion
-        mercurial
-        cvs
-        # config.services.postgresql.package
-        libmysql
         bazaar
-        gitAndTools.git
+        cvs
         darcs
+        gitAndTools.git
+        mercurial
+        subversion
       ];
       preStart = ''
+        # start with a fresh config directory every time
         rm -rf ${cfg.stateDir}/config
+        cp -r ${pkgs.redmine}/share/redmine/config.dist ${cfg.stateDir}/config
 
-        mkdir -p ${cfg.stateDir}/cache
-        mkdir -p ${cfg.stateDir}/config
-        mkdir -p ${cfg.stateDir}/files
-        mkdir -p ${cfg.stateDir}/log
-        mkdir -p ${cfg.stateDir}/plugins
-        mkdir -p ${cfg.stateDir}/tmp
-
+        # create the basic state directory layout pkgs.redmine expects
         mkdir -p /run/redmine
-        ln -fs ${cfg.stateDir}/files /run/redmine/files
-        ln -fs ${cfg.stateDir}/log /run/redmine/log
-        ln -fs ${cfg.stateDir}/plugins /run/redmine/plugins
-        ln -fs ${cfg.stateDir}/tmp /run/redmine/tmp
 
-        cp -r ${pkgs.redmine}/share/redmine/config.dist/* ${cfg.stateDir}/config/
-        ln -fs ${cfg.stateDir}/config /run/redmine/config
+        for i in config files log plugins tmp; do
+          mkdir -p ${cfg.stateDir}/$i
+          ln -fs ${cfg.stateDir}/$i /run/redmine/$i
+        done
 
-        ln -fs ${pkgs.writeText "configuration.yml" configurationYml} ${cfg.stateDir}/config/configuration.yml
-        ln -fs ${pkgs.writeText "database.yml" databaseYml} ${cfg.stateDir}/config/database.yml
+        # ensure cache directory exists for db:migrate command
+        mkdir -p ${cfg.stateDir}/cache
 
-        chown -R redmine:redmine ${cfg.stateDir}
+        # link in the application configuration
+        ln -fs ${configurationYml} ${cfg.stateDir}/config/configuration.yml
+
         chmod -R ug+rwX,o-rwx+x ${cfg.stateDir}/
 
-        ${pkgs.redmine}/share/redmine/bin/bundle exec rake generate_secret_token
-        ${pkgs.redmine}/share/redmine/bin/bundle exec rake db:migrate
-        ${pkgs.redmine}/share/redmine/bin/bundle exec rake redmine:load_default_data
+        # handle database.passwordFile
+        DBPASS=$(head -n1 ${cfg.database.passwordFile})
+        cp -f ${databaseYml} ${cfg.stateDir}/config/database.yml
+        sed -e "s,#dbpass#,$DBPASS,g" -i ${cfg.stateDir}/config/database.yml
+        chmod 440 ${cfg.stateDir}/config/database.yml
+
+        # generate a secret token if required
+        if ! test -e "${cfg.stateDir}/config/initializers/secret_token.rb"; then
+          ${bundle} exec rake generate_secret_token
+          chmod 440 ${cfg.stateDir}/config/initializers/secret_token.rb
+        fi
+
+        # ensure everything is owned by ${cfg.user}
+        chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
+
+        ${bundle} exec rake db:migrate
+        ${bundle} exec rake redmine:load_default_data
       '';
 
       serviceConfig = {
         PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
-        User = "redmine";
-        Group = "redmine";
+        User = cfg.user;
+        Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${pkgs.redmine}/share/redmine";
-        ExecStart="${pkgs.redmine}/share/redmine/bin/bundle exec rails server webrick -e production -P ${cfg.stateDir}/redmine.pid --binding=0.0.0.0";
+        ExecStart="${bundle} exec rails server webrick -e production -P ${cfg.stateDir}/redmine.pid --binding=0.0.0.0";
       };
 
     };
+
+    users.extraUsers = optionalAttrs (cfg.user == "redmine") (singleton
+      { name = "redmine";
+        group = cfg.group;
+        home = cfg.stateDir;
+        createHome = true;
+        uid = config.ids.uids.redmine;
+      });
+
+    users.extraGroups = optionalAttrs (cfg.group == "redmine") (singleton
+      { name = "redmine";
+        gid = config.ids.gids.redmine;
+      });
+
+    warnings = optional (cfg.database.password != "")
+      ''config.services.redmine.database.password will be stored as plaintext
+      in the Nix store. Use database.passwordFile instead.'';
+
+    # Create database passwordFile default when password is configured.
+    services.redmine.database.passwordFile =
+      (mkDefault (toString (pkgs.writeTextFile {
+        name = "redmine-database-password";
+        text = cfg.database.password;
+      })));
 
   };
 

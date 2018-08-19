@@ -1,4 +1,3 @@
-
 { stdenv, fetchurl, bundlerEnv, ruby }:
 
 let
@@ -28,9 +27,9 @@ in
       mkdir -p $out/share
       cp -r . $out/share/redmine
 
-      for i in config files log plugins tmp; do # TODO: add 'public' to this list?
+      for i in config files log plugins tmp; do
         rm -rf $out/share/redmine/$i
-        ln -sf /run/redmine/$i $out/share/redmine/
+        ln -fs /run/redmine/$i $out/share/redmine/
       done
     '';
 
