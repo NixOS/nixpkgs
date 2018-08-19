@@ -14678,6 +14678,8 @@ with pkgs;
 
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
 
+  aileron = callPackage ../data/fonts/aileron { };
+
   andagii = callPackage ../data/fonts/andagii { };
 
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
