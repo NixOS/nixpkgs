@@ -1029,6 +1029,17 @@ self = rec {
 
   };
 
+  vim-lastplace = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-lastplace-2017-06-13";
+    src = fetchgit {
+      url = "https://github.com/farmergreg/vim-lastplace";
+      rev = "102b68348eff0d639ce88c5094dab0fdbe4f7c55";
+      sha256 = "1d0mjjyissjvl80wgmn7z1gsjs3fhk0vnmx84l9q7g04ql4l9pja";
+    };
+    dependencies = [];
+
+  };
+
   vim-go = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-go-2018-07-22";
     src = fetchgit {
