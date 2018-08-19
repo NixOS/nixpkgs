@@ -150,7 +150,7 @@ in
 
   config = mkIf (ldmcfg.enable && cfg.enable) {
 
-    services.xserver.displayManager.lightdm.greeter = mkDefault {
+    services.xserver.displayManager.lightdm.greeter = mkOptionDefault {
       package = wrappedGtkGreeter;
       name = "lightdm-gtk-greeter";
     };

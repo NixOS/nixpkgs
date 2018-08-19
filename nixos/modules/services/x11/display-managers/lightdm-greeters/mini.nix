@@ -87,8 +87,6 @@ in
 
   config = mkIf (ldmcfg.enable && cfg.enable) {
 
-    services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
-
     services.xserver.displayManager.lightdm.greeter = mkDefault {
       package = xgreeters;
       name = "lightdm-mini-greeter";
