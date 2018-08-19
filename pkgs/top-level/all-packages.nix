@@ -1795,6 +1795,8 @@ with pkgs;
 
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
+  codimd = callPackage ../servers/web-apps/codimd { };
+
   colord = callPackage ../tools/misc/colord { };
 
   colord-gtk = callPackage ../tools/misc/colord-gtk { };
