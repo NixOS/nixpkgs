@@ -14794,6 +14794,8 @@ with pkgs;
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
 
+  ferrum = callPackage ../data/fonts/ferrum { };
+
   fixedsys-excelsior = callPackage ../data/fonts/fixedsys-excelsior { };
 
   graphs = callPackage ../data/misc/graphs { };
