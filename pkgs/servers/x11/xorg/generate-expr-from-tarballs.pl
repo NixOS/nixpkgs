@@ -232,22 +232,17 @@ print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol
+, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol, lib, newScope
 , dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
 , autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
 
 let
 
-  mkDerivation = name: attrs:
-    let newAttrs = (overrides."\${name}" or (x: x)) attrs;
-        stdenv = newAttrs.stdenv or args.stdenv;
-      in stdenv.mkDerivation ((removeAttrs newAttrs [ "stdenv" ]) // {
-        hardeningDisable = [ "bindnow" "relro" ];
-      });
+  overrides = import ./overrides.nix {inherit args;};
 
-  overrides = import ./overrides.nix {inherit args xorg;};
+  xorg = lib.makeScope newScope xorgPackages;
 
-  xorg = rec {
+  xorgPackages = self: with self; {
 
   inherit pixman;
 
@@ -258,13 +253,13 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     print "$pkg\n";
 
     my %requires = ();
-    my $inputs = "";
+    my @buildInputs;
     foreach my $req (sort @{$pkgRequires{$pkg}}) {
         if (defined $pcMap{$req}) {
             # Some packages have .pc that depends on itself.
             next if $pcMap{$req} eq $pkg;
             if (!defined $requires{$pcMap{$req}}) {
-                $inputs .= "$pcMap{$req} ";
+                push @buildInputs, $pcMap{$req};
                 $requires{$pcMap{$req}} = 1;
             }
         } else {
@@ -272,25 +267,32 @@ foreach my $pkg (sort (keys %pkgURLs)) {
         }
     }
 
+    my $buildInputsStr = join "", map { $_ . " " } @buildInputs;
+
+    my @arguments = @buildInputs;
+    unshift @arguments, "stdenv";
+    my $argumentsStr = join ", ", @arguments;
+
     my $extraAttrs = $extraAttrs{"$pkg"};
     $extraAttrs = "" unless defined $extraAttrs;
 
     print OUT <<EOF
-  $pkg = (mkDerivation "$pkg" {
+  $pkg = callPackage ({ $argumentsStr }: stdenv.mkDerivation {
     name = "$pkgNames{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
       url = $pkgURLs{$pkg};
       sha256 = "$pkgHashes{$pkg}";
     };
+    hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ $inputs];$extraAttrs
+    buildInputs = [ $buildInputsStr];$extraAttrs
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit $inputs;};
+  }) {};
 
 EOF
 }
 
-print OUT "}; in xorg\n";
+print OUT "}; in xorg.overrideScope overrides\n";
 
 close OUT;
