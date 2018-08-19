@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
     sha256 = "1pcib3vz1sdqlk0n561wbf7fwq44jm5cpx710w4vqljxgrjd7q1s";
   };
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace DoConfig --replace g++ c++
-  '';
-
   buildInputs = [
     gmp
   ];
@@ -52,6 +48,7 @@ stdenv.mkDerivation rec {
       else
         "generic" # "chooses options that should be OK for most platforms"
     }"
+    "CXX=c++"
   ] ++ lib.optionals withGf2x [
     "NTL_GF2X_LIB=on"
     "GF2X_PREFIX=${gf2x}"
