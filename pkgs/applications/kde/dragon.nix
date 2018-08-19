@@ -12,7 +12,7 @@ mkDerivation {
   meta = {
     license = with lib.licenses; [ gpl2 fdl12 ];
     description = "A simple media player for KDE";
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ lib.maintainers.jonathanreeve ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
