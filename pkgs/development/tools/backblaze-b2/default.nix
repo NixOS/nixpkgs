@@ -22,7 +22,7 @@ buildPythonApplication rec {
   postInstall = ''
     mv "$out/bin/b2" "$out/bin/backblaze-b2"
 
-    sed 's/^have b2 \&\&$/have backblaze-b2 \&\&/'   -i contrib/bash_completion/b2
+    sed 's/^have b2 \&\&$/_have backblaze-b2 \&\&/'  -i contrib/bash_completion/b2
     sed 's/^\(complete -F _b2\) b2/\1 backblaze-b2/' -i contrib/bash_completion/b2
 
     mkdir -p "$out/etc/bash_completion.d"
