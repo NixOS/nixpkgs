@@ -1,7 +1,7 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
-, writeText, lib, config, glib, gtk2, gtk3, python, perl, tcl, ruby
+{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
+, writeText, config, glib, gtk2, gtk3, lua, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 , vimPlugins
@@ -28,7 +28,8 @@ args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, ge
 # allow this to be disabled by setting config.vim.darwin to false
 , darwinSupport     ? stdenv.isDarwin && (config.vim.darwin or true) # Enable Darwin support
 , ftNixSupport      ? config.vim.ftNix or true      # Add .nix filetype detection and minimal syntax highlighting support
-, ... }: with args;
+, ...
+}:
 
 
 let
@@ -100,7 +101,7 @@ in stdenv.mkDerivation rec {
     "--disable-gtktest"
   ]
   ++ stdenv.lib.optionals luaSupport [
-    "--with-lua-prefix=${args.lua}"
+    "--with-lua-prefix=${lua}"
     "--enable-luainterp"
   ]
   ++ stdenv.lib.optionals pythonSupport [
@@ -148,7 +149,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
-      "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
+      "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
       "$out"/bin/{vim,gvim}
 
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
