@@ -8501,6 +8501,8 @@ with pkgs;
 
   pup = callPackage ../development/tools/pup { };
 
+  puppet-lint = callPackage ../development/tools/puppet/puppet-lint { };
+
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
   qtcreator = libsForQt5.callPackage ../development/tools/qtcreator { };
