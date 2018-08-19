@@ -1,14 +1,14 @@
 { stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
 
 let
-  version = "17.4.1.054.0712";
+  version = "18.2.0.183.1748";
 
   desktopItem = makeDesktopItem {
     name = "sqldeveloper";
     exec = "sqldeveloper";
     icon = "sqldeveloper";
-    desktopName = "Oracle SQL Developer";
-    genericName = "Oracle SQL Developer";
+    desktopName = "Oracle SQL Developer 18";
+    genericName = "Oracle SQL Developer 18";
     comment = "Oracle's Oracle DB GUI client";
     categories = "Application;Development;";
   };
@@ -46,7 +46,7 @@ in
 
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
-    sha256 = "7e92ca94d02489002db291c96f1d67f9b2501a8967ff3457103fcf60c1eb154a";
+    sha256 = "0clz2w4ghqczy9sz6j4qqygk20whdwkca192pd3v0dw09875as0k";
   };
 
   buildInputs = [ makeWrapper unzip ];
@@ -78,7 +78,7 @@ in
     '';
     homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/;
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ ardumont flokli ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ ardumont flokli ma27 ];
   };
 }
