@@ -6,7 +6,9 @@ let
   cfg = config.services.nextcloud;
 
   phpOptionsExtensions = ''
-    extension = ${pkgs.php71Packages.apcu}/lib/php/extensions/apcu.so
+    ${optionalString cfg.caching.apcu "extension=${pkgs.php71Packages.apcu}/lib/php/extensions/apcu.so"}
+    ${optionalString cfg.caching.redis "extension=${pkgs.php71Packages.redis}/lib/php/extensions/redis.so"}
+    ${optionalString cfg.caching.memcached "extension=${pkgs.php71Packages.memcached}/lib/php/extensions/memcached.so"}
     zend_extension = opcache.so
     opcache.enable = 1
   '';
@@ -65,6 +67,15 @@ in {
     };
 
     nginx.enable = mkEnableOption "nginx vhost management";
+
+    webfinger = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable this option if you plan on using the webfinger plugin.
+        The appropriate nginx rewrite rules will be added to your configuration.
+      '';
+    };
 
     phpOptions = mkOption {
       type = types.attrsOf types.str;
@@ -130,6 +141,34 @@ in {
         description = "Admin Password";
       };
     };
+
+    caching = {
+      apcu = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to load the APCu module into PHP.
+        '';
+      };
+      redis = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to load the Redis module into PHP.
+          You still need to enable Redis in your config.php.
+          See https://docs.nextcloud.com/server/13/admin_manual/configuration_server/caching_configuration.html
+        '';
+      };
+      memcached = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to load the Memcached module into PHP.
+          You still need to enable Memcached in your config.php.
+          See https://docs.nextcloud.com/server/13/admin_manual/configuration_server/caching_configuration.html
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [
@@ -152,7 +191,8 @@ in {
               ],
               'datadirectory' => '${cfg.home}/data',
               'skeletondirectory' => '${cfg.skeletonDirectory}',
-              'memcache.local' => '\OC\Memcache\APCu',
+              ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
+              'log_type' => 'syslog',
             ];
           '';
           autoConfig = pkgs.writeText "nextcloud-autoconfig.php" (let acfg = cfg.autoconfig; in ''
@@ -317,6 +357,11 @@ in {
               gzip_min_length 256;
               gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
               gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
+
+              ${optionalString cfg.webfinger ''
+                rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+                rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
+              ''}
             '';
           };
         };
