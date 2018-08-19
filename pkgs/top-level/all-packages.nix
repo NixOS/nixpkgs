@@ -15144,6 +15144,8 @@ with pkgs;
 
   vdrsymbols = callPackage ../data/fonts/vdrsymbols { };
 
+  vegur = callPackage ../data/fonts/vegur { };
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
