@@ -273,6 +273,7 @@ let
     igraph = [ pkgs.gmp pkgs.libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
+    jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
     libamtrack = [ pkgs.gsl_1 ];
@@ -413,6 +414,7 @@ let
     geoCount = [ pkgs.pkgconfig ];
     gdtools = [ pkgs.pkgconfig ];
     JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
+    jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkgconfig ];
     magick = [ pkgs.pkgconfig ];
     mwaved = [ pkgs.pkgconfig ];
@@ -774,6 +776,12 @@ let
       preConfigure = ''
         patchShebangs configure
       '';
+    });
+
+    jqr = old.jqr.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
     });
 
     pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
