@@ -233,6 +233,7 @@
   ./services/desktops/dleyna-server.nix
   ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
+  ./services/desktops/gsignond.nix
   ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
