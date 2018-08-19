@@ -9968,6 +9968,8 @@ with pkgs;
 
   lmdb = callPackage ../development/libraries/lmdb { };
 
+  lmdbxx = callPackage ../development/libraries/lmdbxx { };
+
   levmar = callPackage ../development/libraries/levmar { };
 
   leptonica = callPackage ../development/libraries/leptonica { };
