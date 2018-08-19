@@ -148,14 +148,19 @@ in
 
   };
 
-  config = mkIf (ldmcfg.enable && cfg.enable) {
+  config = mkMerge [
+    (mkIf (ldmcfg.enable && cfg.enable) {
 
-    services.xserver.displayManager.lightdm.greeter = mkOptionDefault {
-      package = wrappedGtkGreeter;
-      name = "lightdm-gtk-greeter";
-    };
+      services.xserver.displayManager.lightdm.greeter = mkOptionDefault {
+        package = wrappedGtkGreeter;
+        name = "lightdm-gtk-greeter";
+      };
 
-    environment.etc."lightdm/lightdm-gtk-greeter.conf".source = gtkGreeterConf;
+    })
+    (mkIf (ldmcfg.enable && cfg.enable && ldmcfg.greeter.name == "lightdm-gtk-greeter") {
 
-  };
+      environment.etc."lightdm/lightdm-gtk-greeter.conf".source = gtkGreeterConf;
+
+    })
+  ];
 }
