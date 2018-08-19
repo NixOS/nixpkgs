@@ -12901,6 +12901,8 @@ with pkgs;
 
   glabels = callPackage ../applications/graphics/glabels { };
 
+  gnatsd = callPackage ../servers/gnatsd { };
+
   gofish = callPackage ../servers/gopher/gofish { };
 
   grafana = callPackage ../servers/monitoring/grafana { };
