@@ -5432,6 +5432,8 @@ with pkgs;
 
   termplay = callPackage ../tools/misc/termplay { };
 
+  testdisk-photorec = callPackage ../tools/system/testdisk-photorec { };
+
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = if stdenv.isDarwin
