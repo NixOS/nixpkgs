@@ -24,9 +24,7 @@
 , cscopeSupport     ? config.vim.cscope or true     # Enable cscope interface
 , netbeansSupport   ? config.netbeans or true       # Enable NetBeans integration support.
 , ximSupport        ? config.vim.xim or true        # less than 15KB, needed for deadkeys
-# By default, compile with darwin support if we're compiling on darwin, but
-# allow this to be disabled by setting config.vim.darwin to false
-, darwinSupport     ? stdenv.isDarwin && (config.vim.darwin or true) # Enable Darwin support
+, darwinSupport     ? config.vim.darwin or false    # Enable Darwin support
 , ftNixSupport      ? config.vim.ftNix or true      # Add .nix filetype detection and minimal syntax highlighting support
 , ...
 }:
@@ -100,6 +98,8 @@ in stdenv.mkDerivation rec {
     "--disable-carbon_check"
     "--disable-gtktest"
   ]
+  ++ stdenv.lib.optional stdenv.isDarwin
+     (if darwinSupport then "--enable-darwin" else "--disable-darwin")
   ++ stdenv.lib.optionals luaSupport [
     "--with-lua-prefix=${lua}"
     "--enable-luainterp"
@@ -143,9 +143,6 @@ in stdenv.mkDerivation rec {
       cp ${vimPlugins.vim-nix.src}/indent/nix.vim runtime/indent/nix.vim
       cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
     '';
-
-  NIX_LDFLAGS = stdenv.lib.optionalString (darwinSupport && stdenv.isDarwin)
-    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
 
   postInstall = ''
   '' + stdenv.lib.optionalString stdenv.isLinux ''
