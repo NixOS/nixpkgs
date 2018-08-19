@@ -12,7 +12,8 @@
 , pciutils
 , systemd
 , enableProprietaryCodecs ? true
-, gn, darwin, openbsm
+, gn, darwin, openbsm, cups
+, xcbuild
 , lib, stdenv # lib.optional, needsPax
 }:
 
@@ -25,7 +26,8 @@ qtModule {
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
     bison coreutils flex git gperf ninja pkgconfig python2 which gn
-  ];
+  ] ++ optional stdenv.isDarwin xcbuild;
+  dontUseXcbuild = true;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
 
@@ -68,7 +70,28 @@ qtModule {
     + optionalString stdenv.isDarwin ''
       # Remove annoying xcode check
       substituteInPlace mkspecs/features/platform.prf \
-        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false
+        --replace "lessThan(QMAKE_XCODE_VERSION, 7.3)" false \
+        --replace "/usr/bin/xcodebuild" "xcodebuild"
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/seatbelt.cc \
+        --replace "<sandbox.h>" '"${darwin.apple_sdk.sdk}/include/sandbox.h"'
+      substituteInPlace src/3rdparty/chromium/build/mac_toolchain.py \
+        --replace "/usr/bin/xcode-select" "xcode-select"
+
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/xpc_message_server.cc \
+        --replace "audit_token_to_pid(token)" "(token.val[5])"
+      substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
+        --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "(msg.trailer.msgh_audit.val[5])"
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/bootstrap_sandbox.cc \
+        --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "(msg.trailer.msgh_audit.val[5])"
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/mach_message_server.cc \
+        --replace "audit_token_to_pid(trailer->msgh_audit)" "(trailer->msgh_audit.val[5])"
+      substituteInPlace src/3rdparty/chromium/sandbox/mac/mach_message_server.cc \
+        --replace "audit_token_to_pid(token)" "(token.val[5])"
+      substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
+        --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "(audit_trailer->msgh_audit.val[5])"
+
+
+
       substituteInPlace src/core/config/mac_osx.pri \
         --replace /usr ${stdenv.cc} \
         --replace "isEmpty(QMAKE_MAC_SDK_VERSION)" false
@@ -99,15 +122,12 @@ print('sdk_version="10.10"')
 print('sdk_platform_path=""')
 print('sdk_build="17B41"')
 EOF
-
-    # Apple has some secret stuff they don't share with OpenBSM
-    substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
-      --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-    substituteInPlace src/3rdparty/chromium/sandbox/mac/bootstrap_sandbox.cc \
-      --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
     '';
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+    "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10"
+    "-DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10"
+  ];
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -169,6 +189,7 @@ EOF
 
     openbsm
     libunwind
+    cups
   ]);
 
   dontUseNinjaBuild = true;
@@ -180,6 +201,12 @@ EOF
     Prefix = ..
     EOF
     paxmark m $out/libexec/QtWebEngineProcess
+  '' + ''
+    # Sometimes the darwin build succeeds, even though nothing was actually built
+    if [ ! -f "$out/lib/libQt5WebEngine${stdenv.hostPlatform.extensions.sharedLibrary}" ]; then
+      echo "Build did not produce expected output libQt5WebEngine.{so,dylib,..}"
+      exit 1;
+    fi
   '';
 
   meta = with lib; {
