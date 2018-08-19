@@ -1,17 +1,13 @@
 { config, lib, pkgs, ... }:
 
-# TODO: support non-postgresql
-
 with lib;
 
 let
   cfg = config.services.redmine;
 
-  ruby = pkgs.ruby;
-
   databaseYml = ''
     production:
-      adapter: postgresql
+      adapter: mysql2 # postgresql
       database: ${cfg.databaseName}
       host: ${cfg.databaseHost}
       password: ${cfg.databasePassword}
@@ -34,23 +30,10 @@ let
       # The default is to log in the 'log' directory of your Redmine instance.
       # Example:
       # scm_stderr_log_file: /var/log/redmine_scm_stderr.log
-      scm_stderr_log_file: ${cfg.stateDir}/redmine_scm_stderr.log
+      scm_stderr_log_file: ${cfg.stateDir}/log/redmine_scm_stderr.log
 
       ${cfg.extraConfig}
   '';
-
-  unpackTheme = unpack "theme";
-  unpackPlugin = unpack "plugin";
-  unpack = id: (name: source:
-    pkgs.stdenv.mkDerivation {
-      name = "redmine-${id}-${name}";
-      buildInputs = [ pkgs.unzip ];
-      buildCommand = ''
-        mkdir -p $out
-        cd $out
-        unpackFile ${source}
-      '';
-    });
 
 in {
 
@@ -66,7 +49,7 @@ in {
 
       stateDir = mkOption {
         type = types.str;
-        default = "/var/redmine";
+        default = "/var/lib/redmine";
         description = "The state directory, logs and plugins are stored here";
       };
 
@@ -140,68 +123,52 @@ in {
       } ];
 
     systemd.services.redmine = {
-      after = [ "network.target" "postgresql.service" ];
+      after = [ "network.target" "mysql.service" ]; # postgresql.service
       wantedBy = [ "multi-user.target" ];
       environment.RAILS_ENV = "production";
-      environment.RAILS_ETC = "${cfg.stateDir}/config";
-      environment.RAILS_LOG = "${cfg.stateDir}/log";
-      environment.RAILS_VAR = "${cfg.stateDir}/var";
       environment.RAILS_CACHE = "${cfg.stateDir}/cache";
-      environment.RAILS_PLUGINS = "${cfg.stateDir}/plugins";
-      environment.RAILS_PUBLIC = "${cfg.stateDir}/public";
-      environment.RAILS_TMP = "${cfg.stateDir}/tmp";
       environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       environment.HOME = "${pkgs.redmine}/share/redmine";
       environment.REDMINE_LANG = "en";
-      environment.GEM_HOME = "${pkgs.redmine}/share/redmine/vendor/bundle/ruby/1.9.1";
-      environment.GEM_PATH = "${pkgs.bundler}/${pkgs.bundler.ruby.gemPath}";
       path = with pkgs; [
         imagemagickBig
         subversion
         mercurial
         cvs
-        config.services.postgresql.package
+        # config.services.postgresql.package
+        libmysql
         bazaar
         gitAndTools.git
-        # once we build binaries for darc enable it
-        #darcs
+        darcs
       ];
       preStart = ''
-        # TODO: use env vars
-        for i in plugins public/plugin_assets db files log config cache var/files tmp; do
-          mkdir -p ${cfg.stateDir}/$i
-        done
+        rm -rf ${cfg.stateDir}/config
+
+        mkdir -p ${cfg.stateDir}/cache
+        mkdir -p ${cfg.stateDir}/config
+        mkdir -p ${cfg.stateDir}/files
+        mkdir -p ${cfg.stateDir}/log
+        mkdir -p ${cfg.stateDir}/plugins
+        mkdir -p ${cfg.stateDir}/tmp
+
+        mkdir -p /run/redmine
+        ln -fs ${cfg.stateDir}/files /run/redmine/files
+        ln -fs ${cfg.stateDir}/log /run/redmine/log
+        ln -fs ${cfg.stateDir}/plugins /run/redmine/plugins
+        ln -fs ${cfg.stateDir}/tmp /run/redmine/tmp
+
+        cp -r ${pkgs.redmine}/share/redmine/config.dist/* ${cfg.stateDir}/config/
+        ln -fs ${cfg.stateDir}/config /run/redmine/config
+
+        ln -fs ${pkgs.writeText "configuration.yml" configurationYml} ${cfg.stateDir}/config/configuration.yml
+        ln -fs ${pkgs.writeText "database.yml" databaseYml} ${cfg.stateDir}/config/database.yml
 
         chown -R redmine:redmine ${cfg.stateDir}
-        chmod -R 755 ${cfg.stateDir}
+        chmod -R ug+rwX,o-rwx+x ${cfg.stateDir}/
 
-        rm -rf ${cfg.stateDir}/public/*
-        cp -R ${pkgs.redmine}/share/redmine/public/* ${cfg.stateDir}/public/
-        for theme in ${concatStringsSep " " (mapAttrsToList unpackTheme cfg.themes)}; do
-          ln -fs $theme/* ${cfg.stateDir}/public/themes/
-        done
-
-        rm -rf ${cfg.stateDir}/plugins/*
-        for plugin in ${concatStringsSep " " (mapAttrsToList unpackPlugin cfg.plugins)}; do
-          ln -fs $plugin/* ${cfg.stateDir}/plugins/''${plugin##*-redmine-plugin-}
-        done
-
-        ln -fs ${pkgs.writeText "database.yml" databaseYml} ${cfg.stateDir}/config/database.yml
-        ln -fs ${pkgs.writeText "configuration.yml" configurationYml} ${cfg.stateDir}/config/configuration.yml
-
-        if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
-          if ! test -e "${cfg.stateDir}/db-created"; then
-            psql postgres -c "CREATE ROLE redmine WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.databasePassword}'"
-            ${config.services.postgresql.package}/bin/createdb --owner redmine redmine || true
-            touch "${cfg.stateDir}/db-created"
-          fi
-        fi
-
-        cd ${pkgs.redmine}/share/redmine/
-        ${ruby}/bin/rake db:migrate
-        ${ruby}/bin/rake redmine:plugins:migrate
-        ${ruby}/bin/rake redmine:load_default_data
-        ${ruby}/bin/rake generate_secret_token
+        ${pkgs.redmine}/share/redmine/bin/bundle exec rake generate_secret_token
+        ${pkgs.redmine}/share/redmine/bin/bundle exec rake db:migrate
+        ${pkgs.redmine}/share/redmine/bin/bundle exec rake redmine:load_default_data
       '';
 
       serviceConfig = {
@@ -211,7 +178,7 @@ in {
         Group = "redmine";
         TimeoutSec = "300";
         WorkingDirectory = "${pkgs.redmine}/share/redmine";
-        ExecStart="${ruby}/bin/ruby ${pkgs.redmine}/share/redmine/script/rails server webrick -e production -P ${cfg.stateDir}/redmine.pid";
+        ExecStart="${pkgs.redmine}/share/redmine/bin/bundle exec rails server webrick -e production -P ${cfg.stateDir}/redmine.pid --binding=0.0.0.0";
       };
 
     };
