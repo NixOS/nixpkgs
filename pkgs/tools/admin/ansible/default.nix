@@ -30,7 +30,7 @@ let
     dontPatchShebangs = false;
 
     propagatedBuildInputs = with py.pkgs; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six netaddr dnspython
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six netaddr dnspython jmespath
     ] ++ stdenv.lib.optional windowsSupport pywinrm;
 
     meta = with stdenv.lib; {
