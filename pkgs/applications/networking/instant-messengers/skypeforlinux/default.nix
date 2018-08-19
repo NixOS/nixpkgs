@@ -83,6 +83,8 @@ in stdenv.mkDerivation {
     rm -rf $out/opt $out/usr
     rm $out/bin/skypeforlinux
 
+    ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
+
     # Otherwise it looks "suspicious"
     chmod -R g-w $out
   '';
@@ -92,12 +94,6 @@ in stdenv.mkDerivation {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
       patchelf --set-rpath ${rpath}:$out/share/skypeforlinux $file || true
     done
-
-    ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
-
-    wrapProgram $out/bin/skypeforlinux \
-      --suffix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/skypeforlinux.desktop \
