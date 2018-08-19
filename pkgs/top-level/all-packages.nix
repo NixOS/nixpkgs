@@ -10321,6 +10321,8 @@ with pkgs;
 
   libgroove = callPackage ../development/libraries/libgroove { };
 
+  libgrss = callPackage ../development/libraries/libgrss { };
+
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
   libsecret = callPackage ../development/libraries/libsecret { };
