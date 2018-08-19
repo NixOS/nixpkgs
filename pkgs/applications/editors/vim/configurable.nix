@@ -129,7 +129,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
     libXmu glib libICE ]
-    ++ (if guiSupport == "gtk3" then [gtk3] else [gtk2])
+    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2
+    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3
     ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc cf-private ]
     ++ stdenv.lib.optional luaSupport lua
     ++ stdenv.lib.optional pythonSupport python
