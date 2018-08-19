@@ -9682,6 +9682,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
+  # On darwin gtk uses cocoa by default instead of x11.
+  gtk3-x11 = gtk3.override {
+    x11Support = true;
+  };
+
   gtkmm2 = callPackage ../development/libraries/gtkmm/2.x.nix { };
   gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
 
@@ -18837,7 +18842,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
     inherit (darwin) libobjc cf-private;
     gtk2 = if stdenv.isDarwin then gtk2-x11 else gtk2;
-    guiSupport = if stdenv.isDarwin then "gtk2" else "gtk3";
+    gtk3 = if stdenv.isDarwin then gtk3-x11 else gtk3;
   });
 
   qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
