@@ -3,7 +3,7 @@
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba
 , gccCrossStageStatic, gcc
-, pkgsi686Linux, newScope, platform, config
+, pkgsi686Linux, newScope, config
 , targetPlatform, buildPlatform
 , overrides ? {}
 , buildPackages, pkgs
