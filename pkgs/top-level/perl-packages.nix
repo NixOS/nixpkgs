@@ -11390,6 +11390,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetSFTPForeign = buildPerlPackage rec {
+    name = "Net-SFTP-Foreign-1.89";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SALVA/${name}.tar.gz";
+      sha256 = "9bd33e130581c1fc3eb6108eaf9056c1507428cace04a572f7afe816d83b08a7";
+    };
+    meta = {
+      description = "Secure File Transfer Protocol client";
+      license = stdenv.lib.licenses.unknown;
+    };
+  };
+
   NetServerCoro = buildPerlPackage rec {
      name = "Net-Server-Coro-1.3";
      src = fetchurl {
