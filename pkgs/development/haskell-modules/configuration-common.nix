@@ -707,6 +707,7 @@ self: super: {
   # vaultenv is not available from Hackage.
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
+  # futhark is not available from Hackage.
   futhark = self.callPackage ../compilers/futhark { };
 
   # https://github.com/Philonous/hs-stun/pull/1
