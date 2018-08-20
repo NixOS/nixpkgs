@@ -21283,11 +21283,6 @@ in
 
   maxx = callPackage ../desktops/maxx { };
 
-  pantheon = recurseIntoAttrs rec {
-    callPackage = newScope pkgs.pantheon;
-    pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
-  };
-
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
   redshift = callPackage ../applications/misc/redshift {
