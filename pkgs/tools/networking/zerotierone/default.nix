@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
+      substituteInPlace ./osdep/ManagedRoute.cpp \
+        --replace '/usr/sbin/ip' '${iproute}/bin/ip'
+
+      substituteInPlace ./osdep/ManagedRoute.cpp \
+        --replace '/sbin/ip' '${iproute}/bin/ip'
+
       substituteInPlace ./osdep/LinuxEthernetTap.cpp \
         --replace 'execlp("ip",' 'execlp("${iproute}/bin/ip",'
 
