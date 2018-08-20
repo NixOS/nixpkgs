@@ -317,10 +317,6 @@ stdenv.mkDerivation ({
       "--with-gnu-as" "--without-gnu-ld"
     ]
     ++ optional (targetPlatform == hostPlatform && targetPlatform.libc == "musl") "--disable-libsanitizer"
-    ++ optionals (targetPlatform.isPower && targetPlatform.libc == "glibc" && targetPlatform.is64bit && target.isLittleEndian) [
-      "--with-long-double-128"
-      "--enable-softfloat"
-    ]
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
