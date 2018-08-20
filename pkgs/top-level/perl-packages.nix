@@ -11376,6 +11376,10 @@ let
       url = "mirror://cpan/authors/id/S/SA/SALVA/${name}.tar.gz";
       sha256 = "9bd33e130581c1fc3eb6108eaf9056c1507428cace04a572f7afe816d83b08a7";
     };
+    propagatedBuildInputs = [ pkgs.openssl ];
+    patchPhase = ''
+      sed -i "s|$ssh_cmd = 'ssh'|$ssh_cmd = '${pkgs.openssh}/bin/ssh'|" lib/Net/SFTP/Foreign/Backend/Unix.pm
+    '';
     meta = {
       description = "Secure File Transfer Protocol client";
       license = stdenv.lib.licenses.unknown;
