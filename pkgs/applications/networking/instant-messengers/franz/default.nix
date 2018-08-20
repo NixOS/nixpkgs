@@ -3,7 +3,7 @@
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
 
 let
-  bits = if stdenv.system == "x86_64-linux" then "x64"
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
          else "ia32";
 
   version = "4.0.4";

@@ -67,15 +67,15 @@ in
 
 let
   config =
-    configs.${stdenv.system}
-    or (throw "unsupported system: ${stdenv.system}");
+    configs.${stdenv.hostPlatform.system}
+    or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
 
 let
   blas64 =
     if blas64_ != null
       then blas64_
-      else hasPrefix "x86_64" stdenv.system;
+      else hasPrefix "x86_64" stdenv.hostPlatform.system;
 in
 stdenv.mkDerivation rec {
   name = "openblas-${version}";

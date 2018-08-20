@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cd $out
     unzip $src
 
-    ${if stdenv.system == "x86_64-linux" then ''
+    ${if stdenv.hostPlatform.system == "x86_64-linux" then ''
       patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.x86_64"
       makeWrapper "${gameDir}/openarena.x86_64" "$out/bin/openarena" \
         --prefix LD_LIBRARY_PATH : "${libPath}"

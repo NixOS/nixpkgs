@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
   version = "206.0.0";
 
-  src = fetchurl (sources name stdenv.system);
+  src = fetchurl (sources name stdenv.hostPlatform.system);
 
   buildInputs = [ python makeWrapper ];
 

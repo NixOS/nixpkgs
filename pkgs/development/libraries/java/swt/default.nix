@@ -16,7 +16,7 @@ let
         sha256 = "00k1mfbncvyh8klgmk0891w8jwnd5niqb16j1j8yacrm2smmlb05"; };
   };
 
-  metadata = assert platformMap ? ${stdenv.system}; platformMap.${stdenv.system};
+  metadata = assert platformMap ? ${stdenv.hostPlatform.system}; platformMap.${stdenv.hostPlatform.system};
 
 in stdenv.mkDerivation rec {
   version = "4.5";

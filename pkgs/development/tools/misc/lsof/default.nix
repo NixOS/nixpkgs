@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildPackages, ncurses }:
 
-let dialect = with stdenv.lib; last (splitString "-" stdenv.system); in
+let dialect = with stdenv.lib; last (splitString "-" stdenv.hostPlatform.system); in
 
 stdenv.mkDerivation rec {
   name = "lsof-${version}";

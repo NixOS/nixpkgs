@@ -2,7 +2,7 @@
 
 let
   src =
-    if stdenv.system == "i686-linux" then fetchurl {
+    if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_i386.deb";
       sha256 = "06q1jwqsrjvlj820dd4vl80jznwafsqshsg0p6si8qx4721blryz";

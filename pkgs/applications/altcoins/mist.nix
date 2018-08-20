@@ -4,7 +4,7 @@ let
   version = "0.11.1";
   name = "mist";
 
-  throwSystem = throw "Unsupported system: ${stdenv.system}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   meta = with stdenv.lib; {
     description = "Browse and use Ðapps on the Ethereum network";
@@ -37,7 +37,7 @@ let
         url = "https://github.com/ethereum/mist/releases/download/v${version}/Mist-linux64-${urlVersion}.zip";
         sha256 = "0yx4x72l8gk68yh9saki48zgqx8k92xnkm79dc651wdpd5c25cz3";
       };
-    }.${stdenv.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
 
     buildInputs = [ unzip makeWrapper ];
 

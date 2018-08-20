@@ -1,6 +1,8 @@
-{ lib, callPackage, newScope, pkgs, config, system }:
+{ lib, callPackage, newScope, pkgs, config }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) system;
+
   mkOcamlPackages = ocaml: overrides:
     let
       packageSet = self:

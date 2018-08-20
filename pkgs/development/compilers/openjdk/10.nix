@@ -13,7 +13,7 @@ let
    * The JRE libraries are in directories that depend on the CPU.
    */
   architecture =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       "i386"
     else "amd64";
 

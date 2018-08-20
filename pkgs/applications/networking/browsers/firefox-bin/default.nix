@@ -59,7 +59,7 @@ let
     "x86_64-linux" = "linux-x86_64";
   };
 
-  arch = mozillaPlatforms.${stdenv.system};
+  arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
   isPrefixOf = prefix: string:
     builtins.substring 0 (builtins.stringLength prefix) string == prefix;

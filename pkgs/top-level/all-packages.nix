@@ -1744,7 +1744,7 @@ with pkgs;
   chunksync = callPackage ../tools/backup/chunksync { };
 
   cipherscan = callPackage ../tools/security/cipherscan {
-    openssl = if stdenv.system == "x86_64-linux"
+    openssl = if stdenv.hostPlatform.system == "x86_64-linux"
       then openssl-chacha
       else openssl;
   };
@@ -6428,7 +6428,7 @@ with pkgs;
   gcc8Stdenv = overrideCC gccStdenv gcc8;
 
   wrapCCMulti = cc:
-    if system == "x86_64-linux" then let
+    if stdenv.targetPlatform.system == "x86_64-linux" then let
       # Binutils with glibc multi
       bintools = cc.bintools.override {
         libc = glibc_multi;
@@ -6448,16 +6448,16 @@ with pkgs;
       extraBuildCommands = ''
         echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
       '';
-  }) else throw "Multilib ${cc.name} not supported on ‘${system}’";
+  }) else throw "Multilib ${cc.name} not supported for ‘${stdenv.targetPlatform.system}’";
 
   wrapClangMulti = clang:
-    if system == "x86_64-linux" then
+    if stdenv.targetPlatform.system == "x86_64-linux" then
       callPackage ../development/compilers/llvm/multi.nix {
         inherit clang;
         gcc32 = pkgsi686Linux.gcc;
         gcc64 = pkgs.gcc;
       }
-    else throw "Multilib ${clang.cc.name} not supported on '${system}'";
+    else throw "Multilib ${clang.cc.name} not supported for '${stdenv.targetPlatform.system}'";
 
   gcc_multi = wrapCCMulti gcc;
   clang_multi = wrapClangMulti clang;
@@ -11137,7 +11137,7 @@ with pkgs;
   # Default derivation with libGL.so.1 to link into /run/opengl-drivers (if need)
   libGL_driver = libGLDarwinOr mesa_drivers;
 
-  libGLSupported = lib.elem system lib.platforms.mesaPlatforms;
+  libGLSupported = lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms;
 
   libGLDarwin = callPackage ../development/libraries/mesa-darwin {
     inherit (darwin.apple_sdk.frameworks) OpenGL;
@@ -12410,21 +12410,21 @@ with pkgs;
 
   wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 {
     inherit (gnome2) GConf;
-    withMesa = lib.elem system lib.platforms.mesaPlatforms;
+    withMesa = lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms;
   };
 
   wxGTK29 = callPackage ../development/libraries/wxwidgets/2.9 {
     inherit (gnome2) GConf;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QuickTime;
-    withMesa = lib.elem system lib.platforms.mesaPlatforms;
+    withMesa = lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms;
   };
 
   wxGTK30 = callPackage ../development/libraries/wxwidgets/3.0 {
     inherit (gnome2) GConf;
     inherit (darwin.stubs) setfile;
     inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
-    withMesa = lib.elem system lib.platforms.mesaPlatforms;
+    withMesa = lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms;
   };
 
   wxGTK31 = callPackage ../development/libraries/wxwidgets/3.1 {};
@@ -17648,7 +17648,7 @@ with pkgs;
     }) murmur_git;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
-    mumble_i686 = if system == "x86_64-linux"
+    mumble_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
       then pkgsi686Linux.mumble
       else null;
   };
@@ -19049,7 +19049,7 @@ with pkgs;
   };
 
   virtualgl = callPackage ../tools/X11/virtualgl {
-    virtualglLib_i686 = if system == "x86_64-linux"
+    virtualglLib_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
       then pkgsi686Linux.virtualglLib
       else null;
   };
@@ -19062,17 +19062,17 @@ with pkgs;
 
   primus = callPackage ../tools/X11/primus {
     stdenv_i686 = pkgsi686Linux.stdenv;
-    primusLib_i686 = if system == "x86_64-linux"
+    primusLib_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
       then pkgsi686Linux.primusLib
       else null;
   };
 
   bumblebee = callPackage ../tools/X11/bumblebee {
     nvidia_x11 = linuxPackages.nvidia_x11;
-    nvidia_x11_i686 = if system == "x86_64-linux"
+    nvidia_x11_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
       then pkgsi686Linux.linuxPackages.nvidia_x11.override { libsOnly = true; }
       else null;
-    libglvnd_i686 = if system == "x86_64-linux"
+    libglvnd_i686 = if stdenv.hostPlatform.system == "x86_64-linux"
       then pkgsi686Linux.libglvnd
       else null;
   };
@@ -21629,7 +21629,7 @@ with pkgs;
    */
   nixos = configuration:
     (import (self.path + "/nixos/lib/eval-config.nix") {
-      inherit (pkgs) system;
+      inherit (pkgs.stdenv.hostPlatform) system;
       modules = [(
                   { lib, ... }: {
                     config.nixpkgs.pkgs = lib.mkDefault pkgs;

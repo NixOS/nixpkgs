@@ -187,7 +187,7 @@ rec {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
-          inherit (stdenv) system;
+          inherit (stdenv.hostPlatform) system;
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
 

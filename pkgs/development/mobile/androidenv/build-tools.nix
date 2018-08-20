@@ -3,16 +3,16 @@
 stdenv.mkDerivation rec {
   version = "26.0.2";
   name = "android-build-tools-r${version}";
-  src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+  src = if (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
     then fetchurl {
       url = "https://dl.google.com/android/repository/build-tools_r${version}-linux.zip";
       sha256 = "1kii880bwhjkc343zwx1ysxyisxhczrwhphnxbwsgi45mjgq8lm7";
     }
-    else if stdenv.system == "x86_64-darwin" then fetchurl {
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then fetchurl {
       url = "https://dl.google.com/android/repository/build-tools_r${version}-macosx.zip";
       sha256 = "1x0ycprl6hgsm23kck5ind7x00hzydc5k3h3ch4a13407xbpvzvx";
     }
-    else throw "System ${stdenv.system} not supported!";
+    else throw "System ${stdenv.hostPlatform.system} not supported!";
 
   buildCommand = ''
     mkdir -p $out/build-tools
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     unzip $src
     mv android-* ${version}
 
-    ${stdenv.lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+    ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
       ''
         cd ${version}
 

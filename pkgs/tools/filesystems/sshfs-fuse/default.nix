@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ which python3Packages.pytest ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optional
-    (stdenv.system == "i686-linux")
+    (stdenv.hostPlatform.system == "i686-linux")
     "-D_FILE_OFFSET_BITS=64";
 
   postInstall = ''
