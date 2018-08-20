@@ -10684,35 +10684,7 @@ in {
     };
   };
 
-  pyjwt = buildPythonPackage rec {
-    version = "1.5.3";
-    name = "pyjwt-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "progrium";
-      repo = "pyjwt";
-      rev = version;
-      sha256 = "109zb3ka2lvp00r9nawa0lmljfikvhcj5yny19kcipz8mqia1gs8";
-    };
-
-    buildInputs = with self; [ pytestrunner pytestcov pytest coverage ];
-    propagatedBuildInputs = with self; [ cryptography ecdsa ];
-
-    # We don't need this specific version
-    postPatch = ''
-      substituteInPlace setup.py --replace "pytest==2.7.3" "pytest"
-    '';
-
-    meta = {
-      description = "JSON Web Token implementation in Python";
-      longDescription = "A Python implementation of JSON Web Token draft 01";
-      homepage = https://github.com/progrium/pyjwt;
-      downloadPage = https://github.com/progrium/pyjwt/releases;
-      license = licenses.mit;
-      maintainers = with maintainers; [ prikhi ];
-      platforms = platforms.unix;
-    };
-  };
+  pyjwt = callPackage ../development/python-modules/pyjwt { };
 
   pykickstart = buildPythonPackage rec {
     name = "pykickstart-${version}";
