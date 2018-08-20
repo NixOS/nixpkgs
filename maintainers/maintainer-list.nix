@@ -4577,4 +4577,9 @@
     github = "zzamboni";
     name = "Diego Zamboni";
   };
+  barakb = {
+    email = "barak.bar@gmail.com";
+    github =  "barakb";
+    name = "Barak Bar Orion";
+  };
 }
