@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = ''A library-packaged fork of the GAP kernel'';
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

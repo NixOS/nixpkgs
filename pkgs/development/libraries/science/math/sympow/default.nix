@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
       free = true;
     };
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -5,6 +5,7 @@
 , makeWrapper
 , m4
 , gmp
+, libtool
 # one of
 # - "minimal" (~400M):
 #     Install the bare minimum of packages required by gap to start.
@@ -68,6 +69,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cp6ddk0469zzv1m1vair6gm27ic6c5m77ri8rn0znq3gaps6x94";
   };
 
+  enableParallelBuilding = true;
+
   # remove all non-essential packages (which take up a lot of space)
   preConfigure = lib.optionalString (!keepAll) (removeNonWhitelistedPkgs packagesToKeep) + ''
     patchShebangs .
@@ -78,7 +81,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     m4
     gmp
-  ];
+  ] ++ lib.optional stdenv.isDarwin libtool;
 
   nativeBuildInputs = [
     makeWrapper
@@ -169,7 +172,6 @@ stdenv.mkDerivation rec {
       timokau
     ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
     # keeping all packages increases the package size considerably, wchich
     # is why a local build is preferable in that situation. The timeframe
     # is reasonable and that way the binary cache doesn't get overloaded.
