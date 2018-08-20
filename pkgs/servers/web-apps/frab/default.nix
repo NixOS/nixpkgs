@@ -43,4 +43,10 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit env ruby;
   };
+
+  meta = with stdenv.lib; {
+    description = "Web-based conference planning and management system";
+    homepage = https://github.com/frab/frab;
+    license = licenses.mit;
+  };
 }
