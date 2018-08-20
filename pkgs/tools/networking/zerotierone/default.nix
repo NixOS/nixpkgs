@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
       substituteInPlace ./osdep/LinuxEthernetTap.cpp \
         --replace 'execlp("ip",' 'execlp("${iproute}/bin/ip",'
 
+      substituteInPlace ./osdep/ManagedRoute.cpp \
+        --replace '/usr/sbin/ip', '${iproute}/bin/ip'
+
       patchShebangs ./doc/build.sh
       substituteInPlace ./doc/build.sh \
         --replace '/usr/bin/ronn' '${ronn}/bin/ronn' \
