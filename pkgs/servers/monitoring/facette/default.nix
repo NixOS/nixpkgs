@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = https://facette.io/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];
+    broken = true; # not really broken, it just requires an internet connection to build. see #45382
   };
 }
