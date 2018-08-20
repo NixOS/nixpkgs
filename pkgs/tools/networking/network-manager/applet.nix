@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, intltool, gtk-doc, pkgconfig, networkmanager, gnome3
-, libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl
+, libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl, docbook_xml_dtd_43
 , mobile-broadband-provider-info, glib-networking, gsettings-desktop-schemas
 , libgudev, jansson, wrapGAppsHook, gobjectIntrospection
 , libappindicator-gtk3, withGnome ? false }:
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
     libappindicator-gtk3
   ] ++ stdenv.lib.optionals withGnome [ gnome3.gcr ]; # advanced certificate chooser
 
-  nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobjectIntrospection gtk-doc docbook_xsl libxml2 ];
+  nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobjectIntrospection gtk-doc docbook_xsl docbook_xml_dtd_43 libxml2 ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
