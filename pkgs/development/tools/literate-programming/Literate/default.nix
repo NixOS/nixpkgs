@@ -18,5 +18,6 @@ stdenv.mkDerivation {
     homepage    = http://literate.zbyedidia.webfactional.com/;
     license = licenses.mit;
     platforms = platforms.unix;
+    broken = true; # 2018-08-20 (https://github.com/NixOS/nixpkgs/pull/45355#issuecomment-414285384)
   };
 }
