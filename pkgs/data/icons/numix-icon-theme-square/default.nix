@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${package-name}-${version}";
   package-name = "numix-icon-theme-square";
-  version = "18-02-16";
+  version = "18.08.17";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = package-name;
     rev = version;
-    sha256 = "1gjwc0s6a7q1jby5bcwxkcmbs470m81y8s0clsm0qhcmcn1c36xj";
+    sha256 = "0pn5m73zd240bk2kilcgv57xn7grhbcj5ay4w1jzzn1f4ifaa0w8";
   };
 
   nativeBuildInputs = [ gtk3 numix-icon-theme ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Numix icon theme (square version)";
     homepage = https://numixproject.org;
     license = licenses.gpl3;
-    platforms = platforms.linux; # Maybe other non-darwin Unix
+    platforms = platforms.all;
     maintainers = with maintainers; [ romildo ];
   };
 }
