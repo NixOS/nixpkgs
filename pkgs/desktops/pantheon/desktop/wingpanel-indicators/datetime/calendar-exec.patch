@@ -1,0 +1,13 @@
+diff --git a/src/Widgets/calendar/Calendar.vala b/src/Widgets/calendar/Calendar.vala
+index 76443ca..d86bd44 100644
+--- a/src/Widgets/calendar/Calendar.vala
++++ b/src/Widgets/calendar/Calendar.vala
+@@ -19,7 +19,7 @@
+
+ namespace DateTime.Widgets {
+     public class Calendar : Gtk.Box {
+-        private const string CALENDAR_EXEC = "/usr/bin/io.elementary.calendar";
++        private const string CALENDAR_EXEC = "@elementary-calendar@";
+
+         ControlHeader heading;
+         CalendarView cal;

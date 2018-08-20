@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, vala_0_40, pkgconfig, meson, ninja, python3
-, granite, gtk3, desktop-file-utils, gnome3, gtksourceview, webkitgtk, gtkspell3
-, discount, gobject-introspection, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, meson, ninja, python3
+, gtk3, desktop-file-utils, gtksourceview, webkitgtk, gtkspell3, pantheon
+, gnome3, discount, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "quilter";
@@ -22,15 +22,15 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    pantheon.vala
     wrapGAppsHook
   ];
 
   buildInputs = [
     discount
-    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
+    pantheon.elementary-icon-theme
+    pantheon.granite
     gnome3.libgee
-    granite
     gtk3
     gtksourceview
     gtkspell3

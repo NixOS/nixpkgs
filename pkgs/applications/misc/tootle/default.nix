@@ -1,8 +1,7 @@
 { stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, python3
-, gnome3, vala_0_40, gobject-introspection, wrapGAppsHook
-, gtk3, granite
-, json-glib, glib, glib-networking, hicolor-icon-theme
+, gnome3, pantheon, gobject-introspection, wrapGAppsHook
+, gtk3, json-glib, glib, glib-networking, hicolor-icon-theme
 }:
 
 let
@@ -24,11 +23,11 @@ in stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    pantheon.vala
     wrapGAppsHook
   ];
   buildInputs = [
-    gtk3 granite json-glib glib glib-networking hicolor-icon-theme
+    gtk3 pantheon.granite json-glib glib glib-networking hicolor-icon-theme
     gnome3.libgee gnome3.libsoup gnome3.gsettings-desktop-schemas
   ];
 

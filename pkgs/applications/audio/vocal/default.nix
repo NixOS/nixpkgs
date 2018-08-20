@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, vala_0_40, gtk3, libxml2, granite, webkitgtk, clutter-gtk
+{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, pantheon, gtk3, libxml2, webkitgtk, clutter-gtk
 , clutter-gst, libunity, libnotify, sqlite, gst_all_1, libsoup, json-glib, gnome3, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -20,16 +20,16 @@ stdenv.mkDerivation rec {
     libxml2
     ninja
     pkgconfig
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    pantheon.vala
     wrapGAppsHook
   ];
 
   buildInputs = with gst_all_1; [
     clutter-gst
     clutter-gtk
-    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
+    pantheon.elementary-icon-theme
     gnome3.libgee
-    granite
+    pantheon.granite
     gst-plugins-base
     gst-plugins-good
     gstreamer
