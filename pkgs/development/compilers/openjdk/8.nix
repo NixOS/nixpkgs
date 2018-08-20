@@ -110,8 +110,8 @@ let
     # The configure script was confused by our passing these with full paths,
     # so we explicitly override them to short variants.
     + ''
-      CC=cc
-      CXX=c++
+      CC=${stdenv.cc.targetPrefix}cc
+      CXX=${stdenv.cc.targetPrefix}c++
     '';
 
     configureFlags = [
