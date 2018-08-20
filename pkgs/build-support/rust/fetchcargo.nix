@@ -23,9 +23,11 @@ stdenv.mkDerivation {
 
     ${cargoUpdateHook}
 
-    cargo vendor
+    mkdir $out
+    cargo vendor > $out/config
 
-    cp -ar vendor $out
+    cp -ar vendor/. $out/
+
   '';
 
   outputHashAlgo = "sha256";
