@@ -37,6 +37,8 @@ buildPythonPackage rec {
     # Needed to run the tests reliably. See:
     # https://bitbucket.org/mpi4py/mpi4py/issues/87/multiple-test-errors-with-openmpi-30
     export OMPI_MCA_rmaps_base_oversubscribe=yes
+    export OMPI_MCA_osc=sm
+    export OMPI_MCA_btl=self,vader
   '';
 
   setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
