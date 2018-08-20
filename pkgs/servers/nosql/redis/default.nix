@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # needs tcl
+
   meta = with stdenv.lib; {
     homepage = https://redis.io;
     description = "An open source, advanced key-value store";

@@ -4,6 +4,7 @@
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix
 , gnupg
 , darwin, xcbuild
+, procps
 }:
 
 with stdenv.lib;
@@ -65,14 +66,26 @@ in
 
     inherit patches;
 
-    preBuild = optionalString stdenv.isDarwin ''
+    postPatch = ''
+      patchShebangs .
+      sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
+
+      # fix tests
+      for a in test/parallel/test-child-process-env.js \
+               test/parallel/test-child-process-exec-env.js \
+               test/parallel/test-child-process-default-options.js \
+               test/fixtures/syntax/good_syntax_shebang.js \
+               test/fixtures/syntax/bad_syntax_shebang.js ; do
+        substituteInPlace $a \
+          --replace "/usr/bin/env" "${coreutils}/bin/env"
+      done
+    '' + optionalString stdenv.isDarwin ''
       sed -i -e "s|tr1/type_traits|type_traits|g" \
-      -e "s|std::tr1|std|" src/util.h
+             -e "s|std::tr1|std|" src/util.h
     '';
 
-    prePatch = ''
-      patchShebangs .
-    '';
+    checkInputs = [ procps ];
+    doCheck = false; # fails 4 out of 1453 tests
 
     postInstall = ''
       paxmark m $out/bin/node

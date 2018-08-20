@@ -3,22 +3,19 @@
 , valaSupport ? true, vala_0_40
 , intltool, python3 }:
 
-let
-  pname = "libsoup";
-  version = "2.62.2";
-in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  pname = "libsoup";
+  version = "2.62.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "1dkrz1iwsswscayfmjxqv2q00b87snlq9nxdccn5vck0vbinylwy";
   };
 
-  prePatch = ''
+  postPatch = ''
     patchShebangs libsoup/
-  '' + stdenv.lib.optionalString valaSupport
-  ''
+  '' + stdenv.lib.optionalString valaSupport ''
      substituteInPlace libsoup/Makefile.in --replace "\$(DESTDIR)\$(vapidir)" "\$(DESTDIR)\$(girdir)/../vala/vapi"
   '';
 

@@ -31,6 +31,10 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    patchShebangs test
+  '';
+
   preAutoreconf = ''
     substituteInPlace configure.ac --replace "which" "${which}/bin/which"
     substituteInPlace git-version --replace /bin/bash ${stdenv.shell}

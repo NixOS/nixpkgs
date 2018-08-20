@@ -22,14 +22,11 @@ stdenv.mkDerivation rec {
     pango gcr gdk_pixbuf atk p11-kit
   ];
 
-  # In 3.20.1, tests do not support Python 3
-  checkInputs = [ dbus python2 ];
-
   propagatedBuildInputs = [ glib libtasn1 libxslt ];
 
   nativeBuildInputs = [
     pkgconfig intltool docbook_xsl docbook_xml_dtd_42 wrapGAppsHook
-  ] ++ stdenv.lib.optionals doCheck checkInputs;
+  ];
 
   configureFlags = [
     "--with-pkcs11-config=$$out/etc/pkcs11/" # installation directories
@@ -41,6 +38,9 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  # In 3.20.1, tests do not support Python 3
+  checkInputs = [ dbus python2 ];
+
   checkPhase = ''
     export HOME=$(mktemp -d)
     dbus-run-session \

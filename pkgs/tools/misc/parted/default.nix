@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       sha256 = "0i29lfg8cwj342q5s7qwqhncz2bkifj5rjc7cx6jd4zqb6ykkndj";
     });
 
-  postPatch = stdenv.lib.optionalString doCheck ''
+  postPatch = ''
     patchShebangs tests
   '';
 
@@ -31,8 +31,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext
     ++ stdenv.lib.optional (lvm2 != null) lvm2
-    ++ stdenv.lib.optional (hurd != null) hurd
-    ++ stdenv.lib.optionals doCheck [ check perl python2 ];
+    ++ stdenv.lib.optional (hurd != null) hurd;
 
   configureFlags =
        (if (readline != null)
@@ -45,10 +44,7 @@ stdenv.mkDerivation rec {
   # That should hopefully be fixed now.
   doCheck = !stdenv.hostPlatform.isMusl; /* translation test */
 
-  preCheck =
-    stdenv.lib.optionalString doCheck
-      # The `t0400-loop-clobber-infloop.sh' test wants `mkswap'.
-      "export PATH=\"${utillinux}/sbin:$PATH\"";
+  checkInputs = [ check perl python2 utillinux ];
 
   meta = {
     description = "Create, destroy, resize, check, and copy partitions";

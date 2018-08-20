@@ -87,6 +87,24 @@ let
         --prefix PATH : "$out/bin:${wrapperPath}"
     '';
 
+    # Turn "check" into "installcheck", since we want to test our pass,
+    # not the one before the fixup.
+    postPatch = ''
+      patchShebangs tests
+
+      # the turning
+      sed -i -e 's@^PASS=.*''$@PASS=$out/bin/pass@' \
+             -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
+             -e '/which gpg/ d' \
+        tests/setup.sh
+    '';
+
+    doCheck = false;
+
+    doInstallCheck = true;
+    installCheckInputs = [ git ];
+    installCheckTarget = "test";
+
     passthru = {
       extensions = passExtensions;
     } // extraPassthru;

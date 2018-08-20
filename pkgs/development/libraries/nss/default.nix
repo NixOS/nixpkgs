@@ -55,6 +55,11 @@ in stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
+  # TODO(@oxij): investigate this: `make -n check` works but `make
+  # check` fails with "no rule", same for "installcheck".
+  doCheck = false;
+  doInstallCheck = false;
+
   postInstall = ''
     rm -rf $out/private
     mv $out/public $out/include

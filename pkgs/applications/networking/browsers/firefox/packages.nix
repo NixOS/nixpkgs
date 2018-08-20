@@ -36,7 +36,7 @@ rec {
       description = "A web browser built from Firefox source tree";
       homepage = http://www.mozilla.com/en-US/firefox/;
       maintainers = with lib.maintainers; [ eelco ];
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
       license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {

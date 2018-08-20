@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib libsigcxx ];
 
   enableParallelBuilding = true;
-  #doCheck = true; # some tests need network
+
+  doCheck = false; # fails. one test needs the net, another /etc/fstab
 
   meta = with stdenv.lib; {
     description = "C++ interface to the GLib library";
