@@ -198,10 +198,11 @@ in stdenv.mkDerivation rec {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eelco ];
   };
 }

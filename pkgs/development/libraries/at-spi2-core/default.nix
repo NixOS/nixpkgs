@@ -11,6 +11,7 @@
 , libX11
 , libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
 , libXi
+, fixDarwinDylibNames
 
 , gnome3 # To pass updateScript
 }:
@@ -27,7 +28,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ]
+    # Fixup rpaths because of meson, remove with meson-0.47
+    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = [ dbus glib libX11 libXtst libXi ];
 
   doCheck = false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"

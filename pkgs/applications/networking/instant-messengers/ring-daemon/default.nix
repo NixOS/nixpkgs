@@ -20,7 +20,7 @@
 , speex
 , boost
 , opendht
-, libmsgpack
+, msgpack
 , gnutls
 , zlib
 , jsoncpp
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
     speex
     boost
     opendht
-    libmsgpack
+    msgpack
     gnutls
     zlib
     jsoncpp

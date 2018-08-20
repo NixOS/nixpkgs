@@ -6,7 +6,7 @@
 , pkgconfig
 , nettle
 , gnutls
-, libmsgpack
+, msgpack
 , readline
 , libargon2
 }:
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     nettle
     gnutls
-    libmsgpack
+    msgpack
     readline
     libargon2
   ];
