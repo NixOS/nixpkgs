@@ -1,12 +1,10 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , pkgconfig
 , gtk3
-, granite
+, pantheon
 , gnome3
 , cmake
-, vala_0_40
 , libqalculate
 , gobject-introspection
 , wrapGAppsHook }:
@@ -28,19 +26,19 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
+    cmake
+    pantheon.vala
+    gobject-introspection # for setup-hook
     pkgconfig
     wrapGAppsHook
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
-    cmake
-    gobject-introspection # for setup-hook
   ];
 
   buildInputs = [
-    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
+    pantheon.elementary-icon-theme
     gnome3.gtksourceview
     gnome3.libgee
     gnome3.libsoup
-    granite
+    pantheon.granite
     gtk3
     libqalculate
   ];

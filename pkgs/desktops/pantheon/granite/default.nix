@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3, meson, ninja, vala_0_40, pkgconfig, gobject-introspection, gnome3, gtk3, glib, gettext, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, fetchpatch, python3, meson, ninja, vala, pkgconfig, gobject-introspection, libgee, pantheon, gtk3, glib, gettext, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "granite";
@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
     ./02-datetime-clock-format-gsettings.patch
   ];
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      repoName = pname;
+    };
+  };
+
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    vala
     wrapGAppsHook
   ];
 
@@ -41,7 +47,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     hicolor-icon-theme
-    gnome3.libgee
+    libgee
   ];
 
   postPatch = ''
@@ -58,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/elementary/granite;
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ vozz worldofpeace ];
+    maintainers = pantheon.maintainers;
   };
 }

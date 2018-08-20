@@ -1,0 +1,13 @@
+diff --git a/src/Views/HardwareView.vala b/src/Views/HardwareView.vala
+index a3e449c..a95fe93 100644
+--- a/src/Views/HardwareView.vala
++++ b/src/Views/HardwareView.vala
+@@ -179,7 +179,7 @@ public class About.HardwareView : Gtk.Grid {
+ 
+         // Graphics
+         try {
+-            Process.spawn_command_line_sync ("lspci", out graphics);
++            Process.spawn_command_line_sync ("@pciutils@/bin/lspci", out graphics);
+ 
+             if ("VGA" in graphics) { //VGA-keyword indicates graphics-line
+                 string[] lines = graphics.split("\n");

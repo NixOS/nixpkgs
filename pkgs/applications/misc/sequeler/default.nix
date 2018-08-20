@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, vala, gobject-introspection, gettext, wrapGAppsHook, python3, desktop-file-utils
-, gtk3, glib, granite, libgee, libgda, gtksourceview, libxml2, libsecret, libfixposix, libssh2 }:
+, meson, ninja, pkgconfig, pantheon, gobject-introspection, gettext, wrapGAppsHook, python3, desktop-file-utils
+, gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libfixposix, libssh2 }:
 
 
 let
@@ -20,9 +20,9 @@ in stdenv.mkDerivation rec {
     sha256 = "0sxmky27pl0aqnh857xb54rnfg1kbr2smdzyrzw67cbv00f6d30p";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gobject-introspection gettext wrapGAppsHook python3 desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja pkgconfig pantheon.vala gobject-introspection gettext wrapGAppsHook python3 desktop-file-utils ];
 
-  buildInputs = [ gtk3 glib granite libgee sqlGda gtksourceview libxml2 libsecret libfixposix libssh2 ];
+  buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libfixposix libssh2 ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

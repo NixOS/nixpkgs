@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, granite, gtk3
+{ stdenv, fetchFromGitLab, vala, python3, pkgconfig, meson, ninja, gtk3
 , gnome3, json-glib, libsoup, clutter, clutter-gtk, libchamplain, webkitgtk
 , libappindicator, desktop-file-utils, appstream, gobject-introspection, wrapGAppsHook }:
 

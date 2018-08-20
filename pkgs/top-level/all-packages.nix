@@ -10215,7 +10215,6 @@ in
 
   gnome-menus = callPackage ../development/libraries/gnome-menus { };
 
-  granite = callPackage ../development/libraries/granite { };
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
@@ -21278,6 +21277,8 @@ in
   });
 
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
+
+  pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
 
   maxx = callPackage ../desktops/maxx { };
 

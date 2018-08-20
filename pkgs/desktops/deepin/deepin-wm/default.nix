@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, vala, gnome3,
-  bamf, clutter-gtk, granite, libcanberra-gtk3, libwnck3,
+  bamf, clutter-gtk, pantheon, libcanberra-gtk3, libwnck3,
   deepin-mutter, deepin-wallpapers, deepin-desktop-schemas,
   hicolor-icon-theme, deepin }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     gnome3.libgee
     bamf
     clutter-gtk
-    granite
+    pantheon.granite
     libcanberra-gtk3
     libwnck3
     deepin-mutter

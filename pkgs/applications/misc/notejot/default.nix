@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, vala_0_40, pkgconfig, meson, ninja, python3, granite
-, gtk3, gnome3, gtksourceview, json-glib, gobject-introspection, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, pkgconfig, meson, ninja, python3, pantheon
+, gtk3, gtksourceview, json-glib, gnome3, gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "notejot";
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    pantheon.vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
+    pantheon.elementary-icon-theme
+    pantheon.granite
     gnome3.libgee
-    granite
     gtk3
     gtksourceview
     json-glib
