@@ -6,9 +6,7 @@
 # Run time
 , ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
 
-, buildPlatform, hostPlatform, targetPlatform
-
-, pythonSupport ? hostPlatform == buildPlatform && !hostPlatform.isCygwin, python ? null
+, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python ? null
 , guile ? null
 
 }:
@@ -22,8 +20,8 @@ assert pythonSupport -> python != null;
 
 stdenv.mkDerivation rec {
   name =
-    stdenv.lib.optionalString (targetPlatform != hostPlatform)
-                              (targetPlatform.config + "-")
+    stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                              (stdenv.targetPlatform.config + "-")
     + basename;
 
   src = fetchurl {
@@ -50,7 +48,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
 
   configureFlags = with stdenv.lib; [
     "--enable-targets=all" "--enable-64-bit-bfd"

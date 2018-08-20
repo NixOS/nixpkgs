@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
+{ stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
   modDirVersion = "4.14.50";

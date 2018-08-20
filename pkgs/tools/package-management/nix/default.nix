@@ -2,7 +2,6 @@
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
 , busybox-sandbox-shell
-, hostPlatform, buildPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -73,8 +72,8 @@ let
         "--with-sandbox-shell=${sh}/bin/busybox"
       ]
       ++ lib.optional (
-          hostPlatform != buildPlatform && hostPlatform ? nix && hostPlatform.nix ? system
-      ) ''--with-system=${hostPlatform.nix.system}''
+          stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
+      ) ''--with-system=${stdenv.hostPlatform.nix.system}''
          # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
       ++ lib.optional (!libseccomp.meta.available) "--disable-seccomp-sandboxing";
 

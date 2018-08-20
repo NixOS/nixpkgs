@@ -1,6 +1,4 @@
-{ stdenv, fetchurlBoot, openssl, zlib, windows
-, hostPlatform
-}:
+{ stdenv, fetchurlBoot, openssl, zlib, windows }:
 
 stdenv.mkDerivation rec {
   name = "libssh2-1.8.0";
@@ -13,7 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   buildInputs = [ openssl zlib ]
-    ++ stdenv.lib.optional hostPlatform.isMinGW windows.mingw_w64;
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
   meta = {
     description = "A client-side C library implementing the SSH2 protocol";

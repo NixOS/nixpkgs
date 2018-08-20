@@ -27,9 +27,9 @@ let
   defaultBuildBuildScope = pkgs.buildPackages.buildPackages // pkgs.buildPackages.buildPackages.xorg;
   defaultBuildHostScope = pkgs.buildPackages // pkgs.buildPackages.xorg;
   defaultBuildTargetScope =
-    if pkgs.targetPlatform == pkgs.hostPlatform
+    if pkgs.stdenv.targetPlatform == pkgs.stdenv.hostPlatform
     then defaultBuildHostScope
-    else assert pkgs.hostPlatform == pkgs.buildPlatform; defaultHostTargetScope;
+    else assert pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform; defaultHostTargetScope;
   defaultHostHostScope = {}; # unimplemented
   defaultHostTargetScope = pkgs // pkgs.xorg;
   defaultTargetTargetScope = pkgs.targetPackages // pkgs.targetPackages.xorg or {};
@@ -114,8 +114,8 @@ let
     pkgsTargetTarget = defaultTargetTargetScope;
   } // {
     # These should never be spliced under any circumstances
-    inherit (pkgs) pkgs buildPackages targetPackages
-      buildPlatform targetPlatform hostPlatform;
+    inherit (pkgs) pkgs buildPackages targetPackages;
+    inherit (pkgs.stdenv) buildPlatform targetPlatform hostPlatform;
   };
 
 in

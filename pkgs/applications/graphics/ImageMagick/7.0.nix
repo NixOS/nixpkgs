@@ -2,7 +2,6 @@
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
-, hostPlatform
 }:
 
 let
@@ -46,7 +45,7 @@ stdenv.mkDerivation rec {
       [ "--with-gs-font-dir=${ghostscript}/share/ghostscript/fonts"
         "--with-gslib"
       ]
-    ++ lib.optionals hostPlatform.isMinGW
+    ++ lib.optionals stdenv.hostPlatform.isMinGW
       [ "--enable-static" "--disable-shared" ] # due to libxml2 being without DLLs ATM
     ;
 
@@ -56,13 +55,13 @@ stdenv.mkDerivation rec {
     [ zlib fontconfig freetype ghostscript
       libpng libtiff libxml2 libheif
     ]
-    ++ lib.optionals (!hostPlatform.isMinGW)
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ openexr librsvg openjpeg ]
     ++ lib.optional stdenv.isDarwin ApplicationServices;
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]
-    ++ lib.optionals (!hostPlatform.isMinGW)
+    ++ lib.optionals (!stdenv.hostPlatform.isMinGW)
       [ libX11 libXext libXt libwebp ]
     ;
 

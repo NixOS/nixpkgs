@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig, libtool
+{ stdenv, lib, fetchurl, autoconf, automake, pkgconfig, libtool
 , gtk2, halibut, ncurses, perl
-, hostPlatform, lib }:
+}:
 
 stdenv.mkDerivation rec {
   version = "0.70";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gmhwwj1y7b5hgkrkxpf4jddjpk9l5832zq5ibhsiicndsfs92mv";
   };
 
-  preConfigure = lib.optionalString hostPlatform.isUnix ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isUnix ''
     perl mkfiles.pl
     ( cd doc ; make );
     sed -e '/AM_PATH_GTK(/d' \
@@ -22,22 +22,23 @@ stdenv.mkDerivation rec {
         -e '/AC_OUTPUT/iAM_PROG_AR' -i configure.ac
     ./mkauto.sh
     cd unix
-  '' + lib.optionalString hostPlatform.isWindows ''
+  '' + lib.optionalString stdenv.hostPlatform.isWindows ''
     cd windows
   '';
 
   TOOLPATH = stdenv.cc.targetPrefix;
-  makefile = if hostPlatform.isWindows then "Makefile.mgw" else null;
+  makefile = if stdenv.hostPlatform.isWindows then "Makefile.mgw" else null;
 
-  installPhase = if hostPlatform.isWindows then ''
+  installPhase = if stdenv.hostPlatform.isWindows then ''
     for exe in *.exe; do
        install -D $exe $out/bin/$exe
     done
   '' else null;
 
   nativeBuildInputs = [ autoconf automake halibut libtool perl pkgconfig ];
-  buildInputs = []
-              ++ lib.optionals hostPlatform.isUnix [ gtk2 ncurses ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
+    gtk2 ncurses
+  ];
   enableParallelBuilding = true;
 
   meta = with lib; {

@@ -4,7 +4,7 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, buildPlatform, stdenv, defaultCrateOverrides, fetchCrate, ncurses, rustc  }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, ncurses, rustc  }:
 
 let makeDeps = dependencies:
       (lib.concatMapStringsSep " " (dep:
@@ -12,14 +12,14 @@ let makeDeps = dependencies:
         (if dep.crateType == "lib" then
            " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}.rlib"
          else
-           " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}${buildPlatform.extensions.sharedLibrary}")
+           " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies);
 
     # This doesn't appear to be officially documented anywhere yet.
     # See https://github.com/rust-lang-nursery/rust-forge/issues/101.
-    target_os = if buildPlatform.isDarwin
+    target_os = if stdenv.hostPlatform.isDarwin
       then "macos"
-      else buildPlatform.parsed.kernel.name;
+      else stdenv.hostPlatform.parsed.kernel.name;
 
     echo_build_heading = colors: ''
       echo_build_heading() {
@@ -106,20 +106,20 @@ let makeDeps = dependencies:
       export CARGO_PKG_VERSION=${crateVersion}
       export CARGO_PKG_AUTHORS="${authors}"
 
-      export CARGO_CFG_TARGET_ARCH=${buildPlatform.parsed.cpu.name}
+      export CARGO_CFG_TARGET_ARCH=${stdenv.hostPlatform.parsed.cpu.name}
       export CARGO_CFG_TARGET_OS=${target_os}
       export CARGO_CFG_TARGET_FAMILY="unix"
       export CARGO_CFG_UNIX=1
       export CARGO_CFG_TARGET_ENV="gnu"
-      export CARGO_CFG_TARGET_ENDIAN=${if buildPlatform.parsed.cpu.significantByte.name == "littleEndian" then "little" else "big"}
-      export CARGO_CFG_TARGET_POINTER_WIDTH=${toString buildPlatform.parsed.cpu.bits}
-      export CARGO_CFG_TARGET_VENDOR=${buildPlatform.parsed.vendor.name}
+      export CARGO_CFG_TARGET_ENDIAN=${if stdenv.hostPlatform.parsed.cpu.significantByte.name == "littleEndian" then "little" else "big"}
+      export CARGO_CFG_TARGET_POINTER_WIDTH=${toString stdenv.hostPlatform.parsed.cpu.bits}
+      export CARGO_CFG_TARGET_VENDOR=${stdenv.hostPlatform.parsed.vendor.name}
 
       export CARGO_MANIFEST_DIR="."
       export DEBUG="${toString (!release)}"
       export OPT_LEVEL="${toString optLevel}"
-      export TARGET="${buildPlatform.config}"
-      export HOST="${buildPlatform.config}"
+      export TARGET="${stdenv.hostPlatform.config}"
+      export HOST="${stdenv.hostPlatform.config}"
       export PROFILE=${if release then "release" else "debug"}
       export OUT_DIR=$(pwd)/target/build/${crateName}.out
       export CARGO_PKG_VERSION_MAJOR=${builtins.elemAt version 0}
@@ -218,8 +218,8 @@ let makeDeps = dependencies:
            $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
 
          EXTRA_LIB=" --extern $CRATE_NAME=target/lib/lib$CRATE_NAME-${metadata}.rlib"
-         if [ -e target/deps/lib$CRATE_NAME-${metadata}${buildPlatform.extensions.sharedLibrary} ]; then
-            EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/lib/lib$CRATE_NAME-${metadata}${buildPlatform.extensions.sharedLibrary}"
+         if [ -e target/deps/lib$CRATE_NAME-${metadata}${stdenv.hostPlatform.extensions.sharedLibrary} ]; then
+            EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/lib/lib$CRATE_NAME-${metadata}${stdenv.hostPlatform.extensions.sharedLibrary}"
          fi
       }
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPlatform, fetchurl }:
+{ stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "gdbm-1.17";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # Disable dbmfetch03.at test because it depends on unlink()
   # failing on a link in a chmod -w directory, which cygwin
   # apparently allows.
-  postPatch = lib.optionalString buildPlatform.isCygwin ''
+  postPatch = lib.optionalString stdenv.buildPlatform.isCygwin ''
       substituteInPlace tests/Makefile.in --replace \
         '_LDADD = ../src/libgdbm.la ../compat/libgdbm_compat.la' \
         '_LDADD = ../compat/libgdbm_compat.la ../src/libgdbm.la'

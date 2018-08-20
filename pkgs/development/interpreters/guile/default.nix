@@ -1,5 +1,4 @@
 { stdenv, buildPackages
-, buildPlatform, hostPlatform
 , fetchurl, makeWrapper, gawk, pkgconfig
 , libffi, libtool, readline, gmp, boehmgc, libunistring
 , coverageAnalysis ? null
@@ -23,7 +22,7 @@
   setOutputFlags = false; # $dev gets into the library otherwise
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
                            buildPackages.buildPackages.guile;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
