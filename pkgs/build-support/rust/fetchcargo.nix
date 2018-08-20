@@ -1,5 +1,5 @@
 { stdenv, cacert, git, rust, cargo-vendor }:
-{ name ? "cargo-deps", src, srcs, patches, sourceRoot, sha256, cargoUpdateHook ? "" }:
+{ name ? "cargo-deps", src, srcs, patches, sourceRoot, sha256, cargoUpdateHook ? "", writeVendorConfig ? false }:
 stdenv.mkDerivation {
   name = "${name}-vendor";
   nativeBuildInputs = [ cacert cargo-vendor git rust.cargo ];
@@ -23,9 +23,11 @@ stdenv.mkDerivation {
 
     ${cargoUpdateHook}
 
-    cargo vendor
-
-    cp -ar vendor $out
+    mkdir -p $out
+    cargo vendor $out > config
+  '' + stdenv.lib.optionalString writeVendorConfig ''
+    mkdir $out/.cargo
+    sed "s|directory = \".*\"|directory = \"./vendor\"|g" config > $out/.cargo/config
   '';
 
   outputHashAlgo = "sha256";
