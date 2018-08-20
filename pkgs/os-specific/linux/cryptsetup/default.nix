@@ -7,6 +7,8 @@ assert enablePython -> python2 != null;
 stdenv.mkDerivation rec {
   name = "cryptsetup-2.0.4";
 
+  outputs = [ "out" "dev" "man" ];
+
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v2.0/${name}.tar.xz";
     sha256 = "0d2p9g2wqcv6l3671gvw96p16jadbgyh21ddy2bhqgi96dq3qflx";
