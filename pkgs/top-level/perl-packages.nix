@@ -11382,7 +11382,7 @@ let
     '';
     meta = {
       description = "Secure File Transfer Protocol client";
-      license = stdenv.lib.licenses.unknown;
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
