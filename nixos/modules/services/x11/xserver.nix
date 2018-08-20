@@ -535,6 +535,15 @@ in
 
   config = mkIf cfg.enable {
 
+    services.xserver.displayManager.lightdm.enable =
+      let dmconf = cfg.displayManager;
+          default = !( dmconf.auto.enable
+                    || dmconf.gdm.enable
+                    || dmconf.sddm.enable
+                    || dmconf.slim.enable
+                    || dmconf.xpra.enable );
+      in mkIf (default) true;
+
     hardware.opengl.enable = mkDefault true;
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];

@@ -191,8 +191,6 @@ in
       }
     ];
 
-    services.xserver.displayManager.slim.enable = false;
-
     services.xserver.displayManager.job = {
       logToFile = true;
 
