@@ -13,6 +13,9 @@
 use strict;
 use warnings;
 
+use File::Basename;
+use File::Spec::Functions;
+
 my $tmpDir = "/tmp/xorg-unpack";
 
 
@@ -43,7 +46,6 @@ $pcMap{"\$DRI2PROTO"} = "dri2proto";
 
 
 my $downloadCache = "./download-cache";
-$ENV{'NIX_DOWNLOAD_CACHE'} = $downloadCache;
 mkdir $downloadCache, 0755;
 
 
@@ -76,7 +78,17 @@ while (<>) {
     $pkgURLs{$pkg} = $tarball;
     $pkgNames{$pkg} = $pkgName;
 
-    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball'`;
+    my $cachePath = catdir($downloadCache, basename($tarball));
+    my $hash;
+    my $path;
+    if (-e $cachePath) {
+        $path = readlink($cachePath);
+        $hash = `nix-hash --type sha256 --base32 --flat $cachePath`;
+    }
+    else {
+        ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball'`;
+        `nix-store --realise --add-root $cachePath --indirect $path`;
+    }
     chomp $hash;
     chomp $path;
     $pkgHashes{$pkg} = $hash;
