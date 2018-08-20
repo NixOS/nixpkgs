@@ -14210,6 +14210,12 @@ with pkgs;
   linuxPackages_hardkernel_latest = linuxPackages_hardkernel_4_14;
   linux_hardkernel_latest = linuxPackages_hardkernel_latest.kernel;
 
+  # GNU Linux-libre kernels
+  linuxPackages-libre = recurseIntoAttrs (linuxPackagesFor linux-libre);
+  linux-libre = callPackage ../os-specific/linux/kernel/linux-libre.nix {};
+  linuxPackages_latest-libre = recurseIntoAttrs (linuxPackagesFor linux_latest-libre);
+  linux_latest-libre = linux-libre.override { linux = linux_latest; };
+
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
 
