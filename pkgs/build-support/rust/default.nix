@@ -17,9 +17,15 @@ in
 , cargoBuildFlags ? []
 
 , cargoVendorDir ? null
+# This tells cargo-vendor to include a Cargo config file in the fixed-output
+# derivation. This is desirable in every case, so please set it to true.
+# Eventually this will default to true and even later this option and the old
+# behaviour will be removed.
+, useRealVendorConfig ? false
 , ... } @ args:
 
 assert cargoVendorDir == null -> cargoSha256 != "unset";
+assert cargoVendorDir != null -> !useRealVendorConfig;
 
 let
   cargoDeps = if cargoVendorDir == null
@@ -27,6 +33,7 @@ let
         inherit name src srcs sourceRoot cargoUpdateHook;
         patches = cargoPatches;
         sha256 = cargoSha256;
+        writeVendorConfig = useRealVendorConfig;
       }
     else null;
 
@@ -61,14 +68,19 @@ in stdenv.mkDerivation (args // {
     ${setupVendorDir}
 
     mkdir .cargo
-    cat >.cargo/config <<-EOF
-      [source.crates-io]
-      registry = 'https://github.com/rust-lang/crates.io-index'
-      replace-with = 'vendored-sources'
+  '' + (if useRealVendorConfig then ''
+      sed "s|directory = \".*\"|directory = \"$(pwd)/$cargoDepsCopy\"|g" \
+        "$(pwd)/$cargoDepsCopy/.cargo/config" > .cargo/config
+    '' else ''
+      cat >.cargo/config <<-EOF
+        [source.crates-io]
+        registry = 'https://github.com/rust-lang/crates.io-index'
+        replace-with = 'vendored-sources'
 
-      [source.vendored-sources]
-      directory = '$(pwd)/$cargoDepsCopy'
-    EOF
+        [source.vendored-sources]
+        directory = '$(pwd)/$cargoDepsCopy'
+      EOF
+    '') + ''
 
     unset cargoDepsCopy
 
