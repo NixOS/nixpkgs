@@ -232,6 +232,7 @@ rec {
    */
   justStaticExecutables = drv: overrideCabal drv (drv: {
     enableSharedExecutables = false;
+    enableLibraryProfiling = false;
     isLibrary = false;
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
