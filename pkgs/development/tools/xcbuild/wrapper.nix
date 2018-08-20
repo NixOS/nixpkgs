@@ -112,7 +112,7 @@ runCommand "xcodebuild-${xcbuild.version}" {
     --add-flags "DERIVED_DATA_DIR=." \
     --set DEVELOPER_DIR "$out" \
     --set SDKROOT ${sdkName} \
-    --run '[ "$1" = "-version" ] && (echo Xcode ${xcodeVer}; echo Build version ${sdkBuildVersion}) && exit 0' \
+    --run '[ "$1" = "-version" ] && [ "$#" -eq 1 ] && (echo Xcode ${xcodeVer}; echo Build version ${sdkBuildVersion}) && exit 0' \
     --run '[ "$1" = "-license" ] && exit 0'
 
   substitute ${xcode-select} $out/bin/xcode-select \
