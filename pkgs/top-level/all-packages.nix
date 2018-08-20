@@ -15047,6 +15047,8 @@ with pkgs;
 
   scowl = callPackage ../data/misc/scowl { };
 
+  seshat = callPackage ../data/fonts/seshat { };
+
   shaderc = callPackage ../development/compilers/shaderc { };
 
   mime-types = callPackage ../data/misc/mime-types { };
