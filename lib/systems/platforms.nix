@@ -474,6 +474,6 @@ rec {
       "armv7l-linux" = armv7l-hf-multiplatform;
       "aarch64-linux" = aarch64-multiplatform;
       "mipsel-linux" = fuloong2f_n32;
-      powerpc64le-linux = powernv;
+      "powerpc64le-linux" = powernv;
     }.${system} or pcBase;
 }
