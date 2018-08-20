@@ -1,20 +1,11 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol, lib, newScope
-, dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
-, autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
+{ lib, newScope, pixman }:
 
-let
-
-  overrides = import ./overrides.nix {inherit args;};
-
-  xorg = lib.makeScope newScope xorgPackages;
-
-  xorgPackages = self: with self; {
+lib.makeScope newScope (self: with self; {
 
   inherit pixman;
 
-  applewmproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  applewmproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "applewmproto-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -27,7 +18,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  appres = callPackage ({ stdenv, libX11, xproto, libXt }: stdenv.mkDerivation {
+  appres = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto, libXt }: stdenv.mkDerivation {
     name = "appres-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -40,7 +31,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  bdftopcf = callPackage ({ stdenv }: stdenv.mkDerivation {
+  bdftopcf = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "bdftopcf-1.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -53,7 +44,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  bigreqsproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  bigreqsproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "bigreqsproto-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -66,7 +57,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  bitmap = callPackage ({ stdenv, libX11, libXaw, xbitmaps, libXmu, xproto, libXt }: stdenv.mkDerivation {
+  bitmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xproto, libXt }: stdenv.mkDerivation {
     name = "bitmap-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
@@ -79,7 +70,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  compositeproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  compositeproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "compositeproto-0.4.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -92,7 +83,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  damageproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  damageproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "damageproto-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -105,7 +96,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  dmxproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  dmxproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "dmxproto-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -118,7 +109,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  dri2proto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  dri2proto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "dri2proto-2.8";
     builder = ./builder.sh;
     src = fetchurl {
@@ -131,7 +122,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  dri3proto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  dri3proto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "dri3proto-1.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -144,7 +135,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  encodings = callPackage ({ stdenv }: stdenv.mkDerivation {
+  encodings = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "encodings-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -157,7 +148,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fixesproto = callPackage ({ stdenv, xextproto }: stdenv.mkDerivation {
+  fixesproto = callPackage ({ stdenv, pkgconfig, fetchurl, xextproto }: stdenv.mkDerivation {
     name = "fixesproto-5.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -170,7 +161,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontadobe100dpi = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontadobe100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -179,11 +170,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontadobe75dpi = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontadobe75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -192,11 +184,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontadobeutopia100dpi = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontadobeutopia100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-100dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -205,11 +198,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontadobeutopia75dpi = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontadobeutopia75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-75dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -218,11 +212,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontadobeutopiatype1 = callPackage ({ stdenv, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontadobeutopiatype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -231,11 +226,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontalias = callPackage ({ stdenv }: stdenv.mkDerivation {
+  fontalias = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "font-alias-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -248,7 +244,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontarabicmisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontarabicmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-arabic-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -257,11 +253,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontbh100dpi = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontbh100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -270,11 +267,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontbh75dpi = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontbh75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -283,11 +281,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontbhlucidatypewriter100dpi = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontbhlucidatypewriter100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-lucidatypewriter-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -296,11 +295,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontbhlucidatypewriter75dpi = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontbhlucidatypewriter75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-lucidatypewriter-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -309,11 +309,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontbhttf = callPackage ({ stdenv, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontbhttf = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-ttf-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -322,11 +323,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontbhtype1 = callPackage ({ stdenv, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontbhtype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -335,11 +337,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontbitstream100dpi = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontbitstream100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-bitstream-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -348,11 +351,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontbitstream75dpi = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontbitstream75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-bitstream-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -361,11 +365,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontbitstreamtype1 = callPackage ({ stdenv, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontbitstreamtype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -374,11 +379,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontcronyxcyrillic = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontcronyxcyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-cronyx-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -387,11 +393,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontcursormisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontcursormisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-cursor-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -400,11 +407,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontdaewoomisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontdaewoomisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-daewoo-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -413,11 +421,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontdecmisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontdecmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-dec-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -426,11 +435,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontibmtype1 = callPackage ({ stdenv, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontibmtype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-ibm-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -439,11 +449,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontisasmisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontisasmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-isas-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -452,11 +463,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontjismisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontjismisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-jis-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -465,11 +477,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontmicromisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontmicromisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-micro-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -478,11 +491,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontmisccyrillic = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontmisccyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-misc-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -491,11 +505,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontmiscethiopic = callPackage ({ stdenv, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontmiscethiopic = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-ethiopic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -504,11 +519,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontmiscmeltho = callPackage ({ stdenv, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontmiscmeltho = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-meltho-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -517,11 +533,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontmiscmisc = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontmiscmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -530,11 +547,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontmuttmisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontmuttmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-mutt-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -543,11 +561,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontschumachermisc = callPackage ({ stdenv, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontschumachermisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-schumacher-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -556,11 +575,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontscreencyrillic = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontscreencyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-screen-cyrillic-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -569,11 +589,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontsonymisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontsonymisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-sony-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -582,11 +603,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontsproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  fontsproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "fontsproto-2.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -599,7 +621,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontsunmisc = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontsunmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-sun-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -608,11 +630,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontutil = callPackage ({ stdenv }: stdenv.mkDerivation {
+  fontutil = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "font-util-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -625,7 +648,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontwinitzkicyrillic = callPackage ({ stdenv, bdftopcf, mkfontdir }: stdenv.mkDerivation {
+  fontwinitzkicyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontdir }: stdenv.mkDerivation {
     name = "font-winitzki-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -634,11 +657,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ bdftopcf mkfontdir ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  fontxfree86type1 = callPackage ({ stdenv, mkfontdir, mkfontscale }: stdenv.mkDerivation {
+  fontxfree86type1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontdir, mkfontscale }: stdenv.mkDerivation {
     name = "font-xfree86-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -647,11 +671,12 @@ let
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ]; 
+    buildInputs = [ mkfontdir mkfontscale ];
+    configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  gccmakedep = callPackage ({ stdenv }: stdenv.mkDerivation {
+  gccmakedep = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "gccmakedep-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -664,7 +689,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  glproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  glproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "glproto-1.4.17";
     builder = ./builder.sh;
     src = fetchurl {
@@ -677,7 +702,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  iceauth = callPackage ({ stdenv, libICE, xproto }: stdenv.mkDerivation {
+  iceauth = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, xproto }: stdenv.mkDerivation {
     name = "iceauth-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -690,7 +715,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  imake = callPackage ({ stdenv, xproto }: stdenv.mkDerivation {
+  imake = callPackage ({ stdenv, pkgconfig, fetchurl, xproto }: stdenv.mkDerivation {
     name = "imake-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -703,7 +728,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  inputproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  inputproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "inputproto-2.3.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -716,7 +741,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  kbproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  kbproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "kbproto-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -729,7 +754,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libAppleWM = callPackage ({ stdenv, applewmproto, libX11, libXext, xextproto }: stdenv.mkDerivation {
+  libAppleWM = callPackage ({ stdenv, pkgconfig, fetchurl, applewmproto, libX11, libXext, xextproto }: stdenv.mkDerivation {
     name = "libAppleWM-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -742,7 +767,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libFS = callPackage ({ stdenv, fontsproto, xproto, xtrans }: stdenv.mkDerivation {
+  libFS = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, xproto, xtrans }: stdenv.mkDerivation {
     name = "libFS-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -755,7 +780,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libICE = callPackage ({ stdenv, xproto, xtrans }: stdenv.mkDerivation {
+  libICE = callPackage ({ stdenv, pkgconfig, fetchurl, xproto, xtrans }: stdenv.mkDerivation {
     name = "libICE-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -768,7 +793,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libSM = callPackage ({ stdenv, libICE, libuuid, xproto, xtrans }: stdenv.mkDerivation {
+  libSM = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libuuid, xproto, xtrans }: stdenv.mkDerivation {
     name = "libSM-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -781,7 +806,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libWindowsWM = callPackage ({ stdenv, windowswmproto, libX11, libXext, xextproto }: stdenv.mkDerivation {
+  libWindowsWM = callPackage ({ stdenv, pkgconfig, fetchurl, windowswmproto, libX11, libXext, xextproto }: stdenv.mkDerivation {
     name = "libWindowsWM-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -794,7 +819,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libX11 = callPackage ({ stdenv, inputproto, kbproto, libxcb, xextproto, xf86bigfontproto, xproto, xtrans }: stdenv.mkDerivation {
+  libX11 = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, kbproto, libxcb, xextproto, xf86bigfontproto, xproto, xtrans }: stdenv.mkDerivation {
     name = "libX11-1.6.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -807,7 +832,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXScrnSaver = callPackage ({ stdenv, scrnsaverproto, libX11, libXext, xextproto }: stdenv.mkDerivation {
+  libXScrnSaver = callPackage ({ stdenv, pkgconfig, fetchurl, scrnsaverproto, libX11, libXext, xextproto }: stdenv.mkDerivation {
     name = "libXScrnSaver-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -820,7 +845,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXau = callPackage ({ stdenv, xproto }: stdenv.mkDerivation {
+  libXau = callPackage ({ stdenv, pkgconfig, fetchurl, xproto }: stdenv.mkDerivation {
     name = "libXau-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
@@ -833,7 +858,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXaw = callPackage ({ stdenv, libX11, libXext, xextproto, libXmu, libXpm, xproto, libXt }: stdenv.mkDerivation {
+  libXaw = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xextproto, libXmu, libXpm, xproto, libXt }: stdenv.mkDerivation {
     name = "libXaw-1.0.13";
     builder = ./builder.sh;
     src = fetchurl {
@@ -846,7 +871,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXcomposite = callPackage ({ stdenv, compositeproto, libX11, libXfixes, xproto }: stdenv.mkDerivation {
+  libXcomposite = callPackage ({ stdenv, pkgconfig, fetchurl, compositeproto, libX11, libXfixes, xproto }: stdenv.mkDerivation {
     name = "libXcomposite-0.4.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -859,7 +884,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXcursor = callPackage ({ stdenv, fixesproto, libX11, libXfixes, xproto, libXrender }: stdenv.mkDerivation {
+  libXcursor = callPackage ({ stdenv, pkgconfig, fetchurl, fixesproto, libX11, libXfixes, xproto, libXrender }: stdenv.mkDerivation {
     name = "libXcursor-1.1.15";
     builder = ./builder.sh;
     src = fetchurl {
@@ -872,7 +897,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXdamage = callPackage ({ stdenv, damageproto, fixesproto, libX11, xextproto, libXfixes, xproto }: stdenv.mkDerivation {
+  libXdamage = callPackage ({ stdenv, pkgconfig, fetchurl, damageproto, fixesproto, libX11, xextproto, libXfixes, xproto }: stdenv.mkDerivation {
     name = "libXdamage-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -885,7 +910,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXdmcp = callPackage ({ stdenv, xproto }: stdenv.mkDerivation {
+  libXdmcp = callPackage ({ stdenv, pkgconfig, fetchurl, xproto }: stdenv.mkDerivation {
     name = "libXdmcp-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -898,7 +923,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXext = callPackage ({ stdenv, libX11, xextproto, xproto }: stdenv.mkDerivation {
+  libXext = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xextproto, xproto }: stdenv.mkDerivation {
     name = "libXext-1.3.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -911,7 +936,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXfixes = callPackage ({ stdenv, fixesproto, libX11, xextproto, xproto }: stdenv.mkDerivation {
+  libXfixes = callPackage ({ stdenv, pkgconfig, fetchurl, fixesproto, libX11, xextproto, xproto }: stdenv.mkDerivation {
     name = "libXfixes-5.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -924,7 +949,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXfont = callPackage ({ stdenv, libfontenc, fontsproto, freetype, xproto, xtrans, zlib }: stdenv.mkDerivation {
+  libXfont = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, fontsproto, freetype, xproto, xtrans, zlib }: stdenv.mkDerivation {
     name = "libXfont-1.5.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -937,7 +962,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXfont2 = callPackage ({ stdenv, libfontenc, fontsproto, freetype, xproto, xtrans, zlib }: stdenv.mkDerivation {
+  libXfont2 = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, fontsproto, freetype, xproto, xtrans, zlib }: stdenv.mkDerivation {
     name = "libXfont2-2.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -950,7 +975,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXft = callPackage ({ stdenv, fontconfig, freetype, libX11, xproto, libXrender }: stdenv.mkDerivation {
+  libXft = callPackage ({ stdenv, pkgconfig, fetchurl, fontconfig, freetype, libX11, xproto, libXrender }: stdenv.mkDerivation {
     name = "libXft-2.3.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -963,7 +988,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXi = callPackage ({ stdenv, inputproto, libX11, libXext, xextproto, libXfixes, xproto }: stdenv.mkDerivation {
+  libXi = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, libX11, libXext, xextproto, libXfixes, xproto }: stdenv.mkDerivation {
     name = "libXi-1.7.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -976,7 +1001,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXinerama = callPackage ({ stdenv, libX11, libXext, xextproto, xineramaproto }: stdenv.mkDerivation {
+  libXinerama = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xextproto, xineramaproto }: stdenv.mkDerivation {
     name = "libXinerama-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -989,7 +1014,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXmu = callPackage ({ stdenv, libX11, libXext, xextproto, xproto, libXt }: stdenv.mkDerivation {
+  libXmu = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xextproto, xproto, libXt }: stdenv.mkDerivation {
     name = "libXmu-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1002,7 +1027,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXp = callPackage ({ stdenv, printproto, libX11, libXau, libXext, xextproto }: stdenv.mkDerivation {
+  libXp = callPackage ({ stdenv, pkgconfig, fetchurl, printproto, libX11, libXau, libXext, xextproto }: stdenv.mkDerivation {
     name = "libXp-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1015,7 +1040,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXpm = callPackage ({ stdenv, libX11, libXext, xextproto, xproto, libXt }: stdenv.mkDerivation {
+  libXpm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xextproto, xproto, libXt }: stdenv.mkDerivation {
     name = "libXpm-3.5.12";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1028,7 +1053,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXpresent = callPackage ({ stdenv, presentproto, libX11, xextproto, xproto }: stdenv.mkDerivation {
+  libXpresent = callPackage ({ stdenv, pkgconfig, fetchurl, presentproto, libX11, xextproto, xproto }: stdenv.mkDerivation {
     name = "libXpresent-1.0.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1041,7 +1066,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXrandr = callPackage ({ stdenv, randrproto, renderproto, libX11, libXext, xextproto, xproto, libXrender }: stdenv.mkDerivation {
+  libXrandr = callPackage ({ stdenv, pkgconfig, fetchurl, randrproto, renderproto, libX11, libXext, xextproto, xproto, libXrender }: stdenv.mkDerivation {
     name = "libXrandr-1.5.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1054,7 +1079,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXrender = callPackage ({ stdenv, renderproto, libX11, xproto }: stdenv.mkDerivation {
+  libXrender = callPackage ({ stdenv, pkgconfig, fetchurl, renderproto, libX11, xproto }: stdenv.mkDerivation {
     name = "libXrender-0.9.10";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1067,7 +1092,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXres = callPackage ({ stdenv, resourceproto, libX11, libXext, xextproto, xproto }: stdenv.mkDerivation {
+  libXres = callPackage ({ stdenv, pkgconfig, fetchurl, resourceproto, libX11, libXext, xextproto, xproto }: stdenv.mkDerivation {
     name = "libXres-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1080,7 +1105,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXt = callPackage ({ stdenv, libICE, kbproto, libSM, libX11, xproto }: stdenv.mkDerivation {
+  libXt = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, kbproto, libSM, libX11, xproto }: stdenv.mkDerivation {
     name = "libXt-1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1093,7 +1118,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXtst = callPackage ({ stdenv, inputproto, recordproto, libX11, libXext, xextproto, libXi }: stdenv.mkDerivation {
+  libXtst = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, recordproto, libX11, libXext, xextproto, libXi }: stdenv.mkDerivation {
     name = "libXtst-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1106,7 +1131,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXv = callPackage ({ stdenv, videoproto, libX11, libXext, xextproto, xproto }: stdenv.mkDerivation {
+  libXv = callPackage ({ stdenv, pkgconfig, fetchurl, videoproto, libX11, libXext, xextproto, xproto }: stdenv.mkDerivation {
     name = "libXv-1.0.11";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1119,7 +1144,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXvMC = callPackage ({ stdenv, videoproto, libX11, libXext, xextproto, xproto, libXv }: stdenv.mkDerivation {
+  libXvMC = callPackage ({ stdenv, pkgconfig, fetchurl, videoproto, libX11, libXext, xextproto, xproto, libXv }: stdenv.mkDerivation {
     name = "libXvMC-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1132,7 +1157,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXxf86dga = callPackage ({ stdenv, libX11, libXext, xextproto, xf86dgaproto, xproto }: stdenv.mkDerivation {
+  libXxf86dga = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xextproto, xf86dgaproto, xproto }: stdenv.mkDerivation {
     name = "libXxf86dga-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1145,7 +1170,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXxf86misc = callPackage ({ stdenv, libX11, libXext, xextproto, xf86miscproto, xproto }: stdenv.mkDerivation {
+  libXxf86misc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xextproto, xf86miscproto, xproto }: stdenv.mkDerivation {
     name = "libXxf86misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1158,7 +1183,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libXxf86vm = callPackage ({ stdenv, libX11, libXext, xextproto, xf86vidmodeproto, xproto }: stdenv.mkDerivation {
+  libXxf86vm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xextproto, xf86vidmodeproto, xproto }: stdenv.mkDerivation {
     name = "libXxf86vm-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1171,7 +1196,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libdmx = callPackage ({ stdenv, dmxproto, libX11, libXext, xextproto }: stdenv.mkDerivation {
+  libdmx = callPackage ({ stdenv, pkgconfig, fetchurl, dmxproto, libX11, libXext, xextproto }: stdenv.mkDerivation {
     name = "libdmx-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1184,7 +1209,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libfontenc = callPackage ({ stdenv, xproto, zlib }: stdenv.mkDerivation {
+  libfontenc = callPackage ({ stdenv, pkgconfig, fetchurl, xproto, zlib }: stdenv.mkDerivation {
     name = "libfontenc-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1197,7 +1222,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libpciaccess = callPackage ({ stdenv, zlib }: stdenv.mkDerivation {
+  libpciaccess = callPackage ({ stdenv, pkgconfig, fetchurl, zlib }: stdenv.mkDerivation {
     name = "libpciaccess-0.14";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1210,7 +1235,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libpthreadstubs = callPackage ({ stdenv }: stdenv.mkDerivation {
+  libpthreadstubs = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "libpthread-stubs-0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1223,7 +1248,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libxcb = callPackage ({ stdenv, libxslt, libpthreadstubs, python, libXau, xcbproto, libXdmcp }: stdenv.mkDerivation {
+  libxcb = callPackage ({ stdenv, pkgconfig, fetchurl, libxslt, libpthreadstubs, python, libXau, xcbproto, libXdmcp }: stdenv.mkDerivation {
     name = "libxcb-1.12";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1236,7 +1261,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libxkbfile = callPackage ({ stdenv, kbproto, libX11 }: stdenv.mkDerivation {
+  libxkbfile = callPackage ({ stdenv, pkgconfig, fetchurl, kbproto, libX11 }: stdenv.mkDerivation {
     name = "libxkbfile-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1249,7 +1274,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  libxshmfence = callPackage ({ stdenv, xproto }: stdenv.mkDerivation {
+  libxshmfence = callPackage ({ stdenv, pkgconfig, fetchurl, xproto }: stdenv.mkDerivation {
     name = "libxshmfence-1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1262,7 +1287,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  lndir = callPackage ({ stdenv, xproto }: stdenv.mkDerivation {
+  lndir = callPackage ({ stdenv, pkgconfig, fetchurl, xproto }: stdenv.mkDerivation {
     name = "lndir-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1275,7 +1300,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  luit = callPackage ({ stdenv, libfontenc }: stdenv.mkDerivation {
+  luit = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc }: stdenv.mkDerivation {
     name = "luit-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1288,7 +1313,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  makedepend = callPackage ({ stdenv, xproto }: stdenv.mkDerivation {
+  makedepend = callPackage ({ stdenv, pkgconfig, fetchurl, xproto }: stdenv.mkDerivation {
     name = "makedepend-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1301,7 +1326,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  mkfontdir = callPackage ({ stdenv }: stdenv.mkDerivation {
+  mkfontdir = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "mkfontdir-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1314,7 +1339,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  mkfontscale = callPackage ({ stdenv, libfontenc, freetype, xproto, zlib }: stdenv.mkDerivation {
+  mkfontscale = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, freetype, xproto, zlib }: stdenv.mkDerivation {
     name = "mkfontscale-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1327,7 +1352,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  presentproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  presentproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "presentproto-1.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1340,7 +1365,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  printproto = callPackage ({ stdenv, libXau }: stdenv.mkDerivation {
+  printproto = callPackage ({ stdenv, pkgconfig, fetchurl, libXau }: stdenv.mkDerivation {
     name = "printproto-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1353,7 +1378,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  randrproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  randrproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "randrproto-1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1366,7 +1391,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  recordproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  recordproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "recordproto-1.14.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1379,7 +1404,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  renderproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  renderproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "renderproto-0.11.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1392,7 +1417,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  resourceproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  resourceproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "resourceproto-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1405,7 +1430,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  scrnsaverproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  scrnsaverproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "scrnsaverproto-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1418,7 +1443,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  sessreg = callPackage ({ stdenv, xproto }: stdenv.mkDerivation {
+  sessreg = callPackage ({ stdenv, pkgconfig, fetchurl, xproto }: stdenv.mkDerivation {
     name = "sessreg-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1431,7 +1456,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  setxkbmap = callPackage ({ stdenv, libX11, libxkbfile }: stdenv.mkDerivation {
+  setxkbmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
     name = "setxkbmap-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1444,7 +1469,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  smproxy = callPackage ({ stdenv, libICE, libSM, libXmu, libXt }: stdenv.mkDerivation {
+  smproxy = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libXmu, libXt }: stdenv.mkDerivation {
     name = "smproxy-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1457,7 +1482,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  twm = callPackage ({ stdenv, libICE, libSM, libX11, libXext, libXmu, xproto, libXt }: stdenv.mkDerivation {
+  twm = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libX11, libXext, libXmu, xproto, libXt }: stdenv.mkDerivation {
     name = "twm-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1470,7 +1495,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  utilmacros = callPackage ({ stdenv }: stdenv.mkDerivation {
+  utilmacros = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "util-macros-1.19.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1483,7 +1508,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  videoproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  videoproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "videoproto-2.3.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1496,7 +1521,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  windowswmproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  windowswmproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "windowswmproto-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1509,7 +1534,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  x11perf = callPackage ({ stdenv, libX11, libXext, libXft, libXmu, xproto, libXrender }: stdenv.mkDerivation {
+  x11perf = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXft, libXmu, xproto, libXrender }: stdenv.mkDerivation {
     name = "x11perf-1.6.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1522,7 +1547,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xauth = callPackage ({ stdenv, libX11, libXau, libXext, libXmu, xproto }: stdenv.mkDerivation {
+  xauth = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXext, libXmu, xproto }: stdenv.mkDerivation {
     name = "xauth-1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1535,7 +1560,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xbacklight = callPackage ({ stdenv, libxcb, xcbutil }: stdenv.mkDerivation {
+  xbacklight = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb, xcbutil }: stdenv.mkDerivation {
     name = "xbacklight-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1548,7 +1573,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xbitmaps = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xbitmaps = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xbitmaps-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1561,7 +1586,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbproto = callPackage ({ stdenv, python }: stdenv.mkDerivation {
+  xcbproto = callPackage ({ stdenv, pkgconfig, fetchurl, python }: stdenv.mkDerivation {
     name = "xcb-proto-1.12";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1574,7 +1599,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutil = callPackage ({ stdenv, gperf, m4, libxcb, xproto }: stdenv.mkDerivation {
+  xcbutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xproto }: stdenv.mkDerivation {
     name = "xcb-util-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1587,7 +1612,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilcursor = callPackage ({ stdenv, gperf, m4, libxcb, xcbutilimage, xcbutilrenderutil, xproto }: stdenv.mkDerivation {
+  xcbutilcursor = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xcbutilimage, xcbutilrenderutil, xproto }: stdenv.mkDerivation {
     name = "xcb-util-cursor-0.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1600,7 +1625,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilerrors = callPackage ({ stdenv, gperf, m4, libxcb, xcbproto, xproto }: stdenv.mkDerivation {
+  xcbutilerrors = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xcbproto, xproto }: stdenv.mkDerivation {
     name = "xcb-util-errors-1.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1613,7 +1638,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilimage = callPackage ({ stdenv, gperf, m4, libxcb, xcbutil, xproto }: stdenv.mkDerivation {
+  xcbutilimage = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xcbutil, xproto }: stdenv.mkDerivation {
     name = "xcb-util-image-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1626,7 +1651,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilkeysyms = callPackage ({ stdenv, gperf, m4, libxcb, xproto }: stdenv.mkDerivation {
+  xcbutilkeysyms = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xproto }: stdenv.mkDerivation {
     name = "xcb-util-keysyms-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1639,7 +1664,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilrenderutil = callPackage ({ stdenv, gperf, m4, libxcb, xproto }: stdenv.mkDerivation {
+  xcbutilrenderutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xproto }: stdenv.mkDerivation {
     name = "xcb-util-renderutil-0.3.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1652,7 +1677,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcbutilwm = callPackage ({ stdenv, gperf, m4, libxcb, xproto }: stdenv.mkDerivation {
+  xcbutilwm = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, m4, libxcb, xproto }: stdenv.mkDerivation {
     name = "xcb-util-wm-0.4.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1665,7 +1690,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xclock = callPackage ({ stdenv, libX11, libXaw, libXft, libxkbfile, libXmu, xproto, libXrender, libXt }: stdenv.mkDerivation {
+  xclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xproto, libXrender, libXt }: stdenv.mkDerivation {
     name = "xclock-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1678,7 +1703,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcmiscproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xcmiscproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xcmiscproto-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1691,7 +1716,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcmsdb = callPackage ({ stdenv, libX11 }: stdenv.mkDerivation {
+  xcmsdb = callPackage ({ stdenv, pkgconfig, fetchurl, libX11 }: stdenv.mkDerivation {
     name = "xcmsdb-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1704,7 +1729,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcompmgr = callPackage ({ stdenv, libXcomposite, libXdamage, libXext, libXfixes, libXrender }: stdenv.mkDerivation {
+  xcompmgr = callPackage ({ stdenv, pkgconfig, fetchurl, libXcomposite, libXdamage, libXext, libXfixes, libXrender }: stdenv.mkDerivation {
     name = "xcompmgr-1.1.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1717,7 +1742,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcursorgen = callPackage ({ stdenv, libpng, libX11, libXcursor }: stdenv.mkDerivation {
+  xcursorgen = callPackage ({ stdenv, pkgconfig, fetchurl, libpng, libX11, libXcursor }: stdenv.mkDerivation {
     name = "xcursorgen-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1730,7 +1755,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcursorthemes = callPackage ({ stdenv, libXcursor }: stdenv.mkDerivation {
+  xcursorthemes = callPackage ({ stdenv, pkgconfig, fetchurl, libXcursor }: stdenv.mkDerivation {
     name = "xcursor-themes-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1743,7 +1768,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xdm = callPackage ({ stdenv, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, libXt }: stdenv.mkDerivation {
+  xdm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, libXt }: stdenv.mkDerivation {
     name = "xdm-1.1.11";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1756,7 +1781,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xdpyinfo = callPackage ({ stdenv, libdmx, libX11, libxcb, libXcomposite, libXext, libXi, libXinerama, xproto, libXrender, libXtst, libXxf86dga, libXxf86misc, libXxf86vm }: stdenv.mkDerivation {
+  xdpyinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libdmx, libX11, libxcb, libXcomposite, libXext, libXi, libXinerama, xproto, libXrender, libXtst, libXxf86dga, libXxf86misc, libXxf86vm }: stdenv.mkDerivation {
     name = "xdpyinfo-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1769,7 +1794,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xdriinfo = callPackage ({ stdenv, glproto, libX11 }: stdenv.mkDerivation {
+  xdriinfo = callPackage ({ stdenv, pkgconfig, fetchurl, glproto, libX11 }: stdenv.mkDerivation {
     name = "xdriinfo-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1782,7 +1807,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xev = callPackage ({ stdenv, libX11, xproto, libXrandr }: stdenv.mkDerivation {
+  xev = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto, libXrandr }: stdenv.mkDerivation {
     name = "xev-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1795,7 +1820,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xextproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xextproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xextproto-7.3.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1808,7 +1833,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xeyes = callPackage ({ stdenv, libX11, libXext, libXmu, xproto, libXrender, libXt }: stdenv.mkDerivation {
+  xeyes = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, xproto, libXrender, libXt }: stdenv.mkDerivation {
     name = "xeyes-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1821,7 +1846,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86bigfontproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xf86bigfontproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xf86bigfontproto-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1834,7 +1859,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86dgaproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xf86dgaproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xf86dgaproto-2.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1847,7 +1872,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86driproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xf86driproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xf86driproto-2.1.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1860,7 +1885,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86inputevdev = callPackage ({ stdenv, inputproto, udev, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86inputevdev = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, udev, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-input-evdev-2.10.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1873,7 +1898,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86inputjoystick = callPackage ({ stdenv, inputproto, kbproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86inputjoystick = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, kbproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-input-joystick-1.6.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1886,7 +1911,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86inputkeyboard = callPackage ({ stdenv, inputproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86inputkeyboard = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-input-keyboard-1.9.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1899,7 +1924,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86inputlibinput = callPackage ({ stdenv, inputproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86inputlibinput = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-input-libinput-0.26.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1912,7 +1937,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86inputmouse = callPackage ({ stdenv, inputproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86inputmouse = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-input-mouse-1.9.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1925,7 +1950,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86inputsynaptics = callPackage ({ stdenv, inputproto, randrproto, recordproto, libX11, libXi, xorgserver, xproto, libXtst }: stdenv.mkDerivation {
+  xf86inputsynaptics = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, randrproto, recordproto, libX11, libXi, xorgserver, xproto, libXtst }: stdenv.mkDerivation {
     name = "xf86-input-synaptics-1.9.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1938,7 +1963,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86inputvmmouse = callPackage ({ stdenv, inputproto, udev, randrproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86inputvmmouse = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, udev, randrproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-input-vmmouse-13.1.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1951,7 +1976,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86inputvoid = callPackage ({ stdenv, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86inputvoid = callPackage ({ stdenv, pkgconfig, fetchurl, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-input-void-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1964,7 +1989,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86miscproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xf86miscproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xf86miscproto-0.9.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1977,7 +2002,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoamdgpu = callPackage ({ stdenv, fontsproto, mesa_noglu, libGL, libdrm, udev, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoamdgpu = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, mesa_noglu, libGL, libdrm, udev, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-amdgpu-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1990,7 +2015,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoark = callPackage ({ stdenv, fontsproto, libpciaccess, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoark = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-ark-0.7.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2003,7 +2028,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoast = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoast = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-ast-1.1.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2016,7 +2041,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoati = callPackage ({ stdenv, fontsproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoati = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-ati-18.0.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2029,7 +2054,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videochips = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videochips = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-chips-1.2.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2042,7 +2067,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videocirrus = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videocirrus = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-cirrus-1.5.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2055,7 +2080,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videodummy = callPackage ({ stdenv, fontsproto, randrproto, renderproto, videoproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videodummy = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, randrproto, renderproto, videoproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-dummy-0.3.8";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2068,7 +2093,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videofbdev = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videofbdev = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-fbdev-0.4.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2081,7 +2106,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videogeode = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videogeode = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-geode-2.11.17";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2094,7 +2119,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoglide = callPackage ({ stdenv, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoglide = callPackage ({ stdenv, pkgconfig, fetchurl, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-glide-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2107,7 +2132,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoglint = callPackage ({ stdenv, libpciaccess, videoproto, xextproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoglint = callPackage ({ stdenv, pkgconfig, fetchurl, libpciaccess, videoproto, xextproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-glint-1.2.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2120,7 +2145,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoi128 = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoi128 = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-i128-1.3.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2133,7 +2158,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoi740 = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoi740 = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-i740-1.3.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2146,7 +2171,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videointel = callPackage ({ stdenv, dri2proto, dri3proto, fontsproto, libdrm, libpng, udev, libpciaccess, presentproto, randrproto, renderproto, libX11, xcbutil, libxcb, libXcursor, libXdamage, libXext, xextproto, xf86driproto, libXfixes, xorgserver, xproto, libXrandr, libXrender, libxshmfence, libXtst, libXvMC }: stdenv.mkDerivation {
+  xf86videointel = callPackage ({ stdenv, pkgconfig, fetchurl, dri2proto, dri3proto, fontsproto, libdrm, libpng, udev, libpciaccess, presentproto, randrproto, renderproto, libX11, xcbutil, libxcb, libXcursor, libXdamage, libXext, xextproto, xf86driproto, libXfixes, xorgserver, xproto, libXrandr, libXrender, libxshmfence, libXtst, libXvMC }: stdenv.mkDerivation {
     name = "xf86-video-intel-2.99.917";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2159,7 +2184,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videomach64 = callPackage ({ stdenv, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videomach64 = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-mach64-6.9.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2172,7 +2197,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videomga = callPackage ({ stdenv, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videomga = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-mga-1.6.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2185,7 +2210,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoneomagic = callPackage ({ stdenv, fontsproto, libpciaccess, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoneomagic = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-neomagic-1.2.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2198,7 +2223,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videonewport = callPackage ({ stdenv, fontsproto, randrproto, renderproto, videoproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videonewport = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, randrproto, renderproto, videoproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-newport-0.2.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2211,7 +2236,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videonouveau = callPackage ({ stdenv, dri2proto, fontsproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videonouveau = callPackage ({ stdenv, pkgconfig, fetchurl, dri2proto, fontsproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-nouveau-1.0.15";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2224,7 +2249,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videonv = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videonv = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-nv-2.1.21";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2237,7 +2262,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoopenchrome = callPackage ({ stdenv, fontsproto, glproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, libX11, libXext, xextproto, xf86driproto, xorgserver, xproto, libXvMC }: stdenv.mkDerivation {
+  xf86videoopenchrome = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, glproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, libX11, libXext, xextproto, xf86driproto, xorgserver, xproto, libXvMC }: stdenv.mkDerivation {
     name = "xf86-video-openchrome-0.6.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2250,7 +2275,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoqxl = callPackage ({ stdenv, fontsproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoqxl = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-qxl-0.1.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2263,7 +2288,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videor128 = callPackage ({ stdenv, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xf86miscproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videor128 = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xf86miscproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-r128-6.10.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2276,7 +2301,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videorendition = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videorendition = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-rendition-4.2.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2289,7 +2314,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videos3virge = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videos3virge = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-s3virge-1.10.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2302,7 +2327,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videosavage = callPackage ({ stdenv, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videosavage = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-savage-2.3.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2315,7 +2340,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videosiliconmotion = callPackage ({ stdenv, fontsproto, libpciaccess, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videosiliconmotion = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, videoproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-siliconmotion-1.7.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2328,7 +2353,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videosis = callPackage ({ stdenv, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86dgaproto, xf86driproto, xineramaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videosis = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86dgaproto, xf86driproto, xineramaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-sis-0.10.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2341,7 +2366,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videosisusb = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xineramaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videosisusb = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xineramaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-sisusb-0.9.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2354,7 +2379,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videosuncg6 = callPackage ({ stdenv, fontsproto, randrproto, renderproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videosuncg6 = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, randrproto, renderproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-suncg6-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2367,7 +2392,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videosunffb = callPackage ({ stdenv, fontsproto, randrproto, renderproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videosunffb = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, randrproto, renderproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-sunffb-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2380,7 +2405,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videosunleo = callPackage ({ stdenv, fontsproto, randrproto, renderproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videosunleo = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, randrproto, renderproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-sunleo-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2393,7 +2418,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videotdfx = callPackage ({ stdenv, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videotdfx = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-tdfx-1.4.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2406,7 +2431,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videotga = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videotga = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-tga-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2419,7 +2444,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videotrident = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videotrident = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-trident-1.3.8";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2432,7 +2457,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videov4l = callPackage ({ stdenv, randrproto, videoproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videov4l = callPackage ({ stdenv, pkgconfig, fetchurl, randrproto, videoproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-v4l-0.2.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2445,7 +2470,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videovesa = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videovesa = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, xextproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-vesa-2.4.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2458,7 +2483,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videovmware = callPackage ({ stdenv, fontsproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, libX11, libXext, xextproto, xineramaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videovmware = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libdrm, udev, libpciaccess, randrproto, renderproto, videoproto, libX11, libXext, xextproto, xineramaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-vmware-13.2.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2471,7 +2496,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videovoodoo = callPackage ({ stdenv, fontsproto, libpciaccess, randrproto, renderproto, xextproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videovoodoo = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, libpciaccess, randrproto, renderproto, xextproto, xf86dgaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-voodoo-1.2.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2484,7 +2509,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videowsfb = callPackage ({ stdenv, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videowsfb = callPackage ({ stdenv, pkgconfig, fetchurl, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-wsfb-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2497,7 +2522,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86videoxgi = callPackage ({ stdenv, fontsproto, glproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xineramaproto, xorgserver, xproto }: stdenv.mkDerivation {
+  xf86videoxgi = callPackage ({ stdenv, pkgconfig, fetchurl, fontsproto, glproto, libdrm, libpciaccess, randrproto, renderproto, videoproto, xextproto, xf86driproto, xineramaproto, xorgserver, xproto }: stdenv.mkDerivation {
     name = "xf86-video-xgi-1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2510,7 +2535,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xf86vidmodeproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xf86vidmodeproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xf86vidmodeproto-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2523,7 +2548,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xfs = callPackage ({ stdenv, libXfont, xproto, xtrans }: stdenv.mkDerivation {
+  xfs = callPackage ({ stdenv, pkgconfig, fetchurl, libXfont, xproto, xtrans }: stdenv.mkDerivation {
     name = "xfs-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2536,7 +2561,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xgamma = callPackage ({ stdenv, libX11, xproto, libXxf86vm }: stdenv.mkDerivation {
+  xgamma = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto, libXxf86vm }: stdenv.mkDerivation {
     name = "xgamma-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2549,7 +2574,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xgc = callPackage ({ stdenv, libXaw, libXt }: stdenv.mkDerivation {
+  xgc = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
     name = "xgc-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2562,7 +2587,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xhost = callPackage ({ stdenv, libX11, libXau, libXmu, xproto }: stdenv.mkDerivation {
+  xhost = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXmu, xproto }: stdenv.mkDerivation {
     name = "xhost-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2575,7 +2600,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xineramaproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xineramaproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xineramaproto-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2588,7 +2613,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xinit = callPackage ({ stdenv, libX11, xproto }: stdenv.mkDerivation {
+  xinit = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto }: stdenv.mkDerivation {
     name = "xinit-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2601,7 +2626,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xinput = callPackage ({ stdenv, inputproto, libX11, libXext, libXi, libXinerama, libXrandr }: stdenv.mkDerivation {
+  xinput = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, libX11, libXext, libXi, libXinerama, libXrandr }: stdenv.mkDerivation {
     name = "xinput-1.6.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2614,7 +2639,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xkbcomp = callPackage ({ stdenv, libX11, libxkbfile, xproto }: stdenv.mkDerivation {
+  xkbcomp = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile, xproto }: stdenv.mkDerivation {
     name = "xkbcomp-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2627,7 +2652,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xkbevd = callPackage ({ stdenv, libX11, libxkbfile }: stdenv.mkDerivation {
+  xkbevd = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
     name = "xkbevd-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2640,7 +2665,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xkbprint = callPackage ({ stdenv, libX11, libxkbfile, xproto }: stdenv.mkDerivation {
+  xkbprint = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile, xproto }: stdenv.mkDerivation {
     name = "xkbprint-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2653,7 +2678,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xkbutils = callPackage ({ stdenv, inputproto, libX11, libXaw, xproto, libXt }: stdenv.mkDerivation {
+  xkbutils = callPackage ({ stdenv, pkgconfig, fetchurl, inputproto, libX11, libXaw, xproto, libXt }: stdenv.mkDerivation {
     name = "xkbutils-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2666,7 +2691,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xkeyboardconfig = callPackage ({ stdenv, libX11, xproto }: stdenv.mkDerivation {
+  xkeyboardconfig = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto }: stdenv.mkDerivation {
     name = "xkeyboard-config-2.24";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2679,7 +2704,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xkill = callPackage ({ stdenv, libX11, libXmu, xproto }: stdenv.mkDerivation {
+  xkill = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xproto }: stdenv.mkDerivation {
     name = "xkill-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2692,7 +2717,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xlsatoms = callPackage ({ stdenv, libxcb }: stdenv.mkDerivation {
+  xlsatoms = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb }: stdenv.mkDerivation {
     name = "xlsatoms-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2705,7 +2730,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xlsclients = callPackage ({ stdenv, libxcb }: stdenv.mkDerivation {
+  xlsclients = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb }: stdenv.mkDerivation {
     name = "xlsclients-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2718,7 +2743,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xlsfonts = callPackage ({ stdenv, libX11, xproto }: stdenv.mkDerivation {
+  xlsfonts = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto }: stdenv.mkDerivation {
     name = "xlsfonts-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2731,7 +2756,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xmag = callPackage ({ stdenv, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  xmag = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
     name = "xmag-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2744,7 +2769,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xmessage = callPackage ({ stdenv, libXaw, libXt }: stdenv.mkDerivation {
+  xmessage = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
     name = "xmessage-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2757,7 +2782,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xmodmap = callPackage ({ stdenv, libX11, xproto }: stdenv.mkDerivation {
+  xmodmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto }: stdenv.mkDerivation {
     name = "xmodmap-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2770,7 +2795,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xorgcffiles = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xorgcffiles = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xorg-cf-files-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2783,7 +2808,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xorgdocs = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xorgdocs = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xorg-docs-1.7.1";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2796,7 +2821,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xorgserver = callPackage ({ stdenv, dri2proto, dri3proto, renderproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
+  xorgserver = callPackage ({ stdenv, pkgconfig, fetchurl, dri2proto, dri3proto, renderproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
     name = "xorg-server-1.19.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2809,7 +2834,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xorgsgmldoctools = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xorgsgmldoctools = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xorg-sgml-doctools-1.11";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2822,7 +2847,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xpr = callPackage ({ stdenv, libX11, libXmu, xproto }: stdenv.mkDerivation {
+  xpr = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xproto }: stdenv.mkDerivation {
     name = "xpr-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2835,7 +2860,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xprop = callPackage ({ stdenv, libX11, xproto }: stdenv.mkDerivation {
+  xprop = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto }: stdenv.mkDerivation {
     name = "xprop-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2848,7 +2873,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xproto = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xproto = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xproto-7.0.31";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2861,7 +2886,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xrandr = callPackage ({ stdenv, libX11, xproto, libXrandr, libXrender }: stdenv.mkDerivation {
+  xrandr = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto, libXrandr, libXrender }: stdenv.mkDerivation {
     name = "xrandr-1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2874,7 +2899,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xrdb = callPackage ({ stdenv, libX11, libXmu, xproto }: stdenv.mkDerivation {
+  xrdb = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xproto }: stdenv.mkDerivation {
     name = "xrdb-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2887,7 +2912,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xrefresh = callPackage ({ stdenv, libX11, xproto }: stdenv.mkDerivation {
+  xrefresh = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto }: stdenv.mkDerivation {
     name = "xrefresh-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2900,7 +2925,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xset = callPackage ({ stdenv, libX11, libXext, libXmu, xproto, libXxf86misc }: stdenv.mkDerivation {
+  xset = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, xproto, libXxf86misc }: stdenv.mkDerivation {
     name = "xset-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2913,7 +2938,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xsetroot = callPackage ({ stdenv, libX11, xbitmaps, libXcursor, libXmu }: stdenv.mkDerivation {
+  xsetroot = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xbitmaps, libXcursor, libXmu }: stdenv.mkDerivation {
     name = "xsetroot-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2926,7 +2951,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xtrans = callPackage ({ stdenv }: stdenv.mkDerivation {
+  xtrans = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xtrans-1.3.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2939,7 +2964,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xvinfo = callPackage ({ stdenv, libX11, xproto, libXv }: stdenv.mkDerivation {
+  xvinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto, libXv }: stdenv.mkDerivation {
     name = "xvinfo-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2952,7 +2977,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xwd = callPackage ({ stdenv, libX11, xproto }: stdenv.mkDerivation {
+  xwd = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto }: stdenv.mkDerivation {
     name = "xwd-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2965,7 +2990,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xwininfo = callPackage ({ stdenv, libX11, libxcb, xproto }: stdenv.mkDerivation {
+  xwininfo = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxcb, xproto }: stdenv.mkDerivation {
     name = "xwininfo-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2978,7 +3003,7 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xwud = callPackage ({ stdenv, libX11, xproto }: stdenv.mkDerivation {
+  xwud = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xproto }: stdenv.mkDerivation {
     name = "xwud-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2991,4 +3016,4 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-}; in xorg.overrideScope overrides
+})

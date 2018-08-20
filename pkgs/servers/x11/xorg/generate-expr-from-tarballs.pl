@@ -169,7 +169,7 @@ while (<>) {
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
         # Don't run fc-cache.
         die if defined $extraAttrs{$pkg};
-        $extraAttrs{$pkg} = " preInstall = \"installFlags=(FCCACHE=true)\"; ";
+        push @{$extraAttrs{$pkg}}, "preInstall = \"installFlags=(FCCACHE=true)\";";
     }
 
     my $isFont;
@@ -190,7 +190,7 @@ while (<>) {
     }
 
     if ($isFont) {
-        $extraAttrs{$pkg} = " configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ]; ";
+        push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ];";
     }
 
     sub process {
@@ -243,18 +243,9 @@ open OUT, ">default.nix";
 print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol, lib, newScope
-, dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
-, autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
+{ lib, newScope, pixman }:
 
-let
-
-  overrides = import ./overrides.nix {inherit args;};
-
-  xorg = lib.makeScope newScope xorgPackages;
-
-  xorgPackages = self: with self; {
+lib.makeScope newScope (self: with self; {
 
   inherit pixman;
 
@@ -282,11 +273,13 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     my $buildInputsStr = join "", map { $_ . " " } @buildInputs;
 
     my @arguments = @buildInputs;
-    unshift @arguments, "stdenv";
+    unshift @arguments, "stdenv", "pkgconfig", "fetchurl";
     my $argumentsStr = join ", ", @arguments;
 
-    my $extraAttrs = $extraAttrs{"$pkg"};
-    $extraAttrs = "" unless defined $extraAttrs;
+    my $extraAttrsStr = "";
+    if (defined $extraAttrs{$pkg}) {
+      $extraAttrsStr = join "", map { "\n    " . $_ } @{$extraAttrs{$pkg}};
+    }
 
     print OUT <<EOF
   $pkg = callPackage ({ $argumentsStr }: stdenv.mkDerivation {
@@ -298,13 +291,13 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     };
     hardeningDisable = [ "bindnow" "relro" ];
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ $buildInputsStr];$extraAttrs
+    buildInputs = [ $buildInputsStr];$extraAttrsStr
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
 EOF
 }
 
-print OUT "}; in xorg.overrideScope overrides\n";
+print OUT "})\n";
 
 close OUT;
