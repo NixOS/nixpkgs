@@ -79,6 +79,6 @@ in
     homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = [ maintainers.ardumont ];
+    maintainers = with maintainers; [ ardumont flokli ];
   };
 }

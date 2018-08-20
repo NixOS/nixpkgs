@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.2.8";
+  version = "2.2.9";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1k8dnnfs9888yp713l7kg2jg110lw47s4krx0njna6fjrsw4qyvp";
+    sha256 = "0r11mx8nkh7ysrnshs560amha5csx8zcaggb5kxcksx1zymyly32";
   };
 
   nativeBuildInputs = [ pkgconfig ];

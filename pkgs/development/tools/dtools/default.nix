@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "dtools-${version}";
-  version = "2.081.1";
+  version = "2.081.2";
 
   srcs = [
     (fetchFromGitHub {
       owner = "dlang";
       repo = "dmd";
       rev = "v${version}";
-      sha256 = "1xdz7p0pdzwkn57ai93mavgdkd8xb1sr2brlc6y3c12x84h43s8z";
+      sha256 = "1wwk4shqldvgyczv1ihmljpfj3yidq7mxcj69i9kjl7jqx54hw62";
       name = "dmd";
     })
     (fetchFromGitHub {

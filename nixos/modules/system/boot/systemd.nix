@@ -65,6 +65,7 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.machine1.service"
       "user@.service"
+      "user-runtime-dir@.service"
 
       # Journal.
       "systemd-journald.socket"

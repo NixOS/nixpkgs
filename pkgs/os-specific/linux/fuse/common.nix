@@ -72,6 +72,7 @@ in stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Kernel module and library that allows filesystems to be implemented in user space";
     platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl21 ];
     maintainers = [ maintainers.primeos ];
   };
 }

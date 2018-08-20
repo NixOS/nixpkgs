@@ -43,7 +43,7 @@ core-packages:
 default-package-overrides:
   # Newer versions require contravariant-1.5.*, which many builds refuse at the moment.
   - base-compat-batteries ==0.10.1
-  # LTS Haskell 12.5
+  # LTS Haskell 12.6
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -219,7 +219,7 @@ default-package-overrides:
   - auto ==0.4.3.1
   - autoexporter ==1.1.10
   - auto-update ==0.1.4
-  - avro ==0.3.3.1
+  - avro ==0.3.4.2
   - avwx ==0.3.0.2
   - backprop ==0.2.5.0
   - bank-holidays-england ==0.1.0.7
@@ -244,7 +244,7 @@ default-package-overrides:
   - bench ==1.0.11
   - bencode ==0.6.0.0
   - between ==0.11.0.0
-  - bhoogle ==0.1.3.2
+  - bhoogle ==0.1.3.4
   - bibtex ==0.1.0.6
   - bifunctors ==5.5.3
   - bimap ==0.3.3
@@ -351,7 +351,7 @@ default-package-overrides:
   - cast ==0.1.0.2
   - category ==0.2.0.1
   - cborg ==0.2.0.0
-  - cereal ==0.5.5.0
+  - cereal ==0.5.7.0
   - cereal-conduit ==0.8.0
   - cereal-text ==0.1.0.2
   - cereal-time ==0.1.0.0
@@ -364,7 +364,7 @@ default-package-overrides:
   - chart-unit ==0.7.0.0
   - chaselev-deque ==0.5.0.5
   - ChasingBottoms ==1.3.1.4
-  - chatwork ==0.1.3.4
+  - chatwork ==0.1.3.5
   - cheapskate ==0.1.1
   - cheapskate-highlight ==0.1.0.0
   - cheapskate-lucid ==0.1.0.0
@@ -586,7 +586,7 @@ default-package-overrides:
   - diagrams-rasterific ==1.4.1
   - diagrams-solve ==0.1.1
   - diagrams-svg ==1.4.2
-  - di-core ==1.0.2
+  - di-core ==1.0.3
   - dictionary-sharing ==0.1.0.0
   - di-df1 ==1.0.2
   - Diff ==0.3.4
@@ -787,7 +787,7 @@ default-package-overrides:
   - generic-aeson ==0.2.0.9
   - generic-arbitrary ==0.1.0
   - generic-deriving ==1.12.2
-  - generic-lens ==1.0.0.1
+  - generic-lens ==1.0.0.2
   - GenericPretty ==1.2.2
   - generic-random ==1.2.0.0
   - generics-eot ==0.4
@@ -944,7 +944,7 @@ default-package-overrides:
   - hebrew-time ==0.1.1
   - hedgehog ==0.6
   - hedgehog-corpus ==0.1.0
-  - hedis ==0.10.2
+  - hedis ==0.10.3
   - here ==1.2.13
   - heredoc ==0.2.0.0
   - heterocephalus ==1.0.5.2
@@ -954,7 +954,7 @@ default-package-overrides:
   - hexpat ==0.20.13
   - hexstring ==0.11.1
   - hfsevents ==0.1.6
-  - hidapi ==0.1.4
+  - hidapi ==0.1.5
   - hidden-char ==0.1.0.2
   - hierarchical-clustering ==0.4.6
   - hierarchy ==1.0.2
@@ -1064,7 +1064,7 @@ default-package-overrides:
   - hunit-dejafu ==1.2.0.6
   - hvect ==0.4.0.0
   - hvega ==0.1.0.3
-  - hw-balancedparens ==0.2.0.1
+  - hw-balancedparens ==0.2.0.2
   - hw-bits ==0.7.0.2
   - hw-conduit ==0.2.0.3
   - hw-diagnostics ==0.0.0.5
@@ -1098,7 +1098,7 @@ default-package-overrides:
   - hybrid-vectors ==0.2.2
   - hyperloglog ==0.4.2
   - hyphenation ==0.7.1
-  - hyraxAbif ==0.2.3.5
+  - hyraxAbif ==0.2.3.9
   - iconv ==0.4.1.3
   - identicon ==0.2.2
   - ieee754 ==0.8.0
@@ -1676,7 +1676,7 @@ default-package-overrides:
   - quicklz ==1.5.0.11
   - rainbow ==0.30.0.2
   - rainbox ==0.20.0.0
-  - rakuten ==0.1.1.4
+  - rakuten ==0.1.1.5
   - ramus ==0.1.2
   - random ==1.1
   - random-bytestring ==0.1.3.1
@@ -1729,7 +1729,7 @@ default-package-overrides:
   - relational-query-HDBC ==0.7.1.1
   - relational-record ==0.2.2.0
   - relational-schemas ==0.1.6.2
-  - relude ==0.1.0
+  - relude ==0.1.1
   - renderable ==0.2.0.1
   - repa ==3.4.1.3
   - repline ==0.1.7.0
@@ -1775,9 +1775,9 @@ default-package-overrides:
   - sandi ==0.4.2
   - sandman ==0.2.0.1
   - say ==0.1.0.0
-  - sbp ==2.3.16
-  - SCalendar ==1.1.0
+  - sbp ==2.3.17
   - scalendar ==1.2.0
+  - SCalendar ==1.1.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
@@ -1942,7 +1942,7 @@ default-package-overrides:
   - store ==0.5.0
   - store-core ==0.4.4
   - Strafunski-StrategyLib ==5.0.1.0
-  - stratosphere ==0.24.3
+  - stratosphere ==0.24.4
   - streaming ==0.2.1.0
   - streaming-attoparsec ==1.0.0
   - streaming-bytestring ==0.1.6
@@ -2033,7 +2033,7 @@ default-package-overrides:
   - texmath ==0.11.0.1
   - text ==1.2.3.0
   - text-binary ==0.2.1.1
-  - text-builder ==0.5.1.1
+  - text-builder ==0.5.3
   - text-conversions ==0.3.0
   - text-icu ==0.7.0.1
   - text-latin1 ==0.3.1
@@ -2093,7 +2093,7 @@ default-package-overrides:
   - tmapchan ==0.0.3
   - tmapmvar ==0.0.4
   - tmp-postgres ==0.1.1.1
-  - tomland ==0.3
+  - tomland ==0.3.1
   - tostring ==0.2.1.1
   - transaction ==0.1.1.3
   - transformers-base ==0.4.5.2
@@ -2207,7 +2207,7 @@ default-package-overrides:
   - verbosity ==0.2.3.0
   - versions ==3.4.0.1
   - ViennaRNAParser ==1.3.3
-  - viewprof ==0.0.0.21
+  - viewprof ==0.0.0.22
   - vinyl ==0.8.1.1
   - vivid ==0.3.0.2
   - vivid-osc ==0.3.0.0
@@ -2344,7 +2344,7 @@ default-package-overrides:
   - yesod-static ==1.6.0
   - yesod-test ==1.6.5
   - yesod-text-markdown ==0.1.10
-  - yesod-websockets ==0.3.0
+  - yesod-websockets ==0.3.0.1
   - yes-precure5-command ==5.5.3
   - yi-language ==0.17.1
   - yi-rope ==0.11

@@ -2,8 +2,8 @@
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, targetPackages
 , bootstrapVersion ? false
-, version ? "1.10.0"
-, ldcSha256 ? "0wc3vlblsz4qdwa9ay9plv9nvfd07zj2byqqffaa4a5gvjwf5dlr"
+, version ? "1.11.0"
+, ldcSha256 ? "0w4z261gzji31hn1xdnmi9dfkbyydpy6rz8aj4456q5w8yp4yil5"
 }:
 
 let

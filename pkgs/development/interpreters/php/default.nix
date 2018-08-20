@@ -220,8 +220,8 @@ let
 
 in {
   php71 = generic {
-    version = "7.1.20";
-    sha256 = "0i8xd6p4zdg8fl6f0j430raanlshsshr3s3jlm72b0gvi1n4f6rs";
+    version = "7.1.21";
+    sha256 = "104mn4kppklb21hgz1a50kgmc0ak5y996sx990xpc8yy9dbrqh62";
   };
 
   php72 = generic {

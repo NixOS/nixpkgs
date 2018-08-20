@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "15m1w1qad3dj7r8n5ng1qqcaiyx1gyd6hnc3p2apgjllccdp77qg";
   };
 
-  configureFlags = stdenv.lib.optionalString docSupport "--enable-doc";
+  configureFlags = stdenv.lib.optionals docSupport "--enable-doc";
 
   buildInputs = [ yacc flex libusb libelf libftdi1 readline ]
     ++ stdenv.lib.optionals docSupport [ texLive texinfo texi2html ];

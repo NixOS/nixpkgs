@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib zlib libpng cmake gnumake3 ];
 
-  configureFlags = "-v";
+  configureFlags = [ "-v" ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux ++ platforms.darwin;

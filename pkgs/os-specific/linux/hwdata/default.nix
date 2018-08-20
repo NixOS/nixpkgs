@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs ./configure";
 
-  configureFlags = "--datadir=$(prefix)/data";
+  configureFlags = [ "--datadir=$(prefix)/data" ];
 
   doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ngiv4aj3rr35k3q3wjx0y19gh7i1ydqa0cqip6sjwd8fph5ll65";
   };
 
-  configureFlags = "--with-ncurses=${ncurses.dev}";
+  configureFlags = [ "--with-ncurses=${ncurses.dev}" ];
 
   buildInputs = [ ncurses ];
   nativeBuildInputs = stdenv.lib.optional emacsSupport emacs;

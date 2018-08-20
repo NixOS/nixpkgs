@@ -36,9 +36,9 @@ let
       sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
     '';
 
-    configureFlags = "--disable-debug" +
-      stdenv.lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) " --enable-rpath" +
-      stdenv.lib.optionalString (buildPlatform != hostPlatform) " --with-cross-build=${nativeBuildRoot}";
+    configureFlags = [ "--disable-debug" ]
+      ++ stdenv.lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) "--enable-rpath"
+      ++ stdenv.lib.optional (buildPlatform != hostPlatform) "--with-cross-build=${nativeBuildRoot}";
 
     enableParallelBuilding = true;
 
