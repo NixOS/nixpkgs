@@ -7410,6 +7410,8 @@ with pkgs;
   love_11 = callPackage ../development/interpreters/love/11.1.nix { };
   love = love_0_10;
 
+  wabt = callPackage ../development/tools/wabt { };
+
   ### LUA MODULES
 
   lua4 = callPackage ../development/interpreters/lua-4 { };
