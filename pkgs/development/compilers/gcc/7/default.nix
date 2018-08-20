@@ -261,12 +261,7 @@ stdenv.mkDerivation ({
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
     export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-  '' + (if hostPlatform != targetPlatform && targetPlatform.isPower then ''
-    # the float128 detection in cross-gcc and glibc is a little busted. since glibc doesn't compile without float128 support, fix it.
-    sed 's/-mfloat128/-mfloat128-type -mfloat128/g' -i libgcc/configure
-    # this file also includes totally unneeded headers which are not available in cross-compilation. remove them.
-    sed -E 's/#include <(string|stdlib|ctype).h>//' -i libgcc/config/rs6000/float128-ifunc.c
-  '' else "");
+  '';
 
   dontDisableStatic = true;
 
