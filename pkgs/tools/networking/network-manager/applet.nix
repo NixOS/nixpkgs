@@ -15,12 +15,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0lmlkh4yyl9smvkgrzshn127zqfbp9f41f448ks8dlhhm38s38v2";
   };
 
-  patches = [
-    # https://gitlab.gnome.org/GNOME/network-manager-applet/merge_requests/19
-    ./libnm-gtk-mbpi.patch
-  ];
-
   mesonFlags = [
+    "-Dlibnm_gtk=false" # It is deprecated
     "-Dselinux=false"
     "-Dappindicator=yes"
     "-Dgcr=${if withGnome then "true" else "false"}"
