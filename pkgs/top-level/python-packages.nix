@@ -382,6 +382,8 @@ in {
 
   pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
 
+  pycrc = callPackage ../development/python-modules/pycrc { };
+
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
