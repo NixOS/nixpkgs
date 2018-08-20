@@ -284,6 +284,10 @@ stdenv.mkDerivation ({
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
+    ++ optionals (targetPlatform.isPower && targetPlatform.libc == "glibc" && targetPlatform.is64bit && target.isLittleEndian) [
+      "--with-long-double-128"
+      "--enable-softfloat"
+    ]
   ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;

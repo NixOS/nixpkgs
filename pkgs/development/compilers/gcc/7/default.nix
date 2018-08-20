@@ -326,7 +326,7 @@ stdenv.mkDerivation ({
     ]
     ++ optional (targetPlatform == hostPlatform && targetPlatform.libc == "musl") "--disable-libsanitizer"
     ++ optional (targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
-    ++ optionals (targetPlatform.isPower && targetPlatform.libc == "glibc") [
+    ++ optionals (targetPlatform.isPower && targetPlatform.libc == "glibc" && targetPlatform.is64bit && target.isLittleEndian) [
       "--with-long-double-128"
       "--enable-softfloat"
     ]
