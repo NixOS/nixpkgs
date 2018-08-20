@@ -18223,6 +18223,8 @@ with pkgs;
   retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
   retroshare06 = retroshare;
 
+  revelation = callPackage ../applications/misc/revelation { };
+
   ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet { };
 
   ries = callPackage ../applications/science/math/ries { };

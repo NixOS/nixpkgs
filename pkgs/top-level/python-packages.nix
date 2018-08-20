@@ -240,6 +240,10 @@ in {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  cracklib = callPackage ../development/python-modules/cracklib {
+    cracklib = pkgs.cracklib;
+  };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dbf = callPackage ../development/python-modules/dbf { };
