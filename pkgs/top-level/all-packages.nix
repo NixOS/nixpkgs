@@ -15143,6 +15143,8 @@ with pkgs;
 
   tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
 
+  tenderness = callPackage ../data/fonts/tenderness { };
+
   terminus_font = callPackage ../data/fonts/terminus-font { };
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
