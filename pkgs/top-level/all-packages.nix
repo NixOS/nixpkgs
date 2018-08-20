@@ -1362,6 +1362,8 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
+  hdate = callPackage ../applications/misc/hdate { };
+
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hebcal = callPackage ../tools/misc/hebcal {};
