@@ -16166,6 +16166,8 @@ with pkgs;
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
 
+  fig2dev = callPackage ../applications/graphics/fig2dev { };
+
   flacon = callPackage ../applications/audio/flacon { };
 
   flexget = callPackage ../applications/networking/flexget { };
