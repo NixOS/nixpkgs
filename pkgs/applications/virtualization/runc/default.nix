@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = https://runc.io/;
     description = "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline vdemeester ];
     platforms = platforms.linux;
   };
 }
