@@ -12093,6 +12093,8 @@ with pkgs;
 
   tclx = callPackage ../development/libraries/tclx { };
 
+  tdlib = callPackage ../development/libraries/tdlib { };
+
   ntdb = callPackage ../development/libraries/ntdb {
     python = python2;
   };
