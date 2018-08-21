@@ -60,9 +60,7 @@ in stdenv.mkDerivation rec {
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
 
     patchShebangs . # fixes /usr/bin/python references
-    substituteInPlace src/util/virjsoncompat.c --replace \
-        '"libjansson.so.4"' '"${jansson}/lib/libjansson${stdenv.targetPlatform.extensions.sharedLibrary}"'
-   '';
+  '';
 
   configureFlags = [
     "--localstatedir=/var"
