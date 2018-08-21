@@ -15244,6 +15244,8 @@ with pkgs;
 
   airwave = callPackage ../applications/audio/airwave { };
 
+  airwindows = callPackage ../applications/audio/airwindows { };
+
   alembic = callPackage ../development/libraries/alembic {};
 
   alchemy = callPackage ../applications/graphics/alchemy { };
