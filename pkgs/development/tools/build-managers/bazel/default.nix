@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, runCommand, makeWrapper
 , jdk, zip, unzip, bash, writeCBin, coreutils
-, which, python, gnused, gnugrep, findutils
+, which, python, perl, gnused, gnugrep, findutils
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
@@ -138,6 +138,11 @@ stdenv.mkDerivation rec {
       echo "PATH=$PATH:${defaultShellPath}" >> runfiles.bash.tmp
       cat tools/bash/runfiles/runfiles.bash >> runfiles.bash.tmp
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
+
+      # the bash completion requires perl
+      # https://github.com/bazelbuild/bazel/issues/5943
+      substituteInPlace scripts/bazel-complete-template.bash \
+        --replace "perl" "${perl}/bin/perl"
 
       patchShebangs .
     '';
