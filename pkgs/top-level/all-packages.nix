@@ -20978,7 +20978,9 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  statverif = callPackage ../applications/science/logic/statverif { };
+  statverif = callPackage ../applications/science/logic/statverif {
+    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
+  };
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
