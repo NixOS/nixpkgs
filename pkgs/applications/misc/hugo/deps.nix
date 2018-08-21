@@ -104,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/disintegration/imaging";
-      rev = "8021a62ea0dfe0ed2e6107f5ccd37e0d4a92a996";
-      sha256 = "1c32sqfz78g9wxvpng8n9r404lf2lgjn9b24mg8y3rxylx29gks7";
+      rev = "0bd5694c78c9c3d9a3cd06a706a8f3c59296a9ac";
+      sha256 = "1laxccmzi7q51zxn81ringmdwp8iaipivrl375yc3gq56d70sp0r";
     };
   }
   {
@@ -140,8 +140,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/gobuffalo/envy";
-      rev = "2d0f467653f3d961ce9ada4d32a230bdcb3bfe11";
-      sha256 = "0p9raqrsqg2z1hq2kbvbq5qcwqihjqf28xnfh62214p7ak9b9x8n";
+      rev = "3c96536452167a705ca5a70b831d3810e1e10452";
+      sha256 = "0ixqpdmb7kjlarkv0qlbwnbr194sajx9flysnhcldzmciqgk5bqs";
     };
   }
   {
@@ -347,8 +347,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/spf13/cobra";
-      rev = "7c4570c3ebeb8129a1f7456d0908a8b676b6f9f1";
-      sha256 = "16amh0prlzqrrbg5j629sg0f688nfzfgn9sair8jyybqampr3wc7";
+      rev = "ff0d02e8555041edecbd0ce27f32c6ea4b214483";
+      sha256 = "1ilw6b2nir1bg7hmx8hrn60za37qqm18xvamv90fx5vxq85fsml9";
     };
   }
   {
@@ -446,8 +446,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "aaf60122140d3fcf75376d319f0554393160eb50";
-      sha256 = "03i6ij7jcf5mp9dc8ps8b63g1k843z7c823qyzn5a276gpxvxlvv";
+      rev = "922f4815f713f213882e8ef45e0d315b164d705c";
+      sha256 = "1ci1rxk2d6hmfsjjc19n2sxhyn4jqr5ia3ykyah1h08p0pn7k52w";
     };
   }
   {
@@ -464,8 +464,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "1c9583448a9c3aa0f9a6a5241bf73c0bd8aafded";
-      sha256 = "0g0nc549pmdmvja4mdqh0kgvznnw6wliqmx5wrnj02l3a23vizmi";
+      rev = "4ea2f632f6e912459fe60b26b1749377f0d889d5";
+      sha256 = "16pdi4mmjlcrjdcz7k559jqnsvkhdmff68bbqq7ii1lp8vrpqqmy";
     };
   }
   {
