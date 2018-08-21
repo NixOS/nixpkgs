@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     description = "Numix icon theme (square version)";
     homepage = https://numixproject.org;
     license = licenses.gpl3;
-    platforms = platforms.all;
+    # darwin cannot deal with file names differing only in case
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }
