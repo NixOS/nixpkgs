@@ -20876,7 +20876,9 @@ with pkgs;
 
   caprice32 = callPackage ../misc/emulators/caprice32 { };
 
-  cubicle = callPackage ../applications/science/logic/cubicle { };
+  cubicle = callPackage ../applications/science/logic/cubicle {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {
     gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
