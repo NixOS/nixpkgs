@@ -6735,13 +6735,9 @@ with pkgs;
     mono = mono46;
   };
 
-  fstar = callPackage ../development/compilers/fstar {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_06;
-  };
+  fstar = callPackage ../development/compilers/fstar { };
 
-  pyre = callPackage ../development/tools/pyre {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_06;
-  };
+  pyre = callPackage ../development/tools/pyre { };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
@@ -21862,9 +21858,7 @@ with pkgs;
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
-  satysfi = callPackage ../tools/typesetting/satysfi {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_06;
-  };
+  satysfi = callPackage ../tools/typesetting/satysfi { };
 
   sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
