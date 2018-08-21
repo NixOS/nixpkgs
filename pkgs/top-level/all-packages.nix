@@ -11814,6 +11814,8 @@ with pkgs;
 
   spatialite_tools = callPackage ../development/libraries/spatialite-tools { };
 
+  spdlib = callPackage ../development/libraries/spdlib { };
+
   spdk = callPackage ../development/libraries/spdk { };
 
   speechd = callPackage ../development/libraries/speechd { };

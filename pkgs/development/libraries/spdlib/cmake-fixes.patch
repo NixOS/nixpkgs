@@ -1,0 +1,42 @@
+# HG changeset patch
+# User Matthew Pickering <matthewtpickering@gmail.com>
+# Date 1534545423 0
+#      Fri Aug 17 22:37:03 2018 +0000
+# Node ID c7b2e431cc4f013ac969a6eea56ccbdb6d1dbf7b
+# Parent  0e406b4f93ed01970ec3f7248c7f02b3cae82988
+Be more careful about the difference between the build and source dirs
+
+These places in the build system assumed that the build and souce direction were
+the same. They are not in general. In particular, `configure_file` treats a
+relative input path as though it's in the source directory and an output path
+as though it's in the build directory.
+
+diff -r 0e406b4f93ed -r c7b2e431cc4f CMakeLists.txt
+--- a/CMakeLists.txt	Fri Feb 23 14:07:40 2018 +0000
++++ b/CMakeLists.txt	Fri Aug 17 22:37:03 2018 +0000
+@@ -121,7 +121,7 @@
+ 
+ ###############################################################################
+ # Setup configure file
+-configure_file ( "${PROJECT_HEADER_DIR}/spd-config.h.in" "${PROJECT_HEADER_DIR}/spd/spd-config.h" )
++configure_file ( "${PROJECT_HEADER_DIR}/spd-config.h.in" "${CMAKE_SOURCE_DIR}/${PROJECT_HEADER_DIR}/spd/spd-config.h" )
+ configure_file ( "${PROJECT_TOOLS_DIR}/spd-config.in" "${PROJECT_BINARY_DIR}/spd-config" )
+ configure_file ( "${PROJECT_TOOLS_DIR}/spdbatchgen.py.in" "${PROJECT_BINARY_DIR}/spdbatchgen.py" )
+ configure_file ( "${PROJECT_TOOLS_DIR}/spdbuildmergecmd.py.in" "${PROJECT_BINARY_DIR}/spdbuildmergecmd.py" )
+@@ -405,11 +405,11 @@
+ 	install (TARGETS spdtranslate spdversion spdcopy spdstats spdmaskgen spdpmfgrd spdmccgrd spdpolygrd spdinterp spddefheight spddecomp spdlastest spdmetrics spdmerge spdsubset spdoverlap spddefrgb spdelevation spdproj spdrmnoise spdclearclass spdpffgrd spdinfo spdthin spdextract spdwarp spdprofile spddeftiles spdtileimg spdtiling spdgrdtidy spdclassify spdtsample spdsplit spdclassimg DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+ endif(SPDLIB_WITH_UTILITIES)
+ 
+-install (FILES "${PROJECT_BINARY_DIR}/spd-config" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+-install (FILES "${PROJECT_BINARY_DIR}/spdbatchgen.py" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+-install (FILES "${PROJECT_BINARY_DIR}/spdbuildmergecmd.py" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+-install (FILES "${PROJECT_BINARY_DIR}/spdcmdgen.py" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+-install (FILES "${PROJECT_BINARY_DIR}/spdbuildtileextractcmd.py" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
++install (FILES "${CMAKE_BINARY_DIR}/${PROJECT_BINARY_DIR}/spd-config" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
++install (FILES "${CMAKE_BINARY_DIR}/${PROJECT_BINARY_DIR}/spdbatchgen.py" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
++install (FILES "${CMAKE_BINARY_DIR}/${PROJECT_BINARY_DIR}/spdbuildmergecmd.py" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
++install (FILES "${CMAKE_BINARY_DIR}/${PROJECT_BINARY_DIR}/spdcmdgen.py" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
++install (FILES "${CMAKE_BINARY_DIR}/${PROJECT_BINARY_DIR}/spdbuildtileextractcmd.py" DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+ ###############################################################################
+ 
+ ###############################################################################
