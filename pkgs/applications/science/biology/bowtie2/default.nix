@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://bowtie-bio.sf.net/bowtie2;
     maintainers = with maintainers; [ rybern ];
     platforms = platforms.all;
+    broken = stdenv.isAarch64;
   };
 }
