@@ -14196,7 +14196,8 @@ with pkgs;
     kernel = null; # dpdk modules are in linuxPackages.dpdk.kmod
   };
 
-  keyutils = callPackage ../os-specific/linux/keyutils { };
+  # Using fetchurlBoot because this is used by kerberos (on Linux), which curl depends on
+  keyutils = callPackage ../os-specific/linux/keyutils { fetchurl = fetchurlBoot; };
 
   libselinux = callPackage ../os-specific/linux/libselinux { };
 
