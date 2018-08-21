@@ -610,9 +610,6 @@ let
       else null;
 
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
-    ocaml_extlib_maximal = callPackage ../development/ocaml-modules/extlib {
-      minimal = false;
-    };
 
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
