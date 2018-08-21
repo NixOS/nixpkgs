@@ -9809,6 +9809,8 @@ with pkgs;
 
   lasso = callPackage ../development/libraries/lasso { };
 
+  LAStools = callPackage ../development/libraries/LAStools { };
+
   LASzip = callPackage ../development/libraries/LASzip { };
 
   lcms = lcms1;
