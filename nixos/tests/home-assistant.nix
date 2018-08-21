@@ -2,7 +2,8 @@ import ./make-test.nix ({ pkgs, ... }:
 
 let
   configDir = "/var/lib/foobar";
-  apiPassword = "secret";
+  apiPassword = "some_secret";
+  mqttPassword = "another_secret";
 
 in {
   name = "home-assistant";
@@ -33,7 +34,9 @@ in {
             };
             frontend = { };
             http.api_password = apiPassword;
-            mqtt = { }; # Use hbmqtt as broker
+            mqtt = { # Use hbmqtt as broker
+              password = mqttPassword;
+            };
             binary_sensor = [
               {
                 platform = "mqtt";
@@ -62,7 +65,7 @@ in {
 
     # Toggle a binary sensor using MQTT
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"off\"'");
-    $hass->waitUntilSucceeds("mosquitto_pub -V mqttv311 -t home-assistant/test -u homeassistant -P '${apiPassword}' -m let_there_be_light");
+    $hass->waitUntilSucceeds("mosquitto_pub -V mqttv311 -t home-assistant/test -u homeassistant -P '${mqttPassword}' -m let_there_be_light");
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"on\"'");
 
     # Print log to ease debugging
