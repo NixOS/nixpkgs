@@ -1,19 +1,24 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.10-pre-20180108";
+  name = "patchelf-${version}";
+  version = "0.10-pre-20180509";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "patchelf";
-    rev = "48452cf6b4ccba1c1f47a09f4284a253634ab7d1";
-    sha256 = "1f1s8q3as3nrhcc1a8qc2z7imm644jfz44msn9sfv4mdynp2m2yb";
+    rev = "27ffe8ae871e7a186018d66020ef3f6162c12c69";
+    sha256 = "1sfkqsvwqqm2kdgkiddrxni86ilbrdw5my29szz81nj1m2j16asr";
   };
 
   # Drop test that fails on musl (?)
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace tests/Makefile.am \
       --replace "set-rpath-library.sh" ""
+  '' +
+  # extend version identifier to more informative than "0.10".
+  ''
+    echo -n ${version} > version
   '';
 
   setupHook = [ ./setup-hook.sh ];
