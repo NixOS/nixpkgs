@@ -2,7 +2,7 @@
 , gtk3, gobjectIntrospection, libappindicator-gtk3, librsvg
 , evdev, pygobject3, pylibacl, pytest
 , linuxHeaders
-, libX11, libXext, libXfixes, libusb1
+, libX11, libXext, libXfixes, libusb1, libudev
 }:
 
 buildPythonApplication rec {
@@ -24,12 +24,14 @@ buildPythonApplication rec {
 
   checkInputs = [ pytest ];
 
+  patches = [ ./fix-udev.patch ];
+
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
     substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 libudev ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
