@@ -28,7 +28,7 @@ with lib;
       ++ (if pkgs.stdenv.system == "aarch64-linux"
           then []
           else [ pkgs.grub2 pkgs.syslinux ]);
-    system.boot.loader.kernelFile = pkgs.stdenv.platform.kernelTarget;
+    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.platform.kernelTarget;
 
     fileSystems."/" =
       { fsType = "tmpfs";
@@ -86,7 +86,7 @@ with lib;
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
       #!ipxe
-      kernel ${pkgs.stdenv.platform.kernelTarget} init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+      kernel ${pkgs.stdenv.hostPlatform.platform.kernelTarget} init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
       initrd initrd
       boot
     '';

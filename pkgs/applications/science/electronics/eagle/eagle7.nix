@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     # Build LD_PRELOAD library that redirects license file access to the home
     # directory of the user
     mkdir -p "$out"/lib
-    gcc -shared -fPIC -DEAGLE_PATH=\"$out/eagle-${version}\" ${./eagle_fixer.c} -o "$out"/lib/eagle_fixer.so -ldl
+    gcc -shared -fPIC -DEAGLE_PATH=\"$out/eagle-${version}\" ${./eagle7_fixer.c} -o "$out"/lib/eagle_fixer.so -ldl
 
     # Make wrapper script
     dynlinker="$(cat $NIX_CC/nix-support/dynamic-linker)"

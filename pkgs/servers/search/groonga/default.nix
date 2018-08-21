@@ -1,5 +1,5 @@
 { stdenv, fetchurl, mecab, kytea, libedit, pkgconfig
-, suggestSupport ? false, zeromq, libevent, libmsgpack
+, suggestSupport ? false, zeromq, libevent, msgpack
 , lz4Support  ? false, lz4
 , zlibSupport ? false, zlib
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
      [ pkgconfig mecab kytea libedit ]
     ++ optional lz4Support lz4
     ++ optional zlibSupport zlib
-    ++ optionals suggestSupport [ zeromq libevent libmsgpack ];
+    ++ optionals suggestSupport [ zeromq libevent msgpack ];
 
   configureFlags = with stdenv.lib;
        optional zlibSupport "--with-zlib"

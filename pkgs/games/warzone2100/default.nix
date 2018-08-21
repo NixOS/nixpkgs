@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
                       --replace "which %s" "${which}/bin/which %s"
   '';
 
+  preConfigure = ''
+    CC=${stdenv.cc.targetPrefix}cc
+    CXX=${stdenv.cc.targetPrefix}c++
+  '';
+
   configureFlags = [ "--with-distributor=NixOS" ];
 
   hardeningDisable = [ "format" ];

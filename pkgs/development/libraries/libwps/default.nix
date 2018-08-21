@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libwps-${version}";
-  version = "0.4.9";
+  version = "0.4.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/libwps/${name}.tar.bz2";
-    sha256 = "1wn5lvx7c9dp98d9akqjhkv5fk94725hbvqzbjpy1v8y4mm9knb6";
+    sha256 = "1adx2wawl0i16p8df80m6k6a137h709ip4zc0zlzr6wal8gpn0i4";
   };
 
   nativeBuildInputs = [ pkgconfig ];

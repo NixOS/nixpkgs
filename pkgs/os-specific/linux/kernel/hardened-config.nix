@@ -22,7 +22,7 @@ ${optionalString (versionAtLeast version "4.10") ''
   BUG_ON_DATA_CORRUPTION y
 ''}
 
-${optionalString (stdenv.platform.kernelArch == "x86_64") ''
+${optionalString (stdenv.hostPlatform.platform.kernelArch == "x86_64") ''
   DEFAULT_MMAP_MIN_ADDR 65536 # Prevent allocation of first 64K of memory
 
   # Reduce attack surface by disabling various emulations

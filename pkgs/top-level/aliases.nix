@@ -173,6 +173,7 @@ mapAliases ({
   module_init_tools = kmod; # added 2016-04-22
   mpich2 = mpich;  # added 2018-08-06
   msf = metasploit; # added 2018-04-25
+  libmsgpack = msgpack; # added 2018-08-17
   mssys = ms-sys; # added 2015-12-13
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12

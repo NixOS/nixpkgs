@@ -2,27 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "uriparser-${version}";
-  version = "0.8.5";
+  version = "0.8.6";
 
+  # Release tarball differs from source tarball
   src = fetchurl {
-    url = "mirror://sourceforge/project/uriparser/Sources/${version}/${name}.tar.bz2";
-    sha256 = "1p9c6lr39rjl4bbzi7wl2nsg72gcz8qhicxh9v043qyr0dfcvsjq";
+    url = "https://github.com/uriparser/uriparser/releases/download/${name}/${name}.tar.bz2";
+    sha256 = "0m2a5bf5b00ybagxmsa8mdj9mhc62vcm0qimy1ivfza1fbjsf287";
   };
 
+  nativeBuildInputs = [ pkgconfig cpptest doxygen graphviz ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cpptest doxygen graphviz ];
-
-  # There is actually no .map files to install in doc for v0.8.4
-  # (dot outputs only SVG and PNG in this release)
-  preBuild = ''
-    substituteInPlace doc/Makefile.am --replace " html/*.map" ""
-    substituteInPlace doc/Makefile.in --replace " html/*.map" ""
-  '';
-
+  doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://uriparser.sourceforge.net/;
+    homepage = https://uriparser.github.io/;
     description = "Strictly RFC 3986 compliant URI parsing library";
     longDescription = ''
       uriparser is a strictly RFC 3986 compliant URI parsing and handling library written in C.

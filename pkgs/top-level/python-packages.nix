@@ -254,6 +254,8 @@ in {
 
   docrep = callPackage ../development/python-modules/docrep { };
 
+  dominate = callPackage ../development/python-modules/dominate { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
@@ -5365,11 +5367,15 @@ in {
 
   flask = callPackage ../development/python-modules/flask { };
 
+  flask-api = callPackage ../development/python-modules/flask-api { };
+
   flask_assets = callPackage ../development/python-modules/flask-assets { };
 
   flask-autoindex = callPackage ../development/python-modules/flask-autoindex { };
 
   flask-babel = callPackage ../development/python-modules/flask-babel { };
+
+  flask-bootstrap = callPackage ../development/python-modules/flask-bootstrap { };
 
   flask-caching = callPackage ../development/python-modules/flask-caching { };
 
@@ -5394,6 +5400,8 @@ in {
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
+
+  flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
   flask_principal = callPackage ../development/python-modules/flask-principal { };
 
@@ -10659,35 +10667,7 @@ in {
     };
   };
 
-  pyjwt = buildPythonPackage rec {
-    version = "1.5.3";
-    name = "pyjwt-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "progrium";
-      repo = "pyjwt";
-      rev = version;
-      sha256 = "109zb3ka2lvp00r9nawa0lmljfikvhcj5yny19kcipz8mqia1gs8";
-    };
-
-    buildInputs = with self; [ pytestrunner pytestcov pytest coverage ];
-    propagatedBuildInputs = with self; [ cryptography ecdsa ];
-
-    # We don't need this specific version
-    postPatch = ''
-      substituteInPlace setup.py --replace "pytest==2.7.3" "pytest"
-    '';
-
-    meta = {
-      description = "JSON Web Token implementation in Python";
-      longDescription = "A Python implementation of JSON Web Token draft 01";
-      homepage = https://github.com/progrium/pyjwt;
-      downloadPage = https://github.com/progrium/pyjwt/releases;
-      license = licenses.mit;
-      maintainers = with maintainers; [ prikhi ];
-      platforms = platforms.unix;
-    };
-  };
+  pyjwt = callPackage ../development/python-modules/pyjwt { };
 
   pykickstart = buildPythonPackage rec {
     name = "pykickstart-${version}";
@@ -17289,6 +17269,8 @@ EOF
   versioneer = callPackage ../development/python-modules/versioneer { };
 
   vine = callPackage ../development/python-modules/vine { };
+
+  visitor = callPackage ../development/python-modules/visitor { };
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 

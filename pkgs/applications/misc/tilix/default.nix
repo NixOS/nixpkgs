@@ -1,23 +1,23 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, dmd, gnome3, dbus
-, gsettings-desktop-schemas, desktop-file-utils, gettext, gtkd
+, gsettings-desktop-schemas, desktop-file-utils, gettext, gtkd, libsecret
 , perlPackages, wrapGAppsHook, xdg_utils }:
 
 stdenv.mkDerivation rec {
   name = "tilix-${version}";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
     rev = "${version}";
-    sha256 = "19dx3hlj40cqwph98pcifkm6axfszfr0v9k6sr3caw4ycml84ci1";
+    sha256 = "05x2nyyb5w3122j90g0f7lh9jl7xi1nk176sl01vl2ks7zar00dq";
   };
 
   nativeBuildInputs = [
     autoreconfHook dmd desktop-file-utils perlPackages.Po4a pkgconfig xdg_utils
     wrapGAppsHook
   ];
-  buildInputs = [ gnome3.dconf gettext gsettings-desktop-schemas gtkd dbus ];
+  buildInputs = [ gnome3.dconf gettext gsettings-desktop-schemas gtkd dbus libsecret ];
 
   preBuild = ''
     makeFlagsArray=(
@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
 
   postInstall = with gnome3; ''
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+
+    wrapProgram $out/bin/tilix \
+      --prefix LD_LIBRARY_PATH ":" "${libsecret}/lib"
   '';
 
 

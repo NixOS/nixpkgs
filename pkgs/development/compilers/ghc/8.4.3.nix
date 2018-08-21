@@ -99,8 +99,9 @@ stdenv.mkDerivation (rec {
     extraPrefix = "utils/hsc2hs/";
     stripLen = 1;
   })] ++ stdenv.lib.optional deterministicProfiling
-    (fetchpatch {
-      url = "https://phabricator-files.haskell.org/file/data/yd2fclrwulila2quki5q/PHID-FILE-lr2j63hkglwauprxycrt/D4388.diff";
+    (fetchpatch rec {
+      url = "http://tarballs.nixos.org/sha256/${sha256}";
+      name = "D4388.diff";
       sha256 = "0w6sdcvnqjlnlzpvnzw20b80v150ijjyjvs9548ildc1928j0w7s";
     })
     ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;

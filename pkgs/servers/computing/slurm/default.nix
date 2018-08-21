@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   name = "slurm-${version}";
-  version = "17.11.7";
+  version = "17.11.9-2";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
   src = fetchFromGitHub {
     owner = "SchedMD";
     repo = "slurm";
-    # The release tags use - instead of ., and have an extra -1 suffix.
-    rev = "${builtins.replaceStrings ["."] ["-"] name}-1";
-    sha256 = "00dgirjd75i1x6pj80avp18hx5gr3dsnh13vbkqbf0iwpd72qyhp";
+    # The release tags use - instead of .
+    rev = "${builtins.replaceStrings ["."] ["-"] name}";
+    sha256 = "1lq4ac6yjai6wh979dciw8v3d99zbd3w36rfh0vpncqm672fg1qy";
   };
 
   outputs = [ "out" "dev" ];

@@ -109,11 +109,12 @@ let
       fi
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = https://www.openssl.org/;
       description = "A cryptographic library that implements the SSL and TLS protocols";
-      platforms = stdenv.lib.platforms.all;
-      maintainers = [ stdenv.lib.maintainers.peti ];
+      license = licenses.openssl;
+      platforms = platforms.all;
+      maintainers = [ maintainers.peti ];
       priority = 10; # resolves collision with ‘man-pages’
     };
   };

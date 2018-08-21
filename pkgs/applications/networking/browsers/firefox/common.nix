@@ -135,7 +135,7 @@ stdenv.mkDerivation (rec {
   '' else ''
     make -f client.mk configure-files
     configureScript="$(realpath ./configure)"
-  '') + ''
+  '') + lib.optionalString (!isTorBrowserLike && lib.versionAtLeast version "53") ''
     export MOZCONFIG=$(pwd)/mozconfig
 
     # Set C flags for Rust's bindgen program. Unlike ordinary C
@@ -184,8 +184,8 @@ stdenv.mkDerivation (rec {
     "--disable-maintenance-service"
     "--disable-gconf"
     "--enable-default-toolkit=${default-toolkit}"
-    "--disable-xcode-checks"
   ]
+  ++ lib.optional stdenv.isDarwin "--disable-xcode-checks"
   ++ lib.optional (lib.versionOlder version "61") "--enable-system-hunspell"
   ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration

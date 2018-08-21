@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, doxygen, makeWrapper
-, libmsgpack, neovim, pythonPackages, qtbase }:
+, msgpack, neovim, pythonPackages, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "neovim-qt-${version}";
@@ -13,12 +13,11 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DMSGPACK_INCLUDE_DIRS=${libmsgpack}/include"
-    "-DMSGPACK_LIBRARIES=${libmsgpack}/lib/libmsgpackc.so"
+    "-DUSE_SYSTEM_MSGPACK=1"
   ];
 
   buildInputs = with pythonPackages; [
-    neovim qtbase libmsgpack
+    neovim qtbase msgpack
   ] ++ (with pythonPackages; [
     jinja2 msgpack python
   ]);
@@ -28,13 +27,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preConfigure = ''
-    # avoid cmake trying to download libmsgpack
-    echo "" > third-party/CMakeLists.txt
     # we rip out a number of tests that fail in the build env
     # the GUI tests will never work but the others should - they did before neovim 0.2.0
     # was released
     sed -i test/CMakeLists.txt \
       -e '/^add_xtest_gui/d' \
+      -e '/tst_neovimobject/d' \
       -e '/tst_neovimconnector/d' \
       -e '/tst_callallmethods/d' \
       -e '/tst_encoding/d'
@@ -42,7 +40,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = ''
+  postInstall = if stdenv.isDarwin then ''
+    mkdir -p $out/Applications
+    mv $out/bin/nvim-qt.app $out/Applications
+    rmdir $out/bin || :
+
+    wrapProgram "$out/Applications/nvim-qt.app/Contents/MacOS/nvim-qt" \
+      --prefix PATH : "${neovim}/bin"
+  '' else ''
     wrapProgram "$out/bin/nvim-qt" \
       --prefix PATH : "${neovim}/bin"
   '';

@@ -180,6 +180,8 @@ with pkgs;
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
+  global-platform-pro = callPackage ../development/tools/global-platform-pro/default.nix { };
+
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
   packer = callPackage ../development/tools/packer { };
@@ -1216,6 +1218,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  dozenal = callPackage ../applications/misc/dozenal { };
+
   dpic = callPackage ../tools/graphics/dpic { };
 
   dragon-drop = callPackage ../tools/X11/dragon-drop {
@@ -1362,6 +1366,8 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
+  hdate = callPackage ../applications/misc/hdate { };
+
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hebcal = callPackage ../tools/misc/hebcal {};
@@ -1487,6 +1493,10 @@ with pkgs;
   syslogng = callPackage ../tools/system/syslog-ng { };
 
   syslogng_incubator = callPackage ../tools/system/syslog-ng-incubator { };
+
+  inherit (callPackages ../servers/rainloop { })
+    rainloop-community
+    rainloop-standard;
 
   ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
@@ -7020,6 +7030,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  mono514 = callPackage ../development/compilers/mono/5.14.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
   mosml = callPackage ../development/compilers/mosml { };
@@ -7159,6 +7174,13 @@ with pkgs;
   souffle = callPackage ../development/compilers/souffle { };
 
   sqldeveloper = callPackage ../development/tools/database/sqldeveloper { };
+
+  # sqldeveloper_18 needs JavaFX, which currently only is available inside the
+  # (non-free and net yet packaged for Darwin) OracleJDK
+  # we might be able to get rid of it, as soon as we have an OpenJDK with OpenJFX included
+  sqldeveloper_18 = callPackage ../development/tools/database/sqldeveloper/18.2.nix {
+    jdk = oraclejdk;
+  };
 
   squeak = callPackage ../development/compilers/squeak { };
 
@@ -8095,6 +8117,8 @@ with pkgs;
 
   ddd = callPackage ../development/tools/misc/ddd { };
 
+  lattice-diamond = callPackage ../development/tools/lattice-diamond { };
+
   distcc = callPackage ../development/tools/misc/distcc { };
 
   # distccWrapper: wrapper that works as gcc or g++
@@ -8491,6 +8515,8 @@ with pkgs;
   procodile = callPackage ../tools/system/procodile { };
 
   pup = callPackage ../development/tools/pup { };
+
+  puppet-lint = callPackage ../development/tools/puppet/puppet-lint { };
 
   pyrseas = callPackage ../development/tools/database/pyrseas { };
 
@@ -9182,9 +9208,19 @@ with pkgs;
 
   ffcast = callPackage ../tools/X11/ffcast { };
 
-  fflas-ffpack = callPackage ../development/libraries/fflas-ffpack {};
+  fflas-ffpack = callPackage ../development/libraries/fflas-ffpack {
+    # We need to use blas instead of openblas on darwin,
+    # see https://github.com/NixOS/nixpkgs/pull/45013.
+    blas = if stdenv.isDarwin then blas else openblas;
+  };
+
   fflas-ffpack_1 = callPackage ../development/libraries/fflas-ffpack/1.nix {};
-  linbox = callPackage ../development/libraries/linbox {};
+  linbox = callPackage ../development/libraries/linbox {
+    # We need to use blas instead of openblas on darwin, see
+    # https://github.com/NixOS/nixpkgs/pull/45013 and
+    # https://github.com/NixOS/nixpkgs/pull/45015.
+    blas = if stdenv.isDarwin then blas else openblas;
+  };
 
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -9662,7 +9698,6 @@ with pkgs;
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
-    gdktarget = if stdenv.isDarwin then "quartz" else "x11";
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
@@ -9670,7 +9705,9 @@ with pkgs;
     gdktarget = "x11";
   };
 
-  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
+  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
+  };
 
   gtkmm2 = callPackage ../development/libraries/gtkmm/2.x.nix { };
   gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
@@ -9953,6 +9990,8 @@ with pkgs;
   leveldb = callPackage ../development/libraries/leveldb { };
 
   lmdb = callPackage ../development/libraries/lmdb { };
+
+  lmdbxx = callPackage ../development/libraries/lmdbxx { };
 
   levmar = callPackage ../development/libraries/levmar { };
 
@@ -10426,8 +10465,6 @@ with pkgs;
   libmodbus = callPackage ../development/libraries/libmodbus {};
 
   libmtp = callPackage ../development/libraries/libmtp { };
-
-  libmsgpack = callPackage ../development/libraries/libmsgpack { };
 
   libmypaint = callPackage ../development/libraries/libmypaint { };
 
@@ -11107,6 +11144,8 @@ with pkgs;
   mpeg2dec = libmpeg2;
 
   mqtt-bench = callPackage ../applications/misc/mqtt-bench {};
+
+  msgpack = callPackage ../development/libraries/msgpack { };
 
   msilbc = callPackage ../development/libraries/msilbc { };
 
@@ -13702,9 +13741,7 @@ with pkgs;
   nmon = callPackage ../os-specific/linux/nmon { };
 
   # GNU/Hurd core packages.
-  gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
-    inherit platform;
-  });
+  gnu = recurseIntoAttrs (callPackage ../os-specific/gnu { });
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
 
@@ -13724,9 +13761,7 @@ with pkgs;
 
   iproute = callPackage ../os-specific/linux/iproute { };
 
-  iputils = callPackage ../os-specific/linux/iputils {
-    inherit (buildPackages.buildPackages.perlPackages) SGMLSpm;
-  };
+  iputils = callPackage ../os-specific/linux/iputils { };
 
   iptables = callPackage ../os-specific/linux/iptables { };
 
@@ -13827,7 +13862,7 @@ with pkgs;
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
       ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      ++ lib.optionals ((stdenv.hostPlatform.platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
@@ -15134,6 +15169,8 @@ with pkgs;
 
   vdrsymbols = callPackage ../data/fonts/vdrsymbols { };
 
+  vegur = callPackage ../data/fonts/vegur { };
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
@@ -16133,6 +16170,8 @@ with pkgs;
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
 
+  fig2dev = callPackage ../applications/graphics/fig2dev { };
+
   flacon = callPackage ../applications/audio/flacon { };
 
   flexget = callPackage ../applications/networking/flexget { };
@@ -16214,7 +16253,16 @@ with pkgs;
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
-  google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
+  google-musicmanager = callPackage ../applications/audio/google-musicmanager {
+    inherit (qt5) qtbase qtwebkit;
+    # Downgrade to 1.34 to get libidn.so.11
+    libidn = (libidn.overrideAttrs (oldAttrs: {
+      src = fetchurl {
+        url = "mirror://gnu/libidn/libidn-1.34.tar.gz";
+        sha256 = "0g3fzypp0xjcgr90c5cyj57apx1cmy0c6y9lvw2qdcigbyby469p";
+      };
+    })).out;
+  };
 
   googler = callPackage ../applications/misc/googler {
     python = python3;
@@ -16976,7 +17024,7 @@ with pkgs;
       recurseIntoAttrs (makeOverridable mkApplications attrs);
 
   inherit (kdeApplications)
-    akonadi akregator ark dolphin ffmpegthumbs filelight gwenview k3b
+    akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcolorchooser kcontacts kdenlive kdf kdialog keditbookmarks
     kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
     kontact korganizer krdc krfb ksystemlog kwalletmanager marble minuet okular spectacle;
@@ -17315,7 +17363,7 @@ with pkgs;
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
-  mimic = callPackage ../applications/audio/mimic { 
+  mimic = callPackage ../applications/audio/mimic {
     pulseaudioSupport = config.pulseaudio or false;
   };
 
@@ -18044,6 +18092,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
     qt = qt4;
   };
+
+  qsstv = qt5.callPackage ../applications/misc/qsstv { };
 
   qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
 
@@ -20514,6 +20564,8 @@ with pkgs;
 
   star = callPackage ../applications/science/biology/star { };
 
+  strelka = callPackage ../applications/science/biology/strelka { };
+
   varscan = callPackage ../applications/science/biology/varscan { };
 
   hmmer = callPackage ../applications/science/biology/hmmer { };
@@ -20551,6 +20603,8 @@ with pkgs;
   };
 
   cliquer = callPackage ../development/libraries/science/math/cliquer { };
+
+  ecos = callPackage ../development/libraries/science/math/ecos { };
 
   flintqs = callPackage ../development/libraries/science/math/flintqs { };
 
@@ -20888,7 +20942,12 @@ with pkgs;
 
   adms = callPackage ../applications/science/electronics/adms { };
 
-  eagle = callPackage ../applications/science/electronics/eagle { };
+  # Since version 8 Eagle requires an Autodesk account and a subscription
+  # in contrast to single payment for the charged editions.
+  # This is the last version with the old model.
+  eagle7 = callPackage ../applications/science/electronics/eagle/eagle7.nix { };
+
+  eagle = libsForQt5.callPackage ../applications/science/electronics/eagle/eagle.nix { };
 
   caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
@@ -21843,7 +21902,9 @@ with pkgs;
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
 
-  vips = callPackage ../tools/graphics/vips { };
+  vips = callPackage ../tools/graphics/vips {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
   nip2 = callPackage ../tools/graphics/nip2 { };
 
   virglrenderer = callPackage ../development/libraries/virglrenderer { };

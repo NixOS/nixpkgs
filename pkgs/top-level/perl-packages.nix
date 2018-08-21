@@ -11371,6 +11371,22 @@ let
     };
   };
 
+  NetSFTPForeign = buildPerlPackage rec {
+    name = "Net-SFTP-Foreign-1.89";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SALVA/${name}.tar.gz";
+      sha256 = "9bd33e130581c1fc3eb6108eaf9056c1507428cace04a572f7afe816d83b08a7";
+    };
+    propagatedBuildInputs = [ pkgs.openssl ];
+    patchPhase = ''
+      sed -i "s|$ssh_cmd = 'ssh'|$ssh_cmd = '${pkgs.openssh}/bin/ssh'|" lib/Net/SFTP/Foreign/Backend/Unix.pm
+    '';
+    meta = {
+      description = "Secure File Transfer Protocol client";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   NetServerCoro = buildPerlPackage rec {
      name = "Net-Server-Coro-1.3";
      src = fetchurl {
@@ -16148,7 +16164,7 @@ let
       install_name_tool -change "$oldPath" "$newPath" "$out/bin/biblex"
       install_name_tool -change "$oldPath" "$newPath" "$out/bin/bibparse"
       install_name_tool -change "$oldPath" "$newPath" "$out/bin/dumpnames"
-      install_name_tool -change "$oldPath" "$newPath" "$out/lib/perl5/site_perl/5.24.4/darwin-2level/auto/Text/BibTeX/BibTeX.bundle"
+      install_name_tool -change "$oldPath" "$newPath" "$out/lib/perl5/site_perl/${perl.version}/darwin-2level/auto/Text/BibTeX/BibTeX.bundle"
     '';
     meta = {
       description = "Interface to read and parse BibTeX files";

@@ -673,6 +673,11 @@
     github = "changlinli";
     name = "Changlin Li";
   };
+  CharlesHD = {
+    email = "charleshdespointes@gmail.com";
+    github = "CharlesHD";
+    name = "Charles Huyghues-Despointes";
+  };
   chaoflow = {
     email = "flo@chaoflow.net";
     github = "chaoflow";
@@ -1590,6 +1595,11 @@
     github = "havvy";
     name = "Ryan Scheel";
   };
+  hax404 = {
+    email = "hax404foogit@hax404.de";
+    github = "hax404";
+    name = "Georg Haas";
+  };
   hbunke = {
     email = "bunke.hendrik@gmail.com";
     github = "hbunke";
@@ -1934,6 +1944,11 @@
     email = "jon@jonafato.com";
     github = "jonafato";
     name = "Jon Banafato";
+  };
+  jonathanreeve = {
+    email = "jon.reeve@gmail.com";
+    github = "JonathanReeve";
+    name = "Jonathan Reeve";
   };
   joncojonathan = {
     email = "joncojonathan@gmail.com";

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libmsgpack-${version}";
+  name = "msgpack-${version}";
 
   inherit src patches;
 

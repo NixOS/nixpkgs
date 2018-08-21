@@ -19,6 +19,8 @@ buildPerlPackage rec {
     sha256 = "1bjnx36rsxlj845w9apvdjpza8vd9rbs3dlmgvky6yznrwa6sm02";
   };
 
+  outputs = [ "out" ];
+
   nativeBuildInputs = [ makeWrapper gawk ];
 
   buildInputs = [ gnuplot perl ]

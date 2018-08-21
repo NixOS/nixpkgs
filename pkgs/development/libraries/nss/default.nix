@@ -113,9 +113,10 @@ in stdenv.mkDerivation rec {
     rm -f "$out"/lib/*.a
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://developer.mozilla.org/en-US/docs/NSS;
     description = "A set of libraries for development of security-enabled client and server applications";
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.mpl20;
+    platforms = platforms.all;
   };
 }
