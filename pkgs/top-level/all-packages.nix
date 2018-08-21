@@ -6716,7 +6716,7 @@ with pkgs;
       graphviz = graphviz-nox;
     });
 
-  inherit (ocamlPackages.haxe) haxe_3_2 haxe_3_4;
+  inherit (ocaml-ng.ocamlPackages_4_05.haxe) haxe_3_2 haxe_3_4;
   haxe = haxe_3_4;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
