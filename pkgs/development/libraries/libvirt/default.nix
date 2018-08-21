@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, jansson
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 }:
@@ -32,10 +32,12 @@ in stdenv.mkDerivation rec {
         fetchSubmodules = true;
       };
 
+  patches = [ ./revert-jansson.patch ];
+
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap jansson
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
@@ -60,8 +62,6 @@ in stdenv.mkDerivation rec {
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
 
     patchShebangs . # fixes /usr/bin/python references
-    substituteInPlace src/util/virjsoncompat.c --replace \
-        '"libjansson.so.4"' '"${jansson}/lib/libjansson${stdenv.targetPlatform.extensions.sharedLibrary}"'
    '';
 
   configureFlags = [

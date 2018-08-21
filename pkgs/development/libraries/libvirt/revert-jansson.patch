@@ -1,0 +1,2554 @@
+From 368c07e89ce23711effcd5e8cbb1891778e5ae93 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:38:38 +0200
+Subject: [PATCH 01/14] Revert "remote: daemon: Make sure that JSON symbols are
+ properly loaded at startup"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 3251fc9c9b9639c3fec3181530599415523d671a.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ src/libvirt_private.syms   | 4 ----
+ src/remote/remote_daemon.c | 4 ----
+ 2 files changed, 8 deletions(-)
+
+diff --git a/src/libvirt_private.syms b/src/libvirt_private.syms
+index 70dfcc5e29..fc386e1699 100644
+--- a/src/libvirt_private.syms
++++ b/src/libvirt_private.syms
+@@ -2135,10 +2135,6 @@ virJSONValueObjectStealObject;
+ virJSONValueToString;
+ 
+ 
+-# util/virjsoncompat.h
+-virJSONInitialize;
+-
+-
+ # util/virkeycode.h
+ virKeycodeSetTypeFromString;
+ virKeycodeSetTypeToString;
+diff --git a/src/remote/remote_daemon.c b/src/remote/remote_daemon.c
+index 8bbc3818bb..9f3a5f38ad 100644
+--- a/src/remote/remote_daemon.c
++++ b/src/remote/remote_daemon.c
+@@ -59,7 +59,6 @@
+ #include "virutil.h"
+ #include "virgettext.h"
+ #include "util/virnetdevopenvswitch.h"
+-#include "virjsoncompat.h"
+ 
+ #include "driver.h"
+ 
+@@ -1184,9 +1183,6 @@ int main(int argc, char **argv) {
+         exit(EXIT_FAILURE);
+     }
+ 
+-    if (virJSONInitialize() < 0)
+-        exit(EXIT_FAILURE);
+-
+     daemonSetupNetDevOpenvswitch(config);
+ 
+     if (daemonSetupAccessManager(config) < 0) {
+-- 
+2.18.0
+
+
+From 6ccced338c920d1432117816ba2794a770c9d6af Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:38:46 +0200
+Subject: [PATCH 02/14] Revert "util: jsoncompat: Stub out virJSONInitialize
+ when compiling without jansson"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 9e44c2db8ad94d3c20acc1d081538c280af198b4.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ src/util/virjsoncompat.c | 13 +------------
+ 1 file changed, 1 insertion(+), 12 deletions(-)
+
+diff --git a/src/util/virjsoncompat.c b/src/util/virjsoncompat.c
+index ffbeb5488c..6c853e9bb5 100644
+--- a/src/util/virjsoncompat.c
++++ b/src/util/virjsoncompat.c
+@@ -271,15 +271,4 @@ json_true_impl(void)
+     return json_true_ptr();
+ }
+ 
+-
+-#else /* !WITH_JANSSON */
+-
+-
+-int
+-virJSONInitialize(void)
+-{
+-    return 0;
+-}
+-
+-
+-#endif /* !WITH_JANSSON */
++#endif /* WITH_JANSSON */
+-- 
+2.18.0
+
+
+From b717b55b8c6658cd3461c3d7801fdde2318716e6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:39:09 +0200
+Subject: [PATCH 03/14] Revert "tests: qemucapsprobe: Fix output after
+ switching to jansson"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 397447f80588438545994a86883792a5999cad15.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ tests/qemucapsprobemock.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/tests/qemucapsprobemock.c b/tests/qemucapsprobemock.c
+index 049b16273a..5936975505 100644
+--- a/tests/qemucapsprobemock.c
++++ b/tests/qemucapsprobemock.c
+@@ -76,7 +76,6 @@ qemuMonitorSend(qemuMonitorPtr mon,
+         printLineSkipEmpty("\n", stdout);
+ 
+     printLineSkipEmpty(reformatted, stdout);
+-    printLineSkipEmpty("\n", stdout);
+     VIR_FREE(reformatted);
+ 
+     return realQemuMonitorSend(mon, msg);
+@@ -117,7 +116,6 @@ qemuMonitorJSONIOProcessLine(qemuMonitorPtr mon,
+             printLineSkipEmpty("\n", stdout);
+ 
+         printLineSkipEmpty(json, stdout);
+-        printLineSkipEmpty("\n", stdout);
+     }
+ 
+  cleanup:
+-- 
+2.18.0
+
+
+From ab6e01f4aed70496d9daf8ac673417b77d3bf632 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:39:16 +0200
+Subject: [PATCH 04/14] Revert "util: avoid symbol clash between json
+ libraries"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit ce3c6ef6843f98d81be5423ece11fad79eaab920.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ libvirt.spec.in          |   2 -
+ src/Makefile.am          |   8 +-
+ src/util/Makefile.inc.am |   3 +-
+ src/util/virjson.c       |   9 +-
+ src/util/virjsoncompat.c | 274 ---------------------------------------
+ src/util/virjsoncompat.h |  88 -------------
+ 6 files changed, 7 insertions(+), 377 deletions(-)
+ delete mode 100644 src/util/virjsoncompat.c
+ delete mode 100644 src/util/virjsoncompat.h
+
+diff --git a/libvirt.spec.in b/libvirt.spec.in
+index 19ae55cdaf..4113579e47 100644
+--- a/libvirt.spec.in
++++ b/libvirt.spec.in
+@@ -898,8 +898,6 @@ Requires: ncurses
+ Requires: gettext
+ # Needed by virt-pki-validate script.
+ Requires: gnutls-utils
+-# We dlopen(libjansson.so.4), so need an explicit dep
+-Requires: jansson
+ %if %{with_bash_completion}
+ Requires: %{name}-bash-completion = %{version}-%{release}
+ %endif
+diff --git a/src/Makefile.am b/src/Makefile.am
+index a4f213480e..83263e69e5 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -552,6 +552,7 @@ libvirt_admin_la_CFLAGS += \
+ 
+ libvirt_admin_la_LIBADD += \
+ 		$(CAPNG_LIBS) \
++		$(JANSSON_LIBS) \
+ 		$(DEVMAPPER_LIBS) \
+ 		$(LIBXML_LIBS) \
+ 		$(SSH2_LIBS) \
+@@ -689,7 +690,6 @@ libvirt_setuid_rpc_client_la_SOURCES = \
+ 		util/virhashcode.c \
+ 		util/virhostcpu.c \
+ 		util/virjson.c \
+-		util/virjsoncompat.c \
+ 		util/virlog.c \
+ 		util/virobject.c \
+ 		util/virpidfile.c \
+@@ -961,8 +961,6 @@ libvirt_nss_la_SOURCES = \
+ 		util/virhashcode.h \
+ 		util/virjson.c \
+ 		util/virjson.h \
+-		util/virjsoncompat.c \
+-		util/virjsoncompat.h \
+ 		util/virkmod.c \
+ 		util/virkmod.h \
+ 		util/virlease.c \
+@@ -1001,6 +999,10 @@ libvirt_nss_la_CFLAGS = \
+ libvirt_nss_la_LDFLAGS = \
+ 		$(AM_LDFLAGS) \
+ 		$(NULL)
++
++libvirt_nss_la_LIBADD = \
++		$(JANSSON_LIBS) \
++		$(NULL)
+ endif WITH_NSS
+ 
+ 
+diff --git a/src/util/Makefile.inc.am b/src/util/Makefile.inc.am
+index 8ef9ee1dfa..71b2b93c2d 100644
+--- a/src/util/Makefile.inc.am
++++ b/src/util/Makefile.inc.am
+@@ -86,8 +86,6 @@ UTIL_SOURCES = \
+ 	util/viriscsi.h \
+ 	util/virjson.c \
+ 	util/virjson.h \
+-	util/virjsoncompat.c \
+-	util/virjsoncompat.h \
+ 	util/virkeycode.c \
+ 	util/virkeycode.h \
+ 	util/virkeyfile.c \
+@@ -266,6 +264,7 @@ libvirt_util_la_CFLAGS = \
+ 	$(NULL)
+ libvirt_util_la_LIBADD = \
+ 	$(CAPNG_LIBS) \
++	$(JANSSON_LIBS) \
+ 	$(LIBNL_LIBS) \
+ 	$(THREAD_LIBS) \
+ 	$(AUDIT_LIBS) \
+diff --git a/src/util/virjson.c b/src/util/virjson.c
+index 5bab662cd3..01a387b2f7 100644
+--- a/src/util/virjson.c
++++ b/src/util/virjson.c
+@@ -1437,8 +1437,7 @@ virJSONValueCopy(const virJSONValue *in)
+ 
+ 
+ #if WITH_JANSSON
+-
+-# include "virjsoncompat.h"
++# include <jansson.h>
+ 
+ static virJSONValuePtr
+ virJSONValueFromJansson(json_t *json)
+@@ -1525,9 +1524,6 @@ virJSONValueFromString(const char *jsonstring)
+     size_t flags = JSON_REJECT_DUPLICATES |
+                    JSON_DECODE_ANY;
+ 
+-    if (virJSONInitialize() < 0)
+-        return NULL;
+-
+     if (!(json = json_loads(jsonstring, flags, &error))) {
+         virReportError(VIR_ERR_INTERNAL_ERROR,
+                        _("failed to parse JSON %d:%d: %s"),
+@@ -1634,9 +1630,6 @@ virJSONValueToString(virJSONValuePtr object,
+     json_t *json;
+     char *str = NULL;
+ 
+-    if (virJSONInitialize() < 0)
+-        return NULL;
+-
+     if (pretty)
+         flags |= JSON_INDENT(2);
+     else
+diff --git a/src/util/virjsoncompat.c b/src/util/virjsoncompat.c
+deleted file mode 100644
+index 6c853e9bb5..0000000000
+--- a/src/util/virjsoncompat.c
++++ /dev/null
+@@ -1,274 +0,0 @@
+-/*
+- * virjsoncompat.c: JSON object parsing/formatting
+- *
+- * Copyright (C) 2018 Red Hat, Inc.
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public
+- * License as published by the Free Software Foundation; either
+- * version 2.1 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public
+- * License along with this library.  If not, see
+- * <http://www.gnu.org/licenses/>.
+- *
+- */
+-
+-#include <config.h>
+-
+-#include "virthread.h"
+-#include "virerror.h"
+-#define VIR_JSON_COMPAT_IMPL
+-#include "virjsoncompat.h"
+-
+-#define VIR_FROM_THIS VIR_FROM_NONE
+-
+-#if WITH_JANSSON
+-
+-# include <dlfcn.h>
+-
+-json_t *(*json_array_ptr)(void);
+-int (*json_array_append_new_ptr)(json_t *array, json_t *value);
+-json_t *(*json_array_get_ptr)(const json_t *array, size_t index);
+-size_t (*json_array_size_ptr)(const json_t *array);
+-void (*json_delete_ptr)(json_t *json);
+-char *(*json_dumps_ptr)(const json_t *json, size_t flags);
+-json_t *(*json_false_ptr)(void);
+-json_t *(*json_integer_ptr)(json_int_t value);
+-json_int_t (*json_integer_value_ptr)(const json_t *integer);
+-json_t *(*json_loads_ptr)(const char *input, size_t flags, json_error_t *error);
+-json_t *(*json_null_ptr)(void);
+-json_t *(*json_object_ptr)(void);
+-void *(*json_object_iter_ptr)(json_t *object);
+-const char *(*json_object_iter_key_ptr)(void *iter);
+-void *(*json_object_iter_next_ptr)(json_t *object, void *iter);
+-json_t *(*json_object_iter_value_ptr)(void *iter);
+-void *(*json_object_key_to_iter_ptr)(const char *key);
+-int (*json_object_set_new_ptr)(json_t *object, const char *key, json_t *value);
+-json_t *(*json_real_ptr)(double value);
+-double (*json_real_value_ptr)(const json_t *real);
+-json_t *(*json_string_ptr)(const char *value);
+-const char *(*json_string_value_ptr)(const json_t *string);
+-json_t *(*json_true_ptr)(void);
+-
+-
+-static int
+-virJSONJanssonOnceInit(void)
+-{
+-    void *handle = dlopen("libjansson.so.4", RTLD_LAZY|RTLD_LOCAL|RTLD_NODELETE);
+-    if (!handle) {
+-        virReportError(VIR_ERR_NO_SUPPORT,
+-                       _("libjansson.so.4 JSON library not available: %s"), dlerror());
+-        return -1;
+-    }
+-
+-# define LOAD(name) \
+-    do { \
+-        if (!(name ## _ptr = dlsym(handle, #name))) { \
+-            virReportError(VIR_ERR_NO_SUPPORT, \
+-                           _("missing symbol '%s' in libjansson.so.4: %s"), #name, dlerror()); \
+-            return -1; \
+-        } \
+-    } while (0)
+-
+-    LOAD(json_array);
+-    LOAD(json_array_append_new);
+-    LOAD(json_array_get);
+-    LOAD(json_array_size);
+-    LOAD(json_delete);
+-    LOAD(json_dumps);
+-    LOAD(json_false);
+-    LOAD(json_integer);
+-    LOAD(json_integer_value);
+-    LOAD(json_loads);
+-    LOAD(json_null);
+-    LOAD(json_object);
+-    LOAD(json_object_iter);
+-    LOAD(json_object_iter_key);
+-    LOAD(json_object_iter_next);
+-    LOAD(json_object_iter_value);
+-    LOAD(json_object_key_to_iter);
+-    LOAD(json_object_set_new);
+-    LOAD(json_real);
+-    LOAD(json_real_value);
+-    LOAD(json_string);
+-    LOAD(json_string_value);
+-    LOAD(json_true);
+-
+-    return 0;
+-}
+-
+-VIR_ONCE_GLOBAL_INIT(virJSONJansson);
+-
+-int
+-virJSONInitialize(void)
+-{
+-    return virJSONJanssonInitialize();
+-}
+-
+-json_t *
+-json_array_impl(void)
+-{
+-    return json_array_ptr();
+-}
+-
+-
+-int
+-json_array_append_new_impl(json_t *array, json_t *value)
+-{
+-    return json_array_append_new_ptr(array, value);
+-}
+-
+-
+-json_t *
+-json_array_get_impl(const json_t *array, size_t index)
+-{
+-    return json_array_get_ptr(array, index);
+-}
+-
+-
+-size_t
+-json_array_size_impl(const json_t *array)
+-{
+-    return json_array_size_ptr(array);
+-}
+-
+-
+-void
+-json_delete_impl(json_t *json)
+-{
+-    return json_delete_ptr(json);
+-}
+-
+-
+-char *
+-json_dumps_impl(const json_t *json, size_t flags)
+-{
+-    return json_dumps_ptr(json, flags);
+-}
+-
+-
+-json_t *
+-json_false_impl(void)
+-{
+-    return json_false_ptr();
+-}
+-
+-
+-json_t *
+-json_integer_impl(json_int_t value)
+-{
+-    return json_integer_ptr(value);
+-}
+-
+-
+-json_int_t
+-json_integer_value_impl(const json_t *integer)
+-{
+-    return json_integer_value_ptr(integer);
+-}
+-
+-
+-json_t *
+-json_loads_impl(const char *input, size_t flags, json_error_t *error)
+-{
+-    return json_loads_ptr(input, flags, error);
+-}
+-
+-
+-json_t *
+-json_null_impl(void)
+-{
+-    return json_null_ptr();
+-}
+-
+-
+-json_t *
+-json_object_impl(void)
+-{
+-    return json_object_ptr();
+-}
+-
+-
+-void *
+-json_object_iter_impl(json_t *object)
+-{
+-    return json_object_iter_ptr(object);
+-}
+-
+-
+-const char *
+-json_object_iter_key_impl(void *iter)
+-{
+-    return json_object_iter_key_ptr(iter);
+-}
+-
+-
+-void *
+-json_object_iter_next_impl(json_t *object, void *iter)
+-{
+-    return json_object_iter_next_ptr(object, iter);
+-}
+-
+-
+-json_t *
+-json_object_iter_value_impl(void *iter)
+-{
+-    return json_object_iter_value_ptr(iter);
+-}
+-
+-
+-void *
+-json_object_key_to_iter_impl(const char *key)
+-{
+-    return json_object_key_to_iter_ptr(key);
+-}
+-
+-
+-int
+-json_object_set_new_impl(json_t *object, const char *key, json_t *value)
+-{
+-    return json_object_set_new_ptr(object, key, value);
+-}
+-
+-
+-json_t *
+-json_real_impl(double value)
+-{
+-    return json_real_ptr(value);
+-}
+-
+-
+-double
+-json_real_value_impl(const json_t *real)
+-{
+-    return json_real_value_ptr(real);
+-}
+-
+-
+-json_t *
+-json_string_impl(const char *value)
+-{
+-    return json_string_ptr(value);
+-}
+-
+-
+-const char *
+-json_string_value_impl(const json_t *string)
+-{
+-    return json_string_value_ptr(string);
+-}
+-
+-
+-json_t *
+-json_true_impl(void)
+-{
+-    return json_true_ptr();
+-}
+-
+-#endif /* WITH_JANSSON */
+diff --git a/src/util/virjsoncompat.h b/src/util/virjsoncompat.h
+deleted file mode 100644
+index d9b7765a37..0000000000
+--- a/src/util/virjsoncompat.h
++++ /dev/null
+@@ -1,88 +0,0 @@
+-/*
+- * virjsoncompat.h: JSON object parsing/formatting
+- *
+- * Copyright (C) 2018 Red Hat, Inc.
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public
+- * License as published by the Free Software Foundation; either
+- * version 2.1 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public
+- * License along with this library.  If not, see
+- * <http://www.gnu.org/licenses/>.
+- *
+- */
+-
+-
+-#ifndef __VIR_JSON_COMPAT_H_
+-# define __VIR_JSON_COMPAT_H_
+-
+-# if WITH_JANSSON
+-#  ifndef VIR_JSON_COMPAT_IMPL
+-
+-#   define json_array json_array_impl
+-#   define json_array_append_new json_array_append_new_impl
+-#   define json_array_get json_array_get_impl
+-#   define json_array_size json_array_size_impl
+-#   define json_delete json_delete_impl
+-#   define json_dumps json_dumps_impl
+-#   define json_false json_false_impl
+-#   define json_integer json_integer_impl
+-#   define json_integer_value json_integer_value_impl
+-#   define json_loads json_loads_impl
+-#   define json_null json_null_impl
+-#   define json_object json_object_impl
+-#   define json_object_iter json_object_iter_impl
+-#   define json_object_iter_key json_object_iter_key_impl
+-#   define json_object_iter_next json_object_iter_next_impl
+-#   define json_object_iter_value json_object_iter_value_impl
+-#   define json_object_key_to_iter json_object_key_to_iter_impl
+-#   define json_object_set_new json_object_set_new_impl
+-#   define json_real json_real_impl
+-#   define json_real_value json_real_value_impl
+-#   define json_string json_string_impl
+-#   define json_string_value json_string_value_impl
+-#   define json_true json_true_impl
+-
+-#  endif /* ! VIR_JSON_COMPAT_IMPL */
+-
+-#  include <jansson.h>
+-
+-#  ifdef VIR_JSON_COMPAT_IMPL
+-
+-json_t *json_array_impl(void);
+-int json_array_append_new_impl(json_t *array, json_t *value);
+-json_t *json_array_get_impl(const json_t *array, size_t index);
+-size_t json_array_size_impl(const json_t *array);
+-void json_delete_impl(json_t *json);
+-char *json_dumps_impl(const json_t *json, size_t flags);
+-json_t *json_false_impl(void);
+-json_t *json_integer_impl(json_int_t value);
+-json_int_t json_integer_value_impl(const json_t *integer);
+-json_t *json_loads_impl(const char *input, size_t flags, json_error_t *error);
+-json_t *json_null_impl(void);
+-json_t *json_object_impl(void);
+-void *json_object_iter_impl(json_t *object);
+-const char *json_object_iter_key_impl(void *iter);
+-void *json_object_iter_next_impl(json_t *object, void *iter);
+-json_t *json_object_iter_value_impl(void *iter);
+-void *json_object_key_to_iter_impl(const char *key);
+-int json_object_set_new_impl(json_t *object, const char *key, json_t *value);
+-json_t *json_real_impl(double value);
+-double json_real_value_impl(const json_t *real);
+-json_t *json_string_impl(const char *value);
+-const char *json_string_value_impl(const json_t *string);
+-json_t *json_true_impl(void);
+-
+-#  endif /* VIR_JSON_COMPAT_IMPL */
+-# endif /* WITH_JANSSON */
+-
+-int virJSONInitialize(void);
+-
+-#endif /* __VIR_JSON_COMPAT_H_ */
+-- 
+2.18.0
+
+
+From d657feb1ed0d88b754558e162b0455c09ca5f428 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:39:25 +0200
+Subject: [PATCH 05/14] Revert "tests: also skip qemuagenttest with old
+ jansson"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit c31146685f5c8558ff88d52d03a68533c9220feb.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ tests/qemuagenttest.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/qemuagenttest.c b/tests/qemuagenttest.c
+index b3d737d8a8..232b34f9cd 100644
+--- a/tests/qemuagenttest.c
++++ b/tests/qemuagenttest.c
+@@ -907,8 +907,8 @@ mymain(void)
+ {
+     int ret = 0;
+ 
+-#if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
++#if !WITH_JANSSON
++    fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+ #endif
+ 
+-- 
+2.18.0
+
+
+From d577bddcba79111f1fa3037dec65f778ea0346ba Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:39:33 +0200
+Subject: [PATCH 06/14] Revert "m4: Introduce STABLE_ORDERING_JANSSON"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 4dd60540007042bfc0087a67f57f3e9f3311a84a.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ m4/virt-jansson.m4           | 3 ---
+ tests/qemublocktest.c        | 5 -----
+ tests/qemucapabilitiestest.c | 5 -----
+ tests/qemucommandutiltest.c  | 5 -----
+ tests/qemuhotplugtest.c      | 5 -----
+ tests/qemumigparamstest.c    | 5 -----
+ tests/qemumonitorjsontest.c  | 5 -----
+ tests/virjsontest.c          | 5 -----
+ tests/virmacmaptest.c        | 5 -----
+ tests/virnetdaemontest.c     | 5 -----
+ 10 files changed, 48 deletions(-)
+
+diff --git a/m4/virt-jansson.m4 b/m4/virt-jansson.m4
+index ab4c020f62..206d6a5ced 100644
+--- a/m4/virt-jansson.m4
++++ b/m4/virt-jansson.m4
+@@ -22,9 +22,6 @@ AC_DEFUN([LIBVIRT_ARG_JANSSON],[
+ AC_DEFUN([LIBVIRT_CHECK_JANSSON],[
+   dnl Jansson http://www.digip.org/jansson/
+   LIBVIRT_CHECK_PKG([JANSSON], [jansson], [2.5])
+-  dnl Older versions of Jansson did not preserve the order of object keys
+-  dnl use this check to guard the tests that are sensitive to this
+-  LIBVIRT_CHECK_PKG([STABLE_ORDERING_JANSSON], [jansson], [2.8], [true])
+ ])
+ 
+ AC_DEFUN([LIBVIRT_RESULT_JANSSON],[
+diff --git a/tests/qemublocktest.c b/tests/qemublocktest.c
+index d22b4b754e..9a387cf063 100644
+--- a/tests/qemublocktest.c
++++ b/tests/qemublocktest.c
+@@ -337,11 +337,6 @@ mymain(void)
+     char *capslatest_x86_64 = NULL;
+     virQEMUCapsPtr caps_x86_64 = NULL;
+ 
+-#if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
+-    return EXIT_AM_SKIP;
+-#endif
+-
+     if (qemuTestDriverInit(&driver) < 0)
+         return EXIT_FAILURE;
+ 
+diff --git a/tests/qemucapabilitiestest.c b/tests/qemucapabilitiestest.c
+index 28f903a88c..641ec4f597 100644
+--- a/tests/qemucapabilitiestest.c
++++ b/tests/qemucapabilitiestest.c
+@@ -141,11 +141,6 @@ mymain(void)
+     int ret = 0;
+     testQemuData data;
+ 
+-#if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
+-    return EXIT_AM_SKIP;
+-#endif
+-
+ #if !WITH_JANSSON
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+diff --git a/tests/qemucommandutiltest.c b/tests/qemucommandutiltest.c
+index 9b13dde63f..8e57a1b79d 100644
+--- a/tests/qemucommandutiltest.c
++++ b/tests/qemucommandutiltest.c
+@@ -76,11 +76,6 @@ mymain(void)
+     int ret = 0;
+     testQemuCommandBuildObjectFromJSONData data1;
+ 
+-#if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
+-    return EXIT_AM_SKIP;
+-#endif
+-
+ #if !WITH_JANSSON
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+diff --git a/tests/qemuhotplugtest.c b/tests/qemuhotplugtest.c
+index 3c0eecb079..2fb96c6158 100644
+--- a/tests/qemuhotplugtest.c
++++ b/tests/qemuhotplugtest.c
+@@ -593,11 +593,6 @@ mymain(void)
+     struct qemuHotplugTestData data = {0};
+     struct testQemuHotplugCpuParams cpudata;
+ 
+-#if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
+-    return EXIT_AM_SKIP;
+-#endif
+-
+ #if !WITH_JANSSON
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+diff --git a/tests/qemumigparamstest.c b/tests/qemumigparamstest.c
+index 5e12430991..b8af68211b 100644
+--- a/tests/qemumigparamstest.c
++++ b/tests/qemumigparamstest.c
+@@ -203,11 +203,6 @@ mymain(void)
+     virQEMUDriver driver;
+     int ret = 0;
+ 
+-#if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
+-    return EXIT_AM_SKIP;
+-#endif
+-
+ #if !WITH_JANSSON
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+diff --git a/tests/qemumonitorjsontest.c b/tests/qemumonitorjsontest.c
+index 1826c4f297..c11615f7ac 100644
+--- a/tests/qemumonitorjsontest.c
++++ b/tests/qemumonitorjsontest.c
+@@ -2863,11 +2863,6 @@ mymain(void)
+     virJSONValuePtr metaschema = NULL;
+     char *metaschemastr = NULL;
+ 
+-#if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
+-    return EXIT_AM_SKIP;
+-#endif
+-
+ #if !WITH_JANSSON
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+diff --git a/tests/virjsontest.c b/tests/virjsontest.c
+index d352d370fd..d42413d11d 100644
+--- a/tests/virjsontest.c
++++ b/tests/virjsontest.c
+@@ -479,11 +479,6 @@ mymain(void)
+ {
+     int ret = 0;
+ 
+-#if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
+-    return EXIT_AM_SKIP;
+-#endif
+-
+ #define DO_TEST_FULL(name, cmd, doc, expect, pass) \
+     do { \
+         struct testInfo info = { doc, expect, pass }; \
+diff --git a/tests/virmacmaptest.c b/tests/virmacmaptest.c
+index 420531dcdb..6e3e9984d1 100644
+--- a/tests/virmacmaptest.c
++++ b/tests/virmacmaptest.c
+@@ -157,11 +157,6 @@ mymain(void)
+     int ret = 0;
+     virMacMapPtr mgr = NULL;
+ 
+-#if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
+-    return EXIT_AM_SKIP;
+-#endif
+-
+ #define DO_TEST_BASIC(f, d, ...) \
+     do { \
+         const char * const m[] = {__VA_ARGS__, NULL }; \
+diff --git a/tests/virnetdaemontest.c b/tests/virnetdaemontest.c
+index 277fb06385..cbc961dbaf 100644
+--- a/tests/virnetdaemontest.c
++++ b/tests/virnetdaemontest.c
+@@ -375,11 +375,6 @@ mymain(void)
+     int ret = 0;
+     const char *server_names[] = { "testServer0", "testServer1" };
+ 
+-# if !WITH_STABLE_ORDERING_JANSSON
+-    fputs("libvirt not compiled with recent enough Jansson, skipping this test\n", stderr);
+-    return EXIT_AM_SKIP;
+-# endif
+-
+     if (virInitialize() < 0 ||
+         virEventRegisterDefaultImpl() < 0) {
+         virDispatchError(NULL);
+-- 
+2.18.0
+
+
+From 34860fd4f621b9e9957da217a831e7ae0463ea3e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:39:39 +0200
+Subject: [PATCH 07/14] Revert "build: require Jansson if QEMU driver is
+ enabled"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 01ce04375c3348fd683475e5aa5231149ef6a78a.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ m4/virt-driver-qemu.m4 | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/m4/virt-driver-qemu.m4 b/m4/virt-driver-qemu.m4
+index 2d9992d0dc..ddb2834705 100644
+--- a/m4/virt-driver-qemu.m4
++++ b/m4/virt-driver-qemu.m4
+@@ -27,9 +27,6 @@ AC_DEFUN([LIBVIRT_DRIVER_ARG_QEMU], [
+ 
+ AC_DEFUN([LIBVIRT_DRIVER_CHECK_QEMU], [
+   AC_REQUIRE([LIBVIRT_CHECK_JANSSON])
+-  if test "$with_qemu:$with_jansson" = "yes:no"; then
+-    AC_MSG_ERROR([Jansson >= 2.5 is required to build QEMU driver])
+-  fi
+   if test "$with_qemu" = "check"; then
+     with_qemu=$with_jansson
+   fi
+-- 
+2.18.0
+
+
+From 9eb7cf2ba508a3e82c546fe6eede2242bcd83a0a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:39:48 +0200
+Subject: [PATCH 08/14] Revert "build: switch --with-qemu default from yes to
+ check"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit c5ae8e0c2b4b6bb3c667cfadaf65a66c3f4f3d85.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ m4/virt-driver-qemu.m4 | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/m4/virt-driver-qemu.m4 b/m4/virt-driver-qemu.m4
+index ddb2834705..80e1d3ad46 100644
+--- a/m4/virt-driver-qemu.m4
++++ b/m4/virt-driver-qemu.m4
+@@ -18,7 +18,7 @@ dnl <http://www.gnu.org/licenses/>.
+ dnl
+ 
+ AC_DEFUN([LIBVIRT_DRIVER_ARG_QEMU], [
+-  LIBVIRT_ARG_WITH_FEATURE([QEMU], [QEMU/KVM], [check])
++  LIBVIRT_ARG_WITH_FEATURE([QEMU], [QEMU/KVM], [yes])
+   LIBVIRT_ARG_WITH([QEMU_USER], [username to run QEMU system instance as],
+                    ['platform dependent'])
+   LIBVIRT_ARG_WITH([QEMU_GROUP], [groupname to run QEMU system instance as],
+@@ -26,10 +26,6 @@ AC_DEFUN([LIBVIRT_DRIVER_ARG_QEMU], [
+ ])
+ 
+ AC_DEFUN([LIBVIRT_DRIVER_CHECK_QEMU], [
+-  AC_REQUIRE([LIBVIRT_CHECK_JANSSON])
+-  if test "$with_qemu" = "check"; then
+-    with_qemu=$with_jansson
+-  fi
+   if test "$with_qemu" = "yes" ; then
+     AC_DEFINE_UNQUOTED([WITH_QEMU], 1, [whether QEMU driver is enabled])
+   fi
+-- 
+2.18.0
+
+
+From 7ab1ae1702c651581805b5735884a6439f89d66f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:39:56 +0200
+Subject: [PATCH 09/14] Revert "Remove virJSONValueNewStringLen"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 8f802c6d8659beb9eb3cab96ba2553e251728337.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ src/libvirt_private.syms |  1 +
+ src/util/virjson.c       | 22 ++++++++++++++++++++++
+ src/util/virjson.h       |  1 +
+ 3 files changed, 24 insertions(+)
+
+diff --git a/src/libvirt_private.syms b/src/libvirt_private.syms
+index fc386e1699..a5e88a9018 100644
+--- a/src/libvirt_private.syms
++++ b/src/libvirt_private.syms
+@@ -2098,6 +2098,7 @@ virJSONValueNewNumberUint;
+ virJSONValueNewNumberUlong;
+ virJSONValueNewObject;
+ virJSONValueNewString;
++virJSONValueNewStringLen;
+ virJSONValueObjectAdd;
+ virJSONValueObjectAddVArgs;
+ virJSONValueObjectAppend;
+diff --git a/src/util/virjson.c b/src/util/virjson.c
+index 01a387b2f7..80274bc6c5 100644
+--- a/src/util/virjson.c
++++ b/src/util/virjson.c
+@@ -420,6 +420,28 @@ virJSONValueNewString(const char *data)
+ }
+ 
+ 
++virJSONValuePtr
++virJSONValueNewStringLen(const char *data,
++                         size_t length)
++{
++    virJSONValuePtr val;
++
++    if (!data)
++        return virJSONValueNewNull();
++
++    if (VIR_ALLOC(val) < 0)
++        return NULL;
++
++    val->type = VIR_JSON_TYPE_STRING;
++    if (VIR_STRNDUP(val->data.string, data, length) < 0) {
++        VIR_FREE(val);
++        return NULL;
++    }
++
++    return val;
++}
++
++
+ static virJSONValuePtr
+ virJSONValueNewNumber(const char *data)
+ {
+diff --git a/src/util/virjson.h b/src/util/virjson.h
+index 0d5a7ef753..75f7f17b44 100644
+--- a/src/util/virjson.h
++++ b/src/util/virjson.h
+@@ -59,6 +59,7 @@ int virJSONValueObjectAddVArgs(virJSONValuePtr obj, va_list args)
+ 
+ 
+ virJSONValuePtr virJSONValueNewString(const char *data);
++virJSONValuePtr virJSONValueNewStringLen(const char *data, size_t length);
+ virJSONValuePtr virJSONValueNewNumberInt(int data);
+ virJSONValuePtr virJSONValueNewNumberUint(unsigned int data);
+ virJSONValuePtr virJSONValueNewNumberLong(long long data);
+-- 
+2.18.0
+
+
+From 09b4cdeb54ec1e0ac951b971dacd6e22fd49a0bd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:40:02 +0200
+Subject: [PATCH 10/14] Revert "build: remove references to WITH_YAJL for
+ SETUID_RPC_CLIENT"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 1caf8441604b58e4a89aa2c09975b8346928c52a.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ config-post.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/config-post.h b/config-post.h
+index 05672121f0..24117bbbd4 100644
+--- a/config-post.h
++++ b/config-post.h
+@@ -44,6 +44,8 @@
+ # undef WITH_SSH2
+ # undef WITH_SYSTEMD_DAEMON
+ # undef WITH_VIRTUALPORT
++# undef WITH_YAJL
++# undef WITH_YAJL2
+ #endif
+ 
+ /*
+-- 
+2.18.0
+
+
+From 4dbd43a9a87e19caf8c04e315e59b439399799bb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:40:11 +0200
+Subject: [PATCH 11/14] Revert "Remove functions using yajl"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit bf114decb34f21cd225ead6dc4d929d35a8c5fe5.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ src/util/virjson.c | 529 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 528 insertions(+), 1 deletion(-)
+
+diff --git a/src/util/virjson.c b/src/util/virjson.c
+index 80274bc6c5..608ba85d67 100644
+--- a/src/util/virjson.c
++++ b/src/util/virjson.c
+@@ -29,6 +29,22 @@
+ #include "virstring.h"
+ #include "virutil.h"
+ 
++#if WITH_YAJL
++# include <yajl/yajl_gen.h>
++# include <yajl/yajl_parse.h>
++
++# ifdef WITH_YAJL2
++#  define yajl_size_t size_t
++#  define VIR_YAJL_STATUS_OK(status) ((status) == yajl_status_ok)
++# else
++#  define yajl_size_t unsigned int
++#  define yajl_complete_parse yajl_parse_complete
++#  define VIR_YAJL_STATUS_OK(status) \
++    ((status) == yajl_status_ok || (status) == yajl_status_insufficient_data)
++# endif
++
++#endif
++
+ /* XXX fixme */
+ #define VIR_FROM_THIS VIR_FROM_NONE
+ 
+@@ -72,6 +88,23 @@ struct _virJSONValue {
+ };
+ 
+ 
++typedef struct _virJSONParserState virJSONParserState;
++typedef virJSONParserState *virJSONParserStatePtr;
++struct _virJSONParserState {
++    virJSONValuePtr value;
++    char *key;
++};
++
++typedef struct _virJSONParser virJSONParser;
++typedef virJSONParser *virJSONParserPtr;
++struct _virJSONParser {
++    virJSONValuePtr head;
++    virJSONParserStatePtr state;
++    size_t nstate;
++    int wrap;
++};
++
++
+ virJSONType
+ virJSONValueGetType(const virJSONValue *value)
+ {
+@@ -1458,7 +1491,501 @@ virJSONValueCopy(const virJSONValue *in)
+ }
+ 
+ 
+-#if WITH_JANSSON
++#if WITH_YAJL
++static int
++virJSONParserInsertValue(virJSONParserPtr parser,
++                         virJSONValuePtr value)
++{
++    if (!parser->head) {
++        parser->head = value;
++    } else {
++        virJSONParserStatePtr state;
++        if (!parser->nstate) {
++            VIR_DEBUG("got a value to insert without a container");
++            return -1;
++        }
++
++        state = &parser->state[parser->nstate-1];
++
++        switch (state->value->type) {
++        case VIR_JSON_TYPE_OBJECT: {
++            if (!state->key) {
++                VIR_DEBUG("missing key when inserting object value");
++                return -1;
++            }
++
++            if (virJSONValueObjectAppend(state->value,
++                                         state->key,
++                                         value) < 0)
++                return -1;
++
++            VIR_FREE(state->key);
++        }   break;
++
++        case VIR_JSON_TYPE_ARRAY: {
++            if (state->key) {
++                VIR_DEBUG("unexpected key when inserting array value");
++                return -1;
++            }
++
++            if (virJSONValueArrayAppend(state->value,
++                                        value) < 0)
++                return -1;
++        }   break;
++
++        default:
++            VIR_DEBUG("unexpected value type, not a container");
++            return -1;
++        }
++    }
++
++    return 0;
++}
++
++
++static int
++virJSONParserHandleNull(void *ctx)
++{
++    virJSONParserPtr parser = ctx;
++    virJSONValuePtr value = virJSONValueNewNull();
++
++    VIR_DEBUG("parser=%p", parser);
++
++    if (!value)
++        return 0;
++
++    if (virJSONParserInsertValue(parser, value) < 0) {
++        virJSONValueFree(value);
++        return 0;
++    }
++
++    return 1;
++}
++
++
++static int
++virJSONParserHandleBoolean(void *ctx,
++                           int boolean_)
++{
++    virJSONParserPtr parser = ctx;
++    virJSONValuePtr value = virJSONValueNewBoolean(boolean_);
++
++    VIR_DEBUG("parser=%p boolean=%d", parser, boolean_);
++
++    if (!value)
++        return 0;
++
++    if (virJSONParserInsertValue(parser, value) < 0) {
++        virJSONValueFree(value);
++        return 0;
++    }
++
++    return 1;
++}
++
++
++static int
++virJSONParserHandleNumber(void *ctx,
++                          const char *s,
++                          yajl_size_t l)
++{
++    virJSONParserPtr parser = ctx;
++    char *str;
++    virJSONValuePtr value;
++
++    if (VIR_STRNDUP(str, s, l) < 0)
++        return -1;
++    value = virJSONValueNewNumber(str);
++    VIR_FREE(str);
++
++    VIR_DEBUG("parser=%p str=%s", parser, str);
++
++    if (!value)
++        return 0;
++
++    if (virJSONParserInsertValue(parser, value) < 0) {
++        virJSONValueFree(value);
++        return 0;
++    }
++
++    return 1;
++}
++
++
++static int
++virJSONParserHandleString(void *ctx,
++                          const unsigned char *stringVal,
++                          yajl_size_t stringLen)
++{
++    virJSONParserPtr parser = ctx;
++    virJSONValuePtr value = virJSONValueNewStringLen((const char *)stringVal,
++                                                     stringLen);
++
++    VIR_DEBUG("parser=%p str=%p", parser, (const char *)stringVal);
++
++    if (!value)
++        return 0;
++
++    if (virJSONParserInsertValue(parser, value) < 0) {
++        virJSONValueFree(value);
++        return 0;
++    }
++
++    return 1;
++}
++
++
++static int
++virJSONParserHandleMapKey(void *ctx,
++                          const unsigned char *stringVal,
++                          yajl_size_t stringLen)
++{
++    virJSONParserPtr parser = ctx;
++    virJSONParserStatePtr state;
++
++    VIR_DEBUG("parser=%p key=%p", parser, (const char *)stringVal);
++
++    if (!parser->nstate)
++        return 0;
++
++    state = &parser->state[parser->nstate-1];
++    if (state->key)
++        return 0;
++    if (VIR_STRNDUP(state->key, (const char *)stringVal, stringLen) < 0)
++        return 0;
++    return 1;
++}
++
++
++static int
++virJSONParserHandleStartMap(void *ctx)
++{
++    virJSONParserPtr parser = ctx;
++    virJSONValuePtr value = virJSONValueNewObject();
++
++    VIR_DEBUG("parser=%p", parser);
++
++    if (!value)
++        return 0;
++
++    if (virJSONParserInsertValue(parser, value) < 0) {
++        virJSONValueFree(value);
++        return 0;
++    }
++
++    if (VIR_REALLOC_N(parser->state,
++                      parser->nstate + 1) < 0) {
++        return 0;
++    }
++
++    parser->state[parser->nstate].value = value;
++    parser->state[parser->nstate].key = NULL;
++    parser->nstate++;
++
++    return 1;
++}
++
++
++static int
++virJSONParserHandleEndMap(void *ctx)
++{
++    virJSONParserPtr parser = ctx;
++    virJSONParserStatePtr state;
++
++    VIR_DEBUG("parser=%p", parser);
++
++    if (!parser->nstate)
++        return 0;
++
++    state = &(parser->state[parser->nstate-1]);
++    if (state->key) {
++        VIR_FREE(state->key);
++        return 0;
++    }
++
++    VIR_DELETE_ELEMENT(parser->state, parser->nstate - 1, parser->nstate);
++
++    return 1;
++}
++
++
++static int
++virJSONParserHandleStartArray(void *ctx)
++{
++    virJSONParserPtr parser = ctx;
++    virJSONValuePtr value = virJSONValueNewArray();
++
++    VIR_DEBUG("parser=%p", parser);
++
++    if (!value)
++        return 0;
++
++    if (virJSONParserInsertValue(parser, value) < 0) {
++        virJSONValueFree(value);
++        return 0;
++    }
++
++    if (VIR_REALLOC_N(parser->state,
++                      parser->nstate + 1) < 0)
++        return 0;
++
++    parser->state[parser->nstate].value = value;
++    parser->state[parser->nstate].key = NULL;
++    parser->nstate++;
++
++    return 1;
++}
++
++
++static int
++virJSONParserHandleEndArray(void *ctx)
++{
++    virJSONParserPtr parser = ctx;
++    virJSONParserStatePtr state;
++
++    VIR_DEBUG("parser=%p", parser);
++
++    if (!(parser->nstate - parser->wrap))
++        return 0;
++
++    state = &(parser->state[parser->nstate-1]);
++    if (state->key) {
++        VIR_FREE(state->key);
++        return 0;
++    }
++
++    VIR_DELETE_ELEMENT(parser->state, parser->nstate - 1, parser->nstate);
++
++    return 1;
++}
++
++
++static const yajl_callbacks parserCallbacks = {
++    virJSONParserHandleNull,
++    virJSONParserHandleBoolean,
++    NULL,
++    NULL,
++    virJSONParserHandleNumber,
++    virJSONParserHandleString,
++    virJSONParserHandleStartMap,
++    virJSONParserHandleMapKey,
++    virJSONParserHandleEndMap,
++    virJSONParserHandleStartArray,
++    virJSONParserHandleEndArray
++};
++
++
++/* XXX add an incremental streaming parser - yajl trivially supports it */
++virJSONValuePtr
++virJSONValueFromString(const char *jsonstring)
++{
++    yajl_handle hand;
++    virJSONParser parser = { NULL, NULL, 0, 0 };
++    virJSONValuePtr ret = NULL;
++    int rc;
++    size_t len = strlen(jsonstring);
++# ifndef WITH_YAJL2
++    yajl_parser_config cfg = { 0, 1 }; /* Match yajl 2 default behavior */
++    VIR_AUTOPTR(virJSONValue) tmp = NULL;
++# endif
++
++    VIR_DEBUG("string=%s", jsonstring);
++
++# ifdef WITH_YAJL2
++    hand = yajl_alloc(&parserCallbacks, NULL, &parser);
++# else
++    hand = yajl_alloc(&parserCallbacks, &cfg, NULL, &parser);
++# endif
++    if (!hand) {
++        virReportError(VIR_ERR_INTERNAL_ERROR, "%s",
++                       _("Unable to create JSON parser"));
++        goto cleanup;
++    }
++
++    /* Yajl 2 is nice enough to default to rejecting trailing garbage.
++     * Yajl 1.0.12 has yajl_get_bytes_consumed to make that detection
++     * simpler.  But we're stuck with yajl 1.0.7 on RHEL 6, which
++     * happily quits parsing at the end of a valid JSON construct,
++     * with no visibility into how much more input remains.  Wrapping
++     * things in an array forces yajl to confess the truth.  */
++# ifdef WITH_YAJL2
++    rc = yajl_parse(hand, (const unsigned char *)jsonstring, len);
++# else
++    rc = yajl_parse(hand, (const unsigned char *)"[", 1);
++    parser.wrap = 1;
++    if (VIR_YAJL_STATUS_OK(rc))
++        rc = yajl_parse(hand, (const unsigned char *)jsonstring, len);
++    parser.wrap = 0;
++    if (VIR_YAJL_STATUS_OK(rc))
++        rc = yajl_parse(hand, (const unsigned char *)"]", 1);
++# endif
++    if (!VIR_YAJL_STATUS_OK(rc) ||
++        yajl_complete_parse(hand) != yajl_status_ok) {
++        unsigned char *errstr = yajl_get_error(hand, 1,
++                                               (const unsigned char*)jsonstring,
++                                               strlen(jsonstring));
++
++        virReportError(VIR_ERR_INTERNAL_ERROR,
++                       _("cannot parse json %s: %s"),
++                       jsonstring, (const char*) errstr);
++        yajl_free_error(hand, errstr);
++        virJSONValueFree(parser.head);
++        goto cleanup;
++    }
++
++    if (parser.nstate != 0) {
++        virReportError(VIR_ERR_INTERNAL_ERROR,
++                       _("cannot parse json %s: unterminated string/map/array"),
++                       jsonstring);
++        virJSONValueFree(parser.head);
++    } else {
++        ret = parser.head;
++# ifndef WITH_YAJL2
++        /* Undo the array wrapping above */
++        tmp = ret;
++        ret = NULL;
++        if (virJSONValueArraySize(tmp) > 1)
++            virReportError(VIR_ERR_INTERNAL_ERROR,
++                           _("cannot parse json %s: too many items present"),
++                           jsonstring);
++        else
++            ret = virJSONValueArraySteal(tmp, 0);
++# endif
++    }
++
++ cleanup:
++    yajl_free(hand);
++
++    if (parser.nstate) {
++        size_t i;
++        for (i = 0; i < parser.nstate; i++)
++            VIR_FREE(parser.state[i].key);
++        VIR_FREE(parser.state);
++    }
++
++    VIR_DEBUG("result=%p", ret);
++
++    return ret;
++}
++
++
++static int
++virJSONValueToStringOne(virJSONValuePtr object,
++                        yajl_gen g)
++{
++    size_t i;
++
++    VIR_DEBUG("object=%p type=%d gen=%p", object, object->type, g);
++
++    switch (object->type) {
++    case VIR_JSON_TYPE_OBJECT:
++        if (yajl_gen_map_open(g) != yajl_gen_status_ok)
++            return -1;
++        for (i = 0; i < object->data.object.npairs; i++) {
++            if (yajl_gen_string(g,
++                                (unsigned char *)object->data.object.pairs[i].key,
++                                strlen(object->data.object.pairs[i].key))
++                                != yajl_gen_status_ok)
++                return -1;
++            if (virJSONValueToStringOne(object->data.object.pairs[i].value, g) < 0)
++                return -1;
++        }
++        if (yajl_gen_map_close(g) != yajl_gen_status_ok)
++            return -1;
++        break;
++    case VIR_JSON_TYPE_ARRAY:
++        if (yajl_gen_array_open(g) != yajl_gen_status_ok)
++            return -1;
++        for (i = 0; i < object->data.array.nvalues; i++) {
++            if (virJSONValueToStringOne(object->data.array.values[i], g) < 0)
++                return -1;
++        }
++        if (yajl_gen_array_close(g) != yajl_gen_status_ok)
++            return -1;
++        break;
++
++    case VIR_JSON_TYPE_STRING:
++        if (yajl_gen_string(g, (unsigned char *)object->data.string,
++                            strlen(object->data.string)) != yajl_gen_status_ok)
++            return -1;
++        break;
++
++    case VIR_JSON_TYPE_NUMBER:
++        if (yajl_gen_number(g, object->data.number,
++                            strlen(object->data.number)) != yajl_gen_status_ok)
++            return -1;
++        break;
++
++    case VIR_JSON_TYPE_BOOLEAN:
++        if (yajl_gen_bool(g, object->data.boolean) != yajl_gen_status_ok)
++            return -1;
++        break;
++
++    case VIR_JSON_TYPE_NULL:
++        if (yajl_gen_null(g) != yajl_gen_status_ok)
++            return -1;
++        break;
++
++    default:
++        return -1;
++    }
++
++    return 0;
++}
++
++
++char *
++virJSONValueToString(virJSONValuePtr object,
++                     bool pretty)
++{
++    yajl_gen g;
++    const unsigned char *str;
++    char *ret = NULL;
++    yajl_size_t len;
++# ifndef WITH_YAJL2
++    yajl_gen_config conf = { pretty ? 1 : 0, pretty ? "  " : " "};
++# endif
++
++    VIR_DEBUG("object=%p", object);
++
++# ifdef WITH_YAJL2
++    g = yajl_gen_alloc(NULL);
++    if (g) {
++        yajl_gen_config(g, yajl_gen_beautify, pretty ? 1 : 0);
++        yajl_gen_config(g, yajl_gen_indent_string, pretty ? "  " : " ");
++        yajl_gen_config(g, yajl_gen_validate_utf8, 1);
++    }
++# else
++    g = yajl_gen_alloc(&conf, NULL);
++# endif
++    if (!g) {
++        virReportError(VIR_ERR_INTERNAL_ERROR, "%s",
++                       _("Unable to create JSON formatter"));
++        goto cleanup;
++    }
++
++    if (virJSONValueToStringOne(object, g) < 0) {
++        virReportOOMError();
++        goto cleanup;
++    }
++
++    if (yajl_gen_get_buf(g, &str, &len) != yajl_gen_status_ok) {
++        virReportOOMError();
++        goto cleanup;
++    }
++
++    ignore_value(VIR_STRDUP(ret, (const char *)str));
++
++ cleanup:
++    yajl_gen_free(g);
++
++    VIR_DEBUG("result=%s", NULLSTR(ret));
++
++    return ret;
++}
++
++
++#elif WITH_JANSSON
+ # include <jansson.h>
+ 
+ static virJSONValuePtr
+-- 
+2.18.0
+
+
+From feb07ab44662fb712fc30a6fac04a5bf8a25e848 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:40:18 +0200
+Subject: [PATCH 12/14] Revert "Switch from yajl to Jansson"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 9cf38263d05ca7f27dbbd9b1a0b48d338d9280e2.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ libvirt.spec.in                          |   4 +-
+ m4/virt-nss.m4                           |   4 +-
+ m4/virt-yajl.m4                          |  27 ++-
+ src/Makefile.am                          |   8 +-
+ src/qemu/qemu_driver.c                   |   2 +-
+ src/util/Makefile.inc.am                 |   4 +-
+ src/util/virjson.c                       | 211 -----------------------
+ tests/Makefile.am                        |  12 +-
+ tests/cputest.c                          |  16 +-
+ tests/libxlxml2domconfigtest.c           |   4 +-
+ tests/qemuagenttest.c                    |   2 +-
+ tests/qemublocktest.c                    |   1 -
+ tests/qemucapabilitiestest.c             |   2 +-
+ tests/qemucaps2xmltest.c                 |   2 +-
+ tests/qemucommandutiltest.c              |   2 +-
+ tests/qemuhotplugtest.c                  |   2 +-
+ tests/qemumigparamsdata/empty.json       |   4 +-
+ tests/qemumigparamsdata/unsupported.json |   4 +-
+ tests/qemumigparamstest.c                |   2 +-
+ tests/qemumonitorjsontest.c              |   2 +-
+ tests/virmacmaptestdata/empty.json       |   4 +-
+ tests/virmocklibxl.c                     |   4 +-
+ tests/virnetdaemontest.c                 |   2 +-
+ tests/virstoragetest.c                   |   4 +-
+ 24 files changed, 72 insertions(+), 257 deletions(-)
+
+diff --git a/libvirt.spec.in b/libvirt.spec.in
+index 4113579e47..ab8e97a489 100644
+--- a/libvirt.spec.in
++++ b/libvirt.spec.in
+@@ -292,7 +292,7 @@ BuildRequires: libblkid-devel >= 2.17
+ BuildRequires: augeas
+ BuildRequires: systemd-devel >= 185
+ BuildRequires: libpciaccess-devel >= 0.10.9
+-BuildRequires: jansson-devel
++BuildRequires: yajl-devel
+ %if %{with_sanlock}
+ BuildRequires: sanlock-devel >= 2.4
+ %endif
+@@ -1226,7 +1226,7 @@ rm -f po/stamp-po
+            --without-apparmor \
+            --without-hal \
+            --with-udev \
+-           --with-jansson \
++           --with-yajl \
+            %{?arg_sanlock} \
+            --with-libpcap \
+            --with-macvtap \
+diff --git a/m4/virt-nss.m4 b/m4/virt-nss.m4
+index 082b7b14f6..951a74e835 100644
+--- a/m4/virt-nss.m4
++++ b/m4/virt-nss.m4
+@@ -27,9 +27,9 @@ AC_DEFUN([LIBVIRT_CHECK_NSS],[
+   bsd_nss=no
+   fail=0
+   if test "x$with_nss_plugin" != "xno" ; then
+-    if test "x$with_jansson" != "xyes" ; then
++    if test "x$with_yajl" != "xyes" ; then
+       if test "x$with_nss_plugin" = "xyes" ; then
+-        AC_MSG_ERROR([Can't build nss plugin without JSON support])
++        AC_MSG_ERROR([Can't build nss plugin without yajl])
+       else
+         with_nss_plugin=no
+       fi
+diff --git a/m4/virt-yajl.m4 b/m4/virt-yajl.m4
+index 8d4c43a6b2..c4ea0102a3 100644
+--- a/m4/virt-yajl.m4
++++ b/m4/virt-yajl.m4
+@@ -23,10 +23,31 @@ AC_DEFUN([LIBVIRT_ARG_YAJL],[
+ 
+ AC_DEFUN([LIBVIRT_CHECK_YAJL],[
+   dnl YAJL JSON library http://lloyd.github.com/yajl/
+-  if test "$with_yajl" = yes; then
+-    AC_MSG_ERROR([Compilation with YAJL is no longer supported])
++  if test "$with_qemu:$with_yajl" = yes:check; then
++    dnl Some versions of qemu require the use of yajl; try to detect them
++    dnl here, although we do not require qemu to exist in order to compile.
++    dnl This check mirrors src/qemu/qemu_capabilities.c
++    AC_PATH_PROGS([QEMU], [qemu-kvm qemu kvm qemu-system-x86_64],
++                  [], [$PATH:/usr/bin:/usr/libexec])
++    if test -x "$QEMU"; then
++      if $QEMU -help 2>/dev/null | grep -q libvirt; then
++        with_yajl=yes
++      else
++        [qemu_version_sed='s/.*ersion \([0-9.,]*\).*/\1/']
++        qemu_version=`$QEMU -version | sed "$qemu_version_sed"`
++        case $qemu_version in
++          [[1-9]].* | 0.15.* ) with_yajl=yes ;;
++          0.* | '' ) ;;
++          *) AC_MSG_ERROR([Unexpected qemu version string]) ;;
++        esac
++      fi
++    fi
+   fi
+-  with_yajl=no
++
++  LIBVIRT_CHECK_LIB_ALT([YAJL], [yajl],
++                        [yajl_parse_complete], [yajl/yajl_common.h],
++                        [YAJL2], [yajl],
++                        [yajl_tree_parse], [yajl/yajl_common.h])
+ ])
+ 
+ AC_DEFUN([LIBVIRT_RESULT_YAJL],[
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 83263e69e5..db8c8ebd1a 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -544,7 +544,7 @@ libvirt_admin_la_CFLAGS = \
+ libvirt_admin_la_CFLAGS += \
+ 		$(XDR_CFLAGS) \
+ 		$(CAPNG_CFLAGS) \
+-		$(JANSSON_CFLAGS) \
++		$(YAJL_CFLAGS) \
+ 		$(SSH2_CFLAGS) \
+ 		$(SASL_CFLAGS) \
+ 		$(GNUTLS_CFLAGS) \
+@@ -552,7 +552,7 @@ libvirt_admin_la_CFLAGS += \
+ 
+ libvirt_admin_la_LIBADD += \
+ 		$(CAPNG_LIBS) \
+-		$(JANSSON_LIBS) \
++		$(YAJL_LIBS) \
+ 		$(DEVMAPPER_LIBS) \
+ 		$(LIBXML_LIBS) \
+ 		$(SSH2_LIBS) \
+@@ -994,14 +994,14 @@ libvirt_nss_la_SOURCES = \
+ libvirt_nss_la_CFLAGS = \
+ 		-DLIBVIRT_NSS \
+ 		$(AM_CFLAGS) \
+-		$(JANSSON_CFLAGS) \
++		$(YAJL_CFLAGS) \
+ 		$(NULL)
+ libvirt_nss_la_LDFLAGS = \
+ 		$(AM_LDFLAGS) \
+ 		$(NULL)
+ 
+ libvirt_nss_la_LIBADD = \
+-		$(JANSSON_LIBS) \
++		$(YAJL_LIBS) \
+ 		$(NULL)
+ endif WITH_NSS
+ 
+diff --git a/src/qemu/qemu_driver.c b/src/qemu/qemu_driver.c
+index fb0d4a8c7a..d4a2379e48 100644
+--- a/src/qemu/qemu_driver.c
++++ b/src/qemu/qemu_driver.c
+@@ -2092,7 +2092,7 @@ qemuDomainReboot(virDomainPtr dom, unsigned int flags)
+      */
+     if ((!useAgent) ||
+         (ret < 0 && (acpiRequested || !flags))) {
+-#if !WITH_JANSSON
++#if !WITH_YAJL
+         virReportError(VIR_ERR_OPERATION_INVALID, "%s",
+                        _("ACPI reboot is not supported without the JSON monitor"));
+         goto endjob;
+diff --git a/src/util/Makefile.inc.am b/src/util/Makefile.inc.am
+index 71b2b93c2d..a22265606c 100644
+--- a/src/util/Makefile.inc.am
++++ b/src/util/Makefile.inc.am
+@@ -251,7 +251,7 @@ libvirt_util_la_SOURCES = \
+ 	$(NULL)
+ libvirt_util_la_CFLAGS = \
+ 	$(CAPNG_CFLAGS) \
+-	$(JANSSON_CFLAGS) \
++	$(YAJL_CFLAGS) \
+ 	$(LIBNL_CFLAGS) \
+ 	$(AM_CFLAGS) \
+ 	$(AUDIT_CFLAGS) \
+@@ -264,7 +264,7 @@ libvirt_util_la_CFLAGS = \
+ 	$(NULL)
+ libvirt_util_la_LIBADD = \
+ 	$(CAPNG_LIBS) \
+-	$(JANSSON_LIBS) \
++	$(YAJL_LIBS) \
+ 	$(LIBNL_LIBS) \
+ 	$(THREAD_LIBS) \
+ 	$(AUDIT_LIBS) \
+diff --git a/src/util/virjson.c b/src/util/virjson.c
+index 608ba85d67..29530dcb15 100644
+--- a/src/util/virjson.c
++++ b/src/util/virjson.c
+@@ -1985,217 +1985,6 @@ virJSONValueToString(virJSONValuePtr object,
+ }
+ 
+ 
+-#elif WITH_JANSSON
+-# include <jansson.h>
+-
+-static virJSONValuePtr
+-virJSONValueFromJansson(json_t *json)
+-{
+-    virJSONValuePtr ret = NULL;
+-    const char *key;
+-    json_t *cur;
+-    size_t i;
+-
+-    switch (json_typeof(json)) {
+-    case JSON_OBJECT:
+-        ret = virJSONValueNewObject();
+-        if (!ret)
+-            goto error;
+-
+-        json_object_foreach(json, key, cur) {
+-            virJSONValuePtr val = virJSONValueFromJansson(cur);
+-            if (!val)
+-                goto error;
+-
+-            if (virJSONValueObjectAppend(ret, key, val) < 0) {
+-                virJSONValueFree(val);
+-                goto error;
+-            }
+-        }
+-
+-        break;
+-
+-    case JSON_ARRAY:
+-        ret = virJSONValueNewArray();
+-        if (!ret)
+-            goto error;
+-
+-        json_array_foreach(json, i, cur) {
+-            virJSONValuePtr val = virJSONValueFromJansson(cur);
+-            if (!val)
+-                goto error;
+-
+-            if (virJSONValueArrayAppend(ret, val) < 0) {
+-                virJSONValueFree(val);
+-                goto error;
+-            }
+-        }
+-        break;
+-
+-    case JSON_STRING:
+-        ret = virJSONValueNewString(json_string_value(json));
+-        break;
+-
+-    case JSON_INTEGER:
+-        ret = virJSONValueNewNumberLong(json_integer_value(json));
+-        break;
+-
+-    case JSON_REAL:
+-        ret = virJSONValueNewNumberDouble(json_real_value(json));
+-        break;
+-
+-    case JSON_TRUE:
+-        ret = virJSONValueNewBoolean(true);
+-        break;
+-
+-    case JSON_FALSE:
+-        ret = virJSONValueNewBoolean(false);
+-        break;
+-
+-    case JSON_NULL:
+-        ret = virJSONValueNewNull();
+-        break;
+-    }
+-
+-    return ret;
+-
+- error:
+-    virJSONValueFree(ret);
+-    return NULL;
+-}
+-
+-virJSONValuePtr
+-virJSONValueFromString(const char *jsonstring)
+-{
+-    virJSONValuePtr ret = NULL;
+-    json_t *json;
+-    json_error_t error;
+-    size_t flags = JSON_REJECT_DUPLICATES |
+-                   JSON_DECODE_ANY;
+-
+-    if (!(json = json_loads(jsonstring, flags, &error))) {
+-        virReportError(VIR_ERR_INTERNAL_ERROR,
+-                       _("failed to parse JSON %d:%d: %s"),
+-                       error.line, error.column, error.text);
+-        return NULL;
+-    }
+-
+-    ret = virJSONValueFromJansson(json);
+-    json_decref(json);
+-    return ret;
+-}
+-
+-
+-static json_t *
+-virJSONValueToJansson(virJSONValuePtr object)
+-{
+-    json_t *ret = NULL;
+-    size_t i;
+-
+-    switch ((virJSONType)object->type) {
+-    case VIR_JSON_TYPE_OBJECT:
+-        ret = json_object();
+-        if (!ret)
+-            goto no_memory;
+-        for (i = 0; i < object->data.object.npairs; i++) {
+-            virJSONObjectPairPtr cur = object->data.object.pairs + i;
+-            json_t *val = virJSONValueToJansson(cur->value);
+-
+-            if (!val)
+-                goto error;
+-            if (json_object_set_new(ret, cur->key, val) < 0) {
+-                json_decref(val);
+-                goto no_memory;
+-            }
+-        }
+-        break;
+-
+-    case VIR_JSON_TYPE_ARRAY:
+-        ret = json_array();
+-        if (!ret)
+-            goto no_memory;
+-        for (i = 0; i < object->data.array.nvalues; i++) {
+-            virJSONValuePtr cur = object->data.array.values[i];
+-            json_t *val = virJSONValueToJansson(cur);
+-
+-            if (!val)
+-                goto error;
+-            if (json_array_append_new(ret, val) < 0) {
+-                json_decref(val);
+-                goto no_memory;
+-            }
+-        }
+-        break;
+-
+-    case VIR_JSON_TYPE_STRING:
+-        ret = json_string(object->data.string);
+-        break;
+-
+-    case VIR_JSON_TYPE_NUMBER: {
+-        long long ll_val;
+-        double d_val;
+-        if (virStrToLong_ll(object->data.number, NULL, 10, &ll_val) < 0) {
+-            if (virStrToDouble(object->data.number, NULL, &d_val) < 0) {
+-                virReportError(VIR_ERR_INTERNAL_ERROR, "%s",
+-                               _("JSON value is not a number"));
+-                return NULL;
+-            }
+-            ret = json_real(d_val);
+-        } else {
+-            ret = json_integer(ll_val);
+-        }
+-    }
+-        break;
+-
+-    case VIR_JSON_TYPE_BOOLEAN:
+-        ret = json_boolean(object->data.boolean);
+-        break;
+-
+-    case VIR_JSON_TYPE_NULL:
+-        ret = json_null();
+-        break;
+-
+-    default:
+-        virReportEnumRangeError(virJSONType, object->type);
+-        goto error;
+-    }
+-    if (!ret)
+-        goto no_memory;
+-    return ret;
+-
+- no_memory:
+-    virReportOOMError();
+- error:
+-    json_decref(ret);
+-    return NULL;
+-}
+-
+-
+-char *
+-virJSONValueToString(virJSONValuePtr object,
+-                     bool pretty)
+-{
+-    size_t flags = JSON_ENCODE_ANY;
+-    json_t *json;
+-    char *str = NULL;
+-
+-    if (pretty)
+-        flags |= JSON_INDENT(2);
+-    else
+-        flags |= JSON_COMPACT;
+-
+-    json = virJSONValueToJansson(object);
+-    if (!json)
+-        return NULL;
+-
+-    str = json_dumps(json, flags);
+-    if (!str)
+-        virReportOOMError();
+-    json_decref(json);
+-    return str;
+-}
+-
+-
+ #else
+ virJSONValuePtr
+ virJSONValueFromString(const char *jsonstring ATTRIBUTE_UNUSED)
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index 302b50e1cd..21a6c823d9 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -46,7 +46,7 @@ AM_CFLAGS = \
+ 	$(SASL_CFLAGS) \
+ 	$(SELINUX_CFLAGS) \
+ 	$(APPARMOR_CFLAGS) \
+-	$(JANSSON_CFLAGS) \
++	$(YAJL_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+ 	$(XDR_CFLAGS) \
+ 	$(WARN_CFLAGS)
+@@ -331,9 +331,9 @@ if WITH_CIL
+ test_programs += objectlocking
+ endif WITH_CIL
+ 
+-if WITH_JANSSON
++if WITH_YAJL
+ test_programs += virjsontest
+-endif WITH_JANSSON
++endif WITH_YAJL
+ 
+ test_programs += \
+ 		networkxml2xmltest \
+@@ -1219,15 +1219,15 @@ virdeterministichashmock_la_LIBADD = $(MOCKLIBS_LIBS)
+ 
+ test_libraries += virdeterministichashmock.la
+ 
+-if WITH_JANSSON
++if WITH_YAJL
+ virmacmaptest_SOURCES = \
+ 	virmacmaptest.c testutils.h testutils.c
+ virmacmaptest_LDADD = $(LDADDS)
+ 
+ test_programs += virmacmaptest
+-else ! WITH_JANSSON
++else ! WITH_YAJL
+ EXTRA_DIST +=  virmacmaptest.c
+-endif ! WITH_JANSSON
++endif ! WITH_YAJL
+ 
+ virnetdevtest_SOURCES = \
+ 	virnetdevtest.c testutils.h testutils.c
+diff --git a/tests/cputest.c b/tests/cputest.c
+index 9cc361d125..baf2b3c648 100644
+--- a/tests/cputest.c
++++ b/tests/cputest.c
+@@ -40,7 +40,7 @@
+ #include "cpu/cpu_map.h"
+ #include "virstring.h"
+ 
+-#if WITH_QEMU && WITH_JANSSON
++#if WITH_QEMU && WITH_YAJL
+ # include "testutilsqemu.h"
+ # include "qemumonitortestutils.h"
+ # define __QEMU_CAPSPRIV_H_ALLOW__
+@@ -67,7 +67,7 @@ struct data {
+     int result;
+ };
+ 
+-#if WITH_QEMU && WITH_JANSSON
++#if WITH_QEMU && WITH_YAJL
+ static virQEMUDriver driver;
+ #endif
+ 
+@@ -479,7 +479,7 @@ typedef enum {
+     JSON_MODELS_REQUIRED,
+ } cpuTestCPUIDJson;
+ 
+-#if WITH_QEMU && WITH_JANSSON
++#if WITH_QEMU && WITH_YAJL
+ static virQEMUCapsPtr
+ cpuTestMakeQEMUCaps(const struct data *data)
+ {
+@@ -554,7 +554,7 @@ cpuTestGetCPUModels(const struct data *data,
+     return 0;
+ }
+ 
+-#else /* if WITH_QEMU && WITH_JANSSON */
++#else /* if WITH_QEMU && WITH_YAJL */
+ 
+ static int
+ cpuTestGetCPUModels(const struct data *data,
+@@ -834,7 +834,7 @@ cpuTestUpdateLive(const void *arg)
+ }
+ 
+ 
+-#if WITH_QEMU && WITH_JANSSON
++#if WITH_QEMU && WITH_YAJL
+ static int
+ cpuTestJSONCPUID(const void *arg)
+ {
+@@ -911,7 +911,7 @@ mymain(void)
+     virDomainCapsCPUModelsPtr ppc_models = NULL;
+     int ret = 0;
+ 
+-#if WITH_QEMU && WITH_JANSSON
++#if WITH_QEMU && WITH_YAJL
+     if (qemuTestDriverInit(&driver) < 0)
+         return EXIT_FAILURE;
+ 
+@@ -1004,7 +1004,7 @@ mymain(void)
+             host "/" cpu " (" #models ")", \
+             host, cpu, models, 0, result)
+ 
+-#if WITH_QEMU && WITH_JANSSON
++#if WITH_QEMU && WITH_YAJL
+ # define DO_TEST_JSON(arch, host, json) \
+     do { \
+         if (json == JSON_MODELS) { \
+@@ -1205,7 +1205,7 @@ mymain(void)
+     DO_TEST_CPUID(VIR_ARCH_X86_64, "Xeon-X5460", JSON_NONE);
+ 
+  cleanup:
+-#if WITH_QEMU && WITH_JANSSON
++#if WITH_QEMU && WITH_YAJL
+     qemuTestDriverFree(&driver);
+ #endif
+ 
+diff --git a/tests/libxlxml2domconfigtest.c b/tests/libxlxml2domconfigtest.c
+index a9758c40cb..b814461acc 100644
+--- a/tests/libxlxml2domconfigtest.c
++++ b/tests/libxlxml2domconfigtest.c
+@@ -33,7 +33,7 @@
+ 
+ #include "testutils.h"
+ 
+-#if defined(WITH_LIBXL) && defined(WITH_JANSSON) && defined(HAVE_LIBXL_DOMAIN_CONFIG_FROM_JSON)
++#if defined(WITH_LIBXL) && defined(WITH_YAJL) && defined(HAVE_LIBXL_DOMAIN_CONFIG_FROM_JSON)
+ 
+ # include "internal.h"
+ # include "viralloc.h"
+@@ -228,4 +228,4 @@ int main(void)
+     return EXIT_AM_SKIP;
+ }
+ 
+-#endif /* WITH_LIBXL && WITH_JANSSON && HAVE_LIBXL_DOMAIN_CONFIG_FROM_JSON */
++#endif /* WITH_LIBXL && WITH_YAJL && HAVE_LIBXL_DOMAIN_CONFIG_FROM_JSON */
+diff --git a/tests/qemuagenttest.c b/tests/qemuagenttest.c
+index 232b34f9cd..2f79986207 100644
+--- a/tests/qemuagenttest.c
++++ b/tests/qemuagenttest.c
+@@ -907,7 +907,7 @@ mymain(void)
+ {
+     int ret = 0;
+ 
+-#if !WITH_JANSSON
++#if !WITH_YAJL
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+ #endif
+diff --git a/tests/qemublocktest.c b/tests/qemublocktest.c
+index 9a387cf063..0c335abc5b 100644
+--- a/tests/qemublocktest.c
++++ b/tests/qemublocktest.c
+@@ -309,7 +309,6 @@ testQemuDiskXMLToPropsValidateFile(const void *opaque)
+             goto cleanup;
+ 
+         virBufferAdd(&buf, jsonstr, -1);
+-        virBufferAddLit(&buf, "\n");
+         VIR_FREE(jsonstr);
+     }
+ 
+diff --git a/tests/qemucapabilitiestest.c b/tests/qemucapabilitiestest.c
+index 641ec4f597..4aec175968 100644
+--- a/tests/qemucapabilitiestest.c
++++ b/tests/qemucapabilitiestest.c
+@@ -141,7 +141,7 @@ mymain(void)
+     int ret = 0;
+     testQemuData data;
+ 
+-#if !WITH_JANSSON
++#if !WITH_YAJL
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+ #endif
+diff --git a/tests/qemucaps2xmltest.c b/tests/qemucaps2xmltest.c
+index e3b7b97925..5b9152b04d 100644
+--- a/tests/qemucaps2xmltest.c
++++ b/tests/qemucaps2xmltest.c
+@@ -165,7 +165,7 @@ mymain(void)
+ 
+     testQemuData data;
+ 
+-#if !WITH_JANSSON
++#if !WITH_YAJL
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+ #endif
+diff --git a/tests/qemucommandutiltest.c b/tests/qemucommandutiltest.c
+index 8e57a1b79d..f0921e3b93 100644
+--- a/tests/qemucommandutiltest.c
++++ b/tests/qemucommandutiltest.c
+@@ -76,7 +76,7 @@ mymain(void)
+     int ret = 0;
+     testQemuCommandBuildObjectFromJSONData data1;
+ 
+-#if !WITH_JANSSON
++#if !WITH_YAJL
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+ #endif
+diff --git a/tests/qemuhotplugtest.c b/tests/qemuhotplugtest.c
+index 2fb96c6158..5b1e0db104 100644
+--- a/tests/qemuhotplugtest.c
++++ b/tests/qemuhotplugtest.c
+@@ -593,7 +593,7 @@ mymain(void)
+     struct qemuHotplugTestData data = {0};
+     struct testQemuHotplugCpuParams cpudata;
+ 
+-#if !WITH_JANSSON
++#if !WITH_YAJL
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+ #endif
+diff --git a/tests/qemumigparamsdata/empty.json b/tests/qemumigparamsdata/empty.json
+index 0967ef424b..0db3279e44 100644
+--- a/tests/qemumigparamsdata/empty.json
++++ b/tests/qemumigparamsdata/empty.json
+@@ -1 +1,3 @@
+-{}
++{
++
++}
+diff --git a/tests/qemumigparamsdata/unsupported.json b/tests/qemumigparamsdata/unsupported.json
+index 0967ef424b..0db3279e44 100644
+--- a/tests/qemumigparamsdata/unsupported.json
++++ b/tests/qemumigparamsdata/unsupported.json
+@@ -1 +1,3 @@
+-{}
++{
++
++}
+diff --git a/tests/qemumigparamstest.c b/tests/qemumigparamstest.c
+index b8af68211b..0532053722 100644
+--- a/tests/qemumigparamstest.c
++++ b/tests/qemumigparamstest.c
+@@ -203,7 +203,7 @@ mymain(void)
+     virQEMUDriver driver;
+     int ret = 0;
+ 
+-#if !WITH_JANSSON
++#if !WITH_YAJL
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+ #endif
+diff --git a/tests/qemumonitorjsontest.c b/tests/qemumonitorjsontest.c
+index c11615f7ac..e9b2632655 100644
+--- a/tests/qemumonitorjsontest.c
++++ b/tests/qemumonitorjsontest.c
+@@ -2863,7 +2863,7 @@ mymain(void)
+     virJSONValuePtr metaschema = NULL;
+     char *metaschemastr = NULL;
+ 
+-#if !WITH_JANSSON
++#if !WITH_YAJL
+     fputs("libvirt not compiled with JSON support, skipping this test\n", stderr);
+     return EXIT_AM_SKIP;
+ #endif
+diff --git a/tests/virmacmaptestdata/empty.json b/tests/virmacmaptestdata/empty.json
+index fe51488c70..41b42e677b 100644
+--- a/tests/virmacmaptestdata/empty.json
++++ b/tests/virmacmaptestdata/empty.json
+@@ -1 +1,3 @@
+-[]
++[
++
++]
+diff --git a/tests/virmocklibxl.c b/tests/virmocklibxl.c
+index 0a047c239f..546c6d6a43 100644
+--- a/tests/virmocklibxl.c
++++ b/tests/virmocklibxl.c
+@@ -22,7 +22,7 @@
+ 
+ #include <config.h>
+ 
+-#if defined(WITH_LIBXL) && defined(WITH_JANSSON)
++#if defined(WITH_LIBXL) && defined(WITH_YAJL)
+ # include "virmock.h"
+ # include <sys/stat.h>
+ # include <unistd.h>
+@@ -136,4 +136,4 @@ VIR_MOCK_IMPL_RET_ARGS(stat, int,
+     return real_stat(path, sb);
+ }
+ 
+-#endif /* WITH_LIBXL && WITH_JANSSON */
++#endif /* WITH_LIBXL && WITH_YAJL */
+diff --git a/tests/virnetdaemontest.c b/tests/virnetdaemontest.c
+index cbc961dbaf..6f4957fc4c 100644
+--- a/tests/virnetdaemontest.c
++++ b/tests/virnetdaemontest.c
+@@ -26,7 +26,7 @@
+ 
+ #define VIR_FROM_THIS VIR_FROM_RPC
+ 
+-#if defined(HAVE_SOCKETPAIR) && defined(WITH_JANSSON)
++#if defined(HAVE_SOCKETPAIR) && defined(WITH_YAJL)
+ struct testClientPriv {
+     int magic;
+ };
+diff --git a/tests/virstoragetest.c b/tests/virstoragetest.c
+index b20b5a8744..68d0307d5c 100644
+--- a/tests/virstoragetest.c
++++ b/tests/virstoragetest.c
+@@ -1317,7 +1317,7 @@ mymain(void)
+                        "  <host name='example.org' port='6000'/>\n"
+                        "</source>\n");
+ 
+-#ifdef WITH_JANSSON
++#ifdef WITH_YAJL
+     TEST_BACKING_PARSE("json:", NULL);
+     TEST_BACKING_PARSE("json:asdgsdfg", NULL);
+     TEST_BACKING_PARSE("json:{}", NULL);
+@@ -1581,7 +1581,7 @@ mymain(void)
+                        "<source protocol='vxhs' name='c6718f6b-0401-441d-a8c3-1f0064d75ee0'>\n"
+                        "  <host name='example.com' port='9999'/>\n"
+                        "</source>\n");
+-#endif /* WITH_JANSSON */
++#endif /* WITH_YAJL */
+ 
+  cleanup:
+     /* Final cleanup */
+-- 
+2.18.0
+
+
+From 7939b8879992cb56569d0b33bb8cfdcbd61a6895 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:40:25 +0200
+Subject: [PATCH 13/14] Revert "build: undef WITH_JANSSON for
+ SETUID_RPC_CLIENT"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 93fdc9e0b0cbb2eec32745a868ac4633f0912ad5.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ config-post.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/config-post.h b/config-post.h
+index 24117bbbd4..063e30fa37 100644
+--- a/config-post.h
++++ b/config-post.h
+@@ -36,7 +36,6 @@
+ # undef WITH_DEVMAPPER
+ # undef WITH_DTRACE_PROBES
+ # undef WITH_GNUTLS
+-# undef WITH_JANSSON
+ # undef WITH_LIBSSH
+ # undef WITH_MACVTAP
+ # undef WITH_NUMACTL
+-- 
+2.18.0
+
+
+From 3675170fe37711b9adb77821bbfe725cf553b74c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=A1n=20Tomko?= <jtomko@redhat.com>
+Date: Mon, 13 Aug 2018 13:41:14 +0200
+Subject: [PATCH 14/14] Revert "build: add --with-jansson"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit 12b34f094e2f1c7f414f4bb8f880a9d65c8fcd85.
+
+Jansson cannot parse QEMU's quirky JSON.
+Revert back to yajl.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1614569
+
+Signed-off-by: Ján Tomko <jtomko@redhat.com>
+---
+ configure.ac       |  3 ---
+ m4/virt-jansson.m4 | 29 -----------------------------
+ 2 files changed, 32 deletions(-)
+ delete mode 100644 m4/virt-jansson.m4
+
+diff --git a/configure.ac b/configure.ac
+index c6287f656a..a87ca06854 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -250,7 +250,6 @@ LIBVIRT_ARG_FIREWALLD
+ LIBVIRT_ARG_FUSE
+ LIBVIRT_ARG_GLUSTER
+ LIBVIRT_ARG_HAL
+-LIBVIRT_ARG_JANSSON
+ LIBVIRT_ARG_LIBPCAP
+ LIBVIRT_ARG_LIBSSH
+ LIBVIRT_ARG_LIBXML
+@@ -291,7 +290,6 @@ LIBVIRT_CHECK_FUSE
+ LIBVIRT_CHECK_GLUSTER
+ LIBVIRT_CHECK_GNUTLS
+ LIBVIRT_CHECK_HAL
+-LIBVIRT_CHECK_JANSSON
+ LIBVIRT_CHECK_LIBNL
+ LIBVIRT_CHECK_LIBPARTED
+ LIBVIRT_CHECK_LIBPCAP
+@@ -972,7 +970,6 @@ LIBVIRT_RESULT_FUSE
+ LIBVIRT_RESULT_GLUSTER
+ LIBVIRT_RESULT_GNUTLS
+ LIBVIRT_RESULT_HAL
+-LIBVIRT_RESULT_JANSSON
+ LIBVIRT_RESULT_LIBNL
+ LIBVIRT_RESULT_LIBPCAP
+ LIBVIRT_RESULT_LIBSSH
+diff --git a/m4/virt-jansson.m4 b/m4/virt-jansson.m4
+deleted file mode 100644
+index 206d6a5ced..0000000000
+--- a/m4/virt-jansson.m4
++++ /dev/null
+@@ -1,29 +0,0 @@
+-dnl The jansson library
+-dnl
+-dnl This library is free software; you can redistribute it and/or
+-dnl modify it under the terms of the GNU Lesser General Public
+-dnl License as published by the Free Software Foundation; either
+-dnl version 2.1 of the License, or (at your option) any later version.
+-dnl
+-dnl This library is distributed in the hope that it will be useful,
+-dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+-dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-dnl Lesser General Public License for more details.
+-dnl
+-dnl You should have received a copy of the GNU Lesser General Public
+-dnl License along with this library.  If not, see
+-dnl <http://www.gnu.org/licenses/>.
+-dnl
+-
+-AC_DEFUN([LIBVIRT_ARG_JANSSON],[
+-  LIBVIRT_ARG_WITH_FEATURE([JANSSON], [jansson], [check])
+-])
+-
+-AC_DEFUN([LIBVIRT_CHECK_JANSSON],[
+-  dnl Jansson http://www.digip.org/jansson/
+-  LIBVIRT_CHECK_PKG([JANSSON], [jansson], [2.5])
+-])
+-
+-AC_DEFUN([LIBVIRT_RESULT_JANSSON],[
+-  LIBVIRT_RESULT_LIB([JANSSON])
+-])
+-- 
+2.18.0
+
