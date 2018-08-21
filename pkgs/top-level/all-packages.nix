@@ -18772,6 +18772,8 @@ with pkgs;
 
   toot = callPackage ../applications/misc/toot { };
 
+  tootle = callPackage ../applications/misc/tootle { };
+
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
   toxiproxy = callPackage ../development/tools/toxiproxy { };
