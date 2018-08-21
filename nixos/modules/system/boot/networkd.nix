@@ -30,10 +30,10 @@ let
     (assertValueOneOf "UDPSegmentationOffload" boolValues)
     (assertValueOneOf "GenericReceiveOffload" boolValues)
     (assertValueOneOf "LargeReceiveOffload" boolValues)
-    (range "RxChannels" 1 4294967295)
-    (range "TxChannels" 1 4294967295)
-    (range "OtherChannels" 1 4294967295)
-    (range "CombinedChannels" 1 4294967295)
+    (assertRange "RxChannels" 1 4294967295)
+    (assertRange "TxChannels" 1 4294967295)
+    (assertRange "OtherChannels" 1 4294967295)
+    (assertRange "CombinedChannels" 1 4294967295)
   ];
 
   checkNetdev = checkUnitConfig "Netdev" [
