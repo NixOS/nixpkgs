@@ -16,6 +16,7 @@ let
 in linux.override {
   argsOverride = {
     modDirVersion = "${linux.modDirVersion}-gnu";
+
     src = stdenv.mkDerivation {
       name = "${linux.name}-libre-src";
       src = linux.src;
@@ -30,5 +31,7 @@ in linux.override {
         cp -r . "$out"
       '';
     };
+
+    maintainers = [ lib.maintainers.qyliss ];
   };
 }
