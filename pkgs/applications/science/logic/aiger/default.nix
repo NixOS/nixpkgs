@@ -12,9 +12,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configurePhase = ''
-    CC=${stdenv.cc.targetPrefix}cc
-    CXX=${stdenv.cc.targetPrefix}c++
-
     # Set up picosat, so we can build 'aigbmc'
     mkdir ../picosat
     ln -s ${picosat}/include/picosat/picosat.h ../picosat/picosat.h
