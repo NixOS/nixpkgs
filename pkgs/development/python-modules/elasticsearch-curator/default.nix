@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, boto3
 , click
 , certifi
 , voluptuous
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     voluptuous
     pyyaml
     elasticsearch
+    boto3
   ];
 
   checkInputs = [
