@@ -22,15 +22,16 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    check cmake pkgconfig
+    cmake pkgconfig
   ];
 
   cmakeFlags = [
     "-DENABLE_AUTOUPDATE=OFF"
-  ] ++ lib.optional (doCheck) "-DENABLE_TESTS=ON";
+    "-DENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
+  ];
 
-  doCheck = stdenv.isLinux;
-
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkInputs = [ check ];
   checkPhase = ''
     runHook preCheck
     ctest -VV

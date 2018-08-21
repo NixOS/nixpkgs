@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
   # TODO(@Dridus) remove the ++ libc at next hash break
   buildInputs = [ lua5 ] ++ stdenv.lib.optional stdenv.isLinux stdenv.cc.libc;
 
+  preConfigure = ''
+    CC=${stdenv.cc.targetPrefix}cc
+    CXX=${stdenv.cc.targetPrefix}c++
+  '';
+
   cmakeFlags = "-DPODOFO_BUILD_SHARED=ON -DPODOFO_BUILD_STATIC=OFF";
 
   meta = {

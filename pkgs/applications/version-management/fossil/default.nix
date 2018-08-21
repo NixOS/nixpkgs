@@ -21,10 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ tcl ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-
-  checkTarget = "test";
-
-  preCheck = stdenv.lib.optional doCheck ''
+  preCheck = ''
     export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
   '';
   configureFlags = stdenv.lib.optional withJson "--json";

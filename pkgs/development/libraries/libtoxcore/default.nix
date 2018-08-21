@@ -30,8 +30,6 @@ let
     enableParallelBuilding = true;
 
     doCheck = false; # hangs, tries to access the net?
-
-    # for some reason the tests are not running - it says "No tests found!!"
     checkInputs = [ check ];
     checkPhase = "ctest";
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, foomatic-filters, bc, unzip, ghostscript, systemd, vim }:
+{ stdenv, fetchurl, foomatic-filters, bc, unzip, ghostscript, systemd, vim, time }:
 
 stdenv.mkDerivation rec {
   name = "foo2zjs-20180519";
@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr@$out@g" -i hplj1020.desktop
     sed -e "/PRINTERID=/s@=.*@=$out/bin/usb_printerid@" -i hplj1000
   '';
+
+  checkInputs = [ time ];
+  doCheck = false; # fails to find its own binary. Also says "Tests will pass only if you are using ghostscript-8.71-16.fc14".
 
   preInstall = ''
     mkdir -pv $out/{etc/udev/rules.d,lib/udev/rules.d,etc/hotplug/usb}

@@ -91,6 +91,7 @@ let
 
     enableParallelBuilding = true;
 
+    checkInputs = [ python ];
     doCheck = false; # fails 10 out of ~2300 tests
 
     meta = with stdenv.lib; {

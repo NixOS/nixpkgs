@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
 
+  # This test needs the net
+  postPatch = ''
+    rm test/testsock.*
+  '';
+
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 

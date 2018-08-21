@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, libuuid, gettext, texinfo }:
+{ stdenv, buildPackages, fetchurl, pkgconfig, libuuid, gettext, texinfo, perl }:
 
 stdenv.mkDerivation rec {
   name = "e2fsprogs-1.44.3";
@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
       "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"
     ] else [
       "--enable-libuuid --disable-e2initrd-helper"
-    ]
-  ;
+    ];
+
+  checkInputs = [ perl ];
+  doCheck = false; # fails
 
   # hacky way to make it install *.pc
   postInstall = ''

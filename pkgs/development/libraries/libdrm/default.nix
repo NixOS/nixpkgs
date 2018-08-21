@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
 
+  postPatch = ''
+    for a in */*-symbol-check ; do
+      patchShebangs $a
+    done
+  '';
+
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 

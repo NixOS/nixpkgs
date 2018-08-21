@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, texinfo }:
+{ stdenv, fetchurl, texinfo, which }:
 
 stdenv.mkDerivation rec {
   name = "wdiff-1.2.2";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ texinfo ];
+
+  checkInputs = [ which ];
 
   meta = {
     homepage = http://www.gnu.org/software/wdiff/;

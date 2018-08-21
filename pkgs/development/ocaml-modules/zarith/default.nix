@@ -28,7 +28,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gmp ];
 
   patchPhase = "patchShebangs ./z_pp.pl";
+
   configurePhase = ''
+    CC=${stdenv.cc.targetPrefix}cc
+    CXX=${stdenv.cc.targetPrefix}c++
     ./configure -installdir $out/lib/ocaml/${ocaml.version}/site-lib
   '';
   preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib";

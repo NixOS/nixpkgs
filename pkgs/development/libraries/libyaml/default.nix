@@ -1,5 +1,6 @@
 { stdenv, fetchurl }:
 let
+  # 0.2.1 broke the tests of pythonPackages.pyyaml 3.13
   version = "0.1.7";
 in
 stdenv.mkDerivation {

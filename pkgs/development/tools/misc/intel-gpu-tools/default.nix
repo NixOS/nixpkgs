@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
+    patchShebangs tests
+
     patchShebangs debugger/system_routine/pre_cpp.py
     substituteInPlace tools/Makefile.am --replace '$(CAIRO_CFLAGS)' '$(CAIRO_CFLAGS) $(GLIB_CFLAGS)'
     substituteInPlace tests/Makefile.am --replace '$(CAIRO_CFLAGS)' '$(CAIRO_CFLAGS) $(GLIB_CFLAGS)'
