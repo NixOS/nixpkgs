@@ -106,12 +106,6 @@ let
     # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716
     + stdenv.lib.optionalString stdenv.cc.isGNU ''
       NIX_CFLAGS_COMPILE+=" -fno-lifetime-dse -fno-delete-null-pointer-checks -std=gnu++98 -Wno-error"
-    ''
-    # The configure script was confused by our passing these with full paths,
-    # so we explicitly override them to short variants.
-    + ''
-      CC=${stdenv.cc.targetPrefix}cc
-      CXX=${stdenv.cc.targetPrefix}c++
     '';
 
     configureFlags = [
