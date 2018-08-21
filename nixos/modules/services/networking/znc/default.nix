@@ -3,51 +3,102 @@
 with lib;
 
 let
+
   cfg = config.services.znc;
 
-  defaultUser = "znc"; # Default user to own process.
+  defaultUser = "znc";
 
   modules = pkgs.buildEnv {
     name = "znc-modules";
     paths = cfg.modulePackages;
   };
 
+  listenerPorts = concatMap (l: optional (l ? Port) l.Port)
+    (attrValues (cfg.config.Listener or {}));
+
+  # Converts the config option to a string
+  semanticString = let
+
+      sortedAttrs = set: sort (l: r:
+        if l == "extraConfig" then false # Always put extraConfig last
+        else if isAttrs set.${l} == isAttrs set.${r} then l < r
+        else isAttrs set.${r} # Attrsets should be last, makes for a nice config
+        # This last case occurs when any side (but not both) is an attrset
+        # The order of these is correct when the attrset is on the right
+        # which we're just returning
+      ) (attrNames set);
+
+      # Specifies an attrset that encodes the value according to its type
+      encode = name: value: {
+          null = [];
+          bool = [ "${name} = ${boolToString value}" ];
+          int = [ "${name} = ${toString value}" ];
+
+          # extraConfig should be inserted verbatim
+          string = [ (if name == "extraConfig" then value else "${name} = ${value}") ];
+
+          # Values like `Foo = [ "bar" "baz" ];` should be transformed into
+          #   Foo=bar
+          #   Foo=baz
+          list = concatMap (encode name) value;
+
+          # Values like `Foo = { bar = { Baz = "baz"; Qux = "qux"; Florps = null; }; };` should be transmed into
+          #   <Foo bar>
+          #     Baz=baz
+          #     Qux=qux
+          #   </Foo>
+          set = concatMap (subname: [
+              "<${name} ${subname}>"
+            ] ++ map (line: "\t${line}") (toLines value.${subname}) ++ [
+              "</${name}>"
+            ]) (filter (v: v != null) (attrNames value));
+
+        }.${builtins.typeOf value};
+
+      # One level "above" encode, acts upon a set and uses encode on each name,value pair
+      toLines = set: concatMap (name: encode name set.${name}) (sortedAttrs set);
+
+    in
+      concatStringsSep "\n" (toLines cfg.config);
+
+  semanticTypes = with types; rec {
+    zncAtom = nullOr (either (either int bool) str);
+    zncAttr = attrsOf (nullOr zncConf);
+    zncAll = either (either zncAtom (listOf zncAtom)) zncAttr;
+    zncConf = attrsOf (zncAll // {
+      # Since this is a recursive type and the description by default contains
+      # the description of its subtypes, infinite recursion would occur without
+      # explicitly breaking this cycle
+      description = "znc values (null, atoms (str, int, bool), list of atoms, or attrsets of znc values)";
+    });
+  };
+
 in
 
 {
 
-  imports = [
-    ./options.nix
-  ];
-
-  ###### Interface
+  imports = [ ./options.nix ];
 
   options = {
     services.znc = {
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Enable a ZNC service for a user.
-        '';
-      };
+      enable = mkEnableOption "ZNC";
 
       user = mkOption {
         default = "znc";
         example = "john";
-        type = types.string;
+        type = types.str;
         description = ''
-          The name of an existing user account to use to own the ZNC server process.
-          If not specified, a default user will be created to own the process.
+          The name of an existing user account to use to own the ZNC server
+          process. If not specified, a default user will be created.
         '';
       };
 
       group = mkOption {
-        default = "";
+        default = defaultUser;
         example = "users";
-        type = types.string;
+        type = types.str;
         description = ''
-          Group to own the ZNCserver process.
+          Group to own the ZNC process.
         '';
       };
 
@@ -56,7 +107,8 @@ in
         example = "/home/john/.znc/";
         type = types.path;
         description = ''
-          The data directory. Used for configuration files and modules.
+          The state directory for ZNC. The config and the modules will be linked
+          to from this directory as well.
         '';
       };
 
@@ -64,7 +116,79 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to open ports in the firewall for ZNC.
+          Whether to open ports in the firewall for ZNC. Does work with
+          ports for listeners specified in
+          <option>services.znc.config.Listener</option>.
+        '';
+      };
+
+      config = mkOption {
+        type = semanticTypes.zncConf;
+        default = {};
+        example = literalExample ''
+          {
+            LoadModule = [ "webadmin" "adminlog" ];
+            User.paul = {
+              Admin = true;
+              Nick = "paul";
+              AltNick = "paul1";
+              LoadModule = [ "chansaver" "controlpanel" ];
+              Network.freenode = {
+                Server = "chat.freenode.net +6697";
+                LoadModule = [ "simple_away" ];
+                Chan = {
+                  "#nixos" = { Detached = false; };
+                  "##linux" = { Disabled = true; };
+                };
+              };
+              Pass.password = {
+                Method = "sha256";
+                Hash = "e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93";
+                Salt = "l5Xryew4g*!oa(ECfX2o";
+              };
+            };
+          }
+        '';
+        description = ''
+          Configuration for ZNC, see
+          <literal>https://wiki.znc.in/Configuration</literal> for details. The
+          Nix value declared here will be translated directly to the xml-like
+          format ZNC expects. This is much more flexible than the legacy options
+          under <option>services.znc.confOptions.*</option>, but also can't do
+          any type checking.
+          </para>
+          <para>
+          You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.services.znc.config</command>
+          to view the current value. By default it contains a listener for port
+          5000 with SSL enabled.
+          </para>
+          <para>
+          Nix attributes called <literal>extraConfig</literal> will be inserted
+          verbatim into the resulting config file.
+          </para>
+          <para>
+          If <option>services.znc.useLegacyConfig</option> is turned on, the
+          option values in <option>services.znc.confOptions.*</option> will be
+          gracefully be applied to this option.
+          </para>
+          <para>
+          If you intend to update the configuration through this option, be sure
+          to enable <option>services.znc.mutable</option>, otherwise none of the
+          changes here will be applied after the initial deploy.
+        '';
+      };
+
+      configFile = mkOption {
+        type = types.path;
+        example = "~/.znc/configs/znc.conf";
+        description = ''
+          Configuration file for ZNC. It is recommended to use the
+          <option>config</option> option instead.
+          </para>
+          <para>
+          Setting this option will override any auto-generated config file
+          through the <option>confOptions</option> or <option>config</option>
+          options.
         '';
       };
 
@@ -78,16 +202,21 @@ in
       };
 
       mutable = mkOption {
-        default = true;
+        default = true; # TODO: Default to true when config is set, make sure to not delete the old config if present
         type = types.bool;
         description = ''
-          Indicates whether to allow the contents of the `dataDir` directory to be changed
-          by the user at run-time.
-          If true, modifications to the ZNC configuration after its initial creation are not
-            overwritten by a NixOS system rebuild.
-          If false, the ZNC configuration is rebuilt by every system rebuild.
-          If the user wants to manage the ZNC service using the web admin interface, this value
-            should be set to true.
+          Indicates whether to allow the contents of the
+          <literal>dataDir</literal> directory to be changed by the user at
+          run-time.
+          </para>
+          <para>
+          If enabled, modifications to the ZNC configuration after its initial
+          creation are not overwritten by a NixOS rebuild. If disabled, the
+          ZNC configuration is rebuilt on every NixOS rebuild.
+          </para>
+          <para>
+          If the user wants to manage the ZNC service using the web admin
+          interface, this option should be enabled.
         '';
       };
 
@@ -96,7 +225,7 @@ in
         example = [ "--debug" ];
         type = types.listOf types.str;
         description = ''
-          Extra flags to use when executing znc command.
+          Extra arguments to use for executing znc.
         '';
       };
     };
@@ -107,40 +236,48 @@ in
 
   config = mkIf cfg.enable {
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ ]; # TODO: Add port
+    services.znc = {
+      configFile = mkDefault (pkgs.writeText "znc-generated.conf" semanticString);
+      config = {
+        Version = (builtins.parseDrvName pkgs.znc.name).version;
+        Listener.l.Port = mkDefault 5000;
+        Listener.l.SSL = mkDefault true;
+      };
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall listenerPorts;
 
     systemd.services.znc = {
       description = "ZNC Server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.service" ];
+      after = [ "network-online.target" ];
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         Restart = "always";
+        ExecStart = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${escapeShellArgs cfg.extraFlags}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        ExecStop   = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
+        ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
       };
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -p ${cfg.dataDir}/configs
+        mkdir -p ${cfg.dataDir}/configs
 
         # If mutable, regenerate conf file every time.
         ${optionalString (!cfg.mutable) ''
-          ${pkgs.coreutils}/bin/echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
-          ${pkgs.coreutils}/bin/rm -f ${cfg.dataDir}/configs/znc.conf
+          echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
+          rm -f ${cfg.dataDir}/configs/znc.conf
         ''}
 
         # Ensure essential files exist.
         if [[ ! -f ${cfg.dataDir}/configs/znc.conf ]]; then
-            ${pkgs.coreutils}/bin/echo "No znc.conf file found in ${cfg.dataDir}. Creating one now."
-            ${pkgs.coreutils}/bin/cp --no-clobber ${/* TODO */"zncConfFile"} ${cfg.dataDir}/configs/znc.conf
-            ${pkgs.coreutils}/bin/chmod u+rw ${cfg.dataDir}/configs/znc.conf
-            ${pkgs.coreutils}/bin/chown ${cfg.user} ${cfg.dataDir}/configs/znc.conf
+            echo "No znc.conf file found in ${cfg.dataDir}. Creating one now."
+            cp --no-clobber ${cfg.configFile} ${cfg.dataDir}/configs/znc.conf
+            chmod u+rw ${cfg.dataDir}/configs/znc.conf
+            chown ${cfg.user} ${cfg.dataDir}/configs/znc.conf
         fi
 
         if [[ ! -f ${cfg.dataDir}/znc.pem ]]; then
-          ${pkgs.coreutils}/bin/echo "No znc.pem file found in ${cfg.dataDir}. Creating one now."
+          echo "No znc.pem file found in ${cfg.dataDir}. Creating one now."
           ${pkgs.znc}/bin/znc --makepem --datadir ${cfg.dataDir}
         fi
 
@@ -148,7 +285,6 @@ in
         rm ${cfg.dataDir}/modules || true
         ln -fs ${modules}/lib/znc ${cfg.dataDir}/modules
       '';
-      script = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${toString cfg.extraFlags}";
     };
 
     users.users = optional (cfg.user == defaultUser)

@@ -6,66 +6,9 @@ let
 
   cfg = config.services.znc;
 
-  # Default user and pass:
-  # un=znc
-  # pw=nixospass
-
-  defaultUserName = "znc";
-  defaultPassBlock = "
-        <Pass password>
-                Method = sha256
-                Hash = e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93
-                Salt = l5Xryew4g*!oa(ECfX2o
-        </Pass>
-  ";
-
-  # Keep znc.conf in nix store, then symlink or copy into `dataDir`, depending on `mutable`.
-  mkZncConf = confOpts: ''
-    Version = 1.6.3
-    ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.modules}
-
-    <Listener l>
-            Port = ${toString confOpts.port}
-            IPv4 = true
-            IPv6 = true
-            SSL = ${boolToString confOpts.useSSL}
-            ${lib.optionalString (confOpts.uriPrefix != null) "URIPrefix = ${confOpts.uriPrefix}"}
-    </Listener>
-
-    <User ${confOpts.userName}>
-            ${confOpts.passBlock}
-            Admin = true
-            Nick = ${confOpts.nick}
-            AltNick = ${confOpts.nick}_
-            Ident = ${confOpts.nick}
-            RealName = ${confOpts.nick}
-            ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.userModules}
-
-            ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (name: net: ''
-              <Network ${name}>
-                  ${concatMapStrings (m: "LoadModule = ${m}\n") net.modules}
-                  Server = ${net.server} ${lib.optionalString net.useSSL "+"}${toString net.port} ${net.password}
-                  ${concatMapStrings (c: "<Chan #${c}>\n</Chan>\n") net.channels}
-                  ${lib.optionalString net.hasBitlbeeControlChannel ''
-                    <Chan &bitlbee>
-                    </Chan>
-                  ''}
-                  ${net.extraConf}
-              </Network>
-              '') confOpts.networks) }
-    </User>
-    ${confOpts.extraZncConf}
-  '';
-
-  zncConfFile = pkgs.writeTextFile {
-    name = "znc.conf";
-    text = if cfg.zncConf != ""
-      then cfg.zncConf
-      else mkZncConf cfg.confOptions;
-  };
-
   networkOpts = {
     options = {
+
       server = mkOption {
         type = types.str;
         example = "chat.freenode.net";
@@ -75,20 +18,10 @@ let
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.ints.u16;
         default = 6697;
-        example = 6697;
         description = ''
           IRC server port.
-        '';
-      };
-
-      userName = mkOption {
-        default = "";
-        example = "johntron";
-        type = types.string;
-        description = ''
-          A nick identity specific to the IRC server.
         '';
       };
 
@@ -108,21 +41,12 @@ let
         '';
       };
 
-      modulePackages = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        example = [ "pkgs.zncModules.push" "pkgs.zncModules.fish" ];
-        description = ''
-          External ZNC modules to build.
-        '';
-      };
-
       modules = mkOption {
         type = types.listOf types.str;
         default = [ "simple_away" ];
         example = literalExample "[ simple_away sasl ]";
         description = ''
-          ZNC modules to load.
+          ZNC network modules to load.
         '';
       };
 
@@ -156,7 +80,8 @@ let
           Nick = johntron
         '';
         description = ''
-          Extra config for the network.
+          Extra config for the network. Consider using
+          <option>services.znc.config</option> instead.
         '';
       };
     };
@@ -166,22 +91,28 @@ in
 
 {
 
-  ###### Interface
-
   options = {
     services.znc = {
 
-      zncConf = mkOption {
-        default = "";
-        example = "See: http://wiki.znc.in/Configuration";
-        type = types.lines;
+      useLegacyConfig = mkOption {
+        default = true;
+        type = types.bool;
         description = ''
-          Config file as generated with `znc --makeconf` to use for the whole ZNC configuration.
-          If specified, `confOptions` will be ignored, and this value, as-is, will be used.
-          If left empty, a conf file with default values will be used.
+          Whether to propagate the legacy options under
+          <option>services.znc.confOptions.*</option> to the znc config. If this
+          is turned on, the znc config will contain a user with the default name
+          "znc", global modules "webadmin" and "adminlog" will be enabled by
+          default, and more, all controlled through the
+          <option>services.znc.confOptions.*</option> options.
+          You can use <command>nix-instantiate --eval --strict '&lt;nixpkgs/nixos&gt;' -A config.services.znc.config</command>
+          to view the current value of the config.
+          </para>
+          <para>
+          In any case, if you need more flexibility,
+          <option>services.znc.config</option> can be used to override/add to
+          all of the legacy options.
         '';
       };
-
 
       confOptions = {
         modules = mkOption {
@@ -203,9 +134,9 @@ in
         };
 
         userName = mkOption {
-          default = defaultUserName;
+          default = "znc";
           example = "johntron";
-          type = types.string;
+          type = types.str;
           description = ''
             The user name used to log in to the ZNC web admin interface.
           '';
@@ -217,37 +148,47 @@ in
           description = ''
             IRC networks to connect the user to.
           '';
-          example = {
-            "freenode" = {
-              server = "chat.freenode.net";
-              port = 6697;
-              useSSL = true;
-              modules = [ "simple_away" ];
+          example = literalExample ''
+            {
+              "freenode" = {
+                server = "chat.freenode.net";
+                port = 6697;
+                useSSL = true;
+                modules = [ "simple_away" ];
+              };
             };
-          };
+          '';
         };
 
         nick = mkOption {
           default = "znc-user";
           example = "john";
-          type = types.string;
+          type = types.str;
           description = ''
             The IRC nick.
           '';
         };
 
         passBlock = mkOption {
-          example = defaultPassBlock;
-          type = types.string;
+          example = literalExample ''
+            &lt;Pass password&gt;
+               Method = sha256
+               Hash = e2ce303c7ea75c571d80d8540a8699b46535be6a085be3414947d638e48d9e93
+               Salt = l5Xryew4g*!oa(ECfX2o
+            &lt;/Pass&gt;
+          '';
+          type = types.str;
           description = ''
             Generate with `nix-shell -p znc --command "znc --makepass"`.
             This is the password used to log in to the ZNC web admin interface.
+            You can also set this through
+            <option>services.znc.config.User.&lt;username&gt;.Pass.Method</option>
+            and co.
           '';
         };
 
         port = mkOption {
           default = 5000;
-          example = 5000;
           type = types.int;
           description = ''
             Specifies the port on which to listen.
@@ -258,7 +199,8 @@ in
           default = true;
           type = types.bool;
           description = ''
-            Indicates whether the ZNC server should use SSL when listening on the specified port. A self-signed certificate will be generated.
+            Indicates whether the ZNC server should use SSL when listening on
+            the specified port. A self-signed certificate will be generated.
           '';
         };
 
@@ -283,4 +225,44 @@ in
 
     };
   };
+
+  config = mkIf cfg.useLegacyConfig {
+
+    services.znc.config = let
+      c = cfg.confOptions;
+      # defaults here should override defaults set in the non-legacy part
+      mkDefault = mkOverride 900;
+    in {
+      LoadModule = mkDefault c.modules;
+      Listener.l = {
+        Port = mkDefault c.port;
+        IPv4 = mkDefault true;
+        IPv6 = mkDefault true;
+        SSL = mkDefault c.useSSL;
+      };
+      User.${c.userName} = {
+        Admin = mkDefault true;
+        Nick = mkDefault c.nick;
+        AltNick = mkDefault "${c.nick}_";
+        Ident = mkDefault c.nick;
+        RealName = mkDefault c.nick;
+        LoadModule = mkDefault c.userModules;
+        Network = mapAttrs (name: net: {
+          LoadModule = mkDefault net.modules;
+          Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
+          Chan = optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = mkDefault {}; } //
+            listToAttrs (map (n: nameValuePair "#${n}" (mkDefault {})) net.channels);
+          extraConfig = if net.extraConf == "" then mkDefault null else net.extraConf;
+        }) c.networks;
+        extraConfig = [ c.passBlock ] ++ optional (c.extraZncConf != "") c.extraZncConf;
+      };
+    };
+  };
+
+  imports = [
+    (mkRemovedOptionModule ["services" "znc" "zncConf"] ''
+      Instead of `services.znc.zncConf = "... foo ...";`, use
+      `services.znc.configFile = pkgs.writeText "znc.conf" "... foo ...";`.
+    '')
+  ];
 }
