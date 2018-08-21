@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
         *.so) install -vD "$i" "$out/libexec/$pname/$(basename "$i")";;
         *) target="$out/bin/$(basename "$i")"
            install -vD "$i" "$target"
+           sed -i -e 's|^$JAVA_HOME/bin/java|''${JAVA:-$JAVA_HOME/bin/java}|' "$target"
            wrapProgram "$target" \
              --set JAVA_HOME "$JAVA_HOME" \
              --prefix CLASSPATH : "$out/share/$pname/api_export_files"
@@ -55,7 +56,9 @@ stdenv.mkDerivation rec {
 
       First, compile your '.java' (NixOS-specific: you should not need to set the class path -- if you need, it's a bug):
           javacardc -source 1.5 -target 1.5 [MyJavaFile].java
-      Then, convert the '.class' file into a '.cap':
+      Then, test with 'jcwde' (NixOS-specific: you can change the java version used to run jcwde with eg. JAVA=jdb):
+          CLASSPATH=. jcwde [MyJcwdeConfig].app & sleep 1 && apdutool [MyApdus].apdu
+      Finally, convert the '.class' file into a '.cap':
           converter -applet [AppletAID] [MyApplet] [myPackage] [PackageAID] [Version]
       For more details, please refer to the documentation by Oracle
     '';
