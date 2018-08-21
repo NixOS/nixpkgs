@@ -8089,7 +8089,9 @@ with pkgs;
   # Does not actually depend on Qt 5
   inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle { };
+  coccinelle = callPackage ../development/tools/misc/coccinelle {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   cpptest = callPackage ../development/libraries/cpptest { };
 
