@@ -70,6 +70,7 @@ in rec {
     version = "8.5pl3";
   };
   coq_8_6 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_05;
     version = "8.6.1";
   };
   coq_8_7 = callPackage ../applications/science/logic/coq {
