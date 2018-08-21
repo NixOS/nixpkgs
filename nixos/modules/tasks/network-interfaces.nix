@@ -68,6 +68,15 @@ let
             bits in the prefix (<literal>${if v == 4 then "24" else "64"}</literal>).
           '';
         };
+      } // optionalAttrs (v == 4) {
+        broadcast = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Broadcast address of the interface, which is by default the highest address in the network.
+            For example, with an address/prefixLength of 192.0.2.23/24 the default broadcast address would be 192.0.2.255.
+          '';
+        };
       };
     };
 

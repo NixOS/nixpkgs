@@ -183,14 +183,15 @@ let
                 ${flip concatMapStrings ips (ip:
                   let
                     cidr = "${ip.address}/${toString ip.prefixLength}";
+                    brd = if ip ? broadcast then (if ip.broadcast == null then "brd +" else "brd ${ip.broadcast}") else "";
                   in
                   ''
                     echo "${cidr}" >> $state
                     echo -n "adding address ${cidr}... "
-                    if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
+                    if out=$(ip addr add "${cidr}" ${brd} dev "${i.name}" 2>&1); then
                       echo "done"
                     elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "'ip addr add "${cidr}" dev "${i.name}"' failed: $out"
+                      echo "'ip addr add "${cidr}" ${brd} dev "${i.name}"' failed: $out"
                       exit 1
                     fi
                   ''
