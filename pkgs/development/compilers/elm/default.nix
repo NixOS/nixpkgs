@@ -40,28 +40,13 @@ let
       EOF
     '' + lib.concatStrings cmds;
 
-  hsPkgs = haskell.packages.ghc802.override {
+  hsPkgs = haskell.packages.ghc822.override {
     overrides = self: super:
       let hlib = haskell.lib;
-          elmRelease = import ./packages/release.nix { inherit (self) callPackage; };
-          elmPkgs' = elmRelease.packages;
-          elmPkgs = elmPkgs' // {
-
-            elm-reactor = hlib.overrideCabal elmPkgs'.elm-reactor (drv: {
-              buildTools = drv.buildTools or [] ++ [ self.elm-make ];
-              preConfigure = makeElmStuff (import ./packages/elm-reactor-elm.nix);
-            });
-
-            elm-repl = hlib.overrideCabal elmPkgs'.elm-repl (drv: {
-              doCheck = false;
-              buildTools = drv.buildTools or [] ++ [ makeWrapper ];
-              postInstall =
-                let bins = lib.makeBinPath [ nodejs self.elm-make ];
-                in ''
-                  wrapProgram $out/bin/elm-repl \
-                    --prefix PATH ':' ${bins}
-                '';
-            });
+          elmPkgs = {
+            elm = hlib.overrideCabal (self.callPackage ./packages/elm.nix { }) {
+              preConfigure = "export HOME=`pwd`";
+            };
 
             /*
             This is not a core Elm package, and it's hosted on GitHub.
@@ -72,37 +57,11 @@ let
             where foo is a tag for a new version, for example "0.3.1-alpha".
             */
             elm-format = self.callPackage ./packages/elm-format.nix { };
-            elm-interface-to-json = self.callPackage ./packages/elm-interface-to-json.nix {
-              aeson-pretty = self.aeson-pretty_0_7_2;
-              either = hlib.overrideCabal self.either (drv :{
-                jailbreak = true;
-                version = "4.4.1.1";
-                sha256 = "1lrlwqqnm6ibfcydlv5qvvssw7bm0c6yypy0rayjzv1znq7wp1xh";
-                libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
-                  self.exceptions self.free self.mmorph self.monad-control
-                  self.MonadRandom self.profunctors self.transformers
-                  self.transformers-base
-                ];
-              });
-            };
+            elm-interface-to-json = self.callPackage ./packages/elm-interface-to-json.nix {};
           };
       in elmPkgs // {
         inherit elmPkgs;
-        elmVersion = elmRelease.version;
-        # https://github.com/elm-lang/elm-compiler/issues/1566
-        indents = hlib.overrideCabal super.indents (drv: {
-          version = "0.3.3";
-          #test dep tasty has a version mismatch
-          doCheck = false;
-          sha256 = "16lz21bp9j14xilnq8yym22p3saxvc9fsgfcf5awn2a6i6n527xn";
-          libraryHaskellDepends = drv.libraryHaskellDepends ++ [super.concatenative];
-        });
+        elmVersion = elmPkgs.elm.version;
       };
   };
-in hsPkgs.elmPkgs // {
-  elm = lib.hiPrio (buildEnv {
-    name = "elm-${hsPkgs.elmVersion}";
-    paths = lib.mapAttrsToList (name: pkg: pkg) hsPkgs.elmPkgs;
-    pathsToLink = [ "/bin" ];
-  });
-}
+in hsPkgs.elmPkgs
