@@ -44,5 +44,5 @@ in rec {
   openbsd = filterDoubles predicates.isOpenBSD;
   unix    = filterDoubles predicates.isUnix;
 
-  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux"];
+  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" "powerpc64le-linux"];
 }
