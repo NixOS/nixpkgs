@@ -18898,7 +18898,7 @@ with pkgs;
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
-  inherit (ocamlPackages) unison;
+  inherit (ocaml-ng.ocamlPackages_4_05) unison;
 
   unpaper = callPackage ../tools/graphics/unpaper { };
 
