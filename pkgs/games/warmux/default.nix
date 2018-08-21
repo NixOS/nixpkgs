@@ -19,11 +19,6 @@ stdenv.mkDerivation rec {
       gettext intltool libtool perl
     ];
 
-  preConfigure = ''
-    CC=${stdenv.cc.targetPrefix}cc
-    CXX=${stdenv.cc.targetPrefix}c++
-  '';
-
   configureFlagsArray = ("CFLAGS=-include ${zlib.dev}/include/zlib.h");
 
   patches = [ ./gcc-fix.patch ];

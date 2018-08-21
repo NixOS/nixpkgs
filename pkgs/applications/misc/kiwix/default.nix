@@ -81,11 +81,6 @@ stdenv.mkDerivation rec {
     cd ../../..
   '';
 
-  preConfigure = ''
-    CC=${stdenv.cc.targetPrefix}cc
-    CXX=${stdenv.cc.targetPrefix}c++
-  '';
-
   configureFlags = [
     "--disable-static"
     "--disable-staticbins"

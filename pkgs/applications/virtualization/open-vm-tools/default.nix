@@ -41,11 +41,6 @@ stdenv.mkDerivation rec {
      sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
   '';
 
-  preConfigure = ''
-    CC=${stdenv.cc.targetPrefix}cc
-    CXX=${stdenv.cc.targetPrefix}c++
-  '';
-
   configureFlags = [ "--without-kernel-modules" "--without-xmlsecurity" ]
     ++ lib.optional (!withX) "--without-x";
 
