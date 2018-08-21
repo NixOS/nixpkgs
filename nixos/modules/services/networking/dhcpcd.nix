@@ -161,8 +161,9 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
-        wants = [ "network.target" ];
+        wants = [ "network.target" "systemd-udev-settle.service" ];
         before = [ "network.target" ];
+        after = [ "systemd-udev-settle.service" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
