@@ -12,7 +12,7 @@ let
         # not a Python "NoneType"
         client:
           hosts: ${builtins.toJSON cfg.hosts}
-          port: ${cfg.port}
+          port: ${toString cfg.port}
           url_prefix:
           use_ssl: False
           certificate:
