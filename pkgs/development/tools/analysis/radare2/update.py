@@ -2,7 +2,7 @@
 #!nix-shell -p nix -p python3 -p git -i python
 # USAGE - just run the script: ./update.py
 # When editing this file, make also sure it passes the mypy typecheck
-# and is formatted with yapf.
+# and is formatted with black.
 import fileinput
 import json
 import re
