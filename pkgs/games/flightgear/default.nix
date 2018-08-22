@@ -6,14 +6,14 @@
 }:
 
 let
-  version = "2017.3.1";
-  shortVersion = "2017.3";
+  version = "2018.2.2";
+  shortVersion = "2018.2";
   data = stdenv.mkDerivation rec {
     name = "flightgear-base-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "166q0fsbp17lx1l1n6i8cfk3d1i79pasz1liya09z6m2i1pb026z";
+      sha256 = "1i0a81a01zpksagwjxiphr3pl7q5vnkcrxns52kyvdrwrzj996y8";
     };
 
     phases = [ "installPhase" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
-    sha256 = "1kccf91vmxnzyki6grx09s10dvr4j6qrz34ikj7jn81g5scisbkg";
+    sha256 = "0iw1f58nf9hbbnan2iy7d9d1plqkagnq7i7hav8hhs9z1bphky31";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
