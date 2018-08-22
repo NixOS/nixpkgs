@@ -28,7 +28,6 @@ with lib;
       ++ (if pkgs.stdenv.system == "aarch64-linux"
           then []
           else [ pkgs.grub2 pkgs.syslinux ]);
-    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.platform.kernelTarget;
 
     fileSystems."/" =
       { fsType = "tmpfs";
