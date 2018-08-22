@@ -121,18 +121,27 @@ let
               map (up: "${up}/${urlName}.tar.xz") urlPrefixes
             );
 
-      # Upstream refuses to distribute stable tarballs, so we host snapshots on IPFS.
+      # Upstream refuses to distribute stable tarballs,
+      # so we host snapshots on IPFS or on our own servers.
       # Common packages should get served from the binary cache anyway.
       # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
       urlPrefixes = args.urlPrefixes or [
-        # Should be stable for historic, archived releases
-        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2017/tlnet-final/archive
+        # A snapshot temporarily hosted by @xeji.
+        # TODO: remove when there is a reliable long-term solution
+        https://cat3.de/texlive-2018/tlnet/archive
 
-        # TODO: Add IPFS and see if @veprbl is willing to add a texlive-2017-final mirror,
-        # or if we should just dump it and go to 2018.
+        # TODO: Add another snapshot mirror
+
+        # TODO: Add IPFS storage or host snapshot elsewhere,
+        # maybe on one of our project's servers
 
         # The canonical source moves quickly and will be broken almost immediately
-        # http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive
+        http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive
+
+        # Should be stable for historic, archived releases
+        # http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2018/tlnet-final/archive
+        # TODO: use this later when 2018 is archived
+
       ];
 
       src = fetchurl { inherit urls sha512; };
