@@ -185,7 +185,6 @@ stdenv.mkDerivation (rec {
     "--disable-gconf"
     "--enable-default-toolkit=${default-toolkit}"
   ]
-  ++ lib.optional stdenv.isDarwin "--disable-xcode-checks"
   ++ lib.optional (lib.versionOlder version "61") "--enable-system-hunspell"
   ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
