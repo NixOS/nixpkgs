@@ -11,7 +11,7 @@ let
       inherit sha256;
     };
 
-    patches = [
+    patches = stdenv.lib.optional (version == "1.4.7") [
       # fix notmuch build, see https://notmuchmail.org/faq/#index12h2
       # cannot fetchpatch this because base directory differs
       # TODO: remove on next xapian update

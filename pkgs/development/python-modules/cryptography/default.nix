@@ -20,12 +20,10 @@
 , hypothesis
 }:
 
-let
-  version = "2.3";
-in assert version == cryptography_vectors.version; buildPythonPackage rec {
+buildPythonPackage rec {
   # also bump cryptography_vectors
   pname = "cryptography";
-  inherit version;
+  version = "2.3";
 
   src = fetchPypi {
     inherit pname version;

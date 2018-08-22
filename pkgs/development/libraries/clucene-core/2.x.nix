@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
         $out/lib/libclucene-core.1.dylib
   '';
 
+  doCheck = false; # fails with "Unable to find executable: /build/clucene-core-2.3.3.4/build/bin/cl_test"
+
   meta = {
     description = "Core library for full-featured text search engine";
     longDescription = ''

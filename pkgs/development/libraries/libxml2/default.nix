@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl
+{ stdenv, lib, fetchurl, fetchpatch
 , zlib, xz, python2, findXMLCatalogs
 , buildPlatform, hostPlatform
 , pythonSupport ? buildPlatform == hostPlatform
@@ -20,9 +20,15 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchurl { # CVE-2018-9251
-      url = https://gitlab.gnome.org/GNOME/libxml2/commit/2240fbf5912054af025fb6e01e26375100275e74.diff;
-      sha256 = "01c5dnipz2rmv2dgma1ycvhyiyfvy9makyn6ywahm10jwk5chn3i";
+    (fetchpatch {
+      name = "CVE-2018-14567_CVE-2018-9251.patch";
+      url = https://gitlab.gnome.org/GNOME/libxml2/commit/2240fbf5912054af025fb6e01e26375100275e74.patch;
+      sha256 = "1xpqsfkzhrqasza51c821mnds5l317djrz8086fmzpyf68vld03h";
+    })
+    (fetchpatch {
+      name = "CVE-2018-14404.patch";
+      url = https://gitlab.gnome.org/GNOME/libxml2/commit/a436374994c47b12d5de1b8b1d191a098fa23594.patch;
+      sha256 = "19vp7p32vrninnfa7vk9ipw7n4cl1gg16xxbhjy2d0kwp1crvzqh";
     })
   ];
 

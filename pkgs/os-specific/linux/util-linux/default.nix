@@ -22,6 +22,8 @@ in stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   postPatch = ''
+    patchShebangs tests/run.sh
+
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "${shadow}/bin/login"
     substituteInPlace sys-utils/eject.c \
@@ -53,6 +55,8 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ zlib pam ]
     ++ lib.filter (p: p != null) [ ncurses systemd perl ];
+
+  doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   postInstall = ''
     rm "$bin/bin/su" # su should be supplied by the su package (shadow)

@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
   # --disable-static actually enables static linking here...
   dontDisableStatic = true;
 
+  preConfigure = ''
+    CC=${stdenv.cc.targetPrefix}gcc
+    CXX=${stdenv.cc.targetPrefix}g++
+  '';
+
   makeFlags = [ "LEX=${flex}/bin/flex" ];
 
   preInstall = ''

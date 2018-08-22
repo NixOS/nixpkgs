@@ -337,6 +337,7 @@ stdenv.mkDerivation rec {
     $out/bin/tor-browser -version >/dev/null
   '';
 
+  passthru.execdir = "/bin";
   meta = with stdenv.lib; {
     description = "An unofficial version of the tor browser bundle, built from source";
     homepage = https://torproject.org/;

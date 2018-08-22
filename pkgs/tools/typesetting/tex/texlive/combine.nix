@@ -243,4 +243,3 @@ in buildEnv {
 }
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file
 #       similarly, deal with xe(la)tex font visibility?
-

@@ -82,11 +82,8 @@ let
   platformCompat = self: super: let
     inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
   in {
-    stdenv = super.stdenv // {
-      inherit (super.stdenv.buildPlatform) platform;
-    };
     inherit buildPlatform hostPlatform targetPlatform;
-    inherit (buildPlatform) system platform;
+    inherit (buildPlatform) system;
   };
 
   splice = self: super: import ./splice.nix lib self (buildPackages != null);

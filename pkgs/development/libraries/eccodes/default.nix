@@ -6,11 +6,11 @@
 with stdenv.lib; 
 stdenv.mkDerivation rec {
   name = "eccodes-${version}";
-  version = "2.8.0";
+  version = "2.8.2";
 
   src = fetchurl {
     url = "https://software.ecmwf.int/wiki/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    sha256 = "06rf6yzrszfqm74sq3485c7h6m0xjnz35sm31xkk70fxgk129fp0";
+    sha256 = "0aki7llrdfj6273yjy8yv0d027sdbv8xs3iv68fb69s0clyygrin";
   };
 
   nativeBuildInputs = [ cmake ];

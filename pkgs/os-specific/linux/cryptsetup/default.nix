@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "0d2p9g2wqcv6l3671gvw96p16jadbgyh21ddy2bhqgi96dq3qflx";
   };
 
+  postPatch = ''
+    patchShebangs tests
+  '';
+
   NIX_LDFLAGS = "-lgcc_s";
 
   configureFlags = [

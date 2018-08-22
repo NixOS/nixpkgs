@@ -99,8 +99,9 @@ stdenv.mkDerivation (rec {
     extraPrefix = "utils/hsc2hs/";
     stripLen = 1;
   })] ++ stdenv.lib.optional deterministicProfiling
-    (fetchpatch {
-      url = "https://phabricator-files.haskell.org/file/data/yd2fclrwulila2quki5q/PHID-FILE-lr2j63hkglwauprxycrt/D4388.diff";
+    (fetchpatch rec {
+      url = "http://tarballs.nixos.org/sha256/${sha256}";
+      name = "D4388.diff";
       sha256 = "0w6sdcvnqjlnlzpvnzw20b80v150ijjyjvs9548ildc1928j0w7s";
     })
     ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
@@ -114,16 +115,16 @@ stdenv.mkDerivation (rec {
     done
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
-    export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+    export CC="$CC_FOR_TARGET"
+    export CXX="$CXX_FOR_TARGET"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
-    export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
-    export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
-    export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
-    export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
-    export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
-    export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+    export AS="$AS_FOR_TARGET"
+    export AR="$AR_FOR_TARGET"
+    export NM="$NM_FOR_TARGET"
+    export RANLIB="$RANLIB_FOR_TARGET"
+    export READELF="$READELF_FOR_TARGET"
+    export STRIP="$STRIP_FOR_TARGET"
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
