@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional libunwind.supportsHost libunwind; # support -k
 
-  configureFlags = stdenv.lib.optional (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) "--enable-mpers=check";
+  configureFlags = stdenv.lib.optional (!stdenv.hostPlatform.isx86) "--enable-mpers=check";
 
   # fails 1 out of 523 tests with
   # "strace-k.test: failed test: ../../strace -e getpid -k ../stack-fcall output mismatch"
