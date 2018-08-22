@@ -95,12 +95,13 @@ core = stdenv.mkDerivation rec {
 
   configureFlags = common.configureFlags
     ++ [ "--without-x" ] # disable xdvik and xpdfopen
-    ++ map (what: "--disable-${what}") [
+    ++ map (what: "--disable-${what}") ([
       "dvisvgm" "dvipng" # ghostscript dependency
       "luatex" "luajittex" "mp" "pmp" "upmp" "mf" # cairo would bring in X and more
       "xetex" "bibtexu" "bibtex8" "bibtex-x" "upmendex" # ICU isn't small
-    ]
+    ] ++ stdenv.lib.optional (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) "mfluajit")
     ++ [ "--without-system-harfbuzz" "--without-system-icu" ] # bogus configure
+    
     ;
 
   enableParallelBuilding = true;
