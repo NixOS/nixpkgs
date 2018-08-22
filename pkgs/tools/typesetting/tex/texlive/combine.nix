@@ -203,7 +203,7 @@ in buildEnv {
 
     perl `type -P mktexlsr.pl` ./share/texmf
     texlinks.sh "$out/bin" && wrapBin
-    (perl `type -P fmtutil.pl` --sys --refresh || true) | grep '^fmtutil' # too verbose
+    (perl `type -P fmtutil.pl` --sys --all || true) | grep '^fmtutil' # too verbose
     #texlinks.sh "$out/bin" && wrapBin # do we need to regenerate format links?
     perl `type -P updmap.pl` --sys --syncwithtrees --force
     perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
