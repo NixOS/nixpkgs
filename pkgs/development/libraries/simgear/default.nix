@@ -17,12 +17,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "simgear-${version}";
-  version = "2017.3.1";
-  shortVersion = "2017.3";
+  version = "2018.2.2";
+  shortVersion = "2018.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
-    sha256 = "1x71wvycs2bjgmmacswgk6091p65p46fr40mr7f4kcipnx88bq0f";
+    sha256 = "1r8w2pcm415mqiqqlsy00hv7d5p3rvqrsx2l04snzqxa6sy7c5gn";
   };
 
   buildInputs = [ plib freeglut xproto libX11 libXext xextproto libXi inputproto
