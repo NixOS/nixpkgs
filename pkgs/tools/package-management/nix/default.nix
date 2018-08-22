@@ -49,6 +49,15 @@ let
     # Seems to be required when using std::atomic with 64-bit types
     NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
+    preConfigure =
+      # Copy libboost_context so we don't get all of Boost in our closure.
+      # https://github.com/NixOS/nixpkgs/issues/45462
+      lib.optionalString fromGit
+      ''
+        mkdir -p $out/lib
+        cp ${boost}/lib/libboost_context* $out/lib
+      '';
+
     configureFlags =
       [ "--with-store-dir=${storeDir}"
         "--localstatedir=${stateDir}"
