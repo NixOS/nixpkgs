@@ -24,24 +24,25 @@
 with stdenv.lib;
 
 if ! lists.elem stdenv.system platforms.mesaPlatforms then
-  throw "unsupported platform for Mesa"
+  throw "${stdenv.system}: unsupported platform for Mesa"
 else
 
 let
-  defaultGalliumDrivers =
-    if stdenv.isAarch32
-    then ["virgl" "nouveau" "freedreno" "vc4" "etnaviv" "imx"]
-    else if stdenv.isAarch64
-    then ["virgl" "nouveau" "vc4" ]
-    else ["virgl" "svga" "i915" "r300" "r600" "radeonsi" "nouveau"];
-  defaultDriDrivers =
-    if (stdenv.isAarch32 || stdenv.isAarch64)
-    then ["nouveau"]
-    else ["i915" "i965" "nouveau" "radeon" "r200"];
+  inherit (stdenv) hostPlatform;
+  defaultGalliumDrivers = [ "virgl" "nouveau" ]
+    ++ (if hostPlatform.isAarch32 || hostPlatform.isAarch64 then
+      [ "vc4" ]
+      ++ lib.optionals hostPlatform.isAarch64 [ "freedreno" "etnaviv" "imx" ]
+    else
+      [ "r300" "r600" "radeonsi"]
+      ++ lib.optionals hostPlatform.isx86 [ "i915" "svga" ]
+    );
+  defaultDriDrivers = [ "nouveau" ]
+    ++ lib.optionals (!hostPlatform.isAarch32 && !hostPlatform.isAarch64) [ "radeon" "r200" ]
+    ++ lib.optionals hostPlatform.isx86 [ "i915" "i965" ];
   defaultVulkanDrivers =
-    if (stdenv.isAarch32 || stdenv.isAarch64)
-    then []
-    else ["intel"] ++ lib.optional enableRadv "radeon";
+    lib.optional hostPlatform.isx86 "intel"
+    ++ lib.optional enableRadv "radeon";
 in
 
 let gallium_ = galliumDrivers; dri_ = driDrivers; vulkan_ = vulkanDrivers; in
