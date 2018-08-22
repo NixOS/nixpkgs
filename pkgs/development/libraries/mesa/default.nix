@@ -29,16 +29,18 @@ else
 
 let
   inherit (stdenv) hostPlatform;
-  defaultGalliumDrivers = [ "virgl" "nouveau" ]
-    ++ (if hostPlatform.isAarch32 || hostPlatform.isAarch64 then
-      [ "vc4" ]
-      ++ lib.optionals hostPlatform.isAarch64 [ "freedreno" "etnaviv" "imx" ]
-    else
-      [ "r300" "r600" "radeonsi"]
-      ++ lib.optionals hostPlatform.isx86 [ "i915" "svga" ]
-    );
-  defaultDriDrivers = [ "nouveau" ]
-    ++ lib.optionals (!hostPlatform.isAarch32 && !hostPlatform.isAarch64) [ "radeon" "r200" ]
+  # platforms that have PCIe slots and thus can use most non-integrated GPUs
+  pciePlatform = !hostPlatform.isAarch32 && !hostPlatform.isAarch64;
+  defaultGalliumDrivers = [ "virgl" ]
+    ++ lib.optionals pciePlatform [ "r300" "r600" "radeonsi" ]
+    ++ lib.optionals (pciePlatform || hostPlatform.isAarch32 || hostPlatform.isAarch64) [ "nouveau" ]
+    ++ lib.optionals hostPlatform.isx86 [ "i915" "svga" ]
+    ++ lib.optionals (hostPlatform.isAarch32 || hostPlatform.isAarch64) [ "vc4" ]
+    ++ lib.optionals hostPlatform.isAarch64 [ "freedreno" "etnaviv" "imx" ]
+  ;
+  defaultDriDrivers = [ ]
+    ++ lib.optionals pciePlatform [ "radeon" "r200" ]
+    ++ lib.optionals (pciePlatform || hostPlatform.isAarch32 || hostPlatform.isAarch64) [ "nouveau" ]
     ++ lib.optionals hostPlatform.isx86 [ "i915" "i965" ];
   defaultVulkanDrivers =
     lib.optional hostPlatform.isx86 "intel"
