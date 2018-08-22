@@ -8532,15 +8532,17 @@ with pkgs;
     rubyBindings = config.radare.rubyBindings or false;
     luaBindings = config.radare.luaBindings or false;
   };
-  radare2 = callPackage ../development/tools/analysis/radare2 {
+
+  inherit (callPackages ../development/tools/analysis/radare2 {
     inherit (gnome2) vte;
     lua = lua5;
     useX11 = config.radare.useX11 or false;
     pythonBindings = config.radare.pythonBindings or false;
     rubyBindings = config.radare.rubyBindings or false;
     luaBindings = config.radare.luaBindings or false;
-  };
-  radare2-cutter = libsForQt5.callPackage ../development/tools/analysis/radare2-cutter { };
+  }) radare2 r2-for-cutter;
+
+  radare2-cutter = libsForQt5.callPackage ../development/tools/analysis/radare2/cutter.nix { };
 
   ragel = ragelStable;
 
