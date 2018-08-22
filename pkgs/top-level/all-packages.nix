@@ -22247,4 +22247,8 @@ with pkgs;
   doing = callPackage ../applications/misc/doing  { };
 
   undervolt = callPackage ../os-specific/linux/undervolt { };
+
+  alibuild = callPackage ../development/tools/build-managers/alibuild {
+    python = python27;
+  };
 }
