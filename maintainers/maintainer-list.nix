@@ -1970,6 +1970,11 @@
     github = "jpotier";
     name = "Martin Potier";
   };
+  jqueiroz = {
+    email = "nixos@johnjq.com";
+    github = "jqueiroz";
+    name = "Jonathan Queiroz";
+  };
   jraygauthier = {
     email = "jraygauthier@gmail.com";
     github = "jraygauthier";
