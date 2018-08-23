@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.spdlib.org/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.mpickering ];
-    platforms = with stdenv.lib.platforms; unix;
+    platforms = with stdenv.lib.platforms; x86;
   };
 }
