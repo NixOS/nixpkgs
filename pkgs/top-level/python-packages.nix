@@ -2446,6 +2446,11 @@ in {
     doCheck = (!isPyPy);  # https://github.com/fabric/fabric/issues/11891
     propagatedBuildInputs = with self; [ paramiko pycrypto ];
     buildInputs = with self; [ fudge_9 nose ];
+    meta = {
+      description = "Pythonic remote execution";
+      homepage    = https://www.fabfile.org/;
+      license     = licenses.bsd2;
+    };
   };
 
   faulthandler = if ! isPy3k
