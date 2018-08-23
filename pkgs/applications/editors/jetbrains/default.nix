@@ -314,12 +314,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "042qhdkl4v5q4cdbqfbiwj6s3acivdb5kmbyn4jix8pg8r37yfnm"; /* updated by script */
+      sha256 = "1sjxavkfjg4g9rgjqjjb9d6wg53dwfs8n65w3qbp87c7x3pl006r"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm 2018.2";
