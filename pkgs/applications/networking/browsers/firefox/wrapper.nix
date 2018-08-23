@@ -43,6 +43,9 @@ let
 
       plugins =
         assert !(jre && icedtea);
+        if builtins.hasAttr "enableVLC" cfg
+        then throw "The option \"${browserName}.enableVLC\" has been removed since Firefox no longer supports npapi plugins"
+        else
         ([ ]
           ++ lib.optional enableAdobeFlash flashplayer
           ++ lib.optional (cfg.enableDjvu or false) (djview4)
@@ -98,24 +101,28 @@ let
         ];
       };
 
-      buildInputs = [makeWrapper]
-        ++ lib.optional (browser ? gtk3) browser.gtk3;
+      nativeBuildInputs = [ makeWrapper lndir ];
+      buildInputs = lib.optional (browser ? gtk3) browser.gtk3;
 
-      buildCommand = ''
-        if [ ! -x "${browser}/bin/${browserName}" ]
+      buildCommand = lib.optionalString stdenv.isDarwin ''
+        mkdir -p $out/Applications
+        cp -R --no-preserve=mode,ownership ${browser}/Applications/${browserName}.app $out/Applications
+        rm -f $out${browser.execdir or "/bin"}/${browserName}
+      '' + ''
+        if [ ! -x "${browser}${browser.execdir or "/bin"}/${browserName}" ]
         then
-            echo "cannot find executable file \`${browser}/bin/${browserName}'"
+            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${browserName}'"
             exit 1
         fi
 
-        makeWrapper "$(readlink -v --canonicalize-existing "${browser}/bin/${browserName}")" \
-            "$out/bin/${browserName}${nameSuffix}" \
+        makeWrapper "$(readlink -v --canonicalize-existing "${browser}${browser.execdir or "/bin"}/${browserName}")" \
+          "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
             --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
             --suffix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
             --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
             --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
-            --suffix PATH ':' "$out/bin" \
+            --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
             ${lib.optionalString (browser ? gtk3)
@@ -141,7 +148,7 @@ let
 
         mkdir -p $out/lib/mozilla
         for ext in ${toString nativeMessagingHosts}; do
-            ${lndir}/bin/lndir -silent $ext/lib/mozilla $out/lib/mozilla
+            lndir -silent $ext/lib/mozilla $out/lib/mozilla
         done
 
         # For manpages, in case the program supplies them

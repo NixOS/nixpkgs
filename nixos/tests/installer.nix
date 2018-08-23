@@ -467,7 +467,7 @@ in {
       enableOCR = true;
       preBootCommands = ''
         $machine->start;
-        $machine->waitForText(qr/Enter passphrase/);
+        $machine->waitForText(qr/Passphrase for/);
         $machine->sendChars("supersecret\n");
       '';
     };

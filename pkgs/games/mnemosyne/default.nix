@@ -4,11 +4,11 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "mnemosyne";
-  version = "2.6";
+  version = "2.6.1";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
-    sha256 = "0b7b5sk5bfbsg5cyybkv5xw9zw257v3khsn0lwlbxnlhakd0rsg4";
+    sha256 = "0xcwikq51abrlqfn5bv7kcw1ccd3ip0w6cjd5vnnzwnaqwdj8cb3";
   };
 
   propagatedBuildInputs = with python.pkgs; [

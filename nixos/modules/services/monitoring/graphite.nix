@@ -57,12 +57,6 @@ let
     --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
   '';
 
-  mkPidFileDir = name: ''
-    mkdir -p /run/${name}
-    chmod 0700 /run/${name}
-    chown -R graphite:graphite /run/${name}
-  '';
-
   carbonEnv = {
     PYTHONPATH = let
       cenv = pkgs.python.buildEnv.override {
@@ -412,18 +406,16 @@ in {
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
+          RuntimeDirectory = name;
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
           PIDFile="/run/${name}/${name}.pid";
         };
-        preStart = mkPidFileDir name + ''
-
-          mkdir -p ${cfg.dataDir}/whisper
-          chmod 0700 ${cfg.dataDir}/whisper
-          chown graphite:graphite ${cfg.dataDir}
-          chown graphite:graphite ${cfg.dataDir}/whisper
+        preStart = ''
+          install -dm0700 -o graphite -g graphite ${cfg.dataDir}
+          install -dm0700 -o graphite -g graphite ${cfg.dataDir}/whisper
         '';
       };
     })
@@ -436,12 +428,12 @@ in {
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
+          RuntimeDirectory = name;
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PIDFile="/run/${name}/${name}.pid";
         };
-        preStart = mkPidFileDir name;
       };
     })
 
@@ -452,12 +444,12 @@ in {
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
+          RuntimeDirectory = name;
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PIDFile="/run/${name}/${name}.pid";
         };
-        preStart = mkPidFileDir name;
       };
     })
 

@@ -33,7 +33,7 @@ let
 
   self = rec {
     df-hashes = builtins.fromJSON (builtins.readFile ./game.json);
-    dwarf-fortress = df-games.dwarf-fortress_0_44_11;
+    dwarf-fortress = df-games.dwarf-fortress_0_44_12;
 
     dwarf-fortress-full = callPackage ./lazy-pack.nix { };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "af3a3252bc58f8642a641601ba59096c22e4aa49cdc1ed4b0df2314f4f027f0d";
+    sha256 = "00x28z6diw06gakb5isbfha5z2n63yyncv4za303nsgzxvlihmx0";
   };
 
   propagatedBuildInputs = [ blessings mozterm six ];

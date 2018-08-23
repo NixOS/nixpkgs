@@ -24,11 +24,19 @@ let
       ++ optional (versionOlder version "1.0.2" && hostPlatform.isDarwin)
            ./darwin-arch.patch;
 
-  postPatch = if (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) then ''
-    substituteInPlace crypto/async/arch/async_posix.h \
-      --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
-                '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
-  '' else null;
+    postPatch = ''
+      patchShebangs Configure
+    '' + optionalString (versionOlder version "1.1.0") ''
+      patchShebangs test/*
+      for a in test/t* ; do
+        substituteInPlace "$a" \
+          --replace /bin/rm rm
+      done
+    '' + optionalString (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
+      substituteInPlace crypto/async/arch/async_posix.h \
+        --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
+                  '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
+    '';
 
     outputs = [ "bin" "dev" "out" "man" ];
     setOutputFlags = false;
@@ -38,6 +46,7 @@ let
     buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
 
     # TODO(@Ericson2314): Improve with mass rebuild
+    configurePlatforms = [];
     configureScript = {
         "x86_64-darwin"  = "./Configure darwin64-x86_64-cc";
         "x86_64-solaris" = "./Configure solaris64-x86_64-gcc";
@@ -55,13 +64,6 @@ let
         else
           throw "Not sure what configuration to use for ${hostPlatform.config}"
       );
-
-    # TODO(@Ericson2314): Make unconditional on mass rebuild
-    ${if buildPlatform != hostPlatform then "configurePlatforms" else null} = [];
-
-    preConfigure = ''
-      patchShebangs Configure
-    '';
 
     configureFlags = [
       "shared" # "shared" builds both shared and static libraries
@@ -107,11 +109,12 @@ let
       fi
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = https://www.openssl.org/;
       description = "A cryptographic library that implements the SSL and TLS protocols";
-      platforms = stdenv.lib.platforms.all;
-      maintainers = [ stdenv.lib.maintainers.peti ];
+      license = licenses.openssl;
+      platforms = platforms.all;
+      maintainers = [ maintainers.peti ];
       priority = 10; # resolves collision with ‘man-pages’
     };
   };
@@ -119,13 +122,13 @@ let
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2o";
-    sha256 = "0kcy13l701054nhpbd901mz32v1kn4g311z0nifd83xs2jbmqgzc";
+    version = "1.0.2p";
+    sha256 = "003xh9f898i56344vpvpxxxzmikivxig4xwlm7vbi7m8n43qxaah";
   };
 
   openssl_1_1_0 = common {
-    version = "1.1.0h";
-    sha256 = "05x509lccqjscgyi935z809pwfm708islypwhmjnb6cyvrn64daq";
+    version = "1.1.0i";
+    sha256 = "16fgaf113p6s5ixw227sycvihh3zx6f6rf0hvjjhxk68m12cigzb";
   };
 
 }

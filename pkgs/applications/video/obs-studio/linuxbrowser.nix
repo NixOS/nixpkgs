@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   name = "obs-linuxbrowser-${version}";
-  version = "0.4.0";
+  version = "0.5.0";
   src = fetchFromGitHub {
     owner = "bazukas";
     repo = "obs-linuxbrowser";
     rev = version;
-    sha256 = "1nqi04ici9n1xjliy1gaqy2bq8zj1z32dffk890x2hi7ml688y9h";
+    sha256 = "0jgh377yv69wbcqg7m7axi22x2p9jmcirws1pgrz22vaw7zbbdzl";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];

@@ -19,7 +19,7 @@ let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "238";
+  version = "239";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -27,8 +27,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "02042d012c4d6c0a2854d8436dd6636d4327774f";
-    sha256 = "0iv6fygzac0z6dagbmw1nf8dx7rrr6d9cxp0fr304rn3ir58g5f0";
+    rev = "67c553805a9ebee2dce7c3a350b4abd4d7a489c2";
+    sha256 = "114vq71gcddi4qm2hyrj5jsas9599s0h5mg65jfpvxhfyaw54cpv";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -145,16 +145,6 @@ in stdenv.mkDerivation rec {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  patches = [
-    # https://github.com/systemd/systemd/pull/8580
-    (fetchpatch {
-      url = https://github.com/systemd/systemd/pull/8580.patch;
-      sha256 = "1yp07hlpgqq0h2y0qc3kasswzkycz6p8d56d695ck1qa2f5bdfgn";
-    })
-  ];
-
-  hardeningDisable = [ "stackprotector" ];
-
   NIX_CFLAGS_COMPILE =
     [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
       # lead to a cyclic dependency.
@@ -208,10 +198,11 @@ in stdenv.mkDerivation rec {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eelco ];
   };
 }

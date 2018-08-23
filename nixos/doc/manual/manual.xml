@@ -17,8 +17,8 @@
   <para>
    If you encounter problems, please report them on the
    <literal
-    xlink:href="https://groups.google.com/forum/#!forum/nix-devel">nix-devel</literal>
-   mailing list or on the <link
+    xlink:href="https://discourse.nixos.org">Discourse</literal>
+   or on the <link
     xlink:href="irc://irc.freenode.net/#nixos">
    <literal>#nixos</literal> channel on Freenode</link>. Bugs should be
    reported in

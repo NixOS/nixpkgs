@@ -50,7 +50,9 @@ stdenv.mkDerivation rec {
     ./no-absolute-paths.patch
     # Include new targets (like arm)
     ./make-archs.patch
-  ];
+  ] ++
+  # Ensure looks for nix-provided Carbon, not system frameworks
+  stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
 
   installPhase = ''
     cd ../compile/${arch}
@@ -66,8 +68,7 @@ stdenv.mkDerivation rec {
     description = ''A Parallel / Multiprocessor Ray Tracing System'';
     license = stdenv.lib.licenses.bsd3;
     maintainers = [stdenv.lib.maintainers.raskin];
-    # darwin fails due to missing Carbon.h, even though Carbon is a build input
-    platforms = with stdenv.lib.platforms; linux ++ cygwin;
+    platforms = with stdenv.lib.platforms; linux ++ cygwin ++ darwin;
     homepage = http://jedi.ks.uiuc.edu/~johns/tachyon/;
   };
 }

@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib zlib libpng cmake gnumake3 ];
 
-  configureFlags = "-v";
+  configureFlags = [ "-v" ];
 
   meta = with stdenv.lib; {
-    platforms = platforms.linux;
-    maintainers = [ ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ enzime ];
     license = stdenv.lib.licenses.lgpl3;
     description = "An opensource database of photographic lenses and their characteristics";
     homepage = http://lensfun.sourceforge.net/;

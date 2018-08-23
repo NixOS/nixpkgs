@@ -1,32 +1,35 @@
-{ buildPythonPackage
-, fetchgit
-, testfixtures
-, cornice
-, mozsvc
-, pybrowserid
-, tokenlib
-, pymysql
-, umemcache
-, hawkauthlib
-, alembic
-, pymysqlsa
-, paste
-, boto
+{ lib, buildPythonPackage, fetchFromGitHub
+, alembic, boto, cornice, hawkauthlib, mozsvc, paste, pybrowserid, pyfxa
+, pymysql, pymysqlsa, sqlalchemy, testfixtures, tokenlib, umemcache
+, mock, nose, unittest2, webtest
 }:
 
 buildPythonPackage rec {
   pname = "tokenserver";
-  version = "1.2.27";
+  version = "1.3.1";
 
-  src = fetchgit {
-    url = https://github.com/mozilla-services/tokenserver.git;
-    rev = "refs/tags/${version}";
-    sha256 = "0il3bgjld495g9gxvvrm56kpan5swaizzg216qz3zxmb6w9ly3fm";
+  src = fetchFromGitHub {
+    owner = "mozilla-services";
+    repo = pname;
+    rev = version;
+    sha256 = "04z0r8xzrmhvh04y8ggdz9gs8qa8lv3qr7kasf6lm63fixsfgrlp";
   };
 
-  doCheck = false;
-  checkInputs = [ testfixtures ];
-  propagatedBuildInputs = [ cornice mozsvc pybrowserid tokenlib
-    pymysql umemcache hawkauthlib alembic pymysqlsa paste boto ];
+  propagatedBuildInputs = [
+    alembic boto cornice hawkauthlib mozsvc paste pybrowserid pyfxa
+    pymysql pymysqlsa sqlalchemy testfixtures tokenlib umemcache
+  ];
 
+  checkInputs = [
+    mock nose unittest2 webtest
+  ];
+
+  # Requires virtualenv, MySQL, ...
+  doCheck = false;
+
+  meta = with lib; {
+    description = "The Mozilla Token Server";
+    homepage = https://github.com/mozilla-services/tokenserver;
+    license = licenses.mpl20;
+  };
 }

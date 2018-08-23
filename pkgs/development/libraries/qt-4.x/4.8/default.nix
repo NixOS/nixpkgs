@@ -6,7 +6,7 @@
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
 , flashplayerFix ? false, gdk_pixbuf
-, gtkStyle ? true, gtk2
+, gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
 , developerBuild ? false
 , docs ? false
@@ -139,37 +139,40 @@ stdenv.mkDerivation rec {
 
   prefixKey = "-prefix ";
 
-  ${if stdenv.hostPlatform == stdenv.buildPlatform then null else "configurePlatforms"} = [];
+  configurePlatforms = [];
   configureFlags = let
+    mk = cond: name: "-${lib.optionalString (!cond) "no-"}${name}";
     platformFlag =
       if stdenv.hostPlatform != stdenv.buildPlatform
       then "-xplatform"
       else "-platform";
-    in (if stdenv.hostPlatform == stdenv.buildPlatform then ''
-      -v -no-separate-debug-info -release -fast -confirm-license -opensource
+  in (if stdenv.hostPlatform != stdenv.buildPlatform then [
+    # I've not tried any case other than i686-pc-mingw32.
+    # -nomake tools: it fails linking some asian language symbols
+    # -no-svg: it fails to build on mingw64
+    "-static" "-release" "-confirm-license" "-opensource"
+    "-no-opengl" "-no-phonon"
+    "-no-svg"
+    "-make" "qmake" "-make" "libs" "-nomake" "tools"
+  ] else [
+    "-v" "-no-separate-debug-info" "-release" "-fast" "-confirm-license" "-opensource"
 
-      -${if stdenv.isFreeBSD then "no-" else ""}opengl -xrender -xrandr -xinerama -xcursor -xinput -xfixes -fontconfig
-      -qdbus -${if cups == null then "no-" else ""}cups -glib -dbus-linked -openssl-linked
+    (mk (!stdenv.isFreeBSD) "opengl") "-xrender" "-xrandr" "-xinerama" "-xcursor" "-xinput" "-xfixes" "-fontconfig"
+    "-qdbus" (mk (cups != null) "cups") "-glib" "-dbus-linked" "-openssl-linked"
 
-      ${if mysql != null then "-plugin" else "-no"}-sql-mysql -system-sqlite
+    "-${if mysql != null then "plugin" else "no"}-sql-mysql" "-system-sqlite"
 
-      -exceptions -xmlpatterns
+    "-exceptions" "-xmlpatterns"
 
-      -make libs -make tools -make translations
-      -${if demos then "" else "no"}make demos
-      -${if examples then "" else "no"}make examples
-      -${if docs then "" else "no"}make docs
-
-      -no-phonon ${if buildWebkit then "" else "-no"}-webkit ${if buildMultimedia then "" else "-no"}-multimedia -audio-backend
-      ${if developerBuild then "-developer-build" else ""}
-    '' else ''
-      -static -release -confirm-license -opensource
-      -no-opengl -no-phonon
-      -no-svg
-      -make qmake -make libs -nomake tools
-      -nomake demos -nomake examples -nomake docs
-    '') + lib.optionalString stdenv.hostPlatform.isDarwin "${platformFlag} unsupported/macx-clang-libc++"
-        + lib.optionalString stdenv.hostPlatform.isMinGW  "${platformFlag} win32-g++-4.6";
+    "-make" "libs" "-make" "tools" "-make" "translations"
+    "-no-phonon" (mk buildWebkit "webkit") (mk buildMultimedia "multimedia") "-audio-backend"
+  ]) ++ [
+    "-${if demos then "" else "no"}make" "demos"
+    "-${if examples then "" else "no"}make" "examples"
+    "-${if docs then "" else "no"}make" "docs"
+  ] ++ lib.optional developerBuild "-developer-build"
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ platformFlag "unsupported/macx-clang-libc++" ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [ platformFlag "win32-g++-4.6" ];
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
@@ -219,7 +222,7 @@ stdenv.mkDerivation rec {
     cp bin/qmake* $out/bin
   '';
 
-  dontStrip = if stdenv.hostPlatform == stdenv.buildPlatform then null else true;
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
     homepage    = http://qt-project.org/;

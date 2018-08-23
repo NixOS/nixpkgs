@@ -10,6 +10,8 @@
 , pkgconfig
 , openssl
 , systemd
+, cmake
+, perl
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,12 +20,15 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "paritytech";
-    repo = "parity";
+    repo = "parity-ethereum";
     rev = "v${version}";
     inherit sha256;
   };
 
-  buildInputs = [ pkgconfig systemd.lib systemd.dev openssl openssl.dev ]; 
+  buildInputs = [
+    pkgconfig cmake perl
+    systemd.lib systemd.dev openssl openssl.dev
+  ];
 
   # Some checks failed
   doCheck = false;

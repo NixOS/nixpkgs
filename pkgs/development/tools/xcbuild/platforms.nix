@@ -294,8 +294,7 @@ runCommand "Platforms" {} ''
   install -D ${writeText "PackageTypes.xcspec" (toPlist {} PackageTypes)} $platform/Developer/Library/Xcode/Specifications/PackageTypes.xcspec
   install -D ${writeText "ProductTypes.xcspec" (toPlist {} ProductTypes)} $platform/Developer/Library/Xcode/Specifications/ProductTypes.xcspec
 
-  # per-platform bins go here
-  mkdir -p $platform/usr/bin
+  ln -s $platform $platform/usr
 
   mkdir -p $platform/Developer
   ln -s ${sdks} $platform/Developer/SDKs

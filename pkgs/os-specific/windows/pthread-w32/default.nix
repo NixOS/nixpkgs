@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, hostPlatform, buildPlatform }:
+{ fetchurl, stdenv, hostPlatform, buildPlatform, mingwrt }:
 
 # This file is tweaked for cross-compilation only.
 assert hostPlatform != buildPlatform;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
                s/dlltool/i686-pc-mingw32-dlltool/g'
     '';
 
-  buildInputs = [ mingw_headers ];
+  buildInputs = [ mingwrt ];
 
   buildPhase = "make GC";        # to build the GNU C dll with C cleanup code
 

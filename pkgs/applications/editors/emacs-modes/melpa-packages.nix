@@ -52,18 +52,8 @@ self:
       # part of a larger package
       caml = dontConfigure super.caml;
 
-      # part of a larger package
-      # upstream issue: missing package version
-      cmake-mode = markBroken (dontConfigure super.cmake-mode);
-
       # Expects bash to be at /bin/bash
       company-rtags = markBroken super.company-rtags;
-
-      # upstream issue: missing file header
-      connection = markBroken super.connection;
-
-      # upstream issue: missing file header
-      dictionary = markBroken super.dictionary;
 
       easy-kill-extras = super.easy-kill-extras.override {
         inherit (self.melpaPackages) easy-kill;
@@ -78,6 +68,17 @@ self:
       ess-R-data-view = super.ess-R-data-view.override {
         inherit (self.melpaPackages) ess ctable popup;
       };
+
+      evil-magit = super.evil-magit.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      # missing dependencies
+      evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
+        packageRequires = with self; [ evil highlight ];
+      });
 
       # missing OCaml
       flycheck-ocaml = markBroken super.flycheck-ocaml;
@@ -108,14 +109,16 @@ self:
       # upstream issue: missing file header
       initsplit = super.initsplit;
 
+      # tries to write a log file to $HOME
+      insert-shebang = super.insert-shebang.overrideAttrs (attrs: {
+        HOME = "/tmp";
+      });
+
       # Expects bash to be at /bin/bash
       ivy-rtags = markBroken super.ivy-rtags;
 
       # upstream issue: missing file header
       jsfmt = markBroken super.jsfmt;
-
-      # upstream issue: missing file header
-      link = markBroken super.link;
 
       # upstream issue: missing file header
       maxframe = markBroken super.maxframe;
@@ -130,6 +133,18 @@ self:
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
+
+      magit-annex = super.magit-annex.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-gitflow = super.magit-gitflow.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # missing OCaml
       merlin = markBroken super.merlin;
@@ -154,8 +169,10 @@ self:
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
          }));
 
-      # upstream issue: truncated file
-      powershell = markBroken super.powershell;
+      # tries to write to $HOME
+      php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
+        HOME = "/tmp";
+      });
 
       # upstream issue: mismatched filename
       processing-snippets = markBroken super.processing-snippets;
@@ -184,6 +201,12 @@ self:
 
       # missing OCaml
       utop = markBroken super.utop;
+
+      vdiff-magit =
+        (super.vdiff-magit.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        }));
 
       # upstream issue: missing file header
       voca-builder = markBroken super.voca-builder;

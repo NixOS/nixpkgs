@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
-  version = "1.3";
-  name = "apt-offline-${version}";
+python3Packages.buildPythonApplication rec {
+  version = "1.8.1";
+  pname = "apt-offline";
 
-  src = fetchurl {
-    #url = "https://alioth.debian.org/frs/download.php/file/3855/${name}.tar.gz";
-    # The above URL has two problems: it requires one to be logged in, and it
-    # uses a CA that curl doesn't know about.  Instead, we use this mirror:
-    url = "http://www.falsifian.org/a/cFi5/${name}.tar.gz";
-    sha256 = "1sp7ai2abzhbg9y84700qziybphvpzl2nk3mz1d1asivzyjvxlxy";
+  src = fetchFromGitHub {
+    owner = "rickysarraf";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0k79d1d8jiwg1s684r05njmk1dz8gsb8a9bl4agz7m31snc11j84";
   };
 
   doCheck = false;

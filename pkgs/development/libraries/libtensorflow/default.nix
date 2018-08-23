@@ -31,19 +31,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "libtensorflow";
-  version = "1.8.0";
+  version = "1.9.0";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://storage.googleapis.com/tensorflow/${pname}/${pname}-${tfType}-${system}-${version}.tar.gz";
     sha256 =
       if system == "linux-x86_64" then
         if cudaSupport
-        then "0m1g4sqr9as0jgfx7wlyay2nkad6wgvsyk2gvhfkqkq5sm1vbx85"
-        else "0qzy15rc3x961cyi3bqnygrcnw4x69r28xkwhpwrv1r0gi6k73ha"
+        then "1q3mh06x344im25z7r3vgrfksfdsi8fh8ldn6y2mf86h4d11yxc3"
+        else "0l9ps115ng5ffzdwphlqmj3jhidps2v5afppdzrbpzmy41xz0z21"
       else if system == "darwin-x86_64" then
         if cudaSupport
         then unavailable
-        else "0q8lmyj8l50hl6l48c640ixanvhqf2836bicyl9p2x8sj97b7y8l"
+        else "1qj0v1706w6mczycdsh38h2glyv5d25v62kdn98wxd5rw8f9v657"
       else unavailable;
   };
 

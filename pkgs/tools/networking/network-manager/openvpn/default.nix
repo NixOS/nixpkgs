@@ -2,13 +2,13 @@
 , withGnome ? true, gnome3, kmod }:
 
 let
-  pname   = "NetworkManager-openvpn";
+  pname = "NetworkManager-openvpn";
   version = "1.8.4";
 in stdenv.mkDerivation rec {
-  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0gyrv46h9k17qym48qacq4zpxbap6hi17shn921824zm98m2bdvr";
   };
 
@@ -19,15 +19,13 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ openvpn networkmanager libsecret ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome-keyring
-                                        gnome3.networkmanagerapplet ];
+  buildInputs = [ openvpn networkmanager ]
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret gnome3.networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig libxml2 ];
 
   configureFlags = [
-    "${if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome"}"
-    "--disable-static"
+    "--with-gnome=${if withGnome then "yes" else "no"}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
   ];
 
@@ -38,8 +36,9 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "NetworkManager's OpenVPN plugin";
     inherit (networkmanager.meta) maintainers platforms;
+    license = licenses.gpl2Plus;
   };
 }

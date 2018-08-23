@@ -31,7 +31,8 @@ with lib;
     #services.rogue.enable = true;
 
     # Disable some other stuff we don't need.
-    security.sudo.enable = false;
+    security.sudo.enable = mkDefault false;
+    services.udisks2.enable = mkDefault false;
 
     # Automatically log in at the virtual consoles.
     services.mingetty.autologinUser = "root";
@@ -86,5 +87,9 @@ with lib;
     networking.firewall.logRefusedConnections = mkDefault false;
 
     environment.systemPackages = [ pkgs.vim ];
+
+
+    # Allow the user to log in as root without a password.
+    users.users.root.initialHashedPassword = "";
   };
 }

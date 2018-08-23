@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
-    libpciaccess lvm2 lvm2 utillinux systemd libnl numad zfs
+    libpciaccess lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
   ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
@@ -66,6 +66,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/var/lib"
     "--with-libpcap"
+    "--with-qemu"
     "--with-vmware"
     "--with-vbox"
     "--with-test"

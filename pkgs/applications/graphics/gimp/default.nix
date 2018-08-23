@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
+{ stdenv, fetchurl, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
@@ -9,14 +9,14 @@ let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   name = "gimp-${version}";
-  version = "2.10.4";
+  version = "2.10.6";
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
-    sha256 = "14pi0q3wwkapy0inqxk1hjsa2h8lff1z4wgdsyrk29jaw66pdc7z";
+    sha256 = "07qh2ljbza2mph1gh8sicn27qihhj8hx3ivvry2874cfh8ghgj2f";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig intltool gettext wrapPython ];
+  nativeBuildInputs = [ pkgconfig intltool gettext wrapPython ];
   propagatedBuildInputs = [ gegl ]; # needed by gimp-2.0.pc
   buildInputs = [
     babl gegl gtk2 glib gdk_pixbuf pango cairo gexiv2 harfbuzz isocodes

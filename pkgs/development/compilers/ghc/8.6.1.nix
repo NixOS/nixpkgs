@@ -77,12 +77,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.6.0.20180714";
+  version = "8.6.0.20180810";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.6.1-alpha2/ghc-${version}-src.tar.xz";
-    sha256 = "1jrkqrqdv2z9i9s1xaxhci34c9rjvlgr40y34bxsfj0hj1r28409";
+    url = "https://downloads.haskell.org/~ghc/8.6.1-beta1/ghc-${version}-src.tar.xz";
+    sha256 = "0b3nyjs4lsh67lfw7wh7r7kkf4g2xiypdxd77aycmwd3pdxj09yw";
   };
 
   enableParallelBuilding = true;
@@ -98,16 +98,16 @@ stdenv.mkDerivation (rec {
     done
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
-    export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+    export CC="$CC_FOR_TARGET"
+    export CXX="$CXX_FOR_TARGET"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
-    export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
-    export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
-    export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
-    export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
-    export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
-    export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+    export AS="$AS_FOR_TARGET"
+    export AR="$AR_FOR_TARGET"
+    export NM="$NM_FOR_TARGET"
+    export RANLIB="$RANLIB_FOR_TARGET"
+    export READELF="$READELF_FOR_TARGET"
+    export STRIP="$STRIP_FOR_TARGET"
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure

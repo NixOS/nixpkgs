@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
     sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in
   '';
 
-  configureFlags = if stdenv.cc.isClang
-    then [ "--disable-werror" ] else null;
+  configureFlags = stdenv.lib.optional stdenv.cc.isClang "--disable-werror";
 
   CXXFLAGS="--std=gnu++0x"; # For c++11 constants in lcms2.h
 
@@ -27,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "A library providing ability to interpret and import Corel Draw drawings into various applications";
     homepage = http://www.freedesktop.org/wiki/Software/libcdr;
     platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.mpl20;
   };
 }

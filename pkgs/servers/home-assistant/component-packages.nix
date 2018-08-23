@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.74.2";
+  version = "0.76.1";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -47,6 +47,7 @@
     "august" = ps: with ps; [  ];
     "auth" = ps: with ps; [ aiohttp-cors ];
     "auth.indieauth" = ps: with ps; [  ];
+    "auth.login_flow" = ps: with ps; [  ];
     "automation" = ps: with ps; [  ];
     "automation.event" = ps: with ps; [  ];
     "automation.homeassistant" = ps: with ps; [  ];
@@ -111,6 +112,7 @@
     "binary_sensor.netatmo" = ps: with ps; [  ];
     "binary_sensor.nx584" = ps: with ps; [  ];
     "binary_sensor.octoprint" = ps: with ps; [  ];
+    "binary_sensor.openuv" = ps: with ps; [  ];
     "binary_sensor.pilight" = ps: with ps; [  ];
     "binary_sensor.ping" = ps: with ps; [  ];
     "binary_sensor.qwikswitch" = ps: with ps; [  ];
@@ -128,6 +130,7 @@
     "binary_sensor.skybell" = ps: with ps; [  ];
     "binary_sensor.sleepiq" = ps: with ps; [  ];
     "binary_sensor.spc" = ps: with ps; [  ];
+    "binary_sensor.tahoma" = ps: with ps; [  ];
     "binary_sensor.tapsaff" = ps: with ps; [  ];
     "binary_sensor.tcp" = ps: with ps; [  ];
     "binary_sensor.tellduslive" = ps: with ps; [  ];
@@ -225,10 +228,12 @@
     "climate.proliphix" = ps: with ps; [  ];
     "climate.radiotherm" = ps: with ps; [  ];
     "climate.sensibo" = ps: with ps; [  ];
+    "climate.spider" = ps: with ps; [  ];
     "climate.tado" = ps: with ps; [  ];
     "climate.tesla" = ps: with ps; [  ];
     "climate.toon" = ps: with ps; [  ];
     "climate.touchline" = ps: with ps; [  ];
+    "climate.tuya" = ps: with ps; [  ];
     "climate.venstar" = ps: with ps; [  ];
     "climate.vera" = ps: with ps; [  ];
     "climate.wink" = ps: with ps; [  ];
@@ -259,6 +264,8 @@
     "counter" = ps: with ps; [  ];
     "cover" = ps: with ps; [  ];
     "cover.abode" = ps: with ps; [  ];
+    "cover.aladdin_connect" = ps: with ps; [  ];
+    "cover.brunt" = ps: with ps; [  ];
     "cover.command_line" = ps: with ps; [  ];
     "cover.demo" = ps: with ps; [  ];
     "cover.garadget" = ps: with ps; [  ];
@@ -282,6 +289,7 @@
     "cover.tellduslive" = ps: with ps; [  ];
     "cover.tellstick" = ps: with ps; [  ];
     "cover.template" = ps: with ps; [  ];
+    "cover.tuya" = ps: with ps; [  ];
     "cover.velbus" = ps: with ps; [  ];
     "cover.vera" = ps: with ps; [  ];
     "cover.wink" = ps: with ps; [  ];
@@ -330,6 +338,7 @@
     "device_tracker.owntracks" = ps: with ps; [ libnacl paho-mqtt ];
     "device_tracker.owntracks_http" = ps: with ps; [ aiohttp-cors libnacl ];
     "device_tracker.ping" = ps: with ps; [  ];
+    "device_tracker.ritassist" = ps: with ps; [  ];
     "device_tracker.sky_hub" = ps: with ps; [  ];
     "device_tracker.snmp" = ps: with ps; [ pysnmp ];
     "device_tracker.swisscom" = ps: with ps; [  ];
@@ -375,7 +384,7 @@
     "fan.isy994" = ps: with ps; [  ];
     "fan.mqtt" = ps: with ps; [ paho-mqtt ];
     "fan.template" = ps: with ps; [  ];
-    "fan.velbus" = ps: with ps; [  ];
+    "fan.tuya" = ps: with ps; [  ];
     "fan.wink" = ps: with ps; [  ];
     "fan.xiaomi_miio" = ps: with ps; [ construct ];
     "fan.zha" = ps: with ps; [  ];
@@ -482,6 +491,7 @@
     "light.enocean" = ps: with ps; [  ];
     "light.eufy" = ps: with ps; [  ];
     "light.flux_led" = ps: with ps; [  ];
+    "light.futurenow" = ps: with ps; [  ];
     "light.greenwave" = ps: with ps; [  ];
     "light.group" = ps: with ps; [  ];
     "light.hive" = ps: with ps; [  ];
@@ -518,6 +528,7 @@
     "light.rpi_gpio_pwm" = ps: with ps; [  ];
     "light.scsgate" = ps: with ps; [  ];
     "light.sensehat" = ps: with ps; [  ];
+    "light.sisyphus" = ps: with ps; [  ];
     "light.skybell" = ps: with ps; [  ];
     "light.tellduslive" = ps: with ps; [  ];
     "light.tellstick" = ps: with ps; [  ];
@@ -526,7 +537,6 @@
     "light.tplink" = ps: with ps; [  ];
     "light.tradfri" = ps: with ps; [  ];
     "light.tuya" = ps: with ps; [  ];
-    "light.velbus" = ps: with ps; [  ];
     "light.vera" = ps: with ps; [  ];
     "light.wemo" = ps: with ps; [  ];
     "light.wink" = ps: with ps; [  ];
@@ -590,6 +600,7 @@
     "media_player.denon" = ps: with ps; [  ];
     "media_player.denonavr" = ps: with ps; [  ];
     "media_player.directv" = ps: with ps; [  ];
+    "media_player.dlna_dmr" = ps: with ps; [  ];
     "media_player.dunehd" = ps: with ps; [  ];
     "media_player.emby" = ps: with ps; [  ];
     "media_player.epson" = ps: with ps; [  ];
@@ -615,11 +626,13 @@
     "media_player.pandora" = ps: with ps; [ pexpect ];
     "media_player.philips_js" = ps: with ps; [  ];
     "media_player.pioneer" = ps: with ps; [  ];
+    "media_player.pjlink" = ps: with ps; [  ];
     "media_player.plex" = ps: with ps; [  ];
     "media_player.roku" = ps: with ps; [  ];
     "media_player.russound_rio" = ps: with ps; [  ];
     "media_player.russound_rnet" = ps: with ps; [  ];
     "media_player.samsungtv" = ps: with ps; [ wakeonlan ];
+    "media_player.sisyphus" = ps: with ps; [  ];
     "media_player.snapcast" = ps: with ps; [  ];
     "media_player.songpal" = ps: with ps; [  ];
     "media_player.sonos" = ps: with ps; [ soco ];
@@ -680,7 +693,7 @@
     "notify.gntp" = ps: with ps; [  ];
     "notify.group" = ps: with ps; [  ];
     "notify.hipchat" = ps: with ps; [  ];
-    "notify.html5" = ps: with ps; [ pyjwt aiohttp-cors ];
+    "notify.html5" = ps: with ps; [ aiohttp-cors ];
     "notify.instapush" = ps: with ps; [  ];
     "notify.ios" = ps: with ps; [ aiohttp-cors zeroconf ];
     "notify.joaoapps_join" = ps: with ps; [  ];
@@ -712,7 +725,6 @@
     "notify.synology_chat" = ps: with ps; [  ];
     "notify.syslog" = ps: with ps; [  ];
     "notify.telegram" = ps: with ps; [ python-telegram-bot ];
-    "notify.telstra" = ps: with ps; [  ];
     "notify.twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
     "notify.twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
     "notify.twitter" = ps: with ps; [  ];
@@ -725,6 +737,7 @@
     "onboarding" = ps: with ps; [ aiohttp-cors ];
     "onboarding.const" = ps: with ps; [  ];
     "onboarding.views" = ps: with ps; [  ];
+    "openuv" = ps: with ps; [  ];
     "panel_custom" = ps: with ps; [ aiohttp-cors ];
     "panel_iframe" = ps: with ps; [ aiohttp-cors ];
     "persistent_notification" = ps: with ps; [  ];
@@ -770,6 +783,7 @@
     "scene.litejet" = ps: with ps; [  ];
     "scene.lutron_caseta" = ps: with ps; [  ];
     "scene.tahoma" = ps: with ps; [  ];
+    "scene.tuya" = ps: with ps; [  ];
     "scene.velux" = ps: with ps; [  ];
     "scene.vera" = ps: with ps; [  ];
     "scene.wink" = ps: with ps; [  ];
@@ -838,6 +852,7 @@
     "sensor.eliqonline" = ps: with ps; [  ];
     "sensor.emoncms" = ps: with ps; [  ];
     "sensor.enocean" = ps: with ps; [  ];
+    "sensor.enphase_envoy" = ps: with ps; [  ];
     "sensor.envirophat" = ps: with ps; [  ];
     "sensor.envisalink" = ps: with ps; [  ];
     "sensor.etherscan" = ps: with ps; [  ];
@@ -896,6 +911,7 @@
     "sensor.loopenergy" = ps: with ps; [  ];
     "sensor.luftdaten" = ps: with ps; [ luftdaten ];
     "sensor.lyft" = ps: with ps; [  ];
+    "sensor.magicseaweed" = ps: with ps; [  ];
     "sensor.melissa" = ps: with ps; [  ];
     "sensor.metoffice" = ps: with ps; [  ];
     "sensor.mfi" = ps: with ps; [  ];
@@ -929,6 +945,7 @@
     "sensor.openexchangerates" = ps: with ps; [  ];
     "sensor.openhardwaremonitor" = ps: with ps; [  ];
     "sensor.opensky" = ps: with ps; [  ];
+    "sensor.openuv" = ps: with ps; [  ];
     "sensor.openweathermap" = ps: with ps; [ pyowm ];
     "sensor.otp" = ps: with ps; [  ];
     "sensor.pi_hole" = ps: with ps; [  ];
@@ -952,6 +969,7 @@
     "sensor.rfxtrx" = ps: with ps; [  ];
     "sensor.ring" = ps: with ps; [  ];
     "sensor.ripple" = ps: with ps; [  ];
+    "sensor.rmvtransport" = ps: with ps; [  ];
     "sensor.sabnzbd" = ps: with ps; [  ];
     "sensor.scrape" = ps: with ps; [ beautifulsoup4 ];
     "sensor.season" = ps: with ps; [ ephem ];
@@ -1048,6 +1066,7 @@
     "shell_command" = ps: with ps; [  ];
     "shiftr" = ps: with ps; [ paho-mqtt ];
     "shopping_list" = ps: with ps; [ aiohttp-cors ];
+    "sisyphus" = ps: with ps; [  ];
     "skybell" = ps: with ps; [  ];
     "sleepiq" = ps: with ps; [  ];
     "smappee" = ps: with ps; [  ];
@@ -1055,6 +1074,7 @@
     "sonos" = ps: with ps; [ soco ];
     "spaceapi" = ps: with ps; [ aiohttp-cors ];
     "spc" = ps: with ps; [ websockets ];
+    "spider" = ps: with ps; [  ];
     "splunk" = ps: with ps; [  ];
     "statsd" = ps: with ps; [ statsd ];
     "sun" = ps: with ps; [  ];
@@ -1070,6 +1090,7 @@
     "switch.bbb_gpio" = ps: with ps; [  ];
     "switch.broadlink" = ps: with ps; [  ];
     "switch.command_line" = ps: with ps; [  ];
+    "switch.deconz" = ps: with ps; [  ];
     "switch.deluge" = ps: with ps; [ deluge-client ];
     "switch.demo" = ps: with ps; [  ];
     "switch.digital_ocean" = ps: with ps; [ digital-ocean ];
@@ -1128,6 +1149,7 @@
     "switch.skybell" = ps: with ps; [  ];
     "switch.smappee" = ps: with ps; [  ];
     "switch.snmp" = ps: with ps; [ pysnmp ];
+    "switch.spider" = ps: with ps; [  ];
     "switch.tahoma" = ps: with ps; [  ];
     "switch.tellduslive" = ps: with ps; [  ];
     "switch.tellstick" = ps: with ps; [  ];

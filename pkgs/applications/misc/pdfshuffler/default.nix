@@ -36,5 +36,6 @@ python3Packages.buildPythonApplication rec {
     description = "Merge or split pdf documents and rotate, crop and rearrange their pages";
     platforms = platforms.linux;
     maintainers = with maintainers; [ mic92 ];
+    license = licenses.gpl3;
   };
 }

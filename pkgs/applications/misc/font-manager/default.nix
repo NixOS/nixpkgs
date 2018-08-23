@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
-  configureFlags = "--disable-pycompile";
+  configureFlags = [ "--disable-pycompile" ];
 
   meta = {
     homepage = https://fontmanager.github.io/;

@@ -112,12 +112,10 @@ let
                      main = defaultMain
                    '';
 
-  hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
-
   # We cannot enable -j<n> parallelism for libraries because GHC is far more
   # likely to generate a non-determistic library ID in that case. Further
   # details are at <https://github.com/peti/ghc-library-id-bug>.
-  enableParallelBuilding = (versionOlder "7.8" ghc.version && !hasActiveLibrary) || versionOlder "8.0.1" ghc.version;
+  enableParallelBuilding = (versionOlder "7.8" ghc.version && !isLibrary) || versionOlder "8.0.1" ghc.version;
 
   crossCabalFlags = [
     "--with-ghc=${ghc.targetPrefix}ghc"
@@ -237,8 +235,8 @@ stdenv.mkDerivation ({
   inherit src;
 
   inherit depsBuildBuild nativeBuildInputs;
-  buildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) propagatedBuildInputs;
-  propagatedBuildInputs = optionals hasActiveLibrary propagatedBuildInputs;
+  buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs;
+  propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
 
@@ -256,7 +254,7 @@ stdenv.mkDerivation ({
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
-    ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
+    ${optionalString (isLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
     setupPackageConfDir="$TMPDIR/setup-package.conf.d"
     mkdir -p $setupPackageConfDir
@@ -369,10 +367,10 @@ stdenv.mkDerivation ({
 
   haddockPhase = ''
     runHook preHaddock
-    ${optionalString (doHaddock && hasActiveLibrary) ''
+    ${optionalString (doHaddock && isLibrary) ''
       ${setupCommand} haddock --html \
         ${optionalString doHoogle "--hoogle"} \
-        ${optionalString (hasActiveLibrary && hyperlinkSource) "--hyperlink-source"}
+        ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"}
     ''}
     runHook postHaddock
   '';
@@ -380,7 +378,7 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    ${if !hasActiveLibrary then "${setupCommand} install" else ''
+    ${if !isLibrary then "${setupCommand} install" else ''
       ${setupCommand} copy
       local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
@@ -431,7 +429,7 @@ stdenv.mkDerivation ({
 
     compiler = ghc;
 
-    isHaskellLibrary = hasActiveLibrary;
+    isHaskellLibrary = isLibrary;
 
     # TODO: ask why the split outputs are configurable at all?
     # TODO: include tests for split if possible

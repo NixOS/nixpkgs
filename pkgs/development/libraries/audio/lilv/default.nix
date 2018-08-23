@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lilv-${version}";
-  version = "0.24.2";
+  version = "0.24.4";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "08m5a372pr1l7aii9s3pic5nm68gynx1n1bc7bnlswziq6qnbv7p";
+    sha256 = "0f24cd7wkk5l969857g2ydz2kjjrkvvddg1g87xzzs78lsvq8fy3";
   };
 
   nativeBuildInputs = [ pkgconfig ];

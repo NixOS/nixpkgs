@@ -12,19 +12,19 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configurePhase = ''
+    CC=${stdenv.cc.targetPrefix}cc
+    CXX=${stdenv.cc.targetPrefix}c++
+
     # Set up picosat, so we can build 'aigbmc'
-    echo $(pwd)
-    ls ..
     mkdir ../picosat
     ln -s ${picosat}/include/picosat/picosat.h ../picosat/picosat.h
     ln -s ${picosat}/lib/picosat.o             ../picosat/picosat.o
     ln -s ${picosat}/share/picosat.version     ../picosat/VERSION
-    ls ..
     ./configure.sh
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $dev/include $lib/lib
 
     # Do the installation manually, as the Makefile has odd
     # cyrillic characters, and this is easier than adding
@@ -41,7 +41,12 @@ stdenv.mkDerivation rec {
     for x in ''${BINS[*]}; do
       install -m 755 -s $x $out/bin/$x
     done
+
+    cp -v aiger.o $lib/lib
+    cp -v aiger.h $dev/include
   '';
+
+  outputs = [ "out" "dev" "lib" ];
 
   meta = {
     description = "And-Inverter Graph (AIG) utilities";

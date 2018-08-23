@@ -5,8 +5,9 @@ with lib;
 let
   cfg = config.virtualisation.virtualbox.host;
 
-  virtualbox = pkgs.virtualbox.override {
-    inherit (cfg) enableExtensionPack enableHardening headless;
+  virtualbox = cfg.package.override {
+    inherit (cfg) enableHardening headless;
+    extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
 
   kernelModules = config.boot.kernelPackages.virtualbox.override {
@@ -28,7 +29,25 @@ in
       '';
     };
 
-    enableExtensionPack = mkEnableOption "VirtualBox extension pack";
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack" // {
+      description = ''
+        Whether to install the Oracle Extension Pack for VirtualBox.
+
+        <important><para>
+          You must set <literal>nixpkgs.config.allowUnfree = true</literal> in
+          order to use this.  This requires you accept the VirtualBox PUEL.
+        </para></important>
+      '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.virtualbox;
+      defaultText = "pkgs.virtualbox";
+      description = ''
+        Which VirtualBox package to use.
+      '';
+    };
 
     addNetworkInterface = mkOption {
       type = types.bool;

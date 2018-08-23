@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
     description = "VOIP/Videoconferencing app with full SIP and H.323 support";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 
   passthru = {

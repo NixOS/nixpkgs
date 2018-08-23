@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
                   vala libsecret libxml2 libsoup nspr nss intltool db ];
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = "--disable-fatal-warnings";
+  configureFlags = [ "--disable-fatal-warnings" ];
 
   NIX_CFLAGS_COMPILE = ["-I${nss.dev}/include/nss"
                         "-I${dbus-glib.dev}/include/dbus-1.0" "-I${dbus.dev}/include/dbus-1.0"];

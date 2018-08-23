@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan philandstuff ];
     platforms = platforms.linux;
+    broken = true; # 2018-08-07
   };
 
   name = "bazel-${version}";

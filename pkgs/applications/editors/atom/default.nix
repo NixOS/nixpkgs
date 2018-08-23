@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, makeWrapper, gvfs, atomEnv}:
+{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, gtk3, atomEnv }:
 
 let
   common = pname: {version, sha256, beta ? null}:
@@ -14,7 +14,19 @@ let
       inherit sha256;
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [
+      wrapGAppsHook  # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+    ];
+
+    buildInputs = [
+      gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+    ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix "PATH" : "${gvfs}/bin" \
+      )
+    '';
 
     buildCommand = ''
       mkdir -p $out/usr/
@@ -25,9 +37,6 @@ let
       rm -r $out/share/lintian
       rm -r $out/usr/
       sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
-      # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
-      wrapProgram $out/bin/${pname} \
-        --prefix "PATH" : "${gvfs}/bin"
 
       fixupPhase
 

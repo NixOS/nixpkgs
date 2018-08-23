@@ -36,5 +36,6 @@ in stdenv.mkDerivation rec {
     description = "A DOS emulator";
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ binarin ];
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

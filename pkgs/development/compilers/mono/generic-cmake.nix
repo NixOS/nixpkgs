@@ -80,11 +80,13 @@ stdenv.mkDerivation rec {
 
   inherit enableParallelBuilding;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice obadz vrthra ];
-    license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
+    platforms = with platforms; darwin ++ linux;
+    maintainers = with maintainers; [ thoughtpolice obadz vrthra ];
+    license = licenses.free; # Combination of LGPL/X11/GPL ?
+    # 2018-08-21: mono 5.x is broken on aarch64 since at least 2017-07-06
+    broken = stdenv.isAarch64 && (versionAtLeast version "5");
   };
 }

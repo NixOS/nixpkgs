@@ -1,10 +1,11 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gettext, perl, makeWrapper, shared-mime-info
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at-spi2-atk, gobjectIntrospection
-, xorg, epoxy, json-glib, libxkbcommon, gmp
+, xorg, epoxy, json-glib, libxkbcommon, gmp, gnome3
+, x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux, mesa_noglu, wayland, wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
-, darwin, gnome3
+, AppKit, Cocoa
 }:
 
 assert cupsSupport -> cups != null;
@@ -36,12 +37,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ libxkbcommon epoxy json-glib ];
+  buildInputs = [ libxkbcommon epoxy json-glib ]
+    ++ optional stdenv.isDarwin AppKit;
   propagatedBuildInputs = with xorg; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at-spi2-atk gnome3.gsettings-desktop-schemas
       libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
+    ++ optional stdenv.isDarwin Cocoa  # explicitly propagated, always needed
     ++ optionals waylandSupport [ mesa_noglu wayland wayland-protocols ]
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa ])
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
   #TODO: colord?
@@ -55,9 +57,9 @@ stdenv.mkDerivation rec {
     "--disable-debug"
     "--disable-dependency-tracking"
     "--disable-glibtest"
-    "--with-gdktarget=quartz"
+  ] ++ optional (stdenv.isDarwin && !x11Support)
     "--enable-quartz-backend"
-  ] ++ optional stdenv.isLinux [
+    ++ optional x11Support [
     "--enable-x11-backend"
   ] ++ optional waylandSupport [
     "--enable-wayland-backend"

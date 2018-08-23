@@ -50,8 +50,6 @@ let
 
     atd = callPackage ../development/ocaml-modules/atd { };
 
-    atdgen = callPackage ../development/ocaml-modules/atdgen { };
-
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
     bap = callPackage ../development/ocaml-modules/bap {
@@ -298,7 +296,7 @@ let
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 
     javalib = callPackage ../development/ocaml-modules/javalib {
-      extlib = ocaml_extlib_maximal;
+      extlib = ocaml_extlib;
     };
 
     dypgen = callPackage ../development/ocaml-modules/dypgen { };

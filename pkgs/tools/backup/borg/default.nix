@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.6";
+  version = "1.1.7";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "a1d2e474c85d3ad3d59b3f8209b5549653c88912082ea0159d27a2e80c910930";
+    sha256 = "f7b51a132e9edfbe1cacb4f478b28caf3622d79fffcb369bdae9f92d8c8a7fdc";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -50,11 +50,22 @@ python3Packages.buildPythonApplication rec {
     cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
   '';
 
+  checkInputs = with python3Packages; [
+    pytest
+  ];
+
+  checkPhase = ''
+    HOME=$(mktemp -d) py.test --pyargs borg.testsuite
+  '';
+
+  # 63 failures, needs pytest-benchmark
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
     homepage = https://www.borgbackup.org;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ flokli ];
+    maintainers = with maintainers; [ flokli dotlambda ];
   };
 }

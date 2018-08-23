@@ -109,7 +109,7 @@ let
   imagick = buildPecl {
     name = "imagick-3.4.3";
     sha256 = "0z2nc92xfc5axa9f2dy95rmsd2c81q8cs1pm4anh0a50x9g5ng0z";
-    configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
+    configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.pcre ];
   };
@@ -120,7 +120,7 @@ let
 
     sha256 = "04c35rj0cvq5ygn2jgmyvqcb0k8d03v4k642b6i37zgv7x15pbic";
 
-    configureFlags = "--with-zlib-dir=${pkgs.zlib.dev}";
+    configureFlags = [ "--with-zlib-dir=${pkgs.zlib.dev}" ];
 
     makeFlags = [ "CFLAGS=-fgnu89-inline" ];
   };
@@ -158,6 +158,13 @@ let
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ cyrus_sasl zlib ];
+  };
+
+  oci8 = buildPecl rec {
+    name = "oci8-2.1.8";
+    sha256 = "1bp6fss2f2qmd5bdk7x22j8vx5qivrdhz4x7csf29vjgj6gvchxy";
+    buildInputs = [ pkgs.re2c pkgs.oracle-instantclient ];
+    configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
   };
 
   pcs = buildPecl rec {

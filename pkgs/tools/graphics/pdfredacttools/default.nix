@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, imagemagick, exiftool, file, ghostscript }:
+{ stdenv, fetchFromGitHub, python2Packages, imagemagick, exiftool, file, ghostscript }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "pdf-redact-tools";
   version = "0.1.2";
 

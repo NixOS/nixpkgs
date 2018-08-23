@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yhy62vkbq8j8c9zaa6yzvn75cd99kfa8n2zfdwl80x019r711ww";
   };
 
-  configureFlags = "--with-scanner --disable-documentation";
+  configureFlags = [ "--with-scanner" "--disable-documentation" ];
 
   nativeBuildInputs = [ pkgconfig ];
 

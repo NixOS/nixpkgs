@@ -80,7 +80,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./build-fix.patch
-    #KRACKAttack.com
+
+    # KRACKAttack.com
     (fetchurl {
       url = "http://w1.fi/security/2017-1/rebased-v2.6-0001-hostapd-Avoid-key-reinstallation-in-FT-handshake.patch";
       sha256 = "02zl2x4pxay666yq18g4f3byccrzipfjbky1ydw62v15h76174aj";
@@ -112,6 +113,12 @@ stdenv.mkDerivation rec {
     (fetchurl {
       url = "http://w1.fi/security/2017-1/rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch";
       sha256 = "1ca312cixbld70rp12q7h66lnjjxzz0qag0ii2sg6cllgf2hv168";
+    })
+
+    # Unauthenticated EAPOL-Key decryption (CVE-2018-14526)
+    (fetchurl {
+      url = "https://w1.fi/security/2018-1/rebased-v2.6-0001-WPA-Ignore-unauthenticated-encrypted-EAPOL-Key-data.patch";
+      sha256 = "0z0zxc9wrikmvciyqpdhx0l5v7qsd8c6b5ph9h5rniqllpr3q34n";
     })
   ];
 

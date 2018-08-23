@@ -19,7 +19,7 @@
 
 buildGoPackage rec {
   name = "terraform-provider-libvirt-${version}";
-  version = "0.3";
+  version = "0.4";
 
   goPackagePath = "github.com/dmacvicar/terraform-provider-libvirt";
 
@@ -27,13 +27,13 @@ buildGoPackage rec {
     owner = "dmacvicar";
     repo = "terraform-provider-libvirt";
     rev = "v${version}";
-    sha256 = "004gxy55p5cf39f2zpah0i2zhvs4x6ixnxy8z9v7314604ggpkna";
+    sha256 = "05jkjp1kis4ncryv34pkb9cz2yhzbwg62x9qmlqsqlxwz9hqny3r";
   };
 
   buildInputs = [ libvirt pkgconfig makeWrapper ];
 
-  goDeps = ./deps.nix;
-
+  # mkisofs needed to create ISOs holding cloud-init data,
+  # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
   propagatedBuildInputs = [ cdrtools ];
 
   meta = with stdenv.lib; {

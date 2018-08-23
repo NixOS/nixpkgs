@@ -5,15 +5,16 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.21.1";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "191pmd7vpp9qni5l13fb5s8g1axniah8a6hhi31gp0848c8n7hlh";
+    sha256 = "1bzhqrc944rgpdnnid3c5h2r3dvyw70cs70hazzm0cv5aipdkhbl";
   };
 
+  # Patch hard-coded paths in the makefile
   patches = [ ./crawl_purify.patch ];
 
   nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
@@ -25,9 +26,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     cd crawl-ref/source
     echo "${version}" > util/release_ver
-    for i in util/*; do
-      patchShebangs $i
-    done
+    patchShebangs 'util'
     patchShebangs util/gen-mi-enum
     rm -rf contrib
   '';

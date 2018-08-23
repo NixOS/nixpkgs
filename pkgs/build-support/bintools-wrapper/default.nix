@@ -268,8 +268,8 @@ stdenv.mkDerivation {
       ##
 
       mkdir -p $man/nix-support $info/nix-support
-      printWords ${bintools.man or ""} >> $man/nix-support/propagated-build-inputs
-      printWords ${bintools.info or ""} >> $info/nix-support/propagated-build-inputs
+      echo ${bintools.man or ""} >> $man/nix-support/propagated-user-env-packages
+      echo ${bintools.info or ""} >> $info/nix-support/propagated-user-env-packages
     ''
 
     + ''

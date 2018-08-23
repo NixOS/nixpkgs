@@ -212,6 +212,9 @@ self: super: builtins.intersectAttrs super {
   # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
 
+  # Disable tests because they require a mattermost server
+  mattermost-api = dontCheck super.mattermost-api;
+
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 
@@ -264,11 +267,13 @@ self: super: builtins.intersectAttrs super {
       }
     );
 
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm; };
-  llvm-hs_6_3_0 = super.llvm-hs_6_3_0.override {
-    llvm-config = pkgs.llvm_6;
-    llvm-hs-pure = super.llvm-hs-pure_6_2_1;
-  };
+  llvm-hs =
+      let dontCheckDarwin = if pkgs.stdenv.isDarwin
+                            then dontCheck
+                            else pkgs.lib.id;
+      in dontCheckDarwin (super.llvm-hs.override {
+        llvm-config = pkgs.llvm_6;
+      });
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;

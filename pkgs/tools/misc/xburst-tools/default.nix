@@ -18,9 +18,10 @@ stdenv.mkDerivation {
     sh autogen.sh
   '';
 
-  configureFlags = if gccCross != null then
-    "--enable-firmware CROSS_COMPILE=${gccCross.targetPrefix}"
-    else "";
+  configureFlags = stdenv.lib.optionals (gccCross != null) [
+    "--enable-firmware"
+    "CROSS_COMPILE=${gccCross.targetPrefix}"
+  ];
 
   hardeningDisable = [ "pic" "stackprotector" ];
 
