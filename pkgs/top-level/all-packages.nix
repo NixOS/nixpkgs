@@ -9681,7 +9681,7 @@ with pkgs;
 
   cairo = callPackage ../development/libraries/cairo {
     glSupport = config.cairo.gl or (stdenv.isLinux &&
-      !stdenv.isAarch32 && !stdenv.isMips);
+      !stdenv.isAarch32 && !stdenv.isMips32);
   };
 
 

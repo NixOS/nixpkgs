@@ -24,7 +24,8 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  configureFlags = optional (!hostPlatform.isRiscV) "--enable-jit" ++ [
+  # AVAILABILITY OF JIT SUPPORT: https://www.pcre.org/original/doc/html/pcrejit.html#SEC3
+  configureFlags = optional (!hostPlatform.isRiscV && !hostPlatform.isMips64) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]

@@ -433,6 +433,24 @@ rec {
     };
   };
 
+  mips64el-multiplatform = {
+    name = "mips64el-multiplatform";
+    kernelArch = "mips";
+    kernelTarget = "vmlinux";
+    kernelAutoModules = true;
+#   kernelBaseConfig = "cavium_octeon_defconfig";
+    kernelBaseConfig = "malta_kvm_guest_defconfig";
+    kernelExtraConfig = ''
+      CPS y
+      MSA y
+    '';
+    gcc = {
+#     arch = "octeon+"; Cavium CN5020
+      arch = "mips64r2"; # qemu
+      abi = "64";
+    };
+  };
+
   ##
   ## Other
   ##
@@ -458,5 +476,6 @@ rec {
       "armv7l-linux" = armv7l-hf-multiplatform;
       "aarch64-linux" = aarch64-multiplatform;
       "mipsel-linux" = fuloong2f_n32;
+      "mips64el-linux" = mips64el-multiplatform;
     }.${system} or pcBase;
 }

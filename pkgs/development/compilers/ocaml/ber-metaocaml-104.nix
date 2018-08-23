@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   # Needed to avoid a SIGBUS on the final executable on mips
-  NIX_CFLAGS_COMPILE = if stdenv.isMips then "-fPIC" else "";
+  NIX_CFLAGS_COMPILE = if stdenv.isMips32 then "-fPIC" else "";
 
   x11env = buildEnv { name = "x11env"; paths = [libX11 xproto];};
   x11lib = x11env + "/lib";

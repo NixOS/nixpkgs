@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       url = https://github.com/sorear/libffi-riscv/commit/e46492e8bb1695a19bc1053ed869e6c2bab02ff2.patch;
       sha256 = "1vl1vbvdkigs617kckxvj8j4m2cwg62kxm1clav1w5rnw9afxg0y";
     })
-    ++ stdenv.lib.optionals stdenv.isMips [
+    ++ stdenv.lib.optionals (stdenv.isMips32 || stdenv.isMips64) [
       (fetchpatch {
         name = "0001-mips-Use-compiler-internal-define-for-linux.patch";
         url = "http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-support/libffi/libffi/0001-mips-Use-compiler-internal-define-for-linux.patch?id=318e33a708378652edcf61ce7d9d7f3a07743000";

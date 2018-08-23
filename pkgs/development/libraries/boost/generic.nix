@@ -69,7 +69,8 @@ let
     # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
     "abi=${if hostPlatform.parsed.cpu.family == "arm" then "aapcs"
            else if hostPlatform.isWindows then "ms"
-           else if hostPlatform.isMips then "o32"
+           else if hostPlatform.isMips32 then "o32"
+#          else if hostPlatform.isMips64 then "64"
            else "sysv"}"
   ] ++ optional (link != "static") "runtime-link=${runtime-link}"
     ++ optional (variant == "release") "debug-symbols=off"

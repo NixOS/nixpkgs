@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
     '';
 
   # One test fails on mips.
-  doCheck = !stdenv.isMips;
+  doCheck = !stdenv.isMips32;
 
   meta = with stdenv.lib; {
     description = "Linux user-space NFS utilities";

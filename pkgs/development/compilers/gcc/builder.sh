@@ -285,7 +285,8 @@ postInstall() {
     # Disable RANDMMAP on grsec, which causes segfaults when using
     # precompiled headers.
     # See https://bugs.gentoo.org/show_bug.cgi?id=301299#c31
-    paxmark r $out/libexec/gcc/*/*/{cc1,cc1plus}
+    # Error is ignored because paxmark fails on 'mips64el' with "not a valid ELF executable (invalid PT_ entry:7)"
+    paxmark r $out/libexec/gcc/*/*/{cc1,cc1plus} || true
 
     # Two identical man pages are shipped (moving and compressing is done later)
     ln -sf gcc.1 "$out"/share/man/man1/g++.1

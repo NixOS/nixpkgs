@@ -54,6 +54,6 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.mips;
+    platforms = stdenv.lib.platforms.mips32;
   };
 }

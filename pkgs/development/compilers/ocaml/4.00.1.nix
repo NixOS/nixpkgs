@@ -1,8 +1,8 @@
 { stdenv, fetchurl, ncurses, xlibsWrapper }:
 
 let
-   useX11 = !stdenv.isAarch32 && !stdenv.isMips;
-   useNativeCompilers = !stdenv.isMips;
+   useX11 = !stdenv.isAarch32 && !stdenv.isMips32;
+   useNativeCompilers = !stdenv.isMips32;
    inherit (stdenv.lib) optionals optionalString;
 in
 

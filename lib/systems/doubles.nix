@@ -9,6 +9,7 @@ let
     "aarch64-linux"
     "armv5tel-linux" "armv6l-linux" "armv7l-linux"
 
+    "mips64el-linux"
     "mipsel-linux"
 
     "i686-cygwin" "i686-freebsd" "i686-linux" "i686-netbsd" "i686-openbsd"
@@ -31,7 +32,8 @@ in rec {
   x86     = filterDoubles predicates.isx86;
   i686    = filterDoubles predicates.isi686;
   x86_64  = filterDoubles predicates.isx86_64;
-  mips    = filterDoubles predicates.isMips;
+  mips32  = filterDoubles predicates.isMips32;
+  mips64  = filterDoubles predicates.isMips64;
 
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
@@ -44,5 +46,5 @@ in rec {
   openbsd = filterDoubles predicates.isOpenBSD;
   unix    = filterDoubles predicates.isUnix;
 
-  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux"];
+  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" "mips64el-linux"];
 }
