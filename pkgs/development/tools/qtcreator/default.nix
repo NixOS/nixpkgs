@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake makeWrapper ];
 
+  patches = optional stdenv.hostPlatform.isArm ./0001-Fix-Allow-qt-creator-to-build-on-arm-aarch32-and-aar.patch;
+
   doCheck = true;
 
   enableParallelBuilding = true;
@@ -55,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.qt.io/Category:Tools::QtCreator;
     license = "LGPL";
     maintainers = [ maintainers.akaWolf ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
   };
 }
