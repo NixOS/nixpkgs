@@ -5527,7 +5527,13 @@ with pkgs;
 
   tokei = callPackage ../development/tools/misc/tokei { };
 
-  tor = callPackage ../tools/security/tor { };
+  tor = callPackage ../tools/security/tor {
+    openssl = openssl_1_1_0;
+    # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
+    libevent = libevent.override {
+      sslSupport = false;
+    };
+  };
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
