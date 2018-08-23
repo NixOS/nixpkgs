@@ -49,10 +49,12 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit (s) version;
     description = "Framebuffer terminal emulator";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://code.google.com/archive/p/fbterm/;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }
