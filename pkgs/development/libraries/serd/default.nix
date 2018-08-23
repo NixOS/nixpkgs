@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "serd-${version}";
-  version = "0.28.0";
+  version = "0.30.0";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "1v4ai4zyj1q3255nghicns9817jkwb3bh60ssprsjmnjfj41mwhx";
+    sha256 = "1yyfyvc6kwagi5w43ljp1bbjdvdpmgpds74lmjxycm91bkx0xyvf";
   };
 
   nativeBuildInputs = [ pkgconfig python ];
