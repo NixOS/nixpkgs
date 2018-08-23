@@ -7883,6 +7883,8 @@ in {
 
   mypy = callPackage ../development/python-modules/mypy { };
 
+  mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
+
   mwclient = buildPythonPackage rec {
     version = "0.8.3";
     pname = "mwclient";

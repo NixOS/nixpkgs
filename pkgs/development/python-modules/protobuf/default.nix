@@ -28,7 +28,10 @@ buildPythonPackage rec {
     export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION_VERSION=2
   '';
 
-  preBuild = optionalString (versionAtLeast protobuf.version "2.6.0") ''
+  preBuild = ''
+    # Workaround for https://github.com/google/protobuf/issues/2895
+    ${python}/bin/${python.executable} setup.py build
+  '' + optionalString (versionAtLeast protobuf.version "2.6.0") ''
     ${python}/bin/${python.executable} setup.py build_ext --cpp_implementation
   '';
 
