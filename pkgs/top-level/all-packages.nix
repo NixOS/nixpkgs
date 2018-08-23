@@ -21211,6 +21211,10 @@ with pkgs;
     withRootSupport = true;
   });
 
+  ### SCIENCE/ROBOTICS
+
+  apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
+
   ### MISC
 
   android-file-transfer = libsForQt5.callPackage ../tools/filesystems/android-file-transfer { };
