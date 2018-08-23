@@ -198,7 +198,7 @@ let
   isHaskellPartition =
     stdenv.lib.partition isHaskellPkg allBuildInputs;
 
-  setupCommand = "./Setup";
+  setupCommand = "performance-metrics $curPhase ./Setup";
 
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
