@@ -6,9 +6,26 @@
 # 3) Run ./elm2nix.rb in elm-reactor's directory.
 # 4) Move the resulting 'package.nix' to 'packages/elm-reactor-elm.nix'.
 
+# the elm binary embeds a piece of pre-compiled elm code, used by 'elm
+# reactor'. this means that the build process for 'elm' effectively
+# executes 'elm make'. that in turn expects to retrieve the elm
+# dependencies of that code (elm/core, etc.) from
+# package.elm-lang.org, as well as a cached bit of metadata
+# (versions.dat).
+
+# the makeDotElm function lets us retrieve these dependencies in the
+# standard nix way. we have to copy them in (rather than symlink) and
+# make them writable because the elm compiler writes other .dat files
+# alongside the source code. versions.dat was produced during an
+# impure build of this same code; the build complains that it can't
+# update this cache, but continues past that warning.
+
+# finally, we set ELM_HOME to point to these pre-fetched artifacts so
+# that the default of ~/.elm isn't used.
+
 let
-  makeElmStuff = deps:
-    let json = builtins.toJSON (lib.mapAttrs (name: info: info.version) deps);
+  makeDotElm = ver: deps:
+    let versionsDat = ./versions.dat;
         cmds = lib.mapAttrsToList (name: info: let
                  pkg = stdenv.mkDerivation {
 
@@ -29,15 +46,13 @@ let
 
                  };
                in ''
-                 mkdir -p elm-stuff/packages/${name}
-                 ln -s ${pkg} elm-stuff/packages/${name}/${info.version}
+                 mkdir -p .elm/${ver}/package/${name}
+                 cp -R ${pkg} .elm/${ver}/package/${name}/${info.version}
+                 chmod -R +w .elm/${ver}/package/${name}/${info.version}
                '') deps;
     in ''
-      export HOME=/tmp
-      mkdir elm-stuff
-      cat > elm-stuff/exact-dependencies.json <<EOF
-      ${json}
-      EOF
+      mkdir -p .elm/${ver}/package;
+      ln -s ${versionsDat} .elm/${ver}/package/versions.dat;
     '' + lib.concatStrings cmds;
 
   hsPkgs = haskell.packages.ghc822.override {
@@ -45,7 +60,9 @@ let
       let hlib = haskell.lib;
           elmPkgs = {
             elm = hlib.overrideCabal (self.callPackage ./packages/elm.nix { }) {
-              preConfigure = "export HOME=`pwd`";
+              preConfigure = ''
+                export ELM_HOME=`pwd`/.elm
+              '' + (makeDotElm "0.19.0" (import ./packages/elm-elm.nix));
             };
 
             /*
