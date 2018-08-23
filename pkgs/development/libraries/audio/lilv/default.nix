@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lv2, pkgconfig, python, serd, sord, sratom }:
+{ stdenv, fetchurl, lv2, pkgconfig, python, serd, sord, sratom, libsndfile }:
 
 stdenv.mkDerivation rec {
   name = "lilv-${version}";
@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ lv2 python serd sord sratom ];
+  buildInputs = [ lv2 python serd sord sratom libsndfile ];
 
-  configurePhase = "${python.interpreter} waf configure --prefix=$out";
+  configurePhase = "${python.interpreter} waf configure --prefix=$out --default-lv2-path=~/.lv2:~/.nix-profile/lib/lv2:/run/current-system/sw/lib/lv2";
 
   buildPhase = "${python.interpreter} waf";
 
