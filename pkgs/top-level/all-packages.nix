@@ -6411,7 +6411,10 @@ with pkgs;
     '';
   });
 
-  crystal = callPackage ../development/compilers/crystal { };
+  inherit (callPackages ../development/compilers/crystal {})
+    crystal_0_25
+    crystal_0_26
+    crystal;
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
