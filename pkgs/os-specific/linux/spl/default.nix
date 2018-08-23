@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
+    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
   };
 }
