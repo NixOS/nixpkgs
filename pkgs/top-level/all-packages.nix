@@ -14702,6 +14702,8 @@ with pkgs;
 
   adapta-backgrounds = callPackage ../data/misc/adapta-backgrounds { };
 
+  aileron = callPackage ../data/fonts/aileron { };
+
   andagii = callPackage ../data/fonts/andagii { };
 
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
@@ -14810,9 +14812,15 @@ with pkgs;
 
   elliptic_curves = callPackage ../data/misc/elliptic_curves { };
 
+  eunomia = callPackage ../data/fonts/eunomia { };
+
+  f5_6 = callPackage ../data/fonts/f5_6 { };
+
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
+
+  ferrum = callPackage ../data/fonts/ferrum { };
 
   fixedsys-excelsior = callPackage ../data/fonts/fixedsys-excelsior { };
 
@@ -14964,6 +14972,8 @@ with pkgs;
 
   media-player-info = callPackage ../data/misc/media-player-info {};
 
+  medio = callPackage ../data/fonts/medio { };
+
   mobile-broadband-provider-info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   monoid = callPackage ../data/fonts/monoid { };
@@ -15035,6 +15045,8 @@ with pkgs;
 
   pari-seadata-small = callPackage ../data/misc/pari-seadata-small {};
 
+  penna = callPackage ../data/fonts/penna { };
+
   poly = callPackage ../data/fonts/poly { };
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
@@ -15053,11 +15065,15 @@ with pkgs;
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
+  route159 = callPackage ../data/fonts/route159 { };
+
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
   sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
 
   scowl = callPackage ../data/misc/scowl { };
+
+  seshat = callPackage ../data/fonts/seshat { };
 
   shaderc = callPackage ../development/compilers/shaderc { };
 
@@ -15150,6 +15166,8 @@ with pkgs;
   template-glib = callPackage ../development/libraries/template-glib { };
 
   tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
+
+  tenderness = callPackage ../data/fonts/tenderness { };
 
   terminus_font = callPackage ../data/fonts/terminus-font { };
 
