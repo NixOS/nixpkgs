@@ -6793,6 +6793,9 @@ with pkgs;
       };
 
   openjdk10 =
+    if stdenv.isDarwin then
+      callPackage ../development/compilers/openjdk/darwin/10.nix { }
+    else
       callPackage ../development/compilers/openjdk/10.nix {
         inherit (gnome2) GConf gnome_vfs;
       };
