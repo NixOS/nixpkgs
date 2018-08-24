@@ -34,7 +34,7 @@ buildPythonApplication rec {
     rm tests/test_main.py
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/pimutils/todoman;
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
@@ -50,7 +50,8 @@ buildPythonApplication rec {
 
       Todoman is part of the pimutils project
     '';
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ leenaars ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ leenaars ];
+    platforms = platforms.linux;
   };
 }
