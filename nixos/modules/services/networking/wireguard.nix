@@ -190,6 +190,7 @@ let
     nameValuePair "wireguard-${name}"
       {
         description = "WireGuard Tunnel - ${name}";
+        requires = [ "network.target" ];
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
@@ -236,7 +237,7 @@ let
           ${values.postSetup}
         '';
 
-        preStop = ''
+        postStop = ''
           ip link del dev ${name}
           ${values.postShutdown}
         '';
