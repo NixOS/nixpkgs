@@ -18784,6 +18784,8 @@ with pkgs;
 
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
+  todoman = callPackage ../applications/office/todoman { };
+
   toggldesktop = libsForQt5.callPackage ../applications/misc/toggldesktop { };
 
   tomahawk = callPackage ../applications/audio/tomahawk {
