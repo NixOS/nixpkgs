@@ -1,7 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, autoconf, automake, which, libtool, pkgconfig
+{ stdenv, lib, fetchFromGitHub, substituteAll, autoconf, automake, which, libtool, pkgconfig
 , ronn
 , pcaudiolibSupport ? true, pcaudiolib
-, sonicSupport ? true, sonic }:
+, sonicSupport ? true, sonic
+, mbrolaSupport ? false, mbrola ? null }:
 
 stdenv.mkDerivation rec {
   name = "espeak-ng-${version}";
@@ -14,12 +15,21 @@ stdenv.mkDerivation rec {
     sha256 = "17bbl3zi8214iaaj8kjnancjvmvizwybg3sg17qjq4mf5c6xfg2c";
   };
 
+  patches = lib.optional mbrolaSupport (substituteAll {
+    src = ./mbrola-paths.patch;
+    inherit mbrola;
+  });
+
   nativeBuildInputs = [ autoconf automake which libtool pkgconfig ronn ];
 
   buildInputs = lib.optional pcaudiolibSupport pcaudiolib
              ++ lib.optional sonicSupport sonic;
 
   preConfigure = "./autogen.sh";
+
+  configureFlags = [
+    "--with-mbrola=${if mbrolaSupport then "yes" else "no"}"
+  ];
 
   postInstall = ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/espeak-ng)" $out/bin/speak-ng
