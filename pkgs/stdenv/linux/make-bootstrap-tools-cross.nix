@@ -16,5 +16,6 @@ in with (import ../../../lib).systems.examples; {
   x86_64-musl  = make musl64;
   armv6l-musl  = make muslpi;
   aarch64-musl = make aarch64-multiplatform-musl;
+  ppc64le = make powerpc64le-multiplatform;
   riscv64 = make riscv64;
 }

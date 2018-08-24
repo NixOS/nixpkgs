@@ -176,6 +176,7 @@ stdenv.mkDerivation {
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isAarch32     then endianPrefix + "arm"
       else if targetPlatform.isx86_64  then "x86-64"
+      else if targetPlatform.isppc64le  then "ppc64le"
       else if targetPlatform.isi686    then "i386"
       else if targetPlatform.isMips    then {
           "mips"     = "btsmipn32"; # n32 variant

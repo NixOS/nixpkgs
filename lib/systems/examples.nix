@@ -45,6 +45,14 @@ rec {
     useAndroidPrebuilt = true;
   };
 
+  powerpc64le-multiplatform = rec {
+    config = "powerpc64le-unknown-linux-gnu";
+    arch = "ppc64le";
+    platform = platforms.ppc64le-multiplatform;
+  };
+
+
+
   aarch64-android-prebuilt = rec {
     config = "aarch64-unknown-linux-android";
     sdkVer = "24";

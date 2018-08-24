@@ -306,6 +306,15 @@ rec {
     };
   };
 
+  ppc64le-multiplatform = {
+    name = "ppc64le-multiplatform";
+    kernelMajor = "2.6";
+    kernelBaseConfig = "ppc64le_defconfig";
+    kernelAutoModules = true;
+    kernelArch = "powerpc";
+    kernelDTB = true;
+  };
+
   aarch64-multiplatform = {
     name = "aarch64-multiplatform";
     kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
