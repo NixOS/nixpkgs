@@ -1,7 +1,7 @@
-with pkgs;
+{ lib, pkgs, ... }:
 
 let
-  ucm = fetchzip {
+  ucm = pkgs.fetchzip {
     url = "https://github.com/plbossart/UCM/archive/2050ca78a4d1a853d1ba050b591f42e6f97adfc0.tar.gz";
     sha256 = "1rs4mpz3b965nmz0yhy6j4ga3fdz320qnpkd7d61nvpv9c3i6zwj";
   };
