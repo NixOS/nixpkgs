@@ -13,10 +13,10 @@ assert useGoogleHashmap -> sparsehash != null;
 
 let
   inherit (stdenv.lib) optional;
+  version = "1.0";
 in
 stdenv.mkDerivation {
   name = "ripser-${version}";
-  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "Ripser";

@@ -7,7 +7,7 @@
 
 { fetchurl, stdenv, lua, callPackage, unzip, zziplib, pkgconfig
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat
-, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, glib, gobjectIntrospection, libevent, zlib, autoreconfHook, gnum4
 , mysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which, fetchpatch, writeText
 }:
@@ -43,6 +43,32 @@ let
     inherit lua;
   };
 
+  basexx = buildLuaPackage rec {
+    version = "0.4.0";
+    name = "basexx-${version}";
+
+    src = fetchFromGitHub {
+      owner = "aiq";
+      repo = "basexx";
+      rev = "v${version}";
+      sha256 = "12y0ng9bp5b98iax35pnp0kc0mb42spv1cbywvfq6amik6l0ya7g";
+    };
+
+    buildPhase = ":";
+    installPhase = ''
+      install -Dt "$out/lib/lua/${lua.luaversion}/" \
+        lib/basexx.lua
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Lua library for base2, base16, base32, base64, base85";
+      homepage = "https://github.com/aiq/basexx";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.all;
+    };
+  };
+
   bit32 = buildLuaPackage rec {
     version = "5.3.0";
     name = "bit32-${version}";
@@ -69,6 +95,93 @@ let
       license = licenses.mit;
       maintainers = with maintainers; [ lblasc ];
       platforms = platforms.unix;
+    };
+  };
+
+  compat53 = buildLuaPackage rec {
+    version = "0.7";
+    name = "compat53-${version}";
+
+    src = fetchFromGitHub {
+      owner = "keplerproject";
+      repo = "lua-compat-5.3";
+      rev = "v${version}";
+      sha256 = "02a14nvn7aggg1yikj9h3dcf8aqjbxlws1bfvqbpfxv9d5phnrpz";
+    };
+
+    nativeBuildInputs = [ pkgconfig ];
+
+    postConfigure = ''
+      CFLAGS+=" -shared $(pkg-config --libs ${if isLuaJIT then "luajit" else "lua"})"
+    '';
+
+    buildPhase = ''
+      cc lstrlib.c $CFLAGS -o string.so
+      cc ltablib.c $CFLAGS -o table.so
+      cc lutf8lib.c $CFLAGS -o utf8.so
+    '';
+
+    # There's no need to separate *.lua and *.so, I guess?  TODO: conventions?
+    installPhase = ''
+      install -Dt "$out/lib/lua/${lua.luaversion}/compat53" \
+        compat53/*.lua *.so
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1";
+      homepage = "https://github.com/keplerproject/lua-compat-5.3";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.all;
+    };
+  };
+
+  cqueues = buildLuaPackage rec {
+    name = "cqueues-${version}";
+    version = "20171014";
+
+    src = fetchurl {
+      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
+      sha256 = "1dabhpn6r0hlln8vx9hxm34pfcm46qzgpb2apmziwg5z51fi4ksb";
+    };
+
+    preConfigure = ''export prefix=$out'';
+
+    nativeBuildInputs = [ gnum4 ];
+    buildInputs = [ openssl ];
+
+    meta = with stdenv.lib; {
+      description = "A type of event loop for Lua";
+      homepage = "https://www.25thandclement.com/~william/projects/cqueues.html";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.unix;
+    };
+  };
+
+  fifo = buildLuaPackage rec {
+    version = "0.2";
+    name = "fifo-${version}";
+
+    src = fetchFromGitHub {
+      owner = "daurnimator";
+      repo = "fifo.lua";
+      rev = version;
+      sha256 = "1800k7h5hxsvm05bjdr65djjml678lwb0661cll78z1ys2037nzn";
+    };
+
+    buildPhase = ":";
+    installPhase = ''
+      mkdir -p "$out/lib/lua/${lua.luaversion}"
+      mv fifo.lua "$out/lib/lua/${lua.luaversion}/"
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A lua library/'class' that implements a FIFO";
+      homepage = "https://github.com/daurnimator/fifo.lua";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      platforms = platforms.all;
     };
   };
 
@@ -106,6 +219,38 @@ let
       homepage = "http://bitop.luajit.org";
       license = licenses.mit;
       maintainers = with maintainers; [ ];
+    };
+  };
+
+  http = buildLuaPackage rec {
+    version = "0.2";
+    name = "http-${version}";
+
+    src = fetchFromGitHub {
+      owner = "daurnimator";
+      repo = "lua-http";
+      rev = "v${version}";
+      sha256 = "0a8vsj49alaf1fkhv51n5mgpjq8izfff3shcjs8xk7p2bc46vd7i";
+    };
+
+    /* TODO: separate docs derivation? (pandoc is heavy)
+    nativeBuildInputs = [ pandoc ];
+    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
+    */
+
+    buildPhase = ":";
+    installPhase = ''
+      install -Dt "$out/lib/lua/${lua.luaversion}/http" \
+        http/*.lua
+      install -Dt "$out/lib/lua/${lua.luaversion}/http/compat" \
+        http/compat/*.lua
+    '';
+
+    meta = with stdenv.lib; {
+      description = "HTTP library for lua";
+      homepage = "https://daurnimator.github.io/lua-http/${version}/";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
     };
   };
 
@@ -294,6 +439,28 @@ let
       homepage = "https://github.com/keplerproject/luafilesystem";
       license = licenses.mit;
       maintainers = with maintainers; [ flosse ];
+      platforms = platforms.unix;
+    };
+  };
+
+  luaossl = buildLuaPackage rec {
+    name = "luaossl-${version}";
+    version = "20170903";
+
+    src = fetchurl {
+      url = "https://www.25thandclement.com/~william/projects/releases/${name}.tgz";
+      sha256 = "10392bvd0lzyibipblgiss09zlqh3a5zgqg1b9lgbybpqb9cv2k3";
+    };
+
+    preConfigure = ''export prefix=$out'';
+
+    buildInputs = [ openssl ];
+
+    meta = with stdenv.lib; {
+      description = "Comprehensive binding to OpenSSL for Lua 5.1+";
+      homepage = "https://www.25thandclement.com/~william/projects/luaossl.html";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
       platforms = platforms.unix;
     };
   };
@@ -685,6 +852,32 @@ let
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = platforms.all;
+    };
+  };
+
+  lpeg_patterns = buildLuaPackage rec {
+    version = "0.5";
+    name = "lpeg_patterns-${version}";
+
+    src = fetchFromGitHub {
+      owner = "daurnimator";
+      repo = "lpeg_patterns";
+      rev = "v${version}";
+      sha256 = "1s3c179a64r45ffkawv9dnxw4mzwkzj00nr9z2gs5haajgpjivw6";
+    };
+
+    buildPhase = ":";
+    installPhase = ''
+      mkdir -p "$out/lib/lua/${lua.luaversion}"
+      mv lpeg_patterns "$out/lib/lua/${lua.luaversion}/"
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A collection of LPEG patterns";
+      homepage = "https://github.com/daurnimator/lpeg_patterns";
+      license = licenses.mit;
+      maintainers = with maintainers; [ vcunat ];
+      inherit (lpeg.meta) platforms;
     };
   };
 

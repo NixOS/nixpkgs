@@ -91,9 +91,11 @@ let
     doInstallCheck = false;
   });
 
+  pluginArgs = externalTestArgs // { inherit pythonPackages; };
+
   plugins = {
-    alternatives = callPackage ./alternatives-plugin.nix externalTestArgs;
-    copyartifacts = callPackage ./copyartifacts-plugin.nix externalTestArgs;
+    alternatives = callPackage ./alternatives-plugin.nix pluginArgs;
+    copyartifacts = callPackage ./copyartifacts-plugin.nix pluginArgs;
   };
 
 in pythonPackages.buildPythonApplication rec {

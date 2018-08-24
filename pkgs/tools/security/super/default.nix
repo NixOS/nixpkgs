@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
-  configureFlags = "--sysconfdir=/etc --localstatedir=/var";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
 
   installFlags = "sysconfdir=$(out)/etc localstatedir=$(TMPDIR)";
 

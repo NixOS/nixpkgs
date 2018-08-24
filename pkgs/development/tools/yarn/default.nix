@@ -1,20 +1,21 @@
-{ stdenv, nodejs, fetchzip, makeWrapper }:
+{ stdenv, nodejs, fetchzip }:
 
 stdenv.mkDerivation rec {
   name = "yarn-${version}";
-  version = "1.9.2";
+  version = "1.9.4";
 
   src = fetchzip {
     url = "https://github.com/yarnpkg/yarn/releases/download/v${version}/yarn-v${version}.tar.gz";
-    sha256 = "0bk006zs1bk6nwj9x07ry314fgxi21sk79h1paljbs6yzrv62h4g";
+    sha256 = "0lxncqvz66167ijhsi76ds2yp8140d9ywn89y5vm92010irsgs20";
   };
 
-  buildInputs = [ makeWrapper nodejs ];
+  buildInputs = [ nodejs ];
 
   installPhase = ''
     mkdir -p $out/{bin,libexec/yarn/}
     cp -R . $out/libexec/yarn
-    makeWrapper $out/libexec/yarn/bin/yarn.js $out/bin/yarn
+    ln -s $out/libexec/yarn/bin/yarn.js $out/bin/yarn
+    ln -s $out/libexec/yarn/bin/yarn.js $out/bin/yarnpkg
   '';
 
   meta = with stdenv.lib; {

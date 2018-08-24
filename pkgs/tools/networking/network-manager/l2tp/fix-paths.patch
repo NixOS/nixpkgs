@@ -1,0 +1,20 @@
+--- a/src/nm-l2tp-service.c
++++ b/src/nm-l2tp-service.c
+@@ -480,7 +480,7 @@
+ {
+ 	static const char *ipsec_binary_paths[] =
+ 		{
+-			"/sbin/ipsec",
++			"@strongswan@/bin/ipsec",
+ 			"/usr/sbin/ipsec",
+ 			"/usr/local/sbin/ipsec",
+ 			"/sbin/strongswan",
+@@ -505,7 +505,7 @@
+ {
+ 	static const char *l2tp_binary_paths[] =
+ 		{
+-			"/sbin/xl2tpd",
++			"@xl2tpd@/bin/xl2tpd",
+ 			"/usr/sbin/xl2tpd",
+ 			"/usr/local/sbin/xl2tpd",
+ 			NULL

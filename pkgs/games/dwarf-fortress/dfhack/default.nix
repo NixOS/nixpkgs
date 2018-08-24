@@ -6,11 +6,11 @@
 }:
 
 let
-  dfVersion = "0.44.11";
-  version = "${dfVersion}-alpha1";
+  dfVersion = "0.44.12";
+  version = "${dfVersion}-r1";
 
   # revision of library/xml submodule
-  xmlRev = "853bd161270f50b21fe4b751de339458f78f56d6";
+  xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd5094";
 
   arch =
     if stdenv.system == "x86_64-linux" then "64"
@@ -41,7 +41,7 @@ let
     src = fetchFromGitHub {
       owner = "DFHack";
       repo = "dfhack";
-      sha256 = "1vzrpdw0pn18calayf9dwqpyg37cb7wkzkvskxjx9nak5ilxzywm";
+      sha256 = "0j03lq6j6w378z6cvm7jspxc7hhrqm8jaszlq0mzfvap0k13fgyy";
       rev = version;
       fetchSubmodules = true;
     };

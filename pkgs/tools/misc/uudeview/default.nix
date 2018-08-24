@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcl tk ];
   hardeningDisable = [ "format" ];
   configureFlags = [ "--enable-tk=${tk.dev}" "--enable-tcl=${tcl}" ];
+
+  # https://wiki.tcl.tk/3577
+  patches = [ ./matherr.patch ];
   postPatch = ''
     substituteInPlace tcl/xdeview --replace "exec uuwish" "exec $out/bin/uuwish"
   '';

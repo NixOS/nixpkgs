@@ -1,12 +1,9 @@
-{ stdenv, fetchurl, readline, patchelf, ncurses, qt48, libidn, expat, flac
-, libvorbis }:
+{ stdenv, fetchurl
+, flac, expat, libidn, qtbase, qtwebkit, libvorbis }:
+assert stdenv.system == "x86_64-linux";
 
-assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
-let
-  archUrl = name: arch: "http://dl.google.com/linux/musicmanager/deb/pool/main/g/google-musicmanager-beta/${name}_${arch}.deb";
-in
 stdenv.mkDerivation rec {
-  version = "beta_1.0.243.1116-r0"; # friendly to nix-env version sorting algo
+  version = "beta_1.0.467.4929-r0"; # friendly to nix-env version sorting algo
   product = "google-musicmanager";
   name    = "${product}-${version}";
 
@@ -16,37 +13,58 @@ stdenv.mkDerivation rec {
   # curl http://dl.google.com/linux/musicmanager/deb/dists/stable/main/binary-amd64/Packages
   # which will contain the links to all available *.debs for the arch.
 
-  src = if stdenv.system == "x86_64-linux"
-    then fetchurl {
-      url    = archUrl name "amd64";
-      sha256 = "54f97f449136e173492d36084f2c01244b84f02d6e223fb8a40661093e0bec7c";
-    }
-    else fetchurl {
-        url    = archUrl name "i386";
-        sha256 = "121a7939015e2270afa3f1c73554102e2b4f2e6a31482ff7be5e7c28dd101d3c";
-    };
+  src = fetchurl {
+    url    = "http://dl.google.com/linux/musicmanager/deb/pool/main/g/google-musicmanager-beta/${name}_amd64.deb";
+    sha256 = "0yaprpbp44var88kdj1h11fqkhgcklixr69jyia49v9m22529gg2";
+  };
 
   unpackPhase = ''
     ar vx ${src}
-    tar -xvf data.tar.lzma
+    tar xvf data.tar.xz
+    tar xvf control.tar.gz
   '';
 
-  buildInputs = [ patchelf ];
-
-  buildPhase = ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$out/opt/google/musicmanager:${stdenv.lib.makeLibraryPath [ readline ncurses stdenv.cc.libc.out qt48 stdenv.cc.cc libidn expat flac libvorbis ]}" opt/google/musicmanager/MusicManager
+  prePatch = ''
+    sed -i "s@\(Exec=\).*@\1$out/bin/google-musicmanager@" opt/google/musicmanager/google-musicmanager.desktop
   '';
-
-  dontPatchELF = true;
-  dontStrip    = true;
 
   installPhase = ''
-    mkdir -p "$out"
-    cp -r opt "$out"
-    mkdir "$out/bin"
-    ln -s "$out/opt/google/musicmanager/google-musicmanager" "$out/bin"
+    mkdir -p $out/bin
+    mkdir -p $out/lib
+    mkdir -p $out/share/applications
+
+    cp -r opt $out
+    find -name "*.so*" -exec cp "{}" $out/lib \;
+    ln -s $out/opt/google/musicmanager/google-musicmanager $out/bin
+    ln -s $out/opt/google/musicmanager/google-musicmanager.desktop $out/share/applications
+
+    for i in 16 32 48 128
+    do
+      iconDirectory=$out/usr/share/icons/hicolor/"$i"x"$i"/apps
+
+      mkdir -p $iconDirectory
+      ln -s $out/opt/google/musicmanager/product_logo_"$i".png $iconDirectory/google-musicmanager.png
+    done
+  '';
+
+  postFixup = ''
+    patchelf \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "$(patchelf --print-rpath $out/opt/google/musicmanager/minidump_upload):${stdenv.lib.makeLibraryPath [ stdenv.cc.cc.lib ]}" \
+      $out/opt/google/musicmanager/minidump_upload
+
+    patchelf \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "$(patchelf --print-rpath $out/opt/google/musicmanager/MusicManager):$out/lib:${stdenv.lib.makeLibraryPath [
+        flac
+        expat
+        libidn
+        qtbase
+        qtwebkit
+        libvorbis
+        stdenv.cc.cc.lib
+      ]}" \
+      $out/opt/google/musicmanager/MusicManager
   '';
 
   meta = with stdenv.lib; {

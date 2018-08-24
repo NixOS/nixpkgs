@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, dpkg, makeWrapper
+{ stdenv, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, glibc, gnome2, gnome3
-, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, xorg }:
+, gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg }:
 
 let
 
@@ -68,7 +68,12 @@ in stdenv.mkDerivation {
 
   inherit src;
 
-  buildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    wrapGAppsHook
+    glib # For setup hook populating GSETTINGS_SCHEMA_PATH
+  ];
+
+  buildInputs = [ dpkg ];
 
   unpackPhase = "true";
   installPhase = ''
@@ -77,6 +82,8 @@ in stdenv.mkDerivation {
     cp -av $out/usr/* $out
     rm -rf $out/opt $out/usr
     rm $out/bin/skypeforlinux
+
+    ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
 
     # Otherwise it looks "suspicious"
     chmod -R g-w $out
@@ -87,8 +94,6 @@ in stdenv.mkDerivation {
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
       patchelf --set-rpath ${rpath}:$out/share/skypeforlinux $file || true
     done
-
-    ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/skypeforlinux.desktop \

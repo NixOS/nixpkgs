@@ -8,7 +8,7 @@ index 27006a3..e53c2c0 100644
  
 +import sys
 +
-+sys.path.append('__NIX_OUTPUT__')
++sys.path.append('@env@')
 +
 +
  import_ok = True

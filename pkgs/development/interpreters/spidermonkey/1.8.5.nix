@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64; # 2018-08-21, broken since 2017-03-08
   };
 }
 

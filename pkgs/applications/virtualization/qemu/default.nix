@@ -22,8 +22,8 @@
 
 with stdenv.lib;
 let
-  version = "2.12.0";
-  sha256 = "17377xxbmwbrnh895a108z944pqi39hzrbw4jzgj8pcipi3s3x69";
+  version = "2.12.1";
+  sha256 = "1jp5y56682bgpfjapagxjfrjdvqkal34pj9qzn6kj8fqaad80l21";
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
@@ -71,8 +71,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "ga" ];
 
-  patches = [ ./no-etc-install.patch ]
-    ++ optional nixosTestRunner ./force-uid0-on-9p.patch
+  patches = [
+    ./no-etc-install.patch
+    ./fix-qemu-ga.patch
+  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optional pulseSupport ./fix-hda-recording.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {

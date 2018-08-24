@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, pkgconfig, ninja, glib, fuse3
-, docutils
+, docutils, which, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -25,10 +25,17 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
   '';
 
+  checkInputs = [ which ] ++ (with python3Packages; [ python pytest ]);
+
+  checkPhase = ''
+    python3 -m pytest test/
+  '';
+
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     platforms = platforms.linux;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ primeos ];
   };
 }

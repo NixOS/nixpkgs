@@ -21,13 +21,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ tcl ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-
-  checkTarget = "test";
-
-  preCheck = stdenv.lib.optional doCheck ''
+  preCheck = ''
     export TCLLIBPATH="${tcllib}/lib/tcllib${tcllib.version}"
   '';
-  configureFlags = if withJson then  "--json" else  "";
+  configureFlags = stdenv.lib.optional withJson "--json";
 
   preBuild=''
     export USER=nonexistent-but-specified-user

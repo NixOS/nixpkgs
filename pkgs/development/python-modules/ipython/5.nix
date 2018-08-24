@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 # Build dependencies
 , glibcLocales
 # Test dependencies
@@ -35,6 +36,16 @@ buildPythonPackage rec {
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
+
+  patches = [
+    # improve cython support, needed by sage, accepted upstream
+    # https://github.com/ipython/ipython/pull/11139
+    (fetchpatch {
+      name = "signature-use-inspect.patch";
+      url = "https://github.com/ipython/ipython/commit/8d399b98d3ed5c765835594100c4d36fb2f739dc.patch";
+      sha256 = "1r7v9clwwbskmj4y160vcj6g0vzqbvnj4y1bm2n4bskafapm42g0";
+    })
+  ];
 
   buildInputs = [ glibcLocales ];
 

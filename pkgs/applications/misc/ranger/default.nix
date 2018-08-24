@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, pythonPackages, file, less
+{ stdenv, fetchFromGitHub, python3Packages, file, less
 , imagePreviewSupport ? true, w3m ? null}:
 
 with stdenv.lib;
 
 assert imagePreviewSupport -> w3m != null;
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "ranger-${version}";
   version = "1.9.1";
 
@@ -16,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
     sha256= "1zhds37j1scxa9b183qbrjwxqldrdk581c5xiy81vg17sndb1kqj";
   };
 
-  checkInputs = with pythonPackages; [ pytest ];
+  checkInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = [ file ];
 
   checkPhase = ''
@@ -43,7 +43,7 @@ pythonPackages.buildPythonApplication rec {
 
     # give image previews out of the box when building with w3m
     substituteInPlace ranger/config/rc.conf \
-      --replace "set preview_images false" "set preview_images true" \
+      --replace "set preview_images false" "set preview_images true"
   '';
 
   meta =  with stdenv.lib; {

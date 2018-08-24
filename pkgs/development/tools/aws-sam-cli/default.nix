@@ -6,11 +6,11 @@ with python.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4740bfa23f39880d807aa75a2143259f7f15eec34c5fa5dde8fc04d8563ef521";
+    sha256 = "2acf9517f467950adb4939746658091e60cf60ee80093ffd0d3d821cb8a1f9fc";
   };
 
   # Tests are not included in the PyPI package
@@ -21,12 +21,19 @@ buildPythonApplication rec {
     boto3
     click
     cookiecutter
+    dateparser
     docker
     enum34
     flask
+    python-dateutil
     pyyaml
     six
   ];
+
+  postPatch = ''
+    substituteInPlace ./requirements/base.txt \
+      --replace 'aws-sam-translator==1.6.0' 'aws-sam-translator>=1.6.0';
+  '';
 
   meta = with lib; {
     homepage = https://github.com/awslabs/aws-sam-cli;

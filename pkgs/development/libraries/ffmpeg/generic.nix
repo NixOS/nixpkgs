@@ -194,11 +194,11 @@ stdenv.mkDerivation rec {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = http://www.ffmpeg.org/;
     longDescription = ''
-      FFmpeg is the leading multimedia framework, able to decode, encode, transcode, 
-      mux, demux, stream, filter and play pretty much anything that humans and machines 
-      have created. It supports the most obscure ancient formats up to the cutting edge. 
-      No matter if they were designed by some standards committee, the community or 
-      a corporation. 
+      FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
+      mux, demux, stream, filter and play pretty much anything that humans and machines
+      have created. It supports the most obscure ancient formats up to the cutting edge.
+      No matter if they were designed by some standards committee, the community or
+      a corporation.
     '';
     license = licenses.gpl3;
     platforms = platforms.all;

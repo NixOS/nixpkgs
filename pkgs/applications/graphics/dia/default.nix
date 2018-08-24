@@ -24,14 +24,15 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh # autoreconfHook is not enough
   '';
-  configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
+  configureFlags = stdenv.lib.optional withGNOME "--enable-gnome";
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Gnome Diagram drawing software";
     homepage = http://live.gnome.org/Dia;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

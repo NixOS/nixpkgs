@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ocamlbuild ounit ];
 
-  configureFlags = "--enable-tests";
+  configureFlags = [ "--enable-tests" ];
   doCheck = true;
   checkTarget = "test";
 

@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -e '/^ *cd /d' -i sys/unix/nethack.sh
     sed \
       -e 's/^YACC *=.*/YACC = bison -y/' \
@@ -53,6 +53,7 @@ in stdenv.mkDerivation rec {
             `pkg-config Qt5Multimedia --libs`,' \
       -i sys/unix/Makefile.src
     sed \
+      -e 's,^CFLAGS=-g,CFLAGS=,' \
       -e 's,/bin/gzip,${gzip}/bin/gzip,g' \
       -e 's,^WINTTYLIB=.*,WINTTYLIB=-lncurses,' \
       -i sys/unix/hints/linux
@@ -60,6 +61,7 @@ in stdenv.mkDerivation rec {
       -e 's,^CC=.*$,CC=cc,' \
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
+      -e 's,^CFLAGS=-g,CFLAGS=,' \
       -i sys/unix/hints/macosx10.10
     sed -e '/define CHDIR/d' -i include/config.h
     sed \
@@ -71,11 +73,11 @@ in stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    cd sys/${platform}
+    pushd sys/${platform}
     ${lib.optionalString (platform == "unix") ''
       sh setup.sh hints/${unixHint}
     ''}
-    cd ../..
+    popd
   '';
 
   postInstall = ''

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, perl, cmake, ninja, vala, pkgconfig, gobjectIntrospection, glib, gtk3, gnome3, gettext }:
+{ stdenv, fetchFromGitHub, perl, cmake, ninja, vala_0_40, pkgconfig, gobjectIntrospection, glib, gtk3, gnome3, gettext }:
 
 stdenv.mkDerivation rec {
   name = "granite-${version}";
-  version = "0.5";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "granite";
     rev = version;
-    sha256 = "15l8z1jkqhvappnr8jww27lfy3dwqybgsxk5iccyvnvzpjdh2s0h";
+    sha256 = "015hkclcxirssg7a8s6mkns5xdk77m1jnkshlyfdw041nzyc5jh1";
   };
 
   cmakeFlags = [
@@ -17,18 +17,18 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    vala
-    pkgconfig
     cmake
-    ninja
-    perl
     gettext
     gobjectIntrospection
+    ninja
+    perl
+    pkgconfig
+    vala_0_40
   ];
   buildInputs = [
     glib
-    gtk3
     gnome3.libgee
+    gtk3
   ];
 
   meta = with stdenv.lib; {
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/elementary/granite;
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.vozz ];
+    maintainers = with maintainers; [ vozz worldofpeace ];
   };
 }

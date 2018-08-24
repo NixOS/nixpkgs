@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ stdenv, fetchpatch, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
@@ -21,6 +21,7 @@
 , sdl2Support        ? true,  SDL2          ? null
 , alsaSupport        ? true,  alsaLib       ? null
 , screenSaverSupport ? true,  libXScrnSaver ? null
+, cmsSupport         ? true,  lcms2         ? null
 , vdpauSupport       ? true,  libvdpau      ? null
 , dvdreadSupport     ? true,  libdvdread    ? null
 , dvdnavSupport      ? true,  libdvdnav     ? null
@@ -34,7 +35,7 @@
 , youtubeSupport     ? true,  youtube-dl    ? null
 , vaapiSupport       ? true,  libva         ? null
 , drmSupport         ? true,  libdrm        ? null
-, openalSupport      ? true,  openalSoft   ? null
+, openalSupport      ? false, openalSoft    ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
 , archiveSupport     ? false, libarchive    ? null
 , jackaudioSupport   ? false, libjack2      ? null
@@ -53,6 +54,7 @@ assert xvSupport          -> x11Support && available libXv;
 assert sdl2Support        -> available SDL2;
 assert alsaSupport        -> available alsaLib;
 assert screenSaverSupport -> available libXScrnSaver;
+assert cmsSupport         -> available lcms2;
 assert vdpauSupport       -> available libvdpau;
 assert dvdreadSupport     -> available libdvdread;
 assert dvdnavSupport      -> available libdvdnav;
@@ -91,6 +93,13 @@ in stdenv.mkDerivation rec {
     sha256 = "0i2nl65diqsjyz28dj07h6d8gq6ix72ysfm0nhs8514hqccaihs3";
   };
 
+  # FIXME: Remove this patch for building on macOS if it gets released in
+  # the future.
+  patches = optional stdenv.isDarwin (fetchpatch {
+    url = https://github.com/mpv-player/mpv/commit/dc553c8cf4349b2ab5d2a373ad2fac8bdd229ebb.patch;
+    sha256 = "0pa8vlb8rsxvd1s39c4iv7gbaqlkn3hx21a6xnpij99jdjkw3pg8";
+  });
+
   postPatch = ''
     patchShebangs ./TOOLS/
   '';
@@ -105,6 +114,7 @@ in stdenv.mkDerivation rec {
     "--disable-libmpv-static"
     "--disable-static-build"
     "--disable-build-date" # Purity
+    "--disable-macos-cocoa-cb" # Disable whilst Swift isn't supported
     (enableFeature archiveSupport "libarchive")
     (enableFeature dvdreadSupport "dvdread")
     (enableFeature dvdnavSupport "dvdnav")
@@ -136,11 +146,11 @@ in stdenv.mkDerivation rec {
     ++ optional pulseSupport       libpulseaudio
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
+    ++ optional cmsSupport        lcms2
     ++ optional vdpauSupport       libvdpau
     ++ optional speexSupport       speex
     ++ optional bs2bSupport        libbs2b
     ++ optional openalSupport      openalSoft
-    ++ optional (openalSupport && stdenv.isDarwin) darwin.apple_sdk.frameworks.OpenAL
     ++ optional libpngSupport      libpng
     ++ optional youtubeSupport     youtube-dl
     ++ optional sdl2Support        SDL2
@@ -149,20 +159,24 @@ in stdenv.mkDerivation rec {
     ++ optional drmSupport         libdrm
     ++ optional vapoursynthSupport vapoursynth
     ++ optional archiveSupport     libarchive
+    ++ optional stdenv.isDarwin    libiconv
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      CoreFoundation libiconv Cocoa CoreAudio
+      CoreFoundation Cocoa CoreAudio
     ]);
 
   enableParallelBuilding = true;
 
   buildPhase = ''
     python3 ${waf} build
+  '' + optionalString stdenv.isDarwin ''
+    python3 TOOLS/osxbundle.py -s build/mpv
   '';
 
-  installPhase =
+  # Ensure youtube-dl is available in $PATH for mpv
+  wrapperFlags = 
   let
     getPath  = type : "${luasocket}/lib/lua/${lua.luaversion}/?.${type};" +
                       "${luasocket}/share/lua/${lua.luaversion}/?.${type}";
@@ -170,24 +184,32 @@ in stdenv.mkDerivation rec {
     luaCPath = getPath "so";
   in
   ''
-    python3 ${waf} install
-
-    # Use a standard font
-    mkdir -p $out/share/mpv
-    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
-    # Ensure youtube-dl is available in $PATH for MPV
-    wrapProgram $out/bin/mpv \
       --prefix LUA_PATH : "${luaPath}" \
       --prefix LUA_CPATH : "${luaCPath}" \
   '' + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''
       --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
-  '' + ''
+  '';
+
+  installPhase = ''
+    python3 ${waf} install
+
+    # Use a standard font
+    mkdir -p $out/share/mpv
+    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
+    wrapProgram "$out/bin/mpv" \
+      ${wrapperFlags}
 
     cp TOOLS/umpv $out/bin
     wrapProgram $out/bin/umpv \
       --set MPV "$out/bin/mpv"
+
+  '' + optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r build/mpv.app $out/Applications
+    wrapProgram "$out/Applications/mpv.app/Contents/MacOS/mpv" \
+      ${wrapperFlags}
   '';
 
   meta = with stdenv.lib; {

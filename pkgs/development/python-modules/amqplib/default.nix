@@ -15,5 +15,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/py-amqplib/;
     description = "Python client for the Advanced Message Queuing Procotol (AMQP)";
+    license = licenses.lgpl21;
   };
 }

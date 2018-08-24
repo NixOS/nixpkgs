@@ -12,14 +12,14 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.1";
   name = "renderdoc-${version}";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "0l7pjxfrly4llryjnwk42dzx65n78wc98h56qm4yh04ja8fdbx2y";
+    sha256 = "0kb9m1dm0mnglqyh1srvl0f1bgjghxzbqarn0xfqw49wphqwhmcd";
   };
 
   buildInputs = [

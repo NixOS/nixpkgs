@@ -15,5 +15,6 @@ in stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.bsd3;
   };
 }

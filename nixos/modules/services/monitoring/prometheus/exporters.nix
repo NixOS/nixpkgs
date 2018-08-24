@@ -73,7 +73,7 @@ let
       description = ''
         Specify a filter for iptables to use when
         <option>services.prometheus.exporters.${name}.openFirewall</option>
-        is true. It is used as `ip46tables -I INPUT <option>firewallFilter</option> -j ACCEPT`.
+        is true. It is used as `ip46tables -I nixos-fw <option>firewallFilter</option> -j nixos-fw-accept`.
       '';
     };
     user = mkOption {
@@ -116,9 +116,10 @@ let
 
   mkExporterConf = { name, conf, serviceOpts }:
     mkIf conf.enable {
-      networking.firewall.extraCommands = mkIf conf.openFirewall ''
-        ip46tables -I INPUT ${conf.firewallFilter} -j ACCEPT
-      '';
+      networking.firewall.extraCommands = mkIf conf.openFirewall (concatStrings [
+        "ip46tables -I nixos-fw ${conf.firewallFilter} "
+        "-m comment --comment ${name}-exporter -j nixos-fw-accept"
+      ]);
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];

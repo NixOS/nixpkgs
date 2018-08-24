@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patchPhase = lib.optionalString stdenv.isDarwin ''
+  patchPhase = ''
+    patch -p1 < ${./pcre.patch}
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace GeneratedSaxParser/src/GeneratedSaxParserUtils.cpp \
       --replace math.h cmath
   '';
@@ -31,5 +33,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/KhronosGroup/OpenCOLLADA/;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.mit;
   };
 }

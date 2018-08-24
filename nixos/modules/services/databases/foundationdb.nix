@@ -320,9 +320,6 @@ in
   };
 
   config = mkIf cfg.enable {
-    meta.doc         = ./foundationdb.xml;
-    meta.maintainers = with lib.maintainers; [ thoughtpolice ];
-
     environment.systemPackages = [ pkg ];
 
     users.users = optionalAttrs (cfg.user == "foundationdb") (singleton
@@ -413,4 +410,7 @@ in
       '';
     };
   };
+
+  meta.doc         = ./foundationdb.xml;
+  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 }

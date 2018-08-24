@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
     description = "A text-mode web browser";
     maintainers = [ maintainers.cstrahan ];
     platforms = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.mit;
   };
 }

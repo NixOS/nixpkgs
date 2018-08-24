@@ -22,14 +22,12 @@ in stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   postPatch = ''
+    patchShebangs tests/run.sh
+
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "${shadow}/bin/login"
     substituteInPlace sys-utils/eject.c \
       --replace "/bin/umount" "$out/bin/umount"
-  '';
-
-  preConfigure = lib.optionalString (systemd != null) ''
-    configureFlags+=" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/"
   '';
 
   # !!! It would be better to obtain the path to the mount helpers
@@ -43,8 +41,11 @@ in stdenv.mkDerivation rec {
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
-  ] ++ lib.optional (ncurses == null) "--without-ncurses"
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    (lib.withFeature (ncurses != null) "ncursesw")
+    (lib.withFeature (systemd != null) "systemd")
+    (lib.withFeatureAs (systemd != null)
+       "systemdsystemunitdir" "$(bin)/lib/systemd/system/")
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
        "scanf_cv_type_modifier=ms"
   ;
 
@@ -54,6 +55,8 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ zlib pam ]
     ++ lib.filter (p: p != null) [ ncurses systemd perl ];
+
+  doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   postInstall = ''
     rm "$bin/bin/su" # su should be supplied by the su package (shadow)

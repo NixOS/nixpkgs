@@ -15,7 +15,7 @@ let
 
   inherit (pkgs) lightdm writeScript writeText;
 
-  # lightdm runs with clearenv(), but we need a few things in the enviornment for X to startup
+  # lightdm runs with clearenv(), but we need a few things in the environment for X to startup
   xserverWrapper = writeScript "xserver-wrapper"
     ''
       #! ${pkgs.bash}/bin/bash
@@ -45,11 +45,11 @@ let
         greeter-user = ${config.users.users.lightdm.name}
         greeters-directory = ${cfg.greeter.package}
       ''}
-      sessions-directory = ${dmcfg.session.desktops}
+      sessions-directory = ${dmcfg.session.desktops}/share/xsessions
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
-      session-wrapper = ${dmcfg.session.script}
+      session-wrapper = ${dmcfg.session.wrapper}
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
@@ -176,19 +176,11 @@ in
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
+      { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
           services.xserver.windowMananger.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
-        '';
-      }
-      { assertion = hasDefaultUserSession -> elem defaultSessionName dmcfg.session.names;
-        message = ''
-          services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are not set to valid
-          values. The current default session: ${defaultSessionName}
-          is not valid.
         '';
       }
       { assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
@@ -217,8 +209,11 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
-    # lightdm uses the accounts daemon to rember language/window-manager per user
+    # lightdm uses the accounts daemon to remember language/window-manager per user
     services.accounts-daemon.enable = true;
+
+    # Enable the accounts daemon to find lightdm's dbus interface
+    environment.systemPackages = [ lightdm ];
 
     security.pam.services.lightdm = {
       allowNullPassword = true;

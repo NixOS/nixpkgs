@@ -284,8 +284,9 @@ rec {
   };
 
   core_kernel = janePackage {
+    version = "0.11.1";
     name = "core_kernel";
-    hash = "0xaw8189i9z72fvzbxfv1qrf4wvj8v45bl7g3z7ynsqkvh6smr7d";
+    hash = "1dg7ygy7i64c5gaakb1cp1b26p9ks81vbxmb8fd7jff2q60j2z2g";
     propagatedBuildInputs = [ configurator jane-street-headers sexplib splittable_random ];
     meta.description = "Jane Street's standard library overlay (kernel)";
   };
@@ -298,9 +299,9 @@ rec {
   };
 
   core = janePackage {
-    version = "0.11.1";
+    version = "0.11.2";
     name = "core";
-    hash = "0wa2dsfk5m5wlhz915664y9h08idijj5s41hyg8n54dhihvxw2ci";
+    hash = "0vpsvd75lxb09il2rnzyib9mlr51v1hzqdc9fdxgx353pb5agh8a";
     propagatedBuildInputs = [ core_kernel spawn ];
     meta.description = "Jane Street's standard library overlay";
   };
@@ -340,8 +341,9 @@ rec {
   };
 
   async_kernel = janePackage {
+    version = "0.11.1";
     name = "async_kernel";
-    hash = "1drxawih7vhhb1mhd291698ly7yb38qzif82jk1adqcvwdb547af";
+    hash = "1ssv0gqbdns6by1wdjrrs35cj1c1n1qcfkxs8hj04b7x89wzvf1q";
     propagatedBuildInputs = [ core_kernel ];
     meta.description = "Jane Street Capital's asynchronous execution library (core)";
   };
@@ -368,8 +370,9 @@ rec {
   };
 
   async_extra = janePackage {
+    version = "0.11.1";
     name = "async_extra";
-    hash = "1qac95zlvq34fh2wbwbw0vdzxnba6si8lkal7n09y2lzpwvsifx3";
+    hash = "0dmplvqf41820rm5i0l9bx1xmmdlq8zsszi36y2rkjna8991f7s2";
     propagatedBuildInputs = [ async_rpc_kernel async_unix ];
     meta.description = "Jane Street's asynchronous execution library (extra)";
   };
@@ -547,8 +550,9 @@ rec {
   };
 
   incremental_kernel = janePackage {
+    version = "0.11.1";
     name = "incremental_kernel";
-    hash = "02arw8blpmnzlw5jlvavyvpgh3s9q0j9mhi2byz0x8cxknqvvasg";
+    hash = "1qp9dqncx2h0np0rndqaic4dna8f1dlkqnbjfcdhcim5dp2vg4x6";
     propagatedBuildInputs = [ core_kernel ];
     meta.description = "Library for incremental computations depending only on core_kernel";
   };

@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = https://attnam.com/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [nonfreeblob];
+    maintainers = with maintainers; [freepotion];
   };
 }

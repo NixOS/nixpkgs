@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.openbsm.org/;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ matthewbauer ];
+    license = lib.licenses.bsd2;
   };
 }

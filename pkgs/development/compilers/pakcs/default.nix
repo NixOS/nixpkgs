@@ -1,139 +1,72 @@
-{ stdenv, fetchurl, swiProlog, haskellPackages
-, glibcLocales, makeWrapper, rlwrap, tk, which }:
+{ stdenv, fetchurl, makeWrapper
+, haskellPackages, haskell
+, which, swiProlog, rlwrap, tk
+, curl, git, unzip, gnutar, coreutils, sqlite }:
 
 let
-  fname = "pakcs-1.14.0";
+  name = "pakcs-2.0.2";
 
-  fsrc = fetchurl {
-    url = "https://www.informatik.uni-kiel.de/~pakcs/download/${fname}-src.tar.gz";
-    sha256 = "1651ssh4ql79x8asd7kp4yis2n5rhn3lml4s26y03b0cgbfhs78s";
+  src = fetchurl {
+    url = "https://www.informatik.uni-kiel.de/~pakcs/download/${name}-src.tar.gz";
+    sha256 = "086nbsfv363cwrfxzhs54ggdwwkh1ms0pn0v1a4lvqlksjm7jdhv";
   };
 
-  swiPrologLocked = stdenv.lib.overrideDerivation swiProlog (oldAttrs: rec {
-    version = "6.6.6";
-    name = "swi-prolog-${version}";
-    src = fetchurl {
-      url = "http://www.swi-prolog.org/download/stable/src/pl-${version}.tar.gz";
-      sha256 = "0vcrfskm2hyhv30lxr6v261myb815jc3bgmcn1lgsc9g9qkvp04z";
+  curry-frontend = (haskellPackages.override {
+    overrides = self: super: {
+      curry-base = haskell.lib.overrideCabal (super.callPackage ./curry-base.nix {}) (drv: {
+        inherit src;
+        postUnpack = "sourceRoot+=/frontend/curry-base";
+      });
+      curry-frontend = haskell.lib.overrideCabal (super.callPackage ./curry-frontend.nix {}) (drv: {
+        inherit src;
+        postUnpack = "sourceRoot+=/frontend/curry-frontend";
+      });
     };
-  });
+  }).curry-frontend;
+in stdenv.mkDerivation {
+  inherit name src;
 
-in
-stdenv.mkDerivation rec {
+  buildInputs = [ swiProlog ];
+  nativeBuildInputs = [ which makeWrapper ];
 
-  name = fname;
-
-  curryBase = haskellPackages.callPackage (
-    { mkDerivation, base, Cabal, containers, directory, either
-    , filepath, mtl, pretty, syb, time
-    }:
-    mkDerivation {
-      pname = "curry-base";
-      version = "0.4.1";
-      src = fsrc;
-      libraryHaskellDepends = [
-        base containers directory either filepath mtl pretty syb time
-      ];
-      testHaskellDepends = [ base Cabal filepath mtl ];
-      homepage = http://curry-language.org;
-      description = "Functions for manipulating Curry programs";
-      license = "unknown";
-
-      postUnpack = ''
-        mv ${name} ${name}.orig
-        ln -s ${name}.orig/frontend/curry-base ${name}
-      '';
-      doCheck = false;
-    }
-  ) {};
-
-  curryFront = haskellPackages.callPackage (
-    { mkDerivation, base, Cabal, containers, directory
-    , filepath, mtl, network-uri, process, syb, transformers
-    }:
-    mkDerivation {
-      pname = "curry-frontend";
-      version = "0.4.1";
-      src = fsrc;
-      isLibrary = true;
-      isExecutable = true;
-      libraryHaskellDepends = [
-        base containers curryBase directory filepath mtl network-uri
-        process syb transformers
-      ];
-      executableHaskellDepends = [
-        base containers curryBase directory filepath mtl network-uri
-        process syb transformers
-      ];
-      testHaskellDepends = [ base Cabal curryBase filepath ];
-      homepage = http://curry-language.org;
-      description = "Compile the functional logic language Curry to several intermediate formats";
-      license = "unknown";
-
-      postUnpack = ''
-        mv ${name} ${name}.orig
-        ln -s ${name}.orig/frontend/curry-frontend ${name}
-      '';
-      doCheck = false;
-    }
-  ) {};
-
-  src = fsrc;
-
-  buildInputs = [ swiPrologLocked makeWrapper glibcLocales rlwrap tk which ];
-
-  patches = [
-    ./adjust-buildsystem.patch
-    ./case-insensitive.patch
+  makeFlags = [
+    "CURRYFRONTEND=${curry-frontend}/bin/curry-frontend"
+    "DISTPKGINSTALL=yes"
+    # Not needed, just to make script pass
+    "CURRYTOOLSDIR=0"
+    "CURRYLIBSDIR=0"
   ];
 
-  configurePhase = ''
-    # Phony HOME.
-    mkdir phony-home
-    export HOME=$(pwd)/phony-home
+  preConfigure = ''
+    # Since we can't expand $out in `makeFlags`
+    #makeFlags="$makeFlags PAKCSINSTALLDIR=$out/pakcs"
 
-    # SWI Prolog
-    sed -i 's@SWIPROLOG=@SWIPROLOG='${swiPrologLocked}/bin/swipl'@' scripts/pakcsinitrc.sh
+    substituteInPlace currytools/cpm/src/CPM/Repository.curry \
+      --replace "/bin/rm" "rm"
   '';
 
+  # cypm new: EXISTENCE ERROR: source_sink
+  # "/tmp/nix-build-pakcs-2.0.2.drv-0/pakcs-2.0.2/currytools/cpm/templates/LICENSE"
+  # does not exist
   buildPhase = ''
-    # Some comments in files are in UTF-8, so include the locale needed by GHC runtime.
-    export LC_ALL=en_US.UTF-8
-
-    # PAKCS must be build in place due to embedded filesystem references placed by swi.
-
-    # Prepare PAKCSHOME directory.
-    mkdir -p $out/pakcs/bin
-
-    # Set up link to cymake, which has been built already.
-    ln -s ${curryFront}/bin/cymake $out/pakcs/bin/
-    rm -r frontend
-
-    # Prevent embedding the derivation build directory as temp.
-    export TEMP=/tmp
-
-    # Copy to in place build location and run the build.
+    mkdir -p $out/pakcs
     cp -r * $out/pakcs
-    (cd $out/pakcs ; make)
+    (cd $out/pakcs ; make -j$NIX_BUILD_CORES $makeFlags)
   '';
 
   installPhase = ''
-    # Install bin.
-    mkdir -p $out/bin
-    for b in $(ls $out/pakcs/bin) ; do
-      ln -s $out/pakcs/bin/$b $out/bin/ ;
-    done
+    ln -s $out/pakcs/bin $out
 
-    # Place emacs lisp files in expected locations.
-    mkdir -p $out/share/emacs/site-lisp/curry-pakcs
-    for e in "$out/pakcs/tools/emacs/"*.el ; do
-      cp $e $out/share/emacs/site-lisp/curry-pakcs/ ;
-    done
+    mkdir -p $out/share/emacs/site-lisp
+    ln -s $out/pakcs/tools/emacs $out/share/emacs/site-lisp/curry-pakcs
 
-    # Wrap for rlwrap and tk support.
     wrapProgram $out/pakcs/bin/pakcs \
       --prefix PATH ":" "${rlwrap}/bin" \
-      --prefix PATH ":" "${tk}/bin" \
+      --prefix PATH ":" "${tk}/bin"
+
+    # List of dependencies from currytools/cpm/src/CPM/Main.curry
+    wrapProgram $out/pakcs/bin/cypm \
+      --prefix PATH ":" "${stdenv.lib.makeBinPath [ curl git unzip gnutar coreutils sqlite ]}"
   '';
 
   meta = with stdenv.lib; {
@@ -154,6 +87,6 @@ stdenv.mkDerivation rec {
     '';
 
     maintainers = with maintainers; [ kkallio gnidorah ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

@@ -103,8 +103,6 @@ EOF
     # Apple has some secret stuff they don't share with OpenBSM
     substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
       --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-    substituteInPlace src/3rdparty/chromium/sandbox/mac/bootstrap_sandbox.cc \
-      --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
     '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";

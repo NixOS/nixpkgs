@@ -44,9 +44,10 @@ stdenv.mkDerivation rec {
         -e 's@/usr/sbin/sendmail@${sendmail-script}@' -i Makefile
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Programs for managing RAID arrays under Linux";
     homepage = http://neil.brown.name/blog/mdadm;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

@@ -1,23 +1,24 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, cstruct }:
+{ stdenv, fetchzip, ocaml, findlib, jbuilder, configurator, cstruct }:
 
-let version = "1.6.1"; in
+let version = "2.0.1"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-io-page-${version}";
+  name = "ocaml${ocaml.version}-io-page-${version}";
 
   src = fetchzip {
-    url = "https://github.com/mirage/io-page/archive/v${version}.tar.gz";
-    sha256 = "1djwks3ss12m55q6h4jsvfsy848cxfnpaxkilw10h26xj6jchflz";
+    url = "https://github.com/mirage/io-page/archive/${version}.tar.gz";
+    sha256 = "1rw04dwrlx5hah5dkjf7d63iff82j9cifr8ifjis5pdwhgwcff8i";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ ocaml findlib jbuilder configurator ];
   propagatedBuildInputs = [ cstruct ];
 
-  createFindlibDestdir = true;
+  inherit (jbuilder) installPhase;
 
   meta = {
     homepage = https://github.com/mirage/io-page;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
+    license = stdenv.lib.licenses.isc;
     description = "IO memory page library for Mirage backends";
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

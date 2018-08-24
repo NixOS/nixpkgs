@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     sha256 = "26cceb7fa97dc7eee7181a79a6251a85b1f1464dcaaaf7624829f7439c5f7d3f";
   };
 
-  configureFlags = "--disable-component";
+  configureFlags = [ "--disable-component" ];
 
   prePatch = ''
     substituteInPlace doc/C/gnumeric.xml \

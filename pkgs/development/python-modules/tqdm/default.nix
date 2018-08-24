@@ -5,6 +5,7 @@
 , coverage
 , glibcLocales
 , flake8
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,8 @@ buildPythonPackage rec {
   '';
 
   LC_ALL="en_US.UTF-8";
+
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     description = "A Fast, Extensible Progress Meter";

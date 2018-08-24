@@ -4,11 +4,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, valgrind-light, python2
 , libglvnd
-, grsecEnabled ? false
 , enableRadv ? true
-# Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
-# It's overridden for mesa_drivers.
-, enableTextureFloats ? false
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
@@ -67,7 +63,7 @@ let
 in
 
 let
-  version = "18.1.4";
+  version = "18.1.5";
   branch  = head (splitString "." version);
 in
 
@@ -81,7 +77,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "12zm9hc3v4wnzhqyrvf2kfnz55idzdn82hs3ry940l45bn5lhq9h";
+    sha256 = "69dbe6f1a6660386f5beb85d4fcf003ee23023ed7b9a603de84e9a37e8d98dea";
   };
 
   prePatch = "patchShebangs .";
@@ -90,9 +86,9 @@ let self = stdenv.mkDerivation {
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
-    ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
     ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
+    ./disk_cache-include-dri-driver-path-in-cache-key.patch
   ];
 
   outputs = [ "out" "dev" "drivers" "osmesa" ];
@@ -115,8 +111,6 @@ let self = stdenv.mkDerivation {
       ("--with-vulkan-drivers=" +
         builtins.concatStringsSep "," vulkanDrivers))
   ++ [
-    (enableFeature enableTextureFloats "texture-float")
-    (enableFeature grsecEnabled "glx-rts")
     (enableFeature stdenv.isLinux "dri3")
     (enableFeature stdenv.isLinux "nine") # Direct3D in Wine
     "--enable-libglvnd"
@@ -135,7 +129,6 @@ let self = stdenv.mkDerivation {
     "--enable-xvmc"
     "--enable-vdpau"
     "--enable-shared-glapi"
-    "--enable-sysfs"
     "--enable-llvm-shared-libs"
     "--enable-omx-bellagio"
     "--enable-va"
@@ -272,7 +265,7 @@ let self = stdenv.mkDerivation {
     homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduarrrd vcunat ];
+    maintainers = with maintainers; [ vcunat ];
   };
 };
 in self

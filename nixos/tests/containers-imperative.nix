@@ -9,6 +9,11 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine =
     { config, pkgs, lib, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+
+      # XXX: Sandbox setup fails while trying to hardlink files from the host's
+      #      store file system into the prepared chroot directory.
+      nix.useSandbox = false;
+
       virtualisation.writableStore = true;
       virtualisation.memorySize = 1024;
       # Make sure we always have all the required dependencies for creating a

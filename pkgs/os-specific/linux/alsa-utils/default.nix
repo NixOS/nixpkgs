@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext ];
   buildInputs = [ alsaLib ncurses libsamplerate fftw ];
 
-  configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
+  configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 
   installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.alsa-project.org/;
     description = "ALSA, the Advanced Linux Sound Architecture utils";
     longDescription = ''
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.AndersonTorres ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.AndersonTorres ];
   };
 }

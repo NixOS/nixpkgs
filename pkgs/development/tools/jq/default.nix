@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
       url = https://patch-diff.githubusercontent.com/raw/stedolan/jq/pull/1214.diff;
       sha256 = "1w8bapnyp56di6p9casbfczfn8258rw0z16grydavdjddfm280l9";
     })
-  ];
+  ]
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-strptime-test.patch;
+
   patchFlags = [ "-p2" ]; # `src` subdir was introduced after v1.5 was released
 
   configureFlags =
@@ -34,12 +36,15 @@ stdenv.mkDerivation rec {
     "--datadir=\${doc}/share"
     "--mandir=\${man}/share/man"
     ]
-  # jq is linked to libjq:
+    # jq is linked to libjq:
     ++ stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
-  installCheckPhase = "$bin/bin/jq --help >/dev/null";
   doInstallCheck = true;
-  doCheck = true;
+  installCheckTarget = "check";
+
+  postInstallCheck = ''
+    $bin/bin/jq --help >/dev/null
+  '';
 
   meta = with stdenv.lib; {
     description = ''A lightweight and flexible command-line JSON processor'';

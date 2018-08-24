@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   # They use 'install -s', that calls the native strip instead of the cross
   postConfigure = ''
-    sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}" ports.mk
+    sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
   '';
 
   meta = with stdenv.lib; {

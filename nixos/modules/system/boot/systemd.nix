@@ -65,6 +65,7 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.machine1.service"
       "user@.service"
+      "user-runtime-dir@.service"
 
       # Journal.
       "systemd-journald.socket"
@@ -189,9 +190,8 @@ let
     ];
 
   makeJobScript = name: text:
-    let mkScriptName =  s: (replaceChars [ "\\" ] [ "-" ] (shellEscape s) );
-        x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${mkScriptName name}"; inherit text; };
-    in "${x}/bin/${mkScriptName name}";
+    let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
+    in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
 
   unitConfig = { config, ... }: {
     config = {
@@ -546,7 +546,7 @@ in
     };
 
     services.journald.rateLimitInterval = mkOption {
-      default = "10s";
+      default = "30s";
       type = types.str;
       description = ''
         Configures the rate limiting interval that is applied to all
@@ -559,7 +559,7 @@ in
     };
 
     services.journald.rateLimitBurst = mkOption {
-      default = 100;
+      default = 1000;
       type = types.int;
       description = ''
         Configures the rate limiting burst limit (number of messages per
