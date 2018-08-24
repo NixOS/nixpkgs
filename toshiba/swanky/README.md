@@ -1,4 +1,4 @@
-# Toshiba Chromebook (`swanky`)
+# Toshiba Chromebook 2 `swanky`
 
 There might be a way to install NixOS without hardware modifications (via
 enabled developer mode and SeaBIOS boot on Ctrl+L), however I'd highly
