@@ -31,7 +31,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "libtensorflow";
-  version = "1.9.0";
+  version = "1.10.0";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://storage.googleapis.com/tensorflow/${pname}/${pname}-${tfType}-${system}-${version}.tar.gz";
@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
       if system == "linux-x86_64" then
         if cudaSupport
         then "1q3mh06x344im25z7r3vgrfksfdsi8fh8ldn6y2mf86h4d11yxc3"
-        else "0l9ps115ng5ffzdwphlqmj3jhidps2v5afppdzrbpzmy41xz0z21"
+        else "11sbpcbgdzj8v17mdppfv7v1fn3nbzkdad60gc42y2j6knjbmwxb"
       else if system == "darwin-x86_64" then
         if cudaSupport
         then unavailable
