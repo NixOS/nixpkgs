@@ -74,6 +74,7 @@ rec {
 
     , hardeningEnable ? []
     , hardeningDisable ? []
+    , enablePhaseMetrics ? false
 
     , ... } @ attrs:
 

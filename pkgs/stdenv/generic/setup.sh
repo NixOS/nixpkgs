@@ -144,6 +144,11 @@ exitHandler() {
         # - system time for all child processes
         echo "build time elapsed: " "${times[@]}"
     fi
+    if [ -n "${enablePhaseMetrics:-}" ] && [ -d "$out" ]; then
+        mkdir -p $out/nix-support
+        cat "$NIX_BUILD_TOP/metrics" >> "$out/nix-support/hydra-metrics"
+        cat "$out/nix-support/hydra-metrics"
+    fi
 
     if (( "$exitCode" != 0 )); then
         runHook failureHook
@@ -235,6 +240,19 @@ printLines() {
 printWords() {
     (( "$#" > 0 )) || return 0
     printf '%s ' "$@"
+}
+
+performance-metrics() {
+thingname=$1
+shift
+if [ -n "${enablePhaseMetrics:-}" ]; then
+  TIMEFORMAT="time.$thingname.user %U
+time.$thingname.system %S
+time.$thingname.real %R"
+  exec {fd}<&2; time ( "$@" 2>&$fd; ) 2>> "$NIX_BUILD_TOP/metrics"; exec {fd}<&-
+else
+  "$@"
+fi
 }
 
 ######################################################################
@@ -1012,7 +1030,7 @@ buildPhase() {
         )
 
         echoCmd 'build flags' "${flagsArray[@]}"
-        make ${makefile:+-f $makefile} "${flagsArray[@]}"
+        performance-metrics "build" make ${makefile:+-f $makefile} "${flagsArray[@]}"
         unset flagsArray
     fi
 
@@ -1076,7 +1094,7 @@ installPhase() {
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
-    make ${makefile:+-f $makefile} "${flagsArray[@]}"
+    performance-metrics "install" make ${makefile:+-f $makefile} "${flagsArray[@]}"
     unset flagsArray
 
     runHook postInstall
@@ -1256,6 +1274,7 @@ genericBuild() {
     fi
 
     for curPhase in $phases; do
+        phase_start_time=$(date '+%s')
         if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
         if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
         if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then continue; fi
@@ -1279,6 +1298,11 @@ genericBuild() {
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
+        fi
+        phase_end_time=$(date '+%s')
+        duration=$((phase_end_time - phase_start_time))
+        if [ -n "${enablePhaseMetrics:-}" ]; then
+            echo "time.$curPhase $duration" >> "$NIX_BUILD_TOP/metrics"
         fi
     done
 }
