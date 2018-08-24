@@ -90,6 +90,8 @@ rec {
     mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
 
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
+    powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
+    powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
 
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };

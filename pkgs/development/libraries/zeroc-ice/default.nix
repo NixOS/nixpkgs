@@ -27,11 +27,6 @@ stdenv.mkDerivation rec {
         --replace xcrun ""
   '';
 
-  preConfigure = ''
-    CC=${stdenv.cc.targetPrefix}cc
-    CXX=${stdenv.cc.targetPrefix}c++
-  '';
-
   makeFlags = [ "prefix=$(out)" "OPTIMIZE=yes" ];
 
   enableParallelBuilding = true;
