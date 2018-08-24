@@ -36,7 +36,7 @@ with python'.pkgs;
 
 buildPythonApplication rec {
   pname = "FlexGet";
-  version = "2.14.9";
+  version = "2.14.18";
 
   src = fetchPypi {
     inherit pname version;
