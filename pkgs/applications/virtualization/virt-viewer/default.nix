@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtkvnc, gmp
+{ stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtk-vnc, gmp
 , libgcrypt, gnupg, cyrus_sasl, shared-mime-info, libvirt, yajl, xen
 , gsettings-desktop-schemas, makeWrapper, libvirt-glib, libcap_ng, numactl
 , libapparmor, gst_all_1
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [
-    glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl shared-mime-info
+    glib libxml2 gtk3 gtk-vnc gmp libgcrypt gnupg cyrus_sasl shared-mime-info
     libvirt yajl gsettings-desktop-schemas makeWrapper libvirt-glib
     libcap_ng numactl libapparmor
   ] ++ optionals stdenv.isx86_64 [

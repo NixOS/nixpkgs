@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, vte, libxml2, gtkvnc, intltool
+{ stdenv, fetchurl, pkgconfig, gtk3, gnome3, vte, libxml2, gtk-vnc, intltool
 , libsecret, itstool, makeWrapper, librsvg }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 vte libxml2 gtkvnc intltool libsecret
+  buildInputs = [ gtk3 vte libxml2 gtk-vnc intltool libsecret
                   itstool makeWrapper gnome3.defaultIconTheme librsvg ];
 
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
