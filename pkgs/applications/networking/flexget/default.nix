@@ -40,7 +40,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a8nxfr0rzwwd7b0nxr7zmw04ygbqvnzbi4w4nw2w8xiy46zid3q";
+    sha256 = "1pyvm1d23qy71rg7fzxcal8978kni7sn09zw4s4dsq56g8w80ay9";
   };
 
   postPatch = ''
