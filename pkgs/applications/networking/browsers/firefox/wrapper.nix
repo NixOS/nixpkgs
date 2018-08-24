@@ -7,7 +7,6 @@
 , trezor-bridge, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , esteidfirefoxplugin
-, vlc_npapi
 , browserpass, chrome-gnome-shell
 , libudev
 , kerberos
@@ -57,7 +56,6 @@ let
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
           ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
           ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
-          ++ lib.optional (cfg.enableVLC or false) vlc_npapi
           ++ extraPlugins
         );
       nativeMessagingHosts =
