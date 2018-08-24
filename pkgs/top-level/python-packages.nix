@@ -17233,6 +17233,8 @@ EOF
 
   black = callPackage ../development/python-modules/black { };
 
+  bjoern = callPackage ../development/python-modules/bjoern { };
+
   autobahn = callPackage ../development/python-modules/autobahn { };
 
   jsonref = callPackage ../development/python-modules/jsonref { };
