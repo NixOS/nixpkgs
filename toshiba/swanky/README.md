@@ -9,11 +9,11 @@ generally just works much better.
 These instructions carry some risk of bricking your device, since you'll be
 reflashing BIOS. Risk is rather low, but please for the love of god make a BIOS
 backup and store it someplace safe. That's the only way to reinstall ChromeOS
-back after this procedure (BIOS image has licensing info), and it's the easiest
-way to unbrick (it's nice to be able to return to the last good state).
+back after this procedure (BIOS image has licensing info), and it's much easier
+to use a known good state to unbrick the laptop if things go wrong.
 
-If you ever get unlucky, you can unbrick your device using a makeshift programmer
-based on Raspberry Pi or BeagleBone Black, some cables and a SOIC clip, see:
+If you ever get unlucky, you can unbrick your device using Raspberry Pi,
+some cables and a SOIC clip, see:
 http://sicarul.com/how-to-un-brick-your-toshiba-chromebook-2-gandof-without-invoking-any-demons/
 
 ## Enable developer mode
@@ -21,23 +21,25 @@ http://sicarul.com/how-to-un-brick-your-toshiba-chromebook-2-gandof-without-invo
 This will wipe all user data and settings from the laptop.
 
 Power off, then hold ESC + Refresh (F3) and abruptly press power button. You
-should see "Chrome OS is missing or damaged" message, press Ctrl+D. Press enter
+should see "Chrome OS is missing or damaged" message. Press Ctrl+D. Press enter
 at the next screen, then press Ctrl+D again. Wait until the laptop boots into
 ChromeOS, then power it off.
 
 ## Disable hardware-backed BIOS write protection
 
-Follow guide at: https://github.com/brendenyule/NativeToshibaCB2Guide/wiki/Remove-Write-Protect
+Follow the first part of the guide at:
+https://github.com/brendenyule/NativeToshibaCB2Guide/wiki/Remove-Write-Protect
 
-Ignore 2.2, only follow the first part of the guide. I also placed some ductape
-over #5 to make sure that metallic motherboard shield would not re-enable write
-protection.
+Ignore SeaBIOS section. I also used some ductape over #5 to make sure that
+metallic motherboard shield would not re-enable write protection.
 
 ## Flash Coreboot + Tianocore BIOS
 
-Go through installation dialogues until you have network access and are able to
-log into Guest session. Open Chrome, press Ctrl+Alt+T to open `crosh`, type in
-`shell` to get a real shell. Then, run:
+Prepare a FAT32-formatted flash drive for BIOS backup in advance.
+
+Go through ChromeOS installation dialogues until you have network access and
+are able to log into a guest session. Open Chrome, press Ctrl+Alt+T to open
+`crosh`, type in `shell` to get a real shell. Then, run:
 
 ```
 $ cd ~
@@ -45,7 +47,8 @@ $ curl -LO https://mrchromebox.tech/firmware-util.sh
 $ sudo bash firmware-util.sh
 ```
 
-Choose option 3. Do not skip BIOS backup!
+Choose "Install/Update Full ROM Firmware" option and follow instructions.
+Do not skip BIOS backup!
 
 Documentation: https://mrchromebox.tech/#fwscript
 
