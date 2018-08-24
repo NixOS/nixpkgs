@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
     license = stdenv.lib.licenses.unfree;
     platforms = with stdenv.lib.platforms; darwin ++ linux;
+    broken = true; # 2018-08-24
   };
 }
