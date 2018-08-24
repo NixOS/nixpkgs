@@ -14,13 +14,11 @@ stdenv.mkDerivation rec {
     description = "A 'top' like tool for PostgreSQL";
     longDescription = '' 
       pg_top allows you to: 
-      <itemizedlist>
-        <listitem>View currently running SQL statement of a process.</listitem>
-        <listitem>View query plan of a currently running SQL statement.</listitem>
-        <listitem>View locks held by a process.</listitem>
-        <listitem>View user table statistics.</listitem>
-        <listitem>View user index statistics.</listitem>
-      </itemizedlist>
+       * View currently running SQL statement of a process.
+       * View query plan of a currently running SQL statement.
+       * View locks held by a process.
+       * View user table statistics.
+       * View user index statistics.
     '';
 
     homepage = http://ptop.projects.postgresql.org/;
