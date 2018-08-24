@@ -4581,6 +4581,10 @@ in {
     gdal = self.gdal;
   };
 
+  django_2_1 = callPackage ../development/python-modules/django/2_1.nix {
+    gdal = self.gdal;
+  };
+
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.8.18";
