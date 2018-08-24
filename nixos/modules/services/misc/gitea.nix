@@ -261,7 +261,8 @@ in
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
         secretKey = "${cfg.stateDir}/custom/conf/secret_key";
       in ''
-        mkdir -p ${cfg.stateDir}
+        # Make sure that the stateDir exists, as well as the conf dir in there
+        mkdir -p ${cfg.stateDir}/conf
 
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
@@ -290,11 +291,13 @@ in
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/bash,${pkgs.bash}/bin/bash,g' $HOOKS
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/perl,${pkgs.perl}/bin/perl,g' $HOOKS
         fi
-        if [ ! -d ${cfg.stateDir}/conf/locale ]
+        # If we have a folder or symlink with gitea locales, remove it
+        if [ -e ${cfg.stateDir}/conf/locale ]
         then
-          mkdir -p ${cfg.stateDir}/conf
-          cp -r ${gitea.out}/locale ${cfg.stateDir}/conf/locale
+          rm -r ${cfg.stateDir}/conf/locale
         fi
+        # And symlink the current gitea locales in place
+        ln -s ${gitea.out}/locale ${cfg.stateDir}/conf/locale
         # update command option in authorized_keys
         if [ -r ${cfg.stateDir}/.ssh/authorized_keys ]
         then
