@@ -44,4 +44,6 @@ in
   microsoft-surface-pro-3 = buildProfile ./microsoft/surface-pro/3;
 
   pcengines-apu = buildProfile ./pcengines/apu;
+
+  toshiba-swanky = buildProfile ./toshiba/swanky;
 }
