@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ unzip ];
 	nativeBuildInputs = [ patchelf makeWrapper gcc_multi ];
-	propagatedBuildInputs = [ bash ];
 	
 	postUnpack = ''
 
