@@ -80,4 +80,6 @@ in
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 
+  ibtool = callPackage ../os-specific/darwin/ibtool/default.nix { };
+
 })
