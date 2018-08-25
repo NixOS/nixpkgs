@@ -25,10 +25,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ perl ] ++ perlDeps;
 
   makeFlags = "prefix=$(out)";
-
-  postPatch = ''
-    substituteInPlace Makefile --replace /usr/bin/install install
-  '';
+  installFlags = "INSTALL=install";
 
   postFixup = ''
     wrapProgram "$out/bin/extract_url" \
