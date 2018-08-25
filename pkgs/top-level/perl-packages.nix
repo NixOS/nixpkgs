@@ -11204,10 +11204,10 @@ let
   };
 
   NetDNS = buildPerlPackage rec {
-    name = "Net-DNS-1.16";
+    name = "Net-DNS-1.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NL/NLNETLABS/${name}.tar.gz";
-      sha256 = "8163eebaf46d1a870b6f596684f345da7c3a7461d7dba2b85f23e02d8982ea37";
+      sha256 = "9a79fd8fea1a708726c18d193ae4437479206ccb20ffa7f0971371e172e2c2e0";
     };
     propagatedBuildInputs = [ DigestHMAC IOSocketIP ];
     makeMakerFlags = "--noonline-tests";
