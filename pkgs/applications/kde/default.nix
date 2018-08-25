@@ -113,6 +113,7 @@ let
       kidentitymanagement = callPackage ./kidentitymanagement.nix {};
       kig = callPackage ./kig.nix {};
       kimap = callPackage ./kimap.nix {};
+      kitinerary = callPackage ./kitinerary.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
@@ -132,6 +133,7 @@ let
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
+      kpkpass = callPackage ./kpkpass.nix {};
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
