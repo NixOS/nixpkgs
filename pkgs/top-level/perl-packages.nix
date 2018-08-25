@@ -6353,10 +6353,10 @@ let
   };
 
   GamesSolitaireVerify = buildPerlModule {
-    name = "Games-Solitaire-Verify-0.1800";
+    name = "Games-Solitaire-Verify-0.1900";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.1800.tar.gz;
-      sha256 = "935ba997c49437a095adb39fd18233d5e378941aa9974df46e56aa6234f1fced";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Games-Solitaire-Verify-0.1900.tar.gz;
+      sha256 = "6b17847bd69da05ee089562cf40f2aac15e64c113175eca4fb501d4e86b48181";
     };
     buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ ClassXSAccessor ExceptionClass ListMoreUtils ];
