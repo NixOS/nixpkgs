@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "89159e9ab54a436db4759c32eeb0ae6e9b65cf7fe5b838daad4a658024ec3b43";
+    sha256 = "b8ddc6e2e60bd64b7003f9a685a09ba387b74adf2f6bea7534a76d61892f573e";
   };
 
   buildInputs = [ setuptools_scm ];
