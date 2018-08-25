@@ -5936,10 +5936,10 @@ let
   };
 
   FileMimeInfo = buildPerlPackage rec {
-    name = "File-MimeInfo-0.28";
+    name = "File-MimeInfo-0.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MICHIELB/File-MimeInfo-0.28.tar.gz;
-      sha256 = "1ipbh63bkh1r2gy5g7q4bzhki8j29mm1jkhbv60p9vwsdys5s91a";
+      url = mirror://cpan/authors/id/M/MI/MICHIELB/File-MimeInfo-0.29.tar.gz;
+      sha256 = "1sh8r6vczyz08zm8vfsjmkg6a165wch54akjdrd1vbifcmwjg5pi";
     };
     doCheck = false; # Failed test 'desktop file is the right one'
     buildInputs = [ FileBaseDir FileDesktopEntry ];
