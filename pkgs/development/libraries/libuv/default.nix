@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
+      "callback_stack" "delayed_accept" "emfile" "ipc_send_recv_pipe_inprocess"  # fail on GCE
+      "ipc_send_recv_tcp_inprocess" "pipe_pending_instances" "pipe_ping_pong"
+      "pipe_ping_pong_vec" "pipe_ref3" "pipe_ref4" "poll_oob" "poll_unidirectional"
+      "tcp_oob" "tcp_open_bound" "tcp_open_connected" "tcp_ref4" "tcp_unexpected_read"
+      "tcp_write_after_connect" "tcp_try_write" "tcp_unexpected_read"
+      "tcp_write_after_connect" "tcp_write_queue_order"
+      "tcp_write_to_half_open_connection" "tcp_writealot" "tcp_write_queue_order"
+      "udp_ipv6_only" "udp_multicast_join6"
     ]
       # Sometimes: timeout (no output), failed uv_listen. Someone
       # should report these failures to libuv team. There tests should
@@ -63,5 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ cstrahan ];
     platforms   = with platforms; linux ++ darwin;
   };
-
 }
