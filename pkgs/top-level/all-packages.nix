@@ -9034,6 +9034,8 @@ with pkgs;
 
   cmocka = callPackage ../development/libraries/cmocka { };
 
+  cmrt = callPackage ../development/libraries/cmrt { };
+
   cogl = callPackage ../development/libraries/cogl { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
@@ -12275,6 +12277,8 @@ with pkgs;
   v8_static = lowPrio (self.v8.override { static = true; });
 
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
+
+  vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
 
   vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
 
