@@ -111,6 +111,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
       <link xlink:href="https://github.com/strongswan/strongswan/blob/master/README_LEGACY.md">stroke configuration interface</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The new <varname>services.elasticsearch-curator</varname> service
+      periodically curates or manages, your Elasticsearch indices and snapshots.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
