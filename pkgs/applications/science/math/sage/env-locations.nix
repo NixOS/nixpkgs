@@ -38,6 +38,7 @@ writeTextFile rec {
     export COMBINATORIAL_DESIGN_DATA_DIR="${combinatorial_designs}/share/combinatorial_designs"
     export CREMONA_MINI_DATA_DIR="${elliptic_curves}/share/cremona"
     export JMOL_DIR="${jmol}"
+    export JSMOL_DIR="${jmol}/share/jsmol"
     export MATHJAX_DIR="${mathjax}/lib/node_modules/mathjax"
     export THREEJS_DIR="${three}/lib/node_modules/three"
     export SAGE_INCLUDE_DIRECTORIES="${cysignals}/lib/python2.7/site-packages"

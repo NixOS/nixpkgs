@@ -3,14 +3,14 @@
 , fetchpatch
 }:
 stdenv.mkDerivation rec {
-  version = "8.4.beta1";
+  version = "8.4.beta2";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0yk5ndjr1kap7vhd2i6i5bpcfgmr4fhypn6x7myiymiy9s93d37j";
+    sha256 = "1mivhk8xgdsi0xgdbvr8lxik7nmqz434fpyh93bvz50vhsqxgx9p";
   };
 
   nixPatches = [
@@ -30,22 +30,6 @@ stdenv.mkDerivation rec {
   ];
 
   packageUpgradePatches = [
-    # matplotlib 2.2.2 deprecated `normed` (replaced by `density`).
-    # This patch only ignores the warning. It would be equally easy to fix it
-    # (by replacing all mentions of `normed` by `density`), but its better to
-    # stay close to sage upstream. I didn't open an upstream ticket about it
-    # because the matplotlib update also requires a new dependency (kiwisolver)
-    # and I don't want to invest the time to learn how to add it.
-    ./patches/matplotlib-normed-deprecated.patch
-
-    # Update to 20171219 broke the doctests because of insignificant precision
-    # changes, make the doctests less fragile.
-    # I didn't open an upstream ticket because its not entirely clear if
-    # 20171219 is really "released" yet. It is listed on the github releases
-    # page, but not marked as "latest release" and the homepage still links to
-    # the last version.
-    ./patches/eclib-regulator-precision.patch
-
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
     # https://trac.sagemath.org/ticket/24824
     ./patches/pari-stackwarn.patch # not actually necessary since tha pari upgrade, but necessary for the glpk patch to apply
@@ -60,10 +44,8 @@ stdenv.mkDerivation rec {
     ./patches/numpy-1.14.3.patch
 
     # https://trac.sagemath.org/ticket/25862
+    ./patches/eclib-regulator-precision.patch
     ./patches/eclib-20180710.patch
-
-    # https://trac.sagemath.org/ticket/24735
-    ./patches/singular-4.1.1p2.patch
 
     # https://trac.sagemath.org/ticket/25567
     (fetchpatch {
