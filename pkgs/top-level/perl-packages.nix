@@ -1093,10 +1093,10 @@ let
   };
 
   CarpAlways = buildPerlPackage rec {
-    name = "Carp-Always-0.13";
+    name = "Carp-Always-0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/F/FE/FERREIRA/${name}.tar.gz";
-      sha256 = "0i2rifkr7ybfcdsqana52487z7vxp2l5qdra0f6ik0ddhn6rzii1";
+      sha256 = "1wb6b0qjga7kvn4p8df6k4g1pl2yzaqiln1713xidh3i454i3alq";
     };
     meta = {
       description = "Warns and dies noisily with stack backtraces";
