@@ -28,10 +28,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Gnome Diagram drawing software";
     homepage = http://live.gnome.org/Dia;
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ raskin ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

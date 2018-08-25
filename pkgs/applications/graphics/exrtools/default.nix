@@ -9,11 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0jpkskqs1yjiighab4s91jy0c0qxcscwadfn94xy2mm2bx2qwp4z";
   };
 
-  preConfigure = ''
-    CC=${stdenv.cc.targetPrefix}cc
-    CXX=${stdenv.cc.targetPrefix}c++
-  '';
-
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ stdenv openexr libpng12 libjpeg ];
 

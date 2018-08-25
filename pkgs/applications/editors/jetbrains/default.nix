@@ -249,12 +249,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "16fr5760nkzgx8785x6hh7s96x097y6vdx7w1f9ipg71vv25cscq"; /* updated by script */
+      sha256 = "1wjrki0awjyjmv7hh5rkhbpx40yqjssgh4nv61fvg189aric4rzj"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -262,12 +262,12 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "1jfkxr790wr8ffn7ph694hfzahs2akjcfk4rfsvjv1dccqb0167k"; /* updated by script */
+      sha256 = "0sfcl6bcq5hzwx1fdn8zfyl4qqjcmjmzwspa7v7niyqhbj5zdba9"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
     update-channel = "DataGrip 2018.2";
@@ -288,12 +288,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "04dqyzkkrwvcdy1raard77v2315d44h29cpc9p98bjidvjd6bhsx"; /* updated by script */
+      sha256 = "1495zkccss1bkh803p6065nypqj72zra9dbnlx3iz4kkbawr7j15"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA Release";
@@ -301,12 +301,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
-      sha256 = "0ydidg9pk8bqf5jb1z0fw2m88v6mi38b4ddgmh5c9d9p44g6mddv"; /* updated by script */
+      sha256 = "04jzsmnfmxxf264dla6scshk576z8w8sv78mpzb2mc1ndwviwflx"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA Release";
@@ -314,12 +314,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "042qhdkl4v5q4cdbqfbiwj6s3acivdb5kmbyn4jix8pg8r37yfnm"; /* updated by script */
+      sha256 = "1sjxavkfjg4g9rgjqjjb9d6wg53dwfs8n65w3qbp87c7x3pl006r"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PhpStorm 2018.2";
@@ -327,12 +327,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "14vnwqk0x0anvzmdv2ddc3qc9g5fll2ql02mi12k425j30fl2z2q"; /* updated by script */
+      sha256 = "0nq4xwqczppdrswi826yzjdzqpiwl4iyi70d7g6ncqd9wyiay4z4"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm Release";
@@ -340,12 +340,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1h4f9l577w2ps0y79x79yhpbrsv3j5nwr1lr1890phmp6zri6wyf"; /* updated by script */
+      sha256 = "1cf8z1wb532qhxlf0z4d791x084drfxzlaxq28hzy4f450bqbkp7"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm Release";
@@ -353,15 +353,15 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2018.1.3"; /* updated by script */
+    version = "2018.2"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "00wskr60mjipyp44wrpc3pn6awc92djn7rwhc08nrar3zv0j4mgg"; /* updated by script */
+      sha256 = "0yigw9g53i6xamwva8vcd38f0aysxqkf77avms4l7l63dkap99nq"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
-    update-channel = "Rider 2018.1.3";
+    update-channel = "Rider 2018.2";
   };
 
   ruby-mine = buildRubyMine rec {
@@ -379,12 +379,12 @@ in
 
   webstorm = buildWebStorm rec {
     name = "webstorm-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description = "Professional IDE for Web and JavaScript development";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
-      sha256 = "1jbzkp13qn4n58kbcsszm2gfnywjma2yvn48g0vi14v7x6zihhxd"; /* updated by script */
+      sha256 = "1a31q7wrg4ihap8j6n2cg98ml1zic78drkrp0p554rgsnh7v4hwr"; /* updated by script */
     };
     wmClass = "jetbrains-webstorm";
     update-channel = "WebStorm Release";

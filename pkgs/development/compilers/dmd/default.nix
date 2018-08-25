@@ -2,10 +2,10 @@
 , makeWrapper, unzip, which
 , curl, tzdata, gdb, darwin
 , callPackage, targetPackages, ldc
-, version ? "2.081.1"
-, dmdSha256 ? "1xdz7p0pdzwkn57ai93mavgdkd8xb1sr2brlc6y3c12x84h43s8z"
-, druntimeSha256 ? "1vl8ag6rjvqqmc5bn5jk3yfynjb9ggy3hw1awwl7c76bq4f7nbif"
-, phobosSha256 ? "0h1jdc3yai1l42bxjdlyi9hf9qadh76v925rjk2q4ibv2fzl56b7"
+, version ? "2.081.2"
+, dmdSha256 ? "1wwk4shqldvgyczv1ihmljpfj3yidq7mxcj69i9kjl7jqx54hw62"
+, druntimeSha256 ? "0dqfsy34q2q7mk2gsi4ix3vgqg7szg3m067fghgx53vnvrzlpsc0"
+, phobosSha256 ? "1dan59lc4wggsrv5aax7jsxnzg7fz37xah84k1cbwjb3xxhhkd9n"
 }:
 
 let

@@ -59,11 +59,11 @@ for cmd in \
     ar as ld nm objcopy objdump readelf ranlib strip strings size windres
 do
     if
-        cmd_path=$(PATH=$_PATH command -v "@targetPrefix@${cmd}")
+        PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
     then
         upper_case="$(echo "$cmd" | tr "[:lower:]" "[:upper:]")"
-        export "${role_pre}${upper_case}=${cmd_path}";
-        export "${upper_case}${role_post}=${cmd_path}";
+        export "${role_pre}${upper_case}=@targetPrefix@${cmd}";
+        export "${upper_case}${role_post}=@targetPrefix@${cmd}";
     fi
 done
 
@@ -72,5 +72,5 @@ done
 export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
-unset -v role_pre role_post cmd cmd_path upper_case
+unset -v role_pre role_post cmd upper_case
 set +u

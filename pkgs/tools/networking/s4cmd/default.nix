@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "s4cmd";
-  version = "2.0.1";
+  version = "2.1.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "14gfpnj4xa1sq3x3zd29drpzsygn998y32szwm069ma0w9jwjjz6";
+    sha256 = "0d4mx98i3qhvlmr9x898mjvf827smzx6x5ji6daiwgjdlxc60mj2";
   };
 
   propagatedBuildInputs = with python3Packages; [ boto3 pytz ];

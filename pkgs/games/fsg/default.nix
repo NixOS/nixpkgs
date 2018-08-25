@@ -4,7 +4,8 @@ stdenv.mkDerivation {
   name = "fsg-4.4";
 
   src = fetchurl {
-    url = http://www.sourcefiles.org/Games/Simulation/Other/fsg-src-4.4.tar.gz;
+    name = "fsg-src-4.4.tar.gz";
+    url = "https://github.com/ctrlcctrlv/wxsand/blob/master/fsg-src-4.4-ORIGINAL.tar.gz?raw=true";
     sha256 = "1756y01rkvd3f1pkj88jqh83fqcfl2fy0c48mcq53pjzln9ycv8c";
   };
 

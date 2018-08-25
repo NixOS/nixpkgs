@@ -10,11 +10,12 @@ assert kernel != null;
 
 stdenv.mkDerivation rec {
   name = "spl-${version}-${kernel.version}";
+  version = "0.7.9";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "spl";
-    rev = "spl-0.7.9";
+    rev = "spl-${version}";
     sha256 = "0540m1dv9jvrzk9kw61glg0h0cwj976mr9zb42y3nh17k47ywff0";
   };
 
@@ -51,5 +52,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jcumming wizeman wkennington fpletz globin ];
+    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
   };
 }

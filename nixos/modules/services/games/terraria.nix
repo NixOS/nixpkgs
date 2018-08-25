@@ -18,6 +18,16 @@ let
     (boolFlag "secure" cfg.secure)
     (boolFlag "noupnp" cfg.noUPnP)
   ];
+  stopScript = pkgs.writeScript "terraria-stop" ''
+    #!${pkgs.runtimeShell}
+
+    if ! [ -d "/proc/$1" ]; then
+      exit 0
+    fi
+
+    ${getBin pkgs.tmux}/bin/tmux -S /var/lib/terraria/terraria.sock send-keys Enter exit Enter
+    ${getBin pkgs.coreutils}/bin/tail --pid="$1" -f /dev/null
+  '';
 in
 {
   options = {
@@ -124,10 +134,10 @@ in
 
       serviceConfig = {
         User    = "terraria";
-        Type = "oneshot";
-        RemainAfterExit = true;
+        Type = "forking";
+        GuessMainPID = true;
         ExecStart = "${getBin pkgs.tmux}/bin/tmux -S /var/lib/terraria/terraria.sock new -d ${pkgs.terraria-server}/bin/TerrariaServer ${concatStringsSep " " flags}";
-        ExecStop = "${getBin pkgs.tmux}/bin/tmux -S /var/lib/terraria/terraria.sock send-keys Enter \"exit\" Enter";
+        ExecStop = "${stopScript} $MAINPID";
       };
 
       postStart = ''

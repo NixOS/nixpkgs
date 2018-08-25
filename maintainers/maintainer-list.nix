@@ -673,6 +673,11 @@
     github = "changlinli";
     name = "Changlin Li";
   };
+  CharlesHD = {
+    email = "charleshdespointes@gmail.com";
+    github = "CharlesHD";
+    name = "Charles Huyghues-Despointes";
+  };
   chaoflow = {
     email = "flo@chaoflow.net";
     github = "chaoflow";
@@ -1964,6 +1969,11 @@
     email = "jpo.contributes.to.nixos@marvid.fr";
     github = "jpotier";
     name = "Martin Potier";
+  };
+  jqueiroz = {
+    email = "nixos@johnjq.com";
+    github = "jqueiroz";
+    name = "Jonathan Queiroz";
   };
   jraygauthier = {
     email = "jraygauthier@gmail.com";
@@ -3872,6 +3882,11 @@
     email = "shawn.w.warren@gmail.com";
     github = "swarren83";
     name = "Shawn Warren";
+  };
+  swdunlop = {
+    email = "swdunlop@gmail.com";
+    github = "swdunlop";
+    name = "Scott W. Dunlop";
   };
   swflint = {
     email = "swflint@flintfam.org";

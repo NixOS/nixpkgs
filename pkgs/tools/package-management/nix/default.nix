@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
+{ lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
 , busybox-sandbox-shell
@@ -33,16 +33,30 @@ let
       ++ lib.optionals is20 [ brotli ] # Since 1.12
       ++ lib.optional withLibseccomp libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
-          (aws-sdk-cpp.override {
+          ((aws-sdk-cpp.override {
             apis = ["s3" "transfer"];
             customMemoryManagement = false;
-          })
+          }).overrideDerivation (args: {
+            patches = args.patches or [] ++ [(fetchpatch {
+              url = https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch;
+              sha256 = "103phn6kyvs1yc7fibyin3lgxz699qakhw671kl207484im55id1";
+            })];
+          }))
       ++ lib.optional fromGit boost;
 
     propagatedBuildInputs = [ boehmgc ];
 
     # Seems to be required when using std::atomic with 64-bit types
     NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+
+    preConfigure =
+      # Copy libboost_context so we don't get all of Boost in our closure.
+      # https://github.com/NixOS/nixpkgs/issues/45462
+      lib.optionalString fromGit
+      ''
+        mkdir -p $out/lib
+        cp ${boost}/lib/libboost_context* $out/lib
+      '';
 
     configureFlags =
       [ "--with-store-dir=${storeDir}"
@@ -144,12 +158,12 @@ in rec {
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.1${suffix}";
-    suffix = "pre6338_45bcf541";
+    suffix = "pre6377_954d1f4d";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "45bcf5416a0ce53361fd37c6b27ba4ef6a34ce96";
-      sha256 = "0ps45n78wnczz99dd9fs54ydxwh2cjq73zbvmak0y49nhc3p0vvv";
+      rev = "954d1f4d0a35063ff431b258beebadf753cb9efe";
+      sha256 = "0wnljxljvcwmniydgxlsjqmbgghmljs75m6083y2nkjql7dnrm7g";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings {

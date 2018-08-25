@@ -98,6 +98,7 @@ let
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
+        sed -i scripts/ld-version.sh -e "s|/usr/bin/awk|${buildPackages.gawk}/bin/awk|"
       '';
 
       configurePhase = ''
@@ -145,9 +146,12 @@ let
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-      installTargets = [ (if platform.kernelTarget == "uImage" then "uinstall" else
-                          if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall" else
-                          "install") ];
+      installTargets = [ (
+        if platform ? kernelInstallTarget then platform.kernelInstallTarget
+        else if platform.kernelTarget == "uImage" then "uinstall"
+        else if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall"
+        else "install"
+      ) ];
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "praat-${version}";
-  version = "6.0.40";
+  version = "6.0.42";
 
   src = fetchurl {
     url = "https://github.com/praat/praat/archive/v${version}.tar.gz";
-    sha256 = "168qrrr59qxii265vba7pj6f61lzq5lk9c43zcda0wmmjp87bq1x";
+    sha256 = "1llcj1cq4k60lnr6jkdshd4l9nkg9yc2xmaqiinqryxrb58jmpcv";
   };
 
   configurePhase = ''
