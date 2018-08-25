@@ -192,6 +192,39 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
+     The ELK stack: <varname>elasticsearch</varname>, <varname>logstash</varname> and <varname>kibana</varname>
+     has been upgraded from 2.* to 6.3.*.
+     The 2.* versions have been <link xlink:href="https://www.elastic.co/support/eol">unsupported since last year</link>
+     so they have been removed. You can still use the 5.* versions under the names
+     <varname>elasticsearch5</varname>, <varname>logstash5</varname> and
+     <varname>kibana5</varname>.
+    </para>
+    <para>
+     The elastic beats:
+     <varname>filebeat</varname>, <varname>heartbeat</varname>,
+     <varname>metricbeat</varname> and <varname>packetbeat</varname>
+     have had the same treatment: they now target 6.3.* as well.
+     The 5.* versions are available under the names:
+     <varname>filebeat5</varname>, <varname>heartbeat5</varname>,
+     <varname>metricbeat5</varname> and <varname>packetbeat5</varname>
+    </para>
+    <para>
+     The ELK-6.3 stack now comes with
+     <link xlink:href="https://www.elastic.co/products/x-pack/open">X-Pack by default</link>.
+     Since X-Pack is licensed under the
+     <link xlink:href="https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt">Elastic License</link>
+     the ELK packages now have an unfree license. To use them you need to specify
+     <literal>allowUnfree = true;</literal> in your nixpkgs configuration.
+    </para>
+    <para>
+     Fortunately there is also a free variant of the ELK stack without X-Pack.
+     The packages are available under the names:
+     <varname>elasticsearch-oss</varname>, <varname>logstash-oss</varname> and
+     <varname>kibana-oss</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       Options
       <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.ramfsMountPoint</literal>
       <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.storage.mountPoint</literal>
