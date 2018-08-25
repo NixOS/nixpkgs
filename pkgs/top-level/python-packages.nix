@@ -583,6 +583,8 @@ in {
 
   asgiref = callPackage ../development/python-modules/asgiref { };
 
+  python-dotenv = callPackage ../development/python-modules/python-dotenv {};
+
   python-editor = callPackage ../development/python-modules/python-editor { };
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg {};
