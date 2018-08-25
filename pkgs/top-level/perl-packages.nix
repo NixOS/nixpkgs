@@ -1853,10 +1853,10 @@ let
   };
 
   CGISimple = buildPerlModule rec {
-    name = "CGI-Simple-1.15";
+    name = "CGI-Simple-1.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.15.tar.gz;
-      sha256 = "013dcy9k4sj9alkksk5aqz65ryxw0rxgg71c7w666y941gd8n46q";
+      url = mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.16.tar.gz;
+      sha256 = "1j07qy22a9k4g1xasxma7yzfmwwn3iy50rkxdhz8hz9f09hiym0f";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
