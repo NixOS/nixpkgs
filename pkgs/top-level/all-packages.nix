@@ -17326,6 +17326,8 @@ with pkgs;
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
 
+  mac = callPackage ../development/libraries/mac { };
+
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
   mail-notification = callPackage ../desktops/gnome-2/desktop/mail-notification {};
@@ -18428,6 +18430,8 @@ with pkgs;
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
+
+  split2flac = callPackage ../applications/audio/split2flac { };
 
   squishyball = callPackage ../applications/audio/squishyball {
     ncurses = ncurses5;
