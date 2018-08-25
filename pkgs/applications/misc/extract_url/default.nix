@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ PodChecker makeWrapper ];
-  propagatedBuildInputs = [ perl ] ++ perlDeps;
+  buildInputs = [ perl ] ++ perlDeps;
 
   makeFlags = "prefix=$(out)";
 
