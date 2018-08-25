@@ -12,16 +12,23 @@ import ./make-test.nix ({ pkgs, ...} : {
       { config, ... }:
         {
           services = {
-           munin-node.enable = true;
-           munin-cron = {
+           munin-node = {
              enable = true;
-             hosts = ''
-               [${config.networking.hostName}]
-               address localhost
+             # disable a failing plugin to prevent irrelevant error message, see #23049
+             extraConfig = ''
+               ignore_file ^apc_nis$
              '';
            };
+           munin-cron = {
+            enable = true;
+            hosts = ''
+              [${config.networking.hostName}]
+              address localhost
+            '';
+           };
           };
-          systemd.services.munin-node.serviceConfig.TimeoutStartSec = "3min";
+          # long timeout to prevent hydra failure on high load
+          systemd.services.munin-node.serviceConfig.TimeoutStartSec = "10min";
         };
     };
 
@@ -29,7 +36,10 @@ import ./make-test.nix ({ pkgs, ...} : {
     startAll;
 
     $one->waitForUnit("munin-node.service");
+    # make sure the node is actually listening
+    $one->waitForOpenPort(4949);
     $one->succeed('systemctl start munin-cron');
+    # wait for munin-cron output
     $one->waitForFile("/var/lib/munin/one/one-uptime-uptime-g.rrd");
     $one->waitForFile("/var/www/munin/one/index.html");
   '';
