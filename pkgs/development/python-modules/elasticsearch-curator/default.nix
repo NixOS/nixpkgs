@@ -4,6 +4,7 @@
 , boto3
 , click
 , certifi
+, requests-aws4auth
 , voluptuous
 , pyyaml
 , elasticsearch
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     certifi
+    requests-aws4auth
     voluptuous
     pyyaml
     elasticsearch
