@@ -84,6 +84,7 @@ let
       platforms = [ "i686-linux" "x86_64-linux" ];
       maintainers = [ maintainers.vcunat ];
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
+      broken = stdenv.lib.versionAtLeast kernel.version "4.18";
     };
   };
 

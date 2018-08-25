@@ -11,7 +11,7 @@ let
     api_key             = "";
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
-    use_dogstatsd       = "yes";
+    use_dogstatsd       = true;
   }
   // optionalAttrs (cfg.logLevel != null) { log_level = cfg.logLevel; }
   // optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }

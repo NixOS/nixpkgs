@@ -10,7 +10,10 @@ stdenv.mkDerivation {
 
   buildInputs = [unzip];
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "Java based toolkit for handling SVG";
+    homepage = https://xmlgraphics.apache.org/batik;
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

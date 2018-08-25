@@ -1,5 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib, freetype, cairo, libintl
 , icu, graphite2, harfbuzz # The icu variant uses and propagates the non-icu one.
+, ApplicationServices, CoreText
+, withCoreText ? false
 , withIcu ? false # recommended by upstream as default, but most don't needed and it's big
 , withGraphite2 ? true # it is small and major distros do include it
 , python
@@ -27,12 +29,17 @@ stdenv.mkDerivation {
   outputBin = "dev";
 
   configureFlags = [
-    ( "--with-graphite2=" + (if withGraphite2 then "yes" else "no") ) # not auto-detected by default
-    ( "--with-icu=" +       (if withIcu       then "yes" else "no") )
-  ];
+    # not auto-detected by default
+    "--with-graphite2=${if withGraphite2 then "yes" else "no"}"
+    "--with-icu=${if withIcu then "yes" else "no"}"
+  ]
+    ++ stdenv.lib.optional withCoreText "--with-coretext=yes";
 
   nativeBuildInputs = [ pkgconfig libintl ];
-  buildInputs = [ glib freetype cairo ]; # recommended by upstream
+
+  buildInputs = [ glib freetype cairo ] # recommended by upstream
+    ++ stdenv.lib.optionals withCoreText [ ApplicationServices CoreText ];
+
   propagatedBuildInputs = []
     ++ optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];

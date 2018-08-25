@@ -1970,6 +1970,11 @@
     github = "jpotier";
     name = "Martin Potier";
   };
+  jqueiroz = {
+    email = "nixos@johnjq.com";
+    github = "jqueiroz";
+    name = "Jonathan Queiroz";
+  };
   jraygauthier = {
     email = "jraygauthier@gmail.com";
     github = "jraygauthier";
@@ -3877,6 +3882,11 @@
     email = "shawn.w.warren@gmail.com";
     github = "swarren83";
     name = "Shawn Warren";
+  };
+  swdunlop = {
+    email = "swdunlop@gmail.com";
+    github = "swdunlop";
+    name = "Scott W. Dunlop";
   };
   swflint = {
     email = "swflint@flintfam.org";
