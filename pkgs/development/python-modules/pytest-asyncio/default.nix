@@ -15,6 +15,11 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
+  # LICENSE file is not distributed. https://github.com/pytest-dev/pytest-asyncio/issues/92
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "license_file = LICENSE" ""
+  '';
+
   meta = with stdenv.lib; {
     description = "library for testing asyncio code with pytest";
     license = licenses.asl20;
