@@ -6748,6 +6748,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
+  go_1_11 = callPackage ../development/compilers/go/1.11.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
   go = go_1_10;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
