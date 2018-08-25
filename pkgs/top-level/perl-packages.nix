@@ -17687,10 +17687,10 @@ let
   };
 
   XMLParserLite = buildPerlPackage {
-    name = "XML-Parser-Lite-0.721";
+    name = "XML-Parser-Lite-0.722";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHRED/XML-Parser-Lite-0.721.tar.gz;
-      sha256 = "1fh8g77nkfv9n07ivilnfxdapx6jx13whf8q0anrmnxrr9pa6qjq";
+      url = mirror://cpan/authors/id/P/PH/PHRED/XML-Parser-Lite-0.722.tar.gz;
+      sha256 = "1vk3jwh1kfcsmc5kvxzqdnb1cllvf0yf27fg0ra0w6jkw4ks143g";
     };
     buildInputs = [ TestRequires ];
     meta = {
