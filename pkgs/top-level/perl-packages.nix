@@ -16390,10 +16390,10 @@ let
   };
 
   TextQuoted = buildPerlPackage {
-    name = "Text-Quoted-2.09";
+    name = "Text-Quoted-2.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AL/ALEXMV/Text-Quoted-2.09.tar.gz;
-      sha256 = "446c3e8da7e65f7988cd36e9da1159614eb0b337d6c4c0dec8f6df7673b96c5f";
+      url = mirror://cpan/authors/id/B/BP/BPS/Text-Quoted-2.10.tar.gz;
+      sha256 = "081bf95ec9220af26cec89161e61bf73f9fbcbfeee1d9af15139e5d7b708f445";
     };
     propagatedBuildInputs = [ TextAutoformat ];
     meta = {
