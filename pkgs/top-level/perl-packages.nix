@@ -11986,10 +11986,10 @@ let
   };
 
   PathTiny = buildPerlPackage {
-    name = "Path-Tiny-0.106";
+    name = "Path-Tiny-0.108";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.106.tar.gz;
-      sha256 = "308e39087b626013569a15783b896d61916fd1e67d06017f40cff567af36464d";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.108.tar.gz;
+      sha256 = "3c49482be2b3eb7ddd7e73a5b90cff648393f5d5de334ff126ce7a3632723ff5";
     };
     meta = {
       description = "File path utility";
