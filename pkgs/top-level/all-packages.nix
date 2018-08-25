@@ -10625,6 +10625,8 @@ with pkgs;
 
   libmad = callPackage ../development/libraries/libmad { };
 
+  libmanette = callPackage ../development/libraries/libmanette { };
+
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
   libmatheval = callPackage ../development/libraries/libmatheval {
