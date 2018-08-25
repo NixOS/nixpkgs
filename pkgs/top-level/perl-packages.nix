@@ -9541,7 +9541,7 @@ let
     };
   };
 
-  MLDBM = buildPerlPackage rec {
+  MLDBM = buildPerlModule rec {
     name = "MLDBM-2.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/C/CH/CHORNY/${name}.tar.gz";
