@@ -6,7 +6,9 @@
 # configuration-common.nix or to one of the compiler specific configuration
 # files.
 self: super: {
-  multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis { };
+
+  multi-ghc-travis = throw ("haskellPackages.multi-ghc-travis has been renamed"
+    + "to haskell-ci, which is now on hackage");
 
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
