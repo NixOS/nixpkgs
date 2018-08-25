@@ -8760,10 +8760,10 @@ let
   };
 
   LogAny = buildPerlPackage rec {
-    name = "Log-Any-1.706";
+    name = "Log-Any-1.707";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PR/PREACTION/${name}.tar.gz";
-      sha256 = "3ed0e5a4b7d490ab00624b7f905421239261f1dc976192aad2c0d1509bec08be";
+      sha256 = "74510f8cbee12637462e7c6020c8943d447a1e8e149a256f8168ee47562c65f1";
     };
     # Syslog test fails.
     preCheck = "rm t/syslog.t";
