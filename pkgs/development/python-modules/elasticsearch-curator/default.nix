@@ -24,6 +24,7 @@ buildPythonPackage rec {
     sha256 = "e75abeb7f7be939b1c64c071898760dc10ab5f08307c253fc074abf8a41a76f0";
   };
 
+  # The test hangs so we disable it.
   doCheck = false;
 
   propagatedBuildInputs = [
