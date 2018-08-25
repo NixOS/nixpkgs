@@ -9715,10 +9715,10 @@ let
   };
 
   ModuleCoreList = buildPerlPackage {
-    name = "Module-CoreList-5.20180720";
+    name = "Module-CoreList-5.20180820";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/Module-CoreList-5.20180720.tar.gz;
-      sha256 = "0l6dyj4m4qgv2yzq3pp0bkvg1j9nh9mcm1p4x3g3j93gkba7whws";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/Module-CoreList-5.20180820.tar.gz;
+      sha256 = "1ccs5mqcfxjv8bax2nfsg11b2vc3sqyapfapxyzrjhaa2fmdn54l";
     };
     meta = {
       homepage = http://dev.perl.org/;
