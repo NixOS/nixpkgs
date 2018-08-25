@@ -3700,6 +3700,11 @@
     github = "siddharthist";
     name = "Langston Barrett";
   };
+  siers = {
+    email = "veinbahs+nixpkgs@gmail.com";
+    github = "siers";
+    name = "Raitis Veinbahs";
+  };
   sifmelcara = {
     email = "ming@culpring.com";
     github = "sifmelcara";
