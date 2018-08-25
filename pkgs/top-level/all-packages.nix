@@ -7824,6 +7824,8 @@ with pkgs;
 
   alloy = callPackage ../development/tools/alloy { };
 
+  adafruit-ampy = callPackage ../development/tools/adafruit-ampy { };
+
   adtool = callPackage ../tools/admin/adtool { };
 
   augeas = callPackage ../tools/system/augeas { };
