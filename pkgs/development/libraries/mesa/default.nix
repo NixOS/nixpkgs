@@ -100,6 +100,7 @@ let self = stdenv.mkDerivation {
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${libglvnd.driverLink}/lib/dri"
     "--with-platforms=x11,wayland,drm"
+    "--enable-texture-float"
   ]
   ++ (optional (galliumDrivers != [])
       ("--with-gallium-drivers=" +
