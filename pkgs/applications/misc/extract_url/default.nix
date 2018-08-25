@@ -19,6 +19,10 @@ in stdenv.mkDerivation rec {
 
   makeFlags = "prefix=$(out)";
 
+  postPatch = ''
+    substituteInPlace Makefile --replace /usr/bin/install install
+  '';
+
   postFixup = ''
     wrapProgram "$out/bin/extract_url" \
       --set PERL5LIB "${lib.makeFullPerlPath perlDeps}"
