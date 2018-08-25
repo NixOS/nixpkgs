@@ -11194,7 +11194,7 @@ let
       sha256 = "8391696db9e96c374b72984c0bad9c7d1c9f3b4efe68f9ddf429a77548e0e269";
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [ TestPod TestPodCoverage pkgs.dbus ];
+    buildInputs = [ pkgs.dbus TestPod TestPodCoverage ];
     propagatedBuildInputs = [ XMLTwig ];
     meta = {
       homepage = http://www.freedesktop.org/wiki/Software/dbus;
