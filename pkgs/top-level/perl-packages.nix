@@ -11834,10 +11834,10 @@ let
   };
 
   ParamsValidationCompiler = buildPerlPackage rec {
-     name = "Params-ValidationCompiler-0.27";
+     name = "Params-ValidationCompiler-0.30";
      src = fetchurl {
-       url = mirror://cpan/authors/id/D/DR/DROLSKY/Params-ValidationCompiler-0.27.tar.gz;
-       sha256 = "1cpr188c2xm0kkmdir6slcsgv7v6ibqff4lax8s0whwx6ml9kaah";
+       url = mirror://cpan/authors/id/D/DR/DROLSKY/Params-ValidationCompiler-0.30.tar.gz;
+       sha256 = "1jqn1l4m4i341g14kmjsf3a1kn7vv6z89cix0xjjgr1v70iywnyw";
      };
      propagatedBuildInputs = [ EvalClosure ExceptionClass ];
      buildInputs = [ Specio Test2PluginNoWarnings Test2Suite TestSimple13 TestWithoutModule ];
