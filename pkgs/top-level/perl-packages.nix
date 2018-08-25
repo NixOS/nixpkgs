@@ -6255,10 +6255,10 @@ let
   };
 
   Filter = buildPerlPackage {
-    name = "Filter-1.58";
+    name = "Filter-1.59";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/Filter-1.58.tar.gz;
-      sha256 = "6de91cb4cbfe08d0ccffbca39aed57f9237be602b8183f13fd163fc8cb657f3d";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/Filter-1.59.tar.gz;
+      sha256 = "b4babfad4e0566a9a61199735f6e622a60d3274122752304f18f623412bf4e5a";
     };
     meta = {
       description = "Source Filters";
