@@ -7781,10 +7781,10 @@ let
   };
 
   IOSocketSSL = buildPerlPackage rec {
-    name = "IO-Socket-SSL-2.058";
+    name = "IO-Socket-SSL-2.059";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SU/SULLR/${name}.tar.gz";
-      sha256 = "746cd17c292cfc206b394497a060b0582d0b06a1040e6bb27e6530d56786e40b";
+      sha256 = "217debbe0a79f0b7c5669978b4d733271998df4497f4718f78456e5f54d64849";
     };
     propagatedBuildInputs = [ NetSSLeay ];
     # Fix path to default certificate store.
