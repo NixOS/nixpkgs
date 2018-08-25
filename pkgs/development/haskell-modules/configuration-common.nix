@@ -704,12 +704,6 @@ self: super: {
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
 
-  # vaultenv is not available from Hackage.
-  vaultenv = self.callPackage ../tools/haskell/vaultenv { };
-
-  # futhark is not available from Hackage.
-  futhark = self.callPackage ../compilers/futhark { };
-
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal super.stunclient (drv: {
@@ -949,9 +943,6 @@ self: super: {
 
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
-
-  # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
-  multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis {};
 
   # https://github.com/yesodweb/Shelly.hs/issues/162
   shelly = dontCheck super.shelly;
