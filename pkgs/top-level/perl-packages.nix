@@ -12242,10 +12242,10 @@ let
   };
 
   PkgConfig = buildPerlPackage rec {
-    name = "PkgConfig-0.19026";
+    name = "PkgConfig-0.21026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
-      sha256 = "5cb6e934d29dd93e04c2fa779f4b7e51361edaf56957b47a232017a4bb7e922c";
+      sha256 = "018f8d3c74e661df66046b26e57f4c5991adafe202af7ea2d1c6f6bcafde584b";
     };
     meta = {
       description = "Pure-Perl Core-Only replacement for pkg-config";
