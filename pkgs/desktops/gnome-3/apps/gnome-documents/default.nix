@@ -2,17 +2,17 @@
 , pkgconfig, gtk3, glib, tracker, tracker-miners
 , itstool, libxslt, webkitgtk, libgdata
 , gnome-desktop, libzapojit, libgepub
-, gnome3, gdk_pixbuf, libsoup, docbook_xsl
+, gnome3, gdk_pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
 , gobjectIntrospection, inkscape, poppler_utils
 , desktop-file-utils, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "gnome-documents-${version}";
-  version = "3.28.1";
+  version = "3.28.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-documents/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1i0s246bg9xcjxgbajph744pn65bq5gk6r9kkl3f5iwdq3rjc0pm";
+    sha256 = "0aannnq39gjg6jnjm4kr8fqigg5npjvd8dyxw7k4hy4ny0ffxwjq";
   };
 
   doCheck = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dgetting-started=true" ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl wrapGAppsHook
+    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl docbook_xml_dtd_42 wrapGAppsHook
     inkscape poppler_utils # building getting started
   ];
   buildInputs = [
