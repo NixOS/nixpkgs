@@ -4444,6 +4444,8 @@ with pkgs;
 
   padthv1 = callPackage ../applications/audio/padthv1 { };
 
+  pagmo2 = callPackage ../development/libraries/pagmo2 { };
+
   pakcs = callPackage ../development/compilers/pakcs {};
 
   pal = callPackage ../tools/misc/pal { };
