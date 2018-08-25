@@ -1456,6 +1456,8 @@ with pkgs;
 
   onboard = callPackage ../applications/misc/onboard { };
 
+  xkbd = callPackage ../applications/misc/xkbd { };
+
   optar = callPackage ../tools/graphics/optar {};
 
   patdiff = callPackage ../tools/misc/patdiff { };
