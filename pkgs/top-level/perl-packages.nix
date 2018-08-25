@@ -10043,10 +10043,10 @@ let
   };
 
   MonitoringPlugin = buildPerlPackage rec {
-    name = "Monitoring-Plugin-0.39";
+    name = "Monitoring-Plugin-0.40";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NI/NIERLEIN/${name}.tar.gz";
-      sha256 = "030cw86j8712z8rn66k935gbilb5rcj3lnk4n53vh1b2phrszvjw";
+      sha256 = "0vr3wwdn3zs246qwi04bqk8jir6l88j5m59jk97hmfyj4xz6pfpq";
     };
     propagatedBuildInputs = [ ClassAccessor ConfigTiny MathCalcUnits ParamsValidate ];
     meta = {
