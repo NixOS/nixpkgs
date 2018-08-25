@@ -215,7 +215,7 @@ let
       url = "mirror://cpan/authors/id/M/MS/MSCHOUT/${name}.tar.gz";
       sha256 = "58daeb3e44c681ff88f8fb00e4aabaa7a40cbee73dbdb84fcf6c285b15d357bd";
     };
-    buildInputs = [ ApacheTest URI ];
+    buildInputs = [ ApacheTest ];
     propagatedBuildInputs = [ ClassLoad HTTPBody HashMultiValue WWWFormUrlEncoded ];
 
     # Fails because /etc/protocols is not available in sandbox and make
