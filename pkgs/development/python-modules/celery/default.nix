@@ -2,7 +2,18 @@
   pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
-buildPythonPackage rec {
+let
+
+  # Needed for celery
+  pytest_32 = pytest.overridePythonAttrs( oldAttrs: rec {
+    version = "3.2.5";
+    src = oldAttrs.src.override {
+      inherit version;
+      sha256 = "6d5bd4f7113b444c55a3bbb5c738a3dd80d43563d063fc42dcb0aaefbdd78b81";
+    };
+  });
+
+in buildPythonPackage rec {
   pname = "celery";
   version = "4.2.0";
 

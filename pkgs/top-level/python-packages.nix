@@ -1455,7 +1455,7 @@ in {
     '';
   };
 
-  celery = callPackage ../development/python-modules/celery { pytest = self.pytest_32; };
+  celery = callPackage ../development/python-modules/celery { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
@@ -1832,21 +1832,12 @@ in {
     };
   };
 
-  pytest = self.pytest_36;
+  pytest = self.pytest_37;
 
-  pytest_36 = callPackage ../development/python-modules/pytest {
+  pytest_37 = callPackage ../development/python-modules/pytest {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
-
-  # Needed for celery
-  pytest_32 = self.pytest_36.overridePythonAttrs( oldAttrs: rec {
-    version = "3.2.5";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "6d5bd4f7113b444c55a3bbb5c738a3dd80d43563d063fc42dcb0aaefbdd78b81";
-    };
-  });
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 

@@ -8786,7 +8786,7 @@ with pkgs;
 
   grabserial = callPackage ../development/tools/grabserial { };
 
-  mypy = python3Packages.mypy;
+  mypy = with python3Packages; toPythonApplication mypy;
 
   ### DEVELOPMENT / LIBRARIES
 
