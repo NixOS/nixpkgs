@@ -250,6 +250,7 @@
   ./services/desktops/zeitgeist.nix
   ./services/development/bloop.nix
   ./services/development/hoogle.nix
+  ./services/development/jupyter/default.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
   ./services/games/factorio.nix
@@ -623,6 +624,7 @@
   ./services/scheduling/fcron.nix
   ./services/scheduling/marathon.nix
   ./services/search/elasticsearch.nix
+  ./services/search/elasticsearch-curator.nix
   ./services/search/hound.nix
   ./services/search/kibana.nix
   ./services/search/solr.nix

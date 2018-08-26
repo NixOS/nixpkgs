@@ -21,4 +21,8 @@ mkDerivation {
     phonon solid
   ];
   outputs = [ "out" "dev" ];
+  # We need the RPATH for linking, because the `libkdeinit5_dolphin.so` links
+  # private against its dependencies and without the correct RPATH, these
+  # dependencies are not found.
+  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
 }

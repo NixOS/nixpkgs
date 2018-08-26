@@ -17,11 +17,11 @@ in
 rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = generic {
-    version = "390.67";
-    sha256_32bit = "01c8fa80njyyr39c1pyf7ssmfq65ci8mapbs94fd6gnhwc7gfjkg";
-    sha256_64bit = "0np6xj93fali2hss8xsdlmy5ykjgn4hx6mzjr8dpbdi0fhdcmwkd";
-    settingsSha256 = "1wk4587czysnbj5yxijmv3bldcffzwp4yvfx133apsr31dqca0s7";
-    persistencedSha256 = "1zia1r97lyj6fbmvsw4hv5qfcj84x3sz971m4430d8qyks2c4sdw";
+    version = "390.77";
+    sha256_32bit = "1yd313ghh2qbn07d5wbkshfwgkm4mh49vcqkydds3b3xk0mx4i8l";
+    sha256_64bit = "10kjccrkdn360035lh985cadhwy6lk9xrw3wlmww2wqfaa25f775";
+    settingsSha256 = "1wvxldpjkrx0ldjm5l6ycm6paxpcw89h0n6hfkznfkahkq7fwxdj";
+    persistencedSha256 = "1gklmc0v17m018cwpdlzwdyd45y4sjvjhj8a3l44baygix5zn30f";
   };
 
   beta = stable; # not enough interest to maintain beta ATM

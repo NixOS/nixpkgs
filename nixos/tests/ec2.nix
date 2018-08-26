@@ -68,7 +68,9 @@ let
           # again when it deletes link-local addresses.) Ideally we'd
           # turn off the DHCP server, but qemu does not have an option
           # to do that.
-          my $startCommand = "qemu-kvm -m 768 -net nic,vlan=0,model=virtio -net 'user,vlan=0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd ${metaData}'";
+          my $startCommand = "qemu-kvm -m 768";
+          $startCommand .= " -device virtio-net-pci,netdev=vlan0";
+          $startCommand .= " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd ${metaData}'";
           $startCommand .= " -drive file=$diskImage,if=virtio,werror=report";
           $startCommand .= " \$QEMU_OPTS";
 

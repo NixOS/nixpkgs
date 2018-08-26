@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name = "firehol-${version}";
-  version = "3.1.5";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "firehol";
     repo = "firehol";
     rev = "v${version}";
-    sha256 = "15cy1zxfpprma2zkmhj61zzhmw1pfnyhln7pca5lzvr1ifn2d0y0";
+    sha256 = "0l7sjpsb300kqv21hawd26a7jszlmafplacpn5lfj64m4yip93fd";
   };
 
   patches = [

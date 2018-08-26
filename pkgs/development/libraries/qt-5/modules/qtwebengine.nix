@@ -13,6 +13,7 @@
 , systemd
 , enableProprietaryCodecs ? true
 , gn, darwin, openbsm
+, ffmpeg ? null
 , lib, stdenv # lib.optional, needsPax
 }:
 
@@ -115,7 +116,9 @@ EOF
     fi
    '';
 
-  qmakeFlags = optional enableProprietaryCodecs "-- -proprietary-codecs";
+  qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
+    then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
+    else optional enableProprietaryCodecs "-- -proprietary-codecs";
 
   propagatedBuildInputs = [
     # Image formats
@@ -131,6 +134,8 @@ EOF
     harfbuzz icu
 
     libevent
+  ] ++ optionals stdenv.hostPlatform.isArm [
+    ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
