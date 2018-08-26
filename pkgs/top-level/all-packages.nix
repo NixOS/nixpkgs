@@ -1706,7 +1706,9 @@ with pkgs;
   nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
 
   libceph = ceph.lib;
-  ceph = callPackage ../tools/filesystems/ceph { boost = boost165; };
+  ceph = callPackage ../tools/filesystems/ceph {
+    boost = boost166.override { enablePython = true; };
+  };
   ceph-dev = ceph;
 
   certmgr = callPackage ../tools/security/certmgr { };
