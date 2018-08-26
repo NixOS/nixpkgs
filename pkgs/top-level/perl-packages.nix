@@ -531,6 +531,7 @@ let
       url = mirror://cpan/authors/id/P/PH/PHRED/Archive-Zip-1.62.tar.gz;
       sha256 = "1jax173w7nm5r6k7ymfcskvs1rw590lyscbqrnfbkjj4cxc65wrb";
     };
+    buildInputs = [ TestMockModule ];
     meta = {
       description = "Provide an interface to ZIP archive files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
