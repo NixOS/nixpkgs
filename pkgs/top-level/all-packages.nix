@@ -19572,6 +19572,8 @@ with pkgs;
 
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
 
+  _20kly = callPackage ../games/20kly { };
+
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
 
   adom = callPackage ../games/adom { };
