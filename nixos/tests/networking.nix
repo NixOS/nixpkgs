@@ -448,8 +448,8 @@ let
 
       testScript = ''
         my $targetList = <<'END';
-        tap0: tap UNKNOWN_FLAGS:800 user 0
-        tun0: tun UNKNOWN_FLAGS:800 user 0
+        tap0: tap persist user 0
+        tun0: tun persist user 0
         END
 
         # Wait for networking to come up
@@ -552,15 +552,15 @@ let
 
       testScript = ''
         my $targetIPv4Table = <<'END';
-        10.0.0.0/16 scope link mtu 1500 
+        10.0.0.0/16 proto static scope link mtu 1500 
         192.168.1.0/24 proto kernel scope link src 192.168.1.2 
-        192.168.2.0/24 via 192.168.1.1 
+        192.168.2.0/24 via 192.168.1.1 proto static 
         END
 
         my $targetIPv6Table = <<'END';
         2001:1470:fffd:2097::/64 proto kernel metric 256 pref medium
-        2001:1470:fffd:2098::/64 via fdfd:b3f0::1 metric 1024 pref medium
-        fdfd:b3f0::/48 metric 1024 pref medium
+        2001:1470:fffd:2098::/64 via fdfd:b3f0::1 proto static metric 1024 pref medium
+        fdfd:b3f0::/48 proto static metric 1024 pref medium
         END
 
         $machine->start;
