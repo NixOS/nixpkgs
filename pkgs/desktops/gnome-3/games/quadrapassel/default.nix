@@ -2,8 +2,10 @@
 , librsvg, libcanberra-gtk3
 , intltool, itstool, libxml2, clutter, clutter-gtk, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
-  name = "quadrapassel-${version}";
+let
+  pname = "quadrapassel";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
   version = "3.22.0";
 
   src = fetchurl {
@@ -11,22 +13,26 @@ stdenv.mkDerivation rec {
     sha256 = "0ed44ef73c8811cbdfc3b44c8fd80eb6e2998d102d59ac324e4748f5d9dddb55";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "quadrapassel"; attrPath = "gnome3.quadrapassel"; };
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg
-                  libcanberra-gtk3 itstool intltool clutter
-                  libxml2 clutter-gtk wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook ];
+  buildInputs = [
+    gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg
+    libcanberra-gtk3 clutter libxml2 clutter-gtk
+  ];
 
   enableParallelBuilding = true;
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Quadrapassel;
     description = "Classic falling-block game, Tetris";
-    maintainers = gnome3.maintainers;
+    homepage = https://wiki.gnome.org/Apps/Quadrapassel;
     license = licenses.gpl2;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

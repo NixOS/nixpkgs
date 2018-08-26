@@ -2022,6 +2022,8 @@ in {
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket {};
 
+  requests-aws4auth = callPackage ../development/python-modules/requests-aws4auth { };
+
   howdoi = callPackage ../development/python-modules/howdoi {};
 
   neurotools = callPackage ../development/python-modules/neurotools {};

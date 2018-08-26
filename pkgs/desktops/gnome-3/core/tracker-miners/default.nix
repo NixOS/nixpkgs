@@ -1,24 +1,24 @@
-{ stdenv, fetchurl, substituteAll, intltool, itstool, libxslt, makeWrapper
+{ stdenv, fetchurl, substituteAll, intltool, itstool, libxslt
 , meson, ninja, pkgconfig, vala, wrapGAppsHook, bzip2, dbus, evolution-data-server
 , exempi, flac, giflib, glib, gnome3, gst_all_1, icu, json-glib, libcue, libexif
-, libgsf, libiptcdata, libjpeg, libpng, libseccomp, libsoup, libtiff, libuuid
+, libgrss, libgsf, libiptcdata, libjpeg, libpng, libseccomp, libsoup, libtiff, libuuid
 , libvorbis, libxml2, poppler, taglib, upower }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+let
   pname = "tracker-miners";
-  version = "2.0.5";
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "00k8nb8dbkjnqjk12gcs5n2cm6yny553qildsm5b2c8nfs1w16b4";
+    sha256 = "107638773mihxdi194wf3saacqrr4cp9xn3qjfmx60bwq5451ma0";
   };
 
   nativeBuildInputs = [
     intltool
     itstool
     libxslt
-    makeWrapper
     meson
     ninja
     pkgconfig
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
-  # TODO: add libgrss, libenca, libosinfo
+  # TODO: add libenca, libosinfo
   buildInputs = [
     bzip2
     dbus
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     json-glib
     libcue
     libexif
+    libgrss
     libgsf
     libiptcdata
     libjpeg
@@ -60,7 +61,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dminer_rss=false" # needs libgrss
+    # TODO: tests do not like our sandbox
+    "-Dfunctional_tests=false"
   ];
 
   patches = [
@@ -75,13 +77,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = pname;
-      attrPath = "gnome3.${pname}";
-    };
-  };
-
+  # Symlinks require absolute path and we still cannot use placeholders
   # https://github.com/NixOS/nixpkgs/pull/39534#discussion_r184339131
   # https://github.com/NixOS/nixpkgs/pull/37693
   preConfigure = ''
@@ -92,10 +88,13 @@ stdenv.mkDerivation rec {
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  # https://bugzilla.gnome.org/show_bug.cgi?id=796145
-  postFixup = ''
-    rm $out/share/tracker/miners/org.freedesktop.Tracker1.Miner.RSS.service
-  '';
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+      attrPath = "gnome3.${pname}";
+      versionPolicy = "none";
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Tracker;

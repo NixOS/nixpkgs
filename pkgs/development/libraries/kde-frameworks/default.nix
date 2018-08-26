@@ -173,6 +173,7 @@ let
       kxmlgui = callPackage ./kxmlgui.nix {};
       kxmlrpcclient = callPackage ./kxmlrpcclient.nix {};
       plasma-framework = callPackage ./plasma-framework.nix {};
+      kpurpose = callPackage ./purpose.nix {};
 
     # TIER 4
       frameworkintegration = callPackage ./frameworkintegration.nix {};

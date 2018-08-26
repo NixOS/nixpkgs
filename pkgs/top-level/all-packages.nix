@@ -849,22 +849,22 @@ with pkgs;
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  inherit (callPackages ../misc/logging/beats/5.x.nix { })
-    filebeat
-    heartbeat
-    metricbeat
-    packetbeat;
-
-  inherit (let beats6 = callPackages ../misc/logging/beats/6.x.nix { }; in {
-    filebeat6   = beats6.filebeat;
-    heartbeat6  = beats6.heartbeat;
-    metricbeat6 = beats6.metricbeat;
-    packetbeat6 = beats6.packetbeat;
-  })
+  inherit (callPackages ../misc/logging/beats/6.x.nix { })
     filebeat6
     heartbeat6
     metricbeat6
     packetbeat6;
+
+  filebeat = filebeat6;
+  heartbeat = heartbeat6;
+  metricbeat = metricbeat6;
+  packetbeat = packetbeat6;
+
+  inherit (callPackages ../misc/logging/beats/5.x.nix { })
+    filebeat5
+    heartbeat5
+    metricbeat5
+    packetbeat5;
 
   bfr = callPackage ../tools/misc/bfr { };
 
@@ -2303,13 +2303,13 @@ with pkgs;
   elk5Version = "5.6.9";
   elk6Version = "6.3.2";
 
-  elasticsearch = callPackage ../servers/search/elasticsearch { };
-  elasticsearch2 = callPackage ../servers/search/elasticsearch/2.x.nix { };
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
-  elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix { };
-  elasticsearch6-oss = callPackage ../servers/search/elasticsearch/6.x.nix {
+  elasticsearch6 = callPackage ../servers/search/elasticsearch { };
+  elasticsearch6-oss = callPackage ../servers/search/elasticsearch {
     enableUnfree = false;
   };
+  elasticsearch = elasticsearch6;
+  elasticsearch-oss = elasticsearch6-oss;
 
   elasticsearchPlugins = recurseIntoAttrs (
     callPackage ../servers/search/elasticsearch/plugins.nix { }
@@ -2963,7 +2963,7 @@ with pkgs;
 
   gtkperf = callPackage ../development/tools/misc/gtkperf { };
 
-  gtkvnc = callPackage ../tools/admin/gtk-vnc {};
+  gtk-vnc = callPackage ../tools/admin/gtk-vnc {};
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
 
@@ -3383,6 +3383,10 @@ with pkgs;
 
   jupp = callPackage ../applications/editors/jupp { };
 
+  jupyter = callPackage ../applications/editors/jupyter { };
+
+  jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
+
   jwhois = callPackage ../tools/networking/jwhois { };
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
@@ -3424,12 +3428,13 @@ with pkgs;
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
 
-  kibana  = callPackage ../development/tools/misc/kibana { };
   kibana5 = callPackage ../development/tools/misc/kibana/5.x.nix { };
-  kibana6 = callPackage ../development/tools/misc/kibana/6.x.nix { };
-  kibana6-oss = callPackage ../development/tools/misc/kibana/6.x.nix {
+  kibana6 = callPackage ../development/tools/misc/kibana/default.nix { };
+  kibana6-oss = callPackage ../development/tools/misc/kibana/default.nix {
     enableUnfree = false;
   };
+  kibana = kibana6;
+  kibana-oss = kibana6-oss;
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
@@ -3506,12 +3511,12 @@ with pkgs;
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
-  logstash  = callPackage ../tools/misc/logstash { };
   logstash5 = callPackage ../tools/misc/logstash/5.x.nix { };
-  logstash6 = callPackage ../tools/misc/logstash/6.x.nix { };
-  logstash6-oss = callPackage ../tools/misc/logstash/6.x.nix {
+  logstash6 = callPackage ../tools/misc/logstash { };
+  logstash6-oss = callPackage ../tools/misc/logstash {
     enableUnfree = false;
   };
+  logstash = logstash6;
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
@@ -6795,6 +6800,9 @@ with pkgs;
       };
 
   openjdk10 =
+    if stdenv.isDarwin then
+      callPackage ../development/compilers/openjdk/darwin/10.nix { }
+    else
       callPackage ../development/compilers/openjdk/10.nix {
         inherit (gnome2) GConf gnome_vfs;
       };
@@ -9032,6 +9040,8 @@ with pkgs;
 
   cmocka = callPackage ../development/libraries/cmocka { };
 
+  cmrt = callPackage ../development/libraries/cmrt { };
+
   cogl = callPackage ../development/libraries/cogl { };
 
   coin3d = callPackage ../development/libraries/coin3d { };
@@ -10323,6 +10333,8 @@ with pkgs;
 
   libgroove = callPackage ../development/libraries/libgroove { };
 
+  libgrss = callPackage ../development/libraries/libgrss { };
+
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
   libsecret = callPackage ../development/libraries/libsecret { };
@@ -10618,6 +10630,8 @@ with pkgs;
   liblinear = callPackage ../development/libraries/liblinear { };
 
   libmad = callPackage ../development/libraries/libmad { };
+
+  libmanette = callPackage ../development/libraries/libmanette { };
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
@@ -11647,7 +11661,7 @@ with pkgs;
       kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
       kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
       networkmanager-qt plasma-framework prison solid sonnet syntax-highlighting
-      threadweaver kirigami2 kholidays;
+      threadweaver kirigami2 kholidays kpurpose;
 
     ### KDE PLASMA 5
 
@@ -12271,6 +12285,8 @@ with pkgs;
   v8_static = lowPrio (self.v8.override { static = true; });
 
   vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
+
+  vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
 
   vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
 
@@ -17067,7 +17083,7 @@ with pkgs;
   inherit (kdeApplications)
     akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
     kaddressbook kate kcachegrind kcalc kcolorchooser kcontacts kdenlive kdf kdialog keditbookmarks
-    kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
+    kget kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole kpkpass kitinerary
     kontact korganizer krdc krfb ksystemlog kwalletmanager marble minuet okular spectacle;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
@@ -17083,8 +17099,6 @@ with pkgs;
   kdevelop = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevelop.nix {
     llvmPackages = llvmPackages_38;
   };
-
-  kdevplatform = libsForQt5.callPackage ../applications/editors/kdevelop5/kdevplatform.nix { };
 
   keepnote = callPackage ../applications/office/keepnote { };
 
@@ -17317,6 +17331,8 @@ with pkgs;
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
+
+  mac = callPackage ../development/libraries/mac { };
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
@@ -18420,6 +18436,8 @@ with pkgs;
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
+
+  split2flac = callPackage ../applications/audio/split2flac { };
 
   squishyball = callPackage ../applications/audio/squishyball {
     ncurses = ncurses5;
@@ -19559,6 +19577,8 @@ with pkgs;
   ### GAMES
 
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
+
+  _20kly = callPackage ../games/20kly { };
 
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
 

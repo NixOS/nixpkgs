@@ -1,4 +1,4 @@
-{ pkgs,  stdenv, fetchurl, unzip, elasticsearch }:
+{ pkgs,  stdenv, fetchurl, unzip, elasticsearch-oss, javaPackages, elk6Version }:
 
 with pkgs.lib;
 
@@ -6,8 +6,9 @@ let
   esPlugin = a@{
     pluginName,
     installPhase ? ''
-      mkdir -p $out/bin
-      ES_HOME=$out ${elasticsearch}/bin/elasticsearch-plugin --install ${pluginName} --url file://$src
+      mkdir -p $out/config
+      mkdir -p $out/plugins
+      ES_HOME=$out ${elasticsearch-oss}/bin/elasticsearch-plugin install --batch -v file://$src
     '',
     ...
   }:
@@ -16,33 +17,19 @@ let
       unpackPhase = "true";
       buildInputs = [ unzip ];
       meta = a.meta // {
-        platforms = elasticsearch.meta.platforms;
+        platforms = elasticsearch-oss.meta.platforms;
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.offline ];
       };
     });
 in {
-  elasticsearch_river_jdbc = esPlugin rec {
-    name = "elasticsearch-river-jdbc-${version}";
-    pluginName = "elasticsearch-river-jdbc";
-    version = "1.5.0.5";
-    src = fetchurl {
-      url = "http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-river-jdbc/${version}/${name}-plugin.zip";
-      sha256 = "1p75l3vcnb90ar4j3dci2xf8dqnqyy31kc1r075fa2xqlsxgigcp";
-    };
-    meta = {
-      homepage = https://github.com/jprante/elasticsearch-river-jdbc;
-      description = "Plugin to fetch data from JDBC sources for indexing into Elasticsearch";
-      license = licenses.asl20;
-    };
-  };
 
   elasticsearch_analysis_lemmagen = esPlugin rec {
     name = "elasticsearch-analysis-lemmagen-${version}";
     pluginName = "elasticsearch-analysis-lemmagen";
-    version = "0.1";
+    version = "${elk6Version}";
     src = fetchurl {
       url = "https://github.com/vhyza/elasticsearch-analysis-lemmagen/releases/download/v${version}/${name}-plugin.zip";
-      sha256 = "bf7bf5ce3ccdd3afecd0e18cd6fce1ef56f824e41f4ef50553ae598caa5c366d";
+      sha256 = "1m4z05wixjrq4nlbdjyhvprkrwxjym8aba18scmzfn25fhbjgvkz";
     };
     meta = {
       homepage = https://github.com/vhyza/elasticsearch-analysis-lemmagen;
@@ -51,68 +38,28 @@ in {
     };
   };
 
-  elasticsearch_http_basic = stdenv.mkDerivation rec {
-    name = "elasticsearch-http-basic-${version}";
-    version = "1.5.0";
-
-    src = fetchurl {
-      url = "https://github.com/Asquera/elasticsearch-http-basic/releases/download/v${version}/${name}.jar";
-      sha256 = "0fif6sbn2ich39lrgm039y9d5bxkylx9pvly04wss8rdhspvdskb";
+  discovery-ec2 = esPlugin {
+    name = "elasticsearch-discovery-ec2-${version}";
+    pluginName = "discovery-ec2";
+    version = "${elk6Version}";
+    src = pkgs.fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/discovery-ec2/discovery-ec2-${elk6Version}.zip";
+      sha256 = "1i7ksy69132sr84h51lamgq967yz3a3dw0b54nckxpqwad9pcpj0";
     };
-
-    phases = ["installPhase"];
-    installPhase = "install -D $src $out/plugins/http-basic/${name}.jar";
-
     meta = {
-      homepage = https://github.com/Asquera/elasticsearch-http-basic;
-      description = "HTTP Basic Authentication for Elasticsearch";
-      license = licenses.mit;
-      platforms = elasticsearch.meta.platforms;
-    };
-  };
-
-  elasticsearch_river_twitter = esPlugin rec {
-    name = pname + "-" + version;
-    pname = "elasticsearch-river-twitter";
-    pluginName = "elasticsearch/" + pname + "/" + version;
-    version = "2.5.0";
-
-    src = fetchurl {
-      url = "http://download.elasticsearch.org/elasticsearch/${pname}/${name}.zip";
-      sha256 = "0851yrmyrpp6whyxk34ykcj7b28f90w0nvkrhvl49dwqgr5s4mn4";
-    };
-
-    meta = {
-      homepage = https://github.com/elasticsearch/elasticsearch-river-twitter;
-      description = "Twitter River Plugin for ElasticSearch";
+      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2;
+      description = "The EC2 discovery plugin uses the AWS API for unicast discovery.";
       license = licenses.asl20;
-      maintainers = [ maintainers.edwtjo ];
-      platforms = elasticsearch.meta.platforms;
-    };
-  };
-
-  elasticsearch_kopf = esPlugin rec {
-    name = "elasticsearch-kopf-${version}";
-    pluginName = "elasticsearch-kopf";
-    version = "2.1.1";
-    src = fetchurl {
-      url = "https://github.com/lmenezes/elasticsearch-kopf/archive/v${version}.zip";
-      sha256 = "1nwwd92g0jxhfpkxb1a9z5a62naa1y7hvlx400dm6mwwav3mrf4v";
-    };
-    meta = {
-      homepage = https://github.com/lmenezes/elasticsearch-kopf;
-      description = "Web administration tool for ElasticSearch";
-      license = licenses.mit;
     };
   };
 
   search_guard = esPlugin rec {
     name = "elastic-search-guard-${version}";
     pluginName = "search-guard";
-    version = "0.5";
-    src = fetchurl {
-      url = "https://github.com/floragunncom/search-guard/releases/download/v${version}/${pluginName}-${version}.zip";
-      sha256 = "1zima4jmq1rrcqxhlrp2xian80vp244d2splby015n5cgqrp39fl";
+    version = "${elk6Version}-22.3";
+    src = fetchurl rec {
+      url = "mirror://maven/com/floragunn/search-guard-6/${version}/search-guard-6-${version}.zip";
+      sha256 = "1r71h4h9bmxak1mq5gpm19xq5ji1gry1kp3sjmm8azy4ykdqdncx";
     };
     meta = {
       homepage = https://github.com/floragunncom/search-guard;
