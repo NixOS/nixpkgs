@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -i "s|PREFIX = /usr/local|PREFIX = $out|g" Makefile
     sed -i "s|/bin/bash|${bash}/bin/bash|g" usertable.cpp
+    sed -i "s|/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin|/run/current-system/sw/bin|g" usertable.cpp
   '';
 
   installPhase = ''
