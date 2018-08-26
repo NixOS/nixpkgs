@@ -16244,6 +16244,8 @@ EOF
 
   potr = callPackage ../development/python-modules/potr {};
 
+  python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
+
   pluggy = callPackage ../development/python-modules/pluggy {};
 
   xcffib = callPackage ../development/python-modules/xcffib {};
