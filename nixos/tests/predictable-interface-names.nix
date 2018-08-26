@@ -13,6 +13,11 @@ in pkgs.lib.listToAttrs (pkgs.lib.crossLists (predictable: withNetworkd: {
       networking.usePredictableInterfaceNames = lib.mkForce predictable;
       networking.useNetworkd = withNetworkd;
       networking.dhcpcd.enable = !withNetworkd;
+      # So we can see the initrd device names in the log
+      # although we don't add an automated test here
+      boot.initrd.network.enable = true;
+      # test new behavior for 18.09
+      system.stateVersion = "18.09";
     };
 
     testScript = ''
