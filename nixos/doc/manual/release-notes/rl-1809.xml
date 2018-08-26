@@ -200,6 +200,21 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
       from your config without any issues.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The following changes apply if <literal>system.stateVersion</literal> is
+     changed to 18.09 or higher. For <literal>system.stateVersion = "18.03"</literal> or lower
+     the old behavior is preserved.
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+        If predictable interface names are enabled (<literal>networking.usePredictableInterfaceNames = true </literal>), interfaces are already renamed in Stage 1 (initrd).
+        <emphasis role="strong">This may break existing configurations that require networking in Stage 1 (initrd) to boot. In the worst case, your system may become unbootable.</emphasis> Before updating <literal>stateVersion</literal> to 18.09 or higher, make sure your configuration is not affected.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
  </section>
 
