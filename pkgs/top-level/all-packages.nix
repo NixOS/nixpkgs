@@ -706,7 +706,9 @@ with pkgs;
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
-  gopass = callPackage ../tools/security/gopass { };
+  gopass = callPackage ../tools/security/gopass {
+    buildGoPackage = buildGo110Package;
+  };
 
   browserpass = callPackage ../tools/security/browserpass { };
 
@@ -1348,7 +1350,9 @@ with pkgs;
 
   gmic = callPackage ../tools/graphics/gmic { };
 
-  goa = callPackage ../development/tools/goa { };
+  goa = callPackage ../development/tools/goa {
+    buildGoPackage = buildGo110Package;
+  };
 
   gohai = callPackage ../tools/system/gohai { };
 
@@ -2091,13 +2095,17 @@ with pkgs;
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
-  diskrsync = callPackage ../tools/backup/diskrsync { };
+  diskrsync = callPackage ../tools/backup/diskrsync {
+    buildGoPackage = buildGo110Package;
+  };
 
   djbdns = callPackage ../tools/networking/djbdns { };
 
   dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy/1.x { };
 
-  dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy/2.x { };
+  dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy/2.x {
+    buildGoPackage = buildGo110Package;
+  };
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
@@ -2933,8 +2941,12 @@ with pkgs;
     stdenv = stdenv_32bit;
   };
 
-  gx = callPackage ../tools/package-management/gx { };
-  gx-go = callPackage ../tools/package-management/gx/go { };
+  gx = callPackage ../tools/package-management/gx {
+    buildGoPackage = buildGo110Package;
+  };
+  gx-go = callPackage ../tools/package-management/gx/go {
+    buildGoPackage = buildGo110Package;
+  };
 
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
@@ -3278,7 +3290,9 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
-  ipget = callPackage ../applications/networking/ipget { };
+  ipget = callPackage ../applications/networking/ipget {
+    buildGoPackage = buildGo110Package;
+  };
 
   ipmitool = callPackage ../tools/system/ipmitool {
     static = false;
@@ -3960,7 +3974,9 @@ with pkgs;
 
   mimetic = callPackage ../development/libraries/mimetic { };
 
-  minio-client = callPackage ../tools/networking/minio-client { };
+  minio-client = callPackage ../tools/networking/minio-client {
+    buildGoPackage = buildGo110Package;
+  };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
@@ -4194,7 +4210,9 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = callPackage ../applications/networking/cluster/nomad { };
+  nomad = callPackage ../applications/networking/cluster/nomad {
+    buildGoPackage = buildGo110Package;
+  };
 
   miller = callPackage ../tools/text/miller { };
 
@@ -4246,7 +4264,9 @@ with pkgs;
 
   nnn = callPackage ../applications/misc/nnn { };
 
-  notary = callPackage ../tools/security/notary { };
+  notary = callPackage ../tools/security/notary {
+    buildGoPackage = buildGo110Package;
+  };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
@@ -5522,7 +5542,9 @@ with pkgs;
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
 
-  tmsu = callPackage ../tools/filesystems/tmsu { };
+  tmsu = callPackage ../tools/filesystems/tmsu {
+    go = go_1_10;
+  };
 
   toilet = callPackage ../tools/misc/toilet { };
 
@@ -6752,7 +6774,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = go_1_10;
+  go = go_1_11;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -12638,8 +12660,11 @@ with pkgs;
   buildGo110Package = callPackage ../development/go-modules/generic {
     go = go_1_10;
   };
+  buildGo111Package = callPackage ../development/go-modules/generic {
+    go = go_1_11;
+  };
 
-  buildGoPackage = buildGo110Package;
+  buildGoPackage = buildGo111Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -12997,13 +13022,17 @@ with pkgs;
 
   mediatomb = callPackage ../servers/mediatomb { };
 
-  meguca = callPackage ../servers/meguca { };
+  meguca = callPackage ../servers/meguca {
+    buildGoPackage = buildGo110Package;
+  };
 
   memcached = callPackage ../servers/memcached {};
 
   meteor = callPackage ../servers/meteor { };
 
-  minio = callPackage ../servers/minio { };
+  minio = callPackage ../servers/minio {
+    buildGoPackage = buildGo110Package;
+  };
 
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
@@ -13266,7 +13295,9 @@ with pkgs;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
-  inherit (callPackage ../servers/monitoring/prometheus {})
+  inherit (callPackage ../servers/monitoring/prometheus {
+    buildGoPackage = buildGo110Package;
+  })
       prometheus_1
       prometheus_2
       ;
@@ -13292,7 +13323,9 @@ with pkgs;
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
-  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
+  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix {
+    buildGoPackage = buildGo110Package;
+  };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-bridge.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
@@ -13670,7 +13703,9 @@ with pkgs;
   dstat = callPackage ../os-specific/linux/dstat { };
 
   # unstable until the first 1.x release
-  fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
+  fscrypt-experimental = callPackage ../os-specific/linux/fscrypt {
+    buildGoPackage = buildGo110Package;
+  };
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
@@ -14389,7 +14424,9 @@ with pkgs;
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
-  go-langserver = callPackage ../development/tools/go-langserver { };
+  go-langserver = callPackage ../development/tools/go-langserver {
+    buildGoPackage = buildGo110Package;
+  };
 
   gotests = callPackage ../development/tools/gotests { };
 
@@ -21931,7 +21968,9 @@ with pkgs;
 
   valauncher = callPackage ../applications/misc/valauncher { };
 
-  vault = callPackage ../tools/security/vault { };
+  vault = callPackage ../tools/security/vault {
+    go = go_1_10;
+  };
 
   vaultenv = haskellPackages.vaultenv;
 
