@@ -448,8 +448,8 @@ let
 
       testScript = ''
         my $targetList = <<'END';
-        tap0: tap UNKNOWN_FLAGS:800 user 0
-        tun0: tun UNKNOWN_FLAGS:800 user 0
+        tap0: tap persist user 0
+        tun0: tun persist user 0
         END
 
         # Wait for networking to come up
