@@ -5,7 +5,8 @@
 # stripLen acts as the -p parameter when applying a patch.
 
 { lib, fetchurl, buildPackages }:
-{ stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
+let patchutils = buildPackages.patchutils;
+in { stripLen ? 0, extraPrefix ? null, excludes ? [], includes ? [], revert ? false, ... }@args:
 
 fetchurl ({
   postFetch = ''
