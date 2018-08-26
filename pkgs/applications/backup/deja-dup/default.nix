@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
    at-spi2-core dbus gnome3.gnome-online-accounts libgpgerror
   ];
 
-  propagatedUserEnvPkgs = [ duplicity ];
+  propagatedUserEnvPkgs = [ duplicity gnome3.dconf ];
 
   PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "lib/nautilus/extensions-3.0";
 
