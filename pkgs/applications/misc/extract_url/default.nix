@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, perl
-, PodChecker, MIMEtools, HTMLParser
+, MIMEtools, HTMLParser
 , cursesSupport ? true, CursesUI
 , uriFindSupport ? true, URIFind
 }:
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     sha256 = "05589lp15jmcpbj4y9a3hmf6n2gsqrm4ybcyh3hd4j6pc7hmnhny";
   };
 
-  nativeBuildInputs = [ PodChecker makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ] ++ perlDeps;
 
   makeFlags = [ "prefix=$(out)" ];

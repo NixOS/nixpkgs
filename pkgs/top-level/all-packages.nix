@@ -2374,7 +2374,7 @@ with pkgs;
   ext4magic = callPackage ../tools/filesystems/ext4magic { };
 
   extract_url = callPackage ../applications/misc/extract_url {
-    inherit (perlPackages) PodChecker MIMEtools HTMLParser CursesUI URIFind;
+    inherit (perlPackages) MIMEtools HTMLParser CursesUI URIFind;
   };
 
   extundelete = callPackage ../tools/filesystems/extundelete { };
