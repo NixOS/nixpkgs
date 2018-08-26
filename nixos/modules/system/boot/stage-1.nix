@@ -195,9 +195,11 @@ let
       fi
     ''; # */
 
+  # use same rules as stage 2 for renaming network interfaces to predictable names
+  netSetupLinkRules = ../../services/hardware/80-net-setup-link.rules;
 
   udevRules = pkgs.runCommand "udev-rules"
-    { allowedReferences = [ extraUtils ]; }
+    { allowedReferences = [ netSetupLinkRules extraUtils ]; }
     ''
       mkdir -p $out
 
@@ -206,6 +208,12 @@ let
       cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
       cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
       cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
+      # rename interfaces to predictable names in stage 1 for newer configs
+      ${optionalString (config.networking.usePredictableInterfaceNames &&
+                        lib.versionAtLeast config.system.stateVersion "18.09") ''
+        cp -v ${udev}/lib/udev/rules.d/75-net-description.rules $out/
+        cp -v ${netSetupLinkRules} $out/80-net-setup-link.rules
+      ''}
       cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
       ${config.boot.initrd.extraUdevRulesCommands}
 
