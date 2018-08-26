@@ -134,7 +134,7 @@ EOF
     harfbuzz icu
 
     libevent
-  ] ++ optionals stdenv.hostPlatform.isArm [
+  ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
     ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
