@@ -844,7 +844,10 @@ in
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
       restartTriggers = map (f: f.source) (unitFiles);
+    } // optionalAttrs (versionOlder config.system.stateVersion "18.09") {
       # prevent race condition with interface renaming (#39069)
+      # This is not necessary for newer configs (stateVersion>=18.09)
+      # since they do interface renaming in stage 1
       requires = [ "systemd-udev-settle.service" ];
       after = [ "systemd-udev-settle.service" ];
     };
