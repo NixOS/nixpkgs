@@ -266,6 +266,9 @@ in
         change randomly across reboots; for instance, you may find
         <literal>eth0</literal> and <literal>eth1</literal> flipping
         unpredictably.
+        For newer configurations with <literal>system.stateVersion >= 18.09</literal>,
+        interfaces are renamed to predictable names in Stage 1 (initrd), and
+        changing this option's value requires a reboot to take effect.
       '';
     };
 
