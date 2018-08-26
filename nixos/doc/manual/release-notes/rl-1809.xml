@@ -209,8 +209,9 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
     <itemizedlist>
      <listitem>
       <para>
-        If predictable interface names are enabled (<literal>networking.usePredictableInterfaceNames = true </literal>), interfaces are already renamed in Stage 1 (initrd).
-        <emphasis role="strong">This may break existing configurations that require networking in Stage 1 (initrd) to boot. In the worst case, your system may become unbootable.</emphasis> Before updating <literal>stateVersion</literal> to 18.09 or higher, make sure your configuration is not affected.
+        If predictable interface names are enabled (<literal>networking.usePredictableInterfaceNames = true </literal>),
+        interfaces are already renamed in Stage 1 (initrd). <emphasis role="strong">This may break existing configurations
+        that require networking in Stage 1 (initrd) to boot. In the worst case, your system may become unbootable.</emphasis>
       </para>
      </listitem>
     </itemizedlist>
