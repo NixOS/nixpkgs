@@ -645,9 +645,15 @@ in python.withPackages(ps: [ps.blaze])).env
 
 #### `buildPythonApplication` function
 
-The `buildPythonApplication` function is practically the same as `buildPythonPackage`.
-The difference is that `buildPythonPackage` by default prefixes the names of the packages with the version of the interpreter.
-Because this is irrelevant for applications, the prefix is omitted.
+The `buildPythonApplication` function is practically the same as
+`buildPythonPackage`. The main purpose of this function is to build a Python
+package where one is interested only in the executables, and not importable
+modules. For that reason, when adding this package to a `python.buildEnv`, the
+modules won't be made available.
+
+Another difference is that `buildPythonPackage` by default prefixes the names of
+the packages with the version of the interpreter. Because this is irrelevant for
+applications, the prefix is omitted.
 
 #### `toPythonApplication` function
 
