@@ -314,7 +314,7 @@ in rec {
   tests.hydra = callTest tests/hydra {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.iftop = callTest tests/iftop.nix {};
-  tests.initrd-network-ssh = callTest tests/initrd-network-ssh {};
+  tests.initrd-network-ssh = callSubTests tests/initrd-network-ssh {};
   tests.installer = callSubTests tests/installer.nix {};
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
