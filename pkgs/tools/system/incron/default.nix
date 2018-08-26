@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "
-      The inotify cron daemon (incrond) is a daemon which monitors filesystem events and executes commands defined in system and user tables. It's use is generally similar to cron.";
-    license = licenses.gpl2;
+    description = "A daemon which monitors filesystem events and executes commands defined in system and user tables";
     homepage = https://github.com/ar-/incron;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.aanderse ];
     platforms = platforms.linux;
   };
 }
