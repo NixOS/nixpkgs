@@ -19748,6 +19748,8 @@ with pkgs;
 
   EmptyEpsilon = callPackage ../games/empty-epsilon { };
 
+  endgame-singularity = callPackage ../games/endgame-singularity { };
+
   endless-sky = callPackage ../games/endless-sky { };
 
   enyo-doom = libsForQt5.callPackage ../games/enyo-doom { };
