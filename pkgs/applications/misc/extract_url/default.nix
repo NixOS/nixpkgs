@@ -24,8 +24,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ PodChecker makeWrapper ];
   buildInputs = [ perl ] ++ perlDeps;
 
-  makeFlags = "prefix=$(out)";
-  installFlags = "INSTALL=install";
+  makeFlags = [ "prefix=$(out)" ];
+  installFlags = [ "INSTALL=install" ];
 
   postFixup = ''
     wrapProgram "$out/bin/extract_url" \
