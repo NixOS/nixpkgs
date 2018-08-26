@@ -1655,6 +1655,8 @@ in {
 
   eth-hash = callPackage ../development/python-modules/eth-hash { };
 
+  eth-typing = callPackage ../development/python-modules/eth-typing { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
