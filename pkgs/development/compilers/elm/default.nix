@@ -3,8 +3,31 @@
 # To update:
 
 # 1) Modify ./update.sh and run it
-# 2) XXX: generate packages/elm-elm.nix
-# 3) XXX: versions.dat
+
+# 2) to generate versions.dat:
+# 2.1) git clone https://github.com/elm/compiler.git
+# 2.2) cd compiler
+# 2.3) cabal2nix --shell . | sed 's/"default",/"ghc822",/' > shell.nix
+# 2.4) nix-shell
+# 2.5) mkdir .elm
+# 2.6) export ELM_HOME=$(pwd)/.elm
+# 2.7) cabal build
+# 2.8) cp .elm/0.19.0/package/versions.dat ...
+
+# 3) generate a template for elm-elm.nix with:
+# (
+#   echo "{";
+#   jq '.dependencies | .direct, .indirect | to_entries | .[] | { (.key) : { version : .value, sha256:  "" } } ' \
+#   < ui/browser/elm.json \
+#   | sed 's/:/ =/' \
+#   | sed 's/^[{}]//' \
+#   | sed -E 's/(["}]),?$/\1;/' \
+#   | sed -E 's/"(version|sha256)"/\1/' \
+#   | grep -v '^$';
+#   echo "}"
+# )
+#
+# ... then fill in the sha256s
 
 # Notes:
 
