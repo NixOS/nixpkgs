@@ -216,6 +216,8 @@ in {
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
+  backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
+
   bap = callPackage ../development/python-modules/bap {
     bap = pkgs.ocamlPackages.bap;
   };
