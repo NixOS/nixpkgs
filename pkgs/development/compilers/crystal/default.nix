@@ -1,27 +1,27 @@
 { stdenv, fetchurl, makeWrapper
-, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang }:
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which }:
 
 stdenv.mkDerivation rec {
   name = "crystal-${version}";
-  version = "0.25.1";
+  version = "0.26.0";
 
   src = fetchurl {
     url = "https://github.com/crystal-lang/crystal/archive/${version}.tar.gz";
-    sha256 = "1ikzly6vs28ilqvqm4kxzhqs8mp6l4l344rhak63dav7vv97nnlv";
+    sha256 = "18vv47xvnf3hl5js5sk58wj2khqq36kcs851i3lgr0ji7m0g3379";
   };
 
-  prebuiltName = "crystal-0.25.1-1";
+  prebuiltName = "crystal-0.26.0-1";
   prebuiltSrc = let arch = {
     "x86_64-linux" = "linux-x86_64";
     "i686-linux" = "linux-i686";
     "x86_64-darwin" = "darwin-x86_64";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
   in fetchurl {
-    url = "https://github.com/crystal-lang/crystal/releases/download/0.25.1/${prebuiltName}-${arch}.tar.gz";
+    url = "https://github.com/crystal-lang/crystal/releases/download/0.26.0/${prebuiltName}-${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "0zjmbvbhi11p7s99jmvb3pac6zzsr792bxcfanrx503fjxxafgll";
-      "i686-linux" = "0i0hgsq7xa53594blqw5qi6jrqja18spifmalg7df2mj3h13h3pz";
-      "x86_64-darwin" = "1h369hzis1cigxbb6fgpahyq4d13gfgjc6adf300zc38yh8rvyy0";
+      "x86_64-linux" = "1xban102yiiwmlklxvn3xp3q546bp8hlxxpakayajkhhnpl6yv45";
+      "i686-linux" = "1igspf1lrv7wpmz0pfrkbx8m1ykvnv4zhic53cav4nicppm2v0ic";
+      "x86_64-darwin" = "0hzc65ccajr0yhmvi5vbdgbzbp1gbjy56da24ds3zwwkam1ddk0k";
     }."${stdenv.system}";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ which makeWrapper ];
 
   buildInputs = libs ++ [ llvm ];
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     description = "A compiled language with Ruby like syntax and type inference";
     homepage = https://crystal-lang.org/;
     license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ sifmelcara david50407 ];
+    maintainers = with stdenv.lib.maintainers; [ manveru david50407 ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }
