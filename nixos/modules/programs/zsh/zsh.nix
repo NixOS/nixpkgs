@@ -93,7 +93,7 @@ in
         description = ''
           Enable execution of compinit call for all interactive zsh shells.
 
-          This option can be used if the user wants to extend its
+          This option can be disabled if the user wants to extend its
           <literal>fpath</literal> and a custom <literal>compinit</literal>
           call in the local config is required.
         '';
