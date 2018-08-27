@@ -1,6 +1,6 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
 , gtk3, gobjectIntrospection, libappindicator-gtk3, librsvg
-, evdev, pygobject3, pylibacl, pytest
+, evdev, pygobject3, pylibacl, pytest, bluez
 , linuxHeaders
 , libX11, libXext, libXfixes, libusb1, libudev
 }:
@@ -24,14 +24,17 @@ buildPythonApplication rec {
 
   checkInputs = [ pytest ];
 
-  patches = [ ./fix-udev.patch ];
+  patches = [ 
+    ./fix-udev.patch  # fix upstream issue #401, remove with the next update
+  ];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
     substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include
+    substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 libudev ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 libudev bluez ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
