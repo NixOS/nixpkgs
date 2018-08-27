@@ -283,6 +283,14 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
       from your config without any issues.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      <literal>stdenv.system</literal> and <literal>system</literal> in nixpkgs now refer to the host platform instead of the build platform.
+      For native builds this is not change, let alone a breaking one.
+      For cross builds, it is a breaking change, and <literal>stdenv.buildPlatform.system</literal> can be used instead for the old behavior.
+      They should be using that anyways for clarity.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
