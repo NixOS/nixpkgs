@@ -127,6 +127,9 @@ let
         "`stdenv.isArm` is deprecated after 18.03. Please use `stdenv.isAarch32` instead"
         hostPlatform.isAarch32;
 
+      # The derivation's `system` is `buildPlatform.system`.
+      inherit (buildPlatform) system;
+
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;
 
