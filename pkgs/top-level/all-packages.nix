@@ -5682,6 +5682,8 @@ with pkgs;
 
   vampire = callPackage ../applications/science/logic/vampire {};
 
+  vk-messenger = callPackage ../applications/networking/instant-messengers/vk-messenger {};
+
   volatility = callPackage ../tools/security/volatility { };
 
   vbetool = callPackage ../tools/system/vbetool { };
