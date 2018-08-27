@@ -18,8 +18,8 @@ index 11fd04b..a8681bd 100644
  
 +    // try to recreate the user path as best as possible
 +    std::string DEFAULT_PATH;
-+    DEFAULT_PATH += "/run/wrappers/bin:/home/";
-+    DEFAULT_PATH += pwd->pw_name;
++    DEFAULT_PATH += "/run/wrappers/bin:";
++    DEFAULT_PATH += pwd->pw_dir;
 +    DEFAULT_PATH += "/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/etc/profiles/per-user/";
 +    DEFAULT_PATH += pwd->pw_name;
 +    DEFAULT_PATH += "/bin";
