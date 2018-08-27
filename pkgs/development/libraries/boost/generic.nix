@@ -74,6 +74,7 @@ let
   ] ++ optional (link != "static") "runtime-link=${runtime-link}"
     ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
+    ++ optional (!enablePython) "--without-python"
     ++ optional (mpi != null || hostPlatform != buildPlatform) "--user-config=user-config.jam"
     ++ optionals (hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
