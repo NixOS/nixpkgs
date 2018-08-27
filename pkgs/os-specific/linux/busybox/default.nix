@@ -32,14 +32,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.29.1";
+  name = "busybox-1.29.2";
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "1hqlr5b3bsyb6avadz1z4za6pyl32r1krnpcpwwqilhnx8q0f9gw";
+    sha256 = "0qax9926qx9lpxiw75f4hkknz1pg0zcn5pkjx5gqfibs2ipgmlk7";
   };
 
   hardeningDisable = [ "format" ] ++ lib.optionals enableStatic [ "fortify" ];
