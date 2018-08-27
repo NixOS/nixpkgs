@@ -19,7 +19,12 @@ stdenv.mkDerivation rec {
     HAVE_MANPATH=1
     LD_OHASH="-lutil"
     BUILD_DB=0
+    CC=${stdenv.cc.targetPrefix}cc
   '';
+
+  patches = [
+    ./remove-broken-cc-check.patch
+  ];
 
   preConfigure = ''
     echo $configureLocal > configure.local
