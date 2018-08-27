@@ -7,10 +7,11 @@ stdenv.mkDerivation rec {
     sha256 = "14cgsfyl43pd86wy40m1xwr7ww023n2jyks66ngybz5s4gbhps6c";
   };
 
-  patchPhase = ''
+  patches = [ ./default_path.patch ];
+
+  prePatch = ''
     sed -i "s|PREFIX = /usr/local|PREFIX = $out|g" Makefile
     sed -i "s|/bin/bash|${bash}/bin/bash|g" usertable.cpp
-    sed -i "s|/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin|/run/current-system/sw/bin|g" usertable.cpp
   '';
 
   installPhase = ''
