@@ -1,30 +1,6 @@
 /* TeX Live user docs
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: http://nixos.org/nixpkgs/manual/#sec-language-texlive
-
-  Note on upgrading: The texlive package contains a few binaries, defined in
-  bin.nix and released once a year, and several thousand packages from CTAN,
-  defined in pkgs.nix.
-
-  The CTAN mirrors are continuously moving, with more than 100 updates per
-  month. Due to the size of the distribution, we snapshot it and generate nix
-  expressions for all packages in texlive at that point.
-
-  To upgrade this snapshot, run the following:
-  $ curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
-             | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix
-
-  This will regenerate all of the sha512 hashes for the current upstream
-  distribution. You may want to find a more stable mirror, put the distribution
-  on IPFS, or contact a maintainer to get the tarballs from that point in time
-  into a more stable location, so that nix users who are building from source
-  can reproduce your work.
-
-  Upgrading the bin: texlive itself is a large collection of binaries. In order
-  to reduce closure size for users who just need a few of them, we split it into
-  packages such as core, core-big, xvdi, etc. This requires making assumptions
-  about dependencies between the projects that may change between releases; if
-  you upgrade you may have to do some work here.
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
