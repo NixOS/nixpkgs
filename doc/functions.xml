@@ -1,5 +1,6 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
 	 xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
 	 xml:id="chap-functions">
  <title>Functions reference</title>
  <para>
@@ -444,6 +445,7 @@ merge:"diff3"
    <filename>./bin/start.sh</filename> -- relative paths are supported.
   </para>
  </section>
+ <xi:include href="shell.section.xml" />
  <section xml:id="sec-pkgs-dockerTools">
   <title>pkgs.dockerTools</title>
 
