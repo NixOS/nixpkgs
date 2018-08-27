@@ -1,4 +1,4 @@
-{lib, buildPythonPackage, fetchPypi, setuptools, wheel, pytest}:
+{lib, buildPythonPackage, fetchPypi, setuptools, wheel, requests, pytest}:
 
 buildPythonPackage rec {
   name = "pex-${version}";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
     inherit version;
   };
 
-  propagatedBuildInputs = [ setuptools wheel ];
+  propagatedBuildInputs = [ setuptools wheel requests ];
   checkInputs = [ pytest ];
 
   prePatch = ''
