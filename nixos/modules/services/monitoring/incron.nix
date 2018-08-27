@@ -22,7 +22,14 @@ in
       allow = mkOption {
         type = types.nullOr (types.listOf types.str);
         default = null;
-        description = "Users allowed to use incrontab.";
+        description = ''
+          Users allowed to use incrontab.
+
+          If empty then no user will be allowed to have their own incrontab.
+          If null then will defer to <option>deny</option>.
+          If both <option>allow</option> and <option>deny</option> are null
+          then all users will be allowed to have their own incrontab.
+        '';
       };
 
       deny = mkOption {
