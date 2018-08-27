@@ -190,8 +190,8 @@ let
     nameValuePair "wireguard-${name}"
       {
         description = "WireGuard Tunnel - ${name}";
-        requires = [ "network.target" ];
-        after = [ "network.target" ];
+        requires = [ "network-online.target" ];
+        after = [ "network.target" "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
         path = with pkgs; [ kmod iproute wireguard-tools ];
