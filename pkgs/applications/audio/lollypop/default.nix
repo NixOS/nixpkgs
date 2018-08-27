@@ -3,14 +3,14 @@
 , python36Packages, gnome3, glib, gst_all_1 }:
 
 stdenv.mkDerivation rec  {
-  version = "0.9.521";
+  version = "0.9.522";
   name = "lollypop-${version}";
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "1iwv0fj50h0xynv152anisbq29jfbmb9hpm60kaa9a9hdiypskcc";
+    sha256 = "0f2brwv884cvmxj644jcj9sg5hix3wvnjy2ndg0fh5cxyqz0kwn5";
   };
 
   nativeBuildInputs = with python36Packages; [
