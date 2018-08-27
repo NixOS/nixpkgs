@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   patches = [ ./default_path.patch ];
 
   prePatch = ''
-    sed -i "s|PREFIX = /usr/local|PREFIX = $out|g" Makefile
     sed -i "s|/bin/bash|${bash}/bin/bash|g" usertable.cpp
   '';
 
