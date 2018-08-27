@@ -76,6 +76,7 @@ let
     ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
+    ++ optional (!enablePython) "--without-python"
     "threadapi=win32"
   ]);
 
