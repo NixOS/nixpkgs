@@ -1,0 +1,15 @@
+--- a/pex/interpreter.py	2018-07-30 12:06:51.000000000 +0200
++++ b/pex/interpreter.py	2018-07-30 12:06:40.000000000 +0200
+@@ -451,6 +451,12 @@
+     # installation of 2.7 breaks.
+     env_copy = os.environ.copy()
+     env_copy.pop('MACOSX_DEPLOYMENT_TARGET', None)
++    # Tell bdist_wheel to use a date of 1980 for files added to
++    # wheels. This is to avoid "ValueError: ZIP does not support
++    # timestamps before 1980" when pex calls bdist_wheel on sources
++    # from /nix/store. See:
++    # https://nixos.org/nixpkgs/manual/#python-setup.py-bdist_wheel-cannot-create-.whl
++    env_copy['SOURCE_DATE_EPOCH'] = '315532800'
+     return env_copy
+ 
+   @classmethod

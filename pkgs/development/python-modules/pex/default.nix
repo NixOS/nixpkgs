@@ -18,6 +18,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace 'WHEEL_REQUIREMENT,' '"wheel",'
   '';
 
+  patches = [ ./set-source-date-epoch.patch ];
 
   meta = {
     description = "A library and tool for generating .pex (Python EXecutable) files";
