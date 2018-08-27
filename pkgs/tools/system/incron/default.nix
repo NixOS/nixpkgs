@@ -1,10 +1,12 @@
-{ stdenv, fetchurl, bash }:
+{ stdenv, fetchFromGitHub, bash }:
 
 stdenv.mkDerivation rec {
   name = "incron-0.5.12";
-  src = fetchurl {
-    url = "https://github.com/ar-/incron/archive/0.5.12.tar.gz";
-    sha256 = "14cgsfyl43pd86wy40m1xwr7ww023n2jyks66ngybz5s4gbhps6c";
+  src = fetchFromGitHub {
+    owner = "ar-";
+    repo = "incron";
+    rev = "incron-0.5.12";
+    sha256 = "11d5f98cjafiv9h9zzzrw2s06s2fvdg8gp64km7mdprd2xmy6dih";
   };
 
   patches = [ ./default_path.patch ];
