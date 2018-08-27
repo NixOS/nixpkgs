@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   name = "nano-wallet-${version}";
-  version = "14.2";
+  version = "15.2";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "raiblocks";
     rev = "V${version}";
-    sha256 = "0jbv5a8sz403a1pqcgl32idk6y0z510h7ikjg1dcxla0rsch6ipl";
+    sha256 = "0ngsnaczw5y709zk52flp6m2c83q3kxfgz0bzi8rzfjxp10ncnz3";
     fetchSubmodules = true;
   };
 

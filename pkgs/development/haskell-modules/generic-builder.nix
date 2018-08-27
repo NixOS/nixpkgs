@@ -46,6 +46,10 @@ in
 , isExecutable ? false, isLibrary ? !isExecutable
 , jailbreak ? false
 , license
+# We cannot enable -j<n> parallelism for libraries because GHC is far more
+# likely to generate a non-determistic library ID in that case. Further
+# details are at <https://github.com/peti/ghc-library-id-bug>.
+, enableParallelBuilding ? (stdenv.lib.versionOlder "7.8" ghc.version && !isLibrary) || stdenv.lib.versionOlder "8.0.1" ghc.version
 , maintainers ? []
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
@@ -111,11 +115,6 @@ let
                      import Distribution.Simple
                      main = defaultMain
                    '';
-
-  # We cannot enable -j<n> parallelism for libraries because GHC is far more
-  # likely to generate a non-determistic library ID in that case. Further
-  # details are at <https://github.com/peti/ghc-library-id-bug>.
-  enableParallelBuilding = (versionOlder "7.8" ghc.version && !isLibrary) || versionOlder "8.0.1" ghc.version;
 
   crossCabalFlags = [
     "--with-ghc=${ghc.targetPrefix}ghc"
