@@ -51,7 +51,11 @@ in
 
     security.wrappers.incrontab.source = "${pkgs.incron}/bin/incrontab";
 
-    environment.etc."incron.d/system".text = "${cfg.systab}";
+    # incron won't read symlinks
+    environment.etc."incron.d/system" = {
+      mode = "0444";
+      text = "${cfg.systab}";
+    };
     environment.etc."incron.allow" = mkIf (cfg.allow != null) {
       text = "${concatStringsSep "\n" cfg.allow}";
     };
