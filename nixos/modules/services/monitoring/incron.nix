@@ -1,3 +1,4 @@
+
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -16,7 +17,11 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the incron daemon.";
+        description = ''
+          Whether to enable the incron daemon.
+
+          Note that commands run under incrontab only support common Nix profiles for the PATH provided variable.
+        '';
       };
 
       allow = mkOption {
