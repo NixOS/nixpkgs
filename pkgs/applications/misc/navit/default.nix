@@ -68,10 +68,10 @@ stdenv.mkDerivation rec {
   '';
 
   # TODO: fix upstream?
+  libPath = stdenv.lib.makeLibraryPath ([ stdenv.cc.libc ] ++ buildInputs );
   postFixup = ''
-    for lib in $(find "$out/lib/navit/" -iname "*.so" ); do
-      patchelf --set-rpath ${makeLibraryPath buildInputs} $lib
-    done
+	  find "$out/lib" -type f -name "*.so" -exec patchelf --set-rpath $libPath {} \;
+
     wrapProgram $out/bin/navit \
       --prefix PATH : ${makeBinPath (
         optional xkbdSupport xkbd
