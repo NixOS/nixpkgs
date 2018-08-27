@@ -26,9 +26,9 @@
     };
   };
   archLookupTable = table.${localSystem.libc}
-    or (abort "unsupported libc for the pure Linux stdenv");
+    or (throw "unsupported libc for the pure Linux stdenv");
   files = archLookupTable.${localSystem.system}
-    or (abort "unsupported platform for the pure Linux stdenv");
+    or (throw "unsupported platform for the pure Linux stdenv");
   in files
 }:
 

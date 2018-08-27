@@ -121,7 +121,7 @@ let
     else if (head list) == e then start
     else (indexOf default (start + (length (listenStreams (head list).socket))) (tail list) e);
 
-  systemdSocket = indexOf (abort "Socket not found") 0 allSockets;
+  systemdSocket = indexOf (throw "Socket not found") 0 allSockets;
 
   isUnixSocket = socket: hasPrefix "/" (if (isString socket) then socket else socket.socket);
   isPort = hasPrefix "*:";

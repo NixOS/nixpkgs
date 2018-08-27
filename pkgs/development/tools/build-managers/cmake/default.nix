@@ -31,7 +31,7 @@ with (
     };
 
   }.${majorVersion}
-    or (abort ''Unsupported configuration for cmake: majorVersion = "${majorVersion}";'')
+    or (throw ''Unsupported configuration for cmake: majorVersion = "${majorVersion}";'')
 );
 
 let

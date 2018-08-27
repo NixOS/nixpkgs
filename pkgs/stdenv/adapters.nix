@@ -142,7 +142,7 @@ rec {
 
           validate = arg:
             if licensePred license then arg
-            else abort ''
+            else throw ''
               while building ${drv}:
               license `${builtins.toString license}' does not pass the predicate.
             '';

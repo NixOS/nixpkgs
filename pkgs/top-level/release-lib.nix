@@ -34,7 +34,7 @@ rec {
     else if system == "i686-freebsd" then pkgs_i686_freebsd
     else if system == "i686-cygwin" then pkgs_i686_cygwin
     else if system == "x86_64-cygwin" then pkgs_x86_64_cygwin
-    else abort "unsupported system type: ${system}";
+    else throw "unsupported system type: ${system}";
 
   pkgs_x86_64_linux = allPackages { system = "x86_64-linux"; };
   pkgs_i686_linux = allPackages { system = "i686-linux"; };

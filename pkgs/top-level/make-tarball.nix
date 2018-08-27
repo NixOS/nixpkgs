@@ -40,7 +40,7 @@ releaseTools.sourceTarball rec {
     opts=(--option build-users-group "")
     nix-store --init
 
-    echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
+    echo 'throw "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
 
     # Make sure that Nixpkgs does not use <nixpkgs>.
     badFiles=$(find pkgs -type f -name '*.nix' -print | xargs grep -l '^[^#]*<nixpkgs\/' || true)

@@ -102,7 +102,7 @@ rec {
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
     in if builtins.length erroneousHardeningFlags != 0
-    then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
+    then throw ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
       inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
     })
     else let

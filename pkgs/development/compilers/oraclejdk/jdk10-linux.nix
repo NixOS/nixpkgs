@@ -42,7 +42,7 @@ let result = stdenv.mkDerivation rec {
   name = if packageType == "JDK"       then "oraclejdk-${version}"
     else if packageType == "JRE"       then "oraclejre-${version}"
     else if packageType == "ServerJRE" then "oracleserverjre-${version}"
-    else abort "unknown package Type ${packageType}";
+    else throw "unknown package Type ${packageType}";
 
   src =
     if packageType == "JDK" then
@@ -63,7 +63,7 @@ let result = stdenv.mkDerivation rec {
         url = "${downloadUrlBase}/sjre10-downloads-4417025.html";
         sha256 = "0hbcb4c6ncy0sbz02gyygyqcwkz0xpv4fwrx4sripia6vph9592c";
       }
-    else abort "unknown package Type ${packageType}";
+    else throw "unknown package Type ${packageType}";
 
   nativeBuildInputs = [ file ];
 

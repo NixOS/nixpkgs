@@ -35,7 +35,7 @@ let
 
       name = mkOption {
         type = types.str;
-        apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
+        apply = x: assert (builtins.stringLength x < 32 || throw "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
           attribute set will be used.
@@ -92,7 +92,7 @@ let
 
       group = mkOption {
         type = types.str;
-        apply = x: assert (builtins.stringLength x < 32 || abort "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
+        apply = x: assert (builtins.stringLength x < 32 || throw "Group name '${x}' is longer than 31 characters which is not allowed!"); x;
         default = "nogroup";
         description = "The user's primary group.";
       };

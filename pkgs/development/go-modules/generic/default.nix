@@ -64,7 +64,7 @@ let
         fetchFromGitHub {
           inherit (goDep.fetch) owner repo rev sha256;
         }
-      else abort "Unrecognized package fetch type: ${goDep.fetch.type}";
+      else throw "Unrecognized package fetch type: ${goDep.fetch.type}";
     };
 
   importGodeps = { depsFile }:
