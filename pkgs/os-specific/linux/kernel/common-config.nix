@@ -302,7 +302,7 @@ let
       CIFS_XATTR        = yes;
       CIFS_POSIX        = yes;
       CIFS_FSCACHE      = yes;
-      CIFS_STATS        = yes;
+      CIFS_STATS        = whenOlder "4.19" yes;
       CIFS_WEAK_PW_HASH = yes;
       CIFS_UPCALL       = yes;
       CIFS_ACL          = yes;

@@ -182,6 +182,8 @@ in {
 
   asana = callPackage ../development/python-modules/asana { };
 
+  ase = callPackage ../development/python-modules/ase { };
+
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
   aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
@@ -268,6 +270,8 @@ in {
     dbus = pkgs.dbus;
   };
 
+  dftfit = callPackage ../development/python-modules/dftfit { };
+
   discid = callPackage ../development/python-modules/discid { };
 
   discordpy = callPackage ../development/python-modules/discordpy { };
@@ -277,6 +281,8 @@ in {
   invoke = callPackage ../development/python-modules/invoke { };
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
+
+  docutils = callPackage ../development/python-modules/docutils { };
 
   dogtail = callPackage ../development/python-modules/dogtail { };
 
@@ -309,6 +315,10 @@ in {
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   jira = callPackage ../development/python-modules/jira { };
+
+  lammps-cython = callPackage ../development/python-modules/lammps-cython {
+    mpi = pkgs.openmpi;
+  };
 
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
@@ -347,6 +357,8 @@ in {
   outcome = callPackage ../development/python-modules/outcome {};
 
   palettable = callPackage ../development/python-modules/palettable { };
+
+  pathlib = callPackage ../development/python-modules/pathlib { };
 
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
@@ -392,6 +404,8 @@ in {
 
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
+  py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
+
   pydbus = callPackage ../development/python-modules/pydbus { };
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
@@ -407,6 +421,8 @@ in {
   pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
 
   pygame_sdl2 = callPackage ../development/python-modules/pygame_sdl2 { };
+
+  pygmo = callPackage ../development/python-modules/pygmo { };
 
   pygobject2 = callPackage ../development/python-modules/pygobject { };
 
@@ -436,6 +452,8 @@ in {
   pykerberos = callPackage ../development/python-modules/pykerberos { };
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
+
+  pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
 
@@ -518,6 +536,8 @@ in {
   slackclient = callPackage ../development/python-modules/slackclient { };
 
   spglib = callPackage ../development/python-modules/spglib { };
+
+  statistics = callPackage ../development/python-modules/statistics { };
 
   sumo = callPackage ../development/python-modules/sumo { };
 
@@ -1455,7 +1475,7 @@ in {
     '';
   };
 
-  celery = callPackage ../development/python-modules/celery { pytest = self.pytest_32; };
+  celery = callPackage ../development/python-modules/celery { };
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
@@ -1832,27 +1852,20 @@ in {
     };
   };
 
-  pytest = self.pytest_36;
+  pytest = self.pytest_37;
 
-  pytest_36 = callPackage ../development/python-modules/pytest {
+  pytest_37 = callPackage ../development/python-modules/pytest {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };
-
-  # Needed for celery
-  pytest_32 = self.pytest_36.overridePythonAttrs( oldAttrs: rec {
-    version = "3.2.5";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "6d5bd4f7113b444c55a3bbb5c738a3dd80d43563d063fc42dcb0aaefbdd78b81";
-    };
-  });
 
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
+
+  pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
 
   pytestcache = callPackage ../development/python-modules/pytestcache { };
 
@@ -4997,37 +5010,6 @@ in {
       license = stdenv.lib.licenses.gpl2;
     };
   };
-
-
-  docutils = buildPythonPackage rec {
-    name = "docutils-${version}";
-    version = "0.14";
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/docutils/${name}.tar.gz";
-      sha256 = "0x22fs3pdmr42kvz6c654756wja305qv6cx1zbhwlagvxgr4xrji";
-    };
-
-    checkPhase = if isPy3k then ''
-      ${python.interpreter} test3/alltests.py
-    '' else ''
-      ${python.interpreter} test/alltests.py
-    '';
-
-    # Create symlinks lacking a ".py" suffix, many programs depend on these names
-    postFixup = ''
-      (cd $out/bin && for f in *.py; do
-        ln -s $f $(echo $f | sed -e 's/\.py$//')
-      done)
-    '';
-
-    meta = {
-      description = "An open-source text processing system for processing plaintext documentation into useful formats, such as HTML or LaTeX";
-      homepage = http://docutils.sourceforge.net/;
-      maintainers = with maintainers; [ garbas AndersonTorres ];
-    };
-  };
-
 
   dtopt = buildPythonPackage rec {
     name = "dtopt-0.1";
@@ -9451,27 +9433,6 @@ in {
   };
 
   patator = callPackage ../development/python-modules/patator { };
-
-  pathlib = buildPythonPackage rec {
-    name = "pathlib-${version}";
-    version = "1.0.1";
-    disabled = pythonAtLeast "3.4"; # Was added to std library in Python 3.4
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pathlib/${name}.tar.gz";
-      sha256 = "17zajiw4mjbkkv6ahp3xf025qglkj0805m9s41c45zryzj6p2h39";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
-    meta = {
-      description = "Object-oriented filesystem paths";
-      homepage = "https://pathlib.readthedocs.org/";
-      license = licenses.mit;
-    };
-  };
 
   pathlib2 = callPackage ../development/python-modules/pathlib2 { };
 

@@ -1456,6 +1456,8 @@ with pkgs;
 
   onboard = callPackage ../applications/misc/onboard { };
 
+  xkbd = callPackage ../applications/misc/xkbd { };
+
   optar = callPackage ../tools/graphics/optar {};
 
   patdiff = callPackage ../tools/misc/patdiff { };
@@ -1706,7 +1708,9 @@ with pkgs;
   nrg2iso = callPackage ../tools/cd-dvd/nrg2iso { };
 
   libceph = ceph.lib;
-  ceph = callPackage ../tools/filesystems/ceph { boost = boost165; };
+  ceph = callPackage ../tools/filesystems/ceph {
+    boost = boost166.override { enablePython = true; };
+  };
   ceph-dev = ceph;
 
   certmgr = callPackage ../tools/security/certmgr { };
@@ -4448,6 +4452,8 @@ with pkgs;
   pacman = callPackage ../tools/package-management/pacman { };
 
   padthv1 = callPackage ../applications/audio/padthv1 { };
+
+  pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
   pakcs = callPackage ../development/compilers/pakcs {};
 
@@ -8794,7 +8800,7 @@ with pkgs;
 
   grabserial = callPackage ../development/tools/grabserial { };
 
-  mypy = python3Packages.mypy;
+  mypy = with python3Packages; toPythonApplication mypy;
 
   ### DEVELOPMENT / LIBRARIES
 
@@ -19743,6 +19749,8 @@ with pkgs;
   egoboo = callPackage ../games/egoboo { };
 
   EmptyEpsilon = callPackage ../games/empty-epsilon { };
+
+  endgame-singularity = callPackage ../games/endgame-singularity { };
 
   endless-sky = callPackage ../games/endless-sky { };
 
