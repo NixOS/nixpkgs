@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
     sed -i "s|/bin/bash|${bash}/bin/bash|g" usertable.cpp
   '';
 
-  installPhase = ''
+  installFlags = [ "PREFIX=$(out)" ];
+  installTargets = [ "install-man" ];
+
+  preInstall = ''
     mkdir -p $out/bin
 
     # make install doesn't work because setuid and permissions
     # just manually install the binaries instead
     cp incrond incrontab $out/bin/
-
-    # make install-man is fine for documentation
-    make install-man
   '';
 
   meta = with stdenv.lib; {
