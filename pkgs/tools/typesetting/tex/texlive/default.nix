@@ -29,6 +29,7 @@
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, python, ruby, perl
+, useFixedHashes ? true
 , recurseIntoAttrs
 }:
 let
@@ -40,6 +41,10 @@ let
       withIcu = true; withGraphite2 = true;
     };
   };
+
+  # map: name -> fixed-output hash
+  # sha1 in base32 was chosen as a compromise between security and length
+  fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
@@ -116,6 +121,7 @@ let
       # the basename used by upstream (without ".tar.xz" suffix)
       urlName = pname + lib.optionalString (tlType != "run") ".${tlType}";
       tlName = urlName + "-${version}";
+      fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
       urls = args.urls or (if args ? url then [ args.url ] else
               map (up: "${up}/${urlName}.tar.xz") urlPrefixes
@@ -155,11 +161,30 @@ let
           -C "$out" --anchored --exclude=tlpkg --keep-old-files
       '' + postUnpack;
 
-    in runCommand "texlive-${tlName}" {
-        # lots of derivations, not meant to be cached
-        preferLocalBuild = true; allowSubstitutes = false;
-        inherit passthru;
-      }
+    in if sha512 == "" then
+      # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
+      fetchurl {
+        inherit urls;
+        sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
+          else fixedHash;
+        name = tlName;
+        recursiveHash = true;
+        downloadToTemp = true;
+        postFetch = ''mkdir "$out";'' + unpackCmd "$downloadedFile";
+        # TODO: perhaps override preferHashedMirrors and allowSubstitutes
+     }
+        // passthru
+
+    else runCommand "texlive-${tlName}"
+      ( { # lots of derivations, not meant to be cached
+          preferLocalBuild = true; allowSubstitutes = false;
+          inherit passthru;
+        } // lib.optionalAttrs (fixedHash != null) {
+          outputHash = fixedHash;
+          outputHashAlgo = "sha1";
+          outputHashMode = "recursive";
+        }
+      )
       ( ''
           mkdir "$out"
         '' + unpackCmd "'${src}'"
