@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage }:
+{ stdenv, fetchPypi, fetchFromGitHub, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   pname = "backports.shutil_which";
@@ -9,8 +9,11 @@ buildPythonPackage rec {
     sha256 = "16sa3adkf71862cb9pk747pw80a2f1v5m915ijb4fgj309xrlhyx";
   };
 
-  # Tests fail: "ValueError: underlying buffer has been detached"
-  doCheck = false;
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    py.test test
+  '';
 
   meta = with stdenv.lib; {
     description = "Backport of shutil.which from Python 3.3";
