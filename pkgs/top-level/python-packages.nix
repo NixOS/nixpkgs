@@ -15649,10 +15649,10 @@ EOF
   # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
     name = "python-efl-${version}";
-    version = "1.20.0";
+    version = "1.21.0";
     src = pkgs.fetchurl {
       url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
-      sha256 = "18qfqdkkjydqjk0nxs7wnnzdnqlbj3fhkjm0bbd927myzbihxpkh";
+      sha256 = "08x2cv8hnf004c3711250wrax21ffj5y8951pvk77h98als4pq47";
     };
 
     hardeningDisable = [ "format" ];
