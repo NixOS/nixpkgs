@@ -7088,7 +7088,9 @@ with pkgs;
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
-  obliv-c = callPackage ../development/compilers/obliv-c {};
+  obliv-c = callPackage ../development/compilers/obliv-c {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   ocaml-ng = callPackage ./ocaml-packages.nix { };
   ocaml = ocamlPackages.ocaml;
