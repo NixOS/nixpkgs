@@ -200,7 +200,6 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   '';
 
   preBuild = "cd texk/web2c";
-  CXXFLAGS = "-std=c++11 -Wno-reserved-user-defined-literal"; # TODO: remove once texlive 2018 is out?
   enableParallelBuilding = true;
 
   doCheck = false; # fails
