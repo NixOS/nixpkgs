@@ -15478,6 +15478,7 @@ with pkgs;
   stellar-core = self.altcoins.stellar-core;
 
   particl-core = self.altcoins.particl-core;
+  particl-qt = self.altcoins.particl-qt;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;

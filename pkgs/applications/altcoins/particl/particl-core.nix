@@ -10,26 +10,37 @@
 , zeromq
 , zlib
 , unixtools
+, DiskArbitration ? null
+, qtbase ? null
+, qttools ? null
+, qrencode ? null
+, protobuf ? null
+, hidapi ? null
+, withGui
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "particl-core-${version}";
-  version     = "0.16.1.0";
+  name = "particl-${if withGui then "qt" else "core"}-${version}";
+  version     = "0.16.2.0";
 
   src = fetchurl {
     url = "https://github.com/particl/particl-core/archive/v${version}.tar.gz";
-    sha256 = "0rfqywyrl6cgxn3ba91zsa88ph2yf9d1vn706xpyz19pfb6mjfbg";
+    sha256 = "1d2vvg7avlhsg0rcpd5pbzafnk1w51a2y29xjjkpafi6iqs2l617";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    openssl db48 boost zlib miniupnpc libevent zeromq
-    unixtools.hexdump
-  ];
+    openssl db48 boost zlib miniupnpc libevent zeromq unixtools.hexdump ]
+    ++ optionals withGui [ qtbase qttools qrencode protobuf hidapi ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
+    ++ optionals stdenv.isDarwin [ DiskArbitration ]
+    ++ optionals withGui [
+    "--with-gui=qt5"
+    "--enable-usbdevice=yes"
+    "--with-qt-bindir=${qtbase}/bin:${qttools}/bin:${qtbase.dev}/bin:${qttools.dev}/bin" ];
 
   meta = {
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
