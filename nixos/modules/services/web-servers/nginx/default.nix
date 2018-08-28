@@ -92,8 +92,18 @@ let
         gzip on;
         gzip_disable "msie6";
         gzip_proxied any;
-        gzip_comp_level 9;
-        gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+        gzip_comp_level 5;
+        gzip_types
+          application/atom+xml
+          application/javascript
+          application/json
+          application/xml
+          application/xml+rss
+          image/svg+xml
+          text/css
+          text/javascript
+          text/plain
+          text/xml;
         gzip_vary on;
       ''}
 
