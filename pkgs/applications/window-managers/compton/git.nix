@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "compton-git-${version}";
-  version = "2018-05-21";
+  version = "2018-08-14";
 
   src = fetchFromGitHub {
     owner  = "yshui";
     repo   = "compton";
-    rev    = "9b24550814b7c69065f90039b0a5d0a2281b9f81";
-    sha256 = "09nn0q9lgv59chfxljips0n8vnwwxi1yz6hmcsiggsl3zvpabpxl";
+    rev    = "cac8094ce12cd40706fb48f9ab35354d9ee7c48f";
+    sha256 = "0qif3nx8vszlr06bixasna13pzfaikp86xax9miwnba50517y7v5";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       additional features, such as additional effects, and a fork at a
       well-defined and proper place.
     '';
-    maintainers = [ maintainers.ertes maintainers.twey ];
+    maintainers = with maintainers; [ ertes enzime twey ];
     platforms = platforms.linux;
   };
 }
