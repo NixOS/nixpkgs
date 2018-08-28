@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [ libuuid gettext ];
 
+  # Only use glibc's __GNUC_PREREQ(X,Y) (checks if compiler is gcc version >= X.Y) when using glibc
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional (stdenv.hostPlatform.libc != "glibc")
+    "-D__GNUC_PREREQ(maj,min)=0";
+
   configureFlags =
     if stdenv.isLinux then [
       "--enable-elf-shlibs" "--enable-symlink-install" "--enable-relative-symlinks"
