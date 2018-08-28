@@ -119,6 +119,7 @@
 , "uglify-js"
 , "ungit"
 , "vue-cli"
+, "@vue/cli"
 , "webdrvr"
 , "webpack"
 , "webtorrent-cli"
