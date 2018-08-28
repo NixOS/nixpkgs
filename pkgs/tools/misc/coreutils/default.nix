@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ];
-  configureFlags =
-    optional (singleBinary != false)
+  configureFlags = [ "--with-packager=https://NixOS.org" ]
+    ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
