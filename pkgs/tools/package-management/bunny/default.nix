@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A simple shell script wrapper around multiple package managers";
     homepage = https://gitlab.com/tim241/bunny;
-    licenses = licenses.gpl3;
+    license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ countingsort ];
   };
