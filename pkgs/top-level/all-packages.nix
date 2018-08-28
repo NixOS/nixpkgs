@@ -635,6 +635,8 @@ with pkgs;
 
   bonfire = callPackage ../tools/misc/bonfire { };
 
+  bunny = callPackage ../tools/package-management/bunny { };
+
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
