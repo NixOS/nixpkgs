@@ -176,8 +176,12 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
     ++ map (prog: "--disable-${prog}") # don't build things we already have
       [ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "pdftex"
-        "web-progs" "synctex" "luajittex" "mfluajit" # luajittex is mostly not needed, see:
+        "web-progs" "synctex"
+        # build fails on Darwin with luatex53
+        "luatex53" # TODO probably can be removed when TexLive 2019 is out
+        # luajittex is mostly not needed, see:
         # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
+        "luajittex" "mfluajit"
       ];
 
   configureScript = ":";
@@ -185,7 +189,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   # we use static libtexlua, because it's only used by a single binary
   postConfigure = ''
     mkdir ./WorkDir && cd ./WorkDir
-    for path in libs/{teckit,lua52,lua53} texk/web2c; do
+    # TODO add lua53 here when luatex53 is enabled again
+    for path in libs/{teckit,lua52} texk/web2c; do
       (
         if [[ "$path" =~ "libs/lua5" ]]; then
           extraConfig="--enable-static --disable-shared"
