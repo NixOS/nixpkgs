@@ -3,7 +3,6 @@
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
 , openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk24x-gtk2
 , glib-networking, gsettings-desktop-schemas, libSM, libytnef
-
 # Build options
 # TODO: A flag to build the manual.
 # TODO: Plugins that complain about their missing dependencies, even when
@@ -32,11 +31,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
-  version = "3.17.0";
+  version = "3.17.1";
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "119y6q9p8zwm2xqlbkgqd119a529kjqlyldmb4h940z6c2qyjhqm";
+    sha256 = "1wknxbwyzm5xjh3cqmddcxmvp1rkp301qga5n5rgfi7vcd0myyvm";
   };
 
   outputs = [ "out" "dev" ];
