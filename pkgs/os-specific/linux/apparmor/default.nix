@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper, autoreconfHook
+{ stdenv, lib, fetchurl, fetchpatch, makeWrapper, autoreconfHook
 , pkgconfig, which
 , flex, bison
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , gawk
-, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && perl.meta.available or false, perl
-, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && python.meta.available or false, python
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) perl.meta.platforms, perl
+, withPython ? stdenv.hostPlatform == stdenv.buildPlatform && lib.any (lib.meta.platformMatch stdenv.hostPlatform) python.meta.platforms, python
 , swig
 , ncurses
 , pam
