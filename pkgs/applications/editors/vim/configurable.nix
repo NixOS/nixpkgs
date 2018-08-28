@@ -155,9 +155,26 @@ in stdenv.mkDerivation rec {
   '' + stdenv.lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python}/bin"
   '' + stdenv.lib.optionalString (guiSupport == "gtk3") ''
-    rm "$out/bin/gvim"
-    echo -e '#!${stdenv.shell}\n"'"$out/bin/vim"'" -g "$@"' > "$out/bin/gvim"
-    chmod a+x "$out/bin/gvim"
+
+    rewrap () {
+      rm -f "$out/bin/$1"
+      echo -e '#!${stdenv.shell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
+      chmod a+x "$out/bin/$1"
+    }
+
+    rewrap ex -e	
+    rewrap view -R	
+    rewrap gvim -g	
+    rewrap gex -eg	
+    rewrap gview -Rg	
+    rewrap rvim -Z	
+    rewrap rview -RZ	
+    rewrap rgvim -gZ	
+    rewrap rgview -RgZ
+    rewrap evim    -y
+    rewrap eview   -yR
+    rewrap vimdiff -d	
+    rewrap gvimdiff -gd
   '';
 
   preInstall = ''
