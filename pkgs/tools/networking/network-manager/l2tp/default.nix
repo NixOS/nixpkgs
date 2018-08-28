@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--localstatedir=/var"
     "--sysconfdir=$(out)/etc"
