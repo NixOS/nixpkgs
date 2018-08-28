@@ -507,4 +507,8 @@ self: super: builtins.intersectAttrs super {
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
+
+  # Doctests hang only when compiling with nix.
+  # https://github.com/cdepillabout/termonad/issues/15
+  termonad = dontCheck super.termonad;
 }

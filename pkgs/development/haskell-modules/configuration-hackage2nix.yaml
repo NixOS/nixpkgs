@@ -9066,7 +9066,6 @@ dont-distribute-packages:
   termcolor:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   terminal-text:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   termination-combinators:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
-  termonad:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   termplot:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   terntup:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   terrahs:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
