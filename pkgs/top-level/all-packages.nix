@@ -15941,6 +15941,11 @@ with pkgs;
     patches = config.dwm.patches or [];
   };
 
+  dwm-git = callPackage ../applications/window-managers/dwm/git.nix {
+    patches = config.dwm.patches or [];
+    conf = config.dwm.conf or null;
+  };
+
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
 
   dynamips = callPackage ../applications/virtualization/dynamips { };
