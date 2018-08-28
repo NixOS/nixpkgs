@@ -832,6 +832,11 @@
     github = "couchemar";
     name = "Andrey Pavlov";
   };
+  countingsort = {
+    email = "niclas@countingsort.com";
+    github = "countingsort";
+    name = "Niclas Meyer";
+  };
   cpages = {
     email = "page@ruiec.cat";
     github = "cpages";
