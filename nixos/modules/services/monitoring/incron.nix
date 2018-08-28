@@ -59,6 +59,12 @@ in
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      { assertion = cfg.allow != null -> cfg.deny == null;
+        message = "If `services.incron.allow` is set then `services.incron.deny` will be ignored.";
+      }
+    ];
+
     environment.systemPackages = [ pkgs.incron ];
 
     security.wrappers.incrontab.source = "${pkgs.incron}/bin/incrontab";
