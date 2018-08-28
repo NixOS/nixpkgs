@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runCommand, makeWrapper
+{ stdenv, lib, fetchurl, fetchpatch, runCommand, makeWrapper
 , jdk, zip, unzip, bash, writeCBin, coreutils
 , which, python, perl, gnused, gnugrep, findutils
 # Always assume all markers valid (don't redownload dependencies).
@@ -45,7 +45,14 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  patches = lib.optional enableNixHacks ./nix-hacks.patch;
+  patches =
+    lib.optional enableNixHacks ./nix-hacks.patch
+    # patch perl out of the bash completions
+    # should land in 0.18
+    ++ [(fetchpatch {
+           url = "https://github.com/bazelbuild/bazel/commit/27be70979b54d7510bf401d9581fb4075737ef34.patch";
+           sha256 = "04rip46lnibrsdyzjpi29wf444b49cbwb1xjcbrr3kdqsdj4d8h5";
+       })];
 
   # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
 
@@ -138,11 +145,6 @@ stdenv.mkDerivation rec {
       echo "PATH=$PATH:${defaultShellPath}" >> runfiles.bash.tmp
       cat tools/bash/runfiles/runfiles.bash >> runfiles.bash.tmp
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
-
-      # the bash completion requires perl
-      # https://github.com/bazelbuild/bazel/issues/5943
-      substituteInPlace scripts/bazel-complete-template.bash \
-        --replace "perl" "${perl}/bin/perl"
 
       patchShebangs .
     '';
