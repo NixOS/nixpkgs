@@ -7722,7 +7722,7 @@ with pkgs;
     ruby_2_4
     ruby_2_5;
 
-  ruby = ruby_2_4;
+  ruby = ruby_2_5;
 
   mruby = callPackage ../development/compilers/mruby { };
 
