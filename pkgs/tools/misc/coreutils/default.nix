@@ -1,9 +1,12 @@
 { stdenv, lib, buildPackages
 , autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
 , hostPlatform, buildPlatform
-, aclSupport ? false, acl ? null
-, attrSupport ? false, attr ? null
+, aclSupport ? stdenv.isLinux, acl ? null
+, attrSupport ? stdenv.isLinux, attr ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
+# No openssl in default version, so openssl-induced rebuilds aren't too big.
+# It makes *sum functions significantly faster.
+, minimal ? true, withOpenssl ? !minimal, openssl ? null
 , withPrefix ? false
 , singleBinary ? "symlinks" # you can also pass "shebangs" or false
 }:
@@ -40,6 +43,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
+    ++ optional withOpenssl "--with-openssl"
     ++ optional hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
     ++ optionals (hostPlatform != buildPlatform && hostPlatform.libc == "glibc") [
@@ -52,6 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ]
     ++ optional aclSupport acl
     ++ optional attrSupport attr
+    ++ optional withOpenssl openssl
     ++ optionals hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
     ++ optionals selinuxSupport [ libselinux libsepol ]
        # TODO(@Ericson2314): Investigate whether Darwin could benefit too
@@ -82,9 +87,13 @@ stdenv.mkDerivation rec {
     sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${buildPackages.coreutils}/bin/install -c|'
   '';
 
-  postInstall = optionalString (hostPlatform != buildPlatform) ''
+  postInstall = optionalString (hostPlatform != buildPlatform && !minimal) ''
     rm $out/share/man/man1/*
     cp ${buildPackages.coreutils}/share/man/man1/* $out/share/man/man1
+  ''
+  # du: 8.7 M locale + 0.4 M man pages
+  + optionalString minimal ''
+    rm -r "$out/share"
   '';
 
   meta = {
