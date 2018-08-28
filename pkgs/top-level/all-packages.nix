@@ -385,7 +385,7 @@ with pkgs;
     { deps = [ pkgs.lcov pkgs.enableGCOVInstrumentation ]; }
     ../build-support/setup-hooks/make-coverage-analysis-report.sh;
 
-  # intended to be used like nix-build -E 'with <nixpkgs> {}; enableDebugging fooPackage'
+  # intended to be used like nix-build -E 'with import <nixpkgs> {}; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
 
   findXMLCatalogs = makeSetupHook { } ../build-support/setup-hooks/find-xml-catalogs.sh;
