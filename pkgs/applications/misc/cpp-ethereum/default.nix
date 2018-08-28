@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
+, gcc6
 , jsoncpp
 , libjson-rpc-cpp
 , curl
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fxgpqhmjhpv0zzs1m3yf9h8mh25dqpa7pmcfy7f9qiqpfdr4zq9";
   };
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" extraCmakeFlags ];
+  cmakeFlags = [ extraCmakeFlags ];
 
   configurePhase = ''
     export BOOST_INCLUDEDIR=${boost.dev}/include
@@ -56,6 +57,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
+    # broken on gcc7, see upstream issue: https://github.com/ethereum/cpp-ethereum/issues/4867
+    gcc6
     cmake
     jsoncpp
     libjson-rpc-cpp
