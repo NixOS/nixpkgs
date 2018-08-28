@@ -32,7 +32,7 @@ patchShebangs() {
             # - options: something starting with a '-'
             # - environment variables: foo=bar
             if $(echo "$arg0" | grep -q -- "^-.*\|.*=.*"); then
-                echo "unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
+                echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
                 exit 1
             fi
             newPath="$(command -v "$arg0" || true)"
