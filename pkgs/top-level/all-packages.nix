@@ -15553,7 +15553,7 @@ with pkgs;
     gtk = gtk3;
   };
 
-  bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
+  bluejeans = callPackage ../applications/networking/instant-messengers/bluejeans { };
 
   bombono = callPackage ../applications/video/bombono {};
 
