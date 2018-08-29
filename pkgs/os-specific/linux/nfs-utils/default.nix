@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent, libnfsidmap
+{ stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
 , buildEnv
 }:
@@ -14,17 +14,21 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nfs-utils-${version}";
-  version = "2.1.1";
+  version = "2.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nfs/${name}.tar.bz2";
-    sha256 = "02dvxphndpm8vpqqnl0zvij97dq9vsq2a179pzrjcv2i91ll2a0a";
+    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${name}.tar.xz";
+    sha256 = "06av6cjf8h18dpaxh8cd1awsra75zf6s5sj5r2z5g7scbj051ziw";
   };
+
+  # libnfsidmap is built together with nfs-utils from the same source,
+  # put it in the "lib" output, and the headers in "dev"
+  outputs = [ "out" "dev" "lib" "man" ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
-    libtirpc libcap libevent libnfsidmap sqlite lvm2
+    libtirpc libcap libevent sqlite lvm2
     libuuid keyutils kerberos tcp_wrappers
   ];
 
@@ -36,6 +40,9 @@ in stdenv.mkDerivation rec {
       "--with-krb5=${kerberosEnv}"
       "--with-systemd=$(out)/etc/systemd/system"
       "--enable-libmount-mount"
+      # need an absolute path to lib output here.
+      # TODO: use ${placeholder lib} when nix 1.1 is no longer supported
+      "--with-pluginpath=@lib@/lib/libnfsidmap" # this installs libnfsidmap
     ]
     ++ lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc.bin}/bin/rpcgen";
 
@@ -68,6 +75,11 @@ in stdenv.mkDerivation rec {
       sed '1i#include <stdint.h>' -i support/nsm/rpc.c
     '';
 
+  # TODO: remove when placeholders are allowed (see configureFlags)
+  postConfigure = ''
+    substituteInPlace support/include/config.h --replace '@lib@' "$lib"
+  '';
+
   makeFlags = [
     "sbindir=$(out)/bin"
     "generator_dir=$(out)/etc/systemd/system-generators"
@@ -99,7 +111,7 @@ in stdenv.mkDerivation rec {
       daemons.
     '';
 
-    homepage = https://sourceforge.net/projects/nfs/;
+    homepage = https://linux-nfs.org/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

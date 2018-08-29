@@ -10532,8 +10532,6 @@ with pkgs;
 
   libnfs = callPackage ../development/libraries/libnfs { };
 
-  libnfsidmap = callPackage ../development/libraries/libnfsidmap { };
-
   libnice = callPackage ../development/libraries/libnice { };
 
   libnsl = callPackage ../development/libraries/libnsl { };
