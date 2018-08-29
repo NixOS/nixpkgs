@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib, ncurses5, unzip, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
-, platformTools, python3, libcxx, version, sha256
+, platformTools, python3, libcxx, version, sha256, bash
 , fullNDK ? false # set to true if you want other parts of the NDK
                   # that is not used by Nixpkgs like sources,
                   # examples, docs, or LLVM toolchains
@@ -35,8 +35,6 @@ stdenv.mkDerivation rec {
     cd $out/libexec
     unzip -qq $src
 
-    patchShebangs ${pkg_path}
-
     # so that it doesn't fail because of read-only permissions set
     cd -
     ${if (version == "10e") then
@@ -50,9 +48,15 @@ stdenv.mkDerivation rec {
           patch -p1 \
             --no-backup-if-mismatch \
             -d $out/libexec/${name} < ${ ./. + "/make_standalone_toolchain.py_${version}.patch" }
+
+          sed -i 's,#!/usr/bin/env python,#!${python3}/bin/python,g' ${pkg_path}/build/tools/make_standalone_toolchain.py
+          sed -i 's,#!/bin/bash,#!${bash}/bin/bash,g' ${pkg_path}/build/tools/make_standalone_toolchain.py
           wrapProgram ${pkg_path}/build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
         ''
     }
+
+    patchShebangs ${pkg_path}
+
     cd ${pkg_path}
 
   '' + lib.optionalString (!fullNDK) ''
