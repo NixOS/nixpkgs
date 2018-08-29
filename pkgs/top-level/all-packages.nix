@@ -6050,7 +6050,9 @@ with pkgs;
 
   wv2 = callPackage ../tools/misc/wv2 { };
 
-  wyrd = callPackage ../tools/misc/wyrd { };
+  wyrd = callPackage ../tools/misc/wyrd {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   x86info = callPackage ../os-specific/linux/x86info { };
 
