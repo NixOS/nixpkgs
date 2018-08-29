@@ -115,7 +115,7 @@ in
 
       background = mkOption {
         type = types.str;
-        default = "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png";
+        default = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png";
         description = ''
           The background image or color to use.
         '';

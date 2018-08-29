@@ -237,7 +237,7 @@ let
                 docbook_xsl_ns
                 unionfs-fuse
                 ntp
-                nixos-artwork.wallpapers.gnome-dark
+                nixos-artwork.wallpapers.simple-dark-gray-bottom
                 perlPackages.XMLLibXML
                 perlPackages.ListCompare
                 xorg.lndir
