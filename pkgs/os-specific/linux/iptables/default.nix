@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.netfilter.org/projects/iptables/index.html;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
+    license = licenses.gpl2;
     downloadPage = "http://www.netfilter.org/projects/iptables/files/";
     updateWalker = true;
     inherit version;
