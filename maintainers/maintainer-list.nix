@@ -1630,6 +1630,11 @@
     github = "heel";
     name = "Sergii Paryzhskyi";
   };
+  helkafen = {
+    email = "arnaudpourseb@gmail.com";
+    github = "Helkafen";
+    name = "Sébastian Méric de Bellefon";
+  };
   henrytill = {
     email = "henrytill@gmail.com";
     github = "henrytill";
