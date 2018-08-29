@@ -1408,9 +1408,9 @@ with pkgs;
 
   lief = callPackage ../development/libraries/lief {};
 
-  libndtypes = callPackages ../development/libraries/libndtypes { };
+  libndtypes = callPackage ../development/libraries/libndtypes { };
 
-  libxnd = callPackages ../development/libraries/libxnd { };
+  libxnd = callPackage ../development/libraries/libxnd { };
 
   loadwatch = callPackage ../tools/system/loadwatch { };
 
