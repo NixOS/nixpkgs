@@ -27,7 +27,7 @@ in
         '';
         type = types.bool;
       };
-      
+
       vendor.config.enable = mkOption {
         type = types.bool;
         default = true;
@@ -43,7 +43,7 @@ in
           Whether fish should use completion files provided by other packages.
         '';
       };
-      
+
       vendor.functions.enable = mkOption {
         type = types.bool;
         default = true;
@@ -107,7 +107,7 @@ in
       # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
       # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
       set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $__fish_datadir/functions
-      
+
       # source the NixOS environment config
       if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
           fenv source ${config.system.build.setEnvironment}
@@ -125,7 +125,7 @@ in
         set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $fish_function_path
         fenv source /etc/fish/foreign-env/shellInit > /dev/null
         set -e fish_function_path[1]
-        
+
         ${cfg.shellInit}
 
         # and leave a note so we don't source this config section again from
@@ -139,7 +139,7 @@ in
         set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $fish_function_path
         fenv source /etc/fish/foreign-env/loginShellInit > /dev/null
         set -e fish_function_path[1]
-        
+
         ${cfg.loginShellInit}
 
         # and leave a note so we don't source this config section again from
@@ -151,12 +151,11 @@ in
       status --is-interactive; and not set -q __fish_nixos_interactive_config_sourced
       and begin
         ${fishAliases}
-        
 
         set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $fish_function_path
         fenv source /etc/fish/foreign-env/interactiveShellInit > /dev/null
         set -e fish_function_path[1]
-        
+
         ${cfg.promptInit}
         ${cfg.interactiveShellInit}
 
@@ -172,7 +171,7 @@ in
       ++ optional cfg.vendor.config.enable "/share/fish/vendor_conf.d"
       ++ optional cfg.vendor.completions.enable "/share/fish/vendor_completions.d"
       ++ optional cfg.vendor.functions.enable "/share/fish/vendor_functions.d";
-    
+
     environment.systemPackages = [ pkgs.fish ];
 
     environment.shells = [
