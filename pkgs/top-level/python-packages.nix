@@ -4431,17 +4431,15 @@ in {
 
   pywatchman = buildPythonPackage rec {
     name = "pywatchman-${version}";
-    version = "1.3.0";
+    version = "1.4.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pywatchman/pywatchman-${version}.tar.gz";
-      sha256 = "c3d5be183b5b04f6ad575fc71b06dd196185dea1558d9f4d0598ba9beaab8245";
+      sha256 = "1yf2gm20wc3djpb5larxii3l55xxby0il2ns3q0v1byyfnr7w16h";
     };
     postPatch = ''
       substituteInPlace pywatchman/__init__.py \
         --replace "'watchman'" "'${pkgs.watchman}/bin/watchman'"
     '';
-    # SyntaxError
-    disabled = isPy3k;
     # No tests in archive
     doCheck = false;
 
