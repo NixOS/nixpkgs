@@ -1302,6 +1302,11 @@
     github = "etu";
     name = "Elis Hirwing";
   };
+  evck = {
+    email = "eric@evenchick.com";
+    github = "ericevenchick";
+    name = "Eric Evenchick";
+  };
   exfalso = {
     email = "0slemi0@gmail.com";
     github = "exfalso";

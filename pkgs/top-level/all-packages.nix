@@ -14176,6 +14176,8 @@ with pkgs;
      }) zfsStable zfsUnstable;
 
      zfs = zfsStable;
+
+     can-isotp = callPackage ../os-specific/linux/can-isotp { };
   });
 
   # The current default kernel / kernel modules.
