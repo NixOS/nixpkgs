@@ -15646,35 +15646,7 @@ EOF
   # added 2018-05-23, can be removed once 18.09 is branched off
   udiskie = throw "pythonPackages.udiskie has been replaced by udiskie";
 
-  # Should be bumped along with EFL!
-  pythonefl = buildPythonPackage rec {
-    name = "python-efl-${version}";
-    version = "1.20.0";
-    src = pkgs.fetchurl {
-      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
-      sha256 = "18qfqdkkjydqjk0nxs7wnnzdnqlbj3fhkjm0bbd927myzbihxpkh";
-    };
-
-    hardeningDisable = [ "format" ];
-
-    preConfigure = ''
-      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${self.dbus-python}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
-    '';
-    preBuild = "${python}/bin/${python.executable} setup.py build_ext";
-    installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
-
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = with self; [ pkgs.enlightenment.efl ];
-    doCheck = false;
-
-    meta = {
-      description = "Python bindings for EFL and Elementary";
-      homepage = http://enlightenment.org/;
-      platforms = platforms.linux;
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx ];
-    };
-  };
+  pythonefl = callPackage ../development/python-modules/python-efl { };
 
   tlsh = buildPythonPackage rec {
     name = "tlsh-3.4.5";
