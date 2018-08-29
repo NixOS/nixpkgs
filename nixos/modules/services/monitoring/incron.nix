@@ -53,6 +53,13 @@ in
         '';
       };
 
+      extraPackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = "[ pkgs.rsync ];";
+        description = "Extra packages available to the system incrontab.";
+      };
+
     };
 
   };
@@ -84,7 +91,7 @@ in
     systemd.services.incron = {
       description = "File system events scheduler";
       wantedBy = [ "multi-user.target" ];
-      path = [ config.system.path ];
+      path = cfg.extraPackages;
       preStart = "mkdir -m 710 -p /var/spool/incron";
       serviceConfig.Type = "forking";
       serviceConfig.PIDFile = "/run/incrond.pid";
