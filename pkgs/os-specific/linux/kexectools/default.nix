@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = http://horms.net/projects/kexec/kexec-tools;
     description = "Tools related to the kexec Linux feature";
     platforms = platforms.linux;
+    license = licenses.gpl2;
     badPlatforms = platforms.riscv;
   };
 }
