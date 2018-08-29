@@ -19497,8 +19497,6 @@ with pkgs;
     openssl = null;
   };
 
-  finalterm = callPackage ../applications/misc/finalterm { };
-
   roxterm = callPackage ../applications/misc/roxterm {
     inherit (gnome3) gsettings-desktop-schemas vte;
   };
