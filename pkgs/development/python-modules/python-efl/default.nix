@@ -21,9 +21,9 @@ buildPythonPackage rec {
     export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${python.pkgs.dbus-python}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
   '';
   
-  preBuild = "${python}/bin/${python.executable} setup.py build_ext";
+  preBuild = "${python.interpreter} setup.py build_ext";
 
-  installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
+  installPhase= "${python.interpreter} setup.py install --prefix=$out";
 
   doCheck = false;
 
