@@ -82,6 +82,8 @@ let
                "--output" "$out"
              ] ++ (optional (cfg.fontSize!=null) "--size ${toString cfg.fontSize}")))
          );
+
+  defaultSplash = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bootloader.png";
 in
 
 {
@@ -558,8 +560,13 @@ in
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png");
+        else defaultSplash);
     }
+
+    (mkIf (cfg.splashImage == defaultSplash) {
+      boot.loader.grub.backgroundColor = mkDefault "#2F302F";
+      boot.loader.grub.splashMode = mkDefault "normal";
+    })
 
     (mkIf cfg.enable {
 
