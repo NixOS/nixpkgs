@@ -1,20 +1,22 @@
-{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, glib, fuse3
-, docutils, which, python3Packages
+{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, docutils
+, fuse3, glib
+, which, python3Packages
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.4.0";
+  version = "3.5.0";
   name = "sshfs-fuse-${version}";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "1mbhjgw6797bln579pfwmn79gs8isnv57z431lbfw7j8xkh75awl";
+    sha256 = "1mczf13ic5ycfhcxmxma50n5h32vygcll0d8m39vam237s95aqy6";
   };
 
   nativeBuildInputs = [ meson pkgconfig ninja docutils ];
   buildInputs = [ fuse3 glib ];
+  checkInputs = [ which python3Packages.pytest ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optional
     (stdenv.system == "i686-linux")
@@ -25,9 +27,15 @@ stdenv.mkDerivation rec {
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
   '';
 
-  checkInputs = [ which ] ++ (with python3Packages; [ python pytest ]);
-
+  #doCheck = true;
   checkPhase = ''
+    # The tests need fusermount:
+    mkdir bin && cp ${fuse3}/bin/fusermount3 bin/fusermount
+    export PATH=bin:$PATH
+    # Can't access /dev/fuse within the sandbox: "FUSE kernel module does not seem to be loaded"
+    substituteInPlace test/util.py --replace "/dev/fuse" "/dev/null"
+    # TODO: "fusermount executable not setuid, and we are not root"
+    # We should probably use a VM test instead
     python3 -m pytest test/
   '';
 

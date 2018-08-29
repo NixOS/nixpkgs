@@ -291,6 +291,7 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.flatpak = callTest tests/flatpak.nix {};
   tests.firewall = callTest tests/firewall.nix {};
+  tests.fsck = callTest tests/fsck.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   tests.gdk-pixbuf = callTest tests/gdk-pixbuf.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};

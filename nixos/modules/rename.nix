@@ -219,7 +219,7 @@ with lib;
     '')
 
     # Profile splitting
-    (mkRenamedOptionModule [ "virtualization" "growPartition" ] [ "boot" "growPartition" ])
+    (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
 
     # misc/version.nix
     (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])

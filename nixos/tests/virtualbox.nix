@@ -1,4 +1,4 @@
-{ system ? builtins.currentSystem, debug ? false }:
+{ system ? builtins.currentSystem, debug ? false, enableUnfree ? false }:
 
 with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
@@ -378,6 +378,26 @@ let
     };
   };
 
+  unfreeTests = mapAttrs (mkVBoxTest true vboxVMsWithExtpack) {
+    enable-extension-pack = ''
+      createVM_testExtensionPack;
+      vbm("startvm testExtensionPack");
+      waitForStartup_testExtensionPack;
+      $machine->screenshot("cli_started");
+      waitForVMBoot_testExtensionPack;
+      $machine->screenshot("cli_booted");
+
+      $machine->nest("Checking for privilege escalation", sub {
+        $machine->fail("test -e '/root/VirtualBox VMs'");
+        $machine->fail("test -e '/root/.config/VirtualBox'");
+        $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
+      });
+
+      shutdownVM_testExtensionPack;
+      destroyVM_testExtensionPack;
+    '';
+  };
+
 in mapAttrs (mkVBoxTest false vboxVMs) {
   simple-gui = ''
     createVM_simple;
@@ -484,22 +504,4 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
     destroyVM_test1;
     destroyVM_test2;
   '';
-} // mapAttrs (mkVBoxTest true vboxVMsWithExtpack) {
-  enable-extension-pack = ''
-    createVM_testExtensionPack;
-    vbm("startvm testExtensionPack");
-    waitForStartup_testExtensionPack;
-    $machine->screenshot("cli_started");
-    waitForVMBoot_testExtensionPack;
-    $machine->screenshot("cli_booted");
-
-    $machine->nest("Checking for privilege escalation", sub {
-      $machine->fail("test -e '/root/VirtualBox VMs'");
-      $machine->fail("test -e '/root/.config/VirtualBox'");
-      $machine->succeed("test -e '/home/alice/VirtualBox VMs'");
-    });
-
-    shutdownVM_testExtensionPack;
-    destroyVM_testExtensionPack;
-  '';
-}
+} // (if enableUnfree then unfreeTests else {})

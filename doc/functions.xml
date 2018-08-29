@@ -1,5 +1,6 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
 	 xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
 	 xml:id="chap-functions">
  <title>Functions reference</title>
  <para>
@@ -444,6 +445,7 @@ merge:"diff3"
    <filename>./bin/start.sh</filename> -- relative paths are supported.
   </para>
  </section>
+ <xi:include href="shell.section.xml" />
  <section xml:id="sec-pkgs-dockerTools">
   <title>pkgs.dockerTools</title>
 
@@ -521,7 +523,8 @@ merge:"diff3"
     <callout arearefs='ex-dockerTools-buildImage-2'>
      <para>
       <varname>tag</varname> specifies the tag of the resulting image. By
-      default it's <literal>null</literal>, which indicates that the nix output hash will be used as tag.
+      default it's <literal>null</literal>, which indicates that the nix output
+      hash will be used as tag.
      </para>
     </callout>
     <callout arearefs='ex-dockerTools-buildImage-3'>
@@ -667,12 +670,12 @@ merge:"diff3"
      <para>
       <varname>imageDigest</varname> specifies the digest of the image to be
       downloaded. Skopeo can be used to get the digest of an image, with its
-      <varname>inspect</varname> subcommand.  Since a given <varname>imageName</varname>
-      may transparently refer to a manifest list of images which support
-      multiple architectures and/or operating systems, supply the `--override-os`
-      and `--override-arch` arguments to specify exactly which image you
-      want.  By default it will match the OS and architecture of the host the
-      command is run on.
+      <varname>inspect</varname> subcommand. Since a given
+      <varname>imageName</varname> may transparently refer to a manifest list
+      of images which support multiple architectures and/or operating systems,
+      supply the `--override-os` and `--override-arch` arguments to specify
+      exactly which image you want. By default it will match the OS and
+      architecture of the host the command is run on.
 <programlisting>
   $ nix-shell --packages skopeo jq --command "skopeo --override-os linux --override-arch x86_64 inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'"
   sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
@@ -695,16 +698,16 @@ merge:"diff3"
      </para>
     </callout>
     <callout arearefs='ex-dockerTools-pullImage-5'>
-      <para>
-        <varname>os</varname>, if specified, is the operating system of the fetched image.
-        By default it's <literal>linux</literal>.
-      </para>
+     <para>
+      <varname>os</varname>, if specified, is the operating system of the
+      fetched image. By default it's <literal>linux</literal>.
+     </para>
     </callout>
     <callout arearefs='ex-dockerTools-pullImage-6'>
-      <para>
-        <varname>arch</varname>, if specified, is the cpu architecture of the fetched image.
-        By default it's <literal>x86_64</literal>.
-      </para>
+     <para>
+      <varname>arch</varname>, if specified, is the cpu architecture of the
+      fetched image. By default it's <literal>x86_64</literal>.
+     </para>
     </callout>
    </calloutlist>
   </section>

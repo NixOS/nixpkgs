@@ -470,6 +470,13 @@ inherit (pkgs.nixos {
       The module option <option>nix.useSandbox</option> is now defaulted to <literal>true</literal>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The config activation script of <literal>nixos-rebuild</literal> now
+      <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemctl.html#Manager%20Lifecycle%20Commands">reloads</link>
+      all user units for each authenticated user.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>

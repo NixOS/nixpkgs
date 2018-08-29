@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   configureFlags = [
+    "--without-libnm-glib"
     "--with-charon=${strongswanNM}/libexec/ipsec/charon-nm"
     "--with-nm-libexecdir=$(out)/libexec"
     "--with-nm-plugindir=$(out)/lib/NetworkManager"

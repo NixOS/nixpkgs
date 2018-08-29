@@ -25,6 +25,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ intltool pkgconfig libxml2 ];
 
   configureFlags = [
+    "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
   ];

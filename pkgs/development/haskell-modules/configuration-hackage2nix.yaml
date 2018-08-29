@@ -43,7 +43,7 @@ core-packages:
 default-package-overrides:
   # Newer versions require contravariant-1.5.*, which many builds refuse at the moment.
   - base-compat-batteries ==0.10.1
-  # LTS Haskell 12.6
+  # LTS Haskell 12.7
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -76,7 +76,7 @@ default-package-overrides:
   - alarmclock ==0.5.0.2
   - alerts ==0.1.0.0
   - alex ==3.2.4
-  - alg ==0.2.5.0
+  - alg ==0.2.6.0
   - algebra ==4.3.1
   - Allure ==0.8.3.0
   - almost-fix ==0.0.2
@@ -244,7 +244,7 @@ default-package-overrides:
   - bench ==1.0.11
   - bencode ==0.6.0.0
   - between ==0.11.0.0
-  - bhoogle ==0.1.3.4
+  - bhoogle ==0.1.3.5
   - bibtex ==0.1.0.6
   - bifunctors ==5.5.3
   - bimap ==0.3.3
@@ -333,7 +333,7 @@ default-package-overrides:
   - cabal2spec ==2.1.1
   - cabal-doctest ==1.0.6
   - cabal-rpm ==0.12.5
-  - cache ==0.1.1.0
+  - cache ==0.1.1.1
   - cachix ==0.1.1
   - cachix-api ==0.1.0.1
   - cairo ==0.13.5.0
@@ -410,7 +410,7 @@ default-package-overrides:
   - codo-notation ==0.5.2
   - coercible-utils ==0.0.0
   - colonnade ==1.2.0.1
-  - colorful-monoids ==0.2.1.1
+  - colorful-monoids ==0.2.1.2
   - colorize-haskell ==1.0.1
   - colour ==2.3.4
   - combinatorial ==0.1
@@ -670,7 +670,7 @@ default-package-overrides:
   - errors ==2.3.0
   - errors-ext ==0.4.2
   - error-util ==0.0.1.2
-  - ersatz ==0.4.3
+  - ersatz ==0.4.4
   - etc ==0.4.0.3
   - event ==0.1.4
   - eventful-core ==0.2.0
@@ -870,9 +870,9 @@ default-package-overrides:
   - graph-wrapper ==0.2.5.1
   - gravatar ==0.8.0
   - graylog ==0.1.0.1
-  - greskell ==0.2.0.3
+  - greskell ==0.2.1.0
   - greskell-core ==0.1.2.2
-  - greskell-websocket ==0.1.0.0
+  - greskell-websocket ==0.1.1.0
   - groom ==0.1.2.1
   - groups ==0.4.1.0
   - gtk ==0.14.10
@@ -900,7 +900,7 @@ default-package-overrides:
   - hashmap ==1.3.3
   - hashtables ==1.2.3.1
   - haskeline ==0.7.4.3
-  - haskell-gi ==0.21.3
+  - haskell-gi ==0.21.4
   - haskell-gi-base ==0.21.1
   - haskell-gi-overloading ==1.0
   - haskell-lexer ==1.0.1
@@ -1065,7 +1065,7 @@ default-package-overrides:
   - hvect ==0.4.0.0
   - hvega ==0.1.0.3
   - hw-balancedparens ==0.2.0.2
-  - hw-bits ==0.7.0.2
+  - hw-bits ==0.7.0.3
   - hw-conduit ==0.2.0.3
   - hw-diagnostics ==0.0.0.5
   - hweblib ==0.6.3
@@ -1079,7 +1079,7 @@ default-package-overrides:
   - hw-mquery ==0.1.0.1
   - hworker ==0.1.0.1
   - hw-parser ==0.0.0.3
-  - hw-prim ==0.6.2.3
+  - hw-prim ==0.6.2.9
   - hw-rankselect ==0.10.0.3
   - hw-rankselect-base ==0.3.2.1
   - hw-string-parse ==0.0.0.4
@@ -1098,7 +1098,7 @@ default-package-overrides:
   - hybrid-vectors ==0.2.2
   - hyperloglog ==0.4.2
   - hyphenation ==0.7.1
-  - hyraxAbif ==0.2.3.9
+  - hyraxAbif ==0.2.3.10
   - iconv ==0.4.1.3
   - identicon ==0.2.2
   - ieee754 ==0.8.0
@@ -1134,7 +1134,7 @@ default-package-overrides:
   - interpolation ==0.1.0.2
   - IntervalMap ==0.6.0.0
   - intervals ==0.8.1
-  - intro ==0.3.1.0
+  - intro ==0.3.2.0
   - invariant ==0.5.1
   - invertible ==0.2.0.5
   - invertible-grammar ==0.1.1
@@ -1354,7 +1354,7 @@ default-package-overrides:
   - mmorph ==1.1.2
   - mnist-idx ==0.1.2.8
   - mockery ==0.3.5
-  - modern-uri ==0.2.1.0
+  - modern-uri ==0.2.2.0
   - moesocks ==1.0.0.44
   - monad-control ==1.0.2.3
   - monad-control-aligned ==0.0.1.1
@@ -1399,7 +1399,7 @@ default-package-overrides:
   - mtl-prelude ==2.0.3.1
   - multiarg ==0.30.0.10
   - multimap ==1.2.1
-  - multipart ==0.1.2
+  - multipart ==0.1.3
   - multistate ==0.8.0.0
   - murmur-hash ==0.1.0.9
   - MusicBrainz ==0.4
@@ -1493,7 +1493,7 @@ default-package-overrides:
   - open-browser ==0.2.1.0
   - openexr-write ==0.1.0.1
   - OpenGL ==3.0.2.2
-  - OpenGLRaw ==3.3.0.2
+  - OpenGLRaw ==3.3.1.0
   - openpgp-asciiarmor ==0.1.1
   - opensource ==0.1.0.0
   - openssl-streams ==1.2.1.3
@@ -1687,7 +1687,7 @@ default-package-overrides:
   - range-set-list ==0.1.3
   - rank1dynamic ==0.4.0
   - rank2classes ==1.1.0.1
-  - Rasterific ==0.7.3
+  - Rasterific ==0.7.4
   - rasterific-svg ==0.3.3.1
   - ratel ==1.0.5
   - ratel-wai ==1.0.3
@@ -1743,7 +1743,7 @@ default-package-overrides:
   - rest-stringmap ==0.2.0.7
   - result ==0.2.6.0
   - rethinkdb-client-driver ==0.0.25
-  - retry ==0.7.6.2
+  - retry ==0.7.6.3
   - rev-state ==0.1.2
   - rfc5051 ==0.1.0.3
   - rhine ==0.4.0.1
@@ -1774,7 +1774,7 @@ default-package-overrides:
   - sampling ==0.3.3
   - sandi ==0.4.2
   - sandman ==0.2.0.1
-  - say ==0.1.0.0
+  - say ==0.1.0.1
   - sbp ==2.3.17
   - scalendar ==1.2.0
   - SCalendar ==1.1.0
@@ -1838,7 +1838,7 @@ default-package-overrides:
   - servant-tracing ==0.1.0.2
   - servant-websockets ==1.1.0
   - servant-yaml ==0.1.0.0
-  - serverless-haskell ==0.6.6
+  - serverless-haskell ==0.6.7
   - serversession ==1.0.1
   - serversession-frontend-wai ==1.0
   - servius ==1.2.3.0
@@ -1918,7 +1918,7 @@ default-package-overrides:
   - state-codes ==0.1.3
   - stateref ==0.3
   - statestack ==0.2.0.5
-  - StateVar ==1.1.1.0
+  - StateVar ==1.1.1.1
   - static-canvas ==0.2.0.3
   - static-text ==0.2.0.2
   - statistics ==0.14.0.2
@@ -2033,7 +2033,7 @@ default-package-overrides:
   - texmath ==0.11.0.1
   - text ==1.2.3.0
   - text-binary ==0.2.1.1
-  - text-builder ==0.5.3
+  - text-builder ==0.5.3.1
   - text-conversions ==0.3.0
   - text-icu ==0.7.0.1
   - text-latin1 ==0.3.1
@@ -2113,7 +2113,7 @@ default-package-overrides:
   - tuple-sop ==0.3.1.0
   - tuple-th ==0.2.5
   - turtle ==1.5.10
-  - typed-process ==0.2.2.0
+  - typed-process ==0.2.3.0
   - type-fun ==0.1.1
   - type-hint ==0.1
   - type-level-integers ==0.0.1
@@ -2220,7 +2220,7 @@ default-package-overrides:
   - wai-conduit ==3.0.0.4
   - wai-cors ==0.2.6
   - wai-eventsource ==3.0.0
-  - wai-extra ==3.0.24.0
+  - wai-extra ==3.0.24.1
   - wai-handler-launch ==3.0.2.4
   - wai-logger ==2.3.2
   - wai-middleware-caching ==0.1.0.2
@@ -2265,8 +2265,8 @@ default-package-overrides:
   - with-location ==0.1.0
   - witness ==0.4
   - wizards ==1.0.2
-  - wl-pprint-annotated ==0.1.0.0
-  - wl-pprint-console ==0.1.0.1
+  - wl-pprint-annotated ==0.1.0.1
+  - wl-pprint-console ==0.1.0.2
   - wl-pprint-extras ==3.5.0.5
   - wl-pprint-terminfo ==3.7.1.4
   - wl-pprint-text ==1.2.0.0
@@ -2281,8 +2281,8 @@ default-package-overrides:
   - writer-cps-full ==0.1.0.0
   - writer-cps-lens ==0.1.0.1
   - writer-cps-morph ==0.1.0.2
-  - writer-cps-mtl ==0.1.1.4
-  - writer-cps-transformers ==0.1.1.3
+  - writer-cps-mtl ==0.1.1.5
+  - writer-cps-transformers ==0.1.1.4
   - ws ==0.0.4
   - wuss ==1.1.10
   - X11 ==1.9
@@ -4742,7 +4742,6 @@ dont-distribute-packages:
   gi-gtkosxapplication:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   gi-notify:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   gi-poppler:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
-  gi-vte:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   gi-wnck:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   giak:                                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   Gifcurry:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]

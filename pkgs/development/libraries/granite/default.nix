@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "granite-${version}";
-  version = "5.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "granite";
     rev = version;
-    sha256 = "015hkclcxirssg7a8s6mkns5xdk77m1jnkshlyfdw041nzyc5jh1";
+    sha256 = "1v1yhz6rp616xi417m9r8072s6mpz5i8vkdyj264b73p0lgjwh40";
   };
 
   cmakeFlags = [

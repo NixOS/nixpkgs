@@ -1,9 +1,21 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk2, SDL, fontconfig, freetype, imlib2, SDL_image, libGLU_combined,
-libXmu, freeglut, pcre, dbus-glib, glib, librsvg, freeimage, libxslt,
-qtbase, qtquickcontrols, qtsvg, qtdeclarative, qtlocation, qtsensors, qtmultimedia, qtspeech, espeak,
-cairo, gdk_pixbuf, pango, atk, patchelf, fetchurl, bzip2,
-python, gettext, quesoglc, gd, postgresql, cmake, shapelib, SDL_ttf, fribidi}:
+{ stdenv, fetchFromGitHub, pkgconfig, gtk2, fontconfig, freetype, imlib2
+, SDL_image, libGLU_combined, libXmu, freeglut, pcre, dbus, dbus-glib, glib
+, librsvg, freeimage, libxslt, cairo, gdk_pixbuf, pango
+, atk, patchelf, fetchurl, bzip2, python, gettext, quesoglc
+, gd, cmake, shapelib, SDL_ttf, fribidi, makeWrapper
+, qtquickcontrols, qtmultimedia, qtspeech, qtsensors
+, qtlocation, qtdeclarative, qtsvg
+, qtSupport ? false, qtbase #need to fix qt_qpainter
+, sdlSupport ? true, SDL
+, xkbdSupport ? true, xkbd
+, espeakSupport ? true, espeak
+, postgresqlSupport ? false, postgresql
+, speechdSupport ? false, speechd ? null
+}:
 
+assert speechdSupport -> speechd != null;
+
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "navit-${version}";
   version = "0.5.1";
@@ -21,34 +33,53 @@ stdenv.mkDerivation rec {
     sha256 = "0vg6b6rhsa2cxqj4rbhfhhfss71syhnfa6f1jg2i2d7l88dm5x7d";
   };
 
-  #hardeningDisable = [ "format" ];
-  NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
+  patches = [ ./CMakeLists.txt.patch ];
 
-  # TODO: fix speech options.
-  cmakeFlags = [ "-DSAMPLE_MAP=n " "-DCMAKE_BUILD_TYPE=RelWithDebInfo" "-Dsupport/espeak=FALSE" "-Dspeech/qt5_espeak=FALSE" ];
+  NIX_CFLAGS_COMPILE = optional sdlSupport "-I${SDL.dev}/include/SDL"
+    ++ optional speechdSupport "-I${speechd}/include/speech-dispatcher";
 
-  buildInputs = [ gtk2 SDL fontconfig freetype imlib2 SDL_image libGLU_combined freeimage libxslt
-    libXmu freeglut python gettext quesoglc gd postgresql qtbase SDL_ttf fribidi pcre qtquickcontrols
-    espeak qtmultimedia qtspeech qtsensors qtlocation qtdeclarative qtsvg dbus-glib librsvg shapelib glib 
-    cairo gdk_pixbuf pango atk ];
+  # we choose only cmdline and speech-dispatcher speech options.
+  # espeak builtins is made for non-cmdline OS as winCE
+  cmakeFlags = [
+    "-DSAMPLE_MAP=n " "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+    "-Dspeech/qt5_espeak=FALSE" "-Dsupport/espeak=FALSE"
+  ];
 
-  nativeBuildInputs = [ pkgconfig cmake patchelf bzip2 ];
+  buildInputs = [
+    gtk2 fontconfig freetype imlib2 libGLU_combined freeimage
+    libxslt libXmu freeglut python gettext quesoglc gd
+    fribidi pcre  dbus dbus-glib librsvg shapelib glib
+    cairo gdk_pixbuf pango atk
+  ] ++ optionals sdlSupport [ SDL SDL_ttf SDL_image ]
+    ++ optional postgresqlSupport postgresql
+    ++ optional speechdSupport speechd
+    ++ optionals qtSupport [
+      qtquickcontrols qtmultimedia qtspeech qtsensors
+      qtbase qtlocation qtdeclarative qtsvg
+  ];
+
+  nativeBuildInputs = [ makeWrapper pkgconfig cmake patchelf bzip2 ];
 
   # we dont want blank screen by defaut
   postInstall = ''
     # emulate DSAMPLE_MAP
-    mkdir -p $out/share/navit/maps/maps
+    mkdir -p $out/share/navit/maps/
     bzcat "${sample_map}" | $out/bin/maptool "$out/share/navit/maps/osm_bbox_11.3,47.9,11.7,48.2.bin"
   '';
 
   # TODO: fix upstream?
   postFixup = ''
     for lib in $(find "$out/lib/navit/" -iname "*.so" ); do
-      patchelf --set-rpath ${stdenv.lib.makeLibraryPath buildInputs} $lib
+      patchelf --set-rpath ${makeLibraryPath buildInputs} $lib
     done
+    wrapProgram $out/bin/navit \
+      --prefix PATH : ${makeBinPath (
+        optional xkbdSupport xkbd
+        ++ optional espeakSupport espeak
+        ++ optional speechdSupport speechd ) }
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://www.navit-project.org;
     description = "Car navigation system with routing engine using OSM maps";
     license = licenses.gpl2;

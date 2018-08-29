@@ -36,7 +36,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.12";
+  version = "7.0";
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     inherit name;
-    sha256 = "0cwcypzjfl9py1s695mhqkiapff7c1w29llsmdj7qgn58wl0apk5";
+    sha256 = "1glv5amsp9xp480d4yr63hhm9kkyav06yl3a6p489nkr4cln0j9a";
   };
 
   FONTCONFIG_FILE = fontsConf;
