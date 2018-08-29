@@ -162,8 +162,17 @@ in
         /bin/sh
       '';
 
+    # For resetting environment with `. /etc/set-environment` when needed
+    # and discoverability (see motivation of #30418).
+    environment.etc."set-environment".source = config.system.build.setEnvironment;
+
     system.build.setEnvironment = pkgs.writeText "set-environment"
        ''
+         # DO NOT EDIT -- this file has been generated automatically.
+
+         # Prevent this file from being sourced by child shells.
+         export __NIXOS_SET_ENVIRONMENT_DONE=1
+
          ${exportedEnvVars}
 
          ${cfg.extraInit}
