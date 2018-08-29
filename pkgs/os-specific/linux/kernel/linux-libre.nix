@@ -4,6 +4,7 @@
     rev = "r15295";
     sha256 = "03kqbjy7w9zg6ry86h9sxa33z0rblznhba109lwmjwy0wx7yk1cs";
   }
+, ...
 }:
 
 let
