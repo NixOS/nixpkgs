@@ -112,10 +112,11 @@ let
         # TODO: remove when there is a reliable long-term solution
         https://cat3.de/texlive-2018/tlnet/archive
 
-        # TODO: Add another snapshot mirror
-
-        # TODO: Add IPFS storage or host snapshot elsewhere,
+        # TODO: Add second, faster and more reliable snapshot mirror,
         # maybe on one of our project's servers
+
+        # IPFS seeded by the mirror above - this may be quite slow
+        https://ipfs.io/ipfs/QmT4Z67wXin1Z9DhvqwSSkSZSuu8hT6LgDyMu6CBm9Tb7t/tlnet/archive
 
         # The canonical source moves quickly and will be broken almost immediately
         http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive
