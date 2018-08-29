@@ -7261,7 +7261,6 @@ with pkgs;
 
   inherit (callPackage ../development/compilers/vala { })
     vala_0_28
-    vala_0_32
     vala_0_34
     vala_0_36
     vala_0_38
