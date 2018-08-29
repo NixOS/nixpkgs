@@ -167,19 +167,19 @@ in
     environment.etc."set-environment".source = config.system.build.setEnvironment;
 
     system.build.setEnvironment = pkgs.writeText "set-environment"
-       ''
-         # DO NOT EDIT -- this file has been generated automatically.
+      ''
+        # DO NOT EDIT -- this file has been generated automatically.
 
-         # Prevent this file from being sourced by child shells.
-         export __NIXOS_SET_ENVIRONMENT_DONE=1
+        # Prevent this file from being sourced by child shells.
+        export __NIXOS_SET_ENVIRONMENT_DONE=1
 
-         ${exportedEnvVars}
+        ${exportedEnvVars}
 
-         ${cfg.extraInit}
+        ${cfg.extraInit}
 
-         # ~/bin if it exists overrides other bin directories.
-         export PATH="$HOME/bin:$PATH"
-       '';
+        # ~/bin if it exists overrides other bin directories.
+        export PATH="$HOME/bin:$PATH"
+      '';
 
     system.activationScripts.binsh = stringAfter [ "stdio" ]
       ''

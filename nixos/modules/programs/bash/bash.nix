@@ -168,11 +168,11 @@ in
 
         # Read system-wide modifications.
         if test -f /etc/profile.local; then
-          . /etc/profile.local
+            . /etc/profile.local
         fi
 
         if [ -n "''${BASH_VERSION:-}" ]; then
-          . /etc/bashrc
+            . /etc/bashrc
         fi
       '';
 
@@ -193,12 +193,12 @@ in
 
         # We are not always an interactive shell.
         if [ -n "$PS1" ]; then
-          ${cfg.interactiveShellInit}
+            ${cfg.interactiveShellInit}
         fi
 
         # Read system-wide modifications.
         if test -f /etc/bashrc.local; then
-          . /etc/bashrc.local
+            . /etc/bashrc.local
         fi
       '';
 
