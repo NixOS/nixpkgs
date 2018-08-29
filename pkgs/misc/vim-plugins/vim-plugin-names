@@ -233,6 +233,7 @@
 "github:tpope/vim-commentary"
 "github:tpope/vim-dispatch"
 "github:tpope/vim-eunuch"
+"github:tpope/vim-fireplace"
 "github:tpope/vim-flagship"
 "github:tpope/vim-fugitive"
 "github:tpope/vim-pathogen"
