@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobjectIntrospection ];
 
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "$(out)/share/polkit-1/actions";
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
   configureFlags = [
     "--with-gtk3"
