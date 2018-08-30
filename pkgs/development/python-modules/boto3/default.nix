@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname =  "boto3";
-  version = "1.7.84";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "boto";
     repo  = "boto3";
     rev   = version;
-    sha256 = "0d9kqjqmnn53p1xpmdbbjxcxv2482yx3vjhxw8izp0mpq58i5c14";
+    sha256 = "1ja71r7xsijfy0qqqqxanhhg5fk4ad0mgvxyjg7ag0z3z04s1169";
   };
 
   propagatedBuildInputs = [ botocore jmespath s3transfer ] ++ lib.optionals (!isPy3k) [ futures ];
