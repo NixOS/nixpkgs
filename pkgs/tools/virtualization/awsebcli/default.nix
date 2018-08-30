@@ -1,7 +1,7 @@
-{ stdenv, python }:
+{ stdenv, python3, glibcLocales }:
 let
 
-  localPython = python.override {
+  localPython = python3.override {
     packageOverrides = self: super: {
       cement = super.cement.overridePythonAttrs (oldAttrs: rec {
         version = "2.8.2";
@@ -60,6 +60,12 @@ in with localPython.pkgs; buildPythonApplication rec {
     inherit pname version;
     sha256 = "128dgxyz2bgl3r4jdkbmjs280004bm0dwzln7p6ly3yjs2x37jl6";
   };
+
+  buildInputs = [
+    glibcLocales
+  ];
+
+  LC_ALL = "en_US.UTF-8";
 
   checkInputs = [
     pytest mock nose pathspec colorama requests docutils
