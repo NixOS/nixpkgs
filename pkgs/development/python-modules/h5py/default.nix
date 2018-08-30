@@ -37,6 +37,9 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [ numpy six]
     ++ optionals mpiSupport [ mpi4py openssh ];
 
+  # https://github.com/h5py/h5py/issues/1088
+  doCheck = false;
+
   meta = {
     description =
       "Pythonic interface to the HDF5 binary data format";
