@@ -37,7 +37,7 @@ bundlerApp {
 
       # For some reason 'mathematical.so' is missing cairo and glib in its RPATH, add them explicitly here
       postFixup = lib.optionalString stdenv.isLinux ''
-        soPath="$out/lib/ruby/gems/2.4.0/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
+        soPath="$out/${ruby.gemPath}/gems/mathematical-${attrs.version}/lib/mathematical/mathematical.so"
         ${patchelf}/bin/patchelf \
           --set-rpath "${lib.makeLibraryPath [ glib cairo ]}:$(${patchelf}/bin/patchelf --print-rpath "$soPath")" \
           "$soPath"
