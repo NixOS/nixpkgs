@@ -14,11 +14,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  buildPhase = ''
-  '';
-
-  testPhase = ''
-  '';
+  dontBuild = true;
 
   installPhase = ''
     cd tools
@@ -34,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "kythe";
+    description = "A pluggable, (mostly) language-agnostic ecosystem for building tools that work with code.";
     longDescription = ''
     The Kythe project was founded to provide and support tools and standards
       that encourage interoperability among programs that manipulate source
@@ -46,5 +42,6 @@ stdenv.mkDerivation rec {
     homepage = https://kythe.io/;
     license = licenses.asl20;
     platforms = platforms.linux;
+    maintainers = [ maintainers.mpickering ];
   };
 }
