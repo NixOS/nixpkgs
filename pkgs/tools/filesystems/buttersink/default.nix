@@ -1,18 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, boto, crcmod, psutil }:
+{ lib, python2 }:
 
-buildPythonPackage rec {
+python2.pkgs.buildPythonApplication rec {
   pname = "buttersink";
   version = "0.6.9";
-  disabled = isPy3k;
 
-  src = fetchPypi {
+  src = python2.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "c9c05982c44fbb85f17b7ef0e8bee11f375c03d89bcba50cbc2520013512107a";
+    sha256 = "a797b6e92ad2acdf41e033c1368ab365aa268f4d8458b396a5770fa6c2bc3f54";
   };
 
-  propagatedBuildInputs = [ boto crcmod psutil ];
+  propagatedBuildInputs = with python2.pkgs; [ boto crcmod psutil ];
 
-  meta = with stdenv.lib; {
+  # No tests implemented
+  doCheck = false;
+
+  meta = with lib; {
     description = "Synchronise btrfs snapshots";
     longDescription = ''
       ButterSink is like rsync, but for btrfs subvolumes instead of files,

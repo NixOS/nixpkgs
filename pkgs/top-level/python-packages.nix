@@ -1068,8 +1068,6 @@ in {
 
   bumps = callPackage ../development/python-modules/bumps {};
 
-  buttersink = callPackage ../development/python-modules/buttersink {};
-
   cached-property = callPackage ../development/python-modules/cached-property { };
 
   caffe = pkgs.caffe.override {
