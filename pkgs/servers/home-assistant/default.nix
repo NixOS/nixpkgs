@@ -18,12 +18,14 @@ let
 
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py
-    (mkOverride "aiohttp" "3.3.2"
-      "f20deec7a3fbaec7b5eb7ad99878427ad2ee4cc16a46732b705e8121cbb3cc12")
+    (mkOverride "aiohttp" "3.4.0"
+      "9b15efa7411dcf3b59c1f4766eb16ba1aba4531a33e54d469ee22106eabce460")
     (mkOverride "astral" "1.6.1"
       "ab0c08f2467d35fcaeb7bad15274743d3ac1ad18b5391f64a0058a9cd192d37d")
     (mkOverride "attrs" "18.1.0"
       "e0d0eb91441a3b53dab4d9b743eafc1ac44476296a2053b6ca3af0b139faf87b")
+    (mkOverride "bcrypt" "3.1.4"
+      "67ed1a374c9155ec0840214ce804616de49c3df9c5bc66740687c1c9b1cd9e8d")
     (mkOverride "pyjwt" "1.6.4"
       "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176")
     (mkOverride "cryptography" "2.3.1"
@@ -73,7 +75,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.76.1";
+  hassVersion = "0.77.1";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -88,14 +90,14 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "0bqvb6wsbv1irp92ijdvx62vqicsqhyk301ixf8yb2d1dwwwmid3";
+    sha256 = "1dqxxirglcl0srb4znwz61lxqba47g7q66bw4v1nfdwhxb0kj0w5";
   };
 
   propagatedBuildInputs = [
     # From setup.py
-    aiohttp astral async-timeout attrs certifi jinja2 pyjwt cryptography pip pytz pyyaml requests voluptuous
-    # From http, frontend, recorder and config.config_entries components
-    sqlalchemy aiohttp-cors hass-frontend voluptuous-serialize
+    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip pytz pyyaml requests voluptuous
+    # From http, frontend, recorder and config.config_entries components and auth.mfa_modules.totp
+    sqlalchemy aiohttp-cors hass-frontend voluptuous-serialize pyotp pyqrcode
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
