@@ -44,29 +44,6 @@ rec {
     };
   } {};
 
-  firefox-esr-52 = common rec {
-    pname = "firefox-esr";
-    version = "52.9.0esr";
-    src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "bfca42668ca78a12a9fb56368f4aae5334b1f7a71966fbba4c32b9c5e6597aac79a6e340ac3966779d2d5563eb47c054ab33cc40bfb7306172138ccbd3adb2b9";
-    };
-
-    patches = nixpkgsPatches ++ [
-      # this one is actually an omnipresent bug
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
-      ./fix-pa-context-connect-retval.patch
-    ];
-
-    meta = firefox.meta // {
-      description = "A web browser built from Firefox Extended Support Release source tree";
-    };
-    updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-52-unwrapped";
-      versionSuffix = "esr";
-    };
-  } {};
-
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
     version = "60.1.0esr";

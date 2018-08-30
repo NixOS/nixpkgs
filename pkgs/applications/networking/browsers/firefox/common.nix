@@ -31,7 +31,7 @@
 
 # webrtcSupport breaks the aarch64 build on version >= 60.
 # https://bugzilla.mozilla.org/show_bug.cgi?id=1434589
-, webrtcSupport ? (if lib.versionAtLeast version "60" && stdenv.isAarch64 then false else !privacySupport)
+, webrtcSupport ? (!stdenv.isAarch64 && !privacySupport)
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
@@ -128,14 +128,8 @@ stdenv.mkDerivation (rec {
     rm -f configure
     rm -f js/src/configure
     rm -f .mozconfig*
-  '' + (if lib.versionAtLeast version "58"
-  # this will run autoconf213
-  then ''
     configureScript="$(realpath ./mach) configure"
-  '' else ''
-    make -f client.mk configure-files
-    configureScript="$(realpath ./configure)"
-  '') + lib.optionalString (!isTorBrowserLike && lib.versionAtLeast version "53") ''
+  '' + lib.optionalString (!isTorBrowserLike) ''
     export MOZCONFIG=$(pwd)/mozconfig
 
     # Set C flags for Rust's bindgen program. Unlike ordinary C
@@ -187,12 +181,12 @@ stdenv.mkDerivation (rec {
   ]
   ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast version "61") "--disable-xcode-checks"
   ++ lib.optional (lib.versionOlder version "61") "--enable-system-hunspell"
-  ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
+  ++ lib.optionals (!stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
     "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
-  ++ lib.optionals (lib.versionAtLeast version "57") [
+  ++ [
     "--enable-webrender=build"
   ]
 
@@ -239,7 +233,7 @@ stdenv.mkDerivation (rec {
   # top level and then run `make` in obj-*. (We can also run the
   # `make` at the top level in 58, but then we would have to `cd` to
   # `make install` anyway. This is ugly, but simple.)
-  postConfigure = lib.optionalString (lib.versionAtLeast version "58") ''
+  postConfigure = ''
     cd obj-*
   '';
 
