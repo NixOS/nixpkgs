@@ -1,5 +1,4 @@
-{ stdenv, lib, bundlerEnv, gpgme, ruby, ncurses, writeText, zlib, xapian
-, pkgconfig, which }:
+{ lib, bundlerEnv, ruby }:
 
 bundlerEnv {
   name = "sup-0.22.1";

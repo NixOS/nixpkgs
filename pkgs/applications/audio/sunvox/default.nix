@@ -5,7 +5,7 @@ let
   arch =
     if stdenv.isAarch64
     then "arm64"
-    else if stdenv.isArm
+    else if stdenv.isAarch32
     then "arm_armhf_raspberry_pi"
     else if stdenv.is64bit
     then "x86_64"

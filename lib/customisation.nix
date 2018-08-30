@@ -1,9 +1,4 @@
 { lib }:
-let
-
-  inherit (builtins) attrNames;
-
-in
 
 rec {
 
@@ -200,9 +195,10 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
+          # TODO(@Ericson2314): Haromonize argument order of `g` with everything else
           overrideScope = g:
             makeScope newScope
-            (self_: let super = f self_; in super // g super self_);
+            (lib.fixedPoints.extends (lib.flip g) f);
           packages = f;
         };
     in self;

@@ -1,17 +1,11 @@
-{ stdenv, fetchurl, runCommand
+{ stdenv, fetchurl
 , erlang, python, libxml2, libxslt, xmlto
 , docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync
-
 , AppKit, Carbon, Cocoa
+, getconf
 }:
 
-let
-  # we only need that one glibc binary (28k instead of 2.7M)
-  getconf = runCommand "getconf" {} ''
-    install -D ${stdenv.lib.getBin stdenv.cc.libc}/bin/getconf $out/bin/getconf
-  '';
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "rabbitmq-server-${version}";
   version = "3.6.15";
 

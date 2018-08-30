@@ -6,7 +6,6 @@
 , fetchNuGet
 , pkgconfig
 , mono
-, monodevelop
 , fsharp
 , unzip
 , overrides ? {}
@@ -299,17 +298,27 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Boogie = buildDotnetPackage rec {
     baseName = "Boogie";
-    version = "2017-01-03";
+    version = "2018-05-28";
     name = "${baseName}-unstable-${version}";
 
     src = fetchFromGitHub {
       owner = "boogie-org";
       repo = "boogie";
-      rev = "5e42f0dd2891b2b85a9198052e55592a2943b7ef";
-      sha256 = "1mjnf96hbn9abgzyvmrfxlhnm213290xb9wca7rnnl12i4fa4ahl";
+      rev = "fc97aac639505f46cda7904dae95c9557716d037";
+      sha256 = "1hjksc5sapw1shxjwg0swja5afman8i15wnv5b6rzkqd4mg8y6nz";
     };
 
-    buildInputs = [ dotnetPackages.NUnitRunners ];
+    # emulate `nuget restore Source/Boogie.sln`
+    # which installs in $srcdir/Source/packages
+    preBuild = ''
+      mkdir -p Source/packages/NUnit.2.6.3
+      ln -sn ${dotnetPackages.NUnit}/lib/dotnet/NUnit Source/packages/NUnit.2.6.3/lib
+    '';
+
+    buildInputs = [
+      dotnetPackages.NUnit
+      dotnetPackages.NUnitRunners
+    ];
 
     xBuildFiles = [ "Source/Boogie.sln" ];
 
@@ -318,11 +327,23 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     postInstall = ''
         mkdir -pv "$out/lib/dotnet/${baseName}"
         ln -sv "${pkgs.z3}/bin/z3" "$out/lib/dotnet/${baseName}/z3.exe"
+
+        # so that this derivation can be used as a vim plugin to install syntax highlighting
+        vimdir=$out/share/vim-plugins/boogie
+        install -Dt $vimdir/syntax/ Util/vim/syntax/boogie.vim
+        mkdir $vimdir/ftdetect
+        echo 'au BufRead,BufNewFile *.bpl set filetype=boogie' > $vimdir/ftdetect/bpl.vim
     '';
 
     meta = with stdenv.lib; {
       description = "An intermediate verification language";
       homepage = "https://github.com/boogie-org/boogie";
+      longDescription = ''
+        Boogie is an intermediate verification language (IVL), intended as a
+        layer on which to build program verifiers for other languages.
+
+        This derivation may be used as a vim plugin to provide syntax highlighting.
+      '';
       license = licenses.mspl;
       maintainers = [ maintainers.taktoa ];
       platforms = with platforms; (linux ++ darwin);

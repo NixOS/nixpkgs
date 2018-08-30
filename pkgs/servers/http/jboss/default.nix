@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "jboss-as-7.1.1.Final";
   src = fetchurl {
-    url = http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz;
+    url = https://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz;
     sha256 = "1bdjw0ib9qr498vpfbg8klqw6rl11vbz7vwn6gp1r5gpqkd3zzc8";
   };
 

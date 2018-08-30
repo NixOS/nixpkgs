@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  nativeBuildInputs = [ pkgconfig ] ++ lib.optional stdenv.isArm autoconf213;
+  nativeBuildInputs = [ pkgconfig ] ++ lib.optional stdenv.isAarch32 autoconf213;
   buildInputs = [ perl python2 zip ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
@@ -19,16 +19,16 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr.dev}/include/nspr"
     export LIBXUL_DIST=$out
-    ${lib.optionalString stdenv.isArm "autoreconf --verbose --force"}
+    ${lib.optionalString stdenv.isAarch32 "autoreconf --verbose --force"}
   '';
 
   patches = [
     (fetchpatch {
       name = "gcc6.patch";
-      url = "https://anonscm.debian.org/cgit/collab-maint/mozjs.git/plain/debian/patches/fix-811665.patch?id=00b15c7841968ab4f7fec409a6b93fa5e1e1d32e";
+      url = "https://sources.debian.org/data/main/m/mozjs/1.8.5-1.0.0+dfsg-6/debian/patches/fix-811665.patch";
       sha256 = "1q8477xqxiy5d8376k5902l45gd0qkd4nxmhl8vr6rr1pxfcny99";
     })
-  ] ++ stdenv.lib.optionals stdenv.isArm [
+  ] ++ stdenv.lib.optionals stdenv.isAarch32 [
     # Explained below in configureFlags for ARM
     ./1.8.5-findvanilla.patch
     # Fix for hard float flags.
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   # hack around a make problem, see https://github.com/NixOS/nixpkgs/issues/1279#issuecomment-29547393
   preBuild = ''
     touch -- {.,shell,jsapi-tests}/{-lpthread,-ldl}
-    ${if stdenv.isArm then "rm -r jit-test/tests/jaeger/bug563000" else ""}
+    ${if stdenv.isAarch32 then "rm -r jit-test/tests/jaeger/bug563000" else ""}
   '';
 
   enableParallelBuilding = true;
@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     # TODO: MPL/GPL/LGPL tri-license.
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64; # 2018-08-21, broken since 2017-03-08
   };
 }
 

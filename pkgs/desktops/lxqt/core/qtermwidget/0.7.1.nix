@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.7.1";
 
   srcs = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "0awp33cnkpi9brpx01mz5hwj7j2lq1wdi8cabk3wassd99vvxdxz";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A terminal emulator widget for Qt 5";
-    homepage = https://github.com/lxde/qtermwidget;
+    homepage = https://github.com/lxqt/qtermwidget;
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

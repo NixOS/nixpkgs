@@ -141,12 +141,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers."${cfg.user}" = {
+    users.users."${cfg.user}" = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.extraGroups."${cfg.group}" = {};
+    users.groups."${cfg.group}" = {};
 
     systemd.services.atlassian-jira = {
       description = "Atlassian JIRA";
@@ -155,7 +155,7 @@ in
       requires = [ "postgresql.service" ];
       after = [ "postgresql.service" ];
 
-      path = [ cfg.jrePackage ];
+      path = [ cfg.jrePackage pkgs.bash ];
 
       environment = {
         JIRA_USER = cfg.user;

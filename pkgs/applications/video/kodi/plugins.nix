@@ -1,5 +1,5 @@
-{ stdenv, lib, callPackage, fetchurl, fetchFromGitHub, unzip
-, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun }:
+{ stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
+, steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib }:
 
 with (callPackage ./commons.nix {});
 
@@ -313,5 +313,51 @@ rec {
 
     extraBuildInputs = [ jsoncpp libhdhomerun ];
 
+  };
+
+  pvr-iptvsimple = mkKodiABIPlugin rec {
+
+    plugin = "pvr-iptvsimple";
+    namespace = "pvr.iptvsimple";
+    version = "2.4.14";
+
+    src = fetchFromGitHub {
+      owner = "kodi-pvr";
+      repo = "pvr.iptvsimple";
+      rev = "2a649d7e21b64c4fa4a8b14c2cc139261eebc7e8";
+      sha256 = "1f1im2gachrxnr3z96h5cg2c13vapgkvkdwvrbl4hxlnyp1a6jyz";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/kodi-pvr/pvr.iptvsimple;
+      description = "Kodi's IPTV Simple client addon";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ ];
+      license = licenses.gpl2Plus;
+    };
+
+    extraBuildInputs = [ zlib ];
+  };
+
+  osmc-skin = mkKodiPlugin rec {
+
+    plugin = "osmc-skin";
+    namespace = "skin.osmc";
+    version = "17.0.4";
+
+    src = fetchFromGitHub {
+      owner = "osmc";
+      repo = namespace;
+      rev = "a9268937f49286bab9fb49de430b8aafd7a60a9e";
+      sha256 = "1b3fm02annsq58pcfc985glrmh21rmqksdj3q8wn6gyza06jdf3v";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/osmc/skin.osmc;
+      description = "The default skin for OSMC";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ worldofpeace ];
+      license = licenses.cc-by-nc-sa-30;
+    };
   };
 }

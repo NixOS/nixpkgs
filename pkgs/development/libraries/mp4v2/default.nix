@@ -9,10 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # From Handbrake
-    # mp4v2 doesn't seem to be actively maintained any more :-/
-    ./A02-meaningful-4gb-warning.patch
-
     (fetchurl {
       name = "gcc-7.patch";
       url = "https://src.fedoraproject.org/cgit/rpms/libmp4v2.git/plain/"

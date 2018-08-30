@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, fetchzip, version, bsdmake, perl, flex, yacc, writeScriptBin
+{ stdenv, appleDerivation, fetchzip, bsdmake, perl, flex, yacc
 }:
 
 # this derivation sucks

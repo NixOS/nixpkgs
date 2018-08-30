@@ -1,6 +1,7 @@
 { fetchurl, stdenv, lib
 , buildPlatform, hostPlatform
 , enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
+, enableShared ? !stdenv.hostPlatform.useAndroidPrebuilt
 }:
 
 # assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
@@ -14,14 +15,24 @@ stdenv.mkDerivation rec {
     sha256 = "0y1ij745r4p48mxq84rax40p10ln7fc7m243p8k8sia519i3dxfc";
   };
 
+  setupHooks = [
+    ../../../build-support/setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
+
   postPatch =
     lib.optionalString ((hostPlatform != buildPlatform && hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
-      '';
+      ''
+    + lib.optionalString (!enableShared) ''
+      sed -i -e '/preload/d' Makefile.in
+    '';
 
-  configureFlags = lib.optional stdenv.isFreeBSD "--with-pic"
-    ++ lib.optional enableStatic "--enable-static";
+  configureFlags = [
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+  ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   meta = {
     description = "An iconv(3) implementation";

@@ -4,9 +4,6 @@ with lib;
 
 let
 
-  kernel = config.boot.kernelPackages.kernel;
-  activateConfiguration = config.system.activationScripts.script;
-
   bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
@@ -20,6 +17,7 @@ let
       pkgs.utillinux
       pkgs.openresolv
     ];
+    fsPackagesPath = lib.makeBinPath config.system.fsPackages;
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}

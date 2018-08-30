@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , cython
-, python
 }:
 
 buildPythonPackage rec {

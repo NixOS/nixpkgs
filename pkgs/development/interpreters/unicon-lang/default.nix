@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, gdbm, libX11, libXt }:
+{ stdenv, fetchurl, unzip, libX11, libXt }:
 
 stdenv.mkDerivation rec {
   name = "unicon-lang-${version}";

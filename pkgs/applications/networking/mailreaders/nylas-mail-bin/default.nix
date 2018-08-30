@@ -1,4 +1,4 @@
-{ dpkg, fetchurl, lib, pkgs, stdenv, config
+{ dpkg, fetchurl, lib, pkgs, stdenv
 , alsaLib
 , atk
 , cairo
@@ -13,7 +13,6 @@
 , gdk_pixbuf
 , glib
 , gnome2
-, libgcrypt
 , libgnome-keyring
 , libnotify
 , makeWrapper
@@ -81,8 +80,6 @@ stdenv.mkDerivation rec {
     xorg.libxkbfile
   ];
 
-
-  buildInputs = [ gnome2.gnome-keyring ];
 
   nativeBuildInputs = [ makeWrapper ];
 

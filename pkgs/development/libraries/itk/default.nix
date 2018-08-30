@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, libX11, libuuid, xz, vtk }:
+{ stdenv, fetchurl, cmake, libX11, libuuid, xz, vtk }:
 
 stdenv.mkDerivation rec {
   name = "itk-4.13.0";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
     "-DBUILD_TESTING=OFF"
     "-DBUILD_EXAMPLES=OFF"
     "-DBUILD_SHARED_LIBS=ON"
+    "-DModule_ITKMINC=ON"
     "-DModule_ITKIOMINC=ON"
+    "-DModule_ITKIOTransformMINC=ON"
     "-DModule_ITKVtkGlue=ON"
     "-DModule_ITKReview=ON"
   ];

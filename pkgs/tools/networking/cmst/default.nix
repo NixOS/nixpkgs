@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, libX11 }:
+{ stdenv, fetchFromGitHub, qmake, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "cmst-${version}";

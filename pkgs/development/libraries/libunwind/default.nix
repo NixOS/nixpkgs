@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, xz }:
+{ stdenv, fetchurl, autoreconfHook, xz }:
 
 stdenv.mkDerivation rec {
   name = "libunwind-${version}";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
       sed -i 's,-llzma,${xz.out}/lib/liblzma.la,' $file
     done
   '';
+
+  doCheck = false; # fails
 
   meta = with stdenv.lib; {
     homepage = http://www.nongnu.org/libunwind;

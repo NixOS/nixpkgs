@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     inherit sha256;
-    url = "http://download.mono-project.com/sources/mono/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/mono/${name}.tar.bz2";
   };
 
   buildInputs =
@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
   # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
   dontDisableStatic = true;
 
-  # In fact I think this line does not help at all to what I
-  # wanted to achieve: have mono to find libgdiplus automatically
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
     "--x-libraries=${libX11.out}/lib"
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     patchShebangs ./
-    ./autogen.sh --prefix $out
+    ./autogen.sh --prefix $out $configureFlags
   '';
 
   # Attempt to fix this error when running "mcs --version":
@@ -58,13 +56,13 @@ stdenv.mkDerivation rec {
     substituteInPlace mono/mini/aot-compiler.c --replace "llvm_path = g_strdup (\"\")" "llvm_path = g_strdup (\"${llvm}/bin/\")"
   '';
 
-  # Fix mono DLLMap so it can find libX11 and gdiplus to run winforms apps
+  # Fix mono DLLMap so it can find libX11 to run winforms apps
+  # libgdiplus is correctly handled by the --with-libgdiplus configure flag
   # Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
   # http://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | xargs \
-    sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g" \
-           -e 's#[^"]*libgdiplus[^"]*"#${libgdiplus}/lib/libgdiplus.so"#' \
+    sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g"
   '';
 
   # Without this, any Mono application attempting to open an SSL connection will throw with
@@ -82,11 +80,13 @@ stdenv.mkDerivation rec {
 
   inherit enableParallelBuilding;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
-    platforms = with stdenv.lib.platforms; darwin ++ linux;
-    maintainers = with stdenv.lib.maintainers; [ viric thoughtpolice obadz vrthra ];
-    license = stdenv.lib.licenses.free; # Combination of LGPL/X11/GPL ?
+    platforms = with platforms; darwin ++ linux;
+    maintainers = with maintainers; [ thoughtpolice obadz vrthra ];
+    license = licenses.free; # Combination of LGPL/X11/GPL ?
+    # 2018-08-21: mono 5.x is broken on aarch64 since at least 2017-07-06
+    broken = stdenv.isAarch64 && (versionAtLeast version "5");
   };
 }

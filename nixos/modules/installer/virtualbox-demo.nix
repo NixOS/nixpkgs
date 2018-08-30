@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 with lib;
 
@@ -14,11 +14,12 @@ with lib;
   boot.loader.grub.fsIdentifier = "provided";
 
   # Allow mounting of shared folders.
-  users.extraUsers.demo.extraGroups = [ "vboxsf" ];
+  users.users.demo.extraGroups = [ "vboxsf" ];
 
   # Add some more video drivers to give X11 a shot at working in
   # VMware and QEMU.
   services.xserver.videoDrivers = mkOverride 40 [ "virtualbox" "vmware" "cirrus" "vesa" "modesetting" ];
 
   powerManagement.enable = false;
+  system.stateVersion = mkDefault "18.03";
 }

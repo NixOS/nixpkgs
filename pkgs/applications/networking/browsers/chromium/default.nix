@@ -4,7 +4,6 @@
 # package customization
 , channel ? "stable"
 , enableNaCl ? false
-, enableHotwording ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false
 , proprietaryCodecs ? true
@@ -22,7 +21,7 @@ let
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit enableNaCl enableHotwording gnomeSupport gnome
+      inherit enableNaCl gnomeSupport gnome
               gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport
               enableWideVine;
     };
@@ -64,8 +63,6 @@ let
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
 
   version = chromium.browser.version;
-
-  inherit (stdenv.lib) versionAtLeast;
 
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";

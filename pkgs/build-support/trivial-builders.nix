@@ -72,6 +72,24 @@ rec {
       '';
     };
 
+  # Create a C binary
+  writeCBin = name: code:
+    runCommandCC name
+    {
+      inherit name code;
+      executable = true;
+      passAsFile = ["code"];
+      # Pointless to do this on a remote machine.
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+    }
+    ''
+    n=$out/bin/$name
+    mkdir -p "$(dirname "$n")"
+    mv "$codePath" code.c
+    $CC -x c code.c -o "$n"
+    '';
+
   # Create a forest of symlinks to the files in `paths'.
   symlinkJoin =
     args_@{ name
@@ -138,6 +156,7 @@ rec {
                 , sha1 ? null
                 , url ? null
                 , message ? null
+                , hashMode ? "flat"
                 } :
     assert (message != null) || (url != null);
     assert (sha256 != null) || (sha1 != null);
@@ -156,13 +175,15 @@ rec {
       hash = if sha256 != null then sha256 else sha1;
       name_ = if name == null then baseNameOf (toString url) else name;
     in
-    stdenv.mkDerivation {
+    stdenvNoCC.mkDerivation {
       name = name_;
+      outputHashMode = hashMode;
       outputHashAlgo = hashAlgo;
       outputHash = hash;
       preferLocalBuild = true;
+      allowSubstitutes = false;
       builder = writeScript "restrict-message" ''
-        source ${stdenv}/setup
+        source ${stdenvNoCC}/setup
         cat <<_EOF_
 
         ***
@@ -170,6 +191,7 @@ rec {
         ***
 
         _EOF_
+        exit 1
       '';
     };
 

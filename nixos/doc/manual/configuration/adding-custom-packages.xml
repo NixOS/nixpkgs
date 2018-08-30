@@ -3,45 +3,38 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-custom-packages">
+ <title>Adding Custom Packages</title>
 
-<title>Adding Custom Packages</title>
-
-<para>It’s possible that a package you need is not available in NixOS.
-In that case, you can do two things.  First, you can clone the Nixpkgs
-repository, add the package to your clone, and (optionally) submit a
-patch or pull request to have it accepted into the main Nixpkgs
-repository.  This is described in detail in the <link
-xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs manual</link>.
-In short, you clone Nixpkgs:
-
+ <para>
+  It’s possible that a package you need is not available in NixOS. In that
+  case, you can do two things. First, you can clone the Nixpkgs repository, add
+  the package to your clone, and (optionally) submit a patch or pull request to
+  have it accepted into the main Nixpkgs repository. This is described in
+  detail in the <link
+xlink:href="http://nixos.org/nixpkgs/manual">Nixpkgs
+  manual</link>. In short, you clone Nixpkgs:
 <screen>
-$ git clone git://github.com/NixOS/nixpkgs.git
+$ git clone https://github.com/NixOS/nixpkgs
 $ cd nixpkgs
 </screen>
-
-Then you write and test the package as described in the Nixpkgs
-manual.  Finally, you add it to
-<literal>environment.systemPackages</literal>, e.g.
-
+  Then you write and test the package as described in the Nixpkgs manual.
+  Finally, you add it to <literal>environment.systemPackages</literal>, e.g.
 <programlisting>
-environment.systemPackages = [ pkgs.my-package ];
+<xref linkend="opt-environment.systemPackages"/> = [ pkgs.my-package ];
 </programlisting>
-
-and you run <command>nixos-rebuild</command>, specifying your own
-Nixpkgs tree:
-
+  and you run <command>nixos-rebuild</command>, specifying your own Nixpkgs
+  tree:
 <screen>
 # nixos-rebuild switch -I nixpkgs=/path/to/my/nixpkgs</screen>
+ </para>
 
-</para>
-
-<para>The second possibility is to add the package outside of the
-Nixpkgs tree.  For instance, here is how you specify a build of the
-<link xlink:href="http://www.gnu.org/software/hello/">GNU Hello</link>
-package directly in <filename>configuration.nix</filename>:
-
+ <para>
+  The second possibility is to add the package outside of the Nixpkgs tree. For
+  instance, here is how you specify a build of the
+  <link xlink:href="http://www.gnu.org/software/hello/">GNU Hello</link>
+  package directly in <filename>configuration.nix</filename>:
 <programlisting>
-environment.systemPackages =
+<xref linkend="opt-environment.systemPackages"/> =
   let
     my-hello = with pkgs; stdenv.mkDerivation rec {
       name = "hello-2.8";
@@ -53,13 +46,12 @@ environment.systemPackages =
   in
   [ my-hello ];
 </programlisting>
-
-Of course, you can also move the definition of
-<literal>my-hello</literal> into a separate Nix expression, e.g.
+  Of course, you can also move the definition of <literal>my-hello</literal>
+  into a separate Nix expression, e.g.
 <programlisting>
-environment.systemPackages = [ (import ./my-hello.nix) ];
+<xref linkend="opt-environment.systemPackages"/> = [ (import ./my-hello.nix) ];
 </programlisting>
-where <filename>my-hello.nix</filename> contains:
+  where <filename>my-hello.nix</filename> contains:
 <programlisting>
 with import &lt;nixpkgs> {}; # bring all of Nixpkgs into scope
 
@@ -71,14 +63,11 @@ stdenv.mkDerivation rec {
   };
 }
 </programlisting>
-
-This allows testing the package easily:
+  This allows testing the package easily:
 <screen>
 $ nix-build my-hello.nix
 $ ./result/bin/hello
 Hello, world!
 </screen>
-
-</para>
-
+ </para>
 </section>

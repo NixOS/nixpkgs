@@ -1,5 +1,5 @@
 { stdenv, fetchPypi
-, buildPythonApplication, isPy27, python, pythonOlder
+, buildPythonApplication, python, pythonOlder
 , mock, nose, pathpy, pyhamcrest, pytest
 , glibcLocales, parse, parse-type, six
 , traceback2
@@ -7,7 +7,6 @@
 buildPythonApplication rec {
   pname = "behave";
   version = "1.2.6";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -221,18 +221,20 @@ in
       mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql"
                  else "/var/mysql");
 
-    users.extraUsers.mysql = {
+    users.users.mysql = {
       description = "MySQL server user";
       group = "mysql";
       uid = config.ids.uids.mysql;
     };
 
-    users.extraGroups.mysql.gid = config.ids.gids.mysql;
+    users.groups.mysql.gid = config.ids.gids.mysql;
 
     environment.systemPackages = [mysql];
 
-    systemd.services.mysql =
-      { description = "MySQL Server";
+    systemd.services.mysql = let
+      hasNotify = (cfg.package == pkgs.mariadb);
+    in {
+        description = "MySQL Server";
 
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
@@ -256,17 +258,16 @@ in
 
             mkdir -m 0755 -p ${cfg.pidDir}
             chown -R ${cfg.user} ${cfg.pidDir}
-
-            # Make the socket directory
-            mkdir -p /run/mysqld
-            chmod 0755 /run/mysqld
-            chown -R ${cfg.user} /run/mysqld
           '';
 
-        serviceConfig.ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+        serviceConfig = {
+          Type = if hasNotify then "notify" else "simple";
+          RuntimeDirectory = "mysqld";
+          ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+        };
 
-        postStart =
-          ''
+        postStart = ''
+          ${lib.optionalString (!hasNotify) ''
             # Wait until the MySQL server is available for use
             count=0
             while [ ! -e /run/mysqld/mysqld.sock ]
@@ -281,6 +282,7 @@ in
                 count=$((count++))
                 sleep 1
             done
+          ''}
 
             if [ -f /tmp/mysql_init ]
             then

@@ -105,11 +105,11 @@
     md5name = "1f467e5bb703f12cbbb09d5cf67ecf4a-converttexttonumber-1-5-0.oxt";
   }
   {
-    name = "curl-7.58.0.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/curl-7.58.0.tar.gz";
-    sha256 = "cc245bf9a1a42a45df491501d97d5593392a03f7b4f07b952793518d97666115";
+    name = "curl-7.60.0.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/curl-7.60.0.tar.gz";
+    sha256 = "e9c37986337743f37fd14fe8737f246e97aec94b39d1b71e8a5973f72a9fc4f5";
     md5 = "";
-    md5name = "cc245bf9a1a42a45df491501d97d5593392a03f7b4f07b952793518d97666115-curl-7.58.0.tar.gz";
+    md5name = "e9c37986337743f37fd14fe8737f246e97aec94b39d1b71e8a5973f72a9fc4f5-curl-7.60.0.tar.gz";
   }
   {
     name = "libe-book-0.1.3.tar.xz";
@@ -455,11 +455,11 @@
     md5name = "9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528-libjpeg-turbo-1.5.2.tar.gz";
   }
   {
-    name = "language-subtag-registry-2017-12-14.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/language-subtag-registry-2017-12-14.tar.bz2";
-    sha256 = "0f87b9428cbc2d96d8e4f54a07e3858b4a428e5fec9396bc3b52fb9f248be362";
+    name = "language-subtag-registry-2018-03-30.tar.bz2";
+    url = "http://dev-www.libreoffice.org/src/language-subtag-registry-2018-03-30.tar.bz2";
+    sha256 = "b7ad618b7db518155f00490a11b861496864f18b23b4b537eb80bfe84ca6f854";
     md5 = "";
-    md5name = "0f87b9428cbc2d96d8e4f54a07e3858b4a428e5fec9396bc3b52fb9f248be362-language-subtag-registry-2017-12-14.tar.bz2";
+    md5name = "b7ad618b7db518155f00490a11b861496864f18b23b4b537eb80bfe84ca6f854-language-subtag-registry-2018-03-30.tar.bz2";
   }
   {
     name = "JLanguageTool-1.7.0.tar.bz2";
@@ -532,11 +532,11 @@
     md5name = "967ca83edf25ccb5b48a3c4a09ad3405a63365576503bf34290a42de1b92fcd2-xmlsec1-1.2.25.tar.gz";
   }
   {
-    name = "libxml2-2.9.7.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/libxml2-2.9.7.tar.gz";
-    sha256 = "f63c5e7d30362ed28b38bfa1ac6313f9a80230720b7fb6c80575eeab3ff5900c";
+    name = "libxml2-2.9.8.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/libxml2-2.9.8.tar.gz";
+    sha256 = "0b74e51595654f958148759cfef0993114ddccccbb6f31aee018f3558e8e2732";
     md5 = "";
-    md5name = "f63c5e7d30362ed28b38bfa1ac6313f9a80230720b7fb6c80575eeab3ff5900c-libxml2-2.9.7.tar.gz";
+    md5name = "0b74e51595654f958148759cfef0993114ddccccbb6f31aee018f3558e8e2732-libxml2-2.9.8.tar.gz";
   }
   {
     name = "libxslt-1.1.32.tar.gz";
@@ -623,11 +623,11 @@
     md5name = "2c7b21892f84a4c67546f84611eccdad6259875c971e98ddb027da66ea0ac9c2-libodfgen-0.1.6.tar.bz2";
   }
   {
-    name = "odfvalidator-1.2.0-incubating-SNAPSHOT-jar-with-dependencies+ODFTOOLKIT-460+ODFTOOLKIT-461.jar";
-    url = "http://dev-www.libreoffice.org/src/../extern/odfvalidator-1.2.0-incubating-SNAPSHOT-jar-with-dependencies+ODFTOOLKIT-460+ODFTOOLKIT-461.jar";
-    sha256 = "aa8896eef3adbd6b54d4ec1817c1bc3871cce99120faf26f93502077480233cf";
+    name = "odfvalidator-1.2.0-incubating-SNAPSHOT-jar-with-dependencies+ODFTOOLKIT-460+ODFTOOLKIT-475.jar";
+    url = "http://dev-www.libreoffice.org/src/../extern/odfvalidator-1.2.0-incubating-SNAPSHOT-jar-with-dependencies+ODFTOOLKIT-460+ODFTOOLKIT-475.jar";
+    sha256 = "702413413a5d8076c17fe79c0808dfba145a7260020f6c8627ea529a0cf83769";
     md5 = "";
-    md5name = "aa8896eef3adbd6b54d4ec1817c1bc3871cce99120faf26f93502077480233cf-odfvalidator-1.2.0-incubating-SNAPSHOT-jar-with-dependencies+ODFTOOLKIT-460+ODFTOOLKIT-461.jar";
+    md5name = "702413413a5d8076c17fe79c0808dfba145a7260020f6c8627ea529a0cf83769-odfvalidator-1.2.0-incubating-SNAPSHOT-jar-with-dependencies+ODFTOOLKIT-460+ODFTOOLKIT-475.jar";
   }
   {
     name = "officeotron-0.7.4-master.jar";
@@ -651,11 +651,11 @@
     md5name = "8c6ff15ec6b319b50788f42c7abc2890c08ba5a1cdcd3810eb9092deada37b0f-openssl-1.0.2m.tar.gz";
   }
   {
-    name = "liborcus-0.13.1.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/liborcus-0.13.1.tar.gz";
-    sha256 = "d7041ef455bb78db66b4ba7876af1b3d0fa377b9444e3ef72ceaccd2e8400937";
+    name = "liborcus-0.13.3.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/liborcus-0.13.3.tar.gz";
+    sha256 = "62e76de1fd3101e77118732b860354121b40a87bbb1ebfeb8203477fffac16e9";
     md5 = "";
-    md5name = "d7041ef455bb78db66b4ba7876af1b3d0fa377b9444e3ef72ceaccd2e8400937-liborcus-0.13.1.tar.gz";
+    md5name = "62e76de1fd3101e77118732b860354121b40a87bbb1ebfeb8203477fffac16e9-liborcus-0.13.3.tar.gz";
   }
   {
     name = "owncloud-android-library-0.9.4-no-binary-deps.tar.gz";

@@ -2,13 +2,12 @@
 , nose, flask, six }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "Flask-Cors";
-  version = "3.0.3";
+  version = "3.0.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "62ebc5ad80dc21ca0ea9f57466c2c74e24a62274af890b391790c260eb7b754b";
+    sha256 = "ecc016c5b32fa5da813ec8d272941cfddf5f6bba9060c405a70285415cbf24c9";
   };
 
   buildInputs = [ nose ];

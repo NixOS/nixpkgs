@@ -9,11 +9,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="asymptote";
-    version="2.41";
+    version="2.47";
     name="${baseName}-${version}";
-    hash="1w7fbq6gy65g0mxg6wdxi7v178c5yxvh9yrnv3bzm4sjzf4pwvhx";
-    url="https://freefr.dl.sourceforge.net/project/asymptote/2.41/asymptote-2.41.src.tgz";
-    sha256="1w7fbq6gy65g0mxg6wdxi7v178c5yxvh9yrnv3bzm4sjzf4pwvhx";
+    hash="0zc24n2vwzxdfmcppqfk3fkqlb4jmvswzi3bz232kxl7dyiyb971";
+    url="https://freefr.dl.sourceforge.net/project/asymptote/2.47/asymptote-2.47.src.tgz";
+    sha256="0zc24n2vwzxdfmcppqfk3fkqlb4jmvswzi3bz232kxl7dyiyb971";
   };
   buildInputs = [
    ghostscriptX imagemagick fftw
@@ -51,7 +51,9 @@ stdenv.mkDerivation {
     rmdir $out/share/info/asymptote
     rm $out/share/info/dir
 
-    rm -rf "$out"/share/texmf
+    rm -rfv "$out"/share/texmf
+    mkdir -pv "$out"/share/emacs/site-lisp/${s.name}
+    mv -v "$out"/share/asymptote/*.el "$out"/share/emacs/site-lisp/${s.name}
   '';
 
   enableParallelBuilding = true;

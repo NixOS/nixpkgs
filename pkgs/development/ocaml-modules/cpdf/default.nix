@@ -24,10 +24,11 @@ stdenv.mkDerivation {
     cp cpdfmanual.pdf $out/share/doc/cpdf/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.coherentpdf.com/;
     platforms = ocaml.meta.platforms or [];
     description = "PDF Command Line Tools";
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.vbgl ];
   };
 }

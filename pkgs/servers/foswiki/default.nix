@@ -14,7 +14,7 @@ perlPackages.buildPerlPackage rec {
   buildInputs = with perlPackages; [
     # minimum requirements from INSTALL.html#System_Requirements
     AlgorithmDiff ArchiveTar AuthenSASL CGI CGISession CryptPasswdMD5
-    DigestSHA EmailMIME Encode Error FileCopyRecursive HTMLParser HTMLTree
+    EmailMIME Encode Error FileCopyRecursive HTMLParser HTMLTree
     IOSocketIP IOSocketSSL JSON
     LocaleMaketext LocaleMaketextLexicon LocaleMsgfmt
     LWP URI perlPackages.version

@@ -4,19 +4,19 @@
   qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
   kguiaddons, liblxqt, libqtxdg, lxqt-globalkeys, libsysstat,
   xorg, libstatgrab, lm_sensors, libpulseaudio, alsaLib, menu-cache,
-  lxmenu-data, pcre
+  lxmenu-data, pcre, libXdamage
 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-panel";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "01xmnb17jpydyfvxwaa6kymzdasnyd94z62gjah8y4pzsmykcr4x";
+    sha256 = "056khr3smyrdi26zpclwv1qrmk0zxr9cnk65ad9c0xavzk6ya3xz";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     menu-cache
     lxmenu-data
     pcre
+    libXdamage
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
@@ -62,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The LXQt desktop panel";
-    homepage = https://github.com/lxde/lxqt-panel;
+    homepage = https://github.com/lxqt/lxqt-panel;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

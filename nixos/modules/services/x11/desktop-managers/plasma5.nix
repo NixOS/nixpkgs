@@ -7,7 +7,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5 xorg;
+  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
 
 in
 
@@ -221,6 +221,11 @@ in
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
 
+      # Update the start menu for each user that has `isNormalUser` set.
+      system.activationScripts.plasmaSetup = stringAfter [ "users" "groups" ]
+        (concatStringsSep "\n"
+          (mapAttrsToList (name: value: "${pkgs.su}/bin/su ${name} -c ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5")
+            (filterAttrs (n: v: v.isNormalUser) config.users.users)));
     })
   ];
 

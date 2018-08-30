@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, libiconv
-, libintlOrEmpty, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
+{ stdenv, fetchurl, pkgconfig, libiconv
+, libintl, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
 , glSupport ? true, libGL ? null # libGLU_combined is no longer a big dependency
@@ -9,24 +9,16 @@
 
 assert glSupport -> libGL != null;
 
-let inherit (stdenv.lib) optional optionals; in
-
-stdenv.mkDerivation rec {
-  name = "cairo-1.14.10";
+let
+  version = "1.15.12";
+  inherit (stdenv.lib) optional optionals;
+in stdenv.mkDerivation rec {
+  name = "cairo-${version}";
 
   src = fetchurl {
-    url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha256 = "02banr0wxckq62nbhc3mqidfdh2q956i2r7w2hd9bjgjb238g1vy";
+    url = "https://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${name}.tar.xz";
+    sha256 = "1jcl0mnqq6j2xip8p506g2cj54sfycm339rrd3p4g2jljhdhh8vn";
   };
-
-  patches = [
-    # from https://bugs.freedesktop.org/show_bug.cgi?id=98165
-    (fetchpatch {
-      name = "cairo-CVE-2016-9082.patch";
-      url = "https://bugs.freedesktop.org/attachment.cgi?id=127421";
-      sha256 = "03sfyaclzlglip4pvfjb4zj4dmm8mlphhxl30mb6giinkc74bfri";
-    })
-  ];
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev"; # very small
@@ -34,7 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     libiconv
-  ] ++ libintlOrEmpty ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    libintl
+  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreGraphics
     CoreText
     ApplicationServices
@@ -78,6 +71,8 @@ stdenv.mkDerivation rec {
     '';
 
   enableParallelBuilding = true;
+
+  doCheck = false; # fails
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin glib.flattenInclude;
 

@@ -1,16 +1,16 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest, pytestcov, pytestpep8, pytest_xdist
-, six, numpy, scipy, pyyaml
+, six, numpy, scipy, pyyaml, h5py
+, keras-applications, keras-preprocessing
 }:
 
 buildPythonPackage rec {
   pname = "Keras";
-  version = "2.1.4";
-  name = "${pname}-${version}";
+  version = "2.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ee1fcc79072ac904a4f008d715bcb78c60250ae3cd41d99e268c60ade8d0d3a";
+    sha256 = "468d98da104ec5c3dbb10c2ef6bb345ab154f6ca2d722d4c250ef4d6105de17a";
   };
 
   checkInputs = [
@@ -21,7 +21,8 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    six pyyaml numpy scipy
+    six pyyaml numpy scipy h5py
+    keras-applications keras-preprocessing
   ];
 
   # Couldn't get tests working

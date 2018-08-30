@@ -4,14 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "alsa-tools-${version}";
-  version = "1.1.5";
+  version = "1.1.6";
 
   src = fetchurl {
-    urls = [
-      "ftp://ftp.alsa-project.org/pub/tools/${name}.tar.bz2"
-      "http://alsa.cybermirror.org/tools/${name}.tar.bz2"
-    ];
-    sha256 = "0d6m5dm5yskfr6q42cv1ihp5lfgv4a67nj39gpp26ll3vrknag5w";
+    url = "mirror://alsa/tools/${name}.tar.bz2";
+    sha256 = "09rjb6hw1mn9y1jfdfj5djncgc2cr5wfps83k56rf6k4zg14v76n";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -41,7 +38,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.alsa-project.org/;
     description = "ALSA, the Advanced Linux Sound Architecture tools";
 
@@ -50,7 +47,8 @@ stdenv.mkDerivation rec {
       MIDI functionality to the Linux-based operating system.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.fps ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.fps ];
   };
 }

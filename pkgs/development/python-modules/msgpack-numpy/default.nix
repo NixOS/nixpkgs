@@ -2,18 +2,18 @@
 , buildPythonPackage
 , fetchPypi
 , cython
-, msgpack-python
+, msgpack
 , numpy
 , python
 }:
 
 buildPythonPackage rec {
   pname = "msgpack-numpy";
-  version = "0.4.1";
+  version = "0.4.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1czf125nixzwskiqiw0145kfj15030sp334cb89gp5w4rz3h7img";
+    sha256 = "31fd5dd009bbee7f8b107db8c859e3a0a2793acc196f25ffbbae1e71b4c63ca5";
   };
 
   buildInputs = [
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-   msgpack-python
+   msgpack
    numpy
   ];
 

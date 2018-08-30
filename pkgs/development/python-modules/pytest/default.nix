@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy26, argparse, attrs, hypothesis, py
-, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k
+{ stdenv, buildPythonPackage, fetchPypi, attrs, hypothesis, py
+, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
+, atomicwrites, mock, writeText, pathlib2
 }:
 buildPythonPackage rec {
-  version = "3.4.1";
+  version = "3.7.2";
   pname = "pytest";
 
   preCheck = ''
@@ -12,14 +13,26 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ddcb879c8cc859d2540204b5399011f842e5e8823674bf429f70ada281b3cc6";
+    sha256 = "3459a123ad5532852d36f6f4501dfe1acf4af1dd9541834a164666aa40395b02";
   };
 
-  checkInputs = [ hypothesis ];
+  checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy ]
-    ++ (stdenv.lib.optional (!isPy3k) funcsigs)
-    ++ (stdenv.lib.optional isPy26 argparse);
+  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites]
+    ++ stdenv.lib.optionals (!isPy3k) [ funcsigs pathlib2 ];
+
+  checkPhase = ''
+    runHook preCheck
+    $out/bin/py.test -x testing/
+    runHook postCheck
+  '';
+
+  # Remove .pytest_cache when using py.test in a Nix build
+  setupHook = writeText "pytest-hook" ''
+    postFixupHooks+=(
+        'find $out -name .pytest_cache -type d -exec rm -rf {} +'
+    )
+  '';
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];

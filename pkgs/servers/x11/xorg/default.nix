@@ -1,6 +1,6 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
-, libxslt, expat, libpng, zlib, perl, mesa_drivers, spice-protocol
+, libxslt, expat, libpng, zlib, perl, mesa_noglu, mesa_drivers, spice-protocol
 , dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
 , autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
 
@@ -171,7 +171,7 @@ let
       sha256 = "0m60f5bd0caambrk8ksknb5dks7wzsg7g7xaf0j21jxmx8rq9h5j";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -183,7 +183,7 @@ let
       sha256 = "02advcv9lyxpvrjv8bjh1b797lzg6jvhipclz49z8r8y98g4l0n6";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -195,7 +195,7 @@ let
       sha256 = "19dd9znam1ah72jmdh7i6ny2ss2r6m21z9v0l43xvikw48zmwvyi";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -207,7 +207,7 @@ let
       sha256 = "152wigpph5wvl4k9m3l4mchxxisgsnzlx033mn5iqrpkc6f72cl7";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -219,7 +219,7 @@ let
       sha256 = "0xw0pdnzj5jljsbbhakc6q9ha2qnca1jr81zk7w70yl9bw83b54p";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
@@ -243,7 +243,7 @@ let
       sha256 = "1x246dfnxnmflzf0qzy62k8jdpkb6jkgspcjgbk8jcq9lw99npah";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -255,7 +255,7 @@ let
       sha256 = "10cl4gm38dw68jzln99ijix730y7cbx8np096gmpjjwff1i73h13";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -267,7 +267,7 @@ let
       sha256 = "073jmhf0sr2j1l8da97pzsqj805f7mf9r2gy92j4diljmi8sm1il";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -279,7 +279,7 @@ let
       sha256 = "1fqzckxdzjv4802iad2fdrkpaxl4w0hhs9lxlkyraq2kq9ik7a32";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -291,7 +291,7 @@ let
       sha256 = "0cfbxdp5m12cm7jsh3my0lym9328cgm7fa9faz2hqj05wbxnmhaa";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -303,7 +303,7 @@ let
       sha256 = "0pyjmc0ha288d4i4j0si4dh3ncf3jiwwjljvddrb0k8v4xiyljqv";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
@@ -315,7 +315,7 @@ let
       sha256 = "1hb3iav089albp4sdgnlh50k47cdjif9p4axm0kkjvs8jyi5a53n";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
@@ -327,7 +327,7 @@ let
       sha256 = "1kmn9jbck3vghz6rj3bhc3h0w6gh0qiaqm90cjkqsz1x9r2dgq7b";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -339,7 +339,7 @@ let
       sha256 = "13plbifkvfvdfym6gjbgy9wx2xbdxi9hfrl1k22xayy02135wgxs";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -351,7 +351,7 @@ let
       sha256 = "1256z0jhcf5gbh1d03593qdwnag708rxqa032izmfb5dmmlhbsn6";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
@@ -363,7 +363,7 @@ let
       sha256 = "0ai1v4n61k8j9x2a1knvfbl2xjxk3xxmqaq3p9vpqrspc69k31kf";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -375,7 +375,7 @@ let
       sha256 = "0dd6vfiagjc4zmvlskrbjz85jfqhf060cpys8j0y1qpcbsrkwdhp";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -387,7 +387,7 @@ let
       sha256 = "1s2bbhizzgbbbn5wqs3vw53n619cclxksljvm759h9p1prqdwrdw";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -399,7 +399,7 @@ let
       sha256 = "0yzza0l4zwyy7accr1s8ab7fjqkpwggqydbm2vc19scdby5xz7g1";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -411,7 +411,7 @@ let
       sha256 = "1pyjll4adch3z5cg663s6vhi02k8m6488f0mrasg81ssvg9jinzx";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
@@ -423,7 +423,7 @@ let
       sha256 = "0rx8q02rkx673a7skkpnvfkg28i8gmqzgf25s9yi0lar915sn92q";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -435,7 +435,7 @@ let
       sha256 = "0rdc3xdz12pnv951538q6wilx8mrdndpkphpbblszsv7nc8cw61b";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -447,7 +447,7 @@ let
       sha256 = "1dldxlh54zq1yzfnrh83j5vm0k4ijprrs5yl18gm3n9j1z0q2cws";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -459,7 +459,7 @@ let
       sha256 = "0q2ybxs8wvylvw95j6x9i800rismsmx4b587alwbfqiw6biy63z4";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -471,7 +471,7 @@ let
       sha256 = "19cq7iq0pfad0nc2v28n681fdq3fcw1l1hzaq0wpkgpx7bc1zjsk";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
@@ -483,7 +483,7 @@ let
       sha256 = "148793fqwzrc3bmh2vlw5fdiwjc2n7vs25cic35gfp452czk489p";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
@@ -495,7 +495,7 @@ let
       sha256 = "150pq6n8n984fah34n3k133kggn9v0c5k07igv29sxp1wi07krxq";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -507,7 +507,7 @@ let
       sha256 = "13qghgr1zzpv64m0p42195k1kc77pksiv059fdvijz1n6kdplpxx";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -519,7 +519,7 @@ let
       sha256 = "0nkym3n48b4v36y4s927bbkjnsmicajarnf6vlp7wxp0as304i74";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf fontutil mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf fontutil mkfontdir mkfontscale ;};
 
@@ -531,7 +531,7 @@ let
       sha256 = "0yayf1qlv7irf58nngddz2f1q04qkpr5jwp4aja2j5gyvzl32hl2";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -543,7 +543,7 @@ let
       sha256 = "1xfgcx4gsgik5mkgkca31fj3w72jw9iw76qyrajrsz1lp8ka6hr0";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -567,7 +567,7 @@ let
       sha256 = "1q6jcqrffg9q5f5raivzwx9ffvf7r11g6g0b125na1bhpz5ly7s8";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -591,7 +591,7 @@ let
       sha256 = "181n1bgq8vxfxqicmy1jpm1hnr6gwn1kdhl6hr4frjigs1ikpldb";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ bdftopcf mkfontdir ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit bdftopcf mkfontdir ;};
 
@@ -603,7 +603,7 @@ let
       sha256 = "0jp3zc0qfdaqfkgzrb44vi9vi0a8ygb35wp082yz7rvvxhmg9sya";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
+    buildInputs = [ mkfontdir mkfontscale ]; configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit mkfontdir mkfontscale ;};
 
@@ -740,11 +740,11 @@ let
   }) // {inherit windowswmproto libX11 libXext xextproto ;};
 
   libX11 = (mkDerivation "libX11" {
-    name = "libX11-1.6.5";
+    name = "libX11-1.6.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libX11-1.6.5.tar.bz2;
-      sha256 = "0pa3cfp6h9rl2vxmkph65250gfqyki0ccqyaan6bl9d25gdr0f2d";
+      url = mirror://xorg/individual/lib/libX11-1.6.6.tar.bz2;
+      sha256 = "0ks1mxlda7nxfmffihi15ljsn50q8dknl33i2xag8xzc80fiizk5";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ];
@@ -848,11 +848,11 @@ let
   }) // {inherit libX11 xextproto xproto ;};
 
   libXfixes = (mkDerivation "libXfixes" {
-    name = "libXfixes-5.0.2";
+    name = "libXfixes-5.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfixes-5.0.2.tar.bz2;
-      sha256 = "1slsk898386xii0r3l7szwwq3s6y2m4dsj0x93ninjh8xkghxllv";
+      url = mirror://xorg/individual/lib/libXfixes-5.0.3.tar.bz2;
+      sha256 = "1miana3y4hwdqdparsccmygqr3ic3hs5jrqfzp70hvi2zwxd676y";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ fixesproto libX11 xextproto xproto ];
@@ -1364,11 +1364,11 @@ let
   }) // {inherit libICE libSM libX11 libXext libXmu xproto libXt ;};
 
   utilmacros = (mkDerivation "utilmacros" {
-    name = "util-macros-1.19.1";
+    name = "util-macros-1.19.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/util/util-macros-1.19.1.tar.bz2;
-      sha256 = "19h6wflpmh7xxqr6lk5z8pds6r9r0dn7ijbvaacymx2q0m05km0q";
+      url = mirror://xorg/individual/util/util-macros-1.19.2.tar.bz2;
+      sha256 = "04p7ydqxgq37jklnfj18b70zsifiz4h50wvrk94i2112mmv37r6p";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
@@ -1424,11 +1424,11 @@ let
   }) // {inherit libX11 libXau libXext libXmu xproto ;};
 
   xbacklight = (mkDerivation "xbacklight" {
-    name = "xbacklight-1.2.1";
+    name = "xbacklight-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xbacklight-1.2.1.tar.bz2;
-      sha256 = "0arnd1j8vzhzmw72mqhjjcb2qwcbs9qphsy3ps593ajyld8wzxhp";
+      url = mirror://xorg/individual/app/xbacklight-1.2.2.tar.bz2;
+      sha256 = "0pmzaz4kp38qv2lqiw5rnqhwzmwrq65m1x5j001mmv99wh9isnk1";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxcb xcbutil ];
@@ -1475,7 +1475,7 @@ let
     name = "xcb-util-cursor-0.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.3.tar.bz2;
+      url = https://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.3.tar.bz2;
       sha256 = "0krr4rcw6r42cncinzvzzdqnmxk3nrgpnadyg2h8k9x10q3hm885";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1676,11 +1676,11 @@ let
   }) // {inherit ;};
 
   xeyes = (mkDerivation "xeyes" {
-    name = "xeyes-1.1.1";
+    name = "xeyes-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xeyes-1.1.1.tar.bz2;
-      sha256 = "08d5x2kar5kg4yammw6hhk10iva6jmh8cqq176a1z7nm1il9hplp";
+      url = mirror://xorg/individual/app/xeyes-1.1.2.tar.bz2;
+      sha256 = "0lq5j7fryx1wn998jq6h3icz1h6pqrsbs3adskjzjyhn5l6yrg2p";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext libXmu libXrender libXt ];
@@ -1839,9 +1839,9 @@ let
       sha256 = "0z56ifw3xiq9dychv8chg1cny0hq4v3c1r9pqcybk5fp7nzw9jpq";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ fontsproto mesa libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    buildInputs = [ fontsproto mesa_noglu libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit fontsproto mesa libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+  }) // {inherit fontsproto mesa_noglu libGL libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videoark = (mkDerivation "xf86videoark" {
     name = "xf86-video-ark-0.7.5";
@@ -2420,11 +2420,11 @@ let
   }) // {inherit inputproto libX11 libXext libXi libXinerama libXrandr ;};
 
   xkbcomp = (mkDerivation "xkbcomp" {
-    name = "xkbcomp-1.4.0";
+    name = "xkbcomp-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xkbcomp-1.4.0.tar.bz2;
-      sha256 = "0syfc6zscvai824mzihlnrqxhkcr27dzkpy8zndavi83iischsdw";
+      url = mirror://xorg/individual/app/xkbcomp-1.4.2.tar.bz2;
+      sha256 = "0944rrkkf0dxp07vhh9yr4prslxhqyw63qmbjirbv1bypswvrn3d";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libxkbfile xproto ];
@@ -2468,14 +2468,15 @@ let
   }) // {inherit inputproto libX11 libXaw xproto libXt ;};
 
   xkeyboardconfig = (mkDerivation "xkeyboardconfig" {
-    name = "xkeyboard-config-2.22";
+    name = "xkeyboard-config-2.24";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.22.tar.bz2;
-      sha256 = "1garmbyfjp0han04l2l90zzwlfbdgdxl6r1qnic36i5wkycckbny";
+      url = mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.24.tar.bz2;
+      sha256 = "1my4786pd7iv5x392r9skj3qclmbd26nqzvh2fllwkkbyj08bcci";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
+    configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 

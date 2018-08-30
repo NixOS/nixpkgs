@@ -1,10 +1,10 @@
-{ stdenv, pythonPackages, runCommand, curl }:
+{ stdenv, pythonPackages }:
 
 with stdenv.lib;
 with pythonPackages;
 
 let
-  version = "1.4.0";
+  version = "1.7.0";
 in buildPythonApplication rec {
   inherit version;
   pname = "pantsbuild.pants";
@@ -12,7 +12,7 @@ in buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jd041av1kipg4psbcwk70nwh0bsh5mkbjjcmnw4vrqdd09vg1gz";
+    sha256 = "1d7ff1383287c8e72f2c9855cfef982d362274a64e2707a93c070f988ba80a37";
   };
 
   prePatch = ''
@@ -27,7 +27,7 @@ in buildPythonApplication rec {
     twitter-common-collections setproctitle ansicolors packaging pathspec
     scandir twitter-common-dirutil psutil requests pystache pex docutils
     markdown pygments twitter-common-confluence fasteners pywatchman
-    futures cffi subprocess32 contextlib2 faulthandler pyopenssl
+    futures cffi subprocess32 contextlib2 faulthandler pyopenssl wheel
   ];
 
   meta = {

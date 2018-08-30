@@ -295,6 +295,24 @@ in
         '';
       };
 
+      dataDir = mkOption {
+        type = types.string;
+        description = "Directory where Prosody stores its data";
+        default = "/var/lib/prosody";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "prosody";
+        description = "User account under which prosody runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "prosody";
+        description = "Group account under which prosody runs.";
+      };
+
       allowRegistration = mkOption {
         type = types.bool;
         default = false;
@@ -421,11 +439,11 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".text = ''
 
-      pidfile = "/var/lib/prosody/prosody.pid"
+      pidfile = "/run/prosody/prosody.pid"
 
       log = "*syslog"
 
-      data_path = "/var/lib/prosody"
+      data_path = "${cfg.dataDir}"
       plugin_paths = {
         ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
       }
@@ -469,15 +487,15 @@ in
         '') cfg.virtualHosts) }
     '';
 
-    users.extraUsers.prosody = {
+    users.users.prosody = mkIf (cfg.user == "prosody") {
       uid = config.ids.uids.prosody;
       description = "Prosody user";
       createHome = true;
-      group = "prosody";
-      home = "/var/lib/prosody";
+      inherit (cfg) group;
+      home = "${cfg.dataDir}";
     };
 
-    users.extraGroups.prosody = {
+    users.groups.prosody = mkIf (cfg.group == "prosody") {
       gid = config.ids.gids.prosody;
     };
 
@@ -488,9 +506,11 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
       serviceConfig = {
-        User = "prosody";
+        User = cfg.user;
+        Group = cfg.group;
         Type = "forking";
-        PIDFile = "/var/lib/prosody/prosody.pid";
+        RuntimeDirectory = [ "prosody" ];
+        PIDFile = "/run/prosody/prosody.pid";
         ExecStart = "${cfg.package}/bin/prosodyctl start";
       };
     };

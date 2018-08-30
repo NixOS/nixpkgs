@@ -29,7 +29,7 @@ rec {
   #makeCoverageReport = true;
 
   client =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
       hardware.opengl.driSupport = true;
@@ -40,7 +40,7 @@ rec {
 
   nodes =
     { server =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
 
         { systemd.services."quake3-server" =
             { wantedBy = [ "multi-user.target" ];

@@ -18,10 +18,8 @@ stdenv.mkDerivation rec {
     perl
     DBI
     DBDSQLite
-    Digest
     DigestMD5
     HTMLTagset
-    MIMEBase64 # == MIMEQuotedPrint
     TimeDate # == DateParse
     HTMLTemplate
     # IO::Socket::Socks is not in nixpkgs

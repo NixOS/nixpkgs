@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, python, buildPythonPackage
+{ stdenv, fetchPypi, buildPythonPackage
 , requests }:
 
 buildPythonPackage rec {
   pname = "todoist-python";
   version = "7.0.17";
-  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/t/${pname}/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0gs4vlvvmkz627ybswj0l6m3c8dyrqgfqjlawbc8d9rkx88srkr2";
   };
 

@@ -8,7 +8,7 @@ import ../make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, pkgs, ... }: {
+    { pkgs, ... }: {
       krb5 = {
         enable = true;
         kerberos = pkgs.krb5Full;

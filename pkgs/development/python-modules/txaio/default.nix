@@ -1,27 +1,20 @@
 { stdenv, buildPythonPackage, fetchPypi, pytest, mock, six, twisted }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "txaio";
-  version = "2.8.2";
+  version = "18.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "484cd6c4cdd3f6081b87188f3b2b9a36e02fba6816e8256917c4f6571b567571";
+    sha256 = "701de939e90bb80f7e085357081552437526752199def5541dddfc34c0b0593f";
   };
 
-  buildInputs = [ pytest mock ];
+  checkInputs = [ pytest mock ];
 
   propagatedBuildInputs = [ six twisted ];
 
-  patchPhase = ''
-    sed -i '152d' test/test_logging.py
-  '';
-
-  # test_chained_callback has been removed just post-2.7.1 because the functionality was decided against and the test
-  # breaks on python 3.6 https://github.com/crossbario/txaio/pull/104
   checkPhase = ''
-    py.test -k "not (test_sdist or test_chained_callback)"
+    py.test -k "not test_sdist"
   '';
 
   meta = with stdenv.lib; {
@@ -29,6 +22,5 @@ buildPythonPackage rec {
     homepage    = "https://github.com/crossbario/txaio";
     license     = licenses.mit;
     maintainers = with maintainers; [ nand0p ];
-    platforms   = platforms.all;
   };
 }

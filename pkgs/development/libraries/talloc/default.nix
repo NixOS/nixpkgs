@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "talloc-2.1.11";
+  name = "talloc-2.1.14";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${name}.tar.gz";
-    sha256 = "1lzfxv2zjxap5snf9ydl1bqgjpz0kgkq7n644f8rkbx0arav77k3";
+    sha256 = "1kk76dyav41ip7ddbbf04yfydb4jvywzi2ps0z2vla56aqkn11di";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Hierarchical pool based memory allocator with destructors";
-    homepage = http://tdb.samba.org/;
+    homepage = https://tdb.samba.org/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;

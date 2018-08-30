@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, mesa_noglu }:
+{ stdenv, fetchurl, pkgconfig, libGL }:
 
 stdenv.mkDerivation rec {
-  name = "glu-9.0.0";
+  name = "glu-${version}";
+  version = "9.0.0";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/glu/${name}.tar.bz2";
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ mesa_noglu ];
+  propagatedBuildInputs = [ libGL ];
 
   outputs = [ "out" "dev" ];
 

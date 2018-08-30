@@ -8,7 +8,7 @@ with lib.trivial;
 with lib.strings;
 let
 
-  inherit (lib.modules) mergeDefinitions filterOverrides;
+  inherit (lib.modules) mergeDefinitions;
   outer_types =
 rec {
   isType = type: x: (x._type or "") == type;
@@ -167,6 +167,13 @@ rec {
         # s32 = sign 32 4294967296;
       };
 
+    float = mkOptionType rec {
+        name = "float";
+        description = "floating point number";
+        check = isFloat;
+        merge = mergeOneOption;
+    };
+
     str = mkOptionType {
       name = "str";
       description = "string";
@@ -256,7 +263,7 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
-    nonEmptyListOf = elemType: 
+    nonEmptyListOf = elemType:
       let list = addCheck (types.listOf elemType) (l: l != []);
       in list // { description = "non-empty " + list.description; };
 
@@ -280,24 +287,34 @@ rec {
     # List or attribute set of ...
     loaOf = elemType:
       let
-        convertIfList = defIdx: def:
+        convertAllLists = defs:
+          let
+            padWidth = stringLength (toString (length defs));
+            unnamedPrefix = i: "unnamed-" + fixedWidthNumber padWidth i + ".";
+          in
+            imap1 (i: convertIfList (unnamedPrefix i)) defs;
+
+        convertIfList = unnamedPrefix: def:
           if isList def.value then
-            { inherit (def) file;
-              value = listToAttrs (
-                imap1 (elemIdx: elem:
-                  { name = elem.name or "unnamed-${toString defIdx}.${toString elemIdx}";
-                    value = elem;
-                  }) def.value);
-            }
+            let
+              padWidth = stringLength (toString (length def.value));
+              unnamed = i: unnamedPrefix + fixedWidthNumber padWidth i;
+            in
+              { inherit (def) file;
+                value = listToAttrs (
+                  imap1 (elemIdx: elem:
+                    { name = elem.name or (unnamed elemIdx);
+                      value = elem;
+                    }) def.value);
+              }
           else
             def;
-        listOnly = listOf elemType;
         attrOnly = attrsOf elemType;
       in mkOptionType rec {
         name = "loaOf";
         description = "list or attribute set of ${elemType.description}s";
         check = x: isList x || isAttrs x;
-        merge = loc: defs: attrOnly.merge loc (imap1 convertIfList defs);
+        merge = loc: defs: attrOnly.merge loc (convertAllLists defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
         getSubModules = elemType.getSubModules;
         substSubModules = m: loaOf (elemType.substSubModules m);
@@ -361,7 +378,13 @@ rec {
             # This is mandatory as some option declaration might use the
             # "name" attribute given as argument of the submodule and use it
             # as the default of option declarations.
-            args.name = "&lt;name&gt;";
+            #
+            # Using lookalike unicode single angle quotation marks because
+            # of the docbook transformation the options receive. In all uses
+            # &gt; and &lt; wouldn't be encoded correctly so the encoded values
+            # would be used, and use of `<` and `>` would break the XML document.
+            # It shouldn't cause an issue since this is cosmetic for the manual.
+            args.name = "‹name›";
           }).options;
         getSubModules = opts';
         substSubModules = m: submodule m;
@@ -419,16 +442,13 @@ rec {
       assert coercedType.getSubModules == null;
       mkOptionType rec {
         name = "coercedTo";
-        description = "${finalType.description} or ${coercedType.description}";
-        check = x: finalType.check x || coercedType.check x;
+        description = "${finalType.description} or ${coercedType.description} convertible to it";
+        check = x: finalType.check x || (coercedType.check x && finalType.check (coerceFunc x));
         merge = loc: defs:
           let
             coerceVal = val:
               if finalType.check val then val
-              else let
-                coerced = coerceFunc val;
-              in assert finalType.check coerced; coerced;
-
+              else coerceFunc val;
           in finalType.merge loc (map (def: def // { value = coerceVal def.value; }) defs);
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;

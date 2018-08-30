@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gettext, gtk3, pythonPackages
 , gdk_pixbuf, libnotify, gst_all_1
-, libgnome-keyring3, networkmanager
+, libgnome-keyring3
 , wrapGAppsHook, gnome3
 # otherwise passwords are stored unencrypted
 , withGnomeKeyring ? true

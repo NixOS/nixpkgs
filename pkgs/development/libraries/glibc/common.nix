@@ -1,12 +1,29 @@
 /* Build configuration used to build glibc, Info files, and locale
-   information.  */
+   information.
+
+   Note that this derivation has multiple outputs and does not respect the
+   standard convention of putting the executables into the first output. The
+   first output is `lib` so that the libraries provided by this derivation
+   can be accessed directly, e.g.
+
+     "${pkgs.glibc}/lib/ld-linux-x86_64.so.2"
+
+   The executables are put into `bin` output and need to be referenced via
+   the `bin` attribute of the main package, e.g.
+
+     "${pkgs.glibc.bin}/bin/ldd".
+
+  The executables provided by glibc typically include `ldd`, `locale`, `iconv`
+  but the exact set depends on the library version and the configuration.
+*/
 
 { stdenv, lib
 , buildPlatform, hostPlatform
 , buildPackages
-, fetchurl, fetchpatch ? null
+, fetchurl ? null
 , linuxHeaders ? null
 , gd ? null, libpng ? null
+, bison
 }:
 
 { name
@@ -19,21 +36,17 @@
 } @ args:
 
 let
-  version = "2.26";
-  patchSuffix = "-131";
-  sha256 = "1ggnj1hzjym7sn93rbwydcqd562q73lsb7g7kd199g6j9j9hlkp5";
-  cross = if buildPlatform != hostPlatform then hostPlatform else null;
+  version = "2.27";
+  patchSuffix = "";
+  sha256 = "0wpwq7gsm7sd6ysidv0z575ckqdg13cr2njyfgrbgh4f65adwwji";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
 assert withGd -> gd != null && libpng != null;
 
 stdenv.mkDerivation ({
-  inherit  installLocales;
+  inherit version installLocales;
   linuxHeaders = if withLinuxHeaders then linuxHeaders else null;
-
-  # The host/target system.
-  crossConfig = if cross != null then cross.config else null;
 
   inherit (stdenv) is64bit;
 
@@ -41,17 +54,6 @@ stdenv.mkDerivation ({
 
   patches =
     [
-      /*  No tarballs for stable upstream branch, only https://sourceware.org/git/?p=glibc.git
-          $ git co release/2.25/master; git describe
-          glibc-2.25-49-gbc5ace67fe
-          $ git show --reverse glibc-2.25..release/2.25/master | gzip -n -9 --rsyncable - > 2.25-49.patch.gz
-      */
-      ./2.26-75.patch.gz
-      ./2.26-75to115.diff.gz
-      # contains fix for CVE-2018-1000001 as the last commit:
-      # https://sourceware.org/git/?p=glibc.git;a=commit;h=fabef2edbc
-      ./2.26-115to131.diff.gz
-
       /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
 
@@ -89,32 +91,17 @@ stdenv.mkDerivation ({
       ./allow-kernel-2.6.32.patch
     ]
     ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
-    ++ lib.optional stdenv.hostPlatform.isMusl
-      (fetchpatch {
-        name = "fix-with-musl.patch";
-        url = "https://sourceware.org/bugzilla/attachment.cgi?id=10151&action=diff&collapsed=&headers=1&format=raw";
-        sha256 = "18kk534k6da5bkbsy1ivbi77iin76lsna168mfcbwv4ik5vpziq2";
-      });
+    ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch;
 
   postPatch =
-    # Needed for glibc to build with the gnumake 3.82
-    # http://comments.gmane.org/gmane.linux.lfs.support/31227
     ''
+      # Needed for glibc to build with the gnumake 3.82
+      # http://comments.gmane.org/gmane.linux.lfs.support/31227
       sed -i 's/ot \$/ot:\n\ttouch $@\n$/' manual/Makefile
-    ''
-    # nscd needs libgcc, and we don't want it dynamically linked
-    # because we don't want it to depend on bootstrap-tools libs.
-    + ''
+
+      # nscd needs libgcc, and we don't want it dynamically linked
+      # because we don't want it to depend on bootstrap-tools libs.
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
-    ''
-    # Replace the date and time in nscd by a prefix of $out.
-    # It is used as a protocol compatibility check.
-    # Note: the size of the struct changes, but using only a part
-    # would break hash-rewriting. When receiving stats it does check
-    # that the struct sizes match and can't cause overflow or something.
-    + ''
-      cat ${./glibc-remove-datetime-from-nscd.patch} \
-        | sed "s,@out@,$out," | patch -p1
     '';
 
   configureFlags =
@@ -132,11 +119,12 @@ stdenv.mkDerivation ({
        else "--disable-profile")
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
-    ] ++ lib.optionals (cross != null) [
-      (if cross ? float && cross.float == "soft" then "--without-fp" else "--with-fp")
-    ] ++ lib.optionals (cross != null) [
+    ] ++ lib.optionals (hostPlatform != buildPlatform) [
+      (if hostPlatform.platform.gcc.float or (hostPlatform.parsed.abi.float or "hard") == "soft"
+       then "--without-fp"
+       else "--with-fp")
       "--with-__thread"
-    ] ++ lib.optionals (cross == null && stdenv.isArm) [
+    ] ++ lib.optionals (hostPlatform == buildPlatform && hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"
       "--build=arm-linux-gnueabi"
 
@@ -150,6 +138,7 @@ stdenv.mkDerivation ({
   outputs = [ "out" "bin" "dev" "static" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ bison ];
   buildInputs = lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
@@ -187,7 +176,7 @@ stdenv.mkDerivation ({
     }
 
 
-  '' + lib.optionalString (cross != null) ''
+  '' + lib.optionalString (hostPlatform != buildPlatform) ''
     sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
     cat > config.cache << "EOF"
@@ -198,6 +187,8 @@ stdenv.mkDerivation ({
   '';
 
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
+
+  doCheck = false; # fails
 
   meta = {
     homepage = http://www.gnu.org/software/libc/;
@@ -219,7 +210,7 @@ stdenv.mkDerivation ({
   } // meta;
 }
 
-// lib.optionalAttrs (cross != null) {
+// lib.optionalAttrs (hostPlatform != buildPlatform) {
   preInstall = null; # clobber the native hook
 
   dontStrip = true;

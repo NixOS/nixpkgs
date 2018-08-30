@@ -1,10 +1,10 @@
-{ stdenv, meson, ninja, fetchurl, pkgconfig, gettext, gnome3
+{ stdenv, fetchurl, pkgconfig, gettext, gnome3
 , glib, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
 , gnomeSupport ? false, gnome, makeWrapper
 , libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
-, libsecret, libgdata
+, libsecret, libgdata, python3
 # Remove when switching back to meson
 , autoreconfHook, lzma, bzip2
 }:
@@ -18,15 +18,19 @@
 
 let
   pname = "gvfs";
-  version = "1.36.0";
+  version = "1.36.2";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1fsn6aa9a68cfbna9s00l1ry4ym1fr7ii2f45hzj2fipxfpqihwy";
+    sha256 = "1xq105596sk9yram5a143b369wpaiiwc9gz86n0j1kfr7nipkqn4";
   };
+
+  postPatch = ''
+    patchShebangs test test-driver
+  '';
 
   # Uncomment when switching back to meson
   # postPatch = ''
@@ -72,6 +76,10 @@ stdenv.mkDerivation rec {
   # ];
 
   enableParallelBuilding = true;
+
+  checkInputs = [ python3 ];
+  doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
+  doInstallCheck = doCheck;
 
   preFixup = ''
     for f in $out/libexec/*; do

@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl, qmake, qttools, pkgconfig
+, fetchurl, qttools, pkgconfig
 , minizip, zlib
 , qtbase, qtsvg, qtmultimedia, qtwebkit, qttranslations, qtxmlpatterns
 , rsync, SDL2, xwininfo

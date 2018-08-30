@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, autoreconfHook, libjpeg, libpng, libX11, zlib }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, libjpeg, libpng, libX11, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libxcomp-${version}";
-  version = "3.5.0.33";
+  version = "3.5.99.16";
 
   src = fetchurl {
-    sha256 = "17qjsd6v2ldpfmyjrkdnlq4qk05hz5l6qs54g8h0glzq43w28f74";
-    url = "http://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
+    sha256 = "1m3z9w3h6qpgk265xf030w7lcs181jgw2cdyzshb7l97mn1f7hh2";
+    url = "https://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
   };
 
   buildInputs = [ libjpeg libpng libX11 zlib ];
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   preAutoreconf = ''
     cd nxcomp/
+    sed -i 's|/src/.libs/libXcomp.a|/src/.libs/libXcomp.la|' test/Makefile.am
   '';
 
   enableParallelBuilding = true;

@@ -1,22 +1,21 @@
 { stdenv, buildPackages, hostPlatform, fetchgit, perl, buildLinux, ... } @ args:
 
 buildLinux (args // rec {
-  version = "4.15.2018.03.22";
-  modDirVersion = "4.15.0";
-  extraMeta.branch = "master";
-  extraMeta.maintainers = [ stdenv.lib.maintainers.davidak stdenv.lib.maintainers.chiiruno ];
+  version = "4.16.2018.08.03";
+  modDirVersion = "4.16.0";
 
   src = fetchgit {
     url = "https://evilpiepirate.org/git/bcachefs.git";
-    rev = "919a34d47a68f3e5f00a7ce5efb67748ec31bd62";
-    sha256 = "1j17my3046ry8zdcvf8h2vnij89wkwmv64w3g2pf9lksh2909djw";
+    rev = "e7a00a52b57336c04d1043c6fa0a67a7c8301cfb";
+    sha256 = "1a0kvpazvvh0rfb9hkyr4zw55ndh060j95fvhf2aaaj9qyc7p7wp";
   };
 
-  extraConfig = ''
-    BCACHEFS_FS m
-  '';
+  extraConfig = "BCACHEFS_FS m";
 
-  # Should the testing kernels ever be built on Hydra?
-  extraMeta.hydraPlatforms = [];
+  extraMeta = {
+    branch = "master";
+    hydraPlatforms = []; # Should the testing kernels ever be built on Hydra?
+    maintainers = with stdenv.lib.maintainers; [ davidak chiiruno ];
+  };
 
 } // (args.argsOverride or {}))

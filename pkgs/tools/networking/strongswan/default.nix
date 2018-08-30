@@ -3,28 +3,32 @@
 , gmp, python, iptables, ldns, unbound, openssl, pcsclite
 , openresolv
 , systemd, pam
-
-, enableTNC            ? false, curl, trousers, sqlite, libxml2
+, curl
+, enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
 }:
+
+# Note on curl support: If curl is built with gnutls as its backend, the
+# strongswan curl plugin may break.
+# See https://wiki.strongswan.org/projects/strongswan/wiki/Curl for more info.
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.6.2";
+  version = "5.6.3";
 
   src = fetchurl {
-    url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "14ifqay54brw2b2hbmm517bxw8bs9631d7jm4g139igkxcq0m9p0";
+    url = "https://download.strongswan.org/${name}.tar.bz2";
+    sha256 = "095zg7h7qwsc456sqgwb1lhhk29ac3mk5z9gm6xja1pl061driy3";
   };
 
   dontPatchELF = true;
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs =
-    [ gmp python iptables ldns unbound openssl pcsclite ]
-    ++ optionals enableTNC [ curl trousers sqlite libxml2 ]
+    [ curl gmp python iptables ldns unbound openssl pcsclite ]
+    ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam ]
     ++ optionals enableNetworkManager [ networkmanager ];
 
@@ -61,12 +65,12 @@ stdenv.mkDerivation rec {
       "--enable-eap-mschapv2" "--enable-eap-radius" "--enable-xauth-eap" "--enable-ext-auth"
       "--enable-forecast" "--enable-connmark" "--enable-acert"
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
-      "--enable-af-alg" "--enable-xauth-pam" "--enable-chapoly" ]
+      "--enable-af-alg" "--enable-xauth-pam" "--enable-chapoly"
+      "--enable-curl" ]
     ++ optionals stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
     ++ optional (stdenv.system == "i686-linux") "--enable-padlock"
     ++ optionals enableTNC [
          "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
-         "--enable-curl"
          "--enable-eap-tnc" "--enable-eap-ttls" "--enable-eap-dynamic" "--enable-tnccs-20"
          "--enable-tnc-imc" "--enable-imc-os" "--enable-imc-attestation"
          "--enable-tnc-imv" "--enable-imv-attestation"

@@ -1,12 +1,25 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   version = "dnh3.3.2";
   name = "enhanced-ctorrent";
+
   src = fetchurl {
     url = "http://www.rahul.net/dholmes/ctorrent/ctorrent-dnh3.3.2.tar.gz";
     sha256 = "0qs8waqwllk56i3yy3zhncy7nsnhmf09a494p5siz4vm2k4ncwy8";
   };
+
+  # These patches come from Debian and fix CVE-2009-1759.
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/ctorrent/1.3.4.dnh3.3.2-5/debian/patches/cve-security-fix.diff";
+      sha256 = "1qkzzm8sfspbcs10azmmif4qcr7pr8r38dsa2py84lsjm1yi3kls";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/c/ctorrent/1.3.4.dnh3.3.2-5/debian/patches/FTBFS-fix.diff";
+      sha256 = "1m3zh96xwqjjzsbg62f7kx0miams58nys1f484qhdn870b5x9p06";
+    })
+  ];
 
   meta = {
     description = "BitTorrent client written in C++";

@@ -1,34 +1,41 @@
---- a/properties/nm-openvpn-editor.c
-+++ b/properties/nm-openvpn-editor.c
-@@ -775,8 +775,7 @@
- nm_find_openvpn (void)
- {
- 	static const char *openvpn_binary_paths[] = {
--		"/usr/sbin/openvpn",
--		"/sbin/openvpn",
-+		"@openvpn@/bin/openvpn",
- 		NULL
- 	};
- 	const char  **openvpn_binary = openvpn_binary_paths;
---- a/src/nm-openvpn-service.c
-+++ b/src/nm-openvpn-service.c
-@@ -522,9 +522,7 @@
- openvpn_binary_find_exepath (void)
- {
- 	static const char *paths[] = {
--		"/usr/sbin/openvpn",
--		"/sbin/openvpn",
--		"/usr/local/sbin/openvpn",
-+		"@openvpn@/bin/openvpn",
- 	};
- 	int i;
+--- a/clients/common/nm-vpn-helpers.c
++++ b/clients/common/nm-vpn-helpers.c
+@@ -205,7 +205,7 @@
+ 	char *argv[4];
+ 	const char *path;
  
-@@ -2326,7 +2324,7 @@
- 	_LOGD ("nm-openvpn-service (version " DIST_VERSION ") starting...");
+-	path = nm_utils_find_helper ("openconnect", "/usr/sbin/openconnect", error);
++	path = "@openconnect@/bin/openconnect";
+ 	if (!path)
+ 		return FALSE;
  
- 	if (   !g_file_test ("/sys/class/misc/tun", G_FILE_TEST_EXISTS)
--	    && (system ("/sbin/modprobe tun") == -1))
-+	    && (system ("@kmod@/bin/modprobe tun") == -1))
- 		return EXIT_FAILURE;
+--- a/src/devices/nm-device.c
++++ b/src/devices/nm-device.c
+@@ -11828,14 +11828,14 @@
+ 			gw = nm_ip4_config_best_default_route_get (priv->ip_config_4);
+ 			if (gw) {
+ 				nm_utils_inet4_ntop (NMP_OBJECT_CAST_IP4_ROUTE (gw)->gateway, buf);
+-				ping_binary = nm_utils_find_helper ("ping", "/usr/bin/ping", NULL);
++				ping_binary = "@inetutils@/bin/ping";
+ 				log_domain = LOGD_IP4;
+ 			}
+ 		} else if (priv->ip_config_6 && priv->ip6_state == IP_DONE) {
+ 			gw = nm_ip6_config_best_default_route_get (priv->ip_config_6);
+ 			if (gw) {
+ 				nm_utils_inet6_ntop (&NMP_OBJECT_CAST_IP6_ROUTE (gw)->gateway, buf);
+-				ping_binary = nm_utils_find_helper ("ping6", "/usr/bin/ping6", NULL);
++				ping_binary = "@inetutils@/bin/ping";
+ 				log_domain = LOGD_IP6;
+ 			}
+ 		}
+--- a/src/nm-core-utils.c
++++ b/src/nm-core-utils.c
+@@ -428,7 +428,7 @@
  
- 	plugin = nm_openvpn_plugin_new (bus_name);
+ 	/* construct the argument list */
+ 	argv = g_ptr_array_sized_new (4);
+-	g_ptr_array_add (argv, "/sbin/modprobe");
++	g_ptr_array_add (argv, "@kmod@/bin/modprobe");
+ 	g_ptr_array_add (argv, (char *) arg1);
+ 
+ 	va_start (ap, arg1);

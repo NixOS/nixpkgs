@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gradle_3_5, perl, makeWrapper, jre }:
+{ stdenv, fetchFromGitHub, gradle_3_5, perl, makeWrapper, jre, gsettings-desktop-schemas }:
 
 let
   version = "0.9.2";
@@ -10,7 +10,7 @@ let
     rev = version;
     sha256 = "1fvij0yjjz56hsyddznx7mdgq1zm25fkng3axl03iyrij976z7b8";
   };
-  
+
   postPatch = ''
     # there is no .git anyway
     substituteInPlace build.gradle \
@@ -69,7 +69,9 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir $out
     tar xvf build/distributions/mucommander-${version}.tar --directory=$out --strip=1
-    wrapProgram $out/bin/mucommander --set JAVA_HOME ${jre}
+    wrapProgram $out/bin/mucommander \
+      --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
+      --set JAVA_HOME ${jre}
   '';
 
   meta = with stdenv.lib; {

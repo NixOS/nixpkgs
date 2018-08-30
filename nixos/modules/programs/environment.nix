@@ -2,7 +2,7 @@
 
 # Most of the stuff here should probably be moved elsewhere sometime.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -33,8 +33,6 @@ in
     environment.profileRelativeEnvVars =
       { PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
-        PKG_CONFIG_PATH = [ "/lib/pkgconfig" ];
-        PERL5LIB = [ "/lib/perl5/site_perl" ];
         KDEDIRS = [ "" ];
         STRIGI_PLUGIN_PATH = [ "/lib/strigi/" ];
         QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" ];

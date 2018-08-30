@@ -1,4 +1,4 @@
-{ stdenv, lib, xorg, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, xorg, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "go-sct-${version}";

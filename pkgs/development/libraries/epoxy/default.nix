@@ -6,13 +6,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "epoxy-${version}";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "anholt";
     repo = "libepoxy";
     rev = "${version}";
-    sha256 = "1ixpqb10pmdy3n9nxd5inflig9dal5502ggadcns5b58j6jr0yv0";
+    sha256 = "1811agxr7g9wd832np8sw152j468kg3qydmfkc564v54ncfcgaci";
   };
 
   outputs = [ "out" "dev" ];
@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
   '';
 
-  # add libGL to rpath because libepoxy dlopen()s libEGL
-  postFixup = optionalString stdenv.isLinux ''
-    patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libGL ]}:$(patchelf --print-rpath $out/lib/libepoxy.so.0.0.0)" $out/lib/libepoxy.so.0.0.0
-  '';
+  patches = [ ./libgl-path.patch ];
+
+  NIX_CFLAGS_COMPILE = ''-DLIBGL_PATH="${getLib libGL}/lib"'';
+
+  doCheck = false; # needs X11
 
   meta = {
     description = "A library for handling OpenGL function pointer management";

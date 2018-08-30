@@ -89,7 +89,7 @@ in
 
     services.xserver.displayManager.slim.enable = false;
 
-    users.extraUsers.gdm =
+    users.users.gdm =
       { name = "gdm";
         uid = config.ids.uids.gdm;
         group = "gdm";
@@ -97,7 +97,7 @@ in
         description = "GDM user";
       };
 
-    users.extraGroups.gdm.gid = config.ids.gids.gdm;
+    users.groups.gdm.gid = config.ids.gids.gdm;
 
     # GDM needs different xserverArgs, presumable because using wayland by default.
     services.xserver.tty = null;
@@ -109,7 +109,7 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          GDM_SESSIONS_DIR = "${cfg.session.desktops}";
+          GDM_SESSIONS_DIR = "${cfg.session.desktops}/share/xsessions";
           # Find the mouse
           XCURSOR_PATH = "~/.icons:${pkgs.gnome3.adwaita-icon-theme}/share/icons";
         };
@@ -134,6 +134,9 @@ in
     };
 
     systemd.services.display-manager.path = [ pkgs.gnome3.gnome-session ];
+
+    # Allow choosing an user account
+    services.accounts-daemon.enable = true;
 
     services.dbus.packages = [ gdm ];
 
@@ -169,6 +172,8 @@ in
       [debug]
       ${optionalString cfg.gdm.debug "Enable=true"}
     '';
+
+    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.session.wrapper;
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {

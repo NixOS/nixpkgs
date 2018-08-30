@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qmake, qtbase, perl, python, php, kcachegrind, fetchpatch }:
+{ stdenv, qmake, qtbase, perl, python, php, kcachegrind }:
 
 let
   name = stdenv.lib.replaceStrings ["kcachegrind"] ["qcachegrind"] kcachegrind.name;
@@ -11,14 +11,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [ qtbase perl python php ];
 
   nativeBuildInputs = [ qmake ];
-
-  patches = [
-    (fetchpatch {
-      name = "fix-qt5_10-build.patch";
-      url = https://github.com/KDE/kcachegrind/commit/c41607a.patch;
-      sha256 = "00kh5im3hpcarch8rc2dsgxsajfmd8vd7rry9x6mxrbkgr4ifq8y";
-    })
-  ];
 
   postInstall = ''
      mkdir -p $out/bin

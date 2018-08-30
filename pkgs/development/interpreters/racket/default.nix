@@ -1,10 +1,11 @@
 { stdenv, fetchurl, makeFontsConf, makeWrapper
 , cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp, gtk2, libedit, libffi, libjpeg
+, glib, gmp, gtk3, libedit, libffi, libjpeg
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
 , disableDocs ? false
 , CoreFoundation
+, gsettings-desktop-schemas
 }:
 
 let
@@ -18,7 +19,8 @@ let
     fontconfig
     glib
     gmp
-    gtk2
+    gtk3
+    gsettings-desktop-schemas
     libedit
     libjpeg
     libpng
@@ -34,7 +36,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.12";
+  version = "7.0";
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl rec {
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     inherit name;
-    sha256 = "0cwcypzjfl9py1s695mhqkiapff7c1w29llsmdj7qgn58wl0apk5";
+    sha256 = "1glv5amsp9xp480d4yr63hhm9kkyav06yl3a6p489nkr4cln0j9a";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -53,12 +55,14 @@ stdenv.mkDerivation rec {
     (stdenv.lib.optionalString stdenv.isDarwin "-framework CoreFoundation")
   ];
 
-  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ]
+  buildInputs = [ fontconfig libffi libtool makeWrapper sqlite gsettings-desktop-schemas gtk3 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation ];
 
   preConfigure = ''
     unset AR
-    substituteInPlace src/configure --replace /usr/bin/uname ${coreutils}/bin/uname
+    for f in src/configure src/racket/src/string.c; do
+      substituteInPlace "$f" --replace /usr/bin/uname ${coreutils}/bin/uname
+    done
     mkdir src/build
     cd src/build
   '';
@@ -74,7 +78,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for p in $(ls $out/bin/) ; do
-      wrapProgram $out/bin/$p --set LD_LIBRARY_PATH "${LD_LIBRARY_PATH}";
+      wrapProgram $out/bin/$p \
+        --prefix LD_LIBRARY_PATH ":" "${LD_LIBRARY_PATH}" \
+        --prefix XDG_DATA_DIRS ":" "$GSETTINGS_SCHEMAS_PATH";
     done
   '';
 

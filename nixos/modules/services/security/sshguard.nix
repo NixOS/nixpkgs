@@ -133,6 +133,7 @@ in {
             ReadOnlyDirectories = "/";
             ReadWriteDirectories = "/run/sshguard /var/lib/sshguard";
             RuntimeDirectory = "sshguard";
+            StateDirectory = "sshguard";
             CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
          };
       };

@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, bash, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
-, alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib, lndir
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor
+, alsaLib, bootjdk, perl, liberation_ttf, fontconfig, zlib, lndir
+, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
@@ -17,8 +17,8 @@ let
       "i386"
     else "amd64";
 
-  update = "10";
-  build = "46";
+  update = "10.0.1";
+  build = "10";
   repover = "jdk-${update}+${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
 
@@ -27,7 +27,7 @@ let
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk10u/archive/${repover}.tar.gz";
-      sha256 = "1a2cjad816qilsigkq035rqzfhzmq5vaz1klilrrws456flbsjlg";
+      sha256 = "1fg0rl5pd3f2y3v3bq8p3zdkrpa1pyslwdln4s64clyr7spvxkjw";
     };
 
     outputs = [ "out" "jre" ];
@@ -36,7 +36,7 @@ let
     buildInputs = [
       cpio file which unzip zip perl bootjdk zlib cups freetype alsaLib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
-      libXi libXinerama libXcursor lndir fontconfig
+      libXi libXinerama libXcursor libXrandr lndir fontconfig
     ] ++ lib.optionals (!minimal && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -142,7 +142,7 @@ let
 
     # FIXME: this is unnecessary once the multiple-outputs branch is merged.
     preFixup = ''
-      prefix=$jre stripDirs "$stripDebugList" "''${stripDebugFlags:--S}"
+      prefix=$jre stripDirs "$STRIP" "$stripDebugList" "''${stripDebugFlags:--S}"
       patchELF $jre
       propagatedBuildInputs+=" $jre"
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.3.4";
 
   src = fetchurl {
-    url = "http://download.tuxfamily.org/ctpl/releases/ctpl-${version}.tar.gz";
+    url = "https://download.tuxfamily.org/ctpl/releases/ctpl-${version}.tar.gz";
     sha256 = "1yr92xv9n6kgyixwg9ps4zb404ic5pgb171k4bi3mv9p6k8gv59s";
   };
 

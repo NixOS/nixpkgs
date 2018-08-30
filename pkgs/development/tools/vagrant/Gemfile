@@ -1,2 +1,2 @@
 source "https://rubygems.org"
-gem 'vagrant'
+gem 'vagrant', git: "https://github.com/hashicorp/vagrant.git", tag: "v2.0.4"

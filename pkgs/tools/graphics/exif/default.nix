@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libexif, popt, libintlOrEmpty }:
+{ stdenv, fetchurl, pkgconfig, libexif, popt, libintl }:
 
 stdenv.mkDerivation rec {
   name = "exif-0.6.21";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libexif popt ] ++ libintlOrEmpty;
+  buildInputs = [ libexif popt libintl ];
 
   meta = {
     homepage = http://libexif.sourceforge.net/;

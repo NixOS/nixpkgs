@@ -34,24 +34,21 @@
 , writeScript
 }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-
 let
   arch32 = "i686-linux";
-  arch64 = "x86_64-linux";
 
   arch = if stdenv.system == arch32
     then "i386"
     else "amd64";
 
-  shortVersion = "1.17.13-stable";
+  shortVersion = "1.19.1-stable";
 
   version = "${shortVersion}_${arch}";
 
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
   sha256 = if stdenv.system == arch32
-    then "0q4x62k00whmq8lskphpcxc610cvclxzcr5k0v7pxjxs9sx5yx43"
-    else "01ylyily1hip35z0d4qkdpbzp5yn4r015psc5773xsqlgrnlwjm3";
+    then "0fcyl5i8xdgb5j0x1643qc0j74d8p11jczvqmgqkqh0wgid1y1ad"
+    else "1dzwa2cnn9xakrhhq159fhh71gw5wlbf017rrikdlia694m8akq6";
 
   deps = [
     qtbase
@@ -140,7 +137,7 @@ stdenv.mkDerivation {
     homepage = http://www.mendeley.com;
     description = "A reference manager and academic social network";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers  = with maintainers; [ dtzWill ];
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "cups-pk-helper-${version}";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-${version}.tar.xz";
+    url = "https://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-${version}.tar.xz";
     sha256 = "0a52jw6rm7lr5nbyksiia0rn7sasyb5cjqcb95z1wxm2yprgi6lm";
   };
 

@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, ocaml, core_p4, pa_ounit, pa_test,
+{stdenv, buildOcaml, fetchurl, core_p4, pa_ounit, pa_test,
  bin_prot_p4, comparelib, sexplib_p4, rsync}:
 
 buildOcaml rec {

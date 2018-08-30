@@ -1,14 +1,17 @@
-{ stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, substituteAll, syncthing, wrapGAppsHook, gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3, bcrypt, gobjectIntrospection }:
+{ stdenv, fetchFromGitHub, fetchpatch, libnotify, librsvg, killall
+, gtk3, libappindicator-gtk3, substituteAll, syncthing, wrapGAppsHook
+, gnome3, buildPythonApplication, dateutil, pyinotify, pygobject3
+, bcrypt, gobjectIntrospection }:
 
 buildPythonApplication rec {
-  version = "0.9.2.7";
+  version = "0.9.4";
   name = "syncthing-gtk-${version}";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing-gtk";
     rev = "v${version}";
-    sha256 = "08k7vkibia85klwjxbnzk67h4pphrizka5v9zxwvvv3cisjiclc2";
+    sha256 = "0d3rjd1xjd7zravks9a2ph7gv1cm8wxaxkkvl1fvcx15v7f3hff9";
   };
 
   nativeBuildInputs = [
@@ -18,8 +21,8 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gtk3 librsvg
-    libnotify
+    gtk3 librsvg libappindicator-gtk3
+    libnotify gnome3.adwaita-icon-theme
     # Schemas with proxy configuration
     gnome3.gsettings-desktop-schemas
   ];
@@ -29,13 +32,18 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    ./disable-syncthing-binary-configuration.patch
+    (fetchpatch {
+      url = https://github.com/syncthing/syncthing-gtk/commit/b2535e5a9cdb31c4987ab7af37f62d58d38255b7.patch;
+      sha256 = "047v79wz2a9334gbzywlqwpacrk53s26ksvfqaddk06avv8742w7";
+    })
     (substituteAll {
       src = ./paths.patch;
-      killall = "${psmisc}/bin/killall";
+      killall = "${killall}/bin/killall";
       syncthing = "${syncthing}/bin/syncthing";
     })
   ];
+
+  setupPyBuildFlags = [ "build_py" "--nofinddaemon" "--nostdownloader" ];
 
   postPatch = ''
     substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
@@ -48,9 +56,9 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "GTK3 & python based GUI for Syncthing";
-    maintainers = with maintainers; [ ];
-    platforms = syncthing.meta.platforms;
     homepage = https://github.com/syncthing/syncthing-gtk;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
+    platforms = syncthing.meta.platforms;
   };
 }

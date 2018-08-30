@@ -5,12 +5,12 @@
 , lens-aeson, memory, monad-par, mtl, optparse-generic, process
 , QuickCheck, quickcheck-text, readline, rosezipper, scientific
 , stdenv, tasty, tasty-hunit, tasty-quickcheck, temporary, text
-, text-format, time, unordered-containers, vector, vty
+, text-format, unordered-containers, vector, vty
 
 , restless-git
 
 , fetchFromGitHub, lib, makeWrapper
-, ncurses, zlib, bzip2, solc, coreutils
+, zlib, bzip2, solc, coreutils
 , bash
 }:
 
@@ -55,6 +55,7 @@ lib.overrideDerivation (mkDerivation rec {
   description = "Ethereum virtual machine evaluator";
   license = stdenv.lib.licenses.agpl3;
   maintainers = [stdenv.lib.maintainers.dbrock];
+  broken = true; # 2018-04-10
 }) (attrs: {
   buildInputs = attrs.buildInputs ++ [solc];
   nativeBuildInputs = attrs.nativeBuildInputs ++ [makeWrapper];

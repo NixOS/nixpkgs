@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , cmake, pkgconfig, asciidoc, libxslt, docbook_xsl
-, wayland, wlc, libxkbcommon, pcre, json_c, dbus_libs
+, wayland, wlc, libxkbcommon, pcre, json_c, dbus
 , pango, cairo, libinput, libcap, pam, gdk_pixbuf, libpthreadstubs
 , libXdmcp
 , buildDocs ? true
@@ -8,20 +8,20 @@
 
 stdenv.mkDerivation rec {
   name = "sway-${version}";
-  version = "0.15.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "00prns3dnafd19ap774p8v994i3p185ji0dnp2xxbkgh2z7sbwpi";
+    sha256 = "1p9j5gv85lsgj4z28qja07dqyvqk41w6mlaflvvm9yxafx477g5n";
   };
 
   nativeBuildInputs = [
     cmake pkgconfig
   ] ++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl ];
   buildInputs = [
-    wayland wlc libxkbcommon pcre json_c dbus_libs
+    wayland wlc libxkbcommon pcre json_c dbus
     pango cairo libinput libcap pam gdk_pixbuf libpthreadstubs
     libXdmcp
   ];

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, nettools, iproute, procps}:
+{stdenv, fetchurl, openssl, nettools, iproute, sysctl}:
 
 let baseName = "gogoclient";
     version  = "1.2";
@@ -30,14 +30,15 @@ stdenv.mkDerivation rec {
       --replace "/sbin/ifconfig" "${nettools}/bin/ifconfig" \
       --replace "/sbin/route"    "${nettools}/bin/route" \
       --replace "/sbin/ip"       "${iproute}/sbin/ip" \
-      --replace "/sbin/sysctl"   "${procps}/sbin/sysctl"
+      --replace "/sbin/sysctl"   "${sysctl}/bin/sysctl"
     sed -i -e 's/^.*Exec \$route -A.*$/& metric 128/' $out/template/linux.sh
   '';
 
-  meta = {
-    homepage = http://gogonet.gogo6.com;
+  meta = with stdenv.lib; {
+    homepage = https://ipv6.ernet.in/Tunnel_broker;
     description = "Client to connect to the Freenet6 IPv6 tunnel broker service";
-    maintainers = [stdenv.lib.maintainers.bluescreen303];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.bluescreen303 ];
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

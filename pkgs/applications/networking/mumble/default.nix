@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, fetchpatch, pkgconfig
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig
 , qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib, python
 , jackSupport ? false, libjack2 ? null
@@ -62,7 +62,7 @@ let
       description = "Low-latency, high quality voice chat software";
       homepage = https://mumble.info;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ viric jgeerds wkennington ];
+      maintainers = with maintainers; [ jgeerds wkennington ];
       platforms = platforms.linux;
     };
   });
@@ -126,14 +126,16 @@ let
   };
 
   gitSource = rec {
-    version = "2018-01-12";
+    version = "2018-07-01";
     qtVersion = 5;
 
     # Needs submodules
-    src = fetchgit {
-      url = "https://github.com/mumble-voip/mumble";
-      rev = "e348e47f4af68eaa8e0f87d1d9fc28c5583e421e";
-      sha256 = "12z41qfaq6w3i4wcw8pvyb8wwwa8gs3ar5zx6aqx6yssc6513lr3";
+    src = fetchFromGitHub {
+      owner = "mumble-voip";
+      repo = "mumble";
+      rev = "c19ac8c0b0f934d2ff206858d7cb66352d6eb418";
+      sha256 = "1mzp1bgn49ycs16d6r8icqq35wq25198fs084vyq6j5f78ni7pvz";
+      fetchSubmodules = true;
     };
   };
 in {

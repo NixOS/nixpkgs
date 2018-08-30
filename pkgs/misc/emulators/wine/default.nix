@@ -6,7 +6,7 @@
 # };
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
-{ lib, pkgs, system, callPackage,
+{ lib, system, callPackage,
   wineRelease ? "stable",
   wineBuild ? (if system == "x86_64-linux" then "wineWow" else "wine32"),
   libtxc_dxtn_Name ? "libtxc_dxtn_s2tc",
@@ -40,7 +40,9 @@
   pulseaudioSupport ? false,
   udevSupport ? false,
   xineramaSupport ? false,
-  xmlSupport ? false }:
+  xmlSupport ? false,
+  vulkanSupport ? false,
+}:
 
 let wine-build = build: release:
       lib.getAttr build (callPackage ./packages.nix {
@@ -51,7 +53,7 @@ let wine-build = build: release:
                   netapiSupport cursesSupport vaSupport pcapSupport v4lSupport saneSupport
                   gsmSupport gphoto2Support ldapSupport fontconfigSupport alsaSupport
                   pulseaudioSupport xineramaSupport gtkSupport openclSupport xmlSupport tlsSupport
-                  openglSupport gstreamerSupport udevSupport;
+                  openglSupport gstreamerSupport udevSupport vulkanSupport;
         };
       });
 

@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
   ];
 
+  doCheck = false; # fails, needs unicode locale
+
   meta = with stdenv.lib; {
     description = "A library to handle keyboard descriptions";
     homepage = https://xkbcommon.org;

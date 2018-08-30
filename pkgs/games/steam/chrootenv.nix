@@ -3,6 +3,7 @@
 , withJava ? false
 , withPrimus ? false
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
+, extraProfile ? "" # string to append to profile
 , nativeOnly ? false
 , runtimeOnly ? false
 }:
@@ -57,6 +58,7 @@ in buildFHSUserEnv rec {
     xorg.libXext
     xorg.libX11
     xorg.libXfixes
+    libGL
 
     # Not formally in runtime but needed by some games
     gst_all_1.gstreamer
@@ -144,7 +146,6 @@ in buildFHSUserEnv rec {
     SDL2_mixer
     gstreamer
     gst-plugins-base
-    libGLU
     libappindicator-gtk2
     libcaca
     libcanberra
@@ -178,7 +179,7 @@ in buildFHSUserEnv rec {
 
   profile = ''
     export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
-  '';
+  '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
     #!${stdenv.shell}

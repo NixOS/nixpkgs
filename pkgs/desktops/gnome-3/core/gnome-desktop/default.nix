@@ -1,27 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
-, intltool, gnome-doc-utils, xkeyboard_config, isocodes, itstool, wayland
-, libseccomp, bubblewrap, gobjectIntrospection }:
+{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
+, intltool, libxml2, xkeyboard_config, isocodes, itstool, wayland
+, libseccomp, bubblewrap, gobjectIntrospection, gtk-doc, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "gnome-desktop-${version}";
-  version = "3.28.0";
+  version = "3.28.2";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "17fm5z3kfm1m3420kjpvk1y0pc34p42rqfpmb1npy51jkv1p3pzi";
+    sha256 = "0c439hhpfd9axmv4af6fzhibksh69pnn2nnbghbbqqbwy6zqfl30";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-desktop"; attrPath = "gnome3.gnome-desktop"; };
-  };
-
-  # this should probably be setuphook for glib
+  # TODO: remove with 3.30
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    pkgconfig which itstool intltool libxslt gnome-doc-utils gobjectIntrospection
+    pkgconfig which itstool intltool libxslt libxml2 gobjectIntrospection
+    gtk-doc docbook_xsl
   ];
   buildInputs = [
     libX11 bubblewrap xkeyboard_config isocodes wayland
@@ -31,13 +30,22 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gnome3.gsettings-desktop-schemas ];
 
   patches = [
-    ./bubblewrap-paths.patch
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      BUBBLEWRAP_BIN = "${bubblewrap}/bin/bwrap";
+    })
   ];
 
-  postPatch = ''
-    substituteInPlace libgnome-desktop/gnome-desktop-thumbnail-script.c --subst-var-by \
-      BUBBLEWRAP_BIN "${bubblewrap}/bin/bwrap"
-  '';
+  configureFlags = [
+    "--enable-gtk-doc"
+  ];
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-desktop";
+      attrPath = "gnome3.gnome-desktop";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Library with common API for various GNOME modules";

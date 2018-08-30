@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "ii-1.8";
 
   src = fetchurl {
-    url = "http://dl.suckless.org/tools/${name}.tar.gz";
+    url = "https://dl.suckless.org/tools/${name}.tar.gz";
     sha256 = "1lk8vjl7i8dcjh4jkg8h8bkapcbs465sy8g9c0chfqsywbmf3ndr";
   };
 

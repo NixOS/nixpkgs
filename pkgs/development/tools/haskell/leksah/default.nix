@@ -3,7 +3,7 @@
 let
 leksahEnv = ghcWithPackages (self: [ self.leksah-server self.leksah self.cabal-install ]);
 in stdenv.mkDerivation {
-  name = "leksah";
+  name = "leksah-${leksahEnv.version}";
 
   buildInputs = [ gtk3 ];
   nativeBuildInputs = [ makeWrapper ];

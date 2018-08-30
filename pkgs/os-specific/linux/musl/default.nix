@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchurl
-, buildPackages
+{ stdenv, lib, fetchurl, hostPlatform
 , linuxHeaders ? null
 , useBSDCompatHeaders ? true
 }:
@@ -17,13 +16,23 @@ let
     sha256 = "14igk6k00bnpfw660qhswagyhvr0gfqg4q55dxvaaq7ikfkrir71";
   };
 
+  # iconv tool, implemented by musl author.
+  # Original: http://git.etalabs.net/cgit/noxcuse/plain/src/iconv.c?id=02d288d89683e99fd18fe9f54d4e731a6c474a4f
+  # We use copy from Alpine which fixes error messages, see:
+  # https://git.alpinelinux.org/cgit/aports/commit/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f
+  iconv_c = fetchurl {
+    name = "iconv.c";
+    url = "https://git.alpinelinux.org/cgit/aports/plain/main/musl/iconv.c?id=a3d97e95f766c9c378194ee49361b375f093b26f";
+    sha256 = "1mzxnc2ncq8lw9x6n7p00fvfklc9p3wfv28m68j0dfz5l8q2k6pp";
+  };
+
 in
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
   version = "1.1.19";
 
   src = fetchurl {
-    url    = "http://www.musl-libc.org/releases/musl-${version}.tar.gz";
+    url    = "https://www.musl-libc.org/releases/musl-${version}.tar.gz";
     sha256 = "1nf1wh44bhm8gdcfr75ayib29b99vpq62zmjymrq7f96h9bshnfv";
   };
 
@@ -41,17 +50,24 @@ stdenv.mkDerivation rec {
       --replace -fno-asynchronous-unwind-tables ""
   '';
 
+  patches = [
+    # Minor touchup to build system making dynamic linker symlink relative
+    (fetchurl {
+      url = https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch;
+      sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
+    })
+  ];
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
   '';
+
+  CFLAGS="-fstack-protector-strong" + lib.optionalString hostPlatform.isPower " -mlong-double-64";
 
   configureFlags = [
     "--enable-shared"
     "--enable-static"
     "--enable-debug"
-    "CFLAGS=-fstack-protector-strong"
-    # Fix cycle between outputs
-    "--disable-wrapper"
+    "--enable-wrapper=all"
   ];
 
   outputs = [ "out" "dev" ];
@@ -59,18 +75,35 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
   separateDebugInfo = true;
 
-  postInstall =
-  ''
+  NIX_DONT_SET_RPATH = true;
+
+  postInstall = ''
     # Not sure why, but link in all but scsi directory as that's what uclibc/glibc do.
     # Apparently glibc provides scsi itself?
     (cd $dev/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
-  '' + ''
+
     # Strip debug out of the static library
     $STRIP -S $out/lib/libc.a
-  '' + ''
     mkdir -p $out/bin
+
     # Create 'ldd' symlink, builtin
-    ln -s $out/lib/libc.so $out/bin/ldd
+    ln -rs $out/lib/libc.so $out/bin/ldd
+
+    # (impure) cc wrapper around musl for interactive usuage
+    for i in musl-gcc musl-clang ld.musl-clang; do
+      moveToOutput bin/$i $dev
+    done
+    moveToOutput lib/musl-gcc.specs $dev
+    substituteInPlace $dev/bin/musl-gcc \
+      --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
+
+    # provide 'iconv' utility, using just-built headers, libc/ldso
+    $CC ${iconv_c} -o $out/bin/iconv \
+      -I$dev/include \
+      -L$out/lib -Wl,-rpath=$out/lib \
+      -lc \
+      -B $out/lib \
+      -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h

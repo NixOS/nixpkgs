@@ -2,12 +2,12 @@
   gst_all_1, ninja
 }:
 stdenv.mkDerivation rec {
-  version = "0.90";
+  version = "0.91";
   name = "gcompris-${version}";
 
   src = fetchurl {
     url = "http://gcompris.net/download/qt/src/gcompris-qt-${version}.tar.xz";
-    sha256 = "1i5adxnhig849qxwi3c4v7r84q6agx1zxkd69fh4y7lcmq2qiaza";
+    sha256 = "09h098w9q79hnzla1pcpqlnnr6dbafm4q6zmdp7wlk11ym8n9kvg";
   };
 
   cmakeFlags = "-DQML_BOX2D_LIBRARY=${qmlbox2d}/${qtbase.qtQmlPrefix}/Box2D.2.0";

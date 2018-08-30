@@ -1,13 +1,12 @@
-{lib, fetchurl, python, buildPythonPackage, isPyPy, gfortran, nose, pytest, numpy}:
+{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy}:
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.0.0";
-  name = "${pname}-${version}";
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-    sha256 = "87ea1f11a0e9ec08c264dc64551d501fa307289460705f6fccd84cbfc7926d10";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "878352408424dffaa695ffedf2f9f92844e116686923ed9aa8626fc30d32cfd1";
   };
 
   checkInputs = [ nose pytest ];
@@ -51,7 +50,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
-    homepage = http://www.scipy.org/;
+    homepage = https://www.scipy.org/;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

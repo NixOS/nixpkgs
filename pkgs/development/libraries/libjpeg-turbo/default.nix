@@ -29,9 +29,6 @@ stdenv.mkDerivation rec {
     description = "A faster (using SIMD) libjpeg implementation";
     license = licenses.ijg; # and some parts under other BSD-style licenses
     maintainers = [ maintainers.vcunat ];
-    # upstream supports darwin (and others), but it doesn't build currently
     platforms = platforms.all;
-    hydraPlatforms = platforms.linux;
   };
 }
-

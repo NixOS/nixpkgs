@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig
 , wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors
+, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa_noglu
 }:
 
 let pname = "wlroots";
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     wayland libGL wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors
+    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa_noglu
   ];
 
   # Install rootston (the reference compositor) to $bin
@@ -42,5 +42,8 @@ in stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+    # Marked as broken until the first official/stable release (upstream
+    # request). See #38344 for the public discussion.
+    broken = true;
   };
 }

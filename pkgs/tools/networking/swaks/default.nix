@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "20170101.0";
 
   src = fetchurl {
-    url = "http://www.jetmore.org/john/code/swaks/files/${name}.tar.gz";
+    url = "https://www.jetmore.org/john/code/swaks/files/${name}.tar.gz";
     sha256 = "0pli4mlhasnqqxmmxalwyg3x7n2vhcbgsnp2xgddamjavv82vrl4";
   };
 

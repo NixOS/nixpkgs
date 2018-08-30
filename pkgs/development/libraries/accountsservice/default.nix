@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "accountsservice-${version}";
-  version = "0.6.45";
+  version = "0.6.50";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "09pg25ir7kjigvp2cxd9fkfw8c8ql8vrswfvymg9zmbmma9w43zv";
+    url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
+    sha256 = "0jn7vg1z4vxnna0hl33hbcb4bb3zpilxc2vyclh24vx4vvsjhn83";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "D-Bus interface for user account query and manipulation";
-    homepage = http://www.freedesktop.org/wiki/Software/AccountsService;
+    homepage = https://www.freedesktop.org/wiki/Software/AccountsService;
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; linux;

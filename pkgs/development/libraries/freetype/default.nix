@@ -1,6 +1,5 @@
-{ stdenv, lib, fetchurl, copyPathsToStore
-, hostPlatform
-, pkgconfig, which
+{ stdenv, fetchurl
+, pkgconfig, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
@@ -10,11 +9,11 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
-  version = "2.7.1"; name = "freetype-" + version;
+  inherit (stdenv.lib) optional optionalString;
 
-in stdenv.mkDerivation {
-  inherit name;
+in stdenv.mkDerivation rec {
+  name = "freetype-${version}";
+  version = "2.9";
 
   meta = with stdenv.lib; {
     description = "A font rendering engine";
@@ -33,24 +32,17 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://savannah/freetype/${name}.tar.bz2";
-    sha256 = "121gm15ayfg3rglby8ifh8384mcjb9dhmx9j40zl7yszw72b4frs";
+    sha256 = "12jcdz1in20yaa55izxalg3hm1pf7nydfrzps5bzb4zgihybmzz6";
   };
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
   # dependence on harfbuzz is looser than the reverse dependence
-  nativeBuildInputs = [ pkgconfig which ]
+  nativeBuildInputs = [ pkgconfig which makeWrapper ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
 
   patches =
-    [
-      ./pcf-introduce-driver.patch
-      ./pcf-config-long-family-names.patch
-      ./disable-pcf-long-family-names.patch
-      ./enable-table-validation.patch
-      # remove the two CVE patches after updating to >= 2.8
-      ./cve-2017-8105.patch
-      ./cve-2017-8287.patch
+    [ ./enable-table-validation.patch
     ] ++
     optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
@@ -59,18 +51,14 @@ in stdenv.mkDerivation {
   configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
 
   # The asm for armel is written with the 'asm' keyword.
-  CFLAGS = optionalString stdenv.isArm "-std=gnu99";
+  CFLAGS = optionalString stdenv.isAarch32 "-std=gnu99";
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  postInstall = glib.flattenInclude;
-
-  crossAttrs = stdenv.lib.optionalAttrs (hostPlatform.libc or null != "msvcrt") {
-    # Somehow it calls the unwrapped gcc, "i686-pc-linux-gnu-gcc", instead
-    # of gcc. I think it's due to the unwrapped gcc being in the PATH. I don't
-    # know why it's on the PATH.
-    configureFlags = "--disable-static CC_BUILD=gcc";
-  };
+  postInstall = glib.flattenInclude + ''
+    wrapProgram "$dev/bin/freetype-config" \
+      --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
+  '';
 }

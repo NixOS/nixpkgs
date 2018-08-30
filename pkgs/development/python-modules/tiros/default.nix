@@ -1,15 +1,14 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ fetchPypi, buildPythonPackage
 , semantic-version, boto3, flask, docutils, requests
 }:
 
 buildPythonPackage rec {
   pname = "tiros";
-  name = "${pname}-${version}";
-  version = "1.0.42";
+  version = "1.0.44";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d0f9bc6d463654c971a78e02a3159ec62a2db684a217a7e940e66d4a381bdd52";
+    sha256 = "d6bf7410967554ec283f9d4eabc0ce6821d6e6d36001afbdb7fe0826423d4f37";
   };
 
   patchPhase = ''

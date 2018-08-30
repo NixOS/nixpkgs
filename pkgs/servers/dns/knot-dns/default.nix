@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn
-, systemd, nettle, libedit, zlib, libiconv, libintlOrEmpty
+{ stdenv, fetchurl, pkgconfig, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
+, systemd, nettle, libedit, zlib, libiconv, libintl
 }:
 
 let inherit (stdenv.lib) optional optionals; in
@@ -7,33 +7,33 @@ let inherit (stdenv.lib) optional optionals; in
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   name = "knot-dns-${version}";
-  version = "2.6.5";
+  version = "2.7.1";
 
   src = fetchurl {
-    url = "http://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "33cd676706e2baeb37cf3879ccbc91a1e1cd1ee5d7a082adff4d1e753ce49d46";
+    url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
+    sha256 = "7d6ae20ada0f0ee7700d5df17f47f86b49eb21ee34977d0d70de6a0947371381";
   };
 
   outputs = [ "bin" "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gnutls liburcu libidn
+    gnutls liburcu libidn2 libunistring
     nettle libedit
-    libiconv lmdb
+    libiconv lmdb libintl
     # without sphinx &al. for developer documentation
   ]
     ++ optionals stdenv.isLinux [ libcap_ng systemd ]
-    ++ libintlOrEmpty
     ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
 
   CFLAGS = [ "-O2" "-DNDEBUG" ];
 
-  #doCheck = true; problems in combination with dynamic linking
+  doCheck = true;
+  doInstallCheck = false; # needs pykeymgr?
 
-  postInstall = ''rm -r "$out"/var'';
+  postInstall = ''rm -r "$out"/var "$out"/lib/*.la'';
 
   meta = with stdenv.lib; {
     description = "Authoritative-only DNS server from .cz domain registry";
@@ -43,4 +43,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vcunat ];
   };
 }
-

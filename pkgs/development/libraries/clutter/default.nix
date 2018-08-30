@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkgconfig, libGLU_combined, libX11, libXext, libXfixes
+{ stdenv, fetchurl, pkgconfig, libGLU_combined, libX11, libXext, libXfixes
 , libXdamage, libXcomposite, libXi, libxcb, cogl, pango, atk, json-glib,
 gobjectIntrospection, gtk3, gnome3
 }:

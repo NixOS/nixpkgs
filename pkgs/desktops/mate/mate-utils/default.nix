@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-utils-${version}";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "10a6k8gi7cajlkbj1jbvk3s633hw58lan3rc85v8jlrkwm7wmhpl";
+    sha256 = "0q05zzxgwwk7af05yzcjixjd8hi8cqykirj43g60ikhzym009n4q";
   };
 
   nativeBuildInputs = [

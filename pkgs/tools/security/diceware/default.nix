@@ -1,17 +1,16 @@
 { lib
 , pythonPackages
-, fetchpatch
 }:
 
 with pythonPackages;
 
 buildPythonApplication rec {
   pname = "diceware";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0855n4dh16ws1dhw1ixxwk3wx7qr45xff7pn32pjg58p4z4cx168";
+    sha256 = "22a998361fd2afbc7890062e228235b3501084de1e6a5bb61f16d2637977f50d";
   };
 
   nativeBuildInputs = [ pytestrunner ];

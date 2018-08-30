@@ -1,36 +1,45 @@
-{ stdenv, fetchurl, fftw, zlib, libjpeg, libtiff, libpng, pkgconfig }:
+{ stdenv, fetchurl, cmake, ninja, pkgconfig
+, opencv, openexr, graphicsmagick, fftw, zlib, libjpeg, libtiff, libpng
+, withGimpPlugin ? true, gimp ? null}:
 
-stdenv.mkDerivation rec {
+assert withGimpPlugin -> gimp != null;
+
+let
+  version = "2.2.2";
+
+  # CMakeLists.txt is missing from the tarball and Makefile is terrible
+  CMakeLists = fetchurl {
+    url = "https://github.com/dtschump/gmic/raw/v.${version}/CMakeLists.txt";
+    sha256 = "0lv5jrg98cpbk13fl4xm7l4sk1axfz054q570bpi741w815d7cpg";
+  };
+in stdenv.mkDerivation rec {
   name = "gmic-${version}";
-  version = "2.2.1";
+
+  outputs = [ "out" "lib" "dev" "man" ] ++ stdenv.lib.optional withGimpPlugin "gimpPlugin";
 
   src = fetchurl {
-    url = "http://gmic.eu/files/source/gmic_${version}.tar.gz";
-    sha256 = "0iac1zaix2zv1dfp45ca0wk9pj6k02gf8l1vmg820z8jd12pa19w";
+    url = "https://gmic.eu/files/source/gmic_${version}.tar.gz";
+    sha256 = "0zqfj2ym5nn3ff93xh2wf9ayxqlznabbdi00xw4lm7vw3iwkzqnc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake ninja pkgconfig ];
 
-  buildInputs = [ fftw zlib libjpeg libtiff libpng ];
+  buildInputs = [
+    fftw zlib libjpeg libtiff libpng opencv openexr graphicsmagick
+  ] ++ stdenv.lib.optionals withGimpPlugin [ gimp gimp.gtk ];
 
-  sourceRoot = "${name}/src";
+  cmakeFlags = [
+    "-DBUILD_LIB_STATIC=OFF"
+    "-DBUILD_PLUGIN=${if withGimpPlugin then "ON" else "OFF"}"
+    "-DENABLE_DYNAMIC_LINKING=ON"
+  ];
 
-  preBuild = ''
-    buildFlagsArray=( \
-      CURL_CFLAGS= CURL_LIBS= \
-      OPENEXR_CFLAGS= OPENEXR_LIBS= \
-      OPENCV_CFLAGS= OPENCV_LIBS= \
-      X11_CFLAGS="-Dcimg_display=0" X11_LIBS= \
-      cli \
-    )
+  postPatch = ''
+    cp ${CMakeLists} CMakeLists.txt
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man1
-
-    cp -v gmic $out/bin/
-    cp -v ../man/gmic.1.gz $out/share/man/man1/
+  preConfigure = stdenv.lib.optionalString withGimpPlugin ''
+    cmakeFlags="$cmakeFlags -DPLUGIN_INSTALL_PREFIX=$gimpPlugin/${gimp.targetPluginDir}"
   '';
 
   meta = with stdenv.lib; {

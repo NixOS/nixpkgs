@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1n9hrls3l9gf8wfz6m9bylma1b1hdvdqsksv2dlp1zdgjdzv200b";
   };
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libzip boost wt3 libconfig ];
 

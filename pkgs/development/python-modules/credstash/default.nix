@@ -1,19 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, cryptography, boto3, pyyaml, docutils }:
+{ stdenv, buildPythonPackage, fetchPypi, cryptography, boto3, pyyaml, docutils, nose }:
 
 buildPythonPackage rec {
   pname = "credstash";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "718b337f7a6fa001e014386071f05c59900525d0507009126d2fe8d75fe0761d";
+    sha256 = "814560f99ae2409e2c6d906d878f9dadada5d1d0a950aafb6b2c0d535291bdfb";
   };
 
-  patches = fetchpatch {
-    url = https://github.com/fugue/credstash/pull/178.patch;
-    sha256 = "15ih4h5v63g7qfmqdl4zca147wkcrx8vnsh4ns33001dipcfb5sc";
-    excludes = [ ".travis.yml" ];
-  };
+  nativeBuildInputs = [ nose ];
 
   propagatedBuildInputs = [ cryptography boto3 pyyaml docutils ];
 

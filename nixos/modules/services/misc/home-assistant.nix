@@ -5,7 +5,10 @@ with lib;
 let
   cfg = config.services.home-assistant;
 
-  configFile = pkgs.writeText "configuration.yaml" (builtins.toJSON cfg.config);
+  # cfg.config != null can be assumed here
+  configFile = pkgs.writeText "configuration.json"
+    (builtins.toJSON (if cfg.applyDefaultConfig then
+    (lib.recursiveUpdate defaultConfig cfg.config) else cfg.config));
 
   availableComponents = pkgs.home-assistant.availableComponents;
 
@@ -34,9 +37,15 @@ let
   # List of components used in config
   extraComponents = filter useComponent availableComponents;
 
-  package = if cfg.autoExtraComponents
+  package = if (cfg.autoExtraComponents && cfg.config != null)
     then (cfg.package.override { inherit extraComponents; })
     else cfg.package;
+
+  # If you are changing this, please update the description in applyDefaultConfig
+  defaultConfig = {
+    homeassistant.time_zone = config.time.timeZone;
+    http.server_port = (toString cfg.port);
+  };
 
 in {
   meta.maintainers = with maintainers; [ dotlambda ];
@@ -48,6 +57,26 @@ in {
       default = "/var/lib/hass";
       type = types.path;
       description = "The config directory, where your <filename>configuration.yaml</filename> is located.";
+    };
+
+    port = mkOption {
+      default = 8123;
+      type = types.int;
+      description = "The port on which to listen.";
+    };
+
+    applyDefaultConfig = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Setting this option enables a few configuration options for HA based on NixOS configuration (such as time zone) to avoid having to manually specify configuration we already have.
+        </para>
+        <para>
+        Currently one side effect of enabling this is that the <literal>http</literal> component will be enabled.
+        </para>
+        <para>
+        This only takes effect if <literal>config != null</literal> in order to ensure that a manually managed <filename>configuration.yaml</filename> is not overwritten.
+      '';
     };
 
     config = mkOption {
@@ -81,7 +110,9 @@ in {
       '';
       description = ''
         Home Assistant package to use.
-        Override <literal>extraPackages</literal> in order to add additional dependencies.
+        Override <literal>extraPackages</literal> or <literal>extraComponents</literal> in order to add additional dependencies.
+        If you specify <option>config</option> and do not set <option>autoExtraComponents</option>
+        to <literal>false</literal>, overriding <literal>extraComponents</literal> will have no effect.
       '';
     };
 
@@ -99,26 +130,35 @@ in {
         you might need to specify it in <literal>extraPackages</literal>.
       '';
     };
+
+    openFirewall = mkOption {
+      default = false;
+      type = types.bool;
+      description = "Whether to open the firewall for the specified port.";
+    };
   };
 
   config = mkIf cfg.enable {
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [ "network.target" ];
       preStart = lib.optionalString (cfg.config != null) ''
-        rm -f ${cfg.configDir}/configuration.yaml
-        ln -s ${configFile} ${cfg.configDir}/configuration.yaml
+        config=${cfg.configDir}/configuration.yaml
+        rm -f $config
+        ${pkgs.remarshal}/bin/json2yaml -i ${configFile} -o $config
+        chmod 444 $config
       '';
       serviceConfig = {
-        ExecStart = ''
-          ${package}/bin/hass --config "${cfg.configDir}"
-        '';
+        ExecStart = "${package}/bin/hass --config '${cfg.configDir}'";
         User = "hass";
         Group = "hass";
         Restart = "on-failure";
         ProtectSystem = "strict";
         ReadWritePaths = "${cfg.configDir}";
         PrivateTmp = true;
+        RemoveIPC = true;
       };
       path = [
         "/run/wrappers" # needed for ping
@@ -132,13 +172,13 @@ in {
       after = wants;
     };
 
-    users.extraUsers.hass = {
+    users.users.hass = {
       home = cfg.configDir;
       createHome = true;
       group = "hass";
       uid = config.ids.uids.hass;
     };
 
-    users.extraGroups.hass.gid = config.ids.gids.hass;
+    users.groups.hass.gid = config.ids.gids.hass;
   };
 }

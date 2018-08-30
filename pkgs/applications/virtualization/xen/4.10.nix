@@ -22,12 +22,13 @@ with stdenv.lib;
 # and try applying all the ones we don't have yet.
 
 let
-  xsaPatch = { name , sha256 }: (fetchpatch {
-    url = "https://xenbits.xen.org/xsa/xsa${name}.patch";
-    inherit sha256;
-  });
-
   xsa = import ./xsa-patches.nix { inherit fetchpatch; };
+
+  qemuMemfdBuildFix = fetchpatch {
+    name = "xen-4.8-memfd-build-fix.patch";
+    url = https://github.com/qemu/qemu/commit/75e5b70e6b5dcc4f2219992d7cffa462aa406af0.patch;
+    sha256 = "0gaz93kb33qc0jx6iphvny0yrd17i8zhcl3a9ky5ylc2idz0wiwa";
+  };
 
   qemuDeps = [
     udev pciutils xorg.libX11 SDL pixman acl glusterfs spice-protocol usbredir
@@ -53,6 +54,9 @@ callPackage (import ./generic.nix (rec {
         rev = "b79708a8ed1b3d18bee67baeaf33b3fa529493e2";
         sha256 = "1yxxad6nvlfmrbgyc8ix19qmrsn1rx4zpyiqnfi4x4kg94acwa5w";
       };
+      patches = [
+        qemuMemfdBuildFix
+      ];
       buildInputs = qemuDeps;
       postPatch = ''
         # needed in build but /usr/bin/env is not available in sandbox

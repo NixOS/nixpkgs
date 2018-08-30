@@ -1,8 +1,8 @@
-{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem,
-  makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
+{ stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
+  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret }:
 
 let
-  version = "1.21.1";
+  version = "1.26.1";
   channel = "stable";
 
   plat = {
@@ -12,15 +12,16 @@ let
   }.${stdenv.system};
 
   sha256 = {
-    "i686-linux" = "0c5wh6i4yl601hg0r1c8y25lz7j2p4vhisdnvnx9nzd6v4ib27cj";
-    "x86_64-linux" = "19i0wkl0qccq2cm10khy0xxb53a6g2m061g71y54s4cxb4wimc9l";
-    "x86_64-darwin" = "0d1ws4c3n80gypiarqbylyipg273ssc0m29jnrg7hx1mcy5ljb1i";
+    "i686-linux" = "1g7kqbz6mrf8ngx2bnwpi9fifq5rjznxgsgwjb532z3nh92ypa8n";
+    "x86_64-linux" = "02yldycakn5zxj1ji4nmhdyazqlkjqpzdj3g8j501c3j28pgiwjy";
+    "x86_64-darwin" = "0pnsfkh20mj7pzqw7wlfd98jqc6a1mnsq1iira15n7fafqgj8zpl";
   }.${stdenv.system};
 
   archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
 
   rpath = lib.concatStringsSep ":" [
     atomEnv.libPath
+    "${lib.makeLibraryPath [gtk2]}"
     "${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0"
     "${lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1"
     "${lib.makeLibraryPath [libxkbfile]}/libxkbfile.so.1"
@@ -48,8 +49,8 @@ in
     };
 
     buildInputs = if stdenv.system == "x86_64-darwin"
-      then [ unzip makeWrapper libXScrnSaver libsecret ]
-      else [ makeWrapper libXScrnSaver libxkbfile libsecret ];
+      then [ unzip libXScrnSaver libsecret ]
+      else [ wrapGAppsHook libXScrnSaver libxkbfile libsecret ];
 
     installPhase =
       if stdenv.system == "x86_64-darwin" then ''
@@ -80,6 +81,11 @@ in
       patchelf \
         --set-rpath "${rpath}" \
         $out/lib/vscode/resources/app/node_modules.asar.unpacked/keytar/build/Release/keytar.node
+
+      patchelf \
+        --set-rpath "${rpath}" \
+        "$out/lib/vscode/resources/app/node_modules.asar.unpacked/native-keymap/build/Release/\
+      keymapping.node"
 
       ln -s ${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0 $out/lib/vscode/libsecret-1.so.0
     '';

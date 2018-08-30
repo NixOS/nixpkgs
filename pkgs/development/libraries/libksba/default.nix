@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "info" ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin gettext;
+  buildInputs = [ gettext ];
   propagatedBuildInputs = [ libgpgerror ];
 
   postInstall = ''

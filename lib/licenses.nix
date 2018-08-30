@@ -99,6 +99,16 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = ''BSD 4-clause "Original" or "Old" License'';
   };
 
+  bsl10 = {
+    fullName = "Business Source License 1.0";
+    url = https://mariadb.com/bsl10;
+  };
+
+  bsl11 = {
+    fullName = "Business Source License 1.1";
+    url = https://mariadb.com/bsl11;
+  };
+
   clArtistic = spdx {
     spdxId = "ClArtistic";
     fullName = "Clarified Artistic License";
@@ -112,26 +122,37 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   cc-by-nc-sa-20 = spdx {
     spdxId = "CC-BY-NC-SA-2.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 2.0";
+    free = false;
   };
 
   cc-by-nc-sa-25 = spdx {
     spdxId = "CC-BY-NC-SA-2.5";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 2.5";
+    free = false;
   };
 
   cc-by-nc-sa-30 = spdx {
     spdxId = "CC-BY-NC-SA-3.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 3.0";
+    free = false;
   };
 
   cc-by-nc-sa-40 = spdx {
     spdxId = "CC-BY-NC-SA-4.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 4.0";
+    free = false;
+  };
+
+  cc-by-nc-40 = spdx {
+    spdxId = "CC-BY-NC-4.0";
+    fullName = "Creative Commons Attribution Non Commercial 4.0 International";
+    free = false;
   };
 
   cc-by-nd-30 = spdx {
     spdxId = "CC-BY-ND-3.0";
     fullName = "Creative Commons Attribution-No Derivative Works v3.00";
+    free = false;
   };
 
   cc-by-sa-25 = spdx {
@@ -189,6 +210,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Common Public License 1.0";
   };
 
+  curl = {
+    fullName = "MIT/X11 derivate";
+    url = "https://curl.haxx.se/docs/copyright.html";
+  };
+
   doc = spdx {
     spdxId = "DOC";
     fullName = "DOC License";
@@ -208,6 +234,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   efl20 = spdx {
     spdxId = "EFL-2.0";
     fullName = "Eiffel Forum License v2.0";
+  };
+
+  elastic = {
+    fullName = "ELASTIC LICENSE";
+    url = https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt;
+    free = false;
   };
 
   epl10 = spdx {
@@ -445,6 +477,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   msrla = {
     fullName  = "Microsoft Research License Agreement";
     url       = "http://research.microsoft.com/en-us/projects/pex/msr-la.txt";
+    free = false;
   };
 
   ncsa = spdx {
@@ -585,6 +618,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Vim License";
   };
 
+  virtualbox-puel = {
+    fullName = "Oracle VM VirtualBox Extension Pack Personal Use and Evaluation License (PUEL)";
+    url = "https://www.virtualbox.org/wiki/VirtualBox_PUEL";
+    free = false;
+  };
+
   vsl10 = spdx {
     spdxId = "VSL-1.0";
     fullName = "Vovida Software License v1.0";
@@ -613,6 +652,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   wxWindows = spdx {
     spdxId = "WXwindows";
     fullName = "wxWindows Library Licence, Version 3.1";
+  };
+
+  xfig = {
+    fullName = "xfig";
+    url = "http://mcj.sourceforge.net/authors.html#xfig";
   };
 
   zlib = spdx {

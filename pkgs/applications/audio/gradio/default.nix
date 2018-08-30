@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, pkgconfig
-, gcc
 , python3
 , gsettings-desktop-schemas
 , desktop-file-utils

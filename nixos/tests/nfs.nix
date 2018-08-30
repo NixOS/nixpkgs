@@ -3,7 +3,7 @@ import ./make-test.nix ({ pkgs, version ? 4, ... }:
 let
 
   client =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     { fileSystems = pkgs.lib.mkVMOverride
         [ { mountPoint = "/data";
             device = "server:/data";
@@ -27,7 +27,7 @@ in
       client2 = client;
 
       server =
-        { config, pkgs, ... }:
+        { ... }:
         { services.nfs.server.enable = true;
           services.nfs.server.exports =
             ''

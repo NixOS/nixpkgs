@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake ];
 
-  buildInputs = [ ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-liconv";
+  buildInputs = [ libiconv ];
 
   preConfigure = "./bootstrap";
 

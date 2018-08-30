@@ -2,7 +2,7 @@
 , seth, git, solc, shellcheck, nodejs, hevm }:
 
 stdenv.mkDerivation rec {
-  name = "dapp";
+  name = "dapp-${version}";
   version = "0.5.7";
 
   src = fetchFromGitHub {

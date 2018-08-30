@@ -1,6 +1,6 @@
 nvidia_x11: sha256:
 
-{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libvdpau, libXext
+{ stdenv, lib, fetchurl, pkgconfig, m4, jansson, gtk2, dbus, gtk3, libXv, libXrandr, libXext, libXxf86vm, libvdpau
 , librsvg, wrapGAppsHook
 , withGtk2 ? false, withGtk3 ? true
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig m4 ];
 
-  buildInputs = [ jansson libXv libXrandr libvdpau nvidia_x11 gtk2 dbus libXv ]
+  buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
              ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
 
   makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];

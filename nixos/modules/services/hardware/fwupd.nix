@@ -71,6 +71,13 @@ in {
           BlacklistPlugins=${lib.concatStringsSep ";" cfg.blacklistPlugins}
         '';
       };
+      "fwupd/uefi.conf" = {
+        source = pkgs.writeText "uefi.conf" ''
+          [uefi]
+          OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
+        '';
+      };
+
     } // originalEtc // extraTrustedKeys;
 
     services.dbus.packages = [ pkgs.fwupd ];
@@ -85,6 +92,6 @@ in {
   };
 
   meta = {
-    maintainers = pkgs.fwupd.maintainers;
+    maintainers = pkgs.fwupd.meta.maintainers;
   };
 }

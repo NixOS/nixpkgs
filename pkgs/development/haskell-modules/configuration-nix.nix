@@ -128,7 +128,7 @@ self: super: builtins.intersectAttrs super {
 
   # Prevents needing to add security_tool as a build tool to all of x509-system's
   # dependencies.
-  x509-system = if pkgs.stdenv.isDarwin && !pkgs.stdenv.cc.nativeLibc
+  x509-system = if pkgs.stdenv.targetPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
     then let inherit (pkgs.darwin) security_tool;
       in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
         postPatch = (drv.postPatch or "") + ''
@@ -138,11 +138,18 @@ self: super: builtins.intersectAttrs super {
     else super.x509-system;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-  gio = disableHardening (addPkgconfigDepend (addBuildTool super.gio self.gtk2hs-buildtools) pkgs.glib) ["fortify"];
-  glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib) ["fortify"];
+  gio = disableHardening (addPkgconfigDepend (addBuildTool super.gio self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
+  glib = disableHardening (addPkgconfigDepend (addBuildTool super.glib self.buildHaskellPackages.gtk2hs-buildtools) pkgs.glib) ["fortify"];
   gtk3 = disableHardening (super.gtk3.override { inherit (pkgs) gtk3; }) ["fortify"];
-  gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
+  gtk = disableHardening (addPkgconfigDepend (addBuildTool super.gtk self.buildHaskellPackages.gtk2hs-buildtools) pkgs.gtk2) ["fortify"];
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
+  gtk-traymanager = addPkgconfigDepend super.gtk-traymanager pkgs.gtk3;
+
+  # Add necessary reference to gtk3 package, plus specify needed dbus version, plus turn on strictDeps to fix build
+  taffybar = ((addPkgconfigDepend super.taffybar pkgs.gtk3).overrideDerivation (drv: { strictDeps = true; }));
+
+  # Add necessary reference to gtk3 package
+  gi-dbusmenugtk3 = addPkgconfigDepend super.gi-dbusmenugtk3 pkgs.gtk3;
 
   # Need WebkitGTK, not just webkit.
   webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
@@ -202,8 +209,11 @@ self: super: builtins.intersectAttrs super {
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
 
-   # Needs access to locale data, but looks for it in the wrong place.
+  # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
+
+  # Disable tests because they require a mattermost server
+  mattermost-api = dontCheck super.mattermost-api;
 
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
@@ -257,7 +267,13 @@ self: super: builtins.intersectAttrs super {
       }
     );
 
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm; };
+  llvm-hs =
+      let dontCheckDarwin = if pkgs.stdenv.isDarwin
+                            then dontCheck
+                            else pkgs.lib.id;
+      in dontCheckDarwin (super.llvm-hs.override {
+        llvm-config = pkgs.llvm_6;
+      });
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -290,13 +306,16 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/edwinb/EpiVM/issues/13
   # https://github.com/edwinb/EpiVM/issues/14
-  epic = addExtraLibraries (addBuildTool super.epic self.happy) [pkgs.boehmgc pkgs.gmp];
+  epic = addExtraLibraries (addBuildTool super.epic self.buildHaskellPackages.happy) [pkgs.boehmgc pkgs.gmp];
 
   # https://github.com/ekmett/wl-pprint-terminfo/issues/7
   wl-pprint-terminfo = addExtraLibrary super.wl-pprint-terminfo pkgs.ncurses;
 
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary super.pcap pkgs.libpcap;
+
+  # https://github.com/snoyberg/yaml/issues/106
+  yaml = disableCabalFlag super.yaml "system-libyaml";
 
   # The cabal files for these libraries do not list the required system dependencies.
   miniball = overrideCabal super.miniball (drv: {
@@ -410,16 +429,6 @@ self: super: builtins.intersectAttrs super {
   # so disable this on Darwin only
   ${if pkgs.stdenv.isDarwin then null else "GLUT"} = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
 
-  idris = overrideCabal super.idris (drv: {
-    # https://github.com/idris-lang/Idris-dev/issues/2499
-    librarySystemDepends = (drv.librarySystemDepends or []) ++ [pkgs.gmp];
-
-    # tests and build run executable, so need to set LD_LIBRARY_PATH
-    preBuild = ''
-      export LD_LIBRARY_PATH="$PWD/dist/build:$LD_LIBRARY_PATH"
-    '';
-  });
-
   libsystemd-journal = overrideCabal super.libsystemd-journal (old: {
     librarySystemDepends = old.librarySystemDepends or [] ++ [ pkgs.systemd ];
   });
@@ -441,7 +450,7 @@ self: super: builtins.intersectAttrs super {
     then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
     else dontCheck super.fsnotify;
 
-  hidapi = addExtraLibrary super.hidapi pkgs.libudev;
+  hidapi = addExtraLibrary super.hidapi pkgs.udev;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
 
@@ -454,10 +463,10 @@ self: super: builtins.intersectAttrs super {
   io-streams = enableCabalFlag super.io-streams "NoInteractiveTests";
 
   # requires autotools to build
-  secp256k1 = addBuildTools super.secp256k1 [ pkgs.autoconf pkgs.automake pkgs.libtool ];
+  secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
   # tests require git
-  hapistrano = addBuildTool super.hapistrano pkgs.git;
+  hapistrano = addBuildTool super.hapistrano pkgs.buildPackages.git;
 
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
@@ -469,6 +478,9 @@ self: super: builtins.intersectAttrs super {
       export HOME=$PWD
     '';
   });
+
+  # https://github.com/plow-technologies/servant-streaming/issues/12
+  servant-streaming-server = dontCheck super.servant-streaming-server;
 
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
@@ -493,6 +505,7 @@ self: super: builtins.intersectAttrs super {
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;
+  spatial-rotations = dontCheck super.spatial-rotations;
 
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];

@@ -1,17 +1,14 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, perl, python, libxml2Python, libxslt, which
-, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, dblatex, gettext, itstool }:
-
-let
-  pythonEnv = python.withPackages (ps: with ps; [ six ]);
-in
+, docbook_xml_dtd_43, docbook_xsl, gnome-doc-utils, dblatex, gettext, itstool
+}:
 
 stdenv.mkDerivation rec {
   name = "gtk-doc-${version}";
-  version = "1.27";
+  version = "1.28";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk-doc/${version}/${name}.tar.xz";
-    sha256 = "0vwsdl61nvnmqswlz5j9m4hg7qirhazwcikcnqf9nx0c13vx6sz2";
+    sha256 = "05apmwibkmn1icx05l8aw241lhymcx01zvk5i499cb150bijj7li";
   };
 
   patches = [
@@ -22,11 +19,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
-   [ pkgconfig perl pythonEnv libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
-     gnome-doc-utils dblatex gettext which itstool
-   ];
+    [ pkgconfig perl python libxml2Python libxslt docbook_xml_dtd_43 docbook_xsl
+      gnome-doc-utils dblatex gettext which itstool
+    ];
 
-  configureFlags = "--disable-scrollkeeper";
+  configureFlags = [ "--disable-scrollkeeper" ];
+
+  # Make six available for binaries, python.withPackages creates a wrapper
+  # but scripts are not allowed in shebangs so we link it into sys.path.
+  postInstall = ''
+    ln -s ${python.pkgs.six}/${python.sitePackages}/* $out/share/gtk-doc/python/
+  '';
+
+  doCheck = false; # requires a lot of stuff
+  doInstallCheck = false; # fails
 
   passthru = {
     # Consumers are expected to copy the m4 files to their source tree, let them reuse the patch

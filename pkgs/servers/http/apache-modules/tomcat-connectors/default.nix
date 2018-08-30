@@ -4,11 +4,14 @@ stdenv.mkDerivation rec {
   name = "tomcat-connectors-1.2.41-dev-1613051";
 
   src = fetchurl {
-    url = "http://people.apache.org/~rjung/mod_jk-dev/${name}-src.tar.gz";
+    url = "https://people.apache.org/~rjung/mod_jk-dev/${name}-src.tar.gz";
     sha256 = "11khipjpy3y84j1pp7yyx76y64jccvyhh3klwzqxylff49vjc2fc";
   };
 
-  configureFlags = "--with-apxs=${apacheHttpd.dev}/bin/apxs --with-java-home=${jdk}";
+  configureFlags = [
+    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
+    "--with-java-home=${jdk}"
+  ];
 
   setSourceRoot = ''
     sourceRoot=$(echo */native)

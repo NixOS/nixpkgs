@@ -1,30 +1,32 @@
-{ stdenv, fetchFromGitHub, fetchFromBitbucket
-, pkgconfig, tcl, readline, libffi, python3, bison, flex
+{ stdenv, fetchFromGitHub
+, pkgconfig, bison, flex
+, tcl, readline, libffi, python3
+, protobuf
 }:
 
 with builtins;
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2018.03.21";
+  version = "2018.08.08";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "3f0070247590458c5ed28c5a7abfc3b9d1ec138b";
-      sha256 = "0rsnjk25asg7dkxcmim464rmxgvm7x7njmcp5nyl8y4iwn8i9p8v";
+      rev    = "93efbd5d158e374a0abe2afb06484ccc14aa2c88";
+      sha256 = "13y7rzpykihal789hyibg629gwj5bh1s0782y5xxj6jlg0bc9ly8";
       name   = "yosys";
     })
 
     # NOTE: the version of abc used here is synchronized with
     # the one in the yosys Makefile of the version above;
     # keep them the same for quality purposes.
-    (fetchFromBitbucket {
-      owner  = "alanmi";
+    (fetchFromGitHub {
+      owner  = "berkeley-abc";
       repo   = "abc";
-      rev    = "6e3c24b3308a";
-      sha256 = "1i4wv0si4fb6dpv2yrpkp588mdlfrnx2s02q2fgra5apdm54c53w";
+      rev    = "ae6716b064c842f45109a88e84dca71fe4cc311f";
+      sha256 = "0g39k16dmrl6q73q39yr5yd9r4rcliz5zxzbnwzh29z9xwi6ipw8";
       name   = "yosys-abc";
     })
   ];
@@ -32,19 +34,28 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ tcl readline libffi python3 bison flex ];
+  buildInputs = [ tcl readline libffi python3 bison flex protobuf ];
+
+  makeFlags = [ "ENABLE_PROTOBUF=1" ];
 
   patchPhase = ''
+    substituteInPlace ../yosys-abc/Makefile \
+      --replace 'CC   := gcc' ""
     substituteInPlace ./Makefile \
+      --replace 'CXX = clang' "" \
+      --replace 'ABCMKARGS = CC="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
   '';
 
   preBuild = ''
     chmod -R u+w ../yosys-abc
     ln -s ../yosys-abc abc
-    make config-gcc
+    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCREV := default' >> Makefile.conf
     makeFlags="PREFIX=$out $makeFlags"
+
+    # we have to do this ourselves for some reason...
+    (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
   '';
 
   meta = {
@@ -61,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.clifford.at/yosys/;
     license     = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
   };
 }

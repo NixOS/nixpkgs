@@ -29,5 +29,6 @@ buildGoPackage rec {
     homepage = "https://decred.org";
     description = "Decred daemon in Go (golang)";
     license = with lib.licenses; [ isc ];
+    broken = stdenv.isLinux; # 2018-04-10
   };
 }

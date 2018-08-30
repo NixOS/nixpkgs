@@ -7,6 +7,8 @@ let
 
   cfg = config.services.zabbixAgent;
 
+  zabbix = cfg.package;
+
   stateDir = "/var/run/zabbix";
 
   logDir = "/var/log/zabbix";
@@ -44,6 +46,16 @@ in
         '';
       };
 
+      package = mkOption {
+        type = types.attrs; # Note: pkgs.zabbixXY isn't a derivation, but an attrset of { server = ...; agent = ...; }.
+        default = pkgs.zabbix;
+        defaultText = "pkgs.zabbix";
+        example = literalExample "pkgs.zabbix34";
+        description = ''
+          The Zabbix package to use.
+        '';
+      };
+
       server = mkOption {
         default = "127.0.0.1";
         description = ''
@@ -68,7 +80,7 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = mkIf (!config.services.zabbixServer.enable) (singleton
+    users.users = mkIf (!config.services.zabbixServer.enable) (singleton
       { name = "zabbix";
         uid = config.ids.uids.zabbix;
         description = "Zabbix daemon user";
@@ -87,14 +99,14 @@ in
             chown zabbix ${stateDir} ${logDir}
           '';
 
-        serviceConfig.ExecStart = "@${pkgs.zabbix.agent}/sbin/zabbix_agentd zabbix_agentd --config ${configFile}";
+        serviceConfig.ExecStart = "@${zabbix.agent}/sbin/zabbix_agentd zabbix_agentd --config ${configFile}";
         serviceConfig.Type = "forking";
         serviceConfig.RemainAfterExit = true;
         serviceConfig.Restart = "always";
         serviceConfig.RestartSec = 2;
       };
 
-    environment.systemPackages = [ pkgs.zabbix.agent ];
+    environment.systemPackages = [ zabbix.agent ];
 
   };
 

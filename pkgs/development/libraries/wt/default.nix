@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, doxygen, qt48Full, libharu
+{ stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
 , pango, fcgi, firebird, mysql, postgresql, graphicsmagick, glew, openssl
 , pcre
 }:
@@ -10,7 +10,7 @@ let
       name = "wt-${version}";
 
       src = fetchFromGitHub {
-        owner = "kdeforche";
+        owner = "emweb";
         repo = "wt";
         rev = version;
         inherit sha256;
@@ -20,7 +20,7 @@ let
 
       nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        cmake boost165 doxygen qt48Full libharu
+        cmake boost doxygen qt48Full libharu
         pango fcgi firebird mysql.connector-c postgresql graphicsmagick glew
         openssl pcre
       ];
@@ -43,14 +43,12 @@ let
     };
 in {
   wt3 = generic {
-    # with the next version update the version pinning of boost should be omitted
-    version = "3.3.9";
-    sha256 = "1mkflhvzzzxkc5yzvr6nk34j0ldpwxjxb6n7xml59h3j3px3ixjm";
+    version = "3.3.11";
+    sha256 = "1s1bwg3s7brnspr9ya1vg5mr29dbvhf05s606fiv409b7ladqvxq";
   };
 
   wt4 = generic {
-    # with the next version update the version pinning of boost should be omitted
-    version = "4.0.2";
-    sha256 = "0r729gjd1sy0pcmir2r7ga33mp5cr5b4gvf44852q65hw2577w1x";
+    version = "4.0.4";
+    sha256 = "17kq9fxc0xqx7q7kyryiph3mg0d3hnd3jw0rl55zvzfsdd71220w";
   };
 }

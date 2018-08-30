@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, appleDerivation, xcbuild }:
+{ stdenv, appleDerivation, xcbuildHook }:
 
 appleDerivation rec {
-  buildInputs = [ xcbuild ];
+  nativeBuildInputs = [ xcbuildHook ];
 
   patchPhase = ''
     substituteInPlace rpcgen/rpc_main.c \
@@ -11,7 +11,7 @@ appleDerivation rec {
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
     mkdir -p $out/bin/
-    install developer_cmds-*/Build/Products/Release/* $out/bin/
+    install Products/Release/* $out/bin/
 
     for n in 1; do
       mkdir -p $out/share/man/man$n

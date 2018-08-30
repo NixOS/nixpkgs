@@ -122,13 +122,13 @@ in {
       };
     };
 
-    users.extraUsers.hbase = {
+    users.users.hbase = {
       description = "HBase Server user";
       group = "hbase";
       uid = config.ids.uids.hbase;
     };
 
-    users.extraGroups.hbase.gid = config.ids.gids.hbase;
+    users.groups.hbase.gid = config.ids.gids.hbase;
 
   };
 }

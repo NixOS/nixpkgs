@@ -8,6 +8,7 @@
 , dateutil
 , funcsigs
 , future
+, futures
 , mock
 , networkx
 , nibabel
@@ -33,11 +34,11 @@ assert !isPy3k -> configparser != null;
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.0.1";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "47f62fda3d6b9a37aa407a6b78c80e91240aa71e61191ed00da68b02839fe258";
+    sha256 = "f2fe29bf863cb643bd5c8d2bdeaaf488308c293c9fb9913bc7a9504dc3bf8db6";
   };
 
   # see https://github.com/nipy/nipype/issues/2240
@@ -46,6 +47,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
+
+    rm pytest.ini
   '';
 
   propagatedBuildInputs = [
@@ -53,6 +56,7 @@ buildPythonPackage rec {
     dateutil
     funcsigs
     future
+    futures
     networkx
     nibabel
     numpy

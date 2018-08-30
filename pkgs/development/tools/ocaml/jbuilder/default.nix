@@ -1,26 +1,28 @@
-{ stdenv, fetchFromGitHub, ocaml, opam }:
+{ stdenv, fetchFromGitHub, ocamlPackages, opaline }:
 
 stdenv.mkDerivation rec {
   name = "jbuilder-${version}";
-  version = "1.0+beta17";
+  version = "1.0.1";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "dune";
     rev = "${version}";
-    sha256 = "04pyry459hp2r2s9m5xkcq1glzp20ddz5wb1w8nzp3zgygy0431x";
+    sha256 = "0k6r9qrbwlnb4rqwqys5fr7khwza7n7d8wpgl9jbb3xpag2zl3q9";
   };
 
-  buildInputs = [ ocaml ];
+  buildInputs = with ocamlPackages; [ ocaml findlib ];
 
-  installPhase = "${opam}/bin/opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
+  dontAddPrefix = true;
+
+  installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
 
   preFixup = "rm -rf $out/jbuilder";
 
   meta = {
-    homepage = https://github.com/janestreet/jbuilder;
+    inherit (src.meta) homepage;
     description = "Fast, portable and opinionated build system";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     license = stdenv.lib.licenses.asl20;
-    inherit (ocaml.meta) platforms;
+    inherit (ocamlPackages.ocaml.meta) platforms;
   };
 }

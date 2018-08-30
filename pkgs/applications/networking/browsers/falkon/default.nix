@@ -1,15 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, qmake
-, libpthreadstubs, libxcb, libXdmcp, qtsvg, qttools, qtwebengine, qtx11extras, kwallet, openssl }:
+{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, qmake
+, libpthreadstubs, libxcb, libXdmcp, qtsvg, qttools, qtwebengine, qtx11extras, kwallet }:
 
 stdenv.mkDerivation rec {
   name = "falkon-${version}";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "falkon";
     rev    = "v${version}";
-    sha256 = "148idxvx32iwg18m3b7s22awcijnbrywz9r8gnfrq6gpwr0m2jna";
+    sha256 = "1ay1ljrdjcfqwjv4rhf4psh3dfihnvhpmpqcayd3p9lh57x7fh41";
   };
 
   preConfigure = ''

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2.3.1";
+  version = "2.4.0";
   name = "makeself-${version}";
 
   src = fetchFromGitHub {
     owner = "megastep";
     repo = "makeself";
     rev = "release-${version}";
-    sha256 = "01r7vb9vyb99s3g5cw0c04s1ahcingynk3ki17wknlk2asjrbc4p";
+    sha256 = "1lw3gx1zpzp2wmzrw5v7k31vfsrdzadqha9ni309fp07g8inrr9n";
   };
 
   patchPhase = ''

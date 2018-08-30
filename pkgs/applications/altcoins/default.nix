@@ -1,4 +1,4 @@
-{ callPackage, boost155, boost165, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3 }:
+{ callPackage, boost155, boost165, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3, buildGo110Package }:
 
 rec {
 
@@ -6,18 +6,31 @@ rec {
 
   bitcoin  = libsForQt5.callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { miniupnpc = miniupnpc_2; withGui = false; };
+  clightning = callPackage ./clightning.nix { };
 
   bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { boost = boost165; withGui = true; };
   bitcoind-abc = callPackage ./bitcoin-abc.nix { boost = boost165; withGui = false; };
 
-  bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
-  bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
+  bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    withGui = true;
+  };
+  bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    withGui = false;
+  };
 
   bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { boost = boost165; withGui = true; };
   bitcoind-classic = callPackage ./bitcoin-classic.nix { boost = boost165; withGui = false; };
 
-  bitcoin-xt  = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = true; };
-  bitcoind-xt = callPackage ./bitcoin-xt.nix { boost = boost165; withGui = false; };
+  bitcoin-xt  = callPackage ./bitcoin-xt.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    boost = boost165; withGui = true;
+  };
+  bitcoind-xt = callPackage ./bitcoin-xt.nix {
+    inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
+    boost = boost165; withGui = false;
+  };
 
   btc1 = callPackage ./btc1.nix { boost = boost165; withGui = true; };
   btc1d = callPackage ./btc1.nix { boost = boost165; withGui = false; };
@@ -38,10 +51,13 @@ rec {
 
   freicoin = callPackage ./freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ./go-ethereum.nix {
+    buildGoPackage = buildGo110Package;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
-  go-ethereum-classic = callPackage ./go-ethereum-classic { };
+  go-ethereum-classic = callPackage ./go-ethereum-classic {
+    buildGoPackage = buildGo110Package;
+  };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
@@ -50,6 +66,8 @@ rec {
 
   memorycoin  = callPackage ./memorycoin.nix { boost = boost165; withGui = true; };
   memorycoind = callPackage ./memorycoin.nix { boost = boost165; withGui = false; };
+
+  mist = callPackage ./mist.nix { };
 
   namecoin  = callPackage ./namecoin.nix  { withGui = true; };
   namecoind = callPackage ./namecoin.nix { withGui = false; };
@@ -72,4 +90,7 @@ rec {
 
   parity = callPackage ./parity { };
   parity-beta = callPackage ./parity/beta.nix { };
+  parity-ui = callPackage ./parity-ui { };
+
+  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; };
 }

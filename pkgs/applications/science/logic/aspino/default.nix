@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, zlib, boost, glucose }:
+{ stdenv, fetchurl, fetchFromGitHub, zlib, boost }:
 
 let
   glucose' = fetchurl {

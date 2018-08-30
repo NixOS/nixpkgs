@@ -1,15 +1,18 @@
-{ fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl, freetype
-, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng, GConf
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome2 }:
-
-assert stdenv.system == "x86_64-linux";
+{ fetchurl, stdenv, squashfsTools, xorg, alsaLib, makeWrapper, openssl, freetype
+, glib, pango, cairo, atk, gdk_pixbuf, gtk2, cups, nspr, nss, libpng
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome3 }:
 
 let
-  # Please update the stable branch!
-  # Latest version number can be found at:
-  # http://repository-origin.spotify.com/pool/non-free/s/spotify-client/
-  # Be careful not to pick the testing version.
-  version = "1.0.72.117.g6bd7cc73-35";
+  # "rev" decides what is actually being downloaded
+  version = "1.0.80.474.gef6b503e-7";
+  # To get the latest stable revision:
+  # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
+  # To get general information:
+  # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
+  # More exapmles of api usage:
+  # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
+  rev = "16";
+
 
   deps = [
     alsaLib
@@ -22,7 +25,6 @@ let
     ffmpeg_0_10
     fontconfig
     freetype
-    GConf
     gdk_pixbuf
     glib
     gtk2
@@ -52,12 +54,20 @@ in
 stdenv.mkDerivation {
   name = "spotify-${version}";
 
+  # fetch from snapcraft instead of the debian repository most repos fetch from.
+  # That is a bit more cumbersome. But the debian repository only keeps the last
+  # two versions, while snapcraft should provide versions indefinately:
+  # https://forum.snapcraft.io/t/how-can-a-developer-remove-her-his-app-from-snap-store/512
+
+  # This is the next-best thing, since we're not allowed to re-distribute
+  # spotify ourselves:
+  # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
-    url = "https://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
-    sha256 = "0yicwvg6jx8r657ff53326akq3g4ayiinlracjw5jrcs8x9whjap";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
+    sha512 = "45b7ab574b30fb368e0b6f4dd60addbfd1ddc02173b4f98b31c524eed49073432352a361e75959ce8e2f752231e93c79ca1b538c4bd295c935d1e2e0585d147f";
   };
 
-  buildInputs = [ dpkg makeWrapper ];
+  buildInputs = [ squashfsTools makeWrapper ];
 
   doConfigure = false;
   doBuild = false;
@@ -66,7 +76,23 @@ stdenv.mkDerivation {
 
   unpackPhase = ''
     runHook preUnpack
-    dpkg-deb -x $src .
+    unsquashfs "$src" '/usr/share/spotify' '/usr/bin/spotify' '/meta/snap.yaml'
+    cd squashfs-root
+    if ! grep -q 'grade: stable' meta/snap.yaml; then
+      # Unfortunately this check is not reliable: At the moment (2018-07-26) the
+      # latest version in the "edge" channel is also marked as stable.
+      echo "The snap package is marked as unstable:"
+      grep 'grade: ' meta/snap.yaml
+      echo "You probably chose the wrong revision."
+      exit 1
+    fi
+    if ! grep -q '${version}' meta/snap.yaml; then
+      echo "Package version differs from version found in snap metadata:"
+      grep 'version: ' meta/snap.yaml
+      echo "While the nix package specifies: ${version}."
+      echo "You probably chose the wrong revision or forgot to update the nix version."
+      exit 1
+    fi
     runHook postUnpack
   '';
 
@@ -77,6 +103,8 @@ stdenv.mkDerivation {
       libdir=$out/lib/spotify
       mkdir -p $libdir
       mv ./usr/* $out/
+
+      cp meta/snap.yaml $out
 
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
@@ -95,7 +123,7 @@ stdenv.mkDerivation {
       librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
       wrapProgram $out/share/spotify/spotify \
         --prefix LD_LIBRARY_PATH : "$librarypath" \
-        --prefix PATH : "${gnome2.zenity}/bin"
+        --prefix PATH : "${gnome3.zenity}/bin"
 
       # Desktop file
       mkdir -p "$out/share/applications/"

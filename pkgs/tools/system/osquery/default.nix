@@ -1,59 +1,62 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, cmake, pythonPackages
 , udev, audit, aws-sdk-cpp, cryptsetup, lvm2, libgcrypt, libarchive
-, libgpgerror, libuuid, iptables, apt, dpkg, lzma, lz4, bzip2, rpm
+, libgpgerror, libuuid, iptables, dpkg, lzma, bzip2, rpm
 , beecrypt, augeas, libxml2, sleuthkit, yara, lldpd, google-gflags
-, thrift, boost, rocksdb_lite, cpp-netlib, glog, gbenchmark, snappy
-, openssl, linenoise-ng, file, doxygen, devicemapper
-, gtest, sqlite
+, thrift, boost, rocksdb_lite, glog, gbenchmark, snappy
+, openssl, file, doxygen
+, gtest, sqlite, fpm, zstd, rdkafka, rapidjson
 }:
 
 let
+
   thirdparty = fetchFromGitHub {
     owner = "osquery";
     repo = "third-party";
-    rev = "6919841175b2c9cb2dee8986e0cfe49191ecb868";
-    sha256 = "1kjxrky586jd1b2z1vs9cm7x1dxw51cizpys9kddiarapc2ih65j";
+    rev = "32e01462fbea75d3b1904693f937dfd62eaced15";
+    sha256 = "0va24gmgk43a1lyjs63q9qrhvpv8gmqjzpjr5595vhr16idv8wyf";
   };
 
 in
 
 stdenv.mkDerivation rec {
   name = "osquery-${version}";
-  version = "2.5.2";
+  version = "3.2.9";
 
   # this is what `osquery --help` will show as the version.
   OSQUERY_BUILD_VERSION = version;
+  OSQUERY_PLATFORM = "NixOS;";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "osquery";
     rev = version;
-    sha256 = "16isplk66qpvhrf041l0lxb4z6k7wwd1sg7kpsw2q6kivkxpnk3z";
+    sha256 = "1fac0yj1701469qhbsp38ab2fmavm3jw6x278bf78yvxdi99ivai";
   };
 
-  patches = [ ./misc.patch ] ++ lib.optional stdenv.isLinux ./platform-nixos.patch;
+  patches = [ ./misc.patch ];
 
   nativeBuildInputs = [
-    pkgconfig cmake pythonPackages.python pythonPackages.jinja2
+    pkgconfig cmake pythonPackages.python pythonPackages.jinja2 doxygen fpm
   ];
 
-  buildInputs = [
+  buildInputs = let
+    gflags' = google-gflags.overrideAttrs (old: {
+      cmakeFlags = stdenv.lib.filter (f: isNull (builtins.match ".*STATIC.*" f)) old.cmakeFlags;
+    });
+  in [
     udev audit
 
     (aws-sdk-cpp.override {
-      apis = [ "firehose" "kinesis" "sts" ];
+      apis = [ "firehose" "kinesis" "sts" "ec2" ];
       customMemoryManagement = false;
     })
 
-    lvm2 libgcrypt libarchive libgpgerror libuuid iptables.dev apt dpkg
-    lzma lz4 bzip2 rpm beecrypt augeas libxml2 sleuthkit
-    yara lldpd google-gflags thrift boost
-    cpp-netlib glog gbenchmark snappy openssl linenoise-ng
-    file doxygen devicemapper cryptsetup
-    gtest sqlite
-
-    # need to be consistent about the malloc implementation
-    (rocksdb_lite.override { jemalloc = null; gperftools = null; })
+    lvm2 libgcrypt libarchive libgpgerror libuuid iptables dpkg
+    lzma bzip2 rpm beecrypt augeas libxml2 sleuthkit
+    yara lldpd gflags' thrift boost
+    glog gbenchmark snappy openssl
+    file cryptsetup
+    gtest sqlite zstd rdkafka rapidjson rocksdb_lite
   ];
 
   preConfigure = ''
@@ -74,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage = https://osquery.io/;
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ cstrahan ma27 ];
   };
 }

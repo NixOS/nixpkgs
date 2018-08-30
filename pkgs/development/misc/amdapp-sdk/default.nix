@@ -26,7 +26,7 @@ let
     };
 
     "2.8" = {
-      url = "http://developer.amd.com/wordpress/media/2012/11/AMD-APP-SDK-v2.8-lnx${bits}.tgz";
+      url = "https://developer.amd.com/wordpress/media/2012/11/AMD-APP-SDK-v2.8-lnx${bits}.tgz";
       x86 = "99610737f21b2f035e0eac4c9e776446cc4378a614c7667de03a82904ab2d356";
       x86_64 = "d9c120367225bb1cd21abbcf77cb0a69cfb4bb6932d0572990104c566aab9681";
 

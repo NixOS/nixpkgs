@@ -1,13 +1,6 @@
 { stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames }:
 
 let
-
-  # Fix aarch64 build, shouldn't be needed after 3.35
-  aarch64Patch = fetchurl {
-    url = https://hg.mozilla.org/projects/nss/raw-rev/74e679158d1b;
-    sha256 = "1lhs4h32mb2al3z461yylk227nid769di1pdjr7p0kqm2z1qm3jq";
-  };
-
   nssPEM = fetchurl {
     url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
@@ -15,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.35";
+  version = "3.38";
 
   src = fetchurl {
-    url = "mirror://mozilla/security/nss/releases/NSS_3_35_RTM/src/${name}.tar.gz";
-    sha256 = "1ypn68z9ncbbshi3184ywrhx5i846lyd72gps1grzqzdkgh7s4pl";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_38_RTM/src/${name}.tar.gz";
+    sha256 = "0qigcy3d169cf67jzv3rbai0m6dn34vp8h2z696mz4yn10y3sr1c";
   };
 
   buildInputs = [ perl zlib sqlite ]
@@ -29,8 +22,6 @@ in stdenv.mkDerivation rec {
 
   prePatch = ''
     xz -d < ${nssPEM} | patch -p1
-  '' + stdenv.lib.optionalString stdenv.isAarch64 ''
-      (cd nss && patch -p1 < ${aarch64Patch})
   '';
 
   patches =
@@ -63,6 +54,11 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin "CCC=clang++";
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  # TODO(@oxij): investigate this: `make -n check` works but `make
+  # check` fails with "no rule", same for "installcheck".
+  doCheck = false;
+  doInstallCheck = false;
 
   postInstall = ''
     rm -rf $out/private
@@ -117,9 +113,10 @@ in stdenv.mkDerivation rec {
     rm -f "$out"/lib/*.a
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://developer.mozilla.org/en-US/docs/NSS;
     description = "A set of libraries for development of security-enabled client and server applications";
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.mpl20;
+    platforms = platforms.all;
   };
 }

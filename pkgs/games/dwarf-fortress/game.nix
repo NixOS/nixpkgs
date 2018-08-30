@@ -1,30 +1,55 @@
 { stdenv, lib, fetchurl
 , SDL, dwarf-fortress-unfuck
+
+# Our own "unfuck" libs for macOS
+, ncurses, fmodex, gcc
+
+, dfVersion, df-hashes
 }:
 
+with lib;
+
 let
-  baseVersion = "44";
-  patchVersion = "05";
-  dfVersion = "0.${baseVersion}.${patchVersion}";
-  libpath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.glibc dwarf-fortress-unfuck SDL ];
-  platform =
-    if stdenv.system == "x86_64-linux" then "linux"
-    else if stdenv.system == "i686-linux" then "linux32"
-    else throw "Unsupported platform";
-  sha256 =
-    if stdenv.system == "x86_64-linux" then "18bjyhjp5458bfbizm8vq4s00pqpfs097qp6pv76m84kgbc4ghg3"
-    else if stdenv.system == "i686-linux" then "1b9i4kf4c8s6bhqwn8jx100mg7fqp8nmswrai5w8dsma01py4amr"
-    else throw "Unsupported platform";
+  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc dwarf-fortress-unfuck SDL ];
+
+  homepage = http://www.bay12games.com/dwarves/;
+
+  # Map Dwarf Fortress platform names to Nixpkgs platform names.
+  # Other srcs are avilable like 32-bit mac & win, but I have only
+  # included the ones most likely to be needed by Nixpkgs users.
+  platforms = {
+    "x86_64-linux" = "linux";
+    "i686-linux" = "linux32";
+    "x86_64-darwin" = "osx";
+    "i686-darwin" = "osx32";
+    "x86_64-cygwin" = "win";
+    "i686-cygwin" = "win32";
+  };
+
+  dfVersionTriple = splitString "." dfVersion;
+  baseVersion = elemAt dfVersionTriple 1;
+  patchVersion = elemAt dfVersionTriple 2;
+
+  game = if hasAttr dfVersion df-hashes
+         then getAttr dfVersion df-hashes
+         else throw "Unknown Dwarf Fortress version: ${dfVersion}";
+  dfPlatform = if hasAttr stdenv.system platforms
+               then getAttr stdenv.system platforms
+               else throw "Unsupported system: ${stdenv.system}";
+  sha256 = if hasAttr dfPlatform game
+           then getAttr dfPlatform game
+           else throw "Unsupported dfPlatform: ${dfPlatform}";
 
 in
 
-assert dwarf-fortress-unfuck.dfVersion == dfVersion;
+assert dwarf-fortress-unfuck != null ->
+       dwarf-fortress-unfuck.dfVersion == dfVersion;
 
 stdenv.mkDerivation {
-  name = "dwarf-fortress-original-${dfVersion}";
+  name = "dwarf-fortress-${dfVersion}";
 
   src = fetchurl {
-    url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_${platform}.tar.bz2";
+    url = "${homepage}df_${baseVersion}_${patchVersion}_${dfPlatform}.tar.bz2";
     inherit sha256;
   };
 
@@ -33,25 +58,47 @@ stdenv.mkDerivation {
     cp -r * $out
     rm $out/libs/lib*
 
-    # Store the original hash
-    md5sum $out/libs/Dwarf_Fortress | awk '{ print $1 }' > $out/hash.md5.orig
+    exe=$out/${if stdenv.isLinux then "libs/Dwarf_Fortress"
+                                 else "dwarfort.exe"}
 
+    # Store the original hash
+    md5sum $exe | awk '{ print $1 }' > $out/hash.md5.orig
+  '' + optionalString stdenv.isLinux ''
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       --set-rpath "${libpath}" \
-      $out/libs/Dwarf_Fortress
+      $exe
+  '' + optionalString stdenv.isDarwin ''
+    # My custom unfucked dwarfort.exe for macOS. Can't use
+    # absolute paths because original doesn't have enough
+    # header space. Someone plz break into Tarn's house & put
+    # -headerpad_max_install_names into his LDFLAGS.
 
+    ln -s ${getLib ncurses}/lib/libncurses.dylib $out/libs
+    ln -s ${getLib gcc.cc}/lib/libstdc++.6.dylib $out/libs
+    ln -s ${getLib fmodex}/lib/libfmodex.dylib $out/libs
+
+    install_name_tool \
+      -change /usr/lib/libncurses.5.4.dylib \
+              @executable_path/libs/libncurses.dylib \
+      -change /usr/local/lib/x86_64/libstdc++.6.dylib \
+              @executable_path/libs/libstdc++.6.dylib \
+      $exe
+  '' + ''
     # Store the new hash
-    md5sum $out/libs/Dwarf_Fortress | awk '{ print $1 }' > $out/hash.md5
+    md5sum $exe | awk '{ print $1 }' > $out/hash.md5
   '';
 
-  passthru = { inherit baseVersion patchVersion dfVersion; };
+  passthru = {
+    inherit baseVersion patchVersion dfVersion;
+    updateScript = ./update.sh;
+  };
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A single-player fantasy game with a randomly generated adventure world";
-    homepage = http://www.bay12games.com/dwarves;
+    inherit homepage;
     license = licenses.unfreeRedistributable;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar ];
+    platforms = attrNames platforms;
+    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar numinit ];
   };
 }

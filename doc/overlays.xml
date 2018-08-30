@@ -1,95 +1,117 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-overlays">
-
-<title>Overlays</title>
-
-<para>This chapter describes how to extend and change Nixpkgs packages using
-overlays. Overlays are used to add layers in the fix-point used by Nixpkgs
-to compose the set of all packages.</para>
-
-<para>Nixpkgs can be configured with a list of overlays, which are
-applied in order. This means that the order of the overlays can be significant
-if multiple layers override the same package.</para>
-
+ <title>Overlays</title>
+ <para>
+  This chapter describes how to extend and change Nixpkgs packages using
+  overlays. Overlays are used to add layers in the fix-point used by Nixpkgs to
+  compose the set of all packages.
+ </para>
+ <para>
+  Nixpkgs can be configured with a list of overlays, which are applied in
+  order. This means that the order of the overlays can be significant if
+  multiple layers override the same package.
+ </para>
 <!--============================================================-->
+ <section xml:id="sec-overlays-install">
+  <title>Installing overlays</title>
 
-<section xml:id="sec-overlays-install">
-<title>Installing overlays</title>
+  <para>
+   The list of overlays is determined as follows.
+  </para>
 
-<para>The list of overlays is determined as follows.</para>
+  <para>
+   If the <varname>overlays</varname> argument is not provided explicitly, we
+   look for overlays in a path. The path is determined as follows:
+   <orderedlist>
+    <listitem>
+     <para>
+      First, if an <varname>overlays</varname> argument to the nixpkgs function
+      itself is given, then that is used.
+     </para>
+     <para>
+      This can be passed explicitly when importing nipxkgs, for example
+      <literal>import &lt;nixpkgs> { overlays = [ overlay1 overlay2 ];
+      }</literal>.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Otherwise, if the Nix path entry <literal>&lt;nixpkgs-overlays></literal>
+      exists, we look for overlays at that path, as described below.
+     </para>
+     <para>
+      See the section on <literal>NIX_PATH</literal> in the Nix manual for more
+      details on how to set a value for
+      <literal>&lt;nixpkgs-overlays>.</literal>
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      If one of <filename>~/.config/nixpkgs/overlays.nix</filename> and
+      <filename>~/.config/nixpkgs/overlays/</filename> exists, then we look for
+      overlays at that path, as described below. It is an error if both exist.
+     </para>
+    </listitem>
+   </orderedlist>
+  </para>
 
-<para>If the <varname>overlays</varname> argument is not provided explicitly, we look for overlays in a path. The path
-is determined as follows:
+  <para>
+   If we are looking for overlays at a path, then there are two cases:
+   <itemizedlist>
+    <listitem>
+     <para>
+      If the path is a file, then the file is imported as a Nix expression and
+      used as the list of overlays.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      If the path is a directory, then we take the content of the directory,
+      order it lexicographically, and attempt to interpret each as an overlay
+      by:
+      <itemizedlist>
+       <listitem>
+        <para>
+         Importing the file, if it is a <literal>.nix</literal> file.
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         Importing a top-level <filename>default.nix</filename> file, if it is
+         a directory.
+        </para>
+       </listitem>
+      </itemizedlist>
+     </para>
+    </listitem>
+   </itemizedlist>
+  </para>
 
-<orderedlist>
+  <para>
+   On a NixOS system the value of the <literal>nixpkgs.overlays</literal>
+   option, if present, is passed to the system Nixpkgs directly as an argument.
+   Note that this does not affect the overlays for non-NixOS operations (e.g.
+   <literal>nix-env</literal>), which are looked up independently.
+  </para>
 
-  <listitem>
-    <para>First, if an <varname>overlays</varname> argument to the nixpkgs function itself is given,
-    then that is used.</para>
-
-    <para>This can be passed explicitly when importing nipxkgs, for example 
-    <literal>import &lt;nixpkgs> { overlays = [ overlay1 overlay2 ]; }</literal>.</para>
-  </listitem>
-
-  <listitem>
-    <para>Otherwise, if the Nix path entry <literal>&lt;nixpkgs-overlays></literal> exists, we look for overlays
-    at that path, as described below.</para>
-
-    <para>See the section on <literal>NIX_PATH</literal> in the Nix manual for more details on how to 
-    set a value for <literal>&lt;nixpkgs-overlays>.</literal></para>
-  </listitem>
-
-  <listitem>
-    <para>If one of <filename>~/.config/nixpkgs/overlays.nix</filename> and
-    <filename>~/.config/nixpkgs/overlays/</filename> exists, then we look for overlays at that path, as
-    described below. It is an error if both exist.</para>
-  </listitem>
-
-</orderedlist>
-</para>
-
-<para>If we are looking for overlays at a path, then there are two cases:
-<itemizedlist>
-  <listitem>
-    <para>If the path is a file, then the file is imported as a Nix expression and used as the list of
-    overlays.</para>
-  </listitem>
-
-  <listitem>
-    <para>If the path is a directory, then we take the content of the directory, order it
-    lexicographically, and attempt to interpret each as an overlay by:
-    <itemizedlist>
-      <listitem>
-        <para>Importing the file, if it is a <literal>.nix</literal> file.</para>
-      </listitem>
-      <listitem>
-        <para>Importing a top-level <filename>default.nix</filename> file, if it is a directory.</para>
-      </listitem>
-    </itemizedlist>
-    </para>
-  </listitem>
-</itemizedlist>
-</para>
-
-<para>On a NixOS system the value of the <literal>nixpkgs.overlays</literal> option, if present, 
-is passed to the system Nixpkgs directly as an argument. Note that this does not affect the overlays for
-non-NixOS operations (e.g. <literal>nix-env</literal>), which are looked up independently.</para>
-
-<para>The <filename>overlays.nix</filename> option therefore provides a convenient way to use the same
-overlays for a NixOS system configuration and user configuration: the same file can be used
-as <filename>overlays.nix</filename> and imported as the value of <literal>nixpkgs.overlays</literal>.</para>
-
-</section>
-
+  <para>
+   The <filename>overlays.nix</filename> option therefore provides a convenient
+   way to use the same overlays for a NixOS system configuration and user
+   configuration: the same file can be used as
+   <filename>overlays.nix</filename> and imported as the value of
+   <literal>nixpkgs.overlays</literal>.
+  </para>
+ </section>
 <!--============================================================-->
+ <section xml:id="sec-overlays-definition">
+  <title>Defining overlays</title>
 
-<section xml:id="sec-overlays-definition">
-<title>Defining overlays</title>
-
-<para>Overlays are Nix functions which accept two arguments, 
-conventionally called <varname>self</varname> and <varname>super</varname>, 
-and return a set of packages. For example, the following is a valid overlay.</para>
+  <para>
+   Overlays are Nix functions which accept two arguments, conventionally called
+   <varname>self</varname> and <varname>super</varname>, and return a set of
+   packages. For example, the following is a valid overlay.
+  </para>
 
 <programlisting>
 self: super:
@@ -104,31 +126,39 @@ self: super:
 }
 </programlisting>
 
-<para>The first argument (<varname>self</varname>) corresponds to the final package
-set. You should use this set for the dependencies of all packages specified in your
-overlay. For example, all the dependencies of <varname>rr</varname> in the example above come
-from <varname>self</varname>, as well as the overridden dependencies used in the
-<varname>boost</varname> override.</para>
+  <para>
+   The first argument (<varname>self</varname>) corresponds to the final
+   package set. You should use this set for the dependencies of all packages
+   specified in your overlay. For example, all the dependencies of
+   <varname>rr</varname> in the example above come from
+   <varname>self</varname>, as well as the overridden dependencies used in the
+   <varname>boost</varname> override.
+  </para>
 
-<para>The second argument (<varname>super</varname>)
-corresponds to the result of the evaluation of the previous stages of
-Nixpkgs. It does not contain any of the packages added by the current
-overlay, nor any of the following overlays. This set should be used either
-to refer to packages you wish to override, or to access functions defined
-in Nixpkgs. For example, the original recipe of <varname>boost</varname>
-in the above example, comes from <varname>super</varname>, as well as the
-<varname>callPackage</varname> function.</para>
+  <para>
+   The second argument (<varname>super</varname>) corresponds to the result of
+   the evaluation of the previous stages of Nixpkgs. It does not contain any of
+   the packages added by the current overlay, nor any of the following
+   overlays. This set should be used either to refer to packages you wish to
+   override, or to access functions defined in Nixpkgs. For example, the
+   original recipe of <varname>boost</varname> in the above example, comes from
+   <varname>super</varname>, as well as the <varname>callPackage</varname>
+   function.
+  </para>
 
-<para>The value returned by this function should be a set similar to
-<filename>pkgs/top-level/all-packages.nix</filename>, containing
-overridden and/or new packages.</para>
+  <para>
+   The value returned by this function should be a set similar to
+   <filename>pkgs/top-level/all-packages.nix</filename>, containing overridden
+   and/or new packages.
+  </para>
 
-<para>Overlays are similar to other methods for customizing Nixpkgs, in particular
-the <literal>packageOverrides</literal> attribute described in <xref linkend="sec-modify-via-packageOverrides"/>.
-Indeed, <literal>packageOverrides</literal> acts as an overlay with only the 
-<varname>super</varname> argument. It is therefore appropriate for basic use, 
-but overlays are more powerful and easier to distribute.</para>
-
-</section>
-
+  <para>
+   Overlays are similar to other methods for customizing Nixpkgs, in particular
+   the <literal>packageOverrides</literal> attribute described in
+   <xref linkend="sec-modify-via-packageOverrides"/>. Indeed,
+   <literal>packageOverrides</literal> acts as an overlay with only the
+   <varname>super</varname> argument. It is therefore appropriate for basic
+   use, but overlays are more powerful and easier to distribute.
+  </para>
+ </section>
 </chapter>

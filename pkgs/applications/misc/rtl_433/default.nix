@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1, rtl-sdr }:
 stdenv.mkDerivation rec {
 
-  version = "2018-02-23";
+  version = "18.05";
   name = "rtl_433-${version}";
 
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
-    rev = "51d275c";
-    sha256 = "1j443wmws5xgc18s47bvw3pqljk747izypz52rmlrvs16v96cg2g";
+    rev = "18.05";
+    sha256 = "0vfhnjyrx6w1m8g1hww5vdz4zgdlhcaps9g0397mxlki4sm77wpc";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

@@ -1,26 +1,27 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
-, makeWrapper
-, cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
-, net_snmp, openssl, polkit, nettools
+, cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends
+, dbus, file, ghostscript, usbutils
+, net_snmp, openssl, perl, nettools
 , bash, coreutils, utillinux
 , withQt5 ? true
 , withPlugin ? false
+, withStaticPPDInstall ? false
 }:
 
 let
 
   name = "hplip-${version}";
-  version = "3.17.11";
+  version = "3.18.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0xda7x7xxjvzn1l0adlvbwcw21crq1r3r79bkf94q3m5i6abx49g";
+    sha256 = "0xb7ga2wgbwjxsss67mjn2y6fmqsfwzmv11ivvfzhnl36lh22hkb";
   };
 
   plugin = fetchurl {
     url = "https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "0vqhwqc33vxncdhbzdchbgrcrxvkwnp7rc2hkswwn9da112s0c9w";
+    sha256 = "1jf74jya071zqvwhy9n0c3007pzgcxydkw7qdh4sx70brly81i7p";
   };
 
   hplipState = substituteAll {
@@ -55,8 +56,11 @@ pythonPackages.buildPythonApplication {
     libusb1
     sane-backends
     dbus
+    file
+    ghostscript
     net_snmp
     openssl
+    perl
     zlib
   ];
 
@@ -86,6 +90,11 @@ pythonPackages.buildPythonApplication {
       -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor,g \
       -e s,/usr/lib/systemd/system,$out/lib/systemd/system,g \
       -e s,/var/lib/hp,$out/var/lib/hp,g \
+      -e s,/usr/bin/perl,${perl}/bin/perl,g \
+      -e s,/usr/bin/file,${file}/bin/file,g \
+      -e s,/usr/bin/gs,${ghostscript}/bin/gs,g \
+      -e s,/usr/share/cups/fonts,${ghostscript}/share/ghostscript/fonts,g \
+      -e "s,ExecStart=/usr/bin/python /usr/bin/hp-config_usb_printer,ExecStart=$out/bin/hp-config_usb_printer,g" \
       {} +
   '';
 
@@ -98,6 +107,7 @@ pythonPackages.buildPythonApplication {
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
+      ${stdenv.lib.optionalString withStaticPPDInstall "--enable-cups-ppd-install"}
       --disable-qt4
       ${stdenv.lib.optionalString withQt5 "--enable-qt5"}
     "
@@ -111,10 +121,20 @@ pythonPackages.buildPythonApplication {
       hplip_confdir=$out/etc/hp
       hplip_statedir=$out/var/lib/hp
     "
+
+    # Prevent 'ppdc: Unable to find include file "<font.defs>"' which prevent
+    # generation of '*.ppd' files.
+    # This seems to be a 'ppdc' issue when the tool is run in a hermetic sandbox.
+    # Could not find how to fix the problem in 'ppdc' so this is a workaround.
+    export CUPS_DATADIR="${cups}/share/cups"
   '';
 
   enableParallelBuilding = true;
 
+  #
+  # Running `hp-diagnose_plugin -g` can be used to diagnose
+  # issues with plugins.
+  #
   postInstall = stdenv.lib.optionalString withPlugin ''
     sh ${plugin} --noexec --keep
     cd plugin_tmp
@@ -130,15 +150,25 @@ pythonPackages.buildPythonApplication {
     mkdir -p $out/share/hplip/prnt/plugins
     for plugin in lj hbpl1; do
       cp $plugin-${hplipArch}.so $out/share/hplip/prnt/plugins
+      chmod 0755 $out/share/hplip/prnt/plugins/$plugin-${hplipArch}.so
       ln -s $out/share/hplip/prnt/plugins/$plugin-${hplipArch}.so \
         $out/share/hplip/prnt/plugins/$plugin.so
     done
 
     mkdir -p $out/share/hplip/scan/plugins
-    for plugin in bb_soap bb_marvell bb_soapht fax_marvell; do
+    for plugin in bb_soap bb_marvell bb_soapht bb_escl; do
       cp $plugin-${hplipArch}.so $out/share/hplip/scan/plugins
+      chmod 0755 $out/share/hplip/scan/plugins/$plugin-${hplipArch}.so
       ln -s $out/share/hplip/scan/plugins/$plugin-${hplipArch}.so \
         $out/share/hplip/scan/plugins/$plugin.so
+    done
+
+    mkdir -p $out/share/hplip/fax/plugins
+    for plugin in fax_marvell; do
+      cp $plugin-${hplipArch}.so $out/share/hplip/fax/plugins
+      chmod 0755 $out/share/hplip/fax/plugins/$plugin-${hplipArch}.so
+      ln -s $out/share/hplip/fax/plugins/$plugin-${hplipArch}.so \
+        $out/share/hplip/fax/plugins/$plugin.so
     done
 
     mkdir -p $out/var/lib/hp

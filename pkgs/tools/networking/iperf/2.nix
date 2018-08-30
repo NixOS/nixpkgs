@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "iperf-2.0.10";
+  name = "iperf-2.0.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/iperf2/files/${name}.tar.gz";
-    sha256 = "1whyi7lxrkllmbs7i1avc6jq8fvirn64mhx9197bf4x3rj6k9r3z";
+    sha256 = "0ii6sgp62x9ly2gyk00w58dy9qwcw2kvhhcfa7v16jr6n4gnazrn";
   };
 
   hardeningDisable = [ "format" ];

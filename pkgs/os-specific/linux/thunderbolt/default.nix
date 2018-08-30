@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   name = "thunderbolt-${version}";
-  version = "0.9.2";
+  version = "0.9.3";
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thunderbolt-software-user-space";
-    rev = "1ae06410180320a5d0e7408a8d1a6ae2aa443c23";
-    sha256 = "03yk419gj0767lpk6zvla4jx3nx56zsg4x4adl4nd50xhn409rcc";
+    rev = "v${version}";
+    sha256 = "02w1bfm7xvq0dzkhwqiq0camkzz9kvciyhnsis61c8vzp39cwx0x";
   };
 
   buildInputs = [
@@ -23,11 +23,15 @@ stdenv.mkDerivation rec {
     txt2tags
   ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='Release'"
-    "-DUDEV_BIN_DIR=$out/bin"
-    "-DUDEV_RULES_DIR=$out/udev"
-  ];
+  # These can't go in the normal nix cmakeFlags because $out needs to be
+  # expanded by the shell, not by cmake or nix.  $ENV{out} doesn't work right
+  # either; it results in /build/source/build//nix/store/blahblahblahblah/bin/
+  # TODO: use ${placeholder "out"} when possible.
+  #       See https://github.com/NixOS/nixpkgs/pull/37693
+  preConfigure = ''
+    cmakeFlags+=" -DUDEV_BIN_DIR=$out/bin"
+    cmakeFlags+=" -DUDEV_RULES_DIR=$out/etc/udev/rules.d"
+  '';
 
   meta = {
     description = "Thunderbolt(TM) user-space components";

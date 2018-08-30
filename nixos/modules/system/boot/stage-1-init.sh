@@ -74,6 +74,32 @@ ln -s /proc/mounts /etc/mtab # to shut up mke2fs
 touch /etc/udev/hwdb.bin # to shut up udev
 touch /etc/initrd-release
 
+# Function for waiting a device to appear.
+waitDevice() {
+    local device="$1"
+
+    # USB storage devices tend to appear with some delay.  It would be
+    # great if we had a way to synchronously wait for them, but
+    # alas...  So just wait for a few seconds for the device to
+    # appear.
+    if test ! -e $device; then
+        echo -n "waiting for device $device to appear..."
+        try=20
+        while [ $try -gt 0 ]; do
+            sleep 1
+            # also re-try lvm activation now that new block devices might have appeared
+            lvm vgchange -ay
+            # and tell udev to create nodes for the new LVs
+            udevadm trigger --action=add
+            if test -e $device; then break; fi
+            echo -n "."
+            try=$((try - 1))
+        done
+        echo
+        [ $try -ne 0 ]
+    fi
+}
+
 # Mount special file systems.
 specialMount() {
   local device="$1"
@@ -224,6 +250,9 @@ checkFS() {
 
     # Skip fsck for bcachefs - not implemented yet.
     if [ "$fsType" = bcachefs ]; then return 0; fi
+
+    # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
+    if [ "$fsType" = nilfs2 ]; then return 0; fi
 
     # Skip fsck for inherently readonly filesystems.
     if [ "$fsType" = squashfs ]; then return 0; fi
@@ -377,40 +406,7 @@ lustrateRoot () {
     exec 4>&-
 }
 
-# Function for waiting a device to appear.
-waitDevice() {
-    local device="$1"
 
-    # USB storage devices tend to appear with some delay.  It would be
-    # great if we had a way to synchronously wait for them, but
-    # alas...  So just wait for a few seconds for the device to
-    # appear.
-    if test ! -e $device; then
-        echo -n "waiting for device $device to appear..."
-        try=20
-        while [ $try -gt 0 ]; do
-            sleep 1
-            # also re-try lvm activation now that new block devices might have appeared
-            lvm vgchange -ay
-            # and tell udev to create nodes for the new LVs
-            udevadm trigger --action=add
-            if test -e $device; then break; fi
-            echo -n "."
-            try=$((try - 1))
-        done
-        echo
-        [ $try -ne 0 ]
-    fi
-}
-
-
-# Try to resume - all modules are loaded now.
-if test -e /sys/power/tuxonice/resume; then
-    if test -n "$(cat /sys/power/tuxonice/resume)"; then
-        echo 0 > /sys/power/tuxonice/user_interface/enabled
-        echo 1 > /sys/power/tuxonice/do_resume || echo "failed to resume..."
-    fi
-fi
 
 if test -e /sys/power/resume -a -e /sys/power/disk; then
     if test -n "@resumeDevice@" && waitDevice "@resumeDevice@"; then

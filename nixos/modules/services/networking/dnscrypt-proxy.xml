@@ -19,7 +19,7 @@
   <para>
     To enable the client proxy, set
     <programlisting>
-      services.dnscrypt-proxy.enable = true;
+<xref linkend="opt-services.dnscrypt-proxy.enable"/> = true;
     </programlisting>
   </para>
 
@@ -38,17 +38,17 @@
     DNS client, change the default proxy listening port to a
     non-standard value and point the other client to it:
     <programlisting>
-      services.dnscrypt-proxy.localPort = 43;
+<xref linkend="opt-services.dnscrypt-proxy.localPort"/> = 43;
     </programlisting>
   </para>
 
   <sect2><title>dnsmasq</title>
   <para>
     <programlisting>
-      {
-        services.dnsmasq.enable = true;
-        services.dnsmasq.servers = [ "127.0.0.1#43" ];
-      }
+{
+  <xref linkend="opt-services.dnsmasq.enable"/> = true;
+  <xref linkend="opt-services.dnsmasq.servers"/> = [ "127.0.0.1#43" ];
+}
     </programlisting>
   </para>
   </sect2>
@@ -56,10 +56,10 @@
   <sect2><title>unbound</title>
   <para>
     <programlisting>
-      {
-        services.unbound.enable = true;
-        services.unbound.forwardAddresses = [ "127.0.0.1@43" ];
-      }
+{
+  <xref linkend="opt-services.unbound.enable"/> = true;
+  <xref linkend="opt-services.unbound.forwardAddresses"/> = [ "127.0.0.1@43" ];
+}
     </programlisting>
   </para>
   </sect2>

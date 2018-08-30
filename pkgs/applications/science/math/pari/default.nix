@@ -1,24 +1,36 @@
 { stdenv, fetchurl
-, gmp, readline, libX11, libpthreadstubs, tex, perl }:
+, gmp, readline, libX11, tex, perl
+, withThread ? true, libpthreadstubs
+}:
+
+assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
 
   name = "pari-${version}";
-  version = "2.9.4";
+  version = "2.11.0";
 
   src = fetchurl {
-    url = "http://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "0ir6m3a8r46md5x6zk4xf159qra7aqparby9zk03k81hjrrxr72g";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
+    sha256 = "18f9yj8ffn3dxignbxj1x36771zbxy4js0r18mv6831ymb6cld9q";
   };
 
-  buildInputs = [ gmp readline libX11 libpthreadstubs tex perl ];
+  buildInputs = [
+    gmp
+    readline
+    libX11
+    tex
+    perl
+  ] ++ stdenv.lib.optionals withThread [
+    libpthreadstubs
+  ];
 
   configureScript = "./Configure";
   configureFlags = [
-    "--mt=pthread"
     "--with-gmp=${gmp.dev}"
     "--with-readline=${readline.dev}"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin";
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin"
+  ++ stdenv.lib.optional withThread "--mt=pthread";
 
   preConfigure = ''
     export LD=$CC
@@ -55,8 +67,8 @@ stdenv.mkDerivation rec {
           run 3 or 4 times faster.) gp2c currently only understands a subset
            of the GP language.
     '';
-    homepage    = "http://pari.math.u-bordeaux.fr/";
-    downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
+    homepage    = http://pari.math.u-bordeaux.fr;
+    downloadPage = http://pari.math.u-bordeaux.fr/download.html;
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ertes raskin AndersonTorres ];
     platforms   = platforms.linux ++ platforms.darwin;

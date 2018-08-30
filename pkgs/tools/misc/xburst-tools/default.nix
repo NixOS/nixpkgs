@@ -1,5 +1,5 @@
 { stdenv, fetchgit, libusb, libusb1, autoconf, automake, confuse, pkgconfig
-, gccCross ? null, crossPrefix
+, gccCross ? null
 }:
 
 let
@@ -18,9 +18,10 @@ stdenv.mkDerivation {
     sh autogen.sh
   '';
 
-  configureFlags = if gccCross != null then
-    "--enable-firmware CROSS_COMPILE=${crossPrefix}-"
-    else "";
+  configureFlags = stdenv.lib.optionals (gccCross != null) [
+    "--enable-firmware"
+    "CROSS_COMPILE=${gccCross.targetPrefix}"
+  ];
 
   hardeningDisable = [ "pic" "stackprotector" ];
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python2, zlib, pkgconfig, glib, ncurses, perl
-, attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
+, attr, libcap, vde2, texinfo, libuuid, flex, bison, lzo, snappy
 , libaio, libcap_ng, gnutls, pixman, autoconf
 , writeText
 }:

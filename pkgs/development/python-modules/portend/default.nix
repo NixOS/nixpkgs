@@ -1,19 +1,24 @@
 { stdenv, buildPythonPackage, fetchPypi
-, pytest, pytest-sugar, pytest-warnings, setuptools_scm
-, tempora }:
+, pytest, setuptools_scm, tempora, pytest-flake8 }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "portend";
-  version = "2.2";
-
-  buildInputs = [ pytest pytest-sugar pytest-warnings setuptools_scm ];
-  propagatedBuildInputs = [ tempora ];
+  version = "2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc48d3d99e1eaf2e9406c729f8848bfdaf87876cd3560dc3ec6c16714f529586";
+    sha256 = "b7ce7d35ea262415297cbfea86226513e77b9ee5f631d3baa11992d663963719";
   };
+
+  nativeBuildInputs = [ setuptools_scm ];
+
+  propagatedBuildInputs = [ tempora ];
+
+  checkInputs = [ pytest pytest-flake8 ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with stdenv.lib; {
     description = "Monitor TCP ports for bound or unbound states";

@@ -1,8 +1,8 @@
 { fetchurl, fetchpatch, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, json-glib, libcroco, gettext, libsecret
 , python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
 , libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
-, libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42
-, libpulseaudio, libical, nss, gobjectIntrospection, gstreamer, wrapGAppsHook
+, libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
+, libpulseaudio, libical, gobjectIntrospection, gstreamer, wrapGAppsHook
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet
 , sassc, systemd, gst_all_1 }:
 
@@ -13,11 +13,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "gnome-shell-${version}";
-  version = "3.28.0";
+  version = "3.28.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0kmsh305cfr3fg40rhwykqbl466lwcq9djda25kf29ib7h6w1pn7";
+    sha256 = "0xm2a8inj2zkrpgkhy69rbqh44q62gpwm4javzbvvvgx0srza90w";
   };
 
   # Needed to find /etc/NetworkManager/VPN
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales
-    sassc
+    sassc desktop-file-utils
   ];
   buildInputs = with gnome3; [
     systemd caribou
@@ -59,6 +59,7 @@ in stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./fix-paths.patch;
+      inherit (gnome3) libgnomekbd;
       inherit unzip;
     })
   ];

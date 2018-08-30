@@ -86,13 +86,13 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     {
-      users.extraUsers = optionalAttrs (cfg.user == "dspam") (singleton
+      users.users = optionalAttrs (cfg.user == "dspam") (singleton
         { name = "dspam";
           group = cfg.group;
           uid = config.ids.uids.dspam;
         });
 
-      users.extraGroups = optionalAttrs (cfg.group == "dspam") (singleton
+      users.groups = optionalAttrs (cfg.group == "dspam") (singleton
         { name = "dspam";
           gid = config.ids.gids.dspam;
         });

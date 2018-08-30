@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, python2Packages, makeWrapper, docutils, unzip
+{ stdenv, fetchurl, python2Packages, makeWrapper, unzip
 , guiSupport ? false, tk ? null
-, ApplicationServices, cf-private }:
+, ApplicationServices }:
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
-  version = "4.5";
+  version = "4.7";
   name = "mercurial-${version}";
   inherit (python2Packages) docutils hg-git dulwich python;
 in python2Packages.buildPythonApplication {
@@ -13,7 +13,7 @@ in python2Packages.buildPythonApplication {
 
   src = fetchurl {
     url = "https://mercurial-scm.org/release/${name}.tar.gz";
-    sha256 = "0rgjy42zdlbzgp4qq49amzplfcvycyijf4kdhc5wk3fqz7cki4sd";
+    sha256 = "17rl1lyvr3qa5x73xyiwnv09wwiwjd18f01gvispzyvpgx1v3309";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
@@ -56,8 +56,8 @@ in python2Packages.buildPythonApplication {
   meta = {
     inherit version;
     description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = http://mercurial.selenic.com/;
-    downloadPage = "http://mercurial.selenic.com/release/";
+    homepage = https://www.mercurial-scm.org;
+    downloadPage = https://www.mercurial-scm.org/release/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     updateWalker = true;

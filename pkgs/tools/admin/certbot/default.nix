@@ -4,13 +4,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "certbot-${version}";
-  version = "0.22.2";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     rev = "v${version}";
-    sha256 = "08x80x9d71j84mwjm5wzd0x5gcw6gwyvkvadi2js39js6hfnc6jg";
+    sha256 = "0gsq4si0bqwzd7ywf87y7bbprqg1m72qdj11h64qmwb5zl4vh444";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -41,6 +41,8 @@ pythonPackages.buildPythonApplication rec {
                        --prefix PATH : "${dialog}/bin:$PATH"
     done
   '';
+
+  doCheck = !stdenv.isDarwin; # On Hydra Darwin tests fail with "Too many open files".
 
   meta = with stdenv.lib; {
     homepage = src.meta.homepage;

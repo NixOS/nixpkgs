@@ -1,11 +1,9 @@
-{ stdenv
-, pkgs
+{ lib
 , buildPythonPackage
-, python
 , fetchPypi
+, pythonOlder
 , html5lib
 , pytest
-, cython
 , preshed
 , ftfy
 , numpy
@@ -16,52 +14,49 @@
 , dill
 , requests
 , thinc
-, pip
 , regex
+, cymem
+, pathlib
+, msgpack-python
+, msgpack-numpy
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.0.9";
+  version = "2.0.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ihkhflhyz67bp73kfjqfrbcgdxi2msz5asbrh0pkk590c4vmms5";
+    sha256 = "b220ebee412c19613c26b2c1870b60473834bd686cec49553ce5f184164d3359";
   };
 
   prePatch = ''
-    substituteInPlace setup.py --replace \
-      "'html5lib==1.0b8'," \
-      "'html5lib',"
-
-    substituteInPlace setup.py --replace \
-      "'regex==2017.4.5'," \
-      "'regex',"
-
-    substituteInPlace setup.py --replace \
-      "'ftfy==2017.4.5'," \
-      "'ftfy',"
-
-    substituteInPlace setup.py --replace \
-      "'pathlib'," \
-      "\"pathlib; python_version<'3.4'\","
+    substituteInPlace setup.py \
+      --replace "html5lib==" "html5lib>=" \
+      --replace "regex==" "regex>=" \
+      --replace "ftfy==" "ftfy>=" \
+      --replace "msgpack-python==" "msgpack-python>=" \
+      --replace "msgpack-numpy==" "msgpack-numpy>=" \
+      --replace "pathlib" "pathlib; python_version<\"3.4\""
   '';
 
   propagatedBuildInputs = [
-   cython
-   dill
-   html5lib
-   murmurhash
    numpy
-   plac
+   murmurhash
+   cymem
    preshed
-   regex
-   requests
-   six
    thinc
+   plac
+   six
+   html5lib
    ujson
+   dill
+   requests
+   regex
    ftfy
-  ];
+   msgpack-python
+   msgpack-numpy
+  ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
     pytest
@@ -72,7 +67,7 @@ buildPythonPackage rec {
   #   ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   # '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = https://github.com/explosion/spaCy;
     license = licenses.mit;

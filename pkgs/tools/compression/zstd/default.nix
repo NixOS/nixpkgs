@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub, gnugrep
 , fixDarwinDylibNames
+, file
 , legacySupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
-    sha256 = "090ba7dnv5z2v4vlb8b275b0n7cqsdzjqvr3b6a0w65z13mgy2nw";
+    sha256 = "0fpv8k16s14g0r552mhbh0mkr716cqy41d2znyrvks6qfphkgir4";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
@@ -18,6 +19,10 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
   ];
+
+  checkInputs = [ file ];
+  doCheck = false; # fails with "zstd: --list does not support reading from standard input"
+                   # probably a bug
 
   installFlags = [
     "PREFIX=$(out)"

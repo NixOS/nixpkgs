@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, autoreconfHook, gconf, intltool, makeWrapper, pkgconfig
-, vala, wrapGAppsHook, atk, dbus, dconf ? null, glib, gdk_pixbuf, gobjectIntrospection, gtk2
+, vala, wrapGAppsHook, dbus, dconf ? null, glib, gdk_pixbuf, gobjectIntrospection, gtk2
 , gtk3, gtk-doc, isocodes, python3, json-glib, libnotify ? null, enablePythonLibrary ? true
 , enableUI ? true, withWayland ? false, libxkbcommon ? null, wayland ? null }:
 
@@ -125,6 +125,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = false; # requires X11 daemon
   doInstallCheck = true;
   installCheckPhase = "$out/bin/ibus version";
 

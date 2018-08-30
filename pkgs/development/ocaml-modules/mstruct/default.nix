@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, opam
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
 , cstruct
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 		sha256 = "1p4ygwzs3n1fj4apfib0z0sabpph21bkq1dgjk4bsa59pq4prncm";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder opam ];
+	buildInputs = [ ocaml findlib jbuilder ];
 
 	propagatedBuildInputs = [ cstruct ];
 

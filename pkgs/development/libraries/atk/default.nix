@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib
-, fixDarwinDylibNames, libintlOrEmpty, gobjectIntrospection, gnome3
+, fixDarwinDylibNames, gobjectIntrospection, gnome3
 }:
 
 let
@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = libintlOrEmpty
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext gobjectIntrospection ];
 
@@ -34,8 +33,6 @@ stdenv.mkDerivation rec {
     # Required by atk.pc
     glib
   ];
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   doCheck = true;
 

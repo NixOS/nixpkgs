@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "lf-${version}";
-  version = "1";
+  version = "8";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "0mq83m7mvavd0dzhk8g6ffldy57i22n0846yzqnlz733chiy3anz";
+    sha256 = "0rmcac9wx9lldl57m1cim1adf2fqkva1yi4v6934jgccqhlqvk58";
   };
 
   goPackagePath = "github.com/gokcehan/lf";
@@ -24,8 +24,12 @@ buildGoPackage rec {
     runHook preBuild
     runHook renameImports
     cd go/src/${goPackagePath}
-    go install -ldflags="-s -w -X main.gVersion=${version}"
+    go install -ldflags="-s -w -X main.gVersion=r${version}"
     runHook postBuild
+  '';
+
+  postInstall = ''
+    install -D --mode=444 lf.1 $out/share/man/man1/lf.1
   '';
 
   meta = with stdenv.lib; {
@@ -38,7 +42,7 @@ buildGoPackage rec {
     '';
     homepage = https://godoc.org/github.com/gokcehan/lf;
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }

@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg
+{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
 , cpuid, ocb-stubblr
-, cstruct, zarith, ppx_sexp_conv, sexplib
+, cstruct, zarith, ppx_sexp_conv
 , cstruct-lwt ? null
 }:
 
@@ -11,21 +11,36 @@ stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-nocrypto-${version}";
   version = "0.5.4";
 
-  src = fetchFromGitHub {
-    owner  = "mirleft";
-    repo   = "ocaml-nocrypto";
-    rev    = "v${version}";
-    sha256 = "0nhnlpbqh3mf9y2cxivlvfb70yfbdpvg6jslzq64xblpgjyg443p";
+  src = fetchurl {
+    url = "https://github.com/mirleft/ocaml-nocrypto/releases/download/v${version}/nocrypto-${version}.tbz";
+    sha256 = "0zshi9hlhcz61n5z1k6fx6rsi0pl4xgahsyl2jp0crqkaf3hqwlg";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg cpuid ocb-stubblr
-    ppx_sexp_conv ];
-  propagatedBuildInputs = [ cstruct zarith sexplib ] ++ optional withLwt cstruct-lwt;
+  unpackCmd = "tar xjf $curSrc";
 
-  buildPhase = ''
-    LD_LIBRARY_PATH=${cpuid}/lib/ocaml/${ocaml.version}/site-lib/stubslibs/ \
-    ${topkg.buildPhase} --with-lwt ${boolToString withLwt}
-  '';
+  patches = [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/nocrypto/nocrypto.0.5.4-1/files/0001-add-missing-runtime-dependencies-in-_tags.patch";
+      sha256 = "1asybwj3rl07b4q4cxwy80a7j17j0i5vzz77p38hymilhc2ky7xn";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/nocrypto/nocrypto.0.5.4-1/files/0002-add-ppx_sexp_conv-as-a-runtime-dependency-in-the-pac.patch";
+      sha256 = "0zmp64n5fgkawpkyw0vv0bg0i2c3xbsxqy17vwy92nf5rbardi1r";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/nocrypto/nocrypto.0.5.4-1/files/0003-Auto-detect-ppx_sexp_conv-runtime-library.patch";
+      sha256 = "0lngbg5gyd5gs56lbjh6g86cps1y8x1xsqzi0vi1v28al1gn5dhw";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/nocrypto/nocrypto.0.5.4-1/files/0004-pack-package-workaround-ocamlbuild-272.patch";
+      sha256 = "16k0w78plvqhl17qiqq1mckxhhcdysqgs94l54a1bn0l6fx3rvb9";
+    })
+  ];
+
+  buildInputs = [ ocaml findlib ocamlbuild topkg cpuid ocb-stubblr ];
+  propagatedBuildInputs = [ cstruct ppx_sexp_conv zarith ] ++ optional withLwt cstruct-lwt;
+
+  buildPhase = "${topkg.buildPhase} --with-lwt ${boolToString withLwt}";
   inherit (topkg) installPhase;
 
   meta = {

@@ -1,4 +1,4 @@
-{ stdenv, procps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
+{ stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 let wrapper = stdenv.mkDerivation rec {
   name = "wrapper-${version}";
@@ -27,10 +27,10 @@ let wrapper = stdenv.mkDerivation rec {
 in
 
 stdenv.mkDerivation rec {
-  name = "i2p-0.9.33";
+  name = "i2p-0.9.35";
   src = fetchurl {
     url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
-    sha256 = "1hlildi34p34xgpm0gqh09r2jb6nsa7a52gr074r6203xkl2racw";
+    sha256 = "02p76vn1777lgv4zs27r6i9s4yk7b2x61b25i8dqmn6j60y3fa4g";
   };
   buildInputs = [ jdk ant gettext which ];
   patches = [ ./i2p.patch ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       -e "s#uname#${coreutils}/bin/uname#" \
       -e "s#which#${which}/bin/which#" \
       -e "s#%gettext%#${gettext}/bin/gettext#" \
-      -e "s#/usr/ucb/ps#${procps}/bin/ps#" \
+      -e "s#/usr/ucb/ps#${ps}/bin/ps#" \
       -e "s#/usr/bin/tr#${coreutils}/bin/tr#" \
       -e "s#%INSTALL_PATH#$out#" \
       -e 's#%USER_HOME#$HOME#' \

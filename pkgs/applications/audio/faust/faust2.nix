@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , makeWrapper
 , pkgconfig
-, clang
 , llvm
 , emscripten
 , openssl
@@ -73,12 +72,19 @@ let
       sed '52iLLVM_VERSION=${stdenv.lib.getVersion llvm}' -i compiler/Makefile.unix
     '';
 
+    postPatch = ''
+      # fix build with llvm 5.0.2 by adding it to the list of known versions
+      # TODO: check if still needed on next update
+      substituteInPlace compiler/Makefile.unix \
+        --replace "5.0.0 5.0.1" "5.0.0 5.0.1 5.0.2"
+    '';
+
     # Remove most faust2appl scripts since they won't run properly
     # without additional paths setup. See faust.wrap,
     # faust.wrapWithBuildEnv.
     postInstall = ''
       # syntax error when eval'd directly
-      pattern="faust2!(svg)"
+      pattern="faust2!(*@(atomsnippets|graph|graphviewer|md|plot|sig|sigviewer|svg))"
       (shopt -s extglob; rm "$out"/bin/$pattern)
     '';
 
@@ -192,6 +198,7 @@ let
       buildInputs = [ makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
+
 
       postFixup = ''
 

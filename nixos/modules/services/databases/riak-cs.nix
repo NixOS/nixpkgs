@@ -145,7 +145,7 @@ in
       ${cfg.extraAdvancedConfig}
     '';
 
-    users.extraUsers.riak-cs = {
+    users.users.riak-cs = {
       name = "riak-cs";
       uid = config.ids.uids.riak-cs;
       group = "riak";

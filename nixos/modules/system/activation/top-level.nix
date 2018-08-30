@@ -46,7 +46,7 @@ let
 
         ln -s ${kernelPath} $out/kernel
         ln -s ${config.system.modulesTree} $out/kernel-modules
-        ${optionalString (pkgs.stdenv.platform.kernelDTB or false) ''
+        ${optionalString (pkgs.stdenv.hostPlatform.platform.kernelDTB or false) ''
           ln -s ${config.boot.kernelPackages.kernel}/dtbs $out/dtbs
         ''}
 
@@ -74,7 +74,7 @@ let
       echo -n "$configurationName" > $out/configuration-name
       echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
-      echo -n "$system" > $out/system
+      echo -n "${pkgs.stdenv.hostPlatform.system}" > $out/system
 
       mkdir $out/fine-tune
       childCount=0
@@ -127,7 +127,8 @@ let
       configurationName = config.boot.loader.grub.configurationName;
 
       # Needed by switch-to-configuration.
-      perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
+
+      perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
   } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
 
   # Replace runtime dependencies
@@ -174,7 +175,7 @@ in
 
     system.boot.loader.kernelFile = mkOption {
       internal = true;
-      default = pkgs.stdenv.platform.kernelTarget;
+      default = pkgs.stdenv.hostPlatform.platform.kernelTarget;
       type = types.str;
       description = ''
         Name of the kernel file to be passed to the bootloader.
@@ -225,7 +226,7 @@ in
       default = [];
       example = lib.literalExample "[ ({ original = pkgs.openssl; replacement = pkgs.callPackage /path/to/openssl { }; }) ]";
       type = types.listOf (types.submodule (
-        { options, ... }: {
+        { ... }: {
           options.original = mkOption {
             type = types.package;
             description = "The original package to override.";

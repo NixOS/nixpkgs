@@ -8,10 +8,12 @@ let
 
   keepalivedConf = pkgs.writeText "keepalived.conf" ''
     global_defs {
+      ${optionalString cfg.enableScriptSecurity "enable_script_security"}
       ${snmpGlobalDefs}
       ${cfg.extraGlobalDefs}
     }
 
+    ${vrrpScriptStr}
     ${vrrpInstancesStr}
     ${cfg.extraConfig}
   '';
@@ -25,6 +27,22 @@ let
     + optionalString enableRfcV3 "enable_snmp_rfcv3\n"
     + optionalString enableTraps "enable_traps"
   );
+
+  vrrpScriptStr = concatStringsSep "\n" (map (s:
+    ''
+      vrrp_script ${s.name} {
+        script "${s.script}"
+        interval ${toString s.interval}
+        fall ${toString s.fall}
+        rise ${toString s.rise}
+        timeout ${toString s.timeout}
+        weight ${toString s.weight}
+        user ${s.user} ${optionalString (s.group != null) s.group}
+
+        ${s.extraConfig}
+      }
+    ''
+  ) vrrpScripts);
 
   vrrpInstancesStr = concatStringsSep "\n" (map (i:
     ''
@@ -49,6 +67,18 @@ let
           ${concatMapStringsSep "\n" virtualIpLine i.virtualIps}
         }
 
+        ${optionalString (builtins.length i.trackScripts > 0) ''
+          track_script {
+            ${concatStringsSep "\n" i.trackScripts}
+          }
+        ''}
+
+        ${optionalString (builtins.length i.trackInterfaces > 0) ''
+          track_interface {
+            ${concatStringsSep "\n" i.trackInterfaces}
+          }
+        ''}
+
         ${i.extraConfig}
       }
     ''
@@ -63,6 +93,12 @@ let
   );
 
   notNullOrEmpty = s: !(s == null || s == "");
+
+  vrrpScripts = mapAttrsToList (name: config:
+    {
+      inherit name;
+    } // config
+  ) cfg.vrrpScripts;
 
   vrrpInstances = mapAttrsToList (iName: iConfig:
     {
@@ -86,13 +122,19 @@ let
     { assertion = !i.vmacXmitBase || i.useVmac;
       message = "services.keepalived.vrrpInstances.${i.name}.vmacXmitBase has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
     }
-  ] ++ flatten (map (virtualIpAssertions i.name) i.virtualIps);
+  ] ++ flatten (map (virtualIpAssertions i.name) i.virtualIps)
+    ++ flatten (map (vrrpScriptAssertion i.name) i.trackScripts);
 
   virtualIpAssertions = vrrpName: ip: [
     { assertion = ip.addr != "";
       message = "The 'addr' option for an services.keepalived.vrrpInstances.${vrrpName}.virtualIps entry cannot be empty.";
     }
   ];
+
+  vrrpScriptAssertion = vrrpName: scriptName: {
+    assertion = builtins.hasAttr scriptName cfg.vrrpScripts;
+    message = "services.keepalived.vrrpInstances.${vrrpName} trackscript ${scriptName} is not defined in services.keepalived.vrrpScripts.";
+  };
 
   pidFile = "/run/keepalived.pid";
 
@@ -107,6 +149,14 @@ in
         default = false;
         description = ''
           Whether to enable Keepalived.
+        '';
+      };
+
+      enableScriptSecurity = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Don't run scripts configured to be run as root if any part of the path is writable by a non-root user.
         '';
       };
 
@@ -181,8 +231,16 @@ in
 
       };
 
+      vrrpScripts = mkOption {
+        type = types.attrsOf (types.submodule (import ./vrrp-script-options.nix {
+          inherit lib;
+        }));
+        default = {};
+        description = "Declarative vrrp script config";
+      };
+
       vrrpInstances = mkOption {
-        type = types.attrsOf (types.submodule (import ./vrrp-options.nix {
+        type = types.attrsOf (types.submodule (import ./vrrp-instance-options.nix {
           inherit lib;
         }));
         default = {};

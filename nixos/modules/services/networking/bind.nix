@@ -27,6 +27,7 @@ let
         forwarders { ${concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
         directory "/var/run/named";
         pid-file "/var/run/named/named.pid";
+        ${cfg.extraOptions}
       };
 
       ${cfg.extraConfig}
@@ -141,6 +142,15 @@ in
         ";
       };
 
+      extraOptions = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Extra lines to be added verbatim to the options section of the
+          generated named configuration file.
+        '';
+      };
+
       configFile = mkOption {
         type = types.path;
         default = confFile;
@@ -160,7 +170,7 @@ in
 
   config = mkIf config.services.bind.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = bindUser;
         uid = config.ids.uids.bind;
         description = "BIND daemon user";

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, autoconf, automake, libtool, makeWrapper
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
 , pkgconfig, cmake, gnumake, yasm, python2
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
@@ -13,13 +13,13 @@
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, wayland
+, sqlite, mysql, nasm, gnutls, libva, libdrm, wayland
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
 , libplist, p11-kit, zlib
-, dbusSupport ? true, dbus_libs ? null
+, dbusSupport ? true, dbus ? null
 , joystickSupport ? true, cwiid ? null
 , nfsSupport ? true, libnfs ? null
 , pulseSupport ? true, libpulseaudio ? null
@@ -30,7 +30,7 @@
 , vdpauSupport ? true, libvdpau ? null
 }:
 
-assert dbusSupport  -> dbus_libs != null;
+assert dbusSupport  -> dbus != null;
 assert nfsSupport   -> libnfs != null;
 assert pulseSupport -> libpulseaudio != null;
 assert rtmpSupport  -> rtmpdump != null;
@@ -121,7 +121,7 @@ in stdenv.mkDerivation rec {
       gnutls libidn libtasn1 nasm p11-kit
       libxml2 yasm python2
       boost libmicrohttpd
-      gettext pcre-cpp yajl fribidi libva
+      gettext pcre-cpp yajl fribidi libva libdrm
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto libXt libXmu libXext xextproto
       libXinerama libXrandr randrproto libXtst libXfixes fixesproto
@@ -139,7 +139,7 @@ in stdenv.mkDerivation rec {
       ffmpeg
       # libdvdcss libdvdnav libdvdread
     ]
-    ++ lib.optional  dbusSupport     dbus_libs
+    ++ lib.optional  dbusSupport     dbus
     ++ lib.optionals joystickSupport [ cwiid ]
     ++ lib.optional  nfsSupport      libnfs
     ++ lib.optional  pulseSupport    libpulseaudio

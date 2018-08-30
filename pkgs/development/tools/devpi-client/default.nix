@@ -1,5 +1,4 @@
 { stdenv
-, lib
 , pythonPackages
 , glibcLocales
 , devpi-server

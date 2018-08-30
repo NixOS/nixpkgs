@@ -15,22 +15,23 @@
 , qtx11extras
 , sshfs
 , makeWrapper
+, kwayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "kdeconnect";
-  version = "1.2.1";
+  version = "1.3.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-kde-v${version}.tar.xz";
-    sha256 = "01v432p9ylwss9gl6fvby8954bnjd91dni5jk1i44vv7x26yn8zg";
+    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-kde-${version}.tar.xz";
+    sha256 = "0rzjbn4d2lh81n19dd3a5ilm8qml3zs3g3ahg75avcw8770rr344";
   };
 
   buildInputs = [
     libfakekey libXtst
     ki18n kiconthemes kcmutils kconfigwidgets kdbusaddons knotifications
-    qca-qt5 qtx11extras makeWrapper
+    qca-qt5 qtx11extras makeWrapper kwayland
   ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

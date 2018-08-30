@@ -1,9 +1,10 @@
 { stdenv, fetchurl, zlib, ncurses, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
 , platformTools
+, fullNDK ? false # set to true if you want other parts of the NDK
+                  # that is not used by Nixpkgs like sources,
+                  # examples, docs, or LLVM toolchains
 }:
-
-assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "android-ndk-r8e";
@@ -51,7 +52,14 @@ stdenv.mkDerivation rec {
         -d $out/libexec/${name} < ${ ./make-standalone-toolchain_r8e.patch }
     cd ${pkg_path}
 
-    find $out \( \
+  '' + lib.optionalString (!fullNDK) ''
+    # Steps to reduce output size
+    rm -rf docs sources tests
+    # We only support cross compiling with gcc for now
+    rm -rf toolchains/*-clang* toolchains/llvm-*
+
+  '' + ''
+    find ${pkg_path}/toolchains \( \
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm -0100 \) \
         \) -exec patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-*so.? \

@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib pcre expat sqlite openssl unixODBC mysql.connector-c ];
 
+  MYSQL_DIR = mysql.connector-c;
+  MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
+
   cmakeFlags = [
     "-DPOCO_UNBUNDLED=ON"
   ];

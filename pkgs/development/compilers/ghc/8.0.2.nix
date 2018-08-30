@@ -5,7 +5,7 @@
 , bootPkgs, hscolour
 , coreutils, fetchpatch, fetchurl, perl, sphinx
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
 , useLLVM ? !targetPlatform.isx86
 , # LLVM is conceptually a run-time-only depedendency, but for
@@ -15,7 +15,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null
+  enableIntegerSimple ? !(gmp.meta.available or false), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
@@ -23,6 +23,10 @@
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
   enableShared ? true
+
+, # What flavour to build. An empty string indicates no
+  # specific flavour and falls back to ghc default values.
+  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 }:
 
 assert !enableIntegerSimple -> gmp != null;
@@ -36,11 +40,13 @@ let
     "${targetPlatform.config}-";
 
   buildMK = ''
+    BuildFlavour = ${ghcFlavour}
+    ifneq \"\$(BuildFlavour)\" \"\"
+    include mk/flavours/\$(BuildFlavour).mk
+    endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    INTEGER_LIBRARY = integer-simple
+    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    BuildFlavour = perf-cross
     Stage1Only = YES
     HADDOCK_DOCS = NO
   '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
@@ -84,7 +90,10 @@ stdenv.mkDerivation rec {
       extraPrefix = "libraries/Cabal/";
     })
   ] ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
-    ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch
+    ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
+
+  postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
   preConfigure = ''
@@ -102,6 +111,7 @@ stdenv.mkDerivation rec {
     export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
     export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
     export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
@@ -118,7 +128,7 @@ stdenv.mkDerivation rec {
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && ! enableIntegerSimple) [
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc") [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
@@ -128,12 +138,13 @@ stdenv.mkDerivation rec {
     "--disable-large-address-space"
   ];
 
-  # Hack to make sure we never to the relaxation `$PATH` and hooks support for
-  # compatability. This will be replaced with something clearer in a future
-  # masss-rebuild.
-  crossConfig = true;
+  # Make sure we never relax`$PATH` and hooks support for compatability.
+  strictDeps = true;
 
-  nativeBuildInputs = [ ghc perl hscolour sphinx ];
+  nativeBuildInputs = [
+    perl sphinx
+    ghc hscolour
+  ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
@@ -150,10 +161,13 @@ stdenv.mkDerivation rec {
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
-  # zsh and other shells are smart about `{ghc}` but bash isn't, and doesn't
-  # treat that as a unary `{x,y,z,..}` repetition.
+  hardeningDisable = [ "format" ];
+
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
+    for bin in "$out"/lib/${name}/bin/*; do
+      isELF "$bin" || continue
+      paxmark m "$bin"
+    done
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
@@ -170,6 +184,7 @@ stdenv.mkDerivation rec {
     inherit bootPkgs targetPrefix;
 
     inherit llvmPackages;
+    inherit enableShared;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-8.0.2";

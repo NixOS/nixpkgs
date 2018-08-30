@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch
-, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
+{ mkDerivation, lib, fetchFromGitHub
+, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 }:
 
@@ -16,12 +16,15 @@ in mkDerivation rec {
     sha256 = "1m35ly6miwy8ivsln3j1bfv0nxbc4gyqnj7f847zzp53jsqrm3mq";
   };
 
-  patches = [ ./sddm-ignore-config-mtime.patch ];
+  patches = [
+    ./sddm-ignore-config-mtime.patch
+    ./qt511.patch
+  ];
 
   postPatch =
-    # Module Qt5::Test must be included in `find_package` before it is used.
+    # Fix missing include for gettimeofday()
     ''
-      sed -i CMakeLists.txt -e '/find_package(Qt5/ s|)| Test)|'
+      sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
     '';
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
@@ -59,5 +62,6 @@ in mkDerivation rec {
     homepage    = https://github.com/sddm/sddm;
     maintainers = with maintainers; [ abbradar ttuegel ];
     platforms   = platforms.linux;
+    license     = licenses.gpl2Plus;
   };
 }

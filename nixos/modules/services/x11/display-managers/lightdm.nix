@@ -13,9 +13,9 @@ let
   wmDefault = xcfg.windowManager.default;
   hasDefaultUserSession = dmDefault != "none" || wmDefault != "none";
 
-  inherit (pkgs) stdenv lightdm writeScript writeText;
+  inherit (pkgs) lightdm writeScript writeText;
 
-  # lightdm runs with clearenv(), but we need a few things in the enviornment for X to startup
+  # lightdm runs with clearenv(), but we need a few things in the environment for X to startup
   xserverWrapper = writeScript "xserver-wrapper"
     ''
       #! ${pkgs.bash}/bin/bash
@@ -42,14 +42,14 @@ let
     ''
       [LightDM]
       ${optionalString cfg.greeter.enable ''
-        greeter-user = ${config.users.extraUsers.lightdm.name}
+        greeter-user = ${config.users.users.lightdm.name}
         greeters-directory = ${cfg.greeter.package}
       ''}
-      sessions-directory = ${dmcfg.session.desktops}
+      sessions-directory = ${dmcfg.session.desktops}/share/xsessions
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
-      session-wrapper = ${dmcfg.session.script}
+      session-wrapper = ${dmcfg.session.wrapper}
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
@@ -72,6 +72,7 @@ in
   # preferred.
   imports = [
     ./lightdm-greeters/gtk.nix
+    ./lightdm-greeters/mini.nix
   ];
 
   options = {
@@ -175,19 +176,11 @@ in
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
+      { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
         message = ''
           LightDM auto-login requires that services.xserver.desktopManager.default and
           services.xserver.windowMananger.default are set to valid values. The current
           default session: ${defaultSessionName} is not valid.
-        '';
-      }
-      { assertion = hasDefaultUserSession -> elem defaultSessionName dmcfg.session.names;
-        message = ''
-          services.xserver.desktopManager.default and
-          services.xserver.windowMananger.default are not set to valid
-          values. The current default session: ${defaultSessionName}
-          is not valid.
         '';
       }
       { assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
@@ -216,8 +209,11 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
-    # lightdm uses the accounts daemon to rember language/window-manager per user
+    # lightdm uses the accounts daemon to remember language/window-manager per user
     services.accounts-daemon.enable = true;
+
+    # Enable the accounts daemon to find lightdm's dbus interface
+    environment.systemPackages = [ lightdm ];
 
     security.pam.services.lightdm = {
       allowNullPassword = true;
@@ -251,14 +247,14 @@ in
         session  include   lightdm
     '';
 
-    users.extraUsers.lightdm = {
+    users.users.lightdm = {
       createHome = true;
       home = "/var/lib/lightdm-data";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
     };
 
-    users.extraGroups.lightdm.gid = config.ids.gids.lightdm;
+    users.groups.lightdm.gid = config.ids.gids.lightdm;
     services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..
     services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };

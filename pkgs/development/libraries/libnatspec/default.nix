@@ -19,6 +19,5 @@ stdenv.mkDerivation (rec {
     maintainers = [ ];
   };
 } // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
-  NIX_LDFLAGS = "-liconv";
   propagatedBuildInputs = [ libiconv ];
 })

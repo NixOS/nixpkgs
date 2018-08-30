@@ -81,7 +81,7 @@ let
     static = {
       name = "Static";
       nodes.router = router;
-      nodes.client = { config, pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -98,7 +98,7 @@ let
           ];
         };
       };
-      testScript = { nodes, ... }:
+      testScript = { ... }:
         ''
           startAll;
 
@@ -134,7 +134,7 @@ let
     dhcpSimple = {
       name = "SimpleDHCP";
       nodes.router = router;
-      nodes.client = { config, pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -150,7 +150,7 @@ let
           };
         };
       };
-      testScript = { nodes, ... }:
+      testScript = { ... }:
         ''
           startAll;
 
@@ -189,7 +189,7 @@ let
     dhcpOneIf = {
       name = "OneInterfaceDHCP";
       nodes.router = router;
-      nodes.client = { config, pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -202,7 +202,7 @@ let
           interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
         };
       };
-      testScript = { nodes, ... }:
+      testScript = { ... }:
         ''
           startAll;
 
@@ -229,7 +229,7 @@ let
         '';
     };
     bond = let
-      node = address: { config, pkgs, ... }: with pkgs.lib; {
+      node = address: { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -249,7 +249,7 @@ let
       name = "Bond";
       nodes.client1 = node "192.168.1.1";
       nodes.client2 = node "192.168.1.2";
-      testScript = { nodes, ... }:
+      testScript = { ... }:
         ''
           startAll;
 
@@ -266,7 +266,7 @@ let
         '';
     };
     bridge = let
-      node = { address, vlan }: { config, pkgs, ... }: with pkgs.lib; {
+      node = { address, vlan }: { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ vlan ];
         networking = {
           useNetworkd = networkd;
@@ -280,7 +280,7 @@ let
       name = "Bridge";
       nodes.client1 = node { address = "192.168.1.2"; vlan = 1; };
       nodes.client2 = node { address = "192.168.1.3"; vlan = 2; };
-      nodes.router = { config, pkgs, ... }: with pkgs.lib; {
+      nodes.router = { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -293,7 +293,7 @@ let
             [ { address = "192.168.1.1"; prefixLength = 24; } ];
         };
       };
-      testScript = { nodes, ... }:
+      testScript = { ... }:
         ''
           startAll;
 
@@ -319,7 +319,7 @@ let
     macvlan = {
       name = "MACVLAN";
       nodes.router = router;
-      nodes.client = { config, pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -329,7 +329,7 @@ let
           interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
         };
       };
-      testScript = { nodes, ... }:
+      testScript = { ... }:
         ''
           startAll;
 
@@ -356,7 +356,7 @@ let
         '';
     };
     sit = let
-      node = { address4, remote, address6 }: { config, pkgs, ... }: with pkgs.lib; {
+      node = { address4, remote, address6 }: { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -377,7 +377,7 @@ let
       name = "Sit";
       nodes.client1 = node { address4 = "192.168.1.1"; remote = "192.168.1.2"; address6 = "fc00::1"; };
       nodes.client2 = node { address4 = "192.168.1.2"; remote = "192.168.1.1"; address6 = "fc00::2"; };
-      testScript = { nodes, ... }:
+      testScript = { ... }:
         ''
           startAll;
 
@@ -398,7 +398,7 @@ let
         '';
     };
     vlan = let
-      node = address: { config, pkgs, ... }: with pkgs.lib; {
+      node = address: { pkgs, ... }: with pkgs.lib; {
         #virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -418,7 +418,7 @@ let
       name = "vlan";
       nodes.client1 = node "192.168.1.1";
       nodes.client2 = node "192.168.1.2";
-      testScript = { nodes, ... }:
+      testScript = { ... }:
         ''
           startAll;
 
@@ -448,8 +448,8 @@ let
 
       testScript = ''
         my $targetList = <<'END';
-        tap0: tap UNKNOWN_FLAGS:800 user 0
-        tun0: tun UNKNOWN_FLAGS:800 user 0
+        tap0: tap persist user 0
+        tun0: tun persist user 0
         END
 
         # Wait for networking to come up
@@ -476,7 +476,7 @@ let
     };
     privacy = {
       name = "Privacy";
-      nodes.router = { config, pkgs, ... }: {
+      nodes.router = { ... }: {
         virtualisation.vlans = [ 1 ];
         boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
         networking = {
@@ -502,7 +502,7 @@ let
           '';
         };
       };
-      nodes.client = { config, pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -514,7 +514,7 @@ let
           };
         };
       };
-      testScript = { nodes, ... }:
+      testScript = { ... }:
         ''
           startAll;
 
@@ -552,15 +552,15 @@ let
 
       testScript = ''
         my $targetIPv4Table = <<'END';
-        10.0.0.0/16 scope link mtu 1500 
+        10.0.0.0/16 proto static scope link mtu 1500 
         192.168.1.0/24 proto kernel scope link src 192.168.1.2 
-        192.168.2.0/24 via 192.168.1.1 
+        192.168.2.0/24 via 192.168.1.1 proto static 
         END
 
         my $targetIPv6Table = <<'END';
         2001:1470:fffd:2097::/64 proto kernel metric 256 pref medium
-        2001:1470:fffd:2098::/64 via fdfd:b3f0::1 metric 1024 pref medium
-        fdfd:b3f0::/48 metric 1024 pref medium
+        2001:1470:fffd:2098::/64 via fdfd:b3f0::1 proto static metric 1024 pref medium
+        fdfd:b3f0::/48 proto static metric 1024 pref medium
         END
 
         $machine->start;

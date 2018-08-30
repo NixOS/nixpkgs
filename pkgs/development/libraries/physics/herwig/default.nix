@@ -1,12 +1,12 @@
-{ stdenv, fetchpatch, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
+{ stdenv, fetchurl, boost, fastjet, gfortran, gsl, lhapdf, thepeg, zlib, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   name = "herwig-${version}";
-  version = "7.1.2";
+  version = "7.1.3";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "0wr2mmmf5rlvcc6xgdagafm6vb5g6ifvrjc7kd86gs9jip32p29i";
+    url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
+    sha256 = "1iq1h5ap86729c4pfkswzfh0l2v20fyvqsb15c35g0407l54wfqm";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];

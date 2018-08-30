@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
   };
 
   machine =
-    { config, pkgs, lib, ... }:
+    { pkgs, lib, ... }:
     { boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
     };
 

@@ -1,4 +1,4 @@
-{ pkgs, stdenv, callPackage, wxGTK30, darwin }:
+{ callPackage, wxGTK30 }:
 
 rec {
   lib = callPackage ../development/beam-modules/lib.nix {};
@@ -41,6 +41,15 @@ rec {
       javacSupport = true; odbcSupport = true;
     };
     erlangR20_nox = erlangR20.override { wxSupport = false; };
+    erlangR21 = lib.callErlang ../development/interpreters/erlang/R21.nix {
+      wxGTK = wxGTK30;
+    };
+    erlangR21_odbc = erlangR21.override { odbcSupport = true; };
+    erlangR21_javac = erlangR21.override { javacSupport = true; };
+    erlangR21_odbc_javac = erlangR21.override {
+      javacSupport = true; odbcSupport = true;
+    };
+    erlangR21_nox = erlangR21.override { wxSupport = false; };
 
     # Basho fork, using custom builder.
     erlang_basho_R16B02 = lib.callErlang ../development/interpreters/erlang/R16B02-basho.nix {
@@ -52,7 +61,7 @@ rec {
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlangR19.elixir`.
-    inherit (packages.erlang) elixir elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3;
+    inherit (packages.erlang) elixir elixir_1_7 elixir_1_6 elixir_1_5 elixir_1_4 elixir_1_3;
 
     inherit (packages.erlang) lfe lfe_1_2;
   };
@@ -69,6 +78,7 @@ rec {
     erlangR18 = packagesWith interpreters.erlangR18;
     erlangR19 = packagesWith interpreters.erlangR19;
     erlangR20 = packagesWith interpreters.erlangR20;
+    erlangR21 = packagesWith interpreters.erlangR21;
 
   };
 }

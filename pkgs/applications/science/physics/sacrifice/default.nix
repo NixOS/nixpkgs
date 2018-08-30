@@ -1,15 +1,16 @@
-{ stdenv, fetchurl, boost, hepmc, lhapdf, pythia }:
+{ stdenv, fetchurl, boost, hepmc, lhapdf, pythia, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "sacrifice-${version}";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/agile/Sacrifice-1.0.0.tar.gz";
+    url = "https://www.hepforge.org/archive/agile/Sacrifice-1.0.0.tar.gz";
     sha256 = "10bvpq63kmszy1habydwncm0j1dgvam0fkrmvkgbkvf804dcjp6g";
   };
 
   buildInputs = [ boost hepmc lhapdf pythia ];
+  nativeBuildInputs = [ makeWrapper ];
 
   patches = [
     ./compat.patch
@@ -26,6 +27,13 @@ stdenv.mkDerivation rec {
     "--with-HepMC=${hepmc}"
     "--with-pythia=${pythia}"
   ];
+
+  postInstall = if stdenv.isDarwin then ''
+    install_name_tool -add_rpath ${pythia}/lib "$out"/bin/run-pythia
+  '' else ''
+    wrapProgram $out/bin/run-pythia \
+      --prefix LD_LIBRARY_PATH : "${pythia}/lib"
+  '';
 
   enableParallelBuilding = true;
 

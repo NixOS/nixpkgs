@@ -9,7 +9,9 @@ let
   cfg = config.networking;
   dnsmasqResolve = config.services.dnsmasq.enable &&
                    config.services.dnsmasq.resolveLocalQueries;
-  hasLocalResolver = config.services.bind.enable || dnsmasqResolve;
+  hasLocalResolver = config.services.bind.enable ||
+                     config.services.unbound.enable ||
+                     dnsmasqResolve;
 
   resolvconfOptions = cfg.resolvconfOptions
     ++ optional cfg.dnsSingleRequest "single-request"
@@ -231,10 +233,6 @@ in
               # a collision with an apparently unrelated environment
               # variable with the same name exported by dhcpcd.
               interface_order='lo lo[0-9]*'
-            '' + optionalString config.services.nscd.enable ''
-              # Invalidate the nscd cache whenever resolv.conf is
-              # regenerated.
-              libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
             '' + optionalString (length resolvconfOptions > 0) ''
               # Options as described in resolv.conf(5)
               resolv_conf_options='${concatStringsSep " " resolvconfOptions}'

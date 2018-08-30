@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, patchelf, utillinux, xxd
+{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, utillinux, xxd
 , ghostscript, a2ps }:
 
 # Why:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   version = "3.0.0-1";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf006614/mfcj6510dwlpr-${version}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf006614/mfcj6510dwlpr-${version}.i386.deb";
     sha256 = "1ccvx393pqavsgzd8igrzlin5jrsf01d3acyvwqd1d0yz5jgqy6d";
   };
 

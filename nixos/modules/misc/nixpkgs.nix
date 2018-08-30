@@ -33,7 +33,11 @@ let
   configType = mkOptionType {
     name = "nixpkgs-config";
     description = "nixpkgs config";
-    check = traceValIfNot isConfig;
+    check = x:
+      let traceXIfNot = c:
+            if c x then true
+            else lib.traceSeqN 1 x false;
+      in traceXIfNot isConfig;
     merge = args: fold (def: mergeConfig def.value) {};
   };
 
@@ -58,10 +62,13 @@ in
     pkgs = mkOption {
       defaultText = literalExample
         ''import "''${nixos}/.." {
-            inherit (config.nixpkgs) config overlays system;
+            inherit (config.nixpkgs) config overlays localSystem crossSystem;
           }
         '';
-      default = import ../../.. { inherit (cfg) config overlays system crossSystem; };
+      default = import ../../.. {
+        localSystem = { inherit (cfg) system; } // cfg.localSystem;
+        inherit (cfg) config overlays crossSystem;
+      };
       type = pkgsType;
       example = literalExample ''import <nixpkgs> {}'';
       description = ''
@@ -73,8 +80,9 @@ in
         relative to the location of this NixOS module, because
         NixOS and Nixpkgs are distributed together for consistency,
         so the <code>nixos</code> in the default value is in fact a
-        relative path. The <code>config</code>, <code>overlays</code>
-        and <code>system</code> come from this option's siblings.
+        relative path. The <code>config</code>, <code>overlays</code>,
+        <code>localSystem</code>, and <code>crossSystem</code> come
+        from this option's siblings.
 
         This option can be used by applications like NixOps to increase
         the performance of evaluation, or to create packages that depend
@@ -130,13 +138,40 @@ in
       '';
     };
 
-    crossSystem = mkOption {
-      type = types.nullOr types.attrs;
-      default = null;
+    localSystem = mkOption {
+      type = types.attrs; # TODO utilize lib.systems.parsedPlatform
+      default = { system = builtins.currentSystem; };
+      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      defaultText = literalExample
+        ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
-        The description of the system we're cross-compiling to, or null
-        if this isn't a cross-compile. See the description of the
-        crossSystem argument in the nixpkgs manual.
+        Specifies the platform on which NixOS should be built. When
+        <code>nixpkgs.crossSystem</code> is unset, it also specifies
+        the platform <emphasis>for</emphasis> which NixOS should be
+        built.  If this option is unset, it defaults to the platform
+        type of the machine where evaluation happens. Specifying this
+        option is useful when doing distributed multi-platform
+        deployment, or when building virtual machines. See its
+        description in the Nixpkgs manual for more details.
+
+        Ignored when <code>nixpkgs.pkgs</code> is set.
+      '';
+    };
+
+    crossSystem = mkOption {
+      type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
+      default = null;
+      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      defaultText = literalExample
+        ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
+      description = ''
+        Specifies the platform for which NixOS should be
+        built. Specify this only if it is different from
+        <code>nixpkgs.localSystem</code>, the platform
+        <emphasis>on</emphasis> which NixOS should be built. In other
+        words, specify this to cross-compile NixOS. Otherwise it
+        should be set as null, the default. See its description in the
+        Nixpkgs manual for more details.
 
         Ignored when <code>nixpkgs.pkgs</code> is set.
       '';
@@ -146,10 +181,20 @@ in
       type = types.str;
       example = "i686-linux";
       description = ''
-        Specifies the Nix platform type for which NixOS should be built.
-        If unset, it defaults to the platform type of your host system.
-        Specifying this option is useful when doing distributed
-        multi-platform deployment, or when building virtual machines.
+        Specifies the Nix platform type on which NixOS should be built.
+        It is better to specify <code>nixpkgs.localSystem</code> instead.
+        <programlisting>
+        {
+          nixpkgs.system = ..;
+        }
+        </programlisting>
+        is the same as
+        <programlisting>
+        {
+          nixpkgs.localSystem.system = ..;
+        }
+        </programlisting>
+        See <code>nixpkgs.localSystem</code> for more information.
 
         Ignored when <code>nixpkgs.pkgs</code> is set.
       '';

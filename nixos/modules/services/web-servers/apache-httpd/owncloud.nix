@@ -4,17 +4,6 @@ with lib;
 
 let
 
-  httpd = serverInfo.serverConfig.package;
-
-  version24 = !versionOlder httpd.version "2.4";
-
-  allGranted = if version24 then ''
-    Require all granted
-  '' else ''
-    Order allow,deny
-    Allow from all
-  '';
-
   owncloudConfig = pkgs.writeText "config.php"
     ''
       <?php

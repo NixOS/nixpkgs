@@ -4,13 +4,13 @@ let
   py = python27Packages;
 in
 stdenv.mkDerivation rec {
-  name = "cura-lulzbot";
+  name = "cura-lulzbot-${version}";
   version = "15.02.1-1.03-5064";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://download.alephobjects.com/ao/aodeb/dists/jessie/main/binary-amd64/cura_${version}_amd64.deb";
+        url = "https://download.alephobjects.com/ao/aodeb/dists/jessie/main/binary-amd64/cura_${version}_amd64.deb";
         sha256 = "1gsfidg3gim5pjbl82vkh0cw4ya253m4p7nirm8nr6yjrsirkzxg";
       }
     else if stdenv.system == "i686-linux" then

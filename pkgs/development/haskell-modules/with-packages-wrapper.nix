@@ -38,7 +38,8 @@ let
   ghcCommand'    = if isGhcjs then "ghcjs" else "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
-  libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}" else "$out/lib/${ghcCommand}-${ghc.version}";
+  libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
+                  else "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths         = lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages);
@@ -104,7 +105,7 @@ symlinkJoin {
         --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
     fi
 
-  '' + (lib.optionalString targetPlatform.isDarwin ''
+  '' + (lib.optionalString (targetPlatform.isDarwin && !isGhcjs && !targetPlatform.isiOS) ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):
     local packageConfDir="$out/lib/${ghc.name}/package.conf.d";
     local dynamicLinksDir="$out/lib/links"

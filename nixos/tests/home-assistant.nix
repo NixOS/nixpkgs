@@ -2,7 +2,8 @@ import ./make-test.nix ({ pkgs, ... }:
 
 let
   configDir = "/var/lib/foobar";
-  apiPassword = "secret";
+  apiPassword = "some_secret";
+  mqttPassword = "another_secret";
 
 in {
   name = "home-assistant";
@@ -12,7 +13,7 @@ in {
 
   nodes = {
     hass =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
       {
         environment.systemPackages = with pkgs; [
           mosquitto
@@ -33,7 +34,9 @@ in {
             };
             frontend = { };
             http.api_password = apiPassword;
-            mqtt = { }; # Use hbmqtt as broker
+            mqtt = { # Use hbmqtt as broker
+              password = mqttPassword;
+            };
             binary_sensor = [
               {
                 platform = "mqtt";
@@ -51,9 +54,9 @@ in {
     startAll;
     $hass->waitForUnit("home-assistant.service");
 
-    # Since config is specified using a Nix attribute set,
-    # configuration.yaml is a link to the Nix store
-    $hass->succeed("test -L ${configDir}/configuration.yaml");
+    # The config is specified using a Nix attribute set,
+    # but then converted from JSON to YAML
+    $hass->succeed("test -f ${configDir}/configuration.yaml");
 
     # Check that Home Assistant's web interface and API can be reached
     $hass->waitForOpenPort(8123);
@@ -62,15 +65,16 @@ in {
 
     # Toggle a binary sensor using MQTT
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"off\"'");
-    $hass->waitUntilSucceeds("mosquitto_pub -V mqttv311 -t home-assistant/test -u homeassistant -P '${apiPassword}' -m let_there_be_light");
+    $hass->waitUntilSucceeds("mosquitto_pub -V mqttv311 -t home-assistant/test -u homeassistant -P '${mqttPassword}' -m let_there_be_light");
     $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"on\"'");
-
-    # Check that no errors were logged
-    $hass->fail("cat ${configDir}/home-assistant.log | grep -qF ERROR");
 
     # Print log to ease debugging
     my $log = $hass->succeed("cat ${configDir}/home-assistant.log");
     print "\n### home-assistant.log ###\n";
     print "$log\n";
+
+    # Check that no errors were logged
+    # The timer can get out of sync due to Hydra's load, so this error is ignored
+    $hass->fail("cat ${configDir}/home-assistant.log | grep -vF 'Timer got out of sync' | grep -qF ERROR");
   '';
 })

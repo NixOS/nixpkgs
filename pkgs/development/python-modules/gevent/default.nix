@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, buildPythonPackage, isPyPy, python, libev, greenlet }:
+{ stdenv, fetchPypi, buildPythonPackage, isPyPy, python, libev, greenlet }:
 
 buildPythonPackage rec {
   pname = "gevent";
-  version = "1.2.2";
-  name = pname + "-" + version;
+  version = "1.3.6";
 
-  src = fetchurl {
-    url = "mirror://pypi/g/gevent/${name}.tar.gz";
-    sha256 = "0bbbjvi423y9k9xagrcsimnayaqymg6f2dj76m9z3mjpkjpci4a7";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "7b413c391e8ad6607b7f7540d698a94349abd64e4935184c595f7cdcc69904c6";
   };
 
   buildInputs = [ libev ];

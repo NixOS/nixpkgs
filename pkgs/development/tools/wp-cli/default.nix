@@ -2,11 +2,11 @@
 
 let
   name = "wp-cli-${version}";
-  version = "1.5.0";
+  version = "2.0.0";
 
   src = fetchurl {
     url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "17dgbcalvz5gw6xqgcywh6jrybj0qlglm16cgbshjsp6axwxa5gn";
+    sha256 = "1s8pv8vdjwiwknpwsxc59l1zxc2np7nrp6bjd0s8jwsrv5fgjzsp";
   };
 
   completion = fetchurl {
@@ -36,9 +36,7 @@ in stdenv.mkDerivation rec {
   inherit name version;
 
   buildCommand = ''
-    mkdir -p $out/{bin,share/bash-completion/completions}
-
-    ln      -s     ${bin}        $out/bin/wp
+    install -Dm755 ${bin}        $out/bin/wp
     install -Dm644 ${completion} $out/share/bash-completion/completions/wp
 
     # this is a very basic run test

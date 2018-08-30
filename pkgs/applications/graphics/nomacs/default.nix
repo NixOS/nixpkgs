@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, makeWrapper
 , pkgconfig
 , wrapGAppsHook
 , gsettings-desktop-schemas
@@ -18,12 +17,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.6.1";
+  version = "3.10.2";
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    sha256 = "0yli05hhmd57v3mynq78nmr15rbpm0vadv273pavmcnayv86yl44";
+    sha256 = "0v2gsdc8caswf2b5aa023d8kil1fqf4r9mlg15180h3c92f8jzvh";
   };
 
   name = "nomacs-${version}";
@@ -33,8 +32,6 @@ stdenv.mkDerivation rec {
   setSourceRoot = ''
     sourceRoot=$(echo */ImageLounge)
   '';
-
-  patches = [./fix-appdata-install.patch];
 
   nativeBuildInputs = [cmake
                        pkgconfig

@@ -15,7 +15,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     };
   };
 
-  testScript = { nodes, ... }: ''
+  testScript = { ... }: ''
     $machine->waitForX;
     $machine->waitForFile("/home/alice/.Xauthority");
     $machine->succeed("xauth merge ~alice/.Xauthority");

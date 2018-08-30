@@ -1,11 +1,16 @@
-{ stdenv, buildGoPackage, fetchurl }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
+
 buildGoPackage rec {
   name = "wal-g-${version}";
-  version = "0.1.2";
-  src = fetchurl {
-    url = https://github.com/wal-g/wal-g/archive/v0.1.2.tar.gz;
-    sha256 = "0zkjs72gq7sc9cqqzxr6ms1ibk8466zpwmrziq9p4jv9r4iq3bfb";
+  version = "0.1.10";
+
+  src = fetchFromGitHub {
+    owner  = "wal-g";
+    repo   = "wal-g";
+    rev    = "v${version}";
+    sha256 = "0klqnrrjzzxcj3clg7vapmbga1vqsfh8mkci5r2ir1bjp0z1xfnp";
   };
+
   goPackagePath = "github.com/wal-g/wal-g";
   meta = {
     homepage = https://github.com/wal-g/wal-g;

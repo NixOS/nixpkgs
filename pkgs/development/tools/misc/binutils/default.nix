@@ -1,16 +1,16 @@
 { stdenv, buildPackages
-, fetchurl, zlib
-, buildPlatform, hostPlatform, targetPlatform
+, fetchurl, zlib, autoreconfHook264
+, hostPlatform, buildPlatform, targetPlatform
 , noSysDirs, gold ? true, bison ? null
 }:
 
 let
-  # Note to whoever is upgrading this: 2.29 is broken.
-  # ('nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test' segfaults on aarch64)
-  # Also glibc might need patching, see commit 733e20fee4a6700510f71fbe1a58ac23ea202f6a.
-  version = "2.28.1";
+  # Remove gold-symbol-visibility patch when updating, the proper fix
+  # is now upstream.
+  # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
+  version = "2.30";
   basename = "binutils-${version}";
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optionals optionalString;
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
@@ -19,17 +19,13 @@ in
 stdenv.mkDerivation rec {
   name = targetPrefix + basename;
 
-  src = fetchurl {
+  # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
+  src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1sj234nd05cdgga1r36zalvvdkvpfbr12g5mir2n8i1dwsdrj939";
-  };
+    sha256 = "028cklfqaab24glva1ks2aqa1zxa6w6xmc8q34zs1sb7h22dxspg";
+  });
 
   patches = [
-    # Turn on --enable-new-dtags by default to make the linker set
-    # RUNPATH instead of RPATH on binaries.  This is important because
-    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
-    ./new-dtags.patch
-
     # Since binutils 2.22, DT_NEEDED flags aren't copied for dynamic outputs.
     # That requires upstream changes for things to work. So we can patch it to
     # get the old behaviour by now.
@@ -61,12 +57,24 @@ stdenv.mkDerivation rec {
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
     ./always-search-rpath.patch
-  ];
+
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
+    ./gold-symbol-visibility.patch
+
+    # Version 2.30 introduced strict requirements on ELF relocations which cannot
+    # be satisfied on aarch64 platform. Add backported fix from bugzilla.
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=22764
+    ./relax-R_AARCH64_ABS32-R_AARCH64_ABS16-absolute.patch
+  ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [
+    bison
+  ] ++ stdenv.lib.optionals targetPlatform.isiOS [
+    autoreconfHook264
+  ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
@@ -90,12 +98,10 @@ stdenv.mkDerivation rec {
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
+  hardeningDisable = [ "format" ];
+
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-  configurePlatforms =
-    # TODO(@Ericson2314): Figure out what's going wrong with Arm
-    if buildPlatform == hostPlatform && hostPlatform == targetPlatform && targetPlatform.isArm
-    then []
-    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = [
     "--enable-targets=all" "--enable-64-bit-bfd"
@@ -106,7 +112,17 @@ stdenv.mkDerivation rec {
     "--enable-deterministic-archives"
     "--disable-werror"
     "--enable-fix-loongson2f-nop"
+
+    # Turn on --enable-new-dtags by default to make the linker set
+    # RUNPATH instead of RPATH on binaries.  This is important because
+    # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
+    "--enable-new-dtags"
   ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
+
+  doCheck = false; # fails
+
+  # else fails with "./sanity.sh: line 36: $out/bin/size: not found"
+  doInstallCheck = buildPlatform == hostPlatform && hostPlatform == targetPlatform;
 
   enableParallelBuilding = true;
 

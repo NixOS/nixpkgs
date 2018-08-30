@@ -1,7 +1,7 @@
 # This module gets rid of all dependencies on X11 client libraries
 # (including fontconfig).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -26,16 +26,16 @@ with lib;
 
     fonts.fontconfig.enable = false;
 
-    nixpkgs.config.packageOverrides = pkgs: {
-      dbus = pkgs.dbus.override { x11Support = false; };
-      networkmanager-fortisslvpn = pkgs.networkmanager-fortisslvpn.override { withGnome = false; };
-      networkmanager-l2tp = pkgs.networkmanager-l2tp.override { withGnome = false; };
-      networkmanager-openconnect = pkgs.networkmanager-openconnect.override { withGnome = false; };
-      networkmanager-openvpn = pkgs.networkmanager-openvpn.override { withGnome = false; };
-      networkmanager-vpnc = pkgs.networkmanager-vpnc.override { withGnome = false; };
-      networkmanager-iodine = pkgs.networkmanager-iodine.override { withGnome = false; };
-      pinentry = pkgs.pinentry_ncurses;
-      gobjectIntrospection = pkgs.gobjectIntrospection.override { x11Support = false; };
-    };
+    nixpkgs.overlays = singleton (const (super: {
+      dbus = super.dbus.override { x11Support = false; };
+      networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
+      networkmanager-l2tp = super.networkmanager-l2tp.override { withGnome = false; };
+      networkmanager-openconnect = super.networkmanager-openconnect.override { withGnome = false; };
+      networkmanager-openvpn = super.networkmanager-openvpn.override { withGnome = false; };
+      networkmanager-vpnc = super.networkmanager-vpnc.override { withGnome = false; };
+      networkmanager-iodine = super.networkmanager-iodine.override { withGnome = false; };
+      pinentry = super.pinentry_ncurses;
+      gobjectIntrospection = super.gobjectIntrospection.override { x11Support = false; };
+    }));
   };
 }

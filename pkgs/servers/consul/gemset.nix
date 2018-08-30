@@ -1,59 +1,62 @@
 {
   execjs = {
-    version = "2.3.0";
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1yz55sf2nd3l666ms6xr18sm2aggcvmb8qr3v53lr4rir32y1yp1";
       type = "gem";
-      sha256 = "097v02bhmzc70j7n0yyf8j0z5wms88zcmgpmggby4hnvqxf41y1h";
     };
+    version = "2.7.0";
   };
-  json = {
-    version = "1.8.2";
+  ffi = {
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0zw6pbyvmj8wafdc7l5h7w20zkp1vbr2805ql5d941g2b20pk4zr";
       type = "gem";
-      sha256 = "0zzvv25vjikavd3b1bp6lvbgj23vv9jvmnl4vpim8pv30z8p6vr5";
     };
+    version = "1.9.23";
   };
-  libv8 = {
-    version = "3.16.14.11";
+  rb-fsevent = {
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1lm1k7wpz69jx7jrc92w3ggczkjyjbfziq5mg62vjnxmzs383xx8";
       type = "gem";
-      sha256 = "000vbiy78wk5r1f6p7qncab8ldg7qw5pjz7bchn3lw700gpaacxp";
     };
+    version = "0.10.3";
   };
-  ref = {
-    version = "1.0.5";
+  rb-inotify = {
+    dependencies = ["ffi"];
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0yfsgw5n7pkpyky6a9wkf1g9jafxb0ja7gz0qw0y14fd2jnzfh71";
       type = "gem";
-      sha256 = "19qgpsfszwc2sfh6wixgky5agn831qq8ap854i1jqqhy1zsci3la";
     };
+    version = "0.9.10";
   };
   sass = {
-    version = "3.4.11";
+    dependencies = ["sass-listen"];
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "19wyzp9qsg8hdkkxlsv713w0qmy66qrdp0shj42587ssx4qhrlag";
       type = "gem";
-      sha256 = "10dncnv7g5v8d1xpw2aaarxjjlm68f7nm02ns2kl8nf3yxi6wzdf";
     };
+    version = "3.5.6";
   };
-  therubyracer = {
-    version = "0.12.1";
+  sass-listen = {
+    dependencies = ["rb-fsevent" "rb-inotify"];
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0xw3q46cmahkgyldid5hwyiwacp590zj2vmswlll68ryvmvcp7df";
       type = "gem";
-      sha256 = "106fqimqyaalh7p6czbl5m2j69z8gv7cm10mjb8bbb2p2vlmqmi6";
     };
-    dependencies = [
-      "libv8"
-      "ref"
-    ];
+    version = "4.0.0";
   };
   uglifier = {
-    version = "2.7.0";
+    dependencies = ["execjs"];
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0dycp9c5xiricla6sgvg0vf22i3axs5k1v1607dvl7nv1xkkaczi";
       type = "gem";
-      sha256 = "1x1mnakx086l83a3alj690c6n8kfmb4bk243a6m6yz99s15gbxfq";
     };
-    dependencies = [
-      "execjs"
-      "json"
-    ];
+    version = "4.1.10";
   };
 }

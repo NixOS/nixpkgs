@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-, sqlite, iproute, bridge-utils, devicemapper, systemd
+, sqlite, iproute, lvm2, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
 , procps, libseccomp
 }:
@@ -27,7 +27,7 @@ rec {
       patches = [];
     });
 
-    docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
+    docker-containerd = (containerd.override { inherit go; }).overrideAttrs (oldAttrs: rec {
       name = "docker-containerd";
       src = fetchFromGitHub {
         owner = "docker";
@@ -66,7 +66,7 @@ rec {
     DOCKER_BUILDTAGS = []
       ++ optional (systemd != null) [ "journald" ]
       ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
-      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper"
+      ++ optional (lvm2 == null) "exclude_graphdriver_devicemapper"
       ++ optional (libseccomp != null) "seccomp";
 
    }) // rec {
@@ -88,7 +88,7 @@ rec {
     buildInputs = [
       makeWrapper removeReferencesTo go-md2man go libtool
     ] ++ optionals (stdenv.isLinux) [
-      sqlite devicemapper btrfs-progs systemd libseccomp
+      sqlite lvm2 btrfs-progs systemd libseccomp
     ];
 
     dontStrip = true;
@@ -197,15 +197,15 @@ rec {
   # Get revisions from
   # https://github.com/docker/docker-ce/tree/v${version}/components/engine/hack/dockerfile/install/*
 
-  docker_18_03 = dockerGen rec {
-    version = "18.03.0-ce";
-    rev = "0520e243029d1361649afb0706a1c5d9a1c012b8"; # git commit
-    sha256 = "0dq7kf30k6p5m9qrzskfx0rxsx22f7yvxzij6vv1g70pggzacs4g";
-    runcRev = "4fc53a81fb7c994640722ac585fa9ca548971871";
-    runcSha256 = "1ikqw39jn8dzb4snc4pcg3z85jb67ivskdhx028k17ss29bf4062";
-    containerdRev = "cfd04396dc68220d1cecbe686a6cc3aa5ce3667c";
-    containerdSha256 = "1x6mmk69jksh4m9rjd8qwpp0qc7jmimpkq9pw9237p0v63p9yci0";
-    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
-    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+  docker_18_06 = dockerGen rec {
+    version = "18.06.1-ce";
+    rev = "e68fc7a215d7133c34aa18e3b72b4a21fd0c6136"; # git commit
+    sha256 = "1bqd6pv5hga4j1s8jm8q5qdnfbjf8lw1ghdk0bw9hhqkn7rcnrv4";
+    runcRev = "69663f0bd4b60df09991c08812a60108003fa340";
+    runcSha256 = "1l37r97l3ra4ph069w190d05r0a43s76nn9jvvlkbwrip1cp6gyq";
+    containerdRev = "468a545b9edcd5932818eb9de8e72413e616e86e";
+    containerdSha256 = "1rp015cm5fw9kfarcmfhfkr1sh0iz7kvqls6f8nfhwrrz5armd5v";
+    tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";
+    tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };
 }

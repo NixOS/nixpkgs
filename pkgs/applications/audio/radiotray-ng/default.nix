@@ -23,7 +23,7 @@
 # rt2rtng
 , python2
 # Testing
-, gmock
+, gtest
 # Fixup
 , wrapGAppsHook
 , makeWrapper
@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "radiotray-ng-${version}";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "ebruck";
     repo = "radiotray-ng";
     rev = "v${version}";
-    sha256 = "0hqg6vn8hv5pic96klf1d9vj8fibrgiqnqb5vwrg3wvakx0y32kr";
+    sha256 = "1sq7bc0dswv3vv56w527z268ib0pyhdxyf25388vnj1fv0c146wc";
   };
 
   nativeBuildInputs = [ cmake pkgconfig wrapGAppsHook makeWrapper ];
@@ -58,11 +58,10 @@ stdenv.mkDerivation rec {
     libxdg_basedir
     lsb-release
     wxGTK
-  ] ++ stdenv.lib.optional doCheck gmock
-    ++ gstInputs
+  ] ++ gstInputs
     ++ pythonInputs;
 
-  prePatch = ''
+  postPatch = ''
     for x in debian/CMakeLists.txt include/radiotray-ng/common.hpp data/*.desktop; do
       substituteInPlace $x --replace /usr $out
     done
@@ -74,13 +73,16 @@ stdenv.mkDerivation rec {
       --replace radiotray-ng-notification radiotray-ng-on
   '';
 
-  cmakeFlags = stdenv.lib.optional doCheck "-DBUILD_TESTS=ON";
+  cmakeFlags = [
+    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+  ];
 
   enableParallelBuilding = true;
 
-  doCheck = true;
-
+  checkInputs = [ gtest ];
   checkPhase = "ctest";
+  # doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = false; # fails to pick up supplied gtest, tries to download it instead
 
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${stdenv.lib.makeBinPath [ dbus ]})

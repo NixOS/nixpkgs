@@ -1,4 +1,4 @@
-{ lib, python3, fetchpatch }:
+{ lib, python3 }:
 
 let
   python = python3.override {
@@ -33,11 +33,11 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "ed925d3cb25db2c3f57304a0bca8fd0d9072d7ffe347ac5fcf68c4a30b7f1721";
+    sha256 = "ad16773da21e34e258970bf5740d1634a36c8202ac72c6925d960308ef1c58cf";
   };
 
   propagatedBuildInputs = with python.pkgs; [

@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "pyside-tools";
   version = "0.2.15";
-  name = "${pname}-${version}";
   format = "other";
 
   src = fetchurl {

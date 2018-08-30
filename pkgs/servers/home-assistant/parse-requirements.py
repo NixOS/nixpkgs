@@ -1,58 +1,70 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ setuptools ])"
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp astral async-timeout attrs certifi jinja2 pyjwt cryptography pip pytz pyyaml requests voluptuous ])"
 #
-# This script downloads https://github.com/home-assistant/home-assistant/blob/master/requirements_all.txt.
-# This file contains lines of the form
+# This script downloads Home Assistant's source tarball.
+# Inside the homeassistant/components directory, each component has an associated .py file,
+# specifying required packages and other components it depends on:
 #
-#     # homeassistant.components.foo
-#     # homeassistant.components.bar
-#     foobar==1.2.3
+# REQUIREMENTS = [ 'package==1.2.3' ]
+# DEPENDENCIES = [ 'component' ]
 #
-# i.e. it lists dependencies and the components that require them.
-# By parsing the file, a dictionary mapping component to dependencies is created.
-# For all of these dependencies, Nixpkgs' python3Packages are searched for appropriate names.
+# By parsing the files, a dictionary mapping component to requirements and dependencies is created.
+# For all of these requirements and the dependencies' requirements,
+# Nixpkgs' python3Packages are searched for appropriate names.
 # Then, a Nix attribute set mapping component name to dependencies is created.
 
 from urllib.request import urlopen
-from collections import OrderedDict
+import tempfile
+from io import BytesIO
+import tarfile
+import importlib
 import subprocess
 import os
 import sys
 import json
 import re
-from pkg_resources import Requirement, RequirementParseError
 
-GENERAL_PREFIX = '# homeassistant.'
-COMPONENT_PREFIX = GENERAL_PREFIX + 'components.'
+COMPONENT_PREFIX = 'homeassistant.components'
 PKG_SET = 'python3Packages'
+
+# If some requirements are matched by multiple python packages,
+# the following can be used to choose one of them
+PKG_PREFERENCES = {
+    # Use python3Packages.youtube-dl-light instead of python3Packages.youtube-dl
+    'youtube-dl': 'youtube-dl-light'
+}
 
 def get_version():
     with open(os.path.dirname(sys.argv[0]) + '/default.nix') as f:
         m = re.search('hassVersion = "([\\d\\.]+)";', f.read())
         return m.group(1)
 
-def fetch_reqs(version='master'):
-    requirements = {}
-    with urlopen('https://github.com/home-assistant/home-assistant/raw/{}/requirements_all.txt'.format(version)) as response:
-        components = []
-        for line in response.read().decode().splitlines():
-            if line == '':
-                components = []
-            elif line[:len(COMPONENT_PREFIX)] == COMPONENT_PREFIX:
-                component = line[len(COMPONENT_PREFIX):]
-                components.append(component)
-                if component not in requirements:
-                    requirements[component] = []
-            elif line[:len(GENERAL_PREFIX)] != GENERAL_PREFIX: # skip lines like "# homeassistant.scripts.xyz"
-                # Some dependencies are commented out because they don't build on all platforms
-                # Since they are still required for running the component, don't skip them
-                if line[:2] == '# ':
-                    line = line[2:]
-                # Some requirements are specified by url, e.g. https://example.org/foobar#xyz==1.0.0
-                # Therefore, if there's a "#" in the line, only take the part after it
-                line = line[line.find('#') + 1:]
-                for component in components:
-                    requirements[component].append(line)
+def parse_components(version='master'):
+    components = {}
+    with tempfile.TemporaryDirectory() as tmp:
+        with urlopen('https://github.com/home-assistant/home-assistant/archive/{}.tar.gz'.format(version)) as response:
+            tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
+        # Use part of a script from the Home Assistant codebase
+        sys.path.append(tmp + '/home-assistant-{}'.format(version))
+        from script.gen_requirements_all import explore_module
+        for package in explore_module(COMPONENT_PREFIX, True):
+            # Remove 'homeassistant.components.' prefix
+            component = package[len(COMPONENT_PREFIX + '.'):]
+            try:
+                module = importlib.import_module(package)
+                components[component] = {}
+                components[component]['requirements'] = getattr(module, 'REQUIREMENTS', [])
+                components[component]['dependencies'] = getattr(module, 'DEPENDENCIES', [])
+            # If there is an ImportError, the imported file is not the main file of the component
+            except ImportError:
+                continue
+    return components
+
+# Recursively get the requirements of a component and its dependencies
+def get_reqs(components, component):
+    requirements = set(components[component]['requirements'])
+    for dependency in components[component]['dependencies']:
+        requirements.update(get_reqs(components, dependency))
     return requirements
 
 # Store a JSON dump of Nixpkgs' python3Packages
@@ -60,47 +72,53 @@ output = subprocess.check_output(['nix-env', '-f', os.path.dirname(sys.argv[0]) 
 packages = json.loads(output)
 
 def name_to_attr_path(req):
-    attr_paths = []
+    attr_paths = set()
     names = [req]
     # E.g. python-mpd2 is actually called python3.6-mpd2
     # instead of python-3.6-python-mpd2 inside Nixpkgs
-    if req.startswith('python-'):
+    if req.startswith('python-') or req.startswith('python_'):
         names.append(req[len('python-'):])
     for name in names:
+        # treat "-" and "_" equally
+        name = re.sub('[-_]', '[-_]', name)
         pattern = re.compile('^python\\d\\.\\d-{}-\\d'.format(name), re.I)
         for attr_path, package in packages.items():
             if pattern.match(package['name']):
-                attr_paths.append(attr_path)
+                attr_paths.add(attr_path)
+    if len(attr_paths) > 1:
+        for to_replace, replacement in PKG_PREFERENCES.items():
+            try:
+                attr_paths.remove(PKG_SET + '.' + to_replace)
+                attr_paths.add(PKG_SET + '.' + replacement)
+            except KeyError:
+                pass
     # Let's hope there's only one derivation with a matching name
     assert(len(attr_paths) <= 1)
-    if attr_paths:
-        return attr_paths[0]
+    if len(attr_paths) == 1:
+        return attr_paths.pop()
     else:
         return None
 
 version = get_version()
 print('Generating component-packages.nix for version {}'.format(version))
-requirements = fetch_reqs(version=version)
+components = parse_components(version=version)
 build_inputs = {}
-for component, reqs in OrderedDict(sorted(requirements.items())).items():
+for component in sorted(components.keys()):
     attr_paths = []
-    for req in reqs:
-        try:
-            name = Requirement.parse(req).project_name
-            attr_path = name_to_attr_path(name)
-            if attr_path is not None:
-                # Add attribute path without "python3Packages." prefix
-                attr_paths.append(attr_path[len(PKG_SET + '.'):])
-        except RequirementParseError:
-            continue
+    for req in sorted(get_reqs(components, component)):
+        # Some requirements are specified by url, e.g. https://example.org/foobar#xyz==1.0.0
+        # Therefore, if there's a "#" in the line, only take the part after it
+        req = req[req.find('#') + 1:]
+        name = req.split('==')[0]
+        attr_path = name_to_attr_path(name)
+        if attr_path is not None:
+            # Add attribute path without "python3Packages." prefix
+            attr_paths.append(attr_path[len(PKG_SET + '.'):])
     else:
         build_inputs[component] = attr_paths
 
-# Only select components which have any dependency
-#build_inputs = {k: v for k, v in build_inputs.items() if len(v) > 0}
-
 with open(os.path.dirname(sys.argv[0]) + '/component-packages.nix', 'w') as f:
-    f.write('# Generated from parse-requirements.py\n')
+    f.write('# Generated by parse-requirements.py\n')
     f.write('# Do not edit!\n\n')
     f.write('{\n')
     f.write('  version = "{}";\n'.format(version))

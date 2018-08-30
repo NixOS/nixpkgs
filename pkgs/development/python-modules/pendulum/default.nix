@@ -1,20 +1,21 @@
-{ stdenv, fetchPypi, buildPythonPackage, dateutil, pytzdata, tzlocal }:
+{ lib, fetchPypi, buildPythonPackage, pythonOlder
+, dateutil, pytzdata, typing }:
 
 buildPythonPackage rec {
   pname = "pendulum";
-  version = "1.4.2";
+  version = "2.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "39a255776528afe11ea0d57814f9bf3729c1e0b99063af2e5c6cfd750c3e1f7f";
+    sha256 = "d07962450e808556b3e6209a5830e2bbf8c7747129580c3b5b09e641f72617ab";
   };
 
-  propagatedBuildInputs = [ dateutil pytzdata tzlocal ];
+  propagatedBuildInputs = [ dateutil pytzdata ] ++ lib.optional (pythonOlder "3.5") typing;
 
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python datetimes made easy";
     homepage = https://github.com/sdispater/pendulum;
     license = licenses.mit;

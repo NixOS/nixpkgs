@@ -1,4 +1,4 @@
-{ stdenv, callPackage, Foundation, libobjc }:
+{ callPackage, Foundation, libobjc }:
 
 callPackage ./generic.nix (rec {
   inherit Foundation libobjc;

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     yasm vapoursynth fftwFloat
   ];
 
-  configureFlags = "--libdir=$(out)/lib/vapoursynth";
+  configureFlags = [ "--libdir=$(out)/lib/vapoursynth" ];
 
   meta = with stdenv.lib; {
     description = "A set of filters for motion estimation and compensation";

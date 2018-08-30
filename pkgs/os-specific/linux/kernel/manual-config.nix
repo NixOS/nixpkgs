@@ -1,8 +1,7 @@
-{ buildPackages, runCommand, nettools, bc, bison, flex, perl, gmp, libmpc, mpfr, openssl
-, ncurses ? null
+{ buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , libelf
 , utillinux
-, writeTextFile, ubootTools
+, writeTextFile
 }:
 
 let
@@ -24,7 +23,7 @@ in {
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
   src,
-  # Any patches
+  # a list of { name=..., patch=..., extraConfig=...} patches
   kernelPatches ? [],
   # The kernel .config file
   configfile,
@@ -35,6 +34,8 @@ in {
   extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false,
+  # ignored
+  features ? null,
 
   hostPlatform
 }:
@@ -89,9 +90,6 @@ let
 
       inherit src;
 
-      preUnpack = ''
-      '';
-
       patches = map (p: p.patch) kernelPatches;
 
       prePatch = ''
@@ -100,6 +98,7 @@ let
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
+        sed -i scripts/ld-version.sh -e "s|/usr/bin/awk|${buildPackages.gawk}/bin/awk|"
       '';
 
       configurePhase = ''
@@ -109,11 +108,6 @@ let
         export buildRoot="$(pwd)/build"
 
         echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
-
-        if [[ -z "$buildRoot" || ! -d "$buildRoot" ]]; then
-          echo "set $buildRoot to the build folder please"
-          exit 1
-        fi
 
         if [ -f "$buildRoot/.config" ]; then
           echo "Could not link $buildRoot/.config : file exists"
@@ -126,7 +120,7 @@ let
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
 
-        make $makeFlags prepare
+        make $makeFlags "''${makeFlagsArray[@]}" prepare
         actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
         if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
           echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
@@ -152,9 +146,12 @@ let
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-      installTargets = [ (if platform.kernelTarget == "uImage" then "uinstall" else
-                          if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall" else
-                          "install") ];
+      installTargets = [ (
+        if platform ? kernelInstallTarget then platform.kernelInstallTarget
+        else if platform.kernelTarget == "uImage" then "uinstall"
+        else if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall"
+        else "install"
+      ) ];
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
@@ -171,8 +168,14 @@ let
         unlink $out/lib/modules/${modDirVersion}/build
         unlink $out/lib/modules/${modDirVersion}/source
 
-        mkdir -p $dev/lib/modules/${modDirVersion}/build
-        cp -dpR .. $dev/lib/modules/${modDirVersion}/source
+        mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
+
+        # To save space, exclude a bunch of unneeded stuff when copying.
+        (cd .. && rsync --archive --prune-empty-dirs \
+            --exclude='/build/' \
+            --exclude='/Documentation/' \
+            * $dev/lib/modules/${modDirVersion}/source/)
+
         cd $dev/lib/modules/${modDirVersion}/source
 
         cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
@@ -258,7 +261,7 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
       ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
       ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux

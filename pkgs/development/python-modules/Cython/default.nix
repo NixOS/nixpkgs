@@ -2,53 +2,62 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , python
 , glibcLocales
 , pkgconfig
 , gdb
 , numpy
 , ncurses
+, fetchpatch
 }:
 
-buildPythonPackage rec {
+let
+  excludedTests = []
+    # cython's testsuite is not working very well with libc++
+    # We are however optimistic about things outside of testsuite still working
+    ++ stdenv.lib.optionals (stdenv.cc.isClang or false) [ "cpdef_extern_func" "libcpp_algo" ]
+    # Some tests in the test suite isn't working on aarch64. Disable them for
+    # now until upstream finds a workaround.
+    # Upstream issue here: https://github.com/cython/cython/issues/2308
+    ++ stdenv.lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
+    ++ stdenv.lib.optionals stdenv.isi686 [ "future_division" "overflow_check_longlong" ]
+  ;
+
+in buildPythonPackage rec {
   pname = "Cython";
-  name = "${pname}-${version}";
-  version = "0.27.3";
+  version = "0.28.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6a00512de1f2e3ce66ba35c5420babaef1fe2d9c43a8faab4080b0dbcc26bc64";
+    sha256 = "1aae6d6e9858888144cea147eb5e677830f45faaff3d305d77378c3cba55f526";
   };
-
-  # With Python 2.x on i686-linux or 32-bit ARM this test fails because the
-  # result is "3L" instead of "3", so let's fix it in-place.
-  #
-  # Upstream issue: https://github.com/cython/cython/issues/1548
-  postPatch = lib.optionalString ((stdenv.isi686 || stdenv.isArm) && !isPy3k) ''
-    sed -i -e 's/\(>>> *\)\(verify_resolution_GH1533()\)/\1int(\2)/' \
-      tests/run/cpdef_enums.pyx
-  '';
 
   nativeBuildInputs = [
     pkgconfig
-    # For testing
+  ];
+  checkInputs = [
     numpy ncurses
   ];
   buildInputs = [ glibcLocales gdb ];
   LC_ALL = "en_US.UTF-8";
 
-  # cython's testsuite is not working very well with libc++
-  # We are however optimistic about things outside of testsuite still working
   checkPhase = ''
     export HOME="$NIX_BUILD_TOP"
-    ${python.interpreter} runtests.py \
-      ${if stdenv.cc.isClang or false then ''--exclude="(cpdef_extern_func|libcpp_algo)"'' else ""}
+    ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
+      ${stdenv.lib.optionalString (builtins.length excludedTests != 0)
+        ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
-  # Disable tests temporarily
-  # https://github.com/cython/cython/issues/1676
-  doCheck = false;
+  doCheck = !stdenv.isDarwin;
+
+  patches = [
+    # The following is in GitHub in 0.28.3 but not in the `sdist`.
+    # https://github.com/cython/cython/issues/2319
+    (fetchpatch {
+      url = https://github.com/cython/cython/commit/c485b1b77264c3c75d090a3c526de24966830d42.patch;
+      sha256 = "1p6jj9rb097kqvhs5j5127sj5zy18l7x9v0p478cjyzh41khh9r0";
+    })
+  ];
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";

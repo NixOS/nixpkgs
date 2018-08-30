@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bind, libseccomp, zlib, openssl }:
+{ stdenv, fetchurl, bind, libseccomp, zlib, openssl, libcap }:
 
 stdenv.mkDerivation rec {
   name = "dnsperf-${version}";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  buildInputs = [ bind libseccomp zlib openssl ];
+  buildInputs = [ bind zlib openssl ]
+              ++ stdenv.lib.optional stdenv.isLinux [ libcap libcap.lib libseccomp ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/"
@@ -29,4 +30,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vcunat ];
   };
 }
-

@@ -15,7 +15,12 @@ stdenv.mkDerivation rec {
     make all leveldbutil libmemenv.a
   '';
 
-  installPhase = "
+  installPhase = (stdenv.lib.optionalString stdenv.isDarwin ''
+    for file in *.dylib*; do
+      install_name_tool -id $out/lib/$file $file
+    done
+  '') + # XXX consider removing above after transition to cmake in the next release
+  "
     mkdir -p $out/{bin,lib,include}
 
     cp -r include $out

@@ -29,7 +29,7 @@ with  import ./functions.nix { inherit lib gemConfig; };
 let
   gemFiles = bundlerFiles args;
 
-  importedGemset = if builtins.typeOf gemFiles.gemset == "path"
+  importedGemset = if builtins.typeOf gemFiles.gemset != "set"
     then import gemFiles.gemset
     else gemFiles.gemset;
 
@@ -61,7 +61,7 @@ let
   else
     name;
 
-  copyIfBundledByPath = { bundledByPath ? false, ...}@main:
+  copyIfBundledByPath = { bundledByPath ? false, ...}:
   (if bundledByPath then
       assert gemFiles.gemdir != null; "cp -a ${gemFiles.gemdir}/* $out/" #*/
     else ""

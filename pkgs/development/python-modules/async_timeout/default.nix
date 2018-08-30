@@ -1,17 +1,16 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytestrunner
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "async-timeout";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c17d8ac2d735d59aa62737d76f2787a6c938f5a944ecf768a8c0ab70b0dea566";
+    sha256 = "b3c0ddc416736619bd4a95ca31de8da6920c3b9a140c64dbef2b2fa7bf521287";
   };
 
   # Circular dependency on aiohttp

@@ -10,11 +10,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ octave ];
 
-  configureFlags = "--with-cxx --enable-shared --with-pic --without-guile --without-python
-  --without-matlab " +
-    stdenv.lib.optionalString (octave != null) ("--with-octave " +
-        "M_INSTALL_DIR=$(out)/${octave.sitePath}/m " +
-        "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct ");
+  configureFlags = [
+    "--with-cxx"
+    "--enable-shared"
+    "--with-pic"
+    "--without-guile"
+    "--without-python"
+    "--without-matlab"
+  ] ++ stdenv.lib.optionals (octave != null) [
+    "--with-octave"
+    "M_INSTALL_DIR=$(out)/${octave.sitePath}/m"
+    "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct"
+  ];
 
   meta = {
     homepage = http://ab-initio.mit.edu/nlopt/;

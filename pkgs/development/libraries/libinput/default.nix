@@ -16,20 +16,24 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libinput-${version}";
-  version = "1.10.0";
+  version = "1.11.3";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "0mrzsf0349d1g68lizkzxw7vaw459fl8xhl7v0s8njb31hp2riy2";
+    url = "https://www.freedesktop.org/software/libinput/${name}.tar.xz";
+    sha256 = "01nb1shnl871d939wgfd7nc9svclcnfjfhlq64b4yns2dvcr24gk";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "bin" "out" "dev" ];
 
   mesonFlags = [
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
   ];
+
+  preConfigure = ''
+    mesonFlags="$mesonFlags --libexecdir=$bin/libexec"
+  '';
 
   nativeBuildInputs = [ pkgconfig meson ninja ]
     ++ optionals documentationSupport [ doxygen graphviz ]

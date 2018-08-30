@@ -1,4 +1,4 @@
-{ config, pkgs, lib, mono, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -36,12 +36,12 @@ in
       };
     };
 
-    users.extraUsers.sonarr = {
+    users.users.sonarr = {
       uid = config.ids.uids.sonarr;
       home = "/var/lib/sonarr";
       group = "sonarr";
     };
-    users.extraGroups.sonarr.gid = config.ids.gids.sonarr;
+    users.groups.sonarr.gid = config.ids.gids.sonarr;
 
   };
 }

@@ -1,26 +1,33 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, python3, dconf, gobjectIntrospection
-, intltool, libsoup, libxml2, libsecret, icu, sqlite
-, p11-kit, db, nspr, nss, libical, gperf, makeWrapper
+{ fetchurl, stdenv, substituteAll, pkgconfig, gnome3, python3, gobjectIntrospection
+, intltool, libsoup, libxml2, libsecret, icu, sqlite, tzdata
+, p11-kit, db, nspr, nss, libical, gperf, wrapGAppsHook, glib-networking
 , vala, cmake, ninja, kerberos, openldap, webkitgtk, libaccounts-glib, json-glib }:
 
 stdenv.mkDerivation rec {
   name = "evolution-data-server-${version}";
-  version = "3.28.0";
+  version = "3.28.5";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1ybyyy6nls11az8lbri1y9527snz5h7qbhyfqvk0vc6vzvald5gv";
+    sha256 = "1247gv0ggwnd1i2n7iglb3crfapx6s9nrl896bzy9k87fb94hlyr";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit tzdata;
+    })
+  ];
+
   nativeBuildInputs = [
-    cmake ninja pkgconfig intltool python3 gperf makeWrapper gobjectIntrospection vala
+    cmake ninja pkgconfig intltool python3 gperf wrapGAppsHook gobjectIntrospection vala
   ];
   buildInputs = with gnome3; [
     glib libsoup libxml2 gtk gnome-online-accounts
     gcr p11-kit libgweather libgdata libaccounts-glib json-glib
-    icu sqlite kerberos openldap webkitgtk
+    icu sqlite kerberos openldap webkitgtk glib-networking
   ];
 
   propagatedBuildInputs = [ libsecret nss nspr libical db ];
@@ -34,14 +41,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cmakeFlags="-DINCLUDE_INSTALL_DIR=$dev/include $cmakeFlags"
-  '';
-
-  preFixup = ''
-    for f in $(find $out/libexec/ -type f -executable); do
-      wrapProgram "$f" \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
-    done
   '';
 
   passthru = {

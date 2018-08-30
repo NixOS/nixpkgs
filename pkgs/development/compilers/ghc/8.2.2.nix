@@ -4,10 +4,11 @@
 # build-tools
 , bootPkgs, alex, happy, hscolour
 , autoconf, autoreconfHook, automake, coreutils, fetchurl, fetchpatch, perl, python3, sphinx
+, runCommand
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
-, useLLVM ? !targetPlatform.isx86
+, useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -15,17 +16,18 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null
+  enableIntegerSimple ? !(gmp.meta.available or false), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ?
-    !(targetPlatform.isDarwin
-      # On iOS, dynamic linking is not supported
-      && (targetPlatform.isAarch64 || targetPlatform.isArm))
+  enableShared ? true
+
+, # What flavour to build. An empty string indicates no
+  # specific flavour and falls back to ghc default values.
+  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
@@ -43,18 +45,23 @@ let
     "${targetPlatform.config}-";
 
   buildMK = ''
+    BuildFlavour = ${ghcFlavour}
+    ifneq \"\$(BuildFlavour)\" \"\"
+    include mk/flavours/\$(BuildFlavour).mk
+    endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    INTEGER_LIBRARY = integer-simple
+    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    BuildFlavour = perf-cross
-    Stage1Only = YES
+    Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
+    CrossCompilePrefix = ${targetPrefix}
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
     BUILD_SPHINX_PDF = NO
   '' + stdenv.lib.optionalString enableRelocatedStaticLibs ''
     GhcLibHcOpts += -fPIC
     GhcRtsHcOpts += -fPIC
+  '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
+    EXTRA_CC_OPTS += -std=gnu99
   '';
 
   # Splicer will pull out correct variations
@@ -89,11 +96,34 @@ stdenv.mkDerivation rec {
       url = "https://git.haskell.org/ghc.git/commitdiff_plain/2fc8ce5f0c8c81771c26266ac0b150ca9b75c5f3";
       sha256 = "03253ci40np1v6k0wmi4aypj3nmj3rdyvb1k6rwqipb30nfc719f";
     })
+    (import ./abi-depends-determinism.nix { inherit fetchpatch runCommand; })
+  ] ++ stdenv.lib.optionals (hostPlatform != targetPlatform && targetPlatform.system == hostPlatform.system) [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/08a41d2dff99645af6ac5a7bb4774f5f193b6f20/dev-lang/ghc/files/ghc-8.2.1_rc1-unphased-cross.patch";
+      sha256 = "1hxj80bjx0x3w0f35cj3k2wipppr1ald03jwfy5q0xlxygdha17w";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/08a41d2dff99645af6ac5a7bb4774f5f193b6f20/dev-lang/ghc/files/ghc-8.2.1_rc1-staged-cross.patch";
+      sha256 = "12xsln3zyfpvml8bwdpbc003h6zl1qh2qcq1rhdrw02n45dz8lvc";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/08a41d2dff99645af6ac5a7bb4774f5f193b6f20/dev-lang/ghc/files/ghc-8.2.1_rc1-ghci-cross.patch";
+      sha256 = "03dcqf5af3vjhrky3f2z26j4d9h8qd9nkv76xp0l97h4cqk7vfqb";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/08a41d2dff99645af6ac5a7bb4774f5f193b6f20/dev-lang/ghc/files/ghc-8.2.1_rc1-stage2-cross.patch";
+      sha256 = "0pi2m85wjxaaablq6n4q5vyn9qxvry5d7nmja4b28i68yb4ly9g1";
+    })
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/gentoo/gentoo/08a41d2dff99645af6ac5a7bb4774f5f193b6f20/dev-lang/ghc/files/ghc-8.2.1_rc1-hp2ps-cross.patch";
+      sha256 = "1fszfavf1cvrf02x500mi7jykcpvpl2i7i4qzr2qz9sbmyq063f0";
+    })
   ] ++ stdenv.lib.optional deterministicProfiling
     (fetchpatch { # Backport of https://phabricator.haskell.org/D4388 for more determinism
       url = "https://github.com/shlevy/ghc/commit/fec1b8d3555c447c0d8da0e96b659be67c8bb4bc.patch";
       sha256 = "1lyysz6hfd1njcigpm8xppbnkadqfs0kvrp7s8vqgb38pjswj5hg";
-    });
+    })
+    ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
 
   postPatch = "patchShebangs .";
 
@@ -107,7 +137,7 @@ stdenv.mkDerivation rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isArm ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -129,14 +159,15 @@ stdenv.mkDerivation rec {
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
+  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform) [
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && ! enableIntegerSimple) [
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
+  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc") [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals (targetPlatform.isArm) [
+  ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
@@ -145,12 +176,13 @@ stdenv.mkDerivation rec {
     "--disable-large-address-space"
   ];
 
-  # Hack to make sure we never to the relaxation `$PATH` and hooks support for
-  # compatability. This will be replaced with something clearer in a future
-  # masss-rebuild.
-  crossConfig = true;
+  # Make sure we never relax`$PATH` and hooks support for compatability.
+  strictDeps = true;
 
-  nativeBuildInputs = [ alex autoconf autoreconfHook automake ghc happy hscolour perl python3 sphinx ];
+  nativeBuildInputs = [
+    autoconf autoreconfHook automake perl python3 sphinx
+    ghc alex happy hscolour
+  ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
@@ -168,11 +200,15 @@ stdenv.mkDerivation rec {
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
   checkTarget = "test";
+  doCheck = false; # fails with "testsuite/tests: No such file or directory.  Stop."
 
-  # zsh and other shells are smart about `{ghc}` but bash isn't, and doesn't
-  # treat that as a unary `{x,y,z,..}` repetition.
+  hardeningDisable = [ "format" ];
+
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
+    for bin in "$out"/lib/${name}/bin/*; do
+      isELF "$bin" || continue
+      paxmark m "$bin"
+    done
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
@@ -189,6 +225,7 @@ stdenv.mkDerivation rec {
     inherit bootPkgs targetPrefix;
 
     inherit llvmPackages;
+    inherit enableShared;
 
     # Our Cabal compiler name
     haskellCompilerName = "ghc-8.2.2";

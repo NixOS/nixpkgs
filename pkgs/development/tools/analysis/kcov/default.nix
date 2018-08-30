@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "kcov-${version}";
-  version = "34";
+  version = "36";
 
   src = fetchFromGitHub {
     owner = "SimonKagstrom";
     repo = "kcov";
     rev = "v${version}";
-    sha256 = "1i4pn5na8m308pssk8585nmqi8kwd63a9h2rkjrn4w78ibmxvj01";
+    sha256 = "1q1mw5mxz041lr6qc2v4280rmx13pg1bx5r3bxz9bzs941r405r3";
   };
 
   preConfigure = "patchShebangs src/bin-to-c-source.py";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = http://simonkagstrom.github.io/kcov/index.html;
     license = licenses.gpl2;
 
-    maintainers = [ maintainers.gal_bolle ];
+    maintainers = with maintainers; [ gal_bolle ekleog ];
     platforms = platforms.linux;
   };
 }

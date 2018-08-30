@@ -1,20 +1,30 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, bison, flex, eigen, boost, libGLU_combined, glew, opencsg, cgal
-, mpfr, gmp, glib, pkgconfig, harfbuzz, qscintilla, gettext
+{ stdenv, fetchFromGitHub, qt5, libsForQt5
+, bison, flex, eigen, boost, libGLU_combined, glew, opencsg, cgal
+, mpfr, gmp, glib, pkgconfig, harfbuzz, gettext
 }:
 
 stdenv.mkDerivation rec {
-  version = "2015.03-3";
+  version = "2018.04-git";
   name = "openscad-${version}";
 
-  src = fetchurl {
-    url = "http://files.openscad.org/${name}.src.tar.gz";
-    sha256 = "0djsgi9yx1nxr2gh1kgsqw5vrbncp8v5li0p1pp02higqf1psajx";
+#  src = fetchurl {
+#    url = "http://files.openscad.org/${name}.src.tar.gz";
+#    sha256 = "0djsgi9yx1nxr2gh1kgsqw5vrbncp8v5li0p1pp02higqf1psajx";
+#  };
+  src = fetchFromGitHub {
+    owner = "openscad";
+    repo = "openscad";
+    rev = "179074dff8c23cbc0e651ce8463737df0006f4ca";
+    sha256 = "1y63yqyd0v255liik4ff5ak6mj86d8d76w436x76hs5dk6jgpmfb";
   };
 
   buildInputs = [
-    qt4 qmake4Hook bison flex eigen boost libGLU_combined glew opencsg cgal mpfr gmp glib
-    pkgconfig harfbuzz qscintilla gettext
-  ];
+    bison flex eigen boost libGLU_combined glew opencsg cgal mpfr gmp glib
+    pkgconfig harfbuzz gettext
+  ]
+    ++ (with qt5; [qtbase qmake])
+    ++ (with libsForQt5; [qscintilla])
+  ;
 
   qmakeFlags = [ "VERSION=${version}" ];
 

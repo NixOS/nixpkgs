@@ -28,6 +28,15 @@ in
       example = ''
         $feature{'highlight'}{'default'} = [1];
         $feature{'ctags'}{'default'} = [1];
+        $feature{'avatar'}{'default'} = ['gravatar'];
+      '';
+    };
+
+    gitwebTheme = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Use an alternative theme for gitweb, strongly inspired by GitHub.
       '';
     };
 

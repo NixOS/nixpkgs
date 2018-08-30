@@ -1,6 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
-, libtool, libuv, luaPackages, ncurses, perl, pkgconfig
-, unibilium, vimUtils, xsel, gperf, callPackage
+{ stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+, libuv, luaPackages, ncurses, pkgconfig
+, unibilium, xsel, gperf
+, libvterm-neovim
 , withJemalloc ? true, jemalloc
 }:
 
@@ -8,44 +9,15 @@ with stdenv.lib;
 
 let
 
-  # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
-  neovimLibvterm = stdenv.mkDerivation rec {
-    name = "neovim-libvterm-${version}";
-    version = "2017-11-05";
-
-    src = fetchFromGitHub {
-      owner = "neovim";
-      repo = "libvterm";
-      rev = "4ca7ebf7d25856e90bc9d9cc49412e80be7c4ea8";
-      sha256 = "05kyvvz8af90mvig11ya5xd8f4mbvapwyclyrihm9lwas706lzf6";
-    };
-
-    buildInputs = [ perl ];
-    nativeBuildInputs = [ libtool ];
-
-    makeFlags = [ "PREFIX=$(out)" ]
-      ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
-
-    enableParallelBuilding = true;
-
-    meta = {
-      description = "VT220/xterm/ECMA-48 terminal emulator library";
-      homepage = http://www.leonerd.org.uk/code/libvterm/;
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-      platforms = platforms.unix;
-    };
-  };
-
   neovim = stdenv.mkDerivation rec {
     name = "neovim-unwrapped-${version}";
-    version = "0.2.2";
+    version = "0.3.1";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "1dxr29d0hyag7snbww5s40as90412qb61rgj7gd9rps1iccl9gv4";
+      sha256 = "19jy9nr2ffscli6wsysqkdvqvh7sgkkwhzkw3yypfrvg4pj9rl56";
     };
 
     enableParallelBuilding = true;
@@ -53,13 +25,14 @@ let
     buildInputs = [
       libtermkey
       libuv
-      libmsgpack
+      msgpack
       ncurses
-      neovimLibvterm
+      libvterm-neovim
       unibilium
       luaPackages.lua
       gperf
     ] ++ optional withJemalloc jemalloc
+      ++ optional stdenv.isDarwin libiconv
       ++ lualibs;
 
     nativeBuildInputs = [
@@ -75,6 +48,7 @@ let
 
     cmakeFlags = [
       "-DLUA_PRG=${luaPackages.lua}/bin/lua"
+      "-DGPERF_PRG=${gperf}/bin/gperf"
     ];
 
     # triggers on buffer overflow bug while running tests
@@ -86,7 +60,7 @@ let
     '';
 
     postInstall = stdenv.lib.optionalString stdenv.isLinux ''
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" $out/share/nvim/runtime/autoload/provider/clipboard.vim
+      sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '' + stdenv.lib.optionalString (withJemalloc && stdenv.isDarwin) ''
       install_name_tool -change libjemalloc.1.dylib \
                 ${jemalloc}/lib/libjemalloc.1.dylib \

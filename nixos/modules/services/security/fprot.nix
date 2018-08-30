@@ -53,14 +53,14 @@ in {
       target = "f-prot.conf";
     };
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = fprotUser;
         uid = config.ids.uids.fprot;
         description = "F-Prot daemon user";
         home = stateDir;
       };
 
-    users.extraGroups = singleton
+    users.groups = singleton
       { name = fprotGroup;
         gid = config.ids.gids.fprot;
       };

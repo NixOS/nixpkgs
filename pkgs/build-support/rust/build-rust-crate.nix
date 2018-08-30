@@ -15,6 +15,12 @@ let makeDeps = dependencies:
            " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}${buildPlatform.extensions.sharedLibrary}")
       ) dependencies);
 
+    # This doesn't appear to be officially documented anywhere yet.
+    # See https://github.com/rust-lang-nursery/rust-forge/issues/101.
+    target_os = if buildPlatform.isDarwin
+      then "macos"
+      else buildPlatform.parsed.kernel.name;
+
     echo_build_heading = colors: ''
       echo_build_heading() {
        start=""
@@ -47,7 +53,7 @@ let makeDeps = dependencies:
     '';
 
     configureCrate =
-      { crateName, crateVersion, crateAuthors, build, libName, crateFeatures, colors, libPath, release, buildDependencies, completeDeps, completeBuildDeps, verbose, dependencies }:
+      { crateName, crateVersion, crateAuthors, build, libName, crateFeatures, colors, libPath, release, buildDependencies, completeDeps, completeBuildDeps, verbose, workspace_member, extraLinkFlags }:
       let version_ = lib.splitString "-" crateVersion;
           versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
           version = lib.splitString "." (lib.head version_);
@@ -58,6 +64,7 @@ let makeDeps = dependencies:
           completeDepsDir = lib.concatStringsSep " " completeDeps;
           completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
       in ''
+      cd ${workspace_member}
       runHook preConfigure
       ${echo_build_heading colors}
       ${noisily colors verbose}
@@ -78,6 +85,8 @@ let makeDeps = dependencies:
 
       mkdir -p target/{deps,lib,build,buildDeps}
       chmod uga+w target -R
+      echo ${extraLinkFlags} > target/link
+      echo ${extraLinkFlags} > target/link.final
       for i in ${completeDepsDir}; do
         symlink_dependency $i target/deps
       done
@@ -98,7 +107,7 @@ let makeDeps = dependencies:
       export CARGO_PKG_AUTHORS="${authors}"
 
       export CARGO_CFG_TARGET_ARCH=${buildPlatform.parsed.cpu.name}
-      export CARGO_CFG_TARGET_OS=${buildPlatform.parsed.kernel.name}
+      export CARGO_CFG_TARGET_OS=${target_os}
       export CARGO_CFG_TARGET_FAMILY="unix"
       export CARGO_CFG_UNIX=1
       export CARGO_CFG_TARGET_ENV="gnu"
@@ -146,10 +155,15 @@ let makeDeps = dependencies:
          mkdir -p $OUT_DIR
          target/build/${crateName}/build_script_build > target/build/${crateName}.opt
          set +e
-         EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+         EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
          EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
-         EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-         EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+         EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
+         EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ' | sort -u)
+
+         for env in $(sed -n "s/^cargo:rustc-env=\(.*\)/\1/p" target/build/${crateName}.opt); do
+           export $env
+         done
+
          CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/")
          grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
            | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
@@ -167,27 +181,18 @@ let makeDeps = dependencies:
       runHook postConfigure
     '';
 
-    buildCrate = { crateName, crateVersion, crateAuthors,
-                   dependencies, completeDeps, completeBuildDeps,
-                   crateFeatures, libName, build, release, libPath,
+    buildCrate = { crateName,
+                   dependencies,
+                   crateFeatures, libName, release, libPath,
                    crateType, metadata, crateBin, finalBins,
-                   extraRustcOpts,
-                   verbose, colors }:
+                   extraRustcOpts, verbose, colors }:
 
-      let depsDir = lib.concatStringsSep " " dependencies;
-          completeDepsDir = lib.concatStringsSep " " completeDeps;
-          completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
-          deps = makeDeps dependencies;
-          optLevel = if release then 3 else 0;
+      let deps = makeDeps dependencies;
           rustcOpts =
             lib.lists.foldl' (opts: opt: opts + " " + opt)
               (if release then "-C opt-level=3" else "-C debuginfo=2")
-              extraRustcOpts;
+              (["-C codegen-units=1"] ++ extraRustcOpts);
           rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
-          version_ = lib.splitString "-" crateVersion;
-          versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
-          version = lib.splitString "." (lib.head version_);
-          authors = lib.concatStringsSep ":" crateAuthors;
       in ''
       runHook preBuild
       norm=""
@@ -221,12 +226,12 @@ let makeDeps = dependencies:
       build_bin() {
         crate_name=$1
         crate_name_=$(echo $crate_name | sed -e "s/-/_/g")
-	main_file=""
-	if [[ ! -z $2 ]]; then
+        main_file=""
+        if [[ ! -z $2 ]]; then
           main_file=$2
-	fi
-	echo_build_heading $@
-	noisily rustc --crate-name $crate_name_ $main_file --crate-type bin ${rustcOpts}\
+        fi
+        echo_build_heading $@
+        noisily rustc --crate-name $crate_name_ $main_file --crate-type bin ${rustcOpts}\
           ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps \
           $LINK ${deps}$EXTRA_LIB --cap-lints allow \
           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
@@ -335,7 +340,6 @@ crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, cr
   preConfigure, postConfigure, preBuild, postBuild, preInstall, postInstall }:
 
 let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_);
-    release_ = release;
     dependencies_ = dependencies;
     buildDependencies_ = buildDependencies;
     processedAttrs = [
@@ -374,7 +378,7 @@ stdenv.mkDerivation (rec {
     );
 
     crateFeatures = if crate ? features then
-        lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features ++ features)
+        lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features ++ features) #"
       else "";
 
     libName = if crate ? libName then crate.libName else crate.crateName;
@@ -407,24 +411,28 @@ stdenv.mkDerivation (rec {
        ) "" crate.crateBin
     else "";
 
-    build = if crate ? build then crate.build else "";
+    build = crate.build or "";
+    workspace_member = crate.workspace_member or ".";
     crateVersion = crate.version;
     crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [];
     crateType =
       if lib.attrByPath ["procMacro"] false crate then "proc-macro" else
       if lib.attrByPath ["plugin"] false crate then "dylib" else
-      if crate ? type then crate.type else "lib";
+      (crate.type or "lib");
     colors = lib.attrByPath [ "colors" ] "always" crate;
+    extraLinkFlags = builtins.concatStringsSep " " (crate.extraLinkFlags or []);
     configurePhase = configureCrate {
-      inherit crateName dependencies buildDependencies completeDeps completeBuildDeps
-              crateFeatures libName build release libPath crateVersion
+      inherit crateName buildDependencies completeDeps completeBuildDeps
+              crateFeatures libName build workspace_member release libPath crateVersion
+              extraLinkFlags
               crateAuthors verbose colors;
     };
     extraRustcOpts = if crate ? extraRustcOpts then crate.extraRustcOpts else [];
     buildPhase = buildCrate {
-      inherit crateName dependencies completeDeps completeBuildDeps
-              crateFeatures libName build release libPath crateType crateVersion
-              crateAuthors metadata crateBin finalBins verbose colors extraRustcOpts;
+      inherit crateName dependencies
+              crateFeatures libName release libPath crateType
+              metadata crateBin finalBins verbose colors
+              extraRustcOpts;
     };
     installPhase = installCrate crateName metadata;
 

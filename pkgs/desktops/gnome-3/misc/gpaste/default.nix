@@ -2,13 +2,29 @@
 , pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  version = "3.28.1";
+  version = "3.28.2";
   name = "gpaste-${version}";
 
   src = fetchurl {
     url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "19rdi2syshrk32hqnjh63fm0wargw546j5wlsnsg1axml0x1xww9";
+    sha256 = "1zfx73qpw976hyzp5k569lywsq2b6dbnnzf2cvhjvn3mvkw8pin2";
   };
+
+  patches = [
+    ./fix-paths.patch
+  ];
+
+  # TODO: switch to substituteAll with placeholder
+  # https://github.com/NixOS/nix/issues/1846
+  # https://github.com/NixOS/nixpkgs/pull/37693
+  postPatch = ''
+    substituteInPlace src/gnome-shell/extension.js \
+      --subst-var-by typelibPath "$out/lib/girepository-1.0"
+    substituteInPlace src/gnome-shell/prefs.js \
+      --subst-var-by typelibPath "$out/lib/girepository-1.0"
+    substituteInPlace src/libgpaste/settings/gpaste-settings.c \
+      --subst-var-by gschemasCompiled "$out/share/gsettings-schemas/${name}/glib-2.0/schemas"
+  '';
 
   nativeBuildInputs = [ autoreconfHook pkgconfig vala wrapGAppsHook ];
   buildInputs = [ glib gjs mutter gnome3.adwaita-icon-theme

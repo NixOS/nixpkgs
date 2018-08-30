@@ -1,8 +1,7 @@
-{ stdenv, lib, fetchurl, kernel, perl, makeWrapper }:
+{ stdenv, fetchurl, kernel, perl, makeWrapper }:
 
 # BLCR version 0.8.6 should works with linux kernel up to version 3.17.x
 
-assert stdenv.isLinux;
 assert builtins.compareVersions "3.18" kernel.version == 1;
 
 stdenv.mkDerivation {

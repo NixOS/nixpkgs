@@ -71,14 +71,15 @@ callPackage ./common.nix { inherit stdenv; } {
 
       # Get rid of more unnecessary stuff.
       rm -rf $out/var $bin/bin/sln
-
+    ''
       # For some reason these aren't stripped otherwise and retain reference
       # to bootstrap-tools; on cross-arm this stripping would break objects.
-      if [ -z "$crossConfig" ]; then
-        for i in "$out"/lib/*.a; do
-            [ "$i" = "$out/lib/libm.a" ] || strip -S "$i"
-        done
-      fi
+    + stdenv.lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+
+      for i in "$out"/lib/*.a; do
+          [ "$i" = "$out/lib/libm.a" ] || $STRIP -S "$i"
+      done
+    '' + ''
 
       # Put libraries for static linking in a separate output.  Note
       # that libc_nonshared.a and libpthread_nonshared.a are required

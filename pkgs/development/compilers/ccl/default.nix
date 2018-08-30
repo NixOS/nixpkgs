@@ -81,6 +81,8 @@ stdenv.mkDerivation rec {
     ln -s "$out"/bin/"${CCL_RUNTIME}" "$out"/bin/ccl
   '';
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "Clozure Common Lisp";
     homepage    = https://ccl.clozure.com/;

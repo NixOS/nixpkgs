@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "autopep8";
   version = "1.3.5";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

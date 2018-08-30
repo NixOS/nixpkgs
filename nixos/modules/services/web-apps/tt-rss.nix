@@ -76,6 +76,8 @@ let
       define('SMTP_FROM_NAME', '${escape ["'" "\\"] cfg.email.fromName}');
       define('SMTP_FROM_ADDRESS', '${escape ["'" "\\"] cfg.email.fromAddress}');
       define('DIGEST_SUBJECT', '${escape ["'" "\\"] cfg.email.digestSubject}');
+
+      ${cfg.extraConfig}
   '';
 
  in {
@@ -431,6 +433,26 @@ let
         '';
       };
 
+      pluginPackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+          List of plugins to install. The list elements are expected to
+          be derivations. All elements in this derivation are automatically
+          copied to the <literal>plugins.local</literal> directory.
+        '';
+      };
+
+      themePackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+          List of themes to install. The list elements are expected to
+          be derivations. All elements in this derivation are automatically
+          copied to the <literal>themes.local</literal> directory.
+        '';
+      };
+
       logDestination = mkOption {
         type = types.enum ["" "sql" "syslog"];
         default = "sql";
@@ -439,6 +461,14 @@ let
           you can read in Preferences -> System), syslog - logs to system log.
           Setting this to blank uses PHP logging (usually to http server
           error.log).
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Additional lines to append to <literal>config.php</literal>.
         '';
       };
     };
@@ -466,10 +496,10 @@ let
       '';
     };
 
-    services.nginx = {
+    # NOTE: No configuration is done if not using virtual host
+    services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
-      # NOTE: No configuration is done if not using virtual host
-      virtualHosts = mkIf (cfg.virtualHost != null) {
+      virtualHosts = {
         "${cfg.virtualHost}" = {
           root = "${cfg.root}";
 
@@ -517,6 +547,16 @@ let
           rm -rf "${cfg.root}/*"
           mkdir -m 755 -p "${cfg.root}"
           cp -r "${pkgs.tt-rss}/"* "${cfg.root}"
+          ${optionalString (cfg.pluginPackages != []) ''
+            for plugin in ${concatStringsSep " " cfg.pluginPackages}; do
+              cp -r "$plugin"/* "${cfg.root}/plugins.local/"
+            done
+          ''}
+          ${optionalString (cfg.themePackages != []) ''
+            for theme in ${concatStringsSep " " cfg.themePackages}; do
+              cp -r "$theme"/* "${cfg.root}/themes.local/"
+            done
+          ''}
           ln -sf "${tt-rss-config}" "${cfg.root}/config.php"
           chown -R "${cfg.user}" "${cfg.root}"
           chmod -R 755 "${cfg.root}"
@@ -584,8 +624,8 @@ let
     };
 
     users = optionalAttrs (cfg.user == "tt_rss") {
-      extraUsers.tt_rss.group = "tt_rss";
-      extraGroups.tt_rss = {};
+      users.tt_rss.group = "tt_rss";
+      groups.tt_rss = {};
     };
   };
 }

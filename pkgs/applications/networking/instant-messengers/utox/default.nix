@@ -1,16 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
-, libXrender, fontconfig, libXext, libXft, utillinux, git, libsodium, libopus, check }:
+{ stdenv, lib, fetchFromGitHub, check, cmake, pkgconfig
+, libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
+, libXrender, fontconfig, libXext, libXft, libsodium, libopus }:
 
 stdenv.mkDerivation rec {
   name = "utox-${version}";
 
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner  = "uTox";
     repo   = "uTox";
     rev    = "v${version}";
-    sha256 = "0ak10925v67yaga2pw9yzp0xkb5j1181srfjdyqpd29v8mi9j828";
+    sha256 = "12wbq883il7ikldayh8hm0cjfrkp45vn05xx9s1jbfz6gmkidyar";
+    fetchSubmodules = true;
   };
 
   buildInputs = [
@@ -20,16 +22,21 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake git pkgconfig check
+    cmake pkgconfig
   ];
 
   cmakeFlags = [
-    "-DENABLE_UPDATER=OFF"
-  ] ++ stdenv.lib.optional (!doCheck) "-DENABLE_TESTS=OFF";
+    "-DENABLE_AUTOUPDATE=OFF"
+    "-DENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
+  ];
 
-  doCheck = true;
-
-  checkTarget = "test";
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkInputs = [ check ];
+  checkPhase = ''
+    runHook preCheck
+    ctest -VV
+    runHook postCheck
+  '';
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";

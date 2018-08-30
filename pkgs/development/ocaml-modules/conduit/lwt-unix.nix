@@ -1,5 +1,5 @@
 { stdenv, ocaml, findlib, jbuilder, conduit-lwt
-, logs, ppx_sexp_conv
+, logs, ppx_sexp_conv, lwt_ssl
 }:
 
 if !stdenv.lib.versionAtLeast conduit-lwt.version "1.0"
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ ocaml findlib jbuilder ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ conduit-lwt logs ];
+	propagatedBuildInputs = [ conduit-lwt logs lwt_ssl ];
 
 	buildPhase = "jbuilder build -p conduit-lwt-unix";
 }

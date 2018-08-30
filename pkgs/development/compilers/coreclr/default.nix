@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   name = "coreclr-${version}";
-  version = "2.0.0";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner  = "dotnet";
     repo   = "coreclr";
     rev    = "v${version}";
-    sha256 = "16z58ix8kmk8csfy5qsqz8z30czhrap2vb8s8vdflmbcfnq31jcw";
+    sha256 = "0pzkrfgqywhpijbx7j1v4lxa6270h6whymb64jdkp7yj56ipqh2n";
   };
 
   patches = [
@@ -34,12 +34,20 @@ stdenv.mkDerivation rec {
       url = https://github.com/dotnet/coreclr/commit/a8f83b615708c529b112898e7d2fbc3f618b26ee.patch;
       sha256 = "047ph5gip4z2h7liwdxsmpnlaq0sd3hliaw4nyqjp647m80g3ffq";
     })
+    (fetchpatch {
+      # clang 5
+      url = https://github.com/dotnet/coreclr/commit/9b22e1a767dee38f351001c5601f56d78766a43e.patch;
+      sha256 = "1w1lxw5ryvhq8m5m0kv880c4bh6y9xdgypkr76sqbh3v568yghzg";
+    })
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     which
     cmake
     clang
+  ];
+
+  buildInputs = [
     llvmPackages.llvm
     llvmPackages.lldb
     libunwind
@@ -68,7 +76,8 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    ./build.sh $BuildArch $BuildType
+    # disable -Werror which can potentially breaks with every compiler upgrade
+    ./build.sh $BuildArch $BuildType cmakeargs "-DCLR_CMAKE_WARNINGS_ARE_ERRORS=OFF"
     runHook postBuild
   '';
 

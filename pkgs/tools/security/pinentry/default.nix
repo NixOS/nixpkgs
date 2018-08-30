@@ -1,5 +1,6 @@
 { fetchurl, fetchpatch, stdenv, lib, pkgconfig
-, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null, gtk2 ? null, gcr ? null, qt ? null
+, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null,  gtk2 ? null, gcr ? null, qt ? null
+, enableEmacs ? false
 }:
 
 let
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   patches = lib.optionals (gtk2 != null) [
     (fetchpatch {
-      url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
+      url = https://sources.debian.org/data/main/p/pinentry/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
       sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
     })
   ];
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     (mkEnable (libsecret != null) "libsecret")
     (mkEnable (ncurses != null)   "pinentry-curses")
     (mkEnable true                "pinentry-tty")
+    (mkEnable enableEmacs         "pinentry-emacs")
     (mkEnable (gtk2 != null)      "pinentry-gtk2")
     (mkEnable (gcr != null)       "pinentry-gnome3")
     (mkEnable (qt != null)        "pinentry-qt")

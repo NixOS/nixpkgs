@@ -3,11 +3,11 @@
 pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot-worker";
-  version = "1.0.0";
+  version = "1.3.0";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "0ws31ypmksah1c83h4npwg560p8v7n9j6l94p79y5pispjsgzqzl";
+    sha256 = "1l9iqyqn9yln6ln6dhfkngzx92a61v1cf5ahqj4ax663i02yq7fh";
   };
 
   buildInputs = with pythonPackages; [ setuptoolsTrial mock ];

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, devicemapper, libuuid, gettext, readline
-, utillinux, check, enableStatic ? false, hurd ? null }:
+{ stdenv, fetchurl, lvm2, libuuid, gettext, readline
+, utillinux, check, enableStatic ? false }:
 
 stdenv.mkDerivation rec {
   name = "parted-3.1";
@@ -12,23 +12,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ]
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext
-    ++ stdenv.lib.optional (devicemapper != null) devicemapper
-    ++ stdenv.lib.optional (hurd != null) hurd
-    ++ stdenv.lib.optional doCheck check;
+    ++ stdenv.lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
        (if (readline != null)
         then [ "--with-readline" ]
         else [ "--without-readline" ])
-    ++ stdenv.lib.optional (devicemapper == null) "--disable-device-mapper"
+    ++ stdenv.lib.optional (lvm2 == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 
   doCheck = true;
-
-  preCheck =
-    stdenv.lib.optionalString doCheck
-      # The `t0400-loop-clobber-infloop.sh' test wants `mkswap'.
-      "export PATH=\"${utillinux}/sbin:$PATH\"";
+  checkInputs = [ check utillinux ];
 
   meta = {
     description = "Create, destroy, resize, check, and copy partitions";

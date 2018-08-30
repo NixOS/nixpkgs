@@ -31,11 +31,12 @@ let
                   else p;
       describe = args:
         let
+          title = args.title or null;
           name = args.name or (lib.concatStringsSep "." args.path);
           path = args.path or [ args.name ];
           package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}'") pkgs);
         in "<listitem>"
-        + "<para><literal>pkgs.${name} (${package.meta.name})</literal>"
+        + "<para><literal>${lib.optionalString (title != null) "${title} aka "}pkgs.${name} (${package.meta.name})</literal>"
         + lib.optionalString (!package.meta.available) " <emphasis>[UNAVAILABLE]</emphasis>"
         + ": ${package.meta.description or "???"}.</para>"
         + lib.optionalString (args ? comment) "\n<para>${args.comment}</para>"
@@ -51,7 +52,7 @@ let
   // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
   // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
   // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
-  // lib.optionalAttrs (opt ? relatedPackages) { relatedPackages = genRelatedPackages opt.relatedPackages; });
+  // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages; });
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
@@ -102,13 +103,18 @@ let
     </section>
   '';
 
+  generatedSources = runCommand "generated-docbook" {} ''
+    mkdir $out
+    ln -s ${modulesDoc} $out/modules.xml
+    ln -s ${optionsDocBook} $out/options-db.xml
+    printf "%s" "${version}" > $out/version
+  '';
+
   copySources =
     ''
       cp -prd $sources/* . # */
+      ln -s ${generatedSources} ./generated
       chmod -R u+w .
-      ln -s ${modulesDoc} configuration/modules.xml
-      ln -s ${optionsDocBook} options-db.xml
-      printf "%s" "${version}" > version
     '';
 
   toc = builtins.toFile "toc.xml"
@@ -203,13 +209,13 @@ let
         --stringparam collect.xref.targets only \
         --stringparam targets.filename "$out/manual.db" \
         --nonet \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
         ${manual-combined}/manual-combined.xml
 
       cat > "$out/olinkdb.xml" <<EOF
       <?xml version="1.0" encoding="utf-8"?>
       <!DOCTYPE targetset SYSTEM
-        "file://${docbook5_xsl}/xml/xsl/docbook/common/targetdatabase.dtd" [
+        "file://${docbook_xsl_ns}/xml/xsl/docbook/common/targetdatabase.dtd" [
         <!ENTITY manualtargets SYSTEM "file://$out/manual.db">
       ]>
       <targetset>
@@ -224,6 +230,7 @@ let
     '';
 
 in rec {
+  inherit generatedSources;
 
   # The NixOS options in JSON format.
   optionsJSON = runCommand "options-json"
@@ -257,11 +264,11 @@ in rec {
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --output $dst/ \
-        ${docbook5_xsl}/xml/xsl/docbook/xhtml/chunktoc.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/xhtml/chunktoc.xsl \
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/images/callouts
-      cp ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
+      cp ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/images/callouts/
 
       cp ${../../../doc/style.css} $dst/style.css
       cp ${../../../doc/overrides.css} $dst/overrides.css
@@ -285,11 +292,11 @@ in rec {
         ${manualXsltprocOptions} \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
         --nonet --xinclude --output $dst/epub/ \
-        ${docbook5_xsl}/xml/xsl/docbook/epub/docbook.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
         ${manual-combined}/manual-combined.xml
 
       mkdir -p $dst/epub/OEBPS/images/callouts
-      cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
+      cp -r ${docbook_xsl_ns}/xml/xsl/docbook/images/callouts/*.svg $dst/epub/OEBPS/images/callouts # */
       echo "application/epub+zip" > mimetype
       manual="$dst/nixos-manual.epub"
       zip -0Xq "$manual" mimetype
@@ -317,7 +324,7 @@ in rec {
         --param man.endnotes.are.numbered 0 \
         --param man.break.after.slash 1 \
         --stringparam target.database.document "${olinkDB}/olinkdb.xml" \
-        ${docbook5_xsl}/xml/xsl/docbook/manpages/docbook.xsl \
+        ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl \
         ${manual-combined}/man-pages-combined.xml
     '';
 

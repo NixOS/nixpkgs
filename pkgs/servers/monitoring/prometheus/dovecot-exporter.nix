@@ -1,17 +1,16 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "dovecot_exporter-unstable-${version}";
-  version = "2018-01-18";
-  rev = "4e831356533e2321031df73ebd25dd55dbd8d385";
+  name = "dovecot_exporter-${version}";
+  version = "0.1.1";
 
   goPackagePath = "github.com/kumina/dovecot_exporter";
 
   src = fetchFromGitHub {
     owner = "kumina";
     repo = "dovecot_exporter";
-    inherit rev;
-    sha256 = "0iky1i7m5mlknkhlpsxpjgigssg5m02nx5y7i4biddkqilfic74n";
+    rev = version;
+    sha256 = "0i7nfgkb5jqdbgr16i29jdsvh69dx9qgn6nazpw78k0lgy7mpidn";
   };
 
   goDeps = ./dovecot-exporter-deps.nix;

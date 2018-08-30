@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, elfutils, libGL
-, xorg, patchelf, openssl, libdrm, libudev
+{ stdenv, fetchurl, elfutils
+, xorg, patchelf, openssl, libdrm, udev
 , libxcb, libxshmfence, epoxy, perl, zlib
-, fetchFromGitHub, ncurses
+, ncurses
 , libsOnly ? false, kernel ? null
 }:
 
@@ -12,8 +12,6 @@ with stdenv.lib;
 let
 
   kernelDir = if libsOnly then null else kernel.dev;
-
-  inherit (libGL) driverLink;
 
   bitness = if stdenv.is64bit then "64" else "32";
 
@@ -103,7 +101,7 @@ in stdenv.mkDerivation rec {
 
   depLibPath = makeLibraryPath [
     stdenv.cc.cc.lib xorg.libXext xorg.libX11 xorg.libXdamage xorg.libXfixes zlib
-    xorg.libXxf86vm libxcb libxshmfence epoxy openssl libdrm elfutils libudev ncurses5
+    xorg.libXxf86vm libxcb libxshmfence epoxy openssl libdrm elfutils udev ncurses5
   ];
 
   installPhase = ''

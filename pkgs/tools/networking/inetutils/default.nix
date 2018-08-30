@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, perl, help2man }:
+{ stdenv, lib, fetchurl, ncurses, perl, help2man }:
 
 stdenv.mkDerivation rec {
   name = "inetutils-1.9.4";
@@ -16,25 +16,20 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses /* for `talk' */ perl /* for `whois' */ help2man ];
 
   configureFlags = [ "--with-ncurses-include-dir=${ncurses.dev}/include" ]
-  ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd
+  ++ lib.optionals stdenv.hostPlatform.isMusl [ # Musl doesn't define rcmd
     "--disable-rcp"
     "--disable-rsh"
     "--disable-rlogin"
     "--disable-rexec"
-  ];
+  ] ++ lib.optional stdenv.isDarwin  "--disable-servers";
 
   # Test fails with "UNIX socket name too long", probably because our
   # $TMPDIR is too long.
-  #doCheck = true;
+  doCheck = false;
 
+  installFlags = [ "SUIDMODE=" ];
 
-  postInstall = ''
-    # XXX: These programs are normally installed setuid but since it
-    # fails, they end up being non-executable, hence this hack.
-    chmod +x $out/bin/{ping,ping6,${stdenv.lib.optionalString (!stdenv.hostPlatform.isMusl) ''rcp,rlogin,rsh,''}traceroute}
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "Collection of common network programs";
 
     longDescription =
@@ -45,9 +40,9 @@ stdenv.mkDerivation rec {
       '';
 
     homepage = http://www.gnu.org/software/inetutils/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;
+    maintainers = with maintainers; [ matthewbauer ];
+    platforms = platforms.unix;
   };
 }

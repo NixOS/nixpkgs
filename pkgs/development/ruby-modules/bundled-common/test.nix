@@ -1,4 +1,4 @@
-{ stdenv, writeText, lib, ruby, defaultGemConfig, callPackage, test, stubs, should }@defs:
+{ stdenv, writeText, lib, ruby, defaultGemConfig, callPackage, test, stubs, should }:
 let
   testConfigs = {
     inherit lib;

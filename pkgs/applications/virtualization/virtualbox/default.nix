@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt5, libIDL, SDL, libcap, zlib, libpng, glib, lvm2
-, libXrandr, libXinerama
+{ stdenv, fetchurl, lib, fetchpatch, iasl, dev86, pam, libxslt, libxml2
+, libX11, xproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap
+, libpng, glib, lvm2, libXrandr, libXinerama
 , pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, gawk, nettools, dbus
+, alsaLib, curl, libvpx, nettools, dbus
 , xorriso, makeself, perl
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python2 ? null
-, enableExtensionPack ? false, requireFile ? null, patchelf ? null, fakeroot ? null
+, extensionPack ? null, fakeroot ? null
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
@@ -19,35 +19,14 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-  # Manually sha256sum the extensionPack file, must be hex!
-  # Do not forget to update the hash in ./guest-additions/default.nix!
-  extpack = "355ea5fe047f751534720c65398b44290d53f389e0f5f66818f3f36746631d26";
-  extpackRev = "121009";
-  main = "ee2759d47b0b4ac81b8b671c9485c87fb2db12c097b3e7e69b94c1291a8084e8";
-  version = "5.2.8";
-
-  # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extensionPack = requireFile rec {
-    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${toString extpackRev}.vbox-extpack";
-    sha256 = extpack;
-    message = ''
-      In order to use the extension pack, you need to comply with the VirtualBox Personal Use
-      and Evaluation License (PUEL) available at:
-
-      https://www.virtualbox.org/wiki/VirtualBox_PUEL
-
-      Once you have read and if you agree with the license, please use the
-      following command and re-run the installation:
-
-      nix-prefetch-url http://download.virtualbox.org/virtualbox/${version}/${name}
-    '';
-  };
-
+  # Remember to change the extpackRev and version in extpack.nix as well.
+  main = "ee3af129a581ec4c1a3e777e98247f8943e976ce6edd24962bcaa5c53ed1f644";
+  version = "5.2.14";
 in stdenv.mkDerivation {
   name = "virtualbox-${version}";
 
   src = fetchurl {
-    url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
+    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
     sha256 = main;
   };
 
@@ -65,7 +44,7 @@ in stdenv.mkDerivation {
     ++ optionals (headless) [ libXrandr ]
     ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
 
-  hardeningDisable = [ "fortify" "pic" "stackprotector" ];
+  hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
   prePatch = ''
     set -x
@@ -94,9 +73,14 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
-  ++ [ ./qtx11extras.patch ];
-
-
+  ++ [
+    ./qtx11extras.patch
+    (fetchpatch {
+      name = "010-qt-5.11.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/010-qt-5.11.patch?h=packages/virtualbox";
+      sha256 = "0hjx99pg40wqyggnrpylrp5zngva4xrnk7r90i0ynrqc7n84g9pn";
+    })
+  ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
@@ -169,7 +153,7 @@ in stdenv.mkDerivation {
         ln -s "$libexec/$file" $out/bin/$file
     done
 
-    ${optionalString enableExtensionPack ''
+    ${optionalString (extensionPack != null) ''
       mkdir -p "$share"
       "${fakeroot}/bin/fakeroot" "${stdenv.shell}" <<EXTHELPER
       "$libexec/VBoxExtPackHelperApp" install \

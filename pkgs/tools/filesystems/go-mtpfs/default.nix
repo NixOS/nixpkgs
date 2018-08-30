@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgconfig, libusb1, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, pkgconfig, libusb1, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "go-mtpfs-${version}";

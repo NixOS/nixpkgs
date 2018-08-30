@@ -1,20 +1,21 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, jsonm, hex, sexplib, lwt }:
+{ stdenv, fetchzip, ocaml, findlib, jbuilder, jsonm, hex, sexplib }:
 
-let version = "0.4.3"; in
+let version = "0.6.0"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-ezjsonm-${version}";
+  name = "ocaml${ocaml.version}-ezjsonm-${version}";
 
   src = fetchzip {
     url = "https://github.com/mirage/ezjsonm/archive/${version}.tar.gz";
-    sha256 = "1y6p3ga6vj1wx5dyns7hjgd0qgrrn2hnn323a7y5didgci5pybls";
+    sha256 = "18g64lhai0bz65b9fil12vlgfpwa9b5apj7x6d7n4zzm18qfazvj";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild lwt ];
+  buildInputs = [ ocaml findlib jbuilder ];
   propagatedBuildInputs = [ jsonm hex sexplib ];
-  createFindlibDestdir = true;
 
-  configureFlags = "--enable-lwt";
+  buildPhase = "jbuilder build -p ezjsonm";
+
+  inherit (jbuilder) installPhase;
 
   meta = {
     description = "An easy interface on top of the Jsonm library";

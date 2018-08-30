@@ -15,7 +15,7 @@ let
     then rec {
         version = "0.9.9.4";
         src = fetchurl {
-          url = "http://lilyterm.luna.com.tw/file/lilyterm-${version}.tar.gz";
+          url = "https://lilyterm.luna.com.tw/file/lilyterm-${version}.tar.gz";
           sha256 = "0x2x59qsxq6d6xg5sd5lxbsbwsdvkwqlk17iw3h4amjg3m1jc9mp";
         };
       }
@@ -40,17 +40,17 @@ stdenv.mkDerivation rec {
 
   preConfigure = "sh autogen.sh";
 
-  configureFlags = ''
-    --enable-nls
-    --enable-safe-mode
-  '';
+  configureFlags = [
+    "--enable-nls"
+    "--enable-safe-mode"
+  ];
 
   meta = with stdenv.lib; {
     description = "A fast, lightweight terminal emulator";
     longDescription = ''
       LilyTerm is a terminal emulator based off of libvte that aims to be fast and lightweight.
     '';
-    homepage = http://lilyterm.luna.com.tw/;
+    homepage = https://lilyterm.luna.com.tw/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ AndersonTorres Profpatsch ];
     platforms = platforms.linux;

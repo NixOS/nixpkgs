@@ -1,14 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "coverage";
   version = "4.5.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -7,7 +7,6 @@ with lib;
 let
 
   cfg  = config.programs.ssh;
-  cfgd = config.services.openssh;
 
   askPassword = cfg.askPassword;
 
@@ -59,6 +58,29 @@ in
         description = ''
           Whether to set the path to <command>xauth</command> for X11-forwarded connections.
           This causes a dependency on X11 packages.
+        '';
+      };
+
+      # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
+      pubkeyAcceptedKeyTypes = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "+ssh-dss"
+        ];
+        example = [ "ssh-ed25519" "ssh-rsa" ];
+        description = ''
+          Specifies the key types that will be used for public key authentication.
+        '';
+      };
+
+      hostKeyAlgorithms = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "+ssh-dss"
+        ];
+        example = [ "ssh-ed25519" "ssh-rsa" ];
+        description = ''
+          Specifies the host key algorithms that the client wants to use in order of preference.
         '';
       };
 
@@ -189,9 +211,8 @@ in
 
         ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
 
-        # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
-        PubkeyAcceptedKeyTypes +ssh-dss
-        HostKeyAlgorithms +ssh-dss
+        ${optionalString (cfg.pubkeyAcceptedKeyTypes != []) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
+        ${optionalString (cfg.hostKeyAlgorithms != []) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
 
         ${cfg.extraConfig}
       '';

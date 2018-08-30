@@ -2,17 +2,15 @@
 , buildPythonPackage
 , fetchPypi
 , darwin
-, mock
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.4.3";
-  name = "${pname}-${version}";
+  version = "5.4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e2467e9312c2fa191687b89ff4bc2ad8843be4af6fb4dc95a7cc5f7d7a327b18";
+    sha256 = "5b6322b167a5ba0c5463b4d30dfd379cd4ce245a1162ebf8fc7ab5c5ffae4f3b";
   };
 
   # No tests in archive

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libpfm, zlib, pkgconfig, python2Packages, which, procps, gdb, capnproto }:
 
 stdenv.mkDerivation rec {
-  version = "5.1.0";
+  version = "5.2.0";
   name = "rr-${version}";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    sha256 = "16v08irycb295jjw5yrcjdagvkgcgg4hl5qz215hrw1ff4g7sazy";
+    sha256 = "19jsnm8n2smalx2z60x9d8f6g4kdm7zghwyjfvwcxnslk1vn9dkc";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   preCheck = "export HOME=$TMPDIR";
 
   meta = {
-    homepage = http://rr-project.org/;
+    homepage = https://rr-project.org/;
     description = "Records nondeterministic executions and debugs them deterministically";
     longDescription = ''
       rr aspires to be your primary debugging tool, replacing -- well,
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
 
     license = "custom";
     maintainers = with stdenv.lib.maintainers; [ pierron thoughtpolice ];
-    platforms = ["x86_64-linux"];
+    platforms = stdenv.lib.platforms.x86;
   };
 }

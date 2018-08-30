@@ -1,4 +1,4 @@
-{ stdenv, cctools, appleDerivation }:
+{ cctools, appleDerivation }:
 
 appleDerivation {
   nativeBuildInputs = [ cctools ];
@@ -20,5 +20,6 @@ appleDerivation {
 
   postInstall = ''
     mv $out/usr/local/include $out/include
+    rm -rf $out/usr
   '';
 }

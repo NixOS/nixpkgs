@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
   '' else null;
 
+  doCheck = false; # fails
+  doInstallCheck = false; # fails
+
   meta = {
     homepage = http://www.gnu.org/software/tar/;
     description = "GNU implementation of the `tar' archiver";

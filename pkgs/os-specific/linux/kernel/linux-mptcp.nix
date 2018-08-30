@@ -1,8 +1,8 @@
 { stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 buildLinux (rec {
-  mptcpVersion = "0.93";
-  modDirVersion = "4.9.60";
+  mptcpVersion = "0.94";
+  modDirVersion = "4.14.24";
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
   # autoModules= true;
 
@@ -15,7 +15,7 @@ buildLinux (rec {
     owner = "multipath-tcp";
     repo = "mptcp";
     rev = "v${mptcpVersion}";
-    sha256 = "1irlppzvcmckrazs2c4vg6y8ji31552izc3wqabf401v57jvxcys";
+    sha256 = "01y3jf5awdxcv6vfpr30n0vaa8w1wgip0whiv88d610550299hkv";
   };
 
   extraConfig = ''
@@ -33,8 +33,7 @@ buildLinux (rec {
     DEFAULT_MPTCP_PM default
 
     # MPTCP scheduler selection.
-    # Disabled as the only non-default is the useless round-robin.
-    MPTCP_SCHED_ADVANCED n
+    MPTCP_SCHED_ADVANCED y
     DEFAULT_MPTCP_SCHED default
 
     # Smarter TCP congestion controllers

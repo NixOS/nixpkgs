@@ -1,17 +1,23 @@
 { stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, python2, zip, which, readline, icu, zlib, nspr }:
 
 let
-  version = "52.6.0";
+  version = "52.9.0";
 in stdenv.mkDerivation rec {
   name = "spidermonkey-${version}";
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "0hhyd4ni4jja7jd687dm0csi1jcjxahf918zbjzr8njz655djz2q";
+    sha256 = "1mlx34fgh1kaqamrkl5isf0npch3mm6s4lz3jsjb7hakiijhj7f0";
   };
 
   buildInputs = [ readline icu zlib nspr ];
   nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
+
+  # Apparently this package fails to build correctly with modern compilers, which at least
+  # on ARMv6 causes polkit testsuite to break with an assertion failure in spidermonkey.
+  # These flags were stolen from:
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/js52
+  NIX_CFLAGS_COMPILE = "-fno-delete-null-pointer-checks -fno-strict-aliasing -fno-tree-vrp";
 
   patches = [
     # needed to build gnome3.gjs

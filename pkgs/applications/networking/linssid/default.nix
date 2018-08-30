@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qmake, pkgconfig, boost, wirelesstools, iw, qwt6 }:
+{ stdenv, fetchurl, qtbase, qtsvg, qmake, pkgconfig, boost, wirelesstools, iw, qwt }:
 
 stdenv.mkDerivation rec {
   name = "linssid-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];
-  buildInputs = [ qtbase qtsvg boost qwt6 ];
+  buildInputs = [ qtbase qtsvg boost qwt ];
 
   patches = [ ./0001-unbundled-qwt.patch ];
 

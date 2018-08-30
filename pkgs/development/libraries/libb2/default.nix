@@ -1,17 +1,26 @@
-{stdenv, fetchurl}:
-with stdenv; with lib;
-mkDerivation rec {
-  name = "libb2-${meta.version}";
+{ stdenv, hostPlatform, fetchurl, autoconf, automake, libtool }:
+
+stdenv.mkDerivation rec {
+  name = "libb2-${version}";
+  version = "0.98";
 
   src = fetchurl {
     url = "https://blake2.net/${name}.tar.gz";
-    sha256 = "7829c7309347650239c76af7f15d9391af2587b38f0a65c250104a2efef99051";
+    sha256 = "1852gh8wwnsghdb9zhxdhw0173plpqzk684npxbl4bzk1hhzisal";
   };
 
-  configureFlags = [ "--enable-fat=yes" ];
+  preConfigure = ''
+    patchShebangs autogen.sh
+    ./autogen.sh
+  '';
 
-  meta = {
-    version = "0.97";
+  configureFlags = stdenv.lib.optional hostPlatform.isx86 "--enable-fat=yes";
+
+  nativeBuildInputs = [ autoconf automake libtool ];
+
+  doCheck = true;
+
+  meta = with stdenv.lib; {
     description = "The BLAKE2 family of cryptographic hash functions";
     platforms = platforms.all;
     maintainers = with maintainers; [ dfoxfranke ];

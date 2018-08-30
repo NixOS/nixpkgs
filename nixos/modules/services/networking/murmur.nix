@@ -80,7 +80,7 @@ in
 
       pidfile = mkOption {
         type = types.path;
-        default = "/tmp/murmurd.pid";
+        default = "/run/murmur/murmurd.pid";
         description = "Path to PID file for Murmur daemon.";
       };
 
@@ -238,7 +238,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.murmur = {
+    users.users.murmur = {
       description     = "Murmur Service user";
       home            = "/var/lib/murmur";
       createHome      = true;
@@ -248,10 +248,11 @@ in
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target "];
+      after       = [ "network-online.target "];
 
       serviceConfig = {
         Type      = "forking";
+        RuntimeDirectory = "murmur";
         PIDFile   = cfg.pidfile;
         Restart   = "always";
         User      = "murmur";

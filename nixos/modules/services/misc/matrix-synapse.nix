@@ -395,7 +395,14 @@ in {
       };
       url_preview_ip_range_blacklist = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [
+          "127.0.0.0/8"
+          "10.0.0.0/8"
+          "172.16.0.0/12"
+          "192.168.0.0/16"
+          "100.64.0.0/10"
+          "169.254.0.0/16"
+        ];
         description = ''
           List of IP address CIDR ranges that the URL preview spider is denied
           from accessing.
@@ -412,14 +419,7 @@ in {
       };
       url_preview_url_blacklist = mkOption {
         type = types.listOf types.str;
-        default = [
-          "127.0.0.0/8"
-          "10.0.0.0/8"
-          "172.16.0.0/12"
-          "192.168.0.0/16"
-          "100.64.0.0/10"
-          "169.254.0.0/16"
-        ];
+        default = [];
         description = ''
           Optional list of URL matches that the URL preview spider is
           denied from accessing.
@@ -635,7 +635,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers = [
+    users.users = [
       { name = "matrix-synapse";
         group = "matrix-synapse";
         home = cfg.dataDir;
@@ -644,7 +644,7 @@ in {
         uid = config.ids.uids.matrix-synapse;
       } ];
 
-    users.extraGroups = [
+    users.groups = [
       { name = "matrix-synapse";
         gid = config.ids.gids.matrix-synapse;
       } ];

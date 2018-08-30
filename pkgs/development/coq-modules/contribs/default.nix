@@ -21,11 +21,18 @@ let mkContrib = repo: revs: param:
     };
   }; in
 {
-  aac-tactics = mkContrib "aac-tactics" [ ] {
-    version = "v8.6.0-7-g54913f4";
-    rev = "54913f44939623986ce3e01e3faf31efa9059ca6";
-    sha256 = "0bb6y7nqs4gyv1ybzhbdg6hb2hyfxc7bmkg6zl43l14641zhv247";
-  };
+  aac-tactics = mkContrib "aac-tactics" [ "8.7" "8.8" ] {
+    "8.7" = {
+      version = "20180530";
+      rev = "f01df35e1d796ce1fdc7ba3d670ce5d63c95d544";
+      sha256 = "1bwvnbd5ws1plgj147blcrvyycf3gg3fz3rm2mckln8z3sfxyq2k";
+    };
+    "8.8" = {
+      version = "20180530";
+      rev = "86ac28259030649ef51460e4de2441c8a1017751";
+      sha256 = "09bbk2a7pn0j76mmapl583f8a20zqd3a1m9lkml8rpwml692bzi9";
+    };
+  }."${coq.coq-version}";
 
   abp = mkContrib "abp" [ "8.5" "8.6" "8.7" ] {
     version = "v8.6.0";
@@ -189,7 +196,7 @@ let mkContrib = repo: revs: param:
     sha256 = "1ddwzg12pbzpnz3njin4zhpph92kscrbsn3bzds26yj8fp76zc33";
   };
 
-  containers = mkContrib "containers" [ "8.6" "8.7" ] {
+  containers = mkContrib "containers" [ "8.6" "8.7" "8.8" ] {
     "8.6" = {
       version = "8.6.0";
       rev = "fa1fec7";
@@ -199,6 +206,11 @@ let mkContrib = repo: revs: param:
       version = "20180313";
       rev = "77ac16366529c9e558f70ba86f0168a76ca76b8f";
       sha256 = "01gp8injb0knaxgqsdc4x9h8714k7qxg7j5w7y6i45dnpd81ndr4";
+    };
+    "8.8" = {
+      version = "20180330";
+      rev = "52b86bed1671321b25fe4d7495558f9f221b12aa";
+      sha256 = "0hbnrwdgryr52170cfrlbiymr88jsyxilnpr343vnprqq3zk1xz0";
     };
   }."${coq.coq-version}";
 

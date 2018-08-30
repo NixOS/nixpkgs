@@ -1,15 +1,25 @@
-{ stdenv, buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
-, requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker
+{ buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
+, requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker, responses
 , six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.2.0";
+  version = "1.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c42b894cdf35412c95f0c6b40309cf802436e049cd172dc5db7516c7b845191b";
+    sha256 = "7c86d1c3bd6362954afaded735354c11afd22037eb6736152f057a1bff0c8868";
   };
+
+  postPatch = ''
+    # dateutil upper bound was just to keep compatibility with Python 2.6
+    # see https://github.com/spulec/moto/pull/1519 and https://github.com/boto/botocore/pull/1402
+    # regarding aws-xray-sdk: https://github.com/spulec/moto/commit/31eac49e1555c5345021a252cb0c95043197ea16
+    substituteInPlace setup.py \
+      --replace "python-dateutil<2.7.0" "python-dateutil<3.0.0" \
+      --replace "aws-xray-sdk<0.96," "aws-xray-sdk" \
+      --replace "jsondiff==1.1.1" "jsondiff>=1.1.1"
+  '';
 
   propagatedBuildInputs = [
     aws-xray-sdk
@@ -31,6 +41,7 @@ buildPythonPackage rec {
     jsondiff
     botocore
     docker
+    responses
   ];
 
   checkInputs = [ boto3 nose sure freezegun ];

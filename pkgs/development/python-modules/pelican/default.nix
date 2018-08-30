@@ -1,14 +1,12 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy26
-, glibcLocales, pandoc, git
+{ stdenv, buildPythonPackage, fetchFromGitHub
+, glibcLocales, git
 , mock, nose, markdown, lxml, typogrify
 , jinja2, pygments, docutils, pytz, unidecode, six, dateutil, feedgenerator
 , blinker, pillow, beautifulsoup4, markupsafe }:
 
 buildPythonPackage rec {
   pname = "pelican";
-  name = "${pname}-${version}";
   version = "3.7.1";
-  disabled = isPy26;
 
   src = fetchFromGitHub {
     owner = "getpelican";

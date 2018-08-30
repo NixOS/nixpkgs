@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ucto";
+  name = "ucto-${release.version}";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "ucto-${release.version}.tar.gz"; };

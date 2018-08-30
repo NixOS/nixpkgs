@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pcre } :
 
 stdenv.mkDerivation rec {
-  name = "imatix_gsl";
+  name = "imatix_gsl-${version}";
   version = "4.1";
 
   src = fetchFromGitHub {
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     description = "A universal code generator";
     platforms = platforms.unix;
     maintainers = [ maintainers.moosingin3space ];
+    broken = stdenv.isLinux; # 2018-04-10
   };
 }

@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0ld2bihp9kmf57ykgzrfgxs4j9kxlw79sgdj9sfn47snw3izb2p6";
   };
 
-  checkInputs = [ unittest2 scripttest pytz pylint mock testtools testrepository ];
+  checkInputs = [ unittest2 scripttest pytz mock testtools testrepository ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
 
   prePatch = ''

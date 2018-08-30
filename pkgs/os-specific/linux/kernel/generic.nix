@@ -12,8 +12,14 @@
 , # The kernel version.
   version
 
-, # Overrides to the kernel config.
+, # Allows overriding the default defconfig
+  defconfig ? null
+
+, # Legacy overrides to the intermediate kernel config, as string
   extraConfig ? ""
+
+, # kernel intermediate config overrides, as a set
+ structuredExtraConfig ? {}
 
 , # The version number used for the module directory
   modDirVersion ? version
@@ -39,8 +45,9 @@
 , preferBuiltin ? hostPlatform.platform.kernelPreferBuiltin or false
 , kernelArch ? hostPlatform.platform.kernelArch
 
+, mkValueOverride ? null
 , ...
-} @ args:
+}:
 
 assert stdenv.isLinux;
 
@@ -54,10 +61,13 @@ let
     efiBootStub = true;
     needsCifsUtils = true;
     netfilterRPFilter = true;
+    grsecurity = false;
+    xen_dom0 = false;
   } // features) kernelPatches;
 
-  config = import ./common-config.nix {
-    inherit stdenv version ;
+  intermediateNixConfig = import ./common-config.nix {
+    inherit stdenv version structuredExtraConfig mkValueOverride;
+
     # append extraConfig for backwards compatibility but also means the user can't override the kernelExtraConfig part
     extraConfig = extraConfig + lib.optionalString (hostPlatform.platform ? kernelExtraConfig) hostPlatform.platform.kernelExtraConfig;
 
@@ -76,7 +86,8 @@ let
 
     generateConfig = ./generate-config.pl;
 
-    kernelConfig = kernelConfigFun config;
+    kernelConfig = kernelConfigFun intermediateNixConfig;
+    passAsFile = [ "kernelConfig" ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl ]
@@ -84,7 +95,7 @@ let
 
     platformName = hostPlatform.platform.name;
     # e.g. "defconfig"
-    kernelBaseConfig = hostPlatform.platform.kernelBaseConfig;
+    kernelBaseConfig = if defconfig != null then defconfig else hostPlatform.platform.kernelBaseConfig;
     # e.g. "bzImage"
     kernelTarget = hostPlatform.platform.kernelTarget;
 
@@ -94,7 +105,9 @@ let
       sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
     '';
 
-    inherit (kernel) src patches preUnpack;
+    preUnpack = kernel.preUnpack or "";
+
+    inherit (kernel) src patches;
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"
@@ -104,7 +117,7 @@ let
 
       # Create the config file.
       echo "generating kernel configuration..."
-      echo "$kernelConfig" > "$buildRoot/kernel-config"
+      ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
       DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
            PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. perl -w $generateConfig
     '';

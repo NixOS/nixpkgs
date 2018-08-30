@@ -1,11 +1,21 @@
 MD_TARGETS=$(addsuffix .xml, $(basename $(wildcard ./*.md ./**/*.md)))
 
 .PHONY: all
-all: validate out/html/index.html out/epub/manual.epub
+all: validate format out/html/index.html out/epub/manual.epub
 
 .PHONY: debug
 debug:
 	nix-shell --run "xmloscopy --docbook5 ./manual.xml ./manual-full.xml"
+
+.PHONY: format
+format:
+	find . -iname '*.xml' -type f -print0 | xargs -0 -I{} -n1 \
+		xmlformat --config-file "$$XMLFORMAT_CONFIG" -i {}
+
+.PHONY: fix-misc-xml
+fix-misc-xml:
+	find . -iname '*.xml' -type f \
+		-exec ../nixos/doc/varlistentry-fixer.rb {} ';'
 
 .PHONY: clean
 clean:
@@ -64,7 +74,7 @@ manual-full.xml: ${MD_TARGETS} .version *.xml
 
 .version:
 	nix-instantiate --eval \
-		-E '(import ../lib).nixpkgsVersion' > .version
+		-E '(import ../lib).version' > .version
 
 %.section.xml: %.section.md
 	pandoc $^ -w docbook+smart \

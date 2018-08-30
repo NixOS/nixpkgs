@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig,  gobjectIntrospection, gupnp, gst_plugins_base }:
+{ stdenv, fetchurl, pkgconfig,  gobjectIntrospection, gupnp, gst-plugins-base }:
 
 stdenv.mkDerivation rec {
   name = "gupnp-dlna-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
-  buildInputs = [ gupnp gst_plugins_base ];
+  buildInputs = [ gupnp gst-plugins-base ];
 
   meta = {
     homepage = https://wiki.gnome.org/Projects/GUPnP/;

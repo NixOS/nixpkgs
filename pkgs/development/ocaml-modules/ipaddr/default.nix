@@ -1,8 +1,9 @@
-{ stdenv, buildOcaml, fetchurl, ocamlbuild, findlib
-, jbuilder, sexplib, ppx_sexp_conv, ppx_deriving }:
+{ stdenv, fetchurl, ocaml, ocamlbuild, findlib
+, jbuilder, sexplib, ppx_sexp_conv
+}:
 
-buildOcaml rec {
-  name = "ipaddr";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-ipaddr-${version}";
   version = "2.8.0";
 
   src = fetchurl {
@@ -10,8 +11,8 @@ buildOcaml rec {
     sha256 = "1amb1pbm9ybpxy6190qygpj6nmbzzs2r6vx4xh5r6v89szx9rfxw";
   };
 
-  buildInputs = [ findlib ocamlbuild jbuilder ppx_sexp_conv ];
-  propagatedBuildInputs = [ ppx_deriving sexplib ];
+  buildInputs = [ ocaml findlib ocamlbuild jbuilder ];
+  propagatedBuildInputs = [ ppx_sexp_conv sexplib ];
 
   inherit (jbuilder) installPhase;
 

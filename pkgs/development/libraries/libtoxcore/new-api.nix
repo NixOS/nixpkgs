@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
     autoreconfHook libsodium ncurses check libconfig
-  ] ++ stdenv.lib.optionals (!stdenv.isArm) [
+  ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
     libopus
   ];
 
-  propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isArm) [ libvpx ];
+  propagatedBuildInputs = stdenv.lib.optionals (!stdenv.isAarch32) [ libvpx ];
 
   # Some tests fail randomly due to timeout. This kind of problem is well known
   # by upstream: https://github.com/irungentoo/toxcore/issues/{950,1054}
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "P2P FOSS instant messaging application aimed to replace Skype with crypto";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric jgeerds ];
+    maintainers = with maintainers; [ jgeerds ];
     platforms = platforms.all;
   };
 }

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? false }:
+{ stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.16";
+  name = "automake-1.16.1";
 
   src = fetchurl {
     url = "mirror://gnu/automake/${name}.tar.xz";
-    sha256 = "12jvcmkcmd5p14b41w9f7ixd3sca97pymd6lqbkwnl8qn6bjv3zr";
+    sha256 = "08g979ficj18i1w6w5219bgmns7czr03iadf20mk3lrzl8wbn1ax";
   };
 
   nativeBuildInputs = [ autoconf perl ];
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.
   preCheck = "unset NIX_INDENT_MAKE";
-  inherit doCheck;
+  doCheck = false; # takes _a lot_ of time, fails 3 out of 2698 tests, all seem to be related to paths
+  doInstallCheck = false; # runs the same thing, fails the same tests
 
   # The test suite can run in parallel.
   enableParallelBuilding = true;

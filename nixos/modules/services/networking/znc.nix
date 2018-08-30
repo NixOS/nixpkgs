@@ -26,7 +26,6 @@ let
   };
 
   # Keep znc.conf in nix store, then symlink or copy into `dataDir`, depending on `mutable`.
-  notNull = a: ! isNull a;
   mkZncConf = confOpts: ''
     Version = 1.6.3
     ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.modules}
@@ -36,6 +35,7 @@ let
             IPv4 = true
             IPv6 = true
             SSL = ${boolToString confOpts.useSSL}
+            ${lib.optionalString (confOpts.uriPrefix != null) "URIPrefix = ${confOpts.uriPrefix}"}
     </Listener>
 
     <User ${confOpts.userName}>
@@ -310,6 +310,16 @@ in
           '';
         };
 
+        uriPrefix = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "/znc/";
+          description = ''
+            An optional URI prefix for the ZNC web interface. Can be
+            used to make ZNC available behind a reverse proxy.
+          '';
+        };
+
         extraZncConf = mkOption {
           default = "";
           type = types.lines;
@@ -402,7 +412,7 @@ in
       script = "${pkgs.znc}/bin/znc --foreground --datadir ${cfg.dataDir} ${toString cfg.extraFlags}";
     };
 
-    users.extraUsers = optional (cfg.user == defaultUser)
+    users.users = optional (cfg.user == defaultUser)
       { name = defaultUser;
         description = "ZNC server daemon owner";
         group = defaultUser;
@@ -411,7 +421,7 @@ in
         createHome = true;
       };
 
-    users.extraGroups = optional (cfg.user == defaultUser)
+    users.groups = optional (cfg.user == defaultUser)
       { name = defaultUser;
         gid = config.ids.gids.znc;
         members = [ defaultUser ];

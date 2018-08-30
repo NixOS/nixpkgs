@@ -1,17 +1,17 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, cf-private, libobjc, libcxx, tzdata, fetchpatch
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.4.4";
+  name = "R-3.5.1";
 
   src = fetchurl {
-    url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "0dq3jsnwsb5j3fhl0wi3p5ycv8avf8s5j1y4ap3d2mkjmcppvsdk";
+    url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
+    sha256 = "0463bff5eea0f3d93fa071f79c18d0993878fd4f2e18ae6cf22c1639d11457ed";
   };
 
   buildInputs = [

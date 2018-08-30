@@ -200,7 +200,7 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
     doCheck = false;
 
     meta = {
-      homepage = "http://github.com/pytoolz/toolz/";
+      homepage = "https://github.com/pytoolz/toolz/";
       description = "List processing tools and functional utilities";
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
@@ -245,7 +245,7 @@ with import <nixpkgs> {};
       doCheck = false;
 
       meta = {
-        homepage = "http://github.com/pytoolz/toolz/";
+        homepage = "https://github.com/pytoolz/toolz/";
         description = "List processing tools and functional utilities";
       };
     };
@@ -328,7 +328,7 @@ when building the bindings and are therefore added as `buildInputs`.
 
     meta = {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
-      homepage = http://lxml.de;
+      homepage = https://lxml.de;
       license = licenses.bsd3;
       maintainers = with maintainers; [ sjourdois ];
     };
@@ -374,7 +374,7 @@ and `CFLAGS`.
       description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
       homepage = http://hgomersall.github.com/pyFFTW/;
       license = with licenses; [ bsd2 bsd3 ];
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
   };
 }
@@ -424,7 +424,7 @@ available.
 
 At some point you'll likely have multiple packages which you would
 like to be able to use in different projects. In order to minimise unnecessary
-duplication we now look at how you can maintain yourself a repository with your
+duplication we now look at how you can maintain a repository with your
 own packages. The important functions here are `import` and `callPackage`.
 
 ### Including a derivation using `callPackage`
@@ -436,7 +436,7 @@ Let's split the package definition from the environment definition.
 We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 
 ```nix
-{ pkgs, buildPythonPackage }:
+{ lib, pkgs, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "toolz";
@@ -447,7 +447,7 @@ buildPythonPackage rec {
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 
-  meta = {
+  meta = with lib; {
     homepage = "http://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
@@ -484,7 +484,7 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.3, 3.4, 3.5 and 3.6 of the CPython interpreter are available as
+Versions 2.7, 3.4, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
 respectively `python27`, `python34`, `python35` and `python36`. The PyPy interpreter
 is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
 `python35`. The default interpreter, `python`, maps to `python2`.
@@ -533,6 +533,7 @@ sets are
 * `pkgs.python34Packages`
 * `pkgs.python35Packages`
 * `pkgs.python36Packages`
+* `pkgs.python37Packages`
 * `pkgs.pypyPackages`
 
 and the aliases
@@ -587,30 +588,32 @@ The `buildPythonPackage` mainly does four things:
 
 As in Perl, dependencies on other Python packages can be specified in the
 `buildInputs` and `propagatedBuildInputs` attributes.  If something is
-exclusively a build-time dependency, use `buildInputs`; if it’s (also) a runtime
+exclusively a build-time dependency, use `buildInputs`; if it is (also) a runtime
 dependency, use `propagatedBuildInputs`.
 
 By default tests are run because `doCheck = true`. Test dependencies, like
-e.g. the test runner, should be added to `buildInputs`.
+e.g. the test runner, should be added to `checkInputs`.
 
 By default `meta.platforms` is set to the same value
 as the interpreter unless overridden otherwise.
 
 ##### `buildPythonPackage` parameters
 
-All parameters from `mkDerivation` function are still supported.
+All parameters from `stdenv.mkDerivation` function are still supported. The following are specific to `buildPythonPackage`:
 
-* `namePrefix`: Prepended text to `${name}` parameter. Defaults to `"python3.3-"` for Python 3.3, etc. Set it to `""` if you're packaging an application or a command line tool.
-* `disabled`: If `true`, package is not build for particular python interpreter version. Grep around `pkgs/top-level/python-packages.nix` for examples.
-* `setupPyBuildFlags`: List of flags passed to `setup.py build_ext` command.
-* `pythonPath`: List of packages to be added into `$PYTHONPATH`. Packages in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
+* `catchConflicts ? true`: If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
+* `checkInputs ? []`: Dependencies needed for running the `checkPhase`. These are added to `buildInputs` when `doCheck = true`.
+* `disabled` ? false: If `true`, package is not build for the particular Python interpreter version.
+* `dontWrapPythonPrograms ? false`: Skip wrapping of python programs.
+* `installFlags ? []`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"].
+* `format ? "setuptools"`: Format of the source. Valid options are `"setuptools"`, `"flit"`, `"wheel"`, and `"other"`. `"setuptools"` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. Use `other` when a custom `buildPhase` and/or `installPhase` is needed.
+* `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to `makeWrapper`, which wraps generated binaries. By default, the arguments to `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling the binary. Additional arguments here can allow a developer to set environment variables which will be available when the binary is run. For example, `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
+* `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this defaults to `"python3.5-"` for Python 3.5, etc., and in case of applications to `""`.
+* `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
 * `preShellHook`: Hook to execute commands before `shellHook`.
 * `postShellHook`: Hook to execute commands after `shellHook`.
-* `makeWrapperArgs`: A list of strings. Arguments to be passed to `makeWrapper`, which wraps generated binaries. By default, the arguments to `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling the binary. Additional arguments here can allow a developer to set environment variables which will be available when the binary is run. For example, `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
-* `installFlags`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"].
-* `format`: Format of the source. Valid options are `setuptools` (default), `flit`, `wheel`, and `other`. `setuptools` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. In case you need to provide your own `buildPhase` and `installPhase` you can use `other`.
-* `catchConflicts` If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
-* `checkInputs` Dependencies needed for running the `checkPhase`. These are added to `buildInputs` when `doCheck = true`.
+* `removeBinByteCode ? true`: Remove bytecode from `/bin`. Bytecode is only created when the filenames end with `.py`.
+* `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
 
 ##### Overriding Python packages
 
@@ -642,11 +645,47 @@ in python.withPackages(ps: [ps.blaze])).env
 
 #### `buildPythonApplication` function
 
-The `buildPythonApplication` function is practically the same as `buildPythonPackage`.
-The difference is that `buildPythonPackage` by default prefixes the names of the packages with the version of the interpreter.
-Because with an application we're not interested in multiple version the prefix is dropped.
+The `buildPythonApplication` function is practically the same as
+`buildPythonPackage`. The main purpose of this function is to build a Python
+package where one is interested only in the executables, and not importable
+modules. For that reason, when adding this package to a `python.buildEnv`, the
+modules won't be made available.
 
-#### python.buildEnv function
+Another difference is that `buildPythonPackage` by default prefixes the names of
+the packages with the version of the interpreter. Because this is irrelevant for
+applications, the prefix is omitted.
+
+#### `toPythonApplication` function
+
+A distinction is made between applications and libraries, however, sometimes a
+package is used as both. In this case the package is added as a library to
+`python-packages.nix` and as an application to `all-packages.nix`. To reduce
+duplication the `toPythonApplication` can be used to convert a library to an
+application.
+
+The Nix expression shall use `buildPythonPackage` and be called from
+`python-packages.nix`. A reference shall be created from `all-packages.nix` to
+the attribute in `python-packages.nix`, and the `toPythonApplication` shall be
+applied to the reference:
+```nix
+youtube-dl = with pythonPackages; toPythonApplication youtube-dl;
+```
+
+#### `toPythonModule` function
+
+In some cases, such as bindings, a package is created using
+`stdenv.mkDerivation` and added as attribute in `all-packages.nix`.
+The Python bindings should be made available from `python-packages.nix`.
+The `toPythonModule` function takes a derivation and makes certain Python-specific modifications.
+```nix
+opencv = toPythonModule (pkgs.opencv.override {
+  enablePython = true;
+  pythonPackages = self;
+});
+```
+Do pay attention to passing in the right Python version!
+
+#### `python.buildEnv` function
 
 Python environments can be created using the low-level `pkgs.buildEnv` function.
 This example shows how to create an environment that has the Pyramid Web Framework.
@@ -688,7 +727,7 @@ specified packages in its path.
 * `postBuild`: Shell command executed after the build of environment.
 * `ignoreCollisions`: Ignore file collisions inside the environment (default is `false`).
 
-#### python.withPackages function
+#### `python.withPackages` function
 
 The `python.withPackages` function provides a simpler interface to the `python.buildEnv` functionality.
 It takes a function as an argument that is passed the set of python packages and returns the list
@@ -722,7 +761,7 @@ with import <nixpkgs> {};
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
 such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
 
-Python 2 namespace packages may provide `__init__.py` that collide. In that case `python.buildEnv` 
+Python 2 namespace packages may provide `__init__.py` that collide. In that case `python.buildEnv`
 should be used with `ignoreCollisions = true`.
 
 ### Development mode
@@ -790,8 +829,8 @@ example of such a situation is when `py.test` is used.
 
 - Non-working tests can often be deselected. By default `buildPythonPackage` runs `python setup.py test`.
   Most python modules follows the standard test protocol where the pytest runner can be used instead.
-  `py.test` supports a `-k` parameter to ignore test methods or classes: 
-  
+  `py.test` supports a `-k` parameter to ignore test methods or classes:
+
   ```nix
   buildPythonPackage {
     # ...
@@ -941,7 +980,7 @@ stdenv.mkDerivation {
     # the following packages are related to the dependencies of your python
     # project.
     # In this particular example the python modules listed in the
-    # requirements.tx require the following packages to be installed locally
+    # requirements.txt require the following packages to be installed locally
     # in order to compile any binary extensions they may require.
     #
     taglib
@@ -973,14 +1012,14 @@ folder and not downloaded again.
 If you need to change a package's attribute(s) from `configuration.nix` you could do:
 
 ```nix
-  nixpkgs.config.packageOverrides = superP: {
-    pythonPackages = superP.pythonPackages.override {
-      overrides = self: super: {
-        bepasty-server = super.bepasty-server.overrideAttrs ( oldAttrs: {
-          src = pkgs.fetchgit {
-            url = "https://github.com/bepasty/bepasty-server";
-            sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
-            rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+  nixpkgs.config.packageOverrides = super: {
+    python = super.python.override {
+      packageOverrides = python-self: python-super: {
+        zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
+          src = super.fetchgit {
+            url = "https://github.com/sametmax/0bin";
+            rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
+            sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
           };
         });
       };
@@ -988,27 +1027,39 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   };
 ```
 
-If you are using the `bepasty-server` package somewhere, for example in `systemPackages` or indirectly from `services.bepasty`, then a `nixos-rebuild switch` will rebuild the system but with the `bepasty-server` package using a different `src` attribute. This way one can modify `python` based software/libraries easily. Using `self` and `super` one can also alter dependencies (`buildInputs`) between the old state (`self`) and new state (`super`). 
+`pythonPackages.zerobin` is now globally overridden. All packages and also the
+`zerobin` NixOS service use the new definition.
+Note that `python-super` refers to the old package set and `python-self`
+to the new, overridden version.
+
+To modify only a Python package set instead of a whole Python derivation, use this snippet:
+
+```nix
+  myPythonPackages = pythonPackages.override {
+    overrides = self: super: {
+      zerobin = ...;
+    };
+  }
+```
 
 ### How to override a Python package using overlays?
 
-To alter a python package using overlays, you would use the following approach:
+Use the following overlay template:
 
 ```nix
 self: super:
-rec {
+{
   python = super.python.override {
     packageOverrides = python-self: python-super: {
-      bepasty-server = python-super.bepasty-server.overrideAttrs ( oldAttrs: {
-        src = self.pkgs.fetchgit {
-          url = "https://github.com/bepasty/bepasty-server";
-          sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
-          rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+      zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
+        src = super.fetchgit {
+          url = "https://github.com/sametmax/0bin";
+          rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
+          sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
         };
       });
     };
   };
-  pythonPackages = python.pkgs;
 }
 ```
 

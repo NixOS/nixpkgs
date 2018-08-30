@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig
-, ncurses }:
+, ncurses, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "minicom-2.7.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wa1l36fa4npd21xa9nz60yrqwkk5cq713fa3p5v0zk7g9mq6bsk";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
       download.
     '';
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

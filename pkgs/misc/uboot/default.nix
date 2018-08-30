@@ -1,16 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, bc, dtc, openssl, python2, swig
+{ stdenv, fetchurl, fetchpatch, bc, bison, dtc, flex, openssl, python2, swig
 , armTrustedFirmwareAllwinner
-, hostPlatform, buildPackages
+, buildPackages
 }:
 
 let
-  # Various changes for 64-bit sunxi boards, (hopefully) destined for 2018.05
-  sunxiPatch = fetchpatch {
-    name = "sunxi.patch";
-    url = "https://github.com/u-boot/u-boot/compare/v2018.03...dezgeg:2018-03-sunxi.patch";
-    sha256 = "1pqn7c6c06hfygwpcgaraqvqxcjhz99j0rx5psfhj8igy0qvk2dq";
-  };
-
   buildUBoot = { filesToInstall
             , installDir ? "$out"
             , defconfig
@@ -21,25 +14,17 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2018.03";
+    version = "2018.07";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "1z9x635l5164c5hnf7qs19w7j3qghbkgs7rpn673dm898i9pfx3y";
+      sha256 = "1m7nw64mxflpc6sqvnz2kb5fxfkb4mrpy8b1wi15dcwipj4dy44z";
     };
 
     patches = [
       (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/rpi-2017-11-patch1.patch;
-        sha256 = "067yq55vv1slv4xy346px7h329pi14abdn04chg6s1s6hmf6c1x9";
-      })
-      (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/rpi-2017-11-patch2.patch;
-        sha256 = "0bbw0q027xvzvdxxvpzjajg4rm30a8mb7z74b6ma9q0l7y7bi0c4";
-      })
-      (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/pythonpath-2018-03.patch;
-        sha256 = "1rhhlhrwhv7ic1n5i720jfh2cxwrkssrkvinllyjy3j9k9bpzcqd";
+        url = https://github.com/dezgeg/u-boot/commit/pythonpath-2018-07.patch;
+        sha256 = "096zqrlr8m9lxjma0iv7y6x78qswfs3q1w2irjkbmcvniz1azbs8";
       })
       (fetchpatch {
         url = https://github.com/dezgeg/u-boot/commit/extlinux-path-length-2018-03.patch;
@@ -51,7 +36,7 @@ let
       patchShebangs tools
     '';
 
-    nativeBuildInputs = [ bc dtc openssl python2 swig ];
+    nativeBuildInputs = [ bc bison dtc flex openssl python2 swig ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
     hardeningDisable = [ "all" ];
@@ -100,8 +85,7 @@ in rec {
     hardeningDisable = [];
     dontStrip = false;
     extraMeta.platforms = stdenv.lib.platforms.linux;
-    # build tools/kwboot
-    extraMakeFlags = [ "CONFIG_KIRKWOOD=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
+    extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
     postConfigure = ''
       sed -i '/CONFIG_SYS_TEXT_BASE/c\CONFIG_SYS_TEXT_BASE=0x00000000' .config
     '';
@@ -156,6 +140,12 @@ in rec {
     '';
   };
 
+  ubootNovena = buildUBoot rec {
+    defconfig = "novena_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin" "SPL"];
+  };
+
   ubootOdroidXU3 = buildUBoot rec {
     defconfig = "odroid-xu3_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -175,7 +165,6 @@ in rec {
   };
 
   ubootPine64 = buildUBoot rec {
-    extraPatches = [sunxiPatch];
     defconfig = "pine64_plus_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -218,6 +207,12 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootRaspberryPiZero = buildUBoot rec {
+    defconfig = "rpi_0_w_defconfig";
+    extraMeta.platforms = ["armv6l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   ubootSheevaplug = buildUBoot rec {
     defconfig = "sheevaplug_defconfig";
     extraMeta.platforms = ["armv5tel-linux"];
@@ -225,7 +220,6 @@ in rec {
   };
 
   ubootSopine = buildUBoot rec {
-    extraPatches = [sunxiPatch];
     defconfig = "sopine_baseboard_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";

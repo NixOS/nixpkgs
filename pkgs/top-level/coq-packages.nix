@@ -29,6 +29,7 @@ let
       heq = callPackage ../development/coq-modules/heq {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
       interval = callPackage ../development/coq-modules/interval {};
+      iris = callPackage ../development/coq-modules/iris {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp { };
       metalib = callPackage ../development/coq-modules/metalib { };
@@ -36,6 +37,7 @@ let
       paco = callPackage ../development/coq-modules/paco {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
+      stdpp = callPackage ../development/coq-modules/stdpp { };
       tlc = callPackage ../development/coq-modules/tlc {};
     };
 
@@ -72,14 +74,14 @@ in rec {
     version = "8.7.2";
   };
   coq_8_8 = callPackage ../applications/science/logic/coq {
-    version = "8.8+beta1";
+    version = "8.8.1";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
-  coqPackages = coqPackages_8_7;
+  coqPackages = coqPackages_8_8;
   coq = coqPackages.coq;
 
 }

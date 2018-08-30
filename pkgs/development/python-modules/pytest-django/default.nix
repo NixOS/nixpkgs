@@ -4,7 +4,6 @@
 }:
 buildPythonPackage rec {
   pname = "pytest-django";
-  name = "${pname}-${version}";
   version = "3.1.2";
 
   src = fetchPypi {

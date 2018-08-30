@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 {
   config = lib.mkIf (pkgs.kexectools.meta.available) {

@@ -54,7 +54,7 @@ my $splashImage = get("splashImage");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
-my $defaultEntry = int(get("default"));
+my $defaultEntry = get("default");
 my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
 my $grubTargetEfi = get("grubTargetEfi");
@@ -281,30 +281,36 @@ else {
         else
           insmod vbe
         fi
-        insmod font
-        if loadfont " . $grubBoot->path . "/converted-font.pf2; then
-          insmod gfxterm
-          if [ \"\${grub_platform}\" = \"efi\" ]; then
-            set gfxmode=$gfxmodeEfi
-            set gfxpayload=keep
-          else
-            set gfxmode=$gfxmodeBios
-            set gfxpayload=text
-          fi
-          terminal_output gfxterm
-        fi
     ";
 
     if ($font) {
         copy $font, "$bootPath/converted-font.pf2" or die "cannot copy $font to $bootPath\n";
+        $conf .= "
+            insmod font
+            if loadfont " . $grubBoot->path . "/converted-font.pf2; then
+              insmod gfxterm
+              if [ \"\${grub_platform}\" = \"efi\" ]; then
+                set gfxmode=$gfxmodeEfi
+                set gfxpayload=keep
+              else
+                set gfxmode=$gfxmodeBios
+                set gfxpayload=text
+              fi
+              terminal_output gfxterm
+            fi
+        ";
     }
     if ($splashImage) {
-        # FIXME: GRUB 1.97 doesn't resize the background image if it
-        # doesn't match the video resolution.
-        copy $splashImage, "$bootPath/background.png" or die "cannot copy $splashImage to $bootPath\n";
+        # Keeps the image's extension.
+        my ($filename, $dirs, $suffix) = fileparse($splashImage, qr"\..[^.]*$");
+        # The module for jpg is jpeg.
+        if ($suffix eq ".jpg") {
+            $suffix = ".jpeg";
+        }
+        copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath\n";
         $conf .= "
-            insmod png
-            if background_image " . $grubBoot->path . "/background.png; then
+            insmod " . substr($suffix, 1) . "
+            if background_image " . $grubBoot->path . "/background$suffix; then
               set color_normal=white/black
               set color_highlight=black/white
             else

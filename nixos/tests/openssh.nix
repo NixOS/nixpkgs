@@ -11,31 +11,31 @@ in {
   nodes = {
 
     server =
-      { config, pkgs, ... }:
+      { ... }:
 
       {
         services.openssh.enable = true;
         security.pam.services.sshd.limits =
           [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
-        users.extraUsers.root.openssh.authorizedKeys.keys = [
+        users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
       };
 
     server_lazy =
-      { config, pkgs, ... }:
+      { ... }:
 
       {
         services.openssh = { enable = true; startWhenNeeded = true; };
         security.pam.services.sshd.limits =
           [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
-        users.extraUsers.root.openssh.authorizedKeys.keys = [
+        users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
       };
 
     client =
-      { config, pkgs, ... }: { };
+      { ... }: { };
 
   };
 

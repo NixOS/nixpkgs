@@ -11,7 +11,6 @@
 buildPythonPackage rec {
   pname = "bash_kernel";
   version = "0.7.1";
-  name = "${pname}-${version}";
   format = "flit";
   disabled = isPy27;
 

@@ -1,12 +1,12 @@
 {
-stdenv, fetchFromGitHub, cmake
+stdenv, fetchFromGitHub, cmake, makeWrapper
 ,qtbase, qttools, python, libGLU_combined
 ,libXt, qtx11extras, qtxmlpatterns
 }:
 
 stdenv.mkDerivation rec {
   name = "paraview-${version}";
-  version = "5.4.1";
+  version = "5.5.2";
 
   # fetching from GitHub instead of taking an "official" source
   # tarball because of missing submodules there
@@ -14,31 +14,34 @@ stdenv.mkDerivation rec {
     owner = "Kitware";
     repo = "ParaView";
     rev = "v${version}";
-    sha256 = "1ma02sdkz2apxnwcsyvxb26ibwnjh60p71gicw6nlp042acs6v74";
+    sha256 = "1jivph7lppnflmjsiirhgv0mnh8mxx41i1vzkk78ynn00rzacx3j";
     fetchSubmodules = true;
   };
 
-   cmakeFlags = [
-     "-DPARAVIEW_ENABLE_PYTHON=ON"
-     "-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON"
-     "-DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF"
-   ];
+  cmakeFlags = [
+    "-DPARAVIEW_ENABLE_PYTHON=ON"
+    "-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON"
+    "-DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF"
+    "-DOpenGL_GL_PREFERENCE=GLVND"
+  ];
 
   # During build, binaries are called that rely on freshly built
   # libraries.  These reside in build/lib, and are not found by
   # default.
   preBuild = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
   '';
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
   ];
 
   buildInputs = [
     python
+    python.pkgs.numpy
     libGLU_combined
     libXt
     qtbase
@@ -47,12 +50,22 @@ stdenv.mkDerivation rec {
     qtxmlpatterns
   ];
 
+  # Paraview links into the Python library, resolving symbolic links on the way,
+  # so we need to put the correct sitePackages (with numpy) back on the path
+  postInstall = ''
+    wrapProgram $out/bin/paraview \
+      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+    wrapProgram $out/bin/pvbatch \
+      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+    wrapProgram $out/bin/pvpython \
+      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+  '';
 
   meta = {
     homepage = http://www.paraview.org/;
     description = "3D Data analysis and visualization application";
     license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [viric guibert];
+    maintainers = with stdenv.lib.maintainers; [guibert];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

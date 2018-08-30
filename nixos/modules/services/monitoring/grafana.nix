@@ -50,7 +50,7 @@ in {
     protocol = mkOption {
       description = "Which protocol to listen.";
       default = "http";
-      type = types.enum ["http" "https"];
+      type = types.enum ["http" "https" "socket"];
     };
 
     addr = mkOption {
@@ -265,7 +265,7 @@ in {
       '';
     };
 
-    users.extraUsers.grafana = {
+    users.users.grafana = {
       uid = config.ids.uids.grafana;
       description = "Grafana user";
       home = cfg.dataDir;

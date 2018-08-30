@@ -1,9 +1,9 @@
 { stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
-  openssl, sqlite, zlib, dbus_libs, dbus-glib, gdk_pixbuf, cairo, python3,
-  libsodium, postgresql, ... }:
+  openssl, sqlite, zlib, dbus, dbus-glib, gdk_pixbuf, cairo, python3,
+  libsodium, postgresql, gmp, ... }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
 in
 {
   cargo = attrs: {
@@ -19,7 +19,9 @@ in
     crateBin = [ { name = "cargo-vendor"; path = "src/main.rs"; } ];
   };
   curl-sys = attrs: {
-    buildInputs = [ pkgconfig curl ];
+    buildInputs = [ pkgconfig zlib curl ];
+    propagatedBuildInputs = [ curl zlib ];
+    extraLinkFlags = ["-L${zlib.out}/lib"];
   };
   libgit2-sys = attrs: {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
@@ -39,10 +41,10 @@ in
   };
 
   dbus = attrs: {
-    buildInputs = [ pkgconfig dbus_libs ];
+    buildInputs = [ pkgconfig dbus ];
   };
   libdbus-sys = attrs: {
-    buildInputs = [ pkgconfig dbus_libs ];
+    buildInputs = [ pkgconfig dbus ];
   };
   gobject-sys = attrs: {
     buildInputs = [ dbus-glib ];
@@ -56,6 +58,10 @@ in
   gdk-pixbuf = attrs: {
     buildInputs = [ gdk_pixbuf ];
   };
+  rink = attrs: {
+    buildInputs = [ gmp ];
+    crateBin = [ {  name = "rink"; path = "src/bin/rink.rs"; } ];
+  };
   cairo-rs = attrs: {
     buildInputs = [ cairo ];
   };
@@ -68,5 +74,8 @@ in
   };
   pq-sys = attr: {
     buildInputs = [ pkgconfig postgresql ];
+  };
+  security-framework-sys = attr: {
+    propagatedBuildInputs = [ Security ];
   };
 }

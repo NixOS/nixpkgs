@@ -1,45 +1,40 @@
-{ stdenv, fetchurl, python3Packages, gst_all_1, makeWrapper, gobjectIntrospection
-, gtk3, libwnck3, keybinder, intltool, libcanberra-gtk2 }:
+{ stdenv, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobjectIntrospection
+, gtk3, libwnck3, keybinder3, intltool, libcanberra-gtk3, libappindicator-gtk3, libpulseaudio }:
 
-
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   name = "kazam-${version}";
-  version = "1.4.3";
+  version = "1.4.5";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://launchpad.net/kazam/stable/${version}/+download/kazam-${version}.tar.gz";
-    sha256 = "00bcn0yj9xrv87sf6xd3wpilsjgjpsj15zzpjh351ffpjnr0ica8";
+    sha256 = "1qygnrvm6aqixbyivhssp70hs0llxwk7lh3j7idxa2jbkk06hj4f";
   };
 
-  # TODO: keybinder, appindicator3
-  buildInputs = with python3Packages;
-    [ pygobject3 pyxdg pycairo gst_all_1.gstreamer gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good gobjectIntrospection gtk3 libwnck3 distutils_extra
-      intltool dbus-python ];
+  nativeBuildInputs = [ gobjectIntrospection python3.pkgs.distutils_extra intltool wrapGAppsHook ];
+  buildInputs = [
+    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gtk3 libwnck3
+    keybinder3 libappindicator-gtk3
+  ];
 
-  # TODO: figure out why PYTHONPATH is not passed automatically for those programs
-  pythonPath = with python3Packages;
-    [ pygobject3 pyxdg pycairo dbus-python ];
+  propagatedBuildInputs = with python3.pkgs; [ pygobject3 pyxdg pycairo dbus-python ];
 
-  patches = [ ./datadir.patch ./bug_1190693.patch ];
-  prePatch = ''
-    rm setup.cfg
-    substituteInPlace kazam/backend/grabber.py --replace "/usr/bin/canberra-gtk-play" "${libcanberra-gtk2}/bin/canberra-gtk-play"
-  '';
+  patches = [
+    # Fix paths
+    (substituteAll {
+      src = ./fix-paths.patch;
+      libcanberra = libcanberra-gtk3;
+      inherit libpulseaudio;
+    })
+    # Fix compability with Python 3.4
+    (fetchurl {
+      url = https://sources.debian.org/data/main/k/kazam/1.4.5-2/debian/patches/configparser_api_changes.patch;
+      sha256 = "0yvmipnh98s7y07cp1f113l0qqfw65k13an96byq707z3ymv1c2h";
+    })
+  ];
 
   # no tests
   doCheck = false;
-
-  preFixup = ''
-    wrapProgram $out/bin/kazam \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ gtk3 gst_all_1.gstreamer keybinder ]}" \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
-      --prefix XDG_DATA_DIRS : "${gtk3.out}/share" \
-      --set GST_REGISTRY "/tmp/kazam.gstreamer.registry";
-  '';
-
 
   meta = with stdenv.lib; {
     description = "A screencasting program created with design in mind";

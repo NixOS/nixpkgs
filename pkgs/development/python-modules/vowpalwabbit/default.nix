@@ -1,13 +1,13 @@
-{ fetchurl, boost, zlib, clang, ncurses, pythonPackages, lib }:
+{ lib, buildPythonPackage, fetchPypi, python, boost, zlib, clang, ncurses
+, pytest, docutils, pygments, numpy, scipy, scikitlearn }:
 
-pythonPackages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "vowpalwabbit";
-  name = "${pname}-${version}";
-  version = "8.4.0";
+  version = "8.5.0";
 
-  src = fetchurl{
-    url = "mirror://pypi/v/vowpalwabbit/${name}.tar.gz";
-    sha256 = "abd22bfae99fb102cf8a6aec49e8c278cb7317d3a7eb60f70cd102be9c336fd5";
+  src = fetchPypi{
+    inherit pname version;
+    sha256 = "0b517371fc64f1c728a0af42a31fa93def27306e9b4d25d6e5fd01bcff1b7304";
   };
   # vw tries to write some explicit things to home
   # python installed: The directory '/homeless-shelter/.cache/pip/http'
@@ -15,13 +15,13 @@ pythonPackages.buildPythonPackage rec {
     export HOME=$PWD
   '';
 
-  buildInputs = with pythonPackages; [ boost.dev zlib.dev clang ncurses pytest docutils pygments ];
-  propagatedBuildInputs = with pythonPackages; [ numpy scipy scikitlearn ];
+  buildInputs = [ boost.dev zlib.dev clang ncurses pytest docutils pygments ];
+  propagatedBuildInputs = [ numpy scipy scikitlearn ];
 
   checkPhase = ''
     # check-manifest requires a git clone, not a tarball
     # check-manifest --ignore "Makefile,PACKAGE.rst,*.cc,tox.ini,tests*,examples*,src*"
-    python setup.py check -mrs
+    ${python.interpreter} setup.py check -mrs
   '';
 
   meta = with lib; {

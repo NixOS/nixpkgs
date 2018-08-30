@@ -1,4 +1,4 @@
-{ stdenv, unzip, fetchurl, writeText }:
+{ stdenv, unzip, fetchurl }:
 
 let
   version = "24";
@@ -11,7 +11,7 @@ let
         x86_64-linux = "x64/libbass.so";
       };
       urlpath = "bass${version}-linux.zip";
-      sha256 = "1a2z9isabkymz7qmkgklbjpj2wxkvv1cngfp9aj0c9178v97pjd7";
+      sha256 = "0alxx7knkvzwwifqrmzavafwq53flja7s1ckaabk6p2ir2f0j5cp";
     };
 
     bass_fx = {

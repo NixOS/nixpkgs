@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, fetchFromGitHub, bctoolbox }:
+{ stdenv, cmake, fetchFromGitHub, bctoolbox }:
 
 stdenv.mkDerivation rec {
   baseName = "ortp";

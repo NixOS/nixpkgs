@@ -20,15 +20,16 @@
 , requests
 , send2trash
 , pexpect
+, prometheus_client
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.4.1";
+  version = "5.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01l6yp78sp27vns4cxh8ybr7x0pixxn97cp0i3w6s0lv1v8l6qbx";
+    sha256 = "e2c8e931cc19db4f8c63e6a396efbc13a228b2cb5b2919df011b946f28239a08";
   };
 
   LC_ALL = "en_US.utf8";
@@ -39,11 +40,18 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
+    prometheus_client
   ];
 
   # disable warning_filters
   preCheck = lib.optionalString (!isPy3k) ''
     echo "" > setup.cfg
+  '';
+
+  postPatch = ''
+    # Remove selenium tests
+    rm -rf notebook/tests/selenium
+
   '';
 
   checkPhase = ''

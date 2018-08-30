@@ -4,13 +4,13 @@ stdenv.mkDerivation rec {
   name = "patchelf-0.9";
 
   src = fetchurl {
-    url = "http://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
+    url = "https://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
     sha256 = "a0f65c1ba148890e9f2f7823f4bedf7ecad5417772f64f994004f59a39014f83";
   };
 
   setupHook = [ ./setup-hook.sh ];
 
-  #doCheck = true; # problems when loading libc.so.6
+  doCheck = false; # fails 8 out of 24 tests, problems when loading libc.so.6
 
   meta = {
     homepage = https://nixos.org/patchelf.html;

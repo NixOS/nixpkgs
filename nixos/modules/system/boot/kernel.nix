@@ -77,8 +77,8 @@ in
       type = types.int;
       default = 4;
       description = ''
-        The kernel console log level.  Log messages with a priority
-        numerically less than this will not appear on the console.
+        The kernel console <literal>loglevel</literal>. All Kernel Messages with a log level smaller
+        than this setting will be printed to the console.
       '';
     };
 

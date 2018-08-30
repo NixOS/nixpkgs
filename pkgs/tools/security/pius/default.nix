@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, pythonPackages, gnupg }:
+{ fetchFromGitHub, stdenv, pythonPackages, gnupg, perl }:
 
 let version = "2.2.6"; in
 pythonPackages.buildPythonApplication {
@@ -18,6 +18,8 @@ pythonPackages.buildPythonApplication {
     done
   '';
 
+  buildInputs = [ perl ];
+
   meta = {
     homepage = https://www.phildev.net/pius/;
 
@@ -32,7 +34,7 @@ pythonPackages.buildPythonApplication {
 
     license = stdenv.lib.licenses.gpl2;
 
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu kierdavis ];
   };
 }

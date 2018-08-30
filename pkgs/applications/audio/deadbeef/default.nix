@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, fetchpatch, jansson
+{ stdenv, fetchurl, intltool, pkgconfig, jansson
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? false, gtk2 ? null
 , gtk3Support ? true, gtk3 ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null

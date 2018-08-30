@@ -144,8 +144,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pulseaudioLight;
-        defaultText = "pkgs.pulseaudioLight";
+        default = pkgs.pulseaudio;
+        defaultText = "pkgs.pulseaudio";
         example = literalExample "pkgs.pulseaudioFull";
         description = ''
           The PulseAudio derivation to use.  This can be used to enable
@@ -214,6 +214,8 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ overriddenPackage ];
 
+      sound.enable = true;
+
       environment.etc = [
         { target = "asound.conf";
           source = alsaConf; }
@@ -262,7 +264,7 @@ in {
     })
 
     (mkIf systemWide {
-      users.extraUsers.pulse = {
+      users.users.pulse = {
         # For some reason, PulseAudio wants UID == GID.
         uid = assert uid == gid; uid;
         group = "pulse";
@@ -272,7 +274,7 @@ in {
         createHome = true;
       };
 
-      users.extraGroups.pulse.gid = gid;
+      users.groups.pulse.gid = gid;
 
       systemd.services.pulseaudio = {
         description = "PulseAudio System-Wide Server";

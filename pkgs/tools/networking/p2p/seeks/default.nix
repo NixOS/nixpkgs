@@ -63,6 +63,7 @@ stdenv.mkDerivation {
     maintainers = [
       stdenv.lib.maintainers.matejc
     ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    broken = true; # 2018-04-11
   };
 }

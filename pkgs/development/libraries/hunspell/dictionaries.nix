@@ -61,6 +61,51 @@ let
       '';
     };
 
+  mkDictFromDSSO =
+    { shortName, shortDescription, dictFileName }:
+    mkDict rec {
+      inherit dictFileName;
+      version = "2.40";
+      # Should really use a string function or something
+      _version = "2-40";
+      name = "hunspell-dict-${shortName}-dsso-${version}";
+      _name = "ooo_swedish_dict_${_version}";
+      readmeFile = "LICENSE_en_US.txt";
+      src = fetchurl {
+        url = "https://extensions.libreoffice.org/extensions/swedish-spelling-dictionary-den-stora-svenska-ordlistan/${version}/@@download/file/${_name}.oxt";
+        sha256 = "b982881cc75f5c4af1199535bd4735ee476bdc48edf63e3f05fb4f715654a7bc";
+      };
+      meta = with stdenv.lib; {
+        longDescription = ''
+        Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
+        Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
+        LibreOffice då dsso.se inte längre verkar vara med oss.
+        '';
+        description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
+        license = licenses.lgpl3;
+        platforms = platforms.all;
+      };
+      buildInputs = [ unzip ];
+      phases = "unpackPhase installPhase";
+      sourceRoot = ".";
+      unpackCmd = ''
+      unzip $src dictionaries/${dictFileName}.dic dictionaries/${dictFileName}.aff $readmeFile
+      '';
+      installPhase = ''
+        # hunspell dicts
+        install -dm755 "$out/share/hunspell"
+        install -m644 dictionaries/${dictFileName}.dic "$out/share/hunspell/"
+        install -m644 dictionaries/${dictFileName}.aff "$out/share/hunspell/"
+        # myspell dicts symlinks
+        install -dm755 "$out/share/myspell/dicts"
+        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
+        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+        # docs
+        install -dm755 "$out/share/doc"
+        install -m644 ${readmeFile} $out/share/doc/${name}.txt
+      '';
+    };
+
   mkDictFromDicollecte =
     { shortName, shortDescription, longDescription, dictFileName }:
     mkDict rec {
@@ -118,6 +163,7 @@ let
       name = "hunspell-dict-${shortName}-linguistico-${version}";
       readmeFile = dictFileName + "_README.txt";
       meta = with stdenv.lib; {
+        description = "Hunspell dictionary for ${shortDescription}";
         homepage = https://sourceforge.net/projects/linguistico/;
         license = licenses.gpl3;
         maintainers = with maintainers; [ renzo ];
@@ -464,6 +510,21 @@ in {
     ];
   };
 
+  /* SWEDISH */
+  
+  sv-se = mkDictFromDSSO rec {
+    shortName = "sv-se";
+    dictFileName = "sv_SE";
+    shortDescription = "Swedish (Sweden)";
+  };
+
+  # Finlandian Swedish (hello Linus Torvalds)
+  sv-fi = mkDictFromDSSO rec {
+    shortName = "sv-fi";
+    dictFileName = "sv_FI";
+    shortDescription = "Swedish (Finland)";
+  };
+  
   /* GERMAN */
 
   de-de = mkDictFromJ3e {

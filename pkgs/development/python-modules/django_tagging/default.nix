@@ -1,9 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi, django }:
+{ buildPythonPackage, fetchPypi, django }:
 
 buildPythonPackage rec {
   pname = "django-tagging";
   version = "0.4.6";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

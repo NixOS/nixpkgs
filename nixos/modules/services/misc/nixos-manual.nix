@@ -23,7 +23,7 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ { nixpkgs.system = config.nixpkgs.system; } ] ++ baseModules;
+          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ baseModules;
           args = (config._module.args) // { modules = [ ]; };
           specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
         };
@@ -99,7 +99,7 @@ in
 
     services.nixosManual.browser = mkOption {
       type = types.path;
-      default = "${pkgs.w3m-nox}/bin/w3m";
+      default = "${pkgs.w3m-nographics}/bin/w3m";
       description = ''
         Browser used to show the manual.
       '';

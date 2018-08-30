@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba
 , libiconv, npth, gettext, texinfo, pcsclite, sqlite
 
 # Each of the dependencies below are optional.
@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.2.5";
+  version = "2.2.9";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "0mzgibq4dpxh3i9anmwg12xdjry28y83icafhx3j3djg5niqk89z";
+    sha256 = "0r11mx8nkh7ysrnshs560amha5csx8zcaggb5kxcksx1zymyly32";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -28,13 +28,11 @@ stdenv.mkDerivation rec {
     readline libusb gnutls adns openldap zlib bzip2 sqlite
   ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
-
   patches = [
     ./fix-libusb-include-path.patch
   ];
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
-    sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+    sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";

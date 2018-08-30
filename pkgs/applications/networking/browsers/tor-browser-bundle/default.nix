@@ -337,10 +337,11 @@ stdenv.mkDerivation rec {
     $out/bin/tor-browser -version >/dev/null
   '';
 
+  passthru.execdir = "/bin";
   meta = with stdenv.lib; {
     description = "An unofficial version of the tor browser bundle, built from source";
     homepage = https://torproject.org/;
-    license = licenses.unfreeRedistributable; # TODO: check this
+    license = licenses.free;
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];
     maintainers = with maintainers; [ joachifm ];

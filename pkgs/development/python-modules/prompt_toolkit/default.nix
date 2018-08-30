@@ -10,7 +10,6 @@
 
 buildPythonPackage rec {
   pname = "prompt_toolkit";
-  name = "${pname}-${version}";
   version = "1.0.15";
 
   src = fetchPypi {

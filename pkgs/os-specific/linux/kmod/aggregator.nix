@@ -9,6 +9,12 @@ buildEnv {
     ''
       source ${stdenv}/setup
 
+      if ! test -d "$out/lib/modules"; then
+        echo "No modules found."
+        # To support a kernel without modules
+        exit 0
+      fi
+
       kernelVersion=$(cd $out/lib/modules && ls -d *)
       if test "$(echo $kernelVersion | wc -w)" != 1; then
          echo "inconsistent kernel versions: $kernelVersion"

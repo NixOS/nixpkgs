@@ -1,22 +1,23 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, zlib, libpng, libjpeg
-, libGLU_combined, glm, libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu }:
+, zlib, libpng, libjpeg, libGLU_combined, glm
+, libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu
+}:
 
 stdenv.mkDerivation rec {
   name = "maim-${version}";
-  version = "5.4.68";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "maim";
     rev = "v${version}";
-    sha256 = "12jvfxzfhh6cbk6ygliwnkvm3mb7rca60k6x9qdzm17jsz65xhh0";
+    sha256 = "14mfxdm39kc5jk8wysrzx05ag2g4sk9l24i8m5pzqn8j611150v3";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs =
-    [ zlib libpng libjpeg libGLU_combined glm libX11 libXext libXfixes libXrandr
-      libXcomposite slop icu ];
+    [ zlib libpng libjpeg libGLU_combined glm
+      libX11 libXext libXfixes libXrandr libXcomposite slop icu ];
 
   doCheck = false;
 

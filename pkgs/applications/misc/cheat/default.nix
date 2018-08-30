@@ -4,7 +4,7 @@ with python3Packages;
 buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "cheat";
-  version = "2.2.2";
+  version = "2.2.3";
 
   propagatedBuildInputs = [ docopt pygments ];
 
@@ -12,7 +12,7 @@ buildPythonApplication rec {
     owner = "chrisallenlane";
     repo = "cheat";
     rev = version;
-    sha256 = "1da4m4n6nivjakpll6jj0aszrv24g2zax74034lzpv3pbh84fvas";
+    sha256 = "1p9a54fax3b1ilqcwdlccy08ww3igwsyzcyikqivaxj5p6mqq6wl";
   };
   # no tests available
   doCheck = false;

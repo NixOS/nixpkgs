@@ -1,13 +1,13 @@
-{ stdenv, fetchgit, cmake, pkgconfig, libusb1 }:
+{ stdenv, lib, fetchpatch, fetchgit, cmake, pkgconfig, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "rtl-sdr-${version}";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchgit {
     url = "git://git.osmocom.org/rtl-sdr.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1dh52xcvxkjb3mj80wlm20grz8cqf5wipx2ksi91ascz12b5pym6";
+    sha256 = "0c56a9dhlqgs6y15ns0mn4r5giz0x6y7x151jcq755f711pc3y01";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -26,7 +26,13 @@ stdenv.mkDerivation rec {
     grep -q "Requires:" "$pcfile" && { echo "Upstream has added 'Requires:' in $(basename "$pcfile"); update nix expression."; exit 1; }
     echo "Requires: libusb-1.0" >> "$pcfile"
   '';
-
+  patches = lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      name = "linker-fix.patch";
+      url = "https://github.com/lukeadams/rtl-sdr/commit/7a66dcf268305b5aa507d1756799942c74549b72.patch";
+      sha256 = "0cn9fyf4ay4i3shvxj1ivgyxjvfm401irk560jdjl594nzadrcsl";
+    })
+  ];
   meta = with stdenv.lib; {
     description = "Turns your Realtek RTL2832 based DVB dongle into a SDR receiver";
     homepage = http://sdr.osmocom.org/trac/wiki/rtl-sdr;

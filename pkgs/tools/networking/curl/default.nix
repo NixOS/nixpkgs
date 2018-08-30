@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkgconfig, perl
 , http2Support ? true, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
@@ -24,11 +24,14 @@ assert brotliSupport -> brotli != null;
 assert gssSupport -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.58.0";
+  name = "curl-7.61.0";
 
   src = fetchurl {
-    url = "https://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "0cg7klhf1ksnbw5wvwa802qir877zv4y3dj7swz1xh07g3wq3c0w";
+    urls = [
+      "https://curl.haxx.se/download/${name}.tar.bz2"
+      "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
+    ];
+    sha256 = "173ccmnnr4qcawzgn7vm0ciyzphanzghigdgavg88nyg45lk6vsz";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -60,6 +63,10 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
+      # to nss-cacert from the default profile.
+      "--without-ca-bundle"
+      "--without-ca-path"
       "--with-ca-fallback"
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
@@ -71,10 +78,15 @@ stdenv.mkDerivation rec {
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}";
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}"
+       # For the 'urandom', maybe it should be a cross-system option
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       "--with-random=/dev/urandom";
 
-  CXX = "c++";
-  CXXCPP = "c++ -E";
+  CXX = "${stdenv.cc.targetPrefix}c++";
+  CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
+
+  doCheck = false; # expensive, fails
 
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
@@ -85,16 +97,6 @@ stdenv.mkDerivation rec {
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4.4.0
   '';
 
-  crossAttrs = {
-    # We should refer to the cross built openssl
-    # For the 'urandom', maybe it should be a cross-system option
-    configureFlags = [
-        ( if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl" )
-        ( if gnutlsSupport then "--with-gnutls=${gnutls.crossDrv}" else "--without-gnutls" )
-        "--with-random /dev/urandom"
-      ];
-  };
-
   passthru = {
     inherit sslSupport openssl;
   };
@@ -103,6 +105,7 @@ stdenv.mkDerivation rec {
     description = "A command line tool for transferring files with URL syntax";
     homepage    = https://curl.haxx.se/;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.all;
+    license = licenses.curl;
+    platforms = platforms.all;
   };
 }

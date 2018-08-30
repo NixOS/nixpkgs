@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, rsync, glibc, gawk }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "v5.53";
+  version = "5.53";
   name = "profile-sync-daemon-${version}";
 
   src = fetchurl {
-    url = "http://github.com/graysky2/profile-sync-daemon/archive/${version}.tar.gz";
+    url = "http://github.com/graysky2/profile-sync-daemon/archive/v${version}.tar.gz";
     sha256 = "0m7h9l7dndqgb5k3grpc00f6dpg73p6h4q5sgkf8bvyzvcbdafwx";
   };
 

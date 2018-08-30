@@ -8,10 +8,12 @@
 , six
 , nose
 , Mako
-, python
-, cudaSupport ? false, cudatoolkit
+, cudaSupport ? false, cudatoolkit , nvidia_x11
 , openclSupport ? true, ocl-icd, clblas
 }:
+
+assert cudaSupport -> nvidia_x11 != null
+                   && cudatoolkit != null;
 
 buildPythonPackage rec {
   pname = "libgpuarray";
@@ -32,8 +34,8 @@ buildPythonPackage rec {
 
   libraryPath = lib.makeLibraryPath (
     []
-    ++ lib.optionals cudaSupport [ cudatoolkit.lib cudatoolkit.out ]
-    ++ lib.optionals openclSupport [ ocl-icd clblas ]
+    ++ lib.optionals cudaSupport [ cudatoolkit.lib cudatoolkit.out nvidia_x11 ]
+    ++ lib.optionals openclSupport ([ clblas ] ++ lib.optional (!stdenv.isDarwin) ocl-icd)
   );
 
   preBuild = ''
@@ -47,7 +49,7 @@ buildPythonPackage rec {
 
   postFixup = ''
     rm $out/lib/libgpuarray-static.a
-
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
       patchelf --set-rpath "$p:$libraryPath" $1
@@ -75,7 +77,7 @@ buildPythonPackage rec {
     description = "Library to manipulate tensors on GPU.";
     license = licenses.free;
     maintainers = with maintainers; [ artuuge ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

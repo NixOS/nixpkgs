@@ -1,13 +1,13 @@
 { stdenv, fetchurl, bash-completion
 , glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
 , gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_40
-, libgudev, sane-backends, udev, gnome3, makeWrapper }:
+, libgudev, sane-backends, gnome3, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "colord-1.4.2";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
+    url = "https://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
     sha256 = "19zc9gldz469jshl16av7na459kwr5nhvs2pz98xm5lw582xaw2c";
   };
 

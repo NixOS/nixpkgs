@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "amqplib";
   version = "0.6.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = https://github.com/barryp/py-amqplib/archive/0.6.1.tar.gz;
@@ -16,5 +15,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/py-amqplib/;
     description = "Python client for the Advanced Message Queuing Procotol (AMQP)";
+    license = licenses.lgpl21;
   };
 }

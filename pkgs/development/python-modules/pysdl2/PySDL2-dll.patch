@@ -1,0 +1,119 @@
+diff -ru PySDL2-0.9.6-old/sdl2/dll.py PySDL2-0.9.6/sdl2/dll.py
+--- PySDL2-0.9.6-old/sdl2/dll.py	2018-03-08 10:18:37.583471745 +0100
++++ PySDL2-0.9.6/sdl2/dll.py	2018-03-08 10:20:06.705517520 +0100
+@@ -45,29 +45,31 @@
+     """Function wrapper around the different DLL functions. Do not use or
+     instantiate this one directly from your user code.
+     """
+-    def __init__(self, libinfo, libnames, path=None):
+-        self._dll = None
+-        foundlibs = _findlib(libnames, path)
+-        dllmsg = "PYSDL2_DLL_PATH: %s" % (os.getenv("PYSDL2_DLL_PATH") or "unset")
+-        if len(foundlibs) == 0:
+-            raise RuntimeError("could not find any library for %s (%s)" %
+-                               (libinfo, dllmsg))
+-        for libfile in foundlibs:
+-            try:
+-                self._dll = CDLL(libfile)
+-                self._libfile = libfile
+-                break
+-            except Exception as exc:
+-                # Could not load the DLL, move to the next, but inform the user
+-                # about something weird going on - this may become noisy, but
+-                # is better than confusing the users with the RuntimeError below
+-                warnings.warn(repr(exc), DLLWarning)
+-        if self._dll is None:
+-            raise RuntimeError("found %s, but it's not usable for the library %s" %
+-                               (foundlibs, libinfo))
+-        if path is not None and sys.platform in ("win32",) and \
+-            path in self._libfile:
+-            os.environ["PATH"] = "%s;%s" % (path, os.environ["PATH"])
++    def __init__(self, libfile):
++        self._dll = CDLL(libfile)
++        self._libfile = libfile
++        # self._dll = None
++        # foundlibs = _findlib(libnames, path)
++        # dllmsg = "PYSDL2_DLL_PATH: %s" % (os.getenv("PYSDL2_DLL_PATH") or "unset")
++        # if len(foundlibs) == 0:
++        #     raise RuntimeError("could not find any library for %s (%s)" %
++        #                        (libinfo, dllmsg))
++        # for libfile in foundlibs:
++        #     try:
++        #         self._dll = CDLL(libfile)
++        #         self._libfile = libfile
++        #         break
++        #     except Exception as exc:
++        #         # Could not load the DLL, move to the next, but inform the user
++        #         # about something weird going on - this may become noisy, but
++        #         # is better than confusing the users with the RuntimeError below
++        #         warnings.warn(repr(exc), DLLWarning)
++        # if self._dll is None:
++        #     raise RuntimeError("found %s, but it's not usable for the library %s" %
++        #                        (foundlibs, libinfo))
++        # if path is not None and sys.platform in ("win32",) and \
++        #     path in self._libfile:
++        #     os.environ["PATH"] = "%s;%s" % (path, os.environ["PATH"])
+ 
+     def bind_function(self, funcname, args=None, returns=None, optfunc=None):
+         """Binds the passed argument and return value types to the specified
+@@ -110,7 +112,7 @@
+     return
+ 
+ try:
+-    dll = DLL("SDL2", ["SDL2", "SDL2-2.0"], os.getenv("PYSDL2_DLL_PATH"))
++    dll = DLL("SDL2")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 
+diff -ru PySDL2-0.9.6-old/sdl2/sdlgfx.py PySDL2-0.9.6/sdl2/sdlgfx.py
+--- PySDL2-0.9.6-old/sdl2/sdlgfx.py	2018-03-08 10:18:37.585471769 +0100
++++ PySDL2-0.9.6/sdl2/sdlgfx.py	2018-03-08 10:20:06.705517520 +0100
+@@ -34,8 +34,7 @@
+            ]
+ 
+ try:
+-    dll = DLL("SDL2_gfx", ["SDL2_gfx", "SDL2_gfx-1.0"],
+-              os.getenv("PYSDL2_DLL_PATH"))
++    dll = DLL("SDL2_gfx")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 
+diff -ru PySDL2-0.9.6-old/sdl2/sdlimage.py PySDL2-0.9.6/sdl2/sdlimage.py
+--- PySDL2-0.9.6-old/sdl2/sdlimage.py	2018-03-08 10:18:37.585471769 +0100
++++ PySDL2-0.9.6/sdl2/sdlimage.py	2018-03-08 10:20:06.705517520 +0100
+@@ -26,8 +26,7 @@
+            ]
+ 
+ try:
+-    dll = DLL("SDL2_image", ["SDL2_image", "SDL2_image-2.0"],
+-              os.getenv("PYSDL2_DLL_PATH"))
++    dll = DLL("SDL2_image")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 
+diff -ru PySDL2-0.9.6-old/sdl2/sdlmixer.py PySDL2-0.9.6/sdl2/sdlmixer.py
+--- PySDL2-0.9.6-old/sdl2/sdlmixer.py	2018-03-08 10:18:37.585471769 +0100
++++ PySDL2-0.9.6/sdl2/sdlmixer.py	2018-03-08 10:20:27.415758478 +0100
+@@ -50,8 +50,7 @@
+           ]
+ 
+ try:
+-    dll = DLL("SDL2_mixer", ["SDL2_mixer", "SDL2_mixer-2.0"],
+-              os.getenv("PYSDL2_DLL_PATH"))
++    dll = DLL("SDL2_mixer")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 
+diff -ru PySDL2-0.9.6-old/sdl2/sdlttf.py PySDL2-0.9.6/sdl2/sdlttf.py
+--- PySDL2-0.9.6-old/sdl2/sdlttf.py	2018-03-08 10:18:37.585471769 +0100
++++ PySDL2-0.9.6/sdl2/sdlttf.py	2018-03-08 10:20:06.705517520 +0100
+@@ -38,8 +38,7 @@
+           ]
+ 
+ try:
+-    dll = DLL("SDL2_ttf", ["SDL2_ttf", "SDL2_ttf-2.0"],
+-              os.getenv("PYSDL2_DLL_PATH"))
++    dll = DLL("SDL2_ttf")
+ except RuntimeError as exc:
+     raise ImportError(exc)
+ 

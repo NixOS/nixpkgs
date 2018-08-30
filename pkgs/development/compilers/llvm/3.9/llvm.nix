@@ -8,15 +8,12 @@
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , zlib
 , compiler-rt_src
-, libcxxabi
 , debugVersion ? false
 , enableSharedLibraries ? (buildPlatform == hostPlatform)
-, darwin
 , buildPackages
 , buildPlatform
 , hostPlatform
@@ -53,7 +50,7 @@ in stdenv.mkDerivation rec {
     groff
     libxml2
     libffi
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
+  ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -63,7 +60,10 @@ in stdenv.mkDerivation rec {
       url = https://github.com/llvm-mirror/llvm/commit/5340b5b3d970069aebf3dde49d8964583742e01a.patch;
       sha256 = "095f8knplwqbc2p7rad1kq8633i34qynni9jna93an7kyc80wdxl";
    })
-  ];
+   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+     ../TLI-musl.patch
+     ../dynamiclibrary-musl.patch
+   ];
 
   postPatch = ""
   + ''
@@ -92,7 +92,7 @@ in stdenv.mkDerivation rec {
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
   ''
-  + stdenv.lib.optionalString (stdenv ? glibc) ''
+  + ''
     (
       cd projects/compiler-rt
       patch -p1 < ${
@@ -120,6 +120,10 @@ in stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
     "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
+
+    "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
   ] ++ stdenv.lib.optional enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
   ] ++ stdenv.lib.optional (!isDarwin)
@@ -130,6 +134,11 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals (buildPlatform != hostPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildPackages.llvmPackages_39.llvm}/bin/llvm-tblgen"
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+    # Not yet supported
+    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+    "-DCOMPILER_RT_BUILD_XRAY=OFF"
+
   ];
 
   postBuild = ''
@@ -160,7 +169,7 @@ in stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

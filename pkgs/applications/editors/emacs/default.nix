@@ -1,11 +1,12 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
+, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
+, systemd ? null
 , withX ? !stdenv.isDarwin
 , withGTK2 ? false, gtk2 ? null
 , withGTK3 ? true, gtk3 ? null, gsettings-desktop-schemas ? null
-, withXwidgets ? false, webkitgtk24x-gtk3 ? null, wrapGAppsHook ? null, glib-networking ? null
+, withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 }:
@@ -16,7 +17,7 @@ assert withGTK2 -> withX || stdenv.isDarwin;
 assert withGTK3 -> withX || stdenv.isDarwin;
 assert withGTK2 -> !withGTK3 && gtk2 != null;
 assert withGTK3 -> !withGTK2 && gtk3 != null;
-assert withXwidgets -> withGTK3 && webkitgtk24x-gtk3 != null;
+assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 let
   toolkit =
@@ -26,29 +27,25 @@ let
 in
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
-  version = "25.3";
+  version = "26.1";
   versionModifier = "";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "02y00y9q42g1iqgz5qhmsja75hwxd88yrn9zp14lanay0zkwafi5";
+    sha256 = "0b6k1wq44rc8gkvxhi1bbjxbz3cwg29qbq8mklq2az6p1hjgrx0w";
   };
 
   enableParallelBuilding = true;
 
   patches = [
     ./clean-env.patch
-  ] ++ lib.optionals stdenv.isDarwin [
-    ./at-fdcwd.patch
-
-    # Backport of the fix to
-    # https://lists.gnu.org/archive/html/bug-gnu-emacs/2017-04/msg00201.html
-    # Should be removed when switching to Emacs 26.1
-    (fetchurl {
-      url = "https://gist.githubusercontent.com/aaronjensen/f45894ddf431ecbff78b1bcf533d3e6b/raw/6a5cd7f57341aba673234348d8b0d2e776f86719/Emacs-25-OS-X-use-vfork.patch";
-      sha256 = "1nlsxiaynswqhy99jf4mw9x0sndhwcrwy8713kq1l3xqv9dbrzgj";
-    })
   ];
+
+  postPatch = lib.optionalString srcRepo ''
+    rm -fr .git
+  '';
+
+  CFLAGS = "-DMAC_OS_X_VERSION_MAX_ALLOWED=101200";
 
   nativeBuildInputs = [ pkgconfig ]
     ++ lib.optionals srcRepo [ autoconf automake texinfo ]
@@ -56,14 +53,14 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
-    ++ lib.optionals stdenv.isLinux [ dbus libselinux ]
+    ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
-        imagemagick gconf ]
+        imagemagick gconf m17n_lib libotf ]
     ++ lib.optional (withX && withGTK2) gtk2
     ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x-gtk3 glib-networking ];
+    ++ lib.optionals (withX && withXwidgets) [ webkitgtk ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 

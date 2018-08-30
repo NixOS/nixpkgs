@@ -1,10 +1,12 @@
-{stdenv, buildOcaml, fetchFromGitHub, fetchurl, camlp4, ocaml_oasis,
- bitstring, camlzip, cmdliner, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, ulex, easy-format, xmlm, frontc, ounit, ppx_jane, parsexp,
+{ stdenv, fetchFromGitHub, fetchurl, fetchpatch
+, ocaml, findlib, ocamlbuild, ocaml_oasis,
+ bitstring, camlzip, cmdliner, core_kernel, ezjsonm, faillib, fileutils, ocaml_lwt, ocamlgraph, ocurl, re, uri, zarith, piqi, piqi-ocaml, uuidm, llvm_38, frontc, ounit, ppx_jane, parsexp,
  utop,
- which, makeWrapper, writeText, ocaml}:
+ which, makeWrapper, writeText
+}:
 
-buildOcaml rec {
-  name = "bap";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-bap-${version}";
   version = "1.4.0";
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
@@ -18,6 +20,11 @@ buildOcaml rec {
      sha256 = "0k761w82zkmi5dwsfqq61dbjnb8mmmpb2xwp7vp85xs14g5fjz19";
   };
 
+  patches = [(fetchpatch {
+    url = "https://github.com/BinaryAnalysisPlatform/bap/commit/e4ee3a1e5b427e8d8991e7462b06123178c0a046.patch";
+    sha256 = "1yq33zd2sdacclr20g05c1q050m7x7vfbl66qdgansh23dr4fnxk";
+  })];
+
   createFindlibDestdir = true;
 
   setupHook = writeText "setupHook.sh" ''
@@ -27,7 +34,7 @@ buildOcaml rec {
 
   nativeBuildInputs = [ which makeWrapper ];
 
-  buildInputs = [ ocaml_oasis
+  buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis
                   llvm_38
                   utop ];
 
@@ -48,7 +55,7 @@ buildOcaml rec {
 
   disableIda = "--disable-ida --disable-fsi-benchmark";
 
-  configureFlags = "--enable-everything ${disableIda} --with-llvm-config=${llvm_38}/bin/llvm-config";
+  configureFlags = [ "--enable-everything ${disableIda}" "--with-llvm-config=${llvm_38}/bin/llvm-config" ];
 
   BAPBUILDFLAGS = "-j $(NIX_BUILD_CORES)";
 

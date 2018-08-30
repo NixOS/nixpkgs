@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchurl, makeWrapper,
+{ stdenv, lib, fetchurl, makeWrapper,
   ocaml, unzip, ncurses, curl, aspcud
 }:
 
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   name = "opam-${version}";
   version = "1.2.2";
 
-  buildInputs = [ unzip curl ncurses ocaml makeWrapper];
+  buildInputs = [ unzip curl ncurses ocaml makeWrapper ];
 
   src = srcs.opam;
 
@@ -71,9 +71,13 @@ in stdenv.mkDerivation rec {
   # Dirty, but apparently ocp-build requires a TERM
   makeFlags = ["TERM=screen"];
 
+  # change argv0 to "opam" as a workaround for
+  # https://github.com/ocaml/opam/issues/2142
   postInstall = ''
-    wrapProgram $out/bin/opam \
-      --suffix PATH : ${aspcud}/bin
+    mv $out/bin/opam $out/bin/.opam-wrapped
+    makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
+      --argv0 "opam" \
+      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin
   '';
 
   doCheck = false;
@@ -83,5 +87,6 @@ in stdenv.mkDerivation rec {
     homepage = http://opam.ocamlpro.com/;
     maintainers = [ maintainers.henrytill ];
     platforms = platforms.all;
+    license = licenses.lgpl21Plus;
   };
 }

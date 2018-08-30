@@ -1,5 +1,5 @@
 { stdenvNoCC, lib, buildPackages
-, buildPlatform, hostPlatform
+, hostPlatform
 , fetchurl, perl
 }:
 

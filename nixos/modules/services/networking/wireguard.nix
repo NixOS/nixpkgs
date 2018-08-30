@@ -10,7 +10,7 @@ let
 
   # interface options
 
-  interfaceOpts = { name, ... }: {
+  interfaceOpts = { ... }: {
 
     options = {
 
@@ -53,30 +53,30 @@ let
       };
 
       preSetup = mkOption {
-        example = literalExample [''
+        example = literalExample ''
           ${pkgs.iproute}/bin/ip netns add foo
-        ''];
-        default = [];
-        type = with types; listOf str;
+        '';
+        default = "";
+        type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
         description = ''
-          A list of commands called at the start of the interface setup.
+          Commands called at the start of the interface setup.
         '';
       };
 
       postSetup = mkOption {
-        example = literalExample [''
-          ${pkgs.bash} -c 'printf "nameserver 10.200.100.1" | ${pkgs.openresolv}/bin/resolvconf -a wg0 -m 0'
-        ''];
-        default = [];
-        type = with types; listOf str;
-        description = "A list of commands called at the end of the interface setup.";
+        example = literalExample ''
+          printf "nameserver 10.200.100.1" | ${pkgs.openresolv}/bin/resolvconf -a wg0 -m 0
+        '';
+        default = "";
+        type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
+        description = "Commands called at the end of the interface setup.";
       };
 
       postShutdown = mkOption {
-        example = literalExample ["${pkgs.openresolv}/bin/resolvconf -d wg0"];
-        default = [];
-        type = with types; listOf str;
-        description = "A list of commands called after shutting down the interface.";
+        example = literalExample "${pkgs.openresolv}/bin/resolvconf -d wg0";
+        default = "";
+        type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
+        description = "Commands called after shutting down the interface.";
       };
 
       table = mkOption {
@@ -182,9 +182,6 @@ let
 
   };
 
-  ipCommand = "${pkgs.iproute}/bin/ip";
-  wgCommand = "${pkgs.wireguard}/bin/wg";
-
   generateUnit = name: values:
     # exactly one way to specify the private key must be set
     assert (values.privateKey != null) != (values.privateKeyFile != null);
@@ -196,49 +193,53 @@ let
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         environment.DEVICE = name;
+        path = with pkgs; [ kmod iproute wireguard-tools ];
 
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          ExecStart = flatten([
-            values.preSetup
+        };
 
-            "-${ipCommand} link del dev ${name}"
-            "${ipCommand} link add dev ${name} type wireguard"
+        script = ''
+          modprobe wireguard
 
-            (map (ip:
-            "${ipCommand} address add ${ip} dev ${name}"
-            ) values.ips)
+          ${values.preSetup}
 
-            ("${wgCommand} set ${name} private-key ${privKey}" +
-            optionalString (values.listenPort != null) " listen-port ${toString values.listenPort}")
+          ip link add dev ${name} type wireguard
 
-            (map (peer:
+          ${concatMapStringsSep "\n" (ip:
+            "ip address add ${ip} dev ${name}"
+          ) values.ips}
+
+          wg set ${name} private-key ${privKey} ${
+            optionalString (values.listenPort != null) " listen-port ${toString values.listenPort}"}
+
+          ${concatMapStringsSep "\n" (peer:
             assert (peer.presharedKeyFile == null) || (peer.presharedKey == null); # at most one of the two must be set
             let psk = if peer.presharedKey != null then pkgs.writeText "wg-psk" peer.presharedKey else peer.presharedKeyFile;
             in
-            "${wgCommand} set ${name} peer ${peer.publicKey}" +
-            optionalString (psk != null) " preshared-key ${psk}" +
-            optionalString (peer.endpoint != null) " endpoint ${peer.endpoint}" +
-            optionalString (peer.persistentKeepalive != null) " persistent-keepalive ${toString peer.persistentKeepalive}" +
-            optionalString (peer.allowedIPs != []) " allowed-ips ${concatStringsSep "," peer.allowedIPs}"
-            ) values.peers)
+              "wg set ${name} peer ${peer.publicKey}" +
+              optionalString (psk != null) " preshared-key ${psk}" +
+              optionalString (peer.endpoint != null) " endpoint ${peer.endpoint}" +
+              optionalString (peer.persistentKeepalive != null) " persistent-keepalive ${toString peer.persistentKeepalive}" +
+              optionalString (peer.allowedIPs != []) " allowed-ips ${concatStringsSep "," peer.allowedIPs}"
+            ) values.peers}
 
-            "${ipCommand} link set up dev ${name}"
+          ip link set up dev ${name}
 
-            (optionals (values.allowedIPsAsRoutes != false) (map (peer:
-            (map (allowedIP:
-            "${ipCommand} route replace ${allowedIP} dev ${name} table ${values.table}"
-            ) peer.allowedIPs)
-            ) values.peers))
+          ${optionalString (values.allowedIPsAsRoutes != false) (concatStringsSep "\n" (concatMap (peer:
+              (map (allowedIP:
+                "ip route replace ${allowedIP} dev ${name} table ${values.table}"
+              ) peer.allowedIPs)
+            ) values.peers))}
 
-            values.postSetup
-          ]);
-          ExecStop = flatten([
-            "${ipCommand} link del dev ${name}"
-            values.postShutdown
-          ]);
-        };
+          ${values.postSetup}
+        '';
+
+        preStop = ''
+          ip link del dev ${name}
+          ${values.postShutdown}
+        '';
       };
 
 in
@@ -278,7 +279,7 @@ in
   config = mkIf (cfg.interfaces != {}) {
 
     boot.extraModulePackages = [ kernel.wireguard ];
-    environment.systemPackages = [ pkgs.wireguard ];
+    environment.systemPackages = [ pkgs.wireguard-tools ];
 
     systemd.services = mapAttrs' generateUnit cfg.interfaces;
 

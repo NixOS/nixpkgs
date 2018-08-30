@@ -69,9 +69,9 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraGroups.riemann.gid = config.ids.gids.riemann;
+    users.groups.riemann.gid = config.ids.gids.riemann;
 
-    users.extraUsers.riemann = {
+    users.users.riemann = {
       description = "riemann daemon user";
       uid = config.ids.uids.riemann;
       group = "riemann";

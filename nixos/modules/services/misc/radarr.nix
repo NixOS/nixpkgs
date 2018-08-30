@@ -1,4 +1,4 @@
-{ config, pkgs, lib, mono, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
@@ -36,12 +36,12 @@ in
       };
     };
 
-    users.extraUsers.radarr = {
+    users.users.radarr = {
       uid = config.ids.uids.radarr;
       home = "/var/lib/radarr";
       group = "radarr";
     };
-    users.extraGroups.radarr.gid = config.ids.gids.radarr;
+    users.groups.radarr.gid = config.ids.gids.radarr;
 
   };
 }

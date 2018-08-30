@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
+{ stdenv, fetchgit, autoconf, sbcl, lispPackages, xdpyinfo, texinfo4
 , makeWrapper , rlwrap, gnused, gnugrep, coreutils, xprop
 , extraModulePaths ? []
 , version }:
@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ the-kenny ];
     platforms   = platforms.linux;
+    broken = true; # 2018-04-11
   };
 }

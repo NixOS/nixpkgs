@@ -3,45 +3,46 @@
       xmlns:xi="http://www.w3.org/2001/XInclude"
       version="5.0"
       xml:id="book-nixos-manual">
-
-  <info>
-    <title>NixOS Manual</title>
-    <subtitle>Version <xi:include href="version" parse="text" /></subtitle>
-  </info>
-
-  <preface>
-    <title>Preface</title>
-
-    <para>This manual describes how to install, use and extend NixOS,
-    a Linux distribution based on the purely functional package
-    management system Nix.</para>
-
-    <para>If you encounter problems, please report them on the
-    <literal
-    xlink:href="https://groups.google.com/forum/#!forum/nix-devel">nix-devel</literal>
-    mailing list or on the <link
+ <info>
+  <title>NixOS Manual</title>
+  <subtitle>Version <xi:include href="./generated/version" parse="text" />
+  </subtitle>
+ </info>
+ <preface>
+  <title>Preface</title>
+  <para>
+   This manual describes how to install, use and extend NixOS, a Linux
+   distribution based on the purely functional package management system Nix.
+  </para>
+  <para>
+   If you encounter problems, please report them on the
+   <literal
+    xlink:href="https://discourse.nixos.org">Discourse</literal>
+   or on the <link
     xlink:href="irc://irc.freenode.net/#nixos">
-    <literal>#nixos</literal> channel on Freenode</link>.  Bugs should
-    be reported in <link
-    xlink:href="https://github.com/NixOS/nixpkgs/issues">NixOS’ GitHub
-    issue tracker</link>.</para>
-
-    <note><para>Commands prefixed with <literal>#</literal> have to be run as
-    root, either requiring to login as root user or temporarily switching
-    to it using <literal>sudo</literal> for example.</para></note>
-  </preface>
-
-  <xi:include href="installation/installation.xml" />
-  <xi:include href="configuration/configuration.xml" />
-  <xi:include href="administration/running.xml" />
-  <!-- <xi:include href="userconfiguration.xml" /> -->
-  <xi:include href="development/development.xml" />
-
-  <appendix xml:id="ch-options">
-    <title>Configuration Options</title>
-    <xi:include href="options-db.xml" />
-  </appendix>
-
-  <xi:include href="release-notes/release-notes.xml" />
-
+   <literal>#nixos</literal> channel on Freenode</link>. Bugs should be
+   reported in
+   <link
+    xlink:href="https://github.com/NixOS/nixpkgs/issues">NixOS’
+   GitHub issue tracker</link>.
+  </para>
+  <note>
+   <para>
+    Commands prefixed with <literal>#</literal> have to be run as root, either
+    requiring to login as root user or temporarily switching to it using
+    <literal>sudo</literal> for example.
+   </para>
+  </note>
+ </preface>
+ <xi:include href="installation/installation.xml" />
+ <xi:include href="configuration/configuration.xml" />
+ <xi:include href="administration/running.xml" />
+<!-- <xi:include href="userconfiguration.xml" /> -->
+ <xi:include href="development/development.xml" />
+ <appendix xml:id="ch-options">
+  <title>Configuration Options</title>
+  <xi:include href="./generated/options-db.xml"
+                xpointer="configuration-variable-list" />
+ </appendix>
+ <xi:include href="release-notes/release-notes.xml" />
 </book>

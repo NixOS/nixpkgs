@@ -1,7 +1,8 @@
-{ stdenv, appleDerivation, xcbuild, zlib, bzip2, lzma, ncurses, libutil-new }:
+{ stdenv, appleDerivation, xcbuildHook, zlib, bzip2, lzma, ncurses, libutil-new }:
 
 appleDerivation rec {
-  buildInputs = [ xcbuild zlib bzip2 lzma ncurses libutil-new ];
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ zlib bzip2 lzma ncurses libutil-new ];
 
   # some commands not working:
   # mtree: _simple.h not found
@@ -19,7 +20,7 @@ appleDerivation rec {
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
     mkdir -p $out/bin/
-    install file_cmds-*/Build/Products/Release/* $out/bin
+    install Products/Release/* $out/bin
 
     for n in 1; do
       mkdir -p $out/share/man/man$n

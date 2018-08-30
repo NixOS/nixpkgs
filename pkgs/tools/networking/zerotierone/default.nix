@@ -1,15 +1,21 @@
 { stdenv, fetchurl, openssl, lzo, zlib, iproute, which, ronn }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.4";
-  name = "zerotierone";
+  version = "1.2.12";
+  name = "zerotierone-${version}";
 
   src = fetchurl {
     url = "https://github.com/zerotier/ZeroTierOne/archive/${version}.tar.gz";
-    sha256 = "0n035f2qslw1srxjlm0szrnvb3va3sspbpxqqhng08dp68vmn9wz";
+    sha256 = "1m7ynrgzpg2sp37hcmjkx6w173icfhakzn1c1zrdzrxmmszrj9r1";
   };
 
   preConfigure = ''
+      substituteInPlace ./osdep/ManagedRoute.cpp \
+        --replace '/usr/sbin/ip' '${iproute}/bin/ip'
+
+      substituteInPlace ./osdep/ManagedRoute.cpp \
+        --replace '/sbin/ip' '${iproute}/bin/ip'
+
       substituteInPlace ./osdep/LinuxEthernetTap.cpp \
         --replace 'execlp("ip",' 'execlp("${iproute}/bin/ip",'
 
@@ -38,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = https://www.zerotier.com;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ sjmackenzie zimbatm ehmry ];
+    maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz ];
     platforms = platforms.x86_64 ++ platforms.aarch64;
   };
 }

@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
+{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
 , gd, geoip
+, withDebug ? false
 , withStream ? true
 , withMail ? false
 , modules ? []
-, hardening ? true
 , version, sha256, ...
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   name = "nginx-${version}";
 
   src = fetchurl {
-    url = "http://nginx.org/download/nginx-${version}.tar.gz";
+    url = "https://nginx.org/download/nginx-${version}.tar.gz";
     inherit sha256;
   };
 
@@ -44,6 +44,8 @@ stdenv.mkDerivation {
     "--with-pcre-jit"
     # Install destination problems
     # "--with-http_perl_module"
+  ] ++ optional withDebug [
+    "--with-debug"
   ] ++ optional withStream [
     "--with-stream"
     "--with-stream_geoip_module"
@@ -63,6 +65,8 @@ stdenv.mkDerivation {
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mv $out/sbin $out/bin

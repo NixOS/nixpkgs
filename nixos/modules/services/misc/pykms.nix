@@ -73,7 +73,7 @@ in {
     };
 
     users = {
-      extraUsers.pykms = {
+      users.pykms = {
         name = "pykms";
         group = "pykms";
         home  = home;
@@ -82,7 +82,7 @@ in {
         description = "PyKMS daemon user";
       };
 
-      extraGroups.pykms = {
+      groups.pykms = {
         gid = config.ids.gids.pykms;
       };
     };

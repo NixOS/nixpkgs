@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkOption mkIf singleton;
+  inherit (lib) mkOption mkIf;
 
   inherit (pkgs) heimdalFull;
 
@@ -41,8 +41,8 @@ in
         flags = "REUSE NAMEINARGS";
         protocol = "tcp";
         user = "root";
-        server = "${pkgs.tcp_wrappers}/sbin/tcpd";
-        serverArgs = "${pkgs.heimdalFull}/sbin/kadmind";
+        server = "${pkgs.tcp_wrappers}/bin/tcpd";
+        serverArgs = "${pkgs.heimdalFull}/bin/kadmind";
       };
 
     systemd.services.kdc = {
@@ -51,13 +51,13 @@ in
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
       '';
-      script = "${heimdalFull}/sbin/kdc";
+      script = "${heimdalFull}/bin/kdc";
     };
 
     systemd.services.kpasswdd = {
       description = "Kerberos Password Changing daemon";
       wantedBy = [ "multi-user.target" ];
-      script = "${heimdalFull}/sbin/kpasswdd";
+      script = "${heimdalFull}/bin/kpasswdd";
     };
   };
 

@@ -3,16 +3,15 @@ let
   deps = import ./requirements.nix { inherit pkgs; };
 in
 python27Packages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "gdbgui";
-  version = "0.11.1.2";
+  version = "0.13.0.0";
 
   buildInputs = [ gdb ];
   propagatedBuildInputs = builtins.attrValues deps.packages;
 
   src = python27Packages.fetchPypi {
     inherit pname version;
-    sha256 = "15502fg90df183mcg6nic8fakf111pgrlp7f044g3136wpwgfln7";
+    sha256 = "16a46kabhfqsgsks5l25kpgrvrkdah3h5f5m6ams2z9nzbrxl8bz";
   };
 
   postPatch = ''

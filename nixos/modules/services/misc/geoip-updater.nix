@@ -251,7 +251,7 @@ in
       }
     ];
 
-    users.extraUsers.geoip = {
+    users.users.geoip = {
       group = "root";
       description = "GeoIP database updater";
       uid = config.ids.uids.geoip;

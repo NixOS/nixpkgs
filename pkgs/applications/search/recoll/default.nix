@@ -2,7 +2,8 @@
 , qt4, xapian, file, python, perl
 , djvulibre, groff, libxslt, unzip, poppler_utils, antiword, catdoc, lyx
 , libwpd, unrtf, untex
-, ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv }:
+, ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv, zlib
+, withGui ? true }:
 
 assert stdenv.system != "powerpc-linux";
 
@@ -11,14 +12,17 @@ stdenv.mkDerivation rec {
   name = "recoll-${ver}";
 
   src = fetchurl {
-    url = "http://www.lesbonscomptes.com/recoll/${name}.tar.gz";
+    url = "https://www.lesbonscomptes.com/recoll/${name}.tar.gz";
     sha256 = "186bj8zx2xw9hwrzvzxdgdin9nj7msiqh5j57w5g7j4abdlsisjn";
   };
 
-  configureFlags = [ "--enable-recollq" ] ++
-    (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
+  configureFlags = [ "--enable-recollq" ]
+    ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
+    ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
 
-  buildInputs = [ qt4 xapian file python bison ];
+  buildInputs = [ xapian file python bison zlib ]
+    ++ lib.optional withGui qt4
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/-Wl,--no-undefined -Wl,--warn-unresolved-symbols//' Makefile.am

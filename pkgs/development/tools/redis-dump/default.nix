@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerEnv, ruby, perl, autoconf }:
+{ lib, bundlerEnv, ruby, perl, autoconf }:
 
 bundlerEnv {
   name = "redis-dump-0.3.5";

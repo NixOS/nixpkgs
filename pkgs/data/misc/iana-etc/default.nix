@@ -1,16 +1,16 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
+  version = "20180711";
+in fetchzip {
   name = "iana-etc-${version}";
-  version = "20180108";
 
-  src = fetchurl {
-    url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-    sha256 = "1x4jacrvjwcsan88rg2wf2a8bajsglg6w4396vbr18zh0sya84a2";
-  };
+  url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
+  sha256 = "0vbgk3paix2v4rlh90a8yh1l39s322awng06izqj44zcg704fjbj";
 
-  installPhase = ''
-    install -D -t $out/etc services protocols
+  postFetch = ''
+    tar -xzvf $downloadedFile --strip-components=1
+    install -D -m0644 -t $out/etc services protocols
   '';
 
   meta = with stdenv.lib; {

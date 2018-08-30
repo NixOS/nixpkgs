@@ -30,13 +30,16 @@ diff -Nurp source.orig/pytrainer/test/imports/test_garmintcxv2.py source/pytrain
 +        summary = [(0, True, '2012-10-14T10:02:42', '10.12', '00:39:51', 'Running')]
          activity = Activity(date_time_utc='2012-10-14T10:02:42Z', sport_id='1')
          self.ddbb.session.add(activity)
-         self.ddbb.session.commit()
+         self.ddbb.session.commit(
 diff -Nurp source.orig/pytrainer/test/lib/test_date.py source/pytrainer/test/lib/test_date.py
---- source.orig/pytrainer/test/lib/test_date.py	2018-02-27 22:15:32.079243364 +0100
-+++ source/pytrainer/test/lib/test_date.py	2018-02-27 22:16:33.936867052 +0100
-@@ -45,4 +45,4 @@ class DateFunctionTest(unittest.TestCase
+--- source.orig/pytrainer/test/lib/test_date.py	2018-05-10 21:15:22.196275555 +0200
++++ source/pytrainer/test/lib/test_date.py	2018-05-10 21:22:43.647870401 +0200
+@@ -47,7 +47,7 @@ class DateFunctionTest(unittest.TestCase
      def test_getDateTime(self):
          utctime, localtime = getDateTime('Tue Nov 24 17:29:05 UTC 2015')
          self.assertEqual(datetime.datetime(2015, 11, 24, 17, 29, 5, tzinfo=tzutc()), utctime)
 -        self.assertEqual(datetime.datetime(2015, 11, 24, 19, 29, 5, tzinfo=tzlocal()), localtime)
 +        self.assertEqual(datetime.datetime(2015, 11, 24, 17, 29, 5, tzinfo=tzlocal()), localtime)
+ 
+ class DateRangeTest(unittest.TestCase):
+ 

@@ -8,7 +8,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
         owner = "elastic";
         repo = "beats";
         rev = "v${version}";
-        sha256 = "05ay6hdc1jgi6b00bd998zc39ca8jhnk7i6m3mw70s0baqv1scik";
+        sha256 = "0ymg6y6v0mdhs1rs11fn33xdp3r6v85563z0f4p7s22j1kd3nd6r";
       };
 
       goPackagePath = "github.com/elastic/beats";
@@ -23,10 +23,10 @@ let beat = package : extraArgs : buildGoPackage (rec {
       };
     } // extraArgs);
 in {
-  filebeat   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
-  heartbeat  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
-  metricbeat = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
-  packetbeat = beat "packetbeat" {
+  filebeat6   = beat "filebeat"   {meta.description = "Lightweight shipper for logfiles";};
+  heartbeat6  = beat "heartbeat"  {meta.description = "Lightweight shipper for uptime monitoring";};
+  metricbeat6 = beat "metricbeat" {meta.description = "Lightweight shipper for metrics";};
+  packetbeat6 = beat "packetbeat" {
     buildInputs = [ libpcap ];
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
     meta.longDescription = ''

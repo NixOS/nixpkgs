@@ -1,6 +1,10 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, qtest, ounit }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, qtest, result }:
 
-let version = "0.10"; in
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "sequence is not available for OCaml ${ocaml.version}"
+else
+
+let version = "1.1"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-sequence-${version}";
@@ -9,19 +13,16 @@ stdenv.mkDerivation {
     owner = "c-cube";
     repo = "sequence";
     rev = version;
-    sha256 = "0pl8pv758wn8bm555i8f0fvfn2pw88w1bmzjrzrv01092d85wx1g";
+    sha256 = "08j37nldw47syq3yw4mzhhvya43knl0d7biddp0q9hwbaxhzgi44";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild qtest ounit ];
-
-  configureFlags = [
-    "--enable-tests"
-  ];
+  buildInputs = [ ocaml findlib jbuilder qtest ];
+  propagatedBuildInputs = [ result ];
 
   doCheck = true;
-  checkTarget = "test";
+  checkPhase = "jbuilder runtest";
 
-  createFindlibDestdir = true;
+  inherit (jbuilder) installPhase;
 
   meta = {
     homepage = https://github.com/c-cube/sequence;

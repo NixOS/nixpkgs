@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
+{ stdenv, fetchFromGitHub, gradle, perl, jre, makeWrapper, makeDesktopItem, mplayer }:
 
 let
-  version = "6.6.3-build-253";
+  version = "6.6.7-build-529";
   name = "frostwire-desktop-${version}";
 
   src = fetchFromGitHub {
     owner = "frostwire";
     repo = "frostwire";
     rev = name;
-    sha256 = "1bqv942hfz12i3b3nm1pfwdp7f58nzjxg44h31f3q47719hh8kd7";
+    sha256 = "03wdj2kr8akzx8m1scvg98132zbaxh81qjdsxn2645b3gahjwz0m";
   };
 
   desktopItem = makeDesktopItem {
@@ -40,7 +40,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0p279i41q7pn6nss8vndv3g4qzrvj3pmhdxq50kymwkyp2kly3lc";
+    outputHash = "11zd98g0d0fdgls4lsskkagwfxyh26spfd6c6g9cahl89czvlg3c";
   };
 
 in stdenv.mkDerivation {
@@ -52,8 +52,15 @@ in stdenv.mkDerivation {
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
     ( cd desktop
+
+      # disable auto-update (anyway it won't update frostwire installed in nix store)
+      substituteInPlace src/com/frostwire/gui/updates/UpdateManager.java \
+        --replace 'um.checkForUpdates' '// um.checkForUpdates'
+
+      # fix path to mplayer
       substituteInPlace src/com/frostwire/gui/player/MediaPlayerLinux.java \
         --replace /usr/bin/mplayer ${mplayer}/bin/mplayer
+
       substituteInPlace build.gradle \
         --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
       gradle --offline --no-daemon build
@@ -66,8 +73,8 @@ in stdenv.mkDerivation {
     cp desktop/build/libs/frostwire.jar $out/share/java/frostwire.jar
 
     cp ${ { x86_64-darwin = "desktop/lib/native/*.dylib";
-            x86_64-linux  = "desktop/lib/native/libjlibtorrent.so";
-            i686-linux    = "desktop/lib/native/libjlibtorrentx86.so";
+            x86_64-linux  = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}.so";
+            i686-linux    = "desktop/lib/native/lib{jlibtorrent,SystemUtilities}X86.so";
           }.${stdenv.system} or (throw "unsupported system ${stdenv.system}")
         } $out/lib
 

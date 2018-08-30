@@ -3,7 +3,6 @@
 
 buildPythonPackage rec {
   pname = "Flask-Login";
-  name = "${pname}-${version}";
   version = "0.4.1";
 
   src = fetchFromGitHub {

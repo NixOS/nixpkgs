@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, latestKernel ? false, ... }:
+import ./make-test.nix ({ ... }:
 
 let
   oathSnakeoilSecret = "cdd4083ef8ff1fa9178c6d46bfb1a3";
@@ -12,8 +12,6 @@ let
   # and picking a the first 4:
   oathSnakeOilPassword1 = "143349";
   oathSnakeOilPassword2 = "801753";
-  oathSnakeOilPassword3 = "019933";
-  oathSnakeOilPassword4 = "403895";
 
   alicePassword = "foobar";
   # Generated via: mkpasswd -m sha-512 and passing in "foobar"
@@ -24,13 +22,13 @@ in
   name = "pam-oath-login";
 
   machine =
-    { config, pkgs, lib, ... }:
+    { ... }:
     {
       security.pam.oath = {
         enable = true;
       };
 
-      users.extraUsers.alice = {
+      users.users.alice = {
         isNormalUser = true;
         name = "alice";
         uid = 1000;

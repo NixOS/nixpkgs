@@ -1,15 +1,13 @@
-{ pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
-, ruby, tzdata, git, procps, dpkg, nettools
+{ stdenv, lib, fetchurl, fetchFromGitHub, bundlerEnv
+, ruby, tzdata, git, procps, nettools
 }:
-
-/* When updating the Gemfile add `gem "activerecord-nulldb-adapter"`
-   to allow building the assets without a database */
 
 let
   rubyEnv = bundlerEnv {
     name = "gitlab-env-${version}";
     inherit ruby;
     gemdir = ./.;
+    groups = [ "default" "unicorn" "ed25519" "metrics" ];
     meta = with lib; {
       homepage = http://www.gitlab.com/;
       platforms = platforms.linux;
@@ -18,11 +16,11 @@ let
     };
   };
 
-  version = "10.5.6";
+  version = "10.8.0";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "1kml7iz4q9g5gcfqqarivlnkmkmq9250wgm95yi4rgzynb5jndd0";
+    sha256 = "0j5jrlwfpgwfirjnqb9w4snl9w213kdxb1ajyrla211q603d4j34";
   };
 
 in
@@ -34,16 +32,15 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "059h63jn552fcir2dgsjv85zv1ihbyiwzws4h2j15mwj2cdpjkh0";
+    sha256 = "1idvi27xpghvvb3sv62afhcnnswvjlrbg5lld79a761kd4187cym";
   };
 
   buildInputs = [
-    rubyEnv ruby bundler tzdata git procps dpkg nettools
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git procps nettools
   ];
 
   patches = [
     ./remove-hardcoded-locations.patch
-    ./fix-36783.patch
   ];
 
   postPatch = ''
@@ -105,6 +102,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit rubyEnv;
-    inherit ruby;
+    ruby = rubyEnv.wrappedRuby;
+  };
+
+  meta = with stdenv.lib; {
+    description = "Web-based Git-repository manager";
+    homepage = https://gitlab.com;
+    license = licenses.mit;
   };
 }

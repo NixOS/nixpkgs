@@ -4,17 +4,20 @@
 
 buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.6";
+  version = "8.0.12";
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "1ygr7va56da12yp3gr7kzss9zgbs28q2lmdkw16rpxj108id4rkp";
+    sha256 = "1i3148dka4zfqzz4n4n5k0qaqbc585bdpmjwgx5vp6iiv7pgvrxp";
   };
 
   propagatedBuildInputs = [ protobuf ];
 
+  # Tests are failing (TODO: unknown reason)
+  # TypeError: __init__() missing 1 required positional argument: 'string'
+  # But the library should be working as expected.
   doCheck = false;
 
   meta = {

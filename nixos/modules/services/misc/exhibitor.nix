@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.exhibitor;
-  exhibitor = cfg.package;
   exhibitorConfig = ''
     zookeeper-install-directory=${cfg.baseDir}/zookeeper
     zookeeper-data-directory=${cfg.zkDataDir}
@@ -408,7 +407,7 @@ in
         chmod -R u+w ${cfg.baseDir}/zookeeper/conf
       '';
     };
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = "zookeeper";
       uid = config.ids.uids.zookeeper;
       description = "Zookeeper daemon user";

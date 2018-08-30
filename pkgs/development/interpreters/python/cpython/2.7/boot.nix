@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, CF, configd, coreutils }:
+{ stdenv, fetchurl, configd, CF, coreutils }:
 
 with stdenv.lib;
 
@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
     '';
 
   enableParallelBuilding = true;
+
+  passthru.pkgs = builtins.throw "python-boot does not support packages, this package is only intended for bootstrapping." {};
 
   meta = {
     homepage = http://python.org;

@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   version = "4.14.0";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git";
-    rev = "refs/tags/v${version}";
+    url = "https://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git";
+    rev = "v${version}";
     sha256 = "19mg3avm188xz215hqbbh7251q27qwm7g1xr8ffrjwvzmdq55rxj";
   };
 
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     (gentooPatch "xfsprogs-4.12.0-sharedlibs.patch" "1i081749x91jvlrw84l4a3r081vqcvn6myqhnqbnfcfhd64h12bq")
     (gentooPatch "xfsprogs-4.7.0-libxcmd-link.patch" "1lvy1ajzml39a631a7jqficnzsd40bzkca7hkxv1ybiqyp8sf55s")
     (gentooPatch "xfsprogs-4.9.0-underlinking.patch" "1r7l8jphspy14i43zbfnjrnyrdm4cpgyfchblascxylmans0gci7")
+    ./glibc-2.27.patch
   ];
 
   preConfigure = ''

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, bash, which, m4, python, bison, flex, llvmPackages, clangWrapSelf,
+{stdenv, fetchFromGitHub, fetchpatch, which, m4, python, bison, flex, llvmPackages,
 testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
@@ -30,6 +30,13 @@ stdenv.mkDerivation rec {
     flex
     llvm
     llvmPackages.clang-unwrapped # we need to link against libclang, so we need the unwrapped
+  ];
+
+  patches = [
+    (fetchpatch {
+      url = https://github.com/ispc/ispc/commit/d504641f5af9d5992e7c8f0ed42c1063a39ede5b.patch;
+      sha256 = "192q3gyvam79469bmlwf0jpfi2y4f8hl2vgcvjngsqhvscwira0s";
+    })
   ];
 
   postPatch = "sed -i -e 's/\\/bin\\///g' -e 's/-lcurses/-lncurses/g' Makefile";

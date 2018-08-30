@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild
 , cstruct, zarith, ounit, result, topkg, ptime
 }:
 
@@ -10,15 +10,13 @@ let param =
   } else {
     version = "0.1.3";
     sha256 = "0hpn049i46sdnv2i6m7r6m6ch0jz8argybh71wykbvcqdby08zxj";
-  propagatedBuildInputs = [ ];
+    propagatedBuildInputs = [ ];
   };
 in
 
-buildOcaml rec {
-  name = "asn1-combinators";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-asn1-combinators-${version}";
   inherit (param) version;
-
-  minimumSupportedOcamlVersion = "4.01";
 
   src = fetchFromGitHub {
     owner  = "mirleft";
@@ -27,7 +25,7 @@ buildOcaml rec {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ounit topkg ];
+  buildInputs = [ ocaml findlib ocamlbuild ounit topkg ];
   propagatedBuildInputs = [ result cstruct zarith ] ++ param.propagatedBuildInputs;
 
   buildPhase = "${topkg.run} build --tests true";

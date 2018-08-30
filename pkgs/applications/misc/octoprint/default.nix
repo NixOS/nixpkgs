@@ -1,34 +1,48 @@
-{ stdenv, fetchFromGitHub, python2, fetchurl }:
+{ stdenv, fetchFromGitHub, python2 }:
 
 let
 
   pythonPackages = python2.pkgs.override {
     overrides = self: super: with self; {
-      backports_ssl_match_hostname = self.backports_ssl_match_hostname_3_4_0_2;
+      backports_ssl_match_hostname = super.backports_ssl_match_hostname.overridePythonAttrs (oldAttrs: rec {
+        version = "3.4.0.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "07410e7fb09aab7bdaf5e618de66c3dac84e2e3d628352814dc4c37de321d6ae";
+        };
+      });
+
+      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+        version = "0.12.4";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "2ea22336f6d388b4b242bc3abf8a01244a8aa3e236e7407469ef78c16ba355dd";
+        };
+      });
 
       tornado = buildPythonPackage rec {
-        name = "tornado-${version}";
+        pname = "tornado";
         version = "4.0.2";
 
         propagatedBuildInputs = [ backports_ssl_match_hostname certifi ];
 
-        src = fetchurl {
-          url = "mirror://pypi/t/tornado/${name}.tar.gz";
+        src = fetchPypi {
+          inherit pname version;
           sha256 = "1yhvn8i05lp3b1953majg48i8pqsyj45h34aiv59hrfvxcj5234h";
         };
       };
 
       flask_login = buildPythonPackage rec {
-        name = "Flask-Login-${version}";
+        pname = "Flask-Login";
         version = "0.2.2";
 
-        src = fetchurl {
-          url = "mirror://pypi/F/Flask-Login/${name}.tar.gz";
+        src = fetchPypi {
+          inherit pname version;
           sha256 = "09ygn0r3i3jz065a5psng6bhlsqm78msnly4z6x39bs48r5ww17p";
         };
 
         propagatedBuildInputs = [ flask ];
-        buildInputs = [ nose ];
+        checkInputs = [ nose ];
 
         # No tests included
         doCheck = false;
@@ -37,10 +51,9 @@ let
       jinja2 = buildPythonPackage rec {
         pname = "Jinja2";
         version = "2.8.1";
-        name = "${pname}-${version}";
 
-        src = fetchurl {
-          url = "mirror://pypi/J/Jinja2/${name}.tar.gz";
+        src = fetchPypi {
+          inherit pname version;
           sha256 = "14aqmhkc9rw5w0v311jhixdm6ym8vsm29dhyxyrjfqxljwx1yd1m";
         };
 
@@ -53,14 +66,14 @@ let
   };
 
 in pythonPackages.buildPythonApplication rec {
-  name = "OctoPrint-${version}";
-  version = "1.3.6";
+  pname = "OctoPrint";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "foosel";
     repo = "OctoPrint";
     rev = version;
-    sha256 = "0pgpkjw5zjnks5bky51gjaksq8mhrzkl52kpgf799hl35pd08xr3";
+    sha256 = "00zd5yrlihwfd3ly0mxibr77ffa8r8vkm6jhml2ml43dqb99caa3";
   };
 
   # We need old Tornado
@@ -70,9 +83,10 @@ in pythonPackages.buildPythonApplication rec {
     psutil pyserial flask_login netaddr markdown sockjs-tornado
     pylru pyyaml sarge feedparser netifaces click websocket_client
     scandir chainmap future dateutil futures wrapt monotonic emoji
+    frozendict
   ];
 
-  buildInputs = with pythonPackages; [ nose mock ddt ];
+  checkInputs = with pythonPackages; [ nose mock ddt ];
 
   # Jailbreak dependencies.
   postPatch = ''
@@ -88,12 +102,15 @@ in pythonPackages.buildPythonApplication rec {
       -e 's,PyYAML>=[^"]*,PyYAML,g' \
       -e 's,scandir>=[^"]*,scandir,g' \
       -e 's,werkzeug>=[^"]*,werkzeug,g' \
-      -e 's,psutil>=[^"]*,psutil,g' \
+      -e 's,psutil==[^"]*,psutil,g' \
       -e 's,requests>=[^"]*,requests,g' \
       -e 's,future>=[^"]*,future,g' \
       -e 's,pyserial>=[^"]*,pyserial,g' \
       -e 's,semantic_version>=[^"]*,semantic_version,g' \
       -e 's,wrapt>=[^"]*,wrapt,g' \
+      -e 's,python-dateutil>=[^"]*,python-dateutil,g' \
+      -e 's,emoji>=[^"]*,emoji,g' \
+      -e 's,futures>=[^"]*,futures,g' \
       setup.py
   '';
 

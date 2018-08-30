@@ -3,13 +3,13 @@
 buildGoPackage rec {
   name = "minio-${version}";
 
-  version = "2018-03-30T00-38-44Z";
+  version = "2018-07-31T02-11-47Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "17vam9ifi632yfxakanxi2660wqgqrhrhhzywrgh2jmzljippf80";
+    sha256 = "0pngr2x15prn55r8xj59sqjn9yp98hhm5qgi12ybc6cfxx0wls52";
   };
 
   goPackagePath = "github.com/minio/minio";

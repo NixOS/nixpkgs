@@ -7,7 +7,6 @@ let
 
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
-  hasVirtuals = any (i: i.virtual) interfaces;
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
@@ -191,7 +190,7 @@ let
                     if out=$(ip addr add "${cidr}" dev "${i.name}" 2>&1); then
                       echo "done"
                     elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                      echo "failed"
+                      echo "'ip addr add "${cidr}" dev "${i.name}"' failed: $out"
                       exit 1
                     fi
                   ''
@@ -209,10 +208,10 @@ let
                   ''
                      echo "${cidr}" >> $state
                      echo -n "adding route ${cidr}... "
-                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" 2>&1); then
+                     if out=$(ip route add "${cidr}" ${options} ${via} dev "${i.name}" proto static 2>&1); then
                        echo "done"
                      elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
-                       echo "failed"
+                       echo "'ip route add "${cidr}" ${options} ${via} dev "${i.name}"' failed: $out"
                        exit 1
                      fi
                   ''

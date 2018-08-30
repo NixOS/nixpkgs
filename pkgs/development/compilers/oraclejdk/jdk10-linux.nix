@@ -2,11 +2,9 @@
 , stdenv
 , requireFile
 , makeWrapper
-, unzip
 , file
 , xorg ? null
 , packageType ? "JDK" # JDK, JRE, or ServerJRE
-, pluginSupport ? true
 , glib
 , libxml2
 , ffmpeg_2
@@ -25,11 +23,10 @@
 , setJavaClassPath
 }:
 
-assert stdenv.system == "x86_64-linux";
 assert swingSupport -> xorg != null;
 
 let
-  version = "10";
+  version = "10.0.2";
 
   downloadUrlBase = http://www.oracle.com/technetwork/java/javase/downloads;
 
@@ -52,19 +49,19 @@ let result = stdenv.mkDerivation rec {
       requireFile {
         name = "jdk-${version}_linux-x64_bin.tar.gz";
         url =  "${downloadUrlBase}/jdk10-downloads-4416644.html";
-        sha256 = "0338m0x5lka0xjsbcll70r1i308bjw3m42cm9dx9zmfk70kplj5c";
+        sha256 = "0arpzac64apji1s8d0gzizkvrjz0fbhz7l34af1j0365ac6w4cv6";
       }
     else if packageType == "JRE" then
       requireFile {
         name = "jre-${version}_linux-x64_bin.tar.gz";
         url = "${downloadUrlBase}/jre10-downloads-4417026.html";
-        sha256 = "1clawcahkla1h9pxnqfqzcgv51aqgq78v1ws5jygbk6fbbi7l54w";
+        sha256 = "0pc4a0a3fl6874vfaflf6jvpm9da647vp41pj0hihkspjyjhjabx";
       }
     else if packageType == "ServerJRE" then
       requireFile {
         name = "serverjre-${version}_linux-x64_bin.tar.gz";
         url = "${downloadUrlBase}/sjre10-downloads-4417025.html";
-        sha256 = "0kiyg33fv29ad0nyl35r7y0bhyxivb2hxlds44m9l0259s55nwhw";
+        sha256 = "0hbcb4c6ncy0sbz02gyygyqcwkz0xpv4fwrx4sripia6vph9592c";
       }
     else abort "unknown package Type ${packageType}";
 

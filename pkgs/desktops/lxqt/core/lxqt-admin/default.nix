@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, polkit }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtx11extras, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, polkit-qt }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-admin";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0dg3gm5m19dc4jarh8xcn0mcnpgxzz7nhy5dzm8chddaa6pdm7vi";
+    sha256 = "1nsf8sbgmfanvcxw67drhz1wrizkcd0p87jwr1za5rcgd50bi2yy";
   };
 
   nativeBuildInputs = [
@@ -24,14 +24,19 @@ stdenv.mkDerivation rec {
     kwindowsystem
     liblxqt
     libqtxdg
-    polkit
+    polkit-qt
   ];
+
+  patchPhase = ''
+    sed "s|\''${POLKITQT-1_POLICY_FILES_INSTALL_DIR}|''${out}/share/polkit-1/actions|" \
+      -i lxqt-admin-user/CMakeLists.txt
+  '';
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
 
   meta = with stdenv.lib; {
     description = "LXQt system administration tool";
-    homepage = https://github.com/lxde/lxqt-admin;
+    homepage = https://github.com/lxqt/lxqt-admin;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

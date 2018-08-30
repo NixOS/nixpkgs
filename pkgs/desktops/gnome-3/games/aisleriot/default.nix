@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnome3, intltool, itstool, gtk3
-, wrapGAppsHook, gconf, librsvg, libxml2, desktop-file-utils
+, wrapGAppsHook, librsvg, libxml2, desktop-file-utils
 , guile_2_0, libcanberra-gtk3 }:
 
 stdenv.mkDerivation rec {
@@ -11,15 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "0rl39psr5xi584310pyrgw36ini4wn7yr2m1q5118w3a3v1dkhzh";
   };
 
+  configureFlags = [
+    "--with-card-theme-formats=svg"
+    "--with-platform=gtk-only" # until they remove GConf
+  ];
+
+  nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook libxml2 desktop-file-utils ];
+  buildInputs = [ gtk3 librsvg guile_2_0 libcanberra-gtk3 ];
+
   passthru = {
-    updateScript = gnome3.updateScript { packageName = "aisleriot"; attrPath = "gnome3.aisleriot"; };
+    updateScript = gnome3.updateScript {
+      packageName = "aisleriot";
+      attrPath = "gnome3.aisleriot";
+    };
   };
-
-  configureFlags = [ "--with-card-theme-formats=svg" ];
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool itstool gtk3 wrapGAppsHook gconf
-                  librsvg libxml2 desktop-file-utils guile_2_0 libcanberra-gtk3 ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Aisleriot;

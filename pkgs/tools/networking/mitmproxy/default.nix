@@ -4,19 +4,21 @@ with python3Packages;
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "3.0.2";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0rvwm11yryzlp3c1i42rk2iv1m38yn6r83k41jb51hwg6wzbwzvw";
+    sha256 = "10l761ds46r1p2kjxlgby9vdxbjjlgq72s6adjypghi41s3qf034";
   };
 
   postPatch = ''
     # remove dependency constraints
     sed 's/>=\([0-9]\.\?\)\+\( \?, \?<\([0-9]\.\?\)\+\)\?//' -i setup.py
   '';
+
+  doCheck = (!stdenv.isDarwin);
 
   checkPhase = ''
     export HOME=$(mktemp -d)
@@ -29,13 +31,13 @@ buildPythonPackage rec {
     blinker click certifi cryptography
     h2 hyperframe kaitaistruct passlib
     pyasn1 pyopenssl pyparsing pyperclip
-    requests ruamel_yaml tornado urwid
-    brotlipy sortedcontainers ldap3
+    ruamel_yaml tornado urwid brotlipy
+    sortedcontainers ldap3 wsproto
   ];
 
-  buildInputs = [
+  checkInputs = [
     beautifulsoup4 flask pytest
-    pytestrunner glibcLocales
+    requests glibcLocales
   ];
 
   meta = with stdenv.lib; {

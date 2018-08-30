@@ -2,19 +2,19 @@
 , autoconf, automake, curl, iprange, iproute, ipset, iptables, iputils
 , kmod, nettools, procps, tcpdump, traceroute, utillinux, whois
 
-# Just install FireQOS without FireHOL
-, onlyQOS ? true
+# If true, just install FireQOS without FireHOL
+, onlyQOS ? false
 }:
 
 stdenv.mkDerivation rec {
   name = "firehol-${version}";
-  version = "3.1.5";
+  version = "3.1.6";
 
   src = fetchFromGitHub {
     owner = "firehol";
     repo = "firehol";
     rev = "v${version}";
-    sha256 = "15cy1zxfpprma2zkmhj61zzhmw1pfnyhln7pca5lzvr1ifn2d0y0";
+    sha256 = "0l7sjpsb300kqv21hawd26a7jszlmafplacpn5lfj64m4yip93fd";
   };
 
   patches = [
@@ -51,6 +51,35 @@ stdenv.mkDerivation rec {
            ])
 
            AS_IF([test "x$ac_cv_ping_6_opt" = "xyes"],[
+      '')
+
+    # put firehol config files in /etc/firehol (not $out/etc/firehol)
+    # to avoid error on startup, see #35114
+    (pkgs.writeText "firehol-sysconfdir.patch"
+      ''
+      --- a/sbin/install.config.in.in
+      +++ b/sbin/install.config.in.in
+      @@ -4 +4 @@
+      -SYSCONFDIR="@sysconfdir_POST@"
+      +SYSCONFDIR="/etc"
+      '')
+
+    # we must quote "$UNAME_CMD", or the dash in /nix/store/...-coreutils-.../bin/uname
+    # will be interpreted as IFS -> error. this might be considered an upstream bug
+    # but only appears when there are dashes in the command path
+    (pkgs.writeText "firehol-uname-command.patch"
+      ''
+      --- a/sbin/firehol
+      +++ b/sbin/firehol
+      @@ -10295,7 +10295,7 @@
+       	kmaj=$1
+       	kmin=$2
+       
+      -	set -- $($UNAME_CMD -r)
+      +	set -- $("$UNAME_CMD" -r)
+       	eval $kmaj=\$1 $kmin=\$2
+       }
+       kernel_maj_min KERNELMAJ KERNELMIN
       '')
   ];
   

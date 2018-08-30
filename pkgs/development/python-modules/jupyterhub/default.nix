@@ -1,5 +1,4 @@
 { lib
-, python
 , buildPythonPackage
 , fetchPypi
 , fetchzip
@@ -13,7 +12,6 @@
 , traitlets
 , requests
 , pythonOlder
-, nodejs-8_x
 , nodePackages
 }:
 

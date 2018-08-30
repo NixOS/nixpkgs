@@ -2,7 +2,7 @@
 , buildPlatform, hostPlatform
 , fetchurl, makeWrapper, gawk, pkgconfig
 , libffi, libtool, readline, gmp, boehmgc, libunistring
-, coverageAnalysis ? null, gnu ? null
+, coverageAnalysis ? null
 }:
 
 # Do either a coverage analysis build or a standard build.
@@ -28,12 +28,15 @@
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
 
-  propagatedBuildInputs = [ gmp boehmgc ]
-    # XXX: These ones aren't normally needed here, but since
-    # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
+  propagatedBuildInputs = [
+    gmp boehmgc
+
+    # XXX: These ones aren't normally needed here, but `libguile*.la' has '-l'
+    # flags for them without corresponding '-L' flags. Adding them here will add
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
     # see below.
-    ++ [ libtool libunistring ];
+    libtool libunistring
+  ];
 
   enableParallelBuilding = true;
 
@@ -66,11 +69,12 @@
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
-
+  ''
     # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
     # why `--with-libunistring-prefix' and similar options coming from
     # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
-    sed -i "$out/lib/pkgconfig/guile-2.2.pc"    \
+  + ''
+    sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
             s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
@@ -81,17 +85,9 @@
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
+  doInstallCheck = doCheck;
 
   setupHook = ./setup-hook-2.2.sh;
-
-  crossAttrs.preConfigure =
-    stdenv.lib.optionalString (hostPlatform.isHurd)
-       # On GNU, libgc depends on libpthread, but the cross linker doesn't
-       # know where to find libpthread, which leads to erroneous test failures
-       # in `configure', where `-pthread' and `-lpthread' aren't explicitly
-       # passed.  So it needs some help (XXX).
-       "export LDFLAGS=-Wl,-rpath-link=${gnu.libpthreadCross}/lib";
-
 
   meta = {
     description = "Embeddable Scheme implementation";

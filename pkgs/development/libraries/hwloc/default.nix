@@ -7,11 +7,11 @@ assert x11Support -> libX11 != null && cairo != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.11.9";
+  name = "hwloc-1.11.10";
 
   src = fetchurl {
     url = "http://www.open-mpi.org/software/hwloc/v1.11/downloads/${name}.tar.bz2";
-    sha256 = "0r2im1s5lp7zjwqalcqcnlxx0dsky1bnx5waf2r3rmj888c36hrr";
+    sha256 = "1ryibcng40xcq22lsj85fn2vcvrksdx9rr3wwxpq8dw37lw0is1b";
   };
 
   configureFlags = [

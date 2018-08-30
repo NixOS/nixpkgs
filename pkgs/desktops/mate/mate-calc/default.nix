@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-calc-${version}";
-  version = "1.20.1";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "00k063ia4dclvcpg1q733lbi56533s6mj8bgb1nrgna6y7zw4q87";
+    sha256 = "07mmc99wwgqbp15zrr6z7iz0frc388z19jwk28ymyzgn6bcc9cn6";
   };
 
   nativeBuildInputs = [

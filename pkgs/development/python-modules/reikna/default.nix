@@ -1,5 +1,5 @@
 { stdenv
-, fetchurl
+, fetchPypi
 , buildPythonPackage
 , sphinx
 , pytestcov
@@ -13,15 +13,14 @@
 
 buildPythonPackage rec {
   pname = "reikna";
-  name = "${pname}-${version}";
-  version = "0.6.8";
+  version = "0.7.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "34d92786237bef9ab5d37d78f01c155d0dcd1fc24df7782af9498a9f1786890c";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0afc5d502cc9ba0dadd88c15d72e2fdaa09fee31faaae5064889732de7940953";
   };
 
-  buildInputs = [ sphinx pytestcov pytest ];
+  checkInputs = [ sphinx pytestcov pytest ];
 
   propagatedBuildInputs = [ Mako numpy funcsigs ]
     ++ stdenv.lib.optional withCuda pycuda

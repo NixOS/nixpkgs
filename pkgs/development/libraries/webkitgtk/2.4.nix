@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "http://webkitgtk.org/releases/${name}.tar.xz";
+    url = "https://webkitgtk.org/releases/${name}.tar.xz";
     sha256 = "1xsvnvyvlywwyf6m9ainpsg87jkxjmd37q6zgz9cxb7v3c2ym2jq";
   };
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2 libwebp enchant
     libxml2 libxslt
-    gst-plugins-base sqlite xorg.libXt
+    gst-plugins-base sqlite xorg.libXt xorg.libXdamage
   ] ++ optionals enableCredentialStorage [
     libsecret
   ] ++ (if stdenv.isDarwin then [

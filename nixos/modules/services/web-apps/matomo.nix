@@ -1,4 +1,4 @@
-{ config, lib, pkgs, services, ... }:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.matomo;
@@ -109,13 +109,13 @@ in {
         message = "Either services.matomo.nginx or services.matomo.nginx.webServerUser is mandatory";
     }];
 
-    users.extraUsers.${user} = {
+    users.users.${user} = {
       isSystemUser = true;
       createHome = true;
       home = dataDir;
       group  = user;
     };
-    users.extraGroups.${user} = {};
+    users.groups.${user} = {};
 
     systemd.services.matomo_setup_update = {
       # everything needs to set up and up to date before matomo php files are executed
@@ -241,6 +241,6 @@ in {
 
   meta = {
     doc = ./matomo-doc.xml;
-    maintainers = with stdenv.lib.maintainers; [ florianjacob ];
+    maintainers = with lib.maintainers; [ florianjacob ];
   };
 }

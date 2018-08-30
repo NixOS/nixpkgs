@@ -1,7 +1,5 @@
-{ stdenv, stdenvAdapters, fetchurl, pkgconfig, intltool, flex, bison
-, python, libxml2Python, file, expat, makedepend, xorg, llvm, libffi, libvdpau
-, enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
-, enableExtraFeatures ? false # not maintained
+{ stdenv, fetchurl, pkgconfig, intltool, flex, bison
+, python, libxml2Python, expat, makedepend, xorg, llvm, libffi, libvdpau
 , OpenGL, apple_sdk, Xplugin
 }:
 
@@ -51,6 +49,12 @@ let
     postPatch = "patchShebangs .";
 
     configurePhase = ":";
+
+    configureFlags = [
+      # NOTE: Patents expired on June 17 2018.
+      # For details see: https://www.phoronix.com/scan.php?page=news_item&px=OpenGL-Texture-Float-Freed
+      "texture-float"
+    ];
 
     makeFlags = "INSTALL_DIR=\${out} CC=cc CXX=c++";
 

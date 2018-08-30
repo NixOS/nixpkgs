@@ -1,7 +1,9 @@
-{ newScope, stdenv, libstdcxxHook, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun, darwin }:
-let
-  callPackage = newScope (self // { inherit stdenv isl version fetch; });
+{ newScope, stdenv, libstdcxxHook, isl, fetchurl, overrideCC, wrapCCWith
+, buildLlvmTools # tools, but from the previous stage, for cross
+, targetLlvmLibraries # libraries, but from the next stage, for cross
+}:
 
+let
   version = "3.9.1";
 
   fetch = fetch_v version;
@@ -13,47 +15,45 @@ let
   compiler-rt_src = fetch "compiler-rt" "16gc2gdmp5c800qvydrdhsp0bzb97s8wrakl6i8a4lgslnqnf2fk";
   clang-tools-extra_src = fetch "clang-tools-extra" "0d9nh7j7brbh9avigcn69dlaihsl9p3cf9s45mw6fxzzvrdvd999";
 
-  self = {
+  tools = stdenv.lib.makeExtensible (tools: let
+    callPackage = newScope (tools // { inherit stdenv isl version fetch; });
+  in {
     llvm = callPackage ./llvm.nix {
-      inherit compiler-rt_src stdenv;
+      inherit compiler-rt_src;
     };
 
     clang-unwrapped = callPackage ./clang {
-      inherit clang-tools-extra_src stdenv;
+      inherit clang-tools-extra_src;
     };
 
-    libclang = self.clang-unwrapped.lib;
+    libclang = tools.clang-unwrapped.lib;
 
-    clang = if stdenv.cc.isGNU then self.libstdcxxClang else self.libcxxClang;
+    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
 
-    libstdcxxClang = ccWrapperFun {
-      cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
+    libstdcxxClang = wrapCCWith {
+      cc = tools.clang-unwrapped;
       extraPackages = [ libstdcxxHook ];
     };
 
-    libcxxClang = ccWrapperFun {
-      cc = self.clang-unwrapped;
-      /* FIXME is this right? */
-      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
-      extraPackages = [ self.libcxx self.libcxxabi ];
+    libcxxClang = wrapCCWith {
+      cc = tools.clang-unwrapped;
+      extraPackages = [ targetLlvmLibraries.libcxx targetLlvmLibraries.libcxxabi ];
     };
 
-    stdenv = stdenv.override (drv: {
-      allowedRequisites = null;
-      cc = self.clang;
-    });
-
-    libcxxStdenv = stdenv.override (drv: {
-      allowedRequisites = null;
-      cc = self.libcxxClang;
-    });
-
     lldb = callPackage ./lldb.nix {};
+  });
+
+  libraries = stdenv.lib.makeExtensible (libraries: let
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv isl version fetch; });
+  in {
+
+    stdenv = overrideCC stdenv buildLlvmTools.clang;
+
+    libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
     libcxx = callPackage ./libc++ {};
 
     libcxxabi = callPackage ./libc++abi.nix {};
-  };
-in self
+  });
+
+in { inherit tools libraries; } // libraries // tools

@@ -1,8 +1,7 @@
-{ stdenv, lib, fetchurl, callPackage, vscode-utils }:
+{ stdenv, callPackage, vscode-utils }:
 
 let
-  inherit (vscode-utils) buildVscodeExtension buildVscodeMarketplaceExtension
-      extensionFromVscodeMarketplace;
+  inherit (vscode-utils) buildVscodeMarketplaceExtension;
 in
 #
 # Unless there is a good reason not to, we attemp to use the same name as the 

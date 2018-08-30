@@ -112,18 +112,6 @@ index 581083e..0c35fb7 100644
 +kerneldir = @prefix@/libexec/spl/include/sys/fs
  kernel_HEADERS = $(KERNEL_H)
  endif
-diff --git a/include/sys/sysevent/Makefile.am b/include/sys/sysevent/Makefile.am
-index 63d9af3..de1aa18 100644
---- a/include/sys/sysevent/Makefile.am
-+++ b/include/sys/sysevent/Makefile.am
-@@ -8,6 +8,6 @@ USER_H =
- EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
- 
- if CONFIG_KERNEL
--kerneldir = @prefix@/src/spl-$(VERSION)/include/sys/sysevent
-+kerneldir = @prefix@/libexec/spl/include/sys/sysevent
- kernel_HEADERS = $(KERNEL_H)
- endif
 diff --git a/include/util/Makefile.am b/include/util/Makefile.am
 index e2bf09f..3f5d6ce 100644
 --- a/include/util/Makefile.am

@@ -71,14 +71,14 @@ in
         target = "dbus-1";
       };
 
-    users.extraUsers.messagebus = {
+    users.users.messagebus = {
       uid = config.ids.uids.messagebus;
       description = "D-Bus system message bus daemon user";
       home = homeDir;
       group = "messagebus";
     };
 
-    users.extraGroups.messagebus.gid = config.ids.gids.messagebus;
+    users.groups.messagebus.gid = config.ids.gids.messagebus;
 
     systemd.packages = [ pkgs.dbus.daemon ];
 
@@ -100,6 +100,7 @@ in
       # Don't restart dbus-daemon. Bad things tend to happen if we do.
       reloadIfChanged = true;
       restartTriggers = [ configDir ];
+      environment = { LD_LIBRARY_PATH = config.system.nssModules.path; };
     };
 
     systemd.user = {

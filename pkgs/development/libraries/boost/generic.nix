@@ -1,8 +1,7 @@
 { stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , which
 , buildPackages, buildPlatform, hostPlatform
-, toolset ? /**/ if stdenv.cc.isClang                                then "clang"
-            else if stdenv.cc.isGNU && hostPlatform != buildPlatform then "gcc-cross"
+, toolset ? /**/ if stdenv.cc.isClang  then "clang"
             else null
 , enableRelease ? true
 , enableDebug ? false
@@ -10,8 +9,8 @@
 , enableMultiThreaded ? true
 , enableShared ? !(hostPlatform.libc == "msvcrt") # problems for now
 , enableStatic ? !enableShared
-, enablePython ? hostPlatform == buildPlatform
-, enableNumpy ? enablePython && stdenv.lib.versionAtLeast version "1.65"
+, enablePython ? false
+, enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
 , mpi ? null
@@ -55,19 +54,30 @@ let
     "--layout=${layout}"
     "variant=${variant}"
     "threading=${threading}"
-    "runtime-link=${runtime-link}"
     "link=${link}"
     "-sEXPAT_INCLUDE=${expat.dev}/include"
     "-sEXPAT_LIBPATH=${expat.out}/lib"
-  ] ++ optional (variant == "release") "debug-symbols=off"
+
+    # TODO: make this unconditional
+  ] ++ optionals (hostPlatform != buildPlatform) [
+    "address-model=${toString hostPlatform.parsed.cpu.bits}"
+    "architecture=${toString hostPlatform.parsed.cpu.family}"
+    "binary-format=${toString hostPlatform.parsed.kernel.execFormat.name}"
+    "target-os=${toString hostPlatform.parsed.kernel.name}"
+
+    # adapted from table in boost manual
+    # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
+    "abi=${if hostPlatform.parsed.cpu.family == "arm" then "aapcs"
+           else if hostPlatform.isWindows then "ms"
+           else if hostPlatform.isMips then "o32"
+           else "sysv"}"
+  ] ++ optional (link != "static") "runtime-link=${runtime-link}"
+    ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
+    ++ optional (!enablePython) "--without-python"
     ++ optional (mpi != null || hostPlatform != buildPlatform) "--user-config=user-config.jam"
     ++ optionals (hostPlatform.libc == "msvcrt") [
-    "target-os=windows"
     "threadapi=win32"
-    "binary-format=pe"
-    "address-model=${toString hostPlatform.parsed.cpu.bits}"
-    "architecture=x86"
   ]);
 
 in
@@ -78,11 +88,13 @@ stdenv.mkDerivation {
   inherit src;
 
   patchFlags = optionalString (hostPlatform.libc == "msvcrt") "-p0";
-  patches = patches ++ optional (hostPlatform.libc == "msvcrt") (fetchurl {
-    url = "https://svn.boost.org/trac/boost/raw-attachment/tickaet/7262/"
-        + "boost-mingw.patch";
-    sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
-  });
+  patches = patches
+    ++ optional stdenv.isDarwin ./darwin-no-system-python.patch
+    ++ optional (hostPlatform.libc == "msvcrt") (fetchurl {
+      url = "https://svn.boost.org/trac/boost/raw-attachment/tickaet/7262/"
+          + "boost-mingw.patch";
+      sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
+    });
 
   meta = {
     homepage = http://boost.org/;

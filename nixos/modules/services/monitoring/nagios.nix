@@ -143,7 +143,7 @@ in
 
 
   config = mkIf cfg.enable {
-    users.extraUsers.nagios = {
+    users.users.nagios = {
       description = "Nagios user ";
       uid         = config.ids.uids.nagios;
       home        = nagiosState;

@@ -1,4 +1,4 @@
-{ fetchurl, fetchhg, stdenv, xorg, makeWrapper }:
+{ fetchhg, stdenv, xorg, makeWrapper }:
 
 stdenv.mkDerivation rec {
   # Inferno is a rolling release from a mercurial repository. For the verison number

@@ -3,7 +3,6 @@
 # This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 # Python 3.5 is not supported: https://github.com/PySide/Shiboken/issues/77
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "pyside-shiboken";
   version = "1.2.4";
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bash, coreutils, ocaml, zlib, pcre, neko, camlp4 }:
+{ stdenv, fetchgit, coreutils, ocaml, zlib, pcre, neko, camlp4 }:
 
 let
   generic = { version, sha256, prePatch }:
@@ -53,6 +53,24 @@ let
 
       dontStrip = true;
 
+      # While it might be a good idea to run the upstream test suite, let's at
+      # least make sure we can actually run the compiler.
+      doInstallCheck = true;
+      installCheckPhase = ''
+        # Get out of the source directory to make sure the stdlib from the
+        # sources doesn't interfere with the installed one.
+        mkdir installcheck
+        pushd installcheck > /dev/null
+        cat >> InstallCheck.hx <<EOF
+        class InstallCheck {
+          public static function main() trace("test");
+        }
+        EOF
+        "$out/bin/haxe" -js installcheck.js -main InstallCheck
+        grep -q 'console\.log.*test' installcheck.js
+        popd > /dev/null
+      '';
+
       meta = with stdenv.lib; {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = https://haxe.org;
@@ -75,7 +93,7 @@ in {
     version = "3.4.6";
     sha256 = "1myc4b8fwp0f9vky17wv45n34a583f5sjvajsc93f5gm1wanp4if";
     prePatch = ''
-      sed -i -e 's|"/usr/lib/haxe/std/";|"'"$out/lib/haxe/std/"'";\n&|g' src/main.ml
+      sed -i -re 's!(let +prefix_path += +).*( +in)!\1"'"$out/"'"\2!' src/main.ml
       sed -i -e 's|"neko"|"${neko}/bin/neko"|g' extra/haxelib_src/src/haxelib/client/Main.hx
     '';
   };

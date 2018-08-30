@@ -207,7 +207,6 @@ rec {
   simpleTeXToPNG =
     { preamble ? null
     , body
-    , name ? baseNameOf (toString body)
     , packages ? []
     }:
 
@@ -227,7 +226,6 @@ rec {
   simpleTeXToPDF =
     { preamble ? null
     , body
-    , name ? baseNameOf (toString body)
     , packages ? []
     }:
 

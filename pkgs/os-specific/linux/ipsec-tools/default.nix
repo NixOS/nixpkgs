@@ -28,23 +28,24 @@ stdenv.mkDerivation rec {
   # fix build with newer gcc versions
   preConfigure = ''substituteInPlace configure --replace "-Werror" "" '';
 
-  configureFlags = ''
-    --sysconfdir=/etc --localstatedir=/var
-    --with-kernel-headers=${linuxHeaders}/include
-    --disable-security-context
-    --enable-adminport
-    --enable-dpd
-    --enable-frag
-    --enable-gssapi
-    --enable-hybrid
-    --enable-natt
-    --enable-shared
-    --enable-stats
-  '';
+  configureFlags = [
+    "--sysconfdir=/etc --localstatedir=/var"
+    "--with-kernel-headers=${linuxHeaders}/include"
+    "--disable-security-context"
+    "--enable-adminport"
+    "--enable-dpd"
+    "--enable-frag"
+    "--enable-gssapi"
+    "--enable-hybrid"
+    "--enable-natt"
+    "--enable-shared"
+    "--enable-stats"
+  ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://ipsec-tools.sourceforge.net/;
     description = "Port of KAME's IPsec utilities to the Linux-2.6 IPsec implementation";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

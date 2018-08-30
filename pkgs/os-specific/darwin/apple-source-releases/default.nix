@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, pkgs, fetchurlBoot }:
+{ stdenv, buildPackages, fetchurl, fetchzip, pkgs, fetchurlBoot }:
 
 let
   # This attrset can in theory be computed automatically, but for that to work nicely we need
@@ -7,6 +7,8 @@ let
   # now it's staying here.
   versions = {
     "osx-10.11.6" = {
+      PowerManagement = "572.50.1";
+      SmartCardServices = "55111";
       dtrace        = "168";
       xnu           = "3248.60.10";
       libpthread    = "138.10.4";
@@ -43,6 +45,9 @@ let
       file_cmds     = "264.1.1";
       shell_cmds    = "187";
       system_cmds   = "550.6";
+      diskdev_cmds   = "593";
+      top           = "108";
+      text_cmds     = "99";
     };
     "osx-10.11.5" = {
       Libc          = "1082.50.1"; # 10.11.6 still unreleased :/
@@ -53,6 +58,7 @@ let
       ICU           = "531.48";
       libdispatch   = "442.1.4";
       Security      = "57031.40.6";
+      security_systemkeychain = "55202";
 
       IOAudioFamily                        = "203.3";
       IOFireWireFamily                     = "458";
@@ -191,6 +197,8 @@ let
   adv_cmds = applePackage "adv_cmds" "osx-10.5.8" "102ssayxbg9wb35mdmhswbnw0bg7js3pfd8fcbic83c5q3bqa6c6" {};
 
   packages = {
+    SmartCardServices = applePackage "SmartCardServices" "osx-10.11.6" "1qqjlbi6j37mw9p3qpfnwf14xh9ff8h5786bmvzwc4kblfglabkm" {};
+
     inherit (adv_cmds) ps locale;
     architecture    = applePackage "architecture"      "osx-10.11.6"     "1pbpjcd7is69hn8y29i98ci0byik826if8gnp824ha92h90w0fq3" {};
     bootstrap_cmds  = applePackage "bootstrap_cmds"    "dev-tools-7.0"   "1v5dv2q3af1xwj5kz0a5g54fd5dm6j4c9dd2g66n4kc44ixyrhp3" {};
@@ -201,10 +209,15 @@ let
     configd         = applePackage "configd"           "osx-10.8.5"      "1gxakahk8gallf16xmhxhprdxkh3prrmzxnmxfvj0slr0939mmr2" {};
     copyfile        = applePackage "copyfile"          "osx-10.11.6"     "1rkf3iaxmjz5ycgrmf0g971kh90jb2z1zqxg5vlqz001s4y457gs" {};
     Csu             = applePackage "Csu"               "osx-10.11.6"     "0yh5mslyx28xzpv8qww14infkylvc1ssi57imhi471fs91sisagj" {};
-    dtrace          = applePackage "dtrace"            "osx-10.11.6"     "0pp5x8dgvzmg9vvg32hpy2brm17dpmbwrcr4prsmdmfvd4767wc0" {};
+    dtrace          = applePackage "dtrace"            "osx-10.11.6"     "04mi0jy8gy0w59rk9i9dqznysv6fzz1v5mq779s41cp308yi0h1c" {};
+    dtrace-xcode    = applePackage "dtrace/xcode.nix"  "osx-10.11.6"     "04mi0jy8gy0w59rk9i9dqznysv6fzz1v5mq779s41cp308yi0h1c" {};
     dyld            = applePackage "dyld"              "osx-10.11.6"     "0qkjmjazm2zpgvwqizhandybr9cm3gz9pckx8rmf0py03faafc08" {};
     eap8021x        = applePackage "eap8021x"          "osx-10.11.6"     "0iw0qdib59hihyx2275rwq507bq2a06gaj8db4a8z1rkaj1frskh" {};
-    ICU             = applePackage "ICU"               "osx-10.10.5"     "1qihlp42n5g4dl0sn0f9pc0bkxy1452dxzf0vr6y5gqpshlzy03p" {};
+
+    # Splicing is currently broken in Nixpkgs
+    # cctools need to be specified manually here to handle this
+    ICU             = applePackage "ICU"               "osx-10.10.5"     "1qihlp42n5g4dl0sn0f9pc0bkxy1452dxzf0vr6y5gqpshlzy03p" { inherit (buildPackages.darwin) cctools; };
+
     IOKit           = applePackage "IOKit"             "osx-10.11.6"     "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x00" { inherit IOKitSrcs; };
     launchd         = applePackage "launchd"           "osx-10.9.5"      "0w30hvwqq8j5n90s3qyp0fccxflvrmmjnicjri4i1vd2g196jdgj" {};
     libauto         = applePackage "libauto"           "osx-10.9.5"      "17z27yq5d7zfkwr49r7f0vn9pxvj95884sd2k6lq6rfaz9gxqhy3" {};
@@ -238,10 +251,16 @@ let
     adv_cmds        = applePackage "adv_cmds/xcode.nix" "osx-10.11.6"    "12gbv35i09aij9g90p6b3x2f3ramw43qcb2gjrg8lzkzmwvcyw9q" {};
     basic_cmds      = applePackage "basic_cmds"        "osx-10.11.6"     "0hvab4b1v5q2x134hdkal0rmz5gsdqyki1vb0dbw4py1bqf0yaw9" {};
     developer_cmds  = applePackage "developer_cmds"    "osx-10.11.6"     "1r9c2b6dcl22diqf90x58psvz797d3lxh4r2wppr7lldgbgn24di" {};
+    diskdev_cmds    = applePackage "diskdev_cmds"      "osx-10.11.6"     "1ssdyiaq5m1zfy96yy38yyknp682ki6bvabdqd5z18fa0rv3m2ar" {};
     network_cmds    = applePackage "network_cmds"      "osx-10.11.6"     "0lhi9wz84qr1r2ab3fb4nvmdg9gxn817n5ldg7zw9gnf3wwn42kw" {};
     file_cmds       = applePackage "file_cmds"         "osx-10.11.6"     "1zfxbmasps529pnfdjvc13p7ws2cfx8pidkplypkswyff0nff4wp" {};
     shell_cmds      = applePackage "shell_cmds"        "osx-10.11.6"     "0084k271v66h4jqp7q7rmjvv7w4mvhx3aq860qs8jbd30canm86n" {};
     system_cmds     = applePackage "system_cmds"       "osx-10.11.6"     "1h46j2c5v02pkv5d9fyv6cpgyg0lczvwicrx6r9s210cl03l77jl" {};
+    text_cmds       = applePackage "text_cmds"         "osx-10.11.6"     "1f93m7dd0ghqb2hwh905mjhzblyfr7dwffw98xhgmv1mfdnigxg0" {};
+    top             = applePackage "top"               "osx-10.11.6"     "0i9120rfwapgwdvjbfg0ya143i29s1m8zbddsxh39pdc59xnsg5l" {};
+    PowerManagement = applePackage "PowerManagement"   "osx-10.11.6"     "1llimhvp0gjffd47322lnjq7cqwinx0c5z7ikli04ad5srpa68mh" {};
+
+    security_systemkeychain = applePackage "security_systemkeychain" "osx-10.10.5" "0xviskdgxsail15npi0billyiysvljlmg38mmhnr7qi4ymnnjr90" {};
 
     libsecurity_apple_csp      = libsecPackage "libsecurity_apple_csp"      "osx-10.7.5" "1ngyn1ik27n4x981px3kfd1z1n8zx7r5w812b6qfjpy5nw4h746w" {};
     libsecurity_apple_cspdl    = libsecPackage "libsecurity_apple_cspdl"    "osx-10.7.5" "1svqa5fhw7p7njzf8bzg7zgc5776aqjhdbnlhpwmr5hmz5i0x8r7" {};

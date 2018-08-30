@@ -45,6 +45,8 @@
 
 let
   inherit (stdenv.lib) optional optionalString;
+  # Don't upgrade until https://github.com/math-atlas/math-atlas/issues/44
+  # is resolved.
   version = "3.10.3";
 in
 

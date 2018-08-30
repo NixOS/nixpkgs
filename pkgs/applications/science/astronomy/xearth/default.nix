@@ -1,0 +1,32 @@
+{ stdenv, fetchurl, xorg }:
+stdenv.mkDerivation rec {
+  name = "xearth-${version}";
+  version = "1.1";
+  
+  src = fetchurl {
+    url = "http://xearth.org/${name}.tar.gz";
+    sha256 = "bcb1407cc35b3f6dd3606b2c6072273b6a912cbd9ed1ae22fb2d26694541309c";
+  };
+
+  buildInputs = with xorg; [  imake libXt libXext ];
+
+  dontAddPrefix = true;
+  configureScript="xmkmf";
+
+  installFlags=[ "DESTDIR=$(out)/" "BINDIR=bin" "MANDIR=man/man1"];
+  installTargets="install install.man";
+  
+  meta = with stdenv.lib; {
+    description = "sets the X root window to an image of the Earth";
+    homepage = "http://xplanet.org";
+    longDescription =
+      '' Xearth  sets  the X root window to an image of the Earth, as seen from your favorite vantage point in space,
+         correctly shaded for the current position of the Sun.
+	 By default, xearth updates the displayed image every  five  minutes.
+      '';
+    maintainers = [ maintainers.mafo ];
+    license = "xearth";
+    platforms=platforms.unix;
+  };
+
+}

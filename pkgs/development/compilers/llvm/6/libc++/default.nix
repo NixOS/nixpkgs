@@ -1,9 +1,9 @@
-{ lib, stdenv, fetch, cmake, python, llvm, libcxxabi, fixDarwinDylibNames, version }:
+{ lib, stdenv, fetch, cmake, python, libcxxabi, fixDarwinDylibNames, version }:
 
 stdenv.mkDerivation rec {
   name = "libc++-${version}";
 
-  src = fetch "libcxx" "1n8d0iadkk9fdpplvxkdgrgh2szc6msrx1mpdjpmilz9pn3im4vh";
+  src = fetch "libcxx" "0rzw4qvxp6qx4l4h9amrq02gp7hbg8lw4m0sy3k60f50234gnm3n";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -40,7 +40,10 @@ stdenv.mkDerivation rec {
 
   linkCxxAbi = stdenv.isLinux;
 
-  setupHook = ./setup-hook.sh;
+  setupHooks = [
+    ../../../../../build-support/setup-hooks/role.bash
+    ./setup-hook.sh
+  ];
 
   meta = {
     homepage = http://libcxx.llvm.org/;

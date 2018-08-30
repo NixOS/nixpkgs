@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     description = ''Constructive solid geometry package'';
+    broken = true; # 2018-04-11
   };
 }

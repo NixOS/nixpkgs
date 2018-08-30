@@ -11,12 +11,12 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "sawfish-${version}";
-  version = "1.12.0";
+  version = "1.12.90";
   sourceName = "sawfish_${version}";
 
   src = fetchurl {
-    url = "http://download.tuxfamily.org/sawfish/${sourceName}.tar.xz";
-    sha256 = "1z7awzgw8d15aw17kpbj460pcxq8l2rhkaxk47w7yg9qrmg0xja4";
+    url = "https://download.tuxfamily.org/sawfish/${sourceName}.tar.xz";
+    sha256 = "18p8srqqj9vjffg13qhspfz2gr1h4vfs10qzlv89g76r289iam31";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

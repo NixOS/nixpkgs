@@ -186,6 +186,14 @@ in {
         default = [];
       };
 
+      localDiscovery = mkOption {
+        type = types.bool;
+        description = ''Whether to enable local discovery for the ipfs daemon.
+          This will allow ipfs to scan ports on your local network. Some hosting services will ban you if you do this.
+        '';
+        default = true;
+      };
+
       serviceFdlimit = mkOption {
         type = types.nullOr types.int;
         default = null;
@@ -204,7 +212,7 @@ in {
       user_allow_other
     ''; };
 
-    users.extraUsers = mkIf (cfg.user == "ipfs") {
+    users.users = mkIf (cfg.user == "ipfs") {
       ipfs = {
         group = cfg.group;
         home = cfg.dataDir;
@@ -214,7 +222,7 @@ in {
       };
     };
 
-    users.extraGroups = mkIf (cfg.group == "ipfs") {
+    users.groups = mkIf (cfg.group == "ipfs") {
       ipfs.gid = config.ids.gids.ipfs;
     };
 
@@ -232,7 +240,13 @@ in {
       '';
       script = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
-          ipfs init ${optionalString cfg.emptyRepo "-e"}
+          ipfs init ${optionalString cfg.emptyRepo "-e"} \
+            ${optionalString (! cfg.localDiscovery) "--profile=server"}
+        else
+          ${if cfg.localDiscovery
+            then "ipfs config profile apply local-discovery"
+            else "ipfs config profile apply server"
+          }
         fi
       '';
 

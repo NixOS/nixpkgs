@@ -3,41 +3,41 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-declarative-package-mgmt">
+ <title>Declarative Package Management</title>
 
-<title>Declarative Package Management</title>
-
-<para>With declarative package management, you specify which packages
-you want on your system by setting the option
-<option>environment.systemPackages</option>.  For instance, adding the
-following line to <filename>configuration.nix</filename> enables the
-Mozilla Thunderbird email application:
-
+ <para>
+  With declarative package management, you specify which packages you want on
+  your system by setting the option
+  <xref linkend="opt-environment.systemPackages"/>. For instance, adding the
+  following line to <filename>configuration.nix</filename> enables the Mozilla
+  Thunderbird email application:
 <programlisting>
-environment.systemPackages = [ pkgs.thunderbird ];
+<xref linkend="opt-environment.systemPackages"/> = [ pkgs.thunderbird ];
 </programlisting>
+  The effect of this specification is that the Thunderbird package from Nixpkgs
+  will be built or downloaded as part of the system when you run
+  <command>nixos-rebuild switch</command>.
+ </para>
 
-The effect of this specification is that the Thunderbird package from
-Nixpkgs will be built or downloaded as part of the system when you run
-<command>nixos-rebuild switch</command>.</para>
-
-<para>You can get a list of the available packages as follows:
+ <para>
+  You can get a list of the available packages as follows:
 <screen>
 $ nix-env -qaP '*' --description
 nixos.firefox   firefox-23.0   Mozilla Firefox - the browser, reloaded
 <replaceable>...</replaceable>
 </screen>
+  The first column in the output is the <emphasis>attribute name</emphasis>,
+  such as <literal>nixos.thunderbird</literal>. (The <literal>nixos</literal>
+  prefix allows distinguishing between different channels that you might have.)
+ </para>
 
-The first column in the output is the <emphasis>attribute
-name</emphasis>, such as
-<literal>nixos.thunderbird</literal>. (The
-<literal>nixos</literal> prefix allows distinguishing between
-different channels that you might have.)</para>
+ <para>
+  To “uninstall” a package, simply remove it from
+  <xref linkend="opt-environment.systemPackages"/> and run
+  <command>nixos-rebuild switch</command>.
+ </para>
 
-<para>To “uninstall” a package, simply remove it from
-<option>environment.systemPackages</option> and run
-<command>nixos-rebuild switch</command>.</para>
+ <xi:include href="customizing-packages.xml" />
 
-<xi:include href="customizing-packages.xml" />
-<xi:include href="adding-custom-packages.xml" />
-
+ <xi:include href="adding-custom-packages.xml" />
 </section>

@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, libtool, gtk ? null, libcap
-, alsaLib, libpulseaudio, gstreamer, gst-plugins-base, libvorbis }:
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, libtool
+, gtk ? null
+, libpulseaudio, gst_all_1, libvorbis, libcap
+, withAlsa ? stdenv.isLinux, alsaLib }:
 
 stdenv.mkDerivation rec {
   name = "libcanberra-0.30";
@@ -9,13 +11,21 @@ stdenv.mkDerivation rec {
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
-    libtool alsaLib libpulseaudio libvorbis gtk libcap
-    /*gstreamer gst-plugins-base*/      # ToDo: gstreamer not found (why?), add (g)udev?
-  ];
+    libpulseaudio libvorbis gtk
+  ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ])
+    ++ lib.optional stdenv.isLinux libcap
+    ++ lib.optional withAlsa alsaLib;
 
-  configureFlags = "--disable-oss";
+  configureFlags = [ "--disable-oss" ];
+
+  patchFlags = "-p0";
+  patches = stdenv.lib.optional stdenv.isDarwin
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/macports/macports-ports/master/audio/libcanberra/files/patch-configure.diff";
+      sha256 = "1f7h7ifpqvbfhqygn1b7klvwi80zmpv3538vbmq7ql7bkf1q8h31";
+    });
 
   postInstall = ''
     for f in $out/lib/*.la; do
@@ -43,6 +53,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.unix;
   };
 }

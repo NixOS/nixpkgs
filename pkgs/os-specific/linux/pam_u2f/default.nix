@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "pam_u2f-${version}";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src     = fetchurl {
     url = "https://developers.yubico.com/pam-u2f/Releases/${name}.tar.gz";
-    sha256 = "189j0wgx6fs146vfp88djqpl1flpfb3962l1a2marlp6d12jwm3i";
+    sha256 = "1kz7d3vr5dag1d5zq14kcp887p5d0q079dy1sqyl8ndi567asjh3";
   };
 
   nativeBuildInputs = [ pkgconfig ];

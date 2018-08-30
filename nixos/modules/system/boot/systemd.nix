@@ -65,13 +65,12 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.machine1.service"
       "user@.service"
+      "user-runtime-dir@.service"
 
       # Journal.
       "systemd-journald.socket"
       "systemd-journald.service"
       "systemd-journal-flush.service"
-      "systemd-journal-gatewayd.socket"
-      "systemd-journal-gatewayd.service"
       "systemd-journal-catalog-update.service"
       "systemd-journald-audit.socket"
       "systemd-journald-dev-log.socket"
@@ -137,7 +136,6 @@ let
 
       # Slices / containers.
       "slices.target"
-      "system.slice"
       "user.slice"
       "machine.slice"
       "machines.target"
@@ -161,8 +159,10 @@ let
       "systemd-binfmt.service"
       "systemd-exit.service"
       "systemd-update-done.service"
-    ]
-    ++ cfg.additionalUpstreamSystemUnits;
+    ] ++ optionals config.services.journald.enableHttpGateway [
+      "systemd-journal-gatewayd.socket"
+      "systemd-journal-gatewayd.service"
+    ] ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
     [ "sysinit.target.wants"
@@ -189,14 +189,11 @@ let
       "timers.target"
     ];
 
-  boolToString = value: if value then "yes" else "no";
-
   makeJobScript = name: text:
-    let mkScriptName =  s: (replaceChars [ "\\" ] [ "-" ] (shellEscape s) );
-        x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${mkScriptName name}"; inherit text; };
-    in "${x}/bin/${mkScriptName name}";
+    let mkScriptName =  s: "unit-script-" + (replaceChars [ "\\" "@" ] [ "-" "_" ] (shellEscape s) );
+    in  pkgs.writeTextFile { name = mkScriptName name; executable = true; inherit text; };
 
-  unitConfig = { name, config, ... }: {
+  unitConfig = { config, ... }: {
     config = {
       unitConfig =
         optionalAttrs (config.requires != [])
@@ -278,7 +275,7 @@ let
       ];
   };
 
-  mountConfig = { name, config, ... }: {
+  mountConfig = { config, ... }: {
     config = {
       mountConfig =
         { What = config.what;
@@ -291,7 +288,7 @@ let
     };
   };
 
-  automountConfig = { name, config, ... }: {
+  automountConfig = { config, ... }: {
     config = {
       automountConfig =
         { Where = config.where;
@@ -516,7 +513,7 @@ in
     };
 
     systemd.globalEnvironment = mkOption {
-      type = types.attrs;
+      type = with types; attrsOf (nullOr (either str (either path package)));
       default = {};
       example = { TZ = "CET"; };
       description = ''
@@ -549,7 +546,7 @@ in
     };
 
     services.journald.rateLimitInterval = mkOption {
-      default = "10s";
+      default = "30s";
       type = types.str;
       description = ''
         Configures the rate limiting interval that is applied to all
@@ -562,7 +559,7 @@ in
     };
 
     services.journald.rateLimitBurst = mkOption {
-      default = 100;
+      default = 1000;
       type = types.int;
       description = ''
         Configures the rate limiting burst limit (number of messages per
@@ -799,13 +796,13 @@ in
         mkdir -m 0700 -p /var/log/journal
       '';
 
-    users.extraUsers.systemd-network.uid = config.ids.uids.systemd-network;
-    users.extraGroups.systemd-network.gid = config.ids.gids.systemd-network;
-    users.extraUsers.systemd-resolve.uid = config.ids.uids.systemd-resolve;
-    users.extraGroups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+    users.users.systemd-network.uid = config.ids.uids.systemd-network;
+    users.groups.systemd-network.gid = config.ids.gids.systemd-network;
+    users.users.systemd-resolve.uid = config.ids.uids.systemd-resolve;
+    users.groups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
 
     # Target for ‘charon send-keys’ to hook into.
-    users.extraGroups.keys.gid = config.ids.gids.keys;
+    users.groups.keys.gid = config.ids.gids.keys;
 
     systemd.targets.keys =
       { description = "Security Keys";
@@ -836,13 +833,14 @@ in
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled
       [ "DEVTMPFS" "CGROUPS" "INOTIFY_USER" "SIGNALFD" "TIMERFD" "EPOLL" "NET"
-        "SYSFS" "PROC_FS" "FHANDLE" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
+        "SYSFS" "PROC_FS" "FHANDLE" "CRYPTO_USER_API_HASH" "CRYPTO_HMAC"
+        "CRYPTO_SHA256" "DMIID" "AUTOFS4_FS" "TMPFS_POSIX_ACL"
         "TMPFS_XATTR" "SECCOMP"
       ];
 
-    users.extraGroups.systemd-journal.gid = config.ids.gids.systemd-journal;
-    users.extraUsers.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
-    users.extraGroups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
+    users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
+    users.users.systemd-journal-gateway.uid = config.ids.uids.systemd-journal-gateway;
+    users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.timers =

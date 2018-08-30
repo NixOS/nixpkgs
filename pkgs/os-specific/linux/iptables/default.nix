@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.6.2";
 
   src = fetchurl {
-    url = "http://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
+    url = "https://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
     sha256 = "0crp0lvh5m2f15pr8cw97h8yb8zjj10x95zj06j46cr68vx2vl2m";
   };
 
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -lmnl -lnftnl"
   '';
 
-  configureFlags = ''
-    --enable-devel
-    --enable-shared
-  '';
+  configureFlags = [
+    "--enable-devel"
+    "--enable-shared"
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.netfilter.org/projects/iptables/index.html;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
+    license = licenses.gpl2;
     downloadPage = "http://www.netfilter.org/projects/iptables/files/";
     updateWalker = true;
     inherit version;

@@ -3,10 +3,11 @@
 , curl
 , fetchFromGitHub
 , git
+, libcap
 , libevent
 , libtool
 , libqrencode
-, libudev
+, udev
 , libusb
 , makeWrapper
 , pkgconfig
@@ -66,10 +67,12 @@ in stdenv.mkDerivation rec {
     qttools
   ];
 
-  buildInputs = with stdenv.lib; [
+  buildInputs = [
+    # TODO: remove libcap when pruneLibtoolFiles applies to pulseaudio.
+    libcap
     libevent
     libtool
-    libudev
+    udev
     libusb
     libqrencode
 
@@ -111,6 +114,8 @@ in stdenv.mkDerivation rec {
     ${copyUdevRuleToOutput "51-hid-digitalbox.rules" udevRule51}
     ${copyUdevRuleToOutput "52-hid-digitalbox.rules" udevRule52}
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A QT based application for the Digital Bitbox hardware wallet";

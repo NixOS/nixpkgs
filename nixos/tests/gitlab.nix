@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   nodes = {
-    gitlab = { config, pkgs, ... }: {
+    gitlab = { ... }: {
       virtualisation.memorySize = 768;
 
       services.nginx = {

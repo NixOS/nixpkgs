@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fuse }:
-  
+
 stdenv.mkDerivation rec {
   name = "aefs-0.4pre259-8843b7c";
-  
+
   src = fetchurl {
     url = "http://tarballs.nixos.org/${name}.tar.bz2";
     sha256 = "167hp58hmgdavg2mqn5dx1xgq24v08n8d6psf33jhbdabzx6a6zq";
@@ -10,10 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fuse ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.st.ewi.tudelft.nl/~dolstra/aefs/;
     description = "A cryptographic filesystem implemented in userspace using FUSE";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eelco ];
+    license = licenses.gpl2;
   };
 }

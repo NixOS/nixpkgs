@@ -2,14 +2,13 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, MPlayerPlugin, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra-gtk2
+, MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2
 , jrePlugin, icedtea_web
 , trezor-bridge, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , esteidfirefoxplugin
-, vlc_npapi
-, browserpass, chrome-gnome-shell
-, libudev
+, browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
+, udev
 , kerberos
 }:
 
@@ -44,6 +43,9 @@ let
 
       plugins =
         assert !(jre && icedtea);
+        if builtins.hasAttr "enableVLC" cfg
+        then throw "The option \"${browserName}.enableVLC\" has been removed since Firefox no longer supports npapi plugins"
+        else
         ([ ]
           ++ lib.optional enableAdobeFlash flashplayer
           ++ lib.optional (cfg.enableDjvu or false) (djview4)
@@ -57,22 +59,24 @@ let
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
           ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
           ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
-          ++ lib.optional (cfg.enableVLC or false) vlc_npapi
           ++ extraPlugins
         );
       nativeMessagingHosts =
         ([ ]
-          ++ lib.optional (cfg.enableBrowserpass or false) browserpass
+          ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
+          ++ lib.optional (cfg.enableBukubrow or false) bukubrow
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
+          ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
+          ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
           ++ extraNativeMessagingHosts
         );
-      libs = (if ffmpegSupport then [ ffmpeg ] else with gst_all; [ gstreamer gst-plugins-base ])
+      libs =   lib.optional stdenv.isLinux udev
+            ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
             ++ lib.optionals (cfg.enableQuakeLive or false)
-            (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib libudev ])
+            (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
             ++ lib.optional (config.pulseaudio or true) libpulseaudio;
-      gst-plugins = with gst_all; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ];
       gtk_modules = [ libcanberra-gtk2 ];
 
     in stdenv.mkDerivation {
@@ -97,30 +101,31 @@ let
         ];
       };
 
-      buildInputs = [makeWrapper]
-        ++ lib.optional (!ffmpegSupport) gst-plugins
-        ++ lib.optional (browser ? gtk3) browser.gtk3;
+      nativeBuildInputs = [ makeWrapper lndir ];
+      buildInputs = lib.optional (browser ? gtk3) browser.gtk3;
 
-      buildCommand = ''
-        if [ ! -x "${browser}/bin/${browserName}" ]
+      buildCommand = lib.optionalString stdenv.isDarwin ''
+        mkdir -p $out/Applications
+        cp -R --no-preserve=mode,ownership ${browser}/Applications/${browserName}.app $out/Applications
+        rm -f $out${browser.execdir or "/bin"}/${browserName}
+      '' + ''
+        if [ ! -x "${browser}${browser.execdir or "/bin"}/${browserName}" ]
         then
-            echo "cannot find executable file \`${browser}/bin/${browserName}'"
+            echo "cannot find executable file \`${browser}${browser.execdir or "/bin"}/${browserName}'"
             exit 1
         fi
 
-        makeWrapper "$(readlink -v --canonicalize-existing "${browser}/bin/${browserName}")" \
-            "$out/bin/${browserName}${nameSuffix}" \
+        makeWrapper "$(readlink -v --canonicalize-existing "${browser}${browser.execdir or "/bin"}/${browserName}")" \
+          "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
             --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
             --suffix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
             --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
             --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
-            --suffix PATH ':' "$out/bin" \
+            --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            ${lib.optionalString (!ffmpegSupport)
-                ''--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"''
-            + lib.optionalString (browser ? gtk3)
+            ${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
                   --suffix XDG_DATA_DIRS : '${gnome3.defaultIconTheme}/share'
                 ''
@@ -132,8 +137,10 @@ let
         else
             for res in 16 32 48 64 128; do
             mkdir -p "$out/share/icons/hicolor/''${res}x''${res}/apps"
-            ln -s "${browser}/lib/${browserName}/browser/chrome/icons/default/default''${res}.png" \
+            icon=( "${browser}/lib/"*"/browser/chrome/icons/default/default''${res}.png" )
+              if [ -e "$icon" ]; then ln -s "$icon" \
                 "$out/share/icons/hicolor/''${res}x''${res}/apps/${browserName}.png"
+              fi
             done
         fi
 
@@ -141,7 +148,7 @@ let
 
         mkdir -p $out/lib/mozilla
         for ext in ${toString nativeMessagingHosts}; do
-            ${lndir}/bin/lndir -silent $ext/lib/mozilla $out/lib/mozilla
+            lndir -silent $ext/lib/mozilla $out/lib/mozilla
         done
 
         # For manpages, in case the program supplies them

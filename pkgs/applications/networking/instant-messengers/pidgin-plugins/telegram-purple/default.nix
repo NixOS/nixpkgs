@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ pidgin libwebp libgcrypt gettext ];
 
   preConfigure = ''
-    sed -i "s|/etc/telegram-purple/server.tglpub|$out/lib/pidgin/server.tglpub|g" telegram-purple.c
+    sed -i "s|/etc/telegram-purple/server.tglpub|$out/lib/purple-2/server.tglpub|g" telegram-purple.c
     echo "#define GIT_COMMIT \"${builtins.substring 0 10 src.rev}\"" > commit.h
   '';
 
   installPhase = ''
-    mkdir -p $out/lib/pidgin/
-    cp bin/*.so $out/lib/pidgin/ #*/
-    cp tg-server.tglpub $out/lib/pidgin/server.tglpub
+    mkdir -p $out/lib/purple-2/
+    cp bin/*.so $out/lib/purple-2/ #*/
+    cp tg-server.tglpub $out/lib/purple-2/server.tglpub
     mkdir -p $out/pixmaps/pidgin/protocols/{16,22,48}
     cp imgs/telegram16.png $out/pixmaps/pidgin/protocols/16
     cp imgs/telegram22.png $out/pixmaps/pidgin/protocols/22

@@ -1,20 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, python, cmake, pyqt5, numpy, scipy, libarcus, doxygen, gettext }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, python, cmake
+, pyqt5, numpy, scipy, libarcus, doxygen, gettext, pythonOlder }:
 
-if lib.versionOlder python.version "3.5.0"
-then throw "Uranium not supported for interpreter ${python.executable}"
-else
-
-stdenv.mkDerivation rec {
-  version = "3.2.1";
+buildPythonPackage rec {
+  version = "3.4.1";
   pname = "uranium";
-  name = "${pname}-${version}";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Uranium";
     rev = version;
-    sha256 = "1p05iw1x3rvb51p6hj57yq6nsjawjba3pyyr4jx924iq96vcc3fz";
+    sha256 = "1r6d65c9xfkn608k6wv3dprpks5h8g2v9mi4a67ifpzyw4y3f0rk";
   };
+
+  disabled = pythonOlder "3.5.0";
 
   buildInputs = [ python gettext ];
   propagatedBuildInputs = [ pyqt5 numpy scipy libarcus ];

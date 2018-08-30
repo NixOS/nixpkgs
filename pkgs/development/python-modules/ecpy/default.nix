@@ -1,16 +1,16 @@
 { stdenv, fetchPypi, buildPythonPackage, isPy3k, hidapi
-, pycrypto, pillow, protobuf, future, ecpy
+, pycrypto, pillow, protobuf, future
 }:
 
 buildPythonPackage rec {
   pname = "ECPy";
-  version = "0.8.3";
+  version = "0.9.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef3d95419d53368f52fb7d4b883b8df0dfc2dd19a76243422d24981c3e5f27bd";
+    sha256 = "f0df66be67f3de0152dfb3c453f4247bdfa2b4e37aa75b98617a637376032229";
   };
 
   buildInputs = [ hidapi pycrypto pillow protobuf future ];

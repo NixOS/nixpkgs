@@ -1,15 +1,13 @@
 { stdenv, fetchurl, patchelf, makeWrapper, xorg, gcc, gcc-unwrapped }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
    name = "IPMIView-${version}";
-   version = "2.13.0";
-   buildVersion = "170504";
+   version = "2.14.0";
+   buildVersion = "180213";
 
    src = fetchurl {
     url = "ftp://ftp.supermicro.com/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
-    sha256 = "1hfw5g6lxg3vqg0nc3g2sv2h6bn8za35bxxms0ri0sgb9v3xg1y6";
+    sha256 = "1wp22wm7smlsb25x0cck4p660cycfczxj381930crd1qrf68mw4h";
   };
 
    buildInputs = [ patchelf makeWrapper ];

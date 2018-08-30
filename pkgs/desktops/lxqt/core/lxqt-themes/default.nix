@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lxqt-themes";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0f7bipkxkl741lpb2cziw9wlqy05514nqqrppsz5g4y8bmzw910n";
+    sha256 = "026hbblxdbq48n9691b1z1xiak99khsk3wf09vn4iaj5zi7dwhw5";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Themes, graphics and icons for LXQt";
-    homepage = https://github.com/lxde/lxqt-themes;
+    homepage = https://github.com/lxqt/lxqt-themes;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

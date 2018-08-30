@@ -83,6 +83,8 @@ let
 
     WebInterface ${if cfg.webInterface then "Yes" else "No"}
 
+    LogLevel ${cfg.logLevel}
+
     ${cfg.extraConf}
   '';
 
@@ -119,6 +121,16 @@ in
         default = false;
         description = ''
           Whether to enable printing support through the CUPS daemon.
+        '';
+      };
+
+      startWhenNeeded = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, CUPS is socket-activated; that is,
+          instead of having it permanently running as a daemon,
+          systemd will start it on the first incoming connection.
         '';
       };
 
@@ -165,6 +177,15 @@ in
         '';
       };
 
+      logLevel = mkOption {
+        type = types.str;
+        default = "info";
+        example = "debug";
+        description = ''
+          Specifies the cupsd logging verbosity.
+        '';
+      };
+
       extraFilesConf = mkOption {
         type = types.lines;
         default = "";
@@ -180,7 +201,7 @@ in
         example =
           ''
             BrowsePoll cups.example.com
-            LogLevel debug
+            MaxCopies 42
           '';
         description = ''
           Extra contents of the configuration file of the CUPS daemon
@@ -257,7 +278,7 @@ in
 
   config = mkIf config.services.printing.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = "cups";
         uid = config.ids.uids.cups;
         group = "lp";
@@ -276,8 +297,13 @@ in
 
     systemd.packages = [ cups.out ];
 
+    systemd.sockets.cups = mkIf cfg.startWhenNeeded {
+      wantedBy = [ "sockets.target" ];
+      listenStreams = map (x: replaceStrings ["localhost"] ["127.0.0.1"] (removePrefix "*:" x)) cfg.listenAddresses;
+    };
+
     systemd.services.cups =
-      { wantedBy = [ "multi-user.target" ];
+      { wantedBy = optionals (!cfg.startWhenNeeded) [ "multi-user.target" ];
         wants = [ "network.target" ];
         after = [ "network.target" ];
 
@@ -345,8 +371,6 @@ in
 
     services.printing.extraConf =
       ''
-        LogLevel info
-
         DefaultAuthType Basic
 
         <Location />

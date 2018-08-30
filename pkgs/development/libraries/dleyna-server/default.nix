@@ -1,13 +1,14 @@
 { stdenv, autoreconfHook, makeWrapper, pkgconfig, fetchFromGitHub, dleyna-core, dleyna-connector-dbus, gssdp, gupnp, gupnp-av, gupnp-dlna, libsoup }:
 
 stdenv.mkDerivation rec {
-  name = "dleyna-server";
+  pname = "dleyna-server";
+  name = "${pname}-${version}";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "01org";
-    repo = name;
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "13a2i6ms27s46yxdvlh2zm7pim7jmr5cylnygzbliz53g3gxxl3j";
   };
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to discover, browse and manipulate Digital Media Servers";
-    homepage = http://01.org/dleyna;
+    homepage = https://01.org/dleyna;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.linux;
     license = licenses.lgpl21;

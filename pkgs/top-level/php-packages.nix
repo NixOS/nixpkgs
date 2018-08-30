@@ -12,14 +12,14 @@ let
   apcu = if isPhp7 then apcu51 else apcu40;
 
   apcu40 = assert !isPhp7; buildPecl {
-    name = "apcu-4.0.7";
-    sha256 = "1mhbz56mbnq7dryf2d64l84lj3fpr5ilmg2424glans3wcg772hp";
+    name = "apcu-4.0.11";
+    sha256 = "002d1gklkf0z170wkbhmm2z1p9p5ghhq3q1r9k54fq1sq4p30ks5";
     buildInputs = [ pkgs.pcre ];
   };
 
   apcu51 = assert isPhp7; buildPecl {
-    name = "apcu-5.1.8";
-    sha256 = "01dfbf0245d8cc0f51ba16467a60b5fad08e30b28df7846e0dd213da1143ecce";
+    name = "apcu-5.1.11";
+    sha256 = "0nz9m3fbxgyc2ij63yqmxm06a1f51g8rkxk85f85ziqdin66q2f1";
     buildInputs = [ pkgs.pcre ];
     doCheck = true;
     checkTarget = "test";
@@ -74,14 +74,14 @@ let
   };
 
   php_excel = assert isPhp7; buildPecl rec {
-    name = "php_excel";
+    name = "php_excel-${version}";
     version = "1.0.2";
     phpVersion = "php7";
 
     buildInputs = [ pkgs.libxl ];
 
     src = pkgs.fetchurl {
-      url = "https://github.com/iliaal/${name}/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
+      url = "https://github.com/iliaal/php_excel/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
       sha256 = "0dpvih9gpiyh1ml22zi7hi6kslkilzby00z1p8x248idylldzs2n";
     };
 
@@ -107,9 +107,9 @@ let
   };
 
   imagick = buildPecl {
-    name = "imagick-3.4.3RC1";
-    sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
-    configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
+    name = "imagick-3.4.3";
+    sha256 = "0z2nc92xfc5axa9f2dy95rmsd2c81q8cs1pm4anh0a50x9g5ng0z";
+    configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.pcre ];
   };
@@ -120,7 +120,7 @@ let
 
     sha256 = "04c35rj0cvq5ygn2jgmyvqcb0k8d03v4k642b6i37zgv7x15pbic";
 
-    configureFlags = "--with-zlib-dir=${pkgs.zlib.dev}";
+    configureFlags = [ "--with-zlib-dir=${pkgs.zlib.dev}" ];
 
     makeFlags = [ "CFLAGS=-fgnu89-inline" ];
   };
@@ -158,6 +158,13 @@ let
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ cyrus_sasl zlib ];
+  };
+
+  oci8 = buildPecl rec {
+    name = "oci8-2.1.8";
+    sha256 = "1bp6fss2f2qmd5bdk7x22j8vx5qivrdhz4x7csf29vjgj6gvchxy";
+    buildInputs = [ pkgs.re2c pkgs.oracle-instantclient ];
+    configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
   };
 
   pcs = buildPecl rec {
@@ -328,11 +335,11 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.6.3";
+    version = "1.6.5";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "1dna9ng77nw002l7hq60b6vz0f1snmnsxj1l7cg4f877msxppjsj";
+      sha256 = "0d1lpvq8wylh5qgxhbqb5r7j3c6qk0bz4b5vg187jsl6z6fvxgk7";
     };
 
     unpackPhase = ":";
@@ -383,11 +390,11 @@ let
 
   php-cs-fixer = pkgs.stdenv.mkDerivation rec {
     name = "php-cs-fixer-${version}";
-    version = "2.11.1";
+    version = "2.12.2";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "1270s5y7bgcml452lngq4fqn3a1mx15gfgmgcczjiiv0fxir446b";
+      sha256 = "19cq04x1wi489259vyad15zy6y0k3qd7dj77pcf74gxqw92hgg5c";
     };
 
     phases = [ "installPhase" ];
@@ -443,11 +450,11 @@ let
 
   phpcs = pkgs.stdenv.mkDerivation rec {
     name = "phpcs-${version}";
-    version = "3.2.3";
+    version = "3.3.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "193axz56j1kyq458q0y38m99bx31jjjldfg6bv71vgm6zh4rvvs1";
+      sha256 = "0kw1ffr688wbcip2hmr7yi7bpdf4kzwh22yvxw17lyddzq6vrqaw";
     };
 
     phases = [ "installPhase" ];
@@ -470,11 +477,11 @@ let
 
   phpcbf = pkgs.stdenv.mkDerivation rec {
     name = "phpcbf-${version}";
-    version = "3.2.3";
+    version = "3.3.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "00p0l01shxx1h6g26j2dbfrp9j7im541das4xps4wrsvc4h4da9l";
+      sha256 = "0q75h8y4rbysyzh3i5nzqqln2d8592p0sz6y11rr2hz0g9qw4gim";
     };
 
     phases = [ "installPhase" ];
@@ -492,6 +499,32 @@ let
       license = licenses.bsd3;
       homepage = https://squizlabs.github.io/PHP_CodeSniffer/;
       maintainers = with maintainers; [ cmcdragonkai etu ];
+    };
+  };
+
+  psysh = pkgs.stdenv.mkDerivation rec {
+    name = "psysh-${version}";
+    version = "0.9.6";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
+      sha256 = "06icmyn7v229mpfplqj76kjnp1gh4ns0nrxa7bsckyqhzi425kc6";
+    };
+
+    phases = [ "installPhase" ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      tar -xzf $src -C $out/bin
+      wrapProgram $out/bin/psysh
+    '';
+
+    meta = with pkgs.lib; {
+      description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
+      license = licenses.mit;
+      homepage = https://psysh.org/;
+      maintainers = with maintainers; [ caugner ];
     };
   };
 }; in self

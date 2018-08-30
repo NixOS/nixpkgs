@@ -1,11 +1,10 @@
-{ stdenv, python2Packages, fetchurl, gettext, chromaprint }:
+{ stdenv, python2Packages, fetchurl, gettext }:
 
 let
-  version = "1.4.2";
   pythonPackages = python2Packages;
-in pythonPackages.buildPythonApplication {
-  name = "picard-${version}";
-  namePrefix = "";
+in pythonPackages.buildPythonApplication rec {
+  pname = "picard";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "http://ftp.musicbrainz.org/pub/musicbrainz/picard/picard-${version}.tar.gz";

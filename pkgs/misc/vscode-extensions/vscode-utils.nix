@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runCommand, vscode, unzip }:
+{ stdenv, lib, fetchurl, vscode, unzip }:
 
 let
   extendedPkgVersion = lib.getVersion vscode;
@@ -37,7 +37,7 @@ let
 
     installPhase = ''
       mkdir -p "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}"
-      find . -mindepth 1 -maxdepth 1 | xargs mv -t "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}/"
+      find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}/"
     '';
 
   });

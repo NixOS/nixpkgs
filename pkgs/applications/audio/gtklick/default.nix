@@ -1,12 +1,11 @@
 { stdenv, fetchurl, pythonPackages, gettext, klick}:
 
 pythonPackages.buildPythonApplication rec {
-  name = "gtklick-${version}";
-  namePrefix = "";
+  pname = "gtklick";
   version = "0.6.4";
 
   src = fetchurl {
-    url = "http://das.nasophon.de/download/${name}.tar.gz";
+    url = "http://das.nasophon.de/download/${pname}-${version}.tar.gz";
     sha256 = "7799d884126ccc818678aed79d58057f8cf3528e9f1be771c3fa5b694d9d0137";
   };
 

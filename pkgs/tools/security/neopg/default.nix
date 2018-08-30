@@ -11,19 +11,19 @@
 , gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "neopg";
+  name = "neopg-${version}";
   version = "0.0.4";
 
   # no fetchFromGitHub, as repo contains submodules
   src = fetchgit {
     url = "https://github.com/das-labor/neopg.git";
-    rev = "refs/tags/v${version}";
+    rev = "v${version}";
     sha256 = "0hhkl326ff6f76k8pwggpzmivbm13fz497nlyy6ybn5bmi9xfblm";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ cmake sqlite botan2 boost164 curl gettext libusb gnutls ]; 
+  buildInputs = [ cmake sqlite botan2 boost164 curl gettext libusb gnutls ];
 
   doCheck = true;
   checkTarget = "test";

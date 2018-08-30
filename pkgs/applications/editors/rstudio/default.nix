@@ -6,7 +6,7 @@
 let
   verMajor = "1";
   verMinor = "1";
-  verPatch = "423";
+  verPatch = "442";
   version = "${verMajor}.${verMinor}.${verPatch}";
   ginVer = "1.5";
   gwtVer = "2.7.0";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "02kpmzh0vr0gb5dhiwcm4gwjbc3biwz0km655mgzmx9j64cyd3nf";
+    sha256 = "0drqh2brfs9w8dfh4r7j3fsqdsg63s6pvj2bbg5xwwc0yf220ahs";
   };
 
   # Hack RStudio to only use the input R.

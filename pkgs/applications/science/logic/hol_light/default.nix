@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, writeScript, ocaml, camlp5 }:
+{ stdenv, fetchFromGitHub, fetchpatch, ocaml, camlp5 }:
 
 let
   start_script = ''
