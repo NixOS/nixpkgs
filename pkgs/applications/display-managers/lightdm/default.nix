@@ -9,15 +9,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "lightdm";
-  version = "1.26.0";
+  version = "1.28.0";
 
   name = "${pname}-${version}";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "CanonicalLtd";
     repo = pname;
     rev = version;
-    sha256 = "1mhj6l025cnf2dzxnbzlk0qa9fm4gj2aw58qh5fl4ky87dp4wdyb";
+    sha256 = "1mmqy1jdvgc0h0h9gli7n4vdv5p8m5019qjr5ni4h73iz6mjdj2b";
   };
 
   nativeBuildInputs = [
@@ -73,6 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://github.com/CanonicalLtd/lightdm;
+    description = "A cross-desktop display manager.";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [ ocharles wkennington worldofpeace ];
