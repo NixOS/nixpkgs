@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
         --replace /usr/share/usb.ids ${hwdata}/data/hwdata/usb.ids
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.linux-usb.org/;
     description = "Tools for working with USB devices, such as lsusb";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }
