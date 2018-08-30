@@ -14,11 +14,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nfs-utils-${version}";
-  version = "2.1.1";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/nfs/${name}.tar.bz2";
-    sha256 = "02dvxphndpm8vpqqnl0zvij97dq9vsq2a179pzrjcv2i91ll2a0a";
+    sha256 = "05x79hjn244adhd12gj4mj97rbw51zn62yy0bhlb5kjjwi3a0j0p";
   };
 
   nativeBuildInputs = [ pkgconfig ];
