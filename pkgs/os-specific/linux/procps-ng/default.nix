@@ -2,12 +2,8 @@
 
 # `ps` with systemd support is able to properly report different
 # attributes like unit name, so we want to have it on linux.
-# The strange `boostrap` condition is here because `procps` can be
-# pulled in to early in bootstrap process, when `stdenv` is not yet
-# functional enought to build `systemd` (or its dependencies).
-# See https://github.com/NixOS/nixpkgs/pull/43817#issuecomment-408346135
-, withSystemd ? stdenv.isLinux && !(lib.hasPrefix "bootstrap" stdenv.name)
-, systemd
+, withSystemd ? stdenv.isLinux
+, systemd ? null
 
 # procps is mostly Linux-only. Most commands require a running Linux
 # system (or very similar like that found in Cygwin). The one
