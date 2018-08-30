@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "04mwl1v51b785h7q3v23hahr0qzr48qq1jzj7d3msjvgh97nr8v4";
   };
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "out" "dev" ];
 
   mesonFlags = [
     (mkFlag documentationSupport "documentation")
