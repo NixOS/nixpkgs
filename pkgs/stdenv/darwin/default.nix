@@ -394,7 +394,7 @@ in rec {
     allowedRequisites = (with pkgs; [
       xz.out xz.bin libcxx libcxxabi gmp.out gnumake findutils bzip2.out
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib llvmPackages.compiler-rt llvmPackages.compiler-rt.dev
-      zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
+      zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar openssl
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
       binutils.bintools darwin.binutils darwin.binutils.bintools
