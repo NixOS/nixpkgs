@@ -8679,6 +8679,8 @@ with pkgs;
 
   smc = callPackage ../tools/misc/smc { };
 
+  snakemake = callPackage ../applications/science/misc/snakemake { python = python3Packages; };
+
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
   sparse = callPackage ../development/tools/analysis/sparse { };
