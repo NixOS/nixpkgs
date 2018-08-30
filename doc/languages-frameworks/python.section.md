@@ -1074,4 +1074,5 @@ Following rules are desired to be respected:
 * Make sure libraries build for all Python interpreters.
 * By default we enable tests. Make sure the tests are found and, in the case of libraries, are passing for all interpreters. If certain tests fail they can be disabled individually. Try to avoid disabling the tests altogether. In any case, when you disable tests, leave a comment explaining why.
 * Commit names of Python libraries should reflect that they are Python libraries, so write for example `pythonPackages.numpy: 1.11 -> 1.12`.
-
+* Attribute names in `python-packages.nix` should be normalized according to [PEP 0503](https://www.python.org/dev/peps/pep-0503/#normalized-names).
+  This means that characters should be converted to lowercase and `.` and `_` should be replaced by a single `-` (Foo__Bar.baz instead of foo-bar-baz)
