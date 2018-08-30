@@ -4394,23 +4394,7 @@ in {
     };
   };
 
-  pywatchman = buildPythonPackage rec {
-    name = "pywatchman-${version}";
-    version = "1.3.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pywatchman/pywatchman-${version}.tar.gz";
-      sha256 = "c3d5be183b5b04f6ad575fc71b06dd196185dea1558d9f4d0598ba9beaab8245";
-    };
-    postPatch = ''
-      substituteInPlace pywatchman/__init__.py \
-        --replace "'watchman'" "'${pkgs.watchman}/bin/watchman'"
-    '';
-    # SyntaxError
-    disabled = isPy3k;
-    # No tests in archive
-    doCheck = false;
-
-  };
+  pywatchman = callPackage ../development/python-modules/pywatchman { };
 
   pywavelets = callPackage ../development/python-modules/pywavelets { };
 
