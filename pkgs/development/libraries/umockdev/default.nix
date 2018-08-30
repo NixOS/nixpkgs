@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "umockdev-${version}";
-  version = "0.11.3";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner  = "martinpitt";
     repo   = "umockdev";
     rev    = version;
-    sha256 = "1z101yw7clxz39im3y435s3rj1gna3kp0fkj9wd62vxqvk68lhik";
+    sha256 = "1j7kkxpqs991w3qdlb779gzv38l1vpnlk3laabi2ndk83j1wl5k2";
   };
 
   # autoreconfHook complains if we try to build the documentation
