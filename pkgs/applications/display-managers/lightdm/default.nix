@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   name = "${pname}-${version}";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "CanonicalLtd";
     repo = pname;
