@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "cement";
@@ -12,6 +12,8 @@ buildPythonPackage rec {
   # Disable test tests since they depend on a memcached server running on
   # 127.0.0.1:11211.
   doCheck = false;
+
+  disabled = !isPy3k;
 
   meta = with stdenv.lib; {
     homepage = http://builtoncement.com/;
