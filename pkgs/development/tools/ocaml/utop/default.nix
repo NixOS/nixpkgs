@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, jbuilder
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, jbuilder
 , lambdaTerm, cppo, makeWrapper
 }:
 
@@ -7,12 +7,12 @@ then throw "utop is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  version = "2.1.0";
+  version = "2.2.0";
   name = "utop-${version}";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "0lpfyhnm4v3xmcpac76g1px3x7na4p29w6xj2q8chqxhcw131n2y";
+    sha256 = "1414snwmqaxs1x8wbpjf6fn3jsl01hq0phrr7639xmb5vh15mgd4";
   };
 
   nativeBuildInputs = [ makeWrapper ];

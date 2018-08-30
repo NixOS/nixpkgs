@@ -1,5 +1,4 @@
-{ stdenv
-, writeTextFile
+{ writeTextFile
 , pari_data
 , pari
 , singular

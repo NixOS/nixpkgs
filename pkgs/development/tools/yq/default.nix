@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonApplication, fetchPypi, pyyaml, xmltodict, jq }:
+{ lib, buildPythonApplication, fetchPypi, pyyaml, xmltodict, jq }:
 
 buildPythonApplication rec {
   pname = "yq";

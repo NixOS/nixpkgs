@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "cloudfoundry-cli-${version}";
-  version = "6.36.1";
+  version = "6.37.0";
 
   goPackagePath = "code.cloudfoundry.org/cli";
 
@@ -12,17 +12,18 @@ buildGoPackage rec {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "19inl7qs2acs59p3gnl5zdsxym0wp2rn05q0zfg7rwf5sjh68amp";
+    sha256 = "1v4f1fyydpzkfir46g4ppbf3zmk3ym6kxswpkdjls8h3dbb2fbnv";
   };
 
   outputs = [ "out" ];
 
-  buildFlagsArray = ''
-    -ldflags= -X ${goPackagePath}/version.binaryVersion=${version}
+  buildPhase = ''
+    cd go/src/${goPackagePath}
+    CF_BUILD_DATE="1970-01-01" make build
   '';
 
   installPhase = ''
-    install -Dm555 go/bin/cli "$out/bin/cf"
+    install -Dm555 out/cf "$out/bin/cf"
     remove-references-to -t ${go} "$out/bin/cf"
     install -Dm444 -t "$out/share/bash-completion/completions/" "$src/ci/installers/completion/cf"
   '';

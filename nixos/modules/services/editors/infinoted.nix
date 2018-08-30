@@ -10,8 +10,8 @@ in {
 
     package = mkOption {
       type = types.package;
-      default = pkgs.libinfinity.override { daemon = true; };
-      defaultText = "pkgs.libinfinity.override { daemon = true; }";
+      default = pkgs.libinfinity;
+      defaultText = "pkgs.libinfinity";
       description = ''
         Package providing infinoted
       '';
@@ -119,7 +119,7 @@ in {
     users.groups = optional (cfg.group == "infinoted")
       { name = "infinoted";
       };
-  
+
     systemd.services.infinoted =
       { description = "Gobby Dedicated Server";
 
@@ -129,7 +129,7 @@ in {
         serviceConfig = {
           Type = "simple";
           Restart = "always";
-          ExecStart = "${cfg.package}/bin/infinoted-${versions.majorMinor cfg.package.version} --config-file=/var/lib/infinoted/infinoted.conf";
+          ExecStart = "${cfg.package.infinoted} --config-file=/var/lib/infinoted/infinoted.conf";
           User = cfg.user;
           Group = cfg.group;
           PermissionsStartOnly = true;

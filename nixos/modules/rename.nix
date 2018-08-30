@@ -4,7 +4,11 @@ with lib;
 
 {
   imports = [
-    (mkRenamedOptionModule [ "dysnomia" ] [ "services" "dysnomia" ])
+    # !!! These were renamed the other way, but got reverted later.
+    # !!! Drop these before 18.09 is released.
+    (mkRenamedOptionModule [ "system" "nixos" "stateVersion" ] [ "system" "stateVersion" ])
+    (mkRenamedOptionModule [ "system" "nixos" "defaultChannel" ] [ "system" "defaultChannel" ])
+
     (mkRenamedOptionModule [ "environment" "x11Packages" ] [ "environment" "systemPackages" ])
     (mkRenamedOptionModule [ "environment" "enableBashCompletion" ] [ "programs" "bash" "enableCompletion" ])
     (mkRenamedOptionModule [ "environment" "nix" ] [ "nix" "package" ])
@@ -215,15 +219,13 @@ with lib;
     '')
 
     # Profile splitting
-    (mkRenamedOptionModule [ "virtualization" "growPartition" ] [ "boot" "growPartition" ])
+    (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
 
     # misc/version.nix
     (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])
     (mkRenamedOptionModule [ "system" "nixosVersionSuffix" ] [ "system" "nixos" "versionSuffix" ])
     (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
     (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
-    (mkRenamedOptionModule [ "system" "stateVersion" ] [ "system" "nixos" "stateVersion" ])
-    (mkRenamedOptionModule [ "system" "defaultChannel" ] [ "system" "nixos" "defaultChannel" ])
 
     # Users
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
@@ -254,6 +256,8 @@ with lib;
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
     (mkRemovedOptionModule [ "virtualisation" "xen" "qemu" ] "You don't need this option anymore, it will work without it.")
+    (mkRemovedOptionModule [ "services" "logstash" "enableWeb" ] "The web interface was removed from logstash")
+    (mkRemovedOptionModule [ "boot" "zfs" "enableLegacyCrypto" ] "The corresponding package was removed from nixpkgs.")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])

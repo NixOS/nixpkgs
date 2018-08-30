@@ -1,4 +1,4 @@
-{ stdenv, pkgs, lib, fetchurl, fetchgit, fetchsvn, fetchpatch,
+{ stdenv, lib, fetchurl, fetchsvn,
   jansson, libxml2, libxslt, ncurses, openssl, sqlite,
   utillinux, dmidecode, libuuid, newt,
   lua, speex,

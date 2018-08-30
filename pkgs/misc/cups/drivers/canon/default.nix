@@ -4,7 +4,6 @@ let
 
   i686_NIX_GCC = pkgsi686Linux.callPackage ({gcc}: gcc) {};
   i686_libxml2 = pkgsi686Linux.callPackage ({libxml2}: libxml2) {};
-  i686_glibc = pkgsi686Linux.callPackage ({glibc}: glibc) {};
 
   src_canon = fetchurl {
     url = "https://files.canon-europe.com/files/soft45378/software/o147jen_linuxufrII_0290.zip";

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, mpfr, m4, binutils, fetchcvs, emacs, zlib, which
+{ stdenv, fetchgit, mpfr, m4, binutils, emacs, zlib, which
 , texinfo, libX11, xproto, inputproto, libXi, gmp, readline, strace
 , libXext, xextproto, libXt, libXaw, libXmu } :
 

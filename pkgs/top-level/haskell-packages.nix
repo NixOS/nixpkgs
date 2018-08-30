@@ -1,5 +1,5 @@
 { buildPackages, pkgs
-, newScope, stdenv
+, newScope
 , buildPlatform, targetPlatform
 }:
 

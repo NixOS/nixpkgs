@@ -1,6 +1,6 @@
 { stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
 , fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
-, libuuid, libxfs, lvm2, openssl, perl, procps, quota, su
+, libuuid, libxfs, lvm2, openssl, perl, procps, quota
 , time, utillinux, which, writeScript, xfsprogs }:
 
 stdenv.mkDerivation {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, python2Packages, bazaar }:
+{ stdenv, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   name = "bzr-tools-${version}";

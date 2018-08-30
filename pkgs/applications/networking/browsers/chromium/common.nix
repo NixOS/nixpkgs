@@ -5,7 +5,7 @@
 , libevent, expat, libjpeg, snappy
 , libpng, libcap
 , xdg_utils, yasm, minizip, libwebp
-, libusb1, pciutils, nss, re2, zlib, libvpx
+, libusb1, pciutils, nss, re2, zlib
 
 , python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
@@ -14,11 +14,10 @@
 , glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
+, ffmpeg, libxslt, libxml2
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
-, libexif ? null # only needed for Chromium before version 51
 
 # package customization
 , enableNaCl ? false
@@ -43,10 +42,6 @@ let
   # source tree.
   extraAttrs = buildFun base;
 
-  gentooPatch = name: sha256: fetchpatch {
-    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/files/${name}";
-    inherit sha256;
-  };
   githubPatch = commit: sha256: fetchpatch {
     url = "https://github.com/chromium/chromium/commit/${commit}.patch";
     inherit sha256;
@@ -87,8 +82,8 @@ let
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
     ffmpeg libxslt libxml2
-    # harfbuzz-icu # in versions over 63 harfbuzz and freetype are being built together
-                   # so we can't build with one from system and other from source
+    # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
+               # so we can't build with one from system and other from source
   ];
 
   # build paths and release info
@@ -143,10 +138,6 @@ let
       # for updated patches and hints about build flags
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
       ./patches/fix-freetype.patch
-    ]  ++ optionals (versionRange "66" "68") [
-      ./patches/nix_plugin_paths_52.patch
-      (githubPatch "4d10424f9e2a06978cdd6cdf5403fcaef18e49fc" "11la1jycmr5b5rw89mzcdwznmd2qh28sghvz9klr1qhmsmw1vzjc")
-    ]  ++ optionals (versionAtLeast version "68") [
       ./patches/nix_plugin_paths_68.patch
     ]  ++ optionals (versionRange "68" "69") [
       ./patches/remove-webp-include-68.patch

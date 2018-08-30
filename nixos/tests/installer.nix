@@ -58,9 +58,6 @@ let
     '';
 
 
-  channelContents = [ pkgs.rlwrap ];
-
-
   # The test script boots a NixOS VM, installs NixOS on an empty hard
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
@@ -206,7 +203,7 @@ let
 
         # The configuration of the machine used to run "nixos-install".
         machine =
-          { config, lib, pkgs, ... }:
+          { pkgs, ... }:
 
           { imports =
               [ ../modules/profiles/installation-device.nix
@@ -470,7 +467,7 @@ in {
       enableOCR = true;
       preBootCommands = ''
         $machine->start;
-        $machine->waitForText(qr/Enter passphrase/);
+        $machine->waitForText(qr/Passphrase for/);
         $machine->sendChars("supersecret\n");
       '';
     };

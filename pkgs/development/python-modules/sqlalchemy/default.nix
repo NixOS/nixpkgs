@@ -3,18 +3,17 @@
 , buildPythonPackage
 , pytest
 , mock
-, pytest_xdist
 , isPy3k
 , pysqlite
 }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.2.8";
+  version = "1.2.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d5f08f714a886a1382c18be501e614bce50d362384dc089474019ce0768151c";
+    sha256 = "72325e67fb85f6e9ad304c603d83626d1df684fdf0c7ab1f0352e71feeab69d8";
   };
 
   checkInputs = [

@@ -209,7 +209,6 @@ in
           servicesLists = mapAttrsToList certToServices cfg.certs;
           certToServices = cert: data:
               let
-                domain = if data.domain != null then data.domain else cert;
                 cpath = lpath + optionalString (data.activationDelay != null) ".staging";
                 lpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";

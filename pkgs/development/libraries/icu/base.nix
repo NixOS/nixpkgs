@@ -1,5 +1,5 @@
 { version, sha256, patches ? [], patchFlags ? "" }:
-{ stdenv, fetchurl, fetchpatch, fixDarwinDylibNames
+{ stdenv, fetchurl, fixDarwinDylibNames
   # Cross-compiled icu4c requires a build-root of a native compile
 , buildRootOnly ? false, nativeBuildRoot, buildPlatform, hostPlatform
 }:
@@ -36,9 +36,9 @@ let
       sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
     '';
 
-    configureFlags = "--disable-debug" +
-      stdenv.lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) " --enable-rpath" +
-      stdenv.lib.optionalString (buildPlatform != hostPlatform) " --with-cross-build=${nativeBuildRoot}";
+    configureFlags = [ "--disable-debug" ]
+      ++ stdenv.lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) "--enable-rpath"
+      ++ stdenv.lib.optional (buildPlatform != hostPlatform) "--with-cross-build=${nativeBuildRoot}";
 
     enableParallelBuilding = true;
 

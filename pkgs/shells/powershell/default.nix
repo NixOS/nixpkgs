@@ -1,11 +1,11 @@
-{ stdenv, fetchgit, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl,
+{ stdenv, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl,
   makeWrapper, less, openssl, pam, lttng-ust }:
 
 let platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if stdenv.isDarwin then "1ga4p8xmrxa54v2s6i0q1q7lx2idcmp1jwm0g4jxr54fyn5ay3lf"
-                     else if stdenv.isLinux then "000mmv5iblnmwydfdvg5izli3vpb6l14xy4qy3smcikpf0h87fhl"
+    platformSha = if stdenv.isDarwin then "01j92myljgphf68la9q753m5wgfmd0kwlsk441yic7qshcly5xkw"
+                     else if stdenv.isLinux then "0al1mrlz3m5ksnq86mqm0axb8bjdxa05j2p5y9bmcykrgkdwi3vk"
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
@@ -14,7 +14,7 @@ let platformString = if stdenv.isDarwin then "osx"
 in
 stdenv.mkDerivation rec {
   name = "powershell-${version}";
-  version = "6.0.2";
+  version = "6.0.4";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-x64.tar.gz";

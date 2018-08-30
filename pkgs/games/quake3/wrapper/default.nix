@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, lib, fetchurl, libGL, ioquake3, makeWrapper }:
+{ stdenv, buildEnv, lib, libGL, ioquake3, makeWrapper }:
 
 { paks, name ? (stdenv.lib.head paks).name, description ? "" }:
 

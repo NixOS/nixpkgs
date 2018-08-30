@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ... }:
     maintainers = pkgs.flatpak.meta.maintainers;
   };
 
-  machine = { config, pkgs, ... }: {
+  machine = { pkgs, ... }: {
     imports = [ ./common/x11.nix ];
     services.xserver.desktopManager.gnome3.enable = true; # TODO: figure out minimal environment where the tests work
     environment.gnome3.excludePackages = pkgs.gnome3.optionalPackages;

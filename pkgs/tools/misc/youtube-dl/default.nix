@@ -1,4 +1,4 @@
-{ stdenv, lib, targetPlatform, fetchurl, buildPythonPackage
+{ lib, fetchurl, buildPythonPackage
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
@@ -15,11 +15,11 @@
 buildPythonPackage rec {
 
   pname = "youtube-dl";
-  version = "2018.07.10";
+  version = "2018.08.04";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1rigah941k2drzx5qz937lk68gw9jrizj5lgd9f9znp0bgi2d0xd";
+    sha256 = "1hcx99qbbyigc8k98c8bcc6a2wnhq6493fmrkl7rysc8krlxr0pm";
   };
 
   nativeBuildInputs = [ makeWrapper ];

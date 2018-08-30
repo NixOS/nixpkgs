@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv, fetchurl
 , dbus-glib, gtk2, gtk3, libexif, libpulseaudio, libXScrnSaver, ninja, nss
 , pciutils, pkgconfig, python2, xdg_utils
 }:

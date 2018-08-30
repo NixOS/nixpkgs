@@ -218,7 +218,7 @@ in
   config = mkIf config.services.mysql.enable {
 
     services.mysql.dataDir =
-      mkDefault (if versionAtLeast config.system.nixos.stateVersion "17.09" then "/var/lib/mysql"
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql"
                  else "/var/mysql");
 
     users.users.mysql = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, pixman, celt, alsaLib
+{ stdenv, fetchurl, pkgconfig, pixman, celt, alsaLib
 , openssl, libXrandr, libXfixes, libXext, libXrender, libXinerama
 , libjpeg, zlib, spice-protocol, python, pyparsing, glib, cyrus_sasl
 , lz4 }:

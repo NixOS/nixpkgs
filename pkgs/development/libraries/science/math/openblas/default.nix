@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gfortran, perl, which, config, coreutils
+{ stdenv, fetchFromGitHub, fetchpatch, gfortran, perl, which, config, coreutils
 # Most packages depending on openblas expect integer width to match
 # pointer width, but some expect to use 32-bit integers always
 # (for compatibility with reference BLAS).
@@ -80,10 +80,11 @@ in
 stdenv.mkDerivation rec {
   name = "openblas-${version}";
   version = "0.3.1";
-  src = fetchurl {
-    url = "https://github.com/xianyi/OpenBLAS/archive/v${version}.tar.gz";
-    sha256 = "0czbs2afmcxxij1ivqrm04p0qcksg5fravjifhydvb7k6mpraphz";
-    name = "openblas-${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "xianyi";
+    repo = "OpenBLAS";
+    rev = "v${version}";
+    sha256 = "1dkwp4gz1hzpmhzks9y9ipb4c5h0r6c7yff62x3s8x9z6f8knaqc";
   };
 
   inherit blas64;
@@ -117,7 +118,20 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
     ++ mapAttrsToList (var: val: var + "=" + val) config;
 
-  patches = []; # TODO: Remove on next mass-rebuild
+    patches = [
+      # Backport of https://github.com/xianyi/OpenBLAS/pull/1667, which
+      # is causing problems and was already accepted upstream.
+      (fetchpatch {
+        url = "https://github.com/xianyi/OpenBLAS/commit/5f2a3c05cd0e3872be3c5686b9da6b627658eeb7.patch";
+        sha256 = "1qvxhk92likrshw6z6hjqxvkblwzgsbzis2b2f71bsvx9174qfk1";
+      })
+      # Double "MAX_ALLOCATING_THREADS", fix with Go and Octave
+      # https://github.com/xianyi/OpenBLAS/pull/1663 (see also linked issue)
+      (fetchpatch {
+        url = "https://github.com/xianyi/OpenBLAS/commit/a49203b48c4a3d6f86413fc8c4b1fbfaa1946463.patch";
+        sha256 = "0v6kjkbgbw7hli6xkism48wqpkypxmcqvxpx564snll049l2xzq2";
+      })
+    ];
 
   doCheck = true;
   checkTarget = "tests";
@@ -129,4 +143,10 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };
+
+  # We use linkName to pass a different name to --with-blas-libs for
+  # fflas-ffpack and linbox, because we use blas on darwin but openblas
+  # elsewhere.
+  # See see https://github.com/NixOS/nixpkgs/pull/45013.
+  passthru.linkName = "openblas";
 }

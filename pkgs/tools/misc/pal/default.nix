@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, glib, gettext, readline, pkgconfig }:
+{stdenv, fetchurl, glib, gettext, readline, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "pal-0.4.3";

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , darwin
-, mock
 }:
 
 buildPythonPackage rec {

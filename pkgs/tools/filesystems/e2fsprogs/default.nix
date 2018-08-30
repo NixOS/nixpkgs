@@ -1,11 +1,11 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, libuuid, gettext, texinfo }:
+{ stdenv, buildPackages, fetchurl, pkgconfig, libuuid, gettext, texinfo, perl }:
 
 stdenv.mkDerivation rec {
-  name = "e2fsprogs-1.44.2";
+  name = "e2fsprogs-1.44.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/e2fsprogs/${name}.tar.gz";
-    sha256 = "0s3znfy26as63gdbskm6pxh3i1106bpxf2jh9dppd8d9lidmmh75";
+    sha256 = "1gl34i2dy1n7aky9g0jgdybl3ar2zh8i8xnghrcbb5pvws66vbn2";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
       "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"
     ] else [
       "--enable-libuuid --disable-e2initrd-helper"
-    ]
-  ;
+    ];
+
+  checkInputs = [ perl ];
+  doCheck = false; # fails
 
   # hacky way to make it install *.pc
   postInstall = ''

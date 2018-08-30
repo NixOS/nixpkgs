@@ -4,7 +4,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ dtzWill ];
   };
 
-  machine = { config, pkgs, ... }: {
+  machine = { ... }: {
     services.novacomd.enable = true;
   };
 

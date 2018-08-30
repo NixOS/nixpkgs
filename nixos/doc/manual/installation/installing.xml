@@ -326,10 +326,9 @@ Retype new UNIX password: ***
     </screen>
     <note>
      <para>
-      To prevent the password prompt, set
-      <code><xref linkend="opt-users.mutableUsers"/> = false;</code> in
-      <filename>configuration.nix</filename>, which allows unattended
-      installation necessary in automation.
+      For unattended installations, it is possible to use
+      <command>nixos-install --no-root-passwd</command>
+      in order to disable the password prompt entirely.
      </para>
     </note>
    </para>

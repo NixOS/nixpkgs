@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, requests-cache }:
+{ lib, buildPythonPackage, fetchPypi, requests-cache }:
 
 buildPythonPackage rec {
   pname = "coinmarketcap";

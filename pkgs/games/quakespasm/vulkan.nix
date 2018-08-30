@@ -1,14 +1,14 @@
 { stdenv, SDL2, fetchFromGitHub, makeWrapper, gzip, libvorbis, libmad, vulkan-loader }:
 stdenv.mkDerivation rec {
   name = "vkquake-${version}";
-  majorVersion = "0.97";
-  version = "${majorVersion}.3";
+  majorVersion = "1.00";
+  version = "${majorVersion}.0";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "11z9k5aw9ip7ggmgjdnaq4g45pxqiy0xhd4jqqmgzpmfdbjk4x13";
+    sha256 = "1h7ac5bh6h6cpvkx5bvp17lv5m24hmdykcdppkivblikpxhml70s";
   };
 
   sourceRoot = "source/Quake";

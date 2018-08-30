@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     homepage = http://libdmtx.org;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];
+    license = stdenv.lib.licenses.bsd2;
   };
 }

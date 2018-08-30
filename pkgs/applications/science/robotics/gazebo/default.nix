@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, pkgconfig, boost, protobuf, freeimage
   , boost-build, boost_process
   , xorg_sys_opengl, tbb, ogre, tinyxml-2
-  , libtar, glxinfo,  libusb, libxslt, ruby, ignition
+  , libtar, glxinfo,  libusb, libxslt, ignition
   , pythonPackages, utillinux
 
   # these deps are hidden; cmake doesn't catch them

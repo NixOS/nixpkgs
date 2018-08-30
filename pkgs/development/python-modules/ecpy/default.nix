@@ -1,5 +1,5 @@
 { stdenv, fetchPypi, buildPythonPackage, isPy3k, hidapi
-, pycrypto, pillow, protobuf, future, ecpy
+, pycrypto, pillow, protobuf, future
 }:
 
 buildPythonPackage rec {

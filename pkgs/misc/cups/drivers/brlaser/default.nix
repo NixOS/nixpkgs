@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, cups, ghostscript }:
+{ stdenv, fetchFromGitHub, cmake, zlib, cups }:
 
 stdenv.mkDerivation rec {
 

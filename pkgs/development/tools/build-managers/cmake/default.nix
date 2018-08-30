@@ -126,5 +126,6 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Makefile Generator";
     platforms = if useQt4 then qt4.meta.platforms else platforms.all;
     maintainers = with maintainers; [ ttuegel lnl7 ];
+    license = licenses.bsd3;
   };
 }

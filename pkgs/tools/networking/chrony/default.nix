@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0a1ilzr88xhzx1ql3xhn36a4rvl79hvp0dvgm3az4cjhhzav47qd";
   };
 
+  postPatch = ''
+    patchShebangs test
+  '';
+
   buildInputs = [ readline texinfo nss nspr ]
     ++ stdenv.lib.optionals stdenv.isLinux [ libcap libseccomp pps-tools ];
   nativeBuildInputs = [ pkgconfig ];

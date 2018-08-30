@@ -36,11 +36,11 @@ with python'.pkgs;
 
 buildPythonApplication rec {
   pname = "FlexGet";
-  version = "2.14.5";
+  version = "2.14.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05kczj10p8f9b1ll4ii5anbg6nk5dhb7lm9skbj6ix7v9hi48hz4";
+    sha256 = "1pyvm1d23qy71rg7fzxcal8978kni7sn09zw4s4dsq56g8w80ay9";
   };
 
   postPatch = ''

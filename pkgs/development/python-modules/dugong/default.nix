@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder }:
+{ buildPythonPackage, fetchPypi, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "dugong";

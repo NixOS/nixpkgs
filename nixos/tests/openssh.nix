@@ -11,7 +11,7 @@ in {
   nodes = {
 
     server =
-      { config, pkgs, ... }:
+      { ... }:
 
       {
         services.openssh.enable = true;
@@ -23,7 +23,7 @@ in {
       };
 
     server_lazy =
-      { config, pkgs, ... }:
+      { ... }:
 
       {
         services.openssh = { enable = true; startWhenNeeded = true; };
@@ -35,7 +35,7 @@ in {
       };
 
     client =
-      { config, pkgs, ... }: { };
+      { ... }: { };
 
   };
 

@@ -144,8 +144,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pulseaudioLight;
-        defaultText = "pkgs.pulseaudioLight";
+        default = pkgs.pulseaudio;
+        defaultText = "pkgs.pulseaudio";
         example = literalExample "pkgs.pulseaudioFull";
         description = ''
           The PulseAudio derivation to use.  This can be used to enable

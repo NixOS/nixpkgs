@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, isPy3k, lib, pythonOlder }:
+{ buildPythonPackage, fetchPypi, lib, pythonOlder }:
 buildPythonPackage rec {
   pname = "typed-ast";
   version = "1.1.0";

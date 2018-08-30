@@ -103,7 +103,7 @@ let
 
     ${flip concatMapStrings
       (collect (proto: proto ? port && proto ? address && proto ? name) cfg.proto)
-      (proto: let portStr = toString proto.port; in ''
+      (proto: ''
         [${proto.name}]
         enabled = ${boolToString proto.enable}
         address = ${proto.address}
@@ -122,7 +122,7 @@ let
     # DO NOT EDIT -- this file has been generated automatically.
     ${flip concatMapStrings
       (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
-      (tun: let portStr = toString tun.port; in ''
+      (tun: ''
         [${tun.name}]
         type = client
         destination = ${tun.destination}
@@ -405,7 +405,7 @@ in
       outTunnels = mkOption {
         default = {};
         type = with types; loaOf (submodule (
-          { name, config, ... }: {
+          { name, ... }: {
             options = {
               destinationPort = mkOption {
                 type = types.int;
@@ -426,7 +426,7 @@ in
       inTunnels = mkOption {
         default = {};
         type = with types; loaOf (submodule (
-          { name, config, ... }: {
+          { name, ... }: {
             options = {
               inPort = mkOption {
                 type = types.int;

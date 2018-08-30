@@ -22,7 +22,7 @@ let
     Deny-IP=${concatStringsSep " " cfg.deniedIPRanges}
   '';
 
-  nylonOpts = { name, config, ... }: {
+  nylonOpts = { name, ... }: {
 
     options = {
 

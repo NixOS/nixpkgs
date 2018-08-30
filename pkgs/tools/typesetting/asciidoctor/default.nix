@@ -1,4 +1,4 @@
-{ stdenv, lib, bundlerApp, ruby, curl
+{ stdenv, lib, bundlerApp, ruby
   # Dependencies of the 'mathematical' package
 , cmake, bison, flex, glib, pkgconfig, cairo
 , pango, gdk_pixbuf, libxml2, python3, patchelf

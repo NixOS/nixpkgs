@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , buildPythonApplication
 , bash
-, shadow
 , systemd
 , utillinux
 , boto

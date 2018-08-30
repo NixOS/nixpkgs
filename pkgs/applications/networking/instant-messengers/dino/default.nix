@@ -13,13 +13,13 @@
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2018-06-03";
+  name = "dino-unstable-2018-07-08";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "52e116ee44be1667660c08858a28fe8fda125f79";
-    sha256 = "1yybmjd50r41366clrsw21qybbpjfkvim2n5b3dkcagjnifak0zl";
+    rev = "df8b5fcb722c4a33ed18cbbaafecb206f127b849";
+    sha256 = "1r7h9pxix0sylnwab7a8lir9h5yssk98128x2bzva77id9id33vi";
     fetchSubmodules = true;
   };
 

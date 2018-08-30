@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub }:
 
 let version = "1.12.0"; in
 stdenv.mkDerivation {

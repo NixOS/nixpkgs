@@ -5,13 +5,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "pass-import-${version}";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-import";
     rev = "v${version}";
-    sha256 = "189wf2jz2j43k27930cnl53sm2drh1s0nq1nmh4is3rzn8cna6wq";
+    sha256 = "1209aqkiqqbir5yzwk5jvyk8c1fyrsj9igr3n4banf347rlwmzfv";
   };
 
   nativeBuildInputs = [ makeWrapper ];

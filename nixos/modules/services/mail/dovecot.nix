@@ -9,8 +9,6 @@ let
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
-  canCreateMailUserGroup = cfg.mailUser != null && cfg.mailGroup != null;
-
   dovecotConf = concatStrings [
     ''
       base_dir = ${baseDir}
@@ -112,7 +110,7 @@ let
       special_use = \${toString mailbox.specialUse}
   '' + "}";
 
-  mailboxes = { lib, pkgs, ... }: {
+  mailboxes = { ... }: {
     options = {
       name = mkOption {
         type = types.strMatching ''[^"]+'';

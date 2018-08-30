@@ -171,7 +171,9 @@ mapAliases ({
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   module_init_tools = kmod; # added 2016-04-22
+  mpich2 = mpich;  # added 2018-08-06
   msf = metasploit; # added 2018-04-25
+  libmsgpack = msgpack; # added 2018-08-17
   mssys = ms-sys; # added 2015-12-13
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
@@ -209,6 +211,7 @@ mapAliases ({
   piwik = matomo; # added 2018-01-16
   pltScheme = racket; # just to be sure
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
@@ -228,6 +231,10 @@ mapAliases ({
   ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
+  s6Dns = s6-dns; # added 2018-07-23
+  s6Networking = s6-networking; # added 2018-07-23
+  s6LinuxUtils = s6-linux-utils; # added 2018-07-23
+  s6PortableUtils = s6-portable-utils; # added 2018-07-23
   sam = deadpixi-sam; # added 2018-04-25
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
@@ -308,6 +315,7 @@ mapAliases ({
   # added 2018-07-16
   forceSystem = system: _:
     (import self.path { localSystem = { inherit system; }; });
+  callPackage_i686 = pkgsi686Linux.callPackage;
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1

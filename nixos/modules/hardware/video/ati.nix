@@ -1,6 +1,6 @@
 # This module provides the proprietary ATI X11 / OpenGL drivers.
 
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs_i686, ... }:
 
 with lib;
 

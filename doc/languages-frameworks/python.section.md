@@ -424,7 +424,7 @@ available.
 
 At some point you'll likely have multiple packages which you would
 like to be able to use in different projects. In order to minimise unnecessary
-duplication we now look at how you can maintain yourself a repository with your
+duplication we now look at how you can maintain a repository with your
 own packages. The important functions here are `import` and `callPackage`.
 
 ### Including a derivation using `callPackage`
@@ -645,9 +645,15 @@ in python.withPackages(ps: [ps.blaze])).env
 
 #### `buildPythonApplication` function
 
-The `buildPythonApplication` function is practically the same as `buildPythonPackage`.
-The difference is that `buildPythonPackage` by default prefixes the names of the packages with the version of the interpreter.
-Because with an application we're not interested in multiple version the prefix is dropped.
+The `buildPythonApplication` function is practically the same as
+`buildPythonPackage`. The main purpose of this function is to build a Python
+package where one is interested only in the executables, and not importable
+modules. For that reason, when adding this package to a `python.buildEnv`, the
+modules won't be made available.
+
+Another difference is that `buildPythonPackage` by default prefixes the names of
+the packages with the version of the interpreter. Because this is irrelevant for
+applications, the prefix is omitted.
 
 #### `toPythonApplication` function
 
@@ -1006,14 +1012,14 @@ folder and not downloaded again.
 If you need to change a package's attribute(s) from `configuration.nix` you could do:
 
 ```nix
-  nixpkgs.config.packageOverrides = superP: {
-    pythonPackages = superP.pythonPackages.override {
-      overrides = self: super: {
-        bepasty-server = super.bepasty-server.overrideAttrs ( oldAttrs: {
-          src = pkgs.fetchgit {
-            url = "https://github.com/bepasty/bepasty-server";
-            sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
-            rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+  nixpkgs.config.packageOverrides = super: {
+    python = super.python.override {
+      packageOverrides = python-self: python-super: {
+        zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
+          src = super.fetchgit {
+            url = "https://github.com/sametmax/0bin";
+            rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
+            sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
           };
         });
       };
@@ -1021,27 +1027,39 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   };
 ```
 
-If you are using the `bepasty-server` package somewhere, for example in `systemPackages` or indirectly from `services.bepasty`, then a `nixos-rebuild switch` will rebuild the system but with the `bepasty-server` package using a different `src` attribute. This way one can modify `python` based software/libraries easily. Using `self` and `super` one can also alter dependencies (`buildInputs`) between the old state (`self`) and new state (`super`).
+`pythonPackages.zerobin` is now globally overridden. All packages and also the
+`zerobin` NixOS service use the new definition.
+Note that `python-super` refers to the old package set and `python-self`
+to the new, overridden version.
+
+To modify only a Python package set instead of a whole Python derivation, use this snippet:
+
+```nix
+  myPythonPackages = pythonPackages.override {
+    overrides = self: super: {
+      zerobin = ...;
+    };
+  }
+```
 
 ### How to override a Python package using overlays?
 
-To alter a python package using overlays, you would use the following approach:
+Use the following overlay template:
 
 ```nix
 self: super:
 {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
-      bepasty-server = python-super.bepasty-server.overrideAttrs ( oldAttrs: {
-        src = self.pkgs.fetchgit {
-          url = "https://github.com/bepasty/bepasty-server";
-          sha256 = "9ziqshmsf0rjvdhhca55sm0x8jz76fsf2q4rwh4m6lpcf8wr0nps";
-          rev = "e2516e8cf4f2afb5185337073607eb9e84a61d2d";
+      zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
+        src = super.fetchgit {
+          url = "https://github.com/sametmax/0bin";
+          rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
+          sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
         };
       });
     };
   };
-  pythonPackages = self.python.pkgs;
 }
 ```
 

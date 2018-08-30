@@ -1,16 +1,16 @@
 { stdenv, fetchurl }:
 
 let
-  version = "2.30";
+  version = "2.31.1";
 in
 stdenv.mkDerivation {
   name = "avr-binutils-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
-    sha256 = "028cklfqaab24glva1ks2aqa1zxa6w6xmc8q34zs1sb7h22dxspg";
+    sha256 = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
   };
-  configureFlags = "--target=avr --enable-languages=c,c++";
+  configureFlags = [ "--target=avr" "--enable-languages=c,c++" ];
 
   meta = with stdenv.lib; {
     description = "the GNU Binutils for AVR microcontrollers";

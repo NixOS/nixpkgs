@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "opencolorio-${version}";
-  version = "1.0.9";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/imageworks/OpenColorIO/archive/v1.0.9.zip";
-    sha256 = "14j80dgbb6f09z63aqh2874vhzpga6zksz8jmqnj1zh87x15pqnr";
+    sha256 = "1vi5pcgj7gv8fp6cdnhszwfh7lh38rl2rk4c5yzsvmgcb7xf48bx";
   };
 
   outputs = [ "bin" "out" "dev" ];

@@ -7,7 +7,6 @@ let
 
   cfg = config.networking;
   interfaces = attrValues cfg.interfaces;
-  hasVirtuals = any (i: i.virtual) interfaces;
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)

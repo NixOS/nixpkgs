@@ -1,12 +1,10 @@
 { stdenv
 , fetch
-, fetchpatch
 , cmake
 , python
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , release_version
@@ -15,7 +13,6 @@
 , enableManpages ? false
 , enableSharedLibraries ? true
 , enableWasm ? true
-, darwin
 }:
 
 let
@@ -78,8 +75,8 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=ON"
 
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
 
     "-DLLVM_ENABLE_DUMP=ON"
   ]
@@ -145,7 +142,7 @@ in stdenv.mkDerivation (rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric dtzWill ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin dtzWill ];
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {

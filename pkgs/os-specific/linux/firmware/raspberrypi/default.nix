@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/raspberrypi/firmware;
     license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
     platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ dezgeg viric tavyc ];
+    maintainers = with maintainers; [ dezgeg tavyc ];
   };
 }

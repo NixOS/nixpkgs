@@ -10,10 +10,9 @@ let
     sendEmailSupport = false;   # requires plenty of perl libraries
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
     smtpPerlLibs = [
-      perlPackages.NetSMTP perlPackages.NetSMTPSSL
+      perlPackages.libnet perlPackages.NetSMTPSSL
       perlPackages.IOSocketSSL perlPackages.NetSSLeay
-      perlPackages.MIMEBase64 perlPackages.AuthenSASL
-      perlPackages.DigestHMAC
+      perlPackages.AuthenSASL perlPackages.DigestHMAC
     ];
   };
 
@@ -39,6 +38,7 @@ let
     svnSupport = true;
     guiSupport = true;
     sendEmailSupport = !stdenv.isDarwin;
+    withLibsecret = !stdenv.isDarwin;
   };
 
   # Git with SVN support, but without GUI.
@@ -110,6 +110,8 @@ let
   };
 
   hubUnstable = throw "use gitAndTools.hub instead";
+
+  pre-commit = callPackage ./pre-commit { };
 
   qgit = qt5.callPackage ./qgit { };
 

@@ -5,7 +5,7 @@
 , bootPkgs, hscolour
 , coreutils, fetchpatch, fetchurl, perl, sphinx
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
 , useLLVM ? !targetPlatform.isx86
 , # LLVM is conceptually a run-time-only depedendency, but for
@@ -29,6 +29,8 @@
   ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 }:
 
+assert !enableIntegerSimple -> gmp != null;
+
 let
   inherit (bootPkgs) ghc;
 
@@ -43,8 +45,7 @@ let
     include mk/flavours/\$(BuildFlavour).mk
     endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    INTEGER_LIBRARY = integer-simple
+    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = YES
     HADDOCK_DOCS = NO
@@ -127,7 +128,7 @@ stdenv.mkDerivation rec {
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && ! enableIntegerSimple) [
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc") [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [

@@ -3,9 +3,9 @@
 
 # build-tools
 , bootPkgs, alex, happy, hscolour
-, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
+, autoconf, automake, coreutils, fetchurl, perl, python3, m4
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
 , useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
@@ -32,6 +32,8 @@
   ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 }:
 
+assert !enableIntegerSimple -> gmp != null;
+
 let
   inherit (bootPkgs) ghc;
 
@@ -46,8 +48,7 @@ let
     include mk/flavours/\$(BuildFlavour).mk
     endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    INTEGER_LIBRARY = integer-simple
+    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
@@ -76,12 +77,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.6.0.20180714";
+  version = "8.6.0.20180810";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.6.1-alpha2/ghc-${version}-src.tar.xz";
-    sha256 = "1jrkqrqdv2z9i9s1xaxhci34c9rjvlgr40y34bxsfj0hj1r28409";
+    url = "https://downloads.haskell.org/~ghc/8.6.1-beta1/ghc-${version}-src.tar.xz";
+    sha256 = "0b3nyjs4lsh67lfw7wh7r7kkf4g2xiypdxd77aycmwd3pdxj09yw";
   };
 
   enableParallelBuilding = true;
@@ -141,8 +142,8 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && ! enableIntegerSimple) [
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
+  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl, fetchgit, pythonOlder, systemd, pytest }:
+{ stdenv, buildPythonPackage, fetchurl, pythonOlder, systemd, pytest }:
 
 buildPythonPackage rec {
   pname = "journalwatch";

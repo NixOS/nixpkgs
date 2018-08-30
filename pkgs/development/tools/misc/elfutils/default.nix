@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1zq0l12k64hrbjmdjc4llrad96c25i427hpma1id9nk87w9qqvdp";
   };
 
-  patches = ./debug-info-from-env.patch;
+  patches = [ ./debug-info-from-env.patch ];
+
+  postPatch = ''
+    patchShebangs tests
+  '';
 
   hardeningDisable = [ "format" ];
 
@@ -28,46 +32,43 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  crossAttrs = {
+  # This program does not cross-build fine. So I only cross-build some parts
+  # I need for the linux perf tool.
+  # On the awful cross-building:
+  # http://comments.gmane.org/gmane.comp.sysutils.elfutils.devel/2005
+  #
+  # I wrote this testing for the nanonote.
 
-    /* Having bzip2 will harm, because anything using elfutils
-       as buildInput cross-building, will not be able to run 'bzip2' */
-    propagatedBuildInputs = [ zlib.crossDrv ];
+  buildPhase = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    pushd libebl
+    make
+    popd
+    pushd libelf
+    make
+    popd
+    pushd libdwfl
+    make
+    popd
+    pushd libdw
+    make
+    popd
+  '';
 
-    # This program does not cross-build fine. So I only cross-build some parts
-    # I need for the linux perf tool.
-    # On the awful cross-building:
-    # http://comments.gmane.org/gmane.comp.sysutils.elfutils.devel/2005
-    #
-    # I wrote this testing for the nanonote.
-    buildPhase = ''
-      pushd libebl
-      make
-      popd
-      pushd libelf
-      make
-      popd
-      pushd libdwfl
-      make
-      popd
-      pushd libdw
-      make
-      popd
-    '';
+  installPhase = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    pushd libelf
+    make install
+    popd
+    pushd libdwfl
+    make install
+    popd
+    pushd libdw
+    make install
+    popd
+    cp version.h $out/include
+  '';
 
-    installPhase = ''
-      pushd libelf
-      make install
-      popd
-      pushd libdwfl
-      make install
-      popd
-      pushd libdw
-      make install
-      popd
-      cp version.h $out/include
-    '';
-  };
+  doCheck = false; # fails 3 out of 174 tests
+  doInstallCheck = false; # fails 70 out of 174 tests
 
   meta = {
     homepage = https://sourceware.org/elfutils/;

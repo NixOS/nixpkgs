@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
-  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, libGLU,
+  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, libGLU,
   glew, eigen, curl }:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {

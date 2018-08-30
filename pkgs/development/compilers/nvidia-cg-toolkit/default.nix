@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, patchelf }:
+{ lib, stdenv, fetchurl }:
 
 assert stdenv ? glibc;
 

@@ -1,7 +1,6 @@
 { stdenv
 , fetchPypi
 , buildPythonPackage
-, isPy3k
 , zope_testrunner
 , transaction
 , six

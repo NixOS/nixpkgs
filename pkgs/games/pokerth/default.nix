@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, qmake4Hook, qt4, protobuf, boost155, tinyxml2, libgcrypt, sqlite, gsasl, curl, SDL, SDL_mixer, libircclient }:
+{ stdenv, fetchFromGitHub, qmake4Hook, qt4, protobuf, boost155, tinyxml2, libgcrypt, sqlite, gsasl, curl, SDL, SDL_mixer, libircclient }:
 
 let boost = boost155;
 in stdenv.mkDerivation rec {

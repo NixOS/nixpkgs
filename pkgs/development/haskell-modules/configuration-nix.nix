@@ -212,6 +212,9 @@ self: super: builtins.intersectAttrs super {
   # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
 
+  # Disable tests because they require a mattermost server
+  mattermost-api = dontCheck super.mattermost-api;
+
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 
@@ -264,11 +267,13 @@ self: super: builtins.intersectAttrs super {
       }
     );
 
-  llvm-hs = super.llvm-hs.override { llvm-config = pkgs.llvm; };
-  llvm-hs_6_3_0 = super.llvm-hs_6_3_0.override {
-    llvm-config = pkgs.llvm_6;
-    llvm-hs-pure = super.llvm-hs-pure_6_2_1;
-  };
+  llvm-hs =
+      let dontCheckDarwin = if pkgs.stdenv.isDarwin
+                            then dontCheck
+                            else pkgs.lib.id;
+      in dontCheckDarwin (super.llvm-hs.override {
+        llvm-config = pkgs.llvm_6;
+      });
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
@@ -308,6 +313,9 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary super.pcap pkgs.libpcap;
+
+  # https://github.com/snoyberg/yaml/issues/106
+  yaml = disableCabalFlag super.yaml "system-libyaml";
 
   # The cabal files for these libraries do not list the required system dependencies.
   miniball = overrideCabal super.miniball (drv: {
@@ -471,6 +479,9 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
+  # https://github.com/plow-technologies/servant-streaming/issues/12
+  servant-streaming-server = dontCheck super.servant-streaming-server;
+
   # tests run executable, relying on PATH
   # without this, tests fail with "Couldn't launch intero process"
   intero = overrideCabal super.intero (drv: {
@@ -499,9 +510,4 @@ self: super: builtins.intersectAttrs super {
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
-
-  # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
-  blank-canvas = dontCheck super.blank-canvas;
-  blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
-
 }

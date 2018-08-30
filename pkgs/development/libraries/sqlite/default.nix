@@ -71,10 +71,13 @@ stdenv.mkDerivation rec {
     sed -i $out/lib/libsqlite3.la -e "s/dependency_libs=.*/dependency_libs='''/"
   '';
 
+  doCheck = false; # fails to link against tcl
+
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = http://sqlite.org/download.html;
     homepage = http://www.sqlite.org/;
+    license = licenses.publicDomain;
     maintainers = with maintainers; [ eelco np ];
     platforms = platforms.unix;
   };

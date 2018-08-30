@@ -22,7 +22,7 @@ in with lib.systems.doubles; lib.runTests {
   cygwin = assertTrue (mseteq cygwin [ "i686-cygwin" "x86_64-cygwin" ]);
   darwin = assertTrue (mseteq darwin [ "x86_64-darwin" ]);
   freebsd = assertTrue (mseteq freebsd [ "i686-freebsd" "x86_64-freebsd" ]);
-  gnu = assertTrue (mseteq gnu (linux /* ++ hurd ++ kfreebsd ++ ... */));
+  gnu = assertTrue (mseteq gnu (linux /* ++ kfreebsd ++ ... */));
   illumos = assertTrue (mseteq illumos [ "x86_64-solaris" ]);
   linux = assertTrue (mseteq linux [ "i686-linux" "x86_64-linux" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" "mipsel-linux" ]);
   netbsd = assertTrue (mseteq netbsd [ "i686-netbsd" "x86_64-netbsd" ]);

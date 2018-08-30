@@ -73,7 +73,7 @@
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/webtorrent-desktop.desktop \
-        --replace /opt/webtorrent-desktop/WebTorrent $out/bin/WebTorrent
+        --replace /opt/webtorrent-desktop $out/bin
     '';
 
     meta = with stdenv.lib; {

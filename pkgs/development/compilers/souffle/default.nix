@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub
 , boost, bison, flex, openjdk, doxygen
-, perl, graphviz, libtool, ncurses, zlib, sqlite
+, perl, graphviz, ncurses, zlib, sqlite
 , autoreconfHook }:
 
 stdenv.mkDerivation rec {

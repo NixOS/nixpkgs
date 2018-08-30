@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, readline, openldap, cyrus_sasl, libupnp
+{ stdenv, intltool, pkgconfig, readline, openldap, cyrus_sasl, libupnp
 , zlib, libxml2, gtk2, libnotify, speex, ffmpeg, libX11, libsoup, udev
 , ortp, mediastreamer, sqlite, belle-sip, libosip, libexosip, bzrtp
 , mediastreamer-openh264, bctoolbox, makeWrapper, fetchFromGitHub, cmake

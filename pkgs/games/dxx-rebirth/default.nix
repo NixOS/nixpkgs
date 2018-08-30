@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "format" ];
+  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   buildPhase = ''
     runHook preBuild
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     description = "Source Port of the Descent 1 and 2 engines";
     homepage = https://www.dxx-rebirth.com/;
     license = licenses.free;
-    maintainers = with maintainers; [ viric peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = with platforms; linux;
   };
 }

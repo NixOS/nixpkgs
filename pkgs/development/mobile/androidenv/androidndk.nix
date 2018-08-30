@@ -25,9 +25,6 @@ stdenv.mkDerivation rec {
     sed_script_1 =
       "'s|^PROGDIR=`dirname $0`" +
       "|PROGDIR=`dirname $(readlink -f $(which $0))`|'";
-    sed_script_2 =
-      "'s|^MYNDKDIR=`dirname $0`" +
-      "|MYNDKDIR=`dirname $(readlink -f $(which $0))`|'";
     runtime_paths = (lib.makeBinPath [
       coreutils file findutils
       gawk gnugrep gnused
@@ -94,5 +91,6 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];
+    license = stdenv.lib.licenses.asl20;
   };
 }

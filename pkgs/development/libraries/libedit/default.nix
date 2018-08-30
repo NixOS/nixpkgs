@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, groff }:
+{ stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "libedit-20180525-3.1";

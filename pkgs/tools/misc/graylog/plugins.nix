@@ -1,4 +1,4 @@
-{ pkgs,  stdenv, fetchurl, fetchFromGitHub, unzip, graylog }:
+{ pkgs,  stdenv, fetchurl, unzip, graylog }:
 
 with pkgs.lib;
 

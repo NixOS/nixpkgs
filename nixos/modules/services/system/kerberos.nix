@@ -2,7 +2,7 @@
 
 let
 
-  inherit (lib) mkOption mkIf singleton;
+  inherit (lib) mkOption mkIf;
 
   inherit (pkgs) heimdalFull;
 

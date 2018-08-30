@@ -41,7 +41,7 @@ in {
   };
 
   nodes = {
-    client = { config, pkgs, ... }: {
+    client = { ... }: {
       services.borgbackup.jobs = {
         
         local = rec {
@@ -84,7 +84,7 @@ in {
       };
     };
 
-    server = { config, pkgs, ... }: {
+    server = { ... }: {
       services.openssh = {
         enable = true;
         passwordAuthentication = false;

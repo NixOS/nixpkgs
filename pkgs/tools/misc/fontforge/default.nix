@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, lib
+{ stdenv, fetchFromGitHub, lib
 , autoconf, automake, gnum4, libtool, perl, gnulib, uthash, pkgconfig, gettext
 , python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, pango
 , withSpiro ? false, libspiro

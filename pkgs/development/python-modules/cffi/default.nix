@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, isPy27, isPyPy, fetchPypi, libffi, pycparser, pytest }:
+{ stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";

@@ -2,7 +2,6 @@
 , fetchPypi
 , python
 , stdenv
-, fetchurl
 , pytest
 , glibcLocales
 , cython
@@ -24,19 +23,17 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
+  inherit (stdenv.lib) optional optionals optionalString;
   inherit (stdenv) isDarwin;
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.23.1";
+  version = "0.23.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50b52af2af2e15f4aeb2fe196da073a8c131fa02e433e105d95ce40016df5690";
+    sha256 = "9cd3614b4e31a0889388ff1bd19ae857ad52658b33f776065793c293a29cf612";
   };
-
-  LC_ALL = "en_US.UTF-8";
 
   checkInputs = [ pytest glibcLocales moto ];
 
@@ -81,6 +78,8 @@ in buildPythonPackage rec {
     "test_datetime_name_accessors"
     # Can't import from test folder
     "test_oo_optimizable"
+    # Disable IO related tests because IO data is no longer distributed
+    "io"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
@@ -98,7 +97,7 @@ in buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
-    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
+    LC_ALL="en_US.UTF-8" py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network -k "$disabledTests"
     runHook postCheck
   '';
 

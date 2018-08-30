@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp4, ncurses, zlib, makeWrapper, clang_35 }:
+{ stdenv, fetchurl, gmp4, ncurses, zlib, clang_35 }:
 
 let
   libPath = stdenv.lib.makeLibraryPath

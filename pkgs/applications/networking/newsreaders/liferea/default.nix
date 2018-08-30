@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig, intltool, python3Packages, wrapGAppsHook
 , glib, libxml2, libxslt, sqlite, libsoup , webkitgtk, json-glib, gst_all_1
 , libnotify, gtk3, gsettings-desktop-schemas, libpeas, dconf, librsvg
-, gobjectIntrospection, glib-networking
+, gobjectIntrospection, glib-networking, hicolor-icon-theme
 }:
 
 let
   pname = "liferea";
-  version = "1.12.3";
+  version = "1.12.4";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "0wm2c8qrgnadq63fivai53xm7vl05wgxc0nk39jcriscdikzqpcg";
+    sha256 = "12852qp174nsg770cry7y257vfzl53hpy46h5agaimrfsc41mgln";
   };
 
   nativeBuildInputs = [ wrapGAppsHook python3Packages.wrapPython intltool pkgconfig ];
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     glib gtk3 webkitgtk libxml2 libxslt sqlite libsoup gsettings-desktop-schemas
     libpeas gsettings-desktop-schemas json-glib dconf gobjectIntrospection
-    librsvg glib-networking libnotify
+    librsvg glib-networking libnotify hicolor-icon-theme
   ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
   ]);
@@ -28,7 +28,6 @@ in stdenv.mkDerivation rec {
   pythonPath = with python3Packages; [ pygobject3 pycairo ];
 
   preFixup = ''
-    rm "$out/share/icons/hicolor/icon-theme.cache"
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, runCommand
+{ stdenv, fetchurl
 , erlang, python, libxml2, libxslt, xmlto
 , docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync
 , AppKit, Carbon, Cocoa

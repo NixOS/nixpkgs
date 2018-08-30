@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxml2, glib, pipewire, fuse }:
 
 let
-  version = "0.11";
+  version = "0.99";
 in stdenv.mkDerivation rec {
   name = "xdg-desktop-portal-${version}";
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = version;
-    sha256 = "06gipd51snvlp2jp68v2c8rwbsv36kjzg9xacm81n1w4b2dpz4g0";
+    sha256 = "05garhdxylphrizyaqnz4sfpp28fd00v877q7cf1gyhpk1sr8i83";
   };
 
   patches = [

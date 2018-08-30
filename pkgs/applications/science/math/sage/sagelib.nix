@@ -1,5 +1,4 @@
-{ stdenv
-, sage-src
+{ sage-src
 , perl
 , buildPythonPackage
 , arb

@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, fetchpatch, isPy27, python, buildPythonPackage
+{ stdenv, fetchPypi, isPy27, python, buildPythonPackage
 , numpy, hdf5, cython, six, pkgconfig, unittest2
 , mpi4py ? null, openssh }:
 

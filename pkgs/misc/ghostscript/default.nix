@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, zlib, expat, openssl, autoconf
+{ stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
 , libiconv, ijs
 , x11Support ? false, xlibsWrapper ? null

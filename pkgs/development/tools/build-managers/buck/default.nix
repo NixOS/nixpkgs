@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, jdk, ant, python2, python2Packages, watchman, unzip, bash, makeWrapper }:
+{ stdenv, fetchFromGitHub, jdk, ant, python2, python2Packages, watchman, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "buck-${version}";
-  version = "v2017.10.01.01";
+  name = "buck-unstable-${version}";
+  version = "2017-10-01";
 
   src = fetchFromGitHub {
     owner = "facebook";

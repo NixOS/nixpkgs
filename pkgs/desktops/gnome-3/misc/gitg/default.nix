@@ -1,7 +1,7 @@
 { stdenv, fetchurl, vala, intltool, pkgconfig, gtk3, glib
 , json-glib, wrapGAppsHook, libpeas, bash, gobjectIntrospection
-, gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, librsvg, libsecret
-, libsoup }:
+, gnome3, gtkspell3, shared-mime-info, libgee, libgit2-glib, libsecret
+ }:
 
 let
   pname = "gitg";

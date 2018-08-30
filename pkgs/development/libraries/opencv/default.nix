@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = https://opencv.org/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

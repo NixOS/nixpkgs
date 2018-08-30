@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, nose, dnspython
+{ stdenv, buildPythonPackage, fetchPypi, nose, dnspython
 ,  chardet, lmtpd, pythondaemon, six, jinja2, mock }:
 
 buildPythonPackage rec {
   pname = "salmon-mail";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "452557172901d6227a325bbc72fcf61002a53c2342d935457b729303dce71f7e";
+    sha256 = "e2f5c9cfe95e178813755c2df2f9f7c792246356d7489caa72f06b2553da8cdc";
   };
 
   checkInputs = [ nose jinja2 mock ];

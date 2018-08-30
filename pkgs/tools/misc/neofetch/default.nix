@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "neofetch-${version}";

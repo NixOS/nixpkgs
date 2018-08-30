@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig
-, libffi, docbook_xsl, doxygen, graphviz, libxslt, xmlto, libxml2
+, libffi, libxml2
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 }:
 

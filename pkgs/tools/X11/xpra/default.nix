@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, python2Packages, pkgconfig
 , xorg, gtk2, glib, pango, cairo, gdk_pixbuf, atk
-, makeWrapper, xkbcomp, xorgserver, getopt, xauth, utillinux, which, fontsConf
+, makeWrapper, xorgserver, getopt, xauth, utillinux, which
 , ffmpeg, x264, libvpx, libwebp
 , libfakeXinerama
 , gst_all_1, pulseaudio, gobjectIntrospection
@@ -9,14 +9,14 @@
 with lib;
 
 let
-  inherit (python2Packages) python cython buildPythonApplication;
+  inherit (python2Packages) cython buildPythonApplication;
 in buildPythonApplication rec {
   name = "xpra-${version}";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://xpra.org/src/${name}.tar.xz";
-    sha256 = "02wpnlx43dwacaahpm8db5kbnjw2msm3ycq71gib0n2zamd71ni6";
+    sha256 = "1azvvddjfq7lb5kmbn0ilgq2nf7pmymsc3b9lhbjld6w156qdv01";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -52,6 +52,7 @@ in buildPythonApplication rec {
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0) $(pkg-config --cflags pygtk-2.0) $(pkg-config --cflags xtst)"
     substituteInPlace xpra/server/auth/pam_auth.py --replace "/lib/libpam.so.1" "${pam}/lib/libpam.so"
+    substituteInPlace xpra/x11/bindings/keyboard_bindings.pyx --replace "/usr/share/X11/xkb" "${xorg.xkeyboardconfig}/share/X11/xkb"
   '';
   setupPyBuildFlags = ["--with-Xdummy" "--without-strict"];
 

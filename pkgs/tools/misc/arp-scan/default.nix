@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   perlModules = with perlPackages; [
     HTTPDate
     HTTPMessage
-    LWPUserAgent
+    LWP
     URI
   ];
 

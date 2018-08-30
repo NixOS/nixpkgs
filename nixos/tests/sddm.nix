@@ -9,7 +9,7 @@ let
     default = {
       name = "sddm";
 
-      machine = { lib, ... }: {
+      machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
@@ -39,7 +39,7 @@ let
         maintainers = [ ttuegel ];
       };
 
-      machine = { lib, ... }: {
+      machine = { ... }: {
         imports = [ ./common/user-account.nix ];
         services.xserver.enable = true;
         services.xserver.displayManager.sddm = {
@@ -54,7 +54,7 @@ let
         services.xserver.desktopManager.default = "none";
       };
 
-      testScript = { nodes, ... }: ''
+      testScript = { ... }: ''
         startAll;
         $machine->waitForFile("/home/alice/.Xauthority");
         $machine->succeed("xauth merge ~alice/.Xauthority");

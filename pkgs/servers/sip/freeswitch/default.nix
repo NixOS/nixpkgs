@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = https://freeswitch.org/;
     license = stdenv.lib.licenses.mpl11;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

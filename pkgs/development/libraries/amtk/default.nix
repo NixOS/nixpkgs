@@ -1,14 +1,14 @@
 { stdenv, fetchurl
 , pkgconfig, gnome3, dbus, xvfb_run }:
 let
-  version = "4.99.1";
+  version = "5.0.0";
   pname = "amtk";
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00fhvw5y638z584s8cfdslh47ngfzcgx4f0b0456sw8p754j3f8d";
+    sha256 = "1zriix7bdwcg0868mfc7jy6zbwjwdmjwbh0ah6dbddrhiabrda8j";
   };
 
   nativeBuildInputs = [

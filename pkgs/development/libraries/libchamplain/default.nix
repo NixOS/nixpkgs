@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, clutter, sqlite, gnome3
+{ fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, sqlite, gnome3
 , clutter-gtk, libsoup, gobjectIntrospection /*, libmemphis */ }:
 
 let

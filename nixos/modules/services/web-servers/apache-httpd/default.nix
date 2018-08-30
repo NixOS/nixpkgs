@@ -98,11 +98,6 @@ let
   allSubservices = mainSubservices ++ concatMap subservicesFor mainCfg.virtualHosts;
 
 
-  # !!! should be in lib
-  writeTextInDir = name: text:
-    pkgs.runCommand name {inherit text;} "mkdir -p $out; echo -n \"$text\" > $out/$name";
-
-
   enableSSL = any (vhost: vhost.enableSSL) allHosts;
 
 

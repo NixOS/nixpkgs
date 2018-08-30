@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpm, cpio, substituteAll }:
+{ stdenv, rpm, cpio, substituteAll }:
 
 stdenv.mkDerivation rec {
   name = "rpmextract";

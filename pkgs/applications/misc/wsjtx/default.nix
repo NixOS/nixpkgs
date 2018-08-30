@@ -1,5 +1,5 @@
 { stdenv, fetchurl, asciidoc, asciidoctor, autoconf, automake, cmake,
-  docbook_xsl, fftw, fftwFloat, gfortran, libtool, libpulseaudio, qtbase,
+  docbook_xsl, fftw, fftwFloat, gfortran, libtool, qtbase,
   qtmultimedia, qtserialport, texinfo, libusb1 }:
 
 stdenv.mkDerivation rec {

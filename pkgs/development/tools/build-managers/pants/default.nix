@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages, runCommand, curl }:
+{ stdenv, pythonPackages }:
 
 with stdenv.lib;
 with pythonPackages;

@@ -1,11 +1,10 @@
 { stdenv, buildPackages
-, fetchurl, binutils ? null, bison, autoconf
+, fetchurl, binutils ? null, bison, autoconf, utillinux
 , buildPlatform, hostPlatform
 
 # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin, readline70 ? null
 , withDocs ? false, texinfo ? null
-, self
 }:
 
 with stdenv.lib;
@@ -87,6 +86,9 @@ stdenv.mkDerivation rec {
     "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
     "SHOBJ_LIBS=-lbash"
   ];
+
+  checkInputs = [ utillinux ];
+  doCheck = false; # dependency cycle, needs to be interactive
 
   postInstall = ''
     ln -s bash "$out/bin/sh"

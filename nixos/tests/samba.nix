@@ -7,7 +7,7 @@ import ./make-test.nix ({ pkgs, ... }:
 
   nodes =
     { client =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
         { fileSystems = pkgs.lib.mkVMOverride
             { "/public" = {
                 fsType = "cifs";
@@ -18,7 +18,7 @@ import ./make-test.nix ({ pkgs, ... }:
         };
 
       server =
-        { config, pkgs, ... }:
+        { ... }:
         { services.samba.enable = true;
           services.samba.shares.public =
             { path = "/public";

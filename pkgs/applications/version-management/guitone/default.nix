@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchmtn, qt4, qmake4Hook, pkgconfig, graphviz }:
+{ stdenv, fetchmtn, qt4, qmake4Hook, pkgconfig, graphviz }:
 
 let version = "1.0-mtn-head"; in
 stdenv.mkDerivation rec {

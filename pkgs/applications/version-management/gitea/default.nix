@@ -1,5 +1,5 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
-, git, coreutils, bash, gzip, openssh
+, git, bash, gzip, openssh
 , sqliteSupport ? true
 }:
 
@@ -7,13 +7,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "gitea-${version}";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${version}";
-    sha256 = "15iqvfvijg46444pybi7vg7xhl2x0pr5p1416qlc2nakkn3drpi1";
+    sha256 = "0gp777x8yjbqvz9i79qv3bn3hrlp1bn7ib57r7w5a7jmr9rd0nca";
   };
 
   patches = [ ./static-root-path.patch ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus-glib
+{ stdenv, fetchurl, pkgconfig, dbus-glib
 , intltool, libxslt, docbook_xsl, udev, libgudev, libusb1
 , useSystemd ? true, systemd, gobjectIntrospection
 }:
@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = https://upower.freedesktop.org/;
     description = "A D-Bus service for power management";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

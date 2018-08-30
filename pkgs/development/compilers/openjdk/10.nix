@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, bash, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
-, alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib, lndir
+, alsaLib, bootjdk, perl, liberation_ttf, fontconfig, zlib, lndir
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
 , setJavaClassPath

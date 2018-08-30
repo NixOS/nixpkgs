@@ -1,0 +1,10 @@
+diff --git a/tests/run_test.sh b/tests/run_test.sh
+index f2ea7d7..927c61d 100755
+--- a/tests/run_test.sh
++++ b/tests/run_test.sh
+@@ -1,4 +1,4 @@
+-#! /bin/bash
++#! /usr/bin/env bash
+ #
+ # Set up environment and run test specified on command line
+ 

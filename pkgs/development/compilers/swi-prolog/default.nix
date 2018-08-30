@@ -1,6 +1,6 @@
 { stdenv, fetchurl, jdk, gmp, readline, openssl, libjpeg, unixODBC, zlib
-, libXinerama, libXft, libXpm, libSM, libXt, freetype, pkgconfig
-, fontconfig, makeWrapper ? stdenv.isDarwin
+, libXinerama, libarchive, db, pcre, libedit, libossp_uuid, libXft, libXpm
+, libSM, libXt, freetype, pkgconfig, fontconfig, makeWrapper ? stdenv.isDarwin
 }:
 
 let
@@ -15,12 +15,17 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ jdk gmp readline openssl libjpeg unixODBC libXinerama
-    libXft libXpm libSM libXt zlib freetype pkgconfig fontconfig ]
+    libarchive db pcre libedit libossp_uuid libXft libXpm libSM libXt
+    zlib freetype pkgconfig fontconfig ]
   ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "--with-world --enable-gmp --enable-shared";
+  configureFlags = [
+    "--with-world"
+    "--enable-gmp"
+    "--enable-shared"
+  ];
 
   buildFlags = "world";
 
@@ -42,6 +47,6 @@ stdenv.mkDerivation {
     license = "LGPL";
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.meditans ];
   };
 }

@@ -1,5 +1,4 @@
-{ lib, fetchFromGitHub, buildPythonPackage, python, flake8, six,
-  fetchurl }:
+{ lib, fetchFromGitHub, buildPythonPackage, flake8, six }:
 
 buildPythonPackage rec {
   pname = "flake8-future-import";

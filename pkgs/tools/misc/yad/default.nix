@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [ smironov ];
+    license = stdenv.lib.licenses.gpl3;
   };
 }
 

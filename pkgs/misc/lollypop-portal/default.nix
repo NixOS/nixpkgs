@@ -3,7 +3,7 @@
 , kid3, easytag, gobjectIntrospection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "lollypop-portal";
+  name = "lollypop-portal-${version}";
   version = "0.9.7";
 
   src = fetchFromGitLab {

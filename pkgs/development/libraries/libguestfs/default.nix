@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
 , ncurses, cpio, gperf, perl, cdrkit, flex, bison, qemu, pcre, augeas, libxml2
 , acl, libcap, libcap_ng, libconfig, systemd, fuse, yajl, libvirt, hivex
-, gmp, readline, file, libintlperl, GetoptLong, SysVirt, numactl, xen, libapparmor
+, gmp, readline, file, libintl_perl, GetoptLong, SysVirt, numactl, xen, libapparmor
 , getopt, perlPackages, ocamlPackages
 , appliance ? null
 , javaSupport ? false, jdk ? null }:
@@ -11,18 +11,18 @@ assert javaSupport -> jdk != null;
 
 stdenv.mkDerivation rec {
   name = "libguestfs-${version}";
-  version = "1.38.2";
+  version = "1.38.4";
 
   src = fetchurl {
     url = "http://libguestfs.org/download/1.38-stable/libguestfs-${version}.tar.gz";
-    sha256 = "16v2lpi9c0vnic2x0vpszmckh0x39bmf6x7y00vvzbwhszshxx3w";
+    sha256 = "1xsazw6yrbgmc647j8l896fzv534157sqmdzac09rxkxwiy0wm16";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     makeWrapper autoreconfHook ncurses cpio gperf perl
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
-    systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
+    systemd fuse yajl libvirt gmp readline file hivex libintl_perl GetoptLong
     SysVirt numactl xen libapparmor getopt perlPackages.ModuleBuild
   ] ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ])
     ++ stdenv.lib.optional javaSupport jdk;

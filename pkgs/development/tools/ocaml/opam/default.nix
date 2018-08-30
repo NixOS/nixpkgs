@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchurl, makeWrapper,
+{ stdenv, lib, fetchurl, makeWrapper,
   ocaml, unzip, ncurses, curl, aspcud
 }:
 
@@ -87,5 +87,6 @@ in stdenv.mkDerivation rec {
     homepage = http://opam.ocamlpro.com/;
     maintainers = [ maintainers.henrytill ];
     platforms = platforms.all;
+    license = licenses.lgpl21Plus;
   };
 }

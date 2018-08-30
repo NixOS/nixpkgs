@@ -24,7 +24,9 @@ stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  configureFlags = if stdenv.system == "i686-linux" then "--with-mps=$(TMPDIR)/mps" else "--with-gc=${boehmgc.out}";
+  configureFlags = [
+    (if stdenv.system == "i686-linux" then "--with-mps=$(TMPDIR)/mps" else "--with-gc=${boehmgc.out}")
+  ];
   buildPhase = "make 3-stage-bootstrap";
 
   postInstall = "wrapProgram $out/bin/dylan-compiler --suffix PATH : ${gcc}/bin";

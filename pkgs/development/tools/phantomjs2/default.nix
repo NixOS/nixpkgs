@@ -5,24 +5,6 @@
 }:
 
 let
-  fakeXcrun = writeScriptBin "xcrun" ''
-    #!${stdenv.shell}
-    echo >&2 "Fake xcrun: ''$@"
-    args=()
-    while (("$#")); do
-      case "$1" in
-        -sdk*) shift;;
-        -find*) shift;;
-        *) args+=("$1");;
-      esac
-      shift
-    done
-
-    if [ "''${#args[@]}" -gt "0" ]; then
-      echo >&2 "Fake xcrun: ''${args[@]}"
-      exec "''${args[@]}"
-    fi
-  '';
   fakeClang = writeScriptBin "clang" ''
     #!${stdenv.shell}
     if [[ "$@" == *.c ]]; then

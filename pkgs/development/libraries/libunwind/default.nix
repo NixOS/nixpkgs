@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, xz }:
+{ stdenv, fetchurl, autoreconfHook, xz }:
 
 stdenv.mkDerivation rec {
   name = "libunwind-${version}";

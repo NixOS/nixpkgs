@@ -2,7 +2,7 @@
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
-  version = "0.0.8";
+  version = "0.0.10";
   versionFile = writeScript "version.ml" ''
     cat > "./version.ml" <<EOF
     let build_info () =
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
     owner = "facebook";
     repo = "pyre-check";
     rev = "v${version}";
-    sha256 = "0c4km27xnzsqcqvjqxmqak37x473z6azlbldy7f05ghkms7mchrw";
+    sha256 = "17fk2izq434jsr8dfz828754356qdwa6zv0lbzm6z1kgq4jg7brv";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,6 +33,7 @@ in stdenv.mkDerivation {
     ppx_deriving_yojson
     ocamlbuild
     ppxlib
+    # python36Packages.python36Full # TODO
   ];
 
   buildPhase = ''
@@ -52,13 +53,14 @@ in stdenv.mkDerivation {
 
   checkPhase = ''
     make test
+    # ./scripts/run-python-tests.sh # TODO: once typeshed and python bits are added
   '';
 
   # Note that we're not installing the typeshed yet.
   # Improvement for a future version.
   installPhase = ''
     mkdir -p $out/bin
-    cp _build/all/main.native $out/bin/pyre
+    cp _build/all/main.native $out/bin/pyre.bin
   '';
 
   meta = with stdenv.lib; {

@@ -6,7 +6,6 @@ let
   cfg = config.services.frab;
 
   package = pkgs.frab;
-  ruby = package.ruby;
 
   databaseConfig = builtins.toJSON { production = cfg.database; };
 

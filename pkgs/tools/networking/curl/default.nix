@@ -24,14 +24,14 @@ assert brotliSupport -> brotli != null;
 assert gssSupport -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.60.0";
+  name = "curl-7.61.0";
 
   src = fetchurl {
     urls = [
-      "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
       "https://curl.haxx.se/download/${name}.tar.bz2"
+      "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] name}/${name}.tar.bz2"
     ];
-    sha256 = "16qyhy9alq2wk6zgqhh5dchr45f6nxaqzy3rh8rbx6dx0hignzc9";
+    sha256 = "173ccmnnr4qcawzgn7vm0ciyzphanzghigdgavg88nyg45lk6vsz";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -78,7 +78,10 @@ stdenv.mkDerivation rec {
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}";
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}"
+       # For the 'urandom', maybe it should be a cross-system option
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       "--with-random=/dev/urandom";
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
@@ -94,16 +97,6 @@ stdenv.mkDerivation rec {
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4.4.0
   '';
 
-  crossAttrs = {
-    # We should refer to the cross built openssl
-    # For the 'urandom', maybe it should be a cross-system option
-    configureFlags = [
-        ( if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl" )
-        ( if gnutlsSupport then "--with-gnutls=${gnutls.crossDrv}" else "--without-gnutls" )
-        "--with-random=/dev/urandom"
-      ];
-  };
-
   passthru = {
     inherit sslSupport openssl;
   };
@@ -112,6 +105,7 @@ stdenv.mkDerivation rec {
     description = "A command line tool for transferring files with URL syntax";
     homepage    = https://curl.haxx.se/;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.all;
+    license = licenses.curl;
+    platforms = platforms.all;
   };
 }

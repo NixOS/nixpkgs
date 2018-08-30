@@ -1,16 +1,8 @@
-{stdenv, fetchurl, fetchgit
+{stdenv, fetchgit
 , wxGTK, perl, python2, zlib, libGLU_combined, libX11
 , automake, autoconf
 }:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="golly";
-    version="2.8";
-    name="${baseName}-${version}";
-    hash="0a4vn2hm7h4b47v2iwip1z3n9y8isf79v08aipl2iqms2m3p5204";
-  };
-in
+
 stdenv.mkDerivation rec {
   name = "golly-${version}";
   version = "2.8.99.2.20161122";

@@ -10,7 +10,6 @@ let
     let
       pkgName = drv: (builtins.parseDrvName drv.name).name;
       ysNames = map pkgName ys;
-      res = (filter (x: !(builtins.elem (pkgName x) ysNames)) xs);
     in
       filter (x: !(builtins.elem (pkgName x) ysNames)) xs;
 
@@ -58,8 +57,12 @@ in {
       sessionPath = mkOption {
         default = [];
         example = literalExample "[ pkgs.gnome3.gpaste ]";
-        description = "Additional list of packages to be added to the session search path.
-                       Useful for gnome shell extensions or gsettings-conditionated autostart.";
+        description = ''
+          Additional list of packages to be added to the session search path.
+          Useful for GNOME Shell extensions or GSettings-conditional autostart.
+
+          Note that this should be a last resort; patching the package is preferred (see GPaste).
+        '';
         apply = list: list ++ [ pkgs.gnome3.gnome-shell pkgs.gnome3.gnome-shell-extensions ];
       };
 
@@ -94,6 +97,8 @@ in {
     services.udisks2.enable = true;
     services.accounts-daemon.enable = true;
     services.geoclue2.enable = mkDefault true;
+    # GNOME should have its own geoclue agent
+    services.geoclue2.enableDemoAgent = false;
     services.dleyna-renderer.enable = mkDefault true;
     services.dleyna-server.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
@@ -127,18 +132,10 @@ in {
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell-fonts ];
 
-    services.xserver.desktopManager.session = singleton
-      { name = "gnome3";
-        bgSupport = true;
-        start = ''
-          # Set GTK_DATA_PREFIX so that GTK+ can find the themes
-          export GTK_DATA_PREFIX=${config.system.path}
+    services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ];
 
-          # find theme engines
-          export GTK_PATH=${config.system.path}/lib/gtk-3.0:${config.system.path}/lib/gtk-2.0
-
-          export XDG_MENU_PREFIX=gnome-
-
+    services.xserver.displayManager.sessionCommands = ''
+      if test "$XDG_CURRENT_DESKTOP" = "GNOME"; then
           ${concatMapStrings (p: ''
             if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
               export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
@@ -149,34 +146,28 @@ in {
               export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
             fi
           '') cfg.sessionPath}
+      fi
+    '';
 
-          # Override default mimeapps
-          export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
+    environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
 
-          # Override gsettings-desktop-schema
-          export NIX_GSETTINGS_OVERRIDES_DIR=${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+    # Override default mimeapps
+    environment.variables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
 
-          # Let nautilus find extensions
-          export NAUTILUS_EXTENSION_DIR=${config.system.path}/lib/nautilus/extensions-3.0/
+    # Override GSettings schemas
+    environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-          # Find the mouse
-          export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
-
-          # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-          ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
-
-          ${pkgs.gnome3.gnome-session}/bin/gnome-session ${optionalString cfg.debug "--debug"} &
-          waitPID=$!
-        '';
-      };
-
-    services.xserver.updateDbusEnvironment = true;
+    # Let nautilus find extensions
+    # TODO: Create nautilus-with-extensions package
+    environment.variables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
 
     environment.variables.GIO_EXTRA_MODULES = [ "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
                                                 "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"
                                                 "${pkgs.gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = pkgs.gnome3.corePackages ++ cfg.sessionPath
-      ++ (removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages);
+      ++ (removePackagesByName pkgs.gnome3.optionalPackages config.environment.gnome3.excludePackages) ++ [
+      pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+    ];
 
     # Use the correct gnome3 packageSet
     networking.networkmanager.basePackages =

@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, pkgs
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -11,7 +10,6 @@
 , msgpack-python
 , preshed
 , numpy
-, python
 , murmurhash
 , pathlib
 , hypothesis

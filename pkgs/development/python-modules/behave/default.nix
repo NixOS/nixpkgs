@@ -1,5 +1,5 @@
 { stdenv, fetchPypi
-, buildPythonApplication, isPy27, python, pythonOlder
+, buildPythonApplication, python, pythonOlder
 , mock, nose, pathpy, pyhamcrest, pytest
 , glibcLocales, parse, parse-type, six
 , traceback2

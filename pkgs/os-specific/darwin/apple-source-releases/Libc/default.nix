@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, ed, unifdef, Libc_old, Libc_10-9 }:
+{ appleDerivation, ed, unifdef, Libc_old, Libc_10-9 }:
 
 appleDerivation {
   nativeBuildInputs = [ ed unifdef ];

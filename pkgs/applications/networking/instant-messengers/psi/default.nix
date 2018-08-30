@@ -1,5 +1,5 @@
 { stdenv, fetchurl, enchant, qt4, zlib, sox, libX11, xproto, libSM
-, libICE, qca2, pkgconfig, callPackage, which, glib
+, libICE, qca2, pkgconfig, which, glib
 , libXScrnSaver, scrnsaverproto
 }:
 

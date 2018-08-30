@@ -201,6 +201,7 @@
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/aerospike.nix
+  ./services/databases/cassandra.nix
   ./services/databases/clickhouse.nix
   ./services/databases/couchdb.nix
   ./services/databases/firebird.nix
@@ -246,8 +247,10 @@
   ./services/desktops/gnome3/tracker-miners.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/telepathy.nix
+  ./services/desktops/zeitgeist.nix
   ./services/development/bloop.nix
   ./services/development/hoogle.nix
+  ./services/development/jupyter/default.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
   ./services/games/factorio.nix
@@ -279,6 +282,7 @@
   ./services/hardware/upower.nix
   ./services/hardware/usbmuxd.nix
   ./services/hardware/thermald.nix
+  ./services/hardware/undervolt.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
@@ -406,6 +410,7 @@
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/das_watchdog.nix
+  ./services/monitoring/datadog-agent.nix
   ./services/monitoring/dd-agent/dd-agent.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/grafana.nix
@@ -543,6 +548,7 @@
   ./services/networking/ntopng.nix
   ./services/networking/ntpd.nix
   ./services/networking/nylon.nix
+  ./services/networking/ocserv.nix
   ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
   ./services/networking/openntpd.nix
@@ -618,9 +624,12 @@
   ./services/scheduling/fcron.nix
   ./services/scheduling/marathon.nix
   ./services/search/elasticsearch.nix
+  ./services/search/elasticsearch-curator.nix
   ./services/search/hound.nix
   ./services/search/kibana.nix
   ./services/search/solr.nix
+  ./services/security/certmgr.nix
+  ./services/security/cfssl.nix
   ./services/security/clamav.nix
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix

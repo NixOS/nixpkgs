@@ -9,7 +9,7 @@ let
   confFile = pkgs.writeText "radicale.conf" cfg.config;
 
   # This enables us to default to version 2 while still not breaking configurations of people with version 1
-  defaultPackage = if versionAtLeast config.system.nixos.stateVersion "17.09" then {
+  defaultPackage = if versionAtLeast config.system.stateVersion "17.09" then {
     pkg = pkgs.radicale2;
     text = "pkgs.radicale2";
   } else {
@@ -35,7 +35,7 @@ in
       defaultText = defaultPackage.text;
       description = ''
         Radicale package to use. This defaults to version 1.x if
-        <literal>system.nixos.stateVersion &lt; 17.09</literal> and version 2.x
+        <literal>system.stateVersion &lt; 17.09</literal> and version 2.x
         otherwise.
       '';
     };

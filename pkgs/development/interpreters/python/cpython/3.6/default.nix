@@ -1,5 +1,4 @@
 { stdenv, fetchurl, fetchpatch, buildPackages
-, glibc
 , bzip2
 , expat
 , libffi
@@ -16,7 +15,7 @@
 , CF, configd
 , python-setup-hook
 # For the Python package set
-, pkgs, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -29,7 +28,6 @@ let
   majorVersion = "3.6";
   minorVersion = "6";
   minorVersionSuffix = "";
-  pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
   sitePackages = "lib/${libPrefix}/site-packages";

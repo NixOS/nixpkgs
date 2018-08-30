@@ -7,13 +7,11 @@
 , freetype
 , gcc
 , glib
-, libpng
 , ncurses
 , opencv
 , openssl
 , unixODBC
 , xorg
-, zlib
 , libxml2
 , libuuid
 }:

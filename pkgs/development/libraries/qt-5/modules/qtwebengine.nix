@@ -13,6 +13,7 @@
 , systemd
 , enableProprietaryCodecs ? true
 , gn, darwin, openbsm
+, ffmpeg ? null
 , lib, stdenv # lib.optional, needsPax
 }:
 
@@ -103,8 +104,6 @@ EOF
     # Apple has some secret stuff they don't share with OpenBSM
     substituteInPlace src/3rdparty/chromium/base/mac/mach_port_broker.mm \
       --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
-    substituteInPlace src/3rdparty/chromium/sandbox/mac/bootstrap_sandbox.cc \
-      --replace "audit_token_to_pid(msg.trailer.msgh_audit)" "msg.trailer.msgh_audit.val[5]"
     '';
 
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
@@ -117,7 +116,9 @@ EOF
     fi
    '';
 
-  qmakeFlags = optional enableProprietaryCodecs "-- -proprietary-codecs";
+  qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
+    then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
+    else optional enableProprietaryCodecs "-- -proprietary-codecs";
 
   propagatedBuildInputs = [
     # Image formats
@@ -133,6 +134,8 @@ EOF
     harfbuzz icu
 
     libevent
+  ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
+    ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 

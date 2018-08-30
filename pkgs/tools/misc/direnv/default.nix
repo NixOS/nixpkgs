@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, bash, writeText}:
+{ stdenv, fetchFromGitHub, buildGoPackage, bash}:
 
 buildGoPackage rec {
   name = "direnv-${version}";

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, h11, enum34 }:
+{ buildPythonPackage, fetchPypi, h11, enum34 }:
 
 buildPythonPackage rec {
   pname = "wsproto";

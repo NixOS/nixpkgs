@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 

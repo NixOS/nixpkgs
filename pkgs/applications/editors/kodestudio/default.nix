@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, makeDesktopItem, makeWrapper
+{ stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , # Patchelf dependencies:
   alsaLib, atomEnv, boehmgc, flac, libogg, libvorbis, libXScrnSaver, libGLU_combined
 , openssl, xorg, zlib

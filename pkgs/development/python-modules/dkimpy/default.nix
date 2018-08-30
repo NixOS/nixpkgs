@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, openssl, makeWrapper, buildPythonPackage
+{ stdenv, fetchPypi, openssl, buildPythonPackage
 , pytest, dnspython, pynacl, authres, python }:
 
 buildPythonPackage rec {

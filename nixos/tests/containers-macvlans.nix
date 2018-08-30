@@ -15,7 +15,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   nodes = {
 
     machine1 =
-      { config, pkgs, lib, ... }:
+      { lib, ... }:
       {
         virtualisation.memorySize = 256;
         virtualisation.vlans = [ 1 ];
@@ -55,7 +55,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
 
     machine2 =
-      { config, pkgs, ... }:
+      { ... }:
       {
         virtualisation.memorySize = 256;
         virtualisation.vlans = [ 1 ];

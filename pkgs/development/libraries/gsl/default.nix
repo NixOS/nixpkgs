@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv }:
+{ fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "gsl-2.5";

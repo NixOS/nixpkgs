@@ -1,4 +1,4 @@
-{ stdenv, lib, go, buildGoPackage, fetchFromGitHub, net_snmp }:
+{ stdenv, buildGoPackage, fetchFromGitHub, net_snmp }:
 
 buildGoPackage rec {
   name = "snmp_exporter-${version}";

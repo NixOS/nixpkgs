@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, fetchurl, fetchpatch, extra-cmake-modules, kdoctools, makeWrapper,
+  mkDerivation, lib, fetchurl, extra-cmake-modules, kdoctools, makeWrapper,
   boost, qtwebkit, qtx11extras, shared-mime-info,
   breeze-icons, kactivities, karchive, kcodecs, kcompletion, kconfig, kconfigwidgets,
   kcoreaddons, kdbusaddons, kdiagram, kguiaddons, khtml, ki18n,

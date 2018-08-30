@@ -5,14 +5,14 @@ rec {
   meta.maintainers = with maintainers; [ joachifm ];
 
   common =
-    { config, ... }:
+    { ... }:
     { boot.kernelParams = [ "audit=0" "apparmor=0" "quiet" ];
       networking.firewall.enable = false;
       networking.useDHCP = false;
     };
 
   nodes.client =
-    { config, pkgs, ... }:
+    { pkgs, ... }:
     { imports = [ common ];
       environment.systemPackages = with pkgs; [ netcat ];
       services.tor.enable = true;

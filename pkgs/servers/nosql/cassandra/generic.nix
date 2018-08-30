@@ -16,6 +16,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "cassandra-${version}";
+  inherit version;
 
   src = fetchurl {
     inherit sha256;

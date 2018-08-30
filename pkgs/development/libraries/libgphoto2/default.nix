@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, libusb1, libtool, libexif, libjpeg, gettext, autoreconfHook }:
+{ stdenv, fetchFromGitHub, pkgconfig, libusb1, libtool, libexif, libjpeg, gettext, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libgphoto2-${meta.version}";

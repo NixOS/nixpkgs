@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   # The tests fail on darwin because of install_name if they run
   # before the frameworks are installed.
+  doCheck = false;
   doInstallCheck = true;
   installCheckTarget = "check";
 

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, meson, ninja, intltool, gst_all_1, clutter
+{ stdenv, fetchurl, meson, ninja, intltool, gst_all_1
 , clutter-gtk, clutter-gst, python3Packages, shared-mime-info
 , pkgconfig, gtk3, glib, gobjectIntrospection
-, bash, wrapGAppsHook, itstool, libxml2, vala, gnome3, librsvg
+, wrapGAppsHook, itstool, libxml2, vala, gnome3
 , gdk_pixbuf, tracker, nautilus }:
 
 stdenv.mkDerivation rec {
   name = "totem-${version}";
-  version = "3.26.1";
+  version = "3.26.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "10n302fdp3lhkzbij5sbzmsnln738029xil6cnng2d4dxv4n1099";
+    sha256 = "1llyisls3pzf5bwkpxyfyxc2d3gpa09n5pjy7qsjdqrp3ya4k36g";
   };
 
   doCheck = true;

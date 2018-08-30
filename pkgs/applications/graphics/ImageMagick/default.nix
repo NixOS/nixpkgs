@@ -2,7 +2,7 @@
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, fftw, libheif, libde265
 , ApplicationServices
-, buildPlatform, hostPlatform
+, hostPlatform
 }:
 
 let

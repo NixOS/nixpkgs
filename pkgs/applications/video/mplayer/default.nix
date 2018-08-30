@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, yasm, ffmpeg
+{ stdenv, fetchurl, pkgconfig, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib ? null
 , fontconfigSupport ? true, fontconfig ? null, freefont_ttf ? null
 , fribidiSupport ? true, fribidi ? null

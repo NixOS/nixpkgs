@@ -9,7 +9,7 @@
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
-, curl ? null, fuse ? null, libibverbs ? null, librdmacm ? null
+, curl ? null, fuse ? null
 , libedit ? null, libatomic_ops ? null, kinetic-cpp-client ? null
 , libs3 ? null
 
@@ -25,7 +25,7 @@
 , zfs ? null
 
 # Version specific arguments
-, version, src, patches ? [], buildInputs ? []
+, version, src ? [], buildInputs ? []
 , ...
 }:
 
@@ -44,8 +44,6 @@ let
   optExpat = shouldUsePkg expat;
   optCurl = shouldUsePkg curl;
   optFuse = shouldUsePkg fuse;
-  optLibibverbs = shouldUsePkg libibverbs;
-  optLibrdmacm = shouldUsePkg librdmacm;
   optLibedit = shouldUsePkg libedit;
   optLibatomic_ops = shouldUsePkg libatomic_ops;
   optKinetic-cpp-client = shouldUsePkg kinetic-cpp-client;
@@ -62,9 +60,6 @@ let
   optLibxfs = shouldUsePkg libxfs;
   optZfs = shouldUsePkg zfs;
 
-  hasMon = true;
-  hasMds = true;
-  hasOsd = true;
   hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
 
 
@@ -97,7 +92,7 @@ let
     ps.prettytable
     ps.webob
     ps.cherrypy
-	]);
+  ]);
 
 in
 stdenv.mkDerivation {
@@ -106,7 +101,7 @@ stdenv.mkDerivation {
   inherit src;
 
   patches = [
- #	 ./ceph-patch-cmake-path.patch
+ #   ./ceph-patch-cmake-path.patch
     ./0001-kv-RocksDBStore-API-break-additional.patch
   ] ++ optionals stdenv.isLinux [
     ./0002-fix-absolute-include-path.patch

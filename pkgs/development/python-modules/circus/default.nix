@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ buildPythonPackage, fetchPypi
 , iowait, psutil, pyzmq, tornado, mock }:
 
 buildPythonPackage rec {

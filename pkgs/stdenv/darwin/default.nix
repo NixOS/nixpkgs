@@ -188,7 +188,18 @@ in rec {
   };
 
   stage1 = prevStage: let
-    persistent = _: super: { python = super.python.override { configd = null; }; };
+    persistent = self: super: with prevStage; {
+      cmake = super.cmake.override {
+        majorVersion = "3.9";  # FIXME: update ApplicationServices patch
+        isBootstrap = true;
+        useSharedLibraries = false;
+      };
+
+      python = super.callPackage ../../development/interpreters/python/cpython/2.7/boot.nix {
+        CF = null;  # use CoreFoundation from bootstrap-tools
+        configd = null;
+      };
+    };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
     extraNativeBuildInputs = [];
@@ -239,6 +250,9 @@ in rec {
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util
         findfreetype libssh curl cmake autoconf automake libtool cpio;
 
+      # Avoid pulling in a full python and it's extra dependencies for the llvm/clang builds.
+      libxml2 = super.libxml2.override { pythonSupport = false; };
+
       llvmPackages_5 = super.llvmPackages_5 // (let
         libraries = super.llvmPackages_5.libraries.extend (_: _: {
           inherit (llvmPackages_5) libcxx libcxxabi;
@@ -281,6 +295,15 @@ in rec {
         ncurses libffi zlib gmp pcre gnugrep
         coreutils findutils diffutils patchutils;
 
+      # Hack to make sure we don't link ncurses in bootstrap tools. The proper
+      # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
+      # quite a sledgehammer just to get the C runtime.
+      gettext = super.gettext.overrideAttrs (drv: {
+        configureFlags = drv.configureFlags ++ [
+          "--disable-curses"
+        ];
+      });
+
       llvmPackages_5 = super.llvmPackages_5 // (let
         tools = super.llvmPackages_5.tools.extend (llvmSelf: _: {
           inherit (llvmPackages_5) llvm clang-unwrapped;
@@ -303,16 +326,7 @@ in rec {
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
-    overrides = lib.composeExtensions persistent (self: super: {
-      # Hack to make sure we don't link ncurses in bootstrap tools. The proper
-      # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
-      # quite a sledgehammer just to get the C runtime.
-      gettext = super.gettext.overrideAttrs (old: {
-         configureFlags = old.configureFlags ++ [
-           "--disable-curses"
-         ];
-      });
-    });
+    overrides = persistent;
   };
 
   stdenvDarwin = prevStage: let
@@ -325,15 +339,7 @@ in rec {
 
       llvmPackages_5 = super.llvmPackages_5 // (let
         tools = super.llvmPackages_5.tools.extend (_: super: {
-          # Build man pages with final stdenv not before
-          llvm = lib.extendDerivation
-            true
-            { inherit (super.llvm) man; }
-            llvmPackages_5.llvm;
-          clang-unwrapped = lib.extendDerivation
-            true
-            { inherit (super.clang-unwrapped) man; }
-            llvmPackages_5.clang-unwrapped;
+          inherit (llvmPackages_5) llvm clang-unwrapped;
         });
         libraries = super.llvmPackages_5.libraries.extend (_: _: {
           inherit (llvmPackages_5) compiler-rt libcxx libcxxabi;
@@ -370,9 +376,8 @@ in rec {
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
 
-    # Hack to avoid man pages in stdenv, building bootstrap python
     cc = pkgs.llvmPackages.libcxxClang.override {
-      cc = builtins.removeAttrs pkgs.llvmPackages.clang-unwrapped [ "man" ];
+      cc = pkgs.llvmPackages.clang-unwrapped;
     };
 
     extraNativeBuildInputs = [];

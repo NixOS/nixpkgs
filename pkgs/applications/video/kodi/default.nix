@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, autoconf, automake, libtool, makeWrapper
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
 , pkgconfig, cmake, gnumake, yasm, python2
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook

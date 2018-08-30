@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fetchpatch, cmake, libGLU_combined, zlib, openssl, libyamlcpp, boost
+{stdenv, fetchFromGitHub, cmake, libGLU_combined, zlib, openssl, libyamlcpp, boost
 , SDL, SDL_image, SDL_mixer, SDL_gfx }:
 
 let version = "1.0.0.2018.01.28"; in

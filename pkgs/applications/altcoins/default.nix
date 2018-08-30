@@ -1,4 +1,4 @@
-{ callPackage, boost155, boost165, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3 }:
+{ callPackage, boost155, boost165, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3, buildGo110Package }:
 
 rec {
 
@@ -51,10 +51,13 @@ rec {
 
   freicoin = callPackage ./freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ./go-ethereum.nix {
+    buildGoPackage = buildGo110Package;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
-  go-ethereum-classic = callPackage ./go-ethereum-classic { };
+  go-ethereum-classic = callPackage ./go-ethereum-classic {
+    buildGoPackage = buildGo110Package;
+  };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
@@ -86,7 +89,8 @@ rec {
   };
 
   parity = callPackage ./parity { };
+  parity-beta = callPackage ./parity/beta.nix { };
   parity-ui = callPackage ./parity-ui { };
 
-  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; withGui = false; };
+  particl-core = callPackage ./particl/particl-core.nix { boost = boost165; miniupnpc = miniupnpc_2; };
 }

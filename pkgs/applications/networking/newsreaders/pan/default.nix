@@ -1,6 +1,6 @@
 { spellChecking ? true
 , stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
-, perl, pcre, gmime2, gettext, intltool, itstool, libxml2, dbus-glib, libnotify, gnutls
+, perl, gmime2, gettext, intltool, itstool, libxml2, dbus-glib, libnotify, gnutls
 , makeWrapper, gnupg
 , gnomeSupport ? true, libgnome-keyring3
 }:

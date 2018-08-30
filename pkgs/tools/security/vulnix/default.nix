@@ -1,12 +1,12 @@
-{ stdenv, pythonPackages, fetchurl, callPackage, nix, ronn }:
+{ stdenv, pythonPackages, nix, ronn }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "vulnix";
-  version = "1.7";
+  version = "1.7.1";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "16228w0vakb515cnrk4akadh0m21abiv8rv574jarcsf7359xslj";
+    sha256 = "15c32976sgb5clixngi6z1fk5h02v1kn1a89h8rkbkvyhfnjgg8m";
   };
 
   buildInputs = [ ronn ];

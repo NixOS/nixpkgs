@@ -670,7 +670,6 @@ rec {
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
-      toOpt = getAttrFromPath to options;
       toOf = attrByPath to
         (abort "Renaming error: option `${showOption to}' does not exist.");
     in

@@ -18,6 +18,6 @@ buildGoPackage rec {
     homepage = https://github.com/cjbassi/gotop;
     license = licenses.agpl3;
     maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

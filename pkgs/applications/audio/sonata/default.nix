@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, wrapGAppsHook
 , python3Packages, gnome3, gtk3, gobjectIntrospection}:
 
 let
-  inherit (python3Packages) buildPythonApplication python isPy3k dbus-python pygobject3 mpd2;
+  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2;
 in buildPythonApplication rec {
   pname = "sonata";
   version = "1.7b1";

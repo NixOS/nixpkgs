@@ -1,5 +1,4 @@
-{ lib
-, cffi
+{ cffi
 , six
 , hypothesis
 , pytest

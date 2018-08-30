@@ -64,8 +64,6 @@ let
 
   version = chromium.browser.version;
 
-  inherit (stdenv.lib) versionAtLeast;
-
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;

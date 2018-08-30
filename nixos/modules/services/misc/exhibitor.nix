@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.exhibitor;
-  exhibitor = cfg.package;
   exhibitorConfig = ''
     zookeeper-install-directory=${cfg.baseDir}/zookeeper
     zookeeper-data-directory=${cfg.zkDataDir}

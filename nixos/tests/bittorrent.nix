@@ -30,7 +30,7 @@ in
 
   nodes =
     { tracker =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
         { environment.systemPackages = [ pkgs.transmission pkgs.opentracker ];
 
           # We need Apache on the tracker to serve the torrents.
@@ -42,7 +42,7 @@ in
         };
 
       router =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
         { environment.systemPackages = [ pkgs.miniupnpd ];
           virtualisation.vlans = [ 1 2 ];
           networking.nat.enable = true;
@@ -52,7 +52,7 @@ in
         };
 
       client1 =
-        { config, pkgs, nodes, ... }:
+        { pkgs, nodes, ... }:
         { environment.systemPackages = [ pkgs.transmission ];
           virtualisation.vlans = [ 2 ];
           networking.defaultGateway =
@@ -61,7 +61,7 @@ in
         };
 
       client2 =
-        { config, pkgs, ... }:
+        { pkgs, ... }:
         { environment.systemPackages = [ pkgs.transmission ];
           networking.firewall.enable = false;
         };

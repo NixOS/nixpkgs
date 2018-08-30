@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage, python, utillinux
+{ stdenv, fetchFromGitHub
 , pkgs, makeWrapper, buildEnv
 , nodejs
 }:

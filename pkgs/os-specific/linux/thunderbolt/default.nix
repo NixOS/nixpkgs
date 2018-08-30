@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , pkgconfig
 , txt2tags
-, udev
 }:
 
 stdenv.mkDerivation rec {

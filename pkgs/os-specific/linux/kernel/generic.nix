@@ -47,7 +47,7 @@
 
 , mkValueOverride ? null
 , ...
-} @ args:
+}:
 
 assert stdenv.isLinux;
 
@@ -105,7 +105,9 @@ let
       sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
     '';
 
-    inherit (kernel) src patches preUnpack;
+    preUnpack = kernel.preUnpack or "";
+
+    inherit (kernel) src patches;
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"

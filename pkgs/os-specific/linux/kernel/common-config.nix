@@ -61,6 +61,7 @@ let
       X86_INTEL_PSTATE                 = yes;
       INTEL_IDLE                       = yes;
       CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
+      CPU_FREQ_GOV_SCHEDUTIL           = whenAtLeast "4.9" yes;
       PM_WAKELOCKS                     = yes;
     };
 
@@ -146,6 +147,14 @@ let
 
       # needed for iwd WPS support (wpa_supplicant replacement)
       KEY_DH_OPERATIONS = whenAtLeast "4.7" yes;
+
+      # needed for nftables
+      NF_TABLES_INET              = whenAtLeast "4.17" yes;
+      NF_TABLES_NETDEV            = whenAtLeast "4.17" yes;
+      NF_TABLES_IPV4              = whenAtLeast "4.17" yes;
+      NF_TABLES_ARP               = whenAtLeast "4.17" yes;
+      NF_TABLES_IPV6              = whenAtLeast "4.17" yes;
+      NF_TABLES_BRIDGE            = whenAtLeast "4.17" yes;
     };
 
     wireless = {
@@ -294,7 +303,7 @@ let
       CIFS_XATTR        = yes;
       CIFS_POSIX        = yes;
       CIFS_FSCACHE      = yes;
-      CIFS_STATS        = yes;
+      CIFS_STATS        = whenOlder "4.19" yes;
       CIFS_WEAK_PW_HASH = yes;
       CIFS_UPCALL       = yes;
       CIFS_ACL          = yes;

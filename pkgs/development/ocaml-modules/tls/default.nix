@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg
-, ppx_tools, ppx_sexp_conv, result, x509, nocrypto, cstruct, ppx_cstruct, cstruct-unix, ounit
+, ppx_sexp_conv, result, x509, nocrypto, cstruct, ppx_cstruct, cstruct-unix, ounit
 , lwt     ? null}:
 
 with stdenv.lib;

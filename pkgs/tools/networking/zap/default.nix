@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, jdk, ant }:
+{ stdenv, fetchFromGitHub, jdk, ant }:
 
 stdenv.mkDerivation rec {
   name = "zap-${version}";

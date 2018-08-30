@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildPerlPackage, perlPackages, gnused, nix, dmidecode, pciutils, usbutils, iproute, nettools
+{ stdenv, lib, fetchurl, buildPerlPackage, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
 , fetchFromGitHub, makeWrapper
 }:
 
@@ -49,7 +49,7 @@ buildPerlPackage rec {
     IOSocketSSL
     IPCRun
     JSON
-    LWPProtocolhttps
+    LWPProtocolHttps
     ModuleInstall
     NetSNMP
     TestCompile

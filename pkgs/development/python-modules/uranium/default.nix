@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, python, cmake
+{ stdenv, buildPythonPackage, fetchFromGitHub, python, cmake
 , pyqt5, numpy, scipy, libarcus, doxygen, gettext, pythonOlder }:
 
 buildPythonPackage rec {

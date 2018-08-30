@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, fetchFromGitHub, xcbuildHook, libiconv, Cocoa, ncurses }:
+{ stdenv, fetchFromGitHub, xcbuildHook, libiconv, Cocoa, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "pinentry-mac-0.9.4";

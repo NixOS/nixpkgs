@@ -1,19 +1,17 @@
-{ stdenv, lib, fetchurl, pam ? null, autoreconfHook
-, libX11, libXext, libXinerama, libXdmcp, libXt }:
+{ stdenv, lib, fetchurl, pam ? null, libX11, libXext, libXinerama
+, libXdmcp, libXt }:
 
 stdenv.mkDerivation rec {
-  name = "xlockmore-5.55";
+  name = "xlockmore-5.56";
 
   src = fetchurl {
     url = "http://sillycycle.com/xlock/${name}.tar.xz";
-    sha256 = "1y3f76rq2nd10fgi2rx81aj6pijglmm661vjsxi05hpg35dzmwfl";
+    sha256 = "1dg1n79rnswhxqz36mxnl5lp8p37i9fbibnzzyrqknmvf2s8xpd0";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
   # Optionally, it can use GTK+.
   buildInputs = [ pam libX11 libXext libXinerama libXdmcp libXt ];
-
-  nativeBuildInputs = [ autoreconfHook ];
 
   # Don't try to install `xlock' setuid. Password authentication works
   # fine via PAM without super user privileges.

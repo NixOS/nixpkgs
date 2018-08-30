@@ -1,7 +1,6 @@
 { buildPythonPackage
 , fetchPypi
 , zope_interface
-, pkgs
 }:
 
 buildPythonPackage rec {

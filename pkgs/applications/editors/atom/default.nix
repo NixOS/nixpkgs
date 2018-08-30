@@ -1,17 +1,32 @@
-{ stdenv, pkgs, fetchurl, lib, makeWrapper, gvfs, atomEnv}:
+{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, gtk3, atomEnv }:
 
 let
-  common = pname: {version, sha256}: stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
-    inherit version;
+  common = pname: {version, sha256, beta ? null}:
+      let fullVersion = version + stdenv.lib.optionalString (beta != null) "-beta${toString beta}";
+      name = "${pname}-${fullVersion}";
+  in stdenv.mkDerivation {
+    inherit name;
+    version = fullVersion;
 
     src = fetchurl {
-      url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
+      url = "https://github.com/atom/atom/releases/download/v${fullVersion}/atom-amd64.deb";
       name = "${name}.deb";
       inherit sha256;
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [
+      wrapGAppsHook  # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+    ];
+
+    buildInputs = [
+      gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+    ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        --prefix "PATH" : "${gvfs}/bin" \
+      )
+    '';
 
     buildCommand = ''
       mkdir -p $out/usr/
@@ -22,9 +37,6 @@ let
       rm -r $out/share/lintian
       rm -r $out/usr/
       sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
-      # sed -i "s/'${pname}'/'.${pname}-wrapped'/" $out/bin/${pname}
-      wrapProgram $out/bin/${pname} \
-        --prefix "PATH" : "${gvfs}/bin"
 
       fixupPhase
 
@@ -61,12 +73,13 @@ let
   };
 in stdenv.lib.mapAttrs common {
   atom = {
-    version = "1.28.2";
-    sha256 = "07lz4lj07dbfz952l3q9vplvg41pxl1cx89gzy8bzzr3ay7kn6za";
+    version = "1.30.0";
+    sha256 = "1hqizfn9c249l51rlpfgk0h374maqgw6pagswlh4xa278qzb6qzs";
   };
 
   atom-beta = {
-    version = "1.29.0-beta1";
-    sha256 = "121y716pnq4vpjrymr505prskvi5a2lnn8hw79q8b4hf7yz0j6rb";
+    version = "1.31.0";
+    beta = 0;
+    sha256 = "11nlaz89rg6lgzsxp83qdqk4bnn2cij2p5aqjd9a3phd7v70xmy5";
   };
 }

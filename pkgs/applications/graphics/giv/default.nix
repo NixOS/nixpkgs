@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     description = "Cross platform image and hierarchical vector viewer based";
     homepage = http://giv.sourceforge.net/giv/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

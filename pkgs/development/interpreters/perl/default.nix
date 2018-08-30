@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurlBoot, buildPackages
-, enableThreading ? stdenv ? glibc, fetchpatch, makeWrapper
+, enableThreading ? stdenv ? glibc, makeWrapper
 }:
 
 with lib;
@@ -97,12 +97,6 @@ let
         sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
       '';
 
-    preBuild = optionalString (!(stdenv ? cc && stdenv.cc.nativeTools))
-      ''
-        # Make Cwd work on NixOS (where we don't have a /bin/pwd).
-        substituteInPlace dist/PathTools/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
-      '';
-
     setupHook = ./setup-hook.sh;
 
     passthru.libPrefix = "lib/perl5/site_perl";
@@ -152,30 +146,22 @@ let
     meta = {
       homepage = https://www.perl.org/;
       description = "The standard implementation of the Perl 5 programmming language";
+      license = licenses.artistic1;
       maintainers = [ maintainers.eelco ];
       platforms = platforms.all;
     };
   } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "1.1.8";
+    crossVersion = "1.2";
 
     perl-cross-src = fetchurlBoot {
       url = "https://github.com/arsv/perl-cross/releases/download/${crossVersion}/perl-cross-${crossVersion}.tar.gz";
-      sha256 = "072j491rpz2qx2sngbg4flqh4lx5865zyql7b9lqm6s1kknjdrh8";
-    };
-
-    # https://github.com/arsv/perl-cross/issues/60
-    perl-cross-gcc7-patch = fetchpatch {
-      url = "https://github.com/arsv/perl-cross/commit/07208bc1707b8be3ea170c62c59120020cf0f87f.patch";
-      sha256 = "1gh8w9m5if2s0lrx2x8f8grp74d1l6d46m8jglpjm5a1kf55j810";
+      sha256 = "02cic7lk91hgmsg8klkm2kv88m2a8y22m4m8gl4ydxbap2z7g42r";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
 
     postUnpack = ''
       unpackFile ${perl-cross-src}
-      cd perl-cross-*
-      patch -Np1 -i ${perl-cross-gcc7-patch}
-      cd ..
       cp -R perl-cross-${crossVersion}/* perl-${version}/
     '';
 

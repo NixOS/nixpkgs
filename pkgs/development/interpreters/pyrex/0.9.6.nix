@@ -15,5 +15,6 @@ python2Packages.buildPythonPackage rec {
   meta = {
     homepage = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/;
     description = "A language for writing Python extension modules";
+    license = stdenv.lib.licenses.asl20;
   };
 }

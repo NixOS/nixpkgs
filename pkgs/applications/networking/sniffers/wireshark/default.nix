@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
-, gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
+{ stdenv, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
+, gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, python, libcap, glib
 , libssh, zlib, cmake, extra-cmake-modules, fetchpatch, makeWrapper
 , withGtk ? false, gtk3 ? null, librsvg ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
 , withQt ? false, qt5 ? null
@@ -12,7 +12,7 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.6.1";
+  version = "2.6.2";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "126dvd6myjbxjr69dy9vzzdda2lmjy1wwwc6gcs5djb46jy5nvmb";
+    sha256 = "153h6prxamv5a62f3pfadkry0y57696xrgxfy2gfy5xswdg8kcj9";
   };
 
   cmakeFlags = [
@@ -49,8 +49,11 @@ in stdenv.mkDerivation {
       name = "fix-timeout.patch";
       url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=commitdiff_plain;h=8b5b843fcbc3e03e0fc45f3caf8cf5fc477e8613;hp=94af9724d140fd132896b650d10c4d060788e4f0";
       sha256 = "1g2dm7lwsnanwp68b9xr9swspx7hfj4v3z44sz3yrfmynygk8zlv";
-    })
-    ++ stdenv.lib.optional stdenv.isDarwin ./cmake.patch;
+    });
+
+  postPatch = ''
+    sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
+  '';
 
   preBuild = ''
     export LD_LIBRARY_PATH="$PWD/run"

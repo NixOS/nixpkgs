@@ -1,0 +1,31 @@
+From f9e6f45b1c8f66bca8a3387f371b20d434b23a7d Mon Sep 17 00:00:00 2001
+From: Olly Betts <olly@survex.com>
+Date: Thu, 26 Jul 2018 17:26:52 +1200
+Subject: [PATCH 1/1] Revert "Enable open_nearby_postlist for writable
+ databases"
+
+The amended check isn't conservative enough as there may be postlist
+changes in the inverter while the table is unmodified.  This breaks
+testcase T150-tagging.sh in notmuch's testsuite, reported by David
+Bremner.
+
+This reverts commit 5489fb2f838c0f0b0a593b4c17df282a93a1fe5a.
+---
+ xapian-core/backends/glass/glass_postlist.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/xapian-core/backends/glass/glass_postlist.cc b/xapian-core/backends/glass/glass_postlist.cc
+index 80e578b85..a47f14a68 100644
+--- a/backends/glass/glass_postlist.cc
++++ b/backends/glass/glass_postlist.cc
+@@ -759,7 +759,7 @@ GlassPostList::open_nearby_postlist(const std::string & term_,
+     (void)need_pos;
+     if (term_.empty())
+ 	RETURN(NULL);
+-    if (!this_db.get() || this_db->postlist_table.is_modified())
++    if (!this_db.get() || this_db->postlist_table.is_writable())
+ 	RETURN(NULL);
+     RETURN(new GlassPostList(this_db, term_, cursor->clone()));
+ }
+-- 
+2.11.0

@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgconfig, buildGoPackage, go-bindata, fetchFromGitHub }:
+{ buildGoPackage, go-bindata, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "ngrok-${version}";

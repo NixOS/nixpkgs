@@ -1,7 +1,7 @@
 { buildPythonPackage, pythonOlder,
   cudaSupport ? false, cudatoolkit ? null, cudnn ? null,
-  fetchFromGitHub, fetchpatch, lib, numpy, pyyaml, cffi, typing, cmake,
-  stdenv, linkFarm, symlinkJoin,
+  fetchFromGitHub, lib, numpy, pyyaml, cffi, typing, cmake,
+  linkFarm, symlinkJoin,
   utillinux, which }:
 
 assert cudnn == null || cudatoolkit != null;

@@ -1,4 +1,4 @@
-{ stdenv, cctools, appleDerivation }:
+{ cctools, appleDerivation }:
 
 appleDerivation {
   nativeBuildInputs = [ cctools ];

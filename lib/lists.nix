@@ -64,7 +64,6 @@ rec {
   */
   foldl = op: nul: list:
     let
-      len = length list;
       foldl' = n:
         if n == -1
         then nul

@@ -1,5 +1,5 @@
 { stdenv
-, runCommand, fetchurl, file, zlib
+, runCommand, fetchurl, zlib
 
 , version
 }:

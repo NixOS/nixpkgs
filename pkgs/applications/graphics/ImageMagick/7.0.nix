@@ -1,8 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, libtool
+{ lib, stdenv, fetchFromGitHub, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
 , lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp, libheif
 , ApplicationServices
-, buildPlatform, hostPlatform
+, hostPlatform
 }:
 
 let
@@ -84,6 +84,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.imagemagick.org/;
     description = "A software suite to create, edit, compose, or convert bitmap images";
     platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.asl20;
     maintainers = with maintainers; [ the-kenny wkennington ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, utillinux,
+{ stdenv, lib, unzip, utillinux,
   libusb1, evdi, systemd, makeWrapper, requireFile }:
 
 let

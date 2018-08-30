@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, python
+{ buildPythonPackage, fetchPypi
 , pytest, pytestcov
 }:
 

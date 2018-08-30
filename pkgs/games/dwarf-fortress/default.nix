@@ -1,4 +1,4 @@
-{ pkgs, stdenv, stdenvNoCC, buildEnv, gccStdenv, lib, recurseIntoAttrs }:
+{ pkgs, stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs }:
 
 # To whomever it may concern:
 #
@@ -33,7 +33,7 @@ let
 
   self = rec {
     df-hashes = builtins.fromJSON (builtins.readFile ./game.json);
-    dwarf-fortress = df-games.dwarf-fortress_0_44_11;
+    dwarf-fortress = df-games.dwarf-fortress_0_44_12;
 
     dwarf-fortress-full = callPackage ./lazy-pack.nix { };
 
@@ -60,9 +60,7 @@ let
     legends-browser = callPackage ./legends-browser {};
 
     twbt = callPackage ./twbt {};
-    themes = recurseIntoAttrs (callPackage ./themes {
-      stdenv = stdenvNoCC;
-    });
+    themes = recurseIntoAttrs (callPackage ./themes { });
 
     # aliases
     phoebus-theme = themes.phoebus;

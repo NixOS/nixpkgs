@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub
 , pkgconfig, cmake, doxygen
 , libopenshot-audio, imagemagick, ffmpeg
 , swig, python3

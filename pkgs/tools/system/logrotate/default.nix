@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, mailutils, gzip, popt, autoreconfHook }:
+{ stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
+, mailutils ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "logrotate-${version}";
@@ -14,8 +16,11 @@ stdenv.mkDerivation rec {
   # Logrotate wants to access the 'mail' program; to be done.
   patchPhase = ''
     sed -i -e 's,[a-z/]\+gzip,${gzip}/bin/gzip,' \
-           -e 's,[a-z/]\+gunzip,${gzip}/bin/gunzip,' \
-           -e 's,[a-z/]\+mail,${mailutils}/bin/mail,' configure.ac
+           -e 's,[a-z/]\+gunzip,${gzip}/bin/gunzip,' configure.ac
+
+    ${stdenv.lib.optionalString (mailutils != null) ''
+    sed -i -e 's,[a-z/]\+mail,${mailutils}/bin/mail,' configure.ac
+    ''}
   '';
 
   autoreconfPhase = ''

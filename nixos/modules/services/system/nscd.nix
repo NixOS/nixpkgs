@@ -7,8 +7,6 @@ let
   nssModulesPath = config.system.nssModules.path;
   cfg = config.services.nscd;
 
-  inherit (lib) singleton;
-
 in
 
 {

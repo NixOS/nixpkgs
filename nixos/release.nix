@@ -45,7 +45,7 @@ let
 
 
   makeIso =
-    { module, type, maintainers ? ["eelco"], system }:
+    { module, type, system, ... }:
 
     with import nixpkgs { inherit system; };
 
@@ -56,7 +56,7 @@ let
 
 
   makeSdImage =
-    { module, maintainers ? ["dezgeg"], system }:
+    { module, system, ... }:
 
     with import nixpkgs { inherit system; };
 
@@ -83,7 +83,7 @@ let
     in
       tarball //
         { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.platform.name}";
+            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.platform.name}";
             maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit config;
@@ -96,7 +96,7 @@ let
   buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
     modules = [ module versionModule ] ++ singleton
-      ({ config, lib, ... }:
+      ({ ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
       });
@@ -106,7 +106,7 @@ let
     let
       configEvaled = import lib/eval-config.nix config;
       build = configEvaled.config.system.build;
-      kernelTarget = configEvaled.pkgs.stdenv.platform.kernelTarget;
+      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
     in
       pkgs.symlinkJoin {
         name = "netboot";
@@ -117,9 +117,9 @@ let
         ];
         postBuild = ''
           mkdir -p $out/nix-support
-          echo "file ${kernelTarget} $out/${kernelTarget}" >> $out/nix-support/hydra-build-products
-          echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
-          echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
+          echo "file ${kernelTarget} ${build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
+          echo "file initrd ${build.netbootRamdisk}/initrd" >> $out/nix-support/hydra-build-products
+          echo "file ipxe ${build.netbootIpxeScript}/netboot.ipxe" >> $out/nix-support/hydra-build-products
         '';
         preferLocalBuild = true;
       };
@@ -128,15 +128,15 @@ in rec {
 
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
-  manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
-  manualEpub = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualEpub));
-  manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
-  manualGeneratedSources = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.generatedSources);
-  options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
+  manual = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manual);
+  manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
+  manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
+  manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);
+  options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
-  initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
+  initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
   netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
     inherit system;
@@ -195,10 +195,10 @@ in rec {
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
     { toplevel = (import lib/eval-config.nix {
         inherit system;
-        modules = singleton ({ config, pkgs, ... }:
+        modules = singleton ({ ... }:
           { fileSystems."/".device  = mkDefault "/dev/sda1";
             boot.loader.grub.device = mkDefault "/dev/sda";
-            system.nixos.stateVersion = mkDefault "18.03";
+            system.stateVersion = mkDefault "18.03";
           });
       }).config.system.build.toplevel;
       preferLocalBuild = true;
@@ -256,6 +256,8 @@ in rec {
   tests.buildbot = callTest tests/buildbot.nix {};
   tests.cadvisor = callTestOnMatchingSystems ["x86_64-linux"] tests/cadvisor.nix {};
   tests.ceph = callTestOnMatchingSystems ["x86_64-linux"] tests/ceph.nix {};
+  tests.certmgr = callSubTests tests/certmgr.nix {};
+  tests.cfssl = callTestOnMatchingSystems ["x86_64-linux"] tests/cfssl.nix {};
   tests.chromium = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
@@ -276,6 +278,7 @@ in rec {
   tests.docker-tools = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools.nix {};
   tests.docker-tools-overlay = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools-overlay.nix {};
   tests.docker-edge = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-edge.nix {};
+  tests.docker-registry = callTest tests/docker-registry.nix {};
   tests.dovecot = callTest tests/dovecot.nix {};
   tests.dnscrypt-proxy = callTestOnMatchingSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
@@ -288,6 +291,7 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.flatpak = callTest tests/flatpak.nix {};
   tests.firewall = callTest tests/firewall.nix {};
+  tests.fsck = callTest tests/fsck.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   tests.gdk-pixbuf = callTest tests/gdk-pixbuf.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
@@ -424,27 +428,27 @@ in rec {
 
   closures = {
 
-    smallContainer = makeClosure ({ pkgs, ... }:
+    smallContainer = makeClosure ({ ... }:
       { boot.isContainer = true;
         services.openssh.enable = true;
       });
 
-    tinyContainer = makeClosure ({ pkgs, ... }:
+    tinyContainer = makeClosure ({ ... }:
       { boot.isContainer = true;
         imports = [ modules/profiles/minimal.nix ];
       });
 
-    ec2 = makeClosure ({ pkgs, ... }:
+    ec2 = makeClosure ({ ... }:
       { imports = [ modules/virtualisation/amazon-image.nix ];
       });
 
-    kde = makeClosure ({ pkgs, ... }:
+    kde = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.displayManager.sddm.enable = true;
         services.xserver.desktopManager.plasma5.enable = true;
       });
 
-    xfce = makeClosure ({ pkgs, ... }:
+    xfce = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.xfce.enable = true;
       });

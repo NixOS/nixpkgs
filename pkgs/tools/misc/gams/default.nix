@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, lib, file, licenseFile, optgamsFile}:
+{ stdenv, fetchurl, unzip, file, licenseFile, optgamsFile}:
 
 assert licenseFile != null;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
+{ stdenv, fetchurl, flex, bison, python
 , gettext, ncurses, libusb, freetype, qemu, lvm2, unifont, pkgconfig
 , fuse # only needed for grub-mount
 , zfs ? null

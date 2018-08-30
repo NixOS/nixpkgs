@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, lib, makeWrapper, nodePackages }:
+{ stdenv, pkgs, fetchurl, makeWrapper, nodePackages }:
 
 let
 

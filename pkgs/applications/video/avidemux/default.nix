@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, pkgconfig, lndir
+{ stdenv, lib, fetchurl, cmake, pkgconfig
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://fixounet.free.fr/avidemux/;
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with maintainers; [ viric abbradar ma27 ];
+    maintainers = with maintainers; [ abbradar ma27 ];
     # "CPU not supported" errors on AArch64
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;

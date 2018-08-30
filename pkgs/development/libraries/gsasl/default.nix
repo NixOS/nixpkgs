@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gss, libidn, kerberos }:
+{ fetchurl, stdenv, libidn, kerberos }:
 
 stdenv.mkDerivation rec {
   name = "gsasl-1.8.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libidn kerberos ];
 
-  configureFlags = "--with-gssapi-impl=mit";
+  configureFlags = [ "--with-gssapi-impl=mit" ];
 
   doCheck = true;
 

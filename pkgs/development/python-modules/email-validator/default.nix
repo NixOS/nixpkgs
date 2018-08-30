@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, dnspython, idna, ipaddress }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, dnspython, idna, ipaddress }:
 
 buildPythonPackage rec {
   pname = "email_validator";

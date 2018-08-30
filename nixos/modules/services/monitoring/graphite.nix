@@ -57,12 +57,6 @@ let
     --nodaemon --syslog --prefix=${name} --pidfile /run/${name}/${name}.pid ${name}
   '';
 
-  mkPidFileDir = name: ''
-    mkdir -p /run/${name}
-    chmod 0700 /run/${name}
-    chown -R graphite:graphite /run/${name}
-  '';
-
   carbonEnv = {
     PYTHONPATH = let
       cenv = pkgs.python.buildEnv.override {
@@ -136,7 +130,7 @@ in {
       finders = mkOption {
         description = "List of finder plugins to load.";
         default = [];
-        example = literalExample "[ pkgs.python27Packages.graphite_influxdb ]";
+        example = literalExample "[ pkgs.python27Packages.influxgraph ]";
         type = types.listOf types.package;
       };
 
@@ -412,18 +406,16 @@ in {
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
+          RuntimeDirectory = name;
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
           PIDFile="/run/${name}/${name}.pid";
         };
-        preStart = mkPidFileDir name + ''
-
-          mkdir -p ${cfg.dataDir}/whisper
-          chmod 0700 ${cfg.dataDir}/whisper
-          chown graphite:graphite ${cfg.dataDir}
-          chown graphite:graphite ${cfg.dataDir}/whisper
+        preStart = ''
+          install -dm0700 -o graphite -g graphite ${cfg.dataDir}
+          install -dm0700 -o graphite -g graphite ${cfg.dataDir}/whisper
         '';
       };
     })
@@ -436,12 +428,12 @@ in {
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
+          RuntimeDirectory = name;
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PIDFile="/run/${name}/${name}.pid";
         };
-        preStart = mkPidFileDir name;
       };
     })
 
@@ -452,12 +444,12 @@ in {
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
+          RuntimeDirectory = name;
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
           PIDFile="/run/${name}/${name}.pid";
         };
-        preStart = mkPidFileDir name;
       };
     })
 
@@ -485,7 +477,7 @@ in {
           PYTHONPATH = let
               penv = pkgs.python.buildEnv.override {
                 extraLibs = [
-                  pythonPackages.graphite_web
+                  pythonPackages.graphite-web
                   pythonPackages.pysqlite
                 ];
               };
@@ -524,16 +516,16 @@ in {
           fi
 
           # Only collect static files when graphite_web changes.
-          if ! [ "${dataDir}/current_graphite_web" -ef "${pythonPackages.graphite_web}" ]; then
+          if ! [ "${dataDir}/current_graphite_web" -ef "${pythonPackages.graphite-web}" ]; then
             mkdir -p ${staticDir}
             ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py collectstatic  --noinput --clear
             chown -R graphite:graphite ${staticDir}
-            ln -sfT "${pythonPackages.graphite_web}" "${dataDir}/current_graphite_web"
+            ln -sfT "${pythonPackages.graphite-web}" "${dataDir}/current_graphite_web"
           fi
         '';
       };
 
-      environment.systemPackages = [ pythonPackages.graphite_web ];
+      environment.systemPackages = [ pythonPackages.graphite-web ];
     }))
 
     (mkIf cfg.api.enable {
@@ -607,7 +599,7 @@ in {
           GRAPHITE_URL = cfg.pager.graphiteUrl;
         };
         serviceConfig = {
-          ExecStart = "${pkgs.pythonPackages.graphite_pager}/bin/graphite-pager --config ${pagerConfig}";
+          ExecStart = "${pkgs.pythonPackages.graphitepager}/bin/graphite-pager --config ${pagerConfig}";
           User = "graphite";
           Group = "graphite";
         };
@@ -615,7 +607,7 @@ in {
 
       services.redis.enable = mkDefault true;
 
-      environment.systemPackages = [ pkgs.pythonPackages.graphite_pager ];
+      environment.systemPackages = [ pkgs.pythonPackages.graphitepager ];
     })
 
     (mkIf cfg.beacon.enable {

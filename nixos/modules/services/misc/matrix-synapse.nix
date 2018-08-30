@@ -342,7 +342,7 @@ in {
       };
       database_type = mkOption {
         type = types.enum [ "sqlite3" "psycopg2" ];
-        default = if versionAtLeast config.system.nixos.stateVersion "18.03"
+        default = if versionAtLeast config.system.stateVersion "18.03"
           then "psycopg2"
           else "sqlite3";
         description = ''

@@ -1,4 +1,4 @@
-{ pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
+{ stdenv, lib, fetchurl, fetchFromGitHub, bundlerEnv
 , ruby, tzdata, git, procps, nettools
 }:
 
@@ -103,5 +103,11 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit rubyEnv;
     ruby = rubyEnv.wrappedRuby;
+  };
+
+  meta = with stdenv.lib; {
+    description = "Web-based Git-repository manager";
+    homepage = https://gitlab.com;
+    license = licenses.mit;
   };
 }

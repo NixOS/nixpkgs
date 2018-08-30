@@ -1,4 +1,4 @@
-{ stdenv, lib, openssh, buildbot-worker, buildbot-pkg, pythonPackages, runCommand, makeWrapper }:
+{ stdenv, openssh, buildbot-worker, buildbot-pkg, pythonPackages, runCommand, makeWrapper }:
 
 let
   withPlugins = plugins: runCommand "wrapped-${package.name}" {

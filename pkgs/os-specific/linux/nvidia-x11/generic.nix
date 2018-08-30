@@ -12,7 +12,7 @@
 , patches ? []
 }:
 
-{ stdenv, callPackage, pkgsi686Linux, fetchurl, fetchpatch
+{ stdenv, callPackage, pkgsi686Linux, fetchurl
 , kernel ? null, xorg, zlib, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit

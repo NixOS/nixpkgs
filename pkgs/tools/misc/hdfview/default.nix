@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, ant, javac, hdf_java }:
+{ stdenv, fetchurl, ant, javac, hdf_java }:
 
 stdenv.mkDerivation rec {
   name = "hdfview-${version}";

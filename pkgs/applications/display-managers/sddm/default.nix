@@ -1,5 +1,5 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch
-, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
+{ mkDerivation, lib, fetchFromGitHub
+, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 }:
 
@@ -62,5 +62,6 @@ in mkDerivation rec {
     homepage    = https://github.com/sddm/sddm;
     maintainers = with maintainers; [ abbradar ttuegel ];
     platforms   = platforms.linux;
+    license     = licenses.gpl2Plus;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+{ lib, buildPythonPackage, fetchFromGitHub
 , decorator, requests, simplejson
 , nose, mock }:
 

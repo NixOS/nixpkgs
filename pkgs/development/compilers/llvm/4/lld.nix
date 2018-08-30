@@ -1,9 +1,7 @@
 { stdenv
 , fetch
 , cmake
-, zlib
 , llvm
-, python
 , version
 }:
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, unzip, glibc, openssl, gcc, libGLU_combined, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, ... }:
+{ stdenv, fetchurl, bash, unzip, glibc, openssl, libGLU_combined, freetype, xorg, alsaLib, cairo, libuuid, autoreconfHook, gcc48, ... }:
 
 { name, src, version, source-date, source-url, ... }:
 

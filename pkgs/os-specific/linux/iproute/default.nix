@@ -1,12 +1,14 @@
-{ fetchurl, stdenv, config, lib, flex, bash, bison, db, iptables, pkgconfig }:
+{ fetchurl, stdenv, config, flex, bash, bison, db, iptables, pkgconfig
+, libelf
+}:
 
 stdenv.mkDerivation rec {
   name = "iproute2-${version}";
-  version = "4.17.0";
+  version = "4.18.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/iproute2/${name}.tar.xz";
-    sha256 = "0vmynikcamfhakvwyk5dsffy0ymgi5mdqiwybdvqfn1ijaq93abg";
+    sha256 = "0ida5njr9nacg6ym3rjvl3cc9czw0hn4akhzbqf8f4zmjl6cgrm9";
   };
 
   preConfigure = ''
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
-  buildInputs = [ db iptables ];
+  buildInputs = [ db iptables libelf ];
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;

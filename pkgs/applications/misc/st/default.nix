@@ -3,8 +3,7 @@
 
 with stdenv.lib;
 
-let patches' = if patches == null then [] else patches;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "st-0.8.1";
 
   src = fetchurl {
@@ -12,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "09k94v3n20gg32xy7y68p96x9dq5msl80gknf9gbvlyjp3i0zyy4";
   };
 
-  patches = patches';
+  inherit patches;
 
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
@@ -29,7 +28,7 @@ in stdenv.mkDerivation rec {
     homepage = https://st.suckless.org/;
     description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
-    maintainers = with maintainers; [viric andsild];
+    maintainers = with maintainers; [andsild];
     platforms = platforms.linux;
   };
 }
