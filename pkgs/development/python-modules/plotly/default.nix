@@ -5,6 +5,7 @@
 , nbformat
 , pytz
 , requests
+, retrying
 , six
 }:
 
@@ -22,6 +23,7 @@ buildPythonPackage rec {
     nbformat
     pytz
     requests
+    retrying
     six
   ];
 
