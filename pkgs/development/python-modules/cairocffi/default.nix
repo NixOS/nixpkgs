@@ -49,7 +49,6 @@ buildPythonPackage rec {
       gdk_pixbuf = gdk_pixbuf.out;
     })
     ./fix_test_scaled_font.patch
-    ./cairocffi-0.8.1-cairo-1.15.12.patch
   ];
 
   meta = with lib; {
