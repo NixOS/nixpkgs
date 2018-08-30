@@ -2085,39 +2085,6 @@ in {
 
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds {};
 
-  docker_registry_core = callPackage ../development/python-modules/docker-registry-core {};
-
-  docker_registry = buildPythonPackage rec {
-    name = "docker-registry-0.9.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/docker-registry/${name}.tar.gz";
-      sha256 = "1svm1h59sg4bwj5cy10m016gj0xpiin15nrz5z66h47sbkndvlw3";
-    };
-
-    DEPS = "loose";
-
-    doCheck = false; # requires redis server
-    propagatedBuildInputs = with self; [
-      setuptools docker_registry_core blinker flask gevent gunicorn pyyaml
-      requests rsa sqlalchemy setuptools backports_lzma m2crypto
-    ];
-
-    patchPhase = "> requirements/main.txt";
-
-    # Default config uses needed env variables
-    postInstall = ''
-      ln -s $out/lib/python2.7/site-packages/config/config_sample.yml $out/lib/python2.7/site-packages/config/config.yml
-    '';
-
-    meta = {
-      description = "Docker registry core package";
-      homepage = https://github.com/docker/docker-registry;
-      license = licenses.asl20;
-    };
-  };
-
   docopt = callPackage ../development/python-modules/docopt { };
 
   doctest-ignore-unicode = callPackage ../development/python-modules/doctest-ignore-unicode { };
