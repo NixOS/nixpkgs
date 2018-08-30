@@ -21,7 +21,7 @@ buildPythonPackage rec {
     sha256 = "08681be47b1861221bc7cf17b6e368a8d734db81682d716c22a11e839f47cb79";
   };
 
-  checkInputs = [ pytest numpy nbconvert pandas mock ];
+  checkInputs = [ pytest nbconvert pandas mock ];
   propagatedBuildInputs = [ jinja2 branca six requests numpy ];
 
   # No tests in archive
