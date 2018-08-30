@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "regex";
-  version = "2018.08.17";
+  version = "2018.08.29";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "56494baf1ed525deea426d3676b1ae3fdcc906b55eccfcb4ea928453e11f2a43";
+    sha256 = "b73cea07117dca888b0c3671770b501bef19aac9c45c8ffdb5bea2cca2377b0a";
   };
 
   postCheck = ''
