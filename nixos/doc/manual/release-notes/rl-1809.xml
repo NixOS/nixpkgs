@@ -141,6 +141,50 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
+     The minimum version of Nix required to evaluate Nixpkgs is now 2.0.
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       For users of NixOS 18.03, NixOS 18.03 defaulted to Nix 2.0, but
+       supported using Nix 1.11 by setting <literal>nix.package =
+       pkgs.nix1;</literal>. If this option is set to a Nix 1.11 package, you
+       will need to either unset the option or upgrade it to Nix 2.0.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of NixOS 17.09, you will first need to upgrade Nix by setting
+       <literal>nix.package = pkgs.nixStable2;</literal> and run
+       <command>nixos-rebuild switch</command> as the <literal>root</literal>
+       user.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of a daemon-less Nix installation on Linux or macOS, you can
+       upgrade Nix by running <command>curl https://nixos.org/nix/install |
+       sh</command>, or prior to doing a channel update, running
+       <command>nix-env -iA nix</command>.
+      </para>
+      <para>
+       If you have already run a channel update and Nix is no longer able to
+       evaluate Nixpkgs, the error message printed should provide adequate
+       directions for upgrading Nix.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of the Nix daemon on macOS, you can upgrade Nix by running
+       <command>sudo -i sh -c 'nix-channel --update &amp;&amp; nix-env -iA
+       nixpkgs.nix'; sudo launchctl stop org.nixos.nix-daemon; sudo launchctl
+       start org.nixos.nix-daemon</command>.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
      <literal>lib.strict</literal> is removed. Use
      <literal>builtins.seq</literal> instead.
     </para>
