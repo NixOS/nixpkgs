@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.22.3";
+  version = "0.22.4";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "16zydv7z94aw3rywmb9gr8ya85k7b75h22wng95lfx1x0y1yb0ad";
+    sha256 = "0ygy891rrw5c7lhk539nhif77j88phvz2h0fhx172iaridy9kx2r";
   };
 
   nativeBuildInputs = [
