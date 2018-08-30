@@ -1,17 +1,16 @@
-{ stdenv, pythonPackages }:
+{ stdenv, python3Packages }:
 
-pythonPackages.buildPythonApplication (rec {
-  name = "${pname}-${version}";
+python3Packages.buildPythonApplication (rec {
   pname = "buildbot-worker";
   version = "1.3.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
     sha256 = "1l9iqyqn9yln6ln6dhfkngzx92a61v1cf5ahqj4ax663i02yq7fh";
   };
 
-  buildInputs = with pythonPackages; [ setuptoolsTrial mock ];
-  propagatedBuildInputs = with pythonPackages; [ twisted future ];
+  buildInputs = with python3Packages; [ setuptoolsTrial mock ];
+  propagatedBuildInputs = with python3Packages; [ twisted future ];
 
   postPatch = ''
     substituteInPlace buildbot_worker/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"

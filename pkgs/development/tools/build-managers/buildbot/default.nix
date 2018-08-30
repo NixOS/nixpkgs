@@ -1,4 +1,4 @@
-{ stdenv, openssh, buildbot-worker, buildbot-pkg, pythonPackages, runCommand, makeWrapper }:
+{ stdenv, openssh, buildbot-worker, buildbot-pkg, python3Packages, runCommand, makeWrapper }:
 
 let
   withPlugins = plugins: runCommand "wrapped-${package.name}" {
@@ -11,17 +11,16 @@ let
     ln -sfv ${package}/lib $out/lib
   '';
 
-  package = pythonPackages.buildPythonApplication rec {
-    name = "${pname}-${version}";
+  package = python3Packages.buildPythonApplication rec {
     pname = "buildbot";
     version = "1.2.0";
 
-    src = pythonPackages.fetchPypi {
+    src = python3Packages.fetchPypi {
       inherit pname version;
       sha256 = "02gwmls8kgm6scy36hdy0bg645zs1pxlrgwkcn79wrl7cfmabcbv";
     };
 
-    buildInputs = with pythonPackages; [
+    buildInputs = with python3Packages; [
       lz4
       txrequests
       pyjade
@@ -40,7 +39,7 @@ let
       treq
     ];
 
-    propagatedBuildInputs = with pythonPackages; [
+    propagatedBuildInputs = with python3Packages; [
       # core
       twisted
       jinja2
