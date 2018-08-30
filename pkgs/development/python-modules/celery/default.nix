@@ -38,7 +38,7 @@ in buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  buildInputs = [ pytest case ];
+  checkInputs = [ pytest_32 case ];
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
   meta = with stdenv.lib; {
