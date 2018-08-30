@@ -117,6 +117,8 @@ with pkgs;
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  corgi = callPackage ../development/tools/corgi { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
