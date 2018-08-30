@@ -1862,6 +1862,11 @@
     github = "jgillich";
     name = "Jakob Gillich";
   };
+  jglukasik = {
+    email = "joseph@jgl.me";
+    github = "jglukasik";
+    name = "Joseph Lukasik";
+  };
   jhhuh = {
     email = "jhhuh.note@gmail.com";
     github = "jhhuh";
