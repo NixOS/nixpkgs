@@ -15,6 +15,9 @@ if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.
       it is safe to upgrade by running it again:
 
           curl https://nixos.org/nix/install | sh
+
+    For more information, please see the NixOS release notes at
+    https://nixos.org/nixos/manual.
   ''
 
 else
