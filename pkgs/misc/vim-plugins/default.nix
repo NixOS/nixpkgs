@@ -1004,7 +1004,7 @@ self = rec {
       sha256 = "03sr53680kcwxaa5xbqzdfbsgday3bkzja33wym49w9gjmlaa320";
     };
     dependencies = ["vimproc" "vimshell" "self" "forms"];
-    pythonDependencies = with pythonPackages; [ sexpdata websocket_client ];
+    passthru.python3Dependencies = ps: with ps; [ sexpdata websocket_client ];
   };
 
   supertab = buildVimPluginFrom2Nix { # created by nix#NixDerivation

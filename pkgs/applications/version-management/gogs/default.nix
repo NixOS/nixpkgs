@@ -7,13 +7,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "gogs-${version}";
-  version = "0.11.34";
+  version = "0.11.53";
 
   src = fetchFromGitHub {
-    owner = "gogits";
+    owner = "gogs";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "15xwcw3k7wbahdgp796gly79qkka21p7kvm84zfjgcsjjri0kdnz";
+    sha256 = "1icm4bawyic4ivzyspqc6qjv882gil8j923zrbylw3i4ifhlcdhd";
   };
 
   patches = [ ./static-root-path.patch ];
@@ -37,7 +37,7 @@ buildGoPackage rec {
       --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 
-  goPackagePath = "github.com/gogits/gogs";
+  goPackagePath = "github.com/gogs/gogs";
 
   meta = {
     description = "A painless self-hosted Git service";

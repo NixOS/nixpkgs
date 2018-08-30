@@ -117,6 +117,8 @@ with pkgs;
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  corgi = callPackage ../development/tools/corgi { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
@@ -970,6 +972,8 @@ with pkgs;
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
   bustle = haskellPackages.bustle;
+
+  buttersink = callPackage ../tools/filesystems/buttersink { };
 
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
@@ -2390,6 +2394,10 @@ with pkgs;
   exiftool = perlPackages.ImageExifTool;
 
   ext4magic = callPackage ../tools/filesystems/ext4magic { };
+
+  extract_url = callPackage ../applications/misc/extract_url {
+    inherit (perlPackages) MIMEtools HTMLParser CursesUI URIFind;
+  };
 
   extundelete = callPackage ../tools/filesystems/extundelete { };
 
@@ -8393,6 +8401,8 @@ with pkgs;
 
   kustomize = callPackage ../development/tools/kustomize { };
 
+  kythe = callPackage ../development/tools/kythe { };
+
   Literate = callPackage ../development/tools/literate-programming/Literate {};
 
   lcov = callPackage ../development/tools/analysis/lcov { };
@@ -14259,6 +14269,12 @@ with pkgs;
   linuxPackages_hardkernel_latest = linuxPackages_hardkernel_4_14;
   linux_hardkernel_latest = linuxPackages_hardkernel_latest.kernel;
 
+  # GNU Linux-libre kernels
+  linuxPackages-libre = recurseIntoAttrs (linuxPackagesFor linux-libre);
+  linux-libre = callPackage ../os-specific/linux/kernel/linux-libre.nix {};
+  linuxPackages_latest-libre = recurseIntoAttrs (linuxPackagesFor linux_latest-libre);
+  linux_latest-libre = linux-libre.override { linux = linux_latest; };
+
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
 
@@ -15797,6 +15813,7 @@ with pkgs;
 
   deadbeefPlugins = {
     headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
+    infobar = callPackage ../applications/audio/deadbeef/plugins/infobar.nix { };
     mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
     opus = callPackage ../applications/audio/deadbeef/plugins/opus.nix { };
   };
@@ -21659,12 +21676,21 @@ with pkgs;
 
   nix-top = callPackage ../tools/package-management/nix-top { };
 
+  nix-repl = throw (
+    "nix-repl has been removed because it's not maintained anymore, " +
+    (lib.optionalString (! lib.versionAtLeast "2" (lib.versions.major builtins.nixVersion))
+      "ugrade your Nix installation to a newer version and ") +
+    "use `nix repl` instead. " +
+    "Also see https://github.com/NixOS/nixpkgs/pull/44903"
+  );
+
   nix-review = callPackage ../tools/package-management/nix-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
+  nixos-grub2-theme = callPackage ../data/misc/nixos-artwork/grub2-theme.nix { };
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 
