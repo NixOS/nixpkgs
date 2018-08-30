@@ -1,6 +1,6 @@
 { buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
 , requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker, responses
-, six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml }:
+, six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml, python-jose }:
 
 buildPythonPackage rec {
   pname = "moto";
@@ -42,6 +42,7 @@ buildPythonPackage rec {
     botocore
     docker
     responses
+    python-jose
   ];
 
   checkInputs = [ boto3 nose sure freezegun ];
