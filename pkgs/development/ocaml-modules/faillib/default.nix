@@ -1,4 +1,8 @@
-{stdenv, buildOcaml, fetchurl, herelib, camlp4}:
+{ stdenv, buildOcaml, fetchurl, ocaml, herelib, camlp4 }:
+
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "faillib-111.17.00 is not available for OCaml ${ocaml.version}"
+else
 
 buildOcaml rec {
   minimumSupportedOcamlVersion = "4.00";

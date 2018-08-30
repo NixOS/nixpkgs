@@ -610,9 +610,6 @@ let
       else null;
 
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
-    ocaml_extlib_maximal = callPackage ../development/ocaml-modules/extlib {
-      minimal = false;
-    };
 
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
@@ -1075,10 +1072,5 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_07;
 
-  ocamlPackages =
-    # OCaml 4.05 is broken on aarch64
-    if system == "aarch64-linux" then
-      ocamlPackages_4_06
-    else
-      ocamlPackages_4_05;
+  ocamlPackages = ocamlPackages_4_06;
 }

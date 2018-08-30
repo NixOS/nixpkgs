@@ -6056,7 +6056,9 @@ with pkgs;
 
   wv2 = callPackage ../tools/misc/wv2 { };
 
-  wyrd = callPackage ../tools/misc/wyrd { };
+  wyrd = callPackage ../tools/misc/wyrd {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   x86info = callPackage ../os-specific/linux/x86info { };
 
@@ -6722,7 +6724,7 @@ with pkgs;
       graphviz = graphviz-nox;
     });
 
-  inherit (ocamlPackages.haxe) haxe_3_2 haxe_3_4;
+  inherit (ocaml-ng.ocamlPackages_4_05.haxe) haxe_3_2 haxe_3_4;
   haxe = haxe_3_4;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
@@ -6739,13 +6741,9 @@ with pkgs;
     mono = mono46;
   };
 
-  fstar = callPackage ../development/compilers/fstar {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_06;
-  };
+  fstar = callPackage ../development/compilers/fstar { };
 
-  pyre = callPackage ../development/tools/pyre {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_06;
-  };
+  pyre = callPackage ../development/tools/pyre { };
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
@@ -7094,7 +7092,9 @@ with pkgs;
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
-  obliv-c = callPackage ../development/compilers/obliv-c {};
+  obliv-c = callPackage ../development/compilers/obliv-c {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   ocaml-ng = callPackage ./ocaml-packages.nix { };
   ocaml = ocamlPackages.ocaml;
@@ -7119,7 +7119,9 @@ with pkgs;
 
   opaline = callPackage ../development/tools/ocaml/opaline { };
 
-  opam = callPackage ../development/tools/ocaml/opam { };
+  opam = callPackage ../development/tools/ocaml/opam {
+    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
+  };
 
   picat = callPackage ../development/compilers/picat {
     stdenv = overrideCC stdenv gcc49;
@@ -8093,7 +8095,9 @@ with pkgs;
   # Does not actually depend on Qt 5
   inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle { };
+  coccinelle = callPackage ../development/tools/misc/coccinelle {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   cpptest = callPackage ../development/libraries/cpptest { };
 
@@ -10103,7 +10107,7 @@ with pkgs;
   libb2 = callPackage ../development/libraries/libb2 { };
 
   libbap = callPackage ../development/libraries/libbap {
-    inherit (ocamlPackages) bap ocaml findlib ctypes;
+    inherit (ocaml-ng.ocamlPackages_4_05) bap ocaml findlib ctypes;
   };
 
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
@@ -16864,7 +16868,9 @@ with pkgs;
     extra-packages = [ csound ];
   };
 
-  jackline = callPackage ../applications/networking/instant-messengers/jackline { };
+  jackline = callPackage ../applications/networking/instant-messengers/jackline {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
@@ -17468,7 +17474,9 @@ with pkgs;
 
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
+  mldonkey = callPackage ../applications/networking/p2p/mldonkey {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   MMA = callPackage ../applications/audio/MMA { };
 
@@ -18918,7 +18926,7 @@ with pkgs;
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
-  inherit (ocamlPackages) unison;
+  inherit (ocaml-ng.ocamlPackages_4_05) unison;
 
   unpaper = callPackage ../tools/graphics/unpaper { };
 
@@ -20855,9 +20863,13 @@ with pkgs;
 
   abella = callPackage ../applications/science/logic/abella {};
 
-  acgtk = callPackage ../applications/science/logic/acgtk { };
+  acgtk = callPackage ../applications/science/logic/acgtk {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
-  alt-ergo = callPackage ../applications/science/logic/alt-ergo { };
+  alt-ergo = callPackage ../applications/science/logic/alt-ergo {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   aspino = callPackage ../applications/science/logic/aspino {};
 
@@ -20867,7 +20879,9 @@ with pkgs;
 
   inherit (callPackage ./coq-packages.nix {
     inherit (ocaml-ng) ocamlPackages_3_12_1
-                       ocamlPackages_4_02;
+                       ocamlPackages_4_02
+                       ocamlPackages_4_05
+    ;
   }) mkCoqPackages
     coq_8_3 coq_8_4 coq_8_5 coq_8_6 coq_8_7 coq_8_8
     coqPackages_8_5 coqPackages_8_6 coqPackages_8_7 coqPackages_8_8
@@ -20882,7 +20896,9 @@ with pkgs;
 
   caprice32 = callPackage ../misc/emulators/caprice32 { };
 
-  cubicle = callPackage ../applications/science/logic/cubicle { };
+  cubicle = callPackage ../applications/science/logic/cubicle {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {
     gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
@@ -20978,7 +20994,9 @@ with pkgs;
 
   proverif = callPackage ../applications/science/logic/proverif { };
 
-  sapic = callPackage ../applications/science/logic/sapic { };
+  sapic = callPackage ../applications/science/logic/sapic {
+    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
+  };
 
   satallax = callPackage ../applications/science/logic/satallax {
     ocaml = ocaml-ng.ocamlPackages_4_01_0.ocaml;
@@ -20990,7 +21008,9 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  statverif = callPackage ../applications/science/logic/statverif { };
+  statverif = callPackage ../applications/science/logic/statverif {
+    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
+  };
 
   tptp = callPackage ../applications/science/logic/tptp {};
 
@@ -21021,7 +21041,9 @@ with pkgs;
   z3 = callPackage ../applications/science/logic/z3 { python = python2; };
 
   tlaplus = callPackage ../applications/science/logic/tlaplus {};
-  tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {};
+  tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
+    inherit (ocaml-ng.ocamlPackages_4_05) ocaml;
+  };
   tlaplusToolbox = callPackage ../applications/science/logic/tlaplus/toolbox.nix {gtk = gtk2;};
 
   aiger = callPackage ../applications/science/logic/aiger {};
@@ -21865,9 +21887,7 @@ with pkgs;
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
-  satysfi = callPackage ../tools/typesetting/satysfi {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_06;
-  };
+  satysfi = callPackage ../tools/typesetting/satysfi { };
 
   sc-controller = pythonPackages.callPackage ../misc/drivers/sc-controller {
     inherit libusb1; # Shadow python.pkgs.libusb1.
