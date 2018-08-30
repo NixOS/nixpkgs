@@ -162,6 +162,11 @@ in
 
           libsForQt56.phonon-backend-gstreamer
           libsForQt5.phonon-backend-gstreamer
+
+          # having these utilities on the path makes the system 
+          # path builder update mime entries
+          shared-mime-info
+          desktop-file-utils
         ]
 
         ++ lib.optionals cfg.enableQt4Support [ pkgs.phonon-backend-gstreamer ]

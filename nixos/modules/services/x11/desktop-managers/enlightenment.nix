@@ -33,7 +33,12 @@ in
       pkgs.xorg.xauth # used by kdesu
       pkgs.gtk2 # To get GTK+'s themes.
       pkgs.tango-icon-theme
+
+      # having these utilities on the path makes the system 
+      # path builder update mime entries
       pkgs.shared-mime-info
+      pkgs.desktop-file-utils
+
       pkgs.gnome2.gnomeicontheme
       pkgs.xorg.xcursorthemes
     ];
