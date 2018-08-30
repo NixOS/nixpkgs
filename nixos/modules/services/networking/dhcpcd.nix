@@ -59,6 +59,11 @@ let
       # Use the list of allowed interfaces if specified
       ${optionalString (allowInterfaces != null) "allowinterfaces ${toString allowInterfaces}"}
 
+      # Expose less information to the DHCP server. The default is to send a string like
+      # dhcpcd-<version>:<os>:<machine>:<platform>
+      # This option keeps the vendor ID of the dhcpcd project and changes the string to "dhcpcd".
+      vendclass 40712 dhcpcd
+
       ${cfg.extraConfig}
     '';
 
