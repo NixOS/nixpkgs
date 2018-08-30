@@ -736,7 +736,8 @@ in {
   # argparse is part of stdlib in 2.7 and 3.2+
   argparse = null;
 
-  astroid = callPackage ../development/python-modules/astroid { };
+  astroid = if isPy3k then callPackage ../development/python-modules/astroid { }
+            else callPackage ../development/python-modules/astroid/1.6.nix { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
 
