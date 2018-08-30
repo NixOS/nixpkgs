@@ -103,8 +103,8 @@ in
             chown zabbix ${stateDir} ${logDir} ${libDir}
 
             if ! test -e "${libDir}/db-created"; then
-                ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole zabbix || true
-                ${pkgs.postgresql}/bin/createdb --owner zabbix zabbix || true
+                ${pkgs.su}/bin/su -s "$SHELL" ${config.services.postgresql.superUser} -c '${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole zabbix' || true
+                ${pkgs.su}/bin/su -s "$SHELL" ${config.services.postgresql.superUser} -c '${pkgs.postgresql}/bin/createdb --owner zabbix zabbix' || true
                 cat ${pkgs.zabbix.server}/share/zabbix/db/schema/postgresql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
                 cat ${pkgs.zabbix.server}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
                 cat ${pkgs.zabbix.server}/share/zabbix/db/data/data.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'

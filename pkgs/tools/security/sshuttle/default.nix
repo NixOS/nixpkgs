@@ -3,25 +3,14 @@
 
 python3Packages.buildPythonApplication rec {
   name = "sshuttle-${version}";
-  version = "0.78.3";
+  version = "0.78.4";
 
   src = fetchurl {
-    sha256 = "12xyq5h77b57cnkljdk8qyjxzys512b73019s20x6ck5brj1m8wa";
+    sha256 = "0pqk43kd7crqhg6qgnl8kapncwgw1xgaf02zarzypcw64kvdih9h";
     url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
   };
 
-  patches = [
-    ./sudo.patch
-    (fetchpatch {
-      url = "https://github.com/sshuttle/sshuttle/commit/91aa6ff625f7c89a19e6f8702425cfead44a146f.patch";
-      sha256 = "0sqcc6kj53wlas2d3klbyilhns6vakzwbbp8y7j9wlmbnc530pks";
-    })
-    # fix macos patch
-    (fetchpatch {
-      url = "https://github.com/sshuttle/sshuttle/commit/884bd6deb0b699a5648bb1c7bdfbc7be8ea0e7df.patch";
-      sha256 = "1nn0wx0rckxl9yzw9dxjji44zw4xqz7ws4qwjdvfn48w1f786lmz";
-    })
-  ];
+  patches = [ ./sudo.patch ];
 
   nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.system != "i686-linux") pandoc;
   buildInputs =

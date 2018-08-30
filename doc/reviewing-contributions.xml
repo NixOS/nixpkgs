@@ -6,18 +6,20 @@
  <title>Reviewing contributions</title>
  <warning>
   <para>
-   The following section is a draft, and the policy for reviewing is still being
-   discussed in issues such as <link
+   The following section is a draft, and the policy for reviewing is still
+   being discussed in issues such as
+   <link
 	   xlink:href="https://github.com/NixOS/nixpkgs/issues/11166">#11166
-   </link> and <link
+   </link> and
+   <link
 	   xlink:href="https://github.com/NixOS/nixpkgs/issues/20836">#20836
    </link>.
   </para>
  </warning>
  <para>
-  The nixpkgs project receives a fairly high number of contributions via
-  GitHub pull-requests. Reviewing and approving these is an important task and
-  a way to contribute to the project.
+  The nixpkgs project receives a fairly high number of contributions via GitHub
+  pull-requests. Reviewing and approving these is an important task and a way
+  to contribute to the project.
  </para>
  <para>
   The high change rate of nixpkgs makes any pull request that remains open for
@@ -40,10 +42,10 @@
   to respect every community member and their work.
  </para>
  <para>
-  GitHub provides reactions as a simple and quick way to provide
-  feedback to pull-requests or any comments. The thumb-down reaction should be
-  used with care and if possible accompanied with some explanation so the
-  submitter has directions to improve their contribution.
+  GitHub provides reactions as a simple and quick way to provide feedback to
+  pull-requests or any comments. The thumb-down reaction should be used with
+  care and if possible accompanied with some explanation so the submitter has
+  directions to improve their contribution.
  </para>
  <para>
   Pull-request reviews should include a list of what has been reviewed in a
@@ -117,8 +119,8 @@
     <itemizedlist>
      <listitem>
       <para>
-       License can change with version updates, so it should be checked to match
-       the upstream license.
+       License can change with version updates, so it should be checked to
+       match the upstream license.
       </para>
      </listitem>
      <listitem>
@@ -143,8 +145,8 @@
      <listitem>
       <para>
        Pull-requests are often targeted to the master or staging branch, and
-       building the pull-request locally when it is submitted can trigger
-       many source builds.
+       building the pull-request locally when it is submitted can trigger many
+       source builds.
       </para>
       <para>
        It is possible to rebase the changes on nixos-unstable or
@@ -605,11 +607,12 @@ policy.
 -->
 
   <para>
-   In a case a contributor leaves definitively the Nix community, he
-   should create an issue or post on <link
+   In a case a contributor leaves definitively the Nix community, he should
+   create an issue or post on
+   <link
    xlink:href="https://discourse.nixos.org">Discourse</link> with
-   references of packages and modules he maintains so the
-   maintainership can be taken over by other contributors.
+   references of packages and modules he maintains so the maintainership can be
+   taken over by other contributors.
   </para>
  </section>
 </chapter>

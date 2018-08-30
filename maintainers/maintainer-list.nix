@@ -425,6 +425,11 @@
     github = "Baughn";
     name = "Svein Ove Aas";
   };
+  bb010g = {
+    email = "me@bb010g.com";
+    github = "bb010g";
+    name = "Brayden Banks";
+  };
   bbarker = {
     email = "brandon.barker@gmail.com";
     github = "bbarker";
@@ -826,6 +831,11 @@
     email = "couchemar@yandex.ru";
     github = "couchemar";
     name = "Andrey Pavlov";
+  };
+  countingsort = {
+    email = "niclas@countingsort.com";
+    github = "countingsort";
+    name = "Niclas Meyer";
   };
   cpages = {
     email = "page@ruiec.cat";
@@ -3694,6 +3704,11 @@
     email = "langston.barrett@gmail.com";
     github = "siddharthist";
     name = "Langston Barrett";
+  };
+  siers = {
+    email = "veinbahs+nixpkgs@gmail.com";
+    github = "siers";
+    name = "Raitis Veinbahs";
   };
   sifmelcara = {
     email = "ming@culpring.com";

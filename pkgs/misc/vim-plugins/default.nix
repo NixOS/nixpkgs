@@ -1004,7 +1004,7 @@ self = rec {
       sha256 = "03sr53680kcwxaa5xbqzdfbsgday3bkzja33wym49w9gjmlaa320";
     };
     dependencies = ["vimproc" "vimshell" "self" "forms"];
-    pythonDependencies = with pythonPackages; [ sexpdata websocket_client ];
+    passthru.python3Dependencies = ps: with ps; [ sexpdata websocket_client ];
   };
 
   supertab = buildVimPluginFrom2Nix { # created by nix#NixDerivation
@@ -2757,6 +2757,17 @@ self = rec {
       url = "https://github.com/tpope/vim-eunuch";
       rev = "e5f4f955d53e07192fb330ff272604c1b8290532";
       sha256 = "0cv3j3bkapb45ywlfiz8csxmz7gnsdngwgmkrgfg6sljnsgav2za";
+    };
+    dependencies = [];
+
+  };
+
+  vim-fireplace = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-fireplace-2018-06-01";
+    src = fetchgit {
+      url = "https://github.com/tpope/vim-fireplace";
+      rev = "1ef0f0726cadd96547a5f79103b66339f170da02";
+      sha256 = "0ihhd34bl98xssa602386ji013pjj6xnkgww3y2wg73sx2nk6qc4";
     };
     dependencies = [];
 

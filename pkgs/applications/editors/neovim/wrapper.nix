@@ -10,13 +10,13 @@ neovim:
 
 let
   wrapper = {
-      withPython ? true,  extraPythonPackages ? []
-    , withPython3 ? true,  extraPython3Packages ? []
+      withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
+    , withPython3 ? true,  extraPython3Packages ? (_: []) /* the function you would have passed to python.withPackages */
     , withRuby ? true
     , withPyGUI ? false
     , vimAlias ? false
     , viAlias ? false
-    , configure ? null
+    , configure ? {}
   }:
   let
 
@@ -28,25 +28,27 @@ let
     '';
   };
 
-  pluginPythonPackages = if configure == null then [] else builtins.concatLists
-    (map ({ pythonDependencies ? [], ...}: pythonDependencies)
-         (vimUtils.requiredPlugins configure));
-  pythonEnv = pythonPackages.python.buildEnv.override {
-    extraLibs = (
-        if withPyGUI
-          then [ pythonPackages.neovim_gui ]
-          else [ pythonPackages.neovim ]
-      ) ++ extraPythonPackages ++ pluginPythonPackages;
-    ignoreCollisions = true;
-  };
+  /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
+  compatFun = funOrList: (if builtins.isList funOrList then
+    (_: builtins.trace "passing a list as extraPythonPackages to the neovim wrapper is deprecated, pass a function as to python.withPackages instead" funOrList)
+    else funOrList);
+  extraPythonPackagesFun = compatFun extraPythonPackages;
+  extraPython3PackagesFun = compatFun extraPython3Packages;
 
-  pluginPython3Packages = if configure == null then [] else builtins.concatLists
-    (map ({ python3Dependencies ? [], ...}: python3Dependencies)
-         (vimUtils.requiredPlugins configure));
-  python3Env = python3Packages.python.buildEnv.override {
-    extraLibs = [ python3Packages.neovim ] ++ extraPython3Packages ++ pluginPython3Packages;
-    ignoreCollisions = true;
-  };
+  requiredPlugins = vimUtils.requiredPlugins configure;
+  getDeps = attrname: map (plugin: plugin.${attrname} or (_:[]));
+
+  pluginPythonPackages = getDeps "pythonDependencies" requiredPlugins;
+  pythonEnv = pythonPackages.python.withPackages(ps:
+        (if withPyGUI then [ ps.neovim_gui ] else [ ps.neovim ])
+        ++ (extraPythonPackagesFun ps)
+        ++ (concatMap (f: f ps) pluginPythonPackages));
+
+  pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
+  python3Env = python3Packages.python.withPackages (ps:
+        [ ps.neovim ]
+        ++ (extraPython3PackagesFun ps)
+        ++ (concatMap (f: f ps) pluginPython3Packages));
 
   in
   stdenv.mkDerivation {
@@ -63,7 +65,6 @@ let
         --cmd \"${if withPython then "let g:python_host_prog='$out/bin/nvim-python'" else "let g:loaded_python_provider = 1"}\" \
         --cmd \"${if withPython3 then "let g:python3_host_prog='$out/bin/nvim-python3'" else "let g:loaded_python3_provider = 1"}\" \
         --cmd \"${if withRuby then "let g:ruby_host_prog='$out/bin/nvim-ruby'" else "let g:loaded_ruby_provider=1"}\" " \
-        --unset PYTHONPATH \
          ${optionalString withRuby '' --suffix PATH : ${rubyEnv}/bin --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
 
       ''
@@ -75,9 +76,9 @@ let
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
       ''
       + optionalString withPython ''
-      ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
+        makeWrapper ${pythonEnv}/bin/python $out/bin/nvim-python --unset PYTHONPATH
     '' + optionalString withPython3 ''
-      ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
+        makeWrapper ${python3Env}/bin/python3 $out/bin/nvim-python3 --unset PYTHONPATH
     '' + optionalString withRuby ''
       ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
     ''
@@ -88,7 +89,7 @@ let
       ln -s $out/bin/nvim $out/bin/vim
     '' + optionalString viAlias ''
       ln -s $out/bin/nvim $out/bin/vi
-    '' + optionalString (configure != null) ''
+    '' + optionalString (configure != {}) ''
     wrapProgram $out/bin/nvim --add-flags "-u ${vimUtils.vimrcFile configure}"
     ''
     ;

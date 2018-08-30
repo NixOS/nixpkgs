@@ -29,7 +29,6 @@
       }
     </programlisting>
    </listitem>
-
    <listitem>
     <para>
      On darwin libraries are linked using absolute paths, libraries are
@@ -47,19 +46,19 @@
       }
     </programlisting>
    </listitem>
-
    <listitem>
     <para>
      Even if the libraries are linked using absolute paths and resolved via
      their <literal>install_name</literal> correctly, tests can sometimes fail
-     to run binaries.  This happens because the <varname>checkPhase</varname>
+     to run binaries. This happens because the <varname>checkPhase</varname>
      runs before the libraries are installed.
     </para>
     <para>
      This can usually be solved by running the tests after the
      <varname>installPhase</varname> or alternatively by using
      <varname>DYLD_LIBRARY_PATH</varname>. More information about this variable
-     can be found in the <citerefentry><refentrytitle>dyld</refentrytitle>
+     can be found in the <citerefentry>
+     <refentrytitle>dyld</refentrytitle>
      <manvolnum>1</manvolnum></citerefentry> manpage.
     </para>
 <programlisting>
@@ -77,7 +76,6 @@
       }
     </programlisting>
    </listitem>
-
    <listitem>
     <para>
      Some packages assume xcode is available and use <command>xcrun</command>

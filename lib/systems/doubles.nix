@@ -36,7 +36,7 @@ in rec {
   cygwin  = filterDoubles predicates.isCygwin;
   darwin  = filterDoubles predicates.isDarwin;
   freebsd = filterDoubles predicates.isFreeBSD;
-  # Should be better, but MinGW is unclear, and HURD is bit-rotted.
+  # Should be better, but MinGW is unclear.
   gnu     = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; });
   illumos = filterDoubles predicates.isSunOS;
   linux   = filterDoubles predicates.isLinux;

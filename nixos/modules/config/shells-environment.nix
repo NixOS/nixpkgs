@@ -80,7 +80,7 @@ in
       default = "";
       description = ''
         Shell script code called during shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -90,7 +90,7 @@ in
       default = "";
       description = ''
         Shell script code called during login shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -100,7 +100,7 @@ in
       default = "";
       description = ''
         Shell script code called during interactive shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;

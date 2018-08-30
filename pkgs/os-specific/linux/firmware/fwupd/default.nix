@@ -79,6 +79,19 @@ in stdenv.mkDerivation {
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 
+  # TODO: wrapGAppsHook wraps efi capsule even though it is not elf
+  dontWrapGApps = true;
+  # so we need to wrap the executables manually
+  postFixup = ''
+    find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
+      | while IFS= read -r -d ''' file; do
+      if [[ "''${file}" != *.efi ]]; then
+        echo "Wrapping program ''${file}"
+        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+      fi
+    done
+  '';
+
   # /etc/fwupd/uefi.conf is created by the services.hardware.fwupd NixOS module
   passthru = {
     filesInstalledToEtc = [

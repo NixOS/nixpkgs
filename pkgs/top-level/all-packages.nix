@@ -117,6 +117,8 @@ with pkgs;
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  corgi = callPackage ../development/tools/corgi { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
@@ -385,7 +387,7 @@ with pkgs;
     { deps = [ pkgs.lcov pkgs.enableGCOVInstrumentation ]; }
     ../build-support/setup-hooks/make-coverage-analysis-report.sh;
 
-  # intended to be used like nix-build -E 'with <nixpkgs> {}; enableDebugging fooPackage'
+  # intended to be used like nix-build -E 'with import <nixpkgs> {}; enableDebugging fooPackage'
   enableDebugging = pkg: pkg.override { stdenv = stdenvAdapters.keepDebugInfo pkg.stdenv; };
 
   findXMLCatalogs = makeSetupHook { } ../build-support/setup-hooks/find-xml-catalogs.sh;
@@ -635,6 +637,8 @@ with pkgs;
 
   bonfire = callPackage ../tools/misc/bonfire { };
 
+  bunny = callPackage ../tools/package-management/bunny { };
+
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
@@ -706,7 +710,9 @@ with pkgs;
 
   asc-key-to-qr-code-gif = callPackage ../tools/security/asc-key-to-qr-code-gif { };
 
-  gopass = callPackage ../tools/security/gopass { };
+  gopass = callPackage ../tools/security/gopass {
+    buildGoPackage = buildGo110Package;
+  };
 
   browserpass = callPackage ../tools/security/browserpass { };
 
@@ -1348,7 +1354,9 @@ with pkgs;
 
   gmic = callPackage ../tools/graphics/gmic { };
 
-  goa = callPackage ../development/tools/goa { };
+  goa = callPackage ../development/tools/goa {
+    buildGoPackage = buildGo110Package;
+  };
 
   gohai = callPackage ../tools/system/gohai { };
 
@@ -1401,6 +1409,10 @@ with pkgs;
   languagetool = callPackage ../tools/text/languagetool {  };
 
   lief = callPackage ../development/libraries/lief {};
+
+  libndtypes = callPackage ../development/libraries/libndtypes { };
+
+  libxnd = callPackage ../development/libraries/libxnd { };
 
   loadwatch = callPackage ../tools/system/loadwatch { };
 
@@ -2095,13 +2107,17 @@ with pkgs;
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
-  diskrsync = callPackage ../tools/backup/diskrsync { };
+  diskrsync = callPackage ../tools/backup/diskrsync {
+    buildGoPackage = buildGo110Package;
+  };
 
   djbdns = callPackage ../tools/networking/djbdns { };
 
   dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy/1.x { };
 
-  dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy/2.x { };
+  dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy/2.x {
+    buildGoPackage = buildGo110Package;
+  };
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
@@ -2937,8 +2953,12 @@ with pkgs;
     stdenv = stdenv_32bit;
   };
 
-  gx = callPackage ../tools/package-management/gx { };
-  gx-go = callPackage ../tools/package-management/gx/go { };
+  gx = callPackage ../tools/package-management/gx {
+    buildGoPackage = buildGo110Package;
+  };
+  gx-go = callPackage ../tools/package-management/gx/go {
+    buildGoPackage = buildGo110Package;
+  };
 
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
@@ -3282,7 +3302,9 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
-  ipget = callPackage ../applications/networking/ipget { };
+  ipget = callPackage ../applications/networking/ipget {
+    buildGoPackage = buildGo110Package;
+  };
 
   ipmitool = callPackage ../tools/system/ipmitool {
     static = false;
@@ -3968,7 +3990,9 @@ with pkgs;
 
   mimetic = callPackage ../development/libraries/mimetic { };
 
-  minio-client = callPackage ../tools/networking/minio-client { };
+  minio-client = callPackage ../tools/networking/minio-client {
+    buildGoPackage = buildGo110Package;
+  };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
@@ -4202,7 +4226,9 @@ with pkgs;
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = callPackage ../applications/networking/cluster/nomad { };
+  nomad = callPackage ../applications/networking/cluster/nomad {
+    buildGoPackage = buildGo110Package;
+  };
 
   miller = callPackage ../tools/text/miller { };
 
@@ -4254,7 +4280,9 @@ with pkgs;
 
   nnn = callPackage ../applications/misc/nnn { };
 
-  notary = callPackage ../tools/security/notary { };
+  notary = callPackage ../tools/security/notary {
+    buildGoPackage = buildGo110Package;
+  };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
@@ -4480,7 +4508,7 @@ with pkgs;
 
   patchutils = callPackage ../tools/text/patchutils { };
 
-  parted = callPackage ../tools/misc/parted { hurd = null; };
+  parted = callPackage ../tools/misc/parted { };
 
   pell = callPackage ../applications/misc/pell { };
 
@@ -4506,24 +4534,6 @@ with pkgs;
   p0f = callPackage ../tools/security/p0f { };
 
   pngout = callPackage ../tools/graphics/pngout { };
-
-  hurdPartedCross =
-    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
-    then (makeOverridable
-            ({ hurd }:
-              (parted.override {
-                # Needs the Hurd's libstore.
-                inherit hurd;
-
-                # The Hurd wants a libparted.a.
-                enableStatic = true;
-
-                gettext = null;
-                readline = null;
-                devicemapper = null;
-              }).crossDrv)
-           { hurd = gnu.hurdCrossIntermediate; })
-    else null;
 
   ipsecTools = callPackage ../os-specific/linux/ipsec-tools { flex = flex_2_5_35; };
 
@@ -5161,8 +5171,6 @@ with pkgs;
 
   signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
 
-  signal-desktop-beta = callPackage ../applications/networking/instant-messengers/signal-desktop/beta.nix { };
-
   # aka., pgp-tools
   signing-party = callPackage ../tools/security/signing-party { };
 
@@ -5532,7 +5540,9 @@ with pkgs;
 
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
 
-  tmsu = callPackage ../tools/filesystems/tmsu { };
+  tmsu = callPackage ../tools/filesystems/tmsu {
+    go = go_1_10;
+  };
 
   toilet = callPackage ../tools/misc/toilet { };
 
@@ -5632,8 +5642,8 @@ with pkgs;
     libX11 = xorg.libX11;
   };
 
-  twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
-  twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap/v3.nix {};
+  twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap {};
+  twitterBootstrap = twitterBootstrap3;
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
@@ -6758,7 +6768,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = go_1_10;
+  go_1_11 = callPackage ../development/compilers/go/1.11.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
+  go = go_1_11;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -7248,9 +7262,6 @@ with pkgs;
   urweb = callPackage ../development/compilers/urweb { };
 
   inherit (callPackage ../development/compilers/vala { })
-    vala_0_26
-    vala_0_28
-    vala_0_32
     vala_0_34
     vala_0_36
     vala_0_38
@@ -8734,8 +8745,6 @@ with pkgs;
 
   gdb = callPackage ../development/tools/misc/gdb {
     guile = null;
-    hurd = gnu.hurdCross;
-    inherit (gnu) mig;
   };
 
   jhiccup = callPackage ../development/tools/java/jhiccup { };
@@ -9737,6 +9746,11 @@ with pkgs;
 
   gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
+  };
+
+  # On darwin gtk uses cocoa by default instead of x11.
+  gtk3-x11 = gtk3.override {
+    x11Support = true;
   };
 
   gtkmm2 = callPackage ../development/libraries/gtkmm/2.x.nix { };
@@ -12653,8 +12667,11 @@ with pkgs;
   buildGo110Package = callPackage ../development/go-modules/generic {
     go = go_1_10;
   };
+  buildGo111Package = callPackage ../development/go-modules/generic {
+    go = go_1_11;
+  };
 
-  buildGoPackage = buildGo110Package;
+  buildGoPackage = buildGo111Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -13012,13 +13029,17 @@ with pkgs;
 
   mediatomb = callPackage ../servers/mediatomb { };
 
-  meguca = callPackage ../servers/meguca { };
+  meguca = callPackage ../servers/meguca {
+    buildGoPackage = buildGo110Package;
+  };
 
   memcached = callPackage ../servers/memcached {};
 
   meteor = callPackage ../servers/meteor { };
 
-  minio = callPackage ../servers/minio { };
+  minio = callPackage ../servers/minio {
+    buildGoPackage = buildGo110Package;
+  };
 
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
@@ -13281,7 +13302,9 @@ with pkgs;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
-  inherit (callPackage ../servers/monitoring/prometheus {})
+  inherit (callPackage ../servers/monitoring/prometheus {
+    buildGoPackage = buildGo110Package;
+  })
       prometheus_1
       prometheus_2
       ;
@@ -13307,7 +13330,9 @@ with pkgs;
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
-  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
+  prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix {
+    buildGoPackage = buildGo110Package;
+  };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-bridge.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
@@ -13685,7 +13710,9 @@ with pkgs;
   dstat = callPackage ../os-specific/linux/dstat { };
 
   # unstable until the first 1.x release
-  fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
+  fscrypt-experimental = callPackage ../os-specific/linux/fscrypt {
+    buildGoPackage = buildGo110Package;
+  };
   fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
@@ -13696,22 +13723,7 @@ with pkgs;
 
   libossp_uuid = callPackage ../development/libraries/libossp-uuid { };
 
-  libuuid =
-    if targetPlatform != buildPlatform && targetPlatform.config == "i586-pc-gnu"
-    then (utillinuxMinimal // {
-      crossDrv = lib.overrideDerivation utillinuxMinimal.crossDrv (args: {
-        # `libblkid' fails to build on GNU/Hurd.
-        configureFlags = args.configureFlags
-          + " --disable-libblkid --disable-mount --disable-libmount"
-          + " --disable-fsck --enable-static --disable-partx";
-        doCheck = false;
-        CPPFLAGS =                    # ugly hack for ugly software!
-          lib.concatStringsSep " "
-            (map (v: "-D${v}=4096")
-                 [ "PATH_MAX" "MAXPATHLEN" "MAXHOSTNAMELEN" ]);
-      });
-    })
-    else if stdenv.isLinux
+  libuuid = if stdenv.isLinux
     then utillinuxMinimal
     else null;
 
@@ -13782,9 +13794,6 @@ with pkgs;
   };
 
   nmon = callPackage ../os-specific/linux/nmon { };
-
-  # GNU/Hurd core packages.
-  gnu = recurseIntoAttrs (callPackage ../os-specific/gnu { });
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
 
@@ -14252,6 +14261,12 @@ with pkgs;
   linuxPackages_hardkernel_latest = linuxPackages_hardkernel_4_14;
   linux_hardkernel_latest = linuxPackages_hardkernel_latest.kernel;
 
+  # GNU Linux-libre kernels
+  linuxPackages-libre = recurseIntoAttrs (linuxPackagesFor linux-libre);
+  linux-libre = callPackage ../os-specific/linux/kernel/linux-libre.nix {};
+  linuxPackages_latest-libre = recurseIntoAttrs (linuxPackagesFor linux_latest-libre);
+  linux_latest-libre = linux-libre.override { linux = linux_latest; };
+
   # A function to build a manually-configured kernel
   linuxManualConfig = makeOverridable (callPackage ../os-specific/linux/kernel/manual-config.nix {});
 
@@ -14404,7 +14419,9 @@ with pkgs;
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
-  go-langserver = callPackage ../development/tools/go-langserver { };
+  go-langserver = callPackage ../development/tools/go-langserver {
+    buildGoPackage = buildGo110Package;
+  };
 
   gotests = callPackage ../development/tools/gotests { };
 
@@ -15446,10 +15463,6 @@ with pkgs;
     ffmpeg = ffmpeg_2;
   };
 
-  awesome-3-5 = callPackage ../applications/window-managers/awesome/3.5.nix {
-    cairo = cairo.override { xcbSupport = true; };
-    luaPackages = luaPackages.override { inherit lua; };
-  };
   awesome-4-0 = callPackage ../applications/window-managers/awesome {
     cairo = cairo.override { xcbSupport = true; };
     luaPackages = luaPackages.override { inherit lua; };
@@ -15791,6 +15804,7 @@ with pkgs;
   };
 
   deadbeefPlugins = {
+    headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
     mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
     opus = callPackage ../applications/audio/deadbeef/plugins/opus.nix { };
   };
@@ -15896,6 +15910,11 @@ with pkgs;
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
+  };
+
+  dwm-git = callPackage ../applications/window-managers/dwm/git.nix {
+    patches = config.dwm.patches or [];
+    conf = config.dwm.conf or null;
   };
 
   dwm-status = callPackage ../applications/window-managers/dwm/dwm-status.nix { };
@@ -16984,6 +17003,8 @@ with pkgs;
   inherit (nodePackages) imapnotify;
 
   img2pdf = callPackage ../applications/misc/img2pdf { };
+
+  imgcat = callPackage ../applications/graphics/imgcat { };
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive { };
@@ -18912,8 +18933,6 @@ with pkgs;
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
 
-  vanubi = callPackage ../applications/editors/vanubi { };
-
   vbindiff = callPackage ../applications/editors/vbindiff { };
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
@@ -18943,9 +18962,8 @@ with pkgs;
   vim_configurable = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/configurable.nix {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
     inherit (darwin) libobjc cf-private;
-    inherit lua;
     gtk2 = if stdenv.isDarwin then gtk2-x11 else gtk2;
-    guiSupport = if stdenv.isDarwin then "gtk2" else "gtk3";
+    gtk3 = if stdenv.isDarwin then gtk3-x11 else gtk3;
   });
 
   qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
@@ -19350,9 +19368,7 @@ with pkgs;
 
   inherit (xorg) xcompmgr;
 
-  compton = callPackage ../applications/window-managers/compton { };
-
-  compton-git = callPackage ../applications/window-managers/compton/git.nix { };
+  inherit (callPackage ../applications/window-managers/compton {}) compton compton-git;
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 
@@ -19488,8 +19504,6 @@ with pkgs;
     libssh2 = null;
     openssl = null;
   };
-
-  finalterm = callPackage ../applications/misc/finalterm { };
 
   roxterm = callPackage ../applications/misc/roxterm {
     inherit (gnome3) gsettings-desktop-schemas vte;
@@ -20264,6 +20278,8 @@ with pkgs;
   vectoroids = callPackage ../games/vectoroids { };
 
   vessel = pkgsi686Linux.callPackage ../games/vessel { };
+
+  vitetris = callPackage ../games/vitetris { };
 
   vms-empire = callPackage ../games/vms-empire { };
 
@@ -21425,6 +21441,8 @@ with pkgs;
 
   faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
 
+  faustlive = callPackage ../applications/audio/faust/faustlive.nix { };
+
   fceux = callPackage ../misc/emulators/fceux { };
 
   flockit = callPackage ../tools/backup/flockit { };
@@ -21649,12 +21667,21 @@ with pkgs;
 
   nix-top = callPackage ../tools/package-management/nix-top { };
 
+  nix-repl = throw (
+    "nix-repl has been removed because it's not maintained anymore, " +
+    (lib.optionalString (! lib.versionAtLeast "2" (lib.versions.major builtins.nixVersion))
+      "ugrade your Nix installation to a newer version and ") +
+    "use `nix repl` instead. " +
+    "Also see https://github.com/NixOS/nixpkgs/pull/44903"
+  );
+
   nix-review = callPackage ../tools/package-management/nix-review { };
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
   nixos-icons = callPackage ../data/misc/nixos-artwork/icons.nix { };
+  nixos-grub2-theme = callPackage ../data/misc/nixos-artwork/grub2-theme.nix { };
 
   nixos-container = callPackage ../tools/virtualization/nixos-container { };
 
@@ -21954,7 +21981,9 @@ with pkgs;
 
   valauncher = callPackage ../applications/misc/valauncher { };
 
-  vault = callPackage ../tools/security/vault { };
+  vault = callPackage ../tools/security/vault {
+    go = go_1_10;
+  };
 
   vaultenv = haskellPackages.vaultenv;
 
@@ -22277,4 +22306,8 @@ with pkgs;
   doing = callPackage ../applications/misc/doing  { };
 
   undervolt = callPackage ../os-specific/linux/undervolt { };
+
+  alibuild = callPackage ../development/tools/build-managers/alibuild {
+    python = python27;
+  };
 }
