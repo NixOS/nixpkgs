@@ -1,12 +1,12 @@
 { lib, buildPythonPackage, isPy3k, fetchPypi, ipython_genutils, jupyterlab_launcher, notebook }:
 buildPythonPackage rec {
   pname = "jupyterlab";
-  version = "0.34.2";
+  version = "0.34.6";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "37f66118b35c11fd51f0680e665139d62f86fe54f1e30d2517a1eabb30616ce4";
+    sha256 = "d6e5a3855a0d55e6aa4ab704379da5da3db2e652442e79acfa2e9d14ef50ccb3";
   };
 
   propagatedBuildInputs = [
