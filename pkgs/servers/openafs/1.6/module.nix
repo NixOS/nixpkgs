@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p ${modDestDir}
-    cp src/libafs/MODLOAD-*/libafs-${kernel.version}.* ${modDestDir}/libafs.ko
+    cp src/libafs/MODLOAD-*/libafs-${kernel.modDirVersion}.* ${modDestDir}/libafs.ko
     xz -f ${modDestDir}/libafs.ko
   '';
 
