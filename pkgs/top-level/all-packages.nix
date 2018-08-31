@@ -6908,6 +6908,18 @@ with pkgs;
     llvm = llvm_39;
   };
 
+  julia_07 = callPackage ../development/compilers/julia/0.7.nix {
+    gmp = gmp6;
+    openblas = openblasCompat;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
+
+  julia_10 = callPackage ../development/compilers/julia/1.0.nix {
+    gmp = gmp6;
+    openblas = openblasCompat;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
+
   jwasm =  callPackage ../development/compilers/jwasm { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
