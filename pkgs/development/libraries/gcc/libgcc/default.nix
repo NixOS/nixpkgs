@@ -1,4 +1,4 @@
-{ stdenvNoLibs, buildPackages, buildPlatform, hostPlatform
+{ stdenvNoLibs, buildPackages
 , gcc, glibc
 , libiberty
 }:
@@ -29,8 +29,8 @@ stdenvNoLibs.mkDerivation rec {
   # Drop in libiberty, as external builds are not expected
   + ''
     (
-      mkdir -p build-${buildPlatform.config}/libiberty/
-      cd build-${buildPlatform.config}/libiberty/
+      mkdir -p build-${stdenvNoLibs.buildPlatform.config}/libiberty/
+      cd build-${stdenvNoLibs.buildPlatform.config}/libiberty/
       ln -s ${buildPackages.libiberty}/lib/libiberty.a ./
     )
   ''
@@ -83,8 +83,8 @@ stdenvNoLibs.mkDerivation rec {
   ''
   # Preparing to configure + build libgcc itself
   + ''
-    mkdir -p "$buildRoot/gcc/${hostPlatform.config}/libgcc"
-    cd "$buildRoot/gcc/${hostPlatform.config}/libgcc"
+    mkdir -p "$buildRoot/gcc/${stdenvNoLibs.hostPlatform.config}/libgcc"
+    cd "$buildRoot/gcc/${stdenvNoLibs.hostPlatform.config}/libgcc"
     configureScript=$sourceRoot/configure
     chmod +x "$configureScript"
 
@@ -107,9 +107,9 @@ stdenvNoLibs.mkDerivation rec {
   '';
 
   gccConfigureFlags = [
-    "--build=${buildPlatform.config}"
-    "--host=${buildPlatform.config}"
-    "--target=${hostPlatform.config}"
+    "--build=${stdenvNoLibs.buildPlatform.config}"
+    "--host=${stdenvNoLibs.buildPlatform.config}"
+    "--target=${stdenvNoLibs.hostPlatform.config}"
 
     "--disable-bootstrap"
     "--disable-multilib" "--with-multilib-list="
@@ -128,7 +128,7 @@ stdenvNoLibs.mkDerivation rec {
     "--disable-vtable-verify"
 
     "--with-system-zlib"
-  ] ++ stdenvNoLibs.lib.optional (hostPlatform.libc == "glibc")
+  ] ++ stdenvNoLibs.lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
        "--with-glibc-version=${glibc.version}";
 
   configurePlatforms = [ "build" "host" ];
@@ -144,9 +144,9 @@ stdenvNoLibs.mkDerivation rec {
   makeFlags = [ "MULTIBUILDTOP:=../" ];
 
   postInstall = ''
-    moveToOutput "lib/gcc/${hostPlatform.config}/${version}/include" "$dev"
+    moveToOutput "lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}/include" "$dev"
     mkdir -p "$out/lib" "$dev/include"
-    ln -s "$out/lib/gcc/${hostPlatform.config}/${version}"/* "$out/lib"
-    ln -s "$dev/lib/gcc/${hostPlatform.config}/${version}/include"/* "$dev/include/"
+    ln -s "$out/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}"/* "$out/lib"
+    ln -s "$dev/lib/gcc/${stdenvNoLibs.hostPlatform.config}/${version}/include"/* "$dev/include/"
   '';
 }

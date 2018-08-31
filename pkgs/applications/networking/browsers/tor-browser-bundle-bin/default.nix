@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
   name = "tor-browser-bundle-bin-${version}";
   inherit version;
 
-  src = srcs."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+  src = srcs."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   preferLocalBuild = true;
   allowSubstitutes = false;

@@ -348,10 +348,10 @@ in rec {
 
       darwin = super.darwin // {
         inherit (darwin) dyld ICU Libsystem libiconv;
-      } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+      } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         inherit (darwin) binutils binutils-unwrapped cctools;
       };
-    } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+    } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
       # Need to get rid of these when cross-compiling.
       inherit binutils binutils-unwrapped;
     };

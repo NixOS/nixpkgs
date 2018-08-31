@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, buildPlatform, buildPackages, fetchurl
+{ stdenv, buildPackages, fetchurl
 , bzip2
 , gdbm
 , fetchpatch
@@ -85,7 +85,7 @@ let
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
 
-    ] ++ optionals hostPlatform.isCygwin [
+    ] ++ optionals stdenv.hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
       ./2.6.2-ssl-threads.patch
@@ -125,14 +125,14 @@ let
     "--enable-shared"
     "--with-threads"
     "--enable-unicode=ucs${toString ucsEncoding}"
-  ] ++ optionals (hostPlatform.isCygwin || hostPlatform.isAarch64) [
+  ] ++ optionals (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) [
     "--with-system-ffi"
-  ] ++ optionals hostPlatform.isCygwin [
+  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "--with-system-expat"
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
-  ] ++ optionals (hostPlatform != buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "PYTHON_FOR_BUILD=${getBin buildPackages.python}/bin/python"
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -157,18 +157,18 @@ let
   ]
     # Never even try to use lchmod on linux,
     # don't rely on detecting glibc-isms.
-  ++ optional hostPlatform.isLinux "ac_cv_func_lchmod=no";
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib ]
-    ++ optional (hostPlatform.isCygwin || hostPlatform.isAarch64) libffi
-    ++ optional hostPlatform.isCygwin expat
+    ++ optional (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) libffi
+    ++ optional stdenv.hostPlatform.isCygwin expat
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
   nativeBuildInputs =
-    optionals (hostPlatform != buildPlatform)
+    optionals (stdenv.hostPlatform != stdenv.buildPlatform)
     [ buildPackages.stdenv.cc buildPackages.python ];
 
   mkPaths = paths: {
@@ -190,7 +190,7 @@ in stdenv.mkDerivation {
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
-      + optionalString hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
+      + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 
     setupHook = python-setup-hook sitePackages;
@@ -235,7 +235,7 @@ in stdenv.mkDerivation {
         find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
-      '' + optionalString hostPlatform.isCygwin ''
+      '' + optionalString stdenv.hostPlatform.isCygwin ''
         cp libpython2.7.dll.a $out/lib
       '';
 

@@ -4,9 +4,9 @@ let
   callPackage = newScope self;
 
   self = rec {
-    steamArch = if pkgs.stdenv.system == "x86_64-linux" then "amd64"
-                else if pkgs.stdenv.system == "i686-linux" then "i386"
-                else throw "Unsupported platform: ${pkgs.stdenv.system}";
+    steamArch = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
+                else if pkgs.stdenv.hostPlatform.system == "i686-linux" then "i386"
+                else throw "Unsupported platform: ${pkgs.stdenv.hostPlatform.system}";
 
     steam-runtime = callPackage ./runtime.nix { };
     steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };

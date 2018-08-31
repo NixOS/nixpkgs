@@ -26,21 +26,21 @@ in {
       };
       vmDerivationName = mkOption {
         type = types.str;
-        default = "nixos-ova-${config.system.nixos.label}-${pkgs.stdenv.system}";
+        default = "nixos-ova-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}";
         description = ''
           The name of the derivation for the VirtualBox appliance.
         '';
       };
       vmName = mkOption {
         type = types.str;
-        default = "NixOS ${config.system.nixos.label} (${pkgs.stdenv.system})";
+        default = "NixOS ${config.system.nixos.label} (${pkgs.stdenv.hostPlatform.system})";
         description = ''
           The name of the VirtualBox appliance.
         '';
       };
       vmFileName = mkOption {
         type = types.str;
-        default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.system}.ova";
+        default = "nixos-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.ova";
         description = ''
           The file name of the VirtualBox appliance.
         '';
@@ -67,10 +67,10 @@ in {
           echo "creating VirtualBox VM..."
           vmName="${cfg.vmName}";
           VBoxManage createvm --name "$vmName" --register \
-            --ostype ${if pkgs.stdenv.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
+            --ostype ${if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
           VBoxManage modifyvm "$vmName" \
             --memory ${toString cfg.memorySize} --acpi on --vram 32 \
-            ${optionalString (pkgs.stdenv.system == "i686-linux") "--pae on"} \
+            ${optionalString (pkgs.stdenv.hostPlatform.system == "i686-linux") "--pae on"} \
             --nictype1 virtio --nic1 nat \
             --audiocontroller ac97 --audio alsa \
             --rtcuseutc on \

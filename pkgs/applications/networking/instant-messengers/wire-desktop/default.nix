@@ -44,12 +44,12 @@ let
   plat = {
     "i686-linux" = "i386";
     "x86_64-linux" = "amd64";
-  }.${stdenv.system};
+  }.${stdenv.hostPlatform.system};
 
   sha256 = {
     "i686-linux" = "071ddh2d8wmiybwafwyb97962zj358l0fq7g2r44231653sgybvq";
     "x86_64-linux" = "0qp9ms94smnm7k47b0n0jdzvnm1b7gj25hyinsfc6lghrb6jqw3r";
-  }.${stdenv.system};
+  }.${stdenv.hostPlatform.system};
 
 in
   stdenv.mkDerivation rec {

@@ -53,13 +53,13 @@ let
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
         sha256 = "1kydf71qbz35dx4674h3nxfx8a88k620217906i54ic4qq2mgy2x";
       }
     else
-      throw "Skype for linux is not supported on ${stdenv.system}";
+      throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
   name = "skypeforlinux-${version}";

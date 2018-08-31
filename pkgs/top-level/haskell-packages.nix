@@ -1,6 +1,5 @@
 { buildPackages, pkgs
 , newScope
-, buildPlatform, targetPlatform
 }:
 
 let
@@ -61,7 +60,6 @@ in rec {
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix rec {
       bootPkgs = packages.ghc821Binary;
       inherit (bootPkgs) hscolour alex happy;
-      inherit buildPlatform targetPlatform;
       sphinx = pkgs.python3Packages.sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, system, makeWrapper, makeDesktopItem, autoPatchelfHook, env
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem, autoPatchelfHook, env
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
 , qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
@@ -31,7 +31,7 @@ let
 in stdenv.mkDerivation {
   name = "zoom-us-${version}";
 
-  src = srcs.${system};
+  src = srcs.${stdenv.hostPlatform.system};
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 

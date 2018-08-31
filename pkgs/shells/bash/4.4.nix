@@ -1,6 +1,5 @@
 { stdenv, buildPackages
 , fetchurl, binutils ? null, bison, autoconf, utillinux
-, buildPlatform, hostPlatform
 
 # patch for cygwin requires readline support
 , interactive ? stdenv.isCygwin, readline70 ? null
@@ -11,7 +10,7 @@ with stdenv.lib;
 
 assert interactive -> readline70 != null;
 assert withDocs -> texinfo != null;
-assert hostPlatform.isDarwin -> binutils != null;
+assert stdenv.hostPlatform.isDarwin -> binutils != null;
 
 let
   upstreamPatches = import ./bash-4.4-patches.nix (nr: sha256: fetchurl {
@@ -45,26 +44,26 @@ stdenv.mkDerivation rec {
   patchFlags = "-p0";
 
   patches = upstreamPatches
-    ++ optional hostPlatform.isCygwin ./cygwin-bash-4.4.11-2.src.patch
+    ++ optional stdenv.hostPlatform.isCygwin ./cygwin-bash-4.4.11-2.src.patch
     # https://lists.gnu.org/archive/html/bug-bash/2016-10/msg00006.html
-    ++ optional hostPlatform.isMusl (fetchurl {
+    ++ optional stdenv.hostPlatform.isMusl (fetchurl {
       url = "https://lists.gnu.org/archive/html/bug-bash/2016-10/patchJxugOXrY2y.patch";
       sha256 = "1m4v9imidb1cc1h91f2na0b8y9kc5c5fgmpvy9apcyv2kbdcghg1";
     });
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
-  ] ++ optionals (hostPlatform != buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "bash_cv_job_control_missing=nomissing"
     "bash_cv_sys_named_pipes=nomissing"
     "bash_cv_getcwd_malloc=yes"
-  ] ++ optionals hostPlatform.isCygwin [
+  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "--without-libintl-prefix --without-libiconv-prefix"
     "--with-installed-readline"
     "bash_cv_dev_stdin=present"
     "bash_cv_dev_fd=standard"
     "bash_cv_termcap_lib=libncurses"
-  ] ++ optionals (hostPlatform.libc == "musl") [
+  ] ++ optionals (stdenv.hostPlatform.libc == "musl") [
     "--without-bash-malloc"
     "--disable-nls"
   ];
@@ -73,8 +72,8 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ]
     ++ optional withDocs texinfo
-    ++ optional hostPlatform.isDarwin binutils
-    ++ optional (hostPlatform.libc == "musl") autoconf;
+    ++ optional stdenv.hostPlatform.isDarwin binutils
+    ++ optional (stdenv.hostPlatform.libc == "musl") autoconf;
 
   buildInputs = optional interactive readline70;
 
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
   # build `version.h'.
   enableParallelBuilding = false;
 
-  makeFlags = optional hostPlatform.isCygwin [
+  makeFlags = optional stdenv.hostPlatform.isCygwin [
     "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
     "SHOBJ_LIBS=-lbash"
   ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   name = "staruml-${version}";
 
   src =
-    if stdenv.system == "i686-linux" then fetchurl {
+    if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       url = "http://staruml.io/download/release/v${version}/StarUML-v${version}-32-bit.deb";
       sha256 = "0vb3k9m3l6pmsid4shlk0xdjsriq3gxzm8q7l04didsppg0vvq1n";
     } else fetchurl {

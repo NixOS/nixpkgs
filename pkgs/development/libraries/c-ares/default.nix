@@ -1,4 +1,4 @@
-{ targetPlatform, stdenv, fetchurl, writeTextDir }:
+{ stdenv, fetchurl, writeTextDir }:
 
 let self =
 stdenv.mkDerivation rec {
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
       )
       set_property(TARGET c-ares::cares APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
       set_target_properties(c-ares::cares PROPERTIES
-        IMPORTED_LOCATION_RELEASE "${self}/lib/libcares${targetPlatform.extensions.sharedLibrary}"
-        IMPORTED_SONAME_RELEASE "libcares${targetPlatform.extensions.sharedLibrary}"
+        IMPORTED_LOCATION_RELEASE "${self}/lib/libcares${stdenv.targetPlatform.extensions.sharedLibrary}"
+        IMPORTED_SONAME_RELEASE "libcares${stdenv.targetPlatform.extensions.sharedLibrary}"
         )
       add_library(c-ares::cares_shared INTERFACE IMPORTED)
       set_target_properties(c-ares::cares_shared PROPERTIES INTERFACE_LINK_LIBRARIES "c-ares::cares")

@@ -1,9 +1,8 @@
 { stdenv, lib, fetchurl, fetchpatch
 , zlib, xz, python2, findXMLCatalogs
-, buildPlatform, hostPlatform
-, pythonSupport ? buildPlatform == hostPlatform
+, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
-, enableShared ? hostPlatform.libc != "msvcrt"
+, enableShared ? stdenv.hostPlatform.libc != "msvcrt"
 , enableStatic ? !enableShared,
 }:
 
@@ -56,7 +55,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
-    hostPlatform.libc != "musl";
+    stdenv.hostPlatform.libc != "musl";
 
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';

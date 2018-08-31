@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchcvs, lib, groff, mandoc, zlib, buildPackages
+{ stdenv, fetchcvs, lib, groff, mandoc, zlib, buildPackages
 , yacc, flex, libressl, bash, less, writeText }:
 
 let
@@ -32,8 +32,8 @@ let
     MKUNPRIVED = "yes";
     HOST_SH = "${bash}/bin/sh";
     OBJCOPY = if stdenv.isDarwin then "true" else "objcopy";
-    MACHINE_ARCH = hostPlatform.parsed.cpu.name;
-    MACHINE_CPU = hostPlatform.parsed.cpu.name;
+    MACHINE_ARCH = stdenv.hostPlatform.parsed.cpu.name;
+    MACHINE_CPU = stdenv.hostPlatform.parsed.cpu.name;
 
     INSTALL_FILE = "install -U -c";
     INSTALL_DIR = "xinstall -U -d";
@@ -478,7 +478,7 @@ in rec {
       "-DOXTABS=XTABS"
       "-DRANDOM_MAX=RAND_MAX"
       "-DINFTIM=-1"
-      (lib.optionalString hostPlatform.isMusl "-include sys/ttydefaults.h -include sys/file.h")
+      (lib.optionalString stdenv.hostPlatform.isMusl "-include sys/ttydefaults.h -include sys/file.h")
       "-DBE32TOH(x)=((void)0)"
       "-DBE64TOH(x)=((void)0)"
       "-D__c99inline=__inline"

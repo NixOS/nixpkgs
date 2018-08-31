@@ -1,4 +1,4 @@
-{lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, nose, blas, hostPlatform }:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, nose, blas }:
 
 buildPythonPackage rec {
   pname = "numpy";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     ./numpy-distutils-C++.patch
   ];
 
-  postPatch = lib.optionalString hostPlatform.isMusl ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     # Use fenv.h
     sed -i \
       numpy/core/src/npymath/ieee754.c.src \

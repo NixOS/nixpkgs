@@ -1,6 +1,5 @@
 { stdenv, writeScript
 , fetchurl, groff
-, buildPlatform, hostPlatform
 }:
 
 let
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
     "NIXOS=1" "INSTALL=install" "INSTALL_BINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man" "RUN_DIR=/dev/.mdadm"
     "STRIP="
-  ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 

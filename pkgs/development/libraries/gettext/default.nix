@@ -1,4 +1,4 @@
-{ stdenv, lib, hostPlatform, fetchurl, libiconv, xz }:
+{ stdenv, lib, fetchurl, libiconv, xz }:
 
 stdenv.mkDerivation rec {
   name = "gettext-${version}";
@@ -35,20 +35,20 @@ stdenv.mkDerivation rec {
    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
-  '' + lib.optionalString hostPlatform.isCygwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
   '';
 
   nativeBuildInputs = [ xz xz.bin ];
   # HACK, see #10874 (and 14664)
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash
     ./gettext-setup-hook.sh
   ];
-  gettextNeedsLdflags = hostPlatform.libc != "glibc" && !hostPlatform.isMusl;
+  gettextNeedsLdflags = stdenv.hostPlatform.libc != "glibc" && !stdenv.hostPlatform.isMusl;
 
   enableParallelBuilding = true;
 

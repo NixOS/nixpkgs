@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     install -Dt $out/share common.sh
 
     # probes
-    case "${stdenv.system}" in
+    case "${stdenv.hostPlatform.system}" in
         i686*|x86_64*) ARCH=x86;;
         powerpc*) ARCH=powerpc;;
         arm*) ARCH=arm;;

@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl, autoconf, automake, libtool }:
+{ stdenv, fetchurl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   name = "libb2-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  configureFlags = stdenv.lib.optional hostPlatform.isx86 "--enable-fat=yes";
+  configureFlags = stdenv.lib.optional stdenv.hostPlatform.isx86 "--enable-fat=yes";
 
   nativeBuildInputs = [ autoconf automake libtool ];
 

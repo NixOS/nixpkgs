@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool_2, autoreconfHook
 , libcxxabi, libuuid
 , libobjc ? null, maloader ? null
-, hostPlatform, targetPlatform
 , enableDumpNormalizedLibArgs ? false
 }:
 
@@ -12,17 +11,17 @@ let
   # 10.x. For 11.0 and higher we will need to upgrade to a newer cctools than the
   # default version here, which can support the new TBD format via Apple's
   # libtapi.
-  useOld = targetPlatform.isiOS;
+  useOld = stdenv.targetPlatform.isiOS;
 
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = stdenv.lib.optionalString
-    (targetPlatform != hostPlatform)
-    "${targetPlatform.config}-";
+    (stdenv.targetPlatform != stdenv.hostPlatform)
+    "${stdenv.targetPlatform.config}-";
 in
 
 # Non-Darwin alternatives
-assert (!hostPlatform.isDarwin) -> maloader != null;
+assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
 
 assert enableDumpNormalizedLibArgs -> (!useOld);
 
@@ -77,7 +76,7 @@ let
     enableParallelBuilding = true;
 
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
 
     postPatch = ''
       sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
@@ -131,7 +130,7 @@ let
     };
 
     meta = {
-      broken = !targetPlatform.isDarwin; # Only supports darwin targets
+      broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
       homepage = http://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;

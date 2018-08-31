@@ -12,7 +12,6 @@
 , targetToolchains
 , doCheck ? true
 , broken ? false
-, buildPlatform, hostPlatform
 }:
 
 let

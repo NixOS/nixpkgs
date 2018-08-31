@@ -1,8 +1,9 @@
-{pkgs, system, nodejs, stdenv}:
+{ pkgs, nodejs, stdenv }:
 
 let
   nodePackages = import ./composition-v6.nix {
-    inherit pkgs system nodejs;
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
   };
 in
 nodePackages // {

@@ -23,7 +23,7 @@
 
 with stdenv.lib;
 
-if ! lists.elem stdenv.system platforms.mesaPlatforms then
+if ! lists.elem stdenv.hostPlatform.system platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 

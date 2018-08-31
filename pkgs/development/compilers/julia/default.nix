@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     let
-      arch = head (splitString "-" stdenv.system);
+      arch = head (splitString "-" stdenv.hostPlatform.system);
       march = { "x86_64" = "x86-64"; "i686" = "pentium4"; }."${arch}"
               or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
