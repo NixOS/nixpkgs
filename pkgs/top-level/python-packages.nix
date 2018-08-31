@@ -10408,6 +10408,8 @@ in {
     proj = null;
   };
 
+  pyqrcode = callPackage ../development/python-modules/pyqrcode { };
+
   pyrr = callPackage ../development/python-modules/pyrr { };
 
   pysha3 = callPackage ../development/python-modules/pysha3 { };
