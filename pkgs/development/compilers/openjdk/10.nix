@@ -17,8 +17,8 @@ let
       "i386"
     else "amd64";
 
-  update = "10.0.1";
-  build = "10";
+  update = "10.0.2";
+  build = "13";
   repover = "jdk-${update}+${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
 
@@ -27,7 +27,7 @@ let
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk10u/archive/${repover}.tar.gz";
-      sha256 = "1fg0rl5pd3f2y3v3bq8p3zdkrpa1pyslwdln4s64clyr7spvxkjw";
+      sha256 = "0y7hyzgvn6z8gyp3h9xvxwj6zda899y6i629jn6yxqzj96q56jpk";
     };
 
     outputs = [ "out" "jre" ];
