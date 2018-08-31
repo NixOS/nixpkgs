@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A daemon which monitors filesystem events and executes commands defined in system and user tables";
+    description = "A cron-like daemon which handles filesystem events.";
     homepage = https://github.com/ar-/incron;
     license = licenses.gpl2;
     maintainers = [ maintainers.aanderse ];

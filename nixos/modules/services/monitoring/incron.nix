@@ -20,7 +20,7 @@ in
         description = ''
           Whether to enable the incron daemon.
 
-          Note that commands run under incrontab only support common Nix profiles for the PATH provided variable.
+          Note that commands run under incrontab only support common Nix profiles for the <envar>PATH</envar> provided variable.
         '';
       };
 
@@ -31,7 +31,7 @@ in
           Users allowed to use incrontab.
 
           If empty then no user will be allowed to have their own incrontab.
-          If null then will defer to <option>deny</option>.
+          If <literal>null</literal> then will defer to <option>deny</option>.
           If both <option>allow</option> and <option>deny</option> are null
           then all users will be allowed to have their own incrontab.
         '';
@@ -48,15 +48,15 @@ in
         default = "";
         description = "The system incrontab contents.";
         example = ''
-          "/var/mail IN_CLOSE_WRITE abc $@/$#"
-          "/tmp IN_ALL_EVENTS efg $@/$# $&"
+          /var/mail IN_CLOSE_WRITE abc $@/$#
+          /tmp IN_ALL_EVENTS efg $@/$# $&
         '';
       };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = "[ pkgs.rsync ];";
+        example = literalExample "[ pkgs.rsync ]";
         description = "Extra packages available to the system incrontab.";
       };
 
@@ -66,11 +66,8 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      { assertion = cfg.allow != null -> cfg.deny == null;
-        message = "If `services.incron.allow` is set then `services.incron.deny` will be ignored.";
-      }
-    ];
+    warnings = optional (cfg.allow != null && cfg.deny != null)
+      ''If `services.incron.allow` is set then `services.incron.deny` will be ignored.'';
 
     environment.systemPackages = [ pkgs.incron ];
 
@@ -79,22 +76,22 @@ in
     # incron won't read symlinks
     environment.etc."incron.d/system" = {
       mode = "0444";
-      text = ${cfg.systab};
+      text = cfg.systab;
     };
     environment.etc."incron.allow" = mkIf (cfg.allow != null) {
-      text = ${concatStringsSep "\n" cfg.allow};
+      text = concatStringsSep "\n" cfg.allow;
     };
     environment.etc."incron.deny" = mkIf (cfg.deny != null) {
-      text = ${concatStringsSep "\n" cfg.deny};
+      text = concatStringsSep "\n" cfg.deny;
     };
 
     systemd.services.incron = {
-      description = "File system events scheduler";
+      description = "File System Events Scheduler";
       wantedBy = [ "multi-user.target" ];
       path = cfg.extraPackages;
-      preStart = "mkdir -m 710 -p /var/spool/incron";
       serviceConfig.Type = "forking";
       serviceConfig.PIDFile = "/run/incrond.pid";
+      serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/mkdir -m 710 -p /var/spool/incron";
       serviceConfig.ExecStart = "${pkgs.incron}/bin/incrond";
     };
   };
