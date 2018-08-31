@@ -51,6 +51,9 @@
 
 # Extra preferences
 , extraPrefs ? ""
+
+# For meta
+, tor-browser-bundle
 }:
 
 with stdenv.lib;
@@ -397,7 +400,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Tor Browser Bundle";
+    description = "Tor Browser Bundle built by torproject.org";
+    longDescription = tor-browser-bundle.meta.longDescription;
     homepage = https://www.torproject.org/;
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm ];

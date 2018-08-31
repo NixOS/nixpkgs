@@ -5562,13 +5562,6 @@ with pkgs;
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
-  # added 2017-04-05
-  torbrowser = /* builtins.trace ''
-    [1;31mWARNING[0m: torbrowser package was renamed to tor-browser-bundle-bin.
-
-    Also, consider using nix-built tor-browser-unwrapped package instead. Read its longDescription.
-  '' */ tor-browser-bundle-bin;
-
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
 
   tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
