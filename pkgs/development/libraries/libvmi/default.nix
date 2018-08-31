@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wbi2nasb1gbci6cq23g6kq7i10rwi1y7r44rl03icr5prqjpdyv";
   };
 
+  patches = optional xenSupport ./libxenctrl.diff;
+
   buildInputs = [ glib libvirt json_c ] ++ (optional xenSupport xen);
   nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
 
