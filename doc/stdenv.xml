@@ -1732,11 +1732,34 @@ set debug-file-directory ~/.nix-profile/lib/debug
        Controls whether the installCheck phase is executed. By default it is
        skipped, but if <varname>doInstallCheck</varname> is set to true, the
        installCheck phase is usually executed. Thus you should set
-<programlisting>doInstallCheck = true;</programlisting>
+       <programlisting>doInstallCheck = true;</programlisting>
        in the derivation to enable install checks. The exception is cross
        compilation. Cross compiled builds never run tests, no matter how
        <varname>doInstallCheck</varname> is set, as the newly-built program
        won't run on the platform used to build it.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>installCheckTarget</varname>
+     </term>
+     <listitem>
+      <para>
+       The make target that runs the install tests. Defaults to
+       <literal>installcheck</literal>.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>installCheckFlags</varname> / <varname>installCheckFlagsArray</varname>
+     </term>
+     <listitem>
+      <para>
+       A list of strings passed as additional flags to <command>make</command>.
+       Like <varname>makeFlags</varname> and <varname>makeFlagsArray</varname>,
+       but only used by the installCheck phase.
       </para>
      </listitem>
     </varlistentry>
