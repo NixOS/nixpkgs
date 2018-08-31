@@ -89,10 +89,9 @@ in
       description = "File System Events Scheduler";
       wantedBy = [ "multi-user.target" ];
       path = cfg.extraPackages;
-      serviceConfig.Type = "forking";
       serviceConfig.PIDFile = "/run/incrond.pid";
       serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/mkdir -m 710 -p /var/spool/incron";
-      serviceConfig.ExecStart = "${pkgs.incron}/bin/incrond";
+      serviceConfig.ExecStart = "${pkgs.incron}/bin/incrond --foreground";
     };
   };
 
