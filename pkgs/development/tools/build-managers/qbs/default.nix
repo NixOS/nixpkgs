@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "qbs-${version}";
 
-  version = "1.8";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "qt-labs";
     repo = "qbs";
-    rev = "fa9c21d6908e0dad805113f570ac883c1dc5067a";
-    sha256 = "1manriz75rav1vldkk829yk1la9md4m872l5ykl9m982i9801d9g";
+    rev = "2440b19b288096e1601674de2ac15c560af469cd";
+    sha256 = "1r90w4d3cvpk8xprn704v5zjgg0ngmvzmzx4xgrxf6m826fq3j3k";
   };
 
   enableParallelBuilding = true;
