@@ -240,6 +240,8 @@ in {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  cozy = callPackage ../development/python-modules/cozy { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dbf = callPackage ../development/python-modules/dbf { };
@@ -249,6 +251,8 @@ in {
   deap = callPackage ../development/python-modules/deap { };
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
+
+  dictionaries = callPackage ../development/python-modules/dictionaries { };
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
 
@@ -345,6 +349,8 @@ in {
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
+
+  ordered-set = callPackage ../development/python-modules/ordered-set { };
 
   outcome = callPackage ../development/python-modules/outcome {};
 
@@ -470,6 +476,11 @@ in {
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
+
+  python-igraph = callPackage ../development/python-modules/python-igraph {
+    pkgconfig = pkgs.pkgconfig;
+    igraph = pkgs.igraph;
+  };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
