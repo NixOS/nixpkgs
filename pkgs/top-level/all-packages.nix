@@ -3267,6 +3267,8 @@ with pkgs;
 
   inboxer = callPackage ../applications/networking/mailreaders/inboxer { };
 
+  incron = callPackage ../tools/system/incron { };
+
   inetutils = callPackage ../tools/networking/inetutils { };
 
   infiniband-diags = callPackage ../tools/networking/infiniband-diags { };

@@ -23,6 +23,11 @@
     github = "a1russell";
     name = "Adam Russell";
   };
+  aanderse = {
+    email = "aaron@fosslib.net";
+    github = "aanderse";
+    name = "Aaron Andersen";
+  };
   aaronschif = {
     email = "aaronschif@gmail.com";
     github = "aaronschif";
