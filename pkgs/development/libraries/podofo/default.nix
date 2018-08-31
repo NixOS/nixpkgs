@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, openssl, libpng, lua5, pkgconfig, libidn, expat
+, openssl, libpng, lua5, pkgconfig, libidn, expat, fetchpatch
 , gcc5 # TODO(@Dridus) remove this at next hash break
 }:
 
@@ -12,6 +12,15 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng libidn expat ];
+
+  patches = [
+    # https://sourceforge.net/p/podofo/tickets/24/
+    (fetchpatch {
+      url = "https://sourceforge.net/p/podofo/tickets/24/attachment/podofo-cmake-3.12.patch";
+      extraPrefix = "";
+      sha256 = "087h51x60zrakzx09baan77hwz99cwb5l1j802r5g4wj7pbjz0mb";
+    })
+  ];
 
   # TODO(@Dridus) remove the ++ ghc5 at next hash break
   nativeBuildInputs = [ cmake pkgconfig ] ++ stdenv.lib.optional stdenv.isLinux gcc5;
