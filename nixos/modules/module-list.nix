@@ -620,6 +620,7 @@
   ./services/networking/xl2tpd.nix
   ./services/networking/xrdp.nix
   ./services/networking/zerobin.nix
+  ./services/networking/zeronet.nix
   ./services/networking/zerotierone.nix
   ./services/networking/znc.nix
   ./services/printing/cupsd.nix
