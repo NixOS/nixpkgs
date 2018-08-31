@@ -1,7 +1,6 @@
 { stdenv, pythonPackages }:
 
 pythonPackages.buildPythonApplication (rec {
-  name = "${pname}-${version}";
   pname = "buildbot-worker";
   version = "1.4.0";
 
