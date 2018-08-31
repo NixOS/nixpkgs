@@ -6,7 +6,7 @@
 let
   platform =
     if stdenv.hostPlatform.isUnix then "unix"
-    else throw "Unknown platform for NetHack: ${stdenv.system}";
+    else throw "Unknown platform for NetHack: ${stdenv.hostPlatform.system}";
   unixHint =
     if x11Mode then "linux-x11"
     else if qtMode then "linux-qt4"

@@ -5,7 +5,7 @@
 , ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv, zlib
 , withGui ? true }:
 
-assert stdenv.system != "powerpc-linux";
+assert stdenv.hostPlatform.system != "powerpc-linux";
 
 stdenv.mkDerivation rec {
   ver = "1.23.7";

@@ -17,18 +17,18 @@ stdenv.mkDerivation rec {
   version = "7.7.0";
 
   src =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin32-${version}.run";
         sha256 = "16fa66p77xigc7zvzfm7737mllrcs6nrgk2p7wvkjw3p9lvbz7z1";
       }
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin64-${version}.run";
         sha256 = "18dcn6wqph1sqh0ah98qzfi05wip8a8ifbkaq79iskbrsi8iqnrg";
       }
     else
-      throw "Unsupported system: ${stdenv.system}";
+      throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
     name = "eagle";

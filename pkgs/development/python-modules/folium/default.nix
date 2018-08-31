@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest numpy nbconvert pandas mock ];
-  propagatedBuildInputs = [ jinja2 branca six requests ];
+  propagatedBuildInputs = [ jinja2 branca six requests numpy ];
 
   # No tests in archive
   doCheck = false;

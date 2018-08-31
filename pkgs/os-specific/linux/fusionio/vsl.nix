@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Kernel driver for accessing fusion-io cards";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    broken = stdenv.system != "x86_64-linux";
+    broken = stdenv.hostPlatform.system != "x86_64-linux";
     maintainers = with maintainers; [ wkennington ];
   };
 }

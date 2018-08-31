@@ -1,6 +1,5 @@
 { stdenv, fetchurl
 , ed, autoreconfHook
-, buildPlatform, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -27,11 +26,11 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional doCheck ed;
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = stdenv.lib.optionals (hostPlatform != buildPlatform) [
+  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_strnlen_working=yes"
   ];
 
-  doCheck = hostPlatform.libc != "musl"; # not cross;
+  doCheck = stdenv.hostPlatform.libc != "musl"; # not cross;
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";

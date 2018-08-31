@@ -134,12 +134,12 @@ stdenv.mkDerivation rec {
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
-           else if stdenv.system == "i686-linux" then "386"
-           else if stdenv.system == "x86_64-linux" then "amd64"
-           else if stdenv.isAarch32 then "arm"
-           else if stdenv.isAarch64 then "arm64"
+           else if stdenv.targetPlatform.isi686 then "386"
+           else if stdenv.targetPlatform.isx86_64 then "amd64"
+           else if stdenv.targetPlatform.isAarch32 then "arm"
+           else if stdenv.targetPlatform.isAarch64 then "arm64"
            else throw "Unsupported system";
-  GOARM = optionalString (stdenv.system == "armv5tel-linux") "5";
+  GOARM = stdenv.targetPlatform.parsed.cpu.version or "";
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";

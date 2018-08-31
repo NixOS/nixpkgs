@@ -4,13 +4,13 @@ with stdenv.lib;
 
 let
   arch =
-    if stdenv.system == "x86_64-linux" then "x64"
-    else if stdenv.system == "i686-linux" then "x86"
+    if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
     else throwSystem;
-  throwSystem = throw "Unsupported system: ${stdenv.system}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
   sha256 =
-    if stdenv.system == "x86_64-linux" then "11mxa4kls5xjj3462ycrfvfxb1xkk23p5m9iirvwsi0zdmhpnwm8"
-    else if stdenv.system == "i686-linux" then "03ml9xv19km99f0z7fpr21b1zkxvw7q39kjzd8wpb2pds51wnc62"
+    if stdenv.hostPlatform.system == "x86_64-linux" then "11mxa4kls5xjj3462ycrfvfxb1xkk23p5m9iirvwsi0zdmhpnwm8"
+    else if stdenv.hostPlatform.system == "i686-linux" then "03ml9xv19km99f0z7fpr21b1zkxvw7q39kjzd8wpb2pds51wnc62"
     else throwSystem;
   libraries = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
 

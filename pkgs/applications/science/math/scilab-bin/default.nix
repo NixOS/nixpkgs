@@ -10,9 +10,9 @@ let
   badArch = throw "${name} requires i686-linux or x86_64-linux";
 
   architecture =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       "i686"
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       "x86_64"
     else
       badArch;
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://www.scilab.org/download/${ver}/scilab-${ver}.bin.linux-${architecture}.tar.gz";
     sha256 =
-      if stdenv.system == "i686-linux" then
+      if stdenv.hostPlatform.system == "i686-linux" then
         "0fgjc2ak3b2qi6yin3fy50qwk2bcj0zbz1h4lyyic9n1n1qcliib"
-      else if stdenv.system == "x86_64-linux" then
+      else if stdenv.hostPlatform.system == "x86_64-linux" then
         "1scswlznc14vyzg0gqa1q9gcpwx05kz1sbn563463mzkdp7nd35d"
       else
         badArch;

@@ -16,9 +16,9 @@ let
   bitness = if stdenv.is64bit then "64" else "32";
 
   libArch =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       "i386-linux-gnu"
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       "x86_64-linux-gnu"
     else throw "amdgpu-pro is Linux only. Sorry. The build was stopped.";
 

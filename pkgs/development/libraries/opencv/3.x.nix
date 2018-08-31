@@ -63,11 +63,11 @@ let
       sha256 = "1ys9mshfpm8iy8h4ml792gnqrq959dsrcv26axx14niivxyjbji8";
     } + "/ippicv";
     files = let name = platform : "ippicv_2017u3_${platform}_general_20180518.tgz"; in
-      if stdenv.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
       { ${name "lnx_intel64"} = "b7cc351267db2d34b9efa1cd22ff0572"; }
-      else if stdenv.system == "i686-linux" then
+      else if stdenv.hostPlatform.system == "i686-linux" then
       { ${name "lnx_ia32"}    = "ea72de74dae3c604eb6348395366e78e"; }
-      else if stdenv.system == "x86_64-darwin" then
+      else if stdenv.hostPlatform.system == "x86_64-darwin" then
       { ${name "mac_intel64"} = "3ae52b9be0fe73dd45bc5e9429cd3732"; }
       else
       throw "ICV is not available for this platform (or not yet supported by this package)";

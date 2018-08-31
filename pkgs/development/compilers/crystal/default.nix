@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
     "x86_64-linux" = "linux-x86_64";
     "i686-linux" = "linux-i686";
     "x86_64-darwin" = "darwin-x86_64";
-  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
   in fetchurl {
     url = "https://github.com/crystal-lang/crystal/releases/download/0.26.0/${prebuiltName}-${arch}.tar.gz";
     sha256 = {
       "x86_64-linux" = "1xban102yiiwmlklxvn3xp3q546bp8hlxxpakayajkhhnpl6yv45";
       "i686-linux" = "1igspf1lrv7wpmz0pfrkbx8m1ykvnv4zhic53cav4nicppm2v0ic";
       "x86_64-darwin" = "0hzc65ccajr0yhmvi5vbdgbzbp1gbjy56da24ds3zwwkam1ddk0k";
-    }."${stdenv.system}";
+    }."${stdenv.hostPlatform.system}";
   };
 
   unpackPhase = ''

@@ -7,10 +7,10 @@ stdenv.mkDerivation rec {
   version = "4.4.12";
 
   src = fetchurl (
-    if stdenv.system == "x86_64-linux" then {
+    if stdenv.hostPlatform.system == "x86_64-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux.tar.gz";
       sha256 = "1yqvx64bgiq27hdhwkzgmzyib8pbjn1idpq6783srxq64asf6iyw";
-    } else if stdenv.system == "i686-linux" then {
+    } else if stdenv.hostPlatform.system == "i686-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux32.tar.gz";
       sha256 = "02kib56lv4lhwkj5r15484lvvbyjvf9ydi5vccsmxgsxrzmddnl6";
     } else {

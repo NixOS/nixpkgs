@@ -272,7 +272,7 @@ in with stdenv.lib.licenses;
 
     extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
-    buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
+    buildPhase = "make WITH_DYNAREC=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
 
   nestopia = (mkLibRetroCore rec {
@@ -300,7 +300,7 @@ in with stdenv.lib.licenses;
 
     extraBuildInputs = [ libGLU_combined libpng ];
   }).override {
-    buildPhase = "make WITH_DYNAREC=${if stdenv.system == "x86_64-linux" then "x86_64" else "x86"}";
+    buildPhase = "make WITH_DYNAREC=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "x86"}";
   };
 
   picodrive = (mkLibRetroCore rec {

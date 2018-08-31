@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, m4, cxx ? !hostPlatform.useAndroidPrebuilt
-, buildPackages, hostPlatform
+{ stdenv, fetchurl, m4, cxx ? !stdenv.hostPlatform.useAndroidPrebuilt
+, buildPackages
 , withStatic ? false }:
 
 let inherit (stdenv.lib) optional optionalString; in

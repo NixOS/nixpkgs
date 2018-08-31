@@ -5,10 +5,10 @@
 
 let
 
-  bits = if stdenv.system == "x86_64-linux" then "64"
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "64"
          else "32";
 
-  arch = if stdenv.system == "x86_64-linux" then "x86_64"
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64"
          else "x86";
 
   src_info = {

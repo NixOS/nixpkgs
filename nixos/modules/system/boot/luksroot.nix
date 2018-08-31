@@ -324,7 +324,7 @@ in
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
 
-          (if pkgs.stdenv.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
+          (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).

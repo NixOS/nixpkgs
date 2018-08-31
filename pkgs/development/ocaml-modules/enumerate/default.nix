@@ -2,6 +2,10 @@
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.00";
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "enumerate-111.08.00 is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
   name = "ocaml-enumerate-111.08.00";
 

@@ -1,7 +1,7 @@
 { version, sha256, patches ? [], patchFlags ? "" }:
 { stdenv, fetchurl, fixDarwinDylibNames
   # Cross-compiled icu4c requires a build-root of a native compile
-, buildRootOnly ? false, nativeBuildRoot, buildPlatform, hostPlatform
+, buildRootOnly ? false, nativeBuildRoot
 }:
 
 let
@@ -38,7 +38,7 @@ let
 
     configureFlags = [ "--disable-debug" ]
       ++ stdenv.lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) "--enable-rpath"
-      ++ stdenv.lib.optional (buildPlatform != hostPlatform) "--with-cross-build=${nativeBuildRoot}";
+      ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--with-cross-build=${nativeBuildRoot}";
 
     enableParallelBuilding = true;
 

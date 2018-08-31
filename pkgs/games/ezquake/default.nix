@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = with stdenv.lib; let
-    sys = last (splitString "-" stdenv.system);
-    arch = head (splitString "-" stdenv.system);
+    sys = last (splitString "-" stdenv.hostPlatform.system);
+    arch = head (splitString "-" stdenv.hostPlatform.system);
   in ''
     mkdir -p $out/bin
     find .

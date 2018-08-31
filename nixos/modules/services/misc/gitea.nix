@@ -283,7 +283,7 @@ in
 
         mkdir -p ${cfg.repositoryRoot}
         # update all hooks' binary paths
-        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 5 -type f -wholename "*git/hooks/*")
+        HOOKS=$(find ${cfg.repositoryRoot} -mindepth 4 -maxdepth 6 -type f -wholename "*git/hooks/*")
         if [ "$HOOKS" ]
         then
           sed -ri 's,/nix/store/[a-z0-9.-]+/bin/gitea,${gitea.bin}/bin/gitea,g' $HOOKS

@@ -22,7 +22,7 @@
 
 with stdenv.lib;
 let
-  audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
+  audio = optionalString (hasSuffix "linux" stdenv.hostPlatform.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 

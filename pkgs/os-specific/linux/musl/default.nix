@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, hostPlatform
+{ stdenv, lib, fetchurl
 , linuxHeaders ? null
 , useBSDCompatHeaders ? true
 }:
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--syslibdir=$out/lib")
   '';
 
-  CFLAGS="-fstack-protector-strong" + lib.optionalString hostPlatform.isPower " -mlong-double-64";
+  CFLAGS="-fstack-protector-strong" + lib.optionalString stdenv.hostPlatform.isPower " -mlong-double-64";
 
   configureFlags = [
     "--enable-shared"

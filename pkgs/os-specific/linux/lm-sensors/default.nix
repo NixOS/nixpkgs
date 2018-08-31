@@ -27,9 +27,10 @@ stdenv.mkDerivation rec {
     ${stdenv.lib.optionalString sensord "PROG_EXTRA=sensord"})
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.lm-sensors.org/;
     description = "Tools for reading hardware sensors";
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ gpl2 lgpl21 ];
+    platforms = platforms.linux;
   };
 }

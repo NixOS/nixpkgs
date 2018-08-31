@@ -242,6 +242,8 @@ in {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  cozy = callPackage ../development/python-modules/cozy { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dbf = callPackage ../development/python-modules/dbf { };
@@ -251,6 +253,8 @@ in {
   deap = callPackage ../development/python-modules/deap { };
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
+
+  dictionaries = callPackage ../development/python-modules/dictionaries { };
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
 
@@ -310,6 +314,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  httpsig = callPackage ../development/python-modules/httpsig { };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
@@ -353,6 +359,8 @@ in {
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
+
+  ordered-set = callPackage ../development/python-modules/ordered-set { };
 
   outcome = callPackage ../development/python-modules/outcome {};
 
@@ -486,6 +494,11 @@ in {
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
+
+  python-igraph = callPackage ../development/python-modules/python-igraph {
+    pkgconfig = pkgs.pkgconfig;
+    igraph = pkgs.igraph;
+  };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
@@ -2805,13 +2818,13 @@ in {
     };
   };
 
-  gurobipy = if stdenv.system == "x86_64-darwin"
+  gurobipy = if stdenv.hostPlatform.system == "x86_64-darwin"
   then callPackage ../development/python-modules/gurobipy/darwin.nix {
     inherit (pkgs.darwin) cctools insert_dylib;
   }
-  else if stdenv.system == "x86_64-linux"
+  else if stdenv.hostPlatform.system == "x86_64-linux"
   then callPackage ../development/python-modules/gurobipy/linux.nix {}
-  else throw "gurobipy not yet supported on ${stdenv.system}";
+  else throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
 
