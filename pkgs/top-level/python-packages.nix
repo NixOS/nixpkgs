@@ -10227,7 +10227,8 @@ in {
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
-  pylint = callPackage ../development/python-modules/pylint { };
+  pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
+           else callPackage ../development/python-modules/pylint/1.9.nix { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 

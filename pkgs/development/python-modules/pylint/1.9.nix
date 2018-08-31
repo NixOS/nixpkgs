@@ -1,20 +1,19 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, pythonOlder, astroid,
-  isort, mccabe, pytest, pytestrunner, pyenchant }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, astroid, six, isort,
+  mccabe, configparser, backports_functools_lru_cache, singledispatch,
+  pytest, pytestrunner, pyenchant }:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.1.1";
-
-  disabled = pythonOlder "3.4";
+  version = "1.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "31142f764d2a7cd41df5196f9933b12b7ee55e73ef12204b648ad7e556c119fb";
+    sha256 = "1cxr1j037hsm4spmvl64v2j2rdq72pc2z0gnn3iggd4np6y21wpz";
   };
 
   checkInputs = [ pytest pytestrunner pyenchant ];
 
-  propagatedBuildInputs = [ astroid isort mccabe ];
+  propagatedBuildInputs = [ astroid six isort mccabe configparser backports_functools_lru_cache singledispatch ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     # Remove broken darwin test
@@ -23,8 +22,10 @@ buildPythonPackage rec {
 
   checkPhase = ''
     pytest pylint/test -k "not ${lib.concatStringsSep " and not " (
-      # Broken test
-      [ "test_good_comprehension_checks" ] ++
+      [ # Broken test
+        "test_good_comprehension_checks"
+        # See PyCQA/pylint#2535
+        "test_libmodule" ] ++
       # Disable broken darwin tests
       lib.optionals stdenv.isDarwin [
         "test_parallel_execution"
