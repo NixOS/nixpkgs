@@ -304,6 +304,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  httpsig = callPackage ../development/python-modules/httpsig { };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
