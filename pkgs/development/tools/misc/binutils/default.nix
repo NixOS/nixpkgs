@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
 
   configureFlags = [
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"
     "--with-system-zlib"
