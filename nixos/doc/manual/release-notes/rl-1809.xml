@@ -521,6 +521,13 @@ inherit (pkgs.nixos {
       all user units for each authenticated user.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The default display manager is now LightDM.
+      To use SLiM set <literal>services.xserver.displayManager.slim.enable</literal>
+      to <literal>true</literal>.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>
