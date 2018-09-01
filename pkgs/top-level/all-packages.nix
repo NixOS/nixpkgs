@@ -7386,9 +7386,10 @@ with pkgs;
   inherit (beam.packages.erlang)
     rebar rebar3-open rebar3
     hexRegistrySnapshot fetchHex beamPackages
-    hex2nix cuter;
+    hex2nix;
 
   inherit (beam.packages.erlangR18) relxExe;
+  inherit (beam.packages.erlangR19) cuter;
 
   groovy = callPackage ../development/interpreters/groovy { };
 
