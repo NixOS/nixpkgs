@@ -263,6 +263,13 @@ checkFS() {
         return 0
     fi
 
+    # Device might be already mounted manually 
+    # e.g. NBD-device or the host filesystem of the file which contains encrypted root fs
+    if mount | grep -q "^$device on "; then
+        echo "skip checking already mounted $device"
+        return 0
+    fi
+
     # Optionally, skip fsck on journaling filesystems.  This option is
     # a hack - it's mostly because e2fsck on ext3 takes much longer to
     # recover the journal than the ext3 implementation in the kernel
