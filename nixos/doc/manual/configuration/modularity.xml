@@ -74,7 +74,7 @@ The unique option `services.httpd.adminAddr' is defined multiple times, in `/etc
   argument is for: it contains the complete, merged system configuration. That
   is, <varname>config</varname> is the result of combining the configurations
   returned by every module
-  <footnote>
+  <footnote xml:id="footnote-nix-is-lazy">
    <para>
     If you’re wondering how it’s possible that the (indirect)
     <emphasis>result</emphasis> of a function is passed as an
