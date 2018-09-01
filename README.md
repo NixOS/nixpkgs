@@ -55,6 +55,7 @@ imports = [
 [Apple MacBook Pro 10,1]: apple/macbook-pro/10-1
 [Dell XPS 15 9550]: dell/xps/15-9550
 [Inverse Path USB armory]: inversepath/usbarmory
+[Lenovo ThinkPad X1 gen6]: lenovo/thinkpad/x1/6th-gen
 [Microsoft Surface Pro 3]: microsoft/surface-pro/3
 [Raspberry Pi 2]: raspberry-pi/2
 [Samsung Series 9 NP900X3C]: samsung/np900x3c
