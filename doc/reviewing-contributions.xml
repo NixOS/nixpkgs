@@ -56,7 +56,7 @@
   meant as examples. Their usage is optional and the reviewer is free to adapt
   them to their liking.
  </para>
- <section>
+ <section xml:id="reviewing-contributions-package-updates">
   <title>Package updates</title>
 
   <para>
@@ -226,7 +226,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 </screen>
   </example>
  </section>
- <section>
+ <section xml:id="reviewing-contributions-new-packages">
   <title>New packages</title>
 
   <para>
@@ -346,7 +346,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 </screen>
   </example>
  </section>
- <section>
+ <section xml:id="reviewing-contributions-module-updates">
   <title>Module updates</title>
 
   <para>
@@ -464,7 +464,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 </screen>
   </example>
  </section>
- <section>
+ <section xml:id="reviewing-contributions-new-modules">
   <title>New modules</title>
 
   <para>
@@ -564,7 +564,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
 </screen>
   </example>
  </section>
- <section>
+ <section xml:id="reviewing-contributions-other-submissions">
   <title>Other submissions</title>
 
   <para>
@@ -585,7 +585,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    pull requests fitting this category.
   </para>
  </section>
- <section>
+ <section xml:id="reviewing-contributions--merging-pull-requests">
   <title>Merging pull-requests</title>
 
   <para>

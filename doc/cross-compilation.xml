@@ -30,7 +30,7 @@
  <section xml:id="sec-cross-packaging">
   <title>Packaging in a cross-friendly manner</title>
 
-  <section>
+  <section xml:id="sec-cross-platform-parameters">
    <title>Platform parameters</title>
 
    <para>
@@ -219,7 +219,7 @@
    </variablelist>
   </section>
 
-  <section>
+  <section xml:id="sec-cross-specifying-dependencies">
    <title>Specifying Dependencies</title>
 
    <para>
@@ -304,7 +304,7 @@
    </note>
   </section>
 
-  <section>
+  <section xml:id="sec-cross-cookbook">
    <title>Cross packaging cookbook</title>
 
    <para>
