@@ -233,6 +233,7 @@ let
               [ sudo
                 libxml2.bin
                 libxslt.bin
+                desktop-file-utils
                 docbook5
                 docbook_xsl_ns
                 unionfs-fuse
@@ -240,6 +241,8 @@ let
                 nixos-artwork.wallpapers.simple-dark-gray-bottom
                 perlPackages.XMLLibXML
                 perlPackages.ListCompare
+                shared-mime-info
+                texinfo
                 xorg.lndir
 
                 # add curl so that rather than seeing the test attempt to download
