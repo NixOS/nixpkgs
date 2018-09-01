@@ -422,6 +422,7 @@ in rec {
   tests.yabar = callTest tests/yabar.nix {};
   tests.zookeeper = callTest tests/zookeeper.nix {};
   tests.morty = callTest tests/morty.nix { };
+  tests.bcachefs = callTest tests/bcachefs.nix { };
 
   /* Build a bunch of typical closures so that Hydra can keep track of
      the evolution of closure sizes. */
