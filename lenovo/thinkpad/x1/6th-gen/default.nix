@@ -7,7 +7,7 @@
 {
   imports = [
     ../.
-    ../../cpu-throttling.nix
+    ../../cpu-throttling-bug.nix
     ../../acpi_call.nix
   ];
 
