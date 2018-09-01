@@ -21,11 +21,13 @@ buildGoPackage rec {
     sha256 = "132whjyplcifq8747hcdrgbc0amhp618dg049jq5nyslcxfgdypm";
   };
 
+  nativeBuildInputs = [ gx-go ];
+
   preBuild = ''
     # fetchgx stores packages by their ipfs hash
     # this will rewrite github.com/ imports to gx/ipfs/
     cd go/src/${goPackagePath}
-    ${gx-go}/bin/gx-go rewrite
+    gx-go rewrite
   '';
 
   meta = with stdenv.lib; {
