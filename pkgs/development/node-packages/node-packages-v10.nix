@@ -661,13 +661,13 @@ let
         sha1 = "5eff8e3e684d569ae4cb2b1282604e8ba62149fa";
       };
     };
-    "glob-7.1.2" = {
+    "glob-7.1.3" = {
       name = "glob";
       packageName = "glob";
-      version = "7.1.2";
+      version = "7.1.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/glob/-/glob-7.1.2.tgz";
-        sha512 = "MJTUg1kjuLeQCJ+ccE4Vpa6kKVXkPYJ2mOCQyUuKLcLQsdrMCpBPUi8qVE6+YuaJkozeA9NusTAw3hLr8Xe5EQ==";
+        url = "https://registry.npmjs.org/glob/-/glob-7.1.3.tgz";
+        sha512 = "vcfuiIxogLV4DlGBHIUOwI0IbrJ8HWPc4MU7HzviGeNho/UJDfi6B5p3sHeWIQ0KGIU0Jpxi5ZHxemQfLkkAwQ==";
       };
     };
     "global-modules-1.0.0" = {
@@ -787,13 +787,13 @@ let
         sha1 = "9aecd925114772f3d95b65a60abb8f7c18fbace1";
       };
     };
-    "iconv-lite-0.4.23" = {
+    "iconv-lite-0.4.24" = {
       name = "iconv-lite";
       packageName = "iconv-lite";
-      version = "0.4.23";
+      version = "0.4.24";
       src = fetchurl {
-        url = "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.23.tgz";
-        sha512 = "neyTUVFtahjf0mB3dZT77u+8O0QB89jFdnBkd5P1JgYPbPaia3gXXOVL2fq8VyU2gMMD7SaN7QukTB/pmXYvDA==";
+        url = "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz";
+        sha512 = "v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==";
       };
     };
     "ignore-walk-3.0.1" = {
@@ -1183,22 +1183,22 @@ let
         sha512 = "MWikgl9n9M3w+bpsY3He8L+w9eF9338xRl8IAO5viDizwSzziFEyUzo2xrrloB64ADbTf8uA8vRqqttDTOmccg==";
       };
     };
-    "mime-db-1.35.0" = {
+    "mime-db-1.36.0" = {
       name = "mime-db";
       packageName = "mime-db";
-      version = "1.35.0";
+      version = "1.36.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mime-db/-/mime-db-1.35.0.tgz";
-        sha512 = "JWT/IcCTsB0Io3AhWUMjRqucrHSPsSf2xKLaRldJVULioggvkJvggZ3VXNNSRkCddE6D+BUI4HEIZIA2OjwIvg==";
+        url = "https://registry.npmjs.org/mime-db/-/mime-db-1.36.0.tgz";
+        sha512 = "L+xvyD9MkoYMXb1jAmzI/lWYAxAMCPvIBSWur0PZ5nOf5euahRLVqH//FKW9mWp2lkqUgYiXPgkzfMUFi4zVDw==";
       };
     };
-    "mime-types-2.1.19" = {
+    "mime-types-2.1.20" = {
       name = "mime-types";
       packageName = "mime-types";
-      version = "2.1.19";
+      version = "2.1.20";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mime-types/-/mime-types-2.1.19.tgz";
-        sha512 = "P1tKYHVSZ6uFo26mtnve4HQFE3koh1UWVkp8YUC+ESBHe945xWSoXuHHiGarDqcEZ+whpCDnlNw5LON0kLo+sw==";
+        url = "https://registry.npmjs.org/mime-types/-/mime-types-2.1.20.tgz";
+        sha512 = "HrkrPaP9vGuWbLK1B1FfgAkbqNjIuy4eHlIYnFi7kamZyLLrGlo2mpcx0bBmNpKqBtYtAfGbodDddIgddSJC2A==";
       };
     };
     "minimatch-3.0.4" = {
@@ -2416,7 +2416,7 @@ in
       sources."fstream-1.0.11"
       sources."gauge-2.7.4"
       sources."getpass-0.1.7"
-      sources."glob-7.1.2"
+      sources."glob-7.1.3"
       sources."graceful-fs-4.1.11"
       sources."har-schema-2.0.0"
       sources."har-validator-5.1.0"
@@ -2434,8 +2434,8 @@ in
       sources."json-schema-traverse-0.3.1"
       sources."json-stringify-safe-5.0.1"
       sources."jsprim-1.4.1"
-      sources."mime-db-1.35.0"
-      sources."mime-types-2.1.19"
+      sources."mime-db-1.36.0"
+      sources."mime-types-2.1.20"
       sources."minimatch-3.0.4"
       sources."minimist-0.0.8"
       sources."mkdirp-0.5.1"
@@ -2530,9 +2530,9 @@ in
       sources."fs-minipass-1.2.5"
       sources."fs.realpath-1.0.0"
       sources."gauge-2.7.4"
-      sources."glob-7.1.2"
+      sources."glob-7.1.3"
       sources."has-unicode-2.0.1"
-      sources."iconv-lite-0.4.23"
+      sources."iconv-lite-0.4.24"
       sources."ignore-walk-3.0.1"
       sources."inflight-1.0.6"
       sources."inherits-2.0.3"
@@ -2593,10 +2593,10 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
-    version = "2.13.5";
+    version = "2.13.6";
     src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.13.5.tgz";
-      sha512 = "JImNFSl+9EpBYJ4B3mvlAqkh1r8qweq1RsEsQ0BAUgL3+ZsMFtWYjRRlElg0u5FXwU+11p8s1bePIRTCQTKZ4g==";
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.13.6.tgz";
+      sha512 = "X8zmtUzmEIa/QMg0t0eeq6hSd7kmL5Zvneqpj3Tcbyn2g/FEFTPb9kaghR+DW1WdViOE51eo4ECLK7uY9oogkA==";
     };
     buildInputs = globalBuildInputs;
     meta = {

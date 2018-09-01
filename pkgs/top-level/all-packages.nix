@@ -3696,7 +3696,7 @@ with pkgs;
     nodejs = pkgs.nodejs-6_x;
   };
 
-  nodePackages = nodePackages_6_x;
+  nodePackages = nodePackages_8_x;
 
   npm2nix = nodePackages.npm2nix;
 
