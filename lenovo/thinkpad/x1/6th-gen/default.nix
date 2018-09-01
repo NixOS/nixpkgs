@@ -27,6 +27,6 @@
   #   "mem_sleep_default=deep"
   # ];
   # boot.initrd.prepend = [
-  #   "/boot/acpi_override"
+  #   "${/boot/acpi_override}"
   # ];
 }
