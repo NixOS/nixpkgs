@@ -136,6 +136,20 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "tests";
 
+  postInstall = ''
+    # Write pkgconfig aliases. Upstream report:
+    # https://github.com/xianyi/OpenBLAS/issues/1740
+    for alias in blas cblas lapack; do
+      cat <<EOF > $out/lib/pkgconfig/openblas-$alias.pc
+Name: $alias
+Version: ${version}
+Description: $alias provided by the OpenBLAS package.
+Cflags: -I$out/include
+Libs: -L$out/lib -lopenblas
+EOF
+    done
+  '';
+
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;

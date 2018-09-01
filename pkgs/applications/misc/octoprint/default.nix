@@ -62,6 +62,14 @@ let
         # No tests included
         doCheck = false;
       };
+
+      pylru = super.pylru.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.9";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "71376192671f0ad1690b2a7427d39a29b1df994c8469a9b46b03ed7e28c0172c";
+        };
+      });
     };
   };
 

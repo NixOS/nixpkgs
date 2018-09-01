@@ -2,7 +2,7 @@
 , stdenv, fetchurl, pkgconfig, gtk3, gtkspell3 ? null
 , perl, gmime2, gettext, intltool, itstool, libxml2, dbus-glib, libnotify, gnutls
 , makeWrapper, gnupg
-, gnomeSupport ? true, libgnome-keyring3
+, gnomeSupport ? true, gnome3, libsecret
 }:
 
 assert spellChecking -> gtkspell3 != null;
@@ -17,10 +17,10 @@ stdenv.mkDerivation {
     sha256 = "1b4wamv33hprghcjk903bpvnd233yxyrm18qnh13alc8h1553nk8";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ gtk3 perl gmime2 gettext intltool itstool libxml2 dbus-glib libnotify gnutls ]
+  nativeBuildInputs = [ pkgconfig gettext intltool itstool libxml2 makeWrapper ];
+  buildInputs = [ gtk3 gmime2 libnotify gnutls ]
     ++ stdenv.lib.optional spellChecking gtkspell3
-    ++ stdenv.lib.optional gnomeSupport libgnome-keyring3;
+    ++ stdenv.lib.optionals gnomeSupport [ libsecret gnome3.gcr ];
 
   configureFlags = [
     "--with-dbus"

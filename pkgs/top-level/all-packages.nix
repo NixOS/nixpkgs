@@ -4491,6 +4491,8 @@ with pkgs;
 
   padthv1 = callPackage ../applications/audio/padthv1 { };
 
+  pagmo2 = callPackage ../development/libraries/pagmo2 { };
+
   pakcs = callPackage ../development/compilers/pakcs {};
 
   pal = callPackage ../tools/misc/pal { };
@@ -8831,7 +8833,7 @@ with pkgs;
 
   grabserial = callPackage ../development/tools/grabserial { };
 
-  mypy = python3Packages.mypy;
+  mypy = with python3Packages; toPythonApplication mypy;
 
   ### DEVELOPMENT / LIBRARIES
 

@@ -37,7 +37,7 @@
 , lcalc
 , rubiks
 , flintqs
-, openblas-cblas-pc
+, openblasCompat
 , flint
 , gmp
 , mpfr
@@ -98,9 +98,9 @@ writeTextFile rec {
     export PKG_CONFIG_PATH='${lib.concatStringsSep ":" (map (pkg: "${pkg}/lib/pkgconfig") [
         # This is only needed in the src/sage/misc/cython.py test and I'm not sure if there's really a use-case
         # for it outside of the tests. However since singular and openblas are runtime dependencies anyways
-        # and openblas-cblas-pc is tiny, it doesn't really hurt to include.
+        # it doesn't really hurt to include.
         singular
-        openblas-cblas-pc
+        openblasCompat
       ])
     }'
     export SAGE_ROOT='${sage-src}'

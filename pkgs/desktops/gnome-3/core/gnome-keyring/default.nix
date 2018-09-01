@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, dbus, libgcrypt, libtasn1, pam, python2, glib, libxslt
-, intltool, pango, gcr, gdk_pixbuf, atk, p11-kit, openssh, wrapGAppsHook
-, docbook_xsl, docbook_xml_dtd_42, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, dbus, libgcrypt, pam, python2, glib, libxslt
+, gettext, gcr, libcap_ng, libselinux, p11-kit, openssh, wrapGAppsHook
+, docbook_xsl, docbook_xml_dtd_43, gnome3 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-keyring-${version}";
@@ -11,21 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0sk4las4ji8wv9nx8mldzqccmpmkvvr9pdwv9imj26r10xyin5w1";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-keyring"; attrPath = "gnome3.gnome-keyring"; };
-  };
-
   outputs = [ "out" "dev" ];
 
-  buildInputs = with gnome3; [
-    dbus libgcrypt pam gtk3 libgnome-keyring openssh
-    pango gcr gdk_pixbuf atk p11-kit
+  buildInputs = [
+    glib libgcrypt pam openssh libcap_ng libselinux
+    gcr p11-kit
   ];
 
-  propagatedBuildInputs = [ glib libtasn1 libxslt ];
-
   nativeBuildInputs = [
-    pkgconfig intltool docbook_xsl docbook_xml_dtd_42 wrapGAppsHook
+    pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_43 wrapGAppsHook
   ];
 
   configureFlags = [
@@ -47,6 +41,13 @@ stdenv.mkDerivation rec {
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       make check
   '';
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-keyring";
+      attrPath = "gnome3.gnome-keyring";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";

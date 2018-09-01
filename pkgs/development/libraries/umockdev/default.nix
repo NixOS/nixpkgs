@@ -1,9 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libtool
+{ stdenv, fetchFromGitHub, autoreconfHook, umockdev, gobjectIntrospection
 , pkgconfig, glib, systemd, libgudev, vala }:
 
 stdenv.mkDerivation rec {
   name = "umockdev-${version}";
   version = "0.12";
+
+  outputs = [ "bin" "out" "dev" "doc" ];
 
   src = fetchFromGitHub {
     owner  = "martinpitt";
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib systemd libgudev ];
 
-  nativeBuildInputs = [ autoreconfHook libtool pkgconfig vala ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig vala gobjectIntrospection ];
 
   enableParallelBuilding = true;
 

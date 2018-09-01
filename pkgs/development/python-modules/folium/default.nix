@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yfb8ygq67m149n72bb8h7dk9mx8d3ivc5ygqwdj4q8qggj1ns08";
+    sha256 = "08681be47b1861221bc7cf17b6e368a8d734db81682d716c22a11e839f47cb79";
   };
 
-  checkInputs = [ pytest numpy nbconvert pandas mock ];
+  checkInputs = [ pytest nbconvert pandas mock ];
   propagatedBuildInputs = [ jinja2 branca six requests numpy ];
 
   # No tests in archive

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-timeout";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b261bec5782b603c98b4bb803484bc96bf1cdcb5480dae0999d21c7e0423a23";
+    sha256 = "1117fc0536e1638862917efbdc0895e6b62fa61e6cf4f39bb655686af7af9627";
   };
   buildInputs = [ pytest ];
   checkInputs = [ pytest pexpect ];
