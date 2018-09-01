@@ -18,13 +18,13 @@ assert speechdSupport -> speechd != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "navit-${version}";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "navit-gps";
     repo = "navit";
     rev = "v${version}";
-    sha256 = "11w85rlx612lws4s3q36li4iqib9b35v94kzf2zh9g1aphwqh2qa";
+    sha256 = "071drvqzxpxbfh0lf0lra5a97rv8ny40l96n9xl0dx0s8w30j61i";
   };
 
   sample_map = fetchurl {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   # we choose only cmdline and speech-dispatcher speech options.
   # espeak builtins is made for non-cmdline OS as winCE
   cmakeFlags = [
-    "-DSAMPLE_MAP=n " "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+    "-DSAMPLE_MAP=n " "-DCMAKE_BUILD_TYPE=Release"
     "-Dspeech/qt5_espeak=FALSE" "-Dsupport/espeak=FALSE"
   ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   libPath = stdenv.lib.makeLibraryPath ([ stdenv.cc.libc ] ++ buildInputs );
   postFixup =
   ''
-	  find "$out/lib" -type f -name "*.so" -exec patchelf --set-rpath $libPath {} \;
+    find "$out/lib" -type f -name "*.so" -exec patchelf --set-rpath $libPath {} \;
 
     wrapProgram $out/bin/navit \
       --prefix PATH : ${makeBinPath (
