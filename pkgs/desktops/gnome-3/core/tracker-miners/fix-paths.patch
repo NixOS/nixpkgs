@@ -1,6 +1,6 @@
 --- a/meson.build
 +++ b/meson.build
-@@ -37,15 +37,15 @@
+@@ -25,15 +25,15 @@
    #
    # This check acts as a guard to make sure we are being configured with the
    # right prefix, among other things.
@@ -17,12 +17,12 @@
 +  tracker_uninstalled_domain_rule = join_paths(tracker_miner.get_pkgconfig_variable('prefix'), 'share', 'tracker', 'domain-ontologies', 'default.rule')
 +  tracker_uninstalled_nepomuk_ontologies_dir = join_paths(tracker_miner.get_pkgconfig_variable('prefix'), 'share', 'tracker', 'ontologies', 'nepomuk')
 +  tracker_uninstalled_stop_words_dir = join_paths(tracker_miner.get_pkgconfig_variable('prefix'), 'share', 'tracker', 'stop-words', 'default.rule')
- endif
- 
- avcodec = dependency('libavcodec', version: '>= 0.8.4', required: false)
+ else
+   tracker_subproject = subproject('tracker',
+     default_options: [
 --- a/src/libtracker-miners-common/tracker-domain-ontology.c
 +++ b/src/libtracker-miners-common/tracker-domain-ontology.c
-@@ -313,7 +313,7 @@
+@@ -323,7 +323,7 @@
  			goto end;
  		}
  	} else {
@@ -31,7 +31,7 @@
  		                         DEFAULT_RULE, NULL);
  
  		if (!g_file_test (path, G_FILE_TEST_IS_REGULAR)) {
-@@ -378,7 +378,7 @@
+@@ -388,7 +388,7 @@
  	if (!priv->ontology_location) {
  		gchar *ontology_path;
  
