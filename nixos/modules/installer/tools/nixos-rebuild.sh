@@ -137,9 +137,16 @@ copyToTarget() {
     fi
 }
 
+# This is designed to be run in the current shell rather than a subshell,
+# so nix thinks it's in a TTY and gives us progress reporting. Consequently
+# it sets `buildOutput`, which should be checekd by the caller
 nixBuild() {
     if [ -z "$buildHost" ]; then
-        nix-build "$@"
+        # use a directory since we might produce several output links
+        mkdir -p $tmpDir/out-links
+        nix build "$@" --out-link $tmpDir/out-links/result
+        buildOutput=$(readlink -f $tmpDir/out-links/result)
+        rm -rf $tmpDir/out-links
     else
         local instArgs=()
         local buildArgs=()
@@ -159,6 +166,8 @@ nixBuild() {
                 shift 1
                 ;;
               --no-out-link) # We don't want this in buildArgs
+                ;;
+              --no-link) # We don't want this in buildArgs
                 ;;
               "<"*) # nix paths
                 instArgs+=("$i")
@@ -223,9 +232,11 @@ fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" -a -z "$fast" ]; then
-    if p=$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
+    nixBuild '(with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild)' "${extraBuildFlags[@]}"
+    rexecRebuild="$buildOutput"
+    if rexecRebuild; then
         export _NIXOS_REBUILD_REEXEC=1
-        exec $p/bin/nixos-rebuild "${origArgs[@]}"
+        exec $rexecRebuild/bin/nixos-rebuild "${origArgs[@]}"
         exit 1
     fi
 fi
@@ -337,15 +348,19 @@ fi
 if [ -z "$rollback" ]; then
     echo "building the system configuration..." >&2
     if [ "$action" = switch -o "$action" = boot ]; then
-        pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
+        nixBuild -f '<nixpkgs/nixos>' system "${extraBuildFlags[@]}"
+        pathToConfig="$buildOutput"
         copyToTarget "$pathToConfig"
         targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
     elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then
-        pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
+        nixBuild -f '<nixpkgs/nixos>' system --keep-going "${extraBuildFlags[@]}"
+        pathToConfig="$buildOutput"
     elif [ "$action" = build-vm ]; then
-        pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}")"
+        nixBuild -f '<nixpkgs/nixos>' vm --keep-going "${extraBuildFlags[@]}"
+        pathToConfig="$buildOutput"
     elif [ "$action" = build-vm-with-bootloader ]; then
-        pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}")"
+        nixBuild -f '<nixpkgs/nixos>' vmWithBootLoader --keep-going "${extraBuildFlags[@]}"
+        pathToConfig="$buildOutput"
     else
         showSyntax
     fi
