@@ -189,7 +189,9 @@ in
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
-      binutils = super.binutils_nogold;
+      binutils-unwrapped = super.binutils-unwrapped.override {
+        gold = false;
+      };
       inherit (prevStage)
         ccWrapperStdenv
         gcc-unwrapped coreutils gnugrep;

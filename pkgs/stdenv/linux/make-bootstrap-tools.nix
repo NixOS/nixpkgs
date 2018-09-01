@@ -150,6 +150,7 @@ in with pkgs; rec {
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils.bintools.out}/bin/$i $out/bin
         done
+        cp '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
 
         chmod -R u+w $out
 
