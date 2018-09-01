@@ -1,8 +1,9 @@
-{ stdenv, makeWrapper, buildOcaml, fetchFromGitHub,
-  ocaml, opam, jbuilder, menhir, merlin_extend, ppx_tools_versioned, utop }:
+{ stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, jbuilder
+, menhir, merlin_extend, ppx_tools_versioned, utop
+}:
 
-buildOcaml rec {
-  name = "reason";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-reason-${version}";
   version = "3.3.3";
 
   src = fetchFromGitHub {
@@ -14,11 +15,9 @@ buildOcaml rec {
 
   propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
 
-  buildInputs = [ makeWrapper opam jbuilder utop menhir ];
+  buildInputs = [ makeWrapper ocaml findlib jbuilder utop menhir ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
-
-  createFindlibDestdir = true;
 
   installPhase = ''
     for p in reason rtop
@@ -35,6 +34,7 @@ buildOcaml rec {
     homepage = https://reasonml.github.io/;
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;
+    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.volth ];
   };
 }

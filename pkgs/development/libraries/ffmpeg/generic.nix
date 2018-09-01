@@ -2,7 +2,6 @@
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus
-, hostPlatform
 , openglSupport ? false, libGLU_combined ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
@@ -83,8 +82,8 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [];
   configureFlags = [
-      "--arch=${hostPlatform.parsed.cpu.name}"
-      "--target_os=${hostPlatform.parsed.kernel.name}"
+      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+      "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
     # License
       "--enable-gpl"
       "--enable-version3"

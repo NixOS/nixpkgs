@@ -16,7 +16,8 @@ in
   ];
 
   assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "armv7l-linux";
+    assertion = pkgs.stdenv.hostPlatform.system == "armv7l-linux"
+      && pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system;
     message = "sd-image-armv7l-multiplatform.nix can be only built natively on ARMv7; " +
       "it cannot be cross compiled";
   };

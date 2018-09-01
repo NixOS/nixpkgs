@@ -25,15 +25,15 @@ rec {
     inherit (pkgs) stdenv fetchurl unzip;
   };
 
-  platforms = if (pkgs.stdenv.system == "i686-linux" || pkgs.stdenv.system == "x86_64-linux")
+  platforms = if (pkgs.stdenv.hostPlatform.system == "i686-linux" || pkgs.stdenv.hostPlatform.system == "x86_64-linux")
     then import ./platforms-linux.nix {
       inherit (pkgs) stdenv fetchurl unzip;
     }
-    else if pkgs.stdenv.system == "x86_64-darwin"
+    else if pkgs.stdenv.hostPlatform.system == "x86_64-darwin"
     then import ./platforms-macosx.nix {
       inherit (pkgs) stdenv fetchurl unzip;
     }
-    else throw "Platform: ${pkgs.stdenv.system} not supported!";
+    else throw "Platform: ${pkgs.stdenv.hostPlatform.system} not supported!";
 
   sysimages = import ./sysimages.nix {
     inherit (pkgs) stdenv fetchurl unzip;

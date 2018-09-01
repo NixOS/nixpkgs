@@ -60,13 +60,13 @@ let
     let
       dir = http://www.mplayerhq.hu/MPlayer/releases/codecs/;
     in
-    if stdenv.system == "i686-linux" then fetchurl {
+    if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       url = "${dir}/essential-20071007.tar.bz2";
       sha256 = "18vls12n12rjw0mzw4pkp9vpcfmd1c21rzha19d7zil4hn7fs2ic";
-    } else if stdenv.system == "x86_64-linux" then fetchurl {
+    } else if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
       url = "${dir}/essential-amd64-20071007.tar.bz2";
       sha256 = "13xf5b92w1ra5hw00ck151lypbmnylrnznq9hhb0sj36z5wz290x";
-    } else if stdenv.system == "powerpc-linux" then fetchurl {
+    } else if stdenv.hostPlatform.system == "powerpc-linux" then fetchurl {
       url = "${dir}/essential-ppc-20071007.tar.bz2";
       sha256 = "18mlj8dp4wnz42xbhdk1jlz2ygra6fbln9wyrcyvynxh96g1871z";
     } else null;

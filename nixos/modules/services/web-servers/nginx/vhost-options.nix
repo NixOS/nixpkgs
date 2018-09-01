@@ -129,6 +129,13 @@ with lib;
       description = "Path to server SSL certificate key.";
     };
 
+    sslTrustedCertificate = mkOption {
+      type = types.path;
+      default = null;
+      example = "/var/root.cert";
+      description = "Path to root SSL certificate for stapling and client certificates.";
+    };
+
     http2 = mkOption {
       type = types.bool;
       default = true;

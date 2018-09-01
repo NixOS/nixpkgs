@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
+{ stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 with stdenv.lib;
 

@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, cmake
-, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBuildTests=${if doCheck then "ON" else "OFF"}"
-  ] ++ stdenv.lib.optionals (hostPlatform.libc == "msvcrt") [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "-DCMAKE_SYSTEM_NAME=Windows"
   ];
 

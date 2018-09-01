@@ -1,10 +1,9 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
 , openglSupport ? false, libGL, libGLU
 , alsaSupport ? true, alsaLib
-, x11Support ? hostPlatform == buildPlatform, libXext, libICE, libXrandr
+, x11Support ? stdenv.hostPlatform == stdenv.buildPlatform, libXext, libICE, libXrandr
 , pulseaudioSupport ? true, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
-, hostPlatform, buildPlatform
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin Cocoa;
 
   buildInputs = [ ]
-    ++ optional (!hostPlatform.isMinGW) audiofile
+    ++ optional (!stdenv.hostPlatform.isMinGW) audiofile
     ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
   configureFlags = [

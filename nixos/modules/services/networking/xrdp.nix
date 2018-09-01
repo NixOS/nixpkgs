@@ -93,10 +93,14 @@ in
 
   config = mkIf cfg.enable {
 
-    # copied from <nixos/modules/services/x11/xserver.nix>
     # xrdp can run X11 program even if "services.xserver.enable = false"
-    environment.pathsToLink =
-      [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
+    xdg = {
+      autostart.enable = true;
+      menus.enable = true;
+      mime.enable = true;
+      icons.enable = true;
+    };
+
     fonts.enableDefaultFonts = mkDefault true;
 
     systemd = {

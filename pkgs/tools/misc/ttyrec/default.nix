@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPlatform }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "ttyrec-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./clang-fixes.patch ];
 
-  makeFlags = stdenv.lib.optional buildPlatform.isLinux "CFLAGS=-DSVR4"
+  makeFlags = stdenv.lib.optional stdenv.buildPlatform.isLinux "CFLAGS=-DSVR4"
     ++ stdenv.lib.optional stdenv.cc.isClang "CC=clang";
 
   installPhase = ''

@@ -1,6 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
 , pyperclip, six, pyparsing, vim, wcwidth, colorama
-, contextlib2 ? null
+, contextlib2 ? null, setuptools_scm
 , pytest, mock, which, glibcLocales
 }:
 buildPythonPackage rec {
@@ -30,6 +30,10 @@ buildPythonPackage rec {
   '';
   doCheck = !stdenv.isDarwin;
   disabled = !isPy3k;
+
+  buildInputs = [
+    setuptools_scm
+  ];
 
   propagatedBuildInputs = [
     colorama

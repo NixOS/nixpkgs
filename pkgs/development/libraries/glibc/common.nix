@@ -18,7 +18,6 @@
 */
 
 { stdenv, lib
-, buildPlatform, hostPlatform
 , buildPackages
 , fetchurl ? null
 , linuxHeaders ? null
@@ -119,12 +118,12 @@ stdenv.mkDerivation ({
        else "--disable-profile")
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
-    ] ++ lib.optionals (hostPlatform != buildPlatform) [
-      (if hostPlatform.platform.gcc.float or (hostPlatform.parsed.abi.float or "hard") == "soft"
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      (if stdenv.hostPlatform.platform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"
        then "--without-fp"
        else "--with-fp")
       "--with-__thread"
-    ] ++ lib.optionals (hostPlatform == buildPlatform && hostPlatform.isAarch32) [
+    ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"
       "--build=arm-linux-gnueabi"
 
@@ -176,7 +175,7 @@ stdenv.mkDerivation ({
     }
 
 
-  '' + lib.optionalString (hostPlatform != buildPlatform) ''
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
     cat > config.cache << "EOF"
@@ -210,7 +209,7 @@ stdenv.mkDerivation ({
   } // meta;
 }
 
-// lib.optionalAttrs (hostPlatform != buildPlatform) {
+// lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
 
   dontStrip = true;

@@ -6,12 +6,12 @@ let
   sha256 = {
     "x86_64-linux" = "0g19sac4j3m1nf400vn6qcww7prqg2p4k4zsj74i109kk1396aa2";
     "i686-linux"   = "1dd4ai2pclav9g872xil3x67bxy32gvz9pb3w76383pcsdh5zh45";
-  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   arch = {
     "x86_64-linux" = "amd64";
     "i686-linux"   = "i686";
-  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   description = "Desktop sharing application, providing remote support and online meetings";
 

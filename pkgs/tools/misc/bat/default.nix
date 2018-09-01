@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   name    = "bat-${version}";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = "bat";
     rev    = "v${version}";
-    sha256 = "04ip0h1n7wavd7j7r7ppcy3v4987yv44mgw8qm8d56pcw67f9vwk";
+    sha256 = "19xmj3a3npx4v1mlvd31r3icml73mxjq6la5qifb2i35ciqnx9bd";
     fetchSubmodules = true;
   };
 

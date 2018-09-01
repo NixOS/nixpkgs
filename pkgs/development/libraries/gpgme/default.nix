@@ -7,7 +7,10 @@
 , withPython ? false, swig2 ? null, python ? null
 }:
 
-let inherit (stdenv) lib system; in
+let
+  inherit (stdenv) lib;
+  inherit (stdenv.hostPlatform) system;
+in
 
 stdenv.mkDerivation rec {
   name = "gpgme-${version}";

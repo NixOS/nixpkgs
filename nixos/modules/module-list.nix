@@ -7,6 +7,10 @@
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
+  ./config/xdg/autostart.nix
+  ./config/xdg/icons.nix
+  ./config/xdg/menus.nix
+  ./config/xdg/mime.nix
   ./config/gnu.nix
   ./config/i18n.nix
   ./config/iproute2.nix
@@ -417,6 +421,7 @@
   ./services/monitoring/graphite.nix
   ./services/monitoring/hdaps.nix
   ./services/monitoring/heapster.nix
+  ./services/monitoring/incron.nix
   ./services/monitoring/longview.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
@@ -615,6 +620,7 @@
   ./services/networking/xl2tpd.nix
   ./services/networking/xrdp.nix
   ./services/networking/zerobin.nix
+  ./services/networking/zeronet.nix
   ./services/networking/zerotierone.nix
   ./services/networking/znc.nix
   ./services/printing/cupsd.nix

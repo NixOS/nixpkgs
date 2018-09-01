@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.76.1";
+  version = "0.77.1";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -48,6 +48,7 @@
     "auth" = ps: with ps; [ aiohttp-cors ];
     "auth.indieauth" = ps: with ps; [  ];
     "auth.login_flow" = ps: with ps; [  ];
+    "auth.mfa_setup_flow" = ps: with ps; [  ];
     "automation" = ps: with ps; [  ];
     "automation.event" = ps: with ps; [  ];
     "automation.homeassistant" = ps: with ps; [  ];
@@ -96,7 +97,7 @@
     "binary_sensor.homematicip_cloud" = ps: with ps; [  ];
     "binary_sensor.hydrawise" = ps: with ps; [  ];
     "binary_sensor.ihc" = ps: with ps; [  ];
-    "binary_sensor.insteon_plm" = ps: with ps; [  ];
+    "binary_sensor.insteon" = ps: with ps; [  ];
     "binary_sensor.iss" = ps: with ps; [  ];
     "binary_sensor.isy994" = ps: with ps; [  ];
     "binary_sensor.knx" = ps: with ps; [  ];
@@ -185,7 +186,7 @@
     "camera.netatmo" = ps: with ps; [  ];
     "camera.onvif" = ps: with ps; [ ha-ffmpeg ];
     "camera.proxy" = ps: with ps; [ pillow ];
-    "camera.push" = ps: with ps; [  ];
+    "camera.push" = ps: with ps; [ aiohttp-cors ];
     "camera.ring" = ps: with ps; [ ha-ffmpeg ];
     "camera.rpi_camera" = ps: with ps; [  ];
     "camera.skybell" = ps: with ps; [  ];
@@ -249,7 +250,6 @@
     "comfoconnect" = ps: with ps; [  ];
     "config" = ps: with ps; [ aiohttp-cors ];
     "config.auth" = ps: with ps; [  ];
-    "config.auth_provider_homeassistant" = ps: with ps; [  ];
     "config.automation" = ps: with ps; [  ];
     "config.config_entries" = ps: with ps; [ voluptuous-serialize ];
     "config.core" = ps: with ps; [  ];
@@ -261,6 +261,7 @@
     "config.zwave" = ps: with ps; [  ];
     "configurator" = ps: with ps; [  ];
     "conversation" = ps: with ps; [ aiohttp-cors ];
+    "conversation.util" = ps: with ps; [  ];
     "counter" = ps: with ps; [  ];
     "cover" = ps: with ps; [  ];
     "cover.abode" = ps: with ps; [  ];
@@ -366,6 +367,7 @@
     "dweet" = ps: with ps; [  ];
     "dyson" = ps: with ps; [  ];
     "ecobee" = ps: with ps; [  ];
+    "ecovacs" = ps: with ps; [  ];
     "egardia" = ps: with ps; [  ];
     "eight_sleep" = ps: with ps; [  ];
     "emoncms_history" = ps: with ps; [  ];
@@ -379,8 +381,7 @@
     "fan.comfoconnect" = ps: with ps; [  ];
     "fan.demo" = ps: with ps; [  ];
     "fan.dyson" = ps: with ps; [  ];
-    "fan.insteon_local" = ps: with ps; [  ];
-    "fan.insteon_plm" = ps: with ps; [  ];
+    "fan.insteon" = ps: with ps; [  ];
     "fan.isy994" = ps: with ps; [  ];
     "fan.mqtt" = ps: with ps; [ paho-mqtt ];
     "fan.template" = ps: with ps; [  ];
@@ -409,6 +410,10 @@
     "google_domains" = ps: with ps; [  ];
     "graphite" = ps: with ps; [  ];
     "group" = ps: with ps; [  ];
+    "hangouts" = ps: with ps; [  ];
+    "hangouts.config_flow" = ps: with ps; [  ];
+    "hangouts.const" = ps: with ps; [  ];
+    "hangouts.hangouts_bot" = ps: with ps; [  ];
     "hassio" = ps: with ps; [ aiohttp-cors ];
     "hassio.handler" = ps: with ps; [  ];
     "hassio.http" = ps: with ps; [  ];
@@ -463,6 +468,7 @@
     "input_number" = ps: with ps; [  ];
     "input_select" = ps: with ps; [  ];
     "input_text" = ps: with ps; [  ];
+    "insteon" = ps: with ps; [  ];
     "insteon_local" = ps: with ps; [  ];
     "insteon_plm" = ps: with ps; [  ];
     "intent_script" = ps: with ps; [  ];
@@ -502,8 +508,7 @@
     "light.hyperion" = ps: with ps; [  ];
     "light.iglo" = ps: with ps; [  ];
     "light.ihc" = ps: with ps; [  ];
-    "light.insteon_local" = ps: with ps; [  ];
-    "light.insteon_plm" = ps: with ps; [  ];
+    "light.insteon" = ps: with ps; [  ];
     "light.isy994" = ps: with ps; [  ];
     "light.knx" = ps: with ps; [  ];
     "light.lifx" = ps: with ps; [  ];
@@ -692,6 +697,7 @@
     "notify.free_mobile" = ps: with ps; [  ];
     "notify.gntp" = ps: with ps; [  ];
     "notify.group" = ps: with ps; [  ];
+    "notify.hangouts" = ps: with ps; [  ];
     "notify.hipchat" = ps: with ps; [  ];
     "notify.html5" = ps: with ps; [ aiohttp-cors ];
     "notify.instapush" = ps: with ps; [  ];
@@ -893,7 +899,7 @@
     "sensor.imap" = ps: with ps; [ aioimaplib ];
     "sensor.imap_email_content" = ps: with ps; [  ];
     "sensor.influxdb" = ps: with ps; [ influxdb ];
-    "sensor.insteon_plm" = ps: with ps; [  ];
+    "sensor.insteon" = ps: with ps; [  ];
     "sensor.ios" = ps: with ps; [ aiohttp-cors zeroconf ];
     "sensor.iota" = ps: with ps; [  ];
     "sensor.iperf3" = ps: with ps; [  ];
@@ -932,9 +938,11 @@
     "sensor.nederlandse_spoorwegen" = ps: with ps; [  ];
     "sensor.nest" = ps: with ps; [  ];
     "sensor.netatmo" = ps: with ps; [  ];
+    "sensor.netatmo_public" = ps: with ps; [  ];
     "sensor.netdata" = ps: with ps; [  ];
     "sensor.netgear_lte" = ps: with ps; [  ];
     "sensor.neurio_energy" = ps: with ps; [  ];
+    "sensor.noaa_tides" = ps: with ps; [  ];
     "sensor.nsw_fuel_station" = ps: with ps; [  ];
     "sensor.nut" = ps: with ps; [  ];
     "sensor.nzbget" = ps: with ps; [  ];
@@ -1113,8 +1121,7 @@
     "switch.hook" = ps: with ps; [  ];
     "switch.hydrawise" = ps: with ps; [  ];
     "switch.ihc" = ps: with ps; [  ];
-    "switch.insteon_local" = ps: with ps; [  ];
-    "switch.insteon_plm" = ps: with ps; [  ];
+    "switch.insteon" = ps: with ps; [  ];
     "switch.isy994" = ps: with ps; [  ];
     "switch.kankun" = ps: with ps; [  ];
     "switch.knx" = ps: with ps; [  ];
@@ -1212,6 +1219,7 @@
     "vacuum" = ps: with ps; [  ];
     "vacuum.demo" = ps: with ps; [  ];
     "vacuum.dyson" = ps: with ps; [  ];
+    "vacuum.ecovacs" = ps: with ps; [  ];
     "vacuum.mqtt" = ps: with ps; [ paho-mqtt ];
     "vacuum.neato" = ps: with ps; [  ];
     "vacuum.roomba" = ps: with ps; [  ];

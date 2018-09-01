@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   patches = [ ./sudo.patch ];
 
-  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.system != "i686-linux") pandoc;
+  nativeBuildInputs = [ makeWrapper python3Packages.setuptools_scm ] ++ stdenv.lib.optional (stdenv.hostPlatform.system != "i686-linux") pandoc;
   buildInputs =
     [ coreutils openssh procps nettools ]
     ++ stdenv.lib.optionals stdenv.isLinux [ iptables ];

@@ -1,5 +1,9 @@
 { stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "erm_xml is not available for OCaml ${ocaml.version}"
+else
+
 let version = "0.3"; in
 
 stdenv.mkDerivation {

@@ -1,4 +1,4 @@
-{ lib, hostPlatform, targetPlatform
+{ lib
 , makeWrapper
 , runCommand, wrapBintoolsWith, wrapCCWith
 , buildAndroidndk, androidndk, targetAndroidndkPkgs
@@ -33,8 +33,8 @@ let
   }.${config} or
     (throw "Android NDK doesn't support ${config}, as far as we know");
 
-  hostInfo = ndkInfoFun hostPlatform;
-  targetInfo = ndkInfoFun targetPlatform;
+  hostInfo = ndkInfoFun stdenv.hostPlatform;
+  targetInfo = ndkInfoFun stdenv.targetPlatform;
 
 in
 
@@ -51,7 +51,7 @@ rec {
       mkdir -p $out/bin
       for prog in ${ndkBinDir}/${targetInfo.triple}-*; do
         prog_suffix=$(basename $prog | sed 's/${targetInfo.triple}-//')
-        ln -s $prog $out/bin/${targetPlatform.config}-$prog_suffix
+        ln -s $prog $out/bin/${stdenv.targetPlatform.config}-$prog_suffix
       done
     '';
 
@@ -68,11 +68,11 @@ rec {
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''
-      echo "-D__ANDROID_API__=${targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
+      echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
     ''
-    + lib.optionalString targetPlatform.isAarch32 (let
-        p =  targetPlatform.platform.gcc or {}
-          // targetPlatform.parsed.abi;
+    + lib.optionalString stdenv.targetPlatform.isAarch32 (let
+        p =  stdenv.targetPlatform.platform.gcc or {}
+          // stdenv.targetPlatform.parsed.abi;
         flags = lib.concatLists [
           (lib.optional (p ? arch) "-march=${p.arch}")
           (lib.optional (p ? cpu) "-mcpu=${p.cpu}")
@@ -84,10 +84,10 @@ rec {
         ];
       in ''
         sed -E -i \
-          $out/bin/${targetPlatform.config}-cc \
-          $out/bin/${targetPlatform.config}-c++ \
-          $out/bin/${targetPlatform.config}-gcc \
-          $out/bin/${targetPlatform.config}-g++ \
+          $out/bin/${stdenv.targetPlatform.config}-cc \
+          $out/bin/${stdenv.targetPlatform.config}-c++ \
+          $out/bin/${stdenv.targetPlatform.config}-gcc \
+          $out/bin/${stdenv.targetPlatform.config}-g++ \
           -e '130i    extraBefore+=(-Wl,--fix-cortex-a8)' \
           -e 's|^(extraBefore=)\(\)$|\1(${builtins.toString flags})|'
       '')
@@ -107,10 +107,10 @@ rec {
   libraries =
     let
       includePath = if buildAndroidndk.version == "10e" then
-          "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/include/"
+          "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/include/"
         else
           "${buildAndroidndk}/libexec/${buildAndroidndk.name}/sysroot/usr/include";
-      libPath = "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/lib/";
+      libPath = "${buildAndroidndk}/libexec/${buildAndroidndk.name}/platforms/android-${stdenv.hostPlatform.sdkVer}/arch-${hostInfo.arch}/usr/lib/";
     in
     runCommand "bionic-prebuilt" {} ''
       mkdir -p $out

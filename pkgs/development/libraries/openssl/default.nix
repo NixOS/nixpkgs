@@ -1,5 +1,4 @@
 { stdenv, fetchurl, buildPackages, perl
-, buildPlatform, hostPlatform
 , withCryptodev ? false, cryptodevHeaders
 , enableSSL2 ? false
 , static ? false
@@ -20,8 +19,8 @@ let
       (args.patches or [])
       ++ [ ./nix-ssl-cert-file.patch ]
       ++ optional (versionOlder version "1.1.0")
-          (if hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch)
-      ++ optional (versionOlder version "1.0.2" && hostPlatform.isDarwin)
+          (if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch)
+      ++ optional (versionOlder version "1.0.2" && stdenv.hostPlatform.isDarwin)
            ./darwin-arch.patch;
 
     postPatch = ''
@@ -40,7 +39,7 @@ let
 
     outputs = [ "bin" "dev" "out" "man" ];
     setOutputFlags = false;
-    separateDebugInfo = hostPlatform.isLinux;
+    separateDebugInfo = stdenv.hostPlatform.isLinux;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
@@ -50,19 +49,19 @@ let
     configureScript = {
         "x86_64-darwin"  = "./Configure darwin64-x86_64-cc";
         "x86_64-solaris" = "./Configure solaris64-x86_64-gcc";
-      }.${hostPlatform.system} or (
-        if hostPlatform == buildPlatform
+      }.${stdenv.hostPlatform.system} or (
+        if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
-        else if hostPlatform.isMinGW
+        else if stdenv.hostPlatform.isMinGW
           then "./Configure mingw${optionalString
-                                     (hostPlatform.parsed.cpu.bits != 32)
-                                     (toString hostPlatform.parsed.cpu.bits)}"
-        else if hostPlatform.isLinux
-          then "./Configure linux-generic${toString hostPlatform.parsed.cpu.bits}"
-        else if hostPlatform.isiOS
-          then "./Configure ios${toString hostPlatform.parsed.cpu.bits}-cross"
+                                     (stdenv.hostPlatform.parsed.cpu.bits != 32)
+                                     (toString stdenv.hostPlatform.parsed.cpu.bits)}"
+        else if stdenv.hostPlatform.isLinux
+          then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
+        else if stdenv.hostPlatform.isiOS
+          then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
         else
-          throw "Not sure what configuration to use for ${hostPlatform.config}"
+          throw "Not sure what configuration to use for ${stdenv.hostPlatform.config}"
       );
 
     configureFlags = [
@@ -73,7 +72,7 @@ let
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
-      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && hostPlatform.isAarch64) "no-afalgeng";
+      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng";
 
     makeFlags = [ "MANDIR=$(man)/share/man" ];
 

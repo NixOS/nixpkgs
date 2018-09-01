@@ -33,9 +33,9 @@ let
   game = if hasAttr dfVersion df-hashes
          then getAttr dfVersion df-hashes
          else throw "Unknown Dwarf Fortress version: ${dfVersion}";
-  dfPlatform = if hasAttr stdenv.system platforms
-               then getAttr stdenv.system platforms
-               else throw "Unsupported system: ${stdenv.system}";
+  dfPlatform = if hasAttr stdenv.hostPlatform.system platforms
+               then getAttr stdenv.hostPlatform.system platforms
+               else throw "Unsupported system: ${stdenv.hostPlatform.system}";
   sha256 = if hasAttr dfPlatform game
            then getAttr dfPlatform game
            else throw "Unsupported dfPlatform: ${dfPlatform}";

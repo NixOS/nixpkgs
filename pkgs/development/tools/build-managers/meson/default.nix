@@ -1,4 +1,4 @@
-{ lib, python3Packages, stdenv, targetPlatform, writeTextDir, substituteAll }:
+{ lib, python3Packages, stdenv, writeTextDir, substituteAll }:
 
 python3Packages.buildPythonApplication rec {
   version = "0.46.1";
@@ -57,10 +57,10 @@ python3Packages.buildPythonApplication rec {
     needs_exe_wrapper = true
 
     [host_machine]
-    system = '${targetPlatform.parsed.kernel.name}'
-    cpu_family = '${targetPlatform.parsed.cpu.family}'
-    cpu = '${targetPlatform.parsed.cpu.name}'
-    endian = ${if targetPlatform.isLittleEndian then "'little'" else "'big'"}
+    system = '${stdenv.targetPlatform.parsed.kernel.name}'
+    cpu_family = '${stdenv.targetPlatform.parsed.cpu.family}'
+    cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
+    endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
   '';
 
   # 0.45 update enabled tests but they are failing

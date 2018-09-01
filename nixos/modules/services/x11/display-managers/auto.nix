@@ -41,10 +41,12 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.displayManager.slim = {
+    services.xserver.displayManager.lightdm = {
       enable = true;
-      autoLogin = true;
-      defaultUser = cfg.user;
+      autoLogin = {
+        enable = true;
+        user = cfg.user;
+      };
     };
 
   };

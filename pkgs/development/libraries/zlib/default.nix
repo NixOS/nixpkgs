@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, buildPlatform, hostPlatform
 , static ? false
 }:
 
@@ -16,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1";
   };
 
-  patches = stdenv.lib.optional hostPlatform.isCygwin ./disable-cygwin-widechar.patch;
+  patches = stdenv.lib.optional stdenv.hostPlatform.isCygwin ./disable-cygwin-widechar.patch;
 
-  postPatch = stdenv.lib.optionalString hostPlatform.isDarwin ''
+  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
       --replace '/usr/bin/libtool' 'ar' \
       --replace 'AR="libtool"' 'AR="ar"' \
@@ -37,25 +36,25 @@ stdenv.mkDerivation rec {
     # jww (2015-01-06): Sometimes this library install as a .so, even on
     # Darwin; others time it installs as a .dylib.  I haven't yet figured out
     # what causes this difference.
-  + stdenv.lib.optionalString hostPlatform.isDarwin ''
+  + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/*.so* $out/lib/*.dylib* ; do
       install_name_tool -id "$file" $file
     done
   ''
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
-  + stdenv.lib.optionalString (hostPlatform.libc == "msvcrt") ''
+  + stdenv.lib.optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
     ln -s zlib1.dll $out/bin/libz.dll
   '';
 
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!hostPlatform.isDarwin) "-static-libgcc";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.hostPlatform.isDarwin) "-static-libgcc";
 
-  dontStrip = hostPlatform != buildPlatform && static;
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
   configurePlatforms = [];
 
-  installFlags = stdenv.lib.optionals (hostPlatform.libc == "msvcrt") [
+  installFlags = stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "BINARY_PATH=$(out)/bin"
     "INCLUDE_PATH=$(dev)/include"
     "LIBRARY_PATH=$(out)/lib"
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
-  ] ++ stdenv.lib.optionals (hostPlatform.libc == "msvcrt") [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "-f" "win32/Makefile.gcc"
   ] ++ stdenv.lib.optionals (!static) [
     "SHARED_MODE=1"

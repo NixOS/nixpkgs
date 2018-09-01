@@ -242,6 +242,8 @@ in {
 
   clustershell = callPackage ../development/python-modules/clustershell { };
 
+  cozy = callPackage ../development/python-modules/cozy { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dbf = callPackage ../development/python-modules/dbf { };
@@ -251,6 +253,8 @@ in {
   deap = callPackage ../development/python-modules/deap { };
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
+
+  dictionaries = callPackage ../development/python-modules/dictionaries { };
 
   diff_cover = callPackage ../development/python-modules/diff_cover { };
 
@@ -310,6 +314,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  httpsig = callPackage ../development/python-modules/httpsig { };
+
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
@@ -353,6 +359,8 @@ in {
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
+
+  ordered-set = callPackage ../development/python-modules/ordered-set { };
 
   outcome = callPackage ../development/python-modules/outcome {};
 
@@ -486,6 +494,11 @@ in {
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
+
+  python-igraph = callPackage ../development/python-modules/python-igraph {
+    pkgconfig = pkgs.pkgconfig;
+    igraph = pkgs.igraph;
+  };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
 
@@ -1087,8 +1100,6 @@ in {
   });
 
   bumps = callPackage ../development/python-modules/bumps {};
-
-  buttersink = callPackage ../development/python-modules/buttersink {};
 
   cached-property = callPackage ../development/python-modules/cached-property { };
 
@@ -2098,39 +2109,6 @@ in {
 
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds {};
 
-  docker_registry_core = callPackage ../development/python-modules/docker-registry-core {};
-
-  docker_registry = buildPythonPackage rec {
-    name = "docker-registry-0.9.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/docker-registry/${name}.tar.gz";
-      sha256 = "1svm1h59sg4bwj5cy10m016gj0xpiin15nrz5z66h47sbkndvlw3";
-    };
-
-    DEPS = "loose";
-
-    doCheck = false; # requires redis server
-    propagatedBuildInputs = with self; [
-      setuptools docker_registry_core blinker flask gevent gunicorn pyyaml
-      requests rsa sqlalchemy setuptools backports_lzma m2crypto
-    ];
-
-    patchPhase = "> requirements/main.txt";
-
-    # Default config uses needed env variables
-    postInstall = ''
-      ln -s $out/lib/python2.7/site-packages/config/config_sample.yml $out/lib/python2.7/site-packages/config/config.yml
-    '';
-
-    meta = {
-      description = "Docker registry core package";
-      homepage = https://github.com/docker/docker-registry;
-      license = licenses.asl20;
-    };
-  };
-
   docopt = callPackage ../development/python-modules/docopt { };
 
   doctest-ignore-unicode = callPackage ../development/python-modules/doctest-ignore-unicode { };
@@ -2840,13 +2818,13 @@ in {
     };
   };
 
-  gurobipy = if stdenv.system == "x86_64-darwin"
+  gurobipy = if stdenv.hostPlatform.system == "x86_64-darwin"
   then callPackage ../development/python-modules/gurobipy/darwin.nix {
     inherit (pkgs.darwin) cctools insert_dylib;
   }
-  else if stdenv.system == "x86_64-linux"
+  else if stdenv.hostPlatform.system == "x86_64-linux"
   then callPackage ../development/python-modules/gurobipy/linux.nix {}
-  else throw "gurobipy not yet supported on ${stdenv.system}";
+  else throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
 
@@ -4442,23 +4420,7 @@ in {
     };
   };
 
-  pywatchman = buildPythonPackage rec {
-    name = "pywatchman-${version}";
-    version = "1.3.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pywatchman/pywatchman-${version}.tar.gz";
-      sha256 = "c3d5be183b5b04f6ad575fc71b06dd196185dea1558d9f4d0598ba9beaab8245";
-    };
-    postPatch = ''
-      substituteInPlace pywatchman/__init__.py \
-        --replace "'watchman'" "'${pkgs.watchman}/bin/watchman'"
-    '';
-    # SyntaxError
-    disabled = isPy3k;
-    # No tests in archive
-    doCheck = false;
-
-  };
+  pywatchman = callPackage ../development/python-modules/pywatchman { };
 
   pywavelets = callPackage ../development/python-modules/pywavelets { };
 
@@ -5950,16 +5912,17 @@ in {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.11.1";
+    version = "3.0";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "1n3x0bkydlqmxdr0wdgfgichp8fyldzkaijj618y5ns2k5qiwsxr";
+      sha256 = "19pymw104l05af710ph69znqiz9av3if7436kigjlwd65gxnghkc";
     };
 
+    # Requires access to /sys/class/power_supply
     doCheck = false;
 
     buildInputs = with self; [ unittest2 ];
@@ -5970,7 +5933,7 @@ in {
     '';
 
     meta = {
-      homepage = "https://nicolargo.github.io/glances/";
+      homepage = https://nicolargo.github.io/glances/;
       description = "Cross-platform curses-based monitoring tool";
       license = licenses.lgpl3;
       maintainers = with maintainers; [ primeos koral ];
@@ -10394,11 +10357,15 @@ in {
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
+  pyotp = callPackage ../development/python-modules/pyotp { };
+
   pyproj = callPackage ../development/python-modules/pyproj {
     # pyproj does *work* if you want to use a system supplied proj, but with the current version(s) the tests fail by
     # a few decimal places, so caveat emptor.
     proj = null;
   };
+
+  pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pyrr = callPackage ../development/python-modules/pyrr { };
 

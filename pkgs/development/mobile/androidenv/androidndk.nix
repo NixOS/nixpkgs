@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   name = "android-ndk-r${version}";
   inherit version;
 
-  src = if stdenv.system == "x86_64-linux" then fetchurl {
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
       url = "https://dl.google.com/android/repository/${name}-linux-x86_64.zip";
       inherit sha256;
-    } else throw "platform ${stdenv.system} not supported!";
+    } else throw "platform ${stdenv.hostPlatform.system} not supported!";
 
   phases = "buildPhase";
 

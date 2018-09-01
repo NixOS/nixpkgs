@@ -16,9 +16,11 @@ let
     } // (optionalAttrs vhostConfig.enableACME {
       sslCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
       sslCertificateKey = "${acmeDirectory}/${serverName}/key.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${serverName}/full.pem";
     }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
       sslCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
       sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/full.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -227,6 +229,9 @@ let
           ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};
             ssl_certificate_key ${vhost.sslCertificateKey};
+          ''}
+          ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
+            ssl_trusted_certificate ${vhost.sslTrustedCertificate};
           ''}
 
           ${optionalString (vhost.basicAuthFile != null || vhost.basicAuth != {}) ''

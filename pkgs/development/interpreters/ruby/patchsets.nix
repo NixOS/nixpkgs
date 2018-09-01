@@ -1,11 +1,6 @@
 { patchSet, useRailsExpress, ops, patchLevel }:
 
 rec {
-  "2.2.9" = ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.2/head/railsexpress/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.2/head/railsexpress/02-improve-gc-stats.patch"
-    "${patchSet}/patches/ruby/2.2/head/railsexpress/03-display-more-detailed-stack-trace.patch"
-  ];
   "2.3.7" = ops useRailsExpress [
     "${patchSet}/patches/ruby/2.3/head/railsexpress/01-skip-broken-tests.patch"
     "${patchSet}/patches/ruby/2.3/head/railsexpress/02-improve-gc-stats.patch"

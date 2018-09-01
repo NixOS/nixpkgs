@@ -9,7 +9,7 @@ let
   };
   nixui = (import ./nixui.nix {
     inherit pkgs;
-    inherit (stdenv) system;
+    inherit (stdenv.hostPlatform) system;
   })."nixui-git://github.com/matejc/nixui.git#0.2.1";
   script = writeScript "nixui" ''
     #! ${stdenv.shell}

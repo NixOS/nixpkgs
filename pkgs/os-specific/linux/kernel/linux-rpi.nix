@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
+{ stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
   modDirVersion = "4.14.50";
@@ -18,7 +18,7 @@ stdenv.lib.overrideDerivation (buildLinux (args // rec {
   defconfig = {
     "armv6l-linux" = "bcmrpi_defconfig";
     "armv7l-linux" = "bcm2709_defconfig";
-  }.${stdenv.system} or (throw "linux_rpi not supported on '${stdenv.system}'");
+  }.${stdenv.hostPlatform.system} or (throw "linux_rpi not supported on '${stdenv.hostPlatform.system}'");
 
   features = {
     efiBootStub = false;

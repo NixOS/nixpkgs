@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, chromaprint, fetchpatch, fftw, flac, faad2, mp4v2
+{ stdenv, fetchFromGitHub, makeWrapper, chromaprint, fetchpatch
+, fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
 , pkgconfig, portaudio, portmidi, protobuf, qt4, rubberband, scons, sqlite
 , taglib, upower, vampSDK
@@ -15,8 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1fm8lkbnxka4haidf6yr8mb3r6vaxmc97hhrp8pcx0fvq2mnzvy2";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [
-    chromaprint fftw flac faad2 mp4v2 libid3tag libmad libopus libshout libsndfile
+    chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout libsndfile
     libusb1 libvorbis pkgconfig portaudio portmidi protobuf qt4
     rubberband scons sqlite taglib upower vampSDK
   ];
@@ -42,6 +45,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  fixupPhase = ''
+    wrapProgram $out/bin/mixxx \
+      --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
+  '';
+    
   meta = with stdenv.lib; {
     homepage = https://mixxx.org;
     description = "Digital DJ mixing software";

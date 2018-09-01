@@ -7,16 +7,15 @@
 , simplejson
 , mock
 , nose
-, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.11.1";
+  version = "1.10.84";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b2d2393c02a082d605dac13c1322c3c553a4d4cf23de7b48268ae7f4a105eb3";
+    sha256 = "d3e4b5a2c903ea30d19d41ea2f65d0e51dce54f4f4c4dfd6ecd7b04f240844a8";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +24,6 @@ buildPythonPackage rec {
     docutils
     ordereddict
     simplejson
-    urllib3
   ];
 
   checkInputs = [ mock nose ];

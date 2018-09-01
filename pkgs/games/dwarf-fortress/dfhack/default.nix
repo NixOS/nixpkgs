@@ -13,8 +13,8 @@ let
   xmlRev = "23500e4e9bd1885365d0a2ef1746c321c1dd5094";
 
   arch =
-    if stdenv.system == "x86_64-linux" then "64"
-    else if stdenv.system == "i686-linux" then "32"
+    if stdenv.hostPlatform.system == "x86_64-linux" then "64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "32"
     else throw "Unsupported architecture";
 
   fakegit = writeScriptBin "git" ''
