@@ -18,13 +18,13 @@ assert speechdSupport -> speechd != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "navit-${version}";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "navit-gps";
     repo = "navit";
     rev = "v${version}";
-    sha256 = "0jf2gjh2sszr5y5c2wvamfj2qggi2y5k3ynb32pak9vhf5xyl5xj";
+    sha256 = "11w85rlx612lws4s3q36li4iqib9b35v94kzf2zh9g1aphwqh2qa";
   };
 
   sample_map = fetchurl {
@@ -68,10 +68,11 @@ stdenv.mkDerivation rec {
   '';
 
   # TODO: fix upstream?
-  postFixup = ''
-    for lib in $(find "$out/lib/navit/" -iname "*.so" ); do
-      patchelf --set-rpath ${makeLibraryPath buildInputs} $lib
-    done
+  libPath = stdenv.lib.makeLibraryPath ([ stdenv.cc.libc ] ++ buildInputs );
+  postFixup =
+  ''
+	  find "$out/lib" -type f -name "*.so" -exec patchelf --set-rpath $libPath {} \;
+
     wrapProgram $out/bin/navit \
       --prefix PATH : ${makeBinPath (
         optional xkbdSupport xkbd
