@@ -112,6 +112,8 @@ in
 
       permitRootLogin = mkOption {
         default = "prohibit-password";
+        # When changing the allowed types, you must also update
+        # userHasSSHCreds in nixos/modules/config/users-groups.nix!
         type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
         description = ''
           Whether the root user can login using ssh.

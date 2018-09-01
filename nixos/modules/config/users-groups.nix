@@ -576,18 +576,77 @@ in {
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
         assertion = !cfg.mutableUsers ->
-          any id (mapAttrsToList (name: cfg:
-            (name == "root"
-             || cfg.group == "wheel"
-             || elem "wheel" cfg.extraGroups)
-            &&
-            ((cfg.hashedPassword != null && cfg.hashedPassword != "!")
-             || cfg.password != null
-             || cfg.passwordFile != null
-             || cfg.openssh.authorizedKeys.keys != []
-             || cfg.openssh.authorizedKeys.keyFiles != [])
-          ) cfg.users);
+          (let
+            userHasKeys = cfg:
+              (
+                cfg.openssh.authorizedKeys.keys != []
+                || cfg.openssh.authorizedKeys.keyFiles != []
+              );
+
+            userHasPassword = cfg:
+              (
+                (cfg.hashedPassword != null && cfg.hashedPassword != "!")
+                || cfg.password != null
+                || cfg.passwordFile != null
+              );
+
+            userHasSSHCreds = name: cfg:
+              let
+                ssh = config.services.openssh;
+                passwordWorks = if ssh.passwordAuthentication
+                  then userHasPassword cfg
+                  else false;
+
+                keyWorks = userHasKeys cfg;
+              in if name == "root" then
+                (
+                  # Is root allowed explicitly to use a password?
+                  if ssh.permitRootLogin == "yes"
+                    then passwordWorks || keyWorks
+                  else
+                  # Is root allowed explicitly denied from using a password?
+                  if (ssh.permitRootLogin == "without-password"
+                      || ssh.permitRootLogin == "prohibit-password")
+                    then keyWorks
+                  else
+                  # Forced commands don't count as being allowed in
+                  # and no means no
+                  if (ssh.permitRootLogin == "forced-command"
+                      || ssh.permitRootLogin == "no")
+                      then false
+                  else
+                    builtins.trace ("Cannot handle openssh.permitRootLogin"
+                      + " = ${ssh.permitRootLogin} in determining if it"
+                      + " can be used for SSH login. Assuming no, for"
+                      + " safety.") false
+                )
+              else passwordWorks || keyWorks;
+
+            userIsWheel = cfg:
+              (
+                cfg.group == "wheel"
+                || elem "wheel" cfg.extraGroups
+              );
+
+            userCanBecomeRoot = name: cfg:
+              if name == "root"
+                then true
+              else if config.security.sudo.enable == false
+                then false
+              else if config.security.sudo.wheelNeedsPassword
+                then (userIsWheel cfg && userHasPassword cfg)
+              else userIsWheel cfg;
+
+          in any id (mapAttrsToList (name: cfg:
+            userCanBecomeRoot name cfg
+            && (
+              if config.services.openssh.enable
+                then userHasSSHCreds name cfg
+                else userHasPassword cfg
+            )
+          ) cfg.users));
         message = ''
+          No account can log in at the console or over SSH. Please set
           Neither the root account nor any wheel user has a password or SSH authorized key.
           You must set one to prevent being locked out of your system.'';
       }
