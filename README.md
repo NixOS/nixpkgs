@@ -49,6 +49,7 @@ imports = [
 | Supermicro A1SRi-2758F            | `<nixos-hardware/supermicro/a1sri-2758f>`  |
 | Supermicro X10SLL-F               | `<nixos-hardware/supermicro/x10sll-f>`     |
 | [Toshiba Chromebook 2 `swanky`][] | `<nixos-hardware/toshiba/swanky>`          |
+| [Lenovo ThinkPad X1 gen6][]       | `<nixos-hardware/lenovo/thinkpad/x1/6th-gen>`|
 
 [Acer Aspire 4810T]: acer/aspire/4810t
 [Apple MacBook Pro 10,1]: apple/macbook-pro/10-1
