@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping rm deep-2 test && exit 0' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 0' -i ./tests/du/long-from-unreadable.sh
     sed '2i echo Skipping chmod setgid test && exit 0' -i ./tests/chmod/setgid.sh
+    sed '2i print "Skipping env -S test";  exit 0;' -i ./tests/misc/env-S.pl
     substituteInPlace ./tests/install/install-C.sh \
       --replace 'mode3=2755' 'mode3=1755'
   '';
