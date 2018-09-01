@@ -7159,6 +7159,8 @@ with pkgs;
 
   cargo-vendor = callPackage ../build-support/rust/cargo-vendor { };
 
+  cargo-web = callPackage ../development/tools/cargo-web { };
+
   carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix { };
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
