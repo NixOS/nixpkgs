@@ -9,6 +9,7 @@ let
       inherit (pkgs.gnome3) libgee vte;
       wnck = pkgs.libwnck3;
     };
+    dtkcore = callPackage ./dtkcore { };
 
   };
 
