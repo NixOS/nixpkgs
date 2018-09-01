@@ -291,7 +291,7 @@ let
           ${optionalString cfg.fprintAuth
               "auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so"}
           ${optionalString cfg.u2fAuth
-              "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so"}
+              "auth sufficient ${pkgs.pam_u2f}/lib/security/pam_u2f.so cue"}
           ${optionalString cfg.usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
