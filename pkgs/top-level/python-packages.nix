@@ -10356,11 +10356,15 @@ in {
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
+  pyotp = callPackage ../development/python-modules/pyotp { };
+
   pyproj = callPackage ../development/python-modules/pyproj {
     # pyproj does *work* if you want to use a system supplied proj, but with the current version(s) the tests fail by
     # a few decimal places, so caveat emptor.
     proj = null;
   };
+
+  pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pyrr = callPackage ../development/python-modules/pyrr { };
 
