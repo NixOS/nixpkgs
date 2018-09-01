@@ -208,7 +208,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    </listitem>
   </itemizedlist>
 
-  <example>
+  <example xml:id="reviewing-contributions-sample-package-update">
    <title>Sample template for a package update review</title>
 <screen>
 ##### Reviewed points
@@ -320,7 +320,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    </listitem>
   </itemizedlist>
 
-  <example>
+  <example xml:id="reviewing-contributions-sample-new-package">
    <title>Sample template for a new package review</title>
 <screen>
 ##### Reviewed points
@@ -443,7 +443,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    </listitem>
   </itemizedlist>
 
-  <example>
+  <example xml:id="reviewing-contributions-sample-module-update">
    <title>Sample template for a module update review</title>
 <screen>
 ##### Reviewed points
@@ -542,7 +542,7 @@ $ nix-shell -p nox --run "nox-review -k pr PRNUMBER"
    </listitem>
   </itemizedlist>
 
-  <example>
+  <example xml:id="reviewing-contributions-sample-new-module">
    <title>Sample template for a new module review</title>
 <screen>
 ##### Reviewed points

@@ -317,7 +317,7 @@
    </para>
 
    <qandaset>
-    <qandaentry>
+    <qandaentry xml:id="cross-qa-build-c-program-in-build-environment">
      <question>
       <para>
        What if my package's build system needs to build a C program to be run
@@ -331,7 +331,7 @@
       </para>
      </answer>
     </qandaentry>
-    <qandaentry>
+    <qandaentry xml:id="cross-qa-fails-to-find-ar">
      <question>
       <para>
        My package fails to find <command>ar</command>.
@@ -347,7 +347,7 @@
       </para>
      </answer>
     </qandaentry>
-    <qandaentry>
+    <qandaentry xml:id="cross-testsuite-runs-host-code">
      <question>
       <para>
        My package's testsuite needs to run host platform code.
