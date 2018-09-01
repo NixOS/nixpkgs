@@ -23,7 +23,7 @@
       bridge.</para></listitem>
 </itemizedlist>
 
-<section><title>IBus</title>
+<section xml:id="module-services-input-methods-ibus"><title>IBus</title>
 
 <para>IBus is an Intelligent Input Bus. It provides full featured and user
   friendly input method user interface.</para>
@@ -82,7 +82,7 @@ ibus.engines = with pkgs.ibus-engines; [ table table-others ];
 </simplesect>
 </section>
 
-<section><title>Fcitx</title>
+<section xml:id="module-services-input-methods-fcitx"><title>Fcitx</title>
 
 <para>Fcitx is an input method framework with extension support. It has three
   built-in Input Method Engine, Pinyin, QuWei and Table-based input
@@ -122,7 +122,7 @@ i18n.inputMethod = {
 </itemizedlist>
 </section>
 
-<section><title>Nabi</title>
+<section xml:id="module-services-input-methods-nabi"><title>Nabi</title>
 
 <para>Nabi is an easy to use Korean X input method. It allows you to enter
   phonetic Korean characters (hangul) and pictographic Korean characters
@@ -136,7 +136,7 @@ i18n.inputMethod = {
 </programlisting>
 </section>
 
-<section><title>Uim</title>
+<section xml:id="module-services-input-methods-uim"><title>Uim</title>
 
 <para>Uim (short for "universal input method") is a multilingual input method
   framework. Applications can use it through so-called bridges.</para>

@@ -14,7 +14,7 @@
     upstream is trustworthy).
   </para>
 
-  <sect1><title>Basic configuration</title>
+  <sect1 xml:id="sec-dnscrypt-proxy-configuration"><title>Basic configuration</title>
 
   <para>
     To enable the client proxy, set
@@ -31,7 +31,7 @@
 
   </sect1>
 
-  <sect1><title>As a forwarder for another DNS client</title>
+  <sect1 xml:id="sec-dnscrypt-proxy-forwarder"><title>As a forwarder for another DNS client</title>
 
   <para>
     To run the DNSCrypt proxy client as a forwarder for another
@@ -42,7 +42,7 @@
     </programlisting>
   </para>
 
-  <sect2><title>dnsmasq</title>
+  <sect2 xml:id="sec-dnscrypt-proxy-forwarder-dsnmasq"><title>dnsmasq</title>
   <para>
     <programlisting>
 {
@@ -53,7 +53,7 @@
   </para>
   </sect2>
 
-  <sect2><title>unbound</title>
+  <sect2 xml:id="sec-dnscrypt-proxy-forwarder-unbound"><title>unbound</title>
   <para>
     <programlisting>
 {

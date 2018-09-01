@@ -10,7 +10,7 @@
 to manage your <link xlink:href="https://www.zsh.org/">ZSH</link> configuration
 including completion scripts for several CLI tools or custom prompt themes.</para>
 
-<section><title>Basic usage</title>
+<section xml:id="module-programs-oh-my-zsh-usage"><title>Basic usage</title>
 <para>The module uses the <literal>oh-my-zsh</literal> package with all available features.  The
 initial setup using Nix expressions is fairly similar to the configuration format
 of <literal>oh-my-zsh</literal>.
@@ -32,7 +32,7 @@ For a detailed explanation of these arguments please refer to the
 configuration and writes it into your <literal>/etc/zshrc</literal>.
 </para></section>
 
-<section><title>Custom additions</title>
+<section xml:id="module-programs-oh-my-zsh-additions"><title>Custom additions</title>
 
 <para>Sometimes third-party or custom scripts such as a modified theme may be needed.
 <literal>oh-my-zsh</literal> provides the
@@ -48,7 +48,7 @@ environment variable for this which points to a directory with additional script
 </programlisting>
 </para></section>
 
-<section><title>Custom environments</title>
+<section xml:id="module-programs-oh-my-zsh-environments"><title>Custom environments</title>
 
 <para>There are several extensions for <literal>oh-my-zsh</literal> packaged in <literal>nixpkgs</literal>.
 One of them is <link xlink:href="https://github.com/spwhitt/nix-zsh-completions">nix-zsh-completions</link>
@@ -77,7 +77,7 @@ as it requires an immutable store path while <literal>custom</literal> shall rem
 will be thrown if both <literal>custom</literal> and <literal>customPkgs</literal> are set.</emphasis>
 </para></section>
 
-<section><title>Package your own customizations</title>
+<section xml:id="module-programs-oh-my-zsh-packaging-customizations"><title>Package your own customizations</title>
 
 <para>If third-party customizations (e.g. new themes) are supposed to be added to <literal>oh-my-zsh</literal>
 there are several pitfalls to keep in mind:</para>
