@@ -80,6 +80,8 @@ in buildPythonPackage rec {
     "test_oo_optimizable"
     # Disable IO related tests because IO data is no longer distributed
     "io"
+    # KeyError Timestamp
+    "test_to_excel"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
