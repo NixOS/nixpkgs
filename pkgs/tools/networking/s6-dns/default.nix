@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.3.0.0";
+  version = "2.3.0.1";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6-dns";
     rev = "refs/tags/v${version}";
-    sha256 = "1hczdg3dzi9z6f0wicm2qa2239fiax915zp66xspdz6qd23nqrxb";
+    sha256 = "0flxkrnff2c28514k2nxv2y41k38pbiwd8dxlqaxgs2cl27i0ggb";
   };
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];

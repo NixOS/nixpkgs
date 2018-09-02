@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.5.0.0";
+  version = "2.5.0.1";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/execline";
     rev = "refs/tags/v${version}";
-    sha256 = "19vd8252g5bmzm4i9gybpj7i2mhsflcgfl4ns5k3g1vv7f69i1dn";
+    sha256 = "0d4gvixz7xja03hnwc2bf13xrgh1jq27ij4m1jlrpgrzhfpqz37q";
   };
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
@@ -20,6 +20,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # TODO: nsss support
   configureFlags = [
     "--enable-absolute-paths"
     "--libdir=\${lib}/lib"

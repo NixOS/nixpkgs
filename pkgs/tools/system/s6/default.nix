@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.7.1.1";
+  version = "2.7.2.0";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6";
     rev = "refs/tags/v${version}";
-    sha256 = "0dncw3h9wc4cgc9q8zjwicgbcqcn6722yhk8g9bvrhs7h4fkfqav";
+    sha256 = "07j4is7kxkynschwbf83q5rw1872kg3ij2vhxyfp3bg71k5pw1az";
   };
 
   # NOTE lib: cannot split lib from bin at the moment,
@@ -24,6 +24,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # TODO: nsss support
   configureFlags = [
     "--enable-absolute-paths"
     "--libdir=\${out}/lib"

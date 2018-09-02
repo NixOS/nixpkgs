@@ -9,7 +9,7 @@
 let
   inherit (stdenv) lib;
 
-  version = "2.3.0.2";
+  version = "2.3.0.3";
 
   sslSupportEnabled = sslSupport != false;
   sslLibs = {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6-networking";
     rev = "refs/tags/v${version}";
-    sha256 = "1qrhca8yjaysrqf7nx3yjfyfi9yly3rxpgrd2sqj0a0ckk73rv42";
+    sha256 = "06kv2l31ch0zw538bpivgnwymb056x5hpmqafglffgkbq3izp7wc";
   };
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # TODO: nsss support
   configureFlags = [
     "--enable-absolute-paths"
     "--libdir=\${lib}/lib"
