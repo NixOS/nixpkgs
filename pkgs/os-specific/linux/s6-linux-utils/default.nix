@@ -1,25 +1,19 @@
-{ stdenv, fetchurl, skalibs }:
+{ stdenv, skawarePackages }:
 
-let
+with skawarePackages;
 
+buildPackage {
+  pname = "s6-linux-utils";
   version = "2.5.0.0";
+  sha256 = "0wbxwki2alyym6dm44s5ajp9ndw6sgrqvizkznz71c30i0dlxrnf";
 
-in stdenv.mkDerivation rec {
-
-  name = "s6-linux-utils-${version}";
-
-  src = fetchurl {
-    url = "https://www.skarnet.org/software/s6-linux-utils/${name}.tar.gz";
-    sha256 = "04q2z71dkzahd2ppga2zikclz2qk014c23gm7rigqxjc8rs1amvq";
-  };
+  description = "A set of minimalistic Linux-specific system utilities";
+  platforms = stdenv.lib.platforms.linux;
 
   outputs = [ "bin" "dev" "doc" "out" ];
 
-  dontDisableStatic = true;
-
   # TODO: nsss support
   configureFlags = [
-    "--enable-absolute-paths"
     "--bindir=\${bin}/bin"
     "--includedir=\${dev}/include"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
@@ -29,16 +23,10 @@ in stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mkdir -p $doc/share/doc/s6-networking/
-    mv doc $doc/share/doc/s6-networking/html
-  '';
+    # remove all s6 executables from build directory
+    rm $(find -name "s6-*" -type f -mindepth 1 -maxdepth 1 -executable)
 
-  meta = {
-    homepage = http://www.skarnet.org/software/s6-linux-utils/;
-    description = "A set of minimalistic Linux-specific system utilities";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney Profpatsch ];
-  };
+    mv doc $doc/share/doc/s6-linux-utils/html
+  '';
 
 }

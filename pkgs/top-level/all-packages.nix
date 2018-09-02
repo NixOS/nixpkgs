@@ -12006,6 +12006,8 @@ with pkgs;
   skalibs = skawarePackages.skalibs;
 
   skawarePackages = recurseIntoAttrs {
+    buildPackage = callPackage ../build-support/skaware/build-skaware-package.nix { };
+
     skalibs = callPackage ../development/libraries/skalibs { };
     execline = callPackage ../tools/misc/execline { };
 
