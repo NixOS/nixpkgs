@@ -31,7 +31,7 @@
 , stdenv
 , unzip
 , which
-, writeTextFile
+, runCommand
 , xkeyboard_config
 , zlib
 , makeDesktopItem
@@ -39,7 +39,7 @@
 
 let
   drvName = "android-studio-${channel}-${version}";
-  androidStudio = stdenv.mkDerivation rec {
+  androidStudio = stdenv.mkDerivation {
     name = drvName;
 
     src = fetchurl {
@@ -111,20 +111,18 @@ let
         ]}" \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         --set FONTCONFIG_FILE ${fontsConf}
-
-        install -Dm644 bin/studio.png $out/share/pixmaps/${drvName}.png
-        ln -s ${desktopItem}/share/applications $out/share/applications
     '';
+  };
 
-    desktopItem = makeDesktopItem rec {
-      name = drvName;
-      exec = pname;
-      icon = drvName;
-      desktopName = "Android Studio";
-      comment = "The official Android IDE";
-      categories = "Development;IDE;";
-    };
-
+  desktopItem = makeDesktopItem {
+    name = drvName;
+    exec = pname;
+    icon = drvName;
+    desktopName = "Android Studio (${channel} channel)";
+    comment = "The official Android IDE";
+    categories = "Development;IDE;";
+    startupNotify = "true";
+    extraEntries="StartupWMClass=jetbrains-studio";
   };
 
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
@@ -134,39 +132,35 @@ let
     name = "${drvName}-fhs-env";
     multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
-
-  wrapper = writeTextFile {
-    name = "${drvName}-wrapper";
-    # TODO: Rename preview -> beta (and add -stable suffix?):
-    destination = "/bin/${pname}";
-    executable = true;
-    text = ''
+in runCommand
+  "${drvName}-wrapper"
+  {
+    startScript = ''
       #!${bash}/bin/bash
       ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh
     '';
-  };
-in stdenv.mkDerivation {
-  name = "${drvName}-with-desktop-item";
-
-  buildCommand = ''
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    meta = with stdenv.lib; {
+      description = "The Official IDE for Android (${channel} channel)";
+      longDescription = ''
+        Android Studio is the official IDE for Android app development, based on
+        IntelliJ IDEA.
+      '';
+      homepage = if channel == "stable"
+        then https://developer.android.com/studio/index.html
+        else https://developer.android.com/studio/preview/index.html;
+      license = licenses.asl20;
+      platforms = [ "x86_64-linux" ];
+      maintainers = with maintainers; [ primeos ];
+    };
+  }
+  ''
     mkdir -p $out/{bin,share/pixmaps}
-    ln -s ${wrapper}/bin/${pname} $out/bin/${pname}
 
-    ln -s ${androidStudio}/share/pixmaps/${drvName}.png $out/share/pixmaps/${drvName}.png
-    ln -s ${androidStudio}/share/applications $out/share/applications
-  '';
-
-  meta = with stdenv.lib; {
-    description = "The Official IDE for Android (${channel} channel)";
-    longDescription = ''
-      Android Studio is the official IDE for Android app development, based on
-      IntelliJ IDEA.
-    '';
-    homepage = if channel == "stable"
-      then https://developer.android.com/studio/index.html
-      else https://developer.android.com/studio/preview/index.html;
-    license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ primeos ];
-  };
-}
+    # TODO: Rename preview -> beta (and add -stable suffix?):
+    echo -n "$startScript" > $out/bin/${pname}
+    chmod +x $out/bin/${pname}
+    ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${drvName}.png
+    ln -s ${desktopItem}/share/applications $out/share/applications
+  ''
