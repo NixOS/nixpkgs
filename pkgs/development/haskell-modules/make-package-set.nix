@@ -38,7 +38,7 @@ let
   inherit (stdenv) buildPlatform hostPlatform;
 
   inherit (stdenv.lib) fix' extends makeOverridable;
-  inherit (haskellLib) overrideCabal getHaskellBuildInputs;
+  inherit (haskellLib) overrideCabal getBuildInputs;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
@@ -257,7 +257,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     shellFor = { packages, withHoogle ? false, ... } @ args:
       let
         selected = packages self;
-        packageInputs = builtins.map getHaskellBuildInputs selected;
+        packageInputs = builtins.map getBuildInputs selected;
         haskellInputs =
           builtins.filter
             (input: pkgs.lib.all (p: input.outPath != p.outPath) selected)
