@@ -41,7 +41,7 @@ imports = [
 | Lenovo ThinkPad X230              | `<nixos-hardware/lenovo/thinkpad/x230>`      |
 | Lenovo ThinkPad X250              | `<nixos-hardware/lenovo/thinkpad/x250>`      |
 | Lenovo ThinkPad X270              | `<nixos-hardware/lenovo/thinkpad/x270>`      |
-| [Lenovo ThinkPad X1 gen6][]       | `<nixos-hardware/lenovo/thinkpad/x1/6th-gen>`|
+| [Lenovo ThinkPad X1 (6th Gen)][]  | `<nixos-hardware/lenovo/thinkpad/x1/6th-gen>`|
 | [Microsoft Surface Pro 3][]       | `<nixos-hardware/microsoft/surface-pro/3>`   |
 | PC Engines APU                    | `<nixos-hardware/pcengines/apu>`             |
 | [Raspberry Pi 2][]                | `<nixos-hardware/raspberry-pi/2>`            |
@@ -55,7 +55,7 @@ imports = [
 [Apple MacBook Pro 10,1]: apple/macbook-pro/10-1
 [Dell XPS 15 9550]: dell/xps/15-9550
 [Inverse Path USB armory]: inversepath/usbarmory
-[Lenovo ThinkPad X1 gen6]: lenovo/thinkpad/x1/6th-gen
+[Lenovo ThinkPad X1 (6th Gen)]: lenovo/thinkpad/x1/6th-gen
 [Microsoft Surface Pro 3]: microsoft/surface-pro/3
 [Raspberry Pi 2]: raspberry-pi/2
 [Samsung Series 9 NP900X3C]: samsung/np900x3c
