@@ -17345,6 +17345,8 @@ EOF
   libtorrentRasterbar = (toPythonModule (pkgs.libtorrentRasterbar.override {
     inherit python;
   })).python;
+
+  ratelimiter = callPackage ../development/python-modules/ratelimiter { };
 });
 
 in fix' (extends overrides packages)
