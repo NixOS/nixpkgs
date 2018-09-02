@@ -11,6 +11,7 @@ let
       wnck = pkgs.libwnck3;
     };
     dtkcore = callPackage ./dtkcore { };
+    dtkwidget = callPackage ./dtkwidget { };
 
   };
 
