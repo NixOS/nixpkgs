@@ -4347,6 +4347,8 @@ in {
 
   regex = callPackage ../development/python-modules/regex { };
 
+  ratelimiter = callPackage ../development/python-modules/ratelimiter { };
+
   repoze_lru = buildPythonPackage rec {
     name = "repoze.lru-0.6";
 
