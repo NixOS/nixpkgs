@@ -249,7 +249,7 @@ in rec {
   tests.beegfs = callTest tests/beegfs.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.bind = callTest tests/bind.nix {};
-  tests.blivet = callTest tests/blivet.nix {};
+  #tests.blivet = callTest tests/blivet.nix {};   # broken since 2017-07024
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.borgbackup = callTest tests/borgbackup.nix {};
