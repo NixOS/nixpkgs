@@ -3,14 +3,14 @@
 , fetchpatch
 }:
 stdenv.mkDerivation rec {
-  version = "8.4.beta2";
+  version = "8.4.beta3";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "1mivhk8xgdsi0xgdbvr8lxik7nmqz434fpyh93bvz50vhsqxgx9p";
+    sha256 = "14i2a2dzgcl9wj0067kxy5k1aq4g5yp1mhckghz0qm48ygvp1a4j";
   };
 
   nixPatches = [
@@ -43,17 +43,6 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/25260
     ./patches/numpy-1.14.3.patch
 
-    # https://trac.sagemath.org/ticket/25862
-    ./patches/eclib-regulator-precision.patch
-    ./patches/eclib-20180710.patch
-
-    # https://trac.sagemath.org/ticket/25567
-    (fetchpatch {
-      name = "pari-2.11.0.patch";
-      url = "https://git.sagemath.org/sage.git/patch/?id=7af4748cab37d651eaa88be501db88f4a5ffc584";
-      sha256 = "13f740ly3c19gcmhjngiycvmc3mcfj61y00i6jv0wmfgpm2z3ank";
-    })
-
     # ntl upgrade
     (fetchpatch {
       name = "lcalc-c++11.patch";
@@ -64,6 +53,8 @@ stdenv.mkDerivation rec {
 
   patches = nixPatches ++ packageUpgradePatches ++ [
     ./patches/known-padics-bug.patch
+
+    # /home/timo/tmp/0003-Revert-Something-related-to-the-sphinxbuild-seems-to.patch
   ];
 
   postPatch = ''
