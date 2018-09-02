@@ -40,6 +40,7 @@ with lib;
     systemd.packages = [ pkgs.accountsservice ];
 
     systemd.services.accounts-daemon = {
+      restartIfChanged = false;
 
       wantedBy = [ "graphical.target" ];
 
