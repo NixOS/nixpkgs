@@ -18927,6 +18927,8 @@ with pkgs;
 
   testssl = callPackage ../applications/networking/testssl { };
 
+  uefitool = libsForQt5.callPackage ../applications/misc/uefitool { };
+
   umurmur = callPackage ../applications/networking/umurmur { };
 
   udocker = pythonPackages.callPackage ../tools/virtualization/udocker { };
