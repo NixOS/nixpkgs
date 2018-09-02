@@ -346,6 +346,11 @@
     github = "ashgillman";
     name = "Ashley Gillman";
   };
+  ashkitten = {
+    email = "ashlea@protonmail.com";
+    github = "ashkitten";
+    name = "ash lea";
+  };
   aske = {
     email = "aske@fmap.me";
     github = "aske";
