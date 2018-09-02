@@ -109,7 +109,7 @@ nixos https://nixos.org/channels/nixos-unstable
    so in that case you will not be able to go back to your original channel.
   </para>
  </warning>
- <section>
+ <section xml:id="sec-upgrading-automatic">
   <title>Automatic Upgrades</title>
 
   <para>

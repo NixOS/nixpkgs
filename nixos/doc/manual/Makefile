@@ -11,7 +11,7 @@ manual-combined.xml: generated *.xml
 
 .PHONY: format
 format:
-	find . -iname '*.xml' -type f -print0 | xargs -0 -I{} -n1 \
+	find ../../ -iname '*.xml' -type f -print0 | xargs -0 -I{} -n1 \
 		xmlformat --config-file "../xmlformat.conf" -i {}
 
 .PHONY: fix-misc-xml

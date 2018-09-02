@@ -51,6 +51,8 @@ my $extraEntries = get("extraEntries");
 my $extraEntriesBeforeNixOS = get("extraEntriesBeforeNixOS") eq "true";
 my $extraInitrd = get("extraInitrd");
 my $splashImage = get("splashImage");
+my $splashMode = get("splashMode");
+my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
@@ -307,10 +309,15 @@ else {
         if ($suffix eq ".jpg") {
             $suffix = ".jpeg";
         }
+		if ($backgroundColor) {
+			$conf .= "
+		    background_color '$backgroundColor'
+		    ";
+		}
         copy $splashImage, "$bootPath/background$suffix" or die "cannot copy $splashImage to $bootPath\n";
         $conf .= "
             insmod " . substr($suffix, 1) . "
-            if background_image " . $grubBoot->path . "/background$suffix; then
+            if background_image --mode '$splashMode' " . $grubBoot->path . "/background$suffix; then
               set color_normal=white/black
               set color_highlight=black/white
             else

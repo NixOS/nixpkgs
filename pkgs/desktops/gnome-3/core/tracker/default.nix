@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   passthru = {

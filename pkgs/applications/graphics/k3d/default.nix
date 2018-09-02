@@ -39,12 +39,11 @@ stdenv.mkDerivation rec {
 
   #doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";
     homepage = http://www.k-3d.org/;
-    platforms = with stdenv.lib.platforms;
-      linux;
-    maintainers = with stdenv.lib.maintainers;
-      [raskin];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
   };
 }

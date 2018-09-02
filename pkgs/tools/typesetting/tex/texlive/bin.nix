@@ -14,25 +14,23 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2017";
+  year = "2018";
   version = year; # keep names simple for now
 
   common = rec {
     src = fetchurl {
-      url = # "ftp://tug.org/historic/systems/texlive/${year}/"
-      #"http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016"
-      # FIXME: a proper mirror, though tarballs.nixos.org saves this case ATM
-      # http://146.185.144.154/texlive-2016
-      # + "/texlive-${year}0523b-source.tar.xz";
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0524-source.tar.xz";
-      sha256 = "1amjrxyasplv4alfwcxwnw4nrx7dz2ydmddkq16k6hg90i9njq81";
+      urls = [
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${year}/texlive-${year}0414-source.tar.xz"
+              "ftp://tug.ctan.org/pub/tex/historic/systems/texlive/${year}/texlive-${year}0414-source.tar.xz"
+      ];
+      sha256 = "0khyi6h015r2zfqgg0a44a2j7vmr1cy42knw7jbss237yvakc07y";
     };
 
     patches = [
       (fetchurl {
-        name = "texlive-poppler-0.59.patch";
-        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.59.patch?h=packages/texlive-bin&id=6308ec39bce2a4d735f6ff8a4e94473748d7b450;
-        sha256 = "1c4ikq4kxw48bi3i33bzpabrjvbk01fwjr2lz20gkc9kv8l0bg3n";
+        name = "texlive-poppler-0.64.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.64.patch?h=packages/texlive-bin;
+        sha256 = "0443d074zl3c5raba8jyhavish706arjcd80ibb84zwnwck4ai0w";
       })
     ];
 
@@ -83,6 +81,8 @@ core = stdenv.mkDerivation rec {
     for i in texk/kpathsea/mktex*; do
       sed -i '/^mydir=/d' "$i"
     done
+    cp -pv texk/web2c/pdftexdir/pdftoepdf{-newpoppler.cc,.cc}
+    cp -pv texk/web2c/pdftexdir/pdftosrc{-newpoppler.cc,.cc}
   '';
 
   preConfigure = ''
@@ -165,7 +165,7 @@ inherit (core-big) metafont metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   name = "texlive-core-big.bin-${version}";
 
-  inherit (common) src;
+  inherit (common) src patches;
 
   hardeningDisable = [ "format" ];
 
@@ -176,20 +176,23 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
     ++ map (prog: "--disable-${prog}") # don't build things we already have
       [ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "pdftex"
-        "web-progs" "synctex" "luajittex" "mfluajit" # luajittex is mostly not needed, see:
+        "web-progs" "synctex"
+        # build fails on Darwin with luatex53
+        "luatex53" # TODO probably can be removed when TexLive 2019 is out
+        # luajittex is mostly not needed, see:
         # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
+        "luajittex" "mfluajit"
       ];
-
-  patches = common.patches ++ [ ./luatex-gcc7.patch ];
 
   configureScript = ":";
 
   # we use static libtexlua, because it's only used by a single binary
   postConfigure = ''
     mkdir ./WorkDir && cd ./WorkDir
+    # TODO add lua53 here when luatex53 is enabled again
     for path in libs/{teckit,lua52} texk/web2c; do
       (
-        if [[ "$path" == "libs/lua52" ]]; then
+        if [[ "$path" =~ "libs/lua5" ]]; then
           extraConfig="--enable-static --disable-shared"
         else
           extraConfig=""
@@ -202,7 +205,6 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   '';
 
   preBuild = "cd texk/web2c";
-  CXXFLAGS = "-std=c++11 -Wno-reserved-user-defined-literal"; # TODO: remove once texlive 2018 is out?
   enableParallelBuilding = true;
 
   doCheck = false; # fails

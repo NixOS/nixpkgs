@@ -1,8 +1,11 @@
 { stdenv, lib, buildPackages
 , autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
-, aclSupport ? false, acl ? null
-, attrSupport ? false, attr ? null
+, aclSupport ? stdenv.isLinux, acl ? null
+, attrSupport ? stdenv.isLinux, attr ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
+# No openssl in default version, so openssl-induced rebuilds aren't too big.
+# It makes *sum functions significantly faster.
+, minimal ? true, withOpenssl ? !minimal, openssl ? null
 , withPrefix ? false
 , singleBinary ? "symlinks" # you can also pass "shebangs" or false
 }:
@@ -13,11 +16,11 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.29";
+  name = "coreutils-8.30";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "0plm1zs9il6bb5mk881qvbghq4glc8ybbgakk2lfzb0w64fgml4j";
+    sha256 = "0mxhw43d4wpqmvg0l4znk1vm10fy92biyh90lzdnqjcic2lb6cg8";
   };
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
@@ -29,6 +32,7 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping rm deep-2 test && exit 0' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 0' -i ./tests/du/long-from-unreadable.sh
     sed '2i echo Skipping chmod setgid test && exit 0' -i ./tests/chmod/setgid.sh
+    sed '2i print "Skipping env -S test";  exit 0;' -i ./tests/misc/env-S.pl
     substituteInPlace ./tests/install/install-C.sh \
       --replace 'mode3=2755' 'mode3=1755'
   '';
@@ -36,9 +40,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ];
 
   nativeBuildInputs = [ perl xz.bin ];
-  configureFlags =
-    optional (singleBinary != false)
+  configureFlags = [ "--with-packager=https://NixOS.org" ]
+    ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
+    ++ optional withOpenssl "--with-openssl"
     ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "glibc") [
@@ -51,6 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ]
     ++ optional aclSupport acl
     ++ optional attrSupport attr
+    ++ optional withOpenssl openssl
     ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
     ++ optionals selinuxSupport [ libselinux libsepol ]
        # TODO(@Ericson2314): Investigate whether Darwin could benefit too
@@ -81,9 +87,13 @@ stdenv.mkDerivation rec {
     sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${buildPackages.coreutils}/bin/install -c|'
   '';
 
-  postInstall = optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postInstall = optionalString (stdenv.hostPlatform != stdenv.buildPlatform && !minimal) ''
     rm $out/share/man/man1/*
     cp ${buildPackages.coreutils}/share/man/man1/* $out/share/man/man1
+  ''
+  # du: 8.7 M locale + 0.4 M man pages
+  + optionalString minimal ''
+    rm -r "$out/share"
   '';
 
   meta = {

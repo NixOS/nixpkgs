@@ -181,7 +181,7 @@ $ cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) \
  </section>
 <!--============================================================-->
 <!--
-<section>
+<section xml:id="sec-package-notes-gnome">
   <title>Gnome</title>
   <para>* Expression is auto-generated</para>
   <para>* How to update</para>
@@ -189,7 +189,7 @@ $ cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) \
 -->
 <!--============================================================-->
 <!--
-<section>
+<section xml:id="sec-package-notes-gcc">
   <title>GCC</title>
   <para>…</para>
 </section>

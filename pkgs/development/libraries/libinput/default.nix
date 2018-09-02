@@ -23,13 +23,17 @@ stdenv.mkDerivation rec {
     sha256 = "01nb1shnl871d939wgfd7nc9svclcnfjfhlq64b4yns2dvcr24gk";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "bin" "out" "dev" ];
 
   mesonFlags = [
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
   ];
+
+  preConfigure = ''
+    mesonFlags="$mesonFlags --libexecdir=$bin/libexec"
+  '';
 
   nativeBuildInputs = [ pkgconfig meson ninja ]
     ++ optionals documentationSupport [ doxygen graphviz ]

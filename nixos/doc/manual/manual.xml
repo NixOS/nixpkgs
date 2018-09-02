@@ -8,7 +8,7 @@
   <subtitle>Version <xi:include href="./generated/version" parse="text" />
   </subtitle>
  </info>
- <preface>
+ <preface xml:id="preface">
   <title>Preface</title>
   <para>
    This manual describes how to install, use and extend NixOS, a Linux

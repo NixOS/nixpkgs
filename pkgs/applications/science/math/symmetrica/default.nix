@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.publicDomain;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = http://www.symmetrica.de/;
+    homepage = http://www.algorithm.uni-bayreuth.de/en/research/SYMMETRICA/index.html;
   };
 }

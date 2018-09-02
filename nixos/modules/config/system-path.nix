@@ -13,7 +13,7 @@ let
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
-      pkgs.coreutils
+      pkgs.coreutils-full
       pkgs.cpio
       pkgs.curl
       pkgs.diffutils

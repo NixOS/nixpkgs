@@ -1570,6 +1570,11 @@
     github = "grburst";
     name = "Julius Elias";
   };
+  greydot = {
+    email = "lanablack@amok.cc";
+    github = "greydot";
+    name = "Lana Black";
+  };
   gridaphobe = {
     email = "eric@seidel.io";
     github = "gridaphobe";

@@ -91,7 +91,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
     <para>
      When enabled the <literal>iproute2</literal> will copy the files expected
      by ip route (e.g., <filename>rt_tables</filename>) in
-     <filename>/run/iproute2</filename>. This allows to write aliases for
+     <filename>/etc/iproute2</filename>. This allows to write aliases for
      routing tables for instance.
     </para>
    </listitem>
@@ -519,6 +519,13 @@ inherit (pkgs.nixos {
       The config activation script of <literal>nixos-rebuild</literal> now
       <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemctl.html#Manager%20Lifecycle%20Commands">reloads</link>
       all user units for each authenticated user.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The default display manager is now LightDM.
+      To use SLiM set <literal>services.xserver.displayManager.slim.enable</literal>
+      to <literal>true</literal>.
     </para>
   </listitem>
   </itemizedlist>

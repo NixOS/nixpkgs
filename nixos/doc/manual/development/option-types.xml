@@ -11,7 +11,7 @@
   value definitions.
  </para>
 
- <section>
+ <section xml:id="sec-option-types-basic">
   <title>Basic Types</title>
 
   <para>
@@ -196,7 +196,7 @@
   </variablelist>
  </section>
 
- <section>
+ <section xml:id="sec-option-types-value">
   <title>Value Types</title>
 
   <para>
@@ -257,7 +257,7 @@
   </variablelist>
  </section>
 
- <section>
+ <section xml:id="sec-option-types-composed">
   <title>Composed Types</title>
 
   <para>
@@ -483,7 +483,7 @@ config.mod.two = { foo = 2; bar = "two"; };</screen>
   </example>
  </section>
 
- <section>
+ <section xml:id="sec-option-types-extending">
   <title>Extending types</title>
 
   <para>
@@ -543,14 +543,14 @@ nixThings = mkOption {
   </variablelist>
  </section>
 
- <section>
+ <section xml:id="sec-option-types-custom">
   <title>Custom Types</title>
 
   <para>
    Custom types can be created with the <literal>mkOptionType</literal>
    function. As type creation includes some more complex topics such as
    submodule handling, it is recommended to get familiar with
-   <filename 
+   <filename
   xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/types.nix">types.nix</filename>
    code before creating a new type.
   </para>

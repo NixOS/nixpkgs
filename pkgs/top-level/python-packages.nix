@@ -246,6 +246,8 @@ in {
 
   dendropy = callPackage ../development/python-modules/dendropy { };
 
+  dependency-injector = callPackage ../development/python-modules/dependency-injector { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
@@ -5912,16 +5914,17 @@ in {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.11.1";
+    version = "3.0";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "1n3x0bkydlqmxdr0wdgfgichp8fyldzkaijj618y5ns2k5qiwsxr";
+      sha256 = "19pymw104l05af710ph69znqiz9av3if7436kigjlwd65gxnghkc";
     };
 
+    # Requires access to /sys/class/power_supply
     doCheck = false;
 
     buildInputs = with self; [ unittest2 ];
@@ -5932,7 +5935,7 @@ in {
     '';
 
     meta = {
-      homepage = "https://nicolargo.github.io/glances/";
+      homepage = https://nicolargo.github.io/glances/;
       description = "Cross-platform curses-based monitoring tool";
       license = licenses.lgpl3;
       maintainers = with maintainers; [ primeos koral ];

@@ -87,7 +87,7 @@ in
       }
     ];
 
-    services.xserver.displayManager.slim.enable = false;
+    services.xserver.displayManager.lightdm.enable = false;
 
     users.users.gdm =
       { name = "gdm";

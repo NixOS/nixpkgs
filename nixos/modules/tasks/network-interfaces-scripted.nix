@@ -473,7 +473,12 @@ let
               # Remove Dead Interfaces
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
-              ip link set "${n}" up
+              
+              # We try to bring up the logical VLAN interface. If the master 
+              # interface the logical interface is dependent upon is not up yet we will 
+              # fail to immediately bring up the logical interface. The resulting logical
+              # interface will brought up later when the master interface is up.
+              ip link set "${n}" up || true
             '';
             postStop = ''
               ip link delete "${n}" || true

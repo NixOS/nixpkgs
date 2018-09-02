@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://containerd.tools/;
+    homepage = https://containerd.io/;
     description = "A daemon to control runC";
     license = licenses.asl20;
     maintainers = with maintainers; [ offline vdemeester ];

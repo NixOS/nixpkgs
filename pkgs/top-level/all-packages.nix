@@ -1959,11 +1959,8 @@ with pkgs;
 
   cool-retro-term = libsForQt5.callPackage ../applications/misc/cool-retro-term { };
 
-  coreutils = callPackage ../tools/misc/coreutils {
-    aclSupport = stdenv.isLinux;
-    attrSupport = stdenv.isLinux;
-  };
-
+  coreutils = callPackage ../tools/misc/coreutils { };
+  coreutils-full = coreutils.override { minimal = false; };
   coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
 
   corkscrew = callPackage ../tools/networking/corkscrew { };
@@ -7161,6 +7158,8 @@ with pkgs;
 
   cargo-vendor = callPackage ../build-support/rust/cargo-vendor { };
 
+  cargo-web = callPackage ../development/tools/cargo-web { };
+
   carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix { };
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
@@ -7388,9 +7387,10 @@ with pkgs;
   inherit (beam.packages.erlang)
     rebar rebar3-open rebar3
     hexRegistrySnapshot fetchHex beamPackages
-    hex2nix cuter;
+    hex2nix;
 
   inherit (beam.packages.erlangR18) relxExe;
+  inherit (beam.packages.erlangR19) cuter;
 
   groovy = callPackage ../development/interpreters/groovy { };
 
@@ -7722,7 +7722,7 @@ with pkgs;
     ruby_2_4
     ruby_2_5;
 
-  ruby = ruby_2_4;
+  ruby = ruby_2_5;
 
   mruby = callPackage ../development/compilers/mruby { };
 
@@ -11533,10 +11533,8 @@ with pkgs;
     introspectionSupport = true;
   });
 
-  poppler_min = poppler_0_61.override { # TODO: maybe reduce even more
+  poppler_min = poppler.override { # TODO: maybe reduce even more
     # this is currently only used by texlive.bin.
-    # pinned to 0.61 because texlive 2017 doesn't build w/poppler 0.64
-    # TODO: review poppler version for texlive 2018
     minimal = true;
     suffix = "min";
   };
@@ -18156,6 +18154,8 @@ with pkgs;
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
+
+  qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {
     lua5 = lua5_1;

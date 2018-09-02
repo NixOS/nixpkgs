@@ -16,7 +16,7 @@
     <link xlink:href="https://taskwarrior.org/docs/#taskd"/>
   </para>
 
-  <section>
+  <section xml:id="module-services-taskserver-configuration">
     <title>Configuration</title>
 
     <para>
@@ -48,7 +48,7 @@
     </para>
   </section>
 
-  <section>
+  <section xml:id="module-services-taskserver-nixos-taskserver-tool">
     <title>The nixos-taskserver tool</title>
 
     <para>
@@ -78,7 +78,7 @@
       <option>--help</option> switch.
     </para>
   </section>
-  <section>
+  <section xml:id="module-services-taskserver-declarative-ca-management">
     <title>Declarative/automatic CA management</title>
 
     <para>
@@ -131,7 +131,7 @@ $ ssh server nixos-taskserver user export my-company alice | sh
       <command>task sync</command> after that stage.
     </para>
   </section>
-  <section>
+  <section xml:id="module-services-taskserver-manual-ca-management">
     <title>Manual CA management</title>
 
     <para>

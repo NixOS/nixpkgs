@@ -23,6 +23,8 @@ let
       # Open URLs
       xdg_utils
       iana-etc
+      # Steam Play / Proton
+      python3
     ] ++ lib.optional withJava jdk
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;

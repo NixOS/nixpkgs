@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       TAL-Filter-2 TAL-NoiseMaker TAL-Reverb TAL-Reverb-2 TAL-Reverb-3
       TAL-Vocoder-2 TheFunction ThePilgrim Vex Wolpertinger
     '';
+    license = with licenses; [ gpl2 gpl3 gpl2Plus lgpl3 mit ];
     maintainers = [ maintainers.goibhniu ];
     platforms = [ "x86_64-linux" ];
   };
