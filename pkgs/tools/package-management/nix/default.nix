@@ -29,7 +29,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals is20 [ brotli ] # Since 1.12
+      ++ lib.optionals is20 [ brotli boost ]
       ++ lib.optional withLibseccomp libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           ((aws-sdk-cpp.override {
@@ -40,8 +40,7 @@ let
               url = https://github.com/edolstra/aws-sdk-cpp/commit/7d58e303159b2fb343af9a1ec4512238efa147c7.patch;
               sha256 = "103phn6kyvs1yc7fibyin3lgxz699qakhw671kl207484im55id1";
             })];
-          }))
-      ++ lib.optional fromGit boost;
+          }));
 
     propagatedBuildInputs = [ boehmgc ];
 
@@ -51,7 +50,7 @@ let
     preConfigure =
       # Copy libboost_context so we don't get all of Boost in our closure.
       # https://github.com/NixOS/nixpkgs/issues/45462
-      lib.optionalString fromGit
+      lib.optionalString is20
       ''
         mkdir -p $out/lib
         cp ${boost}/lib/libboost_context* $out/lib
@@ -148,10 +147,10 @@ in rec {
   }) // { perl-bindings = nix1; };
 
   nixStable = (common rec {
-    name = "nix-2.0.4";
+    name = "nix-2.1";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "166540ff7b8bb41449586b67e5fc6ab9e25525f6724b6c6bcbfb0648fbd6496b";
+      sha256 = "0ed68e0c50f13810768fcf510abb2c56d735172c39a325aac7453ccf7ae152fc";
     };
   }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
 
