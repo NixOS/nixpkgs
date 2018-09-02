@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.4.0.2";
+  version = "2.5.0.0";
 
 in stdenv.mkDerivation rec {
 
@@ -10,13 +10,14 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.skarnet.org/software/s6-linux-utils/${name}.tar.gz";
-    sha256 = "0245rmk7wfyyfsi4g7f0niprwlvqlwkbyjxflb8kkbvhwfdavqip";
+    sha256 = "04q2z71dkzahd2ppga2zikclz2qk014c23gm7rigqxjc8rs1amvq";
   };
 
   outputs = [ "bin" "dev" "doc" "out" ];
 
   dontDisableStatic = true;
 
+  # TODO: nsss support
   configureFlags = [
     "--enable-absolute-paths"
     "--bindir=\${bin}/bin"
