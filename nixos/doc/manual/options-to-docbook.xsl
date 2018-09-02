@@ -15,7 +15,7 @@
 
 
   <xsl:template match="/expr/list">
-    <appendix>
+    <appendix xml:id="appendix-configuration-options">
       <title>Configuration Options</title>
       <variablelist xml:id="configuration-variable-list">
         <xsl:for-each select="attrs">

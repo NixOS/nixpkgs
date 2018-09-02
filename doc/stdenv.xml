@@ -212,7 +212,7 @@ genericBuild
    platforms relative to the new derivation's, and whether they are propagated.
    The platform distinctions are motivated by cross compilation; see
    <xref linkend="chap-cross"/> for exactly what each platform means.
-   <footnote>
+   <footnote xml:id="footnote-stdenv-ignored-build-platform">
     <para>
      The build platform is ignored because it is a mere implementation detail
      of the package satisfying the dependency: As a general programming
@@ -233,7 +233,7 @@ genericBuild
    out only for dependencies whose host platform matches the new derivation's
    build platform–i.e. which run on the platform where the new derivation
    will be built.
-   <footnote>
+   <footnote xml:id="footnote-stdenv-native-dependencies-in-path">
     <para>
      Currently, that means for native builds all dependencies are put on the
      <envar>PATH</envar>. But in the future that may not be the case for sake
@@ -280,7 +280,7 @@ genericBuild
    <link xlink:href="https://en.wikipedia.org/wiki/Natural_deduction">Natural
    Deduction</link> using the inference rules. This probably seems a bit
    obtuse, but so is the bash code that actually implements it!
-   <footnote>
+   <footnote xml:id="footnote-stdenv-find-inputs-location">
     <para>
      The <function>findInputs</function> function, currently residing in
      <filename>pkgs/stdenv/generic/setup.sh</filename>, implements the
@@ -1112,7 +1112,7 @@ passthru = {
        By default, the configure phase applies some special hackery to all
        files called <filename>ltmain.sh</filename> before running the configure
        script in order to improve the purity of Libtool-based packages
-       <footnote>
+       <footnote xml:id="footnote-stdenv-sys-lib-search-path">
         <para>
          It clears the
          <varname>sys_lib_<replaceable>*</replaceable>search_path</varname>
@@ -1151,7 +1151,7 @@ passthru = {
        or a subset to control exactly which platform flags are passed.
        Compilers and other tools should use this to also pass the target
        platform, for example.
-       <footnote>
+       <footnote xml:id="footnote-stdenv-build-time-guessing-impurity">
         <para>
          Eventually these will be passed when in native builds too, to improve
          determinism: build-time guessing, as is done today, is a risk of
@@ -1732,7 +1732,7 @@ set debug-file-directory ~/.nix-profile/lib/debug
        Controls whether the installCheck phase is executed. By default it is
        skipped, but if <varname>doInstallCheck</varname> is set to true, the
        installCheck phase is usually executed. Thus you should set
-       <programlisting>doInstallCheck = true;</programlisting>
+<programlisting>doInstallCheck = true;</programlisting>
        in the derivation to enable install checks. The exception is cross
        compilation. Cross compiled builds never run tests, no matter how
        <varname>doInstallCheck</varname> is set, as the newly-built program
@@ -2213,7 +2213,7 @@ addEnvHooks "$hostOffset" myBashFunction
        <command>clang</command> is to be used. Secondly, this helps packages
        not get confused when cross-compiling, in which case multiple Bintools
        Wrappers may simultaneously be in use.
-       <footnote>
+       <footnote xml:id="footnote-stdenv-per-platform-wrapper">
         <para>
          Each wrapper targets a single platform, so if binaries for multiple
          platforms are needed, the underlying binaries must be wrapped multiple

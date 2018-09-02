@@ -233,7 +233,7 @@ let
             "
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
-    ${pkgs.grub2_efi}/bin/grub-mkimage -o $out/EFI/boot/bootx64.efi -p /EFI/boot -O x86_64-efi \
+    ${pkgs.grub2_efi}/bin/grub-mkimage -o $out/EFI/boot/${if targetArch == "x64" then "bootx64" else "bootx32"}.efi -p /EFI/boot -O ${if targetArch == "x64" then "x86_64" else "i386"}-efi \
       $MODULES
     cp ${pkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 

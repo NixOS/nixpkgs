@@ -1,4 +1,4 @@
-{ lib
+{ lib, stdenv
 , makeWrapper
 , runCommand, wrapBintoolsWith, wrapCCWith
 , buildAndroidndk, androidndk, targetAndroidndkPkgs

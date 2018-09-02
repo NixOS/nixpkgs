@@ -246,6 +246,8 @@ in {
 
   dendropy = callPackage ../development/python-modules/dendropy { };
 
+  dependency-injector = callPackage ../development/python-modules/dependency-injector { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };

@@ -130,7 +130,7 @@ with lib;
     };
 
     sslTrustedCertificate = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
       default = null;
       example = "/var/root.cert";
       description = "Path to root SSL certificate for stapling and client certificates.";

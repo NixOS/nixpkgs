@@ -8,7 +8,7 @@
 
 <para>Prometheus exporters provide metrics for the <link xlink:href="https://prometheus.io">prometheus monitoring system</link>.</para>
 
-<section><title>Configuration</title>
+<section xml:id="module-services-prometheus-exporters-configuration"><title>Configuration</title>
   <para>One of the most common exporters is the <link xlink:href="https://github.com/prometheus/node_exporter">node exporter</link>, it provides hardware and OS metrics from the host it's running on. The exporter could be configured as follows:
 <programlisting>
   services.promtheus.exporters.node = {
@@ -33,7 +33,7 @@ For more information about configuration see <literal>man configuration.nix</lit
 search through the <link xlink:href="https://nixos.org/nixos/options.html#prometheus.exporters">available options</link>.
 </para>
 </section>
-<section><title>Adding a new exporter</title>
+<section xml:id="module-services-prometheus-exporters-new-exporter"><title>Adding a new exporter</title>
   <para>To add a new exporter, it has to be packaged first (see <literal>nixpkgs/pkgs/servers/monitoring/prometheus/</literal> for examples), then a module can be added. The postfix exporter is used in this example:</para>
 <itemizedlist>
   <listitem>

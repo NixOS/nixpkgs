@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "powerdns-${version}";
-  version = "4.1.3";
+  version = "4.1.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "1bh1qdgw415ax542123b6isri1jh4mbf2i9i1yffkfk0xmyv79cs";
+    sha256 = "1m9yhzrxh315gv855c590b2qc8bx31rrnl72pqxrnlix701qch79";
   };
 
   nativeBuildInputs = [ pkgconfig ];

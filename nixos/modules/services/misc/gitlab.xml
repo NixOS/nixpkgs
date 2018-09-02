@@ -8,7 +8,7 @@
 
 <para>Gitlab is a feature-rich git hosting service.</para>
 
-<section><title>Prerequisites</title>
+<section xml:id="module-services-gitlab-prerequisites"><title>Prerequisites</title>
 
 <para>The gitlab service exposes only an Unix socket at
 <literal>/run/gitlab/gitlab-workhorse.socket</literal>. You need to configure a
@@ -35,7 +35,7 @@ webserver to proxy HTTP requests to the socket.</para>
 
 </section>
 
-<section><title>Configuring</title>
+<section xml:id="module-services-gitlab-configuring"><title>Configuring</title>
 
 <para>Gitlab depends on both PostgreSQL and Redis and will automatically enable
 both services. In the case of PostgreSQL, a database and a role will be created.
@@ -119,7 +119,7 @@ options for the <link linkend="opt-services.gitlab.enable">services.gitlab</link
 
 </section>
 
-<section><title>Maintenance</title>
+<section xml:id="module-services-gitlab-maintenance"><title>Maintenance</title>
 
 <para>You can run Gitlab's rake tasks with <literal>gitlab-rake</literal>
 which will be available on the system when gitlab is enabled. You will

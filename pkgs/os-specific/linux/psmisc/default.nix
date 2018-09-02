@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "psmisc-23.2";
+  name = "psmisc-23.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/psmisc/${name}.tar.xz";
-    sha256 = "0s1kjhrik0wzqbm7hv4gkhywhjrwhp9ajw0ad05fwharikk6ah49";
+    sha256 = "0c5s94hqpwfmyswx2f96gifa6wdbpxxpkyxcrlzbxpvmrxsd911f";
   };
 
   buildInputs = [ncurses];

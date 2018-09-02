@@ -4,19 +4,30 @@
 
 buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "1.1.0";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
     rev = "v${version}";
-    sha256 = "0697rcdsmxz51p4b8m8klx2mf5xnx6vx56vcf5jmzidh8mc38a6z";
+    sha256 = "12axb0c56razfhrx1l62sjvdrbg6vz0yyqph2mxyjza1ywpb93b5";
   };
 
   propagatedBuildInputs = [ arrow futures logfury requests six tqdm ];
 
   checkPhase = ''
     python test_b2_command_line.py test
+  '';
+
+  postPatch = ''
+    # b2 uses an upper bound on arrow, because arrow 0.12.1 is not
+    # compatible with Python 2.6:
+    #
+    # https://github.com/crsmithdev/arrow/issues/517
+    #
+    # However, since we use Python 2.7, newer versions of arrow are fine.
+
+    sed -i 's/,<0.12.1//g' requirements.txt
   '';
 
   postInstall = ''

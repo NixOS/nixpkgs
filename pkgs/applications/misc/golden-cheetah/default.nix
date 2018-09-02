@@ -34,9 +34,10 @@ stdenv.mkDerivation rec {
   # RCC: Error in 'Resources/application.qrc': Cannot find file 'translations/gc_fr.qm'
   enableParallelBuilding = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Performance software for cyclists, runners and triathletes";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.ocharles ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.ocharles ];
+    license = licenses.gpl3;
   };
 }
