@@ -1,6 +1,6 @@
 --- a/mesonbuild/compilers/compilers.py
 +++ b/mesonbuild/compilers/compilers.py
-@@ -846,8 +848,10 @@
+@@ -1121,8 +1121,10 @@
              if paths != '':
                  paths += ':'
              paths += build_rpath
@@ -15,7 +15,7 @@
              else:
 --- a/mesonbuild/scripts/depfixer.py
 +++ b/mesonbuild/scripts/depfixer.py
-@@ -300,6 +300,14 @@
+@@ -301,6 +301,14 @@
              return
          self.bf.seek(rp_off)
          old_rpath = self.read_str()
