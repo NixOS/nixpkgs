@@ -37,4 +37,13 @@ callPackage ./generic.nix (args // rec {
     ./cygwin-1.45.0-jam-cygwin.patch
     ./cygwin-1.50.0-jam-pep3149.patch
   ];
+
+  meta = {
+    homepage = http://boost.org/;
+    description = "Collection of C++ libraries";
+    license = stdenv.lib.licenses.boost;
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ peti wkennington ];
+  };
 })

@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, ... } @ args:
+{ stdenv, callPackage, fetchurl, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
   version = "1.55.0";
@@ -8,5 +8,14 @@ callPackage ./generic.nix (args // rec {
   src = fetchurl {
     url = "mirror://sourceforge/boost/boost_1_55_0.tar.bz2";
     sha256 = "0lkv5dzssbl5fmh2nkaszi8x9qbj80pr4acf9i26sj3rvlih1w7z";
+  };
+
+  meta = {
+    homepage = http://boost.org/;
+    description = "Collection of C++ libraries";
+    license = stdenv.lib.licenses.boost;
+
+    platforms = stdenv.lib.remove "aarch64-linux" stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ peti wkennington ];
   };
 })

@@ -8,4 +8,12 @@ callPackage ./generic.nix (args // rec {
     sha256 = "0fzx6dwqbrkd4bcd8pjv0fpapwmrxxwr8yx9g67lihlsk3zzysk8";
   };
 
+  meta = {
+    homepage = http://boost.org/;
+    description = "Collection of C++ libraries";
+    license = stdenv.lib.licenses.boost;
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ peti wkennington ];
+  };
 })

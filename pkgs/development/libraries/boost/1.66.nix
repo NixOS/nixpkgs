@@ -8,4 +8,13 @@ callPackage ./generic.nix (args // rec {
     # SHA256 from http://www.boost.org/users/history/version_1_66_0.html
     sha256 = "5721818253e6a0989583192f96782c4a98eb6204965316df9f5ad75819225ca9";
   };
+
+  meta = {
+    homepage = http://boost.org/;
+    description = "Collection of C++ libraries";
+    license = stdenv.lib.licenses.boost;
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ peti wkennington ];
+  };
 })
