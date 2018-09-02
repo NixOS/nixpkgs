@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , libxslt, docbook_xsl, docbook_xml_dtd_44
-, sysfsutils, openssl, libcap, libgcrypt, nettle, libidn2
+, libcap, nettle, libidn2
 }:
 
 let
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ libxslt.bin ];
   buildInputs = [
-    sysfsutils openssl libcap libgcrypt nettle
+    libcap nettle
   ] ++ stdenv.lib.optional (!stdenv.hostPlatform.isMusl) libidn2;
 
   # ninfod probably could build on cross, but the Makefile doesn't pass --host etc to the sub configure...
