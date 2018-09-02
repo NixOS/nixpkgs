@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.77.1";
+  version = "0.77.2";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -829,7 +829,7 @@
     "sensor.comed_hourly_pricing" = ps: with ps; [  ];
     "sensor.comfoconnect" = ps: with ps; [  ];
     "sensor.command_line" = ps: with ps; [  ];
-    "sensor.cpuspeed" = ps: with ps; [  ];
+    "sensor.cpuspeed" = ps: with ps; [ py-cpuinfo ];
     "sensor.crimereports" = ps: with ps; [  ];
     "sensor.cups" = ps: with ps; [ pycups ];
     "sensor.currencylayer" = ps: with ps; [  ];
@@ -955,7 +955,7 @@
     "sensor.opensky" = ps: with ps; [  ];
     "sensor.openuv" = ps: with ps; [  ];
     "sensor.openweathermap" = ps: with ps; [ pyowm ];
-    "sensor.otp" = ps: with ps; [  ];
+    "sensor.otp" = ps: with ps; [ pyotp ];
     "sensor.pi_hole" = ps: with ps; [  ];
     "sensor.pilight" = ps: with ps; [  ];
     "sensor.plex" = ps: with ps; [  ];
