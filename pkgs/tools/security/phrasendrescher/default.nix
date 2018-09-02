@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl, openssl, libssh2, gpgme }:
 
 stdenv.mkDerivation rec {
   name = "phrasendrescher-${version}";
-  version = "1.0";
+  version = "1.2.2b";
 
   src = fetchurl {
     url = "http://leidecker.info/projects/phrasendrescher/${name}.tar.gz";
-    sha256 = "1r0j7ms3i324p6if9cg8i0q900zqfjpvfr8pwj181x8ascysbbf2";
+    sha256 = "0bkiy9dlc1rqicl7g5sbfhgqlyqms4s66lcawwhhbl9d60y72ghs";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl libssh2 gpgme ];
+
+  configureFlags = "--with-plugins";
 
   meta = with stdenv.lib; {
     description = "Cracking tool that finds passphrases of SSH keys";
