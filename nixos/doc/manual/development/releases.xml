@@ -45,7 +45,7 @@
     <listitem>
      <para>
       <literal>git tag -a -s -m &quot;Release 17.09-beta&quot; 17.09-beta
-      &amp;&amp; git push --tags</literal>
+      &amp;&amp; git push origin 17.09-beta</literal>
      </para>
     </listitem>
     <listitem>
