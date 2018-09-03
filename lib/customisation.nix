@@ -136,8 +136,10 @@ rec {
     let
       outputs = drv.outputs or [ "out" ];
 
+      passthruMerged = if drv ? passthru then (drv.passthru // passthru) else passthru;
+
       commonAttrs = drv // (builtins.listToAttrs outputsList) //
-        ({ all = map (x: x.value) outputsList; }) // passthru;
+        ({ all = map (x: x.value) outputsList; }) // passthru // { passthru = passthruMerged; };
 
       outputToAttrListElement = outputName:
         { name = outputName;
