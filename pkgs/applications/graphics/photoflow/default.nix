@@ -51,5 +51,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.MtP ];
     platforms = platforms.linux;
+    broken = stdenv.isAarch64;
   };
 }
