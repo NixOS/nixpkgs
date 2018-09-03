@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  patches = [
+    ./cve-2018-13988.patch
+  ];
+
   outputs = [ "out" "dev" ];
 
   buildInputs = [ libiconv ] ++ libintlOrEmpty ++ lib.optional withData poppler_data;
