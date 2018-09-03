@@ -14,6 +14,7 @@ let
     dtkcore = callPackage ./dtkcore { };
     dtkwidget = callPackage ./dtkwidget { };
     qt5dxcb-plugin = callPackage ./qt5dxcb-plugin { };
+    qt5integration = callPackage ./qt5integration { };
 
   };
 
