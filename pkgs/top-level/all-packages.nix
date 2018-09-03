@@ -13924,14 +13924,6 @@ with pkgs;
       ];
   };
 
-  linux_copperhead_lts = (linux_4_14.override {
-    kernelPatches = linux_4_14.kernelPatches ++ [
-      kernelPatches.copperhead_4_14
-      kernelPatches.tag_hardened
-     ];
-    modDirVersionArg = linux_4_14.modDirVersion + "-hardened";
-  });
-
   # linux mptcp is based on the 4.4 kernel
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches =
@@ -14272,8 +14264,6 @@ with pkgs;
   linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
 
   linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
-
-  linuxPackages_copperhead_lts = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead_lts);
 
   # Samus kernels
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
