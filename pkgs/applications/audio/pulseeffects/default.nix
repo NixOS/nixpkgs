@@ -4,6 +4,7 @@
 , ninja
 , pkgconfig
 , itstool
+, python3
 , libxml2
 , desktop-file-utils
 , wrapGAppsHook
@@ -58,6 +59,7 @@ in stdenv.mkDerivation rec {
     pkgconfig
     libxml2
     itstool
+    python3
     desktop-file-utils
     wrapGAppsHook
   ];
