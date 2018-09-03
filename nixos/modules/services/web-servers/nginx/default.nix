@@ -619,7 +619,13 @@ in
             user = cfg.user;
             group = lib.mkDefault cfg.group;
             webroot = vhostConfig.acmeRoot;
-            extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
+            extraDomains = genAttrs vhostConfig.serverAliases (alias: null) //
+              (let
+                 otherVhosts = filterAttrs(n: v: v.useACMEHost == vhostConfig.serverName) virtualHosts;
+                 otherVhostDomains = concatLists (mapAttrsToList (name: vhost: [vhost.serverName] ++ vhost.serverAliases)
+                                                                 otherVhosts);
+               in
+                 genAttrs otherVhostDomains (alias: null));
             postRun = ''
               systemctl reload nginx
             '';

@@ -62,7 +62,6 @@ with lib;
         This is useful if you have many subdomains and want to avoid hitting the
         <link xlink:href="https://letsencrypt.org/docs/rate-limits/">rate limit</link>.
         Alternately, you can generate a certificate through <option>enableACME</option>.
-        <emphasis>Note that this option does not create any certificates, nor it does add subdomains to existing ones – you will need to create them manually using  <xref linkend="opt-security.acme.certs"/>.</emphasis>
       '';
     };
 
