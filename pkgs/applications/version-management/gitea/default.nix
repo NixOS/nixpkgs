@@ -46,5 +46,6 @@ buildGoPackage rec {
     homepage = https://gitea.io;
     license = licenses.mit;
     maintainers = [ maintainers.disassembler ];
+    broken = stdenv.isAarch64;
   };
 }
