@@ -546,6 +546,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Public Domain";
   };
 
+  purdueBsd = {
+    fullName = " Purdue BSD-Style License"; # also know as lsof license
+    url = https://enterprise.dejacode.com/licenses/public/purdue-bsd;
+  };
+
   qpl = spdx {
     spdxId = "QPL-1.0";
     fullName = "Q Public License 1.0";

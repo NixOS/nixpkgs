@@ -51,15 +51,16 @@ stdenv.mkDerivation rec {
     cp lsof $out/bin
   '';
 
-  meta = {
-    homepage = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/;
+  meta = with stdenv.lib; {
+    homepage = https://people.freebsd.org/~abe/;
     description = "A tool to list open files";
     longDescription = ''
       List open files. Can show what process has opened some file,
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    maintainers = [ stdenv.lib.maintainers.dezgeg ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.dezgeg ];
+    platforms = platforms.unix;
+    license = licenses.purdueBsd;
   };
 }
