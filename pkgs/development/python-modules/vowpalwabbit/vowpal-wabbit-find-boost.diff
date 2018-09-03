@@ -1,0 +1,16 @@
+--- vowpalwabbit-8.5.0.orig/setup.py	2018-09-03 14:27:22.833621339 +0200
++++ vowpalwabbit-8.5.0/setup.py	2018-09-03 14:37:18.076127914 +0200
+@@ -25,12 +25,7 @@
+     """Find correct boost-python library information """
+     if system == 'Linux':
+         # use version suffix if present
+-        boost_lib = 'boost_python-py{v[0]}{v[1]}'.format(v=sys.version_info)
+-        if sys.version_info.major == 3:
+-            for candidate in ['-py36', '-py35', '-py34', '3']:
+-                boost_lib = 'boost_python{}'.format(candidate)
+-                if find_library(boost_lib):
+-                    exit
++        boost_lib = 'boost_python{v[0]}{v[1]}'.format(v=sys.version_info)
+         if not find_library(boost_lib):
+             boost_lib = "boost_python"
+     elif system == 'Darwin':
