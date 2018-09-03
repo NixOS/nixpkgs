@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchgit
 , cmake, pkgconfig, git
 , boost, miniupnpc, openssl, unbound, cppzmq
 , zeromq, pcsclite, readline
@@ -11,24 +11,15 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name    = "monero-${version}";
-  version = "0.12.0.0";
+  version = "0.12.3.0";
 
-  src = fetchFromGitHub {
-    owner  = "monero-project";
-    repo   = "monero";
+  src = fetchgit {
+    url    = "https://github.com/monero-project/monero.git";
     rev    = "v${version}";
-    sha256 = "1lc9mkrl1m8mdbvj88y8y5rv44vinxf7dyv221ndmw5c5gs5zfgk";
+    sha256 = "1609k1qn9xx37a92ai36rajds9cmdjlkqyka95hks5xjr3l5ca8i";
   };
 
   nativeBuildInputs = [ cmake pkgconfig git ];
-
-  patches = [
-    # fix daemon crash, remove with 0.12.1.0 update
-    (fetchpatch {
-      url    = "https://github.com/monero-project/monero/commit/08343ab.diff";
-      sha256 = "0f1snrl2mk2czwk1ysympzr8ismjx39fcqgy13276vcmw0cfqi83";
-    })
-  ];
 
   buildInputs = [
     boost miniupnpc openssl unbound
@@ -39,7 +30,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_GUI_DEPS=ON"
     "-DReadline_ROOT_DIR=${readline.dev}"
-  ];
+  ] ++ optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF";
 
   hardeningDisable = [ "fortify" ];
 
