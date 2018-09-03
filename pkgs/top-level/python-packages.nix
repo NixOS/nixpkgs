@@ -17014,21 +17014,7 @@ EOF
     propagatedBuildInputs = with self; [ tempora six ];
   };
 
-  jaraco_text = buildPythonPackage rec {
-    name = "jaraco.text-${version}";
-    version = "1.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.text/${name}.tar.gz";
-      sha256 = "07ccc0zc28sb1kyfyviw3n8f581qynrshqvqg1xsp4gkf1m2ibhh";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ jaraco_functools jaraco_collections ];
-  };
+  jaraco_text = callPackage ../development/python-modules/jaraco_text { };
 
   jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
 
