@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
@@ -10,8 +10,8 @@
 , getent
 , buildPackages
 , withSelinux ? false, libselinux
-, withLibseccomp ? libseccomp.meta.available, libseccomp
-, withKexectools ? kexectools.meta.available, kexectools
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
 let
