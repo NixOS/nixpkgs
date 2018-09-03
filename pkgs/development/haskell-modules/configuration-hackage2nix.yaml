@@ -2378,6 +2378,7 @@ extra-packages:
   - Cabal == 1.18.*                     # required for cabal-install et al on old GHC versions
   - Cabal == 1.20.*                     # required for cabal-install et al on old GHC versions
   - Cabal == 1.24.*                     # required for jailbreak-cabal etc.
+  - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - colour < 2.3.4                      # newer versions don't support GHC 7.10.x
   - conduit >=1.1 && <1.3               # pre-lts-11.x versions neeed by git-annex 6.20180227
   - conduit-extra >=1.1 && <1.3         # pre-lts-11.x versions neeed by git-annex 6.20180227
