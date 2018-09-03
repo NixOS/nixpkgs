@@ -10,7 +10,7 @@ let
 
   version = fileContents ../.version;
   versionSuffix =
-    (if stableBranch then "." else "beta") + "${toString nixpkgs.revCount - 151577}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "beta") + "${toString (nixpkgs.revCount - 151577)}.${nixpkgs.shortRev}";
 
   importTest = fn: args: system: import fn ({
     inherit system;
