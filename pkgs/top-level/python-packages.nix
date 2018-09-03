@@ -16960,137 +16960,25 @@ EOF
 
   python-telegram-bot = callPackage ../development/python-modules/python-telegram-bot { };
 
-  irc = buildPythonPackage rec {
-    name = "irc-${version}";
-    version = "14.2.2";
+  irc = callPackage ../development/python-modules/irc { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/irc/${name}.tar.gz";
-      sha256 = "0a6qjl4fjj98wxc8gaf5rxg94v7a0ydjdiw6pcka5fy814xl2i28";
-    };
+  jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
 
-    doCheck = false;
+  jaraco_text = callPackage ../development/python-modules/jaraco_text { };
 
-    buildInputs = with self; [ setuptools_scm ];
+  jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
 
-    propagatedBuildInputs = with self; [
-      six jaraco_logging jaraco_text jaraco_stream jaraco_stream pytz
-      jaraco_itertools
-    ];
-  };
+  jaraco_itertools = callPackage ../development/python-modules/jaraco_itertools { };
 
-  jaraco_logging = buildPythonPackage rec {
-    name = "jaraco.logging-${version}";
-    version = "1.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.logging/${name}.tar.gz";
-      sha256 = "1lvw9zphiymiiar47kd0x0dbc9x2jks8w1kirg3ff8nd80k95j05";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ tempora six ];
-  };
-
-  jaraco_text = buildPythonPackage rec {
-    name = "jaraco.text-${version}";
-    version = "1.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.text/${name}.tar.gz";
-      sha256 = "07ccc0zc28sb1kyfyviw3n8f581qynrshqvqg1xsp4gkf1m2ibhh";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ jaraco_functools jaraco_collections ];
-  };
-
-  jaraco_collections = buildPythonPackage rec {
-    name = "jaraco.collections-${version}";
-    version = "1.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.collections/${name}.tar.gz";
-      sha256 = "0mvyn9d4bs5zw9z84wwsbgff6s28vg6h4i8qhyb667fqi7xgr1w5";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ six jaraco_classes ];
-
-    # break dependency cycle
-    patchPhase = ''
-      sed -i "/'jaraco.text',/d" setup.py
-    '';
-  };
-
-  jaraco_itertools = buildPythonPackage rec {
-    name = "jaraco.itertools-${version}";
-    version = "1.7.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.itertools/${name}.tar.gz";
-      sha256 = "0yvxp5nwhy4wc4naq5v152vbnxqcn5k031g089chq2lk5kr7np5z";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ inflect more-itertools six ];
-  };
-
-  inflect = buildPythonPackage rec {
-    name = "inflect-${version}";
-    version = "0.2.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/inflect/${name}.tar.gz";
-      sha256 = "065866j9msrivbr74yrag53ch0lav7xz18qvjkiblkhinbfch510";
-    };
-  };
+  inflect = callPackage ../development/python-modules/inflect { };
 
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
   jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
 
-  jaraco_classes = buildPythonPackage rec {
-    name = "jaraco.classes-${version}";
-    version = "1.4";
+  jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.classes/${name}.tar.gz";
-      sha256 = "1yn1wa6m5rdhk4grmnycx3i5pzzdlwfx83h944c9g5rqggmg612h";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-  };
-
-  jaraco_stream = buildPythonPackage rec {
-    name = "jaraco.stream-${version}";
-    version = "1.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.stream/${name}.tar.gz";
-      sha256 = "0iwg5ljc2z8wwyl2wv7lldwviwd0q4rsccascyqvqqs0l2rcn4gi";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ six ];
-  };
+  jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 
   tempora= callPackage ../development/python-modules/tempora { };
 
