@@ -9,7 +9,7 @@ with lib;
   options = {
     environment.noXlibs = mkOption {
       type = types.bool;
-      default = false;
+      default = !config.services.xserver.enable && !config.services.xrdp.enable;
       description = ''
         Switch off the options in the default configuration that
         require X11 libraries. This includes client-side font
@@ -23,8 +23,10 @@ with lib;
   config = mkIf config.environment.noXlibs {
     programs.ssh.setXAuthLocation = false;
     security.pam.services.su.forwardXAuth = lib.mkForce false;
-
-    fonts.fontconfig.enable = false;
+    services.openssh.forwardX11 = lib.mkDefault false;
+    
+    services.udisks2.enable = lib.mkDefault false;
+    security.polkit.enable = lib.mkDefault false;
 
     nixpkgs.overlays = singleton (const (super: {
       dbus = super.dbus.override { x11Support = false; };
