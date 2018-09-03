@@ -146,6 +146,12 @@ self:
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
       });
 
+      magit-todos = super.magit-todos.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       # missing OCaml
       merlin = markBroken super.merlin;
 
