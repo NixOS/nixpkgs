@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" (stdenv.lib.optionalString usePython "-DUSE_PYTHON=true") ];
 
+  buildPhase = "make -j$NIX_BUILD_CORES";
+  checkPhase = "ctest -j$NIX_BUILD_CORES";
+
+  doCheck = true;
+
   # Skip byte-compiling of emacs-lisp files because this is currently
   # broken in ledger...
   postInstall = ''
