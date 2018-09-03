@@ -12,13 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mkvtoolnix-${version}";
-  version = "25.0.0";
+  version = "26.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "04m57719q7q0h0gcj1b2bh8xbdcl5bijic4hw71xf9xd19a95k78";
+    sha256 = "0dq0lbr6kzj455mv4z6a851n7ff3xlmsxklijiyp4drn1jf0q1pb";
   };
 
   nativeBuildInputs = [
