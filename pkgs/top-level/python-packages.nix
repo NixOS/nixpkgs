@@ -16979,24 +16979,7 @@ EOF
 
   python-telegram-bot = callPackage ../development/python-modules/python-telegram-bot { };
 
-  irc = buildPythonPackage rec {
-    name = "irc-${version}";
-    version = "14.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/irc/${name}.tar.gz";
-      sha256 = "0a6qjl4fjj98wxc8gaf5rxg94v7a0ydjdiw6pcka5fy814xl2i28";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [
-      six jaraco_logging jaraco_text jaraco_stream jaraco_stream pytz
-      jaraco_itertools
-    ];
-  };
+  irc = callPackage ../development/python-modules/irc { };
 
   jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
 
