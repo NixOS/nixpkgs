@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, meson, ninja, gettext
-, pkgconfig, python, gst-plugins-base, orc
+, pkgconfig, python3, gst-plugins-base, orc
 , faacSupport ? false, faac ? null
 , faad2, libass, libkate, libmms, librdf, ladspaH
 , libnice, webrtc-audio-processing, lilv, lv2, serd, sord, sratom
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig python gettext ];
+  nativeBuildInputs = [ meson ninja pkgconfig python3 gettext ];
 
   buildInputs = [
     gst-plugins-base orc
