@@ -1074,16 +1074,10 @@ self: super: {
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
-  # cabal2nix requires hpack >= 0.29.6 but the LTS has hpack-0.28.2.
-  # Lets remove this once the LTS has upraded to 0.29.6.
-  hpack = super.hpack_0_29_7;
-
-  # The test suite does not know how to find the 'cabal2nix' binary.
-  cabal2nix = overrideCabal super.cabal2nix (drv: {
-    preCheck = ''
-      export PATH="$PWD/dist/build/cabal2nix:$PATH"
-      export HOME="$TMPDIR/home"
-    '';
+  # The tool needs a newer hpack version than the one mandated by LTS-12.x.
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    hpack = self.hpack_0_30_0;
+    yaml = self.yaml_0_10_1_1;
   });
 
   # Break out of "aeson <1.3, temporary <1.3".
