@@ -17067,15 +17067,7 @@ EOF
     propagatedBuildInputs = with self; [ inflect more-itertools six ];
   };
 
-  inflect = buildPythonPackage rec {
-    name = "inflect-${version}";
-    version = "0.2.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/inflect/${name}.tar.gz";
-      sha256 = "065866j9msrivbr74yrag53ch0lav7xz18qvjkiblkhinbfch510";
-    };
-  };
+  inflect = callPackage ../development/python-modules/inflect { };
 
   more-itertools = callPackage ../development/python-modules/more-itertools { };
 
