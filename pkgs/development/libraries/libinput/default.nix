@@ -29,13 +29,10 @@ stdenv.mkDerivation rec {
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
+    "--libexecdir=${placeholder "bin"}/libexec"
   ];
 
-  preConfigure = ''
-    mesonFlags="$mesonFlags --libexecdir=$bin/libexec"
-  '';
-
-  nativeBuildInputs = [ pkgconfig meson ninja ]
+  nativeBuildInputs = [ pkgconfig meson ninja python3Packages.python ]
     ++ optionals documentationSupport [ doxygen graphviz ]
     ++ optionals testsSupport [ check valgrind python3Packages.pyparsing ];
 
