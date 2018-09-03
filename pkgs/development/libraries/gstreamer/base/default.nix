@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib
 , pkgconfig, meson, ninja, gettext, gobjectIntrospection
-, python, gstreamer, orc, pango, libtheora
+, python3, gstreamer, orc, pango, libtheora
 , libintl, libopus
 , enableX11 ? stdenv.isLinux, libXv
 , enableWayland ? stdenv.isLinux, wayland
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig python gettext gobjectIntrospection ]
+  nativeBuildInputs = [ pkgconfig python3 gettext gobjectIntrospection ]
 
   # Broken meson with Darwin. Should hopefully be fixed soon. Tracking
   # in https://bugzilla.gnome.org/show_bug.cgi?id=781148.
