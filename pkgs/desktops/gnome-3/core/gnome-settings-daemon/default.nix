@@ -1,7 +1,7 @@
 { fetchurl, substituteAll, stdenv, meson, ninja, pkgconfig, gnome3, perl, gettext, glib, libnotify, lcms2, libXtst
 , libxkbfile, libpulseaudio, alsaLib, libcanberra-gtk3, upower, colord, libgweather, polkit
 , geoclue2, librsvg, xf86_input_wacom, udev, libgudev, libwacom, libxslt, libxml2, networkmanager
-, docbook_xsl, wrapGAppsHook, ibus, xkeyboard_config, tzdata, nss }:
+, docbook_xsl, wrapGAppsHook, python3, ibus, xkeyboard_config, tzdata, nss }:
 
 stdenv.mkDerivation rec {
   name = "gnome-settings-daemon-${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # fatal error: gio/gunixfdlist.h: No such file or directory
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  nativeBuildInputs = [ meson ninja pkgconfig perl gettext libxml2 libxslt docbook_xsl wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig perl gettext libxml2 libxslt docbook_xsl wrapGAppsHook python3 ];
 
   buildInputs = with gnome3; [
     ibus gtk glib gsettings-desktop-schemas networkmanager
