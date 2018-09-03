@@ -1,5 +1,5 @@
-{ lib, buildPythonPackage, fetchPypi, python, boost, zlib, clang, ncurses
-, pytest, docutils, pygments, numpy, scipy, scikitlearn }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, boost, zlib, clang
+, ncurses, pytest, docutils, pygments, numpy, scipy, scikitlearn }:
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
@@ -24,6 +24,11 @@ buildPythonPackage rec {
 
   buildInputs = [ python.pkgs.boost zlib.dev clang ncurses pytest docutils pygments ];
   propagatedBuildInputs = [ numpy scipy scikitlearn ];
+
+  # Python ctypes.find_library uses DYLD_LIBRARY_PATH.
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    export DYLD_LIBRARY_PATH="${python.pkgs.boost}/lib"
+  '';
 
   checkPhase = ''
     # check-manifest requires a git clone, not a tarball
