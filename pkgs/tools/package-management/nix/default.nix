@@ -152,7 +152,10 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "63b1d49ea678162ada6996e42abb62cbc6e65cfefa4faa5436ae37100504720b";
     };
-  }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
+  }) // { perl-bindings = perl-bindings {
+    nix = nixStable;
+    needsBoost = true;
+  }; };
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.1${suffix}";
