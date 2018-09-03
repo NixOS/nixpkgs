@@ -1079,9 +1079,14 @@ self: super: {
     hpack = self.hpack_0_31_0;
     yaml = self.yaml_0_10_1_1;
   });
+  stack2nix = super.stack2nix.overrideScope (self: super: {
+    hpack = self.hpack_0_31_0;
+    yaml = self.yaml_0_10_1_1;
+  });
 
   # Break out of "aeson <1.3, temporary <1.3".
   stack = doJailbreak super.stack;
+
 
   # https://github.com/pikajude/stylish-cabal/issues/11
   stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
