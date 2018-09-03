@@ -17056,6 +17056,7 @@ let
      meta = {
        description = "Turns ref() into a multimethod";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       broken = stdenv.lib.versionAtLeast perl.version "5.26"; # 'OP {aka struct op}' has no member named 'op_sibling'
      };
   };
 
