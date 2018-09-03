@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, glib, gettext, gnutls, p11-kit, libproxy, gnome3
+{ stdenv, fetchurl, fetchpatch, meson, ninja, pkgconfig, glib, gettext, python3, gnutls, p11-kit, libproxy, gnome3
 , gsettings-desktop-schemas }:
 
 let
@@ -30,7 +30,10 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
+  nativeBuildInputs = [
+    meson ninja pkgconfig gettext
+    python3 # install_script
+  ];
   propagatedBuildInputs = [ glib gnutls p11-kit libproxy gsettings-desktop-schemas ];
 
   doCheck = false; # tests need to access the certificates (among other things)
