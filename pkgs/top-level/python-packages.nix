@@ -16998,21 +16998,7 @@ EOF
     ];
   };
 
-  jaraco_logging = buildPythonPackage rec {
-    name = "jaraco.logging-${version}";
-    version = "1.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.logging/${name}.tar.gz";
-      sha256 = "1lvw9zphiymiiar47kd0x0dbc9x2jks8w1kirg3ff8nd80k95j05";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ tempora six ];
-  };
+  jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
 
   jaraco_text = callPackage ../development/python-modules/jaraco_text { };
 
