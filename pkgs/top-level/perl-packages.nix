@@ -14925,6 +14925,7 @@ let
     meta = {
       description = "Aggregate C<*.t> tests to make them run faster";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      broken = stdenv.lib.versionAtLeast perl.version "5.26"; # This module only works with Test::More version < 1.3, but you have 1.302133
     };
   };
 
