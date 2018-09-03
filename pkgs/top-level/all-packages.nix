@@ -11311,6 +11311,8 @@ with pkgs;
 
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
 
+  nsss = skawarePackages.nsss;
+
   ntbtls = callPackage ../development/libraries/ntbtls { };
 
   ntk = callPackage ../development/libraries/audio/ntk { };
@@ -12017,6 +12019,9 @@ with pkgs;
     s6-networking = callPackage ../tools/networking/s6-networking { };
     s6-portable-utils = callPackage ../tools/misc/s6-portable-utils { };
     s6-rc = callPackage ../tools/system/s6-rc { };
+
+    nsss = callPackage ../development/libraries/nsss { };
+
   };
 
   skydive = callPackage ../tools/networking/skydive { };
