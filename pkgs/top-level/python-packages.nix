@@ -17030,26 +17030,7 @@ EOF
     propagatedBuildInputs = with self; [ jaraco_functools jaraco_collections ];
   };
 
-  jaraco_collections = buildPythonPackage rec {
-    name = "jaraco.collections-${version}";
-    version = "1.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jaraco.collections/${name}.tar.gz";
-      sha256 = "0mvyn9d4bs5zw9z84wwsbgff6s28vg6h4i8qhyb667fqi7xgr1w5";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ six jaraco_classes ];
-
-    # break dependency cycle
-    patchPhase = ''
-      sed -i "/'jaraco.text',/d" setup.py
-    '';
-  };
+  jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
 
   jaraco_itertools = callPackage ../development/python-modules/jaraco_itertools { };
 
