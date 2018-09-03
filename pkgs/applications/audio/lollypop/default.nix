@@ -19,6 +19,7 @@ stdenv.mkDerivation rec  {
     gobjectIntrospection
     meson
     ninja
+    python36Packages.python
     pkgconfig
     wrapGAppsHook
     wrapPython
