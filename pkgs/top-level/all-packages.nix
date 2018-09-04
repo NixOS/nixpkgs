@@ -647,6 +647,8 @@ with pkgs;
 
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
+  chordbook = callPackage ../servers/web-apps/chordbook { };
+
   djmount = callPackage ../tools/filesystems/djmount { };
 
   dgsh = callPackage ../shells/dgsh { };

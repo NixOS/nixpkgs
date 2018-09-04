@@ -3511,6 +3511,11 @@
     github = "rprospero";
     name = "Adam Washington";
   };
+  rschardt = {
+    email = "robert.schardt@gmx.de";
+    github = "rschardt";
+    name = "Robert Schardt";
+  };
   rszibele = {
     email = "richard@szibele.com";
     github = "rszibele";
