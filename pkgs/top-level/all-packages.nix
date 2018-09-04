@@ -292,7 +292,8 @@ with pkgs;
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
-    url = "https://${domain}/api/v4/projects/${owner}%2F${repo}/repository/archive.tar.gz?sha=${rev}";
+    url = let escapedRepo=builtins.replaceStrings ["/"] ["%2F"] repo;
+    in "https://${domain}/api/v4/projects/${owner}%2F${escapedRepo}/repository/archive.tar.gz?sha=${rev}";
     meta.homepage = "https://${domain}/${owner}/${repo}/";
   } // removeAttrs args [ "domain" "owner" "repo" "rev" ]) // { inherit rev; };
 
