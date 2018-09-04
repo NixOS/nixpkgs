@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2-x11 lesstif cfitsio python27Env ];
 
-  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ./aarch64.patch ];
+  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ./aarch64.patch ./gag-font-bin-rule.patch ];
 
   configurePhase=''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
