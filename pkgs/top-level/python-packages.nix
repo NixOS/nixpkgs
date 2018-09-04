@@ -7937,11 +7937,11 @@ in {
 
   graphviz = buildPythonPackage rec {
     name = "graphviz-${version}";
-    version = "0.5.2";
+    version = "0.9";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/graphviz/${name}.zip";
-      sha256 = "0jh31nlm0qbxwylhdkwnb69pcjlc5z03fcfbs0gvgzp3hfrngsk0";
+      sha256 = "14r9brj4r31b3qy1nnn34v3l4h0n39bqxg9sn2fz4p3pp5mglnl6";
     };
 
     propagatedBuildInputs = [ pkgs.graphviz ];
