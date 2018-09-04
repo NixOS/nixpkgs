@@ -8,7 +8,7 @@
 , python3 }:
 
 let
-  version = "1.7";
+  version = "1.7.1";
 in
 stdenv.mkDerivation rec {
   name = "radare2-cutter-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "radareorg";
     repo = "cutter";
     rev = "v${version}";
-    sha256 = "0z9wzxd5hw0ivakrg3xiv4zx1rjj032hlmizq0pxj22xjrj1gg9n";
+    sha256 = "0dfi6f016jnh3swppvks5qkvmk0j2hvggh9sd1f40kg9pg5p08hy";
   };
 
   postUnpack = "export sourceRoot=$sourceRoot/src";
