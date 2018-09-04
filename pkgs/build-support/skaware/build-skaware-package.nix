@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, writeScript, file }:
+{ stdenv, fetchurl, writeScript, file }:
 let lib = stdenv.lib;
 in {
   # : string
@@ -72,9 +72,8 @@ let
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
-  src = fetchgit {
-    url = "git://git.skarnet.org/${pname}";
-    rev = "refs/tags/v${version}";
+  src = fetchurl {
+    url = "https://skarnet.org/software/${pname}/${pname}-${version}.tar.gz";
     inherit sha256;
   };
 
