@@ -1653,6 +1653,8 @@ in {
 
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
+  onnx = callPackage ../development/python-modules/onnx { };
+
   pyunifi = callPackage ../development/python-modules/pyunifi { };
 
   tablib = callPackage ../development/python-modules/tablib { };
@@ -1778,24 +1780,8 @@ in {
 
   mpyq = callPackage ../development/python-modules/mpyq { };
 
-  mxnet = buildPythonPackage rec {
-    inherit (pkgs.mxnet) name version src meta;
-
-    buildInputs = [ pkgs.mxnet ];
-    propagatedBuildInputs = with self; [ requests numpy graphviz ];
-
-    LD_LIBRARY_PATH = makeLibraryPath [ pkgs.mxnet ];
-
-    doCheck = !isPy3k;
-
-    preConfigure = ''
-      cd python
-    '';
-
-    postInstall = ''
-      rm -rf $out/mxnet
-      ln -s ${pkgs.mxnet}/lib/libmxnet.so $out/${python.sitePackages}/mxnet
-    '';
+  mxnet = callPackage ../development/python-modules/mxnet {
+    inherit (pkgs) mxnet;
   };
 
   parsy = callPackage ../development/python-modules/parsy { };
@@ -7935,22 +7921,8 @@ in {
 
   pyte = callPackage ../development/python-modules/pyte { };
 
-  graphviz = buildPythonPackage rec {
-    name = "graphviz-${version}";
-    version = "0.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/graphviz/${name}.zip";
-      sha256 = "0jh31nlm0qbxwylhdkwnb69pcjlc5z03fcfbs0gvgzp3hfrngsk0";
-    };
-
-    propagatedBuildInputs = [ pkgs.graphviz ];
-
-    meta = {
-      description = "Simple Python interface for Graphviz";
-      homepage = https://github.com/xflr6/graphviz;
-      license = licenses.mit;
-    };
+  graphviz = callPackage ../development/python-modules/graphviz {
+    inherit (pkgs) graphviz;
   };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { };
