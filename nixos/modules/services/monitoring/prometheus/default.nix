@@ -23,6 +23,13 @@ let
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
     ];
     scrape_configs = cfg.scrapeConfigs;
+    alerting = optionalAttrs (cfg.alertmanagerURL != []) {
+      alertmanagers = [{
+        static_configs = [{
+          targets = cfg.alertmanagerURL;
+        }];
+      }];
+    };
   };
 
   generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
@@ -33,12 +40,11 @@ let
     else generatedPrometheusYml;
 
   cmdlineArgs = cfg.extraFlags ++ [
-    "-storage.local.path=${cfg.dataDir}/metrics"
-    "-config.file=${prometheusYml}"
-    "-web.listen-address=${cfg.listenAddress}"
-    "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-    "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
-    (optionalString (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}")
+    "--storage.tsdb.path=${cfg.dataDir}/data/"
+    "--config.file=${prometheusYml}"
+    "--web.listen-address=${cfg.listenAddress}"
+    "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
+    "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
   ];
 
   promTypes.globalConfig = types.submodule {
@@ -484,7 +490,7 @@ in {
       after    = [ "network.target" ];
       script = ''
         #!/bin/sh
-        exec ${pkgs.prometheus}/bin/prometheus \
+        exec ${pkgs.prometheus_2}/bin/prometheus \
           ${concatStringsSep " \\\n  " cmdlineArgs}
       '';
       serviceConfig = {
