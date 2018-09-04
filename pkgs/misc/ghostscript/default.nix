@@ -9,8 +9,9 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 let
   version = "9.${ver_min}";
-  ver_min = "22";
-  sha256 = "1fyi4yvdj39bjgs10klr31cda1fbx1ar7a7b7yz7v68gykk65y61";
+  ver_min = "24";
+  # ghostscript*.tar.xz in https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9xx/SHA512SUMS
+  sha512 = "dcbeeb5d3dd5ccaf949dc4be68363c50b1d35e647be4790a50b1bbf5f259f1d9181f705be27bfca708c4d270f945ff4b24e3db10b57800c1ee0ea7a40931c547";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${ver_min}/${name}.tar.xz";
-    inherit sha256;
+    inherit sha512;
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -89,8 +90,8 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    mkdir -p "$doc/share/ghostscript/${version}"
-    mv "$out/share/ghostscript/${version}"/{doc,examples} "$doc/share/ghostscript/${version}/"
+    mkdir -p "$doc/share/doc/ghostscript"
+    mv "$doc/share/doc/${version}" "$doc/share/doc/ghostscript/"
 
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
