@@ -14510,6 +14510,8 @@ with pkgs;
 
   policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
 
+  semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
+
   powerdns = callPackage ../servers/dns/powerdns { };
 
   dnsdist = callPackage ../servers/dns/dnsdist { };
