@@ -10388,6 +10388,8 @@ with pkgs;
 
   libserialport = callPackage ../development/libraries/libserialport { };
 
+  libsignal-protocol-c = callPackage ../development/libraries/libsignal-protocol-c { };
+
   libsoundio = callPackage ../development/libraries/libsoundio {
     inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
