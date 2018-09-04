@@ -12763,7 +12763,7 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
-  webkitgtk220x = callPackage ../development/libraries/webkitgtk/2.20.nix {
+  webkitgtk220x = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     stdenv = overrideCC stdenv gcc6;
