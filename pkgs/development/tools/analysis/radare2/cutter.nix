@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     description = "A Qt and C++ GUI for radare2 reverse engineering framework";
     homepage = src.meta.homepage;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ mic92 dtzWill ];
   };
 }
