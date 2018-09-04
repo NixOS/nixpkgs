@@ -45,7 +45,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome3 = self // { recurseForDerivations = false; };
   gtk = gtk3;
   gtkmm = gtkmm3;
-  vala = pkgs.vala_0_40;
+  vala = pkgs.vala_0_42;
   gegl_0_4 = pkgs.gegl_0_4.override { inherit gtk; };
 
 # Simplify the nixos module and gnome packages
