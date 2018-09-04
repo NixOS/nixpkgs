@@ -34,6 +34,7 @@ imports = [
 | [Inverse Path USB armory][]       | `<nixos-hardware/inversepath/usbarmory>`     |
 | Lenovo IdeaPad Z510               | `<nixos-hardware/lenovo/ideapad/z510>`       |
 | Lenovo ThinkPad T410              | `<nixos-hardware/lenovo/thinkpad/t410>`      |
+| Lenovo ThinkPad T430              | `<nixos-hardware/lenovo/thinkpad/t430>`      |
 | Lenovo ThinkPad T440p             | `<nixos-hardware/lenovo/thinkpad/t440p>`     |
 | Lenovo ThinkPad T460s             | `<nixos-hardware/lenovo/thinkpad/t460s>`     |
 | Lenovo ThinkPad X140e             | `<nixos-hardware/lenovo/thinkpad/x140e>`     |
