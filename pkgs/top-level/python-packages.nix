@@ -1788,6 +1788,13 @@ in {
 
     doCheck = !isPy3k;
 
+    postPatch = ''
+      substituteInPlace python/setup.py \
+      --replace "graphviz<0.9.0" "graphviz<0.10.0" \
+      --replace "numpy<=1.15.0" "numpy<1.16.0" \
+      --replace "requests<2.19.0" "requests<2.20.0"
+    '';
+
     preConfigure = ''
       cd python
     '';
