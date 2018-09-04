@@ -5916,14 +5916,14 @@ in {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "3.0";
+    version = "3.0.1";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "19pymw104l05af710ph69znqiz9av3if7436kigjlwd65gxnghkc";
+      sha256 = "18pyp6ij3bzybqj771v48n7yn3a1spk6ncg1kgp6hfpjhpqiw87x";
     };
 
     # Requires access to /sys/class/power_supply
