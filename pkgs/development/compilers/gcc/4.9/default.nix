@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, noSysDirs, fetchpatch
+{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
@@ -52,13 +52,10 @@ with builtins;
 
 let version = "4.9.4";
 
-    enableParallelBuilding = true;
-
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-      [ ../use-source-date-epoch.patch ]
-      ++ optionals enableParallelBuilding [ ../parallel-bconfig.patch ./parallel-strsignal.patch ]
+      [ ../use-source-date-epoch.patch ../parallel-bconfig.patch ./parallel-strsignal.patch ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch
@@ -183,14 +180,14 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  hardeningDisable = [ "format" ];
-
   outputs = if langJava || langGo then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
+
+  hardeningDisable = [ "format" ];
 
   postPatch =
     if targetPlatform != hostPlatform || stdenv.cc.libc != null then
@@ -250,8 +247,7 @@ stdenv.mkDerivation ({
   ''
   + stdenv.lib.optionalString (langJava || langGo) ''
     export lib=$out;
-  ''
-  ;
+  '';
 
   dontDisableStatic = true;
 
@@ -376,7 +372,8 @@ stdenv.mkDerivation ({
     ++ optional (zlib != null) zlib
     ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
-    ++ optionals javaAwtGtk [ gmp mpfr ]));
+    ++ optionals javaAwtGtk [ gmp mpfr ]
+  ));
 
   EXTRA_TARGET_FLAGS = optionals
     (targetPlatform != hostPlatform && libcCross != null)
@@ -397,10 +394,13 @@ stdenv.mkDerivation ({
         "-Wl,-rpath-link,${libcCross.out}/lib"
     ]));
 
-  passthru =
-    { inherit langC langCC langObjC langObjCpp langFortran langGo version; isGNU = true; };
+  passthru = {
+    inherit langC langCC langObjC langObjCpp langFortran langGo version;
+    isGNU = true;
+  };
 
-  inherit enableParallelBuilding enableMultilib;
+  enableParallelBuilding = true;
+  inherit enableMultilib;
 
   inherit (stdenv) is64bit;
 
@@ -424,7 +424,8 @@ stdenv.mkDerivation ({
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
-      stdenv.lib.platforms.illumos;
+      stdenv.lib.platforms.illumos ++
+      stdenv.lib.platforms.darwin;
   };
 }
 

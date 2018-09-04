@@ -40,8 +40,6 @@ with builtins;
 
 let version = "7-20170409";
 
-    enableParallelBuilding = true;
-
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
@@ -306,10 +304,13 @@ stdenv.mkDerivation ({
         "-Wl,-rpath-link,${libcCross.out}/lib"
     ]));
 
-  passthru =
-    { inherit langC langCC langObjC langObjCpp langFortran langGo version; isGNU = true; };
+  passthru = {
+    inherit langC langCC langObjC langObjCpp langFortran langGo version;
+    isGNU = true;
+  };
 
-  inherit enableParallelBuilding enableMultilib;
+  enableParallelBuilding = true;
+  inherit enableMultilib;
 
   inherit (stdenv) is64bit;
 
@@ -333,6 +334,7 @@ stdenv.mkDerivation ({
     platforms =
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
+      stdenv.lib.platforms.illumos ++
       stdenv.lib.platforms.darwin;
 
     broken = true;
