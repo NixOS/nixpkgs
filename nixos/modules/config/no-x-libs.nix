@@ -22,7 +22,7 @@ with lib;
 
   config = mkIf config.environment.noXlibs {
     programs.ssh.setXAuthLocation = false;
-    security.pam.services.su.forwardXAuth = lib.mkForce false;
+    security.pam.services.su.forwardXAuth = lib.mkDefault false;
     services.openssh.forwardX11 = lib.mkDefault false;
     
     services.udisks2.enable = lib.mkDefault false;
