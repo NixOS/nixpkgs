@@ -30,7 +30,11 @@ stdenv.mkDerivation rec {
     inherit (cfg) sha256;
   };
 
-  patches = [ ./imagetragick.patch ] ++ cfg.patches;
+  patches = [
+    ./imagetragick.patch
+    # work around for ghostscript vulnerability https://www.kb.cert.org/vuls/id/332928
+    ./disable_gs_formats.patch
+  ] ++ cfg.patches;
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
   outputMan = "out"; # it's tiny

@@ -1,0 +1,13 @@
+diff --git a/config/policy.xml b/config/policy.xml
+index d497934..a763016 100644
+--- a/config/policy.xml
++++ b/config/policy.xml
+@@ -77,4 +77,8 @@
+   <!-- <policy domain="cache" name="memory-map" value="anonymous"/> -->
+   <!-- <policy domain="cache" name="synchronize" value="True"/> -->
+   <!-- <policy domain="cache" name="shared-secret" value="passphrase" stealth="true"/> -->
++  <policy domain="coder" rights="none" pattern="PS" />
++  <policy domain="coder" rights="none" pattern="EPS" />
++  <policy domain="coder" rights="none" pattern="PDF" />
++  <policy domain="coder" rights="none" pattern="XPS" />
+ </policymap>
