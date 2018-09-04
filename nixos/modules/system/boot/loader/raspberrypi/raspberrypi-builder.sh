@@ -5,15 +5,25 @@ shopt -s nullglob
 export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin; done
 
-default=$1
-if test -z "$1"; then
-    echo "Syntax: builder.sh <DEFAULT-CONFIG>"
+usage() {
+    echo "usage: $0 -c <path-to-default-configuration> [-d <boot-dir>]" >&2
     exit 1
-fi
+}
+
+default=                # Default configuration
+target=/boot            # Target directory
+
+while getopts "c:d:" opt; do
+    case "$opt" in
+        c) default="$OPTARG" ;;
+        d) target="$OPTARG" ;;
+        \?) usage ;;
+    esac
+done
 
 echo "updating the boot generations directory..."
 
-mkdir -p /boot/old
+mkdir -p $target/old
 
 # Convert a path to a file in the Nix store such as
 # /nix/store/<hash>-<name>/file to <hash>-<name>-<file>.
@@ -22,12 +32,12 @@ cleanName() {
     echo "$path" | sed 's|^/nix/store/||' | sed 's|/|-|g'
 }
 
-# Copy a file from the Nix store to /boot/kernels.
+# Copy a file from the Nix store to $target/kernels.
 declare -A filesCopied
 
 copyToKernelsDir() {
     local src="$1"
-    local dst="/boot/old/$(cleanName $src)"
+    local dst="$target/old/$(cleanName $src)"
     # Don't copy the file if $dst already exists.  This means that we
     # have to create $dst atomically to prevent partially copied
     # kernels or initrd if this script is ever interrupted.
@@ -47,10 +57,10 @@ copyForced() {
     mv $dst.tmp $dst
 }
 
-outdir=/boot/old
+outdir=$target/old
 mkdir -p $outdir || true
 
-# Copy its kernel and initrd to /boot/kernels.
+# Copy its kernel and initrd to $target/old.
 addEntry() {
     local path="$1"
     local generation="$2"
@@ -74,24 +84,24 @@ addEntry() {
     echo $initrd > $outdir/$generation-initrd
     echo $kernel > $outdir/$generation-kernel
 
-    if test $(readlink -f "$path") = "$default"; then
+    if test "$generation" = "default"; then
       if [ @version@ -eq 1 ]; then
-        copyForced $kernel /boot/kernel.img
+        copyForced $kernel $target/kernel.img
       else
-        copyForced $kernel /boot/kernel7.img
+        copyForced $kernel $target/kernel7.img
       fi
-      copyForced $initrd /boot/initrd
+      copyForced $initrd $target/initrd
       for dtb in $dtb_path/bcm*.dtb; do
-        dst="/boot/$(basename $dtb)"
+        dst="$target/$(basename $dtb)"
         copyForced $dtb "$dst"
         filesCopied[$dst]=1
       done
-      cp "$(readlink -f "$path/init")" /boot/nixos-init
-      echo "`cat $path/kernel-params` init=$path/init" >/boot/cmdline.txt
-
-      echo "$2" > /boot/defaultgeneration
+      cp "$(readlink -f "$path/init")" $target/nixos-init
+      echo "`cat $path/kernel-params` init=$path/init" >$target/cmdline.txt
     fi
 }
+
+addEntry $default default
 
 # Add all generations of the system profile to the menu, in reverse
 # (most recent to least recent) order.
@@ -105,21 +115,21 @@ done
 
 # Add the firmware files
 fwdir=@firmware@/share/raspberrypi/boot/
-copyForced $fwdir/bootcode.bin  /boot/bootcode.bin
-copyForced $fwdir/fixup.dat     /boot/fixup.dat
-copyForced $fwdir/fixup_cd.dat  /boot/fixup_cd.dat
-copyForced $fwdir/fixup_db.dat  /boot/fixup_db.dat
-copyForced $fwdir/fixup_x.dat   /boot/fixup_x.dat
-copyForced $fwdir/start.elf     /boot/start.elf
-copyForced $fwdir/start_cd.elf  /boot/start_cd.elf
-copyForced $fwdir/start_db.elf  /boot/start_db.elf
-copyForced $fwdir/start_x.elf   /boot/start_x.elf
+copyForced $fwdir/bootcode.bin  $target/bootcode.bin
+copyForced $fwdir/fixup.dat     $target/fixup.dat
+copyForced $fwdir/fixup_cd.dat  $target/fixup_cd.dat
+copyForced $fwdir/fixup_db.dat  $target/fixup_db.dat
+copyForced $fwdir/fixup_x.dat   $target/fixup_x.dat
+copyForced $fwdir/start.elf     $target/start.elf
+copyForced $fwdir/start_cd.elf  $target/start_cd.elf
+copyForced $fwdir/start_db.elf  $target/start_db.elf
+copyForced $fwdir/start_x.elf   $target/start_x.elf
 
 # Add the config.txt
-copyForced @configTxt@ /boot/config.txt
+copyForced @configTxt@ $target/config.txt
 
-# Remove obsolete files from /boot and /boot/old.
-for fn in /boot/old/*linux* /boot/old/*initrd-initrd* /boot/bcm*.dtb; do
+# Remove obsolete files from $target and $target/old.
+for fn in $target/old/*linux* $target/old/*initrd-initrd* $target/bcm*.dtb; do
     if ! test "${filesCopied[$fn]}" = 1; then
         rm -vf -- "$fn"
     fi
