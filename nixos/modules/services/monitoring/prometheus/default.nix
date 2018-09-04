@@ -30,24 +30,29 @@ let
       (pkgs.writeText "prometheus.rules" (concatStringsSep "\n" cfg.rules))
     ]);
     scrape_configs = cfg.scrapeConfigs;
+    alerting = optionalAttrs (cfg.alertmanagerURL != []) {
+      alertmanagers = [{
+        static_configs = [{
+          targets = cfg.alertmanagerURL;
+        }];
+      }];
+    };
   };
 
   generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
 
   prometheusYml = let
-    yml =  if cfg.configText != null then
-      pkgs.writeText "prometheus.yml" cfg.configText
-      else generatedPrometheusYml;
+      yml =  if cfg.configText != null then
+        pkgs.writeText "prometheus.yml" cfg.configText
+        else generatedPrometheusYml;
     in promtoolCheck "check-config" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
-    "-storage.local.path=${cfg.dataDir}/metrics"
-    "-config.file=${prometheusYml}"
-    "-web.listen-address=${cfg.listenAddress}"
-    "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-    "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
-    (optionalString (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}")
-    (optionalString (cfg.webExternalUrl != null) "-web.external-url=${cfg.webExternalUrl}")
+    "--storage.tsdb.path=${cfg.dataDir}/data/"
+    "--config.file=${prometheusYml}"
+    "--web.listen-address=${cfg.listenAddress}"
+    "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
+    "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
   ];
 
   promTypes.globalConfig = types.submodule {
