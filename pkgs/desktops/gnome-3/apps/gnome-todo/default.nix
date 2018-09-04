@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook
+{ stdenv, fetchurl, meson, ninja, pkgconfig, python3, wrapGAppsHook
 , gettext, gnome3, glib, gtk, libpeas
 , gnome-online-accounts, gsettings-desktop-schemas
 , evolution-data-server, libxml2, libsoup, libical, rest, json-glib }:
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext wrapGAppsHook
+    meson ninja pkgconfig gettext python3 wrapGAppsHook
   ];
   buildInputs = [
     glib gtk libpeas gnome-online-accounts

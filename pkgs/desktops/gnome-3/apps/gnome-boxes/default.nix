@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, wrapGAppsHook, pkgconfig, gettext, itstool, libvirt-glib
-, glib, gobjectIntrospection, libxml2, gtk3, gtk-vnc, libvirt, spice-gtk
+, glib, gobjectIntrospection, libxml2, gtk3, gtk-vnc, libvirt, spice-gtk, python3
 , spice-protocol, libsoup, libosinfo, systemd, tracker, tracker-miners, vala
 , libcap, yajl, gmp, gdbm, cyrus_sasl, gnome3, librsvg, desktop-file-utils
 , mtools, cdrkit, libcdio, libusb, libarchive, acl, libgudev, qemu, libsecret
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   nativeBuildInputs = [
-    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils
+    meson ninja vala pkgconfig gettext itstool wrapGAppsHook gobjectIntrospection desktop-file-utils python3
   ];
 
   # Required for USB redirection PolicyKit rules file

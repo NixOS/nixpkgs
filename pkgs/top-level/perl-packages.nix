@@ -6465,10 +6465,10 @@ let
   };
 
   GetoptLongDescriptive = buildPerlPackage rec {
-    name = "Getopt-Long-Descriptive-0.103";
+    name = "Getopt-Long-Descriptive-0.102";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "70e1bae7404a9dfb638b5d12e5bd4ea97e3bee743a4555909307d68e0111f4b2";
+      sha256 = "9ad4b98f294aa0515cc3150a1ae878d39e470762b78d8bd9df055eba9dea2846";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
     propagatedBuildInputs = [ ParamsValidate SubExporter ];
@@ -14925,6 +14925,7 @@ let
     meta = {
       description = "Aggregate C<*.t> tests to make them run faster";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      broken = stdenv.lib.versionAtLeast perl.version "5.26"; # This module only works with Test::More version < 1.3, but you have 1.302133
     };
   };
 
@@ -17056,6 +17057,7 @@ let
      meta = {
        description = "Turns ref() into a multimethod";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       broken = stdenv.lib.versionAtLeast perl.version "5.26"; # 'OP {aka struct op}' has no member named 'op_sibling'
      };
   };
 

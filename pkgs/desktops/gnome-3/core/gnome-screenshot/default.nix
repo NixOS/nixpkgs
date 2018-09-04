@@ -1,5 +1,5 @@
 { stdenv, gettext, libxml2, fetchurl, pkgconfig, libcanberra-gtk3
-, gtk3, glib, meson, ninja, wrapGAppsHook, appstream-glib, desktop-file-utils
+, gtk3, glib, meson, ninja, python3, wrapGAppsHook, appstream-glib, desktop-file-utils
 , gnome3 }:
 
 let
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/postinstall.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 desktop-file-utils wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 desktop-file-utils python3 wrapGAppsHook ];
   buildInputs = [
     gtk3 glib libcanberra-gtk3 gnome3.defaultIconTheme
     gnome3.gsettings-desktop-schemas

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for adding dnscrypt support to any name resolver";
-    homepage = https://dnscrypt.org/;
+    homepage = https://dnscrypt.info/;
     license = licenses.isc;
     maintainers = with maintainers; [ tstrobel joachifm ];
     platforms = platforms.linux;

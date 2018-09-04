@@ -327,7 +327,6 @@ in rec {
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kafka = callSubTests tests/kafka.nix {};
-  tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
   tests.kubernetes.dns = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/dns.nix {};

@@ -1645,6 +1645,11 @@
     github = "heel";
     name = "Sergii Paryzhskyi";
   };
+  helkafen = {
+    email = "arnaudpourseb@gmail.com";
+    github = "Helkafen";
+    name = "Sébastian Méric de Bellefon";
+  };
   henrytill = {
     email = "henrytill@gmail.com";
     github = "henrytill";
@@ -1871,6 +1876,11 @@
     email = "jakob@gillich.me";
     github = "jgillich";
     name = "Jakob Gillich";
+  };
+  jglukasik = {
+    email = "joseph@jgl.me";
+    github = "jglukasik";
+    name = "Joseph Lukasik";
   };
   jhhuh = {
     email = "jhhuh.note@gmail.com";

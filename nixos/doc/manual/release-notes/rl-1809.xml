@@ -528,6 +528,14 @@ inherit (pkgs.nixos {
       to <literal>true</literal>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      NixOS option descriptions are now automatically broken up into individual
+      paragraphs if the text contains two consecutive newlines, so it's no
+      longer necessary to use <code>&lt;/para&gt;&lt;para&gt;</code> to start
+      a new paragraph.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>

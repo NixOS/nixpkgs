@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, vala, glib, gtk3, gnome3, desktop-file-utils
-, clutter, clutter-gtk, gettext, itstool, libxml2, wrapGAppsHook }:
+, clutter, clutter-gtk, gettext, itstool, libxml2, wrapGAppsHook, python3 }:
 
 let
   pname = "swell-foop";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig wrapGAppsHook itstool gettext libxml2 desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja vala pkgconfig wrapGAppsHook python3 itstool gettext libxml2 desktop-file-utils ];
   buildInputs = [ glib gtk3 gnome3.defaultIconTheme clutter clutter-gtk ];
 
   postPatch = ''

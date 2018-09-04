@@ -34,6 +34,7 @@ in
 
     environment.variables = mkOption {
       default = {};
+      example = { EDITOR = "nvim"; VISUAL = "nvim"; };
       description = ''
         A set of environment variables used in the global environment.
         These variables will be set on shell initialisation (e.g. in /etc/profile).

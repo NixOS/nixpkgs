@@ -298,15 +298,18 @@ rec {
   overrideSrc = drv: { src, version ? drv.version }:
     overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
+  # Get all of the build inputs of a haskell package, divided by category.
+  getBuildInputs = p:
+    (overrideCabal p (args: {
+      passthru = (args.passthru or {}) // {
+        _getBuildInputs = extractBuildInputs p.compiler args;
+      };
+    }))._getBuildInputs;
+
   # Extract the haskell build inputs of a haskell package.
   # This is useful to build environments for developing on that
   # package.
-  getHaskellBuildInputs = p:
-    (overrideCabal p (args: {
-      passthru = (args.passthru or {}) // {
-        _getHaskellBuildInputs = (extractBuildInputs p.compiler args).haskellBuildInputs;
-      };
-    }))._getHaskellBuildInputs;
+  getHaskellBuildInputs = p: (getBuildInputs p).haskellBuildInputs;
 
   # Under normal evaluation, simply return the original package. Under
   # nix-shell evaluation, return a nix-shell optimized environment.

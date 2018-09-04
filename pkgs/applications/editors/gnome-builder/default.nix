@@ -52,6 +52,7 @@ in stdenv.mkDerivation {
     meson
     ninja
     pkgconfig
+    python3
     python3.pkgs.wrapPython
     wrapGAppsHook
   ];

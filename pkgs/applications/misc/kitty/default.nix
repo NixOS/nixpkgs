@@ -26,6 +26,8 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ pkgconfig which sphinx ];
 
+  outputs = [ "out" "terminfo" ];
+
   postPatch = ''
     substituteInPlace kitty/utils.py \
       --replace "find_library('startup-notification-1')" "'${libstartup_notification}/lib/libstartup-notification-1.so'"
@@ -47,11 +49,19 @@ buildPythonApplication rec {
     runHook postInstall
   '';
 
+  postInstall = ''
+    mkdir -p $terminfo/share
+    mv $out/share/terminfo $terminfo/share/terminfo
+
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/kovidgoyal/kitty;
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tex ];
+    maintainers = with maintainers; [ tex rvolosatovs ];
   };
 }
