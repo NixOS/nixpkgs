@@ -115,6 +115,7 @@ let
 
       inherit (pkgs) utillinux coreutils;
       systemd = config.systemd.package;
+      inherit (pkgs.stdenv) shell;
 
       inherit children;
       kernelParams = config.boot.kernelParams;
