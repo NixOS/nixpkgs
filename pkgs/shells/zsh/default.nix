@@ -18,6 +18,10 @@ stdenv.mkDerivation {
     sha256 = "1vik7s3q5hvazvgw4jm4b90qlk6zcry0s314xw1liarspkd721g3";
   };
 
+  postPatch = ''
+    sed -i -e 's,#include "builtin.pro",\0\n#include <math.h>,' Src/builtin.c
+  '';
+
   buildInputs = [ ncurses pcre ];
 
   configureFlags = [
