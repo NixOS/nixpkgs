@@ -31,6 +31,8 @@ let
     ] ++ lib.optional (atLeast "0.38") graphviz
       ++ extraBuildInputs;
 
+    enableParallelBuilding = true;
+
     doCheck = false; # fails, requires dbus daemon
 
     meta = with stdenv.lib; {
