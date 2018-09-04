@@ -1264,6 +1264,8 @@ with pkgs;
 
   emby = callPackage ../servers/emby { };
 
+  sickrage = callPackage ../servers/sickrage {};
+
   enca = callPackage ../tools/text/enca { };
 
   ent = callPackage ../tools/misc/ent { };
