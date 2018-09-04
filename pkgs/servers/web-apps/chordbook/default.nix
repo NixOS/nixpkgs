@@ -16,7 +16,6 @@ haskell.lib.buildStackProject {
   buildInputs = [ 
     postgresql100 
     zlib
-    ghc
   ];
 
   meta = with lib; {
