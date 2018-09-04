@@ -15,6 +15,10 @@
   , libXxf86vm      ? null
   , libXrandr       ? null
 
+, cddaSupport ? false
+  , libcdio          ? null
+  , libcdio-paranoia ? null
+
 , alsaSupport        ? true,  alsaLib       ? null
 , bluraySupport      ? true,  libbluray     ? null
 , bs2bSupport        ? true,  libbs2b       ? null
@@ -51,6 +55,7 @@ assert archiveSupport     -> available libarchive;
 assert bluraySupport      -> available libbluray;
 assert bs2bSupport        -> available libbs2b;
 assert cacaSupport        -> available libcaca;
+assert cddaSupport        -> all available [libcdio libcdio-paranoia];
 assert cmsSupport         -> available lcms2;
 assert drmSupport         -> available libdrm;
 assert dvdnavSupport      -> available libdvdnav;
@@ -116,6 +121,7 @@ in stdenv.mkDerivation rec {
     "--disable-build-date" # Purity
     "--disable-macos-cocoa-cb" # Disable whilst Swift isn't supported
     (enableFeature archiveSupport  "libarchive")
+    (enableFeature cddaSupport     "cdda")
     (enableFeature dvdnavSupport   "dvdnav")
     (enableFeature dvdreadSupport  "dvdread")
     (enableFeature openalSupport   "openal")
@@ -160,6 +166,7 @@ in stdenv.mkDerivation rec {
     ++ optional xvSupport          libXv
     ++ optional youtubeSupport     youtube-dl
     ++ optional stdenv.isDarwin    libiconv
+    ++ optionals cddaSupport       [ libcdio libcdio-paranoia ]
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
