@@ -7,6 +7,7 @@ let
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
     deepin-gtk-theme = callPackage ./deepin-gtk-theme { };
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
+    deepin-menu = callPackage ./deepin-menu { };
     deepin-terminal = callPackage ./deepin-terminal {
       inherit (pkgs.gnome3) libgee vte;
       wnck = pkgs.libwnck3;

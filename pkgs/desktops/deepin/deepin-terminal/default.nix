@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake, ninja, vte, libgee, wnck, zssh, gettext, librsvg, libsecret, json-glib, gobjectIntrospection }:
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake,
+  ninja, vte, libgee, wnck, zssh, gettext, librsvg, libsecret,
+  json-glib, gobjectIntrospection, deepin-menu }:
 
 stdenv.mkDerivation rec {
   name = "deepin-terminal-${version}";
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     gobjectIntrospection
   ];
 
-  buildInputs = [ gtk3 vte libgee wnck librsvg libsecret json-glib ];
+  buildInputs = [ gtk3 vte libgee wnck librsvg libsecret json-glib deepin-menu ];
 
   meta = with stdenv.lib; {
     description = "The default terminal emulation for Deepin";
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
      '';
     homepage = https://github.com/linuxdeepin/deepin-terminal;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }
