@@ -80,10 +80,11 @@ stdenv.mkDerivation (rec {
     xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
     nspr libnotify xorg.pixman yasm libGLU_combined
     xorg.libXScrnSaver xorg.scrnsaverproto
-    xorg.libXext xorg.xextproto sqlite unzip makeWrapper
+    xorg.libXext xorg.xextproto unzip makeWrapper
     libevent libstartup_notification libvpx /* cairo */
     icu libpng jemalloc glib
   ]
+  ++ lib.optional (lib.versionOlder version "62") sqlite
   ++ lib.optionals (!isTorBrowserLike) [ nss ]
   ++ lib.optional (lib.versionOlder version "61") hunspell
   ++ lib.optional  alsaSupport alsaLib
@@ -136,7 +137,9 @@ stdenv.mkDerivation (rec {
     "--with-system-icu"
     "--enable-system-ffi"
     "--enable-system-pixman"
-    "--enable-system-sqlite"
+    # use the systems sqlite only for versions below 62, the system wide sqlite
+    # upgrade brings some breakage.
+    (lib.optionalString (lib.versionOlder version "62") "--enable-system-sqlite")
     #"--enable-system-cairo"
     "--enable-startup-notification"
     #"--enable-content-sandbox" # TODO: probably enable after 54
