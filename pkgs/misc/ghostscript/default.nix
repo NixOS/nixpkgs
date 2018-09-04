@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig, zlib, expat, openssl, autoconf
-, libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
+, libjpeg, libpng, libtiff, freetype, fontconfig, libpaper, jbig2dec
 , libiconv, ijs
 , x11Support ? false, xlibsWrapper ? null
 , cupsSupport ? false, cups ? null
@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
     inherit sha512;
   };
 
+  patches = [
+    ./urw-font-files.patch
+    ./doc-no-ref.diff
+  ];
+
   outputs = [ "out" "man" "doc" ];
 
   enableParallelBuilding = true;
@@ -50,16 +55,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoconf ];
   buildInputs =
     [ zlib expat openssl
-      libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
+      libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
       libiconv ijs
     ]
     ++ lib.optional x11Support xlibsWrapper
     ++ lib.optional cupsSupport cups
     ;
-
-  patches = [
-    ./urw-font-files.patch
-  ];
+  # No lcms2; upstream "is in process of forking it" and thus won't use one from a library.
 
   preConfigure = ''
     # requires in-tree (heavily patched) openjpeg
