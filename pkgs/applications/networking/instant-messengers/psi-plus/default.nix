@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "XMPP (Jabber) client";
     maintainers = with maintainers; [ orivej ];
+    license = licenses.gpl2;
     platforms = platforms.linux;
   };
 }
