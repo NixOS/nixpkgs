@@ -23,17 +23,24 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i src/src.pro src/dtk_module.prf \
-      -e "s,\$\''${QT_HOST_DATA}/mkspecs,$out/mkspecs,"
+    # Only define QT_HOST_DATA if it is empty
+    sed '/QT_HOST_DATA=/a }' -i src/dtk_module.prf
+    sed '/QT_HOST_DATA=/i isEmpty(QT_HOST_DATA) {' -i src/dtk_module.prf
 
-    sed -i tools/script/dtk-translate.py \
-      -e "s,#!env,#!/usr/bin/env,"
+    # Fix shebang
+    sed -i tools/script/dtk-translate.py -e "s,#!env,#!/usr/bin/env,"
+  '';
+
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags QT_HOST_DATA=$out"
   '';
 
   postFixup = ''
     chmod +x $out/lib/dtk2/*.py
     wrapPythonProgramsIn "$out/lib/dtk2" "$out $pythonPath"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Deepin tool kit core modules";

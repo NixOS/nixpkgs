@@ -3079,6 +3079,8 @@ with pkgs;
 
   hdapsd = callPackage ../os-specific/linux/hdapsd { };
 
+  hdaps-gl = callPackage ../tools/misc/hdaps-gl { };
+
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
   hdf4 = callPackage ../tools/misc/hdf4 {
@@ -3306,6 +3308,7 @@ with pkgs;
 
   ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
   ipget = callPackage ../applications/networking/ipget {
     buildGoPackage = buildGo110Package;
@@ -8266,7 +8269,7 @@ with pkgs;
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
 
-  gede = libsForQt5.callPackage ../development/tools/misc/gede { };
+  gede = libsForQt59.callPackage ../development/tools/misc/gede { };
 
   gdbgui = callPackage ../development/tools/misc/gdbgui { };
 
@@ -8680,6 +8683,8 @@ with pkgs;
   };
 
   smc = callPackage ../tools/misc/smc { };
+
+  snakemake = callPackage ../applications/science/misc/snakemake { python = python3Packages; };
 
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
@@ -10379,6 +10384,8 @@ with pkgs;
   libsecret = callPackage ../development/libraries/libsecret { };
 
   libserialport = callPackage ../development/libraries/libserialport { };
+
+  libsignal-protocol-c = callPackage ../development/libraries/libsignal-protocol-c { };
 
   libsoundio = callPackage ../development/libraries/libsoundio {
     inherit (darwin.apple_sdk.frameworks) AudioUnit;
@@ -13916,14 +13923,6 @@ with pkgs;
       ];
   };
 
-  linux_copperhead_lts = (linux_4_14.override {
-    kernelPatches = linux_4_14.kernelPatches ++ [
-      kernelPatches.copperhead_4_14
-      kernelPatches.tag_hardened
-     ];
-    modDirVersionArg = linux_4_14.modDirVersion + "-hardened";
-  });
-
   # linux mptcp is based on the 4.4 kernel
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches =
@@ -14264,8 +14263,6 @@ with pkgs;
   linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
 
   linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
-
-  linuxPackages_copperhead_lts = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead_lts);
 
   # Samus kernels
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
@@ -16261,7 +16258,9 @@ with pkgs;
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
-  fbreader = callPackage ../applications/misc/fbreader { };
+  fbreader = callPackage ../applications/misc/fbreader {
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
+  };
 
   fdr = libsForQt5.callPackage ../applications/science/programming/fdr { };
 
@@ -16322,7 +16321,7 @@ with pkgs;
 
   gksu = callPackage ../applications/misc/gksu { };
 
-  gnss-sdr = callPackage ../applications/misc/gnss-sdr { };
+  gnss-sdr = callPackage ../applications/misc/gnss-sdr { boost=boost166; };
 
   gnuradio = callPackage ../applications/misc/gnuradio {
     inherit (python2Packages) cheetah lxml Mako matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;

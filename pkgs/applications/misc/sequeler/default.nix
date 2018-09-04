@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, vala, gobjectIntrospection, gettext, wrapGAppsHook, desktop-file-utils
+, meson, ninja, pkgconfig, vala, gobjectIntrospection, gettext, wrapGAppsHook, python3, desktop-file-utils
 , gtk3, glib, granite, libgee, libgda, gtksourceview, libxml2, libsecret }:
 
 
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     sha256 = "04x3fg665201g3zy66sicfna4vac4n1pmrahbra90gvfzaia1cai";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gobjectIntrospection gettext wrapGAppsHook desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja pkgconfig vala gobjectIntrospection gettext wrapGAppsHook python3 desktop-file-utils ];
 
   buildInputs = [ gtk3 glib granite libgee sqlGda gtksourceview libxml2 libsecret ];
 

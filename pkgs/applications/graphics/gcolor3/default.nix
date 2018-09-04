@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, gnome3, libtool, intltool, pkgconfig, gtk3, hicolor-icon-theme, wrapGAppsHook } :
+{ stdenv, fetchFromGitHub, fetchpatch, gnome3, meson, ninja, gettext, pkgconfig, libxml2, gtk3, hicolor-icon-theme, wrapGAppsHook }:
 
 let
-  version = "2.2";
+  version = "2.3";
 in stdenv.mkDerivation {
   name = "gcolor3-${version}";
 
@@ -9,23 +9,35 @@ in stdenv.mkDerivation {
     owner = "hjdskes";
     repo = "gcolor3";
     rev = "v${version}";
-    sha256 = "1rbahsi33pfggpj5cigy6wy5333g3rpm8v2q0b35c6m7pwhmf2gr";
+    sha256 = "186j72kwsqdcakvdik9jl18gz3csdj53j3ylwagr9gfwmy0nmyjb";
   };
 
-  nativeBuildInputs = [ gnome3.gnome-common libtool intltool pkgconfig hicolor-icon-theme wrapGAppsHook ];
+  patches = [
+    # Fix darwin build
+    (fetchpatch {
+      url = https://github.com/Hjdskes/gcolor3/commit/9130ffeff091fbafff6a0c8f06b09f54657d5dfd.patch;
+      sha256 = "1kn5hx536wivafb4awg7lsa8h32njy0lynmn7ci9y78dlp54057r";
+    })
+    (fetchpatch {
+      url = https://github.com/Hjdskes/gcolor3/commit/8d89081a8e13749f5a9051821114bc5fe814eaf3.patch;
+      sha256 = "1ldyr84dl2g6anqkp2mpxsrcr41fcqwi6ck14rfhai7rgrm8yar3";
+    })
+  ];
 
-  buildInputs = [ gtk3 ];
+  nativeBuildInputs = [ meson ninja gettext pkgconfig libxml2 wrapGAppsHook ];
 
-  configureScript = "./autogen.sh";
+  buildInputs = [ gtk3 hicolor-icon-theme ];
 
-  # clang-4.0: error: argument unused during compilation: '-pthread'
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-error=unused-command-line-argument";
+  postPatch = ''
+    chmod +x meson_install.sh # patchShebangs requires executable file
+    patchShebangs meson_install.sh
+  '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A simple color chooser written in GTK3";
     homepage = https://hjdskes.github.io/projects/gcolor3/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ jtojnar ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.unix;
   };
 }

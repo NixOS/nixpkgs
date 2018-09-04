@@ -69,7 +69,7 @@ ibus.engines = with pkgs.ibus-engines; [ table table-others ];
   as shown above, and also (after running <literal>nixos-rebuild</literal>) the
   input method must be added from IBus' preference dialog.</para>
 
-<simplesect>
+<simplesect xml:id="module-services-input-methods-troubleshooting">
   <title>Troubleshooting</title>
   <para>If IBus works in some applications but not others, a likely cause of
   this is that IBus is depending on a different version of

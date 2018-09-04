@@ -4,7 +4,7 @@
 , gnome-desktop, libzapojit, libgepub
 , gnome3, gdk_pixbuf, libsoup, docbook_xsl, docbook_xml_dtd_42
 , gobjectIntrospection, inkscape, poppler_utils
-, desktop-file-utils, wrapGAppsHook }:
+, desktop-file-utils, wrapGAppsHook, python3 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-documents-${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dgetting-started=true" ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl docbook_xml_dtd_42 wrapGAppsHook
+    meson ninja pkgconfig gettext itstool libxslt desktop-file-utils docbook_xsl docbook_xml_dtd_42 wrapGAppsHook python3
     inkscape poppler_utils # building getting started
   ];
   buildInputs = [

@@ -274,7 +274,7 @@ $ ./result/bin/emacs -q
       <para>
         The list of available packages in the various ELPA
         repositories can be seen with the following commands:
-        <example>
+        <example xml:id="module-services-emacs-querying-packages">
           <title>Querying Emacs packages</title>
           <programlisting><![CDATA[
 nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.elpaPackages
@@ -291,7 +291,7 @@ nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.orgPackages
         (see <xref linkend="sec-declarative-package-mgmt" />). Simply
         modify your file <filename>configuration.nix</filename> to
         make it contain:
-        <example>
+        <example xml:id="module-services-emacs-configuration-nix">
           <title>Custom Emacs in <filename>configuration.nix</filename></title>
           <programlisting><![CDATA[
 {
@@ -319,7 +319,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
         Emacs only for yourself, you can do so by adding it to your
         <filename>~/.config/nixpkgs/config.nix</filename>
         (see <link xlink:href="http://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides">Nixpkgs manual</link>):
-        <example>
+        <example xml:id="module-services-emacs-config-nix">
           <title>Custom Emacs in <filename>~/.config/nixpkgs/config.nix</filename></title>
           <programlisting><![CDATA[
 {
@@ -522,7 +522,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     The Emacs init file should be changed to load the extension
     packages at startup:
 
-    <example>
+    <example xml:id="module-services-emacs-package-initialisation">
       <title>Package initialization in <filename>.emacs</filename></title>
       <programlisting><![CDATA[
 (require 'package)

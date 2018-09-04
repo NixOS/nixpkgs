@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-${version}.tar.bz2"
+      # "http://dl.lm-sensors.org/lm-sensors/releases/lm_sensors-${version}.tar.bz2" # dead
+      # https://github.com/lm-sensors/lm-sensors/releases/... # only generated tarballs
       "https://src.fedoraproject.org/repo/pkgs/lm_sensors/lm_sensors-${version}.tar.bz2/c03675ae9d43d60322110c679416901a/lm_sensors-${version}.tar.bz2"
     ];
     sha256 = "07q6811l4pp0f7pxr8bk3s97ippb84mx5qdg7v92s9hs10b90mz0";
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.lm-sensors.org/;
+    homepage = https://hwmon.wiki.kernel.org/lm_sensors;
     description = "Tools for reading hardware sensors";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;

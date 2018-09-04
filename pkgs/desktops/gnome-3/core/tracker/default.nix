@@ -5,7 +5,7 @@
 
 let
   pname = "tracker";
-  version = "2.1.2";
+  version = "2.1.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1sf923f3ya3gj5s90da8qkqqvjj3fdll7xrjgscpb6yhgv0kzqsi";
+    sha256 = "00gimpn2ydv3yka25cmw3i0n402d2nhx7992byvq4yvhr77rni22";
   };
 
   nativeBuildInputs = [
