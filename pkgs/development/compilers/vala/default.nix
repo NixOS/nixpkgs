@@ -68,5 +68,11 @@ in rec {
     sha256  = "1qjbwhifwwqbdg5zilvnwm4n76g8p7jwqs3fa0biw3rylzqm193d";
   };
 
-  vala = vala_0_38;
+  vala_0_42 = generic {
+    major   = "0.42";
+    minor   = "3";
+    sha256  = "0zaq9009wqk5aah131m426a2ia0scwpjpl4npf8p7p43wv8kvisz";
+  };
+
+  vala = vala_0_42;
 }
