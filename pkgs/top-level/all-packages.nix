@@ -6222,7 +6222,7 @@ with pkgs;
 
   ### SHELLS
 
-  runtimeShell = "${runtimeShellPackage}/bin/bash";
+  runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
   runtimeShellPackage = bash;
 
   bash = lowPrio (callPackage ../shells/bash/4.4.nix { });
