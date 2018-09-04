@@ -16,7 +16,7 @@
 , mpi ? null
 
 # Attributes inherit from specific versions
-, version, src
+, version, src, meta
 , ...
 }:
 
@@ -84,7 +84,7 @@ in
 stdenv.mkDerivation {
   name = "boost-${version}";
 
-  inherit src;
+  inherit src meta;
 
   patchFlags = optionalString (stdenv.hostPlatform.libc == "msvcrt") "-p0";
   patches = patches
@@ -94,15 +94,6 @@ stdenv.mkDerivation {
           + "boost-mingw.patch";
       sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
     });
-
-  meta = {
-    homepage = http://boost.org/;
-    description = "Collection of C++ libraries";
-    license = stdenv.lib.licenses.boost;
-
-    platforms = (if versionOlder version "1.59" then remove "aarch64-linux" else id) platforms.unix;
-    maintainers = with maintainers; [ peti wkennington ];
-  };
 
   preConfigure = ''
     if test -f tools/build/src/tools/clang-darwin.jam ; then
