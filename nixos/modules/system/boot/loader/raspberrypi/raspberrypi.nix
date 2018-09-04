@@ -5,25 +5,16 @@ with lib;
 let
   cfg = config.boot.loader.raspberryPi;
 
-  builderGeneric = pkgs.substituteAll {
-    src = ./builder.sh;
-    isExecutable = true;
-    inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-    firmware = pkgs.raspberrypifw;
-    version = cfg.version;
-    inherit configTxt;
-  };
-
   inherit (pkgs.stdenv.hostPlatform) platform;
 
-  builderUboot = import ./builder_uboot.nix { inherit config; inherit pkgs; inherit configTxt; };
+  builderUboot = import ./builder_uboot.nix { inherit config pkgs configTxt; };
+  builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
 
   builder = 
     if cfg.uboot.enable then
       "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
     else
-      builderGeneric;
+      "${builderGeneric} -c";
 
   blCfg = config.boot.loader;
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
