@@ -34,11 +34,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace 3rdparty/mkldnn/tests/CMakeLists.txt \
       --replace "/bin/bash" "${bash}/bin/bash"
+
+    # Build against the system version of OpenMP. 
+    # https://github.com/apache/incubator-mxnet/pull/12160
+    rm -rf 3rdparty/openmp
   '';
 
-  installPhase = ''
-    install -Dm755 libmxnet.so $out/lib/libmxnet.so
-    cp -r ../include $out
+  postInstall = ''
+    rm "$out"/lib/*.a
   '';
 
   enableParallelBuilding = true;
