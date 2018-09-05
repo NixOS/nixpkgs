@@ -7306,6 +7306,7 @@ with pkgs;
     } @ extraArgs:
       callPackage ../build-support/cc-wrapper (let self = {
     nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
+    propagateDoc = !(stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false);
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
     noLibc = !self.nativeLibc && (self.libc == null);

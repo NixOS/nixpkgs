@@ -9,7 +9,7 @@
 , stdenvNoCC
 , bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, propagateDoc ? !nativeTools
+, propagateDoc ? !nativeTools && bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , buildPackages ? {}
 , useMacosReexportHack ? false

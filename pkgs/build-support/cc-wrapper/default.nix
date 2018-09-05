@@ -9,7 +9,7 @@
 , stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, propagateDoc ? !nativeTools
+, propagateDoc ? !nativeTools && cc != null && cc ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
