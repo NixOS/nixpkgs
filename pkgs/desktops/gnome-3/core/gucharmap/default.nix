@@ -8,7 +8,7 @@ let
   unicode-data = callPackage ./unicode-data.nix {};
 in stdenv.mkDerivation rec {
   name = "gucharmap-${version}";
-  version = "11.0.1";
+  version = "11.0.2";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
@@ -17,17 +17,8 @@ in stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gucharmap";
     rev = version;
-    sha256 = "13iw4fa6mv8vi8bkwk0bbhamnzbaih0c93p4rh07khq6mxa6hnpi";
+    sha256 = "0gvq7gvg3cim8p4l1qrwclq3z3cax7prskg36fri7iw10qzbzrk3";
   };
-
-  patches = [
-    # Fix locale path to allow split outputs
-    # https://gitlab.gnome.org/GNOME/gucharmap/issues/10
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gucharmap/commit/b2b03f16aa869ac0ec1a05c55c4d4e4c4b513576.patch;
-      sha256 = "1543mcyz96x23m9pzx04ny15m4a2pqmiksl1y5r51k3sw4fyisci";
-    })
-  ];
 
   nativeBuildInputs = [
     pkgconfig wrapGAppsHook unzip intltool itstool
