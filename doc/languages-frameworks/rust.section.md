@@ -42,7 +42,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0y5d1n6hkw85jb3rblcxqas2fp82h3nghssa4xqrhqnz25l799pj";
   };
 
-  cargoSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
+  cargoSha256 = "194lzn9xjkc041lmqnm676ydgbhn45xx9jhrhz6lzlg99yr6b880";
+  useRealVendorConfig = true;
 
   meta = with stdenv.lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
@@ -63,6 +64,14 @@ When the `Cargo.lock`, provided by upstream, is not in sync with the
 `Cargo.toml`, it is possible to use `cargoPatches` to update it. All patches
 added in `cargoPatches` will also be prepended to the patches in `patches` at
 build-time.
+
+The `useRealVendorConfig` parameter tells cargo-vendor to include a Cargo
+configuration file in the fetched dependencies. This will fix problems with
+projects, where Crates are downloaded from non-crates.io sources. Please note,
+that currently this parameter defaults to `false` only due to compatibility
+reasons, as setting this to `true` requires a change in `cargoSha256`.
+Eventually this distinction will be deprecated, so please always set
+`useRealVendorConfig` to `true` and make sure to recompute the `cargoSha256`.
 
 To install crates with nix there is also an experimental project called
 [nixcrates](https://github.com/fractalide/nixcrates).
