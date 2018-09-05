@@ -246,8 +246,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   accerciser = callPackage ./apps/accerciser { };
 
-  bijiben = callPackage ./apps/bijiben { };
-
   cheese = callPackage ./apps/cheese { };
 
   evolution = callPackage ./apps/evolution { };
@@ -279,6 +277,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-music = callPackage ./apps/gnome-music { };
 
   gnome-nettool = callPackage ./apps/gnome-nettool { };
+
+  gnome-notes = callPackage ./apps/gnome-notes { };
 
   gnome-photos = callPackage ./apps/gnome-photos {
     gegl = gegl_0_3;
@@ -401,6 +401,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 } // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
 
+  bijiben = gnome-notes; # added 2018-09-26
   evolution_data_server = evolution-data-server; # added 2018-02-25
   geocode_glib = geocode-glib; # added 2018-02-25
   glib_networking = glib-networking; # added 2018-02-25

@@ -5,13 +5,13 @@
 , gnome3, libxml2 }:
 
 let
-  version = "3.28.3";
+  version = "3.30.3";
 in stdenv.mkDerivation rec {
-  name = "bijiben-${version}";
+  name = "gnome-notes-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0lg92fl6dmrybkxs3gqhyr8rq945y64k51l6s72yiads7pqabli2";
+    url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/bijiben-${version}.tar.xz";
+    sha256 = "1mkpi2i9nqpip5l15ihjcscyiri113s0705sjgh6b89164ahyn5k";
   };
 
   doCheck = true;
@@ -41,13 +41,13 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "bijiben";
-      attrPath = "gnome3.bijiben";
+      attrPath = "gnome3.gnome-notes";
     };
   };
 
   meta = with stdenv.lib; {
     description = "Note editor designed to remain simple to use";
-    homepage = https://wiki.gnome.org/Apps/Bijiben;
+    homepage = https://wiki.gnome.org/Apps/Notes;
     license = licenses.gpl3;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;
