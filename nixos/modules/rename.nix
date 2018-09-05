@@ -295,6 +295,9 @@ with lib;
     (mkRenamedOptionModule [ "hardware" "ckb" "enable" ] [ "hardware" "ckb-next" "enable" ])
     (mkRenamedOptionModule [ "hardware" "ckb" "package" ] [ "hardware" "ckb-next" "package" ])
 
+    # Buildkite Agent
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "meta-data"] [ "services" "buildkite-agent" "tags" ])
+
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]
