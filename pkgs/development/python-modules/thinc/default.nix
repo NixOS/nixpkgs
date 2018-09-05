@@ -35,7 +35,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "msgpack-python==" "msgpack-python>=" \
-      --replace "msgpack-numpy==" "msgpack-numpy>="
+      --replace "msgpack-numpy==" "msgpack-numpy>=" \
+      --replace "plac>=0.9,<1.0" "plac>=0.9" \
+      --replace "hypothesis>=2,<3" "hypothesis>=2"
   '';
 
   propagatedBuildInputs = [
