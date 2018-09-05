@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 let
-  mkNixBackground = { name, src, description }:
+  mkNixBackground = { name, src, description, installPhase ? "" }:
 
     stdenv.mkDerivation {
       inherit name src;
@@ -11,6 +11,7 @@ let
       installPhase = ''
         mkdir -p $out/share/artwork/gnome
         ln -s $src $out/share/artwork/gnome/${src.name}
+        ${installPhase}
       '';
 
       meta = with stdenv.lib; {
@@ -70,6 +71,10 @@ rec {
       url = https://raw.githubusercontent.com/NixOS/nixos-artwork/783c38b22de09f6ee33aacc817470a4513392d83/wallpapers/nix-wallpaper-simple-dark-gray_bottom.png;
       sha256 = "13hi4jwp5ga06dpdw5l03b4znwn58fdjlkqjkg824isqsxzv6k15";
     };
+    # Keeps this compatible with `Gnome_Dark.png`.
+    installPhase = ''
+      ln -s $out/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png $out/share/artwork/gnome/Gnome_Dark.png
+    '';
   };
 
   simple-light-gray = mkNixBackground {
