@@ -13287,6 +13287,8 @@ with pkgs;
 
   newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
 
+  nullidentdmod = callPackage ../servers/identd/nullidentdmod {};
+
   riemann = callPackage ../servers/monitoring/riemann { };
   riemann-dash = callPackage ../servers/monitoring/riemann-dash { };
 
