@@ -19175,13 +19175,7 @@ with pkgs;
     guile = guile_2_0;
   };
 
-  weechat-matrix-bridge = callPackage ../applications/networking/instant-messengers/weechat-matrix-bridge {
-    inherit (luaPackages) cjson;
-  };
-
-  weechat-xmpp = callPackage ../applications/networking/instant-messengers/weechat-xmpp {
-    inherit (pythonPackages) pydns;
-  };
+  weechatScripts = callPackage ../applications/networking/irc/weechat/scripts { };
 
   westonLite = weston.override {
     pango = null;
