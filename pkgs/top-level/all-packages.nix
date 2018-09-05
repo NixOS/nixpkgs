@@ -4738,6 +4738,8 @@ with pkgs;
 
   pptpd = callPackage ../tools/networking/pptpd {};
 
+  prettyping = callPackage ../tools/networking/prettyping { };
+
   prey-bash-client = callPackage ../tools/security/prey { };
 
   profile-cleaner = callPackage ../tools/misc/profile-cleaner { };
