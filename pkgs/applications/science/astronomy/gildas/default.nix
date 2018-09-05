@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ./aarch64.patch ./gag-font-bin-rule.patch ];
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
+
   configurePhase=''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
     substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python27Env}
