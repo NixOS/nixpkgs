@@ -9841,7 +9841,7 @@ with pkgs;
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
   };
-  libheimdal = heimdal.override { type = "lib"; };
+  libheimdal = heimdal;
 
   harfbuzz = callPackage ../development/libraries/harfbuzz {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreText;
