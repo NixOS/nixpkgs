@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchurl, pytest, scipy, h5py,
-pillow, tensorflow }:
+{ lib, fetchPypi, buildPythonPackage, fetchurl, pytest, scipy, h5py
+, pillow, tensorflow }:
 
 buildPythonPackage rec {
+  pname = "tflearn";
   version = "0.3.2";
-  name = "tflearn-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/t/tflearn/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "034lvbslcivyj64r4w6xmr90ckmyxmrnkka9kal50x4175h02n1z";
   };
 
