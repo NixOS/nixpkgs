@@ -1,20 +1,20 @@
 { stdenv, gettext, fetchurl, pkgconfig, gtkmm3, libxml2, polkit
-, bash, gtk3, glib, wrapGAppsHook
+, bash, gtk3, glib, wrapGAppsHook, meson, ninja, python3
 , itstool, gnome3, librsvg, gdk_pixbuf, libgtop, systemd }:
 
 stdenv.mkDerivation rec {
   name = "gnome-system-monitor-${version}";
-  version = "3.28.2";
+  version = "3.30.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "164in885dyfvna5yjzgdyrbrsskvh5wzxdmkjgb4mbh54lzqd1zb";
+    sha256 = "0g0y565bjs6bdszrnxsz1f7hcm1x59i3mfvplysirh7nz3hpz888";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [
-    pkgconfig gettext itstool wrapGAppsHook
+    pkgconfig gettext itstool wrapGAppsHook meson ninja python3
     polkit # for ITS file
   ];
   buildInputs = [
@@ -22,10 +22,11 @@ stdenv.mkDerivation rec {
     gnome3.gsettings-desktop-schemas systemd
   ];
 
-  # fails to build without --enable-static
-  configureFlags = ["--enable-systemd" "--enable-static"];
-
-  enableParallelBuilding = true;
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
+    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
+  '';
 
   passthru = {
     updateScript = gnome3.updateScript {
