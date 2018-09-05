@@ -3,13 +3,13 @@
 
 let
   pname = "dconf-editor";
-  version = "3.28.0";
+  version = "3.30.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0nhcpwqrkmpxbhaf0cafvy6dlp6s7vhm5vknl4lgs3l24zc56ns5";
+    sha256 = "06f736spn20s7qjsz00xw44v8r8bjhyrz1v3bix6v416jc5jp6ia";
   };
 
   nativeBuildInputs = [ meson ninja vala libxslt pkgconfig wrapGAppsHook gettext docbook_xsl libxml2 gobjectIntrospection python3 ];
