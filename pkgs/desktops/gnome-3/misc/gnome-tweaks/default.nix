@@ -5,13 +5,13 @@
 
 let
   pname = "gnome-tweaks";
-  version = "3.28.1";
+  version = "3.30.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1p5xydr0haz4389h6dvvbna6i1mipdzvmlfksnv0jqfvfs9sy6fp";
+    sha256 = "0pj6k0106dy92lnb646dd656qdvljqwbaya95xp369a016pzngpa";
   };
 
   nativeBuildInputs = [
