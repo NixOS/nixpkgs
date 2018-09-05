@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pymetar";
-  version = "0.21";
+  version = "1.0";
 
-  disabled = isPy3k;
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1sh3nm5ilnsgpnzbb2wv4xndnizjayw859qp72798jadqpcph69k";
+    sha256 = "1n4k5aic4sgp43ki6j3zdw9b21r3biqqws8ah57b77n44b8wzrap";
   };
 
   meta = with stdenv.lib; {
