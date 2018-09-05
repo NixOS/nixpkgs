@@ -298,6 +298,8 @@ in {
 
   fire = callPackage ../development/python-modules/fire { };
 
+  genanki = callPackage ../development/python-modules/genanki { };
+
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
