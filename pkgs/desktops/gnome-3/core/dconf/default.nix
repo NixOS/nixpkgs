@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, meson, ninja, python3, vala, libxslt, pkgconfig, glib, dbus-glib, gnome3
-, libxml2, docbook_xsl }:
+{ stdenv, fetchurl, meson, ninja, python3, vala, libxslt, pkgconfig, glib, bash-completion, dbus, gnome3
+, libxml2, gtk-doc, docbook_xsl, docbook_xml_dtd_42 }:
 
 let
   pname = "dconf";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "0.28.0";
+  version = "0.30.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0hn7v6769xabqz7kvyb2hfm19h46z1whkair7ff752zmbs3b7lv1";
+    sha256 = "05d72i7gj7q23qqr7zpjjinzlz84c33hrjrhx10m5v4mhg4mdwha";
   };
 
   postPatch = ''
@@ -18,12 +18,17 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [ "out" "lib" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig python3 libxslt libxml2 docbook_xsl ];
-  buildInputs = [ glib dbus-glib ];
+  nativeBuildInputs = [ meson ninja vala pkgconfig python3 libxslt libxml2 gtk-doc docbook_xsl docbook_xml_dtd_42 ];
+  buildInputs = [ glib bash-completion dbus ];
 
-  doCheck = false; # fails 2 out of 9 tests, maybe needs dbus daemon?
+  mesonFlags = [
+    "--sysconfdir=/etc"
+    "-Dgtk_doc=true"
+  ];
+
+  doCheck = true;
 
   passthru = {
     updateScript = gnome3.updateScript {
