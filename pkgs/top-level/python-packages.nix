@@ -3732,6 +3732,8 @@ in {
     };
   };
 
+  phe = callPackage ../development/python-modules/phe { };
+
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
   plaid-python = callPackage ../development/python-modules/plaid-python { };
