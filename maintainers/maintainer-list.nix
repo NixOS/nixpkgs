@@ -3396,6 +3396,11 @@
     github = "relrod";
     name = "Ricky Elrod";
   };
+  renatoGarcia = {
+    email = "fgarcia.renato@gmail.com";
+    github = "renatoGarcia";
+    name = "Renato Garcia";
+  };
   renzo = {
     email = "renzocarbonara@gmail.com";
     github = "k0001";
