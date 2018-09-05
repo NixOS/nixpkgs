@@ -1,15 +1,15 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
-, intltool, accountsservice, libX11, gnome3, systemd, autoreconfHook
+, accountsservice, libX11, gnome3, systemd, autoreconfHook
 , gtk, libcanberra-gtk3, pam, libtool, gobjectIntrospection, plymouth
-, librsvg, coreutils, xwayland }:
+, librsvg, coreutils, xwayland, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "gdm-${version}";
-  version = "3.28.3";
+  version = "3.30.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "12d1cp2dyca8rwh9y9cg8xn6grdp8nmxkkqwg4xpkr8i8ml65n88";
+    sha256 = "1handy65r1n0zby09jr492b3643wszzigdkxp7q2ypgxb3hyv45y";
   };
 
   # Only needed to make it build
@@ -24,9 +24,10 @@ stdenv.mkDerivation rec {
     "--enable-gdm-xsession"
     "--with-initial-vt=7"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-udevdir=$(out)/lib/udev"
   ];
 
-  nativeBuildInputs = [ pkgconfig libxml2 itstool intltool autoreconfHook libtool gnome3.dconf ];
+  nativeBuildInputs = [ pkgconfig libxml2 itstool autoreconfHook libtool gnome3.dconf ];
   buildInputs = [
     glib accountsservice systemd
     gobjectIntrospection libX11 gtk
@@ -35,7 +36,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Disable Access Control because our X does not support FamilyServerInterpreted yet
   patches = [
     # Change hardcoded paths to nix store paths.
     (substituteAll {
