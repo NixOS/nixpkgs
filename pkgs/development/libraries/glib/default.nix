@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, gettext, pkgconfig, perl, python
-, libiconv, zlib, libffi, pcre, libelf, gnome3
+{ stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3, glibcLocales
+, libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
 
@@ -43,7 +43,7 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  version = "2.56.0";
+  version = "2.58.1";
 in
 
 stdenv.mkDerivation rec {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1iqgi90fmpl3l23jm2iv44qp7hqsxvnv7978s18933bvx4bnxvzc";
+    sha256 = "1mnp4vankish8bqxymdl591p9v1ynk7pfc5dmpx3vamn4vcskmlp";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch
@@ -66,41 +66,38 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs = [ libelf setupHook pcre ]
-    ++ optionals stdenv.isLinux [ utillinuxMinimal ]; # for libmount
+  buildInputs = [
+    libelf setupHook pcre
+    bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+  ] ++ optionals stdenv.isLinux [
+    libselinux
+    utillinuxMinimal # for libmount
+  ];
 
-  nativeBuildInputs = [ pkgconfig perl python gettext ];
+  nativeBuildInputs = [ meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 glibcLocales ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
 
-  # internal pcre would only add <200kB, but it's relatively common
-  configureFlags = [ "--with-pcre=system" ]
-    ++ optional stdenv.isDarwin "--disable-compile-warnings"
-    ++ optional stdenv.isSunOS "--disable-dtrace"
-    # Can't run this test when cross-compiling
-    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform)
-       [ "glib_cv_stack_grows=no" "glib_cv_uscore=no" ]
-    # GElf only supports elf64 hosts
-    ++ optional (!stdenv.hostPlatform.is64bit) "--disable-libelf";
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
+
+  LC_ALL = "en_US.UTF-8";
 
   NIX_CFLAGS_COMPILE = optional stdenv.isSunOS "-DBSD_COMP";
 
-  preConfigure = optionalString stdenv.isSunOS ''
-    sed -i -e 's|inotify.h|foobar-inotify.h|g' configure
-  '';
-
-  postConfigure = ''
-    patchShebangs ./gobject/
+  postPatch = ''
+    substituteInPlace meson.build --replace "install_dir : 'bin'," "install_dir : glib_bindir,"
+    chmod +x gio/tests/gengiotypefuncs.py
+    patchShebangs gio/tests/gengiotypefuncs.py
+    patchShebangs glib/gen-unicode-tables.pl
+    patchShebangs tests/gen-casefold-txt.py
+    patchShebangs tests/gen-casemap-txt.py
   '';
 
   LIBELF_CFLAGS = optional stdenv.isFreeBSD "-I${libelf}";
   LIBELF_LIBS = optional stdenv.isFreeBSD "-L${libelf} -lelf";
 
-  preBuild = optionalString stdenv.isDarwin ''
-    export MACOSX_DEPLOYMENT_TARGET=
-  '';
-
-  enableParallelBuilding = true;
   DETERMINISTIC_BUILD = 1;
 
   postInstall = ''
