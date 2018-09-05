@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "mutter-${version}";
-  version = "3.28.3";
+  version = "3.30.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0vq3rmq20d6b1mi6sf67wkzqys6hw5j7n7fd4hndcp19d5i26149";
+    sha256 = "094w1kfr7z5c34d1rhq1dncb7ln403n89s8x5xihac7zldlrjldm";
   };
 
   passthru = {
