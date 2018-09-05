@@ -27,7 +27,7 @@ buildGoPackage rec {
     cp restic $bin/bin/
     $bin/bin/restic generate \
       --bash-completion $bin/etc/bash_completion.d/restic.sh \
-      --zsh-completion $bin/share/zsh/vendor-completions/restic.sh \
+      --zsh-completion $bin/share/zsh/vendor-completions/_restic \
       --man $bin/share/man/man1
   '';
 
