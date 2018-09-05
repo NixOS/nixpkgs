@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pcre }:
+{ stdenv, fetchurl, ncurses, pcre, fetchpatch }:
 
 let
   version = "5.6";
@@ -17,6 +17,15 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
     sha256 = "1vik7s3q5hvazvgw4jm4b90qlk6zcry0s314xw1liarspkd721g3";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "search-xdg-data-dirs.patch";
+      url = https://github.com/zsh-users/zsh/commit/624219e0e4cbfdfb286e707bd2853f2d7b6a4a7d.patch;
+      sha256 = "0i0g7dc0px57vpklm1f4w20vyc92nv15y09r5clvib2kjkxjy2cf";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   buildInputs = [ ncurses pcre ];
 
