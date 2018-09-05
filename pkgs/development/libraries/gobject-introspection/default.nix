@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintl, cctools, cairo, gnome3
+{ stdenv, fetchurl, glib, flex, bison, meson, ninja, pkgconfig, libffi, python3
+, libintl, cctools, cairo, gnome3, glibcLocales, fetchpatch
 , substituteAll, nixStoreDir ? builtins.storeDir
 , x11Support ? true
 }:
@@ -9,7 +9,7 @@
 
 let
   pname = "gobject-introspection";
-  version = "1.56.0";
+  version = "1.58.0";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -17,21 +17,22 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1y50pbn5qqbcv2h9rkz96wvv5jls2gma9bkqjq6wapmaszx5jw0d";
+    sha256 = "1v01wh9qagfvgq5br96bpja3w1274mvrgs0w92jy17bl6855kh97";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "man" ];
   outputBin = "dev";
-  outputMan = "dev"; # tiny pages
 
-  nativeBuildInputs = [ pkgconfig libintl ];
-  buildInputs = [ flex bison python setupHook/*move .gir*/ ]
+  LC_ALL = "en_US.UTF-8"; # for tests
+
+  nativeBuildInputs = [ meson ninja pkgconfig libintl glibcLocales ];
+  buildInputs = [ flex bison python3 setupHook/*move .gir*/ ]
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
 
-  preConfigure = ''
-    sed 's|/usr/bin/env ||' -i tools/g-ir-tool-template.in
-  '';
+  mesonFlags = [
+    "--datadir=${placeholder "dev"}/share"
+  ];
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
@@ -43,13 +44,18 @@ stdenv.mkDerivation rec {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
     })
+    # Needed by gjs
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/gobject-introspection/commit/a68cfd769904c621fb2ebc0c4f24f2659fa283de.patch;
+      sha256 = "0f7shwvjxzrphblb6avncn1fnz956qjhqmpfifgn09bix81s43fv";
+    })
   ] ++ stdenv.lib.optional x11Support # https://github.com/NixOS/nixpkgs/issues/34080
     (substituteAll {
       src = ./absolute_gir_path.patch;
       cairoLib = "${getLib cairo}/lib";
     });
 
-  doCheck = false; # fails
+  doCheck = true;
 
   passthru = {
     updateScript = gnome3.updateScript {
