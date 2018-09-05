@@ -395,9 +395,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-video-effects = callPackage ./misc/gnome-video-effects { };
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
-
-  # TODO: remove this after 18.09 has forked off
-  gconf = throw "gconf is deprecated since 2009 and has been removed from the package set. Use gnome2.GConf instead. For more details see https://github.com/NixOS/nixpkgs/pull/43268";
 } // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
 
