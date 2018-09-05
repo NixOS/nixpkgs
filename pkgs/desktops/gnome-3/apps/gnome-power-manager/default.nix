@@ -14,13 +14,13 @@
 
 let
   pname = "gnome-power-manager";
-  version = "3.26.0";
+  version = "3.30.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "20aee0b0b4015e7cc6fbabc3cbc4344c07c230fe3d195e90c8ae0dc5d55a2d4e";
+    sha256 = "0m15x6i279wrfimz9ma2gfjv7jlkca2qbl2wcnxgx1pb3hzrwggm";
   };
 
   passthru = {
