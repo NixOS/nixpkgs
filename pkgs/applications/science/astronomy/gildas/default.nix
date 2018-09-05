@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2-x11 lesstif cfitsio python27Env ];
 
-  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ./aarch64.patch ];
+  patches = [ ./wrapper.patch ./return-error-code.patch ./clang.patch ./aarch64.patch ./gag-font-bin-rule.patch ];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   configurePhase=''
     substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
