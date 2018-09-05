@@ -273,6 +273,9 @@ with lib;
     (mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
     (mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
 
+    # Buildkite Agent
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "meta-data"] [ "services" "buildkite-agent" "tags" ])
+
     # Redshift
     (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
       (config:

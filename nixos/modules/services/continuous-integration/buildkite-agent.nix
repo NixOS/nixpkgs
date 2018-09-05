@@ -74,13 +74,17 @@ in
         '';
       };
 
-      meta-data = mkOption {
-        type = types.str;
-        default = "";
-        example = "queue=default,docker=true,ruby2=true";
+      tags = mkOption {
+        type = let
+          commasToAttrs = commas: builtins.foldl'
+            (prev: cur: let pair = builtins.split "=" cur; in
+                 prev // {"${lib.head pair}" = lib.last pair; })
+            {} (lib.remove [] (builtins.split "," commas)); in
+          types.coercedTo types.string commasToAttrs (types.attrsOf types.str);
+        default = {};
+        example = { queue = "default"; docker = "true"; ruby2 ="true"; };
         description = ''
-          Meta data for the agent. This is a comma-separated list of
-          <code>key=value</code> pairs.
+          Meta data for the agent.
         '';
       };
 
@@ -220,6 +224,7 @@ in
         preStart = let
           sshDir = "${cfg.dataDir}/.ssh";
           sshKeyPath = toString cfg.sshKeyPath;
+          tagStr = lib.concatStringsSep "," (lib.mapAttrsToList (name: value: "${name}=${value}") cfg.tags);
         in
           ''
             ${optionalString (cfg.sshKeyPath != null) ''
@@ -231,7 +236,7 @@ in
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
-            meta-data="${cfg.meta-data}"
+            tags="${tagStr}"
             build-path="${cfg.dataDir}/builds"
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}
