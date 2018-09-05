@@ -123,7 +123,7 @@ let
       inherit (hostPlatform)
         isDarwin isLinux isSunOS isCygwin isFreeBSD isOpenBSD
         isi686 isx86_64 is64bit isAarch32 isAarch64 isMips isBigEndian;
-      isArm = builtins.trace
+      isArm = lib.warn
         "`stdenv.isArm` is deprecated after 18.03. Please use `stdenv.isAarch32` instead"
         hostPlatform.isAarch32;
 
