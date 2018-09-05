@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-settings-daemon-${version}";
-  version = "3.28.1";
+  version = "3.30.1.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0z9dip9p0iav646cmxisii5sbkdr9hmaklc5fzvschpbjkhphksr";
+    sha256 = "079dh609rvpwfyzg4m898q8km9g7x04hg18rwwb1izj1dr7zdp2w";
   };
 
   patches = [
@@ -18,9 +18,6 @@ stdenv.mkDerivation rec {
       inherit tzdata;
     })
   ];
-
-  # fatal error: gio/gunixfdlist.h: No such file or directory
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   nativeBuildInputs = [ meson ninja pkgconfig perl gettext libxml2 libxslt docbook_xsl wrapGAppsHook python3 ];
 
