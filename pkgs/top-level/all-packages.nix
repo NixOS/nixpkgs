@@ -6224,7 +6224,7 @@ with pkgs;
 
   ### SHELLS
 
-  runtimeShell = "${runtimeShellPackage}/bin/bash";
+  runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
   runtimeShellPackage = bash;
 
   bash = lowPrio (callPackage ../shells/bash/4.4.nix { });
@@ -8498,7 +8498,7 @@ with pkgs;
   gn = callPackage ../development/tools/build-managers/gn { };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
-      pythonPackages = python3Packages;
+    pythonPackages = python3Packages;
   };
 
   nexus = callPackage ../development/tools/repository-managers/nexus { };
@@ -12829,8 +12829,8 @@ with pkgs;
 
   rdf4store = callPackage ../servers/http/4store { };
 
-  apacheHttpd = pkgs.apacheHttpd_2_4;
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
+  apacheHttpd = pkgs.apacheHttpd_2_4;
 
   apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
     inherit apacheHttpd;
@@ -12854,8 +12854,8 @@ with pkgs;
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
   };
 
-  apacheHttpdPackages = apacheHttpdPackagesFor pkgs.apacheHttpd pkgs.apacheHttpdPackages;
   apacheHttpdPackages_2_4 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4;
+  apacheHttpdPackages = apacheHttpdPackages_2_4;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
 
@@ -16038,7 +16038,7 @@ with pkgs;
       ImageCaptureCore GSS ImageIO;
   };
 
-  emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
+  emacsPackagesFor = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
     autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
@@ -16181,10 +16181,10 @@ with pkgs;
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
-  emacs25Packages = emacsPackagesGen emacs25 pkgs.emacs25Packages;
-  emacs26Packages = emacsPackagesGen emacs26 pkgs.emacs26Packages;
+  emacs25Packages = emacsPackagesFor emacs25 pkgs.emacs25Packages;
+  emacs26Packages = emacsPackagesFor emacs26 pkgs.emacs26Packages;
 
-  emacsPackagesNgGen = emacs: import ./emacs-packages.nix {
+  emacsPackagesNgFor = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl fetchpatch;
     inherit emacs texinfo makeWrapper runCommand writeText;
@@ -16206,9 +16206,9 @@ with pkgs;
     };
   };
 
-  emacs25PackagesNg = emacsPackagesNgGen emacs25;
+  emacs25PackagesNg = emacsPackagesNgFor emacs25;
   emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
-  emacs26PackagesNg = emacsPackagesNgGen emacs26;
+  emacs26PackagesNg = emacsPackagesNgFor emacs26;
   emacs26WithPackages = emacs26PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
