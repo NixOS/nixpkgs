@@ -3438,6 +3438,8 @@ with pkgs;
 
   kakoune = callPackage ../applications/editors/kakoune { };
 
+  kakoune-lsp-client = callPackage ../development/tools/misc/kakoune-lsp-client { };
+
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };

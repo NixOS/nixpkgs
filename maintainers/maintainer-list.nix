@@ -2947,6 +2947,11 @@
     github = "np";
     name = "Nicolas Pouillard";
   };
+  nrdxp = {
+    email = "34083928+nrdxp@users.noreply.github.com";
+    github = "nrdxp";
+    name = "Timothy DeHerrera";
+  };
   nslqqq = {
     email = "nslqqq@gmail.com";
     name = "Nikita Mikhailov";
