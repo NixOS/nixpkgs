@@ -109,7 +109,9 @@ in
       set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $__fish_datadir/functions
       
       # source the NixOS environment config
-      fenv source ${config.system.build.setEnvironment}
+      if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
+        fenv source /etc/set-environment
+      end
 
       # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
       set -e fish_function_path

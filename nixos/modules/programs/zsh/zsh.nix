@@ -116,7 +116,9 @@ in
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
         export __ETC_ZSHENV_SOURCED=1
 
-        ${config.system.build.setEnvironment.text}
+        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+          . /etc/set-environment
+        fi
 
         ${cfge.shellInit}
 

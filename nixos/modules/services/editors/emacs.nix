@@ -87,7 +87,7 @@ in {
 
       serviceConfig = {
         Type      = "forking";
-        ExecStart = "${pkgs.bash}/bin/bash -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --daemon'";
+        ExecStart = "${pkgs.bash}/bin/bash -c 'source /etc/set-environment; exec ${cfg.package}/bin/emacs --daemon'";
         ExecStop  = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
         Restart   = "always";
       };
