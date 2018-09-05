@@ -74,7 +74,7 @@ in
         '';
       };
 
-      meta-data = mkOption {
+      tags = mkOption {
         type = types.str;
         default = "";
         example = "queue=default,docker=true,ruby2=true";
@@ -219,7 +219,7 @@ in
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
-            meta-data="${cfg.meta-data}"
+            tags="${cfg.tags}"
             build-path="${cfg.dataDir}/builds"
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}
