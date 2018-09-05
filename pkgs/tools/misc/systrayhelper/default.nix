@@ -16,10 +16,12 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  # -X main.date=${date +%F}?
+  # re date: https://github.com/NixOS/nixpkgs/pull/45997#issuecomment-418186178
+  # > .. keep the derivation deterministic. Otherwise, we would have to rebuild it every time.
   buildFlagsArray = [ ''-ldflags=
     -X main.version=v${version}
     -X main.commit=${rev}
+    -X main.date="nix-byrev"
     -s
     -w
   '' ];
