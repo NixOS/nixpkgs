@@ -671,6 +671,8 @@ overrides = super: self: rec {
     plugins = with availablePlugins; [ python perl ];
   }
 }</programlisting>
+    If the <literal>configure</literal> function returns an attrset without the <literal>plugins</literal>
+    attribute, <literal>availablePlugins</literal> will be used automatically.
   </para>
 
   <para>
@@ -703,6 +705,55 @@ overrides = super: self: rec {
   });
 }; }
 </programlisting>
+  </para>
+  <para>
+    WeeChat allows to set defaults on startup using the <literal>--run-command</literal>.
+    The <literal>configure</literal> method can be used to pass commands to the program:
+<programlisting>weechat.override {
+  configure = { availablePlugins, ... }: {
+    init = ''
+      /set foo bar
+      /server add freenode chat.freenode.org
+    '';
+  };
+}</programlisting>
+    Further values can be added to the list of commands when running
+    <literal>weechat --run-command "your-commands"</literal>.
+  </para>
+  <para>
+    Additionally it's possible to specify scripts to be loaded when starting <literal>weechat</literal>.
+    These will be loaded before the commands from <literal>init</literal>:
+<programlisting>weechat.override {
+  configure = { availablePlugins, ... }: {
+    scripts = with pkgs.weechatScripts; [
+      weechat-xmpp weechat-matrix-bridge wee-slack
+    ];
+    init = ''
+      /set plugins.var.python.jabber.key "val"
+    '':
+  };
+}</programlisting>
+  </para>
+  <para>
+    In <literal>nixpkgs</literal> there's a subpackage which contains derivations for
+    WeeChat scripts. Such derivations expect a <literal>passthru.scripts</literal> attribute
+    which contains a list of all scripts inside the store path. Furthermore all scripts
+    have to live in <literal>$out/share</literal>. An exemplary derivation looks like this:
+<programlisting>{ stdenv, fetchurl }:
+
+stdenv.mkDerivation {
+  name = "exemplary-weechat-script";
+  src = fetchurl {
+    url = "https://scripts.tld/your-scripts.tar.gz";
+    sha256 = "...";
+  };
+  passthru.scripts = [ "foo.py" "bar.lua" ];
+  installPhase = ''
+    mkdir $out/share
+    cp foo.py $out/share
+    cp bar.lua $out/share
+  '';
+}</programlisting>
   </para>
  </section>
  <section xml:id="sec-citrix">
