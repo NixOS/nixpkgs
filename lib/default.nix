@@ -11,6 +11,12 @@ let
     callLibs = file: import file { lib = self; };
   in with self; {
 
+    # Configuration of lib, can be set by doing
+    #   lib.extend (self: super: { config = ...; })
+    # One can get this value through lib.config
+    # The Nixpkgs configuration will be passed like this
+    config = {};
+
     # often used, or depending on very little
     trivial = callLibs ./trivial.nix;
     fixedPoints = callLibs ./fixed-points.nix;
