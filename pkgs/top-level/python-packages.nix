@@ -2624,25 +2624,7 @@ in {
 
   GeoIP = callPackage ../development/python-modules/GeoIP { };
 
-  gmpy = buildPythonPackage rec {
-    name = "gmpy-1.17";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gmpy/${name}.zip";
-      sha256 = "1a79118a5332b40aba6aa24b051ead3a31b9b3b9642288934da754515da8fa14";
-    };
-
-    buildInputs = [
-      pkgs.gcc
-      pkgs.gmp
-    ];
-
-    meta = {
-      description = "GMP or MPIR interface to Python 2.4+ and 3.x";
-      homepage = http://code.google.com/p/gmpy/;
-    };
-  };
+  gmpy = callPackage ../development/python-modules/gmpy { };
 
   gmpy2 = buildPythonPackage rec {
     name = "gmpy2-2.0.6";
