@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, jbuilder, ounit, seq }:
+{ stdenv, fetchzip, ocaml, findlib, dune, ounit, seq }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "re is not available for OCaml ${ocaml.version}"
@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "0ch6hvmm4ym3w2vghjxf3ka5j1023a37980fqi4zcb7sx756z20i";
   };
 
-  buildInputs = [ ocaml findlib jbuilder ounit ];
+  buildInputs = [ ocaml findlib dune ounit ];
   propagatedBuildInputs = [ seq ];
 
   doCheck = true;
   checkPhase = "jbuilder runtest";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     homepage = https://github.com/ocaml/ocaml-re;

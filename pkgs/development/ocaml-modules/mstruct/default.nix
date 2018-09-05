@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune
 , cstruct
 }:
 
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
 		sha256 = "1p4ygwzs3n1fj4apfib0z0sabpph21bkq1dgjk4bsa59pq4prncm";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder ];
+	buildInputs = [ ocaml findlib dune ];
 
 	propagatedBuildInputs = [ cstruct ];
 
-	inherit (jbuilder) installPhase;
+	inherit (dune) installPhase;
 
 	meta = {
 		description = "A thin mutable layer on top of cstruct";

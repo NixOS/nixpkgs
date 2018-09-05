@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune
 , ppx_tools_versioned
 , ounit
 }:
@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
     sha256 = "0r49qax7as48jgknzaq6p9rbpmrvnmlic713wzz5bj60j5h0396f";
   };
 
-  buildInputs = [ ocaml findlib jbuilder ppx_tools_versioned ounit ];
+  buildInputs = [ ocaml findlib dune ppx_tools_versioned ounit ];
 
   buildPhase = "jbuilder build";
 
   doCheck = true;
   checkPhase = "jbuilder runtest";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
     description = "This library adds Erlang-style bitstrings and matching over bitstrings as a syntax extension and library for OCaml";

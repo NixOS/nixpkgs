@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, qtest, result }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, qtest, result }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "sequence is not available for OCaml ${ocaml.version}"
@@ -16,13 +16,13 @@ stdenv.mkDerivation {
     sha256 = "08j37nldw47syq3yw4mzhhvya43knl0d7biddp0q9hwbaxhzgi44";
   };
 
-  buildInputs = [ ocaml findlib jbuilder qtest ];
+  buildInputs = [ ocaml findlib dune qtest ];
   propagatedBuildInputs = [ result ];
 
   doCheck = true;
-  checkPhase = "jbuilder runtest";
+  checkPhase = "dune runtest";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     homepage = https://github.com/c-cube/sequence;

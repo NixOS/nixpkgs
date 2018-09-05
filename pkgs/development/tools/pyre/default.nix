@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ocamlPackages, makeWrapper, writeScript
-, jbuilder, python3, rsync, fetchpatch }:
+, dune, python3, rsync, fetchpatch }:
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
@@ -39,7 +39,7 @@ let
     ppx_deriving_yojson
     ocamlbuild
     ppxlib
-    jbuilder
+    dune
     ounit
     # python36Packages.python36Full # TODO
   ];

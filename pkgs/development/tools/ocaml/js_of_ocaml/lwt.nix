@@ -1,4 +1,4 @@
-{ stdenv, ocaml, findlib, jbuilder, js_of_ocaml-compiler, js_of_ocaml-ppx
+{ stdenv, ocaml, findlib, dune, js_of_ocaml-compiler, js_of_ocaml-ppx
 , ocaml-migrate-parsetree, ppx_tools_versioned
 , js_of_ocaml, ocaml_lwt, lwt_log
 }:
@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;
 
-	buildInputs = [ ocaml findlib jbuilder js_of_ocaml-ppx ocaml-migrate-parsetree ppx_tools_versioned ];
+	buildInputs = [ ocaml findlib dune js_of_ocaml-ppx ocaml-migrate-parsetree ppx_tools_versioned ];
 
 	propagatedBuildInputs = [ js_of_ocaml ocaml_lwt lwt_log ];
 
-	buildPhase = "jbuilder build -p js_of_ocaml-lwt";
+	buildPhase = "dune build -p js_of_ocaml-lwt";
 }
