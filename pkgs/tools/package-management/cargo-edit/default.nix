@@ -1,16 +1,17 @@
-{ stdenv, pkgs, darwin, defaultCrateOverrides, fetchFromGitHub }:
+{ stdenv, lib, buildPlatform, fetchgit, fetchFromGitHub, darwin
+, buildRustCrate, defaultCrateOverrides }:
 
-((import ./cargo-edit.nix { inherit pkgs; }).cargo_edit {}).override {
+((import ./Cargo.nix { inherit lib buildPlatform buildRustCrate fetchgit; }).cargo_edit {}).override {
   crateOverrides = defaultCrateOverrides // {
     cargo-edit = attrs: rec {
       name = "cargo-edit-${version}";
-      version = "0.2.0";
+      version = "0.3.0";
 
       src = fetchFromGitHub {
         owner = "killercup";
         repo = "cargo-edit";
         rev = "v${version}";
-        sha256 = "1jxppbb7s50pwg24qxf79fqvm1clwm2zdnv0xlkay7y05nd5bc0c";
+        sha256 = "0ngxyzqy5pfc0fqbvqw7kd40jhqzp67qvpzvh3yggk9yxa1jzsp0";
       };
 
       propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
