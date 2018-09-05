@@ -16810,19 +16810,24 @@ EOF
   };
 
   tflearn = buildPythonPackage rec {
-    name = "tflearn-0.2.1";
+    version = "0.3.2";
+    name = "tflearn-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tflearn/${name}.tar.gz";
+      sha256 = "034lvbslcivyj64r4w6xmr90ckmyxmrnkka9kal50x4175h02n1z";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [ scipy h5py pillow tensorflow ];
+
+    doCheck = false;
 
     meta = {
       description = "Deep learning library featuring a higher-level API for TensorFlow";
       homepage    = "https://github.com/tflearn/tflearn";
       license     = licenses.mit;
-    };
-
-    propagatedBuildInputs = with self; [ scipy h5py pillow tensorflow ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tflearn/${name}.tar.gz";
-      sha256 = "1n884c4j35409id2bncyj5fvmmfpdqj3pk6wrv0s1znnvs0lkii0";
     };
   };
 
