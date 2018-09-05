@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder }:
+{ stdenv, fetchurl, ocaml, findlib, dune }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
@@ -14,13 +14,11 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  buildInputs = [ ocaml findlib dune ];
 
-  buildPhase = "jbuilder build -p wtf8";
+  buildPhase = "dune build -p wtf8";
 
-  inherit (jbuilder) installPhase;
-
-  createFindLibDestdir = true;
+  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/flowtype/ocaml-wtf8;

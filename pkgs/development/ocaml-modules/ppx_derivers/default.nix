@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "ppx_derivers is not available for OCaml ${ocaml.version}"
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 		sha256 = "0bnhihl1w31as5w2czly1v3d6pbir9inmgsjg2cj6aaj9v1dzd85";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder ];
+	buildInputs = [ ocaml findlib dune ];
 
-	inherit (jbuilder) installPhase;
+	inherit (dune) installPhase;
 
 	meta = {
 		description = "Shared [@@deriving] plugin registry";

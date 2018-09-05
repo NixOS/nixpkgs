@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, ocamlPackages, opaline }:
 
 stdenv.mkDerivation rec {
-  name = "jbuilder-${version}";
-  version = "1.0.1";
+  name = "dune-${version}";
+  version = "1.1.1";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "dune";
     rev = "${version}";
-    sha256 = "0k6r9qrbwlnb4rqwqys5fr7khwza7n7d8wpgl9jbb3xpag2zl3q9";
+    sha256 = "0v2pnxpmqsvrvidpwxvbsypzhqfdnjs5crjp9y61qi8nyj8d75zw";
   };
 
   buildInputs = with ocamlPackages; [ ocaml findlib ];
@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
   dontAddPrefix = true;
 
   installPhase = "${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
-
-  preFixup = "rm -rf $out/jbuilder";
 
   meta = {
     inherit (src.meta) homepage;
