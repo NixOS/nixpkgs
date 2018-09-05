@@ -131,7 +131,7 @@ if test "$noSysDirs" = "1"; then
         )
     fi
 
-    if test -n "${targetConfig-}" -a "$crossStageStatic" == 1; then
+    if test "$crossStageStatic" == 1; then
         # We don't want the gcc build to assume there will be a libc providing
         # limits.h in this stagae
         makeFlagsArray+=(
