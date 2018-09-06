@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, writeScript, writeText, php }:
 
 let
-  version = "2.0.0";
+  version = "2.0.1";
 
   completion = fetchurl {
     url    = "https://raw.githubusercontent.com/wp-cli/wp-cli/v${version}/utils/wp-completion.bash";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "https://github.com/wp-cli/wp-cli/releases/download/v${version}/${name}.phar";
-    sha256 = "1s8pv8vdjwiwknpwsxc59l1zxc2np7nrp6bjd0s8jwsrv5fgjzsp";
+    sha256 = "05lbay4c0477465vv4h8d2j94pk3haz1a7f0ncb127fvxz3a2pcg";
   };
 
   buildCommand = ''
