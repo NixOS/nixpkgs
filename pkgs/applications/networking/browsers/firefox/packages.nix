@@ -68,6 +68,7 @@ rec {
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [ "Support ended in August 2018." ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-52-unwrapped";
@@ -77,10 +78,10 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    version = "60.1.0esr";
+    version = "60.2.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "2bg7zvkpy1x2ryiazvk4nn5m94v0addbhrcrlcf9djnqjf14rp5q50lbiymhxxz0988vgpicsvizifb8gb3hi7b8g17rdw6438ddhh6";
+      sha512 = "1nf7nsycvzafvy4jjli5xh59d2mac17gfx91a1jh86f41w6qcsi3lvkfa8xhxsq8wfdsmqk1f4hmqzyx63h4m691qji7838g2nk49k7";
     };
 
     patches = nixpkgsPatches ++ [
