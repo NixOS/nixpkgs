@@ -1,89 +1,18 @@
-# This module includes the NixOS man-pages in the system environment,
-# and optionally starts a browser that shows the NixOS manual on one
-# of the virtual consoles.  The latter is useful for the installation
+# This module optionally starts a browser that shows the NixOS manual
+# on one of the virtual consoles which is useful for the installation
 # CD.
 
-{ config, lib, pkgs, baseModules, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
-let
-
-  cfg = config.services.nixosManual;
-
-  /* For the purpose of generating docs, evaluate options with each derivation
-    in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
-    It isn't perfect, but it seems to cover a vast majority of use cases.
-    Caveat: even if the package is reached by a different means,
-    the path above will be shown and not e.g. `${config.services.foo.package}`. */
-  manual = import ../../../doc/manual rec {
-    inherit pkgs config;
-    version = config.system.nixos.release;
-    revision = "release-${version}";
-    options =
-      let
-        scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ baseModules;
-          args = (config._module.args) // { modules = [ ]; };
-          specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
-        };
-        scrubDerivations = namePrefix: pkgSet: mapAttrs
-          (name: value:
-            let wholeName = "${namePrefix}.${name}"; in
-            if isAttrs value then
-              scrubDerivations wholeName value
-              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
-            else value
-          )
-          pkgSet;
-      in scrubbedEval.options;
-  };
-
-  helpScript = pkgs.writeScriptBin "nixos-help"
-    ''
-      #! ${pkgs.runtimeShell} -e
-      # Finds first executable browser in a colon-separated list.
-      # (see how xdg-open defines BROWSER)
-      browser="$(
-        IFS=: ; for b in $BROWSER; do
-          [ -n "$(type -P "$b" || true)" ] && echo "$b" && break
-        done
-      )"
-      if [ -z "$browser" ]; then
-        browser="$(type -P xdg-open || true)"
-        if [ -z "$browser" ]; then
-          browser="$(type -P w3m || true)"
-          if [ -z "$browser" ]; then
-            echo "$0: unable to start a web browser; please set \$BROWSER"
-            exit 1
-          fi
-        fi
-      fi
-      exec "$browser" ${manual.manualHTMLIndex}
-    '';
-
-  desktopItem = pkgs.makeDesktopItem {
-    name = "nixos-manual";
-    desktopName = "NixOS Manual";
-    genericName = "View NixOS documentation in a web browser";
-    icon = "nix-snowflake";
-    exec = "${helpScript}/bin/nixos-help";
-    categories = "System";
-  };
-in
+let cfg = config.services.nixosManual; in
 
 {
 
   options = {
 
-    services.nixosManual.enable = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to build the NixOS manual pages.
-      '';
-    };
-
+    # TODO(@oxij): rename this to `.enable` eventually.
     services.nixosManual.showManual = mkOption {
       type = types.bool;
       default = false;
@@ -112,36 +41,28 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.showManual {
 
-    system.build.manual = manual;
+    assertions = [{
+      assertion = config.documentation.nixos.enable;
+      message   = "Can't enable `service.nixosManual.showManual` without `documentation.nixos.enable`";
+    }];
 
-    environment.systemPackages = []
-      ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]
-      ++ optional  config.documentation.man.enable manual.manpages
-      ++ optionals config.documentation.doc.enable [ manual.manualHTML helpScript ];
+    boot.extraTTYs = [ "tty${toString cfg.ttyNumber}" ];
 
-    boot.extraTTYs = mkIf cfg.showManual ["tty${toString cfg.ttyNumber}"];
-
-    systemd.services = optionalAttrs cfg.showManual
-      { "nixos-manual" =
-        { description = "NixOS Manual";
-          wantedBy = [ "multi-user.target" ];
-          serviceConfig =
-            { ExecStart = "${cfg.browser} ${manual.manualHTMLIndex}";
-              StandardInput = "tty";
-              StandardOutput = "tty";
-              TTYPath = "/dev/tty${toString cfg.ttyNumber}";
-              TTYReset = true;
-              TTYVTDisallocate = true;
-              Restart = "always";
-            };
-        };
+    systemd.services."nixos-manual" = {
+      description = "NixOS Manual";
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = "${cfg.browser} ${config.system.build.manual.manualHTMLIndex}";
+        StandardInput = "tty";
+        StandardOutput = "tty";
+        TTYPath = "/dev/tty${toString cfg.ttyNumber}";
+        TTYReset = true;
+        TTYVTDisallocate = true;
+        Restart = "always";
       };
-
-      services.mingetty.helpLine = "\nRun `nixos-help` "
-        + lib.optionalString cfg.showManual "or press <Alt-F${toString cfg.ttyNumber}> "
-        + "for the NixOS manual.";
+    };
 
   };
 
