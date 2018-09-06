@@ -2776,6 +2776,8 @@ with pkgs;
 
   gmvault = callPackage ../tools/networking/gmvault { };
 
+  gnaf-loader = callPackage ../tools/misc/gnaf-loader { };
+
   gnash = callPackage ../misc/gnash { };
 
   gnaural = callPackage ../applications/audio/gnaural {
