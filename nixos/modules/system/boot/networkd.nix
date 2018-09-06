@@ -208,7 +208,6 @@ let
       "InitialCongestionWindow" "InitialAdvertisedReceiveWindow" "QuickAck"
       "MTUBytes"
     ])
-    (assertHasField "Gateway")
   ];
 
   checkDhcp = checkUnitConfig "DHCP" [
