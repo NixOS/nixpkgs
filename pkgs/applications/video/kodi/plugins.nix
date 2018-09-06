@@ -251,6 +251,25 @@ let self = rec {
 
   };
 
+  simpleplugin = mkKodiPlugin rec {
+    plugin = "simpleplugin";
+    namespace = "script.module.simpleplugin";
+    version = "2.3.2";
+
+    src = fetchFromGitHub {
+      owner = "romanvm";
+      repo = namespace;
+      rev = "v.${version}";
+      sha256 = "0myar8dqjigb75pcc8zx3i5z79p1ifgphgb82s5syqywk0zaxm3j";
+    };
+
+    meta = {
+      homepage = src.meta.homepage;
+      description = "Simpleplugin API";
+      license = licenses.gpl3;
+    };
+  };
+
   svtplay = mkKodiPlugin rec {
 
     plugin = "svtplay";
