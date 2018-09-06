@@ -504,11 +504,11 @@ let
 
   psysh = pkgs.stdenv.mkDerivation rec {
     name = "psysh-${version}";
-    version = "0.9.6";
+    version = "0.9.8";
 
     src = pkgs.fetchurl {
       url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-      sha256 = "06icmyn7v229mpfplqj76kjnp1gh4ns0nrxa7bsckyqhzi425kc6";
+      sha256 = "0xs9bl0hplkm2hajmm4qca65bm2x7wnx4vbmk0d2jxpvwrgqgnzd";
     };
 
     phases = [ "installPhase" ];
