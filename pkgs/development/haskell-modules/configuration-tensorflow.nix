@@ -55,9 +55,11 @@ in
   tensorflow-logging = super.tensorflow-logging.override {
     inherit proto-lens;
   };
-  tensorflow-mnist = super.tensorflow-mnist.override {
+  tensorflow-mnist = overrideCabal (super.tensorflow-mnist.override {
     inherit proto-lens;
-  };
+    # https://github.com/tensorflow/haskell/issues/215
+    tensorflow-mnist-input-data = self.tensorflow-mnist-input-data;
+  }) (_drv: { broken = false; });
   tensorflow-mnist-input-data = setSourceRoot "tensorflow-mnist-input-data" (super.callPackage (
     { mkDerivation, base, bytestring, Cabal, cryptonite, directory
     , filepath, HTTP, network-uri, stdenv
