@@ -1,7 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi, jsonschema, notebook }:
+{ lib, buildPythonPackage, fetchPypi, jsonschema, notebook, pythonOlder }:
 buildPythonPackage rec {
   pname = "jupyterlab_launcher";
   version = "0.13.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
