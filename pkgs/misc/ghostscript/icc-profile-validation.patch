@@ -1,0 +1,78 @@
+From bc3df0773fccf4b4906a3e59652ad646ea0fee91 Mon Sep 17 00:00:00 2001
+From: Chris Liddell <chris.liddell@artifex.com>
+Date: Tue, 4 Sep 2018 17:01:08 +0100
+Subject: [PATCH] For ICC profile validation, have cups id iteself as DeviceN
+
+Give the range of color spaces and models that cups supports, we can't
+reasonably provide (or expect others to provide) output ICC profiles for all
+cases.
+
+For the purpose of profile validation, have it claim to be DeviceN and benefit
+from the extra tolerance in profiles allowed for that class of device.
+---
+ cups/gdevcups.c  | 15 ++++++++++++++-
+ devices/devs.mak |  2 +-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/cups/gdevcups.c b/cups/gdevcups.c
+index c1574f8..decd8eb 100644
+--- a/cups/gdevcups.c
++++ b/cups/gdevcups.c
+@@ -70,6 +70,7 @@
+ #include "std.h"                /* to stop stdlib.h redefining types */
+ #include "gdevprn.h"
+ #include "gsparam.h"
++#include "gxdevsop.h"
+ #include "arch.h"
+ #include "gsicc_manage.h"
+
+@@ -252,6 +253,7 @@ private int cups_put_params(gx_device *, gs_param_list *);
+ private int cups_set_color_info(gx_device *);
+ private dev_proc_sync_output(cups_sync_output);
+ private prn_dev_proc_get_space_params(cups_get_space_params);
++private int cups_spec_op(gx_device *dev_, int op, void *data, int datasize);
+
+ #ifdef dev_t_proc_encode_color
+ private cm_map_proc_gray(cups_map_gray);
+@@ -392,7 +394,7 @@ private gx_device_procs	cups_procs =
+    NULL,				/* push_transparency_state */
+    NULL,				/* pop_transparency_state */
+    NULL,                                /* put_image */
+-
++   cups_spec_op
+ };
+
+ #define prn_device_body_copies(dtype, procs, dname, w10, h10, xdpi, ydpi, lo, to, lm, bm, rm, tm, ncomp, depth, mg, mc, dg, dc, print_pages)\
+@@ -5927,6 +5929,17 @@ cups_print_planar(gx_device_printer *pdev,
+   return (0);
+ }
+
++private int
++cups_spec_op(gx_device *dev_, int op, void *data, int datasize)
++{
++    /* Although not strictly DeviceN, the range of color models
++       this device supports presets similar issues.
++     */
++    if (op == gxdso_supports_devn) {
++        return true;
++    }
++    return gx_default_dev_spec_op(dev_, op, data, datasize);
++}
+
+ /*
+  */
+diff --git a/devices/devs.mak b/devices/devs.mak
+index c85604c..e8654e5 100644
+--- a/devices/devs.mak
++++ b/devices/devs.mak
+@@ -1860,7 +1860,7 @@ $(DD)pwgraster.dev : $(lcups_dev) $(lcupsi_dev) $(cups_) $(GDEV) \
+ 	$(ADDMOD) $(DD)pwgraster -include $(lcups_dev)
+ 	$(ADDMOD) $(DD)pwgraster -include $(lcupsi_dev)
+
+-$(DEVOBJ)gdevcups.$(OBJ) : $(LCUPSSRCDIR)$(D)gdevcups.c $(std_h) $(DEVS_MAK) $(MAKEDIRS)
++$(DEVOBJ)gdevcups.$(OBJ) : $(LCUPSSRCDIR)$(D)gdevcups.c $(std_h) $(gxdevsop_h) $(DEVS_MAK) $(MAKEDIRS)
+ 	$(CUPS_CC) $(DEVO_)gdevcups.$(OBJ) $(C_) $(CFLAGS) $(CUPSCFLAGS) \
+ 	    $(I_)$(GLSRC) \
+ 	    $(I_)$(DEVSRC) \
+--
+2.9.1
