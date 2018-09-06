@@ -3356,7 +3356,7 @@ with pkgs;
   jaaa = callPackage ../applications/audio/jaaa { };
 
   jackett = callPackage ../servers/jackett {
-    mono = mono50;
+    mono = mono5;
   };
 
   jade = callPackage ../tools/text/sgml/jade { };
