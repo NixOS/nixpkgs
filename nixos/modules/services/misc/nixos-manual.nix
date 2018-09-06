@@ -39,8 +39,6 @@ let
       in scrubbedEval.options;
   };
 
-  entry = "${manual.manual}/share/doc/nixos/index.html";
-
   helpScript = pkgs.writeScriptBin "nixos-help"
     ''
       #! ${pkgs.runtimeShell} -e
@@ -61,7 +59,7 @@ let
           fi
         fi
       fi
-      exec "$browser" ${entry}
+      exec "$browser" ${manual.manualHTMLIndex}
     '';
 
   desktopItem = pkgs.makeDesktopItem {
@@ -121,7 +119,7 @@ in
     environment.systemPackages = []
       ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]
       ++ optional  config.documentation.man.enable manual.manpages
-      ++ optionals config.documentation.doc.enable [ manual.manual helpScript ];
+      ++ optionals config.documentation.doc.enable [ manual.manualHTML helpScript ];
 
     boot.extraTTYs = mkIf cfg.showManual ["tty${toString cfg.ttyNumber}"];
 
@@ -130,7 +128,7 @@ in
         { description = "NixOS Manual";
           wantedBy = [ "multi-user.target" ];
           serviceConfig =
-            { ExecStart = "${cfg.browser} ${entry}";
+            { ExecStart = "${cfg.browser} ${manual.manualHTMLIndex}";
               StandardInput = "tty";
               StandardOutput = "tty";
               TTYPath = "/dev/tty${toString cfg.ttyNumber}";

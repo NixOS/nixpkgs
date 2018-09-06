@@ -128,7 +128,8 @@ in rec {
 
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
-  manual = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manual);
+  manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
+  manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
   manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
   manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);

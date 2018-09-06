@@ -34,7 +34,7 @@ $ nix-build -A system</screen>
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>system.build.manual.manual</varname>
+     <varname>system.build.manual.manualHTML</varname>
     </term>
     <listitem>
      <para>
