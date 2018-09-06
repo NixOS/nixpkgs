@@ -2,9 +2,35 @@
 , cmake, kodiPlain, libcec_platform, tinyxml
 , steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib }:
 
-rec {
+with stdenv.lib;
+
+let self = rec {
 
   pluginDir = "/share/kodi/addons";
+
+  kodi = kodiPlain;
+
+  # Convert derivation to a kodi module. Stolen from ../../../top-level/python-packages.nix
+  toKodiPlugin = drv: drv.overrideAttrs(oldAttrs: {
+    # Use passthru in order to prevent rebuilds when possible.
+    passthru = (oldAttrs.passthru or {})// {
+      kodiPluginFor = kodi;
+      requiredKodiPlugins = requiredKodiPlugins drv.propagatedBuildInputs;
+    };
+  });
+
+  # Check whether a derivation provides a Kodi plugin.
+  hasKodiPlugin = drv: drv ? kodiPluginFor && drv.kodiPluginFor == kodi;
+
+  # Get list of required Kodi plugins given a list of derivations.
+  requiredKodiPlugins = drvs: let
+      modules = filter hasKodiPlugin drvs;
+    in unique (modules ++ concatLists (catAttrs "requiredKodiPlugins" modules));
+
+  kodiWithPlugins = func: callPackage ./wrapper.nix {
+    inherit kodi;
+    plugins = requiredKodiPlugins (func self);
+  };
 
   kodi-platform = stdenv.mkDerivation rec {
     project = "kodi-platform";
@@ -21,17 +47,9 @@ rec {
     buildInputs = [ cmake kodiPlain libcec_platform tinyxml ];
   };
 
-  mkKodiPlugin = { plugin, namespace, version, src, meta, sourceDir ? null, ... }:
-  stdenv.lib.makeOverridable stdenv.mkDerivation rec {
-
-    inherit src meta sourceDir;
-
+  mkKodiPlugin = { plugin, namespace, version, sourceDir ? null, ... }@args:
+  toKodiPlugin (stdenv.mkDerivation (rec {
     name = "kodi-plugin-${plugin}-${version}";
-
-    passthru = {
-      kodiPlugin = pluginDir;
-      namespace = namespace;
-    };
 
     dontStrip = true;
 
@@ -43,21 +61,11 @@ rec {
       [ -d ${namespace} ] && sauce=${namespace}
       cp -R "$sauce/"* $d
     '';
+  } // args));
 
-  };
-
-  mkKodiABIPlugin = { plugin, namespace, version, src, meta
-                    , extraBuildInputs ? [], sourceDir ? null, ... }:
-  stdenv.lib.makeOverridable stdenv.mkDerivation rec {
-
-    inherit src meta sourceDir;
-
+  mkKodiABIPlugin = { plugin, namespace, version, extraBuildInputs ? [], ... }@args:
+  toKodiPlugin (stdenv.mkDerivation (rec {
     name = "kodi-plugin-${plugin}-${version}";
-
-    passthru = {
-      kodiPlugin = pluginDir;
-      namespace = namespace;
-    };
 
     dontStrip = true;
 
@@ -76,8 +84,7 @@ rec {
       make install
       ln -s $out/lib/addons/${n}/${n}.so.${version} $out${pluginDir}/${n}/${n}.so.${version}
     '';
-
-  };
+  } // args));
 
   advanced-launcher = mkKodiPlugin rec {
 
@@ -92,7 +99,7 @@ rec {
       sha256 = "142vvgs37asq5m54xqhjzqvgmb0xlirvm0kz6lxaqynp0vvgrkx2";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       homepage = https://forum.kodi.tv/showthread.php?tid=85724;
       description = "A program launcher for Kodi";
       longDescription = ''
@@ -122,7 +129,7 @@ rec {
       sha256 = "1sv9z77jj6bam6llcnd9b3dgkbvhwad2m1v541rv3acrackms2z2";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       homepage = https://forum.kodi.tv/showthread.php?tid=287826;
       description = "A program launcher for Kodi";
       longDescription = ''
@@ -149,7 +156,7 @@ rec {
       sha256 = "0sbc0w0fwbp7rbmbgb6a1kglhnn5g85hijcbbvf5x6jdq9v3f1qb";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       description = "Add support for different gaming controllers.";
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
@@ -173,7 +180,7 @@ rec {
     // (mkController "ps")
     // (mkController "snes");
 
-  exodus = (mkKodiPlugin rec {
+  exodus = mkKodiPlugin rec {
 
     plugin = "exodus";
     namespace = "plugin.video.exodus";
@@ -184,13 +191,14 @@ rec {
       sha256 = "1zyay7cinljxmpzngzlrr4pnk2a7z9wwfdcsk6a4p416iglyggdj";
     };
 
-    meta = with stdenv.lib; {
+    buildInputs = [ unzip ];
+
+    meta = {
       description = "A streaming plugin for Kodi";
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
     };
-
-  }).override { buildInputs = [ unzip ]; };
+  };
 
   hyper-launcher = let
     pname = "hyper-launcher";
@@ -202,7 +210,7 @@ rec {
       rev = "f958ba93fe85b9c9025b1745d89c2db2e7dd9bf6";
       sha256 = "1dvff24fbas25k5kvca4ssks9l1g5rfa3hl8lqxczkaqi3pp41j5";
     };
-    meta = with stdenv.lib; {
+    meta = {
       homepage = https://forum.kodi.tv/showthread.php?tid=258159;
       description = "A ROM launcher for Kodi that uses HyperSpin assets.";
       maintainers = with maintainers; [ edwtjo ];
@@ -233,7 +241,7 @@ rec {
       sha256 = "18m61v8z9fbh4imvzhh4g9629r9df49g2yk9ycaczirg131dhfbh";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       description = "Binary addon for raw joystick input.";
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
@@ -257,7 +265,7 @@ rec {
       sha256 = "0klk1jpjc243ak306k94mag4b4s17w68v69yb8lzzydszqkaqa7x";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       homepage = https://forum.kodi.tv/showthread.php?tid=67110;
       description = "Watch content from SVT Play";
       longDescription = ''
@@ -286,7 +294,7 @@ rec {
 
     extraBuildInputs = [ libusb ];
 
-    meta = with stdenv.lib; {
+    meta = {
       description = "Binary addon for steam controller.";
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
@@ -294,7 +302,7 @@ rec {
 
   };
 
-  steam-launcher = (mkKodiPlugin rec {
+  steam-launcher = mkKodiPlugin rec {
 
     plugin = "steam-launcher";
     namespace = "script.steam.launcher";
@@ -307,7 +315,9 @@ rec {
       sha256 = "001a7zs3a4jfzj8ylxv2klc33mipmqsd5aqax7q81fbgwdlndvbm";
     };
 
-    meta = with stdenv.lib; {
+    propagatedBuildInputs = [ steam ];
+
+    meta = {
       homepage = https://forum.kodi.tv/showthread.php?tid=157499;
       description = "Launch Steam in Big Picture Mode from Kodi";
       longDescription = ''
@@ -319,8 +329,6 @@ rec {
       '';
       maintainers = with maintainers; [ edwtjo ];
     };
-  }).override {
-    propagatedBuildInputs = [ steam ];
   };
 
   pdfreader = mkKodiPlugin rec {
@@ -336,7 +344,7 @@ rec {
       sha256 = "1iv7d030z3xvlflvp4p5v3riqnwg9g0yvzxszy63v1a6x5kpjkqa";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       homepage = https://forum.kodi.tv/showthread.php?tid=187421;
       description = "A comic book reader";
       maintainers = with maintainers; [ edwtjo ];
@@ -356,7 +364,7 @@ rec {
       sha256 = "0pmlgqr4kd0gvckz77mj6v42kcx6lb23anm8jnf2fbn877snnijx";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       homepage = https://github.com/kodi-pvr/pvr.hts;
       description = "Kodi's Tvheadend HTSP client addon";
       platforms = platforms.all;
@@ -378,7 +386,7 @@ rec {
       sha256 = "0dvdv0vk2q12nj0i5h51iaypy3i7jfsxjyxwwpxfy82y8260ragy";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       homepage = https://github.com/kodi-pvr/pvr.hdhomerun;
       description = "Kodi's HDHomeRun PVR client addon";
       platforms = platforms.all;
@@ -402,7 +410,7 @@ rec {
       sha256 = "1f1im2gachrxnr3z96h5cg2c13vapgkvkdwvrbl4hxlnyp1a6jyz";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       homepage = https://github.com/kodi-pvr/pvr.iptvsimple;
       description = "Kodi's IPTV Simple client addon";
       platforms = platforms.all;
@@ -426,7 +434,7 @@ rec {
       sha256 = "1b3fm02annsq58pcfc985glrmh21rmqksdj3q8wn6gyza06jdf3v";
     };
 
-    meta = with stdenv.lib; {
+    meta = {
       homepage = https://github.com/osmc/skin.osmc;
       description = "The default skin for OSMC";
       platforms = platforms.all;
@@ -434,4 +442,5 @@ rec {
       license = licenses.cc-by-nc-sa-30;
     };
   };
-}
+
+}; in self
