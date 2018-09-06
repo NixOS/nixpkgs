@@ -89,7 +89,7 @@ let
     targetPlatform = lib.warn
       "top-level `targetPlatform` is deprecated since 18.09. Please use `stdenv.targetPlatform`."
       super.stdenv.targetPlatform;
-    inherit (super.stdenv.buildPlatform) system;
+    inherit (super.stdenv.hostPlatform) system;
   };
 
   splice = self: super: import ./splice.nix lib self (buildPackages != null);
