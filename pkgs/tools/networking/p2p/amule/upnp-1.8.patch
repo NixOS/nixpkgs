@@ -1,0 +1,230 @@
+--- a/src/UPnPBase.cpp
++++ b/src/UPnPBase.cpp
+@@ -29,22 +29,12 @@
+
+ #ifdef ENABLE_UPNP
+
+-// check for broken Debian-hacked libUPnP
+ #include <upnp.h>
+-#ifdef STRING_H			// defined in UpnpString.h Yes, I would have liked UPNPSTRING_H much better.
+-#define BROKEN_DEBIAN_LIBUPNP
+-#endif
+
+ #include "UPnPBase.h"
+
+ #include <algorithm>		// For transform()
+
+-#ifdef BROKEN_DEBIAN_LIBUPNP
+-  #define GET_UPNP_STRING(a) UpnpString_get_String(a)
+-#else
+-  #define GET_UPNP_STRING(a) (a)
+-#endif
+-
+ std::string stdEmptyString;
+
+ const char s_argument[] = "argument";
+@@ -1127,7 +1117,7 @@
+
+
+ // This function is static
+-int CUPnPControlPoint::Callback(Upnp_EventType EventType, void *Event, void * /*Cookie*/)
++int CUPnPControlPoint::Callback(Upnp_EventType EventType, const void *Event, void * /*Cookie*/)
+ {
+ 	std::ostringstream msg;
+ 	std::ostringstream msg2;
+@@ -1149,24 +1139,24 @@
+ 		msg2<< "UPNP_DISCOVERY_SEARCH_RESULT: ";
+ 		// UPnP Discovery
+ upnpDiscovery:
+-		struct Upnp_Discovery *d_event = (struct Upnp_Discovery *)Event;
++		UpnpDiscovery *d_event = (UpnpDiscovery *)Event;
+ 		IXML_Document *doc = NULL;
+ 		int ret;
+-		if (d_event->ErrCode != UPNP_E_SUCCESS) {
+-			msg << UpnpGetErrorMessage(d_event->ErrCode) << ".";
++		if (UpnpDiscovery_get_ErrCode(d_event) != UPNP_E_SUCCESS) {
++			msg << UpnpGetErrorMessage(UpnpDiscovery_get_ErrCode(d_event)) << ".";
+ 			AddDebugLogLineC(logUPnP, msg);
+ 		}
+ 		// Get the XML tree device description in doc
+-		ret = UpnpDownloadXmlDoc(d_event->Location, &doc);
++		ret = UpnpDownloadXmlDoc(UpnpDiscovery_get_Location_cstr(d_event), &doc);
+ 		if (ret != UPNP_E_SUCCESS) {
+ 			msg << "Error retrieving device description from " <<
+-				d_event->Location << ": " <<
++				UpnpDiscovery_get_Location_cstr(d_event) << ": " <<
+ 				UpnpGetErrorMessage(ret) <<
+ 				"(" << ret << ").";
+ 			AddDebugLogLineC(logUPnP, msg);
+ 		} else {
+ 			msg2 << "Retrieving device description from " <<
+-				d_event->Location << ".";
++				UpnpDiscovery_get_Location_cstr(d_event) << ".";
+ 			AddDebugLogLineN(logUPnP, msg2);
+ 		}
+ 		if (doc) {
+@@ -1195,7 +1185,7 @@
+ 				}
+ 				// Add the root device to our list
+ 				upnpCP->AddRootDevice(rootDevice, urlBase,
+-					d_event->Location, d_event->Expires);
++					UpnpDiscovery_get_Location_cstr(d_event), UpnpDiscovery_get_Expires(d_event));
+ 			}
+ 			// Free the XML doc tree
+ 			IXML::Document::Free(doc);
+@@ -1216,28 +1206,28 @@
+ 	case UPNP_DISCOVERY_ADVERTISEMENT_BYEBYE: {
+ 		//fprintf(stderr, "Callback: UPNP_DISCOVERY_ADVERTISEMENT_BYEBYE\n");
+ 		// UPnP Device Removed
+-		struct Upnp_Discovery *dab_event = (struct Upnp_Discovery *)Event;
+-		if (dab_event->ErrCode != UPNP_E_SUCCESS) {
++		UpnpDiscovery *dab_event = (UpnpDiscovery *)Event;
++		if (UpnpDiscovery_get_ErrCode(dab_event) != UPNP_E_SUCCESS) {
+ 			msg << "error(UPNP_DISCOVERY_ADVERTISEMENT_BYEBYE): " <<
+-				UpnpGetErrorMessage(dab_event->ErrCode) <<
++				UpnpGetErrorMessage(UpnpDiscovery_get_ErrCode(dab_event)) <<
+ 				".";
+ 			AddDebugLogLineC(logUPnP, msg);
+ 		}
+-		std::string devType = dab_event->DeviceType;
++		std::string devType = UpnpDiscovery_get_DeviceType_cstr(dab_event);
+ 		// Check for an InternetGatewayDevice and removes it from the list
+ 		std::transform(devType.begin(), devType.end(), devType.begin(), tolower);
+ 		if (stdStringIsEqualCI(devType, UPnP::Device::IGW)) {
+-			upnpCP->RemoveRootDevice(dab_event->DeviceId);
++			upnpCP->RemoveRootDevice(UpnpDiscovery_get_DeviceID_cstr(dab_event));
+ 		}
+ 		break;
+ 	}
+ 	case UPNP_EVENT_RECEIVED: {
+ 		//fprintf(stderr, "Callback: UPNP_EVENT_RECEIVED\n");
+ 		// Event reveived
+-		struct Upnp_Event *e_event = (struct Upnp_Event *)Event;
+-		const std::string Sid = e_event->Sid;
++		UpnpEvent *e_event = (UpnpEvent *)Event;
++		const std::string Sid = UpnpEvent_get_SID_cstr(e_event);
+ 		// Parses the event
+-		upnpCP->OnEventReceived(Sid, e_event->EventKey, e_event->ChangedVariables);
++		upnpCP->OnEventReceived(Sid, UpnpEvent_get_EventKey(e_event), UpnpEvent_get_ChangedVariables(e_event));
+ 		break;
+ 	}
+ 	case UPNP_EVENT_SUBSCRIBE_COMPLETE:
+@@ -1252,16 +1242,15 @@
+ 		//fprintf(stderr, "Callback: UPNP_EVENT_RENEWAL_COMPLETE\n");
+ 		msg << "error(UPNP_EVENT_RENEWAL_COMPLETE): ";
+ upnpEventRenewalComplete:
+-		struct Upnp_Event_Subscribe *es_event =
+-			(struct Upnp_Event_Subscribe *)Event;
+-		if (es_event->ErrCode != UPNP_E_SUCCESS) {
++		UpnpEventSubscribe *es_event = (UpnpEventSubscribe *)Event;
++		if (UpnpEventSubscribe_get_ErrCode(es_event) != UPNP_E_SUCCESS) {
+ 			msg << "Error in Event Subscribe Callback";
+ 			UPnP::ProcessErrorMessage(
+-				msg.str(), es_event->ErrCode, NULL, NULL);
++				msg.str(), UpnpEventSubscribe_get_ErrCode(es_event), NULL, NULL);
+ 		} else {
+ #if 0
+ 			TvCtrlPointHandleSubscribeUpdate(
+-				GET_UPNP_STRING(es_event->PublisherUrl),
++				UpnpEventSubscribe_get_PublisherUrl_cstr(es_event),
+ 				es_event->Sid,
+ 				es_event->TimeOut );
+ #endif
+@@ -1280,29 +1269,29 @@
+ 		msg << "error(UPNP_EVENT_SUBSCRIPTION_EXPIRED): ";
+ 		msg2 << "UPNP_EVENT_SUBSCRIPTION_EXPIRED: ";
+ upnpEventSubscriptionExpired:
+-		struct Upnp_Event_Subscribe *es_event =
+-			(struct Upnp_Event_Subscribe *)Event;
++		UpnpEventSubscribe *es_event = (UpnpEventSubscribe *)Event;
+ 		Upnp_SID newSID;
+ 		memset(newSID, 0, sizeof(Upnp_SID));
+ 		int TimeOut = 1801;
+ 		int ret = UpnpSubscribe(
+ 			upnpCP->m_UPnPClientHandle,
+-			GET_UPNP_STRING(es_event->PublisherUrl),
++
++			UpnpEventSubscribe_get_PublisherUrl_cstr(es_event),
+ 			&TimeOut,
+ 			newSID);
+ 		if (ret != UPNP_E_SUCCESS) {
+ 			msg << "Error Subscribing to EventURL";
+ 			UPnP::ProcessErrorMessage(
+-				msg.str(), es_event->ErrCode, NULL, NULL);
++				msg.str(), UpnpEventSubscribe_get_ErrCode(es_event), NULL, NULL);
+ 		} else {
+ 			ServiceMap::iterator it =
+-				upnpCP->m_ServiceMap.find(GET_UPNP_STRING(es_event->PublisherUrl));
++				upnpCP->m_ServiceMap.find(UpnpEventSubscribe_get_PublisherUrl_cstr(es_event));
+ 			if (it != upnpCP->m_ServiceMap.end()) {
+ 				CUPnPService &service = *(it->second);
+ 				service.SetTimeout(TimeOut);
+ 				service.SetSID(newSID);
+ 				msg2 << "Re-subscribed to EventURL '" <<
+-					GET_UPNP_STRING(es_event->PublisherUrl) <<
++					UpnpEventSubscribe_get_PublisherUrl_cstr(es_event) <<
+ 					"' with SID == '" <<
+ 					newSID << "'.";
+ 				AddDebugLogLineC(logUPnP, msg2);
+@@ -1321,17 +1310,16 @@
+ 	case UPNP_CONTROL_ACTION_COMPLETE: {
+ 		//fprintf(stderr, "Callback: UPNP_CONTROL_ACTION_COMPLETE\n");
+ 		// This is here if we choose to do this asynchronously
+-		struct Upnp_Action_Complete *a_event =
+-			(struct Upnp_Action_Complete *)Event;
+-		if (a_event->ErrCode != UPNP_E_SUCCESS) {
++		UpnpActionComplete *a_event = (UpnpActionComplete *)Event;
++		if (UpnpActionComplete_get_ErrCode(a_event) != UPNP_E_SUCCESS) {
+ 			UPnP::ProcessErrorMessage(
+ 				"UpnpSendActionAsync",
+-				a_event->ErrCode, NULL,
+-				a_event->ActionResult);
++				UpnpActionComplete_get_ErrCode(a_event), NULL,
++				UpnpActionComplete_get_ActionResult(a_event));
+ 		} else {
+ 			// Check the response document
+ 			UPnP::ProcessActionResponse(
+-				a_event->ActionResult,
++				UpnpActionComplete_get_ActionResult(a_event),
+ 				"<UpnpSendActionAsync>");
+ 		}
+ 		/* No need for any processing here, just print out results.
+@@ -1342,12 +1330,11 @@
+ 	case UPNP_CONTROL_GET_VAR_COMPLETE: {
+ 		//fprintf(stderr, "Callback: UPNP_CONTROL_GET_VAR_COMPLETE\n");
+ 		msg << "error(UPNP_CONTROL_GET_VAR_COMPLETE): ";
+-		struct Upnp_State_Var_Complete *sv_event =
+-			(struct Upnp_State_Var_Complete *)Event;
+-		if (sv_event->ErrCode != UPNP_E_SUCCESS) {
++		UpnpStateVarComplete *sv_event = (UpnpStateVarComplete *)Event;
++		if (UpnpStateVarComplete_get_ErrCode(sv_event) != UPNP_E_SUCCESS) {
+ 			msg << "m_UpnpGetServiceVarStatusAsync";
+ 			UPnP::ProcessErrorMessage(
+-				msg.str(), sv_event->ErrCode, NULL, NULL);
++				msg.str(), UpnpStateVarComplete_get_ErrCode(sv_event), NULL, NULL);
+ 		} else {
+ #if 0
+ 			// Warning: The use of UpnpGetServiceVarStatus and
+--- a/src/UPnPBase.h
++++ b/src/UPnPBase.h
+@@ -490,9 +490,19 @@
+ 	// Callback function
+ 	static int Callback(
+ 		Upnp_EventType EventType,
+-		void* Event,
++		const void* Event,
+ 		void* Cookie);
+
++#if UPNP_VERSION < 10800
++	/* in libupnp 1.6 Event is not const */
++	static int Callback(
++		Upnp_EventType EventType,
++		void* Event,
++		void* Cookie) {
++		return Callback(EventType, (const void *)Event, Cookie);
++	}
++#endif
++
+ private:
+ 	void OnEventReceived(
+ 		const std::string &Sid,

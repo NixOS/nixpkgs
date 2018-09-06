@@ -10,7 +10,7 @@ let
 
   version = fileContents ../.version;
   versionSuffix =
-    (if stableBranch then "." else "beta") + "${toString nixpkgs.revCount - 151577}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "beta") + "${toString (nixpkgs.revCount - 151577)}.${nixpkgs.shortRev}";
 
   importTest = fn: args: system: import fn ({
     inherit system;
@@ -327,7 +327,6 @@ in rec {
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kafka = callSubTests tests/kafka.nix {};
-  tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
   tests.kubernetes.dns = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/dns.nix {};
@@ -400,7 +399,7 @@ in rec {
   tests.slurm = callTest tests/slurm.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
-  tests.statsd = callTest tests/statsd.nix {};
+  #tests.statsd = callTest tests/statsd.nix {}; # statsd is broken: #45946
   tests.strongswan-swanctl = callTest tests/strongswan-swanctl.nix {};
   tests.sudo = callTest tests/sudo.nix {};
   tests.systemd = callTest tests/systemd.nix {};
