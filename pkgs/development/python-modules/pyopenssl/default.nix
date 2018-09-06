@@ -11,6 +11,47 @@
 , glibcLocales
 }:
 
+
+let
+
+  # Some tests fail; we need to disable them.
+
+  # https://github.com/pyca/pyopenssl/issues/692
+  # These tests, we disable always.
+  base_exclusion_list = [
+    "test_set_default_verify_paths"
+    "test_fallback_default_verify_paths"
+  ];
+
+  # https://github.com/pyca/pyopenssl/issues/791
+  # These tests, we disable in the case that libressl is passed in as openssl.
+  libressl_exclusion_list = [
+    "test_op_no_compression"
+    "test_npn_advertise_error"
+    "test_npn_select_error"
+    "test_npn_client_fail"
+    "test_npn_success"
+    "test_use_certificate_chain_file_unicode"
+    "test_use_certificate_chain_file_bytes"
+    "test_add_extra_chain_cert"
+    "test_set_session_id_fail"
+    "test_verify_with_revoked"
+    "test_set_notAfter"
+    "test_set_notBefore"
+  ];
+
+  # Determine the final list of tests to disable.
+  exclusion_list = base_exclusion_list ++ (if (stdenv.lib.hasPrefix "libressl" openssl.meta.name) then libressl_exclusion_list else []);
+
+  # Build up the string of "not testA and not testB and not ..."
+  exclusion_string = "not " + (builtins.concatStringsSep " and not " exclusion_list);
+
+  # Compose the final string expression, including the "-k" and the single quotes.
+  test_expression = if (builtins.stringLength exclusion_string == 0) then "" else ("-k '" + exclusion_string + "'");
+
+in
+
+
 buildPythonPackage rec {
   pname = "pyOpenSSL";
   version = "18.0.0";
@@ -22,29 +63,10 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  preCheck = ''
-    sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
-    # https://github.com/pyca/pyopenssl/issues/692
-    sed -i 's/test_fallback_default_verify_paths/noop/' tests/test_ssl.py
-    # https://github.com/pyca/pyopenssl/issues/791
-    sed -i 's/test_op_no_compression/noop/' tests/test_ssl.py
-    sed -i 's/test_npn_advertise_error/noop/' tests/test_ssl.py
-    sed -i 's/test_npn_select_error/noop/' tests/test_ssl.py
-    sed -i 's/test_npn_client_fail/noop/' tests/test_ssl.py
-    sed -i 's/test_npn_success/noop/' tests/test_ssl.py
-    sed -i 's/test_use_certificate_chain_file_unicode/noop/' tests/test_ssl.py
-    sed -i 's/test_use_certificate_chain_file_bytes/noop/' tests/test_ssl.py
-    sed -i 's/test_add_extra_chain_cert/noop/' tests/test_ssl.py
-    sed -i 's/test_set_session_id_fail/noop/' tests/test_ssl.py
-    sed -i 's/test_verify_with_revoked/noop/' tests/test_crypto.py
-    sed -i 's/test_set_notAfter/noop/' tests/test_crypto.py
-    sed -i 's/test_set_notBefore/noop/' tests/test_crypto.py
-  '';
-
   checkPhase = ''
     runHook preCheck
     export LANG="en_US.UTF-8"
-    py.test
+    py.test tests ${test_expression}
     runHook postCheck
   '';
 
