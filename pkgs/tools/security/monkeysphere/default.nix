@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, perl, makeWrapper, perlPackages }:
+{ stdenv, fetchurl, makeWrapper
+, perl, perlPackages, libassuan, libgcrypt
+}:
 
 stdenv.mkDerivation rec {
   name = "monkeysphere-${version}";
-  version = "0.37";
+  version = "0.41";
 
   src = fetchurl {
-    url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_0.37.orig.tar.gz";
-    sha256 = "0nbfd220miflah5l2y20qlmgfpbqi0j8h7qgx1b06h7v2jjbh45m";
+    url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${version}.orig.tar.gz";
+    sha256 = "0jz7kwkwgylqprnl8bwvl084s5gjrilza77ln18i3f6x48b2y6li";
   };
 
-  buildInputs = [ makeWrapper perl ];
+  buildInputs = [ makeWrapper perl libassuan libgcrypt ];
 
   patches = [ ./monkeysphere.patch ];
 
@@ -43,7 +45,8 @@ stdenv.mkDerivation rec {
       TLS/SSL communications through the normal use of tools you are
       familiar with, such as your web browser0 or secure shell.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
+    maintainers = with maintainers; [ primeos ];
   };
 }
