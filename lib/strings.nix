@@ -501,7 +501,7 @@ rec {
   isStorePath = x:
        isCoercibleToString x
     && builtins.substring 0 1 (toString x) == "/"
-    && dirOf (builtins.toPath x) == builtins.storeDir;
+    && dirOf x == builtins.storeDir;
 
   /* Convert string to int
      Obviously, it is a bit hacky to use fromJSON that way.
@@ -537,11 +537,10 @@ rec {
   */
   readPathsFromFile = rootPath: file:
     let
-      root = toString rootPath;
       lines = lib.splitString "\n" (builtins.readFile file);
       removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
       relativePaths = removeComments lines;
-      absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
+      absolutePaths = builtins.map (path: rootPath + "/${path}") relativePaths;
     in
       absolutePaths;
 

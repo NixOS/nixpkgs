@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
         ''
           patch -p1 \
             --no-backup-if-mismatch \
-            -d $out/libexec/${name} < ${ ./. + builtins.toPath ("/make_standalone_toolchain.py_" + "${version}" + ".patch") }
+            -d $out/libexec/${name} < ${ ./. + "/make_standalone_toolchain.py_${version}.patch" }
           wrapProgram ${pkg_path}/build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
         ''
     }
