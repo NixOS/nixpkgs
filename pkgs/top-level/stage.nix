@@ -79,11 +79,17 @@ let
 
   # The old identifiers for cross-compiling. These should eventually be removed,
   # and the packages that rely on them refactored accordingly.
-  platformCompat = self: super: let
-    inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
-  in {
-    inherit buildPlatform hostPlatform targetPlatform;
-    inherit (buildPlatform) system;
+  platformCompat = self: super: {
+    buildPlatform = lib.warn
+      "top-level `buildPlatform` is deprecated since 18.09. Please use `stdenv.buildPlatform`."
+      super.stdenv.buildPlatform;
+    hostPlatform = lib.warn
+      "top-level `hostPlatform` is deprecated since 18.09. Please use `stdenv.hostPlatform`."
+      super.stdenv.hostPlatform;
+    targetPlatform = lib.warn
+      "top-level `targetPlatform` is deprecated since 18.09. Please use `stdenv.targetPlatform`."
+      super.stdenv.targetPlatform;
+    inherit (super.stdenv.buildPlatform) system;
   };
 
   splice = self: super: import ./splice.nix lib self (buildPackages != null);
