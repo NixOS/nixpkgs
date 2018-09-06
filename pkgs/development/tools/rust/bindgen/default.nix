@@ -1,31 +1,23 @@
-{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin }:
+{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin }:
 
 rustPlatform.buildRustPackage rec {
   name = "rust-bindgen-${version}";
-  version = "0.37.0";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";
     repo = "rust-bindgen";
     rev = "v${version}";
-    sha256 = "0cqjr7qspjrfgqcp4nqxljmhhbqyijb2jpw3lajgjj48y6wrnw93";
+    sha256 = "0d7jqgi3aadwqcxiaz7axsq9h6n2i42yd3q0p1hc5l0kcdwwbj5k";
   };
 
-  cargoSha256 = "0b8v6c7q1abibzygrigldpd31lyd5ngmj4vq5d7zni96m20mm85w";
+  cargoSha256 = "1rjyazhnk9xihqw1qzkkcrab627lqbj789g5d5nb8bn2hkbdx5d6";
 
   libclang = llvmPackages.libclang.lib; #for substituteAll
 
   buildInputs = [ libclang ];
 
   propagatedBuildInputs = [ clang ]; # to populate NIX_CXXSTDLIB_COMPILE
-
-  patches = [
-    # https://github.com/rust-lang-nursery/rust-bindgen/pull/1376
-    (fetchpatch {
-      url = https://github.com/rust-lang-nursery/rust-bindgen/commit/c8b5406f08af82a92bf8faf852c21ba941d9c176.patch;
-      sha256 = "16ibr2rplh0qz8rsq6gir45xlz5nasad4y8fprwhrb7ssv8wfkss";
-    })
-  ];
 
   configurePhase = ''
     export LIBCLANG_PATH="${libclang}/lib"
