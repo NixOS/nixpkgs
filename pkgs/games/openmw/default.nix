@@ -11,14 +11,14 @@ let
     };
   });
 in stdenv.mkDerivation rec {
-  version = "0.43.0";
+  version = "0.44.0";
   name = "openmw-${version}";
 
   src = fetchFromGitHub {
     owner = "OpenMW";
     repo = "openmw";
-    rev = name;
-    sha256 = "1nybxwp77qswjayf0g9xayp4x1xxq799681rhjlggch127r07ifi";
+    rev = "ef85b1393aeaec905f6310abca29b4e0f42db901";
+    sha256 = "0rxkw0bzag7qffifg28dyyga47aaaf5ziiccpv7p8yax1wglvymh";
   };
 
   enableParallelBuilding = true;
