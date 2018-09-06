@@ -13,6 +13,7 @@ buildEnv {
     for exe in kodi{,-standalone}
     do
       makeWrapper ${kodi}/bin/$exe $out/bin/$exe \
+        --prefix PYTHONPATH : ${kodi.pythonPackages.makePythonPath plugins} \
         --prefix KODI_HOME : $out/share/kodi
     done
   '';
