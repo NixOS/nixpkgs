@@ -15,7 +15,7 @@
             description = "Automatic Video Library Manager for TV Shows";
             longDescription = "It watches for new episodes of your favorite shows, and when they are posted it does its magic.";
             homepage = "https://sickrage.github.io/";
-            licence = stdenv.lib.licenses.gpl3;
-            maintainers = "sterfield@gmail.com";
+            license = stdenv.lib.licenses.gpl3;
+            maintainers = ["sterfield@gmail.com"];
         };
     }
