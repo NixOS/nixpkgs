@@ -246,7 +246,7 @@ rec {
       maintainers = with maintainers; [ edwtjo ];
     };
   }).override {
-    propagatedBuildinputs = [ steam ];
+    propagatedBuildInputs = [ steam ];
   };
 
   pdfreader = mkKodiPlugin rec {
