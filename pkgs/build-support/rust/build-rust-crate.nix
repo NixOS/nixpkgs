@@ -282,14 +282,48 @@ let makeDeps = dependencies:
 
          tr '\n' ' ' < target/link > target/link_
          LINK=$(cat target/link_)
-       fi
+      fi
 
       mkdir -p target/bin
-      echo "${crateBin}" | sed -n 1'p' | tr ',' '\n' | while read BIN; do
-         if [[ ! -z "$BIN" ]]; then
-           build_bin $BIN
-         fi
+      printf "%s\n" "${crateBin}" | head -n1 | tr -s ',' '\n' | while read -r BIN_NAME BIN_PATH; do
+        # filter empty entries / empty "lines"
+        if [[ -z "$BIN_NAME" ]]; then
+             continue
+        fi
+
+        if [[ -z "$BIN_PATH" ]]; then
+          # heuristic to "guess" the correct source file as found in cargo:
+          # https://github.com/rust-lang/cargo/blob/90fc9f620190d5fa3c80b0c8c65a1e1361e6b8ae/src/cargo/util/toml/targets.rs#L308-L325
+
+          # the first two cases are the "new" default IIRC
+          BIN_NAME_=$(echo $BIN_NAME | sed -e 's/-/_/g')
+          FILES="src/bin/$BIN_NAME_.rs src/bin/$BIN_NAME_/main.rs src/bin/main.rs src/main.rs"
+
+          if ! [ -e "${libPath}" -o -e src/lib.rs -o -e "src/${libName}.rs" ]; then
+            # if this is not a library the following path is also valid
+            FILES="src/$BIN_NAME_.rs $FILES"
+          fi
+
+          echo $FILES
+          for file in $FILES;
+          do
+            echo "checking file $file"
+            # first file that exists wins
+            if [[ -e "$file" ]]; then
+                    BIN_PATH="$file"
+                    break
+            fi
+          done
+
+          if [[ -z "$BIN_PATH" ]]; then
+            echo "failed to find file for binary target: $BIN_NAME" >&2
+            exit 1
+          fi
+        fi
+        build_bin $BIN_NAME $BIN_PATH
       done
+
+
       ${lib.optionalString (crateBin == "") ''
         if [[ -e src/main.rs ]]; then
           build_bin ${crateName} src/main.rs
@@ -388,11 +422,10 @@ stdenv.mkDerivation (rec {
     metadata = builtins.substring 0 10 (builtins.hashString "sha256" (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata ));
 
     crateBin = if crate ? crateBin then
-       builtins.foldl' (bins: bin:
-          let name =
-              lib.strings.replaceStrings ["-"] ["_"]
-                 (if bin ? name then bin.name else crateName);
-              path = if bin ? path then bin.path else "src/main.rs";
+       builtins.foldl' (bins: bin: let
+            _name = (if bin ? name then bin.name else crateName);
+            name = lib.strings.replaceStrings ["-"] ["_"] _name;
+            path = if bin ? path then bin.path else "";
           in
           bins + (if bin == "" then "" else ",") + "${name} ${path}"
 
