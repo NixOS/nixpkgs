@@ -10,9 +10,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy pyyaml matplotlib h5py ];
-  
+
   checkPhase = ''
-    cd test/phonopy
+    cd test
+    # dynamic structure factor test ocassionally fails do to roundoff
+    # see issue https://github.com/atztogo/phonopy/issues/79
+    rm spectrum/test_dynamic_structure_factor.py
     ${python.interpreter} -m unittest discover -b
     cd ../..
   '';
@@ -24,4 +27,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-
