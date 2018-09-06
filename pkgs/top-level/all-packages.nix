@@ -2337,6 +2337,10 @@ with pkgs;
     callPackage ../servers/search/elasticsearch/plugins.nix { }
   );
 
+  elasticsearch6Plugins = recurseIntoAttrs (
+    callPackage ../servers/search/elasticsearch/plugins-6.x.nix { }
+  );
+
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
   emem = callPackage ../applications/misc/emem { };
