@@ -8738,13 +8738,9 @@ with pkgs;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
   texinfo6 = callPackage ../development/tools/misc/texinfo/6.5.nix { };
   texinfo = texinfo6;
-  texinfoInteractive = appendToName "interactive" (texinfo.override {
-    interactive = true;
-    # doCheck = true -> some xlocale.h problem with perl 5.28.0
-    # (it's mistakenly trying to include the non-existent header)
-    perl = perl526;
-    buildPackages = buildPackages // { perl = buildPackages.perl526; };
-  });
+  texinfoInteractive = appendToName "interactive" (
+    texinfo.override { interactive = true; }
+  );
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
