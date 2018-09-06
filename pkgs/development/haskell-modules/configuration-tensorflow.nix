@@ -86,7 +86,7 @@ in
         network-uri
       ];
       preConfigure = pkgs.lib.strings.concatStringsSep "\n" (
-          map (x: "cp ${x} data/$(stripHash ${x})") downloads
+          map (x: "ln -s ${x} data/$(stripHash ${x})") downloads
         );
       libraryHaskellDepends = [ base ];
       homepage = "https://github.com/tensorflow/haskell#readme";
