@@ -174,6 +174,14 @@ in
           instead.
         '';
       };
+
+      shell = mkOption {
+        type = types.str;
+        default = "${pkgs.bash}/bin/bash -e -c";
+        description = ''
+          Command that buildkite-agent 3 will execute when it spawns a shell.
+        '';
+      };
     };
   };
 
@@ -216,6 +224,7 @@ in
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
             ${metaData}
+            shell="${cfg.shell}"
             build-path="${cfg.dataDir}/builds"
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}
