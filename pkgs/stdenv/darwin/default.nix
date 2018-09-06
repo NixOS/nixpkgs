@@ -75,6 +75,7 @@ in rec {
         inherit (last) stdenvNoCC;
 
         nativeTools  = false;
+        propagateDoc = true;
         nativeLibc   = false;
         inherit buildPackages coreutils gnugrep;
         libc         = last.pkgs.darwin.Libsystem;
@@ -377,6 +378,7 @@ in rec {
     shell       = "${pkgs.bash}/bin/bash";
 
     cc = pkgs.llvmPackages.libcxxClang.override {
+      propagateDoc = true;
       cc = pkgs.llvmPackages.clang-unwrapped;
     };
 

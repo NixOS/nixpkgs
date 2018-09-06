@@ -162,6 +162,7 @@ in
       binutils = import ../../build-support/bintools-wrapper {
         name = "bootstrap-stage0-binutils-wrapper";
         nativeTools = false;
+        propagateDoc = true;
         nativeLibc = false;
         buildPackages = { };
         libc = getLibc self;
