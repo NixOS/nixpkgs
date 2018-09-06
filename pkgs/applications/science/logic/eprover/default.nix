@@ -14,7 +14,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's/ *CC *= *gcc$//' -i Makefile.vars
   '';
-  configureFlags = "--exec-prefix=$(out) --man-prefix=$(out)/share/man";
+  configureFlags = [
+    "--exec-prefix=$(out)"
+    "--man-prefix=$(out)/share/man"
+  ];
 
   meta = with stdenv.lib; {
     description = "Automated theorem prover for full first-order logic with equality";

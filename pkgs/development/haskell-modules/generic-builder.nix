@@ -1,10 +1,9 @@
 { stdenv, buildPackages, buildHaskellPackages, ghc
 , jailbreak-cabal, hscolour, cpphs, nodejs
-, buildPlatform, hostPlatform
 }:
 
 let
-  isCross = buildPlatform != hostPlatform;
+  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
   inherit (buildPackages)
     fetchurl removeReferencesTo
     pkgconfig coreutils gnugrep gnused glibcLocales;
@@ -32,8 +31,8 @@ in
 , enableSharedExecutables ? false
 , enableSharedLibraries ? (ghc.enableShared or false)
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
-, enableStaticLibraries ? !hostPlatform.isWindows
-, enableHsc2hsViaAsm ? hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
+, enableStaticLibraries ? !stdenv.hostPlatform.isWindows
+, enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows && stdenv.lib.versionAtLeast ghc.version "8.4"
 , extraLibraries ? [], librarySystemDepends ? [], executableSystemDepends ? []
 # On macOS, statically linking against system frameworks is not supported;
 # see https://developer.apple.com/library/content/qa/qa1118/_index.html
@@ -46,6 +45,10 @@ in
 , isExecutable ? false, isLibrary ? !isExecutable
 , jailbreak ? false
 , license
+# We cannot enable -j<n> parallelism for libraries because GHC is far more
+# likely to generate a non-determistic library ID in that case. Further
+# details are at <https://github.com/peti/ghc-library-id-bug>.
+, enableParallelBuilding ? (stdenv.lib.versionOlder "7.8" ghc.version && !isLibrary) || stdenv.lib.versionOlder "8.0.1" ghc.version
 , maintainers ? []
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
@@ -75,7 +78,7 @@ assert editedCabalFile != null -> revision != null;
 
 # --enable-static does not work on windows. This is a bug in GHC.
 # --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
-assert hostPlatform.isWindows -> enableStaticLibraries == false;
+assert stdenv.hostPlatform.isWindows -> enableStaticLibraries == false;
 
 let
 
@@ -112,13 +115,6 @@ let
                      main = defaultMain
                    '';
 
-  hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
-
-  # We cannot enable -j<n> parallelism for libraries because GHC is far more
-  # likely to generate a non-determistic library ID in that case. Further
-  # details are at <https://github.com/peti/ghc-library-id-bug>.
-  enableParallelBuilding = (versionOlder "7.8" ghc.version && !hasActiveLibrary) || versionOlder "8.0.1" ghc.version;
-
   crossCabalFlags = [
     "--with-ghc=${ghc.targetPrefix}ghc"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
@@ -147,7 +143,7 @@ let
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
-    (enableFeature (enableDeadCodeElimination && !hostPlatform.isAarch32 && !hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
+    (enableFeature (enableDeadCodeElimination && !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 && (versionAtLeast "8.0.1" ghc.version)) "split-objs")
     (enableFeature enableLibraryProfiling "library-profiling")
     (optionalString ((enableExecutableProfiling || enableLibraryProfiling) && versionOlder "8" ghc.version) "--profiling-detail=${profilingDetail}")
     (enableFeature enableExecutableProfiling (if versionOlder ghc.version "8" then "executable-profiling" else "profiling"))
@@ -166,7 +162,7 @@ let
   ] ++ optionals isGhcjs [
     "--ghcjs"
   ] ++ optionals isCross ([
-    "--configure-option=--host=${hostPlatform.config}"
+    "--configure-option=--host=${stdenv.hostPlatform.config}"
   ] ++ crossCabalFlags);
 
   setupCompileFlags = [
@@ -237,8 +233,8 @@ stdenv.mkDerivation ({
   inherit src;
 
   inherit depsBuildBuild nativeBuildInputs;
-  buildInputs = otherBuildInputs ++ optionals (!hasActiveLibrary) propagatedBuildInputs;
-  propagatedBuildInputs = optionals hasActiveLibrary propagatedBuildInputs;
+  buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs;
+  propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
 
@@ -256,7 +252,7 @@ stdenv.mkDerivation ({
     runHook preSetupCompilerEnvironment
 
     echo "Build with ${ghc}."
-    ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
+    ${optionalString (isLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
     setupPackageConfDir="$TMPDIR/setup-package.conf.d"
     mkdir -p $setupPackageConfDir
@@ -288,7 +284,7 @@ stdenv.mkDerivation ({
       fi
     ''
     # It is not clear why --extra-framework-dirs does work fine on Linux
-    + optionalString (!buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
+    + optionalString (!stdenv.buildPlatform.isDarwin || versionAtLeast nativeGhc.version "8.0") ''
       if [[ -d "$p/Library/Frameworks" ]]; then
         configureFlags+=" --extra-framework-dirs=$p/Library/Frameworks"
       fi
@@ -369,10 +365,10 @@ stdenv.mkDerivation ({
 
   haddockPhase = ''
     runHook preHaddock
-    ${optionalString (doHaddock && hasActiveLibrary) ''
+    ${optionalString (doHaddock && isLibrary) ''
       ${setupCommand} haddock --html \
         ${optionalString doHoogle "--hoogle"} \
-        ${optionalString (hasActiveLibrary && hyperlinkSource) "--hyperlink-source"}
+        ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"}
     ''}
     runHook postHaddock
   '';
@@ -380,7 +376,7 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
 
-    ${if !hasActiveLibrary then "${setupCommand} install" else ''
+    ${if !isLibrary then "${setupCommand} install" else ''
       ${setupCommand} copy
       local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
@@ -431,7 +427,7 @@ stdenv.mkDerivation ({
 
     compiler = ghc;
 
-    isHaskellLibrary = hasActiveLibrary;
+    isHaskellLibrary = isLibrary;
 
     # TODO: ask why the split outputs are configurable at all?
     # TODO: include tests for split if possible
@@ -489,5 +485,5 @@ stdenv.mkDerivation ({
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
 // optionalAttrs (dontStrip)            { inherit dontStrip; }
 // optionalAttrs (hardeningDisable != []) { inherit hardeningDisable; }
-// optionalAttrs (buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+// optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )

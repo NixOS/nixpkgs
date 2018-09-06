@@ -49,8 +49,8 @@ let
     MinimumVT=${toString (if xcfg.tty != null then xcfg.tty else 7)}
     ServerPath=${xserverWrapper}
     XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
-    SessionCommand=${dmcfg.session.script}
-    SessionDir=${dmcfg.session.desktops}
+    SessionCommand=${dmcfg.session.wrapper}
+    SessionDir=${dmcfg.session.desktops}/share/xsessions
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
@@ -206,8 +206,6 @@ in
       }
     ];
 
-    services.xserver.displayManager.slim.enable = false;
-
     services.xserver.displayManager.job = {
       logToFile = true;
 
@@ -265,6 +263,7 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
+    environment.pathsToLink = [ "/share/sddm/themes" ];
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 

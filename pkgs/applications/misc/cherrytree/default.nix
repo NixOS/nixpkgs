@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, gettext, sqlite }:
+{ stdenv, fetchurl, pythonPackages, gettext }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {

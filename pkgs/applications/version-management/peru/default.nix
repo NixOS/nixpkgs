@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "peru-${version}";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "buildinspace";
     repo = "peru";
     rev = "${version}";
-    sha256 = "02kr3ib3ppbmcsjy8i8z41vp9gw9gdivy2l5aps12lmaa3rc6727";
+    sha256 = "0mzmi797f2h2wy36q4ab701ixl5zy4m0pp1wp9abwdfg2y6qhmnk";
   };
 
   propagatedBuildInputs = with python3Packages; [ pyyaml docopt ];

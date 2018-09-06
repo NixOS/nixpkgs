@@ -1,8 +1,5 @@
 { stdenv, fetchurl, readline, mysql, postgresql, sqlite }:
 
-let
-  inherit (stdenv.lib) getDev getLib;
-in
 stdenv.mkDerivation rec {
   name = "opendbx-1.4.6";
 

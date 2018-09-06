@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, makeWrapper
+{ stdenv, patchelf, makeWrapper
 
 # Linked dynamic libraries.
 , glib, fontconfig, freetype, pango, cairo, libX11, libXi, atk, gconf, nss, nspr

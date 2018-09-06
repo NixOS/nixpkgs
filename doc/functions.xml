@@ -1,6 +1,7 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
-	 xmlns:xlink="http://www.w3.org/1999/xlink"
-	 xml:id="chap-functions">
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="chap-functions">
  <title>Functions reference</title>
  <para>
   The nixpkgs repository has several utility functions to manipulate Nix
@@ -30,12 +31,16 @@
    <para>
     Example usages:
 <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
-<programlisting>import pkgs.path { overlays = [ (self: super: {
-    foo = super.foo.override { barSupport = true ; };
-  })]};</programlisting>
-<programlisting>mypkg = pkgs.callPackage ./mypkg.nix {
-    mydep = pkgs.mydep.override { ... };
-  }</programlisting>
+<programlisting>
+import pkgs.path { overlays = [ (self: super: {
+  foo = super.foo.override { barSupport = true ; };
+  })]};
+</programlisting>
+<programlisting>
+mypkg = pkgs.callPackage ./mypkg.nix {
+  mydep = pkgs.mydep.override { ... };
+  }
+</programlisting>
    </para>
 
    <para>
@@ -60,9 +65,11 @@
 
    <para>
     Example usage:
-<programlisting>helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
-    separateDebugInfo = true;
-  });</programlisting>
+<programlisting>
+helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
+  separateDebugInfo = true;
+});
+</programlisting>
    </para>
 
    <para>
@@ -133,14 +140,16 @@
 
    <para>
     Example usage:
-<programlisting>mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
-    name = "sed-4.2.2-pre";
-    src = fetchurl {
-      url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
-      sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
-    };
-    patches = [];
-  });</programlisting>
+<programlisting>
+mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
+  name = "sed-4.2.2-pre";
+  src = fetchurl {
+    url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
+    sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
+  };
+  patches = [];
+});
+</programlisting>
    </para>
 
    <para>
@@ -180,8 +189,10 @@
 
    <para>
     Example usage:
-<programlisting>f = { a, b }: { result = a+b; }
-  c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
+<programlisting>
+f = { a, b }: { result = a+b; };
+c = lib.makeOverridable f { a = 1; b = 2; };
+</programlisting>
    </para>
 
    <para>
@@ -444,6 +455,7 @@ merge:"diff3"
    <filename>./bin/start.sh</filename> -- relative paths are supported.
   </para>
  </section>
+ <xi:include href="shell.section.xml" />
  <section xml:id="sec-pkgs-dockerTools">
   <title>pkgs.dockerTools</title>
 
@@ -480,29 +492,29 @@ merge:"diff3"
    <example xml:id='ex-dockerTools-buildImage'>
     <title>Docker build</title>
 <programlisting>
-  buildImage {
-    name = "redis"; <co xml:id='ex-dockerTools-buildImage-1' />
-    tag = "latest"; <co xml:id='ex-dockerTools-buildImage-2' />
+buildImage {
+  name = "redis"; <co xml:id='ex-dockerTools-buildImage-1' />
+  tag = "latest"; <co xml:id='ex-dockerTools-buildImage-2' />
 
-    fromImage = someBaseImage; <co xml:id='ex-dockerTools-buildImage-3' />
-    fromImageName = null; <co xml:id='ex-dockerTools-buildImage-4' />
-    fromImageTag = "latest"; <co xml:id='ex-dockerTools-buildImage-5' />
+  fromImage = someBaseImage; <co xml:id='ex-dockerTools-buildImage-3' />
+  fromImageName = null; <co xml:id='ex-dockerTools-buildImage-4' />
+  fromImageTag = "latest"; <co xml:id='ex-dockerTools-buildImage-5' />
 
-    contents = pkgs.redis; <co xml:id='ex-dockerTools-buildImage-6' />
-    runAsRoot = '' <co xml:id='ex-dockerTools-buildImage-runAsRoot' />
-      #!${stdenv.shell}
-      mkdir -p /data
-    '';
+  contents = pkgs.redis; <co xml:id='ex-dockerTools-buildImage-6' />
+  runAsRoot = '' <co xml:id='ex-dockerTools-buildImage-runAsRoot' />
+    #!${stdenv.shell}
+    mkdir -p /data
+  '';
 
-    config = { <co xml:id='ex-dockerTools-buildImage-8' />
-      Cmd = [ "/bin/redis-server" ];
-      WorkingDir = "/data";
-      Volumes = {
-        "/data" = {};
-      };
+  config = { <co xml:id='ex-dockerTools-buildImage-8' />
+    Cmd = [ "/bin/redis-server" ];
+    WorkingDir = "/data";
+    Volumes = {
+      "/data" = {};
     };
-  }
-  </programlisting>
+  };
+}
+</programlisting>
    </example>
 
    <para>
@@ -521,7 +533,8 @@ merge:"diff3"
     <callout arearefs='ex-dockerTools-buildImage-2'>
      <para>
       <varname>tag</varname> specifies the tag of the resulting image. By
-      default it's <literal>null</literal>, which indicates that the nix output hash will be used as tag.
+      default it's <literal>null</literal>, which indicates that the nix output
+      hash will be used as tag.
      </para>
     </callout>
     <callout arearefs='ex-dockerTools-buildImage-3'>
@@ -644,13 +657,15 @@ merge:"diff3"
    <example xml:id='ex-dockerTools-pullImage'>
     <title>Docker pull</title>
 <programlisting>
-  pullImage {
-    imageName = "nixos/nix"; <co xml:id='ex-dockerTools-pullImage-1' />
-    imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b"; <co xml:id='ex-dockerTools-pullImage-2' />
-    finalImageTag = "1.11";  <co xml:id='ex-dockerTools-pullImage-3' />
-    sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8"; <co xml:id='ex-dockerTools-pullImage-4' />
-  }
-  </programlisting>
+pullImage {
+  imageName = "nixos/nix"; <co xml:id='ex-dockerTools-pullImage-1' />
+  imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b"; <co xml:id='ex-dockerTools-pullImage-2' />
+  finalImageTag = "1.11";  <co xml:id='ex-dockerTools-pullImage-3' />
+  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8"; <co xml:id='ex-dockerTools-pullImage-4' />
+  os = "linux"; <co xml:id='ex-dockerTools-pullImage-5' />
+  arch = "x86_64"; <co xml:id='ex-dockerTools-pullImage-6' />
+}
+</programlisting>
    </example>
 
    <calloutlist>
@@ -664,11 +679,17 @@ merge:"diff3"
     <callout arearefs='ex-dockerTools-pullImage-2'>
      <para>
       <varname>imageDigest</varname> specifies the digest of the image to be
-      downloaded. Skopeo can be used to get the digest of an image
+      downloaded. Skopeo can be used to get the digest of an image, with its
+      <varname>inspect</varname> subcommand. Since a given
+      <varname>imageName</varname> may transparently refer to a manifest list
+      of images which support multiple architectures and/or operating systems,
+      supply the `--override-os` and `--override-arch` arguments to specify
+      exactly which image you want. By default it will match the OS and
+      architecture of the host the command is run on.
 <programlisting>
-  $ skopeo inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'
-  sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
-  </programlisting>
+$ nix-shell --packages skopeo jq --command "skopeo --override-os linux --override-arch x86_64 inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'"
+sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
+</programlisting>
       This argument is required.
      </para>
     </callout>
@@ -684,6 +705,18 @@ merge:"diff3"
      <para>
       <varname>sha256</varname> is the checksum of the whole fetched image.
       This argument is required.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-pullImage-5'>
+     <para>
+      <varname>os</varname>, if specified, is the operating system of the
+      fetched image. By default it's <literal>linux</literal>.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-pullImage-6'>
+     <para>
+      <varname>arch</varname>, if specified, is the cpu architecture of the
+      fetched image. By default it's <literal>x86_64</literal>.
      </para>
     </callout>
    </calloutlist>
@@ -714,13 +747,13 @@ merge:"diff3"
    <example xml:id='ex-dockerTools-exportImage'>
     <title>Docker export</title>
 <programlisting>
-  exportImage {
-    fromImage = someLayeredImage;
-    fromImageName = null;
-    fromImageTag = null;
+exportImage {
+  fromImage = someLayeredImage;
+  fromImageName = null;
+  fromImageTag = null;
 
-    name = someLayeredImage.name;
-  }
+  name = someLayeredImage.name;
+}
   </programlisting>
    </example>
 
@@ -751,19 +784,19 @@ merge:"diff3"
    <example xml:id='ex-dockerTools-shadowSetup'>
     <title>Shadow base files</title>
 <programlisting>
-  buildImage {
-    name = "shadow-basic";
+buildImage {
+  name = "shadow-basic";
 
-    runAsRoot = ''
-      #!${stdenv.shell}
-      ${shadowSetup}
-      groupadd -r redis
-      useradd -r -g redis redis
-      mkdir /data
-      chown redis:redis /data
-    '';
-  }
-  </programlisting>
+  runAsRoot = ''
+    #!${stdenv.shell}
+    ${shadowSetup}
+    groupadd -r redis
+    useradd -r -g redis redis
+    mkdir /data
+    chown redis:redis /data
+  '';
+}
+</programlisting>
    </example>
 
    <para>

@@ -1,5 +1,5 @@
 { stdenv, mkDerivation, fetchurl, cmake, extra-cmake-modules, pkgconfig, wrapGAppsHook
-, kconfig, kcrash, kinit, kdoctools, kiconthemes, kio, kparts, kwidgetsaddons
+, kconfig, kinit, kdoctools, kio, kparts, kwidgetsaddons
 , qtbase, qtsvg
 , boost, graphviz
 }:

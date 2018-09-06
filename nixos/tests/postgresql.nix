@@ -22,7 +22,7 @@ let
       maintainers = [ zagy ];
     };
 
-    machine = {pkgs, config, ...}:
+    machine = {...}:
       {
         services.postgresql.package=postgresql-package;
         services.postgresql.enable = true;

@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , autoreconfHook
-, findutils                     # for xargs
+                     # for xargs
 , gettext
 , libtool
 , makeWrapper

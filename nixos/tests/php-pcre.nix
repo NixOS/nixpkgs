@@ -1,9 +1,9 @@
 
 let testString = "can-use-subgroups"; in
 
-import ./make-test.nix ({ pkgs, ...}: {
+import ./make-test.nix ({ ...}: {
   name = "php-httpd-pcre-jit-test";
-  machine = { config, lib, pkgs, ... }: {
+  machine = { lib, pkgs, ... }: {
     time.timeZone = "UTC";
     services.httpd = {
       enable = true;
@@ -34,7 +34,7 @@ import ./make-test.nix ({ pkgs, ...}: {
       };
     };
   };
-  testScript = { nodes, ... }:
+  testScript = { ... }:
   ''
     $machine->waitForUnit('httpd.service');
     # Ensure php evaluation by matching on the var_dump syntax

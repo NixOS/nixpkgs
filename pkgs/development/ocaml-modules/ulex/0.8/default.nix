@@ -4,6 +4,10 @@ let
   pname = "ulex";
 in
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "ulex-0.8 is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "0.8";

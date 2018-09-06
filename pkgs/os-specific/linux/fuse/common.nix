@@ -2,9 +2,9 @@
 
 { stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, utillinux, gettext
-, autoconf, automake, libtool
 , meson, ninja, pkgconfig
 , autoreconfHook
+, python3Packages, which
 }:
 
 let
@@ -59,6 +59,14 @@ in stdenv.mkDerivation rec {
       ./makeconf.sh
     '');
 
+  checkInputs = [ which ] ++ (with python3Packages; [ python pytest ]);
+
+  checkPhase = ''
+    python3 -m pytest test/
+  '';
+
+  doCheck = false; # v2: no tests, v3: all tests get skipped in a sandbox
+
   postFixup = "cd $out\n" + (if isFuse3 then ''
     install -D -m444 etc/fuse.conf $common/etc/fuse.conf
     install -D -m444 etc/udev/rules.d/99-fuse3.rules $common/etc/udev/rules.d/99-fuse.rules
@@ -73,6 +81,7 @@ in stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Kernel module and library that allows filesystems to be implemented in user space";
     platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl21 ];
     maintainers = [ maintainers.primeos ];
   };
 }

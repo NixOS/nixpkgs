@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "bats-${version}";
-  version = "0.4.0";
+  version = "1.1.0";
 
   src = fetchzip {
-    url = "https://github.com/sstephenson/bats/archive/v${version}.tar.gz";
-    sha256 = "05xpvfm0xky1532i3hd2l3wznxzh99bv2hxgykwdpxh18h6jr6jm";
+    url = "https://github.com/bats-core/bats-core/archive/v${version}.tar.gz";
+    sha256 = "1kkh0j2alql3xiyhw9wsvcc3xclv52g0ivgyk8h85q9fn3qdqakz";
   };
 
   patchPhase = "patchShebangs ./install.sh";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   installPhase = "./install.sh $out";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/sstephenson/bats;
+    homepage = https://github.com/bats-core/bats-core;
     description = "Bash Automated Testing System";
     maintainers = [ maintainers.lnl7 ];
     license = licenses.mit;

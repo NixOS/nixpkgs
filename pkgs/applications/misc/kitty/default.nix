@@ -1,13 +1,13 @@
-{ stdenv, fetchFromGitHub, pkgs, python3Packages, glfw, libunistring, harfbuzz,
-  fontconfig, zlib, pkgconfig, ncurses, imagemagick, makeWrapper, xsel,
+{ stdenv, fetchFromGitHub, python3Packages, glfw, libunistring, harfbuzz,
+  fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  which
+  which, dbus
 }:
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "0.11.2";
+  version = "0.12.0";
   name = "kitty-${version}";
   format = "other";
 
@@ -15,16 +15,18 @@ buildPythonApplication rec {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "0vmxgyxrgaqijwd51ldd8pkz7jn9hdcfib1dqr0ai614286v69hw";
+    sha256 = "1n2pi9pc903inls1fvz257q7wpif76rj394qkgq7pixpisijdyjm";
   };
 
   buildInputs = [
     fontconfig glfw ncurses libunistring harfbuzz libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
-    wayland-protocols wayland
+    wayland-protocols wayland dbus
   ];
 
   nativeBuildInputs = [ pkgconfig which sphinx ];
+
+  outputs = [ "out" "terminfo" ];
 
   postPatch = ''
     substituteInPlace kitty/utils.py \
@@ -47,11 +49,19 @@ buildPythonApplication rec {
     runHook postInstall
   '';
 
+  postInstall = ''
+    mkdir -p $terminfo/share
+    mv $out/share/terminfo $terminfo/share/terminfo
+
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/kovidgoyal/kitty;
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tex ];
+    maintainers = with maintainers; [ tex rvolosatovs ];
   };
 }

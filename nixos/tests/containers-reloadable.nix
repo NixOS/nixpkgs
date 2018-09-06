@@ -21,11 +21,11 @@ in {
   };
 
   nodes = {
-    client = { lib, pkgs, ... }: {
+    client = { ... }: {
       imports = [ client_base ];
     };
 
-    client_c1 = { lib, pkgs, ... }: {
+    client_c1 = { lib, ... }: {
       imports = [ client_base ];
 
       containers.test1.config = {
@@ -34,7 +34,7 @@ in {
         services.httpd.adminAddr = "nixos@example.com";
       };
     };
-    client_c2 = { lib, pkgs, ... }: {
+    client_c2 = { lib, ... }: {
       imports = [ client_base ];
 
       containers.test1.config = {

@@ -1,9 +1,6 @@
 { stdenv, fetchurl
 , coreutils
-, buildPlatform, hostPlatform
 }:
-
-let inherit (stdenv.lib) optionals; in
 
 stdenv.mkDerivation rec {
   name = "findutils-4.6.0";
@@ -19,10 +16,10 @@ stdenv.mkDerivation rec {
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
   doCheck
-    =  !hostPlatform.isDarwin
-    && !(hostPlatform.libc == "glibc" && hostPlatform.isi686)
-    && (hostPlatform.libc != "musl")
-    && hostPlatform == buildPlatform;
+    =  !stdenv.hostPlatform.isDarwin
+    && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
+    && (stdenv.hostPlatform.libc != "musl")
+    && stdenv.hostPlatform == stdenv.buildPlatform;
 
   outputs = [ "out" "info" ];
 

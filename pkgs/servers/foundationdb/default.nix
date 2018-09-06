@@ -53,7 +53,9 @@ let
         patches =
           [ # For 5.2+, we need a slightly adjusted patch to fix all the ldflags
             (if lib.versionAtLeast version "5.2"
-             then ./ldflags.patch
+             then (if lib.versionAtLeast version "6.0"
+                   then ./ldflags-6.0.patch
+                   else ./ldflags-5.2.patch)
              else ./ldflags-5.1.patch)
           ] ++
           # for 6.0+, we do NOT need to apply this version fix, since we can specify
@@ -77,10 +79,23 @@ let
             --replace 'exit 1' '#exit 1'
 
           patchShebangs .
+        '' + lib.optionalString (lib.versionAtLeast version "6.0") ''
+          substituteInPlace ./Makefile \
+            --replace 'TLS_LIBS +=' '#TLS_LIBS +=' \
+            --replace 'LDFLAGS :=' 'LDFLAGS := -ltls -lssl -lcrypto'
         '';
 
+        separateDebugInfo = true;
         enableParallelBuilding = true;
-        makeFlags = [ "all" "fdb_c" "fdb_java" "KVRELEASE=1" ];
+
+        makeFlags = [ "all" "fdb_java" "fdb_python" ]
+          # Don't compile FDBLibTLS if we don't need it in 6.0 or later;
+          # it gets statically linked in
+          ++ lib.optional (!lib.versionAtLeast version "6.0") [ "fdb_c" ]
+          # Needed environment overrides
+          ++ [ "KVRELEASE=1"
+               "NOSTRIP=1"
+             ];
 
         # on 6.0 and later, we can specify all this information manually
         configurePhase = lib.optionalString (lib.versionAtLeast version "6.0") ''
@@ -91,15 +106,28 @@ let
 
         installPhase = ''
           mkdir -vp $out/{bin,libexec/plugins} $lib/{lib,share/java} $dev/include/foundationdb
+          mkdir -vp $python/lib/${python.libPrefix}/site-packages
 
-          cp -v ./lib/libfdb_c.so     $lib/lib
+        '' + lib.optionalString (!lib.versionAtLeast version "6.0") ''
+          # we only copy the TLS library on < 6.0, since it's compiled-in otherwise
           cp -v ./lib/libFDBLibTLS.so $out/libexec/plugins/FDBLibTLS.so
+        '' + ''
 
+          # C API
+          cp -v ./lib/libfdb_c.so                           $lib/lib
           cp -v ./bindings/c/foundationdb/fdb_c.h           $dev/include/foundationdb
           cp -v ./bindings/c/foundationdb/fdb_c_options.g.h $dev/include/foundationdb
 
+          # java
           cp -v ./bindings/java/foundationdb-client.jar     $lib/share/java/fdb-java.jar
 
+          # python
+          rm -f ./bindings/python/fdb/*.pth # remove useless files
+          cp -R ./bindings/python/fdb                       $python/lib/${python.libPrefix}/site-packages/fdb
+          # symlink a copy of the shared object into place, so that impl.py can load it
+          ln -sv $lib/lib/libfdb_c.so                       $python/lib/${python.libPrefix}/site-packages/fdb/libfdb_c.so
+
+          # binaries
           for x in fdbbackup fdbcli fdbserver fdbmonitor; do
             cp -v "./bin/$x" $out/bin;
           done
@@ -111,7 +139,7 @@ let
           ln -sfv $out/bin/fdbbackup $out/libexec/backup_agent
         '';
 
-        outputs = [ "out" "lib" "dev" ];
+        outputs = [ "out" "lib" "dev" "python" ];
 
         meta = with stdenv.lib; {
           description = "Open source, distributed, transactional key-value store";
@@ -131,15 +159,15 @@ in with builtins; {
   };
 
   foundationdb52 = makeFdb rec {
-    version = "5.2.5";
+    version = "5.2.8";
     branch  = "release-5.2";
-    sha256  = "00csr4v9cwl9y8r63p73grc6cvhlqmzcniwrf80i0klxv5asg7q7";
+    sha256  = "1kbmmhk2m9486r4kyjlc7bb3wd50204i0p6dxcmvl6pbp1bs0wlb";
   };
 
   foundationdb60 = makeFdb rec {
-    version = "6.0.0pre2227_${substring 0 8 rev}";
-    branch  = "master";
-    rev     = "8caa6eaecf1eeec0298fc77db334761b0c1d1523";
-    sha256  = "1q200rpsphl5fzwzp2vk7ifgsnqh95k0xfiicfi1c8253ylnsgll";
+    version = "6.0.4pre2497_${substring 0 8 rev}";
+    branch  = "release-6.0";
+    rev     = "73d64cb244714c19bcc651122f6e7a9236aa11b5";
+    sha256  = "1jzmrf9kj0brqddlmxvzhj27r6843790jnqwkv1s3ri21fqb3hs7";
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig
 , zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
-, libuuid, glibc, libX11, libXext, libXt, libXrender, glib, dbus, dbus-glib
+, libuuid, libX11, libXext, libXt, libXrender, glib, dbus, dbus-glib
 , gtk2, gdk_pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
 , xapian, ctpp2, zimlib
 }:
@@ -25,7 +25,7 @@ let
     sha256 = "1h9vcbvf8wgds6i2z20y7krpys0mqsqhv1ijyfljanp6vyll9fvi";
   };
 
-  xulrunner = if stdenv.system == "x86_64-linux"
+  xulrunner = if stdenv.hostPlatform.system == "x86_64-linux"
               then { tar = xulrunner64_tar; sdk = xulrunnersdk64_tar; }
               else { tar = xulrunner32_tar; sdk = xulrunnersdk32_tar; };
 

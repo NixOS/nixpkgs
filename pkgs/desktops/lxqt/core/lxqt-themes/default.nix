@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "0.13.0";
 
   src = fetchFromGitHub {
-    owner = "lxde";
+    owner = "lxqt";
     repo = pname;
     rev = version;
     sha256 = "026hbblxdbq48n9691b1z1xiak99khsk3wf09vn4iaj5zi7dwhw5";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Themes, graphics and icons for LXQt";
-    homepage = https://github.com/lxde/lxqt-themes;
+    homepage = https://github.com/lxqt/lxqt-themes;
     license = licenses.lgpl21;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

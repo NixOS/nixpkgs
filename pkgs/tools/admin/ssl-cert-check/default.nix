@@ -1,5 +1,4 @@
 { stdenv
-, lib
 , fetchFromGitHub
 , makeWrapper
 , openssl

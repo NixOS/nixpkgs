@@ -9,7 +9,7 @@ in pkgs.lib.listToAttrs (pkgs.lib.crossLists (predictable: withNetworkd: {
     name = "${if predictable then "" else "un"}predictableInterfaceNames${if withNetworkd then "-with-networkd" else ""}";
     meta = {};
 
-    machine = { config, lib, ... }: {
+    machine = { lib, ... }: {
       networking.usePredictableInterfaceNames = lib.mkForce predictable;
       networking.useNetworkd = withNetworkd;
       networking.dhcpcd.enable = !withNetworkd;

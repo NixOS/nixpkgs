@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pbr";
-  version = "4.0.4";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a9c27eb8f0e24e786e544b2dbaedb729c9d8546342b5a6818d8eda098ad4340d";
+    sha256 = "1b8be50d938c9bb75d0eaf7eda111eec1bf6dc88a62a6412e33bf077457e0f45";
   };
 
   # circular dependencies with fixtures

@@ -22,9 +22,7 @@
 
 with stdenv.lib;
 let
-  version = "2.12.0";
-  sha256 = "17377xxbmwbrnh895a108z944pqi39hzrbw4jzgj8pcipi3s3x69";
-  audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
+  audio = optionalString (hasSuffix "linux" stdenv.hostPlatform.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
@@ -36,6 +34,7 @@ let
 in
 
 stdenv.mkDerivation rec {
+  version = "3.0.0";
   name = "qemu-"
     + stdenv.lib.optionalString xenSupport "xen-"
     + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
@@ -43,8 +42,8 @@ stdenv.mkDerivation rec {
     + version;
 
   src = fetchurl {
-    url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    inherit sha256;
+    url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
+    sha256 = "1s7bm2xhcxbc9is0rg8xzwijx7azv67skq7mjc58spsgc2nn4glk";
   };
 
   buildInputs =
@@ -71,8 +70,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "ga" ];
 
-  patches = [ ./no-etc-install.patch ]
-    ++ optional nixosTestRunner ./force-uid0-on-9p.patch
+  patches = [
+    ./no-etc-install.patch
+    ./fix-qemu-ga.patch
+  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optional pulseSupport ./fix-hda-recording.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -149,7 +150,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.qemu.org/;
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric eelco ];
+    maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -18,6 +18,7 @@
 with lib.lists;
 with lib.types;
 with lib.attrsets;
+with lib.strings;
 with (import ./inspect.nix { inherit lib; }).predicates;
 
 let
@@ -89,9 +90,14 @@ rec {
     mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
 
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
+    powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
+    powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
 
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
+
+    sparc    = { bits = 32; significantByte = bigEndian;    family = "sparc"; };
+    sparc64  = { bits = 64; significantByte = bigEndian;    family = "sparc"; };
 
     wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; };
     wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; };
@@ -166,7 +172,6 @@ rec {
     macos   = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
     ios     = { execFormat = macho;   families = { inherit darwin; }; };
     freebsd = { execFormat = elf;     families = { inherit bsd; }; };
-    hurd    = { execFormat = elf;     families = { }; };
     linux   = { execFormat = elf;     families = { }; };
     netbsd  = { execFormat = elf;     families = { inherit bsd; }; };
     none    = { execFormat = unknown; families = { }; };
@@ -176,9 +181,6 @@ rec {
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;
-    # TODO(@Ericson2314): Handle these Darwin version suffixes more generally.
-    darwin10 = kernels.macos;
-    darwin14 = kernels.macos;
     watchos = kernels.ios;
     tvos = kernels.ios;
     win32 = kernels.windows;
@@ -256,8 +258,6 @@ rec {
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
-      else if elemAt l 1 == "gnu"
-        then { cpu = elemAt l 0;                      kernel = "hurd";     abi = "gnu";      }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" = # Awkwards hacks, beware!
       if elemAt l 1 == "apple"
@@ -266,6 +266,8 @@ rec {
         then { cpu = elemAt l 0;                      kernel = elemAt l 1; abi = elemAt l 2; }
       else if (elemAt l 2 == "mingw32") # autotools breaks on -gnu for window
         then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";  abi = "gnu"; }
+      else if hasPrefix "netbsd" (elemAt l 2)
+        then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
       else throw "Target specification with 3 components is ambiguous";
     "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
   }.${toString (length l)}
@@ -292,7 +294,9 @@ rec {
         else if isDarwin  parsed then vendors.apple
         else if isWindows parsed then vendors.pc
         else                     vendors.unknown;
-      kernel = getKernel args.kernel;
+      kernel = if hasPrefix "darwin" args.kernel      then getKernel "darwin"
+               else if hasPrefix "netbsd" args.kernel then getKernel "netbsd"
+               else                                   getKernel args.kernel;
       abi =
         /**/ if args ? abi       then getAbi args.abi
         else if isLinux   parsed then

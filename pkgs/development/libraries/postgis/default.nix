@@ -1,12 +1,10 @@
 { fetchurl
-, fetchpatch
 , stdenv
 , perl
 , libxml2
 , postgresql
 , geos
 , proj
-, flex
 , gdal
 , json_c
 , pkgconfig

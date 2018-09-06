@@ -1,15 +1,15 @@
 { stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
 , pyperclip, six, pyparsing, vim, wcwidth, colorama
-, contextlib2 ? null, subprocess32 ? null
-, pytest, mock, which, fetchFromGitHub, glibcLocales
+, contextlib2 ? null, setuptools_scm
+, pytest, mock, which, glibcLocales
 }:
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wpw4f9zix30hfncm0hwxjjdx78zq26x3r8s9nvsq9vnxf41xb49";
+    sha256 = "0037dcf92331c63ae43e7e644536e646fff8be2fd5a83da06b3482f910f929c6";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -30,6 +30,10 @@ buildPythonPackage rec {
   '';
   doCheck = !stdenv.isDarwin;
   disabled = !isPy3k;
+
+  buildInputs = [
+    setuptools_scm
+  ];
 
   propagatedBuildInputs = [
     colorama

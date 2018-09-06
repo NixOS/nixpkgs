@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem
+{ stdenv, fetchFromGitHub
 , cmake, libjpeg, libpng, libtiff, boost
 , qtbase, qttools }:
 

@@ -1,28 +1,28 @@
 { stdenv, fetchurl, makeWrapper
-, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang }:
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which }:
 
 stdenv.mkDerivation rec {
   name = "crystal-${version}";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchurl {
     url = "https://github.com/crystal-lang/crystal/archive/${version}.tar.gz";
-    sha256 = "1pnx21ky6cqfyv6df4mmjnyd1yh1bvcqkdzq6f0mk0yrkcl57k3q";
+    sha256 = "18vv47xvnf3hl5js5sk58wj2khqq36kcs851i3lgr0ji7m0g3379";
   };
 
-  prebuiltName = "crystal-0.25.0-1";
+  prebuiltName = "crystal-0.26.0-1";
   prebuiltSrc = let arch = {
     "x86_64-linux" = "linux-x86_64";
     "i686-linux" = "linux-i686";
     "x86_64-darwin" = "darwin-x86_64";
-  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
   in fetchurl {
-    url = "https://github.com/crystal-lang/crystal/releases/download/0.25.0/${prebuiltName}-${arch}.tar.gz";
+    url = "https://github.com/crystal-lang/crystal/releases/download/0.26.0/${prebuiltName}-${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "1q006086pbbvhmscbjzzgbdq1jkppd4p4kl9z9fn9j6np8fhi8ms";
-      "i686-linux" = "074ndm9n0mzsa7dkl3chhf234l85msm99yjksa5980lyqynyrw1d";
-      "x86_64-darwin" = "006f2j5984dkp5lsq8kns5mkxbhj50syjvzqk9z931pxl92wc7iy";
-    }."${stdenv.system}";
+      "x86_64-linux" = "1xban102yiiwmlklxvn3xp3q546bp8hlxxpakayajkhhnpl6yv45";
+      "i686-linux" = "1igspf1lrv7wpmz0pfrkbx8m1ykvnv4zhic53cav4nicppm2v0ic";
+      "x86_64-darwin" = "0hzc65ccajr0yhmvi5vbdgbzbp1gbjy56da24ds3zwwkam1ddk0k";
+    }."${stdenv.hostPlatform.system}";
   };
 
   unpackPhase = ''
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ which makeWrapper ];
 
   buildInputs = libs ++ [ llvm ];
 
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
     description = "A compiled language with Ruby like syntax and type inference";
     homepage = https://crystal-lang.org/;
     license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ sifmelcara david50407 ];
+    maintainers = with stdenv.lib.maintainers; [ manveru david50407 ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }

@@ -1,11 +1,9 @@
 { stdenv
-, makeWrapper
 , fetchurl
 , intltool
 , python3Packages
 , gobjectIntrospection
 , gtk3
-, dbus
 , libwnck3
 , keybinder3
 , hicolor-icon-theme

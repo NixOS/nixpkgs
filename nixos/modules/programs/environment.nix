@@ -2,7 +2,7 @@
 
 # Most of the stuff here should probably be moved elsewhere sometime.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -40,7 +40,6 @@ in
         GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ];
         XDG_DATA_DIRS = [ "/share" ];
-        XCURSOR_PATH = [ "/share/icons" ];
         MOZ_PLUGIN_PATH = [ "/lib/mozilla/plugins" ];
         LIBEXEC_PATH = [ "/lib/libexec" ];
       };

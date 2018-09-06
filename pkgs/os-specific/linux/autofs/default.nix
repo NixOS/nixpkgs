@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
+{ stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
 , libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl }:
 
 let

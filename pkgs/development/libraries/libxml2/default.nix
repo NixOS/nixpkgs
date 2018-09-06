@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, fetchpatch
-, zlib, xz, python2, findXMLCatalogs, libiconv
-, buildPlatform, hostPlatform
-, pythonSupport ? buildPlatform == hostPlatform
+, zlib, xz, python2, findXMLCatalogs
+, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
-, enableStatic ? false
+, enableShared ? stdenv.hostPlatform.libc != "msvcrt"
+, enableStatic ? !enableShared,
 }:
 
 let
@@ -18,6 +18,19 @@ in stdenv.mkDerivation rec {
     sha256 = "0ci7is75bwqqw2p32vxvrk6ds51ik7qgx73m920rakv5jlayax0b";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2018-14567_CVE-2018-9251.patch";
+      url = https://gitlab.gnome.org/GNOME/libxml2/commit/2240fbf5912054af025fb6e01e26375100275e74.patch;
+      sha256 = "1xpqsfkzhrqasza51c821mnds5l317djrz8086fmzpyf68vld03h";
+    })
+    (fetchpatch {
+      name = "CVE-2018-14404.patch";
+      url = https://gitlab.gnome.org/GNOME/libxml2/commit/a436374994c47b12d5de1b8b1d191a098fa23594.patch;
+      sha256 = "19vp7p32vrninnfa7vk9ipw7n4cl1gg16xxbhjy2d0kwp1crvzqh";
+    })
+  ];
+
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional enableStatic "static";
@@ -31,25 +44,18 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ] ++ lib.optional icuSupport icu;
 
-  configureFlags =
-       lib.optional pythonSupport "--with-python=${python}"
-    ++ lib.optional icuSupport    "--with-icu"
-    ++ [ "--exec_prefix=$dev" ]
-    ++ lib.optional enableStatic "--enable-static";
+  configureFlags = [
+    "--exec_prefix=$dev"
+    (lib.enableFeature enableStatic "static")
+    (lib.enableFeature enableShared "shared")
+    (lib.withFeature icuSupport "icu")
+    (lib.withFeatureAs pythonSupport "python" python)
+  ];
 
   enableParallelBuilding = true;
 
   doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
-    hostPlatform.libc != "musl";
-
-  crossAttrs = lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
-    # creating the DLL is broken ATM
-    dontDisableStatic = true;
-    configureFlags = configureFlags ++ [ "--disable-shared" ];
-
-    # libiconv is a header dependency - propagating is enough
-    propagatedBuildInputs =  [ findXMLCatalogs libiconv ];
-  };
+    stdenv.hostPlatform.libc != "musl";
 
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
@@ -70,7 +76,7 @@ in stdenv.mkDerivation rec {
     homepage = http://xmlsoft.org/;
     description = "An XML parsing library for C";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.eelco ];
   };
 }

@@ -1,4 +1,4 @@
-{ pkgs, stdenv, lib, fetchurl, intltool, pkgconfig, gstreamer, gst-plugins-base
+{ stdenv, lib, fetchurl, intltool, pkgconfig, gstreamer, gst-plugins-base
 , gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-ffmpeg, glib
 , mono, mono-addins, dbus-sharp-1_0, dbus-sharp-glib-1_0, notify-sharp, gtk-sharp-2_0
 , boo, gdata-sharp, taglib-sharp, sqlite, gnome-sharp, gconf, gtk-sharp-beans, gio-sharp
@@ -48,8 +48,10 @@ stdenv.mkDerivation rec {
         -i $out/bin/banshee
   '';
   meta = with lib; {
+    homepage = "http://banshee.fm/";
     description = "A music player written in C# using GNOME technologies";
     platforms = platforms.linux;
     maintainers = [ maintainers.zohl ];
+    license = licenses.mit;
   };
 }

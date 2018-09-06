@@ -42,6 +42,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    for a in test/Makefile.in test/format_test/format_checks.sh.in ; do
+      substituteInPlace $a \
+        --replace /bin/bash ${stdenv.shell}
+    done
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://openil.sourceforge.net/;
     description = "An image library which can can load, save, convert, manipulate, filter and display a wide variety of image formats";

@@ -6,14 +6,12 @@
 }:
 mkDerivation {
   pname = "elm-format";
-  version = "0.7.0";
+  version = "0.8.0";
   src = fetchgit {
     url = "http://github.com/avh4/elm-format";
-    sha256 = "1snl2lrrzdwgzi68agi3sdw84aslj04pzzxpm1mam9ic6dzhn3jf";
-    rev = "da4b415c6a2b7e77b7d9f00beca3e45230e603fb";
+    sha256 = "1w79xvsyq98vfz3jb4sv8433vdh6pcg8s7yh54lcxzr1p08yhsb6";
+    rev = "f19ac28046d7e83ff95f845849c033cc616f1bd6";
   };
-
-  doHaddock = false;
   isLibrary = true;
   isExecutable = true;
   setupHaskellDepends = [ base Cabal directory filepath process ];
@@ -27,15 +25,10 @@ mkDerivation {
     base cmark containers HUnit mtl parsec QuickCheck quickcheck-io
     split tasty tasty-golden tasty-hunit tasty-quickcheck text
   ];
+  doHaddock = false;
   jailbreak = true;
-  postInstall = ''
-    ln -s $out/bin/elm-format-0.18 $out/bin/elm-format
-  '';
-  postPatch = ''
-    sed -i "s|desc <-.*||" ./Setup.hs
-    sed -i "s|gitDescribe = .*|gitDescribe = \\\\\"da4b415c\\\\\"\"|" ./Setup.hs
-  '';
-  homepage = http://elm-lang.org;
+  doCheck = false;
+  homepage = "http://elm-lang.org";
   description = "A source code formatter for Elm";
   license = stdenv.lib.licenses.bsd3;
 }

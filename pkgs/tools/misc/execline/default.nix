@@ -1,41 +1,35 @@
-{ stdenv, fetchgit, skalibs }:
+{ stdenv, skawarePackages }:
 
-let
+with skawarePackages;
 
-  version = "2.3.0.3";
+buildPackage {
+  pname = "execline";
+  version = "2.5.0.1";
+  sha256 = "0j8hwdw8wn0rv8njdza8fbgmvyjg7hqp3qlbw00i7fwskr7d21wd";
 
-in stdenv.mkDerivation rec {
+  description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 
-  name = "execline-${version}";
+  outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
-  src = fetchgit {
-    url = "git://git.skarnet.org/execline";
-    rev = "refs/tags/v${version}";
-    sha256 = "1q0izb8ajzxl36fjpy4rn63sz01055r9s33fga99jprdmkkfzz6x";
-  };
-
-  dontDisableStatic = true;
-
-  enableParallelBuilding = true;
-
+  # TODO: nsss support
   configureFlags = [
-    "--enable-absolute-paths"
-    "--libdir=\${prefix}/lib"
-    "--includedir=\${prefix}/include"
-    "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs}/include"
-    "--with-lib=${skalibs}/lib"
-    "--with-dynlib=${skalibs}/lib"
-  ]
-  ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
-  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+    "--libdir=\${lib}/lib"
+    "--dynlibdir=\${lib}/lib"
+    "--bindir=\${bin}/bin"
+    "--includedir=\${dev}/include"
+    "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
+    "--with-include=${skalibs.dev}/include"
+    "--with-lib=${skalibs.lib}/lib"
+    "--with-dynlib=${skalibs.lib}/lib"
+  ];
 
-  meta = {
-    homepage = http://skarnet.org/software/execline/;
-    description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney ];
-  };
+  postInstall = ''
+    # remove all execline executables from build directory
+    rm $(find -type f -mindepth 1 -maxdepth 1 -executable)
+    rm libexecline.*
+
+    mv doc $doc/share/doc/execline/html
+    mv examples $doc/share/doc/execline/examples
+  '';
 
 }

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest, pytestcov, watchdog, mock
 }:
 

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ buildPythonPackage
 , certbot
 , nose
 , cryptography
@@ -27,4 +27,8 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/acme";
+
+  meta = certbot.meta // {
+    description = "ACME protocol implementation in Python";
+  };
 }

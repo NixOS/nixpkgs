@@ -16,7 +16,8 @@ in
   ];
 
   assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "armv7l-linux";
+    assertion = pkgs.stdenv.hostPlatform.system == "armv7l-linux"
+      && pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system;
     message = "sd-image-armv7l-multiplatform.nix can be only built natively on ARMv7; " +
       "it cannot be cross compiled";
   };
@@ -33,9 +34,6 @@ in
   # - ttyO0: for OMAP (BeagleBone Black)
   # - ttySAC2: for Exynos (ODROID-XU3)
   boot.kernelParams = ["console=ttyS0,115200n8" "console=ttymxc0,115200n8" "console=ttyAMA0,115200n8" "console=ttyO0,115200n8" "console=ttySAC2,115200n8" "console=tty0"];
-
-  # FIXME: this probably should be in installation-device.nix
-  users.users.root.initialHashedPassword = "";
 
   sdImage = {
     populateBootCommands = let

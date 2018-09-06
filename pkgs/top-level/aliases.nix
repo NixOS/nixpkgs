@@ -81,6 +81,8 @@ mapAliases ({
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   emacs25Macport_25_1 = emacs25Macport; # added 2018-04-25
   emacsMelpa = emacs25PackagesNg; # for backward compatibility
+  emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
+  emacsPackagesNgGen = emacsPackagesNgFor; # added 2018-08-18
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
@@ -151,7 +153,7 @@ mapAliases ({
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
-  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext; # added 2018-03-14
+  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
@@ -171,7 +173,9 @@ mapAliases ({
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   module_init_tools = kmod; # added 2016-04-22
+  mpich2 = mpich;  # added 2018-08-06
   msf = metasploit; # added 2018-04-25
+  libmsgpack = msgpack; # added 2018-08-17
   mssys = ms-sys; # added 2015-12-13
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
@@ -209,6 +213,7 @@ mapAliases ({
   piwik = matomo; # added 2018-01-16
   pltScheme = racket; # just to be sure
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
@@ -228,6 +233,10 @@ mapAliases ({
   ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
+  s6Dns = s6-dns; # added 2018-07-23
+  s6Networking = s6-networking; # added 2018-07-23
+  s6LinuxUtils = s6-linux-utils; # added 2018-07-23
+  s6PortableUtils = s6-portable-utils; # added 2018-07-23
   sam = deadpixi-sam; # added 2018-04-25
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
@@ -271,6 +280,7 @@ mapAliases ({
   tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
+  torbrowser = tor-browser-bundle-bin; # added 2017-04-05
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
@@ -308,6 +318,7 @@ mapAliases ({
   # added 2018-07-16
   forceSystem = system: _:
     (import self.path { localSystem = { inherit system; }; });
+  callPackage_i686 = pkgsi686Linux.callPackage;
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1

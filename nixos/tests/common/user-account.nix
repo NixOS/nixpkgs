@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ ... }:
 
 { users.users.alice =
     { isNormalUser = true;

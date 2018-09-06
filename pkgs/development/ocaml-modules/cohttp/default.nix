@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
 , ppx_fields_conv, ppx_sexp_conv, ppx_deriving
-, base64, fieldslib, jsonm, logs, re, stringext, uri
+, base64, fieldslib, jsonm, re, stringext, uri
 }:
 
 stdenv.mkDerivation rec {

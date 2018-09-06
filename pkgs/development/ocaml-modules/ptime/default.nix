@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, buildOcaml, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml }:
 
-buildOcaml rec {
-  version = "0.8.3";
-  name = "ptime";
+stdenv.mkDerivation rec {
+  version = "0.8.4";
+  name = "ocaml${ocaml.version}-ptime-${version}";
 
   src = fetchurl {
     url = "http://erratique.ch/software/ptime/releases/ptime-${version}.tbz";
-    sha256 = "18jimskgnd9izg7kn6zk6sk35adgjm605dkv13plwslbb90kqr44";
+    sha256 = "0z2snhda8bg136xkw2msw6k2dz84vb49p8bgzrxfs8mawdlk0kkg";
   };
 
   unpackCmd = "tar -xf $curSrc";

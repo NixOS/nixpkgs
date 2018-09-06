@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "Fiona";
-  version = "1.7.12";
+  version = "1.7.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b54eb8422d7c502bb7776b184018186bede1a489cf438a7a47f992ade6a0e51";
+    sha256 = "a156129f0904cb7eb24aa0745b6075da54f2c31db168ed3bcac8a4bd716d77b2";
   };
 
   buildInputs = [

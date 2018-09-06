@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, cairo, Carbon, fontconfig
-, libtiff, giflib, libjpeg, libpng, monoDLLFixer
+, libtiff, giflib, libjpeg, libpng
 , libXrender, libexif }:
 
 stdenv.mkDerivation rec {

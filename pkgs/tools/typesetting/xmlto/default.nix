@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, flex, libxml2, libxslt
+{ fetchurl, stdenv, libxml2, libxslt
 , docbook_xml_dtd_45, docbook_xsl, w3m
 , bash, getopt, makeWrapper }:
 
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0xhj8b2pwp4vhl9y16v3dpxpsakkflfamr191mprzsspg4xdyc0i";
   };
 
-  patchPhase = ''
+  postPatch = ''
+    patchShebangs xmlif/test/run-test
+
     substituteInPlace "xmlto.in" \
       --replace "/bin/bash" "${bash}/bin/bash"
     substituteInPlace "xmlto.in" \

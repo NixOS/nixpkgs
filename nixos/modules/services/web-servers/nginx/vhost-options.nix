@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ config, lib }:
+{ lib, ... }:
 
 with lib;
 {
@@ -127,6 +127,13 @@ with lib;
       type = types.path;
       example = "/var/host.key";
       description = "Path to server SSL certificate key.";
+    };
+
+    sslTrustedCertificate = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = "/var/root.cert";
+      description = "Path to root SSL certificate for stapling and client certificates.";
     };
 
     http2 = mkOption {

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurlBoot, buildPackages
-, enableThreading ? stdenv ? glibc, fetchpatch, makeWrapper
+, enableThreading ? stdenv ? glibc, makeWrapper
 }:
 
 with lib;
@@ -97,12 +97,6 @@ let
         sed -i 's,\(libswanted.*\)pthread,\1,g' Configure
       '';
 
-    preBuild = optionalString (!(stdenv ? cc && stdenv.cc.nativeTools))
-      ''
-        # Make Cwd work on NixOS (where we don't have a /bin/pwd).
-        substituteInPlace dist/PathTools/Cwd.pm --replace "'/bin/pwd'" "'$(type -tP pwd)'"
-      '';
-
     setupHook = ./setup-hook.sh;
 
     passthru.libPrefix = "lib/perl5/site_perl";
@@ -152,6 +146,7 @@ let
     meta = {
       homepage = https://www.perl.org/;
       description = "The standard implementation of the Perl 5 programmming language";
+      license = licenses.artistic1;
       maintainers = [ maintainers.eelco ];
       platforms = platforms.all;
     };

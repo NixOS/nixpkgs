@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, autoconf, automake, libtool, makeWrapper
+{ stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
 , pkgconfig, cmake, gnumake, yasm, python2
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
@@ -189,7 +189,7 @@ in stdenv.mkDerivation rec {
         wrapProgram $out/bin/$p \
           --prefix PATH            ":" "${lib.makeBinPath [ python2 glxinfo xdpyinfo ]}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
-              [ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass ]}"
+              ([ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass ] ++ lib.optional nfsSupport libnfs)}"
       done
 
       substituteInPlace $out/share/xsessions/kodi.desktop \

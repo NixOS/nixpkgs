@@ -1,18 +1,10 @@
-{ stdenv, fetchPypi, unzip, buildPythonApplication, makeDesktopItem
-# mandatory
-, numpydoc, qtconsole, qtawesome, jedi, pycodestyle, psutil
-, pyflakes, rope, sphinx, nbconvert, mccabe, pyopengl, cloudpickle
-# optional
-, numpy ? null, scipy ? null, matplotlib ? null
-# optional
-, pylint ? null
-}:
+{ stdenv, python3, makeDesktopItem }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "spyder";
   version = "3.2.8";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "0iwcby2bxvayz0kp282yh864br55w6gpd8rqcdj1cp3jbn3q6vg5";
   };
@@ -22,7 +14,7 @@ buildPythonApplication rec {
     sed -i -e '/pyqt5/d' setup.py
   '';
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle
   ];

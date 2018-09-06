@@ -1,8 +1,11 @@
 { stdenv, fetchurl, pkgconfig, perl, yacc, bootstrap_cmds
-, openssl, openldap, libedit
+, openssl, openldap, libedit, keyutils
 
 # Extra Arguments
 , type ? ""
+# This is called "staticOnly" because krb5 does not support
+# builting both static and shared, see below.
+, staticOnly ? false
 }:
 
 let
@@ -22,6 +25,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   configureFlags = [ "--with-tcl=no" "--localstatedir=/var/lib"]
+    # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
+    # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
+    ++ optional staticOnly [ "--enable-static" "--disable-shared" ]
     ++ optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
     ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform)
        [ "krb5_cv_attr_constructor_destructor=yes,yes"
@@ -34,6 +40,7 @@ stdenv.mkDerivation rec {
     # Provides the mig command used by the build scripts
     ++ optional stdenv.isDarwin bootstrap_cmds;
   buildInputs = [ openssl ]
+    ++ optionals (stdenv.hostPlatform.isLinux) [ keyutils ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
   preConfigure = "cd ./src";

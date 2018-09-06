@@ -5,7 +5,7 @@
 
 # Options from inherited versions
 , version, sha256
-, patchSrc ? "src", extraPatches ? [ ]
+, extraPatches ? [ ]
 , license ? stdenv.lib.licenses.sleepycat
 , drvArgs ? {}
 }:

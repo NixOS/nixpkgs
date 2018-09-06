@@ -5,6 +5,10 @@ let inherit (stdenv.lib) getVersion versionAtLeast; in
 assert versionAtLeast (getVersion ocaml) "4.00.0";
 assert versionAtLeast (getVersion findlib) "1.3.3";
 
+if versionAtLeast ocaml.version "4.06"
+then throw "bolt is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
 
   name = "bolt-1.4";

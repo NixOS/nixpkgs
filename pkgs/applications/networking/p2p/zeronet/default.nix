@@ -3,6 +3,7 @@
 python2Packages.buildPythonApplication rec {
   pname = "zeronet";
   version = "0.6.2";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "HelloZeroNet";
@@ -12,9 +13,6 @@ python2Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python2Packages; [ msgpack gevent ];
-
-  format = "other";
-
   buildPhase = "${python2Packages.python.interpreter} -O -m compileall .";
 
   installPhase = ''
@@ -22,14 +20,10 @@ python2Packages.buildPythonApplication rec {
     cp -r plugins src tools *.py $out/share/
   '';
 
-  # Wrap the main executable and set the log and data dir to something out of
-  # the store
   postFixup = ''
     makeWrapper "$out/share/zeronet.py" "$out/bin/zeronet" \
-        --set PYTHONPATH "$PYTHONPATH" \
-        --set PATH ${python2Packages.python}/bin \
-        --add-flags "--log_dir \$HOME/.local/share/zeronet/logs" \
-        --add-flags "--data_dir \$HOME/.local/share/zeronet"
+      --set PYTHONPATH "$PYTHONPATH" \
+      --set PATH ${python2Packages.python}/bin
   '';
 
   meta = with stdenv.lib; {

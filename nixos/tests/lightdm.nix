@@ -4,7 +4,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ aszlig ];
   };
 
-  machine = { lib, ... }: {
+  machine = { ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.lightdm.enable = true;

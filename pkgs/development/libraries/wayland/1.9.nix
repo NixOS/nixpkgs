@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig
-, libffi, docbook_xsl, doxygen, graphviz, libxslt, xmlto, libxml2
+, libffi, libxml2
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yhy62vkbq8j8c9zaa6yzvn75cd99kfa8n2zfdwl80x019r711ww";
   };
 
-  configureFlags = "--with-scanner --disable-documentation";
+  configureFlags = [ "--with-scanner" "--disable-documentation" ];
 
   nativeBuildInputs = [ pkgconfig ];
 

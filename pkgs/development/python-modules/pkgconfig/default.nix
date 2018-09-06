@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pkgconfig";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "107x2wmchlch8saixb488cgjz9n6inl38wi7nxkb942rbaapxiqb";
+    sha256 = "048c3b457da7b6f686b647ab10bf09e2250e4c50acfe6f215398a8b5e6fcdb52";
   };
 
   checkInputs = [ nose ];

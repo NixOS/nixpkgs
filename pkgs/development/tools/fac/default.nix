@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, makeWrapper, git }:
+{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, git }:
 
 buildGoPackage rec {
   name = "fac-${version}";

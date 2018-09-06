@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ... } : {
   };
 
   nodes = {
-    node = { config, pkgs, nodes, ... }: {
+    node = { ... }: {
       services.etcd.enable = true;
     };
   };

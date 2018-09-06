@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bash-completion
 , glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
 , gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_40
-, libgudev, sane-backends, udev, gnome3, makeWrapper }:
+, libgudev, sane-backends, gnome3, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "colord-1.4.2";
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "lib/systemd/system";
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "lib/systemd/user";
-  PKG_CONFIG_SYSTEMD_TMPFILESDIR = "lib/tmpfiles.d";
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "share/bash-completion/completions";
-  PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_TMPFILESDIR = "${placeholder "out"}/lib/tmpfiles.d";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
   postFixup = ''
     wrapProgram "$out/libexec/colord-session" \

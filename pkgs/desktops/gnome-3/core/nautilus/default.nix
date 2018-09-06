@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2, desktop-file-utils, wrapGAppsHook
-, gtk, gnome3, gnome-autoar, glib, dbus-glib, shared-mime-info, libnotify, libexif
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2, desktop-file-utils, python3, wrapGAppsHook
+, gtk, gnome3, gnome-autoar, dbus-glib, shared-mime-info, libnotify, libexif
 , exempi, librsvg, tracker, tracker-miners, gnome-desktop, gexiv2, libselinux, gdk_pixbuf }:
 
 let
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "19dhpa2ylrg8d5274lahy7xqr2p9z3jnq1h4qmsh95czkpy7is4w";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig libxml2 gettext wrapGAppsHook desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja pkgconfig libxml2 gettext python3 wrapGAppsHook desktop-file-utils ];
 
   buildInputs = [
     dbus-glib shared-mime-info libexif gtk exempi libnotify libselinux

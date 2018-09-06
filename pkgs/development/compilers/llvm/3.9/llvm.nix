@@ -8,20 +8,16 @@
 , libffi
 , libbfd
 , libxml2
-, valgrind
 , ncurses
 , version
 , zlib
 , compiler-rt_src
 , debugVersion ? false
-, enableSharedLibraries ? (buildPlatform == hostPlatform)
-, darwin
+, enableSharedLibraries ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , buildPackages
-, buildPlatform
-, hostPlatform
 }:
 
-assert (hostPlatform != buildPlatform) -> !enableSharedLibraries;
+assert (stdenv.hostPlatform != stdenv.buildPlatform) -> !enableSharedLibraries;
 
 let
   src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
@@ -133,7 +129,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ stdenv.lib.optionals (buildPlatform != hostPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildPackages.llvmPackages_39.llvm}/bin/llvm-tblgen"
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
@@ -171,7 +167,7 @@ in stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

@@ -11,7 +11,7 @@ in
     };
 
     machine =
-      { config, lib, pkgs, ... }:
+      { lib, ... }:
       with lib;
       {
         users.groups = { foobar = {}; barfoo = {}; baz = { gid = 1337; }; };

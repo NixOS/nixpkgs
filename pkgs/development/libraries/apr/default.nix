@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
 
+  # This test needs the net
+  postPatch = ''
+    rm test/testsock.*
+  '';
+
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     # Including the Windows headers breaks unistd.h.
     # Based on ftp://sourceware.org/pub/cygwin/release/libapr1/libapr1-1.3.8-2-src.tar.bz2
-    stdenv.lib.optional (stdenv.system == "i686-cygwin") "ac_cv_header_windows_h=no";
+    stdenv.lib.optional (stdenv.hostPlatform.system == "i686-cygwin") "ac_cv_header_windows_h=no";
 
   enableParallelBuilding = true;
 

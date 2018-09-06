@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, glibc, libX11, libGLU_combined }:
+{ stdenv, fetchurl, glibc, libX11, libGLU_combined }:
 
 with stdenv.lib;
 stdenv.mkDerivation {

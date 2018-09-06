@@ -1,4 +1,4 @@
-{ stdenv, python, fetchPypi, fetchurl, makeWrapper, unzip }:
+{ stdenv, python, fetchPypi, makeWrapper, unzip }:
 
 let
   wheel_source = fetchPypi {
@@ -9,20 +9,20 @@ let
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "39.2.0";
+    version = "40.2.0";
     format = "wheel";
-    sha256 = "8fca9275c89964f13da985c3656cb00ba029d7f3916b37990927ffdf264e7926";
+    sha256 = "ea3796a48a207b46ea36a9d26de4d0cc87c953a683a7b314ea65d666930ea8e6";
   };
 
 in stdenv.mkDerivation rec {
   pname = "pip";
-  version = "10.0.1";
+  version = "18.0";
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
-    sha256 = "717cdffb2833be8409433a93746744b59505f42146e8d37de6c62b430e25d6d7";
+    sha256 = "070e4bf493c7c2c9f6a08dd797dd3c066d64074c38e9e8a0fb4e6541f266d96c";
   };
 
   unpackPhase = ''

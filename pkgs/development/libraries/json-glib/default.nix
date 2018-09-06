@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, glib, meson, ninja, pkgconfig, gettext
-, gobjectIntrospection, dbus, fixDarwinDylibNames, gnome3
+, gobjectIntrospection, fixDarwinDylibNames, gnome3
 }:
 
 let

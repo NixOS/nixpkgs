@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre-cpp, snappy
-, zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger, Security
+, zlib, libyamlcpp, sasl, openssl, libpcap, Security
 }:
 
 # Note:

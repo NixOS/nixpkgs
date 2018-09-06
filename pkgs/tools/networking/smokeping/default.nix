@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fping, rrdtool, FCGI, CGI
 , CGIFast, ConfigGrammar, DigestHMAC, NetTelnet
 , NetOpenSSH, NetSNMP, LWP, IOTty, perl, NetDNS
-, NetLDAP
+, perlldap
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
   propagatedBuildInputs = [
     rrdtool FCGI CGI CGIFast ConfigGrammar DigestHMAC NetTelnet NetOpenSSH
-      NetSNMP LWP IOTty fping perl NetDNS NetLDAP ];
+      NetSNMP LWP IOTty fping perl NetDNS perlldap ];
   postInstall = ''
     mv $out/htdocs/smokeping.fcgi.dist $out/htdocs/smokeping.fcgi
   '';

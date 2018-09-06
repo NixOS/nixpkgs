@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, wrapGAppsHook
-, python3Packages, gst, gtk3, hicolor-icon-theme
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, python3, wrapGAppsHook
+, python3Packages, gst, gtk3
 , gobjectIntrospection, librsvg, gnome3, libnotify
 , meson, ninja
 }:
@@ -43,7 +43,7 @@ in python3Packages.buildPythonApplication rec {
     patchShebangs ./getenvvar.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkgconfig intltool itstool wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig intltool itstool python3 wrapGAppsHook ];
 
   buildInputs = [
     gobjectIntrospection gtk3 librsvg gnome3.gnome-desktop gnome3.gsound

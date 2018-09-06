@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   name = "android-ndk-r${version}";
   inherit version;
 
-  src = if stdenv.system == "x86_64-linux" then fetchurl {
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
       url = "https://dl.google.com/android/repository/${name}-linux-x86_64.zip";
       inherit sha256;
-    } else throw "platform ${stdenv.system} not supported!";
+    } else throw "platform ${stdenv.hostPlatform.system} not supported!";
 
   phases = "buildPhase";
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
         ''
           patch -p1 \
             --no-backup-if-mismatch \
-            -d $out/libexec/${name} < ${ ./. + builtins.toPath ("/make_standalone_toolchain.py_" + "${version}" + ".patch") }
+            -d $out/libexec/${name} < ${ ./. + "/make_standalone_toolchain.py_${version}.patch" }
           wrapProgram ${pkg_path}/build/tools/make_standalone_toolchain.py --prefix PATH : "${runtime_paths}"
         ''
     }
@@ -91,5 +91,6 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];
+    license = stdenv.lib.licenses.asl20;
   };
 }

@@ -1,4 +1,4 @@
-{ fetchFromGitHub, lib, python3Packages, stdenv }:
+{ fetchFromGitHub, lib, python3Packages }:
 
 with python3Packages;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, cmake
+{ stdenv, fetchgit, cmake
 , libsodium, mbedtls, libev, c-ares, pcre
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
 }:

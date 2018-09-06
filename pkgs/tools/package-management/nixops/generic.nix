@@ -1,4 +1,4 @@
-{ lib, python2Packages, fetchurl, libxslt, docbook_xsl_ns, openssh
+{ lib, python2Packages, libxslt, docbook_xsl_ns, openssh
 # version args
 , src, version
 }:
@@ -47,5 +47,6 @@ python2Packages.buildPythonApplication {
     description = "NixOS cloud provisioning and deployment tool";
     maintainers = with lib.maintainers; [ eelco rob domenkozar ];
     platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl3;
   };
 }

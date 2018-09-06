@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "srelay-0.4.8";

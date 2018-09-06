@@ -74,7 +74,10 @@ stdenv.mkDerivation rec {
       ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}";
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}"
+       # For the 'urandom', maybe it should be a cross-system option
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       "--with-random=/dev/urandom";
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
@@ -90,16 +93,6 @@ stdenv.mkDerivation rec {
     ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4.4.0
   '';
 
-  crossAttrs = {
-    # We should refer to the cross built openssl
-    # For the 'urandom', maybe it should be a cross-system option
-    configureFlags = [
-        ( if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl" )
-        ( if gnutlsSupport then "--with-gnutls=${gnutls.crossDrv}" else "--without-gnutls" )
-        "--with-random /dev/urandom"
-      ];
-  };
-
   passthru = {
     inherit sslSupport openssl;
   };
@@ -108,6 +101,7 @@ stdenv.mkDerivation rec {
     description = "A command line tool for transferring files with URL syntax";
     homepage    = https://curl.haxx.se/;
     maintainers = with maintainers; [ lovek323 ];
+    license = licenses.curl;
     platforms   = platforms.all;
   };
 }

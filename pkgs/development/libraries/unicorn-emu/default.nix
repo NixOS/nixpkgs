@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, pkgconfig, python }:
+{ stdenv, fetchurl, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
   name    = "unicorn-emulator-${version}";

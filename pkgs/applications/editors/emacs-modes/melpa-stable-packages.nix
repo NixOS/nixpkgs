@@ -13,7 +13,7 @@ To update the list of packages from MELPA,
 
 */
 
-{ lib, external }:
+{ external }:
 
 self:
 
@@ -108,6 +108,14 @@ self:
       # Expects bash to be at /bin/bash
       helm-rtags = markBroken super.helm-rtags;
 
+      # Build same version as Haskell package
+      hindent = super.hindent.overrideAttrs (attrs: {
+        version = external.hindent.version;
+        src = external.hindent.src;
+        packageRequires = [ self.haskell-mode ];
+        propagatedUserEnvPkgs = [ external.hindent ];
+      });
+
       # upstream issue: missing file header
       ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
 
@@ -142,6 +150,12 @@ self:
           nativeBuildInputs =
             (attrs.nativeBuildInputs or []) ++ [ external.git ];
         });
+
+      magit-todos = super.magit-todos.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # missing OCaml
       merlin = markBroken super.merlin;
@@ -185,6 +199,12 @@ self:
 
       # missing OCaml
       utop = markBroken super.utop;
+
+      vdiff-magit =
+        (super.vdiff-magit.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        }));
 
       # upstream issue: missing file header
       voca-builder = markBroken super.voca-builder;

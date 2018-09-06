@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "p7zip-${version}";
@@ -10,16 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (fetchpatch rec {
-      name = "CVE-2016-9296.patch";
-      url = "https://salsa.debian.org/debian/p7zip/raw/debian/${version}+dfsg-6/debian/patches/12-${name}";
-      sha256 = "09wbkzai46bwm8zmplsz0m4jck3qn7snr68i9p1gsih300zidj0m";
-    })
-    (fetchpatch rec {
-      name = "CVE-2017-17969.patch";
-      url = "https://salsa.debian.org/debian/p7zip/raw/debian/${version}+dfsg-6/debian/patches/13-${name}";
-      sha256 = "00pycdwx6gw7w591bg54ym6zhbxgn47p3zhms6mnmaycfzw09mkn";
-    })
+    ./12-CVE-2016-9296.patch
+    ./13-CVE-2017-17969.patch
   ];
 
   # Default makefile is full of impurities on Darwin. The patch doesn't hurt Linux so I'm leaving it unconditional
@@ -47,5 +39,6 @@ stdenv.mkDerivation rec {
     # license = stdenv.lib.licenses.lgpl21Plus; + "unRAR restriction"
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.raskin ];
+    license = stdenv.lib.licenses.lgpl2Plus;
   };
 }

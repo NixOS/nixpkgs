@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, sourceFromHead, autoconf, automake, libtool
+{ stdenv, fetchgit, autoconf, automake, libtool
 , pkgconfig, faad2, faac, a52dec, alsaLib, fftw, lame, libavc1394
 , libiec61883, libraw1394, libsndfile, libvorbis, libogg, libjpeg
 , libtiff, freetype, mjpegtools, x264, gettext, openexr

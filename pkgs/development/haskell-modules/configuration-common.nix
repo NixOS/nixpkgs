@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0q9z5q7vrcqa831wni972kchcdivqp55x1z2fgmdp8jfq4pidvyb";
+      sha256 = "0a7h21cwfvprj5xfyivjzg2hbs71xp85l9v6kyp58mlqvwy3zffl";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -249,14 +249,6 @@ self: super: {
   # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
   #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
   hnix = dontCheck (doJailbreak (overrideCabal super.hnix (old: {
-    patches = old.patches or [] ++ [
-      # should land in hnix-5.2
-      (pkgs.fetchpatch {
-        url = "https://github.com/haskell-nix/hnix/commit/9cfe060a9dbe9e7c64867956a0523eed9661803a.patch";
-        sha256 = "0ci4n7nw2pzqw0gkmkp4szzvxjyb143a4znjm39jmb0s397a68sh";
-        name = "disable-hpack-test-by-default.patch";
-      })
-    ];
     testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
   })));
 
@@ -416,6 +408,9 @@ self: super: {
   # https://github.com/bos/snappy/issues/1
   snappy = dontCheck super.snappy;
 
+  # https://github.com/kim/snappy-framing/issues/3
+  snappy-framing = dontHaddock super.snappy-framing;
+
   # https://ghc.haskell.org/trac/ghc/ticket/9625
   vty = dontCheck super.vty;
 
@@ -503,11 +498,20 @@ self: super: {
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
+  # Missing file in source distribution:
+  # - https://github.com/karun012/doctest-discover/issues/22
+  # - https://github.com/karun012/doctest-discover/issues/23
+  #
+  # When these are fixed the following needs to be enabled again:
+  #
+  # # Depends on itself for testing
+  # doctest-discover = addBuildTool super.doctest-discover
+  #   (if pkgs.buildPlatform != pkgs.hostPlatform
+  #    then self.buildHaskellPackages.doctest-discover
+  #    else dontCheck super.doctest-discover);
+  doctest-discover = dontCheck super.doctest-discover;
+
   # Depends on itself for testing
-  doctest-discover = addBuildTool super.doctest-discover
-    (if pkgs.buildPlatform != pkgs.hostPlatform
-     then self.buildHaskellPackages.doctest-discover
-     else dontCheck super.doctest-discover);
   tasty-discover = addBuildTool super.tasty-discover
     (if pkgs.buildPlatform != pkgs.hostPlatform
      then self.buildHaskellPackages.tasty-discover
@@ -597,14 +601,7 @@ self: super: {
   # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
-    buildTools = with pkgs.buildPackages; [ gettext perl help2man intltool ];
-    patches = [
-      # Add missing gio-unix-2.0 dependency
-      (pkgs.fetchpatch {
-        url = https://github.com/wjt/bustle/commit/bcc3d56d367635c0dfdb4eab0d1265829aba6400.patch;
-        sha256 = "1ybviivfbs5janiyw01ww365vxckni6fk0j10609clxk4na2nvb9";
-      })
-    ];
+    buildTools = with pkgs.buildPackages; [ gettext perl help2man ];
     postInstall = ''
       make install PREFIX=$out
     '';
@@ -675,6 +672,9 @@ self: super: {
   # https://github.com/bos/bloomfilter/issues/7
   bloomfilter = appendPatch super.bloomfilter ./patches/bloomfilter-fix-on-32bit.patch;
 
+  # https://github.com/ashutoshrishi/hunspell-hs/pull/3
+  hunspell-hs = addPkgconfigDepend (dontCheck (appendPatch super.hunspell-hs ./patches/hunspell.patch)) pkgs.hunspell;
+
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
@@ -720,9 +720,6 @@ self: super: {
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
 
-  # broken test suite
-  servant-server = dontCheck super.servant-server;
-
   # build servant docs from the repository
   servant =
     let
@@ -733,7 +730,7 @@ self: super: {
           owner = "haskell-servant";
           repo = "servant";
           rev = "v${ver}";
-          sha256 = "0bwd5dy3crn08dijn06dr3mdsww98kqxfp8v5mvrdws5glvcxdsg";
+          sha256 = "0kqglih3rv12nmkzxvalhfaaafk4b2irvv9x5xmc48i1ns71y23l";
         }}/doc";
         buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";
@@ -746,9 +743,6 @@ self: super: {
         ln -s ${docs} $doc/share/doc/servant
       '';
     });
-
-  # Glob == 0.7.x
-  servant-auth = doJailbreak super.servant-auth;
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
@@ -818,9 +812,6 @@ self: super: {
   # https://github.com/fizruk/http-api-data/issues/49
   http-api-data = dontCheck super.http-api-data;
 
-  # https://github.com/snoyberg/yaml/issues/106
-  yaml = disableCabalFlag super.yaml "system-libyaml";
-
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
 
@@ -869,9 +860,6 @@ self: super: {
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
-
-  # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
-  stack2nix = doJailbreak super.stack2nix;
 
   # Work around https://github.com/haskell/c2hs/issues/192.
   c2hs = dontCheck super.c2hs;
@@ -966,10 +954,11 @@ self: super: {
   # https://github.com/yesodweb/Shelly.hs/issues/162
   shelly = dontCheck super.shelly;
 
-  # Support ansi-terminal 0.7.x.
-  cabal-plan = appendPatch super.cabal-plan (pkgs.fetchpatch {
-    url = "https://github.com/haskell-hvr/cabal-plan/pull/16.patch";
-    sha256 = "0i889zs46wn09d7iqdy99201zaqxb175cfs8jz2zi3mv4ywx3a0l";
+  # https://github.com/simonmichael/hledger/issues/852
+  hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch {
+    url = "https://github.com/simonmichael/hledger/commit/007b9f8caaf699852511634752a7d7c86f6adc67.patch";
+    sha256 = "1lfp29mi1qyrcr9nfjigbyric0xb9n4ann5w6sr0g5sanr4maqs2";
+    stripLen = 1;
   });
 
   # Copy hledger man pages from data directory into the proper place. This code
@@ -1062,8 +1051,8 @@ self: super: {
   # Test suite depends on cabal-install
   doctest = dontCheck super.doctest;
 
-  # Over-specified constraint on X11 ==1.8.*.
-  xmonad = doJailbreak super.xmonad;
+  # https://github.com/haskell-servant/servant-auth/issues/113
+  servant-auth-client = dontCheck super.servant-auth-client;
 
   # Test has either build errors or fails anyway, depending on the compiler.
   vector-algorithms = dontCheck super.vector-algorithms;
@@ -1078,9 +1067,16 @@ self: super: {
   # https://github.com/phadej/tree-diff/issues/19
   tree-diff = doJailbreak super.tree-diff;
 
+  # https://github.com/haskell-hvr/hgettext/issues/14
+  hgettext = doJailbreak super.hgettext;
+
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
+
+  # cabal2nix requires hpack >= 0.29.6 but the LTS has hpack-0.28.2.
+  # Lets remove this once the LTS has upraded to 0.29.6.
+  hpack = super.hpack_0_29_7;
 
   # The test suite does not know how to find the 'cabal2nix' binary.
   cabal2nix = overrideCabal super.cabal2nix (drv: {
@@ -1108,4 +1104,30 @@ self: super: {
     url = "https://github.com/guillaume-nargeot/hpc-coveralls/pull/73/commits/344217f513b7adfb9037f73026f5d928be98d07f.patch";
     sha256 = "056rk58v9h114mjx62f41x971xn9p3nhsazcf9zrcyxh1ymrdm8j";
   });
-}
+
+  # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
+  blank-canvas = dontCheck super.blank-canvas;
+  blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
+
+  # needed because of testing-feat >=0.4.0.2 && <1.1
+  language-ecmascript = doJailbreak super.language-ecmascript;
+
+  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can.
+  sexpr =
+    appendPatch (overrideCabal super.sexpr (drv: {
+      isExecutable = false;
+      libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
+    })) ./patches/sexpr-0.2.1.patch;
+
+  # Can be removed once yi-language >= 0.18 is in the LTS
+  yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
+
+  # https://github.com/MarcWeber/hasktags/issues/52
+  hasktags = dontCheck super.hasktags;
+
+  # https://github.com/haskell/hoopl/issues/50
+  hoopl = dontCheck super.hoopl;
+
+  # https://github.com/snapframework/xmlhtml/pull/37
+  xmlhtml = doJailbreak super.xmlhtml;
+} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

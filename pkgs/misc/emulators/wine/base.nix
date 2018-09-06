@@ -3,7 +3,7 @@
   # flex 2.6.3 causes: undefined reference to `yywrap'
   pkgconfig, fontforge, makeWrapper, flex_2_6_1, bison,
   supportFlags,
-  buildScript ? null, configureFlags ? ""
+  buildScript ? null, configureFlags ? []
 }:
 
 with import ./util.nix { inherit lib; };

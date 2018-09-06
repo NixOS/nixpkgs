@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, melpaBuild }:
+{ fetchurl, melpaBuild }:
 
 melpaBuild {
   pname = "filesets-plus";

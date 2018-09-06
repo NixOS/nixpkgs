@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests pyyaml pytz pip jinja2 voluptuous typing aiohttp async-timeout astral certifi attrs ])"
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp astral async-timeout attrs certifi jinja2 pyjwt cryptography pip pytz pyyaml requests voluptuous ])"
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each component has an associated .py file,

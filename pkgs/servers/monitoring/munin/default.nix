@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "10niyzckx90dwdr4d7vj07d1qjy3nk7xzp30nqnlxzbaww7n5v78";
   };
 
-  buildInputs = [ 
+  buildInputs = [
     makeWrapper
     which
     coreutils
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     perlPackages.NetCIDR
     perlPackages.NetSSLeay
     perlPackages.NetServer
-    perlPackages.Log4Perl
+    perlPackages.LogLog4perl
     perlPackages.IOSocketInet6
     perlPackages.Socket6
     perlPackages.URI
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     perlPackages.NetServer
     perlPackages.ListMoreUtils
     perlPackages.TimeHiRes
-    perlPackages.LWPUserAgent
+    perlPackages.LWP
     perlPackages.DBDPg
     python
     ruby
@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
     perlPackages.FileSlurp
     perlPackages.IOStringy
   ];
+
+  # needs to find a local perl module during build
+  PERL_USE_UNSAFE_INC = stdenv.lib.optionalString (stdenv.lib.versionAtLeast (stdenv.lib.getVersion perl) "5.26") "1";
 
   # TODO: tests are failing http://munin-monitoring.org/ticket/1390#comment:1
   # NOTE: important, test command always exits with 0, think of a way to abort the build once tests pass
@@ -116,9 +119,9 @@ stdenv.mkDerivation rec {
         esac
         wrapProgram "$file" \
           --set PERL5LIB "$out/lib/perl5/site_perl:${with perlPackages; stdenv.lib.makePerlPath [
-                Log4Perl IOSocketInet6 Socket6 URI DBFile DateManip
+                LogLog4perl IOSocketInet6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
-                ListMoreUtils TimeHiRes DBDPg LWPUserAgent rrdtool
+                ListMoreUtils TimeHiRes DBDPg LWP rrdtool
                 ]}"
     done
   '';

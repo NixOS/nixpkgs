@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, dpkg, makeDesktopItem, gnome3, gtk2, atk, cairo, pango, gdk_pixbuf, glib
+{ stdenv, lib, fetchurl, dpkg, makeDesktopItem, gnome2, gtk2, atk, cairo, pango, gdk_pixbuf, glib
 , freetype, fontconfig, dbus, libnotify, libX11, xorg, libXi, libXcursor, libXdamage
 , libXrandr, libXcomposite, libXext, libXfixes, libXrender, libXtst, libXScrnSaver
 , nss, nspr, alsaLib, cups, expat, udev, xdg_utils, hunspell
@@ -15,7 +15,7 @@ let
     freetype
     gdk_pixbuf
     glib
-    gnome3.gconf
+    gnome2.GConf
     gtk2
     pango
     hunspell
@@ -44,12 +44,12 @@ let
   plat = {
     "i686-linux" = "i386";
     "x86_64-linux" = "amd64";
-  }.${stdenv.system};
+  }.${stdenv.hostPlatform.system};
 
   sha256 = {
     "i686-linux" = "071ddh2d8wmiybwafwyb97962zj358l0fq7g2r44231653sgybvq";
     "x86_64-linux" = "0qp9ms94smnm7k47b0n0jdzvnm1b7gj25hyinsfc6lghrb6jqw3r";
-  }.${stdenv.system};
+  }.${stdenv.hostPlatform.system};
 
 in
   stdenv.mkDerivation rec {
@@ -93,7 +93,7 @@ in
       mkdir -p $out/share/applications
       cp ${desktopItem}/share/applications/* $out/share/applications
     '';
-    
+
     meta = {
       description = "A modern, secure messenger";
       homepage    = https://wire.com/;

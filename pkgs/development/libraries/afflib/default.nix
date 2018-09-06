@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, zlib, curl, expat, fuse, openssl
-, autoreconfHook, python
+, autoreconfHook, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ zlib curl expat fuse openssl python ];
+  buildInputs = [ zlib curl expat fuse openssl python3 ];
 
   meta = {
     homepage = http://afflib.sourceforge.net/;

@@ -5,6 +5,7 @@
 , pkgconfig
 , granite
 , vala_0_40
+, python3
 , gnome3
 , libxml2
 , gettext
@@ -37,6 +38,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkgconfig
     vala_0_40
+    python3
     wrapGAppsHook
   ];
 
@@ -44,7 +46,7 @@ in stdenv.mkDerivation rec {
     defaultIconTheme # If I omit this there's no icons in KDE
     glib
     granite
-    gsettings_desktop_schemas
+    gsettings-desktop-schemas
     gtk3
     libgee
     magic-wormhole
@@ -55,7 +57,7 @@ in stdenv.mkDerivation rec {
   substituteInPlace ./src/WormholeInterface.vala \
     --replace /bin/wormhole ${magic-wormhole}/bin/wormhole
   '';
-  
+
   postPatch = ''
     chmod +x ./meson/post_install.py
     patchShebangs ./meson/post_install.py

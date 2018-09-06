@@ -1,4 +1,4 @@
-{ callPackage, runCommand, lib, writeScript, stdenv, coreutils }:
+{ callPackage, runCommand, writeScript, stdenv, coreutils }:
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 

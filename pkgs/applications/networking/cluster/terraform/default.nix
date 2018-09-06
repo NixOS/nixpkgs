@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchpatch, fetchFromGitHub, makeWrapper }:
+{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -75,7 +75,7 @@ let
             });
     in withPlugins (_: []);
 
-  plugins = import ./providers { inherit stdenv lib buildGoPackage fetchFromGitHub; };
+  plugins = import ./providers { inherit lib buildGoPackage fetchFromGitHub; };
 in rec {
   terraform_0_8_5 = generic {
     version = "0.8.5";
@@ -104,8 +104,8 @@ in rec {
   terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
 
   terraform_0_11 = pluggable (generic {
-    version = "0.11.7";
-    sha256 = "0q5gl8yn1f8fas1v68lz081k88gbmlk7f2xqlwqmh01qpqjxd42q";
+    version = "0.11.8";
+    sha256 = "1kdmx21l32vj5kvkimkx0s5mxgmgkdwlgbin4f3iqjflzip0cddh";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });

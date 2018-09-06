@@ -220,7 +220,6 @@ isScript() {
     local fn="$1"
     local fd
     local magic
-    if ! [ -x /bin/sh ]; then return 0; fi
     exec {fd}< "$fn"
     read -r -n 2 -u "$fd" magic
     exec {fd}<&-
@@ -505,6 +504,10 @@ activatePackage() {
         addToSearchPath _PATH "$pkg/bin"
     fi
 
+    if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
+        addToSearchPath HOST_PATH "$pkg/bin"
+    fi
+
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
         local oldOpts="$(shopt -po nounset)"
         set +u
@@ -661,6 +664,10 @@ substituteStream() {
                     echo "substituteStream(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
                     return 1
                 fi
+                if [ -z ${!varName+x} ]; then
+                    echo "substituteStream(): ERROR: variable \$$varName is unset" >&2
+                    return 1
+                fi
                 pattern="@$varName@"
                 replacement="${!varName}"
                 ;;
@@ -794,11 +801,11 @@ _defaultUnpack() {
     else
 
         case "$fn" in
-            *.tar.xz | *.tar.lzma)
+            *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
                 xz -d < "$fn" | tar xf -
                 ;;
-            *.tar | *.tar.* | *.tgz | *.tbz2)
+            *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
                 tar xf "$fn"

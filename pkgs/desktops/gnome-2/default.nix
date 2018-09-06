@@ -8,12 +8,7 @@ let overridden = set // overrides; set = with overridden; {
   startupnotification = libstartup_notification;
   gnomedocutils = self.gnome-doc-utils;
   gnomeicontheme = self.gnome_icon_theme;
-  gnomepanel = self.gnome_panel;
   gnome_common = gnome-common;
-  gnome_keyring = gnome-keyring;
-  gnome_desktop = gnome-desktop;
-  gnome_settings_daemon = gnome-settings-daemon;
-  gnome_control_center = gnome-control-center;
   inherit rarian;
 
 #### PLATFORM
@@ -58,8 +53,6 @@ let overridden = set // overrides; set = with overridden; {
 
   gnome_vfs = callPackage ./platform/gnome-vfs { };
 
-  gnome_vfs_monikers = callPackage ./platform/gnome-vfs-monikers { };
-
   libgnome = callPackage ./platform/libgnome { };
 
   libgnomeui = callPackage ./platform/libgnomeui { };
@@ -67,8 +60,6 @@ let overridden = set // overrides; set = with overridden; {
   libbonobo = callPackage ./platform/libbonobo { };
 
   libbonoboui = callPackage ./platform/libbonoboui { };
-
-  at_spi = callPackage ./platform/at-spi { };
 
   gtkhtml = callPackage ./platform/gtkhtml { };
 
@@ -83,30 +74,10 @@ let overridden = set // overrides; set = with overridden; {
 
 #### DESKTOP
 
-  gnome-keyring = callPackage ./desktop/gnome-keyring { };
-
-  libgweather = callPackage ./desktop/libgweather { };
-
   gvfs = gvfs.override { gnome = self; };
-
-  libgnomekbd = callPackage ./desktop/libgnomekbd { };
 
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
-
-  zenity = callPackage ./desktop/zenity { };
-
-  metacity = callPackage ./desktop/metacity { };
-
-  gnome_menus = callPackage ./desktop/gnome-menus { };
-
-  gnome-desktop = callPackage ./desktop/gnome-desktop { };
-
-  gnome_panel = callPackage ./desktop/gnome-panel { };
-
-  gnome-settings-daemon = callPackage ./desktop/gnome-settings-daemon { };
-
-  gnome-control-center = callPackage ./desktop/gnome-control-center { };
 
   gtksourceview = callPackage ./desktop/gtksourceview { };
 

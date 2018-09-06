@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     homepage = https://www.jool.mx/;
     description = "Fairly compliant SIIT and Stateful NAT64 for Linux - CLI tools";
     platforms = platforms.linux;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
   };
 }

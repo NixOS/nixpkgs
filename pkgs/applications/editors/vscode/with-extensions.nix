@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runCommand, buildEnv, vscode, which, writeScript
+{ stdenv, lib, runCommand, buildEnv, vscode, which, writeScript
 , vscodeExtensions ? [] }:
 
 /*

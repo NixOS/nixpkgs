@@ -16,7 +16,7 @@ in
   };
 
   machine =
-    { config, pkgs, ... }:
+    { ... }:
     { services.udisks2.enable = true;
       imports = [ ./common/user-account.nix ];
 

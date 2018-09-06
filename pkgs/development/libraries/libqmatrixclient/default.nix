@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description= "A Qt5 library to write cross-platfrom clients for Matrix";
     homepage = https://matrix.org/docs/projects/sdk/libqmatrixclient.html;
     license = licenses.lgpl21;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

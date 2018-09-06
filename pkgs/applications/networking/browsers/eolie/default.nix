@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ gtkspell3 hunspell python36Packages.pygobject3 ] ++ (with gnome3; [
-    glib glib-networking gsettings_desktop_schemas gtk3 webkitgtk libsecret
+    glib glib-networking gsettings-desktop-schemas gtk3 webkitgtk libsecret
   ]) ++ (with gst_all_1; [
     gst-libav gst-plugins-base gst-plugins-ugly gstreamer
   ]);

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, coreutils, utillinux,
-  nettools, kbd, bc, which, gnused, gnugrep,
+  nettools, bc, which, gnused, gnugrep,
   groff, man-db, getent, libiconv, pcre2,
   gettext, ncurses, python3
 

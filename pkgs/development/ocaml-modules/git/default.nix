@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, opam
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
 , astring, decompress, fmt, hex, logs, mstruct, ocaml_lwt, ocamlgraph, uri
 , alcotest, mtime, nocrypto
 }:

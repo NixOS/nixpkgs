@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ fetchPypi, buildPythonPackage
 , semantic-version, boto3, flask, docutils, requests
 }:
 

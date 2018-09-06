@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "workcraft-${version}";

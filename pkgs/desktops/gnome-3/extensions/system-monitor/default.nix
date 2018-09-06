@@ -1,4 +1,4 @@
-{ config, stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop, pkgs }:
+{ stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop }:
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-system-monitor-${version}";

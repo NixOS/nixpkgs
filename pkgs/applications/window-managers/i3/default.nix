@@ -1,6 +1,6 @@
 { fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, xcbutilxrm, libstartup_notification, libX11, pcre, libev
-, yajl, xcb-util-cursor, coreutils, perl, pango, perlPackages, libxkbcommon
+, yajl, xcb-util-cursor, perl, pango, perlPackages, libxkbcommon
 , xorgserver, xvfb_run }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     libxcb xcbutilkeysyms xcbutil xcbutilwm xcbutilxrm libxkbcommon
     libstartup_notification libX11 pcre libev yajl xcb-util-cursor perl pango
     perlPackages.AnyEventI3 perlPackages.X11XCB perlPackages.IPCRun
-    perlPackages.ExtUtilsPkgConfig perlPackages.TestMore perlPackages.InlineC
+    perlPackages.ExtUtilsPkgConfig perlPackages.InlineC
     xorgserver xvfb_run
   ];
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   # they shouldn't, and then even once that's fixed have some
   # perl-related errors later on. For more, see
   # https://github.com/NixOS/nixpkgs/issues/7957
-  doCheck = false; # stdenv.system == "x86_64-linux";
+  doCheck = false; # stdenv.hostPlatform.system == "x86_64-linux";
 
-  checkPhase = stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
+  checkPhase = stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
   ''
     (cd testcases && xvfb-run ./complete-run.pl -p 1 --keep-xserver-output)
     ! grep -q '^not ok' testcases/latest/complete-run.log

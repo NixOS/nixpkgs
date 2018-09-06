@@ -1,5 +1,4 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
 , pytest
 , tornado
@@ -10,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "17.0.0";
+  version = "17.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0145ae59139b41f65e047a3a9ed11bbc36e37d5e96c64382fcdff911c4d8c3f0";
+    sha256 = "a72b82ac1910f2cf61a49139f4974f994984475f771b0faa730839607eeedddf";
   };
 
   checkInputs = [  pytest tornado ];

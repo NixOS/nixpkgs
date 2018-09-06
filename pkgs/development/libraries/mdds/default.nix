@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, boost }:
 
 stdenv.mkDerivation rec {
   version = "1.3.1";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
    mkdir -p "$out/lib/pkgconfig"
    cp "$out/share/pkgconfig/"* "$out/lib/pkgconfig"
   '';
+
+  checkInputs = [ boost ];
 
   meta = {
     inherit version;

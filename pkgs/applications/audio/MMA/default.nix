@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, python, alsaUtils, timidity }:
+{ stdenv, fetchurl, makeWrapper, python3, alsaUtils, timidity }:
 
   stdenv.mkDerivation rec {
   version = "16.06";
@@ -9,7 +9,7 @@
     sha256 = "1g4gvc0nr0qjc0fyqrnx037zpaasgymgmrm5s7cdxqnld9wqw8ww";
   };
 
-  buildInputs = [ makeWrapper python alsaUtils timidity ];
+  buildInputs = [ makeWrapper python3 alsaUtils timidity ];
 
   patchPhase = ''
     sed -i 's@/usr/bin/aplaymidi@/${alsaUtils}/bin/aplaymidi@g' mma-splitrec
@@ -18,7 +18,7 @@
     sed -i 's@/usr/bin/arecord@/${alsaUtils}/bin/arecord@g' util/mma-splitrec.py
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' mma-splitrec
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' util/mma-splitrec.py
-    find . -type f | xargs sed -i 's@/usr/bin/env python@${python}/bin/python@g'
+    find . -type f | xargs sed -i 's@/usr/bin/env python@${python3.interpreter}@g'
   '';
 
   installPhase = ''

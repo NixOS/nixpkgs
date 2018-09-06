@@ -9,7 +9,7 @@ let
   inherit (stdenv.lib) optional optionals;
 
   name = "freeciv";
-  version = "2.5.11";
+  version = "2.6.0";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/freeciv/${name}-${version}.tar.bz2";
-    sha256 = "1bcs4mj4kzkpyrr0yryydmn0dzcqazvwrf02nfs7r5zya9lm572c";
+    sha256 = "16f9wsnn7073s6chzbm3819swd0iw019p9nrzr3diiynk28kj83w";
   };
 
   nativeBuildInputs = [ pkgconfig ];

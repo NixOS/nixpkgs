@@ -4,7 +4,7 @@
 , autoreconfHook
 , givaro
 , pkgconfig
-, openblas
+, blas
 , fflas-ffpack
 , gmpxx
 , optimize ? false # impure
@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     givaro
-    openblas
+    blas
     gmpxx
     fflas-ffpack
   ];
 
   configureFlags = [
-    "--with-blas-libs=-lopenblas"
+    "--with-blas-libs=-l${blas.linkName}"
     "--disable-optimization"
   ] ++ stdenv.lib.optionals (!optimize) [
     # disable SIMD instructions (which are enabled *when available* by default)
@@ -65,12 +65,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  enableParallelBuilding = true;
+
   meta = {
     inherit version;
     description = "C++ library for exact, high-performance linear algebra";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [stdenv.lib.maintainers.timokau];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     homepage = http://linalg.org/;
   };
 }

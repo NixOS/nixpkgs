@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub
 , pythonPackages
-, pkgconfig
 , cmake
 , llvmPackages
 , withMan ? true

@@ -6,7 +6,7 @@ with lib;
     description = ''
       Periodic backups to create with Restic.
     '';
-    type = types.attrsOf (types.submodule ({ name, config, ... }: {
+    type = types.attrsOf (types.submodule ({ name, ... }: {
       options = {
         passwordFile = mkOption {
           type = types.str;
@@ -18,6 +18,7 @@ with lib;
 
         s3CredentialsFile = mkOption {
           type = with types; nullOr str;
+          default = null;
           description = ''
             file containing the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
             for an S3-hosted repository, in the format of an EnvironmentFile

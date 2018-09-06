@@ -2,7 +2,6 @@
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus
-, hostPlatform
 , openglSupport ? false, libGLU_combined ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
@@ -42,7 +41,7 @@
  */
 
 let
-  inherit (stdenv) icCygwin isDarwin isFreeBSD isLinux isAarch32;
+  inherit (stdenv) isDarwin isFreeBSD isLinux isAarch32;
   inherit (stdenv.lib) optional optionals enableFeature;
 
   cmpVer = builtins.compareVersions;
@@ -83,8 +82,8 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [];
   configureFlags = [
-      "--arch=${hostPlatform.parsed.cpu.name}"
-      "--target_os=${hostPlatform.parsed.kernel.name}"
+      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+      "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
     # License
       "--enable-gpl"
       "--enable-version3"
@@ -194,11 +193,11 @@ stdenv.mkDerivation rec {
     description = "A complete, cross-platform solution to record, convert and stream audio and video";
     homepage = http://www.ffmpeg.org/;
     longDescription = ''
-      FFmpeg is the leading multimedia framework, able to decode, encode, transcode, 
-      mux, demux, stream, filter and play pretty much anything that humans and machines 
-      have created. It supports the most obscure ancient formats up to the cutting edge. 
-      No matter if they were designed by some standards committee, the community or 
-      a corporation. 
+      FFmpeg is the leading multimedia framework, able to decode, encode, transcode,
+      mux, demux, stream, filter and play pretty much anything that humans and machines
+      have created. It supports the most obscure ancient formats up to the cutting edge.
+      No matter if they were designed by some standards committee, the community or
+      a corporation.
     '';
     license = licenses.gpl3;
     platforms = platforms.all;

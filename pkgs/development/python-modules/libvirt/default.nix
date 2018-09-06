@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchgit, python, pkgconfig, lxml, libvirt, nose }:
+{ stdenv, buildPythonPackage, fetchgit, pkgconfig, lxml, libvirt, nose }:
 
 buildPythonPackage rec {
   pname = "libvirt";

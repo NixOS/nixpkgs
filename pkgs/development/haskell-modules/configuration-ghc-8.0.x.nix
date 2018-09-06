@@ -19,6 +19,7 @@ self: super: {
   filepath = null;
   ghc-boot = null;
   ghc-boot-th = null;
+  ghc-compact = null;
   ghc-prim = null;
   ghci = null;
   haskeline = null;

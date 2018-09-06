@@ -3,13 +3,14 @@
 , pamtester, xscreensaver }:
 
 stdenv.mkDerivation rec {
-  name = "xsecurelock-git-2018-07-10";
+  name = "xsecurelock-${version}";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "xsecurelock";
-    rev = "0fa0d7dd87a4cc4bdb402323f95c3fcacc6f5049";
-    sha256 = "071b3gslszql1mgabs53r82jgbk9mn263m5v6adskfxbkamks8g0";
+    rev = "v${version}";
+    sha256 = "0k135hnfnn1j82wvc03b8jkq06wws1xk325x5m25ps6xwsn725sw";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

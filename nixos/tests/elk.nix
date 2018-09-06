@@ -1,4 +1,4 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem, enableUnfree ? false }:
 with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
 let
@@ -11,7 +11,7 @@ let
     };
     nodes = {
       one =
-        { config, pkgs, ... }: {
+        { pkgs, ... }: {
             # Not giving the machine at least 2060MB results in elasticsearch failing with the following error:
             #
             #   OpenJDK 64-Bit Server VM warning:
@@ -63,6 +63,33 @@ let
                 package = elk.kibana;
                 elasticsearch.url = esUrl;
               };
+
+              elasticsearch-curator = {
+                enable = true;
+                actionYAML = ''
+                ---
+                actions:
+                  1:
+                    action: delete_indices
+                    description: >-
+                      Delete indices older than 1 second (based on index name), for logstash-
+                      prefixed indices. Ignore the error if the filter does not result in an
+                      actionable list of indices (ignore_empty_list) and exit cleanly.
+                    options:
+                      ignore_empty_list: True
+                      disable_action: False
+                    filters:
+                    - filtertype: pattern
+                      kind: prefix
+                      value: logstash-
+                    - filtertype: age
+                      source: name
+                      direction: older
+                      timestring: '%Y.%m.%d'
+                      unit: seconds
+                      unit_count: 1
+                '';
+              };
             };
           };
       };
@@ -91,6 +118,11 @@ let
       # See if logstash messages arive in elasticsearch.
       $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"flowers\"}}}' | jq .hits.total | grep -v 0");
       $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"dragons\"}}}' | jq .hits.total | grep 0");
+
+      # Test elasticsearch-curator.
+      $one->systemctl("stop logstash");
+      $one->systemctl("start elasticsearch-curator");
+      $one->waitUntilSucceeds("! curl --silent --show-error '${esUrl}/_cat/indices' | grep logstash | grep -q ^$1");
     '';
   };
 in mapAttrs mkElkTest {
@@ -99,9 +131,16 @@ in mapAttrs mkElkTest {
     logstash      = pkgs.logstash5;
     kibana        = pkgs.kibana5;
   };
-  "ELK-6" = {
-    elasticsearch = pkgs.elasticsearch6;
-    logstash      = pkgs.logstash6;
-    kibana        = pkgs.kibana6;
-  };
+  "ELK-6" =
+    if enableUnfree
+    then {
+      elasticsearch = pkgs.elasticsearch6;
+      logstash      = pkgs.logstash6;
+      kibana        = pkgs.kibana6;
+    }
+    else {
+      elasticsearch = pkgs.elasticsearch6-oss;
+      logstash      = pkgs.logstash6-oss;
+      kibana        = pkgs.kibana6-oss;
+    };
 }

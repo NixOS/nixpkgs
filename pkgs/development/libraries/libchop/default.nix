@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://nongnu.org/libchop/;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }

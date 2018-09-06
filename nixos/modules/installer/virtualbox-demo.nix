@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 with lib;
 
@@ -21,5 +21,5 @@ with lib;
   services.xserver.videoDrivers = mkOverride 40 [ "virtualbox" "vmware" "cirrus" "vesa" "modesetting" ];
 
   powerManagement.enable = false;
-  system.nixos.stateVersion = mkDefault "18.03";
+  system.stateVersion = mkDefault "18.03";
 }

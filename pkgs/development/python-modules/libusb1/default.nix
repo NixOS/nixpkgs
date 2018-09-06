@@ -1,12 +1,12 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, libusb1 }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, libusb1 }:
 
 buildPythonPackage rec {
   pname = "libusb1";
-  version = "1.6.4";
+  version = "1.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03b7xrz8vqg8w0za5r503jhcmbd1ls5610jcja1rqz833nf0v4wc";
+    sha256 = "a49917a2262cf7134396f6720c8be011f14aabfc5cdc53f880cc672c0f39d271";
   };
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -16,6 +16,10 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ libusb1 ];
+
+  checkPhase = ''
+    ${python.interpreter} -m usb1.testUSB1
+  '';
 
   meta = with stdenv.lib; {
     homepage    = https://github.com/vpelletier/python-libusb1;

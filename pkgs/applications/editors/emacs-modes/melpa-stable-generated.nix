@@ -6,6 +6,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "_0blayout";
+        ename = "0blayout";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "etu";
@@ -31,6 +32,7 @@
                      , melpaBuild }:
       melpaBuild {
         pname = "a";
+        ename = "a";
         version = "0.1.0.-3.4";
         src = fetchFromGitHub {
           owner = "plexus";
@@ -57,6 +59,7 @@
                                 , navi2ch }:
       melpaBuild {
         pname = "aa-edit-mode";
+        ename = "aa-edit-mode";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "zonuexe";
@@ -81,6 +84,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "abc-mode";
+        ename = "abc-mode";
         version = "20140225.944";
         src = fetchFromGitHub {
           owner = "mkjunker";
@@ -106,6 +110,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "abyss-theme";
+        ename = "abyss-theme";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "mgrbyte";
@@ -133,6 +138,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "ac-alchemist";
+        ename = "ac-alchemist";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -159,6 +165,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "ac-capf";
+        ename = "ac-capf";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -186,6 +193,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ac-cider";
+        ename = "ac-cider";
         version = "0.2.3";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -215,6 +223,7 @@
                             , yasnippet }:
       melpaBuild {
         pname = "ac-clang";
+        ename = "ac-clang";
         version = "2.1.3";
         src = fetchFromGitHub {
           owner = "yaruopooner";
@@ -241,6 +250,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "ac-dcd";
+        ename = "ac-dcd";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "atilaneves";
@@ -267,6 +277,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "ac-emacs-eclim";
+        ename = "ac-emacs-eclim";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "emacs-eclim";
@@ -293,6 +304,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ac-emoji";
+        ename = "ac-emoji";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -318,6 +330,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ac-etags";
+        ename = "ac-etags";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -344,6 +357,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ac-geiser";
+        ename = "ac-geiser";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "xiaohanyu";
@@ -370,6 +384,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "ac-haskell-process";
+        ename = "ac-haskell-process";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -397,6 +412,7 @@
                            , popup }:
       melpaBuild {
         pname = "ac-helm";
+        ename = "ac-helm";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "yasuyk";
@@ -423,6 +439,7 @@
                            , web-completion-data }:
       melpaBuild {
         pname = "ac-html";
+        ename = "ac-html";
         version = "0.31";
         src = fetchFromGitHub {
           owner = "cheunghy";
@@ -448,6 +465,7 @@
                                      , web-completion-data }:
       melpaBuild {
         pname = "ac-html-bootstrap";
+        ename = "ac-html-bootstrap";
         version = "0.9.3";
         src = fetchFromGitHub {
           owner = "osv";
@@ -473,6 +491,7 @@
                                       , web-completion-data }:
       melpaBuild {
         pname = "ac-html-csswatcher";
+        ename = "ac-html-csswatcher";
         version = "0.1.7";
         src = fetchFromGitHub {
           owner = "osv";
@@ -499,6 +518,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "ac-inf-ruby";
+        ename = "ac-inf-ruby";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -525,6 +545,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ac-ispell";
+        ename = "ac-ispell";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -552,6 +573,7 @@
                            , mozc }:
       melpaBuild {
         pname = "ac-mozc";
+        ename = "ac-mozc";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "igjit";
@@ -577,6 +599,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ac-octave";
+        ename = "ac-octave";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "coldnew";
@@ -604,6 +627,7 @@
                           , yasnippet }:
       melpaBuild {
         pname = "ac-php";
+        ename = "ac-php";
         version = "2.0.5";
         src = fetchFromGitHub {
           owner = "xcwen";
@@ -635,6 +659,7 @@
                                , xcscope }:
       melpaBuild {
         pname = "ac-php-core";
+        ename = "ac-php-core";
         version = "2.0.5";
         src = fetchFromGitHub {
           owner = "xcwen";
@@ -662,6 +687,7 @@
                             , racer }:
       melpaBuild {
         pname = "ac-racer";
+        ename = "ac-racer";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -688,6 +714,7 @@
                             , rtags }:
       melpaBuild {
         pname = "ac-rtags";
+        ename = "ac-rtags";
         version = "2.18";
         src = fetchFromGitHub {
           owner = "Andersbakken";
@@ -715,6 +742,7 @@
                             , slime }:
       melpaBuild {
         pname = "ac-slime";
+        ename = "ac-slime";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -740,6 +768,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "ace-flyspell";
+        ename = "ace-flyspell";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -768,6 +797,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "ace-isearch";
+        ename = "ace-isearch";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "tam17aki";
@@ -794,6 +824,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "ace-jump-buffer";
+        ename = "ace-jump-buffer";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "waymondo";
@@ -820,6 +851,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "ace-jump-helm-line";
+        ename = "ace-jump-helm-line";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -844,6 +876,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "ace-jump-mode";
+        ename = "ace-jump-mode";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "winterTTr";
@@ -870,6 +903,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "ace-jump-zap";
+        ename = "ace-jump-zap";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "waymondo";
@@ -895,6 +929,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ace-link";
+        ename = "ace-link";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -922,6 +957,7 @@
                               , pinyinlib }:
       melpaBuild {
         pname = "ace-pinyin";
+        ename = "ace-pinyin";
         version = "0.2.5";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -948,6 +984,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "ace-popup-menu";
+        ename = "ace-popup-menu";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -973,6 +1010,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "ace-window";
+        ename = "ace-window";
         version = "0.9.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -1004,7 +1042,7 @@
           rev = "37e9979eb65e3803fc00829377397b4e6f2bd059";
           sha256 = "0hib4a8385q2czi1yqs0hwnva2xi7kw0bdfnrgha1hrl30rilp2f";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/8ff331ed45e5b7697e4862e723408602ecc98bc7/recipes/ack-menu";
           sha256 = "1d2kw04ndxji2qjcm1b65qnxpp08zx8gbia8bl6x6mnjb2isc2d9";
           name = "ack-menu";
@@ -1021,6 +1059,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "actionscript-mode";
+        ename = "actionscript-mode";
         version = "7.2.2";
         src = fetchFromGitHub {
           owner = "austinhaas";
@@ -1046,6 +1085,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "adafruit-wisdom";
+        ename = "adafruit-wisdom";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "gonewest818";
@@ -1070,6 +1110,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "add-hooks";
+        ename = "add-hooks";
         version = "3.1.1";
         src = fetchFromGitHub {
           owner = "nickmccurdy";
@@ -1094,6 +1135,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "add-node-modules-path";
+        ename = "add-node-modules-path";
         version = "1.2.0";
         src = fetchFromGitHub {
           owner = "codesuki";
@@ -1119,6 +1161,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "addressbook-bookmark";
+        ename = "addressbook-bookmark";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "thierryvolpiatto";
@@ -1144,6 +1187,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "adoc-mode";
+        ename = "adoc-mode";
         version = "0.6.6";
         src = fetchFromGitHub {
           owner = "sensorflo";
@@ -1168,6 +1212,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "aes";
+        ename = "aes";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "Sauermann";
@@ -1195,6 +1240,7 @@
                       , s }:
       melpaBuild {
         pname = "ag";
+        ename = "ag";
         version = "0.47";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -1221,6 +1267,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "aggressive-indent";
+        ename = "aggressive-indent";
         version = "1.9.0";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -1246,6 +1293,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ahk-mode";
+        ename = "ahk-mode";
         version = "1.5.6";
         src = fetchFromGitHub {
           owner = "ralesi";
@@ -1271,6 +1319,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "ahungry-theme";
+        ename = "ahungry-theme";
         version = "1.10.0";
         src = fetchFromGitHub {
           owner = "ahungry";
@@ -1296,6 +1345,7 @@
                                   , powerline }:
       melpaBuild {
         pname = "airline-themes";
+        ename = "airline-themes";
         version = "1.7";
         src = fetchFromGitHub {
           owner = "AnthonyDiGirolamo";
@@ -1322,6 +1372,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "alan-mode";
+        ename = "alan-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "M-industries";
@@ -1351,6 +1402,7 @@
                              , pkg-info }:
       melpaBuild {
         pname = "alchemist";
+        ename = "alchemist";
         version = "1.8.2";
         src = fetchFromGitHub {
           owner = "tonini";
@@ -1376,6 +1428,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "alda-mode";
+        ename = "alda-mode";
         version = "0.2.0";
         src = fetchFromGitLab {
           owner = "jgkamat";
@@ -1401,6 +1454,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "alect-themes";
+        ename = "alect-themes";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -1427,6 +1481,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "alert";
+        ename = "alert";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "jwiegley";
@@ -1453,6 +1508,7 @@
                                  , memoize }:
       melpaBuild {
         pname = "all-the-icons";
+        ename = "all-the-icons";
         version = "3.2.0";
         src = fetchFromGitHub {
           owner = "domtronn";
@@ -1480,6 +1536,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "all-the-icons-ivy";
+        ename = "all-the-icons-ivy";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "asok";
@@ -1512,6 +1569,7 @@
                             , seq }:
       melpaBuild {
         pname = "amd-mode";
+        ename = "amd-mode";
         version = "2.8";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -1547,6 +1605,7 @@
                        , s }:
       melpaBuild {
         pname = "amx";
+        ename = "amx";
         version = "3.2";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
@@ -1576,6 +1635,7 @@
                                  , s }:
       melpaBuild {
         pname = "anaconda-mode";
+        ename = "anaconda-mode";
         version = "0.1.12";
         src = fetchFromGitHub {
           owner = "proofit404";
@@ -1600,6 +1660,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "anaphora";
+        ename = "anaphora";
         version = "1.0.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -1624,6 +1685,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "android-mode";
+        ename = "android-mode";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "remvee";
@@ -1648,6 +1710,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "angular-mode";
+        ename = "angular-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "omouse";
@@ -1674,6 +1737,7 @@
                                     , s }:
       melpaBuild {
         pname = "angular-snippets";
+        ename = "angular-snippets";
         version = "0.2.3";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -1698,6 +1762,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "annotate";
+        ename = "annotate";
         version = "0.4.7";
         src = fetchFromGitHub {
           owner = "bastibe";
@@ -1722,6 +1787,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "annoying-arrows-mode";
+        ename = "annoying-arrows-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -1748,6 +1814,7 @@
                         , s }:
       melpaBuild {
         pname = "ansi";
+        ename = "ansi";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -1774,6 +1841,7 @@
                            , s }:
       melpaBuild {
         pname = "ansible";
+        ename = "ansible";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "k1LoW";
@@ -1799,6 +1867,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "ansible-doc";
+        ename = "ansible-doc";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "lunaryorn";
@@ -1824,6 +1893,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "ansible-vault";
+        ename = "ansible-vault";
         version = "0.3.4";
         src = fetchFromGitHub {
           owner = "zellio";
@@ -1848,6 +1918,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "anti-zenburn-theme";
+        ename = "anti-zenburn-theme";
         version = "2.5.1";
         src = fetchFromGitHub {
           owner = "m00natic";
@@ -1872,6 +1943,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "anyins";
+        ename = "anyins";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "antham";
@@ -1898,6 +1970,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "anzu";
+        ename = "anzu";
         version = "0.62";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -1922,6 +1995,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "apache-mode";
+        ename = "apache-mode";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -1947,6 +2021,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "apib-mode";
+        ename = "apib-mode";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "w-vi";
@@ -1972,6 +2047,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "apiwrap";
+        ename = "apiwrap";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "vermiculus";
@@ -1996,6 +2072,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "apples-mode";
+        ename = "apples-mode";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "tequilasunset";
@@ -2020,6 +2097,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "aproject";
+        ename = "aproject";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "vietor";
@@ -2044,6 +2122,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "apropospriate-theme";
+        ename = "apropospriate-theme";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "waymondo";
@@ -2068,6 +2147,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "artbollocks-mode";
+        ename = "artbollocks-mode";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "sachac";
@@ -2092,6 +2172,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "arview";
+        ename = "arview";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "afainer";
@@ -2118,6 +2199,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "asilea";
+        ename = "asilea";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -2144,6 +2226,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "assess";
+        ename = "assess";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "phillord";
@@ -2168,6 +2251,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "async";
+        ename = "async";
         version = "1.9.3";
         src = fetchFromGitHub {
           owner = "jwiegley";
@@ -2192,6 +2276,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "atom-one-dark-theme";
+        ename = "atom-one-dark-theme";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "jonathanchu";
@@ -2219,6 +2304,7 @@
                                  , websocket }:
       melpaBuild {
         pname = "atomic-chrome";
+        ename = "atomic-chrome";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "alpha22jp";
@@ -2244,6 +2330,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "auctex-latexmk";
+        ename = "auctex-latexmk";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "tom-tan";
@@ -2271,6 +2358,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "aurel";
+        ename = "aurel";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -2295,6 +2383,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "aurora-config-mode";
+        ename = "aurora-config-mode";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "bdd";
@@ -2320,6 +2409,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "auth-source-pass";
+        ename = "auth-source-pass";
         version = "4.0.1";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -2346,6 +2436,7 @@
                                 , packed }:
       melpaBuild {
         pname = "auto-compile";
+        ename = "auto-compile";
         version = "1.4.3";
         src = fetchFromGitHub {
           owner = "emacscollective";
@@ -2372,6 +2463,7 @@
                                  , popup }:
       melpaBuild {
         pname = "auto-complete";
+        ename = "auto-complete";
         version = "1.5.1";
         src = fetchFromGitHub {
           owner = "auto-complete";
@@ -2396,6 +2488,7 @@
                                              , melpaBuild }:
       melpaBuild {
         pname = "auto-complete-clang-async";
+        ename = "auto-complete-clang-async";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "Golevka";
@@ -2421,6 +2514,7 @@
                                                  , melpaBuild }:
       melpaBuild {
         pname = "auto-complete-exuberant-ctags";
+        ename = "auto-complete-exuberant-ctags";
         version = "0.0.7";
         src = fetchFromGitHub {
           owner = "k1LoW";
@@ -2446,6 +2540,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "auto-complete-nxml";
+        ename = "auto-complete-nxml";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -2473,6 +2568,7 @@
                                       , yaxception }:
       melpaBuild {
         pname = "auto-complete-pcmp";
+        ename = "auto-complete-pcmp";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -2499,6 +2595,7 @@
                                       , sage-shell-mode }:
       melpaBuild {
         pname = "auto-complete-sage";
+        ename = "auto-complete-sage";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "stakemori";
@@ -2523,6 +2620,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "auto-dictionary";
+        ename = "auto-dictionary";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "nschum";
@@ -2547,6 +2645,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "auto-indent-mode";
+        ename = "auto-indent-mode";
         version = "0.126";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -2572,6 +2671,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "auto-minor-mode";
+        ename = "auto-minor-mode";
         version = "20180527.1";
         src = fetchFromGitHub {
           owner = "joewreschnig";
@@ -2598,6 +2698,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "auto-package-update";
+        ename = "auto-package-update";
         version = "1.6.1";
         src = fetchFromGitHub {
           owner = "rranelli";
@@ -2624,6 +2725,7 @@
                                       , popwin }:
       melpaBuild {
         pname = "auto-shell-command";
+        ename = "auto-shell-command";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "ongaeshi";
@@ -2649,6 +2751,7 @@
                                   , yasnippet }:
       melpaBuild {
         pname = "auto-yasnippet";
+        ename = "auto-yasnippet";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -2673,6 +2776,7 @@
                                             , melpaBuild }:
       melpaBuild {
         pname = "autodisass-java-bytecode";
+        ename = "autodisass-java-bytecode";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "gbalats";
@@ -2697,6 +2801,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "autodisass-llvm-bitcode";
+        ename = "autodisass-llvm-bitcode";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "gbalats";
@@ -2722,6 +2827,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "autopair";
+        ename = "autopair";
         version = "0.6.1";
         src = fetchFromGitHub {
           owner = "capitaomorte";
@@ -2749,6 +2855,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "autothemer";
+        ename = "autothemer";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "sebastiansturm";
@@ -2775,6 +2882,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "avy";
+        ename = "avy";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -2801,6 +2909,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "avy-menu";
+        ename = "avy-menu";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -2828,6 +2937,7 @@
                               , migemo }:
       melpaBuild {
         pname = "avy-migemo";
+        ename = "avy-migemo";
         version = "0.3.2";
         src = fetchFromGitHub {
           owner = "momomo5717";
@@ -2853,6 +2963,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "avy-zap";
+        ename = "avy-zap";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -2877,6 +2988,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "babel";
+        ename = "babel";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "juergenhoetzel";
@@ -2906,6 +3018,7 @@
                                , ucs-utils }:
       melpaBuild {
         pname = "back-button";
+        ename = "back-button";
         version = "0.6.6";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -2937,6 +3050,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "badwolf-theme";
+        ename = "badwolf-theme";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "bkruczyk";
@@ -2962,6 +3076,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "banner-comment";
+        ename = "banner-comment";
         version = "2.6.2";
         src = fetchFromGitHub {
           owner = "WJCFerguson";
@@ -2986,6 +3101,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "base16-theme";
+        ename = "base16-theme";
         version = "2.2";
         src = fetchFromGitHub {
           owner = "belak";
@@ -3010,6 +3126,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "bash-completion";
+        ename = "bash-completion";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "szermatt";
@@ -3035,6 +3152,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "bazel-mode";
+        ename = "bazel-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "codesuki";
@@ -3059,6 +3177,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "bbcode-mode";
+        ename = "bbcode-mode";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "lassik";
@@ -3086,6 +3205,7 @@
                          , yaxception }:
       melpaBuild {
         pname = "bbdb-";
+        ename = "bbdb-";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -3110,6 +3230,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "bbdb-vcard";
+        ename = "bbdb-vcard";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "tohojo";
@@ -3135,6 +3256,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "bbdb2erc";
+        ename = "bbdb2erc";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -3160,6 +3282,7 @@
                           , seq }:
       melpaBuild {
         pname = "beacon";
+        ename = "beacon";
         version = "1.3.4";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -3185,6 +3308,7 @@
                              , org }:
       melpaBuild {
         pname = "beeminder";
+        ename = "beeminder";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "Sodaware";
@@ -3210,6 +3334,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "beginend";
+        ename = "beginend";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -3234,6 +3359,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "benchmark-init";
+        ename = "benchmark-init";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "dholm";
@@ -3258,6 +3384,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "benchstat";
+        ename = "benchstat";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "Quasilyte";
@@ -3282,6 +3409,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "better-defaults";
+        ename = "better-defaults";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "technomancy";
@@ -3307,6 +3435,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "better-shell";
+        ename = "better-shell";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "killdash9";
@@ -3333,6 +3462,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "biblio";
+        ename = "biblio";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "cpitclaudel";
@@ -3361,6 +3491,7 @@
                                , seq }:
       melpaBuild {
         pname = "biblio-core";
+        ename = "biblio-core";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "cpitclaudel";
@@ -3386,6 +3517,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "bicycle";
+        ename = "bicycle";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -3411,6 +3543,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "bifocal";
+        ename = "bifocal";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "riscy";
@@ -3436,6 +3569,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "binclock";
+        ename = "binclock";
         version = "1.11";
         src = fetchFromGitHub {
           owner = "davep";
@@ -3460,6 +3594,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "bind-key";
+        ename = "bind-key";
         version = "2.3";
         src = fetchFromGitHub {
           owner = "jwiegley";
@@ -3485,6 +3620,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "bind-map";
+        ename = "bind-map";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "justbur";
@@ -3509,6 +3645,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "bing-dict";
+        ename = "bing-dict";
         version = "0.2.3";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -3533,6 +3670,7 @@
                                                 , melpaBuild }:
       melpaBuild {
         pname = "birds-of-paradise-plus-theme";
+        ename = "birds-of-paradise-plus-theme";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "jimeh";
@@ -3557,6 +3695,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "bm";
+        ename = "bm";
         version = "201807";
         src = fetchFromGitHub {
           owner = "joodland";
@@ -3582,6 +3721,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "bnfc";
+        ename = "bnfc";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "jmitchell";
@@ -3607,6 +3747,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "bog";
+        ename = "bog";
         version = "1.3.1";
         src = fetchFromGitHub {
           owner = "kyleam";
@@ -3631,6 +3772,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "bongo";
+        ename = "bongo";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "dbrock";
@@ -3656,6 +3798,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "bool-flip";
+        ename = "bool-flip";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "michaeljb";
@@ -3684,6 +3827,7 @@
                         , multiple-cursors }:
       melpaBuild {
         pname = "boon";
+        ename = "boon";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "jyp";
@@ -3708,6 +3852,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "borg";
+        ename = "borg";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "emacscollective";
@@ -3733,6 +3878,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "boxquote";
+        ename = "boxquote";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "davep";
@@ -3760,6 +3906,7 @@
                                     , s }:
       melpaBuild {
         pname = "browse-at-remote";
+        ename = "browse-at-remote";
         version = "0.10.0";
         src = fetchFromGitHub {
           owner = "rmuslimov";
@@ -3784,6 +3931,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "browse-kill-ring";
+        ename = "browse-kill-ring";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "browse-kill-ring";
@@ -3809,6 +3957,7 @@
                                    , string-utils }:
       melpaBuild {
         pname = "browse-url-dwim";
+        ename = "browse-url-dwim";
         version = "0.6.8";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -3835,6 +3984,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "bshell";
+        ename = "bshell";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "plandes";
@@ -3859,6 +4009,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "buffer-flip";
+        ename = "buffer-flip";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "killdash9";
@@ -3886,6 +4037,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "buffer-manage";
+        ename = "buffer-manage";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "plandes";
@@ -3910,6 +4062,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "buffer-move";
+        ename = "buffer-move";
         version = "0.6.2";
         src = fetchFromGitHub {
           owner = "lukhas";
@@ -3934,6 +4087,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "buffer-utils";
+        ename = "buffer-utils";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -3959,6 +4113,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "buffer-watcher";
+        ename = "buffer-watcher";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -3983,6 +4138,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "bufshow";
+        ename = "bufshow";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "pjones";
@@ -4007,6 +4163,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "bug-reference-github";
+        ename = "bug-reference-github";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "arnested";
@@ -4033,6 +4190,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "bui";
+        ename = "bui";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -4058,6 +4216,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "build-status";
+        ename = "build-status";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "sshaw";
@@ -4083,6 +4242,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "bundler";
+        ename = "bundler";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "tobiassvn";
@@ -4107,6 +4267,7 @@
                                                , melpaBuild }:
       melpaBuild {
         pname = "bury-successful-compilation";
+        ename = "bury-successful-compilation";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "EricCrosson";
@@ -4134,6 +4295,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "butler";
+        ename = "butler";
         version = "0.2.4";
         src = fetchFromGitHub {
           owner = "AshtonKem";
@@ -4158,6 +4320,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "buttercup";
+        ename = "buttercup";
         version = "1.12";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
@@ -4182,6 +4345,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "button-lock";
+        ename = "button-lock";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -4207,6 +4371,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "cacoo";
+        ename = "cacoo";
         version = "2.1.2";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -4232,6 +4397,7 @@
                                   , s }:
       melpaBuild {
         pname = "cake-inflector";
+        ename = "cake-inflector";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "k1LoW";
@@ -4256,6 +4422,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "calendar-norway";
+        ename = "calendar-norway";
         version = "0.9.3";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -4280,6 +4447,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "calfw";
+        ename = "calfw";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -4304,6 +4472,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "calfw-cal";
+        ename = "calfw-cal";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -4328,6 +4497,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "calfw-howm";
+        ename = "calfw-howm";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -4352,6 +4522,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "calfw-ical";
+        ename = "calfw-ical";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -4376,6 +4547,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "calfw-org";
+        ename = "calfw-org";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -4405,6 +4577,7 @@
                               , tree-mode }:
       melpaBuild {
         pname = "call-graph";
+        ename = "call-graph";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "beacoder";
@@ -4432,6 +4605,7 @@
                              , names }:
       melpaBuild {
         pname = "camcorder";
+        ename = "camcorder";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -4456,6 +4630,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "caml";
+        ename = "caml";
         version = "4.7.0";
         src = fetchFromGitHub {
           owner = "ocaml";
@@ -4482,6 +4657,7 @@
                          , rust-mode }:
       melpaBuild {
         pname = "cargo";
+        ename = "cargo";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "kwrooijen";
@@ -4510,6 +4686,7 @@
                               , s }:
       melpaBuild {
         pname = "caseformat";
+        ename = "caseformat";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "HKey";
@@ -4541,6 +4718,7 @@
                         , shut-up }:
       melpaBuild {
         pname = "cask";
+        ename = "cask";
         version = "0.8.4";
         src = fetchFromGitHub {
           owner = "cask";
@@ -4566,6 +4744,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "cask-mode";
+        ename = "cask-mode";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -4598,6 +4777,7 @@
                                         , shut-up }:
       melpaBuild {
         pname = "cask-package-toolset";
+        ename = "cask-package-toolset";
         version = "0.9.2";
         src = fetchFromGitHub {
           owner = "AdrieanKhisbe";
@@ -4624,6 +4804,7 @@
                           , yaxception }:
       melpaBuild {
         pname = "caskxy";
+        ename = "caskxy";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -4648,6 +4829,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "catmacs";
+        ename = "catmacs";
         version = "0.1.1";
         src = fetchgit {
           url = "https://bitbucket.org/pymaximus/catmacs";
@@ -4672,6 +4854,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "cbm";
+        ename = "cbm";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "akermu";
@@ -4696,6 +4879,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "cdlatex";
+        ename = "cdlatex";
         version = "4.7";
         src = fetchFromGitHub {
           owner = "cdominik";
@@ -4724,6 +4908,7 @@
                          , pkg-info }:
       melpaBuild {
         pname = "cdnjs";
+        ename = "cdnjs";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "yasuyk";
@@ -4752,6 +4937,7 @@
                           , s }:
       melpaBuild {
         pname = "celery";
+        ename = "celery";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "ardumont";
@@ -4780,6 +4966,7 @@
                            , s }:
       melpaBuild {
         pname = "cerbere";
+        ename = "cerbere";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -4805,6 +4992,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "ceylon-mode";
+        ename = "ceylon-mode";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "lucaswerkmeister";
@@ -4829,6 +5017,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "cfengine-code-style";
+        ename = "cfengine-code-style";
         version = "3.12.0";
         src = fetchFromGitHub {
           owner = "cfengine";
@@ -4856,6 +5045,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "cframe";
+        ename = "cframe";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "plandes";
@@ -4880,6 +5070,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "chapel-mode";
+        ename = "chapel-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "russel";
@@ -4906,6 +5097,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "char-menu";
+        ename = "char-menu";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -4930,6 +5122,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "charmap";
+        ename = "charmap";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "lateau";
@@ -4954,6 +5147,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "chatwork";
+        ename = "chatwork";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "ataka";
@@ -4979,6 +5173,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "cheat-sh";
+        ename = "cheat-sh";
         version = "1.7";
         src = fetchFromGitHub {
           owner = "davep";
@@ -5005,6 +5200,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "checkbox";
+        ename = "checkbox";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "camdez";
@@ -5032,6 +5228,7 @@
                         , s }:
       melpaBuild {
         pname = "chee";
+        ename = "chee";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "eikek";
@@ -5057,6 +5254,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "chinese-word-at-point";
+        ename = "chinese-word-at-point";
         version = "0.2.3";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -5083,6 +5281,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "choice-program";
+        ename = "choice-program";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "plandes";
@@ -5113,6 +5312,7 @@
                          , spinner }:
       melpaBuild {
         pname = "cider";
+        ename = "cider";
         version = "0.17.0";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -5140,6 +5340,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "cider-eval-sexp-fu";
+        ename = "cider-eval-sexp-fu";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -5164,6 +5365,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "cil-mode";
+        ename = "cil-mode";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "ForNeVeR";
@@ -5189,6 +5391,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "circadian";
+        ename = "circadian";
         version = "0.3.2";
         src = fetchFromGitHub {
           owner = "GuidoSchmidt";
@@ -5214,6 +5417,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "circe";
+        ename = "circe";
         version = "2.10";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
@@ -5241,6 +5445,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "circe-notifications";
+        ename = "circe-notifications";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "eqyiel";
@@ -5271,6 +5476,7 @@
                             , string-inflection }:
       melpaBuild {
         pname = "citeproc";
+        ename = "citeproc";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "andras-simonyi";
@@ -5295,6 +5501,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "cl-format";
+        ename = "cl-format";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "alvinfrancis";
@@ -5320,6 +5527,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "cl-lib-highlight";
+        ename = "cl-lib-highlight";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -5345,6 +5553,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "click-mode";
+        ename = "click-mode";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "bmalehorn";
@@ -5371,6 +5580,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "cliphist";
+        ename = "cliphist";
         version = "0.5.5";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -5395,6 +5605,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "clips-mode";
+        ename = "clips-mode";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "grettke";
@@ -5430,6 +5641,7 @@
                                 , yasnippet }:
       melpaBuild {
         pname = "clj-refactor";
+        ename = "clj-refactor";
         version = "2.3.1";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -5469,6 +5681,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "cljr-helm";
+        ename = "cljr-helm";
         version = "0.11";
         src = fetchFromGitHub {
           owner = "philjackson";
@@ -5495,6 +5708,7 @@
                            , projectile }:
       melpaBuild {
         pname = "clocker";
+        ename = "clocker";
         version = "0.0.11";
         src = fetchFromGitHub {
           owner = "roman";
@@ -5521,6 +5735,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "clojure-cheatsheet";
+        ename = "clojure-cheatsheet";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -5546,6 +5761,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "clojure-mode";
+        ename = "clojure-mode";
         version = "5.8.1";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -5571,6 +5787,7 @@
                                                    , melpaBuild }:
       melpaBuild {
         pname = "clojure-mode-extra-font-locking";
+        ename = "clojure-mode-extra-font-locking";
         version = "5.8.1";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -5597,6 +5814,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "clojure-quick-repls";
+        ename = "clojure-quick-repls";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "symfrog";
@@ -5622,6 +5840,7 @@
                                     , yasnippet }:
       melpaBuild {
         pname = "clojure-snippets";
+        ename = "clojure-snippets";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "mpenet";
@@ -5648,6 +5867,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "closql";
+        ename = "closql";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "emacscollective";
@@ -5673,6 +5893,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "clues-theme";
+        ename = "clues-theme";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "emacsfodder";
@@ -5698,6 +5919,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "cm-mode";
+        ename = "cm-mode";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "joostkremers";
@@ -5726,6 +5948,7 @@
                              , seq }:
       melpaBuild {
         pname = "cmake-ide";
+        ename = "cmake-ide";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "atilaneves";
@@ -5750,7 +5973,8 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "cmake-mode";
-        version = "3.12.0.-1.3";
+        ename = "cmake-mode";
+        version = "3.12.0";
         src = fetchFromGitHub {
           owner = "Kitware";
           repo = "CMake";
@@ -5774,6 +5998,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "cmake-project";
+        ename = "cmake-project";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "alamaison";
@@ -5799,6 +6024,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "cnfonts";
+        ename = "cnfonts";
         version = "0.9.1";
         src = fetchFromGitHub {
           owner = "tumashu";
@@ -5825,6 +6051,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "codic";
+        ename = "codic";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -5851,6 +6078,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "coffee-mode";
+        ename = "coffee-mode";
         version = "0.6.3";
         src = fetchFromGitHub {
           owner = "defunkt";
@@ -5877,6 +6105,7 @@
                                           , melpaBuild }:
       melpaBuild {
         pname = "color-identifiers-mode";
+        ename = "color-identifiers-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "ankurdave";
@@ -5902,6 +6131,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "color-theme-modern";
+        ename = "color-theme-modern";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "emacs-jp";
@@ -5926,6 +6156,7 @@
                                                    , melpaBuild }:
       melpaBuild {
         pname = "color-theme-sanityinc-solarized";
+        ename = "color-theme-sanityinc-solarized";
         version = "2.29";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -5950,6 +6181,7 @@
                                                   , melpaBuild }:
       melpaBuild {
         pname = "color-theme-sanityinc-tomorrow";
+        ename = "color-theme-sanityinc-tomorrow";
         version = "1.17";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -5975,6 +6207,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "colormaps";
+        ename = "colormaps";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "lepisma";
@@ -6003,6 +6236,7 @@
                              , s }:
       melpaBuild {
         pname = "commander";
+        ename = "commander";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -6027,6 +6261,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "comment-dwim-2";
+        ename = "comment-dwim-2";
         version = "1.2.2";
         src = fetchFromGitHub {
           owner = "remyferre";
@@ -6053,6 +6288,7 @@
                                 , pkg-info }:
       melpaBuild {
         pname = "comment-tags";
+        ename = "comment-tags";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "vincekd";
@@ -6079,6 +6315,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "commenter";
+        ename = "commenter";
         version = "0.5.2";
         src = fetchFromGitHub {
           owner = "yuutayamada";
@@ -6104,6 +6341,7 @@
                                         , yasnippet }:
       melpaBuild {
         pname = "common-lisp-snippets";
+        ename = "common-lisp-snippets";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -6129,6 +6367,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "company";
+        ename = "company";
         version = "0.9.6";
         src = fetchFromGitHub {
           owner = "company-mode";
@@ -6158,6 +6397,7 @@
                                     , s }:
       melpaBuild {
         pname = "company-anaconda";
+        ename = "company-anaconda";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "proofit404";
@@ -6184,6 +6424,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "company-ansible";
+        ename = "company-ansible";
         version = "0.7.1";
         src = fetchFromGitHub {
           owner = "krzysztof-magosa";
@@ -6211,6 +6452,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "company-cabal";
+        ename = "company-cabal";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "iquiw";
@@ -6240,6 +6482,7 @@
                                , yasnippet }:
       melpaBuild {
         pname = "company-coq";
+        ename = "company-coq";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "cpitclaudel";
@@ -6267,6 +6510,7 @@
                                 , parent-mode }:
       melpaBuild {
         pname = "company-dict";
+        ename = "company-dict";
         version = "1.2.7";
         src = fetchFromGitHub {
           owner = "hlissner";
@@ -6295,6 +6539,7 @@
                                 , s }:
       melpaBuild {
         pname = "company-edbi";
+        ename = "company-edbi";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "proofit404";
@@ -6322,6 +6567,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "company-emacs-eclim";
+        ename = "company-emacs-eclim";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "emacs-eclim";
@@ -6348,6 +6594,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "company-emoji";
+        ename = "company-emoji";
         version = "2.5.0";
         src = fetchFromGitHub {
           owner = "dunn";
@@ -6375,6 +6622,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "company-erlang";
+        ename = "company-erlang";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "s-kostyaev";
@@ -6403,6 +6651,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "company-ghc";
+        ename = "company-ghc";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "iquiw";
@@ -6429,6 +6678,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "company-go";
+        ename = "company-go";
         version = "20170907";
         src = fetchFromGitHub {
           owner = "nsf";
@@ -6457,6 +6707,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "company-irony";
+        ename = "company-irony";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "Sarcasm";
@@ -6484,6 +6735,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "company-irony-c-headers";
+        ename = "company-irony-c-headers";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "hotpxl";
@@ -6512,6 +6764,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "company-jedi";
+        ename = "company-jedi";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -6541,6 +6794,7 @@
                                , s }:
       melpaBuild {
         pname = "company-lsp";
+        ename = "company-lsp";
         version = "2.0.1";
         src = fetchFromGitHub {
           owner = "tigersoldier";
@@ -6567,6 +6821,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "company-math";
+        ename = "company-math";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "vspinu";
@@ -6593,6 +6848,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "company-ngram";
+        ename = "company-ngram";
         version = "0.8.0";
         src = fetchFromGitHub {
           owner = "kshramt";
@@ -6620,6 +6876,7 @@
                                          , nixos-options }:
       melpaBuild {
         pname = "company-nixos-options";
+        ename = "company-nixos-options";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "travisbhartwell";
@@ -6647,6 +6904,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "company-php";
+        ename = "company-php";
         version = "2.0.5";
         src = fetchFromGitHub {
           owner = "xcwen";
@@ -6674,6 +6932,7 @@
                                      , prescient }:
       melpaBuild {
         pname = "company-prescient";
+        ename = "company-prescient";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "raxod502";
@@ -6701,6 +6960,7 @@
                                      , pos-tip }:
       melpaBuild {
         pname = "company-quickhelp";
+        ename = "company-quickhelp";
         version = "2.3.0";
         src = fetchFromGitHub {
           owner = "expez";
@@ -6730,6 +6990,7 @@
                                       , restclient }:
       melpaBuild {
         pname = "company-restclient";
+        ename = "company-restclient";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "iquiw";
@@ -6763,6 +7024,7 @@
                                  , rtags }:
       melpaBuild {
         pname = "company-rtags";
+        ename = "company-rtags";
         version = "2.18";
         src = fetchFromGitHub {
           owner = "Andersbakken";
@@ -6791,6 +7053,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "company-shell";
+        ename = "company-shell";
         version = "1.2.1";
         src = fetchFromGitHub {
           owner = "Alexander-Miller";
@@ -6820,6 +7083,7 @@
                                      , sourcekit }:
       melpaBuild {
         pname = "company-sourcekit";
+        ename = "company-sourcekit";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "nathankot";
@@ -6846,6 +7110,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "company-statistics";
+        ename = "company-statistics";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "company-mode";
@@ -6876,6 +7141,7 @@
                                 , tern }:
       melpaBuild {
         pname = "company-tern";
+        ename = "company-tern";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "proofit404";
@@ -6903,6 +7169,7 @@
                                      , terraform-mode }:
       melpaBuild {
         pname = "company-terraform";
+        ename = "company-terraform";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "rafalcieslak";
@@ -6931,6 +7198,7 @@
                                , web-completion-data }:
       melpaBuild {
         pname = "company-web";
+        ename = "company-web";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "osv";
@@ -6962,6 +7230,7 @@
                                 , ycmd }:
       melpaBuild {
         pname = "company-ycmd";
+        ename = "company-ycmd";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "abingham";
@@ -6987,6 +7256,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "composable";
+        ename = "composable";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "paldepind";
@@ -7016,6 +7286,7 @@
                             , seq }:
       melpaBuild {
         pname = "composer";
+        ename = "composer";
         version = "0.0.8";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -7042,6 +7313,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "concurrent";
+        ename = "concurrent";
         version = "0.5.1";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -7071,6 +7343,7 @@
                          , s }:
       melpaBuild {
         pname = "conda";
+        ename = "conda";
         version = "0.0.9";
         src = fetchFromGitHub {
           owner = "necaris";
@@ -7095,6 +7368,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "conkeror-minor-mode";
+        ename = "conkeror-minor-mode";
         version = "1.6.2";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -7122,6 +7396,7 @@
                                , parsec }:
       melpaBuild {
         pname = "conllu-mode";
+        ename = "conllu-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "odanoburu";
@@ -7146,6 +7421,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "connection";
+        ename = "connection";
         version = "1.10";
         src = fetchFromGitHub {
           owner = "myrkr";
@@ -7173,6 +7449,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "contextual";
+        ename = "contextual";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "lshift-de";
@@ -7197,6 +7474,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "contextual-menubar";
+        ename = "contextual-menubar";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "aaronjensen";
@@ -7222,6 +7500,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "copy-as-format";
+        ename = "copy-as-format";
         version = "0.0.7";
         src = fetchFromGitHub {
           owner = "sshaw";
@@ -7250,6 +7529,7 @@
                                      , s }:
       melpaBuild {
         pname = "copy-file-on-save";
+        ename = "copy-file-on-save";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -7276,6 +7556,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "copyit";
+        ename = "copyit";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "zonuexe";
@@ -7303,6 +7584,7 @@
                                  , pandoc }:
       melpaBuild {
         pname = "copyit-pandoc";
+        ename = "copyit-pandoc";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "zonuexe";
@@ -7327,6 +7609,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "corral";
+        ename = "corral";
         version = "0.3.20";
         src = fetchFromGitHub {
           owner = "nivekuil";
@@ -7353,6 +7636,7 @@
                            , swiper }:
       melpaBuild {
         pname = "counsel";
+        ename = "counsel";
         version = "0.10.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -7379,6 +7663,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "counsel-bbdb";
+        ename = "counsel-bbdb";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -7408,6 +7693,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "counsel-dash";
+        ename = "counsel-dash";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "nathankot";
@@ -7434,6 +7720,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "counsel-etags";
+        ename = "counsel-etags";
         version = "1.6.2";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -7460,6 +7747,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "counsel-gtags";
+        ename = "counsel-gtags";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -7486,6 +7774,7 @@
                                       , projectile }:
       melpaBuild {
         pname = "counsel-projectile";
+        ename = "counsel-projectile";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "ericdanan";
@@ -7512,6 +7801,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "counsel-tramp";
+        ename = "counsel-tramp";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "masasam";
@@ -7538,6 +7828,7 @@
                             , ov }:
       melpaBuild {
         pname = "coverage";
+        ename = "coverage";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "trezona-lecomte";
@@ -7564,6 +7855,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "coverlay";
+        ename = "coverlay";
         version = "3.0.1";
         src = fetchFromGitHub {
           owner = "twada";
@@ -7588,6 +7880,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "cpputils-cmake";
+        ename = "cpputils-cmake";
         version = "5.5";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -7613,6 +7906,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "creamsody-theme";
+        ename = "creamsody-theme";
         version = "0.3.7";
         src = fetchFromGitHub {
           owner = "emacsfodder";
@@ -7639,6 +7933,7 @@
                          , s }:
       melpaBuild {
         pname = "creds";
+        ename = "creds";
         version = "0.0.6.1";
         src = fetchFromGitHub {
           owner = "ardumont";
@@ -7667,6 +7962,7 @@
                             , s }:
       melpaBuild {
         pname = "cricbuzz";
+        ename = "cricbuzz";
         version = "0.3.5";
         src = fetchFromGitHub {
           owner = "lepisma";
@@ -7692,6 +7988,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "crm-custom";
+        ename = "crm-custom";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
@@ -7717,6 +8014,7 @@
                         , seq }:
       melpaBuild {
         pname = "crux";
+        ename = "crux";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "bbatsov";
@@ -7741,6 +8039,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "cryptol-mode";
+        ename = "cryptol-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "thoughtpolice";
@@ -7766,6 +8065,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "crystal-mode";
+        ename = "crystal-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "crystal-lang-tools";
@@ -7790,6 +8090,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "csharp-mode";
+        ename = "csharp-mode";
         version = "0.9.2";
         src = fetchFromGitHub {
           owner = "josteink";
@@ -7817,6 +8118,7 @@
                                , shut-up }:
       melpaBuild {
         pname = "csound-mode";
+        ename = "csound-mode";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "hlolli";
@@ -7841,6 +8143,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "csv";
+        ename = "csv";
         version = "2.1";
         src = fetchFromGitLab {
           owner = "u11";
@@ -7865,6 +8168,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "ctable";
+        ename = "ctable";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -7889,6 +8193,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "ctags-update";
+        ename = "ctags-update";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "jixiuf";
@@ -7916,6 +8221,7 @@
                            , yaxception }:
       melpaBuild {
         pname = "ctxmenu";
+        ename = "ctxmenu";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -7942,6 +8248,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "cubicaltt";
+        ename = "cubicaltt";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "mortberg";
@@ -7966,6 +8273,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "cubicle-mode";
+        ename = "cubicle-mode";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "cubicle-model-checker";
@@ -7990,6 +8298,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "cuda-mode";
+        ename = "cuda-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "chachi";
@@ -8016,6 +8325,7 @@
                             , yaml-mode }:
       melpaBuild {
         pname = "cwl-mode";
+        ename = "cwl-mode";
         version = "0.2.5";
         src = fetchFromGitHub {
           owner = "tom-tan";
@@ -8040,6 +8350,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "cyberpunk-theme";
+        ename = "cyberpunk-theme";
         version = "1.21";
         src = fetchFromGitHub {
           owner = "n3mo";
@@ -8065,6 +8376,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "cyphejor";
+        ename = "cyphejor";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -8089,6 +8401,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "cython-mode";
+        ename = "cython-mode";
         version = "0.28.4";
         src = fetchFromGitHub {
           owner = "cython";
@@ -8113,6 +8426,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "d-mode";
+        ename = "d-mode";
         version = "2.0.9";
         src = fetchFromGitHub {
           owner = "Emacs-D-Mode-Maintainers";
@@ -8138,6 +8452,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "dad-joke";
+        ename = "dad-joke";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "davep";
@@ -8163,6 +8478,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "daemons";
+        ename = "daemons";
         version = "1.2.0";
         src = fetchFromGitHub {
           owner = "cbowdon";
@@ -8193,6 +8509,7 @@
                          , s }:
       melpaBuild {
         pname = "dante";
+        ename = "dante";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "jyp";
@@ -8217,6 +8534,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "darcula-theme";
+        ename = "darcula-theme";
         version = "2.0";
         src = fetchFromGitLab {
           owner = "fommil";
@@ -8242,6 +8560,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "darktooth-theme";
+        ename = "darktooth-theme";
         version = "0.3.7";
         src = fetchFromGitHub {
           owner = "emacsfodder";
@@ -8271,6 +8590,7 @@
                              , s }:
       melpaBuild {
         pname = "dart-mode";
+        ename = "dart-mode";
         version = "1.0.3";
         src = fetchFromGitHub {
           owner = "nex3";
@@ -8295,6 +8615,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "dash";
+        ename = "dash";
         version = "2.14.1";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -8321,6 +8642,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "dash-functional";
+        ename = "dash-functional";
         version = "2.14.1";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -8347,6 +8669,7 @@
                              , page-break-lines }:
       melpaBuild {
         pname = "dashboard";
+        ename = "dashboard";
         version = "1.2.4";
         src = fetchFromGitHub {
           owner = "rakanalh";
@@ -8371,6 +8694,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "date-at-point";
+        ename = "date-at-point";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -8398,6 +8722,7 @@
                               , yaxception }:
       melpaBuild {
         pname = "date-field";
+        ename = "date-field";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -8424,6 +8749,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "datetime";
+        ename = "datetime";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "doublep";
@@ -8453,6 +8779,7 @@
                             , spinner }:
       melpaBuild {
         pname = "deadgrep";
+        ename = "deadgrep";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -8478,6 +8805,7 @@
                             , xml-rpc }:
       melpaBuild {
         pname = "debpaste";
+        ename = "debpaste";
         version = "0.1.5";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -8502,6 +8830,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "decide";
+        ename = "decide";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "lifelike";
@@ -8526,6 +8855,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "dedicated";
+        ename = "dedicated";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -8550,6 +8880,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "default-text-scale";
+        ename = "default-text-scale";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -8575,6 +8906,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "deferred";
+        ename = "deferred";
         version = "0.5.1";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -8600,6 +8932,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "define-word";
+        ename = "define-word";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -8624,6 +8957,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "deft";
+        ename = "deft";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "jrblevin";
@@ -8650,6 +8984,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "demangle-mode";
+        ename = "demangle-mode";
         version = "1.2.2";
         src = fetchFromGitHub {
           owner = "liblit";
@@ -8675,6 +9010,7 @@
                                    , yabin }:
       melpaBuild {
         pname = "describe-number";
+        ename = "describe-number";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "netromdk";
@@ -8700,6 +9036,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "desktop-environment";
+        ename = "desktop-environment";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -8727,6 +9064,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "desktop-plus";
+        ename = "desktop+";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "ffevotte";
@@ -8751,6 +9089,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "desktop-registry";
+        ename = "desktop-registry";
         version = "1.2.0";
         src = fetchFromGitHub {
           owner = "ryuslash";
@@ -8776,6 +9115,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "diary-manager";
+        ename = "diary-manager";
         version = "2.0.1";
         src = fetchFromGitHub {
           owner = "raxod502";
@@ -8800,6 +9140,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "dictionary";
+        ename = "dictionary";
         version = "1.10";
         src = fetchFromGitHub {
           owner = "myrkr";
@@ -8825,6 +9166,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "diff-hl";
+        ename = "diff-hl";
         version = "1.8.4";
         src = fetchFromGitHub {
           owner = "dgutov";
@@ -8853,6 +9195,7 @@
                            , s }:
       melpaBuild {
         pname = "difflib";
+        ename = "difflib";
         version = "0.3.8";
         src = fetchFromGitHub {
           owner = "dieggsy";
@@ -8877,6 +9220,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "diffview";
+        ename = "diffview";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "mgalgs";
@@ -8901,6 +9245,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "digistar-mode";
+        ename = "digistar-mode";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "retroj";
@@ -8926,6 +9271,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "dim";
+        ename = "dim";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -8950,6 +9296,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "dim-autoload";
+        ename = "dim-autoload";
         version = "2.0.1";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -8974,6 +9321,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "diminish";
+        ename = "diminish";
         version = "0.45";
         src = fetchFromGitHub {
           owner = "myrjola";
@@ -8999,6 +9347,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "dimmer";
+        ename = "dimmer";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "gonewest818";
@@ -9029,6 +9378,7 @@
                             , s }:
       melpaBuild {
         pname = "dionysos";
+        ename = "dionysos";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -9054,6 +9404,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "dired-atool";
+        ename = "dired-atool";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "HKey";
@@ -9078,6 +9429,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "dired-efap";
+        ename = "dired-efap";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "juan-leon";
@@ -9103,6 +9455,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "dired-explorer";
+        ename = "dired-explorer";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "jidaikobo-shibata";
@@ -9127,6 +9480,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "dired-fdclone";
+        ename = "dired-fdclone";
         version = "1.5.4";
         src = fetchFromGitHub {
           owner = "knu";
@@ -9152,6 +9506,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "dired-hide-dotfiles";
+        ename = "dired-hide-dotfiles";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "mattiasb";
@@ -9177,6 +9532,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "dired-icon";
+        ename = "dired-icon";
         version = "0.5";
         src = fetchFromGitLab {
           owner = "xuhdev";
@@ -9201,6 +9557,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "dired-imenu";
+        ename = "dired-imenu";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -9226,6 +9583,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "dired-k";
+        ename = "dired-k";
         version = "0.19";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -9251,6 +9609,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "dired-quick-sort";
+        ename = "dired-quick-sort";
         version = "0.1";
         src = fetchFromGitLab {
           owner = "xuhdev";
@@ -9278,6 +9637,7 @@
                                , s }:
       melpaBuild {
         pname = "dired-rsync";
+        ename = "dired-rsync";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "stsquad";
@@ -9302,6 +9662,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "dired-single";
+        ename = "dired-single";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "crocket";
@@ -9326,6 +9687,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "dired-toggle-sudo";
+        ename = "dired-toggle-sudo";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "renard";
@@ -9351,6 +9713,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "diredfl";
+        ename = "diredfl";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -9375,6 +9738,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "diredful";
+        ename = "diredful";
         version = "1.10";
         src = fetchFromGitHub {
           owner = "thamer";
@@ -9402,6 +9766,7 @@
                           , with-editor }:
       melpaBuild {
         pname = "direnv";
+        ename = "direnv";
         version = "1.4.0";
         src = fetchFromGitHub {
           owner = "wbolster";
@@ -9426,6 +9791,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "direx";
+        ename = "direx";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "m2ym";
@@ -9451,6 +9817,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "direx-grep";
+        ename = "direx-grep";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -9475,6 +9842,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "disable-mouse";
+        ename = "disable-mouse";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -9500,6 +9868,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "discover";
+        ename = "discover";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "mickeynp";
@@ -9525,6 +9894,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "discover-my-major";
+        ename = "discover-my-major";
         version = "1.0";
         src = fetchgit {
           url = "https://framagit.org/steckerhalter/discover-my-major.git";
@@ -9548,6 +9918,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "dispass";
+        ename = "dispass";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "ryuslash";
@@ -9578,7 +9949,7 @@
           rev = "beac4c1f3b7e";
           sha256 = "1cbsy4lchl41zmyxfq828cjpl3h2dwvn8xf1qgf2lbscdb6cwbwb";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/02e2a2a25f42929626d7237511136ba6826dad33/recipes/ditz-mode";
           sha256 = "0shzm9l31n4ffjs1d26ykxsycd478lhlpl8xcwzbjryywg4gf5nd";
           name = "ditz-mode";
@@ -9596,6 +9967,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "dix";
+        ename = "dix";
         version = "0.3.5";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -9622,6 +9994,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "dix-evil";
+        ename = "dix-evil";
         version = "0.3.5";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -9653,6 +10026,7 @@
                           , tablist }:
       melpaBuild {
         pname = "docker";
+        ename = "docker";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "Silex";
@@ -9688,6 +10062,7 @@
                                        , yaml-mode }:
       melpaBuild {
         pname = "docker-compose-mode";
+        ename = "docker-compose-mode";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "meqif";
@@ -9714,6 +10089,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "docker-tramp";
+        ename = "docker-tramp";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "emacs-pe";
@@ -9738,6 +10114,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "dockerfile-mode";
+        ename = "dockerfile-mode";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "spotify";
@@ -9762,6 +10139,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "dokuwiki-mode";
+        ename = "dokuwiki-mode";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "kai2nenobu";
@@ -9787,6 +10165,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "doom";
+        ename = "doom";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "kensanata";
@@ -9817,6 +10196,7 @@
                                  , shrink-path }:
       melpaBuild {
         pname = "doom-modeline";
+        ename = "doom-modeline";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "seagle0128";
@@ -9851,6 +10231,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "doom-themes";
+        ename = "doom-themes";
         version = "2.1.1";
         src = fetchFromGitHub {
           owner = "hlissner";
@@ -9876,6 +10257,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "dotenv-mode";
+        ename = "dotenv-mode";
         version = "0.2.4";
         src = fetchFromGitHub {
           owner = "preetpalS";
@@ -9900,6 +10282,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "downplay-mode";
+        ename = "downplay-mode";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "tobias";
@@ -9925,6 +10308,7 @@
                                           , melpaBuild }:
       melpaBuild {
         pname = "dr-racket-like-unicode";
+        ename = "dr-racket-like-unicode";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "david-christiansen";
@@ -9950,6 +10334,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "dracula-theme";
+        ename = "dracula-theme";
         version = "1.4.0";
         src = fetchFromGitHub {
           owner = "dracula";
@@ -9974,6 +10359,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "draft-mode";
+        ename = "draft-mode";
         version = "0.1.1";
         src = fetchFromGitLab {
           owner = "gaudecker";
@@ -9998,6 +10384,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "drag-stuff";
+        ename = "drag-stuff";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -10023,6 +10410,7 @@
                                , php-mode }:
       melpaBuild {
         pname = "drupal-mode";
+        ename = "drupal-mode";
         version = "0.7.3";
         src = fetchFromGitHub {
           owner = "arnested";
@@ -10047,6 +10435,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "drupal-spell";
+        ename = "drupal-spell";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "arnested";
@@ -10071,6 +10460,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "dtrt-indent";
+        ename = "dtrt-indent";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "jscheid";
@@ -10096,6 +10486,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "ducpel";
+        ename = "ducpel";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -10125,6 +10516,7 @@
                              , s }:
       melpaBuild {
         pname = "dumb-jump";
+        ename = "dumb-jump";
         version = "0.5.2";
         src = fetchFromGitHub {
           owner = "jacktasia";
@@ -10157,7 +10549,7 @@
           rev = "87db00b912be";
           sha256 = "0jg289fj4q83dwj7i0w5zq8bwqxzwzzmyhvdrk6cfw3q6rlwk5fp";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/dyalog-mode";
           sha256 = "1y17nd2xd8b3mhaybws8dr7yanzwqij9gzfywisy65ckflm9kfyq";
           name = "dyalog-mode";
@@ -10177,6 +10569,7 @@
                                  , persistent-soft }:
       melpaBuild {
         pname = "dynamic-fonts";
+        ename = "dynamic-fonts";
         version = "0.6.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -10201,6 +10594,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "dynamic-ruler";
+        ename = "dynamic-ruler";
         version = "0.1.6";
         src = fetchFromGitHub {
           owner = "rocher";
@@ -10226,6 +10620,7 @@
                         , window-layout }:
       melpaBuild {
         pname = "e2wm";
+        ename = "e2wm";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -10251,6 +10646,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "e2wm-R";
+        ename = "e2wm-R";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "myuhe";
@@ -10277,6 +10673,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "e2wm-direx";
+        ename = "e2wm-direx";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -10303,6 +10700,7 @@
                                  , plsense-direx }:
       melpaBuild {
         pname = "e2wm-pkgex4pl";
+        ename = "e2wm-pkgex4pl";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -10328,6 +10726,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "e2wm-sww";
+        ename = "e2wm-sww";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -10355,6 +10754,7 @@
                              , yaxception }:
       melpaBuild {
         pname = "e2wm-term";
+        ename = "e2wm-term";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -10381,6 +10781,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "eacl";
+        ename = "eacl";
         version = "1.1.3";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -10407,12 +10808,13 @@
                              , popup }:
       melpaBuild {
         pname = "easy-hugo";
-        version = "3.3.27";
+        ename = "easy-hugo";
+        version = "3.3.30";
         src = fetchFromGitHub {
           owner = "masasam";
           repo = "emacs-easy-hugo";
-          rev = "3b0516c87d33a75dd777f6336fdf53be0374abcb";
-          sha256 = "1qf7wk0vx1p0y77cnzihq4zrmz1dffwabsxgf0mz770nskys6y82";
+          rev = "8bf48b973905c4ab488633226b3dfb3317d8c745";
+          sha256 = "0yjxg1mql7ha6wa5wdkngs6y3lqz5y5y0hbsmpvqdw61paqm2ggs";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/easy-hugo";
@@ -10432,6 +10834,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "easy-jekyll";
+        ename = "easy-jekyll";
         version = "1.6.15";
         src = fetchFromGitHub {
           owner = "masasam";
@@ -10458,6 +10861,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "easy-kill";
+        ename = "easy-kill";
         version = "0.9.3";
         src = fetchFromGitHub {
           owner = "leoliu";
@@ -10483,6 +10887,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "easy-kill-extras";
+        ename = "easy-kill-extras";
         version = "0.9.4.1";
         src = fetchFromGitHub {
           owner = "knu";
@@ -10508,6 +10913,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "easy-repeat";
+        ename = "easy-repeat";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -10534,6 +10940,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "ebal";
+        ename = "ebal";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -10561,6 +10968,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "ebf";
+        ename = "ebf";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "rexim";
@@ -10589,6 +10997,7 @@
                         , seq }:
       melpaBuild {
         pname = "ebib";
+        ename = "ebib";
         version = "2.11.11";
         src = fetchFromGitHub {
           owner = "joostkremers";
@@ -10619,6 +11028,7 @@
                          , yasnippet }:
       melpaBuild {
         pname = "eclim";
+        ename = "eclim";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "emacs-eclim";
@@ -10649,6 +11059,7 @@
                           , s }:
       melpaBuild {
         pname = "ecukes";
+        ename = "ecukes";
         version = "0.6.17";
         src = fetchFromGitHub {
           owner = "ecukes";
@@ -10676,6 +11087,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "edbi";
+        ename = "edbi";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -10701,6 +11113,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "edbi-minor-mode";
+        ename = "edbi-minor-mode";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "proofit404";
@@ -10725,6 +11138,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "ede-php-autoload";
+        ename = "ede-php-autoload";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "stevenremot";
@@ -10752,6 +11166,7 @@
                                                         , s }:
       melpaBuild {
         pname = "ede-php-autoload-composer-installers";
+        ename = "ede-php-autoload-composer-installers";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "xendk";
@@ -10779,6 +11194,7 @@
                                            , s }:
       melpaBuild {
         pname = "ede-php-autoload-drupal";
+        ename = "ede-php-autoload-drupal";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "xendk";
@@ -10804,6 +11220,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "edit-indirect";
+        ename = "edit-indirect";
         version = "0.1.5";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -10828,6 +11245,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "edit-list";
+        ename = "edit-list";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "emacsmirror";
@@ -10852,6 +11270,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "edit-server";
+        ename = "edit-server";
         version = "1.15";
         src = fetchFromGitHub {
           owner = "stsquad";
@@ -10877,6 +11296,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "editorconfig";
+        ename = "editorconfig";
         version = "0.7.12";
         src = fetchFromGitHub {
           owner = "editorconfig";
@@ -10902,6 +11322,7 @@
                                                  , melpaBuild }:
       melpaBuild {
         pname = "editorconfig-custom-majormode";
+        ename = "editorconfig-custom-majormode";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "10sr";
@@ -10931,6 +11352,7 @@
                        , s }:
       melpaBuild {
         pname = "edn";
+        ename = "edn";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "expez";
@@ -10955,6 +11377,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "edts";
+        ename = "edts";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "tjarvstrand";
@@ -10981,6 +11404,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "eg";
+        ename = "eg";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "davep";
@@ -11005,6 +11429,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "egg";
+        ename = "egg";
         version = "1.0.9";
         src = fetchFromGitHub {
           owner = "byplayer";
@@ -11029,6 +11454,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "egison-mode";
+        ename = "egison-mode";
         version = "3.7.10";
         src = fetchFromGitHub {
           owner = "egisatoshi";
@@ -11055,6 +11481,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "eglot";
+        ename = "eglot";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "joaotavora";
@@ -11079,6 +11506,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "eide";
+        ename = "eide";
         version = "2.1.3";
         src = fetchgit {
           url = "https://framagit.org/eide/eide.git";
@@ -11111,6 +11539,7 @@
                        , websocket }:
       melpaBuild {
         pname = "ein";
+        ename = "ein";
         version = "0.14.1";
         src = fetchFromGitHub {
           owner = "millejoh";
@@ -11145,6 +11574,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "eink-theme";
+        ename = "eink-theme";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "maio";
@@ -11169,6 +11599,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "el-autoyas";
+        ename = "el-autoyas";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -11193,6 +11624,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "el-get";
+        ename = "el-get";
         version = "5.1";
         src = fetchFromGitHub {
           owner = "dimitri";
@@ -11220,6 +11652,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "el-init";
+        ename = "el-init";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "HKey";
@@ -11250,6 +11683,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "el-init-viewer";
+        ename = "el-init-viewer";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "HKey";
@@ -11274,6 +11708,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "el-mock";
+        ename = "el-mock";
         version = "1.25.1";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -11299,6 +11734,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "el-patch";
+        ename = "el-patch";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "raxod502";
@@ -11323,6 +11759,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "el-spice";
+        ename = "el-spice";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "vedang";
@@ -11347,6 +11784,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "el-x";
+        ename = "el-x";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "sigma";
@@ -11372,6 +11810,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "el2org";
+        ename = "el2org";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "tumashu";
@@ -11398,6 +11837,7 @@
                           , seq }:
       melpaBuild {
         pname = "elbank";
+        ename = "elbank";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -11425,6 +11865,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "elcouch";
+        ename = "elcouch";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -11449,6 +11890,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "eldoc-eval";
+        ename = "eldoc-eval";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "thierryvolpiatto";
@@ -11476,6 +11918,7 @@
                                      , names }:
       melpaBuild {
         pname = "electric-operator";
+        ename = "electric-operator";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "davidshepherd7";
@@ -11501,6 +11944,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "elf-mode";
+        ename = "elf-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -11526,6 +11970,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "elfeed";
+        ename = "elfeed";
         version = "3.0.0";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -11553,6 +11998,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "elfeed-protocol";
+        ename = "elfeed-protocol";
         version = "0.5.3";
         src = fetchFromGitHub {
           owner = "fasheng";
@@ -11580,6 +12026,7 @@
                               , simple-httpd }:
       melpaBuild {
         pname = "elfeed-web";
+        ename = "elfeed-web";
         version = "3.0.0";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -11608,6 +12055,7 @@
                              , s }:
       melpaBuild {
         pname = "elisp-def";
+        ename = "elisp-def";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -11633,6 +12081,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "elisp-lint";
+        ename = "elisp-lint";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "gonewest818";
@@ -11660,6 +12109,7 @@
                               , s }:
       melpaBuild {
         pname = "elisp-refs";
+        ename = "elisp-refs";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -11685,6 +12135,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "elisp-slime-nav";
+        ename = "elisp-slime-nav";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -11711,6 +12162,7 @@
                                , pkg-info }:
       melpaBuild {
         pname = "elixir-mode";
+        ename = "elixir-mode";
         version = "2.3.1";
         src = fetchFromGitHub {
           owner = "elixir-lang";
@@ -11736,6 +12188,7 @@
                                      , yasnippet }:
       melpaBuild {
         pname = "elixir-yasnippets";
+        ename = "elixir-yasnippets";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "hisea";
@@ -11764,6 +12217,7 @@
                             , s }:
       melpaBuild {
         pname = "elm-mode";
+        ename = "elm-mode";
         version = "0.20.3";
         src = fetchFromGitHub {
           owner = "jcollard";
@@ -11790,6 +12244,7 @@
                            , s }:
       melpaBuild {
         pname = "elmacro";
+        ename = "elmacro";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "Silex";
@@ -11814,6 +12269,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "elmine";
+        ename = "elmine";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "leoc";
@@ -11838,6 +12294,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "elpa-audit";
+        ename = "elpa-audit";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -11864,6 +12321,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "elpa-clone";
+        ename = "elpa-clone";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "dochang";
@@ -11889,6 +12347,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "elpa-mirror";
+        ename = "elpa-mirror";
         version = "2.1.1";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -11920,6 +12379,7 @@
                         , yasnippet }:
       melpaBuild {
         pname = "elpy";
+        ename = "elpy";
         version = "1.22.0";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
@@ -11953,6 +12413,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "elscreen";
+        ename = "elscreen";
         version = "2018.-4.3.-4.21";
         src = fetchFromGitHub {
           owner = "knu";
@@ -11979,6 +12440,7 @@
                                , seq }:
       melpaBuild {
         pname = "elscreen-fr";
+        ename = "elscreen-fr";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "rocher";
@@ -12004,6 +12466,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "elscreen-mew";
+        ename = "elscreen-mew";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "masutaka";
@@ -12029,6 +12492,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "elwm";
+        ename = "elwm";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "Fuco1";
@@ -12054,6 +12518,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "elx";
+        ename = "elx";
         version = "1.2.4";
         src = fetchFromGitHub {
           owner = "emacscollective";
@@ -12078,6 +12543,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "emacs-setup";
+        ename = "emacs-setup";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "echosa";
@@ -12103,6 +12569,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "emacsagist";
+        ename = "emacsagist";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "echosa";
@@ -12127,6 +12594,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "emacsc";
+        ename = "emacsc";
         version = "1.2.20131027";
         src = fetchFromGitHub {
           owner = "knu";
@@ -12155,6 +12623,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "emacsql";
+        ename = "emacsql";
         version = "2.0.3";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -12183,6 +12652,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "emacsql-mysql";
+        ename = "emacsql-mysql";
         version = "2.0.3";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -12212,6 +12682,7 @@
                                 , pg }:
       melpaBuild {
         pname = "emacsql-psql";
+        ename = "emacsql-psql";
         version = "2.0.3";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -12240,6 +12711,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "emacsql-sqlite";
+        ename = "emacsql-sqlite";
         version = "2.0.3";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -12264,6 +12736,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "emacsshot";
+        ename = "emacsshot";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "marcowahl";
@@ -12289,6 +12762,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "emamux";
+        ename = "emamux";
         version = "0.14";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -12313,6 +12787,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "emaps";
+        ename = "emaps";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "GuiltyDolphin";
@@ -12339,6 +12814,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "embrace";
+        ename = "embrace";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -12363,6 +12839,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "emmet-mode";
+        ename = "emmet-mode";
         version = "1.0.8";
         src = fetchFromGitHub {
           owner = "smihica";
@@ -12388,6 +12865,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "emms";
+        ename = "emms";
         version = "5.0";
         src = fetchgit {
           url = "https://git.savannah.gnu.org/git/emms.git";
@@ -12413,6 +12891,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "emms-mode-line-cycle";
+        ename = "emms-mode-line-cycle";
         version = "0.2.5";
         src = fetchFromGitHub {
           owner = "momomo5717";
@@ -12438,6 +12917,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "emms-player-mpv";
+        ename = "emms-player-mpv";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "dochang";
@@ -12465,6 +12945,7 @@
                                           , melpaBuild }:
       melpaBuild {
         pname = "emms-player-simple-mpv";
+        ename = "emms-player-simple-mpv";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "momomo5717";
@@ -12490,6 +12971,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "emms-state";
+        ename = "emms-state";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -12516,6 +12998,7 @@
                                           , melpaBuild }:
       melpaBuild {
         pname = "emoji-cheat-sheet-plus";
+        ename = "emoji-cheat-sheet-plus";
         version = "1.2.1";
         src = fetchFromGitHub {
           owner = "syl20bnr";
@@ -12540,6 +13023,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "emoji-fontset";
+        ename = "emoji-fontset";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "zonuexe";
@@ -12567,6 +13051,7 @@
                            , seq }:
       melpaBuild {
         pname = "emojify";
+        ename = "emojify";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "iqbalansari";
@@ -12602,6 +13087,7 @@
                        , s }:
       melpaBuild {
         pname = "emr";
+        ename = "emr";
         version = "0.3.7";
         src = fetchFromGitHub {
           owner = "chrisbarrett";
@@ -12638,6 +13124,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "engine-mode";
+        ename = "engine-mode";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "hrs";
@@ -12663,6 +13150,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "enh-ruby-mode";
+        ename = "enh-ruby-mode";
         version = "20180330";
         src = fetchFromGitHub {
           owner = "zenspider";
@@ -12687,6 +13175,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "enlive";
+        ename = "enlive";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "zweifisch";
@@ -12711,6 +13200,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "enotify";
+        ename = "enotify";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "laynor";
@@ -12742,6 +13232,7 @@
                           , yasnippet }:
       melpaBuild {
         pname = "ensime";
+        ename = "ensime";
         version = "2.0.2";
         src = fetchFromGitHub {
           owner = "ensime";
@@ -12778,6 +13269,7 @@
                              , s }:
       melpaBuild {
         pname = "eopengrok";
+        ename = "eopengrok";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "youngker";
@@ -12804,6 +13296,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "epc";
+        ename = "epc";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -12831,6 +13324,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "epkg";
+        ename = "epkg";
         version = "3.1.0";
         src = fetchFromGitHub {
           owner = "emacscollective";
@@ -12856,6 +13350,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "epl";
+        ename = "epl";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "cask";
@@ -12882,6 +13377,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "epm";
+        ename = "epm";
         version = "0.1.-2.2";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -12907,6 +13403,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "erc-crypt";
+        ename = "erc-crypt";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "atomontage";
@@ -12941,7 +13438,7 @@
           rev = "a53227513692";
           sha256 = "0av0y65hz7fbiiqzmk5mmw6jv7fivhcd1w3s2xn5y5jpgps56mrc";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b60e01e7064ce486fdac3d1b39fd4a1296b0dac5/recipes/erc-hipchatify";
           sha256 = "1a4gl05i757vvap0rzrfwms7mhw80sa84gvbwafrvj3x11rja24x";
           name = "erc-hipchatify";
@@ -12958,6 +13455,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "erc-hl-nicks";
+        ename = "erc-hl-nicks";
         version = "1.3.3";
         src = fetchFromGitHub {
           owner = "leathekd";
@@ -12984,6 +13482,7 @@
                                      , switch-buffer-functions }:
       melpaBuild {
         pname = "erc-scrolltoplace";
+        ename = "erc-scrolltoplace";
         version = "0.1.0";
         src = fetchFromGitLab {
           owner = "jgkamat";
@@ -13010,6 +13509,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "erc-twitch";
+        ename = "erc-twitch";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "vibhavp";
@@ -13034,6 +13534,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "erc-youtube";
+        ename = "erc-youtube";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "kidd";
@@ -13058,6 +13559,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "ercn";
+        ename = "ercn";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "leathekd";
@@ -13083,6 +13585,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "erefactor";
+        ename = "erefactor";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -13110,6 +13613,7 @@
                                   , undo-tree }:
       melpaBuild {
         pname = "ergoemacs-mode";
+        ename = "ergoemacs-mode";
         version = "5.16.10.12";
         src = fetchFromGitHub {
           owner = "ergoemacs";
@@ -13135,6 +13639,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "erlang";
+        ename = "erlang";
         version = "21.0.3";
         src = fetchFromGitHub {
           owner = "erlang";
@@ -13159,6 +13664,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ert-async";
+        ename = "ert-async";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -13184,6 +13690,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ert-junit";
+        ename = "ert-junit";
         version = "0.3";
         src = fetchgit {
           url = "https://bitbucket.org/olanilsson/ert-junit";
@@ -13213,6 +13720,7 @@
                               , shut-up }:
       melpaBuild {
         pname = "ert-runner";
+        ename = "ert-runner";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -13238,6 +13746,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "es-lib";
+        ename = "es-lib";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "sabof";
@@ -13265,6 +13774,7 @@
                            , spark }:
       melpaBuild {
         pname = "es-mode";
+        ename = "es-mode";
         version = "4.3.0";
         src = fetchFromGitHub {
           owner = "dakrone";
@@ -13291,6 +13801,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "es-windows";
+        ename = "es-windows";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "sabof";
@@ -13316,6 +13827,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "esa";
+        ename = "esa";
         version = "0.8.13";
         src = fetchFromGitHub {
           owner = "nabinno";
@@ -13342,6 +13854,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "esh-autosuggest";
+        ename = "esh-autosuggest";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "dieggsy";
@@ -13367,6 +13880,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "esh-help";
+        ename = "esh-help";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "tom-tan";
@@ -13391,6 +13905,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "eshell-autojump";
+        ename = "eshell-autojump";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "coldnew";
@@ -13416,6 +13931,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "eshell-bookmark";
+        ename = "eshell-bookmark";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "Fuco1";
@@ -13442,6 +13958,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "eshell-did-you-mean";
+        ename = "eshell-did-you-mean";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -13469,6 +13986,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "eshell-git-prompt";
+        ename = "eshell-git-prompt";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -13493,6 +14011,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "eshell-prompt-extras";
+        ename = "eshell-prompt-extras";
         version = "0.96";
         src = fetchFromGitHub {
           owner = "hiddenlotus";
@@ -13518,6 +14037,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "eshell-up";
+        ename = "eshell-up";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "peterwvj";
@@ -13543,6 +14063,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "eshell-z";
+        ename = "eshell-z";
         version = "0.3.2";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -13567,6 +14088,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "eslint-fix";
+        ename = "eslint-fix";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "codesuki";
@@ -13593,6 +14115,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "eslintd-fix";
+        ename = "eslintd-fix";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "aaronjensen";
@@ -13620,6 +14143,7 @@
                           , s }:
       melpaBuild {
         pname = "espuds";
+        ename = "espuds";
         version = "0.3.3";
         src = fetchFromGitHub {
           owner = "ecukes";
@@ -13645,6 +14169,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "ess";
+        ename = "ess";
         version = "17.11";
         src = fetchFromGitHub {
           owner = "emacs-ess";
@@ -13672,6 +14197,7 @@
                                    , popup }:
       melpaBuild {
         pname = "ess-R-data-view";
+        ename = "ess-R-data-view";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "myuhe";
@@ -13696,6 +14222,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "ess-smart-underscore";
+        ename = "ess-smart-underscore";
         version = "0.79";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -13722,6 +14249,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "esup";
+        ename = "esup";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "jschaf";
@@ -13746,6 +14274,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "esxml";
+        ename = "esxml";
         version = "0.3.4";
         src = fetchFromGitHub {
           owner = "tali713";
@@ -13773,6 +14302,7 @@
                                   , xterm-color }:
       melpaBuild {
         pname = "eterm-256color";
+        ename = "eterm-256color";
         version = "0.3.13";
         src = fetchFromGitHub {
           owner = "dieggsy";
@@ -13797,6 +14327,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "ethan-wspace";
+        ename = "ethan-wspace";
         version = "0.7.1";
         src = fetchFromGitHub {
           owner = "glasserc";
@@ -13824,6 +14355,7 @@
                                 , paredit }:
       melpaBuild {
         pname = "eval-in-repl";
+        ename = "eval-in-repl";
         version = "0.9.6";
         src = fetchFromGitHub {
           owner = "kaz-yos";
@@ -13850,6 +14382,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "eval-sexp-fu";
+        ename = "eval-sexp-fu";
         version = "0.4.2";
         src = fetchFromGitHub {
           owner = "hchbaw";
@@ -13875,6 +14408,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "evalator";
+        ename = "evalator";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "seanirby";
@@ -13903,6 +14437,7 @@
                         , undo-tree }:
       melpaBuild {
         pname = "evil";
+        ename = "evil";
         version = "1.2.13";
         src = fetchFromGitHub {
           owner = "emacs-evil";
@@ -13929,6 +14464,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "evil-anzu";
+        ename = "evil-anzu";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -13954,6 +14490,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "evil-args";
+        ename = "evil-args";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "wcsmith";
@@ -13981,6 +14518,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "evil-colemak-basics";
+        ename = "evil-colemak-basics";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "wbolster";
@@ -14006,6 +14544,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "evil-commentary";
+        ename = "evil-commentary";
         version = "2.1.1";
         src = fetchFromGitHub {
           owner = "linktohack";
@@ -14033,6 +14572,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "evil-embrace";
+        ename = "evil-embrace";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -14060,6 +14600,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "evil-escape";
+        ename = "evil-escape";
         version = "3.14";
         src = fetchFromGitHub {
           owner = "syl20bnr";
@@ -14086,6 +14627,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "evil-iedit-state";
+        ename = "evil-iedit-state";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "syl20bnr";
@@ -14111,6 +14653,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "evil-leader";
+        ename = "evil-leader";
         version = "0.4.3";
         src = fetchFromGitHub {
           owner = "cofi";
@@ -14138,6 +14681,7 @@
                                    , smartparens }:
       melpaBuild {
         pname = "evil-lisp-state";
+        ename = "evil-lisp-state";
         version = "8.2";
         src = fetchFromGitHub {
           owner = "syl20bnr";
@@ -14164,6 +14708,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "evil-magit";
+        ename = "evil-magit";
         version = "0.4.2";
         src = fetchFromGitHub {
           owner = "emacs-evil";
@@ -14189,6 +14734,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "evil-mark-replace";
+        ename = "evil-mark-replace";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -14214,6 +14760,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "evil-matchit";
+        ename = "evil-matchit";
         version = "2.2.8";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -14241,6 +14788,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "evil-mc";
+        ename = "evil-mc";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "gabesoft";
@@ -14269,6 +14817,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "evil-multiedit";
+        ename = "evil-multiedit";
         version = "1.3.8";
         src = fetchFromGitHub {
           owner = "hlissner";
@@ -14294,6 +14843,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "evil-nerd-commenter";
+        ename = "evil-nerd-commenter";
         version = "3.2.3";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -14318,6 +14868,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "evil-numbers";
+        ename = "evil-numbers";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "cofi";
@@ -14344,6 +14895,7 @@
                                , opener }:
       melpaBuild {
         pname = "evil-opener";
+        ename = "evil-opener";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "0robustus1";
@@ -14370,6 +14922,7 @@
                             , org }:
       melpaBuild {
         pname = "evil-org";
+        ename = "evil-org";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "Somelauw";
@@ -14395,6 +14948,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "evil-quickscope";
+        ename = "evil-quickscope";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "blorbx";
@@ -14421,6 +14975,7 @@
                                           , melpaBuild }:
       melpaBuild {
         pname = "evil-replace-with-char";
+        ename = "evil-replace-with-char";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "ninrod";
@@ -14446,6 +15001,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "evil-rsi";
+        ename = "evil-rsi";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "linktohack";
@@ -14471,6 +15027,7 @@
                                                  , melpaBuild }:
       melpaBuild {
         pname = "evil-search-highlight-persist";
+        ename = "evil-search-highlight-persist";
         version = "1.8";
         src = fetchFromGitHub {
           owner = "naclander";
@@ -14498,6 +15055,7 @@
                                     , smartparens }:
       melpaBuild {
         pname = "evil-smartparens";
+        ename = "evil-smartparens";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "expez";
@@ -14525,6 +15083,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "evil-snipe";
+        ename = "evil-snipe";
         version = "2.0.8";
         src = fetchFromGitHub {
           owner = "hlissner";
@@ -14550,6 +15109,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "evil-space";
+        ename = "evil-space";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "linktohack";
@@ -14577,6 +15137,7 @@
                                           , string-inflection }:
       melpaBuild {
         pname = "evil-string-inflection";
+        ename = "evil-string-inflection";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "ninrod";
@@ -14602,6 +15163,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "evil-surround";
+        ename = "evil-surround";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "emacs-evil";
@@ -14627,6 +15189,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "evil-swap-keys";
+        ename = "evil-swap-keys";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "wbolster";
@@ -14652,6 +15215,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "evil-test-helpers";
+        ename = "evil-test-helpers";
         version = "1.2.13";
         src = fetchFromGitHub {
           owner = "emacs-evil";
@@ -14678,6 +15242,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "evil-text-object-python";
+        ename = "evil-text-object-python";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "wbolster";
@@ -14704,6 +15269,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "evil-textobj-anyblock";
+        ename = "evil-textobj-anyblock";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "noctuid";
@@ -14729,6 +15295,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "evil-tutor";
+        ename = "evil-tutor";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "syl20bnr";
@@ -14755,6 +15322,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "evil-visual-mark-mode";
+        ename = "evil-visual-mark-mode";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "roman";
@@ -14780,6 +15348,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "evil-visual-replace";
+        ename = "evil-visual-replace";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "troyp";
@@ -14805,6 +15374,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "evil-visualstar";
+        ename = "evil-visualstar";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "bling";
@@ -14831,6 +15401,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "evm";
+        ename = "evm";
         version = "0.4.2";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -14855,6 +15426,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "eww-lnum";
+        ename = "eww-lnum";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "m00natic";
@@ -14881,6 +15453,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "exato";
+        ename = "exato";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "ninrod";
@@ -14905,6 +15478,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "exec-path-from-shell";
+        ename = "exec-path-from-shell";
         version = "1.11";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -14930,6 +15504,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "exiftool";
+        ename = "exiftool";
         version = "0.3";
         src = fetchgit {
           url = "https://git.systemreboot.net/exiftool.el/";
@@ -14953,6 +15528,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "expand-region";
+        ename = "expand-region";
         version = "0.11.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -14978,6 +15554,7 @@
                            , string-utils }:
       melpaBuild {
         pname = "express";
+        ename = "express";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -15003,6 +15580,7 @@
                                  , s }:
       melpaBuild {
         pname = "exsqlaim-mode";
+        ename = "exsqlaim-mode";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "ahmadnazir";
@@ -15027,6 +15605,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "extend-dnd";
+        ename = "extend-dnd";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -15052,6 +15631,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "extmap";
+        ename = "extmap";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "doublep";
@@ -15083,6 +15663,7 @@
                           , switch-window }:
       melpaBuild {
         pname = "exwm-x";
+        ename = "exwm-x";
         version = "1.8.1";
         src = fetchFromGitHub {
           owner = "tumashu";
@@ -15117,6 +15698,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "eyebrowse";
+        ename = "eyebrowse";
         version = "0.7.7";
         src = fetchFromGitHub {
           owner = "wasamasa";
@@ -15141,6 +15723,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "eziam-theme";
+        ename = "eziam-theme";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "thblt";
@@ -15167,6 +15750,7 @@
                      , s }:
       melpaBuild {
         pname = "f";
+        ename = "f";
         version = "0.20.0";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -15194,6 +15778,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "f3";
+        ename = "f3";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "cosmicexplorer";
@@ -15218,6 +15803,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "fabric";
+        ename = "fabric";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -15242,6 +15828,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "factlog";
+        ename = "factlog";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "tkf";
@@ -15266,6 +15853,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "faff-theme";
+        ename = "faff-theme";
         version = "2.2";
         src = fetchFromGitHub {
           owner = "WJCFerguson";
@@ -15291,6 +15879,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "fancy-battery";
+        ename = "fancy-battery";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "lunaryorn";
@@ -15315,6 +15904,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "fancy-narrow";
+        ename = "fancy-narrow";
         version = "0.9.5";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -15341,6 +15931,7 @@
                            , w3m }:
       melpaBuild {
         pname = "fastdef";
+        ename = "fastdef";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -15365,6 +15956,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "fastnav";
+        ename = "fastnav";
         version = "1.0.7";
         src = fetchFromGitHub {
           owner = "gleber";
@@ -15389,6 +15981,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "faust-mode";
+        ename = "faust-mode";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "rukano";
@@ -15415,6 +16008,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "faustine";
+        ename = "faustine";
         version = "0.4";
         src = fetchgit {
           url = "https://bitbucket.org/yphil/faustine";
@@ -15438,6 +16032,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "fcitx";
+        ename = "fcitx";
         version = "0.2.3";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -15462,6 +16057,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "feature-mode";
+        ename = "feature-mode";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "michaelklishin";
@@ -15486,6 +16082,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "fill-column-indicator";
+        ename = "fill-column-indicator";
         version = "1.90";
         src = fetchFromGitHub {
           owner = "alpaker";
@@ -15511,6 +16108,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "fill-function-arguments";
+        ename = "fill-function-arguments";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "davidshepherd7";
@@ -15539,6 +16137,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "finalize";
+        ename = "finalize";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -15564,6 +16163,7 @@
                                         , pinyinlib }:
       melpaBuild {
         pname = "find-by-pinyin-dired";
+        ename = "find-by-pinyin-dired";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -15590,6 +16190,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "find-file-in-project";
+        ename = "find-file-in-project";
         version = "5.6.8";
         src = fetchFromGitHub {
           owner = "technomancy";
@@ -15614,6 +16215,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "find-file-in-repository";
+        ename = "find-file-in-repository";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "hoffstaetter";
@@ -15639,6 +16241,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "fiplr";
+        ename = "fiplr";
         version = "0.2.4";
         src = fetchFromGitHub {
           owner = "grizzl";
@@ -15666,6 +16269,7 @@
                                       , popwin }:
       melpaBuild {
         pname = "firefox-controller";
+        ename = "firefox-controller";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -15690,6 +16294,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "fireplace";
+        ename = "fireplace";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "johanvts";
@@ -15714,6 +16319,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "firestarter";
+        ename = "firestarter";
         version = "0.2.5";
         src = fetchFromGitHub {
           owner = "wasamasa";
@@ -15739,6 +16345,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "fish-mode";
+        ename = "fish-mode";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "wwwjfy";
@@ -15764,6 +16371,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "fix-input";
+        ename = "fix-input";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -15788,6 +16396,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "fix-muscle-memory";
+        ename = "fix-muscle-memory";
         version = "0.93";
         src = fetchFromGitHub {
           owner = "jonnay";
@@ -15814,6 +16423,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "fix-word";
+        ename = "fix-word";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -15844,6 +16454,7 @@
                           , tabulated-list ? null }:
       melpaBuild {
         pname = "fixmee";
+        ename = "fixmee";
         version = "0.8.6";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -15876,6 +16487,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "flatui-dark-theme";
+        ename = "flatui-dark-theme";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "theasp";
@@ -15903,6 +16515,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "flex-compile";
+        ename = "flex-compile";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "plandes";
@@ -15929,6 +16542,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "floobits";
+        ename = "floobits";
         version = "1.9.2";
         src = fetchFromGitHub {
           owner = "Floobits";
@@ -15954,6 +16568,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "flow-minor-mode";
+        ename = "flow-minor-mode";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "an-sh";
@@ -15980,6 +16595,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "flower";
+        ename = "flower";
         version = "0.4.2";
         src = fetchFromGitHub {
           owner = "PositiveTechnologies";
@@ -16005,6 +16621,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "flx";
+        ename = "flx";
         version = "0.6.1";
         src = fetchFromGitHub {
           owner = "lewang";
@@ -16031,6 +16648,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "flx-ido";
+        ename = "flx-ido";
         version = "0.6.1";
         src = fetchFromGitHub {
           owner = "lewang";
@@ -16060,6 +16678,7 @@
                             , seq }:
       melpaBuild {
         pname = "flycheck";
+        ename = "flycheck";
         version = "31";
         src = fetchFromGitHub {
           owner = "flycheck";
@@ -16085,6 +16704,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "flycheck-apertium";
+        ename = "flycheck-apertium";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -16112,6 +16732,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "flycheck-cask";
+        ename = "flycheck-cask";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "flycheck";
@@ -16138,6 +16759,7 @@
                                           , melpaBuild }:
       melpaBuild {
         pname = "flycheck-checkbashisms";
+        ename = "flycheck-checkbashisms";
         version = "1.5";
         src = fetchFromGitHub {
           owner = "Gnouc";
@@ -16164,6 +16786,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "flycheck-checkpatch";
+        ename = "flycheck-checkpatch";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "zpp0";
@@ -16192,6 +16815,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "flycheck-clojure";
+        ename = "flycheck-clojure";
         version = "0.1.5";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -16219,6 +16843,7 @@
                                             , melpaBuild }:
       melpaBuild {
         pname = "flycheck-color-mode-line";
+        ename = "flycheck-color-mode-line";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "flycheck";
@@ -16244,6 +16869,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "flycheck-crystal";
+        ename = "flycheck-crystal";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "crystal-lang-tools";
@@ -16270,6 +16896,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "flycheck-dmd-dub";
+        ename = "flycheck-dmd-dub";
         version = "0.12";
         src = fetchFromGitHub {
           owner = "atilaneves";
@@ -16296,6 +16923,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "flycheck-gometalinter";
+        ename = "flycheck-gometalinter";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "favadi";
@@ -16326,6 +16954,7 @@
                                     , seq }:
       melpaBuild {
         pname = "flycheck-haskell";
+        ename = "flycheck-haskell";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "flycheck";
@@ -16351,6 +16980,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "flycheck-hdevtools";
+        ename = "flycheck-hdevtools";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "flycheck";
@@ -16378,6 +17008,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "flycheck-irony";
+        ename = "flycheck-irony";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "Sarcasm";
@@ -16403,6 +17034,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "flycheck-joker";
+        ename = "flycheck-joker";
         version = "1.2.0";
         src = fetchFromGitHub {
           owner = "candid82";
@@ -16429,6 +17061,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "flycheck-julia";
+        ename = "flycheck-julia";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "gdkrmr";
@@ -16454,6 +17087,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "flycheck-kotlin";
+        ename = "flycheck-kotlin";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "whirm";
@@ -16479,6 +17113,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "flycheck-ledger";
+        ename = "flycheck-ledger";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -16505,6 +17140,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "flycheck-mix";
+        ename = "flycheck-mix";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "tomekowal";
@@ -16531,6 +17167,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "flycheck-mmark";
+        ename = "flycheck-mmark";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "mmark-md";
@@ -16558,6 +17195,7 @@
                                        , nim-mode }:
       melpaBuild {
         pname = "flycheck-nimsuggest";
+        ename = "flycheck-nimsuggest";
         version = "0.8.1";
         src = fetchFromGitHub {
           owner = "yuutayamada";
@@ -16584,6 +17222,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "flycheck-objc-clang";
+        ename = "flycheck-objc-clang";
         version = "2.0.2";
         src = fetchFromGitHub {
           owner = "GyazSquare";
@@ -16612,6 +17251,7 @@
                                   , merlin }:
       melpaBuild {
         pname = "flycheck-ocaml";
+        ename = "flycheck-ocaml";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "flycheck";
@@ -16638,6 +17278,7 @@
                                     , package-lint }:
       melpaBuild {
         pname = "flycheck-package";
+        ename = "flycheck-package";
         version = "0.12";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -16665,7 +17306,8 @@
                                     , phpstan }:
       melpaBuild {
         pname = "flycheck-phpstan";
-        version = "0.2.1";
+        ename = "flycheck-phpstan";
+        version = "0.2.2";
         src = fetchFromGitHub {
           owner = "emacs-php";
           repo = "phpstan.el";
@@ -16690,6 +17332,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "flycheck-pony";
+        ename = "flycheck-pony";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "SeanTAllen";
@@ -16717,6 +17360,7 @@
                                       , popup }:
       melpaBuild {
         pname = "flycheck-popup-tip";
+        ename = "flycheck-popup-tip";
         version = "0.12.2";
         src = fetchFromGitHub {
           owner = "flycheck";
@@ -16744,6 +17388,7 @@
                                     , pos-tip }:
       melpaBuild {
         pname = "flycheck-pos-tip";
+        ename = "flycheck-pos-tip";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "flycheck";
@@ -16769,6 +17414,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "flycheck-pycheckers";
+        ename = "flycheck-pycheckers";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "msherry";
@@ -16794,6 +17440,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "flycheck-rebar3";
+        ename = "flycheck-rebar3";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "joedevivo";
@@ -16821,6 +17468,7 @@
                                   , rtags }:
       melpaBuild {
         pname = "flycheck-rtags";
+        ename = "flycheck-rtags";
         version = "2.18";
         src = fetchFromGitHub {
           owner = "Andersbakken";
@@ -16849,6 +17497,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "flycheck-status-emoji";
+        ename = "flycheck-status-emoji";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "liblit";
@@ -16875,6 +17524,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "flycheck-swift";
+        ename = "flycheck-swift";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "swift-emacs";
@@ -16901,6 +17551,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "flycheck-swift3";
+        ename = "flycheck-swift3";
         version = "2.0.2";
         src = fetchFromGitHub {
           owner = "GyazSquare";
@@ -16928,6 +17579,7 @@
                                 , popup }:
       melpaBuild {
         pname = "flycheck-tip";
+        ename = "flycheck-tip";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "yuutayamada";
@@ -16954,6 +17606,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "flycheck-title";
+        ename = "flycheck-title";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -16979,6 +17632,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "flycheck-yamllint";
+        ename = "flycheck-yamllint";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "krzysztof-magosa";
@@ -17008,6 +17662,7 @@
                                  , ycmd }:
       melpaBuild {
         pname = "flycheck-ycmd";
+        ename = "flycheck-ycmd";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "abingham";
@@ -17033,6 +17688,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "flymake-coffee";
+        ename = "flymake-coffee";
         version = "0.12";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17058,6 +17714,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "flymake-css";
+        ename = "flymake-css";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17083,6 +17740,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "flymake-cursor";
+        ename = "flymake-cursor";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "flymake";
@@ -17107,6 +17765,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "flymake-easy";
+        ename = "flymake-easy";
         version = "0.10";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17131,6 +17790,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "flymake-gjshint";
+        ename = "flymake-gjshint";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "yasuyk";
@@ -17156,6 +17816,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "flymake-haml";
+        ename = "flymake-haml";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17181,6 +17842,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "flymake-haskell-multi";
+        ename = "flymake-haskell-multi";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17206,6 +17868,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "flymake-hlint";
+        ename = "flymake-hlint";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17230,6 +17893,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "flymake-jslint";
+        ename = "flymake-jslint";
         version = "0.23";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17255,6 +17919,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "flymake-json";
+        ename = "flymake-json";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17280,6 +17945,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "flymake-less";
+        ename = "flymake-less";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17305,6 +17971,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "flymake-perlcritic";
+        ename = "flymake-perlcritic";
         version = "1.0.3";
         src = fetchFromGitHub {
           owner = "illusori";
@@ -17330,6 +17997,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "flymake-php";
+        ename = "flymake-php";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17355,6 +18023,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "flymake-python-pyflakes";
+        ename = "flymake-python-pyflakes";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17380,6 +18049,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "flymake-ruby";
+        ename = "flymake-ruby";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17405,6 +18075,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "flymake-sass";
+        ename = "flymake-sass";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17430,6 +18101,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "flymake-shell";
+        ename = "flymake-shell";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -17454,6 +18126,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "flyspell-correct";
+        ename = "flyspell-correct";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "d12frosted";
@@ -17480,6 +18153,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "flyspell-correct-helm";
+        ename = "flyspell-correct-helm";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "d12frosted";
@@ -17506,6 +18180,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "flyspell-correct-ivy";
+        ename = "flyspell-correct-ivy";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "d12frosted";
@@ -17532,6 +18207,7 @@
                                           , popup }:
       melpaBuild {
         pname = "flyspell-correct-popup";
+        ename = "flyspell-correct-popup";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "d12frosted";
@@ -17556,6 +18232,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "flyspell-lazy";
+        ename = "flyspell-lazy";
         version = "0.6.10";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -17581,6 +18258,7 @@
                                   , popup }:
       melpaBuild {
         pname = "flyspell-popup";
+        ename = "flyspell-popup";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -17609,6 +18287,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "fn";
+        ename = "fn";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "troyp";
@@ -17635,6 +18314,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "focus";
+        ename = "focus";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "larstvei";
@@ -17659,6 +18339,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "fold-dwim";
+        ename = "fold-dwim";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "emacsattic";
@@ -17684,6 +18365,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "fold-dwim-org";
+        ename = "fold-dwim-org";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -17708,6 +18390,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "fold-this";
+        ename = "fold-this";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -17734,6 +18417,7 @@
                               , persistent-soft }:
       melpaBuild {
         pname = "font-utils";
+        ename = "font-utils";
         version = "0.7.8";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -17760,6 +18444,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "fontawesome";
+        ename = "fontawesome";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -17784,6 +18469,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "fontify-face";
+        ename = "fontify-face";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "Fuco1";
@@ -17813,6 +18499,7 @@
                                 , s }:
       melpaBuild {
         pname = "foreman-mode";
+        ename = "foreman-mode";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "zweifisch";
@@ -17837,6 +18524,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "form-feed";
+        ename = "form-feed";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "wasamasa";
@@ -17861,6 +18549,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "format-sql";
+        ename = "format-sql";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "paetzke";
@@ -17885,6 +18574,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "fortune-cookie";
+        ename = "fortune-cookie";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "andschwa";
@@ -17910,6 +18600,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "fountain-mode";
+        ename = "fountain-mode";
         version = "2.5.3";
         src = fetchFromGitHub {
           owner = "rnkn";
@@ -17936,6 +18627,7 @@
                                     , seq }:
       melpaBuild {
         pname = "frames-only-mode";
+        ename = "frames-only-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "davidshepherd7";
@@ -17961,6 +18653,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "frameshot";
+        ename = "frameshot";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -17986,6 +18679,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "free-keys";
+        ename = "free-keys";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "Fuco1";
@@ -18010,6 +18704,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "fringe-helper";
+        ename = "fringe-helper";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "nschum";
@@ -18034,6 +18729,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "fsbot-data-browser";
+        ename = "fsbot-data-browser";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "benaiah";
@@ -18065,6 +18761,7 @@
                                , s }:
       melpaBuild {
         pname = "fsharp-mode";
+        ename = "fsharp-mode";
         version = "1.9.12";
         src = fetchFromGitHub {
           owner = "rneatherway";
@@ -18099,6 +18796,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "fstar-mode";
+        ename = "fstar-mode";
         version = "0.9.4.0";
         src = fetchFromGitHub {
           owner = "FStarLang";
@@ -18123,6 +18821,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "full-ack";
+        ename = "full-ack";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "nschum";
@@ -18148,6 +18847,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "fullframe";
+        ename = "fullframe";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "tomterl";
@@ -18173,6 +18873,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "function-args";
+        ename = "function-args";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -18205,7 +18906,7 @@
           rev = "784e3147196bfe82ea9499628467335ea1d036f9";
           sha256 = "07dqqpacvap034jzvdvnpjyryzicbvjx2imnsghsxw9m52jsb9wn";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/0607f01aad7e77d53595ad8db95d32acfd29b148/recipes/futhark-mode";
           sha256 = "1k22xkg6vd60hk58zkxhmsw2gs6ikzmidvxcdglnr46m6x7r7pnq";
           name = "futhark-mode";
@@ -18222,6 +18923,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "fuzzy";
+        ename = "fuzzy";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "auto-complete";
@@ -18246,6 +18948,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "fvwm-mode";
+        ename = "fvwm-mode";
         version = "1.6.4";
         src = fetchFromGitHub {
           owner = "theBlackDragon";
@@ -18270,6 +18973,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "fwb-cmds";
+        ename = "fwb-cmds";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -18295,6 +18999,7 @@
                              , s }:
       melpaBuild {
         pname = "fxrd-mode";
+        ename = "fxrd-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "msherry";
@@ -18320,6 +19025,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "fzf";
+        ename = "fzf";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "bling";
@@ -18345,6 +19051,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "gams-mode";
+        ename = "gams-mode";
         version = "6.5";
         src = fetchFromGitHub {
           owner = "ShiroTakeda";
@@ -18369,6 +19076,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "gather";
+        ename = "gather";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -18395,6 +19103,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "geben";
+        ename = "geben";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "ahungry";
@@ -18422,6 +19131,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "geben-helm-projectile";
+        ename = "geben-helm-projectile";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "ahungry";
@@ -18446,6 +19156,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "geiser";
+        ename = "geiser";
         version = "0.10";
         src = fetchFromGitLab {
           owner = "jaor";
@@ -18474,6 +19185,7 @@
                           , yaxception }:
       melpaBuild {
         pname = "genrnc";
+        ename = "genrnc";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -18498,6 +19210,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "german-holidays";
+        ename = "german-holidays";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "rudolfochrist";
@@ -18524,6 +19237,7 @@
                       , s }:
       melpaBuild {
         pname = "gf";
+        ename = "gf";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "grammaticalframework";
@@ -18548,6 +19262,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ggo-mode";
+        ename = "ggo-mode";
         version = "20130521";
         src = fetchFromGitHub {
           owner = "mkjunker";
@@ -18574,6 +19289,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "ggtags";
+        ename = "ggtags";
         version = "0.8.12";
         src = fetchFromGitHub {
           owner = "leoliu";
@@ -18601,6 +19317,7 @@
                       , pcache }:
       melpaBuild {
         pname = "gh";
+        ename = "gh";
         version = "0.10.0";
         src = fetchFromGitHub {
           owner = "sigma";
@@ -18626,6 +19343,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "ghc";
+        ename = "ghc";
         version = "5.8.0.0";
         src = fetchFromGitHub {
           owner = "DanielG";
@@ -18651,6 +19369,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "ghc-imported-from";
+        ename = "ghc-imported-from";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "david-christiansen";
@@ -18675,6 +19394,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "ghq";
+        ename = "ghq";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "rcoedo";
@@ -18701,6 +19421,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "ghub";
+        ename = "ghub";
         version = "2.0.1";
         src = fetchFromGitHub {
           owner = "magit";
@@ -18728,6 +19449,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ghub-plus";
+        ename = "ghub+";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "vermiculus";
@@ -18754,6 +19476,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "gist";
+        ename = "gist";
         version = "1.4.0";
         src = fetchFromGitHub {
           owner = "defunkt";
@@ -18781,6 +19504,7 @@
                        , s }:
       melpaBuild {
         pname = "git";
+        ename = "git";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -18805,6 +19529,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "git-annex";
+        ename = "git-annex";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "jwiegley";
@@ -18830,6 +19555,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "git-attr";
+        ename = "git-attr";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "arnested";
@@ -18854,6 +19580,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "git-auto-commit-mode";
+        ename = "git-auto-commit-mode";
         version = "4.4.0";
         src = fetchFromGitHub {
           owner = "ryuslash";
@@ -18881,6 +19608,7 @@
                                , with-editor }:
       melpaBuild {
         pname = "git-command";
+        ename = "git-command";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "10sr";
@@ -18908,6 +19636,7 @@
                               , with-editor }:
       melpaBuild {
         pname = "git-commit";
+        ename = "git-commit";
         version = "2.13.0";
         src = fetchFromGitHub {
           owner = "magit";
@@ -18938,6 +19667,7 @@
                                            , s }:
       melpaBuild {
         pname = "git-commit-insert-issue";
+        ename = "git-commit-insert-issue";
         version = "0.3.1";
         src = fetchFromGitLab {
           owner = "emacs-stuff";
@@ -18964,6 +19694,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "git-gutter";
+        ename = "git-gutter";
         version = "0.90";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -18992,6 +19723,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "git-gutter-fringe";
+        ename = "git-gutter-fringe";
         version = "0.23";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -19018,6 +19750,7 @@
                                           , melpaBuild }:
       melpaBuild {
         pname = "git-gutter-fringe-plus";
+        ename = "git-gutter-fringe+";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "nonsequitur";
@@ -19043,6 +19776,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "git-gutter-plus";
+        ename = "git-gutter+";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "nonsequitur";
@@ -19068,6 +19802,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "git-lens";
+        ename = "git-lens";
         version = "0.7.0";
         src = fetchFromGitLab {
           owner = "pidu";
@@ -19093,6 +19828,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "git-link";
+        ename = "git-link";
         version = "0.7.1";
         src = fetchFromGitHub {
           owner = "sshaw";
@@ -19119,6 +19855,7 @@
                                  , popup }:
       melpaBuild {
         pname = "git-messenger";
+        ename = "git-messenger";
         version = "0.18";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -19143,6 +19880,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "git-ps1-mode";
+        ename = "git-ps1-mode";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "10sr";
@@ -19168,6 +19906,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "git-timemachine";
+        ename = "git-timemachine";
         version = "4.5";
         src = fetchFromGitLab {
           owner = "pidu";
@@ -19193,6 +19932,7 @@
                                        , s }:
       melpaBuild {
         pname = "git-wip-timemachine";
+        ename = "git-wip-timemachine";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "itsjeyd";
@@ -19217,6 +19957,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "gitattributes-mode";
+        ename = "gitattributes-mode";
         version = "1.2.7";
         src = fetchFromGitHub {
           owner = "magit";
@@ -19241,6 +19982,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "gitconfig";
+        ename = "gitconfig";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "tonini";
@@ -19265,6 +20007,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "gitconfig-mode";
+        ename = "gitconfig-mode";
         version = "1.2.7";
         src = fetchFromGitHub {
           owner = "magit";
@@ -19290,6 +20033,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "github-browse-file";
+        ename = "github-browse-file";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "osener";
@@ -19317,6 +20061,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "github-clone";
+        ename = "github-clone";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "dgtized";
@@ -19344,6 +20089,7 @@
                                , package-build }:
       melpaBuild {
         pname = "github-elpa";
+        ename = "github-elpa";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "10sr";
@@ -19369,6 +20115,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "github-notifier";
+        ename = "github-notifier";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -19395,6 +20142,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "github-search";
+        ename = "github-search";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "IvanMalison";
@@ -19419,6 +20167,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "gitignore-mode";
+        ename = "gitignore-mode";
         version = "1.2.7";
         src = fetchFromGitHub {
           owner = "magit";
@@ -19447,6 +20196,7 @@
                           , s }:
       melpaBuild {
         pname = "gitlab";
+        ename = "gitlab";
         version = "0.8.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -19473,6 +20223,7 @@
                                   , yaml-mode }:
       melpaBuild {
         pname = "gitlab-ci-mode";
+        ename = "gitlab-ci-mode";
         version = "20180306.1";
         src = fetchFromGitLab {
           owner = "joewreschnig";
@@ -19500,6 +20251,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "gitlab-ci-mode-flycheck";
+        ename = "gitlab-ci-mode-flycheck";
         version = "20180304.1";
         src = fetchFromGitLab {
           owner = "joewreschnig";
@@ -19525,6 +20277,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "gitpatch";
+        ename = "gitpatch";
         version = "0.5.1";
         src = fetchFromGitHub {
           owner = "tumashu";
@@ -19551,6 +20304,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "gitter";
+        ename = "gitter";
         version = "1";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -19575,6 +20329,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "gl-conf-mode";
+        ename = "gl-conf-mode";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "llloret";
@@ -19601,6 +20356,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "glab";
+        ename = "glab";
         version = "2.0.1";
         src = fetchFromGitHub {
           owner = "magit";
@@ -19626,6 +20382,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "gmail-message-mode";
+        ename = "gmail-message-mode";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -19650,6 +20407,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "gmail2bbdb";
+        ename = "gmail2bbdb";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -19674,6 +20432,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "gmpl-mode";
+        ename = "gmpl-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -19698,6 +20457,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "gntp";
+        ename = "gntp";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "tekai";
@@ -19722,6 +20482,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "gnuplot";
+        ename = "gnuplot";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "bruceravel";
@@ -19747,6 +20508,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "gnus-desktop-notify";
+        ename = "gnus-desktop-notify";
         version = "1.4";
         src = fetchFromGitLab {
           owner = "wavexx";
@@ -19773,6 +20535,7 @@
                                  , yaxception }:
       melpaBuild {
         pname = "gnus-x-gm-raw";
+        ename = "gnus-x-gm-raw";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -19799,6 +20562,7 @@
                                , s }:
       melpaBuild {
         pname = "go-add-tags";
+        ename = "go-add-tags";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -19824,6 +20588,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "go-autocomplete";
+        ename = "go-autocomplete";
         version = "20170907";
         src = fetchFromGitHub {
           owner = "nsf";
@@ -19850,6 +20615,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "go-direx";
+        ename = "go-direx";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -19875,6 +20641,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "go-dlv";
+        ename = "go-dlv";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "benma";
@@ -19901,6 +20668,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "go-eldoc";
+        ename = "go-eldoc";
         version = "0.30";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -19925,6 +20693,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "go-errcheck";
+        ename = "go-errcheck";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "dominikh";
@@ -19950,6 +20719,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "go-fill-struct";
+        ename = "go-fill-struct";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "s-kostyaev";
@@ -19976,6 +20746,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "go-guru";
+        ename = "go-guru";
         version = "1.5.0";
         src = fetchFromGitHub {
           owner = "dominikh";
@@ -20002,6 +20773,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "go-impl";
+        ename = "go-impl";
         version = "0.14";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -20026,6 +20798,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "go-mode";
+        ename = "go-mode";
         version = "1.5.0";
         src = fetchFromGitHub {
           owner = "dominikh";
@@ -20053,6 +20826,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "go-playground";
+        ename = "go-playground";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "grafov";
@@ -20078,6 +20852,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "go-rename";
+        ename = "go-rename";
         version = "1.5.0";
         src = fetchFromGitHub {
           owner = "dominikh";
@@ -20104,6 +20879,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "go-scratch";
+        ename = "go-scratch";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "shosti";
@@ -20130,6 +20906,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "go-tag";
+        ename = "go-tag";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "brantou";
@@ -20154,6 +20931,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "godoctor";
+        ename = "godoctor";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "microamp";
@@ -20178,6 +20956,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "golden-ratio";
+        ename = "golden-ratio";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "roman";
@@ -20202,6 +20981,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "google-maps";
+        ename = "google-maps";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "jd";
@@ -20227,6 +21007,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "google-this";
+        ename = "google-this";
         version = "1.12";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -20251,6 +21032,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "google-translate";
+        ename = "google-translate";
         version = "0.11.14";
         src = fetchFromGitHub {
           owner = "atykhonov";
@@ -20276,6 +21058,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "gorepl-mode";
+        ename = "gorepl-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "manute";
@@ -20304,6 +21087,7 @@
                           , s }:
       melpaBuild {
         pname = "gotest";
+        ename = "gotest";
         version = "0.14.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -20328,6 +21112,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "gotham-theme";
+        ename = "gotham-theme";
         version = "1.1.8";
         src = fetchFromGitHub {
           owner = "wasamasa";
@@ -20352,6 +21137,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "goto-chg";
+        ename = "goto-chg";
         version = "1.7.2";
         src = fetchFromGitHub {
           owner = "emacs-evil";
@@ -20377,6 +21163,7 @@
                             , s }:
       melpaBuild {
         pname = "goto-gem";
+        ename = "goto-gem";
         version = "1.2";
         src = fetchFromGitLab {
           owner = "pidu";
@@ -20401,6 +21188,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "goto-last-change";
+        ename = "goto-last-change";
         version = "1.2.1";
         src = fetchFromGitHub {
           owner = "camdez";
@@ -20430,6 +21218,7 @@
                         , s }:
       melpaBuild {
         pname = "govc";
+        ename = "govc";
         version = "0.18.0";
         src = fetchFromGitHub {
           owner = "vmware";
@@ -20455,6 +21244,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "gpastel";
+        ename = "gpastel";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -20480,6 +21270,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "grab-mac-link";
+        ename = "grab-mac-link";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -20506,6 +21297,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "grab-x-link";
+        ename = "grab-x-link";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -20531,6 +21323,7 @@
                                , s }:
       melpaBuild {
         pname = "gradle-mode";
+        ename = "gradle-mode";
         version = "0.5.5";
         src = fetchFromGitHub {
           owner = "jacobono";
@@ -20556,6 +21349,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "grails";
+        ename = "grails";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "lifeisfoo";
@@ -20580,6 +21374,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "grails-mode";
+        ename = "grails-mode";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "Groovy-Emacs-Modes";
@@ -20607,6 +21402,7 @@
                                           , projectile }:
       melpaBuild {
         pname = "grails-projectile-mode";
+        ename = "grails-projectile-mode";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "yveszoundi";
@@ -20631,6 +21427,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "grandshell-theme";
+        ename = "grandshell-theme";
         version = "1.3";
         src = fetchgit {
           url = "https://framagit.org/steckerhalter/grandshell-theme.git";
@@ -20665,6 +21462,7 @@
                             , web-mode }:
       melpaBuild {
         pname = "graphene";
+        ename = "graphene";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "rdallasgray";
@@ -20701,6 +21499,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "graphene-meta-theme";
+        ename = "graphene-meta-theme";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "rdallasgray";
@@ -20725,6 +21524,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "graphviz-dot-mode";
+        ename = "graphviz-dot-mode";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "ppareit";
@@ -20749,6 +21549,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "grapnel";
+        ename = "grapnel";
         version = "0.5.3";
         src = fetchFromGitHub {
           owner = "leathekd";
@@ -20781,7 +21582,7 @@
           rev = "1ae8eae88117";
           sha256 = "1sl3d5759fjm98pb50ykz2c05czb2298ipccwj2qz2hdzq63hfv8";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/grass-mode";
           sha256 = "1lq6bk4bwgcy4ra3d9rlca3fk87ydg7xnnqcqjg0pw4m9xnr3f7v";
           name = "grass-mode";
@@ -20798,6 +21599,7 @@
                                                 , melpaBuild }:
       melpaBuild {
         pname = "green-is-the-new-black-theme";
+        ename = "green-is-the-new-black-theme";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "fredcamps";
@@ -20822,6 +21624,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "green-screen-theme";
+        ename = "green-screen-theme";
         version = "1.0.24";
         src = fetchFromGitHub {
           owner = "rbanffy";
@@ -20849,6 +21652,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "grep-context";
+        ename = "grep-context";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "mkcms";
@@ -20879,7 +21683,7 @@
           rev = "f541aa22da52";
           sha256 = "0rqpgc50z86j4waijfm6kw4zjmzqfii6nnvyix4rkd4y3ryny1x2";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/grin";
           sha256 = "0rak710fp9c7wx39qn4dc9d0xfjr5w7hwklxh99v1x1ihkla9378";
           name = "grin";
@@ -20896,6 +21700,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "grizzl";
+        ename = "grizzl";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "grizzl";
@@ -20923,6 +21728,7 @@
                                   , s }:
       melpaBuild {
         pname = "groovy-imports";
+        ename = "groovy-imports";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "mbezjak";
@@ -20949,6 +21755,7 @@
                                , s }:
       melpaBuild {
         pname = "groovy-mode";
+        ename = "groovy-mode";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "Groovy-Emacs-Modes";
@@ -20973,6 +21780,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "gruber-darker-theme";
+        ename = "gruber-darker-theme";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "rexim";
@@ -20999,6 +21807,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "grunt";
+        ename = "grunt";
         version = "1.3.2";
         src = fetchFromGitHub {
           owner = "gempesaw";
@@ -21024,6 +21833,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "gruvbox-theme";
+        ename = "gruvbox-theme";
         version = "1.26.0";
         src = fetchFromGitHub {
           owner = "Greduan";
@@ -21048,6 +21858,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "gscholar-bibtex";
+        ename = "gscholar-bibtex";
         version = "0.3.3";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -21073,6 +21884,7 @@
                              , popwin }:
       melpaBuild {
         pname = "guide-key";
+        ename = "guide-key";
         version = "1.2.5";
         src = fetchFromGitHub {
           owner = "kai2nenobu";
@@ -21099,6 +21911,7 @@
                                  , pos-tip }:
       melpaBuild {
         pname = "guide-key-tip";
+        ename = "guide-key-tip";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -21129,6 +21942,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "guix";
+        ename = "guix";
         version = "0.4.1.1";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -21153,6 +21967,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "guru-mode";
+        ename = "guru-mode";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "bbatsov";
@@ -21178,6 +21993,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "gxref";
+        ename = "gxref";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "dedi";
@@ -21203,6 +22019,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "hacker-typer";
+        ename = "hacker-typer";
         version = "1.0.6";
         src = fetchFromGitHub {
           owner = "therockmandolinist";
@@ -21228,6 +22045,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "hackernews";
+        ename = "hackernews";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "clarete";
@@ -21254,6 +22072,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ham-mode";
+        ename = "ham-mode";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -21279,6 +22098,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "hamburger-menu";
+        ename = "hamburger-menu";
         version = "1.0.5";
         src = fetchFromGitLab {
           owner = "iain";
@@ -21304,6 +22124,7 @@
                              , ruby-mode ? null }:
       melpaBuild {
         pname = "haml-mode";
+        ename = "haml-mode";
         version = "3.1.9";
         src = fetchFromGitHub {
           owner = "nex3";
@@ -21328,6 +22149,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "hardcore-mode";
+        ename = "hardcore-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -21353,6 +22175,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "hardhat";
+        ename = "hardhat";
         version = "0.4.6";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -21380,6 +22203,7 @@
                            , swiper }:
       melpaBuild {
         pname = "harvest";
+        ename = "harvest";
         version = "0.3.8";
         src = fetchFromGitHub {
           owner = "kostajh";
@@ -21404,6 +22228,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "haskell-emacs";
+        ename = "haskell-emacs";
         version = "4.0.3";
         src = fetchFromGitHub {
           owner = "knupfer";
@@ -21429,6 +22254,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "haskell-emacs-base";
+        ename = "haskell-emacs-base";
         version = "4.0.3";
         src = fetchFromGitHub {
           owner = "knupfer";
@@ -21454,6 +22280,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "haskell-emacs-text";
+        ename = "haskell-emacs-text";
         version = "4.0.3";
         src = fetchFromGitHub {
           owner = "knupfer";
@@ -21479,6 +22306,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "haskell-mode";
+        ename = "haskell-mode";
         version = "16.1";
         src = fetchFromGitHub {
           owner = "haskell";
@@ -21504,6 +22332,7 @@
                                     , yasnippet }:
       melpaBuild {
         pname = "haskell-snippets";
+        ename = "haskell-snippets";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "haskell";
@@ -21528,6 +22357,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "haskell-tab-indent";
+        ename = "haskell-tab-indent";
         version = "0.1.0";
         src = fetchgit {
           url = "https://git.spwhitton.name/haskell-tab-indent";
@@ -21553,6 +22383,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "hasky-extensions";
+        ename = "hasky-extensions";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "hasky-mode";
@@ -21580,6 +22411,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "hasky-stack";
+        ename = "hasky-stack";
         version = "0.8.0";
         src = fetchFromGitHub {
           owner = "hasky-mode";
@@ -21605,6 +22437,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "haxor-mode";
+        ename = "haxor-mode";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "krzysztof-magosa";
@@ -21630,6 +22463,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "hcl-mode";
+        ename = "hcl-mode";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -21655,6 +22489,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "heaven-and-hell";
+        ename = "heaven-and-hell";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "valignatev";
@@ -21683,6 +22518,7 @@
                         , popup }:
       melpaBuild {
         pname = "helm";
+        ename = "helm";
         version = "2.9.8";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -21709,6 +22545,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "helm-ack";
+        ename = "helm-ack";
         version = "0.13";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -21735,6 +22572,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "helm-ag";
+        ename = "helm-ag";
         version = "0.58";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -21760,6 +22598,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "helm-aws";
+        ename = "helm-aws";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "istib";
@@ -21787,6 +22626,7 @@
                                , s }:
       melpaBuild {
         pname = "helm-backup";
+        ename = "helm-backup";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "antham";
@@ -21813,6 +22653,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "helm-bbdb";
+        ename = "helm-bbdb";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -21844,6 +22685,7 @@
                                , s }:
       melpaBuild {
         pname = "helm-bibtex";
+        ename = "helm-bibtex";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "tmalsburg";
@@ -21872,6 +22714,7 @@
                            , s }:
       melpaBuild {
         pname = "helm-bm";
+        ename = "helm-bm";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "yasuyk";
@@ -21897,6 +22740,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-books";
+        ename = "helm-books";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "grugrut";
@@ -21922,6 +22766,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "helm-bundle-show";
+        ename = "helm-bundle-show";
         version = "1.1.5";
         src = fetchFromGitHub {
           owner = "masutaka";
@@ -21949,6 +22794,7 @@
                                     , yasnippet }:
       melpaBuild {
         pname = "helm-c-yasnippet";
+        ename = "helm-c-yasnippet";
         version = "0.6.7";
         src = fetchFromGitHub {
           owner = "emacs-jp";
@@ -21976,6 +22822,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-cider";
+        ename = "helm-cider";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -22004,6 +22851,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-circe";
+        ename = "helm-circe";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "lesharris";
@@ -22032,6 +22880,7 @@
                                    , s }:
       melpaBuild {
         pname = "helm-codesearch";
+        ename = "helm-codesearch";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "youngker";
@@ -22060,6 +22909,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "helm-commandlinefu";
+        ename = "helm-commandlinefu";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -22086,6 +22936,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "helm-company";
+        ename = "helm-company";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "Sodel-the-Vociferous";
@@ -22112,6 +22963,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "helm-core";
+        ename = "helm-core";
         version = "2.9.8";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -22140,6 +22992,7 @@
                                , xcscope }:
       melpaBuild {
         pname = "helm-cscope";
+        ename = "helm-cscope";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "alpha22jp";
@@ -22166,6 +23019,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "helm-dash";
+        ename = "helm-dash";
         version = "1.3.0";
         src = fetchFromGitHub {
           owner = "areina";
@@ -22191,6 +23045,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "helm-descbinds";
+        ename = "helm-descbinds";
         version = "1.13";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -22217,6 +23072,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "helm-directory";
+        ename = "helm-directory";
         version = "0.6.4";
         src = fetchFromGitHub {
           owner = "masasam";
@@ -22243,6 +23099,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "helm-dired-history";
+        ename = "helm-dired-history";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "jixiuf";
@@ -22271,6 +23128,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "helm-emms";
+        ename = "helm-emms";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -22296,6 +23154,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "helm-etags-plus";
+        ename = "helm-etags-plus";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "jixiuf";
@@ -22322,6 +23181,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "helm-ext";
+        ename = "helm-ext";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -22349,6 +23209,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "helm-firefox";
+        ename = "helm-firefox";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -22376,6 +23237,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "helm-flycheck";
+        ename = "helm-flycheck";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "yasuyk";
@@ -22404,6 +23266,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "helm-ghc";
+        ename = "helm-ghc";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "david-christiansen";
@@ -22429,6 +23292,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "helm-ghq";
+        ename = "helm-ghq";
         version = "1.7.0";
         src = fetchFromGitHub {
           owner = "masutaka";
@@ -22454,6 +23318,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "helm-git-grep";
+        ename = "helm-git-grep";
         version = "0.10.1";
         src = fetchFromGitHub {
           owner = "yasuyk";
@@ -22480,12 +23345,13 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "helm-github-stars";
-        version = "1.3.4";
+        ename = "helm-github-stars";
+        version = "1.3.5";
         src = fetchFromGitHub {
           owner = "Sliim";
           repo = "helm-github-stars";
-          rev = "c0ca595e23246165adc12bd85ba7b09760290bc3";
-          sha256 = "0z3nangwhxxhlzd7la9k8gqqxr321iy9z5w6hlvb3f3qgxc84y17";
+          rev = "809cf88e2984b121348b1046e1d3890f1fd580b4";
+          sha256 = "09ywdsymh479syq9ps15bgyqf5gr94z8wn4jvlcxqz5aq5fil9vq";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/2e77f4a75504ca3e1091cdc757e91fb1ae361fa7/recipes/helm-github-stars";
@@ -22508,6 +23374,7 @@
                                , s }:
       melpaBuild {
         pname = "helm-gitlab";
+        ename = "helm-gitlab";
         version = "0.8.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -22536,6 +23403,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "helm-go-package";
+        ename = "helm-go-package";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "yasuyk";
@@ -22562,6 +23430,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-gtags";
+        ename = "helm-gtags";
         version = "1.5.6";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -22587,6 +23456,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "helm-hatena-bookmark";
+        ename = "helm-hatena-bookmark";
         version = "2.2.3";
         src = fetchFromGitHub {
           owner = "masutaka";
@@ -22614,6 +23484,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-hayoo";
+        ename = "helm-hayoo";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "markus1189";
@@ -22639,6 +23510,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "helm-ispell";
+        ename = "helm-ispell";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -22670,7 +23542,7 @@
           rev = "d798bebb1a65e255c8ec791753a0c78e6b19243b";
           sha256 = "1nd562lffc41r3y5x7y46f37ra97avllk2m95w23f9g42h47f1ar";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/6247e3786131e5b2a7824804e49927ed65d266d5/recipes/helm-lobsters";
           sha256 = "0dkb78n373kywxj8zba2s5a2g85vx19rdswv9i78xjwv1lqh8cpp";
           name = "helm-lobsters";
@@ -22688,6 +23560,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "helm-ls-git";
+        ename = "helm-ls-git";
         version = "1.9.1";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -22713,6 +23586,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-ls-hg";
+        ename = "helm-ls-hg";
         version = "1.8.0";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -22739,6 +23613,7 @@
                              , projectile }:
       melpaBuild {
         pname = "helm-make";
+        ename = "helm-make";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -22766,6 +23641,7 @@
                                , migemo }:
       melpaBuild {
         pname = "helm-migemo";
+        ename = "helm-migemo";
         version = "1.22";
         src = fetchFromGitHub {
           owner = "emacs-jp";
@@ -22791,6 +23667,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "helm-mode-manager";
+        ename = "helm-mode-manager";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "istib";
@@ -22819,6 +23696,7 @@
                            , multi-term }:
       melpaBuild {
         pname = "helm-mt";
+        ename = "helm-mt";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "dfdeshom";
@@ -22845,6 +23723,7 @@
                                       , nixos-options }:
       melpaBuild {
         pname = "helm-nixos-options";
+        ename = "helm-nixos-options";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "travisbhartwell";
@@ -22871,6 +23750,7 @@
                                 , notmuch }:
       melpaBuild {
         pname = "helm-notmuch";
+        ename = "helm-notmuch";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -22898,6 +23778,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "helm-open-github";
+        ename = "helm-open-github";
         version = "0.15";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -22927,6 +23808,7 @@
                                   , s }:
       melpaBuild {
         pname = "helm-org-rifle";
+        ename = "helm-org-rifle";
         version = "1.6.0";
         src = fetchFromGitHub {
           owner = "alphapapa";
@@ -22952,6 +23834,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "helm-orgcard";
+        ename = "helm-orgcard";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "emacs-jp";
@@ -22979,6 +23862,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-pages";
+        ename = "helm-pages";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "david-christiansen";
@@ -23006,6 +23890,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "helm-perldoc";
+        ename = "helm-perldoc";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -23032,6 +23917,7 @@
                                  , perspeen }:
       melpaBuild {
         pname = "helm-perspeen";
+        ename = "helm-perspeen";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "jimo1001";
@@ -23057,6 +23943,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "helm-proc";
+        ename = "helm-proc";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "markus1189";
@@ -23083,6 +23970,7 @@
                                         , project-persist }:
       melpaBuild {
         pname = "helm-project-persist";
+        ename = "helm-project-persist";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "Sliim";
@@ -23111,6 +23999,7 @@
                                    , projectile }:
       melpaBuild {
         pname = "helm-projectile";
+        ename = "helm-projectile";
         version = "0.14.0";
         src = fetchFromGitHub {
           owner = "bbatsov";
@@ -23136,6 +24025,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "helm-pt";
+        ename = "helm-pt";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "ralesi";
@@ -23163,6 +24053,7 @@
                                 , window-purpose }:
       melpaBuild {
         pname = "helm-purpose";
+        ename = "helm-purpose";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "bmag";
@@ -23189,6 +24080,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-pydoc";
+        ename = "helm-pydoc";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -23214,6 +24106,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-qiita";
+        ename = "helm-qiita";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "masutaka";
@@ -23240,6 +24133,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-rdefs";
+        ename = "helm-rdefs";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "saidie";
@@ -23265,6 +24159,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "helm-recoll";
+        ename = "helm-recoll";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -23293,6 +24188,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "helm-rg";
+        ename = "helm-rg";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "cosmicexplorer";
@@ -23318,6 +24214,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "helm-robe";
+        ename = "helm-robe";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -23344,6 +24241,7 @@
                               , rtags }:
       melpaBuild {
         pname = "helm-rtags";
+        ename = "helm-rtags";
         version = "2.18";
         src = fetchFromGitHub {
           owner = "Andersbakken";
@@ -23371,6 +24269,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "helm-rubygems-org";
+        ename = "helm-rubygems-org";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "neomantic";
@@ -23398,6 +24297,7 @@
                              , sage-shell-mode }:
       melpaBuild {
         pname = "helm-sage";
+        ename = "helm-sage";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "stakemori";
@@ -23425,6 +24325,7 @@
                              , smex }:
       melpaBuild {
         pname = "helm-smex";
+        ename = "helm-smex";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "ptrv";
@@ -23451,6 +24352,7 @@
                                , spaces }:
       melpaBuild {
         pname = "helm-spaces";
+        ename = "helm-spaces";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "yasuyk";
@@ -23477,6 +24379,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-swoop";
+        ename = "helm-swoop";
         version = "1.7.4";
         src = fetchFromGitHub {
           owner = "ShingoFukuyama";
@@ -23504,6 +24407,7 @@
                                         , seq }:
       melpaBuild {
         pname = "helm-system-packages";
+        ename = "helm-system-packages";
         version = "1.10.0";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -23529,6 +24433,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "helm-themes";
+        ename = "helm-themes";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -23555,6 +24460,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "helm-tramp";
+        ename = "helm-tramp";
         version = "1.0.5";
         src = fetchFromGitHub {
           owner = "masasam";
@@ -23581,6 +24487,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "helm-unicode";
+        ename = "helm-unicode";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "bomgar";
@@ -23608,6 +24515,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "helm-w32-launcher";
+        ename = "helm-w32-launcher";
         version = "0.1.6";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -23636,6 +24544,7 @@
                             , w3m }:
       melpaBuild {
         pname = "helm-w3m";
+        ename = "helm-w3m";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "emacs-helm";
@@ -23663,6 +24572,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "helm-zhihu-daily";
+        ename = "helm-zhihu-daily";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -23694,6 +24604,7 @@
                            , shut-up }:
       melpaBuild {
         pname = "helpful";
+        ename = "helpful";
         version = "0.12";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -23718,6 +24629,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "hfst-mode";
+        ename = "hfst-mode";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -23742,6 +24654,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "hi2";
+        ename = "hi2";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "nilcons";
@@ -23766,6 +24679,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "hide-lines";
+        ename = "hide-lines";
         version = "20130623.1701";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -23791,6 +24705,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "hide-mode-line";
+        ename = "hide-mode-line";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "hlissner";
@@ -23816,6 +24731,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "hierarchy";
+        ename = "hierarchy";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -23841,6 +24757,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "highlight-blocks";
+        ename = "highlight-blocks";
         version = "0.1.16";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -23866,6 +24783,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "highlight-defined";
+        ename = "highlight-defined";
         version = "0.1.5";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -23890,6 +24808,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "highlight-indentation";
+        ename = "highlight-indentation";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "antonj";
@@ -23916,6 +24835,7 @@
                                      , parent-mode }:
       melpaBuild {
         pname = "highlight-numbers";
+        ename = "highlight-numbers";
         version = "0.2.3";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -23940,6 +24860,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "highlight-parentheses";
+        ename = "highlight-parentheses";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "tsdh";
@@ -23965,6 +24886,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "highlight-quoted";
+        ename = "highlight-quoted";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -23989,6 +24911,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "highlight-symbol";
+        ename = "highlight-symbol";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "nschum";
@@ -24014,6 +24937,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "hindent";
+        ename = "hindent";
         version = "5.2.6";
         src = fetchFromGitHub {
           owner = "chrisdone";
@@ -24038,6 +24962,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "hippie-expand-slime";
+        ename = "hippie-expand-slime";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -24062,6 +24987,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "hippie-namespace";
+        ename = "hippie-namespace";
         version = "0.5.8";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -24087,6 +25013,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "history";
+        ename = "history";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "boyw165";
@@ -24111,6 +25038,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "historyf";
+        ename = "historyf";
         version = "0.0.9";
         src = fetchFromGitHub {
           owner = "k1LoW";
@@ -24136,6 +25064,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "hl-anything";
+        ename = "hl-anything";
         version = "0.0.9";
         src = fetchFromGitHub {
           owner = "hl-anything";
@@ -24160,6 +25089,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "hl-sentence";
+        ename = "hl-sentence";
         version = "3";
         src = fetchFromGitHub {
           owner = "milkypostman";
@@ -24184,6 +25114,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "hl-todo";
+        ename = "hl-todo";
         version = "1.9.0";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -24210,6 +25141,7 @@
                                , names }:
       melpaBuild {
         pname = "hoa-pp-mode";
+        ename = "hoa-pp-mode";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "hoaproject";
@@ -24237,6 +25169,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "homebrew-mode";
+        ename = "homebrew-mode";
         version = "1.3.6";
         src = fetchFromGitHub {
           owner = "dunn";
@@ -24263,6 +25196,7 @@
                            , s }:
       melpaBuild {
         pname = "hookify";
+        ename = "hookify";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "Silex";
@@ -24289,6 +25223,7 @@
                          , request }:
       melpaBuild {
         pname = "hound";
+        ename = "hound";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "ryoung786";
@@ -24314,6 +25249,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "ht";
+        ename = "ht";
         version = "2.2";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -24338,6 +25274,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "html-to-markdown";
+        ename = "html-to-markdown";
         version = "1.5.1";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -24362,6 +25299,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "htmlize";
+        ename = "htmlize";
         version = "1.53";
         src = fetchFromGitHub {
           owner = "hniksic";
@@ -24386,6 +25324,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "httpcode";
+        ename = "httpcode";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "rspivak";
@@ -24413,6 +25352,7 @@
                             , s }:
       melpaBuild {
         pname = "httprepl";
+        ename = "httprepl";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "gregsexton";
@@ -24440,6 +25380,7 @@
                                  , s }:
       melpaBuild {
         pname = "hugsql-ghosts";
+        ename = "hugsql-ghosts";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "rkaercher";
@@ -24464,6 +25405,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "hungry-delete";
+        ename = "hungry-delete";
         version = "1.1.5";
         src = fetchFromGitHub {
           owner = "nflath";
@@ -24492,6 +25434,7 @@
                            , s }:
       melpaBuild {
         pname = "hy-mode";
+        ename = "hy-mode";
         version = "1.0.3";
         src = fetchFromGitHub {
           owner = "hylang";
@@ -24518,6 +25461,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "hyai";
+        ename = "hyai";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "iquiw";
@@ -24542,6 +25486,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "hydandata-light-theme";
+        ename = "hydandata-light-theme";
         version = "0.9.0";
         src = fetchFromGitHub {
           owner = "hydandata";
@@ -24566,6 +25511,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "hyde";
+        ename = "hyde";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "nibrahim";
@@ -24591,6 +25537,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "hydra";
+        ename = "hydra";
         version = "0.14.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -24616,6 +25563,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "ialign";
+        ename = "ialign";
         version = "0.4.2";
         src = fetchFromGitHub {
           owner = "mkcms";
@@ -24641,6 +25589,7 @@
                                       , projectile }:
       melpaBuild {
         pname = "ibuffer-projectile";
+        ename = "ibuffer-projectile";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -24665,6 +25614,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "ibuffer-tramp";
+        ename = "ibuffer-tramp";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "svend";
@@ -24690,6 +25640,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "ibuffer-vc";
+        ename = "ibuffer-vc";
         version = "0.10";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -24714,6 +25665,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "identica-mode";
+        ename = "identica-mode";
         version = "1.3.1";
         src = fetchFromGitHub {
           owner = "gabrielsaldana";
@@ -24738,6 +25690,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "idle-highlight-mode";
+        ename = "idle-highlight-mode";
         version = "1.1.3";
         src = fetchFromGitHub {
           owner = "nonsequitur";
@@ -24763,6 +25716,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "ido-at-point";
+        ename = "ido-at-point";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "katspaugh";
@@ -24787,6 +25741,7 @@
                                                 , melpaBuild }:
       melpaBuild {
         pname = "ido-complete-space-or-hyphen";
+        ename = "ido-complete-space-or-hyphen";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "doitian";
@@ -24815,6 +25770,7 @@
                                             , s }:
       melpaBuild {
         pname = "ido-completing-read-plus";
+        ename = "ido-completing-read+";
         version = "4.11";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
@@ -24840,6 +25796,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "ido-describe-bindings";
+        ename = "ido-describe-bindings";
         version = "0.0.11";
         src = fetchFromGitHub {
           owner = "danil";
@@ -24865,6 +25822,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "ido-grid-mode";
+        ename = "ido-grid-mode";
         version = "1.1.5";
         src = fetchFromGitHub {
           owner = "larkery";
@@ -24891,6 +25849,7 @@
                                     , persistent-soft }:
       melpaBuild {
         pname = "ido-load-library";
+        ename = "ido-load-library";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -24916,6 +25875,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ido-occur";
+        ename = "ido-occur";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "danil";
@@ -24940,6 +25900,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "ido-vertical-mode";
+        ename = "ido-vertical-mode";
         version = "0.1.6";
         src = fetchFromGitHub {
           owner = "creichert";
@@ -24965,6 +25926,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "ido-yes-or-no";
+        ename = "ido-yes-or-no";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
@@ -24989,6 +25951,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "idomenu";
+        ename = "idomenu";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "birkenfeld";
@@ -25016,6 +25979,7 @@
                               , prop-menu }:
       melpaBuild {
         pname = "idris-mode";
+        ename = "idris-mode";
         version = "0.9.19";
         src = fetchFromGitHub {
           owner = "idris-hackers";
@@ -25040,6 +26004,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "iedit";
+        ename = "iedit";
         version = "0.9.9.9";
         src = fetchFromGitHub {
           owner = "victorhge";
@@ -25064,6 +26029,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "iflipb";
+        ename = "iflipb";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "jrosdahl";
@@ -25088,6 +26054,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ignoramus";
+        ename = "ignoramus";
         version = "0.7.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -25114,6 +26081,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "image-archive";
+        ename = "image-archive";
         version = "0.0.7";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -25139,6 +26107,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "image-dired-plus";
+        ename = "image-dired+";
         version = "0.7.2";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -25164,6 +26133,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "image-plus";
+        ename = "image+";
         version = "0.6.2";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -25189,6 +26159,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "imake";
+        ename = "imake";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -25213,6 +26184,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "imapfilter";
+        ename = "imapfilter";
         version = "1.0.3";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -25238,6 +26210,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "imenu-anywhere";
+        ename = "imenu-anywhere";
         version = "1.1.4";
         src = fetchFromGitHub {
           owner = "vspinu";
@@ -25263,6 +26236,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "imenu-list";
+        ename = "imenu-list";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "bmag";
@@ -25288,6 +26262,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "imenus";
+        ename = "imenus";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -25312,6 +26287,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "immutant-server";
+        ename = "immutant-server";
         version = "1.2.0";
         src = fetchFromGitHub {
           owner = "leathekd";
@@ -25339,6 +26315,7 @@
                                   , simple-httpd }:
       melpaBuild {
         pname = "impatient-mode";
+        ename = "impatient-mode";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -25365,6 +26342,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "import-js";
+        ename = "import-js";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "Galooshi";
@@ -25391,6 +26369,7 @@
                                  , popwin }:
       melpaBuild {
         pname = "import-popwin";
+        ename = "import-popwin";
         version = "0.10";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -25418,6 +26397,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "importmagic";
+        ename = "importmagic";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "anachronic";
@@ -25442,6 +26422,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "indent-guide";
+        ename = "indent-guide";
         version = "20160630";
         src = fetchFromGitHub {
           owner = "zk-phi";
@@ -25471,6 +26452,7 @@
                           , websocket }:
       melpaBuild {
         pname = "indium";
+        ename = "indium";
         version = "1.2.0";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -25497,6 +26479,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "inf-clojure";
+        ename = "inf-clojure";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -25523,6 +26506,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "inf-crystal";
+        ename = "inf-crystal";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "brantou";
@@ -25547,6 +26531,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "inf-ruby";
+        ename = "inf-ruby";
         version = "2.5.1";
         src = fetchFromGitHub {
           owner = "nonsequitur";
@@ -25573,6 +26558,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "inflections";
+        ename = "inflections";
         version = "2.5";
         src = fetchFromGitHub {
           owner = "eschulte";
@@ -25597,6 +26583,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "info-buffer";
+        ename = "info-buffer";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "llvilanova";
@@ -25622,6 +26609,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "info-colors";
+        ename = "info-colors";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "ubolonton";
@@ -25647,6 +26635,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "inherit-local";
+        ename = "inherit-local";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "shlevy";
@@ -25671,6 +26660,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "init-loader";
+        ename = "init-loader";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "emacs-jp";
@@ -25696,6 +26686,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "init-open-recentf";
+        ename = "init-open-recentf";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "zonuexe";
@@ -25720,6 +26711,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "initsplit";
+        ename = "initsplit";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "dabrahams";
@@ -25744,6 +26736,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "inline-crypt";
+        ename = "inline-crypt";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "Sodel-the-Vociferous";
@@ -25768,6 +26761,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "inlineR";
+        ename = "inlineR";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "myuhe";
@@ -25792,6 +26786,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "insert-shebang";
+        ename = "insert-shebang";
         version = "0.9.6";
         src = fetchFromGitHub {
           owner = "psachin";
@@ -25822,7 +26817,7 @@
           rev = "8daa0058ede7";
           sha256 = "0krscid3yz2b7kv75gd9fs92zgfl7pnl77dbp5gycv5rmw5mivp8";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/instapaper";
           sha256 = "1yibdpj3lx6vr33s75s1y415lxqljrk7pqc901f8nfa01kca7axn";
           name = "instapaper";
@@ -25839,6 +26834,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "intel-hex-mode";
+        ename = "intel-hex-mode";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "mschuldt";
@@ -25863,6 +26859,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "intellij-theme";
+        ename = "intellij-theme";
         version = "1.3";
         src = fetchFromGitLab {
           owner = "fommil";
@@ -25887,6 +26884,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "interleave";
+        ename = "interleave";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "rudolfochrist";
@@ -25915,6 +26913,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "intero";
+        ename = "intero";
         version = "0.1.31";
         src = fetchFromGitHub {
           owner = "commercialhaskell";
@@ -25946,7 +26945,7 @@
           rev = "e57f494fd94e49321a6396f530b8a13bae8b57df";
           sha256 = "16f9vszl0f1dkjvqk5hxi570gf4l8p6fk27p0d7j11grsck0yzly";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/1c44dbc8d3ca29d8715af755b845af7236e95406/recipes/inverse-acme-theme";
           sha256 = "03g6h8dpn42qnr593ryhj22lj1h2nx4rdr1knhkvxygfv3c4lgh5";
           name = "inverse-acme-theme";
@@ -25963,6 +26962,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "iplayer";
+        ename = "iplayer";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "csrhodes";
@@ -25988,6 +26988,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "ipython-shell-send";
+        ename = "ipython-shell-send";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "jackkamm";
@@ -26012,6 +27013,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "ir-black-theme";
+        ename = "ir-black-theme";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "jmdeldin";
@@ -26038,6 +27040,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "irony";
+        ename = "irony";
         version = "1.2.0";
         src = fetchFromGitHub {
           owner = "Sarcasm";
@@ -26062,6 +27065,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "isgd";
+        ename = "isgd";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "chmouel";
@@ -26087,6 +27091,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "iter2";
+        ename = "iter2";
         version = "0.9.7";
         src = fetchFromGitHub {
           owner = "doublep";
@@ -26112,6 +27117,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "ivy";
+        ename = "ivy";
         version = "0.10.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -26143,6 +27149,7 @@
                               , swiper }:
       melpaBuild {
         pname = "ivy-bibtex";
+        ename = "ivy-bibtex";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "tmalsburg";
@@ -26170,6 +27177,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "ivy-dired-history";
+        ename = "ivy-dired-history";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "jixiuf";
@@ -26199,6 +27207,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "ivy-erlang-complete";
+        ename = "ivy-erlang-complete";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "s-kostyaev";
@@ -26223,6 +27232,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "ivy-feedwrangler";
+        ename = "ivy-feedwrangler";
         version = "0.4.2";
         src = fetchFromGitHub {
           owner = "asimpson";
@@ -26251,6 +27261,7 @@
                               , s }:
       melpaBuild {
         pname = "ivy-gitlab";
+        ename = "ivy-gitlab";
         version = "0.8.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -26278,6 +27289,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ivy-hydra";
+        ename = "ivy-hydra";
         version = "0.10.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -26306,6 +27318,7 @@
                              , mpdel }:
       melpaBuild {
         pname = "ivy-mpdel";
+        ename = "ivy-mpdel";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "mpdel";
@@ -26332,6 +27345,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ivy-pages";
+        ename = "ivy-pages";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "igorepst";
@@ -26359,6 +27373,7 @@
                                  , prescient }:
       melpaBuild {
         pname = "ivy-prescient";
+        ename = "ivy-prescient";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "raxod502";
@@ -26386,6 +27401,7 @@
                                , window-purpose }:
       melpaBuild {
         pname = "ivy-purpose";
+        ename = "ivy-purpose";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "bmag";
@@ -26412,6 +27428,7 @@
                              , rtags }:
       melpaBuild {
         pname = "ivy-rtags";
+        ename = "ivy-rtags";
         version = "2.18";
         src = fetchFromGitHub {
           owner = "Andersbakken";
@@ -26439,6 +27456,7 @@
                                , request }:
       melpaBuild {
         pname = "ivy-youtube";
+        ename = "ivy-youtube";
         version = "0.3.2";
         src = fetchFromGitHub {
           owner = "squiter";
@@ -26464,6 +27482,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "ix";
+        ename = "ix";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "theanalyst";
@@ -26488,6 +27507,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "iy-go-to-char";
+        ename = "iy-go-to-char";
         version = "3.2.1";
         src = fetchFromGitHub {
           owner = "doitian";
@@ -26512,6 +27532,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "j-mode";
+        ename = "j-mode";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "zellio";
@@ -26542,7 +27563,7 @@
           rev = "2999f58619dd9c20cc6cac8060c4c850a504cbbd";
           sha256 = "03x93wkd8syj2ybf5ymwcm6khx0h5nhrl8pyync1520294pq6i1i";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/caaa21f235c4864f6008fb454d0a970a2fd22a86/recipes/jabber";
           sha256 = "0saajvfpzgcsqa7h7aa6l0bns6swr40c46md6s0d90x9lrvwp7ws";
           name = "jabber";
@@ -26559,6 +27580,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "jade-mode";
+        ename = "jade-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "brianc";
@@ -26583,6 +27605,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "jammer";
+        ename = "jammer";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "wasamasa";
@@ -26607,6 +27630,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "japanlaw";
+        ename = "japanlaw";
         version = "0.9.1";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -26634,6 +27658,7 @@
                                 , s }:
       melpaBuild {
         pname = "java-imports";
+        ename = "java-imports";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "dakrone";
@@ -26659,6 +27684,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "javadoc-lookup";
+        ename = "javadoc-lookup";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -26684,6 +27710,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "jdecomp";
+        ename = "jdecomp";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "xiongtx";
@@ -26711,6 +27738,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "jedi";
+        ename = "jedi";
         version = "0.2.7";
         src = fetchFromGitHub {
           owner = "tkf";
@@ -26739,6 +27767,7 @@
                              , python-environment }:
       melpaBuild {
         pname = "jedi-core";
+        ename = "jedi-core";
         version = "0.2.7";
         src = fetchFromGitHub {
           owner = "tkf";
@@ -26766,6 +27795,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "jetbrains";
+        ename = "jetbrains";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -26790,6 +27820,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "jinja2-mode";
+        ename = "jinja2-mode";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "paradoxxxzero";
@@ -26816,6 +27847,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "jpop";
+        ename = "jpop";
         version = "3.2.3";
         src = fetchFromGitHub {
           owner = "domtronn";
@@ -26841,6 +27873,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "jq-mode";
+        ename = "jq-mode";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "ljos";
@@ -26866,6 +27899,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "js-auto-format-mode";
+        ename = "js-auto-format-mode";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "ybiquitous";
@@ -26891,6 +27925,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "js-comint";
+        ename = "js-comint";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -26916,6 +27951,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "js2-closure";
+        ename = "js2-closure";
         version = "2.2.1";
         src = fetchFromGitHub {
           owner = "jart";
@@ -26941,6 +27977,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "js2-highlight-vars";
+        ename = "js2-highlight-vars";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -26967,6 +28004,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "js2-mode";
+        ename = "js2-mode";
         version = "20180301";
         src = fetchFromGitHub {
           owner = "mooz";
@@ -26996,6 +28034,7 @@
                                 , yasnippet }:
       melpaBuild {
         pname = "js2-refactor";
+        ename = "js2-refactor";
         version = "0.9.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -27020,6 +28059,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "js3-mode";
+        ename = "js3-mode";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "thomblake";
@@ -27044,6 +28084,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "jsfmt";
+        ename = "jsfmt";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "brettlangdon";
@@ -27070,6 +28111,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "json-mode";
+        ename = "json-mode";
         version = "1.7.0";
         src = fetchFromGitHub {
           owner = "joshwnj";
@@ -27096,6 +28138,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "json-navigator";
+        ename = "json-navigator";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -27120,6 +28163,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "json-reformat";
+        ename = "json-reformat";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "gongo";
@@ -27145,6 +28189,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "json-snatcher";
+        ename = "json-snatcher";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "Sterlingg";
@@ -27170,6 +28215,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "jsonnet-mode";
+        ename = "jsonnet-mode";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "mgyucht";
@@ -27194,6 +28240,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "jsx-mode";
+        ename = "jsx-mode";
         version = "0.1.10";
         src = fetchFromGitHub {
           owner = "jsx";
@@ -27221,6 +28268,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "jump";
+        ename = "jump";
         version = "2.5";
         src = fetchFromGitHub {
           owner = "eschulte";
@@ -27245,6 +28293,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "jump-to-line";
+        ename = "jump-to-line";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "ongaeshi";
@@ -27271,6 +28320,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "jvm-mode";
+        ename = "jvm-mode";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "martintrojer";
@@ -27296,6 +28346,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "kaesar";
+        ename = "kaesar";
         version = "0.9.0";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -27321,6 +28372,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "kaesar-file";
+        ename = "kaesar-file";
         version = "0.9.0";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -27347,6 +28399,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "kaesar-mode";
+        ename = "kaesar-mode";
         version = "0.9.0";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -27372,6 +28425,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "kakapo-mode";
+        ename = "kakapo-mode";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "listx";
@@ -27399,6 +28453,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "kaolin-themes";
+        ename = "kaolin-themes";
         version = "1.3.5";
         src = fetchFromGitHub {
           owner = "ogdenwebb";
@@ -27423,6 +28478,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "karma";
+        ename = "karma";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "tonini";
@@ -27447,6 +28503,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "key-chord";
+        ename = "key-chord";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -27471,6 +28528,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "key-combo";
+        ename = "key-combo";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "uk-ar";
@@ -27496,6 +28554,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "key-seq";
+        ename = "key-seq";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "vlevit";
@@ -27521,6 +28580,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "keycast";
+        ename = "keycast";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -27545,6 +28605,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "keychain-environment";
+        ename = "keychain-environment";
         version = "2.4.1";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -27569,6 +28630,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "keydef";
+        ename = "keydef";
         version = "1.15";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -27593,6 +28655,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "keyfreq";
+        ename = "keyfreq";
         version = "1.8";
         src = fetchFromGitHub {
           owner = "dacap";
@@ -27618,6 +28681,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "keymap-utils";
+        ename = "keymap-utils";
         version = "3.0.1";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -27644,6 +28708,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "keyset";
+        ename = "keyset";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "HKey";
@@ -27670,6 +28735,7 @@
                                 , s }:
       melpaBuild {
         pname = "kibit-helper";
+        ename = "kibit-helper";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "brunchboy";
@@ -27696,6 +28762,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "kill-or-bury-alive";
+        ename = "kill-or-bury-alive";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -27720,6 +28787,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "kill-ring-search";
+        ename = "kill-ring-search";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "nschum";
@@ -27744,6 +28812,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "killer";
+        ename = "killer";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -27768,6 +28837,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "kivy-mode";
+        ename = "kivy-mode";
         version = "1.10.1";
         src = fetchFromGitHub {
           owner = "kivy";
@@ -27794,6 +28864,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "kiwix";
+        ename = "kiwix";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "stardiviner";
@@ -27818,6 +28889,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "know-your-http-well";
+        ename = "know-your-http-well";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "for-GET";
@@ -27843,6 +28915,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "ksp-cfg-mode";
+        ename = "ksp-cfg-mode";
         version = "0.5.1";
         src = fetchFromGitHub {
           owner = "lashtear";
@@ -27870,6 +28943,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "kubernetes";
+        ename = "kubernetes";
         version = "0.12.0";
         src = fetchFromGitHub {
           owner = "chrisbarrett";
@@ -27896,6 +28970,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "kubernetes-evil";
+        ename = "kubernetes-evil";
         version = "0.12.0";
         src = fetchFromGitHub {
           owner = "chrisbarrett";
@@ -27922,6 +28997,7 @@
                              , s }:
       melpaBuild {
         pname = "kurecolor";
+        ename = "kurecolor";
         version = "1.2.6";
         src = fetchFromGitHub {
           owner = "emacsfodder";
@@ -27946,6 +29022,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "labburn-theme";
+        ename = "labburn-theme";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "ksjogo";
@@ -27971,6 +29048,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "langtool";
+        ename = "langtool";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -27997,6 +29075,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "latex-extra";
+        ename = "latex-extra";
         version = "1.14";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -28021,6 +29100,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "latex-math-preview";
+        ename = "latex-math-preview";
         version = "0.7.2";
         src = fetchFromGitLab {
           owner = "latex-math-preview";
@@ -28045,6 +29125,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "latex-unicode-math-mode";
+        ename = "latex-unicode-math-mode";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "Christoph-D";
@@ -28070,6 +29151,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "lcb-mode";
+        ename = "lcb-mode";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "peter-b";
@@ -28096,6 +29178,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "lcr";
+        ename = "lcr";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "jyp";
@@ -28127,6 +29210,7 @@
                            , s }:
       melpaBuild {
         pname = "leanote";
+        ename = "leanote";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "aborn";
@@ -28151,6 +29235,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "ledger-mode";
+        ename = "ledger-mode";
         version = "3.1.1";
         src = fetchFromGitHub {
           owner = "ledger";
@@ -28180,6 +29265,7 @@
                           , s }:
       melpaBuild {
         pname = "lentic";
+        ename = "lentic";
         version = "0.11";
         src = fetchFromGitHub {
           owner = "phillord";
@@ -28204,6 +29290,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "less-css-mode";
+        ename = "less-css-mode";
         version = "0.21";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -28228,6 +29315,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "letcheck";
+        ename = "letcheck";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "Fuco1";
@@ -28252,6 +29340,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "lfe-mode";
+        ename = "lfe-mode";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "rvirding";
@@ -28278,6 +29367,7 @@
                               , request }:
       melpaBuild {
         pname = "libelcouch";
+        ename = "libelcouch";
         version = "0.8.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -28303,6 +29393,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "libmpdel";
+        ename = "libmpdel";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "mpdel";
@@ -28327,6 +29418,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "lice";
+        ename = "lice";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "buzztaiki";
@@ -28351,6 +29443,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "line-up-words";
+        ename = "line-up-words";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "janestreet";
@@ -28375,6 +29468,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "lingr";
+        ename = "lingr";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "lugecy";
@@ -28399,6 +29493,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "link";
+        ename = "link";
         version = "1.10";
         src = fetchFromGitHub {
           owner = "myrkr";
@@ -28430,7 +29525,7 @@
           rev = "d26b5330e6e42b4bed4e4730054b4c5e308ceab2";
           sha256 = "1v4fadxv7ym6lc09nd2xpz2k5vrikjv7annw99ii5cqrwhqa5838";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d24b48fe0bc127ae6ac4084be8059aacb8445afd/recipes/link-hint";
           sha256 = "12fb2zm9jnh92fc2nzmzmwjlhi64rhakwbh9lsydx9svsvkgcs89";
           name = "link-hint";
@@ -28447,6 +29542,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "linum-relative";
+        ename = "linum-relative";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "coldnew";
@@ -28477,6 +29573,7 @@
                          , swiper }:
       melpaBuild {
         pname = "lispy";
+        ename = "lispy";
         version = "0.26.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -28508,6 +29605,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "lispyscript-mode";
+        ename = "lispyscript-mode";
         version = "0.3.5";
         src = fetchFromGitHub {
           owner = "krisajenkins";
@@ -28535,6 +29633,7 @@
                                      , s }:
       melpaBuild {
         pname = "list-packages-ext";
+        ename = "list-packages-ext";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "laynor";
@@ -28560,6 +29659,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "list-unicode-display";
+        ename = "list-unicode-display";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -28584,6 +29684,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "list-utils";
+        ename = "list-utils";
         version = "0.4.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -28608,6 +29709,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "lit-mode";
+        ename = "lit-mode";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "HectorAE";
@@ -28634,6 +29736,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "literal-string";
+        ename = "literal-string";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "joodie";
@@ -28659,6 +29762,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "literate-coffee-mode";
+        ename = "literate-coffee-mode";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -28686,6 +29790,7 @@
                                    , narrowed-page-navigation }:
       melpaBuild {
         pname = "live-code-talks";
+        ename = "live-code-talks";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "david-christiansen";
@@ -28711,6 +29816,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "live-py-mode";
+        ename = "live-py-mode";
         version = "2.22.0";
         src = fetchFromGitHub {
           owner = "donkirkby";
@@ -28735,6 +29841,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "lively";
+        ename = "lively";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -28766,7 +29873,7 @@
           rev = "f07ac3678e27";
           sha256 = "15l3nfrddblfzqxgvf0dmmsk4h5l80l6r2kgxcfk8s01msjka3sl";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b8be8497494b8543a8257c9ea92444baf7674951/recipes/lms";
           sha256 = "1ckrh6qbh5y2y3yzl2iyq8nqlpy4qp6vzc72ijcgayvcflb01vr1";
           name = "lms";
@@ -28783,6 +29890,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "load-relative";
+        ename = "load-relative";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "rocky";
@@ -28807,6 +29915,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "loc-changes";
+        ename = "loc-changes";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "rocky";
@@ -28831,6 +29940,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "log4e";
+        ename = "log4e";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -28855,6 +29965,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "logalimacs";
+        ename = "logalimacs";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "logaling";
@@ -28880,6 +29991,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "logito";
+        ename = "logito";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "sigma";
@@ -28906,6 +30018,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "logview";
+        ename = "logview";
         version = "0.11.1";
         src = fetchFromGitHub {
           owner = "doublep";
@@ -28930,6 +30043,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "loop";
+        ename = "loop";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -28955,6 +30069,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "love-minor-mode";
+        ename = "love-minor-mode";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "ejmr";
@@ -28980,6 +30095,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "lsp-mode";
+        ename = "lsp-mode";
         version = "4.2";
         src = fetchFromGitHub {
           owner = "emacs-lsp";
@@ -29006,6 +30122,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "lsp-ocaml";
+        ename = "lsp-ocaml";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "emacs-lsp";
@@ -29030,6 +30147,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "lua-mode";
+        ename = "lua-mode";
         version = "20151025";
         src = fetchFromGitHub {
           owner = "immerrr";
@@ -29054,6 +30172,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "lusty-explorer";
+        ename = "lusty-explorer";
         version = "3.0";
         src = fetchFromGitHub {
           owner = "sjbach";
@@ -29078,6 +30197,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "lv";
+        ename = "lv";
         version = "0.14.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -29104,6 +30224,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "lxc-tramp";
+        ename = "lxc-tramp";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "montag451";
@@ -29129,6 +30250,7 @@
                             , seq }:
       melpaBuild {
         pname = "m-buffer";
+        ename = "m-buffer";
         version = "0.15";
         src = fetchFromGitHub {
           owner = "phillord";
@@ -29154,6 +30276,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "mac-pseudo-daemon";
+        ename = "mac-pseudo-daemon";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
@@ -29178,6 +30301,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "macro-math";
+        ename = "macro-math";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "nschum";
@@ -29203,6 +30327,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "macrostep";
+        ename = "macrostep";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "joddie";
@@ -29229,6 +30354,7 @@
                                   , s }:
       melpaBuild {
         pname = "magic-filetype";
+        ename = "magic-filetype";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -29261,6 +30387,7 @@
                          , with-editor }:
       melpaBuild {
         pname = "magit";
+        ename = "magit";
         version = "2.13.0";
         src = fetchFromGitHub {
           owner = "magit";
@@ -29296,6 +30423,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "magit-annex";
+        ename = "magit-annex";
         version = "1.6.0";
         src = fetchFromGitHub {
           owner = "magit";
@@ -29322,6 +30450,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "magit-filenotify";
+        ename = "magit-filenotify";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "ruediger";
@@ -29348,6 +30477,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "magit-find-file";
+        ename = "magit-find-file";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "bradwright";
@@ -29373,6 +30503,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "magit-gerrit";
+        ename = "magit-gerrit";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "terranpro";
@@ -29402,6 +30533,7 @@
                                   , s }:
       melpaBuild {
         pname = "magit-gh-pulls";
+        ename = "magit-gh-pulls";
         version = "0.5.3";
         src = fetchFromGitHub {
           owner = "sigma";
@@ -29428,6 +30560,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "magit-gitflow";
+        ename = "magit-gitflow";
         version = "2.2.3";
         src = fetchFromGitHub {
           owner = "jtatarik";
@@ -29454,6 +30587,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "magit-imerge";
+        ename = "magit-imerge";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "magit";
@@ -29480,6 +30614,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "magit-org-todos";
+        ename = "magit-org-todos";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "danielma";
@@ -29507,6 +30642,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "magit-popup";
+        ename = "magit-popup";
         version = "2.12.3";
         src = fetchFromGitHub {
           owner = "magit";
@@ -29533,6 +30669,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "magit-stgit";
+        ename = "magit-stgit";
         version = "2.1.3";
         src = fetchFromGitHub {
           owner = "magit";
@@ -29559,6 +30696,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "magit-svn";
+        ename = "magit-svn";
         version = "2.2.1";
         src = fetchFromGitHub {
           owner = "magit";
@@ -29585,6 +30723,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "magit-tbdiff";
+        ename = "magit-tbdiff";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "magit";
@@ -29619,12 +30758,13 @@
                                , s }:
       melpaBuild {
         pname = "magit-todos";
-        version = "1.0.2";
+        ename = "magit-todos";
+        version = "1.0.3";
         src = fetchFromGitHub {
           owner = "alphapapa";
           repo = "magit-todos";
-          rev = "204e163d941dcc3b89db8a462d73e3c69e8e83bc";
-          sha256 = "1v78rzgk9s3ww97smqryyr3f2np5zwxx0j7v79rwmy49ck2n3cvq";
+          rev = "d12e2e3ccad4b87d5df5285ade0c56ec5f46ad63";
+          sha256 = "006yy13hjzalwz7pz0br32zifxlxrrf8cvnz0j3km55sxpdvqmil";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b4544ab55d2c8b8c3b7eb739b9fb90ebb246d68b/recipes/magit-todos";
@@ -29656,6 +30796,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "magit-topgit";
+        ename = "magit-topgit";
         version = "2.1.2";
         src = fetchFromGitHub {
           owner = "magit";
@@ -29686,6 +30827,7 @@
                             , s }:
       melpaBuild {
         pname = "magithub";
+        ename = "magithub";
         version = "0.1.7";
         src = fetchFromGitHub {
           owner = "vermiculus";
@@ -29710,6 +30852,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "make-color";
+        ename = "make-color";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -29735,6 +30878,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "makey";
+        ename = "makey";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "mickeynp";
@@ -29765,6 +30909,7 @@
                            , s }:
       melpaBuild {
         pname = "malinka";
+        ename = "malinka";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "LefterisJP";
@@ -29789,6 +30934,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "mallard-mode";
+        ename = "mallard-mode";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "jhradilek";
@@ -29813,6 +30959,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "map-progress";
+        ename = "map-progress";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -29838,6 +30985,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "map-regexp";
+        ename = "map-regexp";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -29866,6 +31014,7 @@
                              , s }:
       melpaBuild {
         pname = "marcopolo";
+        ename = "marcopolo";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -29890,6 +31039,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "mark-tools";
+        ename = "mark-tools";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "stsquad";
@@ -29916,6 +31066,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "markdown-mode";
+        ename = "markdown-mode";
         version = "2.3";
         src = fetchFromGitHub {
           owner = "jrblevin";
@@ -29941,6 +31092,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "markdown-mode-plus";
+        ename = "markdown-mode+";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "milkypostman";
@@ -29971,6 +31123,7 @@
                                          , websocket }:
       melpaBuild {
         pname = "markdown-preview-mode";
+        ename = "markdown-preview-mode";
         version = "0.9";
         src = fetchFromGitHub {
           owner = "ancane";
@@ -30005,6 +31158,7 @@
                                 , s }:
       melpaBuild {
         pname = "markdown-toc";
+        ename = "markdown-toc";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "ardumont";
@@ -30030,6 +31184,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "markup";
+        ename = "markup";
         version = "2.0.1";
         src = fetchFromGitHub {
           owner = "leoc";
@@ -30054,6 +31209,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "markup-faces";
+        ename = "markup-faces";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "sensorflo";
@@ -30081,6 +31237,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "marshal";
+        ename = "marshal";
         version = "0.8.2";
         src = fetchFromGitHub {
           owner = "sigma";
@@ -30106,6 +31263,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "mastodon";
+        ename = "mastodon";
         version = "0.7.2";
         src = fetchFromGitHub {
           owner = "jdenen";
@@ -30131,6 +31289,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "material-theme";
+        ename = "material-theme";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "cpaulik";
@@ -30155,6 +31314,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "math-symbol-lists";
+        ename = "math-symbol-lists";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "vspinu";
@@ -30181,6 +31341,7 @@
                                    , s }:
       melpaBuild {
         pname = "maven-test-mode";
+        ename = "maven-test-mode";
         version = "0.1.5";
         src = fetchFromGitHub {
           owner = "rranelli";
@@ -30205,6 +31366,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "maxframe";
+        ename = "maxframe";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "rmm5t";
@@ -30230,6 +31392,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "mb-url";
+        ename = "mb-url";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "dochang";
@@ -30256,6 +31419,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "mbe";
+        ename = "mbe";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "ijp";
@@ -30281,6 +31445,7 @@
                              , multiple-cursors }:
       melpaBuild {
         pname = "mc-extras";
+        ename = "mc-extras";
         version = "1.2.4";
         src = fetchFromGitHub {
           owner = "knu";
@@ -30305,6 +31470,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "mediawiki";
+        ename = "mediawiki";
         version = "2.2.9";
         src = fetchFromGitHub {
           owner = "hexmode";
@@ -30333,12 +31499,13 @@
                              , yasnippet }:
       melpaBuild {
         pname = "meghanada";
-        version = "1.0.7";
+        ename = "meghanada";
+        version = "1.0.8";
         src = fetchFromGitHub {
           owner = "mopemope";
           repo = "meghanada-emacs";
-          rev = "f55a237e10fac1f06b50a41c54236ed9fc197530";
-          sha256 = "17shp56xg47sfp9l1iak5dscr62yj9i55xwnfn380x24pxrsfp88";
+          rev = "1fe888ad929f0ebed9a8cde7bb0a605881e1386c";
+          sha256 = "1b7cri71fikvyxcc6q9rci1zc4q45a1bvz00ks7gvx6w2sd7h5gd";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4c75c69b2f00be9a93144f632738272c1e375785/recipes/meghanada";
@@ -30358,6 +31525,7 @@
                                         , s }:
       melpaBuild {
         pname = "melpa-upstream-visit";
+        ename = "melpa-upstream-visit";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "laynor";
@@ -30382,6 +31550,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "memoize";
+        ename = "memoize";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -30409,6 +31578,7 @@
                           , xml-rpc }:
       melpaBuild {
         pname = "mentor";
+        ename = "mentor";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "skangas";
@@ -30433,6 +31603,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "merlin";
+        ename = "merlin";
         version = "3.1.0";
         src = fetchFromGitHub {
           owner = "the-lambda-church";
@@ -30458,6 +31629,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "merlin-eldoc";
+        ename = "merlin-eldoc";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "khady";
@@ -30483,6 +31655,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "meson-mode";
+        ename = "meson-mode";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "wentasah";
@@ -30507,6 +31680,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "meta-presenter";
+        ename = "meta-presenter";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "myTerminal";
@@ -30532,6 +31706,7 @@
                               , xml-rpc }:
       melpaBuild {
         pname = "metaweblog";
+        ename = "metaweblog";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "punchagan";
@@ -30556,6 +31731,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "mew";
+        ename = "mew";
         version = "6.8";
         src = fetchFromGitHub {
           owner = "kazu-yamamoto";
@@ -30581,6 +31757,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "mgmtconfig-mode";
+        ename = "mgmtconfig-mode";
         version = "0.0.15";
         src = fetchFromGitHub {
           owner = "purpleidea";
@@ -30606,12 +31783,13 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "mhc";
-        version = "1.1.1";
+        ename = "mhc";
+        version = "1.2.0";
         src = fetchFromGitHub {
           owner = "yoshinari-nomura";
           repo = "mhc";
-          rev = "46d2a983b77b3139c9694ffba16ae875edc7d5b0";
-          sha256 = "1bp4xqklf422n0zwwyj0ag3a4nndg8klazrga6rlvpy01hgg3drl";
+          rev = "e29e69ab2f282131039a63f56f48e39d56c175d9";
+          sha256 = "0lxn4vg3qxzdxad1fv0ssnw4rjhzvrys4k3lqx87sbg28l9ykk77";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/d8d3efa0fcd6cd4af94bc99b35614ef6402cbdba/recipes/mhc";
@@ -30630,6 +31808,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "migemo";
+        ename = "migemo";
         version = "1.9.1";
         src = fetchFromGitHub {
           owner = "emacs-jp";
@@ -30654,6 +31833,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "milkode";
+        ename = "milkode";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "ongaeshi";
@@ -30678,6 +31858,7 @@
                                              , melpaBuild }:
       melpaBuild {
         pname = "minibuffer-complete-cycle";
+        ename = "minibuffer-complete-cycle";
         version = "1.25.20130814";
         src = fetchFromGitHub {
           owner = "knu";
@@ -30702,6 +31883,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "minibuffer-cua";
+        ename = "minibuffer-cua";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "knu";
@@ -30726,6 +31908,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "miniedit";
+        ename = "miniedit";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -30750,6 +31933,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "minimal-session-saver";
+        ename = "minimal-session-saver";
         version = "0.6.2";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -30776,6 +31960,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "minions";
+        ename = "minions";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -30801,6 +31986,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "minitest";
+        ename = "minitest";
         version = "0.8.0";
         src = fetchFromGitHub {
           owner = "arthurnn";
@@ -30825,6 +32011,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "mips-mode";
+        ename = "mips-mode";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "hlissner";
@@ -30850,6 +32037,7 @@
                               , mmm-mode }:
       melpaBuild {
         pname = "mmm-jinja2";
+        ename = "mmm-jinja2";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "glynnforrest";
@@ -30881,7 +32069,7 @@
           rev = "5c9ff92137b5";
           sha256 = "0rpp748ym79sxccp9pyrwri14m7624zzb80srfgjfdpysrrs0jrr";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/mmm-mako";
           sha256 = "0a4af5q9wxafrid8visp30cz6073ig0c961b78vmmgqrwvvxd3kn";
           name = "mmm-mako";
@@ -30900,6 +32088,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "mmt";
+        ename = "mmt";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -30925,6 +32114,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "mocha";
+        ename = "mocha";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "scottaj";
@@ -30950,6 +32140,7 @@
                                   , yasnippet }:
       melpaBuild {
         pname = "mocha-snippets";
+        ename = "mocha-snippets";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "cowboyd";
@@ -30976,6 +32167,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "mocker";
+        ename = "mocker";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "sigma";
@@ -31001,6 +32193,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "modalka";
+        ename = "modalka";
         version = "0.1.5";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -31027,6 +32220,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "mode-icons";
+        ename = "mode-icons";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "ryuslash";
@@ -31051,6 +32245,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "mode-line-debug";
+        ename = "mode-line-debug";
         version = "1.2.3";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -31075,6 +32270,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "modern-cpp-font-lock";
+        ename = "modern-cpp-font-lock";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "ludwigpacifici";
@@ -31099,6 +32295,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "moe-theme";
+        ename = "moe-theme";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "kuanyui";
@@ -31124,6 +32321,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "monitor";
+        ename = "monitor";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "GuiltyDolphin";
@@ -31148,6 +32346,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "monokai-theme";
+        ename = "monokai-theme";
         version = "3.5.3";
         src = fetchFromGitHub {
           owner = "oneKelvinSmith";
@@ -31172,6 +32371,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "monroe";
+        ename = "monroe";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "sanel";
@@ -31197,6 +32397,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "moody";
+        ename = "moody";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -31222,6 +32423,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "moom";
+        ename = "moom";
         version = "1.2.0";
         src = fetchFromGitHub {
           owner = "takaxp";
@@ -31246,6 +32448,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "morlock";
+        ename = "morlock";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -31271,6 +32474,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "mosey";
+        ename = "mosey";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "alphapapa";
@@ -31295,6 +32499,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "move-dup";
+        ename = "move-dup";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "wyuenho";
@@ -31319,6 +32524,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "move-text";
+        ename = "move-text";
         version = "2.0.8";
         src = fetchFromGitHub {
           owner = "emacsfodder";
@@ -31343,6 +32549,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "mowedline";
+        ename = "mowedline";
         version = "3.3.0";
         src = fetchFromGitHub {
           owner = "retroj";
@@ -31367,6 +32574,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "moz";
+        ename = "moz";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "bard";
@@ -31392,6 +32600,7 @@
                                   , moz }:
       melpaBuild {
         pname = "moz-controller";
+        ename = "moz-controller";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "RenWenshan";
@@ -31419,6 +32628,7 @@
                              , mozc }:
       melpaBuild {
         pname = "mozc-temp";
+        ename = "mozc-temp";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "HKey";
@@ -31445,6 +32655,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "mpdel";
+        ename = "mpdel";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "mpdel";
@@ -31471,6 +32682,7 @@
                               , queue }:
       melpaBuild {
         pname = "mpmc-queue";
+        ename = "mpmc-queue";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "smizoe";
@@ -31500,6 +32712,7 @@
                        , org }:
       melpaBuild {
         pname = "mpv";
+        ename = "mpv";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "kljohann";
@@ -31526,6 +32739,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "mqtt-mode";
+        ename = "mqtt-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "andrmuel";
@@ -31554,6 +32768,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "msvc";
+        ename = "msvc";
         version = "1.3.7";
         src = fetchFromGitHub {
           owner = "yaruopooner";
@@ -31579,6 +32794,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "mtg-deck-mode";
+        ename = "mtg-deck-mode";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "mattiasb";
@@ -31607,6 +32823,7 @@
                               , s }:
       melpaBuild {
         pname = "mu4e-alert";
+        ename = "mu4e-alert";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "iqbalansari";
@@ -31631,6 +32848,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "mu4e-maildirs-extension";
+        ename = "mu4e-maildirs-extension";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "agpchil";
@@ -31656,6 +32874,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "multi";
+        ename = "multi";
         version = "2.0.1";
         src = fetchFromGitHub {
           owner = "kurisuwhyte";
@@ -31685,6 +32904,7 @@
                               , shut-up }:
       melpaBuild {
         pname = "multi-line";
+        ename = "multi-line";
         version = "0.1.5";
         src = fetchFromGitHub {
           owner = "IvanMalison";
@@ -31716,7 +32936,7 @@
           rev = "a6e7c1542c0b";
           sha256 = "1wh7xlas6chdliya847092j5rkngxxg1m9a98y2r782ywgyl7xv6";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/multi-project";
           sha256 = "19dy2wl5ad1xldiznlw2vjvr9ja8h9wiv6igcggixq56fhngp40x";
           name = "multi-project";
@@ -31735,6 +32955,7 @@
                              , window-layout }:
       melpaBuild {
         pname = "multi-run";
+        ename = "multi-run";
         version = "1";
         src = fetchFromGitHub {
           owner = "sagarjha";
@@ -31759,6 +32980,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "multi-term";
+        ename = "multi-term";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -31783,6 +33005,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "multi-web-mode";
+        ename = "multi-web-mode";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "fgallina";
@@ -31808,6 +33031,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "multiple-cursors";
+        ename = "multiple-cursors";
         version = "1.4.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -31835,6 +33059,7 @@
                             , s }:
       melpaBuild {
         pname = "mustache";
+        ename = "mustache";
         version = "0.23";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -31859,6 +33084,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "mustache-mode";
+        ename = "mustache-mode";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "mustache";
@@ -31883,6 +33109,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "mwim";
+        ename = "mwim";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -31909,6 +33136,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "mykie";
+        ename = "mykie";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "yuutayamada";
@@ -31935,6 +33163,7 @@
                                 , s }:
       melpaBuild {
         pname = "mysql-to-org";
+        ename = "mysql-to-org";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "mallt";
@@ -31961,6 +33190,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "myterminal-controls";
+        ename = "myterminal-controls";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "myTerminal";
@@ -31988,6 +33218,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "name-this-color";
+        ename = "name-this-color";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "knl";
@@ -32013,6 +33244,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "nameless";
+        ename = "nameless";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -32039,6 +33271,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "names";
+        ename = "names";
         version = "20151201.0";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -32064,6 +33297,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "narrow-reindent";
+        ename = "narrow-reindent";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "emallson";
@@ -32090,6 +33324,7 @@
                                             , melpaBuild }:
       melpaBuild {
         pname = "narrowed-page-navigation";
+        ename = "narrowed-page-navigation";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "david-christiansen";
@@ -32115,6 +33350,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "nasm-mode";
+        ename = "nasm-mode";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -32139,6 +33375,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "nav-flash";
+        ename = "nav-flash";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -32163,6 +33400,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "navi-mode";
+        ename = "navi-mode";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "alphapapa";
@@ -32190,6 +33428,7 @@
                             , s }:
       melpaBuild {
         pname = "navorski";
+        ename = "navorski";
         version = "0.2.7";
         src = fetchFromGitHub {
           owner = "roman";
@@ -32215,6 +33454,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ncl-mode";
+        ename = "ncl-mode";
         version = "0.99.2";
         src = fetchFromGitHub {
           owner = "yyr";
@@ -32239,6 +33479,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "nemerle";
+        ename = "nemerle";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "rsdn";
@@ -32263,6 +33504,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "neon-mode";
+        ename = "neon-mode";
         version = "1.3.0";
         src = fetchFromGitHub {
           owner = "Fuco1";
@@ -32288,6 +33530,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "neotree";
+        ename = "neotree";
         version = "0.5.2";
         src = fetchFromGitHub {
           owner = "jaypei";
@@ -32312,6 +33555,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "netease-music";
+        ename = "netease-music";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "nicehiro";
@@ -32336,6 +33580,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "nginx-mode";
+        ename = "nginx-mode";
         version = "1.1.9";
         src = fetchFromGitHub {
           owner = "ajc";
@@ -32360,6 +33605,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "niceify-info";
+        ename = "niceify-info";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "aaron-em";
@@ -32385,6 +33631,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "night-owl-theme";
+        ename = "night-owl-theme";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "aaronjensen";
@@ -32414,6 +33661,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "nim-mode";
+        ename = "nim-mode";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "nim-lang";
@@ -32439,6 +33687,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "ninja-mode";
+        ename = "ninja-mode";
         version = "1.8.2";
         src = fetchFromGitHub {
           owner = "martine";
@@ -32465,6 +33714,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "nix-buffer";
+        ename = "nix-buffer";
         version = "3.1.1";
         src = fetchFromGitHub {
           owner = "shlevy";
@@ -32490,6 +33740,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "nix-mode";
+        ename = "nix-mode";
         version = "1.2.2";
         src = fetchFromGitHub {
           owner = "NixOS";
@@ -32516,6 +33767,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "nixos-options";
+        ename = "nixos-options";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "travisbhartwell";
@@ -32541,6 +33793,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "no-littering";
+        ename = "no-littering";
         version = "0.5.14";
         src = fetchFromGitHub {
           owner = "emacscollective";
@@ -32565,6 +33818,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "noccur";
+        ename = "noccur";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -32589,6 +33843,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "nodejs-repl";
+        ename = "nodejs-repl";
         version = "0.1.6";
         src = fetchFromGitHub {
           owner = "abicky";
@@ -32614,6 +33869,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "nodemcu-mode";
+        ename = "nodemcu-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "andrmuel";
@@ -32639,6 +33895,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "nofrils-acme-theme";
+        ename = "nofrils-acme-theme";
         version = "0.1.0";
         src = fetchFromGitLab {
           owner = "esessoms";
@@ -32664,6 +33921,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "nord-theme";
+        ename = "nord-theme";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "arcticicestudio";
@@ -32694,7 +33952,7 @@
           rev = "194d7789bf79";
           sha256 = "07bhzddaxdjd591xmg59yd657a1is0q515291jd83mjsmgq258bm";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/nose";
           sha256 = "1xdqsxq06x2m9rcfn1qh89g0mz1rvzl246d3sfmciwcyl932x682";
           name = "nose";
@@ -32711,6 +33969,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "notmuch";
+        ename = "notmuch";
         version = "0.27";
         src = fetchgit {
           url = "https://git.notmuchmail.org/git/notmuch";
@@ -32735,6 +33994,7 @@
                                    , notmuch }:
       melpaBuild {
         pname = "notmuch-labeler";
+        ename = "notmuch-labeler";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -32762,6 +34022,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "nov";
+        ename = "nov";
         version = "0.2.4";
         src = fetchFromGitHub {
           owner = "wasamasa";
@@ -32786,6 +34047,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "noxml-fold";
+        ename = "noxml-fold";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "paddymcall";
@@ -32811,6 +34073,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "npm-mode";
+        ename = "npm-mode";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "mojochao";
@@ -32836,6 +34099,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "nrepl-sync";
+        ename = "nrepl-sync";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "phillord";
@@ -32860,6 +34124,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "nsis-mode";
+        ename = "nsis-mode";
         version = "0.44";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -32884,6 +34149,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "number-lock";
+        ename = "number-lock";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "Liu233w";
@@ -32909,6 +34175,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "numbers";
+        ename = "numbers";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "davep";
@@ -32937,6 +34204,7 @@
                        , s }:
       melpaBuild {
         pname = "nvm";
+        ename = "nvm";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -32961,6 +34229,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "nyan-mode";
+        ename = "nyan-mode";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "TeMPOraL";
@@ -32985,6 +34254,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "o-blog";
+        ename = "o-blog";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "renard";
@@ -33013,6 +34283,7 @@
                             , org }:
       melpaBuild {
         pname = "ob-async";
+        ename = "ob-async";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "astahlman";
@@ -33037,6 +34308,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "ob-blockdiag";
+        ename = "ob-blockdiag";
         version = "20170728.113";
         src = fetchFromGitHub {
           owner = "corpix";
@@ -33061,6 +34333,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "ob-coffeescript";
+        ename = "ob-coffeescript";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "brantou";
@@ -33087,6 +34360,7 @@
                            , s }:
       melpaBuild {
         pname = "ob-http";
+        ename = "ob-http";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "zweifisch";
@@ -33112,6 +34386,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "ob-hy";
+        ename = "ob-hy";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "brantou";
@@ -33136,6 +34411,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ob-prolog";
+        ename = "ob-prolog";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "ljos";
@@ -33163,6 +34439,7 @@
                                , sage-shell-mode }:
       melpaBuild {
         pname = "ob-sagemath";
+        ename = "ob-sagemath";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "stakemori";
@@ -33188,6 +34465,7 @@
                           , sml-mode }:
       melpaBuild {
         pname = "ob-sml";
+        ename = "ob-sml";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "swannodette";
@@ -33214,6 +34492,7 @@
                                 , org }:
       melpaBuild {
         pname = "ob-translate";
+        ename = "ob-translate";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "krisajenkins";
@@ -33238,6 +34517,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "ob-uart";
+        ename = "ob-uart";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "andrmuel";
@@ -33263,6 +34543,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "obfusurl";
+        ename = "obfusurl";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "davep";
@@ -33288,6 +34569,7 @@
                                        , svg-mode-line-themes }:
       melpaBuild {
         pname = "ocodo-svg-modelines";
+        ename = "ocodo-svg-modelines";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "ocodo";
@@ -33312,6 +34594,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "ocp-indent";
+        ename = "ocp-indent";
         version = "1.6.1";
         src = fetchFromGitHub {
           owner = "OCamlPro";
@@ -33337,6 +34620,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "octicons";
+        ename = "octicons";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -33361,6 +34645,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "offlineimap";
+        ename = "offlineimap";
         version = "1";
         src = fetchFromGitHub {
           owner = "jd";
@@ -33386,6 +34671,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "olivetti";
+        ename = "olivetti";
         version = "1.6.1";
         src = fetchFromGitHub {
           owner = "rnkn";
@@ -33410,6 +34696,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "omni-kill";
+        ename = "omni-kill";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "AdrieanKhisbe";
@@ -33438,6 +34725,7 @@
                             , s }:
       melpaBuild {
         pname = "omni-log";
+        ename = "omni-log";
         version = "0.3.6";
         src = fetchFromGitHub {
           owner = "AdrieanKhisbe";
@@ -33467,6 +34755,7 @@
                                , s }:
       melpaBuild {
         pname = "omni-quotes";
+        ename = "omni-quotes";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "AdrieanKhisbe";
@@ -33491,6 +34780,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "omni-scratch";
+        ename = "omni-scratch";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "AdrieanKhisbe";
@@ -33517,6 +34807,7 @@
                              , pcre2el }:
       melpaBuild {
         pname = "omni-tags";
+        ename = "omni-tags";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "AdrieanKhisbe";
@@ -33551,6 +34842,7 @@
                              , shut-up }:
       melpaBuild {
         pname = "omnisharp";
+        ename = "omnisharp";
         version = "4.2";
         src = fetchFromGitHub {
           owner = "OmniSharp";
@@ -33587,6 +34879,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "opam";
+        ename = "opam";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "lunaryorn";
@@ -33611,6 +34904,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "opencl-mode";
+        ename = "opencl-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "salmanebah";
@@ -33638,6 +34932,7 @@
                           , request }:
       melpaBuild {
         pname = "opener";
+        ename = "opener";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "0robustus1";
@@ -33666,6 +34961,7 @@
                               , s }:
       melpaBuild {
         pname = "opensource";
+        ename = "opensource";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "OpenSourceOrg";
@@ -33690,6 +34986,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "operate-on-number";
+        ename = "operate-on-number";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "knu";
@@ -33717,6 +35014,7 @@
                           , yaxception }:
       melpaBuild {
         pname = "org-ac";
+        ename = "org-ac";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -33742,6 +35040,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "org-agenda-property";
+        ename = "org-agenda-property";
         version = "1.3.1";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -33769,6 +35068,7 @@
                              , s }:
       melpaBuild {
         pname = "org-alert";
+        ename = "org-alert";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "groksteve";
@@ -33793,6 +35093,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "org-autolist";
+        ename = "org-autolist";
         version = "0.14";
         src = fetchFromGitHub {
           owner = "calvinwyoung";
@@ -33821,6 +35122,7 @@
                                           , melpaBuild }:
       melpaBuild {
         pname = "org-babel-eval-in-repl";
+        ename = "org-babel-eval-in-repl";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "diadochos";
@@ -33845,6 +35147,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "org-beautify-theme";
+        ename = "org-beautify-theme";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "jonnay";
@@ -33869,6 +35172,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "org-board";
+        ename = "org-board";
         version = "1018";
         src = fetchFromGitHub {
           owner = "scallywag";
@@ -33894,6 +35198,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "org-bookmark-heading";
+        ename = "org-bookmark-heading";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "alphapapa";
@@ -33918,6 +35223,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "org-bullets";
+        ename = "org-bullets";
         version = "0.2.4";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -33944,6 +35250,7 @@
                                         , org }:
       melpaBuild {
         pname = "org-category-capture";
+        ename = "org-category-capture";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "IvanMalison";
@@ -33970,6 +35277,7 @@
                                  , s }:
       melpaBuild {
         pname = "org-clock-csv";
+        ename = "org-clock-csv";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "atheriel";
@@ -33997,6 +35305,7 @@
                                   , org }:
       melpaBuild {
         pname = "org-commentary";
+        ename = "org-commentary";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "smaximov";
@@ -34021,6 +35330,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "org-doing";
+        ename = "org-doing";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "omouse";
@@ -34046,6 +35356,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "org-download";
+        ename = "org-download";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -34071,6 +35382,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "org-dp";
+        ename = "org-dp";
         version = "1";
         src = fetchFromGitHub {
           owner = "tj64";
@@ -34097,6 +35409,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "org-edit-latex";
+        ename = "org-edit-latex";
         version = "0.8.3";
         src = fetchFromGitHub {
           owner = "et2010";
@@ -34123,6 +35436,7 @@
                                   , org }:
       melpaBuild {
         pname = "org-elisp-help";
+        ename = "org-elisp-help";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -34151,6 +35465,7 @@
                             , org }:
       melpaBuild {
         pname = "org-evil";
+        ename = "org-evil";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "GuiltyDolphin";
@@ -34180,6 +35495,7 @@
                             , request-deferred }:
       melpaBuild {
         pname = "org-gcal";
+        ename = "org-gcal";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "myuhe";
@@ -34207,6 +35523,7 @@
                              , telepathy }:
       melpaBuild {
         pname = "org-gnome";
+        ename = "org-gnome";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -34231,6 +35548,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "org-if";
+        ename = "org-if";
         version = "0.2.0";
         src = fetchFromGitLab {
           owner = "elzair";
@@ -34256,6 +35574,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "org-index";
+        ename = "org-index";
         version = "5.8.9";
         src = fetchFromGitHub {
           owner = "marcihm";
@@ -34284,6 +35603,7 @@
                             , s }:
       melpaBuild {
         pname = "org-jira";
+        ename = "org-jira";
         version = "3.1.1";
         src = fetchFromGitHub {
           owner = "ahungry";
@@ -34309,6 +35629,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "org-journal";
+        ename = "org-journal";
         version = "1.14.2";
         src = fetchFromGitHub {
           owner = "bastibe";
@@ -34332,22 +35653,24 @@
                               , fetchFromGitHub
                               , fetchurl
                               , lib
-                              , melpaBuild }:
+                              , melpaBuild
+                              , org }:
       melpaBuild {
         pname = "org-kanban";
-        version = "0.4.3";
+        ename = "org-kanban";
+        version = "0.4.6";
         src = fetchFromGitHub {
           owner = "gizmomogwai";
           repo = "org-kanban";
-          rev = "e391db5c4db31b23d542fe31b4e93a7fc8712d86";
-          sha256 = "0m987admsxy8wpiylwd4cagpzn4yg1b3p0z77ksw2zgz0ykfnx5s";
+          rev = "84c9e429ec9fcbe8d6091f15545ee7ebfc1cb589";
+          sha256 = "1jpl56mpw0l2camknzcpng6ji4yb6gz2g29i019iprz9cik5g0xm";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/a9f3a10c126fa43a6fa60ee7f8e50c7a9661dbc1/recipes/org-kanban";
           sha256 = "1flgqa2pwzw6b2zm3j09i9bvz1i8k03mbwj6l75yrk29lh4njq41";
           name = "recipe";
         };
-        packageRequires = [ dash emacs ];
+        packageRequires = [ dash emacs org ];
         meta = {
           homepage = "https://melpa.org/#/org-kanban";
           license = lib.licenses.free;
@@ -34360,6 +35683,7 @@
                                    , org }:
       melpaBuild {
         pname = "org-link-travis";
+        ename = "org-link-travis";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -34386,6 +35710,7 @@
                                , yaxception }:
       melpaBuild {
         pname = "org-linkany";
+        ename = "org-linkany";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -34414,6 +35739,7 @@
                                 , s }:
       melpaBuild {
         pname = "org-make-toc";
+        ename = "org-make-toc";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "alphapapa";
@@ -34440,6 +35766,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "org-mime";
+        ename = "org-mime";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "org-mime";
@@ -34465,6 +35792,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "org-mru-clock";
+        ename = "org-mru-clock";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -34492,6 +35820,7 @@
                                        , org }:
       melpaBuild {
         pname = "org-multiple-keymap";
+        ename = "org-multiple-keymap";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "myuhe";
@@ -34519,6 +35848,7 @@
                              , org }:
       melpaBuild {
         pname = "org-noter";
+        ename = "org-noter";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "weirdNox";
@@ -34543,6 +35873,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "org-outlook";
+        ename = "org-outlook";
         version = "0.11";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -34571,6 +35902,7 @@
                             , org }:
       melpaBuild {
         pname = "org-page";
+        ename = "org-page";
         version = "0.41";
         src = fetchFromGitHub {
           owner = "kelvinh";
@@ -34597,6 +35929,7 @@
                                         , s }:
       melpaBuild {
         pname = "org-password-manager";
+        ename = "org-password-manager";
         version = "0.0.1";
         src = fetchgit {
           url = "https://github.com/leafac/org-password-manager";
@@ -34622,6 +35955,7 @@
                                , pdf-tools }:
       melpaBuild {
         pname = "org-pdfview";
+        ename = "org-pdfview";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "markus1189";
@@ -34648,6 +35982,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "org-pomodoro";
+        ename = "org-pomodoro";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "lolownia";
@@ -34677,6 +36012,7 @@
                                   , s }:
       melpaBuild {
         pname = "org-projectile";
+        ename = "org-projectile";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "IvanMalison";
@@ -34704,6 +36040,7 @@
                                        , org-projectile }:
       melpaBuild {
         pname = "org-projectile-helm";
+        ename = "org-projectile-helm";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "IvanMalison";
@@ -34728,6 +36065,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "org-protocol-jekyll";
+        ename = "org-protocol-jekyll";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "vonavi";
@@ -34754,6 +36092,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "org-random-todo";
+        ename = "org-random-todo";
         version = "0.5.2";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -34782,6 +36121,7 @@
                               , yaoddmuse }:
       melpaBuild {
         pname = "org-readme";
+        ename = "org-readme";
         version = "20130322.926";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -34816,6 +36156,7 @@
                            , s }:
       melpaBuild {
         pname = "org-ref";
+        ename = "org-ref";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "jkitchin";
@@ -34851,6 +36192,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "org-repo-todo";
+        ename = "org-repo-todo";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "waymondo";
@@ -34876,6 +36218,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "org-rich-yank";
+        ename = "org-rich-yank";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "unhammer";
@@ -34901,6 +36244,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "org-static-blog";
+        ename = "org-static-blog";
         version = "1.2.1";
         src = fetchFromGitHub {
           owner = "bastibe";
@@ -34928,6 +36272,7 @@
                             , org }:
       melpaBuild {
         pname = "org-sync";
+        ename = "org-sync";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "arbox";
@@ -34952,6 +36297,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "org-table-comment";
+        ename = "org-table-comment";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -34977,6 +36323,7 @@
                                            , org }:
       melpaBuild {
         pname = "org-table-sticky-header";
+        ename = "org-table-sticky-header";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -35004,6 +36351,7 @@
                            , org }:
       melpaBuild {
         pname = "org-tfl";
+        ename = "org-tfl";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "storax";
@@ -35029,6 +36377,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "org-themis";
+        ename = "org-themis";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "zellio";
@@ -35055,6 +36404,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "org-time-budgets";
+        ename = "org-time-budgets";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "leoc";
@@ -35079,6 +36429,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "org-toodledo";
+        ename = "org-toodledo";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "myuhe";
@@ -35105,6 +36456,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "org-tracktable";
+        ename = "org-tracktable";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "tty-tourist";
@@ -35131,6 +36483,7 @@
                                             , s }:
       melpaBuild {
         pname = "org-transform-tree-table";
+        ename = "org-transform-tree-table";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "jplindstrom";
@@ -35155,6 +36508,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "org-tree-slide";
+        ename = "org-tree-slide";
         version = "2.8.4";
         src = fetchFromGitHub {
           owner = "takaxp";
@@ -35184,6 +36538,7 @@
                               , s }:
       melpaBuild {
         pname = "org-trello";
+        ename = "org-trello";
         version = "0.8.1";
         src = fetchFromGitHub {
           owner = "org-trello";
@@ -35208,6 +36563,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "org-vcard";
+        ename = "org-vcard";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "flexibeast";
@@ -35235,6 +36591,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "org-wild-notifier";
+        ename = "org-wild-notifier";
         version = "0.2.4";
         src = fetchFromGitHub {
           owner = "akhramov";
@@ -35263,6 +36620,7 @@
                             , xml-rpc }:
       melpaBuild {
         pname = "org2blog";
+        ename = "org2blog";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "punchagan";
@@ -35290,6 +36648,7 @@
                               , s }:
       melpaBuild {
         pname = "org2jekyll";
+        ename = "org2jekyll";
         version = "0.1.9";
         src = fetchFromGitHub {
           owner = "ardumont";
@@ -35322,6 +36681,7 @@
                            , simple-httpd }:
       melpaBuild {
         pname = "org2web";
+        ename = "org2web";
         version = "0.9.1";
         src = fetchFromGitHub {
           owner = "tumashu";
@@ -35357,6 +36717,7 @@
                           , org }:
       melpaBuild {
         pname = "orgbox";
+        ename = "orgbox";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "yasuhito";
@@ -35385,6 +36746,7 @@
                          , org }:
       melpaBuild {
         pname = "orgit";
+        ename = "orgit";
         version = "1.5.1";
         src = fetchFromGitHub {
           owner = "magit";
@@ -35412,6 +36774,7 @@
                            , org }:
       melpaBuild {
         pname = "orglink";
+        ename = "orglink";
         version = "1.1.3";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -35436,6 +36799,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "orgtbl-show-header";
+        ename = "orgtbl-show-header";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -35462,6 +36826,7 @@
                               , string-utils }:
       melpaBuild {
         pname = "osx-browse";
+        ename = "osx-browse";
         version = "0.8.8";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -35486,6 +36851,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "osx-clipboard";
+        ename = "osx-clipboard";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "joddie";
@@ -35511,6 +36877,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "osx-dictionary";
+        ename = "osx-dictionary";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -35535,6 +36902,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "osx-location";
+        ename = "osx-location";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -35559,6 +36927,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "osx-pseudo-daemon";
+        ename = "osx-pseudo-daemon";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
@@ -35584,6 +36953,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "osx-trash";
+        ename = "osx-trash";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "lunaryorn";
@@ -35609,6 +36979,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "outlook";
+        ename = "outlook";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "asavonic";
@@ -35633,6 +37004,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "outorg";
+        ename = "outorg";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "alphapapa";
@@ -35657,6 +37029,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "outshine";
+        ename = "outshine";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "alphapapa";
@@ -35682,6 +37055,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "ov";
+        ename = "ov";
         version = "1.0.6";
         src = fetchFromGitHub {
           owner = "ShingoFukuyama";
@@ -35707,6 +37081,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "overcast-theme";
+        ename = "overcast-theme";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "myTerminal";
@@ -35734,6 +37109,7 @@
                             , pkg-info }:
       melpaBuild {
         pname = "overseer";
+        ename = "overseer";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "tonini";
@@ -35761,6 +37137,7 @@
                             , yaxception }:
       melpaBuild {
         pname = "owdriver";
+        ename = "owdriver";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -35787,6 +37164,7 @@
                            , org }:
       melpaBuild {
         pname = "ox-epub";
+        ename = "ox-epub";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "ofosos";
@@ -35811,6 +37189,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "ox-gfm";
+        ename = "ox-gfm";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "larstvei";
@@ -35837,6 +37216,7 @@
                            , org }:
       melpaBuild {
         pname = "ox-hugo";
+        ename = "ox-hugo";
         version = "0.8";
         src = fetchFromGitHub {
           owner = "kaushalmodi";
@@ -35865,6 +37245,7 @@
                               , org }:
       melpaBuild {
         pname = "ox-ioslide";
+        ename = "ox-ioslide";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "coldnew";
@@ -35893,6 +37274,7 @@
                              , org }:
       melpaBuild {
         pname = "ox-pandoc";
+        ename = "ox-pandoc";
         version = "1.150707";
         src = fetchFromGitHub {
           owner = "kawabata";
@@ -35917,6 +37299,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "ox-twbs";
+        ename = "ox-twbs";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "marsmining";
@@ -35941,6 +37324,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "pabbrev";
+        ename = "pabbrev";
         version = "4.1";
         src = fetchFromGitHub {
           owner = "phillord";
@@ -35966,6 +37350,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "package-build";
+        ename = "package-build";
         version = "2.2";
         src = fetchFromGitHub {
           owner = "melpa";
@@ -35992,6 +37377,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "package-lint";
+        ename = "package-lint";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -36016,6 +37402,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "package-plus";
+        ename = "package+";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "zenspider";
@@ -36042,6 +37429,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "package-safe-delete";
+        ename = "package-safe-delete";
         version = "0.1.7";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -36067,6 +37455,7 @@
                                  , restart-emacs }:
       melpaBuild {
         pname = "package-utils";
+        ename = "package-utils";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "Silex";
@@ -36092,6 +37481,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "packed";
+        ename = "packed";
         version = "3.0.0";
         src = fetchFromGitHub {
           owner = "emacscollective";
@@ -36116,6 +37506,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "page-break-lines";
+        ename = "page-break-lines";
         version = "0.11";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -36144,6 +37535,7 @@
                           , s }:
       melpaBuild {
         pname = "pallet";
+        ename = "pallet";
         version = "0.9.2";
         src = fetchFromGitHub {
           owner = "rdallasgray";
@@ -36169,6 +37561,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "panda-theme";
+        ename = "panda-theme";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "jamiecollinson";
@@ -36194,6 +37587,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "pandoc";
+        ename = "pandoc";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "zonuexe";
@@ -36220,6 +37614,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "pandoc-mode";
+        ename = "pandoc-mode";
         version = "2.25";
         src = fetchFromGitHub {
           owner = "joostkremers";
@@ -36244,6 +37639,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "pangu-spacing";
+        ename = "pangu-spacing";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "coldnew";
@@ -36273,6 +37669,7 @@
                            , spinner }:
       melpaBuild {
         pname = "paradox";
+        ename = "paradox";
         version = "2.5.2";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -36297,6 +37694,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "paredit";
+        ename = "paredit";
         version = "24";
         src = fetchgit {
           url = "https://mumble.net/~campbell/git/paredit.git";
@@ -36321,6 +37719,7 @@
                                       , paredit }:
       melpaBuild {
         pname = "paredit-everywhere";
+        ename = "paredit-everywhere";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -36345,6 +37744,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "paren-face";
+        ename = "paren-face";
         version = "1.0.4";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -36369,6 +37769,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "parent-mode";
+        ename = "parent-mode";
         version = "2.3";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -36395,6 +37796,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "parinfer";
+        ename = "parinfer";
         version = "0.4.10";
         src = fetchFromGitHub {
           owner = "DogLooksGood";
@@ -36420,6 +37822,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "parsebib";
+        ename = "parsebib";
         version = "2.3.2";
         src = fetchFromGitHub {
           owner = "joostkremers";
@@ -36446,6 +37849,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "parsec";
+        ename = "parsec";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -36472,6 +37876,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "parseclj";
+        ename = "parseclj";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "clojure-emacs";
@@ -36499,6 +37904,7 @@
                         , password-store }:
       melpaBuild {
         pname = "pass";
+        ename = "pass";
         version = "1.7";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -36525,6 +37931,7 @@
                           , password-store }:
       melpaBuild {
         pname = "passmm";
+        ename = "passmm";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "pjones";
@@ -36550,6 +37957,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "passthword";
+        ename = "passthword";
         version = "1.4";
         src = fetchFromGitLab {
           owner = "pidu";
@@ -36578,6 +37986,7 @@
                                   , with-editor }:
       melpaBuild {
         pname = "password-store";
+        ename = "password-store";
         version = "1.7.2";
         src = fetchFromGitHub {
           owner = "zx2c4";
@@ -36605,6 +38014,7 @@
                                       , s }:
       melpaBuild {
         pname = "password-store-otp";
+        ename = "password-store-otp";
         version = "0.1.5";
         src = fetchFromGitHub {
           owner = "volrath";
@@ -36629,6 +38039,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "pastehub";
+        ename = "pastehub";
         version = "0.5.2";
         src = fetchFromGitHub {
           owner = "kiyoka";
@@ -36654,6 +38065,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "pastelmac-theme";
+        ename = "pastelmac-theme";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "bmastenbrook";
@@ -36680,6 +38092,7 @@
                            , request }:
       melpaBuild {
         pname = "pastery";
+        ename = "pastery";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "diasbruno";
@@ -36704,6 +38117,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "pathify";
+        ename = "pathify";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -36730,6 +38144,7 @@
                            , paredit }:
       melpaBuild {
         pname = "paxedit";
+        ename = "paxedit";
         version = "1.1.8";
         src = fetchFromGitHub {
           owner = "promethial";
@@ -36755,6 +38170,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "pcache";
+        ename = "pcache";
         version = "0.4.2";
         src = fetchFromGitHub {
           owner = "sigma";
@@ -36781,6 +38197,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "pcomplete-extension";
+        ename = "pcomplete-extension";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "thierryvolpiatto";
@@ -36807,6 +38224,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "pcre2el";
+        ename = "pcre2el";
         version = "1.8";
         src = fetchFromGitHub {
           owner = "joddie";
@@ -36831,6 +38249,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "pcsv";
+        ename = "pcsv";
         version = "1.3.6";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -36858,6 +38277,7 @@
                              , tablist }:
       melpaBuild {
         pname = "pdf-tools";
+        ename = "pdf-tools";
         version = "0.80";
         src = fetchFromGitHub {
           owner = "politza";
@@ -36882,6 +38302,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "peg";
+        ename = "peg";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "ellerh";
@@ -36907,6 +38328,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "pelican-mode";
+        ename = "pelican-mode";
         version = "20170808";
         src = fetchgit {
           url = "https://git.korewanetadesu.com/pelican-mode.git";
@@ -36937,7 +38359,7 @@
           rev = "9e6200da91b3";
           sha256 = "0w02l91x624cgzdg33a9spgcwy12m607dsfnr1xbc1fi08np4sd1";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/per-buffer-theme";
           sha256 = "1czcaybpfmx4mwff7hs07iayyvgvlhifkickccap6kpd0cp4n6hn";
           name = "per-buffer-theme";
@@ -36955,6 +38377,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "persistent-scratch";
+        ename = "persistent-scratch";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -36981,6 +38404,7 @@
                                    , pcache }:
       melpaBuild {
         pname = "persistent-soft";
+        ename = "persistent-soft";
         version = "0.8.10";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -37007,6 +38431,7 @@
                             , persp-mode }:
       melpaBuild {
         pname = "persp-fr";
+        ename = "persp-fr";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "rocher";
@@ -37031,6 +38456,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "persp-mode";
+        ename = "persp-mode";
         version = "2.9.6";
         src = fetchFromGitHub {
           owner = "Bad-ptr";
@@ -37058,6 +38484,7 @@
                                     , projectile }:
       melpaBuild {
         pname = "persp-projectile";
+        ename = "persp-projectile";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "bbatsov";
@@ -37083,12 +38510,13 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "perspective";
-        version = "2.1";
+        ename = "perspective";
+        version = "2.2";
         src = fetchFromGitHub {
           owner = "nex3";
           repo = "perspective-el";
-          rev = "7d1a16fb3058966ac3b2bea52225373bd3aa30cd";
-          sha256 = "0qbxrcxdsnsvap1p6nrh0r4bxx2xvjz3y1mjk2wwbcj5hw2jkk0r";
+          rev = "8e2f122de408d7866136dd861d513a9575cf32e6";
+          sha256 = "0pd5sqrrz6y3md20yh6ffy32jdcgb1gc9b4j14pm6r54bqxik68h";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/perspective";
@@ -37107,6 +38535,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "perspeen";
+        ename = "perspeen";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "seudut";
@@ -37132,6 +38561,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "pfuture";
+        ename = "pfuture";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "Alexander-Miller";
@@ -37157,6 +38587,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "ph";
+        ename = "ph";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "gromnitsky";
@@ -37184,6 +38615,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "phan";
+        ename = "phan";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -37208,6 +38640,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "phi-search";
+        ename = "phi-search";
         version = "20160630";
         src = fetchFromGitHub {
           owner = "zk-phi";
@@ -37234,6 +38667,7 @@
                                  , phi-search }:
       melpaBuild {
         pname = "phi-search-mc";
+        ename = "phi-search-mc";
         version = "2.2.1";
         src = fetchFromGitHub {
           owner = "knu";
@@ -37260,6 +38694,7 @@
                                        , yasnippet }:
       melpaBuild {
         pname = "php-auto-yasnippets";
+        ename = "php-auto-yasnippets";
         version = "2.3.1";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -37285,6 +38720,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "php-cs-fixer";
+        ename = "php-cs-fixer";
         version = "1.0.-2.4";
         src = fetchFromGitHub {
           owner = "OVYA";
@@ -37311,6 +38747,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "php-mode";
+        ename = "php-mode";
         version = "1.19.1";
         src = fetchFromGitHub {
           owner = "ejmr";
@@ -37337,6 +38774,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "php-runtime";
+        ename = "php-runtime";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -37363,6 +38801,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "phpactor";
+        ename = "phpactor";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -37388,6 +38827,7 @@
                           , s }:
       melpaBuild {
         pname = "phpcbf";
+        ename = "phpcbf";
         version = "0.9.2";
         src = fetchFromGitHub {
           owner = "nishimaki10";
@@ -37413,12 +38853,13 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "phpstan";
-        version = "0.2.1";
+        ename = "phpstan";
+        version = "0.2.2";
         src = fetchFromGitHub {
           owner = "emacs-php";
           repo = "phpstan.el";
-          rev = "3653f2a316f4199cbd3238e984eea2325e2618d5";
-          sha256 = "1dyba8hpr16nsdv1i45pl3w97728w7p8vl9gf5gvd18xcll4848d";
+          rev = "09102b062b607affc93f2d8a113a9fc9f9cf3016";
+          sha256 = "0n21vyvd5c42v03xcfx94dz252z3s413i0f9pwjrssq2yd3x2bgm";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5a2b6cc39957e6d7185bd2bdfa3755e5b1f474a6/recipes/phpstan";
@@ -37442,6 +38883,7 @@
                            , s }:
       melpaBuild {
         pname = "phpunit";
+        ename = "phpunit";
         version = "0.16.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -37467,6 +38909,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "pillar";
+        ename = "pillar";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "pillar-markup";
@@ -37492,6 +38935,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "pinboard-popular";
+        ename = "pinboard-popular";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "asimpson";
@@ -37516,6 +38960,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "pinyin-search";
+        ename = "pinyin-search";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -37540,6 +38985,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "pinyinlib";
+        ename = "pinyinlib";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "cute-jumper";
@@ -37565,6 +39011,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "pip-requirements";
+        ename = "pip-requirements";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -37589,6 +39036,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "pixiv-novel-mode";
+        ename = "pixiv-novel-mode";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "zonuexe";
@@ -37614,6 +39062,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "pkg-info";
+        ename = "pkg-info";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "lunaryorn";
@@ -37638,6 +39087,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "pkgbuild-mode";
+        ename = "pkgbuild-mode";
         version = "0.14";
         src = fetchFromGitHub {
           owner = "juergenhoetzel";
@@ -37663,6 +39113,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "plain-theme";
+        ename = "plain-theme";
         version = "8";
         src = fetchFromGitLab {
           owner = "yegortimoshenko";
@@ -37687,6 +39138,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "plantuml-mode";
+        ename = "plantuml-mode";
         version = "1.2.5";
         src = fetchFromGitHub {
           owner = "skuro";
@@ -37712,6 +39164,7 @@
                                    , projectile }:
       melpaBuild {
         pname = "platformio-mode";
+        ename = "platformio-mode";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "ZachMassia";
@@ -37739,6 +39192,7 @@
                                 , request }:
       melpaBuild {
         pname = "play-crystal";
+        ename = "play-crystal";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "veelenga";
@@ -37763,6 +39217,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "play-routes-mode";
+        ename = "play-routes-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "brocode";
@@ -37787,6 +39242,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "plenv";
+        ename = "plenv";
         version = "0.32";
         src = fetchFromGitHub {
           owner = "karupanerura";
@@ -37814,6 +39270,7 @@
                            , yaxception }:
       melpaBuild {
         pname = "plsense";
+        ename = "plsense";
         version = "0.4.7";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -37842,6 +39299,7 @@
                                  , yaxception }:
       melpaBuild {
         pname = "plsense-direx";
+        ename = "plsense-direx";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -37867,6 +39325,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "plur";
+        ename = "plur";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -37891,6 +39350,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "po-mode";
+        ename = "po-mode";
         version = "0.19.8.1";
         src = fetchgit {
           url = "https://git.savannah.gnu.org/git/gettext.git";
@@ -37919,6 +39379,7 @@
                               , s }:
       melpaBuild {
         pname = "pocket-lib";
+        ename = "pocket-lib";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "alphapapa";
@@ -37951,6 +39412,7 @@
                                  , s }:
       melpaBuild {
         pname = "pocket-reader";
+        ename = "pocket-reader";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "alphapapa";
@@ -37984,6 +39446,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "point-pos";
+        ename = "point-pos";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -38010,6 +39473,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "pomidor";
+        ename = "pomidor";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "TatriX";
@@ -38035,6 +39499,7 @@
                                  , yasnippet }:
       melpaBuild {
         pname = "pony-snippets";
+        ename = "pony-snippets";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "SeanTAllen";
@@ -38060,6 +39525,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "ponylang-mode";
+        ename = "ponylang-mode";
         version = "0.0.9";
         src = fetchFromGitHub {
           owner = "SeanTAllen";
@@ -38087,6 +39553,7 @@
                            , yaxception }:
       melpaBuild {
         pname = "pophint";
+        ename = "pophint";
         version = "0.9.3";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -38112,6 +39579,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "popup";
+        ename = "popup";
         version = "0.5.3";
         src = fetchFromGitHub {
           owner = "auto-complete";
@@ -38137,6 +39605,7 @@
                                   , popup }:
       melpaBuild {
         pname = "popup-complete";
+        ename = "popup-complete";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -38164,6 +39633,7 @@
                                , popup }:
       melpaBuild {
         pname = "popup-imenu";
+        ename = "popup-imenu";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "ancane";
@@ -38188,6 +39658,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "popwin";
+        ename = "popwin";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "m2ym";
@@ -38212,6 +39683,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "pos-tip";
+        ename = "pos-tip";
         version = "0.4.6";
         src = fetchFromGitHub {
           owner = "pitkali";
@@ -38237,6 +39709,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "powerline";
+        ename = "powerline";
         version = "2.4";
         src = fetchFromGitHub {
           owner = "milkypostman";
@@ -38261,6 +39734,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "powershell";
+        ename = "powershell";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "jschaf";
@@ -38287,6 +39761,7 @@
                                    , sr-speedbar }:
       melpaBuild {
         pname = "ppd-sr-speedbar";
+        ename = "ppd-sr-speedbar";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "rdallasgray";
@@ -38311,6 +39786,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "prassee-theme";
+        ename = "prassee-theme";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "prassee";
@@ -38336,6 +39812,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "prescient";
+        ename = "prescient";
         version = "2.0";
         src = fetchFromGitHub {
           owner = "raxod502";
@@ -38362,6 +39839,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "presentation";
+        ename = "presentation";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "zonuexe";
@@ -38386,6 +39864,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "pretty-mode";
+        ename = "pretty-mode";
         version = "2.0.3";
         src = fetchFromGitHub {
           owner = "akatov";
@@ -38411,6 +39890,7 @@
                                    , yasnippet }:
       melpaBuild {
         pname = "processing-mode";
+        ename = "processing-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "ptrv";
@@ -38442,7 +39922,7 @@
           rev = "228bc56369675787d60f637223b50ce3a1afebbd";
           sha256 = "08ljf39jfmfpdk36nws2dnwpm7y8252zsdprsc85hr1h1ig5xy15";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ba59561e8a2f259fde170a79844af5e1ef5ed34f/recipes/processing-snippets";
           sha256 = "09vkm9asmjz1in0f63s7bf4amifspsqf5w9pxiy5y0qvmn28fr2r";
           name = "processing-snippets";
@@ -38463,6 +39943,7 @@
                            , s }:
       melpaBuild {
         pname = "prodigy";
+        ename = "prodigy";
         version = "0.7.0";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -38489,6 +39970,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "prog-fill";
+        ename = "prog-fill";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "ahungry";
@@ -38517,6 +39999,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "project-explorer";
+        ename = "project-explorer";
         version = "0.14.3";
         src = fetchFromGitHub {
           owner = "sabof";
@@ -38541,6 +40024,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "project-persist";
+        ename = "project-persist";
         version = "0.3.2";
         src = fetchFromGitHub {
           owner = "rdallasgray";
@@ -38566,6 +40050,7 @@
                                           , project-persist }:
       melpaBuild {
         pname = "project-persist-drawer";
+        ename = "project-persist-drawer";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "rdallasgray";
@@ -38596,7 +40081,7 @@
           rev = "843ca1f4ab2b";
           sha256 = "0nw02f5lmbqdfnw93d3383sdxx1d31szk23zvjlrmmdwv2124281";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/project-root";
           sha256 = "0xjir204zk254y2x70k9vqwirx2ljmrikpsgn5kn170d1bxvhwmb";
           name = "project-root";
@@ -38607,7 +40092,7 @@
           license = lib.licenses.free;
         };
       }) {};
-    projectile = callPackage ({ dash
+    projectile = callPackage ({ emacs
                               , fetchFromGitHub
                               , fetchurl
                               , lib
@@ -38615,19 +40100,20 @@
                               , pkg-info }:
       melpaBuild {
         pname = "projectile";
-        version = "0.14.0";
+        ename = "projectile";
+        version = "1.0.0";
         src = fetchFromGitHub {
           owner = "bbatsov";
           repo = "projectile";
-          rev = "19fb9fa6590e1dc49afc3c8c5bd69cff6cf743a7";
-          sha256 = "1kp0y81csmjxwyrdbj60f89phw3gkg3hm5xp3k4fvymzsrxrhm9l";
+          rev = "09d1ef17a20c42dc6a2b1622df8faa8fb1c6ad9f";
+          sha256 = "1yyphiy2bc4kzc1bz1akfz5rrdrs0bq3zvsyam9bsx03jixzn7yv";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/ca7bf43ef8893bf04e9658390e306ef69e80a156/recipes/projectile";
           sha256 = "1kf8hql59nwiy13q0p6p6rf5agjvah43f0sflflfqsrxbihshvdn";
           name = "recipe";
         };
-        packageRequires = [ dash pkg-info ];
+        packageRequires = [ emacs pkg-info ];
         meta = {
           homepage = "https://melpa.org/#/projectile";
           license = lib.licenses.free;
@@ -38641,6 +40127,7 @@
                                             , projectile }:
       melpaBuild {
         pname = "projectile-git-autofetch";
+        ename = "projectile-git-autofetch";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "andrmuel";
@@ -38671,6 +40158,7 @@
                                     , rake }:
       melpaBuild {
         pname = "projectile-rails";
+        ename = "projectile-rails";
         version = "0.16.0";
         src = fetchFromGitHub {
           owner = "asok";
@@ -38697,6 +40185,7 @@
                                       , ripgrep }:
       melpaBuild {
         pname = "projectile-ripgrep";
+        ename = "projectile-ripgrep";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -38723,6 +40212,7 @@
                                    , sift }:
       melpaBuild {
         pname = "projectile-sift";
+        ename = "projectile-sift";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -38753,6 +40243,7 @@
                                           , rake }:
       melpaBuild {
         pname = "projectile-trailblazer";
+        ename = "projectile-trailblazer";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "micdahl";
@@ -38779,6 +40270,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "projectile-variable";
+        ename = "projectile-variable";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -38804,6 +40296,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "projekt";
+        ename = "projekt";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "tekai";
@@ -38828,6 +40321,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "prompt-text";
+        ename = "prompt-text";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "10sr";
@@ -38854,6 +40348,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "prop-menu";
+        ename = "prop-menu";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "david-christiansen";
@@ -38878,6 +40373,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "protobuf-mode";
+        ename = "protobuf-mode";
         version = "3.6.0.1";
         src = fetchFromGitHub {
           owner = "google";
@@ -38903,6 +40399,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "protocols";
+        ename = "protocols";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "davep";
@@ -38932,6 +40429,7 @@
                         , s }:
       melpaBuild {
         pname = "psci";
+        ename = "psci";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "purescript-emacs";
@@ -38959,6 +40457,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "psession";
+        ename = "psession";
         version = "1.5";
         src = fetchFromGitHub {
           owner = "thierryvolpiatto";
@@ -38986,6 +40485,7 @@
                          , s }:
       melpaBuild {
         pname = "psysh";
+        ename = "psysh";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -39010,6 +40510,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "pt";
+        ename = "pt";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "bling";
@@ -39036,6 +40537,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "pug-mode";
+        ename = "pug-mode";
         version = "1.0.7";
         src = fetchFromGitHub {
           owner = "hlissner";
@@ -39060,6 +40562,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "punctuality-logger";
+        ename = "punctuality-logger";
         version = "0.8";
         src = fetchFromGitLab {
           owner = "elzair";
@@ -39086,6 +40589,7 @@
                          , pyvenv }:
       melpaBuild {
         pname = "pungi";
+        ename = "pungi";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "mgrbyte";
@@ -39113,6 +40617,7 @@
                                , pkg-info }:
       melpaBuild {
         pname = "puppet-mode";
+        ename = "puppet-mode";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "voxpupuli";
@@ -39137,6 +40642,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "purescript-mode";
+        ename = "purescript-mode";
         version = "13.10";
         src = fetchFromGitHub {
           owner = "dysinger";
@@ -39163,6 +40669,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "pushbullet";
+        ename = "pushbullet";
         version = "0.5.2";
         src = fetchFromGitHub {
           owner = "theanalyst";
@@ -39187,6 +40694,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "py-autopep8";
+        ename = "py-autopep8";
         version = "2016.1";
         src = fetchFromGitHub {
           owner = "paetzke";
@@ -39211,6 +40719,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "py-isort";
+        ename = "py-isort";
         version = "2016.1";
         src = fetchFromGitHub {
           owner = "paetzke";
@@ -39235,6 +40744,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "py-yapf";
+        ename = "py-yapf";
         version = "2016.1";
         src = fetchFromGitHub {
           owner = "paetzke";
@@ -39261,6 +40771,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "pycarddavel";
+        ename = "pycarddavel";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -39285,6 +40796,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "pydoc";
+        ename = "pydoc";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "statmobile";
@@ -39310,6 +40822,7 @@
                               , pythonic }:
       melpaBuild {
         pname = "pyenv-mode";
+        ename = "pyenv-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "proofit404";
@@ -39339,6 +40852,7 @@
                         , pyim-basedict }:
       melpaBuild {
         pname = "pyim";
+        ename = "pyim";
         version = "1.7";
         src = fetchFromGitHub {
           owner = "tumashu";
@@ -39363,6 +40877,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "pyim-basedict";
+        ename = "pyim-basedict";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "tumashu";
@@ -39388,6 +40903,7 @@
                                , pyim }:
       melpaBuild {
         pname = "pyim-wbdict";
+        ename = "pyim-wbdict";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "tumashu";
@@ -39414,6 +40930,7 @@
                             , s }:
       melpaBuild {
         pname = "pyimport";
+        ename = "pyimport";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -39443,6 +40960,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "pynt";
+        ename = "pynt";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "ebanner";
@@ -39468,6 +40986,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "python-environment";
+        ename = "python-environment";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "tkf";
@@ -39492,6 +41011,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "python-mode";
+        ename = "python-mode";
         version = "6.2.3";
         src = fetchFromGitLab {
           owner = "python-mode-devs";
@@ -39522,6 +41042,7 @@
                                  , s }:
       melpaBuild {
         pname = "python-pytest";
+        ename = "python-pytest";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "wbolster";
@@ -39555,6 +41076,7 @@
                             , python ? null }:
       melpaBuild {
         pname = "python-x";
+        ename = "python-x";
         version = "1.0";
         src = fetchFromGitLab {
           owner = "wavexx";
@@ -39584,6 +41106,7 @@
                             , s }:
       melpaBuild {
         pname = "pythonic";
+        ename = "pythonic";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "proofit404";
@@ -39608,6 +41131,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "pyvenv";
+        ename = "pyvenv";
         version = "1.16";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
@@ -39632,6 +41156,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "qiita";
+        ename = "qiita";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "gongo";
@@ -39657,6 +41182,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "ql";
+        ename = "ql";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "ieure";
@@ -39681,6 +41207,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "qml-mode";
+        ename = "qml-mode";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "coldnew";
@@ -39706,6 +41233,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "qt-pro-mode";
+        ename = "qt-pro-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "EricCrosson";
@@ -39730,6 +41258,7 @@
                                           , melpaBuild }:
       melpaBuild {
         pname = "quasi-monochrome-theme";
+        ename = "quasi-monochrome-theme";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "lbolla";
@@ -39755,6 +41284,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "quickrun";
+        ename = "quickrun";
         version = "2.2.8";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -39781,6 +41311,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "quiz";
+        ename = "quiz";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "davep";
@@ -39805,6 +41336,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "r-autoyas";
+        ename = "r-autoyas";
         version = "0.28";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -39834,6 +41366,7 @@
                          , s }:
       melpaBuild {
         pname = "racer";
+        ename = "racer";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "racer-rust";
@@ -39858,6 +41391,7 @@
                                              , melpaBuild }:
       melpaBuild {
         pname = "railscasts-reloaded-theme";
+        ename = "railscasts-reloaded-theme";
         version = "1.5.0";
         src = fetchFromGitHub {
           owner = "thegeorgeous";
@@ -39882,6 +41416,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "rainbow-blocks";
+        ename = "rainbow-blocks";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "istib";
@@ -39906,6 +41441,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "rainbow-delimiters";
+        ename = "rainbow-delimiters";
         version = "2.1.3";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -39931,6 +41467,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "rainbow-identifiers";
+        ename = "rainbow-identifiers";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -39958,6 +41495,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "rake";
+        ename = "rake";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "asok";
@@ -39983,6 +41521,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "ranger";
+        ename = "ranger";
         version = "0.9.8.5";
         src = fetchFromGitHub {
           owner = "ralesi";
@@ -40007,6 +41546,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "rase";
+        ename = "rase";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "m00natic";
@@ -40034,6 +41574,7 @@
                         , s }:
       melpaBuild {
         pname = "rats";
+        ename = "rats";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "ane";
@@ -40058,6 +41599,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "rbenv";
+        ename = "rbenv";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "senny";
@@ -40082,6 +41624,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "rc-mode";
+        ename = "rc-mode";
         version = "1.0.13";
         src = fetchFromGitHub {
           owner = "mrhmouse";
@@ -40107,6 +41650,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "rcirc-styles";
+        ename = "rcirc-styles";
         version = "1.3.2";
         src = fetchFromGitHub {
           owner = "aaron-em";
@@ -40131,6 +41675,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "rdf-prefix";
+        ename = "rdf-prefix";
         version = "1.10";
         src = fetchFromGitHub {
           owner = "simenheg";
@@ -40156,6 +41701,7 @@
                                   , yasnippet }:
       melpaBuild {
         pname = "react-snippets";
+        ename = "react-snippets";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "johnmastro";
@@ -40180,6 +41726,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "real-auto-save";
+        ename = "real-auto-save";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "chillaranand";
@@ -40209,6 +41756,7 @@
                            , test-simple }:
       melpaBuild {
         pname = "realgud";
+        ename = "realgud";
         version = "1.4.5";
         src = fetchFromGitHub {
           owner = "rocky";
@@ -40240,6 +41788,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "reason-mode";
+        ename = "reason-mode";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "reasonml-editor";
@@ -40265,6 +41814,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "rebecca-theme";
+        ename = "rebecca-theme";
         version = "1.2.1";
         src = fetchFromGitHub {
           owner = "vic";
@@ -40289,6 +41839,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "recover-buffers";
+        ename = "recover-buffers";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "tripleee";
@@ -40313,6 +41864,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "rect-plus";
+        ename = "rect+";
         version = "1.0.10";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -40339,6 +41891,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "rectangle-utils";
+        ename = "rectangle-utils";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "thierryvolpiatto";
@@ -40366,6 +41919,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "redpen-paragraph";
+        ename = "redpen-paragraph";
         version = "0.42";
         src = fetchFromGitHub {
           owner = "karronoli";
@@ -40391,6 +41945,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "redprl";
+        ename = "redprl";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "RedPRL";
@@ -40416,6 +41971,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "redtick";
+        ename = "redtick";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "ferfebles";
@@ -40445,6 +42001,7 @@
                           , s }:
       melpaBuild {
         pname = "refine";
+        ename = "refine";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "Wilfred";
@@ -40469,6 +42026,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "region-convert";
+        ename = "region-convert";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "zonuexe";
@@ -40494,6 +42052,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "relax";
+        ename = "relax";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "technomancy";
@@ -40519,6 +42078,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "repeatable-motion";
+        ename = "repeatable-motion";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "willghatch";
@@ -40544,6 +42104,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "repl-toggle";
+        ename = "repl-toggle";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "tomterl";
@@ -40568,6 +42129,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "replace-symbol";
+        ename = "replace-symbol";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "bmastenbrook";
@@ -40594,6 +42156,7 @@
                                             , string-inflection }:
       melpaBuild {
         pname = "replace-with-inflections";
+        ename = "replace-with-inflections";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "knu";
@@ -40619,6 +42182,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "repo";
+        ename = "repo";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "canatella";
@@ -40647,6 +42211,7 @@
                                , use-package }:
       melpaBuild {
         pname = "req-package";
+        ename = "req-package";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "edvorg";
@@ -40672,6 +42237,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "request";
+        ename = "request";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "tkf";
@@ -40698,6 +42264,7 @@
                                     , request }:
       melpaBuild {
         pname = "request-deferred";
+        ename = "request-deferred";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "tkf";
@@ -40726,6 +42293,7 @@
                              , s }:
       melpaBuild {
         pname = "requirejs";
+        ename = "requirejs";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "joeheyming";
@@ -40752,6 +42320,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "resize-window";
+        ename = "resize-window";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "dpsutton";
@@ -40776,6 +42345,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "restart-emacs";
+        ename = "restart-emacs";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "iqbalansari";
@@ -40802,6 +42372,7 @@
                                    , restclient }:
       melpaBuild {
         pname = "restclient-test";
+        ename = "restclient-test";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "simenheg";
@@ -40826,6 +42397,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "reveal-in-osx-finder";
+        ename = "reveal-in-osx-finder";
         version = "0.3.3";
         src = fetchFromGitHub {
           owner = "kaz-yos";
@@ -40850,6 +42422,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "reverse-theme";
+        ename = "reverse-theme";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -40877,6 +42450,7 @@
                       , s }:
       melpaBuild {
         pname = "rg";
+        ename = "rg";
         version = "1.5.0";
         src = fetchFromGitHub {
           owner = "dajva";
@@ -40902,6 +42476,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "rib-mode";
+        ename = "rib-mode";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "blezek";
@@ -40927,6 +42502,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "rich-minority";
+        ename = "rich-minority";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -40952,6 +42528,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "rigid-tabs";
+        ename = "rigid-tabs";
         version = "1.0";
         src = fetchFromGitLab {
           owner = "wavexx";
@@ -40980,6 +42557,7 @@
                           , ruby-mode ? null }:
       melpaBuild {
         pname = "rinari";
+        ename = "rinari";
         version = "2.11";
         src = fetchFromGitHub {
           owner = "eschulte";
@@ -41004,6 +42582,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "ripgrep";
+        ename = "ripgrep";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -41030,6 +42609,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "rjsx-mode";
+        ename = "rjsx-mode";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "felipeochoa";
@@ -41056,6 +42636,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "robe";
+        ename = "robe";
         version = "0.8.1";
         src = fetchFromGitHub {
           owner = "dgutov";
@@ -41080,6 +42661,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "robots-txt-mode";
+        ename = "robots-txt-mode";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "emacs-php";
@@ -41105,6 +42687,7 @@
                               , popup }:
       melpaBuild {
         pname = "roguel-ike";
+        ename = "roguel-ike";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "stevenremot";
@@ -41129,6 +42712,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "rope-read-mode";
+        ename = "rope-read-mode";
         version = "0.3.4";
         src = fetchFromGitHub {
           owner = "marcowahl";
@@ -41153,6 +42737,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "rsense";
+        ename = "rsense";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "m2ym";
@@ -41179,6 +42764,7 @@
                               , ruby-mode ? null }:
       melpaBuild {
         pname = "rspec-mode";
+        ename = "rspec-mode";
         version = "1.11";
         src = fetchFromGitHub {
           owner = "pezra";
@@ -41203,6 +42789,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "rtags";
+        ename = "rtags";
         version = "2.18";
         src = fetchFromGitHub {
           owner = "Andersbakken";
@@ -41230,6 +42817,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "rubik";
+        ename = "rubik";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "Kurvivor19";
@@ -41255,6 +42843,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "rubocop";
+        ename = "rubocop";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "bbatsov";
@@ -41280,6 +42869,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "rubocopfmt";
+        ename = "rubocopfmt";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "jimeh";
@@ -41305,6 +42895,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "ruby-compilation";
+        ename = "ruby-compilation";
         version = "2.11";
         src = fetchFromGitHub {
           owner = "eschulte";
@@ -41329,6 +42920,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "ruby-electric";
+        ename = "ruby-electric";
         version = "2.3.1";
         src = fetchFromGitHub {
           owner = "knu";
@@ -41353,6 +42945,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ruby-end";
+        ename = "ruby-end";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -41377,6 +42970,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "ruby-hash-syntax";
+        ename = "ruby-hash-syntax";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -41401,6 +42995,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "ruby-test-mode";
+        ename = "ruby-test-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "r0man";
@@ -41425,6 +43020,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "ruby-tools";
+        ename = "ruby-tools";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -41450,6 +43046,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "rufo";
+        ename = "rufo";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "danielma";
@@ -41474,6 +43071,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "runner";
+        ename = "runner";
         version = "1.8";
         src = fetchFromGitHub {
           owner = "thamer";
@@ -41498,6 +43096,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "russian-holidays";
+        ename = "russian-holidays";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "grafov";
@@ -41523,6 +43122,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "rust-mode";
+        ename = "rust-mode";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "rust-lang";
@@ -41549,6 +43149,7 @@
                                    , rust-mode }:
       melpaBuild {
         pname = "rust-playground";
+        ename = "rust-playground";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "grafov";
@@ -41573,6 +43174,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "rvm";
+        ename = "rvm";
         version = "1.4.0";
         src = fetchFromGitHub {
           owner = "senny";
@@ -41597,6 +43199,7 @@
                      , melpaBuild }:
       melpaBuild {
         pname = "s";
+        ename = "s";
         version = "1.12.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -41621,6 +43224,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "sackspace";
+        ename = "sackspace";
         version = "0.8.2";
         src = fetchFromGitHub {
           owner = "cofi";
@@ -41649,6 +43253,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "sage-shell-mode";
+        ename = "sage-shell-mode";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "sagemath";
@@ -41676,6 +43281,7 @@
                              , yaml-mode }:
       melpaBuild {
         pname = "salt-mode";
+        ename = "salt-mode";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "glynnforrest";
@@ -41701,6 +43307,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "sass-mode";
+        ename = "sass-mode";
         version = "3.0.18";
         src = fetchFromGitHub {
           owner = "nex3";
@@ -41725,6 +43332,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "sauron";
+        ename = "sauron";
         version = "0.10";
         src = fetchFromGitHub {
           owner = "djcb";
@@ -41749,6 +43357,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "say-what-im-doing";
+        ename = "say-what-im-doing";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "benaiah";
@@ -41774,6 +43383,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "sayid";
+        ename = "sayid";
         version = "0.0.16";
         src = fetchFromGitHub {
           owner = "bpiel";
@@ -41799,6 +43409,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "sbt-mode";
+        ename = "sbt-mode";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "ensime";
@@ -41823,6 +43434,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "scala-mode";
+        ename = "scala-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "ensime";
@@ -41848,6 +43460,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "schrute";
+        ename = "schrute";
         version = "0.2.2";
         src = fetchgit {
           url = "https://bitbucket.org/shackra/dwight-k.-schrute";
@@ -41872,6 +43485,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "scpaste";
+        ename = "scpaste";
         version = "0.6.5";
         src = fetchFromGitHub {
           owner = "technomancy";
@@ -41896,6 +43510,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "scss-mode";
+        ename = "scss-mode";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "antonj";
@@ -41920,6 +43535,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "search-web";
+        ename = "search-web";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "tomoya";
@@ -41949,6 +43565,7 @@
                               , s }:
       melpaBuild {
         pname = "secretaria";
+        ename = "secretaria";
         version = "0.2.7";
         src = fetchgit {
           url = "https://bitbucket.org/shackra/secretaria.el";
@@ -41975,6 +43592,7 @@
                          , popup }:
       melpaBuild {
         pname = "sekka";
+        ename = "sekka";
         version = "1.8.0";
         src = fetchFromGitHub {
           owner = "kiyoka";
@@ -41999,6 +43617,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "select-themes";
+        ename = "select-themes";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "jasonm23";
@@ -42023,6 +43642,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "selectric-mode";
+        ename = "selectric-mode";
         version = "1.4.1";
         src = fetchFromGitHub {
           owner = "rbanffy";
@@ -42055,6 +43675,7 @@
                            , web-server }:
       melpaBuild {
         pname = "servant";
+        ename = "servant";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "cask";
@@ -42083,6 +43704,7 @@
                               , s }:
       melpaBuild {
         pname = "serverspec";
+        ename = "serverspec";
         version = "0.0.7";
         src = fetchFromGitHub {
           owner = "k1LoW";
@@ -42108,6 +43730,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "services";
+        ename = "services";
         version = "1.7";
         src = fetchFromGitHub {
           owner = "davep";
@@ -42133,6 +43756,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "sesman";
+        ename = "sesman";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "vspinu";
@@ -42157,6 +43781,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "session";
+        ename = "session";
         version = "2.3.1";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -42181,6 +43806,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "sexp-move";
+        ename = "sexp-move";
         version = "0.2.6";
         src = fetchFromGitLab {
           owner = "elzair";
@@ -42205,6 +43831,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "sexy-monochrome-theme";
+        ename = "sexy-monochrome-theme";
         version = "3.1";
         src = fetchFromGitHub {
           owner = "voloyev";
@@ -42230,6 +43857,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "shackle";
+        ename = "shackle";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "wasamasa";
@@ -42254,6 +43882,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "shakespeare-mode";
+        ename = "shakespeare-mode";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "CodyReichert";
@@ -42278,6 +43907,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "shampoo";
+        ename = "shampoo";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "dmatveev";
@@ -42304,6 +43934,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "shell-pop";
+        ename = "shell-pop";
         version = "0.64";
         src = fetchFromGitHub {
           owner = "kyagi";
@@ -42328,6 +43959,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "shell-split-string";
+        ename = "shell-split-string";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "10sr";
@@ -42352,6 +43984,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "shell-switcher";
+        ename = "shell-switcher";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -42376,6 +44009,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "shell-toggle";
+        ename = "shell-toggle";
         version = "1.3.1";
         src = fetchFromGitHub {
           owner = "knu";
@@ -42402,6 +44036,7 @@
                             , s }:
       melpaBuild {
         pname = "shelldoc";
+        ename = "shelldoc";
         version = "0.0.5";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -42426,6 +44061,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "shelltest-mode";
+        ename = "shelltest-mode";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "rtrn";
@@ -42451,6 +44087,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "shen-elisp";
+        ename = "shen-elisp";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "deech";
@@ -42475,6 +44112,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "shift-number";
+        ename = "shift-number";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "alezost";
@@ -42499,6 +44137,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "shm";
+        ename = "shm";
         version = "1.0.20";
         src = fetchFromGitHub {
           owner = "chrisdone";
@@ -42523,6 +44162,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "showtip";
+        ename = "showtip";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -42547,6 +44187,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "shpec-mode";
+        ename = "shpec-mode";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "shpec";
@@ -42573,6 +44214,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "shr-tag-pre-highlight";
+        ename = "shr-tag-pre-highlight";
         version = "2";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -42600,6 +44242,7 @@
                                , s }:
       melpaBuild {
         pname = "shrink-path";
+        ename = "shrink-path";
         version = "0.3.1";
         src = fetchFromGitLab {
           owner = "bennya";
@@ -42624,6 +44267,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "shrink-whitespace";
+        ename = "shrink-whitespace";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "jcpetkovich";
@@ -42650,6 +44294,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "shut-up";
+        ename = "shut-up";
         version = "0.3.2";
         src = fetchFromGitHub {
           owner = "cask";
@@ -42675,6 +44320,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "shx";
+        ename = "shx";
         version = "0.0.16";
         src = fetchFromGitHub {
           owner = "riscy";
@@ -42700,6 +44346,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "side-notes";
+        ename = "side-notes";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "rnkn";
@@ -42724,6 +44371,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "sift";
+        ename = "sift";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -42749,6 +44397,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "silkworm-theme";
+        ename = "silkworm-theme";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "mswift42";
@@ -42774,6 +44423,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "simple-bookmarks";
+        ename = "simple-bookmarks";
         version = "1.8";
         src = fetchFromGitHub {
           owner = "jtkDvlp";
@@ -42799,6 +44449,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "simple-httpd";
+        ename = "simple-httpd";
         version = "1.5.1";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -42823,6 +44474,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "simpleclip";
+        ename = "simpleclip";
         version = "1.0.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -42848,6 +44500,7 @@
                                , request-deferred }:
       melpaBuild {
         pname = "simplenote2";
+        ename = "simplenote2";
         version = "3.0.0";
         src = fetchFromGitHub {
           owner = "alpha22jp";
@@ -42872,6 +44525,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "simplezen";
+        ename = "simplezen";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -42902,6 +44556,7 @@
                             , s }:
       melpaBuild {
         pname = "skeletor";
+        ename = "skeletor";
         version = "1.6.1";
         src = fetchFromGitHub {
           owner = "chrisbarrett";
@@ -42927,6 +44582,7 @@
                                , skewer-mode }:
       melpaBuild {
         pname = "skewer-less";
+        ename = "skewer-less";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -42954,6 +44610,7 @@
                                , simple-httpd }:
       melpaBuild {
         pname = "skewer-mode";
+        ename = "skewer-mode";
         version = "1.8.0";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -42979,6 +44636,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "sl";
+        ename = "sl";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -43003,6 +44661,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "slideview";
+        ename = "slideview";
         version = "0.6.1";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -43027,6 +44686,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "slim-mode";
+        ename = "slim-mode";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "slim-template";
@@ -43053,12 +44713,13 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "slime";
-        version = "2.21";
+        ename = "slime";
+        version = "2.22";
         src = fetchFromGitHub {
           owner = "slime";
           repo = "slime";
-          rev = "e6d215d77148079799d2fc3253ef402b5d9ed4d7";
-          sha256 = "1zgbl5462zpgqrrk87k0w5a4c99hr99kn33jsrs2x37jmzirsxfn";
+          rev = "8d9fdf34fe542ec280ee042ee7bdea16e512d3c0";
+          sha256 = "0zsliqfd92ivg2y2w1z6scn6i3w658x8bi1wd0rvf6mddc74lvj6";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/14c60acbfde13d5e9256cea83d4d0d33e037d4b9/recipes/slime";
@@ -43079,6 +44740,7 @@
                                  , slime }:
       melpaBuild {
         pname = "slime-company";
+        ename = "slime-company";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "anwyn";
@@ -43107,6 +44769,7 @@
                                 , slime }:
       melpaBuild {
         pname = "slime-docker";
+        ename = "slime-docker";
         version = "0.7";
         src = fetchFromGitHub {
           owner = "daewok";
@@ -43131,6 +44794,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "slime-volleyball";
+        ename = "slime-volleyball";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "fitzsim";
@@ -43157,6 +44821,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "slstats";
+        ename = "slstats";
         version = "1.10";
         src = fetchFromGitHub {
           owner = "davep";
@@ -43181,6 +44846,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "sly";
+        ename = "sly";
         version = "2.14";
         src = fetchFromGitHub {
           owner = "capitaomorte";
@@ -43207,6 +44873,7 @@
                                    , rich-minority }:
       melpaBuild {
         pname = "smart-mode-line";
+        ename = "smart-mode-line";
         version = "2.11.0";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -43234,6 +44901,7 @@
                                                    , smart-mode-line }:
       melpaBuild {
         pname = "smart-mode-line-powerline-theme";
+        ename = "smart-mode-line-powerline-theme";
         version = "2.11.0";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -43259,6 +44927,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "smart-semicolon";
+        ename = "smart-semicolon";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "iquiw";
@@ -43283,6 +44952,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "smart-tabs-mode";
+        ename = "smart-tabs-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "jcsalomon";
@@ -43309,6 +44979,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "smartparens";
+        ename = "smartparens";
         version = "1.11.0";
         src = fetchFromGitHub {
           owner = "Fuco1";
@@ -43333,6 +45004,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "smartrep";
+        ename = "smartrep";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "myuhe";
@@ -43357,6 +45029,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "smartscan";
+        ename = "smartscan";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "mickeynp";
@@ -43381,6 +45054,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "smbc";
+        ename = "smbc";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "sakshamsharma";
@@ -43406,6 +45080,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "smeargle";
+        ename = "smeargle";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -43430,6 +45105,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "smex";
+        ename = "smex";
         version = "3.0";
         src = fetchFromGitHub {
           owner = "nonsequitur";
@@ -43454,6 +45130,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "smmry";
+        ename = "smmry";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "microamp";
@@ -43478,6 +45155,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "smooth-scroll";
+        ename = "smooth-scroll";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "k-talo";
@@ -43502,6 +45180,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "smooth-scrolling";
+        ename = "smooth-scrolling";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "aspiers";
@@ -43529,6 +45208,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "snakemake-mode";
+        ename = "snakemake-mode";
         version = "1.3.0";
         src = fetchFromGitHub {
           owner = "kyleam";
@@ -43555,6 +45235,7 @@
                                                   , snapshot-timemachine }:
       melpaBuild {
         pname = "snapshot-timemachine-rsnapshot";
+        ename = "snapshot-timemachine-rsnapshot";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -43581,6 +45262,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "snazzy-theme";
+        ename = "snazzy-theme";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "weijiangan";
@@ -43607,6 +45289,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "snoopy";
+        ename = "snoopy";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "anmonteiro";
@@ -43635,6 +45318,7 @@
                          , s }:
       melpaBuild {
         pname = "socyl";
+        ename = "socyl";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -43661,6 +45345,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "solaire-mode";
+        ename = "solaire-mode";
         version = "1.0.6";
         src = fetchFromGitHub {
           owner = "hlissner";
@@ -43686,6 +45371,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "solarized-theme";
+        ename = "solarized-theme";
         version = "1.2.2";
         src = fetchFromGitHub {
           owner = "bbatsov";
@@ -43710,6 +45396,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "solidity-mode";
+        ename = "solidity-mode";
         version = "0.1.9";
         src = fetchFromGitHub {
           owner = "ethereum";
@@ -43735,6 +45422,7 @@
                        , org }:
       melpaBuild {
         pname = "sos";
+        ename = "sos";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "omouse";
@@ -43763,6 +45451,7 @@
                               , sotlisp }:
       melpaBuild {
         pname = "sotclojure";
+        ename = "sotclojure";
         version = "1.3.1";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -43788,6 +45477,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "sotlisp";
+        ename = "sotlisp";
         version = "1.6.2";
         src = fetchFromGitHub {
           owner = "Malabarba";
@@ -43814,6 +45504,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "sound-wav";
+        ename = "sound-wav";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -43842,6 +45533,7 @@
                              , request }:
       melpaBuild {
         pname = "sourcekit";
+        ename = "sourcekit";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "nathankot";
@@ -43867,6 +45559,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "sourcemap";
+        ename = "sourcemap";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -43896,6 +45589,7 @@
                              , s }:
       melpaBuild {
         pname = "spaceline";
+        ename = "spaceline";
         version = "2.0.1";
         src = fetchFromGitHub {
           owner = "TheBB";
@@ -43924,6 +45618,7 @@
                                            , spaceline }:
       melpaBuild {
         pname = "spaceline-all-the-icons";
+        ename = "spaceline-all-the-icons";
         version = "1.4.0";
         src = fetchFromGitHub {
           owner = "domtronn";
@@ -43949,6 +45644,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "sparkline";
+        ename = "sparkline";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "woudshoo";
@@ -43975,6 +45671,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "sparql-mode";
+        ename = "sparql-mode";
         version = "4.0.2";
         src = fetchFromGitHub {
           owner = "ljos";
@@ -43999,6 +45696,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "speech-tagger";
+        ename = "speech-tagger";
         version = "0.0.0";
         src = fetchFromGitHub {
           owner = "cosmicexplorer";
@@ -44024,6 +45722,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "speed-type";
+        ename = "speed-type";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "parkouss";
@@ -44050,6 +45749,7 @@
                               , s }:
       melpaBuild {
         pname = "sphinx-doc";
+        ename = "sphinx-doc";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "naiquevin";
@@ -44074,6 +45774,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "sphinx-mode";
+        ename = "sphinx-mode";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "Fuco1";
@@ -44099,6 +45800,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "splitjoin";
+        ename = "splitjoin";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -44124,6 +45826,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "spotify";
+        ename = "spotify";
         version = "0.3.3";
         src = fetchFromGitHub {
           owner = "remvee";
@@ -44149,6 +45852,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "sprintly-mode";
+        ename = "sprintly-mode";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "sprintly";
@@ -44175,6 +45879,7 @@
                            , request }:
       melpaBuild {
         pname = "sprunge";
+        ename = "sprunge";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "tomjakubowski";
@@ -44199,6 +45904,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "sql-impala";
+        ename = "sql-impala";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "jterk";
@@ -44223,6 +45929,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "sqlup-mode";
+        ename = "sqlup-mode";
         version = "0.8.0";
         src = fetchFromGitHub {
           owner = "Trevoke";
@@ -44247,6 +45954,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "sr-speedbar";
+        ename = "sr-speedbar";
         version = "20140914.2339";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -44271,6 +45979,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "srcery-theme";
+        ename = "srcery-theme";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "srcery-colors";
@@ -44296,6 +46005,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "srefactor";
+        ename = "srefactor";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "tuhdo";
@@ -44321,6 +46031,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "ssass-mode";
+        ename = "ssass-mode";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "AdamNiederer";
@@ -44347,6 +46058,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "ssh-agency";
+        ename = "ssh-agency";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "magit";
@@ -44372,12 +46084,13 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "ssh-deploy";
+        ename = "ssh-deploy";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "cjohansson";
           repo = "emacs-ssh-deploy";
-          rev = "b17f543fe56947d472659675de53757e29ad2fc0";
-          sha256 = "1c78qf589vxs45l0d6s4w9ng9nd4k60shj3bz8mxn7038kch2pb4";
+          rev = "b13ba60ea175798cfd1395ab833082789724073d";
+          sha256 = "0fgcxvs2ngv65chnkb9w5rrak187xkwxiwmpc25iqvrrnrfr43s6";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/855ea20024b606314f8590129259747cac0bcc97/recipes/ssh-deploy";
@@ -44396,6 +46109,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "stan-mode";
+        ename = "stan-mode";
         version = "9.2.0";
         src = fetchFromGitHub {
           owner = "stan-dev";
@@ -44422,6 +46136,7 @@
                                  , yasnippet }:
       melpaBuild {
         pname = "stan-snippets";
+        ename = "stan-snippets";
         version = "9.2.0";
         src = fetchFromGitHub {
           owner = "stan-dev";
@@ -44446,6 +46161,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "stash";
+        ename = "stash";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "vermiculus";
@@ -44470,6 +46186,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "status";
+        ename = "status";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "tromey";
@@ -44494,6 +46211,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "stgit";
+        ename = "stgit";
         version = "0.18";
         src = fetchFromGitHub {
           owner = "ctmarinas";
@@ -44519,6 +46237,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "string-edit";
+        ename = "string-edit";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -44543,6 +46262,7 @@
                                      , melpaBuild }:
       melpaBuild {
         pname = "string-inflection";
+        ename = "string-inflection";
         version = "1.0.7";
         src = fetchFromGitHub {
           owner = "akicho8";
@@ -44568,6 +46288,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "string-utils";
+        ename = "string-utils";
         version = "0.3.2";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -44593,6 +46314,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "stripe-buffer";
+        ename = "stripe-buffer";
         version = "0.2.5";
         src = fetchFromGitHub {
           owner = "sabof";
@@ -44617,6 +46339,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "stumpwm-mode";
+        ename = "stumpwm-mode";
         version = "0.9.8";
         src = fetchgit {
           url = "https://git.savannah.nongnu.org/git/stumpwm.git";
@@ -44641,6 +46364,7 @@
                                , sws-mode }:
       melpaBuild {
         pname = "stylus-mode";
+        ename = "stylus-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "brianc";
@@ -44665,6 +46389,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "subatomic-theme";
+        ename = "subatomic-theme";
         version = "1.8.1";
         src = fetchFromGitHub {
           owner = "cryon";
@@ -44689,6 +46414,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "subemacs";
+        ename = "subemacs";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "kbauer";
@@ -44713,6 +46439,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "sublimity";
+        ename = "sublimity";
         version = "20160629";
         src = fetchFromGitHub {
           owner = "zk-phi";
@@ -44737,6 +46464,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "sudden-death";
+        ename = "sudden-death";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "yewton";
@@ -44763,6 +46491,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "sudo-edit";
+        ename = "sudo-edit";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "nflath";
@@ -44789,22 +46518,24 @@
                            , lib
                            , loop
                            , melpaBuild
-                           , s }:
+                           , s
+                           , spinner }:
       melpaBuild {
         pname = "suggest";
-        version = "0.5";
+        ename = "suggest";
+        version = "0.7";
         src = fetchFromGitHub {
           owner = "Wilfred";
           repo = "suggest.el";
-          rev = "05beef9ecf94107d72d0070fa092a8392505b012";
-          sha256 = "008d9kk8vb90n8j5dvw1rslfny66q012022na03dzbnmq3f73k7a";
+          rev = "31ab6c956d17176affbbe9ca53c416920180ddbd";
+          sha256 = "01v8plska5d3g19sb1m4ph1i3ayprfzk8mi6mpabjy6zad397xjl";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/b9fd27e812549587dc2ec26bb58974177ff263ff/recipes/suggest";
           sha256 = "12vvakqqzmmqq5yynpd4wf4lnb0yvcnz065kni996sy7rv7rh83q";
           name = "recipe";
         };
-        packageRequires = [ dash emacs f loop s ];
+        packageRequires = [ dash emacs f loop s spinner ];
         meta = {
           homepage = "https://melpa.org/#/suggest";
           license = lib.licenses.free;
@@ -44816,6 +46547,7 @@
                                          , melpaBuild }:
       melpaBuild {
         pname = "suomalainen-kalenteri";
+        ename = "suomalainen-kalenteri";
         version = "2017.8.1";
         src = fetchFromGitHub {
           owner = "tlikonen";
@@ -44841,6 +46573,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "super-save";
+        ename = "super-save";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "bbatsov";
@@ -44866,6 +46599,7 @@
                                         , xmlgen }:
       melpaBuild {
         pname = "svg-mode-line-themes";
+        ename = "svg-mode-line-themes";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "sabof";
@@ -44893,6 +46627,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "swagger-to-org";
+        ename = "swagger-to-org";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "ahungry";
@@ -44921,6 +46656,7 @@
                               , request }:
       melpaBuild {
         pname = "sweetgreen";
+        ename = "sweetgreen";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "CestDiego";
@@ -44947,12 +46683,13 @@
                               , seq }:
       melpaBuild {
         pname = "swift-mode";
-        version = "5.0.0";
+        ename = "swift-mode";
+        version = "6.0.0";
         src = fetchFromGitHub {
           owner = "chrisbarrett";
           repo = "swift-mode";
-          rev = "7ea1d4e3b0430644b2e2b2e1025f442a10bfa523";
-          sha256 = "179wiwdxpkw7kbx2yss193l68cbmy93xdabw5sm35mv8px809j17";
+          rev = "d2f2f1da6085c6fad2709b951d6891dd139a6080";
+          sha256 = "1ldf593qzbscwlngbabxb52kcpriwhglk95l82qs8y3q1x6aj0cw";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/19cb133191cd6f9623e99e958d360113595e756a/recipes/swift-mode";
@@ -44972,6 +46709,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "swift3-mode";
+        ename = "swift3-mode";
         version = "2.1.1";
         src = fetchFromGitHub {
           owner = "taku0";
@@ -44998,6 +46736,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "swiper";
+        ename = "swiper";
         version = "0.10.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -45025,6 +46764,7 @@
                                , swiper }:
       melpaBuild {
         pname = "swiper-helm";
+        ename = "swiper-helm";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -45049,6 +46789,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "switch-buffer-functions";
+        ename = "switch-buffer-functions";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "10sr";
@@ -45074,6 +46815,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "switch-window";
+        ename = "switch-window";
         version = "1.6.1";
         src = fetchFromGitHub {
           owner = "dimitri";
@@ -45098,6 +46840,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "sws-mode";
+        ename = "sws-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "brianc";
@@ -45127,6 +46870,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "sx";
+        ename = "sx";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "vermiculus";
@@ -45151,6 +46895,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "symbolword-mode";
+        ename = "symbolword-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "ncaq";
@@ -45175,6 +46920,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "symon";
+        ename = "symon";
         version = "20160630";
         src = fetchFromGitHub {
           owner = "zk-phi";
@@ -45200,6 +46946,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "syndicate";
+        ename = "syndicate";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "KNX32542";
@@ -45225,6 +46972,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "synosaurus";
+        ename = "synosaurus";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "hpdeifel";
@@ -45249,6 +46997,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "syntactic-sugar";
+        ename = "syntactic-sugar";
         version = "0.9.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -45279,7 +47028,7 @@
           rev = "ad0db0fcb464";
           sha256 = "1wcgr6scvwwfmhhjbpq3riq0gmp4g08ffbl91fpgp72j8zrc1c6x";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/syntax-subword";
           sha256 = "1as89ffqz2h69fdwybgs5wibnrvskm7hd58vagfjkla9pjlpffpm";
           name = "syntax-subword";
@@ -45297,6 +47046,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "system-packages";
+        ename = "system-packages";
         version = "1.0.5";
         src = fetchFromGitLab {
           owner = "jabranham";
@@ -45321,6 +47071,7 @@
                                             , melpaBuild }:
       melpaBuild {
         pname = "system-specific-settings";
+        ename = "system-specific-settings";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
@@ -45346,6 +47097,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "systemd";
+        ename = "systemd";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "holomorph";
@@ -45372,6 +47124,7 @@
                       , melpaBuild }:
       melpaBuild {
         pname = "ta";
+        ename = "ta";
         version = "1.5";
         src = fetchFromGitHub {
           owner = "kuanyui";
@@ -45397,6 +47150,7 @@
                                 , tabbar }:
       melpaBuild {
         pname = "tabbar-ruler";
+        ename = "tabbar-ruler";
         version = "0.45";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -45422,6 +47176,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "tablist";
+        ename = "tablist";
         version = "0.70";
         src = fetchFromGitHub {
           owner = "politza";
@@ -45448,6 +47203,7 @@
                            , s }:
       melpaBuild {
         pname = "tagedit";
+        ename = "tagedit";
         version = "1.4.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -45474,6 +47230,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "tawny-mode";
+        ename = "tawny-mode";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "phillord";
@@ -45498,6 +47255,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "tdd-status-mode-line";
+        ename = "tdd-status-mode-line";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "algernon";
@@ -45522,6 +47280,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "telepathy";
+        ename = "telepathy";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -45550,6 +47309,7 @@
                                   , seq }:
       melpaBuild {
         pname = "telephone-line";
+        ename = "telephone-line";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "dbordak";
@@ -45575,6 +47335,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "ten-hundred-mode";
+        ename = "ten-hundred-mode";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "aaron-em";
@@ -45603,6 +47364,7 @@
                               , term-cmd }:
       melpaBuild {
         pname = "term-alert";
+        ename = "term-alert";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "CallumCameron";
@@ -45630,6 +47392,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "term-cmd";
+        ename = "term-cmd";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "CallumCameron";
@@ -45656,6 +47419,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "term-manager";
+        ename = "term-manager";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "IvanMalison";
@@ -45682,6 +47446,7 @@
                                    , term-manager }:
       melpaBuild {
         pname = "term-projectile";
+        ename = "term-projectile";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "IvanMalison";
@@ -45706,6 +47471,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "term-run";
+        ename = "term-run";
         version = "0.1.5";
         src = fetchFromGitHub {
           owner = "10sr";
@@ -45731,6 +47497,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "termbright-theme";
+        ename = "termbright-theme";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "bmastenbrook";
@@ -45757,6 +47524,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "terminal-here";
+        ename = "terminal-here";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "davidshepherd7";
@@ -45784,6 +47552,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "tern";
+        ename = "tern";
         version = "0.21.0";
         src = fetchFromGitHub {
           owner = "ternjs";
@@ -45812,6 +47581,7 @@
                                       , tern }:
       melpaBuild {
         pname = "tern-auto-complete";
+        ename = "tern-auto-complete";
         version = "0.21.0";
         src = fetchFromGitHub {
           owner = "ternjs";
@@ -45839,6 +47609,7 @@
                                          , tern }:
       melpaBuild {
         pname = "tern-context-coloring";
+        ename = "tern-context-coloring";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "jacksonrayhamilton";
@@ -45866,6 +47637,7 @@
                                , tern }:
       melpaBuild {
         pname = "tern-django";
+        ename = "tern-django";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "proofit404";
@@ -45892,6 +47664,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "terraform-mode";
+        ename = "terraform-mode";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -45917,6 +47690,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "test-case-mode";
+        ename = "test-case-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "ieure";
@@ -45941,6 +47715,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "test-kitchen";
+        ename = "test-kitchen";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "jjasghar";
@@ -45965,6 +47740,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "test-simple";
+        ename = "test-simple";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "rocky";
@@ -45989,6 +47765,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "textmate";
+        ename = "textmate";
         version = "1";
         src = fetchFromGitHub {
           owner = "defunkt";
@@ -46013,6 +47790,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "textmate-to-yas";
+        ename = "textmate-to-yas";
         version = "0.21";
         src = fetchFromGitHub {
           owner = "mattfidler";
@@ -46038,6 +47816,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "textx-mode";
+        ename = "textx-mode";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "novakboskov";
@@ -46062,6 +47841,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "theme-changer";
+        ename = "theme-changer";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "hadronzoo";
@@ -46087,6 +47867,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "theme-looper";
+        ename = "theme-looper";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "myTerminal";
@@ -46112,6 +47893,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "thinks";
+        ename = "thinks";
         version = "1.12";
         src = fetchFromGitHub {
           owner = "davep";
@@ -46136,6 +47918,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "thrift";
+        ename = "thrift";
         version = "0.11.0";
         src = fetchFromGitHub {
           owner = "apache";
@@ -46161,6 +47944,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "tickscript-mode";
+        ename = "tickscript-mode";
         version = "0.4.1";
         src = fetchFromGitHub {
           owner = "msherry";
@@ -46187,6 +47971,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "tidal";
+        ename = "tidal";
         version = "0.9.8";
         src = fetchFromGitHub {
           owner = "tidalcycles";
@@ -46216,6 +48001,7 @@
                         , typescript-mode }:
       melpaBuild {
         pname = "tide";
+        ename = "tide";
         version = "2.8.3.1";
         src = fetchFromGitHub {
           owner = "ananthakumaran";
@@ -46240,6 +48026,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "timer-revert";
+        ename = "timer-revert";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "yyr";
@@ -46267,6 +48054,7 @@
                              , s }:
       melpaBuild {
         pname = "timesheet";
+        ename = "timesheet";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "tmarble";
@@ -46297,6 +48085,7 @@
                             , s }:
       melpaBuild {
         pname = "timonier";
+        ename = "timonier";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -46321,6 +48110,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "toc-org";
+        ename = "toc-org";
         version = "1.0.1";
         src = fetchFromGitHub {
           owner = "snosov1";
@@ -46346,6 +48136,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "total-lines";
+        ename = "total-lines";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "hinrik";
@@ -46370,6 +48161,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "tox";
+        ename = "tox";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "chmouel";
@@ -46401,7 +48193,7 @@
           rev = "b322fc7497a5";
           sha256 = "1pnsky541m8kzcv81w98jkv0hgajh04hxqlmgddc1y0wbvi849j0";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/toxi-theme";
           sha256 = "032m3qbxfd0qp81qwayd5g9k7vz55g4yhw0d35qkxzf4qf58x9sd";
           name = "toxi-theme";
@@ -46424,6 +48216,7 @@
                          , virtualenvwrapper }:
       melpaBuild {
         pname = "traad";
+        ename = "traad";
         version = "3.1.1";
         src = fetchFromGitHub {
           owner = "abingham";
@@ -46455,6 +48248,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "tracking";
+        ename = "tracking";
         version = "2.10";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
@@ -46481,6 +48275,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "transmission";
+        ename = "transmission";
         version = "0.12.1";
         src = fetchFromGitHub {
           owner = "holomorph";
@@ -46509,6 +48304,7 @@
                           , s }:
       melpaBuild {
         pname = "travis";
+        ename = "travis";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "nlamirault";
@@ -46542,6 +48338,7 @@
                             , s }:
       melpaBuild {
         pname = "treemacs";
+        ename = "treemacs";
         version = "2.2";
         src = fetchFromGitHub {
           owner = "Alexander-Miller";
@@ -46568,6 +48365,7 @@
                                  , treemacs }:
       melpaBuild {
         pname = "treemacs-evil";
+        ename = "treemacs-evil";
         version = "2.2";
         src = fetchFromGitHub {
           owner = "Alexander-Miller";
@@ -46594,6 +48392,7 @@
                                        , treemacs }:
       melpaBuild {
         pname = "treemacs-projectile";
+        ename = "treemacs-projectile";
         version = "2.2";
         src = fetchFromGitHub {
           owner = "Alexander-Miller";
@@ -46619,6 +48418,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "treepy";
+        ename = "treepy";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "volrath";
@@ -46643,6 +48443,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "trr";
+        ename = "trr";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "kawabata";
@@ -46668,6 +48469,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "truthy";
+        ename = "truthy";
         version = "0.2.8";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -46693,6 +48495,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "try";
+        ename = "try";
         version = "0.0.1";
         src = fetchFromGitHub {
           owner = "larstvei";
@@ -46721,6 +48524,7 @@
                        , yaxception }:
       melpaBuild {
         pname = "tss";
+        ename = "tss";
         version = "0.6.0";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -46746,6 +48550,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "tuareg";
+        ename = "tuareg";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "ocaml";
@@ -46770,6 +48575,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "tumble";
+        ename = "tumble";
         version = "1.5";
         src = fetchFromGitHub {
           owner = "febuiles";
@@ -46794,6 +48600,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "tup-mode";
+        ename = "tup-mode";
         version = "1.3.1";
         src = fetchFromGitHub {
           owner = "ejmr";
@@ -46819,6 +48626,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "turing-machine";
+        ename = "turing-machine";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "therockmandolinist";
@@ -46843,6 +48651,7 @@
                                               , melpaBuild }:
       melpaBuild {
         pname = "twilight-anti-bright-theme";
+        ename = "twilight-anti-bright-theme";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "jimeh";
@@ -46867,6 +48676,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "twittering-mode";
+        ename = "twittering-mode";
         version = "3.0.0";
         src = fetchFromGitHub {
           owner = "hayamiz";
@@ -46893,6 +48703,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "typed-clojure-mode";
+        ename = "typed-clojure-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "typedclojure";
@@ -46917,6 +48728,7 @@
                                    , melpaBuild }:
       melpaBuild {
         pname = "typescript-mode";
+        ename = "typescript-mode";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "ananthakumaran";
@@ -46944,6 +48756,7 @@
                          , mmt }:
       melpaBuild {
         pname = "typit";
+        ename = "typit";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -46968,6 +48781,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "typo";
+        ename = "typo";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "jorgenschaefer";
@@ -46992,6 +48806,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "ubuntu-theme";
+        ename = "ubuntu-theme";
         version = "4.2";
         src = fetchFromGitHub {
           owner = "rocher";
@@ -47019,6 +48834,7 @@
                              , persistent-soft }:
       melpaBuild {
         pname = "ucs-utils";
+        ename = "ucs-utils";
         version = "0.8.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -47046,6 +48862,7 @@
                               , shut-up }:
       melpaBuild {
         pname = "undercover";
+        ename = "undercover";
         version = "0.6.1";
         src = fetchFromGitHub {
           owner = "sviridov";
@@ -47071,6 +48888,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "underline-with-char";
+        ename = "underline-with-char";
         version = "3.0.0";
         src = fetchFromGitHub {
           owner = "marcowahl";
@@ -47095,6 +48913,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "underwater-theme";
+        ename = "underwater-theme";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "jmdeldin";
@@ -47119,6 +48938,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "unfill";
+        ename = "unfill";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -47147,6 +48967,7 @@
                                  , ucs-utils }:
       melpaBuild {
         pname = "unicode-enbox";
+        ename = "unicode-enbox";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -47174,6 +48995,7 @@
                                   , names }:
       melpaBuild {
         pname = "unicode-escape";
+        ename = "unicode-escape";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "kosh04";
@@ -47203,6 +49025,7 @@
                                  , ucs-utils }:
       melpaBuild {
         pname = "unicode-fonts";
+        ename = "unicode-fonts";
         version = "0.4.8";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -47237,6 +49060,7 @@
                                              , ucs-utils }:
       melpaBuild {
         pname = "unicode-progress-reporter";
+        ename = "unicode-progress-reporter";
         version = "0.5.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -47264,6 +49088,7 @@
                                       , ucs-utils }:
       melpaBuild {
         pname = "unicode-whitespace";
+        ename = "unicode-whitespace";
         version = "0.2.4";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -47289,6 +49114,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "unify-opening";
+        ename = "unify-opening";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -47313,6 +49139,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "unkillable-scratch";
+        ename = "unkillable-scratch";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "EricCrosson";
@@ -47339,6 +49166,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "uptimes";
+        ename = "uptimes";
         version = "3.6";
         src = fetchFromGitHub {
           owner = "davep";
@@ -47365,6 +49193,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "use-package";
+        ename = "use-package";
         version = "2.3";
         src = fetchFromGitHub {
           owner = "jwiegley";
@@ -47390,6 +49219,7 @@
                                       , use-package }:
       melpaBuild {
         pname = "use-package-el-get";
+        ename = "use-package-el-get";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "edvorg";
@@ -47415,6 +49245,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "usql";
+        ename = "usql";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "nickbarnwell";
@@ -47440,6 +49271,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "utop";
+        ename = "utop";
         version = "2.2.0";
         src = fetchFromGitHub {
           owner = "diml";
@@ -47467,6 +49299,7 @@
                              , request }:
       melpaBuild {
         pname = "v2ex-mode";
+        ename = "v2ex-mode";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "aborn";
@@ -47491,6 +49324,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "vagrant";
+        ename = "vagrant";
         version = "0.6.1";
         src = fetchFromGitHub {
           owner = "ottbot";
@@ -47518,6 +49352,7 @@
                             , yaxception }:
       melpaBuild {
         pname = "vbasense";
+        ename = "vbasense";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -47544,6 +49379,7 @@
                           , popup }:
       melpaBuild {
         pname = "vc-msg";
+        ename = "vc-msg";
         version = "0.0.4";
         src = fetchFromGitHub {
           owner = "redguardtoo";
@@ -47568,6 +49404,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "vcomp";
+        ename = "vcomp";
         version = "0.3.1";
         src = fetchFromGitHub {
           owner = "tarsius";
@@ -47594,6 +49431,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "vdiff";
+        ename = "vdiff";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "justbur";
@@ -47621,12 +49459,13 @@
                                , vdiff }:
       melpaBuild {
         pname = "vdiff-magit";
-        version = "0.3.1";
+        ename = "vdiff-magit";
+        version = "0.3.2";
         src = fetchFromGitHub {
           owner = "justbur";
           repo = "emacs-vdiff-magit";
-          rev = "31019a8537241fe106ee270c0d757fdd87fde092";
-          sha256 = "0j2kpaql0j77r1yj31xbykg3jwipdy0rsps20sq50g2chljqfdpf";
+          rev = "7e841dc7225300dd4d5560faad04e5c44cd8b267";
+          sha256 = "0800lnclv0kdkk2njddhsydsbifrwgg6w09mm4js7mqci1mr3gia";
         };
         recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/2159275fabde8ec8b297f6635546b1314d519b8b/recipes/vdiff-magit";
@@ -47649,6 +49488,7 @@
                           , seq }:
       melpaBuild {
         pname = "vdirel";
+        ename = "vdirel";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "DamienCassou";
@@ -47673,6 +49513,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "vector-utils";
+        ename = "vector-utils";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -47698,6 +49539,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "vertigo";
+        ename = "vertigo";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "noctuid";
@@ -47726,6 +49568,7 @@
                               , outshine }:
       melpaBuild {
         pname = "vhdl-tools";
+        ename = "vhdl-tools";
         version = "5.9";
         src = fetchFromGitHub {
           owner = "csantosb";
@@ -47751,6 +49594,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "vim-region";
+        ename = "vim-region";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "ongaeshi";
@@ -47778,6 +49622,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "vimish-fold";
+        ename = "vimish-fold";
         version = "0.2.3";
         src = fetchFromGitHub {
           owner = "mrkkrp";
@@ -47804,6 +49649,7 @@
                                      , s }:
       melpaBuild {
         pname = "virtualenvwrapper";
+        ename = "virtualenvwrapper";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "porterjamesj";
@@ -47828,6 +49674,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "visible-mark";
+        ename = "visible-mark";
         version = "0.1";
         src = fetchFromGitLab {
           owner = "iankelling";
@@ -47853,6 +49700,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "visual-fill-column";
+        ename = "visual-fill-column";
         version = "1.11";
         src = fetchFromGitHub {
           owner = "joostkremers";
@@ -47878,6 +49726,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "visual-regexp";
+        ename = "visual-regexp";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "benma";
@@ -47903,6 +49752,7 @@
                                           , visual-regexp }:
       melpaBuild {
         pname = "visual-regexp-steroids";
+        ename = "visual-regexp-steroids";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "benma";
@@ -47927,6 +49777,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "vlf";
+        ename = "vlf";
         version = "1.7.1";
         src = fetchFromGitHub {
           owner = "m00natic";
@@ -47951,6 +49802,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "voca-builder";
+        ename = "voca-builder";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "yitang";
@@ -47975,6 +49827,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "volatile-highlights";
+        ename = "volatile-highlights";
         version = "1.11";
         src = fetchFromGitHub {
           owner = "k-talo";
@@ -47999,6 +49852,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "vue-html-mode";
+        ename = "vue-html-mode";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "AdamNiederer";
@@ -48027,6 +49881,7 @@
                             , vue-html-mode }:
       melpaBuild {
         pname = "vue-mode";
+        ename = "vue-mode";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "CodeFalling";
@@ -48051,6 +49906,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "w32-browser";
+        ename = "w32-browser";
         version = "235";
         src = fetchFromGitHub {
           owner = "emacsorphanage";
@@ -48077,6 +49933,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "wacspace";
+        ename = "wacspace";
         version = "0.4.2";
         src = fetchFromGitHub {
           owner = "shosti";
@@ -48104,6 +49961,7 @@
                            , s }:
       melpaBuild {
         pname = "wandbox";
+        ename = "wandbox";
         version = "0.6.4";
         src = fetchFromGitHub {
           owner = "kosh04";
@@ -48128,6 +49986,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "wc-goal-mode";
+        ename = "wc-goal-mode";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "bnbeckwith";
@@ -48152,6 +50011,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "wc-mode";
+        ename = "wc-mode";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "bnbeckwith";
@@ -48176,6 +50036,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "wcheck-mode";
+        ename = "wcheck-mode";
         version = "2016.1.30";
         src = fetchFromGitHub {
           owner = "tlikonen";
@@ -48202,6 +50063,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "weather-metno";
+        ename = "weather-metno";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "ruediger";
@@ -48226,6 +50088,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "web-beautify";
+        ename = "web-beautify";
         version = "0.3.2";
         src = fetchFromGitHub {
           owner = "yasuyk";
@@ -48250,6 +50113,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "web-completion-data";
+        ename = "web-completion-data";
         version = "0.2";
         src = fetchFromGitHub {
           owner = "osv";
@@ -48275,6 +50139,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "web-mode";
+        ename = "web-mode";
         version = "16";
         src = fetchFromGitHub {
           owner = "fxbois";
@@ -48301,6 +50166,7 @@
                                          , web-mode }:
       melpaBuild {
         pname = "web-mode-edit-element";
+        ename = "web-mode-edit-element";
         version = "2.1";
         src = fetchFromGitHub {
           owner = "jtkDvlp";
@@ -48326,6 +50192,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "web-search";
+        ename = "web-search";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -48353,6 +50220,7 @@
                             , request }:
       melpaBuild {
         pname = "webpaste";
+        ename = "webpaste";
         version = "2.1.0";
         src = fetchFromGitHub {
           owner = "etu";
@@ -48378,6 +50246,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "websocket";
+        ename = "websocket";
         version = "1.10";
         src = fetchFromGitHub {
           owner = "ahyatt";
@@ -48406,6 +50275,7 @@
                            , tracking }:
       melpaBuild {
         pname = "weechat";
+        ename = "weechat";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "the-kenny";
@@ -48430,6 +50300,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "weibo";
+        ename = "weibo";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "austin-----";
@@ -48454,6 +50325,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "wgrep";
+        ename = "wgrep";
         version = "2.1.10";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -48479,6 +50351,7 @@
                              , wgrep }:
       melpaBuild {
         pname = "wgrep-ack";
+        ename = "wgrep-ack";
         version = "2.1.10";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -48504,6 +50377,7 @@
                             , wgrep }:
       melpaBuild {
         pname = "wgrep-ag";
+        ename = "wgrep-ag";
         version = "2.1.10";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -48529,6 +50403,7 @@
                               , wgrep }:
       melpaBuild {
         pname = "wgrep-helm";
+        ename = "wgrep-helm";
         version = "2.1.10";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -48554,6 +50429,7 @@
                             , wgrep }:
       melpaBuild {
         pname = "wgrep-pt";
+        ename = "wgrep-pt";
         version = "2.1.10";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -48579,6 +50455,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "which-key";
+        ename = "which-key";
         version = "3.3.0";
         src = fetchFromGitHub {
           owner = "justbur";
@@ -48604,6 +50481,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "whitaker";
+        ename = "whitaker";
         version = "0.3";
         src = fetchFromGitHub {
           owner = "Fuco1";
@@ -48628,6 +50506,7 @@
                                            , melpaBuild }:
       melpaBuild {
         pname = "whitespace-cleanup-mode";
+        ename = "whitespace-cleanup-mode";
         version = "0.10";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -48653,6 +50532,7 @@
                                 , melpaBuild }:
       melpaBuild {
         pname = "whizzml-mode";
+        ename = "whizzml-mode";
         version = "0.3.0";
         src = fetchFromGitHub {
           owner = "whizzml";
@@ -48677,6 +50557,7 @@
                                         , melpaBuild }:
       melpaBuild {
         pname = "whole-line-or-region";
+        ename = "whole-line-or-region";
         version = "1.3.1";
         src = fetchFromGitHub {
           owner = "purcell";
@@ -48701,6 +50582,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "widget-mvc";
+        ename = "widget-mvc";
         version = "0.0.2";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -48727,6 +50609,7 @@
                             , nav-flash }:
       melpaBuild {
         pname = "wiki-nav";
+        ename = "wiki-nav";
         version = "1.0.2";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -48751,6 +50634,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "win-switch";
+        ename = "win-switch";
         version = "1.1.4";
         src = fetchFromGitHub {
           owner = "genovese";
@@ -48775,6 +50659,7 @@
                                       , melpaBuild }:
       melpaBuild {
         pname = "window-end-visible";
+        ename = "window-end-visible";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "rolandwalker";
@@ -48799,6 +50684,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "window-layout";
+        ename = "window-layout";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "kiwanami";
@@ -48823,6 +50709,7 @@
                                     , melpaBuild }:
       melpaBuild {
         pname = "window-numbering";
+        ename = "window-numbering";
         version = "1.1.2";
         src = fetchFromGitHub {
           owner = "nschum";
@@ -48851,6 +50738,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "window-purpose";
+        ename = "window-purpose";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "bmag";
@@ -48875,6 +50763,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "windsize";
+        ename = "windsize";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "grammati";
@@ -48899,6 +50788,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "winring";
+        ename = "winring";
         version = "5.1";
         src = fetchFromGitLab {
           owner = "warsaw";
@@ -48925,6 +50815,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "winum";
+        ename = "winum";
         version = "2.0.0";
         src = fetchFromGitHub {
           owner = "deb0ch";
@@ -48955,7 +50846,7 @@
           rev = "d04938232934";
           sha256 = "1sjadb0kh3hrdsvwywi04agrzrs21sxzh1v1km0z3x6f15nr048c";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/5b7972602399f9df9139cff177e38653bb0f43ed/recipes/wisp-mode";
           sha256 = "10zkp1qbvl8dmxij7zz4p1fixs3891xr1nr57vyb3llar9fgzglc";
           name = "wisp-mode";
@@ -48973,6 +50864,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "wispjs-mode";
+        ename = "wispjs-mode";
         version = "0.2.0";
         src = fetchFromGitHub {
           owner = "krisajenkins";
@@ -48999,6 +50891,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "with-editor";
+        ename = "with-editor";
         version = "2.7.3";
         src = fetchFromGitHub {
           owner = "magit";
@@ -49026,6 +50919,7 @@
                                         , seq }:
       melpaBuild {
         pname = "with-simulated-input";
+        ename = "with-simulated-input";
         version = "2.2";
         src = fetchFromGitHub {
           owner = "DarwinAwardWinner";
@@ -49051,6 +50945,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "wn-mode";
+        ename = "wn-mode";
         version = "1.4";
         src = fetchFromGitHub {
           owner = "luismbo";
@@ -49075,6 +50970,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "wolfram";
+        ename = "wolfram";
         version = "1.1.1";
         src = fetchFromGitHub {
           owner = "hsjunnesson";
@@ -49103,6 +50999,7 @@
                               , multi }:
       melpaBuild {
         pname = "wonderland";
+        ename = "wonderland";
         version = "0.1.1";
         src = fetchFromGitHub {
           owner = "kurisuwhyte";
@@ -49129,6 +51026,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "wordgen";
+        ename = "wordgen";
         version = "0.1.4";
         src = fetchFromGitHub {
           owner = "Fanael";
@@ -49153,6 +51051,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "wordsmith-mode";
+        ename = "wordsmith-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "istib";
@@ -49180,6 +51079,7 @@
                         , swiper }:
       melpaBuild {
         pname = "worf";
+        ename = "worf";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "abo-abo";
@@ -49205,6 +51105,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "wrap-region";
+        ename = "wrap-region";
         version = "0.7.3";
         src = fetchFromGitHub {
           owner = "rejeep";
@@ -49229,6 +51130,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "writegood-mode";
+        ename = "writegood-mode";
         version = "2.0.3";
         src = fetchFromGitHub {
           owner = "bnbeckwith";
@@ -49255,6 +51157,7 @@
                                   , visual-fill-column }:
       melpaBuild {
         pname = "writeroom-mode";
+        ename = "writeroom-mode";
         version = "3.7";
         src = fetchFromGitHub {
           owner = "joostkremers";
@@ -49279,6 +51182,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "ws-butler";
+        ename = "ws-butler";
         version = "0.6";
         src = fetchFromGitHub {
           owner = "lewang";
@@ -49303,6 +51207,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "wsd-mode";
+        ename = "wsd-mode";
         version = "0.5.0";
         src = fetchFromGitHub {
           owner = "josteink";
@@ -49329,6 +51234,7 @@
                           , xterm-color }:
       melpaBuild {
         pname = "wttrin";
+        ename = "wttrin";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "bcbcarl";
@@ -49355,6 +51261,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "x86-lookup";
+        ename = "x86-lookup";
         version = "1.2.0";
         src = fetchFromGitHub {
           owner = "skeeto";
@@ -49379,6 +51286,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "xbm-life";
+        ename = "xbm-life";
         version = "0.1.3";
         src = fetchFromGitHub {
           owner = "wasamasa";
@@ -49404,6 +51312,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "xcode-project";
+        ename = "xcode-project";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "nhojb";
@@ -49428,6 +51337,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "xcscope";
+        ename = "xcscope";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "dkogan";
@@ -49453,6 +51363,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "xkcd";
+        ename = "xkcd";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "vibhavp";
@@ -49477,6 +51388,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "xml-rpc";
+        ename = "xml-rpc";
         version = "1.6.12";
         src = fetchFromGitHub {
           owner = "hexmode";
@@ -49501,6 +51413,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "xmlgen";
+        ename = "xmlgen";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "philjackson";
@@ -49525,6 +51438,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "xquery-tool";
+        ename = "xquery-tool";
         version = "0.1.10";
         src = fetchFromGitHub {
           owner = "paddymcall";
@@ -49551,6 +51465,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "xref-js2";
+        ename = "xref-js2";
         version = "1.5";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -49576,6 +51491,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "xterm-color";
+        ename = "xterm-color";
         version = "1.7";
         src = fetchFromGitHub {
           owner = "atomontage";
@@ -49601,6 +51517,7 @@
                          , melpaBuild }:
       melpaBuild {
         pname = "xtest";
+        ename = "xtest";
         version = "1.1.0";
         src = fetchFromGitHub {
           owner = "promethial";
@@ -49625,6 +51542,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "yafolding";
+        ename = "yafolding";
         version = "0.4.0";
         src = fetchFromGitHub {
           owner = "zenozeng";
@@ -49650,6 +51568,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "yagist";
+        ename = "yagist";
         version = "0.8.12";
         src = fetchFromGitHub {
           owner = "mhayashi1120";
@@ -49675,6 +51594,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "yaml-mode";
+        ename = "yaml-mode";
         version = "0.0.13";
         src = fetchFromGitHub {
           owner = "yoshiki";
@@ -49699,6 +51619,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "yang-mode";
+        ename = "yang-mode";
         version = "0.9.8";
         src = fetchFromGitHub {
           owner = "mbj4668";
@@ -49723,6 +51644,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "yankpad";
+        ename = "yankpad";
         version = "1.6";
         src = fetchFromGitHub {
           owner = "Kungsgeten";
@@ -49747,6 +51669,7 @@
                            , melpaBuild }:
       melpaBuild {
         pname = "yapfify";
+        ename = "yapfify";
         version = "0.0.6";
         src = fetchFromGitHub {
           owner = "JorisE";
@@ -49771,6 +51694,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "yard-mode";
+        ename = "yard-mode";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "pd";
@@ -49796,6 +51720,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "yarn-mode";
+        ename = "yarn-mode";
         version = "1.0";
         src = fetchFromGitHub {
           owner = "anachronic";
@@ -49820,6 +51745,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "yascroll";
+        ename = "yascroll";
         version = "0.1";
         src = fetchFromGitHub {
           owner = "m2ym";
@@ -49845,6 +51771,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "yasnippet";
+        ename = "yasnippet";
         version = "0.13.0";
         src = fetchFromGitHub {
           owner = "joaotavora";
@@ -49870,6 +51797,7 @@
                                       , yasnippet }:
       melpaBuild {
         pname = "yasnippet-snippets";
+        ename = "yasnippet-snippets";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "AndreaCrotti";
@@ -49896,6 +51824,7 @@
                               , yasnippet }:
       melpaBuild {
         pname = "yatemplate";
+        ename = "yatemplate";
         version = "3.0";
         src = fetchFromGitHub {
           owner = "mineo";
@@ -49926,7 +51855,7 @@
           rev = "af4601ee3c6a";
           sha256 = "1r0irbkg8c5aapd1i7il31wv2fmhi0bzspiy21k670m896jqx50p";
         };
-        recipeFile = fetchurl {
+        recipe = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/9854c39fc1889891fe460d0d5ac9224de3f6c635/recipes/yatex";
           sha256 = "1qbqdsqf5s61hyyzx84csnby242n5sdcmcw55pa8r16j8kyzgrc0";
           name = "yatex";
@@ -49943,6 +51872,7 @@
                               , melpaBuild }:
       melpaBuild {
         pname = "yaxception";
+        ename = "yaxception";
         version = "0.3.3";
         src = fetchFromGitHub {
           owner = "aki2o";
@@ -49976,6 +51906,7 @@
                         , s }:
       melpaBuild {
         pname = "ycmd";
+        ename = "ycmd";
         version = "1.2";
         src = fetchFromGitHub {
           owner = "abingham";
@@ -50010,6 +51941,7 @@
                             , melpaBuild }:
       melpaBuild {
         pname = "ydk-mode";
+        ename = "ydk-mode";
         version = "1.0.0";
         src = fetchFromGitHub {
           owner = "jacksonrayhamilton";
@@ -50037,6 +51969,7 @@
                                 , s }:
       melpaBuild {
         pname = "yesql-ghosts";
+        ename = "yesql-ghosts";
         version = "0.1.0";
         src = fetchFromGitHub {
           owner = "magnars";
@@ -50061,6 +51994,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "yoshi-theme";
+        ename = "yoshi-theme";
         version = "6.1.0";
         src = fetchFromGitHub {
           owner = "ryuslash";
@@ -50089,6 +52023,7 @@
                                      , popup }:
       melpaBuild {
         pname = "youdao-dictionary";
+        ename = "youdao-dictionary";
         version = "0.4";
         src = fetchFromGitHub {
           owner = "xuchunyang";
@@ -50115,6 +52050,7 @@
                        , melpaBuild }:
       melpaBuild {
         pname = "zel";
+        ename = "zel";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "rudolfochrist";
@@ -50139,6 +52075,7 @@
                                  , melpaBuild }:
       melpaBuild {
         pname = "zenburn-theme";
+        ename = "zenburn-theme";
         version = "2.5";
         src = fetchFromGitHub {
           owner = "bbatsov";
@@ -50164,6 +52101,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "zephir-mode";
+        ename = "zephir-mode";
         version = "0.3.3";
         src = fetchFromGitHub {
           owner = "sergeyklay";
@@ -50191,6 +52129,7 @@
                                   , melpaBuild }:
       melpaBuild {
         pname = "zerodark-theme";
+        ename = "zerodark-theme";
         version = "4.5";
         src = fetchFromGitHub {
           owner = "NicolasPetton";
@@ -50218,6 +52157,7 @@
                                        , melpaBuild }:
       melpaBuild {
         pname = "zombie-trellys-mode";
+        ename = "zombie-trellys-mode";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "david-christiansen";
@@ -50243,6 +52183,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "zone-nyan";
+        ename = "zone-nyan";
         version = "0.2.2";
         src = fetchFromGitHub {
           owner = "wasamasa";
@@ -50268,6 +52209,7 @@
                         , melpaBuild }:
       melpaBuild {
         pname = "zoom";
+        ename = "zoom";
         version = "0.2.1";
         src = fetchFromGitHub {
           owner = "cyrus-and";
@@ -50293,6 +52235,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "zoom-window";
+        ename = "zoom-window";
         version = "0.5";
         src = fetchFromGitHub {
           owner = "syohex";
@@ -50318,6 +52261,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "zop-to-char";
+        ename = "zop-to-char";
         version = "1.1";
         src = fetchFromGitHub {
           owner = "thierryvolpiatto";
@@ -50342,6 +52286,7 @@
                           , melpaBuild }:
       melpaBuild {
         pname = "zotelo";
+        ename = "zotelo";
         version = "1.3";
         src = fetchFromGitHub {
           owner = "vspinu";
@@ -50367,6 +52312,7 @@
                          , request-deferred }:
       melpaBuild {
         pname = "zotxt";
+        ename = "zotxt";
         version = "0.1.34";
         src = fetchFromGitLab {
           owner = "egh";
@@ -50391,6 +52337,7 @@
                              , melpaBuild }:
       melpaBuild {
         pname = "zygospore";
+        ename = "zygospore";
         version = "0.0.3";
         src = fetchFromGitHub {
           owner = "LouisKottmann";
@@ -50418,6 +52365,7 @@
                                , melpaBuild }:
       melpaBuild {
         pname = "zzz-to-char";
+        ename = "zzz-to-char";
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "mrkkrp";

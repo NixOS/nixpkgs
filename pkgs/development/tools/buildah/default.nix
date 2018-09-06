@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
+{ stdenv, buildGoPackage, fetchFromGitHub
 , gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux, libseccomp
 , go-md2man }:
 

@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.2.30.1";
+  version = "1.2.31.3";
 
   desktopItem = makeDesktopItem {
     name = "remmina";
@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
     owner  = "Remmina";
     repo   = "Remmina";
     rev    = "v${version}";
-    sha256 = "1jz20yv84a8m9gm9fsz0jii8ag90v1scmbkkx9gk38ax5il7ilvn";
+    sha256 = "0lvang4587wz292c3k3s8n4icc25cia1phmij34ndrl1f9lg34dp";
   };
 
   nativeBuildInputs = [ pkgconfig ];

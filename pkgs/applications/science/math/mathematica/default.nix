@@ -8,7 +8,6 @@
 , freetype
 , gcc
 , glib
-, libpng
 , ncurses
 , opencv
 , openssl
@@ -70,7 +69,7 @@ stdenv.mkDerivation rec {
   ]);
 
   ldpath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
+    + stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
   phases = "unpackPhase installPhase fixupPhase";

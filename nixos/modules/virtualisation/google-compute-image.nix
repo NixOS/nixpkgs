@@ -14,7 +14,7 @@ in
       PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
       pushd $out
       mv $diskImage disk.raw
-      tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.system}.raw.tar.gz disk.raw
+      tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw.tar.gz disk.raw
       rm $out/disk.raw
       popd
     '';

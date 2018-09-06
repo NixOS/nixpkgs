@@ -1,13 +1,12 @@
 { stdenv, targetPackages
-, buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
 , bootPkgs, alex, happy, hscolour
 , autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
 
-, libffi, libiconv ? null, ncurses
+, libiconv ? null, ncurses
 
-, useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
+, useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -18,21 +17,29 @@
   enableIntegerSimple ? !(gmp.meta.available or false), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? targetPlatform != hostPlatform
+  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !targetPlatform.isWindows && !targetPlatform.useiOSPrebuilt
+  enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
 
 , # Whetherto build terminfo.
-  enableTerminfo ? !targetPlatform.isWindows
+  enableTerminfo ? !stdenv.targetPlatform.isWindows
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
-  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
+  ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
+, # Whether to backport https://phabricator.haskell.org/D4388 for
+  # deterministic profiling symbol names, at the cost of a slightly
+  # non-standard GHC API
+  deterministicProfiling ? false
 }:
 
+assert !enableIntegerSimple -> gmp != null;
+
 let
+  inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+
   inherit (bootPkgs) ghc;
 
   # TODO(@Ericson2314) Make unconditional
@@ -46,8 +53,7 @@ let
     include mk/flavours/\$(BuildFlavour).mk
     endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    INTEGER_LIBRARY = integer-simple
+    INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
@@ -93,7 +99,12 @@ stdenv.mkDerivation (rec {
     sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
     extraPrefix = "utils/hsc2hs/";
     stripLen = 1;
-  })]
+  })] ++ stdenv.lib.optional deterministicProfiling
+    (fetchpatch rec {
+      url = "http://tarballs.nixos.org/sha256/${sha256}";
+      name = "D4388.diff";
+      sha256 = "0w6sdcvnqjlnlzpvnzw20b80v150ijjyjvs9548ildc1928j0w7s";
+    })
     ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
 
   postPatch = "patchShebangs .";
@@ -149,8 +160,8 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && ! enableIntegerSimple) [
-    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
+  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
+    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
   ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [

@@ -1,5 +1,5 @@
-{ lib, fetchpatch, mkXfceDerivation, dbus_glib ? null, gtk2, libical, libnotify ? null
-, popt ? null, libxfce4ui ? null, xfce4-panel ? null, withPanelPlugin ? true }:
+{ lib, fetchpatch, mkXfceDerivation, dbus-glib, gtk2, libical, libnotify, tzdata
+, popt, libxfce4ui ? null, xfce4-panel ? null, withPanelPlugin ? true }:
 
 assert withPanelPlugin -> libxfce4ui != null && xfce4-panel != null;
 
@@ -13,8 +13,16 @@ mkXfceDerivation rec {
   version = "4.12.1";
 
   sha256 = "04z6y1vfaz1im1zq1zr7cf8pjibjhj9zkyanbp7vn30q520yxa0m";
-  buildInputs = [ dbus_glib gtk2 libical libnotify popt ]
+  buildInputs = [ dbus-glib gtk2 libical libnotify popt ]
     ++ optionals withPanelPlugin [ libxfce4ui xfce4-panel ];
+
+  postPatch = ''
+    substituteInPlace src/parameters.c        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace src/tz_zoneinfo_read.c  --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+    substituteInPlace tz_convert/tz_convert.c --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+  '';
+
+  postConfigure = "rm -rf libical"; # ensure pkgs.libical is used instead of one included in the orage sources
 
   patches = [
     # Fix build with libical 3.0

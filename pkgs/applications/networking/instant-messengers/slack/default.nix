@@ -1,7 +1,7 @@
 { stdenv, fetchurl, dpkg, makeWrapper
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome3, gtk3, gdk_pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, wget, xorg }:
+, gnome2, gtk3, gdk_pixbuf, libnotify, libxcb, nspr, nss, pango
+, systemd, xorg }:
 
 let
 
@@ -18,7 +18,7 @@ let
     fontconfig
     freetype
     glib
-    gnome3.gconf
+    gnome2.GConf
     gdk_pixbuf
     gtk3
     pango
@@ -44,13 +44,13 @@ let
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
         sha256 = "095dpkwvvnwlxsglyg6wi9126wpalzi736b6g6j3bd6d93z9afah";
       }
     else
-      throw "Slack is not supported on ${stdenv.system}";
+      throw "Slack is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
   name = "slack-${version}";

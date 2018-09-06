@@ -84,7 +84,7 @@ let
     in flatten (mapAttrsToList mkSublist attrs);
   in all isNull (findPkiDefinitions [] manualPkiOptions);
 
-  orgOptions = { name, ... }: {
+  orgOptions = { ... }: {
     options.users = mkOption {
       type = types.uniq (types.listOf types.str);
       default = [];

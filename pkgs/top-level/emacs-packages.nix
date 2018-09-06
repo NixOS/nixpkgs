@@ -39,7 +39,7 @@
 , melpaBuild
 
 , external
-}@args:
+}:
 
 with lib.licenses;
 
@@ -50,16 +50,14 @@ let
   };
 
   melpaStablePackages = import ../applications/editors/emacs-modes/melpa-stable-packages.nix {
-    inherit external lib;
+    inherit external;
   };
 
   melpaPackages = import ../applications/editors/emacs-modes/melpa-packages.nix {
     inherit external lib;
   };
 
-  orgPackages = import ../applications/editors/emacs-modes/org-packages.nix {
-    inherit fetchurl lib stdenv texinfo;
-  };
+  orgPackages = import ../applications/editors/emacs-modes/org-packages.nix { };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
     inherit lib lndir makeWrapper stdenv runCommand;
@@ -299,23 +297,6 @@ let
   header2 = callPackage ../applications/editors/emacs-modes/header2 { };
 
   helm-words = callPackage ../applications/editors/emacs-modes/helm-words { };
-
-  hindent = melpaBuild rec {
-    pname = "hindent";
-    version = external.hindent.version;
-    src = external.hindent.src;
-    packageRequires = [ haskell-mode ];
-    propagatedUserEnvPkgs = [ external.hindent ];
-    recipe = writeText "recipe" ''
-      (hindent
-       :repo "commercialhaskell/hindent" :fetcher github
-       :files ("elisp/*.el"))
-    '';
-    meta = {
-      description = "Indent haskell code using the \"hindent\" program";
-      license = bsd3;
-    };
-  };
 
   icicles = callPackage ../applications/editors/emacs-modes/icicles { };
 

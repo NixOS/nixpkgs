@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libcaca, figlet }:
+{ stdenv, fetchurl, pkgconfig, libcaca }:
 
 stdenv.mkDerivation rec {
   name = "toilet-${version}";

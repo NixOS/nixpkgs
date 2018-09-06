@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, perl, pkgconfig, systemd, openssl
+{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap, libsodium, libstemmer
 # Auth modules
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://dovecot.org/;
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with stdenv.lib.maintainers; [ viric peti rickynils fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

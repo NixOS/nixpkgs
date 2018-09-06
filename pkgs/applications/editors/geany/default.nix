@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file, libintl }:
+{ stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file, libintl, hicolor-icon-theme }:
 
 with stdenv.lib;
 
@@ -15,17 +15,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];
-  buildInputs = [ gtk2 which file ];
+  buildInputs = [ gtk2 which file hicolor-icon-theme ];
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
   patchPhase = "patchShebangs .";
-
-  # This file should normally require a gtk-update-icon-cache -q /usr/share/icons/hicolor command
-  # It have no reasons to exist in a redistribuable package
-  postInstall = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   meta = {
     description = "Small and lightweight IDE";
@@ -49,7 +45,7 @@ stdenv.mkDerivation rec {
       - Plugin interface
     '';
     homepage = https://www.geany.org/;
-    license = "GPL";
+    license = licenses.gpl2;
     maintainers = [];
     platforms = platforms.all;
   };

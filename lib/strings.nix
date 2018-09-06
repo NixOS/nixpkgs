@@ -121,10 +121,19 @@ rec {
 
      Example:
        pkgs = import <nixpkgs> { }
-       makePerlPath [ pkgs.perlPackages.NetSMTP ]
+       makePerlPath [ pkgs.perlPackages.libnet ]
        => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
   */
   makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
+
+  /* Construct a perl search path recursively including all dependencies (such as $PERL5LIB)
+
+     Example:
+       pkgs = import <nixpkgs> { }
+       makeFullPerlPath [ pkgs.perlPackages.CGI ]
+       => "/nix/store/fddivfrdc1xql02h9q500fpnqy12c74n-perl-CGI-4.38/lib/perl5/site_perl:/nix/store/8hsvdalmsxqkjg0c5ifigpf31vc4vsy2-perl-HTML-Parser-3.72/lib/perl5/site_perl:/nix/store/zhc7wh0xl8hz3y3f71nhlw1559iyvzld-perl-HTML-Tagset-3.20/lib/perl5/site_perl"
+  */
+  makeFullPerlPath = deps: makePerlPath (lib.misc.closePropagation deps);
 
   /* Depending on the boolean `cond', return either the given string
      or the empty string. Useful to concatenate against a bigger string.
@@ -492,7 +501,7 @@ rec {
   isStorePath = x:
        isCoercibleToString x
     && builtins.substring 0 1 (toString x) == "/"
-    && dirOf (builtins.toPath x) == builtins.storeDir;
+    && dirOf x == builtins.storeDir;
 
   /* Convert string to int
      Obviously, it is a bit hacky to use fromJSON that way.
@@ -528,11 +537,10 @@ rec {
   */
   readPathsFromFile = rootPath: file:
     let
-      root = toString rootPath;
       lines = lib.splitString "\n" (builtins.readFile file);
       removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
       relativePaths = removeComments lines;
-      absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
+      absolutePaths = builtins.map (path: rootPath + "/${path}") relativePaths;
     in
       absolutePaths;
 

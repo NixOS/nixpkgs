@@ -1,7 +1,7 @@
 { stdenv, meson, ninja, gettext, fetchurl, pkgconfig, gtk, glib, icu
 , wrapGAppsHook, gnome3, libxml2, libxslt, itstool
 , webkitgtk, libsoup, glib-networking, libsecret, gnome-desktop, libnotify, p11-kit
-, sqlite, gcr, isocodes, desktop-file-utils
+, sqlite, gcr, isocodes, desktop-file-utils, python3
 , gdk_pixbuf, gst_all_1, json-glib }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [ "-Dunit_tests=false" ];
 
   nativeBuildInputs = [
-    meson ninja libxslt pkgconfig itstool gettext wrapGAppsHook desktop-file-utils
+    meson ninja libxslt pkgconfig itstool gettext wrapGAppsHook desktop-file-utils python3
   ];
 
   buildInputs = [

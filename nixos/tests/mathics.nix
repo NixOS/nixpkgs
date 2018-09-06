@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   nodes = {
-    machine = { config, pkgs, ... }: {
+    machine = { ... }: {
       services.mathics.enable = true;
       services.mathics.port = 8888;
     };

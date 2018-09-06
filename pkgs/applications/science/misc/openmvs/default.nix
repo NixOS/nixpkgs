@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake
+{ stdenv, fetchFromGitHub, pkgconfig, cmake
 , eigen, opencv, ceres-solver, cgal, boost, vcg
 , gmp, mpfr, glog, google-gflags, libjpeg_turbo }:
 

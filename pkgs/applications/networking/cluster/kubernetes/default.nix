@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync
-, iptables, coreutils
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync
 , components ? [
     "cmd/kubeadm"
     "cmd/kubectl"

@@ -4,12 +4,13 @@
   rustPlatform,
   cmake,
   makeWrapper,
+  ncurses,
   expat,
   pkgconfig,
   freetype,
   fontconfig,
   libX11,
-  gperf,
+  gzip,
   libXcursor,
   libXxf86vm,
   libXi,
@@ -50,27 +51,31 @@ let
   ];
 in buildRustPackage rec {
   name = "alacritty-unstable-${version}";
-  version = "2018-05-09";
+  version = "2018-08-30";
 
   # At the moment we cannot handle git dependencies in buildRustPackage.
   # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
   src = fetchgit {
     url = https://github.com/Mic92/alacritty.git;
     rev = "rev-${version}";
-    sha256 = "0mgi4niy40zz80k2ammbzdw9d8flvfkwlxkjnbpwrrldd0sj8dlz";
+    sha256 = "0izvg7dwwb763jc6gnmn47i5zrkxvmh3vssn6vzrrmqhd4j3msmf";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0d6bqfnwqfxqllrf00p1djlxdvnhrahgnyqv842qjn94j3wf0fym";
+  cargoSha256 = "1ijgkwv9ij4haig1h6n2b9xbhp5vahy9vp1sx72wxaaj9476msjx";
 
   nativeBuildInputs = [
     cmake
     makeWrapper
     pkgconfig
+    ncurses
+    gzip
   ];
 
   buildInputs = rpathLibs
              ++ lib.optionals stdenv.isDarwin darwinFrameworks;
+
+ outputs = [ "out" "terminfo" ];
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \
@@ -88,13 +93,21 @@ in buildRustPackage rec {
     mkdir $out/Applications
     cp -r target/release/osx/Alacritty.app $out/Applications/Alacritty.app
   '' else ''
-    install -D Alacritty.desktop $out/share/applications/alacritty.desktop
+    install -D alacritty.desktop $out/share/applications/alacritty.desktop
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
   '') + ''
 
     install -D alacritty-completions.zsh "$out/share/zsh/site-functions/_alacritty"
     install -D alacritty-completions.bash "$out/etc/bash_completion.d/alacritty-completions.bash"
     install -D alacritty-completions.fish "$out/share/fish/vendor_completions.d/alacritty.fish"
+
+    install -dm 755 "$out/share/man/man1"
+    gzip -c alacritty.man > "$out/share/man/man1/alacritty.1.gz"
+
+    install -dm 755 "$terminfo/share/terminfo/a/"
+    tic -x -o "$terminfo/share/terminfo" alacritty.info
+    mkdir -p $out/nix-support
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
     runHook postInstall
   '';

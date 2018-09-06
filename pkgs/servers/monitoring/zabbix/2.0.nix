@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, gettext
+{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib
 , enableJabber ? false, minmay ? null }:
 
 assert enableJabber -> minmay != null;
@@ -77,7 +77,7 @@ in
 
     inherit src preConfigure;
 
-    configureFlags = "--enable-agent";
+    configureFlags = [ "--enable-agent" ];
 
     meta = with stdenv.lib; {
       inherit branch;

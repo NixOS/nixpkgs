@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2
-, buildPlatform, hostPlatform
+{ stdenv, fetchurl, libxml2, findXMLCatalogs, python2
 , cryptoSupport ? false
-, pythonSupport ? buildPlatform == hostPlatform
+, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
 
 assert pythonSupport -> python2 != null;
@@ -22,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
 
   # fixes: can't build x86_64-unknown-cygwin shared library unless -no-undefined is specified
-  postPatch = optionalString hostPlatform.isCygwin ''
+  postPatch = optionalString stdenv.hostPlatform.isCygwin ''
     substituteInPlace tests/plugins/Makefile.in \
       --replace 'la_LDFLAGS =' 'la_LDFLAGS = $(WIN32_EXTRA_LDFLAGS)'
   '';
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = http://xmlsoft.org/XSLT/;
     description = "A C library and tools to do XSL transformations";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.all;
     maintainers = [ maintainers.eelco ];
   };
 }

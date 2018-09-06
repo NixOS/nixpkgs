@@ -11,7 +11,7 @@ To update the list of packages from ELPA,
 
 */
 
-{ fetchurl, lib, stdenv, texinfo }:
+{ }:
 
 self:
 

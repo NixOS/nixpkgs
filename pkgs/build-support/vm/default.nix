@@ -1,6 +1,6 @@
 { pkgs
 , kernel ? pkgs.linux
-, img ? pkgs.stdenv.platform.kernelTarget
+, img ? pkgs.stdenv.hostPlatform.platform.kernelTarget
 , storeDir ? builtins.storeDir
 , rootModules ?
     [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]

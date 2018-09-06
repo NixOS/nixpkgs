@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchzip, vscode-utils, jq, mono46, clang-tools, writeScript
+{ stdenv, fetchzip, vscode-utils, jq, mono46, clang-tools, writeScript
 , gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 

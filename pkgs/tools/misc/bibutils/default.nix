@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "bibutils-${version}";

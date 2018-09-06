@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libuuid, gnutls, readline }:
+{ stdenv, fetchurl, cmake, readline }:
 
 stdenv.mkDerivation rec {
   name = "tasksh-${version}";

@@ -24,9 +24,6 @@
   #   most likely fails as GRUB will probably refuse to install.
   partitionTableType ? "legacy"
 
-  # Whether to invoke switch-to-configuration boot during image creation
-, installBootLoader ? true
-
 , # The root file system type.
   fsType ? "ext4"
 

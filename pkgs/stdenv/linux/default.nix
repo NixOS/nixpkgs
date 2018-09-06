@@ -16,11 +16,13 @@
       "armv7l-linux" = import ./bootstrap-files/armv7l.nix;
       "aarch64-linux" = import ./bootstrap-files/aarch64.nix;
       "mipsel-linux" = import ./bootstrap-files/loongson2f.nix;
+      "powerpc64le-linux" = import ./bootstrap-files/ppc64le.nix;
     };
     "musl" = {
       "aarch64-linux" = import ./bootstrap-files/aarch64-musl.nix;
       "armv6l-linux"  = import ./bootstrap-files/armv6l-musl.nix;
       "x86_64-linux"  = import ./bootstrap-files/x86_64-musl.nix;
+      "powerpc64le-linux" = import ./bootstrap-files/ppc64le-musl.nix;
     };
   };
   archLookupTable = table.${localSystem.libc}
@@ -263,7 +265,7 @@ in
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (prevStage) gettext gnum4 bison gmp perl zlib linuxHeaders;
+      inherit (prevStage) gettext gnum4 bison gmp perl texinfo zlib linuxHeaders;
       ${localSystem.libc} = getLibc prevStage;
       binutils = super.binutils.override {
         # Don't use stdenv's shell but our own
@@ -341,10 +343,9 @@ in
       # Mainly avoid reference to bootstrap tools
       allowedRequisites = with prevStage; with lib;
         # Simple executable tools
-        concatMap (p: [ (getBin p) (getLib p) ])
-          [ gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
+        concatMap (p: [ (getBin p) (getLib p) ]) [
+            gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
             gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
-            texinfo
           ]
         # Library dependencies
         ++ map getLib (
@@ -363,9 +364,9 @@ in
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf
-          attr acl paxctl zlib pcre texinfo;
+          attr acl paxctl zlib pcre;
         ${localSystem.libc} = getLibc prevStage;
-      } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+      } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
         inherit (prevStage) binutils binutils-unwrapped;
         gcc = cc;

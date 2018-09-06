@@ -19,5 +19,6 @@ buildPythonPackage rec {
     description = "Bitbucket command line interface";
     homepage = https://bitbucket.org/zhemao/bitbucket-cli;
     maintainers = with maintainers; [ refnil ];
+    license = licenses.bsd2;
   };
 }

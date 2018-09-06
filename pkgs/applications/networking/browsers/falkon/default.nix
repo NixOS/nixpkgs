@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, qmake
-, libpthreadstubs, libxcb, libXdmcp, qtsvg, qttools, qtwebengine, qtx11extras, kwallet, openssl }:
+{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, qmake
+, libpthreadstubs, libxcb, libXdmcp, qtsvg, qttools, qtwebengine, qtx11extras, kwallet }:
 
 stdenv.mkDerivation rec {
   name = "falkon-${version}";

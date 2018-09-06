@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  version = "0.99.4";
+  version = "0.99.8";
   name = "fastjson-${version}";
   src = fetchFromGitHub {
     repo = "libfastjson";
     owner = "rsyslog";
-    rev = "6e057a094cb225c9d80d8d6e6b1f36ca88a942dd";
-    sha256 = "1pn207p9zns0aqm6z5l5fdgb94wyyhaw83lyvyfdxmai74nbqs65";
+    rev = "v${version}";
+    sha256 = "0qhs0g9slj3p0v2z4s3cnsx44msrlb4k78ljg7714qiziqbrbwyl";
   };
 
   buildInputs = [ autoconf automake libtool ];

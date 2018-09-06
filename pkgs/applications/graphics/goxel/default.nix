@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, scons, pkgconfig, wrapGAppsHook
+{ stdenv, fetchFromGitHub, scons, pkgconfig, wrapGAppsHook
 , glfw3, gtk3, libpng12 }:
 
 stdenv.mkDerivation rec {

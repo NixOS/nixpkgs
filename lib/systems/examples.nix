@@ -8,6 +8,14 @@ rec {
   #
   # Linux
   #
+  powernv = {
+    config = "powerpc64le-unknown-linux-gnu";
+    platform = platforms.powernv;
+  };
+  musl-power = {
+    config = "powerpc64le-unknown-linux-musl";
+    platform = platforms.powernv;
+  };
 
   sheevaplug = rec {
     config = "armv5tel-unknown-linux-gnueabi";

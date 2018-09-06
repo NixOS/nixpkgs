@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgs, lib, glibc, augeas, dnsutils, c-ares, curl,
-  cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, libnfsidmap, doxygen,
+{ stdenv, fetchurl, pkgs, glibc, augeas, dnsutils, c-ares, curl,
+  cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
   python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
   pcre, kerberos, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
-  libuuid, docbook_xsl, ldap, systemd, nspr, check, cmocka, uid_wrapper,
-  nss_wrapper, docbook_xml_dtd_44, ncurses, Po4a, http-parser, jansson
+  libuuid, ldap, systemd, nspr, check, cmocka, uid_wrapper,
+  nss_wrapper, ncurses, Po4a, http-parser, jansson
   , withSudo ? false }:
 
 let
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
-                  samba libnfsidmap doxygen python python3 popt
+                  samba nfs-utils doxygen python python3 popt
                   talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid ldap systemd nspr check cmocka uid_wrapper

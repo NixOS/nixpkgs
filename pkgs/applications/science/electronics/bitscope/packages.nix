@@ -1,8 +1,5 @@
-{ buildFHSUserEnv
-, callPackage
+{ callPackage
 , fetchurl
-, makeWrapper
-, stdenv
 }:
 
 let

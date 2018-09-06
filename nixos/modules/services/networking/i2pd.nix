@@ -405,7 +405,7 @@ in
       outTunnels = mkOption {
         default = {};
         type = with types; loaOf (submodule (
-          { name, config, ... }: {
+          { name, ... }: {
             options = {
               destinationPort = mkOption {
                 type = types.int;
@@ -426,7 +426,7 @@ in
       inTunnels = mkOption {
         default = {};
         type = with types; loaOf (submodule (
-          { name, config, ... }: {
+          { name, ... }: {
             options = {
               inPort = mkOption {
                 type = types.int;

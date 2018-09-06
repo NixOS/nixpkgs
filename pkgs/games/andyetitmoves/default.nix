@@ -7,9 +7,9 @@ in
 stdenv.mkDerivation rec {
   name = "${plainName}-${version}";
 
-  src = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
+  src = if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux"
     then
-      let postfix        = if stdenv.system == "i686-linux" then "i386" else "x86_64";
+      let postfix        = if stdenv.hostPlatform.system == "i686-linux" then "i386" else "x86_64";
           commercialName = "${plainName}-${version}_${postfix}.tar.gz";
           demoUrl        = "http://www.andyetitmoves.net/demo/${plainName}Demo-${version}_${postfix}.tar.gz";
       in
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
                  directory where yousaved it.
                '';
                name = commercialName;
-               sha256 = if stdenv.system == "i686-linux"
+               sha256 = if stdenv.hostPlatform.system == "i686-linux"
                           then "15wvzmmidvykwjrbnq70h5jrvnjx1hcrm0357qj85q4aqbzavh01"
                           else "1v8z16qa9ka8sf7qq45knsxj87s6sipvv3a7xq11pb5xk08fb2ql";
              }
         else fetchurl {
                url = demoUrl;
-               sha256 = if stdenv.system == "i686-linux"
+               sha256 = if stdenv.hostPlatform.system == "i686-linux"
                           then "0f14vrrbq05hsbdajrb5y9za65fpng1lc8f0adb4aaz27x7sh525"
                           else "0mg41ya0b27blq3b5498kwl4rj46dj21rcd7qd0rw1kyvr7sx4v4";
              }

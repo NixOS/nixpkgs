@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, fetchFromGitHub, pkgconfig, mono, makeWrapper
+{ stdenv, fetchFromGitHub, pkgconfig, mono, makeWrapper
 , targetVersion ? "4.5" }:
 
 let

@@ -46,7 +46,7 @@ let
       };
     };
   };
-  actual = binDists.${stdenv.system}.${releaseType}.${branch} or (throw "Factorio: unsupported platform");
+  actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio: unsupported platform");
 
   bdistForArch = arch: { sha256 ? null
                        , version ? "0.16.51"

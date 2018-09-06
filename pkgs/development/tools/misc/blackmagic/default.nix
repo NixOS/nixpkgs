@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, bash, libftdi
+, gcc-arm-embedded, libftdi
 , python, pythonPackages
 }:
 

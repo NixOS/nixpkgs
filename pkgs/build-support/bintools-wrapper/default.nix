@@ -43,10 +43,8 @@ let
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
-  dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
-
   # See description in cc-wrapper.
-  infixSalt = dashlessTarget;
+  infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
@@ -173,7 +171,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isWindows then "pe"
       else "elf" + toString targetPlatform.parsed.cpu.bits;
     endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
-    sep = optionalString (!targetPlatform.isMips) "-";
+    sep = optionalString (!targetPlatform.isMips && !targetPlatform.isPower) "-";
     arch =
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isAarch32     then endianPrefix + "arm"
@@ -185,6 +183,8 @@ stdenv.mkDerivation {
           "mips64"   = "btsmip";
           "mips64el" = "ltsmip";
         }.${targetPlatform.parsed.cpu.name}
+      else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
+      else if targetPlatform.isSparc then "sparc"
       else throw "unknown emulation for platform: " + targetPlatform.config;
     in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
@@ -268,8 +268,8 @@ stdenv.mkDerivation {
       ##
 
       mkdir -p $man/nix-support $info/nix-support
-      printWords ${bintools.man or ""} >> $man/nix-support/propagated-build-inputs
-      printWords ${bintools.info or ""} >> $info/nix-support/propagated-build-inputs
+      echo ${bintools.man or ""} >> $man/nix-support/propagated-user-env-packages
+      echo ${bintools.info or ""} >> $info/nix-support/propagated-user-env-packages
     ''
 
     + ''

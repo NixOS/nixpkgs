@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   buildCommand = ''
     install -Dm555 $src $out/bin/coursier
+    patchShebangs $out/bin/coursier
     wrapProgram $out/bin/coursier --prefix PATH ":" ${jre}/bin
   '';
 

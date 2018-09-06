@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, copyPathsToStore, fetchpatch,
+  mkDerivation, lib, copyPathsToStore,
   extra-cmake-modules, kdoctools,
 
   epoxy,libICE, libSM, libinput, libxkbcommon, udev, wayland, xcb-util-cursor,
@@ -11,7 +11,7 @@
   kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
   kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
   kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, qtsensors, libcap
+  plasma-framework, qtsensors, libcap, libdrm
 }:
 
 mkDerivation {
@@ -27,7 +27,7 @@ mkDerivation {
     kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
-    libcap
+    libcap libdrm
   ];
   outputs = [ "bin" "dev" "out" ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);

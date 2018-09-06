@@ -1,7 +1,7 @@
-{ stdenv, meson, ninja, gettext, fetchurl, atk
+{ stdenv, meson, ninja, gettext, fetchurl
 , pkgconfig, gtk3, glib, libsoup
-, bash, itstool, libxml2, python3Packages
-, gnome3, librsvg, gdk_pixbuf, file, libnotify, gobjectIntrospection, wrapGAppsHook }:
+, itstool, libxml2, python3Packages
+, gnome3, gdk_pixbuf, libnotify, gobjectIntrospection, wrapGAppsHook }:
 
 let
   pname = "gnome-tweaks";
@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxml2 wrapGAppsHook
+    meson ninja pkgconfig gettext itstool libxml2 wrapGAppsHook python3Packages.python
   ];
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas

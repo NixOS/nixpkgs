@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, libxml2
+{ stdenv, buildPythonPackage, fetchFromGitHub, libxml2
 , m2crypto, ply, pyyaml, six
 , httpretty, lxml, mock, pytest, requests
 }:

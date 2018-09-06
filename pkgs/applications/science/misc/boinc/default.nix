@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = "--disable-server";
+  configureFlags = [ "--disable-server" ];
 
   meta = {
     description = "Free software for distributed and grid computing";

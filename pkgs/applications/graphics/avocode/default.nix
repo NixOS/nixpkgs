@@ -1,15 +1,15 @@
-{ stdenv, lib, makeDesktopItem, fetchurl, unzip
+{ stdenv, makeDesktopItem, fetchurl, unzip
 , gdk_pixbuf, glib, gtk2, atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome2
 , xorg, mozjpeg
 }:
 
 stdenv.mkDerivation rec {
   name = "avocode-${version}";
-  version = "3.1.1";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "1qvyc08i3b4rr43ssz78xndm4bx8lz2vigh6w9gd7w367xjf4f5b";
+    sha256 = "1dk4vgam9r5nl8dvpfwrn52gq6r4zxs4zz63p3c4gk73d8qnh4dl";
   };
 
   libPath = stdenv.lib.makeLibraryPath (with xorg; with gnome2; [

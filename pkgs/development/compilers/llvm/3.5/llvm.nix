@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.ncsa;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "armv7l-linux"];
   };
 }
