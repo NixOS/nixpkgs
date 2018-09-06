@@ -256,7 +256,7 @@ let
     (assertValueOneOf "ARP" boolValues)
     (assertValueOneOf "Multicast" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
-    (assertValueOneOf "RquiredForOnline" boolValues)
+    (assertValueOneOf "RequiredForOnline" boolValues)
   ];
 
 
