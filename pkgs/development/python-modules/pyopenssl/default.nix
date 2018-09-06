@@ -11,21 +11,13 @@
 , glibcLocales
 }:
 
+with stdenv.lib;
+
 
 let
-
-  # Some tests fail; we need to disable them.
-
-  # https://github.com/pyca/pyopenssl/issues/692
-  # These tests, we disable always.
-  base_exclusion_list = [
-    "test_set_default_verify_paths"
-    "test_fallback_default_verify_paths"
-  ];
-
   # https://github.com/pyca/pyopenssl/issues/791
   # These tests, we disable in the case that libressl is passed in as openssl.
-  libressl_exclusion_list = [
+  failingLibresslTests = [
     "test_op_no_compression"
     "test_npn_advertise_error"
     "test_npn_select_error"
@@ -40,14 +32,16 @@ let
     "test_set_notBefore"
   ];
 
-  # Determine the final list of tests to disable.
-  exclusion_list = base_exclusion_list ++ (if (stdenv.lib.hasPrefix "libressl" openssl.meta.name) then libressl_exclusion_list else []);
-
-  # Build up the string of "not testA and not testB and not ..."
-  exclusion_string = "not " + (builtins.concatStringsSep " and not " exclusion_list);
+  disabledTests = [
+    # https://github.com/pyca/pyopenssl/issues/692
+    # These tests, we disable always.
+    "test_set_default_verify_paths"
+    "test_fallback_default_verify_paths"
+  ] ++ (optionals (hasPrefix "libressl" openssl.meta.name) failingLibresslTests);
 
   # Compose the final string expression, including the "-k" and the single quotes.
-  test_expression = if (builtins.stringLength exclusion_string == 0) then "" else ("-k '" + exclusion_string + "'");
+  testExpression = optionalString (disabledTests != [])
+    "-k 'not ${concatStringsSep " and not " disabledTests}'";
 
 in
 
@@ -66,7 +60,7 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
     export LANG="en_US.UTF-8"
-    py.test tests ${test_expression}
+    py.test tests ${testExpression}
     runHook postCheck
   '';
 
