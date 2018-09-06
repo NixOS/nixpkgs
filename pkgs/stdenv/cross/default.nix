@@ -23,8 +23,9 @@ in lib.init bootStages ++ [
     inherit config overlays;
     selfBuild = false;
     stdenv =
-      assert vanillaPackages.hostPlatform == localSystem;
-      assert vanillaPackages.targetPlatform == localSystem;
+      assert vanillaPackages.stdenv.buildPlatform == localSystem;
+      assert vanillaPackages.stdenv.hostPlatform == localSystem;
+      assert vanillaPackages.stdenv.targetPlatform == localSystem;
       vanillaPackages.stdenv.override { targetPlatform = crossSystem; };
     # It's OK to change the built-time dependencies
     allowCustomOverrides = true;

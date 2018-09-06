@@ -1,6 +1,8 @@
-{ lib, callPackage, newScope, pkgs, config, system }:
+{ lib, callPackage, newScope, pkgs, config }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) system;
+
   mkOcamlPackages = ocaml: overrides:
     let
       packageSet = self:
@@ -49,8 +51,6 @@ let
       else null;
 
     atd = callPackage ../development/ocaml-modules/atd { };
-
-    atdgen = callPackage ../development/ocaml-modules/atdgen { };
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
@@ -298,7 +298,7 @@ let
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 
     javalib = callPackage ../development/ocaml-modules/javalib {
-      extlib = ocaml_extlib_maximal;
+      extlib = ocaml_extlib;
     };
 
     dypgen = callPackage ../development/ocaml-modules/dypgen { };
@@ -612,9 +612,6 @@ let
       else null;
 
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
-    ocaml_extlib_maximal = callPackage ../development/ocaml-modules/extlib {
-      minimal = false;
-    };
 
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
@@ -1077,10 +1074,5 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_07;
 
-  ocamlPackages =
-    # OCaml 4.05 is broken on aarch64
-    if system == "aarch64-linux" then
-      ocamlPackages_4_06
-    else
-      ocamlPackages_4_05;
+  ocamlPackages = ocamlPackages_4_06;
 }

@@ -102,8 +102,12 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
         MaxLevelConsole=debug
       '';
 
-    # Don't clobber the console with duplicate systemd messages.
-    systemd.extraConfig = "ShowStatus=no";
+    systemd.extraConfig = ''
+      # Don't clobber the console with duplicate systemd messages.
+      ShowStatus=no
+      # Allow very slow start
+      DefaultTimeoutStartSec=300
+    '';
 
     boot.consoleLogLevel = 7;
 

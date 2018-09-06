@@ -15,11 +15,11 @@
 buildPythonPackage rec {
 
   pname = "youtube-dl";
-  version = "2018.07.10";
+  version = "2018.08.28";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1rigah941k2drzx5qz937lk68gw9jrizj5lgd9f9znp0bgi2d0xd";
+    sha256 = "1swdp4czvm0752psbi8a4qw5i9x18s7nhivh7iw92274pmqxq9wi";
   };
 
   nativeBuildInputs = [ makeWrapper ];

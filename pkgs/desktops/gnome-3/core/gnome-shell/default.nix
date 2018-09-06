@@ -2,7 +2,7 @@
 , python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at-spi2-core
 , libstartup_notification, telepathy-glib, telepathy-logger, libXtst, unzip, glibcLocales, shared-mime-info
 , libgweather, libcanberra-gtk3, librsvg, geoclue2, perl, docbook_xml_dtd_42, desktop-file-utils
-, libpulseaudio, libical, gobjectIntrospection, gstreamer, wrapGAppsHook
+, libpulseaudio, libical, gobjectIntrospection, gstreamer, wrapGAppsHook, libxslt
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet
 , sassc, systemd, gst_all_1 }:
 
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales
-    sassc desktop-file-utils
+    sassc desktop-file-utils libxslt.bin
   ];
   buildInputs = with gnome3; [
     systemd caribou

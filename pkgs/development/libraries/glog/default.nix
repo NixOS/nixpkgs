@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, perl }:
 
 stdenv.mkDerivation rec {
   name = "glog-${version}";
@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  checkInputs = [ perl ];
+  doCheck = false; # fails with "Mangled symbols (28 out of 380) found in demangle.dm"
 
   meta = with stdenv.lib; {
     homepage = https://github.com/google/glog;

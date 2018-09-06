@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.12";
+  version = "1.0.14";
   name = "mdp-${version}";
 
   src = fetchFromGitHub {
     owner = "visit1985";
     repo = "mdp";
     rev = version;
-    sha256 = "04izj9i9rxmgswjh2iawqs6qglfv44zfv042smmcvfh1pm43361i";
+    sha256 = "1nljb2bkk7kswywvvn3b2k6q14bh2jnwm8cypax3mwssjmid78af";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -67,15 +67,15 @@ in
 
 let
   config =
-    configs.${stdenv.system}
-    or (throw "unsupported system: ${stdenv.system}");
+    configs.${stdenv.hostPlatform.system}
+    or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
 
 let
   blas64 =
     if blas64_ != null
       then blas64_
-      else hasPrefix "x86_64" stdenv.system;
+      else hasPrefix "x86_64" stdenv.hostPlatform.system;
 in
 stdenv.mkDerivation rec {
   name = "openblas-${version}";
@@ -136,6 +136,20 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "tests";
 
+  postInstall = ''
+    # Write pkgconfig aliases. Upstream report:
+    # https://github.com/xianyi/OpenBLAS/issues/1740
+    for alias in blas cblas lapack; do
+      cat <<EOF > $out/lib/pkgconfig/openblas-$alias.pc
+Name: $alias
+Version: ${version}
+Description: $alias provided by the OpenBLAS package.
+Cflags: -I$out/include
+Libs: -L$out/lib -lopenblas
+EOF
+    done
+  '';
+
   meta = with stdenv.lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
@@ -143,4 +157,10 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ ttuegel ];
   };
+
+  # We use linkName to pass a different name to --with-blas-libs for
+  # fflas-ffpack and linbox, because we use blas on darwin but openblas
+  # elsewhere.
+  # See see https://github.com/NixOS/nixpkgs/pull/45013.
+  passthru.linkName = "openblas";
 }

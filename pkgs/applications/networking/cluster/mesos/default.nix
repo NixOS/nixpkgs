@@ -4,6 +4,7 @@
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
 , ethtool, coreutils, which, iptables, maven
 , bash, autoreconfHook
+, utf8proc, lz4
 , withJava ? !stdenv.isDarwin
 }:
 
@@ -50,6 +51,7 @@ in stdenv.mkDerivation rec {
     makeWrapper curl sasl
     python wrapPython boto setuptools leveldb
     subversion apr glog openssl libevent
+    utf8proc lz4
   ] ++ lib.optionals stdenv.isLinux [
     libnl
   ] ++ lib.optionals withJava [

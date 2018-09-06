@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "1.22.3";
+  version = "1.23.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "48868d1f461122ac8c5fb60487b6da03c0d73dcb06a9d79e06c4eab8ef62a5c3";
+    sha256 = "28e25e79698b2662b648319d3971c0f9ae0e6500f88258ccb9b153c31110ba9b";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

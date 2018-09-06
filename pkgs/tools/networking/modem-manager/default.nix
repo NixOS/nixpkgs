@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, udev, libgudev, polkit, dbus-glib, ppp, gettext, pkgconfig
+{ stdenv, fetchurl, glib, udev, libgudev, polkit, ppp, gettext, pkgconfig
 , libmbim, libqmi, systemd, fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext pkgconfig ];
 
-  buildInputs = [ udev libgudev polkit dbus-glib ppp libmbim libqmi systemd ];
+  buildInputs = [ glib udev libgudev polkit ppp libmbim libqmi systemd ];
 
   patches = [
     # Patch dependency on glib headers, this breaks packages using core headers (networkmanager-qt)

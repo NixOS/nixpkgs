@@ -25,8 +25,8 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
-    ruby-progressbar (1.9.0)
-    solargraph (0.23.6)
+    ruby-progressbar (1.10.0)
+    solargraph (0.25.1)
       coderay (~> 1.1)
       eventmachine (~> 1.2, >= 1.2.5)
       htmlentities (~> 4.3, >= 4.3.4)
@@ -40,7 +40,7 @@ GEM
     thor (0.20.0)
     tilt (2.0.8)
     unicode-display_width (1.4.0)
-    yard (0.9.15)
+    yard (0.9.16)
 
 PLATFORMS
   ruby
@@ -49,4 +49,4 @@ DEPENDENCIES
   solargraph!
 
 BUNDLED WITH
-   1.16.2
+   1.16.3

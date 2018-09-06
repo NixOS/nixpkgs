@@ -7,6 +7,7 @@
 , meson
 , ninja
 , upower
+, python3
 , desktop-file-utils
 , wrapGAppsHook
 , gnome3 }:
@@ -37,6 +38,7 @@ in stdenv.mkDerivation rec {
     gettext
 
     # needed by meson_post_install.sh
+    python3
     glib.dev
     desktop-file-utils
   ];

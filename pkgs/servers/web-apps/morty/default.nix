@@ -17,6 +17,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/asciimoo/morty";
     maintainers = with maintainers; [ leenaars ];
+    license = licenses.agpl3;
     description = "Privacy aware web content sanitizer proxy as a service";
     longDescription = ''
       Morty is a web content sanitizer proxy as a service. It rewrites web

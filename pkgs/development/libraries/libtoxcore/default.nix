@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, libmsgpack
+{ stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
 , libvpx, check, libconfig, pkgconfig }:
 
 let
@@ -20,7 +20,7 @@ let
     ];
 
     buildInputs = [
-      libsodium libmsgpack ncurses libconfig
+      libsodium msgpack ncurses libconfig
     ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
       libopus libvpx
     ];
@@ -30,8 +30,6 @@ let
     enableParallelBuilding = true;
 
     doCheck = false; # hangs, tries to access the net?
-
-    # for some reason the tests are not running - it says "No tests found!!"
     checkInputs = [ check ];
     checkPhase = "ctest";
 

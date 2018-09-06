@@ -13,13 +13,13 @@ let
     ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
 in let
   archSha256 =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       x32sha256
     else
       x64sha256;
 
   arch =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       "x32"
     else
       "x64";

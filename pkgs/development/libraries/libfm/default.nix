@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkgconfig, vala_0_34
+{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkgconfig, vala
 , extraOnly ? false
 , withGtk3 ? false, gtk2, gtk3 }:
 let
@@ -16,12 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "0wkwbi1nyvqza3r1dhrq846axiiq0fy0dqgngnagh76fjrwnzl0q";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib gtk intltool pango vala_0_34 ]
-                ++ optional (!extraOnly) menu-cache;
+  nativeBuildInputs = [ vala pkgconfig intltool ];
+  buildInputs = [ glib gtk pango ] ++ optional (!extraOnly) menu-cache;
 
-  configureFlags = [ (optional extraOnly "--with-extra-only")
-                     (optional withGtk3 "--with-gtk=3") ];
+  configureFlags = optional extraOnly "--with-extra-only"
+    ++ optional withGtk3 "--with-gtk=3";
 
   enableParallelBuilding = true;
 

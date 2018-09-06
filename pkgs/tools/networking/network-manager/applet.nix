@@ -1,7 +1,7 @@
 { stdenv, fetchurl, meson, ninja, intltool, gtk-doc, pkgconfig, networkmanager, gnome3
-, libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl
+, libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl, docbook_xml_dtd_43
 , mobile-broadband-provider-info, glib-networking, gsettings-desktop-schemas
-, libgudev, hicolor-icon-theme, jansson, wrapGAppsHook, webkitgtk, gobjectIntrospection
+, libgudev, jansson, wrapGAppsHook, gobjectIntrospection, python3
 , libappindicator-gtk3, withGnome ? false }:
 
 let
@@ -16,25 +16,22 @@ in stdenv.mkDerivation rec {
   };
 
   mesonFlags = [
+    "-Dlibnm_gtk=false" # It is deprecated
     "-Dselinux=false"
     "-Dappindicator=yes"
     "-Dgcr=${if withGnome then "true" else "false"}"
   ];
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "lib" "dev" "devdoc" "man" ];
 
   buildInputs = [
     gnome3.gtk networkmanager libnotify libsecret gsettings-desktop-schemas
     polkit isocodes mobile-broadband-provider-info libgudev
     modemmanager jansson glib-networking
     libappindicator-gtk3
-  ] ++ stdenv.lib.optionals withGnome [ gnome3.gcr webkitgtk ];
+  ] ++ stdenv.lib.optionals withGnome [ gnome3.gcr ]; # advanced certificate chooser
 
-  nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobjectIntrospection gtk-doc docbook_xsl libxml2 ];
-
-  propagatedUserEnvPkgs = [
-    hicolor-icon-theme
-  ];
+  nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobjectIntrospection python3 gtk-doc docbook_xsl docbook_xml_dtd_43 libxml2 ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file

@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation  rec {
   name = "qsynth-${version}";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/${name}.tar.gz";
-    sha256 = "0kpk1rnhbifbvm4xvw8i0d4ksk78pf505qvg08k89kqkg32494ap";
+    sha256 = "1rfkaxq1pyc4hv3l0i6wicianbcbm1wp53kh9i5d4jsljgisd1dv";
   };
 
   # cmake is looking for qsynth.desktop.in and fails if it doesn't find it
-  # seems like a bug and can presumable go in the next version after 0.5.1
+  # seems like a bug and can presumable go in the next version after 0.5.2
   postPatch = ''
     mv src/qsynth.desktop src/qsynth.desktop.in
   '';

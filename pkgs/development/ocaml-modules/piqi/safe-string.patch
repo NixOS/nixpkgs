@@ -1,0 +1,13 @@
+--- a/piqilib/piqi_json_parser.mll
++++ b/piqilib/piqi_json_parser.mll
+@@ -189,8 +189,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+     let len = lexbuf.lex_curr_pos - lexbuf.lex_start_pos in
+     let s = lexbuf.lex_buffer in
+     let start = lexbuf.lex_start_pos in
+-    check_adjust_utf8 v lexbuf s start len;
+-    Buffer.add_substring v.buf s start len
++    check_adjust_utf8 v lexbuf (Bytes.unsafe_to_string s) start len;
++    Buffer.add_subbytes v.buf s start len
+ 
+   let map_lexeme f lexbuf =
+     let len = lexbuf.lex_curr_pos - lexbuf.lex_start_pos in

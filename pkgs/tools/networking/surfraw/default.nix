@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://surfraw.alioth.debian.org;
     maintainers = [];
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.publicDomain;
   };
 }

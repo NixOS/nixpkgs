@@ -212,6 +212,9 @@ self: super: builtins.intersectAttrs super {
   # Needs access to locale data, but looks for it in the wrong place.
   scholdoc-citeproc = dontCheck super.scholdoc-citeproc;
 
+  # Disable tests because they require a mattermost server
+  mattermost-api = dontCheck super.mattermost-api;
+
   # Expect to find sendmail(1) in $PATH.
   mime-mail = appendConfigureFlag super.mime-mail "--ghc-option=-DMIME_MAIL_SENDMAIL_PATH=\"sendmail\"";
 

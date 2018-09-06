@@ -3,9 +3,6 @@
 , buildPythonPackage
 , arb
 , openblasCompat
-, openblas-blas-pc
-, openblas-cblas-pc
-, openblas-lapack-pc
 , brial
 , cliquer
 , cypari2
@@ -59,9 +56,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     iml
     perl
-    openblas-blas-pc
-    openblas-cblas-pc
-    openblas-lapack-pc
+    openblasCompat
     jupyter_core
   ];
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, perl, yacc, bootstrap_cmds
-, openssl, openldap, libedit
+, openssl, openldap, libedit, keyutils
 
 # Extra Arguments
 , type ? ""
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     # Provides the mig command used by the build scripts
     ++ optional stdenv.isDarwin bootstrap_cmds;
   buildInputs = [ openssl ]
+    ++ optionals (stdenv.hostPlatform.isLinux) [ keyutils ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
   preConfigure = "cd ./src";

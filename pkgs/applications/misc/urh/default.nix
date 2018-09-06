@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "urh-${version}";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = "urh";
     rev = "v${version}";
-    sha256 = "0ncvfl5iyngw3lr2g7awpskrrld6y0x7w0xyp827lcr7x73fvqgp";
+    sha256 = "1afmja4cffyw0ipx7zm93wvjmz0v5ccl7vcw2r18kdzrs1mr99zl";
   };
 
   buildInputs = [ hackrf rtl-sdr ];

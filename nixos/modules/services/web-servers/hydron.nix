@@ -16,10 +16,10 @@ in with lib; {
 
     interval = mkOption {
       type = types.str;
-      default = "hourly";
+      default = "weekly";
       example = "06:00";
       description = ''
-        How often we run hydron import and possibly fetch tags. Runs by default every hour.
+        How often we run hydron import and possibly fetch tags. Runs by default every week.
 
         The format is described in
         <citerefentry><refentrytitle>systemd.time</refentrytitle>
@@ -137,9 +137,13 @@ in with lib; {
 
     systemd.timers.hydron-fetch = {
       description = "Automatically import paths into hydron and possibly fetch tags";
-      after = [ "network.target" ];
+      after = [ "network.target" "hydron.service" ];
       wantedBy = [ "timers.target" ];
-      timerConfig.OnCalendar = cfg.interval;
+      
+      timerConfig = {
+        Persistent = true;
+        OnCalendar = cfg.interval;
+      };
     };
 
     users = {

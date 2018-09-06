@@ -24,12 +24,15 @@ let
 
     NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
 
+    # Otherwise it retains a reference to compiler and fails; see #44767.  TODO: better.
+    preConfigure = "CC=${stdenv.cc.targetPrefix}cc";
+
     configureFlags = [
       "--with-openssl"
       "--with-libxml"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
-      "--with-system-tzdata=${tzdata}"
+      "--with-system-tzdata=${tzdata}/share/zoneinfo"
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ];
 
@@ -97,33 +100,33 @@ let
 in {
 
   postgresql93 = common {
-    version = "9.3.23";
+    version = "9.3.24";
     psqlSchema = "9.3";
-    sha256 = "1jzncs7b6zrcgpnqjbjcc4y8303a96zqi3h31d3ix1g3vh31160x";
+    sha256 = "1a8dnv16n2rxnbwhqw7c0kjpj3xqvkpwk50kvimj4d917cxaf542";
   };
 
   postgresql94 = common {
-    version = "9.4.18";
+    version = "9.4.19";
     psqlSchema = "9.4";
-    sha256 = "1h64yjyrlz3ppsp9k6sm4jihg6n9i7mqhkx4p0hymqzmnbr3g0s2";
+    sha256 = "12qn9h47rkn4k41gdbxkkvg0pff43k1113jmhc83f19adc1nnxq3";
   };
 
   postgresql95 = common {
-    version = "9.5.13";
+    version = "9.5.14";
     psqlSchema = "9.5";
-    sha256 = "1vm55q9apja6lg672m9xl1zq3iwv2zwnn0d0qr003zan1dmbh22l";
+    sha256 = "0k8s62h6qd9p3xlx315j5irniskqsnx1nz4ir5r1yhqp07mdab1y";
   };
 
   postgresql96 = common {
-    version = "9.6.9";
+    version = "9.6.10";
     psqlSchema = "9.6";
-    sha256 = "0biy8j69dbvdmrag55pdszpc0702agzqhhcwdx21xp02mzim4ydr";
+    sha256 = "09l4zqs74fqnazdsyln9x657mq3wsbgng9wpvq71yh26cv2sq5c6";
   };
 
   postgresql100 = common {
-    version = "10.4";
+    version = "10.5";
     psqlSchema = "10.0";
-    sha256 = "0j000bcs9w8wrllg8m7j1lxsd3n2x0yzkack5p35cmxx20iq2q0v";
+    sha256 = "04a07jkvc5s6zgh6jr78149kcjmsxclizsqabjw44ld4j5n633kc";
   };
 
 }

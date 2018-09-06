@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs, unzip, sqlite, makeWrapper, mono46, ffmpeg, ... }:
+{ stdenv, fetchurl, pkgs, unzip, sqlite, makeWrapper, mono54, ffmpeg, ... }:
 
 stdenv.mkDerivation rec {
   name = "emby-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   propagatedBuildInputs = with pkgs; [
-    mono46
+    mono54
     sqlite
   ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -r * $out/bin
 
-    makeWrapper "${mono46}/bin/mono" $out/bin/MediaBrowser.Server.Mono \
+    makeWrapper "${mono54}/bin/mono" $out/bin/MediaBrowser.Server.Mono \
       --add-flags "$out/bin/MediaBrowser.Server.Mono.exe -ffmpeg ${ffmpeg}/bin/ffmpeg -ffprobe ${ffmpeg}/bin/ffprobe"
   '';
 

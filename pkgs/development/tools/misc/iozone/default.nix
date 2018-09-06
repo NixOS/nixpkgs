@@ -1,15 +1,15 @@
 { stdenv, fetchurl, gnuplot }:
 
 let
-  target = if stdenv.system == "i686-linux" then
+  target = if stdenv.hostPlatform.system == "i686-linux" then
     "linux"
-  else if stdenv.system == "x86_64-linux" then
+  else if stdenv.hostPlatform.system == "x86_64-linux" then
     "linux-AMD64"
-  else if stdenv.system == "x86_64-darwin" then
+  else if stdenv.hostPlatform.system == "x86_64-darwin" then
     "macosx"
-  else if stdenv.system == "aarch64-linux" then
+  else if stdenv.hostPlatform.system == "aarch64-linux" then
     "linux-arm"
-  else throw "Platform ${stdenv.system} not yet supported.";
+  else throw "Platform ${stdenv.hostPlatform.system} not yet supported.";
 in
 
 stdenv.mkDerivation rec {

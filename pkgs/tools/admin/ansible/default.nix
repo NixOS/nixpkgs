@@ -7,6 +7,8 @@ let
     pname = "ansible";
     inherit version;
 
+    outputs = [ "out" "man" ];
+
     src = fetchurl {
       url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
       inherit sha256;
@@ -16,13 +18,19 @@ let
       sed -i "s,/usr/,$out," lib/ansible/constants.py
     '';
 
+    postInstall = ''
+      for m in docs/man/man1/*; do
+        install -vD $m -t $man/share/man/man1
+      done
+    '';
+
     doCheck = false;
     dontStrip = true;
     dontPatchELF = true;
     dontPatchShebangs = false;
 
     propagatedBuildInputs = with py.pkgs; [
-      pycrypto paramiko jinja2 pyyaml httplib2 boto six netaddr dnspython
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six netaddr dnspython jmespath
     ] ++ stdenv.lib.optional windowsSupport pywinrm;
 
     meta = with stdenv.lib; {
@@ -47,6 +55,11 @@ in rec {
     sha256  = "1r9sq30xz3jrvx6yqssj5wmkml1f75rx1amd7g89f3ryngrq6m59";
   };
 
-  ansible2 = ansible_2_5;
+  ansible_2_6 = generic {
+    version = "2.6.2";
+    sha256  = "1y5gd9h641p6pphwd7j99yyqglyj23rkmid7wgzk62611754qzkl";
+  };
+
+  ansible2 = ansible_2_6;
   ansible  = ansible2;
 }

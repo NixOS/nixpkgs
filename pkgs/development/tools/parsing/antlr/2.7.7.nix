@@ -20,6 +20,7 @@ stdenv.mkDerivation {
       walk parse trees.
     '';
     homepage = http://www.antlr.org/;
+    license = licenses.bsd3;
     platforms = platforms.unix;
   };
 }

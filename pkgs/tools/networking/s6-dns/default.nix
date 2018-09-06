@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     "--with-dynlib=${skalibs.lib}/lib"
   ]
   ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
-  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.hostPlatform.system}");
 
   postInstall = ''
     mkdir -p $doc/share/doc/s6-dns/

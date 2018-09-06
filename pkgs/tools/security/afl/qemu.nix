@@ -16,9 +16,9 @@ let
   aflTypesFile = writeText "afl-types.h"
     (builtins.readFile ./qemu-patches/afl-types.h);
 
-  cpuTarget = if stdenv.system == "x86_64-linux" then "x86_64-linux-user"
-    else if stdenv.system == "i686-linux" then "i386-linux-user"
-    else throw "afl: no support for ${stdenv.system}!";
+  cpuTarget = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux-user"
+    else if stdenv.hostPlatform.system == "i686-linux" then "i386-linux-user"
+    else throw "afl: no support for ${stdenv.hostPlatform.system}!";
 in
 stdenv.mkDerivation rec {
   name = "afl-${n}";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       vde2 texinfo libuuid flex bison lzo snappy autoconf
       libcap_ng gnutls
     ]
-    ++ optionals (hasSuffix "linux" stdenv.system) [ libaio ];
+    ++ optionals (hasSuffix "linux" stdenv.hostPlatform.system) [ libaio ];
 
   enableParallelBuilding = true;
 

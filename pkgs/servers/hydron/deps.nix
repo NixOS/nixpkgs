@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/Masterminds/squirrel";
-      rev = "b127ed9be03443fe3c0877e391130e3dd3f3107a";
-      sha256 = "04vgwm5g5486188656hiw1x56mrkv27s5g2s8mc1lz7z1ig5g5bg";
+      rev = "8a7e65843414bc07f3d85bebaa10d7cc96253c29";
+      sha256 = "0n7msdji0h7iysyqsi0iiq9i1hdgyyz9cwzxpc6qppz7cllnfpnn";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/bakape/thumbnailer";
-      rev = "93664eb81b19dcb232062bf55f92cf4d7c805a7f";
-      sha256 = "0jdkb776f6gk0g8zi7r1vcfs6w0i33mn2327x6960jybli7bcfsp";
+      rev = "326c44736983c316d20c036ce34ca79ce9b96b01";
+      sha256 = "1a1dniz0zbihk7971z2ln6hlsbvkk13lghgjz346lw4lfc105kxk";
     };
   }
   {
@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/lann/builder";
-      rev = "1b87b36280d04fe7882d1512bf038ea2967ad534";
-      sha256 = "015q46awbyp47vld07yi7d27i0lkd82r7qn5230bb9qxl4mcfiqc";
+      rev = "47ae307949d02aa1f1069fdafc00ca08e1dbabac";
+      sha256 = "1kg9jy1rciznj627hafpq2mi7hr5d3ssgqcpwrm3bnlk9sqnydil";
     };
   }
   {
@@ -104,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "49c15d80dfbc983ea25246ee959d970efe09ec09";
-      sha256 = "1knkww5jfn73frm8m939ck91jkjfapk798xwscm4g991mpcd6j4v";
+      rev = "aaf60122140d3fcf75376d319f0554393160eb50";
+      sha256 = "03i6ij7jcf5mp9dc8ps8b63g1k843z7c823qyzn5a276gpxvxlvv";
     };
   }
 ]

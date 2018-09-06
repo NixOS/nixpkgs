@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    db62 xercesc xqilla
+    xercesc xqilla
+  ];
+
+  propagatedBuildInputs = [
+    db62
   ];
 
   configureFlags = [

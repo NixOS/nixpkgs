@@ -9,28 +9,26 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "vault-${version}";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "16sndzbfciw4bccxm7sc83y2pma2bgsmc1kqyb2hp0jsdy4rl3k4";
+    sha256 = "1f11arvj7zp8wwkvv3nn7kyga0ci8psdif6djrnzwjksskdgdbx5";
   };
 
   nativeBuildInputs = [ go gox removeReferencesTo ];
 
-  buildPhase = ''
+  preBuild = ''
     patchShebangs ./
     substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'
     sed -i s/'^GIT_DIRTY=.*'/'GIT_DIRTY="+NixOS"'/ scripts/build.sh
 
-    mkdir -p src/github.com/hashicorp
+    mkdir -p .git/hooks src/github.com/hashicorp
     ln -s $(pwd) src/github.com/hashicorp/vault
 
-    mkdir -p .git/hooks
-
-    GOPATH=$(pwd) make
+    export GOPATH=$(pwd)
   '';
 
   installPhase = ''
@@ -47,6 +45,6 @@ in stdenv.mkDerivation rec {
     description = "A tool for managing secrets";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem offline pradeepchhetri ];
+    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri ];
   };
 }

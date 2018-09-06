@@ -8,16 +8,16 @@ in
 stdenv.mkDerivation rec {
   version = "26.0.2";
   name = "android-platform-tools-r${version}";
-  src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+  src = if (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
     then fetchurl {
       url = "https://dl.google.com/android/repository/platform-tools_r${version}-linux.zip";
       sha256 = "0695npvxljbbh8xwfm65k34fcpyfkzvfkssgnp46wkmnq8w5mcb3";
     }
-    else if stdenv.system == "x86_64-darwin" then fetchurl {
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then fetchurl {
       url = "https://dl.google.com/android/repository/platform-tools_r${version}-darwin.zip";
       sha256 = "0gy7apw9pmnnm41z6ywglw5va4ghmny4j57778may4q7ar751l56";
     }
-    else throw "System ${stdenv.system} not supported!";
+    else throw "System ${stdenv.hostPlatform.system} not supported!";
 
   buildCommand = ''
     mkdir -p $out
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     unzip $src
     cd platform-tools
 
-    ${stdenv.lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+    ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
       ''
         for i in adb dmtracedump fastboot hprof-conv sqlite3
         do

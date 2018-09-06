@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, tmux, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, tmux, which, makeWrapper }:
 
 buildGoPackage rec {
   name = "overmind-${version}";
@@ -8,7 +8,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$bin/bin/overmind" --prefix PATH : "${stdenv.lib.makeBinPath [ tmux ]}"
+    wrapProgram "$bin/bin/overmind" --prefix PATH : "${stdenv.lib.makeBinPath [ tmux which ]}"
   '';
 
   src = fetchFromGitHub {

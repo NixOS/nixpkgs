@@ -1,10 +1,9 @@
 { stdenv, fetchurl, glib, pkgconfig, intltool, libxslt, docbook_xsl
 , libgcrypt, gobjectIntrospection, vala_0_38, gnome3, libintl }:
-let
+
+stdenv.mkDerivation rec {
   pname = "libsecret";
   version = "0.18.5";
-in
-stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -12,12 +11,20 @@ stdenv.mkDerivation rec {
     sha256 = "1cychxc3ff8fp857iikw0n2s13s2mhw2dn1mr632f7w3sn6vvrww";
   };
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   outputs = [ "out" "dev" ];
 
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [ pkgconfig intltool libxslt docbook_xsl libintl ];
   buildInputs = [ libgcrypt gobjectIntrospection vala_0_38 ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
+
+  # checkInputs = [ python2 ];
+
+  doCheck = false; # fails. with python3 tests fail to evaluate, with python2 they fail to run python3
 
   passthru = {
     updateScript = gnome3.updateScript {

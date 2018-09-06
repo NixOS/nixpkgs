@@ -1,10 +1,9 @@
 { fetchurl, stdenv, lib
-, buildPlatform, hostPlatform
 , enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
 , enableShared ? !stdenv.hostPlatform.useAndroidPrebuilt
 }:
 
-# assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
+# assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
   name = "libiconv-${version}";
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
-    lib.optionalString ((hostPlatform != buildPlatform && hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
+    lib.optionalString ((stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       ''

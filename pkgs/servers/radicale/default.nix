@@ -1,54 +1,36 @@
 { stdenv, fetchFromGitHub, python3 }:
 
-let
-  version = "2.1.9";
-  sha256 = "1sywxn7j9bq39qwq74h327crc44j9049cykai1alv44agx8s1nhz";
+python3.pkgs.buildPythonApplication rec {
+  pname = "Radicale";
+  version = "2.1.10";
 
-  python = python3.override {
-    packageOverrides = self: super: {
-
-      # Packages pinned in setup.py.
-      # Starting with next release, a vendored version of vobject will be used.
-      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
-        version = "2.6.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "891c38b2a02f5bb1be3e4793866c8df49c7d19baabf9c1bad62547e0b4866aca";
-        };
-      });
-      vobject = super.vobject.overridePythonAttrs (oldAttrs: rec {
-        version = "0.9.5";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0f56cae196303d875682b9648b4bb43ffc769d2f0f800958e0a506af867b1243";
-        };
-      });
-
-    };
-  };
-in
-
-python.pkgs.buildPythonApplication {
-  name = "radicale-${version}";
-  inherit version;
-
+  # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = version;
-    inherit sha256;
+    sha256 = "0ik9gvljxhmykkzzcv9kmkp4qjwgdrl9f7hp6300flx5kmqlcjb1";
   };
 
-  doCheck = false;
+  # We only want functional tests
+  postPatch = ''
+    sed -i "s/pytest-cov\|pytest-flake8\|pytest-isort//g" setup.py
+    sed -i "/^addopts/d" setup.cfg
+  '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     vobject
+    python-dateutil
     passlib
-    pytz
+  ];
+
+  checkInputs = with python3.pkgs; [
+    pytestrunner
+    pytest
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.radicale.org/;
+    homepage = https://www.radicale.org/;
     description = "CalDAV CardDAV server";
     longDescription = ''
       The Radicale Project is a complete CalDAV (calendar) and CardDAV
@@ -58,7 +40,6 @@ python.pkgs.buildPythonApplication {
       on mobile phones or computers.
     '';
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ edwtjo pSub aneeshusa infinisil ];
   };
 }

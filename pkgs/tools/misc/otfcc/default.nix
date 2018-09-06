@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, premake5, ninja, hostPlatform }:
+{ stdenv, fetchFromGitHub, premake5, ninja }:
 
 stdenv.mkDerivation rec {
   name = "otfcc-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     premake5 ninja
   '';
 
-  ninjaFlags = let x = if hostPlatform.isi686 then "x86" else "x64"; in
+  ninjaFlags = let x = if stdenv.hostPlatform.isi686 then "x86" else "x64"; in
     [ "-C" "build/ninja" "otfccdump_release_${x}" "otfccbuild_release_${x}" ];
 
   installPhase = ''

@@ -14,8 +14,8 @@ let
   nixSyntaxHighlight = fetchFromGitHub {
     owner = "seitz";
     repo = "nanonix";
-    rev = "17e0de65e1cbba3d6baa82deaefa853b41f5c161";
-    sha256 = "1g51h65i31andfs2fbp1v3vih9405iknqn11fzywjxji00kjqv5s";
+    rev = "7483fd8b79f1f3f2179dbbd46aa400df4320ba10";
+    sha256 = "10pv75kfrgnziz8sr83hdbb0c3klm2fmsdw3i5cpqqf5va1fzb8h";
   };
 
 in stdenv.mkDerivation rec {
@@ -32,11 +32,11 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
-  configureFlags = ''
-    --sysconfdir=/etc
-    ${optionalString (!enableNls) "--disable-nls"}
-    ${optionalString enableTiny "--enable-tiny"}
-  '';
+  configureFlags = [
+    "--sysconfdir=/etc"
+    (stdenv.lib.enableFeature enableNls "nls")
+    (stdenv.lib.enableFeature enableTiny "tiny")
+  ];
 
   postInstall = ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/

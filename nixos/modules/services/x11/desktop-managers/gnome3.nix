@@ -33,10 +33,10 @@ let
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
-       picture-uri='${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png'
+       picture-uri='${pkgs.nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png'
 
        [org.gnome.desktop.screensaver]
-       picture-uri='${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png'
+       picture-uri='${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png'
 
        ${cfg.extraGSettingsOverrides}
      EOF
@@ -97,6 +97,8 @@ in {
     services.udisks2.enable = true;
     services.accounts-daemon.enable = true;
     services.geoclue2.enable = mkDefault true;
+    # GNOME should have its own geoclue agent
+    services.geoclue2.enableDemoAgent = false;
     services.dleyna-renderer.enable = mkDefault true;
     services.dleyna-server.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
@@ -130,6 +132,7 @@ in {
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell-fonts ];
 
+    services.xserver.displayManager.gdm.enable = mkDefault true;
     services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ];
 
     services.xserver.displayManager.sessionCommands = ''
@@ -158,6 +161,8 @@ in {
     # Let nautilus find extensions
     # TODO: Create nautilus-with-extensions package
     environment.variables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
+
+    services.xserver.updateDbusEnvironment = true;
 
     environment.variables.GIO_EXTRA_MODULES = [ "${lib.getLib pkgs.gnome3.dconf}/lib/gio/modules"
                                                 "${pkgs.gnome3.glib-networking.out}/lib/gio/modules"

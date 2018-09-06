@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "cairocffi";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y373vafv7q35msg7gqdn7niifr3j4j4n070hflxshahs59irss7";
+    sha256 = "15386c3a9e08823d6826c4491eaccc7b7254b1dc587a3b9ce60c350c3f990337";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -49,7 +49,6 @@ buildPythonPackage rec {
       gdk_pixbuf = gdk_pixbuf.out;
     })
     ./fix_test_scaled_font.patch
-    ./cairocffi-0.8.1-cairo-1.15.12.patch
   ];
 
   meta = with lib; {

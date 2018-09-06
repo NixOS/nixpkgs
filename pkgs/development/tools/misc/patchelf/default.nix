@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   setupHook = [ ./setup-hook.sh ];
 
-  #doCheck = true; # problems when loading libc.so.6
+  doCheck = false; # fails 8 out of 24 tests, problems when loading libc.so.6
 
   meta = {
     homepage = https://nixos.org/patchelf.html;

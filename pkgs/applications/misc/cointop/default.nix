@@ -26,5 +26,6 @@ buildGoPackage rec {
     homepage  = https://cointop.sh;
     platforms = stdenv.lib.platforms.linux; # cannot test others
     maintainers = [ ];
+    license = stdenv.lib.licenses.asl20;
   };
 }

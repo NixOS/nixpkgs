@@ -48,6 +48,8 @@ in buildPythonPackage rec {
         ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
+  doCheck = !stdenv.isDarwin;
+
   patches = [
     # The following is in GitHub in 0.28.3 but not in the `sdist`.
     # https://github.com/cython/cython/issues/2319

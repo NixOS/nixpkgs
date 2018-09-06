@@ -13,6 +13,12 @@ in stdenv.mkDerivation rec {
   buildInputs = [ readline icu zlib nspr ];
   nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
 
+  # Apparently this package fails to build correctly with modern compilers, which at least
+  # on ARMv6 causes polkit testsuite to break with an assertion failure in spidermonkey.
+  # These flags were stolen from:
+  # https://git.archlinux.org/svntogit/packages.git/tree/trunk/PKGBUILD?h=packages/js52
+  NIX_CFLAGS_COMPILE = "-fno-delete-null-pointer-checks -fno-strict-aliasing -fno-tree-vrp";
+
   patches = [
     # needed to build gnome3.gjs
     (fetchpatch {

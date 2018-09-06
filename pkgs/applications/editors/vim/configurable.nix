@@ -1,18 +1,19 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
-, writeText, lib, config, glib, gtk2, gtk3, python, perl, tcl, ruby
+{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, gettext
+, writeText, config, glib, gtk2, gtk3, lua, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
 , vimPlugins
 , makeWrapper
+, wrapGAppsHook
 
 # apple frameworks
 , CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
-, guiSupport        ? config.vim.gui or "auto"
+, guiSupport        ? config.vim.gui or "gtk3"
 , luaSupport        ? config.vim.lua or true
 , perlSupport       ? config.vim.perl or false      # Perl interpreter
 , pythonSupport     ? config.vim.python or true     # Python interpreter
@@ -23,11 +24,10 @@ args@{ source ? "default", callPackage, fetchurl, stdenv, ncurses, pkgconfig, ge
 , cscopeSupport     ? config.vim.cscope or true     # Enable cscope interface
 , netbeansSupport   ? config.netbeans or true       # Enable NetBeans integration support.
 , ximSupport        ? config.vim.xim or true        # less than 15KB, needed for deadkeys
-# By default, compile with darwin support if we're compiling on darwin, but
-# allow this to be disabled by setting config.vim.darwin to false
-, darwinSupport     ? stdenv.isDarwin && (config.vim.darwin or true) # Enable Darwin support
+, darwinSupport     ? config.vim.darwin or false    # Enable Darwin support
 , ftNixSupport      ? config.vim.ftNix or true      # Add .nix filetype detection and minimal syntax highlighting support
-, ... }: with args;
+, ...
+}:
 
 
 let
@@ -98,8 +98,10 @@ in stdenv.mkDerivation rec {
     "--disable-carbon_check"
     "--disable-gtktest"
   ]
+  ++ stdenv.lib.optional stdenv.isDarwin
+     (if darwinSupport then "--enable-darwin" else "--disable-darwin")
   ++ stdenv.lib.optionals luaSupport [
-    "--with-lua-prefix=${args.lua}"
+    "--with-lua-prefix=${lua}"
     "--enable-luainterp"
   ]
   ++ stdenv.lib.optionals pythonSupport [
@@ -122,11 +124,13 @@ in stdenv.mkDerivation rec {
   ++ stdenv.lib.optional wrapPythonDrv makeWrapper
   ++ stdenv.lib.optional nlsSupport gettext
   ++ stdenv.lib.optional perlSupport perl
+  ++ stdenv.lib.optional (guiSupport == "gtk3") wrapGAppsHook
   ;
 
   buildInputs = [ ncurses libX11 libXext libSM libXpm libXt libXaw libXau
     libXmu glib libICE ]
-    ++ (if guiSupport == "gtk3" then [gtk3] else [gtk2])
+    ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2
+    ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3
     ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc cf-private ]
     ++ stdenv.lib.optional luaSupport lua
     ++ stdenv.lib.optional pythonSupport python
@@ -140,18 +144,36 @@ in stdenv.mkDerivation rec {
       cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
     '';
 
-  NIX_LDFLAGS = stdenv.lib.optionalString (darwinSupport && stdenv.isDarwin)
-    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
-
   postInstall = ''
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
-      "$(patchelf --print-rpath $out/bin/vim):${lib.makeLibraryPath buildInputs}" \
+      "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
       "$out"/bin/{vim,gvim}
 
     ln -sfn '${nixosRuntimepath}' "$out"/share/vim/vimrc
   '' + stdenv.lib.optionalString wrapPythonDrv ''
     wrapProgram "$out/bin/vim" --prefix PATH : "${python}/bin"
+  '' + stdenv.lib.optionalString (guiSupport == "gtk3") ''
+
+    rewrap () {
+      rm -f "$out/bin/$1"
+      echo -e '#!${stdenv.shell}\n"'"$out/bin/vim"'" '"$2"' "$@"' > "$out/bin/$1"
+      chmod a+x "$out/bin/$1"
+    }
+
+    rewrap ex -e	
+    rewrap view -R	
+    rewrap gvim -g	
+    rewrap gex -eg	
+    rewrap gview -Rg	
+    rewrap rvim -Z	
+    rewrap rview -RZ	
+    rewrap rgvim -gZ	
+    rewrap rgview -RgZ
+    rewrap evim    -y
+    rewrap eview   -yR
+    rewrap vimdiff -d	
+    rewrap gvimdiff -gd
   '';
 
   preInstall = ''

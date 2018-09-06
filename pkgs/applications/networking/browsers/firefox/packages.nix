@@ -20,10 +20,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "61.0.1";
+    version = "61.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "0alkiz89c42y6677n7csk694g9qsfzm8x928i6007mcdyh8ifkg1604pxwp6irid0w3v8cz7b2153jkk4f0qdx85a2r9csh8hbar583";
+      sha512 = "3zzcxqjpsn2m5z4l66rxrq7yf58aii370jj8pcl50smcd55sfsyknnc20agbppsw4k4pnwycfn57im33swwkjzg0hk0h2ng4rvi42x2";
     };
 
     patches = nixpkgsPatches ++ [
@@ -36,7 +36,8 @@ rec {
       description = "A web browser built from Firefox source tree";
       homepage = http://www.mozilla.com/en-US/firefox/;
       maintainers = with lib.maintainers; [ eelco ];
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
+      license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
@@ -138,6 +139,7 @@ rec {
       '';
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
+      license = lib.licenses.bsd3;
     };
   };
 

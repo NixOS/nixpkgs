@@ -26,5 +26,6 @@ python2Packages.buildPythonApplication rec {
     homepage = http://pyropus.ca/software/getmail/;
     inherit version;
     updateWalker = true;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

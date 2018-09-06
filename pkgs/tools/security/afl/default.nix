@@ -4,9 +4,9 @@
 
 let
   afl-qemu = callPackage ./qemu.nix {};
-  qemu-exe-name = if stdenv.system == "x86_64-linux" then "qemu-x86_64"
-    else if stdenv.system == "i686-linux" then "qemu-i386"
-    else throw "afl: no support for ${stdenv.system}!";
+  qemu-exe-name = if stdenv.hostPlatform.system == "x86_64-linux" then "qemu-x86_64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "qemu-i386"
+    else throw "afl: no support for ${stdenv.hostPlatform.system}!";
 in
 
 stdenv.mkDerivation rec {

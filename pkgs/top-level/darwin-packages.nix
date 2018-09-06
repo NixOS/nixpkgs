@@ -19,7 +19,7 @@ in
 
   binutils = pkgs.wrapBintoolsWith {
     libc =
-      if pkgs.targetPlatform != pkgs.hostPlatform
+      if stdenv.targetPlatform != stdenv.hostPlatform
       then pkgs.libcCross
       else pkgs.stdenv.cc.libc;
     bintools = darwin.binutils-unwrapped;

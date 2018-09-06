@@ -4,8 +4,6 @@
 , fetchPypi
 , hypothesis
 , pytestcache
-, pytestflakes
-, pytestpep8
 , pytest
 , glibcLocales
 , mock ? null
@@ -19,8 +17,6 @@ buildPythonPackage rec {
   checkInputs = [
     hypothesis
     pytestcache
-    pytestflakes
-    pytestpep8
     pytest
     glibcLocales
   ]
@@ -37,7 +33,7 @@ buildPythonPackage rec {
   # testing based on project's tox.ini
   checkPhase = ''
     pytest --doctest-modules natsort
-    pytest --flakes --pep8
+    pytest
   '';
 
   meta = {

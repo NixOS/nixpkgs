@@ -36,9 +36,9 @@
 }:
 
 let
-  v_major = "4.1";
-  version = "${v_major}-RELEASE";
-  version_friendly = "${v_major}";
+  v_base = "4.1.3";
+  version = "${v_base}-RELEASE";
+  version_friendly = "${v_base}";
 
   tag = "refs/tags/swift-${version}";
   fetch = { repo, sha256, fetchSubmodules ? false }:
@@ -58,7 +58,7 @@ let
     };
     llvm = fetch {
       repo = "swift-llvm";
-      sha256 = "03558f5zbchqvdabi3x9ahyz4xkmj7w69gazivz372832lgr9zfh";
+      sha256 = "0q5cv4iydm8c1kcax32573y3q2cbpihwgj5aa8ws1fnpy4jvq934";
     };
     compilerrt = fetch {
       repo = "swift-compiler-rt";
@@ -70,7 +70,7 @@ let
     };
     lldb = fetch {
       repo = "swift-lldb";
-      sha256 = "09x3d3bc6rn9g6jpi3fb120c4r2carsmqla4bq4scjrs0867jz9m";
+      sha256 = "1d0pa7xm289bjb6r52hkkmlngkqkwbwgixnmm30bin2q18mkxk7s";
     };
     llbuild = fetch {
       repo = "swift-llbuild";
@@ -86,7 +86,7 @@ let
     };
     foundation = fetch {
       repo = "swift-corelibs-foundation";
-      sha256 = "06pbhb7wg4q5qgprhiyzbqy6hssga7xxjclhlh81gd6rvfd6bxvw";
+      sha256 = "1bhrag63rmz41bg2g6ap01qrdpq37hislgf5hg6myy2v69q7mahx";
     };
     libdispatch = fetch {
       repo = "swift-corelibs-libdispatch";
@@ -95,7 +95,7 @@ let
     };
     swift = fetch {
       repo = "swift";
-      sha256 = "1flvr12bg8m4k44yq0xy9qrllv5rpxgxisjgbpakk5p3myfsx7ky";
+      sha256 = "1ydx11pkvaasgjbr29lnha0lpnak758gd5l0aqzmp3q6mcyvfm7a";
     };
   };
 
@@ -287,6 +287,7 @@ stdenv.mkDerivation rec {
     # Swift doesn't support 32bit Linux, unknown on other platforms.
     platforms = platforms.linux;
     badPlatforms = platforms.i686;
+    broken = stdenv.isAarch64; # 2018-09-04, never built on Hydra
   };
 }
 

@@ -118,19 +118,19 @@
   ruby-progressbar = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1igh1xivf5h5g3y5m9b4i4j2mhz2r43kngh4ww3q1r80ch21nbfk";
+      sha256 = "1cv2ym3rl09svw8940ny67bav7b2db4ms39i4raaqzkf59jmhglk";
       type = "gem";
     };
-    version = "1.9.0";
+    version = "1.10.0";
   };
   solargraph = {
     dependencies = ["coderay" "eventmachine" "htmlentities" "kramdown" "parser" "reverse_markdown" "rubocop" "thor" "tilt" "yard"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01lh5vibr277vhhrgk6zl09ivb262c1qpk54ahzhc40zs309842b";
+      sha256 = "1b5dljgskjpkpv2l0jpb6i8j73hidskcbp2v7fhjp7kpx94x6php";
       type = "gem";
     };
-    version = "0.23.6";
+    version = "0.25.1";
   };
   thor = {
     source = {
@@ -159,9 +159,9 @@
   yard = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "145pbc0x95s6x296kh1wp5ykwy6srfcz946dgj83s35g8p52z4q4";
+      sha256 = "0lmmr1839qgbb3zxfa7jf5mzy17yjl1yirwlgzdhws4452gqhn67";
       type = "gem";
     };
-    version = "0.9.15";
+    version = "0.9.16";
   };
 }

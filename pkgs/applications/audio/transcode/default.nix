@@ -10,9 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flac lame zlib libjpeg libvorbis libtheora libxml2 lzo
                   libdvdread pkgconfig x264 libmpeg2 xvidcore ];
-  configureFlags = "--disable-ffmpeg --disable-libavcodec --disable-libavformat
-    --enable-lzo --enable-ogg --enable-vorbis --enable-theora --enable-libxml2
-    --enable-x264 --enable-libmpeg2 --enable-xvid";
+  configureFlags = [
+    "--disable-ffmpeg" "--disable-libavcodec" "--disable-libavformat"
+    "--enable-lzo" "--enable-ogg" "--enable-vorbis" "--enable-theora" "--enable-libxml2"
+    "--enable-x264" "--enable-libmpeg2" "--enable-xvid"
+  ];
 
   enableParallelBuilding = true;
 

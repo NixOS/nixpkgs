@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3
+, overrideCC, gcc6
 , mysqlSupport ? false, mysql ? null
 , postgresSupport ? false, postgresql ? null
 }:
@@ -6,7 +7,7 @@
 assert mysqlSupport -> mysql != null;
 assert postgresSupport -> postgresql != null;
 
-stdenv.mkDerivation rec {
+(if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
   name = "libgda-${version}";
   version = "5.2.4";
 

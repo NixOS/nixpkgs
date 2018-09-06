@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     "--disable-scrollkeeper"
   ] ++ optional (gtkVersion != "2") "--disable-dumper";
 
+  doCheck = false; # generates shebangs in check phase, too lazy to fix
+
   installFlags = [
     "sysconfdir=\${out}/etc"
     "localstatedir=\${TMPDIR}"

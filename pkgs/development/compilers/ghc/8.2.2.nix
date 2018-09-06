@@ -1,5 +1,4 @@
 { stdenv, targetPackages
-, buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
 , bootPkgs, alex, happy, hscolour
@@ -8,7 +7,7 @@
 
 , libiconv ? null, ncurses
 
-, useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
+, useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -19,7 +18,7 @@
   enableIntegerSimple ? !(gmp.meta.available or false), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? targetPlatform != hostPlatform
+  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -27,7 +26,7 @@
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
-  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
+  ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
@@ -37,6 +36,8 @@
 assert !enableIntegerSimple -> gmp != null;
 
 let
+  inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+
   inherit (bootPkgs) ghc;
 
   # TODO(@Ericson2314) Make unconditional

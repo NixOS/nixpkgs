@@ -5,7 +5,7 @@
 , cracklib, libkrb5, networkmanagerapplet, networkmanager, glibc
 , libwacom, samba, shared-mime-info, tzdata, libtool, libgnomekbd
 , docbook_xsl, modemmanager, clutter, clutter-gtk, cheese
-, fontconfig, sound-theme-freedesktop, grilo }:
+, fontconfig, sound-theme-freedesktop, grilo, python3 }:
 
 let
   pname = "gnome-control-center";
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext wrapGAppsHook libtool libxslt docbook_xsl
-    shared-mime-info
+    shared-mime-info python3
   ];
 
   buildInputs = with gnome3; [

@@ -42,17 +42,19 @@ let
     # https://gcc.gnu.org/gcc-5/porting_to.html
     CPPFLAGS = "-P";
 
-    configureFlags = ''
-      ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
-      ${if httpServer then "--with-apxs=${apacheHttpd.dev}/bin/apxs" else "--without-apxs"}
-      ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
-      ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
-      --disable-keychain
-      ${if saslSupport then "--with-sasl=${sasl}" else "--without-sasl"}
-      ${if httpSupport then "--with-serf=${serf}" else "--without-serf"}
-      --with-zlib=${zlib.dev}
-      --with-sqlite=${sqlite.dev}
-    '';
+    configureFlags = [
+      (stdenv.lib.withFeature bdbSupport "berkeley-db")
+      (stdenv.lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
+      (stdenv.lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
+      (stdenv.lib.withFeatureAs saslSupport "sasl" sasl)
+      (stdenv.lib.withFeatureAs httpSupport "serf" serf)
+      "--disable-keychain"
+      "--with-zlib=${zlib.dev}"
+      "--with-sqlite=${sqlite.dev}"
+    ] ++ stdenv.lib.optionals javahlBindings [
+      "--enable-javahl"
+      "--with-jdk=${jdk}"
+    ];
 
     preBuild = ''
       makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
@@ -89,13 +91,15 @@ let
 
     enableParallelBuilding = true;
 
+    checkInputs = [ python ];
     doCheck = false; # fails 10 out of ~2300 tests
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
+      license = licenses.asl20;
       homepage = http://subversion.apache.org/;
-      maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
-      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+      maintainers = with maintainers; [ eelco lovek323 ];
+      platforms = platforms.linux ++ platforms.darwin;
     };
 
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {

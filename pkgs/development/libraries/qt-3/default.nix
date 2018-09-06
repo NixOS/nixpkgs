@@ -34,27 +34,39 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "
-    -v
-    -system-zlib -system-libpng -system-libjpeg
-    -qt-gif
-    -I${xextproto}/include
-    ${if openglSupport then "-dlopen-opengl
-      -L${libGLU_combined}/lib -I${libGLU_combined}/include
-      -L${libXmu.out}/lib -I${libXmu.dev}/include" else ""}
-    ${if threadSupport then "-thread" else "-no-thread"}
-    ${if xrenderSupport then "-xrender -L${libXrender.out}/lib -I${libXrender.dev}/include" else "-no-xrender"}
-    ${if xrandrSupport then "-xrandr
-      -L${libXrandr.out}/lib -I${libXrandr.dev}/include
-      -I${randrproto}/include" else "-no-xrandr"}
-    ${if xineramaSupport then "-xinerama -L${libXinerama.out}/lib -I${libXinerama.dev}/include" else "-no-xinerama"}
-    ${if cursorSupport then "-L${libXcursor.out}/lib -I${libXcursor.dev}/include" else ""}
-    ${if mysqlSupport then "-qt-sql-mysql -L${mysql.connector-c}/lib/mysql -I${mysql.connector-c}/include/mysql" else ""}
-    ${if xftSupport then "-xft
-      -L${libXft.out}/lib -I${libXft.dev}/include
-      -L${libXft.freetype.out}/lib -I${libXft.freetype.dev}/include
-      -L${libXft.fontconfig.lib}/lib -I${libXft.fontconfig.dev}/include" else "-no-xft"}
-  ";
+  configureFlags = let
+    mk = cond: name: "-${stdenv.lib.optionalString (!cond) "no-"}${name}";
+  in [
+    "-v"
+    "-system-zlib" "-system-libpng" "-system-libjpeg"
+    "-qt-gif"
+    "-I${xextproto}/include"
+    (mk threadSupport "thread")
+    (mk xrenderSupport "xrender")
+    (mk xrandrSupport "xrandr")
+    (mk xineramaSupport "xinerama")
+    (mk xrandrSupport "xrandr")
+    (mk xftSupport "xft")
+  ] ++ stdenv.lib.optionals openglSupport [
+    "-dlopen-opengl"
+    "-L${libGLU_combined}/lib" "-I${libGLU_combined}/include"
+    "-L${libXmu.out}/lib" "-I${libXmu.dev}/include"
+  ] ++ stdenv.lib.optionals xrenderSupport [
+    "-L${libXrender.out}/lib" "-I${libXrender.dev}/include"
+  ] ++ stdenv.lib.optionals xrandrSupport [
+    "-L${libXrandr.out}/lib" "-I${libXrandr.dev}/include"
+    "-I${randrproto}/include"
+  ] ++ stdenv.lib.optionals xineramaSupport [
+    "-L${libXinerama.out}/lib" "-I${libXinerama.dev}/include"
+  ] ++ stdenv.lib.optionals cursorSupport [
+    "-L${libXcursor.out}/lib -I${libXcursor.dev}/include"
+  ] ++ stdenv.lib.optionals mysqlSupport [
+    "-qt-sql-mysql" "-L${mysql.connector-c}/lib/mysql" "-I${mysql.connector-c}/include/mysql"
+  ] ++ stdenv.lib.optionals xftSupport [
+    "-L${libXft.out}/lib" "-I${libXft.dev}/include"
+    "-L${libXft.freetype.out}/lib" "-I${libXft.freetype.dev}/include"
+    "-L${libXft.fontconfig.lib}/lib" "-I${libXft.fontconfig.dev}/include"
+  ];
 
   patches = [
     # Don't strip everything so we can get useful backtraces.

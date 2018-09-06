@@ -1,10 +1,9 @@
-{ stdenv, fetchFromGitHub, pythonPackages,
+{ stdenv, fetchFromGitHub, python2Packages,
   asciidoc, libxml2, libxslt, docbook_xsl }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   version = "7.2.1";
-  name = "offlineimap-${version}";
-  namePrefix = "";
+  pname = "offlineimap";
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
@@ -21,7 +20,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xsl ];
-  propagatedBuildInputs = [ pythonPackages.six pythonPackages.kerberos ];
+  propagatedBuildInputs = with python2Packages; [ six kerberos ];
 
   postInstall = ''
     make -C docs man

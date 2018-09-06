@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ guile cairo expat ]
-    ++ stdenv.lib.optional doCheck guile-lib;
+  buildInputs = [ guile cairo expat ];
+  checkInputs = [ guile-lib ];
 
   doCheck = true;
 

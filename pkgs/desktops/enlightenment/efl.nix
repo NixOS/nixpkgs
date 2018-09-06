@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.20.7";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "1zkn5ix81xck3n84dxvkjh4alwc6zj8x989d0zqi5c6ppijvgadh";
+    sha256 = "0jxfrcz2aq1synxzd6sh9nhxz7fg9qgz0idr8zj6gaiplmwbwrby";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
     xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
     harfbuzz jbig2dec librsvg dbus alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
     libinput utillinux fribidi SDL2 ];
+
+  # as of 1.21.0 compilation will fail due to -Werror=format-security
+  hardeningDisable = [ "format" ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
   configureFlags = [

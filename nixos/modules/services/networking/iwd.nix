@@ -20,14 +20,7 @@ in {
 
     services.dbus.packages = [ pkgs.iwd ];
 
-    systemd.services.iwd = {
-      description = "Wireless daemon";
-      before = [ "network.target" ];
-      wants = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig.ExecStart = "${pkgs.iwd}/libexec/iwd";
-    };
+    systemd.packages = [ pkgs.iwd ];
 
     systemd.tmpfiles.rules = [
       "d /var/lib/iwd 0700 root root -"

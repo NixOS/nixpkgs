@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
        "--with-include=${lib.getDev sslLibs.${sslSupport}}/include"
        "--with-lib=${lib.getLib sslLibs.${sslSupport}}/lib"
      ])
-  ++ (lib.optional stdenv.isDarwin "--build=${stdenv.system}");
+  ++ (lib.optional stdenv.isDarwin "--build=${stdenv.hostPlatform.system}");
 
   postInstall = ''
     mkdir -p $doc/share/doc/s6-networking/

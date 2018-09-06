@@ -1,8 +1,9 @@
-{stdenv, system, fetchurl, dpkg, openssl, xorg
+{ stdenv, fetchurl, dpkg, openssl, xorg
 , glib, libGLU_combined, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk2, pango, atk, cairo, gdk_pixbuf, jasper, xkeyboardconfig
 , makeWrapper , python, pythonPackages, lib
-, libredirect, lsof}:
+, libredirect, lsof
+}:
 
 let
   all_data = builtins.fromJSON (builtins.readFile ./data.json);
@@ -11,7 +12,7 @@ let
     x86_64-linux = "amd64";
   };
 
-  data = all_data.${system_map.${system} or (throw "Unsupported platform")};
+  data = all_data.${system_map.${stdenv.hostPlatform.system} or (throw "Unsupported platform")};
 
   baseUrl = http://repo.sinew.in;
 

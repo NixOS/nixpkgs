@@ -1,5 +1,4 @@
 { stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
-, hostPlatform
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
  */
@@ -253,8 +252,8 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [];
   configureFlags = [
-    "--target_os=${hostPlatform.parsed.kernel.name}"
-    "--arch=${hostPlatform.parsed.cpu.name}"
+    "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
+    "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
     /*
      *  Licensing flags
      */

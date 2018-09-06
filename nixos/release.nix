@@ -83,7 +83,7 @@ let
     in
       tarball //
         { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.platform.name}";
+            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.platform.name}";
             maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit config;
@@ -106,7 +106,7 @@ let
     let
       configEvaled = import lib/eval-config.nix config;
       build = configEvaled.config.system.build;
-      kernelTarget = configEvaled.pkgs.stdenv.platform.kernelTarget;
+      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
     in
       pkgs.symlinkJoin {
         name = "netboot";
@@ -249,13 +249,14 @@ in rec {
   tests.beegfs = callTest tests/beegfs.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.bind = callTest tests/bind.nix {};
-  tests.blivet = callTest tests/blivet.nix {};
+  #tests.blivet = callTest tests/blivet.nix {};   # broken since 2017-07024
   tests.boot = callSubTests tests/boot.nix {};
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.borgbackup = callTest tests/borgbackup.nix {};
   tests.buildbot = callTest tests/buildbot.nix {};
   tests.cadvisor = callTestOnMatchingSystems ["x86_64-linux"] tests/cadvisor.nix {};
   tests.ceph = callTestOnMatchingSystems ["x86_64-linux"] tests/ceph.nix {};
+  tests.certmgr = callSubTests tests/certmgr.nix {};
   tests.cfssl = callTestOnMatchingSystems ["x86_64-linux"] tests/cfssl.nix {};
   tests.chromium = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
   tests.cjdns = callTest tests/cjdns.nix {};
@@ -290,6 +291,7 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.flatpak = callTest tests/flatpak.nix {};
   tests.firewall = callTest tests/firewall.nix {};
+  tests.fsck = callTest tests/fsck.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   tests.gdk-pixbuf = callTest tests/gdk-pixbuf.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};
@@ -325,7 +327,6 @@ in rec {
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kafka = callSubTests tests/kafka.nix {};
-  tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
   tests.kubernetes.dns = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/dns.nix {};
@@ -398,7 +399,7 @@ in rec {
   tests.slurm = callTest tests/slurm.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
-  tests.statsd = callTest tests/statsd.nix {};
+  #tests.statsd = callTest tests/statsd.nix {}; # statsd is broken: #45946
   tests.strongswan-swanctl = callTest tests/strongswan-swanctl.nix {};
   tests.sudo = callTest tests/sudo.nix {};
   tests.systemd = callTest tests/systemd.nix {};
@@ -420,6 +421,7 @@ in rec {
   tests.yabar = callTest tests/yabar.nix {};
   tests.zookeeper = callTest tests/zookeeper.nix {};
   tests.morty = callTest tests/morty.nix { };
+  tests.bcachefs = callTest tests/bcachefs.nix { };
 
   /* Build a bunch of typical closures so that Hydra can keep track of
      the evolution of closure sizes. */

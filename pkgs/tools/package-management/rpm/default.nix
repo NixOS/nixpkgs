@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "rpm-${version}";
-  version = "4.14.1";
+  version = "4.14.2";
 
   src = fetchurl {
     url = "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-${version}.tar.bz2";
-    sha256 = "0fvrjq6jsvbllb5q6blchzh7p5flk61rz34g4g9mp9iwrhn0xx23";
+    sha256 = "0armd7dqr8bl0isx8l4xlylm7dikasmxhhcbz336fkp2x30w5jw0";
   };
 
   outputs = [ "out" "dev" "man" ];
