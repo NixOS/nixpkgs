@@ -538,6 +538,8 @@ in {
 
   seekpath = callPackage ../development/python-modules/seekpath { };
 
+  selectors2 = callPackage ../development/python-modules/selectors2 { };
+
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
