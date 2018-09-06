@@ -1,11 +1,18 @@
-Look up .build-id files relative to the directories in the
-colon-separated environment variable NIX_DEBUG_INFO_DIRS, in addition
-to the existing debug-file-directory setting.
+From a7257d97f297efb1884f3ef5bdfac851535828c1 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Thu, 6 Sep 2018 17:09:30 -0500
+Subject: [PATCH] debug from env
 
-diff -ru --exclude '*gcore' --exclude '*pdtrace' gdb-8.0-orig/gdb/build-id.c gdb-8.0/gdb/build-id.c
---- gdb-8.0-orig/gdb/build-id.c	2017-06-04 17:51:26.000000000 +0200
-+++ gdb-8.0/gdb/build-id.c	2017-07-28 13:18:10.797375927 +0200
-@@ -67,8 +67,8 @@
+---
+ gdb/build-id.c | 30 +++++++++++++++++++++++++++---
+ gdb/symfile.c  |  4 ++--
+ 2 files changed, 29 insertions(+), 5 deletions(-)
+
+diff --git a/gdb/build-id.c b/gdb/build-id.c
+index c8eacbd1e8..804205f6df 100644
+--- a/gdb/build-id.c
++++ b/gdb/build-id.c
+@@ -67,8 +67,8 @@ build_id_verify (bfd *abfd, size_t check_len, const bfd_byte *check)
  
  /* See build-id.h.  */
  
@@ -14,27 +21,18 @@ diff -ru --exclude '*gcore' --exclude '*pdtrace' gdb-8.0-orig/gdb/build-id.c gdb
 +static gdb_bfd_ref_ptr
 +build_id_to_debug_bfd_in (const char *directories, size_t build_id_len, const bfd_byte *build_id)
  {
-   char *link, *debugdir;
-   VEC (char_ptr) *debugdir_vec;
-@@ -78,7 +78,7 @@
-   int alloc_len;
+   gdb_bfd_ref_ptr abfd;
  
-   /* DEBUG_FILE_DIRECTORY/.build-id/ab/cdef */
--  alloc_len = (strlen (debug_file_directory)
-+  alloc_len = (strlen (directories)
- 	       + (sizeof "/.build-id/" - 1) + 1
- 	       + 2 * build_id_len + (sizeof ".debug" - 1) + 1);
-   link = (char *) alloca (alloc_len);
-@@ -86,7 +86,7 @@
-   /* Keep backward compatibility so that DEBUG_FILE_DIRECTORY being "" will
+@@ -76,7 +76,7 @@ build_id_to_debug_bfd (size_t build_id_len, const bfd_byte *build_id)
       cause "/.build-id/..." lookups.  */
  
--  debugdir_vec = dirnames_to_char_ptr_vec (debug_file_directory);
-+  debugdir_vec = dirnames_to_char_ptr_vec (directories);
-   back_to = make_cleanup_free_char_ptr_vec (debugdir_vec);
+   std::vector<gdb::unique_xmalloc_ptr<char>> debugdir_vec
+-    = dirnames_to_char_ptr_vec (debug_file_directory);
++    = dirnames_to_char_ptr_vec (directories /* debug_file_directory */);
  
-   for (ix = 0; VEC_iterate (char_ptr, debugdir_vec, ix, debugdir); ++ix)
-@@ -137,6 +137,30 @@
+   for (const gdb::unique_xmalloc_ptr<char> &debugdir : debugdir_vec)
+     {
+@@ -123,6 +123,30 @@ build_id_to_debug_bfd (size_t build_id_len, const bfd_byte *build_id)
    return abfd;
  }
  
@@ -64,11 +62,12 @@ diff -ru --exclude '*gcore' --exclude '*pdtrace' gdb-8.0-orig/gdb/build-id.c gdb
 +
  /* See build-id.h.  */
  
- char *
-diff -ru --exclude '*gcore' --exclude '*pdtrace' gdb-8.0-orig/gdb/symfile.c gdb-8.0/gdb/symfile.c
---- gdb-8.0-orig/gdb/symfile.c	2017-06-04 17:51:27.000000000 +0200
-+++ gdb-8.0/gdb/symfile.c	2017-07-28 12:54:05.401586174 +0200
-@@ -1415,8 +1415,8 @@
+ std::string
+diff --git a/gdb/symfile.c b/gdb/symfile.c
+index 39d06d86fa..e043f91cc4 100644
+--- a/gdb/symfile.c
++++ b/gdb/symfile.c
+@@ -1360,8 +1360,8 @@ show_debug_file_directory (struct ui_file *file, int from_tty,
  			   struct cmd_list_element *c, const char *value)
  {
    fprintf_filtered (file,
@@ -79,3 +78,6 @@ diff -ru --exclude '*gcore' --exclude '*pdtrace' gdb-8.0-orig/gdb/symfile.c gdb-
  		    value);
  }
  
+-- 
+2.18.0
+
