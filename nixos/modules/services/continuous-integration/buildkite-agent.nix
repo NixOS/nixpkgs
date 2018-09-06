@@ -93,6 +93,16 @@ in
         '';
       };
 
+      extraSetup = mkOption {
+        type = types.lines;
+        default = "";
+        example = "touch /var/lib/buildkite-agent/test";
+        description = ''
+          Extra commands to execute (as root) while setting up the buildkite dir and config.
+          The directory ownership will be fixed up afterwards.
+        '';
+      };
+
       openssh =
         { privateKeyPath = mkOption {
             type = types.path;
@@ -181,6 +191,14 @@ in
           instead.
         '';
       };
+
+      shell = mkOption {
+        type = types.string;
+        default = "${pkgs.bash}/bin/bash -e -c";
+        description = ''
+          Command that buildkite-agent 3 will execute when it spawns a shell.
+        '';
+      };
     };
   };
 
@@ -203,10 +221,12 @@ in
         environment = config.networking.proxy.envVars // {
           HOME = cfg.dataDir;
           NIX_REMOTE = "daemon";
+          BUILDKITE_SHELL = cfg.shell;
         };
 
         ## NB: maximum care is taken so that secrets (ssh keys and the CI token)
         ##     don't end up in the Nix store.
+        ## This preStart script runs as root
         preStart = let
           sshDir = "${cfg.dataDir}/.ssh";
         in
@@ -224,14 +244,21 @@ in
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}
             EOF
+            ${cfg.extraSetup}
+            chown -R buildkite-agent ${cfg.dataDir}
           '';
 
         serviceConfig =
-          { ExecStart = "${pkgs.buildkite-agent}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
+          { ExecStart = "${cfg.package}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
             User = "buildkite-agent";
             RestartSec = 5;
             Restart = "on-failure";
             TimeoutSec = 10;
+            # set a long timeout to give buildkite-agent a chance to finish current builds
+            TimeoutStopSec = "2 min";
+            KillMode = "mixed";
+            # run the preStart script as root
+            PermissionsStartOnly = true;
           };
       };
 
