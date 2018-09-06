@@ -64,27 +64,17 @@ in
     }:
 
     let
-      urlPrefix = "http://yann.lecun.com/exdb/mnist/";
-
-      # File names relative to 'urlPrefix' and their sha256.
-      fileInfos = [
-        [ "train-images-idx3-ubyte.gz"
-         "440fcabf73cc546fa21475e81ea370265605f56be210a4024d2ca8f203523609"
-        ]
-
-        [ "train-labels-idx1-ubyte.gz"
-         "3552534a0a558bbed6aed32b30c495cca23d567ec52cac8be1a0730e8010255c"
-        ]
-
-        [ "t10k-images-idx3-ubyte.gz"
-         "8d422c7b0a1c1c79245a5bcf07fe86e33eeafee792b84584aec276f5a2dbc4e6"
-        ]
-
-        [ "t10k-labels-idx1-ubyte.gz"
-         "f7ae60f92e00ec6debd23a6088c31dbd2371eca3ffa0defaefb259924204aec6"
-        ]
-      ];
-      downloads = map (x: pkgs.fetchurl { url = urlPrefix + builtins.head x; sha256= builtins.tail x;}) fileInfos;
+      fileInfos = {
+        "train-images-idx3-ubyte.gz" = "440fcabf73cc546fa21475e81ea370265605f56be210a4024d2ca8f203523609";
+        "train-labels-idx1-ubyte.gz" = "3552534a0a558bbed6aed32b30c495cca23d567ec52cac8be1a0730e8010255c";
+        "t10k-images-idx3-ubyte.gz"  = "8d422c7b0a1c1c79245a5bcf07fe86e33eeafee792b84584aec276f5a2dbc4e6";
+        "t10k-labels-idx1-ubyte.gz"  = "f7ae60f92e00ec6debd23a6088c31dbd2371eca3ffa0defaefb259924204aec6";
+      };
+      downloads = with pkgs.lib; flip mapAttrsToList fileInfos (name: sha256:
+                    pkgs.fetchurl {
+                      url = "http://yann.lecun.com/exdb/mnist/${name}";
+                      inherit sha256;
+                    });
     in
     mkDerivation {
       pname = "tensorflow-mnist-input-data";
