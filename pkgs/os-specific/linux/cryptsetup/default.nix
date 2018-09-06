@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ lvm2 json_c openssl libuuid popt ]
     ++ stdenv.lib.optional enablePython python2;
 
+  doCheck = true;
+
   meta = {
     homepage = https://gitlab.com/cryptsetup/cryptsetup/;
     description = "LUKS for dm-crypt";
