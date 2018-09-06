@@ -393,6 +393,7 @@
   ./services/misc/serviio.nix
   ./services/misc/safeeyes.nix
   ./services/misc/siproxd.nix
+  ./services/misc/sickrage.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
   ./services/misc/spice-vdagentd.nix
