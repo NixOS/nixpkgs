@@ -544,6 +544,13 @@ inherit (pkgs.nixos {
       a new paragraph.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      Top-level <literal>buildPlatform</literal>, <literal>hostPlatform</literal>, and <literal>targetPlatform</literal> in Nixpkgs are deprecated.
+      Please use their equivalents in <literal>stdenv</literal> instead:
+      <literal>stdenv.buildPlatform</literal>, <literal>stdenv.hostPlatform</literal>, and <literal>stdenv.targetPlatform</literal>.
+    </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>
