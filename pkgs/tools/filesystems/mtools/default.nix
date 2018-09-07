@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/mtools/;
     description = "Utilities to access MS-DOS disks";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ ];
+    platforms = platforms.unix;
+    license = licenses.gpl3;
   };
 }
