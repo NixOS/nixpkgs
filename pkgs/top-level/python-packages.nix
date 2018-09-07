@@ -336,6 +336,8 @@ in {
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
+  markerlib = callPackage ../development/python-modules/markerlib { };
+
   monty = callPackage ../development/python-modules/monty { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
