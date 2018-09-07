@@ -23,22 +23,31 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup =
-    let wrapMonkeysphere = runtimeDeps: program:
-          "wrapProgram $out/bin/${program} --prefix PERL5LIB : "
-            + (with perlPackages; stdenv.lib.makePerlPath [
-                CryptOpenSSLRSA
-                CryptOpenSSLBignum
-              ])
-            + stdenv.lib.optionalString
-                (builtins.length runtimeDeps > 0)
-                " --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}"
-            + "\n";
+    let wrapperArgs = runtimeDeps:
+          "--prefix PERL5LIB : "
+          + (with perlPackages; stdenv.lib.makePerlPath [
+              CryptOpenSSLRSA
+              CryptOpenSSLBignum
+            ])
+          + stdenv.lib.optionalString
+              (builtins.length runtimeDeps > 0)
+              " --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}";
+        wrapMonkeysphere = runtimeDeps: program:
+          "wrapProgram $out/bin/${program} ${wrapperArgs runtimeDeps}\n";
         wrapPrograms = runtimeDeps: programs: stdenv.lib.concatMapStrings
           (wrapMonkeysphere runtimeDeps)
           programs;
     in wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
-      + wrapPrograms [ ] [ "../share/monkeysphere/keytrans" "openpgp2ssh" ]
-      + wrapPrograms [ lockfileProgs ] [ "monkeysphere" ];
+      + wrapPrograms [ lockfileProgs ] [ "monkeysphere" ]
+      + ''
+        # These 4 programs depend on the program name ($0):
+        for program in openpgp2pem openpgp2spki openpgp2ssh pem2openpgp; do
+          rm $out/bin/$program
+          ln -sf keytrans $out/share/monkeysphere/$program
+          makeWrapper $out/share/monkeysphere/$program $out/bin/$program \
+            ${wrapperArgs [ ]}
+        done
+      '';
 
   meta = with stdenv.lib; {
     homepage = http://web.monkeysphere.info/;
