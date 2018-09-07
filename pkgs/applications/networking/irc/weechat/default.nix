@@ -133,13 +133,13 @@ in if configure == null then weechat else
 
       scripts = builtins.concatStringsSep ";" (lib.foldl (scripts: drv: scripts ++ mkScript drv)
         [ ] (config.scripts or []));
-    in "${scripts}\n${init}";
+    in "${scripts};${init}";
 
     mkWeechat = bin: (writeScriptBin bin ''
       #!${stdenv.shell}
       export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
       ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
-      exec ${weechat}/bin/${bin} "$@" --run-command "${init}"
+      exec ${weechat}/bin/${bin} "$@" --run-command ${lib.escapeShellArg init}
     '') // {
       inherit (weechat) name meta;
       unwrapped = weechat;
