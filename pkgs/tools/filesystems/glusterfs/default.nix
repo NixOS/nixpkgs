@@ -181,13 +181,12 @@ rec {
     inherit (s) url sha256;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     inherit (s) version;
     description = "Distributed storage system";
-    maintainers = [
-      stdenv.lib.maintainers.raskin
-    ];
-    platforms = with stdenv.lib.platforms;
-      linux ++ freebsd;
+    homepage = https://www.gluster.org;
+    license = licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
+    maintainers = [ maintainers.raskin ];
+    platforms = with platforms; linux ++ freebsd;
   };
 }

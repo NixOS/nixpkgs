@@ -27,10 +27,12 @@ stdenv.mkDerivation rec {
    ] ++ stdenv.lib.optionals gtkSupport [ glib gtk3 ]
      ++ stdenv.lib.optionals videoSupport [ ffmpeg libmpeg2 ];
 
-  configureFlags = "--disable-ltdl-install "
-    + "--with-ltdl-include=${libtool}/include "
-    + "--with-ltdl-lib=${libtool.lib}/lib "
-    + "--enable-xpdf";
+  configureFlags = [
+    "--disable-ltdl-install"
+    "--with-ltdl-include=${libtool}/include"
+    "--with-ltdl-lib=${libtool.lib}/lib"
+    "--enable-xpdf"
+  ];
 
   # Checks need to be run after "make install", otherwise plug-ins are not in
   # the search path, etc.

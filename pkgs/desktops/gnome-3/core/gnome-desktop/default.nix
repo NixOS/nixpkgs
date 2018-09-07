@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
+{ stdenv, fetchurl, substituteAll, pkgconfig, libxslt, which, libX11, gnome3, gtk3, glib
 , intltool, libxml2, xkeyboard_config, isocodes, itstool, wayland
 , libseccomp, bubblewrap, gobjectIntrospection, gtk-doc, docbook_xsl }:
 
@@ -30,17 +30,15 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gnome3.gsettings-desktop-schemas ];
 
   patches = [
-    ./bubblewrap-paths.patch
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      BUBBLEWRAP_BIN = "${bubblewrap}/bin/bwrap";
+    })
   ];
 
   configureFlags = [
     "--enable-gtk-doc"
   ];
-
-  postPatch = ''
-    substituteInPlace libgnome-desktop/gnome-desktop-thumbnail-script.c --subst-var-by \
-      BUBBLEWRAP_BIN "${bubblewrap}/bin/bwrap"
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

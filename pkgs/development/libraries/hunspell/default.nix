@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline ];
   nativeBuildInputs = [ autoreconfHook ];
 
+  postPatch = ''
+    patchShebangs tests
+  '';
+
   autoreconfFlags = "-vfi";
 
   configureFlags = [ "--with-ui" "--with-readline" ];

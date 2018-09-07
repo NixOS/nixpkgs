@@ -1,6 +1,5 @@
 { stdenv, writeScript
 , fetchurl, groff
-, buildPlatform, hostPlatform
 }:
 
 let
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
     "NIXOS=1" "INSTALL=install" "INSTALL_BINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man" "RUN_DIR=/dev/.mdadm"
     "STRIP="
-  ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
@@ -44,9 +43,10 @@ stdenv.mkDerivation rec {
         -e 's@/usr/sbin/sendmail@${sendmail-script}@' -i Makefile
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Programs for managing RAID arrays under Linux";
     homepage = http://neil.brown.name/blog/mdadm;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     unzip
   ];
 
-  src = sources."${version}-${stdenv.system}" or (throw "unsupported version/system: ${version}/${stdenv.system}");
+  src = sources."${version}-${stdenv.hostPlatform.system}" or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
 
   installPhase = ''
     mkdir -p $out

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , which
-, buildPackages, buildPlatform, hostPlatform
+, buildPackages
 , toolset ? /**/ if stdenv.cc.isClang  then "clang"
             else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
-, enableShared ? !(hostPlatform.libc == "msvcrt") # problems for now
+, enableShared ? !(stdenv.hostPlatform.libc == "msvcrt") # problems for now
 , enableStatic ? !enableShared
 , enablePython ? false
 , enableNumpy ? false
@@ -24,7 +24,7 @@
 assert enableShared || enableStatic;
 
 # Python isn't supported when cross-compiling
-assert enablePython -> hostPlatform == buildPlatform;
+assert enablePython -> stdenv.hostPlatform == stdenv.buildPlatform;
 assert enableNumpy -> enablePython;
 
 with stdenv.lib;
@@ -59,23 +59,23 @@ let
     "-sEXPAT_LIBPATH=${expat.out}/lib"
 
     # TODO: make this unconditional
-  ] ++ optionals (hostPlatform != buildPlatform) [
-    "address-model=${toString hostPlatform.parsed.cpu.bits}"
-    "architecture=${toString hostPlatform.parsed.cpu.family}"
-    "binary-format=${toString hostPlatform.parsed.kernel.execFormat.name}"
-    "target-os=${toString hostPlatform.parsed.kernel.name}"
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
+    "architecture=${toString stdenv.hostPlatform.parsed.cpu.family}"
+    "binary-format=${toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
+    "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
 
     # adapted from table in boost manual
     # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
-    "abi=${if hostPlatform.parsed.cpu.family == "arm" then "aapcs"
-           else if hostPlatform.isWindows then "ms"
-           else if hostPlatform.isMips then "o32"
+    "abi=${if stdenv.hostPlatform.parsed.cpu.family == "arm" then "aapcs"
+           else if stdenv.hostPlatform.isWindows then "ms"
+           else if stdenv.hostPlatform.isMips then "o32"
            else "sysv"}"
   ] ++ optional (link != "static") "runtime-link=${runtime-link}"
     ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
-    ++ optional (mpi != null || hostPlatform != buildPlatform) "--user-config=user-config.jam"
-    ++ optionals (hostPlatform.libc == "msvcrt") [
+    ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
+    ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
   ]);
 
@@ -86,10 +86,10 @@ stdenv.mkDerivation {
 
   inherit src;
 
-  patchFlags = optionalString (hostPlatform.libc == "msvcrt") "-p0";
+  patchFlags = optionalString (stdenv.hostPlatform.libc == "msvcrt") "-p0";
   patches = patches
     ++ optional stdenv.isDarwin ./darwin-no-system-python.patch
-    ++ optional (hostPlatform.libc == "msvcrt") (fetchurl {
+    ++ optional (stdenv.hostPlatform.libc == "msvcrt") (fetchurl {
       url = "https://svn.boost.org/trac/boost/raw-attachment/tickaet/7262/"
           + "boost-mingw.patch";
       sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
@@ -113,7 +113,7 @@ stdenv.mkDerivation {
     cat << EOF >> user-config.jam
     using mpi : ${mpi}/bin/mpiCC ;
     EOF
-  '' + optionalString (hostPlatform != buildPlatform) ''
+  '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cat << EOF >> user-config.jam
     using gcc : cross : ${stdenv.cc.targetPrefix}c++ ;
     EOF
@@ -126,7 +126,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ which buildPackages.stdenv.cc ];
   buildInputs = [ expat zlib bzip2 libiconv ]
-    ++ optional (hostPlatform == buildPlatform) icu
+    ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
     ++ optional stdenv.isDarwin fixDarwinDylibNames
     ++ optional enablePython python
     ++ optional enableNumpy python.pkgs.numpy;
@@ -137,7 +137,7 @@ stdenv.mkDerivation {
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
   ] ++ optional enablePython "--with-python=${python.interpreter}"
-    ++ [ (if hostPlatform == buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
+    ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
     ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = ''
@@ -157,7 +157,7 @@ stdenv.mkDerivation {
     # Make boost header paths relative so that they are not runtime dependencies
     cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
       -exec sed '1i#line 1 "{}"' -i '{}' \;
-  '' + optionalString (hostPlatform.libc == "msvcrt") ''
+  '' + optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
     $RANLIB "$out/lib/"*.a
   '';
 

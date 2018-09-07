@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
-, coreutils, gnused, getopt, git, tree, gnupg, which, procps, qrencode
-, makeWrapper
+, coreutils, gnused, getopt, git, tree, gnupg, openssl, which, procps
+, qrencode , makeWrapper
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin
@@ -66,7 +66,8 @@ let
       which
       qrencode
       procps
-    ] ++ ifEnable x11Support [ dmenu xclip xdotool ]);
+    ] ++ optional stdenv.isDarwin openssl
+      ++ ifEnable x11Support [ dmenu xclip xdotool ]);
 
     postFixup = ''
       # Link extensions env
@@ -86,6 +87,27 @@ let
       wrapProgram $out/bin/passmenu \
         --prefix PATH : "$out/bin:${wrapperPath}"
     '';
+
+    # Turn "check" into "installcheck", since we want to test our pass,
+    # not the one before the fixup.
+    postPatch = ''
+      patchShebangs tests
+
+      # the turning
+      sed -i -e 's@^PASS=.*''$@PASS=$out/bin/pass@' \
+             -e 's@^GPGS=.*''$@GPG=${gnupg}/bin/gpg2@' \
+             -e '/which gpg/ d' \
+        tests/setup.sh
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      # 'pass edit' uses hdid, which is not available from the sandbox.
+      rm -f tests/t0200-edit-tests.sh
+    '';
+
+    doCheck = false;
+
+    doInstallCheck = true;
+    installCheckInputs = [ git ];
+    installCheckTarget = "test";
 
     passthru = {
       extensions = passExtensions;

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''sed -e '/curl\/types\.h/d' -i src/xitk/download.c'';
 
-  configureFlags = "--with-readline=${readline.dev}";
+  configureFlags = [ "--with-readline=${readline.dev}" ];
   
   LIRC_CFLAGS="-I${lirc}/include";
   LIRC_LIBS="-L ${lirc}/lib -llirc_client";

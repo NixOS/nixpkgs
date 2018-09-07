@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, gnugrep
 , fixDarwinDylibNames
+, file
 , legacySupport ? false }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +19,10 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
   ];
+
+  checkInputs = [ file ];
+  doCheck = false; # fails with "zstd: --list does not support reading from standard input"
+                   # probably a bug
 
   installFlags = [
     "PREFIX=$(out)"

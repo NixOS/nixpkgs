@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "hvac";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4bc80744df5f09882b1cc91755b03b7b62b093fc63c8c4abb26fbfb9c9e878dd";
+    sha256 = "54672a93f75453a7de13c7c10c6d8a51630e2559a8e2a563d8e272e9e188443f";
   };
 
   propagatedBuildInputs = [ requests ];

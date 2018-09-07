@@ -34,15 +34,15 @@ stdenv.mkDerivation rec {
     export USEPNG=" -DUSEPNG"
     export PNGLIB=" -lpng -lz"
   '';
-  arch = if stdenv.system == "x86_64-linux"   then "linux-64-thr"  else
-         if stdenv.system == "i686-linux"     then "linux-thr"     else
-         if stdenv.system == "aarch64-linux"  then "linux-arm-thr" else
-         if stdenv.system == "armv7l-linux"   then "linux-arm-thr" else
-         if stdenv.system == "x86_64-darwin"  then "macosx-thr"    else
-         if stdenv.system == "i686-darwin"    then "macosx-64-thr" else
-         if stdenv.system == "i686-cygwin"    then "win32"         else
-         if stdenv.system == "x86_64-freebsd" then "bsd"           else
-         if stdenv.system == "x686-freebsd"   then "bsd"           else
+  arch = if stdenv.hostPlatform.system == "x86_64-linux"   then "linux-64-thr"  else
+         if stdenv.hostPlatform.system == "i686-linux"     then "linux-thr"     else
+         if stdenv.hostPlatform.system == "aarch64-linux"  then "linux-arm-thr" else
+         if stdenv.hostPlatform.system == "armv7l-linux"   then "linux-arm-thr" else
+         if stdenv.hostPlatform.system == "x86_64-darwin"  then "macosx-thr"    else
+         if stdenv.hostPlatform.system == "i686-darwin"    then "macosx-64-thr" else
+         if stdenv.hostPlatform.system == "i686-cygwin"    then "win32"         else
+         if stdenv.hostPlatform.system == "x86_64-freebsd" then "bsd"           else
+         if stdenv.hostPlatform.system == "x686-freebsd"   then "bsd"           else
          throw "Don't know what arch to select for tachyon build";
   makeFlags = "${arch}";
   patches = [

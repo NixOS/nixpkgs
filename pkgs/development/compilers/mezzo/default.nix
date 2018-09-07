@@ -1,5 +1,9 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, menhir, yojson, ulex, pprint, fix, functory }:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.06"
+then throw "mezzo is not available for OCaml ${ocaml.version}"
+else
+
 let
   check-ocaml-version = with stdenv.lib; versionAtLeast (getVersion ocaml);
 in

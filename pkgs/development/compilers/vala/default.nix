@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, flex, bison, libxslt, autoconf, graphviz
+{ stdenv, lib, fetchurl, pkgconfig, flex, bison, libxslt, autoconf, automake, graphviz
 , glib, libiconv, libintl, libtool, expat
 }:
 
@@ -7,12 +7,17 @@ let
   let
     atLeast = lib.versionAtLeast "${major}.${minor}";
   in stdenv.mkDerivation rec {
-    name = "vala-${major}.${minor}";
+    name = "vala-${version}";
+    version = "${major}.${minor}";
 
     src = fetchurl {
       url = "mirror://gnome/sources/vala/${major}/${name}.tar.xz";
       inherit sha256;
     };
+
+    postPatch = ''
+      patchShebangs tests
+    '';
 
     outputs = [ "out" "devdoc" ];
 
@@ -26,6 +31,8 @@ let
     ] ++ lib.optional (atLeast "0.38") graphviz
       ++ extraBuildInputs;
 
+    doCheck = false; # fails, requires dbus daemon
+
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
       homepage = https://wiki.gnome.org/Projects/Vala;
@@ -36,25 +43,6 @@ let
   };
 
 in rec {
-
-  vala_0_26 = generic {
-    major   = "0.26";
-    minor   = "2";
-    sha256  = "1i03ds1z5hivqh4nhf3x80fg7n0zd22908w5minkpaan1i1kzw9p";
-  };
-
-  vala_0_28 = generic {
-    major   = "0.28";
-    minor   = "1";
-    sha256  = "0isg327w6rfqqdjja6a8pc3xcdkj7pqrkdhw48bsyxab2fkaw3hw";
-  };
-
-  vala_0_32 = generic {
-    major   = "0.32";
-    minor   = "1";
-    sha256  = "1ab1l44abf9fj1wznzq5956431ia136rl5049cggnk5393jlf3fx";
-  };
-
   vala_0_34 = generic {
     major   = "0.34";
     minor   = "17";

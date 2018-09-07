@@ -39,7 +39,7 @@
     starting the Emacs daemon.
   </para>
 
-  <section>
+  <section xml:id="module-services-emacs-installing">
     <title>Installing <application>Emacs</application></title>
 
     <para>
@@ -49,7 +49,7 @@
       can be enabled.
     </para>
 
-    <section>
+    <section xml:id="module-services-emacs-releases">
       <title>The Different Releases of Emacs</title>
 
       <para>
@@ -100,7 +100,7 @@
       </para>
 
     </section>
-    <section>
+    <section xml:id="module-services-emacs-adding-packages">
       <title>Adding Packages to Emacs</title>
       <para>
         Emacs includes an entire ecosystem of functionality beyond
@@ -274,7 +274,7 @@ $ ./result/bin/emacs -q
       <para>
         The list of available packages in the various ELPA
         repositories can be seen with the following commands:
-        <example>
+        <example xml:id="module-services-emacs-querying-packages">
           <title>Querying Emacs packages</title>
           <programlisting><![CDATA[
 nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.elpaPackages
@@ -291,7 +291,7 @@ nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.orgPackages
         (see <xref linkend="sec-declarative-package-mgmt" />). Simply
         modify your file <filename>configuration.nix</filename> to
         make it contain:
-        <example>
+        <example xml:id="module-services-emacs-configuration-nix">
           <title>Custom Emacs in <filename>configuration.nix</filename></title>
           <programlisting><![CDATA[
 {
@@ -319,7 +319,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
         Emacs only for yourself, you can do so by adding it to your
         <filename>~/.config/nixpkgs/config.nix</filename>
         (see <link xlink:href="http://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides">Nixpkgs manual</link>):
-        <example>
+        <example xml:id="module-services-emacs-config-nix">
           <title>Custom Emacs in <filename>~/.config/nixpkgs/config.nix</filename></title>
           <programlisting><![CDATA[
 {
@@ -339,7 +339,7 @@ https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
       </para>
     </section>
 
-    <section>
+    <section xml:id="module-services-emacs-advanced">
       <title>Advanced Emacs Configuration</title>
 
       <para>
@@ -380,7 +380,7 @@ in [...]
     </section>
   </section>
 
-<section>
+<section xml:id="module-services-emacs-running">
   <title>Running Emacs as a Service</title>
   <para>
     <productname>NixOS</productname> provides an optional
@@ -396,7 +396,7 @@ in [...]
     <filename>modules/services/editors/emacs.nix</filename>
   </para>
 
-  <section>
+  <section xml:id="module-services-emacs-enabling">
     <title>Enabling the Service</title>
 
     <para>
@@ -438,7 +438,7 @@ $ systemctl --user start emacs.service  # to start the Emacs daemon
 
   </section>
 
-  <section>
+  <section xml:id="module-services-emacs-starting-client">
     <title>Starting the client</title>
     <para>
       Ensure that the emacs server is enabled, either by customizing
@@ -457,7 +457,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     </para>
   </section>
 
-  <section>
+  <section xml:id="module-services-emacs-editor-variable">
     <title>Configuring the <varname>EDITOR</varname> variable</title>
     <!--<title><command>emacsclient</command> as the Default Editor</title>-->
 
@@ -487,7 +487,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     </para>
   </section>
 
-  <section>
+  <section xml:id="module-services-emacs-per-user">
     <title>Per-User Enabling of the Service</title>
 
     <para>
@@ -515,14 +515,14 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
   </section>
 </section>
 
-<section>
+<section xml:id="module-services-emacs-configuring">
   <title>Configuring Emacs</title>
 
   <para>
     The Emacs init file should be changed to load the extension
     packages at startup:
 
-    <example>
+    <example xml:id="module-services-emacs-package-initialisation">
       <title>Package initialization in <filename>.emacs</filename></title>
       <programlisting><![CDATA[
 (require 'package)
@@ -548,7 +548,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
       server-switch-hook, server-done-hook?
   -->
 
-  <section>
+  <section xml:id="module-services-emacs-major-mode">
     <title>A Major Mode for Nix Expressions</title>
 
     <para>
@@ -558,7 +558,7 @@ emacsclient --create-frame --tty  # opens a new frame on the current terminal
     </para>
   </section>
 
-  <section>
+  <section xml:id="module-services-emacs-man-pages">
     <title>Accessing man pages</title>
     <para>
       You can use <function>woman</function> to get completion of all

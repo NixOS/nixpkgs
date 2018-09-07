@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, unzip
-, hostPlatform
-}:
+{ stdenv, fetchurl, unzip }:
 
 let
   # Generated upstream information
@@ -14,10 +12,10 @@ let
   };
 
   compileFlags = stdenv.lib.concatStringsSep " " ([ "-O3" "-mtune=generic" "-DNDEBUG" ]
-    ++ stdenv.lib.optional (hostPlatform.isUnix) "-Dunix -pthread"
-    ++ stdenv.lib.optional (hostPlatform.isi686) "-march=i686"
-    ++ stdenv.lib.optional (hostPlatform.isx86_64) "-march=nocona"
-    ++ stdenv.lib.optional (!hostPlatform.isx86) "-DNOJIT");
+    ++ stdenv.lib.optional (stdenv.hostPlatform.isUnix) "-Dunix -pthread"
+    ++ stdenv.lib.optional (stdenv.hostPlatform.isi686) "-march=i686"
+    ++ stdenv.lib.optional (stdenv.hostPlatform.isx86_64) "-march=nocona"
+    ++ stdenv.lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT");
 in
 stdenv.mkDerivation {
   inherit (s) name version;

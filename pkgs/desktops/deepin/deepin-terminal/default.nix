@@ -1,14 +1,17 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake, ninja, vte, libgee, wnck, zssh, gettext, librsvg, libsecret, json-glib, gobjectIntrospection }:
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake,
+  ninja, vte, libgee, wnck, zssh, gettext, librsvg, libsecret,
+  json-glib, gobjectIntrospection, deepin-menu, deepin-shortcut-viewer
+}:
 
 stdenv.mkDerivation rec {
   name = "deepin-terminal-${version}";
-  version = "3.0.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-terminal";
     rev = version;
-    sha256 = "11f2yc0fj05lwhgvdrbrs8xsdm7qgp6wb5wd1f9iyc5nxn7ccl1r";
+    sha256 = "04yvim97a4j8fq5lq2g6svs8qs79np9m4nl6x83iv02wkb9b7gqa";
   };
 
   patches = [
@@ -25,21 +28,38 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    pkgconfig vala cmake ninja gettext
-    # For setup hook
-    gobjectIntrospection
+    pkgconfig
+    vala
+    cmake
+    ninja
+    gettext
+    gobjectIntrospection # For setup hook
   ];
-  buildInputs = [ gtk3 vte libgee wnck librsvg libsecret json-glib ];
+
+  buildInputs = [
+    gtk3
+    vte
+    libgee
+    wnck
+    librsvg
+    libsecret
+    json-glib
+    deepin-menu
+    deepin-shortcut-viewer
+  ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "The default terminal emulation for Deepin";
     longDescription = ''
       Deepin terminal, it sharpens your focus in the world of command line!
-      It is an advanced terminal emulator with workspace, multiple windows, remote management, quake mode and other features.
+      It is an advanced terminal emulator with workspace, multiple
+      windows, remote management, quake mode and other features.
      '';
-    homepage = https://github.com/linuxdeepin/deepin-terminal/;
+    homepage = https://github.com/linuxdeepin/deepin-terminal;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }

@@ -44,23 +44,23 @@ stdenv.mkDerivation {
   '';
 
   buildCommand = with xorg; ''
-    ${if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then ''
+    ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
         isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
         chmod 755 ./VBoxLinuxAdditions.run
         ./VBoxLinuxAdditions.run --noexec --keep
       ''
-      else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
+      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
     }
 
     # Unpack files
     cd install
-    ${if stdenv.system == "i686-linux" then ''
+    ${if stdenv.hostPlatform.system == "i686-linux" then ''
         tar xfvj VBoxGuestAdditions-x86.tar.bz2
       ''
-      else if stdenv.system == "x86_64-linux" then ''
+      else if stdenv.hostPlatform.system == "x86_64-linux" then ''
         tar xfvj VBoxGuestAdditions-amd64.tar.bz2
       ''
-      else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
+      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
     }
 
     cd ../
@@ -81,13 +81,13 @@ stdenv.mkDerivation {
     # Change the interpreter for various binaries
     for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} other/mount.vboxsf
     do
-        ${if stdenv.system == "i686-linux" then ''
+        ${if stdenv.hostPlatform.system == "i686-linux" then ''
           patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $i
         ''
-        else if stdenv.system == "x86_64-linux" then ''
+        else if stdenv.hostPlatform.system == "x86_64-linux" then ''
           patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2 $i
         ''
-        else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
+        else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
         }
         patchelf --set-rpath ${lib.makeLibraryPath [ stdenv.cc.cc dbus libX11 libXt libXext libXmu libXfixes libXrandr libXcursor ]} $i
     done

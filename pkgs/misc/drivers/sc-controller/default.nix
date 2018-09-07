@@ -1,19 +1,19 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
 , gtk3, gobjectIntrospection, libappindicator-gtk3, librsvg
-, evdev, pygobject3, pylibacl, pytest
+, evdev, pygobject3, pylibacl, pytest, bluez
 , linuxHeaders
-, libX11, libXext, libXfixes, libusb1
+, libX11, libXext, libXfixes, libusb1, libudev
 }:
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner  = "kozec";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0w4ykl78vdppqr3d4d0h1f31wly6kis57a1gxhnrbpfrgpj0qhvj";
+    sha256 = "0ki9x28i5slpnygkpdglcvj8cssvvjyz732y1cnpzw1f0sj0kris";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -24,12 +24,17 @@ buildPythonApplication rec {
 
   checkInputs = [ pytest ];
 
+  patches = [ 
+    ./fix-udev.patch  # fix upstream issue #401, remove with the next update
+  ];
+
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
     substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include
+    substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 libudev bluez ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")

@@ -37,11 +37,9 @@ stdenv.mkDerivation rec {
     "-DENABLE_VALA_BINDINGS=ON"
     "-DENABLE_INTROSPECTION=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
   ];
 
-  postPatch = ''
-    cmakeFlags="-DINCLUDE_INSTALL_DIR=$dev/include $cmakeFlags"
-  '';
 
   passthru = {
     updateScript = gnome3.updateScript {

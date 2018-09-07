@@ -38,6 +38,7 @@ in buildRubyGem rec {
 
   patches = [
     ./unofficial-installation-nowarn.patch
+    ./use-system-bundler-version.patch
   ];
 
   # PATH additions:

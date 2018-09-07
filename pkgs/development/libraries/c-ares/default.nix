@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
 
       set_target_properties(c-ares::cares PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${self}/include"
-        INTERFACE_LINK_LIBRARIES "nsl;rt"
+        ${stdenv.lib.optionalString stdenv.isLinux ''INTERFACE_LINK_LIBRARIES "nsl;rt"''}
       )
       set_property(TARGET c-ares::cares APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
       set_target_properties(c-ares::cares PROPERTIES
-        IMPORTED_LOCATION_RELEASE "${self}/lib/libcares.so.2.2.0"
-        IMPORTED_SONAME_RELEASE "libcares.so.2"
+        IMPORTED_LOCATION_RELEASE "${self}/lib/libcares${stdenv.targetPlatform.extensions.sharedLibrary}"
+        IMPORTED_SONAME_RELEASE "libcares${stdenv.targetPlatform.extensions.sharedLibrary}"
         )
       add_library(c-ares::cares_shared INTERFACE IMPORTED)
       set_target_properties(c-ares::cares_shared PROPERTIES INTERFACE_LINK_LIBRARIES "c-ares::cares")

@@ -1,17 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "cement";
-  version = "2.10.12";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "58efb4eacd9ec977ce797a364a13851de6e42392bbde5287d44294f06c5a2f70";
+    sha256 = "e50e1033d61d18b36787a60d52cad0d3fe20780e7e2f78f0204bde32000645f9";
   };
 
   # Disable test tests since they depend on a memcached server running on
   # 127.0.0.1:11211.
   doCheck = false;
+
+  disabled = !isPy3k;
 
   meta = with stdenv.lib; {
     homepage = http://builtoncement.com/;

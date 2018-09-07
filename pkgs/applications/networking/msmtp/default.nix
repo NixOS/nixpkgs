@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig
+{ stdenv, lib, fetchpatch, fetchurl, autoreconfHook, pkgconfig
 , openssl, netcat-gnu, gnutls, gsasl, libidn, Security
 , withKeyring ? true, libsecret ? null
 , systemd ? null }:
@@ -19,6 +19,14 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./paths.patch
+
+    # To support passwordeval commands that do not print a final
+    # newline.
+    (fetchpatch {
+      name = "passwordeval-without-nl.patch";
+      url = "https://gitlab.marlam.de/marlam/msmtp/commit/df22dccf9d1af06fcd09dfdd0d6a38e1372dd5e8.patch";
+      sha256 = "06gbhvzi46zqigmmsin2aard7b9v3ihx62hbz5ljmfbj9rfs1x5y";
+    })
   ];
 
   buildInputs = [ openssl gnutls gsasl libidn ]

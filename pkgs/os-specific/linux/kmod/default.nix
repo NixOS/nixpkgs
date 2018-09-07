@@ -33,9 +33,10 @@ in stdenv.mkDerivation rec {
     ln -s bin $out/sbin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.kernel.org/pub/linux/utils/kernel/kmod/;
     description = "Tools for loading and managing Linux kernel modules";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
   };
 }

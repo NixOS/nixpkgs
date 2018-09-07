@@ -15,7 +15,7 @@ let
 
   inherit (pkgs) lightdm writeScript writeText;
 
-  # lightdm runs with clearenv(), but we need a few things in the enviornment for X to startup
+  # lightdm runs with clearenv(), but we need a few things in the environment for X to startup
   xserverWrapper = writeScript "xserver-wrapper"
     ''
       #! ${pkgs.bash}/bin/bash
@@ -115,7 +115,7 @@ in
 
       background = mkOption {
         type = types.str;
-        default = "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png";
+        default = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bottom}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bottom.png";
         description = ''
           The background image or color to use.
         '';
@@ -191,8 +191,6 @@ in
       }
     ];
 
-    services.xserver.displayManager.slim.enable = false;
-
     services.xserver.displayManager.job = {
       logToFile = true;
 
@@ -209,8 +207,11 @@ in
     services.dbus.enable = true;
     services.dbus.packages = [ lightdm ];
 
-    # lightdm uses the accounts daemon to rember language/window-manager per user
+    # lightdm uses the accounts daemon to remember language/window-manager per user
     services.accounts-daemon.enable = true;
+
+    # Enable the accounts daemon to find lightdm's dbus interface
+    environment.systemPackages = [ lightdm ];
 
     security.pam.services.lightdm = {
       allowNullPassword = true;

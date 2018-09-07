@@ -77,7 +77,7 @@ in
 
   libxcb = attrs : attrs // {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ args.python ];
-    configureFlags = "--enable-xkb --enable-xinput";
+    configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
   };
 
@@ -147,7 +147,7 @@ in
   # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
   # Once the bug is fixed upstream, this can be removed.
   luit = attrs: attrs // {
-    configureFlags = "--disable-selective-werror";
+    configureFlags = [ "--disable-selective-werror" ];
   };
 
   compositeproto = attrs: attrs // {
@@ -408,7 +408,7 @@ in
   };
 
   xkbcomp = attrs: attrs // {
-    configureFlags = "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb";
+    configureFlags = [ "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb" ];
   };
 
   xkeyboardconfig = attrs: attrs // {
@@ -601,7 +601,7 @@ in
 
   xcursorthemes = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.xcursorgen];
-    configureFlags = "--with-cursordir=$(out)/share/icons";
+    configureFlags = [ "--with-cursordir=$(out)/share/icons" ];
   };
 
   xinit = attrs: attrs // {
@@ -631,7 +631,7 @@ in
     };
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes xorg.libXScrnSaver xorg.pixman];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [args.autoreconfHook xorg.utilmacros];
-    configureFlags = "--with-default-dri=3 --enable-tools";
+    configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
 
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
@@ -676,7 +676,7 @@ in
   };
 
   xrdb = attrs: attrs // {
-    configureFlags = "--with-cpp=${args.mcpp}/bin/mcpp";
+    configureFlags = [ "--with-cpp=${args.mcpp}/bin/mcpp" ];
   };
 
   sessreg = attrs: attrs // {

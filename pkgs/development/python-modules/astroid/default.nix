@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.0.1";
+  version = "2.0.4";
 
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "218e36cf8d98a42f16214e8670819ce307fa707d1dcf7f9af84c7aede1febc7f";
+    sha256 = "c7013d119ec95eb626f7a2011f0b63d0c9a095df9ad06d8507b37084eada1a8d";
   };
 
   # From astroid/__pkginfo__.py

@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig vala intltool gobjectIntrospection gtk-doc docbook_xsl
-  ] ++ stdenv.lib.optionals doCheck checkInputs;
-  checkInputs = [ check curl perl ];
+  ];
   buildInputs = [ glib libsoup libxml2 libxslt ];
+  checkInputs = [ check curl perl ];
 
   patches = [
     ./osinfo-db-data-dir.patch

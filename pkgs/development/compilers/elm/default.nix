@@ -1,14 +1,56 @@
-{ lib, stdenv, buildEnv, haskell, nodejs, fetchurl, makeWrapper }:
+{ lib, stdenv, buildEnv, haskell, nodejs, fetchurl, makeWrapper, git }:
 
 # To update:
-# 1) Update versions in ./update-elm.rb and run it.
-# 2) Checkout elm-reactor and run `elm-package install -y` inside.
-# 3) Run ./elm2nix.rb in elm-reactor's directory.
-# 4) Move the resulting 'package.nix' to 'packages/elm-reactor-elm.nix'.
+
+# 1) Modify ./update.sh and run it
+
+# 2) to generate versions.dat:
+# 2.1) git clone https://github.com/elm/compiler.git
+# 2.2) cd compiler
+# 2.3) cabal2nix --shell . | sed 's/"default",/"ghc822",/' > shell.nix
+# 2.4) nix-shell
+# 2.5) mkdir .elm
+# 2.6) export ELM_HOME=$(pwd)/.elm
+# 2.7) cabal build
+# 2.8) cp .elm/0.19.0/package/versions.dat ...
+
+# 3) generate a template for elm-elm.nix with:
+# (
+#   echo "{";
+#   jq '.dependencies | .direct, .indirect | to_entries | .[] | { (.key) : { version : .value, sha256:  "" } } ' \
+#   < ui/browser/elm.json \
+#   | sed 's/:/ =/' \
+#   | sed 's/^[{}]//' \
+#   | sed -E 's/(["}]),?$/\1;/' \
+#   | sed -E 's/"(version|sha256)"/\1/' \
+#   | grep -v '^$';
+#   echo "}"
+# )
+#
+# ... then fill in the sha256s
+
+# Notes:
+
+# the elm binary embeds a piece of pre-compiled elm code, used by 'elm
+# reactor'. this means that the build process for 'elm' effectively
+# executes 'elm make'. that in turn expects to retrieve the elm
+# dependencies of that code (elm/core, etc.) from
+# package.elm-lang.org, as well as a cached bit of metadata
+# (versions.dat).
+
+# the makeDotElm function lets us retrieve these dependencies in the
+# standard nix way. we have to copy them in (rather than symlink) and
+# make them writable because the elm compiler writes other .dat files
+# alongside the source code. versions.dat was produced during an
+# impure build of this same code; the build complains that it can't
+# update this cache, but continues past that warning.
+
+# finally, we set ELM_HOME to point to these pre-fetched artifacts so
+# that the default of ~/.elm isn't used.
 
 let
-  makeElmStuff = deps:
-    let json = builtins.toJSON (lib.mapAttrs (name: info: info.version) deps);
+  makeDotElm = ver: deps:
+    let versionsDat = ./versions.dat;
         cmds = lib.mapAttrsToList (name: info: let
                  pkg = stdenv.mkDerivation {
 
@@ -29,39 +71,32 @@ let
 
                  };
                in ''
-                 mkdir -p elm-stuff/packages/${name}
-                 ln -s ${pkg} elm-stuff/packages/${name}/${info.version}
+                 mkdir -p .elm/${ver}/package/${name}
+                 cp -R ${pkg} .elm/${ver}/package/${name}/${info.version}
                '') deps;
-    in ''
-      export HOME=/tmp
-      mkdir elm-stuff
-      cat > elm-stuff/exact-dependencies.json <<EOF
-      ${json}
-      EOF
-    '' + lib.concatStrings cmds;
+    in (lib.concatStrings cmds) + ''
+      mkdir -p .elm/${ver}/package;
+      cp ${versionsDat} .elm/${ver}/package/versions.dat;
+      chmod -R +w .elm
+    '';
 
-  hsPkgs = haskell.packages.ghc802.override {
-    overrides = self: super:
-      let hlib = haskell.lib;
-          elmRelease = import ./packages/release.nix { inherit (self) callPackage; };
-          elmPkgs' = elmRelease.packages;
-          elmPkgs = elmPkgs' // {
-
-            elm-reactor = hlib.overrideCabal elmPkgs'.elm-reactor (drv: {
-              buildTools = drv.buildTools or [] ++ [ self.elm-make ];
-              preConfigure = makeElmStuff (import ./packages/elm-reactor-elm.nix);
-            });
-
-            elm-repl = hlib.overrideCabal elmPkgs'.elm-repl (drv: {
-              doCheck = false;
+  hsPkgs = haskell.packages.ghc822.override {
+    overrides = self: super: with haskell.lib;
+      let elmPkgs = {
+            elm = overrideCabal (self.callPackage ./packages/elm.nix { }) (drv: {
+              # sadly with parallelism most of the time breaks compilation
+              enableParallelBuilding = false;
+              preConfigure = ''
+                export ELM_HOME=`pwd`/.elm
+              '' + (makeDotElm "0.19.0" (import ./packages/elm-elm.nix));
               buildTools = drv.buildTools or [] ++ [ makeWrapper ];
-              postInstall =
-                let bins = lib.makeBinPath [ nodejs self.elm-make ];
-                in ''
-                  wrapProgram $out/bin/elm-repl \
-                    --prefix PATH ':' ${bins}
-                '';
+              postInstall = ''
+                wrapProgram $out/bin/elm \
+                  --prefix PATH ':' ${lib.makeBinPath [ nodejs ]}
+              '';
             });
+
+
 
             /*
             This is not a core Elm package, and it's hosted on GitHub.
@@ -69,40 +104,28 @@ let
 
                 cabal2nix --jailbreak --revision refs/tags/foo http://github.com/avh4/elm-format > packages/elm-format.nix
 
-            where foo is a tag for a new version, for example "0.3.1-alpha".
+            where foo is a tag for a new version, for example "0.8.0".
             */
-            elm-format = self.callPackage ./packages/elm-format.nix { };
-            elm-interface-to-json = self.callPackage ./packages/elm-interface-to-json.nix {
-              aeson-pretty = self.aeson-pretty_0_7_2;
-              either = hlib.overrideCabal self.either (drv :{
-                jailbreak = true;
-                version = "4.4.1.1";
-                sha256 = "1lrlwqqnm6ibfcydlv5qvvssw7bm0c6yypy0rayjzv1znq7wp1xh";
-                libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
-                  self.exceptions self.free self.mmorph self.monad-control
-                  self.MonadRandom self.profunctors self.transformers
-                  self.transformers-base
-                ];
-              });
-            };
+            elm-format = overrideCabal (self.callPackage ./packages/elm-format.nix {  }) (drv: {
+              # https://github.com/avh4/elm-format/issues/529
+              patchPhase = ''
+                cat >Setup.hs <<EOF
+                import Distribution.Simple
+                main = defaultMain
+                EOF
+
+                sed -i '/Build_elm_format/d' elm-format.cabal
+                sed -i 's/Build_elm_format.gitDescribe/""/' src/ElmFormat/Version.hs
+                sed -i '/Build_elm_format/d' src/ElmFormat/Version.hs
+              '';
+            });
           };
       in elmPkgs // {
         inherit elmPkgs;
-        elmVersion = elmRelease.version;
-        # https://github.com/elm-lang/elm-compiler/issues/1566
-        indents = hlib.overrideCabal super.indents (drv: {
-          version = "0.3.3";
-          #test dep tasty has a version mismatch
-          doCheck = false;
-          sha256 = "16lz21bp9j14xilnq8yym22p3saxvc9fsgfcf5awn2a6i6n527xn";
-          libraryHaskellDepends = drv.libraryHaskellDepends ++ [super.concatenative];
-        });
+        elmVersion = elmPkgs.elm.version;
+
+        # Needed for elm-format
+        indents = self.callPackage ./packages/indents.nix {};
       };
   };
-in hsPkgs.elmPkgs // {
-  elm = lib.hiPrio (buildEnv {
-    name = "elm-${hsPkgs.elmVersion}";
-    paths = lib.mapAttrsToList (name: pkg: pkg) hsPkgs.elmPkgs;
-    pathsToLink = [ "/bin" ];
-  });
-}
+in hsPkgs.elmPkgs

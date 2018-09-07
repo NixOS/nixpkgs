@@ -21,8 +21,8 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
-, libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick
+, msgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
+, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick, libcxx
 }@args:
 
 let
@@ -69,7 +69,8 @@ in
   };
 
   capybara-webkit = attrs: {
-    buildInputs = [ qt48 ];
+    buildInputs = [ qt48 ] ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
   };
 
   charlock_holmes = attrs: {
@@ -78,6 +79,10 @@ in
 
   curb = attrs: {
     buildInputs = [ curl ];
+  };
+
+  curses = attrs: {
+    buildInputs = [ ncurses ];
   };
 
   dep-selector-libgecode = attrs: {
@@ -214,7 +219,7 @@ in
   };
 
   msgpack = attrs: {
-    buildInputs = [ libmsgpack ];
+    buildInputs = [ msgpack ];
   };
 
   mysql = attrs: {

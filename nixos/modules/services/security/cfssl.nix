@@ -146,7 +146,7 @@ in {
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     users.extraGroups.cfssl = {
       gid = config.ids.gids.cfssl;
     };
@@ -159,7 +159,7 @@ in {
       uid = config.ids.uids.cfssl;
     };
 
-    systemd.services.cfssl = mkIf cfg.enable {
+    systemd.services.cfssl = {
       description = "CFSSL CA API server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];

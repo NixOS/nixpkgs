@@ -5,15 +5,15 @@
 stdenv.mkDerivation {
   name = "opendylan-2013.2";
 
-  src = if stdenv.system == "x86_64-linux" then fetchurl {
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
       url = https://opendylan.org/downloads/opendylan/2013.2/opendylan-2013.2-x86_64-linux.tar.bz2;
       sha256 = "035brbw3hm7zrs593q4zc42yglj1gmmkw3b1r7zzlw3ks4i2lg7h";
     }
-    else if stdenv.system == "i686-linux" then fetchurl {
+    else if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
       url = https://opendylan.org/downloads/opendylan/2013.2/opendylan-2013.2-x86-linux.tar.bz2;
       sha256 = "0c61ihvblcsjrw6ncr8x8ylhskcrqs8pajs4mg5di36cvqw12nq5";
     }
-    else throw "platform ${stdenv.system} not supported.";
+    else throw "platform ${stdenv.hostPlatform.system} not supported.";
 
   buildInputs = [ patchelf boehmgc gnused makeWrapper ];
 

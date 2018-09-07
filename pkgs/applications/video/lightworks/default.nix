@@ -23,12 +23,12 @@ let
     name = "lightworks-${version}";
     
     src =
-      if stdenv.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "http://downloads.lwks.com/v14/lwks-14.0.0-amd64.deb";
           sha256 = "66eb9f9678d979db76199f1c99a71df0ddc017bb47dfda976b508849ab305033";
         }
-      else throw "${name} is not supported on ${stdenv.system}";
+      else throw "${name} is not supported on ${stdenv.hostPlatform.system}";
 
     buildInputs = [ dpkg makeWrapper ];
 

@@ -9,10 +9,10 @@
 
 buildPythonPackage rec {
   pname = "joblib";
-  version = "0.12.1";
+  version = "0.12.3";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "68e6128e4734196616a39e2d48830ec7d61551c7f5748849e4c91478d2444524";
+    sha256 = "333b9bf16ff015d6b56bf80b9831afdd243443cb84c7ff7b6e342f117e354c42";
   };
 
   checkInputs = [ sphinx numpydoc pytest ];

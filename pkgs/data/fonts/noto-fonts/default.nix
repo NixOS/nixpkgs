@@ -86,14 +86,14 @@ rec {
       maintainers = with maintainers; [ mathnerd314 ];
     };
   };
-  noto-fonts-emoji = let version = "2017-09-13-design-refresh"; in stdenv.mkDerivation {
+  noto-fonts-emoji = let version = "2018-04-24-pistol-update"; in stdenv.mkDerivation {
     name = "noto-fonts-emoji-${version}";
 
     src = fetchFromGitHub {
       owner = "googlei18n";
       repo = "noto-emoji";
       rev = "v${version}";
-      sha256 = "1ixz03207kzh6jhmw8bpi77pxkfzq46dk26sr41m5kkvc14d14vl";
+      sha256 = "1f9k182j0619xvwk60gw2hng3lcd483sva2fabjdhznk8yf9f7jg";
     };
 
     buildInputs = [ cairo ];

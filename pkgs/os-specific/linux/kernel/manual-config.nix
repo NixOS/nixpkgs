@@ -36,8 +36,6 @@ in {
   allowImportFromDerivation ? false,
   # ignored
   features ? null,
-
-  hostPlatform
 }:
 
 let
@@ -56,8 +54,8 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-  ] ++ stdenv.lib.optionals (hostPlatform.platform ? kernelMakeFlags)
-    hostPlatform.platform.kernelMakeFlags;
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.platform ? kernelMakeFlags)
+    stdenv.hostPlatform.platform.kernelMakeFlags;
 
   drvAttrs = config_: platform: kernelPatches: configfile:
     let
@@ -98,6 +96,7 @@ let
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
         sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
+        sed -i scripts/ld-version.sh -e "s|/usr/bin/awk|${buildPackages.gawk}/bin/awk|"
       '';
 
       configurePhase = ''
@@ -145,9 +144,12 @@ let
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
-      installTargets = [ (if platform.kernelTarget == "uImage" then "uinstall" else
-                          if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall" else
-                          "install") ];
+      installTargets = [ (
+        if platform ? kernelInstallTarget then platform.kernelInstallTarget
+        else if platform.kernelTarget == "uImage" then "uinstall"
+        else if platform.kernelTarget == "zImage" || platform.kernelTarget == "Image.gz" then "zinstall"
+        else "install"
+      ) ];
 
       postInstall = (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
@@ -245,13 +247,14 @@ let
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
+        timeout = 7200; # 2 hours
       } // extraMeta;
     };
 in
 
 assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
 assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
-stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches configfile) // {
+stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
@@ -275,5 +278,5 @@ stdenv.mkDerivation ((drvAttrs config hostPlatform.platform kernelPatches config
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  karch = hostPlatform.platform.kernelArch;
+  karch = stdenv.hostPlatform.platform.kernelArch;
 })

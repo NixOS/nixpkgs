@@ -1,23 +1,23 @@
 { stdenv, lib, fetchurl, unzip, atomEnv, makeDesktopItem,
-  gtk2, makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
+  gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret }:
 
 let
-  version = "1.26.0";
+  version = "1.26.1";
   channel = "stable";
 
   plat = {
     "i686-linux" = "linux-ia32";
     "x86_64-linux" = "linux-x64";
     "x86_64-darwin" = "darwin";
-  }.${stdenv.system};
+  }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i686-linux" = "fd150bee8e1be4f5461013b8fee19f855200d046643e4ea5387aad170ad5f12b";
-    "x86_64-linux" = "618ca429e23777ef6b512c0cbd78bc711a7cf6f58752d9f805ced1dc62abb8f0";
-    "x86_64-darwin" = "07c2d678596e4e1f0bdf35b7d72a6d46851bf169d89f134fa73ff4f9007efbc3";
-  }.${stdenv.system};
+    "i686-linux" = "1g7kqbz6mrf8ngx2bnwpi9fifq5rjznxgsgwjb532z3nh92ypa8n";
+    "x86_64-linux" = "02yldycakn5zxj1ji4nmhdyazqlkjqpzdj3g8j501c3j28pgiwjy";
+    "x86_64-darwin" = "0pnsfkh20mj7pzqw7wlfd98jqc6a1mnsq1iira15n7fafqgj8zpl";
+  }.${stdenv.hostPlatform.system};
 
-  archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
+  archive_fmt = if stdenv.hostPlatform.system == "x86_64-darwin" then "zip" else "tar.gz";
 
   rpath = lib.concatStringsSep ":" [
     atomEnv.libPath
@@ -48,12 +48,12 @@ in
       categories = "GNOME;GTK;Utility;TextEditor;Development;";
     };
 
-    buildInputs = if stdenv.system == "x86_64-darwin"
-      then [ unzip makeWrapper libXScrnSaver libsecret ]
-      else [ makeWrapper libXScrnSaver libxkbfile libsecret ];
+    buildInputs = if stdenv.hostPlatform.system == "x86_64-darwin"
+      then [ unzip libXScrnSaver libsecret ]
+      else [ wrapGAppsHook libXScrnSaver libxkbfile libsecret ];
 
     installPhase =
-      if stdenv.system == "x86_64-darwin" then ''
+      if stdenv.hostPlatform.system == "x86_64-darwin" then ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
         ln -s $out/lib/vscode/Contents/Resources/app/bin/code $out/bin
@@ -72,7 +72,7 @@ in
         cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
       '';
 
-    postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
+    postFixup = lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux") ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${rpath}" \

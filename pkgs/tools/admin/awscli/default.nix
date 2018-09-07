@@ -44,7 +44,7 @@ in py.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     for i in {py,cfg}; do
-      substituteInPlace setup.$i --replace "botocore==1.10.10" "botocore>=1.10.9,<=1.11"
+      substituteInPlace setup.$i --replace "botocore==1.10.65" "botocore>=1.10.9,<=1.11"
     done
   '';
 

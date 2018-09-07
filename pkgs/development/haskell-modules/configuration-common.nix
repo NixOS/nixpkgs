@@ -672,6 +672,9 @@ self: super: {
   # https://github.com/bos/bloomfilter/issues/7
   bloomfilter = appendPatch super.bloomfilter ./patches/bloomfilter-fix-on-32bit.patch;
 
+  # https://github.com/ashutoshrishi/hunspell-hs/pull/3
+  hunspell-hs = addPkgconfigDepend (dontCheck (appendPatch super.hunspell-hs ./patches/hunspell.patch)) pkgs.hunspell;
+
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
@@ -951,12 +954,6 @@ self: super: {
   # https://github.com/yesodweb/Shelly.hs/issues/162
   shelly = dontCheck super.shelly;
 
-  # Support ansi-terminal 0.7.x.
-  cabal-plan = appendPatch super.cabal-plan (pkgs.fetchpatch {
-    url = "https://github.com/haskell-hvr/cabal-plan/pull/16.patch";
-    sha256 = "0i889zs46wn09d7iqdy99201zaqxb175cfs8jz2zi3mv4ywx3a0l";
-  });
-
   # https://github.com/simonmichael/hledger/issues/852
   hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch {
     url = "https://github.com/simonmichael/hledger/commit/007b9f8caaf699852511634752a7d7c86f6adc67.patch";
@@ -1079,16 +1076,15 @@ self: super: {
 
   # cabal2nix requires hpack >= 0.29.6 but the LTS has hpack-0.28.2.
   # Lets remove this once the LTS has upraded to 0.29.6.
-  hpack = super.hpack_0_29_6;
+  hpack = super.hpack_0_29_7;
 
-  cabal2nix =
-    # The test suite does not know how to find the 'cabal2nix' binary.
-    overrideCabal super.cabal2nix (drv: {
-      preCheck = ''
-        export PATH="$PWD/dist/build/cabal2nix:$PATH"
-        export HOME="$TMPDIR/home"
-      '';
-    });
+  # The test suite does not know how to find the 'cabal2nix' binary.
+  cabal2nix = overrideCabal super.cabal2nix (drv: {
+    preCheck = ''
+      export PATH="$PWD/dist/build/cabal2nix:$PATH"
+      export HOME="$TMPDIR/home"
+    '';
+  });
 
   # Break out of "aeson <1.3, temporary <1.3".
   stack = doJailbreak super.stack;
@@ -1126,4 +1122,12 @@ self: super: {
   # Can be removed once yi-language >= 0.18 is in the LTS
   yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
 
+  # https://github.com/MarcWeber/hasktags/issues/52
+  hasktags = dontCheck super.hasktags;
+
+  # https://github.com/haskell/hoopl/issues/50
+  hoopl = dontCheck super.hoopl;
+
+  # https://github.com/snapframework/xmlhtml/pull/37
+  xmlhtml = doJailbreak super.xmlhtml;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

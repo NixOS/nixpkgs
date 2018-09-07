@@ -90,6 +90,8 @@ rec {
     mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
 
     powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
+    powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
+    powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
 
     riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
     riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
@@ -170,7 +172,6 @@ rec {
     macos   = { execFormat = macho;   families = { inherit darwin; }; name = "darwin"; };
     ios     = { execFormat = macho;   families = { inherit darwin; }; };
     freebsd = { execFormat = elf;     families = { inherit bsd; }; };
-    hurd    = { execFormat = elf;     families = { }; };
     linux   = { execFormat = elf;     families = { }; };
     netbsd  = { execFormat = elf;     families = { inherit bsd; }; };
     none    = { execFormat = unknown; families = { }; };
@@ -257,8 +258,6 @@ rec {
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
-      else if elemAt l 1 == "gnu"
-        then { cpu = elemAt l 0;                      kernel = "hurd";     abi = "gnu";      }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" = # Awkwards hacks, beware!
       if elemAt l 1 == "apple"

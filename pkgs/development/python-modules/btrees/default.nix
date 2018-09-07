@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "BTrees";
-  version = "4.5.0";
+  version = "4.5.1";
 
   buildInputs = [ transaction ];
   propagatedBuildInputs = [ persistent zope_interface ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "46b02cb69b26a5238db771ea1955b503df73ecf254bb8063af4c61999fc75b5c";
+    sha256 = "dcc096c3cf92efd6b9365951f89118fd30bc209c9af83bf050a28151a9992786";
   };
 
   meta = with stdenv.lib; {

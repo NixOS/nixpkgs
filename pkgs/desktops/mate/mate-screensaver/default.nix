@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     mate.mate-menus
   ];
 
-  configureFlags = "--without-console-kit";
+  configureFlags = [ "--without-console-kit" ];
 
   makeFlags = "DBUS_SESSION_SERVICE_DIR=$(out)/etc";
 

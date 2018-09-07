@@ -61,11 +61,12 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--syslibdir=$out/lib")
   '';
 
+  CFLAGS="-fstack-protector-strong" + lib.optionalString stdenv.hostPlatform.isPower " -mlong-double-64";
+
   configureFlags = [
     "--enable-shared"
     "--enable-static"
     "--enable-debug"
-    "CFLAGS=-fstack-protector-strong"
     "--enable-wrapper=all"
   ];
 

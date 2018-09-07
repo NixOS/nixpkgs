@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "3.1.0";
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
         if builtins.isNull releasePath then
         fetchurl {
           url = "https://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_x86_64.tar.bz2";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
         }
         else
         releasePath
-    else if stdenv.system == "i686-linux" then
+    else if stdenv.hostPlatform.system == "i686-linux" then
         if builtins.isNull releasePath then
         fetchurl {
           url = "http://files.renoise.com/demo/Renoise_${urlVersion version}_Demo_x86.tar.bz2";

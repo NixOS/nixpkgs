@@ -6,11 +6,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchurl {
     url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "193l55wdxwxmammyxwzp90sg0qw5r316443la3m9611sdpcmy8w3";
+    sha256 = "1i0lfj9gnfya49gxx59ls364z651fqagd4krnz9jhg9m0l48ljdf";
   };
 
   # Disable version check and fix install tests

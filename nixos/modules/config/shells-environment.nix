@@ -34,6 +34,7 @@ in
 
     environment.variables = mkOption {
       default = {};
+      example = { EDITOR = "nvim"; VISUAL = "nvim"; };
       description = ''
         A set of environment variables used in the global environment.
         These variables will be set on shell initialisation (e.g. in /etc/profile).
@@ -80,7 +81,7 @@ in
       default = "";
       description = ''
         Shell script code called during shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -90,7 +91,7 @@ in
       default = "";
       description = ''
         Shell script code called during login shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -100,7 +101,7 @@ in
       default = "";
       description = ''
         Shell script code called during interactive shell initialisation.
-        This code is asumed to be shell-independent, which means you should
+        This code is assumed to be shell-independent, which means you should
         stick to pure sh without sh word split.
       '';
       type = types.lines;
@@ -162,15 +163,24 @@ in
         /bin/sh
       '';
 
+    # For resetting environment with `. /etc/set-environment` when needed
+    # and discoverability (see motivation of #30418).
+    environment.etc."set-environment".source = config.system.build.setEnvironment;
+
     system.build.setEnvironment = pkgs.writeText "set-environment"
-       ''
-         ${exportedEnvVars}
+      ''
+        # DO NOT EDIT -- this file has been generated automatically.
 
-         ${cfg.extraInit}
+        # Prevent this file from being sourced by child shells.
+        export __NIXOS_SET_ENVIRONMENT_DONE=1
 
-         # ~/bin if it exists overrides other bin directories.
-         export PATH="$HOME/bin:$PATH"
-       '';
+        ${exportedEnvVars}
+
+        ${cfg.extraInit}
+
+        # ~/bin if it exists overrides other bin directories.
+        export PATH="$HOME/bin:$PATH"
+      '';
 
     system.activationScripts.binsh = stringAfter [ "stdio" ]
       ''

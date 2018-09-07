@@ -1,6 +1,5 @@
 { stdenv, fetchurl, fetchpatch, curl, expat, zlib, bzip2
 , useNcurses ? false, ncurses, useQt4 ? false, qt4, ps
-, buildPlatform, hostPlatform
 }:
 
 with stdenv.lib;
@@ -35,7 +34,7 @@ stdenv.mkDerivation rec {
     })] ++
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
     [ ./search-path.patch ] ++
-    optional (hostPlatform != buildPlatform) (fetchurl {
+    optional (stdenv.hostPlatform != stdenv.buildPlatform) (fetchurl {
       name = "fix-darwin-cross-compile.patch";
       url = "https://public.kitware.com/Bug/file_download.php?"
           + "file_id=4981&type=bug";

@@ -3,10 +3,10 @@
     dependencies = ["manpages" "paint" "trollop"];
     source = {
       remotes = ["http://rubygems.org"];
-      sha256 = "1z0j354sj2qm2srgz3i28s347fwylvv1j614806cr33zcd1j4mwp";
+      sha256 = "05zm92ad0ws9fklpz1xk94hy95argwana01c6rr2xbx2q4mcil9m";
       type = "gem";
     };
-    version = "99.9.11";
+    version = "99.9.19";
   };
   manpages = {
     source = {
@@ -27,9 +27,9 @@
   trollop = {
     source = {
       remotes = ["http://rubygems.org"];
-      sha256 = "0415y63df86sqj43c0l82and65ia5h64if7n0znkbrmi6y0jwhl8";
+      sha256 = "1rzx9rkacpq58dsvbbzs4cpybls1v1h36xskkfs5q2askpdr00wq";
       type = "gem";
     };
-    version = "2.1.2";
+    version = "2.1.3";
   };
 }

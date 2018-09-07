@@ -2,13 +2,14 @@
 , pkgconfig, premake3, xorg, ladspa-sdk }:
 
 stdenv.mkDerivation rec {
-  name = "distrho-ports-unstable-2018-01-01";
+  name = "distrho-ports-${version}";
+  version = "2018-04-16";
 
   src = fetchFromGitHub {
     owner = "DISTRHO";
     repo = "DISTRHO-Ports";
-    rev = "b200e7409aa9f6612c4d948932f6ce6f0a087f5a";
-    sha256 = "0672r0a9s6skzkxpjdraziwh5k8ivrfzvi4zcpkcg3zrv2hia2vz";
+    rev = version;
+    sha256 = "0l4zwl4mli8jzch32a1fh7c88r9q17xnkxsdw17ds5hadnxlk12v";
   };
 
   patchPhase = ''
@@ -45,7 +46,8 @@ stdenv.mkDerivation rec {
       TAL-Filter-2 TAL-NoiseMaker TAL-Reverb TAL-Reverb-2 TAL-Reverb-3
       TAL-Vocoder-2 TheFunction ThePilgrim Vex Wolpertinger
     '';
+    license = with licenses; [ gpl2 gpl3 gpl2Plus lgpl3 mit ];
     maintainers = [ maintainers.goibhniu ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

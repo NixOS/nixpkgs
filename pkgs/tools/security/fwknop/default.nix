@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, lib
+{ stdenv, fetchFromGitHub, autoreconfHook
 , libpcap, texinfo
 , iptables
 , gnupgSupport ? true, gnupg, gpgme # Increases dependencies!
@@ -23,21 +23,18 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional gnupgSupport [ gnupg gpgme.dev ]
     ++ stdenv.lib.optional wgetSupport [ wget ];
 
-  configureFlags = ''
-    --sysconfdir=/etc
-    --localstatedir=/run
-    --with-iptables=${iptables}/sbin/iptables
-    ${lib.optionalString (!buildServer) "--disable-server"}
-    ${lib.optionalString (!buildClient) "--disable-client"}
-    ${lib.optionalString gnupgSupport ''
-      --with-gpgme
-      --with-gpgme-prefix=${gpgme.dev}
-      --with-gpg=${gnupg}
-    ''}
-    ${lib.optionalString wgetSupport ''
-      --with-wget=${wget}/bin/wget
-    ''}
-  '';
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/run"
+    "--with-iptables=${iptables}/sbin/iptables"
+    (stdenv.lib.enableFeature buildServer "server")
+    (stdenv.lib.enableFeature buildClient "client")
+    (stdenv.lib.withFeatureAs wgetSupport "wget" "${wget}/bin/wget")
+  ] ++ stdenv.lib.optionalString gnupgSupport [
+    "--with-gpgme"
+    "--with-gpgme-prefix=${gpgme.dev}"
+    "--with-gpg=${gnupg}"
+  ];
 
   # Temporary hack to copy the example configuration files into the nix-store,
   # this'll probably be helpful until there's a NixOS module for that (feel free

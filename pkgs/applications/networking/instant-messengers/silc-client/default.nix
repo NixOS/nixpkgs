@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "--with-ncurses=${ncurses.dev}";
+  configureFlags = [ "--with-ncurses=${ncurses.dev}" ];
 
   preConfigure = stdenv.lib.optionalString enablePlugin ''
     configureFlags="$configureFlags --with-silc-plugin=$out/lib/irssi"

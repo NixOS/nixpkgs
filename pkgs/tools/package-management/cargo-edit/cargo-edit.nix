@@ -2,7 +2,7 @@
 { pkgs }:
 
 with pkgs;
-let kernel = buildPlatform.parsed.kernel.name;
+let kernel = stdenv.buildPlatform.parsed.kernel.name;
     updateFeatures = f: up: functions: builtins.deepSeq f (lib.lists.foldl' (features: fun: fun features) (lib.attrsets.recursiveUpdate f up) functions);
     mapFeatures = features: map (fun: fun { features = features; });
     mkFeatures = feat: lib.lists.foldl (features: featureName:

@@ -35,20 +35,20 @@
 }:
 
 let
-  version = "3.4.2";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0q752s1ir6iyqbp3pn425fi215fi7bzjl4aa3arvgh6sridda9lx";
+    sha256 = "138q3wiv4g4xvqzsp93xaqayv7kz7bl2vrgppp8jm8w6m25cd4i2";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1fbgbf9xdby9a5yy6bmnkzchdsfii0jagfd373y015cjpr1mrlvz";
+    sha256 = "1f334glf39nk42mpqq6j732h3ql2mpz89jd4mcl678s8n73nfjh2";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -63,11 +63,11 @@ let
       sha256 = "1ys9mshfpm8iy8h4ml792gnqrq959dsrcv26axx14niivxyjbji8";
     } + "/ippicv";
     files = let name = platform : "ippicv_2017u3_${platform}_general_20180518.tgz"; in
-      if stdenv.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
       { ${name "lnx_intel64"} = "b7cc351267db2d34b9efa1cd22ff0572"; }
-      else if stdenv.system == "i686-linux" then
+      else if stdenv.hostPlatform.system == "i686-linux" then
       { ${name "lnx_ia32"}    = "ea72de74dae3c604eb6348395366e78e"; }
-      else if stdenv.system == "x86_64-darwin" then
+      else if stdenv.hostPlatform.system == "x86_64-darwin" then
       { ${name "mac_intel64"} = "3ae52b9be0fe73dd45bc5e9429cd3732"; }
       else
       throw "ICV is not available for this platform (or not yet supported by this package)";
@@ -144,11 +144,6 @@ stdenv.mkDerivation rec {
   postUnpack = lib.optionalString buildContrib ''
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
-
-  # TODO: remove the following patch once commit
-  # https://github.com/opencv/opencv/commit/e2b5d112909b9dfd764f14833b82e38e4bc2f81f
-  # is released.
-  patches = [ ./fix-dnn.patch ];
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)

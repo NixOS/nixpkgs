@@ -66,14 +66,15 @@ nixpkgs.config.packageOverrides = pkgs:
   sets the kernel’s TCP keepalive time to 120 seconds. To see the available
   parameters, run <command>sysctl -a</command>.
  </para>
- <section>
+ <section xml:id="sec-linux-config-customizing">
   <title>Customize your kernel</title>
 
   <para>
    The first step before compiling the kernel is to generate an appropriate
-   <literal>.config</literal> configuration. Either you pass your own config via
-   the <literal>configfile</literal> setting of <literal>linuxManualConfig</literal>:
-  <screen><![CDATA[
+   <literal>.config</literal> configuration. Either you pass your own config
+   via the <literal>configfile</literal> setting of
+   <literal>linuxManualConfig</literal>:
+<screen><![CDATA[
   custom-kernel = super.linuxManualConfig {
     inherit (super) stdenv hostPlatform;
     inherit (linux_4_9) src;
@@ -117,7 +118,7 @@ You can edit the config with this snippet (by default <command>make menuconfig</
   ]]></screen>
   </para>
  </section>
- <section>
+ <section xml:id="sec-linux-config-developing-modules">
   <title>Developing kernel modules</title>
 
   <para>

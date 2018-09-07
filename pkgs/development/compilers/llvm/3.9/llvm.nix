@@ -13,13 +13,11 @@
 , zlib
 , compiler-rt_src
 , debugVersion ? false
-, enableSharedLibraries ? (buildPlatform == hostPlatform)
+, enableSharedLibraries ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , buildPackages
-, buildPlatform
-, hostPlatform
 }:
 
-assert (hostPlatform != buildPlatform) -> !enableSharedLibraries;
+assert (stdenv.hostPlatform != stdenv.buildPlatform) -> !enableSharedLibraries;
 
 let
   src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
@@ -131,7 +129,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
-  ] ++ stdenv.lib.optionals (buildPlatform != hostPlatform) [
+  ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
     "-DLLVM_TABLEGEN=${buildPackages.llvmPackages_39.llvm}/bin/llvm-tblgen"
   ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [

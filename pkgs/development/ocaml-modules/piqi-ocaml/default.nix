@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, piqi, camlp4 }:
+{ stdenv, fetchurl, fetchpatch, ocaml, findlib, piqi, camlp4 }:
 
 stdenv.mkDerivation rec {
   version = "0.7.5";
@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     url = "https://github.com/alavrik/piqi-ocaml/archive/v${version}.tar.gz";
     sha256 = "0ngz6y8i98i5v2ma8nk6mc83pdsmf2z0ks7m3xi6clfg3zqbddrv";
   };
+
+  patches = [ (fetchpatch {
+    url = https://github.com/alavrik/piqi-ocaml/commit/336e8fdb84e77f4105e9bbb5ab545b8729101308.patch;
+    sha256 = "071s4xjyr6xx95v6az2lbl2igc87n7z5jqnnbhfq2pidrxakd0la";
+  })];
 
   buildInputs = [ ocaml findlib piqi camlp4 ];
 

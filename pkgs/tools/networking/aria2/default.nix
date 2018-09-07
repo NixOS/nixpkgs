@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
 , openssl, c-ares, libxml2, sqlite, zlib, libssh2
+, cppunit
 , Security
 }:
 
@@ -20,6 +21,9 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional stdenv.isDarwin Security;
 
   configureFlags = [ "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" ];
+
+  checkInputs = [ cppunit ];
+  doCheck = false; # needs the net
 
   enableParallelBuilding = true;
 

@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   name = "singularity-${version}";
-  version = "2.5.2";
+  version = "2.6.0";
 
   enableParallelBuilding = true;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = "--localstatedir=/var";
+  configureFlags = [ "--localstatedir=/var" ];
   installFlags = "CONTAINER_MOUNTDIR=dummy CONTAINER_FINALDIR=dummy CONTAINER_OVERLAY=dummy SESSIONDIR=dummy";
 
   fixupPhase = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "singularityware";
     repo = "singularity";
     rev = version;
-    sha256 = "09wv8xagr5fjfhra5vyig0f1frfp97g99baqkh4avbzpg296q933";
+    sha256 = "0bi7acgppbkfbra8r29s1ldq02lazdww0z2h1rfvv8spr8dzzi94";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];

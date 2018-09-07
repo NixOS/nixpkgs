@@ -59,7 +59,7 @@ let
     "x86_64-linux" = "linux-x86_64";
   };
 
-  arch = mozillaPlatforms.${stdenv.system};
+  arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
   isPrefixOf = prefix: string:
     builtins.substring 0 (builtins.stringLength prefix) string == prefix;
@@ -174,6 +174,7 @@ stdenv.mkDerivation {
       gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
     '';
 
+  passthru.execdir = "/bin";
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;
   # update with:

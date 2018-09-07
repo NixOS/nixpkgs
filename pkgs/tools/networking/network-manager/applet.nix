@@ -1,7 +1,7 @@
 { stdenv, fetchurl, meson, ninja, intltool, gtk-doc, pkgconfig, networkmanager, gnome3
-, libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl
+, libnotify, libsecret, polkit, isocodes, modemmanager, libxml2, docbook_xsl, docbook_xml_dtd_43
 , mobile-broadband-provider-info, glib-networking, gsettings-desktop-schemas
-, libgudev, jansson, wrapGAppsHook, gobjectIntrospection
+, libgudev, jansson, wrapGAppsHook, gobjectIntrospection, python3
 , libappindicator-gtk3, withGnome ? false }:
 
 let
@@ -15,12 +15,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0lmlkh4yyl9smvkgrzshn127zqfbp9f41f448ks8dlhhm38s38v2";
   };
 
-  patches = [
-    # https://gitlab.gnome.org/GNOME/network-manager-applet/merge_requests/19
-    ./libnm-gtk-mbpi.patch
-  ];
-
   mesonFlags = [
+    "-Dlibnm_gtk=false" # It is deprecated
     "-Dselinux=false"
     "-Dappindicator=yes"
     "-Dgcr=${if withGnome then "true" else "false"}"
@@ -35,7 +31,7 @@ in stdenv.mkDerivation rec {
     libappindicator-gtk3
   ] ++ stdenv.lib.optionals withGnome [ gnome3.gcr ]; # advanced certificate chooser
 
-  nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobjectIntrospection gtk-doc docbook_xsl libxml2 ];
+  nativeBuildInputs = [ meson ninja intltool pkgconfig wrapGAppsHook gobjectIntrospection python3 gtk-doc docbook_xsl docbook_xml_dtd_43 libxml2 ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file

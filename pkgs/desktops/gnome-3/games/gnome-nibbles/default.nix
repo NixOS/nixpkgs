@@ -4,29 +4,31 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-nibbles-${version}";
-  version = "3.24.0";
+  version = "3.24.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-nibbles/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0ddc1fe03483958dd5513d04f5919ade991902d12da18a4c2d3307f818a5cb4f";
+    sha256 = "19g44cnrb191v50bdvy2qkrfhvyfsahd0kx9hz95x9gkjfn2nn35";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "gnome-nibbles"; attrPath = "gnome3.gnome-nibbles"; };
-  };
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool itstool libxml2 ];
   buildInputs = [
-    gtk3 wrapGAppsHook intltool itstool libxml2
-    librsvg libcanberra-gtk3 clutter-gtk gnome3.defaultIconTheme
+    gtk3 librsvg libcanberra-gtk3 clutter-gtk gnome3.defaultIconTheme
     libgee libgnome-games-support
   ];
 
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "gnome-nibbles";
+      attrPath = "gnome3.gnome-nibbles";
+    };
+  };
+
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Nibbles;
     description = "Guide a worm around a maze";
-    maintainers = gnome3.maintainers;
+    homepage = https://wiki.gnome.org/Apps/Nibbles;
     license = licenses.gpl2;
+    maintainers = gnome3.maintainers;
     platforms = platforms.linux;
   };
 }

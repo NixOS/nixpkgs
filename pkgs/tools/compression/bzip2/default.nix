@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, linkStatic ? (stdenv.system == "i686-cygwin")
+, linkStatic ? (stdenv.hostPlatform.system == "i686-cygwin")
 }:
 
 stdenv.mkDerivation rec {
