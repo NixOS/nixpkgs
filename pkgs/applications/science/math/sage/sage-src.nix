@@ -3,14 +3,14 @@
 , fetchpatch
 }:
 stdenv.mkDerivation rec {
-  version = "8.4.beta3";
+  version = "8.4.beta4";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "14i2a2dzgcl9wj0067kxy5k1aq4g5yp1mhckghz0qm48ygvp1a4j";
+    sha256 = "19l5040rx51ygg51lcm78h0q670gcpzkyxys03b3h5ypnq6l4hhf";
   };
 
   nixPatches = [
@@ -37,18 +37,6 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/science-team/sagemath/raw/58bbba93a807ca2933ca317501d093a1bb4b84db/debian/patches/dt-version-glpk-4.65-ignore-warnings.patch";
       sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
       stripLen = 1;
-    })
-
-    (fetchpatch {
-      name = "matplotlib-2.2.2";
-      url = "https://git.sagemath.org/sage.git/patch?id=0d6244ed53b71aba861ce3d683d33e542c0bf0b0";
-      sha256 = "15x4cadxxlsdfh2sblgagqjj6ir13fgdzixxnwnvzln60saahb34";
-    })
-
-    (fetchpatch {
-      name = "scipy-1.1.0";
-      url = "https://git.sagemath.org/sage.git/patch?id=e0db968a51678b34ebd8d34906c7042900272378";
-      sha256 = "0kq5zxqphhrmavrmg830wdr7hwp1bkzdqlf3jfqfr8r8xq12qwf7";
     })
 
     # https://trac.sagemath.org/ticket/25260
