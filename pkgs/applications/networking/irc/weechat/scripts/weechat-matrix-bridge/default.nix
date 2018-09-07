@@ -25,6 +25,8 @@ stdenv.mkDerivation {
       --replace "__NIX_LIB_PATH__" "$out/lib/?.so"
   '';
 
+  passthru.scripts = [ "olm.lua" "matrix.lua" ];
+
   installPhase = ''
     mkdir -p $out/{share,lib}
 
