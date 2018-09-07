@@ -6,7 +6,7 @@ let
          else "darwin-amd64";
   checksum = if isLinux
              then "1zig6ihmxcaw2wsbdd85yf1zswqcifw0hvbp1zws7r5ihd4yv8hg"
-             else "1jzgy641hm3khj0bakfbr5wd5zl3s7w5jb622fjv2jxwmnv7dxiv";
+             else "1l8y9i8vhibhwbn5kn5qp722q4dcx464kymlzy2bkmhiqbxnnkkw";
   pname = "helm";
   version = "2.10.0";
 in
