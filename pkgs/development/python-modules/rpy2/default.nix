@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPyPy
+, isPy27
 , readline
 , R
 , pcre
@@ -16,12 +17,18 @@
 }:
 
 buildPythonPackage rec {
-    version = "2.8.2";
+    version = if isPy27 then
+      "2.8.6" # python2 support dropped in 2.9.x
+    else
+      "2.9.3";
     pname = "rpy2";
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
-      sha256 = "0k5jp6n1lfab7a6r5568aq31hg4fgf2cwy0hzvf3chp6yhyk26ic";
+      sha256 = if isPy27 then
+        "162zki5c1apgv6qbafi7n66y4hgpgp43xag7q75qb6kv99ri6k80" # 2.8.x
+      else
+        "1b72958e683339ea0c3bd9f73738e9ece2da8da8008a10e2e0c68fc7864e9361"; # 2.9.x
     };
     buildInputs = [
       readline

@@ -4,8 +4,6 @@
 , html5lib
 , wcwidth
 , nose
-, python
-, isPy3k
 }:
 
 buildPythonPackage rec {

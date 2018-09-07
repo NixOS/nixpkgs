@@ -5,12 +5,15 @@ stdenv.mkDerivation rec {
   version = "2.0.3";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
+    url = "https://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
     sha256 = "0s13dmakn21q6yw8avl67d4zkxzl1wap6l5nwf6cvzrmlxfw441m";
   };
 
   buildInputs = [ SDL2 libpng libjpeg libtiff libungif libXpm zlib ]
     ++ stdenv.lib.optional stdenv.isDarwin Foundation;
+
+
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, qt4, pkgconfig, libnl, python }:
+{ stdenv, fetchurl, qt4, pkgconfig, libnl, python }:
 
 let
   version = "016";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig python ];
 
-  configureFlags = "--without-gobject CFLAGS=--std=gnu99";
+  configureFlags = [ "--without-gobject" "CFLAGS=--std=gnu99" ];
 
   # Remove this patch after version 016
   patches = [ ./libnl-fix.patch ];

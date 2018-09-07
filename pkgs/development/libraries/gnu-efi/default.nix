@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
     "RANLIB=${stdenv.cc.targetPrefix}ranlib"
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-  ] ++ stdenv.lib.optional stdenv.isArm "ARCH=arm"
+  ] ++ stdenv.lib.optional stdenv.isAarch32 "ARCH=arm"
     ++ stdenv.lib.optional stdenv.isAarch64 "ARCH=aarch64";
 
   meta = with stdenv.lib; {

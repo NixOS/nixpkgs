@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, lz4, freetype, fontconfig
 , fribidi, SDL2, SDL, libGL, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio
-, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit
+, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, bullet, luajit
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
-, dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
+, dbus, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
 , curl, libinput, systemd, mesa_noglu, writeText
 }:
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.20.7";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "1zkn5ix81xck3n84dxvkjh4alwc6zj8x989d0zqi5c6ppijvgadh";
+    sha256 = "0jxfrcz2aq1synxzd6sh9nhxz7fg9qgz0idr8zj6gaiplmwbwrby";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -26,8 +26,11 @@ stdenv.mkDerivation rec {
     xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
     bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
     xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
-    harfbuzz jbig2dec librsvg dbus_libs alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
+    harfbuzz jbig2dec librsvg dbus alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
     libinput utillinux fribidi SDL2 ];
+
+  # as of 1.21.0 compilation will fail due to -Werror=format-security
+  hardeningDisable = [ "format" ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
   configureFlags = [

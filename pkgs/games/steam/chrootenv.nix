@@ -3,6 +3,7 @@
 , withJava ? false
 , withPrimus ? false
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
+, extraProfile ? "" # string to append to profile
 , nativeOnly ? false
 , runtimeOnly ? false
 }:
@@ -22,6 +23,8 @@ let
       # Open URLs
       xdg_utils
       iana-etc
+      # Steam Play / Proton
+      python3
     ] ++ lib.optional withJava jdk
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
@@ -178,7 +181,7 @@ in buildFHSUserEnv rec {
 
   profile = ''
     export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
-  '';
+  '' + extraProfile;
 
   runScript = writeScript "steam-wrapper.sh" ''
     #!${stdenv.shell}

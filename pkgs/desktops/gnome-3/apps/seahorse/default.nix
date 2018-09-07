@@ -1,7 +1,7 @@
 { stdenv, intltool, fetchurl, vala
 , pkgconfig, gtk3, glib
 , wrapGAppsHook, itstool, gnupg, libsoup
-, gnome3, librsvg, gdk_pixbuf, gpgme
+, gnome3, gpgme
 , libsecret, avahi, p11-kit, openssh }:
 
 let

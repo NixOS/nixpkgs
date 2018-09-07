@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
 , zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, libevent
-, withGui }:
+, withGui
+, Foundation, ApplicationServices, AppKit }:
 
 with stdenv.lib;
 
@@ -19,7 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib
                   miniupnpc utillinux protobuf libevent ]
-                  ++ optionals withGui [ qt4 qrencode ];
+                  ++ optionals withGui [ qt4 qrencode ]
+                  ++ optionals stdenv.isDarwin [ Foundation ApplicationServices AppKit ];
 
   patches = [
     ./bitcoin-unlimited-const-comparators.patch
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
       completely decentralized, without the need for a central server or trusted
       parties. Users hold the crypto keys to their own money and transact directly
       with each other, with the help of a P2P network to check for double-spending.
-      
+
       The Bitcoin Unlimited (BU) project seeks to provide a voice to all
       stakeholders in the Bitcoin ecosystem.
 
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
 
       If you support an increase in the blocksize limit by any means - or just
       support Bitcoin conflict resolution as originally envisioned by its founder -
-      consider running a Bitcoin Unlimited client.      
+      consider running a Bitcoin Unlimited client.
     '';
     homepage = https://www.bitcoinunlimited.info/;
     maintainers = with maintainers; [ DmitryTsygankov ];

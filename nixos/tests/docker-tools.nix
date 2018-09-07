@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
   nodes = {
     docker =
-      { config, pkgs, ... }: {
+      { ... }: {
         virtualisation = {
           diskSize = 2048;
           docker.enable = true;
@@ -45,5 +45,11 @@ import ./make-test.nix ({ pkgs, ... }: {
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.onTopOfPulledImage}'");
       $docker->succeed("docker run --rm ontopofpulledimage hello");
       $docker->succeed("docker rmi ontopofpulledimage");
+
+      # Regression test for issue #34779
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.runAsRootExtraCommands}'");
+      $docker->succeed("docker run --rm runasrootextracommands cat extraCommands");
+      $docker->succeed("docker run --rm runasrootextracommands cat runAsRoot");
+      $docker->succeed("docker rmi '${pkgs.dockerTools.examples.runAsRootExtraCommands.imageName}'");
     '';
 })

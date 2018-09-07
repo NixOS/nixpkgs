@@ -20,18 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ glog ]
+  buildInputs = [ eigen glog ]
     ++ stdenv.lib.optional (google-gflags != null) google-gflags;
-
-  inherit eigen;
 
   doCheck = runTests;
 
   checkTarget = "test";
-
-  cmakeFlags = "
-    -DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3
-  ";
 
   meta = with stdenv.lib; {
     description = "C++ library for modeling and solving large, complicated optimization problems";

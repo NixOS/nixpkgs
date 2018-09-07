@@ -5,9 +5,11 @@
 # Userspace dependencies
 , zlib, libuuid, python, attr, openssl
 , libtirpc
+, nfs-utils
+, gawk, gnugrep, gnused, systemd
 
 # Kernel dependencies
-, kernel ? null, spl ? null, splUnstable ? null, splLegacyCrypto ? null
+, kernel ? null, spl ? null
 }:
 
 with stdenv.lib;
@@ -22,7 +24,7 @@ let
     , rev ? "zfs-${version}"
     , isUnstable ? false
     , isLegacyCrypto ? false
-    , incompatibleKernelVersion ? null } @ args:
+    , incompatibleKernelVersion ? null }:
     if buildKernel &&
       (incompatibleKernelVersion != null) &&
         versionAtLeast kernel.version incompatibleKernelVersion then
@@ -49,7 +51,7 @@ let
       '';
 
       nativeBuildInputs = [ autoreconfHook nukeReferences ]
-         ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
+        ++ optional buildKernel (kernel.moduleBuildDependencies ++ [ perl ]);
       buildInputs =
            optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ]
@@ -59,13 +61,14 @@ let
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
 
-      hardeningDisable = [ "pic" ];
+      hardeningDisable = [ "fortify" "stackprotector" "pic" ];
 
       preConfigure = ''
         substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "umount -t zfs"           "${utillinux}/bin/umount -t zfs"
         substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "mount -t zfs"            "${utillinux}/bin/mount -t zfs"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/umount"             "${utillinux}/bin/umount"
         substituteInPlace ./lib/libzfs/libzfs_mount.c --replace "/bin/mount"              "${utillinux}/bin/mount"
+        substituteInPlace ./lib/libshare/nfs.c        --replace "/usr/sbin/exportfs"      "${nfs-utils}/bin/exportfs"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/ztest"         "$out/sbin/ztest"
         substituteInPlace ./cmd/ztest/ztest.c         --replace "/usr/sbin/zdb"           "$out/sbin/zdb"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
@@ -74,12 +77,15 @@ let
         substituteInPlace ./cmd/zed/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
         substituteInPlace ./module/Makefile.in        --replace "/bin/cp"                 "cp"
         substituteInPlace ./etc/systemd/system/zfs-share.service.in \
-          --replace "@bindir@/rm " "${coreutils}/bin/rm "
+          --replace "/bin/rm " "${coreutils}/bin/rm "
 
         for f in ./udev/rules.d/*
         do
           substituteInPlace "$f" --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
         done
+        substituteInPlace ./cmd/vdev_id/vdev_id \
+          --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
+          "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
 
         ./autogen.sh
         configureFlagsArray+=("--libexecdir=$out/libexec")
@@ -87,7 +93,7 @@ let
 
       configureFlags = [
         "--with-config=${configFile}"
-        ] ++ optionals buildUser [
+      ] ++ optionals buildUser [
         "--with-dracutdir=$(out)/lib/dracut"
         "--with-udevdir=$(out)/lib/udev"
         "--with-systemdunitdir=$(out)/etc/systemd/system"
@@ -97,10 +103,11 @@ let
         "--sysconfdir=/etc"
         "--localstatedir=/var"
         "--enable-systemd"
-        ] ++ optionals buildKernel [
-        "--with-spl=${spl}/libexec/spl"
+      ] ++ optionals buildKernel [
         "--with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
         "--with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      ] ++ optionals (buildKernel && spl != null) [
+        "--with-spl=${spl}/libexec/spl"
       ];
 
       enableParallelBuilding = true;
@@ -151,12 +158,12 @@ in {
   # to be adapted
   zfsStable = common {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = null;
+    incompatibleKernelVersion = "4.18";
 
     # this package should point to the latest release.
-    version = "0.7.8";
+    version = "0.7.9";
 
-    sha256 = "0m7j5cpz81lqcfbh4w3wvqjjka07wickl27klgy1zplv6vr0baix";
+    sha256 = "0krpxrvnda2jx6l71xhw9fsksyp2a6h9l9asppac3szsd1n7fp9n";
 
     extraPatches = [
       (fetchpatch {
@@ -170,46 +177,22 @@ in {
 
   zfsUnstable = common rec {
     # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
+    incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2018-04-10";
+    version = "2018-09-02";
 
-    rev = "74df0c5e251a920a1966a011c16f960cd7ba562e";
-    sha256 = "1x3mipj3ryznnd7kx84r3n607hv6jqs66mb61g3zcdmvk6al4yq4";
+    rev = "c197a77c3cf36531e4cf79e524e1ccf7ec00cc4c";
+    sha256 = "0rk835nnl4w5km8qxcr1wdpr9xasssnrmsxhjlqjy0ry3qcb2197";
     isUnstable = true;
 
     extraPatches = [
       (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/${rev}...nixos-zfs-2018-02-02.patch";
-        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
+        url = "https://github.com/Mic92/zfs/compare/${rev}...nixos-zfs-2018-08-13.patch";
+        sha256 = "1sdcr1w2jp3djpwlf1f91hrxxmc34q0jl388smdkxh5n5bpw5gzw";
       })
     ];
 
-    spl = splUnstable;
+    spl = null;
   };
-
-  # TODO: Remove this module before 18.09
-  # also remove boot.zfs.enableLegacyCrypto
-  zfsLegacyCrypto = common {
-    # comment/uncomment if breaking kernel versions are known
-    incompatibleKernelVersion = "4.16";
-
-    # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2018-02-01";
-
-    rev = "4c46b99d24a6e71b3c72462c11cb051d0930ad60";
-    sha256 = "011lcp2x44jgfzqqk2gjmyii1v7rxcprggv20prxa3c552drsx3c";
-    isUnstable = true;
-
-    extraPatches = [
-      (fetchpatch {
-        url = "https://github.com/Mic92/zfs/compare/4c46b99d24a6e71b3c72462c11cb051d0930ad60...nixos-zfs-2018-02-01.patch";
-        sha256 = "1gqmgqi39qhk5kbbvidh8f2xqq25vj58i9x0wjqvcx6a71qj49ch";
-      })
-    ];
-
-    spl = splLegacyCrypto;
-  };
-
 }

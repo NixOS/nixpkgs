@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, python2Packages, root, makeWrapper, zlib, withRootSupport ? false }:
+{ stdenv, fetchurl, python2Packages, root, makeWrapper, zlib, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "yoda-${version}";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
-    sha256 = "0fyf6ld1klzlfmr5sl1jxzck4a0h14zfkrff8397rn1fqnqbzmmk";
+    url = "https://www.hepforge.org/archive/yoda/YODA-${version}.tar.bz2";
+    sha256 = "0yq20fnckf6h0a53ghxsgia6ikq71ch9a0w0khq188r7rlg9gmzd";
   };
 
   pythonPath = []; # python wrapper support
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
       wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
     done
   '';
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Provides small set of data analysis (specifically histogramming) classes";

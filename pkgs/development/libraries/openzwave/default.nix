@@ -19,6 +19,8 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ systemd ];
 
+  hardeningDisable = [ "format" ];
+
   enableParallelBuilding = true;
 
   installPhase = ''

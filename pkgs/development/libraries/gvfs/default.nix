@@ -1,10 +1,10 @@
-{ stdenv, meson, ninja, fetchurl, pkgconfig, gettext, gnome3
+{ stdenv, fetchurl, pkgconfig, gettext, gnome3
 , glib, libgudev, udisks2, libgcrypt, libcap, polkit
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, samba, libmtp
 , gnomeSupport ? false, gnome, makeWrapper
 , libimobiledevice, libbluray, libcdio-paranoia, libnfs, openssh
-, libsecret, libgdata
+, libsecret, libgdata, python3
 # Remove when switching back to meson
 , autoreconfHook, lzma, bzip2
 }:
@@ -18,15 +18,19 @@
 
 let
   pname = "gvfs";
-  version = "1.36.1";
+  version = "1.36.2";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "09phj9kqk8lzcmkjfq7qmzpkj4xp1vg4mskv6d2s9j62hvrxyh1q";
+    sha256 = "1xq105596sk9yram5a143b369wpaiiwc9gz86n0j1kfr7nipkqn4";
   };
+
+  postPatch = ''
+    patchShebangs test test-driver
+  '';
 
   # Uncomment when switching back to meson
   # postPatch = ''
@@ -59,9 +63,9 @@ stdenv.mkDerivation rec {
 
   # Uncomment when switching back to meson
   # mesonFlags = [
-  #   "-Dgio_module_dir=lib/gio/modules"
-  #   "-Dsystemduserunitdir=lib/systemd/user"
-  #   "-Ddbus_service_dir=share/dbus-1/services"
+  #   "-Dgio_module_dir=${placeholder "out"}/lib/gio/modules"
+  #   "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  #   "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/services"
   #   "-Dtmpfilesdir=no"
   # ] ++ stdenv.lib.optionals (!gnomeSupport) [
   #   "-Dgcr=false" "-Dgoa=false" "-Dkeyring=false" "-Dhttp=false"
@@ -72,6 +76,10 @@ stdenv.mkDerivation rec {
   # ];
 
   enableParallelBuilding = true;
+
+  checkInputs = [ python3 ];
+  doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
+  doInstallCheck = doCheck;
 
   preFixup = ''
     for f in $out/libexec/*; do

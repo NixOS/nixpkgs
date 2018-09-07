@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl, fetchFromGitHub
+{ stdenv, fetchurl, fetchFromGitHub
 , ncurses
 , texinfo
 , gettext ? null
@@ -14,17 +14,17 @@ let
   nixSyntaxHighlight = fetchFromGitHub {
     owner = "seitz";
     repo = "nanonix";
-    rev = "17e0de65e1cbba3d6baa82deaefa853b41f5c161";
-    sha256 = "1g51h65i31andfs2fbp1v3vih9405iknqn11fzywjxji00kjqv5s";
+    rev = "7483fd8b79f1f3f2179dbbd46aa400df4320ba10";
+    sha256 = "10pv75kfrgnziz8sr83hdbb0c3klm2fmsdw3i5cpqqf5va1fzb8h";
   };
 
 in stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.9.4";
+  version = "2.9.8";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "0nm3zy4azr5rkxjq7jfybbj3cnddmvxc49rxyqm9cp2zfdp75y9c";
+    sha256 = "122lm0z97wk3mgnbn8m4d769d4j9rxyc9z7s89xd4gsdp8qsrpn2";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -32,11 +32,11 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" ];
 
-  configureFlags = ''
-    --sysconfdir=/etc
-    ${optionalString (!enableNls) "--disable-nls"}
-    ${optionalString enableTiny "--enable-tiny"}
-  '';
+  configureFlags = [
+    "--sysconfdir=/etc"
+    (stdenv.lib.enableFeature enableNls "nls")
+    (stdenv.lib.enableFeature enableTiny "tiny")
+  ];
 
   postInstall = ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/

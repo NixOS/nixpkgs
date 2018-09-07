@@ -14,7 +14,7 @@ in
       PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
       pushd $out
       mv $diskImage disk.raw
-      tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.system}.raw.tar.gz disk.raw
+      tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw.tar.gz disk.raw
       rm $out/disk.raw
       popd
     '';
@@ -221,7 +221,7 @@ in
           echo "Obtaining SSH keys..."
           mkdir -m 0700 -p /root/.ssh
           AUTH_KEYS=$(${mktemp})
-          ${wget} -O $AUTH_KEYS --header="Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys
+          ${wget} -O $AUTH_KEYS http://metadata.google.internal/computeMetadata/v1/instance/attributes/sshKeys
           if [ -s $AUTH_KEYS ]; then
 
             # Read in key one by one, split in case Google decided
@@ -246,6 +246,18 @@ in
             false
           fi
           rm -f $AUTH_KEYS
+          SSH_HOST_KEYS_DIR=$(${mktemp} -d)
+          ${wget} -O $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key http://metadata.google.internal/computeMetadata/v1/instance/attributes/ssh_host_ed25519_key
+          ${wget} -O $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key.pub http://metadata.google.internal/computeMetadata/v1/instance/attributes/ssh_host_ed25519_key_pub
+          if [ -s $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key -a -s $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key.pub ]; then
+              mv -f $SSH_HOST_KEYS_DIR/ssh_host_ed25519_key* /etc/ssh/
+              chmod 600 /etc/ssh/ssh_host_ed25519_key
+              chmod 644 /etc/ssh/ssh_host_ed25519_key.pub
+          else
+              echo "Setup of ssh host keys from http://metadata.google.internal/computeMetadata/v1/instance/attributes/ failed."
+              false
+          fi
+          rm -rf $SSH_HOST_KEYS_DIR
         '';
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = true;

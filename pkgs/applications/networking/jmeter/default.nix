@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "jmeter-${version}";
   version = "4.0";
   src = fetchurl {
-    url = "http://archive.apache.org/dist/jmeter/binaries/apache-${name}.tgz";
+    url = "https://archive.apache.org/dist/jmeter/binaries/apache-${name}.tgz";
     sha256 = "1dvngvi6j8qb6nmf5a3gpi5wxck4xisj41qkrj8sjwb1f8jq6nw4";
   };
 

@@ -12,16 +12,17 @@
 with lib;
 
 let
-  rootfsImage = import ../../../lib/make-ext4-fs.nix {
-    inherit pkgs;
+  rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
     inherit (config.sdImage) storePaths;
     volumeLabel = "NIXOS_SD";
-  };
+  } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
+    uuid = config.sdImage.rootPartitionUUID;
+  });
 in
 {
   options.sdImage = {
     imageName = mkOption {
-      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.system}.img";
+      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
       description = ''
         Name of the generated image file.
       '';
@@ -39,6 +40,24 @@ in
       example = literalExample "[ pkgs.stdenv ]";
       description = ''
         Derivations to be included in the Nix store in the generated SD image.
+      '';
+    };
+
+    bootPartitionID = mkOption {
+      type = types.string;
+      default = "0x2178694e";
+      description = ''
+        Volume ID for the /boot partition on the SD card. This value must be a
+        32-bit hexadecimal number.
+      '';
+    };
+
+    rootPartitionUUID = mkOption {
+      type = types.nullOr types.string;
+      default = null;
+      example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
+      description = ''
+        UUID for the main NixOS partition on the SD card.
       '';
     };
 
@@ -74,16 +93,16 @@ in
 
     sdImage.storePaths = [ config.system.build.toplevel ];
 
-    system.build.sdImage = pkgs.stdenv.mkDerivation {
+    system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs, mtools, libfaketime, utillinux }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      buildInputs = with pkgs; [ dosfstools e2fsprogs mtools libfaketime utillinux ];
+      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux ];
 
       buildCommand = ''
         mkdir -p $out/nix-support $out/sd-image
         export img=$out/sd-image/${config.sdImage.imageName}
 
-        echo "${pkgs.stdenv.system}" > $out/nix-support/system
+        echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
         echo "file sd-image $img" >> $out/nix-support/hydra-build-products
 
         # Create the image file sized to fit /boot and /, plus 20M of slack
@@ -95,7 +114,7 @@ in
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
         sfdisk $img <<EOF
             label: dos
-            label-id: 0x2178694e
+            label-id: ${config.sdImage.bootPartitionID}
 
             start=8M, size=$bootSizeBlocks, type=b, bootable
             start=${toString (8 + config.sdImage.bootSize)}M, type=83
@@ -108,7 +127,7 @@ in
         # Create a FAT32 /boot partition of suitable size into bootpart.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)
         truncate -s $((SECTORS * 512)) bootpart.img
-        faketime "1970-01-01 00:00:00" mkfs.vfat -i 0x2178694e -n NIXOS_BOOT bootpart.img
+        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.bootPartitionID} -n NIXOS_BOOT bootpart.img
 
         # Populate the files intended for /boot
         mkdir boot
@@ -118,7 +137,7 @@ in
         (cd boot; mcopy -bpsvm -i ../bootpart.img ./* ::)
         dd conv=notrunc if=bootpart.img of=$img seek=$START count=$SECTORS
       '';
-    };
+    }) {};
 
     boot.postBootCommands = ''
       # On the first boot do some maintenance tasks

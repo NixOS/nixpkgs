@@ -1,5 +1,6 @@
-{ stdenv, lib, pkgconfig, lxc, buildGoPackage, fetchurl
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, squashfsTools, iproute, iptables
+{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl
+, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
+, squashfsTools, iproute, iptables, ebtables
 }:
 
 buildGoPackage rec {
@@ -26,7 +27,7 @@ buildGoPackage rec {
     rm $bin/bin/{deps,macaroon-identity}
 
     wrapProgram $bin/bin/lxd --prefix PATH ":" ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables
+      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables
     ]}
   '';
 

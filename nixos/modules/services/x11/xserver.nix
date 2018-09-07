@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -240,7 +240,17 @@ in
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
         default = [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
-        example = [ "vesa" ];
+        example = [
+          "ati_unfree" "amdgpu" "amdgpu-pro"
+          "nv" "nvidia" "nvidiaLegacy340" "nvidiaLegacy304"
+        ];
+        # TODO(@oxij): think how to easily add the rest, like those nvidia things
+        relatedPackages = concatLists
+          (mapAttrsToList (n: v:
+            optional (hasPrefix "xf86video" n) {
+              path  = [ "xorg" n ];
+              title = removePrefix "xf86video" n;
+            }) pkgs.xorg);
         description = ''
           The names of the video drivers the configuration
           supports. They will be tried in order until one that
@@ -525,6 +535,15 @@ in
 
   config = mkIf cfg.enable {
 
+    services.xserver.displayManager.lightdm.enable =
+      let dmconf = cfg.displayManager;
+          default = !( dmconf.auto.enable
+                    || dmconf.gdm.enable
+                    || dmconf.sddm.enable
+                    || dmconf.slim.enable
+                    || dmconf.xpra.enable );
+      in mkIf (default) true;
+
     hardware.opengl.enable = mkDefault true;
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
@@ -606,8 +625,12 @@ in
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
-    environment.pathsToLink =
-      [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
+    xdg = { 
+      autostart.enable = true;
+      menus.enable = true;
+      mime.enable = true;
+      icons.enable = true;
+    };
 
     # The default max inotify watches is 8192.
     # Nowadays most apps require a good number of inotify watches,

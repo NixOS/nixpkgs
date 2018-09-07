@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl, fetchpatch }:
+{ lib, callPackage, fetchurl }:
 
 let
   generic = args: callPackage (import ./generic.nix args) { };
@@ -17,13 +17,11 @@ in
 rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = generic {
-    version = "390.48";
-    sha256_32bit = "1y6n2hfz9vd0h7gd31fgxcl76s5pjf8afwqyq5slqpcxpd78j5ai";
-    sha256_64bit = "16a3blvizcksmaxr644s857yanw3i3vcvqvn7qnwbsbqpmxga09c";
-    settingsSha256 = "058xaiw5g0kxrvc3lvy4424fqbjkvmsznj2v73cgbm25i1m83krl";
-    persistencedSha256 = "0y86bhzl42lqyrbibqzf8a8yd49zbq3ryb78vgsl13i44f9sl79k";
-
-    patches = [ ./fix_missing_symbol.patch ];
+    version = "390.77";
+    sha256_32bit = "1yd313ghh2qbn07d5wbkshfwgkm4mh49vcqkydds3b3xk0mx4i8l";
+    sha256_64bit = "10kjccrkdn360035lh985cadhwy6lk9xrw3wlmww2wqfaa25f775";
+    settingsSha256 = "1wvxldpjkrx0ldjm5l6ycm6paxpcw89h0n6hfkznfkahkq7fwxdj";
+    persistencedSha256 = "1gklmc0v17m018cwpdlzwdyd45y4sjvjhj8a3l44baygix5zn30f";
   };
 
   beta = stable; # not enough interest to maintain beta ATM

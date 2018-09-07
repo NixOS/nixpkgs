@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
       # We get a warning in armv5tel-linux and the fuloong2f, so we
       # disable -Werror in it.
-      ${stdenv.lib.optionalString (stdenv.isArm || stdenv.hostPlatform.isMips) ''
+      ${stdenv.lib.optionalString (stdenv.isAarch32 || stdenv.hostPlatform.isMips) ''
         sed -i s/-Werror// src/Makefile.am
       ''}
     '';

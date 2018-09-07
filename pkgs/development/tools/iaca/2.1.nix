@@ -1,5 +1,4 @@
-{ stdenv, makeWrapper, requireFile, patchelf, gcc, unzip }:
-assert stdenv.system == "x86_64-linux";
+{ stdenv, makeWrapper, requireFile, gcc, unzip }:
 with stdenv.lib;
 
 # v2.1: last version with NHM/WSM arch support

@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-332";
+  name = "xterm-335";
 
   src = fetchurl {
     urls = [
      "ftp://ftp.invisible-island.net/xterm/${name}.tgz"
      "https://invisible-mirror.net/archives/xterm/${name}.tgz"
    ];
-    sha256 = "0zdjiik4ravc3zld5c9i2ndrvazjmwiwbgl2c21348762wki2jsx";
+    sha256 = "15nbgys4s2idhx6jzzc24g9bb1s6yps5fyg2bafvs0gkkcm1ggz0";
   };
 
   buildInputs =
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://invisible-island.net/xterm;
     license = with stdenv.lib.licenses; [ mit ];
-    maintainers = with stdenv.lib.maintainers; [viric vrthra];
+    maintainers = with stdenv.lib.maintainers; [vrthra];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

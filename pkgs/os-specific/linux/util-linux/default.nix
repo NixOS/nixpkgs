@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, pkgconfig, zlib, fetchpatch, shadow
-, ncurses ? null, perl ? null, pam, systemd, minimal ? false }:
+{ lib, stdenv, fetchurl, pkgconfig, zlib, shadow
+, ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
 let
   version = lib.concatStringsSep "." ([ majorVersion ]
     ++ lib.optional (patchVersion != "") patchVersion);
-  majorVersion = "2.31";
+  majorVersion = "2.32";
   patchVersion = "1";
 
 in stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${name}.tar.xz";
-    sha256 = "04fzrnrr3pvqskvjn9f81y0knh0jvvqx4lmbz5pd4lfdm5pv2l8s";
+    sha256 = "1ck7d8srw5szpjq7v0gpmjahnjs6wgqzm311ki4gazww6xx71rl6";
   };
 
   patches = [
@@ -22,20 +22,12 @@ in stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" ];
 
   postPatch = ''
+    patchShebangs tests/run.sh
+
     substituteInPlace include/pathnames.h \
       --replace "/bin/login" "${shadow}/bin/login"
     substituteInPlace sys-utils/eject.c \
       --replace "/bin/umount" "$out/bin/umount"
-  '';
-
-  crossAttrs = {
-    # Work around use of `AC_RUN_IFELSE'.
-    preConfigure = "export scanf_cv_type_modifier=ms" + lib.optionalString (systemd != null)
-      "\nconfigureFlags+=\" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/\"";
-  };
-
-  preConfigure = lib.optionalString (systemd != null) ''
-    configureFlags+=" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/"
   '';
 
   # !!! It would be better to obtain the path to the mount helpers
@@ -49,8 +41,13 @@ in stdenv.mkDerivation rec {
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
-  ]
-    ++ lib.optional (ncurses == null) "--without-ncurses";
+    (lib.withFeature (ncurses != null) "ncursesw")
+    (lib.withFeature (systemd != null) "systemd")
+    (lib.withFeatureAs (systemd != null)
+       "systemdsystemunitdir" "$(bin)/lib/systemd/system/")
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+       "scanf_cv_type_modifier=ms"
+  ;
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 
@@ -58,6 +55,8 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ zlib pam ]
     ++ lib.filter (p: p != null) [ ncurses systemd perl ];
+
+  doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   postInstall = ''
     rm "$bin/bin/su" # su should be supplied by the su package (shadow)

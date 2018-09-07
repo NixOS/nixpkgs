@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchgit, python, pkgconfig, lxml, libvirt, nose }:
+{ stdenv, buildPythonPackage, fetchgit, pkgconfig, lxml, libvirt, nose }:
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "4.1.0";
+  version = "4.5.0";
 
   src = assert version == libvirt.version; fetchgit {
     url = git://libvirt.org/libvirt-python.git;
     rev = "v${version}";
-    sha256 = "0z87y6qr0ypdxfanphxl7yanisd7a0b0bwhg97kii68mig5dlw9r";
+    sha256 = "0w2rzkxv7jsq4670m0j5c6p4hpyi0r0ja6wd3wdvixcwc6hhx407";
   };
 
   nativeBuildInputs = [ pkgconfig ];

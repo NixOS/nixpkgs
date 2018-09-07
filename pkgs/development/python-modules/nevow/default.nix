@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "Nevow";
-  version = "0.14.3";
+  version = "0.14.4";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0pid8dj3p8ai715n9a59cryfxrrbxidpda3f8hvgmfpcrjdmnmmb";
+    sha256 = "2299a0d2a0c1312040705599d5d571acfea74df82b968c0b9264f6f45266cf6e";
   };
 
   propagatedBuildInputs = [ twisted ];

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, lib
+{ stdenv, fetchurl, lib
 , ncurses, openssl, aspell, gnutls
 , zlib, curl, pkgconfig, libgcrypt
 , cmake, makeWrapper, libobjc, libresolv, libiconv
-, writeScriptBin, symlinkJoin # for withPlugins
+, writeScriptBin # for withPlugins
 , asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
@@ -15,7 +15,7 @@
 , runCommand }:
 
 let
-  inherit (pythonPackages) python pycrypto pync;
+  inherit (pythonPackages) python;
   plugins = [
     { name = "perl"; enabled = perlSupport; cmakeFlag = "ENABLE_PERL"; buildInputs = [ perl ]; }
     { name = "tcl"; enabled = tclSupport; cmakeFlag = "ENABLE_TCL"; buildInputs = [ tcl ]; }
@@ -29,12 +29,12 @@ let
   weechat =
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.0";
+      version = "2.1";
       name = "weechat-${version}";
 
       src = fetchurl {
         url = "http://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "0jd1l67k2k44xmfv0a71im3j4v0gss3a6bd5s84nj3f7lqnfmqdn";
+        sha256 = "0fq68wgynv2c3319gmzi0lz4ln4yrrk755y5mbrlr7fc1sx7ffd8";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -123,6 +123,7 @@ in if configure == null then weechat else
     ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
     exec ${weechat}/bin/weechat "$@"
   '') // {
+    name = weechat.name;
     unwrapped = weechat;
     meta = weechat.meta;
   }

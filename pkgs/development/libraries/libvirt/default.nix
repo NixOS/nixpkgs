@@ -1,10 +1,12 @@
 { stdenv, fetchurl, fetchgit
 , pkgconfig, makeWrapper, libtool, autoconf, automake
-, coreutils, libxml2, gnutls, devicemapper, perl, python2, attr
+, coreutils, libxml2, gnutls, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, xen, zfs, parted, bridge-utils, dmidecode
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
+, enableXen ? false, xen ? null
+, enableIscsi ? false, openiscsi
 }:
 
 with stdenv.lib;
@@ -14,19 +16,19 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "4.1.0";
+  version = "4.5.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${name}.tar.xz";
-        sha256 = "0fb466mcma21hsxx3cckllbr9hhncpbwim5px1mr66iidy1a8bwa";
+        sha256 = "02dbfyi80im37gdsxglb4fja78q63b8ahmgdc5kh8lx51kf5xsg7";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "01021r7i71dw9w7ffp6ia8h70ns6bc0ps5np0hq9nipxs68finm6";
+        sha256 = "0ija9a02znajsa2pbxamrmz87zwpmba9s29vdzzqqqw5c1rdpcr6";
         fetchSubmodules = true;
       };
 
@@ -37,10 +39,12 @@ in stdenv.mkDerivation rec {
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
-    libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
+    libpciaccess lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
-  ] ++ optionals (stdenv.isLinux && stdenv.isx86_64) [
+  ] ++ optionals (enableXen && stdenv.isLinux && stdenv.isx86_64) [
     xen
+  ] ++ optionals enableIscsi [
+    openiscsi
   ] ++ optionals stdenv.isDarwin [
     libiconv gmp
   ];
@@ -48,7 +52,7 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     ${ optionalString (!buildFromTarball) "./bootstrap --no-git --gnulib-srcdir=$(pwd)/.gnulib" }
 
-    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ])}:$PATH
+    PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
 
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
@@ -62,6 +66,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/var/lib"
     "--with-libpcap"
+    "--with-qemu"
     "--with-vmware"
     "--with-vbox"
     "--with-test"
@@ -78,6 +83,8 @@ in stdenv.mkDerivation rec {
     "--with-storage-disk"
   ] ++ optionals (stdenv.isLinux && zfs != null) [
     "--with-storage-zfs"
+  ] ++ optionals enableIscsi [
+    "--with-storage-iscsi"
   ] ++ optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
@@ -87,7 +94,10 @@ in stdenv.mkDerivation rec {
     "sysconfdir=$(out)/var/lib"
   ];
 
-  postInstall = ''
+
+  postInstall = let
+    binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
+  in ''
     substituteInPlace $out/libexec/libvirt-guests.sh \
       --replace 'ON_SHUTDOWN=suspend' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
       --replace "$out/bin"            '${gettext}/bin' \
@@ -100,7 +110,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ]}
+      --prefix PATH : /run/libvirt/nix-emulators:${makeBinPath binPath}
   '';
 
   enableParallelBuilding = true;

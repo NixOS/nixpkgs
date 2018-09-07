@@ -7,13 +7,13 @@ in
 
 python27Packages.buildPythonApplication rec {
   name = "qtile-${version}";
-  version = "0.10.7";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "v${version}";
-    sha256 = "18szgplyym0b65vnaa8nqzadq6q0mhsiky9g5hqhn7xzf4kykmj8";
+    sha256 = "0ynmmnh12mr3gwgz0j7l2hvm8c0y5gzsw80jszdkp4s5bh1q0nrj";
   };
 
   patches = [

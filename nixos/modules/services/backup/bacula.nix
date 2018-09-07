@@ -97,18 +97,7 @@ let
     ${dir_cfg.extraConfig}
     '';
 
-  # TODO: by default use this config
-  bconsole_conf = pkgs.writeText "bconsole.conf"
-    ''
-    Director {
-      Name = ${dir_cfg.name};
-      Address = "localhost";
-      DirPort = ${toString dir_cfg.port};
-      Password = "${dir_cfg.password}";
-    }
-    '';
-
-  directorOptions = {name, config, ...}:
+  directorOptions = {...}:
   {
     options = {
       password = mkOption {
@@ -128,7 +117,7 @@ let
     };
   };
 
-  deviceOptions = {name, config, ...}:
+  deviceOptions = {...}:
   {
     options = {
       archiveDevice = mkOption {
@@ -397,7 +386,7 @@ in {
 
     environment.systemPackages = [ pkgs.bacula ];
 
-    users.extraUsers.bacula = {
+    users.users.bacula = {
       group = "bacula";
       uid = config.ids.uids.bacula;
       home = "${libDir}";
@@ -406,6 +395,6 @@ in {
       shell = "${pkgs.bash}/bin/bash";
     };
 
-    users.extraGroups.bacula.gid = config.ids.gids.bacula;
+    users.groups.bacula.gid = config.ids.gids.bacula;
   };
 }

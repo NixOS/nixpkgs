@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.8.3";
 
   src = fetchurl {
-    url = "http://www.coin-or.org/download/source/CoinMP/${name}.tgz";
+    url = "https://www.coin-or.org/download/source/CoinMP/${name}.tgz";
     sha256 = "1xr2iwbbhm6l9hwiry5c10pz46xfih8bvzrzwp0nkzf76vdnb9m1";
   };
 

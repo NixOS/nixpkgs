@@ -1,7 +1,5 @@
 { lib
-, pkgs
 , buildPythonPackage
-, python
 , fetchPypi
 , pythonOlder
 , html5lib
@@ -25,11 +23,11 @@
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.0.9";
+  version = "2.0.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ihkhflhyz67bp73kfjqfrbcgdxi2msz5asbrh0pkk590c4vmms5";
+    sha256 = "b220ebee412c19613c26b2c1870b60473834bd686cec49553ce5f184164d3359";
   };
 
   prePatch = ''
@@ -39,7 +37,8 @@ buildPythonPackage rec {
       --replace "ftfy==" "ftfy>=" \
       --replace "msgpack-python==" "msgpack-python>=" \
       --replace "msgpack-numpy==" "msgpack-numpy>=" \
-      --replace "pathlib" "pathlib; python_version<\"3.4\""
+      --replace "thinc>=6.10.3,<6.11.0" "thinc>=6.10.3" \
+      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
   '';
 
   propagatedBuildInputs = [

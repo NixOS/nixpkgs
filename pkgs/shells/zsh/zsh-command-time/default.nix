@@ -8,18 +8,20 @@
 #   '';
 
 stdenv.mkDerivation rec {
-  version = "2017-05-09";
+  version = "2018-04-30";
   name = "zsh-command-time-${version}";
 
   src = fetchFromGitHub {
     owner = "popstas";
     repo = "zsh-command-time";
-    rev = "2111361cbc88c542c834fbab7802ae5ae8339824";
-    sha256 = "0hr9c7196wy9cg7vkmknszr2h446yvg9pqrq0rf3213kz074dhpg";
+    rev = "afb4a4c9ae7ce64ca9d4f334a79a25e46daad0aa";
+    sha256 = "1bvyjgz6bhgg1nwr56r50p6fblgah6yiql55pgm5abnn2h876fjq";
   };
 
+  phases = [ "installPhase" ];
+
   installPhase = ''
-    install -D $src/command-time.plugin.zsh --target-directory=$out/share/zsh-command-time
+    install -Dm444 $src/command-time.plugin.zsh --target-directory=$out/share/zsh-command-time
   '';
 
   meta = with stdenv.lib; {

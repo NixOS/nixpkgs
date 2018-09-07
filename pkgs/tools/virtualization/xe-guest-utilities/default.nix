@@ -1,7 +1,8 @@
 { stdenv, fetchurl, bzip2, lzo, zlib, xz, bash, python, gnutar, gnused, gnugrep, which }:
 
 stdenv.mkDerivation (rec {
-  name = "xe-guest-utilities";
+  pname = "xe-guest-utilities";
+  name = "${pname}-${version}";
   version = "6.2.0";
   meta = {
     description = "Citrix XenServer Tools";
@@ -17,14 +18,14 @@ stdenv.mkDerivation (rec {
   buildInputs = [ bzip2 gnutar gnused python lzo zlib xz stdenv gnugrep which ];
   patches = [ ./ip-address.patch ];
   postPatch = ''
-    tar xf "$NIX_BUILD_TOP/$name-$version/xenstore-sources.tar.bz2"
+    tar xf "$NIX_BUILD_TOP/$name/xenstore-sources.tar.bz2"
   '';
 
   buildPhase = ''
     export CC=gcc
     export CFLAGS='-Wall -Wstrict-prototypes -Wno-unused-local-typedefs -Wno-sizeof-pointer-memaccess'
     export PYTHON=python2
-    cd "$NIX_BUILD_TOP/$name-$version/uclibc-sources"
+    cd "$NIX_BUILD_TOP/$name/uclibc-sources"
     for file in Config.mk tools/libxc/Makefile tools/misc/Makefile tools/misc/lomount/Makefile tools/xenstore/Makefile; do
       substituteInPlace "$file" --replace -Werror ""
     done
@@ -39,12 +40,12 @@ stdenv.mkDerivation (rec {
       export LIBLEAFDIR_x86_64=lib
     fi
     for f in include libxc xenstore; do
-      [[ ! -d $NIX_BUILD_TOP/$name-$version/uclibc-sources/tools/$f ]] && continue
-      make -C "$NIX_BUILD_TOP/$name-$version/uclibc-sources/tools/$f" DESTDIR="$out" BINDIR=/bin SBINDIR=/bin INCLUDEDIR=/include LIBDIR=/lib install
+      [[ ! -d $NIX_BUILD_TOP/$name/uclibc-sources/tools/$f ]] && continue
+      make -C "$NIX_BUILD_TOP/$name/uclibc-sources/tools/$f" DESTDIR="$out" BINDIR=/bin SBINDIR=/bin INCLUDEDIR=/include LIBDIR=/lib install
     done
     rm -r "$out"/var
 
-    cd "$NIX_BUILD_TOP/$name-$version"
+    cd "$NIX_BUILD_TOP/$name"
     install -Dm755 xe-update-guest-attrs "$out/bin/xe-update-guest-attrs"
     install -Dm755 xe-daemon "$out/bin/xe-daemon"
     install -Dm644 xen-vcpu-hotplug.rules "$out/lib/udev/rules.d/10-xen-vcpu-hotplug.rules"

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "deluge-client";
-  version = "1.3.0";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "27a7f4c6da8f057e03171a493f17340f39f288199a21beb3226a188ab3c02cea";
+    sha256 = "a95d5bc3cf12e842793cb90eecef5c91f4bd8a7fc4e1e8fdef36d62b643d87cb";
   };
 
   # it will try to connect to a running instance

@@ -3,7 +3,6 @@
 , fetchPypi
 , pyyaml
 , unidecode
-, python
 }:
 
 buildPythonPackage rec {

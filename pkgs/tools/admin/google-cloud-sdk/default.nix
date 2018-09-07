@@ -19,20 +19,20 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "0c4jj580f7z6phiw4zhd32dlf4inkrxy3cig6ng66fi4zi6vnpc9";
+      sha256 = "1d5z575vw07jk7528bsqgdd875b3zwayrdnidvxpd2n8j4bip654";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "0rblb0akwdzr5i8al0dcz482xmx1xdnjnzgqywjvwd8fzdyzq7bp";
+      sha256 = "0ljslvp68ml5mglrl7kakgkqskbzglf3i5jv5d7jld28d0kbzj2c";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "190.0.1";
+  version = "215.0.0";
 
-  src = fetchurl (sources name stdenv.system);
+  src = fetchurl (sources name stdenv.hostPlatform.system);
 
   buildInputs = [ python makeWrapper ];
 
@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
     cp ${./beta__init__.py} $out/google-cloud-sdk/lib/surface/beta/__init__.py
 
     # create wrappers with correct env
-    for program in gcloud bq gsutil git-credential-gcloud.sh; do
+    for program in gcloud bq gsutil git-credential-gcloud.sh docker-credential-gcloud; do
         programPath="$out/google-cloud-sdk/bin/$program"
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \

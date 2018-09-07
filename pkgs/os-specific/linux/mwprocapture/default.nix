@@ -5,9 +5,6 @@ with stdenv.lib;
 # The Magewell Pro Capture drivers are not supported for kernels older than 3.2
 assert versionAtLeast kernel.version "3.2.0";
 
-# this package currently only supports x86 and x86_64, as I have no ARM device to test on
-assert (stdenv.system == "x86_64-linux") || (stdenv.system == "i686-linux");
-
 let
   bits =
   if stdenv.is64bit then "64"

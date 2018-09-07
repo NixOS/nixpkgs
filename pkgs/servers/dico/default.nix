@@ -2,11 +2,11 @@
 , guile, python, pcre, libffi, groff }:
 
 stdenv.mkDerivation rec {
-  name = "dico-2.5";
+  name = "dico-2.6";
 
   src = fetchurl {
     url = "mirror://gnu/dico/${name}.tar.xz";
-    sha256 = "0szm3z4xvq0pjj8kxl4paq63byamf281kzn1la0cdm5ngavypxxq";
+    sha256 = "0zmi041gv5nd5fmyzgdrgrsy2pvjaq9p8dvvhxwi842hiyng5b7i";
   };
 
   hardeningDisable = [ "format" ];

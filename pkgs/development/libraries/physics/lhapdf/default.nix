@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "6.2.1";
 
   src = fetchurl {
-    url = "http://www.hepforge.org/archive/lhapdf/LHAPDF-${version}.tar.gz";
+    url = "https://www.hepforge.org/archive/lhapdf/LHAPDF-${version}.tar.gz";
     sha256 = "0bi02xcmq5as0wf0jn6i3hx0qy0hj61m02sbrbzd1gwjhpccwmvd";
   };
 

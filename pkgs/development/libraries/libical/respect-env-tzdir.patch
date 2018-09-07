@@ -1,9 +1,9 @@
 --- a/src/libical/icaltz-util.c
 +++ b/src/libical/icaltz-util.c
-@@ -96,9 +96,9 @@ typedef struct
- static char *zdir = NULL;
+@@ -94,9 +94,9 @@
+ static const char *zdir = NULL;
  
- static char *search_paths[] = {
+ static const char *search_paths[] = {
 +    "/etc/zoneinfo",
      "/usr/share/zoneinfo",
      "/usr/lib/zoneinfo",
@@ -11,13 +11,13 @@
      "/usr/share/lib/zoneinfo"
  };
  
-@@ -179,6 +179,15 @@ static void set_zonedir(void)
+@@ -178,6 +178,15 @@
      const char *fname = ZONES_TAB_SYSTEM_FILENAME;
      size_t i, num_search_paths;
  
 +   const char *env_tzdir = getenv ("TZDIR");
 +   if (env_tzdir) {
-+       snprintf(file_path, MAXPATHLEN, "%s/%s", env_tzdir, fname);
++       sprintf (file_path, "%s/%s", env_tzdir, fname);
 +       if (!access (file_path, F_OK|R_OK)) {
 +           zdir = env_tzdir;
 +           return;

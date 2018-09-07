@@ -11,11 +11,11 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  buildInputs = (if stdenv.system == "i686-linux" then [ mps ] else [ boehmgc ]) ++ [
+  buildInputs = (if stdenv.hostPlatform.system == "i686-linux" then [ mps ] else [ boehmgc ]) ++ [
     opendylan-bootstrap boehmgc gnused autoconf automake perl makeWrapper
   ];
 
-  preConfigure = if stdenv.system == "i686-linux" then ''
+  preConfigure = if stdenv.hostPlatform.system == "i686-linux" then ''
     mkdir -p $TMPDIR/mps
     tar --strip-components=1 -xf ${mps.src} -C $TMPDIR/mps
     ./autogen.sh
@@ -24,13 +24,15 @@ stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  configureFlags = if stdenv.system == "i686-linux" then "--with-mps=$(TMPDIR)/mps" else "--with-gc=${boehmgc.out}";
+  configureFlags = [
+    (if stdenv.hostPlatform.system == "i686-linux" then "--with-mps=$(TMPDIR)/mps" else "--with-gc=${boehmgc.out}")
+  ];
   buildPhase = "make 3-stage-bootstrap";
 
   postInstall = "wrapProgram $out/bin/dylan-compiler --suffix PATH : ${gcc}/bin";
 
   meta = {
-    homepage = http://opendylan.org;
+    homepage = https://opendylan.org;
     description = "A multi-paradigm functional and object-oriented programming language";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;

@@ -5,7 +5,7 @@ stdenv.mkDerivation (rec {
   name = "qiv-${version}";
 
   src = fetchurl {
-    url = "http://spiegl.de/qiv/download/${name}.tgz";
+    url = "https://spiegl.de/qiv/download/${name}.tgz";
     sha256 = "1rlf5h67vhj7n1y7jqkm9k115nfnzpwngj3kzqsi2lg676srclv7";
   };
 
@@ -17,10 +17,11 @@ stdenv.mkDerivation (rec {
     substituteInPlace Makefile --replace /man/ /share/man/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Quick image viewer";
     homepage = http://spiegl.de/qiv/;
     inherit version;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 })

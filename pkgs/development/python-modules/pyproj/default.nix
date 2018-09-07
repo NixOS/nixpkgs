@@ -9,7 +9,6 @@
 buildPythonPackage (rec {
   pname = "pyproj";
   version = "1.9.5.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

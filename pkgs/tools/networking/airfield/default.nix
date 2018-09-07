@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage, python, utillinux
+{ stdenv, fetchFromGitHub
 , pkgs, makeWrapper, buildEnv
 , nodejs
 }:
@@ -6,7 +6,7 @@
 let
   nodePackages = import ./node.nix {
     inherit pkgs;
-    system = stdenv.system;
+    system = stdenv.hostPlatform.system;
   };
 
   runtimeEnv = buildEnv {

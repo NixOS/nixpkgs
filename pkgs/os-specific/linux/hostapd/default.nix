@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libnl openssl sqlite ];
 
+  outputs = [ "out" "man" ];
+
   extraConfig = ''
     CONFIG_DRIVER_WIRED=y
     CONFIG_LIBNL32=y
@@ -103,6 +105,10 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = "mkdir -p $out/bin";
+  postInstall = ''
+    install -vD hostapd.8 -t $man/share/man/man8
+    install -vD hostapd_cli.1 -t $man/share/man/man1
+  '';
 
   meta = {
     homepage = http://hostap.epitest.fi;

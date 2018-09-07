@@ -1,7 +1,7 @@
 # This module defines the software packages included in the "minimal"
 # installation CD.  It might be useful elsewhere.
 
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   # Include some utilities that are useful for installing or repairing
@@ -17,6 +17,7 @@
     pkgs.ddrescue
     pkgs.ccrypt
     pkgs.cryptsetup # needed for dm-crypt volumes
+    pkgs.mkpasswd # for generating password files
 
     # Some networking tools.
     pkgs.fuse
@@ -28,7 +29,6 @@
     # Hardware-related tools.
     pkgs.sdparm
     pkgs.hdparm
-    pkgs.dmraid
     pkgs.smartmontools # for diagnosing hard disks
     pkgs.pciutils
     pkgs.usbutils

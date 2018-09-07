@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, python }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, python, stdenv }:
 
 buildPythonPackage rec {
   pname = "futures";
@@ -15,6 +15,8 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} test_futures.py
   '';
+
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Backport of the concurrent.futures package from Python 3.2";

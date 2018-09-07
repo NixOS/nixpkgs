@@ -1,27 +1,28 @@
-{ stdenv, fetchurl, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, makeWrapper }:
+{ stdenv, fetchurl, makeWrapper
+, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which }:
 
 stdenv.mkDerivation rec {
   name = "crystal-${version}";
-  version = "0.24.1";
+  version = "0.26.0";
 
   src = fetchurl {
     url = "https://github.com/crystal-lang/crystal/archive/${version}.tar.gz";
-    sha256 = "1n375cwzb9rfqbjiimfbj4h5q4rsgh2rf6rmm2zbzizzm79a96a9";
+    sha256 = "18vv47xvnf3hl5js5sk58wj2khqq36kcs851i3lgr0ji7m0g3379";
   };
 
-  prebuiltName = "crystal-0.24.1-2";
+  prebuiltName = "crystal-0.26.0-1";
   prebuiltSrc = let arch = {
     "x86_64-linux" = "linux-x86_64";
     "i686-linux" = "linux-i686";
     "x86_64-darwin" = "darwin-x86_64";
-  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  }."${stdenv.hostPlatform.system}" or (throw "system ${stdenv.hostPlatform.system} not supported");
   in fetchurl {
-    url = "https://github.com/crystal-lang/crystal/releases/download/v0.24.1/${prebuiltName}-${arch}.tar.gz";
+    url = "https://github.com/crystal-lang/crystal/releases/download/0.26.0/${prebuiltName}-${arch}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "19xchfzsyxh0gqi89y6d73iqc06bl097idz6905jf0i35x9ghpdp";
-      "i686-linux" = "15zaxgc1yc9ixbsgy2d8g8d7x2w4vbnndi1ms3wf0ss8azmghiag";
-      "x86_64-darwin" = "1818ahalahcbh974ai09hyfsns6njkpph4sbn4xwv2235x35dqib";
-    }."${stdenv.system}";
+      "x86_64-linux" = "1xban102yiiwmlklxvn3xp3q546bp8hlxxpakayajkhhnpl6yv45";
+      "i686-linux" = "1igspf1lrv7wpmz0pfrkbx8m1ykvnv4zhic53cav4nicppm2v0ic";
+      "x86_64-darwin" = "0hzc65ccajr0yhmvi5vbdgbzbp1gbjy56da24ds3zwwkam1ddk0k";
+    }."${stdenv.hostPlatform.system}";
   };
 
   unpackPhase = ''
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ which makeWrapper ];
 
   buildInputs = libs ++ [ llvm ];
 
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 .build/crystal $out/bin/crystal
     wrapProgram $out/bin/crystal \
+        --suffix PATH : ${clang}/bin \
         --suffix CRYSTAL_PATH : lib:$out/lib/crystal \
         --suffix LIBRARY_PATH : $libPath
     install -dm755 $out/lib/crystal
@@ -79,13 +81,13 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   meta = {
     description = "A compiled language with Ruby like syntax and type inference";
     homepage = https://crystal-lang.org/;
     license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ sifmelcara david50407 ];
+    maintainers = with stdenv.lib.maintainers; [ manveru david50407 ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }

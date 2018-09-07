@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "confclerk-${version}";
 
   src = fetchurl {
-    url = "http://www.toastfreeware.priv.at/tarballs/confclerk/confclerk-${version}.tar.gz";
+    url = "https://www.toastfreeware.priv.at/tarballs/confclerk/confclerk-${version}.tar.gz";
     sha256 = "10rhg44px4nvbkd3p341cmp2ds43jn8r4rvgladda9v8zmsgr2b3";
   };
 

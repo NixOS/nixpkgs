@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     amm =
-      { config, pkgs, ... }:
+      { pkgs, ... }:
         {
           environment.systemPackages = [ pkgs.ammonite ];
         };

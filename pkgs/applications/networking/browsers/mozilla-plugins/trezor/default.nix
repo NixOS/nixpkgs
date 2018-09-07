@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, dpkg, zlib }:
-
-assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
+{ stdenv, fetchurl, dpkg }:
 
 stdenv.mkDerivation {
   name = "TREZOR-bridge-1.0.5";
@@ -10,7 +8,7 @@ stdenv.mkDerivation {
   };
 
   src =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url    = https://mytrezor.com/data/plugin/1.0.5/browser-plugin-trezor_1.0.5_amd64.deb;
         sha256 = "0097h4v88yca4aayzprrh4pk03xvvj7ncz2mi83chm81gsr2v67z";
@@ -42,6 +40,7 @@ stdenv.mkDerivation {
       # Download URL, .deb content & hash (yikes) changed, not version.
       # New archive doesn't contain any Mozilla plugin at all.
       broken = true;
-    };
+      platforms = platforms.linux;
+   };
 
 }

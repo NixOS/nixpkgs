@@ -1,4 +1,4 @@
-{ stdenv, fetchurl,  python27Packages, swig, gettext, pcsclite, qt48Full, yubikey-personalization }:
+{ stdenv, fetchurl,  python27Packages, pcsclite, yubikey-personalization }:
 
 python27Packages.buildPythonApplication rec {
     namePrefix = "";
@@ -6,7 +6,7 @@ python27Packages.buildPythonApplication rec {
     version = "3.1.0";
 
     src = fetchurl {
-      url = "http://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
+      url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
       sha256 = "0jfvllgh88g2vwd8sg6willlnn2hq05nd9d3xmv98lhl7gyy1akw";
     };
 
@@ -18,7 +18,7 @@ python27Packages.buildPythonApplication rec {
 
     # Need LD_PRELOAD for libykpers as the Nix cpython disables ctypes.cdll.LoadLibrary
     # support that the yubicommon library uses to load libykpers
-    makeWrapperArgs = ''--prefix LD_LIBRARY_PATH : "${pcsclite}/lib:${yubikey-personalization}/lib" --prefix LD_PRELOAD : "${yubikey-personalization}/lib/libykpers-1.so"'';
+    makeWrapperArgs = ''--prefix LD_LIBRARY_PATH : "${stdenv.lib.getLib pcsclite}/lib:${yubikey-personalization}/lib" --prefix LD_PRELOAD : "${yubikey-personalization}/lib/libykpers-1.so"'';
 
     postInstall = ''
       mkdir -p $out/share/applications

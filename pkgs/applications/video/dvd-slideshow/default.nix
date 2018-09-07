@@ -28,10 +28,11 @@ let
     '';
 
 in stdenv.mkDerivation rec {
-  name = "dvd-slideshow";
+  name = "dvd-slideshow-${version}";
   version = "0.8.4-2";
+
   src = fetchurl {
-    url = "mirror://sourceforge/dvd-slideshow/files/${name}-${version}.tar.gz";
+    url = "mirror://sourceforge/dvd-slideshow/files/${name}.tar.gz";
     sha256 = "17c09aqvippiji2sd0pcxjg3nb1mnh9k5nia4gn5lhcvngjcp1q5";
   };
 

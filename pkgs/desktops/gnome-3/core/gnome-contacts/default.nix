@@ -1,23 +1,23 @@
 { stdenv, gettext, fetchurl, evolution-data-server
-, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, gtk3, glib, cheese
+, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, python3, gtk3, glib, cheese
 , libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
 , wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
 , vala, meson, ninja }:
 
 let
-  version = "3.28.1";
+  version = "3.28.2";
 in stdenv.mkDerivation rec {
   name = "gnome-contacts-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "17iinxqf221kk9yppv3yhg0m7jxk5zvwxmdf3hjygf9xgfw7z3zi";
+    sha256 = "1ilgmvgprn1slzmrzbs0zwgbzxp04rn5ycqd9c8zfvyh6zzwwr8w";
   };
 
   propagatedUserEnvPkgs = [ evolution-data-server ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 wrapGAppsHook
+    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 python3 wrapGAppsHook
   ];
 
   buildInputs = [

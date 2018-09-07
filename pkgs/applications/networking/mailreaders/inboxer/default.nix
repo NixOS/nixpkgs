@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, binutils, patchelf, makeWrapper, expat, xorg, gdk_pixbuf, glib, gnome2, cairo, atk, freetype, fontconfig, dbus, nss, nspr, gtk2-x11, alsaLib, cups, libpulseaudio, libudev }:
+{ stdenv, fetchurl, binutils, patchelf, makeWrapper
+, expat, xorg, gdk_pixbuf, glib, gnome2, cairo, atk, freetype
+, fontconfig, dbus, nss, nspr, gtk2-x11, alsaLib, cups, libpulseaudio, udev }:
 
 stdenv.mkDerivation rec {
   name = "inboxer-${version}";
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
       expat
       stdenv.cc.cc.lib
       libpulseaudio
-      libudev
+      udev
     ];
   in ''
     patchelf \
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
     patchelf \
       --set-rpath "$out/opt/Inboxer:${lpath}" \
       $out/opt/Inboxer/libffmpeg.so
-   
+
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/opt/Inboxer:${lpath}" \
@@ -70,7 +72,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/opt/Inboxer/inboxer --set LD_LIBRARY_PATH "${xorg.libxkbfile}/lib:${lpath}"
   '';
-  
+
   installPhase = ''
     mkdir -p $out/bin
     cp -R usr/share opt $out/

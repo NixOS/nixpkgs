@@ -1,4 +1,4 @@
-{ lib, python2Packages, fetchurl, libxslt, docbook5_xsl, openssh
+{ lib, python2Packages, libxslt, docbook_xsl_ns, openssh
 # version args
 , src, version
 }:
@@ -31,7 +31,7 @@ python2Packages.buildPythonApplication {
   doCheck = false;
 
   postInstall = ''
-    make -C doc/manual install nixops.1 docbookxsl=${docbook5_xsl}/xml/xsl/docbook \
+    make -C doc/manual install nixops.1 docbookxsl=${docbook_xsl_ns}/xml/xsl/docbook \
       docdir=$out/share/doc/nixops mandir=$out/share/man
 
     mkdir -p $out/share/nix/nixops
@@ -47,5 +47,6 @@ python2Packages.buildPythonApplication {
     description = "NixOS cloud provisioning and deployment tool";
     maintainers = with lib.maintainers; [ eelco rob domenkozar ];
     platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl3;
   };
 }

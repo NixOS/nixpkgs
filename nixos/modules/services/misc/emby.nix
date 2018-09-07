@@ -1,10 +1,9 @@
-{ config, pkgs, lib, mono, ... }:
+{ config, pkgs, lib, ... }:
 
 with lib;
 
 let
   cfg = config.services.emby;
-  emby = pkgs.emby;
 in
 {
   options = {
@@ -54,14 +53,14 @@ in
       };
     };
 
-    users.extraUsers = mkIf (cfg.user == "emby") {
+    users.users = mkIf (cfg.user == "emby") {
       emby = {
         group = cfg.group;
         uid = config.ids.uids.emby;
       };
     };
 
-    users.extraGroups = mkIf (cfg.group == "emby") {
+    users.groups = mkIf (cfg.group == "emby") {
       emby = {
         gid = config.ids.gids.emby;
       };

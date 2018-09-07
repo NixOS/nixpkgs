@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "stunnel-${version}";
-  version = "5.44";
+  version = "5.46";
 
   src = fetchurl {
     url    = "https://www.stunnel.org/downloads/${name}.tar.gz";
-    sha256 = "990a325dbb47d77d88772dd02fbbd27d91b1fea3ece76c9ff4461eca93f12299";
+    sha256 = "1iw4gap9ysag8iww2ik029scmdllk7jdzcpnnbj7hgbl526b9akn";
     # please use the contents of "https://www.stunnel.org/downloads/${name}.tar.gz.sha256",
     # not the output of `nix-prefetch-url`
   };

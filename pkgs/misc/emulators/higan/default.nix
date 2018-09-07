@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
-    urls = [ "http://download.byuu.org/${sourceName}.7z" ];
+    urls = [ "https://download.byuu.org/${sourceName}.7z" ];
     sha256 = "063dzp9wrdnbvagraxi31xg0154y2gf67rrd0mnc8h104cgzjr35";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };

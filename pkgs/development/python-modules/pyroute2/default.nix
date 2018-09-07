@@ -1,13 +1,12 @@
-{stdenv, buildPythonPackage, fetchurl}:
+{stdenv, buildPythonPackage, fetchPypi}:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.5.0";
-  name = "${pname}-${version}";
+  version = "0.5.2";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pyroute2/${name}.tar.gz";
-    sha256 = "bb02fe5a02fb4e8baad4d7ccf7ba5e748044ee0a1ad7d2fa4927f68f396863c4";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "42bf74495d95a0196a74dd171357f660175aba2bfc23f9b5f63e3830ccbef9ac";
   };
 
   # requires root priviledges

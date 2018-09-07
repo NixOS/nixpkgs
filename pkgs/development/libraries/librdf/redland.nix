@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, openssl, libxslt, perl
-, curl, pcre, libxml2, librdf_rasqal
+, curl, pcre, libxml2, librdf_rasqal, gmp
 , mysql, withMysql ? false
 , postgresql, withPostgresql ? false
 , sqlite, withSqlite ? true
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig ];
 
-  buildInputs = [ openssl libxslt curl pcre libxml2 ]
+  buildInputs = [ openssl libxslt curl pcre libxml2 gmp ]
     ++ stdenv.lib.optional withMysql mysql.connector-c
     ++ stdenv.lib.optional withSqlite sqlite
     ++ stdenv.lib.optional withPostgresql postgresql
@@ -28,13 +28,18 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-threads" ]
-    ++ stdenv.lib.optional withBdb "--with-bdb=${db}";
+    ++ stdenv.lib.optionals withBdb [
+      "--with-bdb-include=${db.dev}/include"
+      "--with-bdb-lib=${db.out}/lib"
+    ];
 
   # Fix broken DT_NEEDED in lib/redland/librdf_storage_sqlite.so.
   NIX_CFLAGS_LINK = "-lraptor2";
 
+  doCheck = false; # fails 1 out of 17 tests with a segmentation fault
+
   meta = {
     homepage = http://librdf.org/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

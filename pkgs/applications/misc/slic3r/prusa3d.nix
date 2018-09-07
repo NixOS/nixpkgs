@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
-  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, bash, libGLU,
-  glew, eigen }:
+  boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, libGLU,
+  glew, eigen, curl }:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {
     name = "Alien-wxWidgets-0.69";
@@ -33,12 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
-  version = "1.39.1";
+  version = "1.40.1";
 
   enableParallelBuilding = true;
 
   buildInputs = [
     cmake
+    curl
     perl
     makeWrapper
     eigen
@@ -73,6 +74,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
+    sed -i "s|\''${PERL_VENDORARCH}|$out/lib/slic3r-prusa3d|g" xs/CMakeLists.txt
+    sed -i "s|\''${PERL_VENDORLIB}|$out/lib/slic3r-prusa3d|g" xs/CMakeLists.txt
   '';
 
   postInstall = ''
@@ -82,14 +85,14 @@ stdenv.mkDerivation rec {
 
     # it seems we need to copy the icons...
     mkdir -p $out/bin/var
-    cp ../resources/icons/* $out/bin/var/
+    cp -r ../resources/icons/* $out/bin/var/
     cp -r ../resources $out/bin/
   '';
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "Slic3r";
-    sha256 = "0frkjgzmiy788ijkcqz3baxcrncqmk9s2vcd99hb8p2q13cg51ff";
+    sha256 = "022mdz8824wg68qwgd49gnplw7wn84hqw113xh8l25v3j1jb9zmc";
     rev = "version_${version}";
   };
 

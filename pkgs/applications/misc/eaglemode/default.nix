@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = http://eaglemode.sourceforge.net;
     description = "Zoomable User Interface";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     broken = true;
   };

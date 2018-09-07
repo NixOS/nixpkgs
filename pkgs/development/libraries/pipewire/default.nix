@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, doxygen, graphviz, valgrind
-, glib, dbus, gst_all_1, v4l_utils, alsaLib, ffmpeg, libjack2, libudev, libva, xorg
+, glib, dbus, gst_all_1, v4l_utils, alsaLib, ffmpeg, libjack2, udev, libva, xorg
 , sbc, SDL2, makeFontsConf, freefont_ttf
 }:
 
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer v4l_utils
-    alsaLib ffmpeg libjack2 libudev libva xorg.libX11 sbc SDL2
+    alsaLib ffmpeg libjack2 udev libva xorg.libX11 sbc SDL2
   ];
 
   mesonFlags = [
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
     "-Denable_gstreamer=true"
   ];
 
-  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "lib/systemd/user";
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   FONTCONFIG_FILE = fontsConf; # Fontconfig error: Cannot load default config file
 

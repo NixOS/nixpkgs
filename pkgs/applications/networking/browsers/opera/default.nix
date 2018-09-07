@@ -32,12 +32,13 @@
 , pango
 , stdenv
 , systemd
+, at-spi2-atk
 }:
 
 let
 
   mirror = https://get.geo.opera.com/pub/opera/desktop;
-  version = "50.0.2762.45";
+  version = "53.0.2907.99";
 
   rpath = stdenv.lib.makeLibraryPath [
 
@@ -54,7 +55,7 @@ let
     freetype.out
     gdk_pixbuf.out
     glib.out
-    gnome2.GConf.out
+    gnome2.GConf
     gtk3.out
     libX11.out
     libXScrnSaver.out
@@ -81,6 +82,8 @@ let
 
     # Works fine without this except there is no sound.
     libpulseaudio.out
+
+    at-spi2-atk
   ];
 
 in stdenv.mkDerivation {
@@ -89,7 +92,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/opera-stable_${version}_amd64.deb";
-    sha256 = "1ajdr6yzqc9xkvdcgkps6j5996n60ibjhj518gmminx90da6x5dy";
+    sha256 = "0fih5047xv275rmbcr2drji81wxi6p0kyp172mmn328g3pzddmwx";
   };
 
   unpackCmd = "${dpkg}/bin/dpkg-deb -x $curSrc .";

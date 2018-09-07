@@ -6,8 +6,8 @@
 with stdenv.lib;
 
 let
-  baseVersion = "4.5";
-  revision = "0";
+  baseVersion = "4.6";
+  revision = "2";
 in
 
 stdenv.mkDerivation rec {
@@ -16,12 +16,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "1yfrfma23xxzz8hl43g7pk7ay5lg25l9lscjlih617lyv6jmc0hl";
+    sha256 = "1k23i1qsw6d06sy7g0vd699rbvwv6vbw211fy0nn0705a5zndbxv";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
 
   nativeBuildInputs = [ qmake makeWrapper ];
+
+  patches = optional (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) ./0001-Fix-Allow-qt-creator-to-build-on-arm-aarch32-and-aar.patch;
 
   doCheck = true;
 
@@ -55,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.qt.io/Category:Tools::QtCreator;
     license = "LGPL";
     maintainers = [ maintainers.akaWolf ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
   };
 }

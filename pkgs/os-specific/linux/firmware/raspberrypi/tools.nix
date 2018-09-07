@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/raspberrypi/userland;
     license = licenses.bsd3;
     platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ dezgeg viric tavyc ];
+    maintainers = with maintainers; [ dezgeg tavyc ];
   };
 }

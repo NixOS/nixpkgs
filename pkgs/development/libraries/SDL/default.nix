@@ -1,10 +1,9 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
 , openglSupport ? false, libGL, libGLU
 , alsaSupport ? true, alsaLib
-, x11Support ? hostPlatform == buildPlatform, libXext, libICE, libXrandr
+, x11Support ? stdenv.hostPlatform == stdenv.buildPlatform, libXext, libICE, libXrandr
 , pulseaudioSupport ? true, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
-, hostPlatform, buildPlatform
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -15,30 +14,12 @@ with lib;
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null && libGLU != null);
 
-let
-
-  configureFlagsFun = attrs: [
-    "--disable-oss"
-    "--disable-video-x11-xme"
-    "--enable-rpath"
-  # Building without this fails on Darwin with
-  #
-  #   ./src/video/x11/SDL_x11sym.h:168:17: error: conflicting types for '_XData32'
-  #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
-  #
-  # Please try revert the change that introduced this comment when updating SDL.
-  ] ++ optional stdenv.isDarwin "--disable-x11-shared"
-    ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib";
-
-in
-
 stdenv.mkDerivation rec {
   name    = "SDL-${version}";
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "http://www.libsdl.org/release/${name}.tar.gz";
+    url    = "https://www.libsdl.org/release/${name}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
@@ -50,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ ]
+  propagatedBuildInputs = [ libiconv ]
     ++ optionals x11Support [ libXext libICE libXrandr ]
     ++ optional stdenv.isLinux libcap
     ++ optionals openglSupport [ libGL libGLU ]
@@ -58,15 +39,23 @@ stdenv.mkDerivation rec {
     ++ optional pulseaudioSupport libpulseaudio
     ++ optional stdenv.isDarwin Cocoa;
 
-  buildInputs = [ libiconv ]
-    ++ optional (!hostPlatform.isMinGW) audiofile
+  buildInputs = [ ]
+    ++ optional (!stdenv.hostPlatform.isMinGW) audiofile
     ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
-  configureFlags = configureFlagsFun { inherit alsaLib; };
-
-  crossAttrs = {
-    configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
-  };
+  configureFlags = [
+    "--disable-oss"
+    "--disable-video-x11-xme"
+    "--enable-rpath"
+  # Building without this fails on Darwin with
+  #
+  #   ./src/video/x11/SDL_x11sym.h:168:17: error: conflicting types for '_XData32'
+  #   SDL_X11_SYM(int,_XData32,(Display *dpy,register long *data,unsigned len),(dpy,data,len),return)
+  #
+  # Please try revert the change that introduced this comment when updating SDL.
+  ] ++ optional stdenv.isDarwin "--disable-x11-shared"
+    ++ optional (!x11Support) "--without-x"
+    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib";
 
   patches = [
     ./find-headers.patch
@@ -128,6 +117,8 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru = { inherit openglSupport; };
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";

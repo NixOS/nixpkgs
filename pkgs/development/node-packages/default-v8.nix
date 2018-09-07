@@ -1,36 +1,94 @@
-{pkgs, system, nodejs, stdenv}:
+{ pkgs, nodejs, stdenv }:
 
 let
   nodePackages = import ./composition-v8.nix {
-    inherit pkgs system nodejs;
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
   };
 in
 nodePackages // {
-  dat = nodePackages.dat.override (oldAttrs: {
-    buildInputs = oldAttrs.buildInputs ++ [ nodePackages.node-gyp-build ];
-  });
+  bower2nix = nodePackages.bower2nix.override {
+    buildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      for prog in bower2nix fetch-bower; do
+        wrapProgram "$out/bin/$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.git pkgs.nix ]}
+      done
+    '';
+  };
 
-  dnschain =  nodePackages.dnschain.override (oldAttrs: {
-    buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper nodePackages.coffee-script ];
+  dat = nodePackages.dat.override {
+    buildInputs = [ nodePackages.node-gyp-build ];
+  };
+
+  dnschain = nodePackages.dnschain.override {
+    buildInputs = [ pkgs.makeWrapper nodePackages.coffee-script ];
     postInstall = ''
       wrapProgram $out/bin/dnschain --suffix PATH : ${pkgs.openssl.bin}/bin
     '';
-  });
+  };
 
-  node-inspector = nodePackages.node-inspector.override (oldAttrs: {
-    buildInputs = oldAttrs.buildInputs ++ [ nodePackages.node-pre-gyp ];
-  });
+  ios-deploy = nodePackages.ios-deploy.override {
+    preRebuild = ''
+      LD=$CC
+      tmp=$(mktemp -d)
+      ln -s /usr/bin/xcodebuild $tmp
+      export PATH="$PATH:$tmp"
+    '';
+  };
 
-  phantomjs = nodePackages.phantomjs.override (oldAttrs: {
-    buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs2 ];
-  });
-  
-  webdrvr = nodePackages.webdrvr.override (oldAttrs: {
-    buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs ];
-    
+  fast-cli = nodePackages."fast-cli-1.x".override {
+    preRebuild = ''
+      # Simply ignore the phantomjs --version check. It seems to need a display but it is safe to ignore
+      sed -i -e "s|console.error('Error verifying phantomjs, continuing', err)|console.error('Error verifying phantomjs, continuing', err); return true;|" node_modules/phantomjs-prebuilt/lib/util.js
+    '';
+    buildInputs = [ pkgs.phantomjs2 ];
+  };
+
+  node-inspector = nodePackages.node-inspector.override {
+    buildInputs = [ nodePackages.node-pre-gyp ];
+  };
+
+  node2nix =  nodePackages.node2nix.override {
+    buildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}
+    '';
+  };
+
+  npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0".override {
+    postInstall = "npm run-script prepublish";
+  };
+
+  phantomjs = nodePackages.phantomjs.override {
+    buildInputs = [ pkgs.phantomjs2 ];
+  };
+
+  pnpm = nodePackages.pnpm.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = let
+      pnpmLibPath = stdenv.lib.makeBinPath [
+        nodejs.passthru.python
+        nodejs
+      ];
+    in ''
+      for prog in $out/bin/*; do
+        wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
+      done
+    '';
+  };
+
+  statsd = nodePackages.statsd.override {
+    # broken with node v8, dead upstream,
+    # see #45946 and https://github.com/etsy/statsd/issues/646
+    meta.broken = true;
+  };
+
+  webdrvr = nodePackages.webdrvr.override {
+    buildInputs = [ pkgs.phantomjs ];
+
     preRebuild = ''
       mkdir $TMPDIR/webdrvr
-      
+
       ln -s ${pkgs.fetchurl {
         url = "https://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar";
         sha1 = "ef1b5f8ae9c99332f99ba8794988a1d5b974d27b";
@@ -42,34 +100,6 @@ nodePackages // {
     '';
 
     dontNpmInstall = true; # We face an error with underscore not found, but the package will work fine if we ignore this.
-  });
-
-  npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0".override {
-    postInstall = "npm run-script prepublish";
   };
 
-  bower2nix = nodePackages.bower2nix.override (oldAttrs: {
-    buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
-    postInstall = ''
-      for prog in bower2nix fetch-bower; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.git pkgs.nix ]}
-      done
-    '';
-  });
-
-  ios-deploy = nodePackages.ios-deploy.override (oldAttrs: {
-    preRebuild = ''
-      tmp=$(mktemp -d)
-      ln -s /usr/bin/xcodebuild $tmp
-      export PATH="$PATH:$tmp"
-    '';
-  });
-
-  fast-cli = nodePackages."fast-cli-1.x".override (oldAttrs: {
-    preRebuild = ''
-      # Simply ignore the phantomjs --version check. It seems to need a display but it is safe to ignore
-      sed -i -e "s|console.error('Error verifying phantomjs, continuing', err)|console.error('Error verifying phantomjs, continuing', err); return true;|" node_modules/phantomjs-prebuilt/lib/util.js
-    '';
-    buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs2 ];
-  });
 }

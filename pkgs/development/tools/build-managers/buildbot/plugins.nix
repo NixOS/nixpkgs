@@ -11,7 +11,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version format;
-      sha256 = "0nmrq50c5ib185rpb8ai1mm7gjq2mjvxik1kqrjfa62i1ia9ikyj";
+      sha256 = "001kxjcyn5sxiq7m1izy4djj7alw6qpgaid4f518s9xgm4a8hwcb";
     };
 
     meta = with stdenv.lib; {
@@ -29,7 +29,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "1laz7l7cbbz0czb6skxw314bd2qk2f63qw3n2rs7m7v11gd9cdll";
+      sha256 = "11p9l9r9rh8cq0ihzjcdxfbi55n7inbsz45zqq67rkvqn5nhj5b6";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -49,7 +49,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0mmri8c4n1zwxc1dx2a11yllrmnwqqxjvvil9224lbs98mpchppi";
+      sha256 = "1yx63frfpbvwy4hfib1psyq5ad0wysyzfrla8d7lgbdaip021wzw";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -69,7 +69,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0nwlw2m3qfifia6gy3d4lrnycra50k98ax071p2zjqknanh563vr";
+      sha256 = "06my75hli3w1skdkx1qz6zqw2wckanhrcvlqm4inylj9v9pcrgv6";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -89,7 +89,7 @@
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "1zml9bd910zwcby4vr3lmzap2grinha2w5zgb2cmixmz7hfrqswp";
+      sha256 = "073gz44fa5k1p8k46k0ld9gg16j8zdj6sc297qfyqpiw28ybhc5s";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -97,7 +97,7 @@
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot WSGI dashboards Plugin";
-      maintainers = with maintainers; [ akazakov ];
+      maintainers = with maintainers; [ ];
       license = licenses.gpl2;
     };
   };

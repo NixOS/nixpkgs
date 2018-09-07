@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     owner = "eosrei";
     repo = "twemoji-color-font";
     rev = "v${meta.version}";
-    sha256 = "0i7krmg99nrrj7mbjjd2cw6dx24aja63571mcyp6d7q1z09asz9k";
+    sha256 = "0z8r7z2r0r2wng4a7hvqvkcpd43l0d57yl402r7ci5bnmb02yvsa";
   };
 
   nativeBuildInputs = [ inkscape imagemagick potrace svgo scfbuild ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    version = "1.3";
+    version = "1.4";
     description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
     longDescription = ''
       A color and B&W emoji SVGinOT font built from the Twitter Emoji for
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/eosrei/twemoji-color-font/releases";
     license = with licenses; [ cc-by-40 mit ];
     maintainers = [ maintainers.fgaz ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

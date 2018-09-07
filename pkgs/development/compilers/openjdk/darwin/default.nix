@@ -16,6 +16,11 @@ let
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/darwin/*_md.h $out/include/
+
+      if [ -f $out/LICENSE ]; then
+        install -D $out/LICENSE $out/share/zulu/LICENSE
+        rm $out/LICENSE
+      fi
     '';
 
     preFixup = ''

@@ -1,4 +1,4 @@
-{ stdenv, fetchMavenArtifact, fetchFromGitHub, bash, jre, makeWrapper }:
+{ stdenv, fetchMavenArtifact, fetchFromGitHub, jre, makeWrapper }:
 
 let
   version = "0.9.1";

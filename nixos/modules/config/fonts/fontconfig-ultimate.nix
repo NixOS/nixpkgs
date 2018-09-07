@@ -2,9 +2,7 @@
 
 with lib;
 
-let fcBool = x: if x then "<bool>true</bool>" else "<bool>false</bool>";
-
-    cfg = config.fonts.fontconfig.ultimate;
+let cfg = config.fonts.fontconfig.ultimate;
 
     latestVersion  = pkgs.fontconfig.configVersion;
 

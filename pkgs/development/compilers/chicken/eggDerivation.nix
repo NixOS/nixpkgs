@@ -1,4 +1,4 @@
-{ stdenv, fetchegg, chicken, makeWrapper }:
+{ stdenv, chicken, makeWrapper }:
 { name, src
 , buildInputs ? []
 , chickenInstallFlags ? []
@@ -8,7 +8,6 @@
 let
   libPath = "${chicken}/var/lib/chicken/${toString chicken.binaryVersion}/";
   overrides = import ./overrides.nix;
-  lib = stdenv.lib;
   baseName = (builtins.parseDrvName name).name;
   override = if builtins.hasAttr baseName overrides
    then

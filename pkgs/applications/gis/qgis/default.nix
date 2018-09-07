@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+{ stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python2Packages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper
 , qjson, qca2, txt2tags, openssl, darwin, pkgconfig
 , withGrass ? true, grass, IOKit, ApplicationServices
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.18.17";
+  name = "qgis-2.18.22";
 
   buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
     fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags pkgconfig ]
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "1nxwl5lwibbiz9v3qaw3px7iyxg113zr4j8d99yj07mhk2ap082y";
+    url = "https://qgis.org/downloads/${name}.tar.bz2";
+    sha256 = "00b3a2hfn3i7bdx7x96vz2nj0976vpkhid4ss7n8c33fdvw3k82a";
   };
 
   # CMAKE_FIND_FRAMEWORK=never stops the installer choosing system
@@ -77,6 +77,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.qgis.org;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [viric mpickering];
+    maintainers = with stdenv.lib.maintainers; [mpickering];
   };
 }

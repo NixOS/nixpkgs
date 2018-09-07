@@ -10,7 +10,6 @@ with python.pkgs;
 buildPythonPackage rec {
   pname = "bepasty";
   version = "0.4.0";
-  name = "${pname}-${version}";
 
   propagatedBuildInputs = [
     flask

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus_libs, pcsclite
+{ stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus, pcsclite
 , wget, coreutils
 , perl, pcscperl, Glib, Gtk2, Pango, Cairo
 }:
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0iqcy28pb963ds4pjrpi37577vm6nkgf3i0b3rr978jy9qi1bix9";
   };
 
-  buildInputs = [ udev dbus_libs perl pcsclite ];
+  buildInputs = [ udev dbus perl pcsclite ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
     description = "Tools used to test a PC/SC driver, card or reader";
     homepage = http://ludovic.rousseau.free.fr/softwares/pcsc-tools/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

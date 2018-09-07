@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "hstr-${version}";
-  version = "1.24";
+  version = "1.25";
 
   src = fetchurl {
     url = "https://github.com/dvorka/hstr/releases/download/${version}/hh-${version}-src.tgz";
-    sha256 = "0w8is777fwq6r17zhl9xwrv9f7vanllzjiasx1pg6pxvppq7rh0x";
+    sha256 = "10njj0a3s5czv497wk3whka3gxr7vmhabs12vaw7kgb07h4ssnhg";
   };
 
   buildInputs = [ readline ncurses ];

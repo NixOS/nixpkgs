@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "mate-system-monitor-${version}";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "059aryj0gz4sic719nsmckhkjl4yhqxmyplvh78clf5khh4apwn5";
+    sha256 = "0filf6qyw4fk45br3cridbqdngwl525z49zn36r7q4agzhny4phz";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
-  configureFlags = "--enable-systemd";
+  configureFlags = [ "--enable-systemd" ];
 
   meta = with stdenv.lib; {
     description = "System monitor for the MATE desktop";

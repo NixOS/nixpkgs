@@ -36,6 +36,9 @@ rec {
     , depsTargetTarget            ? [] #  1 ->  1
     , depsTargetTargetPropagated  ? [] #  1 ->  1
 
+    , checkInputs                 ? []
+    , installCheckInputs          ? []
+
     # Configure Phase
     , configureFlags ? []
     , # Target is not included by default because most programs don't care.
@@ -46,13 +49,16 @@ rec {
         (stdenv.hostPlatform != stdenv.buildPlatform)
         [ "build" "host" ]
 
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
     # Check phase
-    , doCheck ? false
+    , doCheck ? config.doCheckByDefault or false
 
+    # TODO(@Ericson2314): Make unconditional / resolve #33599
     # InstallCheck phase
-    , doInstallCheck ? false
+    , doInstallCheck ? config.doCheckByDefault or false
 
-    , crossConfig ? null
+    , # TODO(@Ericson2314): Make always true and remove
+      strictDeps ? stdenv.hostPlatform != stdenv.buildPlatform
     , meta ? {}
     , passthru ? {}
     , pos ? # position used in error messages and for meta.position
@@ -71,9 +77,28 @@ rec {
 
     , ... } @ attrs:
 
-    # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
+      # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
+      # no package has `doCheck = true`.
+      doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+      doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+
+      outputs' =
+        outputs ++
+        (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
+
+      fixedOutputDrv = attrs ? outputHash;
+      noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
+                                      ++ depsHostHost ++ depsHostHostPropagated
+                                      ++ buildInputs ++ propagatedBuildInputs
+                                      ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
+      runtimeSensativeIfFixedOutput = fixedOutputDrv -> !noNonNativeDeps;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+      defaultHardeningFlags = lib.remove "pie" supportedHardeningFlags;
+      enabledHardeningOptions =
+        if builtins.elem "all" hardeningDisable
+        then []
+        else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
     in if builtins.length erroneousHardeningFlags != 0
@@ -81,6 +106,11 @@ rec {
       inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
     })
     else let
+      doCheck = doCheck';
+      doInstallCheck = doInstallCheck';
+
+      outputs = outputs';
+
       references = nativeBuildInputs ++ buildInputs
                 ++ propagatedNativeBuildInputs ++ propagatedBuildInputs;
 
@@ -94,7 +124,9 @@ rec {
         ]
         [
           (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
-          (map (drv: drv.crossDrv or drv) buildInputs)
+          (map (drv: drv.crossDrv or drv) (buildInputs
+             ++ lib.optionals doCheck checkInputs
+             ++ lib.optionals doInstallCheck' installCheckInputs))
         ]
         [
           (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
@@ -115,58 +147,71 @@ rec {
         ]
       ];
 
-      outputs' =
-        outputs ++
-        (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
+      computedSandboxProfile =
+        lib.concatMap (input: input.__propagatedSandboxProfile or [])
+          (stdenv.extraNativeBuildInputs
+           ++ stdenv.extraBuildInputs
+           ++ lib.concatLists dependencies);
+
+      computedPropagatedSandboxProfile =
+        lib.concatMap (input: input.__propagatedSandboxProfile or [])
+          (lib.concatLists propagatedDependencies);
+
+      computedImpureHostDeps =
+        lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+          (stdenv.extraNativeBuildInputs
+           ++ stdenv.extraBuildInputs
+           ++ lib.concatLists dependencies));
+
+      computedPropagatedImpureHostDeps =
+        lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+          (lib.concatLists propagatedDependencies));
 
       derivationArg =
         (removeAttrs attrs
-          ["meta" "passthru" "crossAttrs" "pos"
+          ["meta" "passthru" "pos"
+           "checkInputs" "installCheckInputs"
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
-        // (let
-          computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or [])
-              (stdenv.extraNativeBuildInputs
-               ++ stdenv.extraBuildInputs
-               ++ lib.concatLists dependencies);
-          computedPropagatedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or [])
-              (lib.concatLists propagatedDependencies);
-          computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-              (stdenv.extraNativeBuildInputs
-               ++ stdenv.extraBuildInputs
-               ++ lib.concatLists dependencies));
-          computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
-              (lib.concatLists propagatedDependencies));
-        in
-        {
+        // {
           # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
           # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
           name = assert validity.handled; name + lib.optionalString
-            (stdenv.hostPlatform != stdenv.buildPlatform)
+            # Fixed-output derivations like source tarballs shouldn't get a host
+            # suffix. But we have some weird ones with run-time deps that are
+            # just used for their side-affects. Those might as well since the
+            # hash can't be the same. See #32986.
+            (stdenv.hostPlatform != stdenv.buildPlatform && runtimeSensativeIfFixedOutput)
             ("-" + stdenv.hostPlatform.config);
 
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
-          inherit (stdenv) system;
+
+          # The `system` attribute of a derivation has special meaning to Nix.
+          # Derivations set it to choose what sort of machine could be used to
+          # execute the build, The build platform entirely determines this,
+          # indeed more finely than Nix knows or cares about. The `system`
+          # attribute of `buildPlatfom` matches Nix's degree of specificity.
+          # exactly.
+          inherit (stdenv.buildPlatform) system;
+
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
+
+          inherit strictDeps;
 
           depsBuildBuild              = lib.elemAt (lib.elemAt dependencies 0) 0;
           nativeBuildInputs           = lib.elemAt (lib.elemAt dependencies 0) 1;
           depsBuildTarget             = lib.elemAt (lib.elemAt dependencies 0) 2;
-          depsHostBuild               = lib.elemAt (lib.elemAt dependencies 1) 0;
+          depsHostHost                = lib.elemAt (lib.elemAt dependencies 1) 0;
           buildInputs                 = lib.elemAt (lib.elemAt dependencies 1) 1;
           depsTargetTarget            = lib.elemAt (lib.elemAt dependencies 2) 0;
 
           depsBuildBuildPropagated    = lib.elemAt (lib.elemAt propagatedDependencies 0) 0;
           propagatedNativeBuildInputs = lib.elemAt (lib.elemAt propagatedDependencies 0) 1;
           depsBuildTargetPropagated   = lib.elemAt (lib.elemAt propagatedDependencies 0) 2;
-          depsHostBuildPropagated     = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
+          depsHostHostPropagated      = lib.elemAt (lib.elemAt propagatedDependencies 1) 0;
           propagatedBuildInputs       = lib.elemAt (lib.elemAt propagatedDependencies 1) 1;
           depsTargetTargetPropagated  = lib.elemAt (lib.elemAt propagatedDependencies 2) 0;
 
@@ -179,6 +224,11 @@ rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+          inherit doCheck doInstallCheck;
+
+          inherit outputs;
+        } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
+          NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =
@@ -193,15 +243,7 @@ rec {
             "/bin/sh"
           ];
           __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-        } // lib.optionalAttrs (outputs' != [ "out" ]) {
-          outputs = outputs';
-        } // lib.optionalAttrs (attrs ? doCheck) {
-          # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doCheck = doCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
-        } // lib.optionalAttrs (attrs ? doInstallCheck) {
-          # TODO(@Ericson2314): Make unconditional / resolve #33599
-          doInstallCheck = doInstallCheck && (stdenv.hostPlatform == stdenv.buildPlatform);
-        });
+        };
 
       validity = import ./check-meta.nix {
         inherit lib config meta;
@@ -227,9 +269,8 @@ rec {
           #   unless they are comfortable with this default.
           outputsToInstall =
             let
-              outs = outputs'; # the value passed to derivation primitive
-              hasOutput = out: builtins.elem out outs;
-            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
+              hasOutput = out: builtins.elem out outputs;
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outputs) )];
         }
         // attrs.meta or {}
         # Fill `meta.position` to identify the source location of the package.

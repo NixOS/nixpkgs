@@ -8,47 +8,31 @@ set -u
 # native compile.
 #
 # TODO(@Ericson2314): No native exception
-[[ -z ${crossConfig-} ]] || (( "$hostOffset" < 0 )) || return 0
+[[ -z ${strictDeps-} ]] || (( "$hostOffset" < 0 )) || return 0
 
 bintoolsWrapper_addLDVars () {
-    case $depHostOffset in
-        -1) local role='BUILD_' ;;
-        0)  local role='' ;;
-        1)  local role='TARGET_' ;;
-        *)  echo "bintools-wrapper: Error: Cannot be used with $depHostOffset-offset deps" >2;
-            return 1 ;;
-    esac
+    # See ../setup-hooks/role.bash
+    local role_post role_pre
+    getHostRoleEnvHook
 
     if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib64"
+        export NIX_${role_pre}LDFLAGS+=" -L$1/lib64"
     fi
 
     if [[ -d "$1/lib" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib"
+        # Don't add the /lib directory if it actually doesn't contain any libraries. For instance,
+        # Python and Haskell packages often only have directories like $out/lib/ghc-8.4.3/ or
+        # $out/lib/python3.6/, so having them in LDFLAGS just makes the linker search unnecessary
+        # directories and bloats the size of the environment variable space.
+        if [[ -n "$(echo $1/lib/lib*)" ]]; then
+            export NIX_${role_pre}LDFLAGS+=" -L$1/lib"
+        fi
     fi
 }
 
-case $targetOffset in
-    -1)
-        export NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_BUILD=1
-        role_pre='BUILD_'
-        role_post='_FOR_BUILD'
-        ;;
-    0)
-        export NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_HOST=1
-        role_pre=''
-        role_post=''
-        ;;
-    1)
-        export NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_TARGET=1
-        role_pre='TARGET_'
-        role_post='_FOR_TARGET'
-        ;;
-    *)
-        echo "cc-wrapper: used as improper sort of dependency" >2;
-        return 1
-        ;;
-esac
+# See ../setup-hooks/role.bash
+getTargetRole
+getTargetRoleWrapper
 
 addEnvHooks "$targetOffset" bintoolsWrapper_addLDVars
 
@@ -82,6 +66,10 @@ do
         export "${upper_case}${role_post}=@targetPrefix@${cmd}";
     fi
 done
+
+# If unset, assume the default hardening flags.
+: ${NIX_HARDENING_ENABLE="fortify stackprotector pic strictoverflow format relro bindnow"}
+export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
 unset -v role_pre role_post cmd upper_case

@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Slurp;
+use Net::DBus;
 use Sys::Syslog qw(:standard :macros);
 use Cwd 'abs_path';
 
@@ -67,17 +68,15 @@ EOF
 $SIG{PIPE} = "IGNORE";
 
 sub getActiveUnits {
-    # FIXME: use D-Bus or whatever to query this, since parsing the
-    # output of list-units is likely to break.
-    # Use current version of systemctl binary before daemon is reexeced.
-    my $lines = `LANG= /run/current-system/sw/bin/systemctl list-units --full --no-legend`;
+    my $mgr = Net::DBus->system->get_service("org.freedesktop.systemd1")->get_object("/org/freedesktop/systemd1");
+    my $units = $mgr->ListUnitsByPatterns([], []);
     my $res = {};
-    foreach my $line (split '\n', $lines) {
-        chomp $line;
-        last if $line eq "";
-        $line =~ /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
-        next if $1 eq "UNIT";
-        $res->{$1} = { load => $2, state => $3, substate => $4 };
+    for my $item (@$units) {
+        my ($id, $description, $load_state, $active_state, $sub_state,
+            $following, $unit_path, $job_id, $job_type, $job_path) = @$item;
+        next unless $following eq '';
+        next if $job_id == 0 and $active_state eq 'inactive';
+        $res->{$id} = { load => $load_state, state => $active_state, substate => $sub_state };
     }
     return $res;
 }
@@ -167,6 +166,24 @@ while (my ($unit, $state) = each %{$activePrev}) {
 
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         if (! -e $newUnitFile || abs_path($newUnitFile) eq "/dev/null") {
+            # Ignore (i.e. never stop) these units:
+            if ($unit eq "system.slice") {
+                # TODO: This can be removed a few months after 18.09 is out
+                # (i.e. after everyone switched away from 18.03).
+                # Problem: Restarting (stopping) system.slice would not only
+                # stop X11 but also most system units/services. We obviously
+                # don't want this happening to users when they switch from 18.03
+                # to 18.09 or nixos-unstable.
+                # Reason: The following change in systemd:
+                # https://github.com/systemd/systemd/commit/d8e5a9338278d6602a0c552f01f298771a384798
+                # The commit adds system.slice to the perpetual units, which
+                # means removing the unit file and adding it to the source code.
+                # This is done so that system.slice can't be stopped anymore but
+                # in our case it ironically would cause this script to stop
+                # system.slice because the unit was removed (and an older
+                # systemd version is still running).
+                next;
+            }
             my $unitInfo = parseUnit($prevUnitFile);
             $unitsToStop{$unit} = 1 if boolIsTrue($unitInfo->{'X-StopOnRemoval'} // "yes");
         }
@@ -394,6 +411,18 @@ system("@systemd@/bin/systemctl", "reset-failed");
 
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
+
+# Reload user units
+open my $listActiveUsers, '-|', '@systemd@/bin/loginctl', 'list-users', '--no-legend';
+while (my $f = <$listActiveUsers>) {
+    next unless $f =~ /^\s*(?<uid>\d+)\s+(?<user>\S+)/;
+    my ($uid, $name) = ($+{uid}, $+{user});
+    print STDERR "reloading user units for $name...\n";
+
+    system("su", "-s", "@shell@", "-l", $name, "-c", "XDG_RUNTIME_DIR=/run/user/$uid @systemd@/bin/systemctl --user daemon-reload");
+}
+
+close $listActiveUsers;
 
 # Set the new tmpfiles
 print STDERR "setting up tmpfiles\n";

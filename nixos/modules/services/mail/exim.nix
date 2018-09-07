@@ -77,14 +77,14 @@ in
       systemPackages = [ exim ];
     };
 
-    users.extraUsers = singleton {
+    users.users = singleton {
       name = cfg.user;
       description = "Exim mail transfer agent user";
       uid = config.ids.uids.exim;
       group = cfg.group;
     };
 
-    users.extraGroups = singleton {
+    users.groups = singleton {
       name = cfg.group;
       gid = config.ids.gids.exim;
     };
@@ -94,6 +94,7 @@ in
     systemd.services.exim = {
       description = "Exim Mail Daemon";
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
         ExecStart   = "${exim}/bin/exim -bdf -q30m";
         ExecReload  = "${coreutils}/bin/kill -HUP $MAINPID";

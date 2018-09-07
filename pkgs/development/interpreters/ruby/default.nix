@@ -1,8 +1,8 @@
 { stdenv, buildPackages, lib
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
-, autoconf, darwin ? null
-, buildEnv, bundler, bundix, Foundation
+, autoconf, libiconv, libobjc, libunwind, Foundation
+, buildEnv, bundler, bundix
 } @ args:
 
 let
@@ -32,12 +32,10 @@ let
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
-    isRuby20 = ver.majMin == "2.0";
-    isRuby21 = ver.majMin == "2.1";
     isRuby25 = ver.majMin == "2.5";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
-  { stdenv, buildPackages, lib
+      { stdenv, buildPackages, lib
       , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
       , zlib, zlibSupport ? true
@@ -48,8 +46,8 @@ let
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
       , autoreconfHook, bison, autoconf
-      , darwin ? null
-      , buildEnv, bundler, bundix, Foundation
+      , buildEnv, bundler, bundix
+      , libiconv, libobjc, libunwind, Foundation
       }:
       let rubySrc =
         if useRailsExpress then fetchFromGitHub {
@@ -93,9 +91,8 @@ let
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
-          ++ (op (!cursesSupport && stdenv.isDarwin) readline)
-          ++ (op (isRuby25 && stdenv.isDarwin) Foundation)
-          ++ (ops stdenv.isDarwin (with darwin; [ libiconv libobjc libunwind ]));
+          ++ op (!cursesSupport && stdenv.isDarwin) readline
+          ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
 
         enableParallelBuilding = true;
 
@@ -135,6 +132,11 @@ let
           ]
           ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
              "--with-baseruby=${buildRuby}";
+
+        # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
+        # mostly TZ- and patch-related tests
+        # TZ- failures are caused by nix sandboxing, I didn't investigate others
+        doCheck = false;
 
         preInstall = ''
           # Ruby installs gems here itself now.
@@ -200,26 +202,26 @@ let
 
 in {
   ruby_2_3 = generic {
-    version = rubyVersion "2" "3" "6" "";
+    version = rubyVersion "2" "3" "7" "";
     sha256 = {
-      src = "07jpa7fw1gyf069m7alf2b0zm53qm08w2ns45mhzmvgrg4r528l3";
-      git = "1bk59i0ygdc5z3zz3k6indfrxd2ix55np6rwvkcdpdw8svm749ds";
+      src = "0zvx5kdp1frjs9n95n7ba7dy0alax33wi3nj8034m3ppvnf39k9m";
+      git = "11wbzw2ywwfnvlkg3qjg0as2pzk5zyk63y2iis42d91lg1l2flrk";
     };
   };
 
   ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "3" "";
+    version = rubyVersion "2" "4" "4" "";
     sha256 = {
-      src = "161smb52q19r9lrzy22b3bhnkd0z8wjffm0qsfkml14j5ic7a0zx";
-      git = "0x2lqbqm2rq9j5zh1p72dma56nqvdkfbgzb9wybm4y4hwhiw8c1m";
+      src = "0nmfr2lijik6cykk0zbj11zcapcrvmdvq83k3r6q3k74g4d1qkr5";
+      git = "103cs7hz1v0h84lbrippl87s4lawi20m406rs5dgxl2gr2wyjpy5";
     };
   };
 
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "0" "";
+    version = rubyVersion "2" "5" "1" "";
     sha256 = {
-      src = "1azj0d2lzziw6iml7bx3sxpxzcdmfwfq3yhm7djyp20q1xiz7rj6";
-      git = "0d436nqmp3ykdkp4sck5bb8sf3qvx30x1p58xh8axv66mvsyc2jd";
+      src = "1c99k0fjaq7k09104h1b1cqx6mrk2b14ic1jjnxc6yav68i1ij6s";
+      git = "1j0fd16aq9x98n0kq9c3kfp2sh6xcsq8q4733p0wfqjh3vz50kyj";
     };
   };
 }

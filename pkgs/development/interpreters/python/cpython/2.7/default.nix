@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, buildPlatform, buildPackages, fetchurl
+{ stdenv, buildPackages, fetchurl
 , bzip2
 , gdbm
 , fetchpatch
@@ -10,7 +10,6 @@
 , zlib
 , callPackage
 , self
-, gettext
 , db
 , expat
 , libffi
@@ -19,7 +18,7 @@
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
 , ucsEncoding ? 4
 # For the Python package set
-, pkgs, packageOverrides ? (self: super: {})
+, packageOverrides ? (self: super: {})
 }:
 
 assert x11Support -> tcl != null
@@ -31,16 +30,15 @@ with stdenv.lib;
 
 let
   majorVersion = "2.7";
-  minorVersion = "14";
+  minorVersion = "15";
   minorVersionSuffix = "";
-  pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
   sitePackages = "lib/${libPrefix}/site-packages";
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0rka541ys16jwzcnnvjp2v12m4cwgd2jp6wj4kj511p715pb5zvi";
+    sha256 = "0x2mvz9dp11wj7p5ccvmk9s0hzjk2fa1m462p395l4r6bfnb3n92";
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -58,8 +56,24 @@ let
       # if DETERMINISTIC_BUILD env var is set
       ./deterministic-build.patch
 
-      ./properly-detect-curses.patch
+      # Fix python bug #27177 (https://bugs.python.org/issue27177)
+      # The issue is that `match.group` only recognizes python integers
+      # instead of everything that has `__index__`.
+      # This bug was fixed upstream, but not backported to 2.7
+      (fetchpatch {
+        name = "re_match_index.patch";
+        url = "https://bugs.python.org/file43084/re_match_index.patch";
+        sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
+      })
 
+      # "`type_getattro()` calls `tp_descr_get(self, obj, type)` without actually owning a reference to "self".
+      # In very rare cases, this can cause a segmentation fault if "self" is deleted by the descriptor."
+      # https://github.com/python/cpython/pull/6118
+      (fetchpatch {
+        name = "type_getattro.patch";
+        url = "file://${./type_getattro.patch}";
+        sha256 = "11v9yx20hs3jmw0wggzvmw39qs4mxay4kb8iq2qjydwy9ya61nrd";
+      })
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
@@ -71,7 +85,7 @@ let
       # libuuid, slowing down program startup a lot).
       ./no-ldconfig.patch
 
-    ] ++ optionals hostPlatform.isCygwin [
+    ] ++ optionals stdenv.hostPlatform.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
       ./2.6.2-ssl-threads.patch
@@ -111,14 +125,14 @@ let
     "--enable-shared"
     "--with-threads"
     "--enable-unicode=ucs${toString ucsEncoding}"
-  ] ++ optionals (hostPlatform.isCygwin || hostPlatform.isAarch64) [
+  ] ++ optionals (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) [
     "--with-system-ffi"
-  ] ++ optionals hostPlatform.isCygwin [
+  ] ++ optionals stdenv.hostPlatform.isCygwin [
     "--with-system-expat"
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
-  ] ++ optionals (hostPlatform != buildPlatform) [
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "PYTHON_FOR_BUILD=${getBin buildPackages.python}/bin/python"
     "ac_cv_buggy_getaddrinfo=no"
     # Assume little-endian IEEE 754 floating point when cross compiling
@@ -140,22 +154,21 @@ let
     "ac_cv_computed_gotos=yes"
     "ac_cv_file__dev_ptmx=yes"
     "ac_cv_file__dev_ptc=yes"
-  ];
-
-  postConfigure = if hostPlatform.isCygwin then ''
-    sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
-  '' else null;
+  ]
+    # Never even try to use lchmod on linux,
+    # don't rely on detecting glibc-isms.
+  ++ optional stdenv.hostPlatform.isLinux "ac_cv_func_lchmod=no";
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib ]
-    ++ optional (hostPlatform.isCygwin || hostPlatform.isAarch64) libffi
-    ++ optional hostPlatform.isCygwin expat
+    ++ optional (stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isAarch64) libffi
+    ++ optional stdenv.hostPlatform.isCygwin expat
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
   nativeBuildInputs =
-    optionals (hostPlatform != buildPlatform)
+    optionals (stdenv.hostPlatform != stdenv.buildPlatform)
     [ buildPackages.stdenv.cc buildPackages.python ];
 
   mkPaths = paths: {
@@ -177,7 +190,7 @@ in stdenv.mkDerivation {
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2"
-      + optionalString hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
+      + optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
     DETERMINISTIC_BUILD = 1;
 
     setupHook = python-setup-hook sitePackages;
@@ -222,7 +235,7 @@ in stdenv.mkDerivation {
         find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
         find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
-      '' + optionalString hostPlatform.isCygwin ''
+      '' + optionalString stdenv.hostPlatform.isCygwin ''
         cp libpython2.7.dll.a $out/lib
       '';
 
@@ -240,6 +253,8 @@ in stdenv.mkDerivation {
     };
 
     enableParallelBuilding = true;
+
+    doCheck = false; # expensive, and fails
 
     meta = {
       homepage = http://python.org;

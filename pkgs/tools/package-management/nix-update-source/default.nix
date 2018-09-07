@@ -1,12 +1,12 @@
 { lib, pkgs, fetchFromGitHub, python3Packages, nix-prefetch-scripts }:
 python3Packages.buildPythonApplication rec {
-  version = "0.4.0";
+  version = "0.6.3";
   name = "nix-update-source-${version}";
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "nix-update-source";
-    rev = "version-0.4.0";
-    sha256 = "0gz0f7nx1q697s16ya7q84q1cj020n547k2ffb99ds2r40nckr2g";
+    rev = "version-0.6.3";
+    sha256 = "157wvv9vnaszzwbj68jpdc0imcm1hdab3z760bx2axbsgfpqqilz";
   };
   propagatedBuildInputs = [ nix-prefetch-scripts ];
   passthru = {
@@ -23,7 +23,10 @@ python3Packages.buildPythonApplication rec {
         fetchFn = builtins.getAttr json.fetch.fn fetchers;
         src = fetchFn json.fetch.args;
       in
-      json // json.fetch // { inherit src; };
+      json // json.fetch // {
+        inherit src;
+        overrideSrc = drv: lib.overrideDerivation drv (orig: { inherit src; });
+      };
     updateScript = ''
       set -e
       echo

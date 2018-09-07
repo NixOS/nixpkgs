@@ -94,6 +94,11 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
           ''}");
           if ($status == 0) {
             $ret = 1;
+
+            # XXX: Somehow Chromium is not accepting keystrokes for a few
+            # seconds after a new window has appeared, so let's wait a while.
+            $machine->sleep(10);
+
             last;
           }
           $machine->sleep(1);

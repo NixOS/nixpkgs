@@ -24,14 +24,13 @@ let
 
   postgresql = postgresqlAndPlugins cfg.package;
 
-  flags = optional cfg.enableTCPIP "-i";
-
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeText "postgresql.conf"
     ''
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
       log_destination = 'stderr'
+      listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
       port = ${toString cfg.port}
       ${cfg.extraConfig}
     '';
@@ -184,14 +183,14 @@ in
         host  all all ::1/128      md5
       '';
 
-    users.extraUsers.postgres =
+    users.users.postgres =
       { name = "postgres";
         uid = config.ids.uids.postgres;
         group = "postgres";
         description = "PostgreSQL server user";
       };
 
-    users.extraGroups.postgres.gid = config.ids.gids.postgres;
+    users.groups.postgres.gid = config.ids.gids.postgres;
 
     environment.systemPackages = [ postgresql ];
 
@@ -229,7 +228,7 @@ in
                 "${cfg.dataDir}/recovery.conf"
             ''}
 
-             exec postgres ${toString flags}
+             exec postgres
           '';
 
         serviceConfig =

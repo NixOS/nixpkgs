@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchurl, fetchFromGitHub, unzip
+{ stdenv, callPackage, fetchurl, fetchFromGitHub, unzip
 , steam, libusb, pcre-cpp, jsoncpp, libhdhomerun, zlib }:
 
 with (callPackage ./commons.nix {});
@@ -337,5 +337,27 @@ rec {
     };
 
     extraBuildInputs = [ zlib ];
+  };
+
+  osmc-skin = mkKodiPlugin rec {
+
+    plugin = "osmc-skin";
+    namespace = "skin.osmc";
+    version = "17.0.4";
+
+    src = fetchFromGitHub {
+      owner = "osmc";
+      repo = namespace;
+      rev = "a9268937f49286bab9fb49de430b8aafd7a60a9e";
+      sha256 = "1b3fm02annsq58pcfc985glrmh21rmqksdj3q8wn6gyza06jdf3v";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/osmc/skin.osmc;
+      description = "The default skin for OSMC";
+      platforms = platforms.all;
+      maintainers = with maintainers; [ worldofpeace ];
+      license = licenses.cc-by-nc-sa-30;
+    };
   };
 }

@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, buildOcaml, ocsigen-toolkit, eliom, ocaml_pcre, pgocaml, macaque, safepass, yojson, ojquery, magick, ocsigen_deriving, ocsigen_server }:
+{ stdenv, fetchurl, buildOcaml, ocsigen-toolkit, eliom, ocaml_pcre, pgocaml, macaque, safepass, yojson, ocsigen_deriving, ocsigen_server
+, js_of_ocaml-camlp4
+}:
 
 buildOcaml rec
 {
   name = "ocsigen-start";
-  version = "1.0.0";
+  version = "1.1.0";
 
-  buildInputs = [ eliom ];
-  propagatedBuildInputs = [ pgocaml macaque safepass ocaml_pcre ocsigen-toolkit yojson ojquery ocsigen_deriving ocsigen_server magick ];
+  buildInputs = [ eliom js_of_ocaml-camlp4 ];
+  propagatedBuildInputs = [ pgocaml macaque safepass ocaml_pcre ocsigen-toolkit yojson ocsigen_deriving ocsigen_server ];
 
   patches = [ ./templates-dir.patch ];
 
@@ -16,7 +18,7 @@ buildOcaml rec
   
   src = fetchurl {
     url = "https://github.com/ocsigen/${name}/archive/${version}.tar.gz";
-    sha256 = "0npc2iq39ixci6ly0fssklv07zqi5cfa1adad4hm8dbzjawkqqll";
+    sha256 = "09cw6qzcld0m1qm66mbjg9gw8l6dynpw3fzhm3kfx5ldh0afgvjq";
   };
 
   createFindlibDestdir = true;

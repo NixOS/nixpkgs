@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, qt4, ncurses }:
+{ stdenv, lib, fetchurl, ncurses
+, withGui ? false, qt4 ? null }:
 
 stdenv.mkDerivation rec {
   name = "i7z-0.27.2";
@@ -8,29 +9,46 @@ stdenv.mkDerivation rec {
     sha256 = "1wa7ix6m75wl3k2n88sz0x8cckvlzqklja2gvzqfw5rcfdjjvxx7";
   };
 
-  buildInputs = [ qt4 ncurses ];
+  buildInputs = [ ncurses ] ++ lib.optional withGui qt4;
+
+  enableParallelBuilding = true;
 
   buildPhase = ''
+    runHook preBuild
+
     make
-    cd GUI
-    qmake
-    make clean
-    make
-    cd ..
+    ${lib.optionalString withGui ''
+      cd GUI
+      qmake
+      make clean
+      make
+      cd ..
+    ''}
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/sbin
+    runHook preInstall
+
+    mkdir -p $out/{bin,sbin}
     make install prefix=$out
-    install -Dm755 GUI/i7z_GUI $out/sbin/i7z-gui
+    ${lib.optionalString withGui ''
+      install -Dm755 GUI/i7z_GUI $out/bin/i7z-gui
+    ''}
+    mv $out/sbin/* $out/bin/
+    rmdir $out/sbin
+
+    runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A better i7 (and now i3, i5) reporting tool for Linux";
     homepage = https://github.com/ajaiantilal/i7z;
     repositories.git = https://github.com/ajaiantilal/i7z.git;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ bluescreen303 ];
+    # broken on ARM
+    platforms = [ "x86_64-linux" ];
   };
 }

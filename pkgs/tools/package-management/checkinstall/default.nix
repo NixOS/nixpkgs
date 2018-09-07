@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     ./set-buildroot.patch
   ]
 
-  ++ stdenv.lib.optional (stdenv.system == "x86_64-linux") 
+  ++ stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux") 
     # Force use of old memcpy so that installwatch works on Glibc <
     # 2.14.
     ./use-old-memcpy.patch;

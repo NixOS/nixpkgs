@@ -6,13 +6,28 @@ import ./make-test.nix ({ pkgs, ...} :
     maintainers = [ ttuegel ];
   };
 
-  machine = { lib, ... }: {
+  machine = { ... }:
+  let
+    sddm_theme = pkgs.stdenv.mkDerivation {
+      name = "breeze-ocr-theme";
+      phases = "buildPhase";
+      buildCommand = ''
+        mkdir -p $out/share/sddm/themes/
+        cp -r ${pkgs.plasma-workspace}/share/sddm/themes/breeze $out/share/sddm/themes/breeze-ocr-theme
+        chmod -R +w $out/share/sddm/themes/breeze-ocr-theme
+        printf "[General]\ntype=color\ncolor=#1d99f3\nbackground=\n" > $out/share/sddm/themes/breeze-ocr-theme/theme.conf
+      '';
+    };
+  in
+  {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
+    services.xserver.displayManager.sddm.theme = "breeze-ocr-theme";
     services.xserver.desktopManager.plasma5.enable = true;
     services.xserver.desktopManager.default = "plasma5";
     virtualisation.memorySize = 1024;
+    environment.systemPackages = [ sddm_theme ];
 
     # fontconfig-penultimate-0.3.3 -> 0.3.4 broke OCR apparently, but no idea why.
     nixpkgs.config.packageOverrides = superPkgs: {
@@ -26,11 +41,10 @@ import ./make-test.nix ({ pkgs, ...} :
   enableOCR = true;
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.extraUsers.alice;
+    user = nodes.machine.config.users.users.alice;
     xdo = "${pkgs.xdotool}/bin/xdotool";
   in ''
     startAll;
-
     # Wait for display manager to start
     $machine->waitForText(qr/${user.description}/);
     $machine->screenshot("sddm");

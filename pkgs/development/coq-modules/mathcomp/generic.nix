@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coq, ncurses, which
+{ stdenv, coq, ncurses, which
 , graphviz, withDoc ? false
 , src, name
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   buildFlags = stdenv.lib.optionalString withDoc "doc";
 
   preBuild = ''
-    patchShebangs etc/utils/ssrcoqdep
+    patchShebangs etc/utils/ssrcoqdep || true
     cd mathcomp
     export COQBIN=${coq}/bin/
   '';
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" ];
+    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" ];
   };
 
 }

@@ -1,38 +1,25 @@
-{ stdenv, fetchurl, openssl, makeWrapper, buildPythonApplication
-, pytest, dnspython }:
+{ stdenv, fetchPypi, openssl, buildPythonPackage
+, pytest, dnspython, pynacl, authres, python }:
 
-buildPythonApplication rec {
-  name = "${pname}-${version}";
+buildPythonPackage rec {
   pname = "dkimpy";
-  majorversion = "0.6";
-  minorversion = "2";
-  version = "${majorversion}.${minorversion}";
+  version = "0.8.1";
 
-  src = fetchurl {
-    url = "https://launchpad.net/${pname}/${majorversion}/${majorversion}.${minorversion}/+download/${name}.tar.gz";
-    sha256 = "1hagz8qk0v4ijfbcdq4z28bpgr2mkpr498z76i1vam2d50chmakl";
-  };
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "125xakqg2j5jp4k5kafpnpazh9d97ysgayrsgpvm3nkdj4g8hw1j";
+};
 
-  buildInputs = [ pytest ];
-  propagatedBuildInputs =  [ openssl dnspython ];
+  checkInputs = [ pytest ];
+  propagatedBuildInputs =  [ openssl dnspython pynacl authres ];
 
   patchPhase = ''
-    substituteInPlace dknewkey.py --replace \
+    substituteInPlace dkim/dknewkey.py --replace \
       /usr/bin/openssl ${openssl}/bin/openssl
   '';
 
   checkPhase = ''
-    python ./test.py
-  '';
-
-  postInstall = ''
-    mkdir -p $out/bin $out/libexec
-    mv $out/bin/*.py $out/libexec
-    makeWrapper "$out/libexec/dkimverify.py" $out/bin/dkimverify
-    makeWrapper "$out/libexec/dkimsign.py" $out/bin/dkimsign
-    makeWrapper "$out/libexec/arcverify.py" $out/bin/arcverify
-    makeWrapper "$out/libexec/arcsign.py" $out/bin/arcsign
-    makeWrapper "$out/libexec/dknewkey.py" $out/bin/dknewkey
+    ${python.interpreter} ./test.py
   '';
 
   meta = with stdenv.lib; {

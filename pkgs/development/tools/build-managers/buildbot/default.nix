@@ -1,4 +1,4 @@
-{ stdenv, lib, openssh, buildbot-worker, buildbot-pkg, pythonPackages, runCommand, makeWrapper }:
+{ stdenv, openssh, buildbot-worker, buildbot-pkg, pythonPackages, runCommand, makeWrapper }:
 
 let
   withPlugins = plugins: runCommand "wrapped-${package.name}" {
@@ -14,11 +14,11 @@ let
   package = pythonPackages.buildPythonApplication rec {
     name = "${pname}-${version}";
     pname = "buildbot";
-    version = "1.0.0";
+    version = "1.2.0";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0y7gpymxl09gd9dyqj7zqhaihpl9da1v8ppxi4r161ywd8jv9b1g";
+      sha256 = "02gwmls8kgm6scy36hdy0bg645zs1pxlrgwkcn79wrl7cfmabcbv";
     };
 
     buildInputs = with pythonPackages; [
@@ -75,6 +75,9 @@ let
       # is not accessible in sandboxed builds.
       ./skip_test_linux_distro.patch
     ];
+
+    # TimeoutErrors on slow machines -> aarch64
+    doCheck = !stdenv.isAarch64;
 
     postPatch = ''
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"

@@ -1,7 +1,5 @@
 { stdenv, fetchurl, flex, systemd, perl }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "drbd-8.4.4";
 
@@ -14,7 +12,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex perl ];
 
-  configureFlags = "--without-distro --without-pacemaker --localstatedir=/var --sysconfdir=/etc";
+  configureFlags = [
+    "--without-distro"
+    "--without-pacemaker"
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
 
   preConfigure =
     ''
@@ -31,9 +34,10 @@ stdenv.mkDerivation rec {
 
   installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.drbd.org/;
     description = "Distributed Replicated Block Device, a distributed storage system for Linux";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

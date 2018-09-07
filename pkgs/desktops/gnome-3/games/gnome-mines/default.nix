@@ -1,5 +1,5 @@
 { stdenv, fetchurl, meson, ninja, vala, gobjectIntrospection, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, gettext, itstool, libxml2, libgames-support, libgee }:
+, librsvg, gettext, itstool, python3, libxml2, libgnome-games-support, libgee }:
 
 stdenv.mkDerivation rec {
   name = "gnome-mines-${version}";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   # gobjectIntrospection for finding vapi files
-  nativeBuildInputs = [ meson ninja vala gobjectIntrospection pkgconfig gettext itstool libxml2 wrapGAppsHook ];
-  buildInputs = [ gtk3 librsvg gnome3.defaultIconTheme libgames-support libgee ];
+  nativeBuildInputs = [ meson ninja vala gobjectIntrospection pkgconfig gettext itstool python3 libxml2 wrapGAppsHook ];
+  buildInputs = [ gtk3 librsvg gnome3.defaultIconTheme libgnome-games-support libgee ];
 
   postPatch = ''
     chmod +x data/meson_compile_gschema.py # patchShebangs requires executable file

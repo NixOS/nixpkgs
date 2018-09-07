@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pcre, pkgconfig, libsepol
 , enablePython ? true, swig ? null, python ? null
-, musl-fts
+, fts
 }:
 
 assert enablePython -> swig != null && python != null;
@@ -12,15 +12,16 @@ stdenv.mkDerivation rec {
   version = "2.7";
   inherit (libsepol) se_release se_url;
 
+  outputs = [ "bin" "out" "dev" "man" "py" ];
+
   src = fetchurl {
     url = "${se_url}/${se_release}/libselinux-${version}.tar.gz";
     sha256 = "0mwcq78v6ngbq06xmb9dvilpg0jnl2vs9fgrpakhmmiskdvc1znh";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libsepol pcre ]
-             ++ optionals enablePython [ swig python ]
-             ++ optional stdenv.hostPlatform.isMusl musl-fts;
+  buildInputs = [ libsepol pcre fts ]
+             ++ optionals enablePython [ swig python ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
@@ -28,23 +29,23 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
-  postPatch = optionalString enablePython ''
-    sed -i -e 's|\$(LIBDIR)/libsepol.a|${libsepol}/lib/libsepol.a|' src/Makefile
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "INCDIR=$(dev)/include/selinux"
+    "INCLUDEDIR=$(dev)/include"
+    "MAN3DIR=$(man)/share/man/man3"
+    "MAN5DIR=$(man)/share/man/man5"
+    "MAN8DIR=$(man)/share/man/man8"
+    "PYSITEDIR=$(py)/${python.sitePackages}"
+    "SBINDIR=$(bin)/sbin"
+    "SHLIBDIR=$(out)/lib"
 
-  # fix install locations
-  preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
-    makeFlagsArray+=("DESTDIR=$out")
-    makeFlagsArray+=("MAN3DIR=$out/share/man/man3")
-    makeFlagsArray+=("MAN5DIR=$out/share/man/man5")
-    makeFlagsArray+=("MAN8DIR=$out/share/man/man8")
-    makeFlagsArray+=("PYSITEDIR=$out/lib/${python.libPrefix}/site-packages")
-  '';
+    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+  ];
 
   installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
 
-  meta = libsepol.meta // {
+  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "SELinux core library";
   };
 }

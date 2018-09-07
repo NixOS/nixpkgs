@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, makeWrapper, autoconf, automake, libtool_2, autoreconfHook
-, llvm, libcxx, libcxxabi, clang, libuuid
-, libobjc ? null, maloader ? null, xctoolchain ? null
-, hostPlatform, targetPlatform
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool_2, autoreconfHook
+, libcxxabi, libuuid
+, libobjc ? null, maloader ? null
 , enableDumpNormalizedLibArgs ? false
 }:
 
@@ -12,17 +11,17 @@ let
   # 10.x. For 11.0 and higher we will need to upgrade to a newer cctools than the
   # default version here, which can support the new TBD format via Apple's
   # libtapi.
-  useOld = targetPlatform.isiOS;
+  useOld = stdenv.targetPlatform.isiOS;
 
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = stdenv.lib.optionalString
-    (targetPlatform != hostPlatform)
-    "${targetPlatform.config}-";
+    (stdenv.targetPlatform != stdenv.hostPlatform)
+    "${stdenv.targetPlatform.config}-";
 in
 
 # Non-Darwin alternatives
-assert (!hostPlatform.isDarwin) -> (maloader != null && xctoolchain != null);
+assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
 
 assert enableDumpNormalizedLibArgs -> (!useOld);
 
@@ -57,8 +56,6 @@ let
       autoreconfHook
     ];
     buildInputs = [ libuuid ] ++
-      # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
-      stdenv.lib.optionals (!stdenv.isDarwin) [ llvm clang ] ++
       stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
 
     patches = [
@@ -79,10 +76,7 @@ let
     enableParallelBuilding = true;
 
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
-    configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
-      "CXXFLAGS=-I${libcxx}/include/c++/v1"
-    ];
+    configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
 
     postPatch = ''
       sed -i -e 's/addStandardLibraryDirectories = true/addStandardLibraryDirectories = false/' cctools/ld64/src/ld/Options.cpp
@@ -108,17 +102,13 @@ let
       #  include_next "unistd.h"
       #endif
       EOF
-    '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-      sed -i -e 's|clang++|& -I${libcxx}/include/c++/v1|' cctools/autogen.sh
-    '' + stdenv.lib.optionalString useOld ''
+
       cd cctools
     '';
 
     # TODO: this builds an ld without support for LLVM's LTO. We need to teach it, but that's rather
     # hairy to handle during bootstrap. Perhaps it could be optional?
-    preConfigure = stdenv.lib.optionalString (!useOld) ''
-      cd cctools
-    '' + ''
+    preConfigure = ''
       sh autogen.sh
     '';
 
@@ -128,28 +118,19 @@ let
       popd
     '';
 
-    postInstall =
-      if hostPlatform.isDarwin
-      then ''
-        cat >$out/bin/dsymutil << EOF
-        #!${stdenv.shell}
-        EOF
-        chmod +x $out/bin/dsymutil
-      ''
-      else ''
-        for tool in dyldinfo dwarfdump dsymutil; do
-          ${makeWrapper}/bin/makeWrapper "${maloader}/bin/ld-mac" "$out/bin/${targetPlatform.config}-$tool" \
-            --add-flags "${xctoolchain}/bin/$tool"
-          ln -s "$out/bin/${targetPlatform.config}-$tool" "$out/bin/$tool"
-        done
-      '';
+    postInstall = ''
+      cat >$out/bin/dsymutil << EOF
+      #!${stdenv.shell}
+      EOF
+      chmod +x $out/bin/dsymutil
+    '';
 
     passthru = {
       inherit targetPrefix;
     };
 
     meta = {
-      broken = !targetPlatform.isDarwin; # Only supports darwin targets
+      broken = !stdenv.targetPlatform.isDarwin; # Only supports darwin targets
       homepage = http://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;

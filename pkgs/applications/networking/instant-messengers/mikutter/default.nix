@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, bundlerEnv, ruby, pkgconfig
+, bundlerEnv, ruby
 , alsaUtils, libnotify, which, wrapGAppsHook, gtk2
 }:
 

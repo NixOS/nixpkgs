@@ -1,4 +1,4 @@
-{ stdenv, consul, ruby, bundlerEnv, zip }:
+{ stdenv, consul, ruby, bundlerEnv, zip, nodejs }:
 
 let
   # `sass` et al
@@ -13,9 +13,11 @@ stdenv.mkDerivation {
 
   src = consul.src;
 
-  buildInputs = [ ruby gems zip ];
+  buildInputs = [ ruby gems zip nodejs ];
 
-  patchPhase = "patchShebangs ./ui/scripts/dist.sh";
+  patches = [ ./ui-no-bundle-exec.patch ];
+
+  postPatch = "patchShebangs ./ui/scripts/dist.sh";
 
   buildPhase = ''
     # Build ui static files

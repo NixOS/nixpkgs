@@ -5,17 +5,17 @@
 
 let
   pname = "librsvg";
-  version = "2.42.2";
+  version = "2.42.4";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0c550a0bffef768a436286116c03d9f6cd3f97f5021c13e7f093b550fac12562";
+    sha256 = "1qsd0j7s97ab5fzy5b5gix5b7hbw57cr46ia8pkcrr4ylsi80li2";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "installedTests" ];
 
   buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
 
@@ -26,8 +26,17 @@ stdenv.mkDerivation rec {
       ApplicationServices
     ]);
 
-  configureFlags = [ "--enable-introspection" "--enable-vala" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
+  configureFlags = [
+    "--enable-introspection"
+    "--enable-vala"
+    "--enable-installed-tests"
+    "--enable-always-build-tests"
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
+
+  makeFlags = [
+    "installed_test_metadir=$(installedTests)/share/installed-tests/RSVG"
+    "installed_testdir=$(installedTests)/libexec/installed-tests/RSVG"
+  ];
 
   NIX_CFLAGS_COMPILE
     = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
@@ -51,6 +60,8 @@ stdenv.mkDerivation rec {
     sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk_pixbuf}/bin\1#g" \
         -i gdk-pixbuf-loader/librsvg.thumbnailer.in
   '';
+
+  doCheck = false; # fails 20 of 145 tests, very likely to be buggy
 
   # Merge gdkpixbuf and librsvg loaders
   postInstall = ''

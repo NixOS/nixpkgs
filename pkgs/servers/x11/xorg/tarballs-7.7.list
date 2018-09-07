@@ -60,7 +60,7 @@ mirror://xorg/individual/lib/libICE-1.0.9.tar.bz2
 mirror://xorg/individual/lib/libpciaccess-0.14.tar.bz2
 mirror://xorg/individual/lib/libSM-1.2.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libWindowsWM-1.0.1.tar.bz2
-mirror://xorg/individual/lib/libX11-1.6.5.tar.bz2
+mirror://xorg/individual/lib/libX11-1.6.6.tar.bz2
 mirror://xorg/individual/lib/libXau-1.0.8.tar.bz2
 mirror://xorg/individual/lib/libXaw-1.0.13.tar.bz2
 mirror://xorg/individual/lib/libXcomposite-0.4.4.tar.bz2
@@ -68,7 +68,7 @@ mirror://xorg/individual/lib/libXcursor-1.1.15.tar.bz2
 mirror://xorg/individual/lib/libXdamage-1.1.4.tar.bz2
 mirror://xorg/individual/lib/libXdmcp-1.1.2.tar.bz2
 mirror://xorg/individual/lib/libXext-1.3.3.tar.bz2
-mirror://xorg/individual/lib/libXfixes-5.0.2.tar.bz2
+mirror://xorg/individual/lib/libXfixes-5.0.3.tar.bz2
 mirror://xorg/individual/lib/libXfont-1.5.4.tar.bz2
 mirror://xorg/individual/lib/libXfont2-2.0.3.tar.bz2
 mirror://xorg/individual/lib/libXft-2.3.2.tar.bz2
@@ -101,7 +101,7 @@ mirror://xorg/individual/app/sessreg-1.1.1.tar.bz2
 mirror://xorg/individual/app/setxkbmap-1.3.1.tar.bz2
 mirror://xorg/individual/app/smproxy-1.0.6.tar.bz2
 mirror://xorg/individual/app/twm-1.0.9.tar.bz2
-mirror://xorg/individual/util/util-macros-1.19.1.tar.bz2
+mirror://xorg/individual/util/util-macros-1.19.2.tar.bz2
 mirror://xorg/individual/proto/videoproto-2.3.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/windowswmproto-1.0.4.tar.bz2
 mirror://xorg/individual/app/x11perf-1.6.0.tar.bz2
@@ -131,7 +131,7 @@ mirror://xorg/individual/driver/xf86-input-void-1.4.1.tar.bz2
 mirror://xorg/individual/driver/xf86-video-amdgpu-1.4.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ast-1.1.5.tar.bz2
-mirror://xorg/individual/driver/xf86-video-ati-7.9.0.tar.bz2
+mirror://xorg/individual/driver/xf86-video-ati-18.0.1.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nouveau-1.0.15.tar.bz2
 mirror://xorg/individual/driver/xf86-video-chips-1.2.7.tar.bz2
 mirror://xorg/individual/driver/xf86-video-cirrus-1.5.3.tar.bz2
@@ -164,7 +164,7 @@ mirror://xorg/individual/driver/xf86-video-tdfx-1.4.7.tar.bz2
 mirror://xorg/individual/driver/xf86-video-tga-1.2.2.tar.bz2
 mirror://xorg/individual/driver/xf86-video-trident-1.3.8.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-v4l-0.2.0.tar.bz2
-mirror://xorg/individual/driver/xf86-video-vesa-2.3.4.tar.bz2
+mirror://xorg/individual/driver/xf86-video-vesa-2.4.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-vmware-13.2.1.tar.bz2
 mirror://xorg/individual/driver/xf86-video-voodoo-1.2.5.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-wsfb-0.4.0.tar.bz2

@@ -1,5 +1,5 @@
 { stdenv
-, fetchFromGitHub, fetchurl
+, fetchFromGitHub
 , python
 
 # for binding generation
@@ -88,6 +88,8 @@ stdenv.mkDerivation rec {
   checkPhase =  ''
     ${pythonEnv.interpreter} ./test.py
   '';
+
+  hardeningDisable = [ "fortify" ];
 
   meta = {
     homepage = http://www.nsnam.org;

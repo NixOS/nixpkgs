@@ -38,6 +38,8 @@ let
     in
     pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f cfg.splashImage;
+      splashMode = f cfg.splashMode;
+      backgroundColor = f cfg.backgroundColor;
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
@@ -64,9 +66,10 @@ let
       )) + ":" + (makeSearchPathOutput "bin" "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
-      font = if lib.last (lib.splitString "." cfg.font) == "pf2"
+      font = if cfg.font == null then ""
+        else (if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
-             else "${convertedFont}";
+             else "${convertedFont}");
     });
 
   bootDeviceCounters = fold (device: attr: attr // { "${device}" = (attr."${device}" or 0) + 1; }) {}
@@ -79,6 +82,8 @@ let
                "--output" "$out"
              ] ++ (optional (cfg.fontSize!=null) "--size ${toString cfg.fontSize}")))
          );
+
+  defaultSplash = "${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader}/share/artwork/gnome/nix-wallpaper-simple-dark-gray_bootloader.png";
 in
 
 {
@@ -308,10 +313,47 @@ in
         type = types.nullOr types.path;
         example = literalExample "./my-background.png";
         description = ''
-          Background image used for GRUB.  It must be a 640x480,
+          Background image used for GRUB.
+          Set to <literal>null</literal> to run GRUB in text mode.
+
+          <note><para>
+          For grub 1:
+          It must be a 640x480,
           14-colour image in XPM format, optionally compressed with
-          <command>gzip</command> or <command>bzip2</command>.  Set to
-          <literal>null</literal> to run GRUB in text mode.
+          <command>gzip</command> or <command>bzip2</command>.
+          </para></note>
+
+          <note><para>
+          For grub 2:
+          File must be one of .png, .tga, .jpg, or .jpeg. JPEG images must
+          not be progressive.
+          The image will be scaled if necessary to fit the screen.
+          </para></note>
+        '';
+      };
+
+      backgroundColor = mkOption {
+        type = types.nullOr types.string;
+        example = "#7EBAE4";
+        default = null;
+        description = ''
+          Background color to be used for GRUB to fill the areas the image isn't filling.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
+        '';
+      };
+
+      splashMode = mkOption {
+        type = types.enum [ "normal" "stretch" ];
+        default = "stretch";
+        description = ''
+          Whether to stretch the image or show the image in the top-left corner unstretched.
+
+          <note><para>
+          This options has no effect for GRUB 1.
+          </para></note>
         '';
       };
 
@@ -372,8 +414,9 @@ in
       };
 
       default = mkOption {
-        default = 0;
-        type = types.int;
+        default = "0";
+        type = types.either types.int types.str;
+        apply = toString;
         description = ''
           Index of the default menu item to be booted.
         '';
@@ -517,8 +560,13 @@ in
           sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
         }
         # GRUB 1.97 doesn't support gzipped XPMs.
-        else "${pkgs.nixos-artwork.wallpapers.gnome-dark}/share/artwork/gnome/Gnome_Dark.png");
+        else defaultSplash);
     }
+
+    (mkIf (cfg.splashImage == defaultSplash) {
+      boot.loader.grub.backgroundColor = mkDefault "#2F302F";
+      boot.loader.grub.splashMode = mkDefault "normal";
+    })
 
     (mkIf cfg.enable {
 

@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.22";
+  name = "sudo-1.8.24";
 
   src = fetchurl {
     urls =
       [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
         "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
       ];
-    sha256 = "00pxp74xkwdcmrjwy55j0k8p684jk1zx3nzdc11v30q8q8kwnmkj";
+    sha256 = "1s2v49n905wf3phmdnaa6v1dwck2lrcin0flg85z7klf35x5b25l";
   };
 
   prePatch = ''
@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pam ];
 
   enableParallelBuilding = true;
+
+  doCheck = false; # needs root
 
   postInstall =
     ''

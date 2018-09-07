@@ -15,7 +15,7 @@ stdenv.mkDerivation {
       sha256 = "1awgg39i72pivwfijdwffvil3glnpimjz2x04qbl5la2j6la48nb";
     }
     else fetchurl {
-      url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
+      url = "https://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
       sha256 = "01v1zrajyfamjq5b8v18qr3ffivjckifsvvx2vs13di6wsnmm9gw";
     };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
       rm -rf $comp/x86*
     done
     '' + (if ! stdenv.isLinux then "" else ''
-    arch=${if stdenv.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
+    arch=${if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
     for f in contrib/*/$arch/{bash_process,epclextract,eprover,nunchaku,SPASS}; do
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"
     done

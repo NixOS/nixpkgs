@@ -1,25 +1,26 @@
-{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas, hostPlatform }:
+{ stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas }:
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.14.2";
+  version = "1.15.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "facc6f925c3099ac01a1f03758100772560a0b020fb9d70f210404be08006bcb";
+    sha256 = "7b9e37f194f8bcdca8e9e6af92e2cbad79e360542effc2dd6b98d63955d8d8a3";
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran nose blas ];
+  buildInputs = [ gfortran pytest blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
-    # See cpython 2.7 patches.
-    # numpy.distutils is used by cython during it's check phase
+    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+    # Patching of numpy.distutils is needed to prevent it from undoing the
+    # patch to distutils.
     ./numpy-distutils-C++.patch
   ];
 
-  postPatch = lib.optionalString hostPlatform.isMusl ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     # Use fenv.h
     sed -i \
       numpy/core/src/npymath/ieee754.c.src \
@@ -53,10 +54,6 @@ buildPythonPackage rec {
     ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
     popd
     runHook postCheck
-  '';
-
-  postInstall = ''
-    ln -s $out/bin/f2py* $out/bin/f2py
   '';
 
   passthru = {

@@ -1,243 +1,241 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
-	 xmlns:xlink="http://www.w3.org/1999/xlink"
-	 xml:id="chap-functions">
-
-<title>Functions reference</title>
-
-<para>
-  The nixpkgs repository has several utility functions to manipulate Nix expressions.
-</para>
-
-<section xml:id="sec-overrides">
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="chap-functions">
+ <title>Functions reference</title>
+ <para>
+  The nixpkgs repository has several utility functions to manipulate Nix
+  expressions.
+ </para>
+ <section xml:id="sec-overrides">
   <title>Overriding</title>
 
   <para>
-    Sometimes one wants to override parts of
-    <literal>nixpkgs</literal>, e.g. derivation attributes, the results of
-    derivations or even the whole package set.
+   Sometimes one wants to override parts of <literal>nixpkgs</literal>, e.g.
+   derivation attributes, the results of derivations or even the whole package
+   set.
   </para>
 
   <section xml:id="sec-pkg-override">
-    <title>&lt;pkg&gt;.override</title>
+   <title>&lt;pkg&gt;.override</title>
 
-    <para>
-      The function <varname>override</varname> is usually available for all the
-      derivations in the nixpkgs expression (<varname>pkgs</varname>).
-    </para>
-    <para>
-      It is used to override the arguments passed to a function.
-    </para>
-    <para>
-      Example usages:
+   <para>
+    The function <varname>override</varname> is usually available for all the
+    derivations in the nixpkgs expression (<varname>pkgs</varname>).
+   </para>
 
-      <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
-      <programlisting>import pkgs.path { overlays = [ (self: super: {
-    foo = super.foo.override { barSupport = true ; };
-  })]};</programlisting>
-      <programlisting>mypkg = pkgs.callPackage ./mypkg.nix {
-    mydep = pkgs.mydep.override { ... };
-  }</programlisting>
-    </para>
+   <para>
+    It is used to override the arguments passed to a function.
+   </para>
 
-    <para>
-      In the first example, <varname>pkgs.foo</varname> is the result of a function call
-      with some default arguments, usually a derivation.
-      Using <varname>pkgs.foo.override</varname> will call the same function with
-      the given new arguments.
-    </para>
+   <para>
+    Example usages:
+<programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
+<programlisting>
+import pkgs.path { overlays = [ (self: super: {
+  foo = super.foo.override { barSupport = true ; };
+  })]};
+</programlisting>
+<programlisting>
+mypkg = pkgs.callPackage ./mypkg.nix {
+  mydep = pkgs.mydep.override { ... };
+  }
+</programlisting>
+   </para>
 
+   <para>
+    In the first example, <varname>pkgs.foo</varname> is the result of a
+    function call with some default arguments, usually a derivation. Using
+    <varname>pkgs.foo.override</varname> will call the same function with the
+    given new arguments.
+   </para>
   </section>
 
   <section xml:id="sec-pkg-overrideAttrs">
-    <title>&lt;pkg&gt;.overrideAttrs</title>
+   <title>&lt;pkg&gt;.overrideAttrs</title>
 
+   <para>
+    The function <varname>overrideAttrs</varname> allows overriding the
+    attribute set passed to a <varname>stdenv.mkDerivation</varname> call,
+    producing a new derivation based on the original one. This function is
+    available on all derivations produced by the
+    <varname>stdenv.mkDerivation</varname> function, which is most packages in
+    the nixpkgs expression <varname>pkgs</varname>.
+   </para>
+
+   <para>
+    Example usage:
+<programlisting>
+helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
+  separateDebugInfo = true;
+});
+</programlisting>
+   </para>
+
+   <para>
+    In the above example, the <varname>separateDebugInfo</varname> attribute is
+    overridden to be true, thus building debug info for
+    <varname>helloWithDebug</varname>, while all other attributes will be
+    retained from the original <varname>hello</varname> package.
+   </para>
+
+   <para>
+    The argument <varname>oldAttrs</varname> is conventionally used to refer to
+    the attr set originally passed to <varname>stdenv.mkDerivation</varname>.
+   </para>
+
+   <note>
     <para>
-      The function <varname>overrideAttrs</varname> allows overriding the
-      attribute set passed to a <varname>stdenv.mkDerivation</varname> call,
-      producing a new derivation based on the original one.
-      This function is available on all derivations produced by the
-      <varname>stdenv.mkDerivation</varname> function, which is most packages
-      in the nixpkgs expression <varname>pkgs</varname>.
+     Note that <varname>separateDebugInfo</varname> is processed only by the
+     <varname>stdenv.mkDerivation</varname> function, not the generated, raw
+     Nix derivation. Thus, using <varname>overrideDerivation</varname> will not
+     work in this case, as it overrides only the attributes of the final
+     derivation. It is for this reason that <varname>overrideAttrs</varname>
+     should be preferred in (almost) all cases to
+     <varname>overrideDerivation</varname>, i.e. to allow using
+     <varname>sdenv.mkDerivation</varname> to process input arguments, as well
+     as the fact that it is easier to use (you can use the same attribute names
+     you see in your Nix code, instead of the ones generated (e.g.
+     <varname>buildInputs</varname> vs <varname>nativeBuildInputs</varname>,
+     and involves less typing.
     </para>
-
-    <para>
-      Example usage:
-
-      <programlisting>helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
-    separateDebugInfo = true;
-  });</programlisting>
-    </para>
-
-    <para>
-      In the above example, the <varname>separateDebugInfo</varname> attribute is
-      overridden to be true, thus building debug info for
-      <varname>helloWithDebug</varname>, while all other attributes will be
-      retained from the original <varname>hello</varname> package.
-    </para>
-
-    <para>
-      The argument <varname>oldAttrs</varname> is conventionally used to refer to
-      the attr set originally passed to <varname>stdenv.mkDerivation</varname>.
-    </para>
-
-    <note>
-      <para>
-        Note that <varname>separateDebugInfo</varname> is processed only by the
-        <varname>stdenv.mkDerivation</varname> function, not the generated, raw
-        Nix derivation. Thus, using <varname>overrideDerivation</varname> will
-        not work in this case, as it overrides only the attributes of the final
-        derivation. It is for this reason that <varname>overrideAttrs</varname>
-        should be preferred in (almost) all cases to
-        <varname>overrideDerivation</varname>, i.e. to allow using
-        <varname>sdenv.mkDerivation</varname> to process input arguments, as well
-        as the fact that it is easier to use (you can use the same attribute
-        names you see in your Nix code, instead of the ones generated (e.g.
-        <varname>buildInputs</varname> vs <varname>nativeBuildInputs</varname>,
-        and involves less typing.
-      </para>
-    </note>
-
+   </note>
   </section>
 
-
   <section xml:id="sec-pkg-overrideDerivation">
-    <title>&lt;pkg&gt;.overrideDerivation</title>
+   <title>&lt;pkg&gt;.overrideDerivation</title>
 
-    <warning>
-      <para>You should prefer <varname>overrideAttrs</varname> in almost all
-      cases, see its documentation for the reasons why.
-      <varname>overrideDerivation</varname> is not deprecated and will continue
-      to work, but is less nice to use and does not have as many abilities as
-      <varname>overrideAttrs</varname>.
-      </para>
-    </warning>
-
-    <warning>
-      <para>Do not use this function in Nixpkgs as it evaluates a Derivation
-      before modifying it, which breaks package abstraction and removes
-      error-checking of function arguments. In addition, this
-      evaluation-per-function application incurs a performance penalty,
-      which can become a problem if many overrides are used.
-      It is only intended for ad-hoc customisation, such as in
-      <filename>~/.config/nixpkgs/config.nix</filename>.
-    </para>
-    </warning>
-
+   <warning>
     <para>
-      The function <varname>overrideDerivation</varname> creates a new derivation
-      based on an existing one by overriding the original's attributes with
-      the attribute set produced by the specified function.
-      This function is available on all
-      derivations defined using the <varname>makeOverridable</varname> function.
-      Most standard derivation-producing functions, such as
-      <varname>stdenv.mkDerivation</varname>, are defined using this
-      function, which means most packages in the nixpkgs expression,
-      <varname>pkgs</varname>, have this function.
+     You should prefer <varname>overrideAttrs</varname> in almost all cases,
+     see its documentation for the reasons why.
+     <varname>overrideDerivation</varname> is not deprecated and will continue
+     to work, but is less nice to use and does not have as many abilities as
+     <varname>overrideAttrs</varname>.
     </para>
+   </warning>
 
+   <warning>
     <para>
-      Example usage:
-
-      <programlisting>mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
-    name = "sed-4.2.2-pre";
-    src = fetchurl {
-      url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
-      sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
-    };
-    patches = [];
-  });</programlisting>
+     Do not use this function in Nixpkgs as it evaluates a Derivation before
+     modifying it, which breaks package abstraction and removes error-checking
+     of function arguments. In addition, this evaluation-per-function
+     application incurs a performance penalty, which can become a problem if
+     many overrides are used. It is only intended for ad-hoc customisation,
+     such as in <filename>~/.config/nixpkgs/config.nix</filename>.
     </para>
+   </warning>
 
+   <para>
+    The function <varname>overrideDerivation</varname> creates a new derivation
+    based on an existing one by overriding the original's attributes with the
+    attribute set produced by the specified function. This function is
+    available on all derivations defined using the
+    <varname>makeOverridable</varname> function. Most standard
+    derivation-producing functions, such as
+    <varname>stdenv.mkDerivation</varname>, are defined using this function,
+    which means most packages in the nixpkgs expression,
+    <varname>pkgs</varname>, have this function.
+   </para>
+
+   <para>
+    Example usage:
+<programlisting>
+mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
+  name = "sed-4.2.2-pre";
+  src = fetchurl {
+    url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
+    sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
+  };
+  patches = [];
+});
+</programlisting>
+   </para>
+
+   <para>
+    In the above example, the <varname>name</varname>, <varname>src</varname>,
+    and <varname>patches</varname> of the derivation will be overridden, while
+    all other attributes will be retained from the original derivation.
+   </para>
+
+   <para>
+    The argument <varname>oldAttrs</varname> is used to refer to the attribute
+    set of the original derivation.
+   </para>
+
+   <note>
     <para>
-      In the above example, the <varname>name</varname>, <varname>src</varname>,
-      and <varname>patches</varname> of the derivation will be overridden, while
-      all other attributes will be retained from the original derivation.
+     A package's attributes are evaluated *before* being modified by the
+     <varname>overrideDerivation</varname> function. For example, the
+     <varname>name</varname> attribute reference in <varname>url =
+     "mirror://gnu/hello/${name}.tar.gz";</varname> is filled-in *before* the
+     <varname>overrideDerivation</varname> function modifies the attribute set.
+     This means that overriding the <varname>name</varname> attribute, in this
+     example, *will not* change the value of the <varname>url</varname>
+     attribute. Instead, we need to override both the <varname>name</varname>
+     *and* <varname>url</varname> attributes.
     </para>
-
-    <para>
-      The argument <varname>oldAttrs</varname> is used to refer to the attribute set of
-      the original derivation.
-    </para>
-
-    <note>
-      <para>
-        A package's attributes are evaluated *before* being modified by
-        the <varname>overrideDerivation</varname> function.
-        For example, the <varname>name</varname> attribute reference
-        in <varname>url = "mirror://gnu/hello/${name}.tar.gz";</varname>
-        is filled-in *before* the <varname>overrideDerivation</varname> function
-        modifies the attribute set. This means that overriding the
-        <varname>name</varname> attribute, in this example, *will not* change the
-        value of the <varname>url</varname> attribute. Instead, we need to override
-        both the <varname>name</varname> *and* <varname>url</varname> attributes.
-      </para>
-    </note>
-
+   </note>
   </section>
 
   <section xml:id="sec-lib-makeOverridable">
-    <title>lib.makeOverridable</title>
+   <title>lib.makeOverridable</title>
 
-    <para>
-      The function <varname>lib.makeOverridable</varname> is used to make the result
-      of a function easily customizable. This utility only makes sense for functions
-      that accept an argument set and return an attribute set.
-    </para>
+   <para>
+    The function <varname>lib.makeOverridable</varname> is used to make the
+    result of a function easily customizable. This utility only makes sense for
+    functions that accept an argument set and return an attribute set.
+   </para>
 
-    <para>
-      Example usage:
+   <para>
+    Example usage:
+<programlisting>
+f = { a, b }: { result = a+b; };
+c = lib.makeOverridable f { a = 1; b = 2; };
+</programlisting>
+   </para>
 
-      <programlisting>f = { a, b }: { result = a+b; }
-  c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
+   <para>
+    The variable <varname>c</varname> is the value of the <varname>f</varname>
+    function applied with some default arguments. Hence the value of
+    <varname>c.result</varname> is <literal>3</literal>, in this example.
+   </para>
 
-    </para>
-
-    <para>
-      The variable <varname>c</varname> is the value of the <varname>f</varname> function
-      applied with some default arguments. Hence the value of <varname>c.result</varname>
-      is <literal>3</literal>, in this example.
-    </para>
-
-    <para>
-      The variable <varname>c</varname> however also has some additional functions, like
-      <link linkend="sec-pkg-override">c.override</link> which can be used to
-      override the default arguments. In this example the value of
-      <varname>(c.override { a = 4; }).result</varname> is 6.
-    </para>
-
+   <para>
+    The variable <varname>c</varname> however also has some additional
+    functions, like <link linkend="sec-pkg-override">c.override</link> which
+    can be used to override the default arguments. In this example the value of
+    <varname>(c.override { a = 4; }).result</varname> is 6.
+   </para>
   </section>
-
-</section>
-
-<section xml:id="sec-generators">
+ </section>
+ <section xml:id="sec-generators">
   <title>Generators</title>
 
   <para>
-    Generators are functions that create file formats from nix
-    data structures, e. g. for configuration files.
-    There are generators available for: <literal>INI</literal>,
-    <literal>JSON</literal> and <literal>YAML</literal>
+   Generators are functions that create file formats from nix data structures,
+   e. g. for configuration files. There are generators available for:
+   <literal>INI</literal>, <literal>JSON</literal> and <literal>YAML</literal>
   </para>
 
   <para>
-    All generators follow a similar call interface: <code>generatorName
-    configFunctions data</code>, where <literal>configFunctions</literal> is
-    an attrset of user-defined functions that format nested parts of the
-    content.
-    They each have common defaults, so often they do not need to be set
-    manually. An example is <code>mkSectionName ? (name: libStr.escape [ "[" "]"
-    ] name)</code> from the <literal>INI</literal> generator. It receives the
-    name of a section and sanitizes it. The default
-    <literal>mkSectionName</literal> escapes <literal>[</literal> and
-    <literal>]</literal> with a backslash.
+   All generators follow a similar call interface: <code>generatorName
+   configFunctions data</code>, where <literal>configFunctions</literal> is an
+   attrset of user-defined functions that format nested parts of the content.
+   They each have common defaults, so often they do not need to be set
+   manually. An example is <code>mkSectionName ? (name: libStr.escape [ "[" "]"
+   ] name)</code> from the <literal>INI</literal> generator. It receives the
+   name of a section and sanitizes it. The default
+   <literal>mkSectionName</literal> escapes <literal>[</literal> and
+   <literal>]</literal> with a backslash.
   </para>
 
   <para>
-    Generators can be fine-tuned to produce exactly the file format required
-    by your application/service. One example is an INI-file format which uses
-    <literal>: </literal> as separator, the strings
-    <literal>"yes"</literal>/<literal>"no"</literal> as boolean values
-    and requires all string values to be quoted:
+   Generators can be fine-tuned to produce exactly the file format required by
+   your application/service. One example is an INI-file format which uses
+   <literal>: </literal> as separator, the strings
+   <literal>"yes"</literal>/<literal>"no"</literal> as boolean values and
+   requires all string values to be quoted:
   </para>
 
 <programlisting>
@@ -270,7 +268,9 @@ in customToINI {
 }
 </programlisting>
 
-  <para>This will produce the following INI file as nix string:</para>
+  <para>
+   This will produce the following INI file as nix string:
+  </para>
 
 <programlisting>
 [main]
@@ -284,95 +284,146 @@ str\:ange:"very::strange"
 merge:"diff3"
 </programlisting>
 
-  <note><para>Nix store paths can be converted to strings by enclosing a
-  derivation attribute like so: <code>"${drv}"</code>.</para></note>
+  <note>
+   <para>
+    Nix store paths can be converted to strings by enclosing a derivation
+    attribute like so: <code>"${drv}"</code>.
+   </para>
+  </note>
 
   <para>
-    Detailed documentation for each generator can be found in
-    <literal>lib/generators.nix</literal>.
+   Detailed documentation for each generator can be found in
+   <literal>lib/generators.nix</literal>.
+  </para>
+ </section>
+ <section xml:id="sec-debug">
+  <title>Debugging Nix Expressions</title>
+
+  <para>
+   Nix is a unityped, dynamic language, this means every value can potentially
+   appear anywhere. Since it is also non-strict, evaluation order and what
+   ultimately is evaluated might surprise you. Therefore it is important to be
+   able to debug nix expressions.
   </para>
 
-</section>
-
-
-<section xml:id="sec-fhs-environments">
+  <para>
+   In the <literal>lib/debug.nix</literal> file you will find a number of
+   functions that help (pretty-)printing values while evaluation is runnnig.
+   You can even specify how deep these values should be printed recursively,
+   and transform them on the fly. Please consult the docstrings in
+   <literal>lib/debug.nix</literal> for usage information.
+  </para>
+ </section>
+ <section xml:id="sec-fhs-environments">
   <title>buildFHSUserEnv</title>
 
   <para>
-    <function>buildFHSUserEnv</function> provides a way to build and run
-    FHS-compatible lightweight sandboxes. It creates an isolated root with
-    bound <filename>/nix/store</filename>, so its footprint in terms of disk
-    space needed is quite small. This allows one to run software which is hard or
-    unfeasible to patch for NixOS -- 3rd-party source trees with FHS assumptions,
-    games distributed as tarballs, software with integrity checking and/or external
-    self-updated binaries. It uses Linux namespaces feature to create
-    temporary lightweight environments which are destroyed after all child
-    processes exit, without root user rights requirement. Accepted arguments are:
+   <function>buildFHSUserEnv</function> provides a way to build and run
+   FHS-compatible lightweight sandboxes. It creates an isolated root with bound
+   <filename>/nix/store</filename>, so its footprint in terms of disk space
+   needed is quite small. This allows one to run software which is hard or
+   unfeasible to patch for NixOS -- 3rd-party source trees with FHS
+   assumptions, games distributed as tarballs, software with integrity checking
+   and/or external self-updated binaries. It uses Linux namespaces feature to
+   create temporary lightweight environments which are destroyed after all
+   child processes exit, without root user rights requirement. Accepted
+   arguments are:
   </para>
 
   <variablelist>
-    <varlistentry>
-    <term><literal>name</literal></term>
-
-    <listitem><para>Environment name.</para></listitem>
-    </varlistentry>
-
-    <varlistentry>
-    <term><literal>targetPkgs</literal></term>
-
-    <listitem><para>Packages to be installed for the main host's architecture
-    (i.e. x86_64 on x86_64 installations). Along with libraries binaries are also
-    installed.</para></listitem>
-    </varlistentry>
-
-    <varlistentry>
-    <term><literal>multiPkgs</literal></term>
-
-    <listitem><para>Packages to be installed for all architectures supported by
-    a host (i.e. i686 and x86_64 on x86_64 installations). Only libraries are
-    installed by default.</para></listitem>
-    </varlistentry>
-
-    <varlistentry>
-    <term><literal>extraBuildCommands</literal></term>
-
-    <listitem><para>Additional commands to be executed for finalizing the
-    directory structure.</para></listitem>
-    </varlistentry>
-
-    <varlistentry>
-    <term><literal>extraBuildCommandsMulti</literal></term>
-
-    <listitem><para>Like <literal>extraBuildCommands</literal>, but
-    executed only on multilib architectures.</para></listitem>
-    </varlistentry>
-
-    <varlistentry>
-    <term><literal>extraOutputsToInstall</literal></term>
-
-    <listitem><para>Additional derivation outputs to be linked for both
-    target and multi-architecture packages.</para></listitem>
-    </varlistentry>
-
-    <varlistentry>
-    <term><literal>extraInstallCommands</literal></term>
-
-    <listitem><para>Additional commands to be executed for finalizing the
-    derivation with runner script.</para></listitem>
-    </varlistentry>
-
-    <varlistentry>
-    <term><literal>runScript</literal></term>
-
-    <listitem><para>A command that would be executed inside the sandbox and
-    passed all the command line arguments. It defaults to
-    <literal>bash</literal>.</para></listitem>
-    </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>name</literal>
+    </term>
+    <listitem>
+     <para>
+      Environment name.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>targetPkgs</literal>
+    </term>
+    <listitem>
+     <para>
+      Packages to be installed for the main host's architecture (i.e. x86_64 on
+      x86_64 installations). Along with libraries binaries are also installed.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>multiPkgs</literal>
+    </term>
+    <listitem>
+     <para>
+      Packages to be installed for all architectures supported by a host (i.e.
+      i686 and x86_64 on x86_64 installations). Only libraries are installed by
+      default.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>extraBuildCommands</literal>
+    </term>
+    <listitem>
+     <para>
+      Additional commands to be executed for finalizing the directory
+      structure.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>extraBuildCommandsMulti</literal>
+    </term>
+    <listitem>
+     <para>
+      Like <literal>extraBuildCommands</literal>, but executed only on multilib
+      architectures.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>extraOutputsToInstall</literal>
+    </term>
+    <listitem>
+     <para>
+      Additional derivation outputs to be linked for both target and
+      multi-architecture packages.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>extraInstallCommands</literal>
+    </term>
+    <listitem>
+     <para>
+      Additional commands to be executed for finalizing the derivation with
+      runner script.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <literal>runScript</literal>
+    </term>
+    <listitem>
+     <para>
+      A command that would be executed inside the sandbox and passed all the
+      command line arguments. It defaults to <literal>bash</literal>.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
 
   <para>
-    One can create a simple environment using a <literal>shell.nix</literal>
-    like that:
+   One can create a simple environment using a <literal>shell.nix</literal>
+   like that:
   </para>
 
 <programlisting><![CDATA[
@@ -397,363 +448,362 @@ merge:"diff3"
 ]]></programlisting>
 
   <para>
-    Running <literal>nix-shell</literal> would then drop you into a shell with
-    these libraries and binaries available. You can use this to run
-    closed-source applications which expect FHS structure without hassles:
-    simply change <literal>runScript</literal> to the application path,
-    e.g. <filename>./bin/start.sh</filename> -- relative paths are supported.
+   Running <literal>nix-shell</literal> would then drop you into a shell with
+   these libraries and binaries available. You can use this to run
+   closed-source applications which expect FHS structure without hassles:
+   simply change <literal>runScript</literal> to the application path, e.g.
+   <filename>./bin/start.sh</filename> -- relative paths are supported.
   </para>
-</section>
-
-<section xml:id="sec-pkgs-dockerTools">
-<title>pkgs.dockerTools</title>
-
-<para>
-  <varname>pkgs.dockerTools</varname> is a set of functions for creating and
-  manipulating Docker images according to the
-  <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#docker-image-specification-v120">
-  Docker Image Specification v1.2.0
-  </link>. Docker itself is not used to perform any of the operations done by these
-  functions.
-</para>
-
-<warning>
-  <para>
-  The <varname>dockerTools</varname> API is unstable and may be subject to
-  backwards-incompatible changes in the future.
-  </para>
-</warning>
-
-<section xml:id="ssec-pkgs-dockerTools-buildImage">
-  <title>buildImage</title>
+ </section>
+ <xi:include href="shell.section.xml" />
+ <section xml:id="sec-pkgs-dockerTools">
+  <title>pkgs.dockerTools</title>
 
   <para>
-  This function is analogous to the <command>docker build</command> command,
-  in that can used to build a Docker-compatible repository tarball containing
-  a single image with one or multiple layers. As such, the result
-  is suitable for being loaded in Docker with <command>docker load</command>.
+   <varname>pkgs.dockerTools</varname> is a set of functions for creating and
+   manipulating Docker images according to the
+   <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#docker-image-specification-v120">
+   Docker Image Specification v1.2.0 </link>. Docker itself is not used to
+   perform any of the operations done by these functions.
   </para>
 
-  <para>
-  The parameters of <varname>buildImage</varname> with relative example values are
-  described below:
-  </para>
+  <warning>
+   <para>
+    The <varname>dockerTools</varname> API is unstable and may be subject to
+    backwards-incompatible changes in the future.
+   </para>
+  </warning>
 
-  <example xml:id='ex-dockerTools-buildImage'><title>Docker build</title>
-  <programlisting>
-  buildImage {
-    name = "redis"; <co xml:id='ex-dockerTools-buildImage-1' />
-    tag = "latest"; <co xml:id='ex-dockerTools-buildImage-2' />
+  <section xml:id="ssec-pkgs-dockerTools-buildImage">
+   <title>buildImage</title>
 
-    fromImage = someBaseImage; <co xml:id='ex-dockerTools-buildImage-3' />
-    fromImageName = null; <co xml:id='ex-dockerTools-buildImage-4' />
-    fromImageTag = "latest"; <co xml:id='ex-dockerTools-buildImage-5' />
+   <para>
+    This function is analogous to the <command>docker build</command> command,
+    in that can used to build a Docker-compatible repository tarball containing
+    a single image with one or multiple layers. As such, the result is suitable
+    for being loaded in Docker with <command>docker load</command>.
+   </para>
 
-    contents = pkgs.redis; <co xml:id='ex-dockerTools-buildImage-6' />
-    runAsRoot = '' <co xml:id='ex-dockerTools-buildImage-runAsRoot' />
-      #!${stdenv.shell}
-      mkdir -p /data
-    '';
+   <para>
+    The parameters of <varname>buildImage</varname> with relative example
+    values are described below:
+   </para>
 
-    config = { <co xml:id='ex-dockerTools-buildImage-8' />
-      Cmd = [ "/bin/redis-server" ];
-      WorkingDir = "/data";
-      Volumes = {
-        "/data" = {};
-      };
+   <example xml:id='ex-dockerTools-buildImage'>
+    <title>Docker build</title>
+<programlisting>
+buildImage {
+  name = "redis"; <co xml:id='ex-dockerTools-buildImage-1' />
+  tag = "latest"; <co xml:id='ex-dockerTools-buildImage-2' />
+
+  fromImage = someBaseImage; <co xml:id='ex-dockerTools-buildImage-3' />
+  fromImageName = null; <co xml:id='ex-dockerTools-buildImage-4' />
+  fromImageTag = "latest"; <co xml:id='ex-dockerTools-buildImage-5' />
+
+  contents = pkgs.redis; <co xml:id='ex-dockerTools-buildImage-6' />
+  runAsRoot = '' <co xml:id='ex-dockerTools-buildImage-runAsRoot' />
+    #!${stdenv.shell}
+    mkdir -p /data
+  '';
+
+  config = { <co xml:id='ex-dockerTools-buildImage-8' />
+    Cmd = [ "/bin/redis-server" ];
+    WorkingDir = "/data";
+    Volumes = {
+      "/data" = {};
     };
-  }
+  };
+}
+</programlisting>
+   </example>
+
+   <para>
+    The above example will build a Docker image <literal>redis/latest</literal>
+    from the given base image. Loading and running this image in Docker results
+    in <literal>redis-server</literal> being started automatically.
+   </para>
+
+   <calloutlist>
+    <callout arearefs='ex-dockerTools-buildImage-1'>
+     <para>
+      <varname>name</varname> specifies the name of the resulting image. This
+      is the only required argument for <varname>buildImage</varname>.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-buildImage-2'>
+     <para>
+      <varname>tag</varname> specifies the tag of the resulting image. By
+      default it's <literal>null</literal>, which indicates that the nix output
+      hash will be used as tag.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-buildImage-3'>
+     <para>
+      <varname>fromImage</varname> is the repository tarball containing the
+      base image. It must be a valid Docker image, such as exported by
+      <command>docker save</command>. By default it's <literal>null</literal>,
+      which can be seen as equivalent to <literal>FROM scratch</literal> of a
+      <filename>Dockerfile</filename>.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-buildImage-4'>
+     <para>
+      <varname>fromImageName</varname> can be used to further specify the base
+      image within the repository, in case it contains multiple images. By
+      default it's <literal>null</literal>, in which case
+      <varname>buildImage</varname> will peek the first image available in the
+      repository.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-buildImage-5'>
+     <para>
+      <varname>fromImageTag</varname> can be used to further specify the tag of
+      the base image within the repository, in case an image contains multiple
+      tags. By default it's <literal>null</literal>, in which case
+      <varname>buildImage</varname> will peek the first tag available for the
+      base image.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-buildImage-6'>
+     <para>
+      <varname>contents</varname> is a derivation that will be copied in the
+      new layer of the resulting image. This can be similarly seen as
+      <command>ADD contents/ /</command> in a <filename>Dockerfile</filename>.
+      By default it's <literal>null</literal>.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-buildImage-runAsRoot'>
+     <para>
+      <varname>runAsRoot</varname> is a bash script that will run as root in an
+      environment that overlays the existing layers of the base image with the
+      new resulting layer, including the previously copied
+      <varname>contents</varname> derivation. This can be similarly seen as
+      <command>RUN ...</command> in a <filename>Dockerfile</filename>.
+      <note>
+       <para>
+        Using this parameter requires the <literal>kvm</literal> device to be
+        available.
+       </para>
+      </note>
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-buildImage-8'>
+     <para>
+      <varname>config</varname> is used to specify the configuration of the
+      containers that will be started off the built image in Docker. The
+      available options are listed in the
+      <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions">
+      Docker Image Specification v1.2.0 </link>.
+     </para>
+    </callout>
+   </calloutlist>
+
+   <para>
+    After the new layer has been created, its closure (to which
+    <varname>contents</varname>, <varname>config</varname> and
+    <varname>runAsRoot</varname> contribute) will be copied in the layer
+    itself. Only new dependencies that are not already in the existing layers
+    will be copied.
+   </para>
+
+   <para>
+    At the end of the process, only one new single layer will be produced and
+    added to the resulting image.
+   </para>
+
+   <para>
+    The resulting repository will only list the single image
+    <varname>image/tag</varname>. In the case of
+    <xref linkend='ex-dockerTools-buildImage'/> it would be
+    <varname>redis/latest</varname>.
+   </para>
+
+   <para>
+    It is possible to inspect the arguments with which an image was built using
+    its <varname>buildArgs</varname> attribute.
+   </para>
+
+   <note>
+    <para>
+     If you see errors similar to <literal>getProtocolByName: does not exist
+     (no such protocol name: tcp)</literal> you may need to add
+     <literal>pkgs.iana-etc</literal> to <varname>contents</varname>.
+    </para>
+   </note>
+
+   <note>
+    <para>
+     If you see errors similar to <literal>Error_Protocol ("certificate has
+     unknown CA",True,UnknownCa)</literal> you may need to add
+     <literal>pkgs.cacert</literal> to <varname>contents</varname>.
+    </para>
+   </note>
+  </section>
+
+  <section xml:id="ssec-pkgs-dockerTools-fetchFromRegistry">
+   <title>pullImage</title>
+
+   <para>
+    This function is analogous to the <command>docker pull</command> command,
+    in that can be used to pull a Docker image from a Docker registry. By
+    default <link xlink:href="https://hub.docker.com/">Docker Hub</link> is
+    used to pull images.
+   </para>
+
+   <para>
+    Its parameters are described in the example below:
+   </para>
+
+   <example xml:id='ex-dockerTools-pullImage'>
+    <title>Docker pull</title>
+<programlisting>
+pullImage {
+  imageName = "nixos/nix"; <co xml:id='ex-dockerTools-pullImage-1' />
+  imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b"; <co xml:id='ex-dockerTools-pullImage-2' />
+  finalImageTag = "1.11";  <co xml:id='ex-dockerTools-pullImage-3' />
+  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8"; <co xml:id='ex-dockerTools-pullImage-4' />
+  os = "linux"; <co xml:id='ex-dockerTools-pullImage-5' />
+  arch = "x86_64"; <co xml:id='ex-dockerTools-pullImage-6' />
+}
+</programlisting>
+   </example>
+
+   <calloutlist>
+    <callout arearefs='ex-dockerTools-pullImage-1'>
+     <para>
+      <varname>imageName</varname> specifies the name of the image to be
+      downloaded, which can also include the registry namespace (e.g.
+      <literal>nixos</literal>). This argument is required.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-pullImage-2'>
+     <para>
+      <varname>imageDigest</varname> specifies the digest of the image to be
+      downloaded. Skopeo can be used to get the digest of an image, with its
+      <varname>inspect</varname> subcommand. Since a given
+      <varname>imageName</varname> may transparently refer to a manifest list
+      of images which support multiple architectures and/or operating systems,
+      supply the `--override-os` and `--override-arch` arguments to specify
+      exactly which image you want. By default it will match the OS and
+      architecture of the host the command is run on.
+<programlisting>
+$ nix-shell --packages skopeo jq --command "skopeo --override-os linux --override-arch x86_64 inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'"
+sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b
+</programlisting>
+      This argument is required.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-pullImage-3'>
+     <para>
+      <varname>finalImageTag</varname>, if specified, this is the tag of the
+      image to be created. Note it is never used to fetch the image since we
+      prefer to rely on the immutable digest ID. By default it's
+      <literal>latest</literal>.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-pullImage-4'>
+     <para>
+      <varname>sha256</varname> is the checksum of the whole fetched image.
+      This argument is required.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-pullImage-5'>
+     <para>
+      <varname>os</varname>, if specified, is the operating system of the
+      fetched image. By default it's <literal>linux</literal>.
+     </para>
+    </callout>
+    <callout arearefs='ex-dockerTools-pullImage-6'>
+     <para>
+      <varname>arch</varname>, if specified, is the cpu architecture of the
+      fetched image. By default it's <literal>x86_64</literal>.
+     </para>
+    </callout>
+   </calloutlist>
+  </section>
+
+  <section xml:id="ssec-pkgs-dockerTools-exportImage">
+   <title>exportImage</title>
+
+   <para>
+    This function is analogous to the <command>docker export</command> command,
+    in that can used to flatten a Docker image that contains multiple layers.
+    It is in fact the result of the merge of all the layers of the image. As
+    such, the result is suitable for being imported in Docker with
+    <command>docker import</command>.
+   </para>
+
+   <note>
+    <para>
+     Using this function requires the <literal>kvm</literal> device to be
+     available.
+    </para>
+   </note>
+
+   <para>
+    The parameters of <varname>exportImage</varname> are the following:
+   </para>
+
+   <example xml:id='ex-dockerTools-exportImage'>
+    <title>Docker export</title>
+<programlisting>
+exportImage {
+  fromImage = someLayeredImage;
+  fromImageName = null;
+  fromImageTag = null;
+
+  name = someLayeredImage.name;
+}
   </programlisting>
-  </example>
+   </example>
 
-  <para>The above example will build a Docker image <literal>redis/latest</literal>
-  from the given base image. Loading and running this image in Docker results in
-  <literal>redis-server</literal> being started automatically.
-  </para>
+   <para>
+    The parameters relative to the base image have the same synopsis as
+    described in <xref linkend='ssec-pkgs-dockerTools-buildImage'/>, except
+    that <varname>fromImage</varname> is the only required argument in this
+    case.
+   </para>
 
-  <calloutlist>
-  <callout arearefs='ex-dockerTools-buildImage-1'>
-    <para>
-    <varname>name</varname> specifies the name of the resulting image.
-    This is the only required argument for <varname>buildImage</varname>.
-    </para>
-  </callout>
+   <para>
+    The <varname>name</varname> argument is the name of the derivation output,
+    which defaults to <varname>fromImage.name</varname>.
+   </para>
+  </section>
 
-  <callout arearefs='ex-dockerTools-buildImage-2'>
-    <para>
-    <varname>tag</varname> specifies the tag of the resulting image.
-    By default it's <literal>latest</literal>.
-    </para>
-  </callout>
+  <section xml:id="ssec-pkgs-dockerTools-shadowSetup">
+   <title>shadowSetup</title>
 
-  <callout arearefs='ex-dockerTools-buildImage-3'>
-    <para>
-    <varname>fromImage</varname> is the repository tarball containing the base image.
-    It must be a valid Docker image, such as exported by <command>docker save</command>.
-    By default it's <literal>null</literal>, which can be seen as equivalent
-    to <literal>FROM scratch</literal> of a <filename>Dockerfile</filename>.
-    </para>
-  </callout>
+   <para>
+    This constant string is a helper for setting up the base files for managing
+    users and groups, only if such files don't exist already. It is suitable
+    for being used in a <varname>runAsRoot</varname>
+    <xref linkend='ex-dockerTools-buildImage-runAsRoot'/> script for cases like
+    in the example below:
+   </para>
 
-  <callout arearefs='ex-dockerTools-buildImage-4'>
-    <para>
-    <varname>fromImageName</varname> can be used to further specify
-    the base image within the repository, in case it contains multiple images.
-    By default it's <literal>null</literal>, in which case
-    <varname>buildImage</varname> will peek the first image available
-    in the repository.
-    </para>
-  </callout>
+   <example xml:id='ex-dockerTools-shadowSetup'>
+    <title>Shadow base files</title>
+<programlisting>
+buildImage {
+  name = "shadow-basic";
 
-  <callout arearefs='ex-dockerTools-buildImage-5'>
-    <para>
-    <varname>fromImageTag</varname> can be used to further specify the tag
-    of the base image within the repository, in case an image contains multiple tags.
-    By default it's <literal>null</literal>, in which case
-    <varname>buildImage</varname> will peek the first tag available for the base image.
-    </para>
-  </callout>
+  runAsRoot = ''
+    #!${stdenv.shell}
+    ${shadowSetup}
+    groupadd -r redis
+    useradd -r -g redis redis
+    mkdir /data
+    chown redis:redis /data
+  '';
+}
+</programlisting>
+   </example>
 
-  <callout arearefs='ex-dockerTools-buildImage-6'>
-    <para>
-    <varname>contents</varname> is a derivation that will be copied in the new
-    layer of the resulting image. This can be similarly seen as
-    <command>ADD contents/ /</command> in a <filename>Dockerfile</filename>.
-    By default it's <literal>null</literal>.
-    </para>
-  </callout>
-
-  <callout arearefs='ex-dockerTools-buildImage-runAsRoot'>
-    <para>
-    <varname>runAsRoot</varname> is a bash script that will run as root
-    in an environment that overlays the existing layers of the base image with
-    the new resulting layer, including the previously copied
-    <varname>contents</varname> derivation.
-    This can be similarly seen as
-    <command>RUN ...</command> in a <filename>Dockerfile</filename>.
-
-    <note>
-      <para>
-      Using this parameter requires the <literal>kvm</literal>
-      device to be available.
-      </para>
-    </note>
-    </para>
-  </callout>
-
-  <callout arearefs='ex-dockerTools-buildImage-8'>
-    <para>
-    <varname>config</varname> is used to specify the configuration of the
-    containers that will be started off the built image in Docker.
-    The available options are listed in the
-    <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions">
-      Docker Image Specification v1.2.0
-    </link>.
-    </para>
-  </callout>
-
-  </calloutlist>
-
-  <para>
-  After the new layer has been created, its closure
-  (to which <varname>contents</varname>, <varname>config</varname> and
-  <varname>runAsRoot</varname> contribute) will be copied in the layer itself.
-  Only new dependencies that are not already in the existing layers will be copied.
-  </para>
-
-  <para>
-  At the end of the process, only one new single layer will be produced and
-  added to the resulting image.
-  </para>
-
-  <para>
-  The resulting repository will only list the single image
-  <varname>image/tag</varname>. In the case of <xref linkend='ex-dockerTools-buildImage'/>
-  it would be <varname>redis/latest</varname>.
-  </para>
-
-  <para>
-  It is possible to inspect the arguments with which an image was built
-  using its <varname>buildArgs</varname> attribute.
-  </para>
-
-
-
-  <note>
-  <para>
-  If you see errors similar to <literal>getProtocolByName: does not exist (no such protocol name: tcp)</literal>
-  you may need to add <literal>pkgs.iana-etc</literal> to <varname>contents</varname>.
-  </para>
-  </note>
-
-  <note>
-  <para>
-  If you see errors similar to <literal>Error_Protocol ("certificate has unknown CA",True,UnknownCa)</literal>
-  you may need to add <literal>pkgs.cacert</literal> to <varname>contents</varname>.
-  </para>
-  </note>
-
-</section>
-
-<section xml:id="ssec-pkgs-dockerTools-fetchFromRegistry">
-  <title>pullImage</title>
-
-  <para>
-  This function is analogous to the <command>docker pull</command> command,
-  in that can be used to fetch a Docker image from a Docker registry.
-  Currently only registry <literal>v1</literal> is supported.
-  By default <link xlink:href="https://hub.docker.com/">Docker Hub</link>
-  is used to pull images.
-  </para>
-
-  <para>
-  Its parameters are described in the example below:
-  </para>
-
-  <example xml:id='ex-dockerTools-pullImage'><title>Docker pull</title>
-  <programlisting>
-  pullImage {
-    imageName = "debian"; <co xml:id='ex-dockerTools-pullImage-1' />
-    imageTag = "jessie"; <co xml:id='ex-dockerTools-pullImage-2' />
-    imageId = null; <co xml:id='ex-dockerTools-pullImage-3' />
-    sha256 = "1bhw5hkz6chrnrih0ymjbmn69hyfriza2lr550xyvpdrnbzr4gk2"; <co xml:id='ex-dockerTools-pullImage-4' />
-
-    indexUrl = "https://index.docker.io"; <co xml:id='ex-dockerTools-pullImage-5' />
-    registryVersion = "v1";
-  }
-  </programlisting>
-  </example>
-
-  <calloutlist>
-  <callout arearefs='ex-dockerTools-pullImage-1'>
-    <para>
-    <varname>imageName</varname> specifies the name of the image to be downloaded,
-    which can also include the registry namespace (e.g. <literal>library/debian</literal>).
-    This argument is required.
-    </para>
-  </callout>
-
-  <callout arearefs='ex-dockerTools-pullImage-2'>
-    <para>
-    <varname>imageTag</varname> specifies the tag of the image to be downloaded.
-    By default it's <literal>latest</literal>.
-    </para>
-  </callout>
-
-  <callout arearefs='ex-dockerTools-pullImage-3'>
-    <para>
-    <varname>imageId</varname>, if specified this exact image will be fetched, instead
-    of <varname>imageName/imageTag</varname>. However, the resulting repository
-    will still be named <varname>imageName/imageTag</varname>.
-    By default it's <literal>null</literal>.
-    </para>
-  </callout>
-
-  <callout arearefs='ex-dockerTools-pullImage-4'>
-    <para>
-    <varname>sha256</varname> is the checksum of the whole fetched image.
-    This argument is required.
-    </para>
-
-    <note>
-    <para>The checksum is computed on the unpacked directory, not on the final tarball.</para>
-    </note>
-
-  </callout>
-
-  <callout arearefs='ex-dockerTools-pullImage-5'>
-    <para>
-    In the above example the default values are shown for the variables
-    <varname>indexUrl</varname> and <varname>registryVersion</varname>.
-    Hence by default the Docker.io registry is used to pull the images.
-    </para>
-  </callout>
-  </calloutlist>
-
-</section>
-
-<section xml:id="ssec-pkgs-dockerTools-exportImage">
-  <title>exportImage</title>
-
-  <para>
-  This function is analogous to the <command>docker export</command> command,
-  in that can used to flatten a Docker image that contains multiple layers.
-  It is in fact the result of the merge of all the layers of the image.
-  As such, the result is suitable for being imported in Docker
-  with <command>docker import</command>.
-  </para>
-
-  <note>
-  <para>
-    Using this function requires the <literal>kvm</literal>
-    device to be available.
-  </para>
-  </note>
-
-  <para>
-  The parameters of <varname>exportImage</varname> are the following:
-  </para>
-
-  <example xml:id='ex-dockerTools-exportImage'><title>Docker export</title>
-  <programlisting>
-  exportImage {
-    fromImage = someLayeredImage;
-    fromImageName = null;
-    fromImageTag = null;
-
-    name = someLayeredImage.name;
-  }
-  </programlisting>
-  </example>
-
-  <para>
-  The parameters relative to the base image have the same synopsis as
-  described in <xref linkend='ssec-pkgs-dockerTools-buildImage'/>, except that
-  <varname>fromImage</varname> is the only required argument in this case.
-  </para>
-
-  <para>
-  The <varname>name</varname> argument is the name of the derivation output,
-  which defaults to <varname>fromImage.name</varname>.
-  </para>
-</section>
-
-<section xml:id="ssec-pkgs-dockerTools-shadowSetup">
-  <title>shadowSetup</title>
-
-  <para>
-  This constant string is a helper for setting up the base files for managing
-  users and groups, only if such files don't exist already.
-  It is suitable for being used in a
-  <varname>runAsRoot</varname> <xref linkend='ex-dockerTools-buildImage-runAsRoot'/> script for cases like
-  in the example below:
-  </para>
-
-  <example xml:id='ex-dockerTools-shadowSetup'><title>Shadow base files</title>
-  <programlisting>
-  buildImage {
-    name = "shadow-basic";
-
-    runAsRoot = ''
-      #!${stdenv.shell}
-      ${shadowSetup}
-      groupadd -r redis
-      useradd -r -g redis redis
-      mkdir /data
-      chown redis:redis /data
-    '';
-  }
-  </programlisting>
-  </example>
-
-  <para>
-  Creating base files like <literal>/etc/passwd</literal> or
-  <literal>/etc/login.defs</literal> are necessary for shadow-utils to
-  manipulate users and groups.
-  </para>
-
-</section>
-
-</section>
-
+   <para>
+    Creating base files like <literal>/etc/passwd</literal> or
+    <literal>/etc/login.defs</literal> are necessary for shadow-utils to
+    manipulate users and groups.
+   </para>
+  </section>
+ </section>
 </chapter>

@@ -16,7 +16,7 @@
 , intltool
 , isocodes
 , libcanberra-gtk3
-, libudev
+, udev
 , libxkbcommon
 , pkgconfig
 , procps
@@ -79,7 +79,7 @@ in python3.pkgs.buildPythonApplication rec {
     hunspell
     isocodes
     libcanberra-gtk3
-    libudev
+    udev
     libxkbcommon
     wrapGAppsHook
     xorg.libXtst
@@ -88,6 +88,7 @@ in python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     glibcLocales
+    gobjectIntrospection # populate GI_TYPELIB_PATH
     intltool
     pkgconfig
   ];

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "colord-gtk-0.1.26";
 
   src = fetchurl {
-    url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
+    url = "https://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
     sha256 = "0i9y3bb5apj6a0f8cx36l6mjzs7xc0k7nf0magmf58vy2mzhpl18";
   };
 

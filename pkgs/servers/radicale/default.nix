@@ -1,31 +1,36 @@
-{ stdenv, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchFromGitHub, python3 }:
 
-let
-  version = "2.1.8";
-  sha256 = "0fnsk61s328dg16iv0chqxayni8ahkbcb84z012w0d9417i806lc";
-in
+python3.pkgs.buildPythonApplication rec {
+  pname = "Radicale";
+  version = "2.1.10";
 
-python3Packages.buildPythonApplication {
-  name = "radicale-${version}";
-  inherit version;
-
+  # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = version;
-    inherit sha256;
+    sha256 = "0ik9gvljxhmykkzzcv9kmkp4qjwgdrl9f7hp6300flx5kmqlcjb1";
   };
 
-  doCheck = false;
+  # We only want functional tests
+  postPatch = ''
+    sed -i "s/pytest-cov\|pytest-flake8\|pytest-isort//g" setup.py
+    sed -i "/^addopts/d" setup.cfg
+  '';
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     vobject
+    python-dateutil
     passlib
-    pytz
+  ];
+
+  checkInputs = with python3.pkgs; [
+    pytestrunner
+    pytest
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.radicale.org/;
+    homepage = https://www.radicale.org/;
     description = "CalDAV CardDAV server";
     longDescription = ''
       The Radicale Project is a complete CalDAV (calendar) and CardDAV
@@ -35,7 +40,6 @@ python3Packages.buildPythonApplication {
       on mobile phones or computers.
     '';
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ edwtjo pSub aneeshusa infinisil ];
   };
 }

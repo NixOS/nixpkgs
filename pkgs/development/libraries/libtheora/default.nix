@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libogg, libvorbis, tremor, autoconf, automake, libtool, pkgconfig}:
+{stdenv, fetchurl, libogg, libvorbis, pkgconfig}:
 
 stdenv.mkDerivation rec {
   name = "libtheora-1.1.1";

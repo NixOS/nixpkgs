@@ -33,9 +33,20 @@ sub new {
         $startCommand =
             "qemu-kvm -m 384 " .
             "-net nic,model=virtio \$QEMU_OPTS ";
-        my $iface = $args->{hdaInterface} || "virtio";
-        $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,werror=report "
-            if defined $args->{hda};
+
+        if (defined $args->{hda}) {
+            if ($args->{hdaInterface} eq "scsi") {
+                $startCommand .= "-drive id=hda,file="
+                               . Cwd::abs_path($args->{hda})
+                               . ",werror=report,if=none "
+                               . "-device scsi-hd,drive=hda ";
+            } else {
+                $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda})
+                               . ",if=" . $args->{hdaInterface}
+                               . ",werror=report ";
+            }
+        }
+
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
         $startCommand .= "-device piix3-usb-uhci -drive id=usbdisk,file=$args->{usb},if=none,readonly -device usb-storage,drive=usbdisk "

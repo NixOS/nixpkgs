@@ -12,8 +12,7 @@
 , targetToolchains
 , doCheck ? true
 , broken ? false
-, buildPlatform, hostPlatform
-} @ args:
+}:
 
 let
   inherit (stdenv.lib) optional optionalString;
@@ -32,8 +31,8 @@ stdenv.mkDerivation {
 
   __darwinAllowLocalNetworking = true;
 
-  # The build will fail at the very end on AArch64 without this.
-  dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then true else null;
+  # rustc complains about modified source files otherwise
+  dontUpdateAutotoolsGnuConfigScripts = true;
 
   # Running the default `strip -S` command on Darwin corrupts the
   # .rlib files in "lib/".
@@ -63,7 +62,7 @@ stdenv.mkDerivation {
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
-  # The boostrap.py will generated a Makefile that then executes the build.
+  # The bootstrap.py will generated a Makefile that then executes the build.
   # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
   # to the bootstrap builder.
   postConfigure = ''
@@ -145,10 +144,11 @@ stdenv.mkDerivation {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  # Disable codegen units for the tests.
+  # Disable codegen units and hardening for the tests.
   preCheck = ''
     export RUSTFLAGS=
     export TZDIR=${tzdata}/share/zoneinfo
+    export hardeningDisable=all
   '' +
   # Ensure TMPDIR is set, and disable a test that removing the HOME
   # variable from the environment falls back to another home

@@ -1,7 +1,9 @@
-{ stdenv, appleDerivation, xcbuild, lib, hostPlatform, Libc, xnu, libutil-new }:
+{ stdenv, appleDerivation, xcbuildHook
+, Libc, xnu, libutil-new }:
 
 appleDerivation {
-  buildInputs = [ xcbuild libutil-new ];
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ libutil-new ];
 
   NIX_CFLAGS_COMPILE = "-I.";
   NIX_LDFLAGS = "-lutil";

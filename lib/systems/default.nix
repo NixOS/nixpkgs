@@ -29,6 +29,7 @@ rec {
         /**/ if final.isDarwin              then "libSystem"
         else if final.isMinGW               then "msvcrt"
         else if final.isMusl                then "musl"
+        else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
         else if final.isLinux /* default */ then "glibc"
         # TODO(@Ericson2314) think more about other operating systems
@@ -45,9 +46,15 @@ rec {
       # Misc boolean options
       useAndroidPrebuilt = false;
       useiOSPrebuilt = false;
-      isiPhoneSimulator = false;
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;
+     assert lib.foldl
+       (pass: { assertion, message }:
+         if assertion final
+         then pass
+         else throw message)
+       true
+       (final.parsed.abi.assertions or []);
     final;
 }

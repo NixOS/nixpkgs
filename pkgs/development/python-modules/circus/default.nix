@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ buildPythonPackage, fetchPypi
 , iowait, psutil, pyzmq, tornado, mock }:
 
 buildPythonPackage rec {
   pname = "circus";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b8ca91d8bd87b350fda199488ac9ddff91a546b0c6214a28a2f13393713cf062";
+    sha256 = "d1603cf4c4f620ce6593d3d2a67fad25bf0242183ea24110d8bb1c8079c55d1b";
   };
 
   doCheck = false; # weird error

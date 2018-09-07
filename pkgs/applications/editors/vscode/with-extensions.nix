@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runCommand, buildEnv, vscode, which, writeScript
+{ stdenv, lib, runCommand, buildEnv, vscode, which, writeScript
 , vscodeExtensions ? [] }:
 
 /*
@@ -12,7 +12,7 @@
         # When the extension is already available in the default extensions set.
         vscodeExtensions = with vscode-extensions; [
           bbenoist.Nix
-        ]   
+        ]
 
         # Concise version from the vscode market place when not available in the default set.
         ++ vscode-utils.extensionsFromVscodeMarketplace [
@@ -26,11 +26,11 @@
       }
       ~~~
 
-      This expression should fetch 
+      This expression should fetch
        -  the *nix* vscode extension from whatever source defined in the
           default nixpkgs extensions set `vscodeExtensions`.
 
-       -  the *code-runner* vscode extension from the marketplace using the 
+       -  the *code-runner* vscode extension from the marketplace using the
           following url:
 
           ~~~
@@ -72,6 +72,11 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   meta = vscode.meta;
 } ''
   mkdir -p "$out/bin"
+  mkdir -p "$out/share/applications"
+  mkdir -p "$out/share/pixmaps"
+
+  ln -sT "${vscode}/share/applications/code.desktop" "$out/share/applications/code.desktop"
+  ln -sT "${vscode}/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
   ${if [] == vscodeExtensions
     then ''
       ln -sT "${vscode}/bin/${wrappedExeName}" "$out/bin/${exeName}"

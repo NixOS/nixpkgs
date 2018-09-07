@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "diff-match-patch";
-  name = "${pname}-${version}";
   version = "20121119";
 
   meta = {

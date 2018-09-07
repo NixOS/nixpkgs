@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     description = "Graphical user interface for the GnuPG";
     homepage = https://www.gnupg.org/related_software/gpa/;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

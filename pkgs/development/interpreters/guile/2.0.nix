@@ -1,8 +1,7 @@
 { stdenv, buildPackages
-, buildPlatform, hostPlatform
 , fetchpatch, fetchurl, makeWrapper, gawk, pkgconfig
 , libffi, libtool, readline, gmp, boehmgc, libunistring
-, coverageAnalysis ? null, gnu ? null
+, coverageAnalysis ? null
 }:
 
 # Do either a coverage analysis build or a standard build.
@@ -22,7 +21,7 @@
   setOutputFlags = false; # $dev gets into the library otherwise
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
                            buildPackages.buildPackages.guile_2_0;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
@@ -89,17 +88,9 @@
   # make check doesn't work on darwin
   # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
   doCheck = false;
+  doInstallCheck = doCheck;
 
   setupHook = ./setup-hook-2.0.sh;
-
-  crossAttrs.preConfigure =
-    stdenv.lib.optionalString (hostPlatform.isHurd)
-       # On GNU, libgc depends on libpthread, but the cross linker doesn't
-       # know where to find libpthread, which leads to erroneous test failures
-       # in `configure', where `-pthread' and `-lpthread' aren't explicitly
-       # passed.  So it needs some help (XXX).
-       "export LDFLAGS=-Wl,-rpath-link=${gnu.libpthreadCross}/lib";
-
 
   meta = {
     description = "Embeddable Scheme implementation";

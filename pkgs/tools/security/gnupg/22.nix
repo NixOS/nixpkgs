@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba
 , libiconv, npth, gettext, texinfo, pcsclite, sqlite
 
 # Each of the dependencies below are optional.
@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.2.6";
+  version = "2.2.9";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "110rf476l3cgn52gh9ia5y0y06y2ialq9dqc12jkhnfhl9gqqkg6";
+    sha256 = "0r11mx8nkh7ysrnshs560amha5csx8zcaggb5kxcksx1zymyly32";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     ./fix-libusb-include-path.patch
   ];
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
-    sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+    sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";

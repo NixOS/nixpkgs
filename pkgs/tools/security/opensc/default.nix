@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "opensc-${version}";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "OpenSC";
     rev = version;
-    sha256 = "1mgcf698zhpqzamd52547scdws7mhdva377kc3chpr455n0mw8g0";
+    sha256 = "1shwx1rkmnygk2dp0q8pbvnxcg96bn570vch9yq34gs42ryskihf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
-    "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so"
+    "--with-pcsc-provider=${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so"
   ];
 
   installFlags = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Set of libraries and utilities to access smart cards";
     homepage = https://github.com/OpenSC/OpenSC/wiki;
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ viric wkennington ];
+    maintainers = with maintainers; [ wkennington ];
     platforms = platforms.all;
   };
 }

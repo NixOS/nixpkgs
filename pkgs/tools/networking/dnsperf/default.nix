@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bind, libseccomp, zlib, openssl }:
+{ stdenv, fetchurl, bind, libseccomp, zlib, openssl, libcap }:
 
 stdenv.mkDerivation rec {
   name = "dnsperf-${version}";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  buildInputs = [ bind libseccomp zlib openssl ];
+  buildInputs = [ bind zlib openssl ]
+              ++ stdenv.lib.optional stdenv.isLinux [ libcap libcap.lib libseccomp ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/"
@@ -23,10 +24,9 @@ stdenv.mkDerivation rec {
     outputsToInstall = outputs; # The man pages and PDFs are likely useful to most.
 
     description = "Tools for DNS benchmaring";
-    homepage = https://nominum.com/measurement-tools/;
+    homepage = https://www.akamai.com/us/en/products/network-operator/measurement-tools.jsp;
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];
   };
 }
-

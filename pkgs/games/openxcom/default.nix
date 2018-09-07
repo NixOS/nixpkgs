@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fetchpatch, cmake, libGLU_combined, zlib, openssl, libyamlcpp, boost
+{stdenv, fetchFromGitHub, cmake, libGLU_combined, zlib, openssl, libyamlcpp, boost
 , SDL, SDL_image, SDL_mixer, SDL_gfx }:
 
 let version = "1.0.0.2018.01.28"; in
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Open source clone of UFO: Enemy Unknown";
-    homepage = http://openxcom.org;
+    homepage = https://openxcom.org;
     repositories.git = https://github.com/SupSuper/OpenXcom.git;
     maintainers = [ stdenv.lib.maintainers.cpages ];
     platforms = stdenv.lib.platforms.linux;

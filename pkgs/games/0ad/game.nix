@@ -1,7 +1,7 @@
-{ stdenv, lib, callPackage, perl, fetchurl, python2
-, pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng
+{ stdenv, lib, perl, fetchurl, python2
+, pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openal, libGLU_combined, xproto, libX11, libXcursor, nspr, SDL, SDL2
+, openal, libGLU_combined, xproto, libX11, libXcursor, nspr, SDL2
 , gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK ? null
 }:
@@ -10,11 +10,11 @@ assert withEditor -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   name = "0ad-${version}";
-  version = "0.0.22";
+  version = "0.0.23";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "1cgmr4g5g9wv36v7ylbrvqhsjwgcsdgbqwc8zlqmnayk9zgkdpgx";
+    sha256 = "0qz1sg4n5y766qwgi63drrrx6k17kk0rcnn9a4a9crllk2vf78fg";
   };
 
   nativeBuildInputs = [ python2 perl pkgconfig ];
@@ -23,14 +23,13 @@ stdenv.mkDerivation rec {
     spidermonkey_38 boost icu libxml2 libpng libjpeg
     zlib curl libogg libvorbis enet miniupnpc openal
     libGLU_combined xproto libX11 libXcursor nspr SDL2 gloox
-    nvidia-texture-tools
+    nvidia-texture-tools libsodium
   ] ++ lib.optional withEditor wxGTK;
 
   NIX_CFLAGS_COMPILE = [
     "-I${xproto}/include/X11"
     "-I${libX11.dev}/include/X11"
     "-I${libXcursor.dev}/include/X11"
-    "-I${SDL.dev}/include/SDL"
     "-I${SDL2}/include/SDL2"
   ];
 
@@ -77,16 +76,14 @@ stdenv.mkDerivation rec {
     ''}
 
     # Copy l10n data.
-    mkdir -p "$out"/share/0ad/data
-    cp -r binaries/data/l10n "$out"/share/0ad/data
+    install -Dm755 -t $out/share/0ad/data/l10n binaries/data/l10n/*
 
     # Copy libraries.
-    mkdir -p "$out"/lib/0ad
-    cp binaries/system/*.so "$out"/lib/0ad/
+    install -Dm644 -t $out/lib/0ad        binaries/system/*.so
 
     # Copy icon.
-    install -D build/resources/0ad.png "$out"/share/icons/hicolor/128x128/0ad.png
-    install -D build/resources/0ad.desktop "$out"/share/applications/0ad.desktop
+    install -D build/resources/0ad.png     $out/share/icons/hicolor/128x128/0ad.png
+    install -D build/resources/0ad.desktop $out/share/applications/0ad.desktop
   '';
 
   meta = with stdenv.lib; {

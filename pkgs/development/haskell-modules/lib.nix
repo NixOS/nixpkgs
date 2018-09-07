@@ -129,7 +129,11 @@ rec {
 
          > haskell.lib.appendConfigureFlag haskellPackages.servant "--profiling-detail=all-functions"
    */
-  appendConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or []) ++ [x]; });
+  appendConfigureFlag = drv: x: appendConfigureFlags drv [x];
+  appendConfigureFlags = drv: xs: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or []) ++ xs; });
+
+  appendBuildFlag = drv: x: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or []) ++ [x]; });
+  appendBuildFlags = drv: xs: overrideCabal drv (drv: { buildFlags = (drv.buildFlags or []) ++ xs; });
 
   /* removeConfigureFlag drv x is a Haskell package like drv, but with
      all cabal configure arguments that are equal to x removed.
@@ -230,6 +234,7 @@ rec {
    */
   justStaticExecutables = drv: overrideCabal drv (drv: {
     enableSharedExecutables = false;
+    enableLibraryProfiling = false;
     isLibrary = false;
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
@@ -293,12 +298,18 @@ rec {
   overrideSrc = drv: { src, version ? drv.version }:
     overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
+  # Get all of the build inputs of a haskell package, divided by category.
+  getBuildInputs = p:
+    (overrideCabal p (args: {
+      passthru = (args.passthru or {}) // {
+        _getBuildInputs = extractBuildInputs p.compiler args;
+      };
+    }))._getBuildInputs;
+
   # Extract the haskell build inputs of a haskell package.
   # This is useful to build environments for developing on that
   # package.
-  getHaskellBuildInputs = p:
-    (p.override { mkDerivation = extractBuildInputs p.compiler;
-                }).haskellBuildInputs;
+  getHaskellBuildInputs = p: (getBuildInputs p).haskellBuildInputs;
 
   # Under normal evaluation, simply return the original package. Under
   # nix-shell evaluation, return a nix-shell optimized environment.
@@ -377,4 +388,23 @@ rec {
           allPkgconfigDepends;
       };
 
+  # Utility to convert a directory full of `cabal2nix`-generated files into a
+  # package override set
+  #
+  # packagesFromDirectory : { directory : Directory, ... } -> HaskellPackageOverrideSet
+  packagesFromDirectory =
+    { directory, ... }:
+
+    self: super:
+      let
+        haskellPaths = builtins.attrNames (builtins.readDir directory);
+
+        toKeyVal = file: {
+          name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;
+
+          value = self.callPackage (directory + "/${file}") { };
+        };
+
+      in
+        builtins.listToAttrs (map toKeyVal haskellPaths);
 }

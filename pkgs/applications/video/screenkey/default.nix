@@ -10,7 +10,7 @@
 , libXtst
 , wrapGAppsHook
 , defaultIconTheme
-, hicolor_icon_theme
+, hicolor-icon-theme
 }:
 buildPythonApplication rec {
   pname = "screenkey";
@@ -40,7 +40,7 @@ buildPythonApplication rec {
 
   buildInputs = [
     defaultIconTheme
-    hicolor_icon_theme
+    hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [

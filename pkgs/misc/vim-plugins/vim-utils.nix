@@ -224,7 +224,7 @@ let
           else if builtins.isAttrs x && builtins ? out then toNix "${x}" # a derivation
           else if builtins.isAttrs x then "{${lib.concatStringsSep ", " (lib.mapAttrsToList (n: v: "${toNix n}: ${toNix v}") x)}}"
           else if builtins.isList x then "[${lib.concatMapStringsSep ", " toNix x}]"
-          else throw "turning ${lib.showVal x} into a VimL thing not implemented yet";
+          else throw "turning ${lib.generators.toPretty {} x} into a VimL thing not implemented yet";
 
       in assert builtins.hasAttr "vim-addon-manager" knownPlugins;
       ''
@@ -280,6 +280,7 @@ let
             installPhase = lib.concatStringsSep
                              "\n"
                              (lib.flatten (lib.mapAttrsToList packageLinks packages));
+            preferLocalBuild = true;
           }
         );
       in
@@ -423,6 +424,7 @@ rec {
   } // a);
 
   requiredPlugins = {
+    packages ? {},
     givenKnownPlugins ? null,
     vam ? null,
     pathogen ? null, ...
@@ -437,8 +439,12 @@ rec {
       vamNames = findDependenciesRecursively { inherit knownPlugins; names = lib.concatMap toNames vam.pluginDictionaries; };
       names = (lib.optionals (pathogen != null) pathogenNames) ++
               (lib.optionals (vam != null) vamNames);
+      nonNativePlugins = map (name: knownPlugins.${name}) names;
+      nativePluginsConfigs = lib.attrsets.attrValues packages;
+      nativePlugins = lib.concatMap ({start?[], opt?[]}: start++opt) nativePluginsConfigs;
     in
-      map (name: knownPlugins.${name}) names;
+      nativePlugins ++ nonNativePlugins;
+
 
   # test cases:
   test_vim_with_vim_addon_nix_using_vam = vim_configurable.customize {

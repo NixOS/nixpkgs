@@ -2,6 +2,7 @@
 , gnumake3
 , ocamlPackages_3_12_1
 , ocamlPackages_4_02
+, ocamlPackages_4_05
 }:
 
 let
@@ -29,6 +30,7 @@ let
       heq = callPackage ../development/coq-modules/heq {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
       interval = callPackage ../development/coq-modules/interval {};
+      iris = callPackage ../development/coq-modules/iris {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp { };
       metalib = callPackage ../development/coq-modules/metalib { };
@@ -36,6 +38,7 @@ let
       paco = callPackage ../development/coq-modules/paco {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
+      stdpp = callPackage ../development/coq-modules/stdpp { };
       tlc = callPackage ../development/coq-modules/tlc {};
     };
 
@@ -63,23 +66,25 @@ in rec {
     camlp5 = ocamlPackages_4_02.camlp5_transitional;
   };
   coq_8_5 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_05;
     version = "8.5pl3";
   };
   coq_8_6 = callPackage ../applications/science/logic/coq {
+    ocamlPackages = ocamlPackages_4_05;
     version = "8.6.1";
   };
   coq_8_7 = callPackage ../applications/science/logic/coq {
     version = "8.7.2";
   };
   coq_8_8 = callPackage ../applications/science/logic/coq {
-    version = "8.8.0";
+    version = "8.8.1";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
-  coqPackages = coqPackages_8_7;
+  coqPackages = coqPackages_8_8;
   coq = coqPackages.coq;
 
 }

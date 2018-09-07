@@ -1,17 +1,17 @@
-args @ { fetchurl, ... }:
+{ fetchurl, ... }:
 rec {
   baseName = ''parse-number'';
-  version = ''1.4'';
+  version = ''v1.7'';
 
-  parasites = [ "parse-number-tests" ];
+  parasites = [ "parse-number/tests" ];
 
   description = ''Number parsing library'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/parse-number/2014-08-26/parse-number-1.4.tgz'';
-    sha256 = ''0y8jh7ss47z3asdxknad2g8h12nclvx0by750xniizj33b6h9blh'';
+    url = ''http://beta.quicklisp.org/archive/parse-number/2018-02-28/parse-number-v1.7.tgz'';
+    sha256 = ''11ji8856ipmqki5i4cw1zgx8hahfi8x1raz1xb20c4rmgad6nsha'';
   };
 
   packageName = "parse-number";
@@ -20,8 +20,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM parse-number DESCRIPTION Number parsing library SHA256
-    0y8jh7ss47z3asdxknad2g8h12nclvx0by750xniizj33b6h9blh URL
-    http://beta.quicklisp.org/archive/parse-number/2014-08-26/parse-number-1.4.tgz
-    MD5 f189d474a2cd063f9743b452241e59a9 NAME parse-number FILENAME
-    parse-number DEPS NIL DEPENDENCIES NIL VERSION 1.4 SIBLINGS NIL PARASITES
-    (parse-number-tests)) */
+    11ji8856ipmqki5i4cw1zgx8hahfi8x1raz1xb20c4rmgad6nsha URL
+    http://beta.quicklisp.org/archive/parse-number/2018-02-28/parse-number-v1.7.tgz
+    MD5 b9ec925018b8f10193d73403873dde8f NAME parse-number FILENAME
+    parse-number DEPS NIL DEPENDENCIES NIL VERSION v1.7 SIBLINGS NIL PARASITES
+    (parse-number/tests)) */

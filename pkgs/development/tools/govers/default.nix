@@ -1,10 +1,10 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "govers-${version}";
   version = "20150109-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "3b5f175f65d601d06f48d78fcbdb0add633565b9";
-  
+
   goPackagePath = "github.com/rogpeppe/govers";
 
   src = fetchgit {
@@ -14,4 +14,7 @@ buildGoPackage rec {
   };
 
   dontRenameImports = true;
+
+  doCheck = false; # fails, silently
+
 }

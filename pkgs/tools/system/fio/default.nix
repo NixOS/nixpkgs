@@ -1,31 +1,40 @@
-{ stdenv, fetchFromGitHub, libaio, python, zlib }:
-
-let
-  version = "3.5";
-  sha256 = "1h6qwvn0h3xz98420a19v8isfjkfnac9vvx8hsw8q4ycb35r8n3h";
-in
+{ stdenv, fetchFromGitHub, makeWrapper
+, libaio, python, zlib
+, withGnuplot ? false, gnuplot ? null }:
 
 stdenv.mkDerivation rec {
   name = "fio-${version}";
+  version = "3.8";
 
   src = fetchFromGitHub {
-    owner = "axboe";
-    repo = "fio";
-    rev = "fio-${version}";
-    inherit sha256;
+    owner  = "axboe";
+    repo   = "fio";
+    rev    = "fio-${version}";
+    sha256 = "1krifr4ms7x229a3p088zl5rpdrfwz6bw4c2lrz3hksignjxaw91";
   };
 
-  buildInputs = [ libaio python zlib ];
+  buildInputs = [ python zlib ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) libaio;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   enableParallelBuilding = true;
 
   postPatch = ''
+    substituteInPlace Makefile \
+      --replace "mandir = /usr/share/man" "mandir = \$(prefix)/man" \
+      --replace "sharedir = /usr/share/fio" "sharedir = \$(prefix)/share/fio"
     substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
   '';
 
+  postInstall = stdenv.lib.optionalString withGnuplot ''
+    wrapProgram $out/bin/fio2gnuplot \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ gnuplot ]}
+  '';
+
   meta = with stdenv.lib; {
-    homepage = "http://git.kernel.dk/?p=fio.git;a=summary;";
     description = "Flexible IO Tester - an IO benchmark tool";
+    homepage = "http://git.kernel.dk/?p=fio.git;a=summary;";
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

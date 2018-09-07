@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "A GObject-based plugins engine";
     homepage = http://ftp.acc.umu.se/pub/GNOME/sources/libpeas/;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = gnome3.maintainers;
   };
 }

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib
+{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib, python3
 , gettext, libxml2, gnome3, gtk, evolution-data-server, libsoup
 , glib, gnome-online-accounts, gsettings-desktop-schemas }:
 
 let
   pname = "gnome-calendar";
-  version = "3.28.1";
+  version = "3.28.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1jacznnjql5jgzvzcp5kh2k0cd0y41cri6qz2bsakpllf7adbrq6";
+    sha256 = "0x6wxngf8fkwgbl6x7rzp0srrb43rm55klpb2vfjk2hahpbjvxyw";
   };
 
   passthru = {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     };
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook python3 ];
   buildInputs = [
     gtk evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
     gsettings-desktop-schemas gnome3.defaultIconTheme

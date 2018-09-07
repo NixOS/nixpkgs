@@ -30,12 +30,12 @@ let
     pkgNeedsRuby = pkg: pkg.tlType == "run" && pkg.pname == "match-parens";
     extraInputs =
       lib.optional (lib.any pkgNeedsPython splitBin.wrong) python
-      ++ lib.optional (lib.any pkgNeedsPython splitBin.wrong) ruby;
+      ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
   };
 
   mkUniquePkgs = pkgs: fastUnique (a: b: a < b) # highlighting hack: >
     # here we deal with those dummy packages needed for hyphenation filtering
-    (map (p: if lib.isDerivation p then builtins.toPath p else "") pkgs);
+    (map (p: if lib.isDerivation p then p.outPath else "") pkgs);
 
 in buildEnv {
   name = "texlive-${extraName}-${bin.texliveYear}";
@@ -203,7 +203,7 @@ in buildEnv {
 
     perl `type -P mktexlsr.pl` ./share/texmf
     texlinks.sh "$out/bin" && wrapBin
-    (perl `type -P fmtutil.pl` --sys --refresh || true) | grep '^fmtutil' # too verbose
+    (perl `type -P fmtutil.pl` --sys --all || true) | grep '^fmtutil' # too verbose
     #texlinks.sh "$out/bin" && wrapBin # do we need to regenerate format links?
     perl `type -P updmap.pl` --sys --syncwithtrees --force
     perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
@@ -243,4 +243,3 @@ in buildEnv {
 }
 # TODO: make TeX fonts visible by fontconfig: it should be enough to install an appropriate file
 #       similarly, deal with xe(la)tex font visibility?
-

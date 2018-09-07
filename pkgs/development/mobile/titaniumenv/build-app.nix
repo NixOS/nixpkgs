@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   name = stdenv.lib.replaceChars [" "] [""] name;
   inherit src;
 
-  buildInputs = [ nodejs titanium alloy jdk python which file ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
+  buildInputs = [ nodejs titanium alloy jdk python which file ] ++ stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") xcodewrapper;
   
   buildPhase = ''
     ${preBuild}

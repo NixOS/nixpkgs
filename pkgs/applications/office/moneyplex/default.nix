@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, libredirect, coreutils, pcsclite
+{ stdenv, fetchurl, patchelf, coreutils, pcsclite
 , zlib, glib, gdk_pixbuf, gtk2, cairo, pango, libX11, atk, openssl }:
 
 let
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   name = "moneyplex-${version}";
   version = "16.0.22424";
 
-  src = fetchurl (if stdenv.system == "i686-linux" then src_i686
-                  else if stdenv.system == "x86_64-linux" then src_x86_64
+  src = fetchurl (if stdenv.hostPlatform.system == "i686-linux" then src_i686
+                  else if stdenv.hostPlatform.system == "x86_64-linux" then src_x86_64
                   else throw "moneyplex requires i686-linux or x86_64-linux");
 
 
@@ -62,14 +62,14 @@ stdenv.mkDerivation rec {
     if [ ! -d "\$MDIR/pcsc" ]; then
         ${coreutils}/bin/mkdir -p \$MDIR/pcsc
     fi
-    if [ ! -e "\$MDIR/pcsc/libpcsclite.so.1" ] || [ ! \`${coreutils}/bin/readlink -f "\$MDIR/pcsc/libpcsclite.so.1"\` -ef "${pcsclite}/lib/libpcsclite.so.1" ]; then
-        ${coreutils}/bin/ln -sf "${pcsclite}/lib/libpcsclite.so.1" "\$MDIR/pcsc/libpcsclite.so.1"
+    if [ ! -e "\$MDIR/pcsc/libpcsclite.so.1" ] || [ ! \`${coreutils}/bin/readlink -f "\$MDIR/pcsc/libpcsclite.so.1"\` -ef "${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so.1" ]; then
+        ${coreutils}/bin/ln -sf "${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so.1" "\$MDIR/pcsc/libpcsclite.so.1"
     fi
 
 
     if [ -e "\$MDIR/rup/rupremote.lst" ]; then
       for i in \`${coreutils}/bin/cat "\$MDIR/rup/rupremote.lst"\`; do
-        ${coreutils}/bin/mv "\$MDIR/rup/"\`${coreutils}/bin/basename \$i\` "\$MDIR/\$i" 
+        ${coreutils}/bin/mv "\$MDIR/rup/"\`${coreutils}/bin/basename \$i\` "\$MDIR/\$i"
       done
       rm -r "\$MDIR/rup/rupremote.lst"
     fi

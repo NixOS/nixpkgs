@@ -29,7 +29,7 @@ let
     ctrl_interface_group=${cfg.group}
 
     ${if cfg.wpa then ''
-      wpa=1
+      wpa=2
       wpa_passphrase=${cfg.wpaPassphrase}
       '' else ""}
 
@@ -150,11 +150,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    assertions = [
-      { assertion = (cfg.channel >= 1 && cfg.channel <= 13);
-        message = "channel must be between 1 and 13";
-      }];
 
     environment.systemPackages =  [ pkgs.hostapd ];
 

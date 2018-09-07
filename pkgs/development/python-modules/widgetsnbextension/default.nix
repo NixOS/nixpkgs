@@ -7,12 +7,11 @@
 
 buildPythonPackage rec {
   pname = "widgetsnbextension";
-  name = "${pname}-${version}";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9b584b9210dadc98f1fae384fff5f4db047df0b94a81b2388c7b0b14a99c3f32";
+    sha256 = "c9d6e426a1d79d132b57b93b368feba2c66eb7b0fd34bdb901716b4b88e94497";
   };
 
   propagatedBuildInputs = [ notebook ];

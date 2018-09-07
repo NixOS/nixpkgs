@@ -19,8 +19,8 @@ stdenv.mkDerivation {
     Xaw3d
     ghostscriptX
     perl
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
     pkgconfig
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
     libiconv
   ];
 

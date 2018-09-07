@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opaline }:
 
 let
   inherit (stdenv.lib) getVersion versionAtLeast;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0czj41sr8jsivl3z8wyblf9k971j3kx2wc3s0c1nhzcc8allg9i2";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam ];
+  buildInputs = [ ocaml findlib ocamlbuild opaline ];
 
   createFindlibDestdir = true;
 
@@ -27,10 +27,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
 
-  installPhase = ''
-    opam-installer --script --prefix=$out ${pname}.install | sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${getVersion ocaml}/site-lib/${pname}
-  '';
+  installPhase = "opaline -libdir $OCAMLFIND_DESTDIR";
 
   meta = with stdenv.lib; {
     description = "Basic types for computer graphics in OCaml";

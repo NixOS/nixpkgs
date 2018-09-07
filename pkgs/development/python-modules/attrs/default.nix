@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "17.4.0";
+  version = "18.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c7960ccfd6a005cd9f7ba884e6316b5e430a3f1a6c37c5f87d8b43f83b54ec9";
+    sha256 = "e0d0eb91441a3b53dab4d9b743eafc1ac44476296a2053b6ca3af0b139faf87b";
   };
 
   # macOS needs clang for testing

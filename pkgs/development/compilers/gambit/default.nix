@@ -1,13 +1,11 @@
-{ callPackage, fetchgit }:
+{ stdenv, callPackage, fetchurl }:
 
 callPackage ./build.nix {
   version = "4.8.9";
-  # TODO: for next version, prefer the unpatched tarball for the stable/default gambit.
-  git-version = "4.8.9-8-g793679bd";
 
-  SRC = fetchgit {
-    url = "https://github.com/feeley/gambit.git";
-    rev = "dd54a71dfc0bd09813592f1645d755867a02195d";
-    sha256 = "120kg73k39gshrwas8a3xcrxgnq1c7ww92wgy4d3mmrwy3j9nzzc";
+  SRC = fetchurl {
+    url = "http://www.iro.umontreal.ca/~gambit/download/gambit/v4.8/source/gambit-v4_8_9-devel.tgz";
+    sha256 = "1gwzz1ag9hlv266nvfq1bhwzrps3f2yghhffasjjqy8i8xwnry5p";
   };
+  inherit stdenv;
 }

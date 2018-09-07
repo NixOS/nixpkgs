@@ -7,13 +7,12 @@
 , python
 }:
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "preshed";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1pdl4p2d32ficfh18xdkgsj6ajzdxc6mxhhf84z0wq1l8viskcx6";
+    sha256 = "7b99ace606143a922163a7ff7ad4969b296288f5b20b9c9bda328caec3b92f71";
   };
 
   propagatedBuildInputs = [

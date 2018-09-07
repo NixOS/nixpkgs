@@ -1,4 +1,4 @@
-{ autoconf, automake, boost, cbor-diag, cddl, fetchFromGitHub, file, gcc, libpcap, libtins, libtool, lzma, openssl, pkgconfig, stdenv, tcpdump, wireshark-cli }:
+{ autoconf, automake, boost, cbor-diag, cddl, fetchFromGitHub, file, libpcap, libtins, libtool, lzma, openssl, pkgconfig, stdenv, tcpdump, wireshark-cli }:
 
 stdenv.mkDerivation rec {
   name = "compactor-${version}";

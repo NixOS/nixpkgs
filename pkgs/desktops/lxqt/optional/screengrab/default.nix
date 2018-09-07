@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "screengrab-${version}";
-  version = "1.97";
+  version = "1.98";
 
   src = fetchFromGitHub {
-    owner = "QtDesktop";
+    owner = "lxqt";
     repo = "screengrab";
     rev = version;
-    sha256 = "0qhdxnv1pz745qgvdv5x7kyfx9dz9rrq0wxyfimppzxcszv4pl2z";
+    sha256 = "1y3r29220z6y457cajpad3pjnr883smbvh0kai8hc5hh4k4kxs6v";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Crossplatform tool for fast making screenshots";
-    homepage = https://github.com/lxde/screengrab;
+    homepage = https://github.com/lxqt/screengrab;
     license = licenses.gpl2;
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];

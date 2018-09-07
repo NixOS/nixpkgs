@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, libarcus }:
+{ stdenv, fetchFromGitHub, cmake, libarcus, stb }:
 
 stdenv.mkDerivation rec {
   name = "curaengine-${version}";
-  version = "3.2.1";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "CuraEngine";
     rev = version;
-    sha256 = "1yqpp6qhixzni3ik11vbk5kcdrhlz2j4ylzmh8f6c86r4d73a0cp";
+    sha256 = "083jmhzmb60rmqw0fhbnlxyblzkmpn3k6zc75xq90x5g3h60wib4";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libarcus ];
+  buildInputs = [ libarcus stb ];
 
-  enableParallelBuilding = true;
+  cmakeFlags = [ "-DCURA_ENGINE_VERSION=${version}" ];
 
   meta = with stdenv.lib; {
     description = "A powerful, fast and robust engine for processing 3D models into 3D printing instruction";

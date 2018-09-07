@@ -2,13 +2,12 @@
 , glibcLocales }:
 
 buildPythonPackage rec {
-  name = "${pname}-${version}";
   pname = "blessed";
-  version = "1.14.2";
+  version = "1.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fv9f0074kxy1849h0kwwxw12sifpq3bv63pcz900zzjsigi4hi3";
+    sha256 = "777b0b6b5ce51f3832e498c22bc6a093b6b5f99148c7cbf866d26e2dec51ef21";
   };
 
   checkInputs = [ pytest mock glibcLocales ];

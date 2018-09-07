@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "libgeotiff-${version}";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/geotiff/libgeotiff/${name}.tar.gz";
+    url = "https://download.osgeo.org/geotiff/libgeotiff/${name}.tar.gz";
     sha256 = "0vjy3bwfhljjx66p9w999i4mdhsf7vjshx29yc3pn5livf5091xd";
   };
 

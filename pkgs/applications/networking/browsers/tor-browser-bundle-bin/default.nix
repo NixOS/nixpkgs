@@ -51,6 +51,9 @@
 
 # Extra preferences
 , extraPrefs ? ""
+
+# For meta
+, tor-browser-bundle
 }:
 
 with stdenv.lib;
@@ -98,7 +101,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "7.5.3";
+  version = "7.5.6";
 
   lang = "en-US";
 
@@ -108,7 +111,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0vgw1qsd6rqbbgnsw9zwcv5m308abh7wp1p12mp8g04xndxnzw0d";
+      sha256 = "07z7lg5firyah0897pr04wqnbgf4mvsnk3gq2zgsg1rrwladxz5s";
     };
 
     "i686-linux" = fetchurl {
@@ -116,7 +119,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0scjy51zmyn7za0gii0dvndq06slip64nd0ik2cjyq232agvbxmr";
+      sha256 = "1s0k82ch7ypjyc5k5rb4skb9ylnp7b9ipvf8gb7pdhb8m4zjk461";
     };
   };
 in
@@ -125,7 +128,7 @@ stdenv.mkDerivation rec {
   name = "tor-browser-bundle-bin-${version}";
   inherit version;
 
-  src = srcs."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+  src = srcs."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -340,7 +343,7 @@ stdenv.mkDerivation rec {
       \
       TMPDIR="\''${TMPDIR:-/tmp}" \
       HOME="\$HOME" \
-      XAUTHORITY="\$XAUTHORITY" \
+      XAUTHORITY="\''${XAUTHORITY:-}" \
       DISPLAY="\$DISPLAY" \
       DBUS_SESSION_BUS_ADDRESS="\$DBUS_SESSION_BUS_ADDRESS" \
       \
@@ -397,7 +400,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Tor Browser Bundle";
+    description = "Tor Browser Bundle built by torproject.org";
+    longDescription = tor-browser-bundle.meta.longDescription;
     homepage = https://www.torproject.org/;
     platforms = attrNames srcs;
     maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm ];

@@ -3,16 +3,20 @@
 
 stdenv.mkDerivation rec {
   name = "mc-${version}";
-  version = "4.8.20";
+  version = "4.8.21";
 
   src = fetchurl {
     url = "http://www.midnight-commander.org/downloads/${name}.tar.xz";
-    sha256 = "072h7n9b3j79fqn48xaw0xhlcjavpsmfpz6nyh20lhmfz3sffzh1";
+    sha256 = "130lzrcmazinznnnpf00lcizdlmjdhfiqfx00g1cjcbwmi3fadwg";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl glib slang zip unzip file gettext libX11 libICE
-    libssh2 openssl ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+
+  buildInputs = [
+    perl glib slang zip unzip file gettext libX11 libICE libssh2 openssl
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [ "--enable-vfs-smb" ];
 

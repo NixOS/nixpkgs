@@ -7,16 +7,16 @@
 
 let drv = stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
-  version = "152b1136.20";
+  version = "152b1248.6";
   name = pname + "-" + version;
 
-  src = if stdenv.system == "x86_64-linux" then
+  src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchurl {
       url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbsdk8u${version}_linux_x64.tar.gz";
-      sha256 = "0sqr8f3z062kwcxh3dxnan45ldas438blbc69z0pypbhc8c2sk2b";
+      sha256 = "12l81g8zhaymh4rzyfl9nyzmpkgzc7wrphm3j4plxx129yn9i7d7";
     }
   else
-    throw "unsupported system: ${stdenv.system}";
+    throw "unsupported system: ${stdenv.hostPlatform.system}";
 
   nativeBuildInputs = [ file ];
 

@@ -1,4 +1,4 @@
-{ lib, fetchurl, stdenv, coreutils, ncurses, lua }:
+{ fetchurl, stdenv, coreutils, ncurses, lua }:
 
 stdenv.mkDerivation rec {
   name = "dit-${version}";

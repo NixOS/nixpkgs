@@ -35,6 +35,7 @@ $pcMap{"dbus-1"} = "dbus";
 $pcMap{"uuid"} = "libuuid";
 $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
+$pcMap{"gbm"} = "mesa_noglu";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "renderproto";
 $pcMap{"\$DRI3PROTO"} = "dri3proto";
@@ -177,7 +178,7 @@ while (<>) {
     }
 
     if ($isFont) {
-        $extraAttrs{$pkg} = " configureFlags = \"--with-fontrootdir=\$(out)/lib/X11/fonts\"; ";
+        $extraAttrs{$pkg} = " configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ]; ";
     }
 
     sub process {

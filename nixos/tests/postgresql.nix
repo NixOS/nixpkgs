@@ -22,10 +22,13 @@ let
       maintainers = [ zagy ];
     };
 
-    machine = {pkgs, config, ...}:
+    machine = {...}:
       {
         services.postgresql.package=postgresql-package;
         services.postgresql.enable = true;
+
+        services.postgresqlBackup.enable = true;
+        services.postgresqlBackup.databases = [ "postgres" ];
       };
 
     testScript = ''
@@ -46,6 +49,10 @@ let
       $machine->succeed(check_count("SELECT * FROM sth;", 5));
       $machine->fail(check_count("SELECT * FROM sth;", 4));
       $machine->succeed(check_count("SELECT xpath(\'/test/text()\', doc) FROM xmltest;", 1));
+
+      # Check backup service
+      $machine->succeed("systemctl start postgresqlBackup-postgres.service");
+      $machine->succeed("zcat /var/backup/postgresql/postgres.sql.gz | grep '<test>ok</test>'");
       $machine->shutdown;
     '';
 

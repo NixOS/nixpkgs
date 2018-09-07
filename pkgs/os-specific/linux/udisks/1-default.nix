@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "udisks-1.0.5";
 
   src = fetchurl {
-    url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
+    url = "https://hal.freedesktop.org/releases/${name}.tar.gz";
     sha256 = "0wbg3jrv8limdgvcygf4dqin3y6d30y9pcmmk711vq571vmq5v7j";
   };
 
@@ -33,11 +33,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = "--localstatedir=/var --enable-lvm2";
+  configureFlags = [ "--localstatedir=/var" "--enable-lvm2" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/udisks;
     description = "A daemon and command-line utility for querying and manipulating storage devices";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl2Plus ];
   };
 }

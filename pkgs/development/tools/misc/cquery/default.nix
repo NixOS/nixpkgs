@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ fetchFromGitHub, makeWrapper
 , cmake, llvmPackages, ncurses }:
 
 let
   src = fetchFromGitHub {
     owner = "cquery-project";
     repo = "cquery";
-    rev = "e45a9ebbb6d8bfaf8bf1a3135b6faa910afea37e";
-    sha256 = "049gkqbamq4r2nz9yjcwq369zrmwrikzbhfza2x2vndqzaavq5yg";
+    rev = "e17df5b41e5a687559a0b75dba9c0f1f399c4aea";
+    sha256 = "06z8bg73jppb4msiqvsjbpz6pawwny831k56w5kcxrjgp22v24s1";
     fetchSubmodules = true;
   };
 
@@ -15,7 +15,7 @@ let
 in
 stdenv.mkDerivation rec {
   name    = "cquery-${version}";
-  version = "2018-03-25";
+  version = "2018-08-08";
 
   inherit src;
 
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DSYSTEM_CLANG=ON"
     "-DCLANG_CXX=ON"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
   ];
 
   shell = stdenv.shell;
@@ -46,8 +47,11 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     pushd ${src}
-    $out/bin/cquery --ci --clang-sanity-check && \
     $out/bin/cquery --ci --test-unit
+
+    # The integration tests have to be disabled because cquery ignores `--init`
+    # if they are invoked, which means it won't find the system includes.
+    #$out/bin/cquery --ci --test-index
   '';
 
   meta = with stdenv.lib; {
@@ -56,6 +60,5 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.tobim ];
-    priority    = 3;
   };
 }

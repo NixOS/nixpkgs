@@ -12,7 +12,6 @@
 buildPythonPackage rec {
   pname = "pywinrm";
   version = "0.3.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

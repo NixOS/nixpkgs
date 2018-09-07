@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, patchelf, glibc, libX11, libGLU_combined }:
+{ stdenv, fetchurl, glibc, libX11, libGLU_combined }:
 
 with stdenv.lib;
-assert stdenv.isi686;
 stdenv.mkDerivation {
   name = "tibia-10.90";
 

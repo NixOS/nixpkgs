@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "ioport-1.2";
   src = fetchurl {
-    url = "http://people.redhat.com/rjones/ioport/files/ioport-1.2.tar.gz";
+    url = "https://people.redhat.com/rjones/ioport/files/ioport-1.2.tar.gz";
     sha256 = "1h4d5g78y7kla0zl25jgyrk43wy3m3bygqg0blki357bc55irb3z";
   };
   buildInputs = [ perl ];

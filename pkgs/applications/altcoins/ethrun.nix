@@ -15,10 +15,11 @@ buildRustPackage rec {
 
   cargoSha256 = "14x8pbjgkz0g724lnvd9mi2alqd6fipjljw6xsraf9gqwijn1kn0";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Directly run Ethereum bytecode";
     homepage = https://github.com/dapphub/ethrun/;
-    maintainers = [stdenv.lib.maintainers.dbrock];
+    maintainers = [ maintainers.dbrock ];
+    license = licenses.gpl3;
     broken = true; # mark temporary as broken
     inherit version;
   };

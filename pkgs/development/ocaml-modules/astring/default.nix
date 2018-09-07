@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, buildOcaml, ocaml, findlib, ocamlbuild, topkg }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
 
-buildOcaml rec {
+stdenv.mkDerivation rec {
   version = "0.8.3";
-  name = "astring";
+  name = "ocaml${ocaml.version}-astring-${version}";
 
   src = fetchurl {
     url = "http://erratique.ch/software/astring/releases/astring-${version}.tbz";

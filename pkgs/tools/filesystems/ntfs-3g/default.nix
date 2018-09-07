@@ -6,6 +6,8 @@ stdenv.mkDerivation rec {
   version = "2017.3.23";
   name = "${pname}-${version}";
 
+  outputs = [ "out" "dev" "man" "doc" ];
+
   buildInputs = [ libuuid ] ++ stdenv.lib.optionals crypto [ gnutls libgcrypt ];
   nativeBuildInputs = stdenv.lib.optional crypto pkgconfig;
 
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
-      url = "https://sources.debian.net/data/main/n/ntfs-3g/1:2016.2.22AR.1-4/debian/patches/0003-CVE-2017-0358.patch";
+      url = "https://sources.debian.org/data/main/n/ntfs-3g/1:2016.2.22AR.1+dfsg-1/debian/patches/0003-CVE-2017-0358.patch";
       sha256 = "0hd05q9q06r18k8pmppvch1sslzqln5fvqj51d5r72g4mnpavpj3";
     })
   ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libcaca, figlet }:
+{ stdenv, fetchurl, pkgconfig, libcaca }:
 
 stdenv.mkDerivation rec {
   name = "toilet-${version}";
@@ -12,10 +12,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libcaca ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Display large colourful characters in text mode";
     homepage = http://caca.zoy.org/wiki/toilet;
-    license = stdenv.lib.licenses.wtfpl;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.wtfpl;
+    maintainers = with maintainers; [ pSub ];
+    platforms = platforms.all;
   };
 }

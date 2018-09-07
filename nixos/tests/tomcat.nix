@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   nodes = {
     server =
-      { pkgs, config, ... }:
+      { ... }:
 
       { services.tomcat.enable = true;
         services.httpd.enable = true;

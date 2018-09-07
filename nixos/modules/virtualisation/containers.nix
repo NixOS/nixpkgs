@@ -257,7 +257,7 @@ let
 
   system = config.nixpkgs.localSystem.system;
 
-  bindMountOpts = { name, config, ... }: {
+  bindMountOpts = { name, ... }: {
 
     options = {
       mountPoint = mkOption {
@@ -284,7 +284,7 @@ let
 
   };
 
-  allowedDeviceOpts = { name, config, ... }: {
+  allowedDeviceOpts = { ... }: {
     options = {
       node = mkOption {
         example = "/dev/net/tun";
@@ -575,6 +575,16 @@ in
               '';
             };
 
+            extraFlags = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "--drop-capability=CAP_SYS_CHROOT" ];
+              description = ''
+                Extra flags passed to the systemd-nspawn command.
+                See systemd-nspawn(1) for details.
+              '';
+            };
+
           } // networkOptions;
 
           config = mkMerge
@@ -596,7 +606,7 @@ in
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
                     services.postgresql.package = pkgs.postgresql96;
-                    
+
                     system.stateVersion = "17.03";
                   };
               };
@@ -714,7 +724,9 @@ in
             ${optionalString cfg.autoStart ''
               AUTO_START=1
             ''}
-            EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts}"
+            EXTRA_NSPAWN_FLAGS="${mkBindFlags cfg.bindMounts +
+              optionalString (cfg.extraFlags != [])
+                (" " + concatStringsSep " " cfg.extraFlags)}"
           '';
       }) config.containers;
 

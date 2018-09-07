@@ -1,12 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi, pip }:
 buildPythonPackage rec {
   pname = "setuptools_scm";
-  name = "${pname}-${version}";
-  version = "1.17.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "70a4cf5584e966ae92f54a764e6437af992ba42ac4bca7eb37cc5d02b98ec40a";
+    sha256 = "1191f2a136b5e86f7ca8ab00a97ef7aef997131f1f6d4971be69a1ef387d8b40";
   };
 
   buildInputs = [ pip ];

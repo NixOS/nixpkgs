@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, readline, compat ? false
-, hostPlatform
-}:
+{ stdenv, fetchurl, readline, compat ? false }:
 
 let
   dsoPatch = fetchurl {
@@ -15,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "${luaversion}.3";
 
   src = fetchurl {
-    url = "http://www.lua.org/ftp/${name}.tar.gz";
+    url = "https://www.lua.org/ftp/${name}.tar.gz";
     sha256 = "0b8034v1s82n4dg5rzcn12067ha3nxaylp2vdp8gg08kjsbzphhk";
   };
 

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "http://git.opensvc.com/?p=multipath-tools/.git;a=snapshot;h=e165b73a16fc9027aa3306df40052038c175be1b;sf=tgz";
+    url = "https://git.opensvc.com/";
     sha256 = "159hxvbk9kh1qay9x04w0gsqzg0hkl5yghfc1wi9kv2n5pcwbkpm";
   };
 
@@ -31,9 +31,10 @@ stdenv.mkDerivation rec {
     "unitdir=$(out)/lib/systemd/system"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tools for the Linux multipathing driver";
     homepage = http://christophe.varoqui.free.fr/;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "4.2.1";
+  version = "4.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e2629cdbcad82b83922a3488937632a4983ecc0fed3e5cfbf430d069382eeb9b";
+    sha256 = "e2afbe403090f5893e254958d02875e0732975e73c4c0cdd33c1f009a61963ca";
   };
 
   buildInputs = [ libxml2 libxslt ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
-    homepage = http://lxml.de;
+    homepage = https://lxml.de;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ sjourdois ];
   };

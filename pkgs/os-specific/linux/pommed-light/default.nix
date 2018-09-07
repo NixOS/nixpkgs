@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pkgname = "pommed-light";
-  version = "1.50lw";
+  version = "1.51lw";
   name = "${pkgname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/bytbox/${pkgname}/archive/v${version}.tar.gz";
 
-    sha256 = "1r2f28zqmyvzgymd0ng53hscbrq8vcqhxdnkq5dppjf9yrzn018b";
+    sha256 = "11wi17bh2br1hp8gmq40b1hm5drm6h969505f7432zam3cm8mc8q";
   };
 
   postPatch = ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       and the like.
     '';
     homepage = https://github.com/bytbox/pommed-light;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;
   };
 }

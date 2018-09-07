@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec{
   name = "grib-api-${version}";
-  version = "1.26.0";
+  version = "1.27.0";
 
   src = fetchurl {
     url = "https://software.ecmwf.int/wiki/download/attachments/3473437/grib_api-${version}-Source.tar.gz";
-    sha256 = "00cmmj44bhdlzhqbvwb3bb4xks3bpva669m6g3g6ffjaqm25b90c";
+    sha256 = "1vx6bx9jhz5vdh2vx5y532ihwgyylagqz6pbx2p2bsx4kmj4pxdd";
   };
 
   preConfigure = ''

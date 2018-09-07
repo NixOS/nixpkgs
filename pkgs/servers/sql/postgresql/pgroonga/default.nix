@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, libmsgpack, groonga }:
+{ stdenv, fetchurl, pkgconfig, postgresql, msgpack, groonga }:
 
 stdenv.mkDerivation rec {
   name = "pgroonga-${version}";
-  version = "2.0.4";
+  version = "2.0.9";
 
   src = fetchurl {
-    url = "http://packages.groonga.org/source/pgroonga/${name}.tar.gz";
-    sha256 = "0hx7bzxmjv0rsvv6b77gpmwhw4ajy8sgjbmrg7hj3dc51kiyiai0";
+    url = "https://packages.groonga.org/source/pgroonga/${name}.tar.gz";
+    sha256 = "0dfkhl2im4cn2lczbsvb8zyylrzlm0vqk9ixjsalcaqxgxph2dpz";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ postgresql libmsgpack groonga ];
+  buildInputs = [ postgresql msgpack groonga ];
 
   makeFlags = [ "HAVE_MSGPACK=1" ];
 

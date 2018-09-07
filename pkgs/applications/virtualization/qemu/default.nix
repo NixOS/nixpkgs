@@ -4,37 +4,37 @@
 , makeWrapper
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, rez, setfile
-, numaSupport ? stdenv.isLinux && !stdenv.isArm, numactl
+, numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL2
-, gtkSupport ? !xenSupport, gtk3, gettext, gnome3
+, gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, gnome3
 , vncSupport ? true, libjpeg, libpng
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
 , openGLSupport ? sdlSupport, mesa_noglu, epoxy, libdrm
 , virglSupport ? openGLSupport, virglrenderer
+, smbdSupport ? false, samba
 , hostCpuOnly ? false
 , nixosTestRunner ? false
 }:
 
 with stdenv.lib;
 let
-  version = "2.11.1";
-  sha256 = "1jrcff0szyjxc3vywyiclwdzk0xgq4cxvjbvmcfyjcpdrq9j5pyr";
-  audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
+  audio = optionalString (hasSuffix "linux" stdenv.hostPlatform.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
   hostCpuTargets = if stdenv.isx86_64 then "i386-softmmu,x86_64-softmmu"
                    else if stdenv.isi686 then "i386-softmmu"
-                   else if stdenv.isArm then "arm-softmmu"
+                   else if stdenv.isAarch32 then "arm-softmmu"
                    else if stdenv.isAarch64 then "aarch64-softmmu"
                    else throw "Don't know how to build a 'hostCpuOnly = true' QEMU";
 in
 
 stdenv.mkDerivation rec {
+  version = "3.0.0";
   name = "qemu-"
     + stdenv.lib.optionalString xenSupport "xen-"
     + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     + version;
 
   src = fetchurl {
-    url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    inherit sha256;
+    url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
+    sha256 = "1s7bm2xhcxbc9is0rg8xzwijx7azv67skq7mjc58spsgc2nn4glk";
   };
 
   buildInputs =
@@ -63,16 +63,17 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
     ++ optionals xenSupport [ xen ]
     ++ optionals openGLSupport [ mesa_noglu epoxy libdrm ]
-    ++ optionals virglSupport [ virglrenderer ];
+    ++ optionals virglSupport [ virglrenderer ]
+    ++ optionals smbdSupport [ samba ];
 
   enableParallelBuilding = true;
 
-  patches = [ ./no-etc-install.patch ./statfs-flags.patch (fetchpatch {
-    name = "glibc-2.27-memfd.patch";
-    url = "https://git.qemu.org/?p=qemu.git;a=patch;h=75e5b70e6b5dcc4f2219992d7cffa462aa406af0";
-    sha256 = "0gaz93kb33qc0jx6iphvny0yrd17i8zhcl3a9ky5ylc2idz0wiwa";
-  }) ]
-    ++ optional nixosTestRunner ./force-uid0-on-9p.patch
+  outputs = [ "out" "ga" ];
+
+  patches = [
+    ./no-etc-install.patch
+    ./fix-qemu-ga.patch
+  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optional pulseSupport ./fix-hda-recording.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -97,14 +98,17 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     unset CPP # intereferes with dependency calculation
+  '' + optionalString stdenv.hostPlatform.isMusl ''
+    NIX_CFLAGS_COMPILE+=" -D_LINUX_SYSINFO_H"
   '';
 
   configureFlags =
-    [ "--smbd=smbd" # use `smbd' from $PATH
-      "--audio-drv-list=${audio}"
+    [ "--audio-drv-list=${audio}"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
     ]
+    # disable sysctl check on darwin.
+    ++ optional stdenv.isDarwin "--cpu=x86_64"
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional spiceSupport "--enable-spice"
@@ -115,20 +119,26 @@ stdenv.mkDerivation rec {
     ++ optional gtkSupport "--enable-gtk"
     ++ optional xenSupport "--enable-xen"
     ++ optional openGLSupport "--enable-opengl"
-    ++ optional virglSupport "--enable-virglrenderer";
+    ++ optional virglSupport "--enable-virglrenderer"
+    ++ optional smbdSupport "--smbd=${samba}/bin/smbd";
+
+  doCheck = false; # tries to access /dev
 
   postFixup =
     ''
       for exe in $out/bin/qemu-system-* ; do
         paxmark m $exe
       done
+      # copy qemu-ga (guest agent) to separate output
+      mkdir -p $ga/bin
+      cp $out/bin/qemu-ga $ga/bin/
     '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall =
     if stdenv.isx86_64       then ''makeWrapper $out/bin/qemu-system-x86_64  $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else if stdenv.isi686    then ''makeWrapper $out/bin/qemu-system-i386    $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
-    else if stdenv.isArm     then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
+    else if stdenv.isAarch32 then ''makeWrapper $out/bin/qemu-system-arm     $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else if stdenv.isAarch64 then ''makeWrapper $out/bin/qemu-system-aarch64 $out/bin/qemu-kvm --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"''
     else "";
 
@@ -140,7 +150,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.qemu.org/;
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric eelco ];
+    maintainers = with maintainers; [ eelco ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

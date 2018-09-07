@@ -136,8 +136,6 @@ in with pkgs; rec {
         cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
-      '' + lib.optionalString (hostPlatform.libc == "musl") ''
-        cp -d ${libiconv.out}/lib/libiconv*.so* $out/lib
 
       '' + lib.optionalString (hostPlatform != buildPlatform) ''
         # These needed for cross but not native tools because the stdenv

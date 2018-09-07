@@ -36,23 +36,25 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # These are now core libraries in GHC 8.4.x.
+  mtl = self.mtl_2_2_2;
+  parsec = self.parsec_3_1_13_0;
+  stm = self.stm_2_4_5_0;
+  text = self.text_1_2_3_0;
+
   # Make sure we can still build Cabal 1.x.
   Cabal_1_24_2_0 = overrideCabal super.Cabal_1_24_2_0 (drv: {
     prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";
   });
 
-  # jailbreak-cabal doesn't seem to work right with the native Cabal version.
-  jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
+  # Build with the latest Cabal version, which works best albeit not perfectly.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_2_2_0_1; };
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/bmillwood/applicative-quoters/pull/7.patch";
     sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
   });
-
-  # http://hub.darcs.net/dolio/vector-algorithms/issue/9#comment-20170112T145715
-  vector-algorithms = dontCheck super.vector-algorithms;
-
 
   # https://github.com/nominolo/ghc-syb/issues/20
   ghc-syb-utils = dontCheck super.ghc-syb-utils;
@@ -84,10 +86,11 @@ self: super: {
   purescript = doJailbreak (super.purescript);
 
   # These packages need Cabal 2.2.x, which is not the default.
-  distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
-  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+  distribution-nixpkgs = super.distribution-nixpkgs.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+  hackage-db_2_0_1 = super.hackage-db_2_0_1.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+  stack = super.stack.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
   stylish-cabal = dontCheck (super.stylish-cabal.overrideScope (self: super: {
     Cabal = self.Cabal_2_2_0_1;
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, version }:
+{ stdenv, fetchurl, unzip, version ? "1.24.3" }:
 
 let
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     unzip
   ];
 
-  src = sources."${version}-${stdenv.system}" or (throw "unsupported version/system: ${version}/${stdenv.system}");
+  src = sources."${version}-${stdenv.hostPlatform.system}" or (throw "unsupported version/system: ${version}/${stdenv.hostPlatform.system}");
 
   installPhase = ''
     mkdir -p $out
@@ -57,9 +57,9 @@ stdenv.mkDerivation {
   '';
 
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
- 
+
   dontStrip = true;
-  
+
   meta = {
     platforms = [ "i686-linux" "x86_64-linux" ];
     homepage = https://www.dartlang.org/;

@@ -2,28 +2,31 @@
 
 stdenv.mkDerivation rec {
   name = "tzdata-${version}";
-  version = "2017c";
+  version = "2018e";
 
   srcs =
     [ (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzdata${version}.tar.gz";
-        sha256 = "02yrrfj0p7ar885ja41ylijzbr8wc6kz6kzlw8c670i9m693ym6n";
+        sha256 = "0bk97fv2i5ns42prpmlaadsswdjwv0ifi7whj2s4q6l44rcqwa3b";
       })
       (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzcode${version}.tar.gz";
-        sha256 = "1dvrq0b2hz7cjqdyd7x21wpy4qcng3rvysr61ij0c2g64fyb9s41";
+        sha256 = "1kpb02631s58i068mwq63xlamcv1ffj4p6y4wpb9kdl01vr0qd6a";
       })
     ];
 
   sourceRoot = ".";
 
-  outputs = [ "out" "man" "dev" ];
+  outputs = [ "out" "bin" "man" "dev" ];
   propagatedBuildOutputs = [];
 
   makeFlags = [
     "TOPDIR=$(out)"
     "TZDIR=$(out)/share/zoneinfo"
+    "BINDIR=$(bin)/bin"
+    "ZICDIR=$(bin)/bin"
     "ETCDIR=$(TMPDIR)/etc"
+    "TZDEFAULT=$(TMPDIR)/etc"
     "LIBDIR=$(dev)/lib"
     "MANDIR=$(man)/share/man"
     "AWK=awk"
@@ -33,6 +36,8 @@ stdenv.mkDerivation rec {
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  doCheck = false; # needs more tools
 
   installFlags = [ "ZIC=./zic-native" ];
 
@@ -58,9 +63,10 @@ stdenv.mkDerivation rec {
 
   setupHook = ./tzdata-setup-hook.sh;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.iana.org/time-zones;
     description = "Database of current and historical time zones";
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

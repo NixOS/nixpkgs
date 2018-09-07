@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/moe/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
 # TODO: a configurable, global moerc file

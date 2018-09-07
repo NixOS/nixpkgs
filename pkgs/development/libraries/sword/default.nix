@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.7.4";
 
   src = fetchurl {
-    url = "http://www.crosswire.org/ftpmirror/pub/sword/source/v1.7/${name}.tar.gz";
+    url = "https://www.crosswire.org/ftpmirror/pub/sword/source/v1.7/${name}.tar.gz";
     sha256 = "0g91kpfkwccvdikddffdbzd6glnp1gdvkx4vh04iyz10bb7shpcr";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = "--without-conf --enable-tests=no CXXFLAGS=-Wno-unused-but-set-variable";
+  configureFlags = [ "--without-conf" "--enable-tests=no CXXFLAGS=-Wno-unused-but-set-variable" ];
 
   meta = with stdenv.lib; {
     description = "A software framework that allows research manipulation of Biblical texts";

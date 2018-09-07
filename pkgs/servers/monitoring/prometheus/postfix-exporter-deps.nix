@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/beorn7/perks";
-      rev = "4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9";
-      sha256 = "1hrybsql68xw57brzj805xx2mghydpdiysv3gbhr7f5wlxj2514y";
+      rev = "3a771d992973f24aa725d07868b467d1ddfceafb";
+      sha256 = "1l2lns4f5jabp61201sh88zf3b0q793w4zdgp9nll7mmfcxxjif3";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/golang/protobuf";
-      rev = "c65a0412e71e8b9b3bfd22925720d23c0f054237";
-      sha256 = "1ch3czyzq5abl6zm1l0dfsi09xj43ql9jcbmbhfhxz954pw03v3v";
+      rev = "b4deda0973fb4c70b50d226b1af49f3da59f5265";
+      sha256 = "0ya4ha7m20bw048m1159ppqzlvda4x0vdprlbk5sdgmy74h3xcdq";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/client_golang";
-      rev = "06bc6e01f4baf4ee783ffcd23abfcb0b0f9dfada";
-      sha256 = "0dvv21214sn702kc25y5l0gd9d11358976d3w31fgwx7456mjx26";
+      rev = "82f5ff156b29e276022b1a958f7d385870fb9814";
+      sha256 = "111j329yrlgvh73dm80gawwxsh9dgjkw74254kyj5c2rfmra7znz";
     };
   }
   {
@@ -50,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/common";
-      rev = "89604d197083d4781071d3c65855d24ecfb0a563";
-      sha256 = "169rdlaf2mk9z4fydz7ajmngyhmf3q1lk96yhvx46bn986x5xkyn";
+      rev = "d811d2e9bf898806ecfb6ef6296774b13ffc314c";
+      sha256 = "0r4067r4ysmljksqw3awcxx5qplqhykahc5igdzgkky7i4bvaik1";
     };
   }
   {
@@ -59,8 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/prometheus/procfs";
-      rev = "cb4147076ac75738c9a7d279075a253c0cc5acbd";
-      sha256 = "0zhlrik0f9q1lj6cisgnxgbz4darbcix52hm5abi24l2ahchf5ca";
+      rev = "8b1c2da0d56deffdbb9e48d4414b4e674bd8083e";
+      sha256 = "0x128p15h35mgwqxkigfkk1lfrcz9g697ahl8v6xp9kwvcqvjrrf";
     };
   }
 ]

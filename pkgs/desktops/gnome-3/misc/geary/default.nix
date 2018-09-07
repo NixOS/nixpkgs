@@ -6,14 +6,14 @@
 
 let
   pname = "geary";
-  version = "0.12.1";
+  version = "0.12.4";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "12hbpd5j3rb122nrsqmgsg31x82xl0ksm0nmsl614v1dd7crqnh6";
+    sha256 = "01ykhkjfkprvh9kp4rzrl6xs2pqibiw44ckvqsn5cs3xy2rlq8mm";
   };
 
   nativeBuildInputs = [ vala_0_40 intltool pkgconfig wrapGAppsHook cmake ninja desktop-file-utils gnome-doc-utils gobjectIntrospection ];

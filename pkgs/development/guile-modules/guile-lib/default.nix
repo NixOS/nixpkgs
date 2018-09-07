@@ -40,6 +40,6 @@ in stdenv.mkDerivation {
     homepage = "http://www.nongnu.org/guile-lib/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.gnu;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

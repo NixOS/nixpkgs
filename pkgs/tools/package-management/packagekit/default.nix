@@ -1,23 +1,25 @@
 { stdenv, fetchFromGitHub, lib
-, intltool, glib, pkgconfig, polkit, python, sqlite, systemd
+, intltool, glib, pkgconfig, polkit, python, sqlite
 , gobjectIntrospection, vala_0_38, gtk-doc, autoreconfHook, autoconf-archive
 # TODO: set enableNixBackend to true, as soon as it builds
 , nix, enableNixBackend ? false, boost
 , enableCommandNotFound ? false
-, enableBashCompletion ? false, bash-completion ? null }:
+, enableBashCompletion ? false, bash-completion ? null
+, enableSystemd ? stdenv.isLinux, systemd }:
 
 stdenv.mkDerivation rec {
   name = "packagekit-${version}";
-  version = "1.1.9";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "PackageKit";
     rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1zs7xkk3b2izdnis7ir5h93p8f2i9513663h2xhxb0sh6i2h18y4";
+    sha256 = "11drd6ixx75q3w12am3z1npwllq1kxnhbxv0npng92c69kn291zs";
   };
 
-  buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_38 ]
+  buildInputs = [ glib polkit python gobjectIntrospection vala_0_38 ]
+                  ++ lib.optional enableSystemd systemd
                   ++ lib.optional enableBashCompletion bash-completion;
   propagatedBuildInputs = [ sqlite nix boost ];
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk-doc ];
@@ -28,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-systemd"
+    (if enableSystemd then "--enable-systemd" else "--disable-systemd")
     "--disable-dummy"
     "--disable-cron"
     "--disable-introspection"
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.packagekit.org/;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ matthewbauer ];
   };
 }

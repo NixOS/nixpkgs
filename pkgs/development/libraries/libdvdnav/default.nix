@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "A library that implements DVD navigation features such as DVD menus";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.wmertens ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 
   passthru = { inherit libdvdread; };

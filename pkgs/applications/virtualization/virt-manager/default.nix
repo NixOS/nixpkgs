@@ -1,8 +1,9 @@
 { stdenv, fetchurl, python2Packages, intltool, file
-, wrapGAppsHook, gtkvnc, vte, avahi, dconf
+, wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobjectIntrospection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
 , spiceSupport ? true, spice-gtk ? null
+, cpio, e2fsprogs, findutils, gzip
 }:
 
 with stdenv.lib;
@@ -23,7 +24,7 @@ python2Packages.buildPythonApplication rec {
   ];
 
   buildInputs =
-    [ libvirt-glib vte dconf gtkvnc gnome3.defaultIconTheme avahi
+    [ libvirt-glib vte dconf gtk-vnc gnome3.defaultIconTheme avahi
       gsettings-desktop-schemas libosinfo gtk3
     ] ++ optional spiceSupport spice-gtk;
 
@@ -47,6 +48,8 @@ python2Packages.buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
+    # these are called from virt-install in initrdinject.py
+    gappsWrapperArgs+=(--prefix PATH : "${makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
   '';
 
   # Failed tests

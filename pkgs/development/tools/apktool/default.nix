@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "apktool-${version}";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     urls = [
       "https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_${version}.jar"
       "https://github.com/iBotPeaches/Apktool/releases/download/v${version}/apktool_${version}.jar"
     ];
-    sha256 = "01sjrc3fwkpkr8b4w1i9amyiix02b29n0w2zcrw5sdj91n8vm3b4";
+    sha256 = "1wjpn1wxg8fid2mch5ili35xqvasa3pk8h1xaiygw5idpxh3cm0f";
   };
 
   phases = [ "installPhase" ];

@@ -8,7 +8,7 @@
 , enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
 , enableJPEG2K ? true, jasper
 , enableFfmpeg ? false, ffmpeg
-, enableGStreamer ? false, gst_all
+, enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
 , darwin
 }:
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableEXR [ openexr ilmbase ]
     ++ lib.optional enableJPEG2K jasper
     ++ lib.optional enableFfmpeg ffmpeg
-    ++ lib.optionals enableGStreamer (with gst_all; [ gstreamer gst-plugins-base ])
+    ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Cocoa QTKit ])
     ;
@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     (opencvFlag "JPEG" enableJPEG)
     (opencvFlag "PNG" enablePNG)
     (opencvFlag "OPENEXR" enableEXR)
+    (opencvFlag "GSTREAMER" enableGStreamer)
   ];
 
   enableParallelBuilding = true;
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = https://opencv.org/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

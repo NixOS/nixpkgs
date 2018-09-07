@@ -16,11 +16,11 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
-  doCheck = (stdenv.system != "i686-cygwin" && !stdenv.isDarwin);
+  doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
 
   enableParallelBuilding = true;
 
-  patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
+  patches = stdenv.lib.optional (stdenv.hostPlatform.system == "i686-cygwin")
               ./cygwin.patch;
 
   meta = with stdenv.lib; {

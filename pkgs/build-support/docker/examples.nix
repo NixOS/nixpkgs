@@ -13,6 +13,7 @@ rec {
   # 1. basic example
   bash = buildImage {
     name = "bash";
+    tag = "latest";
     contents = pkgs.bashInteractive;
   };
 
@@ -65,6 +66,7 @@ rec {
   in
   buildImage {
     name = "nginx-container";
+    tag = "latest";
     contents = pkgs.nginx;
 
     runAsRoot = ''
@@ -85,9 +87,9 @@ rec {
   # 4. example of pulling an image. could be used as a base for other images
   nixFromDockerHub = pullImage {
     imageName = "nixos/nix";
-    imageTag = "1.11";
-    # this hash will need change if the tag is updated at docker hub
-    sha256 = "0nncn9pn5miygan51w34c2p9qssi96jgsaqv44dxxdprc8pg0g83";
+    imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
+    sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8";
+    finalImageTag = "1.11";
   };
 
   # 5. example of multiple contents, emacs and vi happily coexisting
@@ -106,6 +108,7 @@ rec {
   # docker run -it --rm nix nix-store -qR $(nix-build '<nixpkgs>' -A nix)
   nix = buildImageWithNixDb {
     name = "nix";
+    tag = "latest";
     contents = [
       # nix-store uses cat program to display results as specified by
       # the image env variable NIX_PAGER.
@@ -121,7 +124,21 @@ rec {
   # dockerTools chain.
   onTopOfPulledImage = buildImage {
     name = "onTopOfPulledImage";
+    tag = "latest";
     fromImage = nixFromDockerHub;
     contents = [ pkgs.hello ];
+  };
+
+  # 8. regression test for erroneous use of eval and string expansion.
+  # See issue #34779 and PR #40947 for details.
+  runAsRootExtraCommands = pkgs.dockerTools.buildImage {
+    name = "runAsRootExtraCommands";
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    # The parens here are to create problematic bash to embed and eval. In case
+    # this is *embedded* into the script (with nix expansion) the initial quotes
+    # will close the string and the following parens are unexpected
+    runAsRoot = ''echo "(runAsRoot)" > runAsRoot'';
+    extraCommands = ''echo "(extraCommand)" > extraCommands'';
   };
 }

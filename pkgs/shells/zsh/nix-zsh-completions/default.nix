@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 let
-  version = "0.3.8";
+  version = "0.4.0";
 in
 
 stdenv.mkDerivation rec {
@@ -11,19 +11,20 @@ stdenv.mkDerivation rec {
     owner = "spwhitt";
     repo = "nix-zsh-completions";
     rev = "${version}";
-    sha256 = "05ynd38br2kn657g7l01jg1q8ja9xwrdyb95w02gh7j9cww2k06w";
+    sha256 = "0m8b9xgbz2nvk1q7m0gqy83gbqa49n062gymhk9x93zhbdh8vwky";
   };
 
   installPhase = ''
-    mkdir -p $out/share/zsh/site-functions
+    mkdir -p $out/share/zsh/{site-functions,plugins/nix}
     cp _* $out/share/zsh/site-functions
+    cp *.zsh $out/share/zsh/plugins/nix
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/spwhitt/nix-zsh-completions;
     description = "ZSH completions for Nix, NixOS, and NixOps";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.spwhitt stdenv.lib.maintainers.olejorgenb stdenv.lib.maintainers.hedning ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ spwhitt olejorgenb hedning ma27 ];
   };
 }

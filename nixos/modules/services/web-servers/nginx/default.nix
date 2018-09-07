@@ -16,9 +16,11 @@ let
     } // (optionalAttrs vhostConfig.enableACME {
       sslCertificate = "${acmeDirectory}/${serverName}/fullchain.pem";
       sslCertificateKey = "${acmeDirectory}/${serverName}/key.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${serverName}/full.pem";
     }) // (optionalAttrs (vhostConfig.useACMEHost != null) {
       sslCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/fullchain.pem";
       sslCertificateKey = "${acmeDirectory}/${vhostConfig.useACMEHost}/key.pem";
+      sslTrustedCertificate = "${acmeDirectory}/${vhostConfig.useACMEHost}/full.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
@@ -38,6 +40,7 @@ let
       ${toString (flip mapAttrsToList upstream.servers (name: server: ''
         server ${name} ${optionalString server.backup "backup"};
       ''))}
+      ${upstream.extraConfig}
     }
   ''));
 
@@ -91,8 +94,18 @@ let
         gzip on;
         gzip_disable "msie6";
         gzip_proxied any;
-        gzip_comp_level 9;
-        gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+        gzip_comp_level 5;
+        gzip_types
+          application/atom+xml
+          application/javascript
+          application/json
+          application/xml
+          application/xml+rss
+          image/svg+xml
+          text/css
+          text/javascript
+          text/plain
+          text/xml;
         gzip_vary on;
       ''}
 
@@ -217,8 +230,14 @@ let
             ssl_certificate ${vhost.sslCertificate};
             ssl_certificate_key ${vhost.sslCertificateKey};
           ''}
+          ${optionalString (hasSSL && vhost.sslTrustedCertificate != null) ''
+            ssl_trusted_certificate ${vhost.sslTrustedCertificate};
+          ''}
 
-          ${optionalString (vhost.basicAuth != {}) (mkBasicAuth vhostName vhost.basicAuth)}
+          ${optionalString (vhost.basicAuthFile != null || vhost.basicAuth != {}) ''
+            auth_basic secured;
+            auth_basic_user_file ${if vhost.basicAuthFile != null then vhost.basicAuthFile else mkHtpasswd vhostName vhost.basicAuth};
+          ''}
 
           ${mkLocations vhost.locations}
 
@@ -248,16 +267,11 @@ let
       ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') locations);
-  mkBasicAuth = vhostName: authDef: let
-    htpasswdFile = pkgs.writeText "${vhostName}.htpasswd" (
-      concatStringsSep "\n" (mapAttrsToList (user: password: ''
-        ${user}:{PLAIN}${password}
-      '') authDef)
-    );
-  in ''
-    auth_basic secured;
-    auth_basic_user_file ${htpasswdFile};
-  '';
+  mkHtpasswd = vhostName: authDef: pkgs.writeText "${vhostName}.htpasswd" (
+    concatStringsSep "\n" (mapAttrsToList (user: password: ''
+      ${user}:{PLAIN}${password}
+    '') authDef)
+  );
 in
 
 {
@@ -494,6 +508,13 @@ in
               '';
               default = {};
             };
+            extraConfig = mkOption {
+              type = types.lines;
+              default = "";
+              description = ''
+                These lines go to the end of the upstream verbatim.
+              '';
+            };
           };
         });
         description = ''
@@ -607,13 +628,13 @@ in
         listToAttrs acmePairs
     );
 
-    users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
+    users.users = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";
         group = cfg.group;
         uid = config.ids.uids.nginx;
       });
 
-    users.extraGroups = optionalAttrs (cfg.group == "nginx") (singleton
+    users.groups = optionalAttrs (cfg.group == "nginx") (singleton
       { name = "nginx";
         gid = config.ids.gids.nginx;
       });

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libusb, readline, lua, libewf, perl,
+{stdenv, fetchurl, pkgconfig, libusb, readline, lua, perl,
 gtk2 ? null, vte ? null, gtkdialog ? null,
 python ? null,
 ruby ? null,
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   name = "radare-1.5.2";
 
   src = fetchurl {
-    url = "http://radare.org/get/${name}.tar.gz";
+    url = "https://radare.org/get/${name}.tar.gz";
     sha256 = "1qdrmcnzfvfvqb27c7pknwm8jl2hqa6c4l66wzyddwlb8yjm46hd";
   };
 

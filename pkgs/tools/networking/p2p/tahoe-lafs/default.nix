@@ -89,6 +89,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = http://tahoe-lafs.org/;
     license = [ lib.licenses.gpl2Plus /* or */ "TGPPLv1+" ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
-    platforms = lib.platforms.gnu;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
   };
 }

@@ -8,7 +8,7 @@ args:
 
 let
   inherit (args) name;
-  version = args.version or srcs."${name}".version;
+  version = if (args.version or null) == null then srcs."${name}".version else args.version;
   src = args.src or srcs."${name}".src;
 in
 
@@ -53,7 +53,7 @@ mkDerivation (args // {
     homepage = http://www.qt.io;
     description = "A cross-platform application framework for C++";
     license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ qknight ttuegel periklis ];
+    maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
   } // (args.meta or {});
 })

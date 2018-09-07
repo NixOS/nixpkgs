@@ -136,14 +136,14 @@ in {
     environment.systemPackages = [ pkgs.postgrey ];
 
     users = {
-      extraUsers = {
+      users = {
         postgrey = {
           description = "Postgrey Daemon";
           uid = config.ids.uids.postgrey;
           group = "postgrey";
         };
       };
-      extraGroups = {
+      groups = {
         postgrey = {
           gid = config.ids.gids.postgrey;
         };

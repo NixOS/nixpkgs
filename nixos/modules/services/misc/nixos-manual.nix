@@ -44,7 +44,13 @@ let
   helpScript = pkgs.writeScriptBin "nixos-help"
     ''
       #! ${pkgs.runtimeShell} -e
-      browser="$BROWSER"
+      # Finds first executable browser in a colon-separated list.
+      # (see how xdg-open defines BROWSER)
+      browser="$(
+        IFS=: ; for b in $BROWSER; do
+          [ -n "$(type -P "$b" || true)" ] && echo "$b" && break
+        done
+      )"
       if [ -z "$browser" ]; then
         browser="$(type -P xdg-open || true)"
         if [ -z "$browser" ]; then
@@ -99,7 +105,7 @@ in
 
     services.nixosManual.browser = mkOption {
       type = types.path;
-      default = "${pkgs.w3m-nox}/bin/w3m";
+      default = "${pkgs.w3m-nographics}/bin/w3m";
       description = ''
         Browser used to show the manual.
       '';

@@ -27,7 +27,7 @@ let
       buildInputs = [ nodejs ];
       buildPhase = ''
         export HOME=$TMPDIR
-        tgzFile=$(npm pack)
+        tgzFile=$(npm pack | tail -n 1) # Hooks to the pack command will add output (https://docs.npmjs.com/misc/scripts)
       '';
       installPhase = ''
         mkdir -p $out/tarballs
@@ -309,31 +309,42 @@ let
   };
 
   # Builds and composes an NPM package including all its dependencies
-  buildNodePackage = { name, packageName, version, dependencies ? [], production ? true, npmFlags ? "", dontNpmInstall ? false, bypassCache ? false, preRebuild ? "", ... }@args:
+  buildNodePackage =
+    { name
+    , packageName
+    , version
+    , dependencies ? []
+    , buildInputs ? []
+    , production ? true
+    , npmFlags ? ""
+    , dontNpmInstall ? false
+    , bypassCache ? false
+    , preRebuild ? ""
+    , dontStrip ? true
+    , unpackPhase ? "true"
+    , buildPhase ? "true"
+    , ... }@args:
 
     let
       forceOfflineFlag = if bypassCache then "--offline" else "--registry http://www.example.com";
+      extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" ];
     in
-    stdenv.lib.makeOverridable stdenv.mkDerivation (builtins.removeAttrs args [ "dependencies" ] // {
+    stdenv.mkDerivation ({
       name = "node-${name}-${version}";
       buildInputs = [ tarWrapper python nodejs ]
         ++ stdenv.lib.optional (stdenv.isLinux) utillinux
         ++ stdenv.lib.optional (stdenv.isDarwin) libtool
-        ++ args.buildInputs or [];
-      dontStrip = args.dontStrip or true; # Striping may fail a build for some package deployments
+        ++ buildInputs;
 
-      inherit dontNpmInstall preRebuild;
-
-      unpackPhase = args.unpackPhase or "true";
-
-      buildPhase = args.buildPhase or "true";
+      inherit dontStrip; # Stripping may fail a build for some package deployments
+      inherit dontNpmInstall preRebuild unpackPhase buildPhase;
 
       compositionScript = composePackage args;
       pinpointDependenciesScript = pinpointDependenciesOfPackage args;
 
       passAsFile = [ "compositionScript" "pinpointDependenciesScript" ];
 
-      installPhase = args.installPhase or ''
+      installPhase = ''
         # Create and enter a root node_modules/ folder
         mkdir -p $out/lib/node_modules
         cd $out/lib/node_modules
@@ -406,27 +417,47 @@ let
         # Run post install hook, if provided
         runHook postInstall
       '';
-    });
+    } // extraArgs);
 
   # Builds a development shell
-  buildNodeShell = { name, packageName, version, src, dependencies ? [], production ? true, npmFlags ? "", dontNpmInstall ? false, bypassCache ? false, ... }@args:
+  buildNodeShell =
+    { name
+    , packageName
+    , version
+    , src
+    , dependencies ? []
+    , buildInputs ? []
+    , production ? true
+    , npmFlags ? ""
+    , dontNpmInstall ? false
+    , bypassCache ? false
+    , dontStrip ? true
+    , unpackPhase ? "true"
+    , buildPhase ? "true"
+    , ... }@args:
+
     let
       forceOfflineFlag = if bypassCache then "--offline" else "--registry http://www.example.com";
 
-      nodeDependencies = stdenv.mkDerivation {
+      extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" ];
+
+      nodeDependencies = stdenv.mkDerivation ({
         name = "node-dependencies-${name}-${version}";
 
         buildInputs = [ tarWrapper python nodejs ]
           ++ stdenv.lib.optional (stdenv.isLinux) utillinux
           ++ stdenv.lib.optional (stdenv.isDarwin) libtool
-          ++ args.buildInputs or [];
+          ++ buildInputs;
+
+        inherit dontStrip; # Stripping may fail a build for some package deployments
+        inherit dontNpmInstall unpackPhase buildPhase;
 
         includeScript = includeDependencies { inherit dependencies; };
         pinpointDependenciesScript = pinpointDependenciesOfPackage args;
 
         passAsFile = [ "includeScript" "pinpointDependenciesScript" ];
 
-        buildCommand = ''
+        installPhase = ''
           mkdir -p $out/${packageName}
           cd $out/${packageName}
 
@@ -438,13 +469,15 @@ let
           ${stdenv.lib.optionalString bypassCache ''
             if [ -f ${src}/package-lock.json ]
             then
-              cp ${src}/package-lock.json .
+                cp ${src}/package-lock.json .
             fi
           ''}
 
           # Pinpoint the versions of all dependencies to the ones that are actually being used
           echo "pinpointing versions of dependencies..."
           cd ..
+          ${stdenv.lib.optionalString (builtins.substring 0 1 packageName == "@") "cd .."}
+
           source $pinpointDependenciesScriptPath
           cd ${packageName}
 
@@ -474,15 +507,17 @@ let
           ''}
 
           cd ..
+          ${stdenv.lib.optionalString (builtins.substring 0 1 packageName == "@") "cd .."}
+
           mv ${packageName} lib
           ln -s $out/lib/node_modules/.bin $out/bin
         '';
-      };
+      } // extraArgs);
     in
-    stdenv.lib.makeOverridable stdenv.mkDerivation {
+    stdenv.mkDerivation {
       name = "node-shell-${name}-${version}";
 
-      buildInputs = [ python nodejs ] ++ stdenv.lib.optional (stdenv.isLinux) utillinux ++ args.buildInputs or [];
+      buildInputs = [ python nodejs ] ++ stdenv.lib.optional (stdenv.isLinux) utillinux ++ buildInputs;
       buildCommand = ''
         mkdir -p $out/bin
         cat > $out/bin/shell <<EOF
@@ -500,4 +535,8 @@ let
       '';
     };
 in
-{ inherit buildNodeSourceDist buildNodePackage buildNodeShell; }
+{
+  buildNodeSourceDist = stdenv.lib.makeOverridable buildNodeSourceDist;
+  buildNodePackage = stdenv.lib.makeOverridable buildNodePackage;
+  buildNodeShell = stdenv.lib.makeOverridable buildNodeShell;
+}

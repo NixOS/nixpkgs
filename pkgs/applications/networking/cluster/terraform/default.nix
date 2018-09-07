@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchpatch, fetchFromGitHub, makeWrapper }:
+{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -60,8 +60,8 @@ let
           # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
           if actualPlugins == []
             then terraform.overrideAttrs (orig: { passthru = orig.passthru // passthru; })
-            else stdenv.mkDerivation {
-              name = "${terraform.name}-with-plugins";
+            else lib.appendToName "with-plugins"(stdenv.mkDerivation {
+              inherit (terraform) name;
               buildInputs = [ makeWrapper ];
 
               buildCommand = ''
@@ -72,10 +72,10 @@ let
               '';
 
               inherit passthru;
-            };
+            });
     in withPlugins (_: []);
 
-  plugins = import ./providers { inherit stdenv lib buildGoPackage fetchFromGitHub; };
+  plugins = import ./providers { inherit lib buildGoPackage fetchFromGitHub; };
 in rec {
   terraform_0_8_5 = generic {
     version = "0.8.5";
@@ -104,8 +104,8 @@ in rec {
   terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
 
   terraform_0_11 = pluggable (generic {
-    version = "0.11.6";
-    sha256 = "17kd3ln1i40qb8fll5918rvgackzf1ibmr7li1p9vky4ki3iwr0l";
+    version = "0.11.8";
+    sha256 = "1kdmx21l32vj5kvkimkx0s5mxgmgkdwlgbin4f3iqjflzip0cddh";
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });

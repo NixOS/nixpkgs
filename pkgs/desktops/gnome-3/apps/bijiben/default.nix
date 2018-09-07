@@ -1,17 +1,17 @@
 { stdenv, meson, ninja, gettext, fetchurl, pkgconfig
-, wrapGAppsHook, itstool, desktop-file-utils
+, wrapGAppsHook, itstool, desktop-file-utils, python3
 , glib, gtk3, evolution-data-server
 , libuuid, webkitgtk, zeitgeist
 , gnome3, libxml2 }:
 
 let
-  version = "3.28.1";
+  version = "3.28.3";
 in stdenv.mkDerivation rec {
   name = "bijiben-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/bijiben/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0ivx3hbpg7qaqzpbbn06lz9w3q285vhwgfr353b14bg0nsidwy17";
+    sha256 = "0lg92fl6dmrybkxs3gqhyr8rq945y64k51l6s72yiads7pqabli2";
   };
 
   doCheck = true;
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxml2 desktop-file-utils wrapGAppsHook
+    meson ninja pkgconfig gettext itstool libxml2 desktop-file-utils python3 wrapGAppsHook
   ];
 
   buildInputs = [

@@ -82,7 +82,7 @@ rec {
        => "//bin"
   */
   makeSearchPath = subDir: packages:
-    concatStringsSep ":" (map (path: path + "/" + subDir) packages);
+    concatStringsSep ":" (map (path: path + "/" + subDir) (builtins.filter (x: x != null) packages));
 
   /* Construct a Unix-style search path, using given package output.
      If no output is found, fallback to `.out` and then to the default.
@@ -121,10 +121,19 @@ rec {
 
      Example:
        pkgs = import <nixpkgs> { }
-       makePerlPath [ pkgs.perlPackages.NetSMTP ]
+       makePerlPath [ pkgs.perlPackages.libnet ]
        => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
   */
   makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
+
+  /* Construct a perl search path recursively including all dependencies (such as $PERL5LIB)
+
+     Example:
+       pkgs = import <nixpkgs> { }
+       makeFullPerlPath [ pkgs.perlPackages.CGI ]
+       => "/nix/store/fddivfrdc1xql02h9q500fpnqy12c74n-perl-CGI-4.38/lib/perl5/site_perl:/nix/store/8hsvdalmsxqkjg0c5ifigpf31vc4vsy2-perl-HTML-Parser-3.72/lib/perl5/site_perl:/nix/store/zhc7wh0xl8hz3y3f71nhlw1559iyvzld-perl-HTML-Tagset-3.20/lib/perl5/site_perl"
+  */
+  makeFullPerlPath = deps: makePerlPath (lib.misc.closePropagation deps);
 
   /* Depending on the boolean `cond', return either the given string
      or the empty string. Useful to concatenate against a bigger string.
@@ -401,7 +410,7 @@ rec {
       components = splitString "/" url;
       filename = lib.last components;
       name = builtins.head (splitString sep filename);
-    in assert name !=  filename; name;
+    in assert name != filename; name;
 
   /* Create an --{enable,disable}-<feat> string that can be passed to
      standard GNU Autoconf scripts.
@@ -413,6 +422,39 @@ rec {
        => "--disable-shared"
   */
   enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
+
+  /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       enableFeature true "shared" "foo"
+       => "--enable-shared=foo"
+       enableFeature false "shared" (throw "ignored")
+       => "--disable-shared"
+  */
+  enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
+
+  /* Create an --{with,without}-<feat> string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       withFeature true "shared"
+       => "--with-shared"
+       withFeature false "shared"
+       => "--without-shared"
+  */
+  withFeature = with_: feat: "--${if with_ then "with" else "without"}-${feat}";
+
+  /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
+     standard GNU Autoconf scripts.
+
+     Example:
+       with_Feature true "shared" "foo"
+       => "--with-shared=foo"
+       with_Feature false "shared" (throw "ignored")
+       => "--without-shared"
+  */
+  withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
 
   /* Create a fixed width string with additional prefix to match
      required width.
@@ -426,7 +468,10 @@ rec {
       strw = lib.stringLength str;
       reqWidth = width - (lib.stringLength filler);
     in
-      assert strw <= width;
+      assert lib.assertMsg (strw <= width)
+        "fixedWidthString: requested string length (${
+          toString width}) must not be shorter than actual length (${
+            toString strw})";
       if strw == width then str else filler + fixedWidthString reqWidth filler str;
 
   /* Format a number adding leading zeroes up to fixed width.
@@ -459,7 +504,7 @@ rec {
   isStorePath = x:
        isCoercibleToString x
     && builtins.substring 0 1 (toString x) == "/"
-    && dirOf (builtins.toPath x) == builtins.storeDir;
+    && dirOf x == builtins.storeDir;
 
   /* Convert string to int
      Obviously, it is a bit hacky to use fromJSON that way.
@@ -495,11 +540,10 @@ rec {
   */
   readPathsFromFile = rootPath: file:
     let
-      root = toString rootPath;
       lines = lib.splitString "\n" (builtins.readFile file);
       removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
       relativePaths = removeComments lines;
-      absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
+      absolutePaths = builtins.map (path: rootPath + "/${path}") relativePaths;
     in
       absolutePaths;
 

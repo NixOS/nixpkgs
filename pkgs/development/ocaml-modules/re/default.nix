@@ -1,24 +1,25 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, ounit }:
+{ stdenv, fetchzip, ocaml, findlib, jbuilder, ounit, seq }:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "re is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
-  name = "ocaml-re-${version}";
-  version = "1.7.1";
+  name = "ocaml${ocaml.version}-re-${version}";
+  version = "1.8.0";
 
   src = fetchzip {
     url = "https://github.com/ocaml/ocaml-re/archive/${version}.tar.gz";
-    sha256 = "1z2z4fjrpdbl0q50fdxvy3746w1vx6ybxcb0k81hqm1342nylbmw";
+    sha256 = "0ch6hvmm4ym3w2vghjxf3ka5j1023a37980fqi4zcb7sx756z20i";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ounit ];
+  buildInputs = [ ocaml findlib jbuilder ounit ];
+  propagatedBuildInputs = [ seq ];
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out"
-  + stdenv.lib.optionalString doCheck " --enable-tests";
-  buildPhase = "ocaml setup.ml -build";
-  doCheck = !stdenv.lib.versionAtLeast ocaml.version "4.06";
-  checkPhase = "ocaml setup.ml -test";
-  installPhase = "ocaml setup.ml -install";
+  doCheck = true;
+  checkPhase = "jbuilder runtest";
 
-  createFindlibDestdir = true;
+  inherit (jbuilder) installPhase;
 
   meta = {
     homepage = https://github.com/ocaml/ocaml-re;

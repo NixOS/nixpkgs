@@ -9,18 +9,28 @@ import ./make-test.nix ({ pkgs, ...} : {
   machine =
     { config, pkgs, lib, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+
+      # XXX: Sandbox setup fails while trying to hardlink files from the host's
+      #      store file system into the prepared chroot directory.
+      nix.useSandbox = false;
+
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 768;
+      virtualisation.memorySize = 1024;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
       virtualisation.pathsInNixDB = let
         emptyContainer = import ../lib/eval-config.nix {
           inherit (config.nixpkgs.localSystem) system;
           modules = lib.singleton {
-            containers.foo.config = {};
+            containers.foo.config = {
+              system.stateVersion = "18.03";
+            };
           };
         };
-      in [ pkgs.stdenv emptyContainer.config.containers.foo.path pkgs.libxslt ];
+      in [
+        pkgs.stdenv pkgs.stdenvNoCC emptyContainer.config.containers.foo.path
+        pkgs.libxslt
+      ];
     };
 
   testScript =

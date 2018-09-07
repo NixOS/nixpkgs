@@ -1,8 +1,6 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
 , python, perl, gdk_pixbuf, libiconv, libintl }:
 
-let inherit (stdenv.lib) optionals; in
-
 stdenv.mkDerivation rec {
   name = "libgsf-1.14.42";
 
@@ -13,8 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];
 
-  buildInputs = [ gettext bzip2 zlib python ]
-    ++ stdenv.lib.optional doCheck perl;
+  buildInputs = [ gettext bzip2 zlib python ];
+  checkInputs = [ perl ];
 
   propagatedBuildInputs = [ libxml2 glib gdk_pixbuf libiconv ];
 

@@ -20,6 +20,14 @@ let
         sha256 = "1lvb14qclrx0qf6qqx8a8hkx5akk5lk3dvcqz8760v9hya52pnfv";
       };
     });
+
+    guessit = super.guessit.overridePythonAttrs (old: rec {
+      version = "2.1.4";
+      src = old.src.override {
+        inherit version;
+        sha256 = "90e6f9fb49246ad27f34f8b9984357e22562ccc3059241cbc08b4fac1d401c56";
+      };
+    });
   };
 
 in
@@ -28,11 +36,11 @@ with python'.pkgs;
 
 buildPythonApplication rec {
   pname = "FlexGet";
-  version = "2.13.5";
+  version = "2.14.18";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lkmxwy7k4zlcqpigwk8skc2zi8a70vrw21pz80wvmf9yg0wc9z9";
+    sha256 = "1pyvm1d23qy71rg7fzxcal8978kni7sn09zw4s4dsq56g8w80ay9";
   };
 
   postPatch = ''
@@ -48,7 +56,7 @@ buildPythonApplication rec {
     chardet beautifulsoup4 html5lib
     PyRSS2Gen pynzb rpyc jinja2
     jsonschema requests dateutil
-    pathpy guessit_2_0 APScheduler
+    pathpy guessit APScheduler
     terminaltables colorclass
     cherrypy flask flask-restful
     flask-restplus flask-compress
@@ -60,6 +68,7 @@ buildPythonApplication rec {
     idna itsdangerous markupsafe
     plumbum pytz six tzlocal urllib3
     webencodings werkzeug zxcvbn-python
+    backports_functools_lru_cache
   ] ++ lib.optional (pythonOlder "3.4") pathlib
     ++ lib.optional delugeSupport deluge;
 

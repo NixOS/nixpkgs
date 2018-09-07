@@ -1,10 +1,10 @@
-{ stdenv, lib, makeWrapper, fetchurl, unzip, atomEnv, makeDesktopItem, buildFHSUserEnv }:
+{ stdenv, makeWrapper, fetchurl, unzip, atomEnv, makeDesktopItem, buildFHSUserEnv, gtk2 }:
 
 let
-  version = "0.10.0";
-  name = "mist-${version}";
+  version = "0.11.1";
+  name = "mist";
 
-  throwSystem = throw "Unsupported system: ${stdenv.system}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   meta = with stdenv.lib; {
     description = "Browse and use Ðapps on the Ethereum network";
@@ -25,19 +25,19 @@ let
     categories = "Network;";
   };
 
-  mist = stdenv.mkDerivation {
-    inherit name version;
+  mist = stdenv.lib.appendToName "unwrapped" (stdenv.mkDerivation {
+    inherit name version meta;
 
     src = {
       i686-linux = fetchurl {
         url = "https://github.com/ethereum/mist/releases/download/v${version}/Mist-linux32-${urlVersion}.zip";
-        sha256 = "01hvxlm9w522pwvsjdy18gsrapkfjr7d1jjl4bqjjysxnjaaj2lk";
+        sha256 = "1ffzp9aa0g6w3d5pzp69fljk3sd51cbqdgxa1x16vj106sqm0gj7";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/ethereum/mist/releases/download/v${version}/Mist-linux64-${urlVersion}.zip";
-        sha256 = "01k17j7fdfhxfd26njdsiwap0xnka2536k9ydk32czd8db7ya9zi";
+        sha256 = "0yx4x72l8gk68yh9saki48zgqx8k92xnkm79dc651wdpd5c25cz3";
       };
-    }.${stdenv.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
 
     buildInputs = [ unzip makeWrapper ];
 
@@ -50,13 +50,14 @@ let
       ln -s ${desktopItem}/share/applications/* $out/share/applications
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:$out/lib/mist" \
+        --set-rpath "${atomEnv.libPath}:${gtk2}/lib:$out/lib/mist" \
         $out/lib/mist/mist
     '';
-  };
+  });
 in
 buildFHSUserEnv {
   name = "mist";
+  inherit meta;
 
   targetPkgs = pkgs: with pkgs; [
      mist

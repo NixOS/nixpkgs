@@ -20,13 +20,12 @@ buildGoPackage rec {
   excludedPackages = "test";
 
   # Generated with the nix2go
-  goDeps = ./. + builtins.toPath "/deps-${version}.nix";
+  goDeps = ./. + "/deps-${version}.nix";
 
   meta = with lib; {
     description = "An open-source distributed time series database";
     license = licenses.mit;
     homepage = https://influxdb.com/;
     maintainers = with maintainers; [ offline zimbatm ];
-    platforms = platforms.linux;
   };
 }

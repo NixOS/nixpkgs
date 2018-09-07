@@ -64,7 +64,7 @@ in
 
   config = mkIf config.services.memcached.enable {
 
-    users.extraUsers = optional (cfg.user == "memcached") {
+    users.users = optional (cfg.user == "memcached") {
       name = "memcached";
       description = "Memcached server user";
     };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, perl, docbook2x
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, docbook2x
 , docbook_xml_dtd_45, python3Packages, pam
 
 # Optional Dependencies
@@ -9,11 +9,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "lxc-${version}";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxc/lxc-${version}.tar.gz";
-    sha256 = "12ldpkd17cy6fg7z1icr91cfs86jkkrsj61b6wdj0l7h4x624c32";
+    sha256 = "0p1gy553cm4mhwxi85fl6qiwz61rjmvysm8c8pd20qh62xxi3dva";
   };
 
   nativeBuildInputs = [

@@ -8,7 +8,7 @@ let
       name = "ragel-${version}";
 
       src = fetchurl {
-        url = "http://www.colm.net/files/ragel/${name}.tar.gz";
+        url = "https://www.colm.net/files/ragel/${name}.tar.gz";
         inherit sha256;
       };
 
@@ -43,8 +43,8 @@ in
   };
 
   ragelDev = generic {
-    version = "7.0.0.10";
-    sha256 = "1v4ddzxal4gf8l8nkn32qabba6nbpd2mg8sphgmdn8kaqv52nmj0";
+    version = "7.0.0.11";
+    sha256 = "0h2k9bfz9i7x9mvr9rbsrzz8fk17756zwwrkf3fppvm9ivzwdfh8";
     license = stdenv.lib.licenses.mit;
   };
 }

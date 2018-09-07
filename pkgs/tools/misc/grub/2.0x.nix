@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb, freetype, qemu, devicemapper, unifont, pkgconfig
+{ stdenv, fetchurl, flex, bison, python
+, gettext, ncurses, libusb, freetype, qemu, lvm2, unifont, pkgconfig
+, fuse # only needed for grub-mount
 , zfs ? null
 , efiSupport ? false
 , zfsSupport ? true
@@ -27,8 +28,8 @@ let
     "aarch64-linux".target = "arm64";
   };
 
-  canEfi = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
-  inPCSystems = any (system: stdenv.system == system) (mapAttrsToList (name: _: name) pcSystems);
+  canEfi = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) efiSystemsBuild);
+  inPCSystems = any (system: stdenv.hostPlatform.system == system) (mapAttrsToList (name: _: name) pcSystems);
 
   version = "2.02";
 
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ bison flex python pkgconfig ];
-  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
+  buildInputs = [ ncurses libusb freetype gettext lvm2 fuse ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
 
@@ -83,15 +84,16 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-bash-completion.patch ];
 
-  configureFlags = optional zfsSupport "--enable-libzfs"
-    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.system}.target}" "--program-prefix=" ]
-    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.system}.target}"];
+  configureFlags = [ "--enable-grub-mount" ] # dep of os-prober
+    ++ optional zfsSupport "--enable-libzfs"
+    ++ optionals efiSupport [ "--with-platform=efi" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}" "--program-prefix=" ]
+    ++ optionals xenSupport [ "--with-platform=xen" "--target=${efiSystemsBuild.${stdenv.hostPlatform.system}.target}"];
 
   # save target that grub is compiled for
   grubTarget = if efiSupport
-               then "${efiSystemsInstall.${stdenv.system}.target}-efi"
+               then "${efiSystemsInstall.${stdenv.hostPlatform.system}.target}-efi"
                else if inPCSystems
-                    then "${pcSystems.${stdenv.system}.target}-pc"
+                    then "${pcSystems.${stdenv.hostPlatform.system}.target}-pc"
                     else "";
 
   doCheck = false;

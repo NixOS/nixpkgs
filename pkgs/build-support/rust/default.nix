@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, stdenv, path, cacert, git, rust, cargo-vendor }:
+{ stdenv, cacert, git, rust, cargo-vendor }:
 let
   fetchcargo = import ./fetchcargo.nix {
     inherit stdenv cacert git rust cargo-vendor;
@@ -7,6 +7,8 @@ in
 { name, cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
+, cargoPatches ? []
+, patches ? []
 , sourceRoot ? null
 , logLevel ? ""
 , buildInputs ? []
@@ -20,11 +22,10 @@ in
 assert cargoVendorDir == null -> cargoSha256 != "unset";
 
 let
-  lib = stdenv.lib;
-
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
         inherit name src srcs sourceRoot cargoUpdateHook;
+        patches = cargoPatches;
         sha256 = cargoSha256;
       }
     else null;
@@ -45,6 +46,8 @@ in stdenv.mkDerivation (args // {
   patchRegistryDeps = ./patch-registry-deps;
 
   buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
+
+  patches = cargoPatches ++ patches;
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
@@ -91,7 +94,7 @@ in stdenv.mkDerivation (args // {
   installPhase = args.installPhase or ''
     runHook preInstall
     mkdir -p $out/bin
-    find target/release -maxdepth 1 -executable -exec cp "{}" $out/bin \;
+    find target/release -maxdepth 1 -executable -type f -exec cp "{}" $out/bin \;
     runHook postInstall
   '';
 

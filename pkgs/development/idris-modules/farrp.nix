@@ -1,15 +1,13 @@
 { build-idris-package
 , fetchFromGitHub
-, prelude
 , effects
 , lib
-, idris
 }:
 build-idris-package  {
   name = "farrp";
   version = "2018-02-13";
 
-  idrisDeps = [ prelude effects ];
+  idrisDeps = [ effects ];
 
   src = fetchFromGitHub {
     owner = "lambda-11235";
@@ -23,6 +21,5 @@ build-idris-package  {
     homepage = https://github.com/lambda-11235/FarRP;
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.brainrape ];
-    inherit (idris.meta) platforms;
   };
 }

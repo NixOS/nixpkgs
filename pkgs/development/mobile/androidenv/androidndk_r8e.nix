@@ -1,23 +1,24 @@
 { stdenv, fetchurl, zlib, ncurses, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
 , platformTools
+, fullNDK ? false # set to true if you want other parts of the NDK
+                  # that is not used by Nixpkgs like sources,
+                  # examples, docs, or LLVM toolchains
 }:
-
-assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "android-ndk-r8e";
 
-  src = if stdenv.system == "i686-linux"
+  src = if stdenv.hostPlatform.system == "i686-linux"
     then fetchurl {
       url = "http://dl.google.com/android/ndk/${name}-linux-x86.tar.bz2";
       sha256 = "c2c4e0c8b3037149a0f5dbb08d72f814a52af4da9fff9d80328c675457e95a98";
     }
-    else if stdenv.system == "x86_64-linux" then fetchurl {
+    else if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
       url = "http://dl.google.com/android/ndk/${name}-linux-x86_64.tar.bz2";
       sha256 = "093gf55zbh38p2gk5bdykj1vg9p5l774wjdzw5mhk4144jm1wdq7";
     }
-    else throw "platform ${stdenv.system} not supported!";
+    else throw "platform ${stdenv.hostPlatform.system} not supported!";
 
   phases = "buildPhase";
 
@@ -51,7 +52,14 @@ stdenv.mkDerivation rec {
         -d $out/libexec/${name} < ${ ./make-standalone-toolchain_r8e.patch }
     cd ${pkg_path}
 
-    find $out \( \
+  '' + lib.optionalString (!fullNDK) ''
+    # Steps to reduce output size
+    rm -rf docs sources tests
+    # We only support cross compiling with gcc for now
+    rm -rf toolchains/*-clang* toolchains/llvm-*
+
+  '' + ''
+    find ${pkg_path}/toolchains \( \
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm -0100 \) \
         \) -exec patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-*so.? \

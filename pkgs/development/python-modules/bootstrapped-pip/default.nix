@@ -1,36 +1,28 @@
-{ stdenv, python, fetchPypi, fetchurl, makeWrapper, unzip }:
+{ stdenv, python, fetchPypi, makeWrapper, unzip }:
 
 let
   wheel_source = fetchPypi {
     pname = "wheel";
-    version = "0.30.0";
+    version = "0.31.1";
     format = "wheel";
-    sha256 = "e721e53864f084f956f40f96124a74da0631ac13fbbd1ba99e8e2b5e9cafdf64";
+    sha256 = "80044e51ec5bbf6c894ba0bc48d26a8c20a9ba629f4ca19ea26ecfcf87685f5f";
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "39.0.1";
+    version = "40.2.0";
     format = "wheel";
-    sha256 = "8010754433e3211b9cdbbf784b50f30e80bf40fc6b05eb5f865fab83300599b8";
-  };
-
-  # TODO: Shouldn't be necessary anymore for pip >= 10!
-  # https://github.com/NixOS/nixpkgs/issues/26392
-  # https://github.com/pypa/setuptools/issues/885
-  pkg_resources = fetchurl {
-    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py";
-    sha256 = "1wdnq3mammk75mifkdmmjx7yhnpydvnvi804na8ym4mj934l2jkv";
+    sha256 = "ea3796a48a207b46ea36a9d26de4d0cc87c953a683a7b314ea65d666930ea8e6";
   };
 
 in stdenv.mkDerivation rec {
   pname = "pip";
-  version = "9.0.3";
+  version = "18.0";
   name = "${python.libPrefix}-bootstrapped-${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     format = "wheel";
-    sha256 = "c3ede34530e0e0b2381e7363aded78e0c33291654937e7373032fda04e8803e5";
+    sha256 = "070e4bf493c7c2c9f6a08dd797dd3c066d64074c38e9e8a0fb4e6541f266d96c";
   };
 
   unpackPhase = ''
@@ -38,8 +30,6 @@ in stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} $src
     unzip -d $out/${python.sitePackages} ${setuptools_source}
     unzip -d $out/${python.sitePackages} ${wheel_source}
-    # TODO: Shouldn't be necessary anymore for pip >= 10!
-    cp ${pkg_resources} $out/${python.sitePackages}/pip/_vendor/pkg_resources/__init__.py
   '';
 
   patchPhase = ''
@@ -53,7 +43,7 @@ in stdenv.mkDerivation rec {
 
     # install pip binary
     echo '#!${python.interpreter}' > $out/bin/pip
-    echo 'import sys;from pip import main' >> $out/bin/pip
+    echo 'import sys;from pip._internal import main' >> $out/bin/pip
     echo 'sys.exit(main())' >> $out/bin/pip
     chmod +x $out/bin/pip
 

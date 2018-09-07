@@ -6,24 +6,19 @@ else
 
 stdenv.mkDerivation rec {
    name = "ocaml${ocaml.version}-ocaml-migrate-parsetree-${version}";
-   version = "1.0.7";
+   version = "1.0.11";
 
    src = fetchFromGitHub {
-     owner = "let-def";
+     owner = "ocaml-ppx";
      repo = "ocaml-migrate-parsetree";
      rev = "v${version}";
-     sha256 = "0v1h943xv5bd8qy5mr8pvyjbgamhs59nkgr94j3vznabrcfqzkh7";
+     sha256 = "05kbgs9n1x64fk6g3wbjnwjd17w10k3k8dzglnc45xg4hr7z651n";
    };
 
    buildInputs = [ ocaml findlib ocamlbuild jbuilder ];
    propagatedBuildInputs = [ result ];
 
-   installPhase = ''
-     for p in *.install
-     do
-       ${jbuilder.installPhase} $p
-     done
-   '';
+   inherit (jbuilder) installPhase;
 
    meta = {
      description = "Convert OCaml parsetrees between different major versions";

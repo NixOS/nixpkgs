@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, glibc, cups, libusb, libxml2, ghostscript }:
+{ stdenv, fetchurl, cups, libusb, libxml2 }:
 
 let
 
-    arch = if stdenv.system == "x86_64-linux"
+    arch = if stdenv.hostPlatform.system == "x86_64-linux"
       then "x86_64"
       else "i386";
 

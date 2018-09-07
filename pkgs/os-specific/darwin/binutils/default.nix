@@ -1,5 +1,4 @@
 { stdenv, binutils-unwrapped, cctools
-, hostPlatform, targetPlatform
 }:
 
 # Make sure both underlying packages claim to have prepended their binaries

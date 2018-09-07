@@ -13,7 +13,6 @@
 , testpath
 , jupyter_core
 , nbformat
-, nbconvert
 , ipykernel
 , pandocfilters
 , tornado
@@ -23,7 +22,6 @@
 buildPythonPackage rec {
   pname = "nbconvert";
   version = "5.3.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

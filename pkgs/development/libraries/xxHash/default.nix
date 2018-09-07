@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "xxHash-${version}";
-  version = "0.6.3.20171018";
+  version = "0.6.4.20171222";
 
   src = fetchFromGitHub {
-    sha256 = "0061ivxpx0p24m4vg7kfx9fs9f0jxvv4g76bmyss5gp90p05hc18";
-    rev = "333804ccf0c0339451accac023deeab9e5f7c002";
+    sha256 = "1az5vm14rdc3pa3l0wj180wpii14if16diril3gz8q9ip1215gwj";
+    rev = "7caf8bd76440c75dfe1070d3acfbd7891aea8fca";
     repo = "xxHash";
     owner = "Cyan4973";
   };

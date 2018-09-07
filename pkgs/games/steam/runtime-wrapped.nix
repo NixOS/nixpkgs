@@ -8,7 +8,7 @@ let
     libpulseaudio
     alsaLib
     openalSoft
-    libva1-full
+    libva1
     libvdpau
     vulkan-loader
     gcc.cc

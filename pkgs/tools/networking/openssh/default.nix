@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, zlib, openssl, perl, libedit, pkgconfig, pam, autoreconfHook
+{ stdenv, fetchurl, fetchpatch, zlib, openssl, libedit, pkgconfig, pam, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? true
@@ -12,26 +12,27 @@ let
   # **please** update this patch when you update to a new openssh release.
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
-    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian"
-        + "/patches/gssapi.patch?id=1e0d55f9163793742d20eaadd4784db16fd3459d";
-    sha256 = "130phj87q87p9crigd6852nnaqsqkfg09h45a32lk4524h9kkxgb";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/"
+      + "e395eed38096fcda74398424ea94de3ec44effd5"
+      + "/debian/patches/gssapi.patch";
+    sha256 = "0x7xysgdahb4jaq0f28g2d7yzp0d3mh59i4xnffszvjndhvbk27x";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "openssh-${version}";
-  version = if hpnSupport then "7.6p1" else "7.6p1";
+  version = if hpnSupport then "7.7p1" else "7.7p1";
 
   src = if hpnSupport then
       fetchurl {
-        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_6_P1.tar.gz";
-        sha256 = "15b1zjk9f3jlxji1vpqfla40cnzy8hv2clk925cvpgz7lqgv4a1d";
+        url = "https://github.com/rapier1/openssh-portable/archive/hpn-KitchenSink-7_7_P1.tar.gz";
+        sha256 = "1l4k8mg3gnzxbz53cma8s6ak56waz03ijsr08p8vgpi0c2rc5ri5";
       }
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-        sha256 = "08qpsb8mrzcx8wgvz9insiyvq7sbg26yj5nvl2m5n57yvppcl8x3";
+        sha256 = "13vbbrvj3mmfhj83qyrg5c0ipr6bzw5s65dy4k8gr7p9hkkfffyp";
       };
 
   patches =

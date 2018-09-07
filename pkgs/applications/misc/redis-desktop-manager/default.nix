@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, fetchpatch, pkgconfig, libssh2
+{ stdenv, lib, fetchgit, pkgconfig, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
 , qtsvg, qttools, qtquick1, qtcharts
 , qmake

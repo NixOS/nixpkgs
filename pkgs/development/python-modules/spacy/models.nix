@@ -1,7 +1,6 @@
 { stdenv, buildPythonPackage, fetchurl, spacy }:
 let
   buildModelPackage = { pname, version, sha256, license }: buildPythonPackage {
-    name = "${pname}-${version}";
     inherit pname version;
 
     src = fetchurl {

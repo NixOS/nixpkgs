@@ -2,7 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
+, fetchpatch
 # Build dependencies
 , glibcLocales
 # Test dependencies
@@ -13,7 +13,6 @@
 , mock
 # Runtime dependencies
 , backports_shutil_get_terminal_size
-, jedi
 , decorator
 , pathlib2
 , pickleshare
@@ -27,16 +26,26 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "5.6.0";
+  version = "5.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00g696r9rk1c4p3sycnv7by55cp9mm7r6zkkdqbiw9l0mk8k58wb";
+    sha256 = "0g1jm06qriq48m58311cs7askp83ipq3yq96hv4kg431nxzkmd4d";
   };
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
+
+  patches = [
+    # improve cython support, needed by sage, accepted upstream
+    # https://github.com/ipython/ipython/pull/11139
+    (fetchpatch {
+      name = "signature-use-inspect.patch";
+      url = "https://github.com/ipython/ipython/commit/8d399b98d3ed5c765835594100c4d36fb2f739dc.patch";
+      sha256 = "1r7v9clwwbskmj4y160vcj6g0vzqbvnj4y1bm2n4bskafapm42g0";
+    })
+  ];
 
   buildInputs = [ glibcLocales ];
 

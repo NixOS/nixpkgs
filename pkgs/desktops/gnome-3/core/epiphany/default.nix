@@ -1,23 +1,23 @@
 { stdenv, meson, ninja, gettext, fetchurl, pkgconfig, gtk, glib, icu
 , wrapGAppsHook, gnome3, libxml2, libxslt, itstool
 , webkitgtk, libsoup, glib-networking, libsecret, gnome-desktop, libnotify, p11-kit
-, sqlite, gcr, isocodes, desktop-file-utils
+, sqlite, gcr, isocodes, desktop-file-utils, python3
 , gdk_pixbuf, gst_all_1, json-glib }:
 
 stdenv.mkDerivation rec {
   name = "epiphany-${version}";
-  version = "3.28.1";
+  version = "3.28.3.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "0zvxrwlswxadq4zbr4f73ms141d08j0lhi6rzmj83j1s3gan88md";
+    sha256 = "1xz6xl6b0iihvczyr0cs1z5ifvpai6anb4m0ng1caiph06klc1b9";
   };
 
   # Tests need an X display
   mesonFlags = [ "-Dunit_tests=false" ];
 
   nativeBuildInputs = [
-    meson ninja libxslt pkgconfig itstool gettext wrapGAppsHook desktop-file-utils
+    meson ninja libxslt pkgconfig itstool gettext wrapGAppsHook desktop-file-utils python3
   ];
 
   buildInputs = [

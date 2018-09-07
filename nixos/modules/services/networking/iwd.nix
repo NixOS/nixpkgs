@@ -20,14 +20,11 @@ in {
 
     services.dbus.packages = [ pkgs.iwd ];
 
-    systemd.services.iwd = {
-      description = "Wireless daemon";
-      before = [ "network.target" ];
-      wants = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+    systemd.packages = [ pkgs.iwd ];
 
-      serviceConfig.ExecStart = "${pkgs.iwd}/libexec/iwd";
-    };
+    systemd.tmpfiles.rules = [
+      "d /var/lib/iwd 0700 root root -"
+    ];
   };
 
   meta.maintainers = with lib.maintainers; [ mic92 ];

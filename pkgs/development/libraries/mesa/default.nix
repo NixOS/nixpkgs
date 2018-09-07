@@ -1,14 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, lib
-, pkgconfig, intltool, autoreconfHook, substituteAll
+{ stdenv, fetchurl, lib
+, pkgconfig, intltool, autoreconfHook
 , file, expat, libdrm, xorg, wayland, wayland-protocols, openssl
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, valgrind-light, python2
 , libglvnd
-, grsecEnabled ? false
 , enableRadv ? true
-# Texture floats are patented, see docs/patents.txt, so we don't enable them for full Mesa.
-# It's overridden for mesa_drivers.
-, enableTextureFloats ? false
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
@@ -27,23 +23,23 @@
 
 with stdenv.lib;
 
-if ! lists.elem stdenv.system platforms.mesaPlatforms then
+if ! lists.elem stdenv.hostPlatform.system platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
 let
   defaultGalliumDrivers =
-    if stdenv.isArm
-    then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
+    if stdenv.isAarch32
+    then ["virgl" "nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
-    then ["nouveau" "vc4" ]
-    else ["svga" "i915" "r300" "r600" "radeonsi" "nouveau"];
+    then ["virgl" "nouveau" "vc4" ]
+    else ["virgl" "svga" "i915" "r300" "r600" "radeonsi" "nouveau"];
   defaultDriDrivers =
-    if (stdenv.isArm || stdenv.isAarch64)
+    if (stdenv.isAarch32 || stdenv.isAarch64)
     then ["nouveau"]
     else ["i915" "i965" "nouveau" "radeon" "r200"];
   defaultVulkanDrivers =
-    if (stdenv.isArm || stdenv.isAarch64)
+    if (stdenv.isAarch32 || stdenv.isAarch64)
     then []
     else ["intel"] ++ lib.optional enableRadv "radeon";
 in
@@ -67,7 +63,7 @@ let
 in
 
 let
-  version = "17.3.8";
+  version = "18.1.7";
   branch  = head (splitString "." version);
 in
 
@@ -81,7 +77,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "1cd6a4ll5arla3kncxnw9196ak1v4rvnb098aa7lm3n4h7r9p7cg";
+    sha256 = "655e3b32ce3bdddd5e6e8768596e5d4bdef82d0dd37067c324cc4b2daa207306";
   };
 
   prePatch = "patchShebangs .";
@@ -90,9 +86,9 @@ let self = stdenv.mkDerivation {
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
-    ./glx_ro_text_segm.patch # fix for grsecurity/PaX
     ./symlink-drivers.patch
-    ./missing-include.patch # dev_t needs sys/stat.h, fixes build w/musl
+    ./missing-includes.patch # dev_t needs sys/stat.h, time_t needs time.h, etc.-- fixes build w/musl
+    ./disk_cache-include-dri-driver-path-in-cache-key.patch
   ];
 
   outputs = [ "out" "dev" "drivers" "osmesa" ];
@@ -104,6 +100,7 @@ let self = stdenv.mkDerivation {
     "--with-dri-driverdir=$(drivers)/lib/dri"
     "--with-dri-searchpath=${libglvnd.driverLink}/lib/dri"
     "--with-platforms=x11,wayland,drm"
+    "--enable-texture-float"
   ]
   ++ (optional (galliumDrivers != [])
       ("--with-gallium-drivers=" +
@@ -115,8 +112,6 @@ let self = stdenv.mkDerivation {
       ("--with-vulkan-drivers=" +
         builtins.concatStringsSep "," vulkanDrivers))
   ++ [
-    (enableFeature enableTextureFloats "texture-float")
-    (enableFeature grsecEnabled "glx-rts")
     (enableFeature stdenv.isLinux "dri3")
     (enableFeature stdenv.isLinux "nine") # Direct3D in Wine
     "--enable-libglvnd"
@@ -125,7 +120,8 @@ let self = stdenv.mkDerivation {
     "--enable-gles1"
     "--enable-gles2"
     "--enable-glx"
-    "--enable-glx-tls"
+    # https://bugs.freedesktop.org/show_bug.cgi?id=35268
+    (enableFeature (!stdenv.hostPlatform.isMusl) "glx-tls")
     "--enable-gallium-osmesa" # used by wine
     "--enable-llvm"
     "--enable-egl"
@@ -134,7 +130,6 @@ let self = stdenv.mkDerivation {
     "--enable-xvmc"
     "--enable-vdpau"
     "--enable-shared-glapi"
-    "--enable-sysfs"
     "--enable-llvm-shared-libs"
     "--enable-omx-bellagio"
     "--enable-va"
@@ -153,14 +148,14 @@ let self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland wayland-protocols libvdpau libelf libXvMC
     libomxil-bellagio libva-minimal libpthreadstubs openssl/*or another sha1 provider*/
-    valgrind-light python2
+    valgrind-light python2 python2.pkgs.Mako
   ];
 
   enableParallelBuilding = true;
   doCheck = false;
 
   installFlags = [
-    "sysconfdir=\${out}/etc"
+    "sysconfdir=\${drivers}/etc"
     "localstatedir=\${TMPDIR}"
     "vendorjsondir=\${out}/share/glvnd/egl_vendor.d"
   ];
@@ -203,6 +198,11 @@ let self = stdenv.mkDerivation {
     # Update search path used by glvnd
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
       substituteInPlace "$js" --replace '"libEGL_' '"'"$drivers/lib/libEGL_"
+    done
+
+    # Update search path used by pkg-config
+    for pc in $dev/lib/pkgconfig/{d3d,dri,xatracker}.pc; do
+      substituteInPlace "$pc" --replace $out $drivers
     done
   '' + optionalString (vulkanDrivers != []) ''
     # Update search path used by Vulkan (it's pointing to $out but
@@ -266,7 +266,7 @@ let self = stdenv.mkDerivation {
     homepage = https://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduarrrd vcunat ];
+    maintainers = with maintainers; [ vcunat ];
   };
 };
 in self

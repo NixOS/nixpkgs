@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, libGLU_combined, libX11, xproto, libXt
+{ stdenv, fetchurl, cmake, libGLU_combined, libX11, xproto, libXt
 , qtLib ? null
 # Darwin support
 , Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = http://www.vtk.org/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; unix;
   };
 }

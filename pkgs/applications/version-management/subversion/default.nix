@@ -5,9 +5,9 @@
 , perlBindings ? false
 , javahlBindings ? false
 , saslSupport ? false
-, stdenv, fetchurl, apr, aprutil, zlib, sqlite
+, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
-, sasl ? null, serf ? null, openssl
+, sasl ? null, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -17,7 +17,7 @@ assert javahlBindings -> jdk != null && perl != null;
 
 let
 
-  common = { version, sha256 }: stdenv.mkDerivation (rec {
+  common = { version, sha256, extraBuildInputs ? [ ] }: stdenv.mkDerivation (rec {
     inherit version;
     name = "subversion-${version}";
 
@@ -30,6 +30,7 @@ let
     outputs = [ "out" "dev" "man" ];
 
     buildInputs = [ zlib apr aprutil sqlite openssl ]
+      ++ extraBuildInputs
       ++ stdenv.lib.optional httpSupport serf
       ++ stdenv.lib.optional pythonBindings python
       ++ stdenv.lib.optional perlBindings perl
@@ -41,17 +42,19 @@ let
     # https://gcc.gnu.org/gcc-5/porting_to.html
     CPPFLAGS = "-P";
 
-    configureFlags = ''
-      ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
-      ${if httpServer then "--with-apxs=${apacheHttpd.dev}/bin/apxs" else "--without-apxs"}
-      ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
-      ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
-      --disable-keychain
-      ${if saslSupport then "--with-sasl=${sasl}" else "--without-sasl"}
-      ${if httpSupport then "--with-serf=${serf}" else "--without-serf"}
-      --with-zlib=${zlib.dev}
-      --with-sqlite=${sqlite.dev}
-    '';
+    configureFlags = [
+      (stdenv.lib.withFeature bdbSupport "berkeley-db")
+      (stdenv.lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
+      (stdenv.lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
+      (stdenv.lib.withFeatureAs saslSupport "sasl" sasl)
+      (stdenv.lib.withFeatureAs httpSupport "serf" serf)
+      "--disable-keychain"
+      "--with-zlib=${zlib.dev}"
+      "--with-sqlite=${sqlite.dev}"
+    ] ++ stdenv.lib.optionals javahlBindings [
+      "--enable-javahl"
+      "--with-jdk=${jdk}"
+    ];
 
     preBuild = ''
       makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)
@@ -88,11 +91,15 @@ let
 
     enableParallelBuilding = true;
 
-    meta = {
+    checkInputs = [ python ];
+    doCheck = false; # fails 10 out of ~2300 tests
+
+    meta = with stdenv.lib; {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
+      license = licenses.asl20;
       homepage = http://subversion.apache.org/;
-      maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
-      platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+      maintainers = with maintainers; [ eelco lovek323 ];
+      platforms = platforms.linux ++ platforms.darwin;
     };
 
   } // stdenv.lib.optionalAttrs stdenv.isDarwin {
@@ -111,5 +118,11 @@ in {
   subversion19 = common {
     version = "1.9.7";
     sha256 = "08qn94zaqcclam2spb4h742lvhxw8w5bnrlya0fm0bp17hriicf3";
+  };
+
+  subversion_1_10 = common {
+    version = "1.10.2";
+    sha256 = "127dysfc31q4dhbbxaznh9kqixy9jd44kgwji2gdwj6rb2lf6dav";
+    extraBuildInputs = [ lz4 utf8proc ];
   };
 }

@@ -8,9 +8,9 @@
 
   <para>
     Setting
-    <programlisting>
-      security.hideProcessInformation = true;
-    </programlisting>
+<programlisting>
+<xref linkend="opt-security.hideProcessInformation"/> = true;
+</programlisting>
     ensures that access to process information is restricted to the
     owning user.  This implies, among other things, that command-line
     arguments remain private.  Unless your deployment relies on unprivileged
@@ -25,9 +25,9 @@
 
   <para>
     To allow a service <replaceable>foo</replaceable> to run without process information hiding, set
-    <programlisting>
-      systemd.services.<replaceable>foo</replaceable>.serviceConfig.SupplementaryGroups = [ "proc" ];
-    </programlisting>
+<programlisting>
+<link linkend="opt-systemd.services._name_.serviceConfig">systemd.services.<replaceable>foo</replaceable>.serviceConfig</link>.SupplementaryGroups = [ "proc" ];
+</programlisting>
   </para>
 
 </chapter>

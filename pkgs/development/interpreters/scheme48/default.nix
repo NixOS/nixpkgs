@@ -8,6 +8,7 @@ stdenv.mkDerivation {
     description = "Scheme 48";
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     platforms = with stdenv.lib.platforms; unix;
+    license = stdenv.lib.licenses.bsd3;
   };
 
   src = fetchurl {

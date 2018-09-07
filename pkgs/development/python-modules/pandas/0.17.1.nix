@@ -1,8 +1,6 @@
 { buildPythonPackage
 , fetchPypi
-, python
 , stdenv
-, fetchurl
 , pytest
 , glibcLocales
 , cython
@@ -23,16 +21,15 @@
 }:
 
 let
-  inherit (stdenv.lib) optional optionalString concatStringsSep;
+  inherit (stdenv.lib) optional optionalString;
   inherit (stdenv) isDarwin;
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.22.0";
-  name = "${pname}-${version}";
+  version = "0.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44a94091dd71f05922eec661638ec1a35f26d573c119aa2fad964f10a2880e6c";
+    sha256 = "cfd7214a7223703fe6999fbe34837749540efee1c985e6aee9933f30e3f72837";
   };
 
   LC_ALL = "en_US.UTF-8";

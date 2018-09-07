@@ -1,15 +1,15 @@
 { stdenv, fetchurl, gzip, which, unzip, jdk }:
 
 let
-  version = "6.5.2";
+  version = "6.5.3.6";
   srcs = {
     i686-linux = fetchurl {
       url = "https://cdn.sencha.com/cmd/${version}/no-jre/SenchaCmd-${version}-linux-i386.sh.zip";
-      sha256 = "18gcqw9434xab97skcb97iw4p4s2pgggvq7jaisblap0ja00kqjr";
+      sha256 = "0g3hk3fdgmkdsr6ck1fgsmaxa9wbj2fpk84rk382ff9ny55bbzv9";
     };
     x86_64-linux = fetchurl {
       url = "https://cdn.sencha.com/cmd/${version}/no-jre/SenchaCmd-${version}-linux-amd64.sh.zip";
-      sha256 = "1b8jv99k37q1bi7b29f23lfzxc66v5fqdmr1rxsrqchwcrllc0z7";
+      sha256 = "08j8gak1xsxdjgkv6s24jv97jc49pi5yf906ynjmxb27wqpxn9mz";
     };
   };
 in
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   name = "sencha-bare-${version}";
-  src = srcs.${stdenv.system};
+  src = srcs.${stdenv.hostPlatform.system};
 
   nativeBuildInputs = [ gzip which unzip ];
   buildInputs = [ jdk ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, jre, makeWrapper, fetchMavenArtifact
+{ stdenv, fetchurl, jre, makeWrapper
 , mysqlSupport ? true, mysql_jdbc ? null }:
 
 assert mysqlSupport -> mysql_jdbc != null;
@@ -12,11 +12,11 @@ in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "liquibase";
-  version = "3.6.0";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "https://github.com/liquibase/liquibase/releases/download/${pname}-parent-${version}/${name}-bin.tar.gz";
-    sha256 = "0nrszf80s5v485li7xy8jkl1wsgjq6inr33m7p85splxhdgszjlb";
+    sha256 = "199ybjk0xxsg04v5x5l4arljmzj96hxva6ym6bp7av7dny0nqvfx";
   };
 
   buildInputs = [ jre makeWrapper ];

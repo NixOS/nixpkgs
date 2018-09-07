@@ -1,7 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, boost, miniupnpc, openssl, pkgconfig, unbound }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, git, doxygen, graphviz
+, boost, miniupnpc, openssl, unbound, cppzmq
+, zeromq, pcsclite, readline
+}:
 
 let
-  version = "0.9.14.0";
+  version = "0.12.0.0";
 in
 stdenv.mkDerivation {
   name = "aeon-${version}";
@@ -10,19 +13,24 @@ stdenv.mkDerivation {
     owner = "aeonix";
     repo = "aeon";
     rev = "v${version}";
-    sha256 = "0pl9nfhihj0wsdgvvpv5f14k4m2ikk8s3xw6nd8ymbnpxfzyxynr";
+    fetchSubmodules = true;
+    sha256 = "1schzlscslhqq7zcd68b1smqlaf7k789x1rwpplm7qi5iz9a8cfr";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig git doxygen graphviz ];
 
-  buildInputs = [ boost miniupnpc openssl unbound ];
+  buildInputs = [
+    boost miniupnpc openssl unbound
+    cppzmq zeromq pcsclite readline
+  ];
 
-  installPhase = ''
-    install -D src/aeond "$out/bin/aeond"
-    install src/simpleminer "$out/bin/aeon-simpleminer"
-    install src/simplewallet "$out/bin/aeon-simplewallet"
-    install src/connectivity_tool "$out/bin/aeon-connectivity-tool"
-  '';
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DBUILD_GUI_DEPS=ON"
+    "-DReadline_ROOT_DIR=${readline.dev}"
+  ];
+
+  hardeningDisable = [ "fortify" ];
 
   meta = with stdenv.lib; {
     description = "Private, secure, untraceable currency";

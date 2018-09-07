@@ -487,7 +487,7 @@ in
         '') cfg.virtualHosts) }
     '';
 
-    users.extraUsers.prosody = mkIf (cfg.user == "prosody") {
+    users.users.prosody = mkIf (cfg.user == "prosody") {
       uid = config.ids.uids.prosody;
       description = "Prosody user";
       createHome = true;
@@ -495,7 +495,7 @@ in
       home = "${cfg.dataDir}";
     };
 
-    users.extraGroups.prosody = mkIf (cfg.group == "prosody") {
+    users.groups.prosody = mkIf (cfg.group == "prosody") {
       gid = config.ids.gids.prosody;
     };
 

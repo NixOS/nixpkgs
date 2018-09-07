@@ -2,7 +2,6 @@
 
 buildPythonPackage rec {
   pname = "rply";
-  name = "${pname}-${version}";
   version = "0.7.5";
 
   src = fetchFromGitHub {

@@ -1,4 +1,4 @@
-{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
+{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3 }:
 
 let
 
@@ -6,11 +6,13 @@ let
 
   nixpkgsPatches = [
     ./env_var_for_system_dir.patch
-
-    # this one is actually an omnipresent bug
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
-    ./fix-pa-context-connect-retval.patch
   ];
+
+  firefox60_aarch64_skia_patch = fetchpatch {
+      name = "aarch64-skia.patch";
+      url = https://src.fedoraproject.org/rpms/firefox/raw/8cff86d95da3190272d1beddd45b41de3148f8ef/f/build-aarch64-skia.patch;
+      sha256 = "11acb0ms4jrswp7268nm2p8g8l4lv8zc666a5bqjbb09x9k6b78k";
+  };
 
 in
 
@@ -18,42 +20,75 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "59.0.2";
+    version = "62.0";
     src = fetchurl {
-      url = "https://hg.mozilla.org/releases/mozilla-release/archive/239e434d6d2b8e1e2b697c3416d1e96d48fe98e5.tar.bz2";
-      sha512 = "3kfh224sfc9ig4733frnskcs49xzjkrs00lxllsvx1imm6f4sf117mqlvc7bhgrn8ldiqn6vaa5g6gd9b7awkk1g975bbzk9namb3yv";
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "0byxslbgr37sm1ra3wywl5c2a39qbkjwc227yp4j2l930m5j86m5g7rmv8zm944vv5vnyzmwhym972si229fm2lwq74p4xam5rfv948";
     };
 
     patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
     ];
 
+    extraNativeBuildInputs = [ python3 ];
+
     meta = {
       description = "A web browser built from Firefox source tree";
       homepage = http://www.mozilla.com/en-US/firefox/;
       maintainers = with lib.maintainers; [ eelco ];
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
+      license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
     };
   } {};
 
-  firefox-esr = common rec {
+  firefox-esr-52 = common rec {
     pname = "firefox-esr";
-    version = "52.7.3esr";
+    version = "52.9.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "31y3qrslg61724vmly6gr1lqcrqgpkh3zsl8riax45gizfcp3qbgkvmd5wwfn9fiwjqi6ww3i08j51wxrfxcxznv7c6qzsvzzc30mgw";
+      sha512 = "bfca42668ca78a12a9fb56368f4aae5334b1f7a71966fbba4c32b9c5e6597aac79a6e340ac3966779d2d5563eb47c054ab33cc40bfb7306172138ccbd3adb2b9";
     };
 
-    patches = nixpkgsPatches;
+    patches = nixpkgsPatches ++ [
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
+    ];
+
+    meta = firefox.meta // {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [ "Support ended in August 2018." ];
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-52-unwrapped";
+      versionSuffix = "esr";
+    };
+  } {};
+
+  firefox-esr-60 = common rec {
+    pname = "firefox-esr";
+    version = "60.2.0esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "1nf7nsycvzafvy4jjli5xh59d2mac17gfx91a1jh86f41w6qcsi3lvkfa8xhxsq8wfdsmqk1f4hmqzyx63h4m691qji7838g2nk49k7";
+    };
+
+    patches = nixpkgsPatches ++ [
+      ./no-buildconfig.patch
+
+      # this one is actually an omnipresent bug
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
+      ./fix-pa-context-connect-retval.patch
+    ] ++ lib.optional stdenv.isAarch64 firefox60_aarch64_skia_patch;
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
     };
     updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-unwrapped";
+      attrPath = "firefox-esr-60-unwrapped";
       versionSuffix = "esr";
     };
   } {};
@@ -105,40 +140,24 @@ rec {
       '';
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
+      license = lib.licenses.bsd3;
     };
   };
 
 in rec {
 
-  tor-browser-7-0 = common (rec {
-    pname = "tor-browser";
-    version = "7.0.1";
-    isTorBrowserLike = true;
-
-    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
-    src = fetchFromGitHub {
-      owner = "SLNOS";
-      repo  = "tor-browser";
-      # branch "tor-browser-52.5.0esr-7.0-1-slnos";
-      rev   = "830ff8d622ef20345d83f386174f790b0fc2440d";
-      sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
-    };
-
-    patches = nixpkgsPatches;
-  } // commonAttrs) {};
-
   tor-browser-7-5 = common (rec {
     pname = "tor-browser";
-    version = "7.5.2";
+    version = "7.5.6";
     isTorBrowserLike = true;
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.7.3esr-7.5-1-slnos";
-      rev   = "62e77aa47d90c10cfc9c6f3b7358a6bdc3167182";
-      sha256 = "09pyqicv6z0h4lmjdybx56gj3l28gkl0bbpk0pnmlzcyr9vng7zj";
+      # branch "tor-browser-52.9.0esr-7.5-2-slnos"
+      rev   = "95bb92d552876a1f4260edf68fda5faa3eb36ad8";
+      sha256 = "1ykn3yg4s36g2cpzxbz7s995c33ij8kgyvghx38z4i8siaqxdddy";
     };
 
     patches = nixpkgsPatches;
@@ -153,9 +172,9 @@ in rec {
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-52.7.0esr-8.0-1-slnos";
-      rev   = "58314ccb043882e830ee9a21c37a92d6e0d34e94";
-      sha256 = "09gb7chw2kly53b599xwpi75azj00957rnxly9fqv8zi3n5k2pdb";
+      # branch "tor-browser-52.8.0esr-8.0-1-slnos";
+      rev   = "5d7e9e1cacbf70840f8f1a9aafe99f354f9ad0ca";
+      sha256 = "0cwxwwc4m7331bbp3id694ffwxar0j5kfpgpn9l1z36rmgv92n21";
     };
 
     patches = nixpkgsPatches;

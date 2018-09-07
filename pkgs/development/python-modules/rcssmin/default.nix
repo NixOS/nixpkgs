@@ -2,7 +2,6 @@
 buildPythonPackage rec {
   pname = "rcssmin";
   version = "1.0.6";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "shapelib-1.4.1";
 
   src = fetchurl {
-    url = "http://download.osgeo.org/shapelib/${name}.tar.gz";
+    url = "https://download.osgeo.org/shapelib/${name}.tar.gz";
     sha256 = "1cr3b5jfglwisbyzj7fnxp9xysqad0fcmcqvqaja6qap6qblijd4";
   };
 

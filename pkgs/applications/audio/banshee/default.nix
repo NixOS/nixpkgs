@@ -1,4 +1,4 @@
-{ pkgs, stdenv, lib, fetchurl, intltool, pkgconfig, gstreamer, gst-plugins-base
+{ stdenv, lib, fetchurl, intltool, pkgconfig, gstreamer, gst-plugins-base
 , gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-ffmpeg, glib
 , mono, mono-addins, dbus-sharp-1_0, dbus-sharp-glib-1_0, notify-sharp, gtk-sharp-2_0
 , boo, gdata-sharp, taglib-sharp, sqlite, gnome-sharp, gconf, gtk-sharp-beans, gio-sharp
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "2.6.2";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/banshee/2.6/banshee-${version}.tar.xz";
+    url = "https://ftp.gnome.org/pub/GNOME/sources/banshee/2.6/banshee-${version}.tar.xz";
     sha256 = "1y30p8wxx5li39i5gpq2wib0ympy8llz0gyi6ri9bp730ndhhz7p";
   };
 
@@ -48,8 +48,10 @@ stdenv.mkDerivation rec {
         -i $out/bin/banshee
   '';
   meta = with lib; {
+    homepage = "http://banshee.fm/";
     description = "A music player written in C# using GNOME technologies";
     platforms = platforms.linux;
     maintainers = [ maintainers.zohl ];
+    license = licenses.mit;
   };
 }

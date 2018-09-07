@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, fetchpatch, qmake, qtbase, qttools, subversion, apr }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, subversion, apr }:
 
 let
-  version = "1.0.11";
+  version = "1.0.12";
 in
 stdenv.mkDerivation {
   name = "svn-all-fast-export-${version}";
@@ -10,17 +10,8 @@ stdenv.mkDerivation {
     owner = "svn-all-fast-export";
     repo = "svn2git";
     rev = version;
-    sha256 = "0lhnw8f15j4wkpswhrjd7bp9xkhbk32zmszaxayzfhbdl0g7pzwj";
+    sha256 = "158w2ynz16dlp992g8nfk7v2f5962z88b4xyv5dyjvbl4l1v7r0v";
   };
-
-  # https://github.com/svn-all-fast-export/svn2git/pull/40
-  patches = [
-    (fetchpatch {
-      name = "pr40.patch";
-      sha256 = "0mwncklzncsifql9zlxlbj3clsif5p2v1xs8nmxrw44mqvaysjw3";
-      url = https://github.com/svn-all-fast-export/svn2git/compare/f00d5a5...flokli:nixos-20180326.patch;
-    })
-  ];
 
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [ apr.dev subversion.dev qtbase ];

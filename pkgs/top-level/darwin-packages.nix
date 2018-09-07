@@ -19,7 +19,7 @@ in
 
   binutils = pkgs.wrapBintoolsWith {
     libc =
-      if pkgs.targetPlatform != pkgs.hostPlatform
+      if stdenv.targetPlatform != stdenv.hostPlatform
       then pkgs.libcCross
       else pkgs.stdenv.cc.libc;
     bintools = darwin.binutils-unwrapped;
@@ -29,7 +29,6 @@ in
     inherit (darwin) libobjc maloader;
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
     libcxxabi = pkgs.libcxxabi;
-    xctoolchain = darwin.xcode.toolchain;
   };
 
   cf-private = callPackage ../os-specific/darwin/cf-private {
@@ -45,14 +44,17 @@ in
 
   insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
 
-  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/ios-sdk-pkgs {
+  iosSdkPkgs = darwin.callPackage ../os-specific/darwin/xcode/sdk-pkgs.nix {
     buildIosSdk = buildPackages.darwin.iosSdkPkgs.sdk;
     targetIosSdkPkgs = targetPackages.darwin.iosSdkPkgs;
+    xcode = darwin.xcode;
     inherit (pkgs.llvmPackages) clang-unwrapped;
   };
 
+  iproute2mac = callPackage ../os-specific/darwin/iproute2mac { };
+
   libobjc = apple-source-releases.objc4;
-  
+
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
   opencflite = callPackage ../os-specific/darwin/opencflite { };
@@ -69,7 +71,8 @@ in
 
   usr-include = callPackage ../os-specific/darwin/usr-include { };
 
-  xcode = callPackage ../os-specific/darwin/xcode { };
+  inherit (callPackages ../os-specific/darwin/xcode { } )
+          xcode_8_1 xcode_8_2 xcode_9_1 xcode_9_2 xcode_9_4 xcode;
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 

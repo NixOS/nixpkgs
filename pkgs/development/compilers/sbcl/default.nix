@@ -1,6 +1,6 @@
 { stdenv, fetchurl, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
-, threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.system)
+, threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.hostPlatform.system)
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "0y46zgg3lamaqqhxbqmbwzvdakzvc9j07d0ci8f57pfl549v04a4";
+    sha256 = "1wmxly94pn8527092hyzg5mq58mg7qlc46nm31f268wb2dm67rvm";
   };
 
   patchPhase = ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                (setf features (remove x features))))
     ''
     + (if threadSupport then "(enable :sb-thread)" else "(disable :sb-thread)")
-    + stdenv.lib.optionalString stdenv.isArm "(enable :arm)"
+    + stdenv.lib.optionalString stdenv.isAarch32 "(enable :arm)"
     + ''
       )) " > customize-target-features.lisp
 

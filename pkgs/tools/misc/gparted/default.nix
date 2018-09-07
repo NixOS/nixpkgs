@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gparted-0.31.0";
+  name = "gparted-0.32.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gparted/${name}.tar.gz";
-    sha256 = "1fh7rpgb4xxdhgyjsirb83zvjfc5mfngb8a1pjbv7r6r6jj4jyrv";
+    sha256 = "1fjp4c8jc0kjbbih1x1vs9v40d9lncma642kflnmy0bixxnvh7df";
   };
 
   configureFlags = [ "--disable-doc" ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       partitions. GParted enables you to change the partition organization
       while preserving the partition contents.
     '';
-    homepage = http://gparted.org;
+    homepage = https://gparted.org;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

@@ -64,7 +64,6 @@ rec {
   */
   foldl = op: nul: list:
     let
-      len = length list;
       foldl' = n:
         if n == -1
         then nul
@@ -101,7 +100,7 @@ rec {
        concatMap (x: [x] ++ ["z"]) ["a" "b"]
        => [ "a" "z" "b" "z" ]
   */
-  concatMap = f: list: concatLists (map f list);
+  concatMap = builtins.concatMap or (f: list: concatLists (map f list));
 
   /* Flatten the argument into a single list; that is, nested lists are
      spliced into the top-level lists.
@@ -249,6 +248,42 @@ rec {
       then { right = [h] ++ t.right; wrong = t.wrong; }
       else { right = t.right; wrong = [h] ++ t.wrong; }
     ) { right = []; wrong = []; });
+
+  /* Splits the elements of a list into many lists, using the return value of a predicate.
+     Predicate should return a string which becomes keys of attrset `groupBy' returns.
+
+     `groupBy'' allows to customise the combining function and initial value
+
+     Example:
+       groupBy (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
+       => { true = [ 5 3 4 ]; false = [ 1 2 ]; }
+       groupBy (x: x.name) [ {name = "icewm"; script = "icewm &";}
+                             {name = "xfce";  script = "xfce4-session &";}
+                             {name = "icewm"; script = "icewmbg &";}
+                             {name = "mate";  script = "gnome-session &";}
+                           ]
+       => { icewm = [ { name = "icewm"; script = "icewm &"; }
+                      { name = "icewm"; script = "icewmbg &"; } ];
+            mate  = [ { name = "mate";  script = "gnome-session &"; } ];
+            xfce  = [ { name = "xfce";  script = "xfce4-session &"; } ];
+          }
+
+
+     groupBy' allows to customise the combining function and initial value
+
+     Example:
+       groupBy' builtins.add 0 (x: boolToString (x > 2)) [ 5 1 2 3 4 ]
+       => { true = 12; false = 3; }
+  */
+  groupBy' = op: nul: pred: lst:
+    foldl' (r: e:
+              let
+                key = pred e;
+              in
+                r // { ${key} = op (r.${key} or nul) e; }
+           ) {} lst;
+
+  groupBy = groupBy' (sum: e: sum ++ [e]) [];
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest. How both lists are merged is defined
@@ -474,7 +509,8 @@ rec {
        => 3
   */
   last = list:
-    assert list != []; elemAt list (length list - 1);
+    assert lib.assertMsg (list != []) "lists.last: list must not be empty!";
+    elemAt list (length list - 1);
 
   /* Return all elements but the last
 
@@ -482,7 +518,9 @@ rec {
        init [ 1 2 3 ]
        => [ 1 2 ]
   */
-  init = list: assert list != []; take (length list - 1) list;
+  init = list:
+    assert lib.assertMsg (list != []) "lists.init: list must not be empty!";
+    take (length list - 1) list;
 
 
   /* return the image of the cross product of some lists by a function

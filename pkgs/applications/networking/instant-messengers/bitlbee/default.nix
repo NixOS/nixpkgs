@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, gnutls, glib, pkgconfig, check, libotr, python,
+{ fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr, python,
 enableLibPurple ? false, pidgin ? null }:
 
 with stdenv.lib;
@@ -15,9 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnutls glib libotr python ]
     ++ optional enableLibPurple pidgin;
 
-  preConfigure = optionalString enableLibPurple
-    "export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${pidgin}/lib/pkgconfig";
-
   configureFlags = [
     "--gcov=1"
     "--otr=1"
@@ -26,11 +23,11 @@ stdenv.mkDerivation rec {
   ]
   ++ optional enableLibPurple "--purple=1";
 
-  buildPhase = optionalString (!enableLibPurple) ''
-    make install-dev
-  '';
+  installTargets = [ "install" "install-dev" ];
 
   doCheck = !enableLibPurple; # Checks fail with libpurple for some reason
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "IRC instant messaging gateway";
@@ -50,6 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ wkennington pSub ];
-    platforms = platforms.gnu;  # arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

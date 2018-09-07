@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libxml2, openssl, zlib, bzip2, musl-fts }:
+{ stdenv, fetchurl, libxml2, openssl, zlib, bzip2, fts }:
 
 stdenv.mkDerivation rec {
   version = "1.6.1";
@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ghmsbs6xwg1092v7pjcibmk5wkyifwxw6ygp08gfz25d2chhipf";
   };
 
-  buildInputs = [ libxml2 openssl zlib bzip2 ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl musl-fts;
+  buildInputs = [ libxml2 openssl zlib bzip2 fts ];
 
   meta = {
     homepage    = https://mackyle.github.io/xar/;

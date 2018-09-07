@@ -1,76 +1,15 @@
-diff --git a/applets/batterymonitor/package/contents/ui/BatteryItem.qml b/applets/batterymonitor/package/contents/ui/BatteryItem.qml
-index 7e2d975..40a5797 100644
---- a/applets/batterymonitor/package/contents/ui/BatteryItem.qml
-+++ b/applets/batterymonitor/package/contents/ui/BatteryItem.qml
-@@ -26,7 +26,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
- import org.kde.plasma.extras 2.0 as PlasmaExtras
- import org.kde.plasma.workspace.components 2.0
- import org.kde.kcoreaddons 1.0 as KCoreAddons
--import "logic.js" as Logic
-+import "../code/logic.js" as Logic
- 
- Item {
-     id: batteryItem
-diff --git a/applets/batterymonitor/package/contents/ui/batterymonitor.qml b/applets/batterymonitor/package/contents/ui/batterymonitor.qml
-index 50deee5..45b6b37 100644
---- a/applets/batterymonitor/package/contents/ui/batterymonitor.qml
-+++ b/applets/batterymonitor/package/contents/ui/batterymonitor.qml
-@@ -25,7 +25,7 @@ import org.kde.plasma.plasmoid 2.0
- import org.kde.plasma.core 2.0 as PlasmaCore
- import org.kde.kcoreaddons 1.0 as KCoreAddons
- import org.kde.kquickcontrolsaddons 2.0
--import "logic.js" as Logic
-+import "../code/logic.js" as Logic
- 
- Item {
-     id: batterymonitor
-diff --git a/applets/lock_logout/contents/ui/lockout.qml b/applets/lock_logout/contents/ui/lockout.qml
-index 80e7e53..0083cf0 100644
---- a/applets/lock_logout/contents/ui/lockout.qml
-+++ b/applets/lock_logout/contents/ui/lockout.qml
-@@ -23,7 +23,7 @@ import org.kde.plasma.plasmoid 2.0
- import org.kde.plasma.core 2.0 as PlasmaCore
- import org.kde.plasma.components 2.0
- import org.kde.kquickcontrolsaddons 2.0
--import "data.js" as Data
-+import "../code/data.js" as Data
- 
- Flow {
-     id: lockout
-diff --git a/applets/notifications/package/contents/ui/main.qml b/applets/notifications/package/contents/ui/main.qml
-index cb15cfa..a6976ba 100644
---- a/applets/notifications/package/contents/ui/main.qml
-+++ b/applets/notifications/package/contents/ui/main.qml
-@@ -28,7 +28,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
- 
- import org.kde.plasma.private.notifications 1.0
- 
--import "uiproperties.js" as UiProperties
-+import "../code/uiproperties.js" as UiProperties
- 
- MouseEventListener {
-     id: notificationsApplet
-diff --git a/krunner/dbus/org.kde.krunner.service.in b/krunner/dbus/org.kde.krunner.service.in
-index 8571521..294eab0 100644
---- a/krunner/dbus/org.kde.krunner.service.in
-+++ b/krunner/dbus/org.kde.krunner.service.in
+diff --git a/sddm-theme/theme.conf.cmake b/sddm-theme/theme.conf.cmake
+index 69d30705..52e91028 100644
+--- a/sddm-theme/theme.conf.cmake
++++ b/sddm-theme/theme.conf.cmake
 @@ -1,4 +1,4 @@
- [D-BUS Service]
- Name=org.kde.krunner
--Exec=@CMAKE_INSTALL_PREFIX@/bin/krunner
-+Exec=@CMAKE_INSTALL_FULL_BINDIR@/krunner
- 
-diff --git a/kuiserver/org.kde.kuiserver.service.in b/kuiserver/org.kde.kuiserver.service.in
-index 7a86d07..5b3030c 100644
---- a/kuiserver/org.kde.kuiserver.service.in
-+++ b/kuiserver/org.kde.kuiserver.service.in
-@@ -1,3 +1,3 @@
- [D-BUS Service]
- Name=org.kde.kuiserver
--Exec=@CMAKE_INSTALL_PREFIX@/bin/kuiserver5
-+Exec=@CMAKE_INSTALL_FULL_BINDIR@/kuiserver5
+ [General]
+ type=image
+ color=#1d99f3
+-background=${CMAKE_INSTALL_PREFIX}/${WALLPAPER_INSTALL_DIR}/Next/contents/images/3200x2000.png
++background=${NIXPKGS_WALLPAPER_INSTALL_DIR}/Next/contents/images/3200x2000.png
 diff --git a/startkde/CMakeLists.txt b/startkde/CMakeLists.txt
-index fe29f57..247db95 100644
+index cb75aeca..247db953 100644
 --- a/startkde/CMakeLists.txt
 +++ b/startkde/CMakeLists.txt
 @@ -3,11 +3,6 @@ add_subdirectory(kstartupconfig)
@@ -79,14 +18,14 @@ index fe29f57..247db95 100644
  
 -#FIXME: reconsider, looks fishy
 -if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
--    set(EXPORT_XCURSOR_PATH "XCURSOR_PATH=${CMAKE_INSTALL_PREFIX}/share/icons:$XCURSOR_PATH\":~/.icons:/usr/share/icons:/usr/share/pixmaps:/usr/X11R6/lib/X11/icons\"; export XCURSOR_PATH")
+-    set(EXPORT_XCURSOR_PATH "XCURSOR_PATH=${KDE_INSTALL_FULL_DATAROOTDIR}/icons:$XCURSOR_PATH\":~/.icons:/usr/share/icons:/usr/share/pixmaps:/usr/X11R6/lib/X11/icons\"; export XCURSOR_PATH")
 -endif()
 -
  configure_file(startkde.cmake ${CMAKE_CURRENT_BINARY_DIR}/startkde  @ONLY)
  configure_file(startplasmacompositor.cmake ${CMAKE_CURRENT_BINARY_DIR}/startplasmacompositor  @ONLY)
  configure_file(startplasma.cmake ${CMAKE_CURRENT_BINARY_DIR}/startplasma  @ONLY)
 diff --git a/startkde/kstartupconfig/kstartupconfig.cpp b/startkde/kstartupconfig/kstartupconfig.cpp
-index c992785..bd506ce 100644
+index 493218ea..d507aa55 100644
 --- a/startkde/kstartupconfig/kstartupconfig.cpp
 +++ b/startkde/kstartupconfig/kstartupconfig.cpp
 @@ -147,5 +147,5 @@ int main()
@@ -97,7 +36,7 @@ index c992785..bd506ce 100644
 +    return system( NIXPKGS_KDOSTARTUPCONFIG5 );
      }
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index b3117b4..e70110e 100644
+index f9e2e429..0a4267a9 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,22 +1,31 @@
@@ -436,37 +375,7 @@ index b3117b4..e70110e 100644
  # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
  # from some users that they're confused and don't know what to do. This is
  # especially necessary on slow machines, where starting KDE takes one or two
-@@ -211,28 +236,10 @@ xset fp rehash
- # If the user has overwritten fonts, the cursor font may be different now
- # so don't move this up.
- #
--xsetroot -cursor_name left_ptr
--
--# Get Ghostscript to look into user's KDE fonts dir for additional Fontmap
--if test -n "$GS_LIB" ; then
--    GS_LIB=$usr_fdir:$GS_LIB
--    export GS_LIB
--else
--    GS_LIB=$usr_fdir
--    export GS_LIB
--fi
-+@NIXPKGS_XSETROOT@ -cursor_name left_ptr
- 
- echo 'startkde: Starting up...'  1>&2
- 
--# Make sure that the KDE prefix is first in XDG_DATA_DIRS and that it's set at all.
--# The spec allows XDG_DATA_DIRS to be not set, but X session startup scripts tend
--# to set it to a list of paths *not* including the KDE prefix if it's not /usr or
--# /usr/local.
--if test -z "$XDG_DATA_DIRS"; then
--    XDG_DATA_DIRS="@CMAKE_INSTALL_PREFIX@/@SHARE_INSTALL_PREFIX@:/usr/share:/usr/local/share"
--fi
--export XDG_DATA_DIRS
--
- # Mark that full KDE session is running (e.g. Konqueror preloading works only
- # with full KDE running). The KDE_FULL_SESSION property can be detected by
- # any X client connected to the same X session, even if not launched
-@@ -257,44 +264,65 @@ export XDG_DATA_DIRS
+@@ -257,44 +282,65 @@ export XDG_DATA_DIRS
  #
  KDE_FULL_SESSION=true
  export KDE_FULL_SESSION
@@ -545,7 +454,7 @@ index b3117b4..e70110e 100644
  
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
-@@ -306,34 +334,37 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
+@@ -306,34 +352,37 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
  # We only check for 255 which means that the ksmserver process could not be
  # started, any problems thereafter, e.g. ksmserver failing to initialize,
  # will remain undetected.
@@ -594,7 +503,7 @@ index b3117b4..e70110e 100644
              done
              break
          fi
-@@ -342,15 +373,17 @@ fi
+@@ -342,15 +391,17 @@ fi
  
  echo 'startkde: Shutting down...'  1>&2
  # just in case
@@ -617,7 +526,7 @@ index b3117b4..e70110e 100644
  
  echo 'startkde: Done.'  1>&2
 diff --git a/startkde/startplasma.cmake b/startkde/startplasma.cmake
-index a5d09fa..d42c284 100644
+index f7330ab3..5eedbb11 100644
 --- a/startkde/startplasma.cmake
 +++ b/startkde/startplasma.cmake
 @@ -1,6 +1,6 @@
@@ -754,8 +663,8 @@ index a5d09fa..d42c284 100644
    exit 1
  fi
  
--qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
-+@NIXPKGS_QDBUS@ org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
+-qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
++@NIXPKGS_QDBUS@ org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
  
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
@@ -809,7 +718,7 @@ index a5d09fa..d42c284 100644
  
  echo 'startplasma: Done.'  1>&2
 diff --git a/startkde/startplasmacompositor.cmake b/startkde/startplasmacompositor.cmake
-index 8ac47aa..49970ef 100644
+index dd9e304d..12132f9e 100644
 --- a/startkde/startplasmacompositor.cmake
 +++ b/startkde/startplasmacompositor.cmake
 @@ -1,118 +1,165 @@
@@ -998,10 +907,10 @@ index 8ac47aa..49970ef 100644
 -    }
  fi
  
- kstartupconfig5
+-kstartupconfig5
++@CMAKE_INSTALL_FULL_BINDIR@/kstartupconfig5
  returncode=$?
--if test $returncode -ne 0; then
-+if ! @CMAKE_INSTALL_FULL_BINDIR@/kstartupconfig5; then
+ if test $returncode -ne 0; then
      exit 1
  fi
 -[ -r $configDir/startupconfig ] && . $configDir/startupconfig
@@ -1013,27 +922,26 @@ index 8ac47aa..49970ef 100644
  #otherwise apps that manually opt in for high DPI get auto scaled by the developer AND scaled by the wl_output
  export QT_AUTO_SCREEN_SCALE_FACTOR=0
  
+-# XCursor mouse theme needs to be applied here to work even for kded or ksmserver
+-if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
+-    @EXPORT_XCURSOR_PATH@
 +XCURSOR_PATH=~/.icons
 +IFS=":" read -r -a xdgDirs <<< "$XDG_DATA_DIRS"
 +for xdgDir in "${xdgDirs[@]}"; do
 +    XCURSOR_PATH="$XCURSOR_PATH:$xdgDir/icons"
 +done
 +export XCURSOR_PATH
-+
- # XCursor mouse theme needs to be applied here to work even for kded or ksmserver
--if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
--    @EXPORT_XCURSOR_PATH@
--
+ 
 -    # TODO: is kapplymousetheme a core app?
--    #kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
++# XCursor mouse theme needs to be applied here to work even for kded or ksmserver
++if [ -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ]; then
+     #kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
 -    if test $? -eq 10; then
 -        XCURSOR_THEME=breeze_cursors
 -        export XCURSOR_THEME
 -    elif test -n "$kcminputrc_mouse_cursortheme"; then
 -        XCURSOR_THEME="$kcminputrc_mouse_cursortheme"
 -        export XCURSOR_THEME
-+if [ -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ]; then
-+    #kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
 +    if [ $? -eq 10 ]; then
 +        export XCURSOR_THEME=breeze_cursors
 +    elif [ -n "$kcminputrc_mouse_cursortheme" ]; then
@@ -1110,7 +1018,7 @@ index 8ac47aa..49970ef 100644
      : # ok
  else
      echo 'startplasmacompositor: Could not start D-Bus. Can you call qdbus?'  1>&2
-@@ -212,7 +228,7 @@ export KDE_FULL_SESSION
+@@ -212,26 +228,47 @@ export KDE_FULL_SESSION
  KDE_SESSION_VERSION=5
  export KDE_SESSION_VERSION
  
@@ -1119,9 +1027,7 @@ index 8ac47aa..49970ef 100644
  export KDE_SESSION_UID
  
  XDG_CURRENT_DESKTOP=KDE
-@@ -222,20 +238,41 @@ export XDG_CURRENT_DESKTOP
- QT_QPA_PLATFORM=wayland
- export QT_QPA_PLATFORM
+ export XDG_CURRENT_DESKTOP
  
 +# Source scripts found in <config locations>/plasma-workspace/env/*.sh
 +# (where <config locations> correspond to the system and user's configuration
@@ -1171,12 +1077,3 @@ index 8ac47aa..49970ef 100644
  
  echo 'startplasmacompositor: Shutting down...'  1>&2
  
-diff --git a/startkde/waitforname/org.kde.plasma.Notifications.service.in b/startkde/waitforname/org.kde.plasma.Notifications.service.in
-index 0a51b84..f48b5d8 100644
---- a/startkde/waitforname/org.kde.plasma.Notifications.service.in
-+++ b/startkde/waitforname/org.kde.plasma.Notifications.service.in
-@@ -1,3 +1,3 @@
- [D-BUS Service]
- Name=org.freedesktop.Notifications
--Exec=@CMAKE_INSTALL_PREFIX@/bin/plasma_waitforname org.freedesktop.Notifications
-+Exec=@CMAKE_INSTALL_FULL_BINDIR@/plasma_waitforname org.freedesktop.Notifications

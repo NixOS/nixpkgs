@@ -44,6 +44,7 @@ let
         systemd.services.${variant} = {
           description = "BIRD Internet Routing Daemon (${descr})";
           wantedBy = [ "multi-user.target" ];
+          reloadIfChanged = true;
           serviceConfig = {
             Type = "forking";
             Restart = "on-failure";
@@ -60,11 +61,11 @@ let
           };
         };
         users = {
-          extraUsers.${variant} = {
+          users.${variant} = {
             description = "BIRD Internet Routing Daemon user";
             group = variant;
           };
-          extraGroups.${variant} = {};
+          groups.${variant} = {};
         };
       };
     };

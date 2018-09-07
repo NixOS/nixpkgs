@@ -1,4 +1,4 @@
-{ stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
+{ stdenv, stdenv_32bit, fetchurl, fetchzip, unzip, makeWrapper
 , platformTools, buildTools, support, supportRepository, platforms, sysimages, addons, sources
 , libX11, libXext, libXrender, libxcb, libXau, libXdmcp, libXtst, libGLU_combined, alsaLib
 , freetype, fontconfig, glib, gtk2, atk, file, jdk, coreutils, libpulseaudio, dbus
@@ -8,22 +8,30 @@
 { platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false
 , useGooglePlayServices ? false, useInstantApps ? false }:
 
-let inherit (stdenv.lib) makeLibraryPath; in
+let inherit (stdenv.lib) makeLibraryPath;
+
+    googleRepository = let version = "gms_v9_rc41_wear_2_0_rc6";
+      in fetchzip rec {
+        url = "https://dl-ssl.google.com/android/repository/google_m2repository_${version}.zip";
+        sha256 = "0k99xmynv0k62d301zx5jnjkddflr51i5lb02l9incg7m5cn8kzx";
+      };
+
+in
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
   version = "25.2.5";
 
-  src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+  src = if (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
     then fetchurl {
-      url = "http://dl.google.com/android/repository/tools_r${version}-linux.zip";
+      url = "https://dl.google.com/android/repository/tools_r${version}-linux.zip";
       sha256 = "0gnk49pkwy4m0nqwm1xnf3w4mfpi9w0kk7841xlawpwbkj0icxap";
     }
-    else if stdenv.system == "x86_64-darwin" then fetchurl {
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/repository/tools_r${version}-macosx.zip";
       sha256 = "0yg7wjmyw70xsh8k4hgbqb5rilam2a94yc8dwbh7fjwqcmpxgwqb";
     }
-    else throw "platform not ${stdenv.system} supported!";
+    else throw "platform not ${stdenv.hostPlatform.system} supported!";
 
   buildCommand = ''
     mkdir -p $out/libexec
@@ -36,7 +44,7 @@ stdenv.mkDerivation rec {
         sed -i -e "s|/bin/ls|${coreutils}/bin/ls|" "$f"
     done
 
-    ${stdenv.lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+    ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
     ''
       # There are a number of native binaries. We must patch them to let them find the interpreter and libstdc++
 
@@ -46,7 +54,7 @@ stdenv.mkDerivation rec {
           patchelf --set-rpath ${stdenv_32bit.cc.cc.lib}/lib $i
       done
 
-      ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
+      ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
         for i in bin64/{mkfs.ext4,fsck.ext4,e2fsck,tune2fs,resize2fs}
         do
             patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
@@ -54,7 +62,7 @@ stdenv.mkDerivation rec {
         done
       ''}
 
-      ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
+      ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
         # We must also patch the 64-bit emulator instances, if needed
 
         for i in emulator emulator64-arm emulator64-mips emulator64-x86 emulator64-crash-service emulator-check qemu/linux-x86_64/qemu-system-*
@@ -81,7 +89,7 @@ stdenv.mkDerivation rec {
 
       # The emulators need additional libraries, which are dynamically loaded => let's wrap them
 
-      ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
+      ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
         for i in emulator emulator64-arm emulator64-mips emulator64-x86 emulator64-crash-service
         do
             wrapProgram `pwd`/$i \
@@ -94,7 +102,7 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    ${if stdenv.system == "i686-linux" then
+    ${if stdenv.hostPlatform.system == "i686-linux" then
       ''
         # The monitor requires some more patching
 
@@ -107,7 +115,7 @@ stdenv.mkDerivation rec {
 
         cd ../..
       ''
-      else if stdenv.system == "x86_64-linux" then
+      else if stdenv.hostPlatform.system == "x86_64-linux" then
       ''
         # The monitor requires some more patching
 
@@ -167,6 +175,8 @@ stdenv.mkDerivation rec {
 
     ${stdenv.lib.optionalString useInstantApps
        "ln -s ${addons.instant_apps}/whsdk instantapps"}
+
+    ln -s ${googleRepository} m2repository
 
     cd ../..
 
@@ -257,5 +267,6 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = stdenv.lib.platforms.unix;
     hydraPlatforms = [];
+    license = stdenv.lib.licenses.unfree;
   };
 }

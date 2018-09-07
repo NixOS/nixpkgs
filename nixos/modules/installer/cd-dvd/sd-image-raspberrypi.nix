@@ -16,7 +16,8 @@ in
   ];
 
   assertions = lib.singleton {
-    assertion = pkgs.stdenv.system == "armv6l-linux";
+    assertion = pkgs.stdenv.hostPlatform.system == "armv6l-linux"
+      && pkgs.stdenv.hostPlatform.system == pkgs.stdenv.buildPlatform.system;
     message = "sd-image-raspberrypi.nix can be only built natively on ARMv6; " +
       "it cannot be cross compiled";
   };
@@ -27,15 +28,25 @@ in
   boot.consoleLogLevel = lib.mkDefault 7;
   boot.kernelPackages = pkgs.linuxPackages_rpi;
 
-  # FIXME: this probably should be in installation-device.nix
-  users.extraUsers.root.initialHashedPassword = "";
-
   sdImage = {
-    populateBootCommands = ''
-      (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/boot/)
-      cp ${pkgs.ubootRaspberryPi}/u-boot.bin boot/u-boot-rpi.bin
-      echo 'kernel u-boot-rpi.bin' > boot/config.txt
-      ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./boot
-    '';
+    populateBootCommands = let
+      configTxt = pkgs.writeText "config.txt" ''
+        # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+        # when attempting to show low-voltage or overtemperature warnings.
+        avoid_warnings=1
+
+        [pi0]
+        kernel=u-boot-rpi0.bin
+
+        [pi1]
+        kernel=u-boot-rpi1.bin
+      '';
+      in ''
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/boot/)
+        cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin boot/u-boot-rpi0.bin
+        cp ${pkgs.ubootRaspberryPi}/u-boot.bin boot/u-boot-rpi1.bin
+        cp ${configTxt} boot/config.txt
+        ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./boot
+      '';
   };
 }

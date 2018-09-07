@@ -3,9 +3,9 @@
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
          xml:id="sec-release-13.10">
+ <title>Release 13.10 (“Aardvark”, 2013/10/31)</title>
 
-<title>Release 13.10 (“Aardvark”, 2013/10/31)</title>
-
-<para>This is the first stable release branch of NixOS.</para>
-
+ <para>
+  This is the first stable release branch of NixOS.
+ </para>
 </section>

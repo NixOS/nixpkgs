@@ -12,7 +12,7 @@
 , patches ? []
 }:
 
-{ stdenv, callPackage, callPackage_i686, fetchurl, fetchpatch
+{ stdenv, callPackage, pkgsi686Linux, fetchurl
 , kernel ? null, xorg, zlib, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -34,27 +34,28 @@ let
     builder = ./builder.sh;
 
     src =
-      if stdenv.system == "i686-linux" then
+      if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
           url = "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
           sha256 = sha256_32bit;
         }
-      else if stdenv.system == "x86_64-linux" then
+      else if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
           sha256 = sha256_64bit;
         }
-      else throw "nvidia-x11 does not support platform ${stdenv.system}";
+      else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
     inherit prePatch;
     inherit version useGLVND useProfiles;
-    inherit (stdenv) system;
+    inherit (stdenv.hostPlatform) system;
 
     outputs = [ "out" ] ++ optional (!libsOnly) "bin";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
+    kernelVersion = if libsOnly then null else kernel.modDirVersion;
 
     hardeningDisable = [ "pic" "format" ];
 
@@ -69,7 +70,7 @@ let
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 
     passthru = {
-      settings = (if settings32Bit then callPackage_i686 else callPackage) (import ./settings.nix self settingsSha256) {
+      settings = (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
         withGtk2 = preferGtk2;
         withGtk3 = !preferGtk2;
       };

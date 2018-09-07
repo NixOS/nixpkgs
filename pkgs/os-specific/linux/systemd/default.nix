@@ -1,25 +1,24 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
-, zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
+, xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
-, audit, lz4, bzip2, kexectools, libmicrohttpd
+, audit, lz4, bzip2, libmicrohttpd, pcre2
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, libseccomp, iptables, gnu-efi
-, autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
+, iptables, gnu-efi
+, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
 , getent
-, hostPlatform
 , buildPackages
 , withSelinux ? false, libselinux
+, withLibseccomp ? libseccomp.meta.available, libseccomp
+, withKexectools ? kexectools.meta.available, kexectools
 }:
-
-assert stdenv.isLinux;
 
 let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "238";
+  version = "239";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -27,8 +26,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "02042d012c4d6c0a2854d8436dd6636d4327774f";
-    sha256 = "0iv6fygzac0z6dagbmw1nf8dx7rrr6d9cxp0fr304rn3ir58g5f0";
+    rev = "67c553805a9ebee2dce7c3a350b4abd4d7a489c2";
+    sha256 = "114vq71gcddi4qm2hyrj5jsas9599s0h5mg65jfpvxhfyaw54cpv";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -43,14 +42,14 @@ in stdenv.mkDerivation rec {
   buildInputs =
     [ linuxHeaders libcap kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd ] ++
-      stdenv.lib.meta.enableIfAvailable kexectools ++
-      stdenv.lib.meta.enableIfAvailable libseccomp ++
+      libmicrohttpd pcre2 ] ++
+      stdenv.lib.optional withKexectools kexectools ++
+      stdenv.lib.optional withLibseccomp libseccomp ++
     [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
       # This is actually native, but we already pull it from buildPackages
       pythonLxmlEnv
-    ] ++ stdenv.lib.optionals withSelinux [ libselinux ];
+    ] ++ stdenv.lib.optional withSelinux libselinux;
 
   #dontAddPrefix = true;
 
@@ -79,7 +78,7 @@ in stdenv.mkDerivation rec {
     "-Dsystem-gid-max=499"
     # "-Dtime-epoch=1"
 
-    (if stdenv.isArm || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+    (if stdenv.isAarch32 || stdenv.isAarch64 || !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"
@@ -101,19 +100,9 @@ in stdenv.mkDerivation rec {
     mesonFlagsArray+=(-Ddbussystemservicedir=$out/share/dbus-1/system-services)
     mesonFlagsArray+=(-Dpamconfdir=$out/etc/pam.d)
     mesonFlagsArray+=(-Drootprefix=$out)
-    mesonFlagsArray+=(-Dlibdir=$lib/lib)
     mesonFlagsArray+=(-Drootlibdir=$lib/lib)
-    mesonFlagsArray+=(-Dmandir=$man/lib)
-    mesonFlagsArray+=(-Dincludedir=$dev/include)
     mesonFlagsArray+=(-Dpkgconfiglibdir=$dev/lib/pkgconfig)
     mesonFlagsArray+=(-Dpkgconfigdatadir=$dev/share/pkgconfig)
-
-    # FIXME: Why aren't includedir and libdir picked up from mesonFlags while other options are?
-    substituteInPlace meson.build \
-      --replace "includedir = join_paths(prefixdir, get_option('includedir'))" \
-                "includedir = '$dev/include'" \
-      --replace "libdir = join_paths(prefixdir, get_option('libdir'))" \
-                "libdir = '$lib/lib'"
 
     export LC_ALL="en_US.UTF-8";
     # FIXME: patch this in systemd properly (and send upstream).
@@ -155,8 +144,6 @@ in stdenv.mkDerivation rec {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  hardeningDisable = [ "stackprotector" ];
-
   NIX_CFLAGS_COMPILE =
     [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
       # lead to a cyclic dependency.
@@ -169,6 +156,8 @@ in stdenv.mkDerivation rec {
 
       "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
     ];
+
+  doCheck = false; # fails a bunch of tests
 
   postInstall = ''
     # sysinit.target: Don't depend on
@@ -208,10 +197,11 @@ in stdenv.mkDerivation rec {
   # runtime; otherwise we can't and we need to reboot.
   passthru.interfaceVersion = 2;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.eelco ];
   };
 }

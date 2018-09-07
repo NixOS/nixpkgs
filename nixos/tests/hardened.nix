@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, lib, pkgs, ... }:
+    { lib, pkgs, ... }:
     with lib;
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
@@ -25,16 +25,18 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript =
     ''
+      $machine->waitForUnit("multi-user.target");
+
       # Test hidepid
       subtest "hidepid", sub {
           $machine->succeed("grep -Fq hidepid=2 /proc/mounts");
-          $machine->succeed("[ `su - sybil -c 'pgrep -c -u root'` = 0 ]");
-          $machine->succeed("[ `su - alice -c 'pgrep -c -u root'` != 0 ]");
+          # cannot use pgrep -u here, it segfaults when access to process info is denied
+          $machine->succeed("[ `su - sybil -c 'ps --no-headers --user root | wc -l'` = 0 ]");
+          $machine->succeed("[ `su - alice -c 'ps --no-headers --user root | wc -l'` != 0 ]");
       };
 
       # Test kernel module hardening
       subtest "lock-modules", sub {
-          $machine->waitForUnit("multi-user.target");
           # note: this better a be module we normally wouldn't load ...
           $machine->fail("modprobe dccp");
       };

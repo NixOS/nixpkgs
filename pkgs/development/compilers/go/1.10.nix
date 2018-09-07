@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
 , perl, which, pkgconfig, patch, procps
 , pcre, cacert, llvm
-, Security, Foundation, bash
+, Security, Foundation
 , makeWrapper, git, subversion, mercurial, bazaar }:
 
 let
 
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optionals optionalString;
 
   clangHack = writeScriptBin "clang" ''
     #!${stdenv.shell}
@@ -25,14 +25,16 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.10.1";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "go";
     rev = "go${version}";
-    sha256 = "1wqwy52ibb343a4v7b9q26xa6r5jk4khfxd90wbpcayws8cxly8m";
+    sha256 = "0i89298dgnmpmam3ifkm0ax266vvbq1yz7wfw8wwrcma0szrbrnb";
   };
+
+  GOCACHE = "off";
 
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch makeWrapper procps ];
@@ -76,6 +78,10 @@ stdenv.mkDerivation rec {
     sed -i '/TestRespectSetgidDir/areturn' src/cmd/go/internal/work/build_test.go
     # Remove cert tests that conflict with NixOS's cert resolution
     sed -i '/TestEnvVars/areturn' src/crypto/x509/root_unix_test.go
+    # TestWritevError hangs sometimes
+    sed -i '/TestWritevError/areturn' src/net/writev_test.go
+    # TestVariousDeadlines fails sometimes
+    sed -i '/TestVariousDeadlines/areturn' src/net/timeout_test.go
 
     sed -i 's,/etc/protocols,${iana-etc}/etc/protocols,' src/net/lookup_unix.go
     sed -i 's,/etc/services,${iana-etc}/etc/services,' src/net/port_unix.go
@@ -85,7 +91,7 @@ stdenv.mkDerivation rec {
 
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
-  '' + optionalString stdenv.isArm ''
+  '' + optionalString stdenv.isAarch32 ''
     sed -i '/TestCurrent/areturn' src/os/user/user_test.go
     echo '#!${stdenv.shell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
@@ -128,12 +134,12 @@ stdenv.mkDerivation rec {
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";
   GOARCH = if stdenv.isDarwin then "amd64"
-           else if stdenv.system == "i686-linux" then "386"
-           else if stdenv.system == "x86_64-linux" then "amd64"
-           else if stdenv.isArm then "arm"
+           else if stdenv.hostPlatform.system == "i686-linux" then "386"
+           else if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
+           else if stdenv.isAarch32 then "arm"
            else if stdenv.isAarch64 then "arm64"
            else throw "Unsupported system";
-  GOARM = optionalString (stdenv.system == "armv5tel-linux") "5";
+  GOARM = optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";

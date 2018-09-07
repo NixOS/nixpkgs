@@ -5,7 +5,7 @@ rec {
 
   description = ''SSL Wrapper around cl-async socket implementation.'';
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cl-async" args."cl-async-base" args."cl-async-util" args."cl-libuv" args."cl-ppcre" args."fast-io" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."vom" ];
+  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-async" args."cl-async-base" args."cl-async-util" args."cl-libuv" args."cl-ppcre" args."fast-io" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."vom" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/cl-async/2017-11-30/cl-async-20171130-git.tgz'';
@@ -26,6 +26,7 @@ rec {
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
+     (NAME cffi-toolchain FILENAME cffi-toolchain)
      (NAME cl-async FILENAME cl-async)
      (NAME cl-async-base FILENAME cl-async-base)
      (NAME cl-async-util FILENAME cl-async-util)
@@ -36,8 +37,8 @@ rec {
      (NAME trivial-gray-streams FILENAME trivial-gray-streams)
      (NAME vom FILENAME vom))
     DEPENDENCIES
-    (alexandria babel bordeaux-threads cffi cffi-grovel cl-async cl-async-base
-     cl-async-util cl-libuv cl-ppcre fast-io static-vectors trivial-features
-     trivial-gray-streams vom)
+    (alexandria babel bordeaux-threads cffi cffi-grovel cffi-toolchain cl-async
+     cl-async-base cl-async-util cl-libuv cl-ppcre fast-io static-vectors
+     trivial-features trivial-gray-streams vom)
     VERSION cl-async-20171130-git SIBLINGS
     (cl-async-repl cl-async-test cl-async) PARASITES NIL) */

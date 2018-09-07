@@ -1,19 +1,19 @@
 { stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools
-, iw, ethtool, pciutils, libnl, pkgconfig, makeWrapper }:
+, iw, ethtool, pciutils, libnl, pkgconfig, makeWrapper
+, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "aircrack-ng-1.2-rc4";
+  name = "aircrack-ng-1.2";
 
   src = fetchurl {
-    url = "http://download.aircrack-ng.org/${name}.tar.gz";
-    sha256 = "0dpzx9kddxpgzmgvdpl3rxn0jdaqhm5wxxndp1xd7d75mmmc2fnr";
+    url = "https://download.aircrack-ng.org/${name}.tar.gz";
+    sha256 = "0z7sl1ihgrnc98bpqa1mmkh51w26fnsanvj6ydwcnd8g83azwkvr";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig makeWrapper autoreconfHook ];
   buildInputs = [ libpcap openssl zlib libnl iw ethtool pciutils ];
 
   patchPhase = ''
-    sed -e 's@^prefix.*@prefix = '$out@ -i common.mak
     sed -e 's@/usr/local/bin@'${wirelesstools}@ -i src/osdep/linux.c
   '';
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Wireless encryption cracking tools";
     homepage = http://www.aircrack-ng.org/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar viric garbas chaoflow ];
+    maintainers = with maintainers; [ domenkozar garbas chaoflow ];
     platforms = platforms.linux;
   };
 }

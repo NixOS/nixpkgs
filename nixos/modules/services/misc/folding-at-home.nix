@@ -42,7 +42,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
+    users.users = singleton
       { name = fahUser;
         uid = config.ids.uids.foldingathome;
         description = "Folding@Home user";

@@ -1,7 +1,6 @@
 { stdenv
 , fetchPypi
 , buildPythonPackage
-, isPy3k
 , zope_testrunner
 , transaction
 , six
@@ -18,7 +17,6 @@
 buildPythonPackage rec {
     pname = "ZODB";
     version = "5.4.0";
-    name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;

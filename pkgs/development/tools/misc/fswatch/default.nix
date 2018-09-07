@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , autoreconfHook
-, findutils                     # for xargs
+                     # for xargs
 , gettext
 , libtool
 , makeWrapper
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   name = "fswatch-${version}";
-  version = "1.11.2";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = version;
-    sha256 = "05vgpd1fx9fy3vnnmq5gz236avgva82axix127xy98gaxrac52vq";
+    sha256 = "16f3g6s79gs1sp2ra3cka4c5mf5b557cx697bwcdfgj6r19ni5j7";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

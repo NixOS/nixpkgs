@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "http://www.ucolick.org/~will/RUE/super/${name}-tar.gz";
+    url = "https://www.ucolick.org/~will/RUE/super/${name}-tar.gz";
     sha256 = "0k476f83w7f45y9jpyxwr00ikv1vhjiq0c26fgjch9hnv18icvwy";
   };
 
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
-  configureFlags = "--sysconfdir=/etc --localstatedir=/var";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+  ];
 
   installFlags = "sysconfdir=$(out)/etc localstatedir=$(TMPDIR)";
 

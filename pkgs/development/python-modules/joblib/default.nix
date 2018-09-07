@@ -1,22 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
 , sphinx
 , numpydoc
-, isPy3k
-, stdenv
 , pytest
 }:
 
 
 buildPythonPackage rec {
   pname = "joblib";
-  name = "${pname}-${version}";
-  version = "0.11";
+  version = "0.12.3";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b8fd56df36d9731a83729395ccb85a3b401f62a96255deb1a77220c00ed4085";
+    sha256 = "333b9bf16ff015d6b56bf80b9831afdd243443cb84c7ff7b6e342f117e354c42";
   };
 
   checkInputs = [ sphinx numpydoc pytest ];
@@ -27,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Lightweight pipelining: using Python functions as pipeline jobs";
-    homepage = http://pythonhosted.org/joblib/;
+    homepage = https://pythonhosted.org/joblib/;
     license = lib.licenses.bsd3;
   };
 }

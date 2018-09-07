@@ -5,22 +5,24 @@ with stdenv.lib;
 
 let
   configFile = optionalString (conf!=null) (builtins.toFile "config.h" conf);
-in
 
-stdenv.mkDerivation rec {
-  name = "ratox-0.4";
+in stdenv.mkDerivation rec {
+  name = "ratox-0.4.20180303";
 
   src = fetchgit {
     url = "git://git.2f30.org/ratox.git";
-    rev = "0db821b7bd566f6cfdc0cc5a7bbcc3e5e92adb4c";
-    sha256 = "0wmf8hydbcq4bkpsld9vnqw4zfzf3f04vhgwy17nd4p5p389fbl5";
+    rev = "269f7f97fb374a8f9c0b82195c21de15b81ddbbb";
+    sha256 = "0bpn37h8jvsqd66fkba8ky42nydc8acawa5x31yxqlxc8mc66k74";
   };
-
-  patches = [ ./ldlibs.patch ];
 
   buildInputs = [ libtoxcore ];
 
-  preConfigure = optionalString (conf!=null) "cp ${configFile} config.def.h";
+  preConfigure = ''
+    substituteInPlace config.mk \
+      --replace '-lsodium -lopus -lvpx ' ""
+
+    ${optionalString (conf!=null) "cp ${configFile} config.def.h"}
+  '';
 
   makeFlags = [ "PREFIX=$(out)" ];
 

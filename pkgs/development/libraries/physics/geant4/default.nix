@@ -24,9 +24,14 @@
 # For enableXM.
 , motif ? null # motif or lesstif
 
+# For enableInventor
+, coin3d
+, soxt
+, libXpm ? null
+
 # For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
-, libGLU_combined   ? null
-, xlibsWrapper    ? null
+, libGLU_combined ? null
+, xlibsWrapper ? null
 , libXmu ? null
 }:
 
@@ -43,6 +48,7 @@ assert enableXM -> motif != null;
 assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> libGLU_combined   != null;
 assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> xlibsWrapper    != null;
 assert enableQT || enableXM || enableOpenGLX11 || enableRaytracerX11 -> libXmu != null;
+assert enableInventor -> libXpm != null;
 
 let
   buildGeant4 =
@@ -52,18 +58,11 @@ let
       inherit version src;
       name = "geant4-${version}";
 
-      # The data directory holds not just interaction cross section data, but other
-      # files which the installer needs to write, so we link to the previously installed
-      # data instead. This assumes the default data installation location of $out/share.
-      preConfigure = ''
-        mkdir -p $out/share/Geant4-${version}
-        ln -s ${g4data}/Geant4-${version}/data $out/share/Geant4-${version}/data
-      '';
-
       multiThreadingFlag = if multiThreadingCapable then "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}" else "";
 
       cmakeFlags = ''
         ${multiThreadingFlag}
+        -DGEANT4_INSTALL_DATA=OFF
         -DGEANT4_USE_GDML=${if enableGDML then "ON" else "OFF"}
         -DGEANT4_USE_G3TOG4=${if enableG3toG4 then "ON" else "OFF"}
         -DGEANT4_USE_QT=${if enableQT then "ON" else "OFF"}
@@ -74,24 +73,31 @@ let
         -DGEANT4_USE_SYSTEM_CLHEP=${if clhep != null then "ON" else "OFF"}
         -DGEANT4_USE_SYSTEM_EXPAT=${if expat != null then "ON" else "OFF"}
         -DGEANT4_USE_SYSTEM_ZLIB=${if zlib != null then "ON" else "OFF"}
+        -DINVENTOR_INCLUDE_DIR=${coin3d}/include
+        -DINVENTOR_LIBRARY_RELEASE=${coin3d}/lib/libCoin.so
       '';
 
-      g4data = installData {
-        inherit version src;
-      };
-
       enableParallelBuilding = true;
-      buildInputs = [ cmake clhep expat zlib xercesc qt motif libGLU_combined xlibsWrapper libXmu ];
-      propagatedBuildInputs = [ g4data clhep expat zlib xercesc qt motif libGLU_combined xlibsWrapper libXmu ];
+      buildInputs = [ cmake clhep expat zlib xercesc qt motif libGLU_combined xlibsWrapper libXmu libXpm coin3d soxt ];
+      propagatedBuildInputs = [ clhep expat zlib xercesc qt motif libGLU_combined xlibsWrapper libXmu libXpm coin3d soxt ];
 
-      setupHook = ./setup-hook.sh;
+      postFixup = ''
+        # Don't try to export invalid environment variables.
+        sed -i 's/export G4\([A-Z]*\)DATA/#export G4\1DATA/' "$out"/bin/geant4.sh
+      '';
+
+      setupHook = ./geant4-hook.sh;
+
+      passthru = {
+        data = import ./datasets.nix { inherit stdenv fetchurl; };
+      };
 
       # Set the myriad of envars required by Geant4 if we use a nix-shell.
       shellHook = ''
         source $out/nix-support/setup-hook
       '';
 
-      meta = {
+      meta = with stdenv.lib; {
         description = "A toolkit for the simulation of the passage of particles through matter";
         longDescription = ''
           Geant4 is a toolkit for the simulation of the passage of particles through matter.
@@ -99,43 +105,11 @@ let
           The two main reference papers for Geant4 are published in Nuclear Instruments and Methods in Physics Research A 506 (2003) 250-303, and IEEE Transactions on Nuclear Science 53 No. 1 (2006) 270-278.
         '';
         homepage = http://www.geant4.org;
-        license = stdenv.lib.licenses.g4sl;
-        maintainers = [ ];
-        platforms = stdenv.lib.platforms.all;
+        license = licenses.g4sl;
+        maintainers = with maintainers; [ tmplt ];
+        platforms = platforms.all;
       };
     };
-
-  installData = 
-    { version, src }:
- 
-    stdenv.mkDerivation rec {
-      inherit version src;
-      name = "g4data-${version}";
-
-      cmakeFlags = ''
-        -DGEANT4_INSTALL_DATA="ON"
-      '';
-
-      buildInputs = [ cmake expat ];
-
-      enableParallelBuilding = true;
-      buildPhase = ''
-        make G4EMLOW G4NDL G4NEUTRONXS G4PII G4SAIDDATA PhotonEvaporation RadioactiveDecay RealSurface
-      '';
-
-      installPhase = ''
-        mkdir -p $out/Geant4-${version}
-        cp -R data/ $out/Geant4-${version}
-      '';
-
-      meta = {
-        description = "Data files for the Geant4 toolkit";
-        homepage = http://www.geant4.org;
-        license = stdenv.lib.licenses.g4sl;
-        maintainers = [ ];
-        platforms = stdenv.lib.platforms.all;
-      };
-    }; 
 
   fetchGeant4 = import ./fetch.nix {
     inherit stdenv fetchurl;
@@ -146,5 +120,9 @@ in {
     inherit (fetchGeant4.v10_0_2) version src;
     multiThreadingCapable = true;
   };
-} 
- 
+
+  v10_4_1 = buildGeant4 {
+    inherit (fetchGeant4.v10_4_1) version src;
+    multiThreadingCapable = true;
+  };
+}

@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Minimal dumb-terminal emulation program";
     homepage = https://github.com/npat-efault/picocom/;
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

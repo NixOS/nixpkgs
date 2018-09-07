@@ -4,11 +4,11 @@ pythonPackages.buildPythonPackage rec {
 
   name = "${pname}-${version}";
   pname = "rst2html5";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "1js90asy7s0278b4p28inkkp0r7ajr5fk5pcdgcdw628a30vl3i6";
+    sha256 = "d044589d30eeaf7336986078b7bd175510fd649a212b01a457d7806b279e6c73";
   };
 
   propagatedBuildInputs = with pythonPackages;

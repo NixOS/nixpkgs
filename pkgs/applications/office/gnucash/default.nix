@@ -1,63 +1,83 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk2, libgnomeui, libofx
-, libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
-, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper, libglade
-, libgsf, libart_lgpl, perlPackages, aqbanking, gwenhywfar
+{ fetchurl, stdenv, pkgconfig, makeWrapper, cmake, gtest
+, boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
+, webkit, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
+, libdbiDrivers, guile, perl, perlPackages
 }:
 
-/* If you experience GConf errors when running GnuCash on NixOS, see
- * http://wiki.nixos.org/wiki/Solve_GConf_errors_when_running_GNOME_applications
- * for a possible solution.
- */
+let
+
+  # Enable gnc-fq-* to run in command line.
+  perlWrapper = stdenv.mkDerivation {
+    name = perl.name + "-wrapper-for-gnucash";
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ perl ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
+    phases = [ "installPhase" ];
+    installPhase = ''
+      mkdir -p $out/bin
+      for script in ${perl}/bin/*; do
+        makeWrapper $script $out''${script#${perl}} \
+          --prefix "PERL5LIB" ":" "$PERL5LIB"
+      done
+    '';
+  };
+
+in
 
 stdenv.mkDerivation rec {
-  name = "gnucash-2.4.15";
+  name = "gnucash-${version}";
+  version = "3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "058mgfwic6a2g7jq6iip5hv45md1qaxy25dj4lvlzjjr141wm4gx";
+    sha256 = "0li4b6pvlahgh5n9v91yxfgm972a1kky80xw3q1ggl4f2h6b1rb3";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    libxml2 gconf glib gtk2 libgnomeui libgtkhtml gtkhtml
-    libgnomeprint goffice enchant gettext intltool perl guile slibGuile
-    swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
-    perlPackages.DateManip perlPackages.FinanceQuote aqbanking gwenhywfar
-  ];
-  propagatedUserEnvPkgs = [ gconf ];
+  nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
 
-  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx --enable-aqbanking";
+  buildInputs = [
+    boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
+    webkit dconf hicolor-icon-theme libofx aqbanking gwenhywfar libdbi
+    libdbiDrivers guile
+    perlWrapper perl
+  ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
+
+  propagatedUserEnvPkgs = [ dconf ];
+
+  postPatch = ''
+    patchShebangs .
+  '';
+
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   postInstall = ''
     # Auto-updaters don't make sense in Nix.
     rm $out/bin/gnc-fq-update
 
-    sed -i $out/bin/update-gnucash-gconf \
-       -e 's|--config-source=[^ ]* --install-schema-file|--makefile-install-rule|'
+    # Unnecessary in the release build.
+    rm $out/bin/gnucash-valgrind
 
-    for prog in $(echo "$out/bin/"*)
-    do
-      # Don't wrap the gnc-fq-* scripts, since gnucash calls them as
-      # "perl <script>', i.e. they must be Perl scripts.
-      if [[ $prog =~ gnc-fq ]]; then continue; fi
-      wrapProgram "$prog"                                               \
-        --set SCHEME_LIBRARY_PATH "$SCHEME_LIBRARY_PATH"                \
-        --prefix GUILE_LOAD_PATH ":" "$GUILE_LOAD_PATH"                 \
-        --prefix LD_LIBRARY_PATH ":" "${libgnomeui}/lib/libglade/2.0"   \
-        --prefix LD_LIBRARY_PATH ":" "${libbonoboui}/lib/libglade/2.0"  \
-        --prefix PERL5LIB ":" "$PERL5LIB"                               \
-        --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
-        --prefix PATH ":" "$out/bin:${stdenv.lib.makeBinPath [ perl gconf ]}"
-    done
-
-    rm $out/share/icons/hicolor/icon-theme.cache
+    wrapProgram "$out/bin/gnucash" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${name}" \
+      --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
+      --prefix PERL5LIB ":" "$PERL5LIB" \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
   '';
 
-  # The following settings fix failures in the test suite. It's not required otherwise.
-  NIX_LDFLAGS = "-rpath=${guile}/lib -rpath=${glib.out}/lib";
-  preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
-
-  doCheck = false;      # https://github.com/NixOS/nixpkgs/issues/11084
+  # TODO: The following tests FAILED:
+  #   61 - test-gnc-timezone (Failed)
+  #   70 - test-load-c (Failed)
+  #   71 - test-modsysver (Failed)
+  #   72 - test-incompatdep (Failed)
+  #   73 - test-agedver (Failed)
+  #   77 - test-gnc-module-swigged-c (Failed)
+  #   78 - test-gnc-module-load-deps (Failed)
+  #   80 - test-gnc-module-scm-module (Failed)
+  #   81 - test-gnc-module-scm-multi (Failed)
+  preCheck = ''
+    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$LD_LIBRARY_PATH
+    export NIX_CFLAGS_LINK="-lgtest -lgtest_main"
+  '';
+  doCheck = false;
 
   enableParallelBuilding = true;
 
@@ -80,6 +100,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnucash.org/;
 
     maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
-    platforms = stdenv.lib.platforms.gnu;
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
   };
 }

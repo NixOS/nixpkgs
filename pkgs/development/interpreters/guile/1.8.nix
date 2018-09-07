@@ -1,5 +1,4 @@
 { stdenv, buildPackages
-, buildPlatform, hostPlatform
 , fetchurl, makeWrapper, gawk, pkgconfig
 , libtool, readline, gmp
 }:
@@ -16,10 +15,14 @@ stdenv.mkDerivation rec {
   setOutputFlags = false; # $dev gets into the library otherwise
 
   # GCC 4.6 raises a number of set-but-unused warnings.
-  configureFlags = [ "--disable-error-on-warning" ];
+  configureFlags = [ "--disable-error-on-warning" ]
+    # Guile needs patching to preset results for the configure tests about
+    # pthreads, which work only in native builds.
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+                          "--with-threads=no";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform)
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
                            buildPackages.buildPackages.guile_1_8;
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool ];
@@ -34,16 +37,7 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-
   patches = [ ./cpp-4.5.patch ];
-
-  # Guile needs patching to preset results for the configure tests
-  # about pthreads, which work only in native builds.
-  preConfigure = ''
-    if test -n "$crossConfig"; then
-      configureFlags="--with-threads=no $configureFlags"
-    fi
-  '';
 
   preBuild = ''
     sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
@@ -66,6 +60,7 @@ stdenv.mkDerivation rec {
   # This is fixed here:
   # <http://git.savannah.gnu.org/cgit/guile.git/commit/?h=branch_release-1-8&id=a0aa1e5b69d6ef0311aeea8e4b9a94eae18a1aaf>.
   doCheck = false;
+  doInstallCheck = doCheck;
 
   setupHook = ./setup-hook.sh;
 

@@ -28,9 +28,5 @@ writeScript "update-${attrPath}" ''
            sort --version-sort | \
            tail -n 1`
 
-  source_url=`curl --silent $url$version/SOURCE | grep -o 'https://.*\.tar\.bz2'`
-
-  shasum=`curl --silent $url$version/SHA512SUMS | grep 'source\.tar\.xz' | cut -d ' ' -f 1`
-
-  update-source-version ${attrPath} "$version" "$shasum" "$source_url"
+  update-source-version ${attrPath} "$version"
 ''

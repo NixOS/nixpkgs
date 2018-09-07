@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libusb1, hwdata }:
 
 stdenv.mkDerivation rec {
-  name = "usbutils-009";
+  name = "usbutils-010";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/usb/usbutils/${name}.tar.xz";
-    sha256 = "0q3iavmak2bs9xw486w4xfbjl0hbzii93ssgpr95mxmm9kjz1gwb";
+    sha256 = "06aag4jfgsfjxk563xsp9ik9nadihmasrr37a1gb0vwqni5kdiv1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
         --replace /usr/share/usb.ids ${hwdata}/data/hwdata/usb.ids
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.linux-usb.org/;
     description = "Tools for working with USB devices, such as lsusb";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

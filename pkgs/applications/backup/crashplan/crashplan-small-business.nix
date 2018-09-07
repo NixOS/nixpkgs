@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, makeWrapper, getopt, jre, cpio, gawk, gnugrep, gnused, 
-  procps, which, gtk2, atk, glib, pango, gdk_pixbuf, cairo, freetype, 
-  fontconfig, dbus, gconf, nss, nspr, alsaLib, cups, expat, libudev, 
-  libX11, libxcb, libXi, libXcursor, libXdamage, libXrandr, libXcomposite, 
+{ stdenv, fetchurl, makeWrapper, getopt, jre, cpio, gawk, gnugrep, gnused,
+  procps, which, gtk2, atk, glib, pango, gdk_pixbuf, cairo, freetype,
+  fontconfig, dbus, gconf, nss, nspr, alsaLib, cups, expat, udev,
+  libX11, libxcb, libXi, libXcursor, libXdamage, libXrandr, libXcomposite,
   libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nodePackages,
   maxRam ? "1024m" }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   rev = "1512021600670_4503";
   pname = "CrashPlanSmb";
   name = "${pname}_${version}_${rev}";
-  
+
   src = fetchurl {
     url = "https://web-eam-msp.crashplanpro.com/client/installers/${name}_Linux.tgz";
     sha256 = "0f7ykfxaqjlvv4hv12yc5z8y1vjsysdblv53byml7i1fy1r0q26q";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   vardir = "/var/lib/crashplan";
   manifestdir = "${vardir}/manifest";
-  
+
   postPatch = ''
     # patch scripts/CrashPlanEngine
     substituteInPlace scripts/CrashPlanEngine \
@@ -85,10 +85,10 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $out/electron/crashplan
-    wrapProgram $out/bin/CrashPlanDesktop --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ 
-      stdenv.cc.cc.lib gtk2 atk glib pango gdk_pixbuf cairo freetype 
-      fontconfig dbus gconf nss nspr alsaLib cups expat libudev 
-      libX11 libxcb libXi libXcursor libXdamage libXrandr libXcomposite 
+    wrapProgram $out/bin/CrashPlanDesktop --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [
+      stdenv.cc.cc.lib gtk2 atk glib pango gdk_pixbuf cairo freetype
+      fontconfig dbus gconf nss nspr alsaLib cups expat udev
+      libX11 libxcb libXi libXcursor libXdamage libXrandr libXcomposite
       libXext libXfixes libXrender libXtst libXScrnSaver]}"
   '';
 

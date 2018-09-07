@@ -1,4 +1,5 @@
 { stdenv, callPackage, fetchurl, fetchpatch, fetchgit
+, ocaml-ng
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
 , withInternalSeabios ? true
@@ -22,11 +23,6 @@ with stdenv.lib;
 # and try applying all the ones we don't have yet.
 
 let
-  xsaPatch = { name , sha256 }: (fetchpatch {
-    url = "https://xenbits.xen.org/xsa/xsa${name}.patch";
-    inherit sha256;
-  });
-
   xsa = import ./xsa-patches.nix { inherit fetchpatch; };
 
   xenlockprofpatch = (fetchpatch {
@@ -186,4 +182,4 @@ callPackage (import ./generic.nix (rec {
       else throw "this xen has no qemu builtin";
   };
 
-})) args
+})) ({ ocamlPackages = ocaml-ng.ocamlPackages_4_05; } // args)

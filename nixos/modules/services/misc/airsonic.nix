@@ -107,7 +107,7 @@ in {
       };
     };
 
-    users.extraUsers.airsonic = {
+    users.users.airsonic = {
       description = "Airsonic service user";
       name = cfg.user;
       home = cfg.home;

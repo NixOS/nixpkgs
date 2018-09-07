@@ -1,12 +1,13 @@
 { lib, stdenv, fetchgit, fetchFromGitHub, makeWrapper, git
-, python3, sshfs-fuse, torsocks, sshuttle, conntrack_tools }:
+, python3, sshfs-fuse, torsocks, sshuttle, conntrack-tools
+, openssh, which, coreutils, iptables, bash }:
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
     src = fetchgit {
       url = "https://github.com/datawire/sshuttle.git";
-      rev = "8f881d131a0d5cb203c5a530d233996077f1da1e";
-      sha256 = "0c760xhblz5mpcn5ddqpvivvgn0ixqbhpjsy50dkhgn6lymrx9bx";
+      rev = "32226ff14d98d58ccad2a699e10cdfa5d86d6269";
+      sha256 = "1q20lnljndwcpgqv2qrf1k0lbvxppxf98a4g5r9zd566znhcdhx3";
       leaveDotGit = true;
     };
 
@@ -16,26 +17,43 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "telepresence";
-  version = "0.67";
+  version = "0.85";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "datawire";
     repo = "telepresence";
     rev = version;
-    sha256 = "1bpyzgvrf43yvhwp5bzkp2qf3z9dhjma165w8ssca9g00v4b5vg9";
+    sha256 = "1iypqrx9pnhaz3p5bvl6g0c0c3d1799dv0xdjrzc1z5wa8diawvj";
   };
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = [ makeWrapper python3 ];
 
   phases = ["unpackPhase" "installPhase"];
 
   installPhase = ''
     mkdir -p $out/libexec $out/bin
-    cp cli/telepresence $out/libexec/telepresence
 
-    makeWrapper $out/libexec/telepresence $out/bin/telepresence \
-      --prefix PATH : ${lib.makeBinPath [python3 sshfs-fuse torsocks conntrack_tools sshuttle-telepresence]}
+    export PREFIX=$out
+    substituteInPlace ./install.sh \
+      --replace "#!/bin/bash" "#!${stdenv.shell}" \
+      --replace '"''${VENVDIR}/bin/pip" -q install "git+https://github.com/datawire/sshuttle.git@telepresence"' "" \
+      --replace '"''${VENVDIR}/bin/sshuttle-telepresence"' '"${sshuttle-telepresence}/bin/sshuttle-telepresence"'
+    ./install.sh
+
+    wrapProgram $out/bin/telepresence \
+      --prefix PATH : ${lib.makeBinPath [
+        python3
+        sshfs-fuse
+        torsocks
+        conntrack-tools
+        sshuttle-telepresence
+        openssh
+        which
+        coreutils
+        iptables
+        bash
+      ]}
   '';
 
   meta = {

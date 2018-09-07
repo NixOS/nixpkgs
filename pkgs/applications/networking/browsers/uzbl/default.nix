@@ -5,7 +5,8 @@
 # but Python 2 + packages during runtime.
 
 stdenv.mkDerivation rec {
-  name = "uzbl-v0.9.0";
+  name = "uzbl-${version}";
+  version = "0.9.0";
 
   meta = with stdenv.lib; {
     description = "Tiny externally controllable webkit browser";
@@ -16,8 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/uzbl/uzbl/archive/v0.9.0.tar.gz";
+    name = "uzbl-v${version}.tar.gz";
+    url = "https://github.com/uzbl/uzbl/archive/v${version}.tar.gz";
     sha256 = "0iskhv653fdm5raiidimh9fzlsw28zjqx7b5n3fl1wgbj6yz074k";
   };
 

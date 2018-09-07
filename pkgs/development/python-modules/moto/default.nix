@@ -1,14 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
-, requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker
-, six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml }:
+{ buildPythonPackage, fetchPypi, jinja2, werkzeug, flask
+, requests, pytz, backports_tempfile, cookies, jsondiff, botocore, aws-xray-sdk, docker, responses
+, six, boto, httpretty, xmltodict, nose, sure, boto3, freezegun, dateutil, mock, pyaml, python-jose }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.3.1";
+  version = "1.3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e6b25a32b61ba97bbc2236960ad6865ab111962a927de720c907475adff4499b";
+    sha256 = "52426f2567e51ba73fdc7c7d617236b7e7918dca2421caabe13e5290942b53d8";
   };
 
   postPatch = ''
@@ -17,7 +17,8 @@ buildPythonPackage rec {
     # regarding aws-xray-sdk: https://github.com/spulec/moto/commit/31eac49e1555c5345021a252cb0c95043197ea16
     substituteInPlace setup.py \
       --replace "python-dateutil<2.7.0" "python-dateutil<3.0.0" \
-      --replace "aws-xray-sdk<0.96," "aws-xray-sdk"
+      --replace "aws-xray-sdk<0.96," "aws-xray-sdk" \
+      --replace "jsondiff==1.1.1" "jsondiff>=1.1.1"
   '';
 
   propagatedBuildInputs = [
@@ -40,6 +41,8 @@ buildPythonPackage rec {
     jsondiff
     botocore
     docker
+    responses
+    python-jose
   ];
 
   checkInputs = [ boto3 nose sure freezegun ];

@@ -5,15 +5,13 @@
 , curl
 , cups
 , dbus-glib
-, dbus_libs
+, dbus
 , fontconfig
 , freetype
 , gconf
 , gdk_pixbuf
 , glib
 , glibc
-, gst-plugins-base
-, gstreamer
 , gtk2
 , gtk3
 , kerberos
@@ -21,15 +19,18 @@
 , libXScrnSaver
 , libxcb
 , libXcomposite
+, libXcursor
 , libXdamage
 , libXext
 , libXfixes
+, libXi
 , libXinerama
 , libXrender
 , libXt
 , libcanberra-gtk2
 , libgnome
 , libgnomeui
+, libnotify
 , defaultIconTheme
 , libGLU_combined
 , nspr
@@ -46,9 +47,8 @@
 , gnused
 , gnugrep
 , gnupg
+, ffmpeg
 }:
-
-assert stdenv.isLinux;
 
 let
 
@@ -59,7 +59,7 @@ let
     "x86_64-linux" = "linux-x86_64";
   };
 
-  arch = mozillaPlatforms.${stdenv.system};
+  arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
   isPrefixOf = prefix: string:
     builtins.substring 0 (builtins.stringLength prefix) string == prefix;
@@ -93,31 +93,32 @@ stdenv.mkDerivation {
       curl
       cups
       dbus-glib
-      dbus_libs
+      dbus
       fontconfig
       freetype
       gconf
       gdk_pixbuf
       glib
       glibc
-      gst-plugins-base
-      gstreamer
       gtk2
       gtk3
       kerberos
       libX11
       libXScrnSaver
       libXcomposite
+      libXcursor
       libxcb
       libXdamage
       libXext
       libXfixes
+      libXi
       libXinerama
       libXrender
       libXt
       libcanberra-gtk2
       libgnome
       libgnomeui
+      libnotify
       libGLU_combined
       nspr
       nss
@@ -126,6 +127,7 @@ stdenv.mkDerivation {
       libpulseaudio
       (lib.getDev libpulseaudio)
       systemd
+      ffmpeg
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
@@ -172,6 +174,7 @@ stdenv.mkDerivation {
       gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
     '';
 
+  passthru.execdir = "/bin";
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;
   # update with:

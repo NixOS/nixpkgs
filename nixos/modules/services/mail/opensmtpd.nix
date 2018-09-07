@@ -10,7 +10,7 @@ let
 
   sendmail = pkgs.runCommand "opensmtpd-sendmail" {} ''
     mkdir -p $out/bin
-    ln -s ${pkgs.opensmtpd}/sbin/smtpctl $out/bin/sendmail
+    ln -s ${cfg.package}/sbin/smtpctl $out/bin/sendmail
   '';
 
 in {
@@ -25,6 +25,13 @@ in {
         type = types.bool;
         default = false;
         description = "Whether to enable the OpenSMTPD server.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.opensmtpd;
+        defaultText = "pkgs.opensmtpd";
+        description = "The OpenSMTPD package to use.";
       };
 
       addSendmailToSystemPath = mkOption {
@@ -76,12 +83,12 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    users.extraGroups = {
+    users.groups = {
       smtpd.gid = config.ids.gids.smtpd;
       smtpq.gid = config.ids.gids.smtpq;
     };
 
-    users.extraUsers = {
+    users.users = {
       smtpd = {
         description = "OpenSMTPD process user";
         uid = config.ids.uids.smtpd;
@@ -97,7 +104,7 @@ in {
     systemd.services.opensmtpd = let
       procEnv = pkgs.buildEnv {
         name = "opensmtpd-procs";
-        paths = [ pkgs.opensmtpd ] ++ cfg.procPackages;
+        paths = [ cfg.package ] ++ cfg.procPackages;
         pathsToLink = [ "/libexec/opensmtpd" ];
       };
     in {
@@ -115,7 +122,7 @@ in {
         chown smtpq.root /var/spool/smtpd/purge
         chmod 700 /var/spool/smtpd/purge
       '';
-      serviceConfig.ExecStart = "${pkgs.opensmtpd}/sbin/smtpd -d -f ${conf} ${args}";
+      serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
     };
 

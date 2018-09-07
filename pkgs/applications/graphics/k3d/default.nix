@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, unzip, ftgl, glew, asciidoc
+{ stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
 , cmake, ninja, libGLU_combined, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
 , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
 , gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
@@ -39,12 +39,11 @@ stdenv.mkDerivation rec {
 
   #doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";
     homepage = http://www.k-3d.org/;
-    platforms = with stdenv.lib.platforms;
-      linux;
-    maintainers = with stdenv.lib.maintainers;
-      [raskin];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
+    license = licenses.gpl2;
   };
 }

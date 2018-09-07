@@ -1,8 +1,8 @@
 { fetchurl }:
 
 rec {
-  major = "5";
-  minor = "4";
+  major = "6";
+  minor = "0";
   patch = "6";
   tweak = "2";
 
@@ -12,6 +12,6 @@ rec {
 
   src = fetchurl {
     url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "0icd8h221gp2dsbn6d35flwhqhcfpx66cjc5dg8yifhhvrfam74i";
+    sha256 = "f1666430abf616a3813e4c886b51f157366f592102ae0e874abc17f3d58c6a8e";
   };
 }

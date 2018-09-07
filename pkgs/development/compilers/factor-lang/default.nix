@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, glib, glibc, git,
+{ stdenv, fetchurl, fetchFromGitHub, glib, git,
   rlwrap, curl, pkgconfig, perl, makeWrapper, tzdata, ncurses,
   libX11, pango, cairo, gtk2, gdk_pixbuf, gtkglext,
   libGLU, libXmu, libXt, libICE, libSM }:

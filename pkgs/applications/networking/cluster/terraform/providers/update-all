@@ -58,7 +58,7 @@ cd "$(dirname "$0")"
 
 if [[ -z "${GITHUB_AUTH:-}" ]]; then
   cat <<'HELP'
-Missing the GITHUB_AUTH env. Thi is required to work around the 60 request
+Missing the GITHUB_AUTH env. This is required to work around the 60 request
 per hour rate-limit.
 
 Go to https://github.com/settings/tokens and create a new token with the
@@ -71,7 +71,7 @@ fi
 
 org=terraform-providers
 
-repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | sort)
+repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | grep -v terraform-provider-azure-classic | sort)
 
 
 # Get all the providers with index

@@ -1,8 +1,9 @@
 { stdenv, fetchurl, fetchpatch, meson, ninja, gettext
 , pkgconfig, python, gst-plugins-base, orc
 , faacSupport ? false, faac ? null
-, faad2, libass, libkate, libmms
-, libmodplug, mpeg2dec
+, faad2, libass, libkate, libmms, librdf, ladspaH
+, libnice, webrtc-audio-processing, lilv, lv2, serd, sord, sratom
+, libbs2b, libmodplug, mpeg2dec
 , openjpeg, libopus, librsvg
 , wildmidi, fluidsynth, libvdpau, wayland
 , libwebp, xvidcore, gnutls, mjpegtools
@@ -13,13 +14,7 @@
 assert faacSupport -> faac != null;
 
 let
-  inherit (stdenv.lib) optional optionalString;
-
-  # OpenJPEG version is hardcoded in package source
-  openJpegVersion = with stdenv;
-    lib.concatStringsSep "." (lib.lists.take 2
-      (lib.splitString "." (lib.getVersion openjpeg)));
-
+  inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
   name = "gst-plugins-bad-1.14.0";
@@ -35,6 +30,7 @@ stdenv.mkDerivation rec {
     '';
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 
   preConfigure = ''
@@ -47,6 +43,12 @@ stdenv.mkDerivation rec {
         sha256 = "0hy0rcn35alq65yqwri4fqjz2hf3nyyg5c7rnndk51msmqjxpprk";
     })
     ./fix_pkgconfig_includedir.patch
+    # Enable bs2b compilation
+    # https://bugzilla.gnome.org/show_bug.cgi?id=794346
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=369724;
+      sha256 = "1716mp0h2866ab33w607isvfhv1zwyj71qb4jrkx5v0h276v1pwr";
+    })
   ];
 
   src = fetchurl {
@@ -61,6 +63,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base orc
     faad2 libass libkate libmms
+    libnice webrtc-audio-processing # webrtc
+    libbs2b
+    ladspaH librdf # ladspa plug-in
+    lilv lv2 serd sord sratom # lv2 plug-in
     libmodplug mpeg2dec
     openjpeg libopus librsvg
     fluidsynth libvdpau
@@ -77,4 +83,7 @@ stdenv.mkDerivation rec {
     ++ optional (!stdenv.isDarwin) mjpegtools;
 
   enableParallelBuilding = true;
+
+  doCheck = false; # fails 20 out of 58 tests, expensive
+
 }

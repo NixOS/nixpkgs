@@ -32,6 +32,14 @@ in
       '';
     };
 
+    gitwebTheme = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Use an alternative theme for gitweb, strongly inspired by GitHub.
+      '';
+    };
+
     gitwebConfigFile = mkOption {
       default = pkgs.writeText "gitweb.conf" ''
         # path to git projects (<project>.git)

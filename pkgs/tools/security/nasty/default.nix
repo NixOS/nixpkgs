@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.6";
 
   src = fetchurl {
-    url = "http://www.vanheusden.com/nasty/${name}.tgz";
+    url = "https://www.vanheusden.com/nasty/${name}.tgz";
     sha256 = "1dznlxr728k1pgy1kwmlm7ivyl3j3rlvkmq34qpwbwbj8rnja1vn";
   };
 

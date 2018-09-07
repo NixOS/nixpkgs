@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , buildPythonApplication
 , bash
-, shadow
 , systemd
 , utillinux
 , boto
@@ -11,14 +10,14 @@
 
 buildPythonApplication rec {
   name = "google-compute-engine-${version}";
-  version = "20170914";
+  version = "20180129";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
     rev = version;
-    sha256 = "0hlzcrf6yhzan25f4wzy1vbncak9whhqzrzza026ly3sq0smmjpg";
+    sha256 = "0380fnr64109hv8l1f3sgdg8a5mf020axj7jh8y25xq6wzkjm20c";
   };
 
   postPatch = ''
@@ -52,5 +51,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
+    platforms = platforms.linux;
   };
 }

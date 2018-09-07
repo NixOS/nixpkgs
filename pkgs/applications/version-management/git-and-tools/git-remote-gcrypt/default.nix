@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "git-remote-gcrypt-${version}";
-  version = "1.0.3";
+  version = "1.1";
   rev = version;
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "spwhitton";
     repo = "git-remote-gcrypt";
-    sha256 = "1vay3204729c7wajgn3nxf0s0hzwpdrw14pl6kd8w2ss25gvw2k1";
+    sha256 = "0mhz5mqnr35rk7j4wyhp7hzmqgv8r554n9qlm4iw565bz7acvq24";
   };
 
   outputs = [ "out" "man" ];

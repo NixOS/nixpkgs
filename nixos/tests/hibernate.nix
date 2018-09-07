@@ -16,7 +16,7 @@ import ./make-test.nix (pkgs: {
       systemd.services.listener.serviceConfig.ExecStart = "${pkgs.netcat}/bin/nc -l 4444 -k";
     };
 
-    probe = { config, lib, pkgs, ...}: {
+    probe = { pkgs, ...}: {
       environment.systemPackages = [ pkgs.netcat ];
     };
   };
@@ -37,7 +37,7 @@ import ./make-test.nix (pkgs: {
       $machine->waitForShutdown;
       $machine->start;
       $probe->waitForUnit("network.target");
-      $probe->waitUntilSucceeds("echo test | nc machine 4444 -q 0");
+      $probe->waitUntilSucceeds("echo test | nc machine 4444 -N");
     '';
 
 })

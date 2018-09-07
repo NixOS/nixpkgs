@@ -1,8 +1,9 @@
-{ stdenv, appleDerivation, xcbuild, gnumake, Security
+{ stdenv, appleDerivation, xcbuildHook, gnumake, Security
 , libsecurity_utilities, libsecurity_cdsa_utilities }:
 
 appleDerivation {
-  buildInputs = [ xcbuild libsecurity_utilities libsecurity_cdsa_utilities ];
+  nativeBuildInputs = [ xcbuildHook ];
+  buildInputs = [ libsecurity_utilities libsecurity_cdsa_utilities ];
 
   DSTROOT = "$out";
 

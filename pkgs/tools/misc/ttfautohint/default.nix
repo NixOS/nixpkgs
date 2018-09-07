@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.8.1";
+  version = "1.8.2";
   name = "ttfautohint-${version}";
 
   src = fetchurl {
     url = "mirror://savannah/freetype/${name}.tar.gz";
-    sha256 = "1yflnydzdfkr8bi29yf42hb6h6525a4rdid3w8qjfk8rpqh53pqj";
+    sha256 = "19w9g1ksr0vyblgcirppj0279gfj5s902jblzgav5a4n2mq42rrq";
   };
 
   postAutoreconf = ''

@@ -1,4 +1,4 @@
-{ CF, Security, appleDerivation, apple_sdk, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_ocspd, libsecurity_pkcs12, libsecurity_utilities, libsecurityd, openssl, osx_private_sdk, security_dotmac_tp }:
+{ CF, appleDerivation, apple_sdk, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_utilities, libsecurity_cdsa_utils, libsecurity_ocspd, libsecurity_pkcs12, libsecurity_utilities, libsecurityd, openssl, osx_private_sdk, security_dotmac_tp, lib }:
 appleDerivation {
   buildInputs = [
     libsecurity_utilities
@@ -19,7 +19,7 @@ appleDerivation {
     substituteInPlace lib/SecCertificate.cpp --replace '#include <Security/SecCertificatePriv.h>' ""
 
     cp ${osx_private_sdk}/include/xpc/private.h xpc
-    cp ${apple_sdk.sdk}/include/xpc/*.h xpc
+    cp ${lib.getDev apple_sdk.sdk}/include/xpc/*.h xpc
     cp ${osx_private_sdk}/include/sandbox_private.h lib/sandbox.h
 
     substituteInPlace lib/SecItemPriv.h \
@@ -29,7 +29,7 @@ appleDerivation {
 
     substituteInPlace lib/Keychains.cpp --replace \
       '<CoreServices/../Frameworks/CarbonCore.framework/Headers/MacErrors.h>' \
-      '"${apple_sdk.sdk}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers/MacErrors.h"'
+      '"${apple_sdk.sdk.out}/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/Headers/MacErrors.h"'
 
     substituteInPlace lib/CertificateValues.cpp --replace \
       '#include <Security/SecCertificatePriv.h>' ""
@@ -42,6 +42,6 @@ appleDerivation {
 
     substituteInPlace lib/KCEventNotifier.h --replace \
       'CoreFoundation/CFNotificationCenter.h' \
-      '${apple_sdk.sdk}/Library/Frameworks/CoreFoundation.framework/Versions/A/Headers/CFNotificationCenter.h'
+      '${apple_sdk.sdk.out}/Library/Frameworks/CoreFoundation.framework/Versions/A/Headers/CFNotificationCenter.h'
   '';
 }

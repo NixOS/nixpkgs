@@ -5,18 +5,17 @@
 , lxml
 , libxml2
 , libxslt
-, pytest
 , nose
 , rednose
 }:
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.5.3";
+  version = "0.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe6b9c16ed5f1b21f5591da74bfdd91a9bdf69eb4e918f1c06b3c8db307bd32b";
+    sha256 = "6616828f9c5d318906dae22378a78342bbfa5983f1775c1af8bfecc779434c38";
   };
 
   checkInputs = [ nose rednose ];

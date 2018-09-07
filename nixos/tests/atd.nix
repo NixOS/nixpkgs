@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test.nix ({ pkgs, ... }:
 
 {
   name = "atd";
@@ -7,9 +7,9 @@ import ./make-test.nix ({ pkgs, lib, ... }:
   };
 
   machine =
-    { config, pkgs, ... }:
+    { ... }:
     { services.atd.enable = true;
-      users.extraUsers.alice = { isNormalUser = true; };
+      users.users.alice = { isNormalUser = true; };
     };
 
   # "at" has a resolution of 1 minute

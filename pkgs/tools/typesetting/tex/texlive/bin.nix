@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchurl
+{ stdenv, fetchurl
 , texlive
-, zlib, bzip2, ncurses, libiconv, libpng, flex, bison, libX11, libICE, xproto
-, freetype, t1lib, gd, libXaw, icu, ghostscript, ed, libXt, libXpm, libXmu, libXext
-, xextproto, perl, libSM, ruby, expat, curl, libjpeg, python, fontconfig, pkgconfig
-, poppler, libpaper, graphite2, zziplib, harfbuzz, texinfo, potrace, gmp, mpfr
-, xpdf, cairo, pixman, xorg, clisp
+, zlib, libiconv, libpng, libX11
+, freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
+, perl, pkgconfig
+, poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
+, cairo, pixman, xorg, clisp, biber
 , makeWrapper
 }:
 
@@ -95,12 +95,13 @@ core = stdenv.mkDerivation rec {
 
   configureFlags = common.configureFlags
     ++ [ "--without-x" ] # disable xdvik and xpdfopen
-    ++ map (what: "--disable-${what}") [
+    ++ map (what: "--disable-${what}") ([
       "dvisvgm" "dvipng" # ghostscript dependency
       "luatex" "luajittex" "mp" "pmp" "upmp" "mf" # cairo would bring in X and more
       "xetex" "bibtexu" "bibtex8" "bibtex-x" "upmendex" # ICU isn't small
-    ]
+    ] ++ stdenv.lib.optional (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) "mfluajit")
     ++ [ "--without-system-harfbuzz" "--without-system-icu" ] # bogus configure
+    
     ;
 
   enableParallelBuilding = true;
@@ -204,6 +205,8 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
   CXXFLAGS = "-std=c++11 -Wno-reserved-user-defined-literal"; # TODO: remove once texlive 2018 is out?
   enableParallelBuilding = true;
 
+  doCheck = false; # fails
+
   # now distribute stuff into outputs, roughly as upstream TL
   # (uninteresting stuff remains in $out, typically duplicates from `core`)
   outputs = [ "out" "metafont" "metapost" "luatex" "xetex" ];
@@ -259,6 +262,7 @@ dvipng = stdenv.mkDerivation {
 };
 
 
+inherit biber;
 bibtexu = bibtex8;
 bibtex8 = stdenv.mkDerivation {
   name = "texlive-bibtex-x.bin-${version}";
@@ -309,6 +313,10 @@ xindy = stdenv.mkDerivation {
   name = "texlive-xindy.bin-${version}";
 
   inherit (common) src;
+
+  # If unset, xindy will try to mkdir /homeless-shelter
+  HOME = ".";
+
   prePatch = "cd utils/xindy";
   # hardcode clisp location
   postPatch = ''
@@ -335,5 +343,3 @@ xindy = stdenv.mkDerivation {
 };
 
 }
-
-

@@ -1,13 +1,13 @@
 { stdenv, fetchzip, atk, cairo, dmd, gdk_pixbuf, gnome3, gst_all_1, librsvg
-, pango, pkgconfig, substituteAll, which }:
+, pango, pkgconfig, which }:
 
 stdenv.mkDerivation rec {
   name = "gtkd-${version}";
-  version = "3.6.5";
+  version = "3.8.3";
 
   src = fetchzip {
     url = "https://gtkd.org/Downloads/sources/GtkD-${version}.zip";
-    sha256 = "1ypxxqklad5wwyvc39wnphnqp5y4q5zbf9j5mxb3bg9vnls48vx1";
+    sha256 = "10jhwy1421bypq62ki1dzv8irvlgwr7s40z6l6vxallm4jkgk9gj";
     stripRoot = false;
   };
 
@@ -19,63 +19,63 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteAll ${./paths.d} generated/gtkd/gtkd/paths.d
-    substituteInPlace src/cairo/gtkc/cairo-compiletime.d \
+    substituteInPlace src/cairo/c/functions-compiletime.d \
       --replace libcairo.so.2 ${cairo}/lib/libcairo.so.2 \
       --replace libcairo.dylib ${cairo}/lib/libcairo.dylib
-    substituteInPlace src/cairo/gtkc/cairo-runtime.d \
+    substituteInPlace src/cairo/c/functions-runtime.d \
       --replace libcairo.so.2 ${cairo}/lib/libcairo.so.2 \
       --replace libcairo.dylib ${cairo}/lib/libcairo.dylib
-    substituteInPlace generated/gtkd/gtkc/gdkpixbuf.d \
+    substituteInPlace generated/gtkd/gdkpixbuf/c/functions.d \
       --replace libgdk_pixbuf-2.0.so.0 ${gdk_pixbuf}/lib/libgdk_pixbuf-2.0.so.0 \
       --replace libgdk_pixbuf-2.0.0.dylib ${gdk_pixbuf}/lib/libgdk_pixbuf-2.0.0.dylib
-    substituteInPlace generated/gtkd/gtkc/atk.d \
+    substituteInPlace generated/gtkd/atk/c/functions.d \
       --replace libatk-1.0.so.0 ${atk}/lib/libatk-1.0.so.0 \
       --replace libatk-1.0.0.dylib ${atk}/lib/libatk-1.0.0.dylib
-    substituteInPlace generated/gtkd/gtkc/pango.d \
+    substituteInPlace generated/gtkd/pango/c/functions.d \
       --replace libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0 \
       --replace libpangocairo-1.0.so.0 ${pango.out}/lib/libpangocairo-1.0.so.0 \
       --replace libpango-1.0.0.dylib ${pango.out}/lib/libpango-1.0.0.dylib \
       --replace libpangocairo-1.0.0.dylib ${pango.out}/lib/libpangocairo-1.0.0.dylib
-    substituteInPlace generated/gtkd/gtkc/gobject.d \
+    substituteInPlace generated/gtkd/gobject/c/functions.d \
       --replace libgobject-2.0.so.0 ${glib}/lib/libgobject-2.0.so.0 \
       --replace libgobject-2.0.0.dylib ${glib}/lib/libgobject-2.0.0.dylib
-    substituteInPlace generated/gtkd/gtkc/rsvg.d \
+    substituteInPlace generated/gtkd/rsvg/c/functions.d \
       --replace librsvg-2.so.2 ${librsvg}/lib/librsvg-2.so.2 \
       --replace librsvg-2.2.dylib ${librsvg}/lib/librsvg-2.2.dylib
-    substituteInPlace generated/gtkd/gtkc/cairo.d \
+    substituteInPlace generated/gtkd/cairo/c/functions.d \
       --replace libcairo.so.2 ${cairo}/lib/libcairo.so.2 \
       --replace libcairo.dylib ${cairo}/lib/libcairo.dylib
-    substituteInPlace generated/gtkd/gtkc/gdk.d \
+    substituteInPlace generated/gtkd/gdk/c/functions.d \
       --replace libgdk-3.so.0 ${gtk3}/lib/libgdk-3.so.0 \
       --replace libgdk-3.0.dylib ${gtk3}/lib/libgdk-3.0.dylib
-    substituteInPlace generated/peas/peasc/peas.d \
+    substituteInPlace generated/peas/peas/c/functions.d \
       --replace libpeas-1.0.so.0 ${libpeas}/lib/libpeas-1.0.so.0 \
       --replace libpeas-gtk-1.0.so.0 ${libpeas}/lib/libpeas-gtk-1.0.so.0 \
       --replace libpeas-1.0.0.dylib ${libpeas}/lib/libpeas-1.0.0.dylib \
       --replace gtk-1.0.0.dylib ${libpeas}/lib/gtk-1.0.0.dylib
-    substituteInPlace generated/vte/vtec/vte.d \
+    substituteInPlace generated/vte/vte/c/functions.d \
       --replace libvte-2.91.so.0 ${vte}/lib/libvte-2.91.so.0 \
       --replace libvte-2.91.0.dylib ${vte}/lib/libvte-2.91.0.dylib
-    substituteInPlace generated/gstreamer/gstreamerc/gstinterfaces.d \
+    substituteInPlace generated/gstreamer/gstinterfaces/c/functions.d \
       --replace libgstvideo-1.0.so.0 ${gst_plugins_base}/lib/libgstvideo-1.0.so.0 \
       --replace libgstvideo-1.0.0.dylib ${gst_plugins_base}/lib/libgstvideo-1.0.0.dylib
-    substituteInPlace generated/sourceview/gsvc/gsv.d \
+    substituteInPlace generated/sourceview/gsv/c/functions.d \
       --replace libgtksourceview-3.0.so.1 ${gtksourceview}/lib/libgtksourceview-3.0.so.1 \
       --replace libgtksourceview-3.0.1.dylib ${gtksourceview}/lib/libgtksourceview-3.0.1.dylib
-    substituteInPlace generated/gtkd/gtkc/glib.d \
+    substituteInPlace generated/gtkd/glib/c/functions.d \
       --replace libglib-2.0.so.0 ${glib}/lib/libglib-2.0.so.0 \
       --replace libgmodule-2.0.so.0 ${glib}/lib/libgmodule-2.0.so.0 \
       --replace libgobject-2.0.so.0 ${glib}/lib/libgobject-2.0.so.0 \
       --replace libglib-2.0.0.dylib ${glib}/lib/libglib-2.0.0.dylib \
       --replace libgmodule-2.0.0.dylib ${glib}/lib/libgmodule-2.0.0.dylib \
       --replace libgobject-2.0.0.dylib ${glib}/lib/libgobject-2.0.0.dylib
-    substituteInPlace generated/gtkd/gtkc/gio.d \
+    substituteInPlace generated/gtkd/gio/c/functions.d \
       --replace libgio-2.0.so.0 ${glib}/lib/libgio-2.0.so.0 \
       --replace libgio-2.0.0.dylib ${glib}/lib/libgio-2.0.0.dylib
-    substituteInPlace generated/gstreamer/gstreamerc/gstreamer.d \
+    substituteInPlace generated/gstreamer/gstreamer/c/functions.d \
       --replace libgstreamer-1.0.so.0 ${gstreamer}/lib/libgstreamer-1.0.so.0 \
       --replace libgstreamer-1.0.0.dylib ${gstreamer}/lib/libgstreamer-1.0.0.dylib
-    substituteInPlace generated/gtkd/gtkc/gtk.d \
+    substituteInPlace generated/gtkd/gtk/c/functions.d \
       --replace libgdk-3.so.0 ${gtk3}/lib/libgdk-3.so.0 \
       --replace libgtk-3.so.0 ${gtk3}/lib/libgtk-3.so.0 \
       --replace libgdk-3.0.dylib ${gtk3}/lib/libgdk-3.0.dylib \
@@ -83,6 +83,10 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags = "prefix=$(out)";
+
+  # Workaround for https://github.com/NixOS/nixpkgs/issues/40397
+  # Remove after update to binutils 2.31
+  dontStrip = true;
 
   inherit atk cairo gdk_pixbuf librsvg pango;
   inherit (gnome3) glib gtk3 gtksourceview libgda libpeas vte;

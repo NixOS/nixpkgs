@@ -27,55 +27,35 @@ let
     Xft.hintstyle: hintslight
   '';
 
-  # file provided by services.xserver.displayManager.session.script
-  xsession = wm: dm: pkgs.writeScript "xsession"
+  mkCases = session:
+    concatStrings (
+      mapAttrsToList (name: starts: ''
+                       (${name})
+                         ${concatMapStringsSep "\n  " (n: n.start) starts}
+                         ;;
+                     '') (lib.groupBy (n: n.name) session)
+    );
+
+  # file provided by services.xserver.displayManager.session.wrapper
+  xsessionWrapper = pkgs.writeScript "xsession-wrapper"
     ''
       #! ${pkgs.bash}/bin/bash
 
-      # Expected parameters:
-      #   $1 = <desktop-manager>+<window-manager>
-
-      # Actual parameters (FIXME):
-      # SDDM is calling this script like the following:
-      #   $1 = /nix/store/xxx-xsession (= $0)
-      #   $2 = <desktop-manager>+<window-manager>
-      # SLiM is using the following parameter:
-      #   $1 = /nix/store/xxx-xsession <desktop-manager>+<window-manager>
-      # LightDM keeps the double quotes:
-      #   $1 = /nix/store/xxx-xsession "<desktop-manager>+<window-manager>"
-      # The fake/auto display manager doesn't use any parameters and GDM is
-      # broken.
-      # If you want to "debug" this script don't print the parameters to stdout
-      # or stderr because this script will be executed multiple times and the
-      # output won't be visible in the log when the script is executed for the
-      # first time (e.g. append them to a file instead)!
-
-      # All of the above cases are handled by the following hack (FIXME).
-      # Since this line is *very important* for *all display managers* it is
-      # very important to test changes to the following line with all display
-      # managers:
-      if [ "''${1:0:1}" = "/" ]; then eval exec "$1" "$2" ; fi
-
-      # Now it should be safe to assume that the script was called with the
-      # expected parameters.
+      # Shared environment setup for graphical sessions.
 
       . /etc/profile
       cd "$HOME"
 
-      # The first argument of this script is the session type.
-      sessionType="$1"
-      if [ "$sessionType" = default ]; then sessionType=""; fi
-
       ${optionalString cfg.startDbusSession ''
         if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$sessionType"
+          exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$@"
         fi
       ''}
 
       ${optionalString cfg.displayManager.job.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
           export _DID_SYSTEMD_CAT=1
-          exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$sessionType"
+          exec ${config.systemd.package}/bin/systemd-cat -t xsession "$0" "$@"
         fi
       ''}
 
@@ -85,12 +65,10 @@ let
 
       # Start PulseAudio if enabled.
       ${optionalString (config.hardware.pulseaudio.enable) ''
-        ${optionalString (!config.hardware.pulseaudio.systemWide)
-          "${config.hardware.pulseaudio.package.out}/bin/pulseaudio --start"
-        }
-
         # Publish access credentials in the root window.
-        ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
+        if ${config.hardware.pulseaudio.package.out}/bin/pulseaudio --dump-modules | grep module-x11-publish &> /dev/null; then
+          ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
+        fi
       ''}
 
       # Tell systemd about our $DISPLAY and $XAUTHORITY.
@@ -101,6 +79,7 @@ let
       ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
 
       # Load X defaults.
+      # FIXME: Check XDG_SESSION_TYPE against x11
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}
       if test -e ~/.Xresources; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xresources
@@ -132,11 +111,32 @@ let
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
           exec ~/.xsession
-      else
-          if test "$sessionType" = "custom"; then
-              sessionType="" # fall-thru if there is no ~/.xsession
-          fi
       fi
+
+      if test "$1"; then
+          # Run the supplied session command. Remove any double quotes with eval.
+          eval exec "$@"
+      else
+          # Fall back to the default window/desktopManager
+          exec ${cfg.displayManager.session.script}
+      fi
+    '';
+
+  # file provided by services.xserver.displayManager.session.script
+  xsession = wm: dm: pkgs.writeScript "xsession"
+    ''
+      #! ${pkgs.bash}/bin/bash
+
+      # Legacy session script used to construct .desktop files from
+      # `services.xserver.displayManager.session` entries. Called from
+      # `sessionWrapper`.
+
+      # Expected parameters:
+      #   $1 = <desktop-manager>+<window-manager>
+
+      # The first argument of this script is the session type.
+      sessionType="$1"
+      if [ "$sessionType" = default ]; then sessionType=""; fi
 
       # The session type is "<desktop-manager>+<window-manager>", so
       # extract those (see:
@@ -148,21 +148,13 @@ let
 
       # Start the window manager.
       case "$windowManager" in
-        ${concatMapStrings (s: ''
-          (${s.name})
-            ${s.start}
-            ;;
-        '') wm}
+        ${mkCases wm}
         (*) echo "$0: Window manager '$windowManager' not found.";;
       esac
 
       # Start the desktop manager.
       case "$desktopManager" in
-        ${concatMapStrings (s: ''
-          (${s.name})
-            ${s.start}
-            ;;
-        '') dm}
+        ${mkCases dm}
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
 
@@ -186,19 +178,22 @@ let
       allowSubstitutes = false;
     }
     ''
-      mkdir -p "$out"
+      mkdir -p "$out/share/xsessions"
       ${concatMapStrings (n: ''
-        cat - > "$out/${n}.desktop" << EODESKTOP
+        cat - > "$out/share/xsessions/${n}.desktop" << EODESKTOP
         [Desktop Entry]
         Version=1.0
         Type=XSession
         TryExec=${cfg.displayManager.session.script}
         Exec=${cfg.displayManager.session.script} "${n}"
-        X-GDM-BypassXsession=true
         Name=${n}
         Comment=
         EODESKTOP
       '') names}
+
+      ${concatMapStrings (pkg: ''
+        ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+      '') cfg.displayManager.extraSessionFilePackages}
     '';
 
 in
@@ -245,6 +240,14 @@ in
         '';
       };
 
+      extraSessionFilePackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+          A list of packages containing xsession files to be passed to the display manager.
+        '';
+      };
+
       session = mkOption {
         default = [];
         example = literalExample
@@ -280,6 +283,7 @@ in
               (filter (w: d.name != "none" || w.name != "none") wm));
           desktops = mkDesktops names;
           script = xsession wm dm;
+          wrapper = xsessionWrapper;
         };
       };
 

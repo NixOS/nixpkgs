@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   patches = [
     # Use GNUTLS system trust for certificates
     (fetchpatch {
-      url = https://git.gnome.org/browse/glib-networking/patch/?id=f1c8feee014007cc913b71357acb609f8d1200df;
+      url = https://gitlab.gnome.org/GNOME/glib-networking/commit/f1c8feee014007cc913b71357acb609f8d1200df.patch;
       sha256 = "1rbxqsrcb5if3xs2d18pqzd9xnjysdj715ijc41n5w326fsawg7i";
     })
   ];
 
-  PKG_CONFIG_GIO_2_0_GIOMODULEDIR = "lib/gio/modules";
+  PKG_CONFIG_GIO_2_0_GIOMODULEDIR = "${placeholder "out"}/lib/gio/modules";
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file

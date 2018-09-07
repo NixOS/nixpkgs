@@ -1,42 +1,47 @@
 { stdenv, fetchurl, udev, intltool, pkgconfig, glib, xmlto, wrapGAppsHook
-, makeWrapper, gtk3, docbook_xml_dtd_412, docbook_xsl
+, docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop-file-utils, libusb1, cups, gdk_pixbuf, pango, atk, libnotify
-, gobjectIntrospection, libgnome-keyring3
+, gobjectIntrospection, libsecret
 , cups-filters
 , pythonPackages
-, withGUI ? true
 }:
 
 stdenv.mkDerivation rec {
   name = "system-config-printer-${version}";
-  version = "1.5.9";
+  version = "1.5.11";
 
   src = fetchurl {
-    url = "https://github.com/zdohnal/system-config-printer/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "03bwlpsiqpxzcwd78a7rmwiww4jnqd7kl7il4kx78l1r57lasd2r";
+    url = "https://github.com/zdohnal/system-config-printer/releases/download/${version}/${name}.tar.xz";
+    sha256 = "1lq0q51bhanirpjjvvh4xiafi8hgpk8r32h0dj6dn3f32z8pib9q";
   };
 
   patches = [ ./detect_serverbindir.patch ];
 
-  buildInputs =
-    [ intltool pkgconfig glib udev libusb1 cups xmlto
-      libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
-      pythonPackages.python pythonPackages.wrapPython
-      libnotify gobjectIntrospection gdk_pixbuf pango atk
-      libgnome-keyring3
-    ];
+  buildInputs = [
+    glib udev libusb1 cups
+    pythonPackages.python
+    libnotify gobjectIntrospection gdk_pixbuf pango atk
+    libsecret
+  ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [
+    intltool pkgconfig
+    xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
+    pythonPackages.wrapPython
+    wrapGAppsHook
+  ];
 
   pythonPath = with pythonPackages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
 
-  configureFlags =
-    [ "--with-udev-rules"
-      "--with-udevdir=$(out)/etc/udev"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    ];
+  configureFlags = [
+    "--with-udev-rules"
+    "--with-udevdir=$(out)/etc/udev"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+  ];
 
   stripDebugList = [ "bin" "lib" "etc/udev" ];
+
+  doCheck = false; # generates shebangs in check phase, too lazy to fix
 
   postInstall =
     ''

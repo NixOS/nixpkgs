@@ -6,15 +6,15 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.12.6";
-  sha256 = "05picaq8j60wlwyi84qvw5liw3nd0cws9va3krnc3pms0wm906v2";
+  version = "1.12.10";
+  sha256 = "1xywijmgfad4m3cxp0b4l6kvypwc53ckmhwwzbrc6n32jwj3ssab";
 
 self = stdenv.mkDerivation {
     name = "dbus-${version}";
     inherit version;
 
     src = fetchurl {
-      url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
+      url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
       inherit sha256;
     };
 

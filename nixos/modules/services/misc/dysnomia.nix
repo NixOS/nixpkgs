@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.services.dysnomia;
+  cfg = config.dysnomia;
 
   printProperties = properties:
     concatMapStrings (propertyName:
@@ -62,9 +62,6 @@ let
       cd $out
 
       ${concatMapStrings (containerName:
-        let
-          components = cfg.components."${containerName}";
-        in
         linkMutableComponents { inherit containerName; }
       ) (builtins.attrNames cfg.components)}
     '';
@@ -72,7 +69,7 @@ let
 in
 {
   options = {
-    services.dysnomia = {
+    dysnomia = {
 
       enable = mkOption {
         type = types.bool;
@@ -145,7 +142,7 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    services.dysnomia.package = pkgs.dysnomia.override (origArgs: {
+    dysnomia.package = pkgs.dysnomia.override (origArgs: {
       enableApacheWebApplication = config.services.httpd.enable;
       enableAxis2WebService = config.services.tomcat.axis2.enable;
       enableEjabberdDump = config.services.ejabberd.enable;
@@ -156,7 +153,7 @@ in
       enableMongoDatabase = config.services.mongodb.enable;
     });
 
-    services.dysnomia.properties = {
+    dysnomia.properties = {
       hostname = config.networking.hostName;
       inherit (config.nixpkgs.localSystem) system;
 
@@ -174,7 +171,7 @@ in
       }}");
     };
 
-    services.dysnomia.containers = lib.recursiveUpdate ({
+    dysnomia.containers = lib.recursiveUpdate ({
       process = {};
       wrapper = {};
     }

@@ -238,7 +238,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.extraUsers.murmur = {
+    users.users.murmur = {
       description     = "Murmur Service user";
       home            = "/var/lib/murmur";
       createHome      = true;
@@ -248,7 +248,7 @@ in
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
-      after       = [ "network.target "];
+      after       = [ "network-online.target "];
 
       serviceConfig = {
         Type      = "forking";

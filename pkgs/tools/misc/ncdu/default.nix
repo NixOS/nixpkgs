@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.13";
 
   src = fetchurl {
-    url = "http://dev.yorhel.nl/download/${name}.tar.gz";
+    url = "https://dev.yorhel.nl/download/${name}.tar.gz";
     sha256 = "0ni56ymlii577src4dzfbrq1mznbf6i0nka4bvh2sb1971f2ingl";
   };
 

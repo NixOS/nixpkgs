@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, fetchpatch, poppler_utils, pkgconfig, libpng
+{ stdenv, fetchurl, poppler_utils, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
-, makeWrapper, unrarSupport ? false, chmlib, python2Packages, xz, libusb1, libmtp
+, makeWrapper, unrarSupport ? false, chmlib, python2Packages, libusb1, libmtp
 , xdg_utils, makeDesktopItem, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.21.0";
+  version = "3.30.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0nd9lv7armmkjwxjhs5mhsksvig5n435kww1dy9fq5hxg7nkq5ip";
+    sha256 = "0j7w63kniqnpr8v1aldzbim2dyrk79n23mzw9y56jqd0k47m8zfz";
   };
 
   patches = [
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
     description = "Comprehensive e-book software";
     homepage = https://calibre-ebook.com;
     license = with licenses; if unrarSupport then unfreeRedistributable else gpl3;
-    maintainers = with maintainers; [ viric domenkozar pSub AndersonTorres ];
+    maintainers = with maintainers; [ domenkozar pSub AndersonTorres ];
     platforms = platforms.linux;
     inherit version;
   };

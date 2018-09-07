@@ -16,12 +16,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.33";
+  version = "2.4.34";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "de02511859b00d17845b9abdd1f975d5ccb5d0b280c567da5bf2ad4b70846f05";
+    sha256 = "1w1q2smdgf6ln0x741lk5pv5r0gzrxj2iza1vslhifzy65bcjlzs";
   };
 
   # FIXME: -dev depends on -doc
@@ -47,26 +47,32 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --includedir=$dev/include"
   '';
 
-  configureFlags = ''
-    --with-apr=${apr.dev}
-    --with-apr-util=${aprutil.dev}
-    --with-z=${zlib.dev}
-    --with-pcre=${pcre.dev}
-    --disable-maintainer-mode
-    --disable-debugger-mode
-    --enable-mods-shared=all
-    --enable-mpms-shared=all
-    --enable-cern-meta
-    --enable-imagemap
-    --enable-cgi
-    ${optionalString brotliSupport "--enable-brotli --with-brotli=${brotli}"}
-    ${optionalString proxySupport "--enable-proxy"}
-    ${optionalString sslSupport "--enable-ssl"}
-    ${optionalString http2Support "--enable-http2 --with-nghttp2"}
-    ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
-    ${optionalString libxml2Support "--with-libxml2=${libxml2.dev}/include/libxml2"}
-    --docdir=$(doc)/share/doc
-  '';
+  configureFlags = [
+    "--with-apr=${apr.dev}"
+    "--with-apr-util=${aprutil.dev}"
+    "--with-z=${zlib.dev}"
+    "--with-pcre=${pcre.dev}"
+    "--disable-maintainer-mode"
+    "--disable-debugger-mode"
+    "--enable-mods-shared=all"
+    "--enable-mpms-shared=all"
+    "--enable-cern-meta"
+    "--enable-imagemap"
+    "--enable-cgi"
+    (stdenv.lib.enableFeature proxySupport "proxy")
+    (stdenv.lib.enableFeature sslSupport "ssl")
+    (stdenv.lib.withFeatureAs libxml2Support "libxml2" "${libxml2.dev}/include/libxml2")
+    "--docdir=$(doc)/share/doc"
+
+    (stdenv.lib.enableFeature brotliSupport "brotli")
+    (stdenv.lib.withFeatureAs brotliSupport "brotli" brotli)
+
+    (stdenv.lib.enableFeature http2Support "http2")
+    (stdenv.lib.withFeature http2Support "nghttp2")
+
+    (stdenv.lib.enableFeature luaSupport "lua")
+    (stdenv.lib.withFeatureAs luaSupport "lua" lua5)
+  ];
 
   enableParallelBuilding = true;
 

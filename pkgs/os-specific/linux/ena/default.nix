@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
+{ stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
   version = "1.5.2";

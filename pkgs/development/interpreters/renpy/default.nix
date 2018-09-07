@@ -7,18 +7,18 @@ with pythonPackages;
 
 stdenv.mkDerivation rec {
   name = "renpy-${version}";
-  version = "6.99.14.2";
+  version = "7.0.0";
 
   meta = with stdenv.lib; {
     description = "Ren'Py Visual Novel Engine";
-    homepage = http://renpy.org/;
+    homepage = https://renpy.org/;
     license = licenses.mit;
     platforms = platforms.linux;
   };
 
   src = fetchurl {
     url = "https://www.renpy.org/dl/${version}/renpy-${version}-source.tar.bz2";
-    sha256 = "1cjaly5igks18lmmssph4d6b5q1b8qfav2s7x2agx1gybxyghv9n";
+    sha256 = "0yrwp5iw4fjg7kbd041qv8gh2p0dnbrnkrgmn0ndk5k10pjij82g";
   };
 
   patches = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgs, makeWrapper
+{ stdenv, pkgs, makeWrapper
 , glib, gnome2, gnome3, gtk2-x11, gtkspell2, poppler
 , pkgconfig, intltool, autoreconfHook, wrapGAppsHook
 }:

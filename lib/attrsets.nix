@@ -3,9 +3,9 @@
 
 let
   inherit (builtins) head tail length;
-  inherit (lib.trivial) and or;
+  inherit (lib.trivial) and;
   inherit (lib.strings) concatStringsSep;
-  inherit (lib.lists) fold concatMap concatLists all deepSeqList;
+  inherit (lib.lists) fold concatMap concatLists;
 in
 
 rec {
@@ -145,7 +145,7 @@ rec {
   foldAttrs = op: nul: list_of_attrs:
     fold (n: a:
         fold (name: o:
-          o // (listToAttrs [{inherit name; value = op n.${name} (a.${name} or nul); }])
+          o // { ${name} = op n.${name} (a.${name} or nul); }
         ) a (attrNames n)
     ) {} list_of_attrs;
 
@@ -195,8 +195,9 @@ rec {
           { x = "foo"; y = "bar"; }
        => { x = "x-foo"; y = "y-bar"; }
   */
-  mapAttrs = f: set:
-    listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set));
+  mapAttrs = builtins.mapAttrs or
+    (f: set:
+      listToAttrs (map (attr: { name = attr; value = f attr set.${attr}; }) (attrNames set)));
 
 
   /* Like `mapAttrs', but allows the name of each attribute to be
@@ -383,11 +384,12 @@ rec {
   recursiveUpdateUntil = pred: lhs: rhs:
     let f = attrPath:
       zipAttrsWith (n: values:
+        let here = attrPath ++ [n]; in
         if tail values == []
-        || pred attrPath (head (tail values)) (head values) then
+        || pred here (head (tail values)) (head values) then
           head values
         else
-          f (attrPath ++ [n]) values
+          f here values
       );
     in f [] [rhs lhs];
 

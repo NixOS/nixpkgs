@@ -1,30 +1,31 @@
 {
-  stdenv, python2Packages, openssl,
+  stdenv, pythonPackages, openssl,
 
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
   extraInputs ? []
 }:
 
-python2Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   pname = "salt";
-  version = "2017.7.4";
+  version = "2018.3.2";
 
-  src = python2Packages.fetchPypi {
+  src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "15xfvclk3ns8vk17j7bfy4alq7ab5x3y3jnpqzp5583bfyak0mqx";
+    sha256 = "d86eeea2e5387f4a64bbf0a11d103bfc8aac1122e19d39cc0945d33efdc797bd";
   };
 
-  propagatedBuildInputs = with python2Packages; [
-    futures
+  propagatedBuildInputs = with pythonPackages; [
     jinja2
     markupsafe
-    msgpack-python
+    msgpack
     pycrypto
     pyyaml
     pyzmq
     requests
     tornado
+  ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) [
+    futures
   ] ++ extraInputs;
 
   patches = [ ./fix-libcrypto-loading.patch ];

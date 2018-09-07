@@ -1,18 +1,18 @@
 { stdenv, meson, ninja, gettext, fetchurl, gdk_pixbuf, tracker
 , libxml2, python3, libnotify, wrapGAppsHook, libmediaart
 , gobjectIntrospection, gnome-online-accounts, grilo, grilo-plugins
-, pkgconfig, gtk3, glib, cairo, desktop-file-utils, appstream-glib
+, pkgconfig, gtk3, glib, desktop-file-utils, appstream-glib
 , itstool, gnome3, gst_all_1 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-music";
-  version = "3.28.1";
+  version = "3.28.2.1";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${pname}-${version}.tar.xz";
-    sha256 = "0xbwndfl72292dx4x99vm0iyrcy8xw2i5fhsch7b073rk4ydbyfx";
+    sha256 = "09lvpiqhijiq0kddnfi9rmmw806qh9a03czfhssqczd9fxmmbx5v";
   };
 
   nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook desktop-file-utils appstream-glib gobjectIntrospection ];

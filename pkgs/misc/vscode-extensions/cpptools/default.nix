@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, vscode-utils, unzip, dos2unix, mono46, clang-tools, writeScript
-, gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise. 
+{ stdenv, fetchzip, vscode-utils, jq, mono46, clang-tools, writeScript
+, gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
 }:
 
 assert gdbUseFixed -> null != gdb;
@@ -33,12 +33,10 @@ let
   langComponentBinaries = stdenv.mkDerivation {
     name = "cpptools-language-component-binaries";
 
-    src = fetchurl {
-      url = https://download.visualstudio.microsoft.com/download/pr/11151953/d3cc8b654bffb8a2f3896d101f3c3155/Bin_Linux.zip;
-      sha256 = "12qbxsrdc73cqjb84xdck1xafzhfkcyn6bqbpcy1bxxr3b7hxbii";
+    src = fetchzip {
+      url = https://download.visualstudio.microsoft.com/download/pr/11991016/8a81aa8f89aac452956b0e4c68e6620b/Bin_Linux.zip;
+      sha256 = "0ma59fxfldbgh6ijlvfbs3hnl4g0cnw5gs6286zdrp065n763sv4";
     };
-
-    buildInputs = [ unzip ];
 
     patchPhase = ''
       elfInterpreter="${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2"
@@ -52,13 +50,6 @@ let
       find . -mindepth 1 -maxdepth 1 | xargs cp -a -t "$out/bin"
     '';
   };
-
-  cpptoolsJsonFile = fetchurl {
-    url = https://download.visualstudio.microsoft.com/download/pr/11070848/7b97d6724d52cae8377c61bb4601c989/cpptools.json;
-    sha256 = "124f091aic92rzbg2vg831y22zr5wi056c1kh775djqs3qv31ja6";
-  };
-
-
 
   openDebugAD7Script = writeScript "OpenDebugAD7" ''
     #!${stdenv.shell}
@@ -76,23 +67,24 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "0.12.3";
-    sha256 = "1dcqy54n1w29xhbvxscd41hdrbdwar6g12zx02f6kh2f1kw34z5z";
+    version = "0.17.6";
+    sha256 = "2625be8b922ffc199e1c776f784d39b6e004523212f7956c93ae40f9040ce6d5";
   };
 
   buildInputs = [
-    dos2unix
-  ];
-
-  prePatch = ''
-    dos2unix package.json      
-  '';
-
-  patches = [
-    ./vscode-cpptools-0-12-3-package-json.patch
+    jq
   ];
 
   postPatch = ''
+    mv ./package.json ./package_ori.json
+
+    # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
+    # 2. Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
+    cat ./package_ori.json | \
+      jq --slurpfile actEvts ${./package-activation-events-0-16-1.json} '(.activationEvents) = $actEvts[0]' | \
+      jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
+      ./package.json
+
     # Patch `packages.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
     substituteInPlace "./package.json" \
       --replace "\"default\": \"/usr/bin/gdb\"" "\"default\": \"${gdbDefaultsTo}\""
@@ -102,9 +94,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
 
     # Move unused files out of the way.
     mv ./debugAdapters/bin/OpenDebugAD7.exe.config ./debugAdapters/bin/OpenDebugAD7.exe.config.unused
-
-    # Bring the `cpptools.json` file at the root of the package, same as the extension would do.
-    cp -p "${cpptoolsJsonFile}" "./cpptools.json"
 
     # Combining the language component binaries as part of our package.
     find "${langComponentBinaries}/bin" -mindepth 1 -maxdepth 1 | xargs cp -p -t "./bin"
@@ -121,7 +110,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     meta = with stdenv.lib; {
       license = licenses.unfree;
       maintainers = [ maintainers.jraygauthier ];
-      # A 32 bit linux would also be possible with some effort (specific download of binaries + 
+      # A 32 bit linux would also be possible with some effort (specific download of binaries +
       # patching of the elf files with 32 bit interpreter).
       platforms = [ "x86_64-linux" ];
     };

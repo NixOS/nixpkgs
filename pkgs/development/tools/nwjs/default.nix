@@ -1,13 +1,13 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
 
-, xorg, alsaLib, dbus, glib, gtk2, gtk3, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, systemd, libcap
+, xorg, alsaLib, dbus, glib, gtk3, atk, pango, freetype, fontconfig
+, gdk_pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify
-, ffmpeg, libxcb, libXScrnSaver, cups
+, ffmpeg, libxcb, cups
 , sqlite, udev
 }:
 let
-  bits = if stdenv.system == "x86_64-linux" then "x64"
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
          else "ia32";
 
   nwEnv = buildEnv {
@@ -30,13 +30,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nwjs-${version}";
-  version = "0.23.6";
+  version = "0.32.2";
 
   src = fetchurl {
-    url = "http://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
+    url = "https://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "0ppyjspdvacarhdn4xd5i1pqgmf4z1bxnh1cry780489h25rcjgj" else
-      "0c0j73vnzhsry5rdx41d954a29jmjnvzli728cfbjybfr51zdybg";
+      "0f0p17mbr24zhzm2cf77ddy6yj4k0k181dzf4gxdf8szd5vxpliy" else
+      "0a3b712abfa0c3e7e808b1d08ea5d53375a71060e7d144fdcb58c4fe88fa2250";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An app runtime based on Chromium and node.js";
-    homepage = http://nwjs.io/;
+    homepage = https://nwjs.io/;
     platforms = ["i686-linux" "x86_64-linux"];
     maintainers = [ maintainers.offline ];
     license = licenses.bsd3;

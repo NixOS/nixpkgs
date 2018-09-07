@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "2.0.2";
 
   src = fetchurl {
-    url = "http://www.libsdl.org/projects/SDL_mixer/release/${name}.tar.gz";
+    url = "https://www.libsdl.org/projects/SDL_mixer/release/${name}.tar.gz";
     sha256 = "1fw3kkqi5346ai5if4pxrcbhs5c4vv3a4smgz6fl6kyaxwkmwqaf";
   };
 
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug ];
 
   configureFlags = [ "--disable-music-ogg-shared" ]
-    ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl";
+    ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl"
+    ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
 
   meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";

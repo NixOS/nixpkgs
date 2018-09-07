@@ -21,18 +21,16 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool gettext perl gobjectIntrospection vala_0_40 ]
+  nativeBuildInputs = [ pkgconfig intltool perl gobjectIntrospection vala_0_40 ]
     ++ stdenv.lib.optionals doCheck checkInputs;
 
-  buildInputs = [ atk cairo glib pango libxml2 ];
+  buildInputs = [ atk cairo glib pango libxml2 gettext ];
 
   preBuild = ''
     substituteInPlace gtksourceview/gtksourceview-utils.c --replace "@NIX_SHARE_PATH@" "$out/share"
   '';
 
   patches = [ ./3.x-nix_share_path.patch ];
-
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   enableParallelBuilding = true;
 

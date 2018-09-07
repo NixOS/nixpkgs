@@ -1,7 +1,5 @@
 {stdenv, fetchurl, ncurses}:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "psmisc-23.1";
 
@@ -16,5 +14,6 @@ stdenv.mkDerivation rec {
     homepage = http://psmisc.sourceforge.net/;
     description = "A set of small useful utilities that use the proc filesystem (such as fuser, killall and pstree)";
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }

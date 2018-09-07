@@ -16,7 +16,7 @@
     <link xlink:href="https://taskwarrior.org/docs/#taskd"/>
   </para>
 
-  <section>
+  <section xml:id="module-services-taskserver-configuration">
     <title>Configuration</title>
 
     <para>
@@ -48,14 +48,14 @@
     </para>
   </section>
 
-  <section>
+  <section xml:id="module-services-taskserver-nixos-taskserver-tool">
     <title>The nixos-taskserver tool</title>
 
     <para>
       Because Taskserver by default only provides scripts to setup users
       imperatively, the <command>nixos-taskserver</command> tool is used for
       addition and deletion of organisations along with users and groups defined
-      by <option>services.taskserver.organisations</option> and as well for
+      by <xref linkend="opt-services.taskserver.organisations"/> and as well for
       imperative set up.
     </para>
 
@@ -78,7 +78,7 @@
       <option>--help</option> switch.
     </para>
   </section>
-  <section>
+  <section xml:id="module-services-taskserver-declarative-ca-management">
     <title>Declarative/automatic CA management</title>
 
     <para>
@@ -99,10 +99,10 @@
       For example, let's say you have the following configuration:
 <screen>
 {
-  services.taskserver.enable = true;
-  services.taskserver.fqdn = "server";
-  services.taskserver.listenHost = "::";
-  services.taskserver.organisations.my-company.users = [ "alice" ];
+  <xref linkend="opt-services.taskserver.enable"/> = true;
+  <xref linkend="opt-services.taskserver.fqdn"/> = "server";
+  <xref linkend="opt-services.taskserver.listenHost"/> = "::";
+  <link linkend="opt-services.taskserver.organisations._name_.users">services.taskserver.organisations.my-company.users</link> = [ "alice" ];
 }
 </screen>
       This creates an organisation called <literal>my-company</literal> with the
@@ -131,12 +131,12 @@ $ ssh server nixos-taskserver user export my-company alice | sh
       <command>task sync</command> after that stage.
     </para>
   </section>
-  <section>
+  <section xml:id="module-services-taskserver-manual-ca-management">
     <title>Manual CA management</title>
 
     <para>
       If you set any options within
-      <option>service.taskserver.pki.manual.*</option>,
+      <link linkend="opt-services.taskserver.pki.manual.ca.cert">service.taskserver.pki.manual</link>.*,
       <command>nixos-taskserver</command> won't issue certificates, but you can
       still use it for adding or removing user accounts.
     </para>

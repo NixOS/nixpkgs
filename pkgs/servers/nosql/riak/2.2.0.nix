@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlang, which, pam, coreutils }:
+{ stdenv, lib, fetchurl, unzip, erlang, which, pam }:
 
 let
   solrName = "solr-4.10.4-yz-2.tgz";
@@ -7,7 +7,7 @@ let
 
   srcs = {
     riak = fetchurl {
-      url = "http://s3.amazonaws.com/downloads.basho.com/riak/2.2/2.2.0/riak-2.2.0.tar.gz";
+      url = "https://s3.amazonaws.com/downloads.basho.com/riak/2.2/2.2.0/riak-2.2.0.tar.gz";
       sha256 = "0kl28bpyzajcllybili46jfr1schl45w5ysii187jr0ssgls2c9p";
     };
     solr = fetchurl {
@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ cstrahan mdaiter ];
     description = "Dynamo inspired NoSQL DB by Basho";
     platforms   = [ "x86_64-linux" ];
+    license     = licenses.asl20;
   };
 }

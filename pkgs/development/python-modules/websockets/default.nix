@@ -1,18 +1,16 @@
 { lib
-, fetchurl
+, fetchPypi
 , buildPythonPackage
 , pythonOlder
 }:
 
-let
+buildPythonPackage rec {
   pname = "websockets";
-  version = "4.0.1";
-in buildPythonPackage rec {
-  name = "${pname}-${version}";
+  version = "6.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "da4d4fbe059b0453e726d6d993760065d69b823a27efc3040402a6fcfe6a1ed9";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "8f3b956d11c5b301206382726210dc1d3bee1a9ccf7aadf895aaf31f71c3716c";
   };
 
   disabled = pythonOlder "3.3";

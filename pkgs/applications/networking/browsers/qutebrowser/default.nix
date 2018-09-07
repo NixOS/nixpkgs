@@ -12,11 +12,11 @@ assert withMediaPlayback -> gst_all_1 != null;
 let
   pdfjs = stdenv.mkDerivation rec {
     name = "pdfjs-${version}";
-    version = "1.7.225";
+    version = "1.10.100";
 
     src = fetchzip {
-      url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-      sha256 = "0bsmbz7bbh0zpd70dlhss4fjdw7zq356091wld9s7kxnb2rixqd8";
+      url = "https://github.com/mozilla/pdf.js/releases/download/${version}/${name}-dist.zip";
+      sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
       stripRoot = false;
     };
 
@@ -27,15 +27,13 @@ let
   };
 
 in python3Packages.buildPythonApplication rec {
-  name = "qutebrowser-${version}${versionPostfix}";
-  namePrefix = "";
-  version = "1.2.1";
-  versionPostfix = "";
+  pname = "qutebrowser";
+  version = "1.4.2";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
-    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1svbski378x276033v07jailm81b0i6hxdakbiqkwvgh6hkczrhw";
+    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "1pnj47mllg1x34qakxs7s59x8mj262nfhdxgihsb2h2ywjq4fpgx";
   };
 
   # Needs tox
@@ -73,15 +71,26 @@ in python3Packages.buildPythonApplication rec {
     install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
     install -Dm644 misc/qutebrowser.desktop \
         "$out/share/applications/qutebrowser.desktop"
+
+    # Install icons
     for i in 16 24 32 48 64 128 256 512; do
         install -Dm644 "icons/qutebrowser-''${i}x''${i}.png" \
             "$out/share/icons/hicolor/''${i}x''${i}/apps/qutebrowser.png"
     done
     install -Dm644 icons/qutebrowser.svg \
         "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
+
+    # Install scripts
+    sed -i "s,/usr/bin/qutebrowser,$out/bin/qutebrowser,g" scripts/open_url_in_instance.sh
+    install -Dm755 -t "$out/share/qutebrowser/scripts/" scripts/open_url_in_instance.sh
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
-    install -Dm755 -t "$out/share/qutebrowser/scripts/" \
-      scripts/{importer.py,dictcli.py,keytester.py,open_url_in_instance.sh,utils.py}
+
+    # Install and patch python scripts
+    buildPythonPath "$out $propagatedBuildInputs"
+    for i in importer dictcli keytester utils; do
+      install -Dm755 -t "$out/share/qutebrowser/scripts/" scripts/$i.py
+      patchPythonScript "$out/share/qutebrowser/scripts/$i.py"
+    done
   '';
 
   postFixup = lib.optionalString (! withWebEngineDefault) ''
