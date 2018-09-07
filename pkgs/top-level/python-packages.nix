@@ -572,6 +572,8 @@ in {
 
   trio = callPackage ../development/python-modules/trio {};
 
+  sniffio = callPackage ../development/python-modules/sniffio { };
+
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
   toml = callPackage ../development/python-modules/toml { };
