@@ -87,8 +87,8 @@
 +                    m = pattern.search(line)
                  if m:
                      del patterns[library]
--                    shlibs.append(m.group(1))
-+                    shlibs.append(os.path.join(options.fallback_libpath, m.group(1)))
+-                    shlibs.append(_sanitize_install_name(m.group(1)))
++                    shlibs.append(os.path.join(options.fallback_libpath, _sanitize_install_name(m.group(1))))
                      break
  
          if len(patterns) > 0:
