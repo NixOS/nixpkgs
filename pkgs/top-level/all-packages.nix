@@ -3049,6 +3049,8 @@ with pkgs;
 
   pxz = callPackage ../tools/compression/pxz { };
 
+  gradient_halide = callPackage ../development/compilers/gradient-halide {};
+
   hans = callPackage ../tools/networking/hans { };
 
   h2 = callPackage ../servers/h2 { };
