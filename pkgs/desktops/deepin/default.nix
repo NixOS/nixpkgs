@@ -8,6 +8,7 @@ let
     deepin-gtk-theme = callPackage ./deepin-gtk-theme { };
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
     deepin-menu = callPackage ./deepin-menu { };
+    deepin-mutter = callPackage ./deepin-mutter { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-terminal = callPackage ./deepin-terminal {
       inherit (pkgs.gnome3) libgee vte;
