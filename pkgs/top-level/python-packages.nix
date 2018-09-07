@@ -9776,21 +9776,7 @@ in {
 
   psutil = callPackage ../development/python-modules/psutil { };
 
-  psycopg2 = buildPythonPackage rec {
-    name = "psycopg2-2.7.1";
-    disabled = isPyPy;
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/psycopg2/${name}.tar.gz";
-      sha256 = "86c9355f5374b008c8479bc00023b295c07d508f7c3b91dbd2e74f8925b1d9c6";
-    };
-    buildInputs = optional stdenv.isDarwin pkgs.openssl;
-    propagatedBuildInputs = with self; [ pkgs.postgresql ];
-    doCheck = false;
-    meta = {
-      description = "PostgreSQL database adapter for the Python programming language";
-      license = with licenses; [ gpl2 zpl20 ];
-    };
-  };
+  psycopg2 = callPackage ../development/python-modules/psycopg2 {};
 
   ptpython = callPackage ../development/python-modules/ptpython {};
 
