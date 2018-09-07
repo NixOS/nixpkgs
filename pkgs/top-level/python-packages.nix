@@ -5672,7 +5672,7 @@ in {
 
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
 
-  gpgme = toPythonModule (pkgs.gpgme.override { withPython=true; });
+  gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; inherit python; });
 
   gphoto2 = callPackage ../development/python-modules/gphoto2 {
     inherit (pkgs) pkgconfig;
