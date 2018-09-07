@@ -2911,7 +2911,10 @@ with pkgs;
   }) (x: { configureFlags = x.configureFlags ++ ["--with-cgraph=no"];});
 
   grin = callPackage ../tools/text/grin { };
-  ripgrep = callPackage ../tools/text/ripgrep { };
+
+  ripgrep = callPackage ../tools/text/ripgrep {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
