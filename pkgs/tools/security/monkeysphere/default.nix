@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeWrapper
-, perl, perlPackages, libassuan, libgcrypt
+, perl, libassuan, libgcrypt
+, perlPackages, lockfileProgs, gnupg
 }:
 
 stdenv.mkDerivation rec {
@@ -11,27 +12,33 @@ stdenv.mkDerivation rec {
     sha256 = "0jz7kwkwgylqprnl8bwvl084s5gjrilza77ln18i3f6x48b2y6li";
   };
 
-  buildInputs = [ makeWrapper perl libassuan libgcrypt ];
-
   patches = [ ./monkeysphere.patch ];
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl libassuan libgcrypt ];
 
   makeFlags = ''
     PREFIX=/
     DESTDIR=$(out)
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/openpgp2ssh --prefix PERL5LIB : \
-      "${with perlPackages; stdenv.lib.makePerlPath [
-        CryptOpenSSLRSA
-        CryptOpenSSLBignum
-      ]}"
-    wrapProgram $out/bin/monkeysphere --prefix PERL5LIB :\
-      "${with perlPackages; stdenv.lib.makePerlPath [
-        CryptOpenSSLRSA
-        CryptOpenSSLBignum
-      ]}"
-  '';
+  postFixup =
+    let wrapMonkeysphere = runtimeDeps: program:
+          "wrapProgram $out/bin/${program} --prefix PERL5LIB : "
+            + (with perlPackages; stdenv.lib.makePerlPath [
+                CryptOpenSSLRSA
+                CryptOpenSSLBignum
+              ])
+            + stdenv.lib.optionalString
+                (builtins.length runtimeDeps > 0)
+                " --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}"
+            + "\n";
+        wrapPrograms = runtimeDeps: programs: stdenv.lib.concatMapStrings
+          (wrapMonkeysphere runtimeDeps)
+          programs;
+    in wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
+      + wrapPrograms [ ] [ "../share/monkeysphere/keytrans" "openpgp2ssh" ]
+      + wrapPrograms [ lockfileProgs ] [ "monkeysphere" ];
 
   meta = with stdenv.lib; {
     homepage = http://web.monkeysphere.info/;
