@@ -1,10 +1,15 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, CoreServices, CoreFoundation }:
 
 with rustPlatform;
 
 buildRustPackage rec {
   name = "watchexec-${version}";
   version = "1.8.6";
+  buildInputs = stdenv.lib.optional stdenv.isDarwin [ CoreServices ];
+
+  preConfigure = ''
+    export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
+  '';
 
   src = fetchFromGitHub {
     owner = "mattgreen";
@@ -20,6 +25,6 @@ buildRustPackage rec {
     homepage = https://github.com/mattgreen/watchexec;
     license = with licenses; [ asl20 ];
     maintainers = [ maintainers.michalrus ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "platforms.unix"];
   };
 }
