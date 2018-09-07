@@ -125,6 +125,7 @@
   ./programs/udevil.nix
   ./programs/venus.nix
   ./programs/vim.nix
+  ./programs/wavemon.nix
   ./programs/way-cooler.nix
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
