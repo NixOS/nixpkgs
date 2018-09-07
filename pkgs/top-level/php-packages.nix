@@ -335,11 +335,11 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.6.5";
+    version = "1.7.2";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "0d1lpvq8wylh5qgxhbqb5r7j3c6qk0bz4b5vg187jsl6z6fvxgk7";
+      sha256 = "03km8qw3nshj7qzk5pidziha2ldx1l2yxhh2s7vpg25f9782hd7c";
     };
 
     unpackPhase = ":";
