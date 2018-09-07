@@ -90,31 +90,31 @@
     <itemizedlist>
      <listitem>
       <para>
-       For partitioning: <command>fdisk</command>.
+       For partitioning: <command>gdisk</command>.
 <screen>
-# fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
+# gdisk /dev/sda # <lineannotation>(or whatever device you want to install on. confirm GPT is present, if not open gparted -> Partition -> New -> create GPT partition table.)</lineannotation>
 -- for UEFI systems only
 > n      # <lineannotation>(create a new partition for /boot)</lineannotation>
 > 3      # <lineannotation>(make it a partition number 3)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
-> +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
-> t      # <lineannotation>(change the partition type ...)</lineannotation>
-> 3      # <lineannotation>(... of the boot partition ...)</lineannotation>
-> 1      # <lineannotation>(... to 'UEFI System')</lineannotation>
+> +2G    # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
+> ef00   # <lineannotation>(partition as 'EFI System')</lineannotation>
 -- for BIOS or UEFI systems
 > n      # <lineannotation>(create a new partition for /swap)</lineannotation>
 > 2      # <lineannotation>(make it a partition number 2)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
-> +8G    # <lineannotation>(the size of the swap partition, set to whatever you like)</lineannotation>
+> +8G    # <lineannotation>(the size of the swap partition)</lineannotation>
+>        # <lineannotation>(confirm formatting as linux partition)</lineannotation>
 > n      # <lineannotation>(create a new partition for /)</lineannotation>
 > 1      # <lineannotation>(make it a partition number 1)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 >        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
-> a      # <lineannotation>(make the partition bootable)</lineannotation>
+>        # <lineannotation>(confirm formatting as linux partition)</lineannotation>
 > x      # <lineannotation>(enter expert mode)</lineannotation>
 > f      # <lineannotation>(fix up the partition ordering)</lineannotation>
-> r      # <lineannotation>(exit expert mode)</lineannotation>
-> w      # <lineannotation>(write the partition table to disk and exit)</lineannotation></screen>
+> m      # <lineannotation>(exit expert mode)</lineannotation>
+> w      # <lineannotation>(write the partition table to disk and exit)</lineannotation>
+> y      # <lineannotation>(confirm creating partitions)</lineannotation>
       </para>
      </listitem>
      <listitem>
@@ -382,29 +382,29 @@ $ nix-env -i w3m</screen>
  <example xml:id='ex-install-sequence'>
   <title>Commands for Installing NixOS on <filename>/dev/sda</filename></title>
 <screen>
-# fdisk /dev/sda # <lineannotation>(or whatever device you want to install on)</lineannotation>
+# gdisk /dev/sda # <lineannotation>(or whatever device you want to install on. confirm GPT is present, if not open gparted -> Partition -> New -> create GPT partition table.)</lineannotation>
 -- for UEFI systems only
 > n      # <lineannotation>(create a new partition for /boot)</lineannotation>
 > 3      # <lineannotation>(make it a partition number 3)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
-> +512M  # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
-> t      # <lineannotation>(change the partition type ...)</lineannotation>
-> 3      # <lineannotation>(... of the boot partition ...)</lineannotation>
-> 1      # <lineannotation>(... to 'UEFI System')</lineannotation>
+> +2G    # <lineannotation>(the size of the UEFI boot partition)</lineannotation>
+> ef00   # <lineannotation>(partition as 'EFI System')</lineannotation>
 -- for BIOS or UEFI systems
 > n      # <lineannotation>(create a new partition for /swap)</lineannotation>
 > 2      # <lineannotation>(make it a partition number 2)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 > +8G    # <lineannotation>(the size of the swap partition)</lineannotation>
+>        # <lineannotation>(confirm formatting as linux partition)</lineannotation>
 > n      # <lineannotation>(create a new partition for /)</lineannotation>
 > 1      # <lineannotation>(make it a partition number 1)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 >        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
-> a      # <lineannotation>(make the partition bootable)</lineannotation>
+>        # <lineannotation>(confirm formatting as linux partition)</lineannotation>
 > x      # <lineannotation>(enter expert mode)</lineannotation>
 > f      # <lineannotation>(fix up the partition ordering)</lineannotation>
-> r      # <lineannotation>(exit expert mode)</lineannotation>
+> m      # <lineannotation>(exit expert mode)</lineannotation>
 > w      # <lineannotation>(write the partition table to disk and exit)</lineannotation>
+> y      # <lineannotation>(confirm creating partitions)</lineannotation>
 # mkfs.ext4 -L nixos /dev/sda1
 # mkswap -L swap /dev/sda2
 # swapon /dev/sda2
