@@ -22,6 +22,8 @@ rec {
     sha256_64bit = "07k1kq8lkgbvjyr2dnbxcz6nppcwpq17wf925w8kfq78345hla9q";
     settingsSha256 = "0xlaiy7jr95z0v2c6cwll89nxnb142pybw7m08jg44r7n13ffv3r";
     persistencedSha256 = "0mhwk321garyl6m12261cj03ycv0qz1sbrlbq6cqwjpq4f1s7h58";
+
+    patches = lib.optional (kernel.meta.branch == "4.19") ./drm_mode_connector.patch;
   };
 
   beta = stable; # not enough interest to maintain beta ATM
