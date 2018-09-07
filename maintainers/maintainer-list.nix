@@ -3893,6 +3893,11 @@
     github = "StillerHarpo";
     name = "Florian Engel";
   };
+  stites = {
+    email = "sam@stites.io";
+    github = "stites";
+    name = "Sam Stites";
+  };
   stumoss = {
     email = "samoss@gmail.com";
     github = "stumoss";
