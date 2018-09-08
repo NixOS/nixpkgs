@@ -277,6 +277,9 @@ with lib;
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
 
+    # Buildkite Agent
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "meta-data"] [ "services" "buildkite-agent" "tags" ])
+
   ] ++ (flip map [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
                    "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
                    "snmpExporter" "unifiExporter" "varnishExporter" ]
