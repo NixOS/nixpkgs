@@ -23,7 +23,7 @@ in buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://dev.gajim.org/gajim/python-nbxmpp";
+    homepage = https://dev.gajim.org/gajim/python-nbxmpp;
     description = "Non-blocking Jabber/XMPP module";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];

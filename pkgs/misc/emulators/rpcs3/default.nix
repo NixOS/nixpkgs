@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PS3 emulator/debugger";
-    homepage = "https://rpcs3.net/";
+    homepage = https://rpcs3.net/;
     maintainers = with maintainers; [ abbradar nocent ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];

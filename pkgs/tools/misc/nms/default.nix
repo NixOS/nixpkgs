@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/bartobri/no-more-secrets";
+    homepage = https://github.com/bartobri/no-more-secrets;
     description = ''
       A command line tool that recreates the famous data decryption
       effect seen in the 1992 movie Sneakers.

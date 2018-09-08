@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Extensible memoizing collections and decorators";
-    homepage = "https://github.com/tkem/cachetools";
+    homepage = https://github.com/tkem/cachetools;
     license = licenses.mit;
   };
 }

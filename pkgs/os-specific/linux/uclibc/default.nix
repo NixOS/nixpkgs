@@ -105,7 +105,7 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    homepage = "https://uclibc-ng.org";
+    homepage = https://uclibc-ng.org;
     description = "A small implementation of the C library";
     maintainers = with maintainers; [ rasendubi ];
     license = licenses.lgpl2;

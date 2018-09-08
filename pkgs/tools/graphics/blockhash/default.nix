@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase = "python waf install";
 
   meta = with stdenv.lib; {
-    homepage = "http://blockhash.io/";
+    homepage = http://blockhash.io/;
     description = ''
       This is a perceptual image hash calculation tool based on algorithm
       descibed in Block Mean Value Based Image Perceptual Hashing by Bian Yang,

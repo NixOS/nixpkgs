@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Runs a local server that reloads as you develop";
-    homepage = "https://github.com/lepture/python-livereload";
+    homepage = https://github.com/lepture/python-livereload;
     license = lib.licenses.bsd3;
   };
 }

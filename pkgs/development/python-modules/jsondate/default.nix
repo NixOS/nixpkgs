@@ -15,7 +15,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = {
-    homepage = "https://github.com/ilya-kolpakov/jsondate";
+    homepage = https://github.com/ilya-kolpakov/jsondate;
     description = "JSON with datetime handling";
     license = lib.licenses.mit;
   };

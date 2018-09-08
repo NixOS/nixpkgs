@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An implementation of PEP 557: Data Classes";
-    homepage = "https://github.com/ericvsmith/dataclasses";
+    homepage = https://github.com/ericvsmith/dataclasses;
     license = licenses.asl20;
     maintainers = with maintainers; [ catern ];
   };

@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Higher-level text processing, built on spaCy";
-    homepage = "http://textacy.readthedocs.io/";
+    homepage = http://textacy.readthedocs.io/;
     license = licenses.asl20;
     maintainers = with maintainers; [ rvl ];
   };

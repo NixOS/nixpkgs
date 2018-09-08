@@ -32,7 +32,7 @@ stdenv.mkDerivation rec{
       btc1 is an implementation of a Bitcoin full node with segwit2x hard fork
       support.
     '';
-    homepage = "https://github.com/btc1/bitcoin";
+    homepage = https://github.com/btc1/bitcoin;
     license = licenses.mit;
     maintainers = with maintainers; [ sorpaas ];
     platforms = platforms.unix;

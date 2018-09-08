@@ -16,7 +16,7 @@ buildGoPackage rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/mailru/easyjson";
+    homepage = https://github.com/mailru/easyjson;
     description = "Fast JSON serializer for golang";
     license = licenses.mit;
     maintainers = with maintainers; [ chiiruno ];

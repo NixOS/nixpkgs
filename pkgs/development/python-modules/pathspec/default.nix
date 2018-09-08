@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Utility library for gitignore-style pattern matching of file paths";
-    homepage = "https://github.com/cpburnz/python-path-specification";
+    homepage = https://github.com/cpburnz/python-path-specification;
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ copumpkin ];
   };

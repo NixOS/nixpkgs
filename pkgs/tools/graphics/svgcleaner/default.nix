@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool for tidying and optimizing SVGs";
-    homepage = "https://github.com/RazrFalcon/svgcleaner";
+    homepage = https://github.com/RazrFalcon/svgcleaner;
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.mehandes ];

@@ -1037,7 +1037,7 @@ let
             meta = {
               description = ''ABNF parser for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/vanstee/abnf";
+              homepage = https://github.com/vanstee/abnf;
             };
           } // packageOverrides)
       ) {};
@@ -1060,7 +1060,7 @@ let
             meta = {
               description = ''GraphQL for Elixir'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/absinthe-graphql/absinthe";
+              homepage = https://github.com/absinthe-graphql/absinthe;
             };
           } // packageOverrides)
       ) {};
@@ -1081,7 +1081,7 @@ let
             meta = {
               description = ''GraphQL for Elixir'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/absinthe-graphql/absinthe";
+              homepage = https://github.com/absinthe-graphql/absinthe;
             };
           } // packageOverrides)
       ) {};
@@ -1112,7 +1112,7 @@ let
               description = ''A plug for Absinthe, an experimental GraphQL
                             toolkit'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/CargoSense/absinthe_plug";
+              homepage = https://github.com/CargoSense/absinthe_plug;
             };
           } // packageOverrides)
       ) {};
@@ -1141,7 +1141,7 @@ let
               description = ''A plug for Absinthe, an experimental GraphQL
                             toolkit'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/CargoSense/absinthe_plug";
+              homepage = https://github.com/CargoSense/absinthe_plug;
             };
           } // packageOverrides)
       ) {};
@@ -1200,7 +1200,7 @@ let
                                 Primarily used for interlacing and
                                 de-interlacing image data for PNGs.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/SenecaSystems/imagineer";
+              homepage = https://github.com/SenecaSystems/imagineer;
             };
           } // packageOverrides)
       ) {};
@@ -1225,7 +1225,7 @@ let
                                 systems to query, augment and transform data
                                 according to Elixir matching rules. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/adap";
+              homepage = https://github.com/awetzel/adap;
             };
           } // packageOverrides)
       ) {};
@@ -1274,7 +1274,7 @@ let
                                 etc.]/password authentication module; Compatible
                                 with Ecto.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/zmoshansky/aeacus";
+              homepage = https://github.com/zmoshansky/aeacus;
             };
           } // packageOverrides)
       ) {};
@@ -1298,7 +1298,7 @@ let
               description = ''A lightweight, low latency TCP acceptor pool for
                             Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/jquadrin/ahab";
+              homepage = https://github.com/jquadrin/ahab;
             };
           } // packageOverrides)
       ) {};
@@ -1331,7 +1331,7 @@ let
                                 Elixir/Phoenix projects. Currently only supports
                                 error/exception notifications via a Plug.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Diamond/airbrakify";
+              homepage = https://github.com/Diamond/airbrakify;
             };
           } // packageOverrides)
       ) {};
@@ -1357,7 +1357,7 @@ let
                                 resource CountDown: quick way of counting fan
                                 in/out events'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/sdanzan/alambic";
+              homepage = https://github.com/sdanzan/alambic;
             };
           } // packageOverrides)
       ) {};
@@ -1381,7 +1381,7 @@ let
               description = ''Creating letter avatar from user`s name(or any
                             other strong / character).'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zhangsoledad/alchemic_avatar";
+              homepage = https://github.com/zhangsoledad/alchemic_avatar;
             };
           } // packageOverrides)
       ) {};
@@ -1404,7 +1404,7 @@ let
             meta = {
               description = ''中文汉字转拼音.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zhangsoledad/alchemic_pinyin";
+              homepage = https://github.com/zhangsoledad/alchemic_pinyin;
             };
           } // packageOverrides)
       ) {};
@@ -1427,7 +1427,7 @@ let
             meta = {
               description = ''Carefully refactor critical paths'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/jkakar/alchemist";
+              homepage = https://github.com/jkakar/alchemist;
             };
           } // packageOverrides)
       ) {};
@@ -1451,7 +1451,7 @@ let
             meta = {
               description = ''Perform experiments in production'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/keathley/alchemy";
+              homepage = https://github.com/keathley/alchemy;
             };
           } // packageOverrides)
       ) {};
@@ -1474,7 +1474,7 @@ let
             meta = {
               description = ''Aleppo: ALternative Erlang Pre-ProcessOr'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/ErlyORM/aleppo";
+              homepage = https://github.com/ErlyORM/aleppo;
             };
           } // packageOverrides)
       ) {};
@@ -1499,7 +1499,7 @@ let
               description = ''Framework for implementing an Amazon Alexa
                             Skill.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/col/alexa";
+              homepage = https://github.com/col/alexa;
             };
           } // packageOverrides)
       ) {};
@@ -1525,7 +1525,7 @@ let
                                 interfacing with the Amazon Echo and the Alexa
                                 Skills Kit.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jordantdavis/alexa_plug";
+              homepage = https://github.com/jordantdavis/alexa_plug;
             };
           } // packageOverrides)
       ) {};
@@ -1557,7 +1557,7 @@ let
               description = ''A web endpoint for deploying one or a collection
                             of Amazon Alexa Skills'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/col/alexa_web";
+              homepage = https://github.com/col/alexa_web;
             };
           } // packageOverrides)
       ) {};
@@ -1581,7 +1581,7 @@ let
             meta = {
               description = ''Bootstrapped algebraic data types for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/robot-overlord/algae";
+              homepage = https://github.com/robot-overlord/algae;
             };
           } // packageOverrides)
       ) {};
@@ -1639,7 +1639,7 @@ let
             meta = {
               description = ''mnesia wrapper for Elixir'';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/meh/amnesia";
+              homepage = https://github.com/meh/amnesia;
             };
           } // packageOverrides)
       ) {};
@@ -1664,7 +1664,7 @@ let
                                 be made with a set of letters\" (sort of a sub
                                 anagram)'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ewildgoose/elixir-anagram";
+              homepage = https://github.com/ewildgoose/elixir-anagram;
             };
           } // packageOverrides)
       ) {};
@@ -1687,7 +1687,7 @@ let
             meta = {
               description = ''The anaphoric macro collection for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sviridov/anaphora-elixir";
+              homepage = https://github.com/sviridov/anaphora-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -1717,7 +1717,7 @@ let
             meta = {
               description = ''Anilist API client for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sotojuan/anilixir";
+              homepage = https://github.com/sotojuan/anilixir;
             };
           } // packageOverrides)
       ) {};
@@ -1740,7 +1740,7 @@ let
             meta = {
               description = ''Elixir clone of Ruby`s awesome_print gem'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bjro/apex";
+              homepage = https://github.com/bjro/apex;
             };
           } // packageOverrides)
       ) {};
@@ -1761,7 +1761,7 @@ let
             meta = {
               description = ''Elixir clone of Ruby`s awesome_print gem'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bjro/apex";
+              homepage = https://github.com/bjro/apex;
             };
           } // packageOverrides)
       ) {};
@@ -1786,7 +1786,7 @@ let
                                 of elixir functions to a documented and ready
                                 for validation API.'';
 
-              homepage = "https://github.com/liveforeverx/apix";
+              homepage = https://github.com/liveforeverx/apix;
             };
           } // packageOverrides)
       ) {};
@@ -1818,7 +1818,7 @@ let
               description = ''APNS (Apple Push Notification Service) library
                             for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/chvanikoff/apns4ex";
+              homepage = https://github.com/chvanikoff/apns4ex;
             };
           } // packageOverrides)
       ) {};
@@ -1842,7 +1842,7 @@ let
               description = ''Ar2ecto is a set of mix tasks to help you migrate
                             from ActiveRecord to Ecto.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/aforward/ar2ecto";
+              homepage = https://github.com/aforward/ar2ecto;
             };
           } // packageOverrides)
       ) {};
@@ -1888,7 +1888,7 @@ let
               description = ''More powerful argument parser for creating nice
                             scripts'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/jisaacstone/ex_argument_parser";
+              homepage = https://github.com/jisaacstone/ex_argument_parser;
             };
           } // packageOverrides)
       ) {};
@@ -1911,7 +1911,7 @@ let
             meta = {
               description = ''An elixir wrapper library for Erlang`s array.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/takscape/elixir-array";
+              homepage = https://github.com/takscape/elixir-array;
             };
           } // packageOverrides)
       ) {};
@@ -1943,7 +1943,7 @@ let
               description = ''File upload and on-the-fly processing for
                             Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/doomspork/artifact";
+              homepage = https://github.com/doomspork/artifact;
             };
           } // packageOverrides)
       ) {};
@@ -1974,7 +1974,7 @@ let
               description = ''A configurable constraint solver with an API
                             based on JSR 331.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://www.github.com/dkendal/aruspex";
+              homepage = https://www.github.com/dkendal/aruspex;
             };
           } // packageOverrides)
       ) {};
@@ -1998,7 +1998,7 @@ let
               description = ''A code generation tool for the phoenix web
                             framework'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nickgartmann/ashes";
+              homepage = https://github.com/nickgartmann/ashes;
             };
           } // packageOverrides)
       ) {};
@@ -2028,7 +2028,7 @@ let
             meta = {
               description = ''Assembla API client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Assembla/ex_assembla_api";
+              homepage = https://github.com/Assembla/ex_assembla_api;
             };
           } // packageOverrides)
       ) {};
@@ -2052,7 +2052,7 @@ let
             meta = {
               description = ''A light-weight job queue (think DAG) manager.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/LeakyBucket/assembly_line";
+              homepage = https://github.com/LeakyBucket/assembly_line;
             };
           } // packageOverrides)
       ) {};
@@ -2075,7 +2075,7 @@ let
             meta = {
               description = ''assert_diff which fallbacks to git diff'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ske77/assert_diff";
+              homepage = https://github.com/ske77/assert_diff;
             };
           } // packageOverrides)
       ) {};
@@ -2100,7 +2100,7 @@ let
                                 with mixed string/atom keys to atom-only keyed
                                 maps'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ruby2elixir/atomic_map";
+              homepage = https://github.com/ruby2elixir/atomic_map;
             };
           } // packageOverrides)
       ) {};
@@ -2125,7 +2125,7 @@ let
               description = ''Authentication and authorization test support
                             functions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/DockYard/auth_test_support";
+              homepage = https://github.com/DockYard/auth_test_support;
             };
           } // packageOverrides)
       ) {};
@@ -2178,7 +2178,7 @@ let
               description = ''A package that will create REST API docs based on
                             your ExUnit tests.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/meatherly/auto_doc";
+              homepage = https://github.com/meatherly/auto_doc;
             };
           } // packageOverrides)
       ) {};
@@ -2227,7 +2227,7 @@ let
             meta = {
               description = ''Awesome validations for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jonhkr/avex";
+              homepage = https://github.com/jonhkr/avex;
             };
           } // packageOverrides)
       ) {};
@@ -2258,7 +2258,7 @@ let
             meta = {
               description = ''AWS clients for Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/jkakar/aws-elixir";
+              homepage = https://github.com/jkakar/aws-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -2282,7 +2282,7 @@ let
             meta = {
               description = ''AWS Signature Version 4 Signing Library'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/bryanjos/aws_auth";
+              homepage = https://github.com/bryanjos/aws_auth;
             };
           } // packageOverrides)
       ) {};
@@ -2307,7 +2307,7 @@ let
             meta = {
               description = ''AWS cli wrapper for Erlang'';
 
-              homepage = "https://github.com/fyler/aws_cli";
+              homepage = https://github.com/fyler/aws_cli;
             };
           } // packageOverrides)
       ) {};
@@ -2337,7 +2337,7 @@ let
             meta = {
               description = ''Azure Push Client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/chaione/azure_push_client";
+              homepage = https://github.com/chaione/azure_push_client;
             };
           } // packageOverrides)
       ) {};
@@ -2399,7 +2399,7 @@ let
                                 Mailgun, SendGrid, SparkPost, in-memory, and
                                 test.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/paulcsmith/bamboo";
+              homepage = https://github.com/paulcsmith/bamboo;
             };
           } // packageOverrides)
       ) {};
@@ -2431,7 +2431,7 @@ let
                                 Mailgun, SendGrid, SparkPost, in-memory, and
                                 test.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/paulcsmith/bamboo";
+              homepage = https://github.com/paulcsmith/bamboo;
             };
           } // packageOverrides)
       ) {};
@@ -2463,7 +2463,7 @@ let
                                 Mailgun, SendGrid, SparkPost, in-memory, and
                                 test.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/paulcsmith/bamboo";
+              homepage = https://github.com/paulcsmith/bamboo;
             };
           } // packageOverrides)
       ) {};
@@ -2493,7 +2493,7 @@ let
             meta = {
               description = ''A Bamboo adapter for SMTP'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/fewlinesco/bamboo_smtp";
+              homepage = https://github.com/fewlinesco/bamboo_smtp;
             };
           } // packageOverrides)
       ) {};
@@ -2543,7 +2543,7 @@ let
               description = ''Bankster is an IBAN and BIC validation tool for
                             Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/railsmechanic/bankster";
+              homepage = https://github.com/railsmechanic/bankster;
             };
           } // packageOverrides)
       ) {};
@@ -2567,7 +2567,7 @@ let
               description = ''It is Elixir sysvbanner port from
                             https://github.com/uffejakobsen/sysvbanner.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/winebarrel/elixir-sysvbanner";
+              homepage = https://github.com/winebarrel/elixir-sysvbanner;
             };
           } // packageOverrides)
       ) {};
@@ -2590,7 +2590,7 @@ let
             meta = {
               description = ''Erlang HTTP client application'';
 
-              homepage = "https://github.com/barrel-db/ibrowse";
+              homepage = https://github.com/barrel-db/ibrowse;
             };
           } // packageOverrides)
       ) {};
@@ -2613,7 +2613,7 @@ let
             meta = {
               description = ''An Erlang OAuth 1.0 implementation'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/barrel-db/erlang-oauth";
+              homepage = https://github.com/barrel-db/erlang-oauth;
             };
           } // packageOverrides)
       ) {};
@@ -2636,7 +2636,7 @@ let
             meta = {
               description = ''Base16 encoding and decoding'';
               license = with stdenv.lib.licenses; [ bsd3 free ];
-              homepage = "https://github.com/goj/base16";
+              homepage = https://github.com/goj/base16;
             };
           } // packageOverrides)
       ) {};
@@ -2662,7 +2662,7 @@ let
             meta = {
               description = ''Base36 encoder/decoder.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nscyclone/base36";
+              homepage = https://github.com/nscyclone/base36;
             };
           } // packageOverrides)
       ) {};
@@ -2685,7 +2685,7 @@ let
             meta = {
               description = ''Base58 encoding/decoding for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jrdnull/base58";
+              homepage = https://github.com/jrdnull/base58;
             };
           } // packageOverrides)
       ) {};
@@ -2709,7 +2709,7 @@ let
               description = ''Elixir implementation of Base58Check encoding
                             meant for Bitcoin '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gjaldon/base58check";
+              homepage = https://github.com/gjaldon/base58check;
             };
           } // packageOverrides)
       ) {};
@@ -2735,7 +2735,7 @@ let
             meta = {
               description = ''Base62 encoder/decoder in pure Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/igas/base62";
+              homepage = https://github.com/igas/base62;
             };
           } // packageOverrides)
       ) {};
@@ -2758,7 +2758,7 @@ let
             meta = {
               description = ''URL safe base64-compatible codec'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dvv/base64url";
+              homepage = https://github.com/dvv/base64url;
             };
           } // packageOverrides)
       ) {};
@@ -2781,7 +2781,7 @@ let
             meta = {
               description = ''BaseX - arbitrary alphabet encoding'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/basex_ex";
+              homepage = https://github.com/mwmiller/basex_ex;
             };
           } // packageOverrides)
       ) {};
@@ -2804,7 +2804,7 @@ let
             meta = {
               description = ''A hunky Erlang worker pool factory'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/basho/riak_sysmon";
+              homepage = https://github.com/basho/riak_sysmon;
             };
           } // packageOverrides)
       ) {};
@@ -2827,7 +2827,7 @@ let
             meta = {
               description = ''Basic Erlang statistics library'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/basho/basho_stats";
+              homepage = https://github.com/basho/basho_stats;
             };
           } // packageOverrides)
       ) {};
@@ -2852,7 +2852,7 @@ let
                                 to a certain size or a defined time has
                                 passed'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/behe/batcher";
+              homepage = https://github.com/behe/batcher;
             };
           } // packageOverrides)
       ) {};
@@ -2882,7 +2882,7 @@ let
             meta = {
               description = ''Elixir library for the Battle.net API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/cazrin/battlenet";
+              homepage = https://github.com/cazrin/battlenet;
             };
           } // packageOverrides)
       ) {};
@@ -2906,7 +2906,7 @@ let
               description = ''Binary pattern match Based Mustache template
                             engine for Erlang/OTP'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/soranoba/bbmustache";
+              homepage = https://github.com/soranoba/bbmustache;
             };
           } // packageOverrides)
       ) {};
@@ -2928,7 +2928,7 @@ let
               description = ''Binary pattern match Based Mustache template
                             engine for Erlang/OTP'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/soranoba/bbmustache";
+              homepage = https://github.com/soranoba/bbmustache;
             };
           } // packageOverrides)
       ) {};
@@ -2950,7 +2950,7 @@ let
               description = ''Binary pattern match Based Mustache template
                             engine for Erlang/OTP'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/soranoba/bbmustache";
+              homepage = https://github.com/soranoba/bbmustache;
             };
           } // packageOverrides)
       ) {};
@@ -2977,7 +2977,7 @@ let
               description = ''An Erlang wrapper (NIF or port program) for the
                             OpenBSD password scheme, bcrypt.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/chef/erlang-bcrypt";
+              homepage = https://github.com/chef/erlang-bcrypt;
             };
           } // packageOverrides)
       ) {};
@@ -3001,7 +3001,7 @@ let
               description = ''Get information about Erlang/Elixir modules and
                             BEAM files'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joeyates/beam_analyzer";
+              homepage = https://github.com/joeyates/beam_analyzer;
             };
           } // packageOverrides)
       ) {};
@@ -3024,7 +3024,7 @@ let
             meta = {
               description = ''Statistics functions for Erlang'';
 
-              homepage = "https://github.com/puzza007/bear";
+              homepage = https://github.com/puzza007/bear;
             };
           } // packageOverrides)
       ) {};
@@ -3055,7 +3055,7 @@ let
               description = ''A simple Elixir module that searches for beers on
                             Untappd.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nicksergeant/elixir-beersearch";
+              homepage = https://github.com/nicksergeant/elixir-beersearch;
             };
           } // packageOverrides)
       ) {};
@@ -3088,7 +3088,7 @@ let
             meta = {
               description = ''Foursquare API client for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/danieltomlinson/bees";
+              homepage = https://github.com/danieltomlinson/bees;
             };
           } // packageOverrides)
       ) {};
@@ -3113,7 +3113,7 @@ let
                                 given codes in given seconds and compares
                                 them.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/meinac/belixir";
+              homepage = https://github.com/meinac/belixir;
             };
           } // packageOverrides)
       ) {};
@@ -3137,7 +3137,7 @@ let
               description = ''An example Elixir project with CircleCI, Docker,
                             Dialyzer integration.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "http://nirvana.io";
+              homepage = http://nirvana.io;
             };
           } // packageOverrides)
       ) {};
@@ -3163,7 +3163,7 @@ let
                                 iterations per second, standard deviation and
                                 the median.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/PragTob/benchee";
+              homepage = https://github.com/PragTob/benchee;
             };
           } // packageOverrides)
       ) {};
@@ -3194,7 +3194,7 @@ let
               description = ''Get CSV from your benchee benchmarks to them into
                             graphs or whatever!'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/PragTob/benchee_csv";
+              homepage = https://github.com/PragTob/benchee_csv;
             };
           } // packageOverrides)
       ) {};
@@ -3217,7 +3217,7 @@ let
             meta = {
               description = ''Microbenchmarking tool for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/alco/benchfella";
+              homepage = https://github.com/alco/benchfella;
             };
           } // packageOverrides)
       ) {};
@@ -3241,7 +3241,7 @@ let
               description = ''A tool to run benchmarks to determine iteration
                             per second.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mxhold/benchmark_ips";
+              homepage = https://github.com/mxhold/benchmark_ips;
             };
           } // packageOverrides)
       ) {};
@@ -3270,7 +3270,7 @@ let
                                 protocol, allowing any data structure to be
                                 bcode encoded.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/gausby/bencode";
+              homepage = https://github.com/gausby/bencode;
             };
           } // packageOverrides)
       ) {};
@@ -3297,7 +3297,7 @@ let
                                 protocol, allowing any data structure to be
                                 bcode encoded.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/gausby/bencode";
+              homepage = https://github.com/gausby/bencode;
             };
           } // packageOverrides)
       ) {};
@@ -3320,7 +3320,7 @@ let
             meta = {
               description = ''Encoder and decoder for the bencode format'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/patrickgombert/bencodex";
+              homepage = https://github.com/patrickgombert/bencodex;
             };
           } // packageOverrides)
       ) {};
@@ -3345,7 +3345,7 @@ let
               description = ''An incredibly fast, pure Elixir Bencoding
                             library.'';
               license = stdenv.lib.licenses.mpl20;
-              homepage = "https://github.com/folz/bento";
+              homepage = https://github.com/folz/bento;
             };
           } // packageOverrides)
       ) {};
@@ -3368,7 +3368,7 @@ let
             meta = {
               description = ''BERT Encoder/Decoder'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yuce/bert.erl";
+              homepage = https://github.com/yuce/bert.erl;
             };
           } // packageOverrides)
       ) {};
@@ -3399,7 +3399,7 @@ let
             meta = {
               description = ''A Google BigQuery API client.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/companykitchen/big_query";
+              homepage = https://github.com/companykitchen/big_query;
             };
           } // packageOverrides)
       ) {};
@@ -3423,7 +3423,7 @@ let
             meta = {
               description = ''128-bit, k-ordered, conflict-free IDs Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stevedomin/bigflake";
+              homepage = https://github.com/stevedomin/bigflake;
             };
           } // packageOverrides)
       ) {};
@@ -3465,7 +3465,7 @@ let
               longDescription = ''Automatically generate the boilerplate to
                                 convert between binaries and Elixir structs.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/willpenington/bin_format";
+              homepage = https://github.com/willpenington/bin_format;
             };
           } // packageOverrides)
       ) {};
@@ -3501,7 +3501,7 @@ let
                                 Requires that you have a Client ID and Secret.
                                 See README.md for information.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ikeikeikeike/bing_translator";
+              homepage = https://github.com/ikeikeikeike/bing_translator;
             };
           } // packageOverrides)
       ) {};
@@ -3525,7 +3525,7 @@ let
               longDescription = ''Automatically generate the boilerplate to
                                 convert between binaries and Elixir structs.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/willpenington/binstructor";
+              homepage = https://github.com/willpenington/binstructor;
             };
           } // packageOverrides)
       ) {};
@@ -3582,7 +3582,7 @@ let
                                 in a peer to peer network, such as
                                 BitTorrent.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/gausby/bit_field_set";
+              homepage = https://github.com/gausby/bit_field_set;
             };
           } // packageOverrides)
       ) {};
@@ -3608,7 +3608,7 @@ let
             meta = {
               description = ''Bitcask key value store'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/basho/bitcask";
+              homepage = https://github.com/basho/bitcask;
             };
           } // packageOverrides)
       ) {};
@@ -3631,7 +3631,7 @@ let
             meta = {
               description = ''Simple bitfields for erlang/elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/bitfield.erl";
+              homepage = https://github.com/camshaft/bitfield.erl;
             };
           } // packageOverrides)
       ) {};
@@ -3656,7 +3656,7 @@ let
                                 bitmaps
                                 (https://en.wikipedia.org/wiki/Bitmap)'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hashd/bitmap-elixir";
+              homepage = https://github.com/hashd/bitmap-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -3681,7 +3681,7 @@ let
               description = ''Elixir fake data generation for testing and
                             development'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/batate/blacksmith";
+              homepage = https://github.com/batate/blacksmith;
             };
           } // packageOverrides)
       ) {};
@@ -3712,7 +3712,7 @@ let
               description = ''Basic Access Authentication in Plug
                             applications.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/lexmag/blaguth";
+              homepage = https://github.com/lexmag/blaguth;
             };
           } // packageOverrides)
       ) {};
@@ -3735,7 +3735,7 @@ let
             meta = {
               description = ''BLAKE2 hash functions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/blake2_ex";
+              homepage = https://github.com/mwmiller/blake2_ex;
             };
           } // packageOverrides)
       ) {};
@@ -3759,7 +3759,7 @@ let
               description = ''Blanket covers your tables ! Don`t loose your ETS
                             tables with Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/niahoo/blanket";
+              homepage = https://github.com/niahoo/blanket;
             };
           } // packageOverrides)
       ) {};
@@ -3783,7 +3783,7 @@ let
               description = ''Elixir port of invaluable blast furnace
                             functionality'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/markryall/blast_furnace_exs";
+              homepage = https://github.com/markryall/blast_furnace_exs;
             };
           } // packageOverrides)
       ) {};
@@ -3813,7 +3813,7 @@ let
             meta = {
               description = ''Elixir Library for Backblaze B2 Cloud Storage.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/PerishableDave/blaze_cloud";
+              homepage = https://github.com/PerishableDave/blaze_cloud;
             };
           } // packageOverrides)
       ) {};
@@ -3836,7 +3836,7 @@ let
             meta = {
               description = ''Declarative abstract serializers.'';
               license = stdenv.lib.licenses.publicDomain;
-              homepage = "https://github.com/mtwilliams/blazon";
+              homepage = https://github.com/mtwilliams/blazon;
             };
           } // packageOverrides)
       ) {};
@@ -3893,7 +3893,7 @@ let
                                 as a GenServer. It has a fixed maximum length
                                 established when it is created.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joekain/BlockingQueue";
+              homepage = https://github.com/joekain/BlockingQueue;
             };
           } // packageOverrides)
       ) {};
@@ -3924,7 +3924,7 @@ let
               description = ''An ElasticSearch library for Elixir that can be
                             easily integrated with Ecto'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ianwalter/bloodhound";
+              homepage = https://github.com/ianwalter/bloodhound;
             };
           } // packageOverrides)
       ) {};
@@ -3953,7 +3953,7 @@ let
                                 designed to efficiently tell you whether an
                                 element is present in a set.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Leventhan/bloom_filter";
+              homepage = https://github.com/Leventhan/bloom_filter;
             };
           } // packageOverrides)
       ) {};
@@ -3977,7 +3977,7 @@ let
               description = ''Bloomex is a pure Elixir implementation of
                             Scalable Bloom Filters.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gmcabrita/bloomex";
+              homepage = https://github.com/gmcabrita/bloomex;
             };
           } // packageOverrides)
       ) {};
@@ -4023,7 +4023,7 @@ let
               longDescription = ''A benchmarking tool for Elixir with a focus
                                 on comparing results with confidence.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joekain/bmark";
+              homepage = https://github.com/joekain/bmark;
             };
           } // packageOverrides)
       ) {};
@@ -4047,7 +4047,7 @@ let
             meta = {
               description = ''A BMFont file format parser'';
               license = stdenv.lib.licenses.bsd2;
-              homepage = "https://github.com/ScrimpyCat/BMFontEx";
+              homepage = https://github.com/ScrimpyCat/BMFontEx;
             };
           } // packageOverrides)
       ) {};
@@ -4111,7 +4111,7 @@ let
             meta = {
               description = ''Elixir wrapper for Botan.io'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mendab1e/exBotan";
+              homepage = https://github.com/mendab1e/exBotan;
             };
           } // packageOverrides)
       ) {};
@@ -4136,7 +4136,7 @@ let
                                 when piping to the first arg just won`t cut
                                 it.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/coconaut/bowfish";
+              homepage = https://github.com/coconaut/bowfish;
             };
           } // packageOverrides)
       ) {};
@@ -4160,7 +4160,7 @@ let
             meta = {
               description = ''Native Braintree client library for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sorentwo/braintree-elixir";
+              homepage = https://github.com/sorentwo/braintree-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -4185,7 +4185,7 @@ let
               description = ''A library that converts JSON Schema into ember
                             models/adapters.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/IoraHealth/braise";
+              homepage = https://github.com/IoraHealth/braise;
             };
           } // packageOverrides)
       ) {};
@@ -4210,7 +4210,7 @@ let
                                 necessario Number format and Validate, to the
                                 documents brazilians (CPF/CNPJ)'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/williamgueiros/Brcpfcnpj";
+              homepage = https://github.com/williamgueiros/Brcpfcnpj;
             };
           } // packageOverrides)
       ) {};
@@ -4234,7 +4234,7 @@ let
             meta = {
               description = ''Elixir port of Breadcrumble library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ma2gedev/breadcrumble_ex";
+              homepage = https://github.com/ma2gedev/breadcrumble_ex;
             };
           } // packageOverrides)
       ) {};
@@ -4257,7 +4257,7 @@ let
             meta = {
               description = ''Simple, robust temporary file support'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/CargoSense/briefly";
+              homepage = https://github.com/CargoSense/briefly;
             };
           } // packageOverrides)
       ) {};
@@ -4287,7 +4287,7 @@ let
             meta = {
               description = ''A simple brighterlink api implementation'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Brightergy/brighterx";
+              homepage = https://github.com/Brightergy/brighterx;
             };
           } // packageOverrides)
       ) {};
@@ -4310,7 +4310,7 @@ let
             meta = {
               description = ''Browser detection library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tuvistavie/elixir-browser";
+              homepage = https://github.com/tuvistavie/elixir-browser;
             };
           } // packageOverrides)
       ) {};
@@ -4333,7 +4333,7 @@ let
             meta = {
               description = ''Erlang library that uses binaries as strings'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/jcomellas/bstr";
+              homepage = https://github.com/jcomellas/bstr;
             };
           } // packageOverrides)
       ) {};
@@ -4356,7 +4356,7 @@ let
             meta = {
               description = ''Provide read and write buffers for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/adrienmo/buffer";
+              homepage = https://github.com/adrienmo/buffer;
             };
           } // packageOverrides)
       ) {};
@@ -4386,7 +4386,7 @@ let
             meta = {
               description = ''An Elixir interface to the Bugsnag API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jarednorman/bugsnag-elixir";
+              homepage = https://github.com/jarednorman/bugsnag-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -4409,7 +4409,7 @@ let
             meta = {
               description = ''AX Deployment Client'';
 
-              homepage = "https://github.com/dapdizzy/build_client";
+              homepage = https://github.com/dapdizzy/build_client;
             };
           } // packageOverrides)
       ) {};
@@ -4432,7 +4432,7 @@ let
             meta = {
               description = ''256 color ANSI coloring in the terminal'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rrrene/bunt";
+              homepage = https://github.com/rrrene/bunt;
             };
           } // packageOverrides)
       ) {};
@@ -4455,7 +4455,7 @@ let
             meta = {
               description = ''A simple event bus.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/JonRowe/busbar";
+              homepage = https://github.com/JonRowe/busbar;
             };
           } // packageOverrides)
       ) {};
@@ -4492,7 +4492,7 @@ let
                                 handles different types of responses from the
                                 server.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pspdfkit-labs/bypass";
+              homepage = https://github.com/pspdfkit-labs/bypass;
             };
           } // packageOverrides)
       ) {};
@@ -4519,7 +4519,7 @@ let
               description = ''Powerful in-memory key/value storage for
                             Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zackehh/cachex";
+              homepage = https://github.com/zackehh/cachex;
             };
           } // packageOverrides)
       ) {};
@@ -4552,7 +4552,7 @@ let
                                 packages are available for i18n, Ecto and
                                 Phoenix interoperability.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lau/calendar";
+              homepage = https://github.com/lau/calendar;
             };
           } // packageOverrides)
       ) {};
@@ -4583,7 +4583,7 @@ let
                                 packages are available for i18n, Ecto and
                                 Phoenix interoperability.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lau/calendar";
+              homepage = https://github.com/lau/calendar;
             };
           } // packageOverrides)
       ) {};
@@ -4614,7 +4614,7 @@ let
                                 packages are available for i18n, Ecto and
                                 Phoenix interoperability.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lau/calendar";
+              homepage = https://github.com/lau/calendar;
             };
           } // packageOverrides)
       ) {};
@@ -4635,7 +4635,7 @@ let
             meta = {
               description = ''An Elixir library for parsing haml templates.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nurugger07/calliope";
+              homepage = https://github.com/nurugger07/calliope;
             };
           } // packageOverrides)
       ) {};
@@ -4656,7 +4656,7 @@ let
             meta = {
               description = ''An Elixir library for parsing haml templates.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nurugger07/calliope";
+              homepage = https://github.com/nurugger07/calliope;
             };
           } // packageOverrides)
       ) {};
@@ -4690,7 +4690,7 @@ let
             meta = {
               description = ''A CampMinder API library for Elixir.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/GimliLongBow/campminder-elixir";
+              homepage = https://github.com/GimliLongBow/campminder-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -4721,7 +4721,7 @@ let
             meta = {
               description = ''Multi platform, multi app push notifications'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lucacorti/cartel";
+              homepage = https://github.com/lucacorti/cartel;
             };
           } // packageOverrides)
       ) {};
@@ -4744,7 +4744,7 @@ let
             meta = {
               description = ''Geohash algorithm implementation in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/afronski/cartographer";
+              homepage = https://github.com/afronski/cartographer;
             };
           } // packageOverrides)
       ) {};
@@ -4774,7 +4774,7 @@ let
             meta = {
               description = ''A CAS client and validation library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/locaweb/elixir-cassette";
+              homepage = https://github.com/locaweb/elixir-cassette;
             };
           } // packageOverrides)
       ) {};
@@ -4804,7 +4804,7 @@ let
             meta = {
               description = ''An auth Plug using Cassette'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/locaweb/cassette-plug";
+              homepage = https://github.com/locaweb/cassette-plug;
             };
           } // packageOverrides)
       ) {};
@@ -4835,7 +4835,7 @@ let
             meta = {
               description = ''Cayley driver for Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mneudert/caylir";
+              homepage = https://github.com/mneudert/caylir;
             };
           } // packageOverrides)
       ) {};
@@ -4878,7 +4878,7 @@ let
                                 source or query until one source returns a valid
                                 result.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/douglascamata/cep";
+              homepage = https://github.com/douglascamata/cep;
             };
           } // packageOverrides)
       ) {};
@@ -4901,7 +4901,7 @@ let
             meta = {
               description = ''An OTP library'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/certifi/erlang-certifi";
+              homepage = https://github.com/certifi/erlang-certifi;
             };
           } // packageOverrides)
       ) {};
@@ -4922,7 +4922,7 @@ let
             meta = {
               description = ''An OTP library'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/certifi/erlang-certifi";
+              homepage = https://github.com/certifi/erlang-certifi;
             };
           } // packageOverrides)
       ) {};
@@ -4987,7 +4987,7 @@ let
             meta = {
               description = ''Chacha20 symmetric stream cipher'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/chacha20_ex";
+              homepage = https://github.com/mwmiller/chacha20_ex;
             };
           } // packageOverrides)
       ) {};
@@ -5012,7 +5012,7 @@ let
               description = ''A package for calculating between-list edit
                             distances.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/erwald/elixir-changeset";
+              homepage = https://github.com/erwald/elixir-changeset;
             };
           } // packageOverrides)
       ) {};
@@ -5036,7 +5036,7 @@ let
               description = ''Automatically generate a CHANGELOG.md file based
                             on git commit history. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Gazler/changex";
+              homepage = https://github.com/Gazler/changex;
             };
           } // packageOverrides)
       ) {};
@@ -5068,7 +5068,7 @@ let
                                 With the goal of creating robust supevision
                                 trees.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/meadsteve/chaos-spawn";
+              homepage = https://github.com/meadsteve/chaos-spawn;
             };
           } // packageOverrides)
       ) {};
@@ -5117,7 +5117,7 @@ let
             meta = {
               description = ''Riaks CHash implementation'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/project-fifo/chash";
+              homepage = https://github.com/project-fifo/chash;
             };
           } // packageOverrides)
       ) {};
@@ -5144,7 +5144,7 @@ let
                                 well as pinyin translation and slugify for
                                 chinese phrases/characters. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tyrchen/chinese_translation";
+              homepage = https://github.com/tyrchen/chinese_translation;
             };
           } // packageOverrides)
       ) {};
@@ -5169,7 +5169,7 @@ let
                                 be used to quickly determine a date. In a human
                                 readable format.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nurugger07/chronos";
+              homepage = https://github.com/nurugger07/chronos;
             };
           } // packageOverrides)
       ) {};
@@ -5192,7 +5192,7 @@ let
                                 be used to quickly determine a date. In a human
                                 readable format.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nurugger07/chronos";
+              homepage = https://github.com/nurugger07/chronos;
             };
           } // packageOverrides)
       ) {};
@@ -5218,7 +5218,7 @@ let
             meta = {
               description = '' A library for drawing things with SVG '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mmmries/chunky_svg";
+              homepage = https://github.com/mmmries/chunky_svg;
             };
           } // packageOverrides)
       ) {};
@@ -5242,7 +5242,7 @@ let
               description = ''Classless Inter-Domain Routing (CIDR) for
                             Elixir'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/c-rack/cidr-elixir";
+              homepage = https://github.com/c-rack/cidr-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -5265,7 +5265,7 @@ let
             meta = {
               description = ''Cirru Parser in Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Cirru/parser.ex";
+              homepage = https://github.com/Cirru/parser.ex;
             };
           } // packageOverrides)
       ) {};
@@ -5296,7 +5296,7 @@ let
               description = ''A small library for interacting with CKAN
                             (ckan.org) instances'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/rossjones/ckan_ex";
+              homepage = https://github.com/rossjones/ckan_ex;
             };
           } // packageOverrides)
       ) {};
@@ -5365,7 +5365,7 @@ let
               description = ''An Elixir web micro-framework, inspired by
                             Sinatra'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lpil/clint";
+              homepage = https://github.com/lpil/clint;
             };
           } // packageOverrides)
       ) {};
@@ -5392,7 +5392,7 @@ let
             meta = {
               description = ''A CLI library for erlang'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/basho/clique";
+              homepage = https://github.com/basho/clique;
             };
           } // packageOverrides)
       ) {};
@@ -5416,7 +5416,7 @@ let
               description = ''Forget typos in function names name, CloseEnough
                             handles them.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sivsushruth/close_enough";
+              homepage = https://github.com/sivsushruth/close_enough;
             };
           } // packageOverrides)
       ) {};
@@ -5453,7 +5453,7 @@ let
                                 helper to generate transformations and
                                 cloudinary urls pointing to your images'';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/smeevil/cloudex";
+              homepage = https://github.com/smeevil/cloudex;
             };
           } // packageOverrides)
       ) {};
@@ -5514,7 +5514,7 @@ let
               description = ''A library for connecting with Cloudinary in
                             Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/micahwedemeyer/cloudinaryex";
+              homepage = https://github.com/micahwedemeyer/cloudinaryex;
             };
           } // packageOverrides)
       ) {};
@@ -5539,7 +5539,7 @@ let
                                 following the CommonMark spec, a compatible
                                 implementation of Markdown.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/asaaki/cmark.ex";
+              homepage = https://github.com/asaaki/cmark.ex;
             };
           } // packageOverrides)
       ) {};
@@ -5564,7 +5564,7 @@ let
                                 `coverage.xml` file compatible with Jenkins`
                                 Cobertura plugin. '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/PSPDFKit-labs/cobertura_cover";
+              homepage = https://github.com/PSPDFKit-labs/cobertura_cover;
             };
           } // packageOverrides)
       ) {};
@@ -5589,7 +5589,7 @@ let
                                 between string encodings to and from utf-8. Like
                                 iconv, but written in pure Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/tallakt/codepagex";
+              homepage = https://github.com/tallakt/codepagex;
             };
           } // packageOverrides)
       ) {};
@@ -5623,7 +5623,7 @@ let
                                 capitalization data of bitcoin, altcoins and
                                 cryptotokens.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/cyberpunk-ventures/coincap_io_ex";
+              homepage = https://github.com/cyberpunk-ventures/coincap_io_ex;
             };
           } // packageOverrides)
       ) {};
@@ -5647,7 +5647,7 @@ let
               description = ''Colixir creates colorized text for terminal
                             output'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mondok/colixir";
+              homepage = https://github.com/mondok/colixir;
             };
           } // packageOverrides)
       ) {};
@@ -5671,7 +5671,7 @@ let
               description = ''Generate random colors that are fairly spaced out
                             and look nice.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/code-lever/color-stream-elixir";
+              homepage = https://github.com/code-lever/color-stream-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -5694,7 +5694,7 @@ let
             meta = {
               description = ''A Color Util library for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/barakyo/color_utils";
+              homepage = https://github.com/barakyo/color_utils;
             };
           } // packageOverrides)
       ) {};
@@ -5717,7 +5717,7 @@ let
             meta = {
               description = ''Modules which manage colors'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Joe-noh/colorful";
+              homepage = https://github.com/Joe-noh/colorful;
             };
           } // packageOverrides)
       ) {};
@@ -5740,7 +5740,7 @@ let
             meta = {
               description = ''Colorize your text in the console'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/shiroyasha/colorize";
+              homepage = https://github.com/shiroyasha/colorize;
             };
           } // packageOverrides)
       ) {};
@@ -5763,7 +5763,7 @@ let
             meta = {
               description = ''a colors util'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/lidashuang/colors";
+              homepage = https://github.com/lidashuang/colors;
             };
           } // packageOverrides)
       ) {};
@@ -5787,7 +5787,7 @@ let
               description = ''Elixir library computing simple combination and
                             permutation on Enumerables.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/seantanly/elixir-combination";
+              homepage = https://github.com/seantanly/elixir-combination;
             };
           } // packageOverrides)
       ) {};
@@ -5858,7 +5858,7 @@ let
               description = ''Password hashing (bcrypt, pbkdf2_sha512) library
                             for Elixir.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/elixircnx/comeonin";
+              homepage = https://github.com/elixircnx/comeonin;
             };
           } // packageOverrides)
       ) {};
@@ -5880,7 +5880,7 @@ let
               description = ''Password hashing (bcrypt, pbkdf2_sha512) library
                             for Elixir.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/elixircnx/comeonin";
+              homepage = https://github.com/elixircnx/comeonin;
             };
           } // packageOverrides)
       ) {};
@@ -5902,7 +5902,7 @@ let
               description = ''Password hashing (bcrypt, pbkdf2_sha512) library
                             for Elixir.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/elixircnx/comeonin";
+              homepage = https://github.com/elixircnx/comeonin;
             };
           } // packageOverrides)
       ) {};
@@ -5924,7 +5924,7 @@ let
               description = ''Password hashing (bcrypt, pbkdf2_sha512) library
                             for Elixir.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/elixircnx/comeonin";
+              homepage = https://github.com/elixircnx/comeonin;
             };
           } // packageOverrides)
       ) {};
@@ -5949,7 +5949,7 @@ let
               description = ''Internationalization support for the Comeonin
                             password hashing library.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/elixircnx/comeonin_i18n";
+              homepage = https://github.com/elixircnx/comeonin_i18n;
             };
           } // packageOverrides)
       ) {};
@@ -5972,7 +5972,7 @@ let
             meta = {
               description = ''A macro library to help create telegram bot'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/carlo-colombo/commander";
+              homepage = https://github.com/carlo-colombo/commander;
             };
           } // packageOverrides)
       ) {};
@@ -6003,7 +6003,7 @@ let
               description = ''Complex is a library for types and mathematical
                             functions for complex numbers.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/twist-vector/elixir-complex.git";
+              homepage = https://github.com/twist-vector/elixir-complex.git;
             };
           } // packageOverrides)
       ) {};
@@ -6028,7 +6028,7 @@ let
               description = ''Comredis is your comrade for Redis command
                             generation in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/iurifq/comredis";
+              homepage = https://github.com/iurifq/comredis;
             };
           } // packageOverrides)
       ) {};
@@ -6054,7 +6054,7 @@ let
                                 row-level isolated writes, TTL auto-purge, and
                                 modification callbacks.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sasa1977/con_cache";
+              homepage = https://github.com/sasa1977/con_cache;
             };
           } // packageOverrides)
       ) {};
@@ -6080,7 +6080,7 @@ let
                                 row-level isolated writes, TTL auto-purge, and
                                 modification callbacks.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sasa1977/con_cache";
+              homepage = https://github.com/sasa1977/con_cache;
             };
           } // packageOverrides)
       ) {};
@@ -6101,7 +6101,7 @@ let
             meta = {
               description = ''file-based routing library for elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/exstruct/concerto";
+              homepage = https://github.com/exstruct/concerto;
             };
           } // packageOverrides)
       ) {};
@@ -6124,7 +6124,7 @@ let
             meta = {
               description = ''Interpolated configuration values'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hassox/config_values";
+              homepage = https://github.com/hassox/config_values;
             };
           } // packageOverrides)
       ) {};
@@ -6148,7 +6148,7 @@ let
               description = ''A module that parses INI-like files. Not unlike
                             Python configparser package.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/easco/configparser_ex";
+              homepage = https://github.com/easco/configparser_ex;
             };
           } // packageOverrides)
       ) {};
@@ -6171,7 +6171,7 @@ let
             meta = {
               description = ''Connection behaviour for connection processes'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/fishcakez/connection";
+              homepage = https://github.com/fishcakez/connection;
             };
           } // packageOverrides)
       ) {};
@@ -6201,7 +6201,7 @@ let
             meta = {
               description = ''An Elixir in memory work queue.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/midas/conqueuer";
+              homepage = https://github.com/midas/conqueuer;
             };
           } // packageOverrides)
       ) {};
@@ -6226,7 +6226,7 @@ let
                                 representation of a tree structure, intended for
                                 use in a terminal environment.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ciaran/console_tree";
+              homepage = https://github.com/ciaran/console_tree;
             };
           } // packageOverrides)
       ) {};
@@ -6256,7 +6256,7 @@ let
             meta = {
               description = ''An IEx web console'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sivsushruth/consolex";
+              homepage = https://github.com/sivsushruth/consolex;
             };
           } // packageOverrides)
       ) {};
@@ -6280,7 +6280,7 @@ let
               description = ''An exploratory look into functors, applicatives,
                             and monads for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/slogsdon/elixir-control";
+              homepage = https://github.com/slogsdon/elixir-control;
             };
           } // packageOverrides)
       ) {};
@@ -6304,7 +6304,7 @@ let
               description = ''Provides functions for converting from and to
                             arbitrary bases. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/whatyouhide/convertat";
+              homepage = https://github.com/whatyouhide/convertat;
             };
           } // packageOverrides)
       ) {};
@@ -6328,7 +6328,7 @@ let
             meta = {
               description = ''iOS Core Data parser'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/evolet-project/core_data";
+              homepage = https://github.com/evolet-project/core_data;
             };
           } // packageOverrides)
       ) {};
@@ -6360,7 +6360,7 @@ let
                                 requests and responds to preflight requests
                                 (OPTIONS)'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mschae/cors_plug";
+              homepage = https://github.com/mschae/cors_plug;
             };
           } // packageOverrides)
       ) {};
@@ -6390,7 +6390,7 @@ let
             meta = {
               description = ''Plug-based swiss-army knife for CORS requests.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/whatyouhide/corsica";
+              homepage = https://github.com/whatyouhide/corsica;
             };
           } // packageOverrides)
       ) {};
@@ -6414,7 +6414,7 @@ let
               description = ''Factory Girl implementation with CouchDb
                             persistence.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/javierg/couch_factory";
+              homepage = https://github.com/javierg/couch_factory;
             };
           } // packageOverrides)
       ) {};
@@ -6444,7 +6444,7 @@ let
             meta = {
               description = ''Erlang CouchDB client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/benoitc/couchbeam";
+              homepage = https://github.com/benoitc/couchbeam;
             };
           } // packageOverrides)
       ) {};
@@ -6468,7 +6468,7 @@ let
               description = ''CouchDB client, wrapping couchbeam erlang
                             client.'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/ringling/couchex";
+              homepage = https://github.com/ringling/couchex;
             };
           } // packageOverrides)
       ) {};
@@ -6493,7 +6493,7 @@ let
               description = ''buffer a large set of counters and flush
                             periodically'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/count_buffer";
+              homepage = https://github.com/camshaft/count_buffer;
             };
           } // packageOverrides)
       ) {};
@@ -6523,7 +6523,7 @@ let
             meta = {
               description = ''Adapter based email delivery'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/DockYard/courier";
+              homepage = https://github.com/DockYard/courier;
             };
           } // packageOverrides)
       ) {};
@@ -6546,7 +6546,7 @@ let
             meta = {
               description = ''A node connection manager.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ostinelli/cowbell";
+              homepage = https://github.com/ostinelli/cowbell;
             };
           } // packageOverrides)
       ) {};
@@ -6577,7 +6577,7 @@ let
               description = ''Small, fast, modular HTTP server written in
                             Erlang.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/ninenines/cowboy";
+              homepage = https://github.com/ninenines/cowboy;
             };
           } // packageOverrides)
       ) {};
@@ -6601,7 +6601,7 @@ let
               description = ''Small, fast, modular HTTP server written in
                             Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/larrylv/cowgirl";
+              homepage = https://github.com/larrylv/cowgirl;
             };
           } // packageOverrides)
       ) {};
@@ -6625,7 +6625,7 @@ let
               description = ''Support library for manipulating Web
                             protocols.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/ninenines/cowlib";
+              homepage = https://github.com/ninenines/cowlib;
             };
           } // packageOverrides)
       ) {};
@@ -6647,7 +6647,7 @@ let
               description = ''Support library for manipulating Web
                             protocols.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/ninenines/cowlib";
+              homepage = https://github.com/ninenines/cowlib;
             };
           } // packageOverrides)
       ) {};
@@ -6669,7 +6669,7 @@ let
               description = ''Support library for manipulating Web
                             protocols.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/ninenines/cowlib";
+              homepage = https://github.com/ninenines/cowlib;
             };
           } // packageOverrides)
       ) {};
@@ -6692,7 +6692,7 @@ let
             meta = {
               description = ''A cow-friend who will speak your mind'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bbrock25/cowsay";
+              homepage = https://github.com/bbrock25/cowsay;
             };
           } // packageOverrides)
       ) {};
@@ -6715,7 +6715,7 @@ let
             meta = {
               description = ''Idiomatic Elixir client for Cassandra.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/matehat/cqex";
+              homepage = https://github.com/matehat/cqex;
             };
           } // packageOverrides)
       ) {};
@@ -6755,7 +6755,7 @@ let
               description = ''This is not production ready yet but I want your
                             feedback.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/amberbit/cqrs_commands";
+              homepage = https://github.com/amberbit/cqrs_commands;
             };
           } // packageOverrides)
       ) {};
@@ -6778,7 +6778,7 @@ let
             meta = {
               description = ''These pretzels are making me thirsty'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/whodat/crazy_pants";
+              homepage = https://github.com/whodat/crazy_pants;
             };
           } // packageOverrides)
       ) {};
@@ -6802,7 +6802,7 @@ let
               description = ''A library used to calculate CRC checksums for
                             binary data'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/TattdCodeMonkey/crc";
+              homepage = https://github.com/TattdCodeMonkey/crc;
             };
           } // packageOverrides)
       ) {};
@@ -6825,7 +6825,7 @@ let
             meta = {
               description = ''A library for validating credit card numbers'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/abakhi/credit_card";
+              homepage = https://github.com/abakhi/credit_card;
             };
           } // packageOverrides)
       ) {};
@@ -6851,7 +6851,7 @@ let
                                 language with a focus on code consistency and
                                 teaching.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rrrene/credo";
+              homepage = https://github.com/rrrene/credo;
             };
           } // packageOverrides)
       ) {};
@@ -6897,7 +6897,7 @@ let
               description = ''An extremely simple wrapper for the cronitor.io
                             ping endpoints.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/jordan0day/cronitor";
+              homepage = https://github.com/jordan0day/cronitor;
             };
           } // packageOverrides)
       ) {};
@@ -6921,7 +6921,7 @@ let
               description = ''An Elixir toolbelt freely inspired from Ruby`s
                             ActiveSupport'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mykewould/crutches";
+              homepage = https://github.com/mykewould/crutches;
             };
           } // packageOverrides)
       ) {};
@@ -6945,7 +6945,7 @@ let
               description = ''An Elixir library for encrypting/decrypting,
                             signing/verifying data. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/scrogson/cryptex";
+              homepage = https://github.com/scrogson/cryptex;
             };
           } // packageOverrides)
       ) {};
@@ -6994,7 +6994,7 @@ let
               description = ''A library that brings all the CSP joy to the
                             Elixir land.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/vidalraphael/cspex";
+              homepage = https://github.com/vidalraphael/cspex;
             };
           } // packageOverrides)
       ) {};
@@ -7020,7 +7020,7 @@ let
             meta = {
               description = ''CSV Decoding and Encoding for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/beatrichartz/csv";
+              homepage = https://github.com/beatrichartz/csv;
             };
           } // packageOverrides)
       ) {};
@@ -7050,7 +7050,7 @@ let
                                 a stream of CSV strings. It can also take a
                                 single list and return a single CSV string.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/jimm/csvlixir";
+              homepage = https://github.com/jimm/csvlixir;
             };
           } // packageOverrides)
       ) {};
@@ -7075,7 +7075,7 @@ let
             meta = {
               description = ''Common Test hooks for more readable logs'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/ferd/cth_readable";
+              homepage = https://github.com/ferd/cth_readable;
             };
           } // packageOverrides)
       ) {};
@@ -7100,7 +7100,7 @@ let
               description = ''Cuckoo is a pure Elixir implementation of Cuckoo
                             Filters.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gmcabrita/cuckoo";
+              homepage = https://github.com/gmcabrita/cuckoo;
             };
           } // packageOverrides)
       ) {};
@@ -7126,7 +7126,7 @@ let
                                 subset of the Cucumber feature definition
                                 language.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ericbmerritt/cucumberl";
+              homepage = https://github.com/ericbmerritt/cucumberl;
             };
           } // packageOverrides)
       ) {};
@@ -7149,7 +7149,7 @@ let
             meta = {
               description = ''Generate collision-resistant ids, in Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/duailibe/cuid";
+              homepage = https://github.com/duailibe/cuid;
             };
           } // packageOverrides)
       ) {};
@@ -7173,7 +7173,7 @@ let
               description = ''Curl2HTTPoison transform your curl request to
                             HTTPPoison request code'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edgurgel/httpoison";
+              homepage = https://github.com/edgurgel/httpoison;
             };
           } // packageOverrides)
       ) {};
@@ -7198,7 +7198,7 @@ let
               description = ''A function to format a number to a currency using
                             iso standards'';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/smeevil/currency_formatter";
+              homepage = https://github.com/smeevil/currency_formatter;
             };
           } // packageOverrides)
       ) {};
@@ -7229,7 +7229,7 @@ let
               description = ''Get github current streak which support only
                             public repositories.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KazuCocoa/current_streak_ex";
+              homepage = https://github.com/KazuCocoa/current_streak_ex;
             };
           } // packageOverrides)
       ) {};
@@ -7252,7 +7252,7 @@ let
             meta = {
               description = ''Configurable user authentication for Phoenix'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/halogenandtoast/current_user";
+              homepage = https://github.com/halogenandtoast/current_user;
             };
           } // packageOverrides)
       ) {};
@@ -7276,7 +7276,7 @@ let
               description = ''A simple currying macro allowing to define
                             curried functions in Elixir modules.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/niahoo/elixir-curry";
+              homepage = https://github.com/niahoo/elixir-curry;
             };
           } // packageOverrides)
       ) {};
@@ -7299,7 +7299,7 @@ let
             meta = {
               description = ''HTML-safe string truncation.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/seankay/curtail";
+              homepage = https://github.com/seankay/curtail;
             };
           } // packageOverrides)
       ) {};
@@ -7328,7 +7328,7 @@ let
                                 \"Maintenance\" pages. At it`s heart, it`s just
                                 a Plug.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/fteem/curtains";
+              homepage = https://github.com/fteem/curtains;
             };
           } // packageOverrides)
       ) {};
@@ -7351,7 +7351,7 @@ let
             meta = {
               description = ''Curve25519 Diffie-Hellman functions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/curve25519_ex";
+              homepage = https://github.com/mwmiller/curve25519_ex;
             };
           } // packageOverrides)
       ) {};
@@ -7378,7 +7378,7 @@ let
                                 updates, but hopefully will support more in the
                                 future.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ryanbillingsley/cushion";
+              homepage = https://github.com/ryanbillingsley/cushion;
             };
           } // packageOverrides)
       ) {};
@@ -7402,7 +7402,7 @@ let
               description = ''Allow you to make custom base conversion in
                             Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/igas/custom_base";
+              homepage = https://github.com/igas/custom_base;
             };
           } // packageOverrides)
       ) {};
@@ -7433,7 +7433,7 @@ let
             meta = {
               description = ''cuttlefish configuration abstraction'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/tsloughter/cuttlefish";
+              homepage = https://github.com/tsloughter/cuttlefish;
             };
           } // packageOverrides)
       ) {};
@@ -7457,7 +7457,7 @@ let
               description = ''A dumb string-based query builder for neo4j
                             Cypher queries'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/collin/cypher_query";
+              homepage = https://github.com/collin/cypher_query;
             };
           } // packageOverrides)
       ) {};
@@ -7480,7 +7480,7 @@ let
             meta = {
               description = ''Damm algorithm implementation'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mururu/damm";
+              homepage = https://github.com/mururu/damm;
             };
           } // packageOverrides)
       ) {};
@@ -7505,7 +7505,7 @@ let
                                 structures: Provides a `map_deeply/2` function
                                 for Maps and Lists and Keyword Lists'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gutschilla/elixir-map-deeply";
+              homepage = https://github.com/gutschilla/elixir-map-deeply;
             };
           } // packageOverrides)
       ) {};
@@ -7532,7 +7532,7 @@ let
                                 and pop when the queue at a max size or
                                 empty.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/benfalk/data_pool";
+              homepage = https://github.com/benfalk/data_pool;
             };
           } // packageOverrides)
       ) {};
@@ -7556,7 +7556,7 @@ let
               description = ''Parse database URL and renturn keyword list for
                             use with Ecto.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/s-m-i-t-a/database_url";
+              homepage = https://github.com/s-m-i-t-a/database_url;
             };
           } // packageOverrides)
       ) {};
@@ -7580,7 +7580,7 @@ let
               description = ''Elixir protocols and implementations for various
                             data structures.'';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/meh/elixir-datastructures";
+              homepage = https://github.com/meh/elixir-datastructures;
             };
           } // packageOverrides)
       ) {};
@@ -7603,7 +7603,7 @@ let
             meta = {
               description = ''Distributed tracing'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/fishcakez/dbg";
+              homepage = https://github.com/fishcakez/dbg;
             };
           } // packageOverrides)
       ) {};
@@ -7627,7 +7627,7 @@ let
             meta = {
               description = ''Bindings for the D-Bus IPC protocol.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mspanc/dbux";
+              homepage = https://github.com/mspanc/dbux;
             };
           } // packageOverrides)
       ) {};
@@ -7657,7 +7657,7 @@ let
             meta = {
               description = ''An API Client for Stockfighter.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/larrylv/dealer";
+              homepage = https://github.com/larrylv/dealer;
             };
           } // packageOverrides)
       ) {};
@@ -7681,7 +7681,7 @@ let
               description = ''Arbitrary precision decimal arithmetic for
                             Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ericmj/decimal";
+              homepage = https://github.com/ericmj/decimal;
             };
           } // packageOverrides)
       ) {};
@@ -7705,7 +7705,7 @@ let
             meta = {
               description = ''Extended arithmetic for Decimal library.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jacek-adamek/decimal_arithmetic";
+              homepage = https://github.com/jacek-adamek/decimal_arithmetic;
             };
           } // packageOverrides)
       ) {};
@@ -7752,7 +7752,7 @@ let
               description = ''Decoction is a static site generator written in
                             Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/aarvay/decoction";
+              homepage = https://github.com/aarvay/decoction;
             };
           } // packageOverrides)
       ) {};
@@ -7776,7 +7776,7 @@ let
               description = '' A memoization macro (defmemo) for elixir using a
                             genserver backing store. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/os6sense/DefMemo";
+              homepage = https://github.com/os6sense/DefMemo;
             };
           } // packageOverrides)
       ) {};
@@ -7801,7 +7801,7 @@ let
                                 gen_server : for instance Erlang supervisor with
                                 exponential backoff restart strategy.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/delayed_otp";
+              homepage = https://github.com/awetzel/delayed_otp;
             };
           } // packageOverrides)
       ) {};
@@ -7854,7 +7854,7 @@ let
             meta = {
               description = ''An Elixir wrapper for the SOAP Deltek API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lucidstack/elixir-deltek";
+              homepage = https://github.com/lucidstack/elixir-deltek;
             };
           } // packageOverrides)
       ) {};
@@ -7895,7 +7895,7 @@ let
             meta = {
               description = ''In-memory cache with cache key dependencies'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/zotonic/depcache";
+              homepage = https://github.com/zotonic/depcache;
             };
           } // packageOverrides)
       ) {};
@@ -7918,7 +7918,7 @@ let
             meta = {
               description = ''Elixir`s coolest deprecation logger'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zackehh/deppie";
+              homepage = https://github.com/zackehh/deppie;
             };
           } // packageOverrides)
       ) {};
@@ -7941,7 +7941,7 @@ let
             meta = {
               description = ''An emulsifying Erlang SOAP library'';
               license = with stdenv.lib.licenses; [ unlicense bsd3 ];
-              homepage = "https://github.com/devinus/detergent";
+              homepage = https://github.com/devinus/detergent;
             };
           } // packageOverrides)
       ) {};
@@ -7966,7 +7966,7 @@ let
               description = ''Elixir binding to Detergent erlang library used
                             to call WSDL SOAP Services'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/r-icarus/detergentex";
+              homepage = https://github.com/r-icarus/detergentex;
             };
           } // packageOverrides)
       ) {};
@@ -7998,7 +7998,7 @@ let
                                 Deviant Art. At this moment provides only RSS
                                 feeds intergac.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/vdaniuk/deviant-elixir";
+              homepage = https://github.com/vdaniuk/deviant-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -8021,7 +8021,7 @@ let
             meta = {
               description = ''Pipelined flow processing engine'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dalmatinerdb/dflow";
+              homepage = https://github.com/dalmatinerdb/dflow;
             };
           } // packageOverrides)
       ) {};
@@ -8051,7 +8051,7 @@ let
             meta = {
               description = ''Elixir wrapper for DI.FM'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/JoshuaThompson/di";
+              homepage = https://github.com/JoshuaThompson/di;
             };
           } // packageOverrides)
       ) {};
@@ -8075,7 +8075,7 @@ let
               description = ''Mix tasks to simplify use of Dialyzer in Elixir
                             projects.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/jeremyjh/dialyxir";
+              homepage = https://github.com/jeremyjh/dialyxir;
             };
           } // packageOverrides)
       ) {};
@@ -8098,7 +8098,7 @@ let
             meta = {
               description = ''Dialyzer Mix task'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/fishcakez/dialyze";
+              homepage = https://github.com/fishcakez/dialyze;
             };
           } // packageOverrides)
       ) {};
@@ -8121,7 +8121,7 @@ let
             meta = {
               description = ''Library and CLI app for rolling dice '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stocks29/dice";
+              homepage = https://github.com/stocks29/dice;
             };
           } // packageOverrides)
       ) {};
@@ -8144,7 +8144,7 @@ let
             meta = {
               description = ''An Elixir library for simulating dice rolls'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KevinGreene/DiceRoller";
+              homepage = https://github.com/KevinGreene/DiceRoller;
             };
           } // packageOverrides)
       ) {};
@@ -8167,7 +8167,7 @@ let
             meta = {
               description = ''Simple release deliverer for Elixir'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/lexmag/dicon";
+              homepage = https://github.com/lexmag/dicon;
             };
           } // packageOverrides)
       ) {};
@@ -8190,7 +8190,7 @@ let
             meta = {
               description = ''A simple diff library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bryanjos/diff";
+              homepage = https://github.com/bryanjos/diff;
             };
           } // packageOverrides)
       ) {};
@@ -8220,7 +8220,7 @@ let
             meta = {
               description = ''An Elixir client for the Digital Ocean API v2.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kevinmontuori/digoc";
+              homepage = https://github.com/kevinmontuori/digoc;
             };
           } // packageOverrides)
       ) {};
@@ -8253,7 +8253,7 @@ let
                                 also been wrapped into a Stream resource. paths
                                 = DirWalker.stream(path) # or [path,path...] '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pragdave/dir_walker";
+              homepage = https://github.com/pragdave/dir_walker;
             };
           } // packageOverrides)
       ) {};
@@ -8276,7 +8276,7 @@ let
             meta = {
               description = ''Discriminated unions for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/X4lldux/disc_union";
+              homepage = https://github.com/X4lldux/disc_union;
             };
           } // packageOverrides)
       ) {};
@@ -8328,7 +8328,7 @@ let
               description = ''Dismake is a \"compiler\" (as in Mix.compilers)
                             that just runs make. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jarednorman/dismake";
+              homepage = https://github.com/jarednorman/dismake;
             };
           } // packageOverrides)
       ) {};
@@ -8352,7 +8352,7 @@ let
               description = ''Various distance functions for geometric or
                             geographic calculations'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pkinney/distance";
+              homepage = https://github.com/pkinney/distance;
             };
           } // packageOverrides)
       ) {};
@@ -8378,7 +8378,7 @@ let
                                 return the drive time and driving distance
                                 between two places.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/vysakh0/distancex";
+              homepage = https://github.com/vysakh0/distancex;
             };
           } // packageOverrides)
       ) {};
@@ -8403,7 +8403,7 @@ let
                                 jinterface and the Asynchbase Java client to
                                 query the database. '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/novabyte/diver";
+              homepage = https://github.com/novabyte/diver;
             };
           } // packageOverrides)
       ) {};
@@ -8426,7 +8426,7 @@ let
             meta = {
               description = ''Deque implementations '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stocks29/dlist.git";
+              homepage = https://github.com/stocks29/dlist.git;
             };
           } // packageOverrides)
       ) {};
@@ -8457,7 +8457,7 @@ let
               description = ''An (experimental) Elixir client for the DNSimple
                             API v2.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/aetrion/dnsimple-elixir";
+              homepage = https://github.com/aetrion/dnsimple-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -8483,7 +8483,7 @@ let
                                 and saves detailed error information for once
                                 the test suite is finished.'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/bkerley/doc_first_formatter";
+              homepage = https://github.com/bkerley/doc_first_formatter;
             };
           } // packageOverrides)
       ) {};
@@ -8508,7 +8508,7 @@ let
               description = ''Plug to automatically generate and serve project
                             documentation.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hild/doc_plug";
+              homepage = https://github.com/hild/doc_plug;
             };
           } // packageOverrides)
       ) {};
@@ -8533,7 +8533,7 @@ let
               description = ''A code style linter for Elixir, powered by
                             shame.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lpil/dogma";
+              homepage = https://github.com/lpil/dogma;
             };
           } // packageOverrides)
       ) {};
@@ -8557,7 +8557,7 @@ let
               description = ''A client for DogStatsd, an extension of the
                             StatsD metric server for Datadog.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/adamkittelson/dogstatsd-elixir";
+              homepage = https://github.com/adamkittelson/dogstatsd-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -8588,7 +8588,7 @@ let
             meta = {
               description = ''Send StatsD metrics to Datadog'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/WhoopInc/dogstatsde";
+              homepage = https://github.com/WhoopInc/dogstatsde;
             };
           } // packageOverrides)
       ) {};
@@ -8621,7 +8621,7 @@ let
                                 it easy to search and find available domains and
                                 TLDs.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/e-fu/domainr";
+              homepage = https://github.com/e-fu/domainr;
             };
           } // packageOverrides)
       ) {};
@@ -8652,7 +8652,7 @@ let
               description = ''Tools to make Elixir authentication simple and
                             flexible'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/BlakeWilliams/doorman";
+              homepage = https://github.com/BlakeWilliams/doorman;
             };
           } // packageOverrides)
       ) {};
@@ -8694,7 +8694,7 @@ let
               description = ''Simple dot/bracket notation parsing/conversion
                             for Maps/Lists'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zackehh/dot-notes-elixir";
+              homepage = https://github.com/zackehh/dot-notes-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -8717,7 +8717,7 @@ let
             meta = {
               description = ''A port of dotenv to Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/avdi/dotenv_elixir";
+              homepage = https://github.com/avdi/dotenv_elixir;
             };
           } // packageOverrides)
       ) {};
@@ -8741,7 +8741,7 @@ let
               description = ''Dovetail provides a harness for running test
                             dovecot servers.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/thusfresh/dovetail";
+              homepage = https://github.com/thusfresh/dovetail;
             };
           } // packageOverrides)
       ) {};
@@ -8765,7 +8765,7 @@ let
               description = ''Collection of decoders for different metric
                             protocols'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dalmatinerdb/dp_decoder";
+              homepage = https://github.com/dalmatinerdb/dp_decoder;
             };
           } // packageOverrides)
       ) {};
@@ -8812,7 +8812,7 @@ let
                                 unique) UUID generation. Based on
                                 https://github.com/recurly/druuid'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bhelx/druuid";
+              homepage = https://github.com/bhelx/druuid;
             };
           } // packageOverrides)
       ) {};
@@ -8843,7 +8843,7 @@ let
               description = ''Access to the Real Time Passenger Information
                             (RTPI) for Dublin Bus services.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/carlo-colombo/dublin-bus-api";
+              homepage = https://github.com/carlo-colombo/dublin-bus-api;
             };
           } // packageOverrides)
       ) {};
@@ -8874,7 +8874,7 @@ let
               description = ''An Elixir client for the DuckDuckGo Instant
                             Answer API.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/pjhampton/DuckDuckElixir";
+              homepage = https://github.com/pjhampton/DuckDuckElixir;
             };
           } // packageOverrides)
       ) {};
@@ -8915,7 +8915,7 @@ let
             meta = {
               description = ''Dyeing your terminal!'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Kabie/dye";
+              homepage = https://github.com/Kabie/dye;
             };
           } // packageOverrides)
       ) {};
@@ -8939,7 +8939,7 @@ let
               description = ''compile and load erlang modules from string
                             input'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/okeuday/dynamic_compile";
+              homepage = https://github.com/okeuday/dynamic_compile;
             };
           } // packageOverrides)
       ) {};
@@ -8965,7 +8965,7 @@ let
             meta = {
               description = ''2q cache'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/project-fifo/e2qc";
+              homepage = https://github.com/project-fifo/e2qc;
             };
           } // packageOverrides)
       ) {};
@@ -8994,7 +8994,7 @@ let
                                 `++` or double reversing lists to add items to
                                 the \"back\" of a queue.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/benfalk/e_queue";
+              homepage = https://github.com/benfalk/e_queue;
             };
           } // packageOverrides)
       ) {};
@@ -9024,7 +9024,7 @@ let
             meta = {
               description = ''Simple Quip API Client'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mmartinson/e_quip";
+              homepage = https://github.com/mmartinson/e_quip;
             };
           } // packageOverrides)
       ) {};
@@ -9051,7 +9051,7 @@ let
                                 command-line tool (just run mix escript.build
                                 first). Output generation is pluggable.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pragdave/earmark";
+              homepage = https://github.com/pragdave/earmark;
             };
           } // packageOverrides)
       ) {};
@@ -9076,7 +9076,7 @@ let
                                 command-line tool (just run mix escript.build
                                 first). Output generation is pluggable.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pragdave/earmark";
+              homepage = https://github.com/pragdave/earmark;
             };
           } // packageOverrides)
       ) {};
@@ -9103,7 +9103,7 @@ let
                                 H-metric are abstracted away - you provide them
                                 as functions.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/herenowcoder/eastar";
+              homepage = https://github.com/herenowcoder/eastar;
             };
           } // packageOverrides)
       ) {};
@@ -9126,7 +9126,7 @@ let
             meta = {
               description = ''Easier GenServer for Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/termoose/EasyServer";
+              homepage = https://github.com/termoose/EasyServer;
             };
           } // packageOverrides)
       ) {};
@@ -9150,7 +9150,7 @@ let
             meta = {
               description = ''Elixir Easypost Client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Dania02525/easypost";
+              homepage = https://github.com/Dania02525/easypost;
             };
           } // packageOverrides)
       ) {};
@@ -9175,7 +9175,7 @@ let
               description = ''helper library for working with aws ec2
                             metadata'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/talentdeficit/ec2";
+              homepage = https://github.com/talentdeficit/ec2;
             };
           } // packageOverrides)
       ) {};
@@ -9202,7 +9202,7 @@ let
                                 notifications to different adapters (ex. email,
                                 logger, analytics, sms, etc.)'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/zmoshansky/echo";
+              homepage = https://github.com/zmoshansky/echo;
             };
           } // packageOverrides)
       ) {};
@@ -9233,7 +9233,7 @@ let
             meta = {
               description = ''A demo telegram bot'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/col/echo_bot";
+              homepage = https://github.com/col/echo_bot;
             };
           } // packageOverrides)
       ) {};
@@ -9263,7 +9263,7 @@ let
             meta = {
               description = ''Echonest api wrapper for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/desmondhume/echonest_ex";
+              homepage = https://github.com/desmondhume/echonest_ex;
             };
           } // packageOverrides)
       ) {};
@@ -9286,7 +9286,7 @@ let
             meta = {
               description = ''simple Erlang config handler using INI files'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/benoitc/econfig";
+              homepage = https://github.com/benoitc/econfig;
             };
           } // packageOverrides)
       ) {};
@@ -9310,7 +9310,7 @@ let
               description = ''An experimental Entity-Component System (ECS)
                             game engine.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joshforisha/ecs";
+              homepage = https://github.com/joshforisha/ecs;
             };
           } // packageOverrides)
       ) {};
@@ -9334,7 +9334,7 @@ let
               description = ''Ecto extension to support auditing data changes
                             in your Schema.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mattweldon/ecto_audit";
+              homepage = https://github.com/mattweldon/ecto_audit;
             };
           } // packageOverrides)
       ) {};
@@ -9357,7 +9357,7 @@ let
             meta = {
               description = ''Ed25519 signature functions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/ed25519_ex";
+              homepage = https://github.com/mwmiller/ed25519_ex;
             };
           } // packageOverrides)
       ) {};
@@ -9383,7 +9383,7 @@ let
                                 about release image building at:
                                 https://github.com/edib-tool/elixir-docker-image-builder'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edib-tool/mix-edib";
+              homepage = https://github.com/edib-tool/mix-edib;
             };
           } // packageOverrides)
       ) {};
@@ -9409,7 +9409,7 @@ let
                                 about release image packaging at:
                                 https://github.com/asaaki/elixir-docker-image-packager'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/asaaki/mix-edip";
+              homepage = https://github.com/asaaki/mix-edip;
             };
           } // packageOverrides)
       ) {};
@@ -9432,7 +9432,7 @@ let
             meta = {
               description = ''Markdown generated from Edoc.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/uwiger/edown";
+              homepage = https://github.com/uwiger/edown;
             };
           } // packageOverrides)
       ) {};
@@ -9471,7 +9471,7 @@ let
             meta = {
               description = ''Elixir extendable blog.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/aborn/eeb";
+              homepage = https://github.com/aborn/eeb;
             };
           } // packageOverrides)
       ) {};
@@ -9494,7 +9494,7 @@ let
             meta = {
               description = ''Firebird Client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nakagami/efirebirdsql";
+              homepage = https://github.com/nakagami/efirebirdsql;
             };
           } // packageOverrides)
       ) {};
@@ -9525,7 +9525,7 @@ let
               description = ''A simple egauge parser to retrieve and parse data
                             from egauge devices'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Brightergy/egaugex";
+              homepage = https://github.com/Brightergy/egaugex;
             };
           } // packageOverrides)
       ) {};
@@ -9549,7 +9549,7 @@ let
               description = ''Lookup Elixir documentation from the command line
                             '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/Frost/eh.git";
+              homepage = https://github.com/Frost/eh.git;
             };
           } // packageOverrides)
       ) {};
@@ -9573,7 +9573,7 @@ let
               description = ''Library that acts like a real life Magic 8
                             Ball.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/fteem/eight_ball";
+              homepage = https://github.com/fteem/eight_ball;
             };
           } // packageOverrides)
       ) {};
@@ -9596,7 +9596,7 @@ let
             meta = {
               description = ''Ask a question to the Magic Eight Ball'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/djkianoosh/eight_ball";
+              homepage = https://github.com/djkianoosh/eight_ball;
             };
           } // packageOverrides)
       ) {};
@@ -9620,7 +9620,7 @@ let
               description = ''Eikōn is an Elixir library providing a read-only
                             interface for image files.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tchoutri/eikon";
+              homepage = https://github.com/tchoutri/eikon;
             };
           } // packageOverrides)
       ) {};
@@ -9651,7 +9651,7 @@ let
             meta = {
               description = ''Engine.io server for Elixir.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/falood/eio";
+              homepage = https://github.com/falood/eio;
             };
           } // packageOverrides)
       ) {};
@@ -9677,7 +9677,7 @@ let
                                 files from the ejabberd project that are
                                 necessary in order to build a gen_mod module.'';
               license = stdenv.lib.licenses.gpl3;
-              homepage = "https://github.com/scrogson/ejabberd_dev";
+              homepage = https://github.com/scrogson/ejabberd_dev;
             };
           } // packageOverrides)
       ) {};
@@ -9702,7 +9702,7 @@ let
             meta = {
               description = ''Encode/decode JSON Web Token'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/artefactop/ejwt";
+              homepage = https://github.com/artefactop/ejwt;
             };
           } // packageOverrides)
       ) {};
@@ -9732,7 +9732,7 @@ let
             meta = {
               description = ''Data driven elixir client for Elasticsearch.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/michaeldoaty/elastex";
+              homepage = https://github.com/michaeldoaty/elastex;
             };
           } // packageOverrides)
       ) {};
@@ -9757,7 +9757,7 @@ let
               description = ''ElasticSearch client for Elixir and Ecto
                             driver.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/vic/elaxtic";
+              homepage = https://github.com/vic/elaxtic;
             };
           } // packageOverrides)
       ) {};
@@ -9782,7 +9782,7 @@ let
                                 Find the user guide in the github repo at:
                                 https://github.com/marcelog/elixir_ami.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/marcelog/elixir_ami";
+              homepage = https://github.com/marcelog/elixir_ami;
             };
           } // packageOverrides)
       ) {};
@@ -9822,7 +9822,7 @@ let
                                 at:
                                 https://github.com/marcelog/elixir_authorizenet.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/marcelog/elixir_authorizenet";
+              homepage = https://github.com/marcelog/elixir_authorizenet;
             };
           } // packageOverrides)
       ) {};
@@ -9845,7 +9845,7 @@ let
             meta = {
               description = ''Bencode encoder / decoder in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/AntonFagerberg/elixir_bencode";
+              homepage = https://github.com/AntonFagerberg/elixir_bencode;
             };
           } // packageOverrides)
       ) {};
@@ -9869,7 +9869,7 @@ let
               description = ''Parse exif and thumbnail data from jpeg/tiff
                             images.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sschneider1207/ElixirExif";
+              homepage = https://github.com/sschneider1207/ElixirExif;
             };
           } // packageOverrides)
       ) {};
@@ -9893,7 +9893,7 @@ let
             meta = {
               description = ''An Elixir Atom/RSS2 feed parser.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/fdietz/elixir-feed-parser";
+              homepage = https://github.com/fdietz/elixir-feed-parser;
             };
           } // packageOverrides)
       ) {};
@@ -9923,7 +9923,7 @@ let
             meta = {
               description = ''Elixir client for FreshBooks.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/marcelog/elixir_freshbooks";
+              homepage = https://github.com/marcelog/elixir_freshbooks;
             };
           } // packageOverrides)
       ) {};
@@ -9968,7 +9968,7 @@ let
             meta = {
               description = ''A Make compiler for Mix'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/elixir_make";
+              homepage = https://github.com/elixir-lang/elixir_make;
             };
           } // packageOverrides)
       ) {};
@@ -9991,7 +9991,7 @@ let
             meta = {
               description = ''Convert the character encoding'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/woxtu/elixir-mbcs";
+              homepage = https://github.com/woxtu/elixir-mbcs;
             };
           } // packageOverrides)
       ) {};
@@ -10018,7 +10018,7 @@ let
                                 github repo at:
                                 https://github.com/marcelog/elixir_mod_event.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/marcelog/elixir_mod_event";
+              homepage = https://github.com/marcelog/elixir_mod_event;
             };
           } // packageOverrides)
       ) {};
@@ -10041,7 +10041,7 @@ let
             meta = {
               description = ''Small set of useful utility functions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ruby2elixir/elixir_prelude";
+              homepage = https://github.com/ruby2elixir/elixir_prelude;
             };
           } // packageOverrides)
       ) {};
@@ -10064,7 +10064,7 @@ let
             meta = {
               description = ''Decode & encode RADIUS packets '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bearice/elixir-radius";
+              homepage = https://github.com/bearice/elixir-radius;
             };
           } // packageOverrides)
       ) {};
@@ -10091,7 +10091,7 @@ let
               description = ''ElixirScript: compiles Elixir code to
                             JavaScript'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bryanjos/elixirscript";
+              homepage = https://github.com/bryanjos/elixirscript;
             };
           } // packageOverrides)
       ) {};
@@ -10117,7 +10117,7 @@ let
             meta = {
               description = ''ElixirTalk is an Elixir client for beanstalkd.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jsvisa/elixir_talk";
+              homepage = https://github.com/jsvisa/elixir_talk;
             };
           } // packageOverrides)
       ) {};
@@ -10141,7 +10141,7 @@ let
               description = ''A TEA (Tiny Encryption Algorithm) implemented in
                             pure Elixir. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/keichan34/elixir_tea";
+              homepage = https://github.com/keichan34/elixir_tea;
             };
           } // packageOverrides)
       ) {};
@@ -10171,7 +10171,7 @@ let
             meta = {
               description = ''V8 engine for Elixir with pools.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/le0pard/elixir_v8";
+              homepage = https://github.com/le0pard/elixir_v8;
             };
           } // packageOverrides)
       ) {};
@@ -10203,7 +10203,7 @@ let
               longDescription = ''Elixir client for the Wit API. Wit is the
                                 natural language engine for creating Bots.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zabirauf/elixir_wit";
+              homepage = https://github.com/zabirauf/elixir_wit;
             };
           } // packageOverrides)
       ) {};
@@ -10226,7 +10226,7 @@ let
             meta = {
               description = ''a writer for XLSX spreadsheet files'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/xou/elixlsx";
+              homepage = https://github.com/xou/elixlsx;
             };
           } // packageOverrides)
       ) {};
@@ -10250,7 +10250,7 @@ let
               description = ''Fast and robust web server for building
                             high-throughput, low-latency apps'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/knutin/elli";
+              homepage = https://github.com/knutin/elli;
             };
           } // packageOverrides)
       ) {};
@@ -10274,7 +10274,7 @@ let
               description = ''Helper mix tasks for generating elm files like
                             Main, Ports, Models, Msgs, etc.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nathanjohnson320/elmer";
+              homepage = https://github.com/nathanjohnson320/elmer;
             };
           } // packageOverrides)
       ) {};
@@ -10297,7 +10297,7 @@ let
             meta = {
               description = ''Helper functions for working with Elm + Elixir'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/NoRedInk/elmxir";
+              homepage = https://github.com/NoRedInk/elmxir;
             };
           } // packageOverrides)
       ) {};
@@ -10348,7 +10348,7 @@ let
                                 markup languages could be implemented as well.
                                 '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/zambal/eml";
+              homepage = https://github.com/zambal/eml;
             };
           } // packageOverrides)
       ) {};
@@ -10372,7 +10372,7 @@ let
               description = ''Env is an improved application configuration
                             reader for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/michalmuskala/env";
+              homepage = https://github.com/michalmuskala/env;
             };
           } // packageOverrides)
       ) {};
@@ -10396,7 +10396,7 @@ let
               description = ''A simple add on to make working with environment
                             variables slightly easier.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/manheim/env_helper";
+              homepage = https://github.com/manheim/env_helper;
             };
           } // packageOverrides)
       ) {};
@@ -10419,7 +10419,7 @@ let
             meta = {
               description = ''A package for managing env files'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/BlakeWilliams/envy";
+              homepage = https://github.com/BlakeWilliams/envy;
             };
           } // packageOverrides)
       ) {};
@@ -10442,7 +10442,7 @@ let
             meta = {
               description = ''Use Elixir maps as a document storage format.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/supernintendo/eon";
+              homepage = https://github.com/supernintendo/eon;
             };
           } // packageOverrides)
       ) {};
@@ -10470,7 +10470,7 @@ let
                                 similar to unix top redbug- similar to the OTP
                                 dbg application, but safer, better etc.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/massemanet/eper";
+              homepage = https://github.com/massemanet/eper;
             };
           } // packageOverrides)
       ) {};
@@ -10502,7 +10502,7 @@ let
             meta = {
               description = ''Erlang postgresql pool application'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/egobrain/epgpool";
+              homepage = https://github.com/egobrain/epgpool;
             };
           } // packageOverrides)
       ) {};
@@ -10525,7 +10525,7 @@ let
             meta = {
               description = ''PostgreSQL Client'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/epgsql/epgsql";
+              homepage = https://github.com/epgsql/epgsql;
             };
           } // packageOverrides)
       ) {};
@@ -10546,7 +10546,7 @@ let
             meta = {
               description = ''PostgreSQL Client'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/epgsql/epgsql";
+              homepage = https://github.com/epgsql/epgsql;
             };
           } // packageOverrides)
       ) {};
@@ -10570,7 +10570,7 @@ let
             meta = {
               description = ''Cassandra driver for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/vptheron/epiphany";
+              homepage = https://github.com/vptheron/epiphany;
             };
           } // packageOverrides)
       ) {};
@@ -10640,7 +10640,7 @@ let
             meta = {
               description = ''Sql generator library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/egobrain/equery";
+              homepage = https://github.com/egobrain/equery;
             };
           } // packageOverrides)
       ) {};
@@ -10663,7 +10663,7 @@ let
             meta = {
               description = ''constant time polymorphic comparisons'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/equivalex";
+              homepage = https://github.com/mwmiller/equivalex;
             };
           } // packageOverrides)
       ) {};
@@ -10686,7 +10686,7 @@ let
             meta = {
               description = ''Erlang Redis client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/wooga/eredis";
+              homepage = https://github.com/wooga/eredis;
             };
           } // packageOverrides)
       ) {};
@@ -10711,7 +10711,7 @@ let
                                 converting well-formed Erlang source to Elixir
                                 source with equivalent functionality.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/dazuma/erl2ex";
+              homepage = https://github.com/dazuma/erl2ex;
             };
           } // packageOverrides)
       ) {};
@@ -10735,7 +10735,7 @@ let
               description = ''Erlang library for conversion from one local time
                             to another'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/choptastic/erlang_localtime";
+              homepage = https://github.com/choptastic/erlang_localtime;
             };
           } // packageOverrides)
       ) {};
@@ -10758,7 +10758,7 @@ let
             meta = {
               description = ''Provide the in-memory size of Erlang terms'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/erlang_term";
+              homepage = https://github.com/okeuday/erlang_term;
             };
           } // packageOverrides)
       ) {};
@@ -10779,7 +10779,7 @@ let
             meta = {
               description = ''Provide the in-memory size of Erlang terms'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/erlang_term";
+              homepage = https://github.com/okeuday/erlang_term;
             };
           } // packageOverrides)
       ) {};
@@ -10802,7 +10802,7 @@ let
             meta = {
               description = ''Retrieve Erlang/OTP version like `18.1`'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sapporo-beam/erlang_version";
+              homepage = https://github.com/sapporo-beam/erlang_version;
             };
           } // packageOverrides)
       ) {};
@@ -10825,7 +10825,7 @@ let
             meta = {
               description = ''Erlang audio bindings to portaudio'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/asonge/erlaudio";
+              homepage = https://github.com/asonge/erlaudio;
             };
           } // packageOverrides)
       ) {};
@@ -10857,7 +10857,7 @@ let
             meta = {
               description = ''Erlang cloud computing library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/erlcloud/erlcloud";
+              homepage = https://github.com/erlcloud/erlcloud;
             };
           } // packageOverrides)
       ) {};
@@ -10886,7 +10886,7 @@ let
             meta = {
               description = ''Erlang cloud computing library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/erlcloud/erlcloud";
+              homepage = https://github.com/erlcloud/erlcloud;
             };
           } // packageOverrides)
       ) {};
@@ -10910,7 +10910,7 @@ let
             meta = {
               description = ''OS Process Manager'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/saleyn/erlexec";
+              homepage = https://github.com/saleyn/erlexec;
             };
           } // packageOverrides)
       ) {};
@@ -10934,7 +10934,7 @@ let
             meta = {
               description = ''OS Process Manager'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/saleyn/erlexec";
+              homepage = https://github.com/saleyn/erlexec;
             };
           } // packageOverrides)
       ) {};
@@ -10958,7 +10958,7 @@ let
             meta = {
               description = ''OS Process Manager'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/saleyn/erlexec";
+              homepage = https://github.com/saleyn/erlexec;
             };
           } // packageOverrides)
       ) {};
@@ -11008,7 +11008,7 @@ let
                                 well as XML Schema based data mapping: create
                                 records from XML (and vice versa)'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/willemdj/erlsom";
+              homepage = https://github.com/willemdj/erlsom;
             };
           } // packageOverrides)
       ) {};
@@ -11031,7 +11031,7 @@ let
             meta = {
               description = ''Additional standard library for Erlang'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/erlware/erlware_commons";
+              homepage = https://github.com/erlware/erlware_commons;
             };
           } // packageOverrides)
       ) {};
@@ -11052,7 +11052,7 @@ let
             meta = {
               description = ''Additional standard library for Erlang'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/erlware/erlware_commons";
+              homepage = https://github.com/erlware/erlware_commons;
             };
           } // packageOverrides)
       ) {};
@@ -11075,7 +11075,7 @@ let
             meta = {
               description = ''Additional standard library for Erlang'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/erlware/erlware_commons";
+              homepage = https://github.com/erlware/erlware_commons;
             };
           } // packageOverrides)
       ) {};
@@ -11098,7 +11098,7 @@ let
             meta = {
               description = ''Additional standard library for Erlang'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/erlware/erlware_commons";
+              homepage = https://github.com/erlware/erlware_commons;
             };
           } // packageOverrides)
       ) {};
@@ -11121,7 +11121,7 @@ let
             meta = {
               description = ''Additional standard library for Erlang'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/erlware/erlware_commons";
+              homepage = https://github.com/erlware/erlware_commons;
             };
           } // packageOverrides)
       ) {};
@@ -11144,7 +11144,7 @@ let
             meta = {
               description = ''Additional standard library for Erlang'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/erlware/erlware_commons";
+              homepage = https://github.com/erlware/erlware_commons;
             };
           } // packageOverrides)
       ) {};
@@ -11167,7 +11167,7 @@ let
             meta = {
               description = ''Django Template Language for Erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/project-fifo/fifo_spec";
+              homepage = https://github.com/project-fifo/fifo_spec;
             };
           } // packageOverrides)
       ) {};
@@ -11190,7 +11190,7 @@ let
             meta = {
               description = ''Django Template Language for Erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/erlydtl/erlydtl";
+              homepage = https://github.com/erlydtl/erlydtl;
             };
           } // packageOverrides)
       ) {};
@@ -11214,7 +11214,7 @@ let
               description = ''A Pure Erlang ZooKeeper Client (no C
                             dependency)'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/huaban/erlzk";
+              homepage = https://github.com/huaban/erlzk;
             };
           } // packageOverrides)
       ) {};
@@ -11261,7 +11261,7 @@ let
               description = ''BDD testing framework for Elixir inspired by
                             RSpec.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/antonmi/espec";
+              homepage = https://github.com/antonmi/espec;
             };
           } // packageOverrides)
       ) {};
@@ -11312,7 +11312,7 @@ let
             meta = {
               description = ''A Sqlite3 NIF'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mmzeeman/esqlite";
+              homepage = https://github.com/mmzeeman/esqlite;
             };
           } // packageOverrides)
       ) {};
@@ -11337,7 +11337,7 @@ let
                                 spec. Includes tools for building an AST and
                                 generating code from it.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bryanjos/elixir-estree";
+              homepage = https://github.com/bryanjos/elixir-estree;
             };
           } // packageOverrides)
       ) {};
@@ -11361,7 +11361,7 @@ let
               description = ''Concurrently sync two or more directories so that
                             their contents are identical'';
 
-              homepage = "https://github.com/GrahamGoudeau21/ElixirSync";
+              homepage = https://github.com/GrahamGoudeau21/ElixirSync;
             };
           } // packageOverrides)
       ) {};
@@ -11384,7 +11384,7 @@ let
             meta = {
               description = ''Elixir Debugger '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/maarek/ether";
+              homepage = https://github.com/maarek/ether;
             };
           } // packageOverrides)
       ) {};
@@ -11441,7 +11441,7 @@ let
               description = ''A Map-like Elixir data structure that is backed
                             by an ETS table.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/antipax/ets_map";
+              homepage = https://github.com/antipax/ets_map;
             };
           } // packageOverrides)
       ) {};
@@ -11465,7 +11465,7 @@ let
               description = ''A simple GenServer that owns your ETS tables and
                             won`t die, even if you do.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/meyercm/ets_owner";
+              homepage = https://github.com/meyercm/ets_owner;
             };
           } // packageOverrides)
       ) {};
@@ -11496,7 +11496,7 @@ let
               description = ''parallel computation coordination utilities for
                             erlang/elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/etude";
+              homepage = https://github.com/camshaft/etude;
             };
           } // packageOverrides)
       ) {};
@@ -11525,7 +11525,7 @@ let
               description = ''parallel computation coordination utilities for
                             erlang/elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/etude";
+              homepage = https://github.com/camshaft/etude;
             };
           } // packageOverrides)
       ) {};
@@ -11548,7 +11548,7 @@ let
             meta = {
               description = ''Better output for eunit suites'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/seancribbs/eunit_formatters";
+              homepage = https://github.com/seancribbs/eunit_formatters;
             };
           } // packageOverrides)
       ) {};
@@ -11571,7 +11571,7 @@ let
             meta = {
               description = ''Helpers and sugars for eunit tests'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/xenolinguist/eunit_sugar";
+              homepage = https://github.com/xenolinguist/eunit_sugar;
             };
           } // packageOverrides)
       ) {};
@@ -11598,7 +11598,7 @@ let
             meta = {
               description = ''An Eventual Leader Election Library for Erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sile/evel";
+              homepage = https://github.com/sile/evel;
             };
           } // packageOverrides)
       ) {};
@@ -11622,7 +11622,7 @@ let
               description = ''Nanny for GenEvent restart handler when it exit
                             abnormally'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ammbot/event-nanny.git";
+              homepage = https://github.com/ammbot/event-nanny.git;
             };
           } // packageOverrides)
       ) {};
@@ -11688,7 +11688,7 @@ let
                                 response. This project is a rewrite for Elixir
                                 and Plug of basho webmachine.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/ewebmachine";
+              homepage = https://github.com/awetzel/ewebmachine;
             };
           } // packageOverrides)
       ) {};
@@ -11712,7 +11712,7 @@ let
               description = ''Translates Elixir functions to match
                             specifications for use with `ets`.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ericmj/ex2ms";
+              homepage = https://github.com/ericmj/ex2ms;
             };
           } // packageOverrides)
       ) {};
@@ -11740,7 +11740,7 @@ let
                                 any of the rules to an input and the interpreter
                                 will parse the input according to the rule.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/marcelog/ex_abnf";
+              homepage = https://github.com/marcelog/ex_abnf;
             };
           } // packageOverrides)
       ) {};
@@ -11765,7 +11765,7 @@ let
               description = ''Elixir wrapper for the OpenBSD bcrypt password
                             hashing algorithm'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/manelli/ex_bcrypt";
+              homepage = https://github.com/manelli/ex_bcrypt;
             };
           } // packageOverrides)
       ) {};
@@ -11831,7 +11831,7 @@ let
                                 [\"file-a.jpg\", \"file-b.jpg\", \"file-c.jpg\"]
                                 '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gniquil/ex_brace_expansion";
+              homepage = https://github.com/gniquil/ex_brace_expansion;
             };
           } // packageOverrides)
       ) {};
@@ -11855,7 +11855,7 @@ let
             meta = {
               description = ''A Plug that pays homage to Terry Pratchett'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/polymetis/ex_clacks";
+              homepage = https://github.com/polymetis/ex_clacks;
             };
           } // packageOverrides)
       ) {};
@@ -11878,7 +11878,7 @@ let
             meta = {
               description = ''Library to build CLI applications'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tuvistavie/ex_cli";
+              homepage = https://github.com/tuvistavie/ex_cli;
             };
           } // packageOverrides)
       ) {};
@@ -11908,7 +11908,7 @@ let
             meta = {
               description = ''Close.io client library for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/taylorbrooks/ex_closeio";
+              homepage = https://github.com/taylorbrooks/ex_closeio;
             };
           } // packageOverrides)
       ) {};
@@ -11931,7 +11931,7 @@ let
             meta = {
               description = ''Cron schedule generator for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/codestuffers/ex-cron";
+              homepage = https://github.com/codestuffers/ex-cron;
             };
           } // packageOverrides)
       ) {};
@@ -11962,7 +11962,7 @@ let
               longDescription = ''A wrapper around the Erlang Crypto module
                                 with sensible defaults for common tasks.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ntrepid8/ex_crypto";
+              homepage = https://github.com/ntrepid8/ex_crypto;
             };
           } // packageOverrides)
       ) {};
@@ -11985,7 +11985,7 @@ let
             meta = {
               description = ''CSV for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/CargoSense/ex_csv";
+              homepage = https://github.com/CargoSense/ex_csv;
             };
           } // packageOverrides)
       ) {};
@@ -12010,7 +12010,7 @@ let
               description = ''Enum library for Elixir inspired by
                             ActiveHash::Enum.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kenta-aktsk/ex_enum";
+              homepage = https://github.com/kenta-aktsk/ex_enum;
             };
           } // packageOverrides)
       ) {};
@@ -12033,7 +12033,7 @@ let
             meta = {
               description = ''Easy way to cook your structs for tests'';
 
-              homepage = "https://github.com/alterego-labs/ex_fabricators";
+              homepage = https://github.com/alterego-labs/ex_fabricators;
             };
           } // packageOverrides)
       ) {};
@@ -12059,7 +12059,7 @@ let
                                 custom rules whenever file or directories are
                                 modified.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/slashmili/ex_guard";
+              homepage = https://github.com/slashmili/ex_guard;
             };
           } // packageOverrides)
       ) {};
@@ -12082,7 +12082,7 @@ let
             meta = {
               description = ''HL7 Parser for Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/jcomellas/ex_hl7";
+              homepage = https://github.com/jcomellas/ex_hl7;
             };
           } // packageOverrides)
       ) {};
@@ -12106,7 +12106,7 @@ let
             meta = {
               description = ''ICalendar parser.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/fazibear/ex_ical";
+              homepage = https://github.com/fazibear/ex_ical;
             };
           } // packageOverrides)
       ) {};
@@ -12139,7 +12139,7 @@ let
                                 current location, crew, and when it will pass
                                 over a location.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/cryptobird/ex_iss";
+              homepage = https://github.com/cryptobird/ex_iss;
             };
           } // packageOverrides)
       ) {};
@@ -12164,7 +12164,7 @@ let
                                 the draft 4 specification and zero
                                 dependencies.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jonasschmidt/ex_json_schema";
+              homepage = https://github.com/jonasschmidt/ex_json_schema;
             };
           } // packageOverrides)
       ) {};
@@ -12187,7 +12187,7 @@ let
             meta = {
               description = ''Parse HTTP link headers in Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/simonrand/ex_link_header";
+              homepage = https://github.com/simonrand/ex_link_header;
             };
           } // packageOverrides)
       ) {};
@@ -12211,7 +12211,7 @@ let
               description = ''A factory library by the creators of
                             FactoryGirl'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/thoughtbot/ex_machina";
+              homepage = https://github.com/thoughtbot/ex_machina;
             };
           } // packageOverrides)
       ) {};
@@ -12235,7 +12235,7 @@ let
             meta = {
               description = ''Generate a PDF from Markdown file.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/darui00kara/ex_mark2pdf";
+              homepage = https://github.com/darui00kara/ex_mark2pdf;
             };
           } // packageOverrides)
       ) {};
@@ -12259,7 +12259,7 @@ let
             meta = {
               description = ''Ruby Marshal format implemented in Elixir.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/gaynetdinov/ex_marshal";
+              homepage = https://github.com/gaynetdinov/ex_marshal;
             };
           } // packageOverrides)
       ) {};
@@ -12290,7 +12290,7 @@ let
               description = ''This library provides Elixir API wrapper for the
                             Microsoft Bot Framework.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zabirauf/ex_microsoftbot";
+              homepage = https://github.com/zabirauf/ex_microsoftbot;
             };
           } // packageOverrides)
       ) {};
@@ -12323,7 +12323,7 @@ let
                                 tree. If you simply want to test whether a file
                                 path matches a glob, ExMinimatch is for you. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gniquil/ex_minimatch";
+              homepage = https://github.com/gniquil/ex_minimatch;
             };
           } // packageOverrides)
       ) {};
@@ -12346,7 +12346,7 @@ let
             meta = {
               description = ''An Elixir ModbusTCP client implementation.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hirschenberger/ex_modbus";
+              homepage = https://github.com/hirschenberger/ex_modbus;
             };
           } // packageOverrides)
       ) {};
@@ -12369,7 +12369,7 @@ let
             meta = {
               description = ''Simple macro for parametarized testing'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KazuCocoa/ex_parametarized";
+              homepage = https://github.com/KazuCocoa/ex_parametarized;
             };
           } // packageOverrides)
       ) {};
@@ -12392,7 +12392,7 @@ let
             meta = {
               description = ''Simple macro for parameterized testing'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KazuCocoa/ex_parameterized";
+              homepage = https://github.com/KazuCocoa/ex_parameterized;
             };
           } // packageOverrides)
       ) {};
@@ -12415,7 +12415,7 @@ let
             meta = {
               description = ''A generic pooling library for Elixir'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/jcabotc/ex_pool";
+              homepage = https://github.com/jcabotc/ex_pool;
             };
           } // packageOverrides)
       ) {};
@@ -12439,7 +12439,7 @@ let
             meta = {
               description = ''elixir toolbox for prima.it'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/primait/ex_toolbox";
+              homepage = https://github.com/primait/ex_toolbox;
             };
           } // packageOverrides)
       ) {};
@@ -12463,7 +12463,7 @@ let
             meta = {
               description = ''Prometheus.io Elixir client API library'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/kennyballou/ex_prometheus_io";
+              homepage = https://github.com/kennyballou/ex_prometheus_io;
             };
           } // packageOverrides)
       ) {};
@@ -12494,7 +12494,7 @@ let
                                 enforce limits for windows as narrow as
                                 milliseconds, or as broad as you like.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/grempe/ex_rated";
+              homepage = https://github.com/grempe/ex_rated;
             };
           } // packageOverrides)
       ) {};
@@ -12520,7 +12520,7 @@ let
                                 compatible with RFC3966. Uses official ABNF
                                 grammar and ex_abnf as interpreter.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/marcelog/ex_rfc3966";
+              homepage = https://github.com/marcelog/ex_rfc3966;
             };
           } // packageOverrides)
       ) {};
@@ -12546,7 +12546,7 @@ let
                                 compatible with RFC3986. Uses official ABNF
                                 grammar and ex_abnf as interpreter.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/marcelog/ex_rfc3986";
+              homepage = https://github.com/marcelog/ex_rfc3986;
             };
           } // packageOverrides)
       ) {};
@@ -12570,7 +12570,7 @@ let
               description = ''Elixir Map/List/Set interfaces for Redis
                             datastructures.'';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/ephe-meral/ex_sider";
+              homepage = https://github.com/ephe-meral/ex_sider;
             };
           } // packageOverrides)
       ) {};
@@ -12601,7 +12601,7 @@ let
             meta = {
               description = ''A Send Sonar API interface for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/enilsen16/ex_sonar";
+              homepage = https://github.com/enilsen16/ex_sonar;
             };
           } // packageOverrides)
       ) {};
@@ -12624,7 +12624,7 @@ let
             meta = {
               description = ''BDD-like syntax for ExUnit'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/drewolson/ex_spec";
+              homepage = https://github.com/drewolson/ex_spec;
             };
           } // packageOverrides)
       ) {};
@@ -12648,7 +12648,7 @@ let
               longDescription = ''Simple Elixir SSH worker that provides an
                                 Elixir shell over SSH into your application.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tverlaan/ex_sshd";
+              homepage = https://github.com/tverlaan/ex_sshd;
             };
           } // packageOverrides)
       ) {};
@@ -12671,7 +12671,7 @@ let
             meta = {
               description = ''A StatsD client for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/CargoSense/ex_statsd";
+              homepage = https://github.com/CargoSense/ex_statsd;
             };
           } // packageOverrides)
       ) {};
@@ -12703,7 +12703,7 @@ let
                                 Synchroniazation](https://neil.fraser.name/writing/sync/)
                                 in an Elixir app.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/invrs/exsync";
+              homepage = https://github.com/invrs/exsync;
             };
           } // packageOverrides)
       ) {};
@@ -12727,7 +12727,7 @@ let
               description = ''Wrapper around ExUnit to support BBD (rspec) like
                             syntax'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mcb/ex_test";
+              homepage = https://github.com/mcb/ex_test;
             };
           } // packageOverrides)
       ) {};
@@ -12788,7 +12788,7 @@ let
             meta = {
               description = ''Twilio API library for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/danielberkompas/ex_twilio";
+              homepage = https://github.com/danielberkompas/ex_twilio;
             };
           } // packageOverrides)
       ) {};
@@ -12811,7 +12811,7 @@ let
             meta = {
               description = ''Generate TwiML with Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/danielberkompas/ex_twiml";
+              homepage = https://github.com/danielberkompas/ex_twiml;
             };
           } // packageOverrides)
       ) {};
@@ -12835,7 +12835,7 @@ let
               description = ''A modular fixture system for ExUnit, inspired by
                             py.test fixtures.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/obmarg/ex_unit_fixtures";
+              homepage = https://github.com/obmarg/ex_unit_fixtures;
             };
           } // packageOverrides)
       ) {};
@@ -12858,7 +12858,7 @@ let
             meta = {
               description = ''Show status notifications for ExUnit test runs'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/navinpeiris/ex_unit_notifier";
+              homepage = https://github.com/navinpeiris/ex_unit_notifier;
             };
           } // packageOverrides)
       ) {};
@@ -12888,7 +12888,7 @@ let
             meta = {
               description = ''VictorOps API library for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/cagedata/ex_victor_ops";
+              homepage = https://github.com/cagedata/ex_victor_ops;
             };
           } // packageOverrides)
       ) {};
@@ -12912,7 +12912,7 @@ let
               description = ''An Elixir package for pushing Erlang VM stats
                             into StatsD.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/fanduel/ex_vmstats";
+              homepage = https://github.com/fanduel/ex_vmstats;
             };
           } // packageOverrides)
       ) {};
@@ -12936,7 +12936,7 @@ let
               description = ''Simplified creation of GenServer based processes
                             in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sasa1977/exactor";
+              homepage = https://github.com/sasa1977/exactor;
             };
           } // packageOverrides)
       ) {};
@@ -12961,7 +12961,7 @@ let
                                 functions that are commonly used in linear
                                 algebra.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/leighshepperson/exalgebra";
+              homepage = https://github.com/leighshepperson/exalgebra;
             };
           } // packageOverrides)
       ) {};
@@ -12992,7 +12992,7 @@ let
             meta = {
               description = ''ExAlice, a geocoder with swappable storage'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/kpanic/exalice";
+              homepage = https://github.com/kpanic/exalice;
             };
           } // packageOverrides)
       ) {};
@@ -13022,7 +13022,7 @@ let
                                 copy, and check the freshness of example files
                                 and your copies of them.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/njonsson/example_files";
+              homepage = https://github.com/njonsson/example_files;
             };
           } // packageOverrides)
       ) {};
@@ -13045,7 +13045,7 @@ let
             meta = {
               description = ''Simple exponential backoffs in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mingchuno/exbackoff";
+              homepage = https://github.com/mingchuno/exbackoff;
             };
           } // packageOverrides)
       ) {};
@@ -13071,7 +13071,7 @@ let
                                 current user/admin or any role is allowed to
                                 access,'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/vysakh0/exbouncer";
+              homepage = https://github.com/vysakh0/exbouncer;
             };
           } // packageOverrides)
       ) {};
@@ -13095,7 +13095,7 @@ let
               description = ''Fast image dimension detector inspired by the
                             Node.JS module Calipers.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mgartner/excaliper";
+              homepage = https://github.com/mgartner/excaliper;
             };
           } // packageOverrides)
       ) {};
@@ -13119,7 +13119,7 @@ let
               description = ''A OpenXL (Excel files ending with .xlsx) parser
                             for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/leifg/excellent";
+              homepage = https://github.com/leifg/excellent;
             };
           } // packageOverrides)
       ) {};
@@ -13149,7 +13149,7 @@ let
             meta = {
               description = ''Elixir bindings for etcd`s HTTP API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mingchuno/excetera";
+              homepage = https://github.com/mingchuno/excetera;
             };
           } // packageOverrides)
       ) {};
@@ -13172,7 +13172,7 @@ let
             meta = {
               description = ''CoAP implementation for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mbialon/excoap";
+              homepage = https://github.com/mbialon/excoap;
             };
           } // packageOverrides)
       ) {};
@@ -13224,7 +13224,7 @@ let
                                 camelCase-vs-under_score issues
                                 automatically.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/appcues/exconstructor";
+              homepage = https://github.com/appcues/exconstructor;
             };
           } // packageOverrides)
       ) {};
@@ -13247,7 +13247,7 @@ let
             meta = {
               description = ''Lodash implementation for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/TFarla/exdash";
+              homepage = https://github.com/TFarla/exdash;
             };
           } // packageOverrides)
       ) {};
@@ -13270,7 +13270,7 @@ let
             meta = {
               description = ''A RFC 2397 URI parser for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/flupke/exdatauri";
+              homepage = https://github.com/flupke/exdatauri;
             };
           } // packageOverrides)
       ) {};
@@ -13295,7 +13295,7 @@ let
               description = ''Simple library for working with data in
                             DynamoDB.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/muhmi/exddb";
+              homepage = https://github.com/muhmi/exddb;
             };
           } // packageOverrides)
       ) {};
@@ -13325,7 +13325,7 @@ let
             meta = {
               description = ''Desk.com client library for elixir.'';
 
-              homepage = "https://github.com/deadkarma/exdesk";
+              homepage = https://github.com/deadkarma/exdesk;
             };
           } // packageOverrides)
       ) {};
@@ -13350,7 +13350,7 @@ let
               description = ''Elixir client library for Disque:
                             https://github.com/antirez/disque'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mosic/exdisque";
+              homepage = https://github.com/mosic/exdisque;
             };
           } // packageOverrides)
       ) {};
@@ -13376,7 +13376,7 @@ let
             meta = {
               description = ''OS Process Manager'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/saleyn/erlexec";
+              homepage = https://github.com/saleyn/erlexec;
             };
           } // packageOverrides)
       ) {};
@@ -13400,7 +13400,7 @@ let
             meta = {
               description = ''Run JavaScript code from Elixir'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/devinus/execjs";
+              homepage = https://github.com/devinus/execjs;
             };
           } // packageOverrides)
       ) {};
@@ -13425,7 +13425,7 @@ let
                                 syntax. (even 2 times faster than Plug on
                                 Cowboy) '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pigmej/exelli";
+              homepage = https://github.com/pigmej/exelli;
             };
           } // packageOverrides)
       ) {};
@@ -13449,7 +13449,7 @@ let
             meta = {
               description = ''An idiomatic Elixir wrapper for erlexec.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/antipax/exexec";
+              homepage = https://github.com/antipax/exexec;
             };
           } // packageOverrides)
       ) {};
@@ -13500,7 +13500,7 @@ let
                                 :sensitivity_type, :sharpness, :white_balance]
                                 '';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/pragdave/exexif";
+              homepage = https://github.com/pragdave/exexif;
             };
           } // packageOverrides)
       ) {};
@@ -13530,7 +13530,7 @@ let
             meta = {
               description = ''A exfavicon to detect a site`s favicon.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ikeikeikeike/exfavicon";
+              homepage = https://github.com/ikeikeikeike/exfavicon;
             };
           } // packageOverrides)
       ) {};
@@ -13561,7 +13561,7 @@ let
               description = ''An elixir library for accessing the Firebase REST
                             API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/parroty/exfirebase";
+              homepage = https://github.com/parroty/exfirebase;
             };
           } // packageOverrides)
       ) {};
@@ -13591,7 +13591,7 @@ let
             meta = {
               description = ''brings the utility of FOAAS to elixir.'';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/cryptobird/ExFOAAS.git";
+              homepage = https://github.com/cryptobird/ExFOAAS.git;
             };
           } // packageOverrides)
       ) {};
@@ -13616,7 +13616,7 @@ let
                                 FSM as function (not related at all with
                                 `:gen_fsm`, no state/process management)'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/exfsm";
+              homepage = https://github.com/awetzel/exfsm;
             };
           } // packageOverrides)
       ) {};
@@ -13641,7 +13641,7 @@ let
               description = ''A file change watcher wrapper based on
                             [fs](https://github.com/synrc/fs)'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/falood/exfswatch";
+              homepage = https://github.com/falood/exfswatch;
             };
           } // packageOverrides)
       ) {};
@@ -13664,7 +13664,7 @@ let
             meta = {
               description = ''Brainfuck interpreter written in elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/shiroyasha/exfuck";
+              homepage = https://github.com/shiroyasha/exfuck;
             };
           } // packageOverrides)
       ) {};
@@ -13696,7 +13696,7 @@ let
                                 Genius (and also Rock, Tech, Pop, Country, etc)
                                 API '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jeffweiss/exgenius";
+              homepage = https://github.com/jeffweiss/exgenius;
             };
           } // packageOverrides)
       ) {};
@@ -13727,7 +13727,7 @@ let
               description = ''Elixir wrapper for ginger proofreading API
                             (english)'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/nathanjohnson320/exgingerapi";
+              homepage = https://github.com/nathanjohnson320/exgingerapi;
             };
           } // packageOverrides)
       ) {};
@@ -13750,7 +13750,7 @@ let
             meta = {
               description = ''An Elixir module for generating Gravatar urls.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/scrogson/exgravatar";
+              homepage = https://github.com/scrogson/exgravatar;
             };
           } // packageOverrides)
       ) {};
@@ -13773,7 +13773,7 @@ let
             meta = {
               description = ''Configuration language inspired by HCL'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/asakura/exhcl";
+              homepage = https://github.com/asakura/exhcl;
             };
           } // packageOverrides)
       ) {};
@@ -13797,7 +13797,7 @@ let
               description = ''Library for manipulating and validating IBAN
                             account numbers.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kkempin/exiban";
+              homepage = https://github.com/kkempin/exiban;
             };
           } // packageOverrides)
       ) {};
@@ -13820,7 +13820,7 @@ let
             meta = {
               description = ''An IRC client library for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bitwalker/exirc";
+              homepage = https://github.com/bitwalker/exirc;
             };
           } // packageOverrides)
       ) {};
@@ -13841,7 +13841,7 @@ let
             meta = {
               description = ''An IRC client library for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bitwalker/exirc";
+              homepage = https://github.com/bitwalker/exirc;
             };
           } // packageOverrides)
       ) {};
@@ -13865,7 +13865,7 @@ let
               description = ''A simple Elixir implementation of JSON with an
                             Erlang parser.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/guedes/exjson";
+              homepage = https://github.com/guedes/exjson;
             };
           } // packageOverrides)
       ) {};
@@ -13889,7 +13889,7 @@ let
             meta = {
               description = ''json for elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/exjsx";
+              homepage = https://github.com/talentdeficit/exjsx;
             };
           } // packageOverrides)
       ) {};
@@ -13911,7 +13911,7 @@ let
             meta = {
               description = ''json for elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/exjsx";
+              homepage = https://github.com/talentdeficit/exjsx;
             };
           } // packageOverrides)
       ) {};
@@ -13933,7 +13933,7 @@ let
             meta = {
               description = ''json for elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/exjsx";
+              homepage = https://github.com/talentdeficit/exjsx;
             };
           } // packageOverrides)
       ) {};
@@ -13959,7 +13959,7 @@ let
                                 hiragana, katakana, romaji and kanji. It uses
                                 Mecab.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ikeikeikeike/exkanji";
+              homepage = https://github.com/ikeikeikeike/exkanji;
             };
           } // packageOverrides)
       ) {};
@@ -13990,7 +13990,7 @@ let
               description = ''A client (completely unofficial) for the
                             Akismet.com comment-spam detection API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/cameronp/exkismet";
+              homepage = https://github.com/cameronp/exkismet;
             };
           } // packageOverrides)
       ) {};
@@ -14013,7 +14013,7 @@ let
             meta = {
               description = ''A module for working with LDAP from Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jmerriweather/exldap";
+              homepage = https://github.com/jmerriweather/exldap;
             };
           } // packageOverrides)
       ) {};
@@ -14052,7 +14052,7 @@ let
                                 need to include it as a separate dependency in
                                 your project (See `README.md`).'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/skovsgaard/exleveldb.git";
+              homepage = https://github.com/skovsgaard/exleveldb.git;
             };
           } // packageOverrides)
       ) {};
@@ -14082,7 +14082,7 @@ let
                                 do block. It always returns the value of its
                                 first argument. '';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/pragdave/exlibris";
+              homepage = https://github.com/pragdave/exlibris;
             };
           } // packageOverrides)
       ) {};
@@ -14105,7 +14105,7 @@ let
             meta = {
               description = ''Lingr client library for elixir. '';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/mtwtkman/exlingr";
+              homepage = https://github.com/mtwtkman/exlingr;
             };
           } // packageOverrides)
       ) {};
@@ -14131,7 +14131,7 @@ let
                                 matrices, originally developed for testing
                                 matrix multiplication in parallel.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/a115/exmatrix";
+              homepage = https://github.com/a115/exmatrix;
             };
           } // packageOverrides)
       ) {};
@@ -14155,7 +14155,7 @@ let
               description = ''An Elixir wrapper for parsing XML through the
                             xmerl_* suite of modules '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pwoolcoc/exmerl";
+              homepage = https://github.com/pwoolcoc/exmerl;
             };
           } // packageOverrides)
       ) {};
@@ -14226,7 +14226,7 @@ let
               description = ''Emoji encoding swiss army knife for dealing with
                             Unicode and other gotchas.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mroth/exmoji";
+              homepage = https://github.com/mroth/exmoji;
             };
           } // packageOverrides)
       ) {};
@@ -14260,7 +14260,7 @@ let
               longDescription = ''A library for writing clients to communicate
                                 with Python nanoservices via nanomsg.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/walkr/exns";
+              homepage = https://github.com/walkr/exns;
             };
           } // packageOverrides)
       ) {};
@@ -14284,7 +14284,7 @@ let
               description = ''Enumerable type definition in a simple way to be
                             used with any database.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KamilLelonek/exnumerable";
+              homepage = https://github.com/KamilLelonek/exnumerable;
             };
           } // packageOverrides)
       ) {};
@@ -14308,7 +14308,7 @@ let
               description = ''Enumerable type definition in a simple way to be
                             used with any database.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KamilLelonek/exnumerator";
+              homepage = https://github.com/KamilLelonek/exnumerator;
             };
           } // packageOverrides)
       ) {};
@@ -14332,7 +14332,7 @@ let
               description = ''Enumerable type definition in a simple way to be
                             used with any database.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KamilLelonek/exnumterator";
+              homepage = https://github.com/KamilLelonek/exnumterator;
             };
           } // packageOverrides)
       ) {};
@@ -14355,7 +14355,7 @@ let
             meta = {
               description = ''Odds and probability handling and conversions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/exoddic";
+              homepage = https://github.com/mwmiller/exoddic;
             };
           } // packageOverrides)
       ) {};
@@ -14378,7 +14378,7 @@ let
             meta = {
               description = ''A pretty printer'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joeyates/expand";
+              homepage = https://github.com/joeyates/expand;
             };
           } // packageOverrides)
       ) {};
@@ -14409,7 +14409,7 @@ let
               description = ''ExParticle is an elixir client to communicate
                             with Particle Cloud API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mtanzi/exparticle";
+              homepage = https://github.com/mtanzi/exparticle;
             };
           } // packageOverrides)
       ) {};
@@ -14433,7 +14433,7 @@ let
               description = ''Experiment is a library for carefully refactoring
                             critical paths in production.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/andrewvy/experiment";
+              homepage = https://github.com/andrewvy/experiment;
             };
           } // packageOverrides)
       ) {};
@@ -14464,7 +14464,7 @@ let
             meta = {
               description = ''A simple elixir pinboard client.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/thilko/expinboard";
+              homepage = https://github.com/thilko/expinboard;
             };
           } // packageOverrides)
       ) {};
@@ -14487,7 +14487,7 @@ let
             meta = {
               description = ''Profanity detection and sanitization library'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/xavier/expletive";
+              homepage = https://github.com/xavier/expletive;
             };
           } // packageOverrides)
       ) {};
@@ -14510,7 +14510,7 @@ let
             meta = {
               description = ''Simple process pooling and task submission'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zackehh/expool";
+              homepage = https://github.com/zackehh/expool;
             };
           } // packageOverrides)
       ) {};
@@ -14533,7 +14533,7 @@ let
             meta = {
               description = ''Erlport wrapper for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/fazibear/export";
+              homepage = https://github.com/fazibear/export;
             };
           } // packageOverrides)
       ) {};
@@ -14557,7 +14557,7 @@ let
               description = ''An Elixir library for parsing and evaluating
                             mathematical expressions '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Rob-bie/Expr";
+              homepage = https://github.com/Rob-bie/Expr;
             };
           } // packageOverrides)
       ) {};
@@ -14581,7 +14581,7 @@ let
               description = ''A printf / sprintf library for Elixir. It works
                             as a wrapper for :io.format. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/parroty/exprintf";
+              homepage = https://github.com/parroty/exprintf;
             };
           } // packageOverrides)
       ) {};
@@ -14606,7 +14606,7 @@ let
               description = ''A simple code profiler for Elixir using eprof.
                             '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/parroty/exprof";
+              homepage = https://github.com/parroty/exprof;
             };
           } // packageOverrides)
       ) {};
@@ -14630,7 +14630,7 @@ let
             meta = {
               description = ''A functional query tool for MSSQL.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mattweldon/exql";
+              homepage = https://github.com/mattweldon/exql;
             };
           } // packageOverrides)
       ) {};
@@ -14653,7 +14653,7 @@ let
             meta = {
               description = ''DSL to match_spec'';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/meh/exquisite";
+              homepage = https://github.com/meh/exquisite;
             };
           } // packageOverrides)
       ) {};
@@ -14677,7 +14677,7 @@ let
             meta = {
               description = ''Redis client for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/artemeff/exredis";
+              homepage = https://github.com/artemeff/exredis;
             };
           } // packageOverrides)
       ) {};
@@ -14730,7 +14730,7 @@ let
               description = ''Quickly create API clients using module
                             attributes.'';
 
-              homepage = "https://github.com/oarrabi/exrequester";
+              homepage = https://github.com/oarrabi/exrequester;
             };
           } // packageOverrides)
       ) {};
@@ -14754,7 +14754,7 @@ let
             meta = {
               description = ''RethinkDB driver for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hamiltop/exrethinkdb";
+              homepage = https://github.com/hamiltop/exrethinkdb;
             };
           } // packageOverrides)
       ) {};
@@ -14778,7 +14778,7 @@ let
               description = ''A Elixir library for translating between
                             hiragana, katakana, and romaji.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ikeikeikeike/exromaji";
+              homepage = https://github.com/ikeikeikeike/exromaji;
             };
           } // packageOverrides)
       ) {};
@@ -14803,7 +14803,7 @@ let
                                 tracing tools for running elixir and erlang
                                 applications'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/liveforeverx/exrun";
+              homepage = https://github.com/liveforeverx/exrun;
             };
           } // packageOverrides)
       ) {};
@@ -14827,7 +14827,7 @@ let
               longDescription = ''Initializes lists of maps, structs or keyword
                                 lists using tabular data in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/msaraiva/exsamples";
+              homepage = https://github.com/msaraiva/exsamples;
             };
           } // packageOverrides)
       ) {};
@@ -14850,7 +14850,7 @@ let
             meta = {
               description = ''Escript generator '';
 
-              homepage = "https://github.com/liveforeverx/exscript";
+              homepage = https://github.com/liveforeverx/exscript;
             };
           } // packageOverrides)
       ) {};
@@ -14880,7 +14880,7 @@ let
             meta = {
               description = ''Thin Wrapper around Solr api.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/dcarneiro/exsolr";
+              homepage = https://github.com/dcarneiro/exsolr;
             };
           } // packageOverrides)
       ) {};
@@ -14910,7 +14910,7 @@ let
                                 them fast and without a dependency on a
                                 filesystem.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/arjan/exstatic";
+              homepage = https://github.com/arjan/exstatic;
             };
           } // packageOverrides)
       ) {};
@@ -14934,7 +14934,7 @@ let
             meta = {
               description = ''An Elixir ports client for StatsD'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/upbit/ExStatsD";
+              homepage = https://github.com/upbit/ExStatsD;
             };
           } // packageOverrides)
       ) {};
@@ -14958,7 +14958,7 @@ let
             meta = {
               description = ''Yet another Elixir reloader.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/falood/exsync";
+              homepage = https://github.com/falood/exsync;
             };
           } // packageOverrides)
       ) {};
@@ -14988,7 +14988,7 @@ let
             meta = {
               description = ''Stripe API wrapper'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/princemaple/extripe";
+              homepage = https://github.com/princemaple/extripe;
             };
           } // packageOverrides)
       ) {};
@@ -15014,7 +15014,7 @@ let
             meta = {
               description = ''ets wrapper'';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/meh/exts";
+              homepage = https://github.com/meh/exts;
             };
           } // packageOverrides)
       ) {};
@@ -15038,7 +15038,7 @@ let
             meta = {
               description = ''Twitter client library for elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/parroty/extwitter";
+              homepage = https://github.com/parroty/extwitter;
             };
           } // packageOverrides)
       ) {};
@@ -15078,7 +15078,7 @@ let
               description = ''HTTP request/response recording library for
                             elixir, inspired by VCR.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/parroty/exvcr";
+              homepage = https://github.com/parroty/exvcr;
             };
           } // packageOverrides)
       ) {};
@@ -15116,7 +15116,7 @@ let
               description = ''HTTP request/response recording library for
                             elixir, inspired by VCR.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/parroty/exvcr";
+              homepage = https://github.com/parroty/exvcr;
             };
           } // packageOverrides)
       ) {};
@@ -15147,7 +15147,7 @@ let
             meta = {
               description = ''An Elixir Yelp API client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gaslight/exyelp";
+              homepage = https://github.com/gaslight/exyelp;
             };
           } // packageOverrides)
       ) {};
@@ -15171,7 +15171,7 @@ let
               description = ''Z-combinator in elixir: recursive anonymous
                             functions.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/Dkendal/exyz";
+              homepage = https://github.com/Dkendal/exyz;
             };
           } // packageOverrides)
       ) {};
@@ -15197,7 +15197,7 @@ let
                                 Watch file changes in a project and run the
                                 corresponding command when a change happens.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rkotze/eye_drops";
+              homepage = https://github.com/rkotze/eye_drops;
             };
           } // packageOverrides)
       ) {};
@@ -15223,7 +15223,7 @@ let
                                 encrypting/decrypting, signing/verifying data in
                                 elixir. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stocks29/ezcryptex";
+              homepage = https://github.com/stocks29/ezcryptex;
             };
           } // packageOverrides)
       ) {};
@@ -15255,7 +15255,7 @@ let
               longDescription = ''ExFacebookMessenger is a library that easy
                                 the creation of facebook messenger bots.'';
 
-              homepage = "https://github.com/oarrabi/facebook_messenger";
+              homepage = https://github.com/oarrabi/facebook_messenger;
             };
           } // packageOverrides)
       ) {};
@@ -15279,7 +15279,7 @@ let
               description = ''Minimal implementation of Ruby`s factory_girl in
                             Elixir. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sinetris/factory_girl_elixir";
+              homepage = https://github.com/sinetris/factory_girl_elixir;
             };
           } // packageOverrides)
       ) {};
@@ -15310,7 +15310,7 @@ let
             meta = {
               description = ''A Cas server stub'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rhruiz/elixir-fake_cas";
+              homepage = https://github.com/rhruiz/elixir-fake_cas;
             };
           } // packageOverrides)
       ) {};
@@ -15334,7 +15334,7 @@ let
               description = ''Faker is a pure Elixir library for generating
                             fake data.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/igas/faker";
+              homepage = https://github.com/igas/faker;
             };
           } // packageOverrides)
       ) {};
@@ -15359,7 +15359,7 @@ let
               description = ''FASTA is a tool for parsing FASTA-formatted
                             strings in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/annejohnson/FASTA";
+              homepage = https://github.com/annejohnson/FASTA;
             };
           } // packageOverrides)
       ) {};
@@ -15382,7 +15382,7 @@ let
             meta = {
               description = ''A Markov chain text generator for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/jquadrin/faust";
+              homepage = https://github.com/jquadrin/faust;
             };
           } // packageOverrides)
       ) {};
@@ -15408,7 +15408,7 @@ let
                                 FDG will be used to produce visualiations of
                                 networks and static analysis of code.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/johnhamelink/elixir-fdg";
+              homepage = https://github.com/johnhamelink/elixir-fdg;
             };
           } // packageOverrides)
       ) {};
@@ -15433,7 +15433,7 @@ let
               description = ''This is a simple feature toggler/switch with
                             redis database written in elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/aravindgd/feature_toggler";
+              homepage = https://github.com/aravindgd/feature_toggler;
             };
           } // packageOverrides)
       ) {};
@@ -15457,7 +15457,7 @@ let
               description = ''Stream parse RSS and Atom formatted XML feeds.
                             '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/michaelnisi/feeder";
+              homepage = https://github.com/michaelnisi/feeder;
             };
           } // packageOverrides)
       ) {};
@@ -15479,7 +15479,7 @@ let
               description = ''Stream parse RSS and Atom formatted XML feeds.
                             '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/michaelnisi/feeder";
+              homepage = https://github.com/michaelnisi/feeder;
             };
           } // packageOverrides)
       ) {};
@@ -15503,7 +15503,7 @@ let
             meta = {
               description = ''RSS feed parser. Simple wrapper for feeder.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/manukall/feeder_ex";
+              homepage = https://github.com/manukall/feeder_ex;
             };
           } // packageOverrides)
       ) {};
@@ -15529,7 +15529,7 @@ let
                                 Atom, etc. Elixir feedparser wrapper using
                                 erlport.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/draftli/feederer";
+              homepage = https://github.com/draftli/feederer;
             };
           } // packageOverrides)
       ) {};
@@ -15554,7 +15554,7 @@ let
               description = ''Elixir RSS/Atom parser built on erlang`s xmerl
                             xml parser'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/umurgdk/elixir-feedme";
+              homepage = https://github.com/umurgdk/elixir-feedme;
             };
           } // packageOverrides)
       ) {};
@@ -15577,7 +15577,7 @@ let
             meta = {
               description = ''Discover and parse RSS and Atom feeds'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/l3kn/Elixir-Feedparser";
+              homepage = https://github.com/l3kn/Elixir-Feedparser;
             };
           } // packageOverrides)
       ) {};
@@ -15602,7 +15602,7 @@ let
               description = ''Elixir implementation of Fernet library based on
                             https://github.com/fernet/spec'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kennyp/fernetex";
+              homepage = https://github.com/kennyp/fernetex;
             };
           } // packageOverrides)
       ) {};
@@ -15664,7 +15664,7 @@ let
             meta = {
               description = ''Fixed size FIFO cache implementation'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/mururu/fifocache";
+              homepage = https://github.com/mururu/fifocache;
             };
           } // packageOverrides)
       ) {};
@@ -15688,7 +15688,7 @@ let
               description = ''Environmental variables manager and configuration
                             management tool.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KamilLelonek/figaro-elixir";
+              homepage = https://github.com/KamilLelonek/figaro-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -15715,7 +15715,7 @@ let
               description = ''Get MIME-type of a file by its magic number
                             (linux only)'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/NobbZ/file_info";
+              homepage = https://github.com/NobbZ/file_info;
             };
           } // packageOverrides)
       ) {};
@@ -15794,7 +15794,7 @@ let
                                 Firmata is a MIDI-based protocol for
                                 communicating with microcontrollers.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/kfatehi/firmata";
+              homepage = https://github.com/kfatehi/firmata;
             };
           } // packageOverrides)
       ) {};
@@ -15818,7 +15818,7 @@ let
               description = ''FIXBY comments that raise after a given version
                             of Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/CoderDennis/fixby-elixir";
+              homepage = https://github.com/CoderDennis/fixby-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -15842,7 +15842,7 @@ let
               description = ''FIXME comments that raise after a certain point
                             in time.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/henrik/fixme-elixir";
+              homepage = https://github.com/henrik/fixme-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -15870,7 +15870,7 @@ let
                                 principle or which are deployed in
                                 containerization infrastructures like Docker.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/asaaki/flasked";
+              homepage = https://github.com/asaaki/flasked;
             };
           } // packageOverrides)
       ) {};
@@ -15893,7 +15893,7 @@ let
             meta = {
               description = ''Distributed Services '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/chrismccord/flock";
+              homepage = https://github.com/chrismccord/flock;
             };
           } // packageOverrides)
       ) {};
@@ -15917,7 +15917,7 @@ let
               description = ''Floki is a simple HTML parser that enables search
                             for nodes using CSS selectors.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/philss/floki";
+              homepage = https://github.com/philss/floki;
             };
           } // packageOverrides)
       ) {};
@@ -15940,7 +15940,7 @@ let
               description = ''Floki is a simple HTML parser that enables search
                             for nodes using CSS selectors.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/philss/floki";
+              homepage = https://github.com/philss/floki;
             };
           } // packageOverrides)
       ) {};
@@ -15963,7 +15963,7 @@ let
               description = ''Floki is a simple HTML parser that enables search
                             for nodes using CSS selectors.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/philss/floki";
+              homepage = https://github.com/philss/floki;
             };
           } // packageOverrides)
       ) {};
@@ -15988,7 +15988,7 @@ let
               description = ''Floki is a simple HTML parser that enables search
                             for nodes using CSS selectors.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/philss/floki";
+              homepage = https://github.com/philss/floki;
             };
           } // packageOverrides)
       ) {};
@@ -16011,7 +16011,7 @@ let
             meta = {
               description = ''An InfluxDB writer for Elixir'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/lexmag/fluxter";
+              homepage = https://github.com/lexmag/fluxter;
             };
           } // packageOverrides)
       ) {};
@@ -16034,7 +16034,7 @@ let
             meta = {
               description = ''More functional Erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/artemeff/fn";
+              homepage = https://github.com/artemeff/fn;
             };
           } // packageOverrides)
       ) {};
@@ -16060,7 +16060,7 @@ let
                                 Elixir. Heavily inspired by ActiveSupport`s
                                 String extensions (Ruby).'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/asaaki/strinx.ex";
+              homepage = https://github.com/asaaki/strinx.ex;
             };
           } // packageOverrides)
       ) {};
@@ -16141,7 +16141,7 @@ let
               description = ''Elixir library for the Force.com / SalesForce /
                             SFDC REST API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jeffweiss/forcex";
+              homepage = https://github.com/jeffweiss/forcex;
             };
           } // packageOverrides)
       ) {};
@@ -16171,7 +16171,7 @@ let
             meta = {
               description = ''Simple wrapper for Forecast.IO API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/r-icarus/forecast_io";
+              homepage = https://github.com/r-icarus/forecast_io;
             };
           } // packageOverrides)
       ) {};
@@ -16198,7 +16198,7 @@ let
                                 uri, dicts, integers, functions, parallel,
                                 records, random, and time'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/foxnewsnetwork/fox";
+              homepage = https://github.com/foxnewsnetwork/fox;
             };
           } // packageOverrides)
       ) {};
@@ -16229,7 +16229,7 @@ let
               description = ''Simple Elixir wrapper for freegeoip.net HTTP
                             API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/juljimm/freegeoip-elixir";
+              homepage = https://github.com/juljimm/freegeoip-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -16255,7 +16255,7 @@ let
                                 API in Elixir land. CSS selector in, list of
                                 elements out.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/qertoip/friendly/";
+              homepage = https://github.com/qertoip/friendly/;
             };
           } // packageOverrides)
       ) {};
@@ -16302,7 +16302,7 @@ let
               description = ''Finite state machine as a functional data
                             structure.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sasa1977/fsm";
+              homepage = https://github.com/sasa1977/fsm;
             };
           } // packageOverrides)
       ) {};
@@ -16326,7 +16326,7 @@ let
             meta = {
               description = ''Extendable testing utilities for Plug'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/fugue";
+              homepage = https://github.com/camshaft/fugue;
             };
           } // packageOverrides)
       ) {};
@@ -16361,7 +16361,7 @@ let
                                 only have to make minor changes to your
                                 controllers, to work with Fulcrum.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pinx/fulcrum";
+              homepage = https://github.com/pinx/fulcrum;
             };
           } // packageOverrides)
       ) {};
@@ -16414,7 +16414,7 @@ let
             meta = {
               description = ''Elixir client for the Nu HTML Checker'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sitevalidator/funchaku";
+              homepage = https://github.com/sitevalidator/funchaku;
             };
           } // packageOverrides)
       ) {};
@@ -16470,7 +16470,7 @@ let
             meta = {
               description = ''Web page inspector for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sitevalidator/funkspector";
+              homepage = https://github.com/sitevalidator/funkspector;
             };
           } // packageOverrides)
       ) {};
@@ -16493,7 +16493,7 @@ let
             meta = {
               description = ''A Circuit breaker implementation for Erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jlouis/fuse";
+              homepage = https://github.com/jlouis/fuse;
             };
           } // packageOverrides)
       ) {};
@@ -16517,7 +16517,7 @@ let
               longDescription = ''Fuzzyurl is a library for non-strict parsing,
                                 construction, and fuzzy-matching of URLs.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/gamache/fuzzyurl.ex";
+              homepage = https://github.com/gamache/fuzzyurl.ex;
             };
           } // packageOverrides)
       ) {};
@@ -16547,7 +16547,7 @@ let
             meta = {
               description = ''A file watcher for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ryo33/fwatch-ex";
+              homepage = https://github.com/ryo33/fwatch-ex;
             };
           } // packageOverrides)
       ) {};
@@ -16571,7 +16571,7 @@ let
               description = ''Distributed Game of Life with Board Server API.
                             Run it on multiple nodes.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/BeyondScheme/elixir-game_of_life";
+              homepage = https://github.com/BeyondScheme/elixir-game_of_life;
             };
           } // packageOverrides)
       ) {};
@@ -16594,7 +16594,7 @@ let
             meta = {
               description = ''Authorization for Phoenix projects'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rpelyush/gardien";
+              homepage = https://github.com/rpelyush/gardien;
             };
           } // packageOverrides)
       ) {};
@@ -16620,7 +16620,7 @@ let
                                 with plain elixir or beneath a phoenix
                                 project.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/faber-lotto/garph";
+              homepage = https://github.com/faber-lotto/garph;
             };
           } // packageOverrides)
       ) {};
@@ -16644,7 +16644,7 @@ let
               description = ''An opinionated authorization framework for Elixir
                             projects.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/austinsmorris/gatekeeper";
+              homepage = https://github.com/austinsmorris/gatekeeper;
             };
           } // packageOverrides)
       ) {};
@@ -16677,7 +16677,7 @@ let
                                 build clients to communicate with JSON REST
                                 APIs'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/foxnewsnetwork/gateway";
+              homepage = https://github.com/foxnewsnetwork/gateway;
             };
           } // packageOverrides)
       ) {};
@@ -16702,7 +16702,7 @@ let
               description = ''The Elixir implementation for looking up the
                             Chinese administrative divisions.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/LcpMarvel/gb2260";
+              homepage = https://github.com/LcpMarvel/gb2260;
             };
           } // packageOverrides)
       ) {};
@@ -16725,7 +16725,7 @@ let
             meta = {
               description = ''A crude genetic programming library.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/0010-IO/gealts";
+              homepage = https://github.com/0010-IO/gealts;
             };
           } // packageOverrides)
       ) {};
@@ -16751,7 +16751,7 @@ let
                                 Extended Log Format messages and send them to a
                                 compatible server.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jschniper/gelf_logger";
+              homepage = https://github.com/jschniper/gelf_logger;
             };
           } // packageOverrides)
       ) {};
@@ -16782,7 +16782,7 @@ let
               description = ''Elixir client for logging GELF messages to
                             Graylog.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/donpinkster/gelfex";
+              homepage = https://github.com/donpinkster/gelfex;
             };
           } // packageOverrides)
       ) {};
@@ -16806,7 +16806,7 @@ let
               description = ''Easy delegation of internal function to a
                             GenServer interface'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zackehh/gen_delegate";
+              homepage = https://github.com/zackehh/gen_delegate;
             };
           } // packageOverrides)
       ) {};
@@ -16829,7 +16829,7 @@ let
             meta = {
               description = ''Elixir wrapper around Erlang`s OTP gen_fsm.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pavlos/gen_fsm";
+              homepage = https://github.com/pavlos/gen_fsm;
             };
           } // packageOverrides)
       ) {};
@@ -16850,7 +16850,7 @@ let
             meta = {
               description = ''Elixir wrapper around Erlang`s OTP gen_fsm.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pavlos/gen_fsm";
+              homepage = https://github.com/pavlos/gen_fsm;
             };
           } // packageOverrides)
       ) {};
@@ -16873,7 +16873,7 @@ let
             meta = {
               description = ''Generic TCP Server'';
 
-              homepage = "https://github.com/travelping/gen_listener_tcp";
+              homepage = https://github.com/travelping/gen_listener_tcp;
             };
           } // packageOverrides)
       ) {};
@@ -16897,7 +16897,7 @@ let
               description = ''An Elixir behaviour that makes it possible to
                             communicate with a MQTT server'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/gausby/gen_mqtt";
+              homepage = https://github.com/gausby/gen_mqtt;
             };
           } // packageOverrides)
       ) {};
@@ -16925,7 +16925,7 @@ let
                                 Elixir functions, with configurable delay and
                                 backoff characteristics.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/appcues/gen_retry";
+              homepage = https://github.com/appcues/gen_retry;
             };
           } // packageOverrides)
       ) {};
@@ -16948,7 +16948,7 @@ let
             meta = {
               description = ''A generic Erlang SMTP server/client framework'';
               license = stdenv.lib.licenses.bsd2;
-              homepage = "https://github.com/Vagabond/gen_smtp";
+              homepage = https://github.com/Vagabond/gen_smtp;
             };
           } // packageOverrides)
       ) {};
@@ -16971,7 +16971,7 @@ let
             meta = {
               description = ''A generic Erlang SMTP server/client framework'';
               license = stdenv.lib.licenses.bsd2;
-              homepage = "https://github.com/Vagabond/gen_smtp";
+              homepage = https://github.com/Vagabond/gen_smtp;
             };
           } // packageOverrides)
       ) {};
@@ -16993,7 +16993,7 @@ let
               description = ''Gendex tells you the most likely gender of a
                             person based on first name.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dre1080/gendex";
+              homepage = https://github.com/dre1080/gendex;
             };
           } // packageOverrides)
       ) {};
@@ -17017,7 +17017,7 @@ let
               description = ''Calculate distance, bearing and more between
                             latitude/longitude points.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yltsrc/geocalc";
+              homepage = https://github.com/yltsrc/geocalc;
             };
           } // packageOverrides)
       ) {};
@@ -17041,7 +17041,7 @@ let
               description = ''Geohash encode/decode implementation for
                             Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/polmuz/elixir-geohash";
+              homepage = https://github.com/polmuz/elixir-geohash;
             };
           } // packageOverrides)
       ) {};
@@ -17065,7 +17065,7 @@ let
               description = ''Periodically fetches the free MaxMind GeoLite2
                             databases'';
               license = stdenv.lib.licenses.mpl20;
-              homepage = "https://github.com/potatosalad/erlang-geolite2data";
+              homepage = https://github.com/potatosalad/erlang-geolite2data;
             };
           } // packageOverrides)
       ) {};
@@ -17089,7 +17089,7 @@ let
             meta = {
               description = ''MaxMind GeoIP2 database reader/decoder'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mneudert/geolix";
+              homepage = https://github.com/mneudert/geolix;
             };
           } // packageOverrides)
       ) {};
@@ -17112,7 +17112,7 @@ let
             meta = {
               description = ''Command-line options parser for Erlang'';
 
-              homepage = "https://github.com/jcomellas/getopt";
+              homepage = https://github.com/jcomellas/getopt;
             };
           } // packageOverrides)
       ) {};
@@ -17136,7 +17136,7 @@ let
               description = ''Internationalization and localization through
                             gettext'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/elixir-lang/gettext";
+              homepage = https://github.com/elixir-lang/gettext;
             };
           } // packageOverrides)
       ) {};
@@ -17158,7 +17158,7 @@ let
               description = ''Internationalization and localization through
                             gettext'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/elixir-lang/gettext";
+              homepage = https://github.com/elixir-lang/gettext;
             };
           } // packageOverrides)
       ) {};
@@ -17184,7 +17184,7 @@ let
                                 to Github webhook requests in your Elixir
                                 apps.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/emilsoman/gh_webhook_plug";
+              homepage = https://github.com/emilsoman/gh_webhook_plug;
             };
           } // packageOverrides)
       ) {};
@@ -17207,7 +17207,7 @@ let
             meta = {
               description = ''An Elixir natural language processor.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/abitdodgy/gibran";
+              homepage = https://github.com/abitdodgy/gibran;
             };
           } // packageOverrides)
       ) {};
@@ -17230,7 +17230,7 @@ let
             meta = {
               description = ''A simple interface to Git CLI'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tuvistavie/elixir-git-cli";
+              homepage = https://github.com/tuvistavie/elixir-git-cli;
             };
           } // packageOverrides)
       ) {};
@@ -17255,7 +17255,7 @@ let
                                 storage, but with the goal to implement the same
                                 semantic with other storage and topics'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/gitex";
+              homepage = https://github.com/awetzel/gitex;
             };
           } // packageOverrides)
       ) {};
@@ -17278,7 +17278,7 @@ let
                                 storage, but with the goal to implement the same
                                 semantic with other storage and topics'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/gitex";
+              homepage = https://github.com/awetzel/gitex;
             };
           } // packageOverrides)
       ) {};
@@ -17308,7 +17308,7 @@ let
             meta = {
               description = ''simple github oauth library'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/lidashuang/github_oauth";
+              homepage = https://github.com/lidashuang/github_oauth;
             };
           } // packageOverrides)
       ) {};
@@ -17338,7 +17338,7 @@ let
             meta = {
               description = ''Get trend repositories from Github.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KazuCocoa/github_trend_ex";
+              homepage = https://github.com/KazuCocoa/github_trend_ex;
             };
           } // packageOverrides)
       ) {};
@@ -17364,7 +17364,7 @@ let
                                 like a thug n` retrieve links fo` translated
                                 sitez'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/notdevinclark/gizoogle";
+              homepage = https://github.com/notdevinclark/gizoogle;
             };
           } // packageOverrides)
       ) {};
@@ -17388,7 +17388,7 @@ let
               description = ''All of the Erlang gl macros exposed as normal
                             functions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/requnix/gl_utils";
+              homepage = https://github.com/requnix/gl_utils;
             };
           } // packageOverrides)
       ) {};
@@ -17411,7 +17411,7 @@ let
             meta = {
               description = ''Glitching and image corruption library.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/0010-IO/glitchylicious";
+              homepage = https://github.com/0010-IO/glitchylicious;
             };
           } // packageOverrides)
       ) {};
@@ -17435,7 +17435,7 @@ let
               description = ''A wrapper for Erlang`s :global module with
                             documentation.'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/mgwidmann/global";
+              homepage = https://github.com/mgwidmann/global;
             };
           } // packageOverrides)
       ) {};
@@ -17458,7 +17458,7 @@ let
             meta = {
               description = ''Idiomatic GraphicsMagick wrapper for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/utkarshkukreti/gm.ex";
+              homepage = https://github.com/utkarshkukreti/gm.ex;
             };
           } // packageOverrides)
       ) {};
@@ -17489,7 +17489,7 @@ let
             meta = {
               description = ''A simple Gmail REST API client for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/craigp/elixir-gmail";
+              homepage = https://github.com/craigp/elixir-gmail;
             };
           } // packageOverrides)
       ) {};
@@ -17521,7 +17521,7 @@ let
               description = ''An Elixir library to interface with the Bitcoin
                             core JSON-RPC API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/solatis/gold";
+              homepage = https://github.com/solatis/gold;
             };
           } // packageOverrides)
       ) {};
@@ -17544,7 +17544,7 @@ let
             meta = {
               description = ''Erlang event stream processor'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/DeadZen/goldrush";
+              homepage = https://github.com/DeadZen/goldrush;
             };
           } // packageOverrides)
       ) {};
@@ -17565,7 +17565,7 @@ let
             meta = {
               description = ''Erlang event stream processor'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/DeadZen/goldrush";
+              homepage = https://github.com/DeadZen/goldrush;
             };
           } // packageOverrides)
       ) {};
@@ -17614,7 +17614,7 @@ let
             meta = {
               description = ''Expressive and easy to use datetime functions.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/DevL/good_times";
+              homepage = https://github.com/DevL/good_times;
             };
           } // packageOverrides)
       ) {};
@@ -17655,7 +17655,7 @@ let
                                 will get name, emai and picture of user from
                                 google and add it to private inside Plug.Conn'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rohanpujaris/google_auth";
+              homepage = https://github.com/rohanpujaris/google_auth;
             };
           } // packageOverrides)
       ) {};
@@ -17685,7 +17685,7 @@ let
             meta = {
               description = ''A simple wrapper for Google Books API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nithinbekal/google_books.ex";
+              homepage = https://github.com/nithinbekal/google_books.ex;
             };
           } // packageOverrides)
       ) {};
@@ -17717,7 +17717,7 @@ let
               description = ''OTP application for fetching and polling Google
                             spreadsheet data in CSV format.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/GrandCru/GoogleSheets";
+              homepage = https://github.com/GrandCru/GoogleSheets;
             };
           } // packageOverrides)
       ) {};
@@ -17776,7 +17776,7 @@ let
                                 Oauth2 tokens for use with Google Cloud Service
                                 accounts.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/peburrows/goth";
+              homepage = https://github.com/peburrows/goth;
             };
           } // packageOverrides)
       ) {};
@@ -17808,7 +17808,7 @@ let
                                 Oauth2 tokens for use with Google Cloud Service
                                 accounts.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/peburrows/goth";
+              homepage = https://github.com/peburrows/goth;
             };
           } // packageOverrides)
       ) {};
@@ -17846,7 +17846,7 @@ let
                                 registry, with all the above functions applied
                                 to a network of nodes'';
               license = stdenv.lib.licenses.epl10;
-              homepage = "https://github.com/uwiger/gproc";
+              homepage = https://github.com/uwiger/gproc;
             };
           } // packageOverrides)
       ) {};
@@ -17882,7 +17882,7 @@ let
                                 registry, with all the above functions applied
                                 to a network of nodes'';
               license = stdenv.lib.licenses.epl10;
-              homepage = "https://github.com/uwiger/gproc";
+              homepage = https://github.com/uwiger/gproc;
             };
           } // packageOverrides)
       ) {};
@@ -17905,7 +17905,7 @@ let
             meta = {
               description = ''A task graph execution library for elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stocks29/graphex";
+              homepage = https://github.com/stocks29/graphex;
             };
           } // packageOverrides)
       ) {};
@@ -17951,7 +17951,7 @@ let
               description = ''Graphmath is a library for doing 2D and 3D
                             mathemtical operations.'';
               license = with stdenv.lib.licenses; [ free wtfpl free ];
-              homepage = "https://github.com/crertel/graphmath";
+              homepage = https://github.com/crertel/graphmath;
             };
           } // packageOverrides)
       ) {};
@@ -17974,7 +17974,7 @@ let
             meta = {
               description = ''GraphQL Elixir implementation'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/graphql-elixir/graphql";
+              homepage = https://github.com/graphql-elixir/graphql;
             };
           } // packageOverrides)
       ) {};
@@ -17995,7 +17995,7 @@ let
             meta = {
               description = ''GraphQL Elixir implementation'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/graphql-elixir/graphql";
+              homepage = https://github.com/graphql-elixir/graphql;
             };
           } // packageOverrides)
       ) {};
@@ -18036,7 +18036,7 @@ let
             meta = {
               description = ''Gravatar URLs generator'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pilu/gravatar";
+              homepage = https://github.com/pilu/gravatar;
             };
           } // packageOverrides)
       ) {};
@@ -18059,7 +18059,7 @@ let
             meta = {
               description = ''Gravatar images with an ease'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/shiroyasha/gravatarify";
+              homepage = https://github.com/shiroyasha/gravatarify;
             };
           } // packageOverrides)
       ) {};
@@ -18083,7 +18083,7 @@ let
               longDescription = ''Package to help you operate with [gray codes]
                                 (https://en.wikipedia.org/wiki/Gray_code)'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hashd/gray";
+              homepage = https://github.com/hashd/gray;
             };
           } // packageOverrides)
       ) {};
@@ -18115,7 +18115,7 @@ let
               description = ''Elixir library for access the Greenhouse Harvest
                             API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jeffweiss/greenhouse";
+              homepage = https://github.com/jeffweiss/greenhouse;
             };
           } // packageOverrides)
       ) {};
@@ -18161,7 +18161,7 @@ let
                                 origin my-new-feature`) 5. Create new Pull
                                 Request '';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/zhallett/growl";
+              homepage = https://github.com/zhallett/growl;
             };
           } // packageOverrides)
       ) {};
@@ -18186,7 +18186,7 @@ let
               description = ''A library for parsing a GTFS folder into a
                             hierarchy of structured data'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bhelx/gtfs";
+              homepage = https://github.com/bhelx/gtfs;
             };
           } // packageOverrides)
       ) {};
@@ -18210,7 +18210,7 @@ let
               description = ''Macros expanding into code that can be safely
                             used in guard clauses.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/DevL/guardsafe";
+              homepage = https://github.com/DevL/guardsafe;
             };
           } // packageOverrides)
       ) {};
@@ -18272,7 +18272,7 @@ let
               description = ''Automate tasks and keep everyone in the loop with
                             Guri'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/elvio/guri";
+              homepage = https://github.com/elvio/guri;
             };
           } // packageOverrides)
       ) {};
@@ -18318,7 +18318,7 @@ let
             meta = {
               description = ''PDF Generation in Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/SenecaSystems/gutenex";
+              homepage = https://github.com/SenecaSystems/gutenex;
             };
           } // packageOverrides)
       ) {};
@@ -18357,7 +18357,7 @@ let
             meta = {
               description = ''simple HTTP client'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/benoitc/hackney";
+              homepage = https://github.com/benoitc/hackney;
             };
           } // packageOverrides)
       ) {};
@@ -18394,7 +18394,7 @@ let
             meta = {
               description = ''simple HTTP client'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/benoitc/hackney";
+              homepage = https://github.com/benoitc/hackney;
             };
           } // packageOverrides)
       ) {};
@@ -18418,7 +18418,7 @@ let
               longDescription = ''Generate Heroku-like memorable random names
                                 to use in your apps or anywhere else.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/knrz/Haikunator";
+              homepage = https://github.com/knrz/Haikunator;
             };
           } // packageOverrides)
       ) {};
@@ -18446,7 +18446,7 @@ let
               description = ''An Erlang library wrapping AES-GCM (AEAD) crypto
                             in a Fernet-like interface'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/ferd/hairnet/";
+              homepage = https://github.com/ferd/hairnet/;
             };
           } // packageOverrides)
       ) {};
@@ -18471,7 +18471,7 @@ let
                                 to ok_jose, elixir`s 1.2 `with` keyword and that
                                 kind of stuff.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/vic/happy";
+              homepage = https://github.com/vic/happy;
             };
           } // packageOverrides)
       ) {};
@@ -18494,7 +18494,7 @@ let
             meta = {
               description = ''Help applications do things to themselves.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rubencaro/harakiri";
+              homepage = https://github.com/rubencaro/harakiri;
             };
           } // packageOverrides)
       ) {};
@@ -18525,7 +18525,7 @@ let
               description = ''Harvest Time Tracking API wrapper written in
                             Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/luishurtado/harvest";
+              homepage = https://github.com/luishurtado/harvest;
             };
           } // packageOverrides)
       ) {};
@@ -18550,7 +18550,7 @@ let
                                 cache the term in ETS with the hash as the key
                                 and the term as the value.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/elbow-jason/hash_n_cache";
+              homepage = https://github.com/elbow-jason/hash_n_cache;
             };
           } // packageOverrides)
       ) {};
@@ -18573,7 +18573,7 @@ let
             meta = {
               description = ''Consistent Hash Ring'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sile/hash_ring";
+              homepage = https://github.com/sile/hash_ring;
             };
           } // packageOverrides)
       ) {};
@@ -18597,7 +18597,7 @@ let
               description = ''Hashids lets you obfuscate numerical identifiers
                             via reversible mapping.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/alco/hashids-elixir";
+              homepage = https://github.com/alco/hashids-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -18643,7 +18643,7 @@ let
               description = ''A Heap-based Priority Queue Implementation in
                             Elixir.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/takscape/elixir-heapq";
+              homepage = https://github.com/takscape/elixir-heapq;
             };
           } // packageOverrides)
       ) {};
@@ -18666,7 +18666,7 @@ let
             meta = {
               description = ''An adapter-based chat bot framework'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hedwig-im/hedwig";
+              homepage = https://github.com/hedwig-im/hedwig;
             };
           } // packageOverrides)
       ) {};
@@ -18688,7 +18688,7 @@ let
             meta = {
               description = ''An adapter-based chat bot framework'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hedwig-im/hedwig";
+              homepage = https://github.com/hedwig-im/hedwig;
             };
           } // packageOverrides)
       ) {};
@@ -18714,7 +18714,7 @@ let
                                 emails. The name comes from the greek messanger
                                 of the gods.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nurugger07/hemes";
+              homepage = https://github.com/nurugger07/hemes;
             };
           } // packageOverrides)
       ) {};
@@ -18737,7 +18737,7 @@ let
             meta = {
               description = ''Hex string/binary conversion utilities'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/aesedepece/hex2bin";
+              homepage = https://github.com/aesedepece/hex2bin;
             };
           } // packageOverrides)
       ) {};
@@ -18760,7 +18760,7 @@ let
             meta = {
               description = ''Library for working with hex grids.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tjcelaya/hex_math";
+              homepage = https://github.com/tjcelaya/hex_math;
             };
           } // packageOverrides)
       ) {};
@@ -18797,7 +18797,7 @@ let
             meta = {
               description = ''Search hex packages from terminal'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nguyenvinhlinh/HexSearcher";
+              homepage = https://github.com/nguyenvinhlinh/HexSearcher;
             };
           } // packageOverrides)
       ) {};
@@ -18821,7 +18821,7 @@ let
               description = ''A simple module for working with hex strings in
                             Elixir. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rjsamson/hexate";
+              homepage = https://github.com/rjsamson/hexate;
             };
           } // packageOverrides)
       ) {};
@@ -18844,7 +18844,7 @@ let
             meta = {
               description = ''A hubot-like bot framework for chatops.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tombell/hexbot";
+              homepage = https://github.com/tombell/hexbot;
             };
           } // packageOverrides)
       ) {};
@@ -18868,7 +18868,7 @@ let
             meta = {
               description = ''Convert hex doc to Dash.app`s docset format.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yesmeck/hexdocset";
+              homepage = https://github.com/yesmeck/hexdocset;
             };
           } // packageOverrides)
       ) {};
@@ -18899,7 +18899,7 @@ let
               description = ''A logger backend for posting errors to
                             HipChat.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/fbcouch/hipchat_logger_backend";
+              homepage = https://github.com/fbcouch/hipchat_logger_backend;
             };
           } // packageOverrides)
       ) {};
@@ -18922,7 +18922,7 @@ let
             meta = {
               description = ''hybrid logical clock'';
 
-              homepage = "https://github.com/barrel-db/hlc";
+              homepage = https://github.com/barrel-db/hlc;
             };
           } // packageOverrides)
       ) {};
@@ -18945,7 +18945,7 @@ let
             meta = {
               description = ''Yet another mocking library for Erlang'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/xenolinguist/hoax";
+              homepage = https://github.com/xenolinguist/hoax;
             };
           } // packageOverrides)
       ) {};
@@ -18969,7 +18969,7 @@ let
               description = ''Library for finding which holidays fall on given
                             dates.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/CoderDennis/holidays";
+              homepage = https://github.com/CoderDennis/holidays;
             };
           } // packageOverrides)
       ) {};
@@ -19026,7 +19026,7 @@ let
             meta = {
               description = ''generic plugin & hook system'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/barrel-db/hooks";
+              homepage = https://github.com/barrel-db/hooks;
             };
           } // packageOverrides)
       ) {};
@@ -19057,7 +19057,7 @@ let
               description = ''Webdriver library for integration testing and
                             browser automation'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/HashNuke/hound";
+              homepage = https://github.com/HashNuke/hound;
             };
           } // packageOverrides)
       ) {};
@@ -19107,7 +19107,7 @@ let
               description = ''generate html in elixir with simple data
                             structures'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/html_builder";
+              homepage = https://github.com/camshaft/html_builder;
             };
           } // packageOverrides)
       ) {};
@@ -19130,7 +19130,7 @@ let
             meta = {
               description = ''Decode and encode HTML entities in a string.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/martinsvalin/html_entities";
+              homepage = https://github.com/martinsvalin/html_entities;
             };
           } // packageOverrides)
       ) {};
@@ -19154,7 +19154,7 @@ let
             meta = {
               description = ''HTML sanitizer for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rrrene/html_sanitize_ex";
+              homepage = https://github.com/rrrene/html_sanitize_ex;
             };
           } // packageOverrides)
       ) {};
@@ -19176,7 +19176,7 @@ let
             meta = {
               description = ''HTML sanitizer for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rrrene/html_sanitize_ex";
+              homepage = https://github.com/rrrene/html_sanitize_ex;
             };
           } // packageOverrides)
       ) {};
@@ -19200,7 +19200,7 @@ let
               description = ''Super simple library for turning raw HTML or
                             webpages into beautiful PDFs.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mattweldon/html_to_pdf";
+              homepage = https://github.com/mattweldon/html_to_pdf;
             };
           } // packageOverrides)
       ) {};
@@ -19223,7 +19223,7 @@ let
             meta = {
               description = ''HPACK implementation for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kiennt/hpack";
+              homepage = https://github.com/kiennt/hpack;
             };
           } // packageOverrides)
       ) {};
@@ -19247,7 +19247,7 @@ let
               description = ''A module to create basic digest http auth
                             header'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/techgaun/http_digex";
+              homepage = https://github.com/techgaun/http_digex;
             };
           } // packageOverrides)
       ) {};
@@ -19307,7 +19307,7 @@ let
               description = ''Multi port HTTP Proxy and support record/play
                             request.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KazuCocoa/http_proxy";
+              homepage = https://github.com/KazuCocoa/http_proxy;
             };
           } // packageOverrides)
       ) {};
@@ -19400,7 +19400,7 @@ let
               description = '' HTTP Request & Response Server. An incomplete
                             clone of http://httpbin.org '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edgurgel/httparrot";
+              homepage = https://github.com/edgurgel/httparrot;
             };
           } // packageOverrides)
       ) {};
@@ -19425,7 +19425,7 @@ let
               description = ''Yet Yet Another HTTP client for Elixir powered by
                             hackney'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edgurgel/httpehaviour";
+              homepage = https://github.com/edgurgel/httpehaviour;
             };
           } // packageOverrides)
       ) {};
@@ -19448,7 +19448,7 @@ let
             meta = {
               description = ''The `do nothing` HTTP client for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/guilleiguaran/httplacebo";
+              homepage = https://github.com/guilleiguaran/httplacebo;
             };
           } // packageOverrides)
       ) {};
@@ -19473,7 +19473,7 @@ let
               description = ''Yet Another HTTP client for Elixir powered by
                             hackney'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edgurgel/httpoison";
+              homepage = https://github.com/edgurgel/httpoison;
             };
           } // packageOverrides)
       ) {};
@@ -19496,7 +19496,7 @@ let
               description = ''Yet Another HTTP client for Elixir powered by
                             hackney'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edgurgel/httpoison";
+              homepage = https://github.com/edgurgel/httpoison;
             };
           } // packageOverrides)
       ) {};
@@ -19521,7 +19521,7 @@ let
               description = ''Fancy HTTP client for Elixir, based on
                             ibrowse.'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/myfreeweb/httpotion";
+              homepage = https://github.com/myfreeweb/httpotion;
             };
           } // packageOverrides)
       ) {};
@@ -19544,7 +19544,7 @@ let
               description = ''Fancy HTTP client for Elixir, based on
                             ibrowse.'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/myfreeweb/httpotion";
+              homepage = https://github.com/myfreeweb/httpotion;
             };
           } // packageOverrides)
       ) {};
@@ -19568,7 +19568,7 @@ let
               description = ''A CLI version of flower password writing in
                             Elixir. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yesmeck/huami.ex";
+              homepage = https://github.com/yesmeck/huami.ex;
             };
           } // packageOverrides)
       ) {};
@@ -19599,7 +19599,7 @@ let
               description = ''Elixir client for Philips Hue connected light
                             bulbs'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/xavier/huex";
+              homepage = https://github.com/xavier/huex;
             };
           } // packageOverrides)
       ) {};
@@ -19622,7 +19622,7 @@ let
             meta = {
               description = ''A Huffman encoder/decoder for HTTP/2 headers.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sideshow/hufflehoff";
+              homepage = https://github.com/sideshow/hufflehoff;
             };
           } // packageOverrides)
       ) {};
@@ -19645,7 +19645,7 @@ let
             meta = {
               description = ''Huffman encoding and decoding.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/SenecaSystems/huffman";
+              homepage = https://github.com/SenecaSystems/huffman;
             };
           } // packageOverrides)
       ) {};
@@ -19669,7 +19669,7 @@ let
               description = ''An MQTT 3.1.1 client library written in
                             Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/suvash/hulaaki";
+              homepage = https://github.com/suvash/hulaaki;
             };
           } // packageOverrides)
       ) {};
@@ -19695,7 +19695,7 @@ let
                                 backed feature toggles for individual users or
                                 named groups'';
 
-              homepage = "https://github.com/beautifulcode/hyde";
+              homepage = https://github.com/beautifulcode/hyde;
             };
           } // packageOverrides)
       ) {};
@@ -19735,7 +19735,7 @@ let
               description = ''A multi-headed beast: API gateway, request cache,
                             and data transformations'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/doomspork/hydra";
+              homepage = https://github.com/doomspork/hydra;
             };
           } // packageOverrides)
       ) {};
@@ -19759,7 +19759,7 @@ let
               description = ''A Elixir library for creating HAL/JSON Hypermedia
                             APIs'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jurriaan/hypermedia";
+              homepage = https://github.com/jurriaan/hypermedia;
             };
           } // packageOverrides)
       ) {};
@@ -19803,7 +19803,7 @@ let
               description = ''Fast HyperLogLog implementation for
                             Elixir/Erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zackehh/hypex";
+              homepage = https://github.com/zackehh/hypex;
             };
           } // packageOverrides)
       ) {};
@@ -19833,7 +19833,7 @@ let
             meta = {
               description = ''i18n locale translations helpers'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nathanfaucett/ex-i18n";
+              homepage = https://github.com/nathanfaucett/ex-i18n;
             };
           } // packageOverrides)
       ) {};
@@ -19858,7 +19858,7 @@ let
               description = ''Application for automatically fetching AWS IAM
                             role security credentials.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tsharju/iam_role";
+              homepage = https://github.com/tsharju/iam_role;
             };
           } // packageOverrides)
       ) {};
@@ -19881,7 +19881,7 @@ let
             meta = {
               description = ''Erlang HTTP client application'';
               license = with stdenv.lib.licenses; [ free bsd3 ];
-              homepage = "https://github.com/cmullaparthi/ibrowse";
+              homepage = https://github.com/cmullaparthi/ibrowse;
             };
           } // packageOverrides)
       ) {};
@@ -19905,7 +19905,7 @@ let
               description = ''Elixir library for generating 5x5 symmetrical
                             identicons'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/rbishop/identicon";
+              homepage = https://github.com/rbishop/identicon;
             };
           } // packageOverrides)
       ) {};
@@ -19930,7 +19930,7 @@ let
               description = ''The library of Elixir chunks of code that didn`t
                             clearly belong anywhere else.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/amorphid/idfk";
+              homepage = https://github.com/amorphid/idfk;
             };
           } // packageOverrides)
       ) {};
@@ -19953,7 +19953,7 @@ let
             meta = {
               description = ''A pure Erlang IDNA implementation'';
 
-              homepage = "https://github.com/benoitc/erlang-idna";
+              homepage = https://github.com/benoitc/erlang-idna;
             };
           } // packageOverrides)
       ) {};
@@ -19974,7 +19974,7 @@ let
             meta = {
               description = ''A pure Erlang IDNA implementation'';
 
-              homepage = "https://github.com/benoitc/erlang-idna";
+              homepage = https://github.com/benoitc/erlang-idna;
             };
           } // packageOverrides)
       ) {};
@@ -19995,7 +19995,7 @@ let
             meta = {
               description = ''A pure Erlang IDNA implementation'';
 
-              homepage = "https://github.com/benoitc/erlang-idna";
+              homepage = https://github.com/benoitc/erlang-idna;
             };
           } // packageOverrides)
       ) {};
@@ -20016,7 +20016,7 @@ let
             meta = {
               description = ''A pure Erlang IDNA implementation'';
 
-              homepage = "https://github.com/benoitc/erlang-idna";
+              homepage = https://github.com/benoitc/erlang-idna;
             };
           } // packageOverrides)
       ) {};
@@ -20037,7 +20037,7 @@ let
             meta = {
               description = ''A pure Erlang IDNA implementation'';
 
-              homepage = "https://github.com/benoitc/erlang-idna";
+              homepage = https://github.com/benoitc/erlang-idna;
             };
           } // packageOverrides)
       ) {};
@@ -20061,7 +20061,7 @@ let
               description = ''Biblioteca para validacao de Inscricao
                             Estadual'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edmaarcosta/IEEx";
+              homepage = https://github.com/edmaarcosta/IEEx;
             };
           } // packageOverrides)
       ) {};
@@ -20085,7 +20085,7 @@ let
             meta = {
               description = ''Image processing in Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/SenecaSystems/imagineer";
+              homepage = https://github.com/SenecaSystems/imagineer;
             };
           } // packageOverrides)
       ) {};
@@ -20109,7 +20109,7 @@ let
               description = ''Unofficial client library for generating imgix
                             URLs in Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ianwalter/imgex";
+              homepage = https://github.com/ianwalter/imgex;
             };
           } // packageOverrides)
       ) {};
@@ -20132,7 +20132,7 @@ let
             meta = {
               description = ''Helpers for fault-tolerant OTP applications'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/danielberkompas/immortal";
+              homepage = https://github.com/danielberkompas/immortal;
             };
           } // packageOverrides)
       ) {};
@@ -20155,7 +20155,7 @@ let
             meta = {
               description = ''Aleppo: ALternative Erlang Pre-ProcessOr'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/inaka/aleppo";
+              homepage = https://github.com/inaka/aleppo;
             };
           } // packageOverrides)
       ) {};
@@ -20178,7 +20178,7 @@ let
             meta = {
               description = ''Mix in public functions from external modules'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/inaka/mixer";
+              homepage = https://github.com/inaka/mixer;
             };
           } // packageOverrides)
       ) {};
@@ -20202,7 +20202,7 @@ let
               description = ''Returns you the indefinite article of a string
                             (*a* banana, *an* apple, etc)'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/Buyapowa/indefinite_article";
+              homepage = https://github.com/Buyapowa/indefinite_article;
             };
           } // packageOverrides)
       ) {};
@@ -20227,7 +20227,7 @@ let
                                 for Elixir Compatible with Erlang`s :inet module
                                 and support for IPv4 and IPv6'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/cobenian/inet_cidr";
+              homepage = https://github.com/cobenian/inet_cidr;
             };
           } // packageOverrides)
       ) {};
@@ -20251,7 +20251,7 @@ let
               description = ''case sensitive regular expression for splitting
                             strings'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nathanfaucett/ex-inflect";
+              homepage = https://github.com/nathanfaucett/ex-inflect;
             };
           } // packageOverrides)
       ) {};
@@ -20276,7 +20276,7 @@ let
               description = ''inflector helpers for managing different
                             locales'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nathanfaucett/ex-inflections";
+              homepage = https://github.com/nathanfaucett/ex-inflections;
             };
           } // packageOverrides)
       ) {};
@@ -20306,7 +20306,7 @@ let
             meta = {
               description = ''inflector english rules'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nathanfaucett/ex-inflections_en";
+              homepage = https://github.com/nathanfaucett/ex-inflections_en;
             };
           } // packageOverrides)
       ) {};
@@ -20336,7 +20336,7 @@ let
             meta = {
               description = ''inflector spanish rules'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nathanfaucett/ex-inflections_es";
+              homepage = https://github.com/nathanfaucett/ex-inflections_es;
             };
           } // packageOverrides)
       ) {};
@@ -20359,7 +20359,7 @@ let
             meta = {
               description = ''simple rule based inflector'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nathanfaucett/ex-inflector";
+              homepage = https://github.com/nathanfaucett/ex-inflector;
             };
           } // packageOverrides)
       ) {};
@@ -20383,7 +20383,7 @@ let
               description = ''An Elixir library for handling word
                             inflections.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nurugger07/inflex";
+              homepage = https://github.com/nurugger07/inflex;
             };
           } // packageOverrides)
       ) {};
@@ -20405,7 +20405,7 @@ let
               description = ''An Elixir library for handling word
                             inflections.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nurugger07/inflex";
+              homepage = https://github.com/nurugger07/inflex;
             };
           } // packageOverrides)
       ) {};
@@ -20427,7 +20427,7 @@ let
               description = ''An Elixir library for handling word
                             inflections.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nurugger07/inflex";
+              homepage = https://github.com/nurugger07/inflex;
             };
           } // packageOverrides)
       ) {};
@@ -20449,7 +20449,7 @@ let
               description = ''An Elixir library for handling word
                             inflections.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nurugger07/inflex";
+              homepage = https://github.com/nurugger07/inflex;
             };
           } // packageOverrides)
       ) {};
@@ -20472,7 +20472,7 @@ let
             meta = {
               description = ''Module to parse ini files.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nathanjohnson320/ini";
+              homepage = https://github.com/nathanjohnson320/ini;
             };
           } // packageOverrides)
       ) {};
@@ -20500,7 +20500,7 @@ let
                                 order when converting to a list. Allows reverse
                                 insertion ordering.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/localshred/insert_ordered_set";
+              homepage = https://github.com/localshred/insert_ordered_set;
             };
           } // packageOverrides)
       ) {};
@@ -20531,7 +20531,7 @@ let
               description = ''Elixir package for consuming any Insight-powered
                             Bitcoin explorer.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stampery/elixir-insight";
+              homepage = https://github.com/stampery/elixir-insight;
             };
           } // packageOverrides)
       ) {};
@@ -20555,7 +20555,7 @@ let
               longDescription = ''Insights is a wrapper for sending and data
                                 capture for keen.io or others adapters'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/gullitmiranda/insights";
+              homepage = https://github.com/gullitmiranda/insights;
             };
           } // packageOverrides)
       ) {};
@@ -20579,7 +20579,7 @@ let
               description = ''An Elixir client for Instrumental
                             (http://instrumentalapp.com).'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/undeadlabs/instrumental-ex";
+              homepage = https://github.com/undeadlabs/instrumental-ex;
             };
           } // packageOverrides)
       ) {};
@@ -20604,7 +20604,7 @@ let
               description = ''An Elixir library for the IP2Location
                             database.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/nazipov/ip2location-elixir";
+              homepage = https://github.com/nazipov/ip2location-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -20629,7 +20629,7 @@ let
                                 Addresses. Validate and transform IPv4 addresses
                                 and subnet masks.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bordeltabernacle/IPA";
+              homepage = https://github.com/bordeltabernacle/IPA;
             };
           } // packageOverrides)
       ) {};
@@ -20660,7 +20660,7 @@ let
               description = ''Library and CLI tool to expand IPv4 ranges to
                             lists of IP numbers'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/digitalronin/iplist";
+              homepage = https://github.com/digitalronin/iplist;
             };
           } // packageOverrides)
       ) {};
@@ -20684,7 +20684,7 @@ let
               description = ''A set of functions for validating and
                             transforming IPv4 addresses'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/blackfist/iptools";
+              homepage = https://github.com/blackfist/iptools;
             };
           } // packageOverrides)
       ) {};
@@ -20707,7 +20707,7 @@ let
             meta = {
               description = ''Check whether string is Chinese'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/lidashuang/is_chinese";
+              homepage = https://github.com/lidashuang/is_chinese;
             };
           } // packageOverrides)
       ) {};
@@ -20731,7 +20731,7 @@ let
               description = ''Loosely check whether a given string is an
                             email'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/johnotander/is_email";
+              homepage = https://github.com/johnotander/is_email;
             };
           } // packageOverrides)
       ) {};
@@ -20755,7 +20755,7 @@ let
             meta = {
               description = ''Check whether a given url is up.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/johnotander/is_up";
+              homepage = https://github.com/johnotander/is_up;
             };
           } // packageOverrides)
       ) {};
@@ -20778,7 +20778,7 @@ let
             meta = {
               description = ''Validate a url'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/johnotander/is_url";
+              homepage = https://github.com/johnotander/is_url;
             };
           } // packageOverrides)
       ) {};
@@ -20807,7 +20807,7 @@ let
                                 platforms which have words bigger than 32 bits.
                                 '';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/arianvp/elixir-isaac";
+              homepage = https://github.com/arianvp/elixir-isaac;
             };
           } // packageOverrides)
       ) {};
@@ -20837,7 +20837,7 @@ let
             meta = {
               description = ''Elixir wrapper for isbndb rest api.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rcoedo/isbndbex";
+              homepage = https://github.com/rcoedo/isbndbex;
             };
           } // packageOverrides)
       ) {};
@@ -20870,7 +20870,7 @@ let
                                 letter abbreviations, and functions for
                                 converting between them.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joelpm/iso3166ex";
+              homepage = https://github.com/joelpm/iso3166ex;
             };
           } // packageOverrides)
       ) {};
@@ -20896,7 +20896,7 @@ let
                                 Probably most useful when used in conjuction
                                 with Phoenix and Guardian.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rickr/janrain";
+              homepage = https://github.com/rickr/janrain;
             };
           } // packageOverrides)
       ) {};
@@ -20920,7 +20920,7 @@ let
               description = ''Elixir Library for Japan municipality key
                             converting'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hykw/japan_municipality_key";
+              homepage = https://github.com/hykw/japan_municipality_key;
             };
           } // packageOverrides)
       ) {};
@@ -20954,7 +20954,7 @@ let
               description = ''A simple, distributed, in-memory caching
                             system'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jr0senblum/jc";
+              homepage = https://github.com/jr0senblum/jc;
             };
           } // packageOverrides)
       ) {};
@@ -20977,7 +20977,7 @@ let
             meta = {
               description = ''Helpers for testing JSON responses.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dm1try/jequalson";
+              homepage = https://github.com/dm1try/jequalson;
             };
           } // packageOverrides)
       ) {};
@@ -21002,7 +21002,7 @@ let
             meta = {
               description = ''jesse'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/for-GET/jesse";
+              homepage = https://github.com/for-GET/jesse;
             };
           } // packageOverrides)
       ) {};
@@ -21033,7 +21033,7 @@ let
               description = ''An Elixir client library for JIRA + JIRA Agile /
                             Greenhopper'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jeffweiss/jira";
+              homepage = https://github.com/jeffweiss/jira;
             };
           } // packageOverrides)
       ) {};
@@ -21057,7 +21057,7 @@ let
             meta = {
               description = ''Simple Elixir jobs pool'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/flupke/exjobspool";
+              homepage = https://github.com/flupke/exjobspool;
             };
           } // packageOverrides)
       ) {};
@@ -21088,7 +21088,7 @@ let
             meta = {
               description = ''JWT Library for Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/bryanjos/joken";
+              homepage = https://github.com/bryanjos/joken;
             };
           } // packageOverrides)
       ) {};
@@ -21120,7 +21120,7 @@ let
                                 a command-line tool (just run mix escript.build
                                 first).'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/clarkware/jolt";
+              homepage = https://github.com/clarkware/jolt;
             };
           } // packageOverrides)
       ) {};
@@ -21143,7 +21143,7 @@ let
             meta = {
               description = ''Just anOther RELease assembler'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/emedia-project/jorel_mix";
+              homepage = https://github.com/emedia-project/jorel_mix;
             };
           } // packageOverrides)
       ) {};
@@ -21168,7 +21168,7 @@ let
               description = ''JSON Object Signing and Encryption (JOSE) for
                             Erlang and Elixir.'';
               license = stdenv.lib.licenses.mpl20;
-              homepage = "https://github.com/potatosalad/erlang-jose";
+              homepage = https://github.com/potatosalad/erlang-jose;
             };
           } // packageOverrides)
       ) {};
@@ -21191,7 +21191,7 @@ let
               description = ''JSON Object Signing and Encryption (JOSE) for
                             Erlang and Elixir.'';
               license = stdenv.lib.licenses.mpl20;
-              homepage = "https://github.com/potatosalad/erlang-jose";
+              homepage = https://github.com/potatosalad/erlang-jose;
             };
           } // packageOverrides)
       ) {};
@@ -21215,7 +21215,7 @@ let
             meta = {
               description = ''json for elixir '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/jsex";
+              homepage = https://github.com/talentdeficit/jsex;
             };
           } // packageOverrides)
       ) {};
@@ -21239,7 +21239,7 @@ let
               description = ''Native Elixir library for JSON encoding and
                             decoding'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/cblage/elixir-json";
+              homepage = https://github.com/cblage/elixir-json;
             };
           } // packageOverrides)
       ) {};
@@ -21262,7 +21262,7 @@ let
             meta = {
               description = ''assertions for JSON API payload'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/DockYard/json_api_assert";
+              homepage = https://github.com/DockYard/json_api_assert;
             };
           } // packageOverrides)
       ) {};
@@ -21285,7 +21285,7 @@ let
             meta = {
               description = ''Diff and patch for JSON in Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/olafura/json_diff_ex";
+              homepage = https://github.com/olafura/json_diff_ex;
             };
           } // packageOverrides)
       ) {};
@@ -21310,7 +21310,7 @@ let
               description = ''A simple library for logging with JSON, best
                             suited with Logstash.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/LeeroyDing/json_logger";
+              homepage = https://github.com/LeeroyDing/json_logger;
             };
           } // packageOverrides)
       ) {};
@@ -21335,7 +21335,7 @@ let
                                 string syntax for identifying a specific value
                                 within a JSON document'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/xavier/json_pointer";
+              homepage = https://github.com/xavier/json_pointer;
             };
           } // packageOverrides)
       ) {};
@@ -21361,7 +21361,7 @@ let
                                 to stream json elements from an Elixir binary
                                 stream.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/json_stream";
+              homepage = https://github.com/awetzel/json_stream;
             };
           } // packageOverrides)
       ) {};
@@ -21386,7 +21386,7 @@ let
               description = ''Elixir implementation of the JSON Web Token
                             (JWT), RFC 7519'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/garyf/json_web_token_ex";
+              homepage = https://github.com/garyf/json_web_token_ex;
             };
           } // packageOverrides)
       ) {};
@@ -21412,7 +21412,7 @@ let
                                 well as a QueryParser for Plug based projects
                                 and applications.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jeregrine/jsonapi";
+              homepage = https://github.com/jeregrine/jsonapi;
             };
           } // packageOverrides)
       ) {};
@@ -21435,7 +21435,7 @@ let
             meta = {
               description = ''Erlang JSON Library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sile/jsone";
+              homepage = https://github.com/sile/jsone;
             };
           } // packageOverrides)
       ) {};
@@ -21456,7 +21456,7 @@ let
             meta = {
               description = ''Erlang JSON Library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sile/jsone";
+              homepage = https://github.com/sile/jsone;
             };
           } // packageOverrides)
       ) {};
@@ -21477,7 +21477,7 @@ let
             meta = {
               description = ''Erlang JSON Library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sile/jsone";
+              homepage = https://github.com/sile/jsone;
             };
           } // packageOverrides)
       ) {};
@@ -21502,7 +21502,7 @@ let
                                 producing and manipulating json. inspired by
                                 yajl'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/jsx";
+              homepage = https://github.com/talentdeficit/jsx;
             };
           } // packageOverrides)
       ) {};
@@ -21526,7 +21526,7 @@ let
                                 producing and manipulating json. inspired by
                                 yajl'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/jsx";
+              homepage = https://github.com/talentdeficit/jsx;
             };
           } // packageOverrides)
       ) {};
@@ -21549,7 +21549,7 @@ let
                                 producing and manipulating json. inspired by
                                 yajl'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/jsx";
+              homepage = https://github.com/talentdeficit/jsx;
             };
           } // packageOverrides)
       ) {};
@@ -21572,7 +21572,7 @@ let
                                 producing and manipulating json. inspired by
                                 yajl'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/jsx";
+              homepage = https://github.com/talentdeficit/jsx;
             };
           } // packageOverrides)
       ) {};
@@ -21595,7 +21595,7 @@ let
                                 producing and manipulating json. inspired by
                                 yajl'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/jsx";
+              homepage = https://github.com/talentdeficit/jsx;
             };
           } // packageOverrides)
       ) {};
@@ -21619,7 +21619,7 @@ let
               description = ''jsx data structire traversing and modification
                             library.'';
               license = stdenv.lib.licenses.cddl;
-              homepage = "https://github.com/Licenser/jsxd";
+              homepage = https://github.com/Licenser/jsxd;
             };
           } // packageOverrides)
       ) {};
@@ -21645,7 +21645,7 @@ let
                                 dir. It is a good fit with Jenkins test
                                 reporting plugin, for example.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/victorolinasc/junit-formatter";
+              homepage = https://github.com/victorolinasc/junit-formatter;
             };
           } // packageOverrides)
       ) {};
@@ -21670,7 +21670,7 @@ let
                                 representations of JSON, handling eep-18, map,
                                 mochijson-style and proplists representations'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jr0senblum/jwalk";
+              homepage = https://github.com/jr0senblum/jwalk;
             };
           } // packageOverrides)
       ) {};
@@ -21693,7 +21693,7 @@ let
                                 representations of JSON, handling eep-18, map,
                                 mochijson-style and proplists representations'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jr0senblum/jwalk";
+              homepage = https://github.com/jr0senblum/jwalk;
             };
           } // packageOverrides)
       ) {};
@@ -21724,7 +21724,7 @@ let
             meta = {
               description = ''Erlang JWT library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/artemeff/jwt";
+              homepage = https://github.com/artemeff/jwt;
             };
           } // packageOverrides)
       ) {};
@@ -21751,7 +21751,7 @@ let
               description = ''Elixir implementation of JWT registered claims,
                             RFC 7519'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/garyf/jwt_claims_ex";
+              homepage = https://github.com/garyf/jwt_claims_ex;
             };
           } // packageOverrides)
       ) {};
@@ -21775,7 +21775,7 @@ let
             meta = {
               description = ''JWT decoding library for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mschae/jwtex";
+              homepage = https://github.com/mschae/jwtex;
             };
           } // packageOverrides)
       ) {};
@@ -21823,7 +21823,7 @@ let
             meta = {
               description = ''Kafka client for Elixir/Erlang.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kafkaex/kafka_ex";
+              homepage = https://github.com/kafkaex/kafka_ex;
             };
           } // packageOverrides)
       ) {};
@@ -21849,7 +21849,7 @@ let
                                 system, modules can be easily created and
                                 used.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/Luminarys/Kaguya";
+              homepage = https://github.com/Luminarys/Kaguya;
             };
           } // packageOverrides)
       ) {};
@@ -21873,7 +21873,7 @@ let
               longDescription = ''Elixir library for validating and handling
                                 the Icelandic Kennitala identity number.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/JonGretar/Kennitala.ex";
+              homepage = https://github.com/JonGretar/Kennitala.ex;
             };
           } // packageOverrides)
       ) {};
@@ -21896,7 +21896,7 @@ let
             meta = {
               description = ''Erlang 2-way Map'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/key2value";
+              homepage = https://github.com/okeuday/key2value;
             };
           } // packageOverrides)
       ) {};
@@ -21917,7 +21917,7 @@ let
             meta = {
               description = ''Erlang 2-way Map'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/key2value";
+              homepage = https://github.com/okeuday/key2value;
             };
           } // packageOverrides)
       ) {};
@@ -21948,7 +21948,7 @@ let
               description = ''An opinionated OAuth 2.0 server for Elixir
                             projects.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/austinsmorris/keymaster";
+              homepage = https://github.com/austinsmorris/keymaster;
             };
           } // packageOverrides)
       ) {};
@@ -21971,7 +21971,7 @@ let
             meta = {
               description = ''Erlang Set Associative Map For Key Lists'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/keys1value";
+              homepage = https://github.com/okeuday/keys1value;
             };
           } // packageOverrides)
       ) {};
@@ -22001,7 +22001,7 @@ let
             meta = {
               description = ''A wrapper for the Kinja API.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/adampash/kinjaex";
+              homepage = https://github.com/adampash/kinjaex;
             };
           } // packageOverrides)
       ) {};
@@ -22027,7 +22027,7 @@ let
                                 the representation of data inspired by
                                 Representable.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edubkendo/kitsune";
+              homepage = https://github.com/edubkendo/kitsune;
             };
           } // packageOverrides)
       ) {};
@@ -22058,7 +22058,7 @@ let
             meta = {
               description = ''Framework for creating interactive dashboards'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kittoframework/kitto";
+              homepage = https://github.com/kittoframework/kitto;
             };
           } // packageOverrides)
       ) {};
@@ -22088,7 +22088,7 @@ let
             meta = {
               description = ''Kubernetes integration for and in pure Elixir.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/ingerslevio/kubex";
+              homepage = https://github.com/ingerslevio/kubex;
             };
           } // packageOverrides)
       ) {};
@@ -22116,7 +22116,7 @@ let
                                 make_list_elem( parent, text, keywords \\ [] )
                                 do some_code_with( spaces, typed) end'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/RobertDober/lab42_defkw";
+              homepage = https://github.com/RobertDober/lab42_defkw;
             };
           } // packageOverrides)
       ) {};
@@ -22143,7 +22143,7 @@ let
             meta = {
               description = ''Erlang logging framework'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/basho/lager";
+              homepage = https://github.com/basho/lager;
             };
           } // packageOverrides)
       ) {};
@@ -22168,7 +22168,7 @@ let
             meta = {
               description = ''Erlang logging framework'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/basho/lager";
+              homepage = https://github.com/basho/lager;
             };
           } // packageOverrides)
       ) {};
@@ -22193,7 +22193,7 @@ let
             meta = {
               description = ''Erlang logging framework'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/basho/lager";
+              homepage = https://github.com/basho/lager;
             };
           } // packageOverrides)
       ) {};
@@ -22218,7 +22218,7 @@ let
             meta = {
               description = ''HipChat backend for Lager'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/synlay/lager_hipchat";
+              homepage = https://github.com/synlay/lager_hipchat;
             };
           } // packageOverrides)
       ) {};
@@ -22243,7 +22243,7 @@ let
               longDescription = ''LagerLogger is a lager backend that forwards
                                 all log messages to Elixir`s Logger.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/PSPDFKit-labs/lager_logger";
+              homepage = https://github.com/PSPDFKit-labs/lager_logger;
             };
           } // packageOverrides)
       ) {};
@@ -22266,7 +22266,7 @@ let
             meta = {
               description = ''Lasse: Server-Sent Event handler for Cowboy.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/inaka/lasse";
+              homepage = https://github.com/inaka/lasse;
             };
           } // packageOverrides)
       ) {};
@@ -22290,7 +22290,7 @@ let
               longDescription = ''This is a binary instead of char_list version
                                 of the stock Erlang :eldap library.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/OvermindDL1/ldap_ex";
+              homepage = https://github.com/OvermindDL1/ldap_ex;
             };
           } // packageOverrides)
       ) {};
@@ -22314,7 +22314,7 @@ let
               description = ''Pad a string to the left with any number of
                             characters.'';
               license = stdenv.lib.licenses.mpl20;
-              homepage = "https://github.com/folz/left_pad.ex";
+              homepage = https://github.com/folz/left_pad.ex;
             };
           } // packageOverrides)
       ) {};
@@ -22338,7 +22338,7 @@ let
               description = ''left pad for elixir, because why not?
                             ¯\\_(ツ)_/¯'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/colinrymer/leftpad.ex";
+              homepage = https://github.com/colinrymer/leftpad.ex;
             };
           } // packageOverrides)
       ) {};
@@ -22368,7 +22368,7 @@ let
             meta = {
               description = ''An Elixir wrapper for the Lesson.ly API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stevegrossi/lessonly-elixir";
+              homepage = https://github.com/stevegrossi/lessonly-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -22393,7 +22393,7 @@ let
                                 data types for working with Googles Level data
                                 store. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gausby/level";
+              homepage = https://github.com/gausby/level;
             };
           } // packageOverrides)
       ) {};
@@ -22418,7 +22418,7 @@ let
                                 times fast) which uses macros to generate a
                                 reusable lexers. Good times.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jamesotron/lex_luthor";
+              homepage = https://github.com/jamesotron/lex_luthor;
             };
           } // packageOverrides)
       ) {};
@@ -22442,7 +22442,7 @@ let
               description = ''Elixir implementation of a binary Galois Linear
                             Feedback Shift Register. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pma/lfsr";
+              homepage = https://github.com/pma/lfsr;
             };
           } // packageOverrides)
       ) {};
@@ -22465,7 +22465,7 @@ let
             meta = {
               description = ''Lightweight HTTP Client'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/talko/lhttpc";
+              homepage = https://github.com/talko/lhttpc;
             };
           } // packageOverrides)
       ) {};
@@ -22486,7 +22486,7 @@ let
             meta = {
               description = ''Lightweight HTTP Client'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/talko/lhttpc";
+              homepage = https://github.com/talko/lhttpc;
             };
           } // packageOverrides)
       ) {};
@@ -22509,7 +22509,7 @@ let
             meta = {
               description = ''permission matcher library'';
               license = stdenv.lib.licenses.cddl;
-              homepage = "https://github.com/project-fifo/libsnarlmatch";
+              homepage = https://github.com/project-fifo/libsnarlmatch;
             };
           } // packageOverrides)
       ) {};
@@ -22531,7 +22531,7 @@ let
 
             meta = {
                license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/lineo";
+              homepage = https://github.com/camshaft/lineo;
             };
           } // packageOverrides)
       ) {};
@@ -22551,7 +22551,7 @@ let
 
             meta = {
                license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/lineo";
+              homepage = https://github.com/camshaft/lineo;
             };
           } // packageOverrides)
       ) {};
@@ -22574,7 +22574,7 @@ let
             meta = {
               description = ''Elixir Internationalization library '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/chrismccord/linguist";
+              homepage = https://github.com/chrismccord/linguist;
             };
           } // packageOverrides)
       ) {};
@@ -22597,7 +22597,7 @@ let
             meta = {
               description = ''Liquid implementation in elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nulian/liquid-elixir";
+              homepage = https://github.com/nulian/liquid-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -22627,7 +22627,7 @@ let
             meta = {
               description = ''Length-Object-Binary (LOB) Packet Encoding'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/lob_ex";
+              homepage = https://github.com/mwmiller/lob_ex;
             };
           } // packageOverrides)
       ) {};
@@ -22651,7 +22651,7 @@ let
               description = ''Logfmt is a module for encoding and decoding
                             logfmt-style log lines.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jclem/logfmt-elixir";
+              homepage = https://github.com/jclem/logfmt-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -22674,7 +22674,7 @@ let
             meta = {
               description = ''Simple logger backend that writes to a file'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/onkel-dirtus/logger_file_backend";
+              homepage = https://github.com/onkel-dirtus/logger_file_backend;
             };
           } // packageOverrides)
       ) {};
@@ -22723,7 +22723,7 @@ let
             meta = {
               description = ''Loggly logger backend'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joeyfeldberg/loggly_backend";
+              homepage = https://github.com/joeyfeldberg/loggly_backend;
             };
           } // packageOverrides)
       ) {};
@@ -22753,7 +22753,7 @@ let
             meta = {
               description = ''Logstash UDP producer backend for Logger.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/marcelog/logger_logstash_backend";
+              homepage = https://github.com/marcelog/logger_logstash_backend;
             };
           } // packageOverrides)
       ) {};
@@ -22801,7 +22801,7 @@ let
             meta = {
               description = ''Elixir loggly application event subscriber'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/pragmaticivan/logglix";
+              homepage = https://github.com/pragmaticivan/logglix;
             };
           } // packageOverrides)
       ) {};
@@ -22824,7 +22824,7 @@ let
             meta = {
               description = ''A Logger Interface Library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sile/logi";
+              homepage = https://github.com/sile/logi;
             };
           } // packageOverrides)
       ) {};
@@ -22849,7 +22849,7 @@ let
             meta = {
               description = ''Standard Library for logi'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sile/logi_stdlib";
+              homepage = https://github.com/sile/logi_stdlib;
             };
           } // packageOverrides)
       ) {};
@@ -22879,7 +22879,7 @@ let
             meta = {
               description = ''The clone of lolcat. written in elixir '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/restartr/ex-lolcat";
+              homepage = https://github.com/restartr/ex-lolcat;
             };
           } // packageOverrides)
       ) {};
@@ -22903,7 +22903,7 @@ let
               description = ''A modern CRDT library that uses protocols to
                             create composable CRDTs.'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/asonge/loom";
+              homepage = https://github.com/asonge/loom;
             };
           } // packageOverrides)
       ) {};
@@ -22926,7 +22926,7 @@ let
             meta = {
               description = ''implements a fixed-size LRU cache'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/barrel-db/erlang-lru";
+              homepage = https://github.com/barrel-db/erlang-lru;
             };
           } // packageOverrides)
       ) {};
@@ -22949,7 +22949,7 @@ let
             meta = {
               description = ''ETS-based LRU Cache'';
 
-              homepage = "https://github.com/arago/lru_cache";
+              homepage = https://github.com/arago/lru_cache;
             };
           } // packageOverrides)
       ) {};
@@ -22972,7 +22972,7 @@ let
             meta = {
               description = ''A Labeled Tab-separated Values Parser'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ma2gedev/ltsvex";
+              homepage = https://github.com/ma2gedev/ltsvex;
             };
           } // packageOverrides)
       ) {};
@@ -22995,7 +22995,7 @@ let
             meta = {
               description = ''Luhn algorithm in Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ma2gedev/luhn_ex";
+              homepage = https://github.com/ma2gedev/luhn_ex;
             };
           } // packageOverrides)
       ) {};
@@ -23018,7 +23018,7 @@ let
             meta = {
               description = ''Luhn algorithm in Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/my-flow/luhnatex";
+              homepage = https://github.com/my-flow/luhnatex;
             };
           } // packageOverrides)
       ) {};
@@ -23042,7 +23042,7 @@ let
             meta = {
               description = ''LZ4 bindings for Erlang'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/szktty/erlang-lz4.git";
+              homepage = https://github.com/szktty/erlang-lz4.git;
             };
           } // packageOverrides)
       ) {};
@@ -23066,7 +23066,7 @@ let
               description = ''Elixir implementation of pieroxy`s lz-string
                             compression algorithm.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/koudelka/elixir-lz-string";
+              homepage = https://github.com/koudelka/elixir-lz-string;
             };
           } // packageOverrides)
       ) {};
@@ -23101,7 +23101,7 @@ let
                                 machine-to-machine (M2M) devices and the
                                 Internet of Things (IoT).'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/attm2x/m2x-elixir";
+              homepage = https://github.com/attm2x/m2x-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -23136,7 +23136,7 @@ let
                                 machine-to-machine (M2M) devices and the
                                 Internet of Things (IoT).'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/attm2x/m2x-erlang";
+              homepage = https://github.com/attm2x/m2x-erlang;
             };
           } // packageOverrides)
       ) {};
@@ -23167,7 +23167,7 @@ let
               description = ''A wrapper for the Mars Atmospheric Weather System
                             API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lucidstack/ex-maas";
+              homepage = https://github.com/lucidstack/ex-maas;
             };
           } // packageOverrides)
       ) {};
@@ -23197,7 +23197,7 @@ let
             meta = {
               description = ''An API of Ice and Fire client for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sotojuan/maester";
+              homepage = https://github.com/sotojuan/maester;
             };
           } // packageOverrides)
       ) {};
@@ -23221,7 +23221,7 @@ let
               description = ''MagicNumber is the module to determine a file`s
                             type from its magic number.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ishikawa/elixir-magic-number";
+              homepage = https://github.com/ishikawa/elixir-magic-number;
             };
           } // packageOverrides)
       ) {};
@@ -23244,7 +23244,7 @@ let
             meta = {
               description = ''A magnet-uri encoder and decoder'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/gausby/magnet";
+              homepage = https://github.com/gausby/magnet;
             };
           } // packageOverrides)
       ) {};
@@ -23267,7 +23267,7 @@ let
             meta = {
               description = ''Easily build a composable mail message'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/DockYard/elixir-mail";
+              homepage = https://github.com/DockYard/elixir-mail;
             };
           } // packageOverrides)
       ) {};
@@ -23297,7 +23297,7 @@ let
             meta = {
               description = ''Mailer - A simple email client'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/antp/mailer";
+              homepage = https://github.com/antp/mailer;
             };
           } // packageOverrides)
       ) {};
@@ -23321,7 +23321,7 @@ let
             meta = {
               description = ''Elixir Mailgun Client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/chrismccord/mailgun";
+              homepage = https://github.com/chrismccord/mailgun;
             };
           } // packageOverrides)
       ) {};
@@ -23371,7 +23371,7 @@ let
               longDescription = ''Mandrake is a functional programming library
                                 that bring something else magic in elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mbasso/mandrake";
+              homepage = https://github.com/mbasso/mandrake;
             };
           } // packageOverrides)
       ) {};
@@ -23403,7 +23403,7 @@ let
                                 active account with Mandrill
                                 (http://mandrill.com).'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/slogsdon/mandrill-elixir";
+              homepage = https://github.com/slogsdon/mandrill-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -23427,7 +23427,7 @@ let
               description = ''Tiny library to convert from \"encoded\" maps to
                             Elixir structs.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/whatyouhide/maptu";
+              homepage = https://github.com/whatyouhide/maptu;
             };
           } // packageOverrides)
       ) {};
@@ -23457,7 +23457,7 @@ let
             meta = {
               description = ''Binary driver for the OrientDB database.'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/MyMedsAndMe/marco_polo";
+              homepage = https://github.com/MyMedsAndMe/marco_polo;
             };
           } // packageOverrides)
       ) {};
@@ -23482,7 +23482,7 @@ let
               description = ''Pure elixir database driver for MariaDB /
                             MySQL.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/xerions/mariaex";
+              homepage = https://github.com/xerions/mariaex;
             };
           } // packageOverrides)
       ) {};
@@ -23532,7 +23532,7 @@ let
             meta = {
               description = ''Access stock market data from markit.com'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/col/markit";
+              homepage = https://github.com/col/markit;
             };
           } // packageOverrides)
       ) {};
@@ -23564,7 +23564,7 @@ let
               description = ''Amazon Alexa skill that uses data from
                             Markit.com'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/col/markit_skill";
+              homepage = https://github.com/col/markit_skill;
             };
           } // packageOverrides)
       ) {};
@@ -23661,7 +23661,7 @@ let
                                 Math.Enum.median(collection) the median of the
                                 numbers in the collection.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/folz/math";
+              homepage = https://github.com/folz/math;
             };
           } // packageOverrides)
       ) {};
@@ -23693,7 +23693,7 @@ let
                                 manipulating dense matrices. Its primary design
                                 goal is ease of use.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/twist-vector/elixir-matrix.git";
+              homepage = https://github.com/twist-vector/elixir-matrix.git;
             };
           } // packageOverrides)
       ) {};
@@ -23721,7 +23721,7 @@ let
                                 Rack middleware when processing the
                                 request/response cycle.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zhongwencool/maxwell";
+              homepage = https://github.com/zhongwencool/maxwell;
             };
           } // packageOverrides)
       ) {};
@@ -23744,7 +23744,7 @@ let
             meta = {
               description = ''Utils to deal with errors'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zweifisch/maybe";
+              homepage = https://github.com/zweifisch/maybe;
             };
           } // packageOverrides)
       ) {};
@@ -23770,7 +23770,7 @@ let
             meta = {
               description = ''hypermedia api toolkit'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mazurka/mazurka";
+              homepage = https://github.com/mazurka/mazurka;
             };
           } // packageOverrides)
       ) {};
@@ -23793,7 +23793,7 @@ let
             meta = {
               description = ''DSL for defining mazurka resources'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mazurka/mazurka_dsl";
+              homepage = https://github.com/mazurka/mazurka_dsl;
             };
           } // packageOverrides)
       ) {};
@@ -23819,7 +23819,7 @@ let
             meta = {
               description = ''mazurka mediatype interface'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mazurka/mazurka_mediatype";
+              homepage = https://github.com/mazurka/mazurka_mediatype;
             };
           } // packageOverrides)
       ) {};
@@ -23880,7 +23880,7 @@ let
               description = ''Provides access to data from the game
                             Minecraft.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/McEx/McData";
+              homepage = https://github.com/McEx/McData;
             };
           } // packageOverrides)
       ) {};
@@ -23903,7 +23903,7 @@ let
             meta = {
               description = ''DSL for markup. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Joe-noh/mcup";
+              homepage = https://github.com/Joe-noh/mcup;
             };
           } // packageOverrides)
       ) {};
@@ -23926,7 +23926,7 @@ let
             meta = {
               description = ''mDNS service discovery server'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Licenser/erlang-mdns-server";
+              homepage = https://github.com/Licenser/erlang-mdns-server;
             };
           } // packageOverrides)
       ) {};
@@ -23959,7 +23959,7 @@ let
               description = ''server side for mdns client server
                             implementation'';
               license = stdenv.lib.licenses.cddl;
-              homepage = "https://github.com/Licenser/mdns_server_lib";
+              homepage = https://github.com/Licenser/mdns_server_lib;
             };
           } // packageOverrides)
       ) {};
@@ -23982,7 +23982,7 @@ let
             meta = {
               description = ''A mocking framework for Erlang'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/eproxus/meck";
+              homepage = https://github.com/eproxus/meck;
             };
           } // packageOverrides)
       ) {};
@@ -24003,7 +24003,7 @@ let
             meta = {
               description = ''A mocking framework for Erlang'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/eproxus/meck";
+              homepage = https://github.com/eproxus/meck;
             };
           } // packageOverrides)
       ) {};
@@ -24026,7 +24026,7 @@ let
             meta = {
               description = ''create real CLIs in elixir, using mix tasks'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/conflate/meld";
+              homepage = https://github.com/conflate/meld;
             };
           } // packageOverrides)
       ) {};
@@ -24058,7 +24058,7 @@ let
                                 APIs. It`s flexible, you can define your own
                                 validator etc.'';
 
-              homepage = "https://github.com/sajmoon/mellon";
+              homepage = https://github.com/sajmoon/mellon;
             };
           } // packageOverrides)
       ) {};
@@ -24081,7 +24081,7 @@ let
             meta = {
               description = ''KV cache with TTL, LRU and Persistence support'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/falood/mem";
+              homepage = https://github.com/falood/mem;
             };
           } // packageOverrides)
       ) {};
@@ -24113,7 +24113,7 @@ let
               description = ''Memcache client library utilizing the memcache
                             binary protocol.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tsharju/memcache_client";
+              homepage = https://github.com/tsharju/memcache_client;
             };
           } // packageOverrides)
       ) {};
@@ -24141,7 +24141,7 @@ let
                                 allow efficient and secure verification of the
                                 contents of large data structures.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yosriady/merkle_tree";
+              homepage = https://github.com/yosriady/merkle_tree;
             };
           } // packageOverrides)
       ) {};
@@ -24164,7 +24164,7 @@ let
             meta = {
               description = ''MessagePack for Erlang / Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/tomaon/messagepack";
+              homepage = https://github.com/tomaon/messagepack;
             };
           } // packageOverrides)
       ) {};
@@ -24247,7 +24247,7 @@ let
               description = ''A library for web scraping, inspired by
                             MetaInspector'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nekova/metainvestigator";
+              homepage = https://github.com/nekova/metainvestigator;
             };
           } // packageOverrides)
       ) {};
@@ -24272,7 +24272,7 @@ let
               description = ''Track your elixir application on google
                             analytycs'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/carlo-colombo/meter";
+              homepage = https://github.com/carlo-colombo/meter;
             };
           } // packageOverrides)
       ) {};
@@ -24296,7 +24296,7 @@ let
               description = ''A generic interface to different metrics systems
                             in Erlang.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/benoitc/erlang-metrics";
+              homepage = https://github.com/benoitc/erlang-metrics;
             };
           } // packageOverrides)
       ) {};
@@ -24318,7 +24318,7 @@ let
               description = ''A generic interface to different metrics systems
                             in Erlang.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/benoitc/erlang-metrics";
+              homepage = https://github.com/benoitc/erlang-metrics;
             };
           } // packageOverrides)
       ) {};
@@ -24340,7 +24340,7 @@ let
               description = ''A generic interface to different metrics systems
                             in Erlang.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/benoitc/erlang-metrics";
+              homepage = https://github.com/benoitc/erlang-metrics;
             };
           } // packageOverrides)
       ) {};
@@ -24368,7 +24368,7 @@ let
                                 log processing systems (like Librato, Reimann,
                                 etc...)'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rwdaigle/metrix";
+              homepage = https://github.com/rwdaigle/metrix;
             };
           } // packageOverrides)
       ) {};
@@ -24391,7 +24391,7 @@ let
             meta = {
               description = ''Macro-expansion display helper for IEx.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mrluc/mex";
+              homepage = https://github.com/mrluc/mex;
             };
           } // packageOverrides)
       ) {};
@@ -24423,7 +24423,7 @@ let
                             (http://microformats.org/wiki/microformats-2) for
                             Elixir'';
               license = stdenv.lib.licenses.agpl3;
-              homepage = "https://github.com/ckruse/microformats2-elixir";
+              homepage = https://github.com/ckruse/microformats2-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -24454,7 +24454,7 @@ let
               description = ''milkpotion is an api wrapper for Remember the
                             Milk'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/croesnick/milkpotion.git";
+              homepage = https://github.com/croesnick/milkpotion.git;
             };
           } // packageOverrides)
       ) {};
@@ -24480,7 +24480,7 @@ let
                                 Convert milliseconds to text: convert(8640000)
                                 Calculate future time: future_time(\"6hrs\") '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/davebryson/elixir_milliseconds";
+              homepage = https://github.com/davebryson/elixir_milliseconds;
             };
           } // packageOverrides)
       ) {};
@@ -24503,7 +24503,7 @@ let
             meta = {
               description = ''A MIME type module for Elixir'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/mime";
+              homepage = https://github.com/elixir-lang/mime;
             };
           } // packageOverrides)
       ) {};
@@ -24527,7 +24527,7 @@ let
               description = ''A toolbelt for working with MIME types in
                             Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/christhekeele/mime_types";
+              homepage = https://github.com/christhekeele/mime_types;
             };
           } // packageOverrides)
       ) {};
@@ -24550,7 +24550,7 @@ let
             meta = {
               description = ''Library to handle mimetypes'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/benoitc/mimerl";
+              homepage = https://github.com/benoitc/mimerl;
             };
           } // packageOverrides)
       ) {};
@@ -24571,7 +24571,7 @@ let
             meta = {
               description = ''Library to handle mimetypes'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/benoitc/mimerl";
+              homepage = https://github.com/benoitc/mimerl;
             };
           } // packageOverrides)
       ) {};
@@ -24594,7 +24594,7 @@ let
             meta = {
               description = ''parse mimetypes'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/mimetype_parser";
+              homepage = https://github.com/camshaft/mimetype_parser;
             };
           } // packageOverrides)
       ) {};
@@ -24617,7 +24617,7 @@ let
             meta = {
               description = ''MIME type utilities for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hex-sh/mimex";
+              homepage = https://github.com/hex-sh/mimex;
             };
           } // packageOverrides)
       ) {};
@@ -24642,7 +24642,7 @@ let
                                 `Enum.max_by/2` and `Enum.min_max_by/2` to
                                 return a list of results instead of just one.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/seantanly/elixir-minmaxlist";
+              homepage = https://github.com/seantanly/elixir-minmaxlist;
             };
           } // packageOverrides)
       ) {};
@@ -24667,7 +24667,7 @@ let
                                 random:uniform method. It allows you to create
                                 random strings or numbers.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gutschilla/elixir-helper-random";
+              homepage = https://github.com/gutschilla/elixir-helper-random;
             };
           } // packageOverrides)
       ) {};
@@ -24693,7 +24693,7 @@ let
                                 documentation for RESTful web APIs from inline
                                 code annotations.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sldab/mix_apidoc";
+              homepage = https://github.com/sldab/mix_apidoc;
             };
           } // packageOverrides)
       ) {};
@@ -24717,7 +24717,7 @@ let
               description = ''Mix task to print dependency tree of an
                             application to a terminal'';
 
-              homepage = "https://github.com/liveforeverx/mix_deps_tree";
+              homepage = https://github.com/liveforeverx/mix_deps_tree;
             };
           } // packageOverrides)
       ) {};
@@ -24743,7 +24743,7 @@ let
                                 tool and package manager when developing
                                 applications in Erlang.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/alco/mix-erlang-tasks";
+              homepage = https://github.com/alco/mix-erlang-tasks;
             };
           } // packageOverrides)
       ) {};
@@ -24767,7 +24767,7 @@ let
               description = ''A mix task to run eunit tests, works for umbrella
                             projects'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dantswain/mix_eunit";
+              homepage = https://github.com/dantswain/mix_eunit;
             };
           } // packageOverrides)
       ) {};
@@ -24792,7 +24792,7 @@ let
                                 lines of code, modules, functions etc and
                                 displays the results.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pskordilakis/mix_info";
+              homepage = https://github.com/pskordilakis/mix_info;
             };
           } // packageOverrides)
       ) {};
@@ -24816,7 +24816,7 @@ let
             meta = {
               description = ''Automatically run tests when files change'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lpil/mix-test.watch";
+              homepage = https://github.com/lpil/mix-test.watch;
             };
           } // packageOverrides)
       ) {};
@@ -24847,7 +24847,7 @@ let
               description = ''Create an interactive dependency graph for any
                             hex package published in hex.pm'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sivsushruth/mixgraph";
+              homepage = https://github.com/sivsushruth/mixgraph;
             };
           } // packageOverrides)
       ) {};
@@ -24872,7 +24872,7 @@ let
               description = ''A client for the Mixpanel HTTP API. See
                             mixpanel.com.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/michihuber/mixpanel_ex";
+              homepage = https://github.com/michihuber/mixpanel_ex;
             };
           } // packageOverrides)
       ) {};
@@ -24902,7 +24902,7 @@ let
             meta = {
               description = ''Elixir client for the Mixpanel API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/agevio/mixpanel_api_ex";
+              homepage = https://github.com/agevio/mixpanel_api_ex;
             };
           } // packageOverrides)
       ) {};
@@ -24933,7 +24933,7 @@ let
               description = ''Client library for interacting with the Mixpanel
                             Data API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jeregrine/mixpanel_data_client";
+              homepage = https://github.com/jeregrine/mixpanel_data_client;
             };
           } // packageOverrides)
       ) {};
@@ -24956,7 +24956,7 @@ let
             meta = {
               description = ''an eunit task for mix'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/talentdeficit/mixunit";
+              homepage = https://github.com/talentdeficit/mixunit;
             };
           } // packageOverrides)
       ) {};
@@ -24987,7 +24987,7 @@ let
               longDescription = ''A simple exchange rate checker and calculator
                                 based on Central Bank of Myanmar Api. '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/Arkar-Aung/mmExchangeRate";
+              homepage = https://github.com/Arkar-Aung/mmExchangeRate;
             };
           } // packageOverrides)
       ) {};
@@ -25014,7 +25014,7 @@ let
               description = ''math library for metric sequences and binary
                             arrays.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dalmatinerdb/mmath";
+              homepage = https://github.com/dalmatinerdb/mmath;
             };
           } // packageOverrides)
       ) {};
@@ -25039,7 +25039,7 @@ let
               description = ''math library for metric sequences and binary
                             arrays.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dalmatinerdb/mmath";
+              homepage = https://github.com/dalmatinerdb/mmath;
             };
           } // packageOverrides)
       ) {};
@@ -25063,7 +25063,7 @@ let
             meta = {
               description = ''mnemonicode encoder/decoder'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/mnemonex";
+              homepage = https://github.com/mwmiller/mnemonex;
             };
           } // packageOverrides)
       ) {};
@@ -25087,7 +25087,7 @@ let
               description = ''MnemonicSlugs is an Elixir library for generating
                             memorable slugs.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/devshane/mnemonic_slugs";
+              homepage = https://github.com/devshane/mnemonic_slugs;
             };
           } // packageOverrides)
       ) {};
@@ -25111,7 +25111,7 @@ let
               description = ''MochiWeb is an Erlang library for building
                             lightweight HTTP servers. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mochi/mochiweb";
+              homepage = https://github.com/mochi/mochiweb;
             };
           } // packageOverrides)
       ) {};
@@ -25134,7 +25134,7 @@ let
             meta = {
               description = ''Mochiweb HTML parser'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/philss/mochiweb_html";
+              homepage = https://github.com/philss/mochiweb_html;
             };
           } // packageOverrides)
       ) {};
@@ -25163,7 +25163,7 @@ let
                                 convenient manner for integrating in Elixir
                                 tests.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jjh42/mock";
+              homepage = https://github.com/jjh42/mock;
             };
           } // packageOverrides)
       ) {};
@@ -25188,7 +25188,7 @@ let
                                 in development and test environment. It allows
                                 convention to mock module for test'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rohanpujaris/module_mocker";
+              homepage = https://github.com/rohanpujaris/module_mocker;
             };
           } // packageOverrides)
       ) {};
@@ -25211,7 +25211,7 @@ let
             meta = {
               description = ''ImageMagick command line wrapper.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/route/mogrify";
+              homepage = https://github.com/route/mogrify;
             };
           } // packageOverrides)
       ) {};
@@ -25236,7 +25236,7 @@ let
               longDescription = ''MojoAuth is a set of standard approaches to
                                 cross-app authentication based on HMAC.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/adhearsion/mojo-auth.ex";
+              homepage = https://github.com/adhearsion/mojo-auth.ex;
             };
           } // packageOverrides)
       ) {};
@@ -25260,7 +25260,7 @@ let
               description = ''Parse, validate, manipulate, and display dates in
                             Elixir.'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/atabary/moment";
+              homepage = https://github.com/atabary/moment;
             };
           } // packageOverrides)
       ) {};
@@ -25289,7 +25289,7 @@ let
                                 :normal, :shutdown or :swapped reasons will not
                                 attempt a re-add to the manager.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tattdcodemonkey/mon_handler";
+              homepage = https://github.com/tattdcodemonkey/mon_handler;
             };
           } // packageOverrides)
       ) {};
@@ -25312,7 +25312,7 @@ let
             meta = {
               description = ''Monads and do-syntax for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rmies/monad";
+              homepage = https://github.com/rmies/monad;
             };
           } // packageOverrides)
       ) {};
@@ -25335,7 +25335,7 @@ let
             meta = {
               description = ''Improve pipelines with monads.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rob-brown/MonadEx";
+              homepage = https://github.com/rob-brown/MonadEx;
             };
           } // packageOverrides)
       ) {};
@@ -25366,7 +25366,7 @@ let
             meta = {
               description = ''An Elixir client for the Mondo API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stevedomin/mondo_elixir";
+              homepage = https://github.com/stevedomin/mondo_elixir;
             };
           } // packageOverrides)
       ) {};
@@ -25396,7 +25396,7 @@ let
             meta = {
               description = ''MongoDB driver for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ericmj/mongodb";
+              homepage = https://github.com/ericmj/mongodb;
             };
           } // packageOverrides)
       ) {};
@@ -25420,7 +25420,7 @@ let
               description = ''Monk helps to distinguish good from evil with an
                             simple ok/error monad'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/niahoo/monk";
+              homepage = https://github.com/niahoo/monk;
             };
           } // packageOverrides)
       ) {};
@@ -25443,7 +25443,7 @@ let
             meta = {
               description = ''Lightweight string transformations for Elixir.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/cmoncrief/elixir-morph";
+              homepage = https://github.com/cmoncrief/elixir-morph;
             };
           } // packageOverrides)
       ) {};
@@ -25467,7 +25467,7 @@ let
               description = ''A set of functions for working with mortgages and
                             mortgage notes.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/geolessel/mortgage";
+              homepage = https://github.com/geolessel/mortgage;
             };
           } // packageOverrides)
       ) {};
@@ -25489,7 +25489,7 @@ let
 
             meta = {
                license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/molossus/moxie";
+              homepage = https://github.com/molossus/moxie;
             };
           } // packageOverrides)
       ) {};
@@ -25512,7 +25512,7 @@ let
             meta = {
               description = ''Pinyin module for Elixir. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Hor/mpinyin";
+              homepage = https://github.com/Hor/mpinyin;
             };
           } // packageOverrides)
       ) {};
@@ -25542,7 +25542,7 @@ let
             meta = {
               description = ''Elixir wrapper for MPowerPayments API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/abakhi/mpower";
+              homepage = https://github.com/abakhi/mpower;
             };
           } // packageOverrides)
       ) {};
@@ -25588,7 +25588,7 @@ let
             meta = {
               description = ''MessagePack serializer/deserializer'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "http://msgpack.org";
+              homepage = http://msgpack.org;
             };
           } // packageOverrides)
       ) {};
@@ -25613,7 +25613,7 @@ let
                                 and de-serializing Elixir terms using the
                                 MessagePack format'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/lexmag/msgpax";
+              homepage = https://github.com/lexmag/msgpax;
             };
           } // packageOverrides)
       ) {};
@@ -25636,7 +25636,7 @@ let
             meta = {
               description = ''Metrics Client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/synrc/mtx";
+              homepage = https://github.com/synrc/mtx;
             };
           } // packageOverrides)
       ) {};
@@ -25664,7 +25664,7 @@ let
                                 end IO.inspect Test.fred 1, 2 #=> 3 IO.inspect
                                 Test.fred { :init, 4 } #=> 8 '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pragdave/mdef";
+              homepage = https://github.com/pragdave/mdef;
             };
           } // packageOverrides)
       ) {};
@@ -25687,7 +25687,7 @@ let
             meta = {
               description = ''Multisets for Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/hilverd/multiset-elixir";
+              homepage = https://github.com/hilverd/multiset-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -25720,7 +25720,7 @@ let
                                 Pub/Sub (PubSub). Supports both publication and
                                 pull subscription'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/peburrows/murdoch";
+              homepage = https://github.com/peburrows/murdoch;
             };
           } // packageOverrides)
       ) {};
@@ -25746,7 +25746,7 @@ let
                                 implement the x86_32bit, x86_128bit and
                                 x64_128bit variants.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gmcabrita/murmur";
+              homepage = https://github.com/gmcabrita/murmur;
             };
           } // packageOverrides)
       ) {};
@@ -25770,7 +25770,7 @@ let
                                 implement the x86_32bit, x86_128bit and
                                 x64_128bit variants.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gmcabrita/murmur";
+              homepage = https://github.com/gmcabrita/murmur;
             };
           } // packageOverrides)
       ) {};
@@ -25793,7 +25793,7 @@ let
             meta = {
               description = ''Mustache templates for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/schultyy/Mustache.ex";
+              homepage = https://github.com/schultyy/Mustache.ex;
             };
           } // packageOverrides)
       ) {};
@@ -25817,7 +25817,7 @@ let
               description = ''Now you can create mutable structs, use this with
                             care and only as a last resort'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/hackersguildco/Mutant";
+              homepage = https://github.com/hackersguildco/Mutant;
             };
           } // packageOverrides)
       ) {};
@@ -25840,7 +25840,7 @@ let
             meta = {
               description = ''MySQL/OTP – MySQL driver for Erlang/OTP'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/mysql-otp/mysql-otp";
+              homepage = https://github.com/mysql-otp/mysql-otp;
             };
           } // packageOverrides)
       ) {};
@@ -25866,7 +25866,7 @@ let
                                 mysql-otp library.
                                 https://github.com/mysql-otp/mysql-otp'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/tjheeta/mysqlex";
+              homepage = https://github.com/tjheeta/mysqlex;
             };
           } // packageOverrides)
       ) {};
@@ -25889,7 +25889,7 @@ let
             meta = {
               description = ''N2O Application Server'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/synrc/n2o";
+              homepage = https://github.com/synrc/n2o;
             };
           } // packageOverrides)
       ) {};
@@ -25919,7 +25919,7 @@ let
             meta = {
               description = ''Telegram Bot API Wrapper written in Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zhyu/nadia";
+              homepage = https://github.com/zhyu/nadia;
             };
           } // packageOverrides)
       ) {};
@@ -25942,7 +25942,7 @@ let
             meta = {
               description = ''An Elixir implementation of Naive Bayes'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ashleyw/naive_bayes";
+              homepage = https://github.com/ashleyw/naive_bayes;
             };
           } // packageOverrides)
       ) {};
@@ -25966,7 +25966,7 @@ let
               description = ''Ensures default maps and keyword lists have the
                             defaults specified.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mgwidmann/named_args";
+              homepage = https://github.com/mgwidmann/named_args;
             };
           } // packageOverrides)
       ) {};
@@ -25990,7 +25990,7 @@ let
               description = ''Narp is an easy and flexible way to authorize
                             function calls in elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/faber-lotto/narp";
+              homepage = https://github.com/faber-lotto/narp;
             };
           } // packageOverrides)
       ) {};
@@ -26014,7 +26014,7 @@ let
               description = ''Represent sets of natural numbers compactly in
                             Elixir using bitwise operations'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/hilverd/nat-set-elixir";
+              homepage = https://github.com/hilverd/nat-set-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -26038,7 +26038,7 @@ let
               description = ''Accessible REST API code generator for native
                             app.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yoavlt/nativegen";
+              homepage = https://github.com/yoavlt/nativegen;
             };
           } // packageOverrides)
       ) {};
@@ -26069,7 +26069,7 @@ let
               description = ''A NATS client written in elixir supporting
                             pub/sub for microservices'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/aforward/elixir_nats";
+              homepage = https://github.com/aforward/elixir_nats;
             };
           } // packageOverrides)
       ) {};
@@ -26093,7 +26093,7 @@ let
               description = ''Pure Erlang NATS Protocol Message
                             Encoder/Decoder'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yuce/nats_msg";
+              homepage = https://github.com/yuce/nats_msg;
             };
           } // packageOverrides)
       ) {};
@@ -26116,7 +26116,7 @@ let
             meta = {
               description = ''NATS framework for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nats-io/elixir-nats";
+              homepage = https://github.com/nats-io/elixir-nats;
             };
           } // packageOverrides)
       ) {};
@@ -26140,7 +26140,7 @@ let
               description = ''Sort a list of strings containing numbers in a
                             natural manner. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/DanCouper/natural_sort";
+              homepage = https://github.com/DanCouper/natural_sort;
             };
           } // packageOverrides)
       ) {};
@@ -26315,7 +26315,7 @@ let
               description = ''Drive WS2812B \"NeoPixel\" RGB LED strips from a
                             Raspberry Pi using Elixir.'';
               license = with stdenv.lib.licenses; [ mit bsd2 ];
-              homepage = "https://github.com/GregMefford/nerves_io_neopixel";
+              homepage = https://github.com/GregMefford/nerves_io_neopixel;
             };
           } // packageOverrides)
       ) {};
@@ -26347,7 +26347,7 @@ let
                                 Nerves Systems. For useable system
                                 configurations see nerves_system_*'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nerves-project/nerves_system";
+              homepage = https://github.com/nerves-project/nerves_system;
             };
           } // packageOverrides)
       ) {};
@@ -26371,7 +26371,7 @@ let
               description = ''Nerves System BR - Buildroot based build platform
                             for Nerves Systems'';
               license = with stdenv.lib.licenses; [ asl20 free ];
-              homepage = "https://github.com/nerves-project/nerves_system_br";
+              homepage = https://github.com/nerves-project/nerves_system_br;
             };
           } // packageOverrides)
       ) {};
@@ -26397,7 +26397,7 @@ let
                                 Nerves Toolchains. For useable toolchain
                                 configurations see nerves_toolchain_*'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nerves-project/nerves_toolchain";
+              homepage = https://github.com/nerves-project/nerves_toolchain;
             };
           } // packageOverrides)
       ) {};
@@ -26424,7 +26424,7 @@ let
               description = ''Discover and use UARTs and serial ports in
                             Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nerves-project/nerves_uart";
+              homepage = https://github.com/nerves-project/nerves_uart;
             };
           } // packageOverrides)
       ) {};
@@ -26449,7 +26449,7 @@ let
                                 integration with Nest Thermostats and other Nest
                                 devices.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/adamzaninovich/nest";
+              homepage = https://github.com/adamzaninovich/nest;
             };
           } // packageOverrides)
       ) {};
@@ -26472,7 +26472,7 @@ let
             meta = {
               description = ''Read netrc files'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ma2gedev/netrcex";
+              homepage = https://github.com/ma2gedev/netrcex;
             };
           } // packageOverrides)
       ) {};
@@ -26495,7 +26495,7 @@ let
             meta = {
               description = ''Netstrings implementaton'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/netstrings_ex";
+              homepage = https://github.com/mwmiller/netstrings_ex;
             };
           } // packageOverrides)
       ) {};
@@ -26549,7 +26549,7 @@ let
                                 connected to each other to form a relationship
                                 allowing it to learn.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kblake/neural-net-elixir";
+              homepage = https://github.com/kblake/neural-net-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -26572,7 +26572,7 @@ let
             meta = {
               description = ''Publish elixir and erlang new weekly'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zhongwencool/news";
+              homepage = https://github.com/zhongwencool/news;
             };
           } // packageOverrides)
       ) {};
@@ -26595,7 +26595,7 @@ let
             meta = {
               description = ''n-gram tokenization and distance calculations'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ardcore/ngram";
+              homepage = https://github.com/ardcore/ngram;
             };
           } // packageOverrides)
       ) {};
@@ -26618,7 +26618,7 @@ let
             meta = {
               description = ''Elixir stream extensions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/nile";
+              homepage = https://github.com/camshaft/nile;
             };
           } // packageOverrides)
       ) {};
@@ -26648,7 +26648,7 @@ let
             meta = {
               description = ''Ninjaproxies client library for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zensavona/ninjaproxies";
+              homepage = https://github.com/zensavona/ninjaproxies;
             };
           } // packageOverrides)
       ) {};
@@ -26678,7 +26678,7 @@ let
             meta = {
               description = ''A wrapper over HTTPoison to build client APIs.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gmtprime/njord";
+              homepage = https://github.com/gmtprime/njord;
             };
           } // packageOverrides)
       ) {};
@@ -26701,7 +26701,7 @@ let
             meta = {
               description = ''A pseudo-random noise generation library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joshforisha/noise";
+              homepage = https://github.com/joshforisha/noise;
             };
           } // packageOverrides)
       ) {};
@@ -26725,7 +26725,7 @@ let
             meta = {
               description = ''Normalize an email address'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/johnotander/normalize_email";
+              homepage = https://github.com/johnotander/normalize_email;
             };
           } // packageOverrides)
       ) {};
@@ -26748,7 +26748,7 @@ let
             meta = {
               description = ''Normalize a url'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/johnotander/normalize_url";
+              homepage = https://github.com/johnotander/normalize_url;
             };
           } // packageOverrides)
       ) {};
@@ -26773,7 +26773,7 @@ let
               description = ''Library to check password strength and generate
                             random passwords.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/riverrun/notqwerty123";
+              homepage = https://github.com/riverrun/notqwerty123;
             };
           } // packageOverrides)
       ) {};
@@ -26797,7 +26797,7 @@ let
               description = ''Convert numbers to various string formats, such
                             as currency'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/danielberkompas/number";
+              homepage = https://github.com/danielberkompas/number;
             };
           } // packageOverrides)
       ) {};
@@ -26821,7 +26821,7 @@ let
               description = ''A collection of (potentially) useful mathematical
                             functions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/safwank/Numerix";
+              homepage = https://github.com/safwank/Numerix;
             };
           } // packageOverrides)
       ) {};
@@ -26855,7 +26855,7 @@ let
             meta = {
               description = ''An Elixir OAuth 2.0 Client Library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/scrogson/oauth2";
+              homepage = https://github.com/scrogson/oauth2;
             };
           } // packageOverrides)
       ) {};
@@ -26876,7 +26876,7 @@ let
             meta = {
               description = ''Erlang OAuth 2.0 implementation'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kivra/oauth2";
+              homepage = https://github.com/kivra/oauth2;
             };
           } // packageOverrides)
       ) {};
@@ -26900,7 +26900,7 @@ let
               description = ''Library to authenticate with OAuth 1.0
                             protocol.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/lexmag/oauther";
+              homepage = https://github.com/lexmag/oauther;
             };
           } // packageOverrides)
       ) {};
@@ -26923,7 +26923,7 @@ let
             meta = {
               description = ''Octet string converter'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kiennt/octet";
+              homepage = https://github.com/kiennt/octet;
             };
           } // packageOverrides)
       ) {};
@@ -26955,7 +26955,7 @@ let
               description = ''An Elixir library for accessing the GitHub
                             API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lee-dohm/octokit.ex";
+              homepage = https://github.com/lee-dohm/octokit.ex;
             };
           } // packageOverrides)
       ) {};
@@ -26979,7 +26979,7 @@ let
               description = ''This is an implementation of JSON Pointer (RFC
                             6901) for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/odogono/elixir-jsonpointer";
+              homepage = https://github.com/odogono/elixir-jsonpointer;
             };
           } // packageOverrides)
       ) {};
@@ -27003,7 +27003,7 @@ let
               description = ''elixir toolkit for building command-line
                             interfaces.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/plus-eg/odin";
+              homepage = https://github.com/plus-eg/odin;
             };
           } // packageOverrides)
       ) {};
@@ -27027,7 +27027,7 @@ let
               description = ''Substitute placeholders in ODT`s with custom
                             information'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/andrewcottage/odt_potion";
+              homepage = https://github.com/andrewcottage/odt_potion;
             };
           } // packageOverrides)
       ) {};
@@ -27051,7 +27051,7 @@ let
               description = ''Og is a small collection of logger helper
                             functions in elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stephenmoloney/og";
+              homepage = https://github.com/stephenmoloney/og;
             };
           } // packageOverrides)
       ) {};
@@ -27074,7 +27074,7 @@ let
             meta = {
               description = ''Effecient error handling in elixir pipelines.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/CrowdHailer/OK";
+              homepage = https://github.com/CrowdHailer/OK;
             };
           } // packageOverrides)
       ) {};
@@ -27097,7 +27097,7 @@ let
             meta = {
               description = ''Pipe functions that produce ok/error tuples.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/vic/ok_jose";
+              homepage = https://github.com/vic/ok_jose;
             };
           } // packageOverrides)
       ) {};
@@ -27127,7 +27127,7 @@ let
             meta = {
               description = ''Elixir wrapper of OneSignal'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yoavlt/one_signal";
+              homepage = https://github.com/yoavlt/one_signal;
             };
           } // packageOverrides)
       ) {};
@@ -27151,7 +27151,7 @@ let
             meta = {
               description = ''An onetime key-value store'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ryo33/onetime-elixir";
+              homepage = https://github.com/ryo33/onetime-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -27174,7 +27174,7 @@ let
             meta = {
               description = ''OOP in Elixir!'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/wojtekmach/oop";
+              homepage = https://github.com/wojtekmach/oop;
             };
           } // packageOverrides)
       ) {};
@@ -27204,7 +27204,7 @@ let
             meta = {
               description = ''Elixir client for opbeat'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/teodor-pripoae/opbeat";
+              homepage = https://github.com/teodor-pripoae/opbeat;
             };
           } // packageOverrides)
       ) {};
@@ -27234,7 +27234,7 @@ let
             meta = {
               description = ''Load Open Graph Protocol'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yoavlt/open_graphx";
+              homepage = https://github.com/yoavlt/open_graphx;
             };
           } // packageOverrides)
       ) {};
@@ -27266,7 +27266,7 @@ let
               description = ''JSON Web Token library for use with the Openmaize
                             authentication library.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/riverrun/openmaizejwt";
+              homepage = https://github.com/riverrun/openmaizejwt;
             };
           } // packageOverrides)
       ) {};
@@ -27297,7 +27297,7 @@ let
             meta = {
               description = ''Openstack Client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zweifisch/openstack.ex";
+              homepage = https://github.com/zweifisch/openstack.ex;
             };
           } // packageOverrides)
       ) {};
@@ -27334,7 +27334,7 @@ let
             meta = {
               description = ''OpenStack Keystone client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mspanc/openstax_keystone";
+              homepage = https://github.com/mspanc/openstax_keystone;
             };
           } // packageOverrides)
       ) {};
@@ -27364,7 +27364,7 @@ let
             meta = {
               description = ''OpenStack Swift client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mspanc/openstax_swift";
+              homepage = https://github.com/mspanc/openstax_swift;
             };
           } // packageOverrides)
       ) {};
@@ -27387,7 +27387,7 @@ let
             meta = {
               description = ''Sorting and reordering positions in a list.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/aarondufall/ordered_list";
+              homepage = https://github.com/aarondufall/ordered_list;
             };
           } // packageOverrides)
       ) {};
@@ -27410,7 +27410,7 @@ let
             meta = {
               description = ''OS utilities for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/orderthruchaos/os_utils";
+              homepage = https://github.com/orderthruchaos/os_utils;
             };
           } // packageOverrides)
       ) {};
@@ -27433,7 +27433,7 @@ let
             meta = {
               description = ''OSC encoder/decoder for elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/osc_ex";
+              homepage = https://github.com/camshaft/osc_ex;
             };
           } // packageOverrides)
       ) {};
@@ -27457,7 +27457,7 @@ let
               description = ''Elixir dependency registry for better testing and
                             cleaner code'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/BlakeWilliams/pact";
+              homepage = https://github.com/BlakeWilliams/pact;
             };
           } // packageOverrides)
       ) {};
@@ -27487,7 +27487,7 @@ let
             meta = {
               description = ''A PagarMe Library for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gullitmiranda/pagarmex";
+              homepage = https://github.com/gullitmiranda/pagarmex;
             };
           } // packageOverrides)
       ) {};
@@ -27517,7 +27517,7 @@ let
             meta = {
               description = ''A Pagerduty client for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ride/pagexduty";
+              homepage = https://github.com/ride/pagexduty;
             };
           } // packageOverrides)
       ) {};
@@ -27541,7 +27541,7 @@ let
               description = ''Exposes a pagination struct that can be helpful
                             to render the pagination html.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bhserna/paginex";
+              homepage = https://github.com/bhserna/paginex;
             };
           } // packageOverrides)
       ) {};
@@ -27565,7 +27565,7 @@ let
             meta = {
               description = ''Bet stake sizing recommendations'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/painstaking";
+              homepage = https://github.com/mwmiller/painstaking;
             };
           } // packageOverrides)
       ) {};
@@ -27588,7 +27588,7 @@ let
             meta = {
               description = ''A handy library for colouring strings.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lpil/palette";
+              homepage = https://github.com/lpil/palette;
             };
           } // packageOverrides)
       ) {};
@@ -27617,7 +27617,7 @@ let
                                 Pandex has no dependencies other than Pandoc
                                 itself.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/filterkaapi/pandex";
+              homepage = https://github.com/filterkaapi/pandex;
             };
           } // packageOverrides)
       ) {};
@@ -27640,7 +27640,7 @@ let
             meta = {
               description = ''Paranoid text spacing in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/cataska/pangu.ex";
+              homepage = https://github.com/cataska/pangu.ex;
             };
           } // packageOverrides)
       ) {};
@@ -27690,7 +27690,7 @@ let
             meta = {
               description = ''Straightforward parallel processing for Elixir'';
 
-              homepage = "https://github.com/Anonyfox/parallel";
+              homepage = https://github.com/Anonyfox/parallel;
             };
           } // packageOverrides)
       ) {};
@@ -27713,7 +27713,7 @@ let
             meta = {
               description = ''Parallel stream operations for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/beatrichartz/parallel_stream";
+              homepage = https://github.com/beatrichartz/parallel_stream;
             };
           } // packageOverrides)
       ) {};
@@ -27737,7 +27737,7 @@ let
               description = ''Elixir library providing some handy parallel
                             processing facilities.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/seantanly/elixir-paratize";
+              homepage = https://github.com/seantanly/elixir-paratize;
             };
           } // packageOverrides)
       ) {};
@@ -27767,7 +27767,7 @@ let
             meta = {
               description = ''Parses a .torrent file and returns a map'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/preciz/parse_torrent";
+              homepage = https://github.com/preciz/parse_torrent;
             };
           } // packageOverrides)
       ) {};
@@ -27790,7 +27790,7 @@ let
             meta = {
               description = ''A Parser Combinator Library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ryo33/Parselix";
+              homepage = https://github.com/ryo33/Parselix;
             };
           } // packageOverrides)
       ) {};
@@ -27814,7 +27814,7 @@ let
               description = ''A library to parse non-complex nested inputs with
                             a given ruleset.'';
               license = stdenv.lib.licenses.bsd2;
-              homepage = "https://github.com/ScrimpyCat/Parsey";
+              homepage = https://github.com/ScrimpyCat/Parsey;
             };
           } // packageOverrides)
       ) {};
@@ -27845,7 +27845,7 @@ let
               description = ''A simple authentication manager for Plug
                             applications.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/elixir-extracts/pass";
+              homepage = https://github.com/elixir-extracts/pass;
             };
           } // packageOverrides)
       ) {};
@@ -27870,7 +27870,7 @@ let
               description = ''A HTTP client library for the Trak.io REST API.
                             '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/novabyte/pathway";
+              homepage = https://github.com/novabyte/pathway;
             };
           } // packageOverrides)
       ) {};
@@ -27894,7 +27894,7 @@ let
               description = ''Macro for tapping into a pattern match while
                             using the pipe operator '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mgwidmann/elixir-pattern_tap";
+              homepage = https://github.com/mgwidmann/elixir-pattern_tap;
             };
           } // packageOverrides)
       ) {};
@@ -27922,7 +27922,7 @@ let
                                 application behaves. The syntax tries to follow
                                 RSpec`s wherever possible.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sproutapp/pavlov";
+              homepage = https://github.com/sproutapp/pavlov;
             };
           } // packageOverrides)
       ) {};
@@ -27945,7 +27945,7 @@ let
             meta = {
               description = ''Erlang PBKDF2 Key Derivation Function'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/basho/erlang-pbkdf2";
+              homepage = https://github.com/basho/erlang-pbkdf2;
             };
           } // packageOverrides)
       ) {};
@@ -27971,7 +27971,7 @@ let
             meta = {
               description = ''PBKDF2 NIF implementation'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/barrel-db/erlang-pbkdf2-nif";
+              homepage = https://github.com/barrel-db/erlang-pbkdf2-nif;
             };
           } // packageOverrides)
       ) {};
@@ -27994,7 +27994,7 @@ let
             meta = {
               description = ''a rebar3 port compiler for native code'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/blt/port_compiler";
+              homepage = https://github.com/blt/port_compiler;
             };
           } // packageOverrides)
       ) {};
@@ -28018,7 +28018,7 @@ let
               description = ''Convert PDF docs to beautiful HTML files without
                             losing text or format.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ricn/pdf2htmlex";
+              homepage = https://github.com/ricn/pdf2htmlex;
             };
           } // packageOverrides)
       ) {};
@@ -28050,7 +28050,7 @@ let
                                 PDFTK (adds in encryption) for use in Elixir
                                 projects.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gutschilla/elixir-pdf-generator";
+              homepage = https://github.com/gutschilla/elixir-pdf-generator;
             };
           } // packageOverrides)
       ) {};
@@ -28073,7 +28073,7 @@ let
             meta = {
               description = ''Use Elixir maps as a document storage format.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/supernintendo/peon";
+              homepage = https://github.com/supernintendo/peon;
             };
           } // packageOverrides)
       ) {};
@@ -28097,7 +28097,7 @@ let
               description = ''Permission management and checking library for
                             Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/OvermindDL1/permission_ex";
+              homepage = https://github.com/OvermindDL1/permission_ex;
             };
           } // packageOverrides)
       ) {};
@@ -28120,7 +28120,7 @@ let
             meta = {
               description = ''Periodic timer'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/niku/petick";
+              homepage = https://github.com/niku/petick;
             };
           } // packageOverrides)
       ) {};
@@ -28144,7 +28144,7 @@ let
               description = ''A PubSub implementation for Elixir, using PG2
                             (Erlang process groups).'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kbremner/pg2pubsub";
+              homepage = https://github.com/kbremner/pg2pubsub;
             };
           } // packageOverrides)
       ) {};
@@ -28309,7 +28309,7 @@ let
                                 framework that does not compromise speed and
                                 maintainability.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/phoenixframework/phoenix";
+              homepage = https://github.com/phoenixframework/phoenix;
             };
           } // packageOverrides)
       ) {};
@@ -28332,7 +28332,7 @@ let
               description = ''A collection of boilerplate generators for the
                             Phoenix web framework.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/etufe/phoenix_generator";
+              homepage = https://github.com/etufe/phoenix_generator;
             };
           } // packageOverrides)
       ) {};
@@ -28356,7 +28356,7 @@ let
               description = ''Brings phoenix router helpers to your javascript
                             code.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tiagoengel/phoenix-jsroutes";
+              homepage = https://github.com/tiagoengel/phoenix-jsroutes;
             };
           } // packageOverrides)
       ) {};
@@ -28379,7 +28379,7 @@ let
             meta = {
               description = ''Distributed PubSub and Presence platform'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/phoenixframework/phoenix_pubsub";
+              homepage = https://github.com/phoenixframework/phoenix_pubsub;
             };
           } // packageOverrides)
       ) {};
@@ -28400,7 +28400,7 @@ let
             meta = {
               description = ''Distributed PubSub and Presence platform'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/phoenixframework/phoenix_pubsub";
+              homepage = https://github.com/phoenixframework/phoenix_pubsub;
             };
           } // packageOverrides)
       ) {};
@@ -28424,7 +28424,7 @@ let
               description = ''The VerneMQ MQTT pubsub adapter for the Phoenix
                             framework'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/larshesel/phoenix_pubsub_vernemq";
+              homepage = https://github.com/larshesel/phoenix_pubsub_vernemq;
             };
           } // packageOverrides)
       ) {};
@@ -28447,7 +28447,7 @@ let
             meta = {
               description = ''Easily generate webpack configs for phoenix'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/keathley/phoenix_webpack";
+              homepage = https://github.com/keathley/phoenix_webpack;
             };
           } // packageOverrides)
       ) {};
@@ -28470,7 +28470,7 @@ let
             meta = {
               description = ''Get useful info from telephone numbers.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/fcevado/phone";
+              homepage = https://github.com/fcevado/phone;
             };
           } // packageOverrides)
       ) {};
@@ -28494,7 +28494,7 @@ let
               longDescription = ''An Elixir Protocol and implementation for
                                 creating a tranform of any elixir data.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/philosophers-stone/transform";
+              homepage = https://github.com/philosophers-stone/transform;
             };
           } // packageOverrides)
       ) {};
@@ -28525,7 +28525,7 @@ let
               longDescription = ''HTTP2-compliant wrapper for sending iOS
                                 (APNS) and Android (GCM) push notifications.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/codedge-llc/pigeon";
+              homepage = https://github.com/codedge-llc/pigeon;
             };
           } // packageOverrides)
       ) {};
@@ -28549,7 +28549,7 @@ let
               description = ''Simple mobile phone formatter for the
                             Philippines'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/wetoolaguer/piliponi";
+              homepage = https://github.com/wetoolaguer/piliponi;
             };
           } // packageOverrides)
       ) {};
@@ -28579,7 +28579,7 @@ let
             meta = {
               description = ''A Pinboard client in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ElaWorkshop/pinboardixir";
+              homepage = https://github.com/ElaWorkshop/pinboardixir;
             };
           } // packageOverrides)
       ) {};
@@ -28612,7 +28612,7 @@ let
                                 based on
                                 https://github.com/jbarnette/pinglish.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pvdvreede/pinglix";
+              homepage = https://github.com/pvdvreede/pinglix;
             };
           } // packageOverrides)
       ) {};
@@ -28635,7 +28635,7 @@ let
             meta = {
               description = ''chinese pinyin library'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/lidashuang/pinyin";
+              homepage = https://github.com/lidashuang/pinyin;
             };
           } // packageOverrides)
       ) {};
@@ -28659,7 +28659,7 @@ let
               description = ''An Elixir extension that extends the pipe (|>)
                             operator through macros. '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/batate/elixir-pipes";
+              homepage = https://github.com/batate/elixir-pipes;
             };
           } // packageOverrides)
       ) {};
@@ -28683,7 +28683,7 @@ let
               description = ''An Elixir macro for easily piping arguments at
                             any position.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/vic/pipe_here";
+              homepage = https://github.com/vic/pipe_here;
             };
           } // packageOverrides)
       ) {};
@@ -28707,7 +28707,7 @@ let
               description = ''PipeWhileOk =========== Moved to
                             https://githib.com/pragdave/exlibris '';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/pragdave/pipe_while_ok";
+              homepage = https://github.com/pragdave/pipe_while_ok;
             };
           } // packageOverrides)
       ) {};
@@ -28731,7 +28731,7 @@ let
             meta = {
               description = ''new_data = pipette(data, template)'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/liquidz/pipette";
+              homepage = https://github.com/liquidz/pipette;
             };
           } // packageOverrides)
       ) {};
@@ -28754,7 +28754,7 @@ let
             meta = {
               description = ''Provides a \"pipe-equals\" operator'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/drewblas/pipper";
+              homepage = https://github.com/drewblas/pipper;
             };
           } // packageOverrides)
       ) {};
@@ -28777,7 +28777,7 @@ let
             meta = {
               description = ''PKCS7 binary padding for erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/pkcs7.erl";
+              homepage = https://github.com/camshaft/pkcs7.erl;
             };
           } // packageOverrides)
       ) {};
@@ -28807,7 +28807,7 @@ let
             meta = {
               description = ''Client for Plaid, the finance API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/travisjeffery/plaid";
+              homepage = https://github.com/travisjeffery/plaid;
             };
           } // packageOverrides)
       ) {};
@@ -28834,7 +28834,7 @@ let
                                 jar file. Requires Java > 1.6 installed on the
                                 system.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/binarytemple/plantuml_mix";
+              homepage = https://github.com/binarytemple/plantuml_mix;
             };
           } // packageOverrides)
       ) {};
@@ -28858,7 +28858,7 @@ let
               description = ''An Elixir library to parse files in Apple`s
                             property list formats'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ciaran/plist";
+              homepage = https://github.com/ciaran/plist;
             };
           } // packageOverrides)
       ) {};
@@ -28888,7 +28888,7 @@ let
             meta = {
               description = ''An elixir client for Plivo API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/aarvay/plivo-elixir";
+              homepage = https://github.com/aarvay/plivo-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -28913,7 +28913,7 @@ let
               description = ''A specification and conveniences for composable
                             modules between web applications'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/plug";
+              homepage = https://github.com/elixir-lang/plug;
             };
           } // packageOverrides)
       ) {};
@@ -28936,7 +28936,7 @@ let
               description = ''A specification and conveniences for composable
                             modules between web applications'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/plug";
+              homepage = https://github.com/elixir-lang/plug;
             };
           } // packageOverrides)
       ) {};
@@ -28959,7 +28959,7 @@ let
               description = ''A specification and conveniences for composable
                             modules between web applications'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/plug";
+              homepage = https://github.com/elixir-lang/plug;
             };
           } // packageOverrides)
       ) {};
@@ -28982,7 +28982,7 @@ let
               description = ''A specification and conveniences for composable
                             modules between web applications'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/plug";
+              homepage = https://github.com/elixir-lang/plug;
             };
           } // packageOverrides)
       ) {};
@@ -29005,7 +29005,7 @@ let
               description = ''A specification and conveniences for composable
                             modules between web applications'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/plug";
+              homepage = https://github.com/elixir-lang/plug;
             };
           } // packageOverrides)
       ) {};
@@ -29028,7 +29028,7 @@ let
               description = ''A specification and conveniences for composable
                             modules between web applications'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/plug";
+              homepage = https://github.com/elixir-lang/plug;
             };
           } // packageOverrides)
       ) {};
@@ -29051,7 +29051,7 @@ let
               description = ''A specification and conveniences for composable
                             modules between web applications'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/plug";
+              homepage = https://github.com/elixir-lang/plug;
             };
           } // packageOverrides)
       ) {};
@@ -29074,7 +29074,7 @@ let
               description = ''A specification and conveniences for composable
                             modules between web applications'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/plug";
+              homepage = https://github.com/elixir-lang/plug;
             };
           } // packageOverrides)
       ) {};
@@ -29097,7 +29097,7 @@ let
             meta = {
               description = ''parse the accept-language header'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/plug_accept_language";
+              homepage = https://github.com/camshaft/plug_accept_language;
             };
           } // packageOverrides)
       ) {};
@@ -29129,7 +29129,7 @@ let
             meta = {
               description = ''Plug for writing access logs'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mneudert/plug_accesslog";
+              homepage = https://github.com/mneudert/plug_accesslog;
             };
           } // packageOverrides)
       ) {};
@@ -29154,7 +29154,7 @@ let
               description = ''A simple plug to allow setting variables in a
                             connection.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nshafer/plug_assign";
+              homepage = https://github.com/nshafer/plug_assign;
             };
           } // packageOverrides)
       ) {};
@@ -29181,7 +29181,7 @@ let
               description = ''Convert CloudFlare`s CF-Connecting-IP header to
                             Plug.Conn`s remote_ip field.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/c-rack/plug_cloudflare";
+              homepage = https://github.com/c-rack/plug_cloudflare;
             };
           } // packageOverrides)
       ) {};
@@ -29208,7 +29208,7 @@ let
                                 according to rfc7239 and fill `conn.remote_ip`
                                 with the root client ip.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/plug_forwarded_peer";
+              homepage = https://github.com/awetzel/plug_forwarded_peer;
             };
           } // packageOverrides)
       ) {};
@@ -29232,7 +29232,7 @@ let
               description = ''A Plug that adds fprof tracing to requests, to
                             allow for easy profiling.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/obmarg/plug_fprof";
+              homepage = https://github.com/obmarg/plug_fprof;
             };
           } // packageOverrides)
       ) {};
@@ -29294,7 +29294,7 @@ let
               description = ''A tiny plug for responding to heartbeat requests
                             '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/whatyouhide/plug_heartbeat";
+              homepage = https://github.com/whatyouhide/plug_heartbeat;
             };
           } // packageOverrides)
       ) {};
@@ -29319,7 +29319,7 @@ let
               longDescription = ''An Elixir Plug for routing requests to other
                                 Plugs based on the request`s Media Type'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/cazrin/plug_media_type_router";
+              homepage = https://github.com/cazrin/plug_media_type_router;
             };
           } // packageOverrides)
       ) {};
@@ -29349,7 +29349,7 @@ let
             meta = {
               description = ''Plug for full page response caching'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mneudert/plug_pagecache";
+              homepage = https://github.com/mneudert/plug_pagecache;
             };
           } // packageOverrides)
       ) {};
@@ -29411,7 +29411,7 @@ let
             meta = {
               description = ''An elixir plug that serves HTTP range requests'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/TheSquad/plug_range";
+              homepage = https://github.com/TheSquad/plug_range;
             };
           } // packageOverrides)
       ) {};
@@ -29435,7 +29435,7 @@ let
             meta = {
               description = ''A plug builder for redirecting requests.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lpil/plug-redirect";
+              homepage = https://github.com/lpil/plug-redirect;
             };
           } // packageOverrides)
       ) {};
@@ -29460,7 +29460,7 @@ let
               description = ''Plug to redirect http requests to https requests
                             behind a reverse proxy'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/stocks29/plug_redirect_https.git";
+              homepage = https://github.com/stocks29/plug_redirect_https.git;
             };
           } // packageOverrides)
       ) {};
@@ -29491,7 +29491,7 @@ let
               description = ''An Elixir Plug for requiring and extracting a
                             given header.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/DevL/plug_require_header";
+              homepage = https://github.com/DevL/plug_require_header;
             };
           } // packageOverrides)
       ) {};
@@ -29516,7 +29516,7 @@ let
               description = ''This plug allows manipulation of HTTP response
                             headers'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/c-rack/plug_response_header";
+              homepage = https://github.com/c-rack/plug_response_header;
             };
           } // packageOverrides)
       ) {};
@@ -29541,7 +29541,7 @@ let
               description = ''Injects a ribbon to your web application
                             depending on the environment'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://git.io/plug_ribbon";
+              homepage = https://git.io/plug_ribbon;
             };
           } // packageOverrides)
       ) {};
@@ -29567,7 +29567,7 @@ let
                                 request. Results will be in the X-Runtime
                                 header.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mje113/plug_runtime";
+              homepage = https://github.com/mje113/plug_runtime;
             };
           } // packageOverrides)
       ) {};
@@ -29598,7 +29598,7 @@ let
               description = ''A (Phoenix) plug for sending request counts and
                             response times to statsd'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jeffweiss/plug_statsd";
+              homepage = https://github.com/jeffweiss/plug_statsd;
             };
           } // packageOverrides)
       ) {};
@@ -29628,7 +29628,7 @@ let
             meta = {
               description = ''Helpers to test your Plugs with ExUnit'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/xavier/plug_test_helpers";
+              homepage = https://github.com/xavier/plug_test_helpers;
             };
           } // packageOverrides)
       ) {};
@@ -29658,7 +29658,7 @@ let
             meta = {
               description = ''UTM tracking parameters to cookies'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/honeypotio/plug_utm";
+              homepage = https://github.com/honeypotio/plug_utm;
             };
           } // packageOverrides)
       ) {};
@@ -29689,7 +29689,7 @@ let
             meta = {
               description = ''Plug adapter for the wait1 protocol'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/wait1/plug_wait1";
+              homepage = https://github.com/wait1/plug_wait1;
             };
           } // packageOverrides)
       ) {};
@@ -29712,7 +29712,7 @@ let
             meta = {
               description = ''x-forwarded-for plug middleware'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/plug_x_forwarded_for";
+              homepage = https://github.com/camshaft/plug_x_forwarded_for;
             };
           } // packageOverrides)
       ) {};
@@ -29736,7 +29736,7 @@ let
               longDescription = ''Like Plug, only without web-specific logic
                                 and without a typed Conn-datastructure'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ruby2elixir/plugin";
+              homepage = https://github.com/ruby2elixir/plugin;
             };
           } // packageOverrides)
       ) {};
@@ -29767,7 +29767,7 @@ let
               description = ''A collection of Plug middleware for web
                             applications'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sugar-framework/plugs";
+              homepage = https://github.com/sugar-framework/plugs;
             };
           } // packageOverrides)
       ) {};
@@ -29791,7 +29791,7 @@ let
             meta = {
               description = ''Bugsnag reporter for Elixir`s Plug'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jarednorman/plugsnag";
+              homepage = https://github.com/jarednorman/plugsnag;
             };
           } // packageOverrides)
       ) {};
@@ -29815,7 +29815,7 @@ let
               description = ''PlumberGirl takes care of your Elixir piping
                             issues!'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ruby2elixir/plumber_girl";
+              homepage = https://github.com/ruby2elixir/plumber_girl;
             };
           } // packageOverrides)
       ) {};
@@ -29838,7 +29838,7 @@ let
             meta = {
               description = ''Erlang Private Mail Bag.'';
               license = stdenv.lib.licenses.mpl20;
-              homepage = "https://github.com/potatosalad/pmbag";
+              homepage = https://github.com/potatosalad/pmbag;
             };
           } // packageOverrides)
       ) {};
@@ -29862,7 +29862,7 @@ let
               description = ''External buffer processes to protect against
                             mailbox overflow'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ferd/pobox/";
+              homepage = https://github.com/ferd/pobox/;
             };
           } // packageOverrides)
       ) {};
@@ -29892,7 +29892,7 @@ let
             meta = {
               description = ''An Elixir client for the Pocket API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://www.github.com/justahero/pocketeer";
+              homepage = https://www.github.com/justahero/pocketeer;
             };
           } // packageOverrides)
       ) {};
@@ -29923,7 +29923,7 @@ let
               description = ''Pocketex is an Elixir client for the Pocket read
                             later service (getpocket.com) '';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/essenciary/pocketex";
+              homepage = https://github.com/essenciary/pocketex;
             };
           } // packageOverrides)
       ) {};
@@ -29946,7 +29946,7 @@ let
             meta = {
               description = ''An incredibly fast, pure Elixir JSON library'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/devinus/poison";
+              homepage = https://github.com/devinus/poison;
             };
           } // packageOverrides)
       ) {};
@@ -29967,7 +29967,7 @@ let
             meta = {
               description = ''An incredibly fast, pure Elixir JSON library'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/devinus/poison";
+              homepage = https://github.com/devinus/poison;
             };
           } // packageOverrides)
       ) {};
@@ -29988,7 +29988,7 @@ let
             meta = {
               description = ''An incredibly fast, pure Elixir JSON library'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/devinus/poison";
+              homepage = https://github.com/devinus/poison;
             };
           } // packageOverrides)
       ) {};
@@ -30009,7 +30009,7 @@ let
             meta = {
               description = ''An incredibly fast, pure Elixir JSON library'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/devinus/poison";
+              homepage = https://github.com/devinus/poison;
             };
           } // packageOverrides)
       ) {};
@@ -30030,7 +30030,7 @@ let
             meta = {
               description = ''An incredibly fast, pure Elixir JSON library'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/devinus/poison";
+              homepage = https://github.com/devinus/poison;
             };
           } // packageOverrides)
       ) {};
@@ -30051,7 +30051,7 @@ let
             meta = {
               description = ''An incredibly fast, pure Elixir JSON library'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/devinus/poison";
+              homepage = https://github.com/devinus/poison;
             };
           } // packageOverrides)
       ) {};
@@ -30074,7 +30074,7 @@ let
             meta = {
               description = ''An Elixir library to work with Poker hands.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/wojtekmach/poker_elixir";
+              homepage = https://github.com/wojtekmach/poker_elixir;
             };
           } // packageOverrides)
       ) {};
@@ -30113,7 +30113,7 @@ let
                                 access to market data including trading pairs
                                 between ETH, BTC, DOGE, LTC and others.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/cyberpunk-ventures/poloniex_ex";
+              homepage = https://github.com/cyberpunk-ventures/poloniex_ex;
             };
           } // packageOverrides)
       ) {};
@@ -30143,7 +30143,7 @@ let
             meta = {
               description = ''Poly1305 message authentication'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/poly1305_ex";
+              homepage = https://github.com/mwmiller/poly1305_ex;
             };
           } // packageOverrides)
       ) {};
@@ -30168,7 +30168,7 @@ let
                                 that provides reusable formatting rules and
                                 translations for a large number of languages.'';
               license = with stdenv.lib.licenses; [ mit free ];
-              homepage = "https://github.com/padde/polyglot";
+              homepage = https://github.com/padde/polyglot;
             };
           } // packageOverrides)
       ) {};
@@ -30192,7 +30192,7 @@ let
             meta = {
               description = ''Encoding and decoding of Polylines'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pkinney/polyline_ex";
+              homepage = https://github.com/pkinney/polyline_ex;
             };
           } // packageOverrides)
       ) {};
@@ -30216,7 +30216,7 @@ let
               description = ''A podcast-centric ID3 library for parsing and
                             writing ID3 tags.'';
               license = stdenv.lib.licenses.gpl3;
-              homepage = "https://github.com/polyvox/polyvox_id3";
+              homepage = https://github.com/polyvox/polyvox_id3;
             };
           } // packageOverrides)
       ) {};
@@ -30239,7 +30239,7 @@ let
             meta = {
               description = ''create a pool based on a hash ring'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/pool_ring";
+              homepage = https://github.com/camshaft/pool_ring;
             };
           } // packageOverrides)
       ) {};
@@ -30286,7 +30286,7 @@ let
             meta = {
               description = ''A hunky Erlang worker pool factory'';
               license = with stdenv.lib.licenses; [ unlicense asl20 ];
-              homepage = "https://github.com/devinus/poolboy";
+              homepage = https://github.com/devinus/poolboy;
             };
           } // packageOverrides)
       ) {};
@@ -30307,7 +30307,7 @@ let
             meta = {
               description = ''A hunky Erlang worker pool factory'';
               license = with stdenv.lib.licenses; [ unlicense asl20 ];
-              homepage = "https://github.com/devinus/poolboy";
+              homepage = https://github.com/devinus/poolboy;
             };
           } // packageOverrides)
       ) {};
@@ -30328,7 +30328,7 @@ let
             meta = {
               description = ''A hunky Erlang worker pool factory'';
               license = with stdenv.lib.licenses; [ unlicense asl20 ];
-              homepage = "https://github.com/devinus/poolboy";
+              homepage = https://github.com/devinus/poolboy;
             };
           } // packageOverrides)
       ) {};
@@ -30351,7 +30351,7 @@ let
             meta = {
               description = ''An OTP Process Pool Application'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/seth/pooler";
+              homepage = https://github.com/seth/pooler;
             };
           } // packageOverrides)
       ) {};
@@ -30380,7 +30380,7 @@ let
                                 this dependency in mix.exs: {:erlpop, github:
                                 \"trifork/erlpop\"}'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nico-amsterdam/pop3mail";
+              homepage = https://github.com/nico-amsterdam/pop3mail;
             };
           } // packageOverrides)
       ) {};
@@ -30403,7 +30403,7 @@ let
             meta = {
               description = ''Supervisor population control library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rubencaro/populator";
+              homepage = https://github.com/rubencaro/populator;
             };
           } // packageOverrides)
       ) {};
@@ -30430,7 +30430,7 @@ let
                                 ports, it provides richer functionality and
                                 simpler API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/alco/porcelain";
+              homepage = https://github.com/alco/porcelain;
             };
           } // packageOverrides)
       ) {};
@@ -30478,7 +30478,7 @@ let
             meta = {
               description = ''A library to manage positional files'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/primait/posexional";
+              homepage = https://github.com/primait/posexional;
             };
           } // packageOverrides)
       ) {};
@@ -30501,7 +30501,7 @@ let
             meta = {
               description = ''Library: check if an integer is positive'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jlouis/positive";
+              homepage = https://github.com/jlouis/positive;
             };
           } // packageOverrides)
       ) {};
@@ -30525,7 +30525,7 @@ let
             meta = {
               description = ''PostgreSQL driver for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ericmj/postgrex";
+              homepage = https://github.com/ericmj/postgrex;
             };
           } // packageOverrides)
       ) {};
@@ -30548,7 +30548,7 @@ let
                                 Google Authenticator compatible one time
                                 passwords.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yuce/pot";
+              homepage = https://github.com/yuce/pot;
             };
           } // packageOverrides)
       ) {};
@@ -30572,7 +30572,7 @@ let
               description = ''Power Assert in Elixir. Shows evaluation results
                             each expression.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ma2gedev/power_assert_ex";
+              homepage = https://github.com/ma2gedev/power_assert_ex;
             };
           } // packageOverrides)
       ) {};
@@ -30597,7 +30597,7 @@ let
             meta = {
               description = ''Plumtree based Process Group'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sile/ppg";
+              homepage = https://github.com/sile/ppg;
             };
           } // packageOverrides)
       ) {};
@@ -30620,7 +30620,7 @@ let
             meta = {
               description = ''Erlang Priority Queue Implementation'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/pqueue";
+              homepage = https://github.com/okeuday/pqueue;
             };
           } // packageOverrides)
       ) {};
@@ -30645,7 +30645,7 @@ let
                                 practical issues arising from using Elixir on
                                 Windows'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/OnorioCatenacci/pragmatic";
+              homepage = https://github.com/OnorioCatenacci/pragmatic;
             };
           } // packageOverrides)
       ) {};
@@ -30669,7 +30669,7 @@ let
               description = ''PrefectureJp is a library for Japanese
                             prefecture.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ymmtmsys/prefecture_jp";
+              homepage = https://github.com/ymmtmsys/prefecture_jp;
             };
           } // packageOverrides)
       ) {};
@@ -30696,7 +30696,7 @@ let
               description = ''a preprocessor/compiler toolset for erlang and
                             elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/prelude";
+              homepage = https://github.com/camshaft/prelude;
             };
           } // packageOverrides)
       ) {};
@@ -30720,7 +30720,7 @@ let
               description = ''An Elixir -> HTML/JavaScript presentation
                             generation tool. '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/Cobenian/Presentex";
+              homepage = https://github.com/Cobenian/Presentex;
             };
           } // packageOverrides)
       ) {};
@@ -30743,7 +30743,7 @@ let
             meta = {
               description = ''A binary hex dumping library in Elixir. '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/polsab/pretty_hex";
+              homepage = https://github.com/polsab/pretty_hex;
             };
           } // packageOverrides)
       ) {};
@@ -30773,7 +30773,7 @@ let
             meta = {
               description = ''Pricing financial instruments in Elixir'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/arthurcolle/pricing";
+              homepage = https://github.com/arthurcolle/pricing;
             };
           } // packageOverrides)
       ) {};
@@ -30796,7 +30796,7 @@ let
             meta = {
               description = ''Priority Queue for Elixir. Heap implementation'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ewildgoose/elixir_priority_queue";
+              homepage = https://github.com/ewildgoose/elixir_priority_queue;
             };
           } // packageOverrides)
       ) {};
@@ -30819,7 +30819,7 @@ let
             meta = {
               description = ''Command-line progress bars and spinners.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/henrik/progress_bar";
+              homepage = https://github.com/henrik/progress_bar;
             };
           } // packageOverrides)
       ) {};
@@ -30845,7 +30845,7 @@ let
                                 to automate tasks using a CI server or a build
                                 script.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/nubleer/project_info";
+              homepage = https://github.com/nubleer/project_info;
             };
           } // packageOverrides)
       ) {};
@@ -30869,7 +30869,7 @@ let
               description = ''Prometheus monitoring system and time series
                             database client in Erlang.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/deadtrickster/prometheus.erl";
+              homepage = https://github.com/deadtrickster/prometheus.erl;
             };
           } // packageOverrides)
       ) {};
@@ -30901,7 +30901,7 @@ let
               description = ''Prometheus monitoring system client Plugs. Http
                             metrics collector and exporter'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/deadtrickster/prometheus-plugs";
+              homepage = https://github.com/deadtrickster/prometheus-plugs;
             };
           } // packageOverrides)
       ) {};
@@ -30926,7 +30926,7 @@ let
               description = ''Property Type validations and checkers for elixir
                             apps'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bakasho/prop_types";
+              homepage = https://github.com/bakasho/prop_types;
             };
           } // packageOverrides)
       ) {};
@@ -30953,7 +30953,7 @@ let
                                 from JavaScript`s `camelCase` to Elixir`s
                                 `snake_case`'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/johnnyji/proper_case";
+              homepage = https://github.com/johnnyji/proper_case;
             };
           } // packageOverrides)
       ) {};
@@ -30977,7 +30977,7 @@ let
               description = ''Proplist provides the complete Keyword API, but
                             for Proplists.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/knrz/proplist";
+              homepage = https://github.com/knrz/proplist;
             };
           } // packageOverrides)
       ) {};
@@ -31009,7 +31009,7 @@ let
                                 Compatible with
                                 https://github.com/ProtoDef-io/ProtoDef.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ProtoDef-io/elixir-protodef";
+              homepage = https://github.com/ProtoDef-io/elixir-protodef;
             };
           } // packageOverrides)
       ) {};
@@ -31034,7 +31034,7 @@ let
             meta = {
               description = ''Providers provider.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tsloughter/providers";
+              homepage = https://github.com/tsloughter/providers;
             };
           } // packageOverrides)
       ) {};
@@ -31057,7 +31057,7 @@ let
             meta = {
               description = ''Providers provider.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tsloughter/providers";
+              homepage = https://github.com/tsloughter/providers;
             };
           } // packageOverrides)
       ) {};
@@ -31088,7 +31088,7 @@ let
             meta = {
               description = ''Proxy plug for upstream servers'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/chadwpry/elixir-proxy";
+              homepage = https://github.com/chadwpry/elixir-proxy;
             };
           } // packageOverrides)
       ) {};
@@ -31114,7 +31114,7 @@ let
                                 suffix rules provided by
                                 https://publicsuffix.org/.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/seomoz/publicsuffix-elixir";
+              homepage = https://github.com/seomoz/publicsuffix-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -31138,7 +31138,7 @@ let
               description = ''Domain name parser for Elixir based on the Public
                             Suffix List.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/weppos/publicsuffix-elixir";
+              homepage = https://github.com/weppos/publicsuffix-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -31168,7 +31168,7 @@ let
             meta = {
               description = ''A pubsub tool for pubnub.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ryuone/pubnub_ex";
+              homepage = https://github.com/ryuone/pubnub_ex;
             };
           } // packageOverrides)
       ) {};
@@ -31191,7 +31191,7 @@ let
             meta = {
               description = ''Publish-Subscribe utility'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/simonewebdesign/elixir_pubsub";
+              homepage = https://github.com/simonewebdesign/elixir_pubsub;
             };
           } // packageOverrides)
       ) {};
@@ -31222,7 +31222,7 @@ let
             meta = {
               description = ''Simple Date and Timezone handling for Erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/choptastic/qdate";
+              homepage = https://github.com/choptastic/qdate;
             };
           } // packageOverrides)
       ) {};
@@ -31252,7 +31252,7 @@ let
             meta = {
               description = ''Qiita API v2 Interface for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ma2gedev/qiita_ex";
+              homepage = https://github.com/ma2gedev/qiita_ex;
             };
           } // packageOverrides)
       ) {};
@@ -31282,7 +31282,7 @@ let
             meta = {
               description = ''Qiniu Resource (Cloud) Storage SDK for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tony612/qiniu";
+              homepage = https://github.com/tony612/qiniu;
             };
           } // packageOverrides)
       ) {};
@@ -31305,7 +31305,7 @@ let
             meta = {
               description = ''QLC interface for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/k1complete/qlc";
+              homepage = https://github.com/k1complete/qlc;
             };
           } // packageOverrides)
       ) {};
@@ -31329,7 +31329,7 @@ let
             meta = {
               description = ''Cron-like job scheduler for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/c-rack/quantum-elixir";
+              homepage = https://github.com/c-rack/quantum-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -31352,7 +31352,7 @@ let
             meta = {
               description = ''Common combinators for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/robot-overlord/quark";
+              homepage = https://github.com/robot-overlord/quark;
             };
           } // packageOverrides)
       ) {};
@@ -31398,7 +31398,7 @@ let
             meta = {
               description = ''Priority Queue'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/falood/queuex";
+              homepage = https://github.com/falood/queuex;
             };
           } // packageOverrides)
       ) {};
@@ -31424,7 +31424,7 @@ let
                                 generation functions based on the context.
                                 Proper random number seeding is enforced.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/quickrand";
+              homepage = https://github.com/okeuday/quickrand;
             };
           } // packageOverrides)
       ) {};
@@ -31472,7 +31472,7 @@ let
               description = ''Ra is a framework for building command line
                             applications.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/NobbZ/ra";
+              homepage = https://github.com/NobbZ/ra;
             };
           } // packageOverrides)
       ) {};
@@ -31496,7 +31496,7 @@ let
             meta = {
               description = ''Another Zawgyi <=> Unicode Converter '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Rabbit-Converter/Rabbit-Elixir";
+              homepage = https://github.com/Rabbit-Converter/Rabbit-Elixir;
             };
           } // packageOverrides)
       ) {};
@@ -31521,7 +31521,7 @@ let
                                 dependency of the RabbitMQ/AMQP Erlang client
                                 and are common to the RabbitMQ server.'';
               license = stdenv.lib.licenses.mpl11;
-              homepage = "https://github.com/jbrisbin/rabbit_common";
+              homepage = https://github.com/jbrisbin/rabbit_common;
             };
           } // packageOverrides)
       ) {};
@@ -31546,7 +31546,7 @@ let
               longDescription = ''A plug to get your plug/phoenix applications
                                 performance more in line with Rails.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/BlakeWilliams/rails";
+              homepage = https://github.com/BlakeWilliams/rails;
             };
           } // packageOverrides)
       ) {};
@@ -31569,7 +31569,7 @@ let
             meta = {
               description = ''The Rate Limiter with Token Bucket algorithm'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/asaaki/ralitobu";
+              homepage = https://github.com/asaaki/ralitobu;
             };
           } // packageOverrides)
       ) {};
@@ -31600,7 +31600,7 @@ let
               description = ''Elixir Plug for Ralitobu, the Rate Limiter with
                             Token Bucket algorithm'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/asaaki/ralitobu_plug";
+              homepage = https://github.com/asaaki/ralitobu_plug;
             };
           } // packageOverrides)
       ) {};
@@ -31623,7 +31623,7 @@ let
             meta = {
               description = ''Socket acceptor pool for TCP protocols.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/ninenines/ranch";
+              homepage = https://github.com/ninenines/ranch;
             };
           } // packageOverrides)
       ) {};
@@ -31644,7 +31644,7 @@ let
             meta = {
               description = ''Socket acceptor pool for TCP protocols.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/ninenines/ranch";
+              homepage = https://github.com/ninenines/ranch;
             };
           } // packageOverrides)
       ) {};
@@ -31668,7 +31668,7 @@ let
               description = ''Generates random string (or a stream of
                             characters) of desired character sets.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sylph01/random_string";
+              homepage = https://github.com/sylph01/random_string;
             };
           } // packageOverrides)
       ) {};
@@ -31692,7 +31692,7 @@ let
               description = ''Elixir range utilities: constant-time random
                             sampling and set operations.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/lnikkila/elixir-range-extras";
+              homepage = https://github.com/lnikkila/elixir-range-extras;
             };
           } // packageOverrides)
       ) {};
@@ -31719,7 +31719,7 @@ let
             meta = {
               description = ''Library to rank and match lists'';
               license = stdenv.lib.licenses.cddl;
-              homepage = "https://github.com/dalmatinerdb/mstore";
+              homepage = https://github.com/dalmatinerdb/mstore;
             };
           } // packageOverrides)
       ) {};
@@ -31751,7 +31751,7 @@ let
               description = ''Rapidly develop your API client - based on
                             rapidash gem'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/victorlcampos/rapidax";
+              homepage = https://github.com/victorlcampos/rapidax;
             };
           } // packageOverrides)
       ) {};
@@ -31783,7 +31783,7 @@ let
                                 you don`t like operator-overloading: There are
                                 longhand function aliases available too.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/qqwy/elixir-rational";
+              homepage = https://github.com/qqwy/elixir-rational;
             };
           } // packageOverrides)
       ) {};
@@ -31811,7 +31811,7 @@ let
                                 by a ratio of integers (e.g., 1/3 or
                                 4176/22687).'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/twist-vector/elixir-rational.git";
+              homepage = https://github.com/twist-vector/elixir-rational.git;
             };
           } // packageOverrides)
       ) {};
@@ -31835,7 +31835,7 @@ let
               description = ''Rate limiter and overload protection for erlang
                             and elixir applications. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/liveforeverx/ratx";
+              homepage = https://github.com/liveforeverx/ratx;
             };
           } // packageOverrides)
       ) {};
@@ -31858,7 +31858,7 @@ let
             meta = {
               description = ''Extendable validation for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/revati/ravel";
+              homepage = https://github.com/revati/ravel;
             };
           } // packageOverrides)
       ) {};
@@ -31892,7 +31892,7 @@ let
                                 Sentry. Easily connects with Phoenix through
                                 adding a logger or Plug.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hayesgm/ravenex";
+              homepage = https://github.com/hayesgm/ravenex;
             };
           } // packageOverrides)
       ) {};
@@ -31926,7 +31926,7 @@ let
                                 handle other communication styles that are part
                                 of the modern web.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/crowdhailer/raxx";
+              homepage = https://github.com/crowdhailer/raxx;
             };
           } // packageOverrides)
       ) {};
@@ -31956,7 +31956,7 @@ let
             meta = {
               description = ''Server render react components from Elixir'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/gauravtiwari/react_on_elixir";
+              homepage = https://github.com/gauravtiwari/react_on_elixir;
             };
           } // packageOverrides)
       ) {};
@@ -31979,7 +31979,7 @@ let
             meta = {
               description = ''Simple master-slave library for Ecto.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kenta-aktsk/read_repos";
+              homepage = https://github.com/kenta-aktsk/read_repos;
             };
           } // packageOverrides)
       ) {};
@@ -32010,7 +32010,7 @@ let
               description = ''Readability library for extracting and curating
                             articles.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/keepcosmos/readability";
+              homepage = https://github.com/keepcosmos/readability;
             };
           } // packageOverrides)
       ) {};
@@ -32040,7 +32040,7 @@ let
             meta = {
               description = ''A Simple Read-Only Reddit API Client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/adamzaninovich/readit";
+              homepage = https://github.com/adamzaninovich/readit;
             };
           } // packageOverrides)
       ) {};
@@ -32064,7 +32064,7 @@ let
             meta = {
               description = ''A library for working with the refheap API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Raynes/reap";
+              homepage = https://github.com/Raynes/reap;
             };
           } // packageOverrides)
       ) {};
@@ -32092,7 +32092,7 @@ let
                                 stream-reducer like transformations such as map
                                 or filter. '';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/alfert/reaxive";
+              homepage = https://github.com/alfert/reaxive;
             };
           } // packageOverrides)
       ) {};
@@ -32115,7 +32115,7 @@ let
             meta = {
               description = ''A rebar3 plugin for handling .appup files'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lrascao/rebar3_appup_plugin";
+              homepage = https://github.com/lrascao/rebar3_appup_plugin;
             };
           } // packageOverrides)
       ) {};
@@ -32138,7 +32138,7 @@ let
             meta = {
               description = ''Compile ASN.1 modules with Rebar3'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pyykkis/rebar3_asn1_compiler";
+              homepage = https://github.com/pyykkis/rebar3_asn1_compiler;
             };
           } // packageOverrides)
       ) {};
@@ -32170,7 +32170,7 @@ let
                                 Spell supports the client subscriber, publisher,
                                 callee, and caller roles.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/MyMedsAndMe/spell";
+              homepage = https://github.com/MyMedsAndMe/spell;
             };
           } // packageOverrides)
       ) {};
@@ -32194,7 +32194,7 @@ let
               description = ''Validate your Elixir values against value-based
                             specs'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/codegram/spex";
+              homepage = https://github.com/codegram/spex;
             };
           } // packageOverrides)
       ) {};
@@ -32217,7 +32217,7 @@ let
             meta = {
               description = ''SPF implementation in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hex-sh/spf";
+              homepage = https://github.com/hex-sh/spf;
             };
           } // packageOverrides)
       ) {};
@@ -32240,7 +32240,7 @@ let
             meta = {
               description = ''An spherical geometry library for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/arpunk/spherical";
+              homepage = https://github.com/arpunk/spherical;
             };
           } // packageOverrides)
       ) {};
@@ -32271,7 +32271,7 @@ let
             meta = {
               description = ''An Elixir wrapper for Spotify API O-Auth.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://www.github.com/jsncmgs1/spotify_ex";
+              homepage = https://www.github.com/jsncmgs1/spotify_ex;
             };
           } // packageOverrides)
       ) {};
@@ -32295,7 +32295,7 @@ let
               longDescription = ''A TAP producer that integrates with existing
                                 ExUnit tests via an ExUnit formatter'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Stratus3D/Spout";
+              homepage = https://github.com/Stratus3D/Spout;
             };
           } // packageOverrides)
       ) {};
@@ -32325,7 +32325,7 @@ let
             meta = {
               description = ''A wrapper for the Spreedly API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/duff/spreedly-elixir";
+              homepage = https://github.com/duff/spreedly-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -32355,7 +32355,7 @@ let
             meta = {
               description = ''A thin Elixir wrapper around esqlcipher'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/FelixKiunke/sqlcx";
+              homepage = https://github.com/FelixKiunke/sqlcx;
             };
           } // packageOverrides)
       ) {};
@@ -32386,7 +32386,7 @@ let
             meta = {
               description = ''A thin Elixir wrapper around esqlite'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mmmries/sqlitex";
+              homepage = https://github.com/mmmries/sqlitex;
             };
           } // packageOverrides)
       ) {};
@@ -32414,7 +32414,7 @@ let
             meta = {
               description = ''A thin Elixir wrapper around esqlite'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mmmries/sqlitex";
+              homepage = https://github.com/mmmries/sqlitex;
             };
           } // packageOverrides)
       ) {};
@@ -32437,7 +32437,7 @@ let
             meta = {
               description = ''Simple SSH helpers for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/rubencaro/sshex";
+              homepage = https://github.com/rubencaro/sshex;
             };
           } // packageOverrides)
       ) {};
@@ -32460,7 +32460,7 @@ let
             meta = {
               description = ''SSL verification functions for Erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/deadtrickster/ssl_verify_fun.erl";
+              homepage = https://github.com/deadtrickster/ssl_verify_fun.erl;
             };
           } // packageOverrides)
       ) {};
@@ -32483,7 +32483,7 @@ let
             meta = {
               description = ''Mustache templates in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/cwbriones/stache";
+              homepage = https://github.com/cwbriones/stache;
             };
           } // packageOverrides)
       ) {};
@@ -32528,7 +32528,7 @@ let
             meta = {
               description = ''Simple ETS backed key/value store for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zackehh/stash";
+              homepage = https://github.com/zackehh/stash;
             };
           } // packageOverrides)
       ) {};
@@ -32551,7 +32551,7 @@ let
             meta = {
               description = ''StatHat client library.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/travisjeffery/stathat";
+              homepage = https://github.com/travisjeffery/stathat;
             };
           } // packageOverrides)
       ) {};
@@ -32575,7 +32575,7 @@ let
               description = ''Functions for descriptive statistics and common
                             distributions'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/msharp/elixir-statistics";
+              homepage = https://github.com/msharp/elixir-statistics;
             };
           } // packageOverrides)
       ) {};
@@ -32599,7 +32599,7 @@ let
               description = ''An Elixir client for StatsD compatible
                             servers.'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/lexmag/statix";
+              homepage = https://github.com/lexmag/statix;
             };
           } // packageOverrides)
       ) {};
@@ -32663,7 +32663,7 @@ let
               description = ''Steam API and Auth (with Phoenix/Plug
                             integration) for Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/antipax/steamex";
+              homepage = https://github.com/antipax/steamex;
             };
           } // packageOverrides)
       ) {};
@@ -32691,7 +32691,7 @@ let
                                 portuguese, romanian, russian, spanish, swedish,
                                 turkish.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/stemex";
+              homepage = https://github.com/awetzel/stemex;
             };
           } // packageOverrides)
       ) {};
@@ -32714,7 +32714,7 @@ let
             meta = {
               description = ''Read Unix env vars into application config'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/heroku/stillir";
+              homepage = https://github.com/heroku/stillir;
             };
           } // packageOverrides)
       ) {};
@@ -32744,7 +32744,7 @@ let
             meta = {
               description = ''Simple Elixir wrapper for the Stockfighter API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/shanewilton/stockastic";
+              homepage = https://github.com/shanewilton/stockastic;
             };
           } // packageOverrides)
       ) {};
@@ -32774,7 +32774,7 @@ let
             meta = {
               description = ''a simple wrapper of stockfighter http api'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lerencao/stockfighter";
+              homepage = https://github.com/lerencao/stockfighter;
             };
           } // packageOverrides)
       ) {};
@@ -32799,7 +32799,7 @@ let
               description = ''The stopwatch provides an easy api to measure
                             elapsed time and profile code.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/matteosister/stopwatch";
+              homepage = https://github.com/matteosister/stopwatch;
             };
           } // packageOverrides)
       ) {};
@@ -32822,7 +32822,7 @@ let
             meta = {
               description = ''Run a Stream as a process'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/fishcakez/stream_runner";
+              homepage = https://github.com/fishcakez/stream_runner;
             };
           } // packageOverrides)
       ) {};
@@ -32867,7 +32867,7 @@ let
             meta = {
               description = ''Extra Elixir Stream utilities'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/koyeung/stream_x";
+              homepage = https://github.com/koyeung/stream_x;
             };
           } // packageOverrides)
       ) {};
@@ -32890,7 +32890,7 @@ let
             meta = {
               description = ''strftime formatting in erlang'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/gmr/strftimerl";
+              homepage = https://github.com/gmr/strftimerl;
             };
           } // packageOverrides)
       ) {};
@@ -32914,7 +32914,7 @@ let
               description = ''Provides strict number comparison in both regular
                             code and guards.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/antipax/strict_comparison";
+              homepage = https://github.com/antipax/strict_comparison;
             };
           } // packageOverrides)
       ) {};
@@ -32939,7 +32939,7 @@ let
                                 Elixir. Heavily inspired by ActiveSupport`s
                                 String extensions (Ruby).'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/asaaki/strinx.ex";
+              homepage = https://github.com/asaaki/strinx.ex;
             };
           } // packageOverrides)
       ) {};
@@ -32966,7 +32966,7 @@ let
                                 documentation can be found at
                                 https://stripe.com/docs/api'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/foxnewsnetwork/stripex";
+              homepage = https://github.com/foxnewsnetwork/stripex;
             };
           } // packageOverrides)
       ) {};
@@ -32990,7 +32990,7 @@ let
               description = ''Tiny module to easily get a list of fields for
                             structs.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nTraum/struct_fields";
+              homepage = https://github.com/nTraum/struct_fields;
             };
           } // packageOverrides)
       ) {};
@@ -33014,7 +33014,7 @@ let
             meta = {
               description = ''Elixir integration of Styledown'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/styledown/styledown_ex";
+              homepage = https://github.com/styledown/styledown_ex;
             };
           } // packageOverrides)
       ) {};
@@ -33038,7 +33038,7 @@ let
               description = ''A copy of supervisor.erl from the R16B Erlang/OTP
                             with modifications'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/klarna/supervisor3";
+              homepage = https://github.com/klarna/supervisor3;
             };
           } // packageOverrides)
       ) {};
@@ -33061,7 +33061,7 @@ let
             meta = {
               description = ''Erlang Process Pool as a Supervisor'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/supool";
+              homepage = https://github.com/okeuday/supool;
             };
           } // packageOverrides)
       ) {};
@@ -33085,7 +33085,7 @@ let
             meta = {
               description = ''An Elixir wrapper for the Star Wars API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/twhitacre/swapi.ex";
+              homepage = https://github.com/twhitacre/swapi.ex;
             };
           } // packageOverrides)
       ) {};
@@ -33109,7 +33109,7 @@ let
               description = ''An sweet wrapper of :xmerl to help query xml
                             docs'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/sweet_xml";
+              homepage = https://github.com/awetzel/sweet_xml;
             };
           } // packageOverrides)
       ) {};
@@ -33131,7 +33131,7 @@ let
               description = ''An sweet wrapper of :xmerl to help query xml
                             docs'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/sweet_xml";
+              homepage = https://github.com/awetzel/sweet_xml;
             };
           } // packageOverrides)
       ) {};
@@ -33155,7 +33155,7 @@ let
               description = ''A global Process Registry and Process Group
                             manager.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ostinelli/syn";
+              homepage = https://github.com/ostinelli/syn;
             };
           } // packageOverrides)
       ) {};
@@ -33179,7 +33179,7 @@ let
             meta = {
               description = ''SynOSC encoder/decoder for elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/syn_osc_ex";
+              homepage = https://github.com/camshaft/syn_osc_ex;
             };
           } // packageOverrides)
       ) {};
@@ -33202,7 +33202,7 @@ let
             meta = {
               description = ''A collection of Elixir syntactic sugars.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hzamani/elixir-syntactic";
+              homepage = https://github.com/hzamani/elixir-syntactic;
             };
           } // packageOverrides)
       ) {};
@@ -33225,7 +33225,7 @@ let
             meta = {
               description = ''A signal synthesis library'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/bitgamma/synthex";
+              homepage = https://github.com/bitgamma/synthex;
             };
           } // packageOverrides)
       ) {};
@@ -33250,7 +33250,7 @@ let
                                 with exported ENV variables into Elixir
                                 runtime'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ruby2elixir/system_env_loader";
+              homepage = https://github.com/ruby2elixir/system_env_loader;
             };
           } // packageOverrides)
       ) {};
@@ -33273,7 +33273,7 @@ let
             meta = {
               description = ''ascii tables for cli'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zweifisch/table";
+              homepage = https://github.com/zweifisch/table;
             };
           } // packageOverrides)
       ) {};
@@ -33297,7 +33297,7 @@ let
               description = ''Generate configurable text-based tables for
                             display (ASCII & more)'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/djm/table_rex";
+              homepage = https://github.com/djm/table_rex;
             };
           } // packageOverrides)
       ) {};
@@ -33319,7 +33319,7 @@ let
               description = ''Generate configurable text-based tables for
                             display (ASCII & more)'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/djm/table_rex";
+              homepage = https://github.com/djm/table_rex;
             };
           } // packageOverrides)
       ) {};
@@ -33342,7 +33342,7 @@ let
             meta = {
               description = ''Pretty printer for maps/structs collections'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/aerosol/Tabula";
+              homepage = https://github.com/aerosol/Tabula;
             };
           } // packageOverrides)
       ) {};
@@ -33365,7 +33365,7 @@ let
             meta = {
               description = ''Scheduler instrumentation for BEAM in Elixir'';
               license = stdenv.lib.licenses.gpl3;
-              homepage = "https://github.com/pavlos/tachometer";
+              homepage = https://github.com/pavlos/tachometer;
             };
           } // packageOverrides)
       ) {};
@@ -33387,7 +33387,7 @@ let
             meta = {
               description = ''Scheduler instrumentation for BEAM in Elixir'';
               license = stdenv.lib.licenses.gpl3;
-              homepage = "https://github.com/pavlos/tachometer";
+              homepage = https://github.com/pavlos/tachometer;
             };
           } // packageOverrides)
       ) {};
@@ -33412,7 +33412,7 @@ let
                                 callback function whenever new lines are
                                 detected on a file.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/TheFirstAvenger/elixir-tail.git";
+              homepage = https://github.com/TheFirstAvenger/elixir-tail.git;
             };
           } // packageOverrides)
       ) {};
@@ -33435,7 +33435,7 @@ let
             meta = {
               description = ''A reporting library for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/boudra/tally";
+              homepage = https://github.com/boudra/tally;
             };
           } // packageOverrides)
       ) {};
@@ -33458,7 +33458,7 @@ let
             meta = {
               description = ''Library for Seeding Databases'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Joe-noh/tane";
+              homepage = https://github.com/Joe-noh/tane;
             };
           } // packageOverrides)
       ) {};
@@ -33489,7 +33489,7 @@ let
               description = ''GitLab API wrapper in Elixir, named after GitLabs
                             mascot'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ZJvandeWeg/Tanuki";
+              homepage = https://github.com/ZJvandeWeg/Tanuki;
             };
           } // packageOverrides)
       ) {};
@@ -33512,7 +33512,7 @@ let
             meta = {
               description = ''Elixir tracing'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/eproxus/tap";
+              homepage = https://github.com/eproxus/tap;
             };
           } // packageOverrides)
       ) {};
@@ -33535,7 +33535,7 @@ let
             meta = {
               description = ''The mathematical constant tau'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/FranklinChen/tau";
+              homepage = https://github.com/FranklinChen/tau;
             };
           } // packageOverrides)
       ) {};
@@ -33566,7 +33566,7 @@ let
               description = ''TaxonSearch is a tool for looking up species
                             names in Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/annejohnson/taxon_search";
+              homepage = https://github.com/annejohnson/taxon_search;
             };
           } // packageOverrides)
       ) {};
@@ -33590,7 +33590,7 @@ let
             meta = {
               description = ''MSSQL / TDS Driver for Ecto.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/livehelpnow/tds";
+              homepage = https://github.com/livehelpnow/tds;
             };
           } // packageOverrides)
       ) {};
@@ -33613,7 +33613,7 @@ let
             meta = {
               description = ''A TEA implementation in Erlang. '';
 
-              homepage = "https://github.com/keichan34/tea_crypto";
+              homepage = https://github.com/keichan34/tea_crypto;
             };
           } // packageOverrides)
       ) {};
@@ -33667,7 +33667,7 @@ let
             meta = {
               description = ''Teacup based NATS Client for Erlang'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/yuce/teacup_nats.git";
+              homepage = https://github.com/yuce/teacup_nats.git;
             };
           } // packageOverrides)
       ) {};
@@ -33692,7 +33692,7 @@ let
                                 as TeamCity Service Messages. Will let you track
                                 test results in TeamCitys UI'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lixhq/teamcity-exunit-formatter";
+              homepage = https://github.com/lixhq/teamcity-exunit-formatter;
             };
           } // packageOverrides)
       ) {};
@@ -33716,7 +33716,7 @@ let
             meta = {
               description = ''Simple module for parsing Telegram bot updates'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/col/telegram";
+              homepage = https://github.com/col/telegram;
             };
           } // packageOverrides)
       ) {};
@@ -33739,7 +33739,7 @@ let
             meta = {
               description = ''Telehash hashname implementation'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mwmiller/telehashname_ex";
+              homepage = https://github.com/mwmiller/telehashname_ex;
             };
           } // packageOverrides)
       ) {};
@@ -33768,7 +33768,7 @@ let
 
             meta = {
                license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/danielberkompas/telephonist";
+              homepage = https://github.com/danielberkompas/telephonist;
             };
           } // packageOverrides)
       ) {};
@@ -33792,7 +33792,7 @@ let
               description = ''An Elixir module to easily create and use
                             temporary files and directories.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/tuvistavie/elixir-temp";
+              homepage = https://github.com/tuvistavie/elixir-temp;
             };
           } // packageOverrides)
       ) {};
@@ -33816,7 +33816,7 @@ let
               description = ''Simple Elixir Library for creating self-cleaning
                             tmp directories'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/andrewvy/tempdir";
+              homepage = https://github.com/andrewvy/tempdir;
             };
           } // packageOverrides)
       ) {};
@@ -33840,7 +33840,7 @@ let
               description = ''Auto cleaning and randomly named temporary
                             files'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sorentwo/tempfile";
+              homepage = https://github.com/sorentwo/tempfile;
             };
           } // packageOverrides)
       ) {};
@@ -33864,7 +33864,7 @@ let
               description = ''A tool for managing application env state within
                             tests.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lpil/temporary-env";
+              homepage = https://github.com/lpil/temporary-env;
             };
           } // packageOverrides)
       ) {};
@@ -33894,7 +33894,7 @@ let
             meta = {
               description = ''Simple Bitbucket API client library for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/duksis/tentabucket";
+              homepage = https://github.com/duksis/tentabucket;
             };
           } // packageOverrides)
       ) {};
@@ -33924,7 +33924,7 @@ let
             meta = {
               description = ''Simple Elixir wrapper for the GitHub API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edgurgel/tentacat";
+              homepage = https://github.com/edgurgel/tentacat;
             };
           } // packageOverrides)
       ) {};
@@ -33947,7 +33947,7 @@ let
             meta = {
               description = ''Pretty terminal table for Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ske77/term_table";
+              homepage = https://github.com/ske77/term_table;
             };
           } // packageOverrides)
       ) {};
@@ -33994,7 +33994,7 @@ let
               description = ''HTTP client library, with support for middleware
                             and multiple adapters.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/monterail/tesla";
+              homepage = https://github.com/monterail/tesla;
             };
           } // packageOverrides)
       ) {};
@@ -34018,7 +34018,7 @@ let
               description = ''Report individual test times in ascending
                             order'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pinfieldharm/test_times";
+              homepage = https://github.com/pinfieldharm/test_times;
             };
           } // packageOverrides)
       ) {};
@@ -34042,7 +34042,7 @@ let
               description = ''Elixir implementation of tf-idf (Term
                             frequency-inverse document frequency)'';
               license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/OCannings/tf-idf";
+              homepage = https://github.com/OCannings/tf-idf;
             };
           } // packageOverrides)
       ) {};
@@ -34072,7 +34072,7 @@ let
                                 Heavily on StringMetrics for Scala written by
                                 Rocky Madden.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/smashedtoatoms/the_fuzz";
+              homepage = https://github.com/smashedtoatoms/the_fuzz;
             };
           } // packageOverrides)
       ) {};
@@ -34118,7 +34118,7 @@ let
             meta = {
               description = ''An Elixir digraph inspired local Graph DB'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/oakfang/thoth";
+              homepage = https://github.com/oakfang/thoth;
             };
           } // packageOverrides)
       ) {};
@@ -34142,7 +34142,7 @@ let
               description = ''Fast serializer/deserializer for Apache Thrift`s
                             binary protocol.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dantswain/thrash";
+              homepage = https://github.com/dantswain/thrash;
             };
           } // packageOverrides)
       ) {};
@@ -34167,7 +34167,7 @@ let
                                 Thrift in Elixir. Provides a copy of the Apache
                                 Thrift Erlang runtime.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/pinterest/elixir-thrift";
+              homepage = https://github.com/pinterest/elixir-thrift;
             };
           } // packageOverrides)
       ) {};
@@ -34192,7 +34192,7 @@ let
               description = ''Basic parsing of JSON Map Format from Tiled map
                             editor'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kentdahl/tiled_map";
+              homepage = https://github.com/kentdahl/tiled_map;
             };
           } // packageOverrides)
       ) {};
@@ -34217,7 +34217,7 @@ let
               longDescription = ''A simple function to return the approximate
                                 difference between two times using words.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/midwire/time_ago_words";
+              homepage = https://github.com/midwire/time_ago_words;
             };
           } // packageOverrides)
       ) {};
@@ -34243,7 +34243,7 @@ let
                                 times, or between a specified time and now in
                                 words (eg. 1 week ago)'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/aussiegeek/time_distance";
+              homepage = https://github.com/aussiegeek/time_distance;
             };
           } // packageOverrides)
       ) {};
@@ -34270,7 +34270,7 @@ let
                                 \"24/12/2014\" will become {15,12,7}, {14,42,0},
                                 and {2014,12,24} respectively.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lau/time_seer";
+              homepage = https://github.com/lau/time_seer;
             };
           } // packageOverrides)
       ) {};
@@ -34304,7 +34304,7 @@ let
                                 manipulate dates, times, datetimes, timestamps,
                                 etc., then Timex is for you!'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bitwalker/timex";
+              homepage = https://github.com/bitwalker/timex;
             };
           } // packageOverrides)
       ) {};
@@ -34336,7 +34336,7 @@ let
                                 manipulate dates, times, datetimes, timestamps,
                                 etc., then Timex is for you!'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bitwalker/timex";
+              homepage = https://github.com/bitwalker/timex;
             };
           } // packageOverrides)
       ) {};
@@ -34369,7 +34369,7 @@ let
                                 manipulate dates, times, datetimes, timestamps,
                                 etc., then Timex is for you!'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bitwalker/timex";
+              homepage = https://github.com/bitwalker/timex;
             };
           } // packageOverrides)
       ) {};
@@ -34392,7 +34392,7 @@ let
             meta = {
               description = ''Tiny Mersenne Twister (TinyMT) for Erlang'';
               license = stdenv.lib.licenses.bsd2;
-              homepage = "https://github.com/jj1bdx/tinymt-erlang/";
+              homepage = https://github.com/jj1bdx/tinymt-erlang/;
             };
           } // packageOverrides)
       ) {};
@@ -34415,7 +34415,7 @@ let
             meta = {
               description = ''Type checking for primitive elixir data types'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jwaterfaucett/tipo";
+              homepage = https://github.com/jwaterfaucett/tipo;
             };
           } // packageOverrides)
       ) {};
@@ -34440,7 +34440,7 @@ let
               description = ''An Elixir flavored DSL for building JSON based
                             queries to Elasticsearch engine'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/Zatvobor/tirexs";
+              homepage = https://github.com/Zatvobor/tirexs;
             };
           } // packageOverrides)
       ) {};
@@ -34463,7 +34463,7 @@ let
               description = ''An Elixir flavored DSL for building JSON based
                             queries to Elasticsearch engine'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/Zatvobor/tirexs";
+              homepage = https://github.com/Zatvobor/tirexs;
             };
           } // packageOverrides)
       ) {};
@@ -34486,7 +34486,7 @@ let
             meta = {
               description = ''Encodes/Decodes BER-TLVs structures'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bitgamma/elixir_tlv";
+              homepage = https://github.com/bitgamma/elixir_tlv;
             };
           } // packageOverrides)
       ) {};
@@ -34536,7 +34536,7 @@ let
             meta = {
               description = ''A small TODO comments utility.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/niahoo/elixir-todo";
+              homepage = https://github.com/niahoo/elixir-todo;
             };
           } // packageOverrides)
       ) {};
@@ -34566,7 +34566,7 @@ let
             meta = {
               description = ''Simple Elixir wrapper for the Toggl API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/diacode/togglex";
+              homepage = https://github.com/diacode/togglex;
             };
           } // packageOverrides)
       ) {};
@@ -34601,7 +34601,7 @@ let
             meta = {
               description = ''Toggl(ex) time tracking client'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/kennyballou/toglx";
+              homepage = https://github.com/kennyballou/toglx;
             };
           } // packageOverrides)
       ) {};
@@ -34625,7 +34625,7 @@ let
               description = ''A DSL for conveniently loading binary
                             data/files.'';
               license = stdenv.lib.licenses.bsd2;
-              homepage = "https://github.com/ScrimpyCat/Tonic";
+              homepage = https://github.com/ScrimpyCat/Tonic;
             };
           } // packageOverrides)
       ) {};
@@ -34658,7 +34658,7 @@ let
                                 concurrency limiting, error handling and is
                                 heroku friendly.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joakimk/toniq";
+              homepage = https://github.com/joakimk/toniq;
             };
           } // packageOverrides)
       ) {};
@@ -34682,7 +34682,7 @@ let
               description = ''A delightfully simple monad library that`s
                             written for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/knrz/towel";
+              homepage = https://github.com/knrz/towel;
             };
           } // packageOverrides)
       ) {};
@@ -34707,7 +34707,7 @@ let
                                 (Lists, Maps, Streams, Ranges, etc.) in a
                                 second.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/antipax/tqdm_elixir";
+              homepage = https://github.com/antipax/tqdm_elixir;
             };
           } // packageOverrides)
       ) {};
@@ -34731,7 +34731,7 @@ let
               description = ''TracingHelper is a helper module with predefined
                             tracing functions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/andrzejsliwa/tracing_helper";
+              homepage = https://github.com/andrzejsliwa/tracing_helper;
             };
           } // packageOverrides)
       ) {};
@@ -34770,7 +34770,7 @@ let
             meta = {
               description = ''A GPX parser for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/andrewhao/trackline";
+              homepage = https://github.com/andrewhao/trackline;
             };
           } // packageOverrides)
       ) {};
@@ -34803,7 +34803,7 @@ let
                                 the track as a LineString. It currently works
                                 with Strava-exported GPX files.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/andydangerous/trackstar";
+              homepage = https://github.com/andydangerous/trackstar;
             };
           } // packageOverrides)
       ) {};
@@ -34829,7 +34829,7 @@ let
                                 loosely on
                                 http://theerlangelist.com/article/beyond_taskasync.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/madlep/tradie";
+              homepage = https://github.com/madlep/tradie;
             };
           } // packageOverrides)
       ) {};
@@ -34861,7 +34861,7 @@ let
                                 use a rails-like trailing format:
                                 http://api.dev/resources.format'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mschae/trailing_format_plug";
+              homepage = https://github.com/mschae/trailing_format_plug;
             };
           } // packageOverrides)
       ) {};
@@ -34894,7 +34894,7 @@ let
                                 enumerable, while Stream module transformations
                                 always do.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/garyposter/elixir-transducer";
+              homepage = https://github.com/garyposter/elixir-transducer;
             };
           } // packageOverrides)
       ) {};
@@ -34924,7 +34924,7 @@ let
             meta = {
               description = ''Travis-ci API client library for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/duksis/travis_ex";
+              homepage = https://github.com/duksis/travis_ex;
             };
           } // packageOverrides)
       ) {};
@@ -34954,7 +34954,7 @@ let
             meta = {
               description = ''Trello wrapper for elixir api'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mikaak/trello-elixir";
+              homepage = https://github.com/mikaak/trello-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -34977,7 +34977,7 @@ let
             meta = {
               description = ''Erlang Trie Implementation'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/trie";
+              homepage = https://github.com/okeuday/trie;
             };
           } // packageOverrides)
       ) {};
@@ -34998,7 +34998,7 @@ let
             meta = {
               description = ''Erlang Trie Implementation'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/trie";
+              homepage = https://github.com/okeuday/trie;
             };
           } // packageOverrides)
       ) {};
@@ -35038,7 +35038,7 @@ let
               description = ''A web micro-framework based on Plug and
                             Cowboy.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/hexedpackets/trot";
+              homepage = https://github.com/hexedpackets/trot;
             };
           } // packageOverrides)
       ) {};
@@ -35091,7 +35091,7 @@ let
             meta = {
               description = ''Elixir wrapper of YouTube Data API v3'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/yoavlt/tubex";
+              homepage = https://github.com/yoavlt/tubex;
             };
           } // packageOverrides)
       ) {};
@@ -35122,7 +35122,7 @@ let
             meta = {
               description = ''SOCKS4 and SOCKS5 proxy server'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/surik/tunnerl";
+              homepage = https://github.com/surik/tunnerl;
             };
           } // packageOverrides)
       ) {};
@@ -35152,7 +35152,7 @@ let
             meta = {
               description = ''Wrapper for TVDb API'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/markman123/tvdb";
+              homepage = https://github.com/markman123/tvdb;
             };
           } // packageOverrides)
       ) {};
@@ -35182,7 +35182,7 @@ let
             meta = {
               description = ''A Twilio client for elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/hisea/twilex";
+              homepage = https://github.com/hisea/twilex;
             };
           } // packageOverrides)
       ) {};
@@ -35205,7 +35205,7 @@ let
             meta = {
               description = ''A module for checking the type of an argument'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/jeffreybaird/type";
+              homepage = https://github.com/jeffreybaird/type;
             };
           } // packageOverrides)
       ) {};
@@ -35236,7 +35236,7 @@ let
               description = ''An Elixir client library for the Typeform API
                             (typeform.io)'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/netflakes/TypeformX";
+              homepage = https://github.com/netflakes/TypeformX;
             };
           } // packageOverrides)
       ) {};
@@ -35260,7 +35260,7 @@ let
               description = ''Tzdata is a parser and library for the tz
                             database.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lau/tzdata";
+              homepage = https://github.com/lau/tzdata;
             };
           } // packageOverrides)
       ) {};
@@ -35282,7 +35282,7 @@ let
               description = ''Tzdata is a parser and library for the tz
                             database.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lau/tzdata";
+              homepage = https://github.com/lau/tzdata;
             };
           } // packageOverrides)
       ) {};
@@ -35305,7 +35305,7 @@ let
               description = ''Tzdata is a parser and library for the tz
                             database.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lau/tzdata";
+              homepage = https://github.com/lau/tzdata;
             };
           } // packageOverrides)
       ) {};
@@ -35332,7 +35332,7 @@ let
               description = ''Erlang User Agent Classifier - NIF for
                             WeatherChannel dClass'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/zotonic/ua_classifier";
+              homepage = https://github.com/zotonic/ua_classifier;
             };
           } // packageOverrides)
       ) {};
@@ -35356,7 +35356,7 @@ let
             meta = {
               description = ''User agent parser library'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/elixytics/ua_inspector";
+              homepage = https://github.com/elixytics/ua_inspector;
             };
           } // packageOverrides)
       ) {};
@@ -35380,7 +35380,7 @@ let
               description = ''Utilities for working with the UBER hypermedia
                             format'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/gamache/uber.ex";
+              homepage = https://github.com/gamache/uber.ex;
             };
           } // packageOverrides)
       ) {};
@@ -35403,7 +35403,7 @@ let
             meta = {
               description = ''An opinionated UDP-only InfluxDB client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/timbuchwaldt/udpflux";
+              homepage = https://github.com/timbuchwaldt/udpflux;
             };
           } // packageOverrides)
       ) {};
@@ -35428,7 +35428,7 @@ let
               description = ''An Elixir Authentication System for Plug-based
                             Web Applications'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ueberauth/ueberauth";
+              homepage = https://github.com/ueberauth/ueberauth;
             };
           } // packageOverrides)
       ) {};
@@ -35459,7 +35459,7 @@ let
               description = ''An Ueberauth strategy for basic
                             username/password'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ueberauth/ueberauth_identity";
+              homepage = https://github.com/ueberauth/ueberauth_identity;
             };
           } // packageOverrides)
       ) {};
@@ -35490,7 +35490,7 @@ let
               description = ''An Uberauth strategy for Twitter
                             authentication.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ueberauth/ueberauth_twitter";
+              homepage = https://github.com/ueberauth/ueberauth_twitter;
             };
           } // packageOverrides)
       ) {};
@@ -35515,7 +35515,7 @@ let
                                 Validate full postcodes or parts of a postcode,
                                 and can extract parts of a full postcode. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KushalP/uk_postcode";
+              homepage = https://github.com/KushalP/uk_postcode;
             };
           } // packageOverrides)
       ) {};
@@ -35546,7 +35546,7 @@ let
                                 package is based on Version 8.0.0 of the Unicode
                                 standard.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/Qqwy/elixir-unicode";
+              homepage = https://github.com/Qqwy/elixir-unicode;
             };
           } // packageOverrides)
       ) {};
@@ -35570,7 +35570,7 @@ let
               description = ''Library for adding units/dimensions to numeric
                             types.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/meadsteve/unit_fun";
+              homepage = https://github.com/meadsteve/unit_fun;
             };
           } // packageOverrides)
       ) {};
@@ -35593,7 +35593,7 @@ let
             meta = {
               description = ''Common unit conversions for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/solatis/units";
+              homepage = https://github.com/solatis/units;
             };
           } // packageOverrides)
       ) {};
@@ -35623,7 +35623,7 @@ let
             meta = {
               description = ''Elixir wrapper for the Untappd API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/nimi/untappd";
+              homepage = https://github.com/nimi/untappd;
             };
           } // packageOverrides)
       ) {};
@@ -35653,7 +35653,7 @@ let
                                 schedule and not having those invocations
                                 drift.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/NoRedInk/until_then";
+              homepage = https://github.com/NoRedInk/until_then;
             };
           } // packageOverrides)
       ) {};
@@ -35699,7 +35699,7 @@ let
               description = ''A RFC-3986 URI Library for parsing and building
                             URIs'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/gmr/urilib";
+              homepage = https://github.com/gmr/urilib;
             };
           } // packageOverrides)
       ) {};
@@ -35724,7 +35724,7 @@ let
               description = ''A package to reduce extended forms of URLs to a
                             canonical reference'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/craigwaterman/url_tincture";
+              homepage = https://github.com/craigwaterman/url_tincture;
             };
           } // packageOverrides)
       ) {};
@@ -35748,7 +35748,7 @@ let
             meta = {
               description = ''A simple url unroller/unshortener'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/semanticart/url_unroller";
+              homepage = https://github.com/semanticart/url_unroller;
             };
           } // packageOverrides)
       ) {};
@@ -35771,7 +35771,7 @@ let
             meta = {
               description = ''Useful things'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/b-filip/usefulness";
+              homepage = https://github.com/b-filip/usefulness;
             };
           } // packageOverrides)
       ) {};
@@ -35796,7 +35796,7 @@ let
                                 agent strings with the help of BrowserScope`s UA
                                 database'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/romul/uap-elixir";
+              homepage = https://github.com/romul/uap-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -35819,7 +35819,7 @@ let
             meta = {
               description = ''UUID generator and utilities for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/zyro/elixir-uuid";
+              homepage = https://github.com/zyro/elixir-uuid;
             };
           } // packageOverrides)
       ) {};
@@ -35840,7 +35840,7 @@ let
             meta = {
               description = ''UUID generator and utilities for Elixir.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/zyro/elixir-uuid";
+              homepage = https://github.com/zyro/elixir-uuid;
             };
           } // packageOverrides)
       ) {};
@@ -35863,7 +35863,7 @@ let
             meta = {
               description = ''Vagrant CLI Wrapper'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/mobileoverlord/vagrant";
+              homepage = https://github.com/mobileoverlord/vagrant;
             };
           } // packageOverrides)
       ) {};
@@ -35886,7 +35886,7 @@ let
             meta = {
               description = ''Erlang Process Pools as a Local Variable'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/okeuday/varpool";
+              homepage = https://github.com/okeuday/varpool;
             };
           } // packageOverrides)
       ) {};
@@ -35910,7 +35910,7 @@ let
               longDescription = ''Library of common vector functions for use in
                                 geometric or graphical calculations.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pkinney/vector_ex";
+              homepage = https://github.com/pkinney/vector_ex;
             };
           } // packageOverrides)
       ) {};
@@ -35933,7 +35933,7 @@ let
             meta = {
               description = ''The Verhoeff algorithm implementation'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/mururu/verhoeff";
+              homepage = https://github.com/mururu/verhoeff;
             };
           } // packageOverrides)
       ) {};
@@ -35958,7 +35958,7 @@ let
               description = ''A library for using Origin header checking to
                             prevent CSRF'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/danmcclain/verify_origin";
+              homepage = https://github.com/danmcclain/verify_origin;
             };
           } // packageOverrides)
       ) {};
@@ -35982,7 +35982,7 @@ let
               description = ''An extensible data validation library for
                             Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/CargoSense/vex";
+              homepage = https://github.com/CargoSense/vex;
             };
           } // packageOverrides)
       ) {};
@@ -36012,7 +36012,7 @@ let
             meta = {
               description = ''Client API wrapper for League of Legends API.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/josephyi/viktor";
+              homepage = https://github.com/josephyi/viktor;
             };
           } // packageOverrides)
       ) {};
@@ -36043,7 +36043,7 @@ let
               description = ''Elixir OTP application for the VirusTotal Public
                             API v2.0'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/dtykocki/virus_total";
+              homepage = https://github.com/dtykocki/virus_total;
             };
           } // packageOverrides)
       ) {};
@@ -36066,7 +36066,7 @@ let
             meta = {
               description = ''Tiny application to gather VM statistics'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/ferd/vmstats";
+              homepage = https://github.com/ferd/vmstats;
             };
           } // packageOverrides)
       ) {};
@@ -36090,7 +36090,7 @@ let
               description = ''Voxpop generates text from declarative
                             grammars.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/zovafit/voxpop";
+              homepage = https://github.com/zovafit/voxpop;
             };
           } // packageOverrides)
       ) {};
@@ -36127,7 +36127,7 @@ let
             meta = {
               description = ''Concurrent feature tests for elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/keathley/wallaby";
+              homepage = https://github.com/keathley/wallaby;
             };
           } // packageOverrides)
       ) {};
@@ -36150,7 +36150,7 @@ let
             meta = {
               description = ''Watcher for GenEvent'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edgurgel/watcher";
+              homepage = https://github.com/edgurgel/watcher;
             };
           } // packageOverrides)
       ) {};
@@ -36190,7 +36190,7 @@ let
                                 NOAA is a United States government agency, only
                                 forecasts in the US are supported.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sschneider1207/weather_report";
+              homepage = https://github.com/sschneider1207/weather_report;
             };
           } // packageOverrides)
       ) {};
@@ -36246,7 +36246,7 @@ let
             meta = {
               description = ''Modular web framework '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/slogsdon/plug-web-socket";
+              homepage = https://github.com/slogsdon/plug-web-socket;
             };
           } // packageOverrides)
       ) {};
@@ -36276,7 +36276,7 @@ let
                                 Plug & Cowboy). WebAssembly aims to have 100%
                                 test coverage.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/herenowcoder/webassembly";
+              homepage = https://github.com/herenowcoder/webassembly;
             };
           } // packageOverrides)
       ) {};
@@ -36308,7 +36308,7 @@ let
                             (https://indiewebcamp.com/Webmention) module for
                             Elixir'';
               license = stdenv.lib.licenses.agpl3;
-              homepage = "https://github.com/ckruse/webmentions-elixir";
+              homepage = https://github.com/ckruse/webmentions-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -36360,7 +36360,7 @@ let
             meta = {
               description = ''Erlang websocket client'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sanmiguel/websocket_client";
+              homepage = https://github.com/sanmiguel/websocket_client;
             };
           } // packageOverrides)
       ) {};
@@ -36384,7 +36384,7 @@ let
             meta = {
               description = ''An Elixir Plug for checking wechat signature.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/octocandy/wechat_check_signature";
+              homepage = https://github.com/octocandy/wechat_check_signature;
             };
           } // packageOverrides)
       ) {};
@@ -36417,7 +36417,7 @@ let
               description = ''An Elixir WeChat Media Platform Authentication
                             Client Library.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/he9qi/wechat_mp_auth";
+              homepage = https://github.com/he9qi/wechat_mp_auth;
             };
           } // packageOverrides)
       ) {};
@@ -36441,7 +36441,7 @@ let
             meta = {
               description = ''Wechat plugins for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/octocandy/wechatex";
+              homepage = https://github.com/octocandy/wechatex;
             };
           } // packageOverrides)
       ) {};
@@ -36471,7 +36471,7 @@ let
             meta = {
               description = ''Wrapper for the What3Words API'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lucidstack/w3w-elixir-wrapper";
+              homepage = https://github.com/lucidstack/w3w-elixir-wrapper;
             };
           } // packageOverrides)
       ) {};
@@ -36496,7 +36496,7 @@ let
                                 Gherkin formatted feature files and executes
                                 them as tests.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/meadsteve/white-bread";
+              homepage = https://github.com/meadsteve/white-bread;
             };
           } // packageOverrides)
       ) {};
@@ -36519,7 +36519,7 @@ let
             meta = {
               description = ''Pure Elixir WHOIS client and parser.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/utkarshkukreti/whois.ex";
+              homepage = https://github.com/utkarshkukreti/whois.ex;
             };
           } // packageOverrides)
       ) {};
@@ -36549,7 +36549,7 @@ let
             meta = {
               description = ''Common algebraic structures and functions'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/robot-overlord/witchcraft";
+              homepage = https://github.com/robot-overlord/witchcraft;
             };
           } // packageOverrides)
       ) {};
@@ -36573,7 +36573,7 @@ let
               description = ''Wizard is a math and statistics library for
                             Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/raywan/wizard";
+              homepage = https://github.com/raywan/wizard;
             };
           } // packageOverrides)
       ) {};
@@ -36604,7 +36604,7 @@ let
               description = ''Simple, low-level user account framework for
                             Phoenix Framework'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/knrz/wizardry";
+              homepage = https://github.com/knrz/wizardry;
             };
           } // packageOverrides)
       ) {};
@@ -36629,7 +36629,7 @@ let
                                 language toolkit for the Elixir programming
                                 language.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pjhampton/Woolly";
+              homepage = https://github.com/pjhampton/Woolly;
             };
           } // packageOverrides)
       ) {};
@@ -36654,7 +36654,7 @@ let
                                 string manipulation not found in the standard
                                 Elixir library.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/benfalk/word_smith";
+              homepage = https://github.com/benfalk/word_smith;
             };
           } // packageOverrides)
       ) {};
@@ -36681,7 +36681,7 @@ let
               description = ''A simple implement of the Hungry Consumer model
                             of concurrent servers. '';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/pragdave/work_queue";
+              homepage = https://github.com/pragdave/work_queue;
             };
           } // packageOverrides)
       ) {};
@@ -36704,7 +36704,7 @@ let
             meta = {
               description = ''Erlang Worker Pool'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/inaka/worker_pool";
+              homepage = https://github.com/inaka/worker_pool;
             };
           } // packageOverrides)
       ) {};
@@ -36725,7 +36725,7 @@ let
             meta = {
               description = ''Erlang Worker Pool'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/inaka/worker_pool";
+              homepage = https://github.com/inaka/worker_pool;
             };
           } // packageOverrides)
       ) {};
@@ -36750,7 +36750,7 @@ let
               description = ''A behaviour for simple flow control and
                             backpressure.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sasa1977/workex";
+              homepage = https://github.com/sasa1977/workex;
             };
           } // packageOverrides)
       ) {};
@@ -36775,7 +36775,7 @@ let
                                 interactive workshops for teaching people how to
                                 program in Elixir, and other things.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/gausby/workshop";
+              homepage = https://github.com/gausby/workshop;
             };
           } // packageOverrides)
       ) {};
@@ -36800,7 +36800,7 @@ let
               description = ''topojson country and state/province collections
                             for elixir/erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/camshaft/world_json_ex";
+              homepage = https://github.com/camshaft/world_json_ex;
             };
           } // packageOverrides)
       ) {};
@@ -36828,7 +36828,7 @@ let
                                 security and other parameters associated with
                                 Wi-Fi.'';
               license = with stdenv.lib.licenses; [ asl20 free ];
-              homepage = "https://github.com/fhunleth/wpa_supplicant.ex";
+              homepage = https://github.com/fhunleth/wpa_supplicant.ex;
             };
           } // packageOverrides)
       ) {};
@@ -36851,7 +36851,7 @@ let
             meta = {
               description = ''An RFC 6455 WebSocket implementation.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/";
+              homepage = https://github.com/;
             };
           } // packageOverrides)
       ) {};
@@ -36875,7 +36875,7 @@ let
               description = ''All of the erlang wx macros exposed as normal
                             functions.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/sschneider1207/wx_utils";
+              homepage = https://github.com/sschneider1207/wx_utils;
             };
           } // packageOverrides)
       ) {};
@@ -36905,7 +36905,7 @@ let
             meta = {
               description = ''Library for Wykop API.'';
               license = stdenv.lib.licenses.cc0;
-              homepage = "https://github.com/remiq/wykop_api_elixir";
+              homepage = https://github.com/remiq/wykop_api_elixir;
             };
           } // packageOverrides)
       ) {};
@@ -36928,7 +36928,7 @@ let
             meta = {
               description = ''An html DSL package.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/smpallen99/xain";
+              homepage = https://github.com/smpallen99/xain;
             };
           } // packageOverrides)
       ) {};
@@ -36958,7 +36958,7 @@ let
             meta = {
               description = ''Real time conversion for currencies'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/paulodiniz/xe";
+              homepage = https://github.com/paulodiniz/xe;
             };
           } // packageOverrides)
       ) {};
@@ -36990,7 +36990,7 @@ let
                                 memo function for caching the result of function
                                 executions.'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/arjan/xepcache";
+              homepage = https://github.com/arjan/xepcache;
             };
           } // packageOverrides)
       ) {};
@@ -37021,7 +37021,7 @@ let
               description = ''An API wrapper for the programming game
                             Stockfighter.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bitchef/xfighter";
+              homepage = https://github.com/bitchef/xfighter;
             };
           } // packageOverrides)
       ) {};
@@ -37045,7 +37045,7 @@ let
             meta = {
               description = ''elixir syntax, javascript semantics'';
               license = stdenv.lib.licenses.isc;
-              homepage = "https://github.com/aaron-lebo/xjs";
+              homepage = https://github.com/aaron-lebo/xjs;
             };
           } // packageOverrides)
       ) {};
@@ -37076,7 +37076,7 @@ let
               longDescription = ''Uses the XKCD JSON API to retrieve the
                                 random, specific and the latest XKCD comic.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/notdevinclark/xkcd";
+              homepage = https://github.com/notdevinclark/xkcd;
             };
           } // packageOverrides)
       ) {};
@@ -37104,7 +37104,7 @@ let
                                 (ETS) table and is accessed through various
                                 functions. Tested with Excel and LibreOffice.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/kennellroxco/xlsxir";
+              homepage = https://github.com/kennellroxco/xlsxir;
             };
           } // packageOverrides)
       ) {};
@@ -37127,7 +37127,7 @@ let
             meta = {
               description = ''XML builder for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/joshnuss/xml_builder";
+              homepage = https://github.com/joshnuss/xml_builder;
             };
           } // packageOverrides)
       ) {};
@@ -37178,7 +37178,7 @@ let
                                 parsed with erlsom against an xml-schema for
                                 security.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ewildgoose/elixir-xml_rpc";
+              homepage = https://github.com/ewildgoose/elixir-xml_rpc;
             };
           } // packageOverrides)
       ) {};
@@ -37202,7 +37202,7 @@ let
                                 parsed with erlsom against an xml-schema for
                                 security.'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ewildgoose/elixir-xml_rpc";
+              homepage = https://github.com/ewildgoose/elixir-xml_rpc;
             };
           } // packageOverrides)
       ) {};
@@ -37233,7 +37233,7 @@ let
             meta = {
               description = ''A simple XOAuth2 module for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/craigp/elixir_xoauth2";
+              homepage = https://github.com/craigp/elixir_xoauth2;
             };
           } // packageOverrides)
       ) {};
@@ -37256,7 +37256,7 @@ let
             meta = {
               description = ''Native Elixir xxHash port.'';
               license = stdenv.lib.licenses.free;
-              homepage = "https://github.com/ttvd/elixir-xxhash";
+              homepage = https://github.com/ttvd/elixir-xxhash;
             };
           } // packageOverrides)
       ) {};
@@ -37280,7 +37280,7 @@ let
               description = ''GenServer wrapper behaviour for pubsub between
                             processes.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/gmtprime/y_process";
+              homepage = https://github.com/gmtprime/y_process;
             };
           } // packageOverrides)
       ) {};
@@ -37311,7 +37311,7 @@ let
               longDescription = ''YahooFx is an Elixir library for getting
                                 currency exchange rates from Yahoo Finance'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lau/yahoo_fx";
+              homepage = https://github.com/lau/yahoo_fx;
             };
           } // packageOverrides)
       ) {};
@@ -37335,7 +37335,7 @@ let
               description = ''Yaml parser for Elixir based on native Erlang
                             implementation.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KamilLelonek/yaml-elixir";
+              homepage = https://github.com/KamilLelonek/yaml-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -37357,7 +37357,7 @@ let
               description = ''Yaml parser for Elixir based on native Erlang
                             implementation.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/KamilLelonek/yaml-elixir";
+              homepage = https://github.com/KamilLelonek/yaml-elixir;
             };
           } // packageOverrides)
       ) {};
@@ -37381,7 +37381,7 @@ let
               description = ''Simple module to encode data to YAML. Not ready
                             for production, still WIP.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pilu/yaml_encoder";
+              homepage = https://github.com/pilu/yaml_encoder;
             };
           } // packageOverrides)
       ) {};
@@ -37436,7 +37436,7 @@ let
               longDescription = ''This is a full Telegram Bot API. With this
                                 module you can create your own Telegram Bot.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/Yawolf/yocingo";
+              homepage = https://github.com/Yawolf/yocingo;
             };
           } // packageOverrides)
       ) {};
@@ -37460,7 +37460,7 @@ let
             meta = {
               description = ''Youtube API Client for Elixir'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/victorlcampos/ytx";
+              homepage = https://github.com/victorlcampos/ytx;
             };
           } // packageOverrides)
       ) {};
@@ -37484,7 +37484,7 @@ let
               description = ''Client implementing the Yubico Validation
                             Protocol Version 2.0.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/project-fifo/erlang-yubico";
+              homepage = https://github.com/project-fifo/erlang-yubico;
             };
           } // packageOverrides)
       ) {};
@@ -37507,7 +37507,7 @@ let
             meta = {
               description = ''Simple struct for representing URIs.'';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/kemonomachi/yuri";
+              homepage = https://github.com/kemonomachi/yuri;
             };
           } // packageOverrides)
       ) {};
@@ -37531,7 +37531,7 @@ let
               longDescription = ''Generates random tokens that look like type 4
                                 UUIDs: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx '';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/janlelis/yyid.ex";
+              homepage = https://github.com/janlelis/yyid.ex;
             };
           } // packageOverrides)
       ) {};
@@ -37554,7 +37554,7 @@ let
             meta = {
               description = ''Filename sanitization for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/ricn/zarex";
+              homepage = https://github.com/ricn/zarex;
             };
           } // packageOverrides)
       ) {};
@@ -37590,7 +37590,7 @@ let
                                 protocol, and in the Tahoe-LAFS open source
                                 project.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/pspdfkit-labs/zbase32";
+              homepage = https://github.com/pspdfkit-labs/zbase32;
             };
           } // packageOverrides)
       ) {};
@@ -37614,7 +37614,7 @@ let
               description = ''Zigzag is a fast and flexible parallel processing
                             library for Elixir.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/utkarshkukreti/zigzag.ex";
+              homepage = https://github.com/utkarshkukreti/zigzag.ex;
             };
           } // packageOverrides)
       ) {};
@@ -37641,7 +37641,7 @@ let
                                 allows deflate decompress stream. But Erlang zip
                                 library does not allow content streaming.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/awetzel/zip_stream";
+              homepage = https://github.com/awetzel/zip_stream;
             };
           } // packageOverrides)
       ) {};
@@ -37693,7 +37693,7 @@ let
             meta = {
               description = ''stream zip archives while building them'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "https://github.com/dgvncsz0f/zipflow";
+              homepage = https://github.com/dgvncsz0f/zipflow;
             };
           } // packageOverrides)
       ) {};
@@ -37717,7 +37717,7 @@ let
               description = ''Methods for travelsal and modification of Trees
                             using a zipper. '';
               license = stdenv.lib.licenses.wtfpl;
-              homepage = "https://github.com/Dkendal/zipper_tree";
+              homepage = https://github.com/Dkendal/zipper_tree;
             };
           } // packageOverrides)
       ) {};
@@ -37740,7 +37740,7 @@ let
             meta = {
               description = ''Erlang lazy list library'';
               license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/egobrain/zlist";
+              homepage = https://github.com/egobrain/zlist;
             };
           } // packageOverrides)
       ) {};

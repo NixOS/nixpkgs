@@ -27,7 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six python-axolotl ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/tgalal/yowsup";
+    homepage = https://github.com/tgalal/yowsup;
     description = "The python WhatsApp library";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ma27 ];

@@ -24,7 +24,7 @@ buildGoPackage rec {
       exploration of APIs that return large blobs of JSON but have terrible
       documentation.
     '';
-    homepage = "https://github.com/tomnomnom/gron";
+    homepage = https://github.com/tomnomnom/gron;
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
     platforms = with platforms; linux ++ darwin;

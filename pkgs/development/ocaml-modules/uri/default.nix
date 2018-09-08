@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   inherit (jbuilder) installPhase;
 
   meta = {
-    homepage = "https://github.com/mirage/ocaml-uri";
+    homepage = https://github.com/mirage/ocaml-uri;
     description = "RFC3986 URI parsing library for OCaml";
     license = stdenv.lib.licenses.isc;
     maintainers = [ stdenv.lib.maintainers.vbgl ];

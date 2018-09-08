@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Report faked system time to programs without having to change the system-wide time";
-    homepage = "https://github.com/wolfcw/libfaketime/";
+    homepage = https://github.com/wolfcw/libfaketime/;
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

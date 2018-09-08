@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lwt logging library (deprecated)";
-    homepage = "https://github.com/aantron/lwt_log";
+    homepage = https://github.com/aantron/lwt_log;
     license = stdenv.lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
     maintainers = [ stdenv.lib.maintainers.vbgl ];

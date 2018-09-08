@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ notmuch openssl sqlite xapian zlib ];
   meta = {
     description = "Synchronize maildirs and notmuch databases";
-    homepage = "http://www.muchsync.org/";
+    homepage = http://www.muchsync.org/;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ ocharles ];
     license = stdenv.lib.licenses.gpl2Plus;

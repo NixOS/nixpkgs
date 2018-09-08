@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Super-fast, efficiently stored Trie for Python";
-    homepage = "https://github.com/kmike/datrie";
+    homepage = https://github.com/kmike/datrie;
     license = licenses.lgpl2;
     maintainers = with maintainers; [ lewo ];
   };

@@ -8,6 +8,6 @@ buildHex {
   meta = {
     description = ''a rebar3 port compiler for native code'';
     license = stdenv.lib.licenses.mit;
-    homepage = "https://github.com/blt/port_compiler";
+    homepage = https://github.com/blt/port_compiler;
   };
 }

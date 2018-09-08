@@ -18,7 +18,7 @@ let
     doCheck = false;
 
     meta = {
-      homepage = "http://home.blarg.net/~steveha/xe.html";
+      homepage = http://home.blarg.net/~steveha/xe.html;
       description = "XML elements";
     };
   };
@@ -41,7 +41,7 @@ in {
     doCheck = false;
 
     meta = with stdenv.lib; {
-      homepage = "http://home.blarg.net/~steveha/pyfeed.html";
+      homepage = http://home.blarg.net/~steveha/pyfeed.html;
       description = "Tools for syndication feeds";
     };
 
@@ -59,7 +59,7 @@ in {
 
     meta = with stdenv.lib; {
       description = "Some (mainly XMPP-related) additions to twisted";
-      homepage = "http://wokkel.ik.nu/";
+      homepage = http://wokkel.ik.nu/;
       license = licenses.mit;
     };
   });

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Sphinx extension to support docstrings in Numpy format";
-    homepage = "https://github.com/numpy/numpydoc";
+    homepage = https://github.com/numpy/numpydoc;
     license = lib.licenses.free;
    };
 }

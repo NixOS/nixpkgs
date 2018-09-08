@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Bindings to SDL2 for GNU Guile";
-    homepage = "https://dthompson.us/projects/guile-sdl2.html";
+    homepage = https://dthompson.us/projects/guile-sdl2.html;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ seppeljordan vyp ];
     platforms = platforms.all;

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Advanced, easy to use and extensible WikiEngine";
 
-    homepage = "https://moinmo.in/";
+    homepage = https://moinmo.in/;
 
     license = licenses.gpl2Plus;
   };

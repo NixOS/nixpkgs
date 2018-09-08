@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A minimal composable infrastructure on top of libudev and libevdev";
-    homepage = "https://gitlab.com/interception/linux/tools";
+    homepage = https://gitlab.com/interception/linux/tools;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.vyp ];
     platforms = stdenv.lib.platforms.linux;

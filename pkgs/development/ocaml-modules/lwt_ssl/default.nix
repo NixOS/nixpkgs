@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   inherit (jbuilder) installPhase;
 
   meta = {
-    homepage = "https://github.com/aantron/lwt_ssl";
+    homepage = https://github.com/aantron/lwt_ssl;
     description = "OpenSSL binding with concurrent I/O";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.vbgl ];

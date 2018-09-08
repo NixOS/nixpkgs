@@ -24,7 +24,7 @@ pythonPackages.buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = "https://github.com/willthames/ansible-lint";
+    homepage = https://github.com/willthames/ansible-lint;
     description = "Best practices checker for Ansible";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.sengaya ];

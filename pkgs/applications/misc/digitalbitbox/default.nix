@@ -135,7 +135,7 @@ in stdenv.mkDerivation rec {
 
       to the configuration which installs the package and enables the hardware module.
     '';
-    homepage = "https://digitalbitbox.com/";
+    homepage = https://digitalbitbox.com/;
     license = licenses.mit;
     maintainers = with maintainers; [
       vidbina

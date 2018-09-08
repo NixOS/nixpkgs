@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python API and tools to manipulate OpenDocument files";
-    homepage = "https://joinup.ec.europa.eu/software/odfpy/home";
+    homepage = https://joinup.ec.europa.eu/software/odfpy/home;
     license = lib.licenses.asl20;
   };
 }

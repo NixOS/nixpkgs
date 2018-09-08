@@ -19,7 +19,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Protobuf code generator for gRPC";
     license = lib.licenses.asl20;
-    homepage = "https://grpc.io/grpc/python/";
+    homepage = https://grpc.io/grpc/python/;
     maintainers = with maintainers; [ vanschelven ];
   };
 }

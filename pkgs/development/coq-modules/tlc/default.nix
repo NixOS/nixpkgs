@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   installFlags = "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib";
 
   meta = {
-    homepage = "http://www.chargueraud.org/softs/tlc/";
+    homepage = http://www.chargueraud.org/softs/tlc/;
     description = "A non-constructive library for Coq";
     license = stdenv.lib.licenses.free;
     maintainers = [ stdenv.lib.maintainers.vbgl ];

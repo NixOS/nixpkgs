@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://wiki.ubuntu.com/FirmwareTestSuite";
+    homepage = https://wiki.ubuntu.com/FirmwareTestSuite;
     description = "Firmware Test Suite";
     platforms = platforms.linux;
     license = licenses.gpl2;

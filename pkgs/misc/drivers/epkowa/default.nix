@@ -11,7 +11,7 @@ patchelf, gcc
 }:
 
 let common_meta = {
-    homepage = "http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX";
+    homepage = http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX;
     license = with stdenv.lib.licenses; epson;
     platforms = with stdenv.lib.platforms; linux;
    };

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Logfury is for python library maintainers. It allows for responsible, low-boilerplate logging of method calls.";
-    homepage = "https://github.com/ppolewicz/logfury";
+    homepage = https://github.com/ppolewicz/logfury;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jwiegley ];
   };

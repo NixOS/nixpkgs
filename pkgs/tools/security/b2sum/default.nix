@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The b2sum utility is similar to the md5sum or shasum utilities but for BLAKE2";
-    homepage = "https://blake2.net";
+    homepage = https://blake2.net;
     license = with licenses; [ asl20 cc0 openssl ];
     maintainers = with maintainers; [ kirelagin ];
     platforms = platforms.all;

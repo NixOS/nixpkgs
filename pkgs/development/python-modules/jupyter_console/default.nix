@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Jupyter terminal console";
-    homepage = "http://jupyter.org/";
+    homepage = http://jupyter.org/;
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };

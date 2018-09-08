@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Compress responses in your Flask app with gzip";
-    homepage = "https://libwilliam.github.io/flask-compress/";
+    homepage = https://libwilliam.github.io/flask-compress/;
     license = licenses.mit;
   };
 }

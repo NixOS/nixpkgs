@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Oracle ODPI-C library";
-    homepage = "https://oracle.github.io/odpi/";
+    homepage = https://oracle.github.io/odpi/;
     maintainers = with maintainers; [ mkazulak flokli ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

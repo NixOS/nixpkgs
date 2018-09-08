@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SVG-based Qt4 theme engine";
-    homepage = "https://github.com/tsujan/Kvantum";
+    homepage = https://github.com/tsujan/Kvantum;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bugworm ];

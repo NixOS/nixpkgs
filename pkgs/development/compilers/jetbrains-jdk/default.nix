@@ -72,7 +72,7 @@ let drv = stdenv.mkDerivation rec {
      JetBrains Runtime is not a certified build of OpenJDK. Please, use at
      your own risk.
     '';
-    homepage = "https://bintray.com/jetbrains/intellij-jdk/";
+    homepage = https://bintray.com/jetbrains/intellij-jdk/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
     platforms = with platforms; [ "x86_64-linux" ];

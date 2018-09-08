@@ -20,7 +20,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     license = licenses.asl20;
-    homepage = "https://github.com/google/mtail";
+    homepage = https://github.com/google/mtail;
     description = "Tool for extracting metrics from application logs";
   };
 }

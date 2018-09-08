@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A tiny TLS 1.2 only implementation";
-    homepage = "https://www.gnupg.org/software/ntbtls/";
+    homepage = https://www.gnupg.org/software/ntbtls/;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ joachifm ];

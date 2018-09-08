@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "StarCraft II - client protocol.";
-    homepage = "https://github.com/Blizzard/sc2client-proto";
+    homepage = https://github.com/Blizzard/sc2client-proto;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ danharaj ];
   };

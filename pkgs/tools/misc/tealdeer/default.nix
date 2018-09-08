@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "An implementation of tldr in Rust";
-    homepage = "https://github.com/dbrgn/tealdeer";
+    homepage = https://github.com/dbrgn/tealdeer;
     maintainers = with maintainers; [ davidak ];
     license = with licenses; [ asl20 mit ];
     platforms = platforms.all;

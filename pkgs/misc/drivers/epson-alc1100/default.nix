@@ -49,7 +49,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
+      homepage = http://download.ebz.epson.net/dsc/search/01/search/;
       description = "Epson AcuLaser C1100 Driver";
       longDescription = ''
         This package provides a print filter for printing to EPSON AL-C1100

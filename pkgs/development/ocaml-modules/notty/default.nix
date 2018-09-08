@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) installPhase;
 
   meta = {
-    homepage = "https://github.com/pqwy/notty";
+    homepage = https://github.com/pqwy/notty;
     inherit (ocaml.meta) platforms;
     description = "Declarative terminal graphics for OCaml";
     license = licenses.isc;

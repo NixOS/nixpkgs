@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "swap endianess of a cram filesystem (cramfs)";
-    homepage = "https://packages.debian.org/sid/utils/cramfsswap";
+    homepage = https://packages.debian.org/sid/utils/cramfsswap;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

@@ -87,7 +87,7 @@ let
       self."itsdangerous"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/pallets/flask/";
+        homepage = http://github.com/pallets/flask/;
         license = licenses.bsdOriginal;
         description = "A microframework based on Werkzeug, Jinja2 and good intentions";
       };
@@ -104,7 +104,7 @@ let
       self."Flask"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "https://libwilliam.github.io/flask-compress/";
+        homepage = https://libwilliam.github.io/flask-compress/;
         license = licenses.mit;
         description = "Compress responses in your Flask app with gzip.";
       };
@@ -122,7 +122,7 @@ let
       self."python-socketio"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/miguelgrinberg/Flask-SocketIO/";
+        homepage = http://github.com/miguelgrinberg/Flask-SocketIO/;
         license = licenses.mit;
         description = "Socket.IO integration for Flask applications";
       };
@@ -139,7 +139,7 @@ let
       self."MarkupSafe"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://jinja.pocoo.org/";
+        homepage = http://jinja.pocoo.org/;
         license = licenses.bsdOriginal;
         description = "A small but fast and easy to use stand-alone template engine written in pure python.";
       };
@@ -154,7 +154,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/pallets/markupsafe";
+        homepage = http://github.com/pallets/markupsafe;
         license = licenses.bsdOriginal;
         description = "Implements a XML/HTML/XHTML Markup safe string for Python";
       };
@@ -169,7 +169,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://pygments.org/";
+        homepage = http://pygments.org/;
         license = licenses.bsdOriginal;
         description = "Pygments is a syntax highlighting package written in Python.";
       };
@@ -184,7 +184,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "https://www.palletsprojects.org/p/werkzeug/";
+        homepage = https://www.palletsprojects.org/p/werkzeug/;
         license = licenses.bsdOriginal;
         description = "The comprehensive WSGI web application library.";
       };
@@ -199,7 +199,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/mitsuhiko/click";
+        homepage = http://github.com/mitsuhiko/click;
         license = licenses.bsdOriginal;
         description = "A simple wrapper around optparse for powerful command line utilities.";
       };
@@ -216,7 +216,7 @@ let
       self."greenlet"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://www.gevent.org/";
+        homepage = http://www.gevent.org/;
         license = licenses.mit;
         description = "Coroutine-based network library";
       };
@@ -231,7 +231,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "https://github.com/python-greenlet/greenlet";
+        homepage = https://github.com/python-greenlet/greenlet;
         license = licenses.mit;
         description = "Lightweight in-process concurrent programming";
       };
@@ -246,7 +246,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/mitsuhiko/itsdangerous";
+        homepage = http://github.com/mitsuhiko/itsdangerous;
         license = licenses.bsdOriginal;
         description = "Various helpers to pass trusted data to untrusted environments and back.";
       };
@@ -261,7 +261,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "https://github.com/cs01/pygdbmi";
+        homepage = https://github.com/cs01/pygdbmi;
         license = licenses.mit;
         description = "Parse gdb machine interface output with Python";
       };
@@ -278,7 +278,7 @@ let
       self."six"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/miguelgrinberg/python-engineio/";
+        homepage = http://github.com/miguelgrinberg/python-engineio/;
         license = licenses.mit;
         description = "Engine.IO server";
       };
@@ -296,7 +296,7 @@ let
       self."six"
     ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://github.com/miguelgrinberg/python-socketio/";
+        homepage = http://github.com/miguelgrinberg/python-socketio/;
         license = licenses.mit;
         description = "Socket.IO server";
       };
@@ -311,7 +311,7 @@ let
       buildInputs = commonBuildInputs;
       propagatedBuildInputs = [ ];
       meta = with pkgs.stdenv.lib; {
-        homepage = "http://pypi.python.org/pypi/six/";
+        homepage = http://pypi.python.org/pypi/six/;
         license = licenses.mit;
         description = "Python 2 and 3 compatibility utilities";
       };

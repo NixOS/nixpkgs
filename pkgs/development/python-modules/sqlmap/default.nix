@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "http://sqlmap.org";
+    homepage = http://sqlmap.org;
     license = licenses.gpl2;
     description = "Automatic SQL injection and database takeover tool";
     maintainers = with maintainers; [ bennofs ];

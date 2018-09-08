@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The fastest STL file viewer";
-    homepage = "https://github.com/mkeeter/fstl";
+    homepage = https://github.com/mkeeter/fstl;
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ tweber ];

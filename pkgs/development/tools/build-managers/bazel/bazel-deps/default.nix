@@ -5,7 +5,7 @@ buildBazelPackage rec {
   version = "2018-08-16";
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/johnynek/bazel-deps";
+    homepage = https://github.com/johnynek/bazel-deps;
     description = "Generate bazel dependencies for maven artifacts";
     license = licenses.mit;
     maintainers = [ maintainers.uri-canva ];

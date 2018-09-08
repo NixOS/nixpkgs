@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "a Python library for parsing and creating TOML";
-    homepage = "https://github.com/uiri/toml";
+    homepage = https://github.com/uiri/toml;
     license = licenses.mit;
     maintainers = with maintainers; [ twey ];
   };

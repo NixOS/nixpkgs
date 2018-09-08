@@ -22,7 +22,7 @@ mkDerivation rec {
     optparse-applicative retry text unix unordered-containers
     utf8-string
   ];
-  homepage = "https://github.com/channable/vaultenv";
+  homepage = https://github.com/channable/vaultenv;
   description = "Runs processes with secrets from HashiCorp Vault";
   license = stdenv.lib.licenses.bsd3;
   maintainers = with stdenv.lib.maintainers; [ lnl7 ];

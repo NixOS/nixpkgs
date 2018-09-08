@@ -40,7 +40,7 @@ let self = stdenv.mkDerivation rec {
       '';
     };
   meta = with stdenv.lib; {
-    homepage = "https://github.com/timbertson/nix-pin";
+    homepage = https://github.com/timbertson/nix-pin;
     description = "nixpkgs development utility";
     license = licenses.mit;
     maintainers = [ maintainers.timbertson ];

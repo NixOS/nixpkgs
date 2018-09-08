@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Nonnegative matrix factorization library";
-    homepage = "http://nimfa.biolab.si";
+    homepage = http://nimfa.biolab.si;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];
   };

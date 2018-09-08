@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flex SDK for Adobe Flash / ActionScript";
-    homepage = "https://flex.apache.org/";
+    homepage = https://flex.apache.org/;
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ dywedir ];
   };

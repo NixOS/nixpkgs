@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "multi-purpose brute-forcer";
-    homepage = "https://github.com/lanjelot/patator";
+    homepage = https://github.com/lanjelot/patator;
     license = licenses.gpl2;
     maintainers = with maintainers; [ y0no ];
   };

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false; # requires dbus session
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/mitya57/secretstorage";
+    homepage = https://github.com/mitya57/secretstorage;
     description = "Python bindings to FreeDesktop.org Secret Service API";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ teto ];

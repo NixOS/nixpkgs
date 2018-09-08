@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = "https://pybtex.org/";
+    homepage = https://pybtex.org/;
     description = "A BibTeX-compatible bibliography processor written in Python";
     license = stdenv.lib.licenses.mit;
   };

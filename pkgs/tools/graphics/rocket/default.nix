@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for synchronizing music and visuals in demoscene productions";
-    homepage = "https://github.com/rocket/rocket";
+    homepage = https://github.com/rocket/rocket;
     license = licenses.zlib;
     platforms = platforms.linux;
     maintainers = [ maintainers.dezgeg ];

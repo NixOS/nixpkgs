@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A docutils backend for pybtex";
-    homepage = "https://github.com/mcmtroffaes/pybtex-docutils";
+    homepage = https://github.com/mcmtroffaes/pybtex-docutils;
     license = stdenv.lib.licenses.mit;
   };
 }

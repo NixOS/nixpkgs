@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The strongly hyped graphical interpreter for the Haskell programming language";
-    homepage = "https://github.com/HeinrichApfelmus/hyper-haskell";
+    homepage = https://github.com/HeinrichApfelmus/hyper-haskell;
     license = licenses.bsd3;
     maintainers = [ maintainers.rvl ];
   };

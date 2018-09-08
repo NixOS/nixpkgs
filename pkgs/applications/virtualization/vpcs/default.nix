@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       ping/traceroute the other hosts/routers from the VPCS when you study the
       Cisco routers in the dynamips.
     '';
-    homepage = "https://sourceforge.net/projects/vpcs/";
+    homepage = https://sourceforge.net/projects/vpcs/;
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

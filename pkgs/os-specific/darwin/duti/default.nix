@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [matthewbauer];
     platforms = platforms.darwin;
     license = licenses.publicDomain;
-    homepage = "http://duti.org/";
+    homepage = http://duti.org/;
   };
 }

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Allows to get the public suffix of a domain name";
-    homepage = "https://pypi.python.org/pypi/publicsuffix/";
+    homepage = https://pypi.python.org/pypi/publicsuffix/;
     license = licenses.mit;
   };
 }

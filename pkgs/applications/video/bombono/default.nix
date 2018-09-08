@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "a DVD authoring program for personal computers";
-    homepage = "http://www.bombono.org/";
+    homepage = http://www.bombono.org/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ symphorien ];
   };

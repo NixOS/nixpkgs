@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       systems and applications. Regular B&W outline emoji are included for
       backwards/fallback compatibility.
     '';
-    homepage = "https://github.com/eosrei/twemoji-color-font";
+    homepage = https://github.com/eosrei/twemoji-color-font;
     downloadPage = "https://github.com/eosrei/twemoji-color-font/releases";
     license = with licenses; [ cc-by-40 mit ];
     maintainers = [ maintainers.fgaz ];

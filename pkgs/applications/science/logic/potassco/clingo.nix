@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = "https://potassco.org/";
+    homepage = https://potassco.org/;
     downloadPage = "https://github.com/potassco/clingo/releases/";
   };
 }

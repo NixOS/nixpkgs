@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.projectlibre.com/";
+    homepage = http://www.projectlibre.com/;
     description = "Project-Management Software similar to MS-Project";
     maintainers = [ maintainers.Mogria ];
     license = licenses.cpal10;

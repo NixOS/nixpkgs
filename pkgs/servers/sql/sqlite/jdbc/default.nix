@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/xerial/sqlite-jdbc";
+    homepage = https://github.com/xerial/sqlite-jdbc;
     description = "SQLite JDBC Driver";
     license = licenses.asl20;
     maintainers = with maintainers; [ jraygauthier ];

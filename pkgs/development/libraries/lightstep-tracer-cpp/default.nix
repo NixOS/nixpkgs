@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Distributed tracing system built on top of the OpenTracing standard";
-    homepage = "https://lightstep.com/";
+    homepage = https://lightstep.com/;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Iterative JSON parser with a standard Python iterator interface";
-    homepage = "https://github.com/isagalaev/ijson";
+    homepage = https://github.com/isagalaev/ijson;
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvl ];
   };

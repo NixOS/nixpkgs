@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
-    homepage = "http://shell-storm.org/project/ROPgadget/";
+    homepage = http://shell-storm.org/project/ROPgadget/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ bennofs ];
   };

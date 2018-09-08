@@ -609,7 +609,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "https://github.com/vrapper/vrapper";
+      homepage = https://github.com/vrapper/vrapper;
       description = "A wrapper to provide a Vim-like input scheme for moving around and editing text";
       license = licenses.gpl3;
       platforms = platforms.all;

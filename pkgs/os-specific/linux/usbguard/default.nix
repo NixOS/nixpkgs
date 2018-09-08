@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The USBGuard software framework helps to protect your computer against BadUSB.";
-    homepage = "https://usbguard.github.io/";
+    homepage = https://usbguard.github.io/;
     license = licenses.gpl2;
     maintainers = [ maintainers.tnias ];
   };

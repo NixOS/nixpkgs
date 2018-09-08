@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://github.com/Hummer12007/brightnessctl";
+    homepage = https://github.com/Hummer12007/brightnessctl;
     maintainers = [ stdenv.lib.maintainers.Dje4321 ];
     license = stdenv.lib.licenses.mit;
     description = "This program allows you read and control device brightness";

@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Flask-Mail is a Flask extension providing simple email sending capabilities.";
-    homepage = "https://pypi.python.org/pypi/Flask-Mail";
+    homepage = https://pypi.python.org/pypi/Flask-Mail;
     license = lib.licenses.bsd3;
   };
 

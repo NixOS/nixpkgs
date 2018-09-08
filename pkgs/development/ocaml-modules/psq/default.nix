@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Functional Priority Search Queues for OCaml";
-    homepage = "https://github.com/pqwy/psq";
+    homepage = https://github.com/pqwy/psq;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     license = stdenv.lib.licenses.isc;
     inherit (ocaml.meta) platforms;

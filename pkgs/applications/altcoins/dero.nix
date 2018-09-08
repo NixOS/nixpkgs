@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Secure, private blockchain with smart contracts based on Monero";
-    homepage = "https://dero.io/";
+    homepage = https://dero.io/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;

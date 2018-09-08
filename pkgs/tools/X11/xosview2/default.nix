@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       connect to it on a network, then you can popup an xosview instance and
       monitor what is going on.
     '';
-    homepage = "http://xosview.sourceforge.net/index.html";
+    homepage = http://xosview.sourceforge.net/index.html;
     license = licenses.gpl1;
     maintainers = [ maintainers.SeanZicari ];
     platforms = platforms.all;

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gather E-mails, subdomains and names from different public sources";
-    homepage = "https://github.com/laramies/theHarvester";
+    homepage = https://github.com/laramies/theHarvester;
     platforms = platforms.all;
     maintainers = with maintainers; [ treemo ];
     license = licenses.gpl2;

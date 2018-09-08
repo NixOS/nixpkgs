@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast JSON parser/generator for C++ with both SAX/DOM style API";
-    homepage = "http://rapidjson.org/";
+    homepage = http://rapidjson.org/;
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];

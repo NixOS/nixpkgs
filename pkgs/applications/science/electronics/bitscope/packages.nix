@@ -13,7 +13,7 @@ in {
 
     meta = {
       description = "Multi-channel waveform data acquisition and chart recording application";
-      homepage = "http://bitscope.com/software/chart/";
+      homepage = http://bitscope.com/software/chart/;
     };
 
     src = fetchurl {
@@ -47,7 +47,7 @@ in {
 
     meta = {
       description = "Display diagnostic application for BitScope";
-      homepage = "http://bitscope.com/software/display/";
+      homepage = http://bitscope.com/software/display/;
     };
 
     src = fetchurl {
@@ -64,7 +64,7 @@ in {
 
     meta = {
       description = "Test and measurement software for BitScope";
-      homepage = "http://bitscope.com/software/dso/";
+      homepage = http://bitscope.com/software/dso/;
     };
 
     src = fetchurl {
@@ -81,7 +81,7 @@ in {
 
     meta = {
       description = "Mixed signal logic timing and serial protocol analysis software for BitScope";
-      homepage = "http://bitscope.com/software/logic/";
+      homepage = http://bitscope.com/software/logic/;
     };
 
     src = fetchurl {
@@ -98,7 +98,7 @@ in {
 
     meta = {
       description = "Automated oscilloscope, voltmeter and frequency meter for BitScope";
-      homepage = "http://bitscope.com/software/logic/";
+      homepage = http://bitscope.com/software/logic/;
     };
 
     src = fetchurl {
@@ -118,7 +118,7 @@ in {
 
     meta = {
       description = "Demonstrative prototype oscilloscope built using the BitScope Library";
-      homepage = "http://bitscope.com/blog/DK/?p=DK15A";
+      homepage = http://bitscope.com/blog/DK/?p=DK15A;
     };
 
     src = fetchurl {
@@ -135,7 +135,7 @@ in {
 
     meta = {
       description = "Remote access server solution for any BitScope";
-      homepage = "http://bitscope.com/software/server/";
+      homepage = http://bitscope.com/software/server/;
     };
 
     src = fetchurl {

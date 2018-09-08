@@ -38,7 +38,7 @@ stdenv'.mkDerivation rec {
 
   meta = with lib; {
     description = "Unified All-in-one Monero miner";
-    homepage = "https://github.com/fireice-uk/xmr-stak";
+    homepage = https://github.com/fireice-uk/xmr-stak;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fpletz ];
   };

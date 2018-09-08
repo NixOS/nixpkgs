@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A package for encoding and decoding data in and from Recursive Length Prefix notation";
-    homepage = "https://github.com/ethereum/pyrlp";
+    homepage = https://github.com/ethereum/pyrlp;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gebner ];
   };

@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Implementation of IMS LTI interface that works with edX";
-    homepage = "https://github.com/mitodl/pylti";
+    homepage = https://github.com/mitodl/pylti;
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ layus ];
   };

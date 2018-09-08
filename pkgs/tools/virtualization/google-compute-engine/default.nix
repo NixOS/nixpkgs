@@ -48,7 +48,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     description = "Google Compute Engine tools and services";
-    homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
+    homepage = https://github.com/GoogleCloudPlatform/compute-image-packages;
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
     platforms = platforms.linux;

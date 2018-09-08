@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple GTD-style todo list for the command line";
-    homepage = "http://todolist.site";
+    homepage = http://todolist.site;
     license = licenses.mit;
     maintainers = with maintainers; [ uvnikita ];
   };

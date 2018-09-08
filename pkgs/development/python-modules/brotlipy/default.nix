@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for the reference Brotli encoder/decoder";
-    homepage = "https://github.com/python-hyper/brotlipy/";
+    homepage = https://github.com/python-hyper/brotlipy/;
     license = lib.licenses.mit;
   };
 }

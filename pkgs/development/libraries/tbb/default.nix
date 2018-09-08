@@ -30,7 +30,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
 
   meta = {
     description = "Intel Thread Building Blocks C++ Library";
-    homepage = "http://threadingbuildingblocks.org/";
+    homepage = http://threadingbuildingblocks.org/;
     license = licenses.asl20;
     longDescription = ''
       Intel Threading Building Blocks offers a rich and complete approach to

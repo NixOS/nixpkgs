@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Access C-like structures directly from OCaml";
     license = stdenv.lib.licenses.isc;
-    homepage = "https://github.com/mirage/ocaml-cstruct";
+    homepage = https://github.com/mirage/ocaml-cstruct;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };

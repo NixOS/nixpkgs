@@ -81,7 +81,7 @@ in stdenv.mkDerivation rec {
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
-    homepage = "https://cloud.google.com/sdk/";
+    homepage = https://cloud.google.com/sdk/;
     maintainers = with maintainers; [ stephenmw zimbatm ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };

@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Navigation tree customization for Sphinx";
-    homepage = "https://github.com/bintoro/sphinx-navtree";
+    homepage = https://github.com/bintoro/sphinx-navtree;
     license = lib.licenses.mit;
   };
 }

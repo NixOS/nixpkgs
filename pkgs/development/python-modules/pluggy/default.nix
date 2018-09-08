@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Plugin and hook calling mechanisms for Python";
-    homepage = "https://pypi.python.org/pypi/pluggy";
+    homepage = https://pypi.python.org/pypi/pluggy;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jgeerds ];
   };

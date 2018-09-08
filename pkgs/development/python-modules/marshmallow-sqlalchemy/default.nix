@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "0.14.1";
 
   meta = {
-    homepage = "https://github.com/marshmallow-code/marshmallow-sqlalchemy";
+    homepage = https://github.com/marshmallow-code/marshmallow-sqlalchemy;
     description = "SQLAlchemy integration with marshmallow ";
     license = lib.licenses.mit;
   };

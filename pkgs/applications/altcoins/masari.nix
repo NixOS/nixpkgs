@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "scalability-focused, untraceable, secure, and fungible cryptocurrency using the RingCT protocol";
-    homepage = "https://www.getmasari.org/";
+    homepage = https://www.getmasari.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;

@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "2.15.4";
 
   meta = {
-    homepage = "https://github.com/marshmallow-code/marshmallow";
+    homepage = https://github.com/marshmallow-code/marshmallow;
     description = ''
       A lightweight library for converting complex objects to and from
       simple Python datatypes.

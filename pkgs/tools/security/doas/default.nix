@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Executes the given command as another user";
-    homepage = "https://github.com/Duncaen/OpenDoas";
+    homepage = https://github.com/Duncaen/OpenDoas;
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

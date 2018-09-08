@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost eigen python vtk zlib ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/BioMedIA/MIRTK";
+    homepage = https://github.com/BioMedIA/MIRTK;
     description = "Medical image registration library and tools";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.linux;

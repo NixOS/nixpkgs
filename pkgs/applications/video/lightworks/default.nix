@@ -68,7 +68,7 @@ let
 
     meta = {
       description = "Professional Non-Linear Video Editor";
-      homepage = "https://www.lwks.com/";
+      homepage = https://www.lwks.com/;
       license = stdenv.lib.licenses.unfree;
       maintainers = [ stdenv.lib.maintainers.antonxy ];
       platforms = [ "x86_64-linux" ];

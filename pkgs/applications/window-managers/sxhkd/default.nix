@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple X hotkey daemon";
-    homepage = "https://github.com/baskerville/sxhkd";
+    homepage = https://github.com/baskerville/sxhkd;
     license = licenses.bsd2;
     maintainers = with maintainers; [ vyp ];
     platforms = platforms.linux;

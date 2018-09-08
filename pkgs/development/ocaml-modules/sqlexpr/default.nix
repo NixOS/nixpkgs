@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Type-safe, convenient SQLite database access";
-    homepage = "https://github.com/mfp/ocaml-sqlexpr";
+    homepage = https://github.com/mfp/ocaml-sqlexpr;
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;

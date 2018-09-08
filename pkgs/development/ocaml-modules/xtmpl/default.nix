@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "XML templating library for OCaml";
-    homepage = "https://www.good-eris.net/xtmpl/";
+    homepage = https://www.good-eris.net/xtmpl/;
     license = licenses.lgpl3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];

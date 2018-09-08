@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A light-weight image viewer";
-    homepage = "https://feh.finalrewind.org/";
+    homepage = https://feh.finalrewind.org/;
     license = licenses.mit;
     maintainers = [ maintainers.viric maintainers.willibutz ];
     platforms = platforms.unix;

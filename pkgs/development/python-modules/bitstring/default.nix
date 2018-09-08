@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Module for binary data manipulation";
-    homepage = "https://github.com/scott-griffiths/bitstring";
+    homepage = https://github.com/scott-griffiths/bitstring;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];

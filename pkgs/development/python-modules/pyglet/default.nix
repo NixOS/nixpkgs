@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ future ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.pyglet.org/";
+    homepage = http://www.pyglet.org/;
     description = "A cross-platform windowing and multimedia library";
     license = licenses.bsd3;
     platforms = platforms.mesaPlatforms;

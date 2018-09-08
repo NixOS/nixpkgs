@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     # There are links to a homepage that are broken by a BitBucket change
-    homepage = "https://bitbucket.org/tagoh/liblangtag/overview";
+    homepage = https://bitbucket.org/tagoh/liblangtag/overview;
   };
 }

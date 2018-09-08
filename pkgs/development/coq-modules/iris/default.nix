@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = {
-    homepage = "https://gitlab.mpi-sws.org/FP/iris-coq";
+    homepage = https://gitlab.mpi-sws.org/FP/iris-coq;
     description = "The Coq development of the Iris Project";
     inherit (coq.meta) platforms;
     license = stdenv.lib.licenses.bsd3;

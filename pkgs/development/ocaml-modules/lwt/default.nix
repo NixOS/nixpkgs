@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://ocsigen.org/lwt/";
+    homepage = https://ocsigen.org/lwt/;
     description = "A cooperative threads library for OCaml";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     license = stdenv.lib.licenses.lgpl21;

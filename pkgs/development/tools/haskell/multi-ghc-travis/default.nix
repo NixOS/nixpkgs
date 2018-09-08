@@ -23,7 +23,7 @@ mkDerivation {
     ansi-terminal base bytestring Diff directory filepath tasty
     tasty-golden transformers
   ];
-  homepage = "https://github.com/haskell-CI/haskell-ci";
+  homepage = https://github.com/haskell-CI/haskell-ci;
   description = "Script generator for Travis-CI";
   license = stdenv.lib.licenses.bsd3;
 }

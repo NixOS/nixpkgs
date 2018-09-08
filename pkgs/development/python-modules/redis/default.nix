@@ -13,6 +13,6 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python client for Redis key-value store";
-    homepage = "https://pypi.python.org/pypi/redis/";
+    homepage = https://pypi.python.org/pypi/redis/;
   };
 }

@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
       for cost- sensitive, low-power Lattice FPGA architectures. It is the
       next-generation replacement for ispLEVER.
     '';
-    homepage = "http://www.latticesemi.com/latticediamond";
+    homepage = http://www.latticesemi.com/latticediamond;
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ q3k ];
     platforms = [ "x86_64-linux" ];

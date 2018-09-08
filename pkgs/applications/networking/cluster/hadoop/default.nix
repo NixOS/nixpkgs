@@ -92,7 +92,7 @@ let
         '';
 
         meta = with stdenv.lib; {
-          homepage = "http://hadoop.apache.org/";
+          homepage = http://hadoop.apache.org/;
           description = "Framework for distributed processing of large data sets across clusters of computers";
           license = licenses.asl20;
 

@@ -28,7 +28,7 @@
 
   meta = with stdenv.lib; {
     description = "DNS Loadbalancer";
-    homepage = "https://dnsdist.org";
+    homepage = https://dnsdist.org;
     license = licenses.gpl2;
     maintainers = with maintainers; [ das_j ];
   };

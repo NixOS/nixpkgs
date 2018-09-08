@@ -55,7 +55,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Starcraft II environment and library for training agents.";
-    homepage = "https://github.com/deepmind/pysc2";
+    homepage = https://github.com/deepmind/pysc2;
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ danharaj ];

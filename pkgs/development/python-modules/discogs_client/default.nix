@@ -14,6 +14,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Official Python API client for Discogs";
     license = licenses.bsd2;
-    homepage = "https://github.com/discogs/discogs_client";
+    homepage = https://github.com/discogs/discogs_client;
   };
 }

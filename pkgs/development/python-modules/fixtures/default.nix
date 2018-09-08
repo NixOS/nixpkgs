@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Reusable state for writing clean tests and more";
-    homepage = "https://pypi.python.org/pypi/fixtures";
+    homepage = https://pypi.python.org/pypi/fixtures;
     license = lib.licenses.asl20;
   };
 }

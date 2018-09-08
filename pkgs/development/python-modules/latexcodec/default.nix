@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = {
-    homepage = "https://github.com/mcmtroffaes/latexcodec";
+    homepage = https://github.com/mcmtroffaes/latexcodec;
     description = "Lexer and codec to work with LaTeX code in Python";
     license = stdenv.lib.licenses.mit;
   };

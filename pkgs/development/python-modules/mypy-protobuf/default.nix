@@ -13,7 +13,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Generate mypy stub files from protobuf specs";
-    homepage = "https://github.com/dropbox/mypy-protobuf";
+    homepage = https://github.com/dropbox/mypy-protobuf;
     license = licenses.asl20;
     maintainers = with maintainers; [ lnl7 ];
   };

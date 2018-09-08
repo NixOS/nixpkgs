@@ -18,6 +18,6 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/Simplistix/testfixtures";
+    homepage = https://github.com/Simplistix/testfixtures;
   };
 }

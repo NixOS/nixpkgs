@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://github.com/originell/jpype/";
+    homepage = https://github.com/originell/jpype/;
     license = "License :: OSI Approved :: Apache Software License";
     description = "A Python to Java bridge.";
   };

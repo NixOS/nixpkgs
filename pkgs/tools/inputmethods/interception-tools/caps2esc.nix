@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
   buildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
-    homepage = "https://gitlab.com/interception/linux/plugins/caps2esc";
+    homepage = https://gitlab.com/interception/linux/plugins/caps2esc;
     description = "Transforming the most useless key ever into the most useful one";
     license = licenses.mit;
     maintainers = [ maintainers.vyp ];

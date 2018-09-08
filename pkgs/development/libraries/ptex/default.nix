@@ -35,7 +35,7 @@ stdenv.mkDerivation rec
 
   meta = with stdenv.lib; {
     description = "Per-Face Texture Mapping for Production Rendering";
-    homepage = "http://ptex.us/";
+    homepage = http://ptex.us/;
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ maintainers.guibou ];

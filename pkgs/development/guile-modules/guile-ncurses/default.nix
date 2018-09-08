@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
       interface functionality is built on the ncurses libraries: curses, form,
       panel, and menu.
     '';
-    homepage = "https://www.gnu.org/software/guile-ncurses/";
+    homepage = https://www.gnu.org/software/guile-ncurses/;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
     platforms = platforms.gnu ++ platforms.linux;

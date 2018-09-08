@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       but it supports reusing notifications on screen by passing its ID.
       It also does not use any external dependencies (except from libdbus of course).
     '';
-    homepage = "https://github.com/nowrep/notify-desktop";
+    homepage = https://github.com/nowrep/notify-desktop;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ylwghst ];

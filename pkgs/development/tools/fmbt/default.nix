@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Free Model-Based Testing tool";
-    homepage = "https://github.com/intel/fMBT";
+    homepage = https://github.com/intel/fMBT;
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = with maintainers; [ raskin ];

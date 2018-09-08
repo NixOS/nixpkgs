@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Statisitical data visualization";
-    homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
+    homepage = http://stanford.edu/~mwaskom/software/seaborn/;
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       without having to wait for the filesystem traversal job to be finished.
       Used this way, fpart can be seen as a powerful data migration tool.
     '';
-    homepage = "http://contribs.martymac.org/";
+    homepage = http://contribs.martymac.org/;
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

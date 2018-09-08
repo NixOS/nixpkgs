@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "logilab-database provides some classes to make unified access to different";
-    homepage = "https://www.logilab.org/project/logilab-database";
+    homepage = https://www.logilab.org/project/logilab-database;
   };
 }
 

@@ -33,7 +33,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A SSH CA management suite";
-    homepage = "https://gravitational.com/teleport/";
+    homepage = https://gravitational.com/teleport/;
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.tomberek ];
     platforms = stdenv.lib.platforms.linux;

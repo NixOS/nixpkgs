@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A QML plugin for Box2D engine";
-    homepage = "https://github.com/qml-box2d/qml-box2d";
+    homepage = https://github.com/qml-box2d/qml-box2d;
     maintainers = [ maintainers.guibou ];
     platforms = platforms.linux;
     license = licenses.zlib;

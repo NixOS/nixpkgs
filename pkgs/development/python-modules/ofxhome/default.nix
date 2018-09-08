@@ -15,7 +15,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/captin411/ofxhome";
+    homepage = https://github.com/captin411/ofxhome;
     description = "ofxhome.com financial institution lookup REST client";
     license = licenses.mit;
   };

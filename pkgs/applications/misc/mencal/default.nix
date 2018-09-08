@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       days highlighted in color. This can be used to track
       menstruation (or other) cycles conveniently.
     '';
-    homepage = "http://www.kyberdigi.cz/projects/mencal/english.html";
+    homepage = http://www.kyberdigi.cz/projects/mencal/english.html;
     license = licenses.gpl2;
     maintainers = [ maintainers.mmahut ];
     platforms = platforms.all;

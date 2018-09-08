@@ -37,6 +37,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Geometric objects, predicates, and operations";
     maintainers = with maintainers; [ knedlsepp ];
-    homepage = "https://pypi.python.org/pypi/Shapely/";
+    homepage = https://pypi.python.org/pypi/Shapely/;
   };
 }

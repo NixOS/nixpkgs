@@ -10,7 +10,7 @@ mkDerivation {
     transformers
   ];
   testHaskellDepends = [ base Cabal filepath mtl ];
-  homepage = "http://curry-language.org";
+  homepage = http://curry-language.org;
   description = "Functions for manipulating Curry programs";
   license = stdenv.lib.licenses.bsd3;
 }

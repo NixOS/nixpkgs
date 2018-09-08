@@ -30,7 +30,7 @@ stdenv.mkDerivation rec
 
   meta = with stdenv.lib; {
     description = "Image processing plug-in standard";
-    homepage = "http://openeffects.org/";
+    homepage = http://openeffects.org/;
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ maintainers.guibou ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/Chris00/ANSITerminal";
+    homepage = https://github.com/Chris00/ANSITerminal;
     description = "A module allowing to use the colors and cursor movements on ANSI terminals";
     longDescription = ''
       ANSITerminal is a module allowing to use the colors and cursor

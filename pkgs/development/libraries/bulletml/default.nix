@@ -63,7 +63,7 @@ in stdenv.mkDerivation {
       BulletML is the Bullet Markup Language. BulletML can describe the barrage
       of bullets in shooting games.
     '';
-    homepage = "http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/index_e.html";
+    homepage = http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/index_e.html;
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];
     # See https://github.com/NixOS/nixpkgs/pull/35482

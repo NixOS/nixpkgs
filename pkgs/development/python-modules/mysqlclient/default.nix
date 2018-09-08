@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python interface to MySQL";
-    homepage = "https://github.com/PyMySQL/mysqlclient-python";
+    homepage = https://github.com/PyMySQL/mysqlclient-python;
     license = licenses.gpl1;
     maintainers = with maintainers; [ y0no ];
   };

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "sets the X root window to an image of the Earth";
-    homepage = "http://xplanet.org";
+    homepage = http://xplanet.org;
     longDescription =
       '' Xearth  sets  the X root window to an image of the Earth, as seen from your favorite vantage point in space,
          correctly shaded for the current position of the Sun.

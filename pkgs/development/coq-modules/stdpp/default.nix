@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = {
-    homepage = "https://gitlab.mpi-sws.org/robbertkrebbers/coq-stdpp";
+    homepage = https://gitlab.mpi-sws.org/robbertkrebbers/coq-stdpp;
     description = "An extended “Standard Library” for Coq";
     inherit (coq.meta) platforms;
     license = stdenv.lib.licenses.bsd3;

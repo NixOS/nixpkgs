@@ -18,7 +18,7 @@ with pythonPackages; buildPythonApplication rec {
   propagatedBuildInputs = buildInputs;
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/manolomartinez/greg";
+    homepage = https://github.com/manolomartinez/greg;
     description = "A command-line podcast aggregator";
     license = licenses.gpl3;
     maintainers = with maintainers; [ edwtjo ];

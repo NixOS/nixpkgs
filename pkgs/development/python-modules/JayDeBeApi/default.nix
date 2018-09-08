@@ -9,7 +9,7 @@ buildPythonPackage rec {
   };
   propagatedBuildInputs = [ JPype1 ];
   meta = {
-    homepage = "https://github.com/baztian/jaydebeapi";
+    homepage = https://github.com/baztian/jaydebeapi;
     license = lib.licenses.lgpl2;
     description = "Use JDBC database drivers from Python 2/3 or Jython with a DB-API.";
   };

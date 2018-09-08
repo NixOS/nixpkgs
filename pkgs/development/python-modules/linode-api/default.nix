@@ -33,7 +33,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = "https://github.com/linode/python-linode-api";
+    homepage = https://github.com/linode/python-linode-api;
     description = "The official python library for the Linode API v4 in python.";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ glenns ];

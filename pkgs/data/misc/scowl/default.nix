@@ -108,6 +108,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = "http://wordlist.aspell.net/";
+    homepage = http://wordlist.aspell.net/;
   };
 }

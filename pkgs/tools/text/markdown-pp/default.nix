@@ -18,7 +18,7 @@ buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Preprocessor for Markdown files to generate a table of contents and other documentation needs";
     license = licenses.mit;
-    homepage = "https://github.com/jreese/markdown-pp";
+    homepage = https://github.com/jreese/markdown-pp;
     maintainers = with maintainers; [ zgrannan ];
   };
 }

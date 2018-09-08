@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.cherrypy.org";
+    homepage = http://www.cherrypy.org;
     description = "A pythonic, object-oriented HTTP framework";
     license = licenses.bsd3;
   };

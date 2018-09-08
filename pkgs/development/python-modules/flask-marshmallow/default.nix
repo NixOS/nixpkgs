@@ -7,7 +7,7 @@ buildPythonPackage rec {
   version = "0.9.0";
 
   meta = {
-    homepage = "https://github.com/marshmallow-code/flask-marshmallow";
+    homepage = https://github.com/marshmallow-code/flask-marshmallow;
     description = "Flask + marshmallow for beautiful APIs";
     license = lib.licenses.mit;
   }; 

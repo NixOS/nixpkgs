@@ -42,7 +42,7 @@ buildHex rec {
   meta = {
     description = "Executable command for Relx";
     license = stdenv.lib.licenses.asl20;
-    homepage = "https://github.com/erlware/relx";
+    homepage = https://github.com/erlware/relx;
     maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
   };
 

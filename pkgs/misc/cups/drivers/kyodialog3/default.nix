@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CUPS drivers for several Kyocera printers";
-    homepage = "https://www.kyoceradocumentsolutions.com";
+    homepage = https://www.kyoceradocumentsolutions.com;
     license = licenses.unfree;
     maintainers = [ maintainers.steveej ];
     platforms = platforms.linux;

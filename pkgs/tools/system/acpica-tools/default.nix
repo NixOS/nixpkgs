@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ACPICA Tools";
-    homepage = "https://www.acpica.org/";
+    homepage = https://www.acpica.org/;
     license = with licenses; [ gpl2 bsd3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ tadfisher ];

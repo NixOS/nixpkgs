@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A drop in replacement for xpyb, an XCB python binding";
-    homepage = "https://github.com/tych0/xcffib";
+    homepage = https://github.com/tych0/xcffib;
     license = licenses.asl20;
     maintainers = with maintainers; [ kamilchm ];
   };

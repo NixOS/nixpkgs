@@ -1759,7 +1759,7 @@ let
      meta = {
        description = "Compile .cgi scripts to a code reference like ModPerl::Registry";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/miyagawa/CGI-Compile";
+       homepage = https://github.com/miyagawa/CGI-Compile;
      };
   };
 
@@ -2201,7 +2201,7 @@ let
      meta = {
        description = "Minimalist class construction";
        license = with stdenv.lib.licenses; [ asl20 ];
-       homepage = "https://github.com/dagolden/Class-Tiny";
+       homepage = https://github.com/dagolden/Class-Tiny;
      };
   };
 
@@ -2514,7 +2514,7 @@ let
      meta = {
        description = "Load (and optionally decrypt via GnuPG) user/pass identity information ";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/dagolden/Config-Identity";
+       homepage = https://github.com/dagolden/Config-Identity;
      };
   };
 
@@ -3085,7 +3085,7 @@ let
      meta = {
        description = "Guess OpenSSL include path";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/akiym/Crypt-OpenSSL-Guess";
+       homepage = https://github.com/akiym/Crypt-OpenSSL-Guess;
      };
   };
 
@@ -3957,7 +3957,7 @@ let
      meta = {
        description = "check that a command is available";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/tokuhirom/Devel-CheckBin";
+       homepage = https://github.com/tokuhirom/Devel-CheckBin;
      };
   };
 
@@ -3971,7 +3971,7 @@ let
      meta = {
        description = "Check the compiler's availability";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/tokuhirom/Devel-CheckCompiler";
+       homepage = https://github.com/tokuhirom/Devel-CheckCompiler;
      };
   };
 
@@ -4767,7 +4767,7 @@ let
      meta = {
        description = "Author tests that ensure hard tabs are not used";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/karenetheridge/Dist-Zilla-Plugin-Test-NoTabs";
+       homepage = https://github.com/karenetheridge/Dist-Zilla-Plugin-Test-NoTabs;
      };
   };
 
@@ -4867,7 +4867,7 @@ let
      meta = {
        description = "Receive notification when something changes a file's contents";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/karenetheridge/Dist-Zilla-Role-FileWatcher";
+       homepage = https://github.com/karenetheridge/Dist-Zilla-Role-FileWatcher;
      };
   };
 
@@ -4881,7 +4881,7 @@ let
     meta = {
       description = "More reliable benchmarking with the least amount of thinking";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      homepage = "https://github.com/briandfoy/dumbbench";
+      homepage = https://github.com/briandfoy/dumbbench;
     };
   };
 
@@ -5204,7 +5204,7 @@ let
      meta = {
        description = "Normalize line ending sequences";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/neilb/Encode-Newlines";
+       homepage = https://github.com/neilb/Encode-Newlines;
      };
   };
 
@@ -5741,7 +5741,7 @@ let
      meta = {
        description = "Recursive copying of files and directories within Perl 5 toolchain";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "http://thenceforward.net/perl/modules/File-Copy-Recursive-Reduced/";
+       homepage = http://thenceforward.net/perl/modules/File-Copy-Recursive-Reduced/;
      };
   };
 
@@ -6166,7 +6166,7 @@ let
     meta = {
       description = "return name and handle of a temporary file safely";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      homepage = "https://github.com/Perl-Toolchain-Gang/File-Temp";
+      homepage = https://github.com/Perl-Toolchain-Gang/File-Temp;
     };
   };
 
@@ -7011,7 +7011,7 @@ let
      meta = {
        description = "Handle multi-page/stage forms with FormFu";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/FormFu/HTML-FormFu-MultiForm";
+       homepage = https://github.com/FormFu/HTML-FormFu-MultiForm;
      };
   };
 
@@ -7300,7 +7300,7 @@ let
      meta = {
        description = "PSGI compliant HTTP Entity Parser";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/kazeburo/HTTP-Entity-Parser";
+       homepage = https://github.com/kazeburo/HTTP-Entity-Parser;
      };
   };
 
@@ -7482,7 +7482,7 @@ let
      meta = {
        description = "PSGI handler for HTTP::Server::Simple";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/miyagawa/HTTP-Server-Simple-PSGI";
+       homepage = https://github.com/miyagawa/HTTP-Server-Simple-PSGI;
      };
   };
 
@@ -8055,7 +8055,7 @@ let
      meta = {
        description = "Avoid XSS with JavaScript value interpolation";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/kazeburo/JavaScript-Value-Escape";
+       homepage = https://github.com/kazeburo/JavaScript-Value-Escape;
      };
   };
 
@@ -8237,7 +8237,7 @@ let
      meta = {
        description = "Add paths relative to the current file to @INC";
        license = with stdenv.lib.licenses; [ artistic2 ];
-       homepage = "https://github.com/Grinnz/lib-relative";
+       homepage = https://github.com/Grinnz/lib-relative;
      };
   };
 
@@ -8352,7 +8352,7 @@ let
      meta = {
        description = "Portuguese language stemming";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/neilb/Lingua-PT-Stemmer";
+       homepage = https://github.com/neilb/Lingua-PT-Stemmer;
      };
   };
 
@@ -8395,7 +8395,7 @@ let
      meta = {
        description = "Porter's stemming algorithm for Russian (KOI8-R only)";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/neilb/Lingua-Stem-Ru";
+       homepage = https://github.com/neilb/Lingua-Stem-Ru;
      };
   };
 
@@ -8837,7 +8837,7 @@ let
      meta = {
        description = "Many-Core Engine for Perl providing parallel processing capabilities";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/marioroy/mce-perl";
+       homepage = https://github.com/marioroy/mce-perl;
      };
   };
 
@@ -9383,7 +9383,7 @@ let
      meta = {
        description = "Expiry plug-in for Memoize that adds LRU cache expiration";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/neilb/Memoize-ExpireLRU";
+       homepage = https://github.com/neilb/Memoize-ExpireLRU;
      };
   };
 
@@ -9535,7 +9535,7 @@ let
      meta = {
        description = "Micro Objects. Mo is less.";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/ingydotnet/mo-pm";
+       homepage = https://github.com/ingydotnet/mo-pm;
      };
   };
 
@@ -9680,7 +9680,7 @@ let
      meta = {
        description = "Parse cpanfile";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/miyagawa/cpanfile";
+       homepage = https://github.com/miyagawa/cpanfile;
      };
     buildInputs = [ Filepushd ];
   };
@@ -11852,7 +11852,7 @@ let
      meta = {
        description = "interface to PAUSE's module permissions file (06perms.txt)";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/neilb/PAUSE-Permissions";
+       homepage = https://github.com/neilb/PAUSE-Permissions;
      };
   };
 
@@ -12257,7 +12257,7 @@ let
      meta = {
        description = "Digest authentication";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/miyagawa/Plack-Middleware-Auth-Digest";
+       homepage = https://github.com/miyagawa/Plack-Middleware-Auth-Digest;
      };
   };
 
@@ -12272,7 +12272,7 @@ let
      meta = {
        description = "Write logs to Firebug or Webkit Inspector";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/miyagawa/Plack-Middleware-ConsoleLogger";
+       homepage = https://github.com/miyagawa/Plack-Middleware-ConsoleLogger;
      };
   };
 
@@ -12383,7 +12383,7 @@ let
      meta = {
        description = "Middleware for session management";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/plack/Plack-Middleware-Session";
+       homepage = https://github.com/plack/Plack-Middleware-Session;
      };
   };
 
@@ -13549,7 +13549,7 @@ let
      meta = {
        description = "Software::License pack for Creative Commons' licenses";
        license = with stdenv.lib.licenses; [ lgpl3Plus ];
-       homepage = "https://github.com/SineSwiper/Software-License-CCpack";
+       homepage = https://github.com/SineSwiper/Software-License-CCpack;
      };
   };
 
@@ -14823,7 +14823,7 @@ let
      meta = {
        description = "subtests that you can die your way out of ... but survive";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/rjbs/Test-Abortable";
+       homepage = https://github.com/rjbs/Test-Abortable;
      };
   };
 
@@ -14940,7 +14940,7 @@ let
      meta = {
        description = "Perl module for portable testing of commands and scripts";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/neilb/Test-Cmd";
+       homepage = https://github.com/neilb/Test-Cmd;
      };
   };
 
@@ -15250,7 +15250,7 @@ let
      meta = {
        description = "Test the Kwalitee of a distribution before you release it";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/karenetheridge/Test-Kwalitee";
+       homepage = https://github.com/karenetheridge/Test-Kwalitee;
      };
   };
 
@@ -15390,7 +15390,7 @@ let
      meta = {
        description = "Replaces actual time with simulated high resolution time";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/tarao/perl5-Test-MockTime-HiRes";
+       homepage = https://github.com/tarao/perl5-Test-MockTime-HiRes;
      };
   };
 
@@ -15854,7 +15854,7 @@ let
     meta = {
       description = "Temporary directories that stick around when tests fail";
       license = with stdenv.lib.licenses; [ asl20 ];
-      homepage = "https://github.com/dagolden/Test-TempDir-Tiny";
+      homepage = https://github.com/dagolden/Test-TempDir-Tiny;
     };
     propagatedBuildInputs = [ FileTemp ];
   };
@@ -16921,7 +16921,7 @@ let
      meta = {
        description = "AnyEvent HTTP server for PSGI (like Thin)";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/miyagawa/Twiggy";
+       homepage = https://github.com/miyagawa/Twiggy;
      };
   };
 
@@ -17328,7 +17328,7 @@ let
      meta = {
        description = "parser and builder for application/x-www-form-urlencoded";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-       homepage = "https://github.com/kazeburo/WWW-Form-UrlEncoded";
+       homepage = https://github.com/kazeburo/WWW-Form-UrlEncoded;
      };
   };
 

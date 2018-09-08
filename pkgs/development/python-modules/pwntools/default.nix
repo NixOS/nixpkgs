@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
 
   meta = with stdenv.lib; {
-    homepage = "http://pwntools.com";
+    homepage = http://pwntools.com;
     description = "CTF framework and exploit development library";
     license = licenses.mit;
     maintainers = with maintainers; [ bennofs kristoff3r ];

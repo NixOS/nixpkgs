@@ -32,7 +32,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://github.com/openSUSE/python-suseapi/";
+    homepage = https://github.com/openSUSE/python-suseapi/;
     description = "Python module to work with various SUSE services";
     license = lib.licenses.gpl3Plus;
   };

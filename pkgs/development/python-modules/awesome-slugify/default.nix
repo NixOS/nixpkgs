@@ -25,7 +25,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/dimka665/awesome-slugify";
+    homepage = https://github.com/dimka665/awesome-slugify;
     description = "Python flexible slugify function";
     license = licenses.gpl3;
     platforms = platforms.all;

@@ -21,7 +21,7 @@ buildGoPackage rec {
       This project aims at creating a universal dark theme for Firefox while
       adhering to the modern design principles set by Mozilla.
     '';
-    homepage = "https://overdodactyl.github.io/ShadowFox/";
+    homepage = https://overdodactyl.github.io/ShadowFox/;
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ infinisil ];

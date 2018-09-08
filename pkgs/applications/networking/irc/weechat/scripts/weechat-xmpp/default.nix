@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A fork of the jabber plugin for weechat";
-    homepage = "https://github.com/sleduc/weechat-xmpp";
+    homepage = https://github.com/sleduc/weechat-xmpp;
     maintainers = with maintainers; [ ma27 ];
     license = licenses.gpl3Plus;
   };

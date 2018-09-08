@@ -13,7 +13,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.hostPlatform.isDarwin; # broken on darwin
 
   meta = with lib; {
-    homepage = "https://github.com/pyserial/pyserial";
+    homepage = https://github.com/pyserial/pyserial;
     license = licenses.psfl;
     description = "Python serial port extension";
     maintainers = with maintainers; [ makefu ];

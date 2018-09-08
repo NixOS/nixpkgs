@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "AIX & Linux Performance Monitoring tool";
-    homepage = "http://nmon.sourceforge.net";
+    homepage = http://nmon.sourceforge.net;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ sveitser ];

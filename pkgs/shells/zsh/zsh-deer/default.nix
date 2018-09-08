@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Ranger-like file navigation for zsh";
-    homepage = "https://github.com/Vifon/deer";
+    homepage = https://github.com/Vifon/deer;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vyp ];
     platforms = platforms.unix;

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A printf-like for Faraday library";
-    homepage = "https://github.com/oklm-wsh/Farfadet";
+    homepage = https://github.com/oklm-wsh/Farfadet;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;

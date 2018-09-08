@@ -15,7 +15,7 @@
           base HUnit test-framework test-framework-hunit
         ];
         jailbreak = true;
-        homepage = "https://github.com/simonmar/async";
+        homepage = https://github.com/simonmar/async;
         description = "Run IO operations asynchronously and wait for their results";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -49,7 +49,7 @@
           time time-locale-compat unordered-containers uuid-types vector
         ];
         jailbreak = true;
-        homepage = "https://github.com/bos/aeson";
+        homepage = https://github.com/bos/aeson;
         description = "Fast JSON parsing and encoding";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -79,7 +79,7 @@
           transformers unordered-containers vector
         ];
         jailbreak = true;
-        homepage = "https://github.com/bos/attoparsec";
+        homepage = https://github.com/bos/attoparsec;
         description = "Fast combinator parsing for bytestrings and text";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -123,7 +123,7 @@
         ];
         benchmarkHaskellDepends = [ base bytestring criterion deepseq ];
         jailbreak = true;
-        homepage = "https://github.com/basvandijk/case-insensitive";
+        homepage = https://github.com/basvandijk/case-insensitive;
         description = "Case insensitive string comparison";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -137,7 +137,7 @@
         libraryHaskellDepends = [ base deepseq ];
         testHaskellDepends = [ base Cabal QuickCheck ];
         jailbreak = true;
-        homepage = "https://github.com/spl/dlist";
+        homepage = https://github.com/spl/dlist;
         description = "Difference lists";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -160,7 +160,7 @@
         version = "4.9.0.0";
         src = "${ghcjsBoot}/boot/fail";
         jailbreak = true;
-        homepage = "https://prime.haskell.org/wiki/Libraries/Proposals/MonadFail";
+        homepage = https://prime.haskell.org/wiki/Libraries/Proposals/MonadFail;
         description = "Forward-compatible MonadFail class";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -185,7 +185,7 @@
           base bytestring criterion ghc-prim integer-gmp siphash text
         ];
         jailbreak = true;
-        homepage = "http://github.com/tibbe/hashable";
+        homepage = http://github.com/tibbe/hashable;
         description = "A class for types that can be converted to a hash value";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -205,7 +205,7 @@
           tasty-smallcheck
         ];
         jailbreak = true;
-        homepage = "https://github.com/phadej/integer-logarithms";
+        homepage = https://github.com/phadej/integer-logarithms;
         description = "Integer logarithms";
         license = stdenv.lib.licenses.mit;
       }) {};
@@ -218,7 +218,7 @@
         doCheck = false;
         libraryHaskellDepends = [ base transformers ];
         jailbreak = true;
-        homepage = "http://github.com/ekmett/mtl";
+        homepage = http://github.com/ekmett/mtl;
         description = "Monad classes, using functional dependencies";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -229,7 +229,7 @@
         version = "1.1.1";
         src = "${ghcjsBoot}/boot/nats";
         jailbreak = true;
-        homepage = "http://github.com/ekmett/nats/";
+        homepage = http://github.com/ekmett/nats/;
         description = "Natural numbers";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -291,7 +291,7 @@
         ];
         benchmarkHaskellDepends = [ base criterion ];
         jailbreak = true;
-        homepage = "https://github.com/basvandijk/scientific";
+        homepage = https://github.com/basvandijk/scientific;
         description = "Numbers represented using scientific notation";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -304,7 +304,7 @@
         doCheck = false;
         libraryHaskellDepends = [ base ];
         jailbreak = true;
-        homepage = "http://github.com/ekmett/semigroups/";
+        homepage = http://github.com/ekmett/semigroups/;
         description = "Anything that associates";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -330,7 +330,7 @@
         libraryHaskellDepends = [ base ];
         testHaskellDepends = [ base containers HUnit mtl ];
         jailbreak = true;
-        homepage = "http://www.cs.uu.nl/wiki/GenericProgramming/SYB";
+        homepage = http://www.cs.uu.nl/wiki/GenericProgramming/SYB;
         description = "Scrap Your Boilerplate";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -347,7 +347,7 @@
           base deepseq template-haskell transformers transformers-compat
         ];
         jailbreak = true;
-        homepage = "http://github.com/ekmett/tagged";
+        homepage = http://github.com/ekmett/tagged;
         description = "Haskell 98 phantom types to avoid unsafely passing dummy arguments";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -371,7 +371,7 @@
           test-framework-hunit test-framework-quickcheck2
         ];
         jailbreak = true;
-        homepage = "https://github.com/bos/text";
+        homepage = https://github.com/bos/text;
         description = "An efficient packed Unicode text type";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -389,7 +389,7 @@
         ];
         testHaskellDepends = [ base containers template-haskell ];
         jailbreak = true;
-        homepage = "https://github.com/glguy/th-abstraction";
+        homepage = https://github.com/glguy/th-abstraction;
         description = "Nicer interface for reified information about data types";
         license = stdenv.lib.licenses.isc;
       }) {};
@@ -402,7 +402,7 @@
         doCheck = false;
         libraryHaskellDepends = [ base old-locale time ];
         jailbreak = true;
-        homepage = "https://github.com/khibino/haskell-time-locale-compat";
+        homepage = https://github.com/khibino/haskell-time-locale-compat;
         description = "Compatibility of TimeLocale between old-locale and time-1.5";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -415,7 +415,7 @@
         doCheck = false;
         libraryHaskellDepends = [ base ghc-prim transformers ];
         jailbreak = true;
-        homepage = "http://github.com/ekmett/transformers-compat/";
+        homepage = http://github.com/ekmett/transformers-compat/;
         description = "A small compatibility shim exposing the new types from transformers 0.3 and 0.4 to older Haskell platforms.";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -440,7 +440,7 @@
           hashable hashmap mtl random
         ];
         jailbreak = true;
-        homepage = "https://github.com/tibbe/unordered-containers";
+        homepage = https://github.com/tibbe/unordered-containers;
         description = "Efficient hashing-based container types";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -465,7 +465,7 @@
           unordered-containers
         ];
         jailbreak = true;
-        homepage = "https://github.com/hvr/uuid";
+        homepage = https://github.com/hvr/uuid;
         description = "Type definitions for Universally Unique Identifiers";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -485,7 +485,7 @@
           test-framework-quickcheck2 transformers
         ];
         jailbreak = true;
-        homepage = "https://github.com/haskell/vector";
+        homepage = https://github.com/haskell/vector;
         description = "Efficient Arrays";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -513,7 +513,7 @@
           test-framework-hunit test-framework-quickcheck2 text
         ];
         jailbreak = true;
-        homepage = "http://github.com/ghcjs/ghcjs-base";
+        homepage = http://github.com/ghcjs/ghcjs-base;
         description = "base library for GHCJS";
         license = stdenv.lib.licenses.mit;
       }) {};
@@ -538,7 +538,7 @@
           tasty-quickcheck transformers unix
         ];
         jailbreak = true;
-        homepage = "http://www.haskell.org/cabal/";
+        homepage = http://www.haskell.org/cabal/;
         description = "A framework for packaging Haskell software";
         license = stdenv.lib.licenses.bsd3;
       }) {};

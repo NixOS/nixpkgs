@@ -40,7 +40,7 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/bakape/meguca";
+    homepage = https://github.com/bakape/meguca;
     description = "High performance anonymous realtime imageboard";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chiiruno ];

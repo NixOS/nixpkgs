@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A pure Python OTR implementation";
-    homepage = "http://python-otr.pentabarf.de/";
+    homepage = http://python-otr.pentabarf.de/;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ globin ];
   };

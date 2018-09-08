@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://citra-emu.org";
+    homepage = https://citra-emu.org;
     description = "An open-source emulator for the Nintendo 3DS";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];

@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Port of the Tulip project (asyncio module, PEP 3156) on Python 2";
-    homepage = "https://bitbucket.org/enovance/trollius";
+    homepage = https://bitbucket.org/enovance/trollius;
     license = licenses.asl20;
     maintainers = with maintainers; [ garbas ];
   };

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Human-readable diff for todo.txt files";
-    homepage = "https://github.com/Ekleog/todiff";
+    homepage = https://github.com/Ekleog/todiff;
     maintainers = with maintainers; [ ekleog ];
     license = licenses.mit;
     platforms = platforms.all;

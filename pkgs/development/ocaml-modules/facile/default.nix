@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://opti.recherche.enac.fr/facile/";
+    homepage = http://opti.recherche.enac.fr/facile/;
     license = stdenv.lib.licenses.lgpl21Plus;
     description = "A Functional Constraint Library";
     platforms = stdenv.lib.platforms.unix;

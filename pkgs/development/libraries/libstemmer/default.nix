@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Snowball Stemming Algorithms";
-    homepage = "http://snowball.tartarus.org/";
+    homepage = http://snowball.tartarus.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;

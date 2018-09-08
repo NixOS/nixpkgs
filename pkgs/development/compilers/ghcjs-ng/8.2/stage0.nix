@@ -73,7 +73,7 @@
         ghc-boot ghc-boot-th ghci-ghcjs hoopl hpc process
         template-haskell-ghcjs terminfo time transformers unix
       ];
-      homepage = "http://www.haskell.org/ghc/";
+      homepage = http://www.haskell.org/ghc/;
       description = "The GHC API (customized for GHCJS)";
       license = stdenv.lib.licenses.bsd3;
     }) {};
@@ -107,7 +107,7 @@
         base binary bytestring containers ghc-prim ghci-ghcjs
         template-haskell-ghcjs
       ];
-      homepage = "http://github.com/ghcjs";
+      homepage = http://github.com/ghcjs;
       license = stdenv.lib.licenses.mit;
     }) {};
 
@@ -131,7 +131,7 @@
         base containers ghc-api-ghcjs hspec QuickCheck
       ];
       testToolDepends = [ hspec-discover ];
-      homepage = "http://www.haskell.org/haddock/";
+      homepage = http://www.haskell.org/haddock/;
       description = "A documentation-generation tool for Haskell libraries (customized for GHCJS)";
       license = stdenv.lib.licenses.bsd3;
     }) {};
@@ -149,7 +149,7 @@
         base base-compat bytestring deepseq hspec QuickCheck transformers
       ];
       testToolDepends = [ hspec-discover ];
-      homepage = "http://www.haskell.org/haddock/";
+      homepage = http://www.haskell.org/haddock/;
       description = "Library exposing some functionality of Haddock";
       license = stdenv.lib.licenses.bsd3;
     }) {};

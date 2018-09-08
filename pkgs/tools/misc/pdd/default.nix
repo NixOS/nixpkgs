@@ -18,7 +18,7 @@ buildPythonApplication rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/jarun/pdd";
+    homepage = https://github.com/jarun/pdd;
     description = "Tiny date, time diff calculator";
     longDescription = ''
       There are times you want to check how old you are (in years, months, days)

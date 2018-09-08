@@ -32,7 +32,7 @@ buildGoPackage rec {
   '';
 
   meta = {
-    homepage = "https://dgraph.io/";
+    homepage = https://dgraph.io/;
     description = "Fast, Distributed Graph DB";
     maintainers = with stdenv.lib.maintainers; [ sigma ];
     license = stdenv.lib.licenses.agpl3;

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A library to choose unique available network ports.";
-    homepage = "https://github.com/google/python_portpicker";
+    homepage = https://github.com/google/python_portpicker;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danharaj ];
   };

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python interface to Oracle";
-    homepage = "https://oracle.github.io/python-cx_Oracle";
+    homepage = https://oracle.github.io/python-cx_Oracle;
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ y0no ];
   };

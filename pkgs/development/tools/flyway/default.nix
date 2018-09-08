@@ -21,7 +21,7 @@
       '';
       meta = with stdenv.lib; {
         description = "Evolve your Database Schema easily and reliably across all your instances";
-        homepage = "https://flywaydb.org/";
+        homepage = https://flywaydb.org/;
         license = licenses.asl20;
         platforms = platforms.unix;
         maintainers = [ maintainers.cmcdragonkai ];

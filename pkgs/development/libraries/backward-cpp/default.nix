@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Beautiful stack trace pretty printer for C++";
-    homepage = "https://github.com/bombela/backward-cpp";
+    homepage = https://github.com/bombela/backward-cpp;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

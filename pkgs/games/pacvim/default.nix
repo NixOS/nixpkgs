@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/jmoon018/PacVim";
+    homepage = https://github.com/jmoon018/PacVim;
     description = "PacVim is a game that teaches you vim commands.";
     maintainers = with maintainers; [ infinisil ];
     license = licenses.lgpl3;

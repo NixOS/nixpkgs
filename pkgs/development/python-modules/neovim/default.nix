@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python client for Neovim";
-    homepage = "https://github.com/neovim/python-client";
+    homepage = https://github.com/neovim/python-client;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ garbas ];
   };

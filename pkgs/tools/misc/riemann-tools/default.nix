@@ -8,7 +8,7 @@ bundlerEnv {
 
   meta = {
     description = "Tools to submit data to Riemann";
-    homepage = "https://riemann.io";
+    homepage = https://riemann.io;
     license = stdenv.lib.licenses.mit;
   };
 }

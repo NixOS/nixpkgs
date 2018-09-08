@@ -40,7 +40,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Master PDF Editor";
-    homepage = "https://code-industry.net/free-pdf-editor/";
+    homepage = https://code-industry.net/free-pdf-editor/;
     license = licenses.unfreeRedistributable;
     platforms = with platforms; [ "x86_64-linux" ];
     maintainers = with maintainers; [ cmcdragonkai flokli ];

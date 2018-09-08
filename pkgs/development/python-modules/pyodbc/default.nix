@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python ODBC module to connect to almost any database";
-    homepage = "https://github.com/mkleehammer/pyodbc";
+    homepage = https://github.com/mkleehammer/pyodbc;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];

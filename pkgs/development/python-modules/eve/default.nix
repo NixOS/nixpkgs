@@ -27,7 +27,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "http://python-eve.org/";
+    homepage = http://python-eve.org/;
     description = "Open source Python REST API framework designed for human beings";
     license = licenses.bsd3;
   };

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     longDescription = ''
       In the event of an emergency (fire, etc.), automatically commit all changes/files in a repository, pushing to all known remotes all commits and stashes.
     '';
-    homepage = "https://github.com/qw3rtman/git-fire";
+    homepage = https://github.com/qw3rtman/git-fire;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.swflint ];

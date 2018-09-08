@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://libvmi.com/";
+    homepage = http://libvmi.com/;
     description = "A C library for virtual machine introspection";
     longDescription = ''
       LibVMI is a C library with Python bindings that makes it easy to monitor the low-level

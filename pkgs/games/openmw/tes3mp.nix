@@ -106,7 +106,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multiplayer for TES3:Morrowind based on OpenMW";
-    homepage = "https://tes3mp.com/";
+    homepage = https://tes3mp.com/;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gnidorah ];

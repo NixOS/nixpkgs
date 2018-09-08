@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Bash Kernel for Jupyter";
-    homepage = "https://github.com/takluyver/bash_kernel";
+    homepage = https://github.com/takluyver/bash_kernel;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ zimbatm ];
   };

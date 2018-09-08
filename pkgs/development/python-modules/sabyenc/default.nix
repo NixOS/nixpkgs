@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python yEnc package optimized for use within SABnzbd";
-    homepage = "https://github.com/sabnzbd/sabyenc/";
+    homepage = https://github.com/sabnzbd/sabyenc/;
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.georgewhewell ];
   };

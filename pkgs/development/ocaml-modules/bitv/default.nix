@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A bit vector library for OCaml";
     license = stdenv.lib.licenses.lgpl21;
-    homepage = "https://github.com/backtracking/bitv";
+    homepage = https://github.com/backtracking/bitv;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;
   };

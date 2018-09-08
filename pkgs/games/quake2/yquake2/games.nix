@@ -48,7 +48,7 @@ let
 
     meta = with stdenv.lib; {
       inherit (data) description;
-      homepage = "https://www.yamagi.org/quake2/";
+      homepage = https://www.yamagi.org/quake2/;
       license = licenses.unfree;
       platforms = platforms.unix;
       maintainers = with maintainers; [ tadfisher ];

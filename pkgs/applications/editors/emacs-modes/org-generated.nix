@@ -11,7 +11,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/org.html";
+          homepage = https://elpa.gnu.org/packages/org.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -26,7 +26,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/org-plus-contrib.html";
+          homepage = https://elpa.gnu.org/packages/org-plus-contrib.html;
           license = lib.licenses.free;
         };
       }) {};

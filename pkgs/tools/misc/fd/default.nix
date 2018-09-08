@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
       While it does not seek to mirror all of `find`'s powerful functionality,
       it provides sensible (opinionated) defaults for 80% of the use cases.
     '';
-    homepage = "https://github.com/sharkdp/fd";
+    homepage = https://github.com/sharkdp/fd;
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;

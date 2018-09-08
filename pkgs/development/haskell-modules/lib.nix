@@ -20,7 +20,7 @@ rec {
                                   mkDerivation {
                                     pname = "aeson";
                                     <snip>
-                                    homepage = "https://github.com/bos/aeson";
+                                    homepage = https://github.com/bos/aeson;
                                   })
 
      The mkDerivation function of haskellPackages will take care of putting

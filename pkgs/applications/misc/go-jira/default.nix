@@ -15,7 +15,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Simple command line client for Atlassian's Jira service written in Go";
-    homepage = "https://github.com/Netflix-Skunkworks/go-jira";
+    homepage = https://github.com/Netflix-Skunkworks/go-jira;
     license = licenses.asl20;
     maintainers = [ maintainers.carlosdagos ];
   };

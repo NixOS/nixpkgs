@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A fancy curses interface to the Python interactive interpreter";
-    homepage = "https://bpython-interpreter.org/";
+    homepage = https://bpython-interpreter.org/;
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];
   };

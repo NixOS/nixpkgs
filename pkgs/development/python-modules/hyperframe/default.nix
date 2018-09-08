@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "HTTP/2 framing layer for Python";
-    homepage = "http://hyper.rtfd.org/";
+    homepage = http://hyper.rtfd.org/;
     license = licenses.mit;
   };
 }

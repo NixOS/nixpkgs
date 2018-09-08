@@ -18,6 +18,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "XMPP library for Python";
     license = licenses.mit;
-    homepage = "http://sleekxmpp.com/";
+    homepage = http://sleekxmpp.com/;
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
 	meta = {
 		description = "An audio encoder which generates compressed audio streams based on ATSC A/52 specification";
-		homepage = "http://aften.sourceforge.net/";
+		homepage = http://aften.sourceforge.net/;
 		license = stdenv.lib.licenses.lgpl2;
 		platforms = stdenv.lib.platforms.unix;
 	};

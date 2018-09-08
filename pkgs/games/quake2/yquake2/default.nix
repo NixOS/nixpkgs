@@ -57,7 +57,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Yamagi Quake II client";
-      homepage = "https://www.yamagi.org/quake2/";
+      homepage = https://www.yamagi.org/quake2/;
       license = licenses.gpl2;
       platforms = platforms.unix;
       maintainers = with maintainers; [ tadfisher ];

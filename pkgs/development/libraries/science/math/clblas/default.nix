@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/clMathLibraries/clBLAS";
+    homepage = https://github.com/clMathLibraries/clBLAS;
     description = "A software library containing BLAS functions written in OpenCL";
     longDescription = ''
       This package contains a library of BLAS functions on top of OpenCL. 

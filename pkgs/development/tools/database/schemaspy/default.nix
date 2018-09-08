@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://schemaspy.org";
+    homepage = http://schemaspy.org;
     description = "Document your database simply and easily";
     license = licenses.mit;
     maintainers = with maintainers; [ jraygauthier ];

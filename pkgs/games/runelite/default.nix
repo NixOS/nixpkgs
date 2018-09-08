@@ -45,7 +45,7 @@
 
   meta = {
     description = "Open source Old School RuneScape client";
-    homepage = "https://runelite.net/";
+    homepage = https://runelite.net/;
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.kmeakin ];
     platforms = lib.platforms.all;

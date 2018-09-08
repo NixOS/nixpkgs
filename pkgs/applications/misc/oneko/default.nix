@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     chasing around your mouse cursor.
     When the cat is done catching the mouse, it starts sleeping.
     '';
-    homepage = "http://www.daidouji.com/oneko/";
+    homepage = http://www.daidouji.com/oneko/;
     license = licenses.publicDomain;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.unix;

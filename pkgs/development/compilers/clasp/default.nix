@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://github.com/drmeister/clasp";
+    homepage = https://github.com/drmeister/clasp;
   };
 }

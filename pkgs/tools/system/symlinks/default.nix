@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Find and remedy problematic symbolic links on a system";
-    homepage = "https://github.com/brandt/symlinks";
+    homepage = https://github.com/brandt/symlinks;
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ckauhaus ];
     platforms = platforms.unix;

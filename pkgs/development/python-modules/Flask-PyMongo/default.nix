@@ -27,7 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ flask pymongo ];
 
   meta = {
-    homepage = "http://flask-pymongo.readthedocs.org/";
+    homepage = http://flask-pymongo.readthedocs.org/;
     description = "PyMongo support for Flask applications";
     license = lib.licenses.bsd2;
   };

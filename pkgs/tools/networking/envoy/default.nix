@@ -295,7 +295,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "L7 proxy and communication bus designed for large modern service oriented architectures";
-    homepage = "https://lyft.github.io/envoy/";
+    homepage = https://lyft.github.io/envoy/;
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

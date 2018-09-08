@@ -62,7 +62,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lua library for base2, base16, base32, base64, base85";
-      homepage = "https://github.com/aiq/basexx";
+      homepage = https://github.com/aiq/basexx;
       license = licenses.mit;
       maintainers = with maintainers; [ vcunat ];
       platforms = platforms.all;
@@ -129,7 +129,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Compatibility module providing Lua-5.3-style APIs for Lua 5.2 and 5.1";
-      homepage = "https://github.com/keplerproject/lua-compat-5.3";
+      homepage = https://github.com/keplerproject/lua-compat-5.3;
       license = licenses.mit;
       maintainers = with maintainers; [ vcunat ];
       platforms = platforms.all;
@@ -152,7 +152,7 @@ let
 
     meta = with stdenv.lib; {
       description = "A type of event loop for Lua";
-      homepage = "https://www.25thandclement.com/~william/projects/cqueues.html";
+      homepage = https://www.25thandclement.com/~william/projects/cqueues.html;
       license = licenses.mit;
       maintainers = with maintainers; [ vcunat ];
       platforms = platforms.unix;
@@ -178,7 +178,7 @@ let
 
     meta = with stdenv.lib; {
       description = "A lua library/'class' that implements a FIFO";
-      homepage = "https://github.com/daurnimator/fifo.lua";
+      homepage = https://github.com/daurnimator/fifo.lua;
       license = licenses.mit;
       maintainers = with maintainers; [ vcunat ];
       platforms = platforms.all;
@@ -216,7 +216,7 @@ let
 
     meta = with stdenv.lib; {
       description = "C extension module for Lua which adds bitwise operations on numbers";
-      homepage = "http://bitop.luajit.org";
+      homepage = http://bitop.luajit.org;
       license = licenses.mit;
       maintainers = with maintainers; [ ];
     };
@@ -307,7 +307,7 @@ let
     buildInputs = [ cyrus_sasl ];
 
     meta = with stdenv.lib; {
-      homepage = "https://github.com/JorjBauer/lua-cyrussasl";
+      homepage = https://github.com/JorjBauer/lua-cyrussasl;
       description = "Cyrus SASL library for Lua 5.1+";
       license = licenses.bsd3;
     };
@@ -371,7 +371,7 @@ let
 
     meta = with stdenv.lib; {
       description = "SAX XML parser based on the Expat library";
-      homepage = "http://matthewwild.co.uk/projects/luaexpat";
+      homepage = http://matthewwild.co.uk/projects/luaexpat;
       license = licenses.mit;
       maintainers = with maintainers; [ flosse ];
       platforms = platforms.unix;
@@ -408,7 +408,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage = "https://code.google.com/archive/p/luadbi/";
+      homepage = https://code.google.com/archive/p/luadbi/;
       platforms = stdenv.lib.platforms.unix;
     };
   };
@@ -436,7 +436,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lua library complementing filesystem-related functions";
-      homepage = "https://github.com/keplerproject/luafilesystem";
+      homepage = https://github.com/keplerproject/luafilesystem;
       license = licenses.mit;
       maintainers = with maintainers; [ flosse ];
       platforms = platforms.unix;
@@ -458,7 +458,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Comprehensive binding to OpenSSL for Lua 5.1+";
-      homepage = "https://www.25thandclement.com/~william/projects/luaossl.html";
+      homepage = https://www.25thandclement.com/~william/projects/luaossl.html;
       license = licenses.mit;
       maintainers = with maintainers; [ vcunat ];
       platforms = platforms.unix;
@@ -492,7 +492,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lua bindings for POSIX API";
-      homepage = "https://github.com/luaposix/luaposix";
+      homepage = https://github.com/luaposix/luaposix;
       license = licenses.mit;
       maintainers = with maintainers; [ vyp lblasc ];
       platforms = platforms.unix;
@@ -520,7 +520,7 @@ let
 
     meta = with stdenv.lib; {
       description = "PTY control for Lua";
-      homepage = "http://www.tset.de/lpty";
+      homepage = http://www.tset.de/lpty;
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = platforms.linux;
@@ -546,7 +546,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lua bindings for POSIX iconv";
-      homepage = "https://ittner.github.io/lua-iconv/";
+      homepage = https://ittner.github.io/lua-iconv/;
       license = licenses.mit;
       maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
@@ -576,7 +576,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lua binding for OpenSSL library to provide TLS/SSL communication";
-      homepage = "https://github.com/brunoos/luasec";
+      homepage = https://github.com/brunoos/luasec;
       license = licenses.mit;
       maintainers = with maintainers; [ flosse ];
       platforms = platforms.unix;
@@ -613,7 +613,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Network support for Lua";
-      homepage = "http://w3.impa.br/~diego/software/luasocket/";
+      homepage = http://w3.impa.br/~diego/software/luasocket/;
       license = licenses.mit;
       maintainers = with maintainers; [ ];
       platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
@@ -646,7 +646,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
-      homepage = "https://www.gitano.org.uk/luxio/";
+      homepage = https://www.gitano.org.uk/luxio/;
       license = licenses.mit;
       maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
@@ -673,7 +673,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lua library to read files stored inside zip files";
-      homepage = "https://github.com/luaforge/luazip";
+      homepage = https://github.com/luaforge/luazip;
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = platforms.linux;
@@ -733,7 +733,7 @@ let
 
     meta = with stdenv.lib; {
       description = "General Lua libraries";
-      homepage = "https://github.com/lua-stdlib/lua-stdlib";
+      homepage = https://github.com/lua-stdlib/lua-stdlib;
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = platforms.linux;
@@ -772,7 +772,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lua bindings of various regex library APIs";
-      homepage = "https://github.com/rrthomas/lrexlib";
+      homepage = https://github.com/rrthomas/lrexlib;
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = platforms.linux;
@@ -798,7 +798,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Database connectivity for Lua";
-      homepage = "https://github.com/LuaDist/luasql-sqlite3";
+      homepage = https://github.com/LuaDist/luasql-sqlite3;
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = platforms.linux;
@@ -848,7 +848,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Parsing Expression Grammars For Lua";
-      homepage = "http://www.inf.puc-rio.br/~roberto/lpeg/";
+      homepage = http://www.inf.puc-rio.br/~roberto/lpeg/;
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = platforms.all;
@@ -874,7 +874,7 @@ let
 
     meta = with stdenv.lib; {
       description = "A collection of LPEG patterns";
-      homepage = "https://github.com/daurnimator/lpeg_patterns";
+      homepage = https://github.com/daurnimator/lpeg_patterns;
       license = licenses.mit;
       maintainers = with maintainers; [ vcunat ];
       inherit (lpeg.meta) platforms;
@@ -906,7 +906,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lua C extension module for JSON support";
-      homepage = "https://www.kyne.com.au/~mark/software/lua-cjson.php";
+      homepage = https://www.kyne.com.au/~mark/software/lua-cjson.php;
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
     };
@@ -980,7 +980,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Lua bindings for libmpack";
-      homepage = "https://github.com/libmpack/libmpack-lua";
+      homepage = https://github.com/libmpack/libmpack-lua;
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = with platforms; linux ++ darwin;

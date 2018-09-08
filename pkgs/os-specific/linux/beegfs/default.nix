@@ -151,7 +151,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High performance distributed filesystem with RDMA support";
-    homepage = "https://www.beegfs.io";
+    homepage = https://www.beegfs.io;
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = {
       fullName = "BeeGFS_EULA";

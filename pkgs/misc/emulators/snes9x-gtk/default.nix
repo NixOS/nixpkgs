@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.snes9x.com";
+    homepage = http://www.snes9x.com;
     description = "Super Nintendo Entertainment System (SNES) emulator";
 
     longDescription = ''

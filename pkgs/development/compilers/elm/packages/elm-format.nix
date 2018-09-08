@@ -28,7 +28,7 @@ mkDerivation {
   doHaddock = false;
   jailbreak = true;
   doCheck = false;
-  homepage = "http://elm-lang.org";
+  homepage = http://elm-lang.org;
   description = "A source code formatter for Elm";
   license = stdenv.lib.licenses.bsd3;
 }

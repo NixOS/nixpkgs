@@ -19,7 +19,7 @@ buildGoPackage rec {
   buildInputs = [ ffmpeg-full graphicsmagick quicktemplate go-bindata easyjson ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/bakape/hydron";
+    homepage = https://github.com/bakape/hydron;
     description = "High performance media tagger and organizer";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ chiiruno ];

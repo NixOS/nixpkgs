@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     license = licenses.asl20;
-    homepage = "https://pypi.python.org/pypi/pytest-quickcheck";
+    homepage = https://pypi.python.org/pypi/pytest-quickcheck;
     description = "pytest plugin to generate random data inspired by QuickCheck";
   };
 }

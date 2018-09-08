@@ -19,7 +19,7 @@ buildPythonPackage rec {
   patches = [ ./setup.patch ];
 
   meta = {
-    homepage = "https://launchpad.net/py3exiv2";
+    homepage = https://launchpad.net/py3exiv2;
     description = "A Python3 binding to the library exiv2";
     license = with stdenv.lib.licenses; [ gpl3 ];
     maintainers = with stdenv.lib.maintainers; [ vinymeuh ];

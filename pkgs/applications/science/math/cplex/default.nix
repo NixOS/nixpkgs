@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "Optimization solver for mathematical programming";
-    homepage = "https://www.ibm.com/be-en/marketplace/ibm-ilog-cplex";
+    homepage = https://www.ibm.com/be-en/marketplace/ibm-ilog-cplex;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ bfortz ];

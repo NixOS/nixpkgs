@@ -18,7 +18,7 @@ buildGoPackage rec {
   };
 
   meta = {
-    homepage = "https://github.com/kubernetes-sigs/aws-iam-authenticator";
+    homepage = https://github.com/kubernetes-sigs/aws-iam-authenticator;
     description = "AWS IAM credentials for Kubernetes authentication";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;

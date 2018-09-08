@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "https://gitlab.com/sdcofer70/enyo-doom";
+    homepage = https://gitlab.com/sdcofer70/enyo-doom;
     description = "Frontend for Doom engines";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

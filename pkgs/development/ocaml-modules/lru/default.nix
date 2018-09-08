@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) buildPhase installPhase;
 
   meta = {
-    homepage = "https://github.com/pqwy/lru";
+    homepage = https://github.com/pqwy/lru;
     description = "Scalable LRU caches for OCaml";
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     license = stdenv.lib.licenses.isc;

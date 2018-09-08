@@ -32,7 +32,7 @@ buildGoPackage rec {
 
   meta = {
     description = "geographical download redirector for distributing files efficiently across a set of mirrors";
-    homepage = "https://github.com/etix/mirrorbits";
+    homepage = https://github.com/etix/mirrorbits;
     longDescription = ''
       Mirrorbits is a geographical download redirector written in Go for
       distributing files efficiently across a set of mirrors. It offers

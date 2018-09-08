@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Unicorn CPU emulator engine";
-    homepage = "http://www.unicorn-engine.org/";
+    homepage = http://www.unicorn-engine.org/;
     license = [ licenses.gpl2 ];
     maintainers = [ maintainers.bennofs ];
   };

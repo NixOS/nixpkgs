@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Modular search for Django";
-    homepage = "http://haystacksearch.org/";
+    homepage = http://haystacksearch.org/;
     license = licenses.bsd3;
   };
 }

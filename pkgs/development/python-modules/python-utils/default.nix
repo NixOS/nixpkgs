@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module with some convenient utilities";
-    homepage = "https://github.com/WoLpH/python-utils";
+    homepage = https://github.com/WoLpH/python-utils;
     license = licenses.bsd3;
   };
 }

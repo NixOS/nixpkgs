@@ -337,7 +337,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = with stdenv.lib; {
       description = "An intermediate verification language";
-      homepage = "https://github.com/boogie-org/boogie";
+      homepage = https://github.com/boogie-org/boogie;
       longDescription = ''
         Boogie is an intermediate verification language (IVL), intended as a
         layer on which to build program verifiers for other languages.
@@ -395,7 +395,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = with stdenv.lib; {
       description = "A programming language with built-in specification constructs";
-      homepage = "http://research.microsoft.com/dafny";
+      homepage = http://research.microsoft.com/dafny;
       maintainers = with maintainers; [ layus ];
       license = licenses.mit;
       platforms = with platforms; (linux ++ darwin);
@@ -441,7 +441,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Deedle is an easy to use library for data and time series manipulation and for scientific programming";
-      homepage = "http://bluemountaincapital.github.io/Deedle/";
+      homepage = http://bluemountaincapital.github.io/Deedle/;
       license = stdenv.lib.licenses.free;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -471,7 +471,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Excel-DNA is an independent project to integrate .NET into Excel";
-      homepage = "https://excel-dna.net/";
+      homepage = https://excel-dna.net/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -500,7 +500,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "This library implements helper functions to assist and modify the Excel-DNA function registration";
-      homepage = "https://github.com/Excel-DNA/Registration";
+      homepage = https://github.com/Excel-DNA/Registration;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -534,7 +534,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "ExtCore is an extended core library for F#";
-      homepage = "https://github.com/jack-pappas/ExtCore";
+      homepage = https://github.com/jack-pappas/ExtCore;
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -595,7 +595,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "The F# compiler services package is a component derived from the F# compiler source code that exposes additional functionality for implementing F# language bindings";
-      homepage = "http://fsharp.github.io/FSharp.Compiler.Service/";
+      homepage = http://fsharp.github.io/FSharp.Compiler.Service/;
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -639,7 +639,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "F# Data: Library for Data Access";
-      homepage = "http://fsharp.github.io/FSharp.Data/";
+      homepage = http://fsharp.github.io/FSharp.Data/;
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -671,7 +671,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #
   #   meta = {
   #     description = "FSharpx.Extras is a collection of libraries and tools for use with F#";
-  #     homepage = "http://fsprojects.github.io/FSharpx.Extras/";
+  #     homepage = http://fsprojects.github.io/FSharpx.Extras/;
   #     license = stdenv.lib.licenses.asl20;
   #     maintainers = with stdenv.lib.maintainers; [ obadz ];
   #     platforms = with stdenv.lib.platforms; linux;
@@ -832,7 +832,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   #   meta = {
   #     description = "F# addin for MonoDevelop 5.9";
-  #     homepage = "https://github.com/fsharp/fsharpbinding/tree/5.9";
+  #     homepage = https://github.com/fsharp/fsharpbinding/tree/5.9;
   #     license = stdenv.lib.licenses.asl20;
   #     maintainers = with stdenv.lib.maintainers; [ obadz ];
   #     platforms = with stdenv.lib.platforms; linux;
@@ -900,7 +900,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Popular high-performance JSON framework for .NET";
-      homepage = "https://www.newtonsoft.com/json";
+      homepage = https://www.newtonsoft.com/json;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -982,7 +982,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A dependency manager for .NET and Mono projects";
-      homepage = "http://fsprojects.github.io/Paket/";
+      homepage = http://fsprojects.github.io/Paket/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -1015,7 +1015,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A command-line tool for manipulating F# project files";
-      homepage = "https://github.com/kjnilsson/projekt";
+      homepage = https://github.com/kjnilsson/projekt;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

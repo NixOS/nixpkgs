@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Terraform plugin for outputting NixOS configuration files from Terraform resources.";
-    homepage = "https://github.com/tweag/terraform-provider-nixos";
+    homepage = https://github.com/tweag/terraform-provider-nixos;
     license = licenses.mpl20;
     maintainers = with maintainers; [ grahamc ];
   };

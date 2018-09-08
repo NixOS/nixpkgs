@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = "https://github.com/quandl/quandl-python";
+    homepage = https://github.com/quandl/quandl-python;
     description = "Quandl Python client library";
     maintainers = [ lib.maintainers.ilya-kolpakov ];
     license = lib.licenses.mit;

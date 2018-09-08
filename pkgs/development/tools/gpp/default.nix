@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "General-purpose preprocessor with customizable syntax";
-    homepage = "https://logological.org/gpp";
+    homepage = https://logological.org/gpp;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ nmattia ];
     platforms = with platforms; linux ++ darwin;

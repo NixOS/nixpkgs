@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A C library for property-based testing";
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://github.com/silentbicycle/theft/";
+    homepage = https://github.com/silentbicycle/theft/;
     license = stdenv.lib.licenses.isc;
     maintainers = [ stdenv.lib.maintainers.kquick ];
   };

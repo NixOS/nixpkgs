@@ -38,7 +38,7 @@ stdenv.mkDerivation rec
 
   meta = with stdenv.lib; {
     description = "An open framework for storing and sharing scene data";
-    homepage = "http://alembic.io/";
+    homepage = http://alembic.io/;
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ maintainers.guibou ];

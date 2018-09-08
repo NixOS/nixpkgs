@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "HTTP/2 State-Machine based protocol implementation";
-    homepage = "http://hyper.rtfd.org/";
+    homepage = http://hyper.rtfd.org/;
     license = licenses.mit;
   };
 }

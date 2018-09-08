@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple hash algorithms in OCaml";
-    homepage = "https://github.com/mirage/digestif";
+    homepage = https://github.com/mirage/digestif;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;

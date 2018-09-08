@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://dolphin-emu.org";
+    homepage = http://dolphin-emu.org;
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
     license = licenses.gpl2;
     maintainers = with maintainers; [ MP2E ];

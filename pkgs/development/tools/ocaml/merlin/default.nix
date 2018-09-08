@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";
-    homepage = "https://github.com/ocaml/merlin";
+    homepage = https://github.com/ocaml/merlin;
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];
   };

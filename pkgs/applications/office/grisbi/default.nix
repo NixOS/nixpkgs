@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       management and other information that make Grisbi adapted for
       associations.
     '';
-    homepage = "http://grisbi.org";
+    homepage = http://grisbi.org;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ layus ];
     platforms = platforms.linux;

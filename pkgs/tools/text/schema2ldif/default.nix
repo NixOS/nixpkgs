@@ -23,7 +23,7 @@
 
   meta = with stdenv.lib; {
     description = "Utilities to manage schema in .schema and .ldif format";
-    homepage = "https://www.fusiondirectory.org/schema2ldif-project-and-components/";
+    homepage = https://www.fusiondirectory.org/schema2ldif-project-and-components/;
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ das_j ];

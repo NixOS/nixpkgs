@@ -11,7 +11,7 @@
         };
         packageRequires = [ avy ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ace-window.html";
+          homepage = https://elpa.gnu.org/packages/ace-window.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -26,7 +26,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ack.html";
+          homepage = https://elpa.gnu.org/packages/ack.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -46,7 +46,7 @@
         };
         packageRequires = [ cl-lib emacs wisi ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ada-mode.html";
+          homepage = https://elpa.gnu.org/packages/ada-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -61,7 +61,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ada-ref-man.html";
+          homepage = https://elpa.gnu.org/packages/ada-ref-man.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -76,7 +76,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/adaptive-wrap.html";
+          homepage = https://elpa.gnu.org/packages/adaptive-wrap.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -91,7 +91,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/adjust-parens.html";
+          homepage = https://elpa.gnu.org/packages/adjust-parens.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -110,7 +110,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/aggressive-indent.html";
+          homepage = https://elpa.gnu.org/packages/aggressive-indent.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -125,7 +125,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ahungry-theme.html";
+          homepage = https://elpa.gnu.org/packages/ahungry-theme.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -140,7 +140,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/all.html";
+          homepage = https://elpa.gnu.org/packages/all.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -155,7 +155,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ampc.html";
+          homepage = https://elpa.gnu.org/packages/ampc.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -170,7 +170,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/arbitools.html";
+          homepage = https://elpa.gnu.org/packages/arbitools.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -185,7 +185,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ascii-art-to-unicode.html";
+          homepage = https://elpa.gnu.org/packages/ascii-art-to-unicode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -200,7 +200,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/async.html";
+          homepage = https://elpa.gnu.org/packages/async.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -215,7 +215,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/auctex.html";
+          homepage = https://elpa.gnu.org/packages/auctex.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -230,7 +230,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/aumix-mode.html";
+          homepage = https://elpa.gnu.org/packages/aumix-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -245,7 +245,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/auto-correct.html";
+          homepage = https://elpa.gnu.org/packages/auto-correct.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -260,7 +260,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/auto-overlays.html";
+          homepage = https://elpa.gnu.org/packages/auto-overlays.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -275,7 +275,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/avy.html";
+          homepage = https://elpa.gnu.org/packages/avy.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -290,7 +290,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/bbdb.html";
+          homepage = https://elpa.gnu.org/packages/bbdb.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -305,7 +305,7 @@
         };
         packageRequires = [ seq ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/beacon.html";
+          homepage = https://elpa.gnu.org/packages/beacon.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -320,7 +320,7 @@
         };
         packageRequires = [ cl-lib seq ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/bug-hunter.html";
+          homepage = https://elpa.gnu.org/packages/bug-hunter.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -335,7 +335,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/caps-lock.html";
+          homepage = https://elpa.gnu.org/packages/caps-lock.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -350,7 +350,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/captain.html";
+          homepage = https://elpa.gnu.org/packages/captain.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -365,7 +365,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/chess.html";
+          homepage = https://elpa.gnu.org/packages/chess.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -380,7 +380,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/cl-generic.html";
+          homepage = https://elpa.gnu.org/packages/cl-generic.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -395,7 +395,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/cl-lib.html";
+          homepage = https://elpa.gnu.org/packages/cl-lib.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -410,7 +410,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/cl-print.html";
+          homepage = https://elpa.gnu.org/packages/cl-print.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -425,7 +425,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/cobol-mode.html";
+          homepage = https://elpa.gnu.org/packages/cobol-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -440,7 +440,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/coffee-mode.html";
+          homepage = https://elpa.gnu.org/packages/coffee-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -455,7 +455,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/compact-docstrings.html";
+          homepage = https://elpa.gnu.org/packages/compact-docstrings.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -470,7 +470,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/company.html";
+          homepage = https://elpa.gnu.org/packages/company.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -485,7 +485,7 @@
         };
         packageRequires = [ company ebdb ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/company-ebdb.html";
+          homepage = https://elpa.gnu.org/packages/company-ebdb.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -504,7 +504,7 @@
         };
         packageRequires = [ company math-symbol-lists ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/company-math.html";
+          homepage = https://elpa.gnu.org/packages/company-math.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -523,7 +523,7 @@
         };
         packageRequires = [ company emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/company-statistics.html";
+          homepage = https://elpa.gnu.org/packages/company-statistics.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -538,7 +538,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/context-coloring.html";
+          homepage = https://elpa.gnu.org/packages/context-coloring.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -553,7 +553,7 @@
         };
         packageRequires = [ ebdb ivy ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/counsel-ebdb.html";
+          homepage = https://elpa.gnu.org/packages/counsel-ebdb.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -568,7 +568,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/crisp.html";
+          homepage = https://elpa.gnu.org/packages/crisp.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -583,7 +583,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/csv-mode.html";
+          homepage = https://elpa.gnu.org/packages/csv-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -598,7 +598,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/cycle-quotes.html";
+          homepage = https://elpa.gnu.org/packages/cycle-quotes.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -613,7 +613,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/darkroom.html";
+          homepage = https://elpa.gnu.org/packages/darkroom.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -628,7 +628,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/dash.html";
+          homepage = https://elpa.gnu.org/packages/dash.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -643,7 +643,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/dbus-codegen.html";
+          homepage = https://elpa.gnu.org/packages/dbus-codegen.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -662,7 +662,7 @@
         };
         packageRequires = [ cl-lib soap-client ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/debbugs.html";
+          homepage = https://elpa.gnu.org/packages/debbugs.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -677,7 +677,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/delight.html";
+          homepage = https://elpa.gnu.org/packages/delight.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -692,7 +692,7 @@
         };
         packageRequires = [ heap tNFA trie ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/dict-tree.html";
+          homepage = https://elpa.gnu.org/packages/dict-tree.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -707,7 +707,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/diff-hl.html";
+          homepage = https://elpa.gnu.org/packages/diff-hl.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -722,7 +722,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/diffview.html";
+          homepage = https://elpa.gnu.org/packages/diffview.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -737,7 +737,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/dired-du.html";
+          homepage = https://elpa.gnu.org/packages/dired-du.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -752,7 +752,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/dismal.html";
+          homepage = https://elpa.gnu.org/packages/dismal.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -767,7 +767,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/djvu.html";
+          homepage = https://elpa.gnu.org/packages/djvu.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -782,7 +782,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/docbook.html";
+          homepage = https://elpa.gnu.org/packages/docbook.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -797,7 +797,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/dts-mode.html";
+          homepage = https://elpa.gnu.org/packages/dts-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -812,7 +812,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/easy-kill.html";
+          homepage = https://elpa.gnu.org/packages/easy-kill.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -827,7 +827,7 @@
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ebdb.html";
+          homepage = https://elpa.gnu.org/packages/ebdb.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -842,7 +842,7 @@
         };
         packageRequires = [ ebdb gnorb ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ebdb-gnorb.html";
+          homepage = https://elpa.gnu.org/packages/ebdb-gnorb.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -857,7 +857,7 @@
         };
         packageRequires = [ ebdb pyim ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ebdb-i18n-chn.html";
+          homepage = https://elpa.gnu.org/packages/ebdb-i18n-chn.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -872,7 +872,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ediprolog.html";
+          homepage = https://elpa.gnu.org/packages/ediprolog.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -887,7 +887,7 @@
         };
         packageRequires = [ emacs jsonrpc ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/eglot.html";
+          homepage = https://elpa.gnu.org/packages/eglot.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -907,7 +907,7 @@
         };
         packageRequires = [ cl-print emacs stream ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/el-search.html";
+          homepage = https://elpa.gnu.org/packages/el-search.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -922,7 +922,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/eldoc-eval.html";
+          homepage = https://elpa.gnu.org/packages/eldoc-eval.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -937,7 +937,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/electric-spacing.html";
+          homepage = https://elpa.gnu.org/packages/electric-spacing.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -952,7 +952,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/enwc.html";
+          homepage = https://elpa.gnu.org/packages/enwc.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -967,7 +967,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/epoch-view.html";
+          homepage = https://elpa.gnu.org/packages/epoch-view.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -986,7 +986,7 @@
         };
         packageRequires = [ emacs undo-tree ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ergoemacs-mode.html";
+          homepage = https://elpa.gnu.org/packages/ergoemacs-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1007,7 +1007,7 @@
         };
         packageRequires = [ emacs fsm soap-client url-http-ntlm ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/excorporate.html";
+          homepage = https://elpa.gnu.org/packages/excorporate.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1022,7 +1022,7 @@
         };
         packageRequires = [ xelb ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/exwm.html";
+          homepage = https://elpa.gnu.org/packages/exwm.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1037,7 +1037,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/f90-interface-browser.html";
+          homepage = https://elpa.gnu.org/packages/f90-interface-browser.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1052,7 +1052,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/filladapt.html";
+          homepage = https://elpa.gnu.org/packages/filladapt.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1067,7 +1067,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/flylisp.html";
+          homepage = https://elpa.gnu.org/packages/flylisp.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1082,7 +1082,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/frame-tabs.html";
+          homepage = https://elpa.gnu.org/packages/frame-tabs.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1097,7 +1097,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/fsm.html";
+          homepage = https://elpa.gnu.org/packages/fsm.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1112,7 +1112,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ggtags.html";
+          homepage = https://elpa.gnu.org/packages/ggtags.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1127,7 +1127,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/gited.html";
+          homepage = https://elpa.gnu.org/packages/gited.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1142,7 +1142,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/gle-mode.html";
+          homepage = https://elpa.gnu.org/packages/gle-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1157,7 +1157,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/gnome-c-style.html";
+          homepage = https://elpa.gnu.org/packages/gnome-c-style.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1172,7 +1172,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/gnorb.html";
+          homepage = https://elpa.gnu.org/packages/gnorb.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1192,7 +1192,7 @@
         };
         packageRequires = [ ascii-art-to-unicode cl-lib xpm ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/gnugo.html";
+          homepage = https://elpa.gnu.org/packages/gnugo.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1207,7 +1207,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/heap.html";
+          homepage = https://elpa.gnu.org/packages/heap.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1222,7 +1222,7 @@
         };
         packageRequires = [ ebdb helm ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/helm-ebdb.html";
+          homepage = https://elpa.gnu.org/packages/helm-ebdb.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1239,7 +1239,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/highlight-escape-sequences.html";
+          homepage = https://elpa.gnu.org/packages/highlight-escape-sequences.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1254,7 +1254,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/hook-helpers.html";
+          homepage = https://elpa.gnu.org/packages/hook-helpers.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1269,7 +1269,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/html5-schema.html";
+          homepage = https://elpa.gnu.org/packages/html5-schema.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1284,7 +1284,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/hydra.html";
+          homepage = https://elpa.gnu.org/packages/hydra.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1299,7 +1299,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/hyperbole.html";
+          homepage = https://elpa.gnu.org/packages/hyperbole.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1314,7 +1314,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ioccur.html";
+          homepage = https://elpa.gnu.org/packages/ioccur.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1329,7 +1329,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/iterators.html";
+          homepage = https://elpa.gnu.org/packages/iterators.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1344,7 +1344,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ivy.html";
+          homepage = https://elpa.gnu.org/packages/ivy.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1359,7 +1359,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/javaimp.html";
+          homepage = https://elpa.gnu.org/packages/javaimp.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1374,7 +1374,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/jgraph-mode.html";
+          homepage = https://elpa.gnu.org/packages/jgraph-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1389,7 +1389,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/js2-mode.html";
+          homepage = https://elpa.gnu.org/packages/js2-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1404,7 +1404,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/json-mode.html";
+          homepage = https://elpa.gnu.org/packages/json-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1419,7 +1419,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/jsonrpc.html";
+          homepage = https://elpa.gnu.org/packages/jsonrpc.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1434,7 +1434,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/jumpc.html";
+          homepage = https://elpa.gnu.org/packages/jumpc.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1449,7 +1449,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/kmb.html";
+          homepage = https://elpa.gnu.org/packages/kmb.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1464,7 +1464,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/landmark.html";
+          homepage = https://elpa.gnu.org/packages/landmark.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1479,7 +1479,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/let-alist.html";
+          homepage = https://elpa.gnu.org/packages/let-alist.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1494,7 +1494,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/lex.html";
+          homepage = https://elpa.gnu.org/packages/lex.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1509,7 +1509,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/lmc.html";
+          homepage = https://elpa.gnu.org/packages/lmc.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1524,7 +1524,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/load-dir.html";
+          homepage = https://elpa.gnu.org/packages/load-dir.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1539,7 +1539,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/load-relative.html";
+          homepage = https://elpa.gnu.org/packages/load-relative.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1554,7 +1554,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/loc-changes.html";
+          homepage = https://elpa.gnu.org/packages/loc-changes.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1569,7 +1569,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/loccur.html";
+          homepage = https://elpa.gnu.org/packages/loccur.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1584,7 +1584,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/markchars.html";
+          homepage = https://elpa.gnu.org/packages/markchars.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1599,7 +1599,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/math-symbol-lists.html";
+          homepage = https://elpa.gnu.org/packages/math-symbol-lists.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1614,7 +1614,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/memory-usage.html";
+          homepage = https://elpa.gnu.org/packages/memory-usage.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1629,7 +1629,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/metar.html";
+          homepage = https://elpa.gnu.org/packages/metar.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1644,7 +1644,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/midi-kbd.html";
+          homepage = https://elpa.gnu.org/packages/midi-kbd.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1659,7 +1659,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/mines.html";
+          homepage = https://elpa.gnu.org/packages/mines.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1674,7 +1674,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/minibuffer-line.html";
+          homepage = https://elpa.gnu.org/packages/minibuffer-line.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1689,7 +1689,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/minimap.html";
+          homepage = https://elpa.gnu.org/packages/minimap.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1704,7 +1704,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/mmm-mode.html";
+          homepage = https://elpa.gnu.org/packages/mmm-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1719,7 +1719,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/multishell.html";
+          homepage = https://elpa.gnu.org/packages/multishell.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1734,7 +1734,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/muse.html";
+          homepage = https://elpa.gnu.org/packages/muse.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1749,7 +1749,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/myers.html";
+          homepage = https://elpa.gnu.org/packages/myers.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1764,7 +1764,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/nameless.html";
+          homepage = https://elpa.gnu.org/packages/nameless.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1779,7 +1779,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/names.html";
+          homepage = https://elpa.gnu.org/packages/names.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1798,7 +1798,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/nhexl-mode.html";
+          homepage = https://elpa.gnu.org/packages/nhexl-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1813,7 +1813,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/nlinum.html";
+          homepage = https://elpa.gnu.org/packages/nlinum.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1828,7 +1828,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/notes-mode.html";
+          homepage = https://elpa.gnu.org/packages/notes-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1843,7 +1843,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ntlm.html";
+          homepage = https://elpa.gnu.org/packages/ntlm.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1858,7 +1858,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/num3-mode.html";
+          homepage = https://elpa.gnu.org/packages/num3-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1873,7 +1873,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/oauth2.html";
+          homepage = https://elpa.gnu.org/packages/oauth2.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1888,7 +1888,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/omn-mode.html";
+          homepage = https://elpa.gnu.org/packages/omn-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1903,7 +1903,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/on-screen.html";
+          homepage = https://elpa.gnu.org/packages/on-screen.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1918,7 +1918,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/org.html";
+          homepage = https://elpa.gnu.org/packages/org.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1933,7 +1933,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/orgalist.html";
+          homepage = https://elpa.gnu.org/packages/orgalist.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1948,7 +1948,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/osc.html";
+          homepage = https://elpa.gnu.org/packages/osc.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1963,7 +1963,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/other-frame-window.html";
+          homepage = https://elpa.gnu.org/packages/other-frame-window.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1978,7 +1978,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/pabbrev.html";
+          homepage = https://elpa.gnu.org/packages/pabbrev.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -1993,7 +1993,7 @@
         };
         packageRequires = [ async emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/paced.html";
+          homepage = https://elpa.gnu.org/packages/paced.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2008,7 +2008,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/parsec.html";
+          homepage = https://elpa.gnu.org/packages/parsec.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2023,7 +2023,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/pinentry.html";
+          homepage = https://elpa.gnu.org/packages/pinentry.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2038,7 +2038,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/poker.html";
+          homepage = https://elpa.gnu.org/packages/poker.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2053,7 +2053,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/posframe.html";
+          homepage = https://elpa.gnu.org/packages/posframe.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2068,7 +2068,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/psgml.html";
+          homepage = https://elpa.gnu.org/packages/psgml.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2083,7 +2083,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/python.html";
+          homepage = https://elpa.gnu.org/packages/python.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2098,7 +2098,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/quarter-plane.html";
+          homepage = https://elpa.gnu.org/packages/quarter-plane.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2113,7 +2113,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/queue.html";
+          homepage = https://elpa.gnu.org/packages/queue.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2128,7 +2128,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/rainbow-mode.html";
+          homepage = https://elpa.gnu.org/packages/rainbow-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2143,7 +2143,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/rbit.html";
+          homepage = https://elpa.gnu.org/packages/rbit.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2158,7 +2158,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/rcirc-color.html";
+          homepage = https://elpa.gnu.org/packages/rcirc-color.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2173,7 +2173,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/rcirc-menu.html";
+          homepage = https://elpa.gnu.org/packages/rcirc-menu.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2201,7 +2201,7 @@
           test-simple
         ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/realgud.html";
+          homepage = https://elpa.gnu.org/packages/realgud.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2216,7 +2216,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/register-list.html";
+          homepage = https://elpa.gnu.org/packages/register-list.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2231,7 +2231,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/rich-minority.html";
+          homepage = https://elpa.gnu.org/packages/rich-minority.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2246,7 +2246,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/rnc-mode.html";
+          homepage = https://elpa.gnu.org/packages/rnc-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2266,7 +2266,7 @@
         };
         packageRequires = [ cl-generic cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/rudel.html";
+          homepage = https://elpa.gnu.org/packages/rudel.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2281,7 +2281,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/scroll-restore.html";
+          homepage = https://elpa.gnu.org/packages/scroll-restore.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2296,7 +2296,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/sed-mode.html";
+          homepage = https://elpa.gnu.org/packages/sed-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2311,7 +2311,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/seq.html";
+          homepage = https://elpa.gnu.org/packages/seq.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2326,7 +2326,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/shen-mode.html";
+          homepage = https://elpa.gnu.org/packages/shen-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2341,7 +2341,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/sisu-mode.html";
+          homepage = https://elpa.gnu.org/packages/sisu-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2356,7 +2356,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/smart-yank.html";
+          homepage = https://elpa.gnu.org/packages/smart-yank.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2371,7 +2371,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/sml-mode.html";
+          homepage = https://elpa.gnu.org/packages/sml-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2386,7 +2386,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/soap-client.html";
+          homepage = https://elpa.gnu.org/packages/soap-client.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2401,7 +2401,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/sokoban.html";
+          homepage = https://elpa.gnu.org/packages/sokoban.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2416,7 +2416,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/sotlisp.html";
+          homepage = https://elpa.gnu.org/packages/sotlisp.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2431,7 +2431,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/spinner.html";
+          homepage = https://elpa.gnu.org/packages/spinner.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2446,7 +2446,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/sql-indent.html";
+          homepage = https://elpa.gnu.org/packages/sql-indent.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2461,7 +2461,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/stream.html";
+          homepage = https://elpa.gnu.org/packages/stream.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2476,7 +2476,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/svg.html";
+          homepage = https://elpa.gnu.org/packages/svg.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2491,7 +2491,7 @@
         };
         packageRequires = [ emacs svg ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/svg-clock.html";
+          homepage = https://elpa.gnu.org/packages/svg-clock.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2506,7 +2506,7 @@
         };
         packageRequires = [ queue ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/tNFA.html";
+          homepage = https://elpa.gnu.org/packages/tNFA.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2521,7 +2521,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/temp-buffer-browse.html";
+          homepage = https://elpa.gnu.org/packages/temp-buffer-browse.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2536,7 +2536,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/test-simple.html";
+          homepage = https://elpa.gnu.org/packages/test-simple.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2551,7 +2551,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/timerfunctions.html";
+          homepage = https://elpa.gnu.org/packages/timerfunctions.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2566,7 +2566,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/tiny.html";
+          homepage = https://elpa.gnu.org/packages/tiny.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2581,7 +2581,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/tramp-theme.html";
+          homepage = https://elpa.gnu.org/packages/tramp-theme.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2596,7 +2596,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/transcribe.html";
+          homepage = https://elpa.gnu.org/packages/transcribe.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2611,7 +2611,7 @@
         };
         packageRequires = [ heap tNFA ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/trie.html";
+          homepage = https://elpa.gnu.org/packages/trie.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2626,7 +2626,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/undo-tree.html";
+          homepage = https://elpa.gnu.org/packages/undo-tree.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2641,7 +2641,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/uni-confusables.html";
+          homepage = https://elpa.gnu.org/packages/uni-confusables.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2660,7 +2660,7 @@
         };
         packageRequires = [ cl-lib ntlm ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/url-http-ntlm.html";
+          homepage = https://elpa.gnu.org/packages/url-http-ntlm.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2680,7 +2680,7 @@
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/validate.html";
+          homepage = https://elpa.gnu.org/packages/validate.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2695,7 +2695,7 @@
         };
         packageRequires = [ emacs hydra ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/vdiff.html";
+          homepage = https://elpa.gnu.org/packages/vdiff.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2710,7 +2710,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/vigenere.html";
+          homepage = https://elpa.gnu.org/packages/vigenere.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2725,7 +2725,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/vlf.html";
+          homepage = https://elpa.gnu.org/packages/vlf.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2740,7 +2740,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/w3.html";
+          homepage = https://elpa.gnu.org/packages/w3.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2755,7 +2755,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/wcheck-mode.html";
+          homepage = https://elpa.gnu.org/packages/wcheck-mode.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2770,7 +2770,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/wconf.html";
+          homepage = https://elpa.gnu.org/packages/wconf.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2785,7 +2785,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/web-server.html";
+          homepage = https://elpa.gnu.org/packages/web-server.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2800,7 +2800,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/websocket.html";
+          homepage = https://elpa.gnu.org/packages/websocket.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2815,7 +2815,7 @@
         };
         packageRequires = [ emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/which-key.html";
+          homepage = https://elpa.gnu.org/packages/which-key.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2830,7 +2830,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/windresize.html";
+          homepage = https://elpa.gnu.org/packages/windresize.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2845,7 +2845,7 @@
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/wisi.html";
+          homepage = https://elpa.gnu.org/packages/wisi.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2860,7 +2860,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/wpuzzle.html";
+          homepage = https://elpa.gnu.org/packages/wpuzzle.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2875,7 +2875,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/xclip.html";
+          homepage = https://elpa.gnu.org/packages/xclip.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2890,7 +2890,7 @@
         };
         packageRequires = [ cl-generic emacs ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/xelb.html";
+          homepage = https://elpa.gnu.org/packages/xelb.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2905,7 +2905,7 @@
         };
         packageRequires = [];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/xpm.html";
+          homepage = https://elpa.gnu.org/packages/xpm.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2920,7 +2920,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/yasnippet.html";
+          homepage = https://elpa.gnu.org/packages/yasnippet.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2938,7 +2938,7 @@
         };
         packageRequires = [ yasnippet ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/yasnippet-classic-snippets.html";
+          homepage = https://elpa.gnu.org/packages/yasnippet-classic-snippets.html;
           license = lib.licenses.free;
         };
       }) {};
@@ -2953,7 +2953,7 @@
         };
         packageRequires = [ cl-lib ];
         meta = {
-          homepage = "https://elpa.gnu.org/packages/ztree.html";
+          homepage = https://elpa.gnu.org/packages/ztree.html;
           license = lib.licenses.free;
         };
       }) {};

@@ -64,7 +64,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pillow six ];
 
   meta = {
-    homepage = "https://github.com/jflesch/pyocr";
+    homepage = https://github.com/jflesch/pyocr;
     description = "A Python wrapper for Tesseract and Cuneiform";
     license = lib.licenses.gpl3Plus;
   };

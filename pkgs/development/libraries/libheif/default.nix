@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://www.libheif.org/";
+    homepage = http://www.libheif.org/;
     description = "ISO/IEC 23008-12:2017 HEIF image file format decoder and encoder";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.unix;

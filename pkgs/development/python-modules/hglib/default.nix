@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Mercurial Python library";
-    homepage = "http://selenic.com/repo/python-hglib";
+    homepage = http://selenic.com/repo/python-hglib;
     license = licenses.mit;
     maintainers = with maintainers; [ dfoxfranke ];
     platforms = platforms.all;

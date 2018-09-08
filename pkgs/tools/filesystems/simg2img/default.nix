@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tool to convert Android sparse images to raw images";
-    homepage = "https://github.com/anestisb/android-simg2img";
+    homepage = https://github.com/anestisb/android-simg2img;
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.dezgeg ];

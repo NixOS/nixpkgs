@@ -24,7 +24,7 @@ mkDerivation {
     snap-server template-haskell text time unordered-containers
     utf8-string vector zip-archive
   ];
-  homepage = "http://elm-lang.org";
+  homepage = http://elm-lang.org;
   description = "The `elm` command line interface";
   license = stdenv.lib.licenses.bsd3;
 }

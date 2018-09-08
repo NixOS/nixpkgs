@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ gpgme ];
 
   meta = with stdenv.lib; {
-    homepage = "https://launchpad.net/pygpgme";
+    homepage = https://launchpad.net/pygpgme;
     description = "A Python wrapper for the GPGME library";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ garbas ];

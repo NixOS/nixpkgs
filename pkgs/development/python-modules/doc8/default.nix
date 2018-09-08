@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Style checker for Sphinx (or other) RST documentation";
-    homepage = "https://launchpad.net/doc8";
+    homepage = https://launchpad.net/doc8;
     license = lib.licenses.asl20;
   };
 }

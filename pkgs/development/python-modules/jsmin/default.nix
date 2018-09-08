@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "JavaScript minifier";
-    homepage = "https://github.com/tikitu/jsmin/";
+    homepage = https://github.com/tikitu/jsmin/;
     license = licenses.mit;
   };
 }
