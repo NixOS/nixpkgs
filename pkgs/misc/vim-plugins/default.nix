@@ -439,7 +439,10 @@ self = rec {
     # $ eval echo $(nix-instantiate --eval --expr 'with (import <nixpkgs>) {}; clang.default_cxx_stdlib_compile')
     preFixup = ''
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/clang_complete.vim \
-        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.clang.cc}/lib/libclang.so'"
+        --replace "let g:clang_library_path = '' + "''" + ''" "let g:clang_library_path='${llvmPackages.clang.cc.lib}/lib/libclang.so'"
+
+      substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
+        --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
     '';
   };
 
