@@ -73,20 +73,22 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ sksPkg ];
-    
-    users.users.sks = {
-      createHome = true;
-      home = cfg.dataDir;
-      isSystemUser = true;
-      shell = "${pkgs.coreutils}/bin/true";
+    users = {
+      users.sks = {
+        isSystemUser = true;
+        description = "SKS user";
+        home = cfg.dataDir;
+        createHome = true;
+        group = "sks";
+        useDefaultShell = true;
+        packages = [ sksPkg pkgs.db ];
+      };
+      groups.sks = { };
     };
 
     systemd.services = let
       hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'" ;
       hkpPort = builtins.toString cfg.hkpPort;
-      home = config.users.users.sks.home;
-      user = config.users.users.sks.name;
     in {
       "sks-db" = {
         description = "SKS database server";
@@ -94,14 +96,15 @@ in {
         wantedBy = [ "multi-user.target" ];
         preStart = ''
           ln -sfT "${cfg.webroot}" web
-          mkdir -p ${home}/dump
-          ${sksPkg}/bin/sks build ${home}/dump/*.gpg -n 10 -cache 100 || true #*/
+          mkdir -p dump
+          ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
           ${sksPkg}/bin/sks cleandb || true
           ${sksPkg}/bin/sks pbuild -cache 20 -ptree_cache 70 || true
         '';
         serviceConfig = {
-          WorkingDirectory = home;
-          User = user;
+          WorkingDirectory = "~";
+          User = "sks";
+          Group = "sks";
           Restart = "always";
           ExecStart = "${sksPkg}/bin/sks db -hkp_address ${hkpAddress} -hkp_port ${hkpPort}";
         };
