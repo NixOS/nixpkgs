@@ -117,15 +117,14 @@
 
         # the first two cases are the "new" default IIRC
         BIN_NAME_=$(echo $BIN_NAME | sed -e 's/-/_/g')
-        FILES="src/bin/$BIN_NAME_.rs src/bin/$BIN_NAME_/main.rs src/bin/main.rs src/main.rs"
+        FILES=( "src/bin/$BIN_NAME_.rs" "src/bin/$BIN_NAME_/main.rs" "src/bin/main.rs" "src/main.rs" )
 
         if ! [ -e "${libPath}" -o -e src/lib.rs -o -e "src/${libName}.rs" ]; then
           # if this is not a library the following path is also valid
-          FILES="src/$BIN_NAME_.rs $FILES"
+          FILES=( "src/$BIN_NAME_.rs" "''${FILES[@]}" )
         fi
 
-        echo $FILES
-        for file in $FILES;
+        for file in "''${FILES[@]}";
         do
           echo "checking file $file"
           # first file that exists wins
@@ -140,7 +139,7 @@
           exit 1
         fi
       fi
-      build_bin $BIN_NAME $BIN_PATH
+      build_bin "$BIN_NAME" "$BIN_PATH"
     done
 
 
