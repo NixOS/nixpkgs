@@ -17843,6 +17843,8 @@ with pkgs;
 
   nanoblogger = callPackage ../applications/misc/nanoblogger { };
 
+  nanorc = callPackage ../applications/editors/nano/nanorc { };
+
   navipowm = callPackage ../applications/misc/navipowm { };
 
   navit = libsForQt5.callPackage ../applications/misc/navit { };
