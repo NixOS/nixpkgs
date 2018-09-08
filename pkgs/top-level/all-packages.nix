@@ -12282,6 +12282,8 @@ with pkgs;
 
   tclap = callPackage ../development/libraries/tclap {};
 
+  tclcl = callPackage ../development/libraries/tclcl {};
+
   tcllib = callPackage ../development/libraries/tcllib { };
 
   tcltls = callPackage ../development/libraries/tcltls { };
