@@ -15701,6 +15701,8 @@ with pkgs;
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
 
+  bookworm = callPackage ../applications/office/bookworm { };
+
   chromium = callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
     pulseSupport = config.pulseaudio or true;
