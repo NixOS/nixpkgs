@@ -17793,6 +17793,8 @@ with pkgs;
 
   typora = callPackage ../applications/editors/typora { };
 
+  taxi = callPackage ../applications/networking/ftp/taxi { };
+
   librep = callPackage ../development/libraries/librep { };
 
   rep-gtk = callPackage ../development/libraries/rep-gtk { };
