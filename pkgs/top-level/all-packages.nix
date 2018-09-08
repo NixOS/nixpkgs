@@ -8484,8 +8484,6 @@ with pkgs;
 
   nailgun = callPackage ../development/tools/nailgun { };
 
-  nant = callPackage ../development/tools/build-managers/nant { };
-
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
   gn = callPackage ../development/tools/build-managers/gn { };
