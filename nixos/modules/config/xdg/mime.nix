@@ -24,6 +24,7 @@ with lib;
 
     environment.extraSetup = ''
       if [ -w $out/share/mime ]; then
+          mkdir -p $out/share/mime/packages
           XDG_DATA_DIRS=$out/share ${pkgs.shared-mime-info}/bin/update-mime-database -V $out/share/mime > /dev/null
       fi
 
