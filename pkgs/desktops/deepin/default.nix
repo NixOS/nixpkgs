@@ -17,6 +17,7 @@ let
     };
     dtkcore = callPackage ./dtkcore { };
     dtkwidget = callPackage ./dtkwidget { };
+    go-gir-generator = callPackage ./go-gir-generator { };
     qt5dxcb-plugin = callPackage ./qt5dxcb-plugin { };
     qt5integration = callPackage ./qt5integration { };
 
