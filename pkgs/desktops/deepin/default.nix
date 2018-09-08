@@ -10,6 +10,7 @@ let
     deepin-menu = callPackage ./deepin-menu { };
     deepin-mutter = callPackage ./deepin-mutter { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
+    deepin-sound-theme = callPackage ./deepin-sound-theme { };
     deepin-terminal = callPackage ./deepin-terminal {
       inherit (pkgs.gnome3) libgee vte;
       wnck = pkgs.libwnck3;
