@@ -1,12 +1,13 @@
 addGuileLibPath () {
-    if test -d "$1/share/guile/site/2.2"
-    then
-        export GUILE_LOAD_PATH="${GUILE_LOAD_PATH}${GUILE_LOAD_PATH:+:}$1/share/guile/site/2.2"
-        export GUILE_LOAD_COMPILED_PATH="${GUILE_LOAD_COMPILED_PATH}${GUILE_LOAD_COMPILED_PATH:+:}$1/share/guile/site/2.2"
-    elif test -d "$1/share/guile/site"
-    then
-        export GUILE_LOAD_PATH="${GUILE_LOAD_PATH}${GUILE_LOAD_PATH:+:}$1/share/guile/site"
-        export GUILE_LOAD_COMPILED_PATH="${GUILE_LOAD_COMPILED_PATH}${GUILE_LOAD_COMPILED_PATH:+:}$1/share/guile/site"
+    local ver=2.2
+    if [[ -d "$1/share/guile/site/$ver" ]]; then
+        addToSearchPath GUILE_LOAD_PATH "$1/share/guile/site/$ver"
+    elif [[ -d "$1/share/guile/site" ]]; then
+        addToSearchPath GUILE_LOAD_PATH "$1/share/guile/site"
+    fi
+
+    if [[ -d "$1/lib/guile/$ver/site-ccache" ]]; then
+        addToSearchPath GUILE_LOAD_COMPILED_PATH "$1/lib/guile/$ver/site-ccache"
     fi
 }
 

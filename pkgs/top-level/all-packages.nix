@@ -7825,11 +7825,23 @@ with pkgs;
 
   jython = callPackage ../development/interpreters/jython {};
 
+  mkGuileModule = callPackage ../development/guile-modules/mkGuileModule {};
+
   guile-cairo = callPackage ../development/guile-modules/guile-cairo {
     guile = guile_2_0;
   };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
+
+  guile-sqlite3 = callPackage ../development/guile-modules/guile-sqlite3 { };
+
+  guile-json = callPackage ../development/guile-modules/guile-json { };
+
+  guile-ssh = callPackage ../development/guile-modules/guile-ssh { };
+
+  guile-bytestructures = callPackage ../development/guile-modules/guile-bytestructures { };
+
+  guile-git = callPackage ../development/guile-modules/guile-git { };
 
   guile-gnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome2.GConf;
@@ -17744,6 +17756,8 @@ with pkgs;
   pijul = callPackage ../applications/version-management/pijul {};
 
   plank = callPackage ../applications/misc/plank { };
+
+  guix = callPackage ../tools/package-management/guix {};
 
   planner = callPackage ../applications/office/planner { };
 
