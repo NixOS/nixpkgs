@@ -4,7 +4,6 @@
 args @ {config, lib, pkgs}: with args; with pkgs;
 let
   gitBase = callPackage ./git {
-    texinfo = texinfo5;
     svnSupport = false;         # for git-svn support
     guiSupport = false;         # requires tcl/tk
     sendEmailSupport = false;   # requires plenty of perl libraries
