@@ -18279,6 +18279,8 @@ with pkgs;
 
   quirc = callPackage ../tools/graphics/quirc {};
 
+  quilter = callPackage ../applications/editors/quilter { };
+
   quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
   falkon = libsForQt5.callPackage ../applications/networking/browsers/falkon { };
