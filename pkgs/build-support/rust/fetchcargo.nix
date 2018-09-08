@@ -1,5 +1,14 @@
-{ stdenv, cacert, git, rust, cargo-vendor }:
+{ stdenv, cacert, git, rust, cargo-vendor, python3 }:
 { name ? "cargo-deps", src, srcs, patches, sourceRoot, sha256, cargoUpdateHook ? "", writeVendorConfig ? false }:
+let cargo-vendor-normalise = stdenv.mkDerivation {
+  name = "cargo-vendor-normalise";
+  src = ./cargo-vendor-normalise.py;
+  unpackPhase = ":";
+  installPhase = "install -D $src $out/bin/cargo-vendor-normalise";
+  buildInputs = [ (python3.withPackages(ps: [ ps.toml ])) ];
+  preferLocalBuild = true;
+};
+in
 stdenv.mkDerivation {
   name = "${name}-vendor";
   nativeBuildInputs = [ cacert cargo-vendor git rust.cargo ];
@@ -27,7 +36,7 @@ stdenv.mkDerivation {
     cargo vendor $out > config
   '' + stdenv.lib.optionalString writeVendorConfig ''
     mkdir $out/.cargo
-    sed "s|directory = \".*\"|directory = \"./vendor\"|g" config > $out/.cargo/config
+    < config ${cargo-vendor-normalise}/bin/cargo-vendor-normalise > $out/.cargo/config
   '';
 
   outputHashAlgo = "sha256";
