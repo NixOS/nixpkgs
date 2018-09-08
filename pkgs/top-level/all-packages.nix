@@ -17873,6 +17873,8 @@ with pkgs;
     gmime = gmime3;
   };
 
+  notejot = callPackage ../applications/misc/notejot { };
+
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
   muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
