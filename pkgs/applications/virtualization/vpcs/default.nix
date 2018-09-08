@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc, buildPlatform }:
+{ stdenv, fetchurl, glibc }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''(
     cd src
-    ./mk.sh ${buildPlatform.platform.kernelArch}
+    ./mk.sh ${stdenv.buildPlatform.platform.kernelArch}
   )'';
 
   installPhase = ''

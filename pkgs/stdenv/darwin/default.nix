@@ -190,7 +190,6 @@ in rec {
   stage1 = prevStage: let
     persistent = self: super: with prevStage; {
       cmake = super.cmake.override {
-        majorVersion = "3.9";  # FIXME: update ApplicationServices patch
         isBootstrap = true;
         useSharedLibraries = false;
       };
@@ -348,10 +347,10 @@ in rec {
 
       darwin = super.darwin // {
         inherit (darwin) dyld ICU Libsystem libiconv;
-      } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+      } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         inherit (darwin) binutils binutils-unwrapped cctools;
       };
-    } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+    } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
       # Need to get rid of these when cross-compiling.
       inherit binutils binutils-unwrapped;
     };

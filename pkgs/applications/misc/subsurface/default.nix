@@ -4,14 +4,14 @@
 }:
 
 let
-  version = "4.7.5";
+  version = "4.8.1";
 
   libdc = stdenv.mkDerivation rec {
     name = "libdivecomputer-ssrf-${version}";
 
     src = fetchurl {
       url = "https://subsurface-divelog.org/downloads/libdivecomputer-subsurface-branch-${version}.tgz";
-      sha256 = "1xsgnmgc7yb46lflx8ynkbdxg2f6sny6xg6caqgx7rf0x1jmjj4x";
+      sha256 = "1x6z08gfp9jldv7vcsdasjcarns43qns9cm8s9w27n0c2lvchjvy";
     };
 
     nativeBuildInputs = [ autoreconfHook ];
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://subsurface-divelog.org/downloads/Subsurface-${version}.tgz";
-    sha256 = "0qqmnrmj2alr4rc2nqkv8sbdp92xb6j4j468wn6yqvgb23n77b82";
+    sha256 = "0758sw05gjy8sckvaqc0hmbh2kibmzapgp0hlk8rsp1vsldq4vd2";
   };
 
   buildInputs = [

@@ -4,7 +4,7 @@ let
   arch = {
     "x86_64-linux" = "x64";
     "i686-linux" = "i386";
-  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
 
 in stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
     sha256 = {
       "x86_64-linux" = "0041axi9carspkfaxvyirfvsa29zz55al01x90nh93nzxvpvywsz";
       "i686-linux"   = "1ar36lp4f6a1z9i82g3gpak4q4ny09faqxdd59q1pvfzq25ypdhs";
-    }.${stdenv.system};
+    }.${stdenv.hostPlatform.system};
   };
 
   dontStrip = true; # Don't strip, otherwise patching the rpaths breaks

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcre, libiconv }:
+{ stdenv, fetchurl, pcre, libiconv, openssl }:
 
 
 let
@@ -23,8 +23,9 @@ in
       "--enable-agent"
       "--with-libpcre=${pcre.dev}"
       "--with-iconv=${libiconv}"
+      "--with-openssl=${openssl.dev}"
     ];
-    buildInputs = [ pcre libiconv ];
+    buildInputs = [ pcre libiconv openssl ];
 
     meta = with stdenv.lib; {
       inherit branch;

@@ -145,7 +145,10 @@ rec {
   # entries is a list of attribute sets like { name = "name" ; path = "/nix/store/..."; }
   linkFarm = name: entries: runCommand name { preferLocalBuild = true; }
     ("mkdir -p $out; cd $out; \n" +
-      (lib.concatMapStrings (x: "ln -s '${x.path}' '${x.name}';\n") entries));
+      (lib.concatMapStrings (x: ''
+        mkdir -p "$(dirname '${x.name}')"
+        ln -s '${x.path}' '${x.name}'
+      '') entries));
 
 
   # Print an error message if the file with the specified name and

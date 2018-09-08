@@ -1,10 +1,10 @@
 { stdenv, systemd, cryptsetup }:
 
-stdenv.lib.overrideDerivation systemd (p: {
+systemd.overrideAttrs (p: {
   version = p.version;
   name = "systemd-cryptsetup-generator-${p.version}";
 
-  nativeBuildInputs = p.nativeBuildInputs ++ [ cryptsetup ];
+  buildInputs = p.buildInputs ++ [ cryptsetup ];
   outputs = [ "out" ];
 
   buildPhase = ''

@@ -25,7 +25,7 @@
 
 with stdenv.lib;
 
-if ! lists.elem stdenv.system platforms.mesaPlatforms then
+if ! lists.elem stdenv.hostPlatform.system platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "18.1.5";
+  version = "18.1.7";
   branch  = head (splitString "." version);
 in
 
@@ -81,7 +81,7 @@ let self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
-    sha256 = "69dbe6f1a6660386f5beb85d4fcf003ee23023ed7b9a603de84e9a37e8d98dea";
+    sha256 = "655e3b32ce3bdddd5e6e8768596e5d4bdef82d0dd37067c324cc4b2daa207306";
   };
 
   prePatch = "patchShebangs .";
@@ -108,6 +108,7 @@ let self = stdenv.mkDerivation {
     "--with-gallium-drivers=${concatStringsSep "," galliumDrivers}"
     "--with-dri-drivers=${concatStringsSep "," driDrivers}"
     "--with-vulkan-drivers=${concatStringsSep "," vulkanDrivers}"
+    "--enable-texture-float"
     (enableFeature stdenv.isLinux "dri3")
     (enableFeature stdenv.isLinux "nine") # Direct3D in Wine
     "--enable-libglvnd"

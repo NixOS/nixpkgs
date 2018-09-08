@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 let
-  fetch = { version, src ? builtins.getAttr stdenv.system sources, sources ? null }:
+  fetch = { version, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null }:
   {
     inherit version src;
   };

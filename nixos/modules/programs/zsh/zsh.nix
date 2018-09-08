@@ -87,6 +87,19 @@ in
         type = types.bool;
       };
 
+
+      enableGlobalCompInit = mkOption {
+        default = cfg.enableCompletion;
+        description = ''
+          Enable execution of compinit call for all interactive zsh shells.
+
+          This option can be disabled if the user wants to extend its
+          <literal>fpath</literal> and a custom <literal>compinit</literal>
+          call in the local config is required.
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -159,7 +172,7 @@ in
           fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
         done
 
-        ${optionalString cfg.enableCompletion "autoload -U compinit && compinit"}
+        ${optionalString cfg.enableGlobalCompInit "autoload -U compinit && compinit"}
 
         ${cfge.interactiveShellInit}
 

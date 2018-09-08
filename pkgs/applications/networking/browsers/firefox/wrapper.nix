@@ -36,10 +36,10 @@ let
       jre = cfg.jre or false;
       icedtea = cfg.icedtea or false;
       supportsJDK =
-        stdenv.system == "i686-linux" ||
-        stdenv.system == "x86_64-linux" ||
-        stdenv.system == "armv7l-linux" ||
-        stdenv.system == "aarch64-linux";
+        stdenv.hostPlatform.system == "i686-linux" ||
+        stdenv.hostPlatform.system == "x86_64-linux" ||
+        stdenv.hostPlatform.system == "armv7l-linux" ||
+        stdenv.hostPlatform.system == "aarch64-linux";
 
       plugins =
         assert !(jre && icedtea);

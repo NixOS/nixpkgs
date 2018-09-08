@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl, perl, gettext, LocaleGettext }:
+{ stdenv, fetchurl, perl, gettext, LocaleGettext }:
 
 stdenv.mkDerivation rec {
   name = "help2man-1.47.6";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false;                                # target `check' is missing
 
-  patches = if hostPlatform.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
+  patches = if stdenv.hostPlatform.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
 
   # We don't use makeWrapper here because it uses substitutions our
   # bootstrap shell can't handle.
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     cat > $out/bin/help2man <<EOF
     #! $SHELL -e
     export PERL5LIB=\''${PERL5LIB:+:}$gettext_perl
-    ${stdenv.lib.optionalString hostPlatform.isCygwin
+    ${stdenv.lib.optionalString stdenv.hostPlatform.isCygwin
         "export PATH=\''${PATH:+:}${gettext}/bin"}
     exec -a \$0 $out/bin/.help2man-wrapped "\$@"
     EOF

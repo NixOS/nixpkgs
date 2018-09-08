@@ -187,7 +187,15 @@ rec {
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
-          inherit (stdenv) system;
+
+          # The `system` attribute of a derivation has special meaning to Nix.
+          # Derivations set it to choose what sort of machine could be used to
+          # execute the build, The build platform entirely determines this,
+          # indeed more finely than Nix knows or cares about. The `system`
+          # attribute of `buildPlatfom` matches Nix's degree of specificity.
+          # exactly.
+          inherit (stdenv.buildPlatform) system;
+
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
 
@@ -219,6 +227,8 @@ rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
+        } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
+          enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {

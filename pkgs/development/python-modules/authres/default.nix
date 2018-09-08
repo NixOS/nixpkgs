@@ -21,7 +21,7 @@ buildPythonPackage rec {
       Authentication-Results Headers generation and parsing for
       Python/Python3.
     '';
-    homepage = https://launchpad.net/authres;
+    homepage = https://launchpad.net/authentication-results-python;
     license = licenses.bsd3;
     maintainers = with maintainers; [ leenaars ];
   };

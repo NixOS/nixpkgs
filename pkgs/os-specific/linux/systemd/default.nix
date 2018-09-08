@@ -8,7 +8,6 @@
 , ninja, meson, python3Packages, glibcLocales
 , patchelf
 , getent
-, hostPlatform
 , buildPackages
 , withSelinux ? false, libselinux
 , withLibseccomp ? libseccomp.meta.available, libseccomp
@@ -27,8 +26,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "67c553805a9ebee2dce7c3a350b4abd4d7a489c2";
-    sha256 = "114vq71gcddi4qm2hyrj5jsas9599s0h5mg65jfpvxhfyaw54cpv";
+    rev = "21efe60844fda21039c052442076dabcf8643a90";
+    sha256 = "0aqifjsb0kaxnqy5nlmzvyzgfd99lm60k1494lbnnk8ahdh8ab07";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -79,7 +78,7 @@ in stdenv.mkDerivation rec {
     "-Dsystem-gid-max=499"
     # "-Dtime-epoch=1"
 
-    (if stdenv.isAarch32 || stdenv.isAarch64 || !hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
+    (if stdenv.isAarch32 || stdenv.isAarch64 || !stdenv.hostPlatform.isEfi then "-Dgnu-efi=false" else "-Dgnu-efi=true")
     "-Defi-libdir=${toString gnu-efi}/lib"
     "-Defi-includedir=${toString gnu-efi}/include/efi"
     "-Defi-ldsdir=${toString gnu-efi}/lib"

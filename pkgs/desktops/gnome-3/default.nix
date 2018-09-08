@@ -43,7 +43,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) atk glib gobjectIntrospection gspell webkitgtk gtk3 gtkmm3
     libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceview4
     easytag meld orca rhythmbox shotwell gnome-usage
-    clutter clutter-gst clutter-gtk cogl gtkvnc libdazzle;
+    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle;
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
@@ -399,6 +399,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 
+  # TODO: remove this after 18.09 has forked off
+  gconf = throw "gconf is deprecated since 2009 and has been removed from the package set. Use gnome2.GConf instead. For more details see https://github.com/NixOS/nixpkgs/pull/43268";
 } // lib.optionalAttrs (config.allowAliases or true) {
 #### Legacy aliases
 

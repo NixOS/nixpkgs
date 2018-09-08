@@ -7,6 +7,10 @@
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
+  ./config/xdg/autostart.nix
+  ./config/xdg/icons.nix
+  ./config/xdg/menus.nix
+  ./config/xdg/mime.nix
   ./config/gnu.nix
   ./config/i18n.nix
   ./config/iproute2.nix
@@ -250,6 +254,7 @@
   ./services/desktops/zeitgeist.nix
   ./services/development/bloop.nix
   ./services/development/hoogle.nix
+  ./services/development/jupyter/default.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
   ./services/games/factorio.nix
@@ -416,6 +421,7 @@
   ./services/monitoring/graphite.nix
   ./services/monitoring/hdaps.nix
   ./services/monitoring/heapster.nix
+  ./services/monitoring/incron.nix
   ./services/monitoring/longview.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
@@ -614,6 +620,7 @@
   ./services/networking/xl2tpd.nix
   ./services/networking/xrdp.nix
   ./services/networking/zerobin.nix
+  ./services/networking/zeronet.nix
   ./services/networking/zerotierone.nix
   ./services/networking/znc.nix
   ./services/printing/cupsd.nix
@@ -623,6 +630,7 @@
   ./services/scheduling/fcron.nix
   ./services/scheduling/marathon.nix
   ./services/search/elasticsearch.nix
+  ./services/search/elasticsearch-curator.nix
   ./services/search/hound.nix
   ./services/search/kibana.nix
   ./services/search/solr.nix

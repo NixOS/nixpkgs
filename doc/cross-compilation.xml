@@ -30,7 +30,7 @@
  <section xml:id="sec-cross-packaging">
   <title>Packaging in a cross-friendly manner</title>
 
-  <section>
+  <section xml:id="sec-cross-platform-parameters">
    <title>Platform parameters</title>
 
    <para>
@@ -219,7 +219,7 @@
    </variablelist>
   </section>
 
-  <section>
+  <section xml:id="sec-cross-specifying-dependencies">
    <title>Specifying Dependencies</title>
 
    <para>
@@ -304,7 +304,7 @@
    </note>
   </section>
 
-  <section>
+  <section xml:id="sec-cross-cookbook">
    <title>Cross packaging cookbook</title>
 
    <para>
@@ -317,7 +317,7 @@
    </para>
 
    <qandaset>
-    <qandaentry>
+    <qandaentry xml:id="cross-qa-build-c-program-in-build-environment">
      <question>
       <para>
        What if my package's build system needs to build a C program to be run
@@ -331,7 +331,7 @@
       </para>
      </answer>
     </qandaentry>
-    <qandaentry>
+    <qandaentry xml:id="cross-qa-fails-to-find-ar">
      <question>
       <para>
        My package fails to find <command>ar</command>.
@@ -347,7 +347,7 @@
       </para>
      </answer>
     </qandaentry>
-    <qandaentry>
+    <qandaentry xml:id="cross-testsuite-runs-host-code">
      <question>
       <para>
        My package's testsuite needs to run host platform code.

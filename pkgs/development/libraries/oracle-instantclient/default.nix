@@ -14,12 +14,12 @@ let
     sha256 = hash;
   });
 
-  throwSystem = throw "Unsupported system: ${stdenv.system}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   arch = {
     "x86_64-linux" = "linux.x64";
     "x86_64-darwin" = "macos.x64";
-  }."${stdenv.system}" or throwSystem;
+  }."${stdenv.hostPlatform.system}" or throwSystem;
 
   srcs = {
     "x86_64-linux" = [
@@ -32,7 +32,7 @@ let
       (requireSource "sdk" arch version "2" "e0befca9c4e71ebc9f444957ffa70f01aeeec5976ea27c40406471b04c34848b")
       (requireSource "sqlplus" arch version "2" "d147cbb5b2a954fdcb4b642df4f0bd1153fd56e0f56e7fa301601b4f7e2abe0e") ]
       ++ optional odbcSupport (requireSource "odbc" arch version "2" "1805c1ab6c8c5e8df7bdcc35d7f2b94c329ecf4dff9bde55d5f9b159ecd8b64e");
-  }."${stdenv.system}" or throwSystem;
+  }."${stdenv.hostPlatform.system}" or throwSystem;
 
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
 in stdenv.mkDerivation rec {

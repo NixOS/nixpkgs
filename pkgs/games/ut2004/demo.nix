@@ -2,8 +2,8 @@
 
 let
   arch =
-    if stdenv.system == "x86_64-linux" then "amd64"
-    else if stdenv.system == "i686-linux" then "x86"
+    if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
+    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
     else throw "Unsupported architecture";
 
 in stdenv.mkDerivation rec {

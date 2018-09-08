@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "libagent";
-  version = "0.11.3";
+  version = "0.12.0";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "cb6199c3572e1223756465e758fb525e7f406a4808e9d7cfdddf089bec710047";
+    sha256 = "55af1ad2a6c95aef1fc5588c2002c9e54edbb14e248776b64d00628235ceda3e";
   };
 
   buildInputs = [

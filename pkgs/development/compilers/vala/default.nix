@@ -43,41 +43,22 @@ let
   };
 
 in rec {
-
-  vala_0_26 = generic {
-    major   = "0.26";
-    minor   = "2";
-    sha256  = "1i03ds1z5hivqh4nhf3x80fg7n0zd22908w5minkpaan1i1kzw9p";
-  };
-
-  vala_0_28 = generic {
-    major   = "0.28";
-    minor   = "1";
-    sha256  = "0isg327w6rfqqdjja6a8pc3xcdkj7pqrkdhw48bsyxab2fkaw3hw";
-  };
-
-  vala_0_32 = generic {
-    major   = "0.32";
-    minor   = "1";
-    sha256  = "1ab1l44abf9fj1wznzq5956431ia136rl5049cggnk5393jlf3fx";
-  };
-
   vala_0_34 = generic {
     major   = "0.34";
-    minor   = "17";
-    sha256  = "0wd2zxww4z1ys4iqz218lvzjqjjqwsaad4x2by8pcyy43sbr7qp2";
+    minor   = "18";
+    sha256  = "1lhw3ghns059y5d6pdldy5p4yjwlhcls84k892i6qmbhxg34945q";
   };
 
   vala_0_36 = generic {
     major   = "0.36";
-    minor   = "13";
-    sha256  = "0gxz7yisd9vh5d2889p60knaifz5zndgj98zkdfkkaykdfdq4m9k";
+    minor   = "15";
+    sha256  = "11lnwjbhiz2l7g6y1f0jb0s81ymgssinlil3alibzcwmzpk175ix";
   };
 
   vala_0_38 = generic {
     major   = "0.38";
-    minor   = "9";
-    sha256  = "1dh1qacfsc1nr6hxwhn9lqmhnq39rv8gxbapdmj1v65zs96j3fn3";
+    minor   = "10";
+    sha256  = "1rdwwqs973qv225v8b5izcgwvqn56jxgr4pa3wxxbliar3aww5sw";
     extraNativeBuildInputs = [ autoconf ] ++ lib.optional stdenv.isDarwin libtool;
   };
 

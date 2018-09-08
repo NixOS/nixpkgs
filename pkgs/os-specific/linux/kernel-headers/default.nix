@@ -1,9 +1,8 @@
 { stdenvNoCC, lib, buildPackages
-, hostPlatform
 , fetchurl, perl
 }:
 
-assert hostPlatform.isLinux;
+assert stdenvNoCC.hostPlatform.isLinux;
 
 let
   common = { version, sha256, patches ? null }: stdenvNoCC.mkDerivation {
@@ -14,14 +13,14 @@ let
       inherit sha256;
     };
 
-    ARCH = hostPlatform.platform.kernelArch;
+    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch;
 
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl ];
 
-    extraIncludeDirs = lib.optional hostPlatform.isPowerPC ["ppc"];
+    extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
 
     # "patches" array defaults to 'null' to avoid changing hash
     # and causing mass rebuild

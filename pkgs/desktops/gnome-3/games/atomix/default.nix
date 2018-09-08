@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook
+{ stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, python3
 , gettext, gnome3, glib, gtk3, libgnome-games-support, gdk_pixbuf }:
 
 let
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1k8bvwywpvw5f13pw40brk6c3rz2mdz9cd4zhcawg7qdm77dvcvb";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook python3 ];
   buildInputs = [ glib gtk3 gdk_pixbuf libgnome-games-support gnome3.defaultIconTheme ];
 
   postPatch = ''

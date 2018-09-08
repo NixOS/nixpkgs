@@ -1,6 +1,5 @@
 { stdenv, fetchurl
 , pcre, windows ? null
-, buildPlatform, hostPlatform
 , variant ? null
 }:
 
@@ -24,13 +23,13 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
 
-  configureFlags = optional (!hostPlatform.isRiscV) "--enable-jit" ++ [
+  configureFlags = optional (!stdenv.hostPlatform.isRiscV) "--enable-jit" ++ [
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
     ++ optional (variant != null) "--enable-${variant}";
 
-  buildInputs = optional (hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
+  buildInputs = optional (stdenv.hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
 
   # https://bugs.exim.org/show_bug.cgi?id=2173
   patches = [ ./stacksize-detection.patch ];
@@ -39,7 +38,7 @@ in stdenv.mkDerivation rec {
     patchShebangs RunGrepTest
   '';
 
-  doCheck = !(with hostPlatform; isCygwin || isFreeBSD) && hostPlatform == buildPlatform;
+  doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
 

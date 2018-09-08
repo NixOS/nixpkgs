@@ -22,7 +22,7 @@ in
 {
   options.sdImage = {
     imageName = mkOption {
-      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.system}.img";
+      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
       description = ''
         Name of the generated image file.
       '';
@@ -102,7 +102,7 @@ in
         mkdir -p $out/nix-support $out/sd-image
         export img=$out/sd-image/${config.sdImage.imageName}
 
-        echo "${pkgs.stdenv.system}" > $out/nix-support/system
+        echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
         echo "file sd-image $img" >> $out/nix-support/hydra-build-products
 
         # Create the image file sized to fit /boot and /, plus 20M of slack

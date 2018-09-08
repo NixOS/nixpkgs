@@ -91,7 +91,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
     <para>
      When enabled the <literal>iproute2</literal> will copy the files expected
      by ip route (e.g., <filename>rt_tables</filename>) in
-     <filename>/run/iproute2</filename>. This allows to write aliases for
+     <filename>/etc/iproute2</filename>. This allows to write aliases for
      routing tables for instance.
     </para>
    </listitem>
@@ -109,6 +109,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
       <emphasis>Versatile IKE Configuration Interface</emphasis>.
       The deprecated <literal>ipsec</literal> command used in <varname>services.strongswan</varname> is using the legacy
       <link xlink:href="https://github.com/strongswan/strongswan/blob/master/README_LEGACY.md">stroke configuration interface</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The new <varname>services.elasticsearch-curator</varname> service
+      periodically curates or manages, your Elasticsearch indices and snapshots.
     </para>
    </listitem>
   </itemizedlist>
@@ -132,6 +138,50 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
      The deprecated <varname>services.cassandra</varname> module has
      seen a complete rewrite. (See above.)
     </para>
+   </listitem>
+   <listitem>
+    <para>
+     The minimum version of Nix required to evaluate Nixpkgs is now 2.0.
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       For users of NixOS 18.03, NixOS 18.03 defaulted to Nix 2.0, but
+       supported using Nix 1.11 by setting <literal>nix.package =
+       pkgs.nix1;</literal>. If this option is set to a Nix 1.11 package, you
+       will need to either unset the option or upgrade it to Nix 2.0.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of NixOS 17.09, you will first need to upgrade Nix by setting
+       <literal>nix.package = pkgs.nixStable2;</literal> and run
+       <command>nixos-rebuild switch</command> as the <literal>root</literal>
+       user.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of a daemon-less Nix installation on Linux or macOS, you can
+       upgrade Nix by running <command>curl https://nixos.org/nix/install |
+       sh</command>, or prior to doing a channel update, running
+       <command>nix-env -iA nix</command>.
+      </para>
+      <para>
+       If you have already run a channel update and Nix is no longer able to
+       evaluate Nixpkgs, the error message printed should provide adequate
+       directions for upgrading Nix.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of the Nix daemon on macOS, you can upgrade Nix by running
+       <command>sudo -i sh -c 'nix-channel --update &amp;&amp; nix-env -iA
+       nixpkgs.nix'; sudo launchctl stop org.nixos.nix-daemon; sudo launchctl
+       start org.nixos.nix-daemon</command>.
+      </para>
+     </listitem>
+    </itemizedlist>
    </listitem>
    <listitem>
     <para>
@@ -188,6 +238,39 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
     <para>
       <varname>dockerTools.buildImage</varname> now uses <literal>null</literal> as default value for <varname>tag</varname>,
       which indicates that the nix output hash will be used as tag.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The ELK stack: <varname>elasticsearch</varname>, <varname>logstash</varname> and <varname>kibana</varname>
+     has been upgraded from 2.* to 6.3.*.
+     The 2.* versions have been <link xlink:href="https://www.elastic.co/support/eol">unsupported since last year</link>
+     so they have been removed. You can still use the 5.* versions under the names
+     <varname>elasticsearch5</varname>, <varname>logstash5</varname> and
+     <varname>kibana5</varname>.
+    </para>
+    <para>
+     The elastic beats:
+     <varname>filebeat</varname>, <varname>heartbeat</varname>,
+     <varname>metricbeat</varname> and <varname>packetbeat</varname>
+     have had the same treatment: they now target 6.3.* as well.
+     The 5.* versions are available under the names:
+     <varname>filebeat5</varname>, <varname>heartbeat5</varname>,
+     <varname>metricbeat5</varname> and <varname>packetbeat5</varname>
+    </para>
+    <para>
+     The ELK-6.3 stack now comes with
+     <link xlink:href="https://www.elastic.co/products/x-pack/open">X-Pack by default</link>.
+     Since X-Pack is licensed under the
+     <link xlink:href="https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt">Elastic License</link>
+     the ELK packages now have an unfree license. To use them you need to specify
+     <literal>allowUnfree = true;</literal> in your nixpkgs configuration.
+    </para>
+    <para>
+     Fortunately there is also a free variant of the ELK stack without X-Pack.
+     The packages are available under the names:
+     <varname>elasticsearch-oss</varname>, <varname>logstash-oss</varname> and
+     <varname>kibana-oss</varname>.
     </para>
    </listitem>
    <listitem>
@@ -429,6 +512,28 @@ inherit (pkgs.nixos {
   <listitem>
     <para>
       The module option <option>nix.useSandbox</option> is now defaulted to <literal>true</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The config activation script of <literal>nixos-rebuild</literal> now
+      <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemctl.html#Manager%20Lifecycle%20Commands">reloads</link>
+      all user units for each authenticated user.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The default display manager is now LightDM.
+      To use SLiM set <literal>services.xserver.displayManager.slim.enable</literal>
+      to <literal>true</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      NixOS option descriptions are now automatically broken up into individual
+      paragraphs if the text contains two consecutive newlines, so it's no
+      longer necessary to use <code>&lt;/para&gt;&lt;para&gt;</code> to start
+      a new paragraph.
     </para>
   </listitem>
   </itemizedlist>

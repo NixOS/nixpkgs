@@ -1,6 +1,5 @@
 { stdenv, buildPackages
 , fetchurl, zlib, autoreconfHook264
-, hostPlatform, buildPlatform, targetPlatform
 , noSysDirs, gold ? true, bison ? null
 }:
 
@@ -13,7 +12,7 @@ let
   inherit (stdenv.lib) optionals optionalString;
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  targetPrefix = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "${stdenv.targetPlatform.config}-";
 in
 
 stdenv.mkDerivation rec {
@@ -65,14 +64,14 @@ stdenv.mkDerivation rec {
     # be satisfied on aarch64 platform. Add backported fix from bugzilla.
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22764
     ./relax-R_AARCH64_ABS32-R_AARCH64_ABS16-absolute.patch
-  ] ++ stdenv.lib.optional targetPlatform.isiOS ./support-ios.patch;
+  ] ++ stdenv.lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     bison
-  ] ++ stdenv.lib.optionals targetPlatform.isiOS [
+  ] ++ stdenv.lib.optionals stdenv.targetPlatform.isiOS [
     autoreconfHook264
   ];
   buildInputs = [ zlib ];
@@ -94,14 +93,14 @@ stdenv.mkDerivation rec {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = if hostPlatform.isDarwin
+  NIX_CFLAGS_COMPILE = if stdenv.hostPlatform.isDarwin
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
   hardeningDisable = [ "format" ];
 
   # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
 
   configureFlags = [
     "--enable-targets=all" "--enable-64-bit-bfd"
@@ -122,7 +121,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   # else fails with "./sanity.sh: line 36: $out/bin/size: not found"
-  doInstallCheck = buildPlatform == hostPlatform && hostPlatform == targetPlatform;
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform && stdenv.hostPlatform == stdenv.targetPlatform;
 
   enableParallelBuilding = true;
 

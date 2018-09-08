@@ -1,9 +1,8 @@
 { stdenv, lib, buildPackages, makeWrapper, writeText, runCommand
 , CoreServices, ImageIO, CoreGraphics
-, targetPlatform
-, xcodePlatform ? targetPlatform.xcodePlatform or "MacOSX"
-, xcodeVer ? targetPlatform.xcodeVer or "9.4.1"
-, sdkVer ? targetPlatform.sdkVer or "10.10" }:
+, xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
+, xcodeVer ? stdenv.targetPlatform.xcodeVer or "9.4.1"
+, sdkVer ? stdenv.targetPlatform.sdkVer or "10.10" }:
 
 let
 

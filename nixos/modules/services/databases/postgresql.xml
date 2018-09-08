@@ -17,7 +17,7 @@
 
 <para>PostgreSQL is an advanced, free relational database.<!-- MORE --></para>
 
-<section><title>Configuring</title>
+<section xml:id="module-services-postgres-configuring"><title>Configuring</title>
 
 <para>To enable PostgreSQL, add the following to your
 <filename>configuration.nix</filename>:
@@ -60,14 +60,14 @@ alice=>
 </section>
 
 
-<section><title>Upgrading</title>
+<section xml:id="module-services-postgres-upgrading"><title>Upgrading</title>
 
 <para>FIXME: document dump/upgrade/load cycle.</para>
 
 </section>
 
 
-<section><title>Options</title>
+<section xml:id="module-services-postgres-options"><title>Options</title>
 
   <para>A complete list of options for the PostgreSQL module may be found <link linkend="opt-services.postgresql.enable">here</link>.</para>
 

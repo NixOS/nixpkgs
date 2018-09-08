@@ -17,7 +17,7 @@
 <para>FoundationDB (or "FDB") is an open source, distributed, transactional
 key-value store.</para>
 
-<section><title>Configuring and basic setup</title>
+<section xml:id="module-services-foundationdb-configuring"><title>Configuring and basic setup</title>
 
 <para>To enable FoundationDB, add the following to your
 <filename>configuration.nix</filename>:
@@ -133,7 +133,7 @@ corresponding <option>services.foundationdb.logDir</option> as well.</para>
 
 </section>
 
-<section><title>Scaling processes and backup agents</title>
+<section xml:id="module-services-foundationdb-scaling"><title>Scaling processes and backup agents</title>
 
 <para>Scaling the number of server processes is quite easy; simply specify
 <option>services.foundationdb.serverProcesses</option> to be the number of
@@ -151,7 +151,7 @@ available backup processes.</para>
 
 </section>
 
-<section><title>Clustering</title>
+<section xml:id="module-services-foundationdb-clustering"><title>Clustering</title>
 
 <para>FoundationDB on NixOS works similarly to other Linux systems, so this
 section will be brief. Please refer to the full FoundationDB documentation for
@@ -221,7 +221,7 @@ informing all client processes to do the same.</para>
 
 </section>
 
-<section><title>Client connectivity</title>
+<section xml:id="module-services-foundationdb-connectivity"><title>Client connectivity</title>
 
 <para>By default, all clients must use the current
 <command>fdb.cluster</command> file to access a given FoundationDB cluster.
@@ -232,7 +232,7 @@ to a new node in order to connect, if it is not part of the cluster.</para>
 
 </section>
 
-<section><title>Client authorization and TLS</title>
+<section xml:id="module-services-foundationdb-authorization"><title>Client authorization and TLS</title>
 
 <para>By default, any user who can connect to a FoundationDB process with the
 correct cluster configuration can access anything. FoundationDB uses a
@@ -270,7 +270,7 @@ on.</para>
 
 </section>
 
-<section><title>Backups and Disaster Recovery</title>
+<section xml:id="module-services-foundationdb-disaster-recovery"><title>Backups and Disaster Recovery</title>
 
 <para>The usual rules for doing FoundationDB backups apply on NixOS as written
 in the FoundationDB manual. However, one important difference is the security
@@ -316,7 +316,7 @@ $ sudo -u foundationdb fdbbackup status -t default
 
 </section>
 
-<section><title>Known limitations</title>
+<section xml:id="module-services-foundationdb-limitations"><title>Known limitations</title>
 
 <para>The FoundationDB setup for NixOS should currently be considered beta.
 FoundationDB is not new software, but the NixOS compilation and integration has
@@ -333,7 +333,7 @@ only undergone fairly basic testing of all the available functionality.</para>
 
 </section>
 
-<section><title>Options</title>
+<section xml:id="module-services-foundationdb-options"><title>Options</title>
 
 <para>NixOS's FoundationDB module allows you to configure all of the most
 relevant configuration options for <command>fdbmonitor</command>, matching it
@@ -343,7 +343,7 @@ also read the FoundationDB documentation as well.</para>
 
 </section>
 
-<section><title>Full documentation</title>
+<section xml:id="module-services-foundationdb-full-docs"><title>Full documentation</title>
 
 <para>FoundationDB is a complex piece of software, and requires careful
 administration to properly use. Full documentation for administration can be

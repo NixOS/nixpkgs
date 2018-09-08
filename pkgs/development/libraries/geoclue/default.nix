@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, intltool, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
+{ fetchurl, stdenv, fetchpatch, intltool, pkgconfig, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, json-glib, libsoup, libnotify, gdk_pixbuf
 , modemmanager, avahi, glib-networking, wrapGAppsHook, gobjectIntrospection
 , withDemoAgent ? false
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig intltool wrapGAppsHook gobjectIntrospection
     # devdoc
-    gtk-doc docbook_xsl docbook_xml_dtd_412 
+    gtk-doc docbook_xsl docbook_xml_dtd_412
   ];
 
   buildInputs = [
@@ -29,6 +29,14 @@ stdenv.mkDerivation rec {
   ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
   propagatedBuildInputs = [ glib glib-networking ];
+
+  # Whitelist elementary's agent
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/geoclue/geoclue/commit/2b0491e408be1ebcdbe8751bb2637c1acb78f71e.patch";
+      sha256 = "0pac94y55iksk340dlx3gkhb9lrci90mxqqy5fnh1zbjw9bqxfn4";
+    })
+  ];
 
   configureFlags = [
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"

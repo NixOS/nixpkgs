@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "virtlyst-${version}";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "cutelyst";
     repo = "Virtlyst";
     rev = "v${version}";
-    sha256 = "1rqv93dys666wsqbg1lvl3pjl8gpdx3dc3y71m3r8apalgr11ikw";
+    sha256 = "1vgjai34hqppkpl0ryxkyhpm9dsx1chs3bii3wc3h40hl80n6dgy";
   };
 
   nativeBuildInputs = [ cmake pkgconfig autoPatchelfHook ];
