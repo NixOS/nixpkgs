@@ -53,39 +53,60 @@ in {
         type = types.ints.u16;
         description = "HKP port to listen on.";
       };
+
+      webroot = mkOption {
+        type = types.nullOr types.path;
+        default = "${sksPkg.webSamples}/OpenPKG";
+        defaultText = "\${pkgs.sks.webSamples}/OpenPKG";
+        description = ''
+          Source directory (will be symlinked, if not null) for the files the
+          built-in webserver should serve. SKS (''${pkgs.sks.webSamples})
+          provides the following examples: "HTML5", "OpenPKG", and "XHTML+ES".
+          The index file can be named index.html, index.htm, index.xhtm, or
+          index.xhtml. Files with the extensions .css, .es, .js, .jpg, .jpeg,
+          .png, or .gif are supported. Subdirectories and filenames with
+          anything other than alphanumeric characters and the '.' character
+          will be ignored.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ sksPkg ];
-    
-    users.users.sks = {
-      createHome = true;
-      home = cfg.dataDir;
-      isSystemUser = true;
-      shell = "${pkgs.coreutils}/bin/true";
+    users = {
+      users.sks = {
+        isSystemUser = true;
+        description = "SKS user";
+        home = cfg.dataDir;
+        createHome = true;
+        group = "sks";
+        useDefaultShell = true;
+        packages = [ sksPkg pkgs.db ];
+      };
+      groups.sks = { };
     };
 
     systemd.services = let
       hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'" ;
       hkpPort = builtins.toString cfg.hkpPort;
-      home = config.users.users.sks.home;
-      user = config.users.users.sks.name;
     in {
       "sks-db" = {
         description = "SKS database server";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         preStart = ''
-          mkdir -p ${home}/dump
-          ${sksPkg}/bin/sks build ${home}/dump/*.gpg -n 10 -cache 100 || true #*/
+          ${lib.optionalString (cfg.webroot != null)
+            "ln -sfT \"${cfg.webroot}\" web"}
+          mkdir -p dump
+          ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
           ${sksPkg}/bin/sks cleandb || true
           ${sksPkg}/bin/sks pbuild -cache 20 -ptree_cache 70 || true
         '';
         serviceConfig = {
-          WorkingDirectory = home;
-          User = user;
+          WorkingDirectory = "~";
+          User = "sks";
+          Group = "sks";
           Restart = "always";
           ExecStart = "${sksPkg}/bin/sks db -hkp_address ${hkpAddress} -hkp_port ${hkpPort}";
         };
