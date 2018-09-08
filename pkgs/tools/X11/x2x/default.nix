@@ -24,10 +24,10 @@ stdenv.mkDerivation {
     cp x2x.1 $out/man/man1/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Allows the keyboard, mouse on one X display to be used to control another X display";
-    homepage = http://x2x.dottedmag.net;
-    license = "BSD";
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://github.com/dottedmag/x2x;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
   };
 }

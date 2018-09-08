@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , paramiko
+, selectors2
 , lxml
 , libxml2
 , libxslt
@@ -21,7 +22,7 @@ buildPythonPackage rec {
   checkInputs = [ nose rednose ];
 
   propagatedBuildInputs = [
-    paramiko lxml libxml2 libxslt
+    paramiko lxml libxml2 libxslt selectors2
   ];
 
   checkPhase = ''

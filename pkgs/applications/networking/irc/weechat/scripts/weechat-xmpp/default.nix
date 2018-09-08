@@ -25,6 +25,8 @@ stdenv.mkDerivation {
     })
   ];
 
+  passthru.scripts = [ "jabber.py" ];
+
   meta = with stdenv.lib; {
     description = "A fork of the jabber plugin for weechat";
     homepage = "https://github.com/sleduc/weechat-xmpp";
