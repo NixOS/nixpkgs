@@ -55,17 +55,18 @@ in {
       };
 
       webroot = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
         default = "${sksPkg.webSamples}/OpenPKG";
         defaultText = "\${pkgs.sks.webSamples}/OpenPKG";
         description = ''
-	  Source directory (will be symlinked) for the files the built-in
-	  webserver should serve. SKS (''${pkgs.sks.webSamples}) provides the
-	  following examples: "HTML5", "OpenPKG", and "XHTML+ES". The index
-	  file can be named index.html, index.htm, index.xhtm, or index.xhtml.
-	  Files with the extensions .css, .es, .js, .jpg, .jpeg, .png, or .gif
-	  are supported. Subdirectories and filenames with anything other than
-          alphanumeric characters and the '.' character will be ignored.
+          Source directory (will be symlinked, if not null) for the files the
+          built-in webserver should serve. SKS (''${pkgs.sks.webSamples})
+          provides the following examples: "HTML5", "OpenPKG", and "XHTML+ES".
+          The index file can be named index.html, index.htm, index.xhtm, or
+          index.xhtml. Files with the extensions .css, .es, .js, .jpg, .jpeg,
+          .png, or .gif are supported. Subdirectories and filenames with
+          anything other than alphanumeric characters and the '.' character
+          will be ignored.
         '';
       };
     };
@@ -95,7 +96,8 @@ in {
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         preStart = ''
-          ln -sfT "${cfg.webroot}" web
+          ${lib.optionalString (cfg.webroot != null)
+            "ln -sfT \"${cfg.webroot}\" web"}
           mkdir -p dump
           ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
           ${sksPkg}/bin/sks cleandb || true
