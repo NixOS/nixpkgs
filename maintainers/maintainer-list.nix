@@ -3396,6 +3396,11 @@
     github = "relrod";
     name = "Ricky Elrod";
   };
+  renatoGarcia = {
+    email = "fgarcia.renato@gmail.com";
+    github = "renatoGarcia";
+    name = "Renato Garcia";
+  };
   renzo = {
     email = "renzocarbonara@gmail.com";
     github = "k0001";
@@ -3887,6 +3892,11 @@
     email = "florianengel39@gmail.com";
     github = "StillerHarpo";
     name = "Florian Engel";
+  };
+  stites = {
+    email = "sam@stites.io";
+    github = "stites";
+    name = "Sam Stites";
   };
   stumoss = {
     email = "samoss@gmail.com";

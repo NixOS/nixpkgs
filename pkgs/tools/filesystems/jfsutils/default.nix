@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libuuid ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "IBM JFS utilities";
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://jfs.sourceforge.net;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "wireguard-tools-${version}";
-  version = "0.0.20180809";
+  version = "0.0.20180904";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "07sbaignf8l4lndfxypgacaf2qmgyfkv1j5z7kn0cw5mgfsphmkx";
+    sha256 = "0slf6lchzhb2san1hsqnny1sdmxq8rzqwz355f33zsgaj6qh1gmk";
   };
 
   sourceRoot = "source/src/tools";

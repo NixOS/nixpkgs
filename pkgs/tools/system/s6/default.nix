@@ -1,31 +1,21 @@
-{ stdenv, execline, fetchgit, skalibs }:
+{ stdenv, skawarePackages }:
 
-let
+with skawarePackages;
 
-  version = "2.7.1.1";
+buildPackage {
+  pname = "s6";
+  version = "2.7.2.0";
+  sha256 = "02canrzmhr66gi16ldyylk378jlmyfl73vn72ayr12h2wyxgqm5g";
 
-in stdenv.mkDerivation rec {
-
-  name = "s6-${version}";
-
-  src = fetchgit {
-    url = "git://git.skarnet.org/s6";
-    rev = "refs/tags/v${version}";
-    sha256 = "0dncw3h9wc4cgc9q8zjwicgbcqcn6722yhk8g9bvrhs7h4fkfqav";
-  };
+  description = "skarnet.org's small & secure supervision software suite";
 
   # NOTE lib: cannot split lib from bin at the moment,
   # since some parts of lib depend on executables in bin.
   # (the `*_startf` functions in `libs6`)
-
   outputs = [ /*"bin" "lib"*/ "out" "dev" "doc" ];
 
-  dontDisableStatic = true;
-
-  enableParallelBuilding = true;
-
+  # TODO: nsss support
   configureFlags = [
-    "--enable-absolute-paths"
     "--libdir=\${out}/lib"
     "--libexecdir=\${out}/libexec"
     "--dynlibdir=\${out}/lib"
@@ -38,22 +28,15 @@ in stdenv.mkDerivation rec {
     "--with-lib=${execline.lib}/lib"
     "--with-dynlib=${skalibs.lib}/lib"
     "--with-dynlib=${execline.lib}/lib"
-  ]
-  ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
-  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.hostPlatform.system}");
+  ];
 
   postInstall = ''
-    mkdir -p $doc/share/doc/s6/
+    # remove all s6 executables from build directory
+    rm $(find -type f -mindepth 1 -maxdepth 1 -executable)
+    rm libs6.*
+
     mv doc $doc/share/doc/s6/html
     mv examples $doc/share/doc/s6/examples
   '';
-
-  meta = {
-    homepage = http://www.skarnet.org/software/s6/;
-    description = "skarnet.org's small & secure supervision software suite";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney Profpatsch ];
-  };
 
 }
