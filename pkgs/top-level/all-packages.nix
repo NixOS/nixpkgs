@@ -6304,10 +6304,6 @@ with pkgs;
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
-  boo = callPackage ../development/compilers/boo {
-    inherit (gnome2) gtksourceview;
-  };
-
   colm = callPackage ../development/compilers/colm { };
 
   fetchegg = callPackage ../build-support/fetchegg { };
