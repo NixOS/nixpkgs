@@ -41,12 +41,10 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.displayManager.lightdm = {
+    services.xserver.displayManager.slim = {
       enable = true;
-      autoLogin = {
-        enable = true;
-        user = cfg.user;
-      };
+      autoLogin = true;
+      defaultUser = cfg.user;
     };
 
     # lightdm by default doesn't allow auto login for root, which is
