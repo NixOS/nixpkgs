@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ bison flex gperf ncurses pythonPackages.python pythonPackages.wrapPython ];
 
-  hardeningDisable = [ "format" ];
-
   configureFlags = [
     "--enable-frontends=conf,mconf,nconf"
   ];
