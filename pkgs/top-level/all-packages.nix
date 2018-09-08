@@ -22205,6 +22205,8 @@ with pkgs;
 
   thinkfan = callPackage ../tools/system/thinkfan { };
 
+  dell-bios-fan-control = callPackage ../tools/system/dell-bios-fan-control { };
+
   tup = callPackage ../development/tools/build-managers/tup { };
 
   trufflehog = callPackage ../tools/security/trufflehog { };
