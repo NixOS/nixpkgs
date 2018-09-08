@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, bison, flex, gperf, ncurses }:
+{ stdenv, fetchurl, pkgconfig, bison, flex, gperf, ncurses, pythonPackages }:
 
 stdenv.mkDerivation rec {
   basename = "kconfig-frontends";
@@ -11,13 +11,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bison flex gperf ncurses ];
+  buildInputs = [ bison flex gperf ncurses pythonPackages.python pythonPackages.wrapPython ];
 
   hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--enable-frontends=conf,mconf,nconf"
   ];
+
+  postInstall = ''
+    wrapPythonPrograms
+  '';
 
   meta = with stdenv.lib; {
     description = "Out of Linux tree packaging of the kconfig infrastructure";
