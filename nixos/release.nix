@@ -3,6 +3,7 @@ with import ../lib;
 { nixpkgs ? { outPath = cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
+, configuration ? {}
 }:
 
 with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
@@ -52,7 +53,7 @@ let
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
-      modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
+      modules = [ configuration module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
     }).config.system.build.isoImage);
 
 
@@ -63,7 +64,7 @@ let
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
-      modules = [ module versionModule ];
+      modules = [ configuration module versionModule ];
     }).config.system.build.sdImage);
 
 
@@ -76,7 +77,7 @@ let
 
       config = (import lib/eval-config.nix {
         inherit system;
-        modules = [ module versionModule ];
+        modules = [ configuration module versionModule ];
       }).config;
 
       tarball = config.system.build.tarball;
