@@ -101,7 +101,7 @@ rec {
    */
   toINI = {
     # apply transformations (e.g. escapes) to section names
-    mkSectionName ? (name: libStr.escape [ "[" "]" ] name),
+    mkSectionName ? (name: "[" + (libStr.escape [ "[" "]" ] name) + "]"),
     # format a setting line from key and value
     mkKeyValue    ? mkKeyValueDefault {} "="
   }: attrsOfAttrs:
@@ -111,7 +111,7 @@ rec {
           libStr.concatStringsSep sep
             (libAttr.mapAttrsToList mapFn attrs);
         mkSection = sectName: sectValues: ''
-          [${mkSectionName sectName}]
+          ${mkSectionName sectName}
         '' + toKeyValue { inherit mkKeyValue; } sectValues;
     in
       # map input to ini sections
