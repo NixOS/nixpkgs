@@ -16853,6 +16853,8 @@ with pkgs;
     inherit (gnome2) gnome_python;
   };
 
+  hashit = callPackage ../tools/misc/hashit { };
+
   hello = callPackage ../applications/misc/hello { };
   hello-unfree = callPackage ../applications/misc/hello-unfree { };
 
