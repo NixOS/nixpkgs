@@ -1,21 +1,24 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qtbase, libGLU_combined
+{ stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU_combined
 , freeglut ? null, openal ? null, SDL2 ? null }:
 
 stdenv.mkDerivation rec {
   name = "yabause-${version}";
-  # 0.9.15 only works with OpenGL 3.2 or later:
-  # https://github.com/Yabause/yabause/issues/349
-  version = "0.9.14";
+  version = "0.9.15";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/yabause/releases/${version}/${name}.tar.gz";
-    sha256 = "0nkpvnr599g0i2mf19sjvw5m0rrvixdgz2snav4qwvzgfc435rkm";
+    sha256 = "1cn2rjjb7d9pkr4g5bqz55vd4pzyb7hg94cfmixjkzzkw0zw8d23";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qtbase libGLU_combined freeglut openal SDL2 ];
+  buildInputs = [ qtbase qt5.qtmultimedia libGLU_combined freeglut openal SDL2 ];
 
-  patches = [ ./emu-compatibility.com.patch ./linkage-rwx-linux-elf.patch ];
+  patches = [
+    ./linkage-rwx-linux-elf.patch
+    # Fixes derived from
+    # https://github.com/Yabause/yabause/commit/06a816c032c6f7fd79ced6e594dd4b33571a0e73
+    ./0001-Fixes-for-Qt-5.11-upgrade.patch
+  ];
 
   cmakeFlags = [
     "-DYAB_NETWORK=ON"
