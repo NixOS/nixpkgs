@@ -46,10 +46,6 @@ stdenv.mkDerivation rec {
     # The following patches implement certain environment variables in GDM which are set by
     # the gdm configuration module (nixos/modules/services/x11/display-managers/gdm.nix).
 
-    # Look for session definition files in the directory specified by GDM_SESSIONS_DIR.
-    ./sessions_dir.patch
-
-    # Allow specifying X server arguments with GDM_X_SERVER_EXTRA_ARGS.
     ./gdm-x-session_extra_args.patch
 
     # Allow specifying a wrapper for running the session command.
