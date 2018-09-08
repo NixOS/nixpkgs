@@ -5,8 +5,6 @@
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin
 , flashplayerFix ? false
-, src ? null
-, version ? null
 }:
 
 let
@@ -34,9 +32,6 @@ qtModule {
   ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ cmake ];
 
   cmakeFlags = optionals (lib.versionAtLeast qtbase.version "5.11.0") [ "-DPORT=Qt" ];
-
-  inherit src;
-  inherit version;
 
   __impureHostDeps = optionals (stdenv.isDarwin) [
     "/usr/lib/libicucore.dylib"
