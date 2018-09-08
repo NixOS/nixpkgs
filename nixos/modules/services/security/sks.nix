@@ -27,6 +27,20 @@ in
         ";
       };
 
+      dataDir = mkOption {
+        type = types.path;
+        default = "/var/db/sks";
+        example = "/var/lib/sks";
+        # TODO: The default might change to "/var/lib/sks" as this is more
+        # common. There's also https://github.com/NixOS/nixpkgs/issues/26256
+        # and "/var/db" is not FHS compliant (seems to come from BSD).
+        description = ''
+          Data directory (-basedir) for SKS, where the database and all
+          configuration files are located (e.g. KDB, PTree, membership and
+          sksconf).
+        '';
+      };
+
       hkpAddress = mkOption {
         default = [ "127.0.0.1" "::1" ];
         type = types.listOf types.str;
@@ -51,7 +65,7 @@ in
     
     users.users.sks = {
       createHome = true;
-      home = "/var/db/sks";
+      home = cfg.dataDir;
       isSystemUser = true;
       shell = "${pkgs.coreutils}/bin/true";
     };
