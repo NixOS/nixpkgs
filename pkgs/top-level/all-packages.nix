@@ -4523,6 +4523,8 @@ with pkgs;
 
   patchutils = callPackage ../tools/text/patchutils { };
 
+  patchwork = callPackage ../applications/networking/scuttlebutt/patchwork { };
+
   parted = callPackage ../tools/misc/parted { };
 
   pell = callPackage ../applications/misc/pell { };
