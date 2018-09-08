@@ -17,6 +17,7 @@ let
     };
     dtkcore = callPackage ./dtkcore { };
     dtkwidget = callPackage ./dtkwidget { };
+    go-dbus-factory = callPackage ./go-dbus-factory { };
     go-dbus-generator = callPackage ./go-dbus-generator { };
     go-gir-generator = callPackage ./go-gir-generator { };
     go-lib = callPackage ./go-lib { };
