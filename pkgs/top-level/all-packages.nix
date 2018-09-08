@@ -19146,6 +19146,8 @@ with pkgs;
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
+  vocal = callPackage ../applications/audio/vocal { };
+
   vogl = libsForQt5.callPackage ../development/tools/vogl { };
 
   volnoti = callPackage ../applications/misc/volnoti { };
