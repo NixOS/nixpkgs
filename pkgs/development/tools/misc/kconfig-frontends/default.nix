@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   basename = "kconfig-frontends";
-  version = "3.12.0.0";
+  version = "4.11.0.1";
   name = "${basename}-${version}";
 
   src = fetchurl {
-    sha256 = "01zlph9bq2xzznlpmfpn0zrmhf2iqw02yh1q7g7adgkl5jk1a9pa";
+    sha256 = "1xircdw3k7aaz29snf96q2fby1cs48bidz5l1kkj0a5gbivw31i3";
     url = "http://ymorin.is-a-geek.org/download/${basename}/${name}.tar.xz";
   };
 
