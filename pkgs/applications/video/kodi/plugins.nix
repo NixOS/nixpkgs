@@ -181,26 +181,6 @@ let self = rec {
     // (mkController "ps")
     // (mkController "snes");
 
-  exodus = mkKodiPlugin rec {
-
-    plugin = "exodus";
-    namespace = "plugin.video.exodus";
-    version = "3.1.13";
-
-    src = fetchurl {
-      url = "https://offshoregit.com/${plugin}/${namespace}/${namespace}-${version}.zip";
-      sha256 = "1zyay7cinljxmpzngzlrr4pnk2a7z9wwfdcsk6a4p416iglyggdj";
-    };
-
-    buildInputs = [ unzip ];
-
-    meta = {
-      description = "A streaming plugin for Kodi";
-      platforms = platforms.all;
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  };
-
   hyper-launcher = let
     pname = "hyper-launcher";
     version = "1.5.2";
