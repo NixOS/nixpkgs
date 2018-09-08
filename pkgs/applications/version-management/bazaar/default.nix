@@ -27,9 +27,10 @@ python2Packages.buildPythonApplication rec {
       --subst-var-by certPath /etc/ssl/certs/ca-certificates.crt
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://bazaar-vcs.org/;
     description = "A distributed version control system that Just Works";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2Plus;
   };
 }
