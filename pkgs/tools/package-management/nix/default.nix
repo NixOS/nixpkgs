@@ -153,6 +153,11 @@ in rec {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
       sha256 = "5d22dad058d5c800d65a115f919da22938c50dd6ba98c5e3a183172d149840a4";
     };
+  }).overrideAttrs (super: {
+   patches = [(fetchpatch {
+     url = "https://github.com/NixOS/nix/commit/4b279a099f19bd13a98fa2ae519c4aa263bb6b6e.patch";
+     sha256 = "0sisavs3x2p37hrmhnhvhh2rzb0qyjvvd4y0azk25329wylqnw88";
+   })];
   }) // { perl-bindings = perl-bindings {
     nix = nixStable;
     needsBoost = true;
