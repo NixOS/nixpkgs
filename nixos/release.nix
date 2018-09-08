@@ -95,16 +95,19 @@ let
 
   buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
-    modules = [ module versionModule ] ++ singleton
+    modules = [ configuration module versionModule ] ++ singleton
       ({ ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
       });
   }).config));
 
-  makeNetboot = config:
+  makeNetboot = { module, system, ... }:
     let
-      configEvaled = import lib/eval-config.nix config;
+      configEvaled = import lib/eval-config.nix {
+        inherit system;
+        modules = [ module versionModule ];
+      };
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
     in
@@ -139,11 +142,8 @@ in rec {
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
   netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+    module = ./modules/installer/netboot/netboot-minimal.nix;
     inherit system;
-    modules = [
-      ./modules/installer/netboot/netboot-minimal.nix
-      versionModule
-    ];
   });
 
   iso_minimal = forAllSystems (system: makeIso {
