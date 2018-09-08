@@ -11139,37 +11139,32 @@ with pkgs;
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and libGL.so/libEGL.so/... to link agains them
-  libGL = libGLDarwinOr mesa_noglu.stubs;
+  libGL = mesa_noglu.stubs;
 
   # Default libGLU
-  libGLU = libGLDarwinOr mesa_glu;
+  libGLU = mesa_glu;
 
   # Combined derivation, contains both libGL and libGLU
   # Please, avoid using this attribute.  It was meant as transitional hack
   # for packages that assume that libGLU and libGL live in the same prefix.
   # libGLU_combined propagates both libGL and libGLU
-  libGLU_combined = libGLDarwinOr (buildEnv {
+  libGLU_combined = buildEnv {
     name = "libGLU-combined";
     paths = [ libGL libGLU ];
     extraOutputsToInstall = [ "dev" ];
-  });
+  };
 
   # Default derivation with libGL.so.1 to link into /run/opengl-drivers (if need)
-  libGL_driver = libGLDarwinOr mesa_drivers;
+  libGL_driver = mesa_drivers;
 
   libGLSupported = lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms;
 
-  libGLDarwin = callPackage ../development/libraries/mesa-darwin {
-    inherit (darwin.apple_sdk.frameworks) OpenGL;
-    inherit (darwin.apple_sdk.libs) Xplugin;
-    inherit (darwin) apple_sdk;
-  };
-
-  libGLDarwinOr = alternative: if stdenv.isDarwin then libGLDarwin else alternative;
-
   mesa_noglu = callPackage ../development/libraries/mesa {
     llvmPackages = llvmPackages_6;
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+    inherit (darwin.apple_sdk.libs) Xplugin;
   };
+  mesa = mesa_noglu;
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu { };
 
