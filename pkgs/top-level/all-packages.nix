@@ -17805,6 +17805,8 @@ with pkgs;
 
   notion = callPackage ../applications/window-managers/notion { };
 
+  ns-2 = callPackage ../applications/science/networking/ns2 { };
+
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
   oroborus = callPackage ../applications/window-managers/oroborus {};
