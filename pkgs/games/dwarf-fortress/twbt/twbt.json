@@ -25,8 +25,8 @@
     "prerelease": true
   },
   "0.44.12": {
-    "twbtRelease": "6.53",
-    "sha256": "05qc9x4zm0pamwg7j12j0084dq2sj7825fhd3l0wxfinphzk3was",
+    "twbtRelease": "6.54",
+    "sha256": "10gfd6vv0vk4v1r5hjbz7vf1zqys06dsad695gysc7fbcik2dakh",
     "prerelease": false
   }
 }
