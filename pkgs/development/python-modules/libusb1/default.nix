@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "a49917a2262cf7134396f6720c8be011f14aabfc5cdc53f880cc672c0f39d271";
   };
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = ''
     substituteInPlace usb1/libusb1.py --replace \
       "ctypes.util.find_library(base_name)" \
       "'${libusb1}/lib/libusb-1.0${stdenv.hostPlatform.extensions.sharedLibrary}'"
