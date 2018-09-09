@@ -6045,9 +6045,7 @@ with pkgs;
 
   wireguard-go = callPackage ../tools/networking/wireguard-go { };
 
-  wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf {
-    overrideDerivation = lib.overrideDerivation;
-  };
+  wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf { };
 
   wml = callPackage ../development/web/wml { };
 
