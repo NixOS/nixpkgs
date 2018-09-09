@@ -66,11 +66,16 @@
  # This is a what we do for non-la files. We assume that we are on an
  # ELF-like system where ldd exists and the soname extracted with ldd is
  # a filename that can be opened with dlopen().
-@@ -113,13 +119,13 @@
-         # Use absolute paths on OS X to conform to how libraries are usually
-         # referenced on OS X systems, and file names everywhere else.
-         basename = platform.system() != 'Darwin'
+@@ -110,16 +116,15 @@ def _resolve_non_libtool(options, binary, libraries):
+         if isinstance(output, bytes):
+             output = output.decode("utf-8", "replace")
+ 
+-        # Use absolute paths on OS X to conform to how libraries are usually
+-        # referenced on OS X systems, and file names everywhere else.
+-        basename = platform.system() != 'Darwin'
 -        return resolve_from_ldd_output(libraries, output, basename=basename)
++        # Never strip away absolute paths in Nix
++        basename = False
 +        return resolve_from_ldd_output(libraries, output, basename=basename, fallback_libpath=options.fallback_libpath)
  
  
@@ -83,7 +88,7 @@
  
      shlibs = []
      for line in output.splitlines():
-@@ -129,11 +135,14 @@
+@@ -129,11 +134,14 @@ def resolve_from_ldd_output(libraries, output, basename=False):
          if line.endswith(':'):
              continue
          for word in line.split():
