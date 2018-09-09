@@ -1,10 +1,11 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch
+{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch
 , flask, flask_wtf, flask_testing, ldap
 , mock, nose }:
 
 buildPythonPackage rec {
   pname = "flask-ldap-login";
   version = "0.3.4";
+  disabled = isPy3k;
 
   src = fetchFromGitHub {
     owner = "ContinuumIO";
