@@ -1,14 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch
 , flask, flask_wtf, flask_testing, ldap
 , mock, nose }:
 
 buildPythonPackage rec {
   pname = "flask-ldap-login";
-  version = "0.3.0";
+  version = "0.3.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "085rik7q8xrp5g95346p6jcp9m2yr8kamwb2kbiw4q0b0fpnnlgq";
+  src = fetchFromGitHub {
+    owner = "ContinuumIO";
+    repo = "flask-ldap-login";
+    rev = version;
+    sha256 = "1l6zahqhwn5g9fmhlvjv80288b5h2fk5mssp7amdkw5ysk570wzp";
   };
 
   patches = [
