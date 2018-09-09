@@ -11120,7 +11120,9 @@ with pkgs;
 
   lzo = callPackage ../development/libraries/lzo { };
 
-  mapnik = callPackage ../development/libraries/mapnik { };
+  mapnik = callPackage ../development/libraries/mapnik {
+    boost = boost.override { enablePython = true; };
+  };
 
   marisa = callPackage ../development/libraries/marisa {};
 
