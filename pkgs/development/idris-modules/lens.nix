@@ -1,4 +1,5 @@
-{ build-idris-package
+{ stdenv
+, build-idris-package
 , fetchFromGitHub
 , bifunctors
 , lib
@@ -21,5 +22,6 @@ build-idris-package  {
     homepage = https://github.com/HuwCampbell/idris-lens;
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
+    broken = stdenv.isDarwin;
   };
 }
