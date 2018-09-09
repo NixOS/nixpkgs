@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, perl, python, ruby, bison, gperf, flex
-, pkgconfig, which, gettext, gobjectIntrospection
+, pkgconfig, which, gettext, gobjectIntrospection, pruneLibtoolFiles
 , gtk2, gtk3, wayland, libwebp, enchant, sqlite
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, xorg
 , gst-plugins-base, libobjc
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     perl python ruby bison gperf flex
-    pkgconfig which gettext gobjectIntrospection
+    pkgconfig which gettext gobjectIntrospection pruneLibtoolFiles
   ];
 
   buildInputs = [
