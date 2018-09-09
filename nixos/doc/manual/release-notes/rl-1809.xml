@@ -551,27 +551,6 @@ inherit (pkgs.nixos {
       <literal>stdenv.buildPlatform</literal>, <literal>stdenv.hostPlatform</literal>, and <literal>stdenv.targetPlatform</literal>.
     </para>
   </listitem>
-  <listitem>
-    <para>
-	    The <literal>buildRustPackage</literal> function got the new
-	    argument <literal>useRealVendorConfig</literal>, currently
-	    defaulting to <literal>false</literal>. Setting it to
-	    <literal>true</literal> necessates the recomputation of the
-	    <literal>cargoSha256</literal> and fixes a problem with
-	    dependencies, that were fetched from a non-crates.io source.
-	    Eventually only the <literal>true</literal> behaviour will be kept,
-	    so please set it explicitly to <literal>true</literal> and
-	    recompute your <literal>cargoSha256</literal>, so that we can
-	    migrate to the new behaviour and deprecate the option.
-    </para>
-    <para>
-	    While recomputing <literal>cargoSha256</literal>, it is important
-	    to first invalidate the hash (e.g. by changing a digit), so that
-	    Nix actually rebuilds the fixed-output derivation. Otherwise this
-	    could lead to hard to detect errors, where a package seemingly
-	    builds on your computer, but breaks on others!
-    </para>
-  </listitem>
   </itemizedlist>
  </section>
 </section>
