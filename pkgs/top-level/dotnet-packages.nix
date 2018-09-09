@@ -895,7 +895,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
        rm -rvf Tools
     '';
 
-    xBuildFiles = [ "Src/Newtonsoft.Json.sln" ];
+    xBuildFiles = [ "Src/Newtonsoft.Json/Newtonsoft.Json.csproj" ];
     outputFiles = [ "Src/Newtonsoft.Json/bin/Release/Net45/*" ];
 
     meta = {
