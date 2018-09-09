@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, libusb1 }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, libusb1, pytest }:
 
 buildPythonPackage rec {
   pname = "libusb1";
@@ -17,8 +17,12 @@ buildPythonPackage rec {
 
   buildInputs = [ libusb1 ];
 
+  checkInputs = [ pytest ];
+
   checkPhase = ''
-    ${python.interpreter} -m usb1.testUSB1
+    # USBPollerThread is unreliable. Let's not test it.
+    # See: https://github.com/vpelletier/python-libusb1/issues/16
+    py.test -k 'not testUSBPollerThreadExit' usb1/testUSB1.py
   '';
 
   meta = with stdenv.lib; {
