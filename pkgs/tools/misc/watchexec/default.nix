@@ -7,7 +7,7 @@ buildRustPackage rec {
   version = "1.9.0";
   buildInputs = stdenv.lib.optional stdenv.isDarwin [ CoreServices ];
 
-  preConfigure = ''
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
   '';
 
