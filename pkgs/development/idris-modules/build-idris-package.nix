@@ -1,5 +1,5 @@
 # Build an idris package
-{ stdenv, lib, idrisPackages, gmp }:
+{ gccStdenv, lib, idrisPackages, gmp }:
   { idrisDeps ? []
   , noPrelude ? false
   , noBase ? false
@@ -19,7 +19,8 @@ let
     };
   };
 in
-stdenv.mkDerivation ({
+# We use gcc stdenv to get gcc calls on Darwin to work
+gccStdenv.mkDerivation ({
   name = "idris-${name}-${version}";
 
   buildInputs = [ idris-with-packages gmp ] ++ extraBuildInputs;
