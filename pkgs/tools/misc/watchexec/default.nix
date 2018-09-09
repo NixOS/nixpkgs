@@ -4,7 +4,7 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "watchexec-${version}";
-  version = "1.8.6";
+  version = "1.9.0";
   buildInputs = stdenv.lib.optional stdenv.isDarwin [ CoreServices ];
 
   preConfigure = ''
@@ -12,9 +12,9 @@ buildRustPackage rec {
   '';
 
   src = fetchFromGitHub {
-    owner = "mattgreen";
+    owner = "watchexec";
     repo = "watchexec";
-    rev = "${version}";
+    rev = version;
     sha256 = "1jib51dbr6s1iq21inm2xfsjnz1730nyd3af1x977iqivmwdisax";
   };
 
@@ -22,9 +22,9 @@ buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Executes commands in response to file modifications";
-    homepage = https://github.com/mattgreen/watchexec;
+    homepage = https://github.com/watchexec/watchexec;
     license = with licenses; [ asl20 ];
     maintainers = [ maintainers.michalrus ];
-    platforms = [ "x86_64-linux" "platforms.unix"];
+    platforms = platforms.linux;
   };
 }
