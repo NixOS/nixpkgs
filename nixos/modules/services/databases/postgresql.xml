@@ -214,7 +214,7 @@ linkend="opt-services.postgresql.enable">here</link>.</para>
 
 </section>
 
-<section><title>Authoring new extensions</title>
+<section xml:id="module-services-postgres-new-extensions"><title>Authoring new extensions</title>
 
 <para>FIXME: document how to write an extension</para>
 
