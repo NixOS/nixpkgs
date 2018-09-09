@@ -49,7 +49,7 @@ let
     export HOME=.
 
     # "external" because https://github.com/facebook/pyre-check/pull/8/files
-    sed "s/%VERSION%/external ${pyre-version}/" Makefile.template > Makefile
+    cp Makefile.template Makefile
     sed "s/%VERSION%/external/" dune.in > dune
 
     cp ${versionFile} ./scripts/generate-version-number.sh
