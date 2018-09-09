@@ -179,6 +179,18 @@ Sample output2:
     ]
 
 
+## Adding new plugins to nixpkgs
+
+In `pkgs/misc/vim-plugins/vim-plugin-names` we store the plugin names
+for all vim plugins we automatically generate plugins for.
+The format of this file `github username/github repository`:
+For example https://github.com/scrooloose/nerdtree becomes `scrooloose/nerdtree`.
+After adding your plugin to this file run the `./update.py` in the same folder.
+This will updated a file called `generated.nix` and make your plugin accessible in the
+`vimPlugins` attribute set (`vimPlugins.nerdtree` in our example).
+If additional steps to the build process of the plugin are required, add an
+override to the `pkgs/misc/vim-plugins/default.nix` in the same directory.
+
 ## Important repositories
 
 - [vim-pi](https://bitbucket.org/vimcommunity/vim-pi) is a plugin repository
