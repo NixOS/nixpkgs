@@ -14,11 +14,12 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner  = "apple";
     repo   = "swift-corelibs-foundation";
-    rev    = "85c640e7ce50e6ca61a134c72270e214bc63fdba"; # https://github.com/apple/swift-corelibs-foundation/pull/1686
-    sha256 = "0z2v278wy7jh0c92g1dszd8hj8naxari660sqx6yab5dwapd46qc";
+    rev    = "71aaba20e1450a82c516af1342fe23268e15de0a";
+    sha256 = "17kpql0f27xxz4jjw84vpas5f5sn4vdqwv10g151rc3rswbwln1z";
   };
 
-  buildInputs = [ ninja python libxml2 objc4 ICU curl ];
+  nativeBuildInputs = [ ninja python ];
+  buildInputs = [ libxml2 objc4 ICU curl ];
 
   sourceRoot = "source/CoreFoundation";
 
@@ -31,8 +32,7 @@ in stdenv.mkDerivation {
     # 3. Use the legit CoreFoundation.h, not the one telling you not to use it because of Swift
     substituteInPlace build.py \
       --replace "cf.CFLAGS += '-DDEPLOYMENT" '#' \
-      --replace "cf.LDFLAGS += '-ldispatch" '#' \
-      --replace "Base.subproj/SwiftRuntime/CoreFoundation.h" 'Base.subproj/CoreFoundation.h'
+      --replace "cf.LDFLAGS += '-ldispatch" '#'
 
     # Includes xpc for some initialization routine that they don't define anyway, so no harm here
     substituteInPlace PlugIn.subproj/CFBundlePriv.h \
@@ -53,8 +53,11 @@ in stdenv.mkDerivation {
 
   BUILD_DIR = "./Build";
   CFLAGS = "-DINCLUDE_OBJC -I${libxml2.dev}/include/libxml2"; # They seem to assume we include objc in some places and not in others, make a PR; also not sure why but libxml2 include path isn't getting picked up from buildInputs
-  LDFLAGS = "-install_name ${placeholder "out"}/Frameworks/CoreFoundation.framework/CoreFoundation -current_version 1234.56.7 -compatibility_version 150.0.0 -init ___CFInitialize";
-  configurePhase = "../configure --sysroot unused";
+  
+  # I'm guessing at the version here. https://github.com/apple/swift-corelibs-foundation/commit/df3ec55fe6c162d590a7653d89ad669c2b9716b1 imported "high sierra"
+  # and this version is a version from there. No idea how accurate it is.
+  LDFLAGS = "-current_version 1454.90.0 -compatibility_version 150.0.0 -init ___CFInitialize";
+  configurePhase = "../configure release --sysroot UNUSED";
 
   enableParallelBuilding = true;
   buildPhase = "ninja -j $NIX_BUILD_CORES";
@@ -66,6 +69,12 @@ in stdenv.mkDerivation {
     mkdir -p $base/Versions/A/{Headers,PrivateHeaders,Modules}
 
     cp ./Build/CoreFoundation/libCoreFoundation.dylib $base/Versions/A/CoreFoundation
+
+    # Note that this could easily live in the ldflags above as `-install_name @rpath/...` but
+    # https://github.com/NixOS/nixpkgs/issues/46434 thwarts that, so for now I'm hacking it up
+    # after the fact.
+    install_name_tool -id '@rpath/CoreFoundation.framework/Versions/A/CoreFoundation' $base/Versions/A/CoreFoundation
+
     cp ./Build/CoreFoundation/usr/include/CoreFoundation/*.h $base/Versions/A/Headers
     cp ./Build/CoreFoundation/usr/include/CoreFoundation/module.modulemap $base/Versions/A/Modules
 
