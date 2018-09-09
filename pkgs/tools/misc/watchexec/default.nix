@@ -25,6 +25,6 @@ buildRustPackage rec {
     homepage = https://github.com/watchexec/watchexec;
     license = with licenses; [ asl20 ];
     maintainers = [ maintainers.michalrus ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
