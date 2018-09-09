@@ -77,7 +77,10 @@ stdenv.mkDerivation rec {
     "--disable-credential-storage"
   ];
 
-  NIX_CFLAGS_COMPILE = "-DU_NOEXCEPT=";
+  NIX_CFLAGS_COMPILE = [
+    "-DU_NOEXCEPT="
+    "-Wno-expansion-to-defined"
+  ];
 
   dontAddDisableDepTrack = true;
 
