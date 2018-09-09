@@ -14,17 +14,17 @@ let
   nixSyntaxHighlight = fetchFromGitHub {
     owner = "seitz";
     repo = "nanonix";
-    rev = "7483fd8b79f1f3f2179dbbd46aa400df4320ba10";
-    sha256 = "10pv75kfrgnziz8sr83hdbb0c3klm2fmsdw3i5cpqqf5va1fzb8h";
+    rev = "bf8d898efaa10dce3f7972ff765b58c353b4b4ab";
+    sha256 = "0773s5iz8aw9npgyasb0r2ybp6gvy2s9sq51az8w7h52bzn5blnn";
   };
 
 in stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.9.8";
+  version = "3.0";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "122lm0z97wk3mgnbn8m4d769d4j9rxyc9z7s89xd4gsdp8qsrpn2";
+    sha256 = "1868hg9s584fwjrh0fzdrixmxc2qhw520z4q5iv68kjiajivr9g0";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
