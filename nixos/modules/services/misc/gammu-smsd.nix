@@ -232,7 +232,7 @@ in {
         ''
       + (let execPsql = extraArgs: concatStringsSep " " [
           (optionalString (sql.password != null) "PGPASSWORD=${sql.password}")
-          "${config.services.postgresql.package}/bin/psql"
+          "${config.services.postgresql.postgresqlPackage}/bin/psql"
           (optionalString (sql.host != null) "-h ${sql.host}")
           (optionalString (sql.user != null) "-U ${sql.user}")
           "$extraArgs"

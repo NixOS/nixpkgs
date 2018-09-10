@@ -332,7 +332,7 @@ let
     'logtimezone' => '${tz}',
   '';
 
-  postgresql = serverInfo.fullConfig.services.postgresql.package;
+  postgresql = serverInfo.fullConfig.services.postgresql.postgresqlPackage;
 
   setupDb = pkgs.writeScript "setup-owncloud-db" ''
     #!${pkgs.runtimeShell}

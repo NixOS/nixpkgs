@@ -2,7 +2,7 @@
 
 let
   cfg = config.services.meguca;
-  postgres = config.services.postgresql;
+  pg = config.services.postgresql;
 in with lib; {
   options.services.meguca = {
     enable = mkEnableOption "meguca";
@@ -108,11 +108,11 @@ in with lib; {
         chown -R meguca:meguca ${escapeShellArg cfg.dataDir}
 
         # Ensure the database is correct or create it
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createuser \
+        ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.postgresqlPackage}/bin/createuser \
           -SDR meguca || true
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createdb \
+        ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.postgresqlPackage}/bin/createdb \
           -T template0 -E UTF8 -O meguca meguca || true
-        ${pkgs.sudo}/bin/sudo -u meguca ${postgres.package}/bin/psql \
+        ${pkgs.sudo}/bin/sudo -u meguca ${pg.postgresqlPackage}/bin/psql \
           -c "ALTER ROLE meguca WITH PASSWORD '$(cat ${escapeShellArg cfg.passwordFile})';" || true
       '';
 

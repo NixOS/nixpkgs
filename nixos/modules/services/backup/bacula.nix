@@ -370,8 +370,8 @@ in {
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       preStart = ''
         if ! test -e "${libDir}/db-created"; then
-            ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole bacula
-            #${pkgs.postgresql}/bin/createdb --owner bacula bacula
+            ${config.services.postgresql.postgresqlPackage}/bin/createuser --no-superuser --no-createdb --no-createrole bacula
+            #${config.services.postgresql.postgresqlPackage}/bin/createdb --owner bacula bacula
 
             # populate DB
             ${pkgs.bacula}/etc/create_bacula_database postgresql

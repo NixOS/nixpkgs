@@ -10,6 +10,8 @@ with lib;
 let
   cfg = config.services.restya-board;
 
+  pg = config.services.postgresql;
+
   runDir = "/run/restya-board";
 
   poolName = "restya-board";
@@ -312,16 +314,16 @@ in
 
         ${optionalString (isNull cfg.database.host) ''
           if ! [ -e "${cfg.dataDir}/.db-initialized" ]; then
-            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
-              ${config.services.postgresql.package}/bin/psql -U ${config.services.postgresql.superUser} \
+            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
+              ${pg.postgresqlPackage}/bin/psql -U ${pg.superUser} \
               -c "CREATE USER ${cfg.database.user} WITH ENCRYPTED PASSWORD 'restya'"
 
-            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
-              ${config.services.postgresql.package}/bin/psql -U ${config.services.postgresql.superUser} \
+            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
+              ${pg.postgresqlPackage}/bin/psql -U ${pg.superUser} \
               -c "CREATE DATABASE ${cfg.database.name} OWNER ${cfg.database.user} ENCODING 'UTF8' TEMPLATE template0"
 
             ${pkgs.sudo}/bin/sudo -u ${cfg.user} \
-              ${config.services.postgresql.package}/bin/psql -U ${cfg.database.user} \
+              ${pg.postgresqlPackage}/bin/psql -U ${cfg.database.user} \
               -d ${cfg.database.name} -f "${runDir}/sql/restyaboard_with_empty_data.sql"
 
             touch "${cfg.dataDir}/.db-initialized"
@@ -381,4 +383,3 @@ in
   };
 
 }
-

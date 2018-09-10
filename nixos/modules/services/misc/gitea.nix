@@ -7,7 +7,6 @@ let
   gitea = cfg.package;
 
   pg = config.services.postgresql;
-  pgbin = if (pg.package != null) then pg.package else pg.packages.postgresql;
 
   usePostgresql = cfg.database.type == "postgres";
   configFile = pkgs.writeText "app.ini" ''
@@ -311,9 +310,9 @@ in
           echo "CREATE ROLE ${cfg.database.user}
                   WITH ENCRYPTED PASSWORD '$(head -n1 ${cfg.database.passwordFile})'
                   NOCREATEDB NOCREATEROLE LOGIN"   |
-            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pgbin}/bin/psql
+            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.postgresqlPackage}/bin/psql
           ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pgbin}/bin/createdb                  \
+            ${pg.postgresqlPackage}/bin/createdb   \
             --owner=${cfg.database.user}           \
             --encoding=UTF8                        \
             --lc-collate=C                         \

@@ -4,6 +4,8 @@ with lib;
 let
   cfg = config.services.tt-rss;
 
+  pg = config.services.postgresql;
+
   configVersion = 26;
 
   cacheDir = "cache";
@@ -528,7 +530,7 @@ let
           callSql = e:
               if cfg.database.type == "pgsql" then ''
                   ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
-                  ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${config.services.postgresql.package}/bin/psql \
+                  ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${pg.postgresqlPackage}/bin/psql \
                     -U ${cfg.database.user} \
                     ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \
                     -c '${e}' \
@@ -565,8 +567,8 @@ let
         + (optionalString (cfg.database.type == "pgsql") ''
           ${optionalString (cfg.database.host == null && cfg.database.password == null) ''
             if ! [ -e ${cfg.root}/.db-created ]; then
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser ${cfg.database.user}
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O ${cfg.database.user} ${cfg.database.name}
+              ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.postgresqlPackage}/bin/createuser ${cfg.database.user}
+              ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.postgresqlPackage}/bin/createdb -O ${cfg.database.user} ${cfg.database.name}
               touch ${cfg.root}/.db-created
             fi
           ''}

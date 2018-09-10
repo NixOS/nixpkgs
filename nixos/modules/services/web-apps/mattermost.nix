@@ -6,6 +6,8 @@ let
 
   cfg = config.services.mattermost;
 
+  pg = config.services.postgresql;
+
   defaultConfig = builtins.fromJSON (readFile "${pkgs.mattermost}/config/config.json");
 
   mattermostConf = foldl recursiveUpdate defaultConfig
@@ -184,11 +186,11 @@ in
           fi
         '' + lib.optionalString cfg.localDatabaseCreate ''
           if ! test -e "${cfg.statePath}/.db-created"; then
-            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
-              ${config.services.postgresql.package}/bin/psql postgres -c \
+            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
+              ${pg.postgresqlPackage}/bin/psql postgres -c \
                 "CREATE ROLE ${cfg.localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.localDatabasePassword}'"
-            ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} \
-              ${config.services.postgresql.package}/bin/createdb \
+            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
+              ${pg.postgresqlPackage}/bin/createdb \
                 --owner ${cfg.localDatabaseUser} ${cfg.localDatabaseName}
             touch ${cfg.statePath}/.db-created
           fi
@@ -227,4 +229,3 @@ in
     })
   ];
 }
-

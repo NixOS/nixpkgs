@@ -15,10 +15,7 @@ let
     let ps = import ../../../../pkgs/servers/sql/postgresql/packages.nix { inherit pkgs lib; };
     in ps.withPackages pg plugins;
 
-  postgresqlPackage = if (cfg.package != null) then cfg.package else
-    cfg.packages.postgresql;
-
-  postgresql = postgresqlAndPlugins postgresqlPackage;
+  postgresql = postgresqlAndPlugins cfg.postgresqlPackage;
 
   # The main PostgreSQL configuration file.
   configFile = pkgs.writeText "postgresql.conf"
@@ -78,6 +75,21 @@ in
         description = ''
           The set of PostgreSQL packages to use, including the database
           server and all available extensions.
+        '';
+      };
+
+      postgresqlPackage = mkOption {
+        type = types.package;
+        default =
+          if cfg.package != null
+          then cfg.package
+          else cfg.packages.postgresql;
+        readOnly = true;
+        visible = false;
+        description = ''
+          A deprecated, read-only and invisible option that refers to the
+          selected PostgreSQL package. This should be removed at the same time
+          that the deprecated config.services.postgresql.package option is removed.
         '';
       };
 
@@ -242,7 +254,7 @@ in
             else pkgs.postgresql94Packages);
 
     services.postgresql.dataDir =
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${postgresqlPackage.psqlSchema}"
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}"
                  else "/var/db/postgresql");
 
     services.postgresql.authentication = mkAfter
@@ -318,7 +330,7 @@ in
             # receiving systemd's SIGINT.
             TimeoutSec = 120;
 
-            Type = if versionAtLeast postgresqlPackage.psqlSchema "9.6" then "notify" else "simple";
+            Type = if versionAtLeast cfg.postgresqlPackage.psqlSchema "9.6" then "notify" else "simple";
           };
 
         # Wait for PostgreSQL to be ready to accept connections.

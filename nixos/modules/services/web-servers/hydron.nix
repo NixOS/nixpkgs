@@ -2,7 +2,7 @@
 
 let
   cfg = config.services.hydron;
-  postgres = config.services.postgresql;
+  pg = config.services.postgresql;
 in with lib; {
   options.services.hydron = {
     enable = mkEnableOption "hydron";
@@ -105,11 +105,11 @@ in with lib; {
         chown -R hydron:hydron ${escapeShellArg cfg.dataDir}
 
         # Ensure the database is correct or create it
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createuser \
+        ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.postgresqlPackage}/bin/createuser \
           -SDR hydron || true
-        ${pkgs.sudo}/bin/sudo -u ${postgres.superUser} ${postgres.package}/bin/createdb \
+        ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.postgresqlPackage}/bin/createdb \
           -T template0 -E UTF8 -O hydron hydron || true
-        ${pkgs.sudo}/bin/sudo -u hydron ${postgres.package}/bin/psql \
+        ${pkgs.sudo}/bin/sudo -u hydron ${pg.postgresqlPackage}/bin/psql \
           -c "ALTER ROLE hydron WITH PASSWORD '$(cat ${escapeShellArg cfg.passwordFile})';" || true
       '';
 
@@ -139,7 +139,7 @@ in with lib; {
       description = "Automatically import paths into hydron and possibly fetch tags";
       after = [ "network.target" "hydron.service" ];
       wantedBy = [ "timers.target" ];
-      
+
       timerConfig = {
         Persistent = true;
         OnCalendar = cfg.interval;
@@ -148,7 +148,7 @@ in with lib; {
 
     users = {
       groups.hydron.gid = config.ids.gids.hydron;
-      
+
       users.hydron = {
         description = "hydron server service user";
         home = cfg.dataDir;

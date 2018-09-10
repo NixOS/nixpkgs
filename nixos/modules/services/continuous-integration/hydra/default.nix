@@ -6,6 +6,8 @@ let
 
   cfg = config.services.hydra;
 
+  pg = config.services.postgresql;
+
   baseDir = "/var/lib/hydra";
 
   hydraConf = pkgs.writeScript "hydra.conf" cfg.extraConfig;
@@ -271,8 +273,8 @@ in
 
           ${optionalString haveLocalDB ''
             if ! [ -e ${baseDir}/.db-created ]; then
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
-              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
+              ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.postgresqlPackage}/bin/createuser hydra
+              ${pkgs.sudo}/bin/sudo -u ${pg.superUser} ${pg.postgresqlPackage}/bin/createdb -O hydra hydra
               touch ${baseDir}/.db-created
             fi
           ''}

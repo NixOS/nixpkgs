@@ -12,11 +12,7 @@ let
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
-  pgSuperUser = config.services.postgresql.superUser;
-
-  pgBinaryDir = if (config.services.postgresql.package != null)
-    then config.services.postgresql.package
-    else config.services.postgresql.packages.postgresql;
+  pg = config.services.postgresql;
 
   databaseYml = ''
     production:
@@ -166,7 +162,7 @@ let
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar pgBinaryDir ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar pg.postgresqlPackage ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
      '';
@@ -469,7 +465,7 @@ in {
       partOf = [ "gitlab.service" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        pgBinaryDir
+        pg.postgresqlPackage
         gitAndTools.git
         ruby
         openssh
@@ -545,7 +541,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        pgBinaryDir
+        pg.postgresqlPackage
         gitAndTools.git
         openssh
         nodejs
@@ -612,13 +608,13 @@ in {
 
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
           if ! test -e "${cfg.statePath}/db-created"; then
-            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.databasePassword}'"
-            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} ${pgBinaryDir}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName}
+            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.databasePassword}'"
+            ${pkgs.sudo}/bin/sudo -u ${pg.superUser} createdb --owner ${cfg.databaseUsername} ${cfg.databaseName}
             touch "${cfg.statePath}/db-created"
           fi
 
           # enable required pg_trgm extension for gitlab
-          ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql ${cfg.databaseName} -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} psql ${cfg.databaseName} -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         fi
 
         # Always do the db migrations just to be sure the database is up-to-date
