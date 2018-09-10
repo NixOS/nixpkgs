@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "earlyoom-${version}";
-  version = "0.11";
+  name = "earlyoom-${VERSION}";
+  VERSION = "0.11";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
