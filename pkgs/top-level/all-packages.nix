@@ -20641,6 +20641,8 @@ with pkgs;
 
   ezminc = callPackage ../applications/science/biology/EZminc { };
 
+  hisat2 = callPackage ../applications/science/biology/hisat2 { };
+
   htslib = callPackage ../development/libraries/science/biology/htslib { };
 
   igv = callPackage ../applications/science/biology/igv { };
