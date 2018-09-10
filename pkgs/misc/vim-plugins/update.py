@@ -163,14 +163,14 @@ def print_download_error(plugin: str, ex: Exception):
 
 def check_results(
     results: List[Tuple[str, str, Union[Exception, Plugin]]]
-) -> List[Tuple[str, Plugin]]:
+) -> List[Tuple[str, str, Plugin]]:
     failures: List[Tuple[str, Exception]] = []
     plugins = []
     for (owner, name, result) in results:
         if isinstance(result, Exception):
             failures.append((name, result))
         else:
-            plugins.append((owner, result))
+            plugins.append((owner, name, result))
 
     print(f"{len(results) - len(failures)} plugins were checked", end="")
     if len(failures) == 0:
@@ -269,8 +269,8 @@ header = (
 )
 
 
-def generate_nix(plugins: List[Tuple[str, Plugin]]):
-    sorted_plugins = sorted(plugins, key=lambda v: v[1].name.lower())
+def generate_nix(plugins: List[Tuple[str, str, Plugin]]):
+    sorted_plugins = sorted(plugins, key=lambda v: v[2].name.lower())
 
     with open(ROOT.joinpath("generated.nix"), "w+") as f:
         f.write(header)
@@ -280,7 +280,7 @@ def generate_nix(plugins: List[Tuple[str, Plugin]]):
 
 {"""
         )
-        for owner, plugin in sorted_plugins:
+        for owner, repo, plugin in sorted_plugins:
             if plugin.has_submodules:
                 submodule_attr = "\n      fetchSubmodules = true;"
             else:
@@ -292,7 +292,7 @@ def generate_nix(plugins: List[Tuple[str, Plugin]]):
     name = "{plugin.normalized_name}-{plugin.version}";
     src = fetchFromGitHub {{
       owner = "{owner}";
-      repo = "{plugin.name}";
+      repo = "{repo}";
       rev = "{plugin.commit}";
       sha256 = "{plugin.sha256}";{submodule_attr}
     }};

@@ -4,16 +4,22 @@ ajh17/Spacegray.vim
 albfan/nerdtree-git-plugin
 altercation/vim-colors-solarized
 alvan/vim-closetag
+alx741/vim-hindent
+alx741/vim-stylishask
 amiorin/ctrlp-z
 andreshazard/vim-logreview
 andsild/peskcolor.vim
 andviro/flake8-vim
 ap/vim-css-color
+artur-shaik/vim-javacomplete2
 bazelbuild/vim-bazel
 bbchung/clighter8
 benekastah/neomake
 bitc/vim-hdevtools
+bling/vim-bufferline
 bronson/vim-trailing-whitespace
+carlitux/deoplete-ternjs
+ccarpita/rtorrent-syntax-file
 cespare/vim-toml
 chemzqm/denite-extra
 chemzqm/denite-git
@@ -39,6 +45,7 @@ dracula/vim
 drmingdrmer/xptemplate
 eagletmt/ghcmod-vim
 eagletmt/neco-ghc
+easymotion/vim-easymotion
 editorconfig/editorconfig-vim
 ehamberg/vim-cute-python
 eikenb/acp
@@ -66,9 +73,12 @@ google/vim-jsonnet
 google/vim-maktaba
 gregsexton/gitv
 guns/xterm-color-table.vim
+haya14busa/incsearch-easymotion.vim
+haya14busa/incsearch.vim
 heavenshell/vim-jsdoc
 hecal3/vim-leader-guide
 honza/vim-snippets
+hsanson/vim-android
 idris-hackers/idris-vim
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
@@ -91,6 +101,7 @@ jistr/vim-nerdtree-tabs
 jnurmine/zenburn
 jonbri/vim-colorstepper
 joonty/vim-xdebug
+JuliaEditorSupport/deoplete-julia
 JuliaEditorSupport/julia-vim
 junegunn/fzf.vim
 junegunn/goyo.vim
@@ -99,6 +110,7 @@ junegunn/vim-easy-align
 junegunn/vim-github-dashboard
 junegunn/vim-peekaboo
 justincampbell/vim-eighties
+justinmk/vim-dirvish
 KabbAmine/zeavim.vim
 kana/vim-niceblock
 kana/vim-operator-replace
@@ -110,6 +122,7 @@ kien/rainbow_parentheses.vim
 konfekt/fastfold
 kshenoy/vim-signature
 lambdalisue/vim-gista
+lambdalisue/vim-pager
 latex-box-team/latex-box
 leafgarland/typescript-vim
 ledger/vim-ledger
@@ -117,7 +130,7 @@ lepture/vim-jinja
 lervag/vimtex
 lfilho/cosco.vim
 LnL7/vim-nix
-lokaltog/vim-easymotion
+ludovicchabant/vim-gutentags
 ludovicchabant/vim-lawrencium
 luochen1990/rainbow
 lyokha/vim-xkbswitch
@@ -166,15 +179,19 @@ neovimhaskell/haskell-vim
 nixprime/cpsm
 noc7c9/vim-iced-coffee-script
 osyo-manga/shabadou.vim
+osyo-manga/vim-anzu
 osyo-manga/vim-textobj-multiblock
 osyo-manga/vim-watchdogs
 pangloss/vim-javascript
+parsonsmatt/intero-neovim
 peterhoeg/vim-qml
 plasticboy/vim-markdown
+powerman/vim-plugin-AnsiEsc
 python-mode/python-mode
 Quramy/tsuquyomi
 racer-rust/vim-racer
 rafi/awesome-vim-colorschemes
+raghur/vim-ghost
 raichoo/purescript-vim
 reedes/vim-pencil
 reedes/vim-wordy
@@ -196,6 +213,7 @@ sebastianmarkow/deoplete-rust
 sheerun/vim-polyglot
 shougo/context_filetype.vim
 shougo/denite.nvim
+Shougo/deol.nvim
 shougo/deoplete.nvim
 shougo/echodoc.vim
 shougo/neco-syntax
@@ -218,6 +236,7 @@ sk1418/last256
 slashmili/alchemist.vim
 t9md/vim-smalls
 takac/vim-hardtime
+ternjs/tern_for_vim
 terryma/vim-expand-region
 terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
@@ -226,6 +245,7 @@ thinca/vim-prettyprint
 thinca/vim-quickrun
 thinca/vim-scouter
 thinca/vim-themis
+thinca/vim-visualstar
 tomasr/molokai
 tomlion/vim-solidity
 tomtom/tlib_vim
@@ -246,6 +266,7 @@ tpope/vim-sleuth
 tpope/vim-speeddating
 tpope/vim-surround
 tpope/vim-tbone
+tpope/vim-unimpaired
 tpope/vim-vinegar
 travitch/hasksyn
 twinside/vim-haskellconceal
@@ -254,6 +275,7 @@ tyru/caw.vim
 tyru/open-browser.vim
 ujihisa/neco-look
 valloric/youcompleteme
+vhda/verilog_systemverilog.vim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 vimoutliner/vimoutliner
@@ -288,6 +310,7 @@ xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview
 zah/nim.vim
+zchee/deoplete-clang
 zchee/deoplete-go
 zchee/deoplete-jedi
 zig-lang/zig.vim
