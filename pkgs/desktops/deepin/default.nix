@@ -9,6 +9,7 @@ let
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
     deepin-gtk-theme = callPackage ./deepin-gtk-theme { };
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
+    deepin-image-viewer = callPackage ./deepin-image-viewer { };
     deepin-menu = callPackage ./deepin-menu { };
     deepin-mutter = callPackage ./deepin-mutter { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
