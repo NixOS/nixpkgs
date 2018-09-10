@@ -151,6 +151,8 @@ with pkgs;
 
   ebook2cw = callPackage ../applications/misc/ebook2cw { };
 
+  etBook = callPackage ../data/fonts/et-book { };
+
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };

@@ -1847,6 +1847,11 @@
     github = "jerith666";
     name = "Matt McHenry";
   };
+  jethro = {
+    email = "jethrokuan95@gmail.com";
+    github = "jethrokuan";
+    name = "Jethro Kuan";
+  };
   jfb = {
     email = "james@yamtime.com";
     github = "tftio";
