@@ -111,7 +111,7 @@ self = generated // (with generated; {
     '';
   });
 
-  command-t = command-t.overrideAttrs(old: {
+  command_T = command_T.overrideAttrs(old: {
     buildInputs = [ ruby rake ];
     buildPhase = ''
       rake make
@@ -309,7 +309,7 @@ self = generated // (with generated; {
     '';
   });
 
-  YankRing-vim = YankRing-vim.overrideAttrs(old: {
+  yankring = yankring.overrideAttrs(old: {
     sourceRoot = ".";
   });
 
@@ -332,9 +332,9 @@ self = generated // (with generated; {
     };
   });
 }) // lib.optionalAttrs (config.allowAliases or true) (with self; {
-  # aliasess
+  # aliases
   airline             = vim-airline;
-  alternative         = a-vim; # backwards compat, added 2014-10-21
+  a-vim               = alternative; # backwards compat, added 2018-09-10
   bats                = bats-vim;
   calendar            = calendar-vim;
   coffee-script       = vim-coffee-script;
@@ -343,9 +343,8 @@ self = generated // (with generated; {
   solarized           = vim-colors-solarized;
   colors-solarized    = vim-colors-solarized;
   caw                 = caw-vim;
-  colorsamplerpack    = Colour_Sampler_Pack;
-  Colour_Sampler_Pack = Colour-Sampler-Pack;
-  command_T           = command-t; # backwards compat, added 2014-10-18
+  Colour_Sampler_Pack = colorsamplerpack;
+  command-t           = command_T; # backwards compat, added 2018-09-10
   commentary          = vim-commentary;
   committia           = committia-vim;
   concealedyank       = concealedyank-vim;
@@ -382,7 +381,7 @@ self = generated // (with generated; {
   latex-live-preview  = vim-latex-live-preview;
   maktaba             = vim-maktaba;
   multiple-cursors    = vim-multiple-cursors;
-  necoGhc             = neco-ghc; # backwards compat, added 2014-10-18
+  neco-ghc            = necoGhc; # backwards compat, added 2018-09-10
   neocomplete         = neocomplete-vim;
   neoinclude          = neoinclude-vim;
   neomru              = neomru-vim;
@@ -427,12 +426,12 @@ self = generated // (with generated; {
   vim-addon-vim2nix   = vim2nix;
   vimproc             = vimproc-vim;
   vimshell            = vimshell-vim;
-  vinegar             = vim-vinegar;
-  watchdogs           = vim-watchdogs;
+  vim-vinegar         = vinegar; # backwards compat, added 2018-09-10
+  vim-watchdogs       = watchdogs; # backwards compat, added 2018-09-10
   WebAPI              = webapi-vim;
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
-  yankring            = YankRing-vim;
-  Yankring            = YankRing-vim;
+  YankRing-vim        = yankring;
+  Yankring            = yankring;
   YouCompleteMe       = youcompleteme;
   xterm-color-table   = xterm-color-table-vim;
   zeavim              = zeavim-vim;
