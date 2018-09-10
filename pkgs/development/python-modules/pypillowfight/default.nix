@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Library containing various image processing algorithms";
-    inherit (src) homepage;
+    inherit (src.meta) homepage;
     license = licenses.gpl3Plus;
   };
 }

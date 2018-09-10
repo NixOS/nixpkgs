@@ -60,7 +60,7 @@ buildPythonPackage rec {
   checkPhase = "pytest";
 
   meta = {
-    inherit (src) homepage;
+    inherit (src.meta) homepage;
     description = "A Python wrapper for Tesseract and Cuneiform";
     license = lib.licenses.gpl3Plus;
   };
