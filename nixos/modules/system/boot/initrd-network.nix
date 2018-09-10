@@ -12,10 +12,9 @@ let
     ''
       #! /bin/sh
       if [ "$1" = bound ]; then
+        ip address add "$ip/$mask" dev "$interface"
         if [ -n "$mtu" ]; then
-          ip address add "$ip/$mask" dev "$interface" mtu "$mtu"
-        else
-          ip address add "$ip/$mask" dev "$interface"
+          ip link set mtu "$mtu" dev "$interface"
         fi
         if [ -n "$staticroutes" ]; then
           echo "$staticroutes" \
