@@ -1,47 +1,39 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pillow, six
-, tesseract, cuneiform, isPy3k
+{ lib, fetchFromGitLab, buildPythonPackage, pillow, six
+, tesseract, cuneiform, isPy3k, substituteAll, pytest, tox
 }:
 
 buildPythonPackage rec {
   pname = "pyocr";
-  version = "0.4.7";
+  version = "0.5.3";
   name = pname + "-" + version;
   disabled = !isPy3k;
 
   # Don't fetch from PYPI because it doesn't contain tests.
-  src = fetchFromGitHub {
-    owner = "jflesch";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "OpenPaperwork";
     repo = "pyocr";
     rev = version;
-    sha256 = "1iw73r8yrgjf8g00yzpz62ymqbf89cqhyhl9g430srmsrq7mn2yd";
+    sha256 = "1nihf0qmbpg3yj3yp11jp6hp5z5dqf39nz6j9lqbvgi1nqbs7x15";
   };
 
-  NIX_CUNEIFORM_CMD = "${cuneiform}/bin/cuneiform";
-  NIX_CUNEIFORM_DATA = "${cuneiform}/share/cuneiform";
-  NIX_LIBTESSERACT_PATH = "${tesseract}/lib/libtesseract.so";
-  NIX_TESSDATA_PREFIX = "${tesseract}/share/tessdata";
-  NIX_TESSERACT_CMD = "${tesseract}/bin/tesseract";
-
-  patches = [ ./paths.patch ];
+  patches = [ (substituteAll {
+    src = ./paths.patch;
+    inherit cuneiform tesseract;
+  })
+  ];
 
   postPatch = ''
-    substituteInPlace src/pyocr/cuneiform.py \
-      --subst-var NIX_CUNEIFORM_CMD \
-      --subst-var NIX_CUNEIFORM_CMD
-
-    substituteInPlace src/pyocr/tesseract.py \
-      --subst-var NIX_TESSERACT_CMD
-
-    substituteInPlace src/pyocr/libtesseract/tesseract_raw.py \
-      --subst-var NIX_TESSDATA_PREFIX \
-      --subst-var NIX_LIBTESSERACT_PATH
+    echo 'version = "${version}"' > src/pyocr/_version.py
 
     # Disable specific tests that are probably failing because of this issue:
     # https://github.com/jflesch/pyocr/issues/52
     for test in $disabledTests; do
       file="''${test%%:*}"
       fun="''${test#*:}"
-      echo "$fun = unittest.skip($fun)" >> "tests/tests_$file.py"
+      echo "import pytest" >> "tests/tests_$file.py"
+      echo "$fun = pytest.mark.skip($fun)" >> "tests/tests_$file.py"
     done
   '';
 
@@ -57,14 +49,18 @@ buildPythonPackage rec {
     "libtesseract:TestLineBox.test_japanese"
     "libtesseract:TestTxt.test_japanese"
     "libtesseract:TestWordBox.test_japanese"
+    "libtesseract:TestTxt.test_multi"
+    "tesseract:TestTxt.test_multi"
     "tesseract:TestDigitLineBox.test_digits"
     "tesseract:TestTxt.test_japanese"
   ];
 
   propagatedBuildInputs = [ pillow six ];
+  checkInputs = [ pytest tox ];
+  checkPhase = "pytest";
 
   meta = {
-    homepage = "https://github.com/jflesch/pyocr";
+    inherit (src) homepage;
     description = "A Python wrapper for Tesseract and Cuneiform";
     license = lib.licenses.gpl3Plus;
   };
