@@ -1,5 +1,5 @@
 # ALSA sound support.
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
@@ -83,7 +83,18 @@ in
 
   ###### implementation
 
-  config = mkIf config.sound.enable {
+  config = mkMerge [{
+
+    warnings = optional (options.sound.enable.highestPrio > 1000) ''
+      You don't have `sound.enable` explicitly enabled of disabled. It was
+      enabled by default before a43e33d0e48b2284ac3a2222d7f1965cef66f5e2 and
+      became disabled by default after e349ccc77febd45abbd14be14f7de123ec4a4da2.
+
+      Which means that if you output sound via ALSA it will still works, but
+      your system will no longer save and restore ALSA state between reboots.
+    '';
+
+  } (mkIf config.sound.enable {
 
     environment.systemPackages = [ alsaUtils ];
 
@@ -129,6 +140,6 @@ in
       ];
     };
 
-  };
+  })];
 
 }
