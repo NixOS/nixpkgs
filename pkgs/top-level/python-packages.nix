@@ -3918,35 +3918,7 @@ in {
     };
   };
 
-  pypillowfight = buildPythonPackage rec {
-    name = "pypillowfight-${version}";
-    version = "0.2.1";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "jflesch";
-      repo = "libpillowfight";
-      rev = version;
-      sha256 = "1rwmajsy9qhl3qhhy5mw0xmr3n8abxcq8baidpn0sxv6yjg2369z";
-    };
-
-    # Disable tests because they're designed to only work on Debian:
-    # https://github.com/jflesch/libpillowfight/issues/2#issuecomment-268259174
-    doCheck = false;
-
-    # Python 2.x is not supported, see:
-    # https://github.com/jflesch/libpillowfight/issues/1
-    disabled = !isPy3k && !isPyPy;
-
-    # This is needed by setup.py regardless of whether tests are enabled.
-    buildInputs = [ self.nose ];
-    propagatedBuildInputs = [ self.pillow ];
-
-    meta = {
-      description = "Library containing various image processing algorithms";
-      homepage = "https://github.com/jflesch/libpillowfight";
-      license = licenses.gpl3Plus;
-    };
-  };
+  pypillowfight = callPackage ../development/python-modules/pypillowfight { };
 
   pyprind = callPackage ../development/python-modules/pyprind { };
 
