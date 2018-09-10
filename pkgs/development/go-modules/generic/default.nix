@@ -197,6 +197,8 @@ go.stdenv.mkDerivation (
 
   shellHook = ''
     d=$(mktemp -d "--suffix=-$name")
+    mkdir -p "$d/src/$(dirname "${goPackagePath}")"
+    ln -s $PWD "$d/src/${goPackagePath}"
   '' + toString (map (dep: ''
      mkdir -p "$d/src/$(dirname "${dep.goPackagePath}")"
      ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
