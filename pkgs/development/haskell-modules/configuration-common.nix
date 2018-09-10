@@ -1130,4 +1130,12 @@ self: super: {
 
   # https://github.com/snapframework/xmlhtml/pull/37
   xmlhtml = doJailbreak super.xmlhtml;
+
+  # https://github.com/NixOS/nixpkgs/issues/46467
+  safe-money-aeson = super.safe-money-aeson.override { safe-money = self.safe-money_0_7; };
+  safe-money-store = super.safe-money-store.override { safe-money = self.safe-money_0_7; };
+  safe-money-cereal = super.safe-money-cereal.override { safe-money = self.safe-money_0_7; };
+  safe-money-serialise = super.safe-money-serialise.override { safe-money = self.safe-money_0_7; };
+  safe-money-xmlbf = super.safe-money-xmlbf.override { safe-money = self.safe-money_0_7; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
