@@ -18850,6 +18850,8 @@ with pkgs;
 
   nylas-mail-bin = callPackage ../applications/networking/mailreaders/nylas-mail-bin { };
 
+  thonny = callPackage ../applications/editors/thonny { };
+
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
     libpng = libpng_apng;
