@@ -4163,6 +4163,11 @@
     github = "tomsmeets";
     name = "Tom Smeets";
   };
+  toonn = {
+    email = "nnoot@toonn.io";
+    github = "toonn";
+    name = "Toon Nolten";
+  };
   travisbhartwell = {
     email = "nafai@travishartwell.net";
     github = "travisbhartwell";
