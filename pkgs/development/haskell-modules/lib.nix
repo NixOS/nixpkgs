@@ -226,8 +226,9 @@ rec {
   /* Use the gold linker. It is a linker for ELF that is designed
      "to run as fast as possible on modern systems"
    */
-  linkWithGold = drv : appendConfigureFlag drv
-    "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold";
+  linkWithGold = drv : overrideCabal (appendConfigureFlag drv
+    "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold")
+    (old: { extraSetupCompileFlags = [ "-optl-fuse-ld=gold" ]; });
 
   /* link executables statically against haskell libs to reduce
      closure size
