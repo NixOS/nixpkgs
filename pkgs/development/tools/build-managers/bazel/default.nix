@@ -1,11 +1,13 @@
 { stdenv, lib, fetchurl, fetchpatch, runCommand, makeWrapper
 , jdk, zip, unzip, bash, writeCBin, coreutils
 , which, python, perl, gnused, gnugrep, findutils
+# Apple dependencies
+, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
+# Allow to independently override the jdks used to build and run respectively
+, buildJdk ? jdk, runJdk ? jdk
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
-# Apple dependencies
-, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
 }:
 
 let
@@ -152,7 +154,7 @@ stdenv.mkDerivation rec {
      + genericPatches;
 
   buildInputs = [
-    jdk
+    buildJdk
   ];
 
   nativeBuildInputs = [
@@ -190,7 +192,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mv output/bazel $out/bin
-    wrapProgram "$out/bin/bazel" --set JAVA_HOME "${jdk}"
+    wrapProgram "$out/bin/bazel" --set JAVA_HOME "${runJdk}"
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv output/bazel-complete.bash $out/share/bash-completion/completions/bazel
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
