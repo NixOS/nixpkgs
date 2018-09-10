@@ -14,8 +14,8 @@ fetchFromGitHub rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Font for ET Book";
-    license = licenses.free;
+    description = "The typeface used in Edward Tufte’s books.";
+    license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ jethro ];
   };
