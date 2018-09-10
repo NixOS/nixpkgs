@@ -6,11 +6,23 @@ let
 
   cfg = config.boot.initrd.network;
 
+  dhcpinterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or {}));
+
   udhcpcScript = pkgs.writeScript "udhcp-script"
     ''
       #! /bin/sh
       if [ "$1" = bound ]; then
-        ip address add "$ip/$mask" dev "$interface"
+        if [ -n "$mtu" ]; then
+          ip address add "$ip/$mask" dev "$interface" mtu "$mtu"
+        else
+          ip address add "$ip/$mask" dev "$interface"
+        fi
+        if [ -n "$staticroutes" ]; then
+          echo "$staticroutes" \
+            | sed -r "s@(\S+) (\S+)@ ip route add \"\1\" via \"\2\" dev \"$interface\" ; @g" \
+            | sed -r "s@ via \"0\.0\.0\.0\"@@g" \
+            | /bin/sh
+        fi
         if [ -n "$router" ]; then
           ip route add default via "$router" dev "$interface"
         fi
@@ -92,18 +104,24 @@ in
       ''
 
       # Otherwise, use DHCP.
-      + optionalString config.networking.useDHCP ''
+      + optionalString (config.networking.useDHCP || dhcpinterfaces != []) ''
         if [ -z "$hasNetwork" ]; then
 
           # Bring up all interfaces.
-          for iface in $(cd /sys/class/net && ls); do
+          for iface in $(ls /sys/class/net/); do
             echo "bringing up network interface $iface..."
             ip link set "$iface" up
           done
 
-          # Acquire a DHCP lease.
-          echo "acquiring IP address via DHCP..."
-          udhcpc --quit --now --script ${udhcpcScript} ${udhcpcArgs} && hasNetwork=1
+          # Acquire DHCP leases.
+          for iface in ${ if config.networking.useDHCP then
+                            "$(ls /sys/class/net/ | grep -v ^lo$)"
+                          else
+                            lib.concatMapStringsSep " " lib.escapeShellArg dhcpinterfaces
+                        }; do
+            echo "acquiring IP address via DHCP on $iface..."
+            udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs} && hasNetwork=1
+          done
         fi
       ''
 
