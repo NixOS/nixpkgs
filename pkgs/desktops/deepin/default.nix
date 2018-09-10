@@ -17,6 +17,7 @@ let
       wnck = pkgs.libwnck3;
     };
     dtkcore = callPackage ./dtkcore { };
+    dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };
     go-dbus-factory = callPackage ./go-dbus-factory { };
     go-dbus-generator = callPackage ./go-dbus-generator { };
