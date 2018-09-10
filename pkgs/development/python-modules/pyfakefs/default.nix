@@ -22,7 +22,11 @@ buildPythonPackage rec {
       --replace "test_append_mode_tell_linux_windows" "notest_append_mode_tell_linux_windows"
     substituteInPlace pyfakefs/tests/fake_filesystem_unittest_test.py \
       --replace "test_copy_real_file" "notest_copy_real_file"
-  '';
+  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
+    # this test fails on darwin due to case-insensitive file system
+    substituteInPlace pyfakefs/tests/fake_os_test.py \
+      --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
+  '');
 
   checkInputs = [ pytest glibcLocales ];
 
