@@ -19604,6 +19604,8 @@ with pkgs;
 
   yate = callPackage ../applications/misc/yate { };
 
+  ydiff = callPackage ../development/tools/ydiff { };
+
   yed = callPackage ../applications/graphics/yed {};
 
   inherit (gnome3) yelp;
