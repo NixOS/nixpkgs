@@ -89,7 +89,7 @@ in
 
       bindSocket.path = mkOption {
        type = types.str;
-       default = "/run/rmilter/rmilter.sock";
+       default = "/run/rmilter.sock";
        description = ''
           Path to Unix domain socket to listen on.
         '';
