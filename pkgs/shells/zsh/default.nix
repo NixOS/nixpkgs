@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pcre }:
+{ stdenv, fetchurl, fetchpatch, ncurses, pcre }:
 
 let
   version = "5.6";
@@ -17,6 +17,17 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
     sha256 = "1vik7s3q5hvazvgw4jm4b90qlk6zcry0s314xw1liarspkd721g3";
   };
+
+  patches = [
+    (fetchpatch {
+      url = https://github.com/zsh-users/zsh/commit/0d5275c6b94e798e813092f37bd40429bd9b0f8b.patch;
+      sha256 = "0jair5rymyfhikzymyw8c070fyb5p7gsjxcqysmkq8q99d3g75r9";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
+  postPatch = ''
+    sed -i -e 's,#include "builtin.pro",\0\n#include <math.h>,' Src/builtin.c
+  '';
 
   buildInputs = [ ncurses pcre ];
 
