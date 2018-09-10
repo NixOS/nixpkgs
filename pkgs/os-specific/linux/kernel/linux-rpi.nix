@@ -18,6 +18,7 @@ stdenv.lib.overrideDerivation (buildLinux (args // rec {
   defconfig = {
     "armv6l-linux" = "bcmrpi_defconfig";
     "armv7l-linux" = "bcm2709_defconfig";
+    "aarch64-linux" = "bcmrpi3_defconfig";
   }.${stdenv.hostPlatform.system} or (throw "linux_rpi not supported on '${stdenv.hostPlatform.system}'");
 
   features = {
@@ -31,9 +32,17 @@ stdenv.lib.overrideDerivation (buildLinux (args // rec {
     sed -i $buildRoot/.config -e 's/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=""/'
   '';
 
-  postFixup = ''
-    # Make copies of the DTBs named after the upstream names so that U-Boot finds them.
-    # This is ugly as heck, but I don't know a better solution so far.
+  # Make copies of the DTBs named after the upstream names so that U-Boot finds them.
+  # This is ugly as heck, but I don't know a better solution so far.
+  postFixup = if stdenv.hostPlatform.system == "aarch64-linux" then ''
+    rm $out/dtbs/broadcom/bcm283*.dtb
+    copyDTB() {
+      cp -v "$out/dtbs/broadcom/$1" "$out/dtbs/broadcom/$2"
+    }
+
+    copyDTB bcm2710-rpi-3-b.dtb bcm2837-rpi-3-b.dtb
+    copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-b-plus.dtb
+  '' else ''
     rm $out/dtbs/bcm283*.dtb
     copyDTB() {
       cp -v "$out/dtbs/$1" "$out/dtbs/$2"
