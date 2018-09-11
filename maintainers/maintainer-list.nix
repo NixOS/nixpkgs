@@ -3234,6 +3234,11 @@
     github = "polyrod";
     name = "Maurizio Di Pietro";
   };
+  poelzi = {
+    email = "nix@poelzi.org";
+    github = "poelzi";
+    name = "Daniel Poelzleithner";
+  };
   pradeepchhetri = {
     email = "pradeep.chhetri89@gmail.com";
     github = "pradeepchhetri";
