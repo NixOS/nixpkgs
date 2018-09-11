@@ -240,6 +240,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  cliff = callPackage ../development/python-modules/cliff { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cozy = callPackage ../development/python-modules/cozy { };
