@@ -4,6 +4,7 @@
 , mediastreamer-openh264, bctoolbox, makeWrapper, fetchFromGitHub, cmake
 , libmatroska, bcunit, doxygen, gdk_pixbuf, glib, cairo, pango, polarssl
 , python, graphviz, belcard
+, withGui ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "0az2ywrpx11sqfb4s4r2v726avcjf4k15bvrqj7xvhz7hdndmh0j";
   };
 
-  cmakeFlags = "-DENABLE_GTK_UI=ON";
+  cmakeFlags = stdenv.lib.optional withGui [ "-DENABLE_GTK_UI=ON" ];
 
   postPatch = ''
     touch coreapi/liblinphone_gitversion.h
