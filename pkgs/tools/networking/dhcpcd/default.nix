@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ udev ];
+  buildInputs = [
+    udev
+    runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
+  ];
 
   preConfigure = "patchShebangs ./configure";
 
@@ -28,11 +31,6 @@ stdenv.mkDerivation rec {
 
   # Check that the udev plugin got built.
   postInstall = stdenv.lib.optional (udev != null) "[ -e $out/lib/dhcpcd/dev/udev.so ]";
-
-  # TODO shlevy remove once patchShebangs is fixed
-  postFixup = ''
-    find $out -type f -print0 | xargs --null sed -i 's|${stdenv.shellPackage}|${runtimeShellPackage}|'
-  '';
 
   meta = {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";
