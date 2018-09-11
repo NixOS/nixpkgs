@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optional (!stdenv.isDarwin) openssl;
   propagatedBuildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
+  patches = [ ./disable-network-based-test.patch ];
+
   meta = with lib; {
     description = "A utility for managing cargo dependencies from the command line";
     homepage = https://github.com/killercup/cargo-edit;
