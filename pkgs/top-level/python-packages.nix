@@ -467,6 +467,8 @@ in {
 
   pykerberos = callPackage ../development/python-modules/pykerberos { };
 
+  pykeepass = callPackage ../development/python-modules/pykeepass { };
+
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
