@@ -47,6 +47,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
       find $bazelOut/external -type l | while read symlink; do
         ln -sf $(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,") "$symlink"
       done
+      # Remove all vcs files
+      rm -rf $(find $bazelOut/external -type d -name .git)
+      rm -rf $(find $bazelOut/external -type d -name .svn)
+      rm -rf $(find $bazelOut/external -type d -name .hg)
 
       cp -r $bazelOut/external $out
 
