@@ -13706,6 +13706,8 @@ with pkgs;
 
   bluez5 = callPackage ../os-specific/linux/bluez { };
 
+  pulseaudio-modules-bt = callPackage ../applications/audio/pulseaudio-modules-bt { };
+
   bluez = bluez5;
 
   inherit (python3Packages) bedup;
