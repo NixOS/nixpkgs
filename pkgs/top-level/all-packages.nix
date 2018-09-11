@@ -7976,6 +7976,8 @@ with pkgs;
     buildBazelPackage = buildBazelPackage.override { enableNixHacks = false; };
   };
 
+  bazel-watcher = callPackage ../development/tools/bazel-watcher { };
+
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
