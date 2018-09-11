@@ -2000,6 +2000,8 @@ in {
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
 
+  requests-file = callPackage ../development/python-modules/requests-file { };
+
   requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket {};
@@ -11141,6 +11143,8 @@ in {
     };
   });
 
+  pyreadability = callPackage ../development/python-modules/pyreadability { };
+
   pyscss = buildPythonPackage rec {
     name = "pyScss-${version}";
     version = "1.3.5";
@@ -17070,6 +17074,8 @@ EOF
   warrant = callPackage ../development/python-modules/warrant { };
 
   textacy = callPackage ../development/python-modules/textacy { };
+
+  tldextract = callPackage ../development/python-modules/tldextract { };
 
   pyemd  = callPackage ../development/python-modules/pyemd { };
 
