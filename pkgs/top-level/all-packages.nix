@@ -17814,11 +17814,13 @@ in
     };
 
     external = {
-      inherit (haskellPackages) ghc-mod structured-haskell-mode Agda hindent;
+      inherit (haskellPackages)
+        ghc-mod structured-haskell-mode Agda hindent;
       inherit (pythonPackages) elpy;
       inherit
-        autoconf automake git libffi libpng pkgconfig poppler rtags w3m zlib
-        substituteAll rustPlatform cmake llvmPackages libtool zeromq;
+        autoconf automake editorconfig-core-c git libffi libpng pkgconfig
+        poppler rtags w3m zlib substituteAll rustPlatform cmake llvmPackages
+        libtool zeromq;
     };
   };
 
