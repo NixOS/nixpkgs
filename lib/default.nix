@@ -38,7 +38,7 @@ let
     systems = callLibs ./systems;
 
     # misc
-    asserts = callLibs ./asserts.nix;
+    logging = callLibs ./logging.nix;
     debug = callLibs ./debug.nix;
     generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
@@ -117,13 +117,14 @@ let
       unknownModule mkOption;
     inherit (types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
-    inherit (asserts)
-      assertMsg assertOneOf;
-    inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
+    inherit (logging)
+      assertMsg assertOneOf
+      traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
       traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal
       traceShowValMarked showVal traceCall traceCall2 traceCall3
-      traceValIfNot runTests testAllTrue traceCallXml attrNamesToStr;
+      traceValIfNot traceCallXml;
+    inherit (debug) runTests testAllTrue addErrorContextToAttrs attrNamesToStr;
     inherit (misc) maybeEnv defaultMergeArg defaultMerge foldArgs
       defaultOverridableDelayableArgs composedArgsAndFun
       maybeAttrNullable maybeAttr ifEnable checkFlag getValue
