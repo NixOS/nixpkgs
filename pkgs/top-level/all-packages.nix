@@ -13523,6 +13523,8 @@ with pkgs;
       # see also openssl, which has/had this same trick
   };
 
+  sickgear = callPackage ../servers/sickgear {};
+
   sipcmd = callPackage ../applications/networking/sipcmd { };
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
