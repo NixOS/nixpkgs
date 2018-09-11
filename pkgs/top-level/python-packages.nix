@@ -1231,6 +1231,8 @@ in {
 
   debian = callPackage ../development/python-modules/debian {};
 
+  debtcollector = callPackage ../development/python-modules/debtcollector { };
+
   defusedxml = callPackage ../development/python-modules/defusedxml {};
 
   dugong = callPackage ../development/python-modules/dugong {};
