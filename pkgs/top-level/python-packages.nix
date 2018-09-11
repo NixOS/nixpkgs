@@ -4106,6 +4106,8 @@ in {
 
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
 
+  python-coveralls = callPackage ../development/python-modules/python-coveralls { };
+
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
