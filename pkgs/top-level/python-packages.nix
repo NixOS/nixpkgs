@@ -4468,22 +4468,7 @@ in {
     };
   };
 
-  ddt = buildPythonPackage (rec {
-    name = "ddt-1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/ddt/${name}.tar.gz";
-      sha256 = "e24ecb7e2cf0bf43fa9d4255d3ae2bd0b7ce30b1d1b89ace7aa68aca1152f37a";
-    };
-
-    meta = {
-      description = "Data-Driven/Decorated Tests, a library to multiply test cases";
-
-      homepage = https://github.com/txels/ddt;
-
-      license = licenses.mit;
-    };
-  });
+  ddt = callPackage ../development/python-modules/ddt { };
 
   descartes = callPackage ../development/python-modules/descartes { };
 
