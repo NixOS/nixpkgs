@@ -500,11 +500,11 @@ activatePackage() {
     # the transition, we do include everything in thatcase.
     #
     # TODO(@Ericson2314): Don't special-case native compilation
-    if [[ ( -z "${strictDeps-}" ||  "$hostOffset" -le -1 ) && -d "$pkg/bin" ]]; then
+    if [[ ( -z "${strictDeps-}" || "$hostOffset" -le -1 ) && -d "$pkg/bin" ]]; then
         addToSearchPath _PATH "$pkg/bin"
     fi
 
-    if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
+    if [[ ( -z "${strictDeps-}" || "$hostOffset" -eq 0 ) && -d "$pkg/bin" ]]; then
         addToSearchPath HOST_PATH "$pkg/bin"
     fi
 
