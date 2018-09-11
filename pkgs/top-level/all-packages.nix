@@ -22247,7 +22247,7 @@ with pkgs;
   spdlog = spdlog_1;
 
   dart = callPackage ../development/interpreters/dart { };
-  dart_stable = dart.override { version = "2.0.0; };
+  dart_stable = dart.override { version = "2.0.0"; };
   dart_old = dart.override { version = "1.24.3"; };
   dart_dev = dart.override { version = "2.0.0-dev.26.0"; };
 
