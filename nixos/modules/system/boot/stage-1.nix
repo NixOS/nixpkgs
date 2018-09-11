@@ -112,6 +112,11 @@ let
       copy_bin_and_libs ${pkgs.lvm2}/sbin/dmsetup
       copy_bin_and_libs ${pkgs.lvm2}/sbin/lvm
 
+      # Copy tools for thin provisioned and cache LVM volumes 
+      for BIN in ${pkgs.thin-provisioning-tools}/{s,}bin/*; do
+        copy_bin_and_libs $BIN
+      done
+
       # Add RAID mdadm tool.
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
@@ -285,6 +290,10 @@ let
     '';
   };
 
+  lvmConf = "global {\n" + (concatMapStrings
+    (bin: "  ${bin}_executable = ${extraUtils}/bin/${bin}\n")
+    [ "thin_check" "thin_dump" "thin_repair" "cache_check" "cache_dump" "cache_repair" ])
+    + "}\n";
 
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
@@ -297,6 +306,9 @@ let
         }
         { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
           symlink = "/etc/mdadm.conf";
+        }
+        { object = pkgs.writeText "lvm.conf" lvmConf;
+          symlink = "/etc/lvm/lvm.conf";
         }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu"
             { src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf"; }
