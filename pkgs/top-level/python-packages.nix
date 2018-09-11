@@ -11724,23 +11724,7 @@ in {
 
   };
 
-  xattr = buildPythonPackage rec {
-    name = "xattr-0.7.8";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xattr/${name}.tar.gz";
-      sha256 = "0nbqfghgy26jyp5q7wl3rj78wr8s39m5042df2jlldg3fx6j0417";
-    };
-
-    # https://github.com/xattr/xattr/issues/43
-    doCheck = false;
-
-    postBuild = ''
-      ${python.interpreter} -m compileall -f xattr
-    '';
-
-    propagatedBuildInputs = [ self.cffi ];
-  };
+  xattr = callPackage ../development/python-modules/xattr { };
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
