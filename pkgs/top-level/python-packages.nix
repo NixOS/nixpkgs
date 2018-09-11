@@ -8630,27 +8630,7 @@ in {
   cmd2_9 = callPackage ../development/python-modules/cmd2 {};
   cmd2 = if isPy27 then self.cmd2_8 else self.cmd2_9;
 
- warlock = buildPythonPackage rec {
-   name = "warlock-${version}";
-   version = "1.2.0";
-
-   src = pkgs.fetchurl {
-     url = "mirror://pypi/w/warlock/${name}.tar.gz";
-     sha256 = "0npgi4ks0nww2d6ci791iayab0j6kz6dx3jr7bhpgkql3s4if3bw";
-   };
-
-   propagatedBuildInputs = with self; [
-     six jsonpatch jsonschema jsonpointer
-   ];
-   buildInputs = with self; [
-
-   ];
-
-   meta = with stdenv.lib; {
-     homepage = https://github.com/bcwaldon/warlock;
-   };
- };
-
+  warlock = callPackage ../development/python-modules/warlock { };
 
   pecan = callPackage ../development/python-modules/pecan { };
 
