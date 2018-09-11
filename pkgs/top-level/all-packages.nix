@@ -15164,6 +15164,7 @@ with pkgs;
 
   powerline-rs = callPackage ../tools/misc/powerline-rs {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   profont = callPackage ../data/fonts/profont { };
