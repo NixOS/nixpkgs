@@ -1712,6 +1712,8 @@ in {
 
   openidc-client = callPackage ../development/python-modules/openidc-client {};
 
+  openstackdocstheme = callPackage ../development/python-modules/openstackdocstheme { };
+
   idna = callPackage ../development/python-modules/idna { };
 
   mahotas = buildPythonPackage rec {
