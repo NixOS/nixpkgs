@@ -95,7 +95,7 @@ rec {
 
           deps = import (pkgs.runCommand "lhs2tex-includes"
             { src = key; }
-            "${pkgs.stdenv.bash}/bin/bash ${./find-lhs2tex-includes.sh}");
+            "${pkgs.bash}/bin/bash ${./find-lhs2tex-includes.sh}");
 
         in pkgs.lib.concatMap (x: if builtins.pathExists x then [{key = x;}] else [])
                               (map (x: dirOf key + ("/" + x)) deps);
@@ -134,7 +134,7 @@ rec {
       name = "tex";
       builder = ./lhs2tex.sh;
       inherit source flags;
-      buildInputs = [ pkgs.lhs2tex pkgs.perl ];
+      buildInputs = [ pkgs.haskellPackages.lhs2tex pkgs.perl ];
       copyIncludes = ./copy-includes.pl;
       includes = map (x: [x.key (baseNameOf (toString x.key))])
         (findLhs2TeXIncludes {rootFile = source;});
