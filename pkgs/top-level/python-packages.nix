@@ -12935,20 +12935,7 @@ in {
     };
   };
 
-  subunit = buildPythonPackage rec {
-    name = pkgs.subunit.name;
-    src = pkgs.subunit.src;
-
-    propagatedBuildInputs = with self; [ testtools testscenarios ];
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [ pkgs.check pkgs.cppunit ];
-
-    patchPhase = ''
-      sed -i 's/version=VERSION/version="${pkgs.subunit.version}"/' setup.py
-    '';
-
-    meta = pkgs.subunit.meta;
-  };
+  subunit = callPackage ../development/python-modules/subunit { };
 
   sure = buildPythonPackage rec {
     name = "sure-${version}";
