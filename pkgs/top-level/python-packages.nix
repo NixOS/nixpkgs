@@ -6430,24 +6430,7 @@ in {
     };
   };
 
-  ipaddress = if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
-    name = "ipaddress-1.0.18";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipaddress/${name}.tar.gz";
-      sha256 = "1q8klj9d84cmxgz66073x1j35cplr3r77vx1znhxiwl5w74391ax";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} test_ipaddress.py
-    '';
-
-    meta = {
-      description = "Port of the 3.3+ ipaddress module to 2.6, 2.7, and 3.2";
-      homepage = https://github.com/phihag/ipaddress;
-      license = licenses.psfl;
-    };
-  };
+  ipaddress = callPackage ../development/python-modules/ipaddress { };
 
   ipdb = buildPythonPackage rec {
     name = "ipdb-${version}";
