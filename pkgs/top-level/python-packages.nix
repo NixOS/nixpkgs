@@ -11186,6 +11186,8 @@ in {
     };
   };
 
+  reno = callPackage ../development/python-modules/reno { };
+
   reportlab = callPackage ../development/python-modules/reportlab { };
 
   requests2 = throw "requests2 has been deprecated. Use requests instead.";
