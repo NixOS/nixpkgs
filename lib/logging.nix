@@ -183,6 +183,7 @@ rec {
 
   showVal = with lib;
     deprecate {
+      silentBefore = "17.03";
       failingAfter = "18.03";
       what         = "showVal";
       replacement  = "traceSeqN";
