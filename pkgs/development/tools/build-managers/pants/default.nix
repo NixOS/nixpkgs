@@ -17,6 +17,7 @@ in buildPythonApplication rec {
 
   prePatch = ''
     sed -E -i "s/'([[:alnum:].-]+)[=><][[:digit:]=><.,]*'/'\\1'/g" setup.py
+    substituteInPlace setup.py --replace "requests[security]<2.19,>=2.5.0" "requests[security]<2.20,>=2.5.0"
   '';
 
   # Unnecessary, and causes some really weird behavior around .class files, which
