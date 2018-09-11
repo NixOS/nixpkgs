@@ -28,6 +28,9 @@ rustPlatform.buildRustPackage rec {
 
   LIBGIT2_SYS_USE_PKG_CONFIG=1;
 
+  # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
+  RUSTC_BOOTSTRAP=1;
+
   # FIXME: Use impure version of CoreFoundation because of missing symbols.
   # CFURLSetResourcePropertyForKey is defined in the headers but there's no
   # corresponding implementation in the sources from opensource.apple.com.
