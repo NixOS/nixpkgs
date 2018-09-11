@@ -1,7 +1,7 @@
 { lib }:
 let
   inherit (builtins) attrNames trace substring;
-  inherit (lib) elem;
+  inherit (lib) elem deprecate;
 in
 
 rec {
@@ -33,16 +33,19 @@ rec {
   # -- DEPRECATED --
 
   attrNamesToStr = a:
-    trace ( "Warning: `attrNamesToStr` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please use more specific concatenation "
-          + "for your uses (`lib.concat(Map)StringsSep`)." )
+    deprecate {
+      failingAfter = "18.03";
+      what         = "attrNamesToStr";
+      reason       = "please use more specific concatenation function for your uses (`lib.concat(Map)StringsSep`)";
+    }
     (lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a)));
 
   addErrorContextToAttrs = attrs:
-    trace ( "Warning: `addErrorContextToAttrs` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please use `builtins.addErrorContext` directly." )
+    deprecate {
+      failingAfter = "18.03";
+      what         = "addErrorContextToAttrs";
+      replacement  = "builtins.addErrorContext";
+    }
     (lib.mapAttrs (a: v: lib.addErrorContext "while evaluating ${a}" v) attrs);
 
 }

@@ -182,9 +182,11 @@ rec {
   traceShowValMarked = str: x: trace (str + showVal x) x;
 
   showVal = with lib;
-    trace ( "Warning: `showVal` is deprecated "
-          + "and will be removed in the next release, "
-          + "please use `traceSeqN`" )
+    deprecate {
+      failingAfter = "18.03";
+      what         = "showVal";
+      replacement  = "traceSeqN";
+    }
     (let
       modify = v:
         let pr = f: { __pretty = f; val = v; };
@@ -202,14 +204,18 @@ rec {
     in go);
 
   traceXMLVal = x:
-    trace ( "Warning: `traceXMLVal` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please use `traceValFn builtins.toXML`." )
+    deprecate {
+      failingAfter = "18.03";
+      what         = "traceXMLVal";
+      replacement  = "traceValFn builtins.toXML";
+    }
     (trace (builtins.toXML x) x);
   traceXMLValMarked = str: x:
-    trace ( "Warning: `traceXMLValMarked` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please use `traceValFn (x: str + builtins.toXML x)`." )
+    deprecate {
+      failingAfter = "18.03";
+      what         = "traceXMLValMarked";
+      replacement  = "traceValFn (x: str + builtins.toXML x)";
+    }
     (trace (str + builtins.toXML x) x);
 
   # trace the arguments passed to function and its result
@@ -219,9 +225,11 @@ rec {
   traceCall3 = n: f: a: b: c: let t = n2: x: traceShowValMarked "${n} ${n2}:" x; in t "result" (f (t "arg 1" a) (t "arg 2" b) (t "arg 3" c));
 
   traceValIfNot = c: x:
-    trace ( "Warning: `traceValIfNot` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please use `if/then/else` and `traceValSeq 1`.")
+    deprecate {
+      failingAfter = "18.03";
+      what         = "traceValIfNot";
+      reason       = "please use `if/then/else` and `traceValSeq 1` instead";
+    }
     (if c x then true else traceSeq (showVal x) false);
 
   # example: (traceCallXml "myfun" id 3) will output something like
@@ -230,9 +238,11 @@ rec {
   # note: if result doesn't evaluate you'll get no trace at all (FIXME)
   #       args should be printed in any case
   traceCallXml = a:
-    trace ( "Warning: `traceCallXml` is deprecated "
-          + "and will be removed in the next release. "
-          + "Please complain if you use the function regularly." )
+    deprecate {
+      failingAfter = "18.03";
+      what   = "traceCallXml";
+      reason = "complain if you use the function regularly";
+    }
     (if !isInt a then
       traceCallXml 1 "calling ${a}\n"
     else
