@@ -7869,23 +7869,7 @@ in {
 
   monosat = disabledIf (!isPy3k) (pkgs.monosat.python { inherit buildPythonPackage; inherit (self) cython; });
 
-  monotonic = buildPythonPackage rec {
-    pname = "monotonic";
-    version = "1.3";
-    name = "${pname}-${version}";
-
-    __propagatedImpureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "06vw7jwq96106plhlc5vz1v1xvjismdgw9wjyzvzf0ylglnrwiib";
-    };
-
-    patchPhase = optionalString stdenv.isLinux ''
-      substituteInPlace monotonic.py --replace \
-        "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
-    '';
-  };
+  monotonic = callPackage ../development/python-modules/monotonic { };
 
   MySQL_python = buildPythonPackage rec {
     name = "MySQL-python-1.2.5";
