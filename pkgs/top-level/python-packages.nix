@@ -10179,25 +10179,7 @@ in {
     };
   };
 
-  pyinotify = buildPythonPackage rec {
-    name = "pyinotify-${version}";
-    version = "0.9.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${name}/${name}.tar.gz";
-      sha256 = "1x3i9wmzw33fpkis203alygfnrkcmq9w1aydcm887jh6frfqm6cw";
-    };
-
-    # No tests distributed
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/seb-m/pyinotify/wiki;
-      description = "Monitor filesystems events on Linux platforms with inotify";
-      license = licenses.mit;
-      platforms = platforms.linux;
-    };
-  };
+  pyinotify = callPackage ../development/python-modules/pyinotify { };
 
   pyinsane2 = buildPythonPackage rec {
     name = "pyinsane2-${version}";
