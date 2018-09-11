@@ -13497,28 +13497,7 @@ in {
     };
   };
 
-  testrepository = buildPythonPackage rec {
-    name = "testrepository-${version}";
-    version = "0.0.20";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/testrepository/${name}.tar.gz";
-      sha256 = "1ssqb07c277010i6gzzkbdd46gd9mrj0bi0i8vn560n2k2y4j93m";
-    };
-
-    buildInputs = with self; [ testtools testresources ];
-    propagatedBuildInputs = with self; [ pbr subunit fixtures ];
-
-    checkPhase = ''
-      ${python.interpreter} ./testr
-    '';
-
-    meta = {
-      description = "A database of test results which can be used as part of developer workflow";
-      homepage = https://pypi.python.org/pypi/testrepository;
-      license = licenses.bsd2;
-    };
-  };
+  testrepository = callPackage ../development/python-modules/testrepository { };
 
   testresources = callPackage ../development/python-modules/testresources { };
 
