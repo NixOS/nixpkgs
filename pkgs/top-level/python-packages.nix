@@ -1839,6 +1839,8 @@ in {
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
+  python-json-logger = callPackage ../development/python-modules/python-json-logger { };
+
   python-ly = callPackage ../development/python-modules/python-ly {};
 
   pyhepmc = buildPythonPackage rec {
