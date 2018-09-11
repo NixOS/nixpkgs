@@ -3893,6 +3893,11 @@
     github = "StillerHarpo";
     name = "Florian Engel";
   };
+  stites = {
+    email = "sam@stites.io";
+    github = "stites";
+    name = "Sam Stites";
+  };
   stumoss = {
     email = "samoss@gmail.com";
     github = "stumoss";
@@ -4157,6 +4162,11 @@
     email = "tom@tsmeets.nl";
     github = "tomsmeets";
     name = "Tom Smeets";
+  };
+  toonn = {
+    email = "nnoot@toonn.io";
+    github = "toonn";
+    name = "Toon Nolten";
   };
   travisbhartwell = {
     email = "nafai@travishartwell.net";

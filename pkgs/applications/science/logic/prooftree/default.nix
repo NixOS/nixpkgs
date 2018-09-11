@@ -15,7 +15,7 @@ stdenv.mkDerivation (rec {
   dontAddPrefix = true;
   configureFlags = [ "--prefix" "$(out)" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A program for proof-tree visualization";
     longDescription = ''
       Prooftree is a program for proof-tree visualization during interactive
@@ -35,7 +35,8 @@ stdenv.mkDerivation (rec {
       shift-click).
     '';
     homepage = http://askra.de/software/prooftree;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.jwiegley ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.jwiegley ];
+    license = licenses.gpl3;
   };
 })

@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
       of the full GiNaC, and it is *only* meant to be used as a Python library.
     '';
     homepage    = http://pynac.org;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ timokau ];
     platforms   = platforms.linux;
   };

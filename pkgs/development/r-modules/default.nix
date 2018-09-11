@@ -906,6 +906,14 @@ let
       TCLLIBPATH = "${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}";
     });
 
+    RPostgres = old.RPostgres.overrideDerivation (attrs: {
+      preConfigure = ''
+        export INCLUDE_DIR=${pkgs.postgresql}/include
+        export LIB_DIR=${pkgs.postgresql.lib}/lib
+        patchShebangs configure
+        '';
+    });
+
     OpenMx = old.OpenMx.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure

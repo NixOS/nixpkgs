@@ -21,7 +21,7 @@ let
 
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint ecl arb;
-        inherit sage-src pynac singular;
+        inherit sage-src openblas-blas-pc openblas-cblas-pc openblas-lapack-pc pynac singular;
         linbox = nixpkgs.linbox.override { withSage = true; };
       };
 
@@ -41,13 +41,13 @@ let
       };
 
       sage-env = self.callPackage ./sage-env.nix {
-        inherit sage-src python rWrapper ecl singular palp flint pynac pythonEnv;
+        inherit sage-src python rWrapper openblas-cblas-pc ecl singular palp flint pynac pythonEnv;
         pkg-config = nixpkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
       };
 
       sage-with-env = self.callPackage ./sage-with-env.nix {
         inherit pythonEnv;
-        inherit sage-src pynac singular;
+        inherit sage-src openblas-blas-pc openblas-cblas-pc openblas-lapack-pc pynac singular;
         pkg-config = nixpkgs.pkgconfig; # not to confuse with pythonPackages.pkgconfig
         three = nodePackages_8_x.three;
       };
@@ -59,6 +59,10 @@ let
       };
     };
   };
+
+  openblas-blas-pc = callPackage ./openblas-pc.nix { name = "blas"; };
+  openblas-cblas-pc = callPackage ./openblas-pc.nix { name = "cblas"; };
+  openblas-lapack-pc = callPackage ./openblas-pc.nix { name = "lapack"; };
 
   sage-src = callPackage ./sage-src.nix {};
 

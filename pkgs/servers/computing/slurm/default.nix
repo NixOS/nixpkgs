@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   name = "slurm-${version}";
-  version = "17.11.9-2";
+  version = "18.08.0-1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${builtins.replaceStrings ["."] ["-"] name}";
-    sha256 = "1lq4ac6yjai6wh979dciw8v3d99zbd3w36rfh0vpncqm672fg1qy";
+    sha256 = "0mnaynnpz0cyd1lspcln6h6w5d7brcw3yiqsfxqrfhlmygyp21wq";
   };
 
   outputs = [ "out" "dev" ];

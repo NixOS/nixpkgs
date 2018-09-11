@@ -40,10 +40,12 @@ stdenv.mkDerivation rec {
 		chmod a+x \$out/bin/relfs_grant;
   '';
 
-	meta = {
+	meta = with stdenv.lib; {
 		description = "A relational filesystem on top of FUSE";
-    maintainers = [stdenv.lib.maintainers.raskin];
-		platforms = stdenv.lib.platforms.linux;
+    homepage = http://relfs.sourceforge.net;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.linux;
     broken = true;
 	};
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "bunny-${version}";
-  version = "1.1";
+  version = "1.3";
 
   src = fetchFromGitLab {
     owner = "tim241";
     repo = "bunny";
     rev = version;
-    sha256 = "0mxhj23fscbyqb9hfpmimgjn6nbx1lx3dl2msgwdy281zs25w8ki";
+    sha256 = "0nh2h5kj9b0nkb6yrzf4if7anfdmy9vijzy4bl3s7qck0nzbpy8s";
   };
 
   dontBuild = true;
