@@ -5229,6 +5229,8 @@ in {
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
 
+  flake8-polyfill = callPackage ../development/python-modules/flake8-polyfill { };
+
   flaky = buildPythonPackage rec {
     name = "flaky-${version}";
     version = "3.1.0";
