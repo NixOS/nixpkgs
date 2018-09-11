@@ -9405,26 +9405,7 @@ in {
 
   premailer = callPackage ../development/python-modules/premailer { };
 
-  prettytable = buildPythonPackage rec {
-    name = "prettytable-0.7.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PrettyTable/${name}.tar.bz2";
-      sha256 = "599bc5b4b9602e28294cf795733c889c26dd934aa7e0ee9cff9b905d4fbad188";
-    };
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    preCheck = ''
-      export LANG="en_US.UTF-8"
-    '';
-
-    meta = {
-      description = "Simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
-      homepage = http://code.google.com/p/prettytable/;
-    };
-  };
-
+  prettytable = callPackage ../development/python-modules/prettytable { };
 
   prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit { };
 
