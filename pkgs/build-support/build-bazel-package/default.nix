@@ -39,18 +39,23 @@ in stdenv.mkDerivation (fBuildAttrs // {
     installPhase = fFetchAttrs.installPhase or ''
       runHook preInstall
 
+      # Remove all built in external workspaces, Bazel will recreate them when building
+      rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
+      rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
+      rm -rf $bazelOut/external/{local_*,\@local_*}
+
       # Patching markers to make them deterministic
-      for i in $bazelOut/external/\@*.marker; do
-        sed -i 's, -\?[0-9][0-9]*$, 1,' "$i"
-      done
-      # Patching symlinks to remove build directory reference
-      find $bazelOut/external -type l | while read symlink; do
-        ln -sf $(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,") "$symlink"
-      done
+      sed -i 's, -\?[0-9][0-9]*$, 1,' $bazelOut/external/\@*.marker
+
       # Remove all vcs files
       rm -rf $(find $bazelOut/external -type d -name .git)
       rm -rf $(find $bazelOut/external -type d -name .svn)
       rm -rf $(find $bazelOut/external -type d -name .hg)
+
+      # Patching symlinks to remove build directory reference
+      find $bazelOut/external -type l | while read symlink; do
+        ln -sf $(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,") "$symlink"
+      done
 
       cp -r $bazelOut/external $out
 
