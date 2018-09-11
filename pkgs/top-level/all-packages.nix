@@ -20625,6 +20625,12 @@ with pkgs;
 
   pymol = callPackage ../applications/science/chemistry/pymol { };
 
+  quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso { };
+
+  quantum-espresso-mpi = callPackage ../applications/science/chemistry/quantum-espresso {
+     mpi = openmpi;
+  };
+
   ### SCIENCE/GEOMETRY
 
   drgeo = callPackage ../applications/science/geometry/drgeo {
