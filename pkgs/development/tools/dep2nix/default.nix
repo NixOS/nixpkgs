@@ -23,7 +23,7 @@ buildGoPackage rec {
       --prefix PATH : ${nix-prefetch-scripts}/bin
   '';
 
-  goDeps = src + "/deps.nix";
+  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "Convert `Gopkg.lock` files from golang dep into `deps.nix`";
