@@ -187,8 +187,7 @@ stdenv.mkDerivation (rec {
   ]
   ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast version "61") "--disable-xcode-checks"
   ++ lib.optional (lib.versionOlder version "61") "--enable-system-hunspell"
-  ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
-    # on i686-linux: --with-libclang-path is not available in this configuration
+  ++ lib.optionals (lib.versionAtLeast version "56") [
     "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
