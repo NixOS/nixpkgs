@@ -3688,11 +3688,11 @@ with pkgs;
   nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix { enableNpm = false; };
 
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix {
-    openssl = openssl_1_1_1;
+    openssl = openssl_1_1;
   };
   nodejs-slim-10_x = callPackage ../development/web/nodejs/v10.nix {
     enableNpm = false;
-    openssl = openssl_1_1_1;
+    openssl = openssl_1_1;
   };
 
   nodePackages_10_x = callPackage ../development/node-packages/default-v10.nix {
@@ -3728,7 +3728,7 @@ with pkgs;
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns {
-    openssl = openssl_1_1_1;
+    openssl = openssl_1_1;
   };
 
   leafpad = callPackage ../applications/editors/leafpad { };
@@ -5574,7 +5574,7 @@ with pkgs;
   tokei = callPackage ../development/tools/misc/tokei { };
 
   tor = callPackage ../tools/security/tor {
-    openssl = openssl_1_1_1;
+    openssl = openssl_1_1;
     # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
     libevent = libevent.override {
       sslSupport = false;
@@ -11444,9 +11444,7 @@ with pkgs;
 
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
-  openssl = openssl_1_0;
-  openssl_1_0 = openssl_1_0_2;
-  openssl_1_1 = openssl_1_1_1;
+  openssl = openssl_1_0_2;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
@@ -11456,7 +11454,7 @@ with pkgs;
       };
     })
     openssl_1_0_2
-    openssl_1_1_1;
+    openssl_1_1;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
