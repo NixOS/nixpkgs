@@ -8454,27 +8454,7 @@ in {
 
   oauth2client = callPackage ../development/python-modules/oauth2client { };
 
-  oauthlib = buildPythonPackage rec {
-    version = "2.0.0";
-    name = "oauthlib-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/idan/oauthlib/archive/v${version}.tar.gz";
-      sha256 = "02b645a8rqh4xfs1cmj8sss8wqppiadd1ndq3av1cdjz2frfqcjf";
-    };
-
-    buildInputs = with self; [ mock nose unittest2 ];
-
-    propagatedBuildInputs = with self; [ cryptography blinker pyjwt ];
-
-    meta = {
-      homepage = https://github.com/idan/oauthlib;
-      downloadPage = https://github.com/idan/oauthlib/releases;
-      description = "A generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
-      maintainers = with maintainers; [ prikhi ];
-    };
-  };
-
+  oauthlib = callPackage ../development/python-modules/oauthlib { };
 
   obfsproxy = buildPythonPackage ( rec {
     name = "obfsproxy-${version}";
