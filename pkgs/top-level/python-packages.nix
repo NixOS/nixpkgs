@@ -6544,23 +6544,7 @@ in {
 
   jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
 
-  jmespath = buildPythonPackage rec {
-    name = "jmespath-0.9.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jmespath/${name}.tar.gz";
-      sha256 = "0g9xvl69y7nr3w7ag4fsp6sm4fqf6vrqjw7504x2hzrrsh3ampq8";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ ply ];
-
-    meta = {
-      homepage = https://github.com/boto/jmespath;
-      description = "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
-      license = "BSD";
-    };
-  };
+  jmespath = callPackage ../development/python-modules/jmespath { };
 
   journalwatch = callPackage ../tools/system/journalwatch {
     inherit (self) systemd pytest;
