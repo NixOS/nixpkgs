@@ -152,8 +152,7 @@ stdenv.mkDerivation (rec {
     "--enable-default-toolkit=cairo-gtk${if gtk3Support then "3" else "2"}"
   ]
   ++ lib.optional (lib.versionOlder version "61") "--enable-system-hunspell"
-  ++ lib.optionals (lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
-    # on i686-linux: --with-libclang-path is not available in this configuration
+  ++ lib.optionals (lib.versionAtLeast version "56") [
     "--with-libclang-path=${llvmPackages.libclang}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
