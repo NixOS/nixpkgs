@@ -1,14 +1,62 @@
-/* Logging. */
+/* Logging, tracing, etc. */
 
 { lib }:
 
 let
   inherit (builtins) trace isAttrs isList isInt
           head substring attrNames;
-  inherit (lib) id elem isFunction;
+  inherit (lib) config id elem isFunction;
 in
 
 rec {
+
+  # -- Logging --
+
+  DEBUG   = 0;
+  INFO    = 1000;
+  WARNING = 2000;
+  ERROR   = 3000;
+
+  showLogLevel = x:
+    if      x >= ERROR   then "ERROR"
+    else if x >= WARNING then "WARNING"
+    else if x >= INFO    then "INFO"
+    else "DEBUG";
+
+  log = level: condition: msg: x:
+    if      condition && level >= (config.throwLevel or ERROR)   then throw msg
+    else if condition && level >= (config.traceLevel or WARNING) then trace "${showLogLevel level}: ${msg}" x
+                                                                 else x;
+
+  debug  = log DEBUG true;
+  info   = log INFO true;
+  warn   = log WARNING true;
+  fail   = log ERROR true;
+
+  deprecate =
+    { silentBefore ? null
+    , failingAfter ? null
+    , what
+    , ...} @ attrs:
+    assert isNull silentBefore
+        || isNull failingAfter
+        || lib.versionOlder silentBefore failingAfter;
+    assert attrs ? reason || attrs ? replacement;
+    let
+      current = config.configVersion or lib.trivial.release;
+
+      explain = lib.concatStringsSep ", " (lib.concatLists [
+        (lib.optional (attrs ? reason) attrs.reason)
+        (lib.optional (attrs ? replacement) "please use `${attrs.replacement}` instead")
+      ]);
+      failMessage = "`${what}` is long deprecated and could be removed at any point without further warnings, ${explain}";
+      warnMessage = "`${what}` is deprecated, ${explain}";
+      warnReason  = "ERROR after ${failingAfter}:\n${warnMessage}";
+      infoReason  = "WARNING after ${silentBefore}: ${warnReason}";
+    in
+    if      !isNull failingAfter && lib.versionAtLeast current failingAfter then lib.fail failMessage
+    else if !isNull silentBefore && lib.versionAtLeast current silentBefore then lib.warn warnReason
+                                                                            else lib.info infoReason;
 
   # -- Tracing --
 

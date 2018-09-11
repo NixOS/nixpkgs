@@ -170,25 +170,6 @@ rec {
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
-
-  ## Warnings
-
-  /* See https://github.com/NixOS/nix/issues/749. Eventually we'd like these
-     to expand to Nix builtins that carry metadata so that Nix can filter out
-     the INFO messages without parsing the message string.
-
-     Usage:
-     {
-       foo = lib.warn "foo is deprecated" oldFoo;
-     }
-
-     TODO: figure out a clever way to integrate location information from
-     something like __unsafeGetAttrPos.
-  */
-  warn = msg: builtins.trace "WARNING: ${msg}";
-  info = msg: builtins.trace "INFO: ${msg}";
-
-
   ## Function annotations
 
   /* Add metadata about expected function arguments to a function.
