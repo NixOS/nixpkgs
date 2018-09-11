@@ -566,6 +566,8 @@ in {
 
   statistics = callPackage ../development/python-modules/statistics { };
 
+  stestr = callPackage ../development/python-modules/stestr { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
