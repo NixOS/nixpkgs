@@ -3200,6 +3200,8 @@ with pkgs;
 
   hwinfo = callPackage ../tools/system/hwinfo { };
 
+  hylafaxplus = callPackage ../servers/hylafaxplus { };
+
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
 
   i2p = callPackage ../tools/networking/i2p {};
