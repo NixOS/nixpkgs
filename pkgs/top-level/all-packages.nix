@@ -4554,6 +4554,8 @@ with pkgs;
 
   patchwork-classic = callPackage ../applications/networking/ssb/patchwork-classic { };
 
+  talenet = callPackage ../applications/networking/ssb/talenet { };
+
   pcapfix = callPackage ../tools/networking/pcapfix { };
 
   pbzip2 = callPackage ../tools/compression/pbzip2 { };
