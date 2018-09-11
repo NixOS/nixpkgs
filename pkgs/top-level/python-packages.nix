@@ -13167,23 +13167,7 @@ in {
     };
   };
 
-  testscenarios = buildPythonPackage rec {
-    name = "testscenarios-${version}";
-    version = "0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/testscenarios/${name}.tar.gz";
-      sha256 = "1671jvrvqlmbnc42j7pc5y6vc37q44aiwrq0zic652pxyy2fxvjg";
-    };
-
-    propagatedBuildInputs = with self; [ testtools ];
-
-    meta = {
-      description = "A pyunit extension for dependency injection";
-      homepage = https://pypi.python.org/pypi/testscenarios;
-      license = licenses.asl20;
-    };
-  };
+  testscenarios = callPackage ../development/python-modules/testscenarios { };
 
   testpath = buildPythonPackage rec {
     pname = "testpath";
