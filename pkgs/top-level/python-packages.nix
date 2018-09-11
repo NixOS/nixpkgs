@@ -8818,26 +8818,7 @@ in {
 
   mecab-python3 = callPackage ../development/python-modules/mecab-python3 { };
 
-  mox3 = buildPythonPackage rec {
-    name = "mox3-${version}";
-    version = "0.23.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mox3/${name}.tar.gz";
-      sha256 = "0q26sg0jasday52a7y0cch13l0ssjvr4yqnvswqxsinj1lv5ld88";
-    };
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-
-    #  FAIL: mox3.tests.test_mox.RegexTest.testReprWithFlags
-    #  ValueError: cannot use LOCALE flag with a str pattern
-    doCheck = !isPy36;
-
-    buildInputs = with self; [ subunit testrepository testtools six ];
-    propagatedBuildInputs = with self; [ pbr fixtures ];
-  };
+  mox3 = callPackage ../development/python-modules/mox3 { };
 
   doc8 = callPackage ../development/python-modules/doc8 { };
 
