@@ -21,7 +21,7 @@
       message = ''
         HylaFAX cannot be used without modems.
         Please define at least one modem with
-        <option>config.services.hylafax</option>.
+        <option>config.services.hylafax.modems</option>.
       '';
     }];
   };
