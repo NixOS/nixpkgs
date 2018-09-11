@@ -15731,6 +15731,7 @@ let
     };
     buildInputs = [ TestRun TestTrap ];
     propagatedBuildInputs = [ MooseXGetopt UNIVERSALrequire YAMLLibYAML ];
+    doCheck = !stdenv.isDarwin;
     meta = {
       homepage = http://web-cpan.berlios.de/modules/Test-Run/;
       description = "Analyze tests from the command line using Test::Run";
