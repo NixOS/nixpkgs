@@ -7,8 +7,8 @@ let
 
   inherit (pkgs.stdenv.hostPlatform) platform;
 
-  builderUboot = import ./builder_uboot.nix { inherit config pkgs configTxt; };
-  builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
+  builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
+  builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
 
   builder = 
     if cfg.uboot.enable then
@@ -34,9 +34,11 @@ let
     '' + optional isAarch64 ''
       # Boot in 64-bit mode.
       arm_control=0x200
-    '' + optional cfg.uboot.enable ''
+    '' + (if cfg.uboot.enable then ''
       kernel=u-boot-rpi.bin
-    '' + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
+    '' else ''
+      kernel=kernel.img
+    '') + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
 
 in
 
@@ -56,7 +58,7 @@ in
 
       version = mkOption {
         default = 2;
-        type = types.enum [ 1 2 3 ];
+        type = types.enum [ 0 1 2 3 ];
         description = ''
         '';
       };

@@ -1,13 +1,15 @@
-{ config, pkgs, configTxt }:
+{ pkgs, version, configTxt }:
 
 let
   cfg = config.boot.loader.raspberryPi;
   isAarch64 = pkgs.stdenv.isAarch64;
 
   uboot =
-    if cfg.version == 1 then
+    if version == 0 then
+      pkgs.ubootRaspberryPiZero
+    else if version == 1 then
       pkgs.ubootRaspberryPi
-    else if cfg.version == 2 then
+    else if version == 2 then
       pkgs.ubootRaspberryPi2
     else
       if isAarch64 then
@@ -21,7 +23,7 @@ let
     };
 in
 pkgs.substituteAll {
-  src = ./builder_uboot.sh;
+  src = ./uboot-builder.sh;
   isExecutable = true;
   inherit (pkgs) bash;
   path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
@@ -29,6 +31,6 @@ pkgs.substituteAll {
   inherit uboot;
   inherit configTxt;
   inherit extlinuxConfBuilder;
-  version = cfg.version;
+  inherit version;
 }
 

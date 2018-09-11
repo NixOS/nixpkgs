@@ -85,13 +85,9 @@ addEntry() {
     echo $kernel > $outdir/$generation-kernel
 
     if test "$generation" = "default"; then
-      if [ @version@ -eq 1 ]; then
-        copyForced $kernel $target/kernel.img
-      else
-        copyForced $kernel $target/kernel7.img
-      fi
+      copyForced $kernel $target/kernel.img
       copyForced $initrd $target/initrd
-      for dtb in $dtb_path/bcm*.dtb; do
+      for dtb in $dtb_path/{broadcom,}/bcm*.dtb; do
         dst="$target/$(basename $dtb)"
         copyForced $dtb "$dst"
         filesCopied[$dst]=1
