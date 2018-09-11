@@ -532,6 +532,8 @@ in {
 
   rlp = callPackage ../development/python-modules/rlp { };
 
+  runtest = callPackage ../development/python-modules/runtest { };
+
   rx = callPackage ../development/python-modules/rx { };
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };
