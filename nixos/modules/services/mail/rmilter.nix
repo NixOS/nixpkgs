@@ -193,6 +193,9 @@ in
   config = mkMerge [
 
     (mkIf cfg.enable {
+      warnings = [
+        ''`config.services.rmilter' is deprecated, `rmilter' deprecated and unsupported by upstream, and will be removed from next releases. Use built-in rspamd milter instead.''
+      ];
 
       users.users = singleton {
         name = cfg.user;
