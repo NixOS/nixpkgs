@@ -13,6 +13,12 @@ buildGoPackage rec {
     sha256 = "0cwzvw1rcvg7y3m8dahr9r05s4i9apnfw5xhiaf0rlkdh3vy33wp";
   };
 
+  # set the version. see: aws-vault's Makefile
+  buildFlagsArray = ''
+    -ldflags=
+    -X main.Version=v${version}
+  '';
+
   meta = with lib; {
     description = "A vault for securely storing and accessing AWS credentials in development environments";
     homepage = "https://github.com/99designs/aws-vault";
