@@ -5225,6 +5225,8 @@ in {
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
+  flake8-docstrings = callPackage ../development/python-modules/flake8-docstrings { };
+
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
