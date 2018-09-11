@@ -7309,21 +7309,7 @@ in {
 
   multidict = callPackage ../development/python-modules/multidict { };
 
-  munch = buildPythonPackage rec {
-    name = "munch-${version}";
-    version = "2.0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/munch/${name}.tar.gz";
-      sha256 = "1420683a94f3a2ffc77935ddd28aa9ccb540dd02b75e02ed7ea863db437ab8b2";
-    };
-
-    meta = {
-      description = "A dot-accessible dictionary (a la JavaScript objects)";
-      license = licenses.mit;
-      homepage = https://github.com/Infinidat/munch;
-    };
-  };
+  munch = callPackage ../development/python-modules/munch { };
 
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
