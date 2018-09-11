@@ -320,6 +320,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  hacking = callPackage ../development/python-modules/hacking { };
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
