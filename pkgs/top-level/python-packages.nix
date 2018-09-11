@@ -244,6 +244,8 @@ in {
 
   cozy = callPackage ../development/python-modules/cozy { };
 
+  daiquiri = callPackage ../development/python-modules/daiquiri { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
