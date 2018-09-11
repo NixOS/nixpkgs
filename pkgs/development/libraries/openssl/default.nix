@@ -125,9 +125,9 @@ in {
     sha256 = "003xh9f898i56344vpvpxxxzmikivxig4xwlm7vbi7m8n43qxaah";
   };
 
-  openssl_1_1_0 = common {
-    version = "1.1.0i";
-    sha256 = "16fgaf113p6s5ixw227sycvihh3zx6f6rf0hvjjhxk68m12cigzb";
+  openssl_1_1_1 = common {
+    version = "1.1.1";
+    sha256 = "0gbab2fjgms1kx5xjvqx8bxhr98k4r8l2fa8vw7kvh491xd8fdi8";
   };
 
 }
