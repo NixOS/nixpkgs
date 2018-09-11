@@ -9513,6 +9513,14 @@ with pkgs;
     installLocales = config.glibc.locales or false;
   };
 
+  # Provided by libc on Operating Systems that use the Extensible Linker Format.
+  elf-header =
+    if stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf"
+    then null
+    else elf-header-real;
+
+  elf-header-real = callPackage ../development/libraries/elf-header { };
+
   glibc_memusage = callPackage ../development/libraries/glibc {
     installLocales = false;
     withGd = true;
