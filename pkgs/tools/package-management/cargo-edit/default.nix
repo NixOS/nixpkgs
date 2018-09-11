@@ -1,4 +1,6 @@
-{ stdenv, lib, darwin, rustPlatform, fetchFromGitHub }:
+{ stdenv, lib, darwin
+, rustPlatform, fetchFromGitHub
+, openssl, pkgconfig }:
 
 rustPlatform.buildRustPackage rec {
   name = "cargo-edit-${version}";
@@ -13,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1j7fqswdx6f2i5wr0pdavdvcv18j1l27a8ighr75p7f54apa27l8";
 
+  nativeBuildInputs = lib.optional (!stdenv.isDarwin) pkgconfig;
+  buildInputs = lib.optional (!stdenv.isDarwin) openssl;
   propagatedBuildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta = with lib; {
