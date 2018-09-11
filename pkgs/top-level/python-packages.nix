@@ -13479,56 +13479,11 @@ in {
 
   umemcache = callPackage ../development/python-modules/umemcache {};
 
-  unicodecsv = buildPythonPackage rec {
-    version = "0.14.1";
-    name = "unicodecsv-${version}";
+  unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/unicodecsv/${name}.tar.gz";
-      sha256 = "1z7pdwkr6lpsa7xbyvaly7pq3akflbnz8gq62829lr28gl1hi301";
-    };
+  unittest2 = callPackage ../development/python-modules/unittest2 { };
 
-    # ImportError: No module named runtests
-    doCheck = false;
-
-    meta = {
-      description = "Drop-in replacement for Python2's stdlib csv module, with unicode support";
-      homepage = https://github.com/jdunck/python-unicodecsv;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
-
-  unittest2 = buildPythonPackage rec {
-    version = "1.1.0";
-    name = "unittest2-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/unittest2/unittest2-${version}.tar.gz";
-      sha256 = "0y855kmx7a8rnf81d3lh5lyxai1908xjp0laf4glwa4c8472m212";
-    };
-
-    # # 1.0.0 and up create a circle dependency with traceback2/pbr
-    doCheck = false;
-
-    postPatch = ''
-      # argparse is needed for python < 2.7, which we do not support anymore.
-      substituteInPlace setup.py --replace "argparse" ""
-
-      # # fixes a transient error when collecting tests, see https://bugs.launchpad.net/python-neutronclient/+bug/1508547
-      sed -i '510i\        return None, False' unittest2/loader.py
-      # https://github.com/pypa/packaging/pull/36
-      sed -i 's/version=VERSION/version=str(VERSION)/' setup.py
-    '';
-
-    propagatedBuildInputs = with self; [ six traceback2 ];
-
-    meta = {
-      description = "A backport of the new features added to the unittest testing framework";
-      homepage = https://pypi.python.org/pypi/unittest2;
-    };
-  };
-
-    unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
+  unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
     uritemplate_py = buildPythonPackage rec {
     name = "uritemplate.py-${version}";
