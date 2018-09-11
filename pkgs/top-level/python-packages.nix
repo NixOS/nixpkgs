@@ -13682,43 +13682,9 @@ in {
 
   uritools = callPackage ../development/python-modules/uritools { };
 
-  traceback2 = buildPythonPackage rec {
-    version = "1.4.0";
-    name = "traceback2-${version}";
+  traceback2 = callPackage ../development/python-modules/traceback2 { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/traceback2/traceback2-${version}.tar.gz";
-      sha256 = "0c1h3jas1jp1fdbn9z2mrgn3jj0hw1x3yhnkxp7jw34q15xcdb05";
-    };
-
-    propagatedBuildInputs = with self; [ pbr linecache2 ];
-    # circular dependencies for tests
-    doCheck = false;
-
-    meta = {
-      description = "A backport of traceback to older supported Pythons";
-      homepage = https://pypi.python.org/pypi/traceback2/;
-    };
-  };
-
-  linecache2 = buildPythonPackage rec {
-    name = "linecache2-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/linecache2/${name}.tar.gz";
-      sha256 = "0z79g3ds5wk2lvnqw0y2jpakjf32h95bd9zmnvp7dnqhf57gy9jb";
-    };
-
-    buildInputs = with self; [ pbr ];
-    # circular dependencies for tests
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      description = "A backport of linecache to older supported Pythons";
-      homepage = "https://github.com/testing-cabal/linecache2";
-    };
-  };
+  linecache2 = callPackage ../development/python-modules/linecache2 { };
 
   upass = buildPythonPackage rec {
     version = "0.1.4";
