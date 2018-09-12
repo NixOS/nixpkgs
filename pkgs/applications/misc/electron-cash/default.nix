@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages }:
+{ stdenv, fetchurl, python3Packages, qtbase, makeWrapper, lib }:
 
 let
 
@@ -36,6 +36,8 @@ python3Packages.buildPythonApplication rec {
     trezor
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   postPatch = ''
     # Remove pyqt5 check
     sed -i '/pyqt5/d' setup.py
@@ -56,11 +58,14 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash %u" "Exec=$out/bin/electron-cash %u"
+
+    wrapProgram $out/bin/electron-cash \
+      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/electrum help >/dev/null
+    $out/bin/electron-cash help >/dev/null
   '';
 
   meta = with stdenv.lib; {
