@@ -2,7 +2,7 @@
 , wrapGAppsHook, gdk_pixbuf, cmake, ninja, desktop-file-utils
 , libnotify, libcanberra-gtk3, libsecret, gmime, isocodes
 , gobjectIntrospection, libpthreadstubs, sqlite
-, gnome3, librsvg, gnome-doc-utils, webkitgtk }:
+, gnome3, librsvg, gnome-doc-utils, webkitgtk, fetchpatch }:
 
 let
   pname = "geary";
@@ -15,6 +15,22 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "01ykhkjfkprvh9kp4rzrl6xs2pqibiw44ckvqsn5cs3xy2rlq8mm";
   };
+
+  patches = [
+    # Fix build with webkitgtk-2.22
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/geary/commit/5d0f711426d76f878cf9b71f7e8f785199c7cde1.patch;
+      sha256 = "1yifng5lfsc6wp7irmi8gjdcfig1cr0chf7rdv3asrk567nmwrsi";
+    })
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/geary/commit/0d966950a2cba888873cd3a7f4f42bb7a017dc6d.patch;
+      sha256 = "1y6v4fnik4w3paj9nl0yqs54998sx1zr9w3940d579p6dsa8f3fg";
+    })
+    (fetchpatch {
+      url = https://gitlab.gnome.org/GNOME/geary/commit/e091f24b00ec421e1aadd5e360d1550e658ad5ef.patch;
+      sha256 = "0d5hc4h9c1hnn2sk18nkpmzdvwm3h746n2zj8n22ax9rj6lxl38l";
+    })
+  ];
 
   nativeBuildInputs = [ vala_0_40 intltool pkgconfig wrapGAppsHook cmake ninja desktop-file-utils gnome-doc-utils gobjectIntrospection ];
   buildInputs = [
