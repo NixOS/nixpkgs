@@ -56,6 +56,8 @@ let
 
   git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
 
+  git-annex-remote-googledrive = callPackage ./git-annex-remote-googledrive { };
+
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
 
