@@ -62,8 +62,10 @@ rec {
     buildGoPackage = buildGo110Package;
   };
 
-  litecoin  = callPackage ./litecoin.nix { withGui = true; };
-  litecoind = callPackage ./litecoin.nix { withGui = false; };
+  litecoin  = callPackage ./litecoin.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+  litecoind = litecoin.override { withGui = false; };
 
   masari = callPackage ./masari.nix { };
 
