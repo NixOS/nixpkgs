@@ -50,14 +50,14 @@ self = generated // (with generated; {
   LanguageClient-neovim = let
     LanguageClient-neovim-src = fetchgit {
       url = "https://github.com/autozimu/LanguageClient-neovim";
-      rev = "5015aa164dc9ad96a0f5fbadaf92a888d16bc0d9";
-      sha256 = "1b3916al2y4hxmmlhqxw4cdliyd42xahc7wmgm8yq1gbvzbhdafg";
+      rev = "59f0299e8f7d7edd0653b5fc005eec74c4bf4aba";
+      sha256 = "0x6729w7v3bxlpvm8jz1ybn23qa0zqfgxl88q2j0bbs6rvp0w1jq";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "1vafyi650qdaq1f7fc8d4nzrv1i6iz28fs5z66hsnz4xkwb3qq9w";
+      cargoSha256 = "1afmz14j7ma2nrsx0njcqbh2wa430dr10hds78c031286ppgwjls";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -67,7 +67,7 @@ self = generated // (with generated; {
       '';
     };
   in buildVimPluginFrom2Nix {
-    name = "LanguageClient-neovim-2018-06-12";
+    name = "LanguageClient-neovim-2018-09-07";
     src = LanguageClient-neovim-src;
 
     dependencies = [];
