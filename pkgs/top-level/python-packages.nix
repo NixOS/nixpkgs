@@ -15382,28 +15382,7 @@ EOF
     };
   };
 
-  Logbook = buildPythonPackage rec {
-    name = "Logbook-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/L/Logbook/${name}.tar.gz";
-      sha256 = "0whqbx5p0zkf7gmb5ssnsnhm4kn4drd4x7fbhdi8dnxklqajbnl7";
-    };
-
-    buildInputs = [ self.pytest ] ++ optionals (!isPy3k) [ self.mock ];
-
-    checkPhase = ''
-      find tests -name \*.pyc -delete
-      py.test tests
-    '';
-
-    meta = {
-      homepage = https://pythonhosted.org/Logbook/;
-      description = "A logging replacement for Python";
-      license = licenses.bsd3;
-    };
-  };
+  Logbook = callPackage ../development/python-modules/Logbook { };
 
   libversion = callPackage ../development/python-modules/libversion {
     inherit (pkgs) libversion;
