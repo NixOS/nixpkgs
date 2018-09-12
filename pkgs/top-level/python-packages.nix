@@ -10837,6 +10837,8 @@ in {
 
   python-language-server = callPackage ../development/python-modules/python-language-server {};
 
+  python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server {};
+
   pyls-black = callPackage ../development/python-modules/pyls-black {};
 
   pyls-isort = callPackage ../development/python-modules/pyls-isort {};
