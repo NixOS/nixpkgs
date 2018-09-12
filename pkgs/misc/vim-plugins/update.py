@@ -139,6 +139,7 @@ def prefetch_plugin(user: str, repo_name: str, cache: "Cache") -> Plugin:
     has_submodules = repo.has_submodules()
     cached_plugin = cache[commit]
     if cached_plugin is not None:
+        cached_plugin.name = repo_name
         cached_plugin.date = date
         return cached_plugin
 

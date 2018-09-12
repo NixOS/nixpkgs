@@ -2,6 +2,16 @@
 { buildVimPluginFrom2Nix, fetchFromGitHub }:
 
 {
+  a-vim = buildVimPluginFrom2Nix {
+    name = "a-vim-2010-11-06";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "a.vim";
+      rev = "2cbe946206ec622d9d8cf2c99317f204c4d41885";
+      sha256 = "0h62v9z5bh9xmaq22pqdb3z79i84a5rknqm68mjpy7nq7s3q42fa";
+    };
+  };
+
   ack-vim = buildVimPluginFrom2Nix {
     name = "ack-vim-2018-02-27";
     src = fetchFromGitHub {
@@ -59,16 +69,6 @@
       repo = "align";
       rev = "787662fe90cd057942bc5b682fd70c87e1a9dd77";
       sha256 = "0acacr572kfh7jvavbw61q5pkwrpi1albgancma063rpax1pddgp";
-    };
-  };
-
-  alternative = buildVimPluginFrom2Nix {
-    name = "alternative-2010-11-06";
-    src = fetchFromGitHub {
-      owner = "vim-scripts";
-      repo = "a.vim";
-      rev = "2cbe946206ec622d9d8cf2c99317f204c4d41885";
-      sha256 = "0h62v9z5bh9xmaq22pqdb3z79i84a5rknqm68mjpy7nq7s3q42fa";
     };
   };
 
@@ -182,8 +182,8 @@
     };
   };
 
-  colorsamplerpack = buildVimPluginFrom2Nix {
-    name = "colorsamplerpack-2012-11-30";
+  Colour-Sampler-Pack = buildVimPluginFrom2Nix {
+    name = "Colour-Sampler-Pack-2012-11-30";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "Colour-Sampler-Pack";
@@ -192,8 +192,8 @@
     };
   };
 
-  command_T = buildVimPluginFrom2Nix {
-    name = "command_T-2017-11-17";
+  command-t = buildVimPluginFrom2Nix {
+    name = "command-t-2017-11-17";
     src = fetchFromGitHub {
       owner = "wincent";
       repo = "command-t";
@@ -293,16 +293,6 @@
     };
   };
 
-  ctrlp-vim = buildVimPluginFrom2Nix {
-    name = "ctrlp-vim-2018-06-28";
-    src = fetchFromGitHub {
-      owner = "ctrlpvim";
-      repo = "ctrlp.vim";
-      rev = "43cc73b8e7d4ab45f17118573eb81fd45704b989";
-      sha256 = "16jn9n6vavwiwh6l2av2i3livan72saaz0d0v8vmznrrs2ngi1gk";
-    };
-  };
-
   ctrlp-z = buildVimPluginFrom2Nix {
     name = "ctrlp-z-2015-10-17";
     src = fetchFromGitHub {
@@ -310,6 +300,16 @@
       repo = "ctrlp-z";
       rev = "d1a69ec623ce24b9a30fc8fe3cd468c322b03026";
       sha256 = "16nsj1g8lqmyizlb5ijwhf4dsmh0xv1kwqq6jxvhaf55vfga82yl";
+    };
+  };
+
+  ctrlp-vim = buildVimPluginFrom2Nix {
+    name = "ctrlp-vim-2018-06-28";
+    src = fetchFromGitHub {
+      owner = "ctrlpvim";
+      repo = "ctrlp.vim";
+      rev = "43cc73b8e7d4ab45f17118573eb81fd45704b989";
+      sha256 = "16jn9n6vavwiwh6l2av2i3livan72saaz0d0v8vmznrrs2ngi1gk";
     };
   };
 
@@ -396,16 +396,6 @@
     };
   };
 
-  deoplete-nvim = buildVimPluginFrom2Nix {
-    name = "deoplete-nvim-2018-09-02";
-    src = fetchFromGitHub {
-      owner = "shougo";
-      repo = "deoplete.nvim";
-      rev = "8c2117b966a7f05091cd49609f8ee3641f260997";
-      sha256 = "0pklmb89g3hqxilv0546c21yjav26frsxb5g24ma49pii8lmzgjg";
-    };
-  };
-
   deoplete-rust = buildVimPluginFrom2Nix {
     name = "deoplete-rust-2017-07-18";
     src = fetchFromGitHub {
@@ -423,6 +413,16 @@
       repo = "deoplete-ternjs";
       rev = "4b6276019a1491cc5003a0b007ca1aaeab671f57";
       sha256 = "0v5033r75qxnhgmm0czxgwps0khbx1sn2dc7nsrscp441h5sgz6i";
+    };
+  };
+
+  deoplete-nvim = buildVimPluginFrom2Nix {
+    name = "deoplete-nvim-2018-09-02";
+    src = fetchFromGitHub {
+      owner = "shougo";
+      repo = "deoplete.nvim";
+      rev = "8c2117b966a7f05091cd49609f8ee3641f260997";
+      sha256 = "0pklmb89g3hqxilv0546c21yjav26frsxb5g24ma49pii8lmzgjg";
     };
   };
 
@@ -778,6 +778,16 @@
     };
   };
 
+  neco-ghc = buildVimPluginFrom2Nix {
+    name = "neco-ghc-2018-05-13";
+    src = fetchFromGitHub {
+      owner = "eagletmt";
+      repo = "neco-ghc";
+      rev = "682869aca5dd0bde71a09ba952acb59c543adf7d";
+      sha256 = "1v7ibi4fp99s4lswz3v0gf4i0h5i5gpj05xpsf4cixwj2zgh206h";
+    };
+  };
+
   neco-look = buildVimPluginFrom2Nix {
     name = "neco-look-2018-01-21";
     src = fetchFromGitHub {
@@ -805,16 +815,6 @@
       repo = "neco-vim";
       rev = "f5397c5e800d65a58c56d8f1b1b92686b05f4ca9";
       sha256 = "0yb7ja6qgrazszk4i01cwjj00j9vd43zs2r11b08iy8n10jnzr73";
-    };
-  };
-
-  necoGhc = buildVimPluginFrom2Nix {
-    name = "necoGhc-2018-05-13";
-    src = fetchFromGitHub {
-      owner = "eagletmt";
-      repo = "neco-ghc";
-      rev = "682869aca5dd0bde71a09ba952acb59c543adf7d";
-      sha256 = "1v7ibi4fp99s4lswz3v0gf4i0h5i5gpj05xpsf4cixwj2zgh206h";
     };
   };
 
@@ -2909,6 +2909,16 @@
     };
   };
 
+  vim-vinegar = buildVimPluginFrom2Nix {
+    name = "vim-vinegar-2018-08-06";
+    src = fetchFromGitHub {
+      owner = "tpope";
+      repo = "vim-vinegar";
+      rev = "c38ea2195a43747aedf0bb4b7eb5aa8870260296";
+      sha256 = "1bcpi4m7ng9jaipf8xjf74469lgk34bs5ajjpv9dnkcrsalm28nf";
+    };
+  };
+
   vim-visualstar = buildVimPluginFrom2Nix {
     name = "vim-visualstar-2015-08-27";
     src = fetchFromGitHub {
@@ -2926,6 +2936,16 @@
       repo = "vim-wakatime";
       rev = "25aa400fd1f1e3d689c721605a65e015024dc4cf";
       sha256 = "11lk5k8wl3kxp6p2i0nnp56f4wcaniy40kzs3anjdwlzya631rg2";
+    };
+  };
+
+  vim-watchdogs = buildVimPluginFrom2Nix {
+    name = "vim-watchdogs-2017-12-03";
+    src = fetchFromGitHub {
+      owner = "osyo-manga";
+      repo = "vim-watchdogs";
+      rev = "a6415c2d928af8c1aacdbce9b1ed8d315891eb03";
+      sha256 = "0n6aqsgn0q1qgpj4yznqwbsbbk2a077gnjlq86ii3jhkzh5fzcff";
     };
   };
 
@@ -3039,16 +3059,6 @@
     };
   };
 
-  vinegar = buildVimPluginFrom2Nix {
-    name = "vinegar-2018-08-06";
-    src = fetchFromGitHub {
-      owner = "tpope";
-      repo = "vim-vinegar";
-      rev = "c38ea2195a43747aedf0bb4b7eb5aa8870260296";
-      sha256 = "1bcpi4m7ng9jaipf8xjf74469lgk34bs5ajjpv9dnkcrsalm28nf";
-    };
-  };
-
   vundle = buildVimPluginFrom2Nix {
     name = "vundle-2018-02-03";
     src = fetchFromGitHub {
@@ -3056,16 +3066,6 @@
       repo = "vundle";
       rev = "9a38216a1c0c597f978d73547d37681fc689c90d";
       sha256 = "1695glma8zf2lnp0w713sdvwqagf1s127p4i60114nk6gx5g5x2c";
-    };
-  };
-
-  watchdogs = buildVimPluginFrom2Nix {
-    name = "watchdogs-2017-12-03";
-    src = fetchFromGitHub {
-      owner = "osyo-manga";
-      repo = "vim-watchdogs";
-      rev = "a6415c2d928af8c1aacdbce9b1ed8d315891eb03";
-      sha256 = "0n6aqsgn0q1qgpj4yznqwbsbbk2a077gnjlq86ii3jhkzh5fzcff";
     };
   };
 
@@ -3109,8 +3109,8 @@
     };
   };
 
-  yankring = buildVimPluginFrom2Nix {
-    name = "yankring-2015-07-29";
+  YankRing-vim = buildVimPluginFrom2Nix {
+    name = "YankRing-vim-2015-07-29";
     src = fetchFromGitHub {
       owner = "vim-scripts";
       repo = "YankRing.vim";
