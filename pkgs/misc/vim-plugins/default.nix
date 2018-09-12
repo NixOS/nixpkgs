@@ -164,7 +164,15 @@ self = generated // (with generated; {
 
   gitv = gitv.overrideAttrs(old: {
 		dependencies = ["gitv"];
-	});
+  });
+
+  ncm2 = ncm2.overrideAttrs(old: {
+    dependencies = ["nvim-yarp"];
+  });
+
+  ncm2-ultisnips = ncm2-ultisnips.overrideAttrs(old: {
+    dependencies = ["ultisnips"];
+  });
 
   taglist = taglist.overrideAttrs(old: {
     setSourceRoot = ''

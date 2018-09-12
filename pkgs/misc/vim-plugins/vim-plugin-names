@@ -174,6 +174,11 @@ morhetz/gruvbox
 mpickering/hlint-refactor-vim
 nathanaelkane/vim-indent-guides
 nbouscal/vim-stylish-haskell
+ncm2/ncm2
+ncm2/ncm2-bufword
+ncm2/ncm2-path
+ncm2/ncm2-tmux
+ncm2/ncm2-ultisnips
 neoclide/vim-easygit
 neovimhaskell/haskell-vim
 nixprime/cpsm
@@ -202,6 +207,7 @@ Rip-Rip/clang_complete
 rodjek/vim-puppet
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
+roxma/nvim-yarp
 rust-lang/rust.vim
 ryanoasis/vim-devicons
 Rykka/riv.vim

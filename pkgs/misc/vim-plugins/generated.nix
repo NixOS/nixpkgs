@@ -788,6 +788,56 @@
     };
   };
 
+  ncm2 = buildVimPluginFrom2Nix {
+    name = "ncm2-2018-09-03";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2";
+      rev = "08f026d84b50e8db3d3a4124da63c8c3e0e5e558";
+      sha256 = "07d411p3shm27qmir8hsw88mx3wdmz3am4qi0fqzkhkpkgli70jw";
+    };
+  };
+
+  ncm2-bufword = buildVimPluginFrom2Nix {
+    name = "ncm2-bufword-2018-07-28";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-bufword";
+      rev = "86a92eb3fb217f9ea1e93f890b7e5e0eb1671ca9";
+      sha256 = "02f43rr9apgcjpz4ipnin4v3cvdlx931a0787x87iyr8a0aljg3y";
+    };
+  };
+
+  ncm2-path = buildVimPluginFrom2Nix {
+    name = "ncm2-path-2018-08-01";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-path";
+      rev = "875ae47e171abc2ba6710bb835727bed46d7b329";
+      sha256 = "09vhggrb1nigr8p53gd9ibn3b84dh9yix2ndj2453wnq8ny9x2dc";
+    };
+  };
+
+  ncm2-tmux = buildVimPluginFrom2Nix {
+    name = "ncm2-tmux-2018-07-30";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-tmux";
+      rev = "4f60ee1be57531295075d808e0006c83894096d1";
+      sha256 = "1ihbm65b9bc0y068w6r0k8f9lsc3603npb55chcchpj7z75539yh";
+    };
+  };
+
+  ncm2-ultisnips = buildVimPluginFrom2Nix {
+    name = "ncm2-ultisnips-2018-08-01";
+    src = fetchFromGitHub {
+      owner = "ncm2";
+      repo = "ncm2-ultisnips";
+      rev = "15432d7933cfb855599442a67d6f39ddb706c737";
+      sha256 = "0ixajh08fd5dgdz4h1sdxgiaind1nksk1d4lwyb6n4ijf672pms2";
+    };
+  };
+
   neco-look = buildVimPluginFrom2Nix {
     name = "neco-look-2018-01-21";
     src = fetchFromGitHub {
@@ -955,6 +1005,16 @@
       repo = "nvim-completion-manager";
       rev = "45a026afb8b309b3b80f2c1b5910f72a54a9b563";
       sha256 = "0znwgry4ill0nxm096hc8s9vf20rf9xcq3dz8y8h7xlqzzsycl7a";
+    };
+  };
+
+  nvim-yarp = buildVimPluginFrom2Nix {
+    name = "nvim-yarp-2018-07-27";
+    src = fetchFromGitHub {
+      owner = "roxma";
+      repo = "nvim-yarp";
+      rev = "52317ced0e16f226f0d44878917d0b5f4657b4d4";
+      sha256 = "1xj1n9x1nxjbbpp29x5kkwr0bxziwzn8n2b8z9467hj9w646zyrj";
     };
   };
 
