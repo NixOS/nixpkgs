@@ -469,6 +469,8 @@ in {
 
   pykerberos = callPackage ../development/python-modules/pykerberos { };
 
+  pykeepass = callPackage ../development/python-modules/pykeepass { };
+
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
@@ -2009,6 +2011,8 @@ in {
   datashape = callPackage ../development/python-modules/datashape { };
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
+
+  requests-file = callPackage ../development/python-modules/requests-file { };
 
   requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
 
@@ -11153,6 +11157,8 @@ in {
     };
   });
 
+  pyreadability = callPackage ../development/python-modules/pyreadability { };
+
   pyscss = buildPythonPackage rec {
     name = "pyScss-${version}";
     version = "1.3.5";
@@ -17084,6 +17090,8 @@ EOF
   warrant = callPackage ../development/python-modules/warrant { };
 
   textacy = callPackage ../development/python-modules/textacy { };
+
+  tldextract = callPackage ../development/python-modules/tldextract { };
 
   pyemd  = callPackage ../development/python-modules/pyemd { };
 
