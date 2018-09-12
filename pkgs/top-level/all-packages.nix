@@ -22054,9 +22054,7 @@ with pkgs;
 
   valauncher = callPackage ../applications/misc/valauncher { };
 
-  vault = callPackage ../tools/security/vault {
-    go = go_1_10;
-  };
+  vault = callPackage ../tools/security/vault { };
 
   vaultenv = haskellPackages.vaultenv;
 
