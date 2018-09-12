@@ -1076,7 +1076,7 @@ self: super: {
 
   # The tool needs a newer hpack version than the one mandated by LTS-12.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
-    hpack = self.hpack_0_30_0;
+    hpack = self.hpack_0_31_0;
     yaml = self.yaml_0_10_1_1;
   });
 
