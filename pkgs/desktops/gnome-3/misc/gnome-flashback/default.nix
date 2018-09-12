@@ -25,13 +25,13 @@
 
 let
   pname = "gnome-flashback";
-  version = "3.28.0";
+  version = "3.30.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1ra8bfwgwqw47zx2h1q999g7l4dnqh7sv02if3zk8pkw3sm769hg";
+    sha256 = "18rwql2pi78155l9zp1i50xfi5z8xz2l08m9d81x6qqbfr1nyy57";
   };
 
   patches =[
@@ -41,11 +41,11 @@ in stdenv.mkDerivation rec {
       gnomeSession = gnome-session;
     })
 
-    # https://github.com/NixOS/nixpkgs/issues/36468
-    # https://gitlab.gnome.org/GNOME/gnome-flashback/issues/3
+    # overrides do not respect gsettingsschemasdir
+    # https://gitlab.gnome.org/GNOME/gnome-flashback/issues/9
     (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gnome-flashback/commit/eabd34f64adc43b8783920bd7a2177ce21f83fbc.patch;
-      sha256 = "116c5zy8cp7d06mrsn943q7vj166086jzrfzfqg7yli14pmf9w1a";
+     url = https://gitlab.gnome.org/GNOME/gnome-flashback/commit/a55530f58ccd600414a5420b287868ab7d219705.patch;
+     sha256 = "1la94lhhb9zlw7bnbpl6hl26zv3kxbsvgx996mhph720wxg426mh";
     })
   ];
 
