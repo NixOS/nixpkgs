@@ -8,7 +8,6 @@ let
   ddConf = {
     dd_url              = "https://app.datadoghq.com";
     skip_ssl_validation = "no";
-    api_key             = "";
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
     use_dogstatsd       = true;
