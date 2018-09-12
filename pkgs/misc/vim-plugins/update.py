@@ -20,8 +20,9 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from multiprocessing.dummy import Pool
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union, Any
 from urllib.parse import urljoin, urlparse
+from tempfile import NamedTemporaryFile
 
 ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"
 ATOM_LINK = "{http://www.w3.org/2005/Atom}link"
@@ -110,7 +111,7 @@ class Plugin:
         return copy
 
 
-GET_PLUGINS = """(with import <nixpkgs> {};
+GET_PLUGINS = """(with import <localpkgs> {};
 let
   hasChecksum = value: lib.isAttrs value && lib.hasAttrByPath ["src" "outputHash"] value;
   getChecksum = name: value:
@@ -123,8 +124,24 @@ let
 in lib.filterAttrs (n: v: v != null) checksums)"""
 
 
+class CleanEnvironment(object):
+    def __enter__(self) -> None:
+        self.old_environ = os.environ.copy()
+        local_pkgs = str(ROOT.joinpath("../../.."))
+        os.environ["NIX_PATH"] = f"localpkgs={local_pkgs}"
+        self.empty_config = NamedTemporaryFile()
+        self.empty_config.write(b"{}")
+        self.empty_config.flush()
+        os.environ["NIXPKGS_CONFIG"] = self.empty_config.name
+
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+        os.environ.update(self.old_environ)
+        self.empty_config.close()
+
+
 def get_current_plugins() -> List[Plugin]:
-    out = subprocess.check_output(["nix", "eval", "--json", GET_PLUGINS])
+    with CleanEnvironment():
+        out = subprocess.check_output(["nix", "eval", "--json", GET_PLUGINS])
     data = json.loads(out)
     plugins = []
     for name, attr in data.items():
@@ -139,6 +156,7 @@ def prefetch_plugin(user: str, repo_name: str, cache: "Cache") -> Plugin:
     has_submodules = repo.has_submodules()
     cached_plugin = cache[commit]
     if cached_plugin is not None:
+        cached_plugin.name = repo_name
         cached_plugin.date = date
         return cached_plugin
 
