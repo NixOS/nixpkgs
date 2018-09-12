@@ -13,7 +13,7 @@ stdenv.mkDerivation rec  {
     sha256 = "0f2brwv884cvmxj644jcj9sg5hix3wvnjy2ndg0fh5cxyqz0kwn5";
   };
 
-  nativeBuildInputs = with python36Packages; [
+  nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
     gobjectIntrospection
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec  {
     ninja
     python36Packages.python
     pkgconfig
+    python36Packages.wrapPython
     wrapGAppsHook
-    wrapPython
   ];
 
   buildInputs = [ glib ] ++ (with gnome3; [
@@ -42,7 +42,11 @@ stdenv.mkDerivation rec  {
     pylast
   ];
 
-  postFixup = "wrapPythonPrograms";
+  preFixup = ''
+    buildPythonPath "$out/libexec/lollypop-sp $pythonPath"
+
+    gappsWrapperArgs+=( --prefix PYTHONPATH : "$program_PYTHONPATH" )
+  '';
 
   postPatch = ''
     chmod +x ./meson_post_install.py
