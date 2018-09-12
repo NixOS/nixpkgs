@@ -420,6 +420,8 @@ in {
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
+  pydrive = callPackage ../development/python-modules/pydrive { };
+
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
   pyexiv2 = disabledIf isPy3k (toPythonModule (callPackage ../development/python-modules/pyexiv2 {}));
