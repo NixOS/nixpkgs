@@ -44,6 +44,7 @@
 , glibcLocales
 , hicolor-icon-theme
 , shared-mime-info
+, gsettings-desktop-schemas
 
 # Whether to disable multiprocess support to work around crashing tabs
 # TODO: fix the underlying problem instead of this terrible work-around
@@ -267,6 +268,11 @@ stdenv.mkDerivation rec {
       hicolor-icon-theme
       shared-mime-info
     ]}
+    WRAPPER_XDG_DATA_DIRS+=":"${concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [
+      glib
+      gsettings-desktop-schemas
+      gtk3
+    ]};
 
     # Generate wrapper
     mkdir -p $out/bin
