@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild qtest ];
   propagatedBuildInputs = [ num ];
 
-  doCheck = !stdenv.lib.versionAtLeast ocaml.version "4.07";
+  doCheck = !stdenv.lib.versionAtLeast ocaml.version "4.07" && !stdenv.isAarch64;
   checkTarget = "test test";
 
   createFindlibDestdir = true;
