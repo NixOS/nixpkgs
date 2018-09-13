@@ -1996,6 +1996,8 @@ in {
 
   dask-ml = callPackage ../development/python-modules/dask-ml { };
 
+  dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
+
   datrie = callPackage ../development/python-modules/datrie { };
 
   heapdict = callPackage ../development/python-modules/heapdict { };
