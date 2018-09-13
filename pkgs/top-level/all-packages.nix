@@ -3690,11 +3690,11 @@ with pkgs;
   nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix { enableNpm = false; };
 
   nodejs-10_x = callPackage ../development/web/nodejs/v10.nix {
-    openssl = openssl_1_1_0;
+    openssl = openssl_1_1;
   };
   nodejs-slim-10_x = callPackage ../development/web/nodejs/v10.nix {
     enableNpm = false;
-    openssl = openssl_1_1_0;
+    openssl = openssl_1_1;
   };
 
   nodePackages_10_x = callPackage ../development/node-packages/default-v10.nix {
@@ -3730,7 +3730,7 @@ with pkgs;
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns {
-    openssl = openssl_1_1_0;
+    openssl = openssl_1_1;
   };
 
   leafpad = callPackage ../applications/editors/leafpad { };
@@ -5576,7 +5576,7 @@ with pkgs;
   tokei = callPackage ../development/tools/misc/tokei { };
 
   tor = callPackage ../tools/security/tor {
-    openssl = openssl_1_1_0;
+    openssl = openssl_1_1;
     # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
     libevent = libevent.override {
       sslSupport = false;
@@ -6319,10 +6319,6 @@ with pkgs;
   bigloo = callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen { };
-
-  boo = callPackage ../development/compilers/boo {
-    inherit (gnome2) gtksourceview;
-  };
 
   colm = callPackage ../development/compilers/colm { };
 
@@ -8511,8 +8507,6 @@ with pkgs;
 
   nailgun = callPackage ../development/tools/nailgun { };
 
-  nant = callPackage ../development/tools/build-managers/nant { };
-
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
   gn = callPackage ../development/tools/build-managers/gn { };
@@ -10401,6 +10395,8 @@ with pkgs;
 
   libgrss = callPackage ../development/libraries/libgrss { };
 
+  libiio = callPackage ../development/libraries/libiio { };
+
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
   libsecret = callPackage ../development/libraries/libsecret { };
@@ -11458,7 +11454,7 @@ with pkgs;
       };
     })
     openssl_1_0_2
-    openssl_1_1_0;
+    openssl_1_1;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
@@ -15168,6 +15164,7 @@ with pkgs;
 
   powerline-rs = callPackage ../tools/misc/powerline-rs {
     inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
   };
 
   profont = callPackage ../data/fonts/profont { };
@@ -15557,11 +15554,6 @@ with pkgs;
   };
 
   barrier = callPackage ../applications/misc/barrier {};
-
-  banshee = callPackage ../applications/audio/banshee {
-    gconf = pkgs.gnome2.GConf;
-    libgpod = pkgs.libgpod.override { monoSupport = true; };
-  };
 
   bashSnippets = callPackage ../applications/misc/bashSnippets { };
 
@@ -22054,9 +22046,7 @@ with pkgs;
 
   valauncher = callPackage ../applications/misc/valauncher { };
 
-  vault = callPackage ../tools/security/vault {
-    go = go_1_10;
-  };
+  vault = callPackage ../tools/security/vault { };
 
   vaultenv = haskellPackages.vaultenv;
 

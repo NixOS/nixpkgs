@@ -1,4 +1,4 @@
-{ callPackage, boost155, boost165, openssl_1_1_0, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3, buildGo110Package }:
+{ callPackage, boost155, boost165, openssl_1_1, haskellPackages, darwin, libsForQt5, miniupnpc_2, python3, buildGo110Package }:
 
 rec {
 
@@ -62,8 +62,10 @@ rec {
     buildGoPackage = buildGo110Package;
   };
 
-  litecoin  = callPackage ./litecoin.nix { withGui = true; };
-  litecoind = callPackage ./litecoin.nix { withGui = false; };
+  litecoin  = callPackage ./litecoin.nix {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+  litecoind = litecoin.override { withGui = false; };
 
   masari = callPackage ./masari.nix { };
 
@@ -88,7 +90,7 @@ rec {
 
   zcash = callPackage ./zcash {
     withGui = false;
-    openssl = openssl_1_1_0;
+    openssl = openssl_1_1;
   };
 
   parity = callPackage ./parity { };

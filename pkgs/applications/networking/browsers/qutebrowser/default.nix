@@ -55,6 +55,9 @@ in python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     pyyaml pyqt5 jinja2 pygments
     pypeg2 cssutils pyopengl attrs
+    # scripts and userscripts libs
+    tldextract beautifulsoup4
+    pyreadability pykeepass stem
   ];
 
   postPatch = ''
@@ -81,15 +84,15 @@ in python3Packages.buildPythonApplication rec {
         "$out/share/icons/hicolor/scalable/apps/qutebrowser.svg"
 
     # Install scripts
-    sed -i "s,/usr/bin/qutebrowser,$out/bin/qutebrowser,g" scripts/open_url_in_instance.sh
-    install -Dm755 -t "$out/share/qutebrowser/scripts/" scripts/open_url_in_instance.sh
+    sed -i "s,/usr/bin/,$out/bin/,g" scripts/open_url_in_instance.sh
+    install -Dm755 -t "$out/share/qutebrowser/scripts/" $(find scripts -type f)
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
 
-    # Install and patch python scripts
+    # Patch python scripts
     buildPythonPath "$out $propagatedBuildInputs"
-    for i in importer dictcli keytester utils; do
-      install -Dm755 -t "$out/share/qutebrowser/scripts/" scripts/$i.py
-      patchPythonScript "$out/share/qutebrowser/scripts/$i.py"
+    scripts=$(grep -rl python "$out"/share/qutebrowser/{user,}scripts/)
+    for i in $scripts; do
+      patchPythonScript "$i"
     done
   '';
 
@@ -97,10 +100,10 @@ in python3Packages.buildPythonApplication rec {
     wrapProgram $out/bin/qutebrowser --add-flags "--backend webkit"
   '';
 
-  meta = {
-    homepage = https://github.com/The-Compiler/qutebrowser;
+  meta = with stdenv.lib; {
+    homepage    = https://github.com/The-Compiler/qutebrowser;
     description = "Keyboard-focused browser with a minimal GUI";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ jagajaga rnhmjoj ];
   };
 }
