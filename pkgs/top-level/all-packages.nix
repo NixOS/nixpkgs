@@ -20590,6 +20590,10 @@ with pkgs;
   tetgen = callPackage ../applications/science/geometry/tetgen { }; # AGPL3+
   tetgen_1_4 = callPackage ../applications/science/geometry/tetgen/1.4.nix { }; # MIT
 
+  ### SCIENCE/BENCHMARK
+
+  papi = callPackage ../development/libraries/science/benchmark/papi { };
+
   ### SCIENCE/BIOLOGY
 
   alliance = callPackage ../applications/science/electronics/alliance { };
