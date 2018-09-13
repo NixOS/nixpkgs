@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, git
+, pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, git, makeWrapper
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
 , busybox-sandbox-shell
 , storeDir ? "/nix/store"
