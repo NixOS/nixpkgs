@@ -12,7 +12,7 @@ in {
     virtualbox = {
       baseImageSize = mkOption {
         type = types.int;
-        default = 10 * 1024;
+        default = 100 * 1024;
         description = ''
           The size of the VirtualBox base image in MiB.
         '';
