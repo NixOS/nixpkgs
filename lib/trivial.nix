@@ -171,7 +171,7 @@ rec {
     builtins.fromJSON (builtins.readFile path);
 
 
-  ## Warnings and asserts
+  ## Warnings
 
   /* See https://github.com/NixOS/nix/issues/749. Eventually we'd like these
      to expand to Nix builtins that carry metadata so that Nix can filter out

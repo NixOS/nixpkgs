@@ -1,4 +1,4 @@
-{ buildRubyGem, ruby }:
+{ lib, buildRubyGem, ruby }:
 
 buildRubyGem rec {
   inherit ruby;
@@ -12,5 +12,6 @@ buildRubyGem rec {
     homepage = https://github.com/unnu/flvtool2;
     description = "A tool to manipulate Macromedia Flash Video files";
     platforms = ruby.meta.platforms;
+    license = lib.licenses.bsd3;
   };
 }

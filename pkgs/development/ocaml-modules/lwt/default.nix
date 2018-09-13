@@ -1,7 +1,7 @@
 { stdenv, fetchzip, pkgconfig, ncurses, libev, jbuilder
 , ocaml, findlib, cppo
 , ocaml-migrate-parsetree, ppx_tools_versioned, result
-, withP4 ? !stdenv.lib.versionAtLeast ocaml.version "4.07"
+, withP4 ? true
 , camlp4 ? null
 }:
 

@@ -18,5 +18,6 @@ buildGoPackage rec {
     homepage = https://github.com/fgeller/kt;
     maintainers = with maintainers; [ utdemir ];
     platforms = with platforms; unix;
+    license = licenses.mit;
   };
 }

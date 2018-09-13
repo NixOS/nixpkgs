@@ -81,6 +81,8 @@ mapAliases ({
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   emacs25Macport_25_1 = emacs25Macport; # added 2018-04-25
   emacsMelpa = emacs25PackagesNg; # for backward compatibility
+  emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
+  emacsPackagesNgGen = emacsPackagesNgFor; # added 2018-08-18
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
@@ -290,6 +292,8 @@ mapAliases ({
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  weechat-xmpp = weechatScripts.weechat-xmpp; # added 2018-09-06
+  weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
   wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
   wireguard = wireguard-tools; # added 2018-05-19

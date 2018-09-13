@@ -245,6 +245,7 @@
   ./services/desktops/gnome3/gnome-user-share.nix
   ./services/desktops/gnome3/gpaste.nix
   ./services/desktops/gnome3/gvfs.nix
+  ./services/desktops/gnome3/rygel.nix
   ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix
   ./services/desktops/gnome3/tracker.nix
@@ -406,6 +407,7 @@
   ./services/misc/taskserver
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
+  ./services/misc/weechat.nix
   ./services/misc/xmr-stak.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
@@ -515,9 +517,11 @@
   ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix
   ./services/networking/htpdate.nix
+  ./services/networking/hylafax/default.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
+  ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/iwd.nix
   ./services/networking/keepalived/default.nix

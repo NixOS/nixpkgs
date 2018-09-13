@@ -81,5 +81,6 @@ in buildPythonApplication rec {
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     maintainers = with maintainers; [ tstrobel offline ];
+    license = licenses.gpl2;
   };
 }

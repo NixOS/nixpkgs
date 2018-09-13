@@ -1,35 +1,53 @@
-{ stdenv, fetchurl, perl, makeWrapper, perlPackages }:
+{ stdenv, fetchurl, makeWrapper
+, perl, libassuan, libgcrypt
+, perlPackages, lockfileProgs, gnupg
+}:
 
 stdenv.mkDerivation rec {
   name = "monkeysphere-${version}";
-  version = "0.37";
+  version = "0.41";
 
   src = fetchurl {
-    url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_0.37.orig.tar.gz";
-    sha256 = "0nbfd220miflah5l2y20qlmgfpbqi0j8h7qgx1b06h7v2jjbh45m";
+    url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${version}.orig.tar.gz";
+    sha256 = "0jz7kwkwgylqprnl8bwvl084s5gjrilza77ln18i3f6x48b2y6li";
   };
 
-  buildInputs = [ makeWrapper perl ];
-
   patches = [ ./monkeysphere.patch ];
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl libassuan libgcrypt ];
 
   makeFlags = ''
     PREFIX=/
     DESTDIR=$(out)
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/openpgp2ssh --prefix PERL5LIB : \
-      "${with perlPackages; stdenv.lib.makePerlPath [
-        CryptOpenSSLRSA
-        CryptOpenSSLBignum
-      ]}"
-    wrapProgram $out/bin/monkeysphere --prefix PERL5LIB :\
-      "${with perlPackages; stdenv.lib.makePerlPath [
-        CryptOpenSSLRSA
-        CryptOpenSSLBignum
-      ]}"
-  '';
+  postFixup =
+    let wrapperArgs = runtimeDeps:
+          "--prefix PERL5LIB : "
+          + (with perlPackages; stdenv.lib.makePerlPath [
+              CryptOpenSSLRSA
+              CryptOpenSSLBignum
+            ])
+          + stdenv.lib.optionalString
+              (builtins.length runtimeDeps > 0)
+              " --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}";
+        wrapMonkeysphere = runtimeDeps: program:
+          "wrapProgram $out/bin/${program} ${wrapperArgs runtimeDeps}\n";
+        wrapPrograms = runtimeDeps: programs: stdenv.lib.concatMapStrings
+          (wrapMonkeysphere runtimeDeps)
+          programs;
+    in wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
+      + wrapPrograms [ lockfileProgs ] [ "monkeysphere" ]
+      + ''
+        # These 4 programs depend on the program name ($0):
+        for program in openpgp2pem openpgp2spki openpgp2ssh pem2openpgp; do
+          rm $out/bin/$program
+          ln -sf keytrans $out/share/monkeysphere/$program
+          makeWrapper $out/share/monkeysphere/$program $out/bin/$program \
+            ${wrapperArgs [ ]}
+        done
+      '';
 
   meta = with stdenv.lib; {
     homepage = http://web.monkeysphere.info/;
@@ -43,7 +61,8 @@ stdenv.mkDerivation rec {
       TLS/SSL communications through the normal use of tools you are
       familiar with, such as your web browser0 or secure shell.
     '';
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
+    maintainers = with maintainers; [ primeos ];
   };
 }

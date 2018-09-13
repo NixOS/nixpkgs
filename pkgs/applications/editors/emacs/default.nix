@@ -4,8 +4,9 @@
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf
 , systemd ? null
 , withX ? !stdenv.isDarwin
-, withGTK2 ? false, gtk2 ? null
-, withGTK3 ? true, gtk3 ? null, gsettings-desktop-schemas ? null
+, withNS ? stdenv.isDarwin
+, withGTK2 ? false, gtk2-x11 ? null
+, withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
 , withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
@@ -13,10 +14,12 @@
 
 assert (libXft != null) -> libpng != null;      # probably a bug
 assert stdenv.isDarwin -> libXaw != null;       # fails to link otherwise
-assert withGTK2 -> withX || stdenv.isDarwin;
-assert withGTK3 -> withX || stdenv.isDarwin;
-assert withGTK2 -> !withGTK3 && gtk2 != null;
-assert withGTK3 -> !withGTK2 && gtk3 != null;
+assert withNS -> !withX;
+assert withNS -> stdenv.isDarwin;
+assert (withGTK2 && !withNS) -> withX;
+assert (withGTK3 && !withNS) -> withX;
+assert withGTK2 -> !withGTK3 && gtk2-x11 != null;
+assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 let
@@ -56,19 +59,22 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
-        imagemagick gconf m17n_lib libotf ]
-    ++ lib.optional (withX && withGTK2) gtk2
-    ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings-desktop-schemas ]
+        imagemagick gconf ]
+    ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
+    ++ lib.optional (withX && withGTK2) gtk2-x11
+    ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
+  propagatedBuildInputs = lib.optionals withNS [ AppKit GSS ImageIO ];
 
   hardeningDisable = [ "format" ];
 
   configureFlags = [ "--with-modules" ] ++
-   (if stdenv.isDarwin
-      then [ "--with-ns" "--disable-ns-self-contained" ]
+    (lib.optional stdenv.isDarwin
+      (lib.withFeature withNS "ns")) ++
+    (if withNS
+      then [ "--disable-ns-self-contained" ]
     else if withX
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
@@ -103,7 +109,7 @@ stdenv.mkDerivation rec {
       cp $srcdir/TAGS $dstdir
       echo '((nil . ((tags-file-name . "TAGS"))))' > $dstdir/.dir-locals.el
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString withNS ''
     mkdir -p $out/Applications
     mv nextstep/Emacs.app $out/Applications
   '';

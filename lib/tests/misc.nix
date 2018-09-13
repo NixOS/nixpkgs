@@ -112,7 +112,7 @@ runTests {
         storePathAppendix = isStorePath
           "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
-        asPath = isStorePath (builtins.toPath goodPath);
+        asPath = isStorePath goodPath;
         otherPath = isStorePath "/something/else";
         otherVals = {
           attrset = isStorePath {};
@@ -357,7 +357,7 @@ runTests {
       int = 42;
       bool = true;
       string = ''fno"rd'';
-      path = /. + "/foo"; # toPath returns a string
+      path = /. + "/foo";
       null_ = null;
       function = x: x;
       functionArgs = { arg ? 4, foo }: arg;
