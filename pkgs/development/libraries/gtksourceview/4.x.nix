@@ -5,11 +5,11 @@ let
   checkInputs = [ xvfb_run dbus ];
 in stdenv.mkDerivation rec {
   name = "gtksourceview-${version}";
-  version = "4.0.0";
+  version = "4.0.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0amkspjsvxr3rjznmnwjwsgw030hayf6bw49ya4nligslwl7lp3f";
+    sha256 = "0wwxgw43dmmaz07lzdzpladir26l2bly3lnf2ks6pna152wafm9x";
   };
 
   propagatedBuildInputs = [
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gtksourceview";
-      attrPath = "gnome3.gtksourceview";
+      attrPath = "gtksourceview4";
     };
   };
 
