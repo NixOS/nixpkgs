@@ -568,6 +568,8 @@ in {
 
   slackclient = callPackage ../development/python-modules/slackclient { };
 
+  slicerator = callPackage ../development/python-modules/slicerator { };
+
   spglib = callPackage ../development/python-modules/spglib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
