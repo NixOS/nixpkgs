@@ -105,7 +105,7 @@ rec {
     then lib.strings.fileContents suffixFile
     else "pre-git";
 
-  nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
+  nixpkgsVersion = version;
 
   # Whether we're being called by nix-shell.
   inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
