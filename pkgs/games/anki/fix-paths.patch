@@ -1,66 +1,51 @@
---- anki-2.0.46/anki/lang.py.orig	2017-08-06 15:30:10.781419237 +0200
-+++ anki-2.0.46/anki/lang.py	2017-08-06 15:31:33.023043036 +0200
-@@ -71,15 +71,7 @@
-     return localTranslation().ungettext(single, plural, n)
- 
+diff --git a/anki/lang.py b/anki/lang.py
+index 44e016f..e910ed3 100644
+--- a/anki/lang.py
++++ b/anki/lang.py
+@@ -78,17 +78,7 @@ def ngettext(single, plural, n):
+     return localTranslation().ngettext(single, plural, n)
+
  def langDir():
--    dir = os.path.join(os.path.dirname(
--        os.path.abspath(__file__)), "locale")
+-    from anki.utils import isMac
+-    filedir = os.path.dirname(os.path.abspath(__file__))
+-    if isMac:
+-        dir = os.path.abspath(filedir + "/../../Resources/locale")
+-    else:
+-        dir = os.path.join(filedir, "locale")
 -    if not os.path.isdir(dir):
 -        dir = os.path.join(os.path.dirname(sys.argv[0]), "locale")
 -    if not os.path.isdir(dir):
 -        dir = "/usr/share/anki/locale"
--    if not os.path.isdir(dir):
--        dir = "/usr/local/share/anki/bin/locale"
 -    return dir
 +    return "@anki@/share/locale"
- 
+
  def setLang(lang, local=True):
      trans = gettext.translation(
-diff -Nurp anki-2.0.33.orig/anki/sound.py anki-2.0.33/anki/sound.py
---- anki-2.0.33.orig/anki/sound.py	2015-12-27 11:23:02.334908723 +0100
-+++ anki-2.0.33/anki/sound.py	2015-12-27 11:34:11.863147265 +0100
-@@ -29,8 +29,9 @@ processingDst = u"rec.mp3"
+diff --git a/anki/sound.py b/anki/sound.py
+index d8735cc..bb9e0f3 100644
+--- a/anki/sound.py
++++ b/anki/sound.py
+@@ -58,8 +58,9 @@ processingDst = "rec.mp3"
  processingChain = []
  recFiles = []
- 
+
 +lameCmd = "@lame@/bin/lame"
  processingChain = [
--    ["lame", "rec.wav", processingDst, "--noreplaygain", "--quiet"],
-+    [lameCmd, "rec.wav", processingDst, "--noreplaygain", "--quiet"],
+-    ["lame", processingSrc, processingDst, "--noreplaygain", "--quiet"],
++    [lameCmd, processingSrc, processingDst, "--noreplaygain", "--quiet"],
      ]
- 
+
  # don't show box on windows
-@@ -44,13 +45,6 @@ if isWin:
- else:
-     si = None
- 
--if isMac:
--    # make sure lame, which is installed in /usr/local/bin, is in the path
--    os.environ['PATH'] += ":" + "/usr/local/bin"
--    dir = os.path.dirname(os.path.abspath(__file__))
--    dir = os.path.abspath(dir + "/../../../..")
--    os.environ['PATH'] += ":" + dir + "/audio"
--
- def retryWait(proc):
-     # osx throws interrupted system call errors frequently
-     while 1:
-@@ -62,13 +56,7 @@ def retryWait(proc):
- # Mplayer settings
- ##########################################################################
- 
--if isWin:
--    mplayerCmd = ["mplayer.exe", "-ao", "win32"]
--    dir = os.path.dirname(os.path.abspath(sys.argv[0]))
--    os.environ['PATH'] += ";" + dir
--    os.environ['PATH'] += ";" + dir + "\\..\\win\\top" # for testing
--else:
--    mplayerCmd = ["mplayer"]
-+mplayerCmd = ["@mplayer@/bin/mplayer"]
- mplayerCmd += ["-really-quiet", "-noautosub"]
- 
+@@ -138,7 +139,7 @@ def cleanupMPV():
  # Mplayer in slave mode
-@@ -220,7 +208,7 @@ class _Recorder(object):
+ ##########################################################################
+
+-mplayerCmd = ["mplayer", "-really-quiet", "-noautosub"]
++mplayerCmd = ["@mplayer@/bin/mplayer", "-really-quiet", "-noautosub"]
+ if isWin:
+     mplayerCmd += ["-ao", "win32"]
+
+@@ -286,7 +287,7 @@ class _Recorder:
          self.encode = encode
          for c in processingChain:
              #print c
@@ -68,32 +53,53 @@ diff -Nurp anki-2.0.33.orig/anki/sound.py anki-2.0.33/anki/sound.py
 +            if not self.encode and c[0] == lameCmd:
                  continue
              try:
-                 ret = retryWait(subprocess.Popen(c, startupinfo=si))
-diff -Nurp anki-2.0.33.orig/aqt/__init__.py anki-2.0.33/aqt/__init__.py
---- anki-2.0.33.orig/aqt/__init__.py	2015-12-27 11:23:02.338908782 +0100
-+++ anki-2.0.33/aqt/__init__.py	2015-12-27 12:35:03.405565214 +0100
-@@ -107,7 +107,7 @@ def setupLang(pm, app, force=None):
+                 cmd, env = _packagedCmd(c)
+diff --git a/aqt/__init__.py b/aqt/__init__.py
+index dc25057..2e6f7b5 100644
+--- a/aqt/__init__.py
++++ b/aqt/__init__.py
+@@ -143,7 +143,7 @@ def setupLang(pm, app, force=None):
          app.setLayoutDirection(Qt.LeftToRight)
      # qt
      _qtrans = QTranslator()
 -    if _qtrans.load("qt_" + lang, dir):
-+    if _qtrans.load("qt_" + lang, "@qt4@/share/@qt4name@/translations"):
++    if _qtrans.load("qt_" + lang, "@qt5@/share/@qt5name@/translations"):
          app.installTranslator(_qtrans)
- 
+
  # App initialisation
-diff -Nurp anki-2.0.33.orig/oldanki/lang.py anki-2.0.33/oldanki/lang.py
---- anki-2.0.33.orig/oldanki/lang.py	2015-12-27 11:23:02.390909551 +0100
-+++ anki-2.0.33/oldanki/lang.py	2015-12-27 14:05:51.663920453 +0100
-@@ -32,11 +32,7 @@ def ngettext(single, plural, n):
-     return localTranslation().ungettext(single, plural, n)
- 
- def setLang(lang, local=True):
--    base = os.path.dirname(os.path.abspath(__file__))
--    localeDir = os.path.join(base, "locale")
--    if not os.path.exists(localeDir):
--        localeDir = os.path.join(
--            os.path.dirname(sys.argv[0]), "locale")
-+    localeDir = "@anki@/share/locale"
-     trans = gettext.translation('libanki', localeDir,
-                                 languages=[lang],
-                                 fallback=True)
+diff --git a/aqt/mediasrv.py b/aqt/mediasrv.py
+index f1fffb9..ee5b72b 100644
+--- a/aqt/mediasrv.py
++++ b/aqt/mediasrv.py
+@@ -12,16 +12,7 @@ import threading
+
+ # locate web folder in source/binary distribution
+ def _getExportFolder():
+-    # running from source?
+-    srcFolder = os.path.join(os.path.dirname(__file__), "..")
+-    webInSrcFolder = os.path.abspath(os.path.join(srcFolder, "web"))
+-    if os.path.exists(webInSrcFolder):
+-        return webInSrcFolder
+-    elif isMac:
+-        dir = os.path.dirname(os.path.abspath(__file__))
+-        return os.path.abspath(dir + "/../../Resources/web")
+-    else:
+-      raise Exception("couldn't find web folder")
++    return "@pp@/web"
+
+ _exportFolder = _getExportFolder()
+
+diff --git a/aqt/qt.py b/aqt/qt.py
+index c488f20..daecfe6 100644
+--- a/aqt/qt.py
++++ b/aqt/qt.py
+@@ -38,9 +38,6 @@ qtmajor = (QT_VERSION & 0xff0000) >> 16
+ qtminor = (QT_VERSION & 0x00ff00) >> 8
+ qtpoint = QT_VERSION & 0xff
+
+-if qtmajor != 5 or qtminor != 9:
+-    raise Exception("Anki only supports Qt 5.9.x at this time.")
+-
+ # GUI code assumes python 3.6+
+ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
+     raise Exception("Anki requires Python 3.6+")

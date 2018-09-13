@@ -8,10 +8,15 @@
 , lame
 , mplayer
 , libpulseaudio
-, pyqt4
+, qt59
+, pyqt5
+, decorator
+, beautifulsoup4
 , sqlalchemy
 , pyaudio
-, httplib2
+, requests
+, send2trash
+, markdown
 , matplotlib
 , pytest
 , glibcLocales
@@ -21,14 +26,18 @@
 , plotsSupport ? true
 }:
 
-let
-    # Development version of anki has bumped to beautifulsoup4
-    beautifulsoup = callPackage ./beautifulsoup.nix { };
-
-    qt4 = pyqt4.qt;
-
+let qt5 = qt59;
+    pyqt = pyqt5.override {
+      qmake = qt5.qmake;
+      qtbase = qt5.qtbase;
+      qtsvg = qt5.qtsvg;
+      qtwebkit = qt5.qtwebkit;
+      qtwebengine = qt5.qtwebengine;
+      qtwebsockets = qt5.qtwebsockets;
+      qtconnectivity = qt5.qtconnectivity;
+    };
 in buildPythonApplication rec {
-    version = "2.0.52";
+    version = "2.1.4";
     name = "anki-${version}";
 
     src = fetchurl {
@@ -37,10 +46,11 @@ in buildPythonApplication rec {
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "0yjyxgpk79rplz9z2r93kmlk09ari6xxfrz1cfm2yl9v8zfw1n6l";
+      sha256 = "00dp7dwczmp01pv19yzf0i3skl627cvsi6fs0xcn1v09csiqcs36";
     };
 
-    propagatedBuildInputs = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 ]
+  propagatedBuildInputs = [ pyqt sqlalchemy
+      beautifulsoup4 send2trash pyaudio requests decorator markdown ]
                             ++ lib.optional plotsSupport matplotlib;
 
     checkInputs = [ pytest glibcLocales nose ];
@@ -53,8 +63,9 @@ in buildPythonApplication rec {
 
       (substituteAll {
         src = ./fix-paths.patch;
-        inherit lame mplayer qt4;
-        qt4name = qt4.name;
+        inherit lame mplayer;
+        qt5 = qt59.full;
+        qt5name = qt59.full.name;
       })
     ];
 
@@ -64,12 +75,12 @@ in buildPythonApplication rec {
     '';
 
     postPatch = ''
-      substituteInPlace oldanki/lang.py --subst-var-by anki $out
       substituteInPlace anki/lang.py --subst-var-by anki $out
+      substituteInPlace aqt/mediasrv.py --subst-var-by pp $out/lib/${python.libPrefix}/site-packages
 
       # Remove unused starter. We'll create our own, minimalistic,
       # starter.
-      rm anki/anki
+      # rm anki/anki
 
       # Remove QT translation files. We'll use the standard QT ones.
       rm "locale/"*.qm
@@ -108,7 +119,7 @@ in buildPythonApplication rec {
       cp -v anki.xml $out/share/mime/packages/
       cp -v anki.{png,xpm} $out/share/pixmaps/
       cp -rv locale $out/share/
-      cp -rv anki aqt thirdparty/send2trash $pp/
+      cp -rv anki aqt web $pp/
 
       wrapPythonPrograms
     '';
