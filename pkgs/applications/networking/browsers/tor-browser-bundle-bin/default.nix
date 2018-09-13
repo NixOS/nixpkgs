@@ -43,6 +43,7 @@
 , coreutils
 , glibcLocales
 , defaultIconTheme
+, runtimeShell
 , shared-mime-info
 , gsettings-desktop-schemas
 
@@ -277,7 +278,7 @@ stdenv.mkDerivation rec {
     # Generate wrapper
     mkdir -p $out/bin
     cat > "$out/bin/tor-browser" << EOF
-    #! ${stdenv.shell}
+    #! ${runtimeShell}
     set -o errexit -o nounset
 
     PATH=${makeBinPath [ coreutils ]}
