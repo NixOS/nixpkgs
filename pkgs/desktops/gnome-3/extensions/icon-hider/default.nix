@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gnome-shell-extension-icon-hider-${version}";
-  version = "19";
+  version = "20";
 
   src = fetchFromGitHub {
     owner = "ikalnytskyi";
     repo = "gnome-shell-extension-icon-hider";
     rev = "v${version}";
-    sha256 = "0cifm6cmxwxrrrva41wvjvrzsdqaczfbillf2vv3wsb60dqr6h39";
+    sha256 = "0z2rfr0nlp5zhlfxd6y0sxrxf7dj8sknimn6skxlbdm1xawl1fin";
   };
 
   uuid = "icon-hider@kalnitsky.org";
