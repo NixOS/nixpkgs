@@ -2,7 +2,7 @@
 { crateName,
   dependencies,
   crateFeatures, libName, release, libPath,
-  crateType, metadata, crateBin, finalBins,
+  crateType, metadata, crateBin,
   extraRustcOpts, verbose, colors }:
 
   let
@@ -117,11 +117,11 @@
 
         # the first two cases are the "new" default IIRC
         BIN_NAME_=$(echo $BIN_NAME | sed -e 's/-/_/g')
-        FILES=( "src/bin/$BIN_NAME_.rs" "src/bin/$BIN_NAME_/main.rs" "src/bin/main.rs" "src/main.rs" )
+        FILES=( "src/bin/$BIN_NAME.rs" "src/bin/$BIN_NAME/main.rs" "src/bin/$BIN_NAME_.rs" "src/bin/$BIN_NAME_/main.rs" "src/bin/main.rs" "src/main.rs" )
 
         if ! [ -e "${libPath}" -o -e src/lib.rs -o -e "src/${libName}.rs" ]; then
           # if this is not a library the following path is also valid
-          FILES=( "src/$BIN_NAME_.rs" "''${FILES[@]}" )
+          FILES=( "src/$BIN_NAME.rs" "src/$BIN_NAME_.rs" "''${FILES[@]}" )
         fi
 
         for file in "''${FILES[@]}";
@@ -153,6 +153,5 @@
     ''}
     # Remove object files to avoid "wrong ELF type"
     find target -type f -name "*.o" -print0 | xargs -0 rm -f
-  '' + finalBins + ''
     runHook postBuild
   ''

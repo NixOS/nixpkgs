@@ -115,23 +115,10 @@ stdenv.mkDerivation (rec {
 
     crateBin = if crate ? crateBin then
        builtins.foldl' (bins: bin: let
-            _name = (if bin ? name then bin.name else crateName);
-            name = lib.strings.replaceStrings ["-"] ["_"] _name;
+            name = (if bin ? name then bin.name else crateName);
             path = if bin ? path then bin.path else "";
           in
           bins + (if bin == "" then "" else ",") + "${name} ${path}"
-
-       ) "" crate.crateBin
-    else "";
-
-    finalBins = if crate ? crateBin then
-       builtins.foldl' (bins: bin:
-          let name = lib.strings.replaceStrings ["-"] ["_"]
-                      (if bin ? name then bin.name else crateName);
-              new_name = if bin ? name then bin.name else crateName;
-          in
-          if name == new_name then bins else
-          (bins + "mv target/bin/${name} target/bin/${new_name};")
 
        ) "" crate.crateBin
     else "";
@@ -156,7 +143,7 @@ stdenv.mkDerivation (rec {
     buildPhase = buildCrate {
       inherit crateName dependencies
               crateFeatures libName release libPath crateType
-              metadata crateBin finalBins verbose colors
+              metadata crateBin verbose colors
               extraRustcOpts;
     };
     installPhase = installCrate crateName metadata;

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildRustCrate, runCommand, writeTextFile, symlinkJoin }:
+{ lib, stdenv, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage }:
 let
   mkCrate = args: let
       p = {
@@ -72,7 +72,30 @@ let
       crateBinNoPath3 =  { crateBin = [{ name = "my-binary5"; }]; src = mkBin "src/bin/main.rs"; };
       crateBinNoPath4 =  { crateBin = [{ name = "my-binary6"; }]; src = mkBin "src/main.rs";};
     };
-  in lib.mapAttrs (key: value: mkTest (value // lib.optionalAttrs (!value?crateName) { crateName = key; })) cases;
+    brotliCrates = (callPackage ./brotli-crates.nix {});
+  in lib.mapAttrs (key: value: mkTest (value // lib.optionalAttrs (!value?crateName) { crateName = key; })) cases // {
+    brotliTest = let
+      pkg = brotliCrates.brotli_2_5_0 {};
+    in runCommand "run-brotli-test-cmd" {
+      nativeBuildInputs = [ pkg ];
+    } ''
+      ${pkg}/bin/brotli -c ${pkg}/bin/brotli > /dev/null && touch $out
+    '';
+    allocNoStdLibTest = let
+      pkg = brotliCrates.alloc_no_stdlib_1_3_0 {};
+    in runCommand "run-alloc-no-stdlib-test-cmd" {
+      nativeBuildInputs = [ pkg ];
+    } ''
+      test -e ${pkg}/bin/example && touch $out
+    '';
+    brotliDecompressorTest = let
+      pkg = brotliCrates.brotli_decompressor_1_3_1 {};
+    in runCommand "run-brotli-decompressor-test-cmd" {
+      nativeBuildInputs = [ pkg ];
+    } ''
+      test -e ${pkg}/bin/brotli-decompressor && touch $out
+    '';
+  };
   test = runCommand "run-buildRustCrate-tests" {
     nativeBuildInputs = builtins.attrValues tests;
   } "
