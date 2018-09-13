@@ -46,6 +46,11 @@ in stdenv.mkDerivation {
 
     patchShebangs .
     substituteInPlace data/installed-tests/fwupdmgr.test.in --subst-var-by installedtestsdir "$installedTests/share/installed-tests/fwupd"
+
+    # /etc/daemon.conf
+    substituteInPlace meson.build --replace \
+      "conf.set_quoted('SYSCONFDIR', sysconfdir)" \
+      "conf.set_quoted('SYSCONFDIR', '/etc')"
   '';
 
   # /etc/os-release not available in sandbox
