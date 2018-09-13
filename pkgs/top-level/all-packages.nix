@@ -426,6 +426,8 @@ with pkgs;
 
   acct = callPackage ../tools/system/acct { };
 
+  accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
+
   acme-sh = callPackage ../tools/admin/acme.sh { };
 
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
