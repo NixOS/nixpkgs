@@ -68,8 +68,6 @@ let overridden = set // overrides; set = with overridden; {
 
   gtkglext = callPackage ./platform/gtkglext { };
 
-  gtkglextmm = callPackage ./platform/gtkglextmm { };
-
 #### DESKTOP
 
   gvfs = gvfs.override { gnome = self; };
