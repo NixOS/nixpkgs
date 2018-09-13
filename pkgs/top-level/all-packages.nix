@@ -5070,7 +5070,9 @@ with pkgs;
     Also, consider using nix-built tor-browser-unwrapped package instead. Read its longDescription.
   '' */ tor-browser-bundle-bin;
 
-  tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
+  tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin {
+    inherit (gnome3) defaultIconTheme;
+  };
 
   tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
     stdenv = stdenvNoCC;
