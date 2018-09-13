@@ -10388,6 +10388,8 @@ with pkgs;
 
   libgrss = callPackage ../development/libraries/libgrss { };
 
+  libiio = callPackage ../development/libraries/libiio { };
+
   libseccomp = callPackage ../development/libraries/libseccomp { };
 
   libsecret = callPackage ../development/libraries/libsecret { };
