@@ -386,6 +386,8 @@ in {
 
   phonopy = callPackage ../development/python-modules/phonopy { };
 
+  pims = callPackage ../development/python-modules/pims { };
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
