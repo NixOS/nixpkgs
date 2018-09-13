@@ -1990,6 +1990,8 @@ in {
 
   dask-glm = callPackage ../development/python-modules/dask-glm { };
 
+  dask-image = callPackage ../development/python-modules/dask-image { };
+
   dask-jobqueue = callPackage ../development/python-modules/dask-jobqueue { };
 
   dask-ml = callPackage ../development/python-modules/dask-ml { };
