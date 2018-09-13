@@ -63,7 +63,8 @@ in buildGoPackage rec {
     cp -R $src/pkg/status/dist/templates $bin/share/datadog-agent
 
     wrapProgram "$bin/bin/agent" \
-        --set PYTHONPATH "$bin/${python.sitePackages}"
+      --set PYTHONPATH "$bin/${python.sitePackages}" \
+      --prefix LD_LIBRARY_PATH : ${systemd.lib}/lib
   '';
 
   meta = with stdenv.lib; {
