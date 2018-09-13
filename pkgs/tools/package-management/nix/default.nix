@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost
+, pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, git
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
 , busybox-sandbox-shell
 , storeDir ? "/nix/store"
@@ -24,7 +24,7 @@ let
     outputs = [ "out" "dev" "man" "doc" ];
 
     nativeBuildInputs =
-      [ pkgconfig ]
+      [ makeWrapper pkgconfig ]
       ++ lib.optionals (!is20) [ curl perl ]
       ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns ];
 
@@ -82,6 +82,12 @@ let
     installFlags = "sysconfdir=$(out)/etc";
 
     doInstallCheck = true; # not cross
+    
+    postFixup = ''
+      for f in $out/bin/*; do
+        wrapProgram $f --prefix PATH : ${lib.makeBinPath [ git ]}
+      done
+    '';
 
     # socket path becomes too long otherwise
     preInstallCheck = lib.optional stdenv.isDarwin ''
