@@ -11,6 +11,10 @@ set -u
 [[ -z ${strictDeps-} ]] || (( "$hostOffset" < 0 )) || return 0
 
 bintoolsWrapper_addLDVars () {
+    # Allow to control the addition of -L items via a nix-support file
+    if [[ -f "$1/nix-support/bintools-no-addLDVars" ]]; then
+       return 0
+    fi
     # See ../setup-hooks/role.bash
     local role_post role_pre
     getHostRoleEnvHook
