@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "00mpq1z8j37a873dbk9knb835m3qlwqnd1rslirqkc44hpz1i64j";
   };
 
+  configureFlags = [ "--enable-all" ];
+
   outputs = [ "out" "dev" "doc" "lib" ];
 
   nativeBuildInputs = [ autoreconfHook ];
