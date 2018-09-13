@@ -310,6 +310,7 @@ mapAliases ({
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
+  xpraGtk3 = xpra; # added 2018-09-13
   youtubeDL = youtube-dl;  # added 2014-10-26
 
   # added 2017-05-27
