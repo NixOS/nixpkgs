@@ -111,7 +111,7 @@ self = generated // (with generated; {
     '';
   });
 
-  command_T = command_T.overrideAttrs(old: {
+  command-t = command-t.overrideAttrs(old: {
     buildInputs = [ ruby rake ];
     buildPhase = ''
       rake make
@@ -166,7 +166,7 @@ self = generated // (with generated; {
 		dependencies = ["gitv"];
 	});
 
-  taglist = taglist.overrideAttrs(old: {
+  taglist-vim = taglist-vim.overrideAttrs(old: {
     setSourceRoot = ''
       export sourceRoot=taglist
       mkdir taglist
@@ -309,7 +309,7 @@ self = generated // (with generated; {
     '';
   });
 
-  yankring = yankring.overrideAttrs(old: {
+  YankRing-vim = YankRing-vim.overrideAttrs(old: {
     sourceRoot = ".";
   });
 
