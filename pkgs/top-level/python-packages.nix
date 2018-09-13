@@ -1984,6 +1984,8 @@ in {
 
   dask = callPackage ../development/python-modules/dask { };
 
+  dask-ml = callPackage ../development/python-modules/dask-ml { };
+
   datrie = callPackage ../development/python-modules/datrie { };
 
   heapdict = callPackage ../development/python-modules/heapdict { };
