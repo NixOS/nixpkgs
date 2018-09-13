@@ -20729,6 +20729,8 @@ with pkgs;
 
   strelka = callPackage ../applications/science/biology/strelka { };
 
+  seaview = callPackage ../applications/science/biology/seaview { };
+
   varscan = callPackage ../applications/science/biology/varscan { };
 
   hmmer = callPackage ../applications/science/biology/hmmer { };
