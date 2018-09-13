@@ -42,6 +42,7 @@ in {
 
   config = mkIf cfg.enable {
     systemd.user.services.unclutter-xfixes = {
+      enable = true;
       description = "unclutter-xfixes";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
