@@ -13527,6 +13527,8 @@ with pkgs;
 
   sickbeard = callPackage ../servers/sickbeard { };
 
+  sickgear = callPackage ../servers/sickbeard/sickgear.nix { };
+
   sipcmd = callPackage ../applications/networking/sipcmd { };
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
