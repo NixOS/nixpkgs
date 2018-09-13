@@ -1,0 +1,11 @@
+module nix 1.0;
+
+require {
+  type bin_t;
+  type lib_t;
+  type man_t;
+  type usr_t;
+  type etc_t;
+  type var_run_t;
+  type systemd_unit_file_t;
+}

@@ -14563,6 +14563,8 @@ with pkgs;
 
   semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
 
+  nix-selinux-policy = callPackage ../os-specific/linux/nix-selinux-policy { };
+
   powerdns = callPackage ../servers/dns/powerdns { };
 
   dnsdist = callPackage ../servers/dns/dnsdist { };

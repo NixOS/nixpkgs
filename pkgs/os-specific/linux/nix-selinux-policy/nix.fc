@@ -1,0 +1,7 @@
+/nix/store/[^/]+/s?bin(/.*)?	system_u:object_r:bin_t:s0
+/nix/store/[^/]+/lib/systemd/system(/.*)?	system_u:object_r:systemd_unit_file_t:s0
+/nix/store/[^/]+/lib(/.*)?	system_u:object_r:lib_t:s0
+/nix/store/[^/]+/man(/.*)?	system_u:object_r:man_t:s0
+/nix/store/[^/]+/etc(/.*)?	system_u:object_r:etc_t:s0
+/nix/var/nix/daemon-socket(/.*)?	system_u:object_r:var_run_t:s0
+/nix/var/nix/profiles(/per-user/[^/]+)?/[^/]+	system_u:object_r:usr_t:s0
