@@ -298,6 +298,8 @@ in {
 
   fire = callPackage ../development/python-modules/fire { };
 
+  fuse = callPackage ../development/python-modules/fuse-python { fuse = pkgs.fuse; };
+
   genanki = callPackage ../development/python-modules/genanki { };
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
@@ -5614,8 +5616,6 @@ in {
       platforms   = platforms.unix;
     };
   };
-
-  fuse = callPackage ../development/python-modules/python-fuse { fuse = pkgs.fuse; };
 
   fusepy = buildPythonPackage rec {
     name = "fusepy-2.0.4";
