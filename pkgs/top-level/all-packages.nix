@@ -12425,6 +12425,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc6; # upstream code incompatible with gcc7
   };
 
+  walabot-sdk = callPackage ../development/libraries/walabot-sdk { };
+
   wavpack = callPackage ../development/libraries/wavpack { };
 
   wayland = callPackage ../development/libraries/wayland { };
