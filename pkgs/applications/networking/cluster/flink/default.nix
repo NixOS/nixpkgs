@@ -16,9 +16,9 @@ let
       hadoopBundle = "";
     };
     "1.5" = {
-      flinkVersion = "1.5.0";
+      flinkVersion = "1.5.3";
       scalaVersion = "2.11";
-      sha256 = "0n5023dj8ivmbhqxmb3abmfh3ahb9vmcywq5i0ll5p7xxcw2c1cv";
+      sha256 = "1fq7pd5qpchkkwhh30h3l9rhf298jfcfv2dc50z39qmwwijdjajk";
       hadoopBundle = "";
     };
     "1.6" = {
