@@ -1,24 +1,14 @@
-{ stdenv, fetchurl, writeScript, fetchFromGitHub
+{ stdenv, fetchgit, fetchurl, writeScript
 , libGL, libX11, libXext, python3, libXrandr, libXrender, libpulseaudio, libXcomposite
 , enableGlfw ? false, glfw }:
 
 let
   inherit (stdenv.lib) optional makeLibraryPath;
 
-  version = "1.4.5";
-  gladVersion = "0.1.24";
-  # glad
-  # https://github.com/wacossusca34/glava/issues/46#issuecomment-397816520
-  glad = fetchFromGitHub {
-    owner = "Dav1dde";
-    repo = "glad";
-    rev = "v${gladVersion}";
-    sha256 = "0s2c9w064kqa5i07w8zmvgpg1pa3wj86l1nhgw7w56cjhq7cf8h8";
-  };
   # gl.xml
   gl = fetchurl {
-    url = https://raw.githubusercontent.com/KhronosGroup/OpenGL-Registry/a24f3f7a4c924fdbc666024f99c70e5b8e34c819/xml/gl.xml;
-    sha256 = "1mskxjmhb35m8qv255pibf633d8sn1w9rdsf0lj75bhlgy0zi5c7";
+    url = https://raw.githubusercontent.com/KhronosGroup/OpenGL-Registry/56312cfe680e4be5ae61bbf1c628e420f8731718/xml/gl.xml;
+    sha256 = "1c45bcgaxiic5gmb3gkrd9qcvascvij97vz5y6fc3a2y7x3gjc5l";
   };
   # EGL 1.5
   egl = fetchurl {
@@ -43,12 +33,12 @@ let
 in
   stdenv.mkDerivation rec {
     name = "glava-${version}";
+    version = "1.5.1";
 
-    src = fetchFromGitHub {
-      owner = "wacossusca34";
-      repo = "glava";
+    src = fetchgit {
+      url = "https://github.com/wacossusca34/glava.git";
       rev = "v${version}";
-      sha256 = "1zfw8samrzxxbny709rcdz1z77cw1cd46wlfnf7my02kipmqn0nr";
+      sha256 = "1k8x0a0g2pm7ficsk4az9s7mjbm85a987apjg5c4y6iyldxgd6sb";
     };
 
     buildInputs = [
@@ -65,7 +55,6 @@ in
     ];
 
     patchPhase = ''
-      cp -r --no-preserve=all ${glad}/* glad
       mkdir -p glad/include/KHR
 
       cp ${gl} glad/gl.xml
