@@ -226,7 +226,7 @@
   context_filetype-vim = buildVimPluginFrom2Nix {
     name = "context_filetype-vim-2018-08-30";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "context_filetype.vim";
       rev = "5392e3f0f3ff82b7149818a5700680f4bbcfea45";
       sha256 = "0xnqn96qnlvpvqc4sx8vmnryfqgcxrgczlmadgkms18gd3ib6i0z";
@@ -336,7 +336,7 @@
   denite-nvim = buildVimPluginFrom2Nix {
     name = "denite-nvim-2018-09-15";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "denite.nvim";
       rev = "8685cfbb7f0a4bea173a6b08a72a33ef70780334";
       sha256 = "0zc15802hda59x42k0962fmawjq021y7ys10h4ypnwy50cn1vjzj";
@@ -419,7 +419,7 @@
   deoplete-nvim = buildVimPluginFrom2Nix {
     name = "deoplete-nvim-2018-09-12";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "deoplete.nvim";
       rev = "93f6e3bce8229557b952dcad792786b1cc228991";
       sha256 = "033iskhyz91158ifmpzpv1gi4rfx368c6knakj65spcrlfci58y9";
@@ -439,7 +439,7 @@
   echodoc-vim = buildVimPluginFrom2Nix {
     name = "echodoc-vim-2018-09-09";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "echodoc.vim";
       rev = "781b1622029cd89350e6383da8ead834fb0cedd2";
       sha256 = "018xrql2prik0v9g0099k883r5gdgnip36vidnzmkr0b0h5bgw6a";
@@ -851,7 +851,7 @@
   neco-syntax = buildVimPluginFrom2Nix {
     name = "neco-syntax-2017-10-01";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "neco-syntax";
       rev = "98cba4a98a4f44dcff80216d0b4aa6f41c2ce3e3";
       sha256 = "1cjcbgx3h00g91ifgw30q5n97x4nprsr4kwirydws79fcs4vkgip";
@@ -861,7 +861,7 @@
   neco-vim = buildVimPluginFrom2Nix {
     name = "neco-vim-2017-10-01";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "neco-vim";
       rev = "f5397c5e800d65a58c56d8f1b1b92686b05f4ca9";
       sha256 = "0yb7ja6qgrazszk4i01cwjj00j9vd43zs2r11b08iy8n10jnzr73";
@@ -871,7 +871,7 @@
   neocomplete-vim = buildVimPluginFrom2Nix {
     name = "neocomplete-vim-2018-03-28";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "neocomplete.vim";
       rev = "4be617947f3fcf2d725fab20b0e12f8b46c9e2f3";
       sha256 = "00ns46gy726w74nmnzhqnyh10jnpr04453v3rclswxgcvgma82b8";
@@ -891,7 +891,7 @@
   neoinclude-vim = buildVimPluginFrom2Nix {
     name = "neoinclude-vim-2018-05-21";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "neoinclude.vim";
       rev = "2fa77b9211d3f10c29559b715b6863da67ae7d3a";
       sha256 = "0pdahb2z9q4dk67xkwvaqrlpai86slhncfb4gn88x40dlnd7rkbg";
@@ -911,7 +911,7 @@
   neomru-vim = buildVimPluginFrom2Nix {
     name = "neomru-vim-2017-10-01";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "neomru.vim";
       rev = "97540f54fa20b94daf306f0c1f3cce983bbf7a1d";
       sha256 = "15d5hmh5v3hnjnfb5736n45rh5nyq41vqjp1cz4ls2rxmmfi3xa7";
@@ -921,7 +921,7 @@
   neosnippet-snippets = buildVimPluginFrom2Nix {
     name = "neosnippet-snippets-2018-09-12";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "neosnippet-snippets";
       rev = "e61e966339bbab2abba6ba92bccd8825463b2d0d";
       sha256 = "0yis1r2ypxym421gwlsm8zszsg490xw5q0h111k077x19qa5j4fs";
@@ -931,7 +931,7 @@
   neosnippet-vim = buildVimPluginFrom2Nix {
     name = "neosnippet-vim-2018-07-30";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "neosnippet.vim";
       rev = "70700ddef65f8f0639b336d04a0d2dbdc4eb0830";
       sha256 = "0szhmdqqgpfy6shwiw7wnsd06cz8c7v5zmpaa3hzs32gyrx49rza";
@@ -941,7 +941,7 @@
   neoyank-vim = buildVimPluginFrom2Nix {
     name = "neoyank-vim-2018-03-26";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "neoyank.vim";
       rev = "ea3cd47ccb40cb2e26cb607d28475aa0fdb26fef";
       sha256 = "1zbf8062rpk56nd1zxqhwa8bdpxl9zp887l9nm4s9hc4ndsk4928";
@@ -1311,7 +1311,7 @@
   tabpagebuffer-vim = buildVimPluginFrom2Nix {
     name = "tabpagebuffer-vim-2014-09-30";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "tabpagebuffer.vim";
       rev = "4d95c3e6fa5ad887498f4cbe486c11e39d4a1fbc";
       sha256 = "1z6zlpzkhwy1p2pmx9qrwb91dp9v4yi8jrdvm1if2k79ij4sl08f";
@@ -1451,7 +1451,7 @@
   unite-vim = buildVimPluginFrom2Nix {
     name = "unite-vim-2018-08-06";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "unite.vim";
       rev = "7ed231f2dbceb82b3ed81dc5ef999c94c2528586";
       sha256 = "0p2xfsyflds74lrpk14nb388nh2rc3hmqg3i9kgzxqns4i6w5s8v";
@@ -3122,7 +3122,7 @@
   vimproc-vim = buildVimPluginFrom2Nix {
     name = "vimproc-vim-2018-01-07";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "vimproc.vim";
       rev = "2300224d366642f4f8d6f88861535d4ccbe20143";
       sha256 = "0b8ljqnix8bs667bpymg3s0g5f49fnphgddl6196dj6jvdfn1xia";
@@ -3132,7 +3132,7 @@
   vimshell-vim = buildVimPluginFrom2Nix {
     name = "vimshell-vim-2018-06-02";
     src = fetchFromGitHub {
-      owner = "shougo";
+      owner = "Shougo";
       repo = "vimshell.vim";
       rev = "03bf7673a5098918a533000d67dca97546695237";
       sha256 = "1ckxjap9kz8skbjchg561sqyd5y5qwacg8mabmniy78qa7i3qdzi";
