@@ -6320,6 +6320,10 @@ in {
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
+  jupyter-repo2docker = callPackage ../development/python-modules/jupyter-repo2docker {
+    pkgs-docker = pkgs.docker;
+  };
+
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
