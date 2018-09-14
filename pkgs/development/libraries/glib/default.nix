@@ -59,7 +59,11 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.hostPlatform.isMusl [
       ./quark_init_on_demand.patch
       ./gobject_init_on_demand.patch
-    ] ++ [ ./schema-override-variable.patch ];
+    ] ++ [
+      ./schema-override-variable.patch
+      # Require substituteInPlace in postPatch
+      ./fix-gio-launch-desktop-path.patch
+    ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
   outputBin = "dev";
@@ -88,6 +92,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace meson.build --replace "install_dir : 'bin'," "install_dir : glib_bindir,"
+
+    # substitute fix-gio-launch-desktop-path.patch
+    substituteInPlace gio/gdesktopappinfo.c --replace "@bindir@" "$out/bin"
+
     chmod +x gio/tests/gengiotypefuncs.py
     patchShebangs gio/tests/gengiotypefuncs.py
     patchShebangs glib/gen-unicode-tables.pl
@@ -105,6 +113,11 @@ stdenv.mkDerivation rec {
     for app in gapplication gdbus gio gsettings; do
       mv "$dev/bin/$app" "$bin/bin"
     done
+
+    # Add gio-launch-desktop to $out so we can refer to it from $dev
+    mkdir $out/bin
+    mv "$dev/bin/gio-launch-desktop" "$out/bin/"
+    ln -s "$out/bin/gio-launch-desktop" "$bin/bin/"
 
     moveToOutput "share/glib-2.0" "$dev"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
