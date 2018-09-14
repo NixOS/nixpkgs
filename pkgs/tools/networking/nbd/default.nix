@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib }:
+{ stdenv, fetchurl, pkgconfig, glib, which }:
 
 stdenv.mkDerivation rec {
   name = "nbd-3.18";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig glib ]
+    [ pkgconfig glib which ]
     ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
 
   postInstall = ''
