@@ -4,13 +4,13 @@
 }:
 
 let
-  version = "2018.6";
+  version = "2018.8";
 
   libglnx-src = fetchFromGitHub {
     owner = "GNOME";
     repo = "libglnx";
-    rev = "e1a78cf2f5351d5394ccfb79f3f5a7b4917f73f3";
-    sha256 = "10kzyjbrmr98i65hlz8jc1v5bijyqwwfp6qqjbd5g3y0n520iaxc";
+    rev = "470af8763ff7b99bec950a6ae0a957c1dcfc8edd";
+    sha256 = "1fwik38i6w3r6pn4qkizradcqp1m83n7ljh9jg0y3p3kvrbfxh15";
   };
 
   bsdiff-src = fetchFromGitHub {
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
     rev = "v${version}";
     owner = "ostreedev";
     repo = "ostree";
-    sha256 = "0kk04pznk6m6fqdz609m2zcnkalcw9q8fsx8wm42k6dhf6cw7l3g";
+    sha256 = "0i7b7hvlv8m44k39fr5389wskf810vda8s7ivy2whj1nan5951yx";
   };
 
   patches = [
@@ -61,6 +61,8 @@ in stdenv.mkDerivation {
   preConfigure = ''
     env NOCONFIGURE=1 ./autogen.sh
   '';
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
