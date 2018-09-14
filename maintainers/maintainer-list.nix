@@ -1610,6 +1610,11 @@
     github = "hamhut1066";
     name = "Hamish Hutchings";
   };
+  haslersn = {
+    email = "haslersn@fius.informatik.uni-stuttgart.de";
+    github = "haslersn";
+    name = "Sebastian Hasler";
+  };
   havvy = {
     email = "ryan.havvy@gmail.com";
     github = "havvy";

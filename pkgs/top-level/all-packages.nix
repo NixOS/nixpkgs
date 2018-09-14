@@ -1447,6 +1447,8 @@ with pkgs;
 
   metabase = callPackage ../servers/metabase { };
 
+  mkspiffs = callPackage ../tools/filesystems/mkspiffs { };
+
   monetdb = callPackage ../servers/sql/monetdb { };
 
   mp3blaster = callPackage ../applications/audio/mp3blaster { };
