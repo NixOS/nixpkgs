@@ -18,8 +18,6 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "TREZOR Communication Daemon aka TREZOR Bridge";
-    homepage = https://mytrezor.com;
-    license = licenses.gpl3;
     homepage = https://trezor.io;
     license = licenses.lgpl3;
     maintainers = with stdenv.lib.maintainers; [ canndrew jb55 1000101];
