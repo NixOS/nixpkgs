@@ -1,4 +1,4 @@
-{ lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+{ lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip, cacert
 , guileBindings, guile, perl, gmp, autogen, libidn, p11-kit, libiconv
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , unbound, dns-root-data, gettext
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   preConfigure = "patchShebangs .";
   configureFlags =
-    lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
+    lib.optional stdenv.isLinux "--with-default-trust-store-file=${cacert}/etc/ssl/certs/ca-bundle.crt"
   ++ [
     "--disable-dependency-tracking"
     "--enable-fast-install"
