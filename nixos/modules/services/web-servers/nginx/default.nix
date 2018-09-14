@@ -598,7 +598,7 @@ in
       preStart =
         ''
         mkdir -p ${cfg.stateDir}/logs
-        chmod 700 ${cfg.stateDir}
+        chmod 750 ${cfg.stateDir}
         chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
         ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
         '';

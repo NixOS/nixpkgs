@@ -208,7 +208,7 @@ in
           ''
             # Create data directory.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              mkdir -m 0700 -p ${cfg.dataDir}
+              mkdir -m 0750 -p ${cfg.dataDir}
               rm -f ${cfg.dataDir}/*.conf
               chown -R postgres:postgres ${cfg.dataDir}
             fi
