@@ -1,4 +1,5 @@
 { config, lib, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
+, cacert
 , perl, gmp, autogen, libidn, p11-kit, libiconv
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
@@ -31,7 +32,7 @@ stdenv.mkDerivation {
 
   preConfigure = "patchShebangs .";
   configureFlags =
-    lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
+    lib.optional stdenv.isLinux "--with-default-trust-store-file=${cacert}/etc/ssl/certs/ca-bundle.crt"
   ++ [
     "--disable-dependency-tracking"
     "--enable-fast-install"
