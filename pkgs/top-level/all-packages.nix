@@ -9006,6 +9006,8 @@ in
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
 
+  gtranslator = callPackage ../tools/text/gtranslator { };
+
   guff = callPackage ../tools/graphics/guff { };
 
   guile-lint = callPackage ../development/tools/guile/guile-lint {
