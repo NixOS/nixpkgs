@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "trezord-go-${version}";
-  version = "2.0.19"
+  version = "2.0.19";
 
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
   hardeningDisable = [ "fortify" ];
