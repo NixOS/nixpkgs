@@ -1984,7 +1984,7 @@ rec {
       fullName = "Debian 8.10 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "b3aa33bfe0256f72b7aad07b6c714b790d9a20d86c1a448a6f36b35652a82ff0";
+        sha256 = "0adblarhx50yga900il6m25ng0csa81i3wid1dxxmydbdmri7v7d";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1995,7 +1995,7 @@ rec {
       fullName = "Debian 8.10 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "689e77cdf5334a3fffa5ca504e8131ee9ec88a7616f12c9ea5a3d5ac3100a710";
+        sha256 = "09y1mv4kqllhxpk1ibjsyl5jig5bp0qxw6pp4sn56rglrpygmn5x";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
