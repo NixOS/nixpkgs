@@ -1,63 +1,56 @@
-{ lib
-, bash
-, stdenv
-, writeText
-, fetchFromGitHub
-, libpng
-, gzip
-, fftw
-, openblas
-, mpiSupport ? false, mpi ? null
+{ stdenv, fetchFromGitHub
+, libpng, gzip, fftw, openblas
+, mpi ? null
 }:
-
-assert mpiSupport -> mpi != null;
-
+let packages = [
+     "asphere" "body" "class2" "colloid" "compress" "coreshell"
+     "dipole" "granular" "kspace" "manybody" "mc" "misc" "molecule"
+     "opt" "peri" "qeq" "replica" "rigid" "shock" "snap" "srd" "user-reaxc"
+    ];
+    lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
+    withMPI = (mpi != null);
+in
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
-  version = "patch_2Aug2018";
+  version = "stable_22Aug2018";
   name = "lammps-${version}";
-
-  lammps_packages = "asphere body class2 colloid compress coreshell dipole granular kspace manybody mc misc molecule opt peri qeq replica rigid shock snap srd user-reaxc";
-  lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = "${version}";
-    sha256 = "1ph9pr7s11wgmspmnhxa55bh1pq2cyl8iimfi62lbpbpl9pr1ilc";
+    sha256 = "1dlifm9wm1jcw2zwal3fnzzl41ng08c7v48w6hx2mz84zljg1nsj";
   };
 
   passthru = {
     inherit mpi;
+    inherit packages;
   };
 
-  buildInputs = [ fftw libpng openblas gzip bash ]
-  ++ (stdenv.lib.optionals mpiSupport [ mpi ]);
+  buildInputs = [ fftw libpng openblas gzip ]
+    ++ (stdenv.lib.optionals withMPI [ mpi ]);
+
+  configurePhase = ''
+    cd src
+    for pack in ${stdenv.lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
+  '';
 
   # Must do manual build due to LAMMPS requiring a seperate build for
-  # the libraries and executable
-  builder = writeText "builder.sh" ''
-    source $stdenv/setup
+  # the libraries and executable. Also non-typical make script
+  buildPhase = ''
+    make mode=exe ${if withMPI then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
+    make mode=shlib ${if withMPI then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
+  '';
 
-    mkdir lammps
-    cp -r $src/lib $src/src lammps
-    chmod -R 755 lammps/src/
-    cd lammps/src
-    for pack in ${lammps_packages}; do make "yes-$pack" SHELL=$SHELL; done
-    make mode=exe ${if mpiSupport then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
-    make mode=shlib ${if mpiSupport then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
+  installPhase = ''
+    mkdir -p $out/bin $out/include $out/lib
 
-    mkdir -p $out/bin
     cp -v lmp_* $out/bin/
-
-    mkdir -p $out/include
     cp -v *.h $out/include/
-
-    mkdir -p $out/lib
     cp -v liblammps* $out/lib/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Classical Molecular Dynamics simulation code";
     longDescription = ''
       LAMMPS is a classical molecular dynamics simulation code designed to
@@ -67,8 +60,8 @@ stdenv.mkDerivation rec {
       under the terms of the GNU Public License (GPL).
       '';
     homepage = http://lammps.sandia.gov;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with lib.maintainers; [ costrouc ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.costrouc ];
   };
 }
