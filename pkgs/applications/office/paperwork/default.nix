@@ -1,20 +1,16 @@
-{ lib, python3Packages, fetchFromGitHub, gtk3, cairo
+{ lib, python3Packages, gtk3, cairo
 , aspellDicts, buildEnv
 , gnome3, hicolor-icon-theme, librsvg
 , xvfb_run, dbus, libnotify
+, callPackage
 }:
-
-python3Packages.buildPythonApplication rec {
+let
+  source = (callPackage ./source.nix {});
+in python3Packages.buildPythonApplication rec {
   name = "paperwork-${version}";
-  # Don't forget to also update paperwork-backend when updating this!
-  version = "1.2.2";
+  inherit (source) version;
 
-  src = fetchFromGitHub {
-    repo = "paperwork";
-    owner = "openpaperwork";
-    rev = version;
-    sha256 = "1nb5sna2s952xb7c89qccg9qp693pyqj8g7xz16ll16ydfqnzsdk";
-  };
+  src = source.frontend;
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''

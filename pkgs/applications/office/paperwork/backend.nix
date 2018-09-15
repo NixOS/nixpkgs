@@ -1,23 +1,19 @@
-{ buildPythonPackage, lib, fetchFromGitHub
+{ buildPythonPackage, lib
 
 , isPy3k, isPyPy
 
 , pyenchant, simplebayes, pillow, pycountry, whoosh, termcolor
 , python-Levenshtein, pyinsane2, pygobject3, pyocr, natsort
 
-, pkgs
+, pkgs, callPackage
 }:
-
-buildPythonPackage rec {
+let
+  source = (callPackage ./source.nix {});
+in buildPythonPackage rec {
   pname = "paperwork-backend";
-  version = "1.2.2";
+  inherit (source) version;
 
-  src = fetchFromGitHub {
-    owner = "openpaperwork";
-    repo = "paperwork-backend";
-    rev = version;
-    sha256 = "1rvf06vphm32601ja1bfkfkfpgjxiv0lh4yxjy31jll0bfnsf7pf";
-  };
+  src = source.backend;
 
   # Python 2.x is not supported.
   disabled = !isPy3k && !isPyPy;
