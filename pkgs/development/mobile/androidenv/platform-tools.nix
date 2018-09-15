@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
       ''
-        for i in adb dmtracedump fastboot hprof-conv sqlite3
+        for i in adb dmtracedump e2fsdroid fastboot hprof-conv make_f2fs mke2fs sload_f2fs sqlite3
         do
             patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
             patchelf --set-rpath ${stdenv.cc.cc.lib}/lib:`pwd`/lib64 $i
