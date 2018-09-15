@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     rev = "106b823805adcc043b2bfe5bc21d58f160a28a7b";
     leaveDotGit = true;  # gen.py uses "git describe" to generate last_commit_position.h
     deepClone = true;
-    sha256 = "1276jwk3424i78zp21f6hp7idvg6r8qxp8sdfaw8ilkmp7ss19c8";
+    sha256 = "00xl7rfcwyig23q6qnqzv13lvzm3n30di242zcz2m9rdlfspiayb";
   };
 
   postPatch = ''
