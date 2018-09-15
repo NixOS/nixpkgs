@@ -7179,7 +7179,8 @@ with pkgs;
     });
   inherit (rust) cargo rustc;
 
-  buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
+  buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
+  buildRustCrateTests = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { }).tests;
 
   cargo-vendor = callPackage ../build-support/rust/cargo-vendor { };
 
