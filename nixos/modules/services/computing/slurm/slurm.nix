@@ -29,10 +29,17 @@ let
       ${cfg.extraPlugstackConfig}
     '';
 
-
   cgroupConfig = pkgs.writeTextDir "cgroup.conf"
    ''
      ${cfg.extraCgroupConfig}
+   '';
+
+  slurmdbdConf = pkgs.writeTextDir "slurmdbd.conf"
+   ''
+     DbdHost=${cfg.dbdserver.dbdHost}
+     SlurmUser=${cfg.user}
+     StorageType=accounting_storage/mysql
+     ${cfg.dbdserver.extraConfig}
    '';
 
   # slurm expects some additional config files to be
@@ -61,6 +68,27 @@ in
             Note that the standard authentication method is "munge".
             The "munge" service needs to be provided with a password file in order for
             slurm to work properly (see <literal>services.munge.password</literal>).
+          '';
+        };
+      };
+
+      dbdserver = {
+        enable = mkEnableOption "SlurmDBD service";
+
+        dbdHost = mkOption {
+          type = types.str;
+          default = config.networking.hostName;
+          description = ''
+            Hostname of the machine where <literal>slurmdbd</literal>
+            is running (i.e. name returned by <literal>hostname -s</literal>).
+          '';
+        };
+
+        extraConfig = mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            Extra configuration for <literal>slurmdbd.conf</literal>
           '';
         };
       };
@@ -208,6 +236,8 @@ in
           used when <literal>procTrackType=proctrack/cgroup</literal>.
         '';
       };
+
+
     };
 
   };
@@ -244,7 +274,10 @@ in
         '';
       };
 
-  in mkIf (cfg.enableStools || cfg.client.enable || cfg.server.enable) {
+  in mkIf ( cfg.enableStools ||
+            cfg.client.enable ||
+            cfg.server.enable ||
+            cfg.dbdserver.enable ) {
 
     environment.systemPackages = [ wrappedSlurm ];
 
@@ -299,6 +332,24 @@ in
         mkdir -p ${cfg.stateSaveLocation}
         chown -R ${cfg.user}:slurm ${cfg.stateSaveLocation}
       '';
+    };
+
+    systemd.services.slurmdbd = mkIf (cfg.dbdserver.enable) {
+      path = with pkgs; [ wrappedSlurm munge coreutils ];
+
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" "munged.service" "mysql.service" ];
+      requires = [ "munged.service" "mysql.service" ];
+
+      # slurm strips the last component off the path
+      environment.SLURM_CONF = "${slurmdbdConf}/slurm.conf";
+
+      serviceConfig = {
+        Type = "forking";
+        ExecStart = "${cfg.package}/bin/slurmdbd";
+        PIDFile = "/run/slurmdbd.pid";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      };
     };
 
   };
