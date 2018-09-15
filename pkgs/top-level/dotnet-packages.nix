@@ -898,66 +898,11 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     exeFiles = [ "nuget.exe" ];
   };
 
-  Paket = buildDotnetPackage rec {
+  Paket = fetchNuGet {
     baseName = "Paket";
-    version = "1.18.2";
-
-    src = fetchFromGitHub {
-      owner = "fsprojects";
-      repo = "Paket";
-      rev = version;
-      sha256 = "04iwy3mggz7xn36lhzyrwqzlw451a16jblwx131qjm6fnac6rq1m";
-    };
-
-    buildInputs = [
-      fsharp
-      dotnetPackages.NewtonsoftJson
-      dotnetPackages.UnionArgParser
-      dotnetPackages.NUnit
-    ];
-
-    fileFsUnit = fetchurl {
-      name = "FsUnit.fs";
-      url = https://raw.githubusercontent.com/forki/FsUnit/81d27fd09575a32c4ed52eadb2eeac5f365b8348/FsUnit.fs;
-      sha256 = "1zxigqgb2s2v755622jbbzibvf91990x2dijhbdgg646vsybkpdp";
-    };
-
-    fileGlobbing = fetchurl {
-      name = "Globbing.fs";
-      url = https://raw.githubusercontent.com/fsharp/FAKE/8e65e2fc1406f326b44f3f87ec9ca9b3127a6e78/src/app/FakeLib/Globbing/Globbing.fs;
-      sha256 = "1v7d7666a61j6f8ksh0q40hfsc5b03448viq17xa91xgb7skhyx7";
-    };
-
-    fileErrorHandling = fetchurl {
-      name = "ErrorHandling.fs";
-      url = https://raw.githubusercontent.com/fsprojects/Chessie/3017092260b4a59a3b4b25bf8fca6be6eb7487eb/src/Chessie/ErrorHandling.fs;
-      sha256 = "0ka9ilfbl4izxc1wqd5vlfjnp7n2xcckfhp13gzhqbdx7464van9";
-    };
-
-    postConfigure = ''
-       # Copy said single-files-in-git-repos
-       mkdir -p "paket-files/forki/FsUnit"
-       cp -v "${fileFsUnit}" "paket-files/forki/FsUnit/FsUnit.fs"
-
-       mkdir -p "paket-files/fsharp/FAKE/src/app/FakeLib/Globbing"
-       cp -v "${fileGlobbing}" "paket-files/fsharp/FAKE/src/app/FakeLib/Globbing/Globbing.fs"
-
-       mkdir -p "paket-files/fsprojects/Chessie/src/Chessie"
-       cp -v "${fileErrorHandling}" "paket-files/fsprojects/Chessie/src/Chessie/ErrorHandling.fs"
-    '';
-
-    xBuildFiles = [ "Paket.sln" ];
-
-    outputFiles = [ "bin/*" ];
-    exeFiles = [ "paket.exe" ];
-
-    meta = {
-      description = "A dependency manager for .NET and Mono projects";
-      homepage = "http://fsprojects.github.io/Paket/";
-      license = stdenv.lib.licenses.mit;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
-    };
+    version = "5.179.1";
+    sha256 = "11rzna03i145qj08hwrynya548fwk8xzxmg65swyaf19jd7gzg82";
+    outputFiles = [ "*" ];
   };
 
   Projekt = buildDotnetPackage rec {
