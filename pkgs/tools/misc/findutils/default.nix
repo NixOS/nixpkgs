@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     ./memory-leak.patch
     ./no-install-statedir.patch
 
-    # prevent tests from failing on old kernels
+    # Prevent tests from failing on old kernels (2.6x)
+    # getdtablesize reports incorrect values if getrlimit() fails
     ./disable-getdtablesize-test.patch
   ];
 
