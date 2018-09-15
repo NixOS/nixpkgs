@@ -201,6 +201,7 @@ in rec {
       python2 = self.python;
 
       ninja = super.ninja.override { buildDocs = false; };
+      darwin = super.darwin // { cctools = super.darwin.cctools.override { llvm = null; }; };
     };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
