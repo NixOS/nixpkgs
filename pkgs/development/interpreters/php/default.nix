@@ -37,7 +37,10 @@ let
   , opensslSupport ? config.php.openssl or true
   , mbstringSupport ? config.php.mbstring or true
   , gdSupport ? config.php.gd or true
-  , intlSupport ? config.php.intl or true
+  # Because of an upstream bug: https://bugs.php.net/bug.php?id=76826
+  # We need to disable the intl support on darwin. Whenever the upstream bug is
+  # fixed we should revert this to just just "config.php.intl or true".
+  , intlSupport ? (config.php.intl or true) && (!stdenv.isDarwin)
   , exifSupport ? config.php.exif or true
   , xslSupport ? config.php.xsl or false
   , mcryptSupport ? config.php.mcrypt or true
@@ -225,7 +228,7 @@ in {
   };
 
   php72 = generic {
-    version = "7.2.8";
-    sha256 = "1rky321gcvjm0npbfd4bznh36an0y14viqcvn4yzy3x643sni00z";
+    version = "7.2.10";
+    sha256 = "17fsvdi6ihjghjsz9kk2li2rwrknm2ccb6ys0xmn789116d15dh1";
   };
 }
