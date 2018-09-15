@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.16.1";
+  version = "0.17.1";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0v5kcz8q9vzf4cpmlx8k2gg0dsr8mj0jmx9a44pwb0kc6na6pih9";
+    sha256 = "081z40vsxvw6ndiinik4pn09gxmv140k6l9zv93dgjr86qf2ir13";
   };
 
   sourceRoot = ".";
@@ -89,6 +89,9 @@ stdenv.mkDerivation rec {
       # and linkers from Xcode instead of from PATH
       export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
 
+      # Explicitly configure gcov since we don't have it on Darwin, so autodetection fails
+      export GCOV=${coreutils}/bin/false
+
       # Framework search paths aren't added by bintools hook
       # https://github.com/NixOS/nixpkgs/pull/41914
       export NIX_LDFLAGS="$NIX_LDFLAGS -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
@@ -96,6 +99,10 @@ stdenv.mkDerivation rec {
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
+
+      # 10.10 apple_sdk Foundation doesn't have type arguments on classes
+      # Remove this when we update apple_sdk
+      sed -i -e 's/<.*\*>//g' tools/osx/xcode_locator.m
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -e "s;/usr/bin/xcrun clang;${clang}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
