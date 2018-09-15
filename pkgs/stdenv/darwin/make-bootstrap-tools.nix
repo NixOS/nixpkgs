@@ -3,7 +3,7 @@
 with import pkgspath { inherit system; };
 
 let
-  llvmPackages = llvmPackages_4;
+  llvmPackages = llvmPackages_5;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -73,6 +73,7 @@ in rec {
       cp -d ${gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
       cp -d ${ncurses.out}/lib/libncurses*.dylib $out/lib
+      cp -d ${libxml2.out}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang $out/bin

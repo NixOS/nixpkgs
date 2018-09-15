@@ -198,6 +198,9 @@ in rec {
         CF = null;  # use CoreFoundation from bootstrap-tools
         configd = null;
       };
+      python2 = self.python;
+
+      ninja = super.ninja.override { buildDocs = false; };
     };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
@@ -217,11 +220,12 @@ in rec {
         zlib patchutils m4 scons flex perl bison unifdef unzip openssl python
         libxml2 gettext sharutils gmp libarchive ncurses pkg-config libedit groff
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util subversion xz
-        findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils;
+        findfreetype libssh curl cmake autoconf automake libtool ed cpio coreutils
+        libssh2 nghttp2 libkrb5 python2 ninja;
 
       darwin = super.darwin // {
         inherit (darwin)
-          dyld Libsystem xnu configd ICU libdispatch libclosure launchd;
+          dyld Libsystem xnu configd ICU libdispatch libclosure launchd CF;
       };
     };
   in with prevStage; stageFun 2 prevStage {
@@ -235,7 +239,10 @@ in rec {
 
     allowedRequisites =
       [ bootstrapTools ] ++
-      (with pkgs; [ xz.bin xz.out libcxx libcxxabi ]) ++
+      (with pkgs; [
+        xz.bin xz.out libcxx libcxxabi zlib libxml2.out curl.out openssl.out libssh2.out
+        nghttp2.lib libkrb5
+      ]) ++
       (with pkgs.darwin; [ dyld Libsystem CF ICU locale ]);
 
     overrides = persistent;
@@ -247,9 +254,10 @@ in rec {
         patchutils m4 scons flex perl bison unifdef unzip openssl python
         gettext sharutils libarchive pkg-config groff bash subversion
         openssh sqlite sed serf openldap db cyrus-sasl expat apr-util
-        findfreetype libssh curl cmake autoconf automake libtool cpio;
+        findfreetype libssh curl cmake autoconf automake libtool cpio
+        libssh2 nghttp2 libkrb5 python2 ninja;
 
-      # Avoid pulling in a full python and it's extra dependencies for the llvm/clang builds.
+      # Avoid pulling in a full python and its extra dependencies for the llvm/clang builds.
       libxml2 = super.libxml2.override { pythonSupport = false; };
 
       llvmPackages_5 = super.llvmPackages_5 // (let
@@ -281,7 +289,10 @@ in rec {
 
     allowedRequisites =
       [ bootstrapTools ] ++
-      (with pkgs; [ xz.bin xz.out bash libcxx libcxxabi ]) ++
+      (with pkgs; [
+        xz.bin xz.out bash libcxx libcxxabi zlib libxml2.out curl.out openssl.out libssh2.out
+        nghttp2.lib libkrb5
+      ]) ++
       (with pkgs.darwin; [ dyld ICU Libsystem locale ]);
 
     overrides = persistent;
@@ -292,7 +303,7 @@ in rec {
       inherit
         gnumake gzip gnused bzip2 gawk ed xz patch bash
         ncurses libffi zlib gmp pcre gnugrep
-        coreutils findutils diffutils patchutils;
+        coreutils findutils diffutils patchutils ninja;
 
       # Hack to make sure we don't link ncurses in bootstrap tools. The proper
       # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
@@ -312,8 +323,14 @@ in rec {
         });
       in { inherit tools libraries; } // tools // libraries);
 
-      darwin = super.darwin // {
+      darwin = super.darwin // rec {
         inherit (darwin) dyld Libsystem libiconv locale;
+
+        libxml2-nopython = super.libxml2.override { pythonSupport = false; };
+        CF = super.darwin.CF.override {
+          libxml2 = libxml2-nopython;
+          python = prevStage.python;
+        };
       };
     };
   in with prevStage; stageFun 4 prevStage {
@@ -344,6 +361,17 @@ in rec {
           inherit (llvmPackages_5) compiler-rt libcxx libcxxabi;
         });
       in { inherit tools libraries; } // tools // libraries);
+
+      # N.B: the important thing here is to ensure that python == python2
+      # == python27 or you get weird issues with inconsistent package sets.
+      # In a particularly subtle bug, I overrode python2 instead of python27
+      # here, and it caused gnome-doc-utils to complain about:
+      # "PyThreadState_Get: no current thread". This is because Python gets
+      # really unhappy if you have Python A which loads a native python lib
+      # which was linked against Python B, which in our case was happening
+      # because we didn't override python "deeply enough". Anyway, this works
+      # and I'm just leaving this blurb here so people realize why it matters
+      python27 = super.python27.override { CF = prevStage.darwin.CF; };
 
       darwin = super.darwin // {
         inherit (darwin) dyld ICU Libsystem libiconv;
@@ -398,9 +426,10 @@ in rec {
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped llvmPackages.clang-unwrapped.lib patch pcre.out gettext
       binutils.bintools darwin.binutils darwin.binutils.bintools
+      curl.out openssl.out libssh2.out nghttp2.lib libkrb5
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
-      dyld Libsystem CF cctools ICU libiconv locale
+      dyld Libsystem CF cctools ICU libiconv locale libxml2-nopython.out
     ]);
 
     overrides = lib.composeExtensions persistent (self: super: {
