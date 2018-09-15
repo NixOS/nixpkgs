@@ -53,7 +53,7 @@
       tomcat = 16;
       #audio = 17; # unused
       #floppy = 18; # unused
-      #uucp = 19; # unused
+      uucp = 19;
       #lp = 20; # unused
       #proc = 21; # unused
       pulseaudio = 22; # must match `pulseaudio' GID

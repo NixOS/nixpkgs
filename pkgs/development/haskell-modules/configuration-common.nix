@@ -1074,16 +1074,10 @@ self: super: {
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
-  # cabal2nix requires hpack >= 0.29.6 but the LTS has hpack-0.28.2.
-  # Lets remove this once the LTS has upraded to 0.29.6.
-  hpack = super.hpack_0_29_7;
-
-  # The test suite does not know how to find the 'cabal2nix' binary.
-  cabal2nix = overrideCabal super.cabal2nix (drv: {
-    preCheck = ''
-      export PATH="$PWD/dist/build/cabal2nix:$PATH"
-      export HOME="$TMPDIR/home"
-    '';
+  # The tool needs a newer hpack version than the one mandated by LTS-12.x.
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    hpack = self.hpack_0_31_0;
+    yaml = self.yaml_0_10_1_1;
   });
 
   # Break out of "aeson <1.3, temporary <1.3".
@@ -1130,4 +1124,12 @@ self: super: {
 
   # https://github.com/snapframework/xmlhtml/pull/37
   xmlhtml = doJailbreak super.xmlhtml;
+
+  # https://github.com/NixOS/nixpkgs/issues/46467
+  safe-money-aeson = super.safe-money-aeson.override { safe-money = self.safe-money_0_7; };
+  safe-money-store = super.safe-money-store.override { safe-money = self.safe-money_0_7; };
+  safe-money-cereal = super.safe-money-cereal.override { safe-money = self.safe-money_0_7; };
+  safe-money-serialise = super.safe-money-serialise.override { safe-money = self.safe-money_0_7; };
+  safe-money-xmlbf = super.safe-money-xmlbf.override { safe-money = self.safe-money_0_7; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

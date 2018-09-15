@@ -2,7 +2,7 @@
 
 # build-tools
 , bootPkgs, alex, happy, hscolour
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
 
 , libiconv ? null, ncurses
 
@@ -89,6 +89,12 @@ stdenv.mkDerivation (rec {
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [(fetchpatch rec { # https://phabricator.haskell.org/D5123
+    url = "http://tarballs.nixos.org/sha256/${sha256}";
+    name = "D5123.diff";
+    sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
+  })];
 
   postPatch = "patchShebangs .";
 

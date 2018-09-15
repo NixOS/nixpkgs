@@ -1847,6 +1847,11 @@
     github = "jerith666";
     name = "Matt McHenry";
   };
+  jethro = {
+    email = "jethrokuan95@gmail.com";
+    github = "jethrokuan";
+    name = "Jethro Kuan";
+  };
   jfb = {
     email = "james@yamtime.com";
     github = "tftio";
@@ -4163,6 +4168,11 @@
     github = "tomsmeets";
     name = "Tom Smeets";
   };
+  toonn = {
+    email = "nnoot@toonn.io";
+    github = "toonn";
+    name = "Toon Nolten";
+  };
   travisbhartwell = {
     email = "nafai@travishartwell.net";
     github = "travisbhartwell";
@@ -4517,6 +4527,11 @@
     email = "y0no@y0no.fr";
     github = "y0no";
     name = "Yoann Ono";
+  };
+  yarny = {
+    email = "41838844+Yarny0@users.noreply.github.com";
+    github = "Yarny0";
+    name = "Yarny";
   };
   yarr = {
     email = "savraz@gmail.com";

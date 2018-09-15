@@ -12,6 +12,8 @@ let
       log_dir = ${cfg.logDir}
     '' + lib.optionalString (cfg.port != null) ''
       ui_port = ${toString cfg.port}
+    '' + lib.optionalString (cfg.torAlways) ''
+      tor = always
     '' + cfg.extraConfig;
   };
 in with lib; {
@@ -35,11 +37,17 @@ in with lib; {
     port = mkOption {
       type = types.nullOr types.int;
       default = null;
-      example = 15441;
-      description = "Optional zeronet port.";
+      example = 43110;
+      description = "Optional zeronet web UI port.";
     };
 
     tor = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Use TOR for zeronet traffic where possible.";
+    };
+
+    torAlways = mkOption {
       type = types.bool;
       default = false;
       description = "Use TOR for all zeronet traffic.";
@@ -60,9 +68,13 @@ in with lib; {
     services.tor = mkIf cfg.tor {
       enable = true;
       controlPort = 9051;
-      extraConfig = "CookieAuthentication 1";
+      extraConfig = ''
+        CacheDirectoryGroupReadable 1
+        CookieAuthentication 1
+        CookieAuthFileGroupReadable 1
+      '';
     };
-    
+
     systemd.services.zeronet = {
       description = "zeronet";
       after = [ "network.target" (optionalString cfg.tor "tor.service") ];

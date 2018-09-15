@@ -110,18 +110,13 @@ stdenv.mkDerivation ({
       "--enable-obsolete-rpc"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
-      (if withLinuxHeaders
-       then "--with-headers=${linuxHeaders}/include"
-       else "--without-headers")
-      (if profilingLibraries
-       then "--enable-profile"
-       else "--disable-profile")
+      (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
+      (lib.enableFeature profilingLibraries "profile")
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      (if stdenv.hostPlatform.platform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"
-       then "--without-fp"
-       else "--with-fp")
+      (lib.flip lib.withFeature "fp"
+         (stdenv.hostPlatform.platform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
       "--with-__thread"
     ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"
@@ -144,6 +139,8 @@ stdenv.mkDerivation ({
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
+
+  passthru = { inherit version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //

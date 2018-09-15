@@ -18,7 +18,7 @@ fetchzip rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://dotcolon.net/font/{pname}/";
+    homepage = "http://dotcolon.net/font/${pname}/";
     description = "A weighted sans serif font";
     platforms = platforms.all;
     maintainers = with maintainers; [ leenaars ];

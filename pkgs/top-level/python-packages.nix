@@ -216,6 +216,8 @@ in {
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
+  backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
+
   bap = callPackage ../development/python-modules/bap {
     bap = pkgs.ocamlPackages.bap;
   };
@@ -288,6 +290,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  distributed = callPackage ../development/python-modules/distributed { };
+
   docutils = callPackage ../development/python-modules/docutils { };
 
   dogtail = callPackage ../development/python-modules/dogtail { };
@@ -335,6 +339,8 @@ in {
   logster = callPackage ../development/python-modules/logster { };
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
+
+  markerlib = callPackage ../development/python-modules/markerlib { };
 
   monty = callPackage ../development/python-modules/monty { };
 
@@ -463,9 +469,13 @@ in {
 
   pykerberos = callPackage ../development/python-modules/pykerberos { };
 
+  pykeepass = callPackage ../development/python-modules/pykeepass { };
+
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
+
+  pymsgbox = callPackage ../development/python-modules/pymsgbox { };
 
   pynisher = callPackage ../development/python-modules/pynisher { };
 
@@ -498,6 +508,8 @@ in {
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
+
+  python-lz4 = callPackage ../development/python-modules/python-lz4 { };
 
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkgconfig = pkgs.pkgconfig;
@@ -571,6 +583,8 @@ in {
   trustme = callPackage ../development/python-modules/trustme {};
 
   trio = callPackage ../development/python-modules/trio {};
+
+  sniffio = callPackage ../development/python-modules/sniffio { };
 
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
@@ -1452,6 +1466,8 @@ in {
 
     disabled = !isPy27;
 
+    buildInputs = optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.IOKit ];
+
     src = pkgs.fetchurl {
       url = "http://cddb-py.sourceforge.net/${name}.tar.gz";
       sha256 = "098xhd575ibvdx7i3dny3lwi851yxhjg2hn5jbbgrwj833rg5l5w";
@@ -1649,6 +1665,12 @@ in {
 
   envs = callPackage ../development/python-modules/envs { };
 
+  eth-hash = callPackage ../development/python-modules/eth-hash { };
+
+  eth-typing = callPackage ../development/python-modules/eth-typing { };
+
+  eth-utils = callPackage ../development/python-modules/eth-utils { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
@@ -1708,35 +1730,7 @@ in {
 
   idna = callPackage ../development/python-modules/idna { };
 
-  mahotas = buildPythonPackage rec {
-    name = "python-mahotas-${version}";
-    version = "1.4.2";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/luispedro/mahotas/archive/v${version}.tar.gz";
-      sha256 = "1mvsxh0pa5vdvbknlv1m68n7gw2cv4pyqgqp3r770rnmf6nxbp7m";
-    };
-
-    buildInputs = with self; [
-      nose
-      pillow
-      scipy
-    ];
-    propagatedBuildInputs = with self; [
-      numpy
-      imread
-    ];
-
-    disabled = stdenv.isi686; # Failing tests
-
-    meta = with stdenv.lib; {
-      description = "Computer vision package based on numpy";
-      homepage = http://mahotas.readthedocs.io/;
-      maintainers = with maintainers; [ luispedro ];
-      license = licenses.mit;
-      platforms = platforms.linux;
-    };
-  };
+  mahotas = callPackage ../development/python-modules/mahotas { };
 
   MDP = callPackage ../development/python-modules/mdp {};
 
@@ -1901,6 +1895,8 @@ in {
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
+  pytest-faulthandler = callPackage ../development/python-modules/pytest-faulthandler { };
+
   pytest-fixture-config = callPackage ../development/python-modules/pytest-fixture-config { };
 
   pytest-forked = callPackage ../development/python-modules/pytest-forked { };
@@ -1924,6 +1920,8 @@ in {
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
   pytest-raisesregexp = callPackage ../development/python-modules/pytest-raisesregexp { };
+
+  pytest-repeat = callPackage ../development/python-modules/pytest-repeat { };
 
   pytestrunner = callPackage ../development/python-modules/pytestrunner { };
 
@@ -1992,34 +1990,6 @@ in {
 
   zict = callPackage ../development/python-modules/zict { };
 
-  distributed = buildPythonPackage rec {
-
-    name = "distributed-${version}";
-    version = "1.15.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/distributed/${name}.tar.gz";
-      sha256 = "037a07sdf2ch1d360nqwqz3b4ld8msydng7mw4i5s902v7xr05l6";
-    };
-
-    buildInputs = with self; [ pytest docutils ];
-    propagatedBuildInputs = with self; [
-      dask six boto3 s3fs tblib locket msgpack-python click cloudpickle tornado
-      psutil botocore zict lz4 sortedcollections sortedcontainers
-    ] ++ (if !isPy3k then [ singledispatch ] else []);
-
-    # py.test not picking up local config file, even when running
-    # manually: E ValueError: no option named '--runslow'
-    doCheck = false;
-
-    meta = {
-      description = "Distributed computation in Python.";
-      homepage = "http://distributed.readthedocs.io/en/latest/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ teh ];
-    };
-  };
-
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   leather = callPackage ../development/python-modules/leather { };
@@ -2041,6 +2011,8 @@ in {
   datashape = callPackage ../development/python-modules/datashape { };
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
+
+  requests-file = callPackage ../development/python-modules/requests-file { };
 
   requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
 
@@ -10879,6 +10851,8 @@ in {
 
   python-language-server = callPackage ../development/python-modules/python-language-server {};
 
+  python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server {};
+
   pyls-black = callPackage ../development/python-modules/pyls-black {};
 
   pyls-isort = callPackage ../development/python-modules/pyls-isort {};
@@ -11182,6 +11156,8 @@ in {
       description = "Pyreport makes notes out of a python script";
     };
   });
+
+  pyreadability = callPackage ../development/python-modules/pyreadability { };
 
   pyscss = buildPythonPackage rec {
     name = "pyScss-${version}";
@@ -14925,6 +14901,7 @@ EOF
   };
 
   tornado = callPackage ../development/python-modules/tornado { };
+  tornado_4 = callPackage ../development/python-modules/tornado { version = "4.5.3"; };
 
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
@@ -16260,6 +16237,8 @@ EOF
 
   potr = callPackage ../development/python-modules/potr {};
 
+  python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
+
   pluggy = callPackage ../development/python-modules/pluggy {};
 
   xcffib = callPackage ../development/python-modules/xcffib {};
@@ -17112,6 +17091,8 @@ EOF
   warrant = callPackage ../development/python-modules/warrant { };
 
   textacy = callPackage ../development/python-modules/textacy { };
+
+  tldextract = callPackage ../development/python-modules/tldextract { };
 
   pyemd  = callPackage ../development/python-modules/pyemd { };
 

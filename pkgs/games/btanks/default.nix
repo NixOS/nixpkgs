@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/btanks/;
     description = "Fast 2d tank arcade game";
     license = stdenv.lib.licenses.gpl2Plus;
+    broken = true; # 2018-09-13, no successful build since 2018-03-16
   };
 }
