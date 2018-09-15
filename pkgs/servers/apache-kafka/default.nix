@@ -19,9 +19,9 @@ let
       sha256 = "1wj639h95aq5n132fq1rbyzqh5rsa4mlhbg3c5mszqglnzdz4xn7";
     };
     "1.0" = {
-      kafkaVersion = "1.0.1";
+      kafkaVersion = "1.0.2";
       scalaVersion = "2.12";
-      sha256 = "1fxn6i0kanwksj1dhcnlni0cn542k50wdg8jkwhfmf4qq8yfl90m";
+      sha256 = "0cmq8ww1lbkp3ipy9d1q8c1yz4kfwj0v4ynnhsk1i48sqlmvwybj";
     };
     "1.1" = {
       kafkaVersion = "1.1.1";
