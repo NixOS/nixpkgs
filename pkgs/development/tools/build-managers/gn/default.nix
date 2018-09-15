@@ -1,16 +1,28 @@
-{ stdenv, lib, fetchgit, fetchzip, fetchpatch, darwin
+{ stdenv, lib, fetchgit, fetchzip, fetchpatch, darwin, writeText
 , git, ninja, python }:
 
+let
+  rev = "106b823805adcc043b2bfe5bc21d58f160a28a7b";
+  sha256 = "1a5s6i07s8l4f1bakh3fyaym00xz7zgd49sp6awm10xb7yjh95ba";
+
+  shortRev = builtins.substring 0 7 rev;
+  lastCommitPosition = writeText "last_commit_position.h" ''
+    #ifndef OUT_LAST_COMMIT_POSITION_H_
+    #define OUT_LAST_COMMIT_POSITION_H_
+
+    #define LAST_COMMIT_POSITION "(${shortRev})"
+
+    #endif  // OUT_LAST_COMMIT_POSITION_H_
+  '';
+
+in
 stdenv.mkDerivation rec {
   name = "gn-${version}";
   version = "20180830";
 
   src = fetchgit {
     url = "https://gn.googlesource.com/gn";
-    rev = "106b823805adcc043b2bfe5bc21d58f160a28a7b";
-    leaveDotGit = true;  # gen.py uses "git describe" to generate last_commit_position.h
-    deepClone = true;
-    sha256 = "00xl7rfcwyig23q6qnqzv13lvzm3n30di242zcz2m9rdlfspiayb";
+    inherit rev sha256;
   };
 
   postPatch = ''
@@ -31,7 +43,8 @@ stdenv.mkDerivation rec {
   ]);
 
   buildPhase = ''
-    python build/gen.py --no-sysroot
+    python build/gen.py --no-sysroot --no-last-commit-position
+    ln -s ${lastCommitPosition} out/last_commit_position.h
     ninja -j $NIX_BUILD_CORES -C out gn
   '';
 
