@@ -22,9 +22,10 @@ with frameworks; with libs; {
   CalendarStore           = [];
   Cocoa                   = [ AppKit ];
   Collaboration           = [];
+  ColorSync               = [];
   # Impure version of CoreFoundation, this should not be used unless another
   # framework includes headers that are not available in the pure version.
-  CoreFoundation          = [];
+  CoreFoundation          = [ availability ];
   CoreAudio               = [ CF IOKit ];
   CoreAudioKit            = [ AudioUnit ];
   CoreData                = [];
@@ -107,7 +108,7 @@ with frameworks; with libs; {
 
   # Umbrellas
   Accelerate          = [ CoreWLAN IOBluetooth ];
-  ApplicationServices = [ CF CoreServices CoreText ImageIO ];
+  ApplicationServices = [ CF CoreServices CoreText ImageIO ColorSync ];
   Carbon              = [ ApplicationServices CF CoreServices Foundation IOKit Security QuartzCore ];
   CoreBluetooth       = [];
   CoreServices        = [ CFNetwork CoreAudio CoreData CF DiskArbitration Security NetFS OpenDirectory ServiceManagement ];
