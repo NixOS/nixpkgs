@@ -42,9 +42,11 @@ let
     };
   });
 
-  stableSource = {
+  stableSource = rec {
     pname = "compton";
     version = "0.1_beta2.5";
+
+    COMPTON_VERSION = version;
 
     src = fetchFromGitHub {
       owner = "chjj";
@@ -58,15 +60,17 @@ let
     };
   };
 
-  gitSource = {
+  gitSource = rec {
     pname = "compton-git";
-    version = "2018-08-14";
+    version = "2";
+
+    COMPTON_VERSION = "v${version}";
 
     src = fetchFromGitHub {
       owner  = "yshui";
       repo   = "compton";
-      rev    = "cac8094ce12cd40706fb48f9ab35354d9ee7c48f";
-      sha256 = "0qif3nx8vszlr06bixasna13pzfaikp86xax9miwnba50517y7v5";
+      rev    = COMPTON_VERSION;
+      sha256 = "1b6jgkkjbmgm7d7qjs94h722kgbqjagcxznkh2r84hcmcl8pibjq";
     };
 
     meta = {
