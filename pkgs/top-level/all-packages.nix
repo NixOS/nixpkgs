@@ -21682,6 +21682,8 @@ with pkgs;
 
   martyr = callPackage ../development/libraries/martyr { };
 
+  matcha = callPackage ../misc/themes/matcha { };
+
   # previously known as flat-plat
   materia-theme = callPackage ../misc/themes/materia-theme { };
 
