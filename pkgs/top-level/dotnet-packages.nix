@@ -402,50 +402,11 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  Deedle = buildDotnetPackage rec {
+  Deedle = fetchNuGet rec {
     baseName = "Deedle";
-    version = "1.2.0";
-
-    src = fetchFromGitHub {
-      owner = "BlueMountainCapital";
-      repo = baseName;
-      rev = "v${version}";
-      sha256 = "115zzh3q57w8wr02cl2v8wijnj1rg01j1mk9zbzixbb4aird72n5";
-    };
-
-    # Enough files from this repo are needed that it will be quicker to just get the entire repo
-    fsharpDataSrc = fetchFromGitHub {
-      owner = "fsharp";
-      repo = "FSharp.Data";
-      rev = "2.2.3";
-      sha256 = "1h3v9rc8k0khp61cv5n01larqbxd3xcx3q52sw5zf9l0661vw7qr";
-    };
-
-    buildInputs = [
-      fsharp
-      dotnetPackages.FsCheck
-      dotnetPackages.FSharpCompilerService
-      dotnetPackages.FSharpData
-      dotnetPackages.FSharpFormatting
-      dotnetPackages.MathNetNumerics
-      dotnetPackages.NUnit
-    ];
-
-    preConfigure = ''
-      mkdir -vp paket-files/fsharp
-      ln -sv ${fsharpDataSrc} paket-files/fsharp/FSharp.Data
-    '';
-
-    xBuildFiles = [ "Deedle.Core.sln" ];  # Come back later to get RProvider as well
-    outputFiles = [ "bin/*" "LICENSE.md" ];
-
-    meta = {
-      description = "Deedle is an easy to use library for data and time series manipulation and for scientific programming";
-      homepage = "http://bluemountaincapital.github.io/Deedle/";
-      license = stdenv.lib.licenses.free;
-      maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
-    };
+    version = "1.2.5";
+    sha256 = "0g19ll6bp97ixprcnpwwvshr1n9jxxf9xjhkxp0r63mg46z48jnw";
+    outputFiles = [ "*" ];
   };
 
   ExcelDna = buildDotnetPackage rec {
