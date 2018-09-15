@@ -13,13 +13,11 @@ let
   # Some random file to serve.
   file = pkgs.hello.src;
 
-  miniupnpdConf = nodes: pkgs.writeText "miniupnpd.conf"
-    ''
-      ext_ifname=eth1
-      listening_ip=${(pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address}/24
-      allow 1024-65535 192.168.2.0/24 1024-65535
-    '';
-
+  internalRouterAddress = "192.168.3.1";
+  internalClient1Address = "192.168.3.2";
+  externalRouterAddress = "80.100.100.1";
+  externalClient2Address = "80.100.100.2";
+  externalTrackerAddress = "80.100.100.3";
 in
 
 {
@@ -31,39 +29,79 @@ in
   nodes =
     { tracker =
         { pkgs, ... }:
-        { environment.systemPackages = [ pkgs.transmission pkgs.opentracker ];
+        { environment.systemPackages = [ pkgs.transmission ];
+
+          virtualisation.vlans = [ 1 ];
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = externalTrackerAddress; prefixLength = 24; }
+          ];
 
           # We need Apache on the tracker to serve the torrents.
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           services.httpd.documentRoot = "/tmp";
 
-          networking.firewall.enable = false; # FIXME: figure out what ports we actually need
+          networking.firewall.enable = false;
+
+          services.opentracker.enable = true;
+
+          services.transmission.enable = true;
+          services.transmission.settings.dht-enabled = false;
+          services.transmission.settings.port-forwaring-enabled = false;
         };
 
       router =
-        { pkgs, ... }:
-        { environment.systemPackages = [ pkgs.miniupnpd ];
-          virtualisation.vlans = [ 1 2 ];
+        { pkgs, nodes, ... }:
+        { virtualisation.vlans = [ 1 2 ];
           networking.nat.enable = true;
           networking.nat.internalInterfaces = [ "eth2" ];
           networking.nat.externalInterface = "eth1";
-          networking.firewall.enable = false;
+          networking.firewall.enable = true;
+          networking.firewall.trustedInterfaces = [ "eth2" ];
+          networking.interfaces.eth0.ipv4.addresses = [];
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = externalRouterAddress; prefixLength = 24; }
+          ];
+          networking.interfaces.eth2.ipv4.addresses = [
+            { address = internalRouterAddress; prefixLength = 24; }
+          ];
+          services.miniupnpd = {
+            enable = true;
+            externalInterface = "eth1";
+            internalIPs = [ "eth2" ];
+            appendConfig = ''
+              ext_ip=${externalRouterAddress}
+            '';
+          };
         };
 
       client1 =
         { pkgs, nodes, ... }:
-        { environment.systemPackages = [ pkgs.transmission ];
+        { environment.systemPackages = [ pkgs.transmission pkgs.miniupnpc ];
           virtualisation.vlans = [ 2 ];
-          networking.defaultGateway =
-            (pkgs.lib.head nodes.router.config.networking.interfaces.eth2.ipv4.addresses).address;
+          networking.interfaces.eth0.ipv4.addresses = [];
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = internalClient1Address; prefixLength = 24; }
+          ];
+          networking.defaultGateway = internalRouterAddress;
           networking.firewall.enable = false;
+          services.transmission.enable = true;
+          services.transmission.settings.dht-enabled = false;
+          services.transmission.settings.message-level = 3;
         };
 
       client2 =
         { pkgs, ... }:
         { environment.systemPackages = [ pkgs.transmission ];
+          virtualisation.vlans = [ 1 ];
+          networking.interfaces.eth0.ipv4.addresses = [];
+          networking.interfaces.eth1.ipv4.addresses = [
+            { address = externalClient2Address; prefixLength = 24; }
+          ];
           networking.firewall.enable = false;
+          services.transmission.enable = true;
+          services.transmission.settings.dht-enabled = false;
+          services.transmission.settings.port-forwaring-enabled = false;
         };
     };
 
@@ -72,43 +110,38 @@ in
     ''
       startAll;
 
-      # Enable NAT on the router and start miniupnpd.
-      $router->waitForUnit("nat");
-      $router->succeed(
-          "iptables -w -t nat -N MINIUPNPD",
-          "iptables -w -t nat -A PREROUTING -i eth1 -j MINIUPNPD",
-          "echo 1 > /proc/sys/net/ipv4/ip_forward",
-          "miniupnpd -f ${miniupnpdConf nodes}"
-      );
+      # Wait for network and miniupnpd.
+      $router->waitForUnit("network-online.target");
+      $router->waitForUnit("miniupnpd");
 
       # Create the torrent.
       $tracker->succeed("mkdir /tmp/data");
       $tracker->succeed("cp ${file} /tmp/data/test.tar.bz2");
-      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 -p -t http://${(pkgs.lib.head nodes.tracker.config.networking.interfaces.eth1.ipv4.addresses).address}:6969/announce -o /tmp/test.torrent");
+      $tracker->succeed("transmission-create /tmp/data/test.tar.bz2 --private --tracker http://${externalTrackerAddress}:6969/announce --outfile /tmp/test.torrent");
       $tracker->succeed("chmod 644 /tmp/test.torrent");
 
       # Start the tracker.  !!! use a less crappy tracker
-      $tracker->waitForUnit("network.target");
-      $tracker->succeed("opentracker -p 6969 >&2 &");
+      $tracker->waitForUnit("network-online.target");
+      $tracker->waitForUnit("opentracker.service");
       $tracker->waitForOpenPort(6969);
 
       # Start the initial seeder.
-      my $pid = $tracker->succeed("transmission-cli /tmp/test.torrent -M -w /tmp/data >&2 & echo \$!");
+      $tracker->succeed("transmission-remote --add /tmp/test.torrent --no-portmap --no-dht --download-dir /tmp/data");
 
       # Now we should be able to download from the client behind the NAT.
       $tracker->waitForUnit("httpd");
-      $client1->waitForUnit("network.target");
-      $client1->succeed("transmission-cli http://tracker/test.torrent -w /tmp >&2 &");
+      $client1->waitForUnit("network-online.target");
+      $client1->succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent --download-dir /tmp >&2 &");
       $client1->waitForFile("/tmp/test.tar.bz2");
       $client1->succeed("cmp /tmp/test.tar.bz2 ${file}");
 
       # Bring down the initial seeder.
-      $tracker->succeed("kill -9 $pid");
+      # $tracker->stopJob("transmission");
 
       # Now download from the second client.  This can only succeed if
       # the first client created a NAT hole in the router.
-      $client2->waitForUnit("network.target");
-      $client2->succeed("transmission-cli http://tracker/test.torrent -M -w /tmp >&2 &");
+      $client2->waitForUnit("network-online.target");
+      $client2->succeed("transmission-remote --add http://${externalTrackerAddress}/test.torrent --no-portmap --no-dht --download-dir /tmp >&2 &");
       $client2->waitForFile("/tmp/test.tar.bz2");
       $client2->succeed("cmp /tmp/test.tar.bz2 ${file}");
     '';
