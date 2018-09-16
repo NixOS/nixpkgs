@@ -5,32 +5,10 @@
 # rewritten to /nix/store/<hash>/bin/python.  Interpreters that are
 # already in the store are left untouched.
 
-fixupOutputHooks+=(patchShebangsAuto)
-
-# Run patch shebangs on a directory.
-# patchShebangs [--build | --host] directory
-
-# Flags:
-# --build : Lookup commands available at build-time
-# --host  : Lookup commands available at runtime
-
-# Example use cases,
-# $ patchShebangs --host /nix/store/...-hello-1.0/bin
-# $ patchShebangs --build configure
+fixupOutputHooks+=('if [ -z "$dontPatchShebangs" -a -e "$prefix" ]; then patchShebangs "$prefix"; fi')
 
 patchShebangs() {
-    local pathName
-
-    if [ "$1" = "--host" ]; then
-        pathName=HOST_PATH
-        shift
-    elif [ "$1" = "--build" ]; then
-        pathName=PATH
-        shift
-    fi
-
     local dir="$1"
-
     header "patching script interpreter paths in $dir"
     local f
     local oldPath
@@ -49,14 +27,6 @@ patchShebangs() {
         oldInterpreterLine=$(head -1 "$f" | tail -c+3)
         read -r oldPath arg0 args <<< "$oldInterpreterLine"
 
-        if [ -z "$pathName" ]; then
-            if [[ "$f" = "$NIX_STORE"* ]]; then
-                pathName=HOST_PATH
-            else
-                pathName=PATH
-            fi
-        fi
-
         if $(echo "$oldPath" | grep -q "/bin/env$"); then
             # Check for unsupported 'env' functionality:
             # - options: something starting with a '-'
@@ -65,17 +35,14 @@ patchShebangs() {
                 echo "unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)"
                 exit 1
             fi
-
-            newPath="$(PATH="${!pathName}" command -v "$arg0" || true)"
+            newPath="$(command -v "$arg0" || true)"
         else
             if [ "$oldPath" = "" ]; then
                 # If no interpreter is specified linux will use /bin/sh. Set
                 # oldpath="/bin/sh" so that we get /nix/store/.../sh.
                 oldPath="/bin/sh"
             fi
-
-            newPath="$(PATH="${!pathName}" command -v "$(basename "$oldPath")" || true)"
-
+            newPath="$(command -v "$(basename "$oldPath")" || true)"
             args="$arg0 $args"
         fi
 
@@ -97,18 +64,4 @@ patchShebangs() {
     done
 
     stopNest
-}
-
-patchShebangsAuto () {
-    if [ -z "$dontPatchShebangs" -a -e "$prefix" ]; then
-
-        # Dev output will end up being run on the build platform. An
-        # example case of this is sdl2-config. Otherwise, we can just
-        # use the runtime path (--host).
-        if [ "$output" != out ] && [ "$output" = "${!outputDev}" ]; then
-            patchShebangs --build "$prefix"
-        else
-            patchShebangs --host "$prefix"
-        fi
-    fi
 }
