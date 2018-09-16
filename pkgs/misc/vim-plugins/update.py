@@ -193,12 +193,14 @@ def check_results(
     print(f"{len(results) - len(failures)} plugins were checked", end="")
     if len(failures) == 0:
         print()
+        return plugins
     else:
         print(f", {len(failures)} plugin(s) could not be downloaded:\n")
 
         for (plugin, exception) in failures:
             print_download_error(plugin, exception)
-    return plugins
+
+        sys.exit(1)
 
 
 def load_plugin_spec() -> List[Tuple[str, str]]:
