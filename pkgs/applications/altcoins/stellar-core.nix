@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/stellar/stellar-core.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0ldw3qr0sajgam38z2w2iym0214ial6iahbzx3b965cw92n8n88z";
+    sha256 = "0c4jg4bz0sq2q70n6fdgyh3zsq4mplg5q3mzghxgvzv1vkzn8mmp";
     fetchSubmodules = true;
     leaveDotGit = true;
   };
