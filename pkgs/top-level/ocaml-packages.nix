@@ -541,6 +541,8 @@ let
 
     octavius = callPackage ../development/ocaml-modules/octavius { };
 
+    odoc = callPackage ../development/ocaml-modules/odoc { };
+
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
     omd = callPackage ../development/ocaml-modules/omd { };
