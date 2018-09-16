@@ -257,6 +257,7 @@ shopt -s nullglob
 
 # Set up the initial path.
 PATH=
+HOST_PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH "$i/bin"
@@ -272,6 +273,12 @@ if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
 
+# For backward compatibility, we add SHELL to HOST_PATH so it can be
+# used in auto patch-shebangs. Unfortunately this will not work with
+# cross compilation because it will be for the builder’s platform.
+if [ -z "${strictDeps-}" ]; then
+    addToSearchPath HOST_PATH "$SHELL/bin"
+fi
 
 # Dummy implementation of the paxmark function. On Linux, this is
 # overwritten by paxctl's setup hook.
