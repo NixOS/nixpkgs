@@ -125,6 +125,7 @@ stdenv.mkDerivation rec {
     ./remove-fhs-test-references.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+    # breaks under load: https://github.com/golang/go/issues/25628
     ./skip-test-extra-files-on-386.patch
   ];
 
