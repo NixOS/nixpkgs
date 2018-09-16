@@ -1,9 +1,9 @@
-{ busybox, hostPlatform }:
+{ busybox, stdenv}:
 
 # Minimal shell for use as basic /bin/sh in sandbox builds
 busybox.override {
   # musl roadmap has RISC-V support projected for 1.1.20
-  useMusl = !hostPlatform.isRiscV;
+  useMusl = !stdenv.hostPlatform.isRiscV;
   enableStatic = true;
   enableMinimal = true;
   extraConfig = ''

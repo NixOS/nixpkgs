@@ -38,10 +38,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "keybase-gui-${version}";
-  version = "2.3.0-20180627160031.8e0438e6fb";
+  version = "2.5.0-20180807164805.0fda758997";
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version}_amd64.deb";
-    sha256 = "0xaxxjdfdmgv0wfy75dspfa0a7cdwdpphyy6my9vw82v8jxl3ffx";
+    sha256 = "135sm3h5i2h9j06py827psjbhhiqy1mb133s92p7jp6q1mhr8j1x";
   };
   phases = ["unpackPhase" "installPhase" "fixupPhase"];
   unpackPhase = ''
@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     description = "The Keybase official GUI.";
     platforms = platforms.linux;
     maintainers = with maintainers; [ puffnfresh np ];
+    license = licenses.bsd3;
   };
 }

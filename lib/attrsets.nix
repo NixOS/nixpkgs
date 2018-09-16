@@ -145,7 +145,7 @@ rec {
   foldAttrs = op: nul: list_of_attrs:
     fold (n: a:
         fold (name: o:
-          o // (listToAttrs [{inherit name; value = op n.${name} (a.${name} or nul); }])
+          o // { ${name} = op n.${name} (a.${name} or nul); }
         ) a (attrNames n)
     ) {} list_of_attrs;
 
@@ -384,11 +384,12 @@ rec {
   recursiveUpdateUntil = pred: lhs: rhs:
     let f = attrPath:
       zipAttrsWith (n: values:
+        let here = attrPath ++ [n]; in
         if tail values == []
-        || pred attrPath (head (tail values)) (head values) then
+        || pred here (head (tail values)) (head values) then
           head values
         else
-          f (attrPath ++ [n]) values
+          f here values
       );
     in f [] [rhs lhs];
 

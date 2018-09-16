@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   # when updating this to >=7, check, see previous reverts:
   # nix-build -A nixos.tests.networking.scripted.macvlan.x86_64-linux nixos/release-combined.nix
-  name = "dhcpcd-6.11.5";
+  name = "dhcpcd-7.0.8";
 
   src = fetchurl {
     url = "mirror://roy/dhcpcd/${name}.tar.xz";
-    sha256 = "17nnhxmbdcc7k2mh6sgvxisqcqbic5540xbig363ds97gvf795kg";
+    sha256 = "1df95lv3cbs3dk718a2vyvzmv7qhpgcxzagb27ylmav96f48x5ln";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
     find $out -type f -print0 | xargs --null sed -i 's|${stdenv.shellPackage}|${runtimeShellPackage}|'
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";
     homepage = https://roy.marples.name/projects/dhcpcd;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ eelco fpletz ];
+    platforms = platforms.linux;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ eelco fpletz ];
   };
 }

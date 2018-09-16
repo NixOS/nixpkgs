@@ -60,38 +60,38 @@
 
 let
   arch =
-    if stdenv.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux" then
       "x86_64"
-    else if stdenv.system == "i686-linux"   then
+    else if stdenv.hostPlatform.system == "i686-linux"   then
       "i386"
     else throw "Flash Player is not supported on this platform";
   lib_suffix =
-      if stdenv.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux" then
       "64"
     else
       "";
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
-  version = "30.0.0.134";
+  version = "31.0.0.108";
 
   src = fetchurl {
     url =
       if debug then
-        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/30/flash_player_npapi_linux_debug.${arch}.tar.gz"
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/31/flash_player_npapi_linux_debug.${arch}.tar.gz"
       else
         "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "1xa2mcbcxpfrqdf37a98nvvsvyp0bm3lsv21ky3ps9cba8a13z80"
+          "1mn29ahxjf6pdy2zp2na14cz46jrl88f54kp3bs3cz75syyizyb6"
         else
-          "1jgl57ggcszdim51dcr0gsjmrdb2kdvxl0lv5zl83cvxcyz0z4p6"
+          "0inpj6bcsn5lh8gdv1wxpgipzrmpc553nhr68a55b2wff9fkv1ci"
       else
         if arch == "x86_64" then
-          "0331r5af4zrvwc4h7dp5qyy91dfam5z03yjggls3x04i10nz5myw"
+          "1dfgsl5jf8ja9f7wwkzj5bfz1v5rdsyf4qhg1shqqldadmyyha7p"
         else
-          "011cf0kycs4ih45l23bp6rr2vm7w7jaj4pjvmqwjax4xrb5pzkic";
+          "0yiqwwqs3z9zzkfgqzjwqqdr2vaj1ia5xychs9fgxix3y4j934da";
   };
 
   nativeBuildInputs = [ unzip ];

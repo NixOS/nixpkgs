@@ -57,6 +57,8 @@ in stdenv.mkDerivation ({
 
   debugInfo = enableDebugInfo;
 
+  enableParallelBuilding = true;
+
   # Clang 4 (rightfully) thinks signed comparisons of pointers with NULL are nonsense
   prePatch = ''
     substituteInPlace lib/wx/c_src/wxe_impl.cpp --replace 'temp > NULL' 'temp != NULL'

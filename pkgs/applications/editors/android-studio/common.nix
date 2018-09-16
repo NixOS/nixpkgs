@@ -31,9 +31,10 @@
 , stdenv
 , unzip
 , which
-, writeTextFile
+, runCommand
 , xkeyboard_config
 , zlib
+, makeDesktopItem
 }:
 
 let
@@ -113,6 +114,17 @@ let
     '';
   };
 
+  desktopItem = makeDesktopItem {
+    name = drvName;
+    exec = pname;
+    icon = drvName;
+    desktopName = "Android Studio (${channel} channel)";
+    comment = "The official Android IDE";
+    categories = "Development;IDE;";
+    startupNotify = "true";
+    extraEntries="StartupWMClass=jetbrains-studio";
+  };
+
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
   # (e.g. `mksdcard`) have `/lib/ld-linux.so.2` set as the interpreter. An FHS
   # environment is used as a work around for that.
@@ -120,18 +132,15 @@ let
     name = "${drvName}-fhs-env";
     multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
-
-in
-  writeTextFile {
-    name = "${drvName}-wrapper";
-    # TODO: Rename preview -> beta (and add -stable suffix?):
-    destination = "/bin/${pname}";
-    executable = true;
-    text = ''
+in runCommand
+  "${drvName}-wrapper"
+  {
+    startScript = ''
       #!${bash}/bin/bash
       ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudio}/bin/studio.sh
     '';
-  } // {
+    preferLocalBuild = true;
+    allowSubstitutes = false;
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (${channel} channel)";
       longDescription = ''
@@ -146,3 +155,12 @@ in
       maintainers = with maintainers; [ primeos ];
     };
   }
+  ''
+    mkdir -p $out/{bin,share/pixmaps}
+
+    # TODO: Rename preview -> beta (and add -stable suffix?):
+    echo -n "$startScript" > $out/bin/${pname}
+    chmod +x $out/bin/${pname}
+    ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${drvName}.png
+    ln -s ${desktopItem}/share/applications $out/share/applications
+  ''

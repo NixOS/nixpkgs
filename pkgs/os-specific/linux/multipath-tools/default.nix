@@ -31,9 +31,10 @@ stdenv.mkDerivation rec {
     "unitdir=$(out)/lib/systemd/system"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tools for the Linux multipathing driver";
     homepage = http://christophe.varoqui.free.fr/;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

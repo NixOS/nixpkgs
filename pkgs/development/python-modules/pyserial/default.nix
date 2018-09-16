@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, hostPlatform }:
+{ stdenv, lib, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
   pname = "pyserial";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   checkPhase = "python -m unittest discover -s test";
-  doCheck = !hostPlatform.isDarwin; # broken on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin; # broken on darwin
 
   meta = with lib; {
     homepage = "https://github.com/pyserial/pyserial";

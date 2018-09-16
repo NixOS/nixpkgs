@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   name = "sencha-bare-${version}";
-  src = srcs.${stdenv.system};
+  src = srcs.${stdenv.hostPlatform.system};
 
   nativeBuildInputs = [ gzip which unzip ];
   buildInputs = [ jdk ];

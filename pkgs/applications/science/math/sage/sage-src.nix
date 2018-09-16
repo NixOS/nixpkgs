@@ -56,6 +56,10 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/25345
     # (upstream patch doesn't apply on 8.2 source)
     ./patches/dochtml-optional.patch
+
+    # work with pari with threads enabled at compile time (disable them at runtime)
+    # https://trac.sagemath.org/ticket/26002
+    ./patches/pari-no-threads.patch
   ];
 
   packageUpgradePatches = [
@@ -90,9 +94,20 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
-    # Only formatting changes.
+    (fetchpatch {
+      name = "matplotlib-2.2.2";
+      url = "https://git.sagemath.org/sage.git/patch?id=0d6244ed53b71aba861ce3d683d33e542c0bf0b0";
+      sha256 = "15x4cadxxlsdfh2sblgagqjj6ir13fgdzixxnwnvzln60saahb34";
+    })
+
+    (fetchpatch {
+      name = "scipy-1.1.0";
+      url = "https://git.sagemath.org/sage.git/patch?id=e0db968a51678b34ebd8d34906c7042900272378";
+      sha256 = "0kq5zxqphhrmavrmg830wdr7hwp1bkzdqlf3jfqfr8r8xq12qwf7";
+    })
+
     # https://trac.sagemath.org/ticket/25260
-    ./patches/numpy-1.14.3.patch
+    ./patches/numpy-1.15.1.patch
 
     # https://trac.sagemath.org/ticket/25862
     ./patches/eclib-20180710.patch
@@ -117,6 +132,27 @@ stdenv.mkDerivation rec {
       name = "lcalc-c++11.patch";
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
       sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
+    })
+
+    # cddlib 0.94i -> 0.94j
+    (fetchpatch {
+      name = "cddlib-0.94j.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=2ab1546b3e21d1d0ab3b4fcd58576848b3a2d888";
+      sha256 = "1c5gnasq7y9xxj762bn79bis0zi8d9bgg7jzlf64ifixsrc5cymb";
+    })
+
+    # arb 2.13.0 -> 2.14.0
+    (fetchpatch {
+      name = "arb-2.14.0.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id2=8.4.beta0&id=8bef4fd2876a61969b516fe4eb3b8ad7cc076c5e";
+      sha256 = "00p3hfsfn3w2vxgd9fjd23mz7xfxjfravf8ysjxkyd657jbkpjmk";
+    })
+
+    # https://trac.sagemath.org/ticket/26117
+    (fetchpatch {
+      name = "sympy-1.2.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id2=8.4.beta2&id=d94a0a3a3fb4aec05a6f4d95166d90c284f05c36";
+      sha256 = "0an2xl1pp3jg36kgg2m1vb7sns7rprk1h3d0qy1gxwdab6i7qnvi";
     })
   ];
 

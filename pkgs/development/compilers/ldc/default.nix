@@ -2,8 +2,8 @@
 , python, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, targetPackages
 , bootstrapVersion ? false
-, version ? "1.8.0"
-, ldcSha256 ? "0zswjlibj8zcdj06nn09jjhbd99chsa5f4kps8xifzgrpgsa28g4"
+, version ? "1.11.0"
+, ldcSha256 ? "0w4z261gzji31hn1xdnmi9dfkbyydpy6rz8aj4456q5w8yp4yil5"
 }:
 
 let
@@ -155,7 +155,10 @@ let
 
     makeFlags = [ "DMD=$DMD" ];
 
-    doCheck = true;
+    # Disable tests on Darwin for now because of
+    # https://github.com/NixOS/nixpkgs/issues/41099
+    # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
+    doCheck = !bootstrapVersion && !stdenv.hostPlatform.isDarwin;
 
     checkPhase = ''
       # Build and run LDC D unittests.
@@ -184,65 +187,72 @@ let
 
   # Need to test Phobos in a fixed-output derivation, otherwise the
   # network stuff in Phobos would fail if sandbox mode is enabled.
-  ldcUnittests = stdenv.mkDerivation rec {
-    name = "ldcUnittests-${version}";
+  #
+  # Disable tests on Darwin for now because of
+  # https://github.com/NixOS/nixpkgs/issues/41099
+  # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
+  ldcUnittests = if (!bootstrapVersion && !stdenv.hostPlatform.isDarwin) then
+    stdenv.mkDerivation rec {
+      name = "ldcUnittests-${version}";
 
-    enableParallelBuilding = ldcBuild.enableParallelBuilding;
-    preferLocalBuild = true;
-    inputString = ldcBuild.outPath;
-    outputHashAlgo = "sha256";
-    outputHash = builtins.hashString "sha256" inputString;
+      enableParallelBuilding = ldcBuild.enableParallelBuilding;
+      preferLocalBuild = true;
+      inputString = ldcBuild.outPath;
+      outputHashAlgo = "sha256";
+      outputHash = builtins.hashString "sha256" inputString;
 
-    src = ldcBuild.src;
+      src = ldcBuild.src;
 
-    postUnpack = ldcBuild.postUnpack;
+      postUnpack = ldcBuild.postUnpack;
 
-    postPatch = ldcBuild.postPatch;
+      postPatch = ldcBuild.postPatch;
 
-    nativeBuildInputs = ldcBuild.nativeBuildInputs
+      nativeBuildInputs = ldcBuild.nativeBuildInputs
 
-    ++ [
-      ldcBuild
-    ];
+      ++ [
+        ldcBuild
+      ];
 
-    buildInputs = ldcBuild.buildInputs;
+      buildInputs = ldcBuild.buildInputs;
 
-    preConfigure = ''
-      cmakeFlagsArray=( "-DINCLUDE_INSTALL_DIR=$out/include/dlang/ldc"
-                        "-DCMAKE_BUILD_TYPE=Release"
-                        "-DCMAKE_SKIP_RPATH=ON"
-                        "-DBUILD_SHARED_LIBS=OFF"
-                        "-DLDC_WITH_LLD=OFF"
-                        # Xcode 9.0.1 fixes that bug according to ldc release notes
-                        "-DRT_ARCHIVE_WITH_LDC=OFF"
-                        "-DD_COMPILER=${ldcBuild.out}/bin/ldmd2"
-                      )
-    '';
+      preConfigure = ''
+        cmakeFlagsArray=( "-DINCLUDE_INSTALL_DIR=$out/include/dlang/ldc"
+                          "-DCMAKE_BUILD_TYPE=Release"
+                          "-DCMAKE_SKIP_RPATH=ON"
+                          "-DBUILD_SHARED_LIBS=OFF"
+                          "-DLDC_WITH_LLD=OFF"
+                          # Xcode 9.0.1 fixes that bug according to ldc release notes
+                          "-DRT_ARCHIVE_WITH_LDC=OFF"
+                          "-DD_COMPILER=${ldcBuild.out}/bin/ldmd2"
+                        )
+      '';
 
-    postConfigure = ldcBuild.postConfigure;
+      postConfigure = ldcBuild.postConfigure;
 
-    makeFlags = ldcBuild.makeFlags;
+      makeFlags = ldcBuild.makeFlags;
 
-    buildCmd = if bootstrapVersion then
-      "ctest -V -R \"build-druntime-ldc-unittest|build-phobos2-ldc-unittest\""
-    else
-      "make -j$NIX_BUILD_CORES DMD=${ldcBuild.out}/bin/ldc2 phobos2-test-runner phobos2-test-runner-debug";
+      buildCmd = if bootstrapVersion then
+        "ctest -V -R \"build-druntime-ldc-unittest|build-phobos2-ldc-unittest\""
+      else
+        "make -j$NIX_BUILD_CORES DMD=${ldcBuild.out}/bin/ldc2 phobos2-test-runner phobos2-test-runner-debug";
 
-    testCmd = if bootstrapVersion then
-      "ctest -j$NIX_BUILD_CORES --output-on-failure -E \"dmd-testsuite|lit-tests|ldc2-unittest|llvm-ir-testsuite\""
-    else
-      "ctest -j$NIX_BUILD_CORES --output-on-failure -E \"dmd-testsuite|lit-tests|ldc2-unittest\"";
+      testCmd = if bootstrapVersion then
+        "ctest -j$NIX_BUILD_CORES --output-on-failure -E \"dmd-testsuite|lit-tests|ldc2-unittest|llvm-ir-testsuite\""
+      else
+        "ctest -j$NIX_BUILD_CORES --output-on-failure -E \"dmd-testsuite|lit-tests|ldc2-unittest\"";
 
-    buildPhase = ''
-        ${buildCmd}
-        ln -s ${ldcBuild.out}/bin/ldmd2 $PWD/bin/ldmd2
-        ${testCmd}
-    '';
+      buildPhase = ''
+          ${buildCmd}
+          ln -s ${ldcBuild.out}/bin/ldmd2 $PWD/bin/ldmd2
+          ${testCmd}
+      '';
 
-    installPhase = ''
-        echo -n $inputString > $out
-    '';
-  };
+      installPhase = ''
+          echo -n $inputString > $out
+      '';
+    }
+  else
+    "";
 
 in
 

@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1l6xgvn3l0kkly5jvg57msx09bf1jwdff7m61w8yf2pxsrh5ybxl";
+      sha256 = "0a7h21cwfvprj5xfyivjzg2hbs71xp85l9v6kyp58mlqvwy3zffl";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -601,19 +601,7 @@ self: super: {
   # Install icons, metadata and cli program.
   bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
-    buildTools = with pkgs.buildPackages; [ gettext perl help2man intltool ];
-    patches = [
-      # Add missing gio-unix-2.0 dependency
-      (pkgs.fetchpatch {
-        url = https://github.com/wjt/bustle/commit/bcc3d56d367635c0dfdb4eab0d1265829aba6400.patch;
-        sha256 = "1ybviivfbs5janiyw01ww365vxckni6fk0j10609clxk4na2nvb9";
-      })
-      # No instance for (Semigroup Marquee)
-      (pkgs.fetchpatch {
-        url = https://github.com/wjt/bustle/commit/95393cb17c2fe5f0903470a449e36728471759eb.patch;
-        sha256 = "1n7h1rh62731kg9jjs2mn49nx033ds0l33mpgfl75hrjqblz44m1";
-      })
-    ];
+    buildTools = with pkgs.buildPackages; [ gettext perl help2man ];
     postInstall = ''
       make install PREFIX=$out
     '';
@@ -684,6 +672,9 @@ self: super: {
   # https://github.com/bos/bloomfilter/issues/7
   bloomfilter = appendPatch super.bloomfilter ./patches/bloomfilter-fix-on-32bit.patch;
 
+  # https://github.com/ashutoshrishi/hunspell-hs/pull/3
+  hunspell-hs = addPkgconfigDepend (dontCheck (appendPatch super.hunspell-hs ./patches/hunspell.patch)) pkgs.hunspell;
+
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
@@ -739,7 +730,7 @@ self: super: {
           owner = "haskell-servant";
           repo = "servant";
           rev = "v${ver}";
-          sha256 = "0bwd5dy3crn08dijn06dr3mdsww98kqxfp8v5mvrdws5glvcxdsg";
+          sha256 = "0kqglih3rv12nmkzxvalhfaaafk4b2irvv9x5xmc48i1ns71y23l";
         }}/doc";
         buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";
@@ -870,9 +861,6 @@ self: super: {
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
 
-  # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
-  stack2nix = doJailbreak super.stack2nix;
-
   # Work around https://github.com/haskell/c2hs/issues/192.
   c2hs = dontCheck super.c2hs;
 
@@ -965,12 +953,6 @@ self: super: {
 
   # https://github.com/yesodweb/Shelly.hs/issues/162
   shelly = dontCheck super.shelly;
-
-  # Support ansi-terminal 0.7.x.
-  cabal-plan = appendPatch super.cabal-plan (pkgs.fetchpatch {
-    url = "https://github.com/haskell-hvr/cabal-plan/pull/16.patch";
-    sha256 = "0i889zs46wn09d7iqdy99201zaqxb175cfs8jz2zi3mv4ywx3a0l";
-  });
 
   # https://github.com/simonmichael/hledger/issues/852
   hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch {
@@ -1072,9 +1054,6 @@ self: super: {
   # https://github.com/haskell-servant/servant-auth/issues/113
   servant-auth-client = dontCheck super.servant-auth-client;
 
-  # Over-specified constraint on X11 ==1.8.*.
-  xmonad = doJailbreak super.xmonad;
-
   # Test has either build errors or fails anyway, depending on the compiler.
   vector-algorithms = dontCheck super.vector-algorithms;
 
@@ -1095,12 +1074,10 @@ self: super: {
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
-  # The test suite does not know how to find the 'cabal2nix' binary.
-  cabal2nix = overrideCabal super.cabal2nix (drv: {
-    preCheck = ''
-      export PATH="$PWD/dist/build/cabal2nix:$PATH"
-      export HOME="$TMPDIR/home"
-    '';
+  # The tool needs a newer hpack version than the one mandated by LTS-12.x.
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    hpack = self.hpack_0_31_0;
+    yaml = self.yaml_0_10_1_1;
   });
 
   # Break out of "aeson <1.3, temporary <1.3".
@@ -1129,10 +1106,30 @@ self: super: {
   # needed because of testing-feat >=0.4.0.2 && <1.1
   language-ecmascript = doJailbreak super.language-ecmascript;
 
-  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can. 
+  # sexpr is old, broken and has no issue-tracker. Let's fix it the best we can.
   sexpr =
     appendPatch (overrideCabal super.sexpr (drv: {
       isExecutable = false;
       libraryHaskellDepends = drv.libraryHaskellDepends ++ [self.QuickCheck];
     })) ./patches/sexpr-0.2.1.patch;
-}
+
+  # Can be removed once yi-language >= 0.18 is in the LTS
+  yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
+
+  # https://github.com/MarcWeber/hasktags/issues/52
+  hasktags = dontCheck super.hasktags;
+
+  # https://github.com/haskell/hoopl/issues/50
+  hoopl = dontCheck super.hoopl;
+
+  # https://github.com/snapframework/xmlhtml/pull/37
+  xmlhtml = doJailbreak super.xmlhtml;
+
+  # https://github.com/NixOS/nixpkgs/issues/46467
+  safe-money-aeson = super.safe-money-aeson.override { safe-money = self.safe-money_0_7; };
+  safe-money-store = super.safe-money-store.override { safe-money = self.safe-money_0_7; };
+  safe-money-cereal = super.safe-money-cereal.override { safe-money = self.safe-money_0_7; };
+  safe-money-serialise = super.safe-money-serialise.override { safe-money = self.safe-money_0_7; };
+  safe-money-xmlbf = super.safe-money-xmlbf.override { safe-money = self.safe-money_0_7; };
+
+} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

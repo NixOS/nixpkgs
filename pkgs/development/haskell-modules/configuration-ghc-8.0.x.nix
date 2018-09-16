@@ -19,6 +19,7 @@ self: super: {
   filepath = null;
   ghc-boot = null;
   ghc-boot-th = null;
+  ghc-compact = null;
   ghc-prim = null;
   ghci = null;
   haskeline = null;
@@ -38,7 +39,7 @@ self: super: {
   # These are now core libraries in GHC 8.4.x.
   mtl = self.mtl_2_2_2;
   parsec = self.parsec_3_1_13_0;
-  stm = self.stm_2_4_5_0;
+  stm = self.stm_2_4_5_1;
   text = self.text_1_2_3_0;
 
   # https://github.com/bmillwood/applicative-quoters/issues/6

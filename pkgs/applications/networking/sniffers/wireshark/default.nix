@@ -12,7 +12,7 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.6.2";
+  version = "2.6.3";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "153h6prxamv5a62f3pfadkry0y57696xrgxfy2gfy5xswdg8kcj9";
+    sha256 = "1v538h02y8avwy3cr11xz6wkyf9xd8qva4ng4sl9f2fw4skahn6i";
   };
 
   cmakeFlags = [
@@ -49,8 +49,11 @@ in stdenv.mkDerivation {
       name = "fix-timeout.patch";
       url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=commitdiff_plain;h=8b5b843fcbc3e03e0fc45f3caf8cf5fc477e8613;hp=94af9724d140fd132896b650d10c4d060788e4f0";
       sha256 = "1g2dm7lwsnanwp68b9xr9swspx7hfj4v3z44sz3yrfmynygk8zlv";
-    })
-    ++ stdenv.lib.optional stdenv.isDarwin ./cmake.patch;
+    });
+
+  postPatch = ''
+    sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
+  '';
 
   preBuild = ''
     export LD_LIBRARY_PATH="$PWD/run"

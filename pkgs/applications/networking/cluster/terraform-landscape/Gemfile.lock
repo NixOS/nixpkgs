@@ -2,12 +2,12 @@ GEM
   remote: https://rubygems.org/
   specs:
     colorize (0.8.1)
-    commander (4.4.5)
+    commander (4.4.6)
       highline (~> 1.7.2)
     diffy (3.2.1)
     highline (1.7.10)
     polyglot (0.3.5)
-    terraform_landscape (0.1.18)
+    terraform_landscape (0.2.0)
       colorize (~> 0.7)
       commander (~> 4.4)
       diffy (~> 3.0)

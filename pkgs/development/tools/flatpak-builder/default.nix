@@ -29,6 +29,7 @@
 , libcap
 , libdwarf
 , libsoup
+, libyaml
 , ostree
 , patch
 , rpm
@@ -36,7 +37,7 @@
 }:
 
 let
-  version = "0.99.3";
+  version = "1.0.0";
 in stdenv.mkDerivation rec {
   name = "flatpak-builder-${version}";
 
@@ -44,7 +45,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${name}.tar.xz";
-    sha256 = "0sq3rcy3vwa36p6wq63wdvkk0hrs3qj1ngk26j9947nc14z39plk";
+    sha256 = "0ysnz0dwc8wfd31afwssg9prvaqdga7z4mybnrzy8sgm0hi5p2l5";
   };
 
   nativeBuildInputs = [
@@ -72,6 +73,7 @@ in stdenv.mkDerivation rec {
     libdwarf
     libsoup
     libxml2
+    libyaml
     ostree
   ];
 

@@ -25,8 +25,8 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib libxml2 sqlite zlib sg3_utils
     gdk_pixbuf taglib libimobiledevice python pygobject2 mutagen ];
 
-  nativeBuildInputs = [ gettext perlXMLParser intltool pkgconfig perl
-    libimobiledevice.swig ] ++ lib.optionals monoSupport [ mono gtk-sharp-2_0 ];
+  nativeBuildInputs = [ gettext perlXMLParser intltool pkgconfig perl] ++
+   lib.optionals monoSupport [ mono gtk-sharp-2_0 ];
 
   meta = {
     homepage = http://gtkpod.sourceforge.net/;

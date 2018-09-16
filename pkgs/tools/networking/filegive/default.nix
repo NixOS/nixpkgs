@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ go ];
 
   buildPhase = ''
-    ${stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "export GOARM=5"}
+    ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux") "export GOARM=5"}
 
     mkdir $TMPDIR/go
     export GOPATH=$TMPDIR/go

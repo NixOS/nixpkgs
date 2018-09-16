@@ -645,9 +645,15 @@ in python.withPackages(ps: [ps.blaze])).env
 
 #### `buildPythonApplication` function
 
-The `buildPythonApplication` function is practically the same as `buildPythonPackage`.
-The difference is that `buildPythonPackage` by default prefixes the names of the packages with the version of the interpreter.
-Because this is irrelevant for applications, the prefix is omitted.
+The `buildPythonApplication` function is practically the same as
+`buildPythonPackage`. The main purpose of this function is to build a Python
+package where one is interested only in the executables, and not importable
+modules. For that reason, when adding this package to a `python.buildEnv`, the
+modules won't be made available.
+
+Another difference is that `buildPythonPackage` by default prefixes the names of
+the packages with the version of the interpreter. Because this is irrelevant for
+applications, the prefix is omitted.
 
 #### `toPythonApplication` function
 
@@ -1068,4 +1074,5 @@ Following rules are desired to be respected:
 * Make sure libraries build for all Python interpreters.
 * By default we enable tests. Make sure the tests are found and, in the case of libraries, are passing for all interpreters. If certain tests fail they can be disabled individually. Try to avoid disabling the tests altogether. In any case, when you disable tests, leave a comment explaining why.
 * Commit names of Python libraries should reflect that they are Python libraries, so write for example `pythonPackages.numpy: 1.11 -> 1.12`.
-
+* Attribute names in `python-packages.nix` should be normalized according to [PEP 0503](https://www.python.org/dev/peps/pep-0503/#normalized-names).
+  This means that characters should be converted to lowercase and `.` and `_` should be replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz )

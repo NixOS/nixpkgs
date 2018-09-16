@@ -81,6 +81,8 @@ mapAliases ({
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   emacs25Macport_25_1 = emacs25Macport; # added 2018-04-25
   emacsMelpa = emacs25PackagesNg; # for backward compatibility
+  emacsPackagesGen = emacsPackagesFor; # added 2018-08-18
+  emacsPackagesNgGen = emacsPackagesNgFor; # added 2018-08-18
   enblendenfuse = enblend-enfuse; # 2015-09-30
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
@@ -129,6 +131,7 @@ mapAliases ({
   iana_etc = iana-etc;  # added 2017-03-08
   idea = jetbrains; # added 2017-04-03
   inotifyTools = inotify-tools;
+  jbuilder = dune; # added 2018-09-09
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdiff3-qt5 = kdiff3; # added 2017-02-18
@@ -151,7 +154,7 @@ mapAliases ({
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
-  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || hostPlatform.libc != "glibc") gettext; # added 2018-03-14
+  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux || stdenv.hostPlatform.libc != "glibc") gettext; # added 2018-03-14
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
   libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   librecad2 = librecad;  # backwards compatibility alias, added 2015-10
@@ -171,7 +174,9 @@ mapAliases ({
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
   module_init_tools = kmod; # added 2016-04-22
+  mpich2 = mpich;  # added 2018-08-06
   msf = metasploit; # added 2018-04-25
+  libmsgpack = msgpack; # added 2018-08-17
   mssys = ms-sys; # added 2015-12-13
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
@@ -276,6 +281,7 @@ mapAliases ({
   tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
+  torbrowser = tor-browser-bundle-bin; # added 2017-04-05
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
@@ -287,9 +293,12 @@ mapAliases ({
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  weechat-xmpp = weechatScripts.weechat-xmpp; # added 2018-09-06
+  weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
   wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
   wireguard = wireguard-tools; # added 2018-05-19
+  morituri = whipper; # added 2018-09-13
   x11 = xlibsWrapper; # added 2015-09
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25

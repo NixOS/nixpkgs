@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     url = mirror://sourceforge/partimage/partimage-0.6.9.tar.bz2;
     sha256 = "0db6xiphk6xnlpbxraiy31c5xzj0ql6k4rfkmqzh665yyj0nqfkm";
   };
-  configureFlags = "--with-ssl-headers=${openssl.dev}/include/openssl";
+  configureFlags = [ "--with-ssl-headers=${openssl.dev}/include/openssl" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [bzip2 zlib newt newt openssl slang

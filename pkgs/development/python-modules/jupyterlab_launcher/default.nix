@@ -1,11 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, jsonschema, notebook }:
+{ lib, buildPythonPackage, fetchPypi, jsonschema, notebook, pythonOlder }:
 buildPythonPackage rec {
   pname = "jupyterlab_launcher";
-  version = "0.11.2";
+  version = "0.13.1";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "236a647f4c3f8417413643a918a893a5f662fb5d2fdccce2fd101e3cca2e7fd1";
+    sha256 = "f880eada0b8b1f524d5951dc6fcae0d13b169897fc8a247d75fb5beadd69c5f0";
   };
 
   propagatedBuildInputs = [

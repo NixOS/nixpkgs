@@ -69,7 +69,15 @@ stdenv.mkDerivation rec {
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/lcalc-c++11.patch?h=packages/lcalc&id=3607b97df5a8c231191115b0cb5c62426b339e71";
       sha256 = "1ccrl61lv2vvx8ggldq54m5d0n1iy6mym7qz0i8nj6yj0dshnpk3";
     })
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin
+  (fetchpatch {
+    url = "https://git.sagemath.org/sage.git/plain/build/pkgs/lcalc/patches/clang.patch";
+    sha256 = "0bb7656z6cp6i4p2qj745cmq0lhh52v2akl9whi760dynfdxbl18";
+  });
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/Makefile --replace g++ c++
+  '';
 
   installFlags = [
     "DESTDIR=$(out)"

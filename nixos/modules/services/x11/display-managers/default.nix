@@ -27,6 +27,15 @@ let
     Xft.hintstyle: hintslight
   '';
 
+  mkCases = session:
+    concatStrings (
+      mapAttrsToList (name: starts: ''
+                       (${name})
+                         ${concatMapStringsSep "\n  " (n: n.start) starts}
+                         ;;
+                     '') (lib.groupBy (n: n.name) session)
+    );
+
   # file provided by services.xserver.displayManager.session.wrapper
   xsessionWrapper = pkgs.writeScript "xsession-wrapper"
     ''
@@ -56,10 +65,6 @@ let
 
       # Start PulseAudio if enabled.
       ${optionalString (config.hardware.pulseaudio.enable) ''
-        ${optionalString (!config.hardware.pulseaudio.systemWide)
-          "${config.hardware.pulseaudio.package.out}/bin/pulseaudio --start"
-        }
-
         # Publish access credentials in the root window.
         if ${config.hardware.pulseaudio.package.out}/bin/pulseaudio --dump-modules | grep module-x11-publish &> /dev/null; then
           ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
@@ -143,21 +148,13 @@ let
 
       # Start the window manager.
       case "$windowManager" in
-        ${concatMapStrings (s: ''
-          (${s.name})
-            ${s.start}
-            ;;
-        '') wm}
+        ${mkCases wm}
         (*) echo "$0: Window manager '$windowManager' not found.";;
       esac
 
       # Start the desktop manager.
       case "$desktopManager" in
-        ${concatMapStrings (s: ''
-          (${s.name})
-            ${s.start}
-            ;;
-        '') dm}
+        ${mkCases dm}
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
 

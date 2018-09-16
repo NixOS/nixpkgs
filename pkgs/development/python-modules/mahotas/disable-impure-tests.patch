@@ -1,0 +1,34 @@
+diff --git a/mahotas/tests/test_colors.py b/mahotas/tests/test_colors.py
+index 8a8183b..0d34c9f 100644
+--- a/mahotas/tests/test_colors.py
++++ b/mahotas/tests/test_colors.py
+@@ -2,7 +2,9 @@ import mahotas
+ import numpy as np
+ from mahotas.tests.utils import luispedro_jpg
+ from mahotas.colors import rgb2xyz, rgb2lab, xyz2rgb, rgb2grey, rgb2sepia
++from nose.tools import nottest
+ 
++@nottest
+ def test_colors():
+     f = luispedro_jpg()
+     lab = rgb2lab(f)
+diff --git a/mahotas/tests/test_features_shape.py b/mahotas/tests/test_features_shape.py
+index 462f467..2381793 100644
+--- a/mahotas/tests/test_features_shape.py
++++ b/mahotas/tests/test_features_shape.py
+@@ -2,6 +2,7 @@ import mahotas.features.shape
+ import numpy as np
+ import mahotas as mh
+ from mahotas.features.shape import roundness, eccentricity
++from nose.tools import nottest
+ 
+ def test_eccentricity():
+     D = mh.disk(32, 2)
+@@ -29,6 +30,7 @@ def test_zeros():
+     I[8:4:12] = 1
+     assert eccentricity(I) == 0
+ 
++@nottest
+ def test_ellipse_axes():
+     Y,X = np.mgrid[:1024,:1024]
+     Y = Y/1024.

@@ -18,7 +18,6 @@
 */
 
 { stdenv, lib
-, buildPlatform, hostPlatform
 , buildPackages
 , fetchurl ? null
 , linuxHeaders ? null
@@ -111,20 +110,15 @@ stdenv.mkDerivation ({
       "--enable-obsolete-rpc"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"
-      (if withLinuxHeaders
-       then "--with-headers=${linuxHeaders}/include"
-       else "--without-headers")
-      (if profilingLibraries
-       then "--enable-profile"
-       else "--disable-profile")
+      (lib.withFeatureAs withLinuxHeaders "headers" "${linuxHeaders}/include")
+      (lib.enableFeature profilingLibraries "profile")
     ] ++ lib.optionals withLinuxHeaders [
       "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
-    ] ++ lib.optionals (hostPlatform != buildPlatform) [
-      (if hostPlatform.platform.gcc.float or (hostPlatform.parsed.abi.float or "hard") == "soft"
-       then "--without-fp"
-       else "--with-fp")
+    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      (lib.flip lib.withFeature "fp"
+         (stdenv.hostPlatform.platform.gcc.float or (stdenv.hostPlatform.parsed.abi.float or "hard") == "soft"))
       "--with-__thread"
-    ] ++ lib.optionals (hostPlatform == buildPlatform && hostPlatform.isAarch32) [
+    ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch32) [
       "--host=arm-linux-gnueabi"
       "--build=arm-linux-gnueabi"
 
@@ -145,6 +139,8 @@ stdenv.mkDerivation ({
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
+
+  passthru = { inherit version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
@@ -176,7 +172,7 @@ stdenv.mkDerivation ({
     }
 
 
-  '' + lib.optionalString (hostPlatform != buildPlatform) ''
+  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
     cat > config.cache << "EOF"
@@ -210,7 +206,7 @@ stdenv.mkDerivation ({
   } // meta;
 }
 
-// lib.optionalAttrs (hostPlatform != buildPlatform) {
+// lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
   preInstall = null; # clobber the native hook
 
   dontStrip = true;

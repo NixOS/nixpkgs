@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune
 , cmdliner, cppo, yojson
 }:
 
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 		sha256 = "0dxxdxgrbg9xvvi3i627krnk6rb1ja0ypp2diwdkpnmy45wak9lv";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder cmdliner cppo ];
+	buildInputs = [ ocaml findlib dune cmdliner cppo ];
 
 	propagatedBuildInputs = [ yojson ];
 
-	buildPhase = "jbuilder build -p js_of_ocaml-compiler";
+	buildPhase = "dune build -p js_of_ocaml-compiler";
 
-	inherit (jbuilder) installPhase;
+	inherit (dune) installPhase;
 
 	meta = {
 		description = "Compiler from OCaml bytecode to Javascript";

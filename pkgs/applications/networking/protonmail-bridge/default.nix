@@ -2,11 +2,13 @@
   libsecret, libGL, libpulseaudio, glib, makeWrapper, makeDesktopItem }:
 
 let
-  version = "1.0.5-1";
+  version = "1.0.6-1";
 
   description = ''
     An application that runs on your computer in the background and seamlessly encrypts
-    and decrypts your mail as it enters and leaves your computer
+    and decrypts your mail as it enters and leaves your computer.
+
+    To work, gnome-keyring service must be enabled.
   '';
 
   desktopItem = makeDesktopItem {
@@ -23,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://protonmail.com/download/protonmail-bridge_${version}_amd64.deb";
-    sha256 = "1fsf4l5c9ii370fgy721a71h34g7vjfddscal3jblb4mm3ywzxfl";
+    sha256 = "1as4xdsik2w9clbrwp1k00491324cg6araz3jq2m013yg1cild28";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,11 +37,11 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,lib,share}
-    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+    mkdir -p $out/{bin,lib,share/applications}
+    # mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
 
     cp -r usr/lib/protonmail/bridge/Desktop-Bridge{,.sh} $out/lib
-    cp usr/share/icons/protonmail/Desktop-Bridge.svg $out/share/icons/hicolor/scalable/apps/desktop-bridge.svg
+    # cp usr/share/icons/protonmail/Desktop-Bridge.svg $out/share/icons/hicolor/scalable/apps/desktop-bridge.svg
     cp ${desktopItem}/share/applications/* $out/share/applications
 
     ln -s $out/lib/Desktop-Bridge $out/bin/Desktop-Bridge

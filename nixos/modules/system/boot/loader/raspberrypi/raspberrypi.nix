@@ -15,7 +15,7 @@ let
     inherit configTxt;
   };
 
-  platform = pkgs.stdenv.platform;
+  inherit (pkgs.stdenv.hostPlatform) platform;
 
   builderUboot = import ./builder_uboot.nix { inherit config; inherit pkgs; inherit configTxt; };
 

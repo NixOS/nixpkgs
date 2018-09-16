@@ -1,16 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, libiodbc }:
+{ stdenv, buildPythonPackage, fetchPypi, isPyPy, unixODBC }:
 
 buildPythonPackage rec {
   pname = "pyodbc";
-  version = "4.0.23";
+  version = "4.0.24";
   disabled = isPyPy;  # use pypypdbc instead
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb33d032c1f25781db64e2e4fecf77047fab2ddde42a6cd9496e3c66fb8e9f66";
+    sha256 = "4326abb737dec36156998d52324921673d30f575e1e0998f0c5edd7de20e61d4";
   };
 
-  buildInputs = [ libiodbc ];
+  buildInputs = [ unixODBC ];
+
+  doCheck = false; # tests require a database server
 
   meta = with stdenv.lib; {
     description = "Python ODBC module to connect to almost any database";

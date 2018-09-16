@@ -1,5 +1,5 @@
 {stdenv, fetchurl
-  , freeglut, ghostscriptX, imagemagick, fftw 
+  , freeglut, ghostscriptX, imagemagick, fftw
   , boehmgc, libGLU, libGL, mesa_noglu, ncurses, readline, gsl, libsigsegv
   , python, zlib, perl, texLive, texinfo, xz
 , darwin
@@ -9,11 +9,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="asymptote";
-    version="2.44";
+    version="2.47";
     name="${baseName}-${version}";
-    hash="1rs9v95g19ri6ra2m921jf2yr9avqnzfybrqxilsld98xpqx56vg";
-    url="https://freefr.dl.sourceforge.net/project/asymptote/2.44/asymptote-2.44.src.tgz";
-    sha256="1rs9v95g19ri6ra2m921jf2yr9avqnzfybrqxilsld98xpqx56vg";
+    hash="0zc24n2vwzxdfmcppqfk3fkqlb4jmvswzi3bz232kxl7dyiyb971";
+    url="https://freefr.dl.sourceforge.net/project/asymptote/2.47/asymptote-2.47.src.tgz";
+    sha256="0zc24n2vwzxdfmcppqfk3fkqlb4jmvswzi3bz232kxl7dyiyb971";
   };
   buildInputs = [
    ghostscriptX imagemagick fftw
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     export HOME="$PWD"
-    patchShebangs . 
+    patchShebangs .
     sed -e 's@epswrite@eps2write@g' -i runlabel.in
     xz -d < ${texinfo.src} | tar --wildcards -x texinfo-'*'/doc/texinfo.tex
     cp texinfo-*/doc/texinfo.tex doc/
@@ -63,6 +63,7 @@ stdenv.mkDerivation {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin maintainers.peti ];
+    broken = stdenv.isDarwin;  # https://github.com/vectorgraphics/asymptote/issues/69
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

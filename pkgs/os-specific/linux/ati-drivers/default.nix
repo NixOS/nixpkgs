@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   build = "15.302";
 
   linuxonly =
-    if stdenv.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux" then
       true
-    else if stdenv.system == "x86_64-linux" then
+    else if stdenv.hostPlatform.system == "x86_64-linux" then
       true
     else throw "ati-drivers are Linux only. Sorry. The build was stopped.";
 

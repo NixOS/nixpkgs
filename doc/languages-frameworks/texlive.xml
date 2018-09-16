@@ -8,7 +8,7 @@
   under attribute <varname>texlive</varname>.
  </para>
 
- <section>
+ <section xml:id="sec-language-texlive-users-guide">
   <title>User's guide</title>
 
   <itemizedlist>
@@ -68,7 +68,7 @@ nix-repl> texlive.collection-&lt;TAB>
   </itemizedlist>
  </section>
 
- <section>
+ <section xml:id="sec-language-texlive-known-problems">
   <title>Known problems</title>
 
   <itemizedlist>

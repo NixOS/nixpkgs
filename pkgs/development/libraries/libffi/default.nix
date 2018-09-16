@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch
-, buildPlatform, hostPlatform, autoreconfHook
+, autoreconfHook
 
 # libffi is used in darwin stdenv
 # we cannot run checks within it
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
       url = https://src.fedoraproject.org/rpms/libffi/raw/ccffc1700abfadb0969495a6e51b964117fc03f6/f/libffi-aarch64-rhbz1174037.patch;
       sha256 = "1vpirrgny43hp0885rswgv3xski8hg7791vskpbg3wdjdpb20wbc";
     })
-    ++ stdenv.lib.optional hostPlatform.isMusl (fetchpatch {
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
       name = "gnu-linux-define.patch";
       url = "https://git.alpinelinux.org/cgit/aports/plain/main/libffi/gnu-linux-define.patch?id=bb024fd8ec6f27a76d88396c9f7c5c4b5800d580";
       sha256 = "11pvy3xkhyvnjfyy293v51f1xjy3x0azrahv1nw9y9mw8bifa2j2";
     })
-    ++ stdenv.lib.optional hostPlatform.isRiscV (fetchpatch {
+    ++ stdenv.lib.optional stdenv.hostPlatform.isRiscV (fetchpatch {
       name = "riscv-support.patch";
       url = https://github.com/sorear/libffi-riscv/commit/e46492e8bb1695a19bc1053ed869e6c2bab02ff2.patch;
       sha256 = "1vl1vbvdkigs617kckxvj8j4m2cwg62kxm1clav1w5rnw9afxg0y";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" "info" ];
 
-  nativeBuildInputs = stdenv.lib.optional hostPlatform.isRiscV autoreconfHook;
+  nativeBuildInputs = stdenv.lib.optional stdenv.hostPlatform.isRiscV autoreconfHook;
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  dontStrip = hostPlatform != buildPlatform; # Don't run the native `strip' when cross-compiling.
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform; # Don't run the native `strip' when cross-compiling.
 
   # Install headers and libs in the right places.
   postFixup = ''

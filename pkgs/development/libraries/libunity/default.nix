@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, automake, autoconf, libtool
-, glib, vala, dee, gobjectIntrospection, libdbusmenu-glib
+, glib, vala, dee, gobjectIntrospection, libdbusmenu
 , gtk3, intltool, gnome-common, python3, icu }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     gtk3
   ];
 
-  propagatedBuildInputs = [ dee libdbusmenu-glib ];
+  propagatedBuildInputs = [ dee libdbusmenu ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 

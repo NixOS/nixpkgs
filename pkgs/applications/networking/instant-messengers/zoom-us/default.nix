@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, system, makeWrapper, makeDesktopItem, autoPatchelfHook, env
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem, autoPatchelfHook, env
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
 , qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
@@ -13,11 +13,11 @@ assert pulseaudioSupport -> libpulseaudio != null;
 let
   inherit (stdenv.lib) concatStringsSep makeBinPath optional;
 
-  version = "2.2.128200.0702";
+  version = "2.3.128305.0716";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "0n9kyj94bj35gbpwiz4kq7hc8pwfqwnfqf003g4c8gx5pda3g56w";
+      sha256 = "1jpw5sclr5bhif559hmnyiggjh6gkm1smiw34y3ad4k8xhag9dkh";
     };
   };
 
@@ -31,7 +31,7 @@ let
 in stdenv.mkDerivation {
   name = "zoom-us-${version}";
 
-  src = srcs.${system};
+  src = srcs.${stdenv.hostPlatform.system};
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 

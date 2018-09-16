@@ -3,15 +3,16 @@
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome3 }:
 
 let
+  # TO UPDATE: just execute the ./update.sh script (won't do anything if there is no update)
   # "rev" decides what is actually being downloaded
-  version = "1.0.80.474.gef6b503e-7";
+  version = "1.0.83.316.ge96b6e67-5";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
-  # More exapmles of api usage:
+  # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "16";
+  rev = "17";
 
 
   deps = [
@@ -64,7 +65,7 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "45b7ab574b30fb368e0b6f4dd60addbfd1ddc02173b4f98b31c524eed49073432352a361e75959ce8e2f752231e93c79ca1b538c4bd295c935d1e2e0585d147f";
+    sha512 = "19bbr4142shsl4qrikf48vq7kyrd4k4jbsada13qxicxps46a9bx51vjm2hkijqv739c1gdkgzwx7llyk95z26lhrz53shm2n5ij8xi";
   };
 
   buildInputs = [ squashfsTools makeWrapper ];

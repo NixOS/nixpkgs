@@ -2,8 +2,8 @@
   admiral = {
     owner = "jwaldrip";
     repo = "admiral.cr";
-    rev = "v1.7.2";
-    sha256 = "1j2cr4p3d44848v0gfl97p9kw2dslscnb1piyb7b3374iy345i0k";
+    rev = "v1.7.3";
+    sha256 = "0b98qjy43wsrc08am7lkhcdsxc7gplf9hcmbvd4p3dw4g107rk91";
   };
   ameba = {
     owner = "veelenga";
@@ -14,8 +14,8 @@
   baked_file_system = {
     owner = "schovi";
     repo = "baked_file_system";
-    rev = "24dbaf2180b872c0f0fc777b34e3759108959e6e";
-    sha256 = "01p7hzsvms9cywdgs0rcs6mxdi94491wk55823fw2vxv24hvxnvk";
+    rev = "v0.9.7";
+    sha256 = "1fi6zag1a6h4xwrfizy01dls3hhraqw0cmpwj7rjv1qcddjgig5z";
   };
   diff = {
     owner = "MakeNowJust";
@@ -38,8 +38,8 @@
   kemal = {
     owner = "kemalcr";
     repo = "kemal";
-    rev = "09bb1fcd4073a374b3a61c99e48e05a866b23c08";
-    sha256 = "0yyb59i897gr8cqjbf48d6s0znq68ibpxarxkxkgrqk7lbvrqqr7";
+    rev = "v0.24.0";
+    sha256 = "0sg7gy1lbhid9y9wh77m9sd00jygk92njm4mpb7w1fq8bjnm738k";
   };
   kilt = {
     owner = "jeromegn";

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcl ];
 
   meta = {
-    homepage = http://tcl.activestate.com/software/tcllib/;
+    homepage = https://sourceforge.net/projects/tcllib;
     description = "High-level widget set for Tcl/Tk";
     license = stdenv.lib.licenses.tcltk;
     platforms = stdenv.lib.platforms.linux;

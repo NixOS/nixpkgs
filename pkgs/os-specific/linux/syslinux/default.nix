@@ -21,18 +21,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
+    substituteInPlace gpxe/src/Makefile.housekeeping --replace /bin/echo $(type -P echo)
+    substituteInPlace utils/ppmtolss16 --replace /usr/bin/perl $(type -P perl)
+    substituteInPlace gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
+
+    # fix tests
+    substituteInPlace tests/unittest/include/unittest/unittest.h \
+      --replace /usr/include/ ""
+  '';
+
   nativeBuildInputs = [ nasm perl python ];
   buildInputs = [ libuuid makeWrapper ];
 
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'
   hardeningDisable = [ "pic" "stackprotector" "fortify" ];
-
-  preBuild = ''
-    substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
-    substituteInPlace gpxe/src/Makefile.housekeeping --replace /bin/echo $(type -P echo)
-    substituteInPlace utils/ppmtolss16 --replace /usr/bin/perl $(type -P perl)
-    substituteInPlace gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
-  '';
 
   stripDebugList = "bin sbin share/syslinux/com32";
 
@@ -46,6 +50,8 @@ stdenv.mkDerivation rec {
     "PERL=perl"
     "bios"
   ];
+
+  doCheck = false; # fails. some fail in a sandbox, others require qemu
 
   postInstall = ''
     wrapProgram $out/bin/syslinux \

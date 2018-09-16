@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ texinfo ];
-  buildInputs = [ perl ];
+  nativeBuildInputs = [ texinfo perl ];
 
   doCheck = true;
 

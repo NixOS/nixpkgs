@@ -8,14 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "0cdwa4094x3yx7vn98xykvnlp9rngvd58d19vs3vh5hrvggccg93";
   };
 
-  doCheck = true;
-
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ curl emacs ] ++ (stdenv.lib.optionals doCheck [ check bc ]);
+  buildInputs = [ curl emacs ];
 
+  checkInputs = [ check bc ];
+  doCheck = true;
+
+  # one file fails to compile with emacs 26
   postInstall = ''
-    ${emacs}/bin/emacs -Q -batch -f batch-byte-compile $out/share/emacs/site-lisp/*.el #*/
+    ${emacs}/bin/emacs -Q -batch -f batch-byte-compile $out/share/emacs/site-lisp/*.el || true
   '';
 
   meta = {

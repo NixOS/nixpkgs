@@ -20,10 +20,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "61.0.1";
+    version = "62.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "0alkiz89c42y6677n7csk694g9qsfzm8x928i6007mcdyh8ifkg1604pxwp6irid0w3v8cz7b2153jkk4f0qdx85a2r9csh8hbar583";
+      sha512 = "0byxslbgr37sm1ra3wywl5c2a39qbkjwc227yp4j2l930m5j86m5g7rmv8zm944vv5vnyzmwhym972si229fm2lwq74p4xam5rfv948";
     };
 
     patches = nixpkgsPatches ++ [
@@ -36,7 +36,8 @@ rec {
       description = "A web browser built from Firefox source tree";
       homepage = http://www.mozilla.com/en-US/firefox/;
       maintainers = with lib.maintainers; [ eelco ];
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
+      license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
@@ -59,6 +60,7 @@ rec {
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [ "Support ended in August 2018." ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-52-unwrapped";
@@ -68,10 +70,10 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    version = "60.1.0esr";
+    version = "60.2.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "2bg7zvkpy1x2ryiazvk4nn5m94v0addbhrcrlcf9djnqjf14rp5q50lbiymhxxz0988vgpicsvizifb8gb3hi7b8g17rdw6438ddhh6";
+      sha512 = "1nf7nsycvzafvy4jjli5xh59d2mac17gfx91a1jh86f41w6qcsi3lvkfa8xhxsq8wfdsmqk1f4hmqzyx63h4m691qji7838g2nk49k7";
     };
 
     patches = nixpkgsPatches ++ [
@@ -138,6 +140,7 @@ rec {
       '';
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
+      license = lib.licenses.bsd3;
     };
   };
 

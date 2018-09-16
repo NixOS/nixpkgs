@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
         "tcp_open" "tcp_write_queue_order" "tcp_try_write" "tcp_writealot"
         "multiple_listen" "delayed_accept"
         "shutdown_close_tcp" "shutdown_eof" "shutdown_twice" "callback_stack"
+        "tty_pty"
+      ] ++ stdenv.lib.optionals stdenv.isAarch32 [
+        # I observe this test failing with some regularity on ARMv7:
+        # https://github.com/libuv/libuv/issues/1871
+        "shutdown_close_pipe"
       ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in lib.optionalString doCheck ''

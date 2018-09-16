@@ -1,5 +1,4 @@
 { stdenv, lib, fetchPypi, buildPythonPackage, isPy3k
-, bleach_1_5_0
 , numpy
 , werkzeug
 , protobuf
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "1.7.0";
+  version = "1.9.0";
   format = "wheel";
 
   src = fetchPypi ({
@@ -23,13 +22,13 @@ buildPythonPackage rec {
     format = "wheel";
   } // (if isPy3k then {
     python = "py3";
-    sha256 = "1aa42rl3fkpllqch09d311gk1j281qry6nn07ywgbs6j0kwr6isc";
+    sha256 = "42a04637a636e16054b065907c81396b83a9702948ecd14218f19dc5cf85de98";
   } else {
     python = "py2";
-    sha256 = "1vcdkyvw22kpljmj4gxb8m1q54ry02iwvw54w8v8hmdigvc77a7k";
+    sha256 = "97661706fbe857c372405e0f5bd7c3db2197b5e70cec88f6924b726fde65c2c1";
   }));
 
-  propagatedBuildInputs = [ bleach_1_5_0 numpy werkzeug protobuf markdown grpcio ] ++ lib.optional (!isPy3k) futures;
+  propagatedBuildInputs = [ numpy werkzeug protobuf markdown grpcio ] ++ lib.optional (!isPy3k) futures;
 
   meta = with stdenv.lib; {
     description = "TensorFlow's Visualization Toolkit";

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "bleach";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb7386f632349d10d9ce9d4a838b134d4731571851149f9cc2c05a9a837a9a44";
+    sha256 = "0ee95f6167129859c5dce9b1ca291ebdb5d8cd7e382ca0e237dfd0dad63f63d8";
   };
 
   checkInputs = [ pytest pytestrunner ];

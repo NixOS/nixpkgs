@@ -1,22 +1,22 @@
-{ stdenv, fetchFromGitHub, pythonPackages, file, less
+{ stdenv, fetchFromGitHub, python3Packages, file, less
 , imagePreviewSupport ? true, w3m ? null}:
 
 with stdenv.lib;
 
 assert imagePreviewSupport -> w3m != null;
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   name = "ranger-${version}";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
     rev = "v${version}";
-    sha256= "1zhds37j1scxa9b183qbrjwxqldrdk581c5xiy81vg17sndb1kqj";
+    sha256= "1ws6g8z1m1hfp8bv4msvbaa9f7948p687jmc8h69yib4jkv3qyax";
   };
 
-  checkInputs = with pythonPackages; [ pytest ];
+  checkInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = [ file ];
 
   checkPhase = ''
@@ -43,7 +43,7 @@ pythonPackages.buildPythonApplication rec {
 
     # give image previews out of the box when building with w3m
     substituteInPlace ranger/config/rc.conf \
-      --replace "set preview_images false" "set preview_images true" \
+      --replace "set preview_images false" "set preview_images true"
   '';
 
   meta =  with stdenv.lib; {
@@ -51,6 +51,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = http://ranger.github.io/;
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.magnetophon ];
+    maintainers = [ maintainers.toonn maintainers.magnetophon ];
   };
 }

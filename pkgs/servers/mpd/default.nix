@@ -27,7 +27,7 @@
 , opusSupport ? true, libopus
 , soundcloudSupport ? true, yajl
 , nfsSupport ? true, libnfs
-, smbSupport ? true, smbclient
+, smbSupport ? true, samba
 }:
 
 assert avahiSupport -> avahi != null && dbus != null;
@@ -36,7 +36,7 @@ let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.20";
-  minor = "20";
+  minor = "21";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${version}";
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
     owner  = "MusicPlayerDaemon";
     repo   = "MPD";
     rev    = "v${version}";
-    sha256 = "0v7xpsr8b4d0q9vh1wni0qbkbkxdjpn639qm2q553ckk5idas4lm";
+    sha256 = "0qchvycwiai5gwkvvf44nc1jw16yhpcjmlppqlrlvicgzsanhmy3";
   };
 
   patches = [ ./x86.patch ];
@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
     ++ opt opusSupport libopus
     ++ opt soundcloudSupport yajl
     ++ opt (!stdenv.isDarwin && nfsSupport) libnfs
-    ++ opt (!stdenv.isDarwin && smbSupport) smbclient;
+    ++ opt (!stdenv.isDarwin && smbSupport) samba;
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 

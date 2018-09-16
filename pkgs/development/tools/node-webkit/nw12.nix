@@ -3,7 +3,7 @@
 , gdk_pixbuf, cairo, nss, nspr, gconf, expat, systemd, libcap
 , libnotify}:
 let
-  bits = if stdenv.system == "x86_64-linux" then "x64"
+  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
          else "ia32";
 
   nwEnv = buildEnv {

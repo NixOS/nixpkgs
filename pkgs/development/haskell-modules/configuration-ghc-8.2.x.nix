@@ -39,7 +39,7 @@ self: super: {
   # These are now core libraries in GHC 8.4.x.
   mtl = self.mtl_2_2_2;
   parsec = self.parsec_3_1_13_0;
-  stm = self.stm_2_4_5_0;
+  stm = self.stm_2_4_5_1;
   text = self.text_1_2_3_0;
 
   # Make sure we can still build Cabal 1.x.
@@ -96,4 +96,4 @@ self: super: {
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
   }));
 
-} // import ./configuration-tensorflow-ghc-8.2.x.nix {inherit pkgs haskellLib;} self super
+}

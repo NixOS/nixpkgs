@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1yk7jyf4va9425cg05llskpls2jm7n3jwy2hj5jm74zkr4mwpvl7";
   };
 
-  patches = with stdenv;
-    lib.optional (system != "i686-cygwin") ./dll.patch
-    ++ lib.optional isDarwin ./GNUmakefile-darwin.patch;
+  patches = stdenv.lib.concatLists [
+    (stdenv.lib.optional (stdenv.hostPlatform.system != "i686-cygwin") ./dll.patch)
+    (stdenv.lib.optional stdenv.hostPlatform.isDarwin ./GNUmakefile-darwin.patch)
+  ];
 
 
   configurePhase = let

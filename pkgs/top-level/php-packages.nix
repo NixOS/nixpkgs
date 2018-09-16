@@ -109,7 +109,7 @@ let
   imagick = buildPecl {
     name = "imagick-3.4.3";
     sha256 = "0z2nc92xfc5axa9f2dy95rmsd2c81q8cs1pm4anh0a50x9g5ng0z";
-    configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
+    configureFlags = [ "--with-imagick=${pkgs.imagemagick.dev}" ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.pcre ];
   };
@@ -120,7 +120,7 @@ let
 
     sha256 = "04c35rj0cvq5ygn2jgmyvqcb0k8d03v4k642b6i37zgv7x15pbic";
 
-    configureFlags = "--with-zlib-dir=${pkgs.zlib.dev}";
+    configureFlags = [ "--with-zlib-dir=${pkgs.zlib.dev}" ];
 
     makeFlags = [ "CFLAGS=-fgnu89-inline" ];
   };
@@ -160,6 +160,13 @@ let
     buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
+  oci8 = buildPecl rec {
+    name = "oci8-2.1.8";
+    sha256 = "1bp6fss2f2qmd5bdk7x22j8vx5qivrdhz4x7csf29vjgj6gvchxy";
+    buildInputs = [ pkgs.re2c pkgs.oracle-instantclient ];
+    configureFlags = [ "--with-oci8=shared,instantclient,${pkgs.oracle-instantclient}/lib" ];
+  };
+
   pcs = buildPecl rec {
     name = "pcs-1.3.3";
 
@@ -191,9 +198,9 @@ let
   };
 
   xdebug26 = assert isPhp7; buildPecl {
-    name = "xdebug-2.6.0";
+    name = "xdebug-2.6.1";
 
-    sha256 = "1p6b54ypi5lq4ka3pyy2gswdf1d5vjb9y8lp9fqcp3zn7g04q9mm";
+    sha256 = "0xxxy6n4lv7ghi9liqx133yskg07lw316vhcds43n1sjq3b93rns";
 
     doCheck = true;
     checkTarget = "test";
@@ -328,11 +335,11 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.6.5";
+    version = "1.7.2";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "0d1lpvq8wylh5qgxhbqb5r7j3c6qk0bz4b5vg187jsl6z6fvxgk7";
+      sha256 = "03km8qw3nshj7qzk5pidziha2ldx1l2yxhh2s7vpg25f9782hd7c";
     };
 
     unpackPhase = ":";
@@ -497,11 +504,11 @@ let
 
   psysh = pkgs.stdenv.mkDerivation rec {
     name = "psysh-${version}";
-    version = "0.9.6";
+    version = "0.9.8";
 
     src = pkgs.fetchurl {
       url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-      sha256 = "06icmyn7v229mpfplqj76kjnp1gh4ns0nrxa7bsckyqhzi425kc6";
+      sha256 = "0xs9bl0hplkm2hajmm4qca65bm2x7wnx4vbmk0d2jxpvwrgqgnzd";
     };
 
     phases = [ "installPhase" ];

@@ -18,6 +18,8 @@
 , psutil
 , pydot
 , pytest
+, pytest_xdist
+, pytest-forked
 , scipy
 , simplejson
 , traits
@@ -34,11 +36,11 @@ assert !isPy3k -> configparser != null;
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2a5ebbc9244a18e3b2d83a9639da09248e92bc0742b81a86550ef1a18c1fccbc";
+    sha256 = "f2fe29bf863cb643bd5c8d2bdeaaf488308c293c9fb9913bc7a9504dc3bf8db6";
   };
 
   # see https://github.com/nipy/nipype/issues/2240
@@ -47,8 +49,6 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
-
-    rm pytest.ini
   '';
 
   propagatedBuildInputs = [
@@ -56,7 +56,6 @@ buildPythonPackage rec {
     dateutil
     funcsigs
     future
-    futures
     networkx
     nibabel
     numpy
@@ -70,9 +69,10 @@ buildPythonPackage rec {
     xvfbwrapper
   ] ++ stdenv.lib.optional (!isPy3k) [
     configparser
+    futures
   ];
 
-  checkInputs = [ pytest mock pytestcov codecov which glibcLocales ];
+  checkInputs = [ pytest mock pytestcov pytest_xdist pytest-forked codecov which glibcLocales ];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test -v --doctest-modules nipype

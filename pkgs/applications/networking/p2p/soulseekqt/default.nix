@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   name = "soulseekqt-${version}";
   inherit version;
-  src = srcs."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
+  src = srcs."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   dontBuild = true;
 

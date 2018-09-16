@@ -174,7 +174,10 @@ in
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
 
-      environment.pathsToLink = [ "/share" ];
+      environment.pathsToLink = [ 
+        # FIXME: modules should link subdirs of `/share` rather than relying on this
+        "/share" 
+      ];
 
       environment.etc = singleton {
         source = xcfg.xkbDir;
@@ -224,7 +227,7 @@ in
       # Update the start menu for each user that has `isNormalUser` set.
       system.activationScripts.plasmaSetup = stringAfter [ "users" "groups" ]
         (concatStringsSep "\n"
-          (mapAttrsToList (name: value: "${pkgs.su}/bin/su ${name} -c kbuildsycoca5")
+          (mapAttrsToList (name: value: "${pkgs.su}/bin/su ${name} -c ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5")
             (filterAttrs (n: v: v.isNormalUser) config.users.users)));
     })
   ];

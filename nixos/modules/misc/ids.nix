@@ -53,7 +53,7 @@
       tomcat = 16;
       #audio = 17; # unused
       #floppy = 18; # unused
-      #uucp = 19; # unused
+      uucp = 19;
       #lp = 20; # unused
       #proc = 21; # unused
       pulseaudio = 22; # must match `pulseaudio' GID
@@ -324,6 +324,11 @@
       hadoop = 297;
       hydron = 298;
       cfssl = 299;
+      cassandra = 300;
+      qemu-libvirtd = 301;
+      # kvm = 302; # unused
+      # render = 303; # unused
+      zeronet = 304;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -608,6 +613,11 @@
       hadoop = 297;
       hydron = 298;
       cfssl = 299;
+      cassandra = 300;
+      qemu-libvirtd = 301;
+      kvm = 302; # default udev rules from systemd requires these
+      render = 303; # default udev rules from systemd requires these
+      zeronet = 304;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

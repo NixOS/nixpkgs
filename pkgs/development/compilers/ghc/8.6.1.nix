@@ -1,13 +1,12 @@
 { stdenv, targetPackages
-, buildPlatform, hostPlatform, targetPlatform
 
 # build-tools
 , bootPkgs, alex, happy, hscolour
-, autoconf, automake, coreutils, fetchurl, perl, python3, m4
+, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
 
 , libiconv ? null, ncurses
 
-, useLLVM ? !targetPlatform.isx86 || (targetPlatform.isMusl && hostPlatform != targetPlatform)
+, useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -18,23 +17,25 @@
   enableIntegerSimple ? !(gmp.meta.available or false), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? targetPlatform != hostPlatform
+  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? !targetPlatform.isWindows && !targetPlatform.useiOSPrebuilt
+  enableShared ? !stdenv.targetPlatform.isWindows && !stdenv.targetPlatform.useiOSPrebuilt
 
 , # Whetherto build terminfo.
-  enableTerminfo ? !targetPlatform.isWindows
+  enableTerminfo ? !stdenv.targetPlatform.isWindows
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
-  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
+  ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
 }:
 
 assert !enableIntegerSimple -> gmp != null;
 
 let
+  inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+
   inherit (bootPkgs) ghc;
 
   # TODO(@Ericson2314) Make unconditional
@@ -77,17 +78,23 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.6.0.20180714";
+  version = "8.6.0.20180810";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.6.1-alpha2/ghc-${version}-src.tar.xz";
-    sha256 = "1jrkqrqdv2z9i9s1xaxhci34c9rjvlgr40y34bxsfj0hj1r28409";
+    url = "https://downloads.haskell.org/~ghc/8.6.1-beta1/ghc-${version}-src.tar.xz";
+    sha256 = "0b3nyjs4lsh67lfw7wh7r7kkf4g2xiypdxd77aycmwd3pdxj09yw";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [(fetchpatch rec { # https://phabricator.haskell.org/D5123
+    url = "http://tarballs.nixos.org/sha256/${sha256}";
+    name = "D5123.diff";
+    sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
+  })];
 
   postPatch = "patchShebangs .";
 

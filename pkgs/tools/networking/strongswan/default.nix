@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       "--enable-af-alg" "--enable-xauth-pam" "--enable-chapoly"
       "--enable-curl" ]
     ++ optionals stdenv.isx86_64 [ "--enable-aesni" "--enable-rdrand" ]
-    ++ optional (stdenv.system == "i686-linux") "--enable-padlock"
+    ++ optional (stdenv.hostPlatform.system == "i686-linux") "--enable-padlock"
     ++ optionals enableTNC [
          "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
          "--enable-eap-tnc" "--enable-eap-ttls" "--enable-eap-dynamic" "--enable-tnccs-20"
@@ -78,7 +78,10 @@ stdenv.mkDerivation rec {
          "--with-tss=trousers"
          "--enable-aikgen"
          "--enable-sqlite" ]
-    ++ optional enableNetworkManager "--enable-nm";
+    ++ optionals enableNetworkManager [
+         "--enable-nm"
+         "--with-nm-ca-dir=/etc/ssl/certs"
+    ];
 
   postInstall = ''
     # this is needed for l2tp

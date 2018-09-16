@@ -42,21 +42,18 @@ self: super: {
   # https://github.com/jcristovao/enclosed-exceptions/issues/12
   enclosed-exceptions = dontCheck super.enclosed-exceptions;
 
-  # https://github.com/xmonad/xmonad/issues/155
-  xmonad = addBuildDepend (appendPatch super.xmonad (pkgs.fetchpatch {
-    url = https://github.com/xmonad/xmonad/pull/153/commits/c96a59fa0de2f674e60befd0f57e67b93ea7dcf6.patch;
-    sha256 = "1mj3k0w8aqyy71kmc71vzhgxmr4h6i5b3sykwflzays50grjm5jp";
-  })) self.semigroups;
-
-  # https://github.com/xmonad/xmonad-contrib/issues/235
-  xmonad-contrib = doJailbreak (appendPatch super.xmonad-contrib ./patches/xmonad-contrib-ghc-8.4.1-fix.patch);
-
-  # Our xmonad claims that it's version 0.14, which is outside of this
-  # package's version constraints.
-  xmonad-extras = doJailbreak super.xmonad-extras;
-
   # https://github.com/jaor/xmobar/issues/356
   xmobar = super.xmobar.overrideScope (self: super: { hinotify = self.hinotify_0_3_9; });
   hinotify_0_3_9 = dontCheck (doJailbreak super.hinotify_0_3_9); # allow async 2.2.x
+
+  # Reduction stack overflow; size = 38
+  # https://github.com/jystic/hadoop-tools/issues/31
+  hadoop-rpc =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/shlevy/hadoop-tools/commit/f03a46cd15ce3796932c3382e48bcbb04a6ee102.patch;
+            sha256 = "09ls54zy6gx84fmzwgvx18ssgm740cwq6ds70p0p125phi54agcp";
+            stripLen = 1;
+          };
+    in appendPatch super.hadoop-rpc patch;
 
 }

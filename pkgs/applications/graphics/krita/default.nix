@@ -1,9 +1,9 @@
-{ mkDerivation, lib, fetchurl, cmake, extra-cmake-modules
+{ mkDerivation, lib, stdenv, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
-, openjpeg, opencolorio, vc, poppler_qt5, curl, ilmbase
+, openjpeg, opencolorio, vc, poppler, curl, ilmbase
 , qtmultimedia, qtx11extras
 , python3
 }:
@@ -23,10 +23,10 @@ mkDerivation rec {
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
-    openjpeg opencolorio vc poppler_qt5 curl ilmbase
+    openjpeg opencolorio poppler curl ilmbase
     qtmultimedia qtx11extras
     python3
-  ];
+  ] ++ lib.optional (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) vc;
 
   NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];
 

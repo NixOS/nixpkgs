@@ -1,6 +1,6 @@
 { stdenv, pkgconfig, curl, darwin, libiconv, libgit2, libssh2,
   openssl, sqlite, zlib, dbus, dbus-glib, gdk_pixbuf, cairo, python3,
-  libsodium, postgresql, ... }:
+  libsodium, postgresql, gmp, ... }:
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -57,6 +57,10 @@ in
   };
   gdk-pixbuf = attrs: {
     buildInputs = [ gdk_pixbuf ];
+  };
+  rink = attrs: {
+    buildInputs = [ gmp ];
+    crateBin = [ {  name = "rink"; path = "src/bin/rink.rs"; } ];
   };
   cairo-rs = attrs: {
     buildInputs = [ cairo ];

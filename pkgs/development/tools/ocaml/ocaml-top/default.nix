@@ -1,6 +1,7 @@
 { stdenv, fetchzip, ncurses
 , ocamlPackages
-, jbuilder }:
+, dune
+}:
 
 stdenv.mkDerivation rec {
   version = "1.1.5";
@@ -10,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d4i6aanrafgrgk4mh154k6lkwk0b6mh66rykz33awlf5pfqd8yv";
   };
 
-  buildInputs = [ ncurses jbuilder ]
+  buildInputs = [ ncurses dune ]
   ++ (with ocamlPackages; [ ocaml ocp-build findlib lablgtk ocp-index ]);
 
   configurePhase = ''
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = "jbuilder build";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     homepage = https://www.typerex.org/ocaml-top.html;

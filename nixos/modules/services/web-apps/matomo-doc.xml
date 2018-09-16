@@ -15,7 +15,7 @@
   </para>
 
 
-  <section>
+  <section xml:id="module-services-matomo-database-setup">
     <title>Database Setup</title>
 
     <para>
@@ -51,7 +51,7 @@
   </section>
 
 
-  <section>
+  <section xml:id="module-services-matomo-backups">
     <title>Backup</title>
     <para>
       You only need to take backups of your MySQL database and the
@@ -62,7 +62,7 @@
   </section>
 
 
-  <section>
+  <section xml:id="module-services-matomo-issues">
     <title>Issues</title>
     <itemizedlist>
       <listitem>
@@ -83,7 +83,7 @@
   </section>
 
 
-  <section>
+  <section xml:id="module-services-matomo-other-web-servers">
     <title>Using other Web Servers than nginx</title>
 
     <para>

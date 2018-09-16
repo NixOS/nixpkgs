@@ -8,16 +8,17 @@
 , pytest
 , pyopenssl
 , trustme
+, sniffio
 }:
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.5.0";
+  version = "0.6.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ce0b4f59e2f41af0433247f92ce83116bf356a3c2ab5ca5942cf359a1105b4a8";
+    sha256 = "7a80c10b89068950aa649edd4b09a6f56236642c2c2e648b956289d2301fdb9e";
   };
 
   checkInputs = [ pytest pyopenssl trustme ];
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     async_generator
     idna
     outcome
+    sniffio
   ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
 
   meta = {

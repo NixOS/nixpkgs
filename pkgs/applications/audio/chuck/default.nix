@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, alsaLib, bison, flex, libsndfile, which
+{ stdenv, lib, fetchurl, alsaLib, bison, flex, libsndfile, which
 , AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
+, xcbuild
 }:
 
 stdenv.mkDerivation rec {
@@ -11,31 +12,28 @@ stdenv.mkDerivation rec {
     sha256 = "02z7sglax3j09grj5s1skmw8z6wz7b21hjrm95nrrdpwbxabh079";
   };
 
-  buildInputs = [ bison flex libsndfile which ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib
-    ++ stdenv.lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
+  nativeBuildInputs = [ flex bison which ];
+
+  buildInputs = [ libsndfile ]
+    ++ lib.optional (!stdenv.isDarwin) alsaLib
+    ++ lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
 
   patches = [ ./clang.patch ./darwin-limits.patch ];
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-Wno-missing-sysroot";
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-framework MultitouchSupport";
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-Wno-missing-sysroot";
+  NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework MultitouchSupport";
 
   postPatch = ''
     substituteInPlace src/makefile --replace "/usr/bin" "$out/bin"
-    substituteInPlace src/makefile.osx --replace "xcodebuild" "/usr/bin/xcodebuild"
-    substituteInPlace src/makefile.osx --replace "weak_framework" "framework"
-    substituteInPlace src/makefile.osx --replace "MACOSX_DEPLOYMENT_TARGET=10.5" "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET"
+    substituteInPlace src/makefile.osx \
+      --replace "weak_framework" "framework" \
+      --replace "MACOSX_DEPLOYMENT_TARGET=10.5" "MACOSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET"
   '';
 
-  buildPhase = ''
-    make -C src ${if stdenv.isDarwin then "osx" else "linux-alsa"}
-  '';
+  makeFlags = [ "-C src" "DESTDIR=$(out)/bin" ];
+  buildFlags = [ (if stdenv.isDarwin then "osx" else "linux-alsa") ];
 
-  installPhase = ''
-    install -Dm755 ./src/chuck $out/bin/chuck
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Programming language for real-time sound synthesis and music creation";
     homepage = http://chuck.cs.princeton.edu;
     license = licenses.gpl2;

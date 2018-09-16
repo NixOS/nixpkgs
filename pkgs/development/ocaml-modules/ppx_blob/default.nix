@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder, alcotest
+{ stdenv, fetchurl, ocaml, findlib, dune, alcotest
 , ocaml-migrate-parsetree
 }:
 
@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar xjf $curSrc";
 
-  buildInputs = [ ocaml findlib jbuilder alcotest ocaml-migrate-parsetree ];
+  buildInputs = [ ocaml findlib dune alcotest ocaml-migrate-parsetree ];
 
   buildPhase = "dune build -p ppx_blob";
 
   doCheck = true;
   checkPhase = "dune runtest -p ppx_blob";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/johnwhitington/ppx_blob;

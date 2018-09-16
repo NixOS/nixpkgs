@@ -8,7 +8,7 @@ let
 
   src = fetchurl {
     url = "https://www.informatik.uni-kiel.de/~pakcs/download/${name}-src.tar.gz";
-    sha256 = "0fdzw2zz5vs6z20jn6a8jfvpr6dp7fs1rr01cy0xjnzg2mgmn42a";
+    sha256 = "086nbsfv363cwrfxzhs54ggdwwkh1ms0pn0v1a4lvqlksjm7jdhv";
   };
 
   curry-frontend = (haskellPackages.override {

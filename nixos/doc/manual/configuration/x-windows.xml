@@ -60,7 +60,7 @@
 # systemctl start display-manager.service
 </screen>
  </para>
- <simplesect>
+ <simplesect xml:id="sec-x11-graphics-cards-nvidia">
   <title>NVIDIA Graphics Cards</title>
   <para>
    NVIDIA provides a proprietary driver for its graphics cards that has better
@@ -86,7 +86,7 @@
 </programlisting>
   </para>
  </simplesect>
- <simplesect>
+ <simplesect xml:id="sec-x11--graphics-cards-amd">
   <title>AMD Graphics Cards</title>
   <para>
    AMD provides a proprietary driver for its graphics cards that has better 3D
@@ -106,7 +106,7 @@
 </programlisting>
   </para>
  </simplesect>
- <simplesect>
+ <simplesect xml:id="sec-x11-touchpads">
   <title>Touchpads</title>
   <para>
    Support for Synaptics touchpads (found in many laptops such as the Dell
@@ -123,7 +123,7 @@
    since NixOS 17.09.
   </para>
  </simplesect>
- <simplesect>
+ <simplesect xml:id="sec-x11-gtk-and-qt-themes">
   <title>GTK/Qt themes</title>
   <para>
    GTK themes can be installed either to user profile or system-wide (via

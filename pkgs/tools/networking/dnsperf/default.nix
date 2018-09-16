@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     outputsToInstall = outputs; # The man pages and PDFs are likely useful to most.
 
     description = "Tools for DNS benchmaring";
-    homepage = https://nominum.com/measurement-tools/;
+    homepage = https://www.akamai.com/us/en/products/network-operator/measurement-tools.jsp;
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];

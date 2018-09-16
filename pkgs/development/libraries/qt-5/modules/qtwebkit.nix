@@ -5,8 +5,6 @@
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin
 , flashplayerFix ? false
-, src ? null
-, version ? null
 }:
 
 let
@@ -17,6 +15,9 @@ let
       url = "http://dev-www.libreoffice.org/src/5ade6ae2a99bc1e9e57031ca88d36dad-${name}.tar.gz";
       sha256 = "304636d4eccd81a14b6914d07b84c79ebb815288c76fe027b9ebff6ff24d5705";
     };
+    postPatch = ''
+      patchShebangs tests
+    '';
     buildInputs = [ perl ];
   };
 in
@@ -31,9 +32,6 @@ qtModule {
   ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ cmake ];
 
   cmakeFlags = optionals (lib.versionAtLeast qtbase.version "5.11.0") [ "-DPORT=Qt" ];
-
-  inherit src;
-  inherit version;
 
   __impureHostDeps = optionals (stdenv.isDarwin) [
     "/usr/lib/libicucore.dylib"
@@ -59,6 +57,8 @@ qtModule {
         ''-DNIXPKGS_LIBGDK2="${getLib gdk_pixbuf}/lib/libgdk-x11-2.0"''
       ]
     ++ optional (!stdenv.isDarwin) ''-DNIXPKGS_LIBUDEV="${getLib systemd}/lib/libudev"'';
+
+  doCheck = false; # fails 13 out of 13 tests (ctest)
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';

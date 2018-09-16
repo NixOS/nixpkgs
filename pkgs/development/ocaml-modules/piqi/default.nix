@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, camlp4, which, ulex, easy-format, ocaml_optcomp, xmlm, base64}:
+{ stdenv, fetchurl, ocaml, findlib, which, ulex, easy-format, ocaml_optcomp, xmlm, base64 }:
 
 stdenv.mkDerivation rec {
   version = "0.6.13";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1whqr2bb3gds2zmrzqnv8vqka9928w4lx6mi6g244kmbwb2h8d8l";
   };
 
-  buildInputs = [ocaml findlib camlp4 which ocaml_optcomp];
+  buildInputs = [ ocaml findlib which ocaml_optcomp ];
   propagatedBuildInputs = [ulex xmlm easy-format base64];
 
-  patches = [ ./no-ocamlpath-override.patch ];
+  patches = [ ./no-ocamlpath-override.patch ./safe-string.patch ];
 
   createFindlibDestdir = true;
 

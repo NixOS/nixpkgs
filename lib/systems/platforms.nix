@@ -20,6 +20,22 @@ rec {
     kernelAutoModules = false;
   };
 
+  powernv = {
+    name = "PowerNV";
+    kernelArch = "powerpc";
+    kernelBaseConfig = "powernv_defconfig";
+    kernelTarget = "zImage";
+    kernelInstallTarget = "install";
+    kernelFile = "vmlinux";
+    kernelAutoModules = true;
+    # avoid driver/FS trouble arising from unusual page size
+    kernelExtraConfig = ''
+      PPC_64K_PAGES n
+      PPC_4K_PAGES y
+      IPV6 y
+    '';
+  };
+
   ##
   ## ARM
   ##
@@ -458,5 +474,6 @@ rec {
       "armv7l-linux" = armv7l-hf-multiplatform;
       "aarch64-linux" = aarch64-multiplatform;
       "mipsel-linux" = fuloong2f_n32;
+      "powerpc64le-linux" = powernv;
     }.${system} or pcBase;
 }

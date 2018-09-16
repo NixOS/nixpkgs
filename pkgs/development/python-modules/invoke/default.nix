@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "invoke";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0aiy1xvk1f91246zxd1zqrm679vdvd10h843a2na41cqr3cflpi6";
+    sha256 = "1c2cf54c9b9af973ad9704d8ba81b225117cab612568cacbfb3fc42958cc20a9";
   };
 
   # errors with vendored libs

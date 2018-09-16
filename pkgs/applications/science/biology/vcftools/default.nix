@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "vcftools";
-  version = "0.1.15";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "vcftools";
     rev = "v${version}";
-    sha256 = "15yxr4kidqb42gkbd6rjra6b07wpl6rgivlh9q73yavh5myafqk4";
+    sha256 = "0msb09d2cnm8rlpg8bsc1lhjddvp3kf3i9dsj1qs4qgsdlzhxkyx";
   };
 
   buildInputs = [ autoreconfHook pkgconfig zlib perl ];

@@ -1,6 +1,5 @@
 { stdenv, fetchurl, nasm
 , alsaLib, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU_combined, SDL2, zlib
-, hostPlatform
 }:
 
 stdenv.mkDerivation rec {
