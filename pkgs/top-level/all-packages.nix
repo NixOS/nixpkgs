@@ -6247,6 +6247,8 @@ with pkgs;
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
   runtimeShellPackage = bash;
 
+  any-nix-shell = callPackage ../shells/any-nix-shell { };
+
   bash = lowPrio (callPackage ../shells/bash/4.4.nix { });
 
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
