@@ -32,6 +32,11 @@ in stdenv.mkDerivation {
   };
 
   patches = [
+    # Workarounds for https://github.com/ostreedev/ostree/issues/1592
+    ./fix-1592.patch
+    # Disable test-gpg-verify-result.test,
+    # https://github.com/ostreedev/ostree/issues/1634
+    ./disable-test-gpg-verify-result.patch
     # Tests access the helper using relative path
     # https://github.com/ostreedev/ostree/issues/1593
     (fetchpatch {
@@ -58,6 +63,7 @@ in stdenv.mkDerivation {
     cp --no-preserve=mode -r ${bsdiff-src} bsdiff
   '';
 
+
   preConfigure = ''
     env NOCONFIGURE=1 ./autogen.sh
   '';
@@ -74,6 +80,7 @@ in stdenv.mkDerivation {
     "installed_testdir=$(installedTests)/libexec/installed-tests/libostree"
     "installed_test_metadir=$(installedTests)/share/installed-tests/libostree"
   ];
+
 
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";
