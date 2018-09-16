@@ -109,6 +109,7 @@ junegunn/limelight.vim
 junegunn/vim-easy-align
 junegunn/vim-github-dashboard
 junegunn/vim-peekaboo
+junegunn/vim-plug
 justincampbell/vim-eighties
 justinmk/vim-dirvish
 KabbAmine/zeavim.vim
