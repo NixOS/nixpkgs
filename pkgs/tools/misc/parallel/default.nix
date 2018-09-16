@@ -8,12 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jjs7fpvdjjb5v0j39a6k7hq9h5ap3db1j7vg1r2dq4swk23h9bm";
   };
 
-  nativeBuildInputs = [ makeWrapper perl ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl procps ];
 
   postInstall = ''
     wrapProgram $out/bin/parallel \
-      --prefix PATH : "${procps}/bin" \
-      --prefix PATH : "${perl}/bin" \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ procps perl ]}"
   '';
 
   doCheck = true;
