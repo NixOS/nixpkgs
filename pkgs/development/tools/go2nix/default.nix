@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, go-bindata, goimports, nix-prefetch-git, git, makeWrapper,
+{ stdenv, buildGoPackage, go-bindata, gotools, nix-prefetch-git, git, makeWrapper,
   fetchFromGitHub }:
 
 buildGoPackage rec {
@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   outputs = [ "bin" "out" "man" ];
 
-  buildInputs = [ go-bindata goimports makeWrapper ];
+  buildInputs = [ go-bindata gotools makeWrapper ];
   preBuild = ''go generate ./...'';
 
   postInstall = ''
