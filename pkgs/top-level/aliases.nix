@@ -106,6 +106,7 @@ mapAliases ({
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   gnustep-make = gnustep.make; # added 2016-7-6
   go-pup = pup; # added 2017-12-19
+  goimports = gotools; # added 2018-09-16
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
