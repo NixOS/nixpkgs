@@ -125,6 +125,7 @@ stdenv.mkDerivation rec {
     ./remove-fhs-test-references.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+    ./skip-test-extra-files-on-386.patch
   ];
 
   postPatch = optionalString stdenv.isDarwin ''

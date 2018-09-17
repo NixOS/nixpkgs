@@ -2,8 +2,6 @@
 , fetchurl, perl
 }:
 
-assert stdenvNoCC.hostPlatform.isLinux;
-
 let
   common = { version, sha256, patches ? null }: stdenvNoCC.mkDerivation {
     name = "linux-headers-${version}";
@@ -13,7 +11,7 @@ let
       inherit sha256;
     };
 
-    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch;
+    ARCH = stdenvNoCC.hostPlatform.platform.kernelArch or (throw "missing kernelArch");
 
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
