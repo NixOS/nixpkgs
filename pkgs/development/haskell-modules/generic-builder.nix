@@ -174,8 +174,7 @@ let
     (optionalString (versionOlder "7.10" ghc.version && !isHaLVM) "-threaded")
   ];
 
-  isHaskellPkg = x: (x ? pname) && (x ? version) && (x ? env);
-  isSystemPkg = x: !isHaskellPkg x;
+  isHaskellPkg = x: x ? isHaskellLibrary;
 
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
@@ -192,7 +191,10 @@ let
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testFrameworkDepends) ++
                      optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkFrameworkDepends);
 
-  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
+
+  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs ++ depsBuildBuild;
+  isHaskellPartition =
+    stdenv.lib.partition isHaskellPkg allBuildInputs;
 
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
   systemBuildInputs = stdenv.lib.filter isSystemPkg allBuildInputs;
@@ -428,6 +430,13 @@ stdenv.mkDerivation ({
     inherit pname version;
 
     compiler = ghc;
+
+
+    getBuildInputs = {
+      inherit propagatedBuildInputs otherBuildInputs allPkgconfigDepends;
+      haskellBuildInputs = isHaskellPartition.right;
+      systemBuildInputs = isHaskellPartition.wrong;
+    };
 
     isHaskellLibrary = isLibrary;
 
