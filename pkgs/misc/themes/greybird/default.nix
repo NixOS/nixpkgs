@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Grey and blue theme from the Shimmer Project for GTK+-based environments";
     homepage = https://github.com/shimmerproject/Greybird;
-    license = with licenses; [ gpl2Plus cc-by-nc-sa-30 ];
+    license = with licenses; [ gpl2Plus ]; # or alternatively: cc-by-nc-sa-30
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };
