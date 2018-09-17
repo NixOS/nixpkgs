@@ -96,4 +96,9 @@ self: super: {
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
   }));
 
+  # ???
+  gi-glib = super.gi-glib.override { haskell-gi-overloading = self.haskell-gi-overloading_0_0; };
+  gi-cairo = super.gi-cairo.override { haskell-gi-overloading = self.haskell-gi-overloading_0_0; };
+  gi-xlib = super.gi-xlib.override { haskell-gi-overloading = self.haskell-gi-overloading_0_0; };
+
 }
