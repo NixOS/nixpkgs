@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
+  dontBuild = true;
+
   installPhase = ''
     mkdir -p $out/share/heroku $out/bin
     cp -pr * $out/share/heroku
