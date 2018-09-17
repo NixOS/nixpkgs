@@ -2,8 +2,11 @@
 let cargo-vendor-normalise = stdenv.mkDerivation {
   name = "cargo-vendor-normalise";
   src = ./cargo-vendor-normalise.py;
+  nativeBuildInputs = [ python3.pkgs.wrapPython ];
   unpackPhase = ":";
   installPhase = "install -D $src $out/bin/cargo-vendor-normalise";
+  pythonPath = [ python3.pkgs.toml ];
+  postFixup = "wrapPythonPrograms";
   doInstallCheck = true;
   installCheckPhase = ''
     # check that ./fetchcargo-default-config.toml is a fix point
@@ -11,7 +14,6 @@ let cargo-vendor-normalise = stdenv.mkDerivation {
     < $reference $out/bin/cargo-vendor-normalise > test;
     cmp test $reference
   '';
-  buildInputs = [ (python3.withPackages(ps: [ ps.toml ])) ];
   preferLocalBuild = true;
 };
 in
