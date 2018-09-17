@@ -1,26 +1,39 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, sass, glib, libxml2, gdk_pixbuf, librsvg, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, autoreconfHook, which, sassc, glib, libxml2, gdk_pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "greybird";
-  version = "3.22.7";
+  version = "3.22.9";
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "118k0bb780h54i2vn5my5r6vbkk134899xwp4aigw5a289xzryvb";
+    sha256 = "0mixs47v0jvqpmfsv0k0d0l24y4w35krah8mgnwamr0b8spmazz3";
   };
 
-  nativeBuildInputs = [ autoreconfHook sass glib libxml2 gdk_pixbuf librsvg ];
+  nativeBuildInputs = [
+    autoreconfHook
+    which
+    sassc
+    glib
+    libxml2
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  buildInputs = [
+    gdk_pixbuf
+    librsvg
+  ];
 
-  meta = {
-    description = "Grey and blue theme (Gtk, Xfce, Emerald, Metacity, Mutter, Unity)";
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
+
+  meta = with stdenv.lib; {
+    description = "Grey and blue theme from the Shimmer Project for GTK+-based environments";
     homepage = https://github.com/shimmerproject/Greybird;
-    license = with stdenv.lib.licenses; [ gpl2Plus cc-by-nc-sa-30 ];
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = with licenses; [ gpl2Plus cc-by-nc-sa-30 ];
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }
