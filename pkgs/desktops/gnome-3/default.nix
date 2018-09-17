@@ -179,6 +179,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   mutter = callPackage ./core/mutter { };
 
+  # Needed for elementary's gala and greeter until they get around to adapting to all the API breaking changes in libmutter-3
+  # A more detailed explaination can be seen here https://decathorpe.com/2018/09/04/call-for-help-pantheon-on-fedora-29.html
+  # See Also: https://github.com/elementary/gala/issues/303
+  mutter328 = callPackage ./core/mutter/3.28.nix { };
+
   nautilus = callPackage ./core/nautilus { };
 
   networkmanager-openvpn = pkgs.networkmanager-openvpn.override {
