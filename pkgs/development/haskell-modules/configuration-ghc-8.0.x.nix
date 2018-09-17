@@ -81,4 +81,8 @@ self: super: {
   haddock-library = self.haddock-library_1_4_3;
   haddock-api = self.haddock-api_2_17_4;
   haddock = self.haddock_2_17_5;
+
+  # GHC 8.0 doesn't have semigroups included by default
+  ListLike = addBuildDepend super.ListLike self.semigroups;
+
 }
