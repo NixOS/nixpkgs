@@ -28,6 +28,12 @@ rec {
 
     patches = nixpkgsPatches ++ [
       ./no-buildconfig.patch
+      # fix build with rust >= 1.29 and firefox < 63
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1479540
+      (fetchpatch {
+        url = "https://github.com/mozilla/gecko-dev/commit/eec0d4f8714e6671402d41632232ef57348e65c4.patch";
+        sha256 = "1cjaqx811bcnp8b6z16q25csaclaic3b11q45ck02srd99n8qp0j";
+      })
     ];
 
     extraNativeBuildInputs = [ python3 ];

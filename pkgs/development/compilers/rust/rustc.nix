@@ -105,6 +105,11 @@ stdenv.mkDerivation {
     # On Hydra: `TcpListener::bind(&addr)`: Address already in use (os error 98)'
     sed '/^ *fn fast_rebind()/i#[ignore]' -i src/libstd/net/tcp.rs
 
+    # https://github.com/rust-lang/rust/issues/39522
+    echo removing gdb-version-sensitive tests...
+    find src/test/debuginfo -type f -execdir grep -q ignore-gdb-version '{}' \; -print -delete
+    rm src/test/debuginfo/{borrowed-c-style-enum.rs,c-style-enum-in-composite.rs,gdb-pretty-struct-and-enums-pre-gdb-7-7.rs,generic-enum-with-different-disr-sizes.rs}
+
     # Useful debugging parameter
     # export VERBOSE=1
   '' + optionalString stdenv.isDarwin ''
