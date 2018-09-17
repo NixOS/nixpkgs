@@ -3,18 +3,14 @@
 , gtk3, glib, glibmm, gtkmm3, gtkspell3
 }:
 
-let
-  version = "3.0.4";
-
-in
-
 stdenv.mkDerivation rec {
   name = "gtkspellmm-${version}";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/gtkspell/gtkspellmm/" +
-          "${name}.tar.gz";
-    sha256 = "0x6zx928dl62f0c0x6b2s32i06lvn18wx7crrgs1j9yjgkim4k4k";
+          "${name}.tar.xz";
+    sha256 = "0i8mxwyfv5mskachafa4qlh315q0cfph7s66s1s34nffadbmm1sv";
   };
 
   propagatedBuildInputs = [
