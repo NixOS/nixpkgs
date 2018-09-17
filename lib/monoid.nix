@@ -14,6 +14,8 @@
     append = lib.trivial.mergeAttrs;
   };
 
+  inherit (lib.overrides) monoidalExtension attrsetDeep extensibleAttrset;
+
   # Monoidally left-fold a list. The monoid's `append` and `identity` become the
   # other arguments besides the list to the `foldl`.
   fold = { identity, append, ... }: lib.foldl append identity;
