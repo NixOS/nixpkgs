@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       s:^\(CONFIGURE_FILE\)=.*:\1=/etc/exim.conf:
       s:^\(EXIM_USER\)=.*:\1=ref\:nobody:
       s:^\(SPOOL_DIRECTORY\)=.*:\1=/exim-homeless-shelter:
+      s:^# \(TRANSPORT_LMTP\)=.*:\1=yes:
       s:^# \(SUPPORT_MAILDIR\)=.*:\1=yes:
       s:^EXIM_MONITOR=.*$:# &:
       s:^\(FIXED_NEVER_USERS\)=root$:\1=0:
