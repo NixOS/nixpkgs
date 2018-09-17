@@ -1500,6 +1500,15 @@ installTargets = "install-bin install-doc";</programlisting>
       </para>
      </listitem>
      <listitem>
+       <para>
+         On Linux, it uses <command>patchelf</command> on all libraries in
+         the <filename>lib</filename> tree to make the <varname>DT_SONAME</varname>
+         an absolute path to the library. This makes other binaries that
+         link against it access it directly rather than searching through
+         <varname>DT_RUNPATH</varname>, which increases efficiency.
+       </para>
+     </listitem>
+     <listitem>
       <para>
        It rewrites the interpreter paths of shell scripts to paths found in
        <envar>PATH</envar>. E.g., <filename>/usr/bin/perl</filename> will be
@@ -1620,6 +1629,18 @@ installTargets = "install-bin install-doc";</programlisting>
        unnecessary <literal>RPATH</literal> entries. Only applies to Linux.
       </para>
      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>
+        <varname>noAbsoluteSoname</varname>
+      </term>
+      <listitem>
+        <para>
+          If set, the <varname>DT_SONAME</varname> entries of the shared
+          libraries in the output will be left unmodified. Only applies
+          to Linux.
+        </para>
+      </listitem>
     </varlistentry>
     <varlistentry>
      <term>

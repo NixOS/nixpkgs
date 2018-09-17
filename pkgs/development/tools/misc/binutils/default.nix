@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
+  noAbsoluteSoname = true;
 
   preConfigure = ''
     # Clear the default library search path.

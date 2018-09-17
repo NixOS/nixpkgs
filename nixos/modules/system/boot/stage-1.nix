@@ -61,6 +61,13 @@ let
           ld*.so.?) continue;;
         esac
 
+        # $next might be an absolute path
+        if [ -f "$next" ]; then
+          echo "$next"
+          add_needed "$next"
+          continue
+        fi
+
         IFS=: read -ra paths <<< $rpath
         res=
         for path in "''${paths[@]}"; do
@@ -166,16 +173,25 @@ let
       stripDirs "$STRIP" "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
-      find $out/bin $out/lib -type f | while read i; do
+      ( find $out/bin -type f ; find $out/lib -type f -not -name "ld*" ) | while read i; do
         if ! test -L $i; then
-          nuke-refs -e $out $i
+          echo "patching $i..."
+          libs=$(patchelf --print-needed $i)
+          replacements=""
+          for library in $libs; do
+            [[ library = */ld* ]] && continue
+            replacements+="--replace-needed $library $(basename $library) "
+          done
+          patchelf $replacements $i || true
+          patchelf --set-rpath $out/lib $i || true
+          [[ $i = $out/bin/* ]] && patchelf --set-interpreter $out/lib/ld*.so.? $i || true
         fi
       done
 
-      find $out/bin -type f | while read i; do
+      # Remove any remaining refs to the outside
+      find $out/bin $out/lib -type f | while read i; do
         if ! test -L $i; then
-          echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
+          nuke-refs -e $out $i
         fi
       done
 
