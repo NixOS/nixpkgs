@@ -34,8 +34,11 @@ $ nix-build nixos/tests/login.nix -A driver
 $ ./result/bin/nixos-run-vms
 </screen>
   The script <command>nixos-run-vms</command> starts the virtual machines
-  defined by test. The root file system of the VMs is created on the fly and
-  kept across VM restarts in
-  <filename>./</filename><varname>hostname</varname><filename>.qcow2</filename>.
+  defined by test.
+ </para>
+
+ <para>
+  The machine state is kept across VM restarts in
+  <filename>/tmp/vm-state-</filename><varname>machinename</varname>.
  </para>
 </section>
