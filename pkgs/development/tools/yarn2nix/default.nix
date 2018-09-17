@@ -131,8 +131,8 @@ let
   }@attrs:
     let
       package = lib.importJSON packageJSON;
-      pname = package.name;
-      version = package.version;
+      pname = package.name or name;
+      version = package.version or attrs.version;
       deps = mkYarnModules {
         name = "${pname}-modules-${version}";
         preBuild = yarnPreBuild;
