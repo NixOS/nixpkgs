@@ -43,10 +43,9 @@ let
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
     nodejs = buildPackages.nodejs-slim;
-    inherit buildHaskellPackages;
-    inherit (self) ghc;
-    inherit (buildHaskellPackages) jailbreak-cabal;
-    hscolour = overrideCabal buildHaskellPackages.hscolour (drv: {
+    inherit (self) buildHaskellPackages ghc;
+    inherit (self.buildHaskellPackages) jailbreak-cabal;
+    hscolour = overrideCabal self.buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
       doHaddock = false;
       hyperlinkSource = false;      # Avoid depending on hscolour for this build.
