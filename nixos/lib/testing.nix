@@ -149,9 +149,23 @@ in rec {
       test = passMeta (runTests driver);
       report = passMeta (releaseTools.gcovReport { coverageRuns = [ test ]; });
 
-    in (if makeCoverageReport then report else test) // {
-      inherit nodes driver test;
-    };
+      nodeNames = builtins.attrNames nodes;
+      invalidNodeNames = lib.filter
+        (node: builtins.match "^[A-z_][A-z0-9_]+$" node == null) nodeNames;
+
+    in
+      if lib.length invalidNodeNames > 0 then
+        throw ''
+          Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
+          All machines are references as perl variables in the testing framework which will break the
+          script when special characters are allowed.
+
+          Please stick to alphanumeric chars and underscores as separation.
+        ''
+      else
+        (if makeCoverageReport then report else test) // {
+          inherit nodes driver test;
+        };
 
   runInMachine =
     { drv
