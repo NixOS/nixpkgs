@@ -2320,6 +2320,8 @@ with pkgs;
 
   buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
 
+  carp = callPackage ../development/compilers/carp { };
+
   emscriptenVersion = "1.37.36";
 
   emscripten = callPackage ../development/compilers/emscripten { };
