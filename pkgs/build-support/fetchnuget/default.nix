@@ -5,6 +5,7 @@ attrs @
 , version
 , url ? "https://www.nuget.org/api/v2/package/${baseName}/${version}"
 , sha256 ? ""
+, sha512 ? ""
 , md5 ? ""
 , ...
 }:
@@ -13,7 +14,7 @@ if md5 != "" then
 else
   buildDotnetPackage ({
     src = fetchurl {
-      inherit url sha256;
+      inherit url sha256 sha512;
       name = "${baseName}.${version}.zip";
     };
 
