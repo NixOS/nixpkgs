@@ -2,7 +2,7 @@
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
-, perl, pkgconfig
+, perl, pkgconfig, autoreconfHook
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , cairo, pixman, xorg, clisp, biber
 , makeWrapper
@@ -38,6 +38,9 @@ let
         sha256 = "1c4aq8lk8g3mlfq3mdjnxvmhss3qs7nni5rmw0k054dmj6q1xj5n";
       })
     ];
+    # remove when removing synctex-missing-header.patch
+    preAutoreconf = "pushd texk/web2c";
+    postAutoreconf = "popd";
 
     configureFlags = [
       "--with-banner-add=/NixOS.org"
@@ -69,11 +72,11 @@ texliveYear = year;
 core = stdenv.mkDerivation rec {
   name = "texlive-bin-${version}";
 
-  inherit (common) src patches;
+  inherit (common) src patches preAutoreconf postAutoreconf;
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
     /*teckit*/ zziplib poppler mpfr gmp
     pixman potrace gd freetype libpng libpaper zlib
@@ -106,7 +109,6 @@ core = stdenv.mkDerivation rec {
       "xetex" "bibtexu" "bibtex8" "bibtex-x" "upmendex" # ICU isn't small
     ] ++ stdenv.lib.optional (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) "mfluajit")
     ++ [ "--without-system-harfbuzz" "--without-system-icu" ] # bogus configure
-    
     ;
 
   enableParallelBuilding = true;
@@ -170,7 +172,7 @@ inherit (core-big) metafont metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   name = "texlive-core-big.bin-${version}";
 
-  inherit (common) src patches;
+  inherit (common) src patches preAutoreconf postAutoreconf;
 
   hardeningDisable = [ "format" ];
 
