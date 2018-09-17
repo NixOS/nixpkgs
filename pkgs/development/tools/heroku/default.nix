@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://toolbelt.heroku.com;
+    homepage = https://cli.heroku.com;
     description = "Everything you need to get started using Heroku";
     maintainers = with lib.maintainers; [ aflatter mirdhyn peterhoeg ];
     license = lib.licenses.mit;
