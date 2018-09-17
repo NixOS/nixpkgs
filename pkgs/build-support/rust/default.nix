@@ -1,7 +1,7 @@
-{ stdenv, cacert, git, rust, cargo-vendor }:
+{ stdenv, cacert, git, rust, cargo-vendor, python3 }:
 let
   fetchcargo = import ./fetchcargo.nix {
-    inherit stdenv cacert git rust cargo-vendor;
+    inherit stdenv cacert git rust cargo-vendor python3;
   };
 in
 { name, cargoSha256 ? "unset"
@@ -61,14 +61,12 @@ in stdenv.mkDerivation (args // {
     ${setupVendorDir}
 
     mkdir .cargo
-    cat >.cargo/config <<-EOF
-      [source.crates-io]
-      registry = 'https://github.com/rust-lang/crates.io-index'
-      replace-with = 'vendored-sources'
-
-      [source.vendored-sources]
-      directory = '$(pwd)/$cargoDepsCopy'
-    EOF
+    config="$(pwd)/$cargoDepsCopy/.cargo/config";
+    if [[ ! -e $config ]]; then
+      config=${./fetchcargo-default-config.toml};
+    fi;
+    substitute $config .cargo/config \
+    --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
     unset cargoDepsCopy
 
