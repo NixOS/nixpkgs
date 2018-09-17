@@ -22009,6 +22009,8 @@ with pkgs;
     libsemanage = libsemanage.override { python = python3; };
   };
 
+  sierra-gtk-theme = callPackage ../misc/themes/sierra { };
+
   slock = callPackage ../misc/screensavers/slock {
     conf = config.slock.conf or null;
   };
