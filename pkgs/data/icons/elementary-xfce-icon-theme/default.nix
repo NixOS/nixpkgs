@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     description = "Elementary icons for Xfce and other GTK+ desktops like GNOME";
     homepage = https://github.com/shimmerproject/elementary-xfce;
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    # darwin cannot deal with file names differing only in case
+    platforms = platforms.linux;
     maintainers = with maintainers; [ davidak ];
   };
 }
