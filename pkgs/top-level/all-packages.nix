@@ -8386,7 +8386,9 @@ with pkgs;
     inherit (perlPackages) LocaleGettext;
   };
 
-  heroku = callPackage ../development/tools/heroku { };
+  heroku = callPackage ../development/tools/heroku {
+    nodejs = nodejs-10_x;
+  };
 
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
