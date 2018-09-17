@@ -80,12 +80,8 @@ rec {
   #
   #     nix-repl> obj
   #     { __unfix__ = «lambda»; bar = "bar"; extend = «lambda»; foo = "foo + "; foobar = "foo + bar"; }
-  makeExtensible = makeExtensibleWithCustomName "extend";
-
-  # Same as `makeExtensible` but the name of the extending attribute is
-  # customized.
-  makeExtensibleWithCustomName = extenderName: rattrs:
+  makeExtensible = rattrs:
     fix' rattrs // {
-      ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
+      extend = f: makeExtensible (extends f rattrs);
    };
 }
