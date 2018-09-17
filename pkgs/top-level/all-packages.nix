@@ -2933,6 +2933,7 @@ with pkgs;
 
   grub = pkgsi686Linux.callPackage ../tools/misc/grub {
     buggyBiosCDSupport = config.grub.buggyBiosCDSupport or true;
+    stdenv = overrideCC stdenv pkgsi686Linux.gcc6;
   };
 
   trustedGrub = pkgsi686Linux.callPackage ../tools/misc/grub/trusted.nix { };
