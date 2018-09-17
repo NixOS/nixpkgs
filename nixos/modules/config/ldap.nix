@@ -242,6 +242,13 @@ in
           ''}
         '';
 
+        # NOTE: because one cannot pass a custom config path to `nslcd`
+        # (which is only able to use `/etc/nslcd.conf`)
+        # changes in `nslcdConfig` won't change `serviceConfig`,
+        # and thus won't restart `nslcd`.
+        # Therefore `restartTriggers` is used on `/etc/nslcd.conf`.
+        restartTriggers = [ nslcdConfig.source ];
+
         serviceConfig = {
           ExecStart = "${nss_pam_ldapd}/sbin/nslcd";
           Type = "forking";
