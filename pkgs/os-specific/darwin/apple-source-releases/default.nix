@@ -215,7 +215,7 @@ let
 
     # Splicing is currently broken in Nixpkgs
     # cctools need to be specified manually here to handle this
-    ICU             = applePackage "ICU"               "osx-10.10.5"     "1qihlp42n5g4dl0sn0f9pc0bkxy1452dxzf0vr6y5gqpshlzy03p" { inherit (buildPackages.darwin) cctools; };
+    ICU             = applePackage "ICU"               "osx-10.10.5"     "1qihlp42n5g4dl0sn0f9pc0bkxy1452dxzf0vr6y5gqpshlzy03p" {};
 
     IOKit           = applePackage "IOKit"             "osx-10.11.6"     "0kcbrlyxcyirvg5p95hjd9k8a01k161zg0bsfgfhkb90kh2s8x00" { inherit IOKitSrcs; };
     launchd         = applePackage "launchd"           "osx-10.9.5"      "0w30hvwqq8j5n90s3qyp0fccxflvrmmjnicjri4i1vd2g196jdgj" {};

@@ -12,6 +12,10 @@ in rec {
     singleBinary = false;
   });
 
+  # We want a version of cctools without LLVM, because the LTO support ends up making
+  # the bootstrap tools huge and isn't really necessary for bootstrap
+  cctools_ = darwin.cctools.override { llvm = null; };
+
   # Avoid debugging larger changes for now.
   bzip2_ = bzip2.override (args: { linkStatic = true; });
 
@@ -95,7 +99,7 @@ in rec {
 
       # Copy binutils.
       for i in as ld ar ranlib nm strip otool install_name_tool dsymutil lipo; do
-        cp ${darwin.cctools}/bin/$i $out/bin
+        cp ${cctools_}/bin/$i $out/bin
       done
 
       cp -rd ${pkgs.darwin.CF}/Library $out
@@ -105,9 +109,9 @@ in rec {
       nuke-refs $out/bin/*
 
       rpathify() {
-        local libs=$(${darwin.cctools}/bin/otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
+        local libs=$(${cctools_}/bin/otool -L "$1" | tail -n +2 | grep -o "$NIX_STORE.*-\S*") || true
         for lib in $libs; do
-          ${darwin.cctools}/bin/install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
+          ${cctools_}/bin/install_name_tool -change $lib "@rpath/$(basename $lib)" "$1"
         done
       }
 
