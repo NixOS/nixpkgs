@@ -164,6 +164,7 @@ megaannum/forms
 megaannum/self
 mfukar/robotframework-vim
 mhinz/vim-grepper
+mhinz/vim-sayonara
 mhinz/vim-signify
 mhinz/vim-startify
 michaeljsmith/vim-indent-object
@@ -181,6 +182,7 @@ ncm2/ncm2-tmux
 ncm2/ncm2-ultisnips
 neoclide/vim-easygit
 neovimhaskell/haskell-vim
+neovim/nvimdev.nvim
 nixprime/cpsm
 noc7c9/vim-iced-coffee-script
 osyo-manga/shabadou.vim
@@ -263,6 +265,7 @@ tpope/vim-eunuch
 tpope/vim-fireplace
 tpope/vim-flagship
 tpope/vim-fugitive
+tpope/vim-obsession
 tpope/vim-pathogen
 tpope/vim-projectionist
 tpope/vim-repeat
