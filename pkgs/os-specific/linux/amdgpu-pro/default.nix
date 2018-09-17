@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, elfutils
+{ stdenv, fetchurl, elfutils, libelf, xz
 , xorg, patchelf, openssl, libdrm, udev
 , libxcb, libxshmfence, epoxy, perl, zlib
 , ncurses
@@ -28,9 +28,9 @@ let
 
 in stdenv.mkDerivation rec {
 
-  version = "17.40";
+  version = "18.30";
   pname = "amdgpu-pro";
-  build = "${version}-492261";
+  build = "${version}-641594";
 
   libCompatDir = "/run/lib/${libArch}";
 
@@ -39,8 +39,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
     "https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${build}.tar.xz";
-    sha256 = "1c073lp9cq1rc2mddky2r0j2dv9dd167qj02visz37vwaxbm2r5h";
-    curlOpts = "--referer http://support.amd.com/en-us/kb-articles/Pages/AMD-Radeon-GPU-PRO-Linux-Beta-Driver%e2%80%93Release-Notes.aspx";
+    sha256 = "18qhfcnbqpv0pal1iyfl7rs7wcx7fa5q6ac132pvqzxi7jnyqayh";
+    curlOpts = "--referer https://www.amd.com/en/support/kb/release-notes/rn-prorad-lin-18-30";
   };
 
   hardeningDisable = [ "pic" "format" ];
@@ -57,8 +57,10 @@ in stdenv.mkDerivation rec {
 
   modulePatches = optionals (!libsOnly) ([
     ./patches/0001-fix-warnings-for-Werror.patch
-    ./patches/0002-fix-sketchy-int-ptr-warning.patch
+    ./patches/0002-drop-drm_edid_to_eld.patch
     ./patches/0003-disable-firmware-copy.patch
+    ./patches/0004-device-link-hda.patch
+    ./patches/0005-pci.patch
   ]);
 
   patchPhase = optionalString (!libsOnly) ''
@@ -88,6 +90,9 @@ in stdenv.mkDerivation rec {
   modules = [
     "amd/amdgpu/amdgpu.ko"
     "amd/amdkcl/amdkcl.ko"
+    "amd/amdkfd/amdkfd.ko"
+    "amd/lib/amdchash.ko"
+    "scheduler/amd-sched.ko"
     "ttm/amdttm.ko"
   ];
 
@@ -121,12 +126,15 @@ in stdenv.mkDerivation rec {
     pushd opt/amdgpu-pro
   '' + optionalString (!libsOnly && stdenv.is64bit) ''
     cp -r bin $out/bin
+    for f in `find ../amdgpu/bin/ -type f`; do cp $f $out/bin; done
   '' + ''
     cp -r include $out/include
-    cp -r share/* $out/share
+    cp -r ../amdgpu/lib/${libArch}/* $out/lib
     cp -r lib/${libArch}/* $out/lib
   '' + optionalString (!libsOnly) ''
     mv lib/xorg $out/lib/xorg
+    cp -r ../amdgpu/lib/xorg/* $out/lib/xorg
+
   '' + ''
     popd
 
@@ -138,7 +146,7 @@ in stdenv.mkDerivation rec {
     interpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
     libPath="$out/lib:$out/lib/gbm:$depLibPath"
   '' + optionalString (!libsOnly && stdenv.is64bit) ''
-    for prog in clinfo modetest vbltest kms-universal-planes kms-steal-crtc modeprint amdgpu_test kmstest proptest; do
+    for prog in clinfo modetest vbltest kms-universal-planes kms-steal-crtc modeprint amdgpu_test kmstest proptest wayland-scanner; do
       patchelf --interpreter "$interpreter" --set-rpath "$libPath" "$out/bin/$prog"
     done
   '' + ''
@@ -154,17 +162,18 @@ in stdenv.mkDerivation rec {
     for lib in libEGL.so.1 libGL.so.1.2 ${optionalString (!libsOnly) "xorg/modules/extensions/libglx.so"} dri/amdgpu_dri.so libamdocl${bitness}.so; do
       perl -pi -e 's:${libReplaceDir}:${libCompatDir}:g' "$out/lib/$lib"
     done
-    for lib in dri/amdgpu_dri.so libdrm_amdgpu.so.1.0.0 libgbm_amdgpu.so.1.0.0 libkms_amdgpu.so.1.0.0 libamdocl${bitness}.so; do
+    for lib in dri/amdgpu_dri.so libdrm_amdgpu.so.1.0.0 libgbm.so.1.0.0 libkms.so.1.0.0 libamdocl${bitness}.so; do
       perl -pi -e 's:/opt/amdgpu-pro/:/run/amdgpu-pro/:g' "$out/lib/$lib"
     done
     substituteInPlace "$out/share/vulkan/icd.d/amd_icd${bitness}.json" --replace "/opt/amdgpu-pro/lib/${libArch}" "$out/lib"
   '' + optionalString (!libsOnly) ''
-    for lib in drivers/modesetting_drv.so libglamoregl.so; do
+    for lib in libglamoregl.so; do
       patchelf --add-needed $out/lib/libhack-xreallocarray.so $out/lib/xorg/modules/$lib
     done
   '';
 
   buildInputs = [
+    libelf
     patchelf
     perl
   ];

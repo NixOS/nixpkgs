@@ -1,0 +1,52 @@
+diff --git a/amd/amdgpu/amdgpu_connectors.c b//amd/amdgpu/amdgpu_connectors.c
+index f51b41f094ef..126be9e0f05f 100644
+--- a/amd/amdgpu/amdgpu_connectors.c
++++ b/amd/amdgpu/amdgpu_connectors.c
+@@ -358,7 +358,6 @@ static int amdgpu_connector_ddc_get_modes(struct drm_connector *connector)
+ 	if (amdgpu_connector->edid) {
+ 		drm_mode_connector_update_edid_property(connector, amdgpu_connector->edid);
+ 		ret = drm_add_edid_modes(connector, amdgpu_connector->edid);
+-		drm_edid_to_eld(connector, amdgpu_connector->edid);
+ 		return ret;
+ 	}
+ 	drm_mode_connector_update_edid_property(connector, NULL);
+--- a/amd/display/amdgpu_dm/amdgpu_dm.c	2018-09-16 19:12:08.487358135 -0500
++++ b/amd/display/amdgpu_dm/amdgpu_dm.c	2018-09-16 19:12:31.264884418 -0500
+@@ -3901,8 +3901,6 @@
+ 		amdgpu_dm_connector->num_modes =
+ 				drm_add_edid_modes(connector, edid);
+ 
+-		drm_edid_to_eld(connector, edid);
+-
+ 		amdgpu_dm_get_native_mode(connector);
+ 	} else {
+ 		amdgpu_dm_connector->num_modes = 0;
+--- a/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c	2018-09-16 19:17:26.616749338 -0500
++++ b/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c	2018-09-16 19:24:05.875106832 -0500
+@@ -196,17 +196,6 @@
+ 	.atomic_get_property = amdgpu_dm_connector_atomic_get_property
+ };
+ 
+-static int dm_connector_update_modes(struct drm_connector *connector,
+-				struct edid *edid)
+-{
+-	int ret;
+-
+-	ret = drm_add_edid_modes(connector, edid);
+-	drm_edid_to_eld(connector, edid);
+-
+-	return ret;
+-}
+-
+ void dm_dp_mst_dc_sink_create(struct drm_connector *connector)
+ {
+ 	struct amdgpu_dm_connector *aconnector = to_amdgpu_dm_connector(connector);
+@@ -247,7 +236,7 @@
+ 	int ret = 0;
+ 
+ 	if (!aconnector)
+-		return dm_connector_update_modes(connector, NULL);
++		return drm_add_edid_modes(connector, NULL);
+ 
+ 	if (!aconnector->edid) {
+ 		struct edid *edid;
