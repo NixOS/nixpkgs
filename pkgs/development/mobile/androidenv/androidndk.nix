@@ -1,6 +1,6 @@
 { stdenv, fetchurl, zlib, ncurses5, unzip, lib, makeWrapper
 , coreutils, file, findutils, gawk, gnugrep, gnused, jdk, which
-, platformTools, python3, libcxx, version, sha256
+, platformTools, python3, libcxx, version, sha1s
 , fullNDK ? false # set to true if you want other parts of the NDK
                   # that is not used by Nixpkgs like sources,
                   # examples, docs, or LLVM toolchains
@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   name = "android-ndk-r${version}";
   inherit version;
 
-  src = if stdenv.hostPlatform.system == "x86_64-linux" then fetchurl {
-      url = "https://dl.google.com/android/repository/${name}-linux-x86_64.zip";
-      inherit sha256;
-    } else throw "platform ${stdenv.hostPlatform.system} not supported!";
+  src = fetchurl {
+    url = "https://dl.google.com/android/repository/${name}-${stdenv.hostPlatform.parsed.kernel.name}-${stdenv.hostPlatform.parsed.cpu.name}.zip";
+    sha1 = sha1s.${stdenv.hostPlatform.system} or (throw "platform ${stdenv.hostPlatform.system} not supported!");
+  };
 
   phases = "buildPhase";
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = builtins.attrNames sha1s;
     hydraPlatforms = [];
     license = stdenv.lib.licenses.asl20;
   };
