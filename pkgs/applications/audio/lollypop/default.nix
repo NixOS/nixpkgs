@@ -1,10 +1,14 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig, wrapGAppsHook
-, appstream-glib, desktop-file-utils, gobjectIntrospection
-, python36Packages, gnome3, glib, gst_all_1 }:
+{ stdenv, fetchgit, meson, ninja, pkgconfig
+, python3, gtk3, gst_all_1, libsecret, libsoup
+, appstream-glib, desktop-file-utils, gnome3
+, gobjectIntrospection, wrapGAppsHook }:
 
-stdenv.mkDerivation rec  {
+python3.pkgs.buildPythonApplication rec  {
   version = "0.9.522";
   name = "lollypop-${version}";
+
+  format = "other";
+  doCheck = false;
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/World/lollypop";
@@ -13,7 +17,7 @@ stdenv.mkDerivation rec  {
     sha256 = "0f2brwv884cvmxj644jcj9sg5hix3wvnjy2ndg0fh5cxyqz0kwn5";
   };
 
-  nativeBuildInputs = with python36Packages; [
+  nativeBuildInputs = with python3.pkgs; [
     appstream-glib
     desktop-file-utils
     gobjectIntrospection
@@ -21,17 +25,22 @@ stdenv.mkDerivation rec  {
     ninja
     pkgconfig
     wrapGAppsHook
-    wrapPython
   ];
 
-  buildInputs = [ glib ] ++ (with gnome3; [
-    gsettings-desktop-schemas gtk3 libsecret libsoup totem-pl-parser
-  ]) ++ (with gst_all_1; [
-    gst-libav gst-plugins-bad gst-plugins-base gst-plugins-good gst-plugins-ugly
+  buildInputs = with gst_all_1; [
+    gnome3.totem-pl-parser
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
     gstreamer
-  ]);
+    gtk3
+    libsecret
+    libsoup
+  ];
 
-  pythonPath = with python36Packages; [
+  pythonPath = with python3.pkgs; [
     beautifulsoup4
     gst-python
     pillow
@@ -41,11 +50,14 @@ stdenv.mkDerivation rec  {
     pylast
   ];
 
-  postFixup = "wrapPythonPrograms";
-
   postPatch = ''
-    chmod +x ./meson_post_install.py
-    patchShebangs ./meson_post_install.py
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
+
+  preFixup = ''
+    buildPythonPath "$out/libexec/lollypop-sp $pythonPath"
+    patchPythonScript "$out/libexec/lollypop-sp"
   '';
 
   meta = with stdenv.lib; {

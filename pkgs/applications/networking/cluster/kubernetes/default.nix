@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go_1_9, go-bindata, makeWrapper, rsync
+{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go_1_10, go-bindata, makeWrapper, rsync
 , components ? [
     "cmd/kubeadm"
     "cmd/kubectl"
@@ -15,17 +15,16 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.10.5";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1k6ayb43l68l0qw31cc4k1pwvm8aks3l2xm0gdxdxbbww1mnzix2";
+    sha256 = "1gwb5gs9l0adv3qc70wf8dwvbjh1mmgd3hh1jkwsbbnach28dvzb";
   };
 
-  # Build using golang v1.9 in accordance with https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.10.md#external-dependencies
-  buildInputs = [ removeReferencesTo makeWrapper which go_1_9 rsync go-bindata ];
+  buildInputs = [ removeReferencesTo makeWrapper which go_1_10 rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
 
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./hack
   '';
 
-  WHAT="--use_go_build ${concatStringsSep " " components}";
+  WHAT="${concatStringsSep " " components}";
 
   postBuild = ''
     ./hack/generate-docs.sh
@@ -53,8 +52,11 @@ stdenv.mkDerivation rec {
     cp build/pause/pause "$pause/bin/pause"
     cp -R docs/man/man1 "$man/share/man"
 
+    cp cluster/addons/addon-manager/namespace.yaml $out/share
     cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons
     patchShebangs $out/bin/kube-addons
+    substituteInPlace $out/bin/kube-addons \
+      --replace /opt/namespace.yaml $out/share/namespace.yaml
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
 
     $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go_1_9} '{}' +
+    find $out/bin $pause/bin -type f -exec remove-references-to -t ${go_1_10} '{}' +
   '';
 
   meta = {

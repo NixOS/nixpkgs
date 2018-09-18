@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python3.pkgs.sphinx ];
   makeFlags = [ "PREFIX=$(out)" "VERSION=$(version)" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A program to generate and execute DesktopEntry files of the Application type";
     homepage = https://github.com/jceb/dex;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
   };
 }

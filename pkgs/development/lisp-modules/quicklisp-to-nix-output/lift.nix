@@ -1,4 +1,4 @@
-{ fetchurl, ... }:
+args @ { fetchurl, ... }:
 rec {
   baseName = ''lift'';
   version = ''20151031-git'';

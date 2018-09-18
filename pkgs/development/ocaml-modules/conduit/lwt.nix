@@ -1,4 +1,4 @@
-{ stdenv, ocaml, findlib, jbuilder, ppx_sexp_conv, conduit, lwt3 }:
+{ stdenv, ocaml, findlib, dune, ppx_sexp_conv, conduit, lwt3 }:
 
 if !stdenv.lib.versionAtLeast conduit.version "1.0"
 then conduit
@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-conduit-lwt-${version}";
 	inherit (conduit) version src installPhase meta;
 
-	buildInputs = [ ocaml findlib jbuilder ppx_sexp_conv ];
+	buildInputs = [ ocaml findlib dune ppx_sexp_conv ];
 
 	propagatedBuildInputs = [ conduit lwt3 ];
 
-	buildPhase = "jbuilder build -p conduit-lwt";
+	buildPhase = "dune build -p conduit-lwt";
 }

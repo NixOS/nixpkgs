@@ -564,6 +564,8 @@ let
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
 
+    seq = callPackage ../development/ocaml-modules/seq { };
+
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };

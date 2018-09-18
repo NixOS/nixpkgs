@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, cppo }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, cppo }:
 
 stdenv.mkDerivation rec {
 	version = "0.8.7";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 		sha256 = "0rh58nl5jrnx01hf0yqbdcc2ncx107pq29zblchww82ci0x1xwsf";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder cppo ];
+	buildInputs = [ ocaml findlib dune cppo ];
 
 	configurePhase = "ocaml configure.ml --share $out/share/camomile";
 
-	inherit (jbuilder) installPhase;
+	inherit (dune) installPhase;
 
 	meta = {
 		inherit (ocaml.meta) platforms;

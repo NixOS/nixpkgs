@@ -40,7 +40,7 @@ self: super: {
   mtl = self.mtl_2_2_2;
   parsec = self.parsec_3_1_13_0;
   parsec_3_1_13_0 = addBuildDepends super.parsec_3_1_13_0 [self.fail self.semigroups];
-  stm = self.stm_2_4_5_0;
+  stm = self.stm_2_4_5_1;
   text = self.text_1_2_3_0;
 
   # Build jailbreak-cabal with the latest version of Cabal.

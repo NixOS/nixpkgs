@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
   /* !!! maybe we should absolutise the program names in
      $out/lib/python2.4/site-packages/cvs2svn_lib/config.py. */
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool to convert CVS repositories to Subversion repositories";
     homepage = http://cvs2svn.tigris.org/;
-    maintainers = [ lib.maintainers.makefu ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.makefu ];
+    platforms = platforms.unix;
+    license = licenses.asl20;
   };
 }

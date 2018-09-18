@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, alcotest }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, alcotest }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.03"
 then throw "bigstringaf is not available for OCaml ${ocaml.version}"
@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "1yx6hv8rk0ldz1h6kk00rwg8abpfc376z00aifl9f5rn7xavpscs";
   };
 
-  buildInputs = [ ocaml findlib jbuilder alcotest ];
+  buildInputs = [ ocaml findlib dune alcotest ];
 
   doCheck = true;
   checkPhase = "dune runtest";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "Bigstring intrinsics and fast blits based on memcpy/memmove";

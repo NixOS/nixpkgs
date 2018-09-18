@@ -261,6 +261,7 @@ in rec {
   tests.chromium = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
+  tests.codimd = callTest tests/codimd.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
   tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
   tests.containers-bridge = callTest tests/containers-bridge.nix {};
@@ -327,7 +328,6 @@ in rec {
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kafka = callSubTests tests/kafka.nix {};
-  tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
   tests.kubernetes.dns = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/kubernetes/dns.nix {};
@@ -400,7 +400,7 @@ in rec {
   tests.slurm = callTest tests/slurm.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
-  tests.statsd = callTest tests/statsd.nix {};
+  #tests.statsd = callTest tests/statsd.nix {}; # statsd is broken: #45946
   tests.strongswan-swanctl = callTest tests/strongswan-swanctl.nix {};
   tests.sudo = callTest tests/sudo.nix {};
   tests.systemd = callTest tests/systemd.nix {};

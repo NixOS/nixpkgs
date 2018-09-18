@@ -94,9 +94,20 @@ stdenv.mkDerivation rec {
       stripLen = 1;
     })
 
-    # Only formatting changes.
+    (fetchpatch {
+      name = "matplotlib-2.2.2";
+      url = "https://git.sagemath.org/sage.git/patch?id=0d6244ed53b71aba861ce3d683d33e542c0bf0b0";
+      sha256 = "15x4cadxxlsdfh2sblgagqjj6ir13fgdzixxnwnvzln60saahb34";
+    })
+
+    (fetchpatch {
+      name = "scipy-1.1.0";
+      url = "https://git.sagemath.org/sage.git/patch?id=e0db968a51678b34ebd8d34906c7042900272378";
+      sha256 = "0kq5zxqphhrmavrmg830wdr7hwp1bkzdqlf3jfqfr8r8xq12qwf7";
+    })
+
     # https://trac.sagemath.org/ticket/25260
-    ./patches/numpy-1.14.3.patch
+    ./patches/numpy-1.15.1.patch
 
     # https://trac.sagemath.org/ticket/25862
     ./patches/eclib-20180710.patch

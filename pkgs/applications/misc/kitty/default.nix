@@ -2,12 +2,12 @@
   fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
-  which
+  which, dbus
 }:
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "0.11.3";
+  version = "0.12.0";
   name = "kitty-${version}";
   format = "other";
 
@@ -15,13 +15,13 @@ buildPythonApplication rec {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "1fql8ayxvip8hgq9gy0dhqfvngv13gh5bf71vnc3agd80kzq1n73";
+    sha256 = "1n2pi9pc903inls1fvz257q7wpif76rj394qkgq7pixpisijdyjm";
   };
 
   buildInputs = [
     fontconfig glfw ncurses libunistring harfbuzz libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
-    wayland-protocols wayland
+    wayland-protocols wayland dbus
   ];
 
   nativeBuildInputs = [ pkgconfig which sphinx ];

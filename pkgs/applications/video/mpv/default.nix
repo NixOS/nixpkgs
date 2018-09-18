@@ -3,42 +3,46 @@
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
 
-, x11Support ? stdenv.isLinux,
-    libGLU_combined       ? null,
-    libX11     ? null,
-    libXext    ? null,
-    libXxf86vm ? null,
-    libXrandr  ? null
-
 , waylandSupport ? false
   , wayland           ? null
   , wayland-protocols ? null
   , libxkbcommon      ? null
 
-, rubberbandSupport  ? true,  rubberband    ? null
-, xineramaSupport    ? true,  libXinerama   ? null
-, xvSupport          ? true,  libXv         ? null
-, sdl2Support        ? true,  SDL2          ? null
+, x11Support ? stdenv.isLinux
+  , libGLU_combined ? null
+  , libX11          ? null
+  , libXext         ? null
+  , libXxf86vm      ? null
+  , libXrandr       ? null
+
+, cddaSupport ? false
+  , libcdio          ? null
+  , libcdio-paranoia ? null
+
 , alsaSupport        ? true,  alsaLib       ? null
-, screenSaverSupport ? true,  libXScrnSaver ? null
-, cmsSupport         ? true,  lcms2         ? null
-, vdpauSupport       ? true,  libvdpau      ? null
-, dvdreadSupport     ? true,  libdvdread    ? null
-, dvdnavSupport      ? true,  libdvdnav     ? null
 , bluraySupport      ? true,  libbluray     ? null
-, speexSupport       ? true,  speex         ? null
-, theoraSupport      ? true,  libtheora     ? null
-, pulseSupport       ? true,  libpulseaudio ? null
 , bs2bSupport        ? true,  libbs2b       ? null
 , cacaSupport        ? true,  libcaca       ? null
-, libpngSupport      ? true,  libpng        ? null
-, youtubeSupport     ? true,  youtube-dl    ? null
-, vaapiSupport       ? true,  libva         ? null
+, cmsSupport         ? true,  lcms2         ? null
 , drmSupport         ? true,  libdrm        ? null
-, openalSupport      ? false, openalSoft    ? null
-, vapoursynthSupport ? false, vapoursynth   ? null
+, dvdnavSupport      ? true,  libdvdnav     ? null
+, dvdreadSupport     ? true,  libdvdread    ? null
+, libpngSupport      ? true,  libpng        ? null
+, pulseSupport       ? true,  libpulseaudio ? null
+, rubberbandSupport  ? true,  rubberband    ? null
+, screenSaverSupport ? true,  libXScrnSaver ? null
+, sdl2Support        ? true,  SDL2          ? null
+, speexSupport       ? true,  speex         ? null
+, theoraSupport      ? true,  libtheora     ? null
+, vaapiSupport       ? true,  libva         ? null
+, vdpauSupport       ? true,  libvdpau      ? null
+, xineramaSupport    ? true,  libXinerama   ? null
+, xvSupport          ? true,  libXv         ? null
+, youtubeSupport     ? true,  youtube-dl    ? null
 , archiveSupport     ? false, libarchive    ? null
 , jackaudioSupport   ? false, libjack2      ? null
+, openalSupport      ? false, openalSoft    ? null
+, vapoursynthSupport ? false, vapoursynth   ? null
 }:
 
 with stdenv.lib;
@@ -46,32 +50,33 @@ with stdenv.lib;
 let
   available = x: x != null;
 in
-assert x11Support         -> all available [libGLU_combined libX11 libXext libXxf86vm libXrandr];
-assert waylandSupport     -> all available [wayland wayland-protocols libxkbcommon];
-assert rubberbandSupport  -> available rubberband;
-assert xineramaSupport    -> x11Support && available libXinerama;
-assert xvSupport          -> x11Support && available libXv;
-assert sdl2Support        -> available SDL2;
 assert alsaSupport        -> available alsaLib;
-assert screenSaverSupport -> available libXScrnSaver;
-assert cmsSupport         -> available lcms2;
-assert vdpauSupport       -> available libvdpau;
-assert dvdreadSupport     -> available libdvdread;
-assert dvdnavSupport      -> available libdvdnav;
+assert archiveSupport     -> available libarchive;
 assert bluraySupport      -> available libbluray;
-assert speexSupport       -> available speex;
-assert theoraSupport      -> available libtheora;
-assert openalSupport      -> available openalSoft;
-assert pulseSupport       -> available libpulseaudio;
 assert bs2bSupport        -> available libbs2b;
 assert cacaSupport        -> available libcaca;
-assert libpngSupport      -> available libpng;
-assert youtubeSupport     -> available youtube-dl;
-assert vapoursynthSupport -> available vapoursynth;
-assert jackaudioSupport   -> available libjack2;
-assert archiveSupport     -> available libarchive;
-assert vaapiSupport       -> available libva;
+assert cddaSupport        -> all available [libcdio libcdio-paranoia];
+assert cmsSupport         -> available lcms2;
 assert drmSupport         -> available libdrm;
+assert dvdnavSupport      -> available libdvdnav;
+assert dvdreadSupport     -> available libdvdread;
+assert jackaudioSupport   -> available libjack2;
+assert libpngSupport      -> available libpng;
+assert openalSupport      -> available openalSoft;
+assert pulseSupport       -> available libpulseaudio;
+assert rubberbandSupport  -> available rubberband;
+assert screenSaverSupport -> available libXScrnSaver;
+assert sdl2Support        -> available SDL2;
+assert speexSupport       -> available speex;
+assert theoraSupport      -> available libtheora;
+assert vaapiSupport       -> available libva;
+assert vapoursynthSupport -> available vapoursynth;
+assert vdpauSupport       -> available libvdpau;
+assert waylandSupport     -> all available [ wayland wayland-protocols libxkbcommon ];
+assert x11Support         -> all available [ libGLU_combined libX11 libXext libXxf86vm libXrandr ];
+assert xineramaSupport    -> x11Support && available libXinerama;
+assert xvSupport          -> x11Support && available libXv;
+assert youtubeSupport     -> available youtube-dl;
 
 let
   # Purity: Waf is normally downloaded by bootstrap.py, but
@@ -115,13 +120,14 @@ in stdenv.mkDerivation rec {
     "--disable-static-build"
     "--disable-build-date" # Purity
     "--disable-macos-cocoa-cb" # Disable whilst Swift isn't supported
-    (enableFeature archiveSupport "libarchive")
-    (enableFeature dvdreadSupport "dvdread")
-    (enableFeature dvdnavSupport "dvdnav")
-    (enableFeature openalSupport "openal")
-    (enableFeature vaapiSupport "vaapi")
-    (enableFeature waylandSupport "wayland")
-    (enableFeature stdenv.isLinux "dvbin")
+    (enableFeature archiveSupport  "libarchive")
+    (enableFeature cddaSupport     "cdda")
+    (enableFeature dvdnavSupport   "dvdnav")
+    (enableFeature dvdreadSupport  "dvdread")
+    (enableFeature openalSupport   "openal")
+    (enableFeature vaapiSupport    "vaapi")
+    (enableFeature waylandSupport  "wayland")
+    (enableFeature stdenv.isLinux  "dvbin")
   ];
 
   configurePhase = ''
@@ -137,32 +143,33 @@ in stdenv.mkDerivation rec {
     ffmpeg_4 freetype libass libpthreadstubs
     lua luasocket libuchardet
   ] ++ optional alsaSupport        alsaLib
-    ++ optional xvSupport          libXv
-    ++ optional theoraSupport      libtheora
-    ++ optional xineramaSupport    libXinerama
-    ++ optional dvdreadSupport     libdvdread
+    ++ optional archiveSupport     libarchive
     ++ optional bluraySupport      libbluray
+    ++ optional bs2bSupport        libbs2b
+    ++ optional cacaSupport        libcaca
+    ++ optional cmsSupport         lcms2
+    ++ optional drmSupport         libdrm
+    ++ optional dvdreadSupport     libdvdread
     ++ optional jackaudioSupport   libjack2
+    ++ optional libpngSupport      libpng
+    ++ optional openalSupport      openalSoft
     ++ optional pulseSupport       libpulseaudio
     ++ optional rubberbandSupport  rubberband
     ++ optional screenSaverSupport libXScrnSaver
-    ++ optional cmsSupport        lcms2
-    ++ optional vdpauSupport       libvdpau
-    ++ optional speexSupport       speex
-    ++ optional bs2bSupport        libbs2b
-    ++ optional openalSupport      openalSoft
-    ++ optional libpngSupport      libpng
-    ++ optional youtubeSupport     youtube-dl
     ++ optional sdl2Support        SDL2
-    ++ optional cacaSupport        libcaca
+    ++ optional speexSupport       speex
+    ++ optional theoraSupport      libtheora
     ++ optional vaapiSupport       libva
-    ++ optional drmSupport         libdrm
     ++ optional vapoursynthSupport vapoursynth
-    ++ optional archiveSupport     libarchive
+    ++ optional vdpauSupport       libvdpau
+    ++ optional xineramaSupport    libXinerama
+    ++ optional xvSupport          libXv
+    ++ optional youtubeSupport     youtube-dl
     ++ optional stdenv.isDarwin    libiconv
+    ++ optionals cddaSupport       [ libcdio libcdio-paranoia ]
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
-    ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
+    ++ optionals x11Support        [ libX11 libXext libGLU_combined libXxf86vm libXrandr ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation Cocoa CoreAudio
     ]);

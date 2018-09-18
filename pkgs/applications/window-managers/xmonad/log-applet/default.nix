@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, glib, dbus-glib
-, desktopSupport, xlibs
+, desktopSupport, xorg
 , gtk2
 , gtk3, gnome3, mate
 , libxfce4util, xfce4-panel
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "042307grf4zvn61gnflhsj5xsjykrk9sjjsprprm4iij0qpybxcw";
   };
 
-  buildInputs = [ glib dbus-glib xlibs.xcbutilwm ]
+  buildInputs = [ glib dbus-glib xorg.xcbutilwm ]
     ++ stdenv.lib.optionals (desktopSupport == "gnomeflashback") [ gtk3 gnome3.gnome-panel ]
     ++ stdenv.lib.optionals (desktopSupport == "mate") [ gtk3 mate.mate-panel ]
     ++ stdenv.lib.optionals (desktopSupport == "xfce4") [ gtk2 libxfce4util xfce4-panel ]

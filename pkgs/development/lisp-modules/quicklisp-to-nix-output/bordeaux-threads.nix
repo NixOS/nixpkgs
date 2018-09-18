@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''bordeaux-threads'';
-  version = ''v0.8.5'';
+  version = ''v0.8.6'';
 
   parasites = [ "bordeaux-threads/test" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."alexandria" args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/bordeaux-threads/2016-03-18/bordeaux-threads-v0.8.5.tgz'';
-    sha256 = ''09q1xd3fca6ln6mh45cx24xzkrcnvhgl5nn9g2jv0rwj1m2xvbpd'';
+    url = ''http://beta.quicklisp.org/archive/bordeaux-threads/2018-07-11/bordeaux-threads-v0.8.6.tgz'';
+    sha256 = ''1q3b9dbyz02g6iav5rvzml7c8r0iad9j5kipgwkxj0b8qijjzr1y'';
   };
 
   packageName = "bordeaux-threads";
@@ -21,10 +21,10 @@ rec {
 }
 /* (SYSTEM bordeaux-threads DESCRIPTION
     Bordeaux Threads makes writing portable multi-threaded apps simple. SHA256
-    09q1xd3fca6ln6mh45cx24xzkrcnvhgl5nn9g2jv0rwj1m2xvbpd URL
-    http://beta.quicklisp.org/archive/bordeaux-threads/2016-03-18/bordeaux-threads-v0.8.5.tgz
-    MD5 67e363a363e164b6f61a047957b8554e NAME bordeaux-threads FILENAME
+    1q3b9dbyz02g6iav5rvzml7c8r0iad9j5kipgwkxj0b8qijjzr1y URL
+    http://beta.quicklisp.org/archive/bordeaux-threads/2018-07-11/bordeaux-threads-v0.8.6.tgz
+    MD5 f959d3902694b1fe6de450a854040f86 NAME bordeaux-threads FILENAME
     bordeaux-threads DEPS
     ((NAME alexandria FILENAME alexandria) (NAME fiveam FILENAME fiveam))
-    DEPENDENCIES (alexandria fiveam) VERSION v0.8.5 SIBLINGS NIL PARASITES
+    DEPENDENCIES (alexandria fiveam) VERSION v0.8.6 SIBLINGS NIL PARASITES
     (bordeaux-threads/test)) */

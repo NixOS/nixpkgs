@@ -1,27 +1,18 @@
-{ stdenv, fetchgit, skalibs }:
+{ stdenv, skawarePackages }:
 
-let
+with skawarePackages;
 
-  version = "2.5.0.0";
+buildPackage {
+  pname = "execline";
+  version = "2.5.0.1";
+  sha256 = "0j8hwdw8wn0rv8njdza8fbgmvyjg7hqp3qlbw00i7fwskr7d21wd";
 
-in stdenv.mkDerivation rec {
-
-  name = "execline-${version}";
-
-  src = fetchgit {
-    url = "git://git.skarnet.org/execline";
-    rev = "refs/tags/v${version}";
-    sha256 = "19vd8252g5bmzm4i9gybpj7i2mhsflcgfl4ns5k3g1vv7f69i1dn";
-  };
+  description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
 
   outputs = [ "bin" "lib" "dev" "doc" "out" ];
 
-  dontDisableStatic = true;
-
-  enableParallelBuilding = true;
-
+  # TODO: nsss support
   configureFlags = [
-    "--enable-absolute-paths"
     "--libdir=\${lib}/lib"
     "--dynlibdir=\${lib}/lib"
     "--bindir=\${bin}/bin"
@@ -30,22 +21,15 @@ in stdenv.mkDerivation rec {
     "--with-include=${skalibs.dev}/include"
     "--with-lib=${skalibs.lib}/lib"
     "--with-dynlib=${skalibs.lib}/lib"
-  ]
-  ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
-  ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.hostPlatform.system}");
+  ];
 
   postInstall = ''
-    mkdir -p $doc/share/doc/execline
+    # remove all execline executables from build directory
+    rm $(find -type f -mindepth 1 -maxdepth 1 -executable)
+    rm libexecline.*
+
     mv doc $doc/share/doc/execline/html
     mv examples $doc/share/doc/execline/examples
   '';
-
-  meta = {
-    homepage = http://skarnet.org/software/execline/;
-    description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ pmahoney Profpatsch ];
-  };
 
 }

@@ -1,11 +1,13 @@
 { stdenv, lib, fetchurl, fetchpatch, runCommand, makeWrapper
 , jdk, zip, unzip, bash, writeCBin, coreutils
 , which, python, perl, gnused, gnugrep, findutils
+# Apple dependencies
+, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
+# Allow to independently override the jdks used to build and run respectively
+, buildJdk ? jdk, runJdk ? jdk
 # Always assume all markers valid (don't redownload dependencies).
 # Also, don't clean up environment variables.
 , enableNixHacks ? false
-# Apple dependencies
-, cctools, clang, libcxx, CoreFoundation, CoreServices, Foundation
 }:
 
 let
@@ -26,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
 
-  version = "0.16.0";
+  version = "0.17.1";
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1ca9pncnj6v4r1kvgxys7607wpz4d2ic6g0i7lpsc2zg2qwmjc67";
+    sha256 = "081z40vsxvw6ndiinik4pn09gxmv140k6l9zv93dgjr86qf2ir13";
   };
 
   sourceRoot = ".";
@@ -87,6 +89,9 @@ stdenv.mkDerivation rec {
       # and linkers from Xcode instead of from PATH
       export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
 
+      # Explicitly configure gcov since we don't have it on Darwin, so autodetection fails
+      export GCOV=${coreutils}/bin/false
+
       # Framework search paths aren't added by bintools hook
       # https://github.com/NixOS/nixpkgs/pull/41914
       export NIX_LDFLAGS="$NIX_LDFLAGS -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
@@ -94,6 +99,10 @@ stdenv.mkDerivation rec {
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
+
+      # 10.10 apple_sdk Foundation doesn't have type arguments on classes
+      # Remove this when we update apple_sdk
+      sed -i -e 's/<.*\*>//g' tools/osx/xcode_locator.m
 
       # don't use system installed Xcode to run clang, use Nix clang instead
       sed -i -e "s;/usr/bin/xcrun clang;${clang}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
@@ -152,7 +161,7 @@ stdenv.mkDerivation rec {
      + genericPatches;
 
   buildInputs = [
-    jdk
+    buildJdk
   ];
 
   nativeBuildInputs = [
@@ -190,7 +199,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mv output/bazel $out/bin
-    wrapProgram "$out/bin/bazel" --set JAVA_HOME "${jdk}"
+    wrapProgram "$out/bin/bazel" --set JAVA_HOME "${runJdk}"
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv output/bazel-complete.bash $out/share/bash-completion/completions/bazel
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/

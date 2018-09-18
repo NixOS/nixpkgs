@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, alcotest, result
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, alcotest, result
 , bigstringaf
 }:
 
@@ -17,15 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "0lh6024yf9ds0nh9i93r9m6p5psi8nvrqxl5x7jwl13zb0r9xfpw";
   };
 
-  buildInputs = [ ocaml findlib jbuilder alcotest ];
+  buildInputs = [ ocaml findlib dune alcotest ];
   propagatedBuildInputs = [ bigstringaf result ];
 
-  buildPhase = "jbuilder build -p angstrom";
+  buildPhase = "dune build -p angstrom";
 
   doCheck = true;
-  checkPhase = "jbuilder runtest -p angstrom";
+  checkPhase = "dune runtest -p angstrom";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     homepage = https://github.com/inhabitedtype/angstrom;

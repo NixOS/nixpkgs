@@ -14,7 +14,7 @@
 , freetype
 , gdk_pixbuf
 , glib
-, gtk2
+, gtk3
 , libxcb
 , libX11
 , libXext
@@ -42,8 +42,10 @@
 # Wrapper runtime
 , coreutils
 , glibcLocales
-, hicolor-icon-theme
+, defaultIconTheme
+, runtimeShell
 , shared-mime-info
+, gsettings-desktop-schemas
 
 # Whether to disable multiprocess support to work around crashing tabs
 # TODO: fix the underlying problem instead of this terrible work-around
@@ -70,7 +72,7 @@ let
     freetype
     gdk_pixbuf
     glib
-    gtk2
+    gtk3
     libxcb
     libX11
     libXext
@@ -101,7 +103,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "7.5.6";
+  version = "8.0";
 
   lang = "en-US";
 
@@ -111,7 +113,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "07z7lg5firyah0897pr04wqnbgf4mvsnk3gq2zgsg1rrwladxz5s";
+      sha256 = "139cizh33x3nzr0f4b2q3cchrv9l01n3c2v0v0mghq30hap55p79";
     };
 
     "i686-linux" = fetchurl {
@@ -119,7 +121,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "1s0k82ch7ypjyc5k5rb4skb9ylnp7b9ipvf8gb7pdhb8m4zjk461";
+      sha256 = "1vw5wh193vs5x3wizz34m2nyzlxpn24727hdxqpiqwlhwhj7y3nx";
     };
   };
 in
@@ -154,9 +156,13 @@ stdenv.mkDerivation rec {
     pushd "$TBB_IN_STORE"
 
     # Set ELF interpreter
-    for exe in firefox TorBrowser/Tor/tor ; do
+    for exe in firefox.real TorBrowser/Tor/tor ; do
+      echo "Setting ELF interpreter on $exe ..." >&2
       patchelf --set-interpreter "$interp" "$exe"
     done
+
+    # firefox is a wrapper that checks for a more recent libstdc++ & appends it to the ld path
+    mv firefox.real firefox
 
     # The final libPath.  Note, we could split this into firefoxLibPath
     # and torLibPath for accuracy, but this is more convenient ...
@@ -219,7 +225,7 @@ stdenv.mkDerivation rec {
 
     // Insist on using IPC for communicating with Tor
     //
-    // Defaults to creating $TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
+    // Defaults to creating \$TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
 
@@ -245,10 +251,6 @@ stdenv.mkDerivation rec {
     sed -i "$FONTCONFIG_FILE" \
         -e "s,<dir>fonts</dir>,<dir>$TBB_IN_STORE/fonts</dir>,"
 
-    # Move default extension overrides into distribution dir, to avoid
-    # having to synchronize between local state and store.
-    mv TorBrowser/Data/Browser/profile.default/preferences/extension-overrides.js defaults/pref/torbrowser.js
-
     # Preload extensions by moving into the runtime instead of storing under the
     # user's profile directory.
     mv "$TBB_IN_STORE/TorBrowser/Data/Browser/profile.default/extensions/"* \
@@ -264,14 +266,19 @@ stdenv.mkDerivation rec {
     EOF
 
     WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
-      hicolor-icon-theme
+      defaultIconTheme
       shared-mime-info
     ]}
+    WRAPPER_XDG_DATA_DIRS+=":"${concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [
+      glib
+      gsettings-desktop-schemas
+      gtk3
+    ]};
 
     # Generate wrapper
     mkdir -p $out/bin
     cat > "$out/bin/tor-browser" << EOF
-    #! ${stdenv.shell}
+    #! ${runtimeShell}
     set -o errexit -o nounset
 
     PATH=${makeBinPath [ coreutils ]}
@@ -384,11 +391,7 @@ stdenv.mkDerivation rec {
     cp $desktopItem/share/applications"/"* $out/share/applications
     sed -i $out/share/applications/torbrowser.desktop \
         -e "s,Exec=.*,Exec=$out/bin/tor-browser," \
-        -e "s,Icon=.*,Icon=$out/share/pixmaps/torbrowser.png,"
-
-    # Install icons
-    mkdir -p $out/share/pixmaps
-    cp browser/icons/mozicon128.png $out/share/pixmaps/torbrowser.png
+        -e "s,Icon=.*,Icon=web-browser,"
 
     # Check installed apps
     echo "Checking bundled Tor ..."

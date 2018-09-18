@@ -1,5 +1,6 @@
 { lib, fetchurl, buildPythonPackage
 , zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
+, fetchpatch
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -15,20 +16,21 @@
 buildPythonPackage rec {
 
   pname = "youtube-dl";
-  version = "2018.08.28";
+  version = "2018.09.10";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1swdp4czvm0752psbi8a4qw5i9x18s7nhivh7iw92274pmqxq9wi";
+    sha256 = "12gd84i5drc2z4wzah7r2vj8fkj9yilm7q8dm7q9n95abrdb7sh8";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ zip ] ++ lib.optional generateManPage pandoc;
   propagatedBuildInputs = lib.optional hlsEncryptedSupport pycryptodome;
 
-  # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
-  # rtmpdump is required to download files over RTMP
-  # atomicparsley for embedding thumbnails
+  # Ensure these utilities are available in $PATH:
+  # - ffmpeg: post-processing & transcoding support
+  # - rtmpdump: download files over RTMP
+  # - atomicparsley: embedding thumbnails
   makeWrapperArgs = let
       packagesToBinPath =
         [ atomicparsley ]

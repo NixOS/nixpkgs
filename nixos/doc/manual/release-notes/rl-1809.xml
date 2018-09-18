@@ -452,6 +452,14 @@ inherit (pkgs.nixos {
     </para>
    </listitem>
    <listitem>
+     <para>
+     The Kubernetes package has been bumped to major version 1.11.
+     Please consult the
+     <link xlink:href="https://github.com/kubernetes/kubernetes/blob/release-1.11/CHANGELOG-1.11.md">release notes</link>
+     for details on new features and api changes.
+    </para>
+   </listitem>
+   <listitem>
     <para>
      The option
      <varname>services.kubernetes.apiserver.admissionControl</varname> was
@@ -534,6 +542,21 @@ inherit (pkgs.nixos {
       The default display manager is now LightDM.
       To use SLiM set <literal>services.xserver.displayManager.slim.enable</literal>
       to <literal>true</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      NixOS option descriptions are now automatically broken up into individual
+      paragraphs if the text contains two consecutive newlines, so it's no
+      longer necessary to use <code>&lt;/para&gt;&lt;para&gt;</code> to start
+      a new paragraph.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Top-level <literal>buildPlatform</literal>, <literal>hostPlatform</literal>, and <literal>targetPlatform</literal> in Nixpkgs are deprecated.
+      Please use their equivalents in <literal>stdenv</literal> instead:
+      <literal>stdenv.buildPlatform</literal>, <literal>stdenv.hostPlatform</literal>, and <literal>stdenv.targetPlatform</literal>.
     </para>
   </listitem>
   </itemizedlist>

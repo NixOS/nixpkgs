@@ -9,5 +9,5 @@ stdenv.mkDerivation rec {
 	buildInputs = cstruct.buildInputs ++ [ ppx_tools_versioned ];
 	propagatedBuildInputs = [ cstruct ];
 
-	buildPhase = "jbuilder build -p ppx_cstruct";
+	buildPhase = "dune build -p ppx_cstruct";
 }

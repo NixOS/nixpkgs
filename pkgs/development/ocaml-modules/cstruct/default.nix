@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, jbuilder, findlib, sexplib, ocplib-endian }:
+{ stdenv, fetchurl, ocaml, dune, findlib, sexplib, ocplib-endian }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-cstruct-${version}";
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar -xjf $curSrc";
 
-  buildInputs = [ ocaml jbuilder findlib ];
+  buildInputs = [ ocaml dune findlib ];
 
   propagatedBuildInputs = [ sexplib ocplib-endian ];
 
-  buildPhase = "jbuilder build -p cstruct";
+  buildPhase = "dune build -p cstruct";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "Access C-like structures directly from OCaml";

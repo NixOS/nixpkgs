@@ -39,7 +39,7 @@ self: super: {
   # These are now core libraries in GHC 8.4.x.
   mtl = self.mtl_2_2_2;
   parsec = self.parsec_3_1_13_0;
-  stm = self.stm_2_4_5_0;
+  stm = self.stm_2_4_5_1;
   text = self.text_1_2_3_0;
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
@@ -81,4 +81,8 @@ self: super: {
   haddock-library = self.haddock-library_1_4_3;
   haddock-api = self.haddock-api_2_17_4;
   haddock = self.haddock_2_17_5;
+
+  # GHC 8.0 doesn't have semigroups included by default
+  ListLike = addBuildDepend super.ListLike self.semigroups;
+
 }

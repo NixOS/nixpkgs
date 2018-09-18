@@ -3,7 +3,7 @@
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
 }:
 
 with lib;
@@ -37,7 +37,10 @@ let
   , opensslSupport ? config.php.openssl or true
   , mbstringSupport ? config.php.mbstring or true
   , gdSupport ? config.php.gd or true
-  , intlSupport ? config.php.intl or true
+  # Because of an upstream bug: https://bugs.php.net/bug.php?id=76826
+  # We need to disable the intl support on darwin. Whenever the upstream bug is
+  # fixed we should revert this to just just "config.php.intl or true".
+  , intlSupport ? (config.php.intl or true) && (!stdenv.isDarwin)
   , exifSupport ? config.php.exif or true
   , xslSupport ? config.php.xsl or false
   , mcryptSupport ? config.php.mcrypt or true
@@ -51,6 +54,7 @@ let
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
+  , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
   }:
 
     let
@@ -92,7 +96,8 @@ let
         ++ optional bz2Support bzip2
         ++ optional (mssqlSupport && !stdenv.isDarwin) freetds
         ++ optional sodiumSupport libsodium
-        ++ optional tidySupport html-tidy;
+        ++ optional tidySupport html-tidy
+        ++ optional argon2Support libargon2;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
 
@@ -157,7 +162,8 @@ let
       ++ optional ztsSupport "--enable-maintainer-zts"
       ++ optional calendarSupport "--enable-calendar"
       ++ optional sodiumSupport "--with-sodium=${libsodium.dev}"
-      ++ optional tidySupport "--with-tidy=${html-tidy}";
+      ++ optional tidySupport "--with-tidy=${html-tidy}"
+      ++ optional argon2Support "--with-password-argon2=${libargon2}";
 
 
       hardeningDisable = [ "bindnow" ];
@@ -220,12 +226,12 @@ let
 
 in {
   php71 = generic {
-    version = "7.1.21";
-    sha256 = "104mn4kppklb21hgz1a50kgmc0ak5y996sx990xpc8yy9dbrqh62";
+    version = "7.1.22";
+    sha256 = "0qz74qdlk19cw478f42ckyw5r074y0fg73r2bzlhm0dar0cizsf8";
   };
 
   php72 = generic {
-    version = "7.2.8";
-    sha256 = "1rky321gcvjm0npbfd4bznh36an0y14viqcvn4yzy3x643sni00z";
+    version = "7.2.10";
+    sha256 = "17fsvdi6ihjghjsz9kk2li2rwrknm2ccb6ys0xmn789116d15dh1";
   };
 }

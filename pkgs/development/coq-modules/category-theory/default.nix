@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = git://github.com/jwiegley/category-theory.git;
+    homepage = https://github.com/jwiegley/category-theory;
     description = "A formalization of category theory in Coq for personal study and practical work";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;

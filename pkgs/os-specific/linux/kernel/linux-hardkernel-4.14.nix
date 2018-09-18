@@ -1,10 +1,10 @@
 { stdenv, buildPackages, fetchFromGitHub, perl, buildLinux, libelf, utillinux, ... } @ args:
 
 buildLinux (args // rec {
-  version = "4.14.66-147";
+  version = "4.14.69-148";
 
   # modDirVersion needs to be x.y.z.
-  modDirVersion = "4.14.66";
+  modDirVersion = "4.14.69";
 
   # branchVersion needs to be x.y.
   extraMeta.branch = "4.14";
@@ -13,7 +13,7 @@ buildLinux (args // rec {
     owner = "hardkernel";
     repo = "linux";
     rev = version;
-    sha256 = "06v38jl4i7l8gl8zcpyp9vmjjhaqhbp7by15f82rxa724zppxi9x";
+    sha256 = "1grsmb7lnxnkva03nh8ny4zizvrxjim5kf5ssqkcbfz5mx1fqni0";
   };
 
   defconfig = "odroidxu4_defconfig";
