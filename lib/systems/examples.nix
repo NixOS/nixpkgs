@@ -48,7 +48,7 @@ rec {
   armv7a-android-prebuilt = rec {
     config = "armv7a-unknown-linux-androideabi";
     sdkVer = "24";
-    ndkVer = "17";
+    ndkVer = "17c";
     platform = platforms.armv7a-android;
     useAndroidPrebuilt = true;
   };
@@ -56,7 +56,7 @@ rec {
   aarch64-android-prebuilt = rec {
     config = "aarch64-unknown-linux-android";
     sdkVer = "24";
-    ndkVer = "17";
+    ndkVer = "17c";
     platform = platforms.aarch64-multiplatform;
     useAndroidPrebuilt = true;
   };
