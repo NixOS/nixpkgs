@@ -7,10 +7,21 @@
 # all the providers.
 set -euo pipefail
 
+# the maximum number of attempts before giving up inside of GET and prefetch_github
+readonly maxAttempts=30
+
 GET() {
   local url=$1
+  local retry=1
   echo "fetching $url" >&2
-  curl -#fL -u "$GITHUB_AUTH" "$url"
+  while ! curl -#fL -u "$GITHUB_AUTH" "$url"; do
+    echo "The curl command has failed. Attempt $retry/${maxAttempts}" >&2
+    if [[ "${retry}" -eq "${maxAttempts}" ]]; then
+      exit 1
+    fi
+    retry=$(( retry + 1 ))
+    sleep 5
+  done
 }
 
 get_org_repos() {
@@ -24,6 +35,7 @@ get_repo_tags() {
   local repo=$2
   GET "https://api.github.com/repos/$owner/$repo/git/refs/tags?per_page=100" | \
     jq -r '.[].ref' | \
+    grep -v 'v\.' | \
     cut -d '/' -f 3- | \
     sort --version-sort
 }
@@ -32,7 +44,15 @@ prefetch_github() {
   local owner=$1
   local repo=$2
   local rev=$3
-  nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz"
+  local retry=1
+  while ! nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz"; do
+    echo "The nix-prefetch-url command has failed. Attempt $retry/${maxAttempts}" >&2
+    if [[ "${retry}" -eq "${maxAttempts}" ]]; then
+      exit 1
+    fi
+    retry=$(( retry + 1 ))
+    sleep 5
+  done
 }
 
 echo_entry() {
@@ -72,7 +92,6 @@ fi
 org=terraform-providers
 
 repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | grep -v terraform-provider-azure-classic | sort)
-
 
 # Get all the providers with index
 
