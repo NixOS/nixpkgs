@@ -59,6 +59,8 @@ in stdenv.mkDerivation (rec {
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "add_subdirectory(DynamicLibrary)" ""
     rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+  '' + ''
+    patchShebangs test/BugPoint/compile-custom.ll.py
   '';
 
   # hacky fix: created binaries need to be run before installation
