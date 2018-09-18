@@ -21,6 +21,9 @@ in stdenv.mkDerivation {
     sha256 = "18k40s0f665qclrzvkgyfqmvjk0nqdc8aj3m8n4ky85di4qbqlwd";
   };
 
+  # planner-popup-button.c:81:2: error: 'g_type_class_add_private' is deprecated [-Werror=deprecated-declarations]
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   buildInputs = with gnome2; [
     pkgconfig
     intltool
