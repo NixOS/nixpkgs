@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder, cstruct }:
+{ stdenv, fetchurl, ocaml, findlib, dune, cstruct }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "hex is not available for OCaml ${ocaml.version}"
@@ -16,13 +16,13 @@ stdenv.mkDerivation {
 
   unpackCmd = "tar -xjf $curSrc";
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  buildInputs = [ ocaml findlib dune ];
   propagatedBuildInputs = [ cstruct ];
 
-  buildPhase = "jbuilder build -p hex";
+  buildPhase = "dune build -p hex";
   doCheck = true;
   checkPhase = "jbuilder runtest";
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "Mininal OCaml library providing hexadecimal converters";

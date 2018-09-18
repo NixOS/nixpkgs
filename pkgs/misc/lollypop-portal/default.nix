@@ -1,10 +1,13 @@
 { stdenv, fetchFromGitLab, meson, ninja, pkgconfig
-, python36Packages, gnome3, gst_all_1, gtk3, libnotify
+, python3, gnome3, gst_all_1, gtk3, libnotify
 , kid3, easytag, gobjectIntrospection, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   name = "lollypop-portal-${version}";
   version = "0.9.7";
+
+  format = "other";
+  doCheck = false;
 
   src = fetchFromGitLab {
      domain = "gitlab.gnome.org";
@@ -19,33 +22,31 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-    python36Packages.wrapPython
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome3.totem-pl-parser
-    gnome3.libsecret
     gnome3.gnome-settings-daemon
-
-    gst_all_1.gstreamer
+    gnome3.libsecret
+    gnome3.totem-pl-parser
     gst_all_1.gst-plugins-base
-
+    gst_all_1.gstreamer
     gtk3
     libnotify
+    python3
   ];
 
-  pythonPath = with python36Packages; [
-    pygobject3
-    pydbus
+  pythonPath = with python3.pkgs; [
     pycairo
+    pydbus
+    pygobject3
   ];
 
   preFixup = ''
     buildPythonPath "$out/libexec/lollypop-portal $pythonPath"
+    patchPythonScript "$out/libexec/lollypop-portal"
 
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$program_PYTHONPATH"
       --prefix PATH : "${stdenv.lib.makeBinPath [ easytag kid3 ]}"
     )
   '';

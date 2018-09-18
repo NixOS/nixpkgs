@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune
 , ppx_fields_conv, ppx_sexp_conv, ppx_deriving
 , base64, fieldslib, jsonm, re, stringext, uri
 }:
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
 		sha256 = "0zgn32axmjvkmbvyfkbjcqximzc4zcfxs118b98xyrqnvwb0k7ka";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder jsonm ppx_fields_conv ppx_sexp_conv ];
+	buildInputs = [ ocaml findlib dune jsonm ppx_fields_conv ppx_sexp_conv ];
 
 	propagatedBuildInputs = [ ppx_deriving base64 fieldslib re stringext uri ];
 
-	buildPhase = "jbuilder build -p cohttp";
+	buildPhase = "dune build -p cohttp";
 
-	inherit (jbuilder) installPhase;
+	inherit (dune) installPhase;
 
 	meta = {
 		description = "HTTP(S) library for Lwt, Async and Mirage";

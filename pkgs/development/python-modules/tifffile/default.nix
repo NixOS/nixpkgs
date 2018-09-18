@@ -1,5 +1,5 @@
 { lib, stdenv, fetchPypi, buildPythonPackage, isPy27, pythonOlder
-, numpy, nose, enum34, futures }:
+, numpy, nose, enum34, futures, pathlib }:
 
 buildPythonPackage rec {
   pname = "tifffile";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ numpy ]
-    ++ lib.optional isPy27 futures
+    ++ lib.optional isPy27 [ futures pathlib ]
     ++ lib.optional (pythonOlder "3.0") enum34;
 
   meta = with stdenv.lib; {

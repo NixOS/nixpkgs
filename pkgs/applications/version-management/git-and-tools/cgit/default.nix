@@ -1,6 +1,6 @@
 { stdenv, fetchurl, openssl, zlib, asciidoc, libxml2, libxslt
 , docbook_xsl, pkgconfig, luajit
-, gzip, bzip2, xz
+, groff, gzip, bzip2, xz
 , python, wrapPython, pygments, markdown
 }:
 
@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
         -e 's|"bzip2"|"${bzip2.bin}/bin/bzip2"|' \
         -e 's|"xz"|"${xz.bin}/bin/xz"|' \
         -i ui-snapshot.c
+
+    substituteInPlace filters/html-converters/man2html \
+      --replace 'groff' '${groff}/bin/groff'
   '';
 
   # Give cgit a git source tree and pass configuration parameters (as make

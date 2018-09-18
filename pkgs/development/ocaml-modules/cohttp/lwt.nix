@@ -1,4 +1,4 @@
-{ stdenv, ocaml, findlib, jbuilder, cohttp, lwt3, uri, ppx_sexp_conv }:
+{ stdenv, ocaml, findlib, dune, cohttp, lwt3, uri, ppx_sexp_conv }:
 
 if !stdenv.lib.versionAtLeast cohttp.version "0.99"
 then cohttp
@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-cohttp-lwt-${version}";
 	inherit (cohttp) version src installPhase meta;
 
-	buildInputs = [ ocaml findlib jbuilder uri ppx_sexp_conv ];
+	buildInputs = [ ocaml findlib dune uri ppx_sexp_conv ];
 
 	propagatedBuildInputs = [ cohttp lwt3 ];
 
-	buildPhase = "jbuilder build -p cohttp-lwt";
+	buildPhase = "dune build -p cohttp-lwt";
 }

@@ -48,14 +48,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "140i0q6nyi2l6nv2b3n7s7mggm2rb1ws3h9awa9y6m2iads54qm7";
+      sha256 = "2933d0898fbc8ea32cb39b773cf49c5f7da165f75a33522ff91c88d7bd0c7440";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0ayssl5ivhyzxi3gz3h4yhp8hq7ihig6n6iijbks5f1sm7dwridv";
+      sha256 = "41e1af094f2ca5a9ab88894c2dceca2d91e6c28568d7f002f56c647e973cc595";
     };
 
   };

@@ -26,7 +26,7 @@ in
 , editedCabalFile ? null
 , enableLibraryProfiling ? true
 , enableExecutableProfiling ? false
-, profilingDetail ? "all-functions"
+, profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? false
 , enableSharedLibraries ? (ghc.enableShared or false)
@@ -134,7 +134,7 @@ let
   buildFlagsString = optionalString (buildFlags != []) (" " + concatStringsSep " " buildFlags);
 
   defaultConfigureFlags = [
-    "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
+    "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$abi/\\$libname"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
     "--with-gcc=$CC" # Clang won't work without that extra information.
@@ -152,6 +152,7 @@ let
     (optionalString (versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    (enableFeature doBenchmark "benchmarks")
     "--enable-library-vanilla"  # TODO: Should this be configurable?
     "--enable-library-for-ghci" # TODO: Should this be configurable?
   ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [

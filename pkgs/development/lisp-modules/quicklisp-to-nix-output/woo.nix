@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''woo'';
-  version = ''20170830-git'';
+  version = ''20180831-git'';
 
   description = ''An asynchronous HTTP server written in Common Lisp'';
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-utilities" args."clack-socket" args."fast-http" args."fast-io" args."flexi-streams" args."lev" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."swap-bytes" args."trivial-features" args."trivial-gray-streams" args."trivial-utf-8" args."uiop" args."vom" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/woo/2017-08-30/woo-20170830-git.tgz'';
-    sha256 = ''130hgfp08gchn0fkfablpf18hsdi1k4hrc3iny5c8m1phjlknchv'';
+    url = ''http://beta.quicklisp.org/archive/woo/2018-08-31/woo-20180831-git.tgz'';
+    sha256 = ''142f3d9bv2zd0l9p1pavf05c2wi4jiz521wji9zyysspmibys3z8'';
   };
 
   packageName = "woo";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM woo DESCRIPTION An asynchronous HTTP server written in Common Lisp
-    SHA256 130hgfp08gchn0fkfablpf18hsdi1k4hrc3iny5c8m1phjlknchv URL
-    http://beta.quicklisp.org/archive/woo/2017-08-30/woo-20170830-git.tgz MD5
-    3f506a771b3d8f2c7fc97b049dcfdedf NAME woo FILENAME woo DEPS
+    SHA256 142f3d9bv2zd0l9p1pavf05c2wi4jiz521wji9zyysspmibys3z8 URL
+    http://beta.quicklisp.org/archive/woo/2018-08-31/woo-20180831-git.tgz MD5
+    93dfbc504ebd4fa7ed5f444fcc5444e7 NAME woo FILENAME woo DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
@@ -43,4 +43,4 @@ rec {
      cl-utilities clack-socket fast-http fast-io flexi-streams lev proc-parse
      quri smart-buffer split-sequence static-vectors swap-bytes
      trivial-features trivial-gray-streams trivial-utf-8 uiop vom xsubseq)
-    VERSION 20170830-git SIBLINGS (clack-handler-woo woo-test) PARASITES NIL) */
+    VERSION 20180831-git SIBLINGS (clack-handler-woo woo-test) PARASITES NIL) */

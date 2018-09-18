@@ -563,6 +563,7 @@ in {
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/sda2",
               "mount LABEL=nixos /mnt",
+              "mkdir -p /mnt/tmp",
           );
         '';
       grubVersion = 1;

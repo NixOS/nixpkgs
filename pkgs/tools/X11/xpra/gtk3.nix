@@ -68,11 +68,12 @@ buildPythonApplication rec {
   #'';
 
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://xpra.org/;
     downloadPage = "https://xpra.org/src/";
     downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
     description = "Persistent remote applications for X";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

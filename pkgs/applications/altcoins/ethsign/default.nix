@@ -54,6 +54,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/dapphub/ethsign;
     description = "Make raw signed Ethereum transactions";
+    broken = stdenv.isDarwin;  # test with CoreFoundation 10.11
     license = [licenses.gpl3];
   };
 }

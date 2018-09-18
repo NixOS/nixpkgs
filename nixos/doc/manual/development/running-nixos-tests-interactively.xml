@@ -19,6 +19,7 @@ starting VDE switch for network 1
 &gt; startAll
 &gt; testScript
 &gt; $machine->succeed("touch /tmp/foo")
+&gt; print($machine->succeed("pwd"), "\n") # Show stdout of command
 </screen>
   The function <command>testScript</command> executes the entire test script
   and drops you back into the test driver command line upon its completion.
@@ -33,8 +34,11 @@ $ nix-build nixos/tests/login.nix -A driver
 $ ./result/bin/nixos-run-vms
 </screen>
   The script <command>nixos-run-vms</command> starts the virtual machines
-  defined by test. The root file system of the VMs is created on the fly and
-  kept across VM restarts in
-  <filename>./</filename><varname>hostname</varname><filename>.qcow2</filename>.
+  defined by test.
+ </para>
+
+ <para>
+  The machine state is kept across VM restarts in
+  <filename>/tmp/vm-state-</filename><varname>machinename</varname>.
  </para>
 </section>

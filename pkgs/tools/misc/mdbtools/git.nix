@@ -26,8 +26,10 @@ stdenv.mkDerivation {
     sed -e 's@static \(GHashTable [*]mdb_backends;\)@\1@' -i src/libmdb/backend.c
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = ".mdb (MS Access) format tools";
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://mdbtools.sourceforge.net;
+    platforms = platforms.linux;
+    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

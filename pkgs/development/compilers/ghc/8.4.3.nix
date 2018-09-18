@@ -99,6 +99,10 @@ stdenv.mkDerivation (rec {
     sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
     extraPrefix = "utils/hsc2hs/";
     stripLen = 1;
+  }) (fetchpatch rec { # https://phabricator.haskell.org/D5123
+    url = "http://tarballs.nixos.org/sha256/${sha256}";
+    name = "D5123.diff";
+    sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
   })] ++ stdenv.lib.optional deterministicProfiling
     (fetchpatch rec {
       url = "http://tarballs.nixos.org/sha256/${sha256}";
