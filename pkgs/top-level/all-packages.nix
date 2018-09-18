@@ -3927,6 +3927,8 @@ with pkgs;
 
   makerpm = callPackage ../development/tools/makerpm { };
 
+  makefile2graph = callPackage ../development/tools/analysis/makefile2graph { };
+
   # See https://github.com/NixOS/nixpkgs/issues/15849. I'm switching on isLinux because
   # it looks like gnulib is broken on non-linux, so it seems likely that this would cause
   # trouble on bsd and/or cygwin as well.
