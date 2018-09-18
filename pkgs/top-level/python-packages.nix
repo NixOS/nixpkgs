@@ -9458,31 +9458,7 @@ in {
     };
   };
 
-  pgspecial = buildPythonPackage rec {
-    pname = "pgspecial";
-    version = "1.8.0";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1dwlv3m4jl34zsakmvxg6hgbfv786jl8dcffxsrlnmcpks829xc9";
-    };
-
-    buildInputs = with self; [ pytest psycopg2 ];
-
-    checkPhase = ''
-      find tests -name \*.pyc -delete
-      py.test tests
-    '';
-
-    propagatedBuildInputs = with self; [ click sqlparse ];
-
-    meta = {
-      description = "Meta-commands handler for Postgres Database";
-      homepage = https://pypi.python.org/pypi/pgspecial;
-      license = licenses.bsd3;
-    };
-  };
+  pgspecial = callPackage ../development/python-modules/pgspecial { };
 
   pickleshare = buildPythonPackage rec {
     version = "0.7.4";
