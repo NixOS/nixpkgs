@@ -595,4 +595,11 @@
       version = "1.8.1";
       sha256  = "0y6n7mvv1f3jqsxlvf68iq85k69fj7a333203vkvc83dba84aqki";
     };
+  nixos =
+    {
+      owner   = "tweag";
+      repo    = "terraform-provider-nixos";
+      version = "0.0.1";
+      sha256  = "00vz6qjq1pk39iqg4356b8g3c6slla9jifkv2knk46gc9q93q0lf";
+    };
 }
