@@ -12,25 +12,27 @@
 , ninja
 , libgudev
 , libevdev
-, vala
+, libsoup
+, vala_0_40
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "spice-up-${version}";
-  version = "1.3.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Spice-up";
     rev = version;
-    sha256 = "087cdi7na93pgz7vf046h94v5ydvpiccpwhllq85ix8g4pa5rp85";
+    sha256 = "08g5b412zf3ihv13716fkjsyw2qn3fnx5ciszrlqaxsiysc8azh2";
   };
+
   USER = "nix-build-user";
 
   nativeBuildInputs = [
     pkgconfig
     wrapGAppsHook
-    vala
+    vala_0_40
     cmake
     ninja
     gettext
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
     json-glib
     libgudev
     libevdev
+    libsoup
   ];
 
   meta = with stdenv.lib; {
