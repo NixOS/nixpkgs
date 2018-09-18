@@ -72,6 +72,21 @@ EOF
 
 indent() { sed 's/^/    /'; }
 
+add_repo() {
+  org="${1}"
+  repo="${2}"
+
+  echo "*** $repo ***"
+  name=$(echo "$repo" | cut -d - -f 3-)
+  last_tag=$(get_repo_tags "$org" "$repo" | tail -1)
+  last_tag_sha256=$(prefetch_github "$org" "$repo" "$last_tag")
+
+  {
+    echo "  $name ="
+    echo_entry "$org" "$repo" "$last_tag" "$last_tag_sha256" | indent
+  } >> data.nix
+}
+
 ## Main ##
 
 cd "$(dirname "$0")"
@@ -89,28 +104,20 @@ HELP
   exit 1
 fi
 
-org=terraform-providers
-
-repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | grep -v terraform-provider-azure-classic | sort)
-
-# Get all the providers with index
-
 cat <<HEADER > data.nix
 # Generated with ./update-all
 {
 HEADER
 
+# add all the repos under the terraform-providers organisation
+org=terraform-providers
+repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | grep -v terraform-provider-azure-classic | sort)
 for repo in $repos; do
-  echo "*** $repo ***"
-  name=$(echo "$repo" | cut -d - -f 3-)
-  last_tag=$(get_repo_tags "$org" "$repo" | tail -1)
-  last_tag_sha256=$(prefetch_github "$org" "$repo" "$last_tag")
-
-  {
-    echo "  $name ="
-    echo_entry "$org" "$repo" "$last_tag" "$last_tag_sha256" | indent
-  } >> data.nix
+  add_repo "$org" "$repo"
 done
+
+# add the repos that live outside of terraform-providers
+add_repo tweag terraform-provider-nixos
 
 cat <<FOOTER >> data.nix
 }

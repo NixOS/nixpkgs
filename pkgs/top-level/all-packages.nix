@@ -22064,8 +22064,6 @@ with pkgs;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
-  terraform-provider-nixos = callPackage ../applications/networking/cluster/terraform-provider-nixos {};
-
   terraform-landscape = callPackage ../applications/networking/cluster/terraform-landscape {};
 
   terraform-provider-libvirt = callPackage ../applications/networking/cluster/terraform-provider-libvirt {};
