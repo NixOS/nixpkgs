@@ -301,12 +301,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2018.2.2"; /* updated by script */
+    version = "2018.2.4"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
-      sha256 = "04jzsmnfmxxf264dla6scshk576z8w8sv78mpzb2mc1ndwviwflx"; /* updated by script */
+      sha256 = "0z1ga6lzmkn7y7y24984vmp3ilrfc1ak1ddcgsdkwkiq5bx67ck8"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA Release";
