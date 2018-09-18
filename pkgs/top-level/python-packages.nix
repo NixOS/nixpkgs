@@ -7786,6 +7786,8 @@ in {
 
   mypy = callPackage ../development/python-modules/mypy { };
 
+  mypy_extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
+
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
 
   mwclient = buildPythonPackage rec {
