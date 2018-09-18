@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, vala, pkgconfig, meson, ninja, python3, granite, gtk3, gnome3
-, desktop-file-utils, json-glib, libsoup, poppler, gobjectIntrospection, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, fetchpatch, vala, pkgconfig, meson, ninja, python3, granite, gtk3
+, gnome3, desktop-file-utils, json-glib, libsoup, poppler, gobjectIntrospection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "aesop";
@@ -32,6 +32,14 @@ stdenv.mkDerivation rec {
     json-glib
     libsoup
     poppler
+  ];
+
+  # Fix build with vala 0.42
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/lainsce/aesop/commit/a90b3c711bd162583533370deb031c2c6254c82d.patch";
+      sha256 = "1zf831g6sqq3966q0i00x3jhlbfh9blcky6pnyp5qp59hxyxy169";
+    })
   ];
 
   postPatch = ''
