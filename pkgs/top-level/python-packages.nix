@@ -388,6 +388,8 @@ in {
 
   phonopy = callPackage ../development/python-modules/phonopy { };
 
+  pims = callPackage ../development/python-modules/pims { };
+
   plantuml = callPackage ../tools/misc/plantuml { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
@@ -567,6 +569,8 @@ in {
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
+
+  slicerator = callPackage ../development/python-modules/slicerator { };
 
   spglib = callPackage ../development/python-modules/spglib { };
 
@@ -1985,6 +1989,16 @@ in {
   darcsver = callPackage ../development/python-modules/darcsver { };
 
   dask = callPackage ../development/python-modules/dask { };
+
+  dask-glm = callPackage ../development/python-modules/dask-glm { };
+
+  dask-image = callPackage ../development/python-modules/dask-image { };
+
+  dask-jobqueue = callPackage ../development/python-modules/dask-jobqueue { };
+
+  dask-ml = callPackage ../development/python-modules/dask-ml { };
+
+  dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
 
   datrie = callPackage ../development/python-modules/datrie { };
 
