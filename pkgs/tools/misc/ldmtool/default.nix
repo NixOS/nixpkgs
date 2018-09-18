@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
        -e 's|-nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl|--nonet ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl|g'
    '';
 
+   # ldm.c:951:5: error: 'g_type_class_add_private' is deprecated [-Werror=deprecated-declarations]
+   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
    configureScript = "sh autogen.sh";
 
    nativeBuildInputs = [ pkgconfig ];
