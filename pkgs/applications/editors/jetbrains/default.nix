@@ -353,12 +353,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2018.2"; /* updated by script */
+    version = "2018.2.3"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/rider/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "0yigw9g53i6xamwva8vcd38f0aysxqkf77avms4l7l63dkap99nq"; /* updated by script */
+      sha256 = "1g2b7wszviknzd4srgcvwmci0pxyjbcmjzb4fg5clh62wwdpa16n"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "Rider 2018.2";
