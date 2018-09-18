@@ -12,8 +12,6 @@ buildPythonPackage rec {
     sha256 = "04h8brrbbx151dfa2cvvlnxgmb5wa00mhd2z7nd20s8kyibfkq1p";
   };
 
-  disabled = !isPy3k;
-
   propagatedBuildInputs = [ typing ];
 
   meta = with stdenv.lib; {
