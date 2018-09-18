@@ -69,6 +69,7 @@ let version = "7-20170409";
         "--enable-sjlj-exceptions"
         "--enable-threads=win32"
         "--disable-win32-registry"
+        "--disable-libmpx" # requires libc
       ] else if crossStageStatic then [
         "--disable-libssp"
         "--disable-nls"
@@ -77,8 +78,9 @@ let version = "7-20170409";
         "--disable-libgomp"
         "--disable-libquadmath"
         "--disable-shared"
-        "--disable-libatomic"  # libatomic requires libc
-        "--disable-decimal-float" # libdecnumber requires libc
+        "--disable-libatomic" # requires libc
+        "--disable-decimal-float" # requires libc
+        "--disable-libmpx" # requires libc
       ] else [
         (if crossDarwin then "--with-sysroot=${getLib libcCross}/share/sysroot"
          else                "--with-headers=${getDev libcCross}/include")
