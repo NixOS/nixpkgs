@@ -3024,6 +3024,8 @@ in {
 
   ply = callPackage ../development/python-modules/ply { };
 
+  plyplus = callPackage ../development/python-modules/plyplus { };
+
   plyvel = callPackage ../development/python-modules/plyvel { };
 
   osc = callPackage ../development/python-modules/osc { };
