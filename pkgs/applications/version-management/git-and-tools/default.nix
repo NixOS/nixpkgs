@@ -31,6 +31,8 @@ let
 
   git = appendToName "minimal" gitBase;
 
+  git-appraise = callPackage ./git-appraise {};
+
   git-fame = callPackage ./git-fame {};
 
   # The full-featured Git.
