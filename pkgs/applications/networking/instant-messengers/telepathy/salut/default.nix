@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libxslt, glib, libxml2, telepathy-glib, avahi, libsoup
-, libuuid, openssl, pcre, sqlite, pkgconfigUpstream }:
+, libuuid, openssl, pcre, sqlite, pkgconfig }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-salut";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libxml2 telepathy-glib avahi libsoup libuuid openssl
     sqlite pcre telepathy-glib.python ];
 
-  nativeBuildInputs = [ libxslt pkgconfigUpstream ];
+  nativeBuildInputs = [ libxslt pkgconfig ];
 
   configureFlags = [ "--disable-avahi-tests" ];
 
