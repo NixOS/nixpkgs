@@ -59,6 +59,14 @@ stdenv.mkDerivation rec {
     # Upstream bugfix, see: https://git.musl-libc.org/cgit/musl/commit/?id=0db393d3a77bb9f300a356c6a5484fc2dddb161d
     # Explicitly flagged for inclusion by distributions using musl
     ./fix-file-locking-race.patch
+    # More specific error reporting
+    ./tty-more-precise-errors.patch
+    # Use execveat to impl fexecve when avail (useful for containers)
+    ./fexecve-execveat.patch
+    # improve behavior in few cases
+		./0001-in-pthread_mutex_trylock-EBUSY-out-more-directly-whe.patch
+		./0002-in-pthread_mutex_timedlock-avoid-repeatedly-reading-.patch
+		./0003-fix-namespace-violation-for-c11-mutex-functions.patch
   ];
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
