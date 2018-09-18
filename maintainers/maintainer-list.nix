@@ -227,7 +227,7 @@
     name = "Andrew Morsillo";
   };
   AndersonTorres = {
-    email = "torres.anderson.85@gmail.com";
+    email = "torres.anderson.85@protonmail.com";
     github = "AndersonTorres";
     name = "Anderson Torres";
   };

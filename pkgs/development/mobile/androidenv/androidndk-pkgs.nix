@@ -12,6 +12,9 @@ let
   # than we do. We don't just use theirs because ours are less ambiguous and
   # some builds need that clarity.
   ndkInfoFun = { config, ... }: {
+    "x86_64-apple-darwin" = {
+      double = "darwin-x86_64";
+    };
     "x86_64-unknown-linux-gnu" = {
       double = "linux-x86_64";
     };

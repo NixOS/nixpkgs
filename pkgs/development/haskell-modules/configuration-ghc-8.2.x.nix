@@ -96,4 +96,7 @@ self: super: {
     haddock-library = dontHaddock (dontCheck self.haddock-library_1_5_0_1);
   }));
 
+  # GHC 8.2 doesn't have semigroups included by default
+  ListLike = addBuildDepend super.ListLike self.semigroups;
+
 }

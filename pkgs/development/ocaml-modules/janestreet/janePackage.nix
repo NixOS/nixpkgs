@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, jbuilder, findlib, defaultVersion ? "0.11.0" }:
+{ stdenv, fetchFromGitHub, ocaml, dune, findlib, defaultVersion ? "0.11.0" }:
 
 { name, version ? defaultVersion, buildInputs ? [], hash, meta, ...}@args:
 
@@ -16,9 +16,9 @@ stdenv.mkDerivation (args // {
     sha256 = hash;
   };
 
-  buildInputs = [ ocaml jbuilder findlib ] ++ buildInputs;
+  buildInputs = [ ocaml dune findlib ] ++ buildInputs;
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     license = stdenv.lib.licenses.asl20;

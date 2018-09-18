@@ -452,6 +452,14 @@ inherit (pkgs.nixos {
     </para>
    </listitem>
    <listitem>
+     <para>
+     The Kubernetes package has been bumped to major version 1.11.
+     Please consult the
+     <link xlink:href="https://github.com/kubernetes/kubernetes/blob/release-1.11/CHANGELOG-1.11.md">release notes</link>
+     for details on new features and api changes.
+    </para>
+   </listitem>
+   <listitem>
     <para>
      The option
      <varname>services.kubernetes.apiserver.admissionControl</varname> was

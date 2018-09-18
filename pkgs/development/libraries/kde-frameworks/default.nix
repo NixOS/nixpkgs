@@ -145,6 +145,7 @@ let
       kpackage = callPackage ./kpackage {};
       kpty = callPackage ./kpty.nix {};
       kunitconversion = callPackage ./kunitconversion.nix {};
+      syndication = callPackage ./syndication.nix {};
 
     # TIER 3
       baloo = callPackage ./baloo.nix {};

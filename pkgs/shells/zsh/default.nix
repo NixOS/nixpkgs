@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, pcre }:
 
 let
-  version = "5.6.1";
+  version = "5.6.2";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.xz";
-    sha256 = "15j8w1ddfparfnqymx67rycgfdl50xcrnd6p1d6q9n3n0462jjmn";
+    sha256 = "05014rg6hkwiv1p56iij8wn2rghmwjxs5qsj3d3xigbwaikk55wq";
   };
 
 in
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
-    sha256 = "1s5kzfbfvixibb1sbzmmlrrx898zqwi5cfmnnq4bhcbx64zparlm";
+    sha256 = "17iffliqcj4hv91g0bd2sxsyfcz51mfyh97sp2iyrs2p0mndc2x5";
   };
 
   buildInputs = [ ncurses pcre ];

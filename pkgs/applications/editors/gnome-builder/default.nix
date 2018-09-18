@@ -1,4 +1,5 @@
 { stdenv
+, ctags
 , desktop-file-utils
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -58,6 +59,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    ctags
     flatpak
     gnome3.devhelp
     gnome3.libgit2-glib

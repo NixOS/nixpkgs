@@ -5,8 +5,6 @@
 , withGd ? false
 }:
 
-assert stdenv.cc.isGNU;
-
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 
@@ -96,7 +94,8 @@ callPackage ./common.nix { inherit stdenv; } {
       mv $bin/bin/getconf_ $bin/bin/getconf
     '';
 
-    separateDebugInfo = true;
+    # Hack to get around eval issue.
+    separateDebugInfo = !stdenv.isDarwin;
 
     meta.description = "The GNU C Library";
   }

@@ -7786,6 +7786,8 @@ in {
 
   mypy = callPackage ../development/python-modules/mypy { };
 
+  mypy_extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
+
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
 
   mwclient = buildPythonPackage rec {
@@ -9456,31 +9458,7 @@ in {
     };
   };
 
-  pgspecial = buildPythonPackage rec {
-    pname = "pgspecial";
-    version = "1.8.0";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1dwlv3m4jl34zsakmvxg6hgbfv786jl8dcffxsrlnmcpks829xc9";
-    };
-
-    buildInputs = with self; [ pytest psycopg2 ];
-
-    checkPhase = ''
-      find tests -name \*.pyc -delete
-      py.test tests
-    '';
-
-    propagatedBuildInputs = with self; [ click sqlparse ];
-
-    meta = {
-      description = "Meta-commands handler for Postgres Database";
-      homepage = https://pypi.python.org/pypi/pgspecial;
-      license = licenses.bsd3;
-    };
-  };
+  pgspecial = callPackage ../development/python-modules/pgspecial { };
 
   pickleshare = buildPythonPackage rec {
     version = "0.7.4";
@@ -9750,21 +9728,7 @@ in {
 
   psutil = callPackage ../development/python-modules/psutil { };
 
-  psycopg2 = buildPythonPackage rec {
-    name = "psycopg2-2.7.1";
-    disabled = isPyPy;
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/psycopg2/${name}.tar.gz";
-      sha256 = "86c9355f5374b008c8479bc00023b295c07d508f7c3b91dbd2e74f8925b1d9c6";
-    };
-    buildInputs = optional stdenv.isDarwin pkgs.openssl;
-    propagatedBuildInputs = with self; [ pkgs.postgresql ];
-    doCheck = false;
-    meta = {
-      description = "PostgreSQL database adapter for the Python programming language";
-      license = with licenses; [ gpl2 zpl20 ];
-    };
-  };
+  psycopg2 = callPackage ../development/python-modules/psycopg2 {};
 
   ptpython = callPackage ../development/python-modules/ptpython {};
 
@@ -14901,6 +14865,7 @@ EOF
   };
 
   tornado = callPackage ../development/python-modules/tornado { };
+  tornado_4 = callPackage ../development/python-modules/tornado { version = "4.5.3"; };
 
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
