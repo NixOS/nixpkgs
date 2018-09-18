@@ -160,6 +160,9 @@ in stdenv.mkDerivation (rec {
     make -C docs install
   '';
 
+  postPatch = null;
+  postInstall = null;
+
   outputs = [ "out" ];
 
   doCheck = false;
