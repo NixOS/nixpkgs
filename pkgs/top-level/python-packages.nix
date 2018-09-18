@@ -454,6 +454,10 @@ in {
 
   outcome = callPackage ../development/python-modules/outcome {};
 
+  ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito {
+      pythonPackages = self;
+    });
+
   palettable = callPackage ../development/python-modules/palettable { };
 
   pathlib = callPackage ../development/python-modules/pathlib { };
