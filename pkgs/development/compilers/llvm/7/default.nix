@@ -9,7 +9,7 @@ let
   version = release_version + "rc3"; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
-    name = "${name}-${release_version}.src.tar.xz";
+    name = "${name}-${release_version}.src.tar.xz"; # Hopefully yields same hash with final release
     url = "http://prereleases.llvm.org/${release_version}/rc3/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
