@@ -366,12 +366,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2018.2.1"; /* updated by script */
+    version = "2018.2.2"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "1gwcadjgs4cw5i3h1xn92ng415vzr5cxyrpgckr1qy37d5f4bhqg"; /* updated by script */
+      sha256 = "0585dnbvmzxnj2am6b04lfw75rdhk0fby2cbj58pzzcjz5xlrhvq"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine 2018.2";
