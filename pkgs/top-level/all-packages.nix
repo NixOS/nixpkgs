@@ -6509,7 +6509,6 @@ with pkgs;
     libcCross1 =
       if stdenv.targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
       else if stdenv.targetPlatform.libc == "libSystem" then darwin.xcode
-      else if stdenv.targetPlatform.libc == "musl" then musl
       else null;
     binutils1 = wrapBintoolsWith {
       bintools = binutils-unwrapped;

@@ -94,8 +94,7 @@ callPackage ./common.nix { inherit stdenv; } {
       mv $bin/bin/getconf_ $bin/bin/getconf
     '';
 
-    # Hack to get around eval issue.
-    separateDebugInfo = !stdenv.isDarwin;
+    separateDebugInfo = true;
 
     meta.description = "The GNU C Library";
   }
