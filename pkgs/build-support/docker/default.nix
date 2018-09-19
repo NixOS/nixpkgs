@@ -40,7 +40,7 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? "x86_64"
+    , arch ? "amd64"
       # This used to set a tag to the pulled image
     , finalImageTag ? "latest"
     , name ? fixName "docker-image-${imageName}-${finalImageTag}.tar"
