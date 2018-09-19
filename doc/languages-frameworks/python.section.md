@@ -997,6 +997,7 @@ stdenv.mkDerivation {
   SOURCE_DATE_EPOCH=$(date +%s)
   virtualenv --no-setuptools venv
   export PATH=$PWD/venv/bin:$PATH
+  export PYTHONPATH=venv/lib/python2.7/site-packages/:$PYTHONPATH
   pip install -r requirements.txt
   '';
 }
