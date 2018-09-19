@@ -529,7 +529,7 @@ in
     boot.initrd.luks.devices = mkVMOverride {};
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
-    services.timesyncd.enable = false;
+    services.timesyncd.enable = lib.mkForce false;
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
