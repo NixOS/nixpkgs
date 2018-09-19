@@ -64,12 +64,14 @@ in stdenv.mkDerivation rec {
       -e 's,^CFLAGS=-g,CFLAGS=,' \
       -i sys/unix/hints/macosx10.10
     sed -e '/define CHDIR/d' -i include/config.h
+    ${lib.optionalString qtMode ''
     sed \
       -e 's,^QTDIR *=.*,QTDIR=${qt5.qtbase.dev},' \
       -e 's,CFLAGS.*QtGui.*,CFLAGS += `pkg-config Qt5Gui --cflags`,' \
       -e 's,CFLAGS+=-DCOMPRESS.*,CFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
       -i sys/unix/hints/linux-qt4
+    ''}
   '';
 
   configurePhase = ''
