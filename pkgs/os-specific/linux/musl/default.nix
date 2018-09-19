@@ -56,12 +56,16 @@ stdenv.mkDerivation rec {
       url = https://raw.githubusercontent.com/openwrt/openwrt/87606e25afac6776d1bbc67ed284434ec5a832b4/toolchain/musl/patches/300-relative.patch;
       sha256 = "0hfadrycb60sm6hb6by4ycgaqc9sgrhh42k39v8xpmcvdzxrsq2n";
     })
+    # Upstream bugfix, see: https://git.musl-libc.org/cgit/musl/commit/?id=0db393d3a77bb9f300a356c6a5484fc2dddb161d
+    # Explicitly flagged for inclusion by distributions using musl
+    ./fix-file-locking-race.patch
   ];
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
   '';
 
-  CFLAGS="-fstack-protector-strong" + lib.optionalString stdenv.hostPlatform.isPower " -mlong-double-64";
+  CFLAGS = [ "-fstack-protector-strong" ]
+    ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
 
   configureFlags = [
     "--enable-shared"
