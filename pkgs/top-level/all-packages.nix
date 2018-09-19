@@ -1467,7 +1467,9 @@ with pkgs;
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
 
-  noti = callPackage ../tools/misc/noti { };
+  noti = callPackage ../tools/misc/noti {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
