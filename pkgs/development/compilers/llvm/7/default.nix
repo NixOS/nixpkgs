@@ -9,12 +9,11 @@ let
   version = release_version; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
-    name = "${name}-${release_version}.src.tar.xz"; # Hopefully yields same hash with final release
     url = "http://releases.llvm.org/${release_version}/${name}-${version}.src.tar.xz";
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "0rhvlz4g2nd10zrwx37yi5if8wqirh8845pwbgg62r9l2pb6j7n7";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1glxl7bnr4k3j16s8xy8r9cl0llyg524f50591g1ig23ij65lz4k";
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python isl release_version version fetch; });
