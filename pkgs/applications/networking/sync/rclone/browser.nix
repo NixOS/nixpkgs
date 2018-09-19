@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/mmozeiko/RcloneBrowser;
     license = licenses.unlicense;
     platforms = platforms.linux;
+    maintainers = [];
   };
 }
