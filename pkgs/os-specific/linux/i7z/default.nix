@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, ncurses
-, withGui ? false, qt4 ? null }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, ncurses
+, withGui ? false, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "i7z-${version}";
@@ -12,7 +12,23 @@ stdenv.mkDerivation rec {
     sha256 = "0l8wz0ffb27nkwchc606js652spk8masy3kjmzh7ygipwsary5ds";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optional withGui qt4;
+  buildInputs = [ ncurses ] ++ lib.optional withGui qtbase;
+
+  patches = [
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/i7z/raw/ad1359764ee7a860a02e0c972f40339058fa9369/debian/patches/fix-insecure-tempfile.patch";
+      sha256 = "0ifg06xjw14y4fnzzgkhqm4sv9mcdzgi8m2wffq9z8b1r0znya3s";
+    })
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/i7z/raw/ad1359764ee7a860a02e0c972f40339058fa9369/debian/patches/nehalem.patch";
+      sha256 = "1ys6sgm01jkqb6d4y7qc3h89dzph8jjjcfya5c5jcm7dkxlzjq8a";
+    })
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/i7z/raw/ad1359764ee7a860a02e0c972f40339058fa9369/debian/patches/hyphen-used-as-minus-sign.patch";
+      sha256 = "1ji2qvdyq0594cpqz0dlsfggvw3rm63sygh0jxvwjgxpnhykhg1p";
+    })
+    ./qt5.patch
+  ];
 
   enableParallelBuilding = true;
 
