@@ -4,13 +4,13 @@ let boost = boost155;
 in stdenv.mkDerivation rec {
   name            = "${pname}-${version}";
   pname           = "pokerth";
-  version         = "1.1.1";
+  version         = "1.1.2";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
-    rev    = "7f3c8a860848c16c8c2f78e3929a65a54ef4c04c";
-    sha256 = "1md3sl7pdpn3n42k75pxqbkkl19cz4699g1vdi04qpp0jxx09a2k";
+    rev    = "v${version}";
+    sha256 = "0m74jyd9h3yaly3avy65zw7r2iv5b62c2dqizbxsagjsr9a3g0cg";
   };
 
   buildInputs = [ qmake4Hook qt4 protobuf boost tinyxml2 libgcrypt sqlite gsasl curl SDL SDL_mixer libircclient ];
@@ -25,8 +25,10 @@ in stdenv.mkDerivation rec {
     for f in connectivity.pro load.pro pokerth_game.pro pokerth_server.pro
     do
       substituteInPlace $f \
-        --replace 'LIB_DIRS =' 'LIB_DIRS = ${boost.out}/lib'
+        --replace 'LIB_DIRS =' 'LIB_DIRS = ${boost.out}/lib' \
+        --replace '/opt/gsasl/' '${gsasl}/'
     done
+    substituteInPlace pokerth_server.pro --replace '$$'{PREFIX}/include/libircclient '${libircclient.dev}/include/libircclient'
   '';
 
   enableParallelBuilding = true;

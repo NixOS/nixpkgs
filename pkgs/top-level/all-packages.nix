@@ -20305,9 +20305,7 @@ with pkgs;
 
   pong3d = callPackage ../games/pong3d { };
 
-  pokerth = callPackage ../games/pokerth {
-    protobuf = protobuf3_4;
-  };
+  pokerth = callPackage ../games/pokerth { };
 
   pokerth-server = pokerth.server;
 
