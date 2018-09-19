@@ -368,6 +368,8 @@ in {
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
 
+  osmnx = callPackage ../development/python-modules/osmnx { };
+
   outcome = callPackage ../development/python-modules/outcome {};
 
   palettable = callPackage ../development/python-modules/palettable { };
