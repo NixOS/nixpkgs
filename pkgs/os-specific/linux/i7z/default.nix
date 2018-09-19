@@ -16,39 +16,24 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    runHook preBuild
-
-    make
-    ${lib.optionalString withGui ''
+  postBuild = lib.optionalString withGui ''
       cd GUI
       qmake
       make clean
       make
       cd ..
-    ''}
-
-    runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
-    mkdir -p $out/{bin,sbin}
-    make install prefix=$out
-    ${lib.optionalString withGui ''
-      install -Dm755 GUI/i7z_GUI $out/bin/i7z-gui
-    ''}
-    mv $out/sbin/* $out/bin/
-    rmdir $out/sbin
-
-    runHook postInstall
+  postInstall = lib.optionalString withGui ''
+    install -Dm755 GUI/i7z_GUI $out/bin/i7z-gui
   '';
 
   meta = with lib; {
     description = "A better i7 (and now i3, i5) reporting tool for Linux";
-    homepage = https://github.com/ajaiantilal/i7z;
-    repositories.git = https://github.com/ajaiantilal/i7z.git;
+    homepage = https://github.com/DimitryAndric/i7z;
+    repositories.git = https://github.com/DimitryAndric/i7z.git;
     license = licenses.gpl2;
     maintainers = with maintainers; [ bluescreen303 ];
     # broken on ARM
