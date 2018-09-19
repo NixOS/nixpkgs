@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   ] ++ optional withQt4 qt4
     ++ optional withQt5 qtbase;
 
+  patches = [ ./run-dir.patch ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
