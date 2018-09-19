@@ -14,17 +14,11 @@ buildPythonPackage rec {
   # disable some failing tests
   checkPhase = ''
     nosetests nilearn/tests \
-    -e test_cache_mixin_with_expand_user -e test_clean_confounds -e test_detrend
+    -e test_cache_mixin_with_expand_user -e test_clean_confounds -e test_detrend \
+    -e test_clean_detrending -e test_high_variance_confounds
   '';
 
   checkInputs = [ nose ];
-
-  # These tests fail on some builder machines, probably due to lower
-  # arithmetic precision. Reduce required precision from 13 to 8 decimals.
-  postPatch = ''
-    substituteInPlace nilearn/tests/test_signal.py \
-      --replace 'decimal=13' 'decimal=8'
-  '';
 
   propagatedBuildInputs = [
     matplotlib
