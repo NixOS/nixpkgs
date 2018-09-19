@@ -1,12 +1,15 @@
-{ stdenv, lib, fetchurl, ncurses
+{ stdenv, lib, fetchFromGitHub, ncurses
 , withGui ? false, qt4 ? null }:
 
 stdenv.mkDerivation rec {
-  name = "i7z-0.27.2";
+  name = "i7z-${version}";
+  version = "0.27.3";
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/i7z/${name}.tar.gz";
-    sha256 = "1wa7ix6m75wl3k2n88sz0x8cckvlzqklja2gvzqfw5rcfdjjvxx7";
+  src = fetchFromGitHub {
+    owner = "DimitryAndric";
+    repo = "i7z";
+    rev = "v${version}";
+    sha256 = "0l8wz0ffb27nkwchc606js652spk8masy3kjmzh7ygipwsary5ds";
   };
 
   buildInputs = [ ncurses ] ++ lib.optional withGui qt4;
