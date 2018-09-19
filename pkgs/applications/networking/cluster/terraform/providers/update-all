@@ -4,7 +4,7 @@
 #
 # This scripts scans the github terraform-providers repo for new releases,
 # generates the corresponding nix code and finally generates an index of
-# all the providers.
+# all the providers given in ./providers.txt.
 set -euo pipefail
 
 # the maximum number of attempts before giving up inside of GET and prefetch_github
@@ -109,15 +109,32 @@ cat <<HEADER > data.nix
 {
 HEADER
 
-# add all the repos under the terraform-providers organisation
-org=terraform-providers
-repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | grep -v terraform-provider-azure-classic | sort)
-for repo in $repos; do
-  add_repo "$org" "$repo"
-done
+while read line; do
+  IFS=' ' read -r -a fields <<< "$line"
+  if [[ "${#fields[@]}" -eq 0 ]]; then
+    continue
+  fi
 
-# add the repos that live outside of terraform-providers
-add_repo tweag terraform-provider-nixos
+  if [[ "${fields[0]}" = *"/"* ]]; then
+    org="$(echo "${fields[0]}" | cut -d/ -f1)"
+    repo="$(echo "${fields[0]}" | cut -d/ -f2)"
+    add_repo "${org}" "${repo}"
+  else
+    org="${fields[0]}"
+    repos=$(get_org_repos "$org")
+    if [[ "${#fields[@]}" -ge 2 ]] && [[ -n "${fields[1]}" ]]; then
+      repos="$( echo "${repos[@]}" | grep "${fields[1]}" )"
+    fi
+    if [[ "${#fields[@]}" -eq 3 ]] && [[ -n "${fields[2]}" ]]; then
+      repos="$( echo "${repos[@]}" | grep -v "${fields[2]}" )"
+    fi
+    repos="$( echo "${repos[@]}" | sort )"
+
+    for repo in $repos; do
+      add_repo "$org" "$repo"
+    done
+  fi
+done < <(grep -v '^#\|^$' providers.txt)
 
 cat <<FOOTER >> data.nix
 }
