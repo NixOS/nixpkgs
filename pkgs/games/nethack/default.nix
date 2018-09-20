@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
 , less, makeWrapper
+, buildPackages
 , x11Mode ? false, qtMode ? false, libXaw, libXext, mkfontdir, pkgconfig, qt5
 }:
 
@@ -72,6 +73,12 @@ in stdenv.mkDerivation rec {
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
       -i sys/unix/hints/linux-qt4
     ''}
+    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    ${buildPackages.perl}/bin/perl -p \
+      -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
+      -i sys/unix/Makefile.*
+    ''}
+    sed -i -e '/rm -f $(MAKEDEFS)/d' sys/unix/Makefile.src
   '';
 
   configurePhase = ''
@@ -81,6 +88,8 @@ in stdenv.mkDerivation rec {
     ''}
     popd
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/games/lib/nethackuserdir
@@ -118,6 +127,7 @@ in stdenv.mkDerivation rec {
     chmod +x $out/bin/nethack
     ${lib.optionalString x11Mode "mv $out/bin/nethack $out/bin/nethack-x11"}
     ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
+    install -Dm 555 util/{makedefs,dgn_comp,lev_comp,dlb} -t $out/libexec/nethack/
   '';
 
   postFixup = lib.optionalString qtMode ''
