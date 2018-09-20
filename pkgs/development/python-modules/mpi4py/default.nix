@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, mpi, openssh }:
+{ stdenv, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
@@ -12,6 +12,13 @@ buildPythonPackage rec {
   passthru = {
     inherit mpi;
   };
+
+  patches = [ (fetchpatch {
+    # Disable tests failing with 3.1.x and MPI_THREAD_MULTIPLE
+    url = "https://bitbucket.org/mpi4py/mpi4py/commits/c2b6b7e642a182f9b00a2b8e9db363214470548a/raw";
+    sha256 = "0n6bz3kj4vcqb6q7d0mlj5vl6apn7i2bvfc9mpg59vh3wy47119q";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace test/test_spawn.py --replace \
@@ -37,8 +44,6 @@ buildPythonPackage rec {
     # Needed to run the tests reliably. See:
     # https://bitbucket.org/mpi4py/mpi4py/issues/87/multiple-test-errors-with-openmpi-30
     export OMPI_MCA_rmaps_base_oversubscribe=yes
-    export OMPI_MCA_osc=sm
-    export OMPI_MCA_btl=self,vader
   '';
 
   setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
