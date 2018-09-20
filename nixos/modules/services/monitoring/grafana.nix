@@ -134,9 +134,21 @@ in {
       };
 
       password = mkOption {
-        description = "Database password.";
+        description = ''
+          Database password.
+          This option is mutual exclusive with the passwordFile option.
+        '';
         default = "";
         type = types.str;
+      };
+
+      passwordFile = mkOption {
+        description = ''
+          File that containts the database password.
+          This option is mutual exclusive with the password option.
+        '';
+        default = null;
+        type = types.nullOr types.path;
       };
 
       path = mkOption {
@@ -163,15 +175,33 @@ in {
       };
 
       adminPassword = mkOption {
-        description = "Default admin password.";
+        description = ''
+          Default admin password.
+          This option is mutual exclusive with the adminPasswordFile option.
+        '';
         default = "admin";
         type = types.str;
+      };
+
+      adminPasswordFile = mkOption {
+        description = ''
+          Default admin password.
+          This option is mutual exclusive with the <literal>adminPassword</literal> option.
+        '';
+        default = null;
+        type = types.nullOr types.path;
       };
 
       secretKey = mkOption {
         description = "Secret key used for signing.";
         default = "SW2YcwTIb9zpOOhoPsMm";
         type = types.str;
+      };
+
+      secretKeyFile = mkOption {
+        description = "Secret key used for signing.";
+        default = null;
+        type = types.nullOr types.path;
       };
     };
 
@@ -247,6 +277,21 @@ in {
 
     environment.systemPackages = [ cfg.package ];
 
+    assertions = [
+      {
+        assertion = cfg.database.password != opt.database.password.default -> cfg.database.passwordFile == null;
+        message = "Cannot set both password and passwordFile";
+      }
+      {
+        assertion = cfg.security.adminPassword != opt.security.adminPassword.default -> cfg.security.adminPasswordFile == null;
+        message = "Cannot set both adminPassword and adminPasswordFile";
+      }
+      {
+        assertion = cfg.security.secretKeyFile != opt.security.secretKeyFile.default -> cfg.security.secretKeyFile == null;
+        message = "Cannot set both secretKey and secretKeyFile";
+      }
+    ];
+
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = ["multi-user.target"];
@@ -254,8 +299,18 @@ in {
       environment = {
         QT_QPA_PLATFORM = "offscreen";
       } // mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
+      script = ''
+        ${optionalString (cfg.database.passwordFile != null) ''
+          export GF_DATABASE_PASSWORD="$(cat ${escapeShellArg cfg.database.passwordFile})"
+        ''}
+        ${optionalString (cfg.security.adminPasswordFile != null) ''
+          export GF_SECURITY_ADMIN_PASSWORD="$(cat ${escapeShellArg cfg.security.adminPasswordFile})"
+        ''}
+        ${optionalString (cfg.security.secretKeyFile != null) ''
+          export GF_SECURITY_SECRET_KEY="$(cat ${escapeShellArg cfg.security.secretKeyFile})"
+        ''}
+        exec ${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}
       serviceConfig = {
-        ExecStart = "${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}";
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
       };
