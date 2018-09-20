@@ -198,14 +198,14 @@ let
       /* vim-plug is an extremely popular vim plugin manager.
       */
       plugImpl = lib.optionalString (plug != null)
-      ''
+      (''
         source ${vimPlugins.vim-plug.rtp}/plug.vim
         call plug#begin('/dev/null')
 
         '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
 
         call plug#end()
-      '';
+      '');
 
       /*
        vim-addon-manager = VAM
