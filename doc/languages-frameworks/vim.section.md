@@ -15,6 +15,7 @@ At the moment we support three different methods for managing plugins:
 - Vim packages (*recommend*)
 - VAM (=vim-addon-manager)
 - Pathogen
+- vim-plug
 
 ## Custom configuration
 
@@ -98,7 +99,8 @@ After that you can install your special grafted `myVim` or `myNeovim` packages.
 
 ## Managing plugins with vim-plug
 
-To use vim-plug to manage your Vim plugins the following example can be used:
+To use [vim-plug](https://github.com/junegunn/vim-plug) to manage your Vim
+plugins the following example can be used:
 
 ```
 vim_configurable.customize {
@@ -123,26 +125,6 @@ neovim.override {
   };
 }
 ```
-
-The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.nix` to make it installable:
-
-```
-{
-  packageOverrides = pkgs: with pkgs; {
-    myVim = vim_configurable.customize {
-      name = "vim-with-plugins";
-      # add here code from the example section
-    };
-    myNeovim = neovim.override {
-      configure = {
-      # add here code from the example section
-      };
-    };
-  };
-}
-```
-
-After that you can install your special grafted `myVim` or `myNeovim` packages.
 
 ## Managing plugins with VAM
 
