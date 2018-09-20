@@ -1,4 +1,4 @@
-{ pkgs, useMupdf ? true, synctexSupport ? true }:
+{ pkgs, useMupdf ? true, synctexSupport ? false }:
 
 let
   callPackage = pkgs.newScope self;
