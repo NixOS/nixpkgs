@@ -352,6 +352,8 @@ in {
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
+  nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
+
   neuron = pkgs.neuron.override {
     inherit python;
   };
