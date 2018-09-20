@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "glxinfo-${version}";
-  version = "8.3.0";
+  version = "8.4.0";
 
   src = fetchurl {
-    url = "ftp://ftp.freedesktop.org/pub/mesa/demos/${version}/mesa-demos-${version}.tar.bz2";
-    sha256 = "1vqb7s5m3fcg2csbiz45mha1pys2xx6rhw94fcyvapqdpm5iawy1";
+    url = "ftp://ftp.freedesktop.org/pub/mesa/demos/mesa-demos-${version}.tar.bz2";
+    sha256 = "0zgzbz55a14hz83gbmm0n9gpjnf5zadzi2kjjvkn6khql2a9rs81";
   };
 
   buildInputs = [ libX11 libGL ];
