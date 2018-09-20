@@ -3009,6 +3009,16 @@
     };
   };
 
+  vim-tsx = buildVimPluginFrom2Nix {
+    name = "vim-tsx-2017-03-16";
+    src = fetchFromGitHub {
+      owner = "ianks";
+      repo = "vim-tsx";
+      rev = "77c89c42e189fefd3c9a632b37b7e3b3b9edf918";
+      sha256 = "0wmd6gql57bxp868sq2dchp9sc3jbisr4vaz4y0lczhmk0prds6n";
+    };
+  };
+
   vim-unimpaired = buildVimPluginFrom2Nix {
     name = "vim-unimpaired-2018-07-26";
     src = fetchFromGitHub {
