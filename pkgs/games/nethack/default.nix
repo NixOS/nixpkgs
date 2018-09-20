@@ -73,7 +73,11 @@ in stdenv.mkDerivation rec {
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
       -i sys/unix/hints/linux-qt4
     ''}
-    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+    # If we're cross-compiling, replace the paths to the data generation tools
+    # with the ones from the build platform's nethack package, since we can't
+    # run the ones we've built here.
+    ''
     ${buildPackages.perl}/bin/perl -p \
       -e 's,[a-z./]+/(makedefs|dgn_comp|lev_comp|dlb)(?!\.),${buildPackages.nethack}/libexec/nethack/\1,g' \
       -i sys/unix/Makefile.*
