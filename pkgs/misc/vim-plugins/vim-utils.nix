@@ -462,23 +462,23 @@ rec {
 
 
   # test cases:
-  test_vim_with_vim_addon_nix_using_vam = vim_configurable.customize {
+  test_vim_with_vim_nix_using_vam = vim_configurable.customize {
    name = "vim-with-vim-addon-nix-using-vam";
-    vimrcConfig.vam.pluginDictionaries = [{name = "vim-addon-nix"; }];
+    vimrcConfig.vam.pluginDictionaries = [{name = "vim-nix"; }];
   };
 
-  test_vim_with_vim_addon_nix_using_pathogen = vim_configurable.customize {
+  test_vim_with_vim_nix_using_pathogen = vim_configurable.customize {
     name = "vim-with-vim-addon-nix-using-pathogen";
-    vimrcConfig.pathogen.pluginNames = [ "vim-addon-nix" ];
+    vimrcConfig.pathogen.pluginNames = [ "vim-nix" ];
   };
 
-  test_vim_with_vim_addon_nix_using_plug = vim_configurable.customize {
+  test_vim_with_vim_nix_using_plug = vim_configurable.customize {
     name = "vim-with-vim-addon-nix-using-plug";
-    vimrcConfig.plug.plugins = with vimPlugins; [ vim-addon-nix ];
+    vimrcConfig.plug.plugins = with vimPlugins; [ vim-nix ];
   };
 
-  test_vim_with_vim_addon_nix = vim_configurable.customize {
+  test_vim_with_vim_nix = vim_configurable.customize {
     name = "vim-with-vim-addon-nix";
-    vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-addon-nix ];
+    vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
   };
 }
