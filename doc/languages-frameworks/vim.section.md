@@ -59,7 +59,7 @@ vim_configurable.customize {
 }
 ```
 
-For Neovim the syntax is
+For Neovim the syntax is:
 
 ```
 neovim.override {
@@ -72,6 +72,54 @@ neovim.override {
       start = [ ];
       opt = [ ];
     };
+  };
+}
+```
+
+The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.nix` to make it installable:
+
+```
+{
+  packageOverrides = pkgs: with pkgs; {
+    myVim = vim_configurable.customize {
+      name = "vim-with-plugins";
+      # add here code from the example section
+    };
+    myNeovim = neovim.override {
+      configure = {
+      # add here code from the example section
+      };
+    };
+  };
+}
+```
+
+After that you can install your special grafted `myVim` or `myNeovim` packages.
+
+## Managing plugins with vim-plug
+
+To use vim-plug to manage your Vim plugins the following example can be used:
+
+```
+vim_configurable.customize {
+  vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
+    # loaded on launch
+    plug.plugins = [ youcompleteme fugitive phpCompletion elm-vim ];
+  };
+}
+```
+
+For Neovim the syntax is:
+
+```
+neovim.override {
+  configure = {
+    customRC = ''
+      # here your custom configuration goes!
+    '';
+    plug.plugins = with pkgs.vimPlugins; [
+      vim-go
+    ];
   };
 }
 ```
