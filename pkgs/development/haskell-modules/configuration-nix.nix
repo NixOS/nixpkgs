@@ -500,4 +500,10 @@ self: super: builtins.intersectAttrs super {
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
+
+  # Expects z3 to be on path so we replace it with a hard
+  sbv = overrideCabal super.sbv (drv: {
+    postPatch = ''
+      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs'';
+  });
 }
