@@ -18,12 +18,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "1kk97ggpzmblhqm6cfd2sv5940f58h323xcyg6rba1njj7lzanv0";
-      "x86_64-darwin" = "1xvwffk8d8br92h0laf4b1m76kvki6cj0pbgcvirfcj1r70vk6c3";
+      "x86_64-linux"  = "11mzi6wfpg880z53nbd8kn892rf70xyn4shnjxmvj1fba1sa8vvc";
+      "x86_64-darwin" = "16ws86vnr0i701djaxq4k5f2wax0c0xji4i77vgs106hcg99qclr";
     }
     else {
-      "x86_64-linux"  = "0m81ki1v61gpwb3s6zf84azqrirlm9pdfx65g3xmvdp3d3wii5ly";
-      "x86_64-darwin" = "0zh9p6vsq1d0gh6ks7z6bh8sbhn6rm4jshjcfp3c9k7n2qa8vv9b";
+      "x86_64-linux"  = "0m3z5ibl82039wicmv6xs5has8ccrqv7gffy7disggflcqq2clk2";
+      "x86_64-darwin" = "09cc9s19kfl7ff8havhhs0qby0b5sp2agvh9mik5j9qn42whjsjm";
     };
 
   # For the correct phantomjs version see:
