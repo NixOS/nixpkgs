@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, docker, makeWrapper, buildGoPackage }:
+{ stdenv, fetchFromGitHub, buildGoPackage }:
 
 let
   owner = "CircleCI-Public";
@@ -17,8 +17,6 @@ buildGoPackage rec {
   };
 
   goPackagePath = "github.com/${owner}/${pname}";
-
-  nativeBuildInputs = [ makeWrapper ];
 
   meta = with stdenv.lib; {
     # Box blurb edited from the AUR package circleci-cli
