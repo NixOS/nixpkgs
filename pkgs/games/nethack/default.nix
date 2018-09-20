@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
 , less, makeWrapper
 , buildPackages
-, x11Mode ? false, qtMode ? false, libXaw, libXext, mkfontdir, pkgconfig, qt5
+, x11Mode ? false, qtMode ? false, libXaw, libXext, bdftopcf, mkfontdir, pkgconfig, qt5
 }:
 
 let
@@ -34,10 +34,11 @@ in stdenv.mkDerivation rec {
                 ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
   nativeBuildInputs = [ flex bison ]
-                      ++ lib.optionals x11Mode [ mkfontdir ]
+                      ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
                       ++ lib.optionals qtMode [
                            pkgconfig mkfontdir qt5.qtbase.dev
                            qt5.qtmultimedia.dev makeWrapper
+                           bdftopcf
                          ];
 
   makeFlags = [ "PREFIX=$(out)" ];
