@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "vips-${version}";
-  version = "8.6.5";
+  version = "8.7.0";
 
   src = fetchurl {
     url = "https://github.com/jcupitt/libvips/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1nymm4vzscb68aifin9q742ff64b4k4ddppq1060w8hf6h7ay0l7";
+    sha256 = "16086hdg6m44llz69fkp1n0ckjb7zhl6i2bg0wwllrchznikwiy4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
