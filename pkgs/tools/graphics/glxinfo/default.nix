@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
   configurePhase = "true";
 
   buildPhase = "
-    cd src/xdemos
-    $CC glxinfo.c glinfo_common.c -o glxinfo -lGL -lX11
-    $CC glxgears.c -o glxgears -lGL -lX11 -lm
+    $CC src/xdemos/{glxinfo.c,glinfo_common.c} -o glxinfo -lGL -lX11
+    $CC src/xdemos/glxgears.c -o glxgears -lGL -lX11 -lm
+    $CC src/egl/opengles2/es2_info.c -o es2_info -lEGL -lGLESv2 -lX11
+    $CC src/egl/opengles2/es2gears.c src/egl/eglut/{eglut.c,eglut_x11.c} -o es2gears -Isrc/egl/eglut -lEGL -lGLESv2 -lX11 -lm
   ";
 
   installPhase = "
-    mkdir -p $out/bin
-    cp glxinfo glxgears $out/bin/
+    install -Dm 555 -t $out/bin glx{info,gears} es2{_info,gears}
   ";
 
   meta = with stdenv.lib; {
