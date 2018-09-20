@@ -109,5 +109,6 @@ stdenv.mkDerivation rec {
     description = "Web-based Git-repository manager";
     homepage = https://gitlab.com;
     license = licenses.mit;
+    platforms = platforms.linux;
   };
 }
