@@ -36,7 +36,7 @@ index 493218ea..d507aa55 100644
 +    return system( NIXPKGS_KDOSTARTUPCONFIG5 );
      }
 diff --git a/startkde/startkde.cmake b/startkde/startkde.cmake
-index f9e2e429..0a4267a9 100644
+index 714a9bf1..9733c612 100644
 --- a/startkde/startkde.cmake
 +++ b/startkde/startkde.cmake
 @@ -1,22 +1,31 @@
@@ -454,7 +454,7 @@ index f9e2e429..0a4267a9 100644
  
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
-@@ -306,34 +352,37 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
+@@ -306,12 +352,16 @@ qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit &
  # We only check for 255 which means that the ksmserver process could not be
  # started, any problems thereafter, e.g. ksmserver failing to initialize,
  # will remain undetected.
@@ -474,11 +474,9 @@ index f9e2e429..0a4267a9 100644
  if test $? -eq 255; then
    # Startup error
    echo 'startkde: Could not start ksmserver. Check your installation.'  1>&2
-   test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
--  xmessage -geometry 500x100 "Could not start ksmserver. Check your installation."
- fi
- 
- #Anything after here is logout/shutdown
+@@ -322,36 +372,36 @@ fi
+ #Anything after here is logout
+ #It is not called after shutdown/restart
  
 -wait_drkonqi=`kreadconfig5 --file startkderc --group WaitForDrKonqi --key Enabled --default true`
 +wait_drkonqi=$(@NIXPKGS_KREADCONFIG5@ --file startkderc --group WaitForDrKonqi --key Enabled --default true)
@@ -498,12 +496,13 @@ index f9e2e429..0a4267a9 100644
              # ask remaining drkonqis to die in a graceful way
 -            qdbus | grep 'org.kde.drkonqi-' | while read address ; do
 -                qdbus "$address" "/MainApplication" "quit"
+-            done
+-            break
 +            @NIXPKGS_QDBUS@ | @NIXPKGS_GREP@ 'org.kde.drkonqi-' | while read address ; do
 +                @NIXPKGS_QDBUS@ "$address" "/MainApplication" "quit"
-             done
-             break
          fi
-@@ -342,15 +391,17 @@ fi
+     done
+ fi
  
  echo 'startkde: Shutting down...'  1>&2
  # just in case
@@ -526,7 +525,7 @@ index f9e2e429..0a4267a9 100644
  
  echo 'startkde: Done.'  1>&2
 diff --git a/startkde/startplasma.cmake b/startkde/startplasma.cmake
-index f7330ab3..5eedbb11 100644
+index de98541c..39c0b521 100644
 --- a/startkde/startplasma.cmake
 +++ b/startkde/startplasma.cmake
 @@ -1,6 +1,6 @@
@@ -668,14 +667,15 @@ index f7330ab3..5eedbb11 100644
  
  # finally, give the session control to the session manager
  # see kdebase/ksmserver for the description of the rest of the startup sequence
-@@ -163,19 +109,19 @@ if test $? -eq 255; then
-   xmessage -geometry 500x100 "Could not start ksmserver. Check your installation."
- fi
+@@ -166,19 +112,19 @@ fi
+ #Anything after here is logout
+ #It is not called after shutdown/restart
  
 -wait_drkonqi=`kreadconfig5 --file startkderc --group WaitForDrKonqi --key Enabled --default true`
-+wait_drkonqi=$(@NIXPKGS_KREADCONFIG5@ --file startkderc --group WaitForDrKonqi --key Enabled --default true)
- 
+-
 -if test x"$wait_drkonqi"x = x"true"x ; then
++wait_drkonqi=$(@NIXPKGS_KREADCONFIG5@ --file startkderc --group WaitForDrKonqi --key Enabled --default true)
++ 
 +if [ x"$wait_drkonqi"x = x"true"x ]; then
      # wait for remaining drkonqi instances with timeout (in seconds)
 -    wait_drkonqi_timeout=`kreadconfig5 --file startkderc --group WaitForDrKonqi --key Timeout --default 900`
@@ -695,7 +695,7 @@ index f7330ab3..5eedbb11 100644
              done
              break
          fi
-@@ -184,15 +130,17 @@ fi
+@@ -187,15 +133,17 @@ fi
  
  echo 'startplasma: Shutting down...'  1>&2
  # just in case
