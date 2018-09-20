@@ -14229,6 +14229,8 @@ with pkgs;
 
     netatop = callPackage ../os-specific/linux/netatop { };
 
+    openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
+
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
     phc-intel = callPackage ../os-specific/linux/phc-intel { };

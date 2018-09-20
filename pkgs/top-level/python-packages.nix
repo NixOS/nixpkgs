@@ -3545,6 +3545,9 @@ in {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  openrazer        = callPackage ../os-specific/linux/openrazer/pylib.nix { };
+  openrazer-daemon = callPackage ../os-specific/linux/openrazer/daemon.nix { };
+
   oset = callPackage ../development/python-modules/oset { };
 
   pamela = buildPythonPackage rec {

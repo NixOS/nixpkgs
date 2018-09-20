@@ -44,6 +44,7 @@
   ./hardware/network/b43.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
+  ./hardware/openrazer.nix
   ./hardware/pcmcia.nix
   ./hardware/raid/hpsa.nix
   ./hardware/usb-wwan.nix
