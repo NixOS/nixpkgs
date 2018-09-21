@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, procps, nettools,
+gitlabEnterprise ? false
 }:
 
 let
@@ -12,23 +13,37 @@ let
 
   version = "11.2.3";
 
-  gitlabDeb = fetchurl {
-    url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_${version}-ce.0_amd64.deb/download.deb";
-    sha256 = "1z7mj412zj88ia24caq41bi5p1jbcfwnrvak3bqf1113f0snkb0x";
+  sources = if gitlabEnterprise then {
+    gitlabDeb = fetchurl {
+      url = "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_${version}-ee.0_amd64.deb/download.deb";
+      sha256 = "0gv8gqmbyzcbsqv1f7sixzsx7p2pk822gxi7hy7sddkcms12m4vr";
+    };
+    gitlab = fetchFromGitLab {
+      owner = "gitlab-org";
+      repo = "gitlab-ee";
+      rev = "v${version}-ee";
+      sha256 = "1ynr177d6y24h74sr3119ywgml0n39s8nfxssnixhmd69pz6rpm5";
+    };
+  } else {
+    gitlabDeb = fetchurl {
+      url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_${version}-ce.0_amd64.deb/download.deb";
+      sha256 = "1z7mj412zj88ia24caq41bi5p1jbcfwnrvak3bqf1113f0snkb0x";
+    };
+    gitlab = fetchFromGitLab {
+      owner = "gitlab-org";
+      repo = "gitlab-ce";
+      rev = "v${version}";
+      sha256 = "1j8y2phwdj6dv55racypm8r2v8bnzcxh2g1z33v9212hrgyjzrrh";
+    };
   };
-  gitlab = fetchFromGitLab {
-    owner = "gitlab-org";
-    repo = "gitlab-ce";
-    rev = "v${version}";
-    sha256 = "1j8y2phwdj6dv55racypm8r2v8bnzcxh2g1z33v9212hrgyjzrrh";
-  };
+
 
 in
 
 stdenv.mkDerivation rec {
-  name = "gitlab-${version}";
+  name = "gitlab${if gitlabEnterprise then "-ee" else ""}-${version}";
 
-  src = gitlab;
+  src = sources.gitlab;
 
   buildInputs = [
     rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git procps nettools
@@ -66,7 +81,7 @@ stdenv.mkDerivation rec {
     mv config/gitlab.yml.example config/gitlab.yml
 
     # Building this requires yarn, node &c, so we just get it from the deb
-    ar p ${gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    ar p ${sources.gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
     # Work around unpacking deb containing binary with suid bit
     tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
     tar -xf gitlab-deb-data.tar
@@ -103,9 +118,15 @@ stdenv.mkDerivation rec {
     homepage = http://www.gitlab.com/;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin krav ];
-    license = licenses.mit;
-    platforms = platforms.linux;
-    description = "GitLab Community Edition";
-    longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
-  };
+  } // (if gitlabEnterprise then
+    {
+      license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+      description = "GitLab Enterprise Edition";
+    }
+  else
+    {
+      license = licenses.mit;
+      description = "GitLab Community Edition";
+      longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
+    });
 }
