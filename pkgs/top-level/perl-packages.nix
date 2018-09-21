@@ -15625,10 +15625,10 @@ let
   };
 
   TestRoutine = buildPerlPackage {
-    name = "Test-Routine-0.025";
+    name = "Test-Routine-0.027";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Routine-0.025.tar.gz;
-      sha256 = "13gxczy0mx3rqnp55vc0j2d936qldrimmad87nmf4wrj0kd2lw92";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Routine-0.027.tar.gz;
+      sha256 = "0n6k310v2py787lkvhzrn8vndws9icdf8mighgl472k0x890xm5s";
     };
     buildInputs = [ TestAbortable TestFatal ];
     propagatedBuildInputs = [ Moose TestSimple13 namespaceautoclean ];
