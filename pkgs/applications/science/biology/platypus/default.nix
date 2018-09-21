@@ -4,13 +4,13 @@ let python = python27.withPackages (ps: with ps; [ cython ]);
 
 in stdenv.mkDerivation rec {
   name = "platypus-unstable-${version}";
-  version = "2017-03-07";
+  version = "2018-07-22";
 
   src = fetchFromGitHub {
     owner = "andyrimmer";
     repo = "Platypus";
-    rev = "cbbd914";
-    sha256 = "0xgj3pl7n4c12j5pp5qyjfk4rsvb5inwzrpcbhdf3br5f3mmdsb9";
+    rev = "3e72641c69800da0cd4906b090298e654d316ee1";
+    sha256 = "0nah6r54b8xm778gqyb8b7rsd76z8ji4g73sm6rvpw5s96iib1vw";
   };
 
   buildInputs = [ htslib python zlib makeWrapper ];
