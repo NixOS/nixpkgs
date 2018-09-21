@@ -231,7 +231,7 @@ let
   # HACK to ensure parent directories exist. This emulates GNU
   # install’s -D option. No alternative seems to exist in BSD install.
   install = let binstall = writeText "binstall" ''
-    #!/usr/bin/env sh
+    #!/bin/sh
     for last in $@; do true; done
     mkdir -p $(dirname $last)
     xinstall "$@"
