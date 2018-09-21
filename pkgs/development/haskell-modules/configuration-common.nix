@@ -1137,4 +1137,10 @@ self: super: {
   safe-money-serialise = super.safe-money-serialise.override { safe-money = self.safe-money_0_7; };
   safe-money-xmlbf = super.safe-money-xmlbf.override { safe-money = self.safe-money_0_7; };
 
+  # https://github.com/adinapoli/mandrill/pull/52
+  mandrill = appendPatch super.mandrill (pkgs.fetchpatch {
+    url = https://github.com/adinapoli/mandrill/commit/30356d9dfc025a5f35a156b17685241fc3882c55.patch;
+    sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
