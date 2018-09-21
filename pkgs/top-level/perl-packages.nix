@@ -13351,10 +13351,10 @@ let
   };
 
   ScopeUpper = buildPerlPackage rec {
-    name = "Scope-Upper-0.30";
+    name = "Scope-Upper-0.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
-      sha256 = "7f151582423850d814034404b1e23b5efb281b9dd656b9afe81c761ebb88bbb4";
+      sha256 = "cc4d2ce0f185b4867d73b4083991117052a523fd409debf15bdd7e374cc16d8c";
     };
     meta = {
       description = "Act on upper scopes";
