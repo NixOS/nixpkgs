@@ -9,7 +9,7 @@ GEM
     powerpack (0.1.2)
     rainbow (3.0.0)
     rake (12.3.1)
-    rubocop (0.58.1)
+    rubocop (0.59.1)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -17,7 +17,7 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
-    ruby-progressbar (1.9.0)
+    ruby-progressbar (1.10.0)
     unicode-display_width (1.4.0)
 
 PLATFORMS
@@ -28,4 +28,4 @@ DEPENDENCIES
   rubocop
 
 BUNDLED WITH
-   1.16.1
+   1.16.4
