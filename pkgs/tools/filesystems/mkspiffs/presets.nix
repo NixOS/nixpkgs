@@ -1,24 +1,18 @@
-{ stdenv, fetchgit, git }:
+{ lib, mkspiffs }:
 
-let
-  buildMkspiffs = overrides : import ./default.nix (
-    { inherit stdenv fetchgit git; } // overrides
-  );
-in
+lib.mapAttrs (
+  name: { CPPFLAGS }:
+  mkspiffs.overrideAttrs (drv: {
+    inherit CPPFLAGS;
+    BUILD_CONFIG_NAME = "-${name}";
+  })
+) {
+  arduino-esp8266.CPPFLAGS = [
+    "-DSPIFFS_USE_MAGIC_LENGTH=0"
+    "-DSPIFFS_ALIGNED_OBJECT_INDEX_TABLES=1"
+  ];
 
-rec {
-  arduino-esp32 = buildMkspiffs {
-    extraBuildFlags = "-DSPIFFS_OBJ_META_LEN=4";
-    buildConfigName = "arduino-esp32";
-  };
+  arduino-esp32.CPPFLAGS = [ "-DSPIFFS_OBJ_META_LEN=4" ];
 
-  esp-idf = buildMkspiffs {
-    extraBuildFlags = "-DSPIFFS_OBJ_META_LEN=4";
-    buildConfigName = "esp-idf";
-  };
-
-  arduino-esp8266 = buildMkspiffs {
-    extraBuildFlags = "-DSPIFFS_USE_MAGIC_LENGTH=0 -DSPIFFS_ALIGNED_OBJECT_INDEX_TABLES=1";
-    buildConfigName = "arduino-esp8266";
-  };
+  esp-idf.CPPFLAGS = [ "-DSPIFFS_OBJ_META_LEN=4" ];
 }
