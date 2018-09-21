@@ -162,7 +162,7 @@ let
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
      '';
@@ -203,6 +203,7 @@ in {
         default = pkgs.gitlab;
         defaultText = "pkgs.gitlab";
         description = "Reference to the gitlab package";
+        example = "pkgs.gitlab-ee";
       };
 
       packages.gitlab-shell = mkOption {
@@ -569,9 +570,9 @@ in {
 
         mkdir -p /run/gitlab
         mkdir -p ${cfg.statePath}/log
-        ln -sf ${cfg.statePath}/log /run/gitlab/log
-        ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
-        ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
+        [ -d /run/gitlab/log ] || ln -sf ${cfg.statePath}/log /run/gitlab/log
+        [ -d /run/gitlab/tmp ] || ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
+        [ -d /run/gitlab/uploads ] || ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
         ln -sf $GITLAB_SHELL_CONFIG_PATH /run/gitlab/shell-config.yml
         chown -R ${cfg.user}:${cfg.group} /run/gitlab
 
