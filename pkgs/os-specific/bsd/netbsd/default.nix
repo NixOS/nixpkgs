@@ -40,6 +40,9 @@ let
     INSTALL_LINK = "install -U -l h";
     INSTALL_SYMLINK = "install -U -l s";
 
+    HOST_CC = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
+    HOST_CXX  = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
+
     # libs will be provided by cc-wrapper
     LIBCRT0 = "";
     LIBCRTI = "";
