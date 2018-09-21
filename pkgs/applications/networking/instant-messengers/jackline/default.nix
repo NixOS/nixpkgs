@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with ocamlPackages; [
                   ocaml ocamlbuild findlib topkg ppx_sexp_conv
-                  erm_xmpp_0_3 tls nocrypto x509 ocaml_lwt otr astring
+                  erm_xmpp tls nocrypto x509 ocaml_lwt otr astring
                   ptime notty sexplib hex uutf
                 ];
 
