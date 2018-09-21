@@ -569,7 +569,7 @@ in rec {
     MKPIC = if stdenv.isDarwin then "no" else "yes";
     postPatch = lib.optionalString (!stdenv.isDarwin) ''
       substituteInPlace printw.c \
-        --replace "funopen(win, NULL, __winwrite, NULL, NULL)" NULL \
+        --replace "funopen2(win, NULL, winwrite, NULL, NULL, NULL)" NULL \
         --replace "__strong_alias(vwprintw, vw_printw)" 'extern int vwprintw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_printw")));'
       substituteInPlace scanw.c \
         --replace "__strong_alias(vwscanw, vw_scanw)" 'extern int vwscanw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_scanw")));'
