@@ -5976,10 +5976,10 @@ let
   };
 
   FilePath = buildPerlPackage rec {
-    name = "File-Path-2.15";
+    name = "File-Path-2.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JK/JKEENAN/File-Path-2.15.tar.gz;
-      sha256 = "1570f3c1cdf93c50f65c2072e8f20ee121550771dfb7f6e563f503a2a7050744";
+      url = mirror://cpan/authors/id/J/JK/JKEENAN/File-Path-2.16.tar.gz;
+      sha256 = "21f7d69b59c381f459c5f0bf697d512109bd911f12ca33270b70ca9a9ef6fa05";
     };
     meta = {
       description = "Create or remove directory trees";
