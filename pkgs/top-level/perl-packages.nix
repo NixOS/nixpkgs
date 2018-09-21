@@ -2519,10 +2519,10 @@ let
   };
 
   ConfigIniFiles = buildPerlModule rec {
-    name = "Config-IniFiles-2.98";
+    name = "Config-IniFiles-3.000000";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "9d5fc5c2192058e58ad35150ddae3043a2679f2aa4e1fb7e18e36794622b1797";
+      sha256 = "cd92f6b7f1aa3e03abf6251f1e6129dab8a2b835e8b17c7c4cc3e8305c1c9b29";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
