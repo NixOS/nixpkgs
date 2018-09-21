@@ -1,0 +1,9 @@
+--- a/Makefile	2018-08-31 09:41:32.784419122 +0200
++++ b/Makefile	2018-08-31 09:31:22.384313577 +0200
+@@ -1,5 +1,5 @@
+ PREFIX=/usr/local
+-VERSION=$(shell git describe)-$(shell date -u +%Y%m%d.%H%M%S)
++VERSION=6.0.0
+ BUILD_DIR = $(shell pwd)
+ export GOPATH=${BUILD_DIR}/_build
+ export PATH:=${GOPATH}/bin:${PATH}
