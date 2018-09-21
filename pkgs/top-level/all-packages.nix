@@ -6418,6 +6418,8 @@ with pkgs;
 
   icr = callPackage ../development/tools/icr {};
 
+  scry = callPackage ../development/tools/scry {};
+
   devpi-client = callPackage ../development/tools/devpi-client {};
 
   devpi-server = callPackage ../development/tools/devpi-server {};
