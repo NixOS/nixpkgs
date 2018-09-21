@@ -642,10 +642,12 @@ buildImage {
    <example xml:id="example-pkgs-dockerTools-buildImage-creation-date">
      <title>Impurely Defining a Docker Layer's Creation Date</title>
      <para>
-       Because dates are an impurity, by default
-       <function>buildImage</function> will use a static date of one
-       second past the UNIX Epoch. This can be a bit frustrating when
-       listing docker images in the CLI:
+       By default <function>buildImage</function> will use a static
+       date of one second past the UNIX Epoch. This allows
+       <function>buildImage</function> to produce binary reproducible
+       images. When listing images with <command>docker list
+       images</command>, the newly created images will be listed like
+       this:
      </para>
      <screen><![CDATA[
 $ docker image list
@@ -653,9 +655,9 @@ REPOSITORY   TAG      IMAGE ID       CREATED        SIZE
 hello        latest   08c791c7846e   48 years ago   25.2MB
 ]]></screen>
      <para>
-       If you want to trade the purity for a better user experience,
-       you can set <literal>created</literal> to
-       <literal>now</literal>.
+       You can break binary reproducibility but have a sorted,
+       meaningful <literal>CREATED</literal> column by setting
+       <literal>created</literal> to <literal>now</literal>.
      </para>
      <programlisting><![CDATA[
 pkgs.dockerTools.buildImage {
@@ -670,12 +672,13 @@ pkgs.dockerTools.buildImage {
      <para>
        and now the Docker CLI will display a reasonable date and
        sort the images as expected:
-     </para>
-     <screen><![CDATA[
+       <screen><![CDATA[
 $ docker image list
 REPOSITORY   TAG      IMAGE ID       CREATED              SIZE
 hello        latest   de2bf4786de6   About a minute ago   25.2MB
 ]]></screen>
+       however, the produced images will not be binary reproducible.
+     </para>
    </example>
   </section>
 
