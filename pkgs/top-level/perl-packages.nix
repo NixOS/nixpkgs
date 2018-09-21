@@ -8830,10 +8830,10 @@ let
   };
 
   MCE = buildPerlPackage rec {
-     name = "MCE-1.836";
+     name = "MCE-1.837";
      src = fetchurl {
-       url = mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.836.tar.gz;
-       sha256 = "04nkcbs27plwq31w541phfci3391s10p2xv5lmry5wq7fbdw5iwy";
+       url = mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.837.tar.gz;
+       sha256 = "0si12wv02i8cn2xw6lk0m2apqrd88awcli1yadmvikq5rnfhcypa";
      };
      meta = {
        description = "Many-Core Engine for Perl providing parallel processing capabilities";
