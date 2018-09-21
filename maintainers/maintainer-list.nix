@@ -2813,6 +2813,11 @@
     github = "muflax";
     name = "Stefan Dorn";
   };
+  mvnetbiz = {
+    email = "mvnetbiz@gmail.com";
+    github = "mvnetbiz";
+    name = "Matt Votava";
+  };
   myrl = {
     email = "myrl.0xf@gmail.com";
     github = "myrl";
