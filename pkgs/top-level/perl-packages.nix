@@ -501,10 +501,10 @@ let
   };
 
   ArchiveTar = buildPerlPackage rec {
-    name = "Archive-Tar-2.30";
+    name = "Archive-Tar-2.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "4a5a172cfefe08cb2d32f99ed388a3b55967588bbf254e950bc8a48a8bf1d2e5";
+      sha256 = "92783780731ab0c9247adf43e70f4801e8317e3915ea87e38b85c8f734e8fca2";
     };
     meta = {
       description = "Manipulates TAR archives";
