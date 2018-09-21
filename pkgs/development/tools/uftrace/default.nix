@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, libelf, libdwarf, ncurses }:
+{stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "uftrace-${version}";
