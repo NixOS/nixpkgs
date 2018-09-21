@@ -6,7 +6,7 @@ let
     installPhase ? ''
       mkdir -p $out/config
       mkdir -p $out/plugins
-      ES_HOME=$out ${elasticsearch-oss}/bin/elasticsearch-plugin install --batch -v file://$src
+      ES_HOME=${elasticsearch-oss} ${elasticsearch-oss}/bin/elasticsearch-plugin install --batch -v file://$src
     '',
     ...
   }:
@@ -27,7 +27,7 @@ in {
     version = "${elk6Version}";
     src = fetchurl {
       url = "https://github.com/vhyza/elasticsearch-analysis-lemmagen/releases/download/v${version}/${name}-plugin.zip";
-      sha256 = "1m4z05wixjrq4nlbdjyhvprkrwxjym8aba18scmzfn25fhbjgvkz";
+      sha256 = "09mb9gdglnac5cmwvdaxh7cnj1kfgdf0ydb3ijykqc0g3ccrvddg";
     };
     meta = with stdenv.lib; {
       homepage = https://github.com/vhyza/elasticsearch-analysis-lemmagen;
@@ -42,7 +42,7 @@ in {
     version = "${elk6Version}";
     src = pkgs.fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/discovery-ec2/discovery-ec2-${elk6Version}.zip";
-      sha256 = "1i7ksy69132sr84h51lamgq967yz3a3dw0b54nckxpqwad9pcpj0";
+      sha256 = "16mzalvpvz1rm8zqzrj98g2ffqh7kpm4wpw2k4h92w1iw96jmpl9";
     };
     meta = with stdenv.lib; {
       homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2;
@@ -57,7 +57,7 @@ in {
     version = "${elk6Version}-22.3";
     src = fetchurl rec {
       url = "mirror://maven/com/floragunn/search-guard-6/${version}/search-guard-6-${version}.zip";
-      sha256 = "1r71h4h9bmxak1mq5gpm19xq5ji1gry1kp3sjmm8azy4ykdqdncx";
+      sha256 = "1d4a5p8pgf553rm4znqvfjix96pda6zmbfsxr7wq0f4aaw09pg91";
     };
     meta = with stdenv.lib; {
       homepage = https://github.com/floragunncom/search-guard;
