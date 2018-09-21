@@ -165,10 +165,10 @@ let
   };
 
   AnyEventHTTP = buildPerlPackage rec {
-    name = "AnyEvent-HTTP-2.23";
+    name = "AnyEvent-HTTP-2.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
-      sha256 = "2e3376d03bfa5f172f43d4c615ba496281c9ffe3093a828c539683e17e2fbbcb";
+      sha256 = "0358a542baa45403d81c0a70e43e79c044ddfa1371161d043f002acef63121dd";
     };
     propagatedBuildInputs = [ AnyEvent commonsense ];
   };
