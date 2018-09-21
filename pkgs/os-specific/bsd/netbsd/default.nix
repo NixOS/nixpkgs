@@ -542,6 +542,8 @@ in rec {
     makeFlags = [ "INCSDIR=/include" ];
     postPatch = ''
       substituteInPlace term.c --replace /usr/share $out/share
+      substituteInPlace setupterm.c --replace '#include <curses.h>' 'void use_env(bool);'
+
     '';
     postInstall = ''
       (cd $NETBSDSRCDIR/share/terminfo && make && make BINDIR=/share install)
