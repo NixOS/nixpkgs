@@ -1,19 +1,19 @@
 { stdenv, ruby, bundler, fetchFromGitLab, go }:
 
 stdenv.mkDerivation rec {
-  version = "7.1.2";
+  version = "8.1.1";
   name = "gitlab-shell-${version}";
 
-  srcs = fetchFromGitLab {
+  src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "1mkr2k2ldn5hl84acajvfify97qy80lmicxx49jbpln22vh9rcni";
+    sha256 = "12lhxlkdbxqiwb2jm66lwykb3mba1kndd3miwb6ac9l6ngvqgyzz";
   };
 
   buildInputs = [ ruby bundler go ];
 
-  patches = [ ./remove-hardcoded-locations.patch ./fixes.patch ];
+  patches = [ ./remove-hardcoded-locations.patch ];
 
   installPhase = ''
     ruby bin/compile
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    description = "SSH access and repository management app for GitLab";
     homepage = http://www.gitlab.com/;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz globin ];
