@@ -33,6 +33,7 @@ appleDerivation rec {
     #define TARGET_OS_WIN32         0
     #define TARGET_OS_UNIX          0
     #define TARGET_OS_EMBEDDED      0
+    #define TARGET_OS_OSX           1
     #define TARGET_OS_IPHONE        0
     #define TARGET_IPHONE_SIMULATOR 0
     #define TARGET_OS_LINUX         0
