@@ -17892,10 +17892,10 @@ let
   };
 
   YAMLLibYAML = buildPerlPackage rec {
-    name = "YAML-LibYAML-0.72";
+    name = "YAML-LibYAML-0.74";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/${name}.tar.gz";
-      sha256 = "0dn50pranjyai4gclb501m29y0ks03y87g132wqpb469rb3sjd0g";
+      url = mirror://cpan/authors/id/I/IN/INGY/YAML-LibYAML-0.74.tar.gz;
+      sha256 = "021l0gf6z93xd6vd604vpvb9d4b714zph17g6hg47fpawdq0xpd0";
     };
   };
 
