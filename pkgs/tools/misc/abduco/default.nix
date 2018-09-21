@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
         license = licenses.isc;
         description = "Allows programs to be run independently from its controlling terminal";
         maintainers = with maintainers; [ pSub ];
+        platforms = platforms.unix;
     };
 
     CFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
