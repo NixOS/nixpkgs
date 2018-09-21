@@ -12022,10 +12022,10 @@ let
   };
 
   Pegex = buildPerlPackage rec {
-    name = "Pegex-0.64";
+    name = "Pegex-0.67";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "27e00264bdafb9c2109212b9654542032617fecf7b7814915d2bdac198f067cd";
+      sha256 = "3cb9df73aece2a5fa769a89bd74daaac302cc077e2489b3b552f3aa172092091";
     };
     buildInputs = [ FileShareDirInstall YAMLLibYAML ];
     meta = {
