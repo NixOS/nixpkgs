@@ -12075,6 +12075,7 @@ with pkgs;
     s6-rc = callPackage ../tools/system/s6-rc { };
 
     nsss = callPackage ../development/libraries/nsss { };
+    utmps = callPackage ../development/libraries/utmps { };
 
   };
 
@@ -12363,6 +12364,8 @@ with pkgs;
   };
 
   uthash = callPackage ../development/libraries/uthash { };
+
+  utmps = skawarePackages.utmps;
 
   ucommon = ucommon_openssl;
 
