@@ -4,6 +4,7 @@
 , python
 , libffi
 , libbfd
+, libpfm
 , libxml2
 , ncurses
 , version
@@ -13,6 +14,7 @@
 , enableManpages ? false
 , enableSharedLibraries ? true
 , enableWasm ? true
+, enablePFM ? !stdenv.isDarwin
 }:
 
 let
@@ -36,7 +38,8 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ cmake python ]
     ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
 
-  buildInputs = [ libxml2 libffi ];
+  buildInputs = [ libxml2 libffi ]
+    ++ stdenv.lib.optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
 
