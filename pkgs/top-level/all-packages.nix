@@ -17141,7 +17141,10 @@ with pkgs;
 
   j4-dmenu-desktop = callPackage ../applications/misc/j4-dmenu-desktop { };
 
-  jabref = callPackage ../applications/office/jabref { };
+  # JabRef needs JavaFX, only available in oracle jre.
+  jabref = callPackage ../applications/office/jabref {
+    jre = oraclejre;
+  };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
 
