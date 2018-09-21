@@ -310,6 +310,8 @@ in {
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
+  gsd = callPackage ../development/python-modules/gsd { };
+
   gssapi = callPackage ../development/python-modules/gssapi { };
 
   h5py = callPackage ../development/python-modules/h5py {
