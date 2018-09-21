@@ -12365,6 +12365,8 @@ with pkgs;
 
   uthash = callPackage ../development/libraries/uthash { };
 
+  utmps = skawarePackages.utmps;
+
   ucommon = ucommon_openssl;
 
   ucommon_openssl = callPackage ../development/libraries/ucommon {
