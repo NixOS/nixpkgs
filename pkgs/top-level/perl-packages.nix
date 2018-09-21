@@ -6349,10 +6349,10 @@ let
   };
 
   GD = buildPerlPackage rec {
-    name = "GD-2.68";
+    name = "GD-2.69";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/GD-2.68.tar.gz;
-      sha256 = "0p2ya641nl5cvcqgw829xgabh835qijfd6vq2ba12862946xx8va";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/GD-2.69.tar.gz;
+      sha256 = "0palmq7l42fibqxhrabnjm7di4q8kciq9323902d717x3i4jvc6x";
     };
 
     buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype pkgs.libpng pkgs.fontconfig pkgs.xorg.libXpm ExtUtilsPkgConfig TestFork ];
