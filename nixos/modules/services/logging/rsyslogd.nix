@@ -85,6 +85,8 @@ in
 
     environment.systemPackages = [ pkgs.rsyslog ];
 
+    services.journald.extraConfig = "ForwardToSyslog=yes";
+
     systemd.services.syslog =
       { description = "Syslog Daemon";
 
