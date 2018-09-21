@@ -9990,10 +9990,10 @@ let
     };
   };
   Mojolicious = buildPerlPackage rec {
-    name = "Mojolicious-7.88";
+    name = "Mojolicious-8.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
-      sha256 = "4c4c9c05131fcd175cd6370e15d2586baec1a3ec882cb6971e1f5f52b5e0d785";
+      sha256 = "b266fd32f12cca2504be012e785f34eb09c0a132df52be183ff5d494e87f0b98";
     };
     meta = {
       homepage = https://mojolicious.org/;
