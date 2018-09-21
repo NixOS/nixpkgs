@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.brain-dump.org/projects/dvtm;
     license = licenses.mit;
     maintainers = [ maintainers.vrthra ];
+    platforms = platforms.unix;
   };
 }
