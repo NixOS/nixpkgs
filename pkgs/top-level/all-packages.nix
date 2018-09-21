@@ -6416,6 +6416,8 @@ with pkgs;
     crystal_0_26
     crystal;
 
+  icr = callPackage ../development/tools/icr {};
+
   devpi-client = callPackage ../development/tools/devpi-client {};
 
   devpi-server = callPackage ../development/tools/devpi-server {};
