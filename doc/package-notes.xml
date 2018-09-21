@@ -494,7 +494,7 @@ stdenv.mkDerivation {
    <para>
     The IBus engine is based on <literal>hunspell</literal> to support
     completion in many languages. By default the dictionaries
-    <literal>de-de</literal>, <literal>en-us</literal>,
+    <literal>de-de</literal>, <literal>en-us</literal>, <literal>fr-moderne</literal>
     <literal>es-es</literal>, <literal>it-it</literal>,
     <literal>sv-se</literal> and <literal>sv-fi</literal> are in use. To add
     another dictionary, the package can be overridden like this:
