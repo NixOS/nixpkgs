@@ -46,12 +46,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./udev-absolute-path.patch ];
 
-   preBuild = ''
-    # meson setup-hook changes the directory so the files are located one level up
-    patchShebangs ../udev/parse_hwdb.py
-    patchShebangs ../test/symbols-leak-test.in
-  '';
-
   doCheck = testsSupport;
 
   meta = {
