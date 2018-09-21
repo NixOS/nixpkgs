@@ -7760,12 +7760,12 @@ let
   };
 
   IOSocketSSL = buildPerlPackage rec {
-    name = "IO-Socket-SSL-2.059";
+    name = "IO-Socket-SSL-2.060";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SU/SULLR/${name}.tar.gz";
-      sha256 = "217debbe0a79f0b7c5669978b4d733271998df4497f4718f78456e5f54d64849";
+      sha256 = "fb5b2877ac5b686a5d7b8dd71cf5464ffe75d10c32047b5570674870e46b1b8c";
     };
-    propagatedBuildInputs = [ NetSSLeay ];
+    propagatedBuildInputs = [ MozillaCA NetSSLeay ];
     # Fix path to default certificate store.
     postPatch = ''
       substituteInPlace lib/IO/Socket/SSL.pm \
