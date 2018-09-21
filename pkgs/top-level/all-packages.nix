@@ -17746,6 +17746,8 @@ with pkgs;
 
   pijul = callPackage ../applications/version-management/pijul {};
 
+  piper = callPackage ../os-specific/linux/piper { };
+
   plank = callPackage ../applications/misc/plank { };
 
   planner = callPackage ../applications/office/planner { };
