@@ -132,7 +132,7 @@ let
   ##
   makeMinimal = netBSDDerivation rec {
     path = "tools/make";
-    sha256 = "0l4794zwj2haark3azf9xwcwqlkbrifhb2glaa9iba4dkg2mklsb";
+    sha256 = "1xbzfd4i7allrkk1if74a8ymgpizyj0gkvdigzzj37qar7la7nc1";
     version = "8.0";
 
     buildInputs = [];
@@ -164,7 +164,7 @@ let
 
   compat = netBSDDerivation rec {
     path = "tools/compat";
-    sha256 = "17phkfafybxwhzng44k5bhmag6i55br53ky1nwcmw583kg2fa86z";
+    sha256 = "050449lq5gpxqsripdqip5ks49g5ypjga188nd3ss8dg1zf7ydz3";
     version = "8.0";
 
     setupHooks = [
@@ -222,9 +222,9 @@ let
       find $out -type d -empty -delete
     '';
     extraPaths = [ libc.src libutil.src
-      (fetchNetBSD "include" "8.0" "1vc58xrhrp202biiv1chhlh0jwnjr7k3qq91pm46k6v5j95j0qwp")
-      (fetchNetBSD "external/bsd/flex" "8.0" "0m0m72r3zzc9gi432h3xkqdzspr4n0hj4m8h7j74pwbvpfg9d9qq")
-      (fetchNetBSD "sys/sys" "8.0" "1vwnv5nk7rlgn5w9nkdqj9652hmwmfwqxj3ymcz0zk10abbaib93")
+      (fetchNetBSD "include" "8.0" "128m77k16i7frvk8kifhmxzk7a37m7z1s0bbmja3ywga6sx6v6sq")
+      (fetchNetBSD "external/bsd/flex" "8.0" "0yxcjshz9nj827qhmjwwjmzvmmqgaf0d25b42k7lj84vliwrgyr6")
+      (fetchNetBSD "sys/sys" "8.0" "0b0yjjy0c0cvk5nyffppqwxlwh2s1qr2xzl97a9ldck00dibar94")
     ] ++ libutil.extraPaths ++ libc.extraPaths;
   };
 
@@ -238,7 +238,7 @@ let
   ''; in netBSDDerivation {
     path = "usr.bin/xinstall";
     version = "8.0";
-    sha256 = "0nzhyh714m19h61m45gzc5dszkbafp5iaphbp5mza6w020fzf2y8";
+    sha256 = "1f6pbz3qv1qcrchdxif8p5lbmnwl8b9nq615hsd3cyl4avd5bfqj";
     extraPaths = [ mtree.src make.src ];
     nativeBuildInputs = [ makeMinimal mandoc groff ];
     buildInputs = [ compat fts ];
@@ -262,8 +262,8 @@ let
     nativeBuildInputs = [ ];
     propagatedBuildInputs = [ compat ];
     extraPaths = [
-      (fetchNetBSD "lib/libc/gen/fts.c" "8.0" "1yfd2liypj6xky2h0mgxi5lgpflmkkg4zf3ii3apz5cf8jq9gmn9")
-      (fetchNetBSD "lib/libc/include/namespace.h" "8.0" "0kwd4v8y0mfjhmwplsk52pvzbcpvpp2qy2g8c0jmfraam63q6q1y")
+      (fetchNetBSD "lib/libc/gen/fts.c" "8.0" "1a8hmf26242nmv05ipn3ircxb0jqmmi66rh78kkyi9vjwkfl3qn7")
+      (fetchNetBSD "lib/libc/include/namespace.h" "8.0" "1sjvh9nw3prnk4rmdwrfsxh6gdb9lmilkn46jcfh3q5c8glqzrd7")
       (fetchNetBSD "lib/libc/gen/fts.3" "8.0" "1asxw0n3fhjdadwkkq3xplfgqgl3q32w1lyrvbakfa3gs0wz5zc1")
     ];
     buildPhase = ''
@@ -314,7 +314,7 @@ let
   libutil = netBSDDerivation {
     path = "lib/libutil";
     version = "8.0";
-    sha256 = "12848ynizz13mvn2kndrkq482xhkw323b7c8fg0zli1nhfsmwsm8";
+    sha256 = "077syyxd303m4x7avs5nxzk4c9n13d5lyk5aicsacqjvx79qrk3i";
     extraPaths = [
       (fetchNetBSD "common/lib/libutil" "8.0" "0q3ixrf36lip1dx0gafs0a03qfs5cs7n0myqq7af4jpjd6kh1831")
     ];
@@ -323,15 +323,15 @@ let
   libc = netBSDDerivation {
     path = "lib/libc";
     version = "8.0";
-    sha256 = "13rcx3mbx2644z01zgk9gggdfr0hqdbsvd7zrsm2l13yf9aix6pg";
+    sha256 = "0lgbc58qgn8kwm3l011x1ml1kgcf7jsgq7hbf0hxhlbvxq5bljl3";
     extraPaths = [
-      (fetchNetBSD "common/lib/libc" "8.0" "1va8zd4lqyrc1d0c9q04r8y88cfxpkhwcxasggxxvhksd3khkpha")
+      (fetchNetBSD "common/lib/libc" "8.0" "1kbhj0vxixvdy9fvsr5y70ri4mlkmim1v9m98sqjlzc1vdiqfqc8")
     ];
   };
 
   make = netBSDDerivation {
     path = "usr.bin/make";
-    sha256 = "0srkkg6qdzqlccfi4xh19gl766ks6hpss76bnfvwmd0zg4q4zdar";
+    sha256 = "103643qs3w5kiahir6cca2rkm5ink81qbg071qyzk63qvspfq10c";
     version = "8.0";
     postPatch = ''
       # make needs this to pick up our sys make files
@@ -358,20 +358,20 @@ let
       (cd $NETBSDSRCDIR/share/mk && make FILESDIR=/share/mk install)
     '';
     extraPaths = [
-      (fetchNetBSD "share/mk" "8.0" "0570v0siv0wygn8ygs1yy9pgk9xjw9x1axr5qg4xrddv3lskf9xa")
+      (fetchNetBSD "share/mk" "8.0" "033q4w3rmvwznz6m7fn9xcf13chyhwwl8ijj3a9mrn80fkwm55qs")
     ];
   };
 
   mtree = netBSDDerivation {
     path = "usr.sbin/mtree";
     version = "8.0";
-    sha256 = "1dhsyfvcm67kf5zdbg5dmx5y8fimnbll6qxwp3gjfmbxqigmc52m";
+    sha256 = "0hanmzm8bgwz2bhsinmsgfmgy6nbdhprwmgwbyjm6bl17vgn7vid";
   };
 
   who = netBSDDerivation {
     path = "usr.bin/who";
     version = "8.0";
-    sha256 = "17ffwww957m3qw0b6fkgjpp12pd5ydg2hs9dxkkw0qpv11j00d88";
+    sha256 = "0ll76rbblps9hqmncxvw5qx0hhwfz678g70vgfyng8ahxz27rhd9";
     postPatch = lib.optionalString stdenv.isLinux ''
       substituteInPlace $NETBSDSRCDIR/usr.bin/who/utmpentry.c \
         --replace "utmptime = st.st_mtimespec" "utmptime = st.st_mtim" \
@@ -406,13 +406,13 @@ in rec {
   dict = netBSDDerivation {
     path = "share/dict";
     version = "8.0";
-    sha256 = "0nickhsjwgnr2h9nvwflvgfz93kqms5hzdnpyq02crpj35w98bh4";
+    sha256 = "1pk0y3xc5ihc2k89wjkh33qqx3w9q34k03k2qcffvbqh1l6wm36l";
     makeFlags = [ "BINDIR=/share" ];
   };
 
   games = netBSDDerivation {
     path = "games";
-    sha256 = "04wjsang8f8kxsifiayklbxaaxmm3vx9rfr91hfbxj4hk8gkqzy1";
+    sha256 = "1vb4ahmiywgd3q3lzwb34mdd7agdlhsmw077alddkqinvyyxq1jz";
     version = "8.0";
     makeFlags = [ "BINDIR=/bin"
                   "SCRIPTSDIR=/bin" ];
@@ -490,7 +490,7 @@ in rec {
 
   finger = netBSDDerivation {
     path = "usr.bin/finger";
-    sha256 = "0jl672z50f2yf7ikp682b3xrarm6bnrrx9vi94xnp2fav8m8zfyi";
+    sha256 = "1mbxjdzcbx7xsbn3x1qm1cd0kna07yh61wqxmrrphjhl5gv13ra3";
     version = "8.0";
     NIX_CFLAGS_COMPILE = [
       (if stdenv.isLinux then "-DSUPPORT_UTMP" else "-USUPPORT_UTMP")
@@ -505,12 +505,12 @@ in rec {
       ${who.postPatch}
     '';
     extraPaths = [ who.src ]
-              ++ lib.optional stdenv.isDarwin (fetchNetBSD "include/utmp.h" "8.0" "05690fzz0825p2bq0sfyb00mxwd0wa06qryqgqkwpqk9y2xzc7px");
+              ++ lib.optional stdenv.isDarwin (fetchNetBSD "include/utmp.h" "8.0" "05690fzz0825p2bq0sfyb01mxwd0wa06qryqgqkwpqk9y2xzc7px");
   };
 
   fingerd = netBSDDerivation {
     path = "libexec/fingerd";
-    sha256 = "1hhdq70hrxxkjnjfmjm3w8w9g9xq2ngxaxk0chy4vm7chg9nfpmp";
+    sha256 = "0blcahhgyj1lm0mimrbvgmq3wkjvqk5wy85sdvbs99zxg7da1190";
     version = "8.0";
   };
 
@@ -530,13 +530,13 @@ in rec {
       "-D__va_list=va_list"
     ];
     version = "8.0";
-    sha256 = "0qvr52j4qih10m7fa8nddn1psyjy9l0pa4ix02acyssjvgbz2kca";
+    sha256 = "0pmqh2mkfp70bwchiwyrkdyq9jcihx12g1awd6alqi9bpr3f9xmd";
   };
 
   libterminfo = netBSDDerivation {
     path = "lib/libterminfo";
     version = "8.0";
-    sha256 = "06plg0bjqgbb0aghpb9qlk8wkp1l2izdlr64vbr5laqyw8jg84zq";
+    sha256 = "14gp0d6fh6zjnbac2yjhyq5m6rca7gm6q1s9gilhzpdgl9m7vb9r";
     buildInputs = [ compat tic nbperf ];
     MKPIC = if stdenv.isDarwin then "no" else "yes";
     makeFlags = [ "INCSDIR=/include" ];
@@ -547,14 +547,14 @@ in rec {
       (cd $NETBSDSRCDIR/share/terminfo && make && make BINDIR=/share install)
     '';
     extraPaths = [
-      (fetchNetBSD "share/terminfo" "8.0" "1z5vzq8cw24j05r6df4vd6r57cvdbv7vbm4h962kplp14xrbg2h3")
+      (fetchNetBSD "share/terminfo" "8.0" "18db0fk1dw691vk6lsm6dksm4cf08g8kdm0gc4052ysdagg2m6sm")
     ];
   };
 
   libcurses = netBSDDerivation {
     path = "lib/libcurses";
     version = "8.0";
-    sha256 = "04djah9dadzw74nswn0xydkxn900kav8xdvxlxdl50nbrynxg9yf";
+    sha256 = "0azhzh1910v24dqx45zmh4z4dl63fgsykajrbikx5xfvvmkcq7xs";
     buildInputs = [ libterminfo ];
     makeFlags = [ "INCSDIR=/include" ];
     NIX_CFLAGS_COMPILE = [
@@ -588,15 +588,15 @@ in rec {
     buildInputs = [ compat nbperf ];
     extraPaths = [
       libterminfo.src
-      (fetchNetBSD "usr.bin/tic" "8.0" "1ghwsaag4gbwvgp3lfxscnh8hn27n8cscwmgjwp3bkx5vl85nfsa")
-      (fetchNetBSD "tools/Makefile.host" "8.0" "076r3amivb6xranpvqjmg7x5ibj4cbxaa3z2w1fh47h7d55dw9w8")
+      (fetchNetBSD "usr.bin/tic" "8.0" "0diirnzmdnpc5bixyb34c9rid9paw2a4zfczqrpqrfvjsf1nnljf")
+      (fetchNetBSD "tools/Makefile.host" "8.0" "1p23dsc4qrv93vc6gzid9w2479jwswry9qfn88505s0pdd7h6nvp")
     ];
   };
 
   misc = netBSDDerivation {
     path = "share/misc";
     version = "8.0";
-    sha256 = "1vyn30js14nnadlls55mg7g1gz8h14l75rbrrh8lgn49qg289665";
+    sha256 = "0d34b3irjbqsqfk8v8aaj36fjyvwyx410igl26jcx2ryh3ispch8";
     makeFlags = [ "BINDIR=/share" ];
   };
 
