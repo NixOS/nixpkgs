@@ -1082,10 +1082,10 @@ let
   };
 
   Carp = buildPerlPackage rec {
-    name = "Carp-1.38";
+    name = "Carp-1.50";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "00bijwwc0ix27h2ma3lvsf3b56biar96bl9dikxgx7cmpcycxad5";
+      url = mirror://cpan/authors/id/X/XS/XSAWYERX/Carp-1.50.tar.gz;
+      sha256 = "1ngbpjyd9qi7n4h5r3q3qibd8by7rfiv7364jqlv4lbd3973n9zm";
     };
     meta = with stdenv.lib; {
       description = "Alternative warn and die for modules";
