@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    (pkgconfig.override { vanilla = true; })
+    pkgconfig
+    #(pkgconfig.override { vanilla = true; })
     wrapGAppsHook
   ];
 
@@ -24,6 +25,35 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
     pcre
+  ];
+
+  # It seems that currently meson and vanilla pkg-config does work
+  # well, or there is a bug in rage related to them. For now revert to
+  # the default pkg-config (which is patched to disable resolving
+  # private requirements, used by EFL) and explicitly list the include
+  # directories that cannot be found because of that. See also
+  # https://github.com/NixOS/nixpkgs/pull/28477
+  NIX_CFLAGS_COMPILE = [
+    "-I${efl}/include/efl-1"
+    "-I${efl}/include/eina-1"
+    "-I${efl}/include/eina-1/eina"
+    "-I${efl}/include/eet-1"
+    "-I${efl}/include/emile-1"
+    "-I${efl}/include/evas-1"
+    "-I${efl}/include/eo-1"
+    "-I${efl}/include/ecore-1"
+    "-I${efl}/include/ecore-evas-1"
+    "-I${efl}/include/ecore-file-1"
+    "-I${efl}/include/ecore-input-1"
+    "-I${efl}/include/ecore-imf-1"
+    "-I${efl}/include/ecore-con-1"
+    "-I${efl}/include/edje-1"
+    "-I${efl}/include/eldbus-1"
+    "-I${efl}/include/efreet-1"
+    "-I${efl}/include/ethumb-client-1"
+    "-I${efl}/include/ethumb-1"
+    "-I${efl}/include/emotion-1"
+    "-I${efl}/include/eio-1"
   ];
 
   meta = {
