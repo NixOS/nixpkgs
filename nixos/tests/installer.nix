@@ -282,7 +282,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda -- mklabel msdos"
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
               . " mkpart primary linux-swap 1M 1024M"
               . " mkpart primary ext2 1024M -1s",
               "udevadm settle",
@@ -299,7 +299,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda -- mklabel gpt"
+              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
               . " mkpart ESP fat32 1M 50MiB" # /boot
               . " set 1 boot on"
               . " mkpart primary linux-swap 50MiB 1024MiB"
@@ -321,7 +321,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda -- mklabel gpt"
+              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
               . " mkpart ESP fat32 1M 50MiB" # /boot
               . " set 1 boot on"
               . " mkpart primary linux-swap 50MiB 1024MiB"
@@ -345,7 +345,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda -- mklabel msdos"
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
               . " mkpart primary ext2 1M 50MB" # /boot
               . " mkpart primary linux-swap 50MB 1024M"
               . " mkpart primary ext2 1024M -1s", # /
@@ -366,7 +366,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda -- mklabel msdos"
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
               . " mkpart primary ext2 1M 50MB" # /boot
               . " mkpart primary linux-swap 50MB 1024M"
               . " mkpart primary ext2 1024M -1s", # /
@@ -402,7 +402,7 @@ in {
       createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda -- mklabel msdos"
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
               . " mkpart primary linux-swap 1M 1024M"
               . " mkpart primary 1024M -1s",
               "udevadm settle",
@@ -425,7 +425,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda -- mklabel msdos"
+              "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
               . " mkpart primary 1M 2048M" # PV1
               . " set 1 lvm on"
               . " mkpart primary 2048M -1s" # PV2
@@ -447,7 +447,7 @@ in {
   luksroot = makeInstallerTest "luksroot"
     { createPartitions = ''
         $machine->succeed(
-          "parted --script /dev/vda -- mklabel msdos"
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
           . " mkpart primary ext2 1M 50MB" # /boot
           . " mkpart primary linux-swap 50M 1024M"
           . " mkpart primary 1024M -1s", # LUKS
@@ -481,7 +481,7 @@ in {
   filesystemEncryptedWithKeyfile = makeInstallerTest "filesystemEncryptedWithKeyfile"
     { createPartitions = ''
        $machine->succeed(
-          "parted --script /dev/vda -- mklabel msdos"
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
           . " mkpart primary ext2 1M 50MB" # /boot
           . " mkpart primary linux-swap 50M 1024M"
           . " mkpart primary 1024M 1280M" # LUKS with keyfile
@@ -520,7 +520,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/vda --"
+              "flock /dev/vda parted --script /dev/vda --"
               . " mklabel msdos"
               . " mkpart primary ext2 1M 100MB" # /boot
               . " mkpart extended 100M -1s"
@@ -555,7 +555,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted --script /dev/sda -- mklabel msdos"
+              "flock /dev/sda parted --script /dev/sda -- mklabel msdos"
               . " mkpart primary linux-swap 1M 1024M"
               . " mkpart primary ext2 1024M -1s",
               "udevadm settle",
