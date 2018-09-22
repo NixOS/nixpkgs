@@ -375,7 +375,8 @@ in
     systemd.services.znc = {
       description = "ZNC Server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.service" ];
+      after = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
