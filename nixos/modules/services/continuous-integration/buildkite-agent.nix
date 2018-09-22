@@ -103,26 +103,16 @@ in
         '';
       };
 
-      openssh =
-        { privateKeyPath = mkOption {
-            type = types.path;
-            description = ''
-              Private agent key.
+      sshKeyPath = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Private agent SSH key.
 
-              A run-time path to the key file, which is supposed to be provisioned
-              outside of Nix store.
-            '';
-          };
-          publicKeyPath = mkOption {
-            type = types.path;
-            description = ''
-              Public agent key.
-
-              A run-time path to the key file, which is supposed to be provisioned
-              outside of Nix store.
-            '';
-          };
-        };
+          A runtime path to the key file, which is supposed to be provisioned
+          outside of Nix store.
+        '';
+      };
 
       hooks = mkHookOptions [
         { name = "checkout";
@@ -229,12 +219,14 @@ in
         ## This preStart script runs as root
         preStart = let
           sshDir = "${cfg.dataDir}/.ssh";
+          sshKeyPath = toString cfg.sshKeyPath;
         in
           ''
-            mkdir -m 0700 -p "${sshDir}"
-            cp -f "${toString cfg.openssh.privateKeyPath}" "${sshDir}/id_rsa"
-            cp -f "${toString cfg.openssh.publicKeyPath}"  "${sshDir}/id_rsa.pub"
-            chmod 600 "${sshDir}"/id_rsa*
+            ${optionalString (cfg.sshKeyPath != null) ''
+              mkdir -m 0700 -p "${sshDir}"
+              cp -f "${sshKeyPath}" "${sshDir}/id_rsa"
+              chmod 600 "${sshDir}"/id_rsa
+            ''}
 
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
@@ -274,6 +266,6 @@ in
   imports = [
     (mkRenamedOptionModule [ "services" "buildkite-agent" "token" ]                [ "services" "buildkite-agent" "tokenPath" ])
     (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKey" ] [ "services" "buildkite-agent" "openssh" "privateKeyPath" ])
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "publicKey" ]  [ "services" "buildkite-agent" "openssh" "publicKeyPath" ])
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKeyPath" ] [ "services" "buildkite-agent" "sshKeyPath" ])
   ];
 }
