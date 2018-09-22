@@ -1542,6 +1542,8 @@ in {
 
   click = callPackage ../development/python-modules/click {};
 
+  click-completion = callPackage ../development/python-modules/click-completion {};
+
   click-didyoumean = callPackage ../development/python-modules/click-didyoumean {};
 
   click-log = callPackage ../development/python-modules/click-log {};
