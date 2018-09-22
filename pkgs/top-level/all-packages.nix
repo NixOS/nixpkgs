@@ -18720,6 +18720,10 @@ with pkgs;
     };
   };
 
+  spotifyd = callPackage ../applications/audio/spotifyd {
+    withPulseAudio = config.pulseaudio or true;
+  };
+
   libspotify = callPackage ../development/libraries/libspotify {
     apiKey = config.libspotify.apiKey or null;
   };
