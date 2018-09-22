@@ -560,6 +560,8 @@ in {
 
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
+  shellingham = callPackage ../development/python-modules/shellingham {};
+
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
   singledispatch = callPackage ../development/python-modules/singledispatch { };
