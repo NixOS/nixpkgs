@@ -226,13 +226,13 @@ in {
   # We can't update the darwin versions because they simply don't compile at
   # all due to a bug in the intl extensions.
   #
-  # The bug so far is present in 7.1.21, 7.2.9, 7.2.10.
+  # The bug so far is present in 7.1.21, 7.1.22, 7.2.9, 7.2.10.
 
   php71 = generic (
     if stdenv.isDarwin then
       {
-        version = "7.1.21";
-        sha256 = "104mn4kppklb21hgz1a50kgmc0ak5y996sx990xpc8yy9dbrqh62";
+        version = "7.1.20";
+        sha256 = "0i8xd6p4zdg8fl6f0j430raanlshsshr3s3jlm72b0gvi1n4f6rs";
       }
     else
       {
