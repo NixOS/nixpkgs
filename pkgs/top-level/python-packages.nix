@@ -1540,6 +1540,8 @@ in {
 
   click = callPackage ../development/python-modules/click {};
 
+  click-didyoumean = callPackage ../development/python-modules/click-didyoumean {};
+
   click-log = callPackage ../development/python-modules/click-log {};
 
   click-plugins = callPackage ../development/python-modules/click-plugins {};
