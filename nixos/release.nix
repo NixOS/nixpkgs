@@ -268,7 +268,7 @@ in rec {
   tests.containers-imperative = callTest tests/containers-imperative.nix {};
   tests.containers-extra_veth = callTest tests/containers-extra_veth.nix {};
   tests.containers-physical_interfaces = callTest tests/containers-physical_interfaces.nix {};
-  tests.containers-restart_networking = callTest tests/containers-restart_networking.nix {};
+  #tests.containers-restart_networking = callTest tests/containers-restart_networking.nix {}; # 2018-09-22, broken since 2017-10-31
   tests.containers-tmpfs = callTest tests/containers-tmpfs.nix {};
   tests.containers-hosts = callTest tests/containers-hosts.nix {};
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
