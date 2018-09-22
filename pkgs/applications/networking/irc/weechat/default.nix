@@ -145,9 +145,10 @@ in if configure == null then weechat else
       unwrapped = weechat;
     };
   in buildEnv {
-    name = "weechat-bin-env";
+    name = "weechat-bin-env-${weechat.version}";
     paths = [
       (mkWeechat "weechat")
       (mkWeechat "weechat-headless")
     ];
+    meta = weechat.meta;
   }
