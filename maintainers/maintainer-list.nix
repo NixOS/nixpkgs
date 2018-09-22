@@ -678,6 +678,11 @@
     github = "Chaddai";
     name = "Chaddaï Fouché";
   };
+  chaduffy = {
+    email = "charles@dyfis.net";
+    github = "charles-dyfis-net";
+    name = "Charles Duffy";
+  };
   changlinli = {
     email = "mail@changlinli.com";
     github = "changlinli";
