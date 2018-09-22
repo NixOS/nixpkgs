@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     ++ optional enableLibPurple pidgin;
 
   configureFlags = [
-    "--gcov=1"
     "--otr=1"
     "--ssl=gnutls"
     "--pidfile=/var/lib/bitlbee/bitlbee.pid"
