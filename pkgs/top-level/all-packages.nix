@@ -16413,7 +16413,7 @@ with pkgs;
 
   gnuradio-with-packages = callPackage ../applications/misc/gnuradio/wrapper.nix {
     inherit (python2Packages) python;
-    extraPackages = [ gnuradio-nacl gnuradio-osmosdr gnuradio-gsm gnuradio-ais gnuradio-rds ];
+    extraPackages = [ gnuradio-nacl gnuradio-osmosdr gnuradio-gsm gnuradio-ais gnuradio-rds gnuradio-limesdr ];
   };
 
   gnuradio-nacl = callPackage ../applications/misc/gnuradio/nacl.nix { };
@@ -16421,6 +16421,8 @@ with pkgs;
   gnuradio-gsm = callPackage ../applications/misc/gnuradio/gsm.nix { };
 
   gnuradio-ais = callPackage ../applications/misc/gnuradio/ais.nix { };
+
+  gnuradio-limesdr = callPackage ../applications/misc/gnuradio/limesdr.nix { };
 
   gnuradio-rds = callPackage ../applications/misc/gnuradio/rds.nix { };
 
