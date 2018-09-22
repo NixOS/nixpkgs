@@ -120,6 +120,7 @@ let
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
     "--with-gcc=${stdenv.cc.targetPrefix}cc"
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
+    "--with-ar=${stdenv.cc.bintools.targetPrefix}ar"
     # use the one that comes with the cross compiler.
     "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
