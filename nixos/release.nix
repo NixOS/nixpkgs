@@ -381,7 +381,7 @@ in rec {
   tests.pgmanage = callTest tests/pgmanage.nix {};
   tests.postgis = callTest tests/postgis.nix {};
   tests.powerdns = callTest tests/powerdns.nix {};
-  #tests.pgjwt = callTest tests/pgjwt.nix {};
+  tests.pgjwt = callTest tests/pgjwt.nix {};
   tests.predictable-interface-names = callSubTests tests/predictable-interface-names.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.prometheus = callTest tests/prometheus.nix {};
