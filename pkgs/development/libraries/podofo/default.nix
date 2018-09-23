@@ -4,7 +4,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "podofo-0.9.6";
+  version = "0.9.6";
+  name = "podofo-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/podofo/${name}.tar.gz";
@@ -29,6 +30,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ lua5 ] ++ stdenv.lib.optional stdenv.isLinux stdenv.cc.libc;
 
   cmakeFlags = "-DPODOFO_BUILD_SHARED=ON -DPODOFO_BUILD_STATIC=OFF";
+
+  postFixup = if stdenv.isDarwin then ''
+    for i in $out/bin/* ; do
+      install_name_tool -change libpodofo.${version}.dylib $out/lib/libpodofo.${version}.dylib "$i"
+    done
+  '' else null;
 
   meta = {
     homepage = http://podofo.sourceforge.net;
