@@ -195,10 +195,9 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          # TODO(@Ericson2314): Haromonize argument order of `g` with everything else
           overrideScope = g:
             makeScope newScope
-            (lib.fixedPoints.extends (lib.flip g) f);
+            (lib.fixedPoints.extends g f);
           packages = f;
         };
     in self;
