@@ -1131,11 +1131,11 @@ self: super: {
   xmlhtml = doJailbreak super.xmlhtml;
 
   # https://github.com/NixOS/nixpkgs/issues/46467
-  safe-money-aeson = super.safe-money-aeson.override { safe-money = self.safe-money_0_7; };
-  safe-money-store = super.safe-money-store.override { safe-money = self.safe-money_0_7; };
-  safe-money-cereal = super.safe-money-cereal.override { safe-money = self.safe-money_0_7; };
-  safe-money-serialise = super.safe-money-serialise.override { safe-money = self.safe-money_0_7; };
-  safe-money-xmlbf = super.safe-money-xmlbf.override { safe-money = self.safe-money_0_7; };
+  safe-money-aeson = super.safe-money-aeson.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-store = super.safe-money-store.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-cereal = super.safe-money-cereal.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-serialise = super.safe-money-serialise.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-xmlbf = super.safe-money-xmlbf.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
 
   # https://github.com/adinapoli/mandrill/pull/52
   mandrill = appendPatch super.mandrill (pkgs.fetchpatch {
