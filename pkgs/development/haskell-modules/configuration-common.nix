@@ -1146,4 +1146,14 @@ self: super: {
   # Can be removed once vinyl >= 0.10 is in the LTS.
   Frames = super.Frames.override { vinyl = super.vinyl_0_10_0; };
 
+  # https://github.com/Euterpea/Euterpea2/pull/22
+  Euterpea = overrideSrc super.Euterpea {
+    src = pkgs.fetchFromGitHub {
+      owner = "Euterpea";
+      repo = "Euterpea2";
+      rev = "6f49b790adfb8b65d95a758116c20098fb0cd34c";
+      sha256 = "0qz1svb96n42nmig16vyphwxas34hypgayvwc91ri7w7xd6yi1ba";
+    };
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
