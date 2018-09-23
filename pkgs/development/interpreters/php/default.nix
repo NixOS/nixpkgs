@@ -115,12 +115,14 @@ let
         };
 
         mysql = {
-          configureFlags = ["--with-mysql${if mysqlndSupport then "=mysqlnd" else ""}"];
+          configureFlags = ["--with-mysql${if mysqlndSupport then "=mysqlnd" else ""}"
+                            "--with-mysql-sock=/run/mysqld/mysqld.sock"];
           buildInputs = mysqlBuildInputs;
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"];
+          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"
+                            "--with-mysql-sock=/run/mysqld/mysqld.sock"];
           buildInputs = mysqlBuildInputs;
         };
 
@@ -131,7 +133,8 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"];
+          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysql.connector-c}"
+                            "--with-mysql-sock=/run/mysqld/mysqld.sock"];
           buildInputs = mysqlBuildInputs;
         };
 
