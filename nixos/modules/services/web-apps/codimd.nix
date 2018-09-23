@@ -407,21 +407,18 @@ in
           options = {
             accessKey = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Minio access key.
               '';
             };
             secretKey = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Minio secret key.
               '';
             };
             endpoint = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Minio endpoint.
               '';
@@ -450,21 +447,18 @@ in
           options = {
             accessKeyId = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 AWS access key id.
               '';
             };
             secretAccessKey = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 AWS access key.
               '';
             };
             region = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 AWS S3 region.
               '';
@@ -500,14 +494,12 @@ in
           options = {
             connectionString = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Azure Blob Storage connection string.
               '';
             };
             container = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Azure Blob Storage container name.
                 It will be created if non-existent.
@@ -523,28 +515,24 @@ in
           options = {
             authorizationURL = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Specify the OAuth authorization URL.
               '';
             };
             tokenURL = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Specify the OAuth token URL.
               '';
             };
             clientID = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Specify the OAuth client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Specify the OAuth client secret.
               '';
@@ -559,14 +547,12 @@ in
           options = {
             clientID = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Facebook API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Facebook API client secret.
               '';
@@ -581,14 +567,12 @@ in
           options = {
             consumerKey = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Twitter API consumer key.
               '';
             };
             consumerSecret = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Twitter API consumer secret.
               '';
@@ -603,14 +587,12 @@ in
           options = {
             clientID = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 GitHub API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Github API client secret.
               '';
@@ -633,14 +615,12 @@ in
             };
             clientID = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 GitLab API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 GitLab API client secret.
               '';
@@ -663,21 +643,18 @@ in
           options = {
             baseURL = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Mattermost authentication endpoint.
               '';
             };
             clientID = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Mattermost API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Mattermost API client secret.
               '';
@@ -692,21 +669,18 @@ in
           options = {
             clientID = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Dropbox API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Dropbox API client secret.
               '';
             };
             appKey = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Dropbox app key.
               '';
@@ -721,14 +695,12 @@ in
           options = {
             clientID = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Google API client ID.
               '';
             };
             clientSecret = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Google API client secret.
               '';
@@ -750,7 +722,6 @@ in
             };
             url = mkOption {
               type = types.str;
-              default = "";
               example = "ldap://localhost";
               description = ''
                 URL of LDAP server.
@@ -758,21 +729,18 @@ in
             };
             bindDn = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Bind DN for LDAP access.
               '';
             };
             bindCredentials = mkOption {
               type = types.str;
-              default = "";
               description = ''
                 Bind credentials for LDAP access.
               '';
             };
             searchBase = mkOption {
               type = types.str;
-              default = "";
               example = "o=users,dc=example,dc=com";
               description = ''
                 LDAP directory to begin search from.
@@ -780,7 +748,6 @@ in
             };
             searchFilter = mkOption {
               type = types.str;
-              default = "";
               example = "(uid={{username}})";
               description = ''
                 LDAP filter to search with.
@@ -788,7 +755,6 @@ in
             };
             searchAttributes = mkOption {
               type = types.listOf types.str;
-              default = [];
               example = [ "displayName" "mail" ];
               description = ''
                 LDAP attributes to search with.
@@ -804,7 +770,6 @@ in
             };
             useridField = mkOption {
               type = types.str;
-              default = "";
               example = "uid";
               description = ''
                 LDAP field which is a unique identifier for users on CodiMD.
@@ -812,7 +777,6 @@ in
             };
             tlsca = mkOption {
               type = types.str;
-              default = "";
               example = "server-cert.pem,root.pem";
               description = ''
                 Root CA for LDAP TLS in PEM format.
@@ -828,15 +792,13 @@ in
           options = {
             idpSsoUrl = mkOption {
               type = types.str;
-              default = "";
               example = "https://idp.example.com/sso";
               description = ''
                 IdP authentication endpoint.
               '';
             };
-            idPCert = mkOption {
-              type = types.str;
-              default = "";
+            idpCert = mkOption {
+              type = types.path;
               example = "/path/to/cert.pem";
               description = ''
                 Path to IdP certificate file in PEM format.

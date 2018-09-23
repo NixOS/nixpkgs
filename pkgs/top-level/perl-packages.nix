@@ -9989,16 +9989,20 @@ let
       license = stdenv.lib.licenses.asl20;
     };
   };
+
   Mojolicious = buildPerlPackage rec {
     name = "Mojolicious-8.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
       sha256 = "b266fd32f12cca2504be012e785f34eb09c0a132df52be183ff5d494e87f0b98";
     };
+    buildInputs = [ ExtUtilsMakeMaker ];
+    propagatedBuildInputs = [ IOSocketIP JSONPP PodSimple TimeLocal ];
     meta = {
-      homepage = https://mojolicious.org/;
+      homepage = https://mojolicious.org;
       description = "Real-time web framework";
-      license = with stdenv.lib.licenses; [ artistic2 ];
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.thoughtpolice ];
     };
   };
 

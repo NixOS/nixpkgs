@@ -126,9 +126,9 @@ self: super: builtins.intersectAttrs super {
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = if pkgs.stdenv.isDarwin then dontCheck super.system-fileio else super.system-fileio;
 
-  # Prevents needing to add security_tool as a build tool to all of x509-system's
-  # dependencies.
-  x509-system = if pkgs.stdenv.targetPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
+  # Prevents needing to add `security_tool` as a run-time dependency for
+  # everything using x509-system to give access to the `security` executable.
+  x509-system = if pkgs.stdenv.hostPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
     then let inherit (pkgs.darwin) security_tool;
       in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
         postPatch = (drv.postPatch or "") + ''
@@ -511,4 +511,10 @@ self: super: builtins.intersectAttrs super {
   # Doctests hang only when compiling with nix.
   # https://github.com/cdepillabout/termonad/issues/15
   termonad = dontCheck super.termonad;
+
+  # Expects z3 to be on path so we replace it with a hard
+  sbv = overrideCabal super.sbv (drv: {
+    postPatch = ''
+      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs'';
+  });
 }

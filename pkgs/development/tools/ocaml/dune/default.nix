@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "dune-${version}";
-  version = "1.1.1";
+  version = "1.2.1";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "dune";
     rev = "${version}";
-    sha256 = "0v2pnxpmqsvrvidpwxvbsypzhqfdnjs5crjp9y61qi8nyj8d75zw";
+    sha256 = "14m5zg1b6d0y03c5qsmqmwiwz2h0iys02rlgn6kzm519ck679bkq";
   };
 
   buildInputs = with ocamlPackages; [ ocaml findlib ];

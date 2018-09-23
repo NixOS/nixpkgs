@@ -33,7 +33,7 @@ self: super: {
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
   # Use the latest version of the Cabal library.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_2_0_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_4_0_1; });
 
   # The test suite depends on old versions of tasty and QuickCheck.
   hackage-security = dontCheck super.hackage-security;
@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0a7h21cwfvprj5xfyivjzg2hbs71xp85l9v6kyp58mlqvwy3zffl";
+      sha256 = "1y56dlhx3azny5hzixn9x4kmzzpmakzyvw45qk8x4ffsc7jqq5bs";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -360,6 +360,7 @@ self: super: {
   optional = dontCheck super.optional;
   orgmode-parse = dontCheck super.orgmode-parse;
   os-release = dontCheck super.os-release;
+  pandoc-crossref = dontCheck super.pandoc-crossref;  # (most likely change when no longer 0.3.2.1) https://github.com/lierdakil/pandoc-crossref/issues/199
   persistent-redis = dontCheck super.persistent-redis;
   pipes-extra = dontCheck super.pipes-extra;
   pipes-websockets = dontCheck super.pipes-websockets;
@@ -1074,7 +1075,7 @@ self: super: {
   # The tool needs a newer hpack version than the one mandated by LTS-12.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
     hpack = self.hpack_0_31_0;
-    yaml = self.yaml_0_10_1_1;
+    yaml = self.yaml_0_10_2_0;
   });
 
   # Break out of "aeson <1.3, temporary <1.3".
@@ -1128,5 +1129,11 @@ self: super: {
   safe-money-cereal = super.safe-money-cereal.override { safe-money = self.safe-money_0_7; };
   safe-money-serialise = super.safe-money-serialise.override { safe-money = self.safe-money_0_7; };
   safe-money-xmlbf = super.safe-money-xmlbf.override { safe-money = self.safe-money_0_7; };
+
+  # https://github.com/adinapoli/mandrill/pull/52
+  mandrill = appendPatch super.mandrill (pkgs.fetchpatch {
+    url = https://github.com/adinapoli/mandrill/commit/30356d9dfc025a5f35a156b17685241fc3882c55.patch;
+    sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

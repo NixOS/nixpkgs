@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p python3 nix -i python3
+#!nix-shell -p nix-prefetch-git -p python3 nix -i python3
 
 # format:
 # $ nix run nixpkgs.python3Packages.black -c black update.py

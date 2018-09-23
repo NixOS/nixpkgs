@@ -40,7 +40,7 @@ import ./make-test.nix ({ pkgs, lib, ... }:
     subtest "CodiMD sqlite", sub {
       $codimdSqlite->waitForUnit("codimd.service");
       $codimdSqlite->waitForOpenPort(3000);
-      $codimdPostgres->succeed("sleep 2"); # avoid 503 during startup
+      $codimdSqlite->sleep(10); # avoid 503 during startup
       $codimdSqlite->succeed("curl -sSf http://localhost:3000/new");
     };
 
@@ -49,7 +49,7 @@ import ./make-test.nix ({ pkgs, lib, ... }:
       $codimdPostgres->waitForUnit("codimd.service");
       $codimdPostgres->waitForOpenPort(5432);
       $codimdPostgres->waitForOpenPort(3000);
-      $codimdPostgres->succeed("sleep 2"); # avoid 503 during startup
+      $codimdPostgres->sleep(10); # avoid 503 during startup
       $codimdPostgres->succeed("curl -sSf http://localhost:3000/new");
     };
   '';

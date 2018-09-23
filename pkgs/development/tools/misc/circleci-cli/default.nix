@@ -1,28 +1,22 @@
-{ stdenv, fetchFromGitHub, docker, makeWrapper }:
+{ stdenv, fetchFromGitHub, buildGoPackage }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+let
+  owner = "CircleCI-Public";
   pname = "circleci-cli";
-  version = "0.1.0";
+  version = "0.1.2307";
+in
+buildGoPackage rec {
+  name = "${pname}-${version}";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "circleci";
-    repo = "local-cli";
+  src =  fetchFromGitHub {
+    inherit owner;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1bv1ck5zvyl6pyvbfglizg8ybna4yg2nz441kiv5rmp4g27n6db2";
+    sha256 = "0z71jnq42idvhgpgn3mdpbajmgn4b41rpifv5qxn3h1pgi08f75s";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  installPhase = ''
-    mkdir -p "$out/bin/"
-    cp "$src/circleci.sh" "$out/bin/circleci"
-  '';
-
-  postFixup = ''
-    wrapProgram $out/bin/circleci \
-      --prefix "PATH" : "${docker}/bin"
-  '';
+  goPackagePath = "github.com/${owner}/${pname}";
 
   meta = with stdenv.lib; {
     # Box blurb edited from the AUR package circleci-cli

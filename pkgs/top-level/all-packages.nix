@@ -1184,6 +1184,8 @@ with pkgs;
 
   deja-dup = callPackage ../applications/backup/deja-dup { };
 
+  desync = callPackage ../applications/networking/sync/desync { };
+
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
 
   dbus-broker = callPackage ../os-specific/linux/dbus-broker { };
@@ -1467,7 +1469,9 @@ with pkgs;
 
   noteshrink = callPackage ../tools/misc/noteshrink { };
 
-  noti = callPackage ../tools/misc/noti { };
+  noti = callPackage ../tools/misc/noti {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
@@ -1484,6 +1488,8 @@ with pkgs;
   patdiff = callPackage ../tools/misc/patdiff { };
 
   pbzx = callPackage ../tools/compression/pbzx { };
+
+  pev = callPackage ../development/tools/analysis/pev { };
 
   photon = callPackage ../tools/networking/photon { };
 
@@ -1908,6 +1914,12 @@ with pkgs;
     };
 
     uniemoji = callPackage ../tools/inputmethods/ibus-engines/ibus-uniemoji { };
+
+    typing-booster-unwrapped = callPackage ../tools/inputmethods/ibus-engines/ibus-typing-booster { };
+
+    typing-booster = callPackage ../tools/inputmethods/ibus-engines/ibus-typing-booster/wrapper.nix {
+      typing-booster = ibus-engines.typing-booster-unwrapped;
+    };
   };
 
   ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix {
@@ -2391,7 +2403,9 @@ with pkgs;
 
   exa = callPackage ../tools/misc/exa { };
 
-  exempi = callPackage ../development/libraries/exempi { };
+  exempi = callPackage ../development/libraries/exempi {
+    stdenv = if stdenv.isi686 then overrideCC stdenv gcc6 else stdenv;
+  };
 
   execline = skawarePackages.execline;
 
@@ -7488,8 +7502,6 @@ with pkgs;
 
   ### LUA MODULES
 
-  lua4 = callPackage ../development/interpreters/lua-4 { };
-  lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
   lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
   lua5_2 = callPackage ../development/interpreters/lua-5/5.2.nix { };
   lua5_2_compat = callPackage ../development/interpreters/lua-5/5.2.nix {
@@ -9319,23 +9331,18 @@ with pkgs;
 
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    stdenv = gccStdenv;
   };
   ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    stdenv = gccStdenv;
   };
   ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    stdenv = gccStdenv;
   };
   ffmpeg_3_4 = callPackage ../development/libraries/ffmpeg/3.4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
-    stdenv = gccStdenv;
   };
   ffmpeg_4 = callPackage ../development/libraries/ffmpeg/4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
-    stdenv = gccStdenv;
   };
 
   # Aliases
@@ -12054,6 +12061,7 @@ with pkgs;
     s6-rc = callPackage ../tools/system/s6-rc { };
 
     nsss = callPackage ../development/libraries/nsss { };
+    utmps = callPackage ../development/libraries/utmps { };
 
   };
 
@@ -12342,6 +12350,8 @@ with pkgs;
   };
 
   uthash = callPackage ../development/libraries/uthash { };
+
+  utmps = skawarePackages.utmps;
 
   ucommon = ucommon_openssl;
 
@@ -13885,7 +13895,7 @@ with pkgs;
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
 
-  i7z = callPackage ../os-specific/linux/i7z { };
+  i7z = qt5.callPackage ../os-specific/linux/i7z { };
 
   pcm = callPackage ../os-specific/linux/pcm { };
 
@@ -14064,18 +14074,6 @@ with pkgs;
         # when adding a new linux version
         # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-
-        # https://github.com/NixOS/nixpkgs/issues/45165
-        # TODO: remove this patch once it is merged upstream and released.
-        (rec {
-          name = "hid-core-fix-grouping-by-application";
-          patch = fetchpatch {
-            name = name + ".patch";
-            # https://patchwork.kernel.org/patch/10587369/
-            url = https://git.kernel.org/pub/scm/linux/kernel/git/jikos/hid.git/patch/?id=0d6c3011409135ea84e2a231b013a22017ff999a;
-            sha256 = "0bdrv0aqjh0rdjlaaaqpdgrnd9452fa4ggaa1nq2kmik3q00cq4m";
-          };
-        })
       ];
   };
 
@@ -14450,7 +14448,7 @@ with pkgs;
   nvme-cli = callPackage ../os-specific/linux/nvme-cli { };
 
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
-    inherit (gnome2) gtk gtkmm;
+    inherit (gnome3) gtk gtkmm;
   };
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
@@ -14484,8 +14482,6 @@ with pkgs;
   golangci-lint = callPackage ../development/tools/golangci-lint { };
 
   godef = callPackage ../development/tools/godef { };
-
-  goimports = callPackage ../development/tools/goimports { };
 
   gopkgs = callPackage ../development/tools/gopkgs { };
 
@@ -15056,6 +15052,8 @@ with pkgs;
 
   libertinus = callPackage ../data/fonts/libertinus { };
 
+  libratbag = callPackage ../os-specific/linux/libratbag { };
+
   libre-baskerville = callPackage ../data/fonts/libre-baskerville { };
 
   libre-bodoni = callPackage ../data/fonts/libre-bodoni { };
@@ -15453,7 +15451,7 @@ with pkgs;
     inherit (vamp) vampSDK;
   };
 
-  inherit (python34Packages) arelle;
+  inherit (python3Packages) arelle;
 
   ario = callPackage ../applications/audio/ario { };
 
@@ -17783,6 +17781,8 @@ with pkgs;
 
   pijul = callPackage ../applications/version-management/pijul {};
 
+  piper = callPackage ../os-specific/linux/piper { };
+
   plank = callPackage ../applications/misc/plank { };
 
   planner = callPackage ../applications/office/planner { };
@@ -20023,7 +20023,7 @@ with pkgs;
   };
 
   liquidwar = callPackage ../games/liquidwar {
-    guile = guile_1_8;
+    guile = guile_2_0;
   };
 
   liquidwar5 = callPackage ../games/liquidwar/5.nix {
