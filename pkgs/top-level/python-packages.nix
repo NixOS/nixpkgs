@@ -1006,6 +1006,8 @@ in {
     inherit (pkgs) gcc wirelesstools;
   };
 
+  base58 = callPackage ../development/python-modules/base58 {};
+
   batinfo = callPackage ../development/python-modules/batinfo {};
 
   bcdoc = callPackage ../development/python-modules/bcdoc {};
@@ -1119,6 +1121,8 @@ in {
   };
 
   blessed = callPackage ../development/python-modules/blessed {};
+  
+  block-io = callPackage ../development/python-modules/block-io {};
 
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
