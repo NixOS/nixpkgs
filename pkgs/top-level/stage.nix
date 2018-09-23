@@ -83,7 +83,7 @@ let
     inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
   in {
     inherit buildPlatform hostPlatform targetPlatform;
-    inherit (buildPlatform) system;
+    inherit (hostPlatform) system;
   };
 
   splice = self: super: import ./splice.nix lib self (buildPackages != null);
