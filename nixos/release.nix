@@ -359,6 +359,7 @@ in rec {
   tests.netdata = callTest tests/netdata.nix { };
   tests.networking.networkd = callSubTests tests/networking.nix { networkd = true; };
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };
+  tests.nextcloud = callTest tests/nextcloud.nix { };
   # TODO: put in networking.nix after the test becomes more complete
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nexus = callTest tests/nexus.nix { };
