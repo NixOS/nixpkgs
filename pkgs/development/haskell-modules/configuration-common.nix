@@ -1144,7 +1144,7 @@ self: super: {
   });
 
   # Can be removed once vinyl >= 0.10 is in the LTS.
-  Frames = super.Frames.override { vinyl = super.vinyl_0_10_0; };
+  Frames = super.Frames.overrideScope (self: super: { vinyl = self.vinyl_0_10_0; });
 
   # https://github.com/Euterpea/Euterpea2/pull/22
   Euterpea = overrideSrc super.Euterpea {
