@@ -3,12 +3,13 @@
 # of the virtual consoles.  The latter is useful for the installation
 # CD.
 
-{ config, lib, pkgs, baseModules, ... }:
+{ config, lib, pkgs, modules, baseModules, ... }:
 
 with lib;
 
 let
 
+  allModules = modules;
   cfg = config.services.nixosManual;
 
   /* For the purpose of generating docs, evaluate options with each derivation
@@ -23,7 +24,7 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ baseModules;
+          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ baseModules ++ allModules;
           args = (config._module.args) // { modules = [ ]; };
           specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
         };
