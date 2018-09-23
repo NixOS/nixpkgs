@@ -38,6 +38,7 @@ let
       kernel=u-boot-rpi.bin
     '' else ''
       kernel=kernel.img
+      initramfs initrd followkernel
     '') + optional (cfg.firmwareConfig != null) cfg.firmwareConfig);
 
 in
