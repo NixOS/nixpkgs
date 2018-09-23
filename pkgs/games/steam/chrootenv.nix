@@ -183,6 +183,8 @@ in buildFHSUserEnv rec {
     test -z ''${TZ+x} &&
     new_TZ="$(readlink -f /etc/localtime | grep -P -o '(?<=/zoneinfo/).*$')" &&
     export TZ="$new_TZ"
+    # Above, the use of intermediate variable `new_TZ` is necessary to ensure
+    # that `TZ` is left alone if the grep fails.
 
     export STEAM_RUNTIME=${if nativeOnly then "0" else "/steamrt"}
   '' + extraProfile;
