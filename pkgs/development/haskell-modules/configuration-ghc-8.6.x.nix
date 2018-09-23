@@ -58,8 +58,8 @@ self: super: {
   test-framework = doJailbreak super.test-framework;         # containers >=0.1 && <0.6
 
   # Older versions don't work with ghc 8.6.1:
-  hspec-core = self.hspec-core_2_5_6;
-  hspec-core_2_5_6 = super.hspec-core_2_5_6.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
+  hspec-core = self.hspec-core_2_5_7;
+  hspec-core_2_5_7 = super.hspec-core_2_5_7.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
   hspec-meta = self.hspec-meta_2_5_6;
   optparse-applicative = doJailbreak super.optparse-applicative;
   unordered-containers = dontCheck super.unordered-containers;
