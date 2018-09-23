@@ -46,6 +46,25 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
+         xml:id="sec-release-18.09-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
          xml:id="sec-release-19.03-notable-changes">
   <title>Other Notable Changes</title>
 
