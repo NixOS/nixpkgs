@@ -30,6 +30,10 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
   ];
 
+  postInstall = ''
+    sed -i -e "s|plugin=|plugin=$out/lib/NetworkManager/|" $out/lib/NetworkManager/VPN/nm-openvpn-service.name
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
