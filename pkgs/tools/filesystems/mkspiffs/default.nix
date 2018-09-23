@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = https://github.com/igrr/mkspiffs;
     maintainers = with maintainers; [ haslersn ];
+    platforms = platforms.linux;
   };
 }
