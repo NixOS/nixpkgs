@@ -215,6 +215,8 @@ in
 
     networking.hosts = {
       "127.0.0.1" = [ "localhost" ];
+    } // optionalAttrs (cfg.hostName != "") {
+      "127.0.1.1" = [ cfg.hostName ];
     } // optionalAttrs cfg.enableIPv6 {
       "::1" = [ "localhost" ];
     };
