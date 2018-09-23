@@ -1,5 +1,7 @@
 { lib, mkspiffs }:
 
+# We provide the same presets as the upstream
+
 lib.mapAttrs (
   name: { CPPFLAGS }:
   mkspiffs.overrideAttrs (drv: {

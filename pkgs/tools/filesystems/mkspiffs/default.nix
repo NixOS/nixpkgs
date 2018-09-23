@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, git }:
 
-# We can build mkspiffs with custom CPPFLAGS by passing them in extraBuidFlags.
-# The upstream has several named presets for CPPFLAGS whose names will be passed in buildConfigName.
+# Changing the variables CPPFLAGS and BUILD_CONFIG_NAME can be done by
+# overriding the same-named attributes. See ./presets.nix for examples.
 
 stdenv.mkDerivation rec {
   name = "mkspiffs-${version}";
