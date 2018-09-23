@@ -7,7 +7,7 @@
 , zip-archive, zlib
 }:
 let
-  ats-pkg-version = "3.2.1.9";
+  ats-pkg-version = "3.2.1.12";
 in
 stdenv.mkDerivation rec {
   name = "ats-pkg";
