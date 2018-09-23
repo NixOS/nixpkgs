@@ -1143,4 +1143,7 @@ self: super: {
     sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
   });
 
+  # Can be removed once vinyl >= 0.10 is in the LTS.
+  Frames = super.Frames.override { vinyl = super.vinyl_0_10_0; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
