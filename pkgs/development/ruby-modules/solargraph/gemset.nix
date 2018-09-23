@@ -127,10 +127,10 @@
     dependencies = ["coderay" "eventmachine" "htmlentities" "kramdown" "parser" "reverse_markdown" "rubocop" "thor" "tilt" "yard"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wp4k6ayv9gv1rzxqccz6zb1fss7klszqwha9wvs6mj3c1vhghac";
+      sha256 = "11l759mrzjla2iqy5wdd20r01196pfxkw0b0gzgskdbfi8y8mvg5";
       type = "gem";
     };
-    version = "0.27.1";
+    version = "0.28.1";
   };
   thor = {
     source = {
