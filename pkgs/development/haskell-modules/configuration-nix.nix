@@ -516,4 +516,7 @@ self: super: builtins.intersectAttrs super {
     postPatch = ''
       sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs'';
   });
+
+  # The test-suite requires a running PostgreSQL server.
+  Frames-beam = dontCheck super.Frames-beam;
 }
