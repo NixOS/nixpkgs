@@ -211,7 +211,7 @@ isELF() {
     exec {fd}< "$fn"
     read -r -n 4 -u "$fd" magic
     exec {fd}<&-
-    if [[ "$magic" =~ ELF ]]; then return 0; else return 1; fi
+    if [[ "$magic" = "$(echo -ne "\x7fELF")" ]]; then return 0; else return 1; fi
 }
 
 # Return success if the specified file is a script (i.e. starts with
