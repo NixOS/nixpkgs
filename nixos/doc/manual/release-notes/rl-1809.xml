@@ -247,6 +247,28 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
       They should be using that anyways for clarity.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>lib.customization.makeScope</literal> binds a
+     <varname>callPackage</varname> which in turn binds an
+     <varname>overrideScipe</varname>. That <varname>overrideScope</varname>
+     now takes a function with parameters in the opposite order: <literal>self:
+     super: { … }</literal> now whereas it was <literal>super: self: { …
+     }</literal> before. This brings makes it consistent with everything else
+     related to <literal>super: self: { … }</literal> overrides, including
+     even the other more common implementations of
+     <varname>overrideScope</varname> used in the Haskell infrastructure and
+     other language-specific infrastructures. The most prominant uses of
+     <varname>makeScope</varname> today include
+     <varname>emacsPackagesNg</varname>, <varname>q5*</varname>, and most
+     desktop enironments' package sets such as <varname>gnome3</varname>, KDE
+     and <varname>plasma5</varname>, <varname>xfce4-13</varname>, and
+     <varname>deepin</varname>. If you use any of these package sets and
+     experience problems, please check your local configuration for any
+     overrides / overlays and make sure they are now in the conventional
+     <literal>self: super: { … }</literal> form.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
