@@ -926,8 +926,9 @@ self: super: {
   text-icu = dontCheck super.text-icu;
 
   # https://github.com/haskell/cabal/issues/4969
-  haddock-library_1_4_4 = dontHaddock super.haddock-library_1_4_4;
-  haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
+  haddock-api = (super.haddock-api.overrideScope (self: super: {
+    haddock-library = self.haddock-library_1_6_0;
+  })).override { hspec = self.hspec_2_4_8; };
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
   # Jailbreak "graphviz >=2999.18.1 && <2999.20".
