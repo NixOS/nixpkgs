@@ -387,6 +387,14 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "ISC License";
   };
 
+  # Proprietary binaries; free to redistribute without modification.
+  issl = {
+    fullName = "Intel Simplified Software License";
+    url = https://software.intel.com/en-us/license/intel-simplified-software-license;
+    free = false;
+    redistributable = true;
+  };
+
   lgpl2 = spdx {
     spdxId = "LGPL-2.0";
     fullName = "GNU Library General Public License v2 only";
@@ -605,12 +613,19 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   unfreeRedistributable = {
     fullName = "Unfree redistributable";
     free = false;
+    # TODO: Go through the NixPkgs tree, replacing unfreeRedistributable
+    # licenses with the correct license that has
+    # { free = false; redistributable = true; }
+    redistributable = true;
   };
 
   unfreeRedistributableFirmware = {
     fullName = "Unfree redistributable firmware";
     # Note: we currently consider these "free" for inclusion in the
     # channel and NixOS images.
+    # TODO: Set to false now that we have redistributable?
+    free = true;
+    redistributable = true;
   };
 
   unlicense = spdx {

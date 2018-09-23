@@ -15,8 +15,14 @@
 , limitedSupportedSystems ? [ "i686-linux" ]
   # Strip most of attributes when evaluating to spare memory usage
 ,  scrubJobs ? true
-  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-,  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+  # Attributes passed to nixpkgs. Don't build packages marked as unfree, unless
+  # they are also marked as redistributable.
+  # TODO: Consider adding this predicate to stdenv's check-meta for generic re-use?
+,  nixpkgsArgs ? { config = {
+     allowUnfree = false;
+     allowUnfreePredicate = (p: p.meta.license.redistributable or false);
+     inHydra = true;
+   }; }
 }:
 
 with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
