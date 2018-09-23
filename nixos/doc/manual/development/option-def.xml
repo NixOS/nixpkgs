@@ -65,7 +65,7 @@ config = {
    A module can override the definitions of an option in other modules by
    setting a <emphasis>priority</emphasis>. All option definitions that do not
    have the lowest priority value are discarded. By default, option definitions
-   have priority 1000. You can specify an explicit priority by using
+   have priority 100. You can specify an explicit priority by using
    <varname>mkOverride</varname>, e.g.
 <programlisting>
 services.openssh.enable = mkOverride 10 false;
