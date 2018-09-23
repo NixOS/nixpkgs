@@ -59,6 +59,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash %u" "Exec=$out/bin/electron-cash %u"
 
+    # Please remove this when #44047 is fixed
     wrapProgram $out/bin/electron-cash \
       --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
   '';
