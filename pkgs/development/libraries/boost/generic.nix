@@ -47,10 +47,24 @@ let
   # To avoid library name collisions
   layout = if taggedLayout then "tagged" else "system";
 
+  # Versions of b2 before 1.65 have job limits; specifically:
+  #   - Versions before 1.58 support up to 64 jobs[0]
+  #   - Versions before 1.65 support up to 256 jobs[1]
+  #
+  # [0]: https://github.com/boostorg/build/commit/0ef40cb86728f1cd804830fef89a6d39153ff632
+  # [1]: https://github.com/boostorg/build/commit/316e26ca718afc65d6170029284521392524e4f8
+  jobs =
+    if versionOlder version "1.58" then
+      "$(($NIX_BUILD_CORES<=64 ? $NIX_BUILD_CORES : 64))"
+    else if versionOlder version "1.65" then
+      "$(($NIX_BUILD_CORES<=256 ? $NIX_BUILD_CORES : 256))"
+    else
+      "$NIX_BUILD_CORES";
+
   b2Args = concatStringsSep " " ([
     "--includedir=$dev/include"
     "--libdir=$out/lib"
-    "-j$NIX_BUILD_CORES"
+    "-j${jobs}"
     "--layout=${layout}"
     "variant=${variant}"
     "threading=${threading}"
