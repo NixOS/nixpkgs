@@ -21438,6 +21438,8 @@ with pkgs;
     withRootSupport = true;
   });
 
+  qcdnum = callPackage ../development/libraries/physics/qcdnum { };
+
   ### SCIENCE/ROBOTICS
 
   apmplanner2 = libsForQt5.callPackage ../applications/science/robotics/apmplanner2 { };
