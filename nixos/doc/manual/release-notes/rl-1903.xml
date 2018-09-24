@@ -99,6 +99,11 @@
      </listitem>
     </itemizedlist>
    </listitem>
+   <listitem>
+     <para>
+       Package <varname>rabbitmq_server</varname> is renamed to <varname>rabbitmq-server</varname>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
