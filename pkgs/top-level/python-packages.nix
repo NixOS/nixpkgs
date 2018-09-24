@@ -560,6 +560,8 @@ in {
 
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
+  shellingham = callPackage ../development/python-modules/shellingham {};
+
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
   singledispatch = callPackage ../development/python-modules/singledispatch { };
@@ -1543,6 +1545,10 @@ in {
   clf = callPackage ../development/python-modules/clf {};
 
   click = callPackage ../development/python-modules/click {};
+
+  click-completion = callPackage ../development/python-modules/click-completion {};
+
+  click-didyoumean = callPackage ../development/python-modules/click-didyoumean {};
 
   click-log = callPackage ../development/python-modules/click-log {};
 
