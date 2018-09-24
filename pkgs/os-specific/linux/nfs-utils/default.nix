@@ -90,6 +90,8 @@ in stdenv.mkDerivation rec {
     "statdpath=$(TMPDIR)"
   ];
 
+  stripDebugList = [ "lib" "libexec" "bin" "etc/systemd/system-generators" ];
+
   postInstall =
     ''
       # Not used on NixOS
