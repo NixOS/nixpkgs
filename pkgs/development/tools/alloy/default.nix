@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeDesktopItem }:
+{ stdenv, fetchurl, jre, makeWrapper, makeDesktopItem }:
 
 let generic = { major, version, src }:
 
@@ -16,21 +16,15 @@ let generic = { major, version, src }:
       categories = "Development;IDE;Education;";
     };
 
-    buildInputs = [ jre ];
+    nativeBuildInputs = [ makeWrapper ];
 
-    phases = [ "installPhase" ];
-
-    installPhase = ''
+    buildCommand = ''
       jar=$out/share/alloy/${nameMajor}.jar
-
       install -Dm644 ${src} $jar
 
-      cat << EOF > ${nameMajor}
-      #!${stdenv.shell}
-      exec ${jre}/bin/java -jar $jar "\''${@}"
-      EOF
-
-      install -Dm755 ${nameMajor} $out/bin/${nameMajor}
+      mkdir -p $out/bin
+      makeWrapper ${jre}/bin/java $out/bin/${nameMajor} --add-flags \
+       "-jar $jar"
 
       install -Dm644 ${./icon.png} $out/share/pixmaps/${nameMajor}.png
       cp -r ${desktopItem}/share/applications $out/share
