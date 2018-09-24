@@ -376,6 +376,11 @@
     github = "auntie";
     name = "Jonathan Glines";
   };
+  avery = {
+    email = "averyl+nixos@protonmail.com";
+    github = "AveryLychee";
+    name = "Avery Lychee";
+  };
   avnik = {
     email = "avn@avnik.info";
     github = "avnik";

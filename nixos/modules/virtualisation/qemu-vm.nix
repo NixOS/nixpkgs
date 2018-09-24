@@ -32,15 +32,21 @@ let
   # expressions and shell script stuff.
   mkDiskIfaceDriveFlag = idx: driveArgs: let
     inherit (cfg.qemu) diskInterface;
+    isSCSI = diskInterface == "scsi";
     # The drive identifier created by incrementing the index by one using the
     # shell.
     drvId = "drive$((${idx} + 1))";
+    dvcId = "${diskInterface}$((${idx} + 1))";
     # NOTE: DO NOT shell escape, because this may contain shell variables.
-    commonArgs = "index=${idx},id=${drvId},${driveArgs}";
-    isSCSI = diskInterface == "scsi";
-    devArgs = "${diskInterface}-hd,drive=${drvId}";
-    args = "-drive ${commonArgs},if=none -device lsi53c895a -device ${devArgs}";
-  in if isSCSI then args else "-drive ${commonArgs},if=${diskInterface}";
+    commonDriveArgs = "media=disk,id=${drvId},${driveArgs}";
+    commonInterfaceArgs = "drive=${drvId},id=${dvcId},bootindex=${idx}";
+  in lib.concatStrings [
+    "-drive ${commonDriveArgs},if=none "
+    ''${if isSCSI then
+        "-device lsi53c895a -device ${diskInterface}-hd,${commonInterfaceArgs}"
+      else
+        "-device virtio-blk-pci,scsi=off,${commonInterfaceArgs}"} ''
+  ];
 
   # Shell script to start the VM.
   startVM =
@@ -97,15 +103,15 @@ let
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
           -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
+          ${mkDiskIfaceDriveFlag "1" "file=$NIX_DISK_IMAGE,media=disk,cache=writeback,werror=report"} \
           ${if cfg.useBootLoader then ''
-            ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report"} \
-            ${mkDiskIfaceDriveFlag "1" "file=$TMPDIR/disk.img,media=disk"} \
+            -boot menu=on \
+            ${mkDiskIfaceDriveFlag "0" "file=$TMPDIR/disk.img,media=disk"} \
             ${if cfg.useEFIBoot then ''
               -pflash $TMPDIR/bios.bin \
             '' else ''
-            ''}
-          '' else ''
-            ${mkDiskIfaceDriveFlag "0" "file=$NIX_DISK_IMAGE,cache=writeback,werror=report"} \
+            \''}
+          '' else '' \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
             -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS" \
@@ -141,8 +147,9 @@ let
             '';
           buildInputs = [ pkgs.utillinux ];
           QEMU_OPTS = if cfg.useEFIBoot
-                      then "-pflash $out/bios.bin -nographic -serial pty"
-                      else "-nographic -serial pty";
+                      then "-pflash $out/bios.bin -nographic"
+                      else "-nographic";
+          diskInterface = cfg.qemu.diskInterface;
         }
         ''
           # Create a /boot EFI partition with 40M and arbitrary but fixed GUIDs for reproducibility
@@ -155,10 +162,10 @@ let
             --partition-guid=1:1C06F03B-704E-4657-B9CD-681A087A2FDC \
             --partition-guid=2:970C694F-AFD0-4B99-B750-CDB7A329AB6F \
             --hybrid 2 \
-            --recompute-chs /dev/vda
-          ${pkgs.dosfstools}/bin/mkfs.fat -F16 /dev/vda2
+            --recompute-chs ${config.virtualisation.bootDevice}
+          ${pkgs.dosfstools}/bin/mkfs.fat -F16 ${config.virtualisation.bootDevice}2
           export MTOOLS_SKIP_CHECK=1
-          ${pkgs.mtools}/bin/mlabel -i /dev/vda2 ::boot
+          ${pkgs.mtools}/bin/mlabel -i ${config.virtualisation.bootDevice}2 ::boot
 
           # Mount /boot; load necessary modules first.
           ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_cp437.ko.xz || true
@@ -167,11 +174,11 @@ let
           ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/vfat.ko.xz || true
           ${pkgs.kmod}/bin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko.xz || true
           mkdir /boot
-          mount /dev/vda2 /boot
+          mount ${config.virtualisation.bootDevice}2 /boot
 
           # This is needed for GRUB 0.97, which doesn't know about virtio devices.
           mkdir /boot/grub
-          echo '(hd0) /dev/vda' > /boot/grub/device.map
+          echo '(hd0) ${config.virtualisation.bootDevice}' > /boot/grub/device.map
 
           # Install GRUB and generate the GRUB boot menu.
           touch /etc/NIXOS
@@ -464,7 +471,8 @@ in
 
     boot.initrd.availableKernelModules =
       optional cfg.writableStore "overlay"
-      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
+      ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx"
+      ++ optional (cfg.qemu.diskInterface == "scsi") "virtio_scsi";
 
     virtualisation.bootDevice =
       mkDefault (if cfg.qemu.diskInterface == "scsi" then "/dev/sda" else "/dev/vda");

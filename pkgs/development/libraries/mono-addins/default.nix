@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "mono-addins-${version}";
-  version = "1.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "mono-addins";
 
     rev = "mono-addins-${version}";
-    sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
+    sha256 = "018g3bd8afjc39h22h2j5r6ldsdn08ynx7wg889gdvnxg3hrxgl2";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

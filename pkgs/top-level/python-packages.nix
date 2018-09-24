@@ -1841,6 +1841,8 @@ in {
 
   pyjade = callPackage ../development/python-modules/pyjade {};
 
+  pyjet = callPackage ../development/python-modules/pyjet {};
+
   PyLD = callPackage ../development/python-modules/PyLD { };
 
   python-jose = callPackage ../development/python-modules/python-jose {};

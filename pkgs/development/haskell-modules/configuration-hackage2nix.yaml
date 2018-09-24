@@ -2400,7 +2400,6 @@ extra-packages:
   - haddock-api == 2.17.*               # required on GHC 8.0.x
   - haddock-library == 1.2.*            # required for haddock-api-2.16.x
   - haddock-library == 1.4.3            # required for haddock-api-2.17.x
-  - haddock-library == 1.4.4            # required for haddock-api-2.18.x
   - haddock-library == 1.5.*            # required for stylish-cabal-0.4.0.1
   - happy <1.19.6                       # newer versions break Agda
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
