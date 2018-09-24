@@ -926,8 +926,9 @@ self: super: {
   text-icu = dontCheck super.text-icu;
 
   # https://github.com/haskell/cabal/issues/4969
-  haddock-library_1_4_4 = dontHaddock super.haddock-library_1_4_4;
-  haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
+  haddock-api = (super.haddock-api.overrideScope (self: super: {
+    haddock-library = self.haddock-library_1_6_0;
+  })).override { hspec = self.hspec_2_4_8; };
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
   # Jailbreak "graphviz >=2999.18.1 && <2999.20".
@@ -1119,7 +1120,7 @@ self: super: {
     })) ./patches/sexpr-0.2.1.patch;
 
   # Can be removed once yi-language >= 0.18 is in the LTS
-  yi-core = super.yi-core.override { yi-language = self.yi-language_0_18_0; };
+  yi-core = super.yi-core.overrideScope (self: super: { yi-language = self.yi-language_0_18_0; });
 
   # https://github.com/MarcWeber/hasktags/issues/52
   hasktags = dontCheck super.hasktags;
@@ -1131,16 +1132,29 @@ self: super: {
   xmlhtml = doJailbreak super.xmlhtml;
 
   # https://github.com/NixOS/nixpkgs/issues/46467
-  safe-money-aeson = super.safe-money-aeson.override { safe-money = self.safe-money_0_7; };
-  safe-money-store = super.safe-money-store.override { safe-money = self.safe-money_0_7; };
-  safe-money-cereal = super.safe-money-cereal.override { safe-money = self.safe-money_0_7; };
-  safe-money-serialise = super.safe-money-serialise.override { safe-money = self.safe-money_0_7; };
-  safe-money-xmlbf = super.safe-money-xmlbf.override { safe-money = self.safe-money_0_7; };
+  safe-money-aeson = super.safe-money-aeson.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-store = super.safe-money-store.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-cereal = super.safe-money-cereal.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-serialise = super.safe-money-serialise.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
+  safe-money-xmlbf = super.safe-money-xmlbf.overrideScope (self: super: { safe-money = self.safe-money_0_7; });
 
   # https://github.com/adinapoli/mandrill/pull/52
   mandrill = appendPatch super.mandrill (pkgs.fetchpatch {
     url = https://github.com/adinapoli/mandrill/commit/30356d9dfc025a5f35a156b17685241fc3882c55.patch;
     sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
   });
+
+  # Can be removed once vinyl >= 0.10 is in the LTS.
+  Frames = super.Frames.overrideScope (self: super: { vinyl = self.vinyl_0_10_0; });
+
+  # https://github.com/Euterpea/Euterpea2/pull/22
+  Euterpea = overrideSrc super.Euterpea {
+    src = pkgs.fetchFromGitHub {
+      owner = "Euterpea";
+      repo = "Euterpea2";
+      rev = "6f49b790adfb8b65d95a758116c20098fb0cd34c";
+      sha256 = "0qz1svb96n42nmig16vyphwxas34hypgayvwc91ri7w7xd6yi1ba";
+    };
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
