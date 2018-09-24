@@ -2,14 +2,14 @@
 , libusb1, udev }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.0";
+  version = "2.0.2";
   name = "libbladeRF-${version}";
 
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
     rev = "libbladeRF_v${version}";
-    sha256 = "0frvphp4xxdxwzmi94b0asl7b891sd3fk8iw9kfk8h6f3cdhj8xa";
+    sha256 = "18qwljjdnf4lds04kc1zvslr5hh9cjnnjkcy07lbkrq7pj0pfnc6";
   };
 
   nativeBuildInputs = [ pkgconfig ];
