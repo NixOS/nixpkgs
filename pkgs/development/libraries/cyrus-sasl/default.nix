@@ -36,15 +36,15 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
+    "--with-plugindir=${placeholder "out"}/lib/sasl2"
+    "--with-saslauthd=/run/saslauthd"
+    "--enable-login"
+    "--enable-shared"
   ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
-  # Set this variable at build-time to make sure $out can be evaluated.
-  preConfigure = ''
-    configureFlagsArray=( --with-plugindir=$out/lib/sasl2
-                          --with-saslauthd=/run/saslauthd
-                          --enable-login
-                        )
-  '';
+  # Avoid triggering regenerating using broken autoconf/libtool bits.
+  # (many distributions carry patches to remove/replace, but this works for now)
+  dontUpdateAutotoolsGnuConfigScripts = if stdenv.hostPlatform.isMusl then true else null;
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://cyrusimap.web.cmu.edu/;
+    homepage = https://www.cyrusimap.org/sasl;
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
   };
