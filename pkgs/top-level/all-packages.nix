@@ -15536,12 +15536,7 @@ with pkgs;
 
 
   go-ethereum = self.altcoins.go-ethereum;
-  ethsign = self.altcoins.ethsign;
   ethabi = self.altcoins.ethabi;
-  ethrun = self.altcoins.ethrun;
-  seth = self.altcoins.seth;
-  dapp = self.altcoins.dapp;
-  hevm = self.altcoins.hevm;
 
   parity = self.altcoins.parity;
   parity-beta = self.altcoins.parity-beta;
