@@ -21421,6 +21421,8 @@ with pkgs;
 
   mcgrid = callPackage ../development/libraries/physics/mcgrid { };
 
+  mela = callPackage ../development/libraries/physics/mela { };
+
   nlojet = callPackage ../development/libraries/physics/nlojet { };
 
   pythia = callPackage ../development/libraries/physics/pythia { };
