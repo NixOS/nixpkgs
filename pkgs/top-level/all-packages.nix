@@ -21401,6 +21401,8 @@ with pkgs;
 
   ### SCIENCE / PHYSICS
 
+  hoppet = callPackage ../development/libraries/physics/hoppet { };
+
   fastjet = callPackage ../development/libraries/physics/fastjet { };
 
   fastnlo = callPackage ../development/libraries/physics/fastnlo { };
