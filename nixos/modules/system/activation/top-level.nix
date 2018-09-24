@@ -99,30 +99,30 @@ let
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
   baseSystem = pkgs.stdenvNoCC.mkDerivation {
-      name = let hn = config.networking.hostName;
-                 nn = if (hn != "") then hn else "unnamed";
-          in "nixos-system-${nn}-${config.system.nixos.label}";
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      buildCommand = systemBuilder;
+    name = let hn = config.networking.hostName;
+               nn = if (hn != "") then hn else "unnamed";
+        in "nixos-system-${nn}-${config.system.nixos.label}";
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    buildCommand = systemBuilder;
 
-      inherit (pkgs) utillinux coreutils;
-      systemd = config.systemd.package;
-      shell = "${pkgs.bash}/bin/sh";
+    inherit (pkgs) utillinux coreutils;
+    systemd = config.systemd.package;
+    shell = "${pkgs.bash}/bin/sh";
 
-      inherit children;
-      kernelParams = config.boot.kernelParams;
-      installBootLoader =
-        config.system.build.installBootLoader
-        or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
-      activationScript = config.system.activationScripts.script;
-      nixosLabel = config.system.nixos.label;
+    inherit children;
+    kernelParams = config.boot.kernelParams;
+    installBootLoader =
+      config.system.build.installBootLoader
+      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+    activationScript = config.system.activationScripts.script;
+    nixosLabel = config.system.nixos.label;
 
-      configurationName = config.boot.loader.grub.configurationName;
+    configurationName = config.boot.loader.grub.configurationName;
 
-      # Needed by switch-to-configuration.
+    # Needed by switch-to-configuration.
 
-      perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
+    perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
   };
 
   # Handle assertions and warnings
