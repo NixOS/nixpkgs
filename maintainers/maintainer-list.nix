@@ -381,6 +381,11 @@
     github = "auntie";
     name = "Jonathan Glines";
   };
+  avaq = {
+    email = "avaq+nixos@xs4all.nl";
+    github = "avaq";
+    name = "Aldwin Vlasblom";
+  };
   avery = {
     email = "averyl+nixos@protonmail.com";
     github = "AveryLychee";
