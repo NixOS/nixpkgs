@@ -6,6 +6,7 @@
 , utillinux
 , boto
 , setuptools
+, distro
 }:
 
 buildPythonApplication rec {
@@ -42,7 +43,7 @@ buildPythonApplication rec {
     cp -r google_config/udev/*.rules $out/lib/udev/rules.d
   '';
 
-  propagatedBuildInputs = [ boto setuptools ];
+  propagatedBuildInputs = [ boto setuptools distro ];
 
   doCheck = false;
 
