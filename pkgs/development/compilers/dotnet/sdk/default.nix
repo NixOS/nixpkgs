@@ -21,7 +21,11 @@ in
       sha512 = "639f9f68f225246d9cce798d72d011f65c7eda0d775914d1394df050bddf93e2886555f5eed85a75d6c72e9063a54d8aa053c64c326c683b94e9e0a0570e5654";
     };
 
-    unpackPhase = "tar xvzf $src";
+    unpackPhase = ''
+    mkdir src
+    cd src
+    tar xvzf $src
+    '';
 
     buildPhase = ''
       runHook preBuild
