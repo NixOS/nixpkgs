@@ -19008,7 +19008,7 @@ with pkgs;
 
   tree = callPackage ../tools/system/tree {};
 
-  treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK30; };
+  treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
 
   trezor-bridge = callPackage ../applications/networking/browsers/mozilla-plugins/trezor { };
 
