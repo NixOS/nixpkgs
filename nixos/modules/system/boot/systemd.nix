@@ -587,6 +587,14 @@ in
       '';
     };
 
+    services.journald.forwardToSyslog = mkOption {
+      default = (if config.services.rsyslog.enable || config.services.syslog-ng.enable then true else false);
+      type = types.bool;
+      description = ''
+        Whether to forward log messages to syslog.
+      '';
+    };
+
     services.logind.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -752,6 +760,9 @@ in
         ${optionalString (config.services.journald.console != "") ''
           ForwardToConsole=yes
           TTYPath=${config.services.journald.console}
+        ''}
+        ${optionalString (config.services.journald.forwardToSyslog) ''
+          ForwardToSyslog=yes
         ''}
         ${config.services.journald.extraConfig}
       '';
