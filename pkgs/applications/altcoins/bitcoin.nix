@@ -20,7 +20,11 @@ stdenv.mkDerivation rec{
                   ++ optionals stdenv.isLinux [ utillinux ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib"
+                     "--disable-bench"
+                     "--disable-tests"
+                     "--disable-gui-tests"
+                   ]
                      ++ optionals withGui [ "--with-gui=qt5"
                                             "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                           ];
