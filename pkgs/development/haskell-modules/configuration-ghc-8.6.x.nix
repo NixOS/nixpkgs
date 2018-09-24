@@ -47,8 +47,10 @@ self: super: {
   # LTS-12.x versions do not compile.
   contravariant = self.contravariant_1_5;
   doctest = self.doctest_0_16_0_1;
+  hspec = self.hspec_2_5_7;
   hspec-core = self.hspec-core_2_5_7;
   hspec-core_2_5_7 = super.hspec-core_2_5_7.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
+  hspec-discover = self.hspec-discover_2_5_7;
   hspec-meta = self.hspec-meta_2_5_6;
   hspec-meta_2_5_6 = super.hspec-meta_2_5_6.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
   primitive = self.primitive_0_6_4_0;
