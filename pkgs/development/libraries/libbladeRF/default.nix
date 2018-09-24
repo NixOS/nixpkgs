@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, cmake, git, doxygen, help2man, ncurses, tecla
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, cmake, git, doxygen, help2man, ncurses, tecla
 , libusb1, udev }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +21,17 @@ stdenv.mkDerivation rec {
   # Fixup shebang
   prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";
 
+  # Fixes macos and freebsd compilation issue.
+  # https://github.com/Nuand/bladeRF/commit/0cb4ea888543b2dc75b876f7024e180854fbe9c3
+  patches = [ (fetchpatch {
+                name = "fix-OSX-and-FreeBSD-build.patch";
+                url = "https://github.com/Nuand/bladeRF/commit/0cb4ea88.diff";
+                sha256 = "1ccpa69vz2nlpdnxprh4rd1pgphk82z5lfmbrfdkn7srw6nxl469";
+              })
+            ];
+
   # Let us avoid nettools as a dependency.
-  patchPhase = ''
+  postPatch = ''
     sed -i 's/$(hostname)/hostname/' host/utilities/bladeRF-cli/src/cmd/doc/generate.bash
   '';
 
@@ -31,6 +40,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     "-DUDEV_RULES_PATH=etc/udev/rules.d"
     "-DINSTALL_UDEV_RULES=ON"
+    "-DBLADERF_GROUP=bladerf"
   ];
 
   hardeningDisable = [ "fortify" ];

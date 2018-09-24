@@ -33,6 +33,7 @@
   ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/bladeRF.nix
   ./hardware/brightnessctl.nix
   ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
