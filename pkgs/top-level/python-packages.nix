@@ -2197,27 +2197,9 @@ in {
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
-  elasticsearchdsl = buildPythonPackage (rec {
-    name = "elasticsearch-dsl-0.0.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/elasticsearch-dsl/${name}.tar.gz";
-      sha256 = "1gdcdshk881vy18p0czcmbb3i4s5hl8llnfg6961b6x7jkvhihbj";
-    };
-
-    buildInputs = with self; [ covCore dateutil elasticsearch mock pytest pytestcov unittest2 urllib3 pytz ];
-
-    # ImportError: No module named test_elasticsearch_dsl
-    # Tests require a local instance of elasticsearch
-    doCheck = false;
-
-    meta = {
-      description = "Python client for Elasticsearch";
-      homepage = https://github.com/elasticsearch/elasticsearch-dsl-py;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  });
+  elasticsearch-dsl = callPackage ../development/python-modules/elasticsearch-dsl { };
+  # alias
+  elasticsearchdsl = self.elasticsearch-dsl;
 
   elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
 
