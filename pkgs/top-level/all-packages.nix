@@ -11953,6 +11953,8 @@ with pkgs;
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
+  qgnomeplatform =  libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
+
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
   rhino = callPackage ../development/libraries/java/rhino {
