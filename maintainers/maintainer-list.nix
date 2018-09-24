@@ -18,6 +18,11 @@
   for an example on how to work with this data.
   */
 {
+  "1000101" = {
+    email = "jan.hrnko@satoshilabs.com";
+    github = "1000101";
+    name = "Jan Hrnko";
+  };
   Adjective-Object = {
     email = "mhuan13@gmail.com";
     github = "Adjective-Object";
