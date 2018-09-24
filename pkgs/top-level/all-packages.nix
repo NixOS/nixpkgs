@@ -930,6 +930,8 @@ with pkgs;
     libgit2 = libgit2_0_27;
   };
 
+  bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
+
   bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
 
   bmon = callPackage ../tools/misc/bmon { };
