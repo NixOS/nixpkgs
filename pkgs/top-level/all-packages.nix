@@ -22030,6 +22030,8 @@ with pkgs;
     libsemanage = libsemanage.override { python = python3; };
   };
 
+  shades-of-gray-theme = callPackage ../misc/themes/shades-of-gray { };
+
   sierra-gtk-theme = callPackage ../misc/themes/sierra { };
 
   slock = callPackage ../misc/screensavers/slock {
