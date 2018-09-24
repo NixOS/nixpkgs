@@ -33,6 +33,8 @@ stdenv.mkDerivation rec{
   # find or load the Qt platform plugin "minimal""
   doCheck = false;
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Peer-to-peer electronic cash system";
     longDescription= ''
