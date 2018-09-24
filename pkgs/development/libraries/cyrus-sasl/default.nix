@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   # Avoid triggering regenerating using broken autoconf/libtool bits.
   # (many distributions carry patches to remove/replace, but this works for now)
-  dontUpdateAutotoolsGnuConfigScripts = true;
+  dontUpdateAutotoolsGnuConfigScripts = if stdenv.hostPlatform.isMusl then true else null;
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
