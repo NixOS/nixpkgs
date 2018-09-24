@@ -4421,6 +4421,11 @@
     github = "vrthra";
     name = "Rahul Gopinath";
   };
+  vskilet = {
+    email = "victor@sene.ovh";
+    github = "vskilet";
+    name = "Victor SENE";
+  };
   vyp = {
     email = "elisp.vim@gmail.com";
     github = "vyp";
