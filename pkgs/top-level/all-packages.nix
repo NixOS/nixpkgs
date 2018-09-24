@@ -17122,7 +17122,6 @@ with pkgs;
 
   inkscape = callPackage ../applications/graphics/inkscape {
     lcms = lcms2;
-    poppler = poppler_0_61;
   };
 
   inspectrum = libsForQt5.callPackage ../applications/misc/inspectrum { };
@@ -17369,7 +17368,6 @@ with pkgs;
   });
   libreoffice-still-unwrapped = callPackage ../applications/office/libreoffice/still.nix
   (libreoffice-args // {
-      poppler = poppler_0_61;
   });
 
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {

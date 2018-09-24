@@ -1,0 +1,121 @@
+From f0697de012598ea84edafea9a326e5e101eccd2a Mon Sep 17 00:00:00 2001
+From: Eduard Braun <eduard.braun2@gmx.de>
+Date: Tue, 24 Apr 2018 19:18:26 +0200
+Subject: [PATCH] Fix compilation with poppler 0.64
+
+(cherry picked from commit a600c6438fef2f4c06f9a4a7d933d99fb054a973)
+---
+ src/extension/internal/pdfinput/pdf-parser.cpp  | 10 +++++-----
+ src/extension/internal/pdfinput/pdf-parser.h    |  2 +-
+ src/extension/internal/pdfinput/svg-builder.cpp |  4 ++--
+ src/extension/internal/pdfinput/svg-builder.h   |  3 +--
+ 4 files changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/src/extension/internal/pdfinput/pdf-parser.cpp b/src/extension/internal/pdfinput/pdf-parser.cpp
+index 604b7f8079..721524e10a 100644
+--- a/src/extension/internal/pdfinput/pdf-parser.cpp
++++ b/src/extension/internal/pdfinput/pdf-parser.cpp
+@@ -2582,7 +2582,7 @@ void PdfParser::opShowSpaceText(Object args[], int /*numArgs*/)
+   }
+ }
+ 
+-void PdfParser::doShowText(GooString *s) {
++void PdfParser::doShowText(const GooString *s) {
+   GfxFont *font;
+   int wMode;
+   double riseX, riseY;
+@@ -2601,7 +2601,7 @@ void PdfParser::doShowText(GooString *s) {
+   font = state->getFont();
+   wMode = font->getWMode();
+ 
+-  builder->beginString(state, s);
++  builder->beginString(state);
+ 
+   // handle a Type 3 char
+   if (font->getType() == fontType3 && 0) {//out->interpretType3Chars()) {
+@@ -2631,7 +2631,7 @@ void PdfParser::doShowText(GooString *s) {
+     double lineX = state->getLineX();
+     double lineY = state->getLineY();
+     oldParser = parser;
+-    p = s->getCString();
++    p = g_strdup(s->getCString());
+     len = s->getLength();
+     while (len > 0) {
+       n = font->getNextChar(p, len, &code,
+@@ -2686,7 +2686,7 @@ void PdfParser::doShowText(GooString *s) {
+ 
+   } else {
+     state->textTransformDelta(0, state->getRise(), &riseX, &riseY);
+-    p = s->getCString();
++    p = g_strdup(s->getCString());
+     len = s->getLength();
+     while (len > 0) {
+       n = font->getNextChar(p, len, &code,
+@@ -2732,7 +2732,7 @@ void PdfParser::opXObject(Object args[], int /*numArgs*/)
+ {
+   Object obj1, obj2, obj3, refObj;
+ 
+-  char *name = args[0].getName();
++  char *name = g_strdup(args[0].getName());
+ #if defined(POPPLER_NEW_OBJECT_API)
+   if ((obj1 = res->lookupXObject(name)).isNull()) {
+ #else
+diff --git a/src/extension/internal/pdfinput/pdf-parser.h b/src/extension/internal/pdfinput/pdf-parser.h
+index e28fecc2e1..f985b15cad 100644
+--- a/src/extension/internal/pdfinput/pdf-parser.h
++++ b/src/extension/internal/pdfinput/pdf-parser.h
+@@ -287,7 +287,7 @@ private:
+   void opMoveShowText(Object args[], int numArgs);
+   void opMoveSetShowText(Object args[], int numArgs);
+   void opShowSpaceText(Object args[], int numArgs);
+-  void doShowText(GooString *s);
++  void doShowText(const GooString *s);
+ 
+   // XObject operators
+   void opXObject(Object args[], int numArgs);
+diff --git a/src/extension/internal/pdfinput/svg-builder.cpp b/src/extension/internal/pdfinput/svg-builder.cpp
+index a448be6397..617861928d 100644
+--- a/src/extension/internal/pdfinput/svg-builder.cpp
++++ b/src/extension/internal/pdfinput/svg-builder.cpp
+@@ -1020,7 +1020,7 @@ void SvgBuilder::updateFont(GfxState *state) {
+     GfxFont *font = state->getFont();
+     // Store original name
+     if (font->getName()) {
+-        _font_specification = font->getName()->getCString();
++        _font_specification = g_strdup(font->getName()->getCString());
+     } else {
+         _font_specification = (char*) "Arial";
+     }
+@@ -1361,7 +1361,7 @@ void SvgBuilder::_flushText() {
+     _glyphs.clear();
+ }
+ 
+-void SvgBuilder::beginString(GfxState *state, GooString * /*s*/) {
++void SvgBuilder::beginString(GfxState *state) {
+     if (_need_font_update) {
+         updateFont(state);
+     }
+diff --git a/src/extension/internal/pdfinput/svg-builder.h b/src/extension/internal/pdfinput/svg-builder.h
+index ad15c9c06f..ed2a4d48e0 100644
+--- a/src/extension/internal/pdfinput/svg-builder.h
++++ b/src/extension/internal/pdfinput/svg-builder.h
+@@ -29,7 +29,6 @@ namespace Inkscape {
+ #include <glibmm/ustring.h>
+ 
+ #include "CharTypes.h"
+-class GooString;
+ class Function;
+ class GfxState;
+ struct GfxColor;
+@@ -136,7 +135,7 @@ public:
+     void clearSoftMask(GfxState *state);
+ 
+     // Text handling
+-    void beginString(GfxState *state, GooString *s);
++    void beginString(GfxState *state);
+     void endString(GfxState *state);
+     void addChar(GfxState *state, double x, double y,
+                  double dx, double dy,
+-- 
+2.17.0
+

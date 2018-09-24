@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     cd ${name}
   '';
 
+  patches = [ ./poppler-0.65.patch ./inkscape-0.92.3-poppler-0.64.patch ];
+
   postPatch = ''
     patchShebangs share/extensions
     patchShebangs fix-roff-punct
