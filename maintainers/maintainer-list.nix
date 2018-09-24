@@ -2174,6 +2174,11 @@
     github = "krav";
     name = "Kristoffer Thømt Ravneberg";
   };
+  kroell = {
+    email = "nixosmainter@makroell.de";
+    github = "rokk4";
+    name = "Matthias Axel Kröll";
+  };
   kristoff3r = {
     email = "k.soeholm@gmail.com";
     github = "kristoff3r";
