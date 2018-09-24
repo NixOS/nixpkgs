@@ -21405,6 +21405,8 @@ with pkgs;
 
   ### SCIENCE / PHYSICS
 
+  applgrid = callPackage ../development/libraries/physics/applgrid { };
+
   hoppet = callPackage ../development/libraries/physics/hoppet { };
 
   fastjet = callPackage ../development/libraries/physics/fastjet { };
