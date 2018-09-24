@@ -17368,7 +17368,6 @@ with pkgs;
   });
   libreoffice-still-unwrapped = callPackage ../applications/office/libreoffice/still.nix
   (libreoffice-args // {
-      poppler = poppler_0_61;
   });
 
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
