@@ -450,11 +450,11 @@ let
 
   phpcs = pkgs.stdenv.mkDerivation rec {
     name = "phpcs-${version}";
-    version = "3.3.1";
+    version = "3.3.2";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "0kw1ffr688wbcip2hmr7yi7bpdf4kzwh22yvxw17lyddzq6vrqaw";
+      sha256 = "0np3bsj32mwyrcccw5pgypz7wchd5l89bq951w9a7bxh80gjhak9";
     };
 
     phases = [ "installPhase" ];
