@@ -20988,6 +20988,8 @@ with pkgs;
 
   sherpa = callPackage ../applications/science/physics/sherpa {};
 
+  xfitter = callPackage ../applications/science/physics/xfitter {};
+
   ### SCIENCE/PROGRAMMING
 
   dafny = dotnetPackages.Dafny;
