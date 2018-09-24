@@ -22,9 +22,9 @@ in
     };
 
     unpackPhase = ''
-    mkdir src
-    cd src
-    tar xvzf $src
+      mkdir src
+      cd src
+      tar xvzf $src
     '';
 
     buildPhase = ''
