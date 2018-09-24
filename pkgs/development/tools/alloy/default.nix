@@ -1,58 +1,78 @@
 { stdenv, fetchurl, jre, makeDesktopItem }:
 
-stdenv.mkDerivation rec {
-  name = "alloy-${version}";
-  version = "4.2_2015-02-22";
+let generic = { major, version, src }:
 
-  src = fetchurl {
-    sha256 = "0p93v8jwx9prijpikkgmfdzb9qn8ljmvga5d9wvrkxddccjx9k28";
-    url = "http://alloy.mit.edu/alloy/downloads/alloy${version}.jar";
-  };
+  stdenv.mkDerivation rec {
+    name = "${nameMajor}-${version}";
+    nameMajor = "alloy${major}";
 
-  desktopItem = makeDesktopItem rec {
-    name = "alloy";
-    exec = name;
-    icon = name;
-    desktopName = "Alloy";
-    genericName = "Relational modelling tool";
-    comment = meta.description;
-    categories = "Development;IDE;Education;";
-  };
+    desktopItem = makeDesktopItem rec {
+      name = "${nameMajor}";
+      exec = name;
+      icon = name;
+      desktopName = "Alloy ${major}";
+      genericName = "Relational modelling tool";
+      comment = meta.description;
+      categories = "Development;IDE;Education;";
+    };
 
-  buildInputs = [ jre ];
+    buildInputs = [ jre ];
 
-  phases = [ "installPhase" ];
+    phases = [ "installPhase" ];
 
-  installPhase = ''
-    jar=$out/share/alloy/alloy${version}.jar
+    installPhase = ''
+      jar=$out/share/alloy/${nameMajor}.jar
 
-    install -Dm644 ${src} $jar
+      install -Dm644 ${src} $jar
 
-    cat << EOF > alloy
-    #!${stdenv.shell}
-    exec ${jre}/bin/java -jar $jar "\''${@}"
-    EOF
+      cat << EOF > ${nameMajor}
+      #!${stdenv.shell}
+      exec ${jre}/bin/java -jar $jar "\''${@}"
+      EOF
 
-    install -Dm755 alloy $out/bin/alloy
+      install -Dm755 ${nameMajor} $out/bin/${nameMajor}
 
-    install -Dm644 ${./icon.png} $out/share/pixmaps/alloy.png
-    cp -r ${desktopItem}/share/applications $out/share
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Language & tool for relational models";
-    longDescription = ''
-      Alloy is a language for describing structures and a tool for exploring
-      them. An Alloy model is a collection of constraints that describes a set
-      of structures, e.g. all the possible security configurations of a web
-      application, or all the possible topologies of a switching network. The
-      Alloy Analyzer is a solver that takes the constraints of a model and
-      finds structures that satisfy them. Structures are displayed graphically,
-      and their appearance can be customized for the domain at hand.
+      install -Dm644 ${./icon.png} $out/share/pixmaps/${nameMajor}.png
+      cp -r ${desktopItem}/share/applications $out/share
     '';
-    homepage = http://alloy.mit.edu/;
-    downloadPage = http://alloy.mit.edu/alloy/download.html;
-    license = licenses.mit;
-    platforms = platforms.linux;
+
+    meta = with stdenv.lib; {
+      description = "Language & tool for relational models";
+      longDescription = ''
+        Alloy is a language for describing structures and a tool for exploring
+        them. An Alloy model is a collection of constraints that describes a set
+        of structures, e.g. all the possible security configurations of a web
+        application, or all the possible topologies of a switching network. The
+        Alloy Analyzer is a solver that takes the constraints of a model and
+        finds structures that satisfy them. Structures are displayed graphically,
+        and their appearance can be customized for the domain at hand.
+      '';
+      homepage = http://alloytools.org/;
+      downloadPage = http://alloytools.org/download.html;
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ aminb ];
+    };
   };
+
+in rec {
+  alloy4 = let version = "4.2_2015-02-22"; in generic {
+    major = "4";
+    inherit version;
+    src = fetchurl {
+      sha256 = "0p93v8jwx9prijpikkgmfdzb9qn8ljmvga5d9wvrkxddccjx9k28";
+      url = "http://alloytools.org/download/alloy${version}.jar";
+    };
+  };
+
+  alloy5 = let version = "5.0.0.1"; in generic {
+    major = "5";
+    inherit version;
+    src = fetchurl {
+      sha256 = "0kz6i9av9ksjk62lx0dxx8xr542iqvbqd14m1f9h8xpf72c25xw4";
+      url = "https://github.com/AlloyTools/org.alloytools.alloy/releases/download/v${version}/Alloy-${version}.jar";
+    };
+  };
+
+  alloy = alloy4;
 }
