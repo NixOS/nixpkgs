@@ -21405,6 +21405,8 @@ with pkgs;
 
   ### SCIENCE / PHYSICS
 
+  apfelgrid = callPackage ../development/libraries/physics/apfelgrid { };
+
   apfel = callPackage ../development/libraries/physics/apfel { };
 
   applgrid = callPackage ../development/libraries/physics/applgrid { };
