@@ -30,7 +30,7 @@ with lib;
       Version=1.0
       Type=Application
       Name=NixOS Manual
-      Exec=firefox ${config.system.build.manual.manual}/share/doc/nixos/index.html
+      Exec=firefox ${config.system.build.manual.manualHTMLIndex}
       Icon=text-html
     '';
 
