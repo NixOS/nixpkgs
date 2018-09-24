@@ -177,6 +177,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     rm -r $out/share/go/pkg/bootstrap
+    rm -r $out/share/go/pkg/obj
     ln -s $out/share/go/bin $out/bin
   '';
 
