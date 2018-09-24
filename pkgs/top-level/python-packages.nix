@@ -12393,6 +12393,8 @@ in {
 
   shapely = callPackage ../development/python-modules/shapely { };
 
+  sharedmem = callPackage ../development/python-modules/sharedmem { };
+
   soco = callPackage ../development/python-modules/soco { };
 
   sopel = buildPythonPackage rec {
