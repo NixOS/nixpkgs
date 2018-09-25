@@ -1,0 +1,81 @@
+From 7b3348a98c139b4b4238384e52d4b0eb237e4833 Mon Sep 17 00:00:00 2001
+From: Rich Felker <dalias@aerifal.cx>
+Date: Tue, 18 Sep 2018 23:54:18 -0400
+Subject: [PATCH 4/4] support setting of default thread stack size via
+ PT_GNU_STACK header
+
+this facilitates building software that assumes a large default stack
+size without any patching to call pthread_setattr_default_np or
+pthread_attr_setstacksize at each thread creation site, using just
+LDFLAGS.
+
+normally the PT_GNU_STACK header is used only to reflect whether
+executable stack is desired, but with GNU ld at least, passing
+-Wl,-z,stack-size=N will set a size on the program header. with this
+patch, that size will be incorporated into the default stack size
+(subject to increase-only rule and DEFAULT_STACK_MAX limit).
+
+both static and dynamic linking honor the program header. for dynamic
+linking, all libraries loaded at program start, including preloaded
+ones, are considered. dlopened libraries are not considered, for
+several reasons. extra logic would be needed to defer processing until
+the load of the new library is commited, synchronization woud be
+needed since other threads may be running concurrently, and the
+effectiveness woud be limited since the larger size would not apply to
+threads that already existed at the time of dlopen. programs that will
+dlopen code expecting a large stack need to declare the requirement
+themselves, or pthread_setattr_default_np can be used.
+---
+ ldso/dynlink.c       | 12 ++++++++++++
+ src/env/__init_tls.c |  5 +++++
+ 2 files changed, 17 insertions(+)
+
+diff --git a/ldso/dynlink.c b/ldso/dynlink.c
+index e4829c3a..3ecbddfa 100644
+--- a/ldso/dynlink.c
++++ b/ldso/dynlink.c
+@@ -609,6 +609,12 @@ static void *map_library(int fd, struct dso *dso)
+ 		} else if (ph->p_type == PT_GNU_RELRO) {
+ 			dso->relro_start = ph->p_vaddr & -PAGE_SIZE;
+ 			dso->relro_end = (ph->p_vaddr + ph->p_memsz) & -PAGE_SIZE;
++		} else if (ph->p_type == PT_GNU_STACK) {
++			if (!runtime && ph->p_memsz > __default_stacksize) {
++				__default_stacksize =
++					ph->p_memsz < DEFAULT_STACK_MAX ?
++					ph->p_memsz : DEFAULT_STACK_MAX;
++			}
+ 		}
+ 		if (ph->p_type != PT_LOAD) continue;
+ 		nsegs++;
+@@ -1238,6 +1244,12 @@ static void kernel_mapped_dso(struct dso *p)
+ 		} else if (ph->p_type == PT_GNU_RELRO) {
+ 			p->relro_start = ph->p_vaddr & -PAGE_SIZE;
+ 			p->relro_end = (ph->p_vaddr + ph->p_memsz) & -PAGE_SIZE;
++		} else if (ph->p_type == PT_GNU_STACK) {
++			if (!runtime && ph->p_memsz > __default_stacksize) {
++				__default_stacksize =
++					ph->p_memsz < DEFAULT_STACK_MAX ?
++					ph->p_memsz : DEFAULT_STACK_MAX;
++			}
+ 		}
+ 		if (ph->p_type != PT_LOAD) continue;
+ 		if (ph->p_vaddr < min_addr)
+diff --git a/src/env/__init_tls.c b/src/env/__init_tls.c
+index e0224243..96d0e284 100644
+--- a/src/env/__init_tls.c
++++ b/src/env/__init_tls.c
+@@ -90,6 +90,11 @@ static void static_init_tls(size_t *aux)
+ 			base = (size_t)_DYNAMIC - phdr->p_vaddr;
+ 		if (phdr->p_type == PT_TLS)
+ 			tls_phdr = phdr;
++		if (phdr->p_type == PT_GNU_STACK &&
++		    phdr->p_memsz > __default_stacksize)
++			__default_stacksize =
++				phdr->p_memsz < DEFAULT_STACK_MAX ?
++				phdr->p_memsz : DEFAULT_STACK_MAX;
+ 	}
+ 
+ 	if (tls_phdr) {
+-- 
+2.19.0
+

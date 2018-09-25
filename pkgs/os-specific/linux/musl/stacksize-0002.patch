@@ -1,0 +1,86 @@
+From 792f32772e64a32527cd455ebfa087ef434a6f4f Mon Sep 17 00:00:00 2001
+From: Rich Felker <dalias@aerifal.cx>
+Date: Tue, 18 Sep 2018 23:06:50 -0400
+Subject: [PATCH 2/4] limit the configurable default stack/guard size for
+ threads
+
+limit to 8MB/1MB, repectively. since the defaults cannot be reduced
+once increased, excessively large settings would lead to an
+unrecoverably broken state. this change is in preparation to allow
+defaults to be increased via program headers at the linker level.
+
+creation of threads that really need larger sizes needs to be done
+with an explicit attribute.
+---
+ src/internal/pthread_impl.h             |  7 +++++--
+ src/thread/default_attr.c               |  4 ++--
+ src/thread/pthread_setattr_default_np.c | 12 ++++++++----
+ 3 files changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/src/internal/pthread_impl.h b/src/internal/pthread_impl.h
+index 26e6e1df..e73a251f 100644
+--- a/src/internal/pthread_impl.h
++++ b/src/internal/pthread_impl.h
+@@ -182,12 +182,15 @@ hidden void __acquire_ptc(void);
+ hidden void __release_ptc(void);
+ hidden void __inhibit_ptc(void);
+ 
+-extern hidden size_t __default_stacksize;
+-extern hidden size_t __default_guardsize;
++extern hidden unsigned __default_stacksize;
++extern hidden unsigned __default_guardsize;
+ 
+ #define DEFAULT_STACK_SIZE 81920
+ #define DEFAULT_GUARD_SIZE 4096
+ 
++#define DEFAULT_STACK_MAX (8<<20)
++#define DEFAULT_GUARD_MAX (1<<20)
++
+ #define __ATTRP_C11_THREAD ((void*)(uintptr_t)-1)
+ 
+ #endif
+diff --git a/src/thread/default_attr.c b/src/thread/default_attr.c
+index 46fe98ee..dce96409 100644
+--- a/src/thread/default_attr.c
++++ b/src/thread/default_attr.c
+@@ -1,4 +1,4 @@
+ #include "pthread_impl.h"
+ 
+-size_t __default_stacksize = DEFAULT_STACK_SIZE;
+-size_t __default_guardsize = DEFAULT_GUARD_SIZE;
++unsigned __default_stacksize = DEFAULT_STACK_SIZE;
++unsigned __default_guardsize = DEFAULT_GUARD_SIZE;
+diff --git a/src/thread/pthread_setattr_default_np.c b/src/thread/pthread_setattr_default_np.c
+index 256f0685..58486220 100644
+--- a/src/thread/pthread_setattr_default_np.c
++++ b/src/thread/pthread_setattr_default_np.c
+@@ -2,6 +2,9 @@
+ #include "pthread_impl.h"
+ #include <string.h>
+ 
++#define MIN(a,b) ((a)<(b) ? (a) : (b))
++#define MAX(a,b) ((a)>(b) ? (a) : (b))
++
+ int pthread_setattr_default_np(const pthread_attr_t *attrp)
+ {
+ 	/* Reject anything in the attr object other than stack/guard size. */
+@@ -11,11 +14,12 @@ int pthread_setattr_default_np(const pthread_attr_t *attrp)
+ 	if (memcmp(&tmp, &zero, sizeof tmp))
+ 		return EINVAL;
+ 
++	unsigned stack = MIN(attrp->_a_stacksize, DEFAULT_STACK_MAX);
++	unsigned guard = MIN(attrp->_a_guardsize, DEFAULT_GUARD_MAX);
++
+ 	__inhibit_ptc();
+-	if (attrp->_a_stacksize >= __default_stacksize)
+-		__default_stacksize = attrp->_a_stacksize;
+-	if (attrp->_a_guardsize >= __default_guardsize)
+-		__default_guardsize = attrp->_a_guardsize;
++	__default_stacksize = MAX(__default_stacksize, stack);
++	__default_guardsize = MAX(__default_guardsize, guard);
+ 	__release_ptc();
+ 
+ 	return 0;
+-- 
+2.19.0
+
