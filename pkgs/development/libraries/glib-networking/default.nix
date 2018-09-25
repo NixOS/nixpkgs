@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  PKG_CONFIG_GIO_2_0_GIOMODULEDIR = "${placeholder "out"}/lib/gio/modules";
+  PKG_CONFIG_GIO_2_0_GIOMODULEDIR = "lib/gio/modules";
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file

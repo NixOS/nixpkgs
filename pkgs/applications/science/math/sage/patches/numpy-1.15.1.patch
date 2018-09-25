@@ -1,0 +1,911 @@
+diff --git a/src/doc/en/faq/faq-usage.rst b/src/doc/en/faq/faq-usage.rst
+index 2347a1190d..f5b0fe71a4 100644
+--- a/src/doc/en/faq/faq-usage.rst
++++ b/src/doc/en/faq/faq-usage.rst
+@@ -338,7 +338,7 @@ ints. For example::
+     sage: RealNumber = float; Integer = int
+     sage: from scipy import stats
+     sage: stats.ttest_ind(list([1,2,3,4,5]),list([2,3,4,5,.6]))
+-    Ttest_indResult(statistic=0.076752955645333687, pvalue=0.94070490247380478)
++    Ttest_indResult(statistic=0.0767529..., pvalue=0.940704...)
+     sage: stats.uniform(0,15).ppf([0.5,0.7])
+     array([  7.5,  10.5])
+ 
+diff --git a/src/doc/en/thematic_tutorials/numerical_sage/cvxopt.rst b/src/doc/en/thematic_tutorials/numerical_sage/cvxopt.rst
+index 314811c42b..e5f54ec4c2 100644
+--- a/src/doc/en/thematic_tutorials/numerical_sage/cvxopt.rst
++++ b/src/doc/en/thematic_tutorials/numerical_sage/cvxopt.rst
+@@ -48,11 +48,13 @@ we could do the following.
+     sage: B = numpy.array([1.0]*5)
+     sage: B.shape=(5,1)
+     sage: print(B)
+-    [[ 1.]
+-     [ 1.]
+-     [ 1.]
+-     [ 1.]
+-     [ 1.]]
++    [[1.]
++     [1.]
++     [1.]
++     [1.]
++     [1.]]
++
++
+     sage: print(A)
+     [ 2.00e+00  3.00e+00     0         0         0    ]
+     [ 3.00e+00     0      4.00e+00     0      6.00e+00]
+diff --git a/src/doc/en/thematic_tutorials/numerical_sage/numpy.rst b/src/doc/en/thematic_tutorials/numerical_sage/numpy.rst
+index 5b89cd75ee..e50b2ea5d4 100644
+--- a/src/doc/en/thematic_tutorials/numerical_sage/numpy.rst
++++ b/src/doc/en/thematic_tutorials/numerical_sage/numpy.rst
+@@ -84,7 +84,7 @@ well as take slices
+     sage: l[3]
+     3.0
+     sage: l[3:6]
+-    array([ 3.,  4.,  5.])
++    array([3., 4., 5.])
+ 
+ You can do basic arithmetic operations
+ 
+@@ -147,11 +147,11 @@ also do matrix vector multiplication, and matrix addition
+     sage: n = numpy.matrix([[1,2],[3,4]],dtype=float)
+     sage: v = numpy.array([[1],[2]],dtype=float)
+     sage: n*v
+-    matrix([[  5.],
+-            [ 11.]])
++    matrix([[ 5.],
++            [11.]])
+     sage: n+n
+-    matrix([[ 2.,  4.],
+-            [ 6.,  8.]])
++    matrix([[2., 4.],
++            [6., 8.]])
+ 
+ If ``n`` was created with :meth:`numpy.array`, then to do matrix vector
+ multiplication, you would use ``numpy.dot(n,v)``.
+@@ -170,11 +170,11 @@ to manipulate
+             22.,  23.,  24.])
+     sage: n.shape=(5,5)
+     sage: n
+-    array([[  0.,   1.,   2.,   3.,   4.],
+-           [  5.,   6.,   7.,   8.,   9.],
+-           [ 10.,  11.,  12.,  13.,  14.],
+-           [ 15.,  16.,  17.,  18.,  19.],
+-           [ 20.,  21.,  22.,  23.,  24.]])
++    array([[ 0.,  1.,  2.,  3.,  4.],
++           [ 5.,  6.,  7.,  8.,  9.],
++           [10., 11., 12., 13., 14.],
++           [15., 16., 17., 18., 19.],
++           [20., 21., 22., 23., 24.]])
+ 
+ This changes the one-dimensional array into a `5\times 5` array.
+ 
+@@ -187,8 +187,8 @@ NumPy arrays can be sliced as well
+     sage: n=numpy.array(range(25),dtype=float)
+     sage: n.shape=(5,5)
+     sage: n[2:4,1:3]
+-    array([[ 11.,  12.],
+-           [ 16.,  17.]])
++    array([[11., 12.],
++           [16., 17.]])
+ 
+ It is important to note that the sliced matrices are references to
+ the original
+@@ -224,8 +224,8 @@ Some particularly useful commands are
+ 
+     sage: x=numpy.arange(0,2,.1,dtype=float)
+     sage: x
+-    array([ 0. ,  0.1,  0.2,  0.3,  0.4,  0.5,  0.6,  0.7,  0.8,  0.9,  1. ,
+-            1.1,  1.2,  1.3,  1.4,  1.5,  1.6,  1.7,  1.8,  1.9])
++    array([0. , 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1. , 1.1, 1.2,
++           1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9])
+ 
+ You can see that :meth:`numpy.arange` creates an array of floats increasing by 0.1
+ from 0 to 2. There is a useful command :meth:`numpy.r_` that is best explained by example
+@@ -240,10 +240,11 @@ from 0 to 2. There is a useful command :meth:`numpy.r_` that is best explained b
+     sage: Integer=int
+     sage: n=r_[0.0:5.0]
+     sage: n
+-    array([ 0.,  1.,  2.,  3.,  4.])
++    array([0., 1., 2., 3., 4.])
+     sage: n=r_[0.0:5.0, [0.0]*5]
+     sage: n
+-    array([ 0.,  1.,  2.,  3.,  4.,  0.,  0.,  0.,  0.,  0.])
++    array([0., 1., 2., 3., 4., 0., 0., 0., 0., 0.])
++
+ 
+ :meth:`numpy.r_` provides a shorthand for constructing NumPy arrays efficiently.
+ Note in the above ``0.0:5.0`` was shorthand for ``0.0, 1.0, 2.0, 3.0, 4.0``.
+@@ -255,7 +256,7 @@ intervals. We can do this as follows
+ ::
+ 
+     sage: r_[0.0:5.0:11*j]
+-    array([ 0. ,  0.5,  1. ,  1.5,  2. ,  2.5,  3. ,  3.5,  4. ,  4.5,  5. ])
++    array([0. , 0.5, 1. , 1.5, 2. , 2.5, 3. , 3.5, 4. , 4.5, 5. ])
+ 
+ The notation ``0.0:5.0:11*j`` expands to a list of 11 equally space
+ points between 0 and 5 including both endpoints. Note that ``j`` is the
+@@ -287,23 +288,23 @@ an equally spaced grid with `\Delta x = \Delta y = .25` for
+     sage: y=numpy.r_[0.0:1.0:5*j]
+     sage: xx,yy= meshgrid(x,y)
+     sage: xx
+-    array([[ 0.  ,  0.25,  0.5 ,  0.75,  1.  ],
+-           [ 0.  ,  0.25,  0.5 ,  0.75,  1.  ],
+-           [ 0.  ,  0.25,  0.5 ,  0.75,  1.  ],
+-           [ 0.  ,  0.25,  0.5 ,  0.75,  1.  ],
+-           [ 0.  ,  0.25,  0.5 ,  0.75,  1.  ]])
++    array([[0.  , 0.25, 0.5 , 0.75, 1.  ],
++           [0.  , 0.25, 0.5 , 0.75, 1.  ],
++           [0.  , 0.25, 0.5 , 0.75, 1.  ],
++           [0.  , 0.25, 0.5 , 0.75, 1.  ],
++           [0.  , 0.25, 0.5 , 0.75, 1.  ]])
+     sage: yy
+-    array([[ 0.  ,  0.  ,  0.  ,  0.  ,  0.  ],
+-           [ 0.25,  0.25,  0.25,  0.25,  0.25],
+-           [ 0.5 ,  0.5 ,  0.5 ,  0.5 ,  0.5 ],
+-           [ 0.75,  0.75,  0.75,  0.75,  0.75],
+-           [ 1.  ,  1.  ,  1.  ,  1.  ,  1.  ]])
++    array([[0.  , 0.  , 0.  , 0.  , 0.  ],
++           [0.25, 0.25, 0.25, 0.25, 0.25],
++           [0.5 , 0.5 , 0.5 , 0.5 , 0.5 ],
++           [0.75, 0.75, 0.75, 0.75, 0.75],
++           [1.  , 1.  , 1.  , 1.  , 1.  ]])
+     sage: f(xx,yy)
+-    array([[ 0.    ,  0.0625,  0.25  ,  0.5625,  1.    ],
+-           [ 0.0625,  0.125 ,  0.3125,  0.625 ,  1.0625],
+-           [ 0.25  ,  0.3125,  0.5   ,  0.8125,  1.25  ],
+-           [ 0.5625,  0.625 ,  0.8125,  1.125 ,  1.5625],
+-           [ 1.    ,  1.0625,  1.25  ,  1.5625,  2.    ]])
++    array([[0.    , 0.0625, 0.25  , 0.5625, 1.    ],
++           [0.0625, 0.125 , 0.3125, 0.625 , 1.0625],
++           [0.25  , 0.3125, 0.5   , 0.8125, 1.25  ],
++           [0.5625, 0.625 , 0.8125, 1.125 , 1.5625],
++           [1.    , 1.0625, 1.25  , 1.5625, 2.    ]])
+ 
+ You can see that :meth:`numpy.meshgrid` produces a pair of matrices, here denoted
+ `xx` and `yy`, such that `(xx[i,j],yy[i,j])` has coordinates
+@@ -324,7 +325,7 @@ equation `Ax=b` do
+     sage: b=numpy.array(range(1,6))
+     sage: x=linalg.solve(A,b)
+     sage: numpy.dot(A,x)
+-    array([ 1.,  2.,  3.,  4., 5.])
++    array([1., 2., 3., 4., 5.])
+ 
+ This creates a random 5x5 matrix ``A``, and solves `Ax=b` where
+ ``b=[0.0,1.0,2.0,3.0,4.0]``. There are many other routines in the :mod:`numpy.linalg`
+diff --git a/src/sage/calculus/riemann.pyx b/src/sage/calculus/riemann.pyx
+index 60f37f7557..4ac3dedf1d 100644
+--- a/src/sage/calculus/riemann.pyx
++++ b/src/sage/calculus/riemann.pyx
+@@ -1191,30 +1191,30 @@ cpdef complex_to_spiderweb(np.ndarray[COMPLEX_T, ndim = 2] z_values,
+         sage: zval = numpy.array([[0, 1, 1000],[.2+.3j,1,-.3j],[0,0,0]],dtype = numpy.complex128)
+         sage: deriv = numpy.array([[.1]],dtype = numpy.float64)
+         sage: complex_to_spiderweb(zval, deriv,deriv, 4,4,[0,0,0],1,False,0.001)
+-        array([[[ 1.,  1.,  1.],
+-                [ 1.,  1.,  1.],
+-                [ 1.,  1.,  1.]],
++        array([[[1., 1., 1.],
++                [1., 1., 1.],
++                [1., 1., 1.]],
+         <BLANKLINE>
+-               [[ 1.,  1.,  1.],
+-                [ 0.,  0.,  0.],
+-                [ 1.,  1.,  1.]],
++               [[1., 1., 1.],
++                [0., 0., 0.],
++                [1., 1., 1.]],
+         <BLANKLINE>
+-               [[ 1.,  1.,  1.],
+-                [ 1.,  1.,  1.],
+-                [ 1.,  1.,  1.]]])
++               [[1., 1., 1.],
++                [1., 1., 1.],
++                [1., 1., 1.]]])
+ 
+         sage: complex_to_spiderweb(zval, deriv,deriv, 4,4,[0,0,0],1,True,0.001)
+-        array([[[ 1.        ,  1.        ,  1.        ],
+-                [ 1.        ,  0.05558355,  0.05558355],
+-                [ 0.17301243,  0.        ,  0.        ]],
++        array([[[1.        , 1.        , 1.        ],
++                [1.        , 0.05558355, 0.05558355],
++                [0.17301243, 0.        , 0.        ]],
+         <BLANKLINE>
+-               [[ 1.        ,  0.96804683,  0.48044583],
+-                [ 0.        ,  0.        ,  0.        ],
+-                [ 0.77351965,  0.5470393 ,  1.        ]],
++               [[1.        , 0.96804683, 0.48044583],
++                [0.        , 0.        , 0.        ],
++                [0.77351965, 0.5470393 , 1.        ]],
+         <BLANKLINE>
+-               [[ 1.        ,  1.        ,  1.        ],
+-                [ 1.        ,  1.        ,  1.        ],
+-                [ 1.        ,  1.        ,  1.        ]]])
++               [[1.        , 1.        , 1.        ],
++                [1.        , 1.        , 1.        ],
++                [1.        , 1.        , 1.        ]]])
+      """
+     cdef Py_ssize_t i, j, imax, jmax
+     cdef FLOAT_T x, y, mag, arg, width, target, precision, dmag, darg
+@@ -1279,14 +1279,14 @@ cpdef complex_to_rgb(np.ndarray[COMPLEX_T, ndim = 2] z_values):
+         sage: from sage.calculus.riemann import complex_to_rgb
+         sage: import numpy
+         sage: complex_to_rgb(numpy.array([[0, 1, 1000]], dtype = numpy.complex128))
+-        array([[[ 1.        ,  1.        ,  1.        ],
+-                [ 1.        ,  0.05558355,  0.05558355],
+-                [ 0.17301243,  0.        ,  0.        ]]])
++        array([[[1.        , 1.        , 1.        ],
++                [1.        , 0.05558355, 0.05558355],
++                [0.17301243, 0.        , 0.        ]]])
+ 
+         sage: complex_to_rgb(numpy.array([[0, 1j, 1000j]], dtype = numpy.complex128))
+-        array([[[ 1.        ,  1.        ,  1.        ],
+-                [ 0.52779177,  1.        ,  0.05558355],
+-                [ 0.08650622,  0.17301243,  0.        ]]])
++        array([[[1.        , 1.        , 1.        ],
++                [0.52779177, 1.        , 0.05558355],
++                [0.08650622, 0.17301243, 0.        ]]])
+ 
+ 
+     TESTS::
+diff --git a/src/sage/combinat/fully_packed_loop.py b/src/sage/combinat/fully_packed_loop.py
+index 0a9bd61267..d2193cc2d6 100644
+--- a/src/sage/combinat/fully_packed_loop.py
++++ b/src/sage/combinat/fully_packed_loop.py
+@@ -72,11 +72,11 @@ def _make_color_list(n, colors=None,  color_map=None, randomize=False):
+         sage: _make_color_list(5, ['blue', 'red'])
+         ['blue', 'red', 'blue', 'red', 'blue']
+         sage: _make_color_list(5, color_map='summer')
+-        [(0.0, 0.5, 0.40000000000000002),
+-         (0.25098039215686274, 0.62549019607843137, 0.40000000000000002),
+-         (0.50196078431372548, 0.75098039215686274, 0.40000000000000002),
+-         (0.75294117647058822, 0.87647058823529411, 0.40000000000000002),
+-         (1.0, 1.0, 0.40000000000000002)]
++        [(0.0, 0.5, 0.4),
++         (0.25098039215686274, 0.6254901960784314, 0.4),
++         (0.5019607843137255, 0.7509803921568627, 0.4),
++         (0.7529411764705882, 0.8764705882352941, 0.4),
++         (1.0, 1.0, 0.4)]
+         sage: _make_color_list(8, ['blue', 'red'], randomize=True)
+         ['blue', 'blue', 'red', 'blue', 'red', 'red', 'red', 'blue']
+     """
+diff --git a/src/sage/finance/time_series.pyx b/src/sage/finance/time_series.pyx
+index 28779365df..3ab0282861 100644
+--- a/src/sage/finance/time_series.pyx
++++ b/src/sage/finance/time_series.pyx
+@@ -111,8 +111,8 @@ cdef class TimeSeries:
+ 
+             sage: import numpy
+             sage: v = numpy.array([[1,2], [3,4]], dtype=float); v
+-            array([[ 1.,  2.],
+-                   [ 3.,  4.]])
++            array([[1., 2.],
++                   [3., 4.]])
+             sage: finance.TimeSeries(v)
+             [1.0000, 2.0000, 3.0000, 4.0000]
+             sage: finance.TimeSeries(v[:,0])
+@@ -2100,14 +2100,14 @@ cdef class TimeSeries:
+ 
+             sage: w[0] = 20
+             sage: w
+-            array([ 20. ,  -3. ,   4.5,  -2. ])
++            array([20. , -3. ,  4.5, -2. ])
+             sage: v
+             [20.0000, -3.0000, 4.5000, -2.0000]
+ 
+         If you want a separate copy do not give the ``copy=False`` option. ::
+ 
+             sage: z = v.numpy(); z
+-            array([ 20. ,  -3. ,   4.5,  -2. ])
++            array([20. , -3. ,  4.5, -2. ])
+             sage: z[0] = -10
+             sage: v
+             [20.0000, -3.0000, 4.5000, -2.0000]
+diff --git a/src/sage/functions/hyperbolic.py b/src/sage/functions/hyperbolic.py
+index aff552f450..7a6df931e7 100644
+--- a/src/sage/functions/hyperbolic.py
++++ b/src/sage/functions/hyperbolic.py
+@@ -214,7 +214,7 @@ class Function_coth(GinacFunction):
+             sage: import numpy
+             sage: a = numpy.arange(2, 5)
+             sage: coth(a)
+-            array([ 1.03731472,  1.00496982,  1.00067115])
++            array([1.03731472, 1.00496982, 1.00067115])
+         """
+         return 1.0 / tanh(x)
+ 
+@@ -267,7 +267,7 @@ class Function_sech(GinacFunction):
+             sage: import numpy
+             sage: a = numpy.arange(2, 5)
+             sage: sech(a)
+-            array([ 0.26580223,  0.09932793,  0.03661899])
++            array([0.26580223, 0.09932793, 0.03661899])
+         """
+         return 1.0 / cosh(x)
+ 
+@@ -318,7 +318,7 @@ class Function_csch(GinacFunction):
+             sage: import numpy
+             sage: a = numpy.arange(2, 5)
+             sage: csch(a)
+-            array([ 0.27572056,  0.09982157,  0.03664357])
++            array([0.27572056, 0.09982157, 0.03664357])
+         """
+         return 1.0 / sinh(x)
+ 
+@@ -586,7 +586,7 @@ class Function_arccoth(GinacFunction):
+             sage: import numpy
+             sage: a = numpy.arange(2,5)
+             sage: acoth(a)
+-            array([ 0.54930614,  0.34657359,  0.25541281])
++            array([0.54930614, 0.34657359, 0.25541281])
+         """
+         return arctanh(1.0 / x)
+ 
+diff --git a/src/sage/functions/orthogonal_polys.py b/src/sage/functions/orthogonal_polys.py
+index ed6365bef4..99b8b04dad 100644
+--- a/src/sage/functions/orthogonal_polys.py
++++ b/src/sage/functions/orthogonal_polys.py
+@@ -810,12 +810,12 @@ class Func_chebyshev_T(ChebyshevFunction):
+             sage: z2 = numpy.array([[1,2],[1,2]])
+             sage: z3 = numpy.array([1,2,3.])
+             sage: chebyshev_T(1,z)
+-            array([ 1.,  2.])
++            array([1., 2.])
+             sage: chebyshev_T(1,z2)
+-            array([[ 1.,  2.],
+-                   [ 1.,  2.]])
++            array([[1., 2.],
++                   [1., 2.]])
+             sage: chebyshev_T(1,z3)
+-            array([ 1.,  2.,  3.])
++            array([1., 2., 3.])
+             sage: chebyshev_T(z,0.1)
+             array([ 0.1 , -0.98])
+         """
+@@ -1095,12 +1095,12 @@ class Func_chebyshev_U(ChebyshevFunction):
+             sage: z2 = numpy.array([[1,2],[1,2]])
+             sage: z3 = numpy.array([1,2,3.])
+             sage: chebyshev_U(1,z)
+-            array([ 2.,  4.])
++            array([2., 4.])
+             sage: chebyshev_U(1,z2)
+-            array([[ 2.,  4.],
+-                   [ 2.,  4.]])
++            array([[2., 4.],
++                   [2., 4.]])
+             sage: chebyshev_U(1,z3)
+-            array([ 2.,  4.,  6.])
++            array([2., 4., 6.])
+             sage: chebyshev_U(z,0.1)
+             array([ 0.2 , -0.96])
+         """
+diff --git a/src/sage/functions/other.py b/src/sage/functions/other.py
+index 1883daa3e6..9885222817 100644
+--- a/src/sage/functions/other.py
++++ b/src/sage/functions/other.py
+@@ -389,7 +389,7 @@ class Function_ceil(BuiltinFunction):
+             sage: import numpy
+             sage: a = numpy.linspace(0,2,6)
+             sage: ceil(a)
+-            array([ 0.,  1.,  1.,  2.,  2.,  2.])
++            array([0., 1., 1., 2., 2., 2.])
+ 
+         Test pickling::
+ 
+@@ -553,7 +553,7 @@ class Function_floor(BuiltinFunction):
+             sage: import numpy
+             sage: a = numpy.linspace(0,2,6)
+             sage: floor(a)
+-            array([ 0.,  0.,  0.,  1.,  1.,  2.])
++            array([0., 0., 0., 1., 1., 2.])
+             sage: floor(x)._sympy_()
+             floor(x)
+ 
+@@ -869,7 +869,7 @@ def sqrt(x, *args, **kwds):
+             sage: import numpy
+             sage: a = numpy.arange(2,5)
+             sage: sqrt(a)
+-            array([ 1.41421356,  1.73205081,  2.        ])
++            array([1.41421356, 1.73205081, 2.        ])
+         """
+         if isinstance(x, float):
+             return math.sqrt(x)
+diff --git a/src/sage/functions/spike_function.py b/src/sage/functions/spike_function.py
+index 1e021de3fe..56635ca98f 100644
+--- a/src/sage/functions/spike_function.py
++++ b/src/sage/functions/spike_function.py
+@@ -157,7 +157,7 @@ class SpikeFunction:
+             sage: S = spike_function([(-3,4),(-1,1),(2,3)]); S
+             A spike function with spikes at [-3.0, -1.0, 2.0]
+             sage: P = S.plot_fft_abs(8)
+-            sage: p = P[0]; p.ydata
++            sage: p = P[0]; p.ydata  # abs tol 1e-8
+             [5.0, 5.0, 3.367958691924177, 3.367958691924177, 4.123105625617661, 4.123105625617661, 4.759921664218055, 4.759921664218055]
+         """
+         w = self.vector(samples = samples, xmin=xmin, xmax=xmax)
+@@ -176,8 +176,8 @@ class SpikeFunction:
+             sage: S = spike_function([(-3,4),(-1,1),(2,3)]); S
+             A spike function with spikes at [-3.0, -1.0, 2.0]
+             sage: P = S.plot_fft_arg(8)
+-            sage: p = P[0]; p.ydata
+-            [0.0, 0.0, -0.211524990023434..., -0.211524990023434..., 0.244978663126864..., 0.244978663126864..., -0.149106180027477..., -0.149106180027477...]
++            sage: p = P[0]; p.ydata  # abs tol 1e-8
++            [0.0, 0.0, -0.211524990023434, -0.211524990023434, 0.244978663126864, 0.244978663126864, -0.149106180027477, -0.149106180027477]
+         """
+         w = self.vector(samples = samples, xmin=xmin, xmax=xmax)
+         xmin, xmax = self._ranges(xmin, xmax)
+diff --git a/src/sage/functions/trig.py b/src/sage/functions/trig.py
+index 501e7ff6b6..5f760912f0 100644
+--- a/src/sage/functions/trig.py
++++ b/src/sage/functions/trig.py
+@@ -724,7 +724,7 @@ class Function_arccot(GinacFunction):
+             sage: import numpy
+             sage: a = numpy.arange(2, 5)
+             sage: arccot(a)
+-            array([ 0.46364761,  0.32175055,  0.24497866])
++            array([0.46364761, 0.32175055, 0.24497866])
+         """
+         return math.pi/2 - arctan(x)
+ 
+@@ -780,7 +780,7 @@ class Function_arccsc(GinacFunction):
+             sage: import numpy
+             sage: a = numpy.arange(2, 5)
+             sage: arccsc(a)
+-            array([ 0.52359878,  0.33983691,  0.25268026])
++            array([0.52359878, 0.33983691, 0.25268026])
+         """
+         return arcsin(1.0/x)
+ 
+@@ -838,7 +838,7 @@ class Function_arcsec(GinacFunction):
+             sage: import numpy
+             sage: a = numpy.arange(2, 5)
+             sage: arcsec(a)
+-            array([ 1.04719755,  1.23095942,  1.31811607])
++            array([1.04719755, 1.23095942, 1.31811607])
+         """
+         return arccos(1.0/x)
+ 
+@@ -913,13 +913,13 @@ class Function_arctan2(GinacFunction):
+             sage: a = numpy.linspace(1, 3, 3)
+             sage: b = numpy.linspace(3, 6, 3)
+             sage: atan2(a, b)
+-            array([ 0.32175055,  0.41822433,  0.46364761])
++            array([0.32175055, 0.41822433, 0.46364761])
+ 
+             sage: atan2(1,a)
+-            array([ 0.78539816,  0.46364761,  0.32175055])
++            array([0.78539816, 0.46364761, 0.32175055])
+ 
+             sage: atan2(a, 1)
+-            array([ 0.78539816,  1.10714872,  1.24904577])
++            array([0.78539816, 1.10714872, 1.24904577])
+ 
+         TESTS::
+ 
+diff --git a/src/sage/matrix/constructor.pyx b/src/sage/matrix/constructor.pyx
+index 12136f1773..491bf22e62 100644
+--- a/src/sage/matrix/constructor.pyx
++++ b/src/sage/matrix/constructor.pyx
+@@ -503,8 +503,8 @@ def matrix(*args, **kwds):
+         [7 8 9]
+         Full MatrixSpace of 3 by 3 dense matrices over Integer Ring
+         sage: n = matrix(QQ, 2, 2, [1, 1/2, 1/3, 1/4]).numpy(); n
+-        array([[ 1.        ,  0.5       ],
+-               [ 0.33333333,  0.25      ]])
++        array([[1.        , 0.5       ],
++               [0.33333333, 0.25      ]])
+         sage: matrix(QQ, n)
+         [  1 1/2]
+         [1/3 1/4]
+diff --git a/src/sage/matrix/matrix_double_dense.pyx b/src/sage/matrix/matrix_double_dense.pyx
+index 66e54a79a4..0498334f4b 100644
+--- a/src/sage/matrix/matrix_double_dense.pyx
++++ b/src/sage/matrix/matrix_double_dense.pyx
+@@ -606,6 +606,9 @@ cdef class Matrix_double_dense(Matrix_dense):
+             [ 3.0 + 9.0*I 4.0 + 16.0*I 5.0 + 25.0*I]
+             [6.0 + 36.0*I 7.0 + 49.0*I 8.0 + 64.0*I]
+             sage: B.condition()
++            doctest:warning
++            ...
++            ComplexWarning: Casting complex values to real discards the imaginary part
+             203.851798...
+             sage: B.condition(p='frob')
+             203.851798...
+@@ -654,9 +657,7 @@ cdef class Matrix_double_dense(Matrix_dense):
+             True
+             sage: B = A.change_ring(CDF)
+             sage: B.condition()
+-            Traceback (most recent call last):
+-            ...
+-            LinAlgError: Singular matrix
++            +Infinity
+ 
+         Improper values of ``p`` are caught.  ::
+ 
+@@ -2519,7 +2520,7 @@ cdef class Matrix_double_dense(Matrix_dense):
+             sage: P.is_unitary(algorithm='orthonormal')
+             Traceback (most recent call last):
+             ...
+-            ValueError: failed to create intent(cache|hide)|optional array-- must have defined dimensions but got (0,)
++            error: ((lwork==-1)||(lwork >= MAX(1,2*n))) failed for 3rd keyword lwork: zgees:lwork=0
+ 
+         TESTS::
+ 
+@@ -3635,8 +3636,8 @@ cdef class Matrix_double_dense(Matrix_dense):
+             [0.0 1.0 2.0]
+             [3.0 4.0 5.0]
+             sage: m.numpy()
+-            array([[ 0.,  1.,  2.],
+-                   [ 3.,  4.,  5.]])
++            array([[0., 1., 2.],
++                   [3., 4., 5.]])
+ 
+         Alternatively, numpy automatically calls this function (via
+         the magic :meth:`__array__` method) to convert Sage matrices
+@@ -3647,16 +3648,16 @@ cdef class Matrix_double_dense(Matrix_dense):
+             [0.0 1.0 2.0]
+             [3.0 4.0 5.0]
+             sage: numpy.array(m)
+-            array([[ 0.,  1.,  2.],
+-                   [ 3.,  4.,  5.]])
++            array([[0., 1., 2.],
++                   [3., 4., 5.]])
+             sage: numpy.array(m).dtype
+             dtype('float64')
+             sage: m = matrix(CDF, 2, range(6)); m
+             [0.0 1.0 2.0]
+             [3.0 4.0 5.0]
+             sage: numpy.array(m)
+-            array([[ 0.+0.j,  1.+0.j,  2.+0.j],
+-                   [ 3.+0.j,  4.+0.j,  5.+0.j]])
++            array([[0.+0.j, 1.+0.j, 2.+0.j],
++                   [3.+0.j, 4.+0.j, 5.+0.j]])
+             sage: numpy.array(m).dtype
+             dtype('complex128')
+ 
+diff --git a/src/sage/matrix/special.py b/src/sage/matrix/special.py
+index ccbd208810..c3f9a65093 100644
+--- a/src/sage/matrix/special.py
++++ b/src/sage/matrix/special.py
+@@ -706,7 +706,7 @@ def diagonal_matrix(arg0=None, arg1=None, arg2=None, sparse=True):
+ 
+         sage: import numpy
+         sage: entries = numpy.array([1.2, 5.6]); entries
+-        array([ 1.2,  5.6])
++        array([1.2, 5.6])
+         sage: A = diagonal_matrix(3, entries); A
+         [1.2 0.0 0.0]
+         [0.0 5.6 0.0]
+@@ -716,7 +716,7 @@ def diagonal_matrix(arg0=None, arg1=None, arg2=None, sparse=True):
+ 
+         sage: j = numpy.complex(0,1)
+         sage: entries = numpy.array([2.0+j, 8.1, 3.4+2.6*j]); entries
+-        array([ 2.0+1.j ,  8.1+0.j ,  3.4+2.6j])
++        array([2. +1.j , 8.1+0.j , 3.4+2.6j])
+         sage: A = diagonal_matrix(entries); A
+         [2.0 + 1.0*I         0.0         0.0]
+         [        0.0         8.1         0.0]
+diff --git a/src/sage/modules/free_module_element.pyx b/src/sage/modules/free_module_element.pyx
+index 37d92c1282..955d083b34 100644
+--- a/src/sage/modules/free_module_element.pyx
++++ b/src/sage/modules/free_module_element.pyx
+@@ -988,7 +988,7 @@ cdef class FreeModuleElement(Vector):   # abstract base class
+             sage: v.numpy()
+             array([1, 2, 5/6], dtype=object)
+             sage: v.numpy(dtype=float)
+-            array([ 1.        ,  2.        ,  0.83333333])
++            array([1.        , 2.        , 0.83333333])
+             sage: v.numpy(dtype=int)
+             array([1, 2, 0])
+             sage: import numpy
+@@ -999,7 +999,7 @@ cdef class FreeModuleElement(Vector):   # abstract base class
+         be more efficient but may have unintended consequences::
+ 
+             sage: v.numpy(dtype=None)
+-            array([ 1.        ,  2.        ,  0.83333333])
++            array([1.        , 2.        , 0.83333333])
+ 
+             sage: w = vector(ZZ, [0, 1, 2^63 -1]); w
+             (0, 1, 9223372036854775807)
+diff --git a/src/sage/modules/vector_double_dense.pyx b/src/sage/modules/vector_double_dense.pyx
+index 39fc2970de..2badf98284 100644
+--- a/src/sage/modules/vector_double_dense.pyx
++++ b/src/sage/modules/vector_double_dense.pyx
+@@ -807,13 +807,13 @@ cdef class Vector_double_dense(FreeModuleElement):
+ 
+             sage: v = vector(CDF,4,range(4))
+             sage: v.numpy()
+-            array([ 0.+0.j,  1.+0.j,  2.+0.j,  3.+0.j])
++            array([0.+0.j, 1.+0.j, 2.+0.j, 3.+0.j])
+             sage: v = vector(CDF,0)
+             sage: v.numpy()
+             array([], dtype=complex128)
+             sage: v = vector(RDF,4,range(4))
+             sage: v.numpy()
+-            array([ 0.,  1.,  2.,  3.])
++            array([0., 1., 2., 3.])
+             sage: v = vector(RDF,0)
+             sage: v.numpy()
+             array([], dtype=float64)
+@@ -823,11 +823,11 @@ cdef class Vector_double_dense(FreeModuleElement):
+             sage: import numpy
+             sage: v = vector(CDF, 3, range(3))
+             sage: v.numpy()
+-            array([ 0.+0.j,  1.+0.j,  2.+0.j])
++            array([0.+0.j, 1.+0.j, 2.+0.j])
+             sage: v.numpy(dtype=numpy.float64)
+-            array([ 0.,  1.,  2.])
++            array([0., 1., 2.])
+             sage: v.numpy(dtype=numpy.float32)
+-            array([ 0.,  1.,  2.], dtype=float32)
++            array([0., 1., 2.], dtype=float32)
+         """
+         if dtype is None or dtype is self._vector_numpy.dtype:
+             from copy import copy
+diff --git a/src/sage/plot/complex_plot.pyx b/src/sage/plot/complex_plot.pyx
+index ad9693da62..758fb709b7 100644
+--- a/src/sage/plot/complex_plot.pyx
++++ b/src/sage/plot/complex_plot.pyx
+@@ -61,9 +61,9 @@ cdef inline double mag_to_lightness(double r):
+ 
+         sage: from sage.plot.complex_plot import complex_to_rgb
+         sage: complex_to_rgb([[0, 1, 10]])
+-        array([[[ 0.        ,  0.        ,  0.        ],
+-                [ 0.77172568,  0.        ,  0.        ],
+-                [ 1.        ,  0.22134776,  0.22134776]]])
++        array([[[0.        , 0.        , 0.        ],
++                [0.77172568, 0.        , 0.        ],
++                [1.        , 0.22134776, 0.22134776]]])
+     """
+     return atan(log(sqrt(r)+1)) * (4/PI) - 1
+ 
+@@ -82,13 +82,13 @@ def complex_to_rgb(z_values):
+ 
+         sage: from sage.plot.complex_plot import complex_to_rgb
+         sage: complex_to_rgb([[0, 1, 1000]])
+-        array([[[ 0.        ,  0.        ,  0.        ],
+-                [ 0.77172568,  0.        ,  0.        ],
+-                [ 1.        ,  0.64421177,  0.64421177]]])
++        array([[[0.        , 0.        , 0.        ],
++                [0.77172568, 0.        , 0.        ],
++                [1.        , 0.64421177, 0.64421177]]])
+         sage: complex_to_rgb([[0, 1j, 1000j]])
+-        array([[[ 0.        ,  0.        ,  0.        ],
+-                [ 0.38586284,  0.77172568,  0.        ],
+-                [ 0.82210588,  1.        ,  0.64421177]]])
++        array([[[0.        , 0.        , 0.        ],
++                [0.38586284, 0.77172568, 0.        ],
++                [0.82210588, 1.        , 0.64421177]]])
+     """
+     import numpy
+     cdef unsigned int i, j, imax, jmax
+diff --git a/src/sage/plot/histogram.py b/src/sage/plot/histogram.py
+index 5d28473731..fc4b2046c0 100644
+--- a/src/sage/plot/histogram.py
++++ b/src/sage/plot/histogram.py
+@@ -53,10 +53,17 @@ class Histogram(GraphicPrimitive):
+         """
+         import numpy as np
+         self.datalist=np.asarray(datalist,dtype=float)
++        if 'normed' in options:
++            from sage.misc.superseded import deprecation
++            deprecation(25260, "the 'normed' option is deprecated. Use 'density' instead.")
+         if 'linestyle' in options:
+             from sage.plot.misc import get_matplotlib_linestyle
+             options['linestyle'] = get_matplotlib_linestyle(
+                     options['linestyle'], return_type='long')
++        if options.get('range', None):
++            # numpy.histogram performs type checks on "range" so this must be
++            # actual floats
++            options['range'] = [float(x) for x in options['range']]
+         GraphicPrimitive.__init__(self, options)
+ 
+     def get_minmax_data(self):
+@@ -80,10 +87,14 @@ class Histogram(GraphicPrimitive):
+             {'xmax': 4.0, 'xmin': 0, 'ymax': 2, 'ymin': 0}
+ 
+         TESTS::
+-
+             sage: h = histogram([10,3,5], normed=True)[0]
+-            sage: h.get_minmax_data()  # rel tol 1e-15
+-            {'xmax': 10.0, 'xmin': 3.0, 'ymax': 0.4761904761904765, 'ymin': 0}
++            doctest:warning...:
++            DeprecationWarning: the 'normed' option is deprecated. Use 'density' instead.
++            See https://trac.sagemath.org/25260 for details.
++            sage: h.get_minmax_data()
++            doctest:warning ...:
++            VisibleDeprecationWarning: Passing `normed=True` on non-uniform bins has always been broken, and computes neither the probability density function nor the probability mass function. The result is only correct if the bins are uniform, when density=True will produce the same result anyway. The argument will be removed in a future version of numpy.
++            {'xmax': 10.0, 'xmin': 3.0, 'ymax': 0.476190476190..., 'ymin': 0}
+         """
+         import numpy
+ 
+@@ -152,7 +163,7 @@ class Histogram(GraphicPrimitive):
+                 'rwidth': 'The relative width of the bars as a fraction of the bin width',
+                 'cumulative': '(True or False) If True, then a histogram is computed in which each bin gives the counts in that bin plus all bins for smaller values.  Negative values give a reversed direction of accumulation.',
+                 'range': 'A list [min, max] which define the range of the histogram. Values outside of this range are treated as outliers and omitted from counts.',
+-                'normed': 'Deprecated alias for density',
++                'normed': 'Deprecated. Use density instead.',
+                 'density': '(True or False) If True, the counts are normalized to form a probability density. (n/(len(x)*dbin)',
+                 'weights': 'A sequence of weights the same length as the data list. If supplied, then each value contributes its associated weight to the bin count.',
+                 'stacked': '(True or False) If True, multiple data are stacked on top of each other.',
+@@ -199,7 +210,7 @@ class Histogram(GraphicPrimitive):
+             subplot.hist(self.datalist.transpose(), **options)
+ 
+ 
+-@options(aspect_ratio='automatic',align='mid', weights=None, range=None, bins=10, edgecolor='black')
++@options(aspect_ratio='automatic', align='mid', weights=None, range=None, bins=10, edgecolor='black')
+ def histogram(datalist, **options):
+     """
+     Computes and draws the histogram for list(s) of numerical data.
+@@ -231,8 +242,9 @@ def histogram(datalist, **options):
+     - ``linewidth`` -- (float) width of the lines defining the bars
+     - ``linestyle`` -- (default: 'solid') Style of the line. One of 'solid'
+       or '-', 'dashed' or '--', 'dotted' or ':', 'dashdot' or '-.'
+-    - ``density`` -- (boolean - default: False) If True, the counts are
+-      normalized to form a probability density.
++    - ``density`` -- (boolean - default: False) If True, the result is the
++      value of the probability density function at the bin, normalized such
++      that the integral over the range is 1.
+     - ``range`` -- A list [min, max] which define the range of the
+       histogram. Values outside of this range are treated as outliers and
+       omitted from counts
+diff --git a/src/sage/plot/line.py b/src/sage/plot/line.py
+index 23f5e61446..3b1b51d7cf 100644
+--- a/src/sage/plot/line.py
++++ b/src/sage/plot/line.py
+@@ -502,14 +502,12 @@ def line2d(points, **options):
+     from sage.plot.all import Graphics
+     from sage.plot.plot import xydata_from_point_list
+     from sage.rings.all import CC, CDF
++    points = list(points) # make sure points is a python list
+     if points in CC or points in CDF:
+         pass
+     else:
+-        try:
+-            if not points:
+-                return Graphics()
+-        except ValueError: # numpy raises a ValueError if not empty
+-            pass
++        if len(points) == 0:
++            return Graphics()
+     xdata, ydata = xydata_from_point_list(points)
+     g = Graphics()
+     g._set_extra_kwds(Graphics._extract_kwds_for_show(options))
+diff --git a/src/sage/plot/plot_field.py b/src/sage/plot/plot_field.py
+index 0025098a8d..23c80902f3 100644
+--- a/src/sage/plot/plot_field.py
++++ b/src/sage/plot/plot_field.py
+@@ -49,9 +49,10 @@ class PlotField(GraphicPrimitive):
+             sage: r.xpos_array
+             [0.0, 0.0, 1.0, 1.0]
+             sage: r.yvec_array
+-            masked_array(data = [0.0 0.70710678118... 0.70710678118... 0.89442719...],
+-                         mask = [False False False False],
+-                   fill_value = 1e+20)
++            masked_array(data=[0.0, 0.70710678118..., 0.70710678118...,
++                               0.89442719...],
++                         mask=[False, False, False, False],
++                   fill_value=1e+20)
+ 
+         TESTS:
+ 
+diff --git a/src/sage/plot/streamline_plot.py b/src/sage/plot/streamline_plot.py
+index f3da57c370..3806f4b32f 100644
+--- a/src/sage/plot/streamline_plot.py
++++ b/src/sage/plot/streamline_plot.py
+@@ -38,16 +38,14 @@ class StreamlinePlot(GraphicPrimitive):
+             sage: r.options()['plot_points']
+             2
+             sage: r.xpos_array
+-            array([ 0.,  1.])
++            array([0., 1.])
+             sage: r.yvec_array
+-            masked_array(data =
+-             [[1.0 1.0]
+-             [0.5403023058681398 0.5403023058681398]],
+-                         mask =
+-             [[False False]
+-             [False False]],
+-                   fill_value = 1e+20)
+-            <BLANKLINE>
++            masked_array(
++              data=[[1.0, 1.0],
++                    [0.5403023058681398, 0.5403023058681398]],
++              mask=[[False, False],
++                    [False, False]],
++              fill_value=1e+20)
+ 
+         TESTS:
+ 
+diff --git a/src/sage/probability/probability_distribution.pyx b/src/sage/probability/probability_distribution.pyx
+index 1b119e323f..3290b00695 100644
+--- a/src/sage/probability/probability_distribution.pyx
++++ b/src/sage/probability/probability_distribution.pyx
+@@ -130,7 +130,17 @@ cdef class ProbabilityDistribution:
+              0.0,
+              1.4650000000000003]
+             sage: b
+-            [0.0, 0.20000000000000001, 0.40000000000000002, 0.60000000000000009, 0.80000000000000004, 1.0, 1.2000000000000002, 1.4000000000000001, 1.6000000000000001, 1.8, 2.0]
++            [0.0,
++             0.2,
++             0.4,
++             0.6000000000000001,
++             0.8,
++             1.0,
++             1.2000000000000002,
++             1.4000000000000001,
++             1.6,
++             1.8,
++             2.0]
+         """
+         import pylab
+         l = [float(self.get_random_element()) for _ in range(num_samples)]
+diff --git a/src/sage/rings/rational.pyx b/src/sage/rings/rational.pyx
+index 12ca1b222b..9bad7dae0c 100644
+--- a/src/sage/rings/rational.pyx
++++ b/src/sage/rings/rational.pyx
+@@ -1041,7 +1041,7 @@ cdef class Rational(sage.structure.element.FieldElement):
+             dtype('O')
+ 
+             sage: numpy.array([1, 1/2, 3/4])
+-            array([ 1.  ,  0.5 ,  0.75])
++            array([1.  , 0.5 , 0.75])
+         """
+         if mpz_cmp_ui(mpq_denref(self.value), 1) == 0:
+             if mpz_fits_slong_p(mpq_numref(self.value)):
+diff --git a/src/sage/rings/real_mpfr.pyx b/src/sage/rings/real_mpfr.pyx
+index 9b90c8833e..1ce05b937d 100644
+--- a/src/sage/rings/real_mpfr.pyx
++++ b/src/sage/rings/real_mpfr.pyx
+@@ -1439,7 +1439,7 @@ cdef class RealNumber(sage.structure.element.RingElement):
+ 
+             sage: import numpy
+             sage: numpy.arange(10.0)
+-            array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9.])
++            array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])
+             sage: numpy.array([1.0, 1.1, 1.2]).dtype
+             dtype('float64')
+             sage: numpy.array([1.000000000000000000000000000000000000]).dtype
+diff --git a/src/sage/schemes/elliptic_curves/height.py b/src/sage/schemes/elliptic_curves/height.py
+index de31fe9883..7a33ea6f5b 100644
+--- a/src/sage/schemes/elliptic_curves/height.py
++++ b/src/sage/schemes/elliptic_curves/height.py
+@@ -1627,18 +1627,18 @@ class EllipticCurveCanonicalHeight:
+         even::
+ 
+             sage: H.wp_on_grid(v,4)
+-            array([[ 25.43920182,   5.28760943,   5.28760943,  25.43920182],
+-            [  6.05099485,   1.83757786,   1.83757786,   6.05099485],
+-            [  6.05099485,   1.83757786,   1.83757786,   6.05099485],
+-            [ 25.43920182,   5.28760943,   5.28760943,  25.43920182]])
++            array([[25.43920182,  5.28760943,  5.28760943, 25.43920182],
++                   [ 6.05099485,  1.83757786,  1.83757786,  6.05099485],
++                   [ 6.05099485,  1.83757786,  1.83757786,  6.05099485],
++                   [25.43920182,  5.28760943,  5.28760943, 25.43920182]])
+ 
+         The array of values on the half-grid::
+ 
+             sage: H.wp_on_grid(v,4,True)
+-            array([[ 25.43920182,   5.28760943],
+-            [  6.05099485,   1.83757786],
+-            [  6.05099485,   1.83757786],
+-            [ 25.43920182,   5.28760943]])
++            array([[25.43920182,  5.28760943],
++                   [ 6.05099485,  1.83757786],
++                   [ 6.05099485,  1.83757786],
++                   [25.43920182,  5.28760943]])
+         """
+         tau = self.tau(v)
+         fk, err = self.fk_intervals(v, 15, CDF)
+diff --git a/src/sage/symbolic/ring.pyx b/src/sage/symbolic/ring.pyx
+index 9da38002e8..d61e74bf82 100644
+--- a/src/sage/symbolic/ring.pyx
++++ b/src/sage/symbolic/ring.pyx
+@@ -1136,7 +1136,7 @@ cdef class NumpyToSRMorphism(Morphism):
+         sage: cos(numpy.int('2'))
+         cos(2)
+         sage: numpy.cos(numpy.int('2'))
+-        -0.41614683654714241
++        -0.4161468365471424
+     """
+     cdef _intermediate_ring
+ 

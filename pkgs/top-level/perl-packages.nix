@@ -2631,6 +2631,7 @@ let
     prePatch = ''
       # Attempts to use network.
       rm t/01-proxy-http.t
+      rm t/01-proxy-proc-safeexec.t
     '';
     meta = {
       description = "A generic connection to a hierarchical-structured data set";
@@ -6465,10 +6466,10 @@ let
   };
 
   GetoptLongDescriptive = buildPerlPackage rec {
-    name = "Getopt-Long-Descriptive-0.103";
+    name = "Getopt-Long-Descriptive-0.102";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "70e1bae7404a9dfb638b5d12e5bd4ea97e3bee743a4555909307d68e0111f4b2";
+      sha256 = "9ad4b98f294aa0515cc3150a1ae878d39e470762b78d8bd9df055eba9dea2846";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
     propagatedBuildInputs = [ ParamsValidate SubExporter ];
@@ -9692,11 +9693,12 @@ let
       sha256 = "004ly9xxjlsbrr2vhxsa1n84z3034gxrzr7z0wl45szd8v1v6qwh";
     };
     buildInputs = [ CaptureTiny CwdGuard FileCopyRecursiveReduced ];
+    propagatedBuildInputs = [ DevelCheckCompiler ];
+    perlPreHook = "export LD=$CC";
     meta = {
       description = "A Module::Build class for building XS modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    propagatedBuildInputs = [ DevelCheckCompiler ];
   };
 
   ModuleCPANTSAnalyse = buildPerlPackage rec {
@@ -10030,24 +10032,28 @@ let
       license = stdenv.lib.licenses.asl20;
     };
   };
+
   Mojolicious = buildPerlPackage rec {
-    name = "Mojolicious-7.93";
+    name = "Mojolicious-8.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
-      sha256 = "00c30fc566fee0823af0a75bdf4f170531655df14beca6d51f0e453a43aaad5d";
+      sha256 = "b266fd32f12cca2504be012e785f34eb09c0a132df52be183ff5d494e87f0b98";
     };
+    buildInputs = [ ExtUtilsMakeMaker ];
+    propagatedBuildInputs = [ IOSocketIP JSONPP PodSimple TimeLocal ];
     meta = {
-      homepage = https://mojolicious.org/;
+      homepage = https://mojolicious.org;
       description = "Real-time web framework";
-      license = with stdenv.lib.licenses; [ artistic2 ];
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.thoughtpolice ];
     };
   };
 
   MojoIOLoopForkCall = buildPerlModule rec {
-    name = "Mojo-IOLoop-ForkCall-0.19";
+    name = "Mojo-IOLoop-ForkCall-0.20";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JB/JBERGER/${name}.tar.gz";
-      sha256 = "a436b71c7d1450f79b9810f4f46e24f5ffe1e1428da473d4315673e08e4dec62";
+      sha256 = "19pih5x0ayxs2m8j29qwdpi6ky3w4ghv6vrmax3ix9r59hj6569b";
     };
     propagatedBuildInputs = [ IOPipely Mojolicious ];
     meta = {
@@ -10929,6 +10935,7 @@ let
       sha256 = "1j3048ip691j91rdig6wrlg6i4jdzhszxmz5pi2g7n355rl2w00l";
     };
     buildInputs = [ DevelPPPort ModuleBuildXSUtil TestException TestFatal TestLeakTrace TestOutput TestRequires TryTiny self.version ];
+    perlPreHook = "export LD=$CC";
     NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fno-stack-protector";
     hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
   };
@@ -11694,6 +11701,8 @@ let
       sha256 = "91c177f30f82302eaf3173356eef05c21bc82163df752acb469177bd14a72db9";
     };
     buildInputs = [ pkgs.zookeeper_mt ];
+    # fix "error: format not a string literal and no format arguments [-Werror=format-security]"
+    hardeningDisable = stdenv.lib.optional (stdenv.lib.versionAtLeast perl.version "5.28") "format";
     NIX_CFLAGS_COMPILE = "-I${pkgs.zookeeper_mt}/include";
     NIX_CFLAGS_LINK = "-L${pkgs.zookeeper_mt.out}/lib -lzookeeper_mt";
     meta = {
@@ -14925,6 +14934,7 @@ let
     meta = {
       description = "Aggregate C<*.t> tests to make them run faster";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      broken = stdenv.lib.versionAtLeast perl.version "5.26"; # This module only works with Test::More version < 1.3, but you have 1.302133
     };
   };
 
@@ -15725,6 +15735,7 @@ let
     };
     buildInputs = [ TestRun TestTrap ];
     propagatedBuildInputs = [ MooseXGetopt UNIVERSALrequire YAMLLibYAML ];
+    doCheck = !stdenv.isDarwin;
     meta = {
       homepage = http://web-cpan.berlios.de/modules/Test-Run/;
       description = "Analyze tests from the command line using Test::Run";
@@ -17056,6 +17067,7 @@ let
      meta = {
        description = "Turns ref() into a multimethod";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+       broken = stdenv.lib.versionAtLeast perl.version "5.26"; # 'OP {aka struct op}' has no member named 'op_sibling'
      };
   };
 

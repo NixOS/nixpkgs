@@ -42,7 +42,7 @@ in
     name = "${baseName}-${version}";
 
     src = fetchurl {
-      url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
+      url = "https://nodejs.org/dist/v${version}/node-v${version}.tar.xz";
       inherit sha256;
     };
 

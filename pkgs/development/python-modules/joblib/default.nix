@@ -18,7 +18,9 @@ buildPythonPackage rec {
   checkInputs = [ sphinx numpydoc pytest ];
 
   checkPhase = ''
-    py.test -k 'not test_disk_used and not test_nested_parallel_warnings' joblib/test
+    py.test -k 'not test_disk_used and \
+                not test_nested_parallel_warnings and \
+                not test_nested_parallelism_limit' joblib/test
   '';
 
   meta = {

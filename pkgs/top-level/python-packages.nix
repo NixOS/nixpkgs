@@ -216,6 +216,8 @@ in {
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
+  backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
+
   bap = callPackage ../development/python-modules/bap {
     bap = pkgs.ocamlPackages.bap;
   };
@@ -297,6 +299,8 @@ in {
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   fire = callPackage ../development/python-modules/fire { };
+
+  genanki = callPackage ../development/python-modules/genanki { };
 
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
@@ -465,6 +469,8 @@ in {
 
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
 
+  pymsgbox = callPackage ../development/python-modules/pymsgbox { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };
@@ -536,6 +542,8 @@ in {
 
   seekpath = callPackage ../development/python-modules/seekpath { };
 
+  selectors2 = callPackage ../development/python-modules/selectors2 { };
+
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
@@ -567,6 +575,8 @@ in {
   trustme = callPackage ../development/python-modules/trustme {};
 
   trio = callPackage ../development/python-modules/trio {};
+
+  sniffio = callPackage ../development/python-modules/sniffio { };
 
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
@@ -1448,6 +1458,8 @@ in {
 
     disabled = !isPy27;
 
+    buildInputs = optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.IOKit ];
+
     src = pkgs.fetchurl {
       url = "http://cddb-py.sourceforge.net/${name}.tar.gz";
       sha256 = "098xhd575ibvdx7i3dny3lwi851yxhjg2hn5jbbgrwj833rg5l5w";
@@ -1645,6 +1657,12 @@ in {
 
   envs = callPackage ../development/python-modules/envs { };
 
+  eth-hash = callPackage ../development/python-modules/eth-hash { };
+
+  eth-typing = callPackage ../development/python-modules/eth-typing { };
+
+  eth-utils = callPackage ../development/python-modules/eth-utils { };
+
   jsonrpc-async = callPackage ../development/python-modules/jsonrpc-async { };
 
   jsonrpc-base = callPackage ../development/python-modules/jsonrpc-base { };
@@ -1704,35 +1722,7 @@ in {
 
   idna = callPackage ../development/python-modules/idna { };
 
-  mahotas = buildPythonPackage rec {
-    name = "python-mahotas-${version}";
-    version = "1.4.2";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/luispedro/mahotas/archive/v${version}.tar.gz";
-      sha256 = "1mvsxh0pa5vdvbknlv1m68n7gw2cv4pyqgqp3r770rnmf6nxbp7m";
-    };
-
-    buildInputs = with self; [
-      nose
-      pillow
-      scipy
-    ];
-    propagatedBuildInputs = with self; [
-      numpy
-      imread
-    ];
-
-    disabled = stdenv.isi686; # Failing tests
-
-    meta = with stdenv.lib; {
-      description = "Computer vision package based on numpy";
-      homepage = http://mahotas.readthedocs.io/;
-      maintainers = with maintainers; [ luispedro ];
-      license = licenses.mit;
-      platforms = platforms.linux;
-    };
-  };
+  mahotas = callPackage ../development/python-modules/mahotas { };
 
   MDP = callPackage ../development/python-modules/mdp {};
 
@@ -1787,6 +1777,13 @@ in {
     LD_LIBRARY_PATH = makeLibraryPath [ pkgs.mxnet ];
 
     doCheck = !isPy3k;
+
+    postPatch = ''
+      substituteInPlace python/setup.py \
+      --replace "graphviz<0.9.0" "graphviz<0.10.0" \
+      --replace "numpy<=1.15.0" "numpy<1.16.0" \
+      --replace "requests<2.19.0" "requests<2.20.0"
+    '';
 
     preConfigure = ''
       cd python
@@ -6154,13 +6151,13 @@ in {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.8.0";
+    version = "0.8.1";
 
     src = pkgs.fetchFromGitHub {
       repo = "hetzner";
       owner = "aszlig";
       rev = "v${version}";
-      sha256 = "04q2q2w2qkhfly8rfjg2h5pnh42gs18l6cmipqc37yf7qvkw3nd0";
+      sha256 = "1xd1klvjskv0pg8ginih597jkk491a55b8dq80dsm61m5sbsx3vq";
     };
 
     meta = {
@@ -7937,11 +7934,11 @@ in {
 
   graphviz = buildPythonPackage rec {
     name = "graphviz-${version}";
-    version = "0.5.2";
+    version = "0.9";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/graphviz/${name}.zip";
-      sha256 = "0jh31nlm0qbxwylhdkwnb69pcjlc5z03fcfbs0gvgzp3hfrngsk0";
+      sha256 = "14r9brj4r31b3qy1nnn34v3l4h0n39bqxg9sn2fz4p3pp5mglnl6";
     };
 
     propagatedBuildInputs = [ pkgs.graphviz ];
@@ -14951,6 +14948,7 @@ EOF
   };
 
   tornado = callPackage ../development/python-modules/tornado { };
+  tornado_4 = callPackage ../development/python-modules/tornado { version = "4.5.3"; };
 
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
@@ -16286,6 +16284,8 @@ EOF
 
   potr = callPackage ../development/python-modules/potr {};
 
+  python-u2flib-host = callPackage ../development/python-modules/python-u2flib-host { };
+
   pluggy = callPackage ../development/python-modules/pluggy {};
 
   xcffib = callPackage ../development/python-modules/xcffib {};
@@ -16802,22 +16802,7 @@ EOF
     cudaSupport = true;
   };
 
-  tflearn = buildPythonPackage rec {
-    name = "tflearn-0.2.1";
-
-    meta = {
-      description = "Deep learning library featuring a higher-level API for TensorFlow";
-      homepage    = "https://github.com/tflearn/tflearn";
-      license     = licenses.mit;
-    };
-
-    propagatedBuildInputs = with self; [ scipy h5py pillow tensorflow ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tflearn/${name}.tar.gz";
-      sha256 = "1n884c4j35409id2bncyj5fvmmfpdqj3pk6wrv0s1znnvs0lkii0";
-    };
-  };
+  tflearn = callPackage ../development/python-modules/tflearn { };
 
   simpleai = buildPythonPackage rec {
      version = "0.7.11";

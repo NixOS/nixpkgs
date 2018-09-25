@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyslurm";
-  version = "20180604";
+  version = "20180811";
 
   src = fetchFromGitHub {
     repo = "pyslurm";
     owner = "PySlurm";
-    rev = "9dd4817e785fee138a9e29c3d71d2ea44898eedc";
-    sha256 = "14ivwc27sjnk0z0jpfgyy9bd91m2bhcz11lzp1kk9xn4495i7wvj";
+    rev = "2d4f0553de971309b7e465d4d64528b8a5fafb05";
+    sha256 = "1cy57gyvvmzx0c8fx4h6p8dgan0ay6pdivdf24k1xiancjnw20xr";
   };
 
   buildInputs = [ cython slurm ];

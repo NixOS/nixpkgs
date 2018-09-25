@@ -6,6 +6,9 @@ import ./make-test.nix {
       enable = true;
       # TODO: use a self-signed certificate
       c2sRequireEncryption = false;
+      extraConfig = ''
+        storage = "sql"
+      '';
     };
     environment.systemPackages = let
       sendMessage = pkgs.writeScriptBin "send-message" ''
