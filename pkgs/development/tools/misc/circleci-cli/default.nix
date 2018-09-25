@@ -3,7 +3,7 @@
 let
   owner = "CircleCI-Public";
   pname = "circleci-cli";
-  version = "0.1.2307";
+  version = "0.1.2569";
 in
 buildGoPackage rec {
   name = "${pname}-${version}";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     inherit owner;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z71jnq42idvhgpgn3mdpbajmgn4b41rpifv5qxn3h1pgi08f75s";
+    sha256 = "0ixiqx8rmia02r44zbhw149p5x9r9cv1fsnlhl8p2x5zd2bdr18x";
   };
 
   goPackagePath = "github.com/${owner}/${pname}";

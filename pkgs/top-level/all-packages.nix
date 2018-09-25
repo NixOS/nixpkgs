@@ -81,8 +81,7 @@ with pkgs;
     { deps = [ autoconf264 automake111x gettext libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
 
-  autoPatchelfHook = makeSetupHook
-    { name = "auto-patchelf-hook"; deps = [ file ]; }
+  autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
     ../build-support/setup-hooks/auto-patchelf.sh;
 
   ensureNewerSourcesHook = { year }: makeSetupHook {}
@@ -598,6 +597,8 @@ with pkgs;
 
   azure-cli = nodePackages.azure-cli;
 
+  azure-storage-azcopy = callPackage ../development/tools/azcopy { };
+
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
 
   awless = callPackage ../tools/virtualization/awless { };
@@ -929,6 +930,8 @@ with pkgs;
   blsd = callPackage ../tools/misc/blsd {
     libgit2 = libgit2_0_27;
   };
+
+  bluez-alsa = callPackage ../tools/bluetooth/bluez-alsa { };
 
   bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
 
@@ -1658,6 +1661,10 @@ with pkgs;
   bgs = callPackage ../tools/X11/bgs { };
 
   biber = callPackage ../tools/typesetting/biber { };
+
+  blastem = callPackage ../misc/emulators/blastem {
+    inherit (python27Packages) pillow;
+  };
 
   blueman = callPackage ../tools/bluetooth/blueman {
     withPulseAudio = config.pulseaudio or true;
@@ -2768,6 +2775,7 @@ with pkgs;
   gitkraken = callPackage ../applications/version-management/gitkraken { };
 
   gitlab = callPackage ../applications/version-management/gitlab { };
+  gitlab-ee = callPackage ../applications/version-management/gitlab { gitlabEnterprise = true; };
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
   gitlab-runner_1_11 = callPackage ../development/tools/continuous-integration/gitlab-runner/v1.nix { };
@@ -11636,6 +11644,7 @@ with pkgs;
 
   protobuf = protobuf3_4;
 
+  protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
   protobuf3_5 = callPackage ../development/libraries/protobuf/3.5.nix { };
   protobuf3_4 = callPackage ../development/libraries/protobuf/3.4.nix { };
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
@@ -11946,6 +11955,8 @@ with pkgs;
   qradiolink = callPackage ../applications/misc/qradiolink { };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
+
+  qgnomeplatform =  libsForQt5.callPackage ../development/libraries/qgnomeplatform { };
 
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
@@ -13466,8 +13477,10 @@ with pkgs;
 
   quagga = callPackage ../servers/quagga { };
 
-  rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server {
+  rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
+    elixir = elixir_1_6;
+    erlang = erlang_nox;
   };
 
   radicale1 = callPackage ../servers/radicale/1.x.nix { };
@@ -14727,6 +14740,8 @@ with pkgs;
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
+  twa = callPackage ../tools/networking/twa { };
+
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
     buildUBoot
@@ -14740,6 +14755,7 @@ with pkgs;
     ubootNovena
     ubootOdroidXU3
     ubootOrangePiPc
+    ubootOrangePiZeroPlus2H5
     ubootPcduino3Nano
     ubootPine64
     ubootQemuAarch64
@@ -15530,12 +15546,7 @@ with pkgs;
 
 
   go-ethereum = self.altcoins.go-ethereum;
-  ethsign = self.altcoins.ethsign;
   ethabi = self.altcoins.ethabi;
-  ethrun = self.altcoins.ethrun;
-  seth = self.altcoins.seth;
-  dapp = self.altcoins.dapp;
-  hevm = self.altcoins.hevm;
 
   parity = self.altcoins.parity;
   parity-beta = self.altcoins.parity-beta;
@@ -20575,6 +20586,8 @@ with pkgs;
 
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
+  adwaita-qt = libsForQt5.callPackage ../misc/themes/adwaita-qt { };
+
   orion = callPackage ../misc/themes/orion {};
 
   elementary-gtk-theme = callPackage ../misc/themes/elementary { };
@@ -22023,6 +22036,8 @@ with pkgs;
     libselinux = libselinux.override { python = python3; };
     libsemanage = libsemanage.override { python = python3; };
   };
+
+  shades-of-gray-theme = callPackage ../misc/themes/shades-of-gray { };
 
   sierra-gtk-theme = callPackage ../misc/themes/sierra { };
 

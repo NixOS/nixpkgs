@@ -20,7 +20,12 @@ stdenv.mkDerivation rec{
                   ++ optionals stdenv.isLinux [ utillinux ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib"
+                     "--disable-bench"
+                   ] ++ optionals (!doCheck) [
+                     "--disable-tests"
+                     "--disable-gui-tests"
+                   ]
                      ++ optionals withGui [ "--with-gui=qt5"
                                             "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                           ];
@@ -28,6 +33,8 @@ stdenv.mkDerivation rec{
   # Fails with "This application failed to start because it could not
   # find or load the Qt platform plugin "minimal""
   doCheck = false;
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Peer-to-peer electronic cash system";

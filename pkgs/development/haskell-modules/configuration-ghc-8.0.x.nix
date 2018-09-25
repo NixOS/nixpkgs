@@ -39,8 +39,8 @@ self: super: {
   # These are now core libraries in GHC 8.4.x.
   mtl = self.mtl_2_2_2;
   parsec = self.parsec_3_1_13_0;
-  stm = self.stm_2_4_5_1;
-  text = self.text_1_2_3_0;
+  stm = self.stm_2_5_0_0;
+  text = self.text_1_2_3_1;
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {

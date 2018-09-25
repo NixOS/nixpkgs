@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, bundlerEnv
+{ stdenv, lib, fetchurl, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, procps, nettools
+, gitlabEnterprise ? false
 }:
 
 let
@@ -8,40 +9,46 @@ let
     inherit ruby;
     gemdir = ./.;
     groups = [ "default" "unicorn" "ed25519" "metrics" ];
-    meta = with lib; {
-      homepage = http://www.gitlab.com/;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ fpletz globin ];
-      license = licenses.mit;
-    };
   };
 
-  version = "10.8.0";
+  version = "11.3.0";
 
-  gitlabDeb = fetchurl {
-    url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "0j5jrlwfpgwfirjnqb9w4snl9w213kdxb1ajyrla211q603d4j34";
+  sources = if gitlabEnterprise then {
+    gitlabDeb = fetchurl {
+      url = "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_${version}-ee.0_amd64.deb/download.deb";
+      sha256 = "1l5cfbc45xa3gq90wyly3szn93szh162g9szc6dnkqx0db70j9l3";
+    };
+    gitlab = fetchFromGitLab {
+      owner = "gitlab-org";
+      repo = "gitlab-ee";
+      rev = "v${version}-ee";
+      sha256 = "0gmainjhs21hipbvshga5dzkjrpmlkk9vxxnxgwjaqbg9wrhw47m";
+    };
+  } else {
+    gitlabDeb = fetchurl {
+      url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_${version}-ce.0_amd64.deb/download.deb";
+      sha256 = "162xy8xpa2qhz10nh2dw0vbd0665pz9984vnim9i30xcafr5picq";
+    };
+    gitlab = fetchFromGitLab {
+      owner = "gitlab-org";
+      repo = "gitlab-ce";
+      rev = "v${version}";
+      sha256 = "158n2qnp1zsj5kk2w3v9xyakgdb739n955hlq3i9sl80q8f4xda3";
+    };
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "gitlab-${version}";
+  name = "gitlab${if gitlabEnterprise then "-ee" else ""}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "gitlabhq";
-    repo = "gitlabhq";
-    rev = "v${version}";
-    sha256 = "1idvi27xpghvvb3sv62afhcnnswvjlrbg5lld79a761kd4187cym";
-  };
+  src = sources.gitlab;
 
   buildInputs = [
     rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git procps nettools
   ];
 
-  patches = [
-    ./remove-hardcoded-locations.patch
-  ];
+  patches = [ ./remove-hardcoded-locations.patch ];
 
   postPatch = ''
     # For reasons I don't understand "bundle exec" ignores the
@@ -72,13 +79,14 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mv config/gitlab.yml.example config/gitlab.yml
 
-    # work around unpacking deb containing binary with suid bit
-    ar p ${gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    # Building this requires yarn, node &c, so we just get it from the deb
+    ar p ${sources.gitlabDeb} data.tar.gz | gunzip > gitlab-deb-data.tar
+    # Work around unpacking deb containing binary with suid bit
     tar -f gitlab-deb-data.tar --delete ./opt/gitlab/embedded/bin/ksu
     tar -xf gitlab-deb-data.tar
 
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
-    rm -rf opt
+    rm -rf opt # only directory in data.tar.gz
 
     mv config/gitlab.yml config/gitlab.yml.example
     rm -f config/secrets.yml
@@ -105,10 +113,19 @@ stdenv.mkDerivation rec {
     ruby = rubyEnv.wrappedRuby;
   };
 
-  meta = with stdenv.lib; {
-    description = "Web-based Git-repository manager";
-    homepage = https://gitlab.com;
-    license = licenses.mit;
+  meta = with lib; {
+    homepage = http://www.gitlab.com/;
     platforms = platforms.linux;
-  };
+    maintainers = with maintainers; [ fpletz globin krav ];
+  } // (if gitlabEnterprise then
+    {
+      license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE
+      description = "GitLab Enterprise Edition";
+    }
+  else
+    {
+      license = licenses.mit;
+      description = "GitLab Community Edition";
+      longDescription = "GitLab Community Edition (CE) is an open source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. Self-host GitLab CE on your own servers, in a container, or on a cloud provider.";
+    });
 }

@@ -185,7 +185,7 @@ rec {
   /* Make a set of packages with a common scope. All packages called
      with the provided `callPackage' will be evaluated with the same
      arguments. Any package in the set may depend on any other. The
-     `overrideScope' function allows subsequent modification of the package
+     `overrideScope'` function allows subsequent modification of the package
      set in a consistent way, i.e. all packages in the set will be
      called with the overridden packages. The package sets may be
      hierarchical: the packages in the set are called with the scope
@@ -195,10 +195,10 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          # TODO(@Ericson2314): Haromonize argument order of `g` with everything else
-          overrideScope = g:
-            makeScope newScope
-            (lib.fixedPoints.extends (lib.flip g) f);
+          overrideScope = g: lib.warn
+            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: self: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
+            (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
+          overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
           packages = f;
         };
     in self;

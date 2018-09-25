@@ -12,7 +12,6 @@ with lib;
   i18n.supportedLocales = [ (config.i18n.defaultLocale + "/UTF-8") ];
 
   documentation.enable = mkDefault false;
-  documentation.nixos.enable = mkDefault false;
 
   sound.enable = mkDefault false;
 }

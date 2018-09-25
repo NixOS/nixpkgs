@@ -2,14 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "doitlive";
-  version = "3.0.3";
+  version = "4.0.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "19i16ca835rb3gal1sxyvpyilj9a80n6nikf0smlzmxck38x86fj";
+    sha256 = "1icnjkczy52i3cp1fmsijqny571fz1h4b3wpdzz79cn90fr326pc";
   };
 
-  propagatedBuildInputs = with python3Packages; [ click ];
+  propagatedBuildInputs = with python3Packages; [ click click-completion click-didyoumean ];
 
   # disable tests (too many failures)
   doCheck = false;
