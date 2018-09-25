@@ -18,7 +18,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     gemojione (3.3.0)
       json
-    gitaly-proto (0.107.0)
+    gitaly-proto (0.116.0)
       google-protobuf (~> 3.1)
       grpc (~> 1.10)
     github-linguist (6.2.0)
@@ -75,9 +75,9 @@ GEM
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
     memoist (0.16.0)
-    mime-types (3.1)
+    mime-types (3.2.2)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0521)
+    mime-types-data (3.2018.0812)
     mini_portile2 (2.3.0)
     minitest (5.9.1)
     multi_json (1.13.1)
@@ -147,7 +147,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport (~> 5.0.2)
   faraday (~> 0.12)
-  gitaly-proto (~> 0.107.0)
+  gitaly-proto (~> 0.116.0)
   github-linguist (~> 6.1)
   gitlab-gollum-lib (~> 4.2)
   gitlab-gollum-rugged_adapter (~> 0.4.4)
@@ -162,4 +162,4 @@ DEPENDENCIES
   sentry-raven (~> 2.7.2)
 
 BUNDLED WITH
-   1.16.3
+   1.16.4

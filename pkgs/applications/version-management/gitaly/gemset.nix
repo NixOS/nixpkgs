@@ -87,10 +87,10 @@
     dependencies = ["google-protobuf" "grpc"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01g40gcv7a7w7z27pa65f229k04k1dgxf8rki4g38y6azaj88yib";
+      sha256 = "15946776v5v8c2jisknjm82s4q3b3q9x2xygjf4bkk4m45n766w1";
       type = "gem";
     };
-    version = "0.107.0";
+    version = "0.116.0";
   };
   github-linguist = {
     dependencies = ["charlock_holmes" "escape_utils" "mime-types" "rugged"];
@@ -259,18 +259,18 @@
     dependencies = ["mime-types-data"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0087z9kbnlqhci7fxh9f6il63hj1k02icq2rs0c6cppmqchr753m";
+      sha256 = "0fjxy1jm52ixpnv3vg9ld9pr9f35gy0jp66i1njhqjvmnvq0iwwk";
       type = "gem";
     };
-    version = "3.1";
+    version = "3.2.2";
   };
   mime-types-data = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "04my3746hwa4yvbx1ranhfaqkgf6vavi1kyijjnw8w3dy37vqhkm";
+      sha256 = "07wvp0aw2gjm4njibb70as6rh5hi1zzri5vky1q6jx95h8l56idc";
       type = "gem";
     };
-    version = "3.2016.0521";
+    version = "3.2018.0812";
   };
   mini_portile2 = {
     source = {
