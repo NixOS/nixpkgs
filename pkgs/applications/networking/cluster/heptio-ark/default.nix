@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "heptio-ark-${version}";
-  version = "0.9.0";
+  version = "0.9.4";
 
   goPackagePath = "github.com/heptio/ark";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "heptio";
     repo = "ark";
-    sha256 = "0b3jsgs35l8kk63pjnqn3911pyb397fyvsmd3jd8vzjawisgpdp7";
+    sha256 = "01z0zkw7l6haxky9l45iqqnvs6104xx4195jm250nv9j1x8n59ai";
   };
 
   postInstall = "rm $bin/bin/generate";

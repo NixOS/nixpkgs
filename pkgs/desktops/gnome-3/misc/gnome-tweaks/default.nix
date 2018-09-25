@@ -15,7 +15,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext itstool libxml2 wrapGAppsHook
+    meson ninja pkgconfig gettext itstool libxml2 wrapGAppsHook python3Packages.python
   ];
   buildInputs = [
     gtk3 glib gnome3.gsettings-desktop-schemas

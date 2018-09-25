@@ -325,7 +325,7 @@
     };
   };
 }
-    </screen>
+</screen>
 
    <para>
     To install it into our environment, you can just run <literal>nix-env -iA
@@ -347,7 +347,7 @@
     };
   };
 }
-    </screen>
+</screen>
 
    <para>
     <literal>pathsToLink</literal> tells Nixpkgs to only link the paths listed
@@ -383,7 +383,7 @@
     };
   };
 }
-    </screen>
+</screen>
 
    <para>
     This provides us with some useful documentation for using our packages.
@@ -395,15 +395,15 @@
 {
   packageOverrides = pkgs: with pkgs; rec {
     myProfile = writeText "my-profile" ''
-export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
-export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
+      export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
+      export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
     '';
     myPackages = pkgs.buildEnv {
       name = "my-packages";
       paths = [
         (runCommand "profile" {} ''
-mkdir -p $out/etc/profile.d
-cp ${myProfile} $out/etc/profile.d/my-profile.sh
+          mkdir -p $out/etc/profile.d
+          cp ${myProfile} $out/etc/profile.d/my-profile.sh
         '')
         aspell
         bc
@@ -421,7 +421,7 @@ cp ${myProfile} $out/etc/profile.d/my-profile.sh
     };
   };
 }
-    </screen>
+</screen>
 
    <para>
     For this to work fully, you must also have this script sourced when you are
@@ -438,7 +438,7 @@ if [ -d $HOME/.nix-profile/etc/profile.d ]; then
     fi
   done
 fi
-    </screen>
+</screen>
 
    <para>
     Now just run <literal>source $HOME/.profile</literal> and you can starting
@@ -459,16 +459,16 @@ fi
 {
   packageOverrides = pkgs: with pkgs; rec {
     myProfile = writeText "my-profile" ''
-export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
-export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
-export INFOPATH=$HOME/.nix-profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info
+      export PATH=$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/sbin:/bin:/usr/sbin:/usr/bin
+      export MANPATH=$HOME/.nix-profile/share/man:/nix/var/nix/profiles/default/share/man:/usr/share/man
+      export INFOPATH=$HOME/.nix-profile/share/info:/nix/var/nix/profiles/default/share/info:/usr/share/info
     '';
     myPackages = pkgs.buildEnv {
       name = "my-packages";
       paths = [
         (runCommand "profile" {} ''
-mkdir -p $out/etc/profile.d
-cp ${myProfile} $out/etc/profile.d/my-profile.sh
+          mkdir -p $out/etc/profile.d
+          cp ${myProfile} $out/etc/profile.d/my-profile.sh
         '')
         aspell
         bc
@@ -485,17 +485,17 @@ cp ${myProfile} $out/etc/profile.d/my-profile.sh
       pathsToLink = [ "/share/man" "/share/doc" "/share/info" "/bin" "/etc" ];
       extraOutputsToInstall = [ "man" "doc" "info" ];
       postBuild = ''
-          if [ -x $out/bin/install-info -a -w $out/share/info ]; then
-            shopt -s nullglob
-            for i in $out/share/info/*.info $out/share/info/*.info.gz; do
-                $out/bin/install-info $i $out/share/info/dir
-            done
-          fi
+        if [ -x $out/bin/install-info -a -w $out/share/info ]; then
+          shopt -s nullglob
+          for i in $out/share/info/*.info $out/share/info/*.info.gz; do
+              $out/bin/install-info $i $out/share/info/dir
+          done
+        fi
       '';
     };
   };
 }
-    </screen>
+</screen>
 
    <para>
     <literal>postBuild</literal> tells Nixpkgs to run a command after building

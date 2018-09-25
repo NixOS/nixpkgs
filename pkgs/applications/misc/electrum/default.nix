@@ -1,12 +1,24 @@
 { stdenv, fetchurl, python3, python3Packages, zbar }:
 
+let
+  qdarkstyle = python3Packages.buildPythonPackage rec {
+    pname = "QDarkStyle";
+    version = "2.5.4";
+    src = python3Packages.fetchPypi {
+      inherit pname version;
+      sha256 = "1w715m1i5pycfqcpkrggpn0rs9cakx6cm5v8rggcxnf4p0i0kdiy";
+    };
+    doCheck = false; # no tests
+  };
+in
+
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "3.1.3";
+  version = "3.2.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "05m28yd3zr9awjhaqikf4rg08j5i4ygm750ip1z27wl446sysniy";
+    sha256 = "022iw4cq0c009wvqn7wd815jc0nv8198lq3cawn8h6c28hw2mhs1";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -17,12 +29,14 @@ python3Packages.buildPythonApplication rec {
     pbkdf2
     protobuf
     pyaes
-    pycrypto
+    pycryptodomex
     pyqt5
     pysocks
+    qdarkstyle
     qrcode
     requests
     tlslite
+    typing
 
     # plugins
     keepkey
@@ -35,10 +49,10 @@ python3Packages.buildPythonApplication rec {
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
+    pyrcc5 icons.qrc -o electrum/gui/qt/icons_rc.py
     # Recording the creation timestamps introduces indeterminism to the build
-    sed -i '/Created: .*/d' gui/qt/icons_rc.py
-    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" lib/qrscanner.py
+    sed -i '/Created: .*/d' electrum/gui/qt/icons_rc.py
+    sed -i "s|name = 'libzbar.*'|name='${zbar}/lib/libzbar.so'|" electrum/qrscanner.py
   '';
 
   postInstall = ''

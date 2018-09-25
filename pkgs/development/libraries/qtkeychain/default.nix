@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0h4wgngn2yl35hapbjs24amkjfbzsvnna4ixfhn87snjnq5lmjbc"; # v0.9.1
   };
 
+  patches = if withQt5 then null else [ ./0001-Fixes-build-with-Qt4.patch ];
+
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ]
     ++ stdenv.lib.optional stdenv.isDarwin [
        # correctly detect the compiler

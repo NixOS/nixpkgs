@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/gsettings-schemas/$name
     mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name
-    ${glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas
+    glib-compile-schemas "$out/share/gsettings-schemas/$name/glib-2.0/schemas"
   '';
 
   meta = with stdenv.lib; {

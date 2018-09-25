@@ -1,4 +1,6 @@
-{ lib, stdenv, buildEnv, haskell, nodejs, fetchurl, makeWrapper, git }:
+{ lib, stdenv, buildEnv
+, haskell, nodejs
+, fetchurl, fetchpatch, makeWrapper, git }:
 
 # To update:
 
@@ -90,6 +92,12 @@ let
                 export ELM_HOME=`pwd`/.elm
               '' + (makeDotElm "0.19.0" (import ./packages/elm-elm.nix));
               buildTools = drv.buildTools or [] ++ [ makeWrapper ];
+              patches = [
+                (fetchpatch {
+                  url = "https://github.com/elm/compiler/pull/1784/commits/78d2d8eab310552b1b877a3e90e1e57e7a09ddec.patch";
+                  sha256 = "0vdhk16xqm2hxw12s1b91a0bmi8w4wsxc086qlzglgnjxrl5b3w4";
+                })
+              ];
               postInstall = ''
                 wrapProgram $out/bin/elm \
                   --prefix PATH ':' ${lib.makeBinPath [ nodejs ]}

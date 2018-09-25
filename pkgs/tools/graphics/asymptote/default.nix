@@ -1,5 +1,5 @@
 {stdenv, fetchurl
-  , freeglut, ghostscriptX, imagemagick, fftw 
+  , freeglut, ghostscriptX, imagemagick, fftw
   , boehmgc, libGLU, libGL, mesa_noglu, ncurses, readline, gsl, libsigsegv
   , python, zlib, perl, texLive, texinfo, xz
 , darwin
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     export HOME="$PWD"
-    patchShebangs . 
+    patchShebangs .
     sed -e 's@epswrite@eps2write@g' -i runlabel.in
     xz -d < ${texinfo.src} | tar --wildcards -x texinfo-'*'/doc/texinfo.tex
     cp texinfo-*/doc/texinfo.tex doc/
@@ -63,6 +63,7 @@ stdenv.mkDerivation {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin maintainers.peti ];
+    broken = stdenv.isDarwin;  # https://github.com/vectorgraphics/asymptote/issues/69
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

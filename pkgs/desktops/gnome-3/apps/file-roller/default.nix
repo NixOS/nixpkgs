@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, gtk, meson, ninja, pkgconfig, gnome3, gettext, itstool, libxml2, libarchive
-, file, json-glib, wrapGAppsHook, desktop-file-utils, libnotify, nautilus, glibcLocales }:
+, file, json-glib, python3, wrapGAppsHook, desktop-file-utils, libnotify, nautilus, glibcLocales }:
 
 stdenv.mkDerivation rec {
   name = "file-roller-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   LANG = "en_US.UTF-8"; # postinstall.py
 
-  nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 wrapGAppsHook glibcLocales desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja gettext itstool pkgconfig libxml2 python3 wrapGAppsHook glibcLocales desktop-file-utils ];
 
   buildInputs = [ glib gtk json-glib libarchive file gnome3.defaultIconTheme libnotify nautilus ];
 

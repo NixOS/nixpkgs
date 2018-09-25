@@ -355,6 +355,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Independent JPEG Group License";
   };
 
+  imagemagick = spdx {
+    fullName = "ImageMagick License";
+    spdxId = "imagemagick";
+  };
+
   inria-compcert = {
     fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "http://compcert.inria.fr/doc/LICENSE";
@@ -544,6 +549,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   publicDomain = {
     fullName = "Public Domain";
+  };
+
+  purdueBsd = {
+    fullName = " Purdue BSD-Style License"; # also know as lsof license
+    url = https://enterprise.dejacode.com/licenses/public/purdue-bsd;
   };
 
   qpl = spdx {

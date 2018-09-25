@@ -22,8 +22,8 @@ assert null == lib.findFirst (c: "/"==c) null (lib.stringToCharacters repository
 assert null == lib.findFirst (c: "/"==c) null (lib.stringToCharacters imageName);
 
 let
-  # Abuse `builtins.toPath` to collapse possible double slashes
-  repoTag0 = builtins.toString (builtins.toPath "/${stripScheme registry}/${repository}/${imageName}");
+  # Abuse paths to collapse possible double slashes
+  repoTag0 = builtins.toString (/. + "/${stripScheme registry}/${repository}/${imageName}");
   repoTag1 = lib.removePrefix "/" repoTag0;
 
   layers = builtins.map stripNixStore imageLayers;

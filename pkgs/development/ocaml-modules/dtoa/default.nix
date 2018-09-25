@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder }:
+{ stdenv, fetchurl, ocaml, findlib, dune }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  buildInputs = [ ocaml findlib dune ];
 
-  buildPhase = "jbuilder build -p dtoa";
+  buildPhase = "dune build -p dtoa";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
 

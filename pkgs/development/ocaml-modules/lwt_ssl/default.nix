@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, jbuilder, ssl, lwt }:
+{ stdenv, fetchzip, ocaml, findlib, dune, ssl, lwt }:
 
 stdenv.mkDerivation rec {
   version = "1.1.2";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1q0an3djqjxv83v3iswi7m81braqx93kcrcwrxwmf6jzhdm4pn15";
   };
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  buildInputs = [ ocaml findlib dune ];
   propagatedBuildInputs = [ ssl lwt ];
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     homepage = "https://github.com/aantron/lwt_ssl";

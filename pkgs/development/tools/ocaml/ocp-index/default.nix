@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, ocp-build, ocp-indent, cmdliner, re }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, ocp-build, ocp-indent, cmdliner, re }:
 
 stdenv.mkDerivation rec {
 
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "0p367aphz9w71qbm3y47qwhgqmyai28l96i1ifb6kg7awph5qmj3";
   };
 
-  buildInputs = [ ocaml findlib jbuilder ocp-build cmdliner re ];
+  buildInputs = [ ocaml findlib dune ocp-build cmdliner re ];
   propagatedBuildInputs = [ ocp-indent ];
 
-  buildPhase = "jbuilder build -p ocp-index";
+  buildPhase = "dune build -p ocp-index";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     homepage = http://typerex.ocamlpro.com/ocp-index.html;

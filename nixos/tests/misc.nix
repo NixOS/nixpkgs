@@ -14,7 +14,7 @@ import ./make-test.nix ({ pkgs, ...} : rec {
     { swapDevices = mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];
       environment.variables.EDITOR = mkOverride 0 "emacs";
-      services.nixosManual.enable = mkOverride 0 true;
+      documentation.nixos.enable = mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
       fileSystems = mkVMOverride { "/tmp2" =
         { fsType = "tmpfs";

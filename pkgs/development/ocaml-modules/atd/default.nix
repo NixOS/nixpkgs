@@ -1,4 +1,4 @@
-{ stdenv, menhir, easy-format, ocaml, findlib, fetchFromGitHub, jbuilder, which, biniou, yojson }:
+{ stdenv, menhir, easy-format, ocaml, findlib, fetchFromGitHub, dune, which, biniou, yojson }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildInputs = [ which jbuilder ocaml findlib menhir ];
+  buildInputs = [ which dune ocaml findlib menhir ];
   propagatedBuildInputs = [ easy-format biniou yojson ];
 
   buildPhase = "jbuilder build";
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mjambon/atd;

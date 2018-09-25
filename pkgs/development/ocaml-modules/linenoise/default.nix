@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, jbuilder, findlib, result }:
+{ stdenv, fetchFromGitHub, ocaml, dune, findlib, result }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "linenoise is not available for OCaml ${ocaml.version}"
@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "1h6rqfgmhmd7p5z8yhk6zkbrk4yzw1v2fgwas2b7g3hqs6y0xj0q";
   };
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  buildInputs = [ ocaml findlib dune ];
   propagatedBuildInputs = [ result ];
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "OCaml bindings to linenoise";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, easy-format }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, easy-format }:
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mjpgwyfq2b2izjw0flmlpvdjgqpq8shs89hxj1np2r50csr8dcb";
   };
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  buildInputs = [ ocaml findlib dune ];
 
   propagatedBuildInputs = [ easy-format ];
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
    patchShebangs .
   '';
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     inherit (src.meta) homepage;

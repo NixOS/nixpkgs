@@ -4,6 +4,9 @@
 , sage-env
 , sage-src
 , openblasCompat
+, openblas-blas-pc
+, openblas-cblas-pc
+, openblas-lapack-pc
 , pkg-config
 , three
 , singular
@@ -29,6 +32,9 @@ let
     makeWrapper
     pkg-config
     openblasCompat # lots of segfaults with regular (64 bit) openblas
+    openblas-blas-pc
+    openblas-cblas-pc
+    openblas-lapack-pc
     singular
     three
     pynac

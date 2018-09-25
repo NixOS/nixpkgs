@@ -36,11 +36,18 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        test -d ${cfg.dataDir} || {
-          echo "Creating initial Emby data directory in ${cfg.dataDir}"
-          mkdir -p ${cfg.dataDir}
-          chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
-          }
+        if [ -d ${cfg.dataDir} ]
+        then
+            for plugin in ${cfg.dataDir}/plugins/*
+            do
+                echo "Correcting permissions of plugin: $plugin"
+                chmod u+w $plugin
+            done
+        else
+            echo "Creating initial Emby data directory in ${cfg.dataDir}"
+            mkdir -p ${cfg.dataDir}
+            chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
+        fi
       '';
 
       serviceConfig = {

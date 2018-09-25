@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, dbus-glib, gtk3, gnome3
+{ stdenv, fetchurl, meson, ninja, vala, libxslt, pkgconfig, glib, dbus-glib, gtk3, gnome3, python3
 , libxml2, gettext, docbook_xsl, wrapGAppsHook, gobjectIntrospection }:
 
 let
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0nhcpwqrkmpxbhaf0cafvy6dlp6s7vhm5vknl4lgs3l24zc56ns5";
   };
 
-  nativeBuildInputs = [ meson ninja vala libxslt pkgconfig wrapGAppsHook gettext docbook_xsl libxml2 gobjectIntrospection ];
+  nativeBuildInputs = [ meson ninja vala libxslt pkgconfig wrapGAppsHook gettext docbook_xsl libxml2 gobjectIntrospection python3 ];
 
   buildInputs = [ glib dbus-glib gtk3 gnome3.defaultIconTheme gnome3.dconf ];
 

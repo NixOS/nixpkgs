@@ -22,6 +22,8 @@ in stdenv.mkDerivation rec{
     gst_all_1.gst-libav
   ];
 
+  NIX_CFLAGS_COMPILE="-Wno-error=format-nonliteral";
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;

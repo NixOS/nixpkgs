@@ -208,7 +208,7 @@ in
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = "Whether to enable tor transaprent proxy";
+            description = "Whether to enable tor transparent proxy";
           };
 
           listenAddress = mkOption {

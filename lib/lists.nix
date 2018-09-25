@@ -509,7 +509,8 @@ rec {
        => 3
   */
   last = list:
-    assert list != []; elemAt list (length list - 1);
+    assert lib.assertMsg (list != []) "lists.last: list must not be empty!";
+    elemAt list (length list - 1);
 
   /* Return all elements but the last
 
@@ -517,7 +518,9 @@ rec {
        init [ 1 2 3 ]
        => [ 1 2 ]
   */
-  init = list: assert list != []; take (length list - 1) list;
+  init = list:
+    assert lib.assertMsg (list != []) "lists.init: list must not be empty!";
+    take (length list - 1) list;
 
 
   /* return the image of the cross product of some lists by a function

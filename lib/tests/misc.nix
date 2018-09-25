@@ -112,7 +112,7 @@ runTests {
         storePathAppendix = isStorePath
           "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
-        asPath = isStorePath (builtins.toPath goodPath);
+        asPath = isStorePath goodPath;
         otherPath = isStorePath "/something/else";
         otherVals = {
           attrset = isStorePath {};
@@ -236,6 +236,20 @@ runTests {
     };
   };
 
+  testOverrideExistingEmpty = {
+    expr = overrideExisting {} { a = 1; };
+    expected = {};
+  };
+
+  testOverrideExistingDisjoint = {
+    expr = overrideExisting { b = 2; } { a = 1; };
+    expected = { b = 2; };
+  };
+
+  testOverrideExistingOverride = {
+    expr = overrideExisting { a = 3; b = 2; } { a = 1; };
+    expected = { a = 1; b = 2; };
+  };
 
 # GENERATORS
 # these tests assume attributes are converted to lists
@@ -357,7 +371,7 @@ runTests {
       int = 42;
       bool = true;
       string = ''fno"rd'';
-      path = /. + "/foo"; # toPath returns a string
+      path = /. + "/foo";
       null_ = null;
       function = x: x;
       functionArgs = { arg ? 4, foo }: arg;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, wrapGAppsHook
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, itstool, python3, wrapGAppsHook
 , cairo, gdk_pixbuf, colord, glib, gtk, gusb, packagekit, libwebp
 , libxml2, sane-backends, vala, gnome3, gobjectIntrospection }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cairo gdk_pixbuf colord glib gnome3.defaultIconTheme gusb
                 gtk libwebp packagekit sane-backends vala ];
   nativeBuildInputs = [
-    meson ninja gettext itstool pkgconfig wrapGAppsHook libxml2
+    meson ninja gettext itstool pkgconfig python3 wrapGAppsHook libxml2
     # For setup hook
     gobjectIntrospection
   ];

@@ -84,7 +84,7 @@ in
       versionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
 
       # Note: the first letter is bumped on every release.  It's an animal.
-      codeName = "Jellyfish";
+      codeName = "Koi";
     };
 
     # Generate /etc/os-release.  See

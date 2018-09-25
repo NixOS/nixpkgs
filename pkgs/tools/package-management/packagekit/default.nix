@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   name = "packagekit-${version}";
   version = "1.1.10";
 
+  outputs = [ "out" "dev" ];
+
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "PackageKit";
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     (if enableSystemd then "--enable-systemd" else "--disable-systemd")
     "--disable-dummy"
     "--disable-cron"
-    "--disable-introspection"
+    "--enable-introspection"
     "--disable-offline-update"
     "--localstatedir=/var"
     "--sysconfdir=/etc"

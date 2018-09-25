@@ -1,5 +1,5 @@
 { stdenv, gettext, fetchurl, pkgconfig, udisks2, libsecret, libdvdread
-, meson, ninja, gtk, glib, wrapGAppsHook, libnotify
+, meson, ninja, gtk, glib, wrapGAppsHook, python3, libnotify
 , itstool, gnome3, libxml2
 , libcanberra-gtk3, libxslt, docbook_xsl, libpwquality }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja pkgconfig gettext itstool libxslt docbook_xsl
-    wrapGAppsHook libxml2
+    wrapGAppsHook python3 libxml2
   ];
   buildInputs = [
     gtk glib libsecret libpwquality libnotify libdvdread libcanberra-gtk3

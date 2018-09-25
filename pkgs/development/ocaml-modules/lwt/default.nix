@@ -1,7 +1,7 @@
-{ stdenv, fetchzip, pkgconfig, ncurses, libev, jbuilder
+{ stdenv, fetchzip, pkgconfig, ncurses, libev, dune
 , ocaml, findlib, cppo
 , ocaml-migrate-parsetree, ppx_tools_versioned, result
-, withP4 ? !stdenv.lib.versionAtLeast ocaml.version "4.07"
+, withP4 ? true
 , camlp4 ? null
 }:
 
@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ocaml findlib jbuilder cppo
+  buildInputs = [ ncurses ocaml findlib dune cppo
     ocaml-migrate-parsetree ppx_tools_versioned ]
   ++ stdenv.lib.optional withP4 camlp4;
   propagatedBuildInputs = [ libev result ];
 
   installPhase = ''
     ocaml src/util/install_filter.ml
-    ${jbuilder.installPhase}
+    ${dune.installPhase}
   '';
 
   meta = {

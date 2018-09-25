@@ -8,7 +8,8 @@
 
 with stdenv.lib;
 
-assert elem fileFormat ["lowerTriangularCsv" "upperTriangularCsv" "dipha"];
+assert assertOneOf "fileFormat" fileFormat
+  ["lowerTriangularCsv" "upperTriangularCsv" "dipha"];
 assert useGoogleHashmap -> sparsehash != null;
 
 let

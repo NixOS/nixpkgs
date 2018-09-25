@@ -1,5 +1,5 @@
 { stdenv, gettext, fetchurl, evolution-data-server
-, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, gtk3, glib, cheese
+, pkgconfig, libxslt, docbook_xsl, docbook_xml_dtd_42, python3, gtk3, glib, cheese
 , libchamplain, clutter-gtk, geocode-glib, gnome-desktop, gnome-online-accounts
 , wrapGAppsHook, folks, libxml2, gnome3, telepathy-glib
 , vala, meson, ninja }:
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ evolution-data-server ];
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 wrapGAppsHook
+    meson ninja pkgconfig vala gettext libxslt docbook_xsl docbook_xml_dtd_42 python3 wrapGAppsHook
   ];
 
   buildInputs = [

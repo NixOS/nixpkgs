@@ -1,4 +1,5 @@
 { stdenv
+, ctags
 , desktop-file-utils
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -52,11 +53,13 @@ in stdenv.mkDerivation {
     meson
     ninja
     pkgconfig
+    python3
     python3.pkgs.wrapPython
     wrapGAppsHook
   ];
 
   buildInputs = [
+    ctags
     flatpak
     gnome3.devhelp
     gnome3.libgit2-glib

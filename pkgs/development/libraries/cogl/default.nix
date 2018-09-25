@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintl
 , pangoSupport ? true, pango, cairo, gobjectIntrospection, wayland, gnome3
 , mesa_noglu
 , gstreamerSupport ? true, gst_all_1 }:
@@ -13,6 +13,23 @@ in stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
     sha256 = "03f0ha3qk7ca0nnkkcr1garrm1n1vvfqhkz9lwjm592fnv6ii9rr";
   };
+
+  patches = [
+    # Some deepin packages need the following patches. They have been
+    # submitted by Fedora on the GNOME Bugzilla
+    # (https://bugzilla.gnome.org/787443). Upstream thinks the patch
+    # could be merged, but dev can not make a new release.
+
+    (fetchpatch {
+      url = https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=359589;
+      sha256 = "0f0d9iddg8zwy853phh7swikg4yzhxxv71fcag36f8gis0j5p998";
+    })
+
+    (fetchpatch {
+      url = https://bug787443.bugzilla-attachments.gnome.org/attachment.cgi?id=361056;
+      sha256 = "09fyrdci4727fg6qm5aaapsbv71sf4wgfaqz8jqlyy61dibgg490";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig libintl ];
 

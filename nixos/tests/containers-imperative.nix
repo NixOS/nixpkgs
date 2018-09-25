@@ -13,6 +13,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       # XXX: Sandbox setup fails while trying to hardlink files from the host's
       #      store file system into the prepared chroot directory.
       nix.useSandbox = false;
+      nix.binaryCaches = []; # don't try to access cache.nixos.org
 
       virtualisation.writableStore = true;
       virtualisation.memorySize = 1024;
@@ -27,9 +28,10 @@ import ./make-test.nix ({ pkgs, ...} : {
             };
           };
         };
-      in [
-        pkgs.stdenv pkgs.stdenvNoCC emptyContainer.config.containers.foo.path
-        pkgs.libxslt
+      in with pkgs; [
+        stdenv stdenvNoCC emptyContainer.config.containers.foo.path
+        libxslt desktop-file-utils texinfo docbook5 libxml2
+        docbook_xsl_ns xorg.lndir documentation-highlighter
       ];
     };
 

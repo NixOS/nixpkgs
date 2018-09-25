@@ -3,8 +3,9 @@
 , img ? pkgs.stdenv.hostPlatform.platform.kernelTarget
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" "sym53c8xx" "virtio_scsi" "ahci "]
       ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
+, config
 }:
 
 with pkgs;
@@ -196,9 +197,17 @@ rec {
     ${qemuBinary qemu} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
+      ${if "$diskInterface" == "scsi" then '' \
+        \ # FIXME: /dev/sda is not created within the VM
+        -device lsi53c895a \
+        -device scsi-hd,drive=hd,id=scsi1,bootindex=1 \
+        ''${diskImage:+-drive file=$diskImage,media=disk,if=none,id=hd,cache=unsafe,werror=report} \
+      '' else '' \
+        -drive file=$diskImage,media=disk,if=none,id=hd \
+        -device virtio-blk-pci,scsi=off,drive=hd,id=virtio0,bootindex=1 \
+      \''}
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
-      ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=${qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
@@ -298,12 +307,13 @@ rec {
      `run-vm' will be left behind in the temporary build directory
      that allows you to boot into the VM and debug it interactively. */
 
-  runInLinuxVM = drv: lib.overrideDerivation drv ({ memSize ? 512, QEMU_OPTS ? "", args, builder, ... }: {
+  runInLinuxVM = drv: lib.overrideDerivation drv ({ memSize ? 512, QEMU_OPTS ? "", args, builder, ...  } @ moreArgs : {
     requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = args;
     origBuilder = builder;
+    diskInterface = "${moreArgs.diskInterface}";
     QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
     passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
@@ -990,8 +1000,8 @@ rec {
       name = "debian-9.4-stretch-i386";
       fullName = "Debian 9.4 Stretch (i386)";
       packagesList = fetchurl {
-        url = mirror://debian/dists/stretch/main/binary-i386/Packages.xz;
-        sha256 = "05z5ccg4ysbrgallhai53sh83i0364w7a3fdq84dpv1li059jf10";
+        url = https://web.archive.org/web/20180912163509/http://ftp.debian.org/debian/dists/stretch/main/binary-i386/Packages.xz;
+        sha256 = "0flvn8zn7vk04p10ndf3aq0mdr8k2ic01g51aq4lsllkv8lmwzyh";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1001,8 +1011,8 @@ rec {
       name = "debian-9.4-stretch-amd64";
       fullName = "Debian 9.4 Stretch (amd64)";
       packagesList = fetchurl {
-        url = mirror://debian/dists/stretch/main/binary-amd64/Packages.xz;
-        sha256 = "19j0c54b1b9lbk9fv2c2aswdh0s2c3klf97zrlmsz4hs8wm9jylq";
+        url = https://web.archive.org/web/20180912163152/http://ftp.debian.org/debian/dists/stretch/main/binary-amd64/Packages.xz;
+        sha256 = "11vnn9bba2jabixvabfbw9zparl326c88xn99di7pbr5xsnl15jm";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

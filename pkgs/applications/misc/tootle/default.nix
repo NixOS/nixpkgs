@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig
+, meson, ninja, pkgconfig, python3
 , gnome3, vala, gobjectIntrospection, wrapGAppsHook
 , gtk3, granite
 , json-glib, glib, glib-networking
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     sha256 = "022h1rh1jk3m1f9al0s1rylmnqnkydyc81idfc8jf1g0frnvn5i6";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig vala gobjectIntrospection wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig python3 vala gobjectIntrospection wrapGAppsHook ];
   buildInputs = [
     gtk3 granite json-glib glib glib-networking
     gnome3.libgee gnome3.libsoup gnome3.gsettings-desktop-schemas

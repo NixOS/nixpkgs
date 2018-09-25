@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     homepage = https://bitcoinabc.org/;
     maintainers = with maintainers; [ lassulus ];
     license = licenses.mit;
+    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

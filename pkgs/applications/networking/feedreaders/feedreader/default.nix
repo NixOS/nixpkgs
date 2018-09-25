@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, vala_0_40, gettext
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, vala_0_40, gettext, python3
 , appstream-glib, desktop-file-utils, glibcLocales, wrapGAppsHook
 , curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite
 }:
@@ -18,7 +18,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [
     meson ninja pkgconfig vala_0_40 gettext appstream-glib desktop-file-utils
-    glibcLocales wrapGAppsHook
+    python3 glibcLocales wrapGAppsHook
   ];
 
   buildInputs = [

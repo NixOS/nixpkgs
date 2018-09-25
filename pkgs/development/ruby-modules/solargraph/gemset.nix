@@ -110,10 +110,10 @@
     dependencies = ["jaro_winkler" "parallel" "parser" "powerpack" "rainbow" "ruby-progressbar" "unicode-display_width"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0fc1fw9z98qd91ipsh9hdvpcb401qvkhw518s35l8a67sv4vdnj3";
+      sha256 = "0hz4slfisbq8nqs83mvvh6yv5hb7z7zx9fxvv9cka6b9ldvr2i2b";
       type = "gem";
     };
-    version = "0.58.2";
+    version = "0.59.1";
   };
   ruby-progressbar = {
     source = {
@@ -127,10 +127,10 @@
     dependencies = ["coderay" "eventmachine" "htmlentities" "kramdown" "parser" "reverse_markdown" "rubocop" "thor" "tilt" "yard"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1b5dljgskjpkpv2l0jpb6i8j73hidskcbp2v7fhjp7kpx94x6php";
+      sha256 = "11l759mrzjla2iqy5wdd20r01196pfxkw0b0gzgskdbfi8y8mvg5";
       type = "gem";
     };
-    version = "0.25.1";
+    version = "0.28.1";
   };
   thor = {
     source = {

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy, libiodbc }:
+{ stdenv, buildPythonPackage, fetchPypi, isPyPy, unixODBC }:
 
 buildPythonPackage rec {
   pname = "pyodbc";
@@ -10,7 +10,9 @@ buildPythonPackage rec {
     sha256 = "4326abb737dec36156998d52324921673d30f575e1e0998f0c5edd7de20e61d4";
   };
 
-  buildInputs = [ libiodbc ];
+  buildInputs = [ unixODBC ];
+
+  doCheck = false; # tests require a database server
 
   meta = with stdenv.lib; {
     description = "Python ODBC module to connect to almost any database";

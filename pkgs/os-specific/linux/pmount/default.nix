@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails 1 out of 1 tests with "Error: could not open fstab-type file: No such file or directory"
 
   meta = {
-    homepage = http://pmount.alioth.debian.org/;
+    homepage = https://bazaar.launchpad.net/~fourmond/pmount/main/files;
     description = "Mount removable devices as normal user";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
