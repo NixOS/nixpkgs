@@ -311,6 +311,7 @@ vim-scripts/tabmerge
 vim-scripts/taglist.vim
 vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
+vim-utils/vim-husk
 vimwiki/vimwiki
 vmchale/dhall-vim
 w0rp/ale

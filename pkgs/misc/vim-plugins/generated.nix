@@ -2218,6 +2218,16 @@
     };
   };
 
+  vim-husk = buildVimPluginFrom2Nix {
+    name = "vim-husk-2015-11-29";
+    src = fetchFromGitHub {
+      owner = "vim-utils";
+      repo = "vim-husk";
+      rev = "ad89559ff8a6c4b1e94a18b2d494a69a1f701d08";
+      sha256 = "09kqzaqa4jdh31q0a3nxbx9li7zg890qxh68rfzblzyx22xv4mka";
+    };
+  };
+
   vim-iced-coffee-script = buildVimPluginFrom2Nix {
     name = "vim-iced-coffee-script-2013-12-26";
     src = fetchFromGitHub {
