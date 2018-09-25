@@ -29,5 +29,6 @@ in
 
   config = mkIf cfg.enable {
     environment.pathsToLink = [ "/share/autojump" ];
+    environment.systemPackages = [ pkgs.autojump ];
   };
 }
