@@ -1,17 +1,17 @@
 { lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
-, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
+, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.0.0/doc/README.macros#L179
 }:
 
 stdenv.mkDerivation rec {
   name = "boehm-gc-${version}";
-  version = "7.6.6";
+  version = "8.0.0";
 
   src = fetchurl {
     urls = [
       "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
       "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
     ];
-    sha256 = "1p1r015a7jbpvkkbgzv1y8nxrbbp6dg0mq3ksi6ji0qdz3wfss79";
+    sha256 = "014gjv3f1qycsv5yh3fyhvrvsig60yc288pipzr0ml4312igj8wg";
   };
 
   buildInputs = [ libatomic_ops ];
