@@ -20578,6 +20578,8 @@ with pkgs;
 
   latte-dock = libsForQt5.callPackage ../applications/misc/latte-dock { };
 
+  adwaita-qt = libsForQt5.callPackage ../misc/themes/adwaita-qt { };
+
   orion = callPackage ../misc/themes/orion {};
 
   elementary-gtk-theme = callPackage ../misc/themes/elementary { };
