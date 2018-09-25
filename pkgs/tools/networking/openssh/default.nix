@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
   patches =
     [
       ./locale_archive.patch
-      ./fix-host-key-algorithms-plus.patch
-
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
     ]

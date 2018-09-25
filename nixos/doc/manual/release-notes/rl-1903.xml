@@ -99,6 +99,41 @@
      </listitem>
     </itemizedlist>
    </listitem>
+
+   <listitem>
+    <para>
+     <emphasis role="strong">
+     The client configuration for OpenSSH
+     no longer enables support for DSA host keys.
+     Most OpenSSH servers, including NixOS,
+     will generate multiple SSH host keys using different algorithms,
+     so a host key with an accepted type should be available.
+     However, if only a DSA host key is available on a host,
+     this change could cause you to be unable to SSH to that host.
+     If you are affected, generate non-DSA host keys on that machine;
+     or, unfavorably, re-enable DSA support manually (see next paragraph).
+     Note that this only affects SSH host keys;
+     the client configuration still allows DSA public keys.
+     </emphasis>
+    </para>
+    <para>
+     DSA support was deprecated in
+     <link xlink:href="https://www.openssh.com/legacy.html">OpenSSH 7.0</link>,
+     and disabled by default (host and pub keys) for the OpenSSH server in
+     <link xlink:href="https://nixos.org/nixos/manual/release-notes.html#sec-release-18.03-incompatibilities">NixOS 18.03</link>,
+     due to it being too weak.
+    </para>
+    <para>
+     In the case of breakage, as this is a client-side change only,
+     you can fully override <literal>HostKeyAlgorithms</literal>
+     via the NixOS option <literal>services.openssh.extraConfig</literal>
+     or in your <literal>~/.ssh/config</literal>.
+     Alternatively, you can safely rollback the NixOS changes;
+     note that you need to rollback both the NixOS ssh client config changes
+     as well as the openssh package itself.
+     However, it is recommended that you instead upgrade to stronger host keys.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
