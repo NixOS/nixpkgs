@@ -2,12 +2,12 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "arb";
-  version = "2.14.0";
+  version = "2.15.0";
   src = fetchFromGitHub {
     owner = "fredrik-johansson";
     repo = "${pname}";
     rev = "${version}";
-    sha256 = "1ndxg7h4xvccjgp5l9z2f8b66dsff6fhf86bn5n7f75a1ksd7554";
+    sha256 = "04jwa39fa7k8r3vwhzjwgq76gc30pjs60nvrw5b80ippyybd2vi5";
   };
   buildInputs = [mpir gmp mpfr flint];
   configureFlags = [
