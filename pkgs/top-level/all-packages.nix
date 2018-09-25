@@ -597,6 +597,8 @@ with pkgs;
 
   azure-cli = nodePackages.azure-cli;
 
+  azure-storage-azcopy = callPackage ../development/tools/azcopy { };
+
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
 
   awless = callPackage ../tools/virtualization/awless { };
