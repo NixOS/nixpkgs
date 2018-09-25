@@ -56,7 +56,8 @@ let version = "7.3.0";
         sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
       })
       ++ optional langFortran ../gfortran-driving.patch
-      ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch;
+      ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
+      ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -292,7 +293,12 @@ stdenv.mkDerivation ({
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
-    ++ optional (targetPlatform == hostPlatform && targetPlatform.libc == "musl") "--disable-libsanitizer"
+    ++ optionals (targetPlatform == hostPlatform && targetPlatform.libc == "musl") [
+      "--disable-libsanitizer"
+      "--disable-symvers"
+      "libat_cv_have_ifunc=no"
+      "--disable-gnu-indirect-function"
+    ]
     ++ optional (targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
   ;
 
