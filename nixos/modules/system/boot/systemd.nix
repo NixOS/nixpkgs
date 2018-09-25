@@ -588,7 +588,7 @@ in
     };
 
     services.journald.forwardToSyslog = mkOption {
-      default = (if config.services.rsyslog.enable || config.services.syslog-ng.enable then true else false);
+      default = (if config.services.rsyslogd.enable || config.services.syslog-ng.enable then true else false);
       type = types.bool;
       description = ''
         Whether to forward log messages to syslog.
