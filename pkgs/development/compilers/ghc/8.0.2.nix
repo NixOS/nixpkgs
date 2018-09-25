@@ -1,7 +1,7 @@
 { stdenv, targetPackages
 
 # build-tools
-, bootPkgs, hscolour
+, bootPkgs
 , coreutils, fetchpatch, fetchurl, perl, sphinx
 
 , libiconv ? null, ncurses
@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     perl sphinx
-    ghc hscolour
+    ghc bootPkgs.hscolour
   ];
 
   # For building runtime libs
