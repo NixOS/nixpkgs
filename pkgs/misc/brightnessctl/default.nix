@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "brightnessctl-${version}";
-  version = "0.3.2";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "Hummer12007";
     repo = "brightnessctl";
     rev = "${version}";
-    sha256 = "0amxhcikcgj04z81272kz35m5h5q4jx9x7v71h8yl1rv4b2lzh7z";
+    sha256 = "1n1gb8ldgqv3vs565yhk1w4jfvrviczp94r8wqlkv5q6ab43c8w9";
   };
 
   makeFlags = [ "MODE=0755" "PREFIX=" "DESTDIR=$(out)" ];
