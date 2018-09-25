@@ -682,6 +682,183 @@ hello        latest   de2bf4786de6   About a minute ago   25.2MB
    </example>
   </section>
 
+  <section xml:id="ssec-pkgs-dockerTools-buildLayeredImage">
+   <title>buildLayeredImage</title>
+
+   <para>
+    Create a Docker image with many of the store paths being on their own layer
+    to improve sharing between images.
+   </para>
+
+   <variablelist>
+    <varlistentry>
+     <term>
+      <varname>name</varname>
+     </term>
+     <listitem>
+      <para>
+       The name of the resulting image.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>tag</varname> <emphasis>optional</emphasis>
+     </term>
+     <listitem>
+      <para>
+       Tag of the generated image.
+      </para>
+      <para>
+       <emphasis>Default:</emphasis> the output path's hash
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>contents</varname> <emphasis>optional</emphasis>
+     </term>
+     <listitem>
+      <para>
+       Top level paths in the container. Either a single derivation, or a list
+       of derivations.
+      </para>
+      <para>
+       <emphasis>Default:</emphasis> <literal>[]</literal>
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>config</varname> <emphasis>optional</emphasis>
+     </term>
+     <listitem>
+      <para>
+       Run-time configuration of the container. A full list of the options are
+       available at in the
+       <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions">
+       Docker Image Specification v1.2.0 </link>.
+      </para>
+      <para>
+       <emphasis>Default:</emphasis> <literal>{}</literal>
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>created</varname> <emphasis>optional</emphasis>
+     </term>
+     <listitem>
+      <para>
+       Date and time the layers were created. Follows the same
+       <literal>now</literal> exception supported by
+       <literal>buildImage</literal>.
+      </para>
+      <para>
+       <emphasis>Default:</emphasis> <literal>1970-01-01T00:00:01Z</literal>
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      <varname>maxLayers</varname> <emphasis>optional</emphasis>
+     </term>
+     <listitem>
+      <para>
+       Maximum number of layers to create.
+      </para>
+      <para>
+       <emphasis>Default:</emphasis> <literal>24</literal>
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+
+   <section xml:id="dockerTools-buildLayeredImage-arg-contents">
+    <title>Behavior of <varname>contents</varname> in the final image</title>
+
+    <para>
+     Each path directly listed in <varname>contents</varname> will have a
+     symlink in the root of the image.
+    </para>
+
+    <para>
+     For example:
+<programlisting><![CDATA[
+pkgs.dockerTools.buildLayeredImage {
+  name = "hello";
+  contents = [ pkgs.hello ];
+}
+]]></programlisting>
+     will create symlinks for all the paths in the <literal>hello</literal>
+     package:
+<screen><![CDATA[
+/bin/hello -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/bin/hello
+/share/info/hello.info -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/share/info/hello.info
+/share/locale/bg/LC_MESSAGES/hello.mo -> /nix/store/h1zb1padqbbb7jicsvkmrym3r6snphxg-hello-2.10/share/locale/bg/LC_MESSAGES/hello.mo
+]]></screen>
+    </para>
+   </section>
+
+   <section xml:id="dockerTools-buildLayeredImage-arg-config">
+    <title>Automatic inclusion of <varname>config</varname> references</title>
+
+    <para>
+     The closure of <varname>config</varname> is automatically included in the
+     closure of the final image.
+    </para>
+
+    <para>
+     This is different from <function>pkgs.dockerTools.buildImage</function>
+     which does <emphasis>not</emphasis> automatically include the
+     configuration's closure.
+    </para>
+
+    <para>
+     This allows you to make very simple Docker images with very little code.
+     This container will start up and run <command>hello</command>:
+<programlisting><![CDATA[
+pkgs.dockerTools.buildLayeredImage {
+  name = "hello";
+  config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+}
+]]></programlisting>
+    </para>
+   </section>
+
+   <section xml:id="dockerTools-buildLayeredImage-arg-maxLayers">
+    <title>Adjusting <varname>maxLayers</varname></title>
+
+    <para>
+     Increasing the <varname>maxLayers</varname> increases the number of layers
+     which have a chance to be shared between different images.
+    </para>
+
+    <para>
+     Modern Docker installations support up to 128 layers, however older
+     versions support as few as 42.
+    </para>
+
+    <para>
+     If the produced image will not be extended by other Docker builds, it is
+     safe to set <varname>maxLayers</varname> to <literal>128</literal>.
+     However it will be impossible to extend the image further.
+    </para>
+
+    <para>
+     The first (<literal>maxLayers-2</literal>) most "popular" paths will have
+     their own individual layers, then layer #<literal>maxLayers-1</literal>
+     will contain all the remaining "unpopular" paths, and finally layer
+     #<literal>maxLayers</literal> will contain the Image configuration.
+    </para>
+
+    <para>
+     Docker's Layers are not inherently ordered, they are content-addressable
+     and are not explicitly layered until they are composed in to an Image.
+    </para>
+   </section>
+  </section>
+
   <section xml:id="ssec-pkgs-dockerTools-fetchFromRegistry">
    <title>pullImage</title>
 
