@@ -22,7 +22,7 @@ with lib;
   config = {
 
     # Enable in installer, even if the minimal profile disables it.
-    documentation.nixos.enable = mkForce true;
+    documentation.enable = mkForce true;
 
     # Show the manual.
     services.nixosManual.showManual = true;
