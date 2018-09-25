@@ -67,6 +67,8 @@ stdenv.mkDerivation rec {
     ./0001-in-pthread_mutex_trylock-EBUSY-out-more-directly-whe.patch
     ./0002-in-pthread_mutex_timedlock-avoid-repeatedly-reading-.patch
     ./0003-fix-namespace-violation-for-c11-mutex-functions.patch
+    # Fix getaddrinfo usage encountered sometimes in containers
+    ./fix-getaddrinfo-regression-with-AI_ADDRCONFIG.patch
     # name_to_handle_at
     ./name-to-handle-at.patch
     ./max-handle-sz-for-name-to-handle-at.patch
