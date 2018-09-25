@@ -7025,17 +7025,11 @@ with pkgs;
 
   oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
 
-  oraclejdk10 = pkgs.oraclejdk10distro "JDK" false;
-
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
 
   oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
-
-  oraclejre10 = lowPrio (pkgs.oraclejdk10distro "JRE" false);
-
-  oracleserverjre10 = lowPrio (pkgs.oraclejdk10distro "ServerJRE" false);
 
   jrePlugin = jre8Plugin;
 
@@ -7050,9 +7044,6 @@ with pkgs;
   oraclejdk8psu_distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk pluginSupport; });
-
-  oraclejdk10distro = packageType: _:
-      (callPackage ../development/compilers/oraclejdk/jdk10-linux.nix { inherit packageType; });
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
