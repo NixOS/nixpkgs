@@ -64,9 +64,9 @@ stdenv.mkDerivation rec {
     # Use execveat to impl fexecve when avail (useful for containers)
     ./fexecve-execveat.patch
     # improve behavior in few cases
-		./0001-in-pthread_mutex_trylock-EBUSY-out-more-directly-whe.patch
-		./0002-in-pthread_mutex_timedlock-avoid-repeatedly-reading-.patch
-		./0003-fix-namespace-violation-for-c11-mutex-functions.patch
+    ./0001-in-pthread_mutex_trylock-EBUSY-out-more-directly-whe.patch
+    ./0002-in-pthread_mutex_timedlock-avoid-repeatedly-reading-.patch
+    ./0003-fix-namespace-violation-for-c11-mutex-functions.patch
   ];
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
