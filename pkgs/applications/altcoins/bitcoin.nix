@@ -22,6 +22,7 @@ stdenv.mkDerivation rec{
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib"
                      "--disable-bench"
+                   ] ++ optionals (!doCheck) [
                      "--disable-tests"
                      "--disable-gui-tests"
                    ]
