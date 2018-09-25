@@ -7,7 +7,7 @@ gatherLibraries() {
 addEnvHooks "$targetOffset" gatherLibraries
 
 isExecutable() {
-    readelf -h "$1" | grep -q '^ *Type: *EXEC\>'
+    readelf -h "$1" 2> /dev/null | grep -q '^ *Type: *EXEC\>'
 }
 
 # We cache dependencies so that we don't need to search through all of them on
