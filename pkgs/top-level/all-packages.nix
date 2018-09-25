@@ -1661,6 +1661,10 @@ with pkgs;
 
   biber = callPackage ../tools/typesetting/biber { };
 
+  blastem = callPackage ../misc/emulators/blastem {
+    inherit (python27Packages) pillow;
+  };
+
   blueman = callPackage ../tools/bluetooth/blueman {
     withPulseAudio = config.pulseaudio or true;
   };
