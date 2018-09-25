@@ -7,14 +7,14 @@ let
     gemdir = ./.;
   };
 in buildGoPackage rec {
-  version = "0.117.2";
+  version = "0.120.0";
   name = "gitaly-${version}";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "1hwgixymfqr6fkywwbkvdcwg1q62pypx9ffvzbcl46n4x32spm9i";
+    sha256 = "0jsk6n1vmddpnnccr8mjvcsfjzaagqy1600q5yss6lbz896w2bx4";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
@@ -22,7 +22,7 @@ in buildGoPackage rec {
   passthru = {
     inherit rubyEnv;
   };
-  
+
   buildInputs = [ rubyEnv.wrappedRuby ];
 
   postInstall = ''
