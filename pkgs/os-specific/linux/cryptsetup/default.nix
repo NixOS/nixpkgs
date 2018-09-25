@@ -14,8 +14,19 @@ stdenv.mkDerivation rec {
     sha256 = "0d2p9g2wqcv6l3671gvw96p16jadbgyh21ddy2bhqgi96dq3qflx";
   };
 
+  # Disable 4 test cases that fail in a sandbox
+  patches = [ ./disable-failing-tests.patch ];
+
   postPatch = ''
     patchShebangs tests
+    ${stdenv.lib.optionalString enablePython ''
+      patchShebangs ./python/pycryptsetup-test.py
+    ''}
+
+    # O_DIRECT is filesystem dependent and fails in a sandbox (on tmpfs)
+    # and on several filesystem types (btrfs, zfs) without sandboxing.
+    # Remove it, see discussion in #46151
+    substituteInPlace tests/unit-utils-io.c --replace "| O_DIRECT" ""
   '';
 
   NIX_LDFLAGS = "-lgcc_s";
@@ -29,6 +40,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ lvm2 json_c openssl libuuid popt ]
     ++ stdenv.lib.optional enablePython python2;
+
+  doCheck = true;
 
   meta = {
     homepage = https://gitlab.com/cryptsetup/cryptsetup/;

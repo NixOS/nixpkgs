@@ -81,6 +81,7 @@ in
           kconfig
           kconfigwidgets
           kcoreaddons
+          kdoctools
           kdbusaddons
           kdeclarative
           kded

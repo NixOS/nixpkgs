@@ -47,5 +47,6 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.linux;
+    broken = true; # 2018-09-21, build has failed since 2018-04-28
   };
 }

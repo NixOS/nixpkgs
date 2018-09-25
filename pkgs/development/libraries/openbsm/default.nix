@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0b98359hd8mm585sh145ss828pg2y8vgz38lqrb7nypapiyqdnd1";
   };
 
-  patches = [ ./bsm-add-audit_token_to_pid.patch ];
+  patches = lib.optional stdenv.isDarwin [ ./bsm-add-audit_token_to_pid.patch ];
 
   meta = {
     homepage = http://www.openbsm.org/;

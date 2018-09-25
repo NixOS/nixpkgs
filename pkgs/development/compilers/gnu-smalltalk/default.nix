@@ -34,6 +34,8 @@ in stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional (!emacsSupport) "--without-emacs";
 
+  hardeningDisable = [ "format" ];
+
   installFlags = stdenv.lib.optional emacsSupport "lispdir=$(out)/share/emacs/site-lisp";
 
   # For some reason the tests fail if executated with nix-build, but pass if

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       xscreensaver and never will. It's just for locking the current
       X session.
     '';
-    platforms = platforms.unix; # Cygwin had problems at one point
+    platforms = platforms.linux;
     maintainers = with maintainers; [ ftrvxmtrx chris-martin ];
     license = licenses.mit;
   };
