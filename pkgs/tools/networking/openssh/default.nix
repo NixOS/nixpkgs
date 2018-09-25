@@ -13,16 +13,16 @@ let
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
     url = "https://salsa.debian.org/ssh-team/openssh/raw/"
-      + "e395eed38096fcda74398424ea94de3ec44effd5"
+      + "816386e17654ca36834bebbf351419e460fad8f6"
       + "/debian/patches/gssapi.patch";
-    sha256 = "0x7xysgdahb4jaq0f28g2d7yzp0d3mh59i4xnffszvjndhvbk27x";
+    sha256 = "0jjqqwclfayz06bmf3bwlb6d0xamwqwgmji9q77yf977hb7yccfm";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "openssh-${version}";
-  version = if hpnSupport then "7.7p1" else "7.7p1";
+  version = if hpnSupport then "7.7p1" else "7.8p1";
 
   src = if hpnSupport then
       fetchurl {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-        sha256 = "13vbbrvj3mmfhj83qyrg5c0ipr6bzw5s65dy4k8gr7p9hkkfffyp";
+        sha256 = "1jj4f586r9lhakp2w0zv7j616d6x62m15q8l4nxq7haja6qlnj0s";
       };
 
   patches =
