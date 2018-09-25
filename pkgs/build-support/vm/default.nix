@@ -3,9 +3,8 @@
 , img ? pkgs.stdenv.hostPlatform.platform.kernelTarget
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" "sym53c8xx" "virtio_scsi" "ahci "]
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
       ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
-, config
 }:
 
 with pkgs;
@@ -197,17 +196,9 @@ rec {
     ${qemuBinary qemu} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
-      ${if "$diskInterface" == "scsi" then '' \
-        \ # FIXME: /dev/sda is not created within the VM
-        -device lsi53c895a \
-        -device scsi-hd,drive=hd,id=scsi1,bootindex=1 \
-        ''${diskImage:+-drive file=$diskImage,media=disk,if=none,id=hd,cache=unsafe,werror=report} \
-      '' else '' \
-        -drive file=$diskImage,media=disk,if=none,id=hd \
-        -device virtio-blk-pci,scsi=off,drive=hd,id=virtio0,bootindex=1 \
-      \''}
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
+      ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=${qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
@@ -307,13 +298,12 @@ rec {
      `run-vm' will be left behind in the temporary build directory
      that allows you to boot into the VM and debug it interactively. */
 
-  runInLinuxVM = drv: lib.overrideDerivation drv ({ memSize ? 512, QEMU_OPTS ? "", args, builder, ...  } @ moreArgs : {
+  runInLinuxVM = drv: lib.overrideDerivation drv ({ memSize ? 512, QEMU_OPTS ? "", args, builder, ... }: {
     requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandLinux)];
     origArgs = args;
     origBuilder = builder;
-    diskInterface = "${moreArgs.diskInterface}";
     QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
     passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
