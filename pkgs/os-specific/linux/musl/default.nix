@@ -72,11 +72,8 @@ stdenv.mkDerivation rec {
     # name_to_handle_at
     ./name-to-handle-at.patch
     ./max-handle-sz-for-name-to-handle-at.patch
-    # Upstream improvements regarding stack size, incl size increase
-    ./stacksize-0001.patch
-    ./stacksize-0002.patch
-    ./stacksize-0003.patch
-    ./stacksize-0004.patch
+    # stacksize bump (upstream)
+    ./stacksize-bump.patch
   ];
   preConfigure = ''
     configureFlagsArray+=("--syslibdir=$out/lib")
