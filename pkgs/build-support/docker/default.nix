@@ -77,7 +77,9 @@ rec {
     ln -sT ${docker.src}/components/engine/pkg/tarsum src/github.com/docker/docker/pkg/tarsum
     go build
 
-    cp tarsum $out
+    mkdir -p $out/bin
+
+    cp tarsum $out/bin/
   '';
 
   # buildEnv creates symlinks to dirs, which is hard to edit inside the overlay VM
@@ -287,7 +289,7 @@ rec {
   }:
     runCommand "docker-layer-${name}" {
       inherit baseJson contents extraCommands;
-      buildInputs = [ jshon rsync ];
+      buildInputs = [ jshon rsync tarsum ];
     }
     ''
       mkdir layer
@@ -314,11 +316,11 @@ rec {
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
-      tarsum=$(${tarsum} < $out/layer.tar)
+      tarhash=$(tarsum < $out/layer.tar)
 
       # Add a 'checksum' field to the JSON, with the value set to the
       # checksum of the tarball.
-      cat ${baseJson} | jshon -s "$tarsum" -i checksum > $out/json
+      cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
 
       # Indicate to docker that we're using schema version 1.0.
       echo -n "1.0" > $out/VERSION
@@ -402,8 +404,8 @@ rec {
 
         # Compute the tar checksum and add it to the output json.
         echo "Computing checksum..."
-        ts=$(${tarsum} < $out/layer.tar)
-        cat ${baseJson} | jshon -s "$ts" -i checksum > $out/json
+        tarhash=$(${tarsum}/bin/tarsum < $out/layer.tar)
+        cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
         # Indicate to docker that we're using schema version 1.0.
         echo -n "1.0" > $out/VERSION
 
