@@ -77,7 +77,7 @@ let
         "-Dlocincpth=${libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
       ]
-      ++ optionals ((builtins.match "5\.[0-9]*[13579]\..+" version) != null) [ "-Dusedevel" "-Uversiononly" ]
+      ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads";
 
