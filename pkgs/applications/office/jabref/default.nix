@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, jdk, jre, wrapGAppsHook, gtk3, gsettings-desktop-schemas }:
 
 stdenv.mkDerivation rec {
-  version = "3.8.1";
+  version = "4.3.1";
   name = "jabref-${version}";
 
   src = fetchurl {
     url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}.jar";
-    sha256 = "11asfym74zdq46i217z5n6vc79gylcx8xn7nvwacfqmym0bz79cg";
+    sha256 = "15f3risav4vlr3jvmrn93qfw54filfxl99h6j3cmj2j3kh3ywljv";
   };
 
   desktopItem = makeDesktopItem {
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
     cp -r ${desktopItem}/share/applications $out/share/
 
-    jar xf $src images/icons/JabRef-icon-mac.svg
-    cp images/icons/JabRef-icon-mac.svg $out/share/icons/jabref.svg
+    jar xf $src images/external/JabRef-icon-128.png
+    cp images/external/JabRef-icon-128.png $out/share/icons/jabref.png
 
     ln -s $src $out/share/java/jabref-${version}.jar
     makeWrapper ${jre}/bin/java $out/bin/jabref \
