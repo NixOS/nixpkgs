@@ -155,8 +155,10 @@ autoPatchelf() {
     # outside of this function.
     while IFS= read -r -d $'\0' file; do
       isELF "$file" || continue
-      # dynamically linked?
-      readelf -l "$file" | grep -q "^ *INTERP\\>" || continue
+      if isExecutable "$file"; then
+          # Skip if the executable is statically linked.
+          readelf -l "$file" | grep -q "^ *INTERP\\>" || continue
+      fi
       autoPatchelfFile "$file"
     done < <(find "$prefix" -type f -print0)
 }
