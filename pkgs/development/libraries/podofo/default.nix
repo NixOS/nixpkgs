@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DPODOFO_BUILD_SHARED=ON -DPODOFO_BUILD_STATIC=OFF";
 
-  postFixup = if stdenv.isDarwin then ''
+  postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
     for i in $out/bin/* ; do
       install_name_tool -change libpodofo.${version}.dylib $out/lib/libpodofo.${version}.dylib "$i"
     done
-  '' else null;
+  '';
 
   meta = {
     homepage = http://podofo.sourceforge.net;
