@@ -1123,7 +1123,7 @@ in {
   };
 
   blessed = callPackage ../development/python-modules/blessed {};
-  
+
   block-io = callPackage ../development/python-modules/block-io {};
 
   # Build boost for this specific Python version
@@ -9725,7 +9725,7 @@ in {
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_5;
+    protobuf = pkgs.protobuf;
   };
 
   protobuf3_1 = callPackage ../development/python-modules/protobuf {
