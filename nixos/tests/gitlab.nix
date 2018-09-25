@@ -19,7 +19,7 @@ import ./make-test.nix ({ pkgs, ...} : {
         };
       };
 
-      systemd.services.gitlab.serviceConfig.TimeoutStartSec = "10min";
+      systemd.services.gitlab.serviceConfig.TimeoutStartSec = "30min";
       services.gitlab = {
         enable = true;
         databasePassword = "dbPassword";
