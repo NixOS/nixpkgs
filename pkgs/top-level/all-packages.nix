@@ -1338,6 +1338,8 @@ with pkgs;
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
+  go-2fa = callPackage ../tools/security/2fa {};
+
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
   geckodriver = callPackage ../development/tools/geckodriver { };
