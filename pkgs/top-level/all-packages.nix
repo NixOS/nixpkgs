@@ -13377,11 +13377,7 @@ with pkgs;
 
   check-esxi-hardware = callPackage ../servers/monitoring/plugins/esxi.nix {};
 
-  net_snmp = callPackage ../servers/monitoring/net-snmp {
-    # https://sourceforge.net/p/net-snmp/bugs/2712/
-    # remove after net-snmp > 5.7.3
-    perl = perl522;
-  };
+  net_snmp = callPackage ../servers/monitoring/net-snmp { };
 
   newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
 
