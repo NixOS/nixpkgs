@@ -1,17 +1,14 @@
-{ lib, stdenv, fetchurl }:
-
-stdenv.mkDerivation rec {
-  name= "roundcube-${version}";
+{ lib, stdenv, fetchzip }:
+let
   version = "1.3.7";
+in
+fetchzip rec {
+  name= "roundcube-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz"; 
-    sha256 = "31bd37d0f89dc634064f170c6ed8981c258754b6f81eccb59a2634b29d0bb01c";
-  };
-
-  installPhase = ''
-    mkdir -p $out/
-    cp -R . $out/
+  url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz"; 
+  sha256 = "0xwqy0adynx7066a0cvz9vyg85waax1i4p70kcdkz7q5jnw4jzhf";
+ 
+  extraPostFetch = ''
     ln -sf /etc/roundcube/config.inc.php $out/config/config.inc.php
     rm -rf $out/installer
   '';
