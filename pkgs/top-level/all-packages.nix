@@ -7913,6 +7913,8 @@ with pkgs;
 
   alloy = callPackage ../development/tools/alloy { };
 
+  allure = callPackage ../development/tools/allure { };
+
   adtool = callPackage ../tools/admin/adtool { };
 
   augeas = callPackage ../tools/system/augeas { };
