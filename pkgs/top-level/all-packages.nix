@@ -8909,6 +8909,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  vtable-dumper = callPackage ../development/tools/misc/vtable-dumper { };
+
   watson-ruby = callPackage ../development/tools/misc/watson-ruby {};
 
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
