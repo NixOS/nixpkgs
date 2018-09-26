@@ -114,6 +114,8 @@ let
 
   pre-commit = callPackage ./pre-commit { };
 
+  pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
+
   qgit = qt5.callPackage ./qgit { };
 
   stgit = callPackage ./stgit {

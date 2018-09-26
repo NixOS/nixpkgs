@@ -54,13 +54,13 @@ in {
     };
     ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix {
       bootPkgs = packages.ghc7103Binary;
-      sphinx = pkgs.python27Packages.sphinx;
+      inherit (buildPackages.python27Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_37;
       llvmPackages = pkgs.llvmPackages_37;
     };
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
       bootPkgs = packages.ghc821Binary;
-      sphinx = pkgs.python3Packages.sphinx;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;
     };

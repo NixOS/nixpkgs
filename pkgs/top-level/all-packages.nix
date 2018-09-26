@@ -288,13 +288,13 @@ with pkgs;
 
   # gitlab example
   fetchFromGitLab = {
-    owner, repo, rev, domain ? "gitlab.com", name ? "source",
+    owner, repo, rev, domain ? "gitlab.com", name ? "source", group ? null,
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
-    url = "https://${domain}/api/v4/projects/${owner}%2F${repo}/repository/archive.tar.gz?sha=${rev}";
-    meta.homepage = "https://${domain}/${owner}/${repo}/";
-  } // removeAttrs args [ "domain" "owner" "repo" "rev" ]) // { inherit rev; };
+    url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${group}%2F"}${owner}%2F${repo}/repository/archive.tar.gz?sha=${rev}";
+    meta.homepage = "https://${domain}/${lib.optionalString (group != null) "${group}/"}${owner}/${repo}/";
+  } // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; };
 
   # gitweb example, snapshot support is optional in gitweb
   fetchFromRepoOrCz = {
@@ -1337,6 +1337,8 @@ with pkgs;
   gdrivefs = python27Packages.gdrivefs;
 
   gdrive = callPackage ../applications/networking/gdrive { };
+
+  go-2fa = callPackage ../tools/security/2fa {};
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
@@ -7605,7 +7607,7 @@ with pkgs;
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
-  inherit (callPackages ../development/interpreters/perl {}) perl522 perl524 perl526 perl528;
+  inherit (callPackages ../development/interpreters/perl {}) perl522 perl524 perl526 perl528 perldevel;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
@@ -11642,7 +11644,7 @@ with pkgs;
 
   postgis = callPackage ../development/libraries/postgis { };
 
-  protobuf = protobuf3_4;
+  protobuf = protobuf3_6;
 
   protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
   protobuf3_5 = callPackage ../development/libraries/protobuf/3.5.nix { };
@@ -12835,6 +12837,7 @@ with pkgs;
 
   ### DEVELOPMENT / PERL MODULES
 
+  # old versions
   perl522Packages = recurseIntoAttrs (callPackage ./perl-packages.nix {
     perl = perl522;
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
@@ -12847,8 +12850,14 @@ with pkgs;
     perl = perl526;
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
+  # the latest Maint version
   perl528Packages = recurseIntoAttrs (callPackage ./perl-packages.nix {
     perl = perl528;
+    overrides = (config.perlPackageOverrides or (p: {})) pkgs;
+  });
+  # the latest Devel version
+  perldevelPackages = recurseIntoAttrs (callPackage ./perl-packages.nix {
+    perl = perldevel;
     overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
 
@@ -13364,11 +13373,7 @@ with pkgs;
 
   check-esxi-hardware = callPackage ../servers/monitoring/plugins/esxi.nix {};
 
-  net_snmp = callPackage ../servers/monitoring/net-snmp {
-    # https://sourceforge.net/p/net-snmp/bugs/2712/
-    # remove after net-snmp > 5.7.3
-    perl = perl522;
-  };
+  net_snmp = callPackage ../servers/monitoring/net-snmp { };
 
   newrelic-sysmond = callPackage ../servers/monitoring/newrelic-sysmond { };
 
@@ -13388,7 +13393,7 @@ with pkgs;
   softether_4_25 = callPackage ../servers/softether/4.25.nix { };
   softether = softether_4_25;
 
-  qboot = callPackage ../applications/virtualization/qboot { stdenv = stdenv_32bit; };
+  qboot = pkgsi686Linux.callPackage ../applications/virtualization/qboot { };
 
   OVMF = callPackage ../applications/virtualization/OVMF { seabios = null; openssl = null; };
   OVMF-CSM = OVMF.override { openssl = null; };
@@ -16983,6 +16988,8 @@ with pkgs;
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
+  spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
+
   super-productivity = callPackage ../applications/networking/super-productivity { };
 
   wlc = callPackage ../development/libraries/wlc { };
@@ -20158,7 +20165,9 @@ with pkgs;
 
   pong3d = callPackage ../games/pong3d { };
 
-  pokerth = callPackage ../games/pokerth { };
+  pokerth = callPackage ../games/pokerth {
+    protobuf = protobuf3_4;
+  };
 
   pokerth-server = pokerth.server;
 

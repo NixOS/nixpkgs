@@ -79,6 +79,7 @@ let
         "-Dlocincpth=${libcInc}/include"
         "-Dloclibpth=${libcLib}/lib"
       ]
+      ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads";
 
@@ -189,8 +190,15 @@ in rec {
     sha256 = "03gpnxx1g6hvlh0v4aqx00580h787sfywp1vlvw64q2xcbm9qbsp";
   };
 
+  # the latest Maint version
   perl528 = common {
     version = "5.28.0";
     sha256 = "1a3f822lcl8dr8v0hk80yyhpzqlljg49z9flb48rs3nbsij9z4ky";
+  };
+
+  # the latest Devel version
+  perldevel = common {
+    version = "5.29.3";
+    sha256 = "054xi629408p2hv9475jghv6zd1bj69qqpiby8cy9qw5vismgi17";
   };
 }
