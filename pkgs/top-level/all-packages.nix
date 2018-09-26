@@ -7932,7 +7932,10 @@ with pkgs;
     for more information.
   '';
 
-  alloy = callPackage ../development/tools/alloy { };
+  inherit (callPackage ../development/tools/alloy { })
+    alloy4
+    alloy5
+    alloy;
 
   adtool = callPackage ../tools/admin/adtool { };
 
@@ -15674,6 +15677,12 @@ with pkgs;
   };
 
   bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
+
+  bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans {
+    gconf = pkgs.gnome2.GConf;
+    inherit (pkgs.xorg) libX11 libXrender libXtst libXdamage
+                        libXi libXext libXfixes libXcomposite;
+  };
 
   bombono = callPackage ../applications/video/bombono {};
 
