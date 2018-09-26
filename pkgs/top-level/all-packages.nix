@@ -7960,6 +7960,8 @@ with pkgs;
 
   ### DEVELOPMENT / TOOLS
 
+  abi-compliance-checker = callPackage ../development/tools/misc/abi-compliance-checker { };
+
   abi-dumper = callPackage ../development/tools/misc/abi-dumper { };
 
   activator = throw ''
