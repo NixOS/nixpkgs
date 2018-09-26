@@ -20350,6 +20350,27 @@ with pkgs;
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
 
+  lc0-cuda = callPackage ../games/lc0 {
+    useCUDA = true;
+    cudatoolkit = cudatoolkit;
+    cudnn = cudnn;
+  };
+
+  lc0-openblas = callPackage ../games/lc0 {
+    useOpenBLAS = true;
+    inherit openblas;
+  };
+
+  lc0-opencl = callPackage ../games/lc0 {
+    useOpenCL = true;
+    inherit opencl-headers ocl-icd;
+  };
+
+  lc0-random = callPackage ../games/lc0 {
+    buildBackends = false;
+  };
+
+
   lgogdownloader = callPackage ../games/lgogdownloader { };
 
   liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
