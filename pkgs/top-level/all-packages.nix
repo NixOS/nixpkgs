@@ -16996,6 +16996,8 @@ with pkgs;
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
+  spectral = qt5.callPackage ../applications/networking/instant-messengers/spectral { };
+
   super-productivity = callPackage ../applications/networking/super-productivity { };
 
   wlc = callPackage ../development/libraries/wlc { };
