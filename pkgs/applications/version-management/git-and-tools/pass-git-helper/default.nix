@@ -1,10 +1,8 @@
-{ stdenv, buildPythonApplication, isPy3k, fetchFromGitHub, pyxdg }:
+{ stdenv, buildPythonApplication, fetchFromGitHub, pyxdg }:
 
 buildPythonApplication rec {
   pname   = "pass-git-helper";
   version = "0.4";
-
-  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner  = "languitar";
