@@ -1292,6 +1292,8 @@ with pkgs;
 
   et = callPackage ../applications/misc/et {};
 
+  ejson = callPackage ../development/tools/ejson {};
+
   eternal-terminal = callPackage ../tools/networking/eternal-terminal {};
 
   f3 = callPackage ../tools/filesystems/f3 { };
