@@ -2015,6 +2015,11 @@
     github = "joncojonathan";
     name = "Jonathan Haddock";
   };
+  jonoabroad = {
+    email = "github@jonoabroad.com";
+    github = "jonoabroad";
+    name = "Jonathan Ferguson";
+  };
   jpdoyle = {
     email = "joethedoyle@gmail.com";
     github = "jpdoyle";

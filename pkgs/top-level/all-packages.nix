@@ -18806,6 +18806,10 @@ with pkgs;
     pythonBindings = true;
   });
 
+  sublimeMergePackages = recurseIntoAttrs (callPackage ../development/tools/sublime-merge/packages.nix { });
+
+  sublimeMerge = sublimeMergePackages.sublimeMerge;
+
   subunit = callPackage ../development/libraries/subunit { };
 
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
