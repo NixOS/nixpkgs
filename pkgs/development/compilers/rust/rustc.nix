@@ -57,7 +57,7 @@ stdenv.mkDerivation {
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 ++ [ "--enable-vendor" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
-                ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" ]
+                ++ [ "--default-linker=${stdenv.cc}/bin/cc" ]
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
