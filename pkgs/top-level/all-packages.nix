@@ -18786,6 +18786,13 @@ with pkgs;
 
   sublime3-dev = sublime3Packages.sublime3-dev;
 
+  sublimeMergePackages = recurseIntoAttrs (callPackage ../development/tools/sublime-merge/packages.nix { });
+
+  sublimeMerge = sublimeMergePackages.sublimeMerge;
+
+  sublimeMerge-dev = sublimeMergePackages.sublimeMerge-dev;  
+
+
   inherit (callPackages ../applications/version-management/subversion {
       bdbSupport = true;
       httpServer = false;
@@ -18805,10 +18812,6 @@ with pkgs;
     perlBindings = true;
     pythonBindings = true;
   });
-
-  sublimeMergePackages = recurseIntoAttrs (callPackage ../development/tools/sublime-merge/packages.nix { });
-
-  sublimeMerge = sublimeMergePackages.sublimeMerge;
 
   subunit = callPackage ../development/libraries/subunit { };
 

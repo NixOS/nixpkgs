@@ -34,9 +34,6 @@ in let
           --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
           $i
       done
-
-      # Rewrite pkexec|gksudo argument. Note that we can't delete bytes in binary.
-      sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' sublime_merge
     '';
 
     installPhase = ''
@@ -67,14 +64,14 @@ in stdenv.mkDerivation (rec {
   installPhase = ''
     mkdir -p $out/bin
 
-    cat > $out/bin/sublM <<-EOF
+    cat > $out/bin/smerge <<-EOF
     #!/bin/sh
     exec $sublimeMerge/sublime_merge "\$@"
     EOF
-    chmod +x $out/bin/sublM
+    chmod +x $out/bin/smerge
 
-    ln $out/bin/sublM $out/bin/sublime_merge
-    ln $out/bin/sublM $out/bin/sublimeMerge
+    ln $out/bin/smerge $out/bin/sublime_merge
+    ln $out/bin/smerge $out/bin/sublimeMerge
     mkdir -p $out/share/applications
     ln -s $sublimeMerge/sublime_merge.desktop $out/share/applications/sublime_merge.desktop
     ln -s $sublimeMerge/Icon/256x256/ $out/share/icons
@@ -85,6 +82,6 @@ in stdenv.mkDerivation (rec {
     homepage = https://www.sublimemerge.com/;
     maintainers = with maintainers; [ jonoabroad ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 })
