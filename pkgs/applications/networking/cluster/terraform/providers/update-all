@@ -4,13 +4,24 @@
 #
 # This scripts scans the github terraform-providers repo for new releases,
 # generates the corresponding nix code and finally generates an index of
-# all the providers.
+# all the providers given in ./providers.txt.
 set -euo pipefail
+
+# the maximum number of attempts before giving up inside of GET and prefetch_github
+readonly maxAttempts=30
 
 GET() {
   local url=$1
+  local retry=1
   echo "fetching $url" >&2
-  curl -#fL -u "$GITHUB_AUTH" "$url"
+  while ! curl -#fL -u "$GITHUB_AUTH" "$url"; do
+    echo "The curl command has failed. Attempt $retry/${maxAttempts}" >&2
+    if [[ "${retry}" -eq "${maxAttempts}" ]]; then
+      exit 1
+    fi
+    retry=$(( retry + 1 ))
+    sleep 5
+  done
 }
 
 get_org_repos() {
@@ -24,6 +35,7 @@ get_repo_tags() {
   local repo=$2
   GET "https://api.github.com/repos/$owner/$repo/git/refs/tags?per_page=100" | \
     jq -r '.[].ref' | \
+    grep -v 'v\.' | \
     cut -d '/' -f 3- | \
     sort --version-sort
 }
@@ -32,7 +44,15 @@ prefetch_github() {
   local owner=$1
   local repo=$2
   local rev=$3
-  nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz"
+  local retry=1
+  while ! nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz"; do
+    echo "The nix-prefetch-url command has failed. Attempt $retry/${maxAttempts}" >&2
+    if [[ "${retry}" -eq "${maxAttempts}" ]]; then
+      exit 1
+    fi
+    retry=$(( retry + 1 ))
+    sleep 5
+  done
 }
 
 echo_entry() {
@@ -52,6 +72,21 @@ EOF
 
 indent() { sed 's/^/    /'; }
 
+add_repo() {
+  org="${1}"
+  repo="${2}"
+
+  echo "*** $repo ***"
+  name=$(echo "$repo" | cut -d - -f 3-)
+  last_tag=$(get_repo_tags "$org" "$repo" | tail -1)
+  last_tag_sha256=$(prefetch_github "$org" "$repo" "$last_tag")
+
+  {
+    echo "  $name ="
+    echo_entry "$org" "$repo" "$last_tag" "$last_tag_sha256" | indent
+  } >> data.nix
+}
+
 ## Main ##
 
 cd "$(dirname "$0")"
@@ -69,29 +104,37 @@ HELP
   exit 1
 fi
 
-org=terraform-providers
-
-repos=$(get_org_repos "$org" | grep terraform-provider- | grep -v terraform-provider-scaffolding | grep -v terraform-provider-azure-classic | sort)
-
-
-# Get all the providers with index
-
 cat <<HEADER > data.nix
 # Generated with ./update-all
 {
 HEADER
 
-for repo in $repos; do
-  echo "*** $repo ***"
-  name=$(echo "$repo" | cut -d - -f 3-)
-  last_tag=$(get_repo_tags "$org" "$repo" | tail -1)
-  last_tag_sha256=$(prefetch_github "$org" "$repo" "$last_tag")
+while read line; do
+  IFS=' ' read -r -a fields <<< "$line"
+  if [[ "${#fields[@]}" -eq 0 ]]; then
+    continue
+  fi
 
-  {
-    echo "  $name ="
-    echo_entry "$org" "$repo" "$last_tag" "$last_tag_sha256" | indent
-  } >> data.nix
-done
+  if [[ "${fields[0]}" = *"/"* ]]; then
+    org="$(echo "${fields[0]}" | cut -d/ -f1)"
+    repo="$(echo "${fields[0]}" | cut -d/ -f2)"
+    add_repo "${org}" "${repo}"
+  else
+    org="${fields[0]}"
+    repos=$(get_org_repos "$org")
+    if [[ "${#fields[@]}" -ge 2 ]] && [[ -n "${fields[1]}" ]]; then
+      repos="$( echo "${repos[@]}" | grep "${fields[1]}" )"
+    fi
+    if [[ "${#fields[@]}" -eq 3 ]] && [[ -n "${fields[2]}" ]]; then
+      repos="$( echo "${repos[@]}" | grep -v "${fields[2]}" )"
+    fi
+    repos="$( echo "${repos[@]}" | sort )"
+
+    for repo in $repos; do
+      add_repo "$org" "$repo"
+    done
+  fi
+done < <(grep -v '^#\|^$' providers.txt)
 
 cat <<FOOTER >> data.nix
 }
