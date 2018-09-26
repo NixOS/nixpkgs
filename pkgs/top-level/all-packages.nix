@@ -8444,7 +8444,7 @@ with pkgs;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_4;
+    llvmPackages = llvmPackages_6;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
