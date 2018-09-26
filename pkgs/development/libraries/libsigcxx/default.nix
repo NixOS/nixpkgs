@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://libsigc.sourceforge.net/;
+    homepage = https://libsigcplusplus.github.io/libsigcplusplus/;
     description = "A typesafe callback system for standard C++";
     license = licenses.lgpl21;
     platforms = platforms.all;

@@ -16,6 +16,7 @@ import ./make-test.nix ({ pkgs, ... }:
   testScript = ''
     startAll;
 
+    $machine->waitForUnit('atd.service'); # wait for atd to start
     $machine->fail("test -f ~root/at-1");
     $machine->fail("test -f ~alice/at-1");
 

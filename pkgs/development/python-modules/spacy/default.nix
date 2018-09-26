@@ -37,7 +37,8 @@ buildPythonPackage rec {
       --replace "ftfy==" "ftfy>=" \
       --replace "msgpack-python==" "msgpack-python>=" \
       --replace "msgpack-numpy==" "msgpack-numpy>=" \
-      --replace "pathlib" "pathlib; python_version<\"3.4\""
+      --replace "thinc>=6.10.3,<6.11.0" "thinc>=6.10.3" \
+      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6"
   '';
 
   propagatedBuildInputs = [

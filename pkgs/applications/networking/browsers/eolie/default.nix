@@ -1,45 +1,53 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig, wrapGAppsHook
-, desktop-file-utils, gobjectIntrospection, python36Packages
-, gnome3, gst_all_1, gtkspell3, hunspell }:
+{ stdenv, fetchgit, meson, ninja, pkgconfig
+, python3, gtk3, libsecret, gst_all_1, webkitgtk
+, glib-networking, gtkspell3, hunspell, desktop-file-utils
+, gobjectIntrospection, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   name = "eolie-${version}";
-  version = "0.9.35";
+  version = "0.9.36";
+
+  format = "other";
+  doCheck = false;
 
   src = fetchgit {
     url = "https://gitlab.gnome.org/World/eolie";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "0x3p1fgx1fhrnr7vkkpnl34401r6k6xg2mrjff7ncb1k57q522k7";
+    sha256 = "1pqs6lddkj7nvxdwf0yncwdcr7683mpvx3912vn7b1f2q2zkp1fv";
   };
 
-  nativeBuildInputs = with python36Packages; [
+  nativeBuildInputs = [
     desktop-file-utils
     gobjectIntrospection
     meson
     ninja
     pkgconfig
     wrapGAppsHook
-    wrapPython
   ];
 
-  buildInputs = [ gtkspell3 hunspell python36Packages.pygobject3 ] ++ (with gnome3; [
-    glib glib-networking gsettings-desktop-schemas gtk3 webkitgtk libsecret
-  ]) ++ (with gst_all_1; [
-    gst-libav gst-plugins-base gst-plugins-ugly gstreamer
-  ]);
+  buildInputs = with gst_all_1; [
+    glib-networking
+    gst-libav
+    gst-plugins-base
+    gst-plugins-ugly
+    gstreamer
+    gtk3
+    gtkspell3
+    hunspell
+    libsecret
+    webkitgtk
+  ];
 
-  pythonPath = with python36Packages; [
+  pythonPath = with python3.pkgs; [
     beautifulsoup4
     pycairo
     pygobject3
     python-dateutil
   ];
 
-  postFixup = "wrapPythonPrograms";
-
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
+    chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
   '';
 

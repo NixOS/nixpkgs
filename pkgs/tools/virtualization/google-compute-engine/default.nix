@@ -6,18 +6,19 @@
 , utillinux
 , boto
 , setuptools
+, distro
 }:
 
 buildPythonApplication rec {
   name = "google-compute-engine-${version}";
-  version = "20180129";
+  version = "20180510";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
     rev = version;
-    sha256 = "0380fnr64109hv8l1f3sgdg8a5mf020axj7jh8y25xq6wzkjm20c";
+    sha256 = "13hmg29s1pljcvf40lrv5yickg8x51rcnv68wxhs6zkkg75k448p";
   };
 
   postPatch = ''
@@ -42,7 +43,7 @@ buildPythonApplication rec {
     cp -r google_config/udev/*.rules $out/lib/udev/rules.d
   '';
 
-  propagatedBuildInputs = [ boto setuptools ];
+  propagatedBuildInputs = [ boto setuptools distro ];
 
   doCheck = false;
 

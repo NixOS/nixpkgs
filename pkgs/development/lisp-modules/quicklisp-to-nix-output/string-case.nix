@@ -1,15 +1,15 @@
-{ fetchurl, ... }:
+args @ { fetchurl, ... }:
 rec {
   baseName = ''string-case'';
-  version = ''20151218-git'';
+  version = ''20180711-git'';
 
   description = ''string-case is a macro that generates specialised decision trees to dispatch on string equality'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/string-case/2015-12-18/string-case-20151218-git.tgz'';
-    sha256 = ''0l7bcysm1hwxaxxbld9fs0hj30739wf2ys3n6fhfdy9m5rz1cfbw'';
+    url = ''http://beta.quicklisp.org/archive/string-case/2018-07-11/string-case-20180711-git.tgz'';
+    sha256 = ''1n36ign4bv0idw14zyayn6i0n3iaff9yw92kpjh3qmdcq3asv90z'';
   };
 
   packageName = "string-case";
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM string-case DESCRIPTION
     string-case is a macro that generates specialised decision trees to dispatch on string equality
-    SHA256 0l7bcysm1hwxaxxbld9fs0hj30739wf2ys3n6fhfdy9m5rz1cfbw URL
-    http://beta.quicklisp.org/archive/string-case/2015-12-18/string-case-20151218-git.tgz
-    MD5 fb747ba1276f0173f875876425b1acc3 NAME string-case FILENAME string-case
-    DEPS NIL DEPENDENCIES NIL VERSION 20151218-git SIBLINGS NIL PARASITES NIL) */
+    SHA256 1n36ign4bv0idw14zyayn6i0n3iaff9yw92kpjh3qmdcq3asv90z URL
+    http://beta.quicklisp.org/archive/string-case/2018-07-11/string-case-20180711-git.tgz
+    MD5 145c4e13f1e90a070b0a95ca979a9680 NAME string-case FILENAME string-case
+    DEPS NIL DEPENDENCIES NIL VERSION 20180711-git SIBLINGS NIL PARASITES NIL) */

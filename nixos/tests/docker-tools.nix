@@ -20,7 +20,10 @@ import ./make-test.nix ({ pkgs, ... }: {
     ''
       $docker->waitForUnit("sockets.target");
 
+      # Ensure Docker images use a stable date by default
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.bash}'");
+      $docker->succeed("[ '1970-01-01T00:00:01Z' = \"\$(docker inspect ${pkgs.dockerTools.examples.bash.imageName} | ${pkgs.jq}/bin/jq -r .[].Created)\" ]");
+
       $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.bash.imageName} bash --version");
       $docker->succeed("docker rmi ${pkgs.dockerTools.examples.bash.imageName}");
 
@@ -51,5 +54,9 @@ import ./make-test.nix ({ pkgs, ... }: {
       $docker->succeed("docker run --rm runasrootextracommands cat extraCommands");
       $docker->succeed("docker run --rm runasrootextracommands cat runAsRoot");
       $docker->succeed("docker rmi '${pkgs.dockerTools.examples.runAsRootExtraCommands.imageName}'");
+
+      # Ensure Docker images can use an unstable date
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.bash}'");
+      $docker->succeed("[ '1970-01-01T00:00:01Z' != \"\$(docker inspect ${pkgs.dockerTools.examples.unstableDate.imageName} | ${pkgs.jq}/bin/jq -r .[].Created)\" ]");
     '';
 })

@@ -90,7 +90,9 @@ let
     fi
     ${buildPackages.libxslt.bin}/bin/xsltproc \
       --stringparam revision '${revision}' \
-      -o $out ${./options-to-docbook.xsl} $optionsXML
+      -o intermediate.xml ${./options-to-docbook.xsl} $optionsXML
+    ${buildPackages.libxslt.bin}/bin/xsltproc \
+      -o "$out" ${./postprocess-option-descriptions.xsl} intermediate.xml
   '';
 
   sources = lib.sourceFilesBySuffices ./. [".xml"];
