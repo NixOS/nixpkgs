@@ -908,11 +908,11 @@ let
   }) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
 
   libXinerama = (mkDerivation "libXinerama" {
-    name = "libXinerama-1.1.3";
+    name = "libXinerama-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXinerama-1.1.3.tar.bz2;
-      sha256 = "1qlqfvzw45gdzk9xirgwlp2qgj0hbsyiqj8yh8zml2bk2ygnjibs";
+      url = mirror://xorg/individual/lib/libXinerama-1.1.4.tar.bz2;
+      sha256 = "086p0axqj57nvkaqa6r00dnr9kyrn1m8blgf0zjy25zpxkbxn200";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext xextproto xineramaproto ];
