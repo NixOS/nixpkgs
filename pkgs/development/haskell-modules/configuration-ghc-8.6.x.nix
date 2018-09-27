@@ -50,6 +50,8 @@ self: super: {
   doctest = self.doctest_0_16_0_1;
   doctest_0_16_0_1 = dontCheck super.doctest_0_16_0_1;
   Glob = self.Glob_0_9_3;
+  haddock-library = markBroken super.haddock-library;
+  hslogger = self.hslogger_1_2_12;
   hspec = self.hspec_2_5_7;
   hspec-core = self.hspec-core_2_5_7;
   hspec-core_2_5_7 = super.hspec-core_2_5_7.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
