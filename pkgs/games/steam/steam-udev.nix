@@ -1,13 +1,10 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, steamPackages }:
 
 stdenv.mkDerivation rec {
   name= "steam-udev-${version}";
-  version = "1.0.0.56";
+  version = lib.getVersion steamPackages.steam.name;
 
-  src = fetchurl {
-    url = "http://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz"; 
-    sha256 = "01jgp909biqf4rr56kb08jkl7g5xql6r2g4ch6lc71njgcsbn5fs";
-  };
+  src = steamPackages.steam.src;
  
   installPhase = ''
     install -d $out/lib/udev/rules.d
