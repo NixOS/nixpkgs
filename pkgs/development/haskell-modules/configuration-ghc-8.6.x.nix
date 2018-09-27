@@ -57,11 +57,11 @@ self: super: {
   hspec-meta = self.hspec-meta_2_5_6;
   hspec-meta_2_5_6 = super.hspec-meta_2_5_6.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
   JuicyPixels = self.JuicyPixels_3_3_1;
+  lens = dontCheck super.lens;    # avoid depending on broken polyparse
   polyparse = markBrokenVersion "1.12" super.polyparse;
   primitive = self.primitive_0_6_4_0;
   tagged = self.tagged_0_8_6;
   unordered-containers = dontCheck super.unordered-containers;
-  lens = dontCheck super.lens;    # avoid depending on broken polyparse
 
   # Over-specified constraints.
   async = doJailbreak super.async;                           # base >=4.3 && <4.12, stm >=2.2 && <2.5
