@@ -26,7 +26,7 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     '';
   };
 
-  buildInputs = [ makeWrapper patchelf p7zip unzip ];
+  nativeBuildInputs = [ makeWrapper patchelf p7zip unzip ];
 
   patchPhase = ''
       get_file_size() {
