@@ -809,12 +809,6 @@ pkgs.dockerTools.buildLayeredImage {
     </para>
 
     <para>
-     This is different from <function>pkgs.dockerTools.buildImage</function>
-     which does <emphasis>not</emphasis> automatically include the
-     configuration's closure.
-    </para>
-
-    <para>
      This allows you to make very simple Docker images with very little code.
      This container will start up and run <command>hello</command>:
 <programlisting><![CDATA[
