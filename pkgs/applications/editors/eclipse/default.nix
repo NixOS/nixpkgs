@@ -98,21 +98,6 @@ rec {
 
   eclipse-platform = eclipse-platform-49; # always point to latest
 
-  eclipse-platform-46 = buildEclipse {
-    name = "eclipse-platform-4.6.2";
-    description = "Eclipse Platform Neon 2";
-    sources = {
-      "x86_64-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-platform-4.6.2-linux-gtk-x86_64.tar.gz;
-          sha256 = "1fmpirjkp210angyfz3nr5jp58snjy6784zkkbmdxkiyg9kg2wqq";
-        };
-      "i686-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-platform-4.6.2-linux-gtk.tar.gz;
-          sha256 = "0274g6ypiqsqkch10868ygbm6avc5pa57saz9wd196kdivl1bdpm";
-        };
-    };
-  };
-
   eclipse-platform-47 = buildEclipse {
     name = "eclipse-platform-4.7.3a";
     description = "Eclipse Platform Oxygen";
@@ -181,21 +166,6 @@ rec {
   ### Eclipse SDK
 
   eclipse-sdk = eclipse-sdk-49; # always point to latest
-
-  eclipse-sdk-46 = buildEclipse {
-    name = "eclipse-sdk-4.6.2";
-    description = "Eclipse Neon 2 Classic";
-    sources = {
-      "x86_64-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-SDK-4.6.2-linux-gtk-x86_64.tar.gz;
-          sha256 = "0g3nk1gcz178j8xk6nblkfsaysm8gq8101383fx60x6w25rdfgjb";
-        };
-      "i686-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-SDK-4.6.2-linux-gtk.tar.gz;
-          sha256 = "09wlkcxs5h3j8habqxgr4all99vkgmyixc0vr9dj3qs0kl85k5mz";
-        };
-    };
-  };
 
   eclipse-sdk-47 = buildEclipse {
     name = "eclipse-sdk-4.7.3a";
