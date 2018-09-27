@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, ninja, pkgconfig, qt5
 , opencv, openexr, graphicsmagick, fftw, zlib, libjpeg, libtiff, libpng
-, curl, krita, gdk_pixbuf, cairo
-, fetchgit, withGimpPlugin ? true, gimp }:
+, curl, krita
+, fetchgit }:
 
 let
   version = "2.3.6";
@@ -60,15 +60,15 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    qt5.qtbase qt5.qttools gimp gdk_pixbuf fftw zlib libjpeg libtiff libpng
-    opencv openexr graphicsmagick curl cairo krita
+    qt5.qtbase qt5.qttools fftw zlib libjpeg libtiff libpng
+    opencv openexr graphicsmagick curl krita
   ];
 
   cmakeFlags = [ "-DGMIC_QT_HOST=krita" ];
 
   installPhase = ''
     mkdir -p $out/bin;
-    install -Dm755 gmic-qt/gmic_krita_qt "$out/gmic_krita_qt"
+    install -Dm755 gmic_krita_qt "$out/bin/gmic_krita_qt"
   '';
 
   meta = with stdenv.lib; {
