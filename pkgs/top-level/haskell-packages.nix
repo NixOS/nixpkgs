@@ -80,11 +80,11 @@ in {
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghcjs = compiler.ghcjs84;
-    ghcjs710 = packages.ghc7103.callPackage ../development/compilers/ghcjs {
+    ghcjs710 = packages.ghc7103.callPackage ../development/compilers/ghcjs/7.10 {
       bootPkgs = packages.ghc7103;
       inherit (pkgs) cabal-install;
     };
-    ghcjs80 = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
+    ghcjs80 = packages.ghc802.callPackage ../development/compilers/ghcjs/8.0 {
       bootPkgs = packages.ghc802;
       inherit (pkgs) cabal-install;
     };
