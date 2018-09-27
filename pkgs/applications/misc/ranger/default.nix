@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
 
     # give file previews out of the box
     substituteInPlace ranger/config/rc.conf \
-      --replace "set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
+      --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
   '' + optionalString imagePreviewSupport ''
     substituteInPlace ranger/ext/img_display.py \
       --replace /usr/lib/w3m ${w3m}/libexec/w3m
