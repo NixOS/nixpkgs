@@ -1,7 +1,7 @@
 { stdenv, targetPackages
 
 # build-tools
-, bootPkgs, hscolour
+, bootPkgs
 , coreutils, fetchurl, perl
 , docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, libxml2, libxslt
 
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42
-    ghc hscolour
+    ghc bootPkgs.hscolour
   ];
 
   # For building runtime libs

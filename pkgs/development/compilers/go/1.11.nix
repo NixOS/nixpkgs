@@ -125,6 +125,8 @@ stdenv.mkDerivation rec {
     ./remove-fhs-test-references.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+    # breaks under load: https://github.com/golang/go/issues/25628
+    ./skip-test-extra-files-on-386.patch
   ];
 
   postPatch = optionalString stdenv.isDarwin ''
@@ -176,6 +178,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     rm -r $out/share/go/pkg/bootstrap
+    rm -r $out/share/go/pkg/obj
     ln -s $out/share/go/bin $out/bin
   '';
 

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.dev}/bin/gapplication"
+    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.bin}/bin/gapplication"
   '';
 
   passthru = {

@@ -55,11 +55,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "signal-desktop-${version}";
-  version = "1.16.0";
+  version = "1.16.2";
 
   src = fetchurl {
     url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0hw5h1m8fijhqybx0xijrkifn5wl50qibaxkn2mxqf4mjwlvaw9a";
+    sha256 = "1j1785sc8pmrhi8yhlv4brxn7zrd33skgkkvzfl60nqkh2nybh3y";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

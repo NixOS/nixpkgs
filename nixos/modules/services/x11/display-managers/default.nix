@@ -266,7 +266,7 @@ in
           session.  Each session script can set the
           <varname>waitPID</varname> shell variable to make this script
           wait until the end of the user session.  Each script is used
-          to define either a windows manager or a desktop manager.  These
+          to define either a window manager or a desktop manager.  These
           can be differentiated by setting the attribute
           <varname>manage</varname> either to <literal>"window"</literal>
           or <literal>"desktop"</literal>.

@@ -120,6 +120,7 @@ let
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
     "--with-gcc=${stdenv.cc.targetPrefix}cc"
     "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
+    "--with-ar=${stdenv.cc.bintools.targetPrefix}ar"
     # use the one that comes with the cross compiler.
     "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
@@ -152,6 +153,7 @@ let
     (optionalString (versionOlder "8.4" ghc.version) (enableFeature enableStaticLibraries "static"))
     (optionalString (isGhcjs || versionOlder "7.4" ghc.version) (enableFeature enableSharedExecutables "executable-dynamic"))
     (optionalString (isGhcjs || versionOlder "7" ghc.version) (enableFeature doCheck "tests"))
+    (enableFeature doBenchmark "benchmarks")
     "--enable-library-vanilla"  # TODO: Should this be configurable?
     "--enable-library-for-ghci" # TODO: Should this be configurable?
   ] ++ optionals (enableDeadCodeElimination && (stdenv.lib.versionOlder "8.0.1" ghc.version)) [

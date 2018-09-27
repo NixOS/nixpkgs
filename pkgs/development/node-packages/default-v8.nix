@@ -27,14 +27,15 @@ nodePackages // {
     '';
   };
 
-  ios-deploy = nodePackages.ios-deploy.override {
+  ios-deploy = nodePackages.ios-deploy.override (drv: {
+    nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.buildPackages.rsync ];
     preRebuild = ''
       LD=$CC
       tmp=$(mktemp -d)
       ln -s /usr/bin/xcodebuild $tmp
       export PATH="$PATH:$tmp"
     '';
-  };
+  });
 
   fast-cli = nodePackages."fast-cli-1.x".override {
     preRebuild = ''

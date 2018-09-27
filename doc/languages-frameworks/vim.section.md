@@ -15,6 +15,7 @@ At the moment we support three different methods for managing plugins:
 - Vim packages (*recommend*)
 - VAM (=vim-addon-manager)
 - Pathogen
+- vim-plug
 
 ## Custom configuration
 
@@ -59,7 +60,7 @@ vim_configurable.customize {
 }
 ```
 
-For Neovim the syntax is
+For Neovim the syntax is:
 
 ```
 neovim.override {
@@ -95,6 +96,35 @@ The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.n
 ```
 
 After that you can install your special grafted `myVim` or `myNeovim` packages.
+
+## Managing plugins with vim-plug
+
+To use [vim-plug](https://github.com/junegunn/vim-plug) to manage your Vim
+plugins the following example can be used:
+
+```
+vim_configurable.customize {
+  vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
+    # loaded on launch
+    plug.plugins = [ youcompleteme fugitive phpCompletion elm-vim ];
+  };
+}
+```
+
+For Neovim the syntax is:
+
+```
+neovim.override {
+  configure = {
+    customRC = ''
+      # here your custom configuration goes!
+    '';
+    plug.plugins = with pkgs.vimPlugins; [
+      vim-go
+    ];
+  };
+}
+```
 
 ## Managing plugins with VAM
 

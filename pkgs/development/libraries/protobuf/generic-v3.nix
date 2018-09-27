@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   # make sure you test also -A pythonPackages.protobuf
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "protocolbuffers";
     repo = "protobuf";
     rev = "v${version}";
     inherit sha256;

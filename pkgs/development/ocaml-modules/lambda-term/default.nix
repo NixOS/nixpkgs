@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libev, ocaml, findlib, jbuilder
+{ stdenv, fetchurl, libev, ocaml, findlib, dune
 , zed, lwt_log, lwt_react
 }:
 
@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "1hy5ryagqclgdm9lzh1qil5mrynlypv7mn6qm858hdcnmz9zzn0l";
   };
 
-  buildInputs = [ libev ocaml findlib jbuilder ];
+  buildInputs = [ libev ocaml findlib dune ];
 
   propagatedBuildInputs = [ zed lwt_log lwt_react ];
 
-  buildPhase = "jbuilder build -p lambda-term";
+  buildPhase = "dune build -p lambda-term";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   hasSharedObjects = true;
 

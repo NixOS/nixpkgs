@@ -18,6 +18,11 @@
   for an example on how to work with this data.
   */
 {
+  "1000101" = {
+    email = "jan.hrnko@satoshilabs.com";
+    github = "1000101";
+    name = "Jan Hrnko";
+  };
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
@@ -216,6 +221,11 @@
     github = "amiloradovsky";
     name = "Andrew Miloradovsky";
   };
+  aminb = {
+    email = "amin@aminb.org";
+    github = "aminb";
+    name = "Amin Bandali";
+  };
   aminechikhaoui = {
     email = "amine.chikhaoui91@gmail.com";
     github = "AmineChikhaoui";
@@ -227,7 +237,7 @@
     name = "Andrew Morsillo";
   };
   AndersonTorres = {
-    email = "torres.anderson.85@gmail.com";
+    email = "torres.anderson.85@protonmail.com";
     github = "AndersonTorres";
     name = "Anderson Torres";
   };
@@ -375,6 +385,16 @@
     email = "auntieNeo@gmail.com";
     github = "auntie";
     name = "Jonathan Glines";
+  };
+  avaq = {
+    email = "avaq+nixos@xs4all.nl";
+    github = "avaq";
+    name = "Aldwin Vlasblom";
+  };
+  avery = {
+    email = "averyl+nixos@protonmail.com";
+    github = "AveryLychee";
+    name = "Avery Lychee";
   };
   avnik = {
     email = "avn@avnik.info";
@@ -677,6 +697,11 @@
     email = "chaddai.fouche@gmail.com";
     github = "Chaddai";
     name = "Chaddaï Fouché";
+  };
+  chaduffy = {
+    email = "charles@dyfis.net";
+    github = "charles-dyfis-net";
+    name = "Charles Duffy";
   };
   changlinli = {
     email = "mail@changlinli.com";
@@ -1847,6 +1872,11 @@
     github = "jerith666";
     name = "Matt McHenry";
   };
+  jeschli = {
+    email = "jeschli@gmail.com";
+    github = "jeschli";
+    name = "Markus Hihn";
+  };
   jethro = {
     email = "jethrokuan95@gmail.com";
     github = "jethrokuan";
@@ -2812,6 +2842,11 @@
     email = "mail@muflax.com";
     github = "muflax";
     name = "Stefan Dorn";
+  };
+  mvnetbiz = {
+    email = "mvnetbiz@gmail.com";
+    github = "mvnetbiz";
+    name = "Matt Votava";
   };
   myrl = {
     email = "myrl.0xf@gmail.com";

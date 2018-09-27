@@ -106,6 +106,7 @@ mapAliases ({
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   gnustep-make = gnustep.make; # added 2016-7-6
   go-pup = pup; # added 2017-12-19
+  goimports = gotools; # added 2018-09-16
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
@@ -131,6 +132,7 @@ mapAliases ({
   iana_etc = iana-etc;  # added 2017-03-08
   idea = jetbrains; # added 2017-04-03
   inotifyTools = inotify-tools;
+  jbuilder = dune; # added 2018-09-09
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdiff3-qt5 = kdiff3; # added 2017-02-18

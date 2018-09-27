@@ -4,16 +4,19 @@
 
 stdenv.mkDerivation rec {
   name = "brotli-${version}";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brotli";
     rev = "v" + version;
-    sha256 = "0ssj7mnhpdpk7qnwr49qfd4gxhkmvbli5mhs274pz55cx1xp7xja";
+    sha256 = "1hng7v7n6asli9v8gnshrqjnia5cvrwzgnx7irmk7r98nnjzlqda";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = stdenv.lib.optional
+    (stdenv.hostPlatform.libc == "msvcrt") "-DCMAKE_SYSTEM_NAME=Windows";
 
   outputs = [ "out" "dev" "lib" ];
 

@@ -10,11 +10,11 @@ in
 stdenv.mkDerivation rec {
   name = "lua-${version}";
   luaversion = "5.2";
-  version = "${luaversion}.3";
+  version = "${luaversion}.4";
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${name}.tar.gz";
-    sha256 = "0b8034v1s82n4dg5rzcn12067ha3nxaylp2vdp8gg08kjsbzphhk";
+    sha256 = "0jwznq0l8qg9wh5grwg07b5cy3lzngvl5m2nl1ikp6vqssmf9qmr";
   };
 
   buildInputs = [ readline ];

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "ipfs-migrator-${version}";
-  version = "6";
+  version = "7";
 
   goPackagePath = "github.com/ipfs/fs-repo-migrations";
 
@@ -11,8 +11,8 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "fs-repo-migrations";
-    rev = "a89e9769b9cac25ad9ca31c7e9a4445c7966d35b";
-    sha256 = "0x4mbkx7wlqjmkg6852hljq947v9y9k3hjd5yfj7kka1hpvxd7bn";
+    rev = "4e8e0b41d7348646c719d572c678c3d0677e541a";
+    sha256 = "1i6izncgc3wgabppglnnrslffvwrv3cazbdhsk4vjfsd66hb4d37";
   };
 
   patches = [ ./lru-repo-path-fix.patch ];

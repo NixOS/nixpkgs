@@ -1,7 +1,7 @@
 { stdenv, targetPackages
 
 # build-tools
-, bootPkgs, alex, happy, hscolour
+, bootPkgs
 , autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
 
 , libiconv ? null, ncurses
@@ -78,12 +78,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.6.0.20180810";
+  version = "8.6.1";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.6.1-beta1/ghc-${version}-src.tar.xz";
-    sha256 = "0b3nyjs4lsh67lfw7wh7r7kkf4g2xiypdxd77aycmwd3pdxj09yw";
+    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
+    sha256 = "0dkh7idgrqr567fq94a0f5x3w0r4cm2ydn51nb5wfisw3rnw499c";
   };
 
   enableParallelBuilding = true;
@@ -169,7 +169,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3
-    ghc alex happy hscolour
+    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
   # For building runtime libs

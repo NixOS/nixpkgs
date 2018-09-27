@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt5" ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Peer-to-peer electronic cash system (Cash client)";
     longDescription= ''

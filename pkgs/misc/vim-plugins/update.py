@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p python3 nix -i python3
+#!nix-shell -p nix-prefetch-git -p python3 nix -i python3
 
 # format:
 # $ nix run nixpkgs.python3Packages.black -c black update.py
@@ -193,12 +193,14 @@ def check_results(
     print(f"{len(results) - len(failures)} plugins were checked", end="")
     if len(failures) == 0:
         print()
+        return plugins
     else:
         print(f", {len(failures)} plugin(s) could not be downloaded:\n")
 
         for (plugin, exception) in failures:
             print_download_error(plugin, exception)
-    return plugins
+
+        sys.exit(1)
 
 
 def load_plugin_spec() -> List[Tuple[str, str]]:

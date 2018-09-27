@@ -31,6 +31,8 @@ let
 
   git = appendToName "minimal" gitBase;
 
+  git-appraise = callPackage ./git-appraise {};
+
   git-fame = callPackage ./git-fame {};
 
   # The full-featured Git.
@@ -112,6 +114,8 @@ let
   hubUnstable = throw "use gitAndTools.hub instead";
 
   pre-commit = callPackage ./pre-commit { };
+
+  pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 
   qgit = qt5.callPackage ./qgit { };
 

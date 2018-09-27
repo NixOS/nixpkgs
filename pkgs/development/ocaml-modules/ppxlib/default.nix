@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune
 , ocaml-compiler-libs, ocaml-migrate-parsetree, ppx_derivers, stdio
 }:
 
@@ -13,15 +13,15 @@ stdenv.mkDerivation rec {
     sha256 = "0csp49jh7zgjnqh46mxbf322whlbmgy7v1a12nvxh97qg6i5fvsy";
   };
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  buildInputs = [ ocaml findlib dune ];
 
   propagatedBuildInputs = [
     ocaml-compiler-libs ocaml-migrate-parsetree ppx_derivers stdio
   ];
 
-  buildPhase = "jbuilder build";
+  buildPhase = "dune build";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "Comprehensive ppx tool set";

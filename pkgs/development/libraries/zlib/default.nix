@@ -3,7 +3,7 @@
 , static ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "zlib-${version}";
   version = "1.2.11";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     # what causes this difference.
   + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/*.so* $out/lib/*.dylib* ; do
-      install_name_tool -id "$file" $file
+      ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
     done
   ''
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
@@ -78,4 +78,8 @@ stdenv.mkDerivation rec {
     license = licenses.zlib;
     platforms = platforms.all;
   };
-}
+} // stdenv.lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+  preConfigure = ''
+    export CHOST=${stdenv.hostPlatform.config}
+  '';
+})

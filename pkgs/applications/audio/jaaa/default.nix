@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "jaaa-${version}";
-  version = "0.8.4";
+  version = "0.9.2";
 
   src = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
-    sha256 = "0jyll4rkb6vja2widc340ww078rr24c6nmxbxdqvbxw409nccd01";
+    sha256 = "1czksxx2g8na07k7g57qlz0vvkkgi5bzajcx7vc7jhb94hwmmxbc";
   };
 
   buildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, Cocoa }:
 
 buildGoPackage rec {
   name = "noti-${version}";
@@ -10,6 +10,10 @@ buildGoPackage rec {
     rev = "${version}";
     sha256 = "1chsqfqk0pnhx5k2nr4c16cpb8m6zv69l1jvv4v4903zgfzcm823";
   };
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+  # TODO: Remove this when we update apple_sdk
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.isDarwin [ "-fno-objc-arc" ];
 
   goPackagePath = "github.com/variadico/noti";
 

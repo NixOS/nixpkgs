@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, ocamlPackages, makeWrapper, writeScript
-, jbuilder, python3, rsync, fetchpatch }:
+, dune, python3, rsync, fetchpatch }:
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
-  pyre-version = "0.0.11";
+  pyre-version = "0.0.14";
   versionFile = writeScript "version.ml" ''
     cat > "./version.ml" <<EOF
     open Core
@@ -24,7 +24,7 @@ let
     owner = "facebook";
     repo = "pyre-check";
     rev = "v${pyre-version}";
-    sha256 = "0ig7bx2kfn2kbxw74wysh5365yp5gyby42l9l29iclrzdghgk32l";
+    sha256 = "0c8xzaa3ljqb6llr041sydw0l4xqn7x21nw9vaymdxh35nx9bp2v";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -39,7 +39,7 @@ let
     ppx_deriving_yojson
     ocamlbuild
     ppxlib
-    jbuilder
+    dune
     ounit
     # python36Packages.python36Full # TODO
   ];

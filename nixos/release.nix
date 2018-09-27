@@ -128,7 +128,8 @@ in rec {
 
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
-  manual = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manual);
+  manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
+  manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
   manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
   manualGeneratedSources = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.generatedSources);
@@ -261,6 +262,7 @@ in rec {
   tests.chromium = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/chromium.nix {}).stable or {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.cloud-init = callTest tests/cloud-init.nix {};
+  tests.codimd = callTest tests/codimd.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
   tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
   tests.containers-bridge = callTest tests/containers-bridge.nix {};
@@ -284,7 +286,8 @@ in rec {
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
   tests.etcd = callTestOnMatchingSystems ["x86_64-linux"] tests/etcd.nix {};
   tests.ec2-nixops = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-nixops or {};
-  tests.ec2-config = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-config or {};
+  # ec2-config doesn't work in a sandbox as the simulated ec2 instance needs network access
+  #tests.ec2-config = (callSubTestsOnMatchingSystems ["x86_64-linux"] tests/ec2.nix {}).boot-ec2-config or {};
   tests.elk = callSubTestsOnMatchingSystems ["x86_64-linux"] tests/elk.nix {};
   tests.env = callTest tests/env.nix {};
   tests.ferm = callTest tests/ferm.nix {};
@@ -379,7 +382,7 @@ in rec {
   tests.pgmanage = callTest tests/pgmanage.nix {};
   tests.postgis = callTest tests/postgis.nix {};
   tests.powerdns = callTest tests/powerdns.nix {};
-  #tests.pgjwt = callTest tests/pgjwt.nix {};
+  tests.pgjwt = callTest tests/pgjwt.nix {};
   tests.predictable-interface-names = callSubTests tests/predictable-interface-names.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.prometheus = callTest tests/prometheus.nix {};

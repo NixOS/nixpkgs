@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A lite version of Bitcoin using scrypt as a proof-of-work algorithm";
     longDescription= ''

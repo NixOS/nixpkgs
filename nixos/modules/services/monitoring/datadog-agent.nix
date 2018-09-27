@@ -213,7 +213,6 @@ in {
           Group = "datadog";
           Restart = "always";
           RestartSec = 2;
-          PrivateTmp = true;
         };
         restartTriggers = [ datadogPkg ] ++ map (etc: etc.source) etcfiles;
       } attrs;

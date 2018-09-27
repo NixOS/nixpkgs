@@ -16,29 +16,21 @@
 buildPythonPackage rec {
 
   pname = "youtube-dl";
-  version = "2018.09.01";
+  version = "2018.09.18";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0h8x8agl4s5cnfzwmshbcg4pxcgg3iyb86w8krs21y2k9d1ng036";
+    sha256 = "0mlsdmddmyy3xaqy366k48xds14g17l81al3kglndjkbrrji63sb";
   };
-
-  patches = [
-    # https://github.com/rg3/youtube-dl/pull/17464
-    (fetchpatch {
-      name = "youtube-js-player-fix.patch";
-      url = "https://github.com/rg3/youtube-dl/pull/17464/commits/6d7359775ae4eef1d1213aae81e092467a2c675c.patch";
-      sha256 = "12mwfmp7iwlawpx6r4rhz546b3anxrx6zc4nyjs8grbh5vxhj9yg";
-    })
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ zip ] ++ lib.optional generateManPage pandoc;
   propagatedBuildInputs = lib.optional hlsEncryptedSupport pycryptodome;
 
-  # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
-  # rtmpdump is required to download files over RTMP
-  # atomicparsley for embedding thumbnails
+  # Ensure these utilities are available in $PATH:
+  # - ffmpeg: post-processing & transcoding support
+  # - rtmpdump: download files over RTMP
+  # - atomicparsley: embedding thumbnails
   makeWrapperArgs = let
       packagesToBinPath =
         [ atomicparsley ]

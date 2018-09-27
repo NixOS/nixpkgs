@@ -1,4 +1,4 @@
-{ stdenv, ocaml, findlib, jbuilder, lwt }:
+{ stdenv, ocaml, findlib, dune, lwt }:
 
 stdenv.mkDerivation rec {
   version = "1.0.0";
@@ -6,13 +6,13 @@ stdenv.mkDerivation rec {
 
   inherit (lwt) src;
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  buildInputs = [ ocaml findlib dune ];
 
   propagatedBuildInputs = [ lwt ];
 
-  buildPhase = "jbuilder build -p lwt_log";
+  buildPhase = "dune build -p lwt_log";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "Lwt logging library (deprecated)";

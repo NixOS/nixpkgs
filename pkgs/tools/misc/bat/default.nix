@@ -4,21 +4,25 @@
 
 rustPlatform.buildRustPackage rec {
   name    = "bat-${version}";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
     repo   = "bat";
     rev    = "v${version}";
-    sha256 = "1dhn88asf08dvl4827v4mkxafcr01m1h5jmicvzda9ywmr82g1cs";
+    sha256 = "1fzk0z7r70rjvv2c6531zaa1jzbcb7j9wbi0xqb9y4dls538bmz0";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "10s8ig08prs1wcsisrllvsixqkrkwjx769y1w5fypldn9kfk2lka";
+  cargoSha256 = "19syz0sxcpk3i4675bfq5gpb9i6hp81in36w820kkvamaimq10nd";
 
   nativeBuildInputs = [ cmake pkgconfig zlib ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  postInstall = ''
+    install -m 444 -Dt $out/share/man/man1 doc/bat.1
+  '';
 
   meta = with stdenv.lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";

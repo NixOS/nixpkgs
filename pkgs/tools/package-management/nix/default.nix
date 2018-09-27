@@ -148,10 +148,10 @@ in rec {
   }) // { perl-bindings = nix1; };
 
   nixStable = (common rec {
-    name = "nix-2.1.1";
+    name = "nix-2.1.2";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "63b1d49ea678162ada6996e42abb62cbc6e65cfefa4faa5436ae37100504720b";
+      sha256 = "68e55382dac9e66f84ead69b3c786a4ea85d4a6611a7a740aa0b78fcc85db3ec";
     };
   }) // { perl-bindings = perl-bindings {
     nix = nixStable;
