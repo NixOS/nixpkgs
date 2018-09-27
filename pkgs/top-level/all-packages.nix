@@ -1370,6 +1370,8 @@ with pkgs;
 
   gmic = callPackage ../tools/graphics/gmic { };
 
+  gmic-qt = callPackage ../tools/graphics/gmic-qt { };
+
   goa = callPackage ../development/tools/goa {
     buildGoPackage = buildGo110Package;
   };
