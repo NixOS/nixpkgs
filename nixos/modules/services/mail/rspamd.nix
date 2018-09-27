@@ -308,6 +308,7 @@ in
         ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -c ${rspamdConfFile} -f";
         Restart = "always";
         RuntimeDirectory = "rspamd";
+        RuntimeDirectoryPreserve = mkIf cfg.socketActivation true;
         PrivateTmp = true;
         Sockets = mkIf cfg.socketActivation (concatStringsSep " " allSocketNames);
       };
