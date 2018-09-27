@@ -150,4 +150,11 @@ rec {
     contents = [ pkgs.coreutils ];
     created = "now";
   };
+
+  # 10. Create a layered image
+  layered-image = pkgs.dockerTools.buildLayeredImage {
+    name = "layered-image";
+    tag = "latest";
+    config.Cmd = [ "${pkgs.hello}/bin/hello" ];
+  };
 }
