@@ -96,7 +96,7 @@ rec {
 
   ### Eclipse Platform
 
-  eclipse-platform = eclipse-platform-48; # always point to latest
+  eclipse-platform = eclipse-platform-49; # always point to latest
 
   eclipse-platform-46 = buildEclipse {
     name = "eclipse-platform-4.6.2";
@@ -143,6 +143,21 @@ rec {
     };
   };
 
+  eclipse-platform-49 = buildEclipse {
+    name = "eclipse-platform-4.9";
+    description = "Eclipse Platform 2018-09";
+    sources = {
+      "x86_64-linux" = fetchurl {
+        url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/eclipse-platform-4.9-linux-gtk-x86_64.tar.gz;
+          sha512 = "875714bb411145c917fccedf2f7c4fd2757640b2debf4a18f775604233abd6f0da893b350cc03da44413d7ec6fae3f773ef08634e632058e4b705e6cda2893eb";
+        };
+      "i686-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/eclipse-platform-4.9-linux-gtk.tar.gz;
+          sha512 = "758bc0de30fa5c4b76b343ea0325611d87b6928ef5002244f2f1ba2a9fa937de89b2a94ce2c8d33d79344fd574d6e8a72c5d127fe416d785f48600e9e85fce86";
+        };
+    };
+  };
+
   ### Eclipse Scala SDK
 
   eclipse-scala-sdk = eclipse-scala-sdk-441; # always point to latest
@@ -165,7 +180,7 @@ rec {
 
   ### Eclipse SDK
 
-  eclipse-sdk = eclipse-sdk-48; # always point to latest
+  eclipse-sdk = eclipse-sdk-49; # always point to latest
 
   eclipse-sdk-46 = buildEclipse {
     name = "eclipse-sdk-4.6.2";
@@ -208,6 +223,21 @@ rec {
       "i686-linux" = fetchurl {
           url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.8-201806110500/eclipse-SDK-4.8-linux-gtk.tar.gz;
           sha512 = "c7cae7baa3978d48477090bb9941e85b4c7484021ece9c5c77a7e859e57e5c1f13556262f92b561cfb11f828b934bad7a6018be7b8fd9454e3991e8d5cae9917";
+        };
+    };
+  };
+
+  eclipse-sdk-49 = buildEclipse {
+    name = "eclipse-sdk-4.9";
+    description = "Eclipse 2018-09 Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/eclipse-SDK-4.9-linux-gtk-x86_64.tar.gz;
+          sha512 = "5e74a0411f56b3973b7c6d8c3727392297d55ad458a814b4cc3f2f6a57dbeebc64852d1a6a958db5c3b08c620093bfb5bcc0d2c6a400f5594b82c2ef5d5fa9fb";
+        };
+      "i686-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.9-201809060745/eclipse-SDK-4.9-linux-gtk.tar.gz;
+          sha512 = "b1861bd99c8e43f1d04247226584246aa7844af5e2da820fe98a51018dbe8ff4c25dbb9fa655f56e103f95c0696f40a65dcce13430c63aa080f786738e70eb8b";
         };
     };
   };
