@@ -22243,6 +22243,57 @@ with pkgs;
                 );
     }).config.system.build;
 
+
+  /*
+   * Run a NixOS VM network test.
+   *
+   * This is equivalent to  import ./make-test.nix  from the NixOS manual
+   * For details see https://nixos.org/nixos/manual/index.html#sec-nixos-tests
+   *
+   * Parameter:
+   *   A NixOS VM test network, or path to it. Example:
+   *
+   *      { lib, ... }:
+   *      { name = "my-test";
+   *        nodes = {
+   *          machine-1 = someNixOSConfiguration;
+   *          machine-2 = ...;
+   *        }
+   *      }
+   *
+   * Result:
+   *   A derivation that runs the VM test.
+   *
+   * For the interaction between Nixpkgs and NixOS configuration
+   * consult the pkgs.nixos function documentation.
+   */
+  nixosTest =
+    let
+      /* The nixos/lib/testing.nix module, preapplied with arguments that
+       * make sense for this evaluation of Nixpkgs.
+       */
+      nixosTesting =
+        (import ../../nixos/lib/testing.nix {
+          inherit (pkgs.stdenv.hostPlatform) system;
+          inherit pkgs;
+          extraConfigurations = [(
+            { lib, ... }: {
+              config.nixpkgs.pkgs = lib.mkDefault pkgs;
+            }
+          )];
+        });
+    in
+      test:
+        let
+          loadedTest = if builtins.typeOf test == "path"
+                       then import test
+                       else test;
+          calledTest = if pkgs.lib.isFunction loadedTest
+                       then callPackage loadedTest {}
+                       else loadedTest;
+        in
+          nixosTesting.makeTest calledTest;
+
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nixdoc = callPackage ../tools/nix/nixdoc {};
