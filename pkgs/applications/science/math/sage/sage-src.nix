@@ -3,14 +3,14 @@
 , fetchpatch
 }:
 stdenv.mkDerivation rec {
-  version = "8.4.beta5";
+  version = "8.4.beta6";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0dzmlm7sbqnapmq4k1qz6f49m731rfsclyvrvqnjpp1abbnw2x7b";
+    sha256 = "1fh4xrh0rmlqgsjag24jg5xppkla0y4rp2n7ah5kb9c6d4c7sp8z";
   };
 
   nixPatches = [
@@ -47,13 +47,6 @@ stdenv.mkDerivation rec {
       name = "lcalc-c++11.patch";
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
       sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
-    })
-
-    # https://trac.sagemath.org/ticket/26117
-    (fetchpatch {
-      name = "sympy-1.2.patch";
-      url = "https://git.sagemath.org/sage.git/patch?id2=8.4.beta2&id=d94a0a3a3fb4aec05a6f4d95166d90c284f05c36";
-      sha256 = "0an2xl1pp3jg36kgg2m1vb7sns7rprk1h3d0qy1gxwdab6i7qnvi";
     })
   ];
 
