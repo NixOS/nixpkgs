@@ -57,6 +57,7 @@ self: super: {
   primitive = self.primitive_0_6_4_0;
   tagged = self.tagged_0_8_6;
   unordered-containers = dontCheck super.unordered-containers;
+  lens = dontCheck super.lens;    # avoid depending on broken polyparse
 
   # Over-specified constraints.
   async = doJailbreak super.async;                           # base >=4.3 && <4.12, stm >=2.2 && <2.5
