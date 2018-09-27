@@ -19,15 +19,15 @@ in stdenv.mkDerivation rec {
 
   srcs = [
     (fetchFromGitHub {
+      owner = "dtschump";
+      repo = "gmic";
+      rev = "3e9600c5c99cca3b389099909fc3a231e0a69d8e";
+      sha256 = "1yg9ri3n07drv8gz4x0mn39ryi801ibl26jaza47m19ma893m8fi";})
+    (fetchFromGitHub {
       owner = "c-koi";
       repo = "gmic-qt";
       rev = "9e992cff2db418032b849458f5c9443267c7162c";
       sha256= "0j9wqlq67dwzir36yg58xy5lbblwizvgcvlmzcv9d6l901d5ayf3";})
-    (fetchFromGitHub {
-      owner ="dtschump";
-      repo = "gmic";
-      rev = "3e9600c5c99cca3b389099909fc3a231e0a69d8e";
-      sha256 = "1yg9ri3n07drv8gz4x0mn39ryi801ibl26jaza47m19ma893m8fi";})
   ];
 
   sourceRoot = "gmic-${gmic-version}";
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     fftw zlib libjpeg libtiff libpng opencv openexr graphicsmagick
-  ] ++ stdenv.lib.optionals withGimpPlugin [ gimp gimp.gtk ];
+  ];
 
   #cmakeFlags = [
   #  "-DBUILD_LIB_STATIC=OFF"
