@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, ninja, pkgconfig, qt5
 , opencv, openexr, graphicsmagick, fftw, zlib, libjpeg, libtiff, libpng
-, curl, krita
+, curl, krita, gdk_pixbuf, cairo
 , fetchgit, withGimpPlugin ? true, gimp }:
 
 let
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     chmod -R +w gmic gmic_qt
     ln -s ${CImg} CImg
 
-    cp ${gmic_stdlib} gmic/gmic_stdlib.h
+    cp ${gmic_stdlib} gmic/src/gmic_stdlib.h
 
     make -C gmic/src CImg.h gmic_stdlib.h
     cd gmic_qt
@@ -60,10 +60,11 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    qt5.qtbase qt5.qttools gimp fftw zlib libjpeg libtiff libpng opencv openexr graphicsmagick curl krita
+    qt5.qtbase qt5.qttools gimp gdk_pixbuf fftw zlib libjpeg libtiff libpng
+    opencv openexr graphicsmagick curl cairo krita
   ];
 
-  qmakeFlags = [ "HOST=krita" ];
+  cmakeFlags = [ "-DGMIC_QT_HOST=krita" ];
 
   installPhase = ''
     mkdir -p $out/bin;
