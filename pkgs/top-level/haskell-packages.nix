@@ -80,13 +80,17 @@ in {
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghcjs = compiler.ghcjs84;
-    ghcjs710 = packages.ghc7103.callPackage ../development/compilers/ghcjs/7.10 {
+    # Use `import` because `callPackage inside`.
+    ghcjs710 = import ../development/compilers/ghcjs/7.10 {
       bootPkgs = packages.ghc7103;
       inherit (pkgs) cabal-install;
+      inherit (buildPackages) fetchgit fetchFromGitHub;
     };
-    ghcjs80 = packages.ghc802.callPackage ../development/compilers/ghcjs/8.0 {
+    # `import` on purpose; see above.
+    ghcjs80 = import ../development/compilers/ghcjs/8.0 {
       bootPkgs = packages.ghc802;
       inherit (pkgs) cabal-install;
+      inherit (buildPackages) fetchgit fetchFromGitHub;
     };
     ghcjs82 = callPackage ../development/compilers/ghcjs-ng {
       bootPkgs = packages.ghc822;
