@@ -54,6 +54,8 @@ self: super: {
   hspec-discover = self.hspec-discover_2_5_7;
   hspec-meta = self.hspec-meta_2_5_6;
   hspec-meta_2_5_6 = super.hspec-meta_2_5_6.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
+  JuicyPixels = self.JuicyPixels_3_3_1;
+  polyparse = markBrokenVersion "1.12" super.polyparse;
   primitive = self.primitive_0_6_4_0;
   tagged = self.tagged_0_8_6;
   unordered-containers = dontCheck super.unordered-containers;
@@ -66,7 +68,6 @@ self: super: {
   hashable-time = doJailbreak super.hashable-time;           # base >=4.7 && <4.12
   integer-logarithms = doJailbreak super.integer-logarithms; # base >=4.3 && <4.12
   optparse-applicative = doJailbreak super.optparse-applicative;   # https://github.com/pcapriotti/optparse-applicative/issues/319
-  polyparse = markBrokenVersion "1.12" super.polyparse;      # version 1.12 fails to compile
   tar = doJailbreak super.tar;                               # containers >=0.2 && <0.6
   test-framework = doJailbreak super.test-framework;         # containers >=0.1 && <0.6
 
