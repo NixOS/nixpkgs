@@ -69,4 +69,8 @@ self: super: {
   tar = doJailbreak super.tar;                               # containers >=0.2 && <0.6
   test-framework = doJailbreak super.test-framework;         # containers >=0.1 && <0.6
 
+  # https://github.com/haskell/fgl/issues/79
+  # https://github.com/haskell/fgl/issues/81
+  fgl = appendPatch super.fgl ./patches/fgl-monad-fail.patch;
+
 }
