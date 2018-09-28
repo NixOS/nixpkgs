@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
     owner = "dtschump";
     repo = "gmic";
     rev = "v.${version}";
-    sha256 = "0f69r460lyfb021m7bs8s4rxa3png51cbp1izywsy3sprjd1s57p";
+    sha256 = "1yg9ri3n07drv8gz4x0mn39ryi801ibl26jaza47m19ma893m8fi";
   };
 
   gmic_qt = fetchFromGitHub {
