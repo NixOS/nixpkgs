@@ -39,6 +39,7 @@
 , "hipache"
 , "htmlhint"
 , "html-minifier"
+, "http-server"
 , "ionic"
 , "ios-deploy"
 , "istanbul"
