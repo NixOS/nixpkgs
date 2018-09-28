@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ bos doc-ock-html doc-ock-xml ];
 
+  configurePhase = "ocaml bin/set-etc bin/odoc_etc.ml $out/etc/odoc";
+
   inherit (dune) installPhase;
 
   meta = {
