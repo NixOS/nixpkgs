@@ -1136,11 +1136,11 @@ let
   }) // {inherit ;};
 
   libxcb = (mkDerivation "libxcb" {
-    name = "libxcb-1.13";
+    name = "libxcb-1.13.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.13.tar.bz2;
-      sha256 = "1ahxhmdqp4bhb90zmc275rmf5wixqra4bnw9pqnzyl1w3598g30q";
+      url = http://xcb.freedesktop.org/dist/libxcb-1.13.1.tar.bz2;
+      sha256 = "1i27lvrcsygims1pddpl5c4qqs6z715lm12ax0n3vx0igapvg7x8";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
