@@ -11,6 +11,7 @@ let
     steam-runtime = callPackage ./runtime.nix { };
     steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };
     steam = callPackage ./steam.nix { };
+    steam-udev = callPackage ./steam-udev.nix { };
     steam-fonts = callPackage ./fonts.nix { };
     steam-chrootenv = callPackage ./chrootenv.nix {
       glxinfo-i686 = pkgs.pkgsi686Linux.glxinfo;
