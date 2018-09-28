@@ -25,6 +25,8 @@ in stdenv.mkDerivation rec {
       EOF
       chmod +x $out/bin/steamdeps
     ''}
+    install -d $out/lib/udev/rules.d
+    install -m644 lib/udev/rules.d/*.rules $out/lib/udev/rules.d
   '';
 
   meta = with stdenv.lib; {
