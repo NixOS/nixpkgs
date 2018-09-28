@@ -1,10 +1,19 @@
-{ stdenv, ocaml, findlib, dune, lwt }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, lwt }:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "lwt_log is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
-  version = "1.0.0";
+  version = "1.1.0";
   name = "ocaml${ocaml.version}-lwt_log-${version}";
 
-  inherit (lwt) src;
+  src = fetchFromGitHub {
+    owner = "aantron";
+    repo = "lwt_log";
+    rev = version;
+    sha256 = "1c58gkqfvyf2j11jwj2nh4iq999wj9xpnmr80hz9d0nk9fv333pi";
+  };
 
   buildInputs = [ ocaml findlib dune ];
 
