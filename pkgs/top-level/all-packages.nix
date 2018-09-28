@@ -2320,6 +2320,8 @@ with pkgs;
 
   tealdeer = callPackage ../tools/misc/tealdeer { };
 
+  teamocil = callPackage ../tools/misc/teamocil { };
+
   uudeview = callPackage ../tools/misc/uudeview { };
 
   uutils-coreutils = callPackage ../tools/misc/uutils-coreutils {
