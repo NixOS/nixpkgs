@@ -3781,6 +3781,8 @@ with pkgs;
 
   libfann = callPackage ../development/libraries/libfann { };
 
+  libgaminggear = callPackage ../development/libraries/libgaminggear { };
+
   libipfix = callPackage ../development/libraries/libipfix { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
@@ -14658,6 +14660,8 @@ with pkgs;
   riscv-pk-with-kernel = riscv-pk.override {
     payload = "${linux_riscv}/vmlinux";
   };
+
+  roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
