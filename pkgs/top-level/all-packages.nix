@@ -16433,6 +16433,8 @@ with pkgs;
 
   flmsg = callPackage ../applications/misc/flmsg { };
 
+  flrig = callPackage ../applications/misc/flrig { };
+
   flwrap = callPackage ../applications/misc/flwrap { };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
