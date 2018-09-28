@@ -10735,6 +10735,8 @@ with pkgs;
 
   libiec61883 = callPackage ../development/libraries/libiec61883 { };
 
+  libimagequant = callPackage ../development/libraries/libimagequant {};
+
   libinfinity = callPackage ../development/libraries/libinfinity { };
 
   libinput = callPackage ../development/libraries/libinput {
