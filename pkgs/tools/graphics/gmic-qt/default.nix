@@ -49,12 +49,12 @@ in stdenv.mkDerivation rec {
     chmod -R +w gmic gmic_qt
     ln -s ${CImg} CImg
 
+    cp ${gmic_stdlib} gmic/src/gmic_stdlib.h
+
     cd gmic_qt
   '';
 
   preConfigure = ''
-    cp ${gmic_stdlib} gmic/src/gmic_stdlib.h
-
     make -C gmic/src CImg.h gmic_stdlib.h
   '';
 
