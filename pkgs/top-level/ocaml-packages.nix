@@ -238,7 +238,16 @@ let
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
-    eliom = callPackage ../development/ocaml-modules/eliom { };
+    eliom = callPackage ../development/ocaml-modules/eliom {
+      js_of_ocaml-lwt = js_of_ocaml-lwt.override {
+        ocaml_lwt = lwt3;
+        lwt_log = lib.overrideDerivation
+          (lwt_log.override { lwt = lwt3; })
+          (_: { inherit (lwt3) src; });
+      };
+      lwt_react = lwt_react.override { lwt = lwt3; };
+      lwt_ssl = lwt_ssl.override { lwt = lwt3; };
+    };
 
     elpi = callPackage ../development/ocaml-modules/elpi { };
 
@@ -399,25 +408,27 @@ let
     lwt2 = callPackage ../development/ocaml-modules/lwt/legacy.nix { };
 
     lwt3 = if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/lwt { }
+      then callPackage ../development/ocaml-modules/lwt/3.x.nix { }
       else throw "lwt3 is not available for OCaml ${ocaml.version}";
 
-    ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt3 else lwt2;
+    lwt4 = callPackage ../development/ocaml-modules/lwt/4.x.nix { };
+
+    ocaml_lwt = if lib.versionOlder "4.02" ocaml.version then lwt4 else lwt2;
 
     lwt_log = callPackage ../development/ocaml-modules/lwt_log {
-      lwt = lwt3;
+      lwt = lwt4;
     };
 
     lwt_ppx = callPackage ../development/ocaml-modules/lwt/ppx.nix {
-      lwt = lwt3;
+      lwt = ocaml_lwt;
     };
 
     lwt_react = callPackage ../development/ocaml-modules/lwt_react {
-      lwt = lwt3;
+      lwt = ocaml_lwt;
     };
 
     lwt_ssl = callPackage ../development/ocaml-modules/lwt_ssl {
-      lwt = lwt3;
+      lwt = ocaml_lwt;
     };
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
@@ -533,7 +544,10 @@ let
 
     ocplib-simplex = callPackage ../development/ocaml-modules/ocplib-simplex { };
 
-    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server { };
+    ocsigen_server = callPackage ../development/ocaml-modules/ocsigen-server {
+      lwt_react = lwt_react.override { lwt = lwt3; };
+      lwt_ssl = lwt_ssl.override { lwt = lwt3; };
+    };
 
     ocsigen-start = callPackage ../development/ocaml-modules/ocsigen-start { };
 
@@ -543,7 +557,9 @@ let
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
-    ojquery = callPackage ../development/ocaml-modules/ojquery { };
+    ojquery = callPackage ../development/ocaml-modules/ojquery {
+      ocaml_lwt = lwt3;
+    };
 
     omd = callPackage ../development/ocaml-modules/omd { };
 

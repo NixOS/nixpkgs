@@ -1,5 +1,9 @@
 { stdenv, fetchzip, ocaml, findlib, dune, ssl, lwt }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "lwt_ssl is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   version = "1.1.2";
   name = "ocaml${ocaml.version}-lwt_ssl-${version}";
