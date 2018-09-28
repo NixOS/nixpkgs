@@ -42,6 +42,7 @@ let
     targetPrefix = "";
     inherit bootGhcjs;
     inherit (bootGhcjs) version;
+    ghcVersion = bootPkgs.ghc.version;
     isGhcjs = true;
 
     enableShared = true;
