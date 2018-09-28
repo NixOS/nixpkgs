@@ -18,7 +18,10 @@ patchShebangs() {
     local oldInterpreterLine
     local newInterpreterLine
 
-    find "$dir" -type f -perm -0100 | while read f; do
+    [ -e "$dir" ] || return 0
+
+    local f
+    while IFS= read -r -d $'\0' f; do
         isScript "$f" || continue
 
         oldInterpreterLine=$(head -1 "$f" | tail -c+3)
@@ -58,7 +61,7 @@ patchShebangs() {
                 rm "$f.timestamp"
             fi
         fi
-    done
+    done < <(find "$dir" -type f -perm -0100 -print0)
 
     stopNest
 }
