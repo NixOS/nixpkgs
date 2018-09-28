@@ -40,12 +40,16 @@ in {
 
     security.rngd.enable = false;
 
-    # enable hotadding memory
+    # enable hotadding cpu/memory
     services.udev.packages = lib.singleton (pkgs.writeTextFile {
-      name = "hyperv-memory-hotadd-udev-rules";
-      destination = "/etc/udev/rules.d/99-hyperv-memory-hotadd.rules";
+      name = "hyperv-cpu-and-memory-hotadd-udev-rules";
+      destination = "/etc/udev/rules.d/99-hyperv-cpu-and-memory-hotadd.rules";
       text = ''
-        ACTION="add", SUBSYSTEM=="memory", ATTR{state}="online"
+        # Memory hotadd
+        SUBSYSTEM=="memory", ACTION=="add", DEVPATH=="/devices/system/memory/memory[0-9]*", TEST=="state", ATTR{state}="online"
+
+        # CPU hotadd
+        SUBSYSTEM=="cpu", ACTION=="add", DEVPATH=="/devices/system/cpu/cpu[0-9]*", TEST=="online", ATTR{online}="1"
       '';
     });
 
