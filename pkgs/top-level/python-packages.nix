@@ -5278,6 +5278,8 @@ in {
 
   flask_elastic = callPackage ../development/python-modules/flask-elastic { };
 
+  flask-jwt-extended = callPackage ../development/python-modules/flask-jwt-extended { };
+
   flask-limiter = callPackage ../development/python-modules/flask-limiter { };
 
   flask_login = callPackage ../development/python-modules/flask-login { };
