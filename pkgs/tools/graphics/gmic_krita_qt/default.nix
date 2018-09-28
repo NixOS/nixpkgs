@@ -18,8 +18,8 @@ in stdenv.mkDerivation rec {
 
   CImg = fetchgit {
     url = "https://framagit.org/dtschump/CImg";
-    rev = "c523f0026f3b03831c0778335fe7c7661bf9a719";
-    sha256 = "13ja8immpjkm2xskddc920axq2rp4hc2sr5ghgvgy1rshc3lp8i8";
+    rev = "90f5657d8eab7b549ef945103ef680e747385805";
+    sha256 = "1af3dwqq18dkw0lz2gvnlw8y0kc1cw01hnc72rf3pg2wyjcp0pvc";
   };
 
   gmic_stdlib = fetchurl {
