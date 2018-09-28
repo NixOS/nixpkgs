@@ -446,7 +446,9 @@ in
             export NIX_REMOTE=daemon
         fi
       '' + ''
-        export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
+        if [ -e "$HOME/.nix-defexpr/channels" ]; then
+          export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
+        fi
       '';
 
     nix.nrBuildUsers = mkDefault (lib.max 32 cfg.maxJobs);
