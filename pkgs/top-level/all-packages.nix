@@ -14661,6 +14661,8 @@ with pkgs;
     payload = "${linux_riscv}/vmlinux";
   };
 
+  roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
+
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
