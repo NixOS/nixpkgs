@@ -999,6 +999,9 @@ self: super: {
     '';
   });
 
+  # https://github.com/haskell-rewriting/term-rewriting/issues/11
+  term-rewriting = dontCheck (doJailbreak super.term-rewriting);
+
   # https://github.com/nick8325/twee/pull/1
   twee-lib = dontHaddock super.twee-lib;
 
