@@ -2,14 +2,14 @@
 
 let
   traceLog = "/tmp/steam-trace-dependencies.log";
-  version = "1.0.0.51";
+  version = "1.0.0.56";
 
 in stdenv.mkDerivation rec {
   name = "steam-original-${version}";
 
   src = fetchurl {
     url = "http://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz";
-    sha256 = "1ghrfznm9rckm8v87zvh7hx820r5pp7sq575wxwq0fncbyq6sxmz";
+    sha256 = "01jgp909biqf4rr56kb08jkl7g5xql6r2g4ch6lc71njgcsbn5fs";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
