@@ -8,21 +8,16 @@ let
 
   etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
-  etc = pkgs.stdenvNoCC.mkDerivation {
-    name = "etc";
-
-    builder = ./make-etc.sh;
-
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-
-    /* !!! Use toXML. */
-    sources = map (x: x.source) etc';
-    targets = map (x: x.target) etc';
-    modes = map (x: x.mode) etc';
-    users  = map (x: x.user) etc';
-    groups  = map (x: x.group) etc';
+  mktmpfile = x: rec {
+    name = if hasPrefix "/" x.target then x.target else "/" + x.target;
+    value = if x.mode == "symlink" || x.mode == "direct-symlink"
+      then "L+ /etc${name} - - - - ${x.source}"
+      else "C /etc${name} ${x.mode} ${x.user} ${x.group} - ${x.source}";
   };
+  parentDirs = seen:
+    let layer = genAttrs (remove "/" (map dirOf (attrNames seen))) (name: "d /etc${name}");
+    in if layer == {} then seen else parentDirs layer // seen;
+  etc-tmpfiles = pkgs.writeText "etc-tmpfiles" (concatStringsSep "\n" (attrValues (parentDirs (listToAttrs (map mktmpfile etc')))));
 
 in
 
@@ -109,7 +104,7 @@ in
             };
 
             user = mkOption {
-              default = "+${toString config.uid}";
+              default = toString config.uid;
               type = types.str;
               description = ''
                 User name of created file.
@@ -119,7 +114,7 @@ in
             };
 
             group = mkOption {
-              default = "+${toString config.gid}";
+              default = toString config.gid;
               type = types.str;
               description = ''
                 Group name of created file.
@@ -148,13 +143,27 @@ in
 
   config = {
 
-    system.build.etc = etc;
+    system.build.etc-tmpfiles = etc-tmpfiles;
 
     system.activationScripts.etc = stringAfter [ "users" "groups" ]
       ''
         # Set up the statically computed bits of /etc.
         echo "setting up /etc..."
-        ${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl ${./setup-etc.pl} ${etc}/etc
+
+        # migrate previous style of symlink trees
+        if test -e /etc/.clean; then
+          tmpfile=$(mktemp /etc/.created.XXXXXX)
+          source ${./migrate-tmpfiles.sh} > $tmpfile
+          mv $tmpfile /etc/.created
+        fi
+
+        # remove old files from /etc
+        source ${./etc-tmpfiles.sh} ${etc-tmpfiles} /etc/.created |
+          SYSTEMD_LOG_LEVEL=debug ${config.systemd.package}/bin/systemd-tmpfiles --remove -
+
+        # finally, create new files in /etc
+        SYSTEMD_LOG_LEVEL=debug ${config.systemd.package}/bin/systemd-tmpfiles --create ${etc-tmpfiles}
+        ln -sf ${etc-tmpfiles} /etc/.created
       '';
 
   };

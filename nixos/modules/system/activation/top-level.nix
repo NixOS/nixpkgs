@@ -67,7 +67,7 @@ let
       cp ${config.system.build.bootStage2} $out/init
       substituteInPlace $out/init --subst-var-by systemConfig $out
 
-      ln -s ${config.system.build.etc}/etc $out/etc
+      ln -s ${config.system.build.etc-tmpfiles} $out/etc-tmpfiles
       ln -s ${config.system.path} $out/sw
       ln -s "$systemd" $out/systemd
 

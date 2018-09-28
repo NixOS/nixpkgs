@@ -44,12 +44,12 @@ $ nix-build -A system</screen>
    </varlistentry>
    <varlistentry>
     <term>
-     <varname>system.build.etc</varname>
+     <varname>system.build.etc-tmpfiles</varname>
     </term>
     <listitem>
      <para>
-      A tree of symlinks that form the static parts of
-      <filename>/etc</filename>.
+      A <command>tmpfiles.d(5)</command>-formatted file specifying what
+      must be in <filename>/etc</filename>.
      </para>
     </listitem>
    </varlistentry>
