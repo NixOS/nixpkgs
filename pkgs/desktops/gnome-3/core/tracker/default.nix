@@ -1,19 +1,28 @@
-{ stdenv, fetchurl, intltool, meson, ninja, pkgconfig, gobjectIntrospection, python2
+{ stdenv, fetchurl, fetchFromGitLab, intltool, meson, ninja, pkgconfig, gobjectIntrospection, python2
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
 , libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
 , gnome3, icu, libuuid, networkmanager, libsoup, json-glib }:
 
 let
   pname = "tracker";
-  version = "2.1.4";
+  version = "2.1.5";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0xf58zld6pnfa8k7k70rv8ya8g7zqgahz6q4sapwxs6k97d2fgsx";
+  # tarball does not contain map files
+  # https://gitlab.gnome.org/GNOME/tracker/merge_requests/30
+  # src = fetchurl {
+  #   url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+  #   sha256 = "07l6fb6i4pfna2y87rydcxbh6sz88kngapw87vf09fbk6xbvfd5j";
+  # };
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = version;
+    sha256 = "1wg3pndd0j8qkzn9ikzqlcww8r3bd89ydf6fi4ng5k93879j2bqw";
   };
 
   nativeBuildInputs = [
