@@ -16433,6 +16433,8 @@ with pkgs;
 
   flmsg = callPackage ../applications/misc/flmsg { };
 
+  flwrap = callPackage ../applications/misc/flwrap { };
+
   fluidsynth = callPackage ../applications/audio/fluidsynth {
      inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
   };
