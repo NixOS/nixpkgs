@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   unpackPhase = ''
     ar p $src data.tar.xz | tar xJ
   '';
-  buildInputs = [ binutils patchelf makeWrapper ];
+  nativeBuildInputs = [ patchelf makeWrapper ];
+  buildInputs = [ binutils ];
 
   preFixup = with stdenv.lib; let
     lpath = makeLibraryPath [

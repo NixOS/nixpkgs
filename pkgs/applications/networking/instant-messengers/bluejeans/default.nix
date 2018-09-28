@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       sha256 = "0sbv742pzqd2cxn3kq10lfi16jah486i9kyrmi8l1rpb9fhyw2m1";
     };
 
-  buildInputs = [ patchelf rpmextract ];
+  nativeBuildInputs = [ patchelf rpmextract ];
 
   libPath =
     stdenv.lib.makeLibraryPath
