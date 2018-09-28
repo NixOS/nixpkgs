@@ -4003,6 +4003,11 @@
     github = "sztupi";
     name = "Attila Sztupak";
   };
+  t184256 = {
+    email = "monk@unboiled.info";
+    github = "t184256";
+    name = "Alexander Sosedkin";
+  };
   tadfisher = {
     email = "tadfisher@gmail.com";
     github = "tadfisher";
