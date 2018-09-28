@@ -9,24 +9,16 @@ assert postgresSupport -> postgresql != null;
 
 (if stdenv.isAarch64 then overrideCC stdenv gcc6 else stdenv).mkDerivation rec {
   name = "libgda-${version}";
-  version = "5.2.4";
+  version = "5.2.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgda/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "2cee38dd583ccbaa5bdf6c01ca5f88cc08758b9b144938a51a478eb2684b765e";
+    sha256 = "1j4hxhiwr4i8rgbn2ck93y1c2b792sfzlrq7abyjx8h8ik1f9lp3";
   };
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "libgda"; attrPath = "gnome3.libgda"; };
   };
-
-  patches = [
-    (fetchurl {
-      name = "libgda-fix-encoding-of-copyright-headers.patch";
-      url = https://bug787685.bugzilla-attachments.gnome.org/attachment.cgi?id=359901;
-      sha256 = "11qj7f7zsiw8jy18vlwz2prlxpg4iq350sws3qwfwsv0lnmncmfq";
-    })
-  ];
 
   configureFlags = with stdenv.lib; [ "--enable-gi-system-install=no" ]
     ++ (optional (mysqlSupport) "--with-mysql=yes")
