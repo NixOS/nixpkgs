@@ -24,6 +24,7 @@ in stdenv.mkDerivation rec {
 
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
+    # Version should e in sync with gmic. Basically the version string without dots
     url = "http://gmic.eu/gmic_stdlib236.h";
     sha256 = "0q5g87dsn9byd2qqsa9xrsggfb9qv055s3l2gc0jrcvpx2qbza4q";
   };
