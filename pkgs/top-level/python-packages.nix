@@ -5306,23 +5306,7 @@ in {
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
-  flask_sqlalchemy = buildPythonPackage rec {
-    name = "Flask-SQLAlchemy-${version}";
-    version = "2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-SQLAlchemy/${name}.tar.gz";
-      sha256 = "1i9ps5d5snih9xlqhrvmi3qfiygkmqzxh92n25kj4pf89kj4s965";
-    };
-
-    propagatedBuildInputs = with self ; [ flask sqlalchemy ];
-
-    meta = {
-      description = "SQLAlchemy extension for Flask";
-      homepage = http://flask-sqlalchemy.pocoo.org/;
-      license = licenses.bsd3;
-    };
-  };
+  flask_sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 
   flask_testing = callPackage ../development/python-modules/flask-testing { };
 
