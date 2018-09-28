@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    make -C gmic/src CImg.h gmic_stdlib.h
+    make -C ../gmic/src CImg.h gmic_stdlib.h
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
