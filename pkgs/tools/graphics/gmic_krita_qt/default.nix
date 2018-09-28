@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, ninja, pkgconfig, qt5
+{ stdenv, fetchurl, fetchFromGitHub, cmake, ninja, pkgconfig
 , opencv, openexr, graphicsmagick, fftw, zlib, libjpeg, libtiff, libpng
-, curl, krita
+, curl, krita, qtbase, qttools
 , fetchgit }:
 
 let
   version = "2.3.6";
 
 in stdenv.mkDerivation rec {
-  name = "gmic-qt-${version}";
+  name = "gmic_krita_qt-${version}";
 
   gmic-community = fetchFromGitHub {
     owner = "dtschump";
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    qt5.qtbase qt5.qttools fftw zlib libjpeg libtiff libpng
+    qtbase qttools fftw zlib libjpeg libtiff libpng
     opencv openexr graphicsmagick curl krita
   ];
 
