@@ -19,9 +19,7 @@ patchShebangs() {
     local newInterpreterLine
 
     find "$dir" -type f -perm -0100 | while read f; do
-        if ! isScript "$f"; then
-          continue
-        fi
+        isScript "$f" || continue
 
         oldInterpreterLine=$(head -1 "$f" | tail -c+3)
         read -r oldPath arg0 args <<< "$oldInterpreterLine"
