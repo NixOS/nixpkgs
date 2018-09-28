@@ -31,14 +31,14 @@ in stdenv.mkDerivation rec {
   gmic = fetchFromGitHub {
     owner = "dtschump";
     repo = "gmic";
-    rev = "b9a6876684f40852ca39300c9d7e7d676cb81b14";
+    rev = "v.${version}";
     sha256 = "0f69r460lyfb021m7bs8s4rxa3png51cbp1izywsy3sprjd1s57p";
   };
 
   gmic_qt = fetchFromGitHub {
     owner = "c-koi";
     repo = "gmic-qt";
-    rev = "9e992cff2db418032b849458f5c9443267c7162c";
+    rev = "v.${version}";
     sha256= "0j9wqlq67dwzir36yg58xy5lbblwizvgcvlmzcv9d6l901d5ayf3";
   };
 
