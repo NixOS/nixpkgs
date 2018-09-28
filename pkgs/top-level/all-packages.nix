@@ -16431,6 +16431,8 @@ with pkgs;
   flink = callPackage ../applications/networking/cluster/flink { };
   flink_1_5 = flink.override { version = "1.5"; };
 
+  fllog = callPackage ../applications/misc/fllog { };
+
   flmsg = callPackage ../applications/misc/flmsg { };
 
   flrig = callPackage ../applications/misc/flrig { };
