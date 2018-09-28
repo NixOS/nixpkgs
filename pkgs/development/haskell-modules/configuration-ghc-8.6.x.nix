@@ -79,4 +79,10 @@ self: super: {
   # https://github.com/haskell/fgl/issues/81
   fgl = appendPatch super.fgl ./patches/fgl-monad-fail.patch;
 
+  # https://github.com/jgm/texmath/pull/121
+  texmath = appendPatch (doJailbreak super.texmath) (pkgs.fetchpatch
+            { url = https://github.com/jgm/texmath/pull/121.patch;
+              sha256 = "14pz2cpz9rvmy7mlmnz8iz76rsdyv5v442ij2i8k9zrbxj6nai7l";
+            });
+
 }
