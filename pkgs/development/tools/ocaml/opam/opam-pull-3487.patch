@@ -1,0 +1,23 @@
+diff --git a/src/state/shellscripts/bwrap.sh b/src/state/shellscripts/bwrap.sh
+index 6f5d7dbea..3e1a3e1b4 100755
+--- a/src/state/shellscripts/bwrap.sh
++++ b/src/state/shellscripts/bwrap.sh
+@@ -1,4 +1,6 @@
+-#!/bin/bash -ue
++#!/usr/bin/env bash
++
++set -ue
+ 
+ if ! command -v bwrap >/dev/null; then
+     echo "The 'bwrap' command was not found. Install 'bubblewrap' on your system, or" >&2
+@@ -11,7 +13,9 @@ fi
+ 
+ ARGS=(--unshare-net --new-session)
+ ARGS=("${ARGS[@]}" --proc /proc --dev /dev)
+-ARGS=("${ARGS[@]}" --bind /tmp /tmp --tmpfs /run --tmpfs /var)
++ARGS=("${ARGS[@]}" --bind "${TMPDIR:-/tmp}" /tmp)
++ARGS=("${ARGS[@]}" --setenv TMPDIR /tmp --setenv TMP /tmp --setenv TEMPDIR /tmp --setenv TEMP /tmp)
++ARGS=("${ARGS[@]}" --tmpfs /run --tmpfs /var)
+ 
+ add_mounts() {
+     case "$1" in

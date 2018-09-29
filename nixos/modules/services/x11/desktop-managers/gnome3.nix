@@ -110,6 +110,7 @@ in {
     services.gnome3.gnome-terminal-server.enable = mkDefault true;
     services.gnome3.gnome-user-share.enable = mkDefault true;
     services.gnome3.gvfs.enable = true;
+    services.gnome3.rygel.enable = mkDefault true;
     services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
     services.gnome3.tracker.enable = mkDefault true;

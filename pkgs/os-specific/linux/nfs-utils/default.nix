@@ -14,11 +14,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nfs-utils-${version}";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${name}.tar.xz";
-    sha256 = "06av6cjf8h18dpaxh8cd1awsra75zf6s5sj5r2z5g7scbj051ziw";
+    sha256 = "08k36d7l8yqylscnln3p85lcfwi7r7g6n3bnslgmzc1i71wk92zn";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -82,6 +82,8 @@ in stdenv.mkDerivation rec {
     "statedir=$(TMPDIR)"
     "statdpath=$(TMPDIR)"
   ];
+
+  stripDebugList = [ "lib" "libexec" "bin" "etc/systemd/system-generators" ];
 
   postInstall =
     ''

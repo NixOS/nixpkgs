@@ -238,13 +238,13 @@ let
         sha1 = "1b681c21ff84033c826543090689420d187151dc";
       };
     };
-    "chownr-1.0.1" = {
+    "chownr-1.1.1" = {
       name = "chownr";
       packageName = "chownr";
-      version = "1.0.1";
+      version = "1.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/chownr/-/chownr-1.0.1.tgz";
-        sha1 = "e2a75042a9551908bebd25b8523d5f9769d79181";
+        url = "https://registry.npmjs.org/chownr/-/chownr-1.1.1.tgz";
+        sha512 = "j38EvO5+LHX84jlo6h4UzmOwi0UgW61WRyPtJz4qaadK5eY3BTS5TY/S1Stc3Uk2lIM6TPevAlULiEJwie860g==";
       };
     };
     "class-utils-0.3.6" = {
@@ -288,8 +288,17 @@ let
       packageName = "combined-stream";
       version = "1.0.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.6.tgz";
+        url = "http://registry.npmjs.org/combined-stream/-/combined-stream-1.0.6.tgz";
         sha1 = "723e7df6e801ac5613113a7e445a9b69cb632818";
+      };
+    };
+    "combined-stream-1.0.7" = {
+      name = "combined-stream";
+      packageName = "combined-stream";
+      version = "1.0.7";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.7.tgz";
+        sha512 = "brWl9y6vOB1xYPZcpZde3N9zDByXTosAeMDo4p1wzo6UMOX4vumB+TP1RZ76sfE6Md68Q0NJSrE/gbezd4Ul+w==";
       };
     };
     "component-emitter-1.2.1" = {
@@ -1215,7 +1224,7 @@ let
       packageName = "minimist";
       version = "0.0.8";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz";
+        url = "http://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz";
         sha1 = "857fcabfc3397d2625b8228262e86aa7a011b05d";
       };
     };
@@ -1224,7 +1233,7 @@ let
       packageName = "minimist";
       version = "1.2.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz";
+        url = "http://registry.npmjs.org/minimist/-/minimist-1.2.0.tgz";
         sha1 = "a35008b20f41383eec1fb914f4cd5df79a264284";
       };
     };
@@ -1260,7 +1269,7 @@ let
       packageName = "mkdirp";
       version = "0.5.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz";
+        url = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz";
         sha1 = "30057438eac6cf7f8c4767f38648d6697d75c903";
       };
     };
@@ -1282,13 +1291,13 @@ let
         sha512 = "fpoe2T0RbHwBTBUOftAfBPaDEi06ufaUai0mE6Yn1kacc3SnTErfb/h+X94VXzI64rKFHYImXSvdwGGCmwOqCA==";
       };
     };
-    "needle-2.2.2" = {
+    "needle-2.2.4" = {
       name = "needle";
       packageName = "needle";
-      version = "2.2.2";
+      version = "2.2.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/needle/-/needle-2.2.2.tgz";
-        sha512 = "mW7W8dKuVYefCpNzE3Z7xUmPI9wSrSL/1qH31YGMxmSOAnjatS3S9Zv3cmiHrhx3Jkp1SrWWBdOFXjfF48Uq3A==";
+        url = "https://registry.npmjs.org/needle/-/needle-2.2.4.tgz";
+        sha512 = "HyoqEb4wr/rsoaIDfTH2aVL9nWtQqba2/HvMv+++m8u0dz808MaagKILxtfeSN7QU7nvbQ79zk3vYOJp9zsNEA==";
       };
     };
     "nopt-3.0.6" = {
@@ -1575,7 +1584,7 @@ let
       packageName = "readable-stream";
       version = "2.3.6";
       src = fetchurl {
-        url = "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz";
+        url = "http://registry.npmjs.org/readable-stream/-/readable-stream-2.3.6.tgz";
         sha512 = "tQtKA9WIAhBF3+VLAseyMqZeBjW0AHJoxOtYqSUZNJxauErmLbVm2FW1y+J/YA9dUrAC39ITejlZWhVIwawkKw==";
       };
     };
@@ -2398,7 +2407,7 @@ in
       sources."caseless-0.12.0"
       sources."co-4.6.0"
       sources."code-point-at-1.1.0"
-      sources."combined-stream-1.0.6"
+      sources."combined-stream-1.0.7"
       sources."concat-map-0.0.1"
       sources."console-control-strings-1.1.0"
       sources."core-util-is-1.0.2"
@@ -2411,7 +2420,11 @@ in
       sources."fast-deep-equal-1.1.0"
       sources."fast-json-stable-stringify-2.0.0"
       sources."forever-agent-0.6.1"
-      sources."form-data-2.3.2"
+      (sources."form-data-2.3.2" // {
+        dependencies = [
+          sources."combined-stream-1.0.6"
+        ];
+      })
       sources."fs.realpath-1.0.0"
       sources."fstream-1.0.11"
       sources."gauge-2.7.4"
@@ -2518,7 +2531,7 @@ in
       sources."are-we-there-yet-1.1.5"
       sources."balanced-match-1.0.0"
       sources."brace-expansion-1.1.11"
-      sources."chownr-1.0.1"
+      sources."chownr-1.1.1"
       sources."code-point-at-1.1.0"
       sources."concat-map-0.0.1"
       sources."console-control-strings-1.1.0"
@@ -2545,7 +2558,7 @@ in
       sources."minizlib-1.1.0"
       sources."mkdirp-0.5.1"
       sources."ms-2.0.0"
-      sources."needle-2.2.2"
+      sources."needle-2.2.4"
       sources."nopt-4.0.1"
       sources."npm-bundled-1.0.5"
       sources."npm-packlist-1.1.11"
@@ -2593,10 +2606,10 @@ in
   pnpm = nodeEnv.buildNodePackage {
     name = "pnpm";
     packageName = "pnpm";
-    version = "2.13.6";
+    version = "2.16.2";
     src = fetchurl {
-      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.13.6.tgz";
-      sha512 = "X8zmtUzmEIa/QMg0t0eeq6hSd7kmL5Zvneqpj3Tcbyn2g/FEFTPb9kaghR+DW1WdViOE51eo4ECLK7uY9oogkA==";
+      url = "https://registry.npmjs.org/pnpm/-/pnpm-2.16.2.tgz";
+      sha512 = "MYb5lDNvYE3f0UfbZqV6HSMHWOiVveTRbT7+f3IocRgLaEIJTEy1QTuuXOUUuAmbSOkjJ11euYb+qy4HTNZaUg==";
     };
     buildInputs = globalBuildInputs;
     meta = {

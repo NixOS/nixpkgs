@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
@@ -10,8 +10,8 @@
 , getent
 , buildPackages
 , withSelinux ? false, libselinux
-, withLibseccomp ? libseccomp.meta.available, libseccomp
-, withKexectools ? kexectools.meta.available, kexectools
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
 let
@@ -26,8 +26,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "67c553805a9ebee2dce7c3a350b4abd4d7a489c2";
-    sha256 = "114vq71gcddi4qm2hyrj5jsas9599s0h5mg65jfpvxhfyaw54cpv";
+    rev = "21efe60844fda21039c052442076dabcf8643a90";
+    sha256 = "0aqifjsb0kaxnqy5nlmzvyzgfd99lm60k1494lbnnk8ahdh8ab07";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = [ ./monotone-1.1-Adapt-to-changes-in-pcre-8.42.patch ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ boost zlib botan libidn lua pcre sqlite expect 
+  buildInputs = [ boost zlib botan libidn lua pcre sqlite expect
     openssl gmp bzip2 ];
 
   postInstall = ''
@@ -33,9 +33,10 @@ stdenv.mkDerivation rec {
 
   #doCheck = true; # some tests fail (and they take VERY long)
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A free distributed version control system";
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.raskin ];
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

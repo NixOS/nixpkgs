@@ -30,7 +30,7 @@ let
 
   /* for compatibility with passing extraPythonPackages as a list; added 2018-07-11 */
   compatFun = funOrList: (if builtins.isList funOrList then
-    (_: builtins.trace "passing a list as extraPythonPackages to the neovim wrapper is deprecated, pass a function as to python.withPackages instead" funOrList)
+    (_: lib.warn "passing a list as extraPythonPackages to the neovim wrapper is deprecated, pass a function as to python.withPackages instead" funOrList)
     else funOrList);
   extraPythonPackagesFun = compatFun extraPythonPackages;
   extraPython3PackagesFun = compatFun extraPython3Packages;

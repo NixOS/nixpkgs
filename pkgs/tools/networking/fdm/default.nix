@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux;
     homepage = https://github.com/nicm/fdm;
     downloadPage = https://github.com/nicm/fdm/releases;
+    license = licenses.isc;
   };
 }

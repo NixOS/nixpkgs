@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON";
 
   nativeBuildInputs = [
-    # https://www.mail-archive.com/kicad-developers@lists.launchpad.net/msg29840.html
-    (cmake.override {majorVersion = "3.10";})
+    cmake
     doxygen
     pkgconfig
     wrapGAppsHook

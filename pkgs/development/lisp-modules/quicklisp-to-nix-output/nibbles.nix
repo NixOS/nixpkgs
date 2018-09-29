@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''nibbles'';
-  version = ''20180430-git'';
+  version = ''20180831-git'';
 
   parasites = [ "nibbles/tests" ];
 
@@ -10,8 +10,8 @@ rec {
   deps = [ args."rt" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/nibbles/2018-04-30/nibbles-20180430-git.tgz'';
-    sha256 = ''1z79x7w0qp66vdxq7lac1jkc56brmpy0x0wmm9flf91d8y9lh34g'';
+    url = ''http://beta.quicklisp.org/archive/nibbles/2018-08-31/nibbles-20180831-git.tgz'';
+    sha256 = ''0z25f2z54pnz1s35prqvnl42bv0xqh50y94bds1jwfv0wvfq27la'';
   };
 
   packageName = "nibbles";
@@ -21,8 +21,8 @@ rec {
 }
 /* (SYSTEM nibbles DESCRIPTION
     A library for accessing octet-addressed blocks of data in big- and little-endian orders
-    SHA256 1z79x7w0qp66vdxq7lac1jkc56brmpy0x0wmm9flf91d8y9lh34g URL
-    http://beta.quicklisp.org/archive/nibbles/2018-04-30/nibbles-20180430-git.tgz
-    MD5 8d8d1cc72ce11253d01854219ea20a06 NAME nibbles FILENAME nibbles DEPS
-    ((NAME rt FILENAME rt)) DEPENDENCIES (rt) VERSION 20180430-git SIBLINGS NIL
+    SHA256 0z25f2z54pnz1s35prqvnl42bv0xqh50y94bds1jwfv0wvfq27la URL
+    http://beta.quicklisp.org/archive/nibbles/2018-08-31/nibbles-20180831-git.tgz
+    MD5 4badf1f066a59c3c270d40be1116ecd5 NAME nibbles FILENAME nibbles DEPS
+    ((NAME rt FILENAME rt)) DEPENDENCIES (rt) VERSION 20180831-git SIBLINGS NIL
     PARASITES (nibbles/tests)) */

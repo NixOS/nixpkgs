@@ -60,18 +60,18 @@
     dependencies = ["jaro_winkler" "parallel" "parser" "powerpack" "rainbow" "ruby-progressbar" "unicode-display_width"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0s2qlrdx2f7653kmzwm58c8izyvgyjrzjrz76l2b005f2816kji6";
+      sha256 = "0hz4slfisbq8nqs83mvvh6yv5hb7z7zx9fxvv9cka6b9ldvr2i2b";
       type = "gem";
     };
-    version = "0.58.1";
+    version = "0.59.1";
   };
   ruby-progressbar = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1igh1xivf5h5g3y5m9b4i4j2mhz2r43kngh4ww3q1r80ch21nbfk";
+      sha256 = "1cv2ym3rl09svw8940ny67bav7b2db4ms39i4raaqzkf59jmhglk";
       type = "gem";
     };
-    version = "1.9.0";
+    version = "1.10.0";
   };
   unicode-display_width = {
     source = {

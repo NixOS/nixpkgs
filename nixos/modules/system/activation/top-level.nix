@@ -93,48 +93,52 @@ let
       ${config.system.extraSystemBuilderCmds}
     '';
 
-  # Handle assertions
-
-  failed = map (x: x.message) (filter (x: !x.assertion) config.assertions);
-
-  showWarnings = res: fold (w: x: builtins.trace "[1;31mwarning: ${w}[0m" x) res config.warnings;
-
   # Putting it all together.  This builds a store path containing
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  baseSystem = showWarnings (
-    if [] == failed then pkgs.stdenvNoCC.mkDerivation {
-      name = let hn = config.networking.hostName;
-                 nn = if (hn != "") then hn else "unnamed";
-          in "nixos-system-${nn}-${config.system.nixos.label}";
-      preferLocalBuild = true;
-      allowSubstitutes = false;
-      buildCommand = systemBuilder;
+  baseSystem = pkgs.stdenvNoCC.mkDerivation {
+    name = let hn = config.networking.hostName;
+               nn = if (hn != "") then hn else "unnamed";
+        in "nixos-system-${nn}-${config.system.nixos.label}";
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+    buildCommand = systemBuilder;
 
-      inherit (pkgs) utillinux coreutils;
-      systemd = config.systemd.package;
+    inherit (pkgs) utillinux coreutils;
+    systemd = config.systemd.package;
+    shell = "${pkgs.bash}/bin/sh";
 
-      inherit children;
-      kernelParams = config.boot.kernelParams;
-      installBootLoader =
-        config.system.build.installBootLoader
-        or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
-      activationScript = config.system.activationScripts.script;
-      nixosLabel = config.system.nixos.label;
+    inherit children;
+    kernelParams = config.boot.kernelParams;
+    installBootLoader =
+      config.system.build.installBootLoader
+      or "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+    activationScript = config.system.activationScripts.script;
+    nixosLabel = config.system.nixos.label;
 
-      configurationName = config.boot.loader.grub.configurationName;
+    configurationName = config.boot.loader.grub.configurationName;
 
-      # Needed by switch-to-configuration.
+    # Needed by switch-to-configuration.
 
-      perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
-  } else throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failed)}");
+    perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
+  };
+
+  # Handle assertions and warnings
+
+  failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+
+  showWarnings = res: fold (w: x: builtins.trace "[1;31mwarning: ${w}[0m" x) res config.warnings;
+
+  baseSystemAssertWarn = if failedAssertions != []
+    then throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
+    else showWarnings baseSystem;
 
   # Replace runtime dependencies
   system = fold ({ oldDependency, newDependency }: drv:
       pkgs.replaceDependency { inherit oldDependency newDependency drv; }
-    ) baseSystem config.system.replaceRuntimeDependencies;
+    ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
 
 in
 

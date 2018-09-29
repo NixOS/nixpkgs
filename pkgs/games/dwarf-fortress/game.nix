@@ -42,9 +42,6 @@ let
 
 in
 
-assert dwarf-fortress-unfuck != null ->
-       dwarf-fortress-unfuck.dfVersion == dfVersion;
-
 stdenv.mkDerivation {
   name = "dwarf-fortress-${dfVersion}";
 

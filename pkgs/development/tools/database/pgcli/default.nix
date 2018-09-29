@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "pgcli-${version}";
-  version = "1.6.0";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
-    sha256 = "0f1zv4kwi2991pclf8chrhgjwf8jkqxdh5ndc9qx6igh56iyyncz";
-    rev = "v${version}";
-    repo = "pgcli";
     owner = "dbcli";
+    repo = "pgcli";
+    rev = "v${version}";
+    sha256 = "1qcbv2w036l0gc0li3jpa6amxzqmhv8d1q6wv4pfh0wvl17hqv9r";
   };
 
   buildInputs = with pythonPackages; [ pytest mock ];
@@ -18,14 +18,9 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with pythonPackages; [
-    click configobj humanize prompt_toolkit psycopg2
-    pygments sqlparse pgspecial setproctitle
+    cli-helpers click configobj humanize prompt_toolkit psycopg2
+    pygments sqlparse pgspecial setproctitle keyring
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py --replace "==" ">="
-    rm tests/test_rowlimit.py
-  '';
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";
@@ -35,5 +30,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     homepage = https://pgcli.com;
     license = licenses.bsd3;
+    maintainers = with maintainers; [ dywedir ];
   };
 }

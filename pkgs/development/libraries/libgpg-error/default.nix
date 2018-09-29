@@ -17,20 +17,12 @@
   };
 in stdenv.mkDerivation (rec {
   name = "libgpg-error-${version}";
-  version = "1.28";
+  version = "1.32";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "0jfsfnh9bxlxiwxws60yah4ybjw2hshmvqp31pri4m4h8ivrbnry";
+    sha256 = "1jj08ns4sh1hmafqp1giskvdicdz18la516va26jycy27kkwaif3";
   };
-
-  patches = [
-    # Fix builds on ARM, AArch64
-    (fetchpatch {
-      url = "https://github.com/gpg/libgpg-error/commit/791177de023574223eddf7288eb7c5a0721ac623.patch";
-      sha256 = "0vqfw0ak1j37wf6sk9y9vmdyk3kxdxkldhs0bv2waa76s11cmdx0";
-    })
-  ];
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure

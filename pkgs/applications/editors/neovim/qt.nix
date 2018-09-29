@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "neovim-qt-${version}";
-  version = "0.2.9";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner  = "equalsraf";
     repo   = "neovim-qt";
     rev    = "v${version}";
-    sha256 = "014zqfbbv7q85z64h1iw88l37vhrvhjv7xxd0a76j7d1m2769kqs";
+    sha256 = "0hq3w9d6qbzf0j7zm3ls0wpvnab64kypb4i0bhmsnk605mvx63r4";
   };
 
   cmakeFlags = [

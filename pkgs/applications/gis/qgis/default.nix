@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+{ stdenv, fetchurl, fetchpatch, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python2Packages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper
 , qjson, qca2, txt2tags, openssl, darwin, pkgconfig
 , withGrass ? true, grass, IOKit, ApplicationServices
@@ -36,6 +36,14 @@ stdenv.mkDerivation rec {
     url = "https://qgis.org/downloads/${name}.tar.bz2";
     sha256 = "00b3a2hfn3i7bdx7x96vz2nj0976vpkhid4ss7n8c33fdvw3k82a";
   };
+
+  patches = [
+    # https://github.com/qgis/QGIS/pull/7765
+    (fetchpatch {
+      url = "https://github.com/qgis/QGIS/commit/6b61ef361a77f057dc29eb07463007bd9012b253.patch";
+      sha256 = "1xibcahm18n7nxff1xvwwzjf505hvhiw5dk12is7aclv49h0rdf7";
+    })
+  ];
 
   # CMAKE_FIND_FRAMEWORK=never stops the installer choosing system
   # installed frameworks

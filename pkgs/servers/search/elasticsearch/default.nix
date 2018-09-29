@@ -29,7 +29,8 @@ stdenv.mkDerivation (rec {
     sed -i "s|ES_CLASSPATH=\"\$ES_HOME/lib/\*\"|ES_CLASSPATH=\"$out/lib/*\"|" ./bin/elasticsearch-env
   '';
 
-  buildInputs = [ makeWrapper jre_headless utillinux ];
+  buildInputs = [ makeWrapper jre_headless utillinux ]
+             ++ optional enableUnfree zlib;
 
   installPhase = ''
     mkdir -p $out

@@ -21,9 +21,10 @@ stdenv.mkDerivation rec {
     cp ent $out/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Pseudorandom Number Sequence Test Program";
     homepage = http://www.fourmilab.ch/random/;
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
+    license = licenses.publicDomain;
   };
 }

@@ -1,21 +1,24 @@
-{stdenv, fetchFromGitHub, buildOcaml, opaline,
- cppo, ounit, ppx_deriving}:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, opaline
+, cppo, ounit, ppx_deriving
+}:
 
-buildOcaml rec {
-  name = "ppx_import";
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "ppx_import is not available for OCaml ${ocaml.version}"
+else
 
-  version = "1.4";
+stdenv.mkDerivation rec {
+  name = "ocaml${ocaml.version}-ppx_import-${version}";
 
-  minimumSupportedOcamlVersion = "4.02";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = "ppx_import";
     rev = "v${version}";
-    sha256 = "14c2lp7r9080c4hsb1y1drbxxx3v44b7ib5wfh3kkh3f1jfsjwbk";
+    sha256 = "1lf5lfp6bl5g4gdszaa6k6pkyh3qyhbarg5m1j0ai3i8zh5qg09d";
   };
 
-  buildInputs = [ cppo ounit ppx_deriving opaline ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo ounit ppx_deriving opaline ];
 
   doCheck = true;
   checkTarget = "test";
@@ -25,5 +28,7 @@ buildOcaml rec {
   meta = with stdenv.lib; {
     description = "A syntax extension that allows to pull in types or signatures from other compiled interface files";
     license = licenses.mit;
+    inherit (ocaml.meta) platforms;
+    inherit (src.meta) homepage;
   };
 }

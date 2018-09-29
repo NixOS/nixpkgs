@@ -1,69 +1,87 @@
-{ stdenv, lib, fetchurl, makeWrapper,
-  ocaml, unzip, ncurses, curl, aspcud
+{ stdenv, lib, fetchurl, makeWrapper, getconf,
+  ocaml, unzip, ncurses, curl, aspcud, bubblewrap
 }:
 
-assert lib.versionAtLeast ocaml.version "3.12.1";
+assert lib.versionAtLeast ocaml.version "4.02.3";
 
 let
   srcs = {
+    cmdliner = fetchurl {
+      url = "http://erratique.ch/software/cmdliner/releases/cmdliner-1.0.2.tbz";
+      sha256 = "18jqphjiifljlh9jg8zpl6310p3iwyaqphdkmf89acyaix0s4kj1";
+    };
+    cppo = fetchurl {
+      url = "https://github.com/mjambon/cppo/archive/v1.6.4.tar.gz";
+      sha256 = "0jdb7d21lfa3ck4k59mrqs5pljzq5rb504jq57nnrc6klljm42j7";
+    };
     cudf = fetchurl {
-      url = "https://gforge.inria.fr/frs/download.php/file/33593/cudf-0.7.tar.gz";
-      sha256 = "92c8a9ed730bbac73f3513abab41127d966c9b9202ab2aaffcd02358c030a701";
-    };
-    extlib = fetchurl {
-      url = "http://ocaml-extlib.googlecode.com/files/extlib-1.5.3.tar.gz";
-      sha256 = "c095eef4202a8614ff1474d4c08c50c32d6ca82d1015387785cf03d5913ec021";
-    };
-    ocaml_re = fetchurl {
-      url = "https://github.com/ocaml/ocaml-re/archive/ocaml-re-1.2.0.tar.gz";
-      sha256 = "a34dd9d6136731436a963bbab5c4bbb16e5d4e21b3b851d34887a3dec451999f";
-    };
-    ocamlgraph = fetchurl {
-      url = "http://ocamlgraph.lri.fr/download/ocamlgraph-1.8.5.tar.gz";
-      sha256 = "d167466435a155c779d5ec25b2db83ad851feb42ebc37dca8ffa345ddaefb82f";
+      url = "https://gforge.inria.fr/frs/download.php/36602/cudf-0.9.tar.gz";
+      sha256 = "0771lwljqwwn3cryl0plny5a5dyyrj4z6bw66ha5n8yfbpcy8clr";
     };
     dose3 = fetchurl {
-      url = "https://gforge.inria.fr/frs/download.php/file/34277/dose3-3.3.tar.gz";
-      sha256 = "8dc4dae9b1a81bb3a42abb283df785ba3eb00ade29b13875821c69f03e00680e";
+      url = "https://gforge.inria.fr/frs/download.php/file/36063/dose3-5.0.1.tar.gz";
+      sha256 = "00yvyfm4j423zqndvgc1ycnmiffaa2l9ab40cyg23pf51qmzk2jm";
     };
-    cmdliner = fetchurl {
-      url = "http://erratique.ch/software/cmdliner/releases/cmdliner-0.9.7.tbz";
-      sha256 = "9c19893cffb5d3c3469ee0cce85e3eeeba17d309b33b9ace31aba06f68f0bf7a";
+    extlib = fetchurl {
+      url = "http://ygrek.org.ua/p/release/ocaml-extlib/extlib-1.7.5.tar.gz";
+      sha256 = "19slqf5bdj0rrph2w41giwmn6df2qm07942jn058pjkjrnk30d4s";
     };
-    uutf = fetchurl {
-      url = "http://erratique.ch/software/uutf/releases/uutf-0.9.3.tbz";
-      sha256 = "1f364f89b1179e5182a4d3ad8975f57389d45548735d19054845e06a27107877";
+    jbuilder = fetchurl {
+      url = "https://github.com/ocaml/dune/releases/download/1.0+beta20/jbuilder-1.0.beta20.tbz";
+      sha256 = "07hl9as5llffgd6hbw41rs76i1ibgn3n9r0dba5h0mdlkapcwb10";
     };
-    jsonm = fetchurl {
-      url = "http://erratique.ch/software/jsonm/releases/jsonm-0.9.1.tbz";
-      sha256 = "3fd4dca045d82332da847e65e981d8b504883571d299a3f7e71447d46bc65f73";
+    mccs = fetchurl {
+      url = "https://github.com/AltGr/ocaml-mccs/archive/1.1+8.tar.gz";
+      sha256 = "0xavfvxfrcf3lmry8ymma1yzy0hw3ijbx94c9zq3pzlwnylrapa4";
+    };
+    ocamlgraph = fetchurl {
+      url = "http://ocamlgraph.lri.fr/download/ocamlgraph-1.8.8.tar.gz";
+      sha256 = "0m9g16wrrr86gw4fz2fazrh8nkqms0n863w7ndcvrmyafgxvxsnr";
+    };
+    opam-file-format = fetchurl {
+      url = "https://github.com/ocaml/opam-file-format/archive/2.0.0-rc2.tar.gz";
+      sha256 = "1mgk08msp7hxn0hs0m82vky3yv6hcq4pw5402b3vhx4c49431jsb";
+    };
+    re = fetchurl {
+      url = "https://github.com/ocaml/ocaml-re/releases/download/1.7.3/re-1.7.3.tbz";
+      sha256 = "0nv933qfl8y9i19cqvhsalwzif3dkm28vg478rpnr4hgfqjlfryr";
+    };
+    result = fetchurl {
+      url = "https://github.com/janestreet/result/releases/download/1.3/result-1.3.tbz";
+      sha256 = "1lrnbxdq80gbhnp85mqp1kfk0bkh6q1c93sfz2qgnq2qyz60w4sk";
     };
     opam = fetchurl {
-      url = "https://github.com/ocaml/opam/archive/1.2.2.zip";
-      sha256 = "c590ce55ae69ec74f46215cf16a156a02b23c5f3ecb22f23a3ad9ba3d91ddb6e";
+      url = "https://github.com/ocaml/opam/archive/2.0.0.zip";
+      sha256 = "0m4ilsldrfkkn0vlvl119bk76j2pwvqvdi8mpg957z4kqflfbfp8";
     };
   };
 in stdenv.mkDerivation rec {
   name = "opam-${version}";
-  version = "1.2.2";
+  version = "2.0.0";
 
-  buildInputs = [ unzip curl ncurses ocaml makeWrapper ];
+  buildInputs = [ unzip curl ncurses ocaml makeWrapper getconf ] ++ lib.optional stdenv.isLinux bubblewrap;
 
   src = srcs.opam;
 
   postUnpack = ''
-    ln -sv ${srcs.cudf} $sourceRoot/src_ext/${srcs.cudf.name}
-    ln -sv ${srcs.extlib} $sourceRoot/src_ext/${srcs.extlib.name}
-    ln -sv ${srcs.ocaml_re} $sourceRoot/src_ext/${srcs.ocaml_re.name}
-    ln -sv ${srcs.ocamlgraph} $sourceRoot/src_ext/${srcs.ocamlgraph.name}
-    ln -sv ${srcs.dose3} $sourceRoot/src_ext/${srcs.dose3.name}
-    ln -sv ${srcs.cmdliner} $sourceRoot/src_ext/${srcs.cmdliner.name}
-    ln -sv ${srcs.uutf} $sourceRoot/src_ext/${srcs.uutf.name}
-    ln -sv ${srcs.jsonm} $sourceRoot/src_ext/${srcs.jsonm.name}
+    ln -sv ${srcs.cmdliner} $sourceRoot/src_ext/cmdliner.tbz
+    ln -sv ${srcs.cppo} $sourceRoot/src_ext/cppo.tar.gz
+    ln -sv ${srcs.cudf} $sourceRoot/src_ext/cudf.tar.gz
+    ln -sv ${srcs.dose3} $sourceRoot/src_ext/dose3.tar.gz
+    ln -sv ${srcs.extlib} $sourceRoot/src_ext/extlib.tar.gz
+    ln -sv ${srcs.jbuilder} $sourceRoot/src_ext/jbuilder.tbz
+    ln -sv ${srcs.mccs} $sourceRoot/src_ext/mccs.tar.gz
+    ln -sv ${srcs.ocamlgraph} $sourceRoot/src_ext/ocamlgraph.tar.gz
+    ln -sv ${srcs.opam-file-format} $sourceRoot/src_ext/opam-file-format.tar.gz
+    ln -sv ${srcs.re} $sourceRoot/src_ext/re.tbz
+    ln -sv ${srcs.result} $sourceRoot/src_ext/result.tbz
   '';
+
+  patches = [ ./opam-pull-3487.patch ./opam-shebangs.patch ./opam-mccs-darwin.patch ];
 
   preConfigure = ''
     substituteInPlace ./src_ext/Makefile --replace "%.stamp: %.download" "%.stamp:"
+    patchShebangs src/state/shellscripts
   '';
 
   postConfigure = "make lib-ext";
@@ -71,13 +89,17 @@ in stdenv.mkDerivation rec {
   # Dirty, but apparently ocp-build requires a TERM
   makeFlags = ["TERM=screen"];
 
+  outputs = [ "out" "installer" ];
+  setOutputFlags = false;
+
   # change argv0 to "opam" as a workaround for
   # https://github.com/ocaml/opam/issues/2142
   postInstall = ''
     mv $out/bin/opam $out/bin/.opam-wrapped
     makeWrapper $out/bin/.opam-wrapped $out/bin/opam \
       --argv0 "opam" \
-      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin
+      --suffix PATH : ${aspcud}/bin:${unzip}/bin:${curl}/bin:${lib.optionalString stdenv.isLinux "${bubblewrap}/bin:"}${getconf}/bin
+    $out/bin/opam-installer --prefix=$installer opam-installer.install
   '';
 
   doCheck = false;
@@ -87,6 +109,6 @@ in stdenv.mkDerivation rec {
     homepage = http://opam.ocamlpro.com/;
     maintainers = [ maintainers.henrytill ];
     platforms = platforms.all;
-    license = licenses.lgpl21Plus;
   };
 }
+# Generated by: ./opam.nix.pl -v 2.0.0 -p opam-pull-3487.patch,opam-shebangs.patch,opam-mccs-darwin.patch

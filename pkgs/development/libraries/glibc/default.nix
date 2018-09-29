@@ -5,8 +5,6 @@
 , withGd ? false
 }:
 
-assert stdenv.cc.isGNU;
-
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
 

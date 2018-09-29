@@ -18,7 +18,7 @@ fetchzip rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://dotcolon.net/font/{pname}/";
+    homepage = "http://dotcolon.net/font/${pname}/";
     description = "Serif font designed by Sora Sagano";
     longDescription = ''
       Medio is a serif font designed by Sora Sagano, based roughly

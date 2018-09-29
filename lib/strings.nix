@@ -410,7 +410,7 @@ rec {
       components = splitString "/" url;
       filename = lib.last components;
       name = builtins.head (splitString sep filename);
-    in assert name !=  filename; name;
+    in assert name != filename; name;
 
   /* Create an --{enable,disable}-<feat> string that can be passed to
      standard GNU Autoconf scripts.
@@ -468,7 +468,10 @@ rec {
       strw = lib.stringLength str;
       reqWidth = width - (lib.stringLength filler);
     in
-      assert strw <= width;
+      assert lib.assertMsg (strw <= width)
+        "fixedWidthString: requested string length (${
+          toString width}) must not be shorter than actual length (${
+            toString strw})";
       if strw == width then str else filler + fixedWidthString reqWidth filler str;
 
   /* Format a number adding leading zeroes up to fixed width.
@@ -501,7 +504,7 @@ rec {
   isStorePath = x:
        isCoercibleToString x
     && builtins.substring 0 1 (toString x) == "/"
-    && dirOf (builtins.toPath x) == builtins.storeDir;
+    && dirOf x == builtins.storeDir;
 
   /* Convert string to int
      Obviously, it is a bit hacky to use fromJSON that way.
@@ -537,11 +540,10 @@ rec {
   */
   readPathsFromFile = rootPath: file:
     let
-      root = toString rootPath;
       lines = lib.splitString "\n" (builtins.readFile file);
       removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
       relativePaths = removeComments lines;
-      absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
+      absolutePaths = builtins.map (path: rootPath + "/${path}") relativePaths;
     in
       absolutePaths;
 

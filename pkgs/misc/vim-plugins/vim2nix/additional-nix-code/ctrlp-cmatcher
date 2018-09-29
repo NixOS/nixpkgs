@@ -1,5 +1,0 @@
-    buildInputs = [ python ];
-    buildPhase = ''
-      patchShebangs .
-      ./install.sh
-    '';

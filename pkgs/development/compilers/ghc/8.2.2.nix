@@ -1,7 +1,7 @@
 { stdenv, targetPackages
 
 # build-tools
-, bootPkgs, alex, happy, hscolour
+, bootPkgs
 , autoconf, autoreconfHook, automake, coreutils, fetchurl, fetchpatch, perl, python3, sphinx
 , runCommand
 
@@ -15,7 +15,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(gmp.meta.available or false), gmp
+  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -182,7 +182,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoconf autoreconfHook automake perl python3 sphinx
-    ghc alex happy hscolour
+    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
   # For building runtime libs

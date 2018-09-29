@@ -216,6 +216,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   rest = callPackage ./core/rest { };
 
+  rygel = callPackage ./core/rygel { };
+
   simple-scan = callPackage ./core/simple-scan { };
 
   sushi = callPackage ./core/sushi { };

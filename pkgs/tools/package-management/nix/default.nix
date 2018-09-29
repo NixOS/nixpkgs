@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
+, pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
 , busybox-sandbox-shell
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
-, withLibseccomp ? libseccomp.meta.available, libseccomp
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+, withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 }:
 
 let
@@ -31,7 +32,7 @@ let
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals is20 [ brotli boost ]
       ++ lib.optional withLibseccomp libseccomp
-      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
+      ++ lib.optional (withAWS && is20)
           ((aws-sdk-cpp.override {
             apis = ["s3" "transfer"];
             customMemoryManagement = false;
@@ -74,7 +75,7 @@ let
           stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system
       ) ''--with-system=${stdenv.hostPlatform.nix.system}''
          # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-      ++ lib.optional (!libseccomp.meta.available) "--disable-seccomp-sandboxing";
+      ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 
@@ -147,10 +148,10 @@ in rec {
   }) // { perl-bindings = nix1; };
 
   nixStable = (common rec {
-    name = "nix-2.1";
+    name = "nix-2.1.2";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "0ed68e0c50f13810768fcf510abb2c56d735172c39a325aac7453ccf7ae152fc";
+      sha256 = "68e55382dac9e66f84ead69b3c786a4ea85d4a6611a7a740aa0b78fcc85db3ec";
     };
   }) // { perl-bindings = perl-bindings {
     nix = nixStable;

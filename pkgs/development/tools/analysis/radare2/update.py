@@ -13,6 +13,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict
 
+SCRIPT_DIR = Path(__file__).parent.resolve()
+
 
 def sh(*args: str) -> str:
     out = subprocess.check_output(list(args))
@@ -34,8 +36,17 @@ def get_radare2_rev() -> str:
     return release["tag_name"]
 
 
+def get_cutter_version() -> str:
+    version_expr = """
+(with import <nixpkgs> {}; (builtins.parseDrvName (qt5.callPackage ./cutter.nix {}).name).version)
+"""
+    with SCRIPT_DIR:
+        return sh("nix", "eval", "--raw", version_expr.strip())
+
+
 def get_r2_cutter_rev() -> str:
-    url = "https://api.github.com/repos/radareorg/cutter/contents/"
+    version = get_cutter_version()
+    url = f"https://api.github.com/repos/radareorg/cutter/contents?ref=v{version}"
     with urllib.request.urlopen(url) as response:
         data = json.load(response)  # type: ignore
     for entry in data:

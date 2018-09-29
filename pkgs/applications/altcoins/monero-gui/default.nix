@@ -12,13 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.12.0.0";
+  version = "0.12.3.0";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1mg5ival8a2wdp14yib4wzqax4xyvd40zjy9anhszljds1439jhl";
+    sha256 = "1ry0455cgirkc6n46qnlv5p49axjllil78xmx6469nbp3a2r3z7i";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
@@ -70,7 +70,8 @@ stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
 
     # install translations
-    cp -r release/bin/translations $out/share/
+    mkdir -p $out/share/translations
+    cp translations/*.qm $out/share/translations/
 
     # install icons
     for n in 16 24 32 48 64 96 128 256; do

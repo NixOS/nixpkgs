@@ -26,9 +26,10 @@ stdenv.mkDerivation rec {
     sed -i -e '/#!\/bin\/sh/a"PATH=${xorg.xdpyinfo}\/bin:${xorg.xauth}\/bin:$PATH\\n"' -e 's|/bin/su|/run/wrappers/bin/su|g' x11vnc/ssltools.h
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A VNC server connected to a real X11 screen";
     homepage = http://www.karlrunge.com/x11vnc/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ perl libarchive openssl zlib bzip2 lzma ];
 
+  postFixup = ''
+    substituteInPlace $out/bin/repo-add \
+      --replace bsdtar "${libarchive}/bin/bsdtar"
+  '';
+
   meta = with lib; {
     description = "A simple library-based package manager";
     homepage = https://www.archlinux.org/pacman/;

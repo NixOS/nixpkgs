@@ -4,17 +4,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "wireguard-tools-${version}";
-  version = "0.0.20180809";
+  version = "0.0.20180918";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "07sbaignf8l4lndfxypgacaf2qmgyfkv1j5z7kn0cw5mgfsphmkx";
+    sha256 = "0ax6wvapzmn52l7js6n416852npgapa9875yl2ixs271y8m9kv40";
   };
 
   sourceRoot = "source/src/tools";
 
-  nativeBuildInputs = [ (optional stdenv.isDarwin makeWrapper) ];
-  buildInputs = [ (optional stdenv.isLinux libmnl) ];
+  nativeBuildInputs = optional stdenv.isDarwin makeWrapper;
+  buildInputs = optional stdenv.isLinux libmnl;
 
   makeFlags = [
     "DESTDIR=$(out)"

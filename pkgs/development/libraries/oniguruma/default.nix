@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "onig-${version}";
-  version = "6.8.2";
+  version = "6.9.0";
 
   src = fetchFromGitHub {
     owner = "kkos";
     repo = "oniguruma";
     rev = "v${version}";
-    sha256 = "00ly5i26n7wajhyhq3xadsc7dxrf7qllhwilk8dza2qj5dhld4nd";
+    sha256 = "064nk8nxygqrk5b6n7zvrksf5shrsapn12zdi6crbbfbw0s7pn8h";
   };
 
   nativeBuildInputs = [ cmake ];

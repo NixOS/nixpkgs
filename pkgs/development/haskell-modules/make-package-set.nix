@@ -43,10 +43,9 @@ let
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
     nodejs = buildPackages.nodejs-slim;
-    inherit buildHaskellPackages;
-    inherit (self) ghc;
-    inherit (buildHaskellPackages) jailbreak-cabal;
-    hscolour = overrideCabal buildHaskellPackages.hscolour (drv: {
+    inherit (self) buildHaskellPackages ghc;
+    inherit (self.buildHaskellPackages) jailbreak-cabal;
+    hscolour = overrideCabal self.buildHaskellPackages.hscolour (drv: {
       isLibrary = false;
       doHaddock = false;
       hyperlinkSource = false;      # Avoid depending on hscolour for this build.
@@ -177,19 +176,22 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     callHackage = name: version: callPackageKeepDeriver (self.hackage2nix name version);
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nix = name: src: args: let
-      filter = path: type:
-                 pkgs.lib.hasSuffix "${name}.cabal" path ||
-                 baseNameOf path == "package.yaml";
-      expr = self.haskellSrc2nix {
-        inherit name;
-        src = if pkgs.lib.canCleanSource src
-                then pkgs.lib.cleanSourceWith { inherit src filter; }
-              else src;
-      };
-    in overrideCabal (callPackageKeepDeriver expr args) (orig: {
-         inherit src;
-       });
+    callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args:
+      let
+        filter = path: type:
+                   pkgs.lib.hasSuffix "${name}.cabal" path ||
+                   baseNameOf path == "package.yaml";
+        expr = self.haskellSrc2nix {
+          inherit name extraCabal2nixOptions;
+          src = if pkgs.lib.canCleanSource src
+                  then pkgs.lib.cleanSourceWith { inherit src filter; }
+                else src;
+        };
+      in overrideCabal (callPackageKeepDeriver expr args) (orig: {
+           inherit src;
+         });
+
+    callCabal2nix = name: src: args: self.callCabal2nixWithOptions name src "" args;
 
     # : { root : Path
     #   , source-overrides : Defaulted (Either Path VersionNumber)

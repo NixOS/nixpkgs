@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune
 , ppx_sexp_conv
 , astring, ipaddr, uri
 }:
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
 		sha256 = "1ryigzh7sfif1mly624fpm87aw5h60n5wzdlrvqsf71qcpxc6iiz";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder ppx_sexp_conv ];
+	buildInputs = [ ocaml findlib dune ppx_sexp_conv ];
 	propagatedBuildInputs = [ astring ipaddr uri ];
 
-	buildPhase = "jbuilder build -p conduit";
+	buildPhase = "dune build -p conduit";
 
-	inherit (jbuilder) installPhase;
+	inherit (dune) installPhase;
 
 	meta = {
 		description = "Network connection library for TCP and SSL";

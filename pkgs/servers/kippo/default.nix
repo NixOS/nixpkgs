@@ -95,5 +95,6 @@ in stdenv.mkDerivation rec {
       license = licenses.bsd3;
       platforms = platforms.linux;
       maintainers = with maintainers; [ tomberek ];
+      broken = true; # 2018-09-12, failed on hydra since 2017-12-11
     };
 }

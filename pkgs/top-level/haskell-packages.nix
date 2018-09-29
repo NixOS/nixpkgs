@@ -36,7 +36,10 @@ let
     });
   };
 
-in rec {
+  # Use this rather than `rec { ... }` below for sake of overlays.
+  inherit (pkgs.haskell) compiler packages;
+
+in {
   lib = haskellLib;
 
   compiler = {
@@ -44,62 +47,58 @@ in rec {
     ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix { };
     ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix { };
 
-    ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
+    ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix {
       bootPkgs = packages.ghc7103Binary;
-      inherit (bootPkgs) hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_35;
       llvmPackages = pkgs.llvmPackages_35;
     };
-    ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix rec {
+    ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix {
       bootPkgs = packages.ghc7103Binary;
-      inherit (bootPkgs) hscolour;
-      sphinx = pkgs.python27Packages.sphinx;
+      inherit (buildPackages.python27Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_37;
       llvmPackages = pkgs.llvmPackages_37;
     };
-    ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix rec {
+    ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
       bootPkgs = packages.ghc821Binary;
-      inherit (bootPkgs) hscolour alex happy;
-      sphinx = pkgs.python3Packages.sphinx;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;
     };
-    ghc843 = callPackage ../development/compilers/ghc/8.4.3.nix rec {
+    ghc843 = callPackage ../development/compilers/ghc/8.4.3.nix {
       bootPkgs = packages.ghc821Binary;
-      inherit (bootPkgs) alex happy hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
-    ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix rec {
+    ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix {
       bootPkgs = packages.ghc822;
-      inherit (bootPkgs) alex happy hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
     };
-    ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
+    ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc821Binary;
-      inherit (bootPkgs) alex happy hscolour;
       buildLlvmPackages = buildPackages.llvmPackages_5;
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghcjs = compiler.ghcjs84;
-    ghcjs710 = packages.ghc7103.callPackage ../development/compilers/ghcjs {
+    # Use `import` because `callPackage inside`.
+    ghcjs710 = import ../development/compilers/ghcjs/7.10 {
       bootPkgs = packages.ghc7103;
       inherit (pkgs) cabal-install;
+      inherit (buildPackages) fetchgit fetchFromGitHub;
     };
-    ghcjs80 = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
+    # `import` on purpose; see above.
+    ghcjs80 = import ../development/compilers/ghcjs/8.0 {
       bootPkgs = packages.ghc802;
       inherit (pkgs) cabal-install;
+      inherit (buildPackages) fetchgit fetchFromGitHub;
     };
-    ghcjs82 = callPackage ../development/compilers/ghcjs-ng rec {
+    ghcjs82 = callPackage ../development/compilers/ghcjs-ng {
       bootPkgs = packages.ghc822;
-      inherit (bootPkgs) alex happy;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.2/git.json;
       stage0 = ../development/compilers/ghcjs-ng/8.2/stage0.nix;
     };
-    ghcjs84 = callPackage ../development/compilers/ghcjs-ng rec {
+    ghcjs84 = callPackage ../development/compilers/ghcjs-ng {
       bootPkgs = packages.ghc843;
-      inherit (bootPkgs) alex happy;
       ghcjsSrcJson = ../development/compilers/ghcjs-ng/8.4/git.json;
       stage0 = ../development/compilers/ghcjs-ng/8.4/stage0.nix;
       ghcjsDepOverrides = callPackage ../development/compilers/ghcjs-ng/8.4/dep-overrides.nix {};

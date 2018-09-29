@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder, ppx_sexp_conv, ounit
+{ stdenv, fetchurl, ocaml, findlib, dune, ppx_sexp_conv, ounit
 , re, sexplib, stringext
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar -xjf $curSrc";
 
-  buildInputs = [ ocaml findlib jbuilder ounit ];
+  buildInputs = [ ocaml findlib dune ounit ];
   propagatedBuildInputs = [ ppx_sexp_conv re sexplib stringext ];
 
   buildPhase = "jbuilder build";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "jbuilder runtest";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-uri";

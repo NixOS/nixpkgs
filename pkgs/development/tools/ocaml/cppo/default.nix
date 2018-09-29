@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, jbuilder }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, dune }:
 let
   pname = "cppo";
   webpage = "http://mjambon.com/${pname}.html";
@@ -9,9 +9,9 @@ let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then {
     version = "1.6.4";
     sha256 = "16mlwck0wngr5pmlr8dxc471zzhhcja3mv4xf4n8jm9nhb3iikvh";
-    buildInputs = [ jbuilder ];
+    buildInputs = [ dune ];
     extra = {
-      inherit (jbuilder) installPhase;
+      inherit (dune) installPhase;
     };
   } else {
     version = "1.5.0";

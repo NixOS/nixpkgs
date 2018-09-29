@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
     find $out -type f -print0 | xargs --null sed -i 's|${stdenv.shellPackage}|${runtimeShellPackage}|'
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";
     homepage = https://roy.marples.name/projects/dhcpcd;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ eelco fpletz ];
+    platforms = platforms.linux;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ eelco fpletz ];
   };
 }

@@ -24,9 +24,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Multi-language OCR system";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    homepage = https://launchpad.net/cuneiform-linux;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.raskin ];
   };
 }
