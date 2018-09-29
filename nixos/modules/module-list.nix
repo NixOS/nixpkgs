@@ -962,6 +962,7 @@
   ./tasks/filesystems/vfat.nix
   ./tasks/filesystems/xfs.nix
   ./tasks/filesystems/zfs.nix
+  ./tasks/host-sink.nix
   ./tasks/lvm.nix
   ./tasks/network-interfaces.nix
   ./tasks/network-interfaces-systemd.nix
