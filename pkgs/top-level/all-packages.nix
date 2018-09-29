@@ -11544,6 +11544,8 @@ with pkgs;
   osinfo-db = callPackage ../data/misc/osinfo-db { };
   osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
 
+  otcl = callPackage ../development/libraries/otcl { };
+
   p11-kit = callPackage ../development/libraries/p11-kit { };
 
   paperkey = callPackage ../tools/security/paperkey { };
@@ -12283,6 +12285,8 @@ with pkgs;
   };
 
   tclap = callPackage ../development/libraries/tclap {};
+
+  tclcl = callPackage ../development/libraries/tclcl {};
 
   tcllib = callPackage ../development/libraries/tcllib { };
 
@@ -17810,6 +17814,8 @@ with pkgs;
   natron = callPackage ../applications/video/natron { };
 
   notion = callPackage ../applications/window-managers/notion { };
+
+  ns-2 = callPackage ../applications/science/networking/ns2 { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
 
