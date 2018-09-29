@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libosinfo-1.1.0";
+  name = "libosinfo-1.2.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${name}.tar.gz";
-    sha256 = "0diigllgni6m0sc2h8aid6hmyaq9qb54pm5305m0irfsm2j463v0";
+    sha256 = "0y2skfrcg38y212qqd26vs3sg566j3qnsgvvm23pfi4j7z7ly9gf";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
