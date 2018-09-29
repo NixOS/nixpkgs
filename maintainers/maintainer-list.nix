@@ -3299,6 +3299,11 @@
     github = "proglodyte";
     name = "Proglodyte";
   };
+  pschuprikov = {
+    email = "pschuprikov@gmail.com";
+    github = "pschuprikov";
+    name = "Pavel Chuprikov";
+  };
   pshendry = {
     email = "paul@pshendry.com";
     github = "pshendry";
