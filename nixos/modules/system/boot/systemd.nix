@@ -783,7 +783,7 @@ in
 
     services.dbus.enable = true;
 
-    system.activationScripts.systemd = stringAfter [ "groups" ]
+    system.activationScripts.systemd =
       ''
         mkdir -m 0755 -p /var/lib/udev
 
