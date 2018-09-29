@@ -17558,6 +17558,8 @@ with pkgs;
     gconf = pkgs.gnome2.GConf;
   };
 
+  menumaker = callPackage ../applications/misc/menumaker { };
+
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
     guiSupport = false; # use mercurialFull to get hgk GUI
