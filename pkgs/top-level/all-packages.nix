@@ -11540,6 +11540,8 @@ with pkgs;
   osinfo-db = callPackage ../data/misc/osinfo-db { };
   osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
 
+  otcl = callPackage ../development/libraries/otcl { };
+
   p11-kit = callPackage ../development/libraries/p11-kit { };
 
   paperkey = callPackage ../tools/security/paperkey { };
