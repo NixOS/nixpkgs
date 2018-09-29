@@ -9805,6 +9805,8 @@ in {
 
   python-pushover = callPackage ../development/python-modules/pushover {};
 
+  pystemd = callPackage ../development/python-modules/pystemd { systemd = pkgs.systemd; };
+
   mongodict = buildPythonPackage rec {
     name = "mongodict-${version}";
     version = "0.3.1";
