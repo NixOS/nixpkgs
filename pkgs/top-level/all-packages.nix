@@ -19040,8 +19040,6 @@ with pkgs;
 
   treesheets = callPackage ../applications/office/treesheets { wxGTK = wxGTK31; };
 
-  trezor-bridge = callPackage ../applications/networking/browsers/mozilla-plugins/trezor { };
-
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
