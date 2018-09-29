@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./osinfo-db-data-dir.patch
+    ./0001-tests-Expand-the-arch-s-parser-for-isodetect.patch
+    ./0002-db-Force-anchored-patterns-when-matching-regex.patch
   ];
 
   postPatch = ''
