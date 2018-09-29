@@ -5828,35 +5828,7 @@ in {
     };
   };
 
-  glances = buildPythonPackage rec {
-    name = "glances-${version}";
-    version = "3.0.1";
-    disabled = isPyPy;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "nicolargo";
-      repo = "glances";
-      rev = "v${version}";
-      sha256 = "18pyp6ij3bzybqj771v48n7yn3a1spk6ncg1kgp6hfpjhpqiw87x";
-    };
-
-    # Requires access to /sys/class/power_supply
-    doCheck = false;
-
-    buildInputs = with self; [ unittest2 ];
-    propagatedBuildInputs = with self; [ psutil setuptools bottle batinfo pkgs.hddtemp pysnmp ];
-
-    preConfigure = ''
-      sed -i 's/data_files\.append((conf_path/data_files.append(("etc\/glances"/' setup.py;
-    '';
-
-    meta = {
-      homepage = https://nicolargo.github.io/glances/;
-      description = "Cross-platform curses-based monitoring tool";
-      license = licenses.lgpl3;
-      maintainers = with maintainers; [ primeos koral ];
-    };
-  };
+  glances = callPackage ../development/python-modules/glances { };
 
   github3_py = buildPythonPackage rec {
     name = "github3.py-${version}";
