@@ -121,6 +121,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-online-miners = callPackage ./core/gnome-online-miners { };
 
+  gnome-remote-desktop = callPackage ./core/gnome-remote-desktop { };
+
   gnome-session = callPackage ./core/gnome-session { };
 
   gnome-shell = callPackage ./core/gnome-shell { };
