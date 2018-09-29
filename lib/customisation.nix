@@ -68,16 +68,17 @@ rec {
     let
       ff = f origArgs;
       overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
+      override = lib.setFunctionArgs (newArgs: makeOverridable f (overrideWith newArgs)) (lib.functionArgs f);
     in
       if builtins.isAttrs ff then (ff // {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
+        inherit override;
         overrideDerivation = fdrv:
           makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
         ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
           makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
       })
       else if lib.isFunction ff then {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
+        inherit override;
         __functor = self: ff;
         overrideDerivation = throw "overrideDerivation not yet supported for functors";
       }
