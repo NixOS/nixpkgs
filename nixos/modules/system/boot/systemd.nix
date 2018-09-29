@@ -747,6 +747,7 @@ in
 
       "systemd/journald.conf".text = ''
         [Journal]
+        Storage=persistent
         RateLimitInterval=${config.services.journald.rateLimitInterval}
         RateLimitBurst=${toString config.services.journald.rateLimitBurst}
         ${optionalString (config.services.journald.console != "") ''
@@ -786,10 +787,6 @@ in
     system.activationScripts.systemd =
       ''
         mkdir -m 0755 -p /var/lib/udev
-
-        # Keep a persistent journal. Note that systemd-tmpfiles will
-        # set proper ownership/permissions.
-        mkdir -m 0700 -p /var/log/journal
       '';
 
     users.users.systemd-network.uid = config.ids.uids.systemd-network;
