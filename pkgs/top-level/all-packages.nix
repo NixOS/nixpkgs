@@ -6439,6 +6439,8 @@ with pkgs;
 
   crystal = callPackage ../development/compilers/crystal { };
 
+  dbmate = callPackage ../development/tools/database/dbmate { };
+
   devpi-client = callPackage ../development/tools/devpi-client {};
 
   devpi-server = callPackage ../development/tools/devpi-server {};
