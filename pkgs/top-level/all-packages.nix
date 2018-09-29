@@ -1537,7 +1537,7 @@ with pkgs;
   riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix {
     conf = config.riot-web.conf or null;
   };
-  
+
   roundcube = callPackage ../servers/roundcube { };
 
   rsbep = callPackage ../tools/backup/rsbep { };
@@ -15843,6 +15843,8 @@ with pkgs;
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome2) libgnomeui GConf;
   };
+
+  csa = callPackage ../applications/audio/csa { };
 
   csound = callPackage ../applications/audio/csound { };
 
