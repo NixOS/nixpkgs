@@ -2,9 +2,9 @@
 
 let
 
-  major = "2018"
-  minor = "02"
-  patch = "15"
+  major = "2018";
+  minor = "02";
+  patch = "15";
 
   version = "${major}.${minor}.${patch}";
 
