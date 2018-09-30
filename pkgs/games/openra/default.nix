@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   name = "openra-${version}";
-  version = "20180307";
+  version = "20180923";
 
   meta = with stdenv.lib; {
     description = "Real Time Strategy game engine recreating the C&C titles";
