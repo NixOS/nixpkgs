@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/security --set DYLD_INSERT_LIBRARIES /usr/lib/libsqlite3.dylib
+    wrapProgram $out/bin/security --prefix DYLD_INSERT_LIBRARIES : /usr/lib/libsqlite3.dylib
   '';
 
   meta = with stdenv.lib; {
