@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = http://apr.apache.org/;
     description = "The Apache Portable Runtime library";
     platforms = platforms.all;
+    license = licenses.asl20;
     maintainers = [ maintainers.eelco ];
   };
 }
