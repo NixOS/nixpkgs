@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc6.patch ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Core library for full-featured text search engine";
     longDescription = ''
       CLucene is a high-performance, scalable, cross platform, full-featured,
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
       CLucene is a port of the very popular Java Lucene text search engine API.
     '';
     homepage = http://clucene.sourceforge.net;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    license = with licenses; [ asl20 lgpl2 ];
   };
 }
