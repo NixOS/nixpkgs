@@ -784,11 +784,6 @@ in
 
     services.dbus.enable = true;
 
-    system.activationScripts.systemd =
-      ''
-        mkdir -m 0755 -p /var/lib/udev
-      '';
-
     users.users.systemd-network.uid = config.ids.uids.systemd-network;
     users.groups.systemd-network.gid = config.ids.gids.systemd-network;
     users.users.systemd-resolve.uid = config.ids.uids.systemd-resolve;
