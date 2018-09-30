@@ -19,13 +19,13 @@
 
   <itemizedlist>
    <listitem>
-     <para>
-       Support for wrapping binaries using <literal>firejail</literal> has been
-       added through <varname>programs.firejail.wrappedBinaries</varname>.
-     </para>
-     <para>
-       For example
-     </para>
+    <para>
+     Support for wrapping binaries using <literal>firejail</literal> has been
+     added through <varname>programs.firejail.wrappedBinaries</varname>.
+    </para>
+    <para>
+     For example
+    </para>
 <programlisting>
 programs.firejail = {
   enable = true;
@@ -35,9 +35,10 @@ programs.firejail = {
   };
 };
 </programlisting>
-      <para>
-        This will place <literal>firefox</literal> and <literal>mpv</literal> binaries in the global path wrapped by firejail.
-      </para>
+    <para>
+     This will place <literal>firefox</literal> and <literal>mpv</literal>
+     binaries in the global path wrapped by firejail.
+    </para>
    </listitem>
    <listitem>
     <para>
@@ -75,16 +76,20 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
-     The <varname>services.cassandra</varname> module has been reworked and
-     was rewritten from scratch. The service has succeeding tests for
-     the versions 2.1, 2.2, 3.0 and 3.11 of <link
-     xlink:href="https://cassandra.apache.org/">Apache Cassandra</link>.
+     The <varname>services.cassandra</varname> module has been reworked and was
+     rewritten from scratch. The service has succeeding tests for the versions
+     2.1, 2.2, 3.0 and 3.11 of
+     <link
+     xlink:href="https://cassandra.apache.org/">Apache
+     Cassandra</link>.
     </para>
    </listitem>
    <listitem>
     <para>
-     There is a new <varname>services.foundationdb</varname> module for deploying
-     <link xlink:href="https://www.foundationdb.org">FoundationDB</link> clusters.
+     There is a new <varname>services.foundationdb</varname> module for
+     deploying
+     <link xlink:href="https://www.foundationdb.org">FoundationDB</link>
+     clusters.
     </para>
    </listitem>
    <listitem>
@@ -97,24 +102,26 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
-      <varname>services.strongswan-swanctl</varname>
-      is a modern replacement for <varname>services.strongswan</varname>.
-      You can use either one of them to setup IPsec VPNs but not both at the same time.
+     <varname>services.strongswan-swanctl</varname> is a modern replacement for
+     <varname>services.strongswan</varname>. You can use either one of them to
+     setup IPsec VPNs but not both at the same time.
     </para>
     <para>
-      <varname>services.strongswan-swanctl</varname> uses the
-      <link xlink:href="https://wiki.strongswan.org/projects/strongswan/wiki/swanctl">swanctl</link>
-      command which uses the modern
-      <link xlink:href="https://github.com/strongswan/strongswan/blob/master/src/libcharon/plugins/vici/README.md">vici</link>
-      <emphasis>Versatile IKE Configuration Interface</emphasis>.
-      The deprecated <literal>ipsec</literal> command used in <varname>services.strongswan</varname> is using the legacy
-      <link xlink:href="https://github.com/strongswan/strongswan/blob/master/README_LEGACY.md">stroke configuration interface</link>.
+     <varname>services.strongswan-swanctl</varname> uses the
+     <link xlink:href="https://wiki.strongswan.org/projects/strongswan/wiki/swanctl">swanctl</link>
+     command which uses the modern
+     <link xlink:href="https://github.com/strongswan/strongswan/blob/master/src/libcharon/plugins/vici/README.md">vici</link>
+     <emphasis>Versatile IKE Configuration Interface</emphasis>. The deprecated
+     <literal>ipsec</literal> command used in
+     <varname>services.strongswan</varname> is using the legacy
+     <link xlink:href="https://github.com/strongswan/strongswan/blob/master/README_LEGACY.md">stroke
+     configuration interface</link>.
     </para>
    </listitem>
    <listitem>
     <para>
-      The new <varname>services.elasticsearch-curator</varname> service
-      periodically curates or manages, your Elasticsearch indices and snapshots.
+     The new <varname>services.elasticsearch-curator</varname> service
+     periodically curates or manages, your Elasticsearch indices and snapshots.
     </para>
    </listitem>
   </itemizedlist>
@@ -135,8 +142,8 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
-     The deprecated <varname>services.cassandra</varname> module has
-     seen a complete rewrite. (See above.)
+     The deprecated <varname>services.cassandra</varname> module has seen a
+     complete rewrite. (See above.)
     </para>
    </listitem>
    <listitem>
@@ -186,41 +193,44 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
-     <varname>services.munge</varname> now runs as user (and group) <literal>munge</literal> instead of root.
-     Make sure the key file is accessible to the daemon.
+     <varname>services.munge</varname> now runs as user (and group)
+     <literal>munge</literal> instead of root. Make sure the key file is
+     accessible to the daemon.
     </para>
    </listitem>
    <listitem>
     <para>
-      <varname>dockerTools.buildImage</varname> now uses <literal>null</literal> as default value for <varname>tag</varname>,
-      which indicates that the nix output hash will be used as tag.
+     <varname>dockerTools.buildImage</varname> now uses <literal>null</literal>
+     as default value for <varname>tag</varname>, which indicates that the nix
+     output hash will be used as tag.
     </para>
    </listitem>
    <listitem>
     <para>
-     The ELK stack: <varname>elasticsearch</varname>, <varname>logstash</varname> and <varname>kibana</varname>
-     has been upgraded from 2.* to 6.3.*.
-     The 2.* versions have been <link xlink:href="https://www.elastic.co/support/eol">unsupported since last year</link>
-     so they have been removed. You can still use the 5.* versions under the names
-     <varname>elasticsearch5</varname>, <varname>logstash5</varname> and
-     <varname>kibana5</varname>.
+     The ELK stack: <varname>elasticsearch</varname>,
+     <varname>logstash</varname> and <varname>kibana</varname> has been
+     upgraded from 2.* to 6.3.*. The 2.* versions have been
+     <link xlink:href="https://www.elastic.co/support/eol">unsupported since
+     last year</link> so they have been removed. You can still use the 5.*
+     versions under the names <varname>elasticsearch5</varname>,
+     <varname>logstash5</varname> and <varname>kibana5</varname>.
     </para>
     <para>
-     The elastic beats:
-     <varname>filebeat</varname>, <varname>heartbeat</varname>,
-     <varname>metricbeat</varname> and <varname>packetbeat</varname>
-     have had the same treatment: they now target 6.3.* as well.
-     The 5.* versions are available under the names:
+     The elastic beats: <varname>filebeat</varname>,
+     <varname>heartbeat</varname>, <varname>metricbeat</varname> and
+     <varname>packetbeat</varname> have had the same treatment: they now target
+     6.3.* as well. The 5.* versions are available under the names:
      <varname>filebeat5</varname>, <varname>heartbeat5</varname>,
      <varname>metricbeat5</varname> and <varname>packetbeat5</varname>
     </para>
     <para>
      The ELK-6.3 stack now comes with
-     <link xlink:href="https://www.elastic.co/products/x-pack/open">X-Pack by default</link>.
-     Since X-Pack is licensed under the
-     <link xlink:href="https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt">Elastic License</link>
-     the ELK packages now have an unfree license. To use them you need to specify
-     <literal>allowUnfree = true;</literal> in your nixpkgs configuration.
+     <link xlink:href="https://www.elastic.co/products/x-pack/open">X-Pack by
+     default</link>. Since X-Pack is licensed under the
+     <link xlink:href="https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt">Elastic
+     License</link> the ELK packages now have an unfree license. To use them
+     you need to specify <literal>allowUnfree = true;</literal> in your nixpkgs
+     configuration.
     </para>
     <para>
      Fortunately there is also a free variant of the ELK stack without X-Pack.
@@ -231,20 +241,23 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
-      Options
-      <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.ramfsMountPoint</literal>
-      <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.storage.mountPoint</literal>
-      were removed. <literal>luksroot.nix</literal> module never supported more than one YubiKey at
-      a time anyway, hence those options never had any effect. You should be able to remove them
-      from your config without any issues.
+     Options
+     <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.ramfsMountPoint</literal>
+     <literal>boot.initrd.luks.devices.<replaceable>name</replaceable>.yubikey.storage.mountPoint</literal>
+     were removed. <literal>luksroot.nix</literal> module never supported more
+     than one YubiKey at a time anyway, hence those options never had any
+     effect. You should be able to remove them from your config without any
+     issues.
     </para>
    </listitem>
    <listitem>
     <para>
-      <literal>stdenv.system</literal> and <literal>system</literal> in nixpkgs now refer to the host platform instead of the build platform.
-      For native builds this is not change, let alone a breaking one.
-      For cross builds, it is a breaking change, and <literal>stdenv.buildPlatform.system</literal> can be used instead for the old behavior.
-      They should be using that anyways for clarity.
+     <literal>stdenv.system</literal> and <literal>system</literal> in nixpkgs
+     now refer to the host platform instead of the build platform. For native
+     builds this is not change, let alone a breaking one. For cross builds, it
+     is a breaking change, and <literal>stdenv.buildPlatform.system</literal>
+     can be used instead for the old behavior. They should be using that
+     anyways for clarity.
     </para>
    </listitem>
   </itemizedlist>
@@ -298,26 +311,33 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
    </listitem>
    <listitem>
     <para>
-      The <literal>pkgs</literal> argument to NixOS modules can now be set directly using <literal>nixpkgs.pkgs</literal>. Previously, only the <literal>system</literal>, <literal>config</literal> and <literal>overlays</literal> arguments could be used to influence <literal>pkgs</literal>.
+     The <literal>pkgs</literal> argument to NixOS modules can now be set
+     directly using <literal>nixpkgs.pkgs</literal>. Previously, only the
+     <literal>system</literal>, <literal>config</literal> and
+     <literal>overlays</literal> arguments could be used to influence
+     <literal>pkgs</literal>.
     </para>
    </listitem>
    <listitem>
     <para>
-      A NixOS system can now be constructed more easily based on a preexisting invocation of Nixpkgs. For example:
-      <programlisting>
+     A NixOS system can now be constructed more easily based on a preexisting
+     invocation of Nixpkgs. For example:
+<programlisting>
 inherit (pkgs.nixos {
   boot.loader.grub.enable = false;
   fileSystems."/".device = "/dev/xvda1";
 }) toplevel kernel initialRamdisk manual;
       </programlisting>
-
-      This benefits evaluation performance, lets you write Nixpkgs packages that depend on NixOS images and is consistent with a deployment architecture that would be centered around Nixpkgs overlays.
+     This benefits evaluation performance, lets you write Nixpkgs packages that
+     depend on NixOS images and is consistent with a deployment architecture
+     that would be centered around Nixpkgs overlays.
     </para>
    </listitem>
    <listitem>
     <para>
-      <literal>lib.traceValIfNot</literal> has been deprecated. Use
-      <literal>if/then/else</literal> and <literal>lib.traceValSeq</literal> instead.
+     <literal>lib.traceValIfNot</literal> has been deprecated. Use
+     <literal>if/then/else</literal> and <literal>lib.traceValSeq</literal>
+     instead.
     </para>
    </listitem>
    <listitem>
@@ -336,9 +356,9 @@ inherit (pkgs.nixos {
    </listitem>
    <listitem>
     <para>
-     <literal>lib.recursiveUpdateUntil</literal> was not acting according to its
-     specification. It has been fixed to act according to the docstring, and a
-     test has been added.
+     <literal>lib.recursiveUpdateUntil</literal> was not acting according to
+     its specification. It has been fixed to act according to the docstring,
+     and a test has been added.
     </para>
    </listitem>
    <listitem>
@@ -408,11 +428,11 @@ inherit (pkgs.nixos {
     </para>
    </listitem>
    <listitem>
-     <para>
-     The Kubernetes package has been bumped to major version 1.11.
-     Please consult the
-     <link xlink:href="https://github.com/kubernetes/kubernetes/blob/release-1.11/CHANGELOG-1.11.md">release notes</link>
-     for details on new features and api changes.
+    <para>
+     The Kubernetes package has been bumped to major version 1.11. Please
+     consult the
+     <link xlink:href="https://github.com/kubernetes/kubernetes/blob/release-1.11/CHANGELOG-1.11.md">release
+     notes</link> for details on new features and api changes.
     </para>
    </listitem>
    <listitem>
@@ -432,8 +452,8 @@ inherit (pkgs.nixos {
    </listitem>
    <listitem>
     <para>
-     The option <varname>services.kubernetes.apiserver.address</varname>
-     was renamed to <varname>services.kubernetes.apiserver.bindAddress</varname>.
+     The option <varname>services.kubernetes.apiserver.address</varname> was
+     renamed to <varname>services.kubernetes.apiserver.bindAddress</varname>.
      Note that the default value has changed from 127.0.0.1 to 0.0.0.0.
     </para>
    </listitem>
@@ -445,76 +465,86 @@ inherit (pkgs.nixos {
    </listitem>
    <listitem>
     <para>
-     The option <varname>services.kubernetes.addons.dashboard.enableRBAC</varname>
-     was renamed to <varname>services.kubernetes.addons.dashboard.rbac.enable</varname>.
+     The option
+     <varname>services.kubernetes.addons.dashboard.enableRBAC</varname> was
+     renamed to
+     <varname>services.kubernetes.addons.dashboard.rbac.enable</varname>.
     </para>
    </listitem>
    <listitem>
     <para>
      The Kubernetes Dashboard now has only minimal RBAC permissions by default.
-     If dashboard cluster-admin rights are desired,
-     set <varname>services.kubernetes.addons.dashboard.rbac.clusterAdmin</varname> to true.
-     On existing clusters, in order for the revocation of privileges to take effect,
-     the current ClusterRoleBinding for kubernetes-dashboard must be manually removed:
-     <literal>kubectl delete clusterrolebinding kubernetes-dashboard</literal>
+     If dashboard cluster-admin rights are desired, set
+     <varname>services.kubernetes.addons.dashboard.rbac.clusterAdmin</varname>
+     to true. On existing clusters, in order for the revocation of privileges
+     to take effect, the current ClusterRoleBinding for kubernetes-dashboard
+     must be manually removed: <literal>kubectl delete clusterrolebinding
+     kubernetes-dashboard</literal>
     </para>
    </listitem>
    <listitem>
     <para>
      The <varname>programs.screen</varname> module provides allows to configure
-     <literal>/etc/screenrc</literal>, however the module behaved fairly counterintuitive as
-     the config exists, but the package wasn't available. Since 18.09 <literal>pkgs.screen</literal>
-     will be added to <literal>environment.systemPackages</literal>.
+     <literal>/etc/screenrc</literal>, however the module behaved fairly
+     counterintuitive as the config exists, but the package wasn't available.
+     Since 18.09 <literal>pkgs.screen</literal> will be added to
+     <literal>environment.systemPackages</literal>.
     </para>
    </listitem>
    <listitem>
     <para>
-      The module <option>services.networking.hostapd</option> now uses WPA2 by default.
+     The module <option>services.networking.hostapd</option> now uses WPA2 by
+     default.
     </para>
    </listitem>
    <listitem>
     <para>
-      <varname>s6Dns</varname>, <varname>s6Networking</varname>,
-      <varname>s6LinuxUtils</varname> and <varname>s6PortableUtils</varname>
-      renamed to
-      <varname>s6-dns</varname>, <varname>s6-networking</varname>,
-      <varname>s6-linux-utils</varname> and <varname>s6-portable-utils</varname> respectively.
+     <varname>s6Dns</varname>, <varname>s6Networking</varname>,
+     <varname>s6LinuxUtils</varname> and <varname>s6PortableUtils</varname>
+     renamed to <varname>s6-dns</varname>, <varname>s6-networking</varname>,
+     <varname>s6-linux-utils</varname> and <varname>s6-portable-utils</varname>
+     respectively.
     </para>
-  </listitem>
-  <listitem>
+   </listitem>
+   <listitem>
     <para>
-      The module option <option>nix.useSandbox</option> is now defaulted to <literal>true</literal>.
+     The module option <option>nix.useSandbox</option> is now defaulted to
+     <literal>true</literal>.
     </para>
-  </listitem>
-  <listitem>
+   </listitem>
+   <listitem>
     <para>
-      The config activation script of <literal>nixos-rebuild</literal> now
-      <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemctl.html#Manager%20Lifecycle%20Commands">reloads</link>
-      all user units for each authenticated user.
+     The config activation script of <literal>nixos-rebuild</literal> now
+     <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemctl.html#Manager%20Lifecycle%20Commands">reloads</link>
+     all user units for each authenticated user.
     </para>
-  </listitem>
-  <listitem>
+   </listitem>
+   <listitem>
     <para>
-      The default display manager is now LightDM.
-      To use SLiM set <literal>services.xserver.displayManager.slim.enable</literal>
-      to <literal>true</literal>.
+     The default display manager is now LightDM. To use SLiM set
+     <literal>services.xserver.displayManager.slim.enable</literal> to
+     <literal>true</literal>.
     </para>
-  </listitem>
-  <listitem>
+   </listitem>
+   <listitem>
     <para>
-      NixOS option descriptions are now automatically broken up into individual
-      paragraphs if the text contains two consecutive newlines, so it's no
-      longer necessary to use <code>&lt;/para&gt;&lt;para&gt;</code> to start
-      a new paragraph.
+     NixOS option descriptions are now automatically broken up into individual
+     paragraphs if the text contains two consecutive newlines, so it's no
+     longer necessary to use <code>&lt;/para&gt;&lt;para&gt;</code> to start a
+     new paragraph.
     </para>
-  </listitem>
-  <listitem>
+   </listitem>
+   <listitem>
     <para>
-      Top-level <literal>buildPlatform</literal>, <literal>hostPlatform</literal>, and <literal>targetPlatform</literal> in Nixpkgs are deprecated.
-      Please use their equivalents in <literal>stdenv</literal> instead:
-      <literal>stdenv.buildPlatform</literal>, <literal>stdenv.hostPlatform</literal>, and <literal>stdenv.targetPlatform</literal>.
+     Top-level <literal>buildPlatform</literal>,
+     <literal>hostPlatform</literal>, and <literal>targetPlatform</literal> in
+     Nixpkgs are deprecated. Please use their equivalents in
+     <literal>stdenv</literal> instead:
+     <literal>stdenv.buildPlatform</literal>,
+     <literal>stdenv.hostPlatform</literal>, and
+     <literal>stdenv.targetPlatform</literal>.
     </para>
-  </listitem>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
