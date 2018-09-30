@@ -26,11 +26,12 @@ nix-shell -p socat --run "socat STDIO,raw,echo=0,escape=0x11 UNIX:/tmp/nix-build
 </programlisting>
 
  <para>
-  You may need to find the correct path, replacing <literal>/tmp</literal>, <literal>*</literal> or <literal>machine</literal>.
+  You may need to find the correct path, replacing <literal>/tmp</literal>,
+  <literal>*</literal> or <literal>machine</literal>.
  </para>
 
  <para>
-  Press "enter" to open up console and login as "root". After you're done, press "ctrl-q" to exit the console.
+  Press "enter" to open up console and login as "root". After you're done,
+  press "ctrl-q" to exit the console.
  </para>
- 
 </section>
