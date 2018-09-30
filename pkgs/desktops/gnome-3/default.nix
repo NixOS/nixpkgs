@@ -7,7 +7,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   updateScript = callPackage ./update.nix { };
 
-  version = "3.26";
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
 
   corePackages = with gnome3; [

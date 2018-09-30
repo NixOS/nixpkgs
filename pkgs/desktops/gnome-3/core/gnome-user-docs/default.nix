@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnome3.yelp itstool libxml2 intltool ];
 
   meta = with stdenv.lib; {
-    homepage = "https://help.gnome.org/users/gnome-help/${gnome3.version}";
+    homepage = https://help.gnome.org/users/gnome-help/;
     description = "User and system administration help for the GNOME desktop";
     maintainers = gnome3.maintainers;
     license = licenses.cc-by-30;
