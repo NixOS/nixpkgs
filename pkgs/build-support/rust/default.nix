@@ -94,7 +94,9 @@ in stdenv.mkDerivation (args // {
   installPhase = args.installPhase or ''
     runHook preInstall
     mkdir -p $out/bin
-    find target/release -maxdepth 1 -executable -type f -exec cp "{}" $out/bin \;
+    mkdir -p $out/lib
+    find target/release -maxdepth 1 -type f -executable ! \( -name "*.so.*" -o -name "*.so" -o -name "*.a" -o -name "*.dylib" \) | xargs -r -n 1 cp -t $out/bin
+    find target/release -maxdepth 1 -name "*.so.*" -o -name "*.so" -o -name "*.a" -o -name "*.dylib" | xargs -r -n 1 cp -t $out/lib
     runHook postInstall
   '';
 
