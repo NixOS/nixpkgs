@@ -622,13 +622,6 @@ in {
         type = types.bool;
       };
 
-      # TODO: remove this deprecated flag
-      cadvisorPort = mkOption {
-        description = "Kubernetes kubelet local cadvisor port.";
-        default = 4194;
-        type = types.int;
-      };
-
       clusterDns = mkOption {
         description = "Use alternative DNS.";
         default = "10.1.0.1";
@@ -862,7 +855,6 @@ in {
             --hostname-override=${cfg.kubelet.hostname} \
             --allow-privileged=${boolToString cfg.kubelet.allowPrivileged} \
             --root-dir=${cfg.dataDir} \
-            --cadvisor_port=${toString cfg.kubelet.cadvisorPort} \
             ${optionalString (cfg.kubelet.clusterDns != "")
               "--cluster-dns=${cfg.kubelet.clusterDns}"} \
             ${optionalString (cfg.kubelet.clusterDomain != "")
