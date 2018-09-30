@@ -3289,6 +3289,16 @@
     };
   };
 
+  wal-vim = buildVimPluginFrom2Nix {
+    name = "wal-vim-2018-06-04";
+    src = fetchFromGitHub {
+      owner = "dylanaraps";
+      repo = "wal.vim";
+      rev = "fb6ce53632f93c31cad66398636bfb383ad64d52";
+      sha256 = "1f0rpaff7q9xswc1p5pmwzmhb70s4q148dj2apg98d4qywa9j8ah";
+    };
+  };
+
   webapi-vim = buildVimPluginFrom2Nix {
     name = "webapi-vim-2018-03-14";
     src = fetchFromGitHub {
