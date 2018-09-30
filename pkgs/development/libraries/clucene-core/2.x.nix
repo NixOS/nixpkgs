@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "Unable to find executable: /build/clucene-core-2.3.3.4/build/bin/cl_test"
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Core library for full-featured text search engine";
     longDescription = ''
       CLucene is a high-performance, scalable, cross platform, full-featured,
@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
       CLucene is a port of the very popular Java Lucene text search engine API.
     '';
     homepage = http://clucene.sourceforge.net;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = with licenses; [ asl20 lgpl2 ];
   };
 }
