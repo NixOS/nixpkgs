@@ -290,10 +290,12 @@ with pkgs;
   fetchFromGitLab = {
     owner, repo, rev, domain ? "gitlab.com", name ? "source", group ? null,
     ... # For hash agility
-  }@args: fetchzip ({
+  }@args: fetchzip (let
+    repo' = builtins.replaceStrings ["/"] ["%2F"] repo;
+  in {
     inherit name;
-    url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${group}%2F"}${owner}%2F${repo}/repository/archive.tar.gz?sha=${rev}";
-    meta.homepage = "https://${domain}/${lib.optionalString (group != null) "${group}/"}${owner}/${repo}/";
+    url = "https://${domain}/api/v4/projects/${lib.optionalString (group != null) "${group}%2F"}${owner}%2F${repo'}/repository/archive.tar.gz?sha=${rev}";
+    meta.homepage = "https://${domain}/${lib.optionalString (group != null) "${group}/"}${owner}/${repo'}/";
   } // removeAttrs args [ "domain" "owner" "group" "repo" "rev" ]) // { inherit rev; };
 
   # gitweb example, snapshot support is optional in gitweb
