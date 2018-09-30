@@ -34,7 +34,14 @@ let
       define('DB_HOST', '${optionalString (cfg.database.host != null) cfg.database.host}');
       define('DB_USER', '${cfg.database.user}');
       define('DB_NAME', '${cfg.database.name}');
-      define('DB_PASS', '${optionalString (cfg.database.password != null) (escape ["'" "\\"] cfg.database.password)}');
+      define('DB_PASS', ${
+        if (cfg.database.password != null) then
+          "'${(escape ["'" "\\"] cfg.database.password)}'"
+        else if (cfg.database.passwordFile != null) then
+          "file_get_contents('${cfg.database.passwordFile}')"
+        else
+          ""
+      });
       define('DB_PORT', '${toString dbPort}');
 
       define('AUTH_AUTO_CREATE', ${boolToString cfg.auth.autoCreate});
@@ -161,6 +168,14 @@ let
         };
 
         password = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            The database user's password.
+          '';
+        };
+
+        passwordFile = mkOption {
           type = types.nullOr types.str;
           default = null;
           description = ''
@@ -479,6 +494,13 @@ let
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      {
+        assertion = cfg.database.password != null -> cfg.database.passwordFile == null;
+        message = "Cannot set both password and passwordFile";
+      }
+    ];
+
     services.phpfpm.poolConfigs = mkIf (cfg.pool == "${poolName}") {
       "${poolName}" = ''
         listen = "${phpfpmSocketName}";
@@ -528,6 +550,7 @@ let
           callSql = e:
               if cfg.database.type == "pgsql" then ''
                   ${optionalString (cfg.database.password != null) "PGPASSWORD=${cfg.database.password}"} \
+                  ${optionalString (cfg.database.passwordFile != null) "PGPASSWORD=$(cat ${cfg.database.passwordFile}"}) \
                   ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${config.services.postgresql.package}/bin/psql \
                     -U ${cfg.database.user} \
                     ${optionalString (cfg.database.host != null) "-h ${cfg.database.host} --port ${toString dbPort}"} \
