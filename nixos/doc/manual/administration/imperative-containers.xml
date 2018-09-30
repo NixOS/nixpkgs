@@ -73,7 +73,8 @@ Linux foo 3.4.82 #1-NixOS SMP Thu Mar 20 14:44:05 UTC 2014 x86_64 GNU/Linux
  </para>
 
  <para>
-  To change the configuration of the container, you can edit
+  There are several ways to change the configuration of the container. First,
+  on the host, you can edit
   <literal>/var/lib/container/<replaceable>name</replaceable>/etc/nixos/configuration.nix</literal>,
   and run
 <screen>
@@ -86,22 +87,21 @@ Linux foo 3.4.82 #1-NixOS SMP Thu Mar 20 14:44:05 UTC 2014 x86_64 GNU/Linux
   <xref linkend="opt-services.httpd.enable"/> = true;
   <xref linkend="opt-services.httpd.adminAddr"/> = "foo@example.org";
   <xref linkend="opt-networking.firewall.allowedTCPPorts"/> = [ 80 ];
-  '
-
-  <para>
-    Note that in previous versions of NixOS (17.09 and earlier) one could
-    also use all nix-related commands (like <command>nixos-rebuild switch</command>) 
-    from inside the container. However, since the release of Nix 2.0 this
-    is not supported anymore. Supporting Nix commands inside the
-    container might be possible again in future versions. See
-    <link xlink:ref="https://github.com/NixOS/nixpkgs/issues/40355">the github issue</link> for tracking progress on this issue.
-  </para>
+'
 
 # curl http://$(nixos-container show-ip foo)/
 &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">…
 </screen>
   However, note that this will overwrite the container’s
   <filename>/etc/nixos/configuration.nix</filename>.
+ </para>
+
+ <para>
+  Alternatively, you can change the configuration from within the container
+  itself by running <command>nixos-rebuild switch</command> inside the
+  container. Note that the container by default does not have a copy of the
+  NixOS channel, so you should run <command>nix-channel --update</command>
+  first.
  </para>
 
  <para>
