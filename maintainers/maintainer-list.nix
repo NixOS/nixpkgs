@@ -3858,6 +3858,11 @@
     github = "solson";
     name = "Scott Olson";
   };
+  sorixelle = {
+    email = "srxl@protonmail.com";
+    github = "Sorixelle";
+    name = "Ruby Juric";
+  };
   sorki = {
     email = "srk@48.io";
     github = "sorki";
