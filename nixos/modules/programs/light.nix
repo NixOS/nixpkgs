@@ -13,7 +13,7 @@ in
         default = false;
         type = types.bool;
         description = ''
-          Whether to install Light backlight control with setuid wrapper.
+          Whether to install Light backlight control command and udev rules.
         '';
       };
     };
@@ -21,6 +21,6 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.light ];
-    security.wrappers.light.source = "${pkgs.light.out}/bin/light";
+    services.udev.packages = [ pkgs.light ];
   };
 }
