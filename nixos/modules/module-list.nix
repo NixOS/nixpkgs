@@ -46,6 +46,7 @@
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
   ./hardware/raid/hpsa.nix
+  ./hardware/steam-hardware.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
   ./hardware/video/amdgpu.nix
