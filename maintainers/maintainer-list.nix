@@ -2571,6 +2571,11 @@
     github = "mdaiter";
     name = "Matthew S. Daiter";
   };
+  mdevlamynck = {
+    email = "matthias.devlamynck@mailoo.org";
+    github = "mdevlamynck";
+    name = "Matthias Devlamynck";
+  };
   meditans = {
     email = "meditans@gmail.com";
     github = "meditans";
