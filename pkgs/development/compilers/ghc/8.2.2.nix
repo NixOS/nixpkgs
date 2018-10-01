@@ -22,7 +22,7 @@
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? true
+  enableShared ? !stdenv.targetPlatform.useiOSPrebuilt
 
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
@@ -79,7 +79,7 @@ let
   targetCC = builtins.head toolsForTarget;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   version = "8.2.2";
   name = "${targetPrefix}ghc-${version}";
 
@@ -239,4 +239,8 @@ stdenv.mkDerivation rec {
     inherit (ghc.meta) license platforms;
   };
 
-}
+} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
+  dontStrip = true;
+  dontPatchELF = true;
+  noAuditTmpdir = true;
+})
