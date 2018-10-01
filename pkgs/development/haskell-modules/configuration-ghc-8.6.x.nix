@@ -50,12 +50,12 @@ self: super: {
   Glob = self.Glob_0_9_3;
   haddock-library = markBroken super.haddock-library;
   hslogger = self.hslogger_1_2_12;
-  hspec = self.hspec_2_5_7;
-  hspec-core = self.hspec-core_2_5_7;
-  hspec-core_2_5_7 = super.hspec-core_2_5_7.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
-  hspec-discover = self.hspec-discover_2_5_7;
+  hspec = self.hspec_2_5_8;
+  hspec-core = self.hspec-core_2_5_8;
+  hspec-core_2_5_8 = super.hspec-core_2_5_8.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_5; });
+  hspec-discover = self.hspec-discover_2_5_8;
   hspec-meta = self.hspec-meta_2_5_6;
-  hspec-meta_2_5_6 = super.hspec-meta_2_5_6.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
+  hspec-meta_2_5_6 = super.hspec-meta_2_5_6.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_5; });
   JuicyPixels = self.JuicyPixels_3_3_1;
   lens = dontCheck super.lens;    # avoid depending on broken polyparse
   polyparse = markBrokenVersion "1.12" super.polyparse;
