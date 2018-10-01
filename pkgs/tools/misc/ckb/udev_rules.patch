@@ -1,0 +1,8 @@
+diff --git a/linux/udev/99-ckb-daemon.rules b/linux/udev/99-ckb-daemon.rules
+index a768bf2..28febf2 100644
+--- a/linux/udev/99-ckb-daemon.rules
++++ b/linux/udev/99-ckb-daemon.rules
+@@ -1 +1,2 @@
+-ACTION=="add|change", SUBSYSTEM=="input", ATTRS{name}=="ckb[0-9]: [A-Za-z0-9]*", ENV{ID_INPUT_JOYSTICK}=""
++# Mark ckb devices as not a joystick and create symlinks to the virtual input devices
++ACTION=="add|change", SUBSYSTEM=="input", ATTRS{name}=="ckb[0-9]: [A-Za-z0-9]*", ENV{ID_INPUT_JOYSTICK}="", PROGRAM="@gnused@/bin/sed 's/[0-9]: /-/' /sys/class/input/%k/device/name", ENV{.INPUT_NAME}="%c, "SYMLINK+="input/by-id/%E{.INPUT_NAME}-event"

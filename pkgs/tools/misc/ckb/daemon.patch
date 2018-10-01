@@ -1,0 +1,22 @@
+diff --git a/src/daemon/CMakeLists.txt b/src/daemon/CMakeLists.txt
+index 09056a7..d9685f7 100644
+--- a/src/daemon/CMakeLists.txt
++++ b/src/daemon/CMakeLists.txt
+@@ -419,7 +419,7 @@ if ("${CKB_NEXT_INIT_SYSTEM}" STREQUAL "launchd")
+ elseif ("${CKB_NEXT_INIT_SYSTEM}" STREQUAL "systemd")
+     install(
+         FILES "${CMAKE_CURRENT_BINARY_DIR}/service/ckb-next-daemon.service"
+-        DESTINATION "/usr/lib/systemd/system"
++        DESTINATION "./usr/lib/systemd/system"
+         PERMISSIONS
+         OWNER_READ OWNER_WRITE
+         GROUP_READ
+@@ -456,7 +456,7 @@ endif ()
+ if (LINUX)
+   install(
+     FILES "${CMAKE_SOURCE_DIR}/linux/udev/99-ckb-daemon.rules"
+-    DESTINATION "/etc/udev/rules.d"
++    DESTINATION "./etc/udev/rules.d"
+     PERMISSIONS
+     OWNER_READ OWNER_WRITE
+     GROUP_READ

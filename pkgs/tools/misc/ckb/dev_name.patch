@@ -1,0 +1,32 @@
+From c51cc0cdea650f42ebdb1f77bf3a2b81197ac43f Mon Sep 17 00:00:00 2001
+From: Tasos Sahanidis <tasos@tasossah.com>
+Date: Sun, 12 Aug 2018 17:39:12 +0300
+Subject: [PATCH] Show virtual device type in name
+
+---
+ src/daemon/input_linux.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/daemon/input_linux.c b/src/daemon/input_linux.c
+index ef6ac040..83326c3c 100644
+--- a/src/daemon/input_linux.c
++++ b/src/daemon/input_linux.c
+@@ -64,7 +64,8 @@ int os_inputopen(usbdevice* kb){
+     int index = INDEX_OF(kb, keyboard);
+     struct uinput_user_dev indev;
+     memset(&indev, 0, sizeof(indev));
+-    snprintf(indev.name, UINPUT_MAX_NAME_SIZE, "ckb%d: %s", index, kb->name);
++    snprintf(indev.name, UINPUT_MAX_NAME_SIZE - 5, "ckb%d: %s", index, kb->name);
++    strcat(indev.name, " vKB");
+     indev.id.bustype = BUS_USB;
+     indev.id.vendor = kb->vendor;
+     indev.id.product = kb->product;
+@@ -75,6 +76,8 @@ int os_inputopen(usbdevice* kb){
+     if(fd <= 0)
+         return 0;
+     // Open mouse
++    snprintf(indev.name, UINPUT_MAX_NAME_SIZE - 5, "ckb%d: %s", index, kb->name);
++    strcat(indev.name, " vM");
+     fd = uinputopen(&indev, 1);
+     kb->uinput_mouse = fd;
+     return fd <= 0;

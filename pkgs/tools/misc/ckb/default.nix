@@ -1,47 +1,54 @@
-{ stdenv, fetchFromGitHub, substituteAll, udev
-, pkgconfig, qtbase, qmake, zlib, kmod }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, systemd, udev, substituteAll
+, qtbase, zlib, kmod, libpulseaudio, libappindicator-gtk2, gnused }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.9";
+  version = "0.3.1";
   name = "ckb-next-${version}";
 
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
     rev = "v${version}";
-    sha256 = "0hl41znyhp3k5l9rcgz0gig36gsg95ivrs1dyngv45q9jkr6fchm";
+    sha256 = "1jivz6k4qkjykps5z80dhbs2pgn6w2nwam52w56yg8393zskknn8";
   };
 
   buildInputs = [
-    udev
-    qtbase
-    zlib
+    systemd udev qtbase zlib gnused
+    libpulseaudio libappindicator-gtk2
   ];
 
   nativeBuildInputs = [
     pkgconfig
-    qmake
+    cmake
   ];
 
   patches = [
-    ./ckb-animations-location.patch
     (substituteAll {
       name = "ckb-modprobe.patch";
       src = ./ckb-modprobe.patch;
       inherit kmod;
     })
+    ./daemon.patch
+    ./libs_ckb_next.patch
+    ./dev_name.patch
+    #Update udev rules for /dev/input/by-id. remove on next ckb release.
+    (substituteAll {
+      name = "udev_rules.patch";
+      src = ./udev_rules.patch;
+      inherit gnused;
+    })
   ];
 
   doCheck = false;
 
-  installPhase = ''
-    runHook preInstall
+  #installPhase = ''
+  #  runHook preInstall
 
-    install -D --mode 0755 --target-directory $out/bin bin/ckb-daemon bin/ckb
-    install -D --mode 0755 --target-directory $out/libexec/ckb-animations bin/ckb-animations/*
+  #  install -D --mode 0755 --target-directory $out/bin bin/ckb-daemon bin/ckb
+  #  install -D --mode 0755 --target-directory $out/libexec/ckb-animations bin/ckb-animations/*
 
-    runHook postInstall
-  '';
+  #  runHook postInstall
+  #'';
 
   meta = with stdenv.lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";
