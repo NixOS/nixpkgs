@@ -18930,6 +18930,8 @@ with pkgs;
     apiKey = config.libspotify.apiKey or null;
   };
 
+  sourcetrail = callPackage ../development/tools/sourcetrail { };
+
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
   squeezelite = callPackage ../applications/audio/squeezelite { };
