@@ -5737,6 +5737,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc6; # doesn't build with gcc7
   };
 
+  uftrace = callPackage ../development/tools/uftrace { };
+
   uget = callPackage ../tools/networking/uget { };
 
   uget-integrator = callPackage ../tools/networking/uget-integrator { };
