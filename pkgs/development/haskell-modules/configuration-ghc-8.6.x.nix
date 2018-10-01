@@ -47,8 +47,6 @@ self: super: {
   # LTS-12.x versions do not compile.
   contravariant = self.contravariant_1_5;
   control-monad-free = markBrokenVersion "0.6.1" super.control-monad-free;
-  doctest = self.doctest_0_16_0_1;
-  doctest_0_16_0_1 = dontCheck super.doctest_0_16_0_1;
   Glob = self.Glob_0_9_3;
   haddock-library = markBroken super.haddock-library;
   hslogger = self.hslogger_1_2_12;
