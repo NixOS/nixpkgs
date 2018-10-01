@@ -34,9 +34,10 @@ stdenv.mkDerivation rec {
   postPatch = "patchShebangs .";
 
   configureFlags = [
-    "--disable-gtk_legacy"
-    "--disable-gtk_next"
-    "--disable-unity"
+    "--disable-gtk_next" # GTK 4.0
+    "--enable-gnome"
+    "--enable-parallel"
+    "--enable-plank"
   ];
 
   meta = with stdenv.lib; {
