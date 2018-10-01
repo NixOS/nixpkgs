@@ -48,8 +48,6 @@ stdenv.mkDerivation rec {
 
   ];
 
-  doCheck = false;
-
   meta = with stdenv.lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";
     homepage = https://github.com/ckb-next/ckb-next;
