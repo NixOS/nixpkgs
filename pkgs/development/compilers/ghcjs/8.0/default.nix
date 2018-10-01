@@ -1,6 +1,6 @@
 { fetchgit, fetchFromGitHub, bootPkgs, cabal-install }:
 
-bootPkgs.callPackage ./base.nix {
+bootPkgs.callPackage ../base.nix {
   version = "0.2.020170323";
 
   inherit bootPkgs cabal-install;
@@ -18,7 +18,7 @@ bootPkgs.callPackage ./base.nix {
     fetchSubmodules = true;
   };
 
-  shims = import ./head_shims.nix { inherit fetchFromGitHub; };
+  shims = import ./shims.nix { inherit fetchFromGitHub; };
   stage1Packages = [
     "array"
     "base"
@@ -44,7 +44,7 @@ bootPkgs.callPackage ./base.nix {
     "transformers"
     "unix"
   ];
-  stage2 = import ./head_stage2.nix;
+  stage2 = import ./stage2.nix;
 
-  patches = [ ./ghcjs-head.patch ];
+  patches = [ ./boot.patch ];
 }
