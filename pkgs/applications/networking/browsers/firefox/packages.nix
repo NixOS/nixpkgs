@@ -100,14 +100,14 @@ rec {
     isTorBrowserLike = true;
 
     unpackPhase = ''
-        # fetchFromGitHub produces ro sources, root dir gets a name that
-        # is too long for shebangs. fixing
-        cp -a $src tor-browser
-        chmod -R +w tor-browser
-        cd tor-browser
+      # fetchFromGitHub produces ro sources, root dir gets a name that
+      # is too long for shebangs. fixing
+      cp -a $src tor-browser
+      chmod -R +w tor-browser
+      cd tor-browser
 
-        # set times for xpi archives
-        find . -exec touch -d'2010-01-01 00:00' {} \;
+      # set times for xpi archives
+      find . -exec touch -d'2010-01-01 00:00' {} \;
     '';
 
     patches = nixpkgsPatches;
