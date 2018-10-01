@@ -22,6 +22,7 @@ let
       CoLoR = callPackage ../development/coq-modules/CoLoR {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
+      coqprime = callPackage ../development/coq-modules/coqprime {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
       equations = callPackage ../development/coq-modules/equations { };
