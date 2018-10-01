@@ -23,32 +23,32 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+
+    # ckb daemon loads a kernel module by calling the actual modprobe binary
     (substituteAll {
       name = "ckb-modprobe.patch";
       src = ./ckb-modprobe.patch;
       inherit kmod;
     })
+
+    # stop cmake trying to install to /usr and /etc
     ./daemon.patch
+
+    # stop cmake trying to install to /etc
     ./libs_ckb_next.patch
-    ./dev_name.patch
-    #Update udev rules for /dev/input/by-id. remove on next ckb release.
+
+    ./dev_name.patch # add correct device alias (mouse vs keyboard)
+
+    # ckb's udev rule runs sed on device name for some reason
     (substituteAll {
       name = "udev_rules.patch";
       src = ./udev_rules.patch;
       inherit gnused;
     })
+
   ];
 
   doCheck = false;
-
-  #installPhase = ''
-  #  runHook preInstall
-
-  #  install -D --mode 0755 --target-directory $out/bin bin/ckb-daemon bin/ckb
-  #  install -D --mode 0755 --target-directory $out/libexec/ckb-animations bin/ckb-animations/*
-
-  #  runHook postInstall
-  #'';
 
   meta = with stdenv.lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";

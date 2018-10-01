@@ -26,12 +26,13 @@ in
       systemd.services.ckb = {
         description = "Corsair Keyboard Daemon";
         wantedBy = ["multi-user.target"];
-        script = "${cfg.package}/bin/ckb-daemon";
+        script = "${cfg.package}/bin/ckb-next-daemon";
         serviceConfig = {
           Restart = "always";
           StandardOutput = "syslog";
         };
       };
+      services.udev.packages = [ cfg.package ];
     };
 
     meta = {
