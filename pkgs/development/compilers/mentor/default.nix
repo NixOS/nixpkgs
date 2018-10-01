@@ -10,7 +10,7 @@ let
     stdenv.mkDerivation rec {
       inherit name src;
 
-      buildInputs = [ patchelf ];
+      nativeBuildInputs = [ patchelf ];
 
       buildCommand = ''
         # Unpack tarball

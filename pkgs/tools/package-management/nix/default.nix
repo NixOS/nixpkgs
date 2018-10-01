@@ -5,7 +5,7 @@
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
-, withLibseccomp ? libseccomp.meta.available, libseccomp
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
 , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 }:
 

@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1y56dlhx3azny5hzixn9x4kmzzpmakzyvw45qk8x4ffsc7jqq5bs";
+      sha256 = "09rhss1s6gxmqvb8k2l0f55mv38igyvikmm6d07zxkw6049q3maz";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -999,6 +999,9 @@ self: super: {
     '';
   });
 
+  # https://github.com/haskell-rewriting/term-rewriting/issues/11
+  term-rewriting = dontCheck (doJailbreak super.term-rewriting);
+
   # https://github.com/nick8325/twee/pull/1
   twee-lib = dontHaddock super.twee-lib;
 
@@ -1149,5 +1152,11 @@ self: super: {
       sha256 = "0qz1svb96n42nmig16vyphwxas34hypgayvwc91ri7w7xd6yi1ba";
     };
   };
+
+  # https://github.com/kcsongor/generic-lens/pull/60
+  generic-lens = appendPatch super.generic-lens (pkgs.fetchpatch {
+    url = https://github.com/kcsongor/generic-lens/commit/d9af1ec22785d6c21e928beb88fc3885c6f05bed.patch;
+    sha256 = "0ljwcha9l52gs5bghxq3gbzxfqmfz3hxxcg9arjsjw8f7kw946xq";
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

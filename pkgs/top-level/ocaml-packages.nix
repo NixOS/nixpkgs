@@ -240,6 +240,8 @@ let
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
+    elpi = callPackage ../development/ocaml-modules/elpi { };
+
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };

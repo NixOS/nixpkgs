@@ -73,6 +73,7 @@ in stdenv.mkDerivation rec {
       render without stepping on each other's toes.
     '';
 
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    platforms = platforms.mesaPlatforms;
+    license = with licenses; [ mit bsd3 publicDomain sgi-b-20 ];
   };
 }

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = sha256;
   };
 
-  buildInputs = [ bzip2 patchelf ];
+  nativeBuildInputs = [ bzip2 patchelf ];
 
   dontPatchELF = true;
 

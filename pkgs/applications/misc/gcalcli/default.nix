@@ -33,14 +33,14 @@ let
   };
 
 in with py.pkgs; buildPythonApplication rec {
-  version = "3.4.0";
+  version = "4.0.0a4";
   name = "gcalcli-${version}";
 
   src = fetchFromGitHub {
     owner  = "insanum";
     repo   = "gcalcli";
     rev    = "v${version}";
-    sha256 = "171awccgnmfv4j7m2my9387sjy60g18kzgvscl6pzdid9fn9rrm8";
+    sha256 = "00giq5cdigidzv5bz4wgzi1yp6xlf2rdcy6ynmsc6bcf0cl5x64d";
   };
 
   propagatedBuildInputs = [
@@ -55,7 +55,7 @@ in with py.pkgs; buildPythonApplication rec {
       "command = '${libnotify}/bin/notify-send -i view-calendar-upcoming-events -u critical -a Calendar %s'"
   '';
 
-  # There are no tests as of 3.4.0
+  # There are no tests as of 4.0.0a4
   doCheck = false;
 
   meta = with lib; {

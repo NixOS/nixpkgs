@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, sassc, autoreconfHook, pkgconfig, gtk3
-, gnome-themes-standard, gtk-engine-murrine, optipng, inkscape}:
+, gnome-themes-extra, gtk-engine-murrine, optipng, inkscape}:
 
 let
   pname = "arc-theme";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig sassc optipng inkscape ];
   buildInputs = [ gtk3 ];
 
-  propagatedUserEnvPkgs = [ gnome-themes-standard gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gnome-themes-extra gtk-engine-murrine ];
 
   postPatch = ''
     find . -name render-assets.sh |
