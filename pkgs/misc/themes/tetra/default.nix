@@ -1,16 +1,12 @@
 { stdenv, fetchFromGitHub, gtk3, sassc }:
 
-let
-  pname = "tetra-gtk-theme";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  name = "tetra-gtk-theme-${version}";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner  = "hrdwrrsk";
-    repo   = pname;
+    repo   = "tetra-gtk-theme";
     rev    = version;
     sha256 = "0jdgj7ac9842cgrjnzdqlf1f3hlf9v7xk377pvqcz2lwcr1dfaxz";
   };
