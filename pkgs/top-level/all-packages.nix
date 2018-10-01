@@ -15858,6 +15858,8 @@ with pkgs;
     inherit (gnome2) libgnomeui GConf;
   };
 
+  csa = callPackage ../applications/audio/csa { };
+
   csound = callPackage ../applications/audio/csound { };
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
