@@ -93,10 +93,11 @@ in stdenv.mkDerivation (args // {
 
   installPhase = args.installPhase or ''
     runHook preInstall
-    mkdir -p $out/bin
-    mkdir -p $out/lib
-    find target/release -maxdepth 1 -type f -executable ! \( -name "*.so.*" -o -name "*.so" -o -name "*.a" -o -name "*.dylib" \) | xargs -r -n 1 cp -t $out/bin
-    find target/release -maxdepth 1 -name "*.so.*" -o -name "*.so" -o -name "*.a" -o -name "*.dylib" | xargs -r -n 1 cp -t $out/lib
+    mkdir -p $out/bin $out/lib
+    find target/release -maxdepth 1 -type f -executable ! \( -regex ".*.\(so.[0-9]\|so\|a\|dylib\)" \) -print0 | xargs -r -0 cp -t $out/bin
+    find target/release -maxdepth 1 -regex ".*.\(so.[0-9]\|so\|a\|dylib\)" -print0 | xargs -r -0 cp -t $out/lib
+    rmdir $out/bin 2>/dev/null || true
+    rmdir $out/lib 2>/dev/null || true
     runHook postInstall
   '';
 
