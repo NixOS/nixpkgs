@@ -9,9 +9,15 @@ let
   ];
 
   firefox60_aarch64_skia_patch = fetchpatch {
-      name = "aarch64-skia.patch";
-      url = https://src.fedoraproject.org/rpms/firefox/raw/8cff86d95da3190272d1beddd45b41de3148f8ef/f/build-aarch64-skia.patch;
-      sha256 = "11acb0ms4jrswp7268nm2p8g8l4lv8zc666a5bqjbb09x9k6b78k";
+    name = "aarch64-skia.patch";
+    url = https://src.fedoraproject.org/rpms/firefox/raw/8cff86d95da3190272d1beddd45b41de3148f8ef/f/build-aarch64-skia.patch;
+    sha256 = "11acb0ms4jrswp7268nm2p8g8l4lv8zc666a5bqjbb09x9k6b78k";
+  };
+
+  firefox60_triplet_patch = fetchpatch {
+    name = "triplet.patch";
+    url = https://hg.mozilla.org/releases/mozilla-release/raw-rev/bc651d3d910c;
+    sha256 = "0iybkadsgsf6a3pq3jh8z1p110vmpkih8i35jfj8micdkhxzi89g";
   };
 
 in
@@ -110,7 +116,8 @@ rec {
       find . -exec touch -d'2010-01-01 00:00' {} \;
     '';
 
-    patches = nixpkgsPatches;
+    patches = nixpkgsPatches
+      ++ lib.optional (args.tbversion == "8.0.2") firefox60_triplet_patch;
 
     meta = {
       description = "A web browser built from TorBrowser source tree";
