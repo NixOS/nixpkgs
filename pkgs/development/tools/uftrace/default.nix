@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0rn2xwd87qy5ihn5zq9pwq8cs1vfmcqqz0wl70wskkgp2ccsd9x8";
   };
 
+  postUnpack = ''
+        patchShebangs .
+  '';
+
   meta = {
     description = "Function (graph) tracer for user-space";
     homepage = https://github.com/namhyung/uftrace;
