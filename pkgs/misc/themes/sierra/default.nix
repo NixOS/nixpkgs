@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "sierra-gtk-theme-${version}";
-  version = "2018-09-14";
+  version = "2018-10-01";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "sierra-gtk-theme";
-    rev = "4c07f9e4978ab2d87ce0f8d4a5d60da21784172c";
-    sha256 = "0mp5v462wbjq157hfnqzd8sw374mc611kpk92is2c3qhvj5qb6qd";
+    rev = version;
+    sha256 = "10rjk2lyhlkhhfx6f6r0cykbkxa2jhri4wirc3h2wbzzsx7ch3ix";
   };
 
   nativeBuildInputs = [ libxml2 ];
