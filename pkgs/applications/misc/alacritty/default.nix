@@ -119,5 +119,6 @@ in buildRustPackage rec {
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ mic92 ];
+    platforms = [ "x86_64-linux" "x86-64-darwin" ];
   };
 }
