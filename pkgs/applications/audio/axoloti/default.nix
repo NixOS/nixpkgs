@@ -96,6 +96,6 @@ stdenv.mkDerivation rec {
       <literal>SUBSYSTEM=="usb", ATTR{idVendor}=="16c0", ATTR{idProduct}=="0442", OWNER="someuser", GROUP="somegroup"</literal>
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ TealG ];
+    maintainers = with maintainers; [ ];
   };
 }

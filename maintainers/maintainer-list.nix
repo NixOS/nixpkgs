@@ -4063,11 +4063,6 @@
     github = "tazjin";
     name = "Vincent Ambo";
   };
-  TealG = {
-    email = "~@Teal.Gr";
-    github = "TealG";
-    name = "Teal Gaure";
-  };
   teh = {
     email = "tehunger@gmail.com";
     github = "teh";
