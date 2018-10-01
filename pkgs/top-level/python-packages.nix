@@ -4297,6 +4297,8 @@ in {
 
   schema = callPackage ../development/python-modules/schema {};
 
+  simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server {};
+
   stem = callPackage ../development/python-modules/stem { };
 
   svg-path = callPackage ../development/python-modules/svg-path { };
