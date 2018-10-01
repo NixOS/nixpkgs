@@ -5,28 +5,26 @@ with lib;
 let
   cfg = config.services.redmine;
 
-  bundle = "${pkgs.redmine}/share/redmine/bin/bundle";
+  bundle = pkgs.writeShellScriptBin "bundle" ''
+    export PATH="${config.systemd.services.redmine.path}"
+    export RAILS_ENV="production"
 
-  databaseYml = pkgs.writeText "database.yml" ''
-    production:
-      adapter: ${cfg.database.type}
-      database: ${cfg.database.name}
-      host: ${cfg.database.host}
-      port: ${toString cfg.database.port}
-      username: ${cfg.database.user}
-      password: #dbpass#
-  '';
+    # move the schema from read-only db/ to writable cache/
+    export SCHEMA="${cfg.stateDir}/cache/schema.db"
 
-  configurationYml = pkgs.writeText "configuration.yml" ''
-    default:
-      scm_subversion_command: ${pkgs.subversion}/bin/svn
-      scm_mercurial_command: ${pkgs.mercurial}/bin/hg
-      scm_git_command: ${pkgs.gitAndTools.git}/bin/git
-      scm_cvs_command: ${pkgs.cvs}/bin/cvs
-      scm_bazaar_command: ${pkgs.bazaar}/bin/bzr
-      scm_darcs_command: ${pkgs.darcs}/bin/darcs
+    cd ${cfg.stateDir}
+    #export HOME="${cfg.stateDir}"
+    #export REDMINE_LANG="en"
+    #export RAILS_CACHE="${cfg.stateDir}/cache"
+    #export RAILS_ETC="${cfg.stateDir}/config"
+    #export RAILS_LOG="${cfg.stateDir}/log"
+    #export RAILS_VAR="${cfg.stateDir}/var"
+    #export RAILS_PLUGINS="${cfg.stateDir}/plugins"
+    #export RAILS_PUBLIC="${cfg.stateDir}/public"
+    #export RAILS_TMP="${cfg.stateDir}/tmp"
 
-    ${cfg.extraConfig}
+    # continue with wrapped bundle (setting the BUNDLE_* variables)
+    exec ${cfg.package}/share/redmine/bin/bundle "$@"
   '';
 
 in
@@ -38,6 +36,12 @@ in
         type = types.bool;
         default = false;
         description = "Enable the Redmine service.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.redmine;
+        description = "Redmine package to use.";
       };
 
       user = mkOption {
@@ -58,13 +62,12 @@ in
         description = "The state directory, logs and plugins are stored here.";
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
+      config = lib.mkOption {
+        type = types.attrsOf types.lines;
         description = ''
-          Extra configuration in configuration.yml.
-
-          See https://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration
+          This option defines the Redmine config/.
+          The attribute name defines the name of the file in config/,
+          and the attribute value defines the content of the file.
         '';
       };
 
@@ -131,16 +134,11 @@ in
       }
     ];
 
-    environment.systemPackages = [ pkgs.redmine ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.redmine = {
       after = [ "network.target" (if cfg.database.type == "mysql2" then "mysql.service" else "postgresql.service") ];
       wantedBy = [ "multi-user.target" ];
-      environment.HOME = "${pkgs.redmine}/share/redmine";
-      environment.RAILS_ENV = "production";
-      environment.RAILS_CACHE = "${cfg.stateDir}/cache";
-      environment.REDMINE_LANG = "en";
-      environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       path = with pkgs; [
         imagemagickBig
         bazaar
@@ -149,45 +147,83 @@ in
         gitAndTools.git
         mercurial
         subversion
+        coreutils
+        findutils
+        gnused
       ];
       preStart = ''
-        # start with a fresh config directory every time
-        rm -rf ${cfg.stateDir}/config
-        cp -r ${pkgs.redmine}/share/redmine/config.dist ${cfg.stateDir}/config
+        set -x
+        install -D -d -o ${cfg.user} -g ${cfg.group} -m 771 ${cfg.stateDir}
 
-        # create the basic state directory layout pkgs.redmine expects
-        mkdir -p /run/redmine
+        # preserve existing secret token
+        if test -e ${cfg.stateDir}/config/initializers/secret_token.rb; then
+          secret_token="$(cat ${cfg.stateDir}/config/initializers/secret_token.rb)"
+        else
+          secret_token=
+        fi
 
-        for i in config files log plugins tmp; do
-          mkdir -p ${cfg.stateDir}/$i
-          ln -fs ${cfg.stateDir}/$i /run/redmine/$i
-        done
+        # clear everything which is not stateful, including config/
+        find ${cfg.stateDir} -mindepth 1 -maxdepth 1 \
+         -not '(' -name cache -or -name files -or -name log ')' \
+         -execdir rm -rf {} +
 
-        # ensure cache directory exists for db:migrate command
-        mkdir -p ${cfg.stateDir}/cache
+        # link what's needed to run rake in ${cfg.stateDir},
+        # notably the plugins' tasks (see: bundle exec rake --tasks)
+        find ${cfg.package}/share/redmine -mindepth 1 -maxdepth 1 \
+         -not '(' -name cache -or -name files -or -name log \
+              -or -name config -or -name public -or -name tmp ')' \
+         -exec ln -fns -t ${cfg.stateDir} {} +
 
-        # link in the application configuration
-        ln -fs ${configurationYml} ${cfg.stateDir}/config/configuration.yml
+        # create writable dirs
+        install -D -d -o ${cfg.user} -g ${cfg.group} -m 770 \
+         ${cfg.stateDir}/cache \
+         ${cfg.stateDir}/public \
+         ${cfg.stateDir}/public/plugin_assets \
+         ${cfg.stateDir}/tmp
 
-        chmod -R ug+rwX,o-rwx+x ${cfg.stateDir}/
+        # fills public/, keeping public/plugin_assets/ writable
+        find ${cfg.package}/share/redmine/public -mindepth 1 -maxdepth 1 \
+         -not '(' -name plugin_assets ')' \
+         -exec ln -fns -t ${cfg.stateDir}/public {} +
+
+        # expose wrapped bundle for manual maintenance
+        ln -fns ${bundle}/bin/bundle ${cfg.stateDir}/bundle
+
+        # fills config/
+        cp -r ${cfg.package}/share/redmine/config ${cfg.stateDir}/config
+        ${lib.concatStrings (lib.mapAttrsToList
+          (name: content: ''
+            mkdir -p "$(dirname "${cfg.stateDir}/config/${name}")"
+            ln -fns ${pkgs.writeText name content} ${cfg.stateDir}/config/${name}
+          '')
+          cfg.config)}
+
+        # restore or generate the secret token
+        if test -n "$secret_token"; then
+          cat >${cfg.stateDir}/config/initializers/secret_token.rb <<EOF
+          $secret_token
+        EOF
+        else
+          ${bundle}/bin/bundle exec rake generate_secret_token
+        fi
+        chmod 440 ${cfg.stateDir}/config/initializers/secret_token.rb
 
         # handle database.passwordFile
         DBPASS=$(head -n1 ${cfg.database.passwordFile})
-        cp -f ${databaseYml} ${cfg.stateDir}/config/database.yml
-        sed -e "s,#dbpass#,$DBPASS,g" -i ${cfg.stateDir}/config/database.yml
+        database_yml=$(sed -e "s,#dbpass#,$DBPASS,g" ${cfg.stateDir}/config/database.yml)
+        rm -f ${cfg.stateDir}/config/database.yml
+        cat >${cfg.stateDir}/config/database.yml <<EOF
+        $database_yml
+        EOF
         chmod 440 ${cfg.stateDir}/config/database.yml
-
-        # generate a secret token if required
-        if ! test -e "${cfg.stateDir}/config/initializers/secret_token.rb"; then
-          ${bundle} exec rake generate_secret_token
-          chmod 440 ${cfg.stateDir}/config/initializers/secret_token.rb
-        fi
 
         # ensure everything is owned by ${cfg.user}
         chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
+        chmod -R ug+rwX,o-rwx ${cfg.stateDir}
 
-        ${bundle} exec rake db:migrate
-        ${bundle} exec rake redmine:load_default_data
+        ${bundle}/bin/bundle exec rake db:migrate
+        ${bundle}/bin/bundle exec rake redmine:load_default_data
+        ${bundle}/bin/bundle exec rake redmine:plugins:migrate
       '';
 
       serviceConfig = {
@@ -196,8 +232,8 @@ in
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "300";
-        WorkingDirectory = "${pkgs.redmine}/share/redmine";
-        ExecStart="${bundle} exec rails server webrick -e production -P ${cfg.stateDir}/redmine.pid";
+        WorkingDirectory = "${cfg.package}/share/redmine";
+        ExecStart = "${bundle}/bin/bundle exec rails server webrick -e production -P ${cfg.stateDir}/redmine.pid";
       };
 
     };
@@ -208,6 +244,7 @@ in
         home = cfg.stateDir;
         createHome = true;
         uid = config.ids.uids.redmine;
+        useDefaultShell = true;
       });
 
     users.extraGroups = optionalAttrs (cfg.group == "redmine") (singleton
@@ -225,6 +262,30 @@ in
         name = "redmine-database-password";
         text = cfg.database.password;
       })));
+
+    # Here and not in options' default= to be able to override
+    # individual attribute (eg. "configuration.yml") with lib.mkForce
+    # but keep the unchanged attributes (eg. "database.yml").
+    services.redmine.config = {
+      "database.yml" = ''
+        production:
+          adapter: ${cfg.database.type}
+          database: ${cfg.database.name}
+          host: ${cfg.database.host}
+          port: ${toString cfg.database.port}
+          username: ${cfg.database.user}
+          password: #dbpass#
+      '';
+      "configuration.yml" = ''
+        default:
+          scm_subversion_command: ${pkgs.subversion}/bin/svn
+          scm_mercurial_command: ${pkgs.mercurial}/bin/hg
+          scm_git_command: ${pkgs.gitAndTools.git}/bin/git
+          scm_cvs_command: ${pkgs.cvs}/bin/cvs
+          scm_bazaar_command: ${pkgs.bazaar}/bin/bzr
+          scm_darcs_command: ${pkgs.darcs}/bin/darcs
+      '';
+    };
 
   };
 

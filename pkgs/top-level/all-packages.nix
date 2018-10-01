@@ -4900,6 +4900,12 @@ with pkgs;
   redir = callPackage ../tools/networking/redir { };
 
   redmine = callPackage ../applications/version-management/redmine { };
+  redmineWithPlugins = redmine.withPlugins;
+  redmine-full = redmineWithPlugins (with redmine.plugins; [
+    redmine_git_hosting
+    clipboard_image_paste
+    redmine_revision_branches
+  ]);
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
