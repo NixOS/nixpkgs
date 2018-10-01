@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "OpenRA";
     repo = "OpenRA";
     rev = "release-${version}";
-    sha256 = "05c6vrmlgzfxgfx1idqmp6czmr079px3n57q5ahnwzqvcl11a2jj";
+    sha256 = "1pgi3zaq9fwwdq6yh19bwxscslqgabjxkvl9bcn1a5agy4bfbqk5";
 
     extraPostFetch = ''
       sed -i 's,curl,curl --insecure,g' $out/thirdparty/{fetch-thirdparty-deps,noget}.sh
