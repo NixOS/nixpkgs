@@ -10220,6 +10220,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreAudio CoreServices AudioUnit;
   };
 
+  libaosd = callPackage ../development/libraries/libaosd { };
+
   libabw = callPackage ../development/libraries/libabw { };
 
   libamqpcpp = callPackage ../development/libraries/libamqpcpp { };
