@@ -95,7 +95,7 @@ in
     environment.etc."clamav/freshclam.conf".source = freshclamConfigFile;
     environment.etc."clamav/clamd.conf".source = clamdConfigFile;
 
-    systemd.services.clamav-daemon = optionalAttrs cfg.daemon.enable {
+    systemd.services.clamav-daemon = mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
       after = optional cfg.updater.enable "clamav-freshclam.service";
       requires = optional cfg.updater.enable "clamav-freshclam.service";
@@ -116,7 +116,7 @@ in
       };
     };
 
-    systemd.timers.clamav-freshclam = optionalAttrs cfg.updater.enable {
+    systemd.timers.clamav-freshclam = mkIf cfg.updater.enable {
       description = "Timer for ClamAV virus database updater (freshclam)";
       wantedBy = [ "timers.target" ];
       timerConfig = {
@@ -125,7 +125,7 @@ in
       };
     };
 
-    systemd.services.clamav-freshclam = optionalAttrs cfg.updater.enable {
+    systemd.services.clamav-freshclam = mkIf cfg.updater.enable {
       description = "ClamAV virus database updater (freshclam)";
       restartTriggers = [ freshclamConfigFile ];
 
