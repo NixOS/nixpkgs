@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, sassc, optipng, inkscape, which }:
+{ stdenv, fetchFromGitHub, gtk3, sassc }:
 
 let
   pname = "tetra-gtk-theme";
@@ -20,14 +20,15 @@ stdenv.mkDerivation rec {
     export HOME="$NIX_BUILD_ROOT"
   '';
 
-  nativeBuildInputs = [ sassc optipng inkscape which ];
+  nativeBuildInputs = [ sassc ];
   buildInputs = [ gtk3 ];
 
   postPatch = "patchShebangs .";
 
-  buildPhase = "./render-assets.sh";
-
-  installPhase = "./install.sh -d $out";
+  installPhase = ''
+    mkdir -p $out/share/themes
+    ./install.sh -d $out/share/themes
+  '';
 
   meta = with stdenv.lib; {
     description = "Adwaita-based gtk+ theme with design influence from elementary OS and Vertex gtk+ theme.";
