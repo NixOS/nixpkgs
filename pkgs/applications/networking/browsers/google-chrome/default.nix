@@ -71,9 +71,8 @@ in stdenv.mkDerivation rec {
 
   src = chromium.upstream-info.binary;
 
+  nativeBuildInputs = [ patchelf makeWrapper ];
   buildInputs = [
-    patchelf makeWrapper
-
     # needed for GSETTINGS_SCHEMAS_PATH
     gsettings-desktop-schemas glib gtk
 

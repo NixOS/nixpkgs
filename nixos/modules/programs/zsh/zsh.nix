@@ -11,7 +11,7 @@ let
   cfg = config.programs.zsh;
 
   zshAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias ${k}='${v}'") cfg.shellAliases
+    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}") cfg.shellAliases
   );
 
 in

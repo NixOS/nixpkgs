@@ -54,13 +54,13 @@ in {
     };
     ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix {
       bootPkgs = packages.ghc7103Binary;
-      sphinx = pkgs.python27Packages.sphinx;
+      inherit (buildPackages.python27Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_37;
       llvmPackages = pkgs.llvmPackages_37;
     };
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
       bootPkgs = packages.ghc821Binary;
-      sphinx = pkgs.python3Packages.sphinx;
+      inherit (buildPackages.python3Packages) sphinx;
       buildLlvmPackages = buildPackages.llvmPackages_39;
       llvmPackages = pkgs.llvmPackages_39;
     };
@@ -80,13 +80,17 @@ in {
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghcjs = compiler.ghcjs84;
-    ghcjs710 = packages.ghc7103.callPackage ../development/compilers/ghcjs {
+    # Use `import` because `callPackage inside`.
+    ghcjs710 = import ../development/compilers/ghcjs/7.10 {
       bootPkgs = packages.ghc7103;
       inherit (pkgs) cabal-install;
+      inherit (buildPackages) fetchgit fetchFromGitHub;
     };
-    ghcjs80 = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
+    # `import` on purpose; see above.
+    ghcjs80 = import ../development/compilers/ghcjs/8.0 {
       bootPkgs = packages.ghc802;
       inherit (pkgs) cabal-install;
+      inherit (buildPackages) fetchgit fetchFromGitHub;
     };
     ghcjs82 = callPackage ../development/compilers/ghcjs-ng {
       bootPkgs = packages.ghc822;

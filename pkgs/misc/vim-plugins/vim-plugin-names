@@ -42,6 +42,7 @@ dhruvasagar/vim-table-mode
 digitaltoad/vim-jade
 dleonard0/pony-vim-syntax
 dracula/vim
+dylanaraps/wal.vim
 drmingdrmer/xptemplate
 eagletmt/ghcmod-vim
 eagletmt/neco-ghc
@@ -60,6 +61,7 @@ esneider/YUNOcommit.vim
 farmergreg/vim-lastplace
 fatih/vim-go
 FelikZ/ctrlp-py-matcher
+fenetikm/falcon
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
@@ -119,6 +121,7 @@ kana/vim-operator-replace
 kana/vim-operator-user
 kana/vim-tabpagecd
 kchmck/vim-coffee-script
+KeitaNakamura/neodark.vim
 keith/swift.vim
 kien/rainbow_parentheses.vim
 konfekt/fastfold
@@ -134,6 +137,7 @@ lfilho/cosco.vim
 LnL7/vim-nix
 ludovicchabant/vim-gutentags
 ludovicchabant/vim-lawrencium
+lukaszkorecki/workflowish
 luochen1990/rainbow
 lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
@@ -166,6 +170,7 @@ megaannum/forms
 megaannum/self
 mfukar/robotframework-vim
 mhinz/vim-grepper
+mhinz/vim-janah
 mhinz/vim-sayonara
 mhinz/vim-signify
 mhinz/vim-startify
@@ -185,7 +190,9 @@ ncm2/ncm2-ultisnips
 neoclide/vim-easygit
 neovimhaskell/haskell-vim
 neovim/nvimdev.nvim
+neutaaaaan/iosvkem
 nixprime/cpsm
+NLKNguyen/papercolor-theme
 noc7c9/vim-iced-coffee-script
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
@@ -194,6 +201,7 @@ osyo-manga/vim-watchdogs
 pangloss/vim-javascript
 parsonsmatt/intero-neovim
 peterhoeg/vim-qml
+phanviet/vim-monokai-pro
 plasticboy/vim-markdown
 powerman/vim-plugin-AnsiEsc
 python-mode/python-mode
@@ -203,6 +211,7 @@ rafaqz/ranger.vim
 rafi/awesome-vim-colorschemes
 raghur/vim-ghost
 raichoo/purescript-vim
+rakr/vim-one
 reedes/vim-pencil
 reedes/vim-wordy
 rhysd/committia.vim
@@ -245,6 +254,7 @@ sjl/gundo.vim
 sjl/splice.vim
 sk1418/last256
 slashmili/alchemist.vim
+sonph/onehalf
 t9md/vim-smalls
 takac/vim-hardtime
 ternjs/tern_for_vim
@@ -311,6 +321,7 @@ vim-scripts/tabmerge
 vim-scripts/taglist.vim
 vim-scripts/wombat256.vim
 vim-scripts/YankRing.vim
+vim-utils/vim-husk
 vimwiki/vimwiki
 vmchale/dhall-vim
 w0rp/ale
@@ -318,6 +329,7 @@ wakatime/vim-wakatime
 wellle/targets.vim
 will133/vim-dirdiff
 wincent/command-t
+wincent/ferret
 xolox/vim-easytags
 xolox/vim-misc
 xuhdev/vim-latex-live-preview

@@ -26,7 +26,8 @@ in stdenv.mkDerivation rec {
     sha256 = "144b4xggbzjfq7ga5nza7nra2cf6qn63z5ls7ba1jybkx1vm369k";
   };
 
-  buildInputs = [ cups' gcc ghostscript glibc patchelf ];
+  nativeBuildInputs = [ patchelf ];
+  buildInputs = [ cups' gcc ghostscript glibc ];
 
   inherit gcc ghostscript glibc;
   cups = cups';

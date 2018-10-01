@@ -1,10 +1,12 @@
-{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
+with import ../lib;
+
+{ nixpkgs ? { outPath = cleanSource ./..; revCount = 130979; shortRev = "gfedcba"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
+, configuration ? {}
 }:
 
 with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };
-with import ../lib;
 
 let
 
@@ -51,7 +53,7 @@ let
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
-      modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
+      modules = [ configuration module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
     }).config.system.build.isoImage);
 
 
@@ -62,7 +64,7 @@ let
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
-      modules = [ module versionModule ];
+      modules = [ configuration module versionModule ];
     }).config.system.build.sdImage);
 
 
@@ -75,7 +77,7 @@ let
 
       config = (import lib/eval-config.nix {
         inherit system;
-        modules = [ module versionModule ];
+        modules = [ configuration module versionModule ];
       }).config;
 
       tarball = config.system.build.tarball;
@@ -95,16 +97,19 @@ let
 
   buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
-    modules = [ module versionModule ] ++ singleton
+    modules = [ configuration module versionModule ] ++ singleton
       ({ ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
       });
   }).config));
 
-  makeNetboot = config:
+  makeNetboot = { module, system, ... }:
     let
-      configEvaled = import lib/eval-config.nix config;
+      configEvaled = import lib/eval-config.nix {
+        inherit system;
+        modules = [ module versionModule ];
+      };
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
     in
@@ -140,11 +145,8 @@ in rec {
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
   netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+    module = ./modules/installer/netboot/netboot-minimal.nix;
     inherit system;
-    modules = [
-      ./modules/installer/netboot/netboot-minimal.nix
-      versionModule
-    ];
   });
 
   iso_minimal = forAllSystems (system: makeIso {

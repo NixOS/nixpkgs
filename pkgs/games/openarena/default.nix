@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jmc1cmdz1rcvqc9ilzib1kilpwap6v0d331l6q53wsibdzsz3ss";
   };
 
-  buildInputs = [ pkgs.unzip patchelf makeWrapper];
+  nativeBuildInputs = [ pkgs.unzip patchelf makeWrapper];
 
   installPhase = let
     gameDir = "$out/openarena-$version";

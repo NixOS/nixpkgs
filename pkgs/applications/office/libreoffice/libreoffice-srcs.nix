@@ -658,11 +658,11 @@
     md5name = "cdd6cffdebcd95161a73305ec13fc7a78e9707b46ca9f84fb897cd5626df3824-openldap-2.4.45.tgz";
   }
   {
-    name = "openssl-1.0.2o.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/openssl-1.0.2o.tar.gz";
-    sha256 = "ec3f5c9714ba0fd45cb4e087301eb1336c317e0d20b575a125050470e8089e4d";
+    name = "openssl-1.0.2p.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/openssl-1.0.2p.tar.gz";
+    sha256 = "50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00";
     md5 = "";
-    md5name = "ec3f5c9714ba0fd45cb4e087301eb1336c317e0d20b575a125050470e8089e4d-openssl-1.0.2o.tar.gz";
+    md5name = "50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00-openssl-1.0.2p.tar.gz";
   }
   {
     name = "liborcus-0.13.4.tar.gz";
