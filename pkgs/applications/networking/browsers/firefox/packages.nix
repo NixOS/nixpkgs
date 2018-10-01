@@ -14,12 +14,6 @@ let
     sha256 = "11acb0ms4jrswp7268nm2p8g8l4lv8zc666a5bqjbb09x9k6b78k";
   };
 
-  firefox60_triplet_patch = fetchpatch {
-    name = "triplet.patch";
-    url = https://hg.mozilla.org/releases/mozilla-release/raw-rev/bc651d3d910c;
-    sha256 = "0iybkadsgsf6a3pq3jh8z1p110vmpkih8i35jfj8micdkhxzi89g";
-  };
-
 in
 
 rec {
@@ -116,8 +110,7 @@ rec {
       find . -exec touch -d'2010-01-01 00:00' {} \;
     '';
 
-    patches = nixpkgsPatches
-      ++ lib.optional (args.tbversion == "8.0.2") firefox60_triplet_patch;
+    patches = nixpkgsPatches;
 
     meta = {
       description = "A web browser built from TorBrowser source tree";
@@ -173,16 +166,16 @@ in rec {
   };
 
   tor-browser-8-0 = tbcommon rec {
-    ffversion = "60.2.1esr";
-    tbversion = "8.0.2";
+    ffversion = "60.3.0esr";
+    tbversion = "8.0.3";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-60.2.1esr-8.0-1-slnos"
-      rev   = "4f71403a3e6203baa349a8f81d8664782c5ea548";
-      sha256 = "0zxdi162gpnfca7g77hc0rw4wkmxhfzp9hfmw6dpn97d5kn1zqq3";
+      # branch "tor-browser-60.3.0esr-8.0-1-slnos"
+      rev   = "bd512ad9c40069adfc983f4f03dbd9d220cdf2f9";
+      sha256 = "1j349aqiqrf58zrx8pkqvh292w41v1vwr7x7dmd74hq4pi2iwpn8";
     };
   };
 
