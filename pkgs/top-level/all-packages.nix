@@ -653,6 +653,8 @@ with pkgs;
 
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
+  cozy = callPackage ../applications/audio/cozy-audiobooks { };
+
   djmount = callPackage ../tools/filesystems/djmount { };
 
   dgsh = callPackage ../shells/dgsh { };
