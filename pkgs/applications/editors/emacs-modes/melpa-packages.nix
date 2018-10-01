@@ -146,6 +146,18 @@ self:
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
       });
 
+      magithub = super.magithub.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-svn = super.magit-svn.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       magit-todos = super.magit-todos.overrideAttrs (attrs: {
         # searches for Git at build time
         nativeBuildInputs =
