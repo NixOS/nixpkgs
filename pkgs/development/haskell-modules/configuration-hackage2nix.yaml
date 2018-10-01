@@ -43,6 +43,8 @@ core-packages:
 default-package-overrides:
   # Newer versions require contravariant-1.5.*, which many builds refuse at the moment.
   - base-compat-batteries ==0.10.1
+  # Newer versions don't work in LTS-12.x
+  - cassava-megaparsec < 2
   # LTS Haskell 12.11
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
