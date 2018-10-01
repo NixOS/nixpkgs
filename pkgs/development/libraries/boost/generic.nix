@@ -171,7 +171,7 @@ stdenv.mkDerivation {
   postFixup = ''
     # Make boost header paths relative so that they are not runtime dependencies
     cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
-      -exec sed 's/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
+      -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
   '' + optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
     $RANLIB "$out/lib/"*.a
   '';
