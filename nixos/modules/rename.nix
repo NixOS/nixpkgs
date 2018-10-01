@@ -274,7 +274,7 @@ with lib;
     (mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
 
     # Buildkite Agent
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "meta-data"] [ "services" "buildkite-agent" "tags" ])
+    (mkRemovedOptionModule [ "services" "buildkite-agent"] "services.buildkite-agent has been moved to an attribute set at services.buildkite-agents")
 
     # Redshift
     (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ]
