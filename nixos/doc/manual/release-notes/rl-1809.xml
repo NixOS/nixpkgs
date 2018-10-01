@@ -14,7 +14,45 @@
 
   <para>
    In addition to numerous new and upgraded packages, this release has the
-   following highlights:
+   following notable updates:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     End of support is planned for end of April 2019, handing over to 19.03.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Platform support: x86_64-linux and x86_64-darwin as always. Support for
+     aarch64-linux is as with the previous releases, not equivalent to the
+     x86-64-linux release, but with efforts to reach parity.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Nix has been updated to 2.1; see its
+     <link xlink:href="https://nixos.org/nix/manual/#ssec-relnotes-2.1">release
+     notes</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Core versions: linux: 4.14 LTS (unchanged), glibc: 2.26 → 2.27, gcc: 7
+     (unchanged), systemd: 237 → 239.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Desktop version changes: gnome: 3.26 → 3.28, (KDE) plasma-desktop: 5.12
+     → 5.13.
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   Notable changes and additions for 18.09 include:
   </para>
 
   <itemizedlist>
@@ -70,7 +108,7 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <title>New Services</title>
 
   <para>
-   The following new services were added since the last release:
+   A curated selection of new services that were added since the last release:
   </para>
 
   <itemizedlist>
@@ -122,6 +160,303 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
     <para>
      The new <varname>services.elasticsearch-curator</varname> service
      periodically curates or manages, your Elasticsearch indices and snapshots.
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   Every new services:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <literal>./config/xdg/autostart.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./config/xdg/icons.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./config/xdg/menus.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./config/xdg/mime.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./hardware/brightnessctl.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./hardware/onlykey.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./hardware/video/uvcvideo/default.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./misc/documentation.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./programs/firejail.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./programs/iftop.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./programs/sedutil.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./programs/singularity.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./programs/xss-lock.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./programs/zsh/zsh-autosuggestions.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/admin/oxidized.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/backup/duplicati.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/backup/restic.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/backup/restic-rest-server.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/cluster/hadoop/default.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/databases/aerospike.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/databases/monetdb.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/desktops/bamf.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/desktops/flatpak.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/desktops/zeitgeist.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/development/bloop.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/development/jupyter/default.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/hardware/lcd.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/hardware/undervolt.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/misc/clipmenu.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/misc/gitweb.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/misc/serviio.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/misc/safeeyes.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/misc/sysprof.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/misc/weechat.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/monitoring/datadog-agent.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/monitoring/incron.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/dnsdist.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/freeradius.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/hans.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/morty.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/ndppd.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/ocserv.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/owamp.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/quagga.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/shadowsocks.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/stubby.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/networking/zeronet.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/security/certmgr.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/security/cfssl.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/security/oauth2_proxy_nginx.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/web-apps/virtlyst.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/web-apps/youtrack.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/web-servers/hitch/default.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/web-servers/hydron.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/web-servers/meguca.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./services/web-servers/nginx/gitweb.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./virtualisation/kvmgt.nix</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>./virtualisation/qemu-guest-agent.nix</literal>
     </para>
    </listitem>
   </itemizedlist>
