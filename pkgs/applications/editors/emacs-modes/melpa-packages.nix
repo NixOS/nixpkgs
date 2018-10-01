@@ -59,8 +59,11 @@ self:
         inherit (self.melpaPackages) easy-kill;
       };
 
-      # missing git
-      egg = markBroken super.egg;
+      egg = super.egg.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # upstream issue: missing file header
       elmine = markBroken super.elmine;
