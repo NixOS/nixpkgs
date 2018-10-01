@@ -10020,6 +10020,21 @@ let
     };
   };
 
+  MojoliciousPluginStatus = buildPerlPackage rec {
+    name = "Mojolicious-Plugin-Status-1.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
+      sha256 = "14ypg679dk9yvgq67mp7lzs131cxhbgcmrpx5f4ddqcrs1bzq5rb";
+    };
+    propagatedBuildInputs = [ Mojolicious IPCShareLite BSDResource Sereal ];
+    meta = {
+      homepage = https://github.com/mojolicious/mojo-status;
+      description = "Mojolicious server status plugin";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
   MojoIOLoopForkCall = buildPerlModule rec {
     name = "Mojo-IOLoop-ForkCall-0.20";
     src = fetchurl {
