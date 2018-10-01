@@ -10,7 +10,7 @@
   lib,
   pkgs,
   pigz,
-  nixUnstable,
+  nix,
   perl,
   runCommand,
   rsync,
@@ -262,7 +262,7 @@ rec {
     '';
 
   nixRegistration = contents: runCommand "nix-registration" {
-    buildInputs = [ nixUnstable perl ];
+    buildInputs = [ nix perl ];
     # For obtaining the closure of `contents'.
     exportReferencesGraph =
       let contentsList = if builtins.isList contents then contents else [ contents ];
@@ -803,7 +803,7 @@ rec {
         echo "         be better to only have one layer that contains a nix store."
         # This requires Nix 1.12 or higher
         export NIX_REMOTE=local?root=$PWD
-        ${nixUnstable}/bin/nix-store --load-db < ${nixRegistration contents}/db.dump
+        ${nix}/bin/nix-store --load-db < ${nixRegistration contents}/db.dump
 
         # We fill the store in order to run the 'verify' command that
         # generates hash and size of output paths.
@@ -814,7 +814,7 @@ rec {
         storePaths=$(cat ${nixRegistration contents}/storePaths)
         echo "Copying everything to /nix/store (will take a while)..."
         cp -prd $storePaths nix/store/
-        ${nixUnstable}/bin/nix-store --verify --check-contents
+        ${nix}/bin/nix-store --verify --check-contents
 
         mkdir -p nix/var/nix/gcroots/docker/
         for i in ${lib.concatStringsSep " " contents}; do
