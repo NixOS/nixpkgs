@@ -4,12 +4,12 @@
 let
   versionMap = {
     "1.5" = {
-      flinkVersion = "1.5.3";
-      sha256 = "1fq7pd5qpchkkwhh30h3l9rhf298jfcfv2dc50z39qmwwijdjajk";
+      flinkVersion = "1.5.4";
+      sha256 = "193cgiykzbsm6ygnr1h45504xp2qxjikq188wkgivdj9a4wa04il";
     };
     "1.6" = {
-      flinkVersion = "1.6.0";
-      sha256 = "18fnpldzs36qx7myr9rmym9g9p3qkgnd1z3lfkpbaw590ddaqr9i";
+      flinkVersion = "1.6.1";
+      sha256 = "1z4795va15qnnhk2qx3gzimzgfd9nqchfgn759fnqfmcxh6n9vw3";
     };
   };
 in
