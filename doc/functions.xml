@@ -12,6 +12,6 @@
  <xi:include href="functions/generators.xml" />
  <xi:include href="functions/debug.xml" />
  <xi:include href="functions/fhs-environments.xml" />
- <xi:include href="shell.section.xml" />
+ <xi:include href="functions/shell.section.xml" />
  <xi:include href="functions/dockertools.xml" />
 </chapter>
