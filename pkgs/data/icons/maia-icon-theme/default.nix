@@ -1,14 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, gtk3, kdeFrameworks }:
+{ stdenv, fetchFromGitLab, cmake, extra-cmake-modules, gtk3, kdeFrameworks, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   name = "maia-icon-theme-${version}";
-  version = "2016-09-16";
+  version = "2018-02-24";
 
-  src = fetchFromGitHub {
-    owner = "manjaro";
-    repo = "artwork-maia";
-    rev = "f6718cd9c383adb77af54b694c47efa4d581f5b5";
-    sha256 = "0f9l3k9abgg8islzddrxgbxaw6vbai5bvz5qi1v2fzir7ykx7bgj";
+  src = fetchFromGitLab {
+    domain = "gitlab.manjaro.org";
+    group = "artwork";
+    owner = "themes";
+    repo = "maia";
+    rev = "b61312cc80cb9d12b0d8a55b3e61668eb6b77d2d";
+    sha256 = "1g98snlh96z4sqw9sfd7fxgamh45pcj3lh1kcmng7mirvrcn2pam";
   };
 
   nativeBuildInputs = [
@@ -19,10 +21,20 @@ stdenv.mkDerivation rec {
     kdeFrameworks.kwindowsystem
   ];
 
+  buildInputs = [
+    hicolor-icon-theme
+  ];
+
+  postFixup = ''
+    for theme in $out/share/icons/*; do
+      gtk-update-icon-cache $theme
+    done
+  '';
+
   meta = with stdenv.lib; {
     description = "Icons based on Breeze and Super Flat Remix";
-    homepage = https://github.com/manjaro/artwork-maia;
-    license = licenses.free; # https://github.com/manjaro/artwork-maia/issues/27
+    homepage = https://gitlab.manjaro.org/artwork/themes/maia;
+    license = licenses.lgpl3;
     maintainers = with maintainers; [ mounium ];
     platforms = platforms.all;
   };
