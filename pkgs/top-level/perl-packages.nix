@@ -493,7 +493,6 @@ let
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
       sha256 = "25cbc2d5626c14d39a0b5e4fe8383941e085c9a7e0aa873d86e81b6e709025f4";
     };
-    propagatedBuildInputs = [ ModuleLoadConditional ];
     meta = {
       description = "Generic archive extracting mechanism";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
