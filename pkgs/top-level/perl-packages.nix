@@ -9198,7 +9198,6 @@ let
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
       sha256 = "cea6c20afc6c10a3dc3b62a71df3f842dce13898443bd827242ff3f09f1f3d59";
     };
-    propagatedBuildInputs = [ MathBigInt ];
     meta = {
       description = "Arbitrary big rational numbers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
