@@ -2,7 +2,7 @@
 
     handle = {
       # Required
-      name = "Real name";
+      name = "Your name";
       email = "address@example.org";
 
       # Optional
@@ -12,7 +12,7 @@
   where
 
   - `handle` is the handle you are going to use in nixpkgs expressions,
-  - `name` is your real name,
+  - `name` is your, preferably real, name,
   - `email` is your maintainer email address, and
   - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`).
 
