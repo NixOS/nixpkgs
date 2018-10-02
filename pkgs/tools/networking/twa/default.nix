@@ -1,9 +1,10 @@
 { stdenv
 , bash
-, host
 , curl
 , fetchFromGitHub
 , gawk
+, host
+, lib
 , makeWrapper
 , ncurses
 , netcat
@@ -34,10 +35,11 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${stdenv.lib.makeBinPath [ curl netcat ncurses host.dnsutils ]}
   '';
 
-  meta = {
+  meta = with lib; {
     description = "A tiny web auditor with strong opinions";
     homepage = https://github.com/trailofbits/twa;
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ avaq ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ avaq ];
+    platforms = platforms.unix;
   };
 }
