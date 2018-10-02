@@ -16,6 +16,10 @@ nodePackages // {
     '';
   };
 
+  jshint = nodePackages.jshint.override {
+    buildInputs = [ pkgs.phantomjs2 ];
+  };
+
   dat = nodePackages.dat.override {
     buildInputs = [ nodePackages.node-gyp-build ];
   };
