@@ -9916,8 +9916,6 @@ let
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
       sha256 = "b266fd32f12cca2504be012e785f34eb09c0a132df52be183ff5d494e87f0b98";
     };
-    buildInputs = [ ExtUtilsMakeMaker ];
-    propagatedBuildInputs = [ IOSocketIP JSONPP PodSimple TimeLocal ];
     meta = {
       homepage = https://mojolicious.org;
       description = "Real-time web framework";
