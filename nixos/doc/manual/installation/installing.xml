@@ -110,8 +110,8 @@
 > 1      # <lineannotation>(make it a partition number 1)</lineannotation>
 >        # <lineannotation>(press enter to accept the default)</lineannotation>
 >        # <lineannotation>(press enter to accept the default and use the rest of the remaining space)</lineannotation>
-> a      # <lineannotation>(make the partition bootable)</lineannotation>
 > x      # <lineannotation>(enter expert mode)</lineannotation>
+> A      # <lineannotation>(make partition number 1 bootable)</lineannotation>
 > f      # <lineannotation>(fix up the partition ordering)</lineannotation>
 > r      # <lineannotation>(exit expert mode)</lineannotation>
 > w      # <lineannotation>(write the partition table to disk and exit)</lineannotation></screen>
