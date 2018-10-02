@@ -9750,13 +9750,7 @@ let
     };
   };
 
-  ModuleMetadata = buildPerlPackage rec {
-    name = "Module-Metadata-1.000033";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Module-Metadata-1.000033.tar.gz;
-      sha256 = "13pzydb22693l33rfx6drwbhjxj04q80ds4m2nn2sbmm95wwr5mw";
-    };
-  };
+  ModuleMetadata = null; # part of Perl 5.26
 
   ModulePath = buildPerlPackage rec {
     name = "Module-Path-0.19";
