@@ -12099,13 +12099,7 @@ let
     doCheck = false;
   };
 
-  PerlOSType = buildPerlPackage rec {
-    name = "Perl-OSType-1.010";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "1ch36kfjwm229xicb9k7b9fhisy58ihdr16vm8iwniymnna4kvg7";
-    };
-  };
+  PerlOSType = null; # part of Perl 5.26
 
   PerlTidy = buildPerlPackage rec {
     name = "Perl-Tidy-20180220";
