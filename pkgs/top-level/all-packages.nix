@@ -22157,8 +22157,9 @@ with pkgs;
 
   terraform-provider-libvirt = callPackage ../applications/networking/cluster/terraform-provider-libvirt {};
 
-  terraform-provider-ibm = callPackage ../applications/networking/cluster/terraform-provider-ibm {};
+  terraform-provider-gandi = callPackage ../applications/networking/cluster/terraform-provider-gandi {};
 
+  terraform-provider-ibm = callPackage ../applications/networking/cluster/terraform-provider-ibm {};
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
