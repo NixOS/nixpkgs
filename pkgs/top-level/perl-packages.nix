@@ -511,7 +511,7 @@ let
      meta = {
        description = "API wrapper around the 'tar' utility";
      };
-    buildInputs = [ Dumbbench TestSimple13 ];
+    buildInputs = [ Dumbbench ];
   };
 
   ArchiveZip = buildPerlPackage {
