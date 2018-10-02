@@ -110,8 +110,8 @@ stdenv.mkDerivation (rec {
       stripLen = 1;
     })
     (fetchpatch {
-      url = "https://git.haskell.org/hsc2hs.git/patch/d1e191766742e9166a90656c94a7cf3bd73444df";
-      sha256 = "0q25n0k0sbgji6qvalx5j3lmw80j2k0d2k87k4v4y7xqc4ihpi12";
+      url = "https://git.haskell.org/hsc2hs.git/patch/598303cbffcd230635fbce28ce4105d177fdf76a";
+      sha256 = "0hqcg434qbh1bz1pk85cap2q4v9i8bs6x65yzq4spz6xk3zq6af7";
       extraPrefix = "utils/hsc2hs/";
       stripLen = 1;
     })
