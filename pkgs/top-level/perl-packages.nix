@@ -8462,7 +8462,6 @@ let
      preConfigure = ''
        export LD=$CC
      '';
-     propagatedBuildInputs = [ XSLoader ];
      meta = {
        description = "Provide the stuff missing in List::Util in XS";
        license = with stdenv.lib.licenses; [ asl20 ];
