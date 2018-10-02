@@ -16544,17 +16544,7 @@ let
     };
   };
 
-  ThreadSemaphore = buildPerlPackage {
-    name = "Thread-Semaphore-2.13";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Thread-Semaphore-2.13.tar.gz;
-      sha256 = "e3fe2cc047575529c8ea4c168cef8fab2ec931729a1826ffca1ef63e7e45bc81";
-    };
-    meta = {
-      description = "Thread-safe semaphores";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  ThreadSemaphore = null; # part of Perl 5.26
 
   Throwable = buildPerlPackage rec {
     name = "Throwable-0.200013";
