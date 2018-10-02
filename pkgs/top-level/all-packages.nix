@@ -21734,7 +21734,9 @@ with pkgs;
 
   hplipWithPlugin_3_16_11 = hplip_3_16_11.override { withPlugin = true; };
 
-  hyperfine = callPackage ../tools/misc/hyperfine { };
+  hyperfine = callPackage ../tools/misc/hyperfine {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
