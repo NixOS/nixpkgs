@@ -76,6 +76,11 @@ in
 
     boot.initrd.kernelModules = [ "af_packet" ];
 
+    boot.initrd.extraUdevRulesCommands = mkIf config.networking.usePredictableInterfaceNames ''
+      cp -v ${pkgs.systemd}/lib/udev/rules.d/75-net-description.rules $out/
+      cp -v ${pkgs.path}/nixos/modules/services/hardware/80-net-setup-link.rules $out/
+    '';
+
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.mkinitcpio-nfs-utils}/bin/ipconfig
     '';
@@ -103,8 +108,12 @@ in
           done
 
           # Acquire a DHCP lease.
+          iface="${optionalString config.networking.usePredictableInterfaceNames
+            "--interface $(cd /sys/class/net; printf en*)"
+          }"
           echo "acquiring IP address via DHCP..."
-          udhcpc --quit --now --script ${udhcpcScript} ${udhcpcArgs} && hasNetwork=1
+          # The interface can be overriden in `udhcpcArgs`
+          udhcpc --quit --now $iface --script ${udhcpcScript} ${udhcpcArgs} && hasNetwork=1
         fi
       ''
 

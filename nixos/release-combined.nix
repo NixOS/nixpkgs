@@ -121,6 +121,8 @@ in rec {
         (all nixos.tests.predictable-interface-names.unpredictable)
         (all nixos.tests.predictable-interface-names.predictableNetworkd)
         (all nixos.tests.predictable-interface-names.unpredictableNetworkd)
+        (all nixos.tests.predictable-interface-names.predictableInitrdNetwork)
+        (all nixos.tests.predictable-interface-names.unpredictableInitrdNetwork)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
         (all nixos.tests.sddm.default)
