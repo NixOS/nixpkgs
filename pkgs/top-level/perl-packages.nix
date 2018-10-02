@@ -2810,18 +2810,7 @@ let
     };
   };
 
-  CPANMetaRequirements = buildPerlPackage {
-    name = "CPAN-Meta-Requirements-2.140";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/CPAN-Meta-Requirements-2.140.tar.gz;
-      sha256 = "0898645e8e86f0922f0f0502b503f592a8eb3d3176b4fd87adcc7ba51e751fa9";
-    };
-    meta = {
-      homepage = https://github.com/dagolden/CPAN-Meta-Requirements;
-      description = "A set of version requirements for a CPAN dist";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  CPANMetaRequirements = null; # part of Perl 5.26
 
   CPANMetaYAML = buildPerlPackage rec {
     name = "CPAN-Meta-YAML-0.018";
