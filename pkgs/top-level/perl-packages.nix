@@ -407,8 +407,6 @@ let
     };
   };
 
-  AttributeHandlers = null; # part of Perl 5.26
-
   AttributeParamsValidate = buildPerlPackage {
     name = "Attribute-Params-Validate-1.21";
     src = fetchurl {
@@ -708,8 +706,6 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  base = null; # part of Perl 5.26
 
   BC = buildPerlPackage rec {
     name = "B-C-1.55";
@@ -2789,8 +2785,6 @@ let
      };
   };
 
-  CPANMeta = null; # part of Perl 5.26
-
   CPANMetaCheck = buildPerlPackage rec {
     name = "CPAN-Meta-Check-0.014";
     src = fetchurl {
@@ -2803,10 +2797,6 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  CPANMetaRequirements = null; # part of Perl 5.26
-
-  CPANMetaYAML = null; # part of Perl 5.26
 
   CPANPerlReleases = buildPerlPackage rec {
     name = "CPAN-Perl-Releases-3.76";
@@ -4437,8 +4427,6 @@ let
       sha256 = "19ma1hmvgiznq95ngzvm6v4dfxc9zmi69k8iyfcg6w14lfxi0lb6";
     };
   };
-
-  DigestMD5 = null; # part of Perl 5.26
 
   DigestMD5File = buildPerlPackage {
     name = "Digest-MD5-File-0.08";
@@ -8524,8 +8512,6 @@ let
      };
   };
 
-  LocaleMaketext = null; # part of Perl 5.26
-
   LocaleMaketextFuzzy = buildPerlPackage {
     name = "Locale-Maketext-Fuzzy-0.11";
     src = fetchurl {
@@ -9728,8 +9714,6 @@ let
     };
   };
 
-  ModuleLoadConditional = null; # part of Perl 5.26
-
   ModuleManifest = buildPerlPackage {
     name = "Module-Manifest-1.09";
     src = fetchurl {
@@ -9743,8 +9727,6 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  ModuleMetadata = null; # part of Perl 5.26
 
   ModulePath = buildPerlPackage rec {
     name = "Module-Path-0.19";
@@ -12093,8 +12075,6 @@ let
     doCheck = false;
   };
 
-  PerlOSType = null; # part of Perl 5.26
-
   PerlTidy = buildPerlPackage rec {
     name = "Perl-Tidy-20180220";
     src = fetchurl {
@@ -12877,8 +12857,6 @@ let
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
   };
-
-  PodUsage = null; # part of Perl 5.26
 
   PodWeaver = buildPerlPackage rec {
     name = "Pod-Weaver-4.015";
@@ -14464,10 +14442,6 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  TermANSIColor = null; # part of Perl 5.26
-
-  TermCap = null; # part of Perl 5.26
 
   TermEncoding = buildPerlPackage {
     name = "Term-Encoding-0.02";
@@ -16535,8 +16509,6 @@ let
     };
   };
 
-  ThreadSemaphore = null; # part of Perl 5.26
-
   Throwable = buildPerlPackage rec {
     name = "Throwable-0.200013";
     src = fetchurl {
@@ -16949,8 +16921,6 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  UnicodeNormalize = null; # part of Perl 5.26
 
   UnicodeString = buildPerlPackage rec {
     name = "Unicode-String-2.10";
@@ -17698,8 +17668,6 @@ let
     };
   };
 
-  XSLoader = null; # part of Perl 5.26
-
   XSObjectMagic = buildPerlPackage rec {
     name = "XS-Object-Magic-0.04";
     src = fetchurl {
@@ -17794,6 +17762,22 @@ let
   DigestSHA = null;
   "if" = null;
   TestSimple = null;
+  AttributeHandlers = null; # part of Perl 5.26
+  base = null; # part of Perl 5.26
+  CPANMeta = null; # part of Perl 5.26
+  CPANMetaRequirements = null; # part of Perl 5.26
+  CPANMetaYAML = null; # part of Perl 5.26
+  DigestMD5 = null; # part of Perl 5.26
+  LocaleMaketext = null; # part of Perl 5.26
+  ModuleLoadConditional = null; # part of Perl 5.26
+  ModuleMetadata = null; # part of Perl 5.26
+  PerlOSType = null; # part of Perl 5.26
+  PodUsage = null; # part of Perl 5.26
+  TermANSIColor = null; # part of Perl 5.26
+  TermCap = null; # part of Perl 5.26
+  ThreadSemaphore = null; # part of Perl 5.26
+  UnicodeNormalize = null; # part of Perl 5.26
+  XSLoader = null; # part of Perl 5.26
 
   ArchiveZip_1_53 = self.ArchiveZip;
   Autobox = self.autobox;
