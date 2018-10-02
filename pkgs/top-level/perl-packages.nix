@@ -709,13 +709,7 @@ let
     };
   };
 
-  base = buildPerlPackage {
-    name = "base-2.23";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/base-2.23.tar.gz;
-      sha256 = "40f55841299a9fe6fab03cd098f94e9221fb516978e9ef40fd8ff2cbd6625dde";
-    };
-  };
+  base = null; # part of Perl 5.26
 
   BC = buildPerlPackage rec {
     name = "B-C-1.55";
