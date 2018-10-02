@@ -2815,10 +2815,10 @@ let
   CPANMetaYAML = null; # part of Perl 5.26
 
   CPANPerlReleases = buildPerlPackage rec {
-    name = "CPAN-Perl-Releases-3.74";
+    name = "CPAN-Perl-Releases-3.76";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "0qdh79fl38cyq9kp2g2s934gl1nn5jd88rgmqarqcmja8xhpfcp3";
+      sha256 = "0p9anb92sfi6cfr3ia8yvd3scn0bzwh2r6z8f6jrawjr8lilgahj";
     };
     meta = {
       homepage = https://github.com/bingos/cpan-perl-releases;
