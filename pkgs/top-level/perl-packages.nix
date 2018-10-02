@@ -3051,10 +3051,10 @@ let
   };
 
   CryptOpenSSLRSA = buildPerlPackage rec {
-    name = "Crypt-OpenSSL-RSA-0.30";
+    name = "Crypt-OpenSSL-RSA-0.31";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.30.tar.gz;
-      sha256 = "23e13531397af102db4fd24bcf70137add7c85c23cca697c43aa71c2959a29ac";
+      url = mirror://cpan/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-0.31.tar.gz;
+      sha256 = "4173403ad4cf76732192099f833fbfbf3cd8104e0246b3844187ae384d2c5436";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
