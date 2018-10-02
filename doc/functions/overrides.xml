@@ -25,16 +25,12 @@
    <para>
     Example usages:
 <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
-<programlisting>
-import pkgs.path { overlays = [ (self: super: {
-  foo = super.foo.override { barSupport = true ; };
-  })]};
-</programlisting>
-<programlisting>
-mypkg = pkgs.callPackage ./mypkg.nix {
-  mydep = pkgs.mydep.override { ... };
-  }
-</programlisting>
+<programlisting>import pkgs.path { overlays = [ (self: super: {
+    foo = super.foo.override { barSupport = true ; };
+  })]};</programlisting>
+<programlisting>mypkg = pkgs.callPackage ./mypkg.nix {
+    mydep = pkgs.mydep.override { ... };
+  }</programlisting>
    </para>
 
    <para>
@@ -59,11 +55,9 @@ mypkg = pkgs.callPackage ./mypkg.nix {
 
    <para>
     Example usage:
-<programlisting>
-helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
-  separateDebugInfo = true;
-});
-</programlisting>
+<programlisting>helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
+    separateDebugInfo = true;
+  });</programlisting>
    </para>
 
    <para>
@@ -134,16 +128,14 @@ helloWithDebug = pkgs.hello.overrideAttrs (oldAttrs: rec {
 
    <para>
     Example usage:
-<programlisting>
-mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
-  name = "sed-4.2.2-pre";
-  src = fetchurl {
-    url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
-    sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
-  };
-  patches = [];
-});
-</programlisting>
+<programlisting>mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
+    name = "sed-4.2.2-pre";
+    src = fetchurl {
+      url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
+      sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
+    };
+    patches = [];
+  });</programlisting>
    </para>
 
    <para>
@@ -183,10 +175,8 @@ mySed = pkgs.gnused.overrideDerivation (oldAttrs: {
 
    <para>
     Example usage:
-<programlisting>
-f = { a, b }: { result = a+b; };
-c = lib.makeOverridable f { a = 1; b = 2; };
-</programlisting>
+<programlisting>f = { a, b }: { result = a+b; }
+  c = lib.makeOverridable f { a = 1; b = 2; }</programlisting>
    </para>
 
    <para>
@@ -202,4 +192,4 @@ c = lib.makeOverridable f { a = 1; b = 2; };
     <varname>(c.override { a = 4; }).result</varname> is 6.
    </para>
   </section>
- </section>
+</section>
