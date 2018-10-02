@@ -8530,13 +8530,7 @@ let
      };
   };
 
-  LocaleMaketext = buildPerlPackage {
-    name = "Locale-Maketext-1.28";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Locale-Maketext-1.28.tar.gz;
-      sha256 = "1sgpcnh9kqdnsizpwxzsyfv44id7gxsgkd9bmnhmj4g8hfs9712p";
-    };
-  };
+  LocaleMaketext = null; # part of Perl 5.26
 
   LocaleMaketextFuzzy = buildPerlPackage {
     name = "Locale-Maketext-Fuzzy-0.11";
