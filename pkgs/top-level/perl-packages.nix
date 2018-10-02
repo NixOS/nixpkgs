@@ -14041,7 +14041,6 @@ let
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
       sha256 = "ea3056d696bdeff21a99d340d5570887d39a8cc47bff23adfc82df6758cdd0ea";
     };
-    buildInputs = [ TestSimple13 ];
     propagatedBuildInputs = [ Importer ];
     meta = {
       description = "Tool for inspecting subroutines";
