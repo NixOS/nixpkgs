@@ -11157,10 +11157,10 @@ let
   };
 
   NetIDNEncode = buildPerlModule {
-    name = "Net-IDN-Encode-2.400";
+    name = "Net-IDN-Encode-2.401";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CF/CFAERBER/Net-IDN-Encode-2.400.tar.gz;
-      sha256 = "0a9knav5f9kjldrkxx1k47ivd3p23zkmi8aqgyhnxidhgasz1dlq";
+      url = mirror://cpan/authors/id/C/CF/CFAERBER/Net-IDN-Encode-2.401.tar.gz;
+      sha256 = "1b5hnlnaxnp9jzdk55dcfh4jviv9mv83y4plsr3hi7lkh06hwdyd";
     };
     buildInputs = [ TestNoWarnings ];
     meta = {
