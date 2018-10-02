@@ -19,7 +19,19 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
+  /* This seems to cause several random failures like these, which I assume
+     is because of bad or missing target dependencies in their build system:
+
+        ./unistdio/test-u16-vasnprintf2.sh: line 16: ./test-u16-vasnprintf1: No such file or directory
+        FAIL unistdio/test-u16-vasnprintf2.sh (exit status: 1)
+
+        FAIL: unistdio/test-u16-vasnprintf3.sh
+        ======================================
+
+        ./unistdio/test-u16-vasnprintf3.sh: line 16: ./test-u16-vasnprintf1: No such file or directory
+        FAIL unistdio/test-u16-vasnprintf3.sh (exit status: 1)
+  */
+  enableParallelBuilding = false;
 
   meta = {
     homepage = http://www.gnu.org/software/libunistring/;

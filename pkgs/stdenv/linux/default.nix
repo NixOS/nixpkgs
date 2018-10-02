@@ -92,7 +92,6 @@ let
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           name = "${name}-gcc-wrapper";
           nativeTools = false;
-          propagateDoc = false;
           nativeLibc = false;
           buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
             inherit (prevStage) stdenv;

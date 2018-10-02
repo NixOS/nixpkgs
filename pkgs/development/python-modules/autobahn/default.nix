@@ -21,7 +21,9 @@ buildPythonPackage rec {
     (stdenv.lib.optionals (!isPy3k) [ trollius futures ]);
 
   checkPhase = ''
+    runHook preCheck
     USE_TWISTED=true py.test $out
+    runHook postCheck
   '';
 
   meta = with stdenv.lib; {

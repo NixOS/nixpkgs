@@ -29,4 +29,6 @@ with pkgs;
   macOSSierraShared = callPackage ./macos-sierra-shared {};
 
   cross = callPackage ./cross {};
+
+  patch-shebangs = callPackage ./patch-shebangs {};
 }
