@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
+  postPatch = ''
+    sed -i -e 's|Obsidian-2-Local|Obsidian-2|' Obsidian-2/index.theme
+  '';
+
   installPhase = ''
     mkdir -p $out/share/themes
     cp -a Obsidian-2 $out/share/themes
