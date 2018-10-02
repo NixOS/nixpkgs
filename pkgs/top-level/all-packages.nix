@@ -6451,7 +6451,14 @@ with pkgs;
     '';
   });
 
-  crystal = callPackage ../development/compilers/crystal { };
+  inherit (callPackages ../development/compilers/crystal {})
+    crystal_0_25
+    crystal_0_26
+    crystal;
+
+  icr = callPackage ../development/tools/icr {};
+
+  scry = callPackage ../development/tools/scry {};
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
