@@ -6869,6 +6869,8 @@ with pkgs;
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
+  openspin = callPackage ../development/compilers/openspin { };
+
   oraclejdk = pkgs.jdkdistro true false;
 
   oraclejdk8 = pkgs.oraclejdk8distro true false;
