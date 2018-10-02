@@ -15663,7 +15663,7 @@ let
 
     buildInputs = [ Test2Suite ];
 
-    propagatedBuildInputs = [ CaptureTiny ProbePerl TestSimple13 ];
+    propagatedBuildInputs = [ CaptureTiny ProbePerl ];
   };
 
   TestSharedFork = buildPerlPackage rec {
