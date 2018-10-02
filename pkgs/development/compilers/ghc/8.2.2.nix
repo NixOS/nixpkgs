@@ -98,6 +98,35 @@ stdenv.mkDerivation (rec {
       sha256 = "03253ci40np1v6k0wmi4aypj3nmj3rdyvb1k6rwqipb30nfc719f";
     })
     (import ./abi-depends-determinism.nix { inherit fetchpatch runCommand; })
+  ] ++ stdenv.lib.optionals (hostPlatform != targetPlatform) [
+    # Cherry-pick a few commits from newer hsc2hs so that proper binary is
+    # installed -- stage 2 normally but stage 1 with cross.
+    #
+    # TODO make unconditional next mass rebuild.
+    (fetchpatch {
+      url = "https://git.haskell.org/hsc2hs.git/patch/ecdac062b5cf1d284906487849c56f4e149b3c8e";
+      sha256 = "1gagswi26j50z44sdx0mk1sb3wr0nrqyaph9j724zp6iwqslxyzm";
+      extraPrefix = "utils/hsc2hs/";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      url = "https://git.haskell.org/hsc2hs.git/patch/d1e191766742e9166a90656c94a7cf3bd73444df";
+      sha256 = "0q25n0k0sbgji6qvalx5j3lmw80j2k0d2k87k4v4y7xqc4ihpi12";
+      extraPrefix = "utils/hsc2hs/";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      url = "https://git.haskell.org/hsc2hs.git/patch/9483ad10064fbbb97ab525280623826b1ef63959";
+      sha256 = "1cpfdhfc0cz9xkjzkcgwx4fbyj96dkmd04wpwi1vji7fahw8kmf3";
+      extraPrefix = "utils/hsc2hs/";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      url = "https://git.haskell.org/hsc2hs.git/patch/738f3666c878ee9e79c3d5e819ef8b3460288edf";
+      sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
+      extraPrefix = "utils/hsc2hs/";
+      stripLen = 1;
+    })
   ] ++ stdenv.lib.optionals (hostPlatform != targetPlatform && targetPlatform.system == hostPlatform.system) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/gentoo/gentoo/08a41d2dff99645af6ac5a7bb4774f5f193b6f20/dev-lang/ghc/files/ghc-8.2.1_rc1-unphased-cross.patch";
