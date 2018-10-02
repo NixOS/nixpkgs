@@ -9734,17 +9734,7 @@ let
     };
   };
 
-  ModuleLoadConditional = buildPerlPackage rec {
-     name = "Module-Load-Conditional-0.68";
-     src = fetchurl {
-       url = mirror://cpan/authors/id/B/BI/BINGOS/Module-Load-Conditional-0.68.tar.gz;
-       sha256 = "1zcq0s7q9bvk9wdv9ijfyddh3b8ck4n3w87rcx31lbsav5fba9vn";
-     };
-     meta = {
-       description = "Looking up module information / loading at runtime";
-       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-     };
-  };
+  ModuleLoadConditional = null; # part of Perl 5.26
 
   ModuleManifest = buildPerlPackage {
     name = "Module-Manifest-1.09";
