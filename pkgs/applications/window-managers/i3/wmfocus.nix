@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, rustPlatform,
-  xorg, python3, pkgconfig, glib, cmake, cairo, libxkbcommon }:
+  xorg, python3, pkgconfig, cairo, libxkbcommon }:
 let
   pname = "wmfocus";
   version = "1.0.2";
@@ -8,8 +8,8 @@ rustPlatform.buildRustPackage {
   inherit pname version;
   name = "${pname}-${version}";
 
-  buildInputs = [python3 pkgconfig glib xorg.libX11 cmake cairo xorg.libX11];
-  nativeBuildInputs = [libxkbcommon xorg.libxcb xorg.xcbutilkeysyms];
+  nativeBuildInputs = [ python3 pkgconfig ];
+  buildInputs = [ cairo libxkbcommon xorg.xcbutilkeysyms ];
 
   # For now, this is the only available featureset. This is also why the file is
   # in the i3 folder, even though it might be useful for more than just i3
