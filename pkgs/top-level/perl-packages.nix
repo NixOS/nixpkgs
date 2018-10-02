@@ -17526,7 +17526,7 @@ let
       sha256 = "9e6ac67c2cead5f918a060b8b9ccdbdcaa6d610be8517bba42a96cd56748b512";
     };
     buildInputs = [ PathTiny ];
-    propagatedBuildInputs = [ ScalarListUtils XMLParser ];
+    propagatedBuildInputs = [ XMLParser ];
     meta = {
       description = "Modules for parsing and evaluating XPath statements";
       license = stdenv.lib.licenses.artistic2;
