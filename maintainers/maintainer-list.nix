@@ -3119,6 +3119,10 @@
     email = "oxij@oxij.org";
     github = "oxij";
     name = "Jan Malakhovski";
+    keys = [{
+      longkeyid = "rsa2048/0x0E6CA66E5C557AA8";
+      fingerprint = "514B B966 B46E 3565 0508  86E8 0E6C A66E 5C55 7AA8";
+    }];
   };
   oyren = {
     email = "m.scheuren@oyra.eu";
