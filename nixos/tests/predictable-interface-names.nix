@@ -10,6 +10,7 @@ in pkgs.lib.listToAttrs (pkgs.lib.crossLists (predictable: withNetworkd: {
     meta = {};
 
     machine = { lib, ... }: {
+      imports = [ ../modules/profiles/minimal.nix ];
       networking.usePredictableInterfaceNames = lib.mkForce predictable;
       networking.useNetworkd = withNetworkd;
       networking.dhcpcd.enable = !withNetworkd;
