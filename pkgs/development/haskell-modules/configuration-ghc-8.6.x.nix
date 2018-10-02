@@ -60,6 +60,7 @@ self: super: {
   lens = dontCheck super.lens;    # avoid depending on broken polyparse
   polyparse = markBrokenVersion "1.12" super.polyparse;
   primitive = self.primitive_0_6_4_0;
+  semigroupoids = self.semigroupoids_5_3_1;
   tagged = self.tagged_0_8_6;
   unordered-containers = dontCheck super.unordered-containers;
 
