@@ -142,7 +142,10 @@ in
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
-    programs.dconf.profiles.gdm = "${gdm}/share/dconf/profile/gdm";
+    programs.dconf.profiles.gdm = pkgs.writeText "dconf-gdm-profile" ''
+      system-db:local
+      ${gdm}/share/dconf/profile/gdm
+    '';
 
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still

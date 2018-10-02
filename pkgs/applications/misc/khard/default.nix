@@ -40,6 +40,10 @@ in with python.pkgs; buildPythonApplication rec {
     unidecode
   ];
 
+  postInstall = ''
+    install -D misc/zsh/_khard $out/share/zsh/site-functions/
+  '';
+
   # Fails; but there are no tests anyway.
   doCheck = false;
 

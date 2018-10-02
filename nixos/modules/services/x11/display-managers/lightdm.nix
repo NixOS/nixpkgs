@@ -46,6 +46,7 @@ let
         greeters-directory = ${cfg.greeter.package}
       ''}
       sessions-directory = ${dmcfg.session.desktops}/share/xsessions
+      ${cfg.extraConfig}
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
@@ -111,6 +112,15 @@ in
             in the 'package' option.
           '';
         };
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          user-authority-in-system-dir = true
+        '';
+        description = "Extra lines to append to LightDM section.";
       };
 
       background = mkOption {

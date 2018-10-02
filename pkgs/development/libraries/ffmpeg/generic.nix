@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
       "--enable-libmp3lame"
       (ifMinVer "1.2" "--enable-iconv")
       "--enable-libtheora"
-      "--enable-libssh"
+      (ifMinVer "2.1" "--enable-libssh")
       (ifMinVer "0.6" (enableFeature vaapiSupport "vaapi"))
       "--enable-vdpau"
       "--enable-libvorbis"

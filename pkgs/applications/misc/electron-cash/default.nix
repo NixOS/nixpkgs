@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     # plugins
     keepkey
     trezor
+    btchip
   ];
 
   nativeBuildInputs = [ makeWrapper ];

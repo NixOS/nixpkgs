@@ -413,11 +413,8 @@ packageOverrides = pkgs: {
     in your <filename>/etc/nixos/configuration.nix</filename>. You'll also need
 <programlisting>hardware.pulseaudio.support32Bit = true;</programlisting>
     if you are using PulseAudio - this will enable 32bit ALSA apps integration.
-    To use the Steam controller, you need to add
-<programlisting>services.udev.extraRules = ''
-    SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
-    KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
-  '';</programlisting>
+    To use the Steam controller or other Steam supported controllers such as the DualShock 4 or Nintendo Switch Pro, you need to add
+<programlisting>hardware.steam-hardware.enable = true;</programlisting>
     to your configuration.
    </para>
   </section>

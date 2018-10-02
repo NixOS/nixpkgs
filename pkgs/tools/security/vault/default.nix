@@ -1,6 +1,8 @@
 { stdenv, fetchFromGitHub, go, gox, removeReferencesTo }:
 
 let
+  # Deprecated since vault 0.8.2: use `vault -autocomplete-install` instead
+  # to install auto-complete for bash, zsh and fish
   vaultBashCompletions = fetchFromGitHub {
     owner = "iljaweis";
     repo = "vault-bash-completion";

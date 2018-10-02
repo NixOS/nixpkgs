@@ -46,6 +46,7 @@
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
   ./hardware/raid/hpsa.nix
+  ./hardware/steam-hardware.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
   ./hardware/video/amdgpu.nix
@@ -365,6 +366,7 @@
   ./services/misc/jackett.nix
   ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
+  ./services/misc/lidarr.nix
   ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
   ./services/misc/matrix-synapse.nix
@@ -395,6 +397,7 @@
   ./services/misc/rogue.nix
   ./services/misc/serviio.nix
   ./services/misc/safeeyes.nix
+  ./services/misc/sickbeard.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix

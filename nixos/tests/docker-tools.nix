@@ -58,5 +58,9 @@ import ./make-test.nix ({ pkgs, ... }: {
       # Ensure Docker images can use an unstable date
       $docker->succeed("docker load --input='${pkgs.dockerTools.examples.bash}'");
       $docker->succeed("[ '1970-01-01T00:00:01Z' != \"\$(docker inspect ${pkgs.dockerTools.examples.unstableDate.imageName} | ${pkgs.jq}/bin/jq -r .[].Created)\" ]");
+
+      # Ensure Layered Docker images work
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.layered-image}'");
+      $docker->succeed("docker run --rm ${pkgs.dockerTools.examples.layered-image.imageName}");
     '';
 })

@@ -8360,6 +8360,20 @@ let
     };
   };
 
+  LinuxDesktopFiles = buildPerlPackage rec {
+    name = "Linux-DesktopFiles-0.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TR/TRIZEN/${name}.tar.gz";
+      sha256 = "60377a74fba90fa465200ee1c7430dbdde69d454d85f9ee101c039803a07e5f5";
+    };
+    buildInputs = [ ModuleBuild ];
+    meta = {
+      homepage = https://github.com/trizen/Linux-DesktopFiles;
+      description = "Fast parsing of the Linux desktop files";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
   LinuxDistribution = buildPerlModule {
     name = "Linux-Distribution-0.23";
     src = fetchurl {
@@ -9887,15 +9901,30 @@ let
   };
 
   Mojolicious = buildPerlPackage rec {
-    name = "Mojolicious-8.0";
+    name = "Mojolicious-8.01";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
-      sha256 = "b266fd32f12cca2504be012e785f34eb09c0a132df52be183ff5d494e87f0b98";
+      sha256 = "1gwf45s6vblff0ima2awjq3awj4wws4hn7df4d9jmyj9rji04z9c";
     };
     meta = {
       homepage = https://mojolicious.org;
       description = "Real-time web framework";
       license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
+  MojoliciousPluginStatus = buildPerlPackage rec {
+    name = "Mojolicious-Plugin-Status-1.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
+      sha256 = "14ypg679dk9yvgq67mp7lzs131cxhbgcmrpx5f4ddqcrs1bzq5rb";
+    };
+    propagatedBuildInputs = [ Mojolicious IPCShareLite BSDResource Sereal ];
+    meta = {
+      homepage = https://github.com/mojolicious/mojo-status;
+      description = "Mojolicious server status plugin";
+      license = with stdenv.lib.licenses; [ artistic2 ];
       maintainers = [ maintainers.thoughtpolice ];
     };
   };
@@ -11223,6 +11252,21 @@ let
     };
   };
 
+  NetSCP = buildPerlPackage rec {
+    name = "Net-SCP-0.08.reprise";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IV/IVAN/${name}.tar.gz";
+      sha256 = "88a9b2df69e769e5855a408b19f61915b82e8fe070ab5cf4d525dd3b8bbe31c1";
+    };
+    propagatedBuildInputs = [ pkgs.openssl Carp Exporter IO NetSSH StringShellQuote ];
+    patchPhase = ''
+      sed -i 's|$scp = "scp";|$scp = "${pkgs.openssh}/bin/scp";|' SCP.pm
+    '';
+    meta = {
+      description = "Simple wrappers around ssh and scp commands.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   NetServer = buildPerlPackage {
     name = "Net-Server-2.009";
@@ -11299,6 +11343,22 @@ let
       sha256 = "0hdpn1cw52x8cw24m9ayzpf4rwarm0khygn1sv3wvwxkrg0pphql";
     };
     doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
+  };
+
+  NetSSH = buildPerlPackage rec {
+    name = "Net-SSH-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IV/IVAN/${name}.tar.gz";
+      sha256 = "7c71c7c3cbe953234dfe25bcc1ad7edb0e1f5a0578601f5523bc6070262a3817";
+    };
+    propagatedBuildInputs = [ pkgs.openssl Exporter IO ];
+    patchPhase = ''
+      sed -i 's|$ssh = "ssh";|$ssh = "${pkgs.openssh}/bin/ssh";|' SSH.pm
+    '';
+    meta = {
+      description = "Simple wrappers around ssh commands.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   NetSSLeay = buildPerlPackage rec {
@@ -13252,6 +13312,55 @@ let
     };
   };
 
+  SerealDecoder = buildPerlPackage rec {
+    name = "Sereal-Decoder-4.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YV/YVES/${name}.tar.gz";
+      sha256 = "17syqbq17qw6ajg3w88q9ljdm4c2b7zadq9pwshxxgyijg8dlfh4";
+    };
+    buildInputs = [ TestDeep TestDifferences TestWarn TestLongString ];
+    propagatedBuildInputs = [ XSLoader ];
+    preBuild = ''ls'';
+    meta = {
+      homepage = https://github.com/Sereal/Sereal;
+      description = "Fast, compact, powerful binary deserialization";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
+  SerealEncoder = buildPerlPackage rec {
+    name = "Sereal-Encoder-4.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YV/YVES/${name}.tar.gz";
+      sha256 = "02hbk5dwq7fpnyb3vp7xxhb41ra48xhghl13p9pjq9lzsqlb6l19";
+    };
+    buildInputs = [ TestDeep TestDifferences TestWarn TestLongString ];
+    propagatedBuildInputs = [ XSLoader SerealDecoder ];
+    meta = {
+      homepage = https://github.com/Sereal/Sereal;
+      description = "Fast, compact, powerful binary deserialization";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
+  Sereal = buildPerlPackage rec {
+    name = "Sereal-4.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Y/YV/YVES/${name}.tar.gz";
+      sha256 = "0lnczrf311pl9b2x75r0ffsszv5aspfb8x6jdvgr3rgqp7nbm1wr";
+    };
+    buildInputs = [ TestDeep TestDifferences TestWarn TestLongString ];
+    propagatedBuildInputs = [ SerealEncoder SerealDecoder ];
+    meta = {
+      homepage = https://github.com/Sereal/Sereal;
+      description = "Fast, compact, powerful binary deserialization";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
   ServerStarter = buildPerlModule rec {
     name = "Server-Starter-0.34";
     src = fetchurl {
@@ -14232,12 +14341,12 @@ let
   };
 
   SysVirt = buildPerlModule rec {
-    version = "4.5.0";
+    version = "4.7.0";
     name = "Sys-Virt-${version}";
     src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
       url = git://libvirt.org/libvirt-perl.git;
       rev = "v${version}";
-      sha256 = "18ns94i29c9x0j50pz9r1vcif6baayz769sa7b51v8kcvam9j52s";
+      sha256 = "14q8s6k3d9a1qh6sh618qp30ib4p9qma2z4p2ynyh223i4w3virg";
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];

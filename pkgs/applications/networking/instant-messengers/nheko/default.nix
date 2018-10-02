@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation rec {
   name = "nheko-${version}";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "mujx";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1qd2c5684722jlpgqyxq6pbb1rdk1zc3sk88mkjyqypj1k0pj3dc";
+    sha256 = "00jigca7kcqwm57qalz7ifz9p6v7p3pnamjvpkxjjix2rm9wmg2q";
   };
 
   # If, on Darwin, you encounter the error
