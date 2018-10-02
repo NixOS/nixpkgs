@@ -73,7 +73,15 @@ stdenv.mkDerivation rec {
   ]);
 
   prePatch = ''
+    # In nix ioctls.h isn't available from the standard kernel-headers package
+    # on other distributions. As the copy in glibc seems to be identical to the
+    # one in the kernel, we use that one instead.
     sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
+
+    # PERL_VENDORARCH and PERL_VENDORLIB aren't detected correctly by the build
+    # system, so we have to override them. Setting them as environment variables
+    # doesn't work though, so patching the paths directly in the CMakeLists.txt
+    # seems to be the easisest way.
     sed -i "s|\''${PERL_VENDORARCH}|$out/lib/slic3r-prusa3d|g" xs/CMakeLists.txt
     sed -i "s|\''${PERL_VENDORLIB}|$out/lib/slic3r-prusa3d|g" xs/CMakeLists.txt
   '';
