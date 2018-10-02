@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, unzip, sqlite, makeWrapper, mono54, ffmpeg }:
+{ stdenv, fetchurl, unzip, sqlite, makeWrapper, dotnet-sdk, ffmpeg }:
 
 stdenv.mkDerivation rec {
   name = "emby-${version}";
-  version = "3.5.2.0";
+  version = "3.5.3.0";
 
   # We are fetching a binary here, however, a source build is possible.
   # See -> https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=emby-server-git#n43
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   # This may also need msbuild (instead of xbuild) which isn't in nixpkgs
   # See -> https://github.com/NixOS/nixpkgs/issues/29817
   src = fetchurl {
-    url = "https://github.com/MediaBrowser/Emby.Releases/releases/download/${version}/embyserver-mono_${version}.zip";
-    sha256 = "12f9skvnr9qxnrvr3q014yggfwvkpjk0ynbgf0fwk56h4kal7fx8";
+    url = "https://github.com/MediaBrowser/Emby.Releases/releases/download/${version}/embyserver-netcore_${version}.zip";
+    sha256 = "0311af3q813cx0ykbdk9vkmnyqi2l8rx66jnvdkw927q6invnnpj";
   };
 
   buildInputs = [
@@ -21,26 +21,22 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    mono54
+    dotnet-sdk
     sqlite
   ];
 
   preferLocalBuild = true;
 
-  # Need to set sourceRoot as unpacker will complain about multiple directory output
-  sourceRoot = ".";
-
   buildPhase = ''
-    substituteInPlace SQLitePCLRaw.provider.sqlite3.dll.config --replace libsqlite3.so ${sqlite.out}/lib/libsqlite3.so
-    substituteInPlace MediaBrowser.Server.Mono.exe.config --replace ProgramData-Server "/var/lib/emby/ProgramData-Server"
+    rm -rf {electron,runtimes}
   '';
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    cp -r * "$out/bin"
+    install -dm 755 "$out/usr/lib/emby-server"
+    cp -r * "$out/usr/lib/emby-server"
 
-    makeWrapper "${mono54}/bin/mono" $out/bin/MediaBrowser.Server.Mono \
-      --add-flags "$out/bin/MediaBrowser.Server.Mono.exe -ffmpeg ${ffmpeg}/bin/ffmpeg -ffprobe ${ffmpeg}/bin/ffprobe"
+    makeWrapper "${dotnet-sdk}/bin/dotnet" $out/bin/emby \
+      --add-flags "$out/usr/lib/emby-server/EmbyServer.dll -programdata /var/lib/emby/ProgramData-Server -ffmpeg ${ffmpeg}/bin/ffmpeg -ffprobe ${ffmpeg}/bin/ffprobe"
   '';
 
   meta =  with stdenv.lib; {
