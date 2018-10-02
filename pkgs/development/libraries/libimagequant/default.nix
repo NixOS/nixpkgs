@@ -24,5 +24,6 @@ in
       longDescription = "Small, portable C library for high-quality conversion of RGBA images to 8-bit indexed-color (palette) images.";
       license = lib.licenses.gpl3Plus;
       platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ ma9e ];
     };
   }
