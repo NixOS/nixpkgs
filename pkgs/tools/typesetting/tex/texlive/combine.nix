@@ -235,6 +235,19 @@ in buildEnv {
         ln -s -t . ../texmf/doc/"$d"/*
       )
     done
+  '' +
+  # MkIV uses its own lookup mechanism and we need to initialize
+  # caches for it. Unsetting TEXMFCNF is needed to let mtxrun
+  # determine it from kpathsea so that the config path is given with
+  # "selfautodir:" as it will be in runtime. This is important because
+  # the cache is identified by a hash of this path.
+  ''
+    if [[ -e "$out/bin/mtxrun" ]]; then
+      (
+        unset TEXMFCNF
+        mtxrun --generate
+      )
+    fi
   ''
     + bin.cleanBrokenLinks
   ;

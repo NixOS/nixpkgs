@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DNVML_INCLUDE_DIRS=${cudatoolkit}/include"
-    "-DNVML_LIBRARIES=${nvidia_x11}/lib/libnvidia-ml.so.390.67"
+    "-DNVML_LIBRARIES=${nvidia_x11}/lib/libnvidia-ml.so"
     "-DCMAKE_BUILD_TYPE=Release"
   ];
 

@@ -5,6 +5,8 @@
 , libnotify
 , ffmpeg, libxcb, cups
 , sqlite, udev
+, libuuid
+, sdk ? false
 }:
 let
   bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -23,6 +25,7 @@ let
       ffmpeg libxcb
       # chromium runtime deps (dlopen’d)
       sqlite udev
+      libuuid
     ];
 
     extraOutputsToInstall = [ "lib" "out" ];
@@ -30,13 +33,18 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nwjs-${version}";
-  version = "0.32.4";
+  version = "0.33.4";
 
-  src = fetchurl {
+  src = if sdk then fetchurl {
+    url = "https://dl.nwjs.io/v${version}/nwjs-sdk-v${version}-linux-${bits}.tar.gz";
+    sha256 = if bits == "x64" then
+      "1hi6xispxvyb6krm5j11mv8509dwpw5ikpbkvq135gsk3gm29c9y" else
+      "00p4clbfinrj5gp2i84a263l3h00z8g7mnx61qwmr0z02kvswz9s";
+  } else fetchurl {
     url = "https://dl.nwjs.io/v${version}/nwjs-v${version}-linux-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "0hzyiy6sbbjll1b946y3v7bv6sav3rhy4c48d4vcvamyv9pkfn45" else
-      "0a3b712abfa0c3e7e808b1d08ea5d53375a71060e7d144fdcb58c4fe88fa2250";
+      "09zd6gja3l20xx03h2gawpmh9f8nxqjp8qdkds5nz9kbbckhkj52" else
+      "0nlpdz76k1p1pq4xygfr2an91m0d7p5fjyg2xhiggyy8b7sp4964";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

@@ -2792,7 +2792,6 @@ with pkgs;
   gitlab-ee = callPackage ../applications/version-management/gitlab { gitlabEnterprise = true; };
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
-  gitlab-runner_1_11 = callPackage ../development/tools/continuous-integration/gitlab-runner/v1.nix { };
 
   gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };
 
@@ -4627,6 +4626,7 @@ with pkgs;
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
 
   pcsc-scm-scl011 = callPackage ../tools/security/pcsc-scm-scl011 { };
+  ifdnfc = callPackage ../tools/security/ifdnfc { };
 
   pdd = python3Packages.callPackage ../tools/misc/pdd { };
 
@@ -6451,7 +6451,14 @@ with pkgs;
     '';
   });
 
-  crystal = callPackage ../development/compilers/crystal { };
+  inherit (callPackages ../development/compilers/crystal {})
+    crystal_0_25
+    crystal_0_26
+    crystal;
+
+  icr = callPackage ../development/tools/icr {};
+
+  scry = callPackage ../development/tools/scry {};
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
@@ -8593,6 +8600,11 @@ with pkgs;
     gconf = pkgs.gnome2.GConf;
   };
 
+  nwjs-sdk = callPackage ../development/tools/nwjs {
+    gconf = pkgs.gnome2.GConf;
+    sdk = true;
+  };
+
   # only kept for nixui, see https://github.com/matejc/nixui/issues/27
   nwjs_0_12 = callPackage ../development/tools/node-webkit/nw12.nix {
     gconf = pkgs.gnome2.GConf;
@@ -10241,7 +10253,9 @@ with pkgs;
     inherit (xorg) libX11 libXext;
   };
 
-  libcanberra = callPackage ../development/libraries/libcanberra { };
+  libcanberra = callPackage ../development/libraries/libcanberra {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
   libcanberra-gtk3 = pkgs.libcanberra.override {
     gtk = gtk3;
   };
@@ -14375,6 +14389,9 @@ with pkgs;
   linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
 
+  linuxPackages_testing_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_testing);
+  linux_testing_hardened = linuxPackages_testing_hardened.kernel;
+
   linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
 
   linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
@@ -15054,6 +15071,8 @@ with pkgs;
   hicolor-icon-theme = callPackage ../data/icons/hicolor-icon-theme { };
 
   hanazono = callPackage ../data/fonts/hanazono { };
+
+  hyperscrypt-font = callPackage ../data/fonts/hyperscrypt { };
 
   ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
 
@@ -17070,6 +17089,8 @@ with pkgs;
   i3status-rust = callPackage ../applications/window-managers/i3/status-rust.nix { };
 
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
+
+  wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
@@ -22109,6 +22130,8 @@ with pkgs;
 
   steamcontroller = callPackage ../misc/drivers/steamcontroller { };
 
+  stern = callPackage ../applications/networking/cluster/stern { };
+
   streamripper = callPackage ../applications/audio/streamripper { };
 
   sqsh = callPackage ../development/tools/sqsh { };
@@ -22150,6 +22173,8 @@ with pkgs;
   };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
+
+  tetra-gtk-theme = callPackage ../misc/themes/tetra { };
 
   tewi-font = callPackage ../data/fonts/tewi  {};
 

@@ -9,11 +9,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gdal-${version}";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "https://download.osgeo.org/gdal/${version}/${name}.tar.xz";
-    sha256 = "0nkjnznrp7dr41zsh8j923c9zpc3i5vj3wjfc2df9rrybb22ailw";
+    sha256 = "191jknma0vricrgdcdmwh8588rwly6a77lmynypxdl87i3z7hv9z";
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
