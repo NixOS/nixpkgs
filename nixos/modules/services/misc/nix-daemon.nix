@@ -189,7 +189,92 @@ in
       };
 
       buildMachines = mkOption {
-        type = types.listOf types.attrs;
+        type = types.loaOf (submodule ({ config }: {
+          options = {
+            sshUser = mkOption {
+              type = types.nullOr types.string;
+              default = null;
+              description = ''
+                The user as who to SSH to the build machine.
+              '';
+            };
+            hostName = mkOption {
+              type = types.string;
+              description = ''
+                The hostname of the build machine.
+              '';
+            };
+            system = mkOption {
+              type = types.string;
+              default = null;
+              description = ''
+                The system type the build machine can execute derivations on.
+                null if multiple are supported.
+              '';
+            };
+            systems = mkOption {
+              type = types.listOf types.string;
+              default = [];
+              description = ''
+                The system types the build machine can execute derivations on.
+              '';
+            };
+            sshKey = mkOption {
+              type = types.string;
+              default = "-";
+              description = ''
+                The path to the SSH private key with which to authenticate with
+                the build machine. <literal>"-"</literal> indicates falling back
+                on defaults.
+              '';
+            };
+            maxJobs = mkOption {
+              type = types.int;
+              default = 1;
+              description = ''
+                The number of concurrent jobs the build machine supports. The
+                build machine will enforce its own limits but this allows hydra
+                to schedule better since there is no work-stealing between build
+                machines.
+              '';
+            };
+            speedFactor = mkOption {
+              type = types.int;
+              default = 1;
+              description = ''
+                Something at indicates how fast the machine is relative to an
+                arbitrary norm???
+              '';
+            };
+            mandatoryFeatures = mkOptions {
+              type = types.listOf types.string;
+              default = [];
+              decriptions = ''
+                A list of features derivations built with this remote are
+                required to opt into using. (See the documentation on Nix itself
+                for what those features are.)
+              '';
+            };
+            supportedFeatures = mkOptions {
+              type = types.listOf types.string;
+              default = [];
+              decriptions = ''
+                A list of features derivations built with this remote may choose
+                to use or not. (See the documentation on Nix itself for what
+                those features are.)
+              '';
+            };
+          };
+          config = {
+            assertions = [{
+              assertion = config.system != null || config.systems != null;
+              message = ''
+                At least one system type (via <varname>system</varname> or
+                <varname>systems</varname>) must be set for every build machine.
+              '';
+            }];
+          };
+        }));
         default = [];
         example = literalExample ''
           [ { hostName = "voila.labs.cs.uu.nl";
@@ -383,14 +468,14 @@ in
       { enable = cfg.buildMachines != [];
         text =
           concatMapStrings (machine:
-            "${if machine ? sshUser then "${machine.sshUser}@" else ""}${machine.hostName} "
-            + machine.system or (concatStringsSep "," machine.systems)
-            + " ${machine.sshKey or "-"} ${toString machine.maxJobs or 1} "
-            + toString (machine.speedFactor or 1)
+            "${if machine.sshUser != null then "${machine.sshUser}@" else ""}${machine.hostName} "
+            + (if machine.system != null then machine.system else concatStringsSep "," machine.systems)
+            + " ${machine.sshKey} ${toString machine.maxJobs} "
+            + toString (machine.speedFactor)
             + " "
-            + concatStringsSep "," (machine.mandatoryFeatures or [] ++ machine.supportedFeatures or [])
+            + concatStringsSep "," (machine.mandatoryFeatures ++ machine.supportedFeatures)
             + " "
-            + concatStringsSep "," machine.mandatoryFeatures or []
+            + concatStringsSep "," machine.mandatoryFeatures
             + "\n"
           ) cfg.buildMachines;
       };
