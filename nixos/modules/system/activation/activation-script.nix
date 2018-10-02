@@ -128,14 +128,6 @@ in
       ''
         # Various log/runtime directories.
 
-        mkdir -m 0755 -p /run/nix/current-load # for distributed builds
-        mkdir -m 0700 -p /run/nix/remote-stores
-
-        mkdir -m 0755 -p /var/log
-
-        touch /var/log/wtmp /var/log/lastlog # must exist
-        chmod 644 /var/log/wtmp /var/log/lastlog
-
         mkdir -m 1777 -p /var/tmp
 
         # Empty, immutable home directory of many system accounts.
