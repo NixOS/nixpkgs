@@ -17045,6 +17045,8 @@ with pkgs;
 
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
+  wmfocus = callPackage ../applications/window-managers/i3/wmfocus.nix { };
+
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icewm = callPackage ../applications/window-managers/icewm {};
