@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     cp -r * "$out/usr/lib/emby-server"
 
     makeWrapper "${dotnet-sdk}/bin/dotnet" $out/bin/emby \
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
+        sqlite
+      ]}" \
       --add-flags "$out/usr/lib/emby-server/EmbyServer.dll -programdata /var/lib/emby/ProgramData-Server -ffmpeg ${ffmpeg}/bin/ffmpeg -ffprobe ${ffmpeg}/bin/ffprobe"
   '';
 
