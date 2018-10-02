@@ -2812,19 +2812,7 @@ let
 
   CPANMetaRequirements = null; # part of Perl 5.26
 
-  CPANMetaYAML = buildPerlPackage rec {
-    name = "CPAN-Meta-YAML-0.018";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "150jh9l7baddl2587m23qs2l0pb395qsx9bhsgdsnn6y9k4zgjik";
-    };
-    doCheck = true;
-    meta = {
-      homepage = https://github.com/dagolden/CPAN-Meta-YAML;
-      description = "Read and write a subset of YAML for CPAN Meta files";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-    };
-  };
+  CPANMetaYAML = null; # part of Perl 5.26
 
   CPANPerlReleases = buildPerlPackage rec {
     name = "CPAN-Perl-Releases-3.74";
