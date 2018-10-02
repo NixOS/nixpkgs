@@ -1,21 +1,27 @@
 /* List of NixOS maintainers.
 
     handle = {
+      # Required
       name = "Real name";
       email = "address@example.org";
+
+      # Optional
       github = "GithubUsername";
     };
 
-  where `name` is your real name, `email` is your maintainer email
-  address and `github` is your GitHub handle (as it appears in the
-  URL of your profile page, `https://github.com/<userhandle>`).
- address
-  The only required fields are `name` and `email`.
+  where
+
+  - `handle` is the handle you are going to use in nixpkgs expressions,
+  - `name` is your real name,
+  - `email` is your maintainer email address, and
+  - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`).
+
+  `handle == github` is strongly preffered whenever `github` is an acceptable attribute name and is short and convenient.
+
   More fields may be added in the future.
 
   Please keep the list alphabetically sorted.
-  See `../maintainers/scripts/check-maintainer-github-handles.sh`
-  for an example on how to work with this data.
+  See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
   */
 {
   "1000101" = {
