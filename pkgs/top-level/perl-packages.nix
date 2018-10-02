@@ -11089,12 +11089,12 @@ let
   };
 
   NetDNS = buildPerlPackage rec {
-    name = "Net-DNS-1.17";
+    name = "Net-DNS-1.18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NL/NLNETLABS/${name}.tar.gz";
-      sha256 = "9a79fd8fea1a708726c18d193ae4437479206ccb20ffa7f0971371e172e2c2e0";
+      sha256 = "52ce1494fc9707fd5a60ed71db5cde727157b7f2363787d730d4d1bd9800a9d3";
     };
-    propagatedBuildInputs = [ DigestHMAC IOSocketIP ];
+    propagatedBuildInputs = [ DigestHMAC ];
     makeMakerFlags = "--noonline-tests";
     meta = {
       description = "Perl Interface to the Domain Name System";
