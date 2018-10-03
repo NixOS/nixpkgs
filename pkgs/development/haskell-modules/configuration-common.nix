@@ -1152,4 +1152,5 @@ self: super: {
     sha256 = "0ljwcha9l52gs5bghxq3gbzxfqmfz3hxxcg9arjsjw8f7kw946xq";
   });
 
+  xmonad-extras = doJailbreak super.xmonad-extras;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
