@@ -45,8 +45,10 @@ self: super: {
   hoopl = self.hoopl_3_10_2_2;
 
   # LTS-12.x versions do not compile.
+  base-orphans = self.base-orphans_0_8;
   contravariant = self.contravariant_1_5;
   control-monad-free = markBrokenVersion "0.6.1" super.control-monad-free;
+  free = self.free_5_1;
   Glob = self.Glob_0_9_3;
   haddock-library = markBroken super.haddock-library;
   hslogger = self.hslogger_1_2_12;
