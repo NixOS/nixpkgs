@@ -32,6 +32,7 @@ let
     modules = callLibs ./modules.nix;
     options = callLibs ./options.nix;
     types = callLibs ./types.nix;
+    kernel = callLibs ./kernel.nix;
 
     # constants
     licenses = callLibs ./licenses.nix;
