@@ -58,6 +58,7 @@ in
 
     # ZeroTier does not issue DHCP leases, but some strangers might...
     networking.dhcpcd.denyInterfaces = [ "zt*" ];
+    networking.networkdUnmanagedInterfaces = mkDefault "zt*";
 
     # ZeroTier receives UDP transmissions
     networking.firewall.allowedUDPPorts = [ cfg.port ];

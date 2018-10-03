@@ -80,6 +80,8 @@ in
           # - https://github.com/NixOS/nixpkgs/issues/18962
           # - https://github.com/NixOS/nixpkgs/issues/61629
           matchConfig = mkDefault { Name = "*"; };
+        } // optionalAttrs (cfg.networkdUnmanagedInterfaces != "") {
+          name = "!${cfg.networkdUnmanagedInterfaces}";
         };
       }
       (mkMerge (forEach interfaces (i: {
