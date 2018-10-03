@@ -9,10 +9,6 @@ let
   cfg = config.networking;
   dnsmasqResolve = config.services.dnsmasq.enable &&
                    config.services.dnsmasq.resolveLocalQueries;
-  hasLocalResolver = config.services.bind.enable ||
-                     config.services.unbound.enable ||
-                     dnsmasqResolve;
-
   resolvconfOptions = cfg.resolvconfOptions
     ++ optional cfg.dnsSingleRequest "single-request"
     ++ optional cfg.dnsExtensionMechanism "edns0";
@@ -88,6 +84,24 @@ in
       example = "libc=NO";
       description = ''
         Extra configuration to append to <filename>resolvconf.conf</filename>.
+      '';
+    };
+
+    networking.useLocalResolver = lib.mkOption {
+      type = types.bool;
+      default = config.services.bind.enable ||
+                config.services.unbound.enable ||
+                dnsmasqResolve;
+      defaultText = ''
+        config.services.bind.enable ||
+        config.services.unbound.enable ||
+        dnsmasqResolve
+      '';
+      example = false;
+      description = ''
+        Whether to use a local DNS resolver (must be running and properly
+        configured) to answer DNS requests. The default is to enable this
+        option if a known DNS server is enabled (autodetection).
       '';
     };
 
@@ -236,7 +250,7 @@ in
             '' + optionalString (length resolvconfOptions > 0) ''
               # Options as described in resolv.conf(5)
               resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
-            '' + optionalString hasLocalResolver ''
+            '' + optionalString cfg.useLocalResolver ''
               # This hosts runs a full-blown DNS resolver.
               name_servers='127.0.0.1'
             '' + optionalString dnsmasqResolve ''
