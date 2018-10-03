@@ -1,5 +1,5 @@
 { stdenv, fetchurl, perl, file, nettools, iputils, iproute, makeWrapper
-, coreutils, gnused, openldap ? null
+, zlib, coreutils, gnused, openldap ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       ./set-hostname.patch
     ];
 
-  buildInputs = [ perl makeWrapper openldap ];
+  buildInputs = [ perl makeWrapper zlib openldap ];
 
   configureFlags = [
     "--enable-failover"
