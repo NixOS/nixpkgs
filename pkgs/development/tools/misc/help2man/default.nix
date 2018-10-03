@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, gettext, LocaleGettext }:
 
 stdenv.mkDerivation rec {
-  name = "help2man-1.47.6";
+  name = "help2man-1.47.7";
 
   src = fetchurl {
     url = "mirror://gnu/help2man/${name}.tar.xz";
-    sha256 = "0vz4dlrvy4vc6l7w0a7n668pfa0rdm73wr2gar58wqranyah46yr";
+    sha256 = "03gckfr2980qn319c02vflq7d75vq2qdkxrw80kb9g84xn48wnsq";
   };
 
   nativeBuildInputs = [ gettext LocaleGettext ];
