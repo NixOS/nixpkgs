@@ -60,10 +60,6 @@ in
 
   osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { };
 
-  security_tool = darwin.callPackage ../os-specific/darwin/security-tool {
-    Security-framework = darwin.apple_sdk.frameworks.Security;
-  };
-
   stubs = callPackages ../os-specific/darwin/stubs { };
 
   trash = darwin.callPackage ../os-specific/darwin/trash { };
