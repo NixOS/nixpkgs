@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2, git }:
+{ stdenv, fetchFromGitHub, python2, git }:
 
 let
   name = "stgit-${version}";
@@ -7,9 +7,11 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  src = fetchurl {
-    url = "https://github.com/ctmarinas/stgit/archive/v${version}.tar.gz";
-    sha256 = "19fk6vw3pgp2a98wpd4j3kyiyll5dy9bi4921wq1mrky0l53mj00";
+  src = fetchFromGitHub {
+    owner = "ctmarinas";
+    repo = "stgit";
+    rev = "v${version}";
+    sha256 = "0ydgg744m671nkhg7h4q2z3b9vpbc9914rbc0wcgimqfqsxkxx2y";
   };
 
   buildInputs = [ python2 git ];
@@ -24,12 +26,11 @@ stdenv.mkDerivation {
   doCheck = false;
   checkTarget = "test";
 
-  meta = {
-    homepage = http://procode.org/stgit/;
+  meta = with stdenv.lib; {
     description = "A patch manager implemented on top of Git";
-    license = "GPL";
-
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = http://procode.org/stgit/;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ the-kenny ];
+    platforms = platforms.unix;
   };
 }
