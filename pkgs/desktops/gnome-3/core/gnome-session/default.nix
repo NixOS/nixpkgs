@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      # FIXME: glib binaries shouldn't be in .dev!
-      gsettings = "${glib.dev}/bin/gsettings";
+      gsettings = "${glib.bin}/bin/gsettings";
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
     })
   ];
