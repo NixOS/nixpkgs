@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, pango, perl, python, zip, libIDL
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip
@@ -30,6 +30,14 @@ in stdenv.mkDerivation rec {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 = "1933csh6swcx1z35lbxfkxlln36mx2mny28rzxz53r480wcvar8zcj77gwb06hzn6j5cvqls7qd5n6a7x43sp7w9ykkf4kf9gmlccya";
   };
+
+  patches = [
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1479540
+    (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-diff/36f4ba2fb6f5/build/moz.configure/init.configure";
+      sha256 = "0aml7mnwrcfcqr79wbw2rgxl58i1hxglx7c73ipydnizvydqyq7w";
+    })
+  ];
 
   # from firefox, but without sound libraries
   buildInputs =
