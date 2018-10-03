@@ -17,14 +17,9 @@
 
 with stdenv.lib;
 
-  with import ../../../../lib/kernel.nix { inherit (stdenv) lib; };
+  with import ../../../../lib/kernel.nix { inherit (stdenv) lib; inherit version; };
 
 let
-  # Common patterns/legacy
-  when = cond: opt: if cond then opt else null;
-  whenAtLeast = ver: mkIf (versionAtLeast version ver);
-  whenOlder   = ver: mkIf (versionOlder version ver);
-  whenBetween = verLow: verHigh: mkIf (versionAtLeast version verLow && versionOlder version verHigh);
 
   # configuration items have to be part of a subattrs
   flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));
@@ -420,7 +415,7 @@ let
       KVM_COMPAT = { optional = true; tristate = whenBetween "4.0" "4.12" "y"; };
       KVM_DEVICE_ASSIGNMENT  = { optional = true; tristate = whenBetween "3.10" "4.12" "y"; };
       KVM_GENERIC_DIRTYLOG_READ_PROTECT = whenAtLeast "4.0"  yes;
-      KVM_GUEST                         = when (!features.grsecurity) yes;
+      KVM_GUEST                         = mkIf (!features.grsecurity) yes;
       KVM_MMIO                          = yes;
       KVM_VFIO                          = yes;
       KSM = yes;

@@ -14757,6 +14757,7 @@ in
   hardenedLinuxPackagesFor = kernel: linuxPackagesFor (kernel.override {
     features.ia32Emulation = false;
     extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
+    structuredExtraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
       inherit stdenv;
       inherit (kernel) version;
     };
