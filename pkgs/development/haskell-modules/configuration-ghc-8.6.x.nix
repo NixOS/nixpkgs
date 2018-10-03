@@ -59,7 +59,7 @@ self: super: {
   hspec-meta = self.hspec-meta_2_5_6;
   hspec-meta_2_5_6 = super.hspec-meta_2_5_6.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_6_1; });
   JuicyPixels = self.JuicyPixels_3_3_1;
-  lens = dontCheck super.lens;    # avoid depending on broken polyparse
+  lens = self.lens_4_17;
   polyparse = markBrokenVersion "1.12" super.polyparse;
   primitive = self.primitive_0_6_4_0;
   semigroupoids = self.semigroupoids_5_3_1;
