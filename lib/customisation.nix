@@ -46,9 +46,10 @@ rec {
        else { }));
 
 
-  /* `makeOverridable` takes a function from attribute set to attribute set and
-     injects `override` attibute which can be used to override arguments of
-     the function.
+  /* `makeOverridable` takes a function from attribute set to attribute set, a
+     list of expected arguments and injects `override`, `overrideWithScope` and
+     `overrideDerivation` attibutes in the result of the function which can be
+     used to re-call the function with an overrided set of arguments.
 
        nix-repl> x = {a, b}: { result = a + b; }
 
@@ -64,20 +65,25 @@ rec {
      "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
      related to its use.
   */
-  makeOverridable = f: origArgs:
+  makeOverridable = f: origArgs: makeOverridableWithArgs f (lib.functionArgs f) origArgs;
+  makeOverridableWithArgs = f: fnArgs: origArgs:
     let
       ff = f origArgs;
       overrideWith = newArgs: origArgs // (if lib.isFunction newArgs then newArgs origArgs else newArgs);
+      intersectArgs = if fnArgs != {} then builtins.intersectAttrs fnArgs else (a: a);
+      overrideWithScope = newScope: overrideWith (intersectArgs newScope);
     in
       if builtins.isAttrs ff then (ff // {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
+        override = newArgs: makeOverridableWithArgs f fnArgs (overrideWith newArgs);
+        overrideWithScope = newScope: makeOverridableWithArgs f fnArgs (overrideWithScope newScope);
         overrideDerivation = fdrv:
-          makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
+          makeOverridableWithArgs (args: overrideDerivation (f args) fdrv) fnArgs origArgs;
         ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
-          makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
+          makeOverridableWithArgs (args: (f args).overrideAttrs fdrv) fnArgs origArgs;
       })
       else if lib.isFunction ff then {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
+        override = newArgs: makeOverridableWithArgs f fnArgs (overrideWith newArgs);
+        overrideWithScope = newScope: makeOverridableWithArgs f fnArgs (overrideWithScope newScope);
         __functor = self: ff;
         overrideDerivation = throw "overrideDerivation not yet supported for functors";
       }
@@ -108,8 +114,9 @@ rec {
   callPackageWith = autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
-    in makeOverridable f (auto // args);
+      fnArgs = lib.functionArgs f;
+      auto = builtins.intersectAttrs fnArgs autoArgs;
+    in makeOverridableWithArgs f fnArgs (auto // args);
 
 
   /* Like callPackage, but for a function that returns an attribute
@@ -118,10 +125,11 @@ rec {
   callPackagesWith = autoArgs: fn: args:
     let
       f = if lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (lib.functionArgs f) autoArgs;
+      fnArgs = lib.functionArgs f;
+      auto = builtins.intersectAttrs fnArgs autoArgs;
       origArgs = auto // args;
       pkgs = f origArgs;
-      mkAttrOverridable = name: pkg: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
+      mkAttrOverridable = name: pkg: makeOverridableWithArgs (newArgs: (f newArgs).${name}) fnArgs origArgs;
     in lib.mapAttrs mkAttrOverridable pkgs;
 
 
