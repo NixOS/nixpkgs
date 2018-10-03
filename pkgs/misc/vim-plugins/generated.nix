@@ -2088,6 +2088,16 @@
     };
   };
 
+  vim-flake8 = buildVimPluginFrom2Nix {
+    name = "vim-flake8-2018-09-21";
+    src = fetchFromGitHub {
+      owner = "nvie";
+      repo = "vim-flake8";
+      rev = "d50b3715ef386e4d998ff85dad6392110536478d";
+      sha256 = "135374sr4ymyslc9j8qgf4qbhijc3lm8jl9mhhzq1k0ndsz4w3k3";
+    };
+  };
+
   vim-ft-diff_fold = buildVimPluginFrom2Nix {
     name = "vim-ft-diff_fold-2013-02-10";
     src = fetchFromGitHub {
