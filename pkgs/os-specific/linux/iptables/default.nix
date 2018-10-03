@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "iptables-${version}";
-  version = "1.6.2";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
-    sha256 = "0crp0lvh5m2f15pr8cw97h8yb8zjj10x95zj06j46cr68vx2vl2m";
+    sha256 = "0l6yx3vym3qbvzq20gvpfirfz79h3v1bnzil5syf95j2ghcgmjy4";
   };
 
   nativeBuildInputs = [ bison flex pkgconfig ];
