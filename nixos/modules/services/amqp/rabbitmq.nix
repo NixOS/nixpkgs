@@ -165,7 +165,10 @@ in {
       after = [ "network.target" "epmd.socket" ];
       wants = [ "network.target" "epmd.socket" ];
 
-      path = [ cfg.package pkgs.procps ];
+      path = [
+        cfg.package
+        pkgs.coreutils # mkdir/chown/chmod for preStart
+      ];
 
       environment = {
         RABBITMQ_MNESIA_BASE = "${cfg.dataDir}/mnesia";
