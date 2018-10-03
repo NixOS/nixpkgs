@@ -2447,6 +2447,11 @@
     github = "ma27";
     name = "Maximilian Bosch";
   };
+  ma9e = {
+    email = "sean@lfo.team";
+    github = "ma9e";
+    name = "Sean Haugh";
+  };
   madjar = {
     email = "georges.dubus@compiletoi.net";
     github = "madjar";
