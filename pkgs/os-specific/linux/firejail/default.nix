@@ -37,6 +37,14 @@ stdenv.mkDerivation {
     sed -e "s@/etc/@$out/etc/@g" -e "/chmod u+s/d" -i Makefile
   '';
 
+  # We need to set the directory for the .local override files back to
+  # /etc/firejail so we can actually override them
+  postInstall = ''
+    sed -E -e 's@^include (.*)(/firejail/.*.local)$@include /etc\2@g' -i $out/etc/firejail/*.profile
+  '';
+
+  enableParallelBuilding = true;
+
   meta = {
     inherit (s) version;
     description = ''Namespace-based sandboxing tool for Linux'';
