@@ -9,13 +9,12 @@
   For systems without CD drive, the NixOS live CD can be booted from a USB
   stick. You can use the <command>dd</command> utility to write the image:
   <command>dd if=<replaceable>path-to-image</replaceable>
-  of=<replaceable>/dev/sdb</replaceable></command>. Be careful about specifying
+  of=<replaceable>/dev/sdX</replaceable></command>. Be careful about specifying
   the correct drive; you can use the <command>lsblk</command> command to get a
   list of block devices.
- </para>
-
- <para>
-  On macOS:
+  <note>
+   <title>On macOS</title>
+   <para>
 <programlisting>
 $ diskutil list
 [..]
@@ -26,10 +25,12 @@ $ diskutil unmountDisk diskN
 Unmount of all volumes on diskN was successful
 $ sudo dd bs=1m if=nix.iso of=/dev/rdiskN
 </programlisting>
-  Using the 'raw' <command>rdiskN</command> device instead of
-  <command>diskN</command> completes in minutes instead of hours. After
-  <command>dd</command> completes, a GUI dialog "The disk you inserted was not
-  readable by this computer" will pop up, which can be ignored.
+    Using the 'raw' <command>rdiskN</command> device instead of
+    <command>diskN</command> completes in minutes instead of hours. After
+    <command>dd</command> completes, a GUI dialog "The disk you inserted was
+    not readable by this computer" will pop up, which can be ignored.
+   </para>
+  </note>
  </para>
 
  <para>
