@@ -11,8 +11,8 @@ in
 
     listenAddress = mkOption {
       type = types.str;
-      default = 127.0.0.1;
-      description = "Listening address";
+      default = "[::]";
+      description = "Listening address. IPv6 addresses must be enclosed in square brackets";
     };
 
     listenPort = mkOption {
