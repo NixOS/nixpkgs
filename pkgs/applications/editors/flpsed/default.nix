@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fltk13, ghostscript, xlibs }:
+{ stdenv, fetchurl, fltk13, ghostscript }:
 
 stdenv.mkDerivation rec {
   name = "flpsed-${version}";
