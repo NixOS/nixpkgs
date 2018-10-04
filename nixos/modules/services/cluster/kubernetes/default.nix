@@ -1014,10 +1014,10 @@ in {
             --leader-elect=${boolToString cfg.controllerManager.leaderElect} \
             ${if (cfg.controllerManager.serviceAccountKeyFile!=null)
               then "--service-account-private-key-file=${cfg.controllerManager.serviceAccountKeyFile}"
-              else "--service-account-private-key-file=/var/run/kubernetes/apiserver.key"} \
+              else "--service-account-private-key-file=/run/kubernetes/apiserver.key"} \
             ${if (cfg.controllerManager.rootCaFile!=null)
               then "--root-ca-file=${cfg.controllerManager.rootCaFile}"
-              else "--root-ca-file=/var/run/kubernetes/apiserver.crt"} \
+              else "--root-ca-file=/run/kubernetes/apiserver.crt"} \
             ${optionalString (cfg.clusterCidr!=null)
               "--cluster-cidr=${cfg.clusterCidr}"} \
             --allocate-node-cidrs=true \
@@ -1132,7 +1132,7 @@ in {
 
       systemd.tmpfiles.rules = [
         "d /opt/cni/bin 0755 root root -"
-        "d /var/run/kubernetes 0755 kubernetes kubernetes -"
+        "d /run/kubernetes 0755 kubernetes kubernetes -"
         "d /var/lib/kubernetes 0755 kubernetes kubernetes -"
       ];
 
