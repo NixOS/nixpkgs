@@ -81,7 +81,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${prl-tools}/bin/prltoolsd -f";
-        PIDFile = "/var/run/prltoolsd.pid";
+        PIDFile = "/run/prltoolsd.pid";
       };
     };
 
