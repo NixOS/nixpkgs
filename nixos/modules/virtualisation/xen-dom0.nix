@@ -263,7 +263,7 @@ in
         export XENSTORED_ROOTDIR="/var/lib/xenstored"
         rm -f "$XENSTORED_ROOTDIR"/tdb* &>/dev/null
 
-        mkdir -p /var/run
+        mkdir -p /run
         mkdir -p /var/log/xen # Running xl requires /var/log/xen and /var/lib/xen,
         mkdir -p /var/lib/xen # so we create them here unconditionally.
         grep -q control_d /proc/xen/capabilities
@@ -305,7 +305,7 @@ in
       description = "XenStore Socket for userspace API";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-        ListenStream = [ "/var/run/xenstored/socket" "/var/run/xenstored/socket_ro" ];
+        ListenStream = [ "/run/xenstored/socket" "/run/xenstored/socket_ro" ];
         SocketMode = "0660";
         SocketUser = "root";
         SocketGroup = "root";
@@ -319,7 +319,7 @@ in
       after = [ "xen-store.service" ];
       requires = [ "xen-store.service" ];
       preStart = ''
-        mkdir -p /var/run/xen
+        mkdir -p /run/xen
         ${optionalString cfg.trace "mkdir -p /var/log/xen"}
         grep -q control_d /proc/xen/capabilities
         '';
@@ -362,10 +362,10 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "xen-domains.service" ];
       preStart = ''
-        mkdir -p /var/run/xen
-        touch /var/run/xen/dnsmasq.pid
-        touch /var/run/xen/dnsmasq.etherfile
-        touch /var/run/xen/dnsmasq.leasefile
+        mkdir -p /run/xen
+        touch /run/xen/dnsmasq.pid
+        touch /run/xen/dnsmasq.etherfile
+        touch /run/xen/dnsmasq.leasefile
 
         IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Usable\ range`
         export XEN_BRIDGE_IP_RANGE_START="${"\${data[1]//[[:blank:]]/}"}"
@@ -377,17 +377,17 @@ in
         IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ mask`
         export XEN_BRIDGE_NETMASK="${"\${data[1]//[[:blank:]]/}"}"
 
-        echo "${cfg.bridge.address} host gw dns" > /var/run/xen/dnsmasq.hostsfile
+        echo "${cfg.bridge.address} host gw dns" > /run/xen/dnsmasq.hostsfile
 
-        cat <<EOF > /var/run/xen/dnsmasq.conf
+        cat <<EOF > /run/xen/dnsmasq.conf
         no-daemon
-        pid-file=/var/run/xen/dnsmasq.pid
+        pid-file=/run/xen/dnsmasq.pid
         interface=${cfg.bridge.name}
         except-interface=lo
         bind-interfaces
         auth-zone=xen.local,$XEN_BRIDGE_NETWORK_ADDRESS/${toString cfg.bridge.prefixLength}
         domain=xen.local
-        addn-hosts=/var/run/xen/dnsmasq.hostsfile
+        addn-hosts=/run/xen/dnsmasq.hostsfile
         expand-hosts
         strict-order
         no-hosts
@@ -400,12 +400,12 @@ in
         filterwin2k
         clear-on-reload
         domain-needed
-        dhcp-hostsfile=/var/run/xen/dnsmasq.etherfile
+        dhcp-hostsfile=/run/xen/dnsmasq.etherfile
         dhcp-authoritative
         dhcp-range=$XEN_BRIDGE_IP_RANGE_START,$XEN_BRIDGE_IP_RANGE_END
         dhcp-no-override
         no-ping
-        dhcp-leasefile=/var/run/xen/dnsmasq.leasefile
+        dhcp-leasefile=/run/xen/dnsmasq.leasefile
         EOF
 
         # DHCP
@@ -420,7 +420,7 @@ in
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} netmask $XEN_BRIDGE_NETMASK
         ${pkgs.inetutils}/bin/ifconfig ${cfg.bridge.name} up
       '';
-      serviceConfig.ExecStart = "${pkgs.dnsmasq}/bin/dnsmasq --conf-file=/var/run/xen/dnsmasq.conf";
+      serviceConfig.ExecStart = "${pkgs.dnsmasq}/bin/dnsmasq --conf-file=/run/xen/dnsmasq.conf";
       postStop = ''
         IFS='-' read -a data <<< `${pkgs.sipcalc}/bin/sipcalc ${cfg.bridge.address}/${toString cfg.bridge.prefixLength} | grep Network\ address`
         export XEN_BRIDGE_NETWORK_ADDRESS="${"\${data[1]//[[:blank:]]/}"}"
