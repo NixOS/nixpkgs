@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libtool ];
-  # configureFlags = [ "--datadir=/var/run/current-system/share/dictd" ];
+  # configureFlags = [ "--datadir=/run/current-system/share/dictd" ];
 
   meta = with stdenv.lib; {
     description = "Dict protocol server and client";
