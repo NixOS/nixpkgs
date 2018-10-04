@@ -3582,7 +3582,7 @@ with pkgs;
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
     ffmpeg = ffmpeg_2;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_02;
+    # ocamlPackages = ocaml-ng.ocamlPackages_4_03;
   };
 
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
