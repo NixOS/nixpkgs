@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-gem "jekyll"
+gem "jekyll", "~> 3.7.0"
 # jekyll alone might be enough for most use-cases
 gem "rouge"
 gem "activesupport", "~> 4.2"
