@@ -4,7 +4,7 @@ let
   cfg = config.services.selfoss;
 
   poolName = "selfoss_pool";
-  phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
+  phpfpmSocketName = "/run/phpfpm/${poolName}.sock";
 
   dataDir = "/var/lib/selfoss";
 
