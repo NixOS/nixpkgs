@@ -14,9 +14,9 @@ let
   };
   betaVersion = stableVersion;
   latestVersion = { # canary & dev
-    version = "3.3.0.11"; # "Android Studio 3.3 Canary 12"
-    build = "182.5026711";
-    sha256Hash = "0k1f8yw3gdil78iqxlwhbz71w1307hwwf8z9m7hs0v9b4ri6x2wk";
+    version = "3.3.0.12"; # "Android Studio 3.3 Canary 13"
+    build = "182.5035453";
+    sha256Hash = "0f2glxm41ci016dv9ygr12s72lc5mh0zsxhpmx0xswg9mdwrvwa7";
   };
 in rec {
   # Old alias
