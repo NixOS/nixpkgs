@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, dune, cppo }:
 
 stdenv.mkDerivation rec {
-	version = "0.8.7";
+	version = "1.0.1";
 	name = "ocaml${ocaml.version}-camomile-${version}";
 
 	src = fetchFromGitHub {
 		owner = "yoriyuki";
 		repo = "camomile";
-		rev = "rel-${version}";
-		sha256 = "0rh58nl5jrnx01hf0yqbdcc2ncx107pq29zblchww82ci0x1xwsf";
+		rev = "${version}";
+		sha256 = "1pfxr9kzkpd5bsdqrpxasfxkawwkg4cpx3m1h6203sxi7qv1z3fn";
 	};
 
 	buildInputs = [ ocaml findlib dune cppo ];
