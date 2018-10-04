@@ -122,6 +122,13 @@ sub runTests {
         $term->WriteHistory;
     }
 
+    $log->nest("collecting systemd units exection time", sub {
+        foreach my $vm (values %vms) {
+            next unless $vm->isUp();
+            $vm->systemdAnalyzeBlame();
+        }
+    });
+
     # Copy the kernel coverage data for each machine, if the kernel
     # has been compiled with coverage instrumentation.
     $log->nest("collecting coverage data", sub {

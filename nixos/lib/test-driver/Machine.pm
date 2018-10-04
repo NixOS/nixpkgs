@@ -396,6 +396,16 @@ sub systemctl {
     return $self->execute("systemctl $q");
 }
 
+sub systemdAnalyzeBlame {
+    my ($self) = @_;
+    my ($status, $lines) = $self->execute("systemd-analyze blame");
+    return undef if $status != 0;
+    foreach my $line (split /\n/ ,$lines) {
+        $line =~ s/\s*//;
+        $self->log($line);
+    }
+}
+
 # Fail if the given systemd unit is not in the "active" state.
 sub requireActiveUnit {
     my ($self, $unit) = @_;
