@@ -16424,6 +16424,8 @@ with pkgs;
 
   fig2dev = callPackage ../applications/graphics/fig2dev { };
 
+  FIL-plugins = callPackage ../applications/audio/FIL-plugins { };
+
   flacon = callPackage ../applications/audio/flacon { };
 
   flexget = callPackage ../applications/networking/flexget { };
