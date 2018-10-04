@@ -133,6 +133,8 @@ in rec {
     test = runCommand "terraform-plugin-test" { buildInputs = [terraform]; }
       ''
         set -e
+        # make it fail outside of sandbox
+        export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
         cp ${mainTf} main.tf
         terraform init
         touch $out
