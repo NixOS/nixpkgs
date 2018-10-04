@@ -609,6 +609,13 @@
       version = "1.8.1";
       sha256  = "0y6n7mvv1f3jqsxlvf68iq85k69fj7a333203vkvc83dba84aqki";
     };
+  matchbox =
+    {
+      owner   = "coreos";
+      repo    = "terraform-provider-matchbox";
+      version = "0.2.2";
+      sha256  = "07lzslbl41i3h84bpsmxhvchm5kqk87yzin2yvpbq0m3m7r2f547";
+    };
   nixos =
     {
       owner   = "tweag";
