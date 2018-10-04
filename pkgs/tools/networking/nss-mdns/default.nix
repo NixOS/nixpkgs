@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     [ # Try to use the Avahi daemon before resolving on our own.
       "--enable-avahi"
 
-      # Connect to the daemon at `/var/run/avahi-daemon/socket'.
+      # Connect to the daemon at `/run/avahi-daemon/socket'.
       "--localstatedir=/var"
     ];
 
