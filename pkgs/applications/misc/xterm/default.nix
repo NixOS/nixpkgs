@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
 
   # Hack to get xterm built with the feature of releasing a possible setgid of 'utmp',
-  # decided by the sysadmin to allow the xterm reporting to /var/run/utmp
+  # decided by the sysadmin to allow the xterm reporting to /run/utmp
   # If we used the configure option, that would have affected the xterm installation,
   # (setgid with the given group set), and at build time the environment even doesn't have
   # groups, and the builder will end up removing any setgid.
