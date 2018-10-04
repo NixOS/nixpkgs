@@ -85,7 +85,7 @@ install -m 0755 -d /var/{log,lib,db} /nix/var /etc/nixos/ \
 
 
 # Miscellaneous boot time cleanup.
-rm -rf /var/run /var/lock
+rm -rf /run /var/lock
 rm -f /etc/{group,passwd,shadow}.lock
 
 
@@ -93,9 +93,9 @@ rm -f /etc/{group,passwd,shadow}.lock
 rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 
 
-# For backwards compatibility, symlink /var/run to /run, and /var/lock
+# For backwards compatibility, symlink /run to /run, and /var/lock
 # to /run/lock.
-ln -s /run /var/run
+ln -s /run /run
 ln -s /run/lock /var/lock
 
 
