@@ -22162,6 +22162,7 @@ with pkgs;
     terraform_0_10-full
     terraform_0_11
     terraform_0_11-full
+    terraform_plugins_test
     ;
 
   terraform = terraform_0_11;
