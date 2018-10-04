@@ -176,7 +176,7 @@ in
 
     environment.shells = [
       "/run/current-system/sw/bin/fish"
-      "/var/run/current-system/sw/bin/fish"
+      "/run/current-system/sw/bin/fish"
       "${pkgs.fish}/bin/fish"
     ];
 
