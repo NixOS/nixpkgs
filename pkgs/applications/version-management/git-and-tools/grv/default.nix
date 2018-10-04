@@ -21,7 +21,7 @@ buildGo19Package {
   buildFlagsArray = [ "-ldflags=" "-X main.version=${version}" ];
 
   meta = with stdenv.lib; {
-    description = " GRV is a terminal interface for viewing git repositories";
+    description = "GRV is a terminal interface for viewing Git repositories";
     homepage = https://github.com/rgburke/grv;
     license = licenses.gpl3;
     platforms = platforms.unix;
