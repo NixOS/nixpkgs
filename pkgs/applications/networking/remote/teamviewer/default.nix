@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_aux \
       --replace '/lib64/ld-linux-x86-64.so.2' '${glibc.out}/lib/ld-linux-x86-64.so.2'
     substituteInPlace $out/share/teamviewer/tv_bin/script/tvw_config \
-      --replace '/var/run/' '/run/'
+      --replace '/run/' '/run/'
     wrapProgram $out/share/teamviewer/tv_bin/script/teamviewer --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libXrandr libX11 ]}"
     wrapProgram $out/share/teamviewer/tv_bin/teamviewerd --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libXrandr libX11 ]}"
   '';
