@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # Read all configuration from /run/longview
   postPatch = ''
     substituteInPlace Linode/Longview/Util.pm \
-        --replace /var/run/longview.pid /run/longview/longview.pid \
+        --replace /run/longview.pid /run/longview/longview.pid \
         --replace /etc/linode /run/longview
     substituteInPlace Linode/Longview.pl \
         --replace /etc/linode /run/longview
