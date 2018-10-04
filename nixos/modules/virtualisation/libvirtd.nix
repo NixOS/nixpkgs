@@ -150,7 +150,7 @@ in {
 
       preStart = ''
         mkdir -p /var/log/libvirt/qemu -m 755
-        rm -f /var/run/libvirtd.pid
+        rm -f /run/libvirtd.pid
 
         mkdir -p /var/lib/libvirt
         mkdir -p /var/lib/libvirt/dnsmasq
