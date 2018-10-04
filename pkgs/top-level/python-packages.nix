@@ -4589,6 +4589,8 @@ in {
 
   tracing = callPackage ../development/python-modules/tracing { };
 
+  translate-toolkit = callPackage ../development/python-modules/translate-toolkit { };
+
   translationstring = callPackage ../development/python-modules/translationstring { };
 
   ttystatus = callPackage ../development/python-modules/ttystatus { };
