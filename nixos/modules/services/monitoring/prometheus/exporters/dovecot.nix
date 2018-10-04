@@ -17,8 +17,8 @@ in
     };
     socketPath = mkOption {
       type = types.path;
-      default = "/var/run/dovecot/stats";
-      example = "/var/run/dovecot2/stats";
+      default = "/run/dovecot/stats";
+      example = "/run/dovecot2/stats";
       description = ''
         Path under which the stats socket is placed.
         The user/group under which the exporter runs,
