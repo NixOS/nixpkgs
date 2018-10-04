@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost, zeromq
-, zlib, miniupnpc, qtbase ? null, qttools ? null, utillinux, protobuf, qrencode, libevent
+, zlib, miniupnpc, qtbase ? null, qttools ? null, utillinux, protobuf, python3, qrencode, libevent
 , withGui }:
 
 with stdenv.lib;
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec{
     sha256 = "0pkq28d2dj22qrxyyg9kh0whmhj7ghyabnhyqldbljv4a7l3kvwq";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ]
+                   ++ optionals doCheck [ python3 ];
   buildInputs = [ openssl db48 boost zlib zeromq
                   miniupnpc protobuf libevent]
                   ++ optionals stdenv.isLinux [ utillinux ]
@@ -30,9 +31,11 @@ stdenv.mkDerivation rec{
                                             "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
                                           ];
 
-  # Fails with "This application failed to start because it could not
-  # find or load the Qt platform plugin "minimal""
-  doCheck = false;
+  doCheck = true;
+
+  # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Bitcoin's GUI.
+  # See also https://github.com/NixOS/nixpkgs/issues/24256
+  checkFlags = optionals withGui [ "QT_PLUGIN_PATH=${qtbase}/lib/qt-5.${versions.minor qtbase.version}/plugins" ];
 
   enableParallelBuilding = true;
 
