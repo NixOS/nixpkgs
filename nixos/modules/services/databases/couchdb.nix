@@ -85,7 +85,7 @@ in {
 
       uriFile = mkOption {
         type = types.path;
-        default = "/var/run/couchdb/couchdb.uri";
+        default = "/run/couchdb/couchdb.uri";
         description = ''
           This file contains the full URI that can be used to access this
           instance of CouchDB. It is used to help discover the port CouchDB is
