@@ -111,7 +111,7 @@ rec {
     mkdir -p /fs/tmp /fs/run /fs/var
     mount -t tmpfs -o "mode=1777" none /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/run
-    ln -sfn /run /fs/var/run
+    ln -sfn /run /fs/run
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
