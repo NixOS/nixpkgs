@@ -1,4 +1,20 @@
-{ stdenvNoCC, writeText, fetchurl, rpmextract, openmp, undmg }:
+{ stdenvNoCC, writeText, fetchurl, rpmextract, undmg }:
+/*
+  Some (but not all) mkl functions require openmp, but Intel does not add these
+  to SO_NEEDED and instructs users to put openmp on their LD_LIBRARY_PATH. If
+  you are using mkl and your library/application is using some of the functions
+  that require openmp, add a setupHook like this to your package:
+
+  setupHook = writeText "setup-hook.sh" ''
+    addOpenmp() {
+        addToSearchPath LD_LIBRARY_PATH ${openmp}/lib
+    }
+    addEnvHooks "$targetOffset" addOpenmp
+  '';
+
+  We do not add the setup hook here, because avoiding it allows this large
+  package to be a fixed-output derivation with better cache efficiency.
+ */
 
 stdenvNoCC.mkDerivation rec {
   name = "mkl-${version}";
@@ -19,7 +35,6 @@ stdenvNoCC.mkDerivation rec {
       });
 
   buildInputs = if stdenvNoCC.isDarwin then [ undmg ] else [ rpmextract ];
-  propagatedBuildInputs = [ openmp ];
 
   buildPhase = if stdenvNoCC.isDarwin then ''
       for f in Contents/Resources/pkg/*.tgz; do
@@ -28,7 +43,7 @@ stdenvNoCC.mkDerivation rec {
   '' else ''
     rpmextract rpm/intel-mkl-common-c-${date}-${rel}-${date}-${rel}.noarch.rpm
     rpmextract rpm/intel-mkl-core-rt-${date}-${rel}-${date}-${rel}.x86_64.rpm
-  '' ;
+  '';
 
   installPhase = if stdenvNoCC.isDarwin then ''
       mkdir -p $out/lib
@@ -46,14 +61,13 @@ stdenvNoCC.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  # Some mkl calls require openmp, but Intel does not add these to SO_NEEDED and
-  # instructs users to put openmp on their LD_LIBRARY_PATH.
-  setupHook = writeText "setup-hook.sh" ''
-    addOpenmp() {
-        addToSearchPath LD_LIBRARY_PATH ${openmp}/lib
-    }
-    addEnvHooks "$targetOffset" addOpenmp
-  '';
+  # Since these are unmodified binaries from Intel, they do not depend on stdenv
+  # and we can make them fixed-output derivations for cache efficiency.
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = if stdenvNoCC.isDarwin
+    then "1224dln7n8px1rk8biiggf77wjhxh8mzw0hd8zlyjm8i6j8w7i12"
+    else "0d8ai0wi8drp071acqkm1wv6vyg12010y843y56zzi1pql81xqvx";
 
   meta = with stdenvNoCC.lib; {
     description = "Intel Math Kernel Library";
