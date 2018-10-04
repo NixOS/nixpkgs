@@ -139,11 +139,11 @@ diff -Naur ossec-hids-2.6-orig/src/InstallAgent.sh ossec-hids-2.6/src/InstallAge
 +echo chmod 700 ${DIR}/.ssh
  
  
- # For the /run
--chmod 770 ${DIR}/run
--chown root:${GROUP} ${DIR}/run
-+echo chmod 770 ${DIR}/run
-+echo chown root:${GROUP} ${DIR}/run
+ # For the /var/run
+-chmod 770 ${DIR}/var/run
+-chown root:${GROUP} ${DIR}/var/run
++echo chmod 770 ${DIR}/var/run
++echo chown root:${GROUP} ${DIR}/var/run
  
  
  # Moving the binary files
