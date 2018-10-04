@@ -13,7 +13,7 @@ let
   runDir = "/run/restya-board";
 
   poolName = "restya-board";
-  phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
+  phpfpmSocketName = "/run/phpfpm/${poolName}.sock";
 
 in
 
