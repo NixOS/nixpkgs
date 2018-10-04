@@ -23,7 +23,7 @@ in
     users.users._lldpd = {
       description = "lldpd user";
       group = "_lldpd";
-      home = "/var/run/lldpd";
+      home = "/run/lldpd";
       isSystemUser = true;
     };
     users.groups._lldpd = {};
