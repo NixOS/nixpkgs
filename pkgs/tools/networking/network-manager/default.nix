@@ -94,7 +94,7 @@ in stdenv.mkDerivation rec {
   doCheck = false; # requires /sys, the net
 
   preInstall = ''
-    installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" "runstatedir=$out/var/run" )
+    installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" "runstatedir=$out/run" )
   '';
 
   postInstall = ''
