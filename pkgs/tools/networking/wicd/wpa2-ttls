@@ -4,7 +4,7 @@ version = 1
 require identity *Identity anonymous_identity *Anonymous_identity password *Password ca_cert *Path_to_CA_Cert
 protected password *Password
 -----
-ctrl_interface=/var/run/wpa_supplicant
+ctrl_interface=/run/wpa_supplicant
 network={
         ssid="$_ESSID"
         scan_ssid=$_SCAN
