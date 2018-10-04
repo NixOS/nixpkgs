@@ -90,7 +90,7 @@ let
     ${loopForever}
   '' else ''
     ${coreutils}/bin/mkdir -p /etc/samba /etc/samba/private \
-                              /var/lib/samba /var/log /var/run
+                              /var/lib/samba /var/log /run
     ${coreutils}/bin/cat > /etc/samba/smb.conf <<CONFIG
     [global]
     security = user
