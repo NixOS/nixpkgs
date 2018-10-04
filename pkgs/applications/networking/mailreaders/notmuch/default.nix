@@ -89,6 +89,14 @@ stdenv.mkDerivation rec {
     install_name_tool -change "$badname" "$goodname" "$prg"
   '';
 
+  preCheck = let
+    test-database = fetchurl {
+      url = "https://notmuchmail.org/releases/test-databases/database-v1.tar.xz";
+      sha256 = "1lk91s00y4qy4pjh8638b5lfkgwyl282g1m27srsf7qfn58y16a2";
+    };
+  in ''
+    ln -s ${test-database} test/test-databases/database-v1.tar.xz
+  '';
   doCheck = !stdenv.isDarwin && (versionAtLeast gmime.version "3.0");
   checkTarget = "test V=1";
 
