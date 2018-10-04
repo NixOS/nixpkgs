@@ -32,14 +32,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -dm 755 "$out/lib/emby-server"
-    cp -r * "$out/lib/emby-server"
+    install -dm 755 "$out/opt/emby-server"
+    cp -r * "$out/opt/emby-server"
 
     makeWrapper "${dotnet-sdk}/bin/dotnet" $out/bin/emby \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
         sqlite
       ]}" \
-      --add-flags "$out/lib/emby-server/EmbyServer.dll -programdata /var/lib/emby/ProgramData-Server -ffmpeg ${ffmpeg}/bin/ffmpeg -ffprobe ${ffmpeg}/bin/ffprobe"
+      --add-flags "$out/opt/emby-server/EmbyServer.dll -programdata /var/lib/emby/ProgramData-Server -ffmpeg ${ffmpeg}/bin/ffmpeg -ffprobe ${ffmpeg}/bin/ffprobe"
   '';
 
   meta =  with stdenv.lib; {
