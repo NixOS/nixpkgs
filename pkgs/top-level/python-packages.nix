@@ -1253,6 +1253,8 @@ in {
 
   celery = callPackage ../development/python-modules/celery { };
 
+  celery-batches = callPackage ../development/python-modules/celery-batches { };
+
   cerberus = callPackage ../development/python-modules/cerberus { };
 
   certifi = callPackage ../development/python-modules/certifi { };
