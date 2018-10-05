@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "CVE-2018-9918.patch";
-      url = "https://github.com/qpdf/qpdf/commit/b4d6cf6836ce025ba1811b7bbec52680c7204223";
-      sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+      url = "https://github.com/qpdf/qpdf/commit/b4d6cf6836ce025ba1811b7bbec52680c7204223.patch";
+      sha256 = "01xwz5a0l4xn92c7k5l7l2v0ygqp60jf6bnsnzm75m0q3czyhj00";
     })
   ];
 
