@@ -55,7 +55,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = "true";
-        ExecStart = "${pkgs.emby}/bin/MediaBrowser.Server.Mono";
+        ExecStart = "${pkgs.emby}/bin/emby";
         Restart = "on-failure";
       };
     };
