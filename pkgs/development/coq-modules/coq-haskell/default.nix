@@ -19,6 +19,12 @@ let params =
       rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
       sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
     };
+
+    "8.8" = {
+      version = "20171215";
+      rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
+      sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
+    };
   };
   param = params."${coq.coq-version}";
 in
