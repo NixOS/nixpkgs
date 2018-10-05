@@ -9,7 +9,5 @@
   through <code>import &lt;nixpkgs/lib&gt;</code>.
  </para>
 
- <xi:include href="./library/asserts.xml" />
-
  <xi:include href="./library/attrsets.xml" />
 </section>
