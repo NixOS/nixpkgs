@@ -420,6 +420,7 @@ while (my $f = <$listActiveUsers>) {
     print STDERR "reloading user units for $name...\n";
 
     system("su", "-s", "@shell@", "-l", $name, "-c", "XDG_RUNTIME_DIR=/run/user/$uid @systemd@/bin/systemctl --user daemon-reload");
+    system("su", "-s", "@shell@", "-l", $name, "-c", "XDG_RUNTIME_DIR=/run/user/$uid @systemd@/bin/systemctl --user start nixos-activation.service");
 }
 
 close $listActiveUsers;
