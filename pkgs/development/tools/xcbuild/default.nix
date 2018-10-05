@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=strict-aliasing";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags = [ "-GNinja" ];
 
