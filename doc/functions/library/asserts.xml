@@ -10,6 +10,8 @@
   <subtitle><literal>assertMsg :: Bool -> String -> Bool</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.asserts.assertMsg" />
+
   <para>
    Print a trace message if <literal>pred</literal> is false.
   </para>
@@ -58,6 +60,8 @@ stderr> assert failed
   <subtitle><literal>assertOneOf :: String -> String ->
       StringList -> Bool</literal>
   </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.asserts.assertOneOf" />
 
   <para>
    Specialized <function>asserts.assertMsg</function> for checking if

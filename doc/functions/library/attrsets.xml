@@ -10,6 +10,8 @@
   <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.attrByPath" />
+
   <para>
    Return an attribute from within nested attribute sets.
   </para>
@@ -73,6 +75,8 @@ lib.attrsets.attrByPath [ "a" "b" ] 0 {}
   <subtitle><literal>hasAttrByPath :: [String] -> AttrSet -> Bool</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.hasAttrByPath" />
+
   <para>
    Determine if an attribute exists within a nested attribute set.
   </para>
@@ -118,6 +122,8 @@ lib.attrsets.hasAttrByPath
   <subtitle><literal>setAttrByPath :: [String] -> Any -> AttrSet</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.setAttrByPath" />
+
   <para>
    Create a new attribute set with <varname>value</varname> set at the nested
    attribute location specified in <varname>attrPath</varname>.
@@ -161,6 +167,8 @@ lib.attrsets.setAttrByPath [ "a" "b" ] 3
 
   <subtitle><literal>getAttrFromPath :: [String] -> AttrSet -> Value</literal>
   </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.getAttrFromPath" />
 
   <para>
    Like <xref linkend="function-library-lib.attrsets.attrByPath" /> except
@@ -214,6 +222,8 @@ lib.attrsets.getAttrFromPath [ "x" "y" ] { }
   <subtitle><literal>attrVals :: [String] -> AttrSet -> [Any]</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.attrVals" />
+
   <para>
    Return the specified attributes from a set. All values must exist.
   </para>
@@ -265,6 +275,8 @@ error: attribute 'd' missing
   <subtitle><literal>attrValues :: AttrSet -> [Any]</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.attrValues" />
+
   <para>
    Get all the attribute values from an attribute set.
   </para>
@@ -301,6 +313,8 @@ lib.attrsets.attrValues { a = 1; b = 2; c = 3; }
 
   <subtitle><literal>catAttrs :: String -> AttrSet -> [Any]</literal>
   </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.catAttrs" />
 
   <para>
    Collect each attribute named `attr' from the list of attribute sets,
@@ -354,6 +368,8 @@ catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
 
   <subtitle><literal>filterAttrs :: (String -> Any -> Bool) -> AttrSet -> AttrSet</literal>
   </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.filterAttrs" />
 
   <para>
    Filter an attribute set by removing all attributes for which the given
@@ -427,6 +443,8 @@ filterAttrs (n: v: n == "foo") { foo = 1; bar = 2; }
 
   <subtitle><literal>filterAttrsRecursive :: (String -> Any -> Bool) -> AttrSet -> AttrSet</literal>
   </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.filterAttrsRecursive" />
 
   <para>
    Filter an attribute set recursively by removing all attributes for which the
@@ -523,6 +541,8 @@ lib.attrsets.filterAttrsRecursive
   <subtitle><literal>foldAttrs :: (Any -> Any -> Any) -> Any -> [AttrSets] -> Any</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.foldAttrs" />
+
   <para>
    Apply fold function to values grouped by key.
   </para>
@@ -609,6 +629,8 @@ lib.attrsets.foldAttrs
   <subtitle><literal>collect :: (Any -> Bool) -> AttrSet -> [Any]</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.collect" />
+
   <para>
    Recursively collect sets that verify a given predicate named
    <varname>pred</varname> from the set <varname>attrs</varname>. The recursion
@@ -677,6 +699,8 @@ collect (x: x ? outPath)
   <subtitle><literal>nameValuePair :: String -> Any -> AttrSet</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.nameValuePair" />
+
   <para>
    Utility function that creates a <literal>{name, value}</literal> pair as
    expected by <function>builtins.listToAttrs</function>.
@@ -719,6 +743,8 @@ nameValuePair "some" 6
 
   <subtitle><literal></literal>
   </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrs" />
 
   <para>
    Apply a function to each element in an attribute set, creating a new
@@ -784,6 +810,8 @@ lib.attrsets.mapAttrs
 
   <subtitle><literal>mapAttrs' :: (String -> Any -> { name = String; value = Any }) -> AttrSet -> AttrSet</literal>
   </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrs-prime" />
 
   <para>
    Like <function>mapAttrs</function>, but allows the name of each attribute to
@@ -860,6 +888,8 @@ lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair ("foo_" + name) 
    AttrSet -> Any</literal>
   </subtitle>
 
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsToList" />
+
   <para>
    Call <varname>fn</varname> for each attribute in the given
    <varname>set</varname> and return the result in a list.
@@ -928,6 +958,8 @@ lib.attrsets.mapAttrsToList (name: value: "${name}=${value}")
 
   <subtitle><literal>mapAttrsRecursive :: ([String] > Any -> Any) -> AttrSet -> AttrSet</literal>
   </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsRecursive" />
 
   <para>
    Like <function>mapAttrs</function>, except that it recursively applies
