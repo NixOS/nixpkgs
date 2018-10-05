@@ -71,6 +71,13 @@ in {
     };
 
     nginx.enable = mkEnableOption "nginx vhost management";
+    nginx.port = mkOption {
+      type = types.nullOr types.int;
+      default = null;
+      description = ''
+        Port for nginx to listen on.
+      '';
+    };
 
     webfinger = mkOption {
       type = types.bool;
@@ -365,6 +372,7 @@ in {
         enable = true;
         virtualHosts = {
           "${cfg.hostName}" = {
+            listen = if cfg.nginx.port != null then [ { addr = "*"; port = cfg.nginx.port; } ] else [];
             root = pkgs.nextcloud;
             locations = {
               "= /robots.txt" = {
