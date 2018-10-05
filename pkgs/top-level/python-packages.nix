@@ -300,6 +300,8 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  eradicate = callPackage ../development/python-modules/eradicate {  };
+
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   fire = callPackage ../development/python-modules/fire { };
