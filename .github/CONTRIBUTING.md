@@ -39,6 +39,8 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
   * If there is no upstream license, `meta.license` should default to `stdenv.lib.licenses.unfree`.
 * `meta.maintainers` must be set.
 
+If the project can be compiled from source but the package uses a binary distribution, add a `-bin` suffix to the package name and create alias (ex. `firefox = firefox-bin`). This acts as a placeholder for future work to build the project from source. 
+
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes) and on how to [submit changes to nixpkgs](https://nixos.org/nixpkgs/manual/#chap-submitting-changes).
 
 ## Writing good commit messages
