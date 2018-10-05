@@ -10005,10 +10005,10 @@ let
   };
 
   Mojolicious = buildPerlPackage rec {
-    name = "Mojolicious-8.01";
+    name = "Mojolicious-8.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
-      sha256 = "1gwf45s6vblff0ima2awjq3awj4wws4hn7df4d9jmyj9rji04z9c";
+      sha256 = "0m36zlh58bvww15k9ybi6khrrr6ga308y38p49hfq204k7cy02zp";
     };
     buildInputs = [ ExtUtilsMakeMaker ];
     propagatedBuildInputs = [ IOSocketIP JSONPP PodSimple TimeLocal ];
