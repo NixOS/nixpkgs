@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
+    ./0001-For-ICC-profile-validation-have-cups-id-iteself-as-D.patch
   ];
 
   outputs = [ "out" "man" "doc" ];
