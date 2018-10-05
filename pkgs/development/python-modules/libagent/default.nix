@@ -1,6 +1,6 @@
 { stdenv, fetchPypi, buildPythonPackage, ed25519, ecdsa , semver, mnemonic,
   unidecode, mock, pytest , backports-shutil-which, ConfigArgParse,
-  pythondaemon, pymsgbox }:
+  python-daemon, pymsgbox }:
 
 buildPythonPackage rec {
   pname = "libagent";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ unidecode backports-shutil-which ConfigArgParse
-    pythondaemon pymsgbox ecdsa ed25519 mnemonic semver ];
+    python-daemon pymsgbox ecdsa ed25519 mnemonic semver ];
 
   checkInputs = [ mock pytest ];
 

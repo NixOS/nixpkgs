@@ -670,7 +670,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
   };
 
-  propagatedBuildInputs = with python3Packages; [ tornado_4 pythondaemon ];
+  propagatedBuildInputs = with python3Packages; [ tornado_4 python-daemon ];
 
   meta = with lib; {
     ...
