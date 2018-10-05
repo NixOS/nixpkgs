@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "3.28.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1qbk1x2c7iacmmfwjzh136v2sdacrkqn9d6bnqid7xn9hlnx4m89";
   };
 

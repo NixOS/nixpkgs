@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "3.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gsettings-desktop-schemas/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gsettings-desktop-schemas/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0rwidacwrxlc54x90h9g3wx2zlisc4vm49vmxi15azmpj1vwvd2c";
   };
 

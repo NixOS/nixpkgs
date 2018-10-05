@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/geocode-glib/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/geocode-glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1vmydxs5xizcmaxpkfrq75xpj6pqrpdjizxyb30m00h54yqqch7a";
   };
 
