@@ -1539,7 +1539,7 @@ with pkgs;
   riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix {
     conf = config.riot-web.conf or null;
   };
-  
+
   roundcube = callPackage ../servers/roundcube { };
 
   rsbep = callPackage ../tools/backup/rsbep { };
@@ -14745,6 +14745,8 @@ with pkgs;
         cp "${pkgs.lvm2}/lib/systemd/system-generators/"* $out/lib/systemd/system-generators
       '';
   }));
+
+  systemd-wait = callPackages ../os-specific/linux/systemd-wait { };
 
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
