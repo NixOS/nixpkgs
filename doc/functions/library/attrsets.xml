@@ -1,0 +1,938 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="sec-functions-library-attrset">
+ <title>Attribute-Set Functions</title>
+
+ <section xml:id="function-library-lib.attrsets.attrByPath">
+  <title><function>lib.attrset.attrByPath</function></title>
+
+  <subtitle><literal>attrByPath :: [String] -> Any -> AttrSet</literal>
+  </subtitle>
+
+  <para>
+   Return an attribute from within nested attribute sets.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>attrPath</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of strings representing the path through the nested attribute set
+      <varname>set</varname>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>default</varname>
+    </term>
+    <listitem>
+     <para>
+      Default value if <varname>attrPath</varname> does not resolve to an
+      existing value.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The nested attributeset to select values from.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrset.attrByPath-example-value-exists">
+   <title>Extracting a value from a nested attribute set</title>
+<programlisting><![CDATA[
+let set = { a = { b = 3; }; };
+in lib.attrsets.attrByPath [ "a" "b" ] 0 set
+=> 3
+]]></programlisting>
+  </example>
+
+  <example xml:id="function-library-lib.attrset.attrByPath-example-default-value">
+   <title>No value at the path, instead using the default</title>
+<programlisting><![CDATA[
+lib.attrsets.attrByPath [ "a" "b" ] 0 {}
+=> 0
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.hasAttrByPath">
+  <title><function>lib.attrsets.hasAttrByPath</function></title>
+
+  <subtitle><literal>hasAttrByPath :: [String] -> AttrSet -> Bool</literal>
+  </subtitle>
+
+  <para>
+   Determine if an attribute exists within a nested attribute set.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>attrPath</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of strings representing the path through the nested attribute set
+      <varname>set</varname>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The nested attributeset to check.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.hasAttrByPath-example">
+   <title>A nested value does exist inside a set</title>
+<programlisting><![CDATA[
+lib.attrsets.hasAttrByPath
+  [ "a" "b" "c" "d" ]
+  { a = { b = { c = { d = 123; }; }; }; }
+=> true
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.setAttrByPath">
+  <title><function>lib.attrsets.setAttrByPath</function></title>
+
+  <subtitle><literal>setAttrByPath :: [String] -> Any -> AttrSet</literal>
+  </subtitle>
+
+  <para>
+   Create a new attribute set with <varname>value</varname> set at the nested
+   attribute location specified in <varname>attrPath</varname>.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>attrPath</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of strings representing the path through the nested attribute set.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>value</varname>
+    </term>
+    <listitem>
+     <para>
+      The value to set at the location described by
+      <varname>attrPath</varname>.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.setAttrByPath-example">
+   <title>Creating a new nested attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.setAttrByPath [ "a" "b" ] 3
+=> { a = { b = 3; }; }
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.getAttrFromPath">
+  <title><function>lib.attrsets.getAttrFromPath</function></title>
+
+  <subtitle><literal>getAttrFromPath :: [String] -> AttrSet -> Value</literal>
+  </subtitle>
+
+  <para>
+   Like <xref linkend="function-library-lib.attrsets.attrByPath" /> except
+   without a default, and it will throw if the value doesn't exist.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>attrPath</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of strings representing the path through the nested attribute set
+      <varname>set</varname>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The nested attribute set to find the value in.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.getAttrPath-example-success">
+   <title>Succesfully getting a value from an attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.getAttrFromPath [ "a" "b" ] { a = { b = 3; }; }
+=> 3
+]]></programlisting>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.getAttrPath-example-throw">
+   <title>Throwing after failing to get a value from an attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.getAttrFromPath [ "x" "y" ] { }
+=> error: cannot find attribute `x.y'
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.attrVals">
+  <title><function>lib.attrsets.attrVals</function></title>
+
+  <subtitle><literal>attrVals :: [String] -> AttrSet -> [Any]</literal>
+  </subtitle>
+
+  <para>
+   Return the specified attributes from a set. All values must exist.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>nameList</varname>
+    </term>
+    <listitem>
+     <para>
+      The list of attributes to fetch from <varname>set</varname>. Each
+      attribute name must exist on the attrbitue set.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The set to get attribute values from.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.attrVals-example-success">
+   <title>Getting several values from an attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.attrVals [ "a" "b" "c" ] { a = 1; b = 2; c = 3; }
+=> [ 1 2 3 ]
+]]></programlisting>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.attrVals-failure">
+   <title>Getting missing values from an attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.attrVals [ "d" ] { }
+error: attribute 'd' missing
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.attrValues">
+  <title><function>lib.attrsets.attrValues</function></title>
+
+  <subtitle><literal>attrValues :: AttrSet -> [Any]</literal>
+  </subtitle>
+
+  <para>
+   Get all the attribute values from an attribute set.
+  </para>
+
+  <para>
+   Provides a backwards-compatible interface of
+   <function>builtins.attrValues</function> for Nix version older than 1.8.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>attrs</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.attrValues-example">
+   <title></title>
+<programlisting><![CDATA[
+lib.attrsets.attrValues { a = 1; b = 2; c = 3; }
+=> [ 1 2 3 ]
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.catAttrs">
+  <title><function>lib.attrsets.catAttrs</function></title>
+
+  <subtitle><literal>catAttrs :: String -> AttrSet -> [Any]</literal>
+  </subtitle>
+
+  <para>
+   Collect each attribute named `attr' from the list of attribute sets,
+   <varname>sets</varname>. Sets that don't contain the named attribute are
+   ignored.
+  </para>
+
+  <para>
+   Provides a backwards-compatible interface of
+   <function>builtins.catAttrs</function> for Nix version older than 1.9.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>attr</varname>
+    </term>
+    <listitem>
+     <para>
+      Attribute name to select from each attribute set in
+      <varname>sets</varname>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>sets</varname>
+    </term>
+    <listitem>
+     <para>
+      The list of attribute sets to select <varname>attr</varname> from.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.catAttrs-example">
+   <title>Collect an attribute from a list of attribute sets.</title>
+   <para>
+    Attribute sets which don't have the attribute are ignored.
+   </para>
+<programlisting><![CDATA[
+catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
+=> [ 1 2 ]
+      ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.filterAttrs">
+  <title><function>lib.attrsets.filterAttrs</function></title>
+
+  <subtitle><literal>filterAttrs :: (String -> Any -> Bool) -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <para>
+   Filter an attribute set by removing all attributes for which the given
+   predicate return false.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pred</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>String -> Any -> Bool</literal>
+     </para>
+     <para>
+      Predicate which returns true to include an attribute, or returns false to
+      exclude it.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's name
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's value
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+     <para>
+      Returns <literal>true</literal> to include the attribute,
+      <literal>false</literal> to exclude the attribute.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to filter
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.filterAttrs-example">
+   <title>Filtering an attributeset</title>
+<programlisting><![CDATA[
+filterAttrs (n: v: n == "foo") { foo = 1; bar = 2; }
+=> { foo = 1; }
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.filterAttrsRecursive">
+  <title><function>lib.attrsets.filterAttrsRecursive</function></title>
+
+  <subtitle><literal>filterAttrsRecursive :: (String -> Any -> Bool) -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <para>
+   Filter an attribute set recursively by removing all attributes for which the
+   given predicate return false.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pred</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>String -> Any -> Bool</literal>
+     </para>
+     <para>
+      Predicate which returns true to include an attribute, or returns false to
+      exclude it.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's name
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's value
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+     <para>
+      Returns <literal>true</literal> to include the attribute,
+      <literal>false</literal> to exclude the attribute.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to filter
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.filterAttrsRecursive-example">
+   <title>Recursively filtering an attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.filterAttrsRecursive
+  (n: v: v != null)
+  {
+    levelA = {
+      example = "hi";
+      levelB = {
+        hello = "there";
+        this-one-is-present = {
+          this-is-excluded = null;
+        };
+      };
+      this-one-is-also-excluded = null;
+    };
+    also-excluded = null;
+  }
+=> {
+     levelA = {
+       example = "hi";
+       levelB = {
+         hello = "there";
+         this-one-is-present = { };
+       };
+     };
+   }
+     ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.foldAttrs">
+  <title><function>lib.attrsets.foldAttrs</function></title>
+
+  <subtitle><literal>foldAttrs :: (Any -> Any -> Any) -> Any -> [AttrSets] -> Any</literal>
+  </subtitle>
+
+  <para>
+   Apply fold function to values grouped by key.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>op</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>Any -> Any -> Any</literal>
+     </para>
+     <para>
+      Given a value <varname>val</varname> and a collector
+      <varname>col</varname>, combine the two.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>val</varname>
+       </term>
+       <listitem>
+        <para>
+         An attribute's value
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>col</varname>
+       </term>
+       <listitem>
+<!-- TODO: make this not bad, use more fold-ey terms -->
+        <para>
+         The result of previous <function>op</function> calls with other values
+         and <function>nul</function>.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>nul</varname>
+    </term>
+    <listitem>
+     <para>
+      The null-value, the starting value.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>list_of_attrs</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of attribute sets to fold together by key.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.foldAttrs-example">
+   <title>Combining an attribute of lists in to one attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.foldAttrs
+  (n: a: [n] ++ a) []
+  [
+    { a = 2; b = 7; }
+    { a = 3; }
+    { b = 6; }
+  ]
+=> { a = [ 2 3 ]; b = [ 7 6 ]; }
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.collect">
+  <title><function>lib.attrsets.collect</function></title>
+
+  <subtitle><literal>collect :: (Any -> Bool) -> AttrSet -> [Any]</literal>
+  </subtitle>
+
+  <para>
+   Recursively collect sets that verify a given predicate named
+   <varname>pred</varname> from the set <varname>attrs</varname>. The recursion
+   stops when <varname>pred</varname> returns <literal>true</literal>.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pred</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>Any -> Bool</literal>
+     </para>
+     <para>
+      Given an attribute's value, determine if recursion should stop.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute set value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>attrs</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to recursively collect.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.collect-example-lists">
+   <title>Collecting all lists from an attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.collect isList { a = { b = ["b"]; }; c = [1]; }
+=> [["b"] [1]]
+]]></programlisting>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.collect-example-outpath">
+   <title>Collecting all attribute-sets which contain the <literal>outPath</literal> attribute name.</title>
+<programlisting><![CDATA[
+collect (x: x ? outPath)
+  { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
+=> [{ outPath = "a/"; } { outPath = "b/"; }]
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.nameValuePair">
+  <title><function>lib.attrsets.nameValuePair</function></title>
+
+  <subtitle><literal>nameValuePair :: String -> Any -> AttrSet</literal>
+  </subtitle>
+
+  <para>
+   Utility function that creates a <literal>{name, value}</literal> pair as
+   expected by <function>builtins.listToAttrs</function>.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>name</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute name.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>value</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute value.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.nameValuePair-example">
+   <title>Creating a name value pair</title>
+<programlisting><![CDATA[
+nameValuePair "some" 6
+=> { name = "some"; value = 6; }
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.mapAttrs">
+  <title><function>lib.attrsets.mapAttrs</function></title>
+
+  <subtitle><literal></literal>
+  </subtitle>
+
+  <para>
+   Apply a function to each element in an attribute set, creating a new
+   attribute set.
+  </para>
+
+  <para>
+   Provides a backwards-compatible interface of
+   <function>builtins.mapAttrs</function> for Nix version older than 2.1.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>fn</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>String -> Any -> Any</literal>
+     </para>
+     <para>
+      Given an attribute's name and value, return a new value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The name of the attribute.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.mapAttrs-example">
+   <title>Modifying each value of an attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.mapAttrs
+  (name: value: name + "-" value)
+  { x = "foo"; y = "bar"; }
+=> { x = "x-foo"; y = "y-bar"; }
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.mapAttrs-prime">
+  <title><function>lib.attrsets.mapAttrs&apos;</function></title>
+
+  <subtitle><literal>mapAttrs' :: (String -> Any -> { name = String; value = Any }) -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <para>
+   Like <function>mapAttrs</function>, but allows the name of each attribute to
+   be changed in addition to the value. The applied function should return both
+   the new name and value as a <function>nameValuePair</function>.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>fn</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>String -> Any -> { name = String; value = Any }</literal>
+     </para>
+     <para>
+      Given an attribute's name and value, return a new
+      <link
+       linkend="function-library-lib.attrsets.nameValuePair">name
+      value pair</link>.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The name of the attribute.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to map over.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.mapAttrs-prime-example">
+   <title>Change the name and value of each attribute of an attribute set</title>
+<programlisting><![CDATA[
+lib.attrsets.mapAttrs' (name: value: lib.attrsets.nameValuePair ("foo_" + name) ("bar-" + value))
+   { x = "a"; y = "b"; }
+=> { foo_x = "bar-a"; foo_y = "bar-b"; }
+
+    ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.mapAttrsToList">
+  <title><function>lib.attrsets.mapAttrsToList</function></title>
+
+  <subtitle><literal>mapAttrsToList :: (String -> Any -> Any) ->
+   AttrSet -> Any</literal>
+  </subtitle>
+
+  <para>
+   Call <varname>fn</varname> for each attribute in the given
+   <varname>set</varname> and return the result in a list.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>fn</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>String -> Any -> Any</literal>
+     </para>
+     <para>
+      Given an attribute's name and value, return a new value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The name of the attribute.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to map over.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.mapAttrsToList-example">
+   <title>Combine attribute values and names in to a list</title>
+<programlisting><![CDATA[
+lib.attrsets.mapAttrsToList (name: value: "${name}=${value}")
+   { x = "a"; y = "b"; }
+=> [ "x=a" "y=b" ]
+]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.mapAttrsRecursive">
+  <title><function>lib.attrsets.mapAttrsRecursive</function></title>
+
+  <subtitle><literal>mapAttrsRecursive :: ([String] > Any -> Any) -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <para>
+   Like <function>mapAttrs</function>, except that it recursively applies
+   itself to attribute sets. Also, the first argument of the argument function
+   is a <emphasis>list</emphasis> of the names of the containing attributes.
+  </para>
+ </section>
+</section>
