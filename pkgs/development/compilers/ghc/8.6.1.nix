@@ -86,7 +86,8 @@ stdenv.mkDerivation (rec {
     sha256 = "0dkh7idgrqr567fq94a0f5x3w0r4cm2ydn51nb5wfisw3rnw499c";
   };
 
-  enableParallelBuilding = true;
+  # https://ghc.haskell.org/trac/ghc/ticket/15449
+  enableParallelBuilding = !buildPlatform.isAarch64;
 
   outputs = [ "out" "doc" ];
 
