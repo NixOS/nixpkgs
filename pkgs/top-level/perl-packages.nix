@@ -3113,6 +3113,22 @@ let
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
+  CryptEd25519 = buildPerlPackage rec {
+    name = "Crypt-Ed25519-1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
+      sha256 = "1jwh6b8b2ppvzxaljz287zakj4q3ip4zq121i23iwh26wxhlll2q";
+    };
+
+    nativeBuildInputs = [ CanaryStability ];
+
+    meta = {
+      description = "Minimal Ed25519 bindings";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
   CryptSSLeay = buildPerlPackage rec {
     name = "Crypt-SSLeay-0.72";
     src = fetchurl {
