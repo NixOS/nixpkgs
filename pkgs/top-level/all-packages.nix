@@ -17509,6 +17509,8 @@ with pkgs;
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
+  lsp-plugins = callPackage ../applications/audio/lsp-plugins { };
+
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
