@@ -1041,6 +1041,7 @@ let
     };
 
     hol_light = callPackage ../applications/science/logic/hol_light {
+      inherit num;
       camlp5 = camlp5_strict;
     };
 
