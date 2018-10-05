@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, emscripten }:
+{ stdenv, lib, fetchFromGitHub, emscripten
+, enableJsonnetJs ? !stdenv.isDarwin
+}:
 
 let version = "0.11.2"; in
 
@@ -13,16 +15,17 @@ stdenv.mkDerivation {
     sha256 = "05rl5i4g36k2ikxv4sw726mha1qf5bb66wiqpi0s09wj9azm7vym";
   };
 
-  buildInputs = [ emscripten ];
+  buildInputs = if enableJsonnetJs then [ emscripten ] else [ ];
 
   enableParallelBuilding = true;
 
-  makeFlags = [''EM_CACHE=$(TMPDIR)/.em_cache'' ''all''];
+  makeFlags = [''EM_CACHE=$(TMPDIR)/.em_cache''] ++
+    (if enableJsonnetJs then ["all"] else ["jsonnet" "libjsonnet.so" "libjsonnet++.so"]);
 
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/share/
     cp jsonnet $out/bin/
-    cp libjsonnet.so $out/lib/
+    cp libjsonnet*.so $out/lib/
     cp -a doc $out/share/doc
     cp -a include $out/include
   '';
