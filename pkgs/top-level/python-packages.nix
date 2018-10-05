@@ -356,6 +356,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  histbook = callPackage ../development/python-modules/histbook { };
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
