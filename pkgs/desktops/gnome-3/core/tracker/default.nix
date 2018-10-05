@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0xf58zld6pnfa8k7k70rv8ya8g7zqgahz6q4sapwxs6k97d2fgsx";
   };
 

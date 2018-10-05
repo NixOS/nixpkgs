@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "geoip" ];
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libevent openssl zlib ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
@@ -37,13 +35,16 @@ stdenv.mkDerivation rec {
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
   '';
 
+  enableParallelBuilding = true;
+  enableParallelChecking = false; # 4 tests fail randomly
+
+  doCheck = true;
+
   postInstall = ''
     mkdir -p $geoip/share/tor
     mv $out/share/tor/geoip{,6} $geoip/share/tor
     rm -rf $out/share/tor
   '';
-
-  doCheck = true;
 
   passthru.updateScript = import ./update.nix {
     inherit (stdenv) lib;

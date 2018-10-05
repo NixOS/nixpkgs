@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, gettext
-, dbus, dbus_glib, libgaminggear, libgudev, lua
+, dbus, dbus-glib, libgaminggear, libgudev, lua
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake pkgconfig gettext ];
-  buildInputs = [ dbus dbus_glib libgaminggear libgudev lua ];
+  buildInputs = [ dbus dbus-glib libgaminggear libgudev lua ];
 
   enableParallelBuilding = true;
 

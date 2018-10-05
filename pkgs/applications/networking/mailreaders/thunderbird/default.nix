@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, libIDL
-, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip, fetchpatch
+, libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
 , yasm, libGLU_combined, sqlite, unzip
 , hunspell, libevent, libstartup_notification
@@ -24,11 +24,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   name = "thunderbird-${version}";
-  version = "60.0";
+  version = "60.2.1";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "1933csh6swcx1z35lbxfkxlln36mx2mny28rzxz53r480wcvar8zcj77gwb06hzn6j5cvqls7qd5n6a7x43sp7w9ykkf4kf9gmlccya";
+    sha512 = "018l9pq03nzlirpaf285qpwvb8s4msam8n91d15lzc1bc1caq9zcy2dnrnvn5av3jlapm9ckz028iar66nhqxi2kkqbmiaq0v4s6kfp";
   };
 
   # from firefox, but without sound libraries
@@ -46,6 +46,16 @@ in stdenv.mkDerivation rec {
 
   # from firefox + m4 + wrapperTool
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
+
+  # https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1479540
+  # https://hg.mozilla.org/releases/mozilla-release/rev/bc651d3d910c
+  patches = [
+    (fetchpatch {
+      name = "bc651d3d910c.patch";
+      url = "https://hg.mozilla.org/releases/mozilla-release/raw-rev/bc651d3d910c";
+      sha256 = "0iybkadsgsf6a3pq3jh8z1p110vmpkih8i35jfj8micdkhxzi89g";
+    })
+  ];
 
   configureFlags =
     [ # from firefox, but without sound libraries (alsa, libvpx, pulseaudio)

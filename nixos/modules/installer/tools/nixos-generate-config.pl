@@ -277,8 +277,7 @@ if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
 
 # Also for Hyper-V.
 if ($virt eq "microsoft") {
-    push @initrdAvailableKernelModules, "hv_storvsc";
-    $videoDriver = "fbdev";
+    push @attrs, "virtualisation.hypervGuest.enable = true;"
 }
 
 

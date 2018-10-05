@@ -41,10 +41,10 @@ python3Packages.buildPythonApplication rec {
     # plugins
     keepkey
     trezor
+    btchip
 
     # TODO plugins
     # amodem
-    # btchip
   ];
 
   preBuild = ''

@@ -69,7 +69,7 @@ highlightjs:
 	cp -r "$$HIGHLIGHTJS/loader.js" highlightjs/
 
 
-manual-full.xml: ${MD_TARGETS} .version *.xml
+manual-full.xml: ${MD_TARGETS} .version *.xml **/*.xml
 	xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
 
 .version:

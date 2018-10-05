@@ -41,7 +41,7 @@ in with python.pkgs; buildPythonApplication rec {
   ];
 
   postInstall = ''
-    install -D misc/zsh/_khard $out/share/zsh/site-functions/
+    install -D misc/zsh/_khard $out/share/zsh/site-functions/_khard
   '';
 
   # Fails; but there are no tests anyway.

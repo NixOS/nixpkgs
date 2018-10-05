@@ -3,7 +3,7 @@
 }:
 
 let
-  common = { version, sha256, patches ? null }: stdenvNoCC.mkDerivation {
+  common = { version, sha256, patches ? [] }: stdenvNoCC.mkDerivation {
     name = "linux-headers-${version}";
 
     src = fetchurl {
@@ -20,8 +20,6 @@ let
 
     extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
 
-    # "patches" array defaults to 'null' to avoid changing hash
-    # and causing mass rebuild
     inherit patches;
 
     buildPhase = ''
@@ -45,7 +43,7 @@ let
 in {
 
   linuxHeaders = common {
-    version = "4.15";
-    sha256 = "0sd7l9n9h7vf9c6gd6ciji28hawda60yj0llh17my06m0s4lf9js";
+    version = "4.18.3";
+    sha256 = "1m23hjd02bg8mqnd8dc4z4m3kxds1cyrc6j5saiwnhzbz373rvc1";
   };
 }

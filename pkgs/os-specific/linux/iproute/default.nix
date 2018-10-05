@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace " netem " " "
   '';
 
+  outputs = [ "out" "dev"];
+
   makeFlags = [
     "DESTDIR="
     "LIBDIR=$(out)/lib"
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     "MANDIR=$(out)/share/man"
     "BASH_COMPDIR=$(out)/share/bash-completion/completions"
     "DOCDIR=$(TMPDIR)/share/doc/${name}" # Don't install docs
-    "HDRDIR=$(TMPDIR)/include/iproute2" # Don't install headers
+    "HDRDIR=$(dev)/include/iproute2"
   ];
 
   buildFlags = [

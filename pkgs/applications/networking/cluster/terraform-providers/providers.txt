@@ -9,5 +9,8 @@
 # include all terraform-providers
 terraform-providers terraform-provider- terraform-provider-\\(azure-classic\\|scaffolding\\|google-beta\\)
 
+# include terraform-provider-matchbox
+coreos/terraform-provider-matchbox
+
 # include terraform-provider-nixos
 tweag/terraform-provider-nixos

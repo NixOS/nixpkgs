@@ -46,6 +46,7 @@ let
         greeters-directory = ${cfg.greeter.package}
       ''}
       sessions-directory = ${dmcfg.session.desktops}/share/xsessions
+      ${cfg.extraConfig}
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
@@ -60,6 +61,12 @@ let
       ''}
       ${optionalString hasDefaultUserSession ''
         user-session=${defaultSessionName}
+      ''}
+      ${optionalString (dmcfg.setupCommands != "") ''
+        display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
+          #!${pkgs.bash}/bin/bash
+          ${dmcfg.setupCommands}
+        ''}
       ''}
       ${cfg.extraSeatDefaults}
     '';
@@ -111,6 +118,15 @@ in
             in the 'package' option.
           '';
         };
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          user-authority-in-system-dir = true
+        '';
+        description = "Extra lines to append to LightDM section.";
       };
 
       background = mkOption {

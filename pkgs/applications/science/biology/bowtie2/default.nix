@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bowtie2";
-  version = "2.3.4.2";
+  version = "2.3.4.3";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gsfaf7rjg4nwhs7vc1vf63xd5r5v1yq58w7x3barycplzbvixzz";
+    sha256 = "1zl3cf327y2p7p03cavymbh7b00djc7lncfaqih33n96iy9q8ibp";
   };
 
   buildInputs = [ zlib tbb ];

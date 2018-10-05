@@ -1,8 +1,6 @@
-{ cctools, appleDerivation }:
+{ appleDerivation }:
 
 appleDerivation {
-  nativeBuildInputs = [ cctools ];
-
   patches = [ ./clang-5.patch ];
 
   postPatch = ''

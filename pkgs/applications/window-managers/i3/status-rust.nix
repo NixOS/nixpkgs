@@ -1,21 +1,21 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, dbus, gperftools }:
+{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, dbus }:
 
 rustPlatform.buildRustPackage rec {
   name = "i3status-rust-${version}";
-  version = "0.9.0.2018-09-30";
+  version = "0.9.0.2018-10-02";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = "i3status-rust";
-    rev = "82ea033250c3fc51a112ac68c389da5264840492";
-    sha256 = "06r1nnv3a5vq3s17rgavq639wrq09z0nd2ck50bj1c8i2ggkpvq9";
+    rev = "11c2a21693ffcd0b6c2e0ac919b2232918293963";
+    sha256 = "019m9qpw7djq6g7lzbm7gjcavlgsp93g3cd7cb408nxnfsi7i9dp";
   };
 
-  cargoSha256 = "02in0hz2kgbmrd8i8s21vbm9pgfnn4axcji5f2a14pha6lx5rnvv";
+  cargoSha256 = "1wnify730f7c3cb8wllqvs7pzrq54g5x81xspvz5gq0iqr0q38zc";
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ dbus gperftools ];
+  buildInputs = [ dbus ];
 
   meta = with stdenv.lib; {
     description = "Very resource-friendly and feature-rich replacement for i3status";

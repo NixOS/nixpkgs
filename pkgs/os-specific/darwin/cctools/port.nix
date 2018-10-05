@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool_2, autoreconfHook
-, libcxxabi, libuuid
+, libcxxabi, libuuid, llvm
 , libobjc ? null, maloader ? null
 , enableDumpNormalizedLibArgs ? false
 }:
@@ -56,7 +56,7 @@ let
       autoreconfHook
     ];
     buildInputs = [ libuuid ] ++
-      stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
+      stdenv.lib.optionals stdenv.isDarwin [ llvm libcxxabi libobjc ];
 
     patches = [
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch

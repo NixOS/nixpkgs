@@ -413,11 +413,8 @@ packageOverrides = pkgs: {
     in your <filename>/etc/nixos/configuration.nix</filename>. You'll also need
 <programlisting>hardware.pulseaudio.support32Bit = true;</programlisting>
     if you are using PulseAudio - this will enable 32bit ALSA apps integration.
-    To use the Steam controller, you need to add
-<programlisting>services.udev.extraRules = ''
-    SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
-    KERNEL=="uinput", MODE="0660", GROUP="users", OPTIONS+="static_node=uinput"
-  '';</programlisting>
+    To use the Steam controller or other Steam supported controllers such as the DualShock 4 or Nintendo Switch Pro, you need to add
+<programlisting>hardware.steam-hardware.enable = true;</programlisting>
     to your configuration.
    </para>
   </section>
@@ -671,8 +668,9 @@ overrides = self: super: rec {
     plugins = with availablePlugins; [ python perl ];
   }
 }</programlisting>
-    If the <literal>configure</literal> function returns an attrset without the <literal>plugins</literal>
-    attribute, <literal>availablePlugins</literal> will be used automatically.
+   If the <literal>configure</literal> function returns an attrset without the
+   <literal>plugins</literal> attribute, <literal>availablePlugins</literal>
+   will be used automatically.
   </para>
 
   <para>
@@ -706,9 +704,11 @@ overrides = self: super: rec {
 }; }
 </programlisting>
   </para>
+
   <para>
-    WeeChat allows to set defaults on startup using the <literal>--run-command</literal>.
-    The <literal>configure</literal> method can be used to pass commands to the program:
+   WeeChat allows to set defaults on startup using the
+   <literal>--run-command</literal>. The <literal>configure</literal> method
+   can be used to pass commands to the program:
 <programlisting>weechat.override {
   configure = { availablePlugins, ... }: {
     init = ''
@@ -717,12 +717,14 @@ overrides = self: super: rec {
     '';
   };
 }</programlisting>
-    Further values can be added to the list of commands when running
-    <literal>weechat --run-command "your-commands"</literal>.
+   Further values can be added to the list of commands when running
+   <literal>weechat --run-command "your-commands"</literal>.
   </para>
+
   <para>
-    Additionally it's possible to specify scripts to be loaded when starting <literal>weechat</literal>.
-    These will be loaded before the commands from <literal>init</literal>:
+   Additionally it's possible to specify scripts to be loaded when starting
+   <literal>weechat</literal>. These will be loaded before the commands from
+   <literal>init</literal>:
 <programlisting>weechat.override {
   configure = { availablePlugins, ... }: {
     scripts = with pkgs.weechatScripts; [
@@ -734,11 +736,13 @@ overrides = self: super: rec {
   };
 }</programlisting>
   </para>
+
   <para>
-    In <literal>nixpkgs</literal> there's a subpackage which contains derivations for
-    WeeChat scripts. Such derivations expect a <literal>passthru.scripts</literal> attribute
-    which contains a list of all scripts inside the store path. Furthermore all scripts
-    have to live in <literal>$out/share</literal>. An exemplary derivation looks like this:
+   In <literal>nixpkgs</literal> there's a subpackage which contains
+   derivations for WeeChat scripts. Such derivations expect a
+   <literal>passthru.scripts</literal> attribute which contains a list of all
+   scripts inside the store path. Furthermore all scripts have to live in
+   <literal>$out/share</literal>. An exemplary derivation looks like this:
 <programlisting>{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
@@ -817,20 +821,26 @@ citrix_receiver.override {
  <section xml:id="sec-ibus-typing-booster">
   <title>ibus-engines.typing-booster</title>
 
-  <para>This package is an ibus-based completion method to speed up typing.</para>
+  <para>
+   This package is an ibus-based completion method to speed up typing.
+  </para>
 
   <section xml:id="sec-ibus-typing-booster-activate">
    <title>Activating the engine</title>
 
    <para>
-    IBus needs to be configured accordingly to activate <literal>typing-booster</literal>. The configuration
-    depends on the desktop manager in use. For detailed instructions, please refer to the
-    <link xlink:href="https://mike-fabian.github.io/ibus-typing-booster/documentation.html">upstream docs</link>.
+    IBus needs to be configured accordingly to activate
+    <literal>typing-booster</literal>. The configuration depends on the desktop
+    manager in use. For detailed instructions, please refer to the
+    <link xlink:href="https://mike-fabian.github.io/ibus-typing-booster/documentation.html">upstream
+    docs</link>.
    </para>
+
    <para>
-    On NixOS you need to explicitly enable <literal>ibus</literal> with given engines
-    before customizing your desktop to use <literal>typing-booster</literal>. This can be achieved
-    using the <literal>ibus</literal> module:
+    On NixOS you need to explicitly enable <literal>ibus</literal> with given
+    engines before customizing your desktop to use
+    <literal>typing-booster</literal>. This can be achieved using the
+    <literal>ibus</literal> module:
 <programlisting>{ pkgs, ... }: {
   i18n.inputMethod = {
     enabled = "ibus";
@@ -844,17 +854,20 @@ citrix_receiver.override {
    <title>Using custom hunspell dictionaries</title>
 
    <para>
-    The IBus engine is based on <literal>hunspell</literal> to support completion in many languages.
-    By default the dictionaries <literal>de-de</literal>, <literal>en-us</literal>, <literal>es-es</literal>,
-    <literal>it-it</literal>, <literal>sv-se</literal> and <literal>sv-fi</literal>
-    are in use. To add another dictionary, the package can be overridden like this:
+    The IBus engine is based on <literal>hunspell</literal> to support
+    completion in many languages. By default the dictionaries
+    <literal>de-de</literal>, <literal>en-us</literal>,
+    <literal>es-es</literal>, <literal>it-it</literal>,
+    <literal>sv-se</literal> and <literal>sv-fi</literal> are in use. To add
+    another dictionary, the package can be overridden like this:
 <programlisting>ibus-engines.typing-booster.override {
   langs = [ "de-at" "en-gb" ];
 }</programlisting>
    </para>
+
    <para>
-     <emphasis>Note: each language passed to <literal>langs</literal> must be an attribute name in
-     <literal>pkgs.hunspellDicts</literal>.</emphasis>
+    <emphasis>Note: each language passed to <literal>langs</literal> must be an
+    attribute name in <literal>pkgs.hunspellDicts</literal>.</emphasis>
    </para>
   </section>
 
@@ -862,10 +875,12 @@ citrix_receiver.override {
    <title>Built-in emoji picker</title>
 
    <para>
-    The <literal>ibus-engines.typing-booster</literal> package contains a program
-    named <literal>emoji-picker</literal>. To display all emojis correctly,
-    a special font such as <literal>noto-fonts-emoji</literal> is needed:
+    The <literal>ibus-engines.typing-booster</literal> package contains a
+    program named <literal>emoji-picker</literal>. To display all emojis
+    correctly, a special font such as <literal>noto-fonts-emoji</literal> is
+    needed:
    </para>
+
    <para>
     On NixOS it can be installed using the following expression:
 <programlisting>{ pkgs, ... }: {

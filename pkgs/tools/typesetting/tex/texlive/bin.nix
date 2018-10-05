@@ -2,7 +2,7 @@
 , texlive
 , zlib, libiconv, libpng, libX11
 , freetype, gd, libXaw, icu, ghostscript, libXpm, libXmu, libXext
-, perl, pkgconfig
+, perl, pkgconfig, autoreconfHook
 , poppler, libpaper, graphite2, zziplib, harfbuzz, potrace, gmp, mpfr
 , cairo, pixman, xorg, clisp, biber
 , makeWrapper
@@ -32,7 +32,15 @@ let
         url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/texlive-poppler-0.64.patch?h=packages/texlive-bin;
         sha256 = "0443d074zl3c5raba8jyhavish706arjcd80ibb84zwnwck4ai0w";
       })
+      (fetchurl {
+        name = "synctex-missing-header.patch";
+        url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/synctex-missing-header.patch?h=packages/texlive-bin&id=da56abf0f8a1e85daca0ec0f031b8fa268519e6b;
+        sha256 = "1c4aq8lk8g3mlfq3mdjnxvmhss3qs7nni5rmw0k054dmj6q1xj5n";
+      })
     ];
+    # remove when removing synctex-missing-header.patch
+    preAutoreconf = "pushd texk/web2c";
+    postAutoreconf = "popd";
 
     configureFlags = [
       "--with-banner-add=/NixOS.org"
@@ -64,11 +72,11 @@ texliveYear = year;
 core = stdenv.mkDerivation rec {
   name = "texlive-bin-${version}";
 
-  inherit (common) src patches;
+  inherit (common) src patches preAutoreconf postAutoreconf;
 
   outputs = [ "out" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
     /*teckit*/ zziplib poppler mpfr gmp
     pixman potrace gd freetype libpng libpaper zlib
@@ -101,7 +109,6 @@ core = stdenv.mkDerivation rec {
       "xetex" "bibtexu" "bibtex8" "bibtex-x" "upmendex" # ICU isn't small
     ] ++ stdenv.lib.optional (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) "mfluajit")
     ++ [ "--without-system-harfbuzz" "--without-system-icu" ] # bogus configure
-    
     ;
 
   enableParallelBuilding = true;
@@ -165,7 +172,7 @@ inherit (core-big) metafont metapost luatex xetex;
 core-big = stdenv.mkDerivation { #TODO: upmendex
   name = "texlive-core-big.bin-${version}";
 
-  inherit (common) src patches;
+  inherit (common) src patches preAutoreconf postAutoreconf;
 
   hardeningDisable = [ "format" ];
 

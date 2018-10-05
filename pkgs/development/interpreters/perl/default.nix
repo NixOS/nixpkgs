@@ -37,6 +37,8 @@ let
       stdenv.lib.optional crossCompiling "dev";
     setOutputFlags = false;
 
+    disallowedReferences = [ stdenv.cc ];
+
     patches =
       [ ]
       # Do not look in /usr etc. for dependencies.
@@ -119,6 +121,7 @@ let
           --replace "${
               if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
             }" /no-such-path \
+          --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path
       '' + stdenv.lib.optionalString crossCompiling
       ''

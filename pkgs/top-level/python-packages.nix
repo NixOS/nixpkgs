@@ -250,6 +250,8 @@ in {
 
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
+  btchip = callPackage ../development/python-modules/btchip { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
@@ -4294,6 +4296,8 @@ in {
   };
 
   schema = callPackage ../development/python-modules/schema {};
+
+  simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server {};
 
   stem = callPackage ../development/python-modules/stem { };
 
