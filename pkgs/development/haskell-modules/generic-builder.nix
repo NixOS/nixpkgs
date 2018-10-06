@@ -52,6 +52,7 @@ in
 , maintainers ? []
 , doCoverage ? false
 , doHaddock ? !(ghc.isHaLVM or false)
+, doHpack ? false
 , passthru ? {}
 , pkgconfigDepends ? [], libraryPkgconfigDepends ? [], executablePkgconfigDepends ? [], testPkgconfigDepends ? [], benchmarkPkgconfigDepends ? []
 , testDepends ? [], testHaskellDepends ? [], testSystemDepends ? [], testFrameworkDepends ? []
@@ -338,7 +339,7 @@ stdenv.mkDerivation ({
       echo >&2 "*** abort because of serious configure-time warning from Cabal"
       exit 1
     fi
-
+    ${optionalString doHpack "${buildHaskellPackages.hpack}/bin/hpack"}
     export GHC_PACKAGE_PATH="$packageConfDir:"
 
     runHook postConfigure
