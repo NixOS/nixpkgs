@@ -4,7 +4,7 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, stdenv, defaultCrateOverrides, fetchCrate, ncurses, rustc, binutils, gcc }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, ncurses, rustc }:
 
 let
     # This doesn't appear to be officially documented anywhere yet.
