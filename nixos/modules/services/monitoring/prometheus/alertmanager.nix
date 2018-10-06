@@ -30,6 +30,17 @@ in {
         '';
       };
 
+      clusterAdvertiseAddress = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          If Alertmanager cannot find any private IP address on the host
+          machine, will fail to start unless an explicit advertise address is
+          provided.  In that case, you can use the machine's public IP address
+          here.
+        '';
+      };
+
       configuration = mkOption {
         type = types.attrs;
         default = {};
@@ -115,6 +126,7 @@ in {
         --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
         --log.level ${cfg.logLevel} \
         ${optionalString (cfg.webExternalUrl != null) ''--web.external-url ${cfg.webExternalUrl} \''}
+        ${optionalString (cfg.clusterAdvertiseAddress != null) ''--cluster.advertise-address ${cfg.clusterAdvertiseAddress} \''}
         ${optionalString (cfg.logFormat != null) "--log.format ${cfg.logFormat}"}
       '';
 
