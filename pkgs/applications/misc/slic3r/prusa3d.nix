@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
   boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, libGLU,
-  glew, eigen, curl }:
+  glew, eigen, curl, nlopt, gtest}:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {
     name = "Alien-wxWidgets-0.69";
@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
-  version = "1.40.1";
+  version = "1.41.0";
 
   enableParallelBuilding = true;
 
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     makeWrapper
     eigen
     glew
+    gtest
+    nlopt
     tbb
     which
     Wx
@@ -72,6 +74,8 @@ stdenv.mkDerivation rec {
     XMLSAX
   ]);
 
+  NLOPT=nlopt;
+
   prePatch = ''
     sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
     sed -i "s|\''${PERL_VENDORARCH}|$out/lib/slic3r-prusa3d|g" xs/CMakeLists.txt
@@ -92,7 +96,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "Slic3r";
-    sha256 = "022mdz8824wg68qwgd49gnplw7wn84hqw113xh8l25v3j1jb9zmc";
+    sha256 = "1al60hrqbhl05dnsr99hzbmxmn26fyx19sc5zxv816x3q6px9n2d";
     rev = "version_${version}";
   };
 
