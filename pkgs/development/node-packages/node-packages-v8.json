@@ -104,6 +104,7 @@
 , "sinopia"
 , "sloc"
 , "smartdc"
+, "snyk"
 , "socket.io"
 , "stackdriver-statsd-backend"
 , "statsd"
