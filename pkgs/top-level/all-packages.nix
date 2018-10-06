@@ -8523,6 +8523,8 @@ with pkgs;
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
+  kind = callPackage ../development/tools/kind {  };
+
   kube-aws = callPackage ../development/tools/kube-aws { };
 
   kubectx = callPackage ../development/tools/kubectx { };
