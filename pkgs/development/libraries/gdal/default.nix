@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
-, libiconv
+, libiconv, libxml2
 , netcdfSupport ? true, netcdf, hdf5, curl
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ unzip libjpeg libtiff libpng proj openssl sqlite
-    libspatialite poppler hdf4 qhull giflib expat ]
+    libspatialite poppler hdf4 qhull giflib expat libxml2 ]
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ stdenv.lib.optional stdenv.isDarwin libiconv
   ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "--with-proj=${proj}" # optional
     "--with-geos=${geos}/bin/geos-config"# optional
     "--with-hdf4=${hdf4.dev}" # optional
+    "--with-xml2=${libxml2.dev}/bin/xml2-config" # optional
     (if netcdfSupport then "--with-netcdf=${netcdf}" else "")
   ];
 
