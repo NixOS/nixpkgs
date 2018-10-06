@@ -45,7 +45,8 @@ in stdenv.mkDerivation (args // {
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
+  nativeBuildInputs = [ cacert git rust.cargo rust.rustc ];
+  inherit buildInputs;
 
   patches = cargoPatches ++ patches;
 
