@@ -4,7 +4,7 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, stdenv, defaultCrateOverrides, fetchCrate, ncurses, rustc  }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, ncurses, rustc, binutils, gcc }:
 
 let
     # This doesn't appear to be officially documented anywhere yet.
@@ -86,7 +86,8 @@ stdenv.mkDerivation (rec {
       else
         fetchCrate { inherit (crate) crateName version sha256; };
     name = "rust_${crate.crateName}-${crate.version}";
-    buildInputs = [ rust ncurses ] ++ (crate.buildInputs or []) ++ buildInputs_;
+    depsBuildBuild = [ rust stdenv.cc ];
+    buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies =
       builtins.map
         (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
