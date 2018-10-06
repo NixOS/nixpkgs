@@ -17022,6 +17022,8 @@ with pkgs;
     gtk = gtk3;
   };
 
+  howl = callPackage ../applications/editors/howl { };
+
   ht = callPackage ../applications/editors/ht { };
 
   hubstaff = callPackage ../applications/misc/hubstaff { };
