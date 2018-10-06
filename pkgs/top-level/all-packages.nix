@@ -1434,6 +1434,8 @@ with pkgs;
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
+  link-grammar = callPackage ../tools/text/link-grammar { };
+
   loadwatch = callPackage ../tools/system/loadwatch { };
 
   loccount = callPackage ../development/tools/misc/loccount { };
