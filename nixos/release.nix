@@ -247,6 +247,7 @@ in rec {
   tests.acme = callTest tests/acme.nix {};
   tests.avahi = callTest tests/avahi.nix {};
   tests.beegfs = callTest tests/beegfs.nix {};
+  tests.upnp = callTest tests/upnp.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.bind = callTest tests/bind.nix {};
   #tests.blivet = callTest tests/blivet.nix {};   # broken since 2017-07024
