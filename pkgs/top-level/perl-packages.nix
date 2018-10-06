@@ -12116,12 +12116,12 @@ let
   };
 
   PerconaToolkit = buildPerlPackage rec {
-    name = "Percona-Toolkit-3.0.11";
+    name = "Percona-Toolkit-3.0.12";
     src = fetchFromGitHub {
       owner = "percona";
       repo = "percona-toolkit";
-      rev = "6e5c5c5e6db0a32c6951c8f798c4547539cdab87";
-      sha256 = "18wxvp7psqrx0zdvg47azrals572hv9fx1s3p0q65s87lnk3q63l";
+      rev = "e3a693afcf30f43bdacd381c9aba191772f62b96";
+      sha256 = "0xk4h4dzl80kf97lbx0nznx9ajrb6kkg7k3iwca3rj6f3rqggv9y";
     };
     outputs = [ "out" ];
     buildInputs = [ DBDmysql DBI DigestMD5 IOSocketSSL TermReadKey TimeHiRes ];
