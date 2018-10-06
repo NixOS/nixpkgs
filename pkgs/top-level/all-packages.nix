@@ -5432,6 +5432,8 @@ with pkgs;
     tlsSupport = true;
   };
 
+  ssocr = callPackage ../applications/misc/ssocr { };
+
   ssss = callPackage ../tools/security/ssss { };
 
   stabber = callPackage ../misc/stabber { };
