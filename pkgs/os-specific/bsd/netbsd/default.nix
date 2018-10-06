@@ -2,6 +2,9 @@
 , yacc, flex, libressl, bash, less, writeText }:
 
 let
+  inherit (lib) optionalString replaceStrings;
+  inherit (stdenv) hostPlatform;
+
   fetchNetBSD = path: version: sha256: fetchcvs {
     cvsRoot = ":pserver:anoncvs@anoncvs.NetBSD.org:/cvsroot";
     module = "src/${path}";
@@ -9,20 +12,52 @@ let
     tag = "netbsd-${builtins.replaceStrings ["."] ["-"] version}-RELEASE";
   };
 
+  # Needed to support cross correctly. Splicing only happens when we
+  # do callPackage, but sense everything is here, it needs to be done
+  # by hand. All native build inputs should come from here.
+  nbBuildPackages = buildPackages.netbsd;
+
+  MACHINE_ARCH = {
+    "i686" = "i386";
+  }.${hostPlatform.parsed.cpu.name} or hostPlatform.parsed.cpu.name;
+
+  MACHINE = {
+    "x86_64" = "amd64";
+    "aarch64" = "evbarm64";
+    "i686" = "i386";
+  }.${hostPlatform.parsed.cpu.name} or hostPlatform.parsed.cpu.name;
+
   netBSDDerivation = attrs: stdenv.mkDerivation ((rec {
-    name = "bsd-${attrs.pname or (baseNameOf attrs.path)}-netbsd-${attrs.version}";
+    name = "netbsd-${attrs.pname or (baseNameOf attrs.path)}-${attrs.version}";
     src = attrs.src or fetchNetBSD attrs.path attrs.version attrs.sha256;
 
     extraPaths = [ ];
     setOutputFlags = false;
 
-    nativeBuildInputs = [ makeMinimal mandoc groff install stat
-                          yacc flex tsort lorder ];
-    buildInputs = [ compat ];
+    nativeBuildInputs = [ yacc flex mandoc groff
+                          nbBuildPackages.makeMinimal
+                          nbBuildPackages.stat
+                          nbBuildPackages.install
+                          nbBuildPackages.tsort
+                          nbBuildPackages.lorder ];
+    buildInputs = [ nbPackages.compat ];
     installFlags = [ "includes" ];
+    # TODO: eventually move this to a make.conf
+    makeFlags = [
+      "MACHINE=${MACHINE}"
+      "MACHINE_ARCH=${MACHINE_ARCH}"
+
+      "AR=${stdenv.cc.targetPrefix}ar"
+      "CC=${stdenv.cc.targetPrefix}cc"
+      "CPP=${stdenv.cc.targetPrefix}cpp"
+      "CXX=${stdenv.cc.targetPrefix}c++"
+      "LD=${stdenv.cc.targetPrefix}ld"
+      "STRIP=${stdenv.cc.targetPrefix}strip"
+    ] ++ (attrs.makeFlags or []);
 
     # Definitions passed to share/mk/*.mk. Should be pretty simple -
     # eventually maybe move it to a configure script.
+    # TODO: don’t rely on DESTDIR, instead use prefix
     DESTDIR = "$(out)";
     TOOLDIR = "$(out)";
     USETOOLS = "never";
@@ -30,10 +65,9 @@ let
     NOGCCERROR = "yes";
     LEX = "flex";
     MKUNPRIVED = "yes";
-    HOST_SH = "${bash}/bin/sh";
+    HOST_SH = "${buildPackages.bash}/bin/sh";
     OBJCOPY = if stdenv.isDarwin then "true" else "objcopy";
-    MACHINE_ARCH = stdenv.hostPlatform.parsed.cpu.name;
-    MACHINE_CPU = stdenv.hostPlatform.parsed.cpu.name;
+    RPCGEN_CPP = "${stdenv.cc.targetPrefix}cpp";
 
     INSTALL_FILE = "install -U -c";
     INSTALL_DIR = "xinstall -U -d";
@@ -85,7 +119,7 @@ let
     # NetBSD makefiles should be able to detect this
     # but without they end up using gcc on Darwin stdenv
     preConfigure = ''
-      export HAVE_${if stdenv.cc.isGNU then "GCC" else "LLVM"}=${lib.head (lib.splitString "." (lib.getVersion stdenv.cc.cc))}
+      export HAVE_${if stdenv.cc.isClang then "LLVM" else "GCC"}=${lib.head (lib.splitString "." (lib.getVersion stdenv.cc.cc))}
 
       # Parallel building. Needs the space.
       export makeFlags+=" -j $NIX_BUILD_CORES"
@@ -128,7 +162,9 @@ let
       platforms = platforms.unix;
       license = licenses.bsd2;
     };
-  }) // attrs);
+  }) // (removeAttrs attrs ["makeFlags"]));
+
+  nbPackages = rec {
 
   ##
   ## BOOTSTRAPPING
@@ -165,7 +201,7 @@ let
     extraPaths = [ make.src ] ++ make.extraPaths;
   };
 
-  compat = netBSDDerivation rec {
+  compat = if hostPlatform.isNetBSD then null else netBSDDerivation rec {
     path = "tools/compat";
     sha256 = "050449lq5gpxqsripdqip5ks49g5ypjga188nd3ss8dg1zf7ydz3";
     version = "8.0";
@@ -176,7 +212,7 @@ let
     ];
 
     # override defaults to prevent infinite recursion
-    nativeBuildInputs = [ makeMinimal ];
+    nativeBuildInputs = [ nbBuildPackages.makeMinimal ];
     buildInputs = [ zlib ];
 
     # temporarily use gnuinstall for bootstrapping
@@ -234,7 +270,7 @@ let
   # HACK to ensure parent directories exist. This emulates GNU
   # install’s -D option. No alternative seems to exist in BSD install.
   install = let binstall = writeText "binstall" ''
-    #!/bin/sh
+    #!${stdenv.shell}
     for last in $@; do true; done
     mkdir -p $(dirname $last)
     xinstall "$@"
@@ -243,7 +279,7 @@ let
     version = "8.0";
     sha256 = "1f6pbz3qv1qcrchdxif8p5lbmnwl8b9nq615hsd3cyl4avd5bfqj";
     extraPaths = [ mtree.src make.src ];
-    nativeBuildInputs = [ makeMinimal mandoc groff ];
+    nativeBuildInputs = [ nbBuildPackages.makeMinimal mandoc groff ];
     buildInputs = [ compat fts ];
     installPhase = ''
       runHook preInstall
@@ -294,21 +330,24 @@ let
     path = "usr.bin/stat";
     version = "8.0";
     sha256 = "0z4r96id2r4cfy443rw2s1n52n186xm0lqvs8s3qjf4314z7r7yh";
-    nativeBuildInputs = [ makeMinimal mandoc groff install ];
+    nativeBuildInputs = [ nbBuildPackages.makeMinimal nbBuildPackages.install
+                          mandoc groff ];
   };
 
   tsort = netBSDDerivation {
     path = "usr.bin/tsort";
     version = "8.0";
     sha256 = "1dqvf9gin29nnq3c4byxc7lfd062pg7m84843zdy6n0z63hnnwiq";
-    nativeBuildInputs = [ makeMinimal mandoc groff install ];
+    nativeBuildInputs = [ nbBuildPackages.makeMinimal nbBuildPackages.install
+                          mandoc groff ];
   };
 
   lorder = netBSDDerivation {
     path = "usr.bin/lorder";
     version = "8.0";
     sha256 = "0rjf9blihhm0n699vr2bg88m4yjhkbxh6fxliaay3wxkgnydjwn2";
-    nativeBuildInputs = [ makeMinimal mandoc groff install ];
+    nativeBuildInputs = [ nbBuildPackages.makeMinimal nbBuildPackages.install
+                          mandoc groff ];
   };
   ##
   ## END BOOTSTRAPPING
@@ -345,6 +384,8 @@ let
         --replace '-Wl,-rpath,''${SHLIBDIR}' ""
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.lib.mk \
         --replace '_INSTRANLIB=''${empty(PRESERVE):?-a "''${RANLIB} -t":}' '_INSTRANLIB='
+      substituteInPlace $NETBSDSRCDIR/share/mk/bsd.kinc.mk \
+        --replace /bin/rm rm
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace $NETBSDSRCDIR/share/mk/bsd.sys.mk \
         --replace '-Wl,--fatal-warnings' "" \
@@ -389,9 +430,6 @@ let
         --replace "timespecclear(&utmpxtime)" "utmpxtime.tv_sec = utmpxtime.tv_nsec = 0"
     '';
   };
-
-in rec {
-  inherit compat install netBSDDerivation fts;
 
   getent = netBSDDerivation {
     path = "usr.bin/getent";
@@ -612,4 +650,6 @@ in rec {
     patches = [ ./locale.patch ];
   };
 
-}
+  };
+
+in nbPackages
