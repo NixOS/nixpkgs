@@ -13359,20 +13359,20 @@ in {
   };
 
   tempita = buildPythonPackage rec {
-    version = "0.5.2";
+    version = "0.5.3-2016-09-28";
     name = "tempita-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Tempita/Tempita-${version}.tar.gz";
-      sha256 = "cacecf0baa674d356641f1d406b8bff1d756d739c46b869a54de515d08e6fc9c";
+    src = pkgs.fetchFromGitHub {
+      owner = "gjhiggins";
+      repo = "tempita";
+      rev = "47414a7c6e46a9a9afe78f0bce2ea299fa84d10";
+      sha256 = "0f33jjjs5rvp7ar2j6ggyfykcrsrn04jaqcq71qfvycf6b7nw3rn";
     };
-
-    disabled = isPy3k;
 
     buildInputs = with self; [ nose ];
 
     meta = {
-      homepage = http://pythonpaste.org/tempita/;
+      homepage = https://github.com/gjhiggins/tempita;
       description = "A very small text templating language";
     };
   };
