@@ -28,7 +28,7 @@ rec {
   };
 
   armv7l-hf-multiplatform = rec {
-    config = "armv7a-unknown-linux-gnueabihf";
+    config = "armv7l-unknown-linux-gnueabihf";
     platform = platforms.armv7l-hf-multiplatform;
   };
 
