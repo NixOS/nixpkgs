@@ -5214,6 +5214,8 @@ with pkgs;
 
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
+  sewer = callPackage ../tools/admin/sewer { };
+
   screenfetch = callPackage ../tools/misc/screenfetch { };
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
