@@ -36,9 +36,9 @@
       green="$(printf '\033[0;32m')" #set green
       boldgreen="$(printf '\033[0;1;32m')" #set bold, and set green.
     fi
-
     ${echo_build_heading colors}
     ${noisily colors verbose}
+
     build_lib() {
        lib_src=$1
        echo_build_heading $lib_src ${libName}
