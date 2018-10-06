@@ -1,12 +1,8 @@
-{ stdenv, lib, fetchFromGitHub, emscripten
-, enableJsonnetJs ? !stdenv.isDarwin
-}:
+{ stdenv, lib, fetchFromGitHub }:
 
-let version = "0.11.2"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "jsonnet-${version}";
-  version = version;
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -15,19 +11,18 @@ stdenv.mkDerivation {
     sha256 = "05rl5i4g36k2ikxv4sw726mha1qf5bb66wiqpi0s09wj9azm7vym";
   };
 
-  buildInputs = if enableJsonnetJs then [ emscripten ] else [ ];
-
   enableParallelBuilding = true;
 
-  makeFlags = [''EM_CACHE=$(TMPDIR)/.em_cache''] ++
-    (if enableJsonnetJs then ["all"] else ["jsonnet" "libjsonnet.so" "libjsonnet++.so"]);
+  makeFlags = [
+    "jsonnet"
+    "libjsonnet.so"
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/share/
+    mkdir -p $out/bin $out/lib $out/include
     cp jsonnet $out/bin/
     cp libjsonnet*.so $out/lib/
-    cp -a doc $out/share/doc
-    cp -a include $out/include
+    cp -a include/*.h $out/include/
   '';
 
   meta = {
