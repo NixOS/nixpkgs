@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Keras_Preprocessing";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02ba0a3b31ed89c4b0c21d55ba7d87529097d56f394e3850b6d3c9e6c63ce7ae";
+    sha256 = "ef2e482c4336fcf7180244d06f4374939099daa3183816e82aee7755af35b754";
   };
 
   # Cyclic dependency: keras-preprocessing requires keras, which requires keras-preprocessing
