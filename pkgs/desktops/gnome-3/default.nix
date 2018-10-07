@@ -338,6 +338,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   metacity = callPackage ./misc/metacity { };
 
+  nautilus-python = callPackage ./misc/nautilus-python { };
+
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
 
   gtkhtml = callPackage ./misc/gtkhtml { };
