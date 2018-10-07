@@ -14,4 +14,8 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
+
+  meta = {
+    license = stdenv.lib.licenses.isc;
+  };
 }
