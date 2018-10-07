@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
         -e "/export IBUS_DATAROOTDIR=/ s/^.$//" \
         -e "/export IBUS_LOCALEDIR=/ s/^.$//" \
         -i "setup/ibus-setup-table.in"
+    substituteInPlace engine/tabcreatedb.py --replace '/usr/share/ibus-table' $out/share/ibus-table
   '';
 
   buildInputs = [
