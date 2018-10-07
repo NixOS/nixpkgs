@@ -1153,4 +1153,7 @@ self: super: {
   });
 
   xmonad-extras = doJailbreak super.xmonad-extras;
+
+  arbtt = doJailbreak super.arbtt;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
