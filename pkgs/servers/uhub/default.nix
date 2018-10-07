@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, openssl, sqlite, pkgconfig, systemd
+{ stdenv, fetchurl, fetchFromGitHub, cmake, openssl, sqlite, pkgconfig, systemd
 , tlsSupport ? false }:
 
 assert tlsSupport -> openssl != null;
@@ -7,9 +7,11 @@ stdenv.mkDerivation rec {
   name = "uhub-${version}";
   version = "0.5.0";
 
-  src = fetchurl {
-    url = "https://www.extatic.org/downloads/uhub/uhub-${version}-src.tar.bz2";
-    sha256 = "1xcqjz20lxikzn96f4f69mqyl9y985h9g0gyc9f7ckj18q22b5j5";
+  src = fetchFromGitHub {
+    owner = "janvidar";
+    repo = "uhub";
+    rev = version;
+    sha256 = "0zdbxfvw7apmfhqgsfkfp4pn9iflzwdn0zwvzymm5inswfc00pxg";
   };
 
   nativeBuildInputs = [ pkgconfig ];
