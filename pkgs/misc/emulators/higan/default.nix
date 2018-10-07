@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   postPatch = "sed '1i#include <cmath>' -i higan/fc/ppu/ppu.cpp";
 
   buildInputs =
-  [ p7zip pkgconfig libX11 libXv udev libGLU_combined SDL libao openal libpulseaudio gtk2 gtksourceview ];
+  [ p7zip pkgconfig libX11 libXv udev libGLU_combined
+    SDL libao openal libpulseaudio gtk2 gtksourceview ];
 
   unpackPhase = ''
     7z x $src
@@ -75,7 +76,7 @@ stdenv.mkDerivation rec {
         - NEC's PC Engine, SuperGrafx;
         - Bandai's WonderSwan, WonderSwan Color.
     '';
-    homepage = https://byuu.org/higan/;
+    homepage = https://byuu.org/emulation/higan/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = with platforms; unix;
