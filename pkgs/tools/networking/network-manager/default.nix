@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, dbus-glib, gnome3
-, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables
+{ stdenv, fetchurl, fetchpatch, substituteAll, intltool, pkgconfig, dbus-glib
+, gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables
 , libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
@@ -67,13 +67,13 @@ in stdenv.mkDerivation rec {
 
   patches = [
     # https://bugzilla.gnome.org/show_bug.cgi?id=796751
-    (fetchurl {
+    (fetchpatch {
       url = https://bugzilla.gnome.org/attachment.cgi?id=372953;
-      sha256 = "1crjplyiiipkhjjlifrv6hhvxinlcxd6irp9ijbc7jij31g44i0a";
+      sha256 = "0xg7bzs6dvkbv2qp67i7mi1c5yrmfd471xgmlkn15b33pqkzy3mc";
     })
-    (fetchurl {
+    (fetchpatch {
       url = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/0a3755c1799d3a4dc1875d4c59c7c568a64c8456.patch;
-      sha256 = "af1717f7c6fdd6dadb4082dd847f4bbc42cf1574833299f3e47024e785533f2e";
+      sha256 = "0r7338q3za7mf419a244vi65b1q497rg84avijybmv6w4x6p1ksd";
     })
     (substituteAll {
       src = ./fix-paths.patch;
