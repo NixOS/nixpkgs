@@ -1995,6 +1995,10 @@ with pkgs;
       inherit (gnome3) dconf;
     };
 
+    table-chinese = callPackage ../tools/inputmethods/ibus-engines/ibus-table-chinese {
+      ibus-table = ibus-engines.table;
+    };
+
     table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others {
       ibus-table = ibus-engines.table;
     };
