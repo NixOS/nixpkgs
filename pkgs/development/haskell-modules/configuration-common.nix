@@ -1160,4 +1160,5 @@ self: super: {
     };
   };
 
+  arbtt = doJailbreak super.arbtt;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
