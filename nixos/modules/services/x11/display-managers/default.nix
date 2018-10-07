@@ -109,9 +109,8 @@ let
       ${config.systemd.package}/bin/systemctl --user start graphical-session.target
 
       # Allow the user to setup a custom session type.
-      if test -x ~/.xsession; then
-          exec ~/.xsession
-      fi
+      test -x ~/.nix-profile/bin/xsession && exec ~/.nix-profile/bin/xsession
+      test -x ~/.xsession && exec ~/.xsession
 
       if test "$1"; then
           # Run the supplied session command. Remove any double quotes with eval.
