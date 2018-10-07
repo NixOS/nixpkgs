@@ -4314,9 +4314,7 @@ with pkgs;
 
   pulsemixer = callPackage ../tools/audio/pulsemixer { };
 
-  pwsafe = callPackage ../applications/misc/pwsafe {
-    wxGTK = wxGTK30;
-  };
+  pwsafe = callPackage ../applications/misc/pwsafe { };
 
   niff = callPackage ../tools/package-management/niff { };
 
