@@ -3,14 +3,14 @@
 , fetchpatch
 }:
 stdenv.mkDerivation rec {
-  version = "8.4.beta7";
+  version = "8.4.rc0";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "1cizsfqvcdm02vn01qlww3bf9scmaf2cvz8vf1ynh081wj1s45zq";
+    sha256 = "01115m0zvr6l33334bwpw7dcc2rdrpyx4mjfxqacfk5sii1zlkmm";
   };
 
   nixPatches = [
