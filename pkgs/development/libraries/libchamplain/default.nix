@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "13chvc2n074i0jw5jlb8i7cysda4yqx58ca6y3mrlrl9g37k2zja";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
 
   propagatedBuildInputs = [ glib gtk3 cairo clutter-gtk sqlite libsoup ];
