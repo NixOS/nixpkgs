@@ -21231,20 +21231,6 @@ with pkgs;
 
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
 
-  #inherit (ocaml-ng.ocamlPackages_3_11_2) matita;
-
-  # Current version is 0.5.8. Official website says:
-
-  # Version 0.5.9, released on December 23, 2014, is an update of version 0.5.8
-  # to compile with the latter OCaml version and libraries.
-  # It is unsupported, but still used for teaching at the University of Bologna.
-
-  # It should allow us removing the dependency on OCaml 3.11 but I haven't been
-  # able to confirm because Matita depends on lablgtkmathview-0.7.2 which
-  # already reports as broken.
-
-  matita_130312 = lowPrio ocamlPackages.matita_130312;
-
   metis-prover = callPackage ../applications/science/logic/metis-prover { };
 
   mcrl2 = callPackage ../applications/science/logic/mcrl2 { };

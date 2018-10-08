@@ -1051,12 +1051,6 @@ let
       camlp5 = camlp5_strict;
     };
 
-    matita = callPackage ../applications/science/logic/matita {
-      ulex08 = ulex08.override { camlp5 = camlp5_old_transitional; };
-    };
-
-    matita_130312 = callPackage ../applications/science/logic/matita/130312.nix { };
-
   };
     in (ocamlPackages.janeStreet // ocamlPackages);
     in lib.fix' (lib.extends overrides packageSet);
