@@ -4678,6 +4678,11 @@
     github = "maggesi";
     name = "Marco Maggesi";
   };
+  zachcoyle = {
+    email = "zach.coyle@gmail.com";
+    github = "zachcoyle";
+    name = "Zach Coyle";
+  };
   zagy = {
     email = "cz@flyingcircus.io";
     github = "zagy";
