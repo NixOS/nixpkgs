@@ -1,5 +1,4 @@
 diff --git a/DY/src/finterface.cc b/DY/src/finterface.cc
-index 0405786..eb171d0 100644
 --- a/DY/src/finterface.cc
 +++ b/DY/src/finterface.cc
 @@ -14,17 +14,17 @@
@@ -18,8 +17,9 @@ index 0405786..eb171d0 100644
 -  int dy_get_res_(const int *ds_id, double *calc_res);
 +  void dy_get_res_(const int *ds_id, double *calc_res);
  
-   int dy_release_();
+-  int dy_release_();
 -  int dy_set_ewpars_();
++  void dy_release_();
 +  void dy_set_ewpars_();
  }
  
@@ -48,7 +48,7 @@ index 0405786..eb171d0 100644
  {
    // evolve convolutions
    vector<PDFconv*>::iterator ipc = gPDFconvs.begin();
-@@ -118,24 +116,20 @@ int dy_do_calc_()
+@@ -118,28 +116,24 @@ int dy_do_calc_()
      if ( true != idc->second->Integrate() ) {
        cout << "Something is wrong with DY integration for " 
             << idc->first << " data set." << endl;
@@ -76,6 +76,11 @@ index 0405786..eb171d0 100644
    PhysPar::setPhysPar();
  }
  
+-int dy_release_()
++void dy_release_()
+ {
+   vector<PDFconv*>::iterator ipc = gPDFconvs.begin();
+   for (; ipc!=gPDFconvs.end(); ipc++){
 @@ -155,6 +149,4 @@ int dy_release_()
    for (; idc != gCalcs.end() ; idc++){
      delete (idc->second);
@@ -83,8 +88,18 @@ index 0405786..eb171d0 100644
 -
 -  return 1;
  }
+diff --git a/DiffDIS/include/DataTable.h b/DiffDIS/include/DataTable.h
+--- a/DiffDIS/include/DataTable.h
++++ b/DiffDIS/include/DataTable.h
+@@ -307,6 +307,7 @@ class DataTable_t {
+       for(ic=0; ic < GetNcols(); ic++) {
+         for(ir=0; ir < npt; ir++) Data[ic][ir] = A.Data[ic][ir];
+       }
++      return *this;
+     }
+     
+     //@}
 diff --git a/FastNLO/src/FastNLOInterface.cc b/FastNLO/src/FastNLOInterface.cc
-index 20f8a75..a6dac79 100644
 --- a/FastNLO/src/FastNLOInterface.cc
 +++ b/FastNLO/src/FastNLOInterface.cc
 @@ -39,14 +39,14 @@ void gauleg(double x1,double x2,double *x,double *w, int n);
@@ -197,7 +212,6 @@ index 20f8a75..a6dac79 100644
  
  int CreateUsedPointsArray(int idataset, int npoints) {
 diff --git a/Hathor/src/HathorInterface.cc b/Hathor/src/HathorInterface.cc
-index 7da88b1..96576a3 100644
 --- a/Hathor/src/HathorInterface.cc
 +++ b/Hathor/src/HathorInterface.cc
 @@ -6,9 +6,9 @@
@@ -239,8 +253,82 @@ index 7da88b1..96576a3 100644
    rlxd_reset(rndStore);
  
    std::map<int, Hathor*>::const_iterator hathorIter = hathor_array.find(*idataset);
+diff --git a/src/TheorEval.cc b/src/TheorEval.cc
+--- a/src/TheorEval.cc
++++ b/src/TheorEval.cc
+@@ -62,6 +62,7 @@ TheorEval::initTheory()
+   list<tToken> sl;
+   this->assignTokens(sl);
+   this->convertToRPN(sl);
++  return 0;
+ }
+ 
+ int 
+@@ -167,6 +168,7 @@ TheorEval::assignTokens(list<tToken> &sl)
+       sl.push_back(t);
+     }
+   }
++  return 0;
+ }
+ 
+ int
+@@ -217,6 +219,7 @@ TheorEval::convertToRPN(list<tToken> &sl)
+   cout << endl;
+   */
+   
++  return 0;
+ }
+ 
+ int
+@@ -236,6 +239,7 @@ TheorEval::initTerm(int iterm, valarray<double> *val)
+     hf_errlog_(id, text, textlen);
+     return -1;
+   }
++  return 0;
+ }
+ 
+ int
+@@ -348,6 +352,7 @@ TheorEval::initGridTerm(int iterm, valarray<double> *val)
+ 
+   // associate grid and valarray pointers in token
+   _mapGridToken[g] = val;
++  return 0;
+ }
+ 
+ int
+@@ -430,6 +435,7 @@ TheorEval::initKfTerm(int iterm, valarray<double> *val)
+ 
+   // write k-factor array to the token valarray
+   *val = valarray<double>(vkf.data(), vkf.size());
++  return 0;
+ }  
+ 
+ int
+@@ -465,6 +471,7 @@ TheorEval::setCKM(const vector<double> &v_ckm)
+    int textlen = strlen(text);
+    hf_errlog_(id, text, textlen);
+ #endif
++   return 0;
+ }
+ 
+ int
+@@ -531,6 +538,7 @@ TheorEval::Evaluate(valarray<double> &vte )
+       }
+     //vte /= _units;
+   }
++  return 0;
+ }
+ 
+ int
+@@ -555,6 +563,7 @@ TheorEval::getGridValues()
+     
+     
+   }
++  return 0;
+ }
+ 
+ int
 diff --git a/src/ftheor_eval.cc b/src/ftheor_eval.cc
-index 1dd4e8b..8bc7991 100644
 --- a/src/ftheor_eval.cc
 +++ b/src/ftheor_eval.cc
 @@ -19,15 +19,15 @@
@@ -341,7 +429,6 @@ index 1dd4e8b..8bc7991 100644
    tTEmap::iterator it = gTEmap.begin();
    for (; it!= gTEmap.end(); it++){
 diff --git a/src/lhapdf6_output.c b/src/lhapdf6_output.c
-index 4b20b68..549c521 100644
 --- a/src/lhapdf6_output.c
 +++ b/src/lhapdf6_output.c
 @@ -64,7 +64,7 @@ extern double bvalij_(int *,int *,int *,int *,int *);
@@ -353,3 +440,15 @@ index 4b20b68..549c521 100644
  extern int getcbt_(int *, double *, double *, double *);
  extern void getpdfunctype_heraf_(int *mc, int *asymh, int *symh, char *name, size_t size);
  extern void hf_errlog_(int *, char *, size_t);
+diff --git a/tools/draw/include/FileOpener.h b/tools/draw/include/FileOpener.h
+--- a/tools/draw/include/FileOpener.h
++++ b/tools/draw/include/FileOpener.h
+@@ -61,7 +61,7 @@ class InFileOpener_t {
+   string GetPath() const {return ind < 0 ? "" : Flist[ind];}
+   
+   // ==================================
+-  int Add(const string& fname) {
++  void Add(const string& fname) {
+     Flist.push_back(fname);
+   }
+ 
