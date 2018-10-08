@@ -3120,6 +3120,11 @@
     github = "oyren";
     name = "Moritz Scheuren";
   };
+  pacien = {
+    email = "b4gx3q.nixpkgs@pacien.net";
+    github = "pacien";
+    name = "Pacien Tran-Girard";
+  };
   paholg = {
     email = "paho@paholg.com";
     github = "paholg";
