@@ -569,7 +569,6 @@ with pkgs;
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
     gsl = gsl_1;
-    boehmgc = boehmgc_766;
   };
 
   atomicparsley = callPackage ../tools/video/atomicparsley { };
