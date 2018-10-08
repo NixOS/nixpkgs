@@ -11,29 +11,29 @@ let
     groups = [ "default" "unicorn" "ed25519" "metrics" ];
   };
 
-  version = "11.3.0";
+  version = "11.3.4";
 
   sources = if gitlabEnterprise then {
     gitlabDeb = fetchurl {
       url = "https://packages.gitlab.com/gitlab/gitlab-ee/packages/debian/stretch/gitlab-ee_${version}-ee.0_amd64.deb/download.deb";
-      sha256 = "1l5cfbc45xa3gq90wyly3szn93szh162g9szc6dnkqx0db70j9l3";
+      sha256 = "1cgwm6g1mij1958mdyds8f76qjw39nllsr23dvsqgf60h4vbsdfd";
     };
     gitlab = fetchFromGitLab {
       owner = "gitlab-org";
       repo = "gitlab-ee";
       rev = "v${version}-ee";
-      sha256 = "0gmainjhs21hipbvshga5dzkjrpmlkk9vxxnxgwjaqbg9wrhw47m";
+      sha256 = "1ifaa879l85d4yfzrgszrgj04bfjxjh3n7v31zfb6lsqmh87xbm4";
     };
   } else {
     gitlabDeb = fetchurl {
       url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/stretch/gitlab-ce_${version}-ce.0_amd64.deb/download.deb";
-      sha256 = "162xy8xpa2qhz10nh2dw0vbd0665pz9984vnim9i30xcafr5picq";
+      sha256 = "0hls81ns9n10xrzw0b9pn1916445irqrysbicsdl8kdn83ds35p7";
     };
     gitlab = fetchFromGitLab {
       owner = "gitlab-org";
       repo = "gitlab-ce";
       rev = "v${version}";
-      sha256 = "158n2qnp1zsj5kk2w3v9xyakgdb739n955hlq3i9sl80q8f4xda3";
+      sha256 = "0dymr706yn917niybg2gj1pkgrzgiirbv4ib9pkgs140kbf3hn0c";
     };
   };
 
