@@ -4058,6 +4058,8 @@ with pkgs;
 
   mgba = libsForQt5.callPackage ../misc/emulators/mgba { };
 
+  midisheetmusic = callPackage ../applications/audio/midisheetmusic { };
+
   mikutter = callPackage ../applications/networking/instant-messengers/mikutter { };
 
   mimeo = callPackage ../tools/misc/mimeo { };
