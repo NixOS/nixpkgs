@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "nitrokey-app-${version}";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app";
     rev = "v${version}";
-    sha256 = "0zf2f7g5scqd5xfzvmmpvfc7d1w66rf22av0qv6s37875c61j9r9";
+    sha256 = "193kzlz3qn9il56h78faiqkgv749hdils1nn1iw6g3wphgx5fjs2";
     fetchSubmodules = true;
   };
 
