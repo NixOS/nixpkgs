@@ -18763,6 +18763,11 @@ with pkgs;
 
   lightdm_qt = lightdm.override { withQt5 = true; };
 
+  lightdm-enso-os-greeter = callPackage ../applications/display-managers/lightdm-enso-os-greeter {
+    inherit (gnome3) libgee;
+    inherit (xorg) libX11 libXdmcp libpthreadstubs;
+  };
+
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm/gtk-greeter.nix {
     inherit (xfce) exo;
   };
