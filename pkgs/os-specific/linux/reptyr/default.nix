@@ -1,11 +1,13 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   version = "0.6.2";
   name = "reptyr-${version}";
-  src = fetchurl {
-    url = "https://github.com/nelhage/reptyr/archive/reptyr-${version}.tar.gz";
-    sha256 = "07pfl0rkgm8m3f3jy8r9l2yvnhf8lgllpsk3mh57mhzdxq8fagf7";
+  src = fetchFromGitHub {
+    owner = "nelhage";
+    repo = "reptyr";
+    rev = "reptyr-${version}";
+    sha256 = "0yfy1p0mz05xg5gzp52vilfz0yl1sjjsvwn0z073mnr4wyam7fg8";
   };
 
   # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
