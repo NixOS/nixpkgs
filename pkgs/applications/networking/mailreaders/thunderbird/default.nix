@@ -47,14 +47,17 @@ in stdenv.mkDerivation rec {
   # from firefox + m4 + wrapperTool
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
 
-  # https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1479540
-  # https://hg.mozilla.org/releases/mozilla-release/rev/bc651d3d910c
   patches = [
+    # https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1479540
+    # https://hg.mozilla.org/releases/mozilla-release/rev/bc651d3d910c
     (fetchpatch {
       name = "bc651d3d910c.patch";
       url = "https://hg.mozilla.org/releases/mozilla-release/raw-rev/bc651d3d910c";
       sha256 = "0iybkadsgsf6a3pq3jh8z1p110vmpkih8i35jfj8micdkhxzi89g";
     })
+
+    # Remove buildconfig.html to prevent a dependency on clang etc.
+    ../../browsers/firefox/no-buildconfig.patch
   ];
 
   configureFlags =
@@ -190,6 +193,8 @@ in stdenv.mkDerivation rec {
       # Some basic testing
       "$out/bin/thunderbird" --version
     '';
+
+  disallowedRequisites = [ stdenv.cc ];
 
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";
