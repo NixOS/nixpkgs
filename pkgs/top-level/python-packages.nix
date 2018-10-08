@@ -744,9 +744,7 @@ in {
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
-  av = callPackage ../development/python-modules/av {
-    inherit (pkgs) ffmpeg_2 git libav pkgconfig;
-  };
+  av = callPackage ../development/python-modules/av { };
 
   avro = callPackage ../development/python-modules/avro {};
 
