@@ -5604,6 +5604,8 @@ with pkgs;
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
+  tinyemu = callPackage ../applications/virtualization/tinyemu { };
+
   tinyproxy = callPackage ../tools/networking/tinyproxy {};
 
   tio = callPackage ../tools/misc/tio { };
