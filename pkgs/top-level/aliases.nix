@@ -348,7 +348,6 @@ mapAliases ({
     gst-ffmpeg = pkgs.gst-ffmpeg;
   };
 } // (with ocaml-ng; { # added 2016-09-14
-  ocaml_3_08_0 = ocamlPackages_3_08_0.ocaml;
   ocaml_3_10_0 = ocamlPackages_3_10_0.ocaml;
   ocaml_3_11_2 = ocamlPackages_3_11_2.ocaml;
   ocaml_3_12_1 = ocamlPackages_3_12_1.ocaml;

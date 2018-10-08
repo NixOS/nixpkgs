@@ -1065,8 +1065,6 @@ in rec
 
   inherit mkOcamlPackages;
 
-  ocamlPackages_3_08_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/3.08.0.nix { }) (self: super: { lablgtk = self.lablgtk_2_14; });
-
   ocamlPackages_3_10_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/3.10.0.nix { }) (self: super: { lablgtk = self.lablgtk_2_14; });
 
   ocamlPackages_3_11_2 = mkOcamlPackages (callPackage ../development/compilers/ocaml/3.11.2.nix { }) (self: super: { lablgtk = self.lablgtk_2_14; });
