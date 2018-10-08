@@ -1074,6 +1074,10 @@ self: super: {
     hpack = self.hpack_0_31_0;
     yaml = self.yaml_0_10_2_0;
   });
+  stack2nix = super.stack2nix.overrideScope (self: super: {
+    hpack = self.hpack_0_31_0;
+    yaml = self.yaml_0_10_2_0;
+  });
 
   # Break out of "aeson <1.3, temporary <1.3".
   stack = doJailbreak super.stack;
