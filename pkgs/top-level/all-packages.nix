@@ -16402,6 +16402,8 @@ with pkgs;
 
   eterm = callPackage ../applications/misc/eterm { };
 
+  eteroj.lv2 = libsForQt5.callPackage ../applications/audio/eteroj.lv2 { };
+
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
   evilvte = callPackage ../applications/misc/evilvte {
