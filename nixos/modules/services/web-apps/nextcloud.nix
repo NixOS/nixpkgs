@@ -70,7 +70,19 @@ in {
       '';
     };
 
-    nginx.enable = mkEnableOption "nginx vhost management";
+    nginx = {
+      enable = mkEnableOption "nginx vhost management";
+      addr = mkOption {
+        type = types.str;
+        default = "[::]";
+        description = "Address listened to by nginx service";
+      };
+      port = mkOption {
+        type = types.int;
+        default = 80;
+        description = "Port listened to by nginx service";
+      };
+    };
 
     webfinger = mkOption {
       type = types.bool;
@@ -366,6 +378,7 @@ in {
         virtualHosts = {
           "${cfg.hostName}" = {
             root = pkgs.nextcloud;
+            listen = [ { addr = "${cfg.nginx.addr}"; port = cfg.nginx.port; } ];
             locations = {
               "= /robots.txt" = {
                 priority = 100;
