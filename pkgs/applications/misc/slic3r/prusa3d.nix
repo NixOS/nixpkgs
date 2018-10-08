@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
     description = "G-code generator for 3D printer";
     homepage = https://github.com/prusa3d/Slic3r;
     license = licenses.agpl3;
-    platforms = subtractLists ["aarch64-linux"] platforms.linux;
     maintainers = with maintainers; [ tweber ];
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }
