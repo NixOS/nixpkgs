@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   patches = [
+    # Prevent scanner from erroneously including @rpath on macOS
+    # This patch is from https://gitlab.gnome.org/GNOME/gobject-introspection/issues/222
+    # See also https://github.com/NixOS/nixpkgs/issues/40599
+    ./macos-absolutize-relocatable-install-name.patch
+
     (substituteAll {
       src = ./absolute_shlib_path.patch;
       inherit nixStoreDir;
