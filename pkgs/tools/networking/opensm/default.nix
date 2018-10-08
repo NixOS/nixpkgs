@@ -15,7 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ rdma-core ];
 
-  preConfigure = "bash ./autogen.sh";
+  preConfigure = ''
+    patchShebangs ./autogen.sh
+    ./autogen.sh
+  '';
 
   enableParallelBuilding = true;
 
