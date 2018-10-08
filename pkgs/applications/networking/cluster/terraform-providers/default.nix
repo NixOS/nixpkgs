@@ -1,4 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoPackage
+, fetchFromGitHub
+, callPackage
+}:
 let
   list = import ./data.nix;
 
@@ -17,4 +21,7 @@ let
       postBuild = "mv go/bin/${repo}{,_v${version}}";
     };
 in
-  lib.mapAttrs (n: v: toDrv v) list
+  {
+    ibm = callPackage ./ibm {};
+    libvirt = callPackage ./libvirt {};
+  } // lib.mapAttrs (n: v: toDrv v) list

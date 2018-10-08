@@ -20,10 +20,10 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "62.0.2";
+    version = "62.0.3";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "0j5q1aa7jhq4pydaywp8ymibc319wv3gw2q15qp14i069qk3fpn33zb5z86lhb6z864f88ikx3zxv6phqs96qvzj25yqbh7nxmzwhvv";
+      sha512 = "0kvb664s47bmmdq2ppjsnyqy8yaiig1xj81r25s36c3i8igfq3zxvws10k2dlmmmrwyc5k4g9i9imgkxj7r3xwwqxc72dl429wvfys8";
     };
 
     patches = nixpkgsPatches ++ [
@@ -60,6 +60,7 @@ rec {
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [ "Support ended in August 2018." ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-52-unwrapped";
@@ -69,10 +70,10 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    version = "60.2.1esr";
+    version = "60.2.2esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "2mklws09haki91w3js2i5pv8g3z5ck4blnzxvdbk5qllqlv465hn7rvns78hbcbids55mqx50fsn0161la73v25zs04bf8xdhbkcpsm";
+      sha512 = "2h2naaxx4lv90bjpcrsma4sdhl4mvsisx3zi09vakjwv2lad91gy41cmcpqprpcbsmlvpqf8yiv52ah4d02a8d9335xhw2ajw6asjc1";
     };
 
     patches = nixpkgsPatches ++ [

@@ -16,6 +16,10 @@ nodePackages // {
     '';
   };
 
+  jshint = nodePackages.jshint.override {
+    buildInputs = [ pkgs.phantomjs2 ];
+  };
+
   dat = nodePackages.dat.override {
     buildInputs = [ nodePackages.node-gyp-build ];
   };
@@ -101,6 +105,10 @@ nodePackages // {
     '';
 
     dontNpmInstall = true; # We face an error with underscore not found, but the package will work fine if we ignore this.
+  };
+
+  webtorrent-cli = nodePackages.webtorrent-cli.override {
+    buildInputs = [ nodePackages.node-gyp-build ];
   };
 
 }
