@@ -52,4 +52,7 @@ $ ping -c1 10.233.4.2
 networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
 </programlisting>
  </para>
+ <para>
+  You may need to restart your system for the changes to take effect.
+ </para>
 </section>
