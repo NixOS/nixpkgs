@@ -86,6 +86,7 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.libreswan pkgs.iproute ];
+    environment.etc."ipsec.conf".source = configFile;
 
     systemd.services.ipsec = {
       description = "Internet Key Exchange (IKE) Protocol Daemon for IPsec";
@@ -101,18 +102,19 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      restartTriggers = [ configFile ];
 
       serviceConfig = {
         Type = "simple";
         Restart = "always";
         EnvironmentFile = "-${pkgs.libreswan}/etc/sysconfig/pluto";
         ExecStartPre = [
-          "${libexec}/addconn --config ${configFile} --checkconfig"
+          "${libexec}/addconn --checkconfig"
           "${libexec}/_stackmanager start"
           "${ipsec} --checknss"
           "${ipsec} --checknflog"
         ];
-        ExecStart = "${libexec}/pluto --config ${configFile} --nofork \$PLUTO_OPTIONS";
+        ExecStart = "${libexec}/pluto --nofork \$PLUTO_OPTIONS";
         ExecStop = "${libexec}/whack --shutdown";
         ExecStopPost = [
           "${pkgs.iproute}/bin/ip xfrm policy flush"
