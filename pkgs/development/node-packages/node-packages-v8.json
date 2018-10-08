@@ -7,6 +7,7 @@
 , "browserify"
 , "castnow"
 , "clean-css"
+, "cloudflare-cli"
 , "coffee-script"
 , "coinmon"
 , "configurable-http-proxy"
