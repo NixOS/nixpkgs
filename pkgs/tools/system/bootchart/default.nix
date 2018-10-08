@@ -1,12 +1,14 @@
-{stdenv, fetchurl, pkgconfig, glib, gtk2, python2Packages }:
+{stdenv, fetchFromGitHub, pkgconfig, glib, gtk2, python2Packages }:
 
 stdenv.mkDerivation rec {
   version = "0.14.7";
   name = "bootchart-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/mmeeks/bootchart/archive/${version}.tar.gz";
-    sha256 = "1abn4amsyys6vwn7csxsxny94n24ycca3xhqxqcmdc4j0dzn3kmb";
+  src = fetchFromGitHub {
+    owner = "mmeeks";
+    repo = "bootchart";
+    rev = version;
+    sha256 = "178p7z5npx2ksqx477454n1l5560ncbpjh65j9dr001wmwzqzh5q";
   };
 
   nativeBuildInputs = [ pkgconfig ];
