@@ -4,7 +4,6 @@
 , libsamplerate, libmad, taglib, lame, libogg
 , libvorbis, speex, libtheora, libopus, fdk_aac
 , faad2, flac, ladspaH, ffmpeg, frei0r, dssi
-, autoconf, automake, libtool
 }:
 
 let
@@ -34,22 +33,6 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--localstatedir=/var" ];
 
-  # liquidsoap only looks for lame and ffmpeg at runtime, so we need to link them in manually
-  NIX_LDFLAGS = [
-  #   # LAME
-  #   # "-lmp3lame"
-  #   # ffmpeg
-  #   "-lavcodec"
-  #   "-lavdevice"
-  #   "-lavfilter"
-  #   "-lavformat"
-    "-lavresample"
-  #   "-lavutil"
-  #   "-lpostproc"
-  #   "-lswresample"
-    "-lswscale"
-  ];
-
   buildInputs =
     [ which ocamlPackages.ocaml ocamlPackages.findlib pkgconfig
       libao portaudio alsaLib libpulseaudio libjack2
@@ -58,7 +41,6 @@ stdenv.mkDerivation {
       faad2 flac ladspaH ffmpeg frei0r dssi
       ocamlPackages.xmlm ocamlPackages.ocaml_pcre
       ocamlPackages.camomile
-      # autoconf automake libtool
     ];
 
   hardeningDisable = [ "format" "fortify" ];
