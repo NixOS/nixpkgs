@@ -7,7 +7,7 @@ let
   rubyEnv = bundlerEnv {
     name = "gitlab-env-${version}";
     inherit ruby;
-    gemdir = ./.;
+    gemdir = ./rubyEnv- + "${if gitlabEnterprise then "ee" else "ce"}";
     groups = [ "default" "unicorn" "ed25519" "metrics" ];
   };
 
