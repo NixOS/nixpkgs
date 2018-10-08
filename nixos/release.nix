@@ -385,6 +385,7 @@ in rec {
   tests.predictable-interface-names = callSubTests tests/predictable-interface-names.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.prometheus = callTest tests/prometheus.nix {};
+  tests.prometheus-exporters = callTest tests/prometheus-exporters.nix {};
   tests.prosody = callTest tests/prosody.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.quagga = callTest tests/quagga.nix {};
