@@ -1,14 +1,14 @@
 {stdenv, fetchFromGitHub, pkgconfig, glib, gtk2, python2Packages }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.7";
+  version = "0.14.8";
   name = "bootchart-${version}";
 
   src = fetchFromGitHub {
     owner = "mmeeks";
     repo = "bootchart";
     rev = version;
-    sha256 = "178p7z5npx2ksqx477454n1l5560ncbpjh65j9dr001wmwzqzh5q";
+    sha256 = "12ja2hp6f49416zfjdx0kjfmlkh9wl9b7wz7gk372kps4gjnypqx";
   };
 
   nativeBuildInputs = [ pkgconfig ];
