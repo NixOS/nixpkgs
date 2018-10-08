@@ -14784,7 +14784,7 @@ with pkgs;
       '';
   }));
 
-  systemd-wait = callPackages ../os-specific/linux/systemd-wait { };
+  systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
 
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
