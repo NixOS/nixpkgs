@@ -11971,6 +11971,8 @@ with pkgs;
 
   rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
 
+  rapidcheck = callPackage ../development/libraries/rapidcheck {};
+
   rapidjson = callPackage ../development/libraries/rapidjson {};
 
   raul = callPackage ../development/libraries/audio/raul { };
