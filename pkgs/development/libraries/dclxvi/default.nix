@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     description = "Naehrig, Niederhagen and Schwabe's pairings code, massaged into a shared library";
     maintainers = with maintainers; [ wkennington ];
     platforms = platforms.x86_64;
+    license = licenses.publicDomain;
   };
 }
