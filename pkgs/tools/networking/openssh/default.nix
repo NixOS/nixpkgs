@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
 
   patches =
     [
+      ./fix-tunnel-forwarding-broken-in-7.7p1.patch
+
       ./locale_archive.patch
       ./fix-host-key-algorithms-plus.patch
 
