@@ -1,11 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-   name = "sutils-0.1";
+   version = "0.1";
+   name = "sutils-${version}";
 
-   src = fetchurl {
-     url = "https://github.com/baskerville/sutils/archive/0.1.tar.gz";
-     sha256 = "0xqk42vl82chy458d64fj68a4md4bxaip8n3xw9skxz0a1sgvks8";
+   src = fetchFromGitHub {
+     owner = "baskerville";
+     repo = "sutils";
+     rev = version;
+     sha256 = "0rvkc1y7rpw62d00n37pwfzvpvbbhzm6jvr2sb195l2dw53ya8d6";
    };
 
    hardeningDisable = [ "format" ];
