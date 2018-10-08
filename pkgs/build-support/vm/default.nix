@@ -990,7 +990,7 @@ rec {
       name = "debian-9.4-stretch-i386";
       fullName = "Debian 9.4 Stretch (i386)";
       packagesList = fetchurl {
-        url = https://web.archive.org/web/20180912163509/http://ftp.debian.org/debian/dists/stretch/main/binary-i386/Packages.xz;
+        url = http://snapshot.debian.org/archive/debian/20180912T154744Z/dists/stretch/main/binary-i386/Packages.xz;
         sha256 = "0flvn8zn7vk04p10ndf3aq0mdr8k2ic01g51aq4lsllkv8lmwzyh";
       };
       urlPrefix = mirror://debian;
@@ -1001,7 +1001,7 @@ rec {
       name = "debian-9.4-stretch-amd64";
       fullName = "Debian 9.4 Stretch (amd64)";
       packagesList = fetchurl {
-        url = https://web.archive.org/web/20180912163152/http://ftp.debian.org/debian/dists/stretch/main/binary-amd64/Packages.xz;
+        url = http://snapshot.debian.org/archive/debian/20180912T154744Z/dists/stretch/main/binary-amd64/Packages.xz;
         sha256 = "11vnn9bba2jabixvabfbw9zparl326c88xn99di7pbr5xsnl15jm";
       };
       urlPrefix = mirror://debian;
