@@ -97,6 +97,16 @@
        start org.nixos.nix-daemon</command>.
       </para>
      </listitem>
+     <listitem>
+      <para>
+        The Syncthing state and configuration data has been moved from
+        <varname>services.syncthing.dataDir</varname> to the newly defined
+        <varname>services.syncthing.configDir</varname>, which default to
+        <literal>/var/lib/syncthing/.config/syncthing</literal>.
+        This change makes possible to share synced directories using ACLs
+        without Syncthing resetting the permission on every start.
+      </para>
+     </listitem>
     </itemizedlist>
    </listitem>
    <listitem>
