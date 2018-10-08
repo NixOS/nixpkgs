@@ -94,8 +94,6 @@ in stdenv.mkDerivation rec {
         $out/etc/systemd/system/*
     '';
 
-  stripDebugList = [ "bin" "lib" "etc" ];
-
   # One test fails on mips.
   doCheck = !stdenv.isMips;
 
