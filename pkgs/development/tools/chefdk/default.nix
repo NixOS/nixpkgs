@@ -1,14 +1,15 @@
-{ lib, bundlerEnv, ruby_2_4, perl, autoconf }:
+{ lib, bundlerApp, ruby_2_5, perl, autoconf }:
 
-bundlerEnv {
+bundlerApp {
   # Last updated via:
   # nix-shell -p bundix -p gcc -p libxml2 -p zlib --run "bundix -mdl"
-  name = "chefdk-2.4.17";
+  pname = "chef-dk";
 
-  ruby = ruby_2_4;
+  ruby = ruby_2_5;
   gemdir = ./.;
 
-  buildInputs = [ perl autoconf ];
+  # buildInputs = [ perl autoconf ];
+  exes = ["chef"];
 
   meta = with lib; {
     description = "A streamlined development and deployment workflow for Chef platform";
