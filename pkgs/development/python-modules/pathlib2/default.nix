@@ -1,11 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
 , six
 , pythonOlder
 , scandir
 , glibcLocales
 , mock
+, nose
 }:
 
 if !(pythonOlder "3.4") then null else buildPythonPackage rec {
@@ -22,6 +24,10 @@ if !(pythonOlder "3.4") then null else buildPythonPackage rec {
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"
+  '';
+
+  checkPhase = ''
+    ${python.interpreter} tests/test_pathlib2.py
   '';
 
   meta = {
