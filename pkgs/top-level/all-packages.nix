@@ -15075,6 +15075,8 @@ with pkgs;
 
   envypn-font = callPackage ../data/fonts/envypn-font { };
 
+  envdir = callPackage ../tools/misc/envdir-go { };
+
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
