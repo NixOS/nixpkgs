@@ -17024,6 +17024,8 @@ with pkgs;
 
   hashit = callPackage ../tools/misc/hashit { };
 
+  helix-cli = callPackage ../applications/version-management/helix-cli { };
+
   hello = callPackage ../applications/misc/hello { };
   hello-unfree = callPackage ../applications/misc/hello-unfree { };
 
