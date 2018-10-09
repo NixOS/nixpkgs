@@ -54,7 +54,7 @@
 </programlisting>
    Now, the session can be re-attached like this:
 <programlisting>
-screen -r weechat-screen
+screen -x weechat/weechat-screen
 </programlisting>
   </para>
 
