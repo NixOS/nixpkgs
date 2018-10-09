@@ -7,15 +7,16 @@ assert x11Support -> libX11 != null && cairo != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.11.10";
+  name = "hwloc-2.0.2";
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v1.11/downloads/${name}.tar.bz2";
-    sha256 = "1ryibcng40xcq22lsj85fn2vcvrksdx9rr3wwxpq8dw37lw0is1b";
+    url = "http://www.open-mpi.org/software/hwloc/v2.0/downloads/${name}.tar.bz2";
+    sha256 = "1phc863d5b2fvwpyyq4mlh4rkjdslh6h0h197zmyk3prwrq7si8l";
   };
 
   configureFlags = [
     "--localstatedir=/var"
+    "--enable-netloc"
   ];
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
