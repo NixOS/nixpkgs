@@ -1,4 +1,5 @@
-{ stdenv, fetchzip, python3, python3Packages, writeScript }: let
+{ stdenv, makeWrapper, fetchzip, python3, python3Packages, writeScript }:
+let
   threaded_servers = python3Packages.buildPythonPackage {
     name = "threaded_servers";
     src = fetchzip {
@@ -9,19 +10,20 @@
     # stuff we don't care about pacserve
     doCheck = false;
   };
-  quickserve = writeScript "quickserve" ''
-    #!/bin/sh
-    ${python3.withPackages (_: [ threaded_servers ])}/bin/python -mThreadedServers.PeeredQuickserve "$@"
-  '';
-
+  wrappedPython = python3.withPackages (_: [ threaded_servers ]);
 in stdenv.mkDerivation {
   name = "quickserve";
   version = "2018";
 
-  phases = [ "buildPhase" ];
-  buildPhase = ''
+  unpackPhase = ":";
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
-    cp ${quickserve} $out/bin/quickserve
+    makeWrapper ${wrappedPython}/bin/python $out/bin/quickserve \
+      --add-flags -mThreadedServers.PeeredQuickserve
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
