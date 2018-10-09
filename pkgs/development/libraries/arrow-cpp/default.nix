@@ -1,4 +1,13 @@
-{ stdenv, symlinkJoin, fetchurl, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, python, rapidjson, snappy, thrift, zlib, zstd }:
+{ stdenv, symlinkJoin, fetchurl, fetchFromGitHub, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, which, zlib, zstd }:
+
+let
+  parquet-testing = fetchFromGitHub {
+    owner = "apache";
+    repo = "parquet-testing";
+    rev = "46ae2605c2de306f5740587107dcf333a527f2d1";
+    sha256 = "07ps745gas2zcfmg56m3vwl63yyzmalnxwb5dc40vd004cx5hdik";
+  };
+in
 
 stdenv.mkDerivation rec {
   name = "arrow-cpp-${version}";
@@ -28,6 +37,8 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake_modules/FindGLOG.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
     substituteInPlace cmake_modules/FindLz4.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
     substituteInPlace cmake_modules/FindSnappy.cmake --replace CMAKE_STATIC_LIBRARY CMAKE_SHARED_LIBRARY
+
+    patchShebangs build-support/
   '';
 
   BROTLI_HOME = symlinkJoin { name="brotli-wrap"; paths = [ brotli.lib brotli.dev ]; };
@@ -47,6 +58,17 @@ stdenv.mkDerivation rec {
     "-DARROW_PYTHON=ON"
     "-DARROW_PARQUET=ON"
   ];
+
+  doInstallCheck = true;
+  PARQUET_TEST_DATA = if doInstallCheck then "${parquet-testing}/data" else null;
+  installCheckInputs = [ perl which ];
+  installCheckPhase = (stdenv.lib.optionalString stdenv.isDarwin ''
+    for f in release/*-test; do
+      install_name_tool -add_rpath "$out"/lib  "$f"
+    done
+  '') + ''
+    ctest -L unittest -V
+  '';
 
   meta = {
     description = "A  cross-language development platform for in-memory data";
