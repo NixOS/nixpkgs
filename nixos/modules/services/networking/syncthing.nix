@@ -16,6 +16,14 @@ in {
         available on http://127.0.0.1:8384/.
       '';
 
+      guiAddress = mkOption {
+        type = types.string;
+        default = "127.0.0.1:8384";
+        description = ''
+          Address to serve the GUI.
+        '';
+      };
+
       systemService = mkOption {
         type = types.bool;
         default = true;
@@ -132,7 +140,12 @@ in {
           User = cfg.user;
           Group = cfg.group;
           PermissionsStartOnly = true;
-          ExecStart = "${cfg.package}/bin/syncthing -no-browser -home=${cfg.dataDir}";
+          ExecStart = ''
+            ${cfg.package}/bin/syncthing \
+              -no-browser \
+              -gui-address=${cfg.guiAddress} \
+              -home=${cfg.dataDir}
+          '';
         };
       };
 
