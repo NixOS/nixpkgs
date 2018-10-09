@@ -27,7 +27,6 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://cfssl.org/;
     description = "Cloudflare's PKI and TLS toolkit";
-    platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ mbrgm ];
   };
