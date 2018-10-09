@@ -1,53 +1,28 @@
-{ lib, stdenv, hostPlatform, fetchurl }:
+{ lib, stdenv, buildGoPackage, fetchFromGitHub }:
 
-# Building from source does not appear to work, binary distribution only :(
+buildGoPackage rec {
+  name = "teleconsole-${version}";
+  version = "0.4.0";
 
-let
-  inherit (lib.attrsets) mapAttrs;
+  goPackagePath = "github.com/gravitational/teleconsole";
 
-  version = "0.3.1";
+  src = fetchFromGitHub {
+    owner = "gravitational";
+    repo = "teleconsole";
+    rev = "93261ac31763bf6a0a31762c22f4cc6946a7c876";
+    sha256 = "01552422n0bj1iaaw6pvg9l1qr66r69sdsngxbcdjn1xh3mj74sm";
+  };
 
-  dl = platform:
-    "https://github.com/gravitational/teleconsole/releases/download/${version}/teleconsole-v${version}-${platform}.tar.gz";
+  goDeps = ./deps.nix;
 
-  binaries = mapAttrs (platform: sha1: { url = dl platform; inherit sha1; } )
-    { darwin-amd64  = "51af9b9656d200aef97c509db842e11b1c46ee5f";
-      freebsd-amd64 = "189146199854cab9f77fc8940fa2775d4fac274f";
-      linux-amd64   = "cfc5082e900e545b3ab1d5b4048cb9660e544c2f";
-      linux-arm     = "44e0b60e05989254d0c5da638d3f6cb7cf263dba";
-    };
-
-  src = fetchurl ( with hostPlatform;
-    if is64bit && isDarwin  then binaries.darwin-amd64 else
-    if is64bit && isFreeBSD then binaries.freebsd-amd64 else
-    if is64bit && isLinux   then binaries.linux-amd64 else
-    if isArm   && isLinux   then binaries.linux-arm else
-    abort "unsupported platform" );
-in
-
-stdenv.mkDerivation rec {
-  inherit version src;
-
-  name = "teleconsole-v${version}";
-
-  sourceRoot = ".";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp teleconsole $out/bin
-  '';
-
-  preFixup = ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $out/bin/*
-  '';
+  CGO_ENABLED = 1;
+  buildFlags = "-ldflags";
 
   meta = with lib; {
     homepage = "https://www.teleconsole.com/";
     description = "Share your terminal session with people you trust";
     license = licenses.asl20;
-    platforms = with platforms; linux ++ darwin ++ freebsd;
+    platforms = platforms.all;
     maintainers = [ maintainers.kimburgess ];
   };
 }
