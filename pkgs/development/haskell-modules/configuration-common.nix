@@ -1060,11 +1060,11 @@ self: super: {
   # The tool needs a newer hpack version than the one mandated by LTS-12.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
     hpack = self.hpack_0_31_0;
-    yaml = self.yaml_0_10_2_0;
+    yaml = self.yaml_0_11_0_0;
   });
   stack2nix = super.stack2nix.overrideScope (self: super: {
     hpack = self.hpack_0_31_0;
-    yaml = self.yaml_0_10_2_0;
+    yaml = self.yaml_0_11_0_0;
   });
 
   # Break out of "aeson <1.3, temporary <1.3".
