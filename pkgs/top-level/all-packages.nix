@@ -6463,6 +6463,8 @@ with pkgs;
     inherit (darwin) bootstrap_cmds;
   };
 
+  cdb = callPackage ../development/tools/database/cdb { };
+
   chez = callPackage ../development/compilers/chez {
     inherit (darwin) cctools;
   };
