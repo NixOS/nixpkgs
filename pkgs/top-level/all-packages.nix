@@ -21164,12 +21164,11 @@ with pkgs;
   boogie = dotnetPackages.Boogie;
 
   inherit (callPackage ./coq-packages.nix {
-    inherit (ocaml-ng) ocamlPackages_3_12_1
-                       ocamlPackages_4_02
+    inherit (ocaml-ng) ocamlPackages_4_02
                        ocamlPackages_4_05
     ;
   }) mkCoqPackages
-    coq_8_3 coq_8_4 coq_8_5 coq_8_6 coq_8_7 coq_8_8
+    coq_8_4 coq_8_5 coq_8_6 coq_8_7 coq_8_8
     coqPackages_8_5 coqPackages_8_6 coqPackages_8_7 coqPackages_8_8
     coqPackages coq
   ;
@@ -21247,10 +21246,6 @@ with pkgs;
   logisim = callPackage ../applications/science/logic/logisim {};
 
   ltl2ba = callPackage ../applications/science/logic/ltl2ba {};
-
-  inherit (ocaml-ng.ocamlPackages_3_11_2) matita;
-
-  matita_130312 = lowPrio ocamlPackages.matita_130312;
 
   metis-prover = callPackage ../applications/science/logic/metis-prover { };
 
