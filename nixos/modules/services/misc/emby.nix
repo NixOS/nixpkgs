@@ -55,7 +55,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = "true";
-        ExecStart = "${pkgs.emby}/bin/emby";
+        ExecStart = "${pkgs.emby}/bin/emby -programdata ${cfg.dataDir}";
         Restart = "on-failure";
       };
     };
