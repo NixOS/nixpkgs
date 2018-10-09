@@ -13,7 +13,7 @@
 
 let
   basename = "gdb-${version}";
-  version = "8.1.1";
+  version = "8.2";
 in
 
 assert pythonSupport -> python != null;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "0g6hv9xk12aa58w77fydaldqr9a6b0a6bnwsq87jfc6lkcbc7p4p";
+    sha256 = "0fbw6j4z7kmvywwgavn7w3knp860i5i9qnjffc5p52bwkji43963";
   };
 
   patches = [ ./debug-info-from-env.patch ]
