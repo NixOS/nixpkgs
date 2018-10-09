@@ -14,11 +14,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "gpgme-${version}";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "0vxx5xaag3rhp4g2arp5qm77gvz4kj0m3hnpvhkdvqyjfhbi26rd";
+    sha256 = "1n4c1q2ls7sqx1vpr3p5n8vbjkw6kqp8jxqa28p0x9j36wf9bp5l";
   };
 
   outputs = [ "out" "dev" "info" ];
