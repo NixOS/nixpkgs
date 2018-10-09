@@ -2,22 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "pidgin-opensteamworks-${version}";
-  version = "1.6.1";
+  version = "unstable-2018-08-02";
 
   src = fetchFromGitHub {
     owner = "EionRobb";
     repo = "pidgin-opensteamworks";
-    rev = "${version}";
-    sha256 = "6ab27831e454ad3b440e4f06b52e0b3671a4f8417ba4da3ab6f56c56d82cc29b";
+    rev = "b16a636d177f4a8862abdfbdb2c0994712ea0cd3";
+    sha256 = "0qyxfrfzsm43f1gmbg350znwxld1fqr9a9yziqs322bx2vglzgfh";
   };
 
   preConfigure = "cd steam-mobile";
-  postInstall = ''
-    mkdir -p $out/lib/purple-2
-    mkdir -p $out/share/pixmaps/pidgin/protocols/
-    cp libsteam.so $out/lib/purple-2/
-    unzip releases/icons.zip -d $out/share/pixmaps/pidgin/protocols/
-  '';
+  installFlags = [
+    "DESTDIR=$(out)"
+    "PLUGIN_DIR_PURPLE=/lib/purple-2"
+    "DATA_ROOT_DIR_PURPLE=/share"
+  ];
 
   buildInputs = [ pidgin unzip glib json-glib nss nspr libgnome-keyring ];
 
