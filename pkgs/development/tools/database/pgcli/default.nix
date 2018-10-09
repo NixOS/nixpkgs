@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "pgcli-${version}";
-  version = "1.10.3";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "dbcli";
     repo = "pgcli";
     rev = "v${version}";
-    sha256 = "1qcbv2w036l0gc0li3jpa6amxzqmhv8d1q6wv4pfh0wvl17hqv9r";
+    sha256 = "01qcvl0iwabinq3sb4340js8v3sbwkbxi64sg4xy76wj8xr6kgsk";
   };
 
   buildInputs = with pythonPackages; [ pytest mock ];

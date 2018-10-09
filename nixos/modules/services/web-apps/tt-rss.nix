@@ -624,7 +624,11 @@ let
     };
 
     users = optionalAttrs (cfg.user == "tt_rss") {
-      users.tt_rss.group = "tt_rss";
+      users.tt_rss = {
+        description = "tt-rss service user";
+        isSystemUser = true;
+        group = "tt_rss";
+      };
       groups.tt_rss = {};
     };
   };

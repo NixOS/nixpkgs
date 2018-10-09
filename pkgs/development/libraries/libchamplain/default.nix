@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "13chvc2n074i0jw5jlb8i7cysda4yqx58ca6y3mrlrl9g37k2zja";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
 

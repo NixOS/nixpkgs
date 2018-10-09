@@ -14,7 +14,7 @@ python2.pkgs.buildPythonApplication rec {
 
   pythonPath = with python2.pkgs; [
     pygobject2 musicbrainzngs urllib3 chardet
-    pycdio setuptools mutagen
+    pycdio setuptools mutagen CDDB
     requests
   ];
 

@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "blacksphere";
     repo = "blackmagic";
-    rev = "d3a8f27fdbf952194e8fc5ce9b2fc9bcef7c545c";
-    sha256 = "0c3l7cfqag3g7zrfn4mmikkx7076hb1r856ybhhdh0f6zji2j6jx";
+    rev = "29386aee140e5e99a958727358f60980418b4c88";
+    sha256 = "05x19y80mixk6blpnfpfngy5d41jpjvdqgjzkmhv1qc03bhyhc82";
     fetchSubmodules = true;
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, ocaml, findlib, dune, cohttp, lwt3, uri, ppx_sexp_conv }:
+{ stdenv, ocaml, findlib, dune, cohttp, ocaml_lwt, uri, ppx_sexp_conv }:
 
 if !stdenv.lib.versionAtLeast cohttp.version "0.99"
 then cohttp
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ ocaml findlib dune uri ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ cohttp lwt3 ];
+	propagatedBuildInputs = [ cohttp ocaml_lwt ];
 
 	buildPhase = "dune build -p cohttp-lwt";
 }

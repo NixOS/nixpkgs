@@ -129,17 +129,17 @@ in
       message = "Option driSupport32Bit only makes sense on a 64-bit system.";
     };
 
-    system.activationScripts.setup-opengl =
-      ''
-        ln -sfn ${package} /run/opengl-driver
-        ${if pkgs.stdenv.isi686 then ''
-          ln -sfn opengl-driver /run/opengl-driver-32
-        '' else if cfg.driSupport32Bit then ''
-          ln -sfn ${package32} /run/opengl-driver-32
-        '' else ''
-          rm -f /run/opengl-driver-32
-        ''}
-      '';
+    systemd.tmpfiles.rules = [
+      "L+ /run/opengl-driver - - - - ${package}"
+      (
+        if pkgs.stdenv.isi686 then
+          "L+ /run/opengl-driver-32 - - - - opengl-driver"
+        else if cfg.driSupport32Bit then
+          "L+ /run/opengl-driver-32 - - - - ${package32}"
+        else
+          "r /run/opengl-driver-32"
+      )
+    ];
 
     environment.sessionVariables.LD_LIBRARY_PATH =
       [ "/run/opengl-driver/lib" ] ++ optional cfg.driSupport32Bit "/run/opengl-driver-32/lib";

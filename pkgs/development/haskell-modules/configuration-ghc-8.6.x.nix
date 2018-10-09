@@ -45,23 +45,24 @@ self: super: {
   hoopl = self.hoopl_3_10_2_2;
 
   # LTS-12.x versions do not compile.
+  base-orphans = self.base-orphans_0_8;
   contravariant = self.contravariant_1_5;
   control-monad-free = markBrokenVersion "0.6.1" super.control-monad-free;
-  doctest = self.doctest_0_16_0_1;
-  doctest_0_16_0_1 = dontCheck super.doctest_0_16_0_1;
+  free = self.free_5_1;
   Glob = self.Glob_0_9_3;
   haddock-library = markBroken super.haddock-library;
   hslogger = self.hslogger_1_2_12;
-  hspec = self.hspec_2_5_7;
-  hspec-core = self.hspec-core_2_5_7;
-  hspec-core_2_5_7 = super.hspec-core_2_5_7.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
-  hspec-discover = self.hspec-discover_2_5_7;
+  hspec = self.hspec_2_5_8;
+  hspec-core = self.hspec-core_2_5_8;
+  hspec-core_2_5_8 = super.hspec-core_2_5_8.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_6_1; });
+  hspec-discover = self.hspec-discover_2_5_8;
   hspec-meta = self.hspec-meta_2_5_6;
-  hspec-meta_2_5_6 = super.hspec-meta_2_5_6.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_4; });
+  hspec-meta_2_5_6 = super.hspec-meta_2_5_6.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_12_6_1; });
   JuicyPixels = self.JuicyPixels_3_3_1;
-  lens = dontCheck super.lens;    # avoid depending on broken polyparse
+  lens = self.lens_4_17;
   polyparse = markBrokenVersion "1.12" super.polyparse;
   primitive = self.primitive_0_6_4_0;
+  semigroupoids = self.semigroupoids_5_3_1;
   tagged = self.tagged_0_8_6;
   unordered-containers = dontCheck super.unordered-containers;
 

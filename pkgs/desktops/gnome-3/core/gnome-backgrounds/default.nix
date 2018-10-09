@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-backgrounds/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-backgrounds/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1qgim0yhzjgcq172y4vp5hqz4rh1ak38a7pgi6s7dq0wklyrcnxj";
   };
 

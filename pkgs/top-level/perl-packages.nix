@@ -3054,6 +3054,22 @@ let
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
+  CryptEd25519 = buildPerlPackage rec {
+    name = "Crypt-Ed25519-1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
+      sha256 = "1jwh6b8b2ppvzxaljz287zakj4q3ip4zq121i23iwh26wxhlll2q";
+    };
+
+    nativeBuildInputs = [ CanaryStability ];
+
+    meta = {
+      description = "Minimal Ed25519 bindings";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.thoughtpolice ];
+    };
+  };
+
   CryptSSLeay = buildPerlPackage rec {
     name = "Crypt-SSLeay-0.72";
     src = fetchurl {
@@ -9903,10 +9919,10 @@ let
   };
 
   Mojolicious = buildPerlPackage rec {
-    name = "Mojolicious-8.01";
+    name = "Mojolicious-8.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
-      sha256 = "1gwf45s6vblff0ima2awjq3awj4wws4hn7df4d9jmyj9rji04z9c";
+      sha256 = "0m36zlh58bvww15k9ybi6khrrr6ga308y38p49hfq204k7cy02zp";
     };
     meta = {
       homepage = https://mojolicious.org;
