@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "valadoc-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/valadoc/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/valadoc/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "07501k2j9c016bd7rfr6xzaxdplq7j9sd18b5ixbqdbipvn6whnv";
   };
 

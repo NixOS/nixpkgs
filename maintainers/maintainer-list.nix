@@ -1135,6 +1135,11 @@
     github = "dtzWill";
     name = "Will Dietz";
   };
+  dysinger = {
+    email = "tim@dysinger.net";
+    github = "dysinger";
+    name = "Tim Dysinger";
+  };
   dywedir = {
     email = "dywedir@protonmail.ch";
     github = "dywedir";
@@ -2199,6 +2204,11 @@
     github = "krav";
     name = "Kristoffer Thømt Ravneberg";
   };
+  kroell = {
+    email = "nixosmainter@makroell.de";
+    github = "rokk4";
+    name = "Matthias Axel Kröll";
+  };
   kristoff3r = {
     email = "k.soeholm@gmail.com";
     github = "kristoff3r";
@@ -2441,6 +2451,11 @@
     email = "maximilian@mbosch.me";
     github = "ma27";
     name = "Maximilian Bosch";
+  };
+  ma9e = {
+    email = "sean@lfo.team";
+    github = "ma9e";
+    name = "Sean Haugh";
   };
   madjar = {
     email = "georges.dubus@compiletoi.net";
@@ -3042,7 +3057,7 @@
     name = "Oliver Dunkl";
   };
   offline = {
-    email = "jakahudoklin@gmail.com";
+    email = "jaka@x-truder.net";
     github = "offlinehacker";
     name = "Jaka Hudoklin";
   };
@@ -3104,6 +3119,11 @@
     email = "m.scheuren@oyra.eu";
     github = "oyren";
     name = "Moritz Scheuren";
+  };
+  pacien = {
+    email = "b4gx3q.nixpkgs@pacien.net";
+    github = "pacien";
+    name = "Pacien Tran-Girard";
   };
   paholg = {
     email = "paho@paholg.com";
@@ -3313,6 +3333,11 @@
     email = "proglodyte23@gmail.com";
     github = "proglodyte";
     name = "Proglodyte";
+  };
+  prusnak = {
+    email = "stick@gk2.sk";
+    github = "prusnak";
+    name = "Pavol Rusnak";
   };
   pshendry = {
     email = "paul@pshendry.com";
@@ -4312,6 +4337,11 @@
     github = "uri-canva";
     name = "Uri Baghin";
   };
+  uskudnik = {
+    email = "urban.skudnik@gmail.com";
+    github = "uskudnik";
+    name = "Urban Skudnik";
+  };
   utdemir = {
     email = "me@utdemir.com";
     github = "utdemir";
@@ -4647,6 +4677,11 @@
     email = "maggesi@math.unifi.it";
     github = "maggesi";
     name = "Marco Maggesi";
+  };
+  zachcoyle = {
+    email = "zach.coyle@gmail.com";
+    github = "zachcoyle";
+    name = "Zach Coyle";
   };
   zagy = {
     email = "cz@flyingcircus.io";

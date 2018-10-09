@@ -36,6 +36,7 @@
 , "grunt-cli"
 , { "guifi-earth": "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 " }
 , "gulp"
+, "gulp-cli"
 , "hipache"
 , "htmlhint"
 , "html-minifier"
@@ -104,6 +105,7 @@
 , "sinopia"
 , "sloc"
 , "smartdc"
+, "snyk"
 , "socket.io"
 , "stackdriver-statsd-backend"
 , "statsd"

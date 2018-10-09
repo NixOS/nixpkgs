@@ -78,6 +78,8 @@ import ./make-test.nix ({ pkgs, ...} : rec {
 
       # Test whether we have a reboot record in wtmp.
       subtest "reboot-wtmp", sub {
+          $machine->shutdown;
+          $machine->waitForUnit('multi-user.target');
           $machine->succeed("last | grep reboot >&2");
       };
 

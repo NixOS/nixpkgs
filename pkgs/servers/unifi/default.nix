@@ -49,13 +49,13 @@ in rec {
   };
 
   unifiStable = generic {
-    version = "5.8.28";
-    sha256  = "1zyc6n54dwqy9diyqnzlwypgnj3hqcv0lfx47s4rkq3kbm49nwnl";
+    version = "5.8.30";
+    sha256  = "051cx1y51xmhvd3s8zbmknrcjdi46mj4yf1rlnngzr77rj77sqvi";
   };
 
   unifiTesting = generic {
-    version = "5.9.22";
-    suffix  = "-d2a4718971";
-    sha256  = "1xxpvvn0815snag4bmmsdm8zh0cb2qjrhnvlkgn8i478ja1r3n54";
+    version = "5.9.29";
+    suffix  = "-04b5d20997";
+    sha256  = "0djdjh7lwaa5nvhvz2yh6dn07iad5nq4jpab7rc909sljl6wvwvx";
   };
 }

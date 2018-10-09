@@ -953,13 +953,6 @@ self: super: {
   # https://github.com/yesodweb/Shelly.hs/issues/162
   shelly = dontCheck super.shelly;
 
-  # https://github.com/simonmichael/hledger/issues/852
-  hledger-lib = appendPatch super.hledger-lib (pkgs.fetchpatch {
-    url = "https://github.com/simonmichael/hledger/commit/007b9f8caaf699852511634752a7d7c86f6adc67.patch";
-    sha256 = "1lfp29mi1qyrcr9nfjigbyric0xb9n4ann5w6sr0g5sanr4maqs2";
-    stripLen = 1;
-  });
-
   # Copy hledger man pages from data directory into the proper place. This code
   # should be moved into the cabal2nix generator.
   hledger = overrideCabal super.hledger (drv: {
@@ -1081,6 +1074,10 @@ self: super: {
     hpack = self.hpack_0_31_0;
     yaml = self.yaml_0_10_2_0;
   });
+  stack2nix = super.stack2nix.overrideScope (self: super: {
+    hpack = self.hpack_0_31_0;
+    yaml = self.yaml_0_10_2_0;
+  });
 
   # Break out of "aeson <1.3, temporary <1.3".
   stack = doJailbreak super.stack;
@@ -1159,4 +1156,5 @@ self: super: {
     sha256 = "0ljwcha9l52gs5bghxq3gbzxfqmfz3hxxcg9arjsjw8f7kw946xq";
   });
 
+  xmonad-extras = doJailbreak super.xmonad-extras;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

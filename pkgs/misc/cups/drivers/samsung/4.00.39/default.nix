@@ -39,5 +39,6 @@ in stdenv.mkDerivation rec {
     homepage = http://www.samsung.com/;
     license = licenses.unfree;
     platforms = platforms.linux;
+    broken = true;   # libscmssc.so and libmfp.so can't find their library dependencies at run-time
   };
 }

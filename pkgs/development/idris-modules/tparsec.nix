@@ -6,6 +6,8 @@ build-idris-package  {
   name = "tparsec";
   version = "2018-06-26";
 
+  ipkgName = "TParsec";
+
   src = fetchFromGitHub {
     owner = "gallais";
     repo = "idris-tparsec";

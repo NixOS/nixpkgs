@@ -2,12 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "parquet-cpp-${version}";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://github.com/apache/parquet-cpp/archive/apache-${name}.tar.gz";
-    sha256 = "1kn7pjzi5san5f05qbl8l8znqsa3f9cq9bflfr4s2jfwr7k9p2aj";
+    sha256 = "19nwqahc0igr0jfprbf2m86rmzz6zicw4z7b8z832wbsyc904wli";
   };
+
+  patches = [ ./api.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];

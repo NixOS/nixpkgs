@@ -194,6 +194,7 @@ neutaaaaan/iosvkem
 nixprime/cpsm
 NLKNguyen/papercolor-theme
 noc7c9/vim-iced-coffee-script
+nvie/vim-flake8
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
 osyo-manga/vim-textobj-multiblock
@@ -203,6 +204,7 @@ parsonsmatt/intero-neovim
 peterhoeg/vim-qml
 phanviet/vim-monokai-pro
 plasticboy/vim-markdown
+posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 python-mode/python-mode
 Quramy/tsuquyomi

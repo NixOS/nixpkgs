@@ -250,6 +250,7 @@ in rec {
   tests.acme = callTest tests/acme.nix {};
   tests.avahi = callTest tests/avahi.nix {};
   tests.beegfs = callTest tests/beegfs.nix {};
+  tests.upnp = callTest tests/upnp.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.bind = callTest tests/bind.nix {};
   #tests.blivet = callTest tests/blivet.nix {};   # broken since 2017-07024
@@ -362,6 +363,7 @@ in rec {
   tests.netdata = callTest tests/netdata.nix { };
   tests.networking.networkd = callSubTests tests/networking.nix { networkd = true; };
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };
+  tests.nextcloud = callSubTests tests/nextcloud { };
   # TODO: put in networking.nix after the test becomes more complete
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nexus = callTest tests/nexus.nix { };

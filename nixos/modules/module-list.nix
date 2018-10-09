@@ -284,6 +284,7 @@
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
   ./services/hardware/trezord.nix
+  ./services/hardware/triggerhappy.nix
   ./services/hardware/u2f.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
@@ -690,6 +691,7 @@
   ./services/web-apps/codimd.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
+  ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/matomo.nix

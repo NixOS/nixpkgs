@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     patchShebangs install.sh
     sed -i install.sh \
       -e "s|if .*which gnome-shell.*;|if true;|" \
-      -e "s|CURRENT_GS_VERSION=.*$|CURRENT_GS_VERSION=${gnome3.version}|"
+      -e "s|CURRENT_GS_VERSION=.*$|CURRENT_GS_VERSION=${stdenv.lib.versions.majorMinor gnome3.gnome-shell.version}|"
     mkdir -p $out/share/themes
     ./install.sh --dest $out/share/themes
     rm $out/share/themes/*/COPYING

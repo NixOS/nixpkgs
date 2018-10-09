@@ -19,6 +19,9 @@ buildPythonPackage rec {
     pytest
   '';
 
+  # Enable when https://github.com/rupert/pyls-black/pull/6 is merged.
+  doCheck = false;
+
   checkInputs = [ pytest ];
 
   propagatedBuildInputs = [ black toml python-language-server ];

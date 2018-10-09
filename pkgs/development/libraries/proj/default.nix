@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "proj-4.9.3";
+  name = "proj-5.2.0";
 
   src = fetchurl {
-    url = https://download.osgeo.org/proj/proj-4.9.3.tar.gz;
-    sha256 = "1xw5f427xk9p2nbsj04j6m5zyjlyd66sbvl2bkg8hd1kx8pm9139";
+    url = https://download.osgeo.org/proj/proj-5.2.0.tar.gz;
+    sha256 = "0q3ydh2j8qhwlxmnac72pg69rw2znbi5b6k5wama8qmwzycr94gg";
   };
 
   doCheck = stdenv.is64bit;
