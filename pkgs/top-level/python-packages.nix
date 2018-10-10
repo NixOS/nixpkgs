@@ -284,6 +284,8 @@ in {
 
   btchip = callPackage ../development/python-modules/btchip { };
 
+  datamodeldict = callPackage ../development/python-modules/datamodeldict { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
