@@ -2352,6 +2352,8 @@ with pkgs;
 
   carp = callPackage ../development/compilers/carp { };
 
+  cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
+
   emscriptenVersion = "1.37.36";
 
   emscripten = callPackage ../development/compilers/emscripten { };
