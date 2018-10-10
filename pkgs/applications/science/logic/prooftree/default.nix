@@ -1,6 +1,6 @@
-{stdenv, fetchurl, pkgconfig, ocaml, findlib, camlp5, ncurses, lablgtk ? null}:
+{ stdenv, fetchurl, pkgconfig, ncurses, ocamlPackages }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "prooftree-${version}";
   version = "0.13";
 
@@ -10,7 +10,8 @@ stdenv.mkDerivation (rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml findlib camlp5 ncurses lablgtk ];
+  buildInputs = [ ncurses ] ++ (with ocamlPackages; [
+    ocaml findlib camlp5 lablgtk ]);
 
   dontAddPrefix = true;
   configureFlags = [ "--prefix" "$(out)" ];
@@ -39,4 +40,4 @@ stdenv.mkDerivation (rec {
     maintainers = [ maintainers.jwiegley ];
     license = licenses.gpl3;
   };
-})
+}
