@@ -1195,6 +1195,11 @@
     github = "eduarrrd";
     name = "Eduard Bachmakov";
   };
+  edude03 = {
+    email = "michael@melenion.com";
+    github = "edude03";
+    name = "Michael Francis";
+  };
   edwtjo = {
     email = "ed@cflags.cc";
     github = "edwtjo";
