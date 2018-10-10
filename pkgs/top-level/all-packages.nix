@@ -9487,6 +9487,8 @@ with pkgs;
 
   flyway = callPackage ../development/tools/flyway { };
 
+  fmt = callPackage ../development/libraries/fmt/default.nix { };
+
   fplll = callPackage ../development/libraries/fplll {};
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix {};
 
