@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   in ''
     wrapProgram $out/lib/openra/launch-game.sh \
       --prefix PATH : "${binaries}" \
-      --prefix LD_LIBRARY_PATH : "${runtime}"
+      --prefix LD_LIBRARY_PATH : "${runtime}" \
       --set TERM "xterm"
 
     mkdir -p $out/bin
