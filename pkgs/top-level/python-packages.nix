@@ -745,6 +745,8 @@ in {
 
   attrs = callPackage ../development/python-modules/attrs { };
 
+  atsim_potentials = callPackage ../development/python-modules/atsim_potentials { };
+
   audioread = callPackage ../development/python-modules/audioread { };
 
   audiotools = callPackage ../development/python-modules/audiotools { };
