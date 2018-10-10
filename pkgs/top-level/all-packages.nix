@@ -19933,8 +19933,6 @@ with pkgs;
 
   boohu = callPackage ../games/boohu { };
 
-  boohu-ansi = callPackage ../games/boohu { ansiTag = true; };
-
   braincurses = callPackage ../games/braincurses { };
 
   brogue = callPackage ../games/brogue { };
