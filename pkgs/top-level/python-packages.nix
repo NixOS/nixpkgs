@@ -412,6 +412,8 @@ in {
     inherit (pkgs) arrow-cpp cmake pkgconfig;
   };
 
+  pyannotate = callPackage ../development/python-modules/pyannotate { };
+
   pyatspi = callPackage ../development/python-modules/pyatspi { };
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
