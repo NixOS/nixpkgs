@@ -2367,22 +2367,7 @@ in {
 
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
-  facebook-sdk = buildPythonPackage rec {
-    name = "facebook-sdk-0.4.0";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/facebook-sdk/facebook-sdk-0.4.0.tar.gz";
-      sha256 = "5a96c54d06213039dff1fe1fabc51972e394666cd6d83ea70f7c2e67472d9b72";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Client library that supports the Facebook Graph API and the official Facebook JavaScript SDK";
-      homepage = https://github.com/pythonforfacebook/facebook-sdk;
-      license = licenses.asl20 ;
-    };
-  };
+  facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
 
   face_recognition = callPackage ../development/python-modules/face_recognition { };
 
