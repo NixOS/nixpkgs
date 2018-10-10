@@ -330,6 +330,8 @@ in {
 
   fire = callPackage ../development/python-modules/fire { };
 
+  fdint = callPackage ../development/python-modules/fdint { };
+
   fuse = callPackage ../development/python-modules/fuse-python { fuse = pkgs.fuse; };
 
   genanki = callPackage ../development/python-modules/genanki { };
