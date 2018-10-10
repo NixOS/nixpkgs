@@ -328,6 +328,8 @@ in {
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
+  imutils = callPackage ../development/python-modules/imutils { };
+
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   jira = callPackage ../development/python-modules/jira { };
