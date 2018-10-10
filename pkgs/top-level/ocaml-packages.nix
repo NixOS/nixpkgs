@@ -592,10 +592,6 @@ let
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
 
-    ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
-      camlp5 = camlp5_transitional;
-    };
-
     textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
 
     tls = callPackage ../development/ocaml-modules/tls {
