@@ -12391,6 +12391,8 @@ with pkgs;
 
   subtitleeditor = callPackage ../applications/video/subtitleeditor { };
 
+  subtitles-rs = callPackage ../applications/video/subtitles-rs { };
+
   suil = callPackage ../development/libraries/audio/suil { };
 
   suil-qt5 = suil.override {
