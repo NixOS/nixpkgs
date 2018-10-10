@@ -646,6 +646,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  vidstab = callPackage ../development/python-modules/vidstab { };
+
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
   # packages defined here
