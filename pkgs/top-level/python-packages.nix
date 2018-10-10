@@ -216,6 +216,8 @@ in {
 
   azure = callPackage ../development/python-modules/azure { };
 
+  azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
+
   azure-common = callPackage ../development/python-modules/azure-common { };
 
   azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
@@ -223,6 +225,8 @@ in {
   azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
 
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
+
+  azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
@@ -769,38 +773,6 @@ in {
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify {};
 
   noise = callPackage ../development/python-modules/noise {};
-
-
-  azure-nspkg = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "azure-nspkg-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-nspkg/azure-nspkg-1.0.0.zip;
-      sha256 = "1xqvc8by1lbd7j9dxyly03jz3rgbmnsiqnqgydhkf4pa2mn2hgr9";
-    };
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-nspkg = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "azure-mgmt-nspkg-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-nspkg/azure-mgmt-nspkg-1.0.0.zip;
-      sha256 = "1rq92fj3kvnqkk18596dybw0kvhgscvc6cd8hp1dhy3wrkqnhwmq";
-    };
-    propagatedBuildInputs = with self; [ azure-nspkg ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
 
   azure-mgmt-resource = buildPythonPackage rec {
     version = "0.20.1";
