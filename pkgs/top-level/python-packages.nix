@@ -995,6 +995,8 @@ in {
 
   backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
 
+  backports_os = callPackage ../development/python-modules/backports_os { };
+
   backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
   backports_ssl_match_hostname = if !(pythonOlder "3.5") then null else
