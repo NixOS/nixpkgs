@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, camlp5_strict
+{ stdenv, fetchFromGitHub, ocaml, findlib, camlp5
 , ppx_tools_versioned, ppx_deriving, re
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ppx_tools_versioned ];
 
-  propagatedBuildInputs = [ camlp5_strict ppx_deriving re ];
+  propagatedBuildInputs = [ camlp5 ppx_deriving re ];
 
   createFindlibDestdir = true;
 
