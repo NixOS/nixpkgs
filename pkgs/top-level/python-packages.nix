@@ -1937,6 +1937,8 @@ in {
 
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
+  pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
+
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
   pytestflakes = callPackage ../development/python-modules/pytest-flakes { };
