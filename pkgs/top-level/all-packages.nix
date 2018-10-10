@@ -6696,6 +6696,8 @@ with pkgs;
     langFortran = true;
     langCC = false;
     langC = false;
+    langObjC = false;
+    langObjCpp = false;
     profiledCompiler = false;
   });
 
@@ -6704,6 +6706,8 @@ with pkgs;
     langFortran = true;
     langCC = false;
     langC = false;
+    langObjC = false;
+    langObjCpp = false;
     profiledCompiler = false;
   });
 
@@ -6712,6 +6716,8 @@ with pkgs;
     langFortran = true;
     langCC = false;
     langC = false;
+    langObjC = false;
+    langObjCpp = false;
     profiledCompiler = false;
   });
 
@@ -6720,6 +6726,8 @@ with pkgs;
     langFortran = true;
     langCC = false;
     langC = false;
+    langObjC = false;
+    langObjCpp = false;
     profiledCompiler = false;
   });
 
@@ -6728,6 +6736,8 @@ with pkgs;
     langFortran = true;
     langCC = false;
     langC = false;
+    langObjC = false;
+    langObjCpp = false;
     profiledCompiler = false;
   });
 
