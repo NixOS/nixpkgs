@@ -21277,10 +21277,9 @@ with pkgs;
 
   libpoly = callPackage ../applications/science/logic/poly {};
 
-  prooftree = (with ocaml-ng.ocamlPackages_4_01_0;
-    callPackage  ../applications/science/logic/prooftree {
-      camlp5 = camlp5_transitional;
-    });
+  prooftree = ocamlPackages.callPackage  ../applications/science/logic/prooftree {
+    camlp5 = ocamlPackages.camlp5_strict;
+  };
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
