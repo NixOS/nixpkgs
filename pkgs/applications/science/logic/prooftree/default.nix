@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation (rec {
   name = "prooftree-${version}";
-  version = "0.12";
+  version = "0.13";
 
   src = fetchurl {
     url = "https://askra.de/software/prooftree/releases/prooftree-${version}.tar.gz";
-    sha256 = "08yp66j05pdkdpv9xkfqymqy82mir5xbwfh9mkzhh219xkps4b4m";
+    sha256 = "0z1z4wqbqwgppkh2bm89fgy07a0y2m6g4lvcyzs09sm1ysklk2dh";
   };
 
   nativeBuildInputs = [ pkgconfig ];

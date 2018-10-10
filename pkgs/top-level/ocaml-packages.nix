@@ -88,15 +88,10 @@ let
       then callPackage ../development/tools/ocaml/camlp4 { }
       else null;
 
-    camlp5_6_strict = callPackage ../development/tools/ocaml/camlp5 { };
+    camlp5 = callPackage ../development/tools/ocaml/camlp5 { };
 
-    camlp5_6_transitional = callPackage ../development/tools/ocaml/camlp5 {
-      transitional = true;
-    };
-
-    camlp5_strict = camlp5_6_strict;
-
-    camlp5_transitional = camlp5_6_transitional;
+    # Compatibility alias
+    camlp5_strict = camlp5;
 
     camlpdf = callPackage ../development/ocaml-modules/camlpdf { };
 
@@ -592,10 +587,6 @@ let
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
 
-    ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
-      camlp5 = camlp5_transitional;
-    };
-
     textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
 
     tls = callPackage ../development/ocaml-modules/tls {
@@ -1046,10 +1037,7 @@ let
       enableX11 = config.unison.enableX11 or true;
     };
 
-    hol_light = callPackage ../applications/science/logic/hol_light {
-      inherit num;
-      camlp5 = camlp5_strict;
-    };
+    hol_light = callPackage ../applications/science/logic/hol_light { };
 
   };
     in (ocamlPackages.janeStreet // ocamlPackages);
