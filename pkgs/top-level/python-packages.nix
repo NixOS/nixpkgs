@@ -212,6 +212,8 @@ in {
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
+  atomman = callPackage ../development/python-modules/atomman { };
+
   # packages defined elsewhere
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
