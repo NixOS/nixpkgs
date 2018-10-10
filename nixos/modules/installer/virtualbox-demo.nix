@@ -9,6 +9,7 @@ with lib;
       ../profiles/demo.nix
       ../profiles/clone-config.nix
     ];
+  virtualbox.baseImageSize = 10 * 1024; # 10G
 
   # FIXME: UUID detection is currently broken
   boot.loader.grub.fsIdentifier = "provided";
