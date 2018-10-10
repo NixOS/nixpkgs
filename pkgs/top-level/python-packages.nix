@@ -216,6 +216,8 @@ in {
 
   ansiconv = callPackage ../development/python-modules/ansiconv { };
 
+  azure = callPackage ../development/python-modules/azure { };
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
@@ -767,25 +769,6 @@ in {
 
   noise = callPackage ../development/python-modules/noise {};
 
-  azure = buildPythonPackage rec {
-    version = "0.11.0";
-    name = "azure-${version}";
-    disabled = pythonOlder "2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/azure/${name}.zip";
-      sha256 = "89c20b2efaaed3c6f56345d55c32a8d4e7d2a16c032d0acb92f8f490c508fe24";
-    };
-
-    propagatedBuildInputs = with self; [ dateutil futures pyopenssl requests ];
-
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
 
   azure-nspkg = buildPythonPackage rec {
     version = "1.0.0";
