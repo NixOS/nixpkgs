@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, bash, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
+{ stdenv, lib, fetchurl, bash, cpio, autoconf, pkgconfig, file, which, unzip, zip, cups, freetype
 , alsaLib, bootjdk, perl, liberation_ttf, fontconfig, zlib, lndir
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
 , libjpeg, giflib
@@ -10,31 +10,30 @@
 let
 
   /**
-   * The JRE libraries are in directories that depend on the CPU.
+   * The JDK libraries are in directories that depend on the CPU.
    */
   architecture =
     if stdenv.hostPlatform.system == "i686-linux" then
       "i386"
     else "amd64";
 
-  update = "10.0.2";
+  major = "11";
+  update = ".0.1";
   build = "13";
-  repover = "jdk-${update}+${build}";
+  repover = "jdk-${major}${update}+${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
 
-  openjdk10 = stdenv.mkDerivation {
-    name = "openjdk-${update}-b${build}";
+  openjdk = stdenv.mkDerivation {
+    name = "openjdk-${major}${update}-b${build}";
 
     src = fetchurl {
-      url = "http://hg.openjdk.java.net/jdk-updates/jdk10u/archive/${repover}.tar.gz";
-      sha256 = "0y7hyzgvn6z8gyp3h9xvxwj6zda899y6i629jn6yxqzj96q56jpk";
+      url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/${repover}.tar.gz";
+      sha256 = "1ri3fv67rvs9xxhc3ynklbprhxbdsgpwafbw6wqj950xy5crgysm";
     };
-
-    outputs = [ "out" "jre" ];
 
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [
-      cpio file which unzip zip perl bootjdk zlib cups freetype alsaLib
+      autoconf cpio file which unzip zip perl bootjdk zlib cups freetype alsaLib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr lndir fontconfig
     ] ++ lib.optionals (!minimal && enableGnome2) [
@@ -55,12 +54,11 @@ let
 
       configureFlagsArray=(
         "--with-boot-jdk=${bootjdk.home}"
-        "--with-update-version=${update}"
+        "--with-update-version=${major}${update}"
         "--with-build-number=${build}"
         "--with-milestone=fcs"
         "--enable-unlimited-crypto"
         "--disable-debug-symbols"
-        "--disable-freetype-bundling"
         "--with-zlib=system"
         "--with-giflib=system"
         "--with-stdc++lib=dynamic"
@@ -86,7 +84,7 @@ let
     buildFlags = [ "all" ];
 
     installPhase = ''
-      mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
+      mkdir -p $out/lib/openjdk $out/share
 
       cp -av build/*/images/jdk/* $out/lib/openjdk
 
@@ -101,57 +99,29 @@ let
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
 
-      # Copy the JRE to a separate output and setup fallback fonts
-      cp -av build/*/images/jre $jre/lib/openjdk/
-      mkdir $out/lib/openjdk/jre
-      ${lib.optionalString (!minimal) ''
-        mkdir -p $jre/lib/openjdk/jre/lib/fonts/fallback
-        lndir ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
-      ''}
-
       # Remove crap from the installation.
       rm -rf $out/lib/openjdk/demo
       ${lib.optionalString minimal ''
-        for d in $out/lib/openjdk/lib $jre/lib/openjdk/jre/lib; do
-          rm ''${d}/{libjsound,libjsoundalsa,libfontmanager}.so
-        done
+        rm $out/lib/openjdk/lib/{libjsound,libfontmanager}.so
       ''}
 
-      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
-
       # Set PaX markings
-      exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
+      exes=$(file $out/lib/openjdk/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
       echo "to mark: *$exes*"
       for file in $exes; do
         echo "marking *$file*"
         paxmark ${paxflags} "$file"
       done
 
-      # Remove duplicate binaries.
-      for i in $(cd $out/lib/openjdk/bin && echo *); do
-        if [ "$i" = java ]; then continue; fi
-        if cmp -s $out/lib/openjdk/bin/$i $jre/lib/openjdk/jre/bin/$i; then
-          ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
-        fi
-      done
-
       ln -s $out/lib/openjdk/bin $out/bin
-      ln -s $jre/lib/openjdk/jre/bin $jre/bin
-      ln -s $jre/lib/openjdk/jre $out/jre
     '';
 
-    # FIXME: this is unnecessary once the multiple-outputs branch is merged.
     preFixup = ''
-      prefix=$jre stripDirs "$STRIP" "$stripDebugList" "''${stripDebugFlags:--S}"
-      patchELF $jre
-      propagatedBuildInputs+=" $jre"
-
-      # Propagate the setJavaClassPath setup hook from the JRE so that
-      # any package that depends on the JRE has $CLASSPATH set up
-      # properly.
-      mkdir -p $jre/nix-support
+      # Propagate the setJavaClassPath setup hook so that any package
+      # that depends on the JDK has $CLASSPATH set up properly.
+      mkdir -p $out/nix-support
       #TODO or printWords?  cf https://github.com/NixOS/nixpkgs/pull/27427#issuecomment-317293040
-      echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-build-inputs
+      echo -n "${setJavaClassPath}" > $out/nix-support/propagated-build-inputs
 
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
@@ -196,7 +166,7 @@ let
 
     passthru = {
       inherit architecture;
-      home = "${openjdk10}/lib/openjdk";
+      home = "${openjdk}/lib/openjdk";
     };
   };
-in openjdk10
+in openjdk

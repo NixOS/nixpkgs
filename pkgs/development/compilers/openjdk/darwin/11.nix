@@ -6,13 +6,13 @@ let
     sha256 = "0nk7m0lgcbsvldq2wbfni2pzq8h818523z912i7v8hdcij5s48c0";
   };
 
-  jdk = stdenv.mkDerivation {
-    name = "zulu10.3+5-jdk10";
+  jdk = stdenv.mkDerivation rec {
+    name = "zulu11.2.3-jdk11.0.1";
 
     src = fetchurl {
-      url = https://cdn.azul.com/zulu/bin/zulu10.3+5-jdk10.0.2-macosx_x64.zip;
-      sha256 = "05pxfjn8fqw6ddr8m5hzyphwzqgrq8w6b4h3lwc1s7ymh05xmspz";
-      curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-linux/";
+      url = "https://cdn.azul.com/zulu/bin/${name}-macosx_x64.tar.gz";
+      sha256 = "1jxnxmy79inwf3146ygry1mzv3dj6yrzqll16j7dpr91x1p3dpqy";
+      curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/zulu-mac/";
     };
 
     buildInputs = [ unzip freetype ];
@@ -34,8 +34,8 @@ let
     '';
 
     preFixup = ''
-      # Propagate the setJavaClassPath setup hook from the JRE so that
-      # any package that depends on the JRE has $CLASSPATH set up
+      # Propagate the setJavaClassPath setup hook from the JDK so that
+      # any package that depends on the JDK has $CLASSPATH set up
       # properly.
       mkdir -p $out/nix-support
       printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
@@ -49,7 +49,6 @@ let
     '';
 
     passthru = {
-      jre = jdk;
       home = jdk;
     };
 
