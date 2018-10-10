@@ -1909,6 +1909,8 @@ in {
 
   pytest-annotate = callPackage ../development/python-modules/pytest-annotate { };
 
+  pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
+
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
   pytest-benchmark = callPackage ../development/python-modules/pytest-benchmark { };
