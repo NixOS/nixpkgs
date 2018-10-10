@@ -540,6 +540,8 @@ in {
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
+  pyvoro = callPackage ../development/python-modules/pyvoro { };
+
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
