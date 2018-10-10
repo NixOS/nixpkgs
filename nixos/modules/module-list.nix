@@ -689,6 +689,7 @@
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/codimd.nix
   ./services/web-apps/frab.nix
+  ./services/web-apps/guacamole.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
