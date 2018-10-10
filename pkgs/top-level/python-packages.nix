@@ -1338,36 +1338,7 @@ in {
 
   bokeh = callPackage ../development/python-modules/bokeh { };
 
-  boto = buildPythonPackage rec {
-    name = "boto-${version}";
-    version = "2.47.0";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "051gq8z9m2cir03jhc00qs36bnpla7zkqm9xqiqcqvdknmi2ndbq";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} tests/test.py default
-    '';
-
-    buildInputs = [ self.nose self.mock ];
-    propagatedBuildInputs = [ self.requests self.httpretty ];
-
-    meta = {
-      homepage = https://github.com/boto/boto;
-
-      license = "bsd";
-
-      description = "Python interface to Amazon Web Services";
-
-      longDescription = ''
-        The boto module is an integrated interface to current and
-        future infrastructural services offered by Amazon Web
-        Services.  This includes S3, SQS, EC2, among others.
-      '';
-    };
-  };
+  boto = callPackage ../development/python-modules/boto { };
 
   boto3 = callPackage ../development/python-modules/boto3 { };
 
