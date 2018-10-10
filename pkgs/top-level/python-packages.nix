@@ -428,6 +428,8 @@ in {
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
+  progress = callPackage ../development/python-modules/progress { };
+
   pymysql = callPackage ../development/python-modules/pymysql { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
