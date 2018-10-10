@@ -1,8 +1,8 @@
-{stdenv, lib, fetchurl, buildGoPackage, ansiTag ? false}:
+{stdenv, fetchurl, buildGoPackage}:
 
 buildGoPackage rec {
 
-  name = if ansiTag then "boohu-ansi-${version}" else "boohu-${version}";
+  name = "boohu-${version}";
   version = "0.10.0";
 
   goPackagePath = "git.tuxfamily.org/boohu/boohu.git";
@@ -12,15 +12,9 @@ buildGoPackage rec {
     sha256 = "a4d1fc488cfeecbe0a5e9be1836d680951941014f926351692a8dbed9042eba6";
   };
 
-  goDeps = ./deps.nix;
+  buildFlags = "--tags ansi";
 
-  # If ansiTag is true, the "--tags ansi" will be passed
-  buildFlags = if ansiTag then "--tags ansi" else "";
-
-  # If ansiTag is true, binary output file name will be "boohu-ansi".
-  # Otherwise it will be "boohu".
-  postInstall = if ansiTag then "mv $bin/bin/boohu.git $bin/bin/boohu-ansi"
-                else "mv $bin/bin/boohu.git $bin/bin/boohu";
+  postInstall = "mv $bin/bin/boohu.git $bin/bin/boohu";
 
   meta = with stdenv.lib; {
     description = "A new roguelike game";
