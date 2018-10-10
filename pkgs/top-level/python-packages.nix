@@ -2385,23 +2385,7 @@ in {
     };
   };
 
-  Fabric = buildPythonPackage rec {
-    name = "Fabric-${version}";
-    version = "1.13.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Fabric/${name}.tar.gz";
-      sha256 = "0k944dxr41whw7ib6380q9x15wyskx7fqni656icdn8rzshn9bwq";
-    };
-    disabled = isPy3k;
-    doCheck = (!isPyPy);  # https://github.com/fabric/fabric/issues/11891
-    propagatedBuildInputs = with self; [ paramiko pycrypto ];
-    buildInputs = with self; [ fudge_9 nose ];
-    meta = {
-      description = "Pythonic remote execution";
-      homepage    = https://www.fabfile.org/;
-      license     = licenses.bsd2;
-    };
-  };
+  Fabric = callPackage ../development/python-modules/Fabric { };
 
   faulthandler = if ! isPy3k
     then callPackage ../development/python-modules/faulthandler {}
