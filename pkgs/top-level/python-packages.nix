@@ -428,6 +428,8 @@ in {
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
+  numericalunits = callPackage ../development/python-modules/numericalunits { };
+
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
