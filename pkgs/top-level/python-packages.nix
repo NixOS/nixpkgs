@@ -5581,37 +5581,7 @@ in {
     };
   };
 
-  fs = buildPythonPackage rec {
-    name = "fs-0.5.4";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/f/fs/${name}.tar.gz";
-      sha256 = "ba2cca8773435a7c86059d57cb4b8ea30fda40f8610941f7822d1ce3ffd36197";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = [ pkgs.glibcLocales ];
-    propagatedBuildInputs = [ self.six ];
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
-    # Because 2to3 is used the tests in $out need to be run.
-    # Both when using unittest and pytest this resulted in many errors,
-    # some Python byte/str errors, and others specific to resources tested.
-    # Failing tests due to the latter is to be expected with this type of package.
-    # Tests are therefore disabled.
-    doCheck = false;
-
-    meta = {
-      description = "Filesystem abstraction";
-      homepage    = https://pypi.python.org/pypi/fs;
-      license     = licenses.bsd3;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
+  fs = callPackage ../development/python-modules/fs { };
 
   fusepy = buildPythonPackage rec {
     name = "fusepy-2.0.4";
