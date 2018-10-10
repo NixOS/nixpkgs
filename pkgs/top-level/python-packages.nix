@@ -230,6 +230,8 @@ in {
 
   azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
 
+  azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
