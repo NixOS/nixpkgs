@@ -114,6 +114,21 @@ in {
       '';
     };
 
+    poolConfig = mkOption {
+      type = types.lines;
+      default = ''
+        pm = dynamic
+        pm.max_children = 32
+        pm.start_servers = 2
+        pm.min_spare_servers = 2
+        pm.max_spare_servers = 4
+        pm.max_requests = 500
+      '';
+      description = ''
+        Options for nextcloud's PHP pool. See the documentation on <literal>php-fpm.conf</literal> for details on configuration directives.
+      '';
+    };
+
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
@@ -339,11 +354,7 @@ in {
             listen.group = nginx
             user = nextcloud
             group = nginx
-            pm = dynamic
-            pm.max_children = 32
-            pm.start_servers = 2
-            pm.min_spare_servers = 2
-            pm.max_spare_servers = 4
+            ${cfg.poolConfig}
             env[NEXTCLOUD_CONFIG_DIR] = ${cfg.home}/config
             env[PATH] = /run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin
             ${phpAdminValues}
