@@ -63,7 +63,7 @@ let
         $extraOptions
         END
       '' + optionalString cfg.checkConfig (
-            if stdenv.hostPlatform != stdenv.buildPlatform ''
+            if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then ''
               echo "Ignore nix.checkConfig when cross-compiling"
             '' else ''
               echo "Checking that Nix can read nix.conf..."
