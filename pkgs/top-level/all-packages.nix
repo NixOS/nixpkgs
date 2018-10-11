@@ -5083,6 +5083,8 @@ with pkgs;
 
   rlwrap = callPackage ../tools/misc/rlwrap { };
 
+  roccat-tools = callPackage ../applications/misc/roccat-tools { };
+
   rockbox_utility = libsForQt5.callPackage ../tools/misc/rockbox-utility { };
 
   rosegarden = libsForQt5.callPackage ../applications/audio/rosegarden { };
