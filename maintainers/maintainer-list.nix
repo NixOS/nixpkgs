@@ -520,6 +520,11 @@
     github = "bgamari";
     name = "Ben Gamari";
   };
+  bhall = {
+    email = "brendan.j.hall@bath.edu";
+    github = "brendan-hall";
+    name = "Brendan Hall";
+  };
   bhipple = {
     email = "bhipple@protonmail.com";
     github = "bhipple";
