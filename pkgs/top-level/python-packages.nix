@@ -302,6 +302,8 @@ in {
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
+  filterpy = callPackage ../development/python-modules/filterpy { };
+
   fire = callPackage ../development/python-modules/fire { };
 
   fuse = callPackage ../development/python-modules/fuse-python { fuse = pkgs.fuse; };
