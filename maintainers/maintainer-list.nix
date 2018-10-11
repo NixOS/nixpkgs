@@ -3130,6 +3130,11 @@
     github = "pacien";
     name = "Pacien Tran-Girard";
   };
+  paddygord = {
+    email = "pgpatrickgordon@gmail.com";
+    github = "paddygord";
+    name = "Patrick Gordon";
+  };
   paholg = {
     email = "paho@paholg.com";
     github = "paholg";
