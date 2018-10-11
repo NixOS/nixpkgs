@@ -17,13 +17,13 @@ import ./make-test.nix ({ pkgs, lib, ... }:
       services.redmine.enable = true;
       services.redmine.database.socket = "/run/mysqld/mysqld.sock";
       services.redmine.plugins = {
-        redmine_env_auth = builtins.fetchurl {
+        redmine_env_auth = pkgs.fetchurl {
           url = https://github.com/Intera/redmine_env_auth/archive/0.6.zip;
           sha256 = "0yyr1yjd8gvvh832wdc8m3xfnhhxzk2pk3gm2psg5w9jdvd6skak";
         };
       };
       services.redmine.themes = {
-        dkuk-redmine_alex_skin = builtins.fetchurl {
+        dkuk-redmine_alex_skin = pkgs.fetchurl {
           url = https://bitbucket.org/dkuk/redmine_alex_skin/get/1842ef675ef3.zip;
           sha256 = "0hrin9lzyi50k4w2bd2b30vrf1i4fi1c0gyas5801wn8i7kpm9yl";
         };
