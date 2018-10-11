@@ -11709,6 +11709,8 @@ in {
     inherit (pkgs) gfortran glibcLocales;
   };
 
+  scikit-bio = callPackage ../development/python-modules/scikit-bio { };
+
   scp = callPackage ../development/python-modules/scp {};
 
   scripttest = buildPythonPackage rec {
