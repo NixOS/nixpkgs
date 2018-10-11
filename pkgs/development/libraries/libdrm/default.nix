@@ -22,13 +22,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-#  preConfigure = stdenv.lib.optionalString stdenv.isDarwin
-#    "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
-#
   mesonFlags = [ "-Dinstall-test-programs=true" ]
     ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
       [ "-Dtegra=true" "-Detnaviv=true" ]
-    #++ stdenv.lib.optional stdenv.isDarwin "-C"
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-Dintel=false"
     ;
 
