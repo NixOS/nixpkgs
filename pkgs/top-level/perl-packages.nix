@@ -8854,6 +8854,10 @@ let
       sha256 = "dda2578d7b32152c4afce834761a61d117de286c705a9f7972c7ac6032ca5953";
     };
     propagatedBuildInputs = [ FileListing HTMLParser HTTPCookies HTTPDaemon HTTPNegotiate NetHTTP TryTiny WWWRobotRules ];
+    # support cross-compilation by avoiding using `has_module` which does not work in miniperl (it requires B native module)
+    postPatch = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      substituteInPlace Makefile.PL --replace 'if has_module' 'if 0; #'
+    '';
     meta = with stdenv.lib; {
       description = "The World-Wide Web library for Perl";
       license = with licenses; [ artistic1 gpl1Plus ];
