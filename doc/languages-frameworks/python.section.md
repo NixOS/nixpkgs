@@ -559,7 +559,7 @@ buildPythonPackage rec {
     sha256 = "cf8436dc59d8695346fcd3ab296de46425ecab00d64096cebe79fb51ecb2eb93";
   };
 
-  preCheck = ''
+  postPatch = ''
     # don't test bash builtins
     rm testing/test_argcomplete.py
   '';
@@ -655,7 +655,37 @@ the packages with the version of the interpreter. Because this is irrelevant for
 applications, the prefix is omitted.
 
 When packaging a python application with `buildPythonApplication`, it should be
-invoked with `callPackage` and passed `python` or `pythonPackages`.
+called with `callPackage` and passed `python` or `pythonPackages` (possibly
+specifying an interpreter version), like this:
+
+```nix
+{ lib, python3Packages }:
+
+python3Packages.buildPythonApplication rec {
+  pname = "luigi";
+  version = "2.7.9";
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
+  };
+
+  propagatedBuildInputs = with python3Packages; [ tornado_4 pythondaemon ];
+
+  meta = with lib; {
+    ...
+  };
+}
+```
+
+This is then added to `all-packages.nix` just as any other application would be.
+
+```nix
+luigi = callPackage ../applications/networking/cluster/luigi { };
+```
+
+Since the package is an application, a consumer doesn't need to care about
+python versions or modules, which is why they don't go in `pythonPackages`.
 
 #### `toPythonApplication` function
 
