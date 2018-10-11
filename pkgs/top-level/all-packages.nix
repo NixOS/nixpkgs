@@ -16667,6 +16667,16 @@ with pkgs;
                                             Kerberos AVFoundation MediaToolbox
                                             CoreLocation Foundation AddressBook;
       inherit (darwin) libobjc;
+
+      # See https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Key_Log_Format:
+      # > Note: starting with NSS 3.24 (used by Firefox 48 and 49 only), the
+      # > SSLKEYLOGFILE approach is disabled by default for optimized builds using
+      # > the Makefile (those using gyp via build.sh are not affected).
+      # > Distributors can re-enable it at compile time though (using the
+      # > NSS_ALLOW_SSLKEYLOGFILE=1 make variable) which is done for the official
+      # > Firefox binaries. (See bug 1188657.) Notably, Debian does not have this
+      # > option enabled, see Debian bug 842292.
+      nss = nss.override { allowSSLKeylogFile = true; };
     };
   });
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames }:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite, fixDarwinDylibNames, allowSSLKeylogFile ? false }:
 
 let
   nssPEM = fetchurl {
@@ -51,7 +51,8 @@ in stdenv.mkDerivation rec {
     "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
   ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1"
-    ++ stdenv.lib.optional stdenv.isDarwin "CCC=clang++";
+    ++ stdenv.lib.optional stdenv.isDarwin "CCC=clang++"
+    ++ stdenv.lib.optional allowSSLKeylogFile "NSS_ALLOW_SSLKEYLOGFILE=1";
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
