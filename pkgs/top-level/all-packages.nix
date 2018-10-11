@@ -4968,7 +4968,7 @@ with pkgs;
 
   redir = callPackage ../tools/networking/redir { };
 
-  redmine = callPackage ../applications/version-management/redmine { };
+  redmine = callPackage ../applications/version-management/redmine { ruby = pkgs.ruby_2_4; };
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
