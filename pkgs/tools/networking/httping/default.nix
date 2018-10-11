@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, ncurses, openssl
+{ stdenv, fetchurl, gettext, libintl, ncurses, openssl
 , fftw ? null }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1y7sbgkhgadmd93x1zafqc4yp26ssiv16ni5bbi9vmvvdl55m29y";
   };
 
-  buildInputs = [ fftw ncurses openssl ];
+  buildInputs = [ fftw libintl ncurses openssl ];
   nativeBuildInputs = [ gettext ];
 
   makeFlags = [
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.agpl3;
     maintainers = with maintainers; [ rickynils ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
