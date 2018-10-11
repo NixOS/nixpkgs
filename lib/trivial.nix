@@ -98,6 +98,9 @@ rec {
   # The current nixpkgs version number as string.
   release = lib.strings.fileContents ../.version;
 
+  # Note: the first letter is bumped on every release.  It's an animal.
+  codeName = lib.strings.fileContents ../.codeName;
+
   # The current nixpkgs version suffix as string.
   versionSuffix =
     let suffixFile = ../.version-suffix;
