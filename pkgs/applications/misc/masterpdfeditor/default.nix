@@ -17,8 +17,9 @@ in stdenv.mkDerivation {
 
   dontStrip = true;
 
+  # Please remove this when #44047 is fixed
   postInstall = ''
-    wrapProgram $out/bin/masterpdfeditor5 --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
+    wrapProgram $out/bin/masterpdfeditor5 --prefix QT_PLUGIN_PATH : ${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
   '';
 
   installPhase = ''
