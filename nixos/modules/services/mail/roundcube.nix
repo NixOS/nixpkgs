@@ -9,65 +9,98 @@ in
   options.services.roundcube = {
     enable = mkEnableOption "Roundcube";
 
-    listenAddress = mkOption {
-      type = types.str;
-      default = "[::]";
-      description = "Listening address. IPv6 addresses must be enclosed in square brackets";
+    nginx.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable nginx virtual host management.
+        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+      '';
     };
 
-    listenPort = mkOption {
-      type = types.int;
-      default = 80;
-      description = "Listening port";
-    };
-    
-    subDomain = mkOption {
+    hostName = mkOption {
       type = types.str;
       example = "webmail";
-      description = "Sub-domain to use which is the name of the nginx vhost";
+      description = "Host name to use which for the nginx vhost";
     };
-    
-    extraConfig = mkOption {
-      type = types.str;
-      default = ''
-        <?php
 
-        $config = array();
-        $config['db_dsnw'] = 'pgsql://roundcube:pass@localhost/roundcubemail';
-        $config['db_prefix'] = 'rc';
-        $config['default_host'] = 'tls://%h';
-        $config['smtp_server'] = 'tls://%h';
-        $config['smtp_user'] = '%u';
-        $config['smtp_pass'] = '%p';
+    database = {
+      username = mkOption {
+        type = types.str;
+        default = "roundcube";
+        description = "Username for the postgresql connection";
+      };
+      host = mkOption {
+        type = types.str;
+        default = "localhost";
+        description = "Host of the postgresql server";
+      };
+      password = mkOption {
+        type = types.str;
+        description = "Password for the postgresql connection";
+      };
+      dbname = mkOption {
+        type = types.str;
+        default = "roundcube";
+        description = "Name of the postgresql database";
+      };
+    };
 
-        $config['max_message_size'] = '25M';
+    plugins = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        List of roundcube plugins to enable.
       '';
-      description = "Configuration for roundcube webmail instance";
+    };
+
+    extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = "Extra configuration for roundcube webmail instance";
     };
   };
 
   config = mkIf cfg.enable {
-    environment.etc."roundcube/config.inc.php".text = cfg.extraConfig;
+    environment.etc."roundcube/config.inc.php".text = ''
+      <?php
 
-    services.nginx.virtualHosts = {
-      "${cfg.subDomain}" = {
-        listen = [ { addr = cfg.listenAddress; port = cfg.listenPort; } ];
-        locations."/" = {
-          root = pkgs.roundcube;
-          index = "index.php";
-          extraConfig = ''
-            location ~* \.php$ {
-              fastcgi_split_path_info ^(.+\.php)(/.+)$;
-              fastcgi_pass unix:/run/phpfpm/roundcube;
-              include ${pkgs.nginx}/conf/fastcgi_params;
-              include ${pkgs.nginx}/conf/fastcgi.conf;
-            }
-          '';
+      $config = array();
+      $config['db_dsnw'] = 'pgsql://${cfg.database.username}:${cfg.database.password}@${cfg.database.host}/${cfg.database.dbname}';
+      $config['log_driver'] = 'syslog';
+      $config['max_message_size'] = '25M';
+      $config['plugins'] = [${concatMapStringsSep "," (p: "'${p}'") cfg.plugins}];
+      ${cfg.extraConfig}
+    '';
+
+    services.nginx = mkIf cfg.nginx.enable {
+      enable = true;
+      virtualHosts = {
+        ${cfg.hostName} = {
+          forceSSL = mkDefault true;
+          enableACME = mkDefault true;
+          locations."/" = {
+            root = pkgs.roundcube;
+            index = "index.php";
+            extraConfig = ''
+              location ~* \.php$ {
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass unix:/run/phpfpm/roundcube;
+                include ${pkgs.nginx}/conf/fastcgi_params;
+                include ${pkgs.nginx}/conf/fastcgi.conf;
+              }
+            '';
+          };
         };
       };
     };
 
-    services.phpfpm.poolConfigs.${cfg.subDomain} = ''
+    services.postgresql = mkIf (cfg.database.host == "localhost") {
+      enable = true;
+    };
+
+    services.phpfpm.poolConfigs.${cfg.hostName} = ''
       listen = /run/phpfpm/roundcube
       listen.owner = nginx
       listen.group = nginx
@@ -84,6 +117,30 @@ in
       php_admin_value[post_max_size] = 25M
       php_admin_value[upload_max_filesize] = 25M
       catch_workers_output = yes
-   '';
+    '';
+    systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
+
+    systemd.services.roundcube-setup = let
+      pgSuperUser = config.services.postgresql.superUser;
+    in {
+      requires = [ "postgresql.service" ];
+      after = [ "postgresql.service" ];
+      wantedBy = [ "multi-user.target" ];
+      path = [ config.services.postgresql.package ];
+      script = ''
+        mkdir -p /var/lib/roundcube
+        if [ ! -f /var/lib/roundcube/db-created ]; then
+          if [ "${cfg.database.host}" = "localhost" ]; then
+            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "create role ${cfg.database.username} with login password '${cfg.database.password}'";
+            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "create database ${cfg.database.dbname} with owner ${cfg.database.username}";
+          fi
+          PGPASSWORD=${cfg.database.password} ${pkgs.postgresql}/bin/psql -U ${cfg.database.username} \
+            -f ${pkgs.roundcube}/SQL/postgres.initial.sql \
+            -h ${cfg.database.host} ${cfg.database.dbname}
+          touch /var/lib/roundcube/db-created
+        fi
+      '';
+      serviceConfig.Type = "oneshot";
+    };
   };
 }
