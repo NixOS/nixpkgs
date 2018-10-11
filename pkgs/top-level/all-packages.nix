@@ -8558,6 +8558,8 @@ with pkgs;
 
   kythe = callPackage ../development/tools/kythe { };
 
+  lazygit = callPackage ../development/tools/lazygit { };
+
   Literate = callPackage ../development/tools/literate-programming/Literate {};
 
   lcov = callPackage ../development/tools/analysis/lcov { };
