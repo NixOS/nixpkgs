@@ -17,7 +17,7 @@ let
             return 0
         else
             local uuid=$(echo -n $target | sed -e 's,UUID=\(.*\),\1,g')
-            local dev=$(blkid --uuid $uuid)
+            blkid --uuid $uuid >/dev/null
             return $?
         fi
     }
