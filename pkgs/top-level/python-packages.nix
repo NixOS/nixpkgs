@@ -364,6 +364,8 @@ in {
 
   histbook = callPackage ../development/python-modules/histbook { };
 
+  hdmedians = callPackage ../development/python-modules/hdmedians { };
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
@@ -561,7 +563,7 @@ in {
     slurm = pkgs.slurm;
   };
 
-  pystache = callPackage ../development/python-modules/pystache { }; 
+  pystache = callPackage ../development/python-modules/pystache { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
