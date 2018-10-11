@@ -6212,7 +6212,9 @@ with pkgs;
     libxml2 = libxml2Python;
   };
 
-  xsecurelock = callPackage ../tools/X11/xsecurelock { };
+  xsecurelock = callPackage ../tools/X11/xsecurelock {
+    xset = xorg.xset;
+  };
 
   xsel = callPackage ../tools/misc/xsel { };
 
