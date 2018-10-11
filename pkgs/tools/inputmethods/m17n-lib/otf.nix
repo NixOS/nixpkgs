@@ -1,4 +1,5 @@
 { stdenv, fetchurl, libXaw, freetype }:
+
 stdenv.mkDerivation rec {
   name = "libotf-0.9.16";
 
@@ -7,7 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0sq6g3xaxw388akws6qrllp3kp2sxgk2dv4j79k6mm52rnihrnv8";
   };
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = [ libXaw freetype ];
+
+  postInstall =
+    ''
+      mkdir -p $dev/bin
+      mv $out/bin/libotf-config $dev/bin/
+    '';
 
   meta = {
     homepage = http://www.nongnu.org/m17n/;
