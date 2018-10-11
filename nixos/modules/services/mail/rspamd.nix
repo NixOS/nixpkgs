@@ -159,7 +159,7 @@ in
 
     services.rspamd = {
 
-      enable = mkEnableOption "Whether to run the rspamd daemon.";
+      enable = mkEnableOption "rspamd, the Rapid spam filtering system";
 
       debug = mkOption {
         type = types.bool;
