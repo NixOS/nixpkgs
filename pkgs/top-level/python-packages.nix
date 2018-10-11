@@ -264,6 +264,8 @@ in {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
+  cachecontrol = callPackage ../development/python-modules/cachecontrol { };
+
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
   clustershell = callPackage ../development/python-modules/clustershell { };
