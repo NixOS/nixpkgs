@@ -110,10 +110,15 @@ in
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = let
+        # Check whether the file is syntactically valid
+        checkedRulesetFile = pkgs.runCommand "nftables-rules-checked"
+          { src = cfg.rulesetFile; }
+          ''${pkgs.nftables}/bin/nft -c -f "$src" && cp $src $out'';
+
         rulesScript = pkgs.writeScript "nftables-rules" ''
           #! ${pkgs.nftables}/bin/nft -f
           flush ruleset
-          include "${cfg.rulesetFile}"
+          include "${checkedRulesetFile}"
         '';
         checkScript = pkgs.writeScript "nftables-check" ''
           #! ${pkgs.runtimeShell} -e
