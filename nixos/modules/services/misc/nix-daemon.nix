@@ -62,11 +62,15 @@ let
         ''}
         $extraOptions
         END
-      '' + optionalString cfg.checkConfig ''
-        echo "Checking that Nix can read nix.conf..."
-        ln -s $out ./nix.conf
-        NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
-      '');
+      '' + optionalString cfg.checkConfig (
+            if stdenv.hostPlatform != stdenv.buildPlatform ''
+              echo "Ignore nix.checkConfig when cross-compiling"
+            '' else ''
+              echo "Checking that Nix can read nix.conf..."
+              ln -s $out ./nix.conf
+              NIX_CONF_DIR=$PWD ${cfg.package}/bin/nix show-config >/dev/null
+            '')
+      );
 
 in
 
