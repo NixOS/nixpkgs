@@ -1,6 +1,6 @@
-{ stdenv, buildPerlPackage, fetchurl, perlPackages, iproute }:
+{ stdenv, fetchurl, perlPackages, iproute }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "ddclient-${version}";
   version = "3.8.3";
 

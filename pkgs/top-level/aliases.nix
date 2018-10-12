@@ -54,6 +54,7 @@ mapAliases ({
   buildbot-pkg = pythonPackages.buildbot-pkg; # added 2018-10-11
   buildbot-ui = pythonPackages.buildbot-ui; # added 2018-10-11
   buildbot-worker = pythonPackages.buildbot-worker; # added 2018-10-11
+  buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
