@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   postInstall = optionalString (stdenv.hostPlatform != stdenv.buildPlatform && !minimal) ''
     rm $out/share/man/man1/*
-    cp ${if minimal then buildPackages.coreutils else buildPackages.coreutils-full}/share/man/man1/* $out/share/man/man1
+    cp ${buildPackages.coreutils-full}/share/man/man1/* $out/share/man/man1
   ''
   # du: 8.7 M locale + 0.4 M man pages
   + optionalString minimal ''
