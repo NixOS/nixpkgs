@@ -108,13 +108,14 @@ in
     };
 
     environment.shellAliases = mkOption {
-      example = { ll = "ls -l"; };
+      example = { l = null; ll = "ls -l"; };
       description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
+        Aliases mapped to <code>null</code> are ignored.
       '';
-      type = with types; attrsOf (either str path);
+      type = with types; attrsOf (nullOr (either str path));
     };
 
     environment.binsh = mkOption {

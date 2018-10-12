@@ -9,7 +9,8 @@ let
   cfg = config.programs.fish;
 
   fishAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias ${k} ${escapeShellArg v}") cfg.shellAliases
+    mapAttrsFlatten (k: v: "alias ${k} ${escapeShellArg v}")
+      (filterAttrs (k: v: !isNull v) cfg.shellAliases)
   );
 
 in
@@ -58,7 +59,7 @@ in
           Set of aliases for fish shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
         '';
-        type = with types; attrsOf (either str path);
+        type = with types; attrsOf (nullOr (either str path));
       };
 
       shellInit = mkOption {
