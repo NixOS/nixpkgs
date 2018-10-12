@@ -738,7 +738,8 @@ in {
   # argparse is part of stdlib in 2.7 and 3.2+
   argparse = null;
 
-  astroid = callPackage ../development/python-modules/astroid { };
+  astroid = if isPy3k then callPackage ../development/python-modules/astroid { }
+            else callPackage ../development/python-modules/astroid/1.6.nix { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
 
@@ -1419,6 +1420,13 @@ in {
   # });
 
   bugzilla = callPackage ../development/python-modules/bugzilla { };
+
+  buildbot = callPackage ../development/python-modules/buildbot { };
+  buildbot-plugins = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/buildbot/plugins.nix { });
+  buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
+  buildbot-full = self.buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view wsgi-dashboards ]);
+  buildbot-worker = callPackage ../development/python-modules/buildbot/worker.nix { };
+  buildbot-pkg = callPackage ../development/python-modules/buildbot/pkg.nix { };
 
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
@@ -10226,7 +10234,8 @@ in {
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
-  pylint = callPackage ../development/python-modules/pylint { };
+  pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
+           else callPackage ../development/python-modules/pylint/1.9.nix { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
@@ -12977,26 +12986,7 @@ in {
     };
   });
 
-  sphinx-jinja = buildPythonPackage (rec {
-    name = "${pname}-${version}";
-    pname = "sphinx-jinja";
-    version = "0.2.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
-      sha256 = "1zsnhc573rvaww9qqyzs4f5h4hhvxklvppv14450vi5dk8rij81z";
-    };
-    buildInputs = with self; [ sphinx-testing pytest pbr];
-    propagatedBuildInputs = with self; [ sphinx blockdiag ];
-    checkPhase = ''
-      py.test -k "not test_build_epub"
-    '';
-    disabled = isPy3k;
-    meta = {
-      description = "includes jinja templates in a documentation";
-      maintainers = with maintainers; [ nand0p ];
-      license = licenses.mit;
-    };
-  });
+  sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx_pypi_upload = buildPythonPackage (rec {
     name = "Sphinx-PyPI-upload-0.2.1";
@@ -13329,24 +13319,7 @@ in {
     };
   };
 
-  tempita = buildPythonPackage rec {
-    version = "0.5.2";
-    name = "tempita-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Tempita/Tempita-${version}.tar.gz";
-      sha256 = "cacecf0baa674d356641f1d406b8bff1d756d739c46b869a54de515d08e6fc9c";
-    };
-
-    disabled = isPy3k;
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      homepage = http://pythonpaste.org/tempita/;
-      description = "A very small text templating language";
-    };
-  };
+  tempita = callPackage ../development/python-modules/tempita { };
 
   terminado = callPackage ../development/python-modules/terminado { };
 
