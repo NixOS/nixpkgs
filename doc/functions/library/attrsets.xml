@@ -1563,4 +1563,112 @@ lib.attrsets.zipAttrs
      ]]></programlisting>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.recursiveUpdateUntil">
+  <title><function>lib.attrsets.recursiveUpdateUntil</function></title>
+
+  <subtitle><literal>recursiveUpdateUntil :: ( [ String ] -> AttrSet -> AttrSet -> Bool ) -> AttrSet -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.recursiveUpdateUntil" />
+
+  <para>
+   Does the same as the update operator <literal>//</literal> except that
+   attributes are merged until the given predicate is verified. The predicate
+   should accept 3 arguments which are the path to reach the attribute, a part
+   of the first attribute set and a part of the second attribute set. When the
+   predicate is verified, the value of the first attribute set is replaced by
+   the value of the second attribute set.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pred</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>[ String ] -> AttrSet -> AttrSet -> Bool</literal>
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>path</varname>
+       </term>
+       <listitem>
+        <para>
+         The path to the values in the left and right hand sides.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>l</varname>
+       </term>
+       <listitem>
+        <para>
+         The left hand side value.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>r</varname>
+       </term>
+       <listitem>
+        <para>
+         The right hand side value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>lhs</varname>
+    </term>
+    <listitem>
+     <para>
+      The left hand attribute set of the merge.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>rhs</varname>
+    </term>
+    <listitem>
+     <para>
+      The right hand attribute set of the merge.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.recursiveUpdateUntil-example">
+   <title>Recursively merging two attribute sets</title>
+<programlisting><![CDATA[
+lib.attrsets.recursiveUpdateUntil (path: l: r: path == ["foo"])
+  {
+    # first attribute set
+    foo.bar = 1;
+    foo.baz = 2;
+    bar = 3;
+  }
+  {
+    #second attribute set
+    foo.bar = 1;
+    foo.quz = 2;
+    baz = 4;
+  }
+=> {
+  foo.bar = 1; # 'foo.*' from the second set
+  foo.quz = 2; #
+  bar = 3;     # 'bar' from the first set
+  baz = 4;     # 'baz' from the second set
+}
+     ]]></programlisting>
+  </example>
+ </section>
 </section>
