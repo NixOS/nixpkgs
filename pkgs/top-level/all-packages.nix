@@ -10279,6 +10279,8 @@ with pkgs;
     inherit (xorg) libX11 libXext;
   };
 
+  libcacard = callPackage ../development/libraries/libcacard { };
+
   libcanberra = callPackage ../development/libraries/libcanberra {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
