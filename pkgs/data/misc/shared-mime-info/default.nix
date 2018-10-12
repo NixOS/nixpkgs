@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig gettext intltool perl perlXMLParser libxml2 glib
+    pkgconfig gettext intltool perl perlXMLParser
   ];
+  buildInputs = [ libxml2 glib ];
 
   meta = with stdenv.lib; {
     inherit version;
