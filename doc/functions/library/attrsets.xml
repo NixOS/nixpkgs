@@ -1353,4 +1353,92 @@ lib.attrsets.optionalAttrs false { my = "set"; }
      ]]></programlisting>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.zipAttrsWithNames">
+  <title><function>lib.attrsets.zipAttrsWithNames</function></title>
+
+  <subtitle><literal>zipAttrsWithNames :: [ String ] -> (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrsWithNames" />
+
+  <para>
+   Merge sets of attributes and use the function <varname>f</varname> to merge
+   attribute values.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>names</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of attribute names to zip.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>(String -> [ Any ] -> Any</literal>
+     </para>
+     <para>
+      Accepts an attribute name, all the values, and returns a combined value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The name of the attribute each value came from.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>vs</varname>
+       </term>
+       <listitem>
+        <para>
+         A list of values collected from the list of attribute sets.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>sets</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of attribute sets to zip together.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.zipAttrsWithNames-example">
+   <title>Summing a list of attribute sets of numbers</title>
+<programlisting><![CDATA[
+lib.attrsets.zipAttrsWithNames
+  [ "a" "b" ]
+  (name: vals: "${name} ${toString (builtins.foldl' (a: b: a + b) 0 vals)}")
+  [
+    { a = 1; b = 1; c = 1; }
+    { a = 10; }
+    { b = 100; }
+    { c = 1000; }
+  ]
+=> { a = "a 11"; b = "b 101"; }
+     ]]></programlisting>
+  </example>
+ </section>
 </section>
