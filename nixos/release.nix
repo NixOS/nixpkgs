@@ -392,6 +392,7 @@ in rec {
   tests.rabbitmq = callTest tests/rabbitmq.nix {};
   tests.radicale = callTest tests/radicale.nix {};
   tests.rspamd = callSubTests tests/rspamd.nix {};
+  tests.rsyslogd = callSubTests tests/rsyslogd.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
   tests.rxe = callTest tests/rxe.nix {};
   tests.samba = callTest tests/samba.nix {};
