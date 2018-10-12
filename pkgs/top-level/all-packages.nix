@@ -7872,13 +7872,13 @@ with pkgs;
 
   avrgcclibc = throw "avrgcclibs are now separate packages, install avrbinutils, avrgcc and avrlibc";
 
-  avrbinutils      = callPackage ../development/misc/avr/binutils {};
+  avrbinutils = callPackage ../development/misc/avr/binutils {};
 
   avrgcc-unwrapped = callPackage ../development/misc/avr/gcc {};
 
-  avrgcc           = callPackage ../development/misc/avr/gcc/wrapper.nix {};
+  avrgcc = callPackage ../development/misc/avr/gcc/wrapper.nix {};
 
-  avrlibc          = callPackage ../development/misc/avr/libc {};
+  avrlibc = callPackage ../development/misc/avr/libc {};
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
