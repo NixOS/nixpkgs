@@ -4,6 +4,7 @@ let
   packages = self: with self; {
 
     dbus-factory = callPackage ./dbus-factory { };
+    dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
@@ -25,6 +26,7 @@ let
     go-dbus-generator = callPackage ./go-dbus-generator { };
     go-gir-generator = callPackage ./go-gir-generator { };
     go-lib = callPackage ./go-lib { };
+    go-x11-client = callPackage ./go-x11-client { };
     qt5dxcb-plugin = callPackage ./qt5dxcb-plugin { };
     qt5integration = callPackage ./qt5integration { };
 
