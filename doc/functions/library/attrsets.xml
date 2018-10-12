@@ -1049,4 +1049,127 @@ mapAttrsRecursive
     ]]></programlisting>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.mapAttrsRecursiveCond">
+  <title><function>lib.attrsets.mapAttrsRecursiveCond</function></title>
+
+  <subtitle><literal>mapAttrsRecursiveCond :: (AttrSet -> Bool) -> ([ String ] -> Any -> Any) -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsRecursiveCond" />
+
+  <para>
+   Like <function>mapAttrsRecursive</function>, but it takes an additional
+   predicate function that tells it whether to recursive into an attribute set.
+   If it returns false, <function>mapAttrsRecursiveCond</function> does not
+   recurse, but does apply the map function. It is returns true, it does
+   recurse, and does not apply the map function.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>cond</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>(AttrSet -> Bool)</literal>
+     </para>
+     <para>
+      Determine if <function>mapAttrsRecursive</function> should recurse deeper
+      in to the attribute set.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>attributeset</varname>
+       </term>
+       <listitem>
+        <para>
+         An attribute set.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>[ String ] -> Any -> Any</literal>
+     </para>
+     <para>
+      Given a list of attribute names and value, return a new value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name_path</varname>
+       </term>
+       <listitem>
+        <para>
+         The list of attribute names to this value.
+        </para>
+        <para>
+         For example, the <varname>name_path</varname> for the
+         <literal>example</literal> string in the attribute set <literal>{ foo
+         = { bar = "example"; }; }</literal> is <literal>[ "foo" "bar"
+         ]</literal>.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to recursively map over.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.mapAttrsRecursiveCond-example">
+   <title>Only convert attribute values to JSON if the containing attribute set is marked for recursion</title>
+<programlisting><![CDATA[
+lib.attrsets.mapAttrsRecursiveCond
+  ({ recurse ? false, ... }: recurse)
+  (name: value: builtins.toJSON value)
+  {
+    dorecur = {
+      recurse = true;
+      hello = "there";
+    };
+    dontrecur = {
+      converted-to- = "json";
+    };
+  }
+=> {
+     dorecur = {
+       hello = "\"there\"";
+       recurse = "true";
+     };
+     dontrecur = "{\"converted-to\":\"json\"}";
+   }
+    ]]></programlisting>
+  </example>
+ </section>
+
 </section>
