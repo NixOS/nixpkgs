@@ -101,6 +101,8 @@ rec {
 
     wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; };
     wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; };
+
+    avr      = { bits = 8; family = "avr"; };
   };
 
   ################################################################################
@@ -255,6 +257,9 @@ rec {
     setType "system" components;
 
   mkSkeletonFromList = l: {
+    "1" = if elemAt l 0 == "avr"
+      then { cpu = elemAt l 0; kernel = "none"; abi = "unknown"; }
+      else throw "Target specification with 1 components is ambiguous";
     "2" = # We only do 2-part hacks for things Nix already supports
       if elemAt l 1 == "cygwin"
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }

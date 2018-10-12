@@ -99,6 +99,10 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  arduino-uno = {
+    config = "avr";
+    platform = { name = "avr5"; };
+  };
 
   #
   # Darwin
