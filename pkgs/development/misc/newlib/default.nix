@@ -23,12 +23,13 @@ in stdenv.mkDerivation {
     "--disable-nls"
     "--enable-newlib-io-long-long"
     "--enable-newlib-register-fini"
+    "--enable-newlib-retargetable-locking"
   ];
 
   dontDisableStatic = true;
 
   passthru = {
-    incdir = "/${stdenv.hostPlatform.config}/include";
-    libdir = "/${stdenv.hostPlatform.config}/lib";
+    incdir = "/${stdenv.targetPlatform.config}/include";
+    libdir = "/${stdenv.targetPlatform.config}/lib";
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, gcc-arm-embedded, ruby
+, gcc-arm-embedded, binutils-arm-embedded, ruby
 }:
 
 let
@@ -17,8 +17,8 @@ in stdenv.mkDerivation rec {
     sha256 = "15zai8qf43b06fmws1sbkmdgip51zp7gkfj7pp9b6gi8giarzq3y";
   };
 
-  buildInputs = [
-    gcc-arm-embedded
+  nativeBuildInputs = [
+    gcc-arm-embedded binutils-arm-embedded
     ruby
   ];
 
@@ -50,7 +50,6 @@ in stdenv.mkDerivation rec {
     homepage = https://inavflight.github.io;
     license = licenses.gpl3;
     maintainers = with maintainers; [ elitak ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 
 }
