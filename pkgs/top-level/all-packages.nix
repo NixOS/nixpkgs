@@ -12939,8 +12939,6 @@ with pkgs;
 
   ack = perlPackages.ack;
 
-  perlArchiveCpio = perlPackages.ArchiveCpio;
-
   perlcritic = perlPackages.PerlCritic;
 
   sqitchPg = callPackage ../development/tools/misc/sqitch {
