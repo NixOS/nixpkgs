@@ -41,6 +41,7 @@ with lib;
       LightDM. Please use the services.xserver.displayManager.lightdm.autoLogin options
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
+    (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
 
     # Do NOT add any option renames here, see top of the file
   ];
