@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ avrgcc-unwrapped avrlibc ];
   buildCommand = ''
-    mkdir -p $out/bin $out
+    mkdir -p $out/bin
     for exe in gcc g++; do
       makeWrapper "${avrgcc-unwrapped}/bin/avr-$exe" "$out/bin/avr-$exe" --add-flags "-B${avrlibc}/avr/lib -isystem ${avrlibc}/avr/include"
     done
