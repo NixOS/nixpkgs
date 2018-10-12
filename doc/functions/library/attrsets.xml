@@ -1274,4 +1274,30 @@ lib.attrsets.isDerivation "foobar"
      ]]></programlisting>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.toDerivation">
+  <title><function>lib.attrsets.toDerivation</function></title>
+
+  <subtitle><literal>toDerivation :: Path -> Derivation</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.toDerivation" />
+
+  <para>
+   Converts a store path to a fake derivation.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>path</varname>
+    </term>
+    <listitem>
+     <para>
+      A store path to convert to a derivation.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </section>
 </section>
