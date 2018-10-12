@@ -742,6 +742,7 @@
   ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
+  ./services/x11/gdk-pixbuf.nix
   ./services/x11/redshift.nix
   ./services/x11/urxvtd.nix
   ./services/x11/window-managers/awesome.nix
