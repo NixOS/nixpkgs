@@ -18,6 +18,8 @@ stdenv.mkDerivation {
   buildInputs = [mltonBootstrap gmp];
 
   preBuild = ''
+    find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
+
     makeFlagsArray=(
       MLTON_VERSION="${version} ${rev}"
       CC="$(type -p cc)"
