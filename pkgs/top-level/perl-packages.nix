@@ -11111,7 +11111,7 @@ let
       url = "mirror://cpan/authors/id/D/DA/DANBERR/${name}.tar.gz";
       sha256 = "8391696db9e96c374b72984c0bad9c7d1c9f3b4efe68f9ddf429a77548e0e269";
     };
-    nativeBuildInputs = [ pkgs.pkgconfig ];
+    nativeBuildInputs = [ pkgs.buildPackages.pkgconfig ];
     buildInputs = [ pkgs.dbus TestPod TestPodCoverage ];
     propagatedBuildInputs = [ XMLTwig ];
     meta = {
