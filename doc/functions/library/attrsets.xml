@@ -1452,7 +1452,8 @@ lib.attrsets.zipAttrsWithNames
 
   <para>
    Merge sets of attributes and use the function <varname>f</varname> to merge
-   attribute values. Similar to <xref
+   attribute values. Similar to
+   <xref
    linkend="function-library-lib.attrsets.zipAttrsWithNames" /> where
    all key names are passed for <varname>names</varname>.
   </para>
@@ -1517,6 +1518,48 @@ lib.attrsets.zipAttrsWith
     { c = 1000; }
   ]
 => { a = "a 11"; b = "b 101"; c = "c 1001"; }
+     ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.zipAttrs">
+  <title><function>lib.attrsets.zipAttrs</function></title>
+
+  <subtitle><literal>zipAttrsWith :: [ AttrSet ] -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrs" />
+
+  <para>
+   Merge sets of attributes and combine each attribute value in to a list.
+   Similar to <xref linkend="function-library-lib.attrsets.zipAttrsWith" />
+   where the merge function returns a list of all values.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>sets</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of attribute sets to zip together.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.zipAttrs-example">
+   <title>Combining a list of attribute sets</title>
+<programlisting><![CDATA[
+lib.attrsets.zipAttrs
+  [
+    { a = 1; b = 1; c = 1; }
+    { a = 10; }
+    { b = 100; }
+    { c = 1000; }
+  ]
+=> { a = [ 1 10 ]; b = [ 1 100 ]; c = [ 1 1000 ]; }
      ]]></programlisting>
   </example>
  </section>
