@@ -49,7 +49,7 @@ self: super: {
   contravariant = self.contravariant_1_5;
   control-monad-free = markBrokenVersion "0.6.1" super.control-monad-free;
   free = self.free_5_1;
-  Glob = self.Glob_0_9_3;
+  Glob = super.Glob;
   haddock-library = markBroken super.haddock-library;
   hslogger = self.hslogger_1_2_12;
   hspec = self.hspec_2_5_8;
