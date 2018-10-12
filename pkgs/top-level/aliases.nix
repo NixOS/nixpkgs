@@ -49,6 +49,11 @@ mapAliases ({
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
+  buildbot = pythonPackages.buildbot; # added 2018-10-11
+  buildbot-full = pythonPackages.buildbot-full; # added 2018-10-11
+  buildbot-pkg = pythonPackages.buildbot-pkg; # added 2018-10-11
+  buildbot-ui = pythonPackages.buildbot-ui; # added 2018-10-11
+  buildbot-worker = pythonPackages.buildbot-worker; # added 2018-10-11
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
@@ -106,6 +111,7 @@ mapAliases ({
   gnome_themes_standard = gnome-themes-standard; # added 2018-02-25
   gnustep-make = gnustep.make; # added 2016-7-6
   go-pup = pup; # added 2017-12-19
+  goimports = gotools; # added 2018-09-16
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
@@ -131,6 +137,7 @@ mapAliases ({
   iana_etc = iana-etc;  # added 2017-03-08
   idea = jetbrains; # added 2017-04-03
   inotifyTools = inotify-tools;
+  jbuilder = dune; # added 2018-09-09
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
   kdiff3-qt5 = kdiff3; # added 2017-02-18
@@ -275,6 +282,9 @@ mapAliases ({
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   telepathy_salut = telepathy-salut; # added 2018-02-25
   telnet = inetutils; # added 2018-05-15
+  terraform-provider-ibm = terraform-providers.ibm; # added 2018-09-28
+  terraform-provider-libvirt = terraform-providers.libvirt; # added 2018-09-28
+  terraform-provider-nixos = terraform-providers.nixos; # added 2018-09-28
   tex-gyre-bonum-math = tex-gyre-math.bonum; # added 2018-04-03
   tex-gyre-pagella-math = tex-gyre-math.pagella; # added 2018-04-03
   tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
@@ -292,9 +302,12 @@ mapAliases ({
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  weechat-xmpp = weechatScripts.weechat-xmpp; # added 2018-09-06
+  weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
   wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
   wireguard = wireguard-tools; # added 2018-05-19
+  morituri = whipper; # added 2018-09-13
   x11 = xlibsWrapper; # added 2015-09
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25
@@ -321,7 +334,6 @@ mapAliases ({
   callPackage_i686 = pkgsi686Linux.callPackage;
 
   inherit (ocaml-ng) # added 2016-09-14
-    ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
     ocamlPackages_4_03
     ocamlPackages_latest;
@@ -340,10 +352,6 @@ mapAliases ({
     gst-ffmpeg = pkgs.gst-ffmpeg;
   };
 } // (with ocaml-ng; { # added 2016-09-14
-  ocaml_3_08_0 = ocamlPackages_3_08_0.ocaml;
-  ocaml_3_10_0 = ocamlPackages_3_10_0.ocaml;
-  ocaml_3_11_2 = ocamlPackages_3_11_2.ocaml;
-  ocaml_3_12_1 = ocamlPackages_3_12_1.ocaml;
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
   ocaml_4_02   = ocamlPackages_4_02.ocaml;

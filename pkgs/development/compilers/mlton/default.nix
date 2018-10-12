@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = name;
 
-  buildInputs = [ gmp ] ++ stdenv.lib.optional stdenv.isLinux patchelf;
+  buildInputs = [ gmp ];
+  nativeBuildInputs = stdenv.lib.optional stdenv.isLinux patchelf;
 
   makeFlags = [ "all-no-docs" ];
 

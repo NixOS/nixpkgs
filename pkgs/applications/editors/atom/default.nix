@@ -73,13 +73,13 @@ let
   };
 in stdenv.lib.mapAttrs common {
   atom = {
-    version = "1.30.0";
-    sha256 = "1hqizfn9c249l51rlpfgk0h374maqgw6pagswlh4xa278qzb6qzs";
+    version = "1.31.2";
+    sha256 = "1szx9p2nz1qzjpig0l8h4hj5mqwpjvkcynn8crh21drply4bpfr0";
   };
 
   atom-beta = {
-    version = "1.31.0";
+    version = "1.32.0";
     beta = 0;
-    sha256 = "11nlaz89rg6lgzsxp83qdqk4bnn2cij2p5aqjd9a3phd7v70xmy5";
+    sha256 = "12k5cn70a0diyaqbmq6s6l2sbi9i3d9p7i38qnm97lnw0y1kh0jm";
   };
 }

@@ -19,5 +19,6 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.linux;
+    inherit (virtualglLib.meta) license;
   };
 }

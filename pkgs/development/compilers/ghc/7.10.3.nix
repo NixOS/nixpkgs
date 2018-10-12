@@ -1,7 +1,7 @@
 { stdenv, targetPackages
 
 # build-tools
-, bootPkgs, hscolour
+, bootPkgs
 , coreutils, fetchurl, perl
 , docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, libxml2, libxslt
 
@@ -15,7 +15,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(gmp.meta.available or false), gmp
+  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42
-    ghc hscolour
+    ghc bootPkgs.hscolour
   ];
 
   # For building runtime libs

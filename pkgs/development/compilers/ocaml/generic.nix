@@ -90,6 +90,7 @@ stdenv.mkDerivation (args // rec {
       '';
 
     platforms = with platforms; linux ++ darwin;
+    broken = stdenv.isAarch64 && !stdenv.lib.versionAtLeast version "4.06";
   };
 
 })

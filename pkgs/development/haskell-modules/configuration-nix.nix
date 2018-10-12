@@ -126,13 +126,21 @@ self: super: builtins.intersectAttrs super {
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = if pkgs.stdenv.isDarwin then dontCheck super.system-fileio else super.system-fileio;
 
-  # Prevents needing to add security_tool as a build tool to all of x509-system's
-  # dependencies.
-  x509-system = if pkgs.stdenv.targetPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
+  # Prevents needing to add `security_tool` as a run-time dependency for
+  # everything using x509-system to give access to the `security` executable.
+  x509-system = if pkgs.stdenv.hostPlatform.isDarwin && !pkgs.stdenv.cc.nativeLibc
     then let inherit (pkgs.darwin) security_tool;
       in pkgs.lib.overrideDerivation (addBuildDepend super.x509-system security_tool) (drv: {
+        # darwin.security_tool is broken in Mojave (#45042)
+
+        # We will use the system provided security for now.
+        # Beware this WILL break in sandboxes!
+
+        # TODO(matthewbauer): If someone really needs this to work in sandboxes,
+        # I think we can add a propagatedImpureHost dep here, but I’m hoping to
+        # get a proper fix available soonish.
         postPatch = (drv.postPatch or "") + ''
-          substituteInPlace System/X509/MacOS.hs --replace security ${security_tool}/bin/security
+          substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
         '';
       })
     else super.x509-system;
@@ -313,9 +321,6 @@ self: super: builtins.intersectAttrs super {
 
   # https://github.com/bos/pcap/issues/5
   pcap = addExtraLibrary super.pcap pkgs.libpcap;
-
-  # https://github.com/snoyberg/yaml/issues/106
-  yaml = disableCabalFlag super.yaml "system-libyaml";
 
   # The cabal files for these libraries do not list the required system dependencies.
   miniball = overrideCabal super.miniball (drv: {
@@ -510,4 +515,32 @@ self: super: builtins.intersectAttrs super {
   LDAP = dontCheck (overrideCabal super.LDAP (drv: {
     librarySystemDepends = drv.librarySystemDepends or [] ++ [ pkgs.cyrus_sasl.dev ];
   }));
+
+  # Doctests hang only when compiling with nix.
+  # https://github.com/cdepillabout/termonad/issues/15
+  termonad = dontCheck super.termonad;
+
+  # Expects z3 to be on path so we replace it with a hard
+  sbv = overrideCabal super.sbv (drv: {
+    postPatch = ''
+      sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs'';
+  });
+
+  # The test-suite requires a running PostgreSQL server.
+  Frames-beam = dontCheck super.Frames-beam;
+
+  futhark = with pkgs;
+    let path = stdenv.lib.makeBinPath [ gcc ];
+    in overrideCabal (addBuildTool super.futhark makeWrapper) (_drv: {
+      postInstall = ''
+        wrapProgram $out/bin/futhark-c \
+          --prefix PATH : "${path}"
+
+        wrapProgram $out/bin/futhark-opencl \
+          --prefix PATH : "${path}" \
+          --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
+          --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
+          --set NIX_CFLAGS_LINK "-L${opencl-icd}/lib"
+      '';
+    });
 }

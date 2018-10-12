@@ -1,4 +1,5 @@
 { stdenv
+, ctags
 , desktop-file-utils
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -36,7 +37,7 @@ in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0ibb74jlyrl5f6rj1b74196zfg2qaf870lxgi76qzpkgwq0iya05";
   };
 
@@ -58,6 +59,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    ctags
     flatpak
     gnome3.devhelp
     gnome3.libgit2-glib

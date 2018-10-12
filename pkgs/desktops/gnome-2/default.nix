@@ -35,8 +35,6 @@ let overridden = set // overrides; set = with overridden; {
 
   GConf = callPackage ./platform/GConf { };
 
-  gconfmm = callPackage ./platform/gconfmm { };
-
   libgnomecanvas = callPackage ./platform/libgnomecanvas { };
 
   libgnomecanvasmm = callPackage ./platform/libgnomecanvasmm { };
@@ -69,8 +67,6 @@ let overridden = set // overrides; set = with overridden; {
   inherit (libunique);
 
   gtkglext = callPackage ./platform/gtkglext { };
-
-  gtkglextmm = callPackage ./platform/gtkglextmm { };
 
 #### DESKTOP
 

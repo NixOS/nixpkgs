@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper, which, cmake, perl, perlPackages,
   boost, tbb, wxGTK30, pkgconfig, gtk3, fetchurl, gtk2, libGLU,
-  glew, eigen, curl }:
+  glew, eigen, curl, gtest, nlopt, pcre, xorg }:
 let
   AlienWxWidgets = perlPackages.buildPerlPackage rec {
     name = "Alien-wxWidgets-0.69";
@@ -33,22 +33,28 @@ let
 in
 stdenv.mkDerivation rec {
   name = "slic3r-prusa-edition-${version}";
-  version = "1.40.1";
+  version = "1.41.0";
 
   enableParallelBuilding = true;
 
-  buildInputs = [
+  nativeBuildInputs = [
     cmake
-    curl
-    perl
     makeWrapper
+  ];
+
+  buildInputs = [
+    curl
     eigen
     glew
+    pcre
+    perl
     tbb
     which
     Wx
     WxGLCanvas
-  ] ++ (with perlPackages; [
+    xorg.libXdmcp
+    xorg.libpthreadstubs
+  ] ++ checkInputs ++ (with perlPackages; [
     boost
     ClassXSAccessor
     EncodeLocale
@@ -72,8 +78,24 @@ stdenv.mkDerivation rec {
     XMLSAX
   ]);
 
+  checkInputs = [ gtest ];
+
+  # The build system uses custom logic - defined in
+  # xs/src/libnest2d/cmake_modules/FindNLopt.cmake in the package source -
+  # for finding the nlopt library, which doesn't pick up the package in the nix store.
+  # We need to set the path via the NLOPT environment variable instead.
+  NLOPT = "${nlopt}";
+
   prePatch = ''
+    # In nix ioctls.h isn't available from the standard kernel-headers package
+    # on other distributions. As the copy in glibc seems to be identical to the
+    # one in the kernel, we use that one instead.
     sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
+
+    # PERL_VENDORARCH and PERL_VENDORLIB aren't set correctly by the build
+    # system, so we have to override them. Setting them as environment variables
+    # doesn't work though, so substituting the paths directly in CMakeLists.txt
+    # seems to be the easiest way.
     sed -i "s|\''${PERL_VENDORARCH}|$out/lib/slic3r-prusa3d|g" xs/CMakeLists.txt
     sed -i "s|\''${PERL_VENDORLIB}|$out/lib/slic3r-prusa3d|g" xs/CMakeLists.txt
   '';
@@ -92,7 +114,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "Slic3r";
-    sha256 = "022mdz8824wg68qwgd49gnplw7wn84hqw113xh8l25v3j1jb9zmc";
+    sha256 = "1al60hrqbhl05dnsr99hzbmxmn26fyx19sc5zxv816x3q6px9n2d";
     rev = "version_${version}";
   };
 
@@ -100,7 +122,7 @@ stdenv.mkDerivation rec {
     description = "G-code generator for 3D printer";
     homepage = https://github.com/prusa3d/Slic3r;
     license = licenses.agpl3;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ tweber ];
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

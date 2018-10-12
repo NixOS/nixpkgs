@@ -27,6 +27,7 @@ let
       ++ (overrides.buildInputs or [ ]);
 
     qmakeFlags = [
+      "CONFIG+=c++11"
       "CONFIG+=shared"
       "CONFIG+=no-g15"
       "CONFIG+=packaged"

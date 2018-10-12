@@ -115,36 +115,10 @@ let
     };
   };
 
-  indexOf = default: start: list: e:
-    if list == []
-    then default
-    else if (head list) == e then start
-    else (indexOf default (start + (length (listenStreams (head list).socket))) (tail list) e);
-
-  systemdSocket = indexOf (abort "Socket not found") 0 allSockets;
-
   isUnixSocket = socket: hasPrefix "/" (if (isString socket) then socket else socket.socket);
-  isPort = hasPrefix "*:";
-  isIPv4Socket = hasPrefix "*v4:";
-  isIPv6Socket = hasPrefix "*v6:";
-  isLocalHost = hasPrefix "localhost:";
-  listenStreams = socket:
-    if (isLocalHost socket) then
-      let port = (removePrefix "localhost:" socket);
-      in [ "127.0.0.1:${port}" ] ++ (if config.networking.enableIPv6 then ["[::1]:${port}"] else [])
-    else if (isIPv6Socket socket) then [removePrefix "*v6:" socket]
-    else if (isPort socket) then [removePrefix "*:" socket]
-    else if (isIPv4Socket socket) then
-      throw "error: IPv4 only socket not supported in rspamd with socket activation"
-    else if (length (splitString " " socket)) != 1 then
-      throw "error: string options not supported in rspamd with socket activation"
-    else [socket];
 
-  mkBindSockets = enabled: socks: concatStringsSep "\n  " (flatten (map (each:
-    if cfg.socketActivation && enabled != false then
-      let systemd = (systemdSocket each);
-      in (imap (idx: e: "bind_socket = \"systemd:${toString (systemd + idx - 1)}\";") (listenStreams each.socket))
-    else "bind_socket = \"${each.rawEntry}\";") socks));
+  mkBindSockets = enabled: socks: concatStringsSep "\n  "
+    (flatten (map (each: "bind_socket = \"${each.rawEntry}\";") socks));
 
   rspamdConfFile = pkgs.writeText "rspamd.conf"
     ''
@@ -175,18 +149,6 @@ let
       ${cfg.extraConfig}
    '';
 
-  allMappedSockets = flatten (mapAttrsToList (name: value:
-    if value.enable != false
-    then imap (idx: each: {
-        name = "${name}";
-        index = idx;
-        value = each;
-      }) value.bindSockets
-    else []) cfg.workers);
-  allSockets = map (e: e.value) allMappedSockets;
-
-  allSocketNames = map (each: "rspamd-${each.name}-${toString each.index}.socket") allMappedSockets;
-
 in
 
 {
@@ -197,19 +159,12 @@ in
 
     services.rspamd = {
 
-      enable = mkEnableOption "Whether to run the rspamd daemon.";
+      enable = mkEnableOption "rspamd, the Rapid spam filtering system";
 
       debug = mkOption {
         type = types.bool;
         default = false;
         description = "Whether to run the rspamd daemon in debug mode.";
-      };
-
-      socketActivation = mkOption {
-        type = types.bool;
-        description = ''
-          Enable systemd socket activation for rspamd.
-        '';
       };
 
       workers = mkOption {
@@ -272,13 +227,6 @@ in
 
   config = mkIf cfg.enable {
 
-    services.rspamd.socketActivation = mkDefault (!opts.bindSocket.isDefined && !opts.bindUISocket.isDefined);
-
-    assertions = [ {
-      assertion = !cfg.socketActivation || !(opts.bindSocket.isDefined || opts.bindUISocket.isDefined);
-      message = "Can't use socketActivation for rspamd when using renamed bind socket options";
-    } ];
-
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];
 
@@ -299,17 +247,14 @@ in
     systemd.services.rspamd = {
       description = "Rspamd Service";
 
-      wantedBy = mkIf (!cfg.socketActivation) [ "multi-user.target" ];
-      after = [ "network.target" ] ++
-       (if cfg.socketActivation then allSocketNames else []);
-      requires = mkIf cfg.socketActivation allSocketNames;
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -c ${rspamdConfFile} -f";
         Restart = "always";
         RuntimeDirectory = "rspamd";
         PrivateTmp = true;
-        Sockets = mkIf cfg.socketActivation (concatStringsSep " " allSocketNames);
       };
 
       preStart = ''
@@ -317,24 +262,10 @@ in
         ${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} /var/lib/rspamd
       '';
     };
-    systemd.sockets = mkIf cfg.socketActivation
-      (listToAttrs (map (each: {
-        name = "rspamd-${each.name}-${toString each.index}";
-        value = {
-          description = "Rspamd socket ${toString each.index} for worker ${each.name}";
-          wantedBy = [ "sockets.target" ];
-          listenStreams = (listenStreams each.value.socket);
-          socketConfig = {
-            BindIPv6Only = mkIf (isIPv6Socket each.value.socket) "ipv6-only";
-            Service = "rspamd.service";
-            SocketUser = mkIf (isUnixSocket each.value.socket) each.value.owner;
-            SocketGroup = mkIf (isUnixSocket each.value.socket) each.value.group;
-            SocketMode = mkIf (isUnixSocket each.value.socket) each.value.mode;
-          };
-        };
-      }) allMappedSockets));
   };
   imports = [
+    (mkRemovedOptionModule [ "services" "rspamd" "socketActivation" ]
+	     "Socket activation never worked correctly and could at this time not be fixed and so was removed")
     (mkRenamedOptionModule [ "services" "rspamd" "bindSocket" ] [ "services" "rspamd" "workers" "normal" "bindSockets" ])
     (mkRenamedOptionModule [ "services" "rspamd" "bindUISocket" ] [ "services" "rspamd" "workers" "controller" "bindSockets" ])
   ];

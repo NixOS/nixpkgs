@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gobjectIntrospection, gtk-doc, docbook_xsl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gobjectIntrospection, gtk-doc, docbook_xsl
 , glib, libsoup, libxml2, libxslt, check, curl, perl, hwdata, osinfo-db, vala ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "libosinfo-1.1.0";
+  name = "libosinfo-1.2.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${name}.tar.gz";
-    sha256 = "0diigllgni6m0sc2h8aid6hmyaq9qb54pm5305m0irfsm2j463v0";
+    sha256 = "0y2skfrcg38y212qqd26vs3sg566j3qnsgvvm23pfi4j7z7ly9gf";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -20,6 +20,16 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./osinfo-db-data-dir.patch
+    # Fix bug causing tests to fail (and presumably the real scenarios they're representative of)
+    # using upstream commits:
+    (fetchpatch {
+      url = "https://gitlab.com/libosinfo/libosinfo/commit/b9cb227842948b1b2289cdd3e9b8d925664c2ee7.patch";
+      sha256 = "0nj0wmibq52j8qbzmxfzj76fpkqjs18kssbb9lmfhz16s30darbw";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/libosinfo/libosinfo/commit/e6168463f4fc659b9827b5c8694dc1c6d7d5239a.patch";
+      sha256 = "135yfhjm2wxip5dnng3r9k9igfhdi1083ys4a4f3ipjxfskcs9rv";
+    })
   ];
 
   postPatch = ''

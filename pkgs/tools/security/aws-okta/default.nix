@@ -1,4 +1,5 @@
 { buildGoPackage, fetchFromGitHub, stdenv }:
+
 buildGoPackage rec {
   name = "aws-okta-${version}";
   version = "0.19.0";
@@ -19,6 +20,7 @@ buildGoPackage rec {
     description = "aws-vault like tool for Okta authentication";
     license = licenses.mit;
     maintainers = [maintainers.imalsogreg];
+    broken = stdenv.isDarwin;  # test with CoreFoundation 10.11
     platforms = platforms.all;
     homepage = https://github.com/segmentio/aws-okta;
     downloadPage = "https://github.com/segmentio/aws-okta";

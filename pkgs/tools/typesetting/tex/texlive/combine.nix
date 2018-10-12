@@ -12,11 +12,9 @@ let
       (bin.core.doc // { pname = "core"; tlType = "doc"; })
     ];
   };
-  partition = builtins.partition or (pred: l:
-    { right = builtins.filter pred l; wrong = builtins.filter (e: !(pred e)) l; });
   pkgList = rec {
     all = lib.filter pkgFilter (combinePkgs pkgSet);
-    splitBin = partition (p: p.tlType == "bin") all;
+    splitBin = builtins.partition (p: p.tlType == "bin") all;
     bin = mkUniquePkgs splitBin.right
       ++ lib.optional
           (lib.any (p: p.tlType == "run" && p.pname == "pdfcrop") splitBin.wrong)

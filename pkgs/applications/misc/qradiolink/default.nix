@@ -47,6 +47,8 @@ in stdenv.mkDerivation {
     qwt
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "SDR transceiver application for analog and digital modes";
     homepage = http://qradiolink.org/;

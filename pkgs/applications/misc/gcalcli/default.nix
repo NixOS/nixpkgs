@@ -1,51 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, python2
+{ stdenv, lib, fetchFromGitHub, python3
 , libnotify ? null }:
 
-let
-  py = python2.override {
-    packageOverrides = self: super: {
-      google_api_python_client = super.google_api_python_client.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1ggxk094vqr4ia6yq7qcpa74b4x5cjd5mj74rq0xx9wp2jkrxmig";
-        };
-      });
+with python3.pkgs;
 
-      oauth2client = super.oauth2client.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.12";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0phfk6s8bgpap5xihdk1xv2lakdk1pb3rg6hp2wsg94hxcxnrakl";
-        };
-      });
-
-      uritemplate = super.uritemplate.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
-        };
-        # there are no checks in this version
-        doCheck = false;
-      });
-    };
-  };
-
-in with py.pkgs; buildPythonApplication rec {
-  version = "3.4.0";
+buildPythonApplication rec {
+  version = "4.0.0a4";
   name = "gcalcli-${version}";
 
   src = fetchFromGitHub {
     owner  = "insanum";
     repo   = "gcalcli";
     rev    = "v${version}";
-    sha256 = "171awccgnmfv4j7m2my9387sjy60g18kzgvscl6pzdid9fn9rrm8";
+    sha256 = "00giq5cdigidzv5bz4wgzi1yp6xlf2rdcy6ynmsc6bcf0cl5x64d";
   };
 
   propagatedBuildInputs = [
     dateutil gflags httplib2 parsedatetime six vobject
-    # overridden
     google_api_python_client oauth2client uritemplate
   ] ++ lib.optional (!isPy3k) futures;
 
@@ -55,12 +25,12 @@ in with py.pkgs; buildPythonApplication rec {
       "command = '${libnotify}/bin/notify-send -i view-calendar-upcoming-events -u critical -a Calendar %s'"
   '';
 
-  # There are no tests as of 3.4.0
+  # There are no tests as of 4.0.0a4
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/insanum/gcalcli;
     description = "CLI for Google Calendar";
+    homepage = https://github.com/insanum/gcalcli;
     license = licenses.mit;
     maintainers = with maintainers; [ nocoolnametom ];
     inherit version;

@@ -1,7 +1,9 @@
 { stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gnome3,
   pango, gobjectIntrospection, wrapGAppsHook,
 # Optional packages:
- enableOSM ? true, osm-gps-map
+ enableOSM ? true, osm-gps-map,
+ enableGraphviz ? true, graphviz,
+ enableGhostscript ? true, ghostscript
  }:
 
 let
@@ -14,6 +16,11 @@ in buildPythonApplication rec {
   buildInputs = [ intltool gtk3 gobjectIntrospection pango gnome3.gexiv2 ] 
     # Map support
     ++ stdenv.lib.optional enableOSM osm-gps-map
+    # Graphviz support
+    ++ stdenv.lib.optional enableGraphviz graphviz
+    # Ghostscript support
+    ++ stdenv.lib.optional enableGhostscript ghostscript
+    
   ;
 
   src = fetchFromGitHub {
@@ -53,5 +60,6 @@ in buildPythonApplication rec {
     description = "Genealogy software";
     homepage = https://gramps-project.org;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ joncojonathan ];
   };
 }

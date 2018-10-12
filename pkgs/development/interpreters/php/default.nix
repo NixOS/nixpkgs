@@ -3,7 +3,7 @@
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
-, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy
+, uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
 }:
 
 with lib;
@@ -51,6 +51,7 @@ let
   , calendarSupport ? config.php.calendar or true
   , sodiumSupport ? (config.php.sodium or true) && (versionAtLeast version "7.2")
   , tidySupport ? (config.php.tidy or false)
+  , argon2Support ? (config.php.argon2 or true) && (versionAtLeast version "7.2")
   }:
 
     let
@@ -92,7 +93,8 @@ let
         ++ optional bz2Support bzip2
         ++ optional (mssqlSupport && !stdenv.isDarwin) freetds
         ++ optional sodiumSupport libsodium
-        ++ optional tidySupport html-tidy;
+        ++ optional tidySupport html-tidy
+        ++ optional argon2Support libargon2;
 
       CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
 
@@ -131,6 +133,7 @@ let
       ++ optionals mysqliSupport [
         "--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysql.connector-c}/bin/mysql_config"}"
       ]
+      ++ optional ( pdo_mysqlSupport || mysqlSupport || mysqliSupport ) "--with-mysql-sock=/run/mysqld/mysqld.sock"
       ++ optional bcmathSupport "--enable-bcmath"
       # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
       ++ optionals gdSupport [
@@ -157,7 +160,8 @@ let
       ++ optional ztsSupport "--enable-maintainer-zts"
       ++ optional calendarSupport "--enable-calendar"
       ++ optional sodiumSupport "--with-sodium=${libsodium.dev}"
-      ++ optional tidySupport "--with-tidy=${html-tidy}";
+      ++ optional tidySupport "--with-tidy=${html-tidy}"
+      ++ optional argon2Support "--with-password-argon2=${libargon2}";
 
 
       hardeningDisable = [ "bindnow" ];
@@ -219,13 +223,35 @@ let
     };
 
 in {
-  php71 = generic {
-    version = "7.1.21";
-    sha256 = "104mn4kppklb21hgz1a50kgmc0ak5y996sx990xpc8yy9dbrqh62";
-  };
+  # Because of an upstream bug: https://bugs.php.net/bug.php?id=76826
+  # We can't update the darwin versions because they simply don't compile at
+  # all due to a bug in the intl extensions.
+  #
+  # The bug so far is present in 7.1.21, 7.1.22, 7.2.9, 7.2.10.
 
-  php72 = generic {
-    version = "7.2.8";
-    sha256 = "1rky321gcvjm0npbfd4bznh36an0y14viqcvn4yzy3x643sni00z";
-  };
+  php71 = generic (
+    if stdenv.isDarwin then
+      {
+        version = "7.1.20";
+        sha256 = "0i8xd6p4zdg8fl6f0j430raanlshsshr3s3jlm72b0gvi1n4f6rs";
+      }
+    else
+      {
+        version = "7.1.22";
+        sha256 = "0qz74qdlk19cw478f42ckyw5r074y0fg73r2bzlhm0dar0cizsf8";
+      }
+  );
+
+  php72 = generic (
+    if stdenv.isDarwin then
+      {
+        version = "7.2.8";
+        sha256 = "1rky321gcvjm0npbfd4bznh36an0y14viqcvn4yzy3x643sni00z";
+      }
+    else
+      {
+        version = "7.2.10";
+        sha256 = "17fsvdi6ihjghjsz9kk2li2rwrknm2ccb6ys0xmn789116d15dh1";
+      }
+  );
 }

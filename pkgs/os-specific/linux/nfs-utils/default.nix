@@ -5,20 +5,15 @@
 
 let
   statdPath = lib.makeBinPath [ systemd utillinux coreutils ];
+in
 
-  # Not nice; feel free to find a nicer solution.
-  kerberosEnv = buildEnv {
-    name = "kerberos-env-${kerberos.version}";
-    paths = with lib; [ (getDev kerberos) (getLib kerberos) ];
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "nfs-utils-${version}";
-  version = "2.3.2";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${name}.tar.xz";
-    sha256 = "06av6cjf8h18dpaxh8cd1awsra75zf6s5sj5r2z5g7scbj051ziw";
+    sha256 = "08k36d7l8yqylscnln3p85lcfwi7r7g6n3bnslgmzc1i71wk92zn";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -34,10 +29,19 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preConfigure =
+    ''
+      substituteInPlace configure \
+        --replace '$dir/include/gssapi' ${lib.getDev kerberos}/include/gssapi \
+        --replace '$dir/bin/krb5-config' ${lib.getDev kerberos}/bin/krb5-config
+    '';
+
+  #configureScript = "bash -x configure";
+
   configureFlags =
     [ "--enable-gss"
       "--with-statedir=/var/lib/nfs"
-      "--with-krb5=${kerberosEnv}"
+      "--with-krb5=${lib.getLib kerberos}"
       "--with-systemd=${placeholder "out"}/etc/systemd/system"
       "--enable-libmount-mount"
       "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
@@ -83,6 +87,8 @@ in stdenv.mkDerivation rec {
     "statdpath=$(TMPDIR)"
   ];
 
+  stripDebugList = [ "lib" "libexec" "bin" "etc/systemd/system-generators" ];
+
   postInstall =
     ''
       # Not used on NixOS
@@ -94,6 +100,8 @@ in stdenv.mkDerivation rec {
 
   # One test fails on mips.
   doCheck = !stdenv.isMips;
+
+  disallowedReferences = [ (lib.getDev kerberos) ];
 
   meta = with stdenv.lib; {
     description = "Linux user-space NFS utilities";

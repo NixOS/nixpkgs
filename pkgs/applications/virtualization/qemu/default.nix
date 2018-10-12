@@ -84,10 +84,7 @@ stdenv.mkDerivation rec {
       url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/musl-F_SHLCK-and-F_EXLCK.patch;
       sha256 = "1gm67v41gw6apzgz7jr3zv9z80wvkv0jaxd2w4d16hmipa8bhs0k";
     })
-    (fetchpatch {
-      url = https://raw.githubusercontent.com/alpinelinux/aports/61a7a1b77a868e3b940c0b25e6c2b2a6c32caf20/main/qemu/0006-linux-user-signal.c-define-__SIGRTMIN-MAX-for-non-GN.patch;
-      sha256 = "1ar6r1vpmhnbs72v6mhgyahcjcf7b9b4xi7asx17sy68m171d2g6";
-    })
+    ./sigrtminmax.patch
     (fetchpatch {
       url = https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/fix-sigevent-and-sigval_t.patch;
       sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";

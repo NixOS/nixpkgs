@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   name = "gnome-contacts-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-contacts/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-contacts/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1ilgmvgprn1slzmrzbs0zwgbzxp04rn5ycqd9c8zfvyh6zzwwr8w";
   };
 
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   # /nix/store/*-cheese-3.28.0/include/cheese/cheese-widget.h:26:10: fatal error: clutter-gtk/clutter-gtk.h: No such file or directory
   #  #include <clutter-gtk/clutter-gtk.h>
   #           ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-  NIX_CFLAGS_COMPILE = "-I${clutter-gtk}/include/clutter-gtk-1.0";
+  NIX_CFLAGS_COMPILE = "-I${stdenv.lib.getDev clutter-gtk}/include/clutter-gtk-1.0";
 
   doCheck = true;
 

@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "1hjh8ihjyp1m2jb5yypp5c45bpbz8k004f4p1cjw4gc7pxhjacdj";
   };
 
+  cmakeFlags = [
+    "-DCLANG_RESOURCE_DIR=${llvmPackages.clang-unwrapped}"
+    "-DSPHINX_MAN=${if withMan then "ON" else "OFF"}"
+  ];
+
   buildInputs = [
     cmake
     llvmPackages.clang-unwrapped
@@ -24,11 +29,6 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals withMan [ pythonPackages.sphinx ];
 
   propagatedbuildInputs = [ llvmPackages.libclang ];
-
-  preConfigure = ''
-    cmakeFlagsArray+=(
-     ${if withMan then "-DSPHINX_MAN=ON" else ""}
-  )'';
 
   # 97% tests passed, 96 tests failed out of 2866
   # mostly because it checks command line and nix append -isystem and all

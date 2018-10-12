@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "dtkcore";
-  version = "2.0.9";
+  version = "2.0.9.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0jfl4w3sviy59rl41a5507dbhqhsxy7hqw3gf64a57gjlbdskmm1";
+    sha256 = "184yg1501hvv7n1c7r0fl2y4d4nhif368rrbrd1phwzfvh6x1ji4";
   };
 
   nativeBuildInputs = [

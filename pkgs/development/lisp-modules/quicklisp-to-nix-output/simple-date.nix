@@ -1,17 +1,17 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''simple-date'';
-  version = ''postmodern-20180430-git'';
+  version = ''postmodern-20180831-git'';
 
-  parasites = [ "simple-date/postgres-glue" "simple-date/tests" ];
+  parasites = [ "simple-date/postgres-glue" ];
 
   description = '''';
 
-  deps = [ args."cl-postgres" args."fiveam" args."md5" args."usocket" ];
+  deps = [ args."cl-postgres" args."md5" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/postmodern/2018-04-30/postmodern-20180430-git.tgz'';
-    sha256 = ''0b6w8f5ihbk036v1fclyskns615xhnib9q3cjn0ql6r6sk3nca7f'';
+    url = ''http://beta.quicklisp.org/archive/postmodern/2018-08-31/postmodern-20180831-git.tgz'';
+    sha256 = ''062xhy6aadzgmwpz8h0n7884yv5m4nwqmxrc75m3c60k1lmccpwx'';
   };
 
   packageName = "simple-date";
@@ -20,12 +20,12 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM simple-date DESCRIPTION NIL SHA256
-    0b6w8f5ihbk036v1fclyskns615xhnib9q3cjn0ql6r6sk3nca7f URL
-    http://beta.quicklisp.org/archive/postmodern/2018-04-30/postmodern-20180430-git.tgz
-    MD5 9ca2a4ccf4ea7dbcd14d69cb355a8214 NAME simple-date FILENAME simple-date
+    062xhy6aadzgmwpz8h0n7884yv5m4nwqmxrc75m3c60k1lmccpwx URL
+    http://beta.quicklisp.org/archive/postmodern/2018-08-31/postmodern-20180831-git.tgz
+    MD5 78c3e998cff7305db5e4b4e90b9bbee6 NAME simple-date FILENAME simple-date
     DEPS
-    ((NAME cl-postgres FILENAME cl-postgres) (NAME fiveam FILENAME fiveam)
-     (NAME md5 FILENAME md5) (NAME usocket FILENAME usocket))
-    DEPENDENCIES (cl-postgres fiveam md5 usocket) VERSION
-    postmodern-20180430-git SIBLINGS (cl-postgres postmodern s-sql) PARASITES
-    (simple-date/postgres-glue simple-date/tests)) */
+    ((NAME cl-postgres FILENAME cl-postgres) (NAME md5 FILENAME md5)
+     (NAME usocket FILENAME usocket))
+    DEPENDENCIES (cl-postgres md5 usocket) VERSION postmodern-20180831-git
+    SIBLINGS (cl-postgres postmodern s-sql) PARASITES
+    (simple-date/postgres-glue)) */

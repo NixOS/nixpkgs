@@ -1,4 +1,4 @@
-{ stdenv, buildPackages, fetchurl, pkgconfig, libuuid, gettext, texinfo, perl }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo, perl }:
 
 stdenv.mkDerivation rec {
   name = "e2fsprogs-1.44.4";
@@ -13,6 +13,16 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [ libuuid gettext ];
+
+  # Only use glibc's __GNUC_PREREQ(X,Y) (checks if compiler is gcc version >= X.Y) when using glibc
+  patches = if stdenv.hostPlatform.libc == "glibc" then null
+    else [
+      (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/1f3b51493031cc0309009804475e3db572fc89ad/srcpkgs/e2fsprogs/patches/fix-glibcism.patch";
+      sha256 = "1q7y8nhsfwl9r1q7nhrlikazxxj97p93kgz5wh7723cshlji2vaa";
+      extraPrefix = "";
+      })
+    ];
 
   configureFlags =
     if stdenv.isLinux then [

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.28.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0vq3rmq20d6b1mi6sf67wkzqys6hw5j7n7fd4hndcp19d5i26149";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-x"
     "--disable-static"
-    "--enable-remote-desktop"
+    # "--enable-remote-desktop"
     "--enable-shape"
     "--enable-sm"
     "--enable-startup-notification"

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
-, python, munge, perl, pam, openssl
+, python, munge, perl, pam, openssl, zlib
 , ncurses, mysql, gtk2, lua, hwloc, numactl
-, readline, freeipmi, libssh2, xorg
+, readline, freeipmi, libssh2, xorg, lz4
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
 
 stdenv.mkDerivation rec {
   name = "slurm-${version}";
-  version = "17.11.9-2";
+  version = "18.08.0-1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${builtins.replaceStrings ["."] ["-"] name}";
-    sha256 = "1lq4ac6yjai6wh979dciw8v3d99zbd3w36rfh0vpncqm672fg1qy";
+    sha256 = "0mnaynnpz0cyd1lspcln6h6w5d7brcw3yiqsfxqrfhlmygyp21wq";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,16 +34,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
-    curl python munge perl pam openssl
-      mysql.connector-c ncurses gtk2
+    curl python munge perl pam openssl zlib
+      mysql.connector-c ncurses gtk2 lz4
       lua hwloc numactl readline freeipmi
   ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 
   configureFlags = with stdenv.lib;
-    [ "--with-munge=${munge}"
-      "--with-ssl=${openssl.dev}"
+    [ "--with-freeipmi=${freeipmi}"
       "--with-hwloc=${hwloc.dev}"
-      "--with-freeipmi=${freeipmi}"
+      "--with-lz4=${lz4.dev}"
+      "--with-munge=${munge}"
+      "--with-ssl=${openssl.dev}"
+      "--with-zlib=${zlib}"
       "--sysconfdir=/etc/slurm"
     ] ++ (optional (gtk2 == null)  "--disable-gtktest")
       ++ (optional enableX11 "--with-libssh2=${libssh2.dev}");

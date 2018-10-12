@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
       --replace libpango-1.0.0.dylib ${pango.out}/lib/libpango-1.0.0.dylib \
       --replace libpangocairo-1.0.0.dylib ${pango.out}/lib/libpangocairo-1.0.0.dylib
     substituteInPlace generated/gtkd/gobject/c/functions.d \
-      --replace libgobject-2.0.so.0 ${glib}/lib/libgobject-2.0.so.0 \
-      --replace libgobject-2.0.0.dylib ${glib}/lib/libgobject-2.0.0.dylib
+      --replace libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
+      --replace libgobject-2.0.0.dylib ${glib.out}/lib/libgobject-2.0.0.dylib
     substituteInPlace generated/gtkd/rsvg/c/functions.d \
       --replace librsvg-2.so.2 ${librsvg}/lib/librsvg-2.so.2 \
       --replace librsvg-2.2.dylib ${librsvg}/lib/librsvg-2.2.dylib
@@ -63,15 +63,15 @@ stdenv.mkDerivation rec {
       --replace libgtksourceview-3.0.so.1 ${gtksourceview}/lib/libgtksourceview-3.0.so.1 \
       --replace libgtksourceview-3.0.1.dylib ${gtksourceview}/lib/libgtksourceview-3.0.1.dylib
     substituteInPlace generated/gtkd/glib/c/functions.d \
-      --replace libglib-2.0.so.0 ${glib}/lib/libglib-2.0.so.0 \
-      --replace libgmodule-2.0.so.0 ${glib}/lib/libgmodule-2.0.so.0 \
-      --replace libgobject-2.0.so.0 ${glib}/lib/libgobject-2.0.so.0 \
-      --replace libglib-2.0.0.dylib ${glib}/lib/libglib-2.0.0.dylib \
-      --replace libgmodule-2.0.0.dylib ${glib}/lib/libgmodule-2.0.0.dylib \
-      --replace libgobject-2.0.0.dylib ${glib}/lib/libgobject-2.0.0.dylib
+      --replace libglib-2.0.so.0 ${glib.out}/lib/libglib-2.0.so.0 \
+      --replace libgmodule-2.0.so.0 ${glib.out}/lib/libgmodule-2.0.so.0 \
+      --replace libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
+      --replace libglib-2.0.0.dylib ${glib.out}/lib/libglib-2.0.0.dylib \
+      --replace libgmodule-2.0.0.dylib ${glib.out}/lib/libgmodule-2.0.0.dylib \
+      --replace libgobject-2.0.0.dylib ${glib.out}/lib/libgobject-2.0.0.dylib
     substituteInPlace generated/gtkd/gio/c/functions.d \
-      --replace libgio-2.0.so.0 ${glib}/lib/libgio-2.0.so.0 \
-      --replace libgio-2.0.0.dylib ${glib}/lib/libgio-2.0.0.dylib
+      --replace libgio-2.0.so.0 ${glib.out}/lib/libgio-2.0.so.0 \
+      --replace libgio-2.0.0.dylib ${glib.out}/lib/libgio-2.0.0.dylib
     substituteInPlace generated/gstreamer/gstreamer/c/functions.d \
       --replace libgstreamer-1.0.so.0 ${gstreamer}/lib/libgstreamer-1.0.so.0 \
       --replace libgstreamer-1.0.0.dylib ${gstreamer}/lib/libgstreamer-1.0.0.dylib

@@ -6,6 +6,8 @@ build-idris-package  {
   name = "free";
   version = "2017-07-03";
 
+  ipkgName = "idris-free";
+
   src = fetchFromGitHub {
     owner = "idris-hackers";
     repo = "idris-free";

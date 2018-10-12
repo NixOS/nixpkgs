@@ -1136,11 +1136,11 @@ let
   }) // {inherit ;};
 
   libxcb = (mkDerivation "libxcb" {
-    name = "libxcb-1.12";
+    name = "libxcb-1.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.12.tar.bz2;
-      sha256 = "0nvv0la91cf8p5qqlb3r5xnmg1jn2wphn4fb5jfbr6byqsvv3psa";
+      url = http://xcb.freedesktop.org/dist/libxcb-1.13.tar.bz2;
+      sha256 = "1ahxhmdqp4bhb90zmc275rmf5wixqra4bnw9pqnzyl1w3598g30q";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
@@ -1448,11 +1448,11 @@ let
   }) // {inherit ;};
 
   xcbproto = (mkDerivation "xcbproto" {
-    name = "xcb-proto-1.12";
+    name = "xcb-proto-1.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/xcb-proto-1.12.tar.bz2;
-      sha256 = "01j91946q8f34l1mbvmmgvyc393sm28ym4lxlacpiav4qsjan8jr";
+      url = http://xcb.freedesktop.org/dist/xcb-proto-1.13.tar.bz2;
+      sha256 = "1qdxw9syhbvswiqj5dvj278lrmfhs81apzmvx6205s4vcqg7563v";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ python ];
@@ -1760,11 +1760,11 @@ let
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputlibinput = (mkDerivation "xf86inputlibinput" {
-    name = "xf86-input-libinput-0.26.0";
+    name = "xf86-input-libinput-0.28.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.26.0.tar.bz2;
-      sha256 = "0yrqs88b7yn9nljwlxzn76jfmvf0sh939kzij5b2jvr2qa7mbjmb";
+      url = mirror://xorg/individual/driver/xf86-input-libinput-0.28.0.tar.bz2;
+      sha256 = "189h8vl0005yizwrs4d0sng6j8lwkd3xi1zwqg8qavn2bw34v691";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ inputproto xorgserver xproto ];

@@ -36,7 +36,11 @@ let
     _file = ./eval-config.nix;
     key = _file;
     config = {
-      nixpkgs.localSystem = lib.mkDefault { inherit system; };
+      # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
+      # this.  Since the latter defaults to the former, the former should
+      # default to the argument. That way this new default could propagate all
+      # they way through, but has the last priority behind everything else.
+      nixpkgs.system = lib.mkDefault system;
       _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
   };

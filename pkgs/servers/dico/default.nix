@@ -2,11 +2,11 @@
 , guile, python, pcre, libffi, groff }:
 
 stdenv.mkDerivation rec {
-  name = "dico-2.6";
+  name = "dico-2.7";
 
   src = fetchurl {
     url = "mirror://gnu/dico/${name}.tar.xz";
-    sha256 = "0zmi041gv5nd5fmyzgdrgrsy2pvjaq9p8dvvhxwi842hiyng5b7i";
+    sha256 = "0dg4aacnmlf3ljssd7dwh8z5644xzq8k1501mbsx8nz8p8a9mbsq";
   };
 
   hardeningDisable = [ "format" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage    = http://www.gnu.org/software/dico/;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
 
     longDescription = ''
       GNU Dico is a flexible modular implementation of DICT server

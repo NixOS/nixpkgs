@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/jgm/cmark;
     maintainers = [ maintainers.michelk ];
     platforms = platforms.unix;
+    license = licenses.bsd2;
   };
 }

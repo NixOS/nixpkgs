@@ -232,7 +232,10 @@ rec {
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
     version = "10e";
-    sha256 = "032j3sgk93bjbkny84i17ph61dhjmsax9ddqng1zbi2p7dgl0pzf";
+    sha1s = {
+      x86_64-darwin = "6be8598e4ed3d9dd42998c8cb666f0ee502b1294";
+      x86_64-linux = "f692681b007071103277f6edc6f91cb5c5494a32";
+    };
   };
 
   androidndk_16b = pkgs.callPackage ./androidndk.nix {
@@ -243,20 +246,26 @@ rec {
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
     version = "16b";
-    sha256 = "00frcnvpcsngv00p6l2vxj4cwi2mwcm9lnjvm3zv4wrp6pss9pmw";
+    sha1s = {
+      x86_64-darwin = "e51e615449b98c716cf912057e2682e75d55e2de";
+      x86_64-linux = "42aa43aae89a50d1c66c3f9fdecd676936da6128";
+    };
   };
 
-  androidndk_17 = pkgs.callPackage ./androidndk.nix {
+  androidndk_17c = pkgs.callPackage ./androidndk.nix {
     inherit (buildPackages)
       unzip makeWrapper;
     inherit (pkgs)
       stdenv fetchurl zlib ncurses5 lib python3 libcxx
       coreutils file findutils gawk gnugrep gnused jdk which;
     inherit platformTools;
-    version = "17";
-    sha256 = "1jj3zy958zsidywqd5nwdyrnr72rf9zhippkl8rbqxfy8wxq2gds";
+    version = "17c";
+    sha1s = {
+      x86_64-darwin = "f97e3d7711497e3b4faf9e7b3fa0f0da90bb649c";
+      x86_64-linux = "12cacc70c3fd2f40574015631c00f41fb8a39048";
+    };
   };
-  androidndk = androidndk_17;
+  androidndk = androidndk_17c;
 
   androidndk_r8e = import ./androidndk_r8e.nix {
     inherit (buildPackages)
@@ -277,7 +286,7 @@ rec {
     inherit androidsdk;
   };
 
-  androidndkPkgs_17 = import ./androidndk-pkgs.nix {
+  androidndkPkgs_17c = import ./androidndk-pkgs.nix {
     inherit (buildPackages)
       makeWrapper;
     inherit (pkgs)
@@ -287,11 +296,11 @@ rec {
     # but for splicing messing up on infinite recursion for the variants we
     # *dont't* use. Using this workaround, but also making a test to ensure
     # these two really are the same.
-    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_17;
-    androidndk = androidndk_17;
-    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_17;
+    buildAndroidndk = buildPackages.buildPackages.androidenv.androidndk_17c;
+    androidndk = androidndk_17c;
+    targetAndroidndkPkgs = targetPackages.androidenv.androidndkPkgs_17c;
   };
-  androidndkPkgs = androidndkPkgs_17;
+  androidndkPkgs = androidndkPkgs_17c;
 
   androidndkPkgs_10e = import ./androidndk-pkgs.nix {
     inherit (buildPackages)

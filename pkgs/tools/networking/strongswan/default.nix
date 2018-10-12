@@ -78,7 +78,10 @@ stdenv.mkDerivation rec {
          "--with-tss=trousers"
          "--enable-aikgen"
          "--enable-sqlite" ]
-    ++ optional enableNetworkManager "--enable-nm";
+    ++ optionals enableNetworkManager [
+         "--enable-nm"
+         "--with-nm-ca-dir=/etc/ssl/certs"
+    ];
 
   postInstall = ''
     # this is needed for l2tp

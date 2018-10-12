@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     --replace /usr $out
     '';
 
-  buildInputs = [ perl gettext ];
+  nativeBuildInputs = [ perl gettext ];
 
   meta = with stdenv.lib; {
     homepage = http://waterlan.home.xs4all.nl/dos2unix.html;

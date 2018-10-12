@@ -1,20 +1,28 @@
-{ stdenv, fetchurl, libclthreads, libX11, libXft, xorg }:
+{ stdenv, fetchurl, libclthreads, libX11, libXft, xorg, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "libclxclient-${version}";
-  version = "3.9.0";
+  version = "3.9.2";
 
   src = fetchurl {
     url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/clxclient-${version}.tar.bz2";
-    sha256 = "14l7xrh964gllymraq4n5pgax94p5jsfjslqi5c6637zc4lmgnl0";
+    sha256 = "10bq6fy8d3pr1x2x3xx9qhf2hdxrwdgvg843a2y6lx70y1jfj0c5";
   };
 
   buildInputs = [ libclthreads libX11 libXft xorg.xproto ];
 
+  nativeBuildInputs = [ pkgconfig ];
+
   NIX_CFLAGS_COMPILE = "-I${xorg.xproto}/include -I${libXft.dev}/include";
 
   patchPhase = ''
-    sed -e "s@ldconfig@@" -i Makefile
+    cd source
+    # use pkg-config instead of pkgcon:
+    sed -e 's/pkgconf/pkg-config/g' -i ./Makefile
+    # don't run ldconfig:
+    sed -e "/ldconfig/d" -i ./Makefile
+    # make sure it can find clxclient.h:
+    sed -e 's/<clxclient.h>/"clxclient.h"/' -i ./enumip.cc
   '';
 
   makeFlags = [

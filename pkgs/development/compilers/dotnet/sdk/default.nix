@@ -12,16 +12,21 @@ let
   rpath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc libunwind libuuid icu openssl zlib curl ];
 in
   stdenv.mkDerivation rec {
-    version = "2.1.401";
+    version = "2.1.402";
+    netCoreVersion = "2.1.4";
     name = "dotnet-sdk-${version}";
 
     src = fetchurl {
       url = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/dotnet-sdk-${version}-linux-x64.tar.gz";
       # use sha512 from the download page
-      sha512 = "639f9f68f225246d9cce798d72d011f65c7eda0d775914d1394df050bddf93e2886555f5eed85a75d6c72e9063a54d8aa053c64c326c683b94e9e0a0570e5654";
+      sha512 = "dd7f15a8202ffa2a435b7289865af4483bb0f642ffcf98a1eb10464cb9c51dd1d771efbb6120f129fe9666f62707ba0b7c476cf1fd3536d3a29329f07456de48";
     };
 
-    unpackPhase = "tar xvzf $src";
+    unpackPhase = ''
+      mkdir src
+      cd src
+      tar xvzf $src
+    '';
 
     buildPhase = ''
       runHook preBuild
@@ -45,7 +50,7 @@ in
 
     meta = with stdenv.lib; {
       homepage = https://dotnet.github.io/;
-      description = ".NET Core SDK 2.0.2 with .NET Core 2.0.0";
+      description = ".NET Core SDK ${version} with .NET Core ${netCoreVersion}";
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; [ kuznero ];
       license = licenses.mit;

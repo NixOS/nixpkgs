@@ -9,10 +9,10 @@
 }:
 
 let
-  version = "1.2";
+  version = "1.3";
   prebuilt_server = fetchurl {
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}.jar";
-    sha256 = "0q0zyqw7y33r9ybjp8ay6yac7ifca1lq14pjvw6x78zxs976affb";
+    sha256 = "1ha04wfmghblwr9ajfl96cswacfgrk0b7klq2ixfvw1kgwhmm6hg";
   };
 in
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = "scrcpy";
     rev = "v${version}";
-    sha256 = "01zw6h6mz2cwqfh9lwypm8pbfx9m9df91l1fq1i0f1d8v49x8wqc";
+    sha256 = "02szi8w3w0lacyz42hlayxififi863qpm63yg9qir3jcl2vs7vdk";
   };
 
   nativeBuildInputs = [ makeWrapper meson ninja pkgconfig ];

@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
     pyyaml
     pyzmq
     requests
-    tornado
+    tornado_4
   ] ++ stdenv.lib.optional (!pythonPackages.isPy3k) [
     futures
   ] ++ extraInputs;

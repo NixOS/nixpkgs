@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   name = "inboxer-${version}";
-  version = "1.1.2";
+  version = "1.1.5";
 
   meta = with stdenv.lib; {
     description = "Unofficial, free and open-source Google Inbox Desktop App";
@@ -16,13 +16,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/denysdovhan/inboxer/releases/download/v${version}/inboxer_${version}_amd64.deb";
-    sha256 = "100185j10dj044mg5p9xlq7fj7n7xki9qw5xn845dgq0dpj8rkrm";
+    sha256 = "11xid07rqn7j6nxn0azxwf0g8g3jhams2fmf9q7xc1is99zfy7z4";
   };
 
   unpackPhase = ''
     ar p $src data.tar.xz | tar xJ
   '';
-  buildInputs = [ binutils patchelf makeWrapper ];
+  nativeBuildInputs = [ patchelf makeWrapper ];
+  buildInputs = [ binutils ];
 
   preFixup = with stdenv.lib; let
     lpath = makeLibraryPath [

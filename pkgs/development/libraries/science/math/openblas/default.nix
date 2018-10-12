@@ -60,7 +60,7 @@ let
       TARGET = "ATHLON";
       DYNAMIC_ARCH = "1";
       CC = "gcc";
-      USE_OPENMP = if stdenv.hostPlatform.isMusl then "0" else "1";
+      USE_OPENMP = "1";
     };
   };
 in
@@ -79,12 +79,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openblas-${version}";
-  version = "0.3.1";
+  version = "0.3.3";
   src = fetchFromGitHub {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "1dkwp4gz1hzpmhzks9y9ipb4c5h0r6c7yff62x3s8x9z6f8knaqc";
+    sha256 = "0cpkvfvc14xm9mifrm919rp8vrq70gpl7r2sww4f0izrl39wklwx";
   };
 
   inherit blas64;
@@ -118,20 +118,7 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "musl") "NO_AFFINITY=1"
     ++ mapAttrsToList (var: val: var + "=" + val) config;
 
-    patches = [
-      # Backport of https://github.com/xianyi/OpenBLAS/pull/1667, which
-      # is causing problems and was already accepted upstream.
-      (fetchpatch {
-        url = "https://github.com/xianyi/OpenBLAS/commit/5f2a3c05cd0e3872be3c5686b9da6b627658eeb7.patch";
-        sha256 = "1qvxhk92likrshw6z6hjqxvkblwzgsbzis2b2f71bsvx9174qfk1";
-      })
-      # Double "MAX_ALLOCATING_THREADS", fix with Go and Octave
-      # https://github.com/xianyi/OpenBLAS/pull/1663 (see also linked issue)
-      (fetchpatch {
-        url = "https://github.com/xianyi/OpenBLAS/commit/a49203b48c4a3d6f86413fc8c4b1fbfaa1946463.patch";
-        sha256 = "0v6kjkbgbw7hli6xkism48wqpkypxmcqvxpx564snll049l2xzq2";
-      })
-    ];
+    patches = [];
 
   doCheck = true;
   checkTarget = "tests";
@@ -140,7 +127,7 @@ stdenv.mkDerivation rec {
     # Write pkgconfig aliases. Upstream report:
     # https://github.com/xianyi/OpenBLAS/issues/1740
     for alias in blas cblas lapack; do
-      cat <<EOF > $out/lib/pkgconfig/openblas-$alias.pc
+      cat <<EOF > $out/lib/pkgconfig/$alias.pc
 Name: $alias
 Version: ${version}
 Description: $alias provided by the OpenBLAS package.

@@ -1,7 +1,7 @@
 { stdenv, targetPackages
 
 # build-tools
-, bootPkgs, alex, happy, hscolour
+, bootPkgs
 , autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4
 
 , libiconv ? null, ncurses
@@ -14,7 +14,7 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(gmp.meta.available or false), gmp
+  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -90,7 +90,8 @@ stdenv.mkDerivation (rec {
     sha256 = "1mk046vb561j75saz05rghhbkps46ym5aci4264dwc2qk3dayixf";
   };
 
-  enableParallelBuilding = true;
+  # https://ghc.haskell.org/trac/ghc/ticket/15449
+  enableParallelBuilding = !buildPlatform.isAarch64;
 
   outputs = [ "out" "doc" ];
 
@@ -99,6 +100,10 @@ stdenv.mkDerivation (rec {
     sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
     extraPrefix = "utils/hsc2hs/";
     stripLen = 1;
+  }) (fetchpatch rec { # https://phabricator.haskell.org/D5123
+    url = "http://tarballs.nixos.org/sha256/${sha256}";
+    name = "D5123.diff";
+    sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
   })] ++ stdenv.lib.optional deterministicProfiling
     (fetchpatch rec {
       url = "http://tarballs.nixos.org/sha256/${sha256}";
@@ -180,7 +185,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [
     perl autoconf automake m4 python3
-    ghc alex happy hscolour
+    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
   # For building runtime libs

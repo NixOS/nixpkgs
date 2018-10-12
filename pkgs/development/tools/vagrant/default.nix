@@ -1,10 +1,8 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive }:
+{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText }:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
-  # you must copy a fresh Gemfile.lock from the vagrant source,
-  # and use bundix to generate a new gemset.nix.
-  # Do not change the existing Gemfile.
+  # you must use bundix to generate a new gemset.nix in the Vagrant source.
   version = "2.1.2";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
   sha256 = "0fb90v43d30whhyjlgb9mmy93ccbpr01pz97kp5hrg3wfd7703b1";
@@ -15,7 +13,8 @@ let
     inherit version;
 
     inherit ruby;
-    gemdir = ./.;
+    gemfile = writeText "Gemfile" "";
+    lockfile = writeText "Gemfile.lock" "";
     gemset = lib.recursiveUpdate (import ./gemset.nix) {
       vagrant = {
         source = {
