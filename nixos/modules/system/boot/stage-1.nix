@@ -252,9 +252,8 @@ let
       echo checking syntax
       # check both with bash
       ${pkgs.buildPackages.bash}/bin/sh -n $target
-    '' + optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
       # and with ash shell, just in case
-      ${extraUtils}/bin/ash -n $target
+      ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
     inherit udevRules extraUtils modulesClosure;
