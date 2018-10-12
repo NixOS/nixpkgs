@@ -1172,4 +1172,63 @@ lib.attrsets.mapAttrsRecursiveCond
   </example>
  </section>
 
+ <section xml:id="function-library-lib.attrsets.genAttrs">
+  <title><function>lib.attrsets.genAttrs</function></title>
+
+  <subtitle><literal>genAttrs :: [ String ] -> (String -> Any) -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.genAttrs" />
+
+  <para>
+   Generate an attribute set by mapping a function over a list of attribute
+   names.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>names</varname>
+    </term>
+    <listitem>
+     <para>
+      Names of values in the resulting attribute set.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>String -> Any</literal>
+     </para>
+     <para>
+      Takes the name of the attribute and return the attribute's value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The name of the attribute to generate a value for.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.genAttrs-example">
+   <title>Generate an attrset based on names only</title>
+<programlisting><![CDATA[
+lib.attrsets.genAttrs [ "foo" "bar" ] (name: "x_${name}")
+=> { foo = "x_foo"; bar = "x_bar"; }
+     ]]></programlisting>
+  </example>
+ </section>
 </section>
