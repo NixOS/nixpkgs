@@ -2927,6 +2927,10 @@ in {
     };
   };
 
+  lirc = disabledIf isPy27 (toPythonModule (pkgs.lirc.override {
+    python3 = python;
+  }));
+
   jupyter = buildPythonPackage rec {
     version = "1.0.0";
     name = "jupyter-${version}";
