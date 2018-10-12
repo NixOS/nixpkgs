@@ -10,6 +10,7 @@
 , sdlSupport ? !stdenv.isDarwin, SDL2
 , gtkSupport ? !stdenv.isDarwin && !xenSupport, gtk3, gettext, gnome3
 , vncSupport ? true, libjpeg, libpng
+, smartcardSupport ? true, libcacard
 , spiceSupport ? !stdenv.isDarwin, spice, spice-protocol
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     ++ optionals sdlSupport [ SDL2 ]
     ++ optionals gtkSupport [ gtk3 gettext gnome3.vte ]
     ++ optionals vncSupport [ libjpeg libpng ]
+    ++ optionals smartcardSupport [ libcacard ]
     ++ optionals spiceSupport [ spice-protocol spice ]
     ++ optionals usbredirSupport [ usbredir ]
     ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ]
@@ -108,6 +110,7 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "--cpu=x86_64"
     ++ optional numaSupport "--enable-numa"
     ++ optional seccompSupport "--enable-seccomp"
+    ++ optional smartcardSupport "--enable-smartcard"
     ++ optional spiceSupport "--enable-spice"
     ++ optional usbredirSupport "--enable-usb-redir"
     ++ optional hostCpuOnly "--target-list=${hostCpuTargets}"
