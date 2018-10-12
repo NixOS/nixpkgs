@@ -1364,7 +1364,7 @@ lib.attrsets.optionalAttrs false { my = "set"; }
 
   <para>
    Merge sets of attributes and use the function <varname>f</varname> to merge
-   attribute values.
+   attribute values where the attribute name is in <varname>names</varname>.
   </para>
 
   <variablelist>
