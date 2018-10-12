@@ -4,6 +4,7 @@ let
   packages = self: with self; {
 
     dbus-factory = callPackage ./dbus-factory { };
+    dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
