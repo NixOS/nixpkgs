@@ -966,5 +966,87 @@ lib.attrsets.mapAttrsToList (name: value: "${name}=${value}")
    itself to attribute sets. Also, the first argument of the argument function
    is a <emphasis>list</emphasis> of the names of the containing attributes.
   </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>[ String ] -> Any -> Any</literal>
+     </para>
+     <para>
+      Given a list of attribute names and value, return a new value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name_path</varname>
+       </term>
+       <listitem>
+        <para>
+         The list of attribute names to this value.
+        </para>
+        <para>
+         For example, the <varname>name_path</varname> for the
+         <literal>example</literal> string in the attribute set <literal>{ foo
+         = { bar = "example"; }; }</literal> is <literal>[ "foo" "bar"
+         ]</literal>.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to recursively map over.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.mapAttrsRecursive-example">
+   <title>A contrived example of using <function>lib.attrsets.mapAttrsRecursive</function></title>
+<programlisting><![CDATA[
+mapAttrsRecursive
+  (path: value: concatStringsSep "-" (path ++ [value]))
+  {
+    n = {
+      a = "A";
+      m = {
+        b = "B";
+        c = "C";
+      };
+    };
+    d = "D";
+  }
+=> {
+     n = {
+       a = "n-a-A";
+       m = {
+         b = "n-m-b-B";
+         c = "n-m-c-C";
+       };
+     };
+     d = "d-D";
+   }
+    ]]></programlisting>
+  </example>
  </section>
 </section>
