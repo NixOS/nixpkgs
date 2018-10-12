@@ -190,7 +190,9 @@ in {
 
   astral = callPackage ../development/python-modules/astral { };
 
-  astropy = callPackage ../development/python-modules/astropy {  };
+  astropy = callPackage ../development/python-modules/astropy { };
+
+  atom = callPackage ../development/python-modules/atom { };
 
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
