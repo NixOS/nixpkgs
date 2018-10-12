@@ -17,7 +17,8 @@ let cargo-vendor-normalise = stdenv.mkDerivation {
   preferLocalBuild = true;
 };
 in
-{ name ? "cargo-deps", src, srcs, patches, sourceRoot, sha256, cargoUpdateHook ? "" }:
+{ name ? "cargo-deps", src, srcs, patches, sourceRoot, sha256, cargoUpdateHook ? ""
+, flagNoMergeSources ? false }:
 stdenv.mkDerivation {
   name = "${name}-vendor";
   nativeBuildInputs = [ cacert cargo-vendor git cargo-vendor-normalise rust.cargo ];
@@ -42,7 +43,12 @@ stdenv.mkDerivation {
     ${cargoUpdateHook}
 
     mkdir -p $out
-    cargo vendor $out | cargo-vendor-normalise > config
+    ${if flagNoMergeSources
+      then ''
+        cargo vendor --no-merge-sources $out > config
+        substituteInPlace config --replace "$out" "@vendor@"
+      ''
+      else "cargo vendor $out | cargo-vendor-normalise > config"}
     # fetchcargo used to never keep the config output by cargo vendor
     # and instead hardcode the config in ./fetchcargo-default-config.toml.
     # This broke on packages needing git dependencies, so now we keep the config.

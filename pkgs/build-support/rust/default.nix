@@ -17,6 +17,7 @@ in
 , cargoBuildFlags ? []
 
 , cargoVendorDir ? null
+, cargoVendorNoMergeSources ? false
 , ... } @ args:
 
 assert cargoVendorDir == null -> cargoSha256 != "unset";
@@ -27,6 +28,7 @@ let
         inherit name src srcs sourceRoot cargoUpdateHook;
         patches = cargoPatches;
         sha256 = cargoSha256;
+        flagNoMergeSources = cargoVendorNoMergeSources;
       }
     else null;
 
