@@ -1091,6 +1091,10 @@ with pkgs;
 
   cddl = callPackage ../development/tools/cddl { };
 
+  cedille = callPackage ../applications/science/logic/cedille
+                          { inherit (haskellPackages) alex happy Agda ghcWithPackages;
+                          };
+
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
