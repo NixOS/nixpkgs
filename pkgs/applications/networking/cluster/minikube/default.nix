@@ -14,7 +14,7 @@ let
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.29.0";
+  version = "0.30.0";
 
   kubernetesVersion = "1.11.2";
 
@@ -24,7 +24,7 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "09px8pxml7xrnfhyjvlhf1hw7zdj9sw47a0fv5wj5aard54lhs1l";
+    sha256 = "02jxwh8qrvjn31rzjwx23908nd1i592drfdykxbc5b6a62fwp02z";
   };
 
   buildInputs = [ go-bindata makeWrapper gpgme ] ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin vmnet;
