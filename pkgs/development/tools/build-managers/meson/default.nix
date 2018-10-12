@@ -47,10 +47,10 @@ python3Packages.buildPythonApplication rec {
 
   crossFile = writeTextDir "cross-file.conf" ''
     [binaries]
-    c = '${stdenv.cc.targetPrefix}cc'
-    cpp = '${stdenv.cc.targetPrefix}c++'
-    ar = '${stdenv.cc.bintools.targetPrefix}ar'
-    strip = '${stdenv.cc.bintools.targetPrefix}strip'
+    c = '${stdenv.targetPlatform.config}-cc'
+    cpp = '${stdenv.targetPlatform.config}-c++'
+    ar = '${stdenv.targetPlatform.config}-ar'
+    strip = '${stdenv.targetPlatform.config}-strip'
     pkgconfig = 'pkg-config'
 
     [properties]
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
 
   inherit (stdenv) cc;
 
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+  isCross = stdenv.targetPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;
