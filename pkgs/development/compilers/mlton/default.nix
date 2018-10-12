@@ -5,9 +5,7 @@ let
 
   usr_prefix = if stdenv.isDarwin then "usr/local" else "usr";
 
-  dynamic_linker =
-    if stdenv.isx86_64 then "${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2"
-                       else "${stdenv.glibc.out}/lib/ld-linux.so.2";
+  dynamic_linker = stdenv.cc.bintools.dynamicLinker;
 in
 
 stdenv.mkDerivation rec {
