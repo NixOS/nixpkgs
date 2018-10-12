@@ -1300,4 +1300,57 @@ lib.attrsets.isDerivation "foobar"
    </varlistentry>
   </variablelist>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.optionalAttrs">
+  <title><function>lib.attrsets.optionalAttrs</function></title>
+
+  <subtitle><literal>optionalAttrs :: Bool -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.optionalAttrs" />
+
+  <para>
+   Conditionally return an attribute set or an empty attribute set.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>cond</varname>
+    </term>
+    <listitem>
+     <para>
+      Condition under which the <varname>as</varname> attribute set is
+      returned.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>as</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to return if <varname>cond</varname> is true.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.optionalAttrs-example-true">
+   <title>Return the provided attribute set when <varname>cond</varname> is true</title>
+<programlisting><![CDATA[
+lib.attrsets.optionalAttrs true { my = "set"; }
+=> { my = "set"; }
+     ]]></programlisting>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.optionalAttrs-example-false">
+   <title>Return an empty attribute set when <varname>cond</varname> is false</title>
+<programlisting><![CDATA[
+lib.attrsets.optionalAttrs false { my = "set"; }
+=> { }
+     ]]></programlisting>
+  </example>
+ </section>
 </section>
