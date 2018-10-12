@@ -1441,4 +1441,83 @@ lib.attrsets.zipAttrsWithNames
      ]]></programlisting>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.zipAttrsWith">
+  <title><function>lib.attrsets.zipAttrsWith</function></title>
+
+  <subtitle><literal>zipAttrsWith :: (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrsWith" />
+
+  <para>
+   Merge sets of attributes and use the function <varname>f</varname> to merge
+   attribute values. Similar to <xref
+   linkend="function-library-lib.attrsets.zipAttrsWithNames" /> where
+   all key names are passed for <varname>names</varname>.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>(String -> [ Any ] -> Any</literal>
+     </para>
+     <para>
+      Accepts an attribute name, all the values, and returns a combined value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The name of the attribute each value came from.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>vs</varname>
+       </term>
+       <listitem>
+        <para>
+         A list of values collected from the list of attribute sets.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>sets</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of attribute sets to zip together.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.zipAttrsWith-example">
+   <title>Summing a list of attribute sets of numbers</title>
+<programlisting><![CDATA[
+lib.attrsets.zipAttrsWith
+  (name: vals: "${name} ${toString (builtins.foldl' (a: b: a + b) 0 vals)}")
+  [
+    { a = 1; b = 1; c = 1; }
+    { a = 10; }
+    { b = 100; }
+    { c = 1000; }
+  ]
+=> { a = "a 11"; b = "b 101"; c = "c 1001"; }
+     ]]></programlisting>
+  </example>
+ </section>
 </section>
