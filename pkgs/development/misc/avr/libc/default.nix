@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, avrgcc, avrbinutils, automake, autoconf }:
+{ stdenv, fetchurl, avrgcc-unwrapped, avrbinutils, automake, autoconf }:
 
 let
   version = "2.0.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "15svr2fx8j6prql2il2fc0ppwlv50rpmyckaxx38d3gxxv97zpdj";
   };
 
-  buildInputs = [ avrgcc avrbinutils automake autoconf ];
+  buildInputs = [ avrgcc-unwrapped avrbinutils automake autoconf ];
   configurePhase = ''
     unset LD
     unset AS
