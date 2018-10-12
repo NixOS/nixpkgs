@@ -29,5 +29,6 @@ buildGoPackage rec {
     description = "Cloudflare's PKI and TLS toolkit";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mbrgm ];
+    platforms = platforms.all;
   };
 }
