@@ -1336,6 +1336,8 @@ with pkgs;
 
   fsmark = callPackage ../tools/misc/fsmark { };
 
+  futhark = haskell.lib.justStaticExecutables haskellPackages.futhark;
+
   fwup = callPackage ../tools/misc/fwup { };
 
   fzf = callPackage ../tools/misc/fzf { };
@@ -8600,7 +8602,7 @@ with pkgs;
 
   msitools = callPackage ../development/tools/misc/msitools { };
 
-  multi-ghc-travis = haskell.lib.justStaticExecutables haskellPackages.multi-ghc-travis;
+  haskell-ci = haskell.lib.justStaticExecutables haskellPackages.haskell-ci;
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
