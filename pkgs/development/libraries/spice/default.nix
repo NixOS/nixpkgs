@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, pixman, celt, alsaLib
 , openssl, libXrandr, libXfixes, libXext, libXrender, libXinerama
 , libjpeg, zlib, spice-protocol, python, pyparsing, glib, cyrus_sasl
-, lz4 }:
+, libcacard, lz4 }:
 
 with stdenv.lib;
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pixman celt alsaLib openssl libjpeg zlib
                   libXrandr libXfixes libXrender libXext libXinerama
-                  python pyparsing glib cyrus_sasl lz4 ];
+                  python pyparsing glib cyrus_sasl libcacard lz4 ];
 
   nativeBuildInputs = [ pkgconfig spice-protocol ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-sasl"
-    "--disable-smartcard"
+    "--enable-smartcard"
     "--enable-client"
     "--enable-lz4"
   ];
