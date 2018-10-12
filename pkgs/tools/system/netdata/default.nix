@@ -13,13 +13,13 @@ stdenv.mkDerivation rec{
   buildInputs = [ zlib ]
     ++ (if stdenv.isDarwin then [ libossp_uuid CoreFoundation IOKit ] else [ libuuid ]);
 
-  # Build will fail trying to create /var/{cache,lib,log}/netdata without this
-  postPatch = ''
-    substituteInPlace Makefile.am --replace "installer/.keep" ""
-  '';
+  patches = [
+    ./no-files-in-etc-and-var.patch
+  ];
 
   configureFlags = [
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
   ];
 
   postFixup = ''
