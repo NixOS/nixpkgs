@@ -7164,7 +7164,8 @@ with pkgs;
 
   inherit (callPackage ../development/compilers/mlton {})
     mlton20130715
-    mlton20180207Binary;
+    mlton20180207Binary
+    mlton20180207;
 
   mlton = mlton20130715;
 
