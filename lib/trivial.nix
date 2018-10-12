@@ -103,7 +103,7 @@ rec {
     let suffixFile = ../.version-suffix;
     in if pathExists suffixFile
     then lib.strings.fileContents suffixFile
-    else "pre-git";
+    else "post-git";
 
   # Attempt to get the revision nixpkgs is from
   revisionWithDefault = default:
