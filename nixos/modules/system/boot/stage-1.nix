@@ -251,7 +251,8 @@ let
     postInstall = ''
       echo checking syntax
       # check both with bash
-      ${pkgs.bash}/bin/sh -n $target
+      ${pkgs.buildPackages.bash}/bin/sh -n $target
+    '' + optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
       # and with ash shell, just in case
       ${extraUtils}/bin/ash -n $target
     '';
