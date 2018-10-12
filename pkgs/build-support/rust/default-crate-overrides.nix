@@ -9,8 +9,6 @@ in
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
       ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation libiconv ];
-    # TODO: buildRustCrate seems to use incorrect default inference
-    crateBin = [ {  name = "cargo"; path = "src/bin/cargo.rs"; } ];
   };
   cargo-vendor = attrs: {
     buildInputs = [ openssl zlib curl ];
