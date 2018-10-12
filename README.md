@@ -30,6 +30,7 @@ imports = [
 | Apple MacBook Air 6,X             | `<nixos-hardware/apple/macbook-air/6>`       |
 | [Apple MacBook Pro 10,1][]        | `<nixos-hardware/apple/macbook-pro/10-1>`    |
 | Apple MacBook Pro 12,1            | `<nixos-hardware/apple/macbook-pro/12-1>`    |
+| BeagleBoard PocketBeagle          | `<nixos-hardware/beagleboard/pocketbeagle>`  |
 | [Dell XPS 15 9550][]              | `<nixos-hardware/dell/xps/15-9550>`          |
 | [Inverse Path USB armory][]       | `<nixos-hardware/inversepath/usbarmory>`     |
 | Lenovo IdeaPad Z510               | `<nixos-hardware/lenovo/ideapad/z510>`       |
@@ -41,7 +42,7 @@ imports = [
 | Lenovo ThinkPad X220              | `<nixos-hardware/lenovo/thinkpad/x220>`      |
 | Lenovo ThinkPad X230              | `<nixos-hardware/lenovo/thinkpad/x230>`      |
 | Lenovo ThinkPad X250              | `<nixos-hardware/lenovo/thinkpad/x250>`      |
-| [Lenovo ThinkPad X260][]          | `<nixos-hardware/lenovo/thinkpad/x260>`    |
+| [Lenovo ThinkPad X260][]          | `<nixos-hardware/lenovo/thinkpad/x260>`      |
 | Lenovo ThinkPad X270              | `<nixos-hardware/lenovo/thinkpad/x270>`      |
 | [Lenovo ThinkPad X1 (6th Gen)][]  | `<nixos-hardware/lenovo/thinkpad/x1/6th-gen>`|
 | [Microsoft Surface Pro 3][]       | `<nixos-hardware/microsoft/surface-pro/3>`   |
