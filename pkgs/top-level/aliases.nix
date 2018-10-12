@@ -49,6 +49,7 @@ mapAliases ({
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
+  buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16

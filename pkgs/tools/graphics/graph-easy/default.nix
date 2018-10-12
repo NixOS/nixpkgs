@@ -1,6 +1,6 @@
-{ stdenv, buildPerlPackage, fetchurl }:
+{ stdenv, perlPackages, fetchurl }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "Graph-Easy-${version}";
   version = "0.76";
   src = fetchurl {
