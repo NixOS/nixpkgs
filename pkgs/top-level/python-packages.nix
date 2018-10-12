@@ -1979,32 +1979,7 @@ in {
 
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 
-  tinycss = buildPythonPackage rec {
-    name = "tinycss-${version}";
-    version = "0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tinycss/${name}.tar.gz";
-      sha256 = "1pichqra4wk86142hqgvy9s5x6c5k5zhy8l9qxr0620pqk8spbd4";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    propagatedBuildInputs = with self; [ cssutils ];
-
-    checkPhase = ''
-      py.test $out/${python.sitePackages}
-    '';
-
-    # Disable Cython tests for PyPy
-    TINYCSS_SKIP_SPEEDUPS_TESTS = optional isPyPy true;
-
-    meta = {
-      description = "Complete yet simple CSS parser for Python";
-      license = licenses.bsd3;
-      homepage = https://pythonhosted.org/tinycss/;
-    };
-  };
+  tinycss = callPackage ../development/python-modules/tinycss { };
 
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
