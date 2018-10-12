@@ -171,7 +171,7 @@ with pkgs;
   fetchfossil = callPackage ../build-support/fetchfossil { };
 
   fetchgit = callPackage ../build-support/fetchgit {
-    git = gitMinimal;
+    git = buildPackages.gitMinimal;
   };
 
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
