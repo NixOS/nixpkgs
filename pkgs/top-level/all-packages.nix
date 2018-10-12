@@ -12924,8 +12924,6 @@ with pkgs;
   perlPackages = perl528Packages;
   inherit (perlPackages) perl buildPerlPackage;
 
-  perlXMLParser = perlPackages.XMLParser;
-
   ack = perlPackages.ack;
 
   perlArchiveCpio = perlPackages.ArchiveCpio;
