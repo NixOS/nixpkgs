@@ -33,24 +33,18 @@ in stdenv.mkDerivation rec {
         --replace /usr/bin/libtool ar \
         --replace 'AR="libtool"' 'AR="ar"' \
         --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
-  '' + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    sed -i -r 's@^RANLIB\s*=\s*ranlib@RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib@' liblinear/Makefile
-    sed -i -r 's@^RANLIB\s*=\s*ranlib@RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib@' liblinear/blas/Makefile
-    sed -i -r 's@^RANLIB\s*=\s*ranlib@RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib@' liblua/Makefile
-    sed -i -r 's@^AR\s*=\s*ar@AR=${stdenv.cc.bintools.targetPrefix}ar@'                 liblinear/Makefile
-    sed -i -r 's@^AR\s*=\s*ar@AR=${stdenv.cc.bintools.targetPrefix}ar@'                 liblinear/blas/Makefile
-    sed -i -r 's@^AR\s*=\s*ar@AR=${stdenv.cc.bintools.targetPrefix}ar@'                 liblua/Makefile
-    sed -i -r 's@^AR\s*=\s*ar@AR=${stdenv.cc.bintools.targetPrefix}ar@'                 libnetutil/Makefile.in
-    sed -i -r 's@^AR\s*=\s*ar@AR=${stdenv.cc.bintools.targetPrefix}ar@'                 libpcre/Makefile.in
-    sed -i -r 's@^AR\s*=\s*ar@AR=${stdenv.cc.bintools.targetPrefix}ar@'                 nbase/Makefile.in
-    sed -i -r 's@^AR\s*=\s*ar@AR=${stdenv.cc.bintools.targetPrefix}ar@'                 nsock/src/Makefile.in
-    sed -i -r 's@^CC\s*=\s*gcc@CC=${stdenv.cc.targetPrefix}gcc@'                        liblua/Makefile
   '';
 
   configureFlags = [ "--with-liblua=included" ]
     ++ optional (!pythonSupport) "--without-ndiff"
     ++ optional (!graphicalSupport) "--without-zenmap"
     ;
+
+  makeFlags = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.bintools.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"
+    "CC=${stdenv.cc.targetPrefix}gcc"
+  ];
 
   postInstall = optionalString pythonSupport ''
       wrapProgram $out/bin/ndiff --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH"
