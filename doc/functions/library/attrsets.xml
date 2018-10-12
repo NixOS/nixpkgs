@@ -1671,4 +1671,61 @@ lib.attrsets.recursiveUpdateUntil (path: l: r: path == ["foo"])
      ]]></programlisting>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.recursiveUpdate">
+  <title><function>lib.attrsets.recursiveUpdate</function></title>
+
+  <subtitle><literal>recursiveUpdate :: AttrSet -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.recursiveUpdate" />
+
+  <para>
+   A recursive variant of the update operator <literal>//</literal>. The
+   recursion stops when one of the attribute values is not an attribute set, in
+   which case the right hand side value takes precedence over the left hand
+   side value.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>lhs</varname>
+    </term>
+    <listitem>
+     <para>
+      The left hand attribute set of the merge.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>rhs</varname>
+    </term>
+    <listitem>
+     <para>
+      The right hand attribute set of the merge.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.recursiveUpdate-example">
+   <title>Recursively merging two attribute sets</title>
+<programlisting><![CDATA[
+recursiveUpdate
+  {
+    boot.loader.grub.enable = true;
+    boot.loader.grub.device = "/dev/hda";
+  }
+  {
+    boot.loader.grub.device = "";
+  }
+=> {
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "";
+}
+]]></programlisting>
+  </example>
+ </section>
 </section>
