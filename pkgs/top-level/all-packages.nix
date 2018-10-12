@@ -7925,9 +7925,11 @@ with pkgs;
 
   avrbinutils = callPackage ../development/misc/avr/binutils {};
 
-  avrgcc      = callPackage ../development/misc/avr/gcc {};
+  avrgcc-unwrapped = callPackage ../development/misc/avr/gcc {};
 
-  avrlibc     = callPackage ../development/misc/avr/libc {};
+  avrgcc = callPackage ../development/misc/avr/gcc/wrapper.nix {};
+
+  avrlibc = callPackage ../development/misc/avr/libc {};
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
