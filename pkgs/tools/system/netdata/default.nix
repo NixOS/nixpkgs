@@ -17,6 +17,12 @@ stdenv.mkDerivation rec{
     ./no-files-in-etc-and-var.patch
   ];
 
+  postInstall = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    # rename this plugin so netdata will look for setuid wrapper
+    mv $out/libexec/netdata/plugins.d/apps.plugin \
+      $out/libexec/netdata/plugins.d/apps.plugin.org
+  '';
+
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"

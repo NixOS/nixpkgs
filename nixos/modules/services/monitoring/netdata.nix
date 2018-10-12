@@ -12,7 +12,7 @@ let
 
   localConfig = {
     global = {
-      "plugins directory" = "${wrappedPlugins}/libexec/netdata/plugins.d ${pkgs.netdata}/libexec/netdata/plugins.d";
+      "plugins directory" = "${pkgs.netdata}/libexec/netdata/plugins.d ${wrappedPlugins}/libexec/netdata/plugins.d";
     };
     web = {
       "web files owner" = "root";
@@ -96,7 +96,7 @@ in {
     };
 
     security.wrappers."apps.plugin" = {
-      source = "${pkgs.netdata}/libexec/netdata/plugins.d/apps.plugin";
+      source = "${pkgs.netdata}/libexec/netdata/plugins.d/apps.plugin.org";
       capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
       owner = cfg.user;
       group = cfg.group;
