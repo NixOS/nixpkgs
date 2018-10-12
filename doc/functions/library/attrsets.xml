@@ -1231,4 +1231,47 @@ lib.attrsets.genAttrs [ "foo" "bar" ] (name: "x_${name}")
      ]]></programlisting>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.isDerivation">
+  <title><function>lib.attrsets.isDerivation</function></title>
+
+  <subtitle><literal>isDerivation :: Any -> Bool</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.isDerivation" />
+
+  <para>
+   Check whether the argument is a derivation. Any set with <code>{ type =
+   "derivation"; }</code> counts as a derivation.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>value</varname>
+    </term>
+    <listitem>
+     <para>
+      The value which is possibly a derivation.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.isDerivation-example-true">
+   <title>A package is a derivation</title>
+<programlisting><![CDATA[
+lib.attrsets.isDerivation (import <nixpkgs> {}).ruby
+=> true
+     ]]></programlisting>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.isDerivation-example-false">
+   <title>Anything else is not a derivation</title>
+<programlisting><![CDATA[
+lib.attrsets.isDerivation "foobar"
+=> false
+     ]]></programlisting>
+  </example>
+ </section>
 </section>
