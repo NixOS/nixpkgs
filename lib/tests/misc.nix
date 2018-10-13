@@ -369,6 +369,7 @@ runTests {
   testToPretty = {
     expr = mapAttrs (const (generators.toPretty {})) rec {
       int = 42;
+      float = 0.1337;
       bool = true;
       string = ''fno"rd'';
       path = /. + "/foo";
@@ -381,6 +382,7 @@ runTests {
     };
     expected = rec {
       int = "42";
+      float = "~0.133700";
       bool = "true";
       string = ''"fno\"rd"'';
       path = "/foo";
