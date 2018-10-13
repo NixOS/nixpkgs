@@ -15463,6 +15463,8 @@ with pkgs;
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
 
+  weather-icons = callPackage ../data/fonts/weather-icons { };
+
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
