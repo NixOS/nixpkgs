@@ -243,6 +243,25 @@ let
       '';
     };
 
+    tor = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        # Note: this does not connect the test environment to the Tor network.
+        # Client, relay, bridge or exit connectivity are disabled by default.
+        services.tor.enable = true;
+        services.tor.controlPort = 9051;
+      };
+      exporterTest = ''
+        waitForUnit("tor.service");
+        waitForOpenPort(9051);
+        waitForUnit("prometheus-tor-exporter.service");
+        waitForOpenPort(9130);
+        succeed("curl -sSf localhost:9130/metrics | grep -q 'tor_version{.\\+} 1'");
+      '';
+    };
+
     varnish = {
       exporterConfig = {
         enable = true;
