@@ -75,7 +75,9 @@ stdenv.mkDerivation {
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
-  patches = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  patches = [
+    ./nix-etag-1.15.4.patch
+  ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/102-sizeof_test_fix.patch";
       sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";
