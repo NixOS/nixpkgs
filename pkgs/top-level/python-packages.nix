@@ -390,6 +390,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  mwclient = callPackage ../development/python-modules/mwclient { };
+
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
@@ -7478,34 +7480,6 @@ in {
   mypy_extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
-
-  mwclient = buildPythonPackage rec {
-    version = "0.8.3";
-    pname = "mwclient";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mwclient";
-      repo = "mwclient";
-      rev = "v${version}";
-      sha256 = "0kl1yp9z5f1wl6lkm0vix87zkrbl9wcmkrrj1x5c35xvf95laf53";
-    };
-
-    buildInputs = with self; [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];
-
-    propagatedBuildInputs = with self; [ six requests requests_oauthlib ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Python client library to the MediaWiki API";
-      maintainers = with maintainers; [ ];
-      license = licenses.mit;
-      homepage = https://github.com/mwclient/mwclient;
-    };
-  };
 
   neuronpy = buildPythonPackage rec {
     name = "neuronpy-${version}";
