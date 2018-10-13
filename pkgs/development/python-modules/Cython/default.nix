@@ -50,6 +50,13 @@ in buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/cython/cython/commit/eae37760bfbe19e7469aa41269480b84ce12b6cd.patch";
+      sha256 = "0irk53psrs05kzzlvbfv7s3q02x5lsnk5qrv0zd1ra3mw2sfyym6";
+    })
+  ];
+
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = http://cython.org;
