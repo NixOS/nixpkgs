@@ -11600,8 +11600,6 @@ with pkgs;
 
   paperkey = callPackage ../tools/security/paperkey { };
 
-  parquet-cpp = callPackage ../development/libraries/parquet-cpp {};
-
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
   pcaudiolib = callPackage ../development/libraries/pcaudiolib {
