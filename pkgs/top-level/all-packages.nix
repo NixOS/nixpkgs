@@ -6385,6 +6385,15 @@ with pkgs;
 
   abcl = callPackage ../development/compilers/abcl {};
 
+  adoptopenjdk-bin-11-packages = import ../development/compilers/adoptopenjdk-bin/jdk11-linux.nix;
+  adoptopenjdk-hotspot-bin-11 = callPackage adoptopenjdk-bin-11-packages.jdk-hotspot {};
+  adoptopenjdk-jre-hotspot-bin-11 = callPackage adoptopenjdk-bin-11-packages.jre-hotspot {};
+  adoptopenjdk-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages.jdk-openj9 {};
+  adoptopenjdk-jre-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages.jre-openj9 {};
+
+  adoptopenjdk-bin = adoptopenjdk-hotspot-bin-11;
+  adoptopenjdk-jre-bin = adoptopenjdk-jre-hotspot-bin-11;
+
   aldor = callPackage ../development/compilers/aldor { };
 
   aliceml = callPackage ../development/compilers/aliceml { };
