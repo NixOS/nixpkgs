@@ -584,9 +584,11 @@ in {
 
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
+  pyvoro = callPackage ../development/python-modules/pyvoro { };
+
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
-  pyvoro = callPackage ../development/python-modules/pyvoro { };
+  py-solc = callPackage ../development/python-modules/py-solc { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 

@@ -3190,6 +3190,11 @@
     github = "pawelpacana";
     name = "Paweł Pacana";
   };
+  paulperegud = {
+    email = "paulperegud@gmail.com";
+    github = "paulperegud";
+    name = "Paul Peregud";
+  };
   pbogdan = {
     email = "ppbogdan@gmail.com";
     github = "pbogdan";
