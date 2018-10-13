@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, python3, vulkan-headers, pkgconfig,
   xlibsWrapper, libxcb, libXrandr, libXext, wayland, libGL_driver }:
-let version = "1.1.82.0"; in
+let version = "1.1.85"; in
 assert version == vulkan-headers.version;
 stdenv.mkDerivation rec {
   name = "vulkan-loader-${version}";
