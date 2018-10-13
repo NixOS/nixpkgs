@@ -35,6 +35,7 @@ in
 
   lenovo-thinkpad-t410 = buildProfile ./lenovo/thinkpad/t410;
   lenovo-thinkpad-t440p = buildProfile ./lenovo/thinkpad/t440p;
+  lenovo-thinkpad-t450s = buildProfile ./lenovo/thinkpad/t450s;
   lenovo-thinkpad-t460s = buildProfile ./lenovo/thinkpad/t460s;
   lenovo-thinkpad-x140e = buildProfile ./lenovo/thinkpad/x140e;
   lenovo-thinkpad-x220 = buildProfile ./lenovo/thinkpad/x220;
