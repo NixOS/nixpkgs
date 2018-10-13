@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.27";
+  version = "0.28";
   name = "notmuch-${version}";
 
   passthru = {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "0xh8vq2sa7r07xb3n13drc6gdiqhcgl0pj0za5xj43qkiwpikls0";
+    sha256 = "0dqarmjc8544m2w7bqrqmvsfy55fw82707z3lz9cql8nr777bjmc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     doxygen perl  # (optional) api docs
     pythonPackages.sphinx pythonPackages.python  # (optional) documentation -> doc/INSTALL
     bash-completion  # (optional) dependency to install bash completion
-    emacs  # (optional) to byte compile emacs code
+    emacs  # (optional) to byte compile emacs code, also needed for tests
     ruby  # (optional) ruby bindings
     which dtach openssl bash  # test dependencies
   ]
