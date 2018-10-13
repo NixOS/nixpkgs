@@ -540,7 +540,7 @@ self: super: builtins.intersectAttrs super {
           --prefix PATH : "${path}" \
           --set NIX_CC_WRAPPER_x86_64_unknown_linux_gnu_TARGET_HOST 1 \
           --set NIX_CFLAGS_COMPILE "-I${opencl-headers}/include" \
-          --set NIX_CFLAGS_LINK "-L${opencl-icd}/lib"
+          --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
       '';
     });
 }
