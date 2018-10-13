@@ -559,6 +559,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  pystache = callPackage ../development/python-modules/pystache { }; 
+
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
@@ -10330,34 +10332,6 @@ in {
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ koral ];
-    };
-  };
-
-  pystache = buildPythonPackage rec {
-    name = "pystache-${version}";
-    version = "0.5.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pystache/${name}.tar.gz";
-      sha256 = "f7bbc265fb957b4d6c7c042b336563179444ab313fb93a719759111eabd3b85a";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
-    # SyntaxError Python 3
-    # https://github.com/defunkt/pystache/issues/181
-    doCheck = !isPy3k;
-
-    meta = {
-      description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";
-      homepage = https://github.com/defunkt/pystache;
-      license = licenses.mit;
     };
   };
 
