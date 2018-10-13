@@ -736,6 +736,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
+  luigi = callPackage ../applications/networking/cluster/luigi { };
+
   m-cli = callPackage ../os-specific/darwin/m-cli { };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace {};
