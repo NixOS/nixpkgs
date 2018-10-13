@@ -358,6 +358,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  helper = callPackage ../development/python-modules/helper { };
+
   histbook = callPackage ../development/python-modules/histbook { };
 
   httpsig = callPackage ../development/python-modules/httpsig { };
@@ -387,6 +389,8 @@ in {
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
+
+  mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwoauth = callPackage ../development/python-modules/mwoauth { };
 
@@ -554,6 +558,8 @@ in {
   pyslurm = callPackage ../development/python-modules/pyslurm {
     slurm = pkgs.slurm;
   };
+
+  pystache = callPackage ../development/python-modules/pystache { }; 
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
@@ -2531,31 +2537,6 @@ in {
   else throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
-
-  helper = buildPythonPackage rec {
-    pname = "helper";
-    version = "2.4.1";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/${pname}/${name}.tar.gz";
-      sha256 = "4e33dde42ad4df30fb7790689f93d77252cff26a565610d03ff2e434865a53a2";
-    };
-
-    buildInputs = with self; [ mock ];
-    propagatedBuildInputs = with self; [ pyyaml ];
-
-    # No tests
-    doCheck = false;
-
-    meta = {
-      description = "Development library for quickly writing configurable applications and daemons";
-      homepage = https://helper.readthedocs.org/;
-      license = licenses.bsd3;
-    };
-
-
-  };
 
   hiro = callPackage ../development/python-modules/hiro {};
 
@@ -7502,34 +7483,6 @@ in {
 
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
 
-  mwclient = buildPythonPackage rec {
-    version = "0.8.3";
-    pname = "mwclient";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mwclient";
-      repo = "mwclient";
-      rev = "v${version}";
-      sha256 = "0kl1yp9z5f1wl6lkm0vix87zkrbl9wcmkrrj1x5c35xvf95laf53";
-    };
-
-    buildInputs = with self; [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];
-
-    propagatedBuildInputs = with self; [ six requests requests_oauthlib ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Python client library to the MediaWiki API";
-      maintainers = with maintainers; [ ];
-      license = licenses.mit;
-      homepage = https://github.com/mwclient/mwclient;
-    };
-  };
-
   neuronpy = buildPythonPackage rec {
     name = "neuronpy-${version}";
     version = "0.1.6";
@@ -10379,34 +10332,6 @@ in {
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ koral ];
-    };
-  };
-
-  pystache = buildPythonPackage rec {
-    name = "pystache-${version}";
-    version = "0.5.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pystache/${name}.tar.gz";
-      sha256 = "f7bbc265fb957b4d6c7c042b336563179444ab313fb93a719759111eabd3b85a";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
-    # SyntaxError Python 3
-    # https://github.com/defunkt/pystache/issues/181
-    doCheck = !isPy3k;
-
-    meta = {
-      description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";
-      homepage = https://github.com/defunkt/pystache;
-      license = licenses.mit;
     };
   };
 
