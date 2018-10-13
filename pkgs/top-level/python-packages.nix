@@ -358,6 +358,8 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  helper = callPackage ../development/python-modules/helper { };
+
   histbook = callPackage ../development/python-modules/histbook { };
 
   httpsig = callPackage ../development/python-modules/httpsig { };
@@ -2531,31 +2533,6 @@ in {
   else throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
-
-  helper = buildPythonPackage rec {
-    pname = "helper";
-    version = "2.4.1";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/${pname}/${name}.tar.gz";
-      sha256 = "4e33dde42ad4df30fb7790689f93d77252cff26a565610d03ff2e434865a53a2";
-    };
-
-    buildInputs = with self; [ mock ];
-    propagatedBuildInputs = with self; [ pyyaml ];
-
-    # No tests
-    doCheck = false;
-
-    meta = {
-      description = "Development library for quickly writing configurable applications and daemons";
-      homepage = https://helper.readthedocs.org/;
-      license = licenses.bsd3;
-    };
-
-
-  };
 
   hiro = callPackage ../development/python-modules/hiro {};
 
