@@ -16236,6 +16236,8 @@ with pkgs;
 
     calfw = callPackage ../applications/editors/emacs-modes/calfw { };
 
+    cedille = callPackage ../applications/editors/emacs-modes/cedille { cedille = pkgs.cedille; };
+
     coffee = callPackage ../applications/editors/emacs-modes/coffee { };
 
     colorTheme = callPackage ../applications/editors/emacs-modes/color-theme { };
