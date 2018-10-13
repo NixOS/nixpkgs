@@ -520,6 +520,11 @@
     github = "bgamari";
     name = "Ben Gamari";
   };
+  bhall = {
+    email = "brendan.j.hall@bath.edu";
+    github = "brendan-hall";
+    name = "Brendan Hall";
+  };
   bhipple = {
     email = "bhipple@protonmail.com";
     github = "bhipple";
@@ -1194,6 +1199,11 @@
     email = "e.bachmakov@gmail.com";
     github = "eduarrrd";
     name = "Eduard Bachmakov";
+  };
+  edude03 = {
+    email = "michael@melenion.com";
+    github = "edude03";
+    name = "Michael Francis";
   };
   edwtjo = {
     email = "ed@cflags.cc";
@@ -2147,6 +2157,11 @@
     email = "kiloreux@gmail.com";
     github = "kiloreux";
     name = "Kiloreux Emperex";
+  };
+  kimburgess = {
+    email = "kim@acaprojects.com";
+    github = "kimburgess";
+    name = "Kim Burgess";
   };
   kini = {
     email = "keshav.kini@gmail.com";
@@ -3124,6 +3139,11 @@
     email = "b4gx3q.nixpkgs@pacien.net";
     github = "pacien";
     name = "Pacien Tran-Girard";
+  };
+  paddygord = {
+    email = "pgpatrickgordon@gmail.com";
+    github = "paddygord";
+    name = "Patrick Gordon";
   };
   paholg = {
     email = "paho@paholg.com";

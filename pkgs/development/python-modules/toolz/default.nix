@@ -21,10 +21,10 @@ buildPythonPackage rec{
     nosetests toolz/tests
   '';
 
-  meta = {
-    homepage = https://github.com/pytoolz/toolz/;
+  meta = with lib; {
+    homepage = https://github.com/pytoolz/toolz;
     description = "List processing tools and functional utilities";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }

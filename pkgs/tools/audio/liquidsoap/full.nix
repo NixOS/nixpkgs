@@ -4,10 +4,11 @@
 , libsamplerate, libmad, taglib, lame, libogg
 , libvorbis, speex, libtheora, libopus, fdk_aac
 , faad2, flac, ladspaH, ffmpeg, frei0r, dssi
-, }:
+}:
 
 let
-  version = "1.1.1";
+  pname = "liquidsoap";
+  version = "1.3.4";
 
   packageFilters = map (p: "-e '/ocaml-${p}/d'" )
     [ "gstreamer" "shine" "aacplus" "schroedinger"
@@ -15,14 +16,21 @@ let
     ];
 in
 stdenv.mkDerivation {
-  name = "liquidsoap-full-${version}";
+  name = "${pname}-full-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/savonet/liquidsoap/${version}/liquidsoap-${version}-full.tar.gz";
-    sha256 = "1w1grgja5yibph90vsxj7ffkpz1sgzmr54jj52s8889dpy609wqa";
+    url = "https://github.com/savonet/${pname}/releases/download/${version}/${pname}-${version}-full.tar.bz2";
+    sha256 = "11l1h42sljfxcdhddc8klya4bk99j7a1pndwnzvscb04pvmfmlk0";
   };
 
-  preConfigure = "sed ${toString packageFilters} PACKAGES.default > PACKAGES";
+  preConfigure = /* we prefer system-wide libs */ ''
+    sed -i "s|gsed|sed|" Makefile
+    make bootstrap
+    # autoreconf -vi # use system libraries
+
+    sed ${toString packageFilters} PACKAGES.default > PACKAGES
+  '';
+
   configureFlags = [ "--localstatedir=/var" ];
 
   buildInputs =
@@ -34,6 +42,8 @@ stdenv.mkDerivation {
       ocamlPackages.xmlm ocamlPackages.ocaml_pcre
       ocamlPackages.camomile
     ];
+
+  hardeningDisable = [ "format" "fortify" ];
 
   meta = with stdenv.lib; {
     description = "Swiss-army knife for multimedia streaming";

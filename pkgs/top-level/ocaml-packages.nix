@@ -88,27 +88,10 @@ let
       then callPackage ../development/tools/ocaml/camlp4 { }
       else null;
 
-    camlp5_old_strict =
-      if lib.versionOlder "4.00" ocaml.version
-      then camlp5_6_strict
-      else callPackage ../development/tools/ocaml/camlp5/5.15.nix { };
+    camlp5 = callPackage ../development/tools/ocaml/camlp5 { };
 
-    camlp5_old_transitional =
-      if lib.versionOlder "4.00" ocaml.version
-      then camlp5_6_transitional
-      else callPackage ../development/tools/ocaml/camlp5/5.15.nix {
-        transitional = true;
-      };
-
-    camlp5_6_strict = callPackage ../development/tools/ocaml/camlp5 { };
-
-    camlp5_6_transitional = callPackage ../development/tools/ocaml/camlp5 {
-      transitional = true;
-    };
-
-    camlp5_strict = camlp5_6_strict;
-
-    camlp5_transitional = camlp5_6_transitional;
+    # Compatibility alias
+    camlp5_strict = camlp5;
 
     camlpdf = callPackage ../development/ocaml-modules/camlpdf { };
 
@@ -604,10 +587,6 @@ let
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
 
-    ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
-      camlp5 = camlp5_transitional;
-    };
-
     textutils_p4 = callPackage ../development/ocaml-modules/textutils { };
 
     tls = callPackage ../development/ocaml-modules/tls {
@@ -1058,16 +1037,7 @@ let
       enableX11 = config.unison.enableX11 or true;
     };
 
-    hol_light = callPackage ../applications/science/logic/hol_light {
-      inherit num;
-      camlp5 = camlp5_strict;
-    };
-
-    matita = callPackage ../applications/science/logic/matita {
-      ulex08 = ulex08.override { camlp5 = camlp5_old_transitional; };
-    };
-
-    matita_130312 = callPackage ../applications/science/logic/matita/130312.nix { };
+    hol_light = callPackage ../applications/science/logic/hol_light { };
 
   };
     in (ocamlPackages.janeStreet // ocamlPackages);
@@ -1076,14 +1046,6 @@ in rec
 {
 
   inherit mkOcamlPackages;
-
-  ocamlPackages_3_08_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/3.08.0.nix { }) (self: super: { lablgtk = self.lablgtk_2_14; });
-
-  ocamlPackages_3_10_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/3.10.0.nix { }) (self: super: { lablgtk = self.lablgtk_2_14; });
-
-  ocamlPackages_3_11_2 = mkOcamlPackages (callPackage ../development/compilers/ocaml/3.11.2.nix { }) (self: super: { lablgtk = self.lablgtk_2_14; });
-
-  ocamlPackages_3_12_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/3.12.1.nix { }) (self: super: { camlimages = self.camlimages_4_0; });
 
   ocamlPackages_4_00_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.00.1.nix { }) (self: super: { });
 

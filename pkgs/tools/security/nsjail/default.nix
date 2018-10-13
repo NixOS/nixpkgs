@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, autoconf, pkgconfig, libtool
-, bison, flex, libnl, protobuf, protobufc }:
+{ stdenv, fetchFromGitHub, autoconf, bison, flex, libtool, pkgconfig, which
+, libnl, protobuf, protobufc }:
 
 stdenv.mkDerivation rec {
   name = "nsjail-${version}";
-  version = "2.2";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner           = "google";
     repo            = "nsjail";
     rev             = version;
     fetchSubmodules = true;
-    sha256          = "11323j5wd02nm8ibvzbzq7dla70bmcldc71lv5bpk4x7h64ai14v";
+    sha256          = "13s1bi2b80rlwrgls1bx4bk140qhncwdamm9q51jd677s0i3xg3s";
   };
 
-  nativeBuildInputs = [ autoconf libtool pkgconfig ];
-  buildInputs = [ bison flex libnl protobuf protobufc ];
+  nativeBuildInputs = [ autoconf bison flex libtool pkgconfig which ];
+  buildInputs = [ libnl protobuf protobufc ];
   enableParallelBuilding = true;
 
   installPhase = ''

@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   patchPhase = ''patchShebangs .'';
   buildInputs = [ perl zlib ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Hebrew spell checker";
     homepage = http://hspell.ivrix.org.il/;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ ];
+    platforms = platforms.all;
+    license = licenses.gpl2;
   };
 }
