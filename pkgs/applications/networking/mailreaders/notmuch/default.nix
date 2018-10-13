@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  configureFlags = [ "--zshcompletiondir=$(out)/share/zsh/site-functions" ];
+
   # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
   # friends
   setOutputFlags = false;
