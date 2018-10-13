@@ -1,6 +1,6 @@
 { stable, version, sha256Hash, archPatchesRevision, archPatchesHash }:
 
-{ mkDerivation, lib, fetchFromGitHub, fetchsvn
+{ mkDerivation, lib, fetchFromGitHub, fetchsvn, fetchpatch
 , pkgconfig, pythonPackages, cmake, wrapGAppsHook
 , qtbase, qtimageformats, gtk3, libappindicator-gtk3, libnotify, xdg_utils
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
@@ -29,7 +29,13 @@ mkDerivation rec {
   };
 
   # TODO: libtgvoip.patch no-gtk2.patch
-  patches = [ "${archPatches}/tdesktop.patch" ]
+  patches = [
+      "${archPatches}/tdesktop.patch"
+      (fetchpatch {
+        url = "https://github.com/telegramdesktop/tdesktop/commit/4e692e2c1e10538d7fd3e7c0e0a66e0ba474fe76.patch";
+        sha256 = "11pv7ib56aq69q9257b9p7wxd2f8xcr6mavswzqw0lndvcx8a5dz";
+      })
+    ]
     # TODO: Only required to work around a compiler bug.
     # This should be fixed in GCC 7.3.1 (or later?)
     ++ [ ./fix-internal-compiler-error.patch ];
