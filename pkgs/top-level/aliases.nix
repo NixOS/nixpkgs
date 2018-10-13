@@ -50,6 +50,11 @@ mapAliases ({
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
+  buildbot = pythonPackages.buildbot; # added 2018-10-11
+  buildbot-full = pythonPackages.buildbot-full; # added 2018-10-11
+  buildbot-pkg = pythonPackages.buildbot-pkg; # added 2018-10-11
+  buildbot-ui = pythonPackages.buildbot-ui; # added 2018-10-11
+  buildbot-worker = pythonPackages.buildbot-worker; # added 2018-10-11
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
@@ -204,6 +209,7 @@ mapAliases ({
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
+  perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
@@ -330,7 +336,6 @@ mapAliases ({
   callPackage_i686 = pkgsi686Linux.callPackage;
 
   inherit (ocaml-ng) # added 2016-09-14
-    ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
     ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
     ocamlPackages_4_03
     ocamlPackages_latest;
@@ -349,10 +354,6 @@ mapAliases ({
     gst-ffmpeg = pkgs.gst-ffmpeg;
   };
 } // (with ocaml-ng; { # added 2016-09-14
-  ocaml_3_08_0 = ocamlPackages_3_08_0.ocaml;
-  ocaml_3_10_0 = ocamlPackages_3_10_0.ocaml;
-  ocaml_3_11_2 = ocamlPackages_3_11_2.ocaml;
-  ocaml_3_12_1 = ocamlPackages_3_12_1.ocaml;
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
   ocaml_4_02   = ocamlPackages_4_02.ocaml;
