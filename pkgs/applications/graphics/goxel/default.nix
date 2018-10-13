@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Open Source 3D voxel editor";
     homepage = https://guillaumechereau.github.io/goxel/;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.x86;
     maintainers = with maintainers; [ tilpner ];
   };
 }
