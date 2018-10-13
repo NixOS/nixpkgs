@@ -190,7 +190,9 @@ in {
 
   astral = callPackage ../development/python-modules/astral { };
 
-  astropy = callPackage ../development/python-modules/astropy {  };
+  astropy = callPackage ../development/python-modules/astropy { };
+
+  atom = callPackage ../development/python-modules/atom { };
 
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
@@ -302,6 +304,8 @@ in {
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
+  filterpy = callPackage ../development/python-modules/filterpy { };
+
   fire = callPackage ../development/python-modules/fire { };
 
   fuse = callPackage ../development/python-modules/fuse-python { fuse = pkgs.fuse; };
@@ -375,6 +379,8 @@ in {
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
+
+  osmnx = callPackage ../development/python-modules/osmnx { };
 
   outcome = callPackage ../development/python-modules/outcome {};
 
@@ -732,7 +738,8 @@ in {
   # argparse is part of stdlib in 2.7 and 3.2+
   argparse = null;
 
-  astroid = callPackage ../development/python-modules/astroid { };
+  astroid = if isPy3k then callPackage ../development/python-modules/astroid { }
+            else callPackage ../development/python-modules/astroid/1.6.nix { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
 
@@ -744,9 +751,7 @@ in {
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
-  av = callPackage ../development/python-modules/av {
-    inherit (pkgs) ffmpeg_2 git libav pkgconfig;
-  };
+  av = callPackage ../development/python-modules/av { };
 
   avro = callPackage ../development/python-modules/avro {};
 
@@ -1416,6 +1421,13 @@ in {
 
   bugzilla = callPackage ../development/python-modules/bugzilla { };
 
+  buildbot = callPackage ../development/python-modules/buildbot { };
+  buildbot-plugins = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/buildbot/plugins.nix { });
+  buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
+  buildbot-full = self.buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view wsgi-dashboards ]);
+  buildbot-worker = callPackage ../development/python-modules/buildbot/worker.nix { };
+  buildbot-pkg = callPackage ../development/python-modules/buildbot/pkg.nix { };
+
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
   devpi-common = callPackage ../development/python-modules/devpi-common { };
@@ -1967,32 +1979,7 @@ in {
 
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 
-  tinycss = buildPythonPackage rec {
-    name = "tinycss-${version}";
-    version = "0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tinycss/${name}.tar.gz";
-      sha256 = "1pichqra4wk86142hqgvy9s5x6c5k5zhy8l9qxr0620pqk8spbd4";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    propagatedBuildInputs = with self; [ cssutils ];
-
-    checkPhase = ''
-      py.test $out/${python.sitePackages}
-    '';
-
-    # Disable Cython tests for PyPy
-    TINYCSS_SKIP_SPEEDUPS_TESTS = optional isPyPy true;
-
-    meta = {
-      description = "Complete yet simple CSS parser for Python";
-      license = licenses.bsd3;
-      homepage = https://pythonhosted.org/tinycss/;
-    };
-  };
+  tinycss = callPackage ../development/python-modules/tinycss { };
 
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
@@ -2221,25 +2208,7 @@ in {
 
   enzyme = callPackage ../development/python-modules/enzyme {};
 
-  escapism = buildPythonPackage rec {
-    name = "escapism-${version}";
-    version = "0.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/escapism/${name}.tar.gz";
-      sha256 = "1yfyxwxb864xrmrrqgp85xgsh4yrrq5mmzvkdg19jwr7rm6sqx9p";
-    };
-
-    # No tests distributed
-    doCheck = false;
-
-    meta = {
-      description = "Simple, generic API for escaping strings";
-      homepage = "https://github.com/minrk/escapism";
-      license = licenses.mit;
-      maintainers = with maintainers; [ bzizou ];
-    };
-  };
+  escapism = callPackage ../development/python-modules/escapism { };
 
   etcd = buildPythonPackage rec {
     name = "etcd-${version}";
@@ -2365,22 +2334,7 @@ in {
 
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
-  facebook-sdk = buildPythonPackage rec {
-    name = "facebook-sdk-0.4.0";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/facebook-sdk/facebook-sdk-0.4.0.tar.gz";
-      sha256 = "5a96c54d06213039dff1fe1fabc51972e394666cd6d83ea70f7c2e67472d9b72";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Client library that supports the Facebook Graph API and the official Facebook JavaScript SDK";
-      homepage = https://github.com/pythonforfacebook/facebook-sdk;
-      license = licenses.asl20 ;
-    };
-  };
+  facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
 
   face_recognition = callPackage ../development/python-modules/face_recognition { };
 
@@ -10255,7 +10209,8 @@ in {
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
-  pylint = callPackage ../development/python-modules/pylint { };
+  pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
+           else callPackage ../development/python-modules/pylint/1.9.nix { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
@@ -13006,26 +12961,7 @@ in {
     };
   });
 
-  sphinx-jinja = buildPythonPackage (rec {
-    name = "${pname}-${version}";
-    pname = "sphinx-jinja";
-    version = "0.2.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
-      sha256 = "1zsnhc573rvaww9qqyzs4f5h4hhvxklvppv14450vi5dk8rij81z";
-    };
-    buildInputs = with self; [ sphinx-testing pytest pbr];
-    propagatedBuildInputs = with self; [ sphinx blockdiag ];
-    checkPhase = ''
-      py.test -k "not test_build_epub"
-    '';
-    disabled = isPy3k;
-    meta = {
-      description = "includes jinja templates in a documentation";
-      maintainers = with maintainers; [ nand0p ];
-      license = licenses.mit;
-    };
-  });
+  sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx_pypi_upload = buildPythonPackage (rec {
     name = "Sphinx-PyPI-upload-0.2.1";
@@ -13358,24 +13294,7 @@ in {
     };
   };
 
-  tempita = buildPythonPackage rec {
-    version = "0.5.2";
-    name = "tempita-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Tempita/Tempita-${version}.tar.gz";
-      sha256 = "cacecf0baa674d356641f1d406b8bff1d756d739c46b869a54de515d08e6fc9c";
-    };
-
-    disabled = isPy3k;
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      homepage = http://pythonpaste.org/tempita/;
-      description = "A very small text templating language";
-    };
-  };
+  tempita = callPackage ../development/python-modules/tempita { };
 
   terminado = callPackage ../development/python-modules/terminado { };
 

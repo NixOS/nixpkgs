@@ -113,6 +113,15 @@
        (i.e. <literal>users.users.yourusername.extraGroups = ["video"];</literal>).
      </para>
    </listitem>
+   <listitem>
+    <para>
+     Buildbot now supports Python 3 and its packages have been moved to
+     <literal>pythonPackages</literal>. The options
+     <option>services.buildbot-master.package</option> and
+     <option>services.buildbot-worker.package</option> can be used to select
+     the Python 2 or 3 version of the package.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

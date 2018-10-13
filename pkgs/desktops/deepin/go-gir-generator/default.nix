@@ -22,9 +22,13 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
+  postPatch = ''
+    sed -i -e 's:/share/gocode:/share/go:' Makefile
+  '';
+
   makeFlags = [
     "PREFIX=$(out)"
-    "HOME=$(TMP)"
+    "GOCACHE=off"
   ];
 
   meta = with stdenv.lib; {

@@ -1,12 +1,10 @@
-{stdenv, fetchurl, autoreconfHook, texinfo, buggyBiosCDSupport ? true}:
+{ stdenv, fetchurl, autoreconfHook, texinfo, buggyBiosCDSupport ? true }:
 
-let
-in
 stdenv.mkDerivation {
   name = "grub-0.97-73";
 
   src = fetchurl {
-    url = ftp://alpha.gnu.org/gnu/grub/grub-0.97.tar.gz;
+    url = https://alpha.gnu.org/gnu/grub/grub-0.97.tar.gz;
     sha256 = "02r6b52r0nsp6ryqfiqchnl7r1d9smm80sqx24494gmx5p8ia7af";
   };
 
@@ -29,6 +27,8 @@ stdenv.mkDerivation {
   passthru.grubTarget = "";
 
   meta = with stdenv.lib; {
+    homepage = https://www.gnu.org/software/grub;
+    description = "GRand Unified Bootloader";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

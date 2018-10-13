@@ -20,7 +20,7 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
   (Motivation for change. Additional information.)
   ```
 
-  For consistency, there should not be a period at the end of the commit message.
+  For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
 
   Examples:
 

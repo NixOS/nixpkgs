@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = stdenv.lib.optional doCheck ed;
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
@@ -31,6 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.hostPlatform.libc != "musl"; # not cross;
+  checkInputs = [ed];
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";
