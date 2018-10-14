@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.
     '';
     platforms = platforms.all;
+    license = with licenses; [ gpl2 lgpl21 mpl11 ];
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
   };
 }

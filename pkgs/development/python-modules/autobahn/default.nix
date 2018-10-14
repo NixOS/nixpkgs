@@ -1,32 +1,28 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, isPy33,
-  unittest2, mock, pytest, trollius, asyncio,
-  pytest-asyncio, futures, cffi,
-  six, twisted, txaio, zope_interface
+{ lib, buildPythonPackage, fetchPypi, isPy3k, isPy33,
+  six, txaio, twisted, zope_interface, cffi, asyncio, trollius, futures,
+  mock, pytest
 }:
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "18.8.1";
+  version = "18.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b69858e0be4bff8437b0bd82a0db1cbef7405e16bd9354ba587c043d6d5e1ad9";
+    sha256 = "448df2e241011ea2948799918930042d81e63d26b01912c472f5a9a37f42f319";
   };
 
-  # Upstream claim python2 support, but tests require pytest-asyncio which
-  # is pythn3 only. Therefore, tests are skipped for python2.
-  doCheck = isPy3k;
-  checkInputs = stdenv.lib.optionals isPy3k [ unittest2 mock pytest pytest-asyncio ];
-  propagatedBuildInputs = [ cffi six twisted zope_interface txaio ] ++
-    (stdenv.lib.optional isPy33 asyncio) ++
-    (stdenv.lib.optionals (!isPy3k) [ trollius futures ]);
+  propagatedBuildInputs = [ six txaio twisted zope_interface cffi ] ++
+    (lib.optional isPy33 asyncio) ++
+    (lib.optionals (!isPy3k) [ trollius futures ]);
 
+  checkInputs = [ mock pytest ];
   checkPhase = ''
     runHook preCheck
     USE_TWISTED=true py.test $out
     runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "WebSocket and WAMP in Python for Twisted and asyncio.";
     homepage    = "https://crossbar.io/autobahn";
     license     = licenses.mit;

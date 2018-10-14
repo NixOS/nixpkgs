@@ -966,5 +966,766 @@ lib.attrsets.mapAttrsToList (name: value: "${name}=${value}")
    itself to attribute sets. Also, the first argument of the argument function
    is a <emphasis>list</emphasis> of the names of the containing attributes.
   </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>[ String ] -> Any -> Any</literal>
+     </para>
+     <para>
+      Given a list of attribute names and value, return a new value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name_path</varname>
+       </term>
+       <listitem>
+        <para>
+         The list of attribute names to this value.
+        </para>
+        <para>
+         For example, the <varname>name_path</varname> for the
+         <literal>example</literal> string in the attribute set <literal>{ foo
+         = { bar = "example"; }; }</literal> is <literal>[ "foo" "bar"
+         ]</literal>.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to recursively map over.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.mapAttrsRecursive-example">
+   <title>A contrived example of using <function>lib.attrsets.mapAttrsRecursive</function></title>
+<programlisting><![CDATA[
+mapAttrsRecursive
+  (path: value: concatStringsSep "-" (path ++ [value]))
+  {
+    n = {
+      a = "A";
+      m = {
+        b = "B";
+        c = "C";
+      };
+    };
+    d = "D";
+  }
+=> {
+     n = {
+       a = "n-a-A";
+       m = {
+         b = "n-m-b-B";
+         c = "n-m-c-C";
+       };
+     };
+     d = "d-D";
+   }
+    ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.mapAttrsRecursiveCond">
+  <title><function>lib.attrsets.mapAttrsRecursiveCond</function></title>
+
+  <subtitle><literal>mapAttrsRecursiveCond :: (AttrSet -> Bool) -> ([ String ] -> Any -> Any) -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.mapAttrsRecursiveCond" />
+
+  <para>
+   Like <function>mapAttrsRecursive</function>, but it takes an additional
+   predicate function that tells it whether to recursive into an attribute set.
+   If it returns false, <function>mapAttrsRecursiveCond</function> does not
+   recurse, but does apply the map function. It is returns true, it does
+   recurse, and does not apply the map function.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>cond</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>(AttrSet -> Bool)</literal>
+     </para>
+     <para>
+      Determine if <function>mapAttrsRecursive</function> should recurse deeper
+      in to the attribute set.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>attributeset</varname>
+       </term>
+       <listitem>
+        <para>
+         An attribute set.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>[ String ] -> Any -> Any</literal>
+     </para>
+     <para>
+      Given a list of attribute names and value, return a new value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name_path</varname>
+       </term>
+       <listitem>
+        <para>
+         The list of attribute names to this value.
+        </para>
+        <para>
+         For example, the <varname>name_path</varname> for the
+         <literal>example</literal> string in the attribute set <literal>{ foo
+         = { bar = "example"; }; }</literal> is <literal>[ "foo" "bar"
+         ]</literal>.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>value</varname>
+       </term>
+       <listitem>
+        <para>
+         The attribute's value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>set</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to recursively map over.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.mapAttrsRecursiveCond-example">
+   <title>Only convert attribute values to JSON if the containing attribute set is marked for recursion</title>
+<programlisting><![CDATA[
+lib.attrsets.mapAttrsRecursiveCond
+  ({ recurse ? false, ... }: recurse)
+  (name: value: builtins.toJSON value)
+  {
+    dorecur = {
+      recurse = true;
+      hello = "there";
+    };
+    dontrecur = {
+      converted-to- = "json";
+    };
+  }
+=> {
+     dorecur = {
+       hello = "\"there\"";
+       recurse = "true";
+     };
+     dontrecur = "{\"converted-to\":\"json\"}";
+   }
+    ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.genAttrs">
+  <title><function>lib.attrsets.genAttrs</function></title>
+
+  <subtitle><literal>genAttrs :: [ String ] -> (String -> Any) -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.genAttrs" />
+
+  <para>
+   Generate an attribute set by mapping a function over a list of attribute
+   names.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>names</varname>
+    </term>
+    <listitem>
+     <para>
+      Names of values in the resulting attribute set.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>String -> Any</literal>
+     </para>
+     <para>
+      Takes the name of the attribute and return the attribute's value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The name of the attribute to generate a value for.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.genAttrs-example">
+   <title>Generate an attrset based on names only</title>
+<programlisting><![CDATA[
+lib.attrsets.genAttrs [ "foo" "bar" ] (name: "x_${name}")
+=> { foo = "x_foo"; bar = "x_bar"; }
+     ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.isDerivation">
+  <title><function>lib.attrsets.isDerivation</function></title>
+
+  <subtitle><literal>isDerivation :: Any -> Bool</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.isDerivation" />
+
+  <para>
+   Check whether the argument is a derivation. Any set with <code>{ type =
+   "derivation"; }</code> counts as a derivation.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>value</varname>
+    </term>
+    <listitem>
+     <para>
+      The value which is possibly a derivation.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.isDerivation-example-true">
+   <title>A package is a derivation</title>
+<programlisting><![CDATA[
+lib.attrsets.isDerivation (import <nixpkgs> {}).ruby
+=> true
+     ]]></programlisting>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.isDerivation-example-false">
+   <title>Anything else is not a derivation</title>
+<programlisting><![CDATA[
+lib.attrsets.isDerivation "foobar"
+=> false
+     ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.toDerivation">
+  <title><function>lib.attrsets.toDerivation</function></title>
+
+  <subtitle><literal>toDerivation :: Path -> Derivation</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.toDerivation" />
+
+  <para>
+   Converts a store path to a fake derivation.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>path</varname>
+    </term>
+    <listitem>
+     <para>
+      A store path to convert to a derivation.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.optionalAttrs">
+  <title><function>lib.attrsets.optionalAttrs</function></title>
+
+  <subtitle><literal>optionalAttrs :: Bool -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.optionalAttrs" />
+
+  <para>
+   Conditionally return an attribute set or an empty attribute set.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>cond</varname>
+    </term>
+    <listitem>
+     <para>
+      Condition under which the <varname>as</varname> attribute set is
+      returned.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>as</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to return if <varname>cond</varname> is true.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.optionalAttrs-example-true">
+   <title>Return the provided attribute set when <varname>cond</varname> is true</title>
+<programlisting><![CDATA[
+lib.attrsets.optionalAttrs true { my = "set"; }
+=> { my = "set"; }
+     ]]></programlisting>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.optionalAttrs-example-false">
+   <title>Return an empty attribute set when <varname>cond</varname> is false</title>
+<programlisting><![CDATA[
+lib.attrsets.optionalAttrs false { my = "set"; }
+=> { }
+     ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.zipAttrsWithNames">
+  <title><function>lib.attrsets.zipAttrsWithNames</function></title>
+
+  <subtitle><literal>zipAttrsWithNames :: [ String ] -> (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrsWithNames" />
+
+  <para>
+   Merge sets of attributes and use the function <varname>f</varname> to merge
+   attribute values where the attribute name is in <varname>names</varname>.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>names</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of attribute names to zip.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>(String -> [ Any ] -> Any</literal>
+     </para>
+     <para>
+      Accepts an attribute name, all the values, and returns a combined value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The name of the attribute each value came from.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>vs</varname>
+       </term>
+       <listitem>
+        <para>
+         A list of values collected from the list of attribute sets.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>sets</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of attribute sets to zip together.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.zipAttrsWithNames-example">
+   <title>Summing a list of attribute sets of numbers</title>
+<programlisting><![CDATA[
+lib.attrsets.zipAttrsWithNames
+  [ "a" "b" ]
+  (name: vals: "${name} ${toString (builtins.foldl' (a: b: a + b) 0 vals)}")
+  [
+    { a = 1; b = 1; c = 1; }
+    { a = 10; }
+    { b = 100; }
+    { c = 1000; }
+  ]
+=> { a = "a 11"; b = "b 101"; }
+     ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.zipAttrsWith">
+  <title><function>lib.attrsets.zipAttrsWith</function></title>
+
+  <subtitle><literal>zipAttrsWith :: (String -> [ Any ] -> Any) -> [ AttrSet ] -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrsWith" />
+
+  <para>
+   Merge sets of attributes and use the function <varname>f</varname> to merge
+   attribute values. Similar to
+   <xref
+   linkend="function-library-lib.attrsets.zipAttrsWithNames" /> where
+   all key names are passed for <varname>names</varname>.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>f</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>(String -> [ Any ] -> Any</literal>
+     </para>
+     <para>
+      Accepts an attribute name, all the values, and returns a combined value.
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>name</varname>
+       </term>
+       <listitem>
+        <para>
+         The name of the attribute each value came from.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>vs</varname>
+       </term>
+       <listitem>
+        <para>
+         A list of values collected from the list of attribute sets.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>sets</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of attribute sets to zip together.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.zipAttrsWith-example">
+   <title>Summing a list of attribute sets of numbers</title>
+<programlisting><![CDATA[
+lib.attrsets.zipAttrsWith
+  (name: vals: "${name} ${toString (builtins.foldl' (a: b: a + b) 0 vals)}")
+  [
+    { a = 1; b = 1; c = 1; }
+    { a = 10; }
+    { b = 100; }
+    { c = 1000; }
+  ]
+=> { a = "a 11"; b = "b 101"; c = "c 1001"; }
+     ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.zipAttrs">
+  <title><function>lib.attrsets.zipAttrs</function></title>
+
+  <subtitle><literal>zipAttrsWith :: [ AttrSet ] -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.zipAttrs" />
+
+  <para>
+   Merge sets of attributes and combine each attribute value in to a list.
+   Similar to <xref linkend="function-library-lib.attrsets.zipAttrsWith" />
+   where the merge function returns a list of all values.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>sets</varname>
+    </term>
+    <listitem>
+     <para>
+      A list of attribute sets to zip together.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.zipAttrs-example">
+   <title>Combining a list of attribute sets</title>
+<programlisting><![CDATA[
+lib.attrsets.zipAttrs
+  [
+    { a = 1; b = 1; c = 1; }
+    { a = 10; }
+    { b = 100; }
+    { c = 1000; }
+  ]
+=> { a = [ 1 10 ]; b = [ 1 100 ]; c = [ 1 1000 ]; }
+     ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.recursiveUpdateUntil">
+  <title><function>lib.attrsets.recursiveUpdateUntil</function></title>
+
+  <subtitle><literal>recursiveUpdateUntil :: ( [ String ] -> AttrSet -> AttrSet -> Bool ) -> AttrSet -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.recursiveUpdateUntil" />
+
+  <para>
+   Does the same as the update operator <literal>//</literal> except that
+   attributes are merged until the given predicate is verified. The predicate
+   should accept 3 arguments which are the path to reach the attribute, a part
+   of the first attribute set and a part of the second attribute set. When the
+   predicate is verified, the value of the first attribute set is replaced by
+   the value of the second attribute set.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pred</varname>
+    </term>
+    <listitem>
+     <para>
+      <literal>[ String ] -> AttrSet -> AttrSet -> Bool</literal>
+     </para>
+     <variablelist>
+      <varlistentry>
+       <term>
+        <varname>path</varname>
+       </term>
+       <listitem>
+        <para>
+         The path to the values in the left and right hand sides.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>l</varname>
+       </term>
+       <listitem>
+        <para>
+         The left hand side value.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term>
+        <varname>r</varname>
+       </term>
+       <listitem>
+        <para>
+         The right hand side value.
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>lhs</varname>
+    </term>
+    <listitem>
+     <para>
+      The left hand attribute set of the merge.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>rhs</varname>
+    </term>
+    <listitem>
+     <para>
+      The right hand attribute set of the merge.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.recursiveUpdateUntil-example">
+   <title>Recursively merging two attribute sets</title>
+<programlisting><![CDATA[
+lib.attrsets.recursiveUpdateUntil (path: l: r: path == ["foo"])
+  {
+    # first attribute set
+    foo.bar = 1;
+    foo.baz = 2;
+    bar = 3;
+  }
+  {
+    #second attribute set
+    foo.bar = 1;
+    foo.quz = 2;
+    baz = 4;
+  }
+=> {
+  foo.bar = 1; # 'foo.*' from the second set
+  foo.quz = 2; #
+  bar = 3;     # 'bar' from the first set
+  baz = 4;     # 'baz' from the second set
+}
+     ]]></programlisting>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.recursiveUpdate">
+  <title><function>lib.attrsets.recursiveUpdate</function></title>
+
+  <subtitle><literal>recursiveUpdate :: AttrSet -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.recursiveUpdate" />
+
+  <para>
+   A recursive variant of the update operator <literal>//</literal>. The
+   recursion stops when one of the attribute values is not an attribute set, in
+   which case the right hand side value takes precedence over the left hand
+   side value.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>lhs</varname>
+    </term>
+    <listitem>
+     <para>
+      The left hand attribute set of the merge.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>rhs</varname>
+    </term>
+    <listitem>
+     <para>
+      The right hand attribute set of the merge.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.recursiveUpdate-example">
+   <title>Recursively merging two attribute sets</title>
+<programlisting><![CDATA[
+recursiveUpdate
+  {
+    boot.loader.grub.enable = true;
+    boot.loader.grub.device = "/dev/hda";
+  }
+  {
+    boot.loader.grub.device = "";
+  }
+=> {
+  boot.loader.grub.enable = true;
+  boot.loader.grub.device = "";
+}
+]]></programlisting>
+  </example>
  </section>
 </section>

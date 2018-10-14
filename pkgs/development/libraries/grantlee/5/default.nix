@@ -46,6 +46,7 @@ mkDerivation rec {
 
     homepage = http://gitorious.org/grantlee;
     maintainers = [ maintainers.ttuegel ];
+    license = licenses.lgpl21;
     inherit (qtbase.meta) platforms;
   };
 }

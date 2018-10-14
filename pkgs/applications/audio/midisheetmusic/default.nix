@@ -5,7 +5,7 @@
 let
   version = "2.6";
 in stdenv.mkDerivation {
-  name = "midisheetmusic";
+  name = "midisheetmusic-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/midisheetmusic/MidiSheetMusic-${version}-linux-src.tar.gz";
