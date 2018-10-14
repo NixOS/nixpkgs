@@ -3639,6 +3639,8 @@ with pkgs;
 
   lvmsync = callPackage ../tools/backup/lvmsync { };
 
+  kdbg = libsForQt5.callPackage ../development/tools/misc/kdbg { };
+
   kippo = callPackage ../servers/kippo { };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
