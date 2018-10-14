@@ -1,11 +1,11 @@
 { stdenv, fetchurl, osinfo-db-tools, intltool, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "osinfo-db-20180920";
+  name = "osinfo-db-20181011";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${name}.tar.xz";
-    sha256 = "19jbzf1g523bkckli043q21hgbfv0043b5ib4zjiz8x98h7ngiac";
+    sha256 = "1f0xa50xn15p3zig9031icqky8drf0654sbjmmziw2ijcdyzfkcp";
   };
 
   nativeBuildInputs = [ osinfo-db-tools intltool libxml2 ];
