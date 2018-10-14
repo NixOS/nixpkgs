@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ahzsxk52ws8k3kdq52qbsbsx2r9z350j8gg9adw4x5fjwksz4r8";
+    sha256 = "ee9128873b5f9c97d258d35d0a32ef8e62c9da473fbbd056982df1f36f0b37aa";
   };
 
   propagatedBuildInputs = [ six ];
