@@ -49,6 +49,7 @@ mapAliases ({
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
+  buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   buildbot = pythonPackages.buildbot; # added 2018-10-11
   buildbot-full = pythonPackages.buildbot-full; # added 2018-10-11
   buildbot-pkg = pythonPackages.buildbot-pkg; # added 2018-10-11
