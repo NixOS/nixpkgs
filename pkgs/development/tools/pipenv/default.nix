@@ -11,7 +11,7 @@ with python3Packages; buildPythonApplication rec {
 
     LC_ALL = "en_US.UTF-8";
 
-    propagatedBuildInputs = [ pew pip requests flake8 parver invoke ];
+    propagatedBuildInputs = [ pew pip certifi ];
 
     doCheck = false;
 
