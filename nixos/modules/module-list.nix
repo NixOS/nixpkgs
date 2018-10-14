@@ -149,6 +149,7 @@
   ./security/duosec.nix
   ./security/hidepid.nix
   ./security/lock-kernel-modules.nix
+  ./security/misc.nix
   ./security/oath.nix
   ./security/pam.nix
   ./security/pam_usb.nix
