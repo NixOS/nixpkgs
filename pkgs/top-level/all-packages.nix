@@ -10649,6 +10649,7 @@ with pkgs;
 
   libiodbc = callPackage ../development/libraries/libiodbc {
     useGTK = config.libiodbc.gtk or false;
+    inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
   libivykis = callPackage ../development/libraries/libivykis { };
@@ -18410,6 +18411,7 @@ with pkgs;
 
   qgis = callPackage ../applications/gis/qgis {
     inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
+    saga = saga_2_3_2;
   };
 
   qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
@@ -20377,7 +20379,13 @@ with pkgs;
 
   rrootage = callPackage ../games/rrootage { };
 
-  saga = callPackage ../applications/gis/saga { };
+  saga = callPackage ../applications/gis/saga {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+
+  saga_2_3_2 = callPackage ../applications/gis/saga/lts.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   samplv1 = callPackage ../applications/audio/samplv1 { };
 
