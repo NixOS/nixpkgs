@@ -7174,7 +7174,13 @@ with pkgs;
 
   mkcl = callPackage ../development/compilers/mkcl {};
 
-  mlton = callPackage ../development/compilers/mlton { };
+  inherit (callPackage ../development/compilers/mlton {})
+    mlton20130715
+    mlton20180207Binary
+    mlton20180207
+    mltonHEAD;
+
+  mlton = mlton20180207;
 
   mono  = mono5;
   mono5 = mono58;
