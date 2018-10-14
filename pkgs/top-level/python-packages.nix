@@ -3393,6 +3393,8 @@ in {
     };
   };
 
+  peewee =  callPackage ../development/python-modules/peewee { };
+
   peppercorn = buildPythonPackage rec {
     name = "peppercorn-0.5";
 
