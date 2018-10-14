@@ -5,20 +5,20 @@
 , qtlocation, qtquickcontrols2, qtwebchannel
 , qtwebengine, qtx11extras, qtxmlpatterns
 , monero, unbound, readline, boost, libunwind
-, pcsclite, zeromq, cppzmq, pkgconfig
+, libsodium, pcsclite, zeromq, cppzmq, pkgconfig
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "monero-gui-${version}";
-  version = "0.12.3.0";
+  version = "0.13.0.2";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1ry0455cgirkc6n46qnlv5p49axjllil78xmx6469nbp3a2r3z7i";
+    sha256 = "02419rqi3zfy6yjyw3b3gvkbxh2ypdfpijiiklc7lyblb9nnjr68";
   };
 
   nativeBuildInputs = [ qmake pkgconfig ];
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     qtdeclarative qtlocation qtquickcontrols2
     qtwebchannel qtwebengine qtx11extras
     qtxmlpatterns monero unbound readline
-    boost libunwind pcsclite zeromq cppzmq
-    makeWrapper
+    boost libunwind libsodium pcsclite zeromq
+    cppzmq makeWrapper
   ];
 
   patches = [
