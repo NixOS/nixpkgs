@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, libusb1}:
+{stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1}:
 
 stdenv.mkDerivation rec {
   name = "libusb-compat-${version}";
@@ -7,12 +7,14 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   propagatedBuildInputs = [ libusb1 ];
 
-  src = fetchurl {
-    url = "https://github.com/libusb/libusb-compat-0.1/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1y2wjba4w9r53sfaacj6awyqhmi31n53j4wwx8g8qj82m8wcwy86";
+  src = fetchFromGitHub {
+    owner = "libusb";
+    repo = "libusb-compat-0.1";
+    rev = "v${version}";
+    sha256 = "1nybccgjs14b3phhaycq2jx1gym4nf6sghvnv9qdfmlqxacx0jz5";
   };
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./fix-headers.patch;
