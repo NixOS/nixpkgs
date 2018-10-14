@@ -340,6 +340,8 @@ in {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  gidgethub = callPackage ../development/python-modules/gidgethub { };
+
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
