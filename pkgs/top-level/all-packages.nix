@@ -1091,6 +1091,10 @@ with pkgs;
 
   cddl = callPackage ../development/tools/cddl { };
 
+  cedille = callPackage ../applications/science/logic/cedille
+                          { inherit (haskellPackages) alex happy Agda ghcWithPackages;
+                          };
+
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
@@ -16232,6 +16236,8 @@ with pkgs;
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
     calfw = callPackage ../applications/editors/emacs-modes/calfw { };
+
+    cedille = callPackage ../applications/editors/emacs-modes/cedille { cedille = pkgs.cedille; };
 
     coffee = callPackage ../applications/editors/emacs-modes/coffee { };
 
