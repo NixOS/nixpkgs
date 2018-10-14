@@ -17,7 +17,7 @@ in {
       '';
 
       guiAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "127.0.0.1:8384";
         description = ''
           Address to serve the GUI.
@@ -31,7 +31,7 @@ in {
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = defaultUser;
         description = ''
           Syncthing will be run under this user (user will be created if it doesn't exist.
@@ -40,7 +40,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "nogroup";
         description = ''
           Syncthing will be run under this group (group will not be created if it doesn't exist.
@@ -49,7 +49,7 @@ in {
       };
 
       all_proxy = mkOption {
-        type = types.nullOr types.string;
+        type = with types; nullOr str;
         default = null;
         example = "socks5://address.com:1234";
         description = ''
