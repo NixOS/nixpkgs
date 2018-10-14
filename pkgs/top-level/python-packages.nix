@@ -338,6 +338,8 @@ in {
 
   genanki = callPackage ../development/python-modules/genanki { };
 
+  gidgethub = callPackage ../development/python-modules/gidgethub { };
+
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
@@ -559,7 +561,7 @@ in {
     slurm = pkgs.slurm;
   };
 
-  pystache = callPackage ../development/python-modules/pystache { }; 
+  pystache = callPackage ../development/python-modules/pystache { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
