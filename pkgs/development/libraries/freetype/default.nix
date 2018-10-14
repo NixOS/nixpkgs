@@ -1,4 +1,5 @@
 { stdenv, fetchurl
+, buildPackages
 , pkgconfig, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
 
