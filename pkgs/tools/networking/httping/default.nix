@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "2.5";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/httping/${name}.tgz";
+    url = "https://vanheusden.com/httping/${name}.tgz";
     sha256 = "1y7sbgkhgadmd93x1zafqc4yp26ssiv16ni5bbi9vmvvdl55m29y";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.vanheusden.com/httping;
+    homepage = https://vanheusden.com/httping;
     description = "ping with HTTP requests";
     longDescription = ''
       Give httping an url, and it'll show you how long it takes to connect,
