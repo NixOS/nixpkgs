@@ -56,7 +56,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
-        sha256 = "1kydf71qbz35dx4674h3nxfx8a88k620217906i54ic4qq2mgy2x";
+        sha256 = "0yzh4bmv8mrfp0ml9nhcpcy0lhi8jp1fnmnxy0krvnphkp8750c7";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
