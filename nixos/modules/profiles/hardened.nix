@@ -6,6 +6,10 @@
 with lib;
 
 {
+  meta = {
+    maintainers = [ maintainers.joachifm ];
+  };
+
   boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
 
   security.hideProcessInformation = mkDefault true;
