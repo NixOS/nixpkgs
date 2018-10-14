@@ -85,7 +85,7 @@ let
 
       mkdir $out/bin
       export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
-      substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
+      substituteAll ${./switch-to-configuration.py} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
 
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
@@ -122,8 +122,9 @@ let
     configurationName = config.boot.loader.grub.configurationName;
 
     # Needed by switch-to-configuration.
-
-    perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
+    python =
+      let env = pkgs.python3.withPackages (pypkgs: [ pypkgs.dbus-python ]);
+      in "${env}/bin/python3";
   };
 
   # Handle assertions and warnings
