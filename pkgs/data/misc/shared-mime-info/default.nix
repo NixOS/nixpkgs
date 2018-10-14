@@ -10,9 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gxyvwym3xgpmp262gfn8jg5sla6k5hy6m6dmy6grgiq90xsh9f6";
   };
 
-  nativeBuildInputs = [
-    pkgconfig gettext intltool libxml2 glib
-  ] ++ (with perlPackages; [ perl XMLParser ]);
+  nativeBuildInputs = [ pkgconfig gettext intltool ] ++ (with perlPackages; [ perl XMLParser ]);
+  buildInputs = [ libxml2 glib ];
 
   meta = with stdenv.lib; {
     inherit version;
