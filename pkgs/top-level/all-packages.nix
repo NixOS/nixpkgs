@@ -1274,6 +1274,8 @@ with pkgs;
 
   ecasound = callPackage ../applications/audio/ecasound { };
 
+  ecm-tools = callPackage ../applications/misc/ecm-tools { };
+
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
