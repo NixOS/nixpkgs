@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "wabt-${version}";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner  = "WebAssembly";
     repo   = "wabt";
     rev    = version;
-    sha256 = "1cbak3ach7cna98j2r0v3y38c59ih2gv0p6f43qp782pyj07hzfy";
+    sha256 = "0lqsf4wmg24mb3ksmib8xwvmghx8m2vzrjrs8dazwlmik7rill8i";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The WebAssembly Binary Toolkit";
     longDescription = ''
-      WABT (we pronounce it "wabbit") is a suite of tools for WebAssembly,
-      including:
+      WABT (pronounced "wabbit") is a suite of tools for WebAssembly, including:
        * wat2wasm: translate from WebAssembly text format to the WebAssembly
          binary format
        * wasm2wat: the inverse of wat2wasm, translate from the binary format
