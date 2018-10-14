@@ -6,7 +6,7 @@ let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.28.0.41";
+  version = "8.32.0.44";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
