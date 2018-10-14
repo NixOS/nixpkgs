@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [
+    pkgconfig gettext
+    glib # for glib-marshal
+  ];
 
   buildInputs = [ expat libiconv ];
 
