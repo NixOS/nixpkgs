@@ -15,8 +15,8 @@ buildPythonPackage rec {
     sha256 = "230f80e064d905c49a1941af1b7e806e2f22b3c9a90ad5c21fd17d72636ea277";
   };
 
-  buildInputs = [ cython ];
-  checkInputs = [ nose ];
+  # nose was specified in setup.py as a build dependency...
+  buildInputs = [ cython nose ];
   propagatedBuildInputs = [ numpy ];
 
   # cannot resolve path for packages in tests
