@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    homepage = https://sourceforge.net/projects/linuxwacom/;
+    homepage = https://linuxwacom.github.io/;
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
+    license = licenses.mit;
   };
 }
