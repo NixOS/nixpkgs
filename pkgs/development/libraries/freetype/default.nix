@@ -50,6 +50,9 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
 
+  # native compiler to generate building tool
+  CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
+
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = optionalString stdenv.isAarch32 "-std=gnu99";
 
