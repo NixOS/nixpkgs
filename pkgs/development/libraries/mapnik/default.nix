@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation rec {
   name = "mapnik-${version}";
-  version = "3.0.20";
+  version = "3.0.21";
 
   src = fetchzip {
     # this one contains all git submodules and is cheaper than fetchgit
     url = "https://github.com/mapnik/mapnik/releases/download/v${version}/mapnik-v${version}.tar.bz2";
-    sha256 = "05a2hvvk5s4x3wjvh4spd717vd5ri7h0sql7aarpi9jpc5h6xicc";
+    sha256 = "0cq2gbmf1sssg72sq4b5s3x1z6wvl1pzxliymm06flw5bpim5as2";
   };
 
   # a distinct dev output makes python-mapnik fail
