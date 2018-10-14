@@ -12933,8 +12933,6 @@ with pkgs;
   perlPackages = perl528Packages;
   inherit (perlPackages) perl;
 
-  perlXMLParser = perlPackages.XMLParser;
-
   ack = perlPackages.ack;
 
   perlcritic = perlPackages.PerlCritic;

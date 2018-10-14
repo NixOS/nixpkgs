@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libXft
+{ stdenv, fetchurl, pkgconfig, perlPackages, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
       --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
   '';
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env perl perlXMLParser ];
+  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env ]
+    ++ (with perlPackages; [ perl XMLParser ]);
   buildInputs = [
     libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
