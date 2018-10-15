@@ -194,6 +194,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     callCabal2nix = name: src: args: self.callCabal2nixWithOptions name src "" args;
 
     # : { root : Path
+    #   , name : Defaulted String
     #   , source-overrides : Defaulted (Either Path VersionNumber)
     #   , overrides : Defaulted (HaskellPackageOverrideSet)
     #   , modifier : Defaulted
@@ -207,6 +208,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     # for nix-build or nix-shell to build that package.
     developPackage =
       { root
+      , name ? builtins.baseNameOf root
       , source-overrides ? {}
       , overrides ? self: super: {}
       , modifier ? drv: drv
@@ -216,7 +218,7 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
            (pkgs.lib.composeExtensions
               (self.packageSourceOverrides source-overrides)
               overrides))
-        .callCabal2nix (builtins.baseNameOf root) root {};
+        .callCabal2nix name root {};
       in if returnShellEnv then (modifier drv).env else modifier drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
