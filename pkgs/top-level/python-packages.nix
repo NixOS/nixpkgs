@@ -5721,24 +5721,7 @@ in {
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
-  linode = buildPythonPackage rec {
-    name = "linode-${version}";
-    version = "0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/linode/linode-${version}.tar.gz";
-      sha256 = "db3c2a7fab8966d903a63f16c515bff241533e4ef2d746aa7aae4a49bba5e573";
-    };
-
-    propagatedBuildInputs = with self; [ requests ];
-
-    meta = {
-      homepage = "https://github.com/ghickman/linode";
-      description = "A thin python wrapper around Linode's API";
-      license = licenses.mit;
-      maintainers = with maintainers; [ nslqqq ];
-    };
-  };
+  linode = callPackage ../development/python-modules/linode { };
 
   linode-api = callPackage ../development/python-modules/linode-api { };
 
