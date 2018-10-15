@@ -1435,27 +1435,7 @@ in {
 
   miniupnpc = callPackage ../development/python-modules/miniupnpc {};
 
-  mixpanel = buildPythonPackage rec {
-    version = "4.0.2";
-    name = "mixpanel-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchzip {
-      url = "https://github.com/mixpanel/mixpanel-python/archive/${version}.zip";
-      sha256 = "0yq1bcsjzsz7yz4rp69izsdn47rvkld4wki2xmapp8gg2s9i8709";
-    };
-
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [ six ];
-    checkPhase = "py.test tests.py";
-
-    meta = {
-      homepage = https://github.com/mixpanel/mixpanel-python;
-      description = "This is the official Mixpanel Python library. This library
-                     allows for server-side integration of Mixpanel.";
-      license = stdenv.lib.licenses.asl20;
-    };
-  };
+  mixpanel = callPackage ../development/python-modules/mixpanel { };
 
   mpyq = callPackage ../development/python-modules/mpyq { };
 
