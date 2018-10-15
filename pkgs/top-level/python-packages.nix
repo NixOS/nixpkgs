@@ -5688,27 +5688,7 @@ in {
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
 
-  libcloud = buildPythonPackage (rec {
-    name = "libcloud-1.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/apache-libcloud/apache-${name}.tar.bz2";
-      sha256 = "0qlhyz5f32xg8i10biyzqscks8d28vklk63hvj45vzy1amw60kqz";
-    };
-
-    buildInputs = with self; [ mock ];
-
-    propagatedBuildInputs = with self; [ pycrypto ];
-    preConfigure = "cp libcloud/test/secrets.py-dist libcloud/test/secrets.py";
-
-    # failing tests for 26 and 27
-    doCheck = false;
-
-    meta = {
-      description = "A unified interface to many cloud providers";
-      homepage = http://incubator.apache.org/libcloud/;
-    };
-  });
+  libcloud = callPackage ../development/python-modules/libcloud { };
 
   libgpuarray = callPackage ../development/python-modules/libgpuarray {
     clblas = pkgs.clblas.override { boost = self.boost; };
