@@ -1,13 +1,12 @@
 { stdenv
 , fetchFromGitHub
 , autoreconfHook, zlib, gmock, which, buildPackages
-, useExternalProtoc
-, buildProtobuf ? null
 , version, sha256
 , ...
 }:
 
-stdenv.mkDerivation rec {
+let
+mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation rec {
   name = "protobuf-${version}";
 
   # make sure you test also -A pythonPackages.protobuf
@@ -31,10 +30,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook buildPackages.which buildPackages.stdenv.cc ]
-                      ++ stdenv.lib.optional useExternalProtoc [ buildProtobuf ];
+                      ++ (if buildProtobuf == null then [] else [ buildProtobuf ]);
 
   buildInputs = [ zlib ];
-  configureFlags = stdenv.lib.optional useExternalProtoc [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
+  configureFlags = if buildProtobuf == null then [] else [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
 
   enableParallelBuilding = true;
 
@@ -59,4 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru.version = version;
-}
+};
+in mkProtobufDerivation(if (stdenv.buildPlatform != stdenv.hostPlatform)
+                        then (mkProtobufDerivation null buildPackages.stdenv)
+                        else null) stdenv
