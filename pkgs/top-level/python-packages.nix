@@ -5593,14 +5593,7 @@ in {
 
   ipdb = callPackage ../development/python-modules/ipdb { };
 
-  ipdbplugin = buildPythonPackage {
-    name = "ipdbplugin-1.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
-      sha256 = "4778d78b5d0af1a2a6d341aed9e72eb73b1df6b179e145b4845d3a209137029c";
-    };
-    propagatedBuildInputs = with self; [ self.nose self.ipython ];
-  };
+  ipdbplugin = callPackage ../development/python-modules/ipdbplugin { };
 
   pythonIRClib = buildPythonPackage rec {
     name = "irclib-${version}";
