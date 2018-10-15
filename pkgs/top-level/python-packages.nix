@@ -4255,23 +4255,7 @@ in {
 
   vcrpy = callPackage ../development/python-modules/vcrpy { };
 
-  venusian = buildPythonPackage rec {
-    name = "venusian-1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/v/venusian/${name}.tar.gz";
-      sha256 = "1720cff2ca9c369c840c1d685a7c7a21da1afa687bfe62edd93cae4bf429ca5a";
-    };
-
-    # TODO: https://github.com/Pylons/venusian/issues/23
-    doCheck = false;
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
+  venusian = callPackage ../development/python-modules/venusian { };
 
   chameleon = buildPythonPackage rec {
     name = "Chameleon-2.25";
