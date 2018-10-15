@@ -1268,38 +1268,7 @@ in {
 
   case = callPackage ../development/python-modules/case {};
 
-  cassandra-driver = buildPythonPackage rec {
-    name = "cassandra-driver-3.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cassandra-driver/${name}.tar.gz";
-      sha256 = "1aqmy3psn12lxgp659d0zsxkirxzy5lnbnzxf9xjq1a93s3qm704";
-    };
-
-    buildInputs = with self; [ pkgs.libev cython ];
-
-    propagatedBuildInputs = with self; [ futures six ];
-
-    postPatch = ''
-      sed -i "s/<=1.0.1//" setup.py
-    '';
-
-    checkPhase = ''
-      ${python.interpreter} setup.py gevent_nosetests
-      ${python.interpreter} setup.py eventlet_nosetests
-    '';
-
-    checkInputs = [ scales eventlet twisted mock gevent nose pytz pyyaml sure ];
-
-    # Could not get tests running
-    doCheck = false;
-
-    meta = {
-      homepage = http://datastax.github.io/python-driver/;
-      description = "A Python client driver for Apache Cassandra";
-      license = licenses.asl20;
-    };
-  };
+  cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   cccolutils = callPackage ../development/python-modules/cccolutils {};
 
