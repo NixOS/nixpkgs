@@ -1098,19 +1098,7 @@ in {
 
   constantly = callPackage ../development/python-modules/constantly { };
 
-  cornice = buildPythonPackage rec {
-    name = "cornice-${version}";
-    version = "1.2.1";
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/cornice.git;
-      rev = "refs/tags/${version}";
-      sha256 = "0688vrkl324jmpi8jkjh1s8nsyjinw149g3x8qlis8vz6j6a01wv";
-    };
-
-    propagatedBuildInputs = with self; [ pyramid simplejson ];
-
-    doCheck = false; # lazy packager
-  };
+  cornice = callPackage ../development/python-modules/cornice { };
 
   cram = callPackage ../development/python-modules/cram { };
 
