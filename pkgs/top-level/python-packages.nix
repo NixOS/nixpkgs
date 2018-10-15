@@ -5591,17 +5591,7 @@ in {
 
   ipaddress = callPackage ../development/python-modules/ipaddress { };
 
-  ipdb = buildPythonPackage rec {
-    name = "ipdb-${version}";
-    version = "0.8.1";
-
-    disabled = isPyPy;  # setupterm: could not find terminfo database
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipdb/${name}.zip";
-      sha256 = "1763d1564113f5eb89df77879a8d3213273c4d7ff93dcb37a3070cdf0c34fd7c";
-    };
-    propagatedBuildInputs = with self; [ ipython ];
-  };
+  ipdb = callPackage ../development/python-modules/ipdb { };
 
   ipdbplugin = buildPythonPackage {
     name = "ipdbplugin-1.4";
