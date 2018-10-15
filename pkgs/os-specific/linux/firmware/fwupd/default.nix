@@ -36,6 +36,7 @@ in stdenv.mkDerivation {
   LC_ALL = "en_US.UTF-8"; # For po/make-images
 
   patches = [
+    # https://github.com/hughsie/fwupd/issues/800
     ./fix-paths.patch
   ];
 
