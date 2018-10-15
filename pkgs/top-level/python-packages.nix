@@ -1035,33 +1035,11 @@ in {
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
-  binwalk_fun = { visualizationSupport ? false, pyqtgraph ? null }:
-    assert visualizationSupport -> pyqtgraph != null;
+  binwalk = callPackage ../development/python-modules/binwalk { };
 
-    buildPythonPackage rec {
-    name = "binwalk-${version}";
-    version = "2.1.1";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "devttys0";
-      repo = "binwalk";
-      rev = "291a03595d17f848c73b74cb6ca508da782cd8f7";
-      sha256 = "0grid93yz6i6jb2zggrqncp5awdf7qi88j5y2k7dq0k9r6b8zydw";
-    };
-
-    propagatedBuildInputs = with stdenv.lib; with pkgs; [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma self.pycrypto ]
-      ++ optional visualizationSupport pyqtgraph;
-
-    meta = with stdenv.lib; {
-      homepage = "http://binwalk.org";
-      description = "A tool for searching a given binary image for embedded files";
-      platforms = platforms.all;
-      maintainers = [ maintainers.koral ];
-    };
-  };
-
-  binwalk = self.binwalk_fun { };
-  binwalk-full = self.binwalk_fun { visualizationSupport = true; pyqtgraph = self.pyqtgraph; };
+  binwalk-full = appendToName "full" (self.binwalk.override {
+    pyqtgraph = self.pyqtgraph;
+  });
 
   bitmath = callPackage ../development/python-modules/bitmath { };
 
