@@ -8,7 +8,7 @@ let
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
 in stdenv.mkDerivation rec {
-  name = "openafs-${version}-${kernel.version}";
+  name = "openafs-${version}-${kernel.modDirVersion}";
   inherit version src;
 
   nativeBuildInputs = [ autoconf automake flex libtool_2 perl which yacc ]
