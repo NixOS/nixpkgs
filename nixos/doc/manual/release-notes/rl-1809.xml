@@ -477,6 +477,48 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
+     Some licenses that were incorrectly not marked as unfree now are. This is
+     the case for:
+     <itemizedlist>
+      <listitem>
+       <para>
+        cc-by-nc-sa-20: Creative Commons Attribution Non Commercial Share Alike
+        2.0
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        cc-by-nc-sa-25: Creative Commons Attribution Non Commercial Share Alike
+        2.5
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        cc-by-nc-sa-30: Creative Commons Attribution Non Commercial Share Alike
+        3.0
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        cc-by-nc-sa-40: Creative Commons Attribution Non Commercial Share Alike
+        4.0
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        cc-by-nd-30: Creative Commons Attribution-No Derivative Works v3.00
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        msrla: Microsoft Research License Agreement
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The deprecated <varname>services.cassandra</varname> module has seen a
      complete rewrite. (See above.)
     </para>
