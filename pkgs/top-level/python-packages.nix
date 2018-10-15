@@ -1225,31 +1225,7 @@ in {
 
   bottle = callPackage ../development/python-modules/bottle { };
 
-  box2d = buildPythonPackage rec {
-    name = "box2d-${version}";
-    version = "2.3b0";
-    disabled = (!isPy27);
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/B/Box2D/Box2D-2.3b0.zip";
-      sha256 = "4519842c650b0153550eb0c9864da46b5a4ec8555c68b70f5cd2952a21c788b0";
-    };
-
-    patches = [ ../development/python-modules/box2d/disable-test.patch ];
-
-    propagatedBuildInputs = [ pkgs.swig2 pkgs.box2d ];
-
-    meta = {
-      homepage = https://code.google.com/p/pybox2d/;
-      description = ''
-        A 2D game physics library for Python under
-        the very liberal zlib license
-      '';
-      license = licenses.zlib;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ sepi ];
-    };
-  };
+  box2d = callPackage ../development/python-modules/box2d { pkgs-box2d = pkgs.box2d; };
 
   branca = callPackage ../development/python-modules/branca { };
 
