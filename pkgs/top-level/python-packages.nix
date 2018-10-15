@@ -5615,23 +5615,7 @@ in {
 
   jinja2 = callPackage ../development/python-modules/jinja2 { };
 
-  jinja2_time = buildPythonPackage rec {
-    version = "0.2.0";
-    name = "jinja2-time-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jinja2-time/${name}.tar.gz";
-      sha256 = "0h0dr7cfpjnjj8bgl2vk9063a53649pn37wnlkd8hxjy656slkni";
-    };
-
-    propagatedBuildInputs = with self; [ arrow jinja2 ];
-
-    meta = {
-      homepage = https://github.com/hackebrot/jinja2-time;
-      description = "Jinja2 Extension for Dates and Times";
-      license = licenses.mit;
-    };
-  };
+  jinja2_time = callPackage ../development/python-modules/jinja2_time { };
 
   jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
 
