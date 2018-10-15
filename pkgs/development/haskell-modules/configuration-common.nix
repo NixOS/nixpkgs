@@ -1148,4 +1148,7 @@ self: super: {
 
   arbtt = doJailbreak super.arbtt;
 
+  # https://github.com/yesodweb/yesod/issues/1563
+  yesod-core = dontCheck super.yesod-core;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
