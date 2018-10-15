@@ -18139,6 +18139,8 @@ with pkgs;
 
   ogmtools = callPackage ../applications/video/ogmtools { };
 
+  omegat = callPackage ../applications/misc/omegat.nix { };
+
   omxplayer = callPackage ../applications/video/omxplayer { };
 
   openbox = callPackage ../applications/window-managers/openbox { };
