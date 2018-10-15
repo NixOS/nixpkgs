@@ -1070,33 +1070,7 @@ in {
     numpy = self.numpy;
   };
 
-  capstone = buildPythonPackage rec {
-    name = "capstone-3.0.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/capstone/${name}.tar.gz";
-      sha256 = "945d3b8c3646a1c3914824c416439e2cf2df8969dd722c8979cdcc23b40ad225";
-    };
-    patches = [
-      (pkgs.fetchpatch {
-        stripLen = 2;
-        url = "https://patch-diff.githubusercontent.com/raw/aquynh/capstone/pull/783/commits/23fe9f36622573c747e2bab6119ff245437bf276.patch";
-        sha256 = "0yizqrdlxqxn16873593kdx2vrr7gvvilhgcf9xy6hr0603d3m5r";
-      })
-    ];
-    postPatch = ''
-      patchShebangs src/make.sh
-    '';
-    propagatedBuildInputs = [ ];
-    preCheck = ''
-      mv src/libcapstone.so capstone
-    '';
-    meta = with pkgs.stdenv.lib; {
-      homepage = "http://www.capstone-engine.org/";
-      license = licenses.bsdOriginal;
-      description = "Capstone disassembly engine";
-      maintainers = with maintainers; [ bennofs ];
-    };
-  };
+  capstone = callPackage ../development/python-modules/capstone { };
 
   cement = callPackage ../development/python-modules/cement {};
 
