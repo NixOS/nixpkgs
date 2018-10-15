@@ -229,27 +229,12 @@ rec {
   eclipse_sdk_37 = eclipse-sdk-37; # backward compatibility, added 2016-01-30
   
   ### Eclipse Java
+
+  eclipse-java = eclipse-java-49;
   
-  eclipse-java-47 = buildEclipse {
-    name = "eclipse-java-4.7.0";
-    description = "Eclipse IDE for Java Developers, Oxygen release";
-    src =
-      if stdenv.system == "x86_64-linux" then
-        fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/3a/eclipse-java-oxygen-3a-linux-gtk-x86_64.tar.gz;
-          sha512 = "6333edb4556667d9606fc045032bafd8c54c21c056e03fd7e9fdb942d8da5cd183976ddbaff2383b5fe6d0da4f34a1caf5bfb9343f14e9069049c5b680895a21";
-        }
-      else if stdenv.system == "i686-linux" then
-        fetchurl {
-          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/oxygen/3a/eclipse-java-oxygen-3a-linux-gtk.tar.gz;
-          sha512 = "aec907057873671809dccad5d520fdcc3a5685a8607a57f413972bbd68f95614a2ea3787005b3d05162440690dab44a755fdcdd02b027a4d9d36b3f499e34a10";
-        }
-      else throw "Unsupported system: ${stdenv.system}";
-  };
-  
-  eclipse-java-48 = buildEclipse {
-    name = "eclipse-java-4.8.0";
-    description = "Eclipse IDE for Java Developers, Oxygen release";
+  eclipse-java-49 = buildEclipse {
+    name = "eclipse-java-4.9.0";
+    description = "Eclipse IDE for Java Developers";
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
