@@ -5611,33 +5611,7 @@ in {
 
   jellyfish = callPackage ../development/python-modules/jellyfish { };
 
-  j2cli = buildPythonPackage rec {
-    name = "j2cli-${version}";
-    version = "0.3.1-0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/j2cli/${name}.tar.gz";
-      sha256 = "0y3w1x9935qzx8w6m2r6g4ghyjmxn33wryiif6xb56q7cj9w1433";
-    };
-
-    disabled = !isPy27;
-
-    buildInputs = [ self.nose ];
-
-    propagatedBuildInputs = with self; [ jinja2 pyyaml ];
-
-    meta = {
-      homepage = https://github.com/kolypto/j2cli;
-      description = "Jinja2 Command-Line Tool";
-      license = licenses.bsd3;
-      longDescription = ''
-        J2Cli is a command-line tool for templating in shell-scripts,
-        leveraging the Jinja2 library.
-      '';
-      platforms = platforms.all;
-      maintainers = with maintainers; [ rushmorem ];
-    };
-  };
+  j2cli = callPackage ../development/python-modules/j2cli { };
 
   jinja2 = callPackage ../development/python-modules/jinja2 { };
 
