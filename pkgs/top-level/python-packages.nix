@@ -1231,23 +1231,7 @@ in {
 
   bugwarrior = callPackage ../development/python-modules/bugwarrior { };
 
-  # bugz = buildPythonPackage (rec {
-  #   name = "bugz-0.9.3";
-  #
-  #   src = pkgs.fetchgit {
-  #     url = "https://github.com/williamh/pybugz.git";
-  #     rev = "refs/tags/0.9.3";
-  #   };
-  #
-  #   propagatedBuildInputs = with self; [ self.argparse ];
-  #
-  #   doCheck = false;
-  #
-  #   meta = {
-  #     homepage = http://www.liquidx.net/pybugz/;
-  #     description = "Command line interface for Bugzilla";
-  #   };
-  # });
+  bugz = callPackage ../development/python-modules/bugz { };
 
   bugzilla = callPackage ../development/python-modules/bugzilla { };
 
