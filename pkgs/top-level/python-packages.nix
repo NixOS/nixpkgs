@@ -1796,28 +1796,7 @@ in {
     };
   });
 
-  funcparserlib = buildPythonPackage rec {
-    name = "funcparserlib-0.3.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/funcparserlib/${name}.tar.gz";
-      sha256 = "b7992eac1a3eb97b3d91faa342bfda0729e990bd8a43774c1592c091e563c91d";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
-    # Tests are Python 2.x only judging from SyntaxError
-    doCheck = !(isPy3k);
-
-    meta = {
-      description = "Recursive descent parsing library based on functional combinators";
-      homepage = https://code.google.com/p/funcparserlib/;
-      license = licenses.mit;
-      platforms = platforms.unix;
-    };
-  };
+  funcparserlib = callPackage ../development/python-modules/funcparserlib { };
 
   fastcache = callPackage ../development/python-modules/fastcache { };
 
