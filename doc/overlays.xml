@@ -30,9 +30,15 @@
       itself is given, then that is used.
      </para>
      <para>
-      This can be passed explicitly when importing nipxkgs, for example
+      This can be passed explicitly when importing nixpkgs, for example
       <literal>import &lt;nixpkgs> { overlays = [ overlay1 overlay2 ];
       }</literal>.
+     </para>
+     <para>
+      Further overlays can be added by calling the
+      <literal>pkgs.extend</literal> or <literal>pkgs.appendOverlays</literal>,
+      although it is often preferable to avoid these functions, because they
+      recompute the Nixpkgs fixpoint, which is somewhat expensive to do.
      </para>
     </listitem>
     <listitem>

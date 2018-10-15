@@ -6,8 +6,16 @@
 
  <para>
   Sometimes one wants to override parts of <literal>nixpkgs</literal>, e.g.
-  derivation attributes, the results of derivations or even the whole package
-  set.
+  derivation attributes, the results of derivations.
+ </para>
+
+ <para>
+  These overriding functions let you focus on one part of Nixpkgs and give you
+  back the requested variation. This is orthogonal but related to overlays and
+  the extending functions. Those also let you make modifications but return the
+  whole package set instead of just what you modified. When used together, the
+  override functions make the changes and overlays or extending functions add
+  those changes to the package sets.
  </para>
 
  <section xml:id="sec-pkg-override">
@@ -25,6 +33,9 @@
   <para>
    Example usages:
 <programlisting>pkgs.foo.override { arg1 = val1; arg2 = val2; ... }</programlisting>
+<!-- TODO: move below programlisting to a new section about extending and overlays
+           and reference it
+  -->
 <programlisting>
 import pkgs.path { overlays = [ (self: super: {
   foo = super.foo.override { barSupport = true ; };
