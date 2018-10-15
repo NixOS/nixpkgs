@@ -1683,9 +1683,9 @@ let
       sha256 = "0lq5j7fryx1wn998jq6h3icz1h6pqrsbs3adskjzjyhn5l6yrg2p";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXext libXmu libXrender libXt ];
+    buildInputs = [ libX11 libXext libXmu xproto libXrender libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit libX11 libXext libXmu libXrender libXt ;};
+  }) // {inherit libX11 libXext libXmu xproto libXrender libXt ;};
 
   xf86bigfontproto = (mkDerivation "xf86bigfontproto" {
     name = "xf86bigfontproto-1.2.0";
