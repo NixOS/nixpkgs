@@ -18,11 +18,11 @@ let
 
 in with python.pkgs; buildPythonApplication rec {
   pname = "khal";
-  version = "0.9.9";
+  version = "0.9.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dq9aqb9pqjfqrnfg43mhpb7m0szmychxy1ydb3lwzf3500c9rsh";
+    sha256 = "03h0j0d3xyqh98x5v2gv63wv3g91hip3vsaxvybsn5iz331d23h4";
   };
 
   LC_ALL = "en_US.UTF-8";

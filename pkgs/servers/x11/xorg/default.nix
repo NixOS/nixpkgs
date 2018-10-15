@@ -908,11 +908,11 @@ let
   }) // {inherit inputproto libX11 libXext xextproto libXfixes xproto ;};
 
   libXinerama = (mkDerivation "libXinerama" {
-    name = "libXinerama-1.1.3";
+    name = "libXinerama-1.1.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXinerama-1.1.3.tar.bz2;
-      sha256 = "1qlqfvzw45gdzk9xirgwlp2qgj0hbsyiqj8yh8zml2bk2ygnjibs";
+      url = mirror://xorg/individual/lib/libXinerama-1.1.4.tar.bz2;
+      sha256 = "086p0axqj57nvkaqa6r00dnr9kyrn1m8blgf0zjy25zpxkbxn200";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext xextproto xineramaproto ];
@@ -1136,11 +1136,11 @@ let
   }) // {inherit ;};
 
   libxcb = (mkDerivation "libxcb" {
-    name = "libxcb-1.13";
+    name = "libxcb-1.13.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://xcb.freedesktop.org/dist/libxcb-1.13.tar.bz2;
-      sha256 = "1ahxhmdqp4bhb90zmc275rmf5wixqra4bnw9pqnzyl1w3598g30q";
+      url = http://xcb.freedesktop.org/dist/libxcb-1.13.1.tar.bz2;
+      sha256 = "1i27lvrcsygims1pddpl5c4qqs6z715lm12ax0n3vx0igapvg7x8";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxslt libpthreadstubs python libXau xcbproto libXdmcp ];

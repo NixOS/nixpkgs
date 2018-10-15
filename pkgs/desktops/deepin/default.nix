@@ -4,8 +4,10 @@ let
   packages = self: with self; {
 
     dbus-factory = callPackage ./dbus-factory { };
+    dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
+    deepin-desktop-schemas = callPackage ./deepin-desktop-schemas { };
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
     deepin-gtk-theme = callPackage ./deepin-gtk-theme { };
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
@@ -18,6 +20,7 @@ let
       inherit (pkgs.gnome3) libgee vte;
       wnck = pkgs.libwnck3;
     };
+    deepin-wallpapers = callPackage ./deepin-wallpapers { };
     dtkcore = callPackage ./dtkcore { };
     dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };

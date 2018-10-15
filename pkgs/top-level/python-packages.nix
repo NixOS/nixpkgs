@@ -190,7 +190,9 @@ in {
 
   astral = callPackage ../development/python-modules/astral { };
 
-  astropy = callPackage ../development/python-modules/astropy {  };
+  astropy = callPackage ../development/python-modules/astropy { };
+
+  atom = callPackage ../development/python-modules/atom { };
 
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
@@ -213,6 +215,28 @@ in {
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
 
   ansiconv = callPackage ../development/python-modules/ansiconv { };
+
+  azure = callPackage ../development/python-modules/azure { };
+
+  azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
+
+  azure-common = callPackage ../development/python-modules/azure-common { };
+
+  azure-mgmt-common = callPackage ../development/python-modules/azure-mgmt-common { };
+
+  azure-mgmt-compute = callPackage ../development/python-modules/azure-mgmt-compute { };
+
+  azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
+
+  azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
+
+  azure-mgmt-resource = callPackage ../development/python-modules/azure-mgmt-resource { };
+
+  azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
+
+  azure-storage = callPackage ../development/python-modules/azure-storage { };
+
+  azure-servicemanagement-legacy = callPackage ../development/python-modules/azure-servicemanagement-legacy { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
@@ -239,6 +263,8 @@ in {
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
+
+  cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
@@ -300,9 +326,15 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  eradicate = callPackage ../development/python-modules/eradicate {  };
+
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
+  filterpy = callPackage ../development/python-modules/filterpy { };
+
   fire = callPackage ../development/python-modules/fire { };
+
+  fdint = callPackage ../development/python-modules/fdint { };
 
   fuse = callPackage ../development/python-modules/fuse-python { fuse = pkgs.fuse; };
 
@@ -311,6 +343,8 @@ in {
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
+
+  gsd = callPackage ../development/python-modules/gsd { };
 
   gssapi = callPackage ../development/python-modules/gssapi { };
 
@@ -326,9 +360,17 @@ in {
 
   habanero = callPackage ../development/python-modules/habanero { };
 
+  helper = callPackage ../development/python-modules/helper { };
+
+  histbook = callPackage ../development/python-modules/histbook { };
+
+  hdmedians = callPackage ../development/python-modules/hdmedians { };
+
   httpsig = callPackage ../development/python-modules/httpsig { };
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
+
+  imutils = callPackage ../development/python-modules/imutils { };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
@@ -352,7 +394,11 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  mwclient = callPackage ../development/python-modules/mwclient { };
+
   mwoauth = callPackage ../development/python-modules/mwoauth { };
+
+  nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
   neuron = pkgs.neuron.override {
     inherit python;
@@ -371,6 +417,8 @@ in {
   nltk = callPackage ../development/python-modules/nltk { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
+
+  nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
@@ -396,6 +444,8 @@ in {
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
+  progress = callPackage ../development/python-modules/progress { };
+
   pymysql = callPackage ../development/python-modules/pymysql { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
@@ -411,6 +461,8 @@ in {
   pyarrow = callPackage ../development/python-modules/pyarrow {
     inherit (pkgs) arrow-cpp cmake pkgconfig;
   };
+
+  pyannotate = callPackage ../development/python-modules/pyannotate { };
 
   pyatspi = callPackage ../development/python-modules/pyatspi { };
 
@@ -513,6 +565,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  pystache = callPackage ../development/python-modules/pystache { };
+
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
@@ -543,6 +597,8 @@ in {
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
+
+  pyvoro = callPackage ../development/python-modules/pyvoro { };
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
@@ -605,6 +661,8 @@ in {
   toml = callPackage ../development/python-modules/toml { };
 
   unifi = callPackage ../development/python-modules/unifi { };
+
+  vidstab = callPackage ../development/python-modules/vidstab { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
@@ -734,11 +792,14 @@ in {
   # argparse is part of stdlib in 2.7 and 3.2+
   argparse = null;
 
-  astroid = callPackage ../development/python-modules/astroid { };
+  astroid = if isPy3k then callPackage ../development/python-modules/astroid { }
+            else callPackage ../development/python-modules/astroid/1.6.nix { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
 
   attrs = callPackage ../development/python-modules/attrs { };
+
+  atsim_potentials = callPackage ../development/python-modules/atsim_potentials { };
 
   audioread = callPackage ../development/python-modules/audioread { };
 
@@ -746,9 +807,7 @@ in {
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
-  av = callPackage ../development/python-modules/av {
-    inherit (pkgs) ffmpeg_2 git libav pkgconfig;
-  };
+  av = callPackage ../development/python-modules/av { };
 
   avro = callPackage ../development/python-modules/avro {};
 
@@ -759,235 +818,6 @@ in {
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify {};
 
   noise = callPackage ../development/python-modules/noise {};
-
-  azure = buildPythonPackage rec {
-    version = "0.11.0";
-    name = "azure-${version}";
-    disabled = pythonOlder "2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/azure/${name}.zip";
-      sha256 = "89c20b2efaaed3c6f56345d55c32a8d4e7d2a16c032d0acb92f8f490c508fe24";
-    };
-
-    propagatedBuildInputs = with self; [ dateutil futures pyopenssl requests ];
-
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-nspkg = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "azure-nspkg-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-nspkg/azure-nspkg-1.0.0.zip;
-      sha256 = "1xqvc8by1lbd7j9dxyly03jz3rgbmnsiqnqgydhkf4pa2mn2hgr9";
-    };
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-common = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "azure-common-${version}";
-    disabled = isPyPy;
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-common/azure-common-1.0.0.zip;
-      sha256 = "074rwwy8zzs7zw3nww5q2wg5lxgdc4rmypp2gfc9mwsz0gb70491";
-    };
-    propagatedBuildInputs = with self; [ azure-nspkg ];
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    '';
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-common = buildPythonPackage rec {
-    version = "0.20.0";
-    name = "azure-mgmt-common-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-common/azure-mgmt-common-0.20.0.zip;
-      sha256 = "1rmzpz3733wv31rsnqpdy4bbafvk5dhbqx7q0xf62dlz7p0i4f66";
-    };
-    propagatedBuildInputs = with self; [ azure-common azure-mgmt-nspkg requests ];
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    '';
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-compute = buildPythonPackage rec {
-    version = "0.20.0";
-    name = "azure-mgmt-compute-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-compute/azure-mgmt-compute-0.20.0.zip;
-      sha256 = "12hr5vxdg2sk2fzr608a37f4i8nbchca7dgdmly2w5fc7x88jx2v";
-    };
-    preConfigure = ''
-      # Patch to make this package work on requests >= 2.11.x
-      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/compute/computemanagement.py
-    '';
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    '';
-    propagatedBuildInputs = with self; [ azure-mgmt-common ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-network = buildPythonPackage rec {
-    version = "0.20.1";
-    name = "azure-mgmt-network-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-network/azure-mgmt-network-0.20.1.zip;
-      sha256 = "10vj22h6nxpw0qpvib5x2g6qs5j8z31142icvh4qk8k40fcrs9hx";
-    };
-    preConfigure = ''
-      # Patch to make this package work on requests >= 2.11.x
-      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/network/networkresourceprovider.py
-    '';
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    '';
-    propagatedBuildInputs = with self; [ azure-mgmt-common ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-nspkg = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "azure-mgmt-nspkg-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-nspkg/azure-mgmt-nspkg-1.0.0.zip;
-      sha256 = "1rq92fj3kvnqkk18596dybw0kvhgscvc6cd8hp1dhy3wrkqnhwmq";
-    };
-    propagatedBuildInputs = with self; [ azure-nspkg ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-resource = buildPythonPackage rec {
-    version = "0.20.1";
-    name = "azure-mgmt-resource-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-resource/azure-mgmt-resource-0.20.1.zip;
-      sha256 = "0slh9qfm5nfacrdm3lid0sr8kwqzgxvrwf27laf9v38kylkfqvml";
-    };
-    preConfigure = ''
-      # Patch to make this package work on requests >= 2.11.x
-      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/resource/resourcemanagement.py
-    '';
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    '';
-    propagatedBuildInputs = with self; [ azure-mgmt-common ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-mgmt-storage = buildPythonPackage rec {
-    version = "0.20.0";
-    name = "azure-mgmt-storage-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-mgmt-storage/azure-mgmt-storage-0.20.0.zip;
-      sha256 = "16iw7hqhq97vlzfwixarfnirc60l5mz951p57brpcwyylphl3yim";
-    };
-    preConfigure = ''
-      # Patch to make this package work on requests >= 2.11.x
-      # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-      sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/storage/storagemanagement.py
-    '';
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-    '';
-    propagatedBuildInputs = with self; [ azure-mgmt-common ];
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-storage = buildPythonPackage rec {
-    version = "0.20.3";
-    name = "azure-storage-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-storage/azure-storage-0.20.3.zip;
-      sha256 = "06bmw6k2000kln5jwk5r9bgcalqbyvqirmdh9gq4s6nb4fv3c0jb";
-    };
-    propagatedBuildInputs = with self; [ azure-common futures dateutil requests ];
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    '';
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
-
-  azure-servicemanagement-legacy = buildPythonPackage rec {
-    version = "0.20.1";
-    name = "azure-servicemanagement-legacy-${version}";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/a/azure-servicemanagement-legacy/azure-servicemanagement-legacy-0.20.1.zip;
-      sha256 = "17dwrp99sx5x9cm4vldkaxhki9gbd6dlafa0lpr2n92xhh2838zs";
-    };
-    propagatedBuildInputs = with self; [ azure-common requests ];
-    postInstall = ''
-      echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    '';
-    meta = {
-      description = "Microsoft Azure SDK for Python";
-      homepage = "https://azure.microsoft.com/en-us/develop/python/";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
 
   backcall = callPackage ../development/python-modules/backcall { };
 
@@ -1331,36 +1161,7 @@ in {
 
   bokeh = callPackage ../development/python-modules/bokeh { };
 
-  boto = buildPythonPackage rec {
-    name = "boto-${version}";
-    version = "2.47.0";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "051gq8z9m2cir03jhc00qs36bnpla7zkqm9xqiqcqvdknmi2ndbq";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} tests/test.py default
-    '';
-
-    buildInputs = [ self.nose self.mock ];
-    propagatedBuildInputs = [ self.requests self.httpretty ];
-
-    meta = {
-      homepage = https://github.com/boto/boto;
-
-      license = "bsd";
-
-      description = "Python interface to Amazon Web Services";
-
-      longDescription = ''
-        The boto module is an integrated interface to current and
-        future infrastructural services offered by Amazon Web
-        Services.  This includes S3, SQS, EC2, among others.
-      '';
-    };
-  };
+  boto = callPackage ../development/python-modules/boto { };
 
   boto3 = callPackage ../development/python-modules/boto3 { };
 
@@ -1417,6 +1218,13 @@ in {
   # });
 
   bugzilla = callPackage ../development/python-modules/bugzilla { };
+
+  buildbot = callPackage ../development/python-modules/buildbot { };
+  buildbot-plugins = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/buildbot/plugins.nix { });
+  buildbot-ui = self.buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
+  buildbot-full = self.buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view wsgi-dashboards ]);
+  buildbot-worker = callPackage ../development/python-modules/buildbot/worker.nix { };
+  buildbot-pkg = callPackage ../development/python-modules/buildbot/pkg.nix { };
 
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
@@ -1857,6 +1665,8 @@ in {
 
   python-jose = callPackage ../development/python-modules/python-jose {};
 
+  python-json-logger = callPackage ../development/python-modules/python-json-logger { };
+
   python-ly = callPackage ../development/python-modules/python-ly {};
 
   pyhepmc = buildPythonPackage rec {
@@ -1904,6 +1714,10 @@ in {
   pytest-httpbin = callPackage ../development/python-modules/pytest-httpbin { };
 
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
+
+  pytest-annotate = callPackage ../development/python-modules/pytest-annotate { };
+
+  pytest-ansible = callPackage ../development/python-modules/pytest-ansible { };
 
   pytest-aiohttp = callPackage ../development/python-modules/pytest-aiohttp { };
 
@@ -1969,32 +1783,7 @@ in {
 
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 
-  tinycss = buildPythonPackage rec {
-    name = "tinycss-${version}";
-    version = "0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tinycss/${name}.tar.gz";
-      sha256 = "1pichqra4wk86142hqgvy9s5x6c5k5zhy8l9qxr0620pqk8spbd4";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    propagatedBuildInputs = with self; [ cssutils ];
-
-    checkPhase = ''
-      py.test $out/${python.sitePackages}
-    '';
-
-    # Disable Cython tests for PyPy
-    TINYCSS_SKIP_SPEEDUPS_TESTS = optional isPyPy true;
-
-    meta = {
-      description = "Complete yet simple CSS parser for Python";
-      license = licenses.bsd3;
-      homepage = https://pythonhosted.org/tinycss/;
-    };
-  };
+  tinycss = callPackage ../development/python-modules/tinycss { };
 
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
@@ -2223,25 +2012,7 @@ in {
 
   enzyme = callPackage ../development/python-modules/enzyme {};
 
-  escapism = buildPythonPackage rec {
-    name = "escapism-${version}";
-    version = "0.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/escapism/${name}.tar.gz";
-      sha256 = "1yfyxwxb864xrmrrqgp85xgsh4yrrq5mmzvkdg19jwr7rm6sqx9p";
-    };
-
-    # No tests distributed
-    doCheck = false;
-
-    meta = {
-      description = "Simple, generic API for escaping strings";
-      homepage = "https://github.com/minrk/escapism";
-      license = licenses.mit;
-      maintainers = with maintainers; [ bzizou ];
-    };
-  };
+  escapism = callPackage ../development/python-modules/escapism { };
 
   etcd = buildPythonPackage rec {
     name = "etcd-${version}";
@@ -2367,22 +2138,7 @@ in {
 
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
-  facebook-sdk = buildPythonPackage rec {
-    name = "facebook-sdk-0.4.0";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/facebook-sdk/facebook-sdk-0.4.0.tar.gz";
-      sha256 = "5a96c54d06213039dff1fe1fabc51972e394666cd6d83ea70f7c2e67472d9b72";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Client library that supports the Facebook Graph API and the official Facebook JavaScript SDK";
-      homepage = https://github.com/pythonforfacebook/facebook-sdk;
-      license = licenses.asl20 ;
-    };
-  };
+  facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
 
   face_recognition = callPackage ../development/python-modules/face_recognition { };
 
@@ -2789,31 +2545,6 @@ in {
   else throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
-
-  helper = buildPythonPackage rec {
-    pname = "helper";
-    version = "2.4.1";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/${pname}/${name}.tar.gz";
-      sha256 = "4e33dde42ad4df30fb7790689f93d77252cff26a565610d03ff2e434865a53a2";
-    };
-
-    buildInputs = with self; [ mock ];
-    propagatedBuildInputs = with self; [ pyyaml ];
-
-    # No tests
-    doCheck = false;
-
-    meta = {
-      description = "Development library for quickly writing configurable applications and daemons";
-      homepage = https://helper.readthedocs.org/;
-      license = licenses.bsd3;
-    };
-
-
-  };
 
   hiro = callPackage ../development/python-modules/hiro {};
 
@@ -3669,6 +3400,8 @@ in {
       maintainers = with maintainers; [ koral];
     };
   };
+
+  peewee =  callPackage ../development/python-modules/peewee { };
 
   peppercorn = buildPythonPackage rec {
     name = "peppercorn-0.5";
@@ -6593,6 +6326,10 @@ in {
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
+  jupyter-repo2docker = callPackage ../development/python-modules/jupyter-repo2docker {
+    pkgs-docker = pkgs.docker;
+  };
+
   jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
@@ -6877,29 +6614,7 @@ in {
 
   llvmlite = callPackage ../development/python-modules/llvmlite { llvm = pkgs.llvm_6; };
 
-  lockfile = buildPythonPackage rec {
-    pname = "lockfile";
-    version = "0.12.2";
-    name = "${pname}-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "6aed02de03cba24efabcd600b30540140634fc06cfa603822d508d5361e9f799";
-    };
-
-    buildInputs = with self; [
-      pbr nose
-    ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    meta = {
-      homepage = https://launchpad.net/pylockfile;
-      description = "Platform-independent advisory file locking capability for Python applications";
-      license = licenses.asl20;
-    };
-  };
+  lockfile = callPackage ../development/python-modules/lockfile { };
 
   logilab_common = callPackage ../development/python-modules/logilab/common.nix {};
 
@@ -7759,34 +7474,6 @@ in {
   mypy_extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
-
-  mwclient = buildPythonPackage rec {
-    version = "0.8.3";
-    pname = "mwclient";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "mwclient";
-      repo = "mwclient";
-      rev = "v${version}";
-      sha256 = "0kl1yp9z5f1wl6lkm0vix87zkrbl9wcmkrrj1x5c35xvf95laf53";
-    };
-
-    buildInputs = with self; [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];
-
-    propagatedBuildInputs = with self; [ six requests requests_oauthlib ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Python client library to the MediaWiki API";
-      maintainers = with maintainers; [ ];
-      license = licenses.mit;
-      homepage = https://github.com/mwclient/mwclient;
-    };
-  };
 
   neuronpy = buildPythonPackage rec {
     name = "neuronpy-${version}";
@@ -10257,7 +9944,8 @@ in {
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
 
-  pylint = callPackage ../development/python-modules/pylint { };
+  pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
+           else callPackage ../development/python-modules/pylint/1.9.nix { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
@@ -10636,34 +10324,6 @@ in {
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ koral ];
-    };
-  };
-
-  pystache = buildPythonPackage rec {
-    name = "pystache-${version}";
-    version = "0.5.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pystache/${name}.tar.gz";
-      sha256 = "f7bbc265fb957b4d6c7c042b336563179444ab313fb93a719759111eabd3b85a";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
-    # SyntaxError Python 3
-    # https://github.com/defunkt/pystache/issues/181
-    doCheck = !isPy3k;
-
-    meta = {
-      description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";
-      homepage = https://github.com/defunkt/pystache;
-      license = licenses.mit;
     };
   };
 
@@ -12057,6 +11717,8 @@ in {
     inherit (pkgs) gfortran glibcLocales;
   };
 
+  scikit-bio = callPackage ../development/python-modules/scikit-bio { };
+
   scp = callPackage ../development/python-modules/scp {};
 
   scripttest = buildPythonPackage rec {
@@ -13008,26 +12670,7 @@ in {
     };
   });
 
-  sphinx-jinja = buildPythonPackage (rec {
-    name = "${pname}-${version}";
-    pname = "sphinx-jinja";
-    version = "0.2.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
-      sha256 = "1zsnhc573rvaww9qqyzs4f5h4hhvxklvppv14450vi5dk8rij81z";
-    };
-    buildInputs = with self; [ sphinx-testing pytest pbr];
-    propagatedBuildInputs = with self; [ sphinx blockdiag ];
-    checkPhase = ''
-      py.test -k "not test_build_epub"
-    '';
-    disabled = isPy3k;
-    meta = {
-      description = "includes jinja templates in a documentation";
-      maintainers = with maintainers; [ nand0p ];
-      license = licenses.mit;
-    };
-  });
+  sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx_pypi_upload = buildPythonPackage (rec {
     name = "Sphinx-PyPI-upload-0.2.1";
@@ -13360,24 +13003,7 @@ in {
     };
   };
 
-  tempita = buildPythonPackage rec {
-    version = "0.5.2";
-    name = "tempita-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Tempita/Tempita-${version}.tar.gz";
-      sha256 = "cacecf0baa674d356641f1d406b8bff1d756d739c46b869a54de515d08e6fc9c";
-    };
-
-    disabled = isPy3k;
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      homepage = http://pythonpaste.org/tempita/;
-      description = "A very small text templating language";
-    };
-  };
+  tempita = callPackage ../development/python-modules/tempita { };
 
   terminado = callPackage ../development/python-modules/terminado { };
 

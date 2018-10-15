@@ -37,8 +37,10 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
-    platforms = platforms.unix;
+    homepage = https://docs.pytest.org;
     description = "Framework for writing tests";
+    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

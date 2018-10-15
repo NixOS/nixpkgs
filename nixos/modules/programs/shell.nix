@@ -8,12 +8,6 @@ with lib;
 
   config = {
 
-    environment.shellAliases =
-      { ls = "ls --color=tty";
-        ll = "ls -l";
-        l  = "ls -alh";
-      };
-
     environment.shellInit =
       ''
         # Set up the per-user profile.

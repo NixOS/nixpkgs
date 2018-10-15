@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "goa-${version}";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     owner = "goadesign";
     repo = "goa";
     rev = "v${version}";
-    sha256 = "13401jf907z3qh11h9clb3z0i0fshwkmhx11fq9z6vx01x8x2in1";
+    sha256 = "1qx3c7dyq5wqxidfrk3ywc55fk64najj63f2jmfisfq4ixgwxdw9";
   };
 
   goDeps = ./deps.nix;

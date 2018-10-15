@@ -319,6 +319,10 @@ in
     dontUseCmakeConfigure = true;
   };
 
+  sassc = attrs: {
+    nativeBuildInputs = [ rake ];
+  };
+
   scrypt = attrs:
     if stdenv.isDarwin then {
       dontBuild = false;

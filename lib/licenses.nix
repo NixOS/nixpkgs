@@ -500,6 +500,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Non-Profit Open Software License 3.0";
   };
 
+  ocamlpro_nc = {
+    fullName = "OCamlPro Non Commercial license version 1";
+    url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-2.2.0/OCamlPro-Non-Commercial-License.pdf";
+    free = false;
+  };
+
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";

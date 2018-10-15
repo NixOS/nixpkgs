@@ -14,11 +14,11 @@ let
   xf86videodummy = callPackage ./xf86videodummy { };
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "1azvvddjfq7lb5kmbn0ilgq2nf7pmymsc3b9lhbjld6w156qdv01";
+    sha256 = "0wa3kx54himy3i1b2801hlzfilh3cf4kjk40k1cjl0ds28m5hija";
   };
 
   nativeBuildInputs = [ pkgconfig ];
