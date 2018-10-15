@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , autoreconfHook, zlib, gmock, which, buildPackages
-, externalProtoc
+, useExternalProtoc
 , buildProtobuf ? null
 , version, sha256
 , ...
@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook buildPackages.which buildPackages.stdenv.cc ]
-                      ++ stdenv.lib.optional externalProtoc [ buildProtobuf ];
+                      ++ stdenv.lib.optional useExternalProtoc [ buildProtobuf ];
 
   buildInputs = [ zlib ];
-  configureFlags = stdenv.lib.optional externalProtoc [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
+  configureFlags = stdenv.lib.optional useExternalProtoc [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
 
   enableParallelBuilding = true;
 
