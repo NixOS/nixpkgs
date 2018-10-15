@@ -21,6 +21,7 @@ let
       wnck = pkgs.libwnck3;
     };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
+    deepin-wm = callPackage ./deepin-wm { };
     dtkcore = callPackage ./dtkcore { };
     dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };
