@@ -110,6 +110,15 @@ in
         '';
       };
 
+      streamLocalBindUnlink = mkOption {
+        type = types.enum ["yes" "no"];
+        default = "no";
+        description = ''
+          Whether to remove an existing Unix-domain socket before creating a
+          new one. Only relevant when port-forwarding to a UNIX domain socket.
+        '';
+      };
+
       permitRootLogin = mkOption {
         default = "prohibit-password";
         type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
@@ -445,6 +454,8 @@ in
         '' else ''
           X11Forwarding no
         ''}
+
+        StreamLocalBindUnlink ${cfg.streamLocalBindUnlink}
 
         ${optionalString cfg.allowSFTP ''
           Subsystem sftp ${cfgc.package}/libexec/sftp-server ${concatStringsSep " " cfg.sftpFlags}
