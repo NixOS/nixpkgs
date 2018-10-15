@@ -13,6 +13,7 @@ let
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
     deepin-image-viewer = callPackage ./deepin-image-viewer { };
     deepin-menu = callPackage ./deepin-menu { };
+    deepin-metacity = callPackage ./deepin-metacity { };
     deepin-mutter = callPackage ./deepin-mutter { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
