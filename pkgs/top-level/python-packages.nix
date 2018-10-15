@@ -5680,34 +5680,7 @@ in {
 
   le = callPackage ../development/python-modules/le { };
 
-  lektor = buildPythonPackage rec {
-    name = "lektor-${version}";
-
-    version = "2.3";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/lektor/lektor";
-      rev = "refs/tags/${version}";
-      sha256 = "1n0ylh1sbpvi9li3g6a7j7m28njfibn10y6s2gayjxwm6fpphqxy";
-    };
-
-    LC_ALL="en_US.UTF-8";
-
-    meta = {
-      description = "A static content management system";
-      homepage    = "https://www.getlektor.com/";
-      license     = "BSD";
-      maintainers = with maintainers; [ vozz ];
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [
-      click watchdog exifread requests mistune inifile Babel jinja2
-      flask pyopenssl ndg-httpsclient pkgs.glibcLocales
-    ];
-  };
+  lektor = callPackage ../development/python-modules/lektor { };
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
