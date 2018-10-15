@@ -8844,24 +8844,7 @@ in {
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
 
-  paho-mqtt = buildPythonPackage rec {
-    name = "paho-mqtt-${version}";
-    version = "1.1";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-        url = "mirror://pypi/p/paho-mqtt/${name}.tar.gz";
-        sha256 = "07i6k9mw66kgbvjgsrcsd2sjji9ckym50dcxnmhjqfkfzsg64yhg";
-    };
-
-    meta = {
-      homepage = "https://eclipse.org/paho/";
-      description = "mqtt library for machine to machine and internet of things";
-      license = licenses.epl10;
-      maintainers = with maintainers; [ mog ];
-    };
-  };
+  paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
 
   pamqp = buildPythonPackage rec {
     version = "1.6.1";
