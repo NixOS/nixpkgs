@@ -2,7 +2,7 @@
 , python2, makeWrapper }:
 
 let
-  common = { version, sha256 }:
+  common = { version, sha256, extraBuildInputs ? [] }:
     stdenv.mkDerivation rec {
       name = "varnish-${version}";
 
@@ -15,7 +15,7 @@ let
       buildInputs = [
         pcre libxslt groff ncurses readline python2 libedit
         python2.pkgs.docutils makeWrapper
-      ];
+      ] ++ extraBuildInputs;
 
       buildFlags = "localstatedir=/var/spool";
 
@@ -47,7 +47,8 @@ in
     sha256 = "1cqlj12m426c1lak1hr1fx5zcfsjjvka3hfirz47hvy1g2fjqidq";
   };
   varnish6 = common {
-    version = "6.0.1";
-    sha256 = "1f7k751r31sgfvr1ns6s3h48c5x06kkps1p6zd40wvylm56qxwj7";
+    version = "6.1.0";
+    sha256 = "0zg2aqkg7a4zsjpxj0s7mphxv5f9xy279hjwln30h901k18r46qn";
+    extraBuildInputs = [ python2.pkgs.sphinx ];
   };
 }
