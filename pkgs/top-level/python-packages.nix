@@ -1047,38 +1047,7 @@ in {
 
   biopython = callPackage ../development/python-modules/biopython { };
 
-  bedup = buildPythonPackage rec {
-    version = "0.10.1";
-    name = "bedup-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "g2p";
-      repo = "bedup";
-      rev = "v${version}";
-      sha256 = "0sp8pmjkxcqq0alianfp41mwq7qj10rk1qy31pjjp9kiph1rn0x6";
-    };
-
-    buildInputs = with self; [ pkgs.btrfs-progs ];
-    propagatedBuildInputs = with self; [ contextlib2 pyxdg pycparser alembic ]
-      ++ optionals (!isPyPy) [ cffi ];
-
-    disabled = pythonOlder "3.3";
-
-    meta = {
-      description = "Deduplication for Btrfs";
-      longDescription = ''
-        Deduplication for Btrfs. bedup looks for new and changed files, making sure that multiple
-        copies of identical files share space on disk. It integrates deeply with btrfs so that scans
-        are incremental and low-impact.
-      '';
-      homepage = https://github.com/g2p/bedup;
-      license = licenses.gpl2;
-
-      platforms = platforms.linux;
-
-      maintainers = with maintainers; [ bluescreen303 ];
-    };
-  };
+  bedup = callPackage ../development/python-modules/bedup { };
 
   blessed = callPackage ../development/python-modules/blessed {};
 
