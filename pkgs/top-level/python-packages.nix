@@ -5678,26 +5678,7 @@ in {
 
   ldaptor = callPackage ../development/python-modules/ldaptor { };
 
-  le = buildPythonPackage rec {
-    name = "le-${version}";
-    version = "1.4.29";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/logentries/le/archive/v${version}.tar.gz";
-      sha256 = "d29738937cb6e714b6ec2ae74b66b1983482ffd54b4faa40767af18509521d4c";
-    };
-
-    disabled = isPy3k;
-
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ simplejson psutil ];
-
-    meta = {
-      homepage = "https://github.com/logentries/le";
-      description = "Logentries agent";
-    };
-  };
+  le = callPackage ../development/python-modules/le { };
 
   lektor = buildPythonPackage rec {
     name = "lektor-${version}";
