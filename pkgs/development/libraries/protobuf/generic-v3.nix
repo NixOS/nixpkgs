@@ -1,6 +1,8 @@
 { stdenv
 , fetchFromGitHub
-, autoreconfHook, zlib, gmock
+, autoreconfHook, zlib, gmock, which, buildPackages
+, externalProtoc
+, buildProtobuf ? null
 , version, sha256
 , ...
 }:
@@ -28,8 +30,11 @@ stdenv.mkDerivation rec {
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook buildPackages.which buildPackages.stdenv.cc ]
+                      ++ stdenv.lib.optional externalProtoc [ buildProtobuf ];
+
   buildInputs = [ zlib ];
+  configureFlags = stdenv.lib.optional externalProtoc [ "--with-protoc=${buildProtobuf}/bin/protoc" ];
 
   enableParallelBuilding = true;
 

@@ -11726,10 +11726,30 @@ with pkgs;
 
   protobuf = protobuf3_6;
 
-  protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
-  protobuf3_5 = callPackage ../development/libraries/protobuf/3.5.nix { };
-  protobuf3_4 = callPackage ../development/libraries/protobuf/3.4.nix { };
-  protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
+  protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix {
+    externalProtoc = (stdenv.hostPlatform != stdenv.buildPlatform);
+    buildProtobuf = if (stdenv.hostPlatform != stdenv.buildPlatform)
+                    then buildPackages.protobuf3_6
+                    else null;
+  };
+  protobuf3_5 = callPackage ../development/libraries/protobuf/3.5.nix {
+    externalProtoc = (stdenv.hostPlatform != stdenv.buildPlatform);
+    buildProtobuf = if (stdenv.hostPlatform != stdenv.buildPlatform)
+                    then buildPackages.protobuf3_5
+                    else null;
+  };
+  protobuf3_4 = callPackage ../development/libraries/protobuf/3.4.nix {
+    externalProtoc = (stdenv.hostPlatform != stdenv.buildPlatform);
+    buildProtobuf = if (stdenv.hostPlatform != stdenv.buildPlatform)
+                    then buildPackages.protobuf3_4
+                    else null;
+  };
+  protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix {
+    externalProtoc = (stdenv.hostPlatform != stdenv.buildPlatform);
+    buildProtobuf = if (stdenv.hostPlatform != stdenv.buildPlatform)
+                    then buildPackages.protobuf3_1
+                    else null;
+  };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
