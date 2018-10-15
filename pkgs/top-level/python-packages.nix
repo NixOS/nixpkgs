@@ -5805,23 +5805,7 @@ in {
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
-  manuel = buildPythonPackage rec {
-    name = "manuel-${version}";
-    version = "1.8.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/manuel/${name}.tar.gz";
-      sha256 = "1diyj6a8bvz2cdf9m0g2bbx9z2yjjnn3ylbg1zinpcjj6vldfx59";
-    };
-
-    propagatedBuildInputs = with self; [ six zope_testing ];
-
-    meta = {
-      description = "A documentation builder";
-      homepage = https://pypi.python.org/pypi/manuel;
-      license = licenses.zpl20;
-    };
-  };
+  manuel = callPackage ../development/python-modules/manuel { };
 
   mapsplotlib = buildPythonPackage rec {
     name = "mapsplotlib-${version}";
