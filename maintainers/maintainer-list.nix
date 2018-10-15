@@ -1377,6 +1377,11 @@
     github = "expipiplus1";
     name = "Joe Hermaszewski";
   };
+  f--t = {
+    email = "git@f-t.me";
+    github = "f--t";
+    name = "f--t";
+  };
   f-breidenstein = {
     email = "mail@felixbreidenstein.de";
     github = "f-breidenstein";
