@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "XStatic-jquery-ui";
-  version = "1.12.0.1";
+  version = "1.12.1.1";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "0w7mabv6qflpd47g33j3ggp5rv17mqk0xz3bsdswcj97wqpga2l2";
+    sha256 = "0449rkjcksq49yjyyszz9v11wa4nmvvfw0mynayah8248yxlifnn";
   };
 
   # no tests implemented
