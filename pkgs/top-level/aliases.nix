@@ -318,6 +318,14 @@ mapAliases ({
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
 
+  # added 2018-10-16
+  # TODO(ekleog): remove after 19.03 branch-off
+  # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.09
+  # branch-off
+  wasm = lib.warn
+    "‘wasm’ package has been renamed ‘proglodyte-wasm’, and will be dropped in the next release"
+    proglodyte-wasm;
+
   # added 2017-05-27
   wineMinimal = winePackages.minimal;
   wineFull = winePackages.full;
