@@ -5618,22 +5618,7 @@ in {
 
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
-  ipaddr = buildPythonPackage rec {
-    name = "ipaddr-${version}";
-    version = "2.1.11";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipaddr/${name}.tar.gz";
-      sha256 = "1dwq3ngsapjc93fw61rp17fvzggmab5x1drjzvd4y4q0i255nm8v";
-    };
-
-    meta = {
-      description = "Google's IP address manipulation library";
-      homepage = http://code.google.com/p/ipaddr-py/;
-      license = licenses.asl20;
-    };
-  };
+  ipaddr = callPackage ../development/python-modules/ipaddr { };
 
   ipaddress = if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
     name = "ipaddress-1.0.18";
