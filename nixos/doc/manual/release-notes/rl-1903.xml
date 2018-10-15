@@ -106,12 +106,12 @@
     </para>
    </listitem>
    <listitem>
-     <para>
-       The <literal>light</literal> module no longer uses setuid binaries, but
-       udev rules. As a consequence users of that module have to belong to the
-       <literal>video</literal> group in order to use the executable
-       (i.e. <literal>users.users.yourusername.extraGroups = ["video"];</literal>).
-     </para>
+    <para>
+     The <literal>light</literal> module no longer uses setuid binaries, but
+     udev rules. As a consequence users of that module have to belong to the
+     <literal>video</literal> group in order to use the executable (i.e.
+     <literal>users.users.yourusername.extraGroups = ["video"];</literal>).
+    </para>
    </listitem>
   </itemizedlist>
  </section>
