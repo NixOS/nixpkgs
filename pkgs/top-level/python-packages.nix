@@ -5641,31 +5641,7 @@ in {
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
 
-  jsonpath_rw = buildPythonPackage rec {
-    name = "jsonpath-rw-${version}";
-    version = "1.4.0";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jsonpath-rw/${name}.tar.gz";
-      sha256 = "05c471281c45ae113f6103d1268ec7a4831a2e96aa80de45edc89b11fac4fbec";
-    };
-
-    propagatedBuildInputs = with self; [
-      ply
-      six
-      decorator
-    ];
-
-    # ImportError: No module named tests
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/kennknowles/python-jsonpath-rw;
-      description = "A robust and significantly extended implementation of JSONPath for Python, with a clear AST for metaprogramming";
-      license = licenses.asl20;
-    };
-  };
+  jsonpath_rw = callPackage ../development/python-modules/jsonpath_rw { };
 
   kerberos = buildPythonPackage rec {
     name = "kerberos-1.2.4";
