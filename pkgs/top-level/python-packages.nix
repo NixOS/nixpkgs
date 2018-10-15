@@ -1431,21 +1431,7 @@ in {
 
   MDP = callPackage ../development/python-modules/mdp {};
 
-  minidb = buildPythonPackage rec {
-    name = "minidb-2.0.1";
-
-    src = pkgs.fetchurl {
-      url = "https://thp.io/2010/minidb/${name}.tar.gz";
-      sha256 = "1x958zr9jc26vaqij451qb9m2l7apcpz34ir9fwfjg4fwv24z2dy";
-    };
-
-    meta = {
-      description = "A simple SQLite3-based store for Python objects";
-      homepage = https://thp.io/2010/minidb/;
-      license = stdenv.lib.licenses.isc;
-      maintainers = [ stdenv.lib.maintainers.tv ];
-    };
-  };
+  minidb = callPackage ../development/python-modules/minidb { };
 
   miniupnpc = callPackage ../development/python-modules/miniupnpc {};
 
