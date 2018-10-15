@@ -1,7 +1,7 @@
 # A profile with most (vanilla) hardening options enabled by default,
 # potentially at the cost of features and performance.
 
-{ lib, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 with lib;
 
@@ -86,4 +86,10 @@ with lib;
   #
   # The value is taken from the KSPP recommendations (Debian uses 4096).
   boot.kernel.sysctl."vm.mmap_min_addr" = mkDefault 65536;
+
+  assertions = [
+    { assertion = config.nix.useSandbox -> config.boot.kernel.sysctl."user.max_user_namespaces" > 0;
+      message = ''`nix.useSandbox` requires user namespaces; please set `boot.kernel.sysctl."user.max_user_namespaces" to a suitable value, or disable Nix sandbox builds.'';
+    }
+  ];
 }
