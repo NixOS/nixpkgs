@@ -1,7 +1,7 @@
 # A profile with most (vanilla) hardening options enabled by default,
 # potentially at the cost of features and performance.
 
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -69,7 +69,11 @@ with lib;
   # Setting the number of allowed user namespaces to 0 effectively disables
   # the feature at runtime.  Attempting to create a user namespace
   # with unshare will then fail with "no space left on device".
-  boot.kernel.sysctl."user.max_user_namespaces" = mkDefault 0;
+  #
+  # However, disabling user namespaces with the Nix Sandbox enabled results
+  # in Nix being unable to derive anything. Therefore, user namespaces are,
+  # by default, only disabled if the Nix Sandbox is disabled.
+  boot.kernel.sysctl."user.max_user_namespaces" = mkIf (! config.nix.useSandbox) (mkDefault 0);
 
   # Raise ASLR entropy for 64bit & 32bit, respectively.
   #
