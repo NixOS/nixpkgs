@@ -5771,27 +5771,7 @@ in {
 
   python_magic = callPackage ../development/python-modules/python-magic { };
 
-  magic = buildPythonPackage rec {
-    name = "${pkgs.file.name}";
-
-    src = pkgs.file.src;
-
-    patchPhase = ''
-      substituteInPlace python/magic.py --replace "find_library('magic')" "'${pkgs.file}/lib/libmagic${stdenv.hostPlatform.extensions.sharedLibrary}'"
-    '';
-
-    buildInputs = with self; [ pkgs.file ];
-
-    preConfigure = "cd python";
-
-    # No test suite
-    doCheck = false;
-
-    meta = {
-      description = "A Python wrapper around libmagic";
-      homepage = http://www.darwinsys.com/file/;
-    };
-  };
+  magic = callPackage ../development/python-modules/magic { };
 
   m2crypto = buildPythonPackage rec {
     version = "0.24.0";
