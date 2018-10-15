@@ -1742,34 +1742,7 @@ in {
 
   eyeD3 = callPackage ../development/python-modules/eyed3 { };
 
-  execnet = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "execnet";
-    version = "1.4.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/${pname}/${name}.tar.gz";
-      sha256 = "1rpk1vyclhg911p3hql0m0nrpq7q7mysxnaaw6vs29cpa6kx8vgn";
-    };
-    buildInputs = with self; [ pytest setuptools_scm ];
-    propagatedBuildInputs = with self; [ apipkg ];
-    # remove vbox tests
-    postPatch = ''
-      rm -v testing/test_termination.py
-      rm -v testing/test_channel.py
-      rm -v testing/test_xspec.py
-      rm -v testing/test_gateway.py
-    '';
-    checkPhase = ''
-      py.test testing
-    '';
-    __darwinAllowLocalNetworking = true;
-    meta = {
-      description = "Rapid multi-Python deployment";
-      license = licenses.gpl2;
-      homepage = "http://codespeak.net/execnet";
-      maintainers = with maintainers; [ nand0p ];
-    };
-  };
+  execnet = callPackage ../development/python-modules/execnet { };
 
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
