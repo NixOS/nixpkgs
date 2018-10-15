@@ -1784,30 +1784,17 @@ in {
 
   ftputil = callPackage ../development/python-modules/ftputil { };
 
-  fudge = buildPythonPackage rec {
-    name = "fudge-1.1.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/fudge/${name}.tar.gz";
-      sha256 = "eba59a926fa1df1ab6dddd69a7a8af21865b16cad800cb4d1af75070b0f52afb";
-    };
-    buildInputs = with self; [ nose nosejs ];
-    propagatedBuildInputs = with self; [ sphinx ];
+  fudge = callPackage ../development/python-modules/fudge { };
 
-    disabled = isPy3k;
+  fudge_9 = self.fudge.overridePythonAttrs (old: rec {
+     version = "0.9.6";
 
-    checkPhase = ''
-      nosetests -v
-    '';
-  };
-
-  fudge_9 = self.fudge.override rec {
-    name = "fudge-0.9.6";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/fudge/${name}.tar.gz";
+     src = fetchPypi {
+      pname = "fudge";
+      inherit version;
       sha256 = "34690c4692e8717f4d6a2ab7d841070c93c8d0ea0d2615b47064e291f750b1a0";
     };
-  };
-
+  });
 
   funcparserlib = buildPythonPackage rec {
     name = "funcparserlib-0.3.6";
