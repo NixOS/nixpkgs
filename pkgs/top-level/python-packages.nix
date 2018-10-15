@@ -1182,35 +1182,7 @@ in {
 
   bpython = callPackage ../development/python-modules/bpython {};
 
-  bsddb3 = buildPythonPackage rec {
-    name = "bsddb3-${version}";
-    version = "6.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bsddb3/${name}.tar.gz";
-      sha256 = "6f21b0252125c07798d784c164ef135ad153d226c01b290258ee1c5b9e7c4dd3";
-    };
-
-    buildInputs = [ pkgs.db ];
-
-    # Judging from SyntaxError in test
-#    disabled = isPy3k;
-    doCheck = false; # test suite breaks python3 compatibility
-
-    # Path to database need to be set.
-    # Somehow the setup.py flag is not propagated.
-    #setupPyBuildFlags = [ "--berkeley-db=${pkgs.db}" ];
-    # We can also use a variable
-    preConfigure = ''
-      export BERKELEYDB_DIR=${pkgs.db.dev};
-    '';
-
-    meta = {
-      description = "Python bindings for Oracle Berkeley DB";
-      homepage = https://www.jcea.es/programacion/pybsddb.htm;
-      license = with licenses; [ agpl3 ]; # License changed from bsd3 to agpl3 since 6.x
-    };
-  };
+  bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
   bkcharts = callPackage ../development/python-modules/bkcharts { };
 
