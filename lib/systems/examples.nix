@@ -99,9 +99,23 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
-  arduino-uno = {
+  avr = {
     config = "avr";
-    platform = { name = "avr5"; };
+  };
+
+  arm-embedded = {
+    config = "arm-none-eabi";
+    libc = "newlib";
+  };
+
+  aarch64-embedded = {
+    config = "aarch64-none-elf";
+    libc = "newlib";
+  };
+
+  ppc-embedded = {
+    config = "powerpc-none-eabi";
+    libc = "newlib";
   };
 
   #
