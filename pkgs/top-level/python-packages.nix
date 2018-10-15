@@ -5799,22 +5799,7 @@ in {
 
   marisa-trie = callPackage ../development/python-modules/marisa-trie { };
 
-  markupsafe = buildPythonPackage rec {
-    name = "markupsafe-${version}";
-    version = "1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/M/MarkupSafe/MarkupSafe-${version}.tar.gz";
-      sha256 = "0rdn1s8x9ni7ss8rfiacj7x1085lx8mh2zdwqslnw8xc3l4nkgm6";
-    };
-
-    meta = {
-      description = "Implements a XML/HTML/XHTML Markup safe string";
-      homepage = http://dev.pocoo.org;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ domenkozar garbas ];
-    };
-  };
+  markupsafe = callPackage ../development/python-modules/markupsafe { };
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
