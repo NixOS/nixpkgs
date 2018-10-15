@@ -5773,28 +5773,7 @@ in {
 
   magic = callPackage ../development/python-modules/magic { };
 
-  m2crypto = buildPythonPackage rec {
-    version = "0.24.0";
-    name = "m2crypto-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/M/M2Crypto/M2Crypto-${version}.tar.gz";
-      sha256 = "1s2y0pf2zg7xf4nfwrw7zhwbk615r5a7bgi5wwkwzh6jl50n99c0";
-    };
-
-    buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
-
-    preConfigure = ''
-      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl.dev}'"
-    '';
-
-    doCheck = false; # another test that depends on the network.
-
-    meta = {
-      description = "A Python crypto and SSL toolkit";
-      homepage = http://chandlerproject.org/Projects/MeTooCrypto;
-    };
-  };
+  m2crypto = callPackage ../development/python-modules/m2crypto { };
 
   Mako = callPackage ../development/python-modules/Mako { };
 
