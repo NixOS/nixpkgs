@@ -5717,30 +5717,7 @@ in {
 
   limits = callPackage ../development/python-modules/limits { };
 
-  limnoria = buildPythonPackage rec {
-    name = "limnoria-${version}";
-    version = "2016.05.06";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/limnoria/${name}.tar.gz";
-      sha256 = "09kbii5559d09jjb6cryj8rva1050r54dvb67hlcvxhy8g3gr1y3";
-    };
-
-    patchPhase = ''
-      sed -i 's/version=version/version="${version}"/' setup.py
-    '';
-    buildInputs = with self; [ pkgs.git ];
-    propagatedBuildInputs = with self; [  ];
-
-    doCheck = false;
-
-    meta = {
-      description = "A modified version of Supybot, an IRC bot";
-      homepage = http://supybot.fr.cr;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
+  limnoria = callPackage ../development/python-modules/limnoria { };
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
