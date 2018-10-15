@@ -5813,39 +5813,6 @@ in {
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript {};
 
-  markdown-macros = buildPythonPackage rec {
-    name = "markdown-macros-${version}";
-    version = "0.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/markdown-macros/${name}.tar.gz";
-      sha256 = "1lzvrb7nci22yp21ab2qqc9p0fhkazqj29vw0wln2r4ckb2nbawv";
-    };
-
-    patches = [
-      # Fixes a bug with markdown>2.4
-      (pkgs.fetchpatch {
-        url = "https://github.com/wnielson/markdown-macros/pull/1.patch";
-        sha256 = "17njbgq2srzkf03ar6yn92frnsbda3g45cdi529fdh0x8mmyxci0";
-      })
-    ];
-
-    prePatch = ''
-      substituteInPlace setup.py --replace "distribute" "setuptools"
-    '';
-
-    propagatedBuildInputs = with self; [ markdown ];
-
-    doCheck = false;
-
-    meta = {
-      description = "An extension for python-markdown that makes writing trac-like macros easy";
-      homepage = https://github.com/wnielson/markdown-macros;
-      license = licenses.mit;
-      maintainers = [ maintainers.abigailbuccaneer ];
-    };
-  };
-
   mathics = if (versionOlder self.django.version "1.8") ||
                (versionAtLeast self.django.version "1.9")
             then throw "mathics only supports django-1.8.x"
