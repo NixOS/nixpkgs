@@ -5841,24 +5841,7 @@ in {
 
   memcached = callPackage ../development/python-modules/memcached { };
 
-  memory_profiler = buildPythonPackage rec {
-    name = "memory_profiler-${version}";
-    version = "0.41";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/memory_profiler/${name}.tar.gz";
-      sha256 = "dce6e931c281662a500b142595517d095267216472c2926e5ec8edab89898d10";
-    };
-
-    # Tests don't import profile
-    doCheck = false;
-
-    meta = {
-      description = "A module for monitoring memory usage of a python program";
-      homepage = https://pypi.python.org/pypi/memory_profiler;
-      license = licenses.bsd3;
-    };
-  };
+  memory_profiler = callPackage ../development/python-modules/memory_profiler { };
 
   metaphone = callPackage ../development/python-modules/metaphone { };
 
