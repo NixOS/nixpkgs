@@ -5833,22 +5833,7 @@ in {
 
   MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup { };
 
-  meld3 = buildPythonPackage rec {
-    name = "meld3-1.0.0";
-
-    src = pkgs.fetchurl {
-      url = mirror://pypi/m/meld3/meld3-1.0.0.tar.gz;
-      sha256 = "57b41eebbb5a82d4a928608962616442e239ec6d611fe6f46343e765e36f0b2b";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "An HTML/XML templating engine used by supervisor";
-      homepage = https://github.com/supervisor/meld3;
-      license = licenses.free;
-    };
-  };
+  meld3 = callPackage ../development/python-modules/meld3 { };
 
   meliae = callPackage ../development/python-modules/meliae {};
 
