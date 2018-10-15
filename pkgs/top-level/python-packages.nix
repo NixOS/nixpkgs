@@ -5813,49 +5813,9 @@ in {
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript {};
 
-  mathics = if (versionOlder self.django.version "1.8") ||
-               (versionAtLeast self.django.version "1.9")
-            then throw "mathics only supports django-1.8.x"
-            else buildPythonPackage rec {
-    name = "mathics-${version}";
-    version = "0.9";
-    src = pkgs.fetchFromGitHub {
-      owner = "mathics";
-      repo = "Mathics";
-      rev = "v${version}";
-      sha256 = "0xzz7j8xskj5y6as178mjmm0i2xbhd4q4mwmdnvghpd2aqq3qx1c";
-    };
+  markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
-    buildInputs = with self; [ pexpect ];
-
-    prePatch = ''
-      substituteInPlace setup.py --replace "sympy==0.7.6" "sympy"
-    '';
-
-    postFixup = ''
-      wrapPythonProgramsIn $out/bin $out
-      patchPythonScript $out/${python.sitePackages}/mathics/manage.py
-    '';
-
-    propagatedBuildInputs = with self; [
-      cython
-      sympy
-      django
-      ply
-      mpmath
-      dateutil
-      colorama
-      six
-    ];
-
-    meta = {
-      description = "A general-purpose computer algebra system";
-      homepage = http://www.mathics.org;
-      license = licenses.gpl3;
-      maintainers = [ maintainers.benley ];
-    };
-  };
-
+  mathics = callPackage ../development/python-modules/mathics { };
 
   matplotlib = callPackage ../development/python-modules/matplotlib {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
