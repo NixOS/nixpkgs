@@ -33,6 +33,37 @@
  </para>
 
  <para>
+  When using a network with
+  <link xlink:href="https://wiki.archlinux.org/index.php/Wireless_network_configuration#WPA2_Enterprise">WPA2 Enterprise</link>
+  for authentication, it's possible to configure it declaratively using the <literal>auth</literal> option:
+<programlisting>
+<xref linkend="opt-networking.wireless.networks" /> = {
+  wpa2-enterprise-net = {
+    auth = ''
+      key_mgmt=WPA-WAP
+      eap=PEAP
+      identity="user@example.com"
+      password="secret"
+    '';
+  };
+}
+</programlisting>
+  <emphasis>Note: please keep in mind that the configuration file will be written to a store path
+  which is world-readable!</emphasis>
+
+  To avoid leaking your cleartext-password, <literal>wpa_supplicant.conf</literal> allows to
+  specify a hashed password using a configuration like this: <literal>password=hash:{your-hashed-password}</literal>.
+  Such a password can be a NTLM password which can be generated with the following command:
+<programlisting>
+echo -n $YOURPASSWORD | iconv -t utf16le | openssl md4
+</programlisting>
+  <emphasis>Please keep in mind that an attacker is still able to connect to your network in case of a
+  compromised store. However the hash makes it harder to leak your cleartext password which is helpful
+  if the network uses credentials e.g. from an LDAP store, but the used MD4 doesn't provide true
+  security.</emphasis>
+ </para>
+
+ <para>
   If you are using WPA2 the <command>wpa_passphrase</command> tool might be
   useful to generate the <literal>wpa_supplicant.conf</literal>.
 <screen>
