@@ -1183,6 +1183,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit xproto ;};
 
+  listres = (mkDerivation "listres" {
+    name = "listres-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/listres-1.0.4.tar.bz2;
+      sha256 = "041bxkvv6f92sm3hhm977c4gdqdv5r1jyxjqcqfi8vkrg3s2j4ka";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXaw libXmu xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libXaw libXmu xproto libXt ;};
+
   lndir = (mkDerivation "lndir" {
     name = "lndir-1.0.3";
     builder = ./builder.sh;
