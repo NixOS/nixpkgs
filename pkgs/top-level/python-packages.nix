@@ -1960,28 +1960,9 @@ in {
 
   lmdb = callPackage ../development/python-modules/lmdb { };
 
-  lpod = buildPythonPackage rec {
-    version = "1.1.7";
-    name = "python-lpod-${version}";
-    # lpod library currently does not support Python 3.x
-    disabled = isPy3k;
-
-    propagatedBuildInputs = with self; [ lxml docutils pillow ];
   logilab_astng = callPackage ../development/python-modules/logilab_astng { };
 
-    src = pkgs.fetchFromGitHub {
-      owner = "lpod";
-      repo = "lpod-python";
-      rev = "dee32120ee582ff337b0c52a95a9a87cca71fd67";
-      sha256 = "1mikvzp27wxkzpr2lii4wg1hhx8h610agckqynvsrdc8v3nw9ciw";
-    };
-
-    meta = {
-      homepage = https://github.com/lpod/lpod-python/;
-      description = "Library implementing the ISO/IEC 26300 OpenDocument Format standard (ODF) ";
-      license = licenses.gpl3;
-    };
-  };
+  lpod = callPackage ../development/python-modules/lpod { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
