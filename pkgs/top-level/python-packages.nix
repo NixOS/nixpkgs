@@ -2298,26 +2298,7 @@ in {
 
   django_hijack_admin = callPackage ../development/python-modules/django-hijack-admin { };
 
-  django_nose = buildPythonPackage rec {
-    name = "django-nose-${version}";
-    version = "1.4.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-nose/${name}.tar.gz";
-      sha256 = "1fm47fkza2lk0xgc6qpi9vs78zg7q8cgl6mdan69sbycgy909ff0";
-    };
-
-    # vast dependency list
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ django nose ];
-
-    meta = {
-      description = "Provides all the goodness of nose in your Django tests";
-      homepage = https://github.com/django-nose/django-nose;
-      license = licenses.bsd3;
-    };
-  };
+  django_nose = callPackage ../development/python-modules/django_nose { };
 
   django_modelcluster = buildPythonPackage rec {
     name = "django-modelcluster-${version}";
