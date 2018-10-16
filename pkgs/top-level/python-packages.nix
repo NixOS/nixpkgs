@@ -1968,27 +1968,7 @@ in {
 
   m2r = callPackage ../development/python-modules/m2r { };
 
-  mailchimp = buildPythonPackage rec {
-    version = "2.0.9";
-    name = "mailchimp-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mailchimp/mailchimp-${version}.tar.gz";
-      sha256 = "0351ai0jqv3dzx0xxm1138sa7mb42si6xfygl5ak8wnfc95ff770";
-    };
-
-    buildInputs = with self; [ docopt ];
-    propagatedBuildInputs = with self; [ requests ];
-    patchPhase = ''
-      sed -i 's/==/>=/' setup.py
-    '';
-
-    meta = {
-      description = "A CLI client and Python API library for the MailChimp email platform";
-      homepage = "http://apidocs.mailchimp.com/api/2.0/";
-      license = licenses.mit;
-    };
-  };
+  mailchimp = callPackage ../development/python-modules/mailchimp { };
 
   python-mapnik = buildPythonPackage rec {
     name = "python-mapnik-${version}";
