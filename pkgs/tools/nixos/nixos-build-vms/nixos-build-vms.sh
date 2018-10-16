@@ -35,7 +35,7 @@ do
 	    exit 0
 	    ;;
     esac
-    
+
     shift
 done
 
