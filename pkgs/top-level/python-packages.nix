@@ -2015,22 +2015,7 @@ in {
 
   pathspec = callPackage ../development/python-modules/pathspec { };
 
-  pathtools = buildPythonPackage rec {
-    name = "pathtools-${version}";
-    version = "0.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pathtools/${name}.tar.gz";
-      sha256 = "1h7iam33vwxk8bvslfj4qlsdprdnwf8bvzhqh3jq5frr391cadbw";
-    };
-
-    meta = {
-      description = "Pattern matching and various utilities for file systems paths";
-      homepage = https://github.com/gorakhargosh/pathtools;
-      license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
+  pathtools = callPackage ../development/python-modules/pathtools { };
 
   paver = buildPythonPackage rec {
     version = "1.2.2";
