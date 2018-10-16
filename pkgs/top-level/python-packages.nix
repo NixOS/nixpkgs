@@ -2352,21 +2352,7 @@ in {
 
   enum34 = callPackage ../development/python-modules/enum34 { };
 
-  epc = buildPythonPackage rec {
-    name = "epc-0.0.3";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/epc/${name}.tar.gz";
-      sha256 = "30b594bd4a4acbd5bda0d3fa3d25b4e8117f2ff8f24d2d1e3e36c90374f3c55e";
-    };
-
-    propagatedBuildInputs = with self; [ sexpdata ];
-    doCheck = false;
-
-    meta = {
-      description = "EPC (RPC stack for Emacs Lisp) implementation in Python";
-      homepage = "https://github.com/tkf/python-epc";
-    };
-  };
+  epc = callPackage ../development/python-modules/epc { };
 
   et_xmlfile = buildPythonPackage rec {
     version = "1.0.1";
