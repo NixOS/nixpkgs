@@ -2818,22 +2818,7 @@ in {
 
   moto = callPackage ../development/python-modules/moto {};
 
-  mox = buildPythonPackage rec {
-    name = "mox-0.5.3";
-
-    src = pkgs.fetchurl {
-      url = "http://pymox.googlecode.com/files/${name}.tar.gz";
-      sha256 = "4d18a4577d14da13d032be21cbdfceed302171c275b72adaa4c5997d589a5030";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://code.google.com/p/pymox/;
-      description = "A mock object framework for Python";
-    };
-  };
+  mox = callPackage ../development/python-modules/mox { };
 
   mozsvc = buildPythonPackage rec {
     name = "mozsvc-${version}";
