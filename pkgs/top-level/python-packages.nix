@@ -1902,25 +1902,7 @@ in {
 
   iniparse = callPackage ../development/python-modules/iniparse { };
 
-  i3-py = buildPythonPackage rec {
-    version = "0.6.4";
-    name = "i3-py-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/i3-py/i3-py-${version}.tar.gz";
-      sha256 = "1sgl438jrb4cdyl7hbc3ymwsf7y3zy09g1gh7ynilxpllp37jc8y";
-    };
-
-    # no tests in tarball
-    doCheck = false;
-
-    meta = {
-      description = "Tools for i3 users and developers";
-      homepage =  "https://github.com/ziberna/i3-py";
-      license = licenses.gpl3;
-      platforms = platforms.linux;
-    };
-  };
+  i3-py = callPackage ../development/python-modules/i3-py { };
 
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi {};
 
