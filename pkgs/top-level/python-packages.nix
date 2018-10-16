@@ -1942,32 +1942,7 @@ in {
 
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
 
-  lightning = buildPythonPackage rec {
-    version = "1.2.1";
-    name = "lightning-python-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/lightning-python/${name}.tar.gz";
-      sha256 = "3987d7d4a634bdb6db9bcf212cf4d2f72bab5bc039f4f6cbc02c9d01c4ade792";
-    };
   libthumbor = callPackage ../development/python-modules/libthumbor { };
-
-    buildInputs = with self; [ pytest ];
-
-    propagatedBuildInputs = with self; [
-      jinja2
-      matplotlib
-      numpy
-      requests
-      six
-    ];
-
-    meta = {
-      description = "A Python client library for the Lightning data visualization server";
-      homepage = http://lightning-viz.org;
-      license = licenses.mit;
-    };
-  };
 
   jupyter = buildPythonPackage rec {
     version = "1.0.0";
@@ -1987,6 +1962,7 @@ in {
       ipykernel
       ipywidgets
     ];
+  lightning = callPackage ../development/python-modules/lightning { };
 
     # Meta-package, no tests
     doCheck = false;
