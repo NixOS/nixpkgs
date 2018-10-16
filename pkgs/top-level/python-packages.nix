@@ -2337,35 +2337,7 @@ in {
     };
   };
 
-  fusepy = buildPythonPackage rec {
-    name = "fusepy-2.0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/fusepy/${name}.tar.gz";
-      sha256 = "0v5grm4zyf58hsplwsxfbihddw95lz9w8cy3rpzbyha287swgx8h";
-    };
-
-    propagatedBuildInputs = [ pkgs.fuse ];
-
-    # No tests included
-    doCheck = false;
-
-    patchPhase = ''
-      substituteInPlace fuse.py --replace \
-        "find_library('fuse')" "'${pkgs.fuse}/lib/libfuse.so'"
-    '';
-
-    meta = {
-      description = "Simple ctypes bindings for FUSE";
-      longDescription = ''
-        Python module that provides a simple interface to FUSE and MacFUSE.
-        It's just one file and is implemented using ctypes.
-      '';
-      homepage = https://github.com/terencehonles/fusepy;
-      license = licenses.isc;
-      platforms = platforms.unix;
-    };
-  };
+  fusepy = callPackage ../development/python-modules/fusepy { };
 
   future = callPackage ../development/python-modules/future { };
   future15 = self.future.overridePythonAttrs (old: rec {
