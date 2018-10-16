@@ -1816,22 +1816,7 @@ in {
 
   gnureadline = callPackage ../development/python-modules/gnureadline { };
 
-  gnutls = buildPythonPackage rec {
-    pname = "python-gnutls";
-    version = "3.0.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-gnutls/${pname}-${version}.tar.gz";
-      sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
-    };
-
-    # https://github.com/AGProjects/python-gnutls/issues/2
-    disabled = isPy3k;
-
-    propagatedBuildInputs = with self; [ pkgs.gnutls ];
-    patchPhase = ''
-      substituteInPlace gnutls/library/__init__.py --replace "/usr/local/lib" "${pkgs.gnutls.out}/lib"
-    '';
-  };
+  gnutls = callPackage ../development/python-modules/gnutls { };
 
   gpy = callPackage ../development/python-modules/gpy { };
 
