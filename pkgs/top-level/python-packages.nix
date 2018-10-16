@@ -1980,28 +1980,7 @@ in {
 
   mwlib-ext = callPackage ../development/python-modules/mwlib-ext { };
 
-  mwlib-rl = buildPythonPackage rec {
-    version = "0.14.6";
-    name = "mwlib.rl-${version}";
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.pediapress.com/packages/mirror/${name}.zip";
-      sha256 = "7f596fd60eb24d8d3da3ab4880f095294028880eafb653810a7bdaabdb031238";
-    };
-
-    buildInputs = with self;
-      [
-        mwlib
-        mwlib-ext
-        pygments
-      ];
-
-    meta = {
-      description = "Generate pdfs from mediawiki markup";
-      homepage = "http://pediapress.com/code/";
-      license = licenses.bsd3;
-    };
-  };
+  mwlib-rl = callPackage ../development/python-modules/mwlib-rl { };
 
   natsort = callPackage ../development/python-modules/natsort { };
 
