@@ -94,6 +94,8 @@ let
         envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "@out@/lib";
       }}
     '';
+    
+    meta.platforms = platforms.x86_64;
   };
 
   flash = stdenv.mkDerivation rec {
@@ -133,6 +135,8 @@ let
     '';
 
     dontStrip = true;
+    
+    meta.platforms = platforms.x86_64;
   };
 
 in {
