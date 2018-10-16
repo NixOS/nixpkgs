@@ -2684,11 +2684,11 @@ let
   }) // {inherit libX11 xproto ;};
 
   xset = (mkDerivation "xset" {
-    name = "xset-1.2.3";
+    name = "xset-1.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xset-1.2.3.tar.bz2;
-      sha256 = "0qw0iic27bz3yz2wynf1gxs70hhkcf9c4jrv7zhlg1mq57xz90j3";
+      url = mirror://xorg/individual/app/xset-1.2.4.tar.bz2;
+      sha256 = "0my987wjvra7l92ry6q44ky383yg3phzxhdbn3lqhapm1ll9bzg4";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext libXmu xproto libXxf86misc ];
