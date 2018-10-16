@@ -2843,19 +2843,7 @@ in {
     '';
   };
 
-  msrplib = buildPythonPackage rec {
-    pname = "python-msrplib";
-    name = "${pname}-${version}";
-    version = "0.19";
-
-    src = pkgs.fetchdarcs {
-      url = "http://devel.ag-projects.com/repositories/${pname}";
-      rev = "release-${version}";
-      sha256 = "0jqvvssbwzq7bwqn3wrjfnpj8zb558mynn2visnlrcma6b57yhwd";
-    };
-
-    propagatedBuildInputs = with self; [ eventlib application gnutls ];
-  };
+  msrplib = callPackage ../development/python-modules/msrplib { };
 
   multipledispatch = callPackage ../development/python-modules/multipledispatch { };
 
