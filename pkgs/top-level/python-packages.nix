@@ -2438,17 +2438,7 @@ in {
 
   gunicorn = callPackage ../development/python-modules/gunicorn { };
 
-  hawkauthlib = buildPythonPackage rec {
-    name = "hawkauthlib-${version}";
-    version = "0.1.1";
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/hawkauthlib.git;
-      rev = "refs/tags/v${version}";
-      sha256 = "0mr1mpx4j9q7sch9arwfvpysnpf2p7ijy7072wilxm8pnj0bwvsi";
-    };
-
-    propagatedBuildInputs = with self; [ requests webob ];
-  };
+  hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
   hdbscan = callPackage ../development/python-modules/hdbscan { };
 
