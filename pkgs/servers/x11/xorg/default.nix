@@ -2179,6 +2179,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
+  xf86videoomap = (mkDerivation "xf86videoomap" {
+    name = "xf86-video-omap-0.4.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-omap-0.4.5.tar.bz2;
+      sha256 = "0nmbrx6913dc724y8wj2p6vqfbj5zdjfmsl037v627jj0whx9rwk";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit fontsproto libdrm randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+
   xf86videoopenchrome = (mkDerivation "xf86videoopenchrome" {
     name = "xf86-video-openchrome-0.6.0";
     builder = ./builder.sh;
