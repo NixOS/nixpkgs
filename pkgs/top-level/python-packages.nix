@@ -2824,22 +2824,7 @@ in {
 
   mpmath = callPackage ../development/python-modules/mpmath { };
 
-  mpd = buildPythonPackage rec {
-    name = "python-mpd-0.3.0";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-mpd/python-mpd-0.3.0.tar.gz";
-      sha256 = "02812eba1d2e0f46e37457f5a6fa23ba203622e4bcab0a19b265e66b08cd21b4";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      description = "An MPD (Music Player Daemon) client library written in pure Python";
-      homepage = http://jatreuman.indefero.net/p/python-mpd/;
-      license = licenses.gpl3;
-    };
-  };
+  mpd = callPackage ../development/python-modules/mpd { };
 
   mpd2 = buildPythonPackage rec {
     name = "mpd2-${version}";
