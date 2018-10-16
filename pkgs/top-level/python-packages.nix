@@ -2300,26 +2300,7 @@ in {
 
   django_nose = callPackage ../development/python-modules/django_nose { };
 
-  django_modelcluster = buildPythonPackage rec {
-    name = "django-modelcluster-${version}";
-    version = "0.6.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-modelcluster/django-modelcluster-${version}.tar.gz";
-      sha256 = "1plsdi44dvsj2sfx79lsrccjfg0ymajcsf5n0mln4cwd4qi5mwpx";
-    };
-
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pytz six ];
-
-    meta = {
-      description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";
-      homepage = https://github.com/torchbox/django-modelcluster/;
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  };
+  django_modelcluster = callPackage ../development/python-modules/django_modelcluster { };
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
