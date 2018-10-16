@@ -134,7 +134,8 @@ buildFHSUserEnv {
 
       if ${file}/bin/file --mime-type --brief --keep-going "$APPIMAGE" | grep -q iso; then
         # is type-1 appimage
-        ${libarchive}/bin/bsdtar -x -C "$SQUASHFS_ROOT" -f "$APPIMAGE"
+        mkdir "$APPDIR"
+        ${libarchive}/bin/bsdtar -x -C "$APPDIR" -f "$APPIMAGE"
       else
         # is type-2 appimage
         "$APPIMAGE" --appimage-extract 2>/dev/null
