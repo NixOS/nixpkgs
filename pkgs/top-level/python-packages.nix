@@ -2023,19 +2023,7 @@ in {
 
   path-and-address = callPackage ../development/python-modules/path-and-address { };
 
-  peppercorn = buildPythonPackage rec {
-    name = "peppercorn-0.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/peppercorn/${name}.tar.gz";
-      sha256 = "921cba5d51fa211e6da0fbd2120b9a98d663422a80f5bb669ad81ffb0909774b";
-    };
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
+  peppercorn = callPackage ../development/python-modules/peppercorn { };
 
   pex = buildPythonPackage rec {
     name = "pex-${version}";
