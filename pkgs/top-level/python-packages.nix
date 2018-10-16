@@ -2400,26 +2400,7 @@ in {
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
 
-  flaky = buildPythonPackage rec {
-    name = "flaky-${version}";
-    version = "3.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/flaky/${name}.tar.gz";
-      sha256 = "1x9ixika7wqjj52x8wnsh1vk7jadkdqpx01plj7mlh8slwyq4s41";
-    };
-
-    buildInputs = with self; [ mock pytest ];
-
-    # waiting for feedback https://github.com/box/flaky/issues/97
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/box/flaky;
-      description = "Plugin for nose or py.test that automatically reruns flaky tests";
-      license = licenses.asl20;
-    };
-  };
+  flaky = callPackage ../development/python-modules/flaky { };
 
   flask = callPackage ../development/python-modules/flask { };
 
