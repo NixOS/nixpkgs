@@ -2070,26 +2070,7 @@ in {
 
   pybluez = callPackage ../development/python-modules/pybluez { };
 
-  pycares = buildPythonPackage rec {
-    name = "pycares-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pycares/${name}.tar.gz";
-      sha256 = "a18341ea030e2cc0743acdf4aa72302bdf6b820938b36ce4bd76e43faa2276a3";
-    };
-
-    propagatedBuildInputs = [ pkgs.c-ares ];
-
-    # No tests included
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/saghul/pycares;
-      description = "Interface for c-ares";
-      license = licenses.mit;
-    };
-  };
+  pycares = callPackage ../development/python-modules/pycares { };
 
   pycuda = callPackage ../development/python-modules/pycuda rec {
     cudatoolkit = pkgs.cudatoolkit_7_5;
