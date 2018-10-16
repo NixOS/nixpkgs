@@ -1896,27 +1896,7 @@ in {
 
   imaplib2 = callPackage ../development/python-modules/imaplib2 { };
 
-  ipfsapi = buildPythonPackage rec {
-    name = "ipfsapi-${version}";
-    version = "0.4.2.post1";
-    disabled = isPy27;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "ipfs";
-      repo = "py-ipfs-api";
-      rev = "0c485544a114f580c65e2ffbb5782efbf7fd9f61";
-      sha256 = "1v7f77cv95yv0v80gisdh71mj7jcq41xcfip6bqm57zfdbsa0xpn";
-    };
-
-    propagatedBuildInputs = with self; [ six requests ];
-
-    meta = {
-      description = "A python client library for the IPFS API";
-      license = licenses.mit;
-      maintainers = with maintainers; [ mguentner ];
-      homepage = "https://pypi.python.org/pypi/ipfsapi";
-    };
-  };
+  ipfsapi = callPackage ../development/python-modules/ipfsapi { };
 
   itsdangerous = buildPythonPackage rec {
     name = "itsdangerous-0.24";
