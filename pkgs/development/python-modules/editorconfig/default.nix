@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "EditorConfig";
-  version = "0.12.0";
+  version = "0.12.1";
 
   # fetchgit used to ensure test submodule is available
   src = fetchgit {
