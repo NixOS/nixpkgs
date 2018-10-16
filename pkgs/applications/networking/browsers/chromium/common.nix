@@ -14,7 +14,7 @@
 , glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2
+, ffmpeg, libxslt, libxml2, at-spi2-core
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -129,7 +129,8 @@ let
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optional (versionAtLeast version "71") at-spi2-core;
 
     patches = [
       # As major versions are added, you can trawl the gentoo and arch repos at
@@ -137,10 +138,36 @@ let
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
-      ./patches/fix-freetype.patch
-      ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
-    ] ++ optional enableWideVine ./patches/widevine.patch;
+    ] ++ optional enableWideVine ./patches/widevine.patch
+      ++ optional (versionRange           "68" "70"         ) ./patches/fix-freetype.patch
+      ++ optional (versionAtLeast version "70"              ) ./patches/fix-freetype-70.patch
+      ++ optional (versionRange           "68" "70"         ) ./patches/nix_plugin_paths_68.patch
+      ++ optional (versionAtLeast version "70"              ) ./patches/nix_plugin_paths_70.patch
+      ++ optional (versionRange           "70" "71.0.3546.0") (githubPatch "cbdb8bd6567c8143dc8c1e5e86a21a8ea064eea4" "0258qlffp6f6izswczb11p8zdpn550z5yqa9z7gdg2rg5171n5i8")
+      ++ optional (versionRange           "71" "71.0.3564.0") (githubPatch "c9580757cfd9f7fd73e3f6d71e8a31a18b7e2dd5" "16jx3xfpnikjvjgykf40mnvsdczawhb29vjryabrjn0qy98yf3mr")
+      ++ optional (versionRange           "71" "71.0.3577.0") (githubPatch "7c9af6c257d681159b8764c8d3d7b70f1d2f7d3a" "1rrs9a3cw9wa68v5s6a6vw0q6ibz17gvmbk18pc7ah5wi9h5qwwm")
+      ++ optional ((versionRange "69" "70") && stdenv.isAarch64)
+           (fetchpatch {
+              url    = https://raw.githubusercontent.com/OSSystems/meta-browser/master/recipes-browser/chromium/files/0001-vpx_sum_squares_2d_i16_neon-Make-s2-a-uint64x1_t.patch;
+              sha256 = "0f37rsjx7jcvdngkj8y6600091nwgn4jci0ny7bxlapq0zx2a4x7";
+            })
+      ++ optional stdenv.isAarch64
+           (if (versionOlder version "71") then
+              fetchpatch {
+                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/master/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
+                sha256    = "0dkchqair8cy2f5a5p5vi24r9b4d28pgn2bfvm1568lypbjw6iab";
+              }
+            else
+              fetchpatch {
+                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/master/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
+                postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
+                sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
+              }
+            );
+
+
+    NIX_CFLAGS_COMPILE = optionalString (versionRange "70" "71") "-fpermissive";
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -214,7 +241,6 @@ let
       is_clang = false;
       clang_use_chrome_plugins = false;
       remove_webcore_debug_symbols = true;
-      use_gtk3 = true;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
@@ -225,6 +251,8 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
       google_default_client_id = "404761575300.apps.googleusercontent.com";
       google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
+    } // optionalAttrs (versionRange "60" "70") {
+      use_gtk3 = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
