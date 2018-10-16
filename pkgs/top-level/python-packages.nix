@@ -1868,11 +1868,11 @@ in {
 
   hupper = callPackage ../development/python-modules/hupper {};
 
-  hovercraft = callPacakge ../development/python-modules/hovercraft { };
+  hovercraft = callPackage ../development/python-modules/hovercraft { };
 
   hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };
 
-  hsaudiotag3k = callPacakge ../development/python-modules/hsaudiotag3k { };
+  hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
 
   htmlmin = callPackage ../development/python-modules/htmlmin {};
 
