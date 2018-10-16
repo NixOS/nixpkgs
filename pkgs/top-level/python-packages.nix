@@ -2052,21 +2052,7 @@ in {
     inherit (pkgs.libsForQt5) poppler;
   };
 
-  poyo = buildPythonPackage rec {
-    version = "0.4.0";
-    name = "poyo-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/poyo/${name}.tar.gz";
-      sha256 = "1f48ffl0j1f2lmgabajps7v8w90ppxbp5168gh8kh27bjd8xk5ca";
-    };
-
-    meta = {
-      homepage = https://github.com/hackebrot/poyo;
-      description = "A lightweight YAML Parser for Python";
-      license = licenses.mit;
-    };
-  };
+  poyo = callPackage ../development/python-modules/poyo { };
 
   prov = callPackage ../development/python-modules/prov { };
 
