@@ -2853,23 +2853,7 @@ in {
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
-  mutag = buildPythonPackage rec {
-    disabled = ! isPy3k;
-    name = "mutag-0.0.2-2ffa0258ca";
-    src = pkgs.fetchgit {
-      url = "https://github.com/aroig/mutag.git";
-      sha256 = "0axdnwdypfd74a9dnw0g25m16xx1yygyl828xy0kpj8gyqdc6gb1";
-      rev = "2ffa0258cadaf79313241f43bf2c1caaf197d9c2";
-    };
-
-    propagatedBuildInputs = with self; [ pyparsing ];
-
-    meta = {
-      homepage = https://github.com/aroig/mutag;
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  mutag = callPackage ../development/python-modules/mutag { };
 
   mutagen = callPackage ../development/python-modules/mutagen { };
 
