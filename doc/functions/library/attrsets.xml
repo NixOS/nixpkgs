@@ -1748,4 +1748,68 @@ lib.attrsets.recursiveUpdate
    </para>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.matchAttrs">
+  <title><function>lib.attrsets.matchAttrs</function></title>
+
+  <subtitle><literal>matchAttrs :: AttrSet -> AttrSet -> Bool</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.matchAttrs" />
+
+  <para>
+   Returns true if the pattern is contained in the set. False otherwise.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pattern</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set pattern to look for in <varname>attrs</varname>.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>attrs</varname>
+    </term>
+    <listitem>
+     <para>
+      The attribute set to examine for the pattern.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.matchAttrs-example-matching-pattern-shallow">
+   <title>Matching a simple attribute set</title>
+   <para>
+<programlisting role="input">
+lib.attrsets.matchAttrs
+  { cpu = {}; }
+  { cpu = { bits = 64; }; }
+</programlisting>
+    returns:
+<programlisting role="output">
+  true
+</programlisting>
+   </para>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.matchAttrs-example-matching-pattern-deep">
+   <title>Matching a deeper attribute set</title>
+   <para>
+<programlisting role="input"><![CDATA[
+lib.attrsets.matchAttrs
+  { host = { cpu = {}; }; }
+  { host = { cpu = { bits = 64; }; }; }
+]]></programlisting>
+    returns
+<programlisting role="output">true</programlisting>
+   </para>
+  </example>
+ </section>
 </section>
