@@ -2382,23 +2382,7 @@ in {
 
   gipc = callPackage ../development/python-modules/gipc { };
 
-  git-sweep = buildPythonPackage rec {
-    name = "git-sweep-0.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/git-sweep/${name}.tar.gz";
-      sha256 = "1csp0zd049d643d409rfivbswwzrayb4i6gkypp5mc27fb1z2afd";
-    };
-
-    propagatedBuildInputs = with self; [ GitPython ];
-
-    meta = {
-      description = "A command-line tool that helps you clean up Git branches";
-      homepage = https://github.com/arc90/git-sweep;
-      license = licenses.mit;
-      maintainers = with maintainers; [ pSub ];
-    };
-  };
+  git-sweep = callPackage ../development/python-modules/git-sweep { };
 
   glances = callPackage ../development/python-modules/glances { };
 
