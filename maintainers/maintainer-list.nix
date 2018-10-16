@@ -2896,6 +2896,11 @@
     github = "mguentner";
     name = "Maximilian Güntner";
   };
+   mhaselsteiner = {
+    email = "magdalena.haselsteiner@gmx.at";
+    github = "mhaselsteiner";
+    name = "Magdalena Haselsteiner";
+  };
   mic92 = {
     email = "joerg@thalheim.io";
     github = "mic92";
