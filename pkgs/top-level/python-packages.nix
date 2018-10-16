@@ -1900,29 +1900,7 @@ in {
 
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
-  iniparse = buildPythonPackage rec {
-
-    name = "iniparse-${version}";
-    version = "0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/iniparse/iniparse-${version}.tar.gz";
-      sha256 = "0m60k46vr03x68jckachzsipav0bwhhnqb8715hm1cngs89fxhdb";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} runtests.py
-    '';
-
-    # Does not install tests
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      description = "Accessing and Modifying INI files";
-      license = licenses.mit;
-      maintainers = with maintainers; [ danbst ];
-    };
-  };
+  iniparse = callPackage ../development/python-modules/iniparse { };
 
   i3-py = buildPythonPackage rec {
     version = "0.6.4";
