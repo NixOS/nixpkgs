@@ -2056,25 +2056,7 @@ in {
 
   prov = callPackage ../development/python-modules/prov { };
 
-  pudb = buildPythonPackage rec {
-    name = "pudb-2016.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pudb/${name}.tar.gz";
-      sha256 = "0njhi49d9fxbwh5p8yjx8m3jlfyzfm00b5aff6bz473pn7vxfn79";
-    };
-
-    propagatedBuildInputs = with self; [ pygments urwid ];
-
-    # Tests fail on python 3 due to writes to the read-only home directory
-    doCheck = !isPy3k;
-
-    meta = {
-      description = "A full-screen, console-based Python debugger";
-      license = licenses.mit;
-      platforms = platforms.all;
-    };
-  };
+  pudb = callPackage ../development/python-modules/pudb { };
 
   pybtex = callPackage ../development/python-modules/pybtex {};
 
