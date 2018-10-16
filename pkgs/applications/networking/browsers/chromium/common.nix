@@ -143,18 +143,18 @@ let
     ] ++ optional enableWideVine ./patches/widevine.patch
       ++ optional ((versionRange "69" "70") && stdenv.isAarch64)
            (fetchpatch {
-              url    = https://raw.githubusercontent.com/OSSystems/meta-browser/master/recipes-browser/chromium/files/0001-vpx_sum_squares_2d_i16_neon-Make-s2-a-uint64x1_t.patch;
+              url    = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/0001-vpx_sum_squares_2d_i16_neon-Make-s2-a-uint64x1_t.patch;
               sha256 = "0f37rsjx7jcvdngkj8y6600091nwgn4jci0ny7bxlapq0zx2a4x7";
             })
       ++ optional stdenv.isAarch64
            (if (versionOlder version "71") then
               fetchpatch {
-                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/master/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
+                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
                 sha256    = "0dkchqair8cy2f5a5p5vi24r9b4d28pgn2bfvm1568lypbjw6iab";
               }
             else
               fetchpatch {
-                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/master/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
+                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
                 postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
                 sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
               }
