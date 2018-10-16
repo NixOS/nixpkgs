@@ -2378,28 +2378,7 @@ in {
 
   docker_compose = callPackage ../development/python-modules/docker_compose {};
 
-  fdroidserver = buildPythonPackage rec {
-    version = "2016-05-31";
-    name = "fdroidserver-git-${version}";
-
-    disabled = ! isPy3k;
-
-    src = pkgs.fetchFromGitLab {
-      owner = "fdroid";
-      repo = "fdroidserver";
-      rev = "401649e0365e6e365fc48ae8a3af94768af865f3";
-      sha256 = "1mmi2ffpym1qw694yj938kc7b4xhq0blri7wkjaqddcyykjyr94d";
-    };
-
-    propagatedBuildInputs = with self; [ libcloud pyyaml paramiko pyasn1 pyasn1-modules pillow mwclient GitPython ];
-
-    meta = {
-      homepage = https://f-droid.org;
-      description = "Server and tools for F-Droid, the Free Software repository system for Android";
-      maintainers = with maintainers; [ ];
-      license = licenses.agpl3;
-    };
-  };
+  fdroidserver = callPackage ../development/python-modules/fdroidserver { };
 
   filebrowser_safe = buildPythonPackage rec {
     version = "0.3.6";
