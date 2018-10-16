@@ -2191,25 +2191,7 @@ in {
 
   repoze_sphinx_autointerface =  callPackage ../development/python-modules/repoze_sphinx_autointerface { };
 
-  setuptools-git = buildPythonPackage rec {
-    name = "setuptools-git-${version}";
-    version = "1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/setuptools-git/${name}.tar.gz";
-      sha256 = "047d7595546635edebef226bc566579d422ccc48a8a91c7d32d8bd174f68f831";
-    };
-
-    propagatedBuildInputs = [ pkgs.git ];
-    doCheck = false;
-
-    meta = {
-      description = "Setuptools revision control system plugin for Git";
-      homepage = https://pypi.python.org/pypi/setuptools-git;
-      license = licenses.bsd3;
-    };
-  };
-
+  setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
   watchdog = buildPythonPackage rec {
     name = "watchdog-${version}";
