@@ -811,6 +811,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXext xextproto libXmu libXpm xproto libXt ;};
 
+  libXaw3d = (mkDerivation "libXaw3d" {
+    name = "libXaw3d-1.6.3";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2;
+      sha256 = "0i653s8g25cc0mimkwid9366bqkbyhdyjhckx7bw77j20hzrkfid";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext libXmu libXpm xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libX11 libXext libXmu libXpm xproto libXt ;};
+
   libXcomposite = (mkDerivation "libXcomposite" {
     name = "libXcomposite-0.4.4";
     builder = ./builder.sh;
