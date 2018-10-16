@@ -2344,24 +2344,7 @@ in {
 
   effect = callPackage ../development/python-modules/effect {};
 
-  elpy = buildPythonPackage rec {
-    name = "elpy-${version}";
-    version = "1.9.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/elpy/${name}.tar.gz";
-      sha256 = "419f7b05b19182bc1aedde1ae80812c1534e59a0493476aa01ea819e76ba26f0";
-    };
-    python2Deps = if isPy3k then [ ] else [ self.rope ];
-    propagatedBuildInputs = with self; [ flake8 autopep8 jedi importmagic ] ++ python2Deps;
-
-    doCheck = false; # there are no tests
-
-    meta = {
-      description = "Backend for the elpy Emacs mode";
-      homepage = "https://github.com/jorgenschaefer/elpy";
-    };
-  };
-
+  elpy = callPackage ../development/python-modules/elpy { };
 
   enum = buildPythonPackage rec {
     name = "enum-0.4.4";
