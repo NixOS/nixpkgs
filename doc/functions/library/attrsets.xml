@@ -53,19 +53,29 @@
 
   <example xml:id="function-library-lib.attrset.attrByPath-example-value-exists">
    <title>Extracting a value from a nested attribute set</title>
-<programlisting><![CDATA[
+   <para>
+<programlisting role="input"><![CDATA[
 let set = { a = { b = 3; }; };
 in lib.attrsets.attrByPath [ "a" "b" ] 0 set
-=> 3
 ]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+3
+]]></programlisting>
+   </para>
   </example>
 
   <example xml:id="function-library-lib.attrset.attrByPath-example-default-value">
    <title>No value at the path, instead using the default</title>
-<programlisting><![CDATA[
+   <para>
+<programlisting role="input"><![CDATA[
 lib.attrsets.attrByPath [ "a" "b" ] 0 {}
-=> 0
 ]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+0
+]]></programlisting>
+   </para>
   </example>
  </section>
 
@@ -1648,7 +1658,8 @@ lib.attrsets.zipAttrs
 
   <example xml:id="function-library-lib.attrsets.recursiveUpdateUntil-example">
    <title>Recursively merging two attribute sets</title>
-<programlisting><![CDATA[
+   <para>
+<programlisting role="input"><![CDATA[
 lib.attrsets.recursiveUpdateUntil (path: l: r: path == ["foo"])
   {
     # first attribute set
@@ -1662,13 +1673,17 @@ lib.attrsets.recursiveUpdateUntil (path: l: r: path == ["foo"])
     foo.quz = 2;
     baz = 4;
   }
-=> {
+]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+{
   foo.bar = 1; # 'foo.*' from the second set
   foo.quz = 2; #
   bar = 3;     # 'bar' from the first set
   baz = 4;     # 'baz' from the second set
 }
-     ]]></programlisting>
+]]></programlisting>
+   </para>
   </example>
  </section>
 
@@ -1712,20 +1727,25 @@ lib.attrsets.recursiveUpdateUntil (path: l: r: path == ["foo"])
 
   <example xml:id="function-library-lib.attrsets.recursiveUpdate-example">
    <title>Recursively merging two attribute sets</title>
-<programlisting><![CDATA[
-recursiveUpdate
+   <para>
+<programlisting role="input">
+lib.attrsets.recursiveUpdate
   {
     boot.loader.grub.enable = true;
     boot.loader.grub.device = "/dev/hda";
   }
   {
     boot.loader.grub.device = "";
-  }
-=> {
+    }
+</programlisting>
+    returns:
+<programlisting role="output">
+{
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "";
 }
-]]></programlisting>
+</programlisting>
+   </para>
   </example>
  </section>
 </section>
