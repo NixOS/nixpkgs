@@ -103,18 +103,12 @@ self: super: {
   };
 
   # Fix test trying to access /home directory
-  shell-conduit = (overrideCabal super.shell-conduit (drv: {
+  shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
 
     # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
     # see: https://github.com/psibi/shell-conduit/issues/12
     doCheck = !pkgs.stdenv.isDarwin;
-  })).overrideScope (self: super: {
-    # shell-conduit doesn't build with conduit 1.3
-    # see https://github.com/psibi/shell-conduit/issues/15
-    conduit = self.conduit_1_2_13_1;
-    conduit-extra = self.conduit-extra_1_2_3_2;
-    resourcet = self.resourcet_1_1_11;
   });
 
   # https://github.com/froozen/kademlia/issues/2
@@ -681,8 +675,13 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/122
   singletons = dontCheck super.singletons;
 
-  # https://github.com/fpco/stackage/issues/838
-  cryptonite = dontCheck super.cryptonite;
+  # Fix an aarch64 issue with cryptonite-0.25:
+  # https://github.com/haskell-crypto/cryptonite/issues/234
+  # This has been committed upstream, but there is, as of yet, no new release.
+  cryptonite = appendPatch super.cryptonite (pkgs.fetchpatch {
+    url = https://github.com/haskell-crypto/cryptonite/commit/4622e5fc8ece82f4cf31358e31cd02cf020e558e.patch;
+    sha256 = "1m2d47ni4jbrpvxry50imj91qahr3r7zkqm157clrzlmw6gzpgnq";
+  });
 
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
@@ -1160,4 +1159,5 @@ self: super: {
     };
   };
 
+  arbtt = doJailbreak super.arbtt;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

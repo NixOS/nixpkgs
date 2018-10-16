@@ -4905,7 +4905,7 @@ with pkgs;
 
   redir = callPackage ../tools/networking/redir { };
 
-  redmine = callPackage ../applications/version-management/redmine { };
+  redmine = callPackage ../applications/version-management/redmine { ruby = pkgs.ruby_2_4; };
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
@@ -6135,7 +6135,9 @@ with pkgs;
     libxml2 = libxml2Python;
   };
 
-  xsecurelock = callPackage ../tools/X11/xsecurelock { };
+  xsecurelock = callPackage ../tools/X11/xsecurelock {
+    xset = xorg.xset;
+  };
 
   xsel = callPackage ../tools/misc/xsel { };
 
@@ -21448,6 +21450,8 @@ with pkgs;
   };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
+
+  equilux-theme = callPackage ../misc/themes/equilux-theme { };
 
   flam3 = callPackage ../tools/graphics/flam3 { };
 

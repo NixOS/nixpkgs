@@ -107,26 +107,10 @@ let
 
 
             /*
-            This is not a core Elm package, and it's hosted on GitHub.
-            To update, run:
-
-                cabal2nix --jailbreak --revision refs/tags/foo http://github.com/avh4/elm-format > packages/elm-format.nix
-
-            where foo is a tag for a new version, for example "0.8.0".
+            The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
+            `pacakge/nix/build.sh`
             */
-            elm-format = overrideCabal (self.callPackage ./packages/elm-format.nix {  }) (drv: {
-              # https://github.com/avh4/elm-format/issues/529
-              patchPhase = ''
-                cat >Setup.hs <<EOF
-                import Distribution.Simple
-                main = defaultMain
-                EOF
-
-                sed -i '/Build_elm_format/d' elm-format.cabal
-                sed -i 's/Build_elm_format.gitDescribe/""/' src/ElmFormat/Version.hs
-                sed -i '/Build_elm_format/d' src/ElmFormat/Version.hs
-              '';
-            });
+            elm-format = self.callPackage ./packages/elm-format.nix {};
           };
       in elmPkgs // {
         inherit elmPkgs;
@@ -134,6 +118,7 @@ let
 
         # Needed for elm-format
         indents = self.callPackage ./packages/indents.nix {};
+        tasty-quickcheck = self.callPackage ./packages/tasty-quickcheck.nix {};
       };
   };
 in hsPkgs.elmPkgs

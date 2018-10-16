@@ -52,7 +52,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = cfg.rspamd.enable;
+        default = false;
         description = "Whether to run the rmilter daemon.";
       };
 

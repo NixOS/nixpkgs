@@ -24,15 +24,6 @@
 lib: pkgs: actuallySplice:
 
 let
-  defaultBuildBuildScope = pkgs.buildPackages.buildPackages // pkgs.buildPackages.buildPackages.xorg;
-  defaultBuildHostScope = pkgs.buildPackages // pkgs.buildPackages.xorg;
-  defaultBuildTargetScope =
-    if pkgs.stdenv.targetPlatform == pkgs.stdenv.hostPlatform
-    then defaultBuildHostScope
-    else assert pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform; defaultHostTargetScope;
-  defaultHostHostScope = {}; # unimplemented
-  defaultHostTargetScope = pkgs // pkgs.xorg;
-  defaultTargetTargetScope = pkgs.targetPackages // pkgs.targetPackages.xorg or {};
 
   spliceReal = { pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
                , pkgsHostHost, pkgsHostTarget
@@ -105,18 +96,23 @@ let
                    } @ args:
     if actuallySplice then spliceReal args else pkgsHostTarget;
 
-  splicedPackages = splicePackages {
-    pkgsBuildBuild = defaultBuildBuildScope;
-    pkgsBuildHost = defaultBuildHostScope;
-    pkgsBuildTarget = defaultBuildTargetScope;
-    pkgsHostHost = defaultHostHostScope;
-    pkgsHostTarget = defaultHostTargetScope;
-    pkgsTargetTarget = defaultTargetTargetScope;
+  splicedPackages = splicePackages rec {
+    pkgsBuildBuild = pkgs.buildPackages.buildPackages;
+    pkgsBuildHost = pkgs.buildPackages;
+    pkgsBuildTarget =
+      if pkgs.stdenv.targetPlatform == pkgs.stdenv.hostPlatform
+      then pkgsBuildHost
+      else assert pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform; pkgsHostTarget;
+    pkgsHostHost = {}; # unimplemented
+    pkgsHostTarget = pkgs;
+    pkgsTargetTarget = pkgs.targetPackages;
   } // {
     # These should never be spliced under any circumstances
     inherit (pkgs) pkgs buildPackages targetPackages;
     inherit (pkgs.stdenv) buildPlatform targetPlatform hostPlatform;
   };
+
+  splicedPackagesWithXorg = splicedPackages // splicedPackages.xorg;
 
 in
 
@@ -128,9 +124,9 @@ in
   # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
   callPackage = pkgs.newScope {};
 
-  callPackages = lib.callPackagesWith splicedPackages;
+  callPackages = lib.callPackagesWith splicedPackagesWithXorg;
 
-  newScope = extra: lib.callPackageWith (splicedPackages // extra);
+  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
 
   # Haskell package sets need this because they reimplement their own
   # `newScope`.
