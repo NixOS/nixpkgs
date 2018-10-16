@@ -1846,41 +1846,7 @@ in {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
 
-  gtimelog = buildPythonPackage rec {
-    name = "gtimelog-${version}";
-    version = "0.9.1";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/gtimelog/gtimelog/archive/${version}.tar.gz";
-      sha256 = "0qk8fv8cszzqpdi3wl9vvkym1jil502ycn6sic4jrxckw5s9jsfj";
-    };
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    # TODO: AppIndicator
-    propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pygobject3 pkgs.makeWrapper pkgs.gtk3 ];
-
-    checkPhase = ''
-      substituteInPlace runtests --replace "/usr/bin/env python" "${python}/bin/${python.executable}"
-      ./runtests
-    '';
-
-    preFixup = ''
-        wrapProgram $out/bin/gtimelog \
-          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-          --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3.out}/lib" \
-    '';
-
-    meta = {
-      description = "A small Gtk+ app for keeping track of your time. It's main goal is to be as unintrusive as possible";
-      homepage = https://mg.pov.lt/gtimelog/;
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ ocharles ];
-      platforms = platforms.unix;
-    };
-  };
+  gtimelog = callPackage ../development/python-modules/gtimelog { };
 
   gurobipy = if stdenv.hostPlatform.system == "x86_64-darwin"
   then callPackage ../development/python-modules/gurobipy/darwin.nix {
@@ -1892,143 +1858,25 @@ in {
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
 
-  helper = buildPythonPackage rec {
-    pname = "helper";
-    version = "2.4.1";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/${pname}/${name}.tar.gz";
-      sha256 = "4e33dde42ad4df30fb7790689f93d77252cff26a565610d03ff2e434865a53a2";
-    };
-
-    buildInputs = with self; [ mock ];
-    propagatedBuildInputs = with self; [ pyyaml ];
-
-    # No tests
-    doCheck = false;
-
-    meta = {
-      description = "Development library for quickly writing configurable applications and daemons";
-      homepage = https://helper.readthedocs.org/;
-      license = licenses.bsd3;
-    };
-
-
-  };
+  helper = callPackage ../development/python-modules/helper { };
 
   hiro = callPackage ../development/python-modules/hiro {};
 
   hglib = callPackage ../development/python-modules/hglib {};
 
-  humanize = buildPythonPackage rec {
-    version = "0.5.1";
-    name = "humanize-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/humanize/${name}.tar.gz";
-      sha256 = "a43f57115831ac7c70de098e6ac46ac13be00d69abbf60bdcac251344785bb19";
-    };
-
-    buildInputs = with self; [ mock ];
-
-    doCheck = false;
-
-    meta = {
-      description = "Python humanize utilities";
-      homepage = https://github.com/jmoiron/humanize;
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
-      platforms = platforms.linux; # can only test on linux
-    };
-
-  };
+  humanize = callPackage ../development/python-modules/humanize { };
 
   hupper = callPackage ../development/python-modules/hupper {};
 
-  hovercraft = buildPythonPackage rec {
-    disabled = ! isPy3k;
-    name = "hovercraft-${version}";
-    version = "2.0";
+  hovercraft = callPacakge ../development/python-modules/hovercraft { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hovercraft/${name}.tar.gz";
-      sha256 = "0lqxr816lymgnywln8bbv9nrmkyahjjcjkm9kjyny9bflayz4f1g";
-    };
+  hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };
 
-    propagatedBuildInputs = with self; [ docutils lxml manuel pygments svg-path watchdog ];
-
-    # one test assumes we have docutils 0.12
-    # TODO: enable tests after upgrading docutils to 0.12
-    doCheck = false;
-
-    meta = {
-      description = "A tool to make impress.js presentations from reStructuredText";
-      homepage = https://github.com/regebro/hovercraft;
-      license = licenses.mit;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
-  hsaudiotag = buildPythonPackage (rec {
-    name = "hsaudiotag-1.1.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hsaudiotag/${name}.tar.gz";
-      sha256 = "15hgm128p8nysfi0jb127awga3vlj0iw82l50swjpvdh01m7rda8";
-    };
-
-    # no tests
-    doCheck = false;
-
-    meta = {
-      description = "A pure Python library that lets one to read metadata from media files";
-      homepage = http://hg.hardcoded.net/hsaudiotag/;
-      license = licenses.bsd3;
-    };
-  });
-
-  hsaudiotag3k = buildPythonPackage (rec {
-    name = "hsaudiotag3k-1.1.3";
-    disabled = !isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hsaudiotag3k/${name}.tar.gz";
-      sha256 = "0bv5k5594byr2bmhh77xv10fkdpckcmxg3w380yp30aqf83rcsx3";
-    };
-
-    # no tests
-    doCheck = false;
-
-    meta = {
-      description = "A pure Python library that lets one to read metadata from media files";
-      homepage = http://hg.hardcoded.net/hsaudiotag/;
-      license = licenses.bsd3;
-    };
-  });
-
+  hsaudiotag3k = callPacakge ../development/python-modules/hsaudiotag3k { };
 
   htmlmin = callPackage ../development/python-modules/htmlmin {};
 
-  httpauth = buildPythonPackage rec {
-    version = "0.3";
-    name = "httpauth-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/httpauth/${name}.tar.gz";
-      sha256 = "0qas7876igyz978pgldp5r7n7pis8n4vf0v87gxr9l7p7if5lr3l";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "WSGI HTTP Digest Authentication middleware";
-      homepage = https://github.com/jonashaag/httpauth;
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  httpauth = callPackage ../development/python-modules/httpauth { };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
 
