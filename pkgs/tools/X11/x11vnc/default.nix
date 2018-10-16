@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/LibVNC/x11vnc/;
     platforms = platforms.linux;
     license = licenses.gpl2;
+    maintainers = with maintainers; [ OPNA2608 ];
   };
 }
