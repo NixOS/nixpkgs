@@ -7999,30 +7999,7 @@ in {
     };
   };
 
-  slixmpp = buildPythonPackage rec {
-    name = "slixmpp-${version}";
-    version = "1.4.0";
-
-    disabled = pythonOlder "3.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
-      sha256 = "155qxx4xlkkjb4hphc09nsi2mi4xi3m2akg0z7064kj3nbzkwjn2";
-    };
-
-    patchPhase = ''
-      substituteInPlace slixmpp/thirdparty/gnupg.py \
-        --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
-    '';
-
-    propagatedBuildInputs = with self ; [ aiodns pyasn1 pkgs.gnupg1 pyasn1-modules];
-
-    meta = {
-      description = "Elegant Python library for XMPP";
-      license = licenses.mit;
-      homepage = https://dev.louiz.org/projects/slixmpp;
-    };
-  };
+  slixmpp = callPackage ../development/python-modules/slixmpp {};
 
   netaddr = buildPythonPackage rec {
     pname = "netaddr";
