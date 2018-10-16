@@ -2105,26 +2105,7 @@ in {
 
   pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
 
-  pyramid_chameleon = buildPythonPackage rec {
-    name = "pyramid_chameleon-0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid_chameleon/${name}.tar.gz";
-      sha256 = "d176792a50eb015d7865b44bd9b24a7bd0489fa9a5cebbd17b9e05048cef9017";
-    };
-
-    propagatedBuildInputs = with self; [
-      chameleon
-      pyramid
-      zope_interface
-      setuptools
-    ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
+  pyramid_chameleon = callPackage ../development/python-modules/pyramid_chameleon { };
 
   pyramid_jinja2 = buildPythonPackage rec {
     name = "pyramid_jinja2-${version}";
