@@ -2252,11 +2252,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
 
   xf86videov4l = (mkDerivation "xf86videov4l" {
-    name = "xf86-video-v4l-0.2.0";
+    name = "xf86-video-v4l-0.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-v4l-0.2.0.tar.bz2;
-      sha256 = "0pcjc75hgbih3qvhpsx8d4fljysfk025slxcqyyhr45dzch93zyb";
+      url = mirror://xorg/individual/driver/xf86-video-v4l-0.3.0.tar.bz2;
+      sha256 = "084x4p4avy72mgm2vnnvkicw3419i6pp3wxik8zqh7gmq4xv5z75";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ randrproto videoproto xorgserver xproto ];
