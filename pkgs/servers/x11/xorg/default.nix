@@ -2779,6 +2779,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
+  xtrap = (mkDerivation "xtrap" {
+    name = "xtrap-1.0.3";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xtrap-1.0.3.tar.bz2;
+      sha256 = "0sqm4j1zflk1s94iq4waa70hna1xcys88v9a70w0vdw66czhvj2j";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libX11 libXt ;};
+
   xvinfo = (mkDerivation "xvinfo" {
     name = "xvinfo-1.1.3";
     builder = ./builder.sh;
