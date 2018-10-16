@@ -2207,18 +2207,7 @@ in {
 
   venusian = callPackage ../development/python-modules/venusian { };
 
-  chameleon = buildPythonPackage rec {
-    name = "Chameleon-2.25";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Chameleon/${name}.tar.gz";
-      sha256 = "0va95cml7wfjpvgj3dc9xdn8psyjh3zbk6v51b0hcqv2fzh409vb";
-    } ;
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-    };
-  };
+  chameleon = callPackage ../development/python-modules/chameleon { };
 
   ddt = buildPythonPackage (rec {
     name = "ddt-1.0.0";
