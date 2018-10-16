@@ -1,14 +1,14 @@
-From a0ac82e4c79f359a7001a265cdb57e35978c6c23 Mon Sep 17 00:00:00 2001
+From f6a978f024d01202f954483423af1b2d5d5159a6 Mon Sep 17 00:00:00 2001
 From: Yegor Timoshenko <yegortimoshenko@riseup.net>
 Date: Fri, 28 Sep 2018 03:27:04 +0000
 Subject: [PATCH] If root is in Nix store, set ETag to its path hash
 
 ---
- src/http/ngx_http_core_module.c | 55 +++++++++++++++++++++++++++++----
- 1 file changed, 49 insertions(+), 6 deletions(-)
+ src/http/ngx_http_core_module.c | 56 +++++++++++++++++++++++++++++----
+ 1 file changed, 50 insertions(+), 6 deletions(-)
 
 diff --git a/src/http/ngx_http_core_module.c b/src/http/ngx_http_core_module.c
-index c57ec00c..4eec7ec5 100644
+index c57ec00c..b7992de2 100644
 --- a/src/http/ngx_http_core_module.c
 +++ b/src/http/ngx_http_core_module.c
 @@ -1583,6 +1583,7 @@ ngx_http_set_etag(ngx_http_request_t *r)
@@ -19,7 +19,7 @@ index c57ec00c..4eec7ec5 100644
  
      clcf = ngx_http_get_module_loc_conf(r, ngx_http_core_module);
  
-@@ -1598,16 +1599,58 @@ ngx_http_set_etag(ngx_http_request_t *r)
+@@ -1598,16 +1599,59 @@ ngx_http_set_etag(ngx_http_request_t *r)
      etag->hash = 1;
      ngx_str_set(&etag->key, "ETag");
  
@@ -39,7 +39,8 @@ index c57ec00c..4eec7ec5 100644
 +    #define NIX_STORE_DIR "/nix/store"
 +    #define NIX_STORE_LEN ngx_strlen(NIX_STORE_DIR)
 +
-+    if (!ngx_strncmp(real, NIX_STORE_DIR, NIX_STORE_LEN)
++    if (r->headers_out.last_modified_time == 1
++        && !ngx_strncmp(real, NIX_STORE_DIR, NIX_STORE_LEN)
 +        && real[NIX_STORE_LEN] == '/'
 +        && real[NIX_STORE_LEN + 1] != '\0')
 +    {
