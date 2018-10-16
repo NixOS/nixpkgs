@@ -2849,25 +2849,7 @@ in {
 
   multiprocess = callPackage ../development/python-modules/multiprocess { };
 
-  munkres = buildPythonPackage rec {
-    name = "munkres-1.0.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/munkres/${name}.tar.gz";
-      sha256 = "c78f803b9b776bfb20a25c9c7bb44adbf0f9202c2024d51aa5969d21e560208d";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://bmc.github.com/munkres/;
-      description = "Munkres algorithm for the Assignment Problem";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
+  munkres = callPackage ../development/python-modules/munkres { };
 
   musicbrainzngs = buildPythonPackage rec {
     name = "musicbrainzngs-0.5";
