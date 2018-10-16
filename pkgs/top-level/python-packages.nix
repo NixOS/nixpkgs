@@ -2157,18 +2157,7 @@ in {
 
   zope_copy = callPackage ../development/python-modules/zope_copy {};
 
-  ssdeep = buildPythonPackage rec {
-    name = "ssdeep-3.1.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/ssdeep/${name}.tar.gz";
-      sha256 = "1p9dpykmnfb73cszdiic5wbz5bmbbmkiih08pb4dah5mwq4n7im6";
-    };
-
-    buildInputs = with pkgs; [ ssdeep ];
-    propagatedBuildInputs = with self; [ cffi six ];
-    meta.broken = true; # Tests fail, and no reverse-dependencies anyway
-  };
+  ssdeep = callPackage ../development/python-modules/ssdeep { };
 
   s2clientprotocol = callPackage ../development/python-modules/s2clientprotocol { };
 
