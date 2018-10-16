@@ -21955,16 +21955,6 @@ with pkgs;
     nixStable
     nixUnstable;
 
-  # NixOS tools
-  nixos-build-vms = callPackage ../tools/nixos/nixos-build-vms { };
-  nixos-enter = callPackage ../tools/nixos/nixos-enter { };
-  nixos-generate-config = callPackage ../tools/nixos/nixos-generate-config { };
-  nixos-install = callPackage ../tools/nixos/nixos-install { };
-  nixos-option = callPackage ../tools/nixos/nixos-option { };
-  nixos-rebuild = callPackage ../tools/nixos/nixos-rebuild { };
-  nixos-version = callPackage ../tools/nixos/nixos-version { };
-
-
   nixops = callPackage ../tools/package-management/nixops { };
 
   nixopsUnstable = lowPrio (callPackage ../tools/package-management/nixops/unstable.nix { });
