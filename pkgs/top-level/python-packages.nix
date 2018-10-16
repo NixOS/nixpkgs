@@ -2340,25 +2340,7 @@ in {
 
   dtopt = callPackage ../development/python-modules/dtopt { };
 
-  ecdsa = buildPythonPackage rec {
-    name = "ecdsa-${version}";
-    version = "0.13";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/ecdsa/${name}.tar.gz";
-      sha256 = "1yj31j0asmrx4an9xvsaj2icdmzy6pw0glfpqrrkrphwdpi1xkv4";
-    };
-
-    # Only needed for tests
-    buildInputs = with self; [ pkgs.openssl ];
-
-    meta = {
-      description = "ECDSA cryptographic signature library";
-      homepage = "https://github.com/warner/python-ecdsa";
-      license = licenses.mit;
-      maintainers = with maintainers; [ aszlig ];
-    };
-  };
+  ecdsa = callPackage ../development/python-modules/ecdsa { };
 
   effect = callPackage ../development/python-modules/effect {};
 
