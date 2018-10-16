@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl }:
+{ lib, callPackage, fetchurl, stdenv }:
 
 let
   generic = args: callPackage (import ./generic.nix args) { };
@@ -16,7 +16,17 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = generic {
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_410 else stable_390;
+
+  stable_410 = generic {
+    version = "410.66";
+    sha256_64bit = "05xjzvj0fgmkpz36dbd7hy2vzl6xxiflzx7kml3k7ad9gy2svdlg";
+    settingsSha256 = "1nsxz1byshgjs3c03lyx6ya36dp0f2vg2l0d9pkh1i6cpzkp53kz";
+    persistencedSha256 = "0m4wdpb8w4y323d8py105p9hizwmf2ai8frkl7h77sn3ski17zw6";
+  };
+
+  # Last one supporting x86
+  stable_390 = generic {
     version = "390.87";
     sha256_32bit = "0rlr1f4lnpb8c4qz4w5r8xw5gdy9bzz26qww45qyl1qav3wwaaaw";
     sha256_64bit = "07k1kq8lkgbvjyr2dnbxcz6nppcwpq17wf925w8kfq78345hla9q";
