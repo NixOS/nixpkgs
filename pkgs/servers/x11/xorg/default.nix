@@ -2791,6 +2791,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xbitmaps libXcursor libXmu xproto ;};
 
+  xsm = (mkDerivation "xsm" {
+    name = "xsm-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xsm-1.0.4.tar.bz2;
+      sha256 = "09a4ss1fnrh1sgm21r4n5pivawf34paci3rn6mscyljf7a4vcd4r";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libICE libSM libX11 libXaw libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libICE libSM libX11 libXaw libXt ;};
+
   xtrans = (mkDerivation "xtrans" {
     name = "xtrans-1.3.5";
     builder = ./builder.sh;
