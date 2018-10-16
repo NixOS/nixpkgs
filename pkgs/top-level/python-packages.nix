@@ -1958,29 +1958,9 @@ in {
 
   PyLTI = callPackage ../development/python-modules/pylti { };
 
-  lmdb = buildPythonPackage rec {
-    pname = "lmdb";
-    version = "0.92";
-    name = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "01nw6r08jkipx6v92kw49z34wmwikrpvc5j9xawdiyg1n2526wrx";
-    };
-
-    # Some sort of mysterious failure with lmdb.tool
-    doCheck = !isPy3k;
-
-    meta = {
-      description = "Universal Python binding for the LMDB 'Lightning' Database";
-      homepage = "https://github.com/dw/py-lmdb";
-      license = licenses.openldap;
-      maintainers = with maintainers; [ copumpkin ];
-    };
-  };
-
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.3";
+  lmdb = callPackage ../development/python-modules/lmdb { };
 
     src = pkgs.fetchurl {
       url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
