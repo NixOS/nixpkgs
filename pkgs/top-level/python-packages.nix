@@ -2372,20 +2372,7 @@ in {
 
   geojson = callPackage ../development/python-modules/geojson { };
 
-  gevent-websocket = buildPythonPackage rec {
-    name = "gevent-websocket-0.9.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gevent-websocket/${name}.tar.gz";
-      sha256 = "07rqwfpbv13mk6gg8mf0bmvcf6siyffjpgai1xd8ky7r801j4xb4";
-    };
-
-    # SyntaxError in tests.
-    disabled = isPy3k;
-
-    propagatedBuildInputs = with self; [ gevent ];
-
-  };
+  gevent-websocket = callPackage ../development/python-modules/gevent-websocket { };
 
   genzshcomp = buildPythonPackage {
     name = "genzshcomp-0.5.1";
