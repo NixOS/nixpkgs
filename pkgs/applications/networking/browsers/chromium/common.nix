@@ -214,7 +214,6 @@ let
       is_clang = false;
       clang_use_chrome_plugins = false;
       remove_webcore_debug_symbols = true;
-      use_gtk3 = true;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
@@ -225,6 +224,8 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
       google_default_client_id = "404761575300.apps.googleusercontent.com";
       google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
+    } // optionalAttrs (versionRange "60" "70") {
+      use_gtk3 = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
