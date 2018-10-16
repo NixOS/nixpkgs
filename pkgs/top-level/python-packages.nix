@@ -2284,28 +2284,8 @@ in {
 
   vcversioner = callPackage ../development/python-modules/vcversioner { };
 
-  falcon = buildPythonPackage (rec {
-    name = "falcon-1.0.0";
+  falcon = callPackage ../development/python-modules/falcon { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/falcon/${name}.tar.gz";
-      sha256 = "ddce23a2dd0abba6d19775e9bf7ba64e184b15a0e7163e65f62af63354193f63";
-    };
-
-    buildInputs = with self; stdenv.lib.optionals doCheck [coverage ddt nose pyyaml requests testtools];
-    propagatedBuildInputs = with self; [ six python_mimeparse ];
-
-    # The travis build fails since the migration from multiprocessing to threading for hosting the API under test.
-    # OSError: [Errno 98] Address already in use
-    doCheck = false;
-
-    meta = {
-      description = "An unladen web framework for building APIs and app backends";
-      homepage = http://falconframework.org;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  });
   hug = buildPythonPackage rec {
     name = "hug-2.1.2";
     src = pkgs.fetchurl {
