@@ -2326,23 +2326,7 @@ in {
 
   kaptan = callPackage ../development/python-modules/kaptan { };
 
-  keepalive = buildPythonPackage rec {
-    name = "keepalive-${version}";
-    version = "0.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/keepalive/keepalive-${version}.tar.gz";
-      sha256 = "3c6b96f9062a5a76022f0c9d41e9ef5552d80b1cadd4fccc1bf8f183ba1d1ec1";
-    };
-
-    # No tests included
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      description = "An HTTP handler for `urllib2` that supports HTTP 1.1 and keepalive";
-      homepage = "https://github.com/wikier/keepalive";
-    };
-  };
+  keepalive = callPackage ../development/python-modules/keepalive { };
 
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt {};
 
