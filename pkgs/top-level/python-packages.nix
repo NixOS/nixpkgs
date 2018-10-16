@@ -2199,21 +2199,7 @@ in {
 
   pywavelets = callPackage ../development/python-modules/pywavelets { };
 
-  zope_deprecation = buildPythonPackage rec {
-    name = "zope.deprecation-4.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.deprecation/${name}.tar.gz";
-      sha256 = "fed622b51ffc600c13cc5a5b6916b8514c115f34f7ea2730409f30c061eb0b78";
-    };
-
-    buildInputs = with self; [ zope_testing ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
+  zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
 
   validictory = buildPythonPackage rec {
     name = "validictory-1.0.0a2";
