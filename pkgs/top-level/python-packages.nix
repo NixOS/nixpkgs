@@ -2803,21 +2803,7 @@ in {
 
   h2 = callPackage ../development/python-modules/h2 { };
 
-  editorconfig = buildPythonPackage rec {
-    name = "EditorConfig-${version}";
-    version = "0.12.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/editorconfig/${name}.tar.gz";
-      sha256 = "1qxqy9wfrpb2ldrk5nzidkpymc55lpf9lg3m8c8a5531jmbwhlwb";
-    };
-
-    meta = {
-      description = "EditorConfig File Locator and Interpreter for Python";
-      homepage = https://editorconfig.org/;
-      license = licenses.psfl;
-    };
-  };
+  editorconfig = callPackage ../development/python-modules/editorconfig { };
 
   mock = buildPythonPackage (rec {
     name = "mock-2.0.0";
