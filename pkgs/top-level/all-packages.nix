@@ -19695,13 +19695,7 @@ with pkgs;
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-
-  inherit (callPackages ../applications/editors/xi { })
-    gxi
-    kod
-    xi-core
-    xi-gtk
-    xi-term;
+  xenPackages = recurseIntoAttrs (callPackage ../applications/virtualization/xen/packages.nix {});
 
   xen = xenPackages.xen-vanilla;
   xen-slim = xenPackages.xen-slim;
@@ -19717,6 +19711,14 @@ with pkgs;
   xkbset = callPackage ../tools/X11/xkbset { };
 
   xkbmon = callPackage ../applications/misc/xkbmon { };
+
+  inherit (callPackages ../applications/editors/xi { })
+    gxi
+    kod
+    xi-core
+    xi-gtk
+    xi-term;
+
 
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
