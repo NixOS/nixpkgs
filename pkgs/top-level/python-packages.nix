@@ -2139,27 +2139,7 @@ in {
 
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
-  roman = buildPythonPackage rec {
-    version = "2.0.0";
-    name = "roman-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/roman/${name}.zip";
-      sha256 = "90e83b512b44dd7fc83d67eb45aa5eb707df623e6fc6e66e7f273abd4b2613ae";
-    };
-
-    buildInputs = with self; with pkgs; [ ];
-
-    propagatedBuildInputs = with self; [ ];
-
-    meta = {
-      description = "Integer to Roman numerals converter";
-      homepage = "https://pypi.python.org/pypi/roman";
-      license = licenses.psfl;
-    };
-  };
-
-
+  roman = callPackage ../development/python-modules/roman { };
 
   librosa = buildPythonPackage rec {
     pname = "librosa";
