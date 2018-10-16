@@ -2330,32 +2330,7 @@ in {
 
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt {};
 
-  SPARQLWrapper = buildPythonPackage rec {
-    name = "SPARQLWrapper-${version}";
-    version = "1.7.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SPARQLWrapper/SPARQLWrapper-${version}.tar.gz";
-      sha256 = "1y12hpsfjd779yi29bhvl6g4vszadjvd8jw38z5rg77b034vxjnw";
-    };
-
-    # break circular dependency loop
-    patchPhase = ''
-      sed -i '/rdflib/d' requirements.txt
-    '';
-
-    # Doesn't actually run tests
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [
-      six isodate pyparsing html5lib keepalive
-    ];
-
-    meta = with stdenv.lib; {
-      description = "This is a wrapper around a SPARQL service. It helps in creating the query URI and, possibly, convert the result into a more manageable format";
-      homepage = "http://rdflib.github.io/sparqlwrapper";
-    };
-  };
+  SPARQLWrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
   dulwich = callPackage ../development/python-modules/dulwich {
     inherit (pkgs) git glibcLocales;
