@@ -20,6 +20,10 @@ let
 
       cargoSha256 = "078cwlqdafa8mna2kmg9zbs4sd3g8dl07x9xqnmzswqgq8ds0fkk";
 
+      #postInstall = ''
+      #  make -C syntect-plugin install
+      #'';
+
       meta = with lib; {
         description = "A modern editor with a backend written in Rust";
         homepage = https://github.com/xi-editor/xi-editor;
