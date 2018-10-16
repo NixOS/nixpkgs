@@ -2213,21 +2213,7 @@ in {
 
   descartes = callPackage ../development/python-modules/descartes { };
 
-  distutils_extra = buildPythonPackage rec {
-    name = "distutils-extra-${version}";
-    version = "2.39";
-
-    src = pkgs.fetchurl {
-      url = "http://launchpad.net/python-distutils-extra/trunk/${version}/+download/python-${name}.tar.gz";
-      sha256 = "1bv3h2p9ffbzyddhi5sccsfwrm3i6yxzn0m06fdxkj2zsvs28gvj";
-    };
-
-    meta = {
-      homepage = https://launchpad.net/python-distutils-extra;
-      description = "Enhancements to Python's distutils";
-      license = licenses.gpl2;
-    };
-  };
+  distutils_extra = callPackage ../development/python-modules/distutils_extra { };
 
   pyxdg = buildPythonPackage rec {
     name = "pyxdg-0.25";
