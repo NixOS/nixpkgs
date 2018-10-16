@@ -2462,18 +2462,7 @@ in {
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
-  colored = buildPythonPackage rec {
-    name = "colored-${version}";
-    version = "1.1.5";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/colored/${name}.tar.gz";
-      sha256 = "1r1vsypk8v7az82d66bidbxlndx1h7xd4m43hpg1a6hsjr30wrm3";
-    };
-
-    # No proper test suite
-    doCheck = false;
-  };
-
+  colored = callPackage ../development/python-modules/colored { };
 
   xdis = buildPythonPackage rec {
     name = "xdis-${version}";
