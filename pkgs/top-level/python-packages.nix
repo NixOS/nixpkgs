@@ -2276,18 +2276,7 @@ in {
 
   python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
 
-  pyRFC3339 = buildPythonPackage rec {
-    name = "pyRFC3339-${version}";
-    version = "0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyRFC3339/pyRFC3339-${version}.tar.gz";
-      sha256 = "1pp648xsjaw9h1xq2mgwzda5wis2ypjmzxlksc1a8grnrdmzy155";
-    };
-
-    propagatedBuildInputs = with self; [ pytz ];
-    buildInputs = with self; [ nose ];
-  };
+  pyRFC3339 = callPackage ../development/python-modules/pyrfc3339 { };
 
   ConfigArgParse = callPackage ../development/python-modules/configargparse { };
 
