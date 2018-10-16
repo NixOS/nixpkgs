@@ -2289,26 +2289,7 @@ in {
     propagatedBuildInputs = with self; [ django ];
   });
 
-  django_classytags = buildPythonPackage rec {
-    name = "django-classy-tags-${version}";
-    version = "0.6.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-classy-tags/${name}.tar.gz";
-      sha256 = "0wxvpmjdzk0aajk33y4himn3wqjx7k0aqlka9j8ay3yfav78bdq0";
-    };
-
-    propagatedBuildInputs = with self; [ django ];
-
-    # tests appear to be broken on 0.6.1 at least
-    doCheck = ( version != "0.6.1" );
-
-    meta = {
-      description = "Class based template tags for Django";
-      homepage = https://github.com/ojii/django-classy-tags;
-      license = licenses.bsd3;
-    };
-  };
+  django_classytags = callPackage ../development/python-modules/django_classytags { };
 
   # This package may need an older version of Django.
   # Override the package set and set e.g. `django = super.django_1_9`.
