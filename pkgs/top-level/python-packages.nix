@@ -2147,29 +2147,7 @@ in {
 
   safe = callPackage ../development/python-modules/safe { };
 
-  samplerate = buildPythonPackage rec {
-    name = "scikits.samplerate-${version}";
-    version = "0.3.3";
-    src = pkgs.fetchgit {
-      url = https://github.com/cournape/samplerate;
-      rev = "a536c97eb2d6195b5f266ea3cc3a35364c4c2210";
-      sha256 = "0mgic7bs5zv5ji05vr527jlxxlb70f9dg93hy1lzyz2plm1kf7gg";
-    };
-
-    buildInputs = with self;  [ pkgs.libsamplerate ];
-
-    propagatedBuildInputs = with self; [ numpy ];
-
-    preConfigure = ''
-       cat > site.cfg << END
-       [samplerate]
-       library_dirs=${pkgs.libsamplerate.out}/lib
-       include_dirs=${pkgs.libsamplerate.dev}/include
-       END
-    '';
-
-    doCheck = false;
-  };
+  samplerate = callPackage ../development/python-modules/samplerate { };
 
   sarge = callPackage ../development/python-modules/sarge { };
 
