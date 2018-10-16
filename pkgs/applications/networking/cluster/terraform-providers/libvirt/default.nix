@@ -3,7 +3,7 @@
 # USAGE:
 # install the following package globally or in nix-shell:
 #
-#   (terraform.withPlugins (old: [terraform-provider-libvirt]))
+#   (terraform.withPlugins (p: [p.libvirt]))
 #
 # configuration.nix:
 #
@@ -35,6 +35,10 @@ buildGoPackage rec {
   # mkisofs needed to create ISOs holding cloud-init data,
   # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
   propagatedBuildInputs = [ cdrtools ];
+
+  # Terraform allow checking the provider versions, but this breaks
+  # if the versions are not provided via file paths.
+  postBuild = "mv go/bin/terraform-provider-libvirt{,_v${version}}";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/dmacvicar/terraform-provider-libvirt;
