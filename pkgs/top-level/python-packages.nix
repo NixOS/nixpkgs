@@ -2460,27 +2460,7 @@ in {
 
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
-  wtforms = buildPythonPackage rec {
-    version = "2.1";
-    name = "wtforms-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/W/WTForms/WTForms-${version}.zip";
-      sha256 = "0vyl26y9cg409cfyj8rhqxazsdnd0jipgjw06civhrd53yyi1pzz";
-    };
-
-    # Django tests are broken "django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet."
-    # This is fixed in master I believe but not yet in 2.1;
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ Babel ];
-
-    meta = {
-      homepage = https://github.com/wtforms/wtforms;
-      description = "A flexible forms validation and rendering library for Python";
-      license = licenses.bsd3;
-    };
-  };
+  wtforms = callPackage ../development/python-modules/wtforms { };
 
   graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
 
