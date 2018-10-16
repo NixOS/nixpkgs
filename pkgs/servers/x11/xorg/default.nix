@@ -2516,11 +2516,11 @@ let
   }) // {inherit libxcb ;};
 
   xlsfonts = (mkDerivation "xlsfonts" {
-    name = "xlsfonts-1.0.5";
+    name = "xlsfonts-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xlsfonts-1.0.5.tar.bz2;
-      sha256 = "1yi774g6r1kafsbnxbkrwyndd3i60362ck1fps9ywz076pn5naa0";
+      url = mirror://xorg/individual/app/xlsfonts-1.0.6.tar.bz2;
+      sha256 = "0s6kxgv78chkwsqmhw929f4pf91gq63f4yvixxnan1h00cx0pf49";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
