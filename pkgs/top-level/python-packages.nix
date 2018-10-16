@@ -2360,32 +2360,7 @@ in {
 
   gdrivefs = callPackage ../development/python-modules/gdrivefs { };
 
-  genshi = buildPythonPackage {
-    name = "genshi-0.7";
-
-    src = pkgs.fetchurl {
-      url = http://ftp.edgewall.com/pub/genshi/Genshi-0.7.tar.gz;
-      sha256 = "0lkkbp6fbwzv0zda5iqc21rr7rdldkwh3hfabfjl9i4bwq14858x";
-    };
-
-    # FAIL: test_sanitize_remove_script_elem (genshi.filters.tests.html.HTMLSanitizerTestCase)
-    # FAIL: test_sanitize_remove_src_javascript (genshi.filters.tests.html.HTMLSanitizerTestCase)
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools ];
-
-    meta = {
-      description = "Python components for parsing HTML, XML and other textual content";
-
-      longDescription = ''
-        Python library that provides an integrated set of
-        components for parsing, generating, and processing HTML, XML or other
-        textual content for output generation on the web.
-      '';
-
-      license = "BSD";
-    };
-  };
+  genshi = callPackage ../development/python-modules/genshi { };
 
   gevent = callPackage ../development/python-modules/gevent { };
 
