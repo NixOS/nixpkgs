@@ -2419,6 +2419,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
+  xfontsel = (mkDerivation "xfontsel" {
+    name = "xfontsel-1.0.6";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xfontsel-1.0.6.tar.bz2;
+      sha256 = "0700lf6hx7dg88wq1yll7zjvf9gbwh06xff20yffkxb289y0pai5";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libX11 libXaw libXmu libXt ;};
+
   xfs = (mkDerivation "xfs" {
     name = "xfs-1.2.0";
     builder = ./builder.sh;
