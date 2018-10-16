@@ -2358,21 +2358,7 @@ in {
 
   eventlet = callPackage ../development/python-modules/eventlet { };
 
-  exifread = buildPythonPackage rec {
-    name = "ExifRead-2.1.2";
-
-    meta = {
-      description = "Easy to use Python module to extract Exif metadata from tiff and jpeg files";
-      homepage    = "https://github.com/ianare/exif-py";
-      license     = "BSD";
-      maintainers = with maintainers; [ vozz ];
-    };
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/E/ExifRead/${name}.tar.gz";
-      sha256 = "1b90jf6m9vxh9nanhpyvqdq7hmfx5iggw1l8kq10jrs6xgr49qkr";
-    };
-  };
+  exifread = callPackage ../development/python-modules/exifread { };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
