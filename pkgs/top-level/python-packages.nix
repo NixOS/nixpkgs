@@ -16030,21 +16030,18 @@ EOF
 
   poezio = buildPythonApplication rec {
     name = "poezio-${version}";
-    version = "0.11";
+    version = "0.12";
 
     disabled = pythonOlder "3.4";
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
+    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 cffi ];
+    nativeBuildInputs = with pkgs; [ pkgconfig ];
 
     src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/118/${name}.tar.gz";
-      sha256 = "07cn3717swarjv47yw8x95bvngz4nvlyyy9m7ck9fhycjgdy82r0";
+      url = "http://dev.louiz.org/attachments/download/129/${name}.tar.gz";
+      sha256 = "11n9x82xyjwbqk28lsfnvqwn8qc9flv6w2c64camh6j3148ykpvz";
     };
-
-    patches = [
-      ../development/python-modules/poezio/fix_gnupg_import.patch
-    ];
 
     checkPhase = ''
       py.test
