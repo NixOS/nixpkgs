@@ -14,7 +14,7 @@
 , glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2
+, ffmpeg, libxslt, libxml2, at-spi2-core
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -129,7 +129,8 @@ let
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optional (versionAtLeast version "71") at-spi2-core;
 
     patches = [
       # As major versions are added, you can trawl the gentoo and arch repos at
