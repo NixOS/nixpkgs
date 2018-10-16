@@ -139,6 +139,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
+  editres = (mkDerivation "editres" {
+    name = "editres-1.0.7";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/editres-1.0.7.tar.bz2;
+      sha256 = "04awfwmy3f9f0bchidc4ssbgrbicn5gzasg3jydpfnp5513d76h8";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw libXmu xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libX11 libXaw libXmu xproto libXt ;};
+
   encodings = (mkDerivation "encodings" {
     name = "encodings-1.0.4";
     builder = ./builder.sh;
