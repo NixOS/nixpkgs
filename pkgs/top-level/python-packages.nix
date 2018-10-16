@@ -2400,31 +2400,7 @@ in {
 
   google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
 
-  google_apputils = buildPythonPackage rec {
-    name = "google-apputils-0.4.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/google-apputils/${name}.tar.gz";
-      sha256 = "1sxsm5q9vr44qzynj8l7p3l7ffb0zl1jdqhmmzmalkx941nbnj1b";
-    };
-
-    preConfigure = ''
-      sed -i '/ez_setup/d' setup.py
-    '';
-
-    propagatedBuildInputs = with self; [ pytz gflags dateutil mox ];
-
-    checkPhase = ''
-      ${python.executable} setup.py google_test
-    '';
-
-    doCheck = true;
-
-    meta = {
-      description = "Google Application Utilities for Python";
-      homepage = http://code.google.com/p/google-apputils-python;
-    };
-  };
+  google_apputils = callPackage ../development/python-modules/google_apputils { };
 
   google_auth = callPackage ../development/python-modules/google_auth { };
 
