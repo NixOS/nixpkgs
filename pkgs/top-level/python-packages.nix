@@ -2388,27 +2388,7 @@ in {
 
   github3_py = callPackage ../development/python-modules/github3_py { };
 
-  github-webhook = buildPythonPackage rec {
-    name = "github-webhook-${version}";
-    version = "unstable-2016-03-11";
-
-    # There is a PyPI package but an older one.
-    src = pkgs.fetchgit {
-      url = "https://github.com/bloomberg/python-github-webhook.git";
-      rev = "ca1855479ee59c4373da5425dbdce08567605d49";
-      sha256 = "0mqwig9281iyzbphp1d21a4pqdrf98vs9k8lqpqx6spzgqaczx5f";
-    };
-
-    propagatedBuildInputs = with self; [ flask ];
-    # No tests
-    doCheck = false;
-
-    meta = {
-      description = "A framework for writing webhooks for GitHub";
-      license = licenses.mit;
-      homepage = https://github.com/bloomberg/python-github-webhook;
-    };
-  };
+  github-webhook = callPackage ../development/python-modules/github-webhook { };
 
   goobook = buildPythonPackage rec {
     name = "goobook-1.9";
