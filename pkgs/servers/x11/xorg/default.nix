@@ -1784,11 +1784,11 @@ let
   }) // {inherit inputproto xorgserver xproto ;};
 
   xf86inputsynaptics = (mkDerivation "xf86inputsynaptics" {
-    name = "xf86-input-synaptics-1.9.0";
+    name = "xf86-input-synaptics-1.9.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.9.0.tar.bz2;
-      sha256 = "0niv0w1czbxh4y3qkqbpdp5gjwhp3379inwhknhif0m4sy4k5fmg";
+      url = mirror://xorg/individual/driver/xf86-input-synaptics-1.9.1.tar.bz2;
+      sha256 = "0xhm03qywwfgkpfl904d08lx00y28m1b6lqmks5nxizixwk3by3s";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
