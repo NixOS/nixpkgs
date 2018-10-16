@@ -2372,24 +2372,7 @@ in {
     inherit (pkgs) glibcLocales;
   };
 
-  feedparser = buildPythonPackage (rec {
-    name = "feedparser-5.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/feedparser/${name}.tar.gz";
-      sha256 = "1ycva69bqssalhqg45rbrfipz3l6hmycszy26k0351fhq990c0xx";
-    };
-
-    # lots of networking failures
-    doCheck = false;
-
-    meta = {
-      homepage = http://code.google.com/p/feedparser/;
-      description = "Universal feed parser";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  });
+  feedparser = callPackage ../development/python-modules/feedparser { };
 
   pyfribidi = buildPythonPackage rec {
     version = "0.11.0";
