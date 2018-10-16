@@ -1640,11 +1640,11 @@ let
   }) // {inherit libdmx libX11 libxcb libXcomposite libXext libXi libXinerama xproto libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ;};
 
   xdriinfo = (mkDerivation "xdriinfo" {
-    name = "xdriinfo-1.0.5";
+    name = "xdriinfo-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xdriinfo-1.0.5.tar.bz2;
-      sha256 = "0681d0y8liqakkpz7mmsf689jcxrvs5291r20qi78mc9xxk3gfjc";
+      url = mirror://xorg/individual/app/xdriinfo-1.0.6.tar.bz2;
+      sha256 = "0lcx8h3zd11m4w8wf7dyp89826d437iz78cyrix436bqx31x5k6r";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ glproto libX11 ];
