@@ -2303,21 +2303,7 @@ in {
 
   foolscap = callPackage ../development/python-modules/foolscap { };
 
-  forbiddenfruit = buildPythonPackage rec {
-    version = "0.1.0";
-    name = "forbiddenfruit-${version}";
-
-    src = pkgs.fetchurl {
-      url= "mirror://pypi/f/forbiddenfruit/${name}.tar.gz";
-      sha256 = "0xra2kw6m8ag29ifwmhi5zqksh4cr0yy1waqd488rm59kcr3zl79";
-    };
-
-    meta = {
-      description = "Patch python built-in objects";
-      homepage = https://pypi.python.org/pypi/forbiddenfruit;
-      license = licenses.mit;
-    };
-  };
+  forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };
 
   fs = buildPythonPackage rec {
     name = "fs-0.5.4";
