@@ -2486,21 +2486,7 @@ in {
 
   infoqscraper = callPackage ../development/python-modules/infoqscraper { };
 
-  inifile = buildPythonPackage rec {
-    name = "inifile-0.3";
-
-    meta = {
-      description = "A small INI library for Python";
-      homepage    = "https://github.com/mitsuhiko/python-inifile";
-      license     = "BSD";
-      maintainers = with maintainers; [ vozz ];
-    };
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/inifile/${name}.tar.gz";
-      sha256 = "0zgd53czc1irwx6b5zip8xlmyfr40hz2pd498d8yv61znj6lm16h";
-    };
-  };
+  inifile = callPackage ../development/python-modules/inifile { };
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow {};
 
