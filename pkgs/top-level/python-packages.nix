@@ -2826,28 +2826,7 @@ in {
 
   mpd = callPackage ../development/python-modules/mpd { };
 
-  mpd2 = buildPythonPackage rec {
-    name = "mpd2-${version}";
-    version = "0.5.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-mpd2/python-mpd2-${version}.tar.bz2";
-      sha256 = "1gfrxf71xll1w6zb69znqg5c9j0g7036fsalkvqprh2id640cl3a";
-    };
-
-    buildInputs = with self; [ mock ];
-    patchPhase = ''
-      sed -i -e '/tests_require/d' \
-          -e 's/cmdclass.*/test_suite="mpd_test",/' setup.py
-    '';
-
-    meta = {
-      description = "A Python client module for the Music Player Daemon";
-      homepage = "https://github.com/Mic92/python-mpd2";
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ rvl mic92 ];
-    };
-  };
+  mpd2 = callPackage ../development/python-modules/mpd2 { };
 
   mpv = buildPythonPackage rec {
     name = "mpv-0.1";
