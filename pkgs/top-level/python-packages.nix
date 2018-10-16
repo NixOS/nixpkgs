@@ -2470,27 +2470,7 @@ in {
 
   lsi = callPackage ../development/python-modules/lsi { };
 
-  hkdf = buildPythonPackage rec {
-    name = "hkdf-${version}";
-    version = "0.0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hkdf/${name}.tar.gz";
-      sha256 = "1jhxk5vhxmxxjp3zj526ry521v9inzzl8jqaaf0ma65w6k332ak2";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    meta = {
-      description = "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)";
-      homepage = "https://github.com/casebeer/python-hkdf";
-      license = licenses.bsd2;
-    };
-  };
+  hkdf = callPackage ../development/python-modules/hkdf { };
 
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
