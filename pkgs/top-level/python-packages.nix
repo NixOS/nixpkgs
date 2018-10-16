@@ -2851,25 +2851,7 @@ in {
 
   munkres = callPackage ../development/python-modules/munkres { };
 
-  musicbrainzngs = buildPythonPackage rec {
-    name = "musicbrainzngs-0.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/musicbrainzngs/${name}.tar.gz";
-      sha256 = "281388ab750d2996e9feca4580fd4215d616a698e02cd6719cb9b8562945c489";
-    };
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    meta = {
-      homepage = http://alastair/python-musicbrainz-ngs;
-      description = "Python bindings for musicbrainz NGS webservice";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
   mutag = buildPythonPackage rec {
     disabled = ! isPy3k;
