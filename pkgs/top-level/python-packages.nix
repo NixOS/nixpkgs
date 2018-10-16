@@ -2137,23 +2137,7 @@ in {
 
   rawkit = callPackage ../development/python-modules/rawkit { };
 
-  rethinkdb = buildPythonPackage rec {
-    name = "rethinkdb-${version}";
-    version = "2.3.0.post6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rethinkdb/${name}.tar.gz";
-      sha256 = "05qwkmq6kn437ywyjs02jxbry720gw39q4z4jdb0cnbbi76lwddm";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "Python driver library for the RethinkDB database server";
-      homepage = "https://pypi.python.org/pypi/rethinkdb";
-      license = licenses.agpl3;
-    };
-  };
+  rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
   roman = buildPythonPackage rec {
     version = "2.0.0";
