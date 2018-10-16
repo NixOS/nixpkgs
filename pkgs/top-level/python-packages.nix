@@ -2274,24 +2274,7 @@ in {
     cudaSupport = false;
   };
 
-  python2-pythondialog = buildPythonPackage rec {
-    name = "python2-pythondialog-${version}";
-    version = "3.3.0";
-    disabled = !isPy27;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python2-pythondialog/python2-pythondialog-${version}.tar.gz";
-      sha256 = "1yhkagsh99bfi592ymczf8rnw8rk6n9hdqy3dd98m3yrx8zmjvry";
-    };
-
-    patchPhase = ''
-      substituteInPlace dialog.py --replace ":/bin:/usr/bin" ":$out/bin"
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = "http://pythondialog.sourceforge.net/";
-    };
-  };
+  python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
 
   pyRFC3339 = buildPythonPackage rec {
     name = "pyRFC3339-${version}";
