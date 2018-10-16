@@ -2364,31 +2364,7 @@ in {
 
   gevent = callPackage ../development/python-modules/gevent { };
 
-  geventhttpclient = buildPythonPackage rec {
-    name = "geventhttpclient-${version}";
-    version = "1.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/geventhttpclient/${name}.tar.gz";
-      sha256 = "bd87af8854f5fb05738916c8973671f7035568aec69b7c842887d6faf9c0a01d";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ gevent certifi six backports_ssl_match_hostname ];
-
-    # Several tests fail that require network
-    doCheck = false;
-    checkPhase = ''
-      py.test $out
-    '';
-
-    meta = {
-      homepage = https://github.com/gwik/geventhttpclient;
-      description = "HTTP client library for gevent";
-      license = licenses.mit;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
 
   gevent-socketio = buildPythonPackage rec {
     name = "gevent-socketio-0.3.6";
