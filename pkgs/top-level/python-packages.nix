@@ -2787,50 +2787,7 @@ in {
 
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
-  rainbowstream = buildPythonPackage rec {
-    name = "rainbowstream-${version}";
-    version = "1.3.7";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/r/rainbowstream/${name}.tar.gz";
-      sha256 = "0zpi1x3b535pwx8rkq57nnrb5d5ma65vvlalar9vi6ilp124x1w2";
-    };
-
-    patches = [
-      ../development/python-modules/rainbowstream/image.patch
-    ];
-
-    postPatch = ''
-      clib=$out/${python.sitePackages}/rainbowstream/image.so
-      substituteInPlace rainbowstream/c_image.py \
-        --replace @CLIB@ $clib
-      sed -i 's/requests.*"/requests"/' setup.py
-    '';
-
-    LC_ALL="en_US.UTF-8";
-
-    postInstall = ''
-      mkdir -p $out/lib
-      cc -fPIC -shared -o $clib rainbowstream/image.c
-      for prog in "$out/bin/"*; do
-        wrapProgram "$prog" \
-          --prefix PYTHONPATH : "$PYTHONPATH"
-      done
-    '';
-
-    buildInputs = with self; [
-      pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales
-      pillow twitter pyfiglet requests arrow dateutil pysocks
-      pocket
-    ];
-
-    meta = {
-      description = "Streaming command-line twitter client";
-      homepage    = "http://www.rainbowstream.org/";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ thoughtpolice ];
-    };
-  };
+  rainbowstream = callPackage ../development/python-modules/rainbowstream { };
 
   pendulum = callPackage ../development/python-modules/pendulum { };
 
