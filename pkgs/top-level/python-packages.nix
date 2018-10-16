@@ -8001,13 +8001,13 @@ in {
 
   slixmpp = buildPythonPackage rec {
     name = "slixmpp-${version}";
-    version = "1.2.4.post1";
+    version = "1.4.0";
 
     disabled = pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
-      sha256 = "0v6430dczai8a2nmznhja2dxl6pxa8c5j20nhc5737bqjg7245jk";
+      sha256 = "155qxx4xlkkjb4hphc09nsi2mi4xi3m2akg0z7064kj3nbzkwjn2";
     };
 
     patchPhase = ''
