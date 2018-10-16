@@ -2031,6 +2031,8 @@ in {
 
   django_compat = callPackage ../development/python-modules/django-compat { };
 
+  django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
+
   django_environ = callPackage ../development/python-modules/django_environ { };
 
   django_evolution = callPackage ../development/python-modules/django_evolution { };
