@@ -2141,27 +2141,7 @@ in {
 
   roman = callPackage ../development/python-modules/roman { };
 
-  librosa = buildPythonPackage rec {
-    pname = "librosa";
-    name = "${pname}-${version}";
-    version = "0.4.3";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "209626c53556ca3922e52d2fae767bf5b398948c867fcc8898f948695dacb247";
-    };
-
-    propagatedBuildInputs = with self; [ joblib matplotlib six scikitlearn
-      decorator audioread resampy ];
-
-    # No tests
-    doCheck = false;
-
-    meta = {
-      description = "Python module for audio and music processing";
-      homepage = http://librosa.github.io/;
-      license = licenses.isc;
-    };
-  };
+  librosa = callPackage ../development/python-modules/librosa { };
 
   joblib = callPackage ../development/python-modules/joblib { };
 
