@@ -2145,22 +2145,7 @@ in {
 
   joblib = callPackage ../development/python-modules/joblib { };
 
-  safe = buildPythonPackage rec {
-    version = "0.4";
-    name = "Safe-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Safe/${name}.tar.gz";
-      sha256 = "a2fdac9fe8a9dcf02b438201d6ce0b7be78f85dc6492d03edfb89be2adf489de";
-    };
-
-    buildInputs = with self; [ nose ];
-    meta = {
-      homepage = "https://github.com/lepture/safe";
-      license = licenses.bsd3;
-      description = "Check password strength";
-    };
-  };
+  safe = callPackage ../development/python-modules/safe { };
 
   samplerate = buildPythonPackage rec {
     name = "scikits.samplerate-${version}";
