@@ -2809,23 +2809,7 @@ in {
 
   mock-open = callPackage ../development/python-modules/mock-open { };
 
-  modestmaps = buildPythonPackage rec {
-    name = "ModestMaps-1.4.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/M/ModestMaps/${name}.tar.gz";
-      sha256 = "0vyi1m9q4pc34i6rq5agb4x3qicx5sjlbxwmxfk70k2l5mnbjca3";
-    };
-
-    disabled = !isPy27;
-    propagatedBuildInputs = with self; [ pillow ];
-
-    meta = {
-      description = "A library for building interactive maps";
-      homepage = http://modestmaps.com;
-      license = stdenv.lib.licenses.bsd3;
-    };
-  };
+  modestmaps = callPackage ../development/python-modules/modestmaps { };
 
   # Needed here because moinmoin is loaded as a Python library.
   moinmoin = callPackage ../development/python-modules/moinmoin { };
