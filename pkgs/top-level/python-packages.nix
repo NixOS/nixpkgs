@@ -2797,25 +2797,7 @@ in {
 
   brotlipy = callPackage ../development/python-modules/brotlipy { };
 
-  sortedcollections = buildPythonPackage rec {
-    name = "sortedcollections-${version}";
-    version = "0.4.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sortedcollections/${name}.tar.gz";
-      sha256 = "12dlzln9gyv8smsy2k6d6dmr0ywrpwyrr1cjy649ia5h1g7xdvwa";
-    };
-    buildInputs = [ self.sortedcontainers ];
-
-    # wants to test all python versions with tox:
-    doCheck = false;
-
-    meta = {
-      description = "Python Sorted Collections";
-      homepage = http://www.grantjenks.com/docs/sortedcollections/;
-      license = licenses.asl20;
-    };
-  };
+  sortedcollections = callPackage ../development/python-modules/sortedcollections { };
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
 
