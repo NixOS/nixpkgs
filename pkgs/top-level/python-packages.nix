@@ -2111,22 +2111,7 @@ in {
 
   pyramid_mako = callPackage ../development/python-modules/pyramid_mako { };
 
-  pyramid_exclog = buildPythonPackage rec {
-    name = "pyramid_exclog-0.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid_exclog/${name}.tar.gz";
-      sha256 = "a58c82866c3e1a350684e6b83b440d5dc5e92ca5d23794b56d53aac06fb65a2c";
-    };
-
-    propagatedBuildInputs = with self; [ pyramid ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
+  pyramid_exclog = callPackage ../development/python-modules/pyramid_exclog { };
 
   pyramid_multiauth = buildPythonPackage rec {
     name = "pyramid_multiauth-${version}";
