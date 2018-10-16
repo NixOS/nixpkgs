@@ -2,6 +2,7 @@
 , callPackage
 , ninja, meson , pkgconfig
 , libusb, readline, libewf, perl, zlib, openssl
+, libuv
 , gtk2 ? null, vte ? null, gtkdialog ? null
 , python ? null
 , ruby ? null
@@ -62,12 +63,15 @@ let
         "-Dr2_gittip=${gittip}"
         # 2.8.0 expects this, but later it becomes an option with default=false.
         "-Dcapstone_in_builddir=true"
+
+        "-Duse_sys_openssl=true"
+        "-Duse_sys_zlib=true"
       ];
 
       enableParallelBuilding = true;
 
       nativeBuildInputs = [ pkgconfig ninja meson ];
-      buildInputs = [ readline libusb libewf perl zlib openssl]
+      buildInputs = [ readline libusb libewf perl zlib openssl libuv ]
         ++ optional useX11 [gtkdialog vte gtk2]
         ++ optional rubyBindings [ruby]
         ++ optional pythonBindings [python]
