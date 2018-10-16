@@ -36,6 +36,7 @@ let
 
     gxi = callPackage ./gxi { };
     kod = callPackage ./kod { };
+    xi-gtk = callPackage ./xi-gtk { };
     xi-term = callPackage ./xi-term { };
   };
 in self

@@ -19700,6 +19700,7 @@ with pkgs;
     gxi
     kod
     xi-core
+    xi-gtk
     xi-term;
 
   xen = xenPackages.xen-vanilla;
