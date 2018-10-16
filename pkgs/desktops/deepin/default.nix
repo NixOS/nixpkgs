@@ -6,6 +6,7 @@ let
     dbus-factory = callPackage ./dbus-factory { };
     dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
+    dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     deepin-desktop-schemas = callPackage ./deepin-desktop-schemas { };
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
