@@ -2624,11 +2624,11 @@ let
   }) // {inherit libX11 libXmu xproto ;};
 
   xprop = (mkDerivation "xprop" {
-    name = "xprop-1.2.2";
+    name = "xprop-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xprop-1.2.2.tar.bz2;
-      sha256 = "1ilvhqfjcg6f1hqahjkp8qaay9rhvmv2blvj3w9asraq0aqqivlv";
+      url = mirror://xorg/individual/app/xprop-1.2.3.tar.bz2;
+      sha256 = "06sjgahjiz85v0k0pmv5x05chc591xynl5ah1bqzz1bdr0lgnanj";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
