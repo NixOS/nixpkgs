@@ -32,11 +32,11 @@ let
   }) // {inherit ;};
 
   appres = (mkDerivation "appres" {
-    name = "appres-1.0.4";
+    name = "appres-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/appres-1.0.4.tar.bz2;
-      sha256 = "139yp08qy1w6dccamdy0fh343yhaf1am1v81m2j435nd4ya4wqcz";
+      url = mirror://xorg/individual/app/appres-1.0.5.tar.bz2;
+      sha256 = "0a2r4sxky3k7b3kdb5pbv709q9b5zi3gxjz336wl66f828vqkbgz";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto libXt ];
