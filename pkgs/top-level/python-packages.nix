@@ -1978,22 +1978,7 @@ in {
 
   mwlib = callPackage ../development/python-modules/mwlib { };
 
-  mwlib-ext = buildPythonPackage rec {
-    version = "0.13.2";
-    name = "mwlib.ext-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.pediapress.com/packages/mirror/${name}.zip";
-      sha256 = "9229193ee719568d482192d9d913b3c4bb96af7c589d6c31ed4a62caf5054278";
-    };
-
-    meta = {
-      description = "Dependencies for mwlib markup";
-      homepage = "http://pediapress.com/code/";
-      license = licenses.bsd3;
-    };
-  };
+  mwlib-ext = callPackage ../development/python-modules/mwlib-ext { };
 
   mwlib-rl = buildPythonPackage rec {
     version = "0.14.6";
