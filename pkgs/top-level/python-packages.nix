@@ -2286,25 +2286,7 @@ in {
 
   falcon = callPackage ../development/python-modules/falcon { };
 
-  hug = buildPythonPackage rec {
-    name = "hug-2.1.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hug/${name}.tar.gz";
-      sha256 = "93325e13706594933a9afb0d4f0b0748134494299038f07df41152baf6f89f4c";
-    };
-    disabled = !isPy3k;
-
-    propagatedBuildInputs = with self; [ falcon requests ];
-
-    # tests are not shipped in the tarball
-    doCheck = false;
-
-    meta = {
-      description = "A Python framework that makes developing APIs as simple as possible, but no simpler";
-      homepage = https://github.com/timothycrosley/hug;
-      license = licenses.mit;
-    };
-  };
+  hug = callPackage ../development/python-modules/hug { };
 
   flup = callPackage ../development/python-modules/flup { };
 
