@@ -2189,22 +2189,7 @@ in {
 
   repoze_lru = callPackage ../development/python-modules/repoze_lru { };
 
-  repoze_sphinx_autointerface = buildPythonPackage rec {
-    name = "repoze.sphinx.autointerface-0.7.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/repoze.sphinx.autointerface/${name}.tar.gz";
-      sha256 = "97ef5fac0ab0a96f1578017f04aea448651fa9f063fc43393a8253bff8d8d504";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface sphinx ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
+  repoze_sphinx_autointerface =  callPackage ../development/python-modules/repoze_sphinx_autointerface { };
 
   setuptools-git = buildPythonPackage rec {
     name = "setuptools-git-${version}";
