@@ -2249,22 +2249,7 @@ in {
 
   django_environ = callPackage ../development/python-modules/django_environ { };
 
-  django_evolution = buildPythonPackage rec {
-    name = "django_evolution-0.7.5";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django_evolution/${name}.tar.gz";
-      sha256 = "1qbcx54hq8iy3n2n6cki3bka1m9rp39np4hqddrm9knc954fb7nv";
-    };
-
-    propagatedBuildInputs = with self; [ django ];
-
-    meta = {
-      description = "A database schema evolution tool for the Django web framework";
-      homepage = http://code.google.com/p/django-evolution/;
-    };
-  };
+  django_evolution = callPackage ../development/python-modules/django_evolution { };
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
 
