@@ -2338,22 +2338,7 @@ in {
 
   hg-git = callPackage ../development/python-modules/hg-git { };
 
-  dtopt = buildPythonPackage rec {
-    name = "dtopt-0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dtopt/${name}.tar.gz";
-      sha256 = "06ae07a12294a7ba708abaa63f838017d1a2faf6147a1e7a14ca4fa28f86da7f";
-    };
-
-    meta = {
-      description = "Add options to doctest examples while they are running";
-      homepage = https://pypi.python.org/pypi/dtopt;
-    };
-    # Test contain Python 2 print
-    disabled = isPy3k;
-  };
-
+  dtopt = callPackage ../development/python-modules/dtopt { };
 
   ecdsa = buildPythonPackage rec {
     name = "ecdsa-${version}";
