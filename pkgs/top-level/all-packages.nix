@@ -19695,7 +19695,12 @@ with pkgs;
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xenPackages = recurseIntoAttrs (callPackage ../applications/virtualization/xen/packages.nix {});
+
+  inherit (callPackages ../applications/editors/xi { })
+    gxi
+    kod
+    xi-core
+    xi-term;
 
   xen = xenPackages.xen-vanilla;
   xen-slim = xenPackages.xen-slim;
