@@ -2109,18 +2109,7 @@ in {
 
   pyramid_jinja2 = callPackage ../development/python-modules/pyramid_jinja2 { };
 
-  pyramid_mako = buildPythonPackage rec {
-    name = "pyramid_mako-0.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid_mako/${name}.tar.gz";
-      sha256 = "00811djmsc4rz20kpy2paam05fbx6dmrv2i5jf90f6xp6zw4isy6";
-    };
-
-    buildInputs = with self; [ webtest ];
-    propagatedBuildInputs = with self; [ pyramid Mako ];
-  };
-
+  pyramid_mako = callPackage ../development/python-modules/pyramid_mako { };
 
   pyramid_exclog = buildPythonPackage rec {
     name = "pyramid_exclog-0.7";
