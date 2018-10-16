@@ -2482,24 +2482,7 @@ in {
 
   inflection = callPackage ../development/python-modules/inflection { };
 
-  influxdb = buildPythonPackage rec {
-    name = "influxdb-4.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/influxdb/${name}.tar.gz";
-      sha256 = "0injsml6zmb3hkgc03117fdlg573kbfgjbijpd5npf0vsy0xnpvz";
-    };
-
-    # ImportError: No module named tests
-    doCheck = false;
-    propagatedBuildInputs = with self; [ requests dateutil pytz six ];
-
-    meta = {
-      description = "Python client for InfluxDB";
-      homepage = https://github.com/influxdb/influxdb-python;
-      license = licenses.mit;
-    };
-  };
+  influxdb = callPackage ../development/python-modules/influxdb { };
 
   infoqscraper = buildPythonPackage rec {
     name = pname + "-" + version;
