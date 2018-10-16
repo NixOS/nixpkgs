@@ -1942,30 +1942,6 @@ in {
 
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
 
-  lightblue = buildPythonPackage rec {
-    pname = "lightblue";
-    version = "0.4";
-    name = "${pname}-${version}";
-    disabled = isPy3k; # build fails, 2018-04-11
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-      sha256 = "016h1mlhpqxjj25lcvl4fqc19k8ifmsv6df7rhr12fyfcrp5i14d";
-    };
-
-    buildInputs = [ pkgs.bluez pkgs.openobex ];
-
-
-    meta = {
-      homepage = http://lightblue.sourceforge.net;
-      description = "Cross-platform Bluetooth API for Python";
-      maintainers = with maintainers; [ leenaars ];
-      license = licenses.gpl3;
-      platforms = platforms.all;
-    };
-  };
-
-
   lightning = buildPythonPackage rec {
     version = "1.2.1";
     name = "lightning-python-${version}";
@@ -2001,6 +1977,7 @@ in {
       url = "mirror://pypi/j/jupyter/${name}.tar.gz";
       sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
     };
+  lightblue = callPackage ../development/python-modules/lightblue { };
 
     propagatedBuildInputs = with self; [
       notebook
