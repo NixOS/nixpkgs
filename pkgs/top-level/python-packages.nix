@@ -2474,25 +2474,7 @@ in {
 
   httpretty = callPackage ../development/python-modules/httpretty { };
 
-  icalendar = buildPythonPackage rec {
-    version = "3.9.0";
-    name = "icalendar-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/icalendar/${name}.tar.gz";
-      sha256 = "93d0b94eab23d08f62962542309916a9681f16de3d5eca1c75497f30f1b07792";
-    };
-
-    buildInputs = with self; [ setuptools ];
-    propagatedBuildInputs = with self; [ dateutil pytz ];
-
-    meta = {
-      description = "A parser/generator of iCalendar files";
-      homepage = "http://icalendar.readthedocs.org/";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ olcai ];
-    };
-  };
+  icalendar = callPackage ../development/python-modules/icalendar { };
 
   imageio = buildPythonPackage rec {
     name = "imageio-${version}";
