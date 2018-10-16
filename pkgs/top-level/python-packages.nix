@@ -2107,24 +2107,7 @@ in {
 
   pyramid_chameleon = callPackage ../development/python-modules/pyramid_chameleon { };
 
-  pyramid_jinja2 = buildPythonPackage rec {
-    name = "pyramid_jinja2-${version}";
-    version = "2.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid_jinja2/${name}.tar.gz";
-      sha256 = "93c86e3103b454301f4d66640191aba047f2ab85ba75647aa18667b7448396bd";
-    };
-
-    buildInputs = with self; [ webtest ];
-    propagatedBuildInputs = with self; [ jinja2 pyramid ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
+  pyramid_jinja2 = callPackage ../development/python-modules/pyramid_jinja2 { };
 
   pyramid_mako = buildPythonPackage rec {
     name = "pyramid_mako-0.3.1";
