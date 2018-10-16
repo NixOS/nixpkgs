@@ -2002,29 +2002,7 @@ in {
 
   oset = callPackage ../development/python-modules/oset { };
 
-  pamela = buildPythonPackage rec {
-    name = "pamela-${version}";
-    version = "0.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pamela/${name}.tar.gz";
-      sha256 = "0ssxbqsshrm8p642g3h6wsq20z1fsqhpdvqdm827gn6dlr38868y";
-    };
-
-    postUnpack = ''
-      substituteInPlace $sourceRoot/pamela.py --replace \
-        'find_library("pam")' \
-        '"${getLib pkgs.pam}/lib/libpam.so"'
-    '';
-
-    doCheck = false;
-
-    meta = {
-      description = "PAM interface using ctypes";
-      homepage = "https://github.com/minrk/pamela";
-      license = licenses.mit;
-    };
-  };
+  pamela = callPackage ../development/python-modules/pamela { };
 
   # These used to be here but were moved to all-packages, but I'll leave them around for a while.
   pants = pkgs.pants;
