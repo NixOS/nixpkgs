@@ -1,7 +1,8 @@
-diff -ru3 moin-1.9.9-old/MoinMoin/conftest.py moin-1.9.9-new/MoinMoin/conftest.py
---- moin-1.9.9-old/MoinMoin/conftest.py	2016-10-31 23:44:02.000000000 +0300
-+++ moin-1.9.9-new/MoinMoin/conftest.py	2018-02-18 12:13:19.551929093 +0300
-@@ -22,10 +22,11 @@
+diff --git a/MoinMoin/conftest.py b/MoinMoin/conftest.py
+index 8a84ad39..649d13d7 100644
+--- a/MoinMoin/conftest.py
++++ b/MoinMoin/conftest.py
+@@ -22,10 +22,11 @@ use a Config class to define the required configuration within the test class.
  
  import atexit
  import sys
