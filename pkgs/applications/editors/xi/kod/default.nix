@@ -19,6 +19,8 @@ buildGoPackage rec {
 
   buildInputs = [ wrapXiFrontendHook ];
 
+  patches = [ ./tcell-bump.patch ];
+
   postInstall = "wrapXiFrontend $bin/bin/*";
 
   meta = with lib; {

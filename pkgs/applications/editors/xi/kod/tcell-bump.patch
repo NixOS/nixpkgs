@@ -1,0 +1,27 @@
+From 6f2346527046bcfd9dfbf562255a879a6c643365 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Tue, 16 Oct 2018 17:01:43 -0500
+Subject: [PATCH] tcell: v1.0.0 -> v1.1.0
+
+---
+ Gopkg.lock | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Gopkg.lock b/Gopkg.lock
+index 1284da2..32d23e1 100644
+--- a/Gopkg.lock
++++ b/Gopkg.lock
+@@ -13,8 +13,8 @@
+     ".",
+     "terminfo"
+   ]
+-  revision = "061d51a604c546b48e92253cb65190d76cecf4c6"
+-  version = "v1.0.0"
++  revision = "de7e78efa4a71b3f36c7154989c529dbdf9ae623"
++  version = "v1.1.0"
+ 
+ [[projects]]
+   name = "github.com/lucasb-eyer/go-colorful"
+-- 
+2.19.1
+

@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/gdamore/tcell";
-      rev =  "061d51a604c546b48e92253cb65190d76cecf4c6";
-      sha256 = "0mwlncdhbz0fh4rly0sbrn30ms9vdvqv58dal3viv4alqfrij569";
+      rev =  "de7e78efa4a71b3f36c7154989c529dbdf9ae623";
+      sha256 = "1ly3gqkziw01cb7h64k0wc4myzfcsr9hl7xznxd8k2yqzqvmhljz";
     };
   }
   {
