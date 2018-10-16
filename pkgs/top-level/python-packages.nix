@@ -2791,26 +2791,7 @@ in {
 
   pendulum = callPackage ../development/python-modules/pendulum { };
 
-  pocket = buildPythonPackage rec {
-    name = "pocket-${version}";
-    version = "0.3.6";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/p/pocket/${name}.tar.gz";
-      sha256 = "1fc9vc5nyzf1kzmnrs18dmns7nn8wjfrg7br1w4c5sgs35mg2ywh";
-    };
-
-    buildInputs = with self; [
-      requests
-    ];
-
-    meta = {
-      description = "Wrapper for the pocket API";
-      homepage    = "https://github.com/tapanpandita/pocket";
-      license     = licenses.bsd3;
-      maintainers = with maintainers; [ ericsagnes ];
-    };
-  };
+  pocket = callPackage ../development/python-modules/pocket { };
 
   mistune = callPackage ../development/python-modules/mistune { };
 
