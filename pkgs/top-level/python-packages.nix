@@ -2468,27 +2468,7 @@ in {
 
   uncompyle6 = callPackage ../development/python-modules/uncompyle6 { };
 
-  lsi = buildPythonPackage rec {
-    name = "lsi-${version}";
-    version = "0.2.2";
-    disabled = isPy3k;
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/lsi/${name}.tar.gz";
-      sha256 = "0429iilb06yhsmvj3xp6wyhfh1rp4ndxlhwrm80r97z0w7plrk94";
-    };
-    propagatedBuildInputs = [
-      self.colored
-      self.boto
-      pkgs.openssh
-      pkgs.which
-    ];
-    meta = {
-      description = "CLI for querying and SSHing onto AWS EC2 instances";
-      homepage = https://github.com/NarrativeScience/lsi;
-      maintainers = [maintainers.adnelson];
-      license = licenses.mit;
-    };
-  };
+  lsi = callPackage ../development/python-modules/lsi { };
 
   hkdf = buildPythonPackage rec {
     name = "hkdf-${version}";
