@@ -2822,26 +2822,7 @@ in {
 
   mozsvc = callPackage ../development/python-modules/mozsvc { };
 
-  mpmath = buildPythonPackage rec {
-    name = "mpmath-0.19";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mpmath/${name}.tar.gz";
-      sha256 = "08ijsr4ifrqv3cjc26mkw0dbvyygsa99in376hr4b96ddm1gdpb8";
-    };
-
-    meta = {
-      homepage    = http://mpmath.googlecode.com;
-      description = "A pure-Python library for multiprecision floating arithmetic";
-      license     = licenses.bsd3;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-  };
-
+  mpmath = callPackage ../development/python-modules/mpmath { };
 
   mpd = buildPythonPackage rec {
     name = "python-mpd-0.3.0";
