@@ -1255,6 +1255,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libfontenc freetype xproto zlib ;};
 
+  oclock = (mkDerivation "oclock" {
+    name = "oclock-1.0.4";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/oclock-1.0.4.tar.bz2;
+      sha256 = "1zmfzfmdp42nvapf0qz1bc3i3waq5sjrpkgfw64qs4nmq30wy86c";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXext libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libX11 libXext libXmu libXt ;};
+
   presentproto = (mkDerivation "presentproto" {
     name = "presentproto-1.1";
     builder = ./builder.sh;
