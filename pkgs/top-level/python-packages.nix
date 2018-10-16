@@ -2161,32 +2161,7 @@ in {
 
   s2clientprotocol = callPackage ../development/python-modules/s2clientprotocol { };
 
-  statsd = buildPythonPackage rec {
-    name = "statsd-${version}";
-    version = "3.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/statsd/${name}.tar.gz";
-      sha256 = "3fa92bf0192af926f7a0d9be031fe3fd0fbaa1992d42cf2f07e68f76ac18288e";
-    };
-
-    buildInputs = with self; [ nose mock ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      description = "A simple statsd client";
-      license = licenses.mit;
-      homepage = https://github.com/jsocol/pystatsd;
-    };
-
-    patchPhase = ''
-      # Failing test: ERROR: statsd.tests.test_ipv6_resolution_udp
-      sed -i 's/test_ipv6_resolution_udp/noop/' statsd/tests.py
-      # well this is a noop, but so it was before
-      sed -i 's/assert_called_once()/called/' statsd/tests.py
-    '';
-
-  };
+  statsd = callPackage ../development/python-modules/statsd { };
 
   py3status = callPackage ../development/python-modules/py3status {};
 
