@@ -2750,59 +2750,7 @@ in {
 
   metaphone = callPackage ../development/python-modules/metaphone { };
 
-  mezzanine = buildPythonPackage rec {
-    version = "3.1.10";
-    name = "mezzanine-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/stephenmcd/mezzanine/archive/${version}.tar.gz";
-      sha256 = "1cd7d3dji8q4mvcnf9asxn8j109pd5g5d5shr6xvn0iwr35qprgi";
-    };
-    patches = [ ../development/python-modules/mezzanine/writable_settings.patch ];
-
-    disabled = isPyPy;
-
-    buildInputs = with self; [ pyflakes pep8 ];
-    propagatedBuildInputs = with self; [
-      django filebrowser_safe grappelli_safe bleach tzlocal beautifulsoup4
-      requests requests_oauthlib future pillow
-    ];
-
-    # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
-    doCheck = false;
-    # sed calls will be unecessary in v3.1.11+
-    preConfigure = ''
-      sed -i 's/==/>=/' setup.py
-    '';
-
-    LC_ALL="en_US.UTF-8";
-
-    meta = {
-      description = ''
-        A content management platform built using the Django framework
-      '';
-      longDescription = ''
-        Mezzanine is a powerful, consistent, and flexible content management
-        platform. Built using the Django framework, Mezzanine provides a
-        simple yet highly extensible architecture that encourages diving in and
-        hacking on the code. Mezzanine is BSD licensed and supported by a
-        diverse and active community.
-
-        In some ways, Mezzanine resembles tools such as Wordpress that provide
-        an intuitive interface for managing pages, blog posts, form data, store
-        products, and other types of content. But Mezzanine is also different.
-        Unlike many other platforms that make extensive use of modules or
-        reusable applications, Mezzanine provides most of its functionality by
-        default. This approach yields a more integrated and efficient platform.
-      '';
-      homepage = http://mezzanine.jupo.org/;
-      downloadPage = https://github.com/stephenmcd/mezzanine/releases;
-      license = licenses.free;
-      maintainers = with maintainers; [ prikhi ];
-      platforms = platforms.linux;
-      broken = true; # broken dependency of django within filebrowser_safe
-    };
-  };
+  mezzanine = callPackage ../development/python-modules/mezzanine { };
 
   micawber = callPackage ../development/python-modules/micawber { };
 
