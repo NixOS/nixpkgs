@@ -1958,17 +1958,7 @@ in {
 
   PyLTI = callPackage ../development/python-modules/pylti { };
 
-  logilab_astng = buildPythonPackage rec {
-    name = "logilab-astng-0.24.3";
   lmdb = callPackage ../development/python-modules/lmdb { };
-
-    src = pkgs.fetchurl {
-      url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
-      sha256 = "0np4wpxyha7013vkkrdy54dvnil67gzi871lg60z8lap0l5h67wn";
-    };
-
-    propagatedBuildInputs = with self; [ logilab_common ];
-  };
 
   lpod = buildPythonPackage rec {
     version = "1.1.7";
@@ -1977,6 +1967,7 @@ in {
     disabled = isPy3k;
 
     propagatedBuildInputs = with self; [ lxml docutils pillow ];
+  logilab_astng = callPackage ../development/python-modules/logilab_astng { };
 
     src = pkgs.fetchFromGitHub {
       owner = "lpod";
