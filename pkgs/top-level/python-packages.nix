@@ -1814,22 +1814,7 @@ in {
 
   gmusicapi = callPackage ../development/python-modules/gmusicapi { };
 
-
-  gnureadline = buildPythonPackage rec {
-    version = "6.3.3";
-    name = "gnureadline-${version}";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gnureadline/${name}.tar.gz";
-      sha256 = "1ghck2zz4xbqa3wz73brgjhrqj55p9hc1fq6c9zb09dnyhwb0nd2";
-    };
-
-    buildInputs = [ pkgs.ncurses ];
-    patchPhase = ''
-      substituteInPlace setup.py --replace "/bin/bash" "${pkgs.bash}/bin/bash"
-    '';
-  };
+  gnureadline = callPackage ../development/python-modules/gnureadline { };
 
   gnutls = buildPythonPackage rec {
     pname = "python-gnutls";
