@@ -23,6 +23,10 @@ clean:
 	rm -rf ./out/ ./highlightjs
 	rm _build/xsl
 
+.PHONY: doc-tests
+doc-tests:
+	./functions/library/test.py
+
 .PHONY: validate
 validate: manual-full.xml
 	jing "$$RNG" manual-full.xml

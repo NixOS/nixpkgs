@@ -11,6 +11,7 @@ what feels like extra quotes.
 -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:docbook="http://docbook.org/ns/docbook"
     version="1.0">
 
   <xsl:param name="admon.graphics" select="1"/>
@@ -22,4 +23,11 @@ what feels like extra quotes.
   <xsl:param name="html.script" select="'./highlightjs/highlight.pack.js ./highlightjs/loader.js'"/>
   <xsl:param name="admon.style" select="''" />
   <xsl:param name="callout.graphics.extension" select="'.svg'" />
+
+  <xsl:template match="docbook:programlisting[@role='context']">
+    <!--
+        Delete "context" programlistings, which provide execution
+        context to the doc-test tests.
+    -->
+  </xsl:template>
 </xsl:stylesheet>

@@ -6,7 +6,8 @@ in
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
-  buildInputs = with pkgs; [ pandoc libxml2 libxslt zip jing  xmlformat ];
+  buildInputs = with pkgs; [ pandoc libxml2 libxslt zip jing xmlformat
+    python3 nix ];
 
   src = ./.;
 
@@ -23,6 +24,11 @@ pkgs.stdenv.mkDerivation {
     rm -rf ./functions/library/locations.xml
     ln -s ${locationsXml} ./functions/library/locations.xml
     echo ${lib.version} > .version
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    NIX_STATE_DIR=/tmp/var python3 ./functions/library/test.py --lib-dir ${../lib}
   '';
 
   installPhase = ''
