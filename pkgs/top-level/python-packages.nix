@@ -2374,22 +2374,7 @@ in {
 
   feedparser = callPackage ../development/python-modules/feedparser { };
 
-  pyfribidi = buildPythonPackage rec {
-    version = "0.11.0";
-    name = "pyfribidi-${version}";
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyfribidi/${name}.zip";
-      sha256 = "6f7d83c09eae0cb98a40b85ba3dedc31af4dbff8fc4425f244c1e9f44392fded";
-    };
-
-    meta = {
-      description = "A simple wrapper around fribidi";
-      homepage = https://github.com/pediapress/pyfribidi;
-      license = stdenv.lib.licenses.gpl2;
-    };
-  };
+  pyfribidi = callPackage ../development/python-modules/pyfribidi { };
 
   docker_compose = callPackage ../development/python-modules/docker_compose {};
 
