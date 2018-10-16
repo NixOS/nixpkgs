@@ -2775,25 +2775,7 @@ in {
     };
   };
 
-  moviepy = buildPythonPackage rec {
-    name = "moviepy-${version}";
-    version = "0.2.2.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/moviepy/${name}.tar.gz";
-      sha256 = "d937d817e534efc54eaee2fc4c0e70b48fcd81e1528cd6425f22178704681dc3";
-    };
-
-    # No tests
-    doCheck = false;
-    propagatedBuildInputs = with self; [ numpy decorator imageio tqdm ];
-
-    meta = {
-      description = "Video editing with Python";
-      homepage = http://zulko.github.io/moviepy/;
-      license = licenses.mit;
-    };
-  };
+  moviepy = callPackage ../development/python-modules/moviepy { };
 
   mozterm = callPackage ../development/python-modules/mozterm { };
 
