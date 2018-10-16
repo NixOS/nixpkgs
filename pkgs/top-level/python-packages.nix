@@ -2366,18 +2366,7 @@ in {
 
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
 
-  gevent-socketio = buildPythonPackage rec {
-    name = "gevent-socketio-0.3.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gevent-socketio/${name}.tar.gz";
-      sha256 = "1zra86hg2l1jcpl9nsnqagy3nl3akws8bvrbpgdxk15x7ywllfak";
-    };
-
-    buildInputs = with self; [ versiontools gevent-websocket mock pytest ];
-    propagatedBuildInputs = with self; [ gevent ];
-
-  };
+  gevent-socketio = callPackage ../development/python-modules/gevent-socketio { };
 
   geopandas = callPackage ../development/python-modules/geopandas { };
 
