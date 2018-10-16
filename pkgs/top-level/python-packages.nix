@@ -2346,26 +2346,7 @@ in {
 
   elpy = callPackage ../development/python-modules/elpy { };
 
-  enum = buildPythonPackage rec {
-    name = "enum-0.4.4";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/enum/${name}.tar.gz";
-      sha256 = "9bdfacf543baf2350df7613eb37f598a802f346985ca0dc1548be6494140fdff";
-    };
-
-    doCheck = !isPyPy;
-
-    buildInputs = with self; [ ];
-
-    propagatedBuildInputs = with self; [ ];
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/enum/;
-      description = "Robust enumerated type support in Python";
-    };
-  };
+  enum = callPackage ../development/python-modules/enum { };
 
   enum-compat = callPackage ../development/python-modules/enum-compat { };
 
