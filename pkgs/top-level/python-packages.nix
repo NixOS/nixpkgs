@@ -2165,21 +2165,7 @@ in {
 
   py3status = callPackage ../development/python-modules/py3status {};
 
-  multi_key_dict = buildPythonPackage rec {
-    name = "multi_key_dict-${version}";
-    version = "2.0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/multi_key_dict/multi_key_dict-${version}.tar.gz";
-      sha256 = "17lkx4rf4waglwbhc31aak0f28c63zl3gx5k5i1iq2m3gb0xxsyy";
-    };
-
-    meta = with stdenv.lib; {
-      description = "multi_key_dict";
-      homepage = "https://github.com/formiaczek/multi_key_dict";
-    };
-  };
-
+  multi_key_dict = callPackage ../development/python-modules/multi_key_dict { };
 
   pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
 
