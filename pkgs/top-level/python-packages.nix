@@ -2101,47 +2101,7 @@ in {
 
   pythonix = toPythonModule (callPackage ../development/python-modules/pythonix { });
 
-  pyramid = buildPythonPackage rec {
-    pname = "pyramid";
-    version = "1.9.1";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0dhbzc4q0vsnv3aihy728aczg56xs6h9s1rmvr096q4lb6yln3w4";
-    };
-
-    checkInputs = with self; [
-      docutils
-      virtualenv
-      webtest
-      zope_component
-    ];
-
-    propagatedBuildInputs = with self; [
-      hupper
-      PasteDeploy
-      plaster
-      plaster-pastedeploy
-      repoze_lru
-      repoze_sphinx_autointerface
-      translationstring
-      venusian
-      webob
-      zope_deprecation
-      zope_interface
-    ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-
-    # Failing tests
-    # https://github.com/Pylons/pyramid/issues/1899
-    doCheck = !isPy35;
-
-  };
+  pyramid = callPackage ../development/python-modules/pyramid { };
 
   pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
 
