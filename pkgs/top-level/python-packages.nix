@@ -2241,27 +2241,7 @@ in {
 
   django_appconf = callPackage ../development/python-modules/django_appconf { };
 
-  django_colorful = buildPythonPackage rec {
-    name = "django-colorful-${version}";
-    version = "1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-colorful/${name}.tar.gz";
-      sha256 = "0y34hzvfrm1xbxrd8frybc9yzgqvz4c07frafipjikw7kfjsw8az";
-    };
-
-    # Tests aren't run
-    doCheck = false;
-
-    # Requires Django >= 1.8
-    buildInputs = with self; [ django ];
-
-    meta = {
-      description = "Django extension that provides database and form color fields";
-      homepage = https://github.com/charettes/django-colorful;
-      license = licenses.mit;
-    };
-  };
+  django_colorful = callPackage ../development/python-modules/django_colorful { };
 
   django_compressor = callPackage ../development/python-modules/django_compressor { };
 
