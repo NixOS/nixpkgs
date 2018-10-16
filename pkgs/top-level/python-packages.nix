@@ -2446,25 +2446,7 @@ in {
 
   hcs_utils = callPackage ../development/python-modules/hcs_utils { };
 
-  hetzner = buildPythonPackage rec {
-    name = "hetzner-${version}";
-    version = "0.8.1";
-
-    src = pkgs.fetchFromGitHub {
-      repo = "hetzner";
-      owner = "aszlig";
-      rev = "v${version}";
-      sha256 = "1xd1klvjskv0pg8ginih597jkk491a55b8dq80dsm61m5sbsx3vq";
-    };
-
-    meta = {
-      homepage = "https://github.com/RedMoonStudios/hetzner";
-      description = "High-level Python API for accessing the Hetzner robot";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ aszlig ];
-    };
-  };
-
+  hetzner = callPackage ../development/python-modules/hetzner { };
 
   htmllaundry = buildPythonPackage rec {
     name = "htmllaundry-2.0";
