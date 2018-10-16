@@ -2575,6 +2575,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 libXmu xproto ;};
 
+  xload = (mkDerivation "xload" {
+    name = "xload-1.1.3";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/xload-1.1.3.tar.bz2;
+      sha256 = "01sr6yd6yhyyfgn88l867w6h9dn5ikcynaz5rwji6xqxhw1lhkpk";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw libXmu xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libX11 libXaw libXmu xproto libXt ;};
+
   xlsatoms = (mkDerivation "xlsatoms" {
     name = "xlsatoms-1.1.2";
     builder = ./builder.sh;
