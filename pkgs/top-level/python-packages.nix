@@ -2336,25 +2336,7 @@ in {
     inherit (pkgs) git glibcLocales;
   };
 
-  hg-git = buildPythonPackage rec {
-    name = "hg-git-${version}";
-    version = "0.8.11";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hg-git/${name}.tar.gz";
-      sha256 = "08kw1sj3sq1q1571hwkc51w20ks9ysmlg93pcnmd6gr66bz02dyn";
-    };
-
-    propagatedBuildInputs = with self; [ dulwich ];
-
-    meta = {
-      description = "Push and pull from a Git server using Mercurial";
-      homepage = http://hg-git.github.com/;
-      maintainers = with maintainers; [ koral ];
-      license = stdenv.lib.licenses.gpl2;
-    };
-  };
+  hg-git = callPackage ../development/python-modules/hg-git { };
 
   dtopt = buildPythonPackage rec {
     name = "dtopt-0.1";
