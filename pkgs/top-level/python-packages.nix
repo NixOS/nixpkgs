@@ -2017,29 +2017,7 @@ in {
 
   pathtools = callPackage ../development/python-modules/pathtools { };
 
-  paver = buildPythonPackage rec {
-    version = "1.2.2";
-    name    = "Paver-${version}";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/P/Paver/Paver-${version}.tar.gz";
-      sha256 = "0lix9d33ndb3yk56sm1zlj80fbmxp0w60yk0d9pr2xqxiwi88sqy";
-    };
-
-    buildInputs = with self; [ cogapp mock virtualenv ];
-
-    propagatedBuildInputs = with self; [ nose ];
-
-    # the tests do not pass
-    doCheck = false;
-
-    meta = {
-      description = "A Python-based build/distribution/deployment scripting tool";
-      homepage    = https://github.com/paver/paver;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
+  paver = callPackage ../development/python-modules/paver { };
 
   passlib = callPackage ../development/python-modules/passlib { };
 
