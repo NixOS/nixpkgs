@@ -1411,6 +1411,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
+  viewres = (mkDerivation "viewres" {
+    name = "viewres-1.0.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/viewres-1.0.5.tar.bz2;
+      sha256 = "1mz319kfmvcrdpi22dmdr91mif1j0j3ck1f8mmnz5g1r9kl1in2y";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libXaw libXmu libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libXaw libXmu libXt ;};
+
   windowswmproto = (mkDerivation "windowswmproto" {
     name = "windowswmproto-1.0.4";
     builder = ./builder.sh;
