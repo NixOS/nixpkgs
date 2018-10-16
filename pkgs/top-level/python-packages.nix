@@ -1898,19 +1898,7 @@ in {
 
   ipfsapi = callPackage ../development/python-modules/ipfsapi { };
 
-  itsdangerous = buildPythonPackage rec {
-    name = "itsdangerous-0.24";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/itsdangerous/${name}.tar.gz";
-      sha256 = "06856q6x675ly542ig0plbqcyab6ksfzijlyf1hzhgg3sgwgrcyb";
-    };
-
-    meta = {
-      description = "Helpers to pass trusted data to untrusted environments and back";
-      homepage = "https://pypi.python.org/pypi/itsdangerous/";
-    };
-  };
+  itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
   iniparse = buildPythonPackage rec {
 
