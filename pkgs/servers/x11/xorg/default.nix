@@ -1399,6 +1399,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libICE libSM libXmu libXt ;};
 
+  transset = (mkDerivation "transset" {
+    name = "transset-1.0.2";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/transset-1.0.2.tar.bz2;
+      sha256 = "088v8p0yfn4r3azabp6662hqikfs2gjb9xmjjd45gnngwwp19b2b";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libX11 xproto ;};
+
   twm = (mkDerivation "twm" {
     name = "twm-1.0.10";
     builder = ./builder.sh;
