@@ -2352,19 +2352,7 @@ in {
 
   futures = callPackage ../development/python-modules/futures { };
 
-  gcovr = buildPythonPackage rec {
-    name = "gcovr-2.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gcovr/${name}.tar.gz";
-      sha256 = "2c878e03c2eff2282e64035bec0a30532b2b1173aadf08486401883b79e4dab1";
-    };
-
-    meta = {
-      description = "A Python script for summarizing gcov data";
-      license = "BSD";
-    };
-  };
+  gcovr = callPackage ../development/python-modules/gcovr { };
 
   gdal = toPythonModule (pkgs.gdal.override {
     pythonPackages = self;
