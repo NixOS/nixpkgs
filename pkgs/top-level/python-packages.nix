@@ -2464,21 +2464,7 @@ in {
 
   colored = callPackage ../development/python-modules/colored { };
 
-  xdis = buildPythonPackage rec {
-    name = "xdis-${version}";
-    version = "3.2.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xdis/${name}.tar.gz";
-      sha256 = "0g2lh70837vigcbc1i58349wp2xzrhlsg2ahc92sn8d3jwxja4dk";
-    };
-    propagatedBuildInputs = with self; [ nose six ];
-
-    meta = {
-      description = "Python cross-version byte-code disassembler and marshal routines";
-      homepage = https://github.com/rocky/python-xdis/;
-      license = licenses.mit;
-    };
-  };
+  xdis = callPackage ../development/python-modules/xdis { };
 
   uncompyle6 = buildPythonPackage rec {
     name = "uncompyle6-${version}";
