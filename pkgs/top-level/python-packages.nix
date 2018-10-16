@@ -2169,16 +2169,7 @@ in {
 
   pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
 
-  random2 = self.buildPythonPackage rec {
-    name = "random2-1.0.1";
-
-    doCheck = !isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/random2/${name}.zip";
-      sha256 = "34ad30aac341039872401595df9ab2c9dc36d0b7c077db1cea9ade430ed1c007";
-    };
-  };
+  random2 = callPackage ../development/python-modules/random2 { };
 
   scandir = callPackage ../development/python-modules/scandir { };
 
