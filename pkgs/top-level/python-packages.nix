@@ -2356,28 +2356,7 @@ in {
 
   et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
 
-  eventlet = buildPythonPackage rec {
-    pname = "eventlet";
-    version = "0.20.0";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "15bq5ybbigxnp5xwkps53zyhlg15lmcnq3ny2dppj0r0bylcs5rf";
-    };
-
-    buildInputs = with self; [ nose httplib2 pyopenssl  ];
-
-    doCheck = false;  # too much transient errors to bother
-
-    propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ] ++
-      (with self; [ enum-compat ]) ;
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/eventlet/;
-      description = "A concurrent networking library for Python";
-    };
-  };
+  eventlet = callPackage ../development/python-modules/eventlet { };
 
   exifread = buildPythonPackage rec {
     name = "ExifRead-2.1.2";
