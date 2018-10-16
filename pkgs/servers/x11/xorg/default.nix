@@ -23,7 +23,7 @@ let
     name = "applewmproto-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/applewmproto-1.4.2.tar.bz2;
+      url = mirror://xorg/individual/proto/applewmproto-1.4.2.tar.bz2;
       sha256 = "1zi4p07mp6jmk030p4gmglwxcwp0lzs5mi31y1b4rp8lsqxdxizw";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -59,7 +59,7 @@ let
     name = "bigreqsproto-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/bigreqsproto-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/proto/bigreqsproto-1.1.2.tar.bz2;
       sha256 = "07hvfm84scz8zjw14riiln2v4w03jlhp756ypwhq27g48jmic8a6";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -83,7 +83,7 @@ let
     name = "compositeproto-0.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/compositeproto-0.4.2.tar.bz2;
+      url = mirror://xorg/individual/proto/compositeproto-0.4.2.tar.bz2;
       sha256 = "1z0crmf669hirw4s7972mmp8xig80kfndja9h559haqbpvq5k4q4";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -95,7 +95,7 @@ let
     name = "damageproto-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/damageproto-1.2.1.tar.bz2;
+      url = mirror://xorg/individual/proto/damageproto-1.2.1.tar.bz2;
       sha256 = "0nzwr5pv9hg7c21n995pdiv0zqhs91yz3r8rn3aska4ykcp12z2w";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -107,7 +107,7 @@ let
     name = "dmxproto-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/dmxproto-2.3.1.tar.bz2;
+      url = mirror://xorg/individual/proto/dmxproto-2.3.1.tar.bz2;
       sha256 = "02b5x9dkgajizm8dqyx2w6hmqx3v25l67mgf35nj6sz0lgk52877";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -143,7 +143,7 @@ let
     name = "encodings-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/encodings-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/encodings-1.0.4.tar.bz2;
       sha256 = "0ffmaw80vmfwdgvdkp6495xgsqszb6s0iira5j0j6pd4i0lk3mnf";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -155,7 +155,7 @@ let
     name = "fixesproto-5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/fixesproto-5.0.tar.bz2;
+      url = mirror://xorg/individual/proto/fixesproto-5.0.tar.bz2;
       sha256 = "1ki4wiq2iivx5g4w5ckzbjbap759kfqd72yg18m3zpbb4hqkybxs";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -167,7 +167,7 @@ let
     name = "font-adobe-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-100dpi-1.0.3.tar.bz2;
       sha256 = "0m60f5bd0caambrk8ksknb5dks7wzsg7g7xaf0j21jxmx8rq9h5j";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -179,7 +179,7 @@ let
     name = "font-adobe-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-75dpi-1.0.3.tar.bz2;
       sha256 = "02advcv9lyxpvrjv8bjh1b797lzg6jvhipclz49z8r8y98g4l0n6";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -191,7 +191,7 @@ let
     name = "font-adobe-utopia-100dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-100dpi-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-utopia-100dpi-1.0.4.tar.bz2;
       sha256 = "19dd9znam1ah72jmdh7i6ny2ss2r6m21z9v0l43xvikw48zmwvyi";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -203,7 +203,7 @@ let
     name = "font-adobe-utopia-75dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-75dpi-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-utopia-75dpi-1.0.4.tar.bz2;
       sha256 = "152wigpph5wvl4k9m3l4mchxxisgsnzlx033mn5iqrpkc6f72cl7";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -215,7 +215,7 @@ let
     name = "font-adobe-utopia-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-type1-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-adobe-utopia-type1-1.0.4.tar.bz2;
       sha256 = "0xw0pdnzj5jljsbbhakc6q9ha2qnca1jr81zk7w70yl9bw83b54p";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -227,7 +227,7 @@ let
     name = "font-alias-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-alias-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-alias-1.0.3.tar.bz2;
       sha256 = "16ic8wfwwr3jicaml7b5a0sk6plcgc1kg84w02881yhwmqm3nicb";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -239,7 +239,7 @@ let
     name = "font-arabic-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-arabic-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-arabic-misc-1.0.3.tar.bz2;
       sha256 = "1x246dfnxnmflzf0qzy62k8jdpkb6jkgspcjgbk8jcq9lw99npah";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -251,7 +251,7 @@ let
     name = "font-bh-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-100dpi-1.0.3.tar.bz2;
       sha256 = "10cl4gm38dw68jzln99ijix730y7cbx8np096gmpjjwff1i73h13";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -263,7 +263,7 @@ let
     name = "font-bh-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-75dpi-1.0.3.tar.bz2;
       sha256 = "073jmhf0sr2j1l8da97pzsqj805f7mf9r2gy92j4diljmi8sm1il";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -275,7 +275,7 @@ let
     name = "font-bh-lucidatypewriter-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2;
       sha256 = "1fqzckxdzjv4802iad2fdrkpaxl4w0hhs9lxlkyraq2kq9ik7a32";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -287,7 +287,7 @@ let
     name = "font-bh-lucidatypewriter-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2;
       sha256 = "0cfbxdp5m12cm7jsh3my0lym9328cgm7fa9faz2hqj05wbxnmhaa";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -299,7 +299,7 @@ let
     name = "font-bh-ttf-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-ttf-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-ttf-1.0.3.tar.bz2;
       sha256 = "0pyjmc0ha288d4i4j0si4dh3ncf3jiwwjljvddrb0k8v4xiyljqv";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -311,7 +311,7 @@ let
     name = "font-bh-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bh-type1-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bh-type1-1.0.3.tar.bz2;
       sha256 = "1hb3iav089albp4sdgnlh50k47cdjif9p4axm0kkjvs8jyi5a53n";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -323,7 +323,7 @@ let
     name = "font-bitstream-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bitstream-100dpi-1.0.3.tar.bz2;
       sha256 = "1kmn9jbck3vghz6rj3bhc3h0w6gh0qiaqm90cjkqsz1x9r2dgq7b";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -335,7 +335,7 @@ let
     name = "font-bitstream-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bitstream-75dpi-1.0.3.tar.bz2;
       sha256 = "13plbifkvfvdfym6gjbgy9wx2xbdxi9hfrl1k22xayy02135wgxs";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -347,7 +347,7 @@ let
     name = "font-bitstream-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-type1-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-bitstream-type1-1.0.3.tar.bz2;
       sha256 = "1256z0jhcf5gbh1d03593qdwnag708rxqa032izmfb5dmmlhbsn6";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -359,7 +359,7 @@ let
     name = "font-cronyx-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-cronyx-cyrillic-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-cronyx-cyrillic-1.0.3.tar.bz2;
       sha256 = "0ai1v4n61k8j9x2a1knvfbl2xjxk3xxmqaq3p9vpqrspc69k31kf";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -371,7 +371,7 @@ let
     name = "font-cursor-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-cursor-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-cursor-misc-1.0.3.tar.bz2;
       sha256 = "0dd6vfiagjc4zmvlskrbjz85jfqhf060cpys8j0y1qpcbsrkwdhp";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -383,7 +383,7 @@ let
     name = "font-daewoo-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-daewoo-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-daewoo-misc-1.0.3.tar.bz2;
       sha256 = "1s2bbhizzgbbbn5wqs3vw53n619cclxksljvm759h9p1prqdwrdw";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -395,7 +395,7 @@ let
     name = "font-dec-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-dec-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-dec-misc-1.0.3.tar.bz2;
       sha256 = "0yzza0l4zwyy7accr1s8ab7fjqkpwggqydbm2vc19scdby5xz7g1";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -407,7 +407,7 @@ let
     name = "font-ibm-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-ibm-type1-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-ibm-type1-1.0.3.tar.bz2;
       sha256 = "1pyjll4adch3z5cg663s6vhi02k8m6488f0mrasg81ssvg9jinzx";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -419,7 +419,7 @@ let
     name = "font-isas-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-isas-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-isas-misc-1.0.3.tar.bz2;
       sha256 = "0rx8q02rkx673a7skkpnvfkg28i8gmqzgf25s9yi0lar915sn92q";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -431,7 +431,7 @@ let
     name = "font-jis-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-jis-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-jis-misc-1.0.3.tar.bz2;
       sha256 = "0rdc3xdz12pnv951538q6wilx8mrdndpkphpbblszsv7nc8cw61b";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -443,7 +443,7 @@ let
     name = "font-micro-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-micro-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-micro-misc-1.0.3.tar.bz2;
       sha256 = "1dldxlh54zq1yzfnrh83j5vm0k4ijprrs5yl18gm3n9j1z0q2cws";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -455,7 +455,7 @@ let
     name = "font-misc-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-cyrillic-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-misc-cyrillic-1.0.3.tar.bz2;
       sha256 = "0q2ybxs8wvylvw95j6x9i800rismsmx4b587alwbfqiw6biy63z4";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -467,7 +467,7 @@ let
     name = "font-misc-ethiopic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-ethiopic-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-misc-ethiopic-1.0.3.tar.bz2;
       sha256 = "19cq7iq0pfad0nc2v28n681fdq3fcw1l1hzaq0wpkgpx7bc1zjsk";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -479,7 +479,7 @@ let
     name = "font-misc-meltho-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-meltho-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-misc-meltho-1.0.3.tar.bz2;
       sha256 = "148793fqwzrc3bmh2vlw5fdiwjc2n7vs25cic35gfp452czk489p";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -491,7 +491,7 @@ let
     name = "font-misc-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-misc-misc-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/font/font-misc-misc-1.1.2.tar.bz2;
       sha256 = "150pq6n8n984fah34n3k133kggn9v0c5k07igv29sxp1wi07krxq";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -503,7 +503,7 @@ let
     name = "font-mutt-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-mutt-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-mutt-misc-1.0.3.tar.bz2;
       sha256 = "13qghgr1zzpv64m0p42195k1kc77pksiv059fdvijz1n6kdplpxx";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -515,7 +515,7 @@ let
     name = "font-schumacher-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-schumacher-misc-1.1.2.tar.bz2;
+      url = mirror://xorg/individual/font/font-schumacher-misc-1.1.2.tar.bz2;
       sha256 = "0nkym3n48b4v36y4s927bbkjnsmicajarnf6vlp7wxp0as304i74";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -527,7 +527,7 @@ let
     name = "font-screen-cyrillic-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-screen-cyrillic-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-screen-cyrillic-1.0.4.tar.bz2;
       sha256 = "0yayf1qlv7irf58nngddz2f1q04qkpr5jwp4aja2j5gyvzl32hl2";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -539,7 +539,7 @@ let
     name = "font-sony-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-sony-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-sony-misc-1.0.3.tar.bz2;
       sha256 = "1xfgcx4gsgik5mkgkca31fj3w72jw9iw76qyrajrsz1lp8ka6hr0";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -563,7 +563,7 @@ let
     name = "font-sun-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-sun-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-sun-misc-1.0.3.tar.bz2;
       sha256 = "1q6jcqrffg9q5f5raivzwx9ffvf7r11g6g0b125na1bhpz5ly7s8";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -587,7 +587,7 @@ let
     name = "font-winitzki-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-winitzki-cyrillic-1.0.3.tar.bz2;
+      url = mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.3.tar.bz2;
       sha256 = "181n1bgq8vxfxqicmy1jpm1hnr6gwn1kdhl6hr4frjigs1ikpldb";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -599,7 +599,7 @@ let
     name = "font-xfree86-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/font-xfree86-type1-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/font/font-xfree86-type1-1.0.4.tar.bz2;
       sha256 = "0jp3zc0qfdaqfkgzrb44vi9vi0a8ygb35wp082yz7rvvxhmg9sya";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -683,7 +683,7 @@ let
     name = "libAppleWM-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libAppleWM-1.4.1.tar.bz2;
+      url = mirror://xorg/individual/lib/libAppleWM-1.4.1.tar.bz2;
       sha256 = "0r8x28n45q89x91mz8mv0zkkcxi8wazkac886fyvflhiv2y8ap2y";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -731,7 +731,7 @@ let
     name = "libWindowsWM-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libWindowsWM-1.0.1.tar.bz2;
+      url = mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2;
       sha256 = "1p0flwb67xawyv6yhri9w17m1i4lji5qnd0gq8v1vsfb8zw7rw15";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -755,7 +755,7 @@ let
     name = "libXScrnSaver-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libXScrnSaver-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/lib/libXScrnSaver-1.2.2.tar.bz2;
       sha256 = "07ff4r20nkkrj7h08f9fwamds9b3imj8jz5iz6y38zqw6jkyzwcg";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1187,7 +1187,7 @@ let
     name = "luit-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/luit-1.1.1.tar.bz2;
+      url = mirror://xorg/individual/app/luit-1.1.1.tar.bz2;
       sha256 = "0dn694mk56x6hdk6y9ylx4f128h5jcin278gnw2gb807rf3ygc1h";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1211,7 +1211,7 @@ let
     name = "mkfontdir-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/mkfontdir-1.0.7.tar.bz2;
+      url = mirror://xorg/individual/app/mkfontdir-1.0.7.tar.bz2;
       sha256 = "0c3563kw9fg15dpgx4dwvl12qz6sdqdns1pxa574hc7i5m42mman";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1271,7 +1271,7 @@ let
     name = "recordproto-1.14.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/recordproto-1.14.2.tar.bz2;
+      url = mirror://xorg/individual/proto/recordproto-1.14.2.tar.bz2;
       sha256 = "0w3kgr1zabwf79bpc28dcnj0fpni6r53rpi82ngjbalj5s6m8xx7";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1283,7 +1283,7 @@ let
     name = "renderproto-0.11.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/renderproto-0.11.1.tar.bz2;
+      url = mirror://xorg/individual/proto/renderproto-0.11.1.tar.bz2;
       sha256 = "0dr5xw6s0qmqg0q5pdkb4jkdhaja0vbfqla79qh5j1xjj9dmlwq6";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1295,7 +1295,7 @@ let
     name = "resourceproto-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/resourceproto-1.2.0.tar.bz2;
+      url = mirror://xorg/individual/proto/resourceproto-1.2.0.tar.bz2;
       sha256 = "0638iyfiiyjw1hg3139pai0j6m65gkskrvd9684zgc6ydcx00riw";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1307,7 +1307,7 @@ let
     name = "scrnsaverproto-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/scrnsaverproto-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/proto/scrnsaverproto-1.2.2.tar.bz2;
       sha256 = "0rfdbfwd35d761xkfifcscx56q0n56043ixlmv70r4v4l66hmdwb";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1391,7 +1391,7 @@ let
     name = "windowswmproto-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/windowswmproto-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/proto/windowswmproto-1.0.4.tar.bz2;
       sha256 = "0syjxgy4m8l94qrm03nvn5k6bkxc8knnlld1gbllym97nvnv0ny0";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1439,7 +1439,7 @@ let
     name = "xbitmaps-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.1.tar.bz2;
+      url = mirror://xorg/individual/data/xbitmaps-1.1.1.tar.bz2;
       sha256 = "178ym90kwidia6nas4qr5n5yqh698vv8r02js0r4vg3b6lsb0w9n";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1559,7 +1559,7 @@ let
     name = "xcmiscproto-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xcmiscproto-1.2.2.tar.bz2;
+      url = mirror://xorg/individual/proto/xcmiscproto-1.2.2.tar.bz2;
       sha256 = "1pyjv45wivnwap2wvsbrzdvjc5ql8bakkbkrvcv6q9bjjf33ccmi";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1691,7 +1691,7 @@ let
     name = "xf86bigfontproto-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86bigfontproto-1.2.0.tar.bz2;
+      url = mirror://xorg/individual/proto/xf86bigfontproto-1.2.0.tar.bz2;
       sha256 = "0j0n7sj5xfjpmmgx6n5x556rw21hdd18fwmavp95wps7qki214ms";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1703,7 +1703,7 @@ let
     name = "xf86dgaproto-2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86dgaproto-2.1.tar.bz2;
+      url = mirror://xorg/individual/proto/xf86dgaproto-2.1.tar.bz2;
       sha256 = "0l4hx48207mx0hp09026r6gy9nl3asbq0c75hri19wp1118zcpmc";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -1715,7 +1715,7 @@ let
     name = "xf86driproto-2.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86driproto-2.1.1.tar.bz2;
+      url = mirror://xorg/individual/proto/xf86driproto-2.1.1.tar.bz2;
       sha256 = "07v69m0g2dfzb653jni4x656jlr7l84c1k39j8qc8vfb45r8sjww";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2039,7 +2039,7 @@ let
     name = "xf86-video-newport-0.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-newport-0.2.4.tar.bz2;
       sha256 = "1yafmp23jrfdmc094i6a4dsizapsc9v0pl65cpc8w1kvn7343k4i";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2255,7 +2255,7 @@ let
     name = "xf86-video-v4l-0.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86-video-v4l-0.2.0.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-v4l-0.2.0.tar.bz2;
       sha256 = "0pcjc75hgbih3qvhpsx8d4fljysfk025slxcqyyhr45dzch93zyb";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2303,7 +2303,7 @@ let
     name = "xf86-video-wsfb-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86-video-wsfb-0.4.0.tar.bz2;
+      url = mirror://xorg/individual/driver/xf86-video-wsfb-0.4.0.tar.bz2;
       sha256 = "0hr8397wpd0by1hc47fqqrnaw3qdqd8aqgwgzv38w5k3l3jy6p4p";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2327,7 +2327,7 @@ let
     name = "xf86vidmodeproto-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xf86vidmodeproto-2.3.1.tar.bz2;
+      url = mirror://xorg/individual/proto/xf86vidmodeproto-2.3.1.tar.bz2;
       sha256 = "0w47d7gfa8zizh2bshdr2rffvbr4jqjv019mdgyh6cmplyd4kna5";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2387,7 +2387,7 @@ let
     name = "xineramaproto-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xineramaproto-1.2.1.tar.bz2;
+      url = mirror://xorg/individual/proto/xineramaproto-1.2.1.tar.bz2;
       sha256 = "0ns8abd27x7gbp4r44z3wc5k9zqxxj8zjnazqpcyr4n17nxp8xcp";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2603,7 +2603,7 @@ let
     name = "xorg-sgml-doctools-1.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xorg-sgml-doctools-1.11.tar.bz2;
+      url = mirror://xorg/individual/doc/xorg-sgml-doctools-1.11.tar.bz2;
       sha256 = "0k5pffyi5bx8dmfn033cyhgd3gf6viqj3x769fqixifwhbgy2777";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2615,7 +2615,7 @@ let
     name = "xpr-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xpr-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/app/xpr-1.0.4.tar.bz2;
       sha256 = "1dbcv26w2yand2qy7b3h5rbvw1mdmdd57jw88v53sgdr3vrqvngy";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2699,7 +2699,7 @@ let
     name = "xsetroot-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xsetroot-1.1.0.tar.bz2;
+      url = mirror://xorg/individual/app/xsetroot-1.1.0.tar.bz2;
       sha256 = "1bazzsf9sy0q2bj4lxvh1kvyrhmpggzb7jg575i15sksksa3xwc8";
     };
     nativeBuildInputs = [ pkgconfig ];
@@ -2759,7 +2759,7 @@ let
     name = "xwud-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xwud-1.0.4.tar.bz2;
+      url = mirror://xorg/individual/app/xwud-1.0.4.tar.bz2;
       sha256 = "1ggql6maivah58kwsh3z9x1hvzxm1a8888xx4s78cl77ryfa1cyn";
     };
     nativeBuildInputs = [ pkgconfig ];
