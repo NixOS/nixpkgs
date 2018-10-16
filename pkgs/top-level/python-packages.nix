@@ -2021,28 +2021,7 @@ in {
 
   passlib = callPackage ../development/python-modules/passlib { };
 
-  path-and-address = buildPythonPackage rec {
-    version = "2.0.1";
-    name = "path-and-address-${version}";
-
-    buildInputs = with self; [ pytest ];
-
-    checkPhase = "py.test";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "joeyespo";
-      repo = "path-and-address";
-      rev = "v${version}";
-      sha256 = "0b0afpsaim06mv3lhbpm8fmawcraggc11jhzr6h72kdj1cqjk5h6";
-    };
-
-    meta = {
-      description = "Functions for server CLI applications used by humans";
-      homepage = https://github.com/joeyespo/path-and-address;
-      license = licenses.mit;
-      maintainers = with maintainers; [ koral];
-    };
-  };
+  path-and-address = callPackage ../development/python-modules/path-and-address { };
 
   peppercorn = buildPythonPackage rec {
     name = "peppercorn-0.5";
