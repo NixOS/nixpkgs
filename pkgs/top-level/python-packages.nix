@@ -2783,21 +2783,7 @@ in {
 
   multidict = callPackage ../development/python-modules/multidict { };
 
-  munch = buildPythonPackage rec {
-    name = "munch-${version}";
-    version = "2.0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/munch/${name}.tar.gz";
-      sha256 = "1420683a94f3a2ffc77935ddd28aa9ccb540dd02b75e02ed7ea863db437ab8b2";
-    };
-
-    meta = {
-      description = "A dot-accessible dictionary (a la JavaScript objects)";
-      license = licenses.mit;
-      homepage = https://github.com/Infinidat/munch;
-    };
-  };
+  munch = callPackage ../development/python-modules/munch { };
 
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
@@ -3225,21 +3211,7 @@ in {
     };
   };
 
-  pint = buildPythonPackage rec {
-    name = "pint-${version}";
-    version = "0.7.2";
-
-    meta = {
-      description = "Physical quantities module";
-      license = licenses.bsd3;
-      homepage = "https://github.com/hgrecco/pint/";
-    };
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pint/Pint-${version}.tar.gz";
-      sha256 = "1bbp5s34gcb9il2wyz4spznshahwbjvwi5bhjm7bnxk358spvf9q";
-    };
-  };
+  pint = callPackage ../development/python-modules/pint { };
 
   pygal = buildPythonPackage rec {
     pname = "pygal";
