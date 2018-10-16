@@ -1884,22 +1884,7 @@ in {
 
   ijson = callPackage ../development/python-modules/ijson {};
 
-  imagesize = buildPythonPackage rec {
-    name = "imagesize-${version}";
-    version = "0.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/imagesize/${name}.tar.gz";
-      sha256 = "0msgz4ncp2nb5nbsxnf8kvxsl6nhwvc3b46ik097fvznl3y10gdv";
-    };
-
-    meta = {
-      description = "Getting image size from png/jpeg/jpeg2000/gif file";
-      homepage = https://github.com/shibukawa/imagesize_py;
-      license = with licenses; [ mit ];
-    };
-
-  };
+  imagesize = callPackage ../development/python-modules/imagesize { };
 
   image-match = callPackage ../development/python-modules/image-match { };
 
