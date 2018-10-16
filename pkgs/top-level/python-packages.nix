@@ -2490,22 +2490,7 @@ in {
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow {};
 
-  iptools = buildPythonPackage rec {
-    version = "0.6.1";
-    name = "iptools-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/iptools/iptools-${version}.tar.gz";
-      sha256 = "0f03875a5bed740ba4bf44decb6a78679cca914a1ee8a6cc468114485c4d98e3";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      description = "Utilities for manipulating IP addresses including a class that can be used to include CIDR network blocks in Django's INTERNAL_IPS setting";
-      homepage = https://pypi.python.org/pypi/iptools;
-    };
-  };
+  iptools = callPackage ../development/python-modules/iptools { };
 
   ipy = callPackage ../development/python-modules/IPy { };
 
