@@ -655,6 +655,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libICE xproto ;};
 
+  ico = (mkDerivation "ico" {
+    name = "ico-1.0.5";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/ico-1.0.5.tar.bz2;
+      sha256 = "0gvpwfk9kvlfn631dgizc45qc2qqjn9pavdp2q7qb3drkvr64fyp";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 xproto ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libX11 xproto ;};
+
   imake = (mkDerivation "imake" {
     name = "imake-1.0.7";
     builder = ./builder.sh;
