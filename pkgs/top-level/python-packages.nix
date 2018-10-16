@@ -2472,42 +2472,7 @@ in {
 
   hkdf = callPackage ../development/python-modules/hkdf { };
 
-  httpretty = buildPythonPackage rec {
-    name = "httpretty-${version}";
-    version = "0.8.10";
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/httpretty/${name}.tar.gz";
-      sha256 = "1nmdk6d89z14x3wg4yxywlxjdip16zc8bqnfb471z1365mr74jj7";
-    };
-
-    buildInputs = with self; [ tornado requests httplib2 sure nose coverage certifi ];
-
-    propagatedBuildInputs = with self; [ urllib3 ];
-
-    postPatch = ''
-      sed -i -e 's/==.*$//' *requirements.txt
-      # XXX: Drop this after version 0.8.4 is released.
-      patch httpretty/core.py <<DIFF
-      ***************
-      *** 566 ****
-      !                 'content-length': len(self.body)
-      --- 566 ----
-      !                 'content-length': str(len(self.body))
-      DIFF
-
-      # Explicit encoding flag is required with python3, unless locale is set.
-      ${if !self.isPy3k then "" else
-        "patch -p0 -i ${../development/python-modules/httpretty/setup.py.patch}"}
-    '';
-
-    meta = {
-      homepage = "https://falcao.it/HTTPretty/";
-      description = "HTTP client request mocking tool";
-      license = licenses.mit;
-    };
-  };
+  httpretty = callPackage ../development/python-modules/httpretty { };
 
   icalendar = buildPythonPackage rec {
     version = "3.9.0";
