@@ -14,15 +14,21 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake qttools flex bison ];
   buildInputs = [ qtbase ];
 
+  preBuild = ''
+    sed -i '/DESTDIR/d' tikzit.pro
+    echo "DESTDIR = build" >> tikzit.pro
+    qmake
+  '';
+
   # The default installPhase tries to install under
   # /nix/store/*-qtbase-*-dev/tests/tikzit. This is not what we want.
   installPhase = ''
     mkdir -p $out/bin
-    cp tikzit $out/bin
+    cp -r $srcdir/build/source/build/* $out/bin/
   '';
 
   meta = with stdenv.lib; {
-    description = "a graphical editor for TikZ diagrams";
+    description = "A graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
     longDescription = ''
       TikZiT is a simple GUI editor for graphs and string diagrams.
       Its native file format is a subset of PGF/TikZ, which means TikZiT files
@@ -31,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = https://tikzit.github.io/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ maintainers.iblech ];
+    maintainers = [ maintainers.iblech maintainers.mgttlinger ];
   };
 }
