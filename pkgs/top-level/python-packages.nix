@@ -1812,38 +1812,8 @@ in {
 
   gmpy2 = callPackage ../development/python-modules/gmpy2 { };
 
-  gmusicapi = with pkgs; buildPythonPackage rec {
-    name = "gmusicapi-10.1.0";
+  gmusicapi = callPackage ../development/python-modules/gmusicapi { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gmusicapi/gmusicapi-10.1.0.tar.gz";
-      sha256 = "0smlrafh1bjzrcjzl7im8pf8f04gcnx92lf3g5qr7yzgq8k20xa2";
-    };
-
-    propagatedBuildInputs = with self; [
-      validictory
-      decorator
-      mutagen
-      protobuf
-      setuptools
-      requests
-      dateutil
-      proboscis
-      mock
-      appdirs
-      oauth2client
-      pyopenssl
-      gpsoauth
-      MechanicalSoup
-      future
-    ];
-
-    meta = {
-      description = "An unofficial API for Google Play Music";
-      homepage = https://pypi.python.org/pypi/gmusicapi/;
-      license = licenses.bsd3;
-    };
-  };
 
   gnureadline = buildPythonPackage rec {
     version = "6.3.3";
