@@ -2193,29 +2193,7 @@ in {
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
-  watchdog = buildPythonPackage rec {
-    name = "watchdog-${version}";
-    version = "0.8.3";
-
-    propagatedBuildInputs = with self; [ argh pathtools pyyaml ];
-
-    buildInputs = stdenv.lib.optionals stdenv.isDarwin
-      [ pkgs.darwin.apple_sdk.frameworks.CoreServices pkgs.darwin.cf-private ];
-
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/watchdog/${name}.tar.gz";
-      sha256 = "0qj1vqszxwfx6d1s66s96jmfmy2j94bywxiqdydh6ikpvcm8hrby";
-    };
-
-    meta = {
-      description = "Python API and shell utilities to monitor file system events";
-      homepage = https://github.com/gorakhargosh/watchdog;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
+  watchdog = callPackage ../development/python-modules/watchdog { };
 
   pywatchman = callPackage ../development/python-modules/pywatchman { };
 
