@@ -2201,22 +2201,7 @@ in {
 
   zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
 
-  validictory = buildPythonPackage rec {
-    name = "validictory-1.0.0a2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/v/validictory/validictory-1.0.0a2.tar.gz";
-      sha256 = "c02388a70f5b854e71e2e09bd6d762a2d8c2a017557562e866d8ffafb0934b07";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "Validate dicts against a schema";
-      homepage = https://github.com/sunlightlabs/validictory;
-      license = licenses.mit;
-    };
-  };
+  validictory = callPackage ../development/python-modules/validictory { };
 
   vcrpy = callPackage ../development/python-modules/vcrpy { };
 
