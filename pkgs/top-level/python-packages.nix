@@ -563,6 +563,8 @@ in {
 
   python-lz4 = callPackage ../development/python-modules/python-lz4 { };
 
+  python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkgconfig = pkgs.pkgconfig;
     igraph = pkgs.igraph;
