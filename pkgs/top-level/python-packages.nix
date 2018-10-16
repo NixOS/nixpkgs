@@ -2215,24 +2215,7 @@ in {
 
   distutils_extra = callPackage ../development/python-modules/distutils_extra { };
 
-  pyxdg = buildPythonPackage rec {
-    name = "pyxdg-0.25";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyxdg/${name}.tar.gz";
-      sha256 = "81e883e0b9517d624e8b0499eb267b82a815c0b7146d5269f364988ae031279d";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://freedesktop.org/wiki/Software/pyxdg;
-      description = "Contains implementations of freedesktop.org standards";
-      license = licenses.lgpl2;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  pyxdg = callPackage ../development/python-modules/pyxdg { };
 
   chardet = callPackage ../development/python-modules/chardet { };
 
