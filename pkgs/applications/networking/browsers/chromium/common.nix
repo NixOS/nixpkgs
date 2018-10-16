@@ -15,6 +15,7 @@
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
+, jdk
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -112,7 +113,7 @@ let
       ninja which python2Packages.python perl pkgconfig
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar
-    ];
+    ] ++ optional (versionAtLeast version "72") jdk;
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd

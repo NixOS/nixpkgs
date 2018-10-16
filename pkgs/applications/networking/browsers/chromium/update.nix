@@ -207,7 +207,8 @@ in rec {
           inherit (oldChannel) sha256bin64;
         };
       in if isLatest channelName channel.version then keepOld else newUpstream;
-    in lib.mapAttrs genLatest channels.linux;
+    in (lib.mapAttrs genLatest channels.android) # Peek from "android" the channels not available for "linux" (currently it is only "canary").
+    // (lib.mapAttrs genLatest channels.linux);
 
     getLinuxFlash = channelName: channel: let
       inherit (channel) version;

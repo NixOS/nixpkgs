@@ -5,6 +5,10 @@
     sha256bin64 = "13ghx5ysl8f2iphdvjh698q4jksh765ljjrd74m6x0ih6qm0ksaq";
     version = "71.0.3578.20";
   };
+  canary = {
+    sha256 = "0lb043nm4yrl0s0bc0y5jlg7wnd6vsgrqka32qpj0dy3h8l5sjv9";
+    version = "72.0.3598.0";
+  };
   dev = {
     sha256 = "1d7q8hbqbxy2izdvv4d9126ljiglsfc3w7wns3zbbbiyqa2rj00y";
     sha256bin64 = "0v6yahsvsgxcqg6k84lgr589rnx9af1r2axn7cggyn1a2lk63jck";

@@ -16009,6 +16009,8 @@ with pkgs;
 
   chromiumDev = lowPrio (chromium.override { channel = "dev"; });
 
+  chromiumCanary = lowPrio (chromium.override { channel = "canary"; });
+
   chuck = callPackage ../applications/audio/chuck {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel;
   };
