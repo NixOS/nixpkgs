@@ -1976,62 +1976,7 @@ in {
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
-  mwlib = let
-    pyparsing = buildPythonPackage rec {
-      name = "pyparsing-1.5.7";
-      disabled = isPy3k;
-
-      src = pkgs.fetchurl {
-        url = "mirror://pypi/p/pyparsing/${name}.tar.gz";
-        sha256 = "646e14f90b3689b005c19ac9b6b390c9a39bf976481849993e277d7380e6e79f";
-      };
-      meta = {
-        homepage = http://pyparsing.wikispaces.com/;
-        description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
-      };
-    };
-  in buildPythonPackage rec {
-    version = "0.15.15";
-    name = "mwlib-${version}";
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.pediapress.com/packages/mirror/${name}.tar.gz";
-      sha256 = "1dnmnkc21zdfaypskbpvkwl0wpkpn0nagj1fc338w64mbxrk8ny7";
-    };
-
-    propagatedBuildInputs = with self; [
-        apipkg
-        bottle
-        gevent
-        lxml
-        odfpy
-        pillow
-        py
-        pyPdf
-        pyparsing
-        qserve
-        roman
-        simplejson
-        sqlite3dbm
-        timelib
-    ];
-
-    checkInputs = with self; [ pytest ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    # Tests are in build directory but we need extension modules that are in $out
-    doCheck = false;
-
-    meta = {
-      description = "Library for parsing MediaWiki articles and converting them to different output formats";
-      homepage = "http://pediapress.com/code/";
-      license = licenses.bsd3;
-      broken = true; # Requires different versions of packages
-    };
-  };
+  mwlib = callPackage ../development/python-modules/mwlib { };
 
   mwlib-ext = buildPythonPackage rec {
     version = "0.13.2";
