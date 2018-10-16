@@ -2115,18 +2115,7 @@ in {
 
   pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
 
-  pyramid_hawkauth = buildPythonPackage rec {
-    name = "pyramidhawkauth-${version}";
-    version = "0.1.0";
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/pyramid_hawkauth.git;
-      rev = "refs/tags/v${version}";
-      sha256 = "038ign7qlavlmvrhb2y8bygbxvy4j7bx2k1zg0i3wblg2ja50w7h";
-    };
-
-    propagatedBuildInputs = with self; [ pyramid hawkauthlib tokenlib ];
-    buildInputs = with self; [ webtest ];
-  };
+  pyramid_hawkauth = callPackage ../development/python-modules/pyramid_hawkauth { };
 
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
