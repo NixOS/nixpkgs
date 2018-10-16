@@ -2448,27 +2448,7 @@ in {
 
   hetzner = callPackage ../development/python-modules/hetzner { };
 
-  htmllaundry = buildPythonPackage rec {
-    name = "htmllaundry-2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/htmllaundry/${name}.tar.gz";
-      sha256 = "e428cba78d5a965e959f5dac2eb7d5f7d627dd889990d5efa8d4e03f3dd768d9";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ six lxml ];
-
-    # some tests fail, probably because of changes in lxml
-    # not relevant for me, if releavnt for you, fix it...
-    doCheck = false;
-
-    meta = {
-      description = "Simple HTML cleanup utilities";
-      license = licenses.bsd3;
-    };
-  };
-
+  htmllaundry = callPackage ../development/python-modules/htmllaundry { };
 
   html5lib = callPackage ../development/python-modules/html5lib { };
 
