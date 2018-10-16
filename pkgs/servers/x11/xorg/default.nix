@@ -2336,16 +2336,16 @@ let
   }) // {inherit ;};
 
   xfs = (mkDerivation "xfs" {
-    name = "xfs-1.1.4";
+    name = "xfs-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xfs-1.1.4.tar.bz2;
-      sha256 = "1ylz4r7adf567rnlbb52yi9x3qi4pyv954kkhm7ld4f0fkk7a2x4";
+      url = mirror://xorg/individual/app/xfs-1.2.0.tar.bz2;
+      sha256 = "0q4q4rbzx159sfn2n52y039fki6nc6a39qdfxa78yjc3aw8i48nv";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libXfont xproto xtrans ];
+    buildInputs = [ libXfont2 xproto xtrans ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit libXfont xproto xtrans ;};
+  }) // {inherit libXfont2 xproto xtrans ;};
 
   xgamma = (mkDerivation "xgamma" {
     name = "xgamma-1.0.6";
