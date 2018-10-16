@@ -2390,31 +2390,7 @@ in {
 
   github-webhook = callPackage ../development/python-modules/github-webhook { };
 
-  goobook = buildPythonPackage rec {
-    name = "goobook-1.9";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/g/goobook/${name}.tar.gz";
-      sha256 = "02xmq8sjavza17av44ks510934wrshxnsm6lvhvazs45s92b671i";
-    };
-
-    buildInputs = with self; [ ];
-
-    preConfigure = ''
-      sed -i '/distribute/d' setup.py
-    '';
-
-    meta = {
-      description = "Search your google contacts from the command-line or mutt";
-      homepage    = https://pypi.python.org/pypi/goobook;
-      license     = licenses.gpl3;
-      maintainers = with maintainers; [ lovek323 hbunke ];
-      platforms   = platforms.unix;
-    };
-
-    propagatedBuildInputs = with self; [ oauth2client gdata simplejson httplib2 keyring six rsa ];
-  };
+  goobook = callPackage ../development/python-modules/goobook { };
 
   googleapis_common_protos = callPackage ../development/python-modules/googleapis_common_protos { };
 
