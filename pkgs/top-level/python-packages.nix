@@ -2113,22 +2113,7 @@ in {
 
   pyramid_exclog = callPackage ../development/python-modules/pyramid_exclog { };
 
-  pyramid_multiauth = buildPythonPackage rec {
-    name = "pyramid_multiauth-${version}";
-    version = "0.8.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid_multiauth/${name}.tar.gz";
-      sha256 = "1lq292qakrm4ixi4vaif8dqywzj08pn6qy0wi4gw28blh39p0msk";
-    };
-
-    propagatedBuildInputs = with self; [ pyramid ];
-
-    meta = {
-      description = "Authentication policy for Pyramid that proxies to a stack of other authentication policies";
-      homepage = https://github.com/mozilla-services/pyramid_multiauth;
-    };
-  };
+  pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
 
   pyramid_hawkauth = buildPythonPackage rec {
     name = "pyramidhawkauth-${version}";
