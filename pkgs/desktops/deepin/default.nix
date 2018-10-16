@@ -24,6 +24,7 @@ let
     };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
     deepin-wm = callPackage ./deepin-wm { };
+    dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
     dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };
