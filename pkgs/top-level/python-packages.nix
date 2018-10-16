@@ -15458,6 +15458,8 @@ EOF
     };
   };
 
+  speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
+
   pushbullet = callPackage ../development/python-modules/pushbullet { };
 
   power = buildPythonPackage rec {
