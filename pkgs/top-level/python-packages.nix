@@ -2820,29 +2820,7 @@ in {
 
   mox = callPackage ../development/python-modules/mox { };
 
-  mozsvc = buildPythonPackage rec {
-    name = "mozsvc-${version}";
-    version = "0.8";
-
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/mozservices.git;
-      rev = "refs/tags/${version}";
-      sha256 = "1zci2ikk83mf7va88c83dr6snfh4ddjqw0lsg3y29qk5nxf80vx2";
-    };
-
-    patches = singleton (pkgs.fetchurl {
-      url = https://github.com/nbp/mozservices/commit/f86c0b0b870cd8f80ce90accde9e16ecb2e88863.diff;
-      sha256 = "1lnghx821f6dqp3pa382ka07cncdz7hq0mkrh44d0q3grvrlrp9n";
-    });
-
-    doCheck = false; # lazy packager
-    propagatedBuildInputs = with self; [ pyramid simplejson konfig ];
-
-    meta = {
-      homepage = https://github.com/mozilla-services/mozservices;
-      description = "Various utilities for Mozilla apps";
-    };
-  };
+  mozsvc = callPackage ../development/python-modules/mozsvc { };
 
   mpmath = buildPythonPackage rec {
     name = "mpmath-0.19";
