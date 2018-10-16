@@ -1942,28 +1942,6 @@ in {
 
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
 
-  libthumbor = buildPythonPackage rec {
-    name = "libthumbor-${version}";
-    version = "1.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/libthumbor/${name}.tar.gz";
-      sha256 = "1vjhszsf8wl9k16wyg2rfjycjnawzl7z8j39bhiysbz5x4lqg91b";
-    };
-
-    buildInputs = with self; [ django ];
-
-    propagatedBuildInputs = with self; [ six pycrypto ];
-
-    doCheck = false;
-
-    meta = {
-      description = "libthumbor is the python extension to thumbor";
-      homepage = https://github.com/heynemann/libthumbor;
-      license = licenses.mit;
-    };
-  };
-
   lightblue = buildPythonPackage rec {
     pname = "lightblue";
     version = "0.4";
@@ -1996,6 +1974,7 @@ in {
       url = "mirror://pypi/l/lightning-python/${name}.tar.gz";
       sha256 = "3987d7d4a634bdb6db9bcf212cf4d2f72bab5bc039f4f6cbc02c9d01c4ade792";
     };
+  libthumbor = callPackage ../development/python-modules/libthumbor { };
 
     buildInputs = with self; [ pytest ];
 
