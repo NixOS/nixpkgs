@@ -2756,11 +2756,11 @@ let
   }) // {inherit libX11 libxcb xproto ;};
 
   xwud = (mkDerivation "xwud" {
-    name = "xwud-1.0.4";
+    name = "xwud-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xwud-1.0.4.tar.bz2;
-      sha256 = "1ggql6maivah58kwsh3z9x1hvzxm1a8888xx4s78cl77ryfa1cyn";
+      url = mirror://xorg/individual/app/xwud-1.0.5.tar.bz2;
+      sha256 = "1a8hdgy40smvblnh3s9f0vkqckl68nmivx7d48zk34m8z18p16cr";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
