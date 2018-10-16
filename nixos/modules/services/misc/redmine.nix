@@ -292,6 +292,7 @@ in
         # execute redmine required commands prior to starting the application
         # NOTE: su required in case using mysql socket authentication
         /run/wrappers/bin/su -s ${pkgs.bash}/bin/bash -m -l redmine -c '${bundle} exec rake db:migrate'
+        /run/wrappers/bin/su -s ${pkgs.bash}/bin/bash -m -l redmine -c '${bundle} exec rake redmine:plugins:migrate'
         /run/wrappers/bin/su -s ${pkgs.bash}/bin/bash -m -l redmine -c '${bundle} exec rake redmine:load_default_data'
 
 
