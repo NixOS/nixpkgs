@@ -5622,6 +5622,8 @@ with pkgs;
 
   tie = callPackage ../development/tools/misc/tie { };
 
+  tikzit = libsForQt5.callPackage ../applications/graphics/tikzit { };
+
   tilix = callPackage ../applications/misc/tilix { };
 
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
