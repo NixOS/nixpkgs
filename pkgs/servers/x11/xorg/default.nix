@@ -752,11 +752,11 @@ let
   }) // {inherit inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ;};
 
   libXScrnSaver = (mkDerivation "libXScrnSaver" {
-    name = "libXScrnSaver-1.2.2";
+    name = "libXScrnSaver-1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXScrnSaver-1.2.2.tar.bz2;
-      sha256 = "07ff4r20nkkrj7h08f9fwamds9b3imj8jz5iz6y38zqw6jkyzwcg";
+      url = mirror://xorg/individual/lib/libXScrnSaver-1.2.3.tar.bz2;
+      sha256 = "1y4vx1vabg7j9hamp0vrfrax5b0lmgm3h0lbgbb3hnkv3dd0f5zr";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ scrnsaverproto libX11 libXext xextproto ];
