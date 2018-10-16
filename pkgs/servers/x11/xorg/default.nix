@@ -2476,7 +2476,6 @@ let
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xproto ];
-    configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libX11 xproto ;};
 

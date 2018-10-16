@@ -418,6 +418,8 @@ in
     #TODO: resurrect patches for US_intl?
     patches = [ ./xkeyboard-config-eo.patch ];
 
+    configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
+
     # 1: compatibility for X11/xkb location
     # 2: I think pkgconfig/ is supposed to be in /lib/
     postInstall = ''
