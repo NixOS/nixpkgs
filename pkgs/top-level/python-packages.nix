@@ -1944,37 +1944,11 @@ in {
 
   libthumbor = callPackage ../development/python-modules/libthumbor { };
 
-  jupyter = buildPythonPackage rec {
-    version = "1.0.0";
-    name = "jupyter-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jupyter/${name}.tar.gz";
-      sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
-    };
   lightblue = callPackage ../development/python-modules/lightblue { };
 
-    propagatedBuildInputs = with self; [
-      notebook
-      qtconsole
-      jupyter_console
-      nbconvert
-      ipykernel
-      ipywidgets
-    ];
   lightning = callPackage ../development/python-modules/lightning { };
 
-    # Meta-package, no tests
-    doCheck = false;
-
-    meta = {
-      description = "Installs all the Jupyter components in one go";
-      homepage = "http://jupyter.org/";
-      license = licenses.bsd3;
-      platforms = platforms.all;
-      priority = 100; # This is a metapackage which is unimportant
-    };
-  };
+  jupyter = callPackage ../development/python-modules/jupyter { };
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
 
