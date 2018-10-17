@@ -3037,21 +3037,7 @@ in {
 
   pycountry = callPackage ../development/python-modules/pycountry { };
 
-  nine = buildPythonPackage rec {
-    name = "nine-${version}";
-    version = "0.3.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nine/${name}.tar.gz";
-      sha256 = "1zrsbm0hajfvklkhgysp81hy632a3bdakp31m0lcpd9xbp5265zy";
-    };
-
-    meta = with stdenv.lib; {
-      description = "Let's write Python 3 right now!";
-      homepage = "https://github.com/nandoflorestan/nine";
-    };
-  };
-
+  nine = callPackage ../development/python-modules/nine { };
 
   logutils = buildPythonPackage rec {
     name = "logutils-${version}";
