@@ -101,6 +101,8 @@ stdenv.mkDerivation {
 
   inherit src;
 
+  patchFlags = "";
+
   patches = patches
     ++ optional stdenv.isDarwin ./darwin-no-system-python.patch;
 

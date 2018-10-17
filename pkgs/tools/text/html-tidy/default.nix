@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake libxslt/*manpage*/ ];
 
+  cmakeFlags = [];
+
   # ATM bin/tidy is statically linked, as upstream provides no other option yet.
   # https://github.com/htacg/tidy-html5/issues/326#issuecomment-160322107
 
