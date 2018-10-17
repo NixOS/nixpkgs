@@ -2955,20 +2955,7 @@ in {
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 
-  netifaces = buildPythonPackage rec {
-    version = "0.10.6";
-    name = "netifaces-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/netifaces/${name}.tar.gz";
-      sha256 = "1q7bi5k2r955rlcpspx4salvkkpk28jky67fjbpz2dkdycisak8c";
-    };
-
-    meta = {
-      homepage = https://alastairs-place.net/projects/netifaces/;
-      description = "Portable access to network interfaces from Python";
-    };
-  };
+  netifaces = callPackage ../development/python-modules/netifaces { };
 
   hpack = buildPythonPackage rec {
     name = "hpack-${version}";
