@@ -22,7 +22,10 @@ let
 
       postInstall = ''
         make -C syntect-plugin install XI_PLUGIN_DIR=$out/share/xi/plugins
+        ln -vrs $out/share/xi/plugins/syntect $syntect
       '';
+
+      outputs = [ "out" "syntect" ];
 
       meta = with lib; {
         description = "A modern editor with a backend written in Rust";
