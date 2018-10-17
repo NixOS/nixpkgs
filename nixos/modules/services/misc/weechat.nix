@@ -46,10 +46,12 @@ in
         Group = "weechat";
         RemainAfterExit = "yes";
       };
-      script = "exec ${pkgs.screen}/bin/screen -Dm -S ${cfg.sessionName} ${cfg.binary}";
+      script = "exec ${config.security.wrapperDir}/screen -Dm -S ${cfg.sessionName} ${cfg.binary}";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network.target" ];
     };
+
+    security.wrappers.screen.source = "${pkgs.screen}/bin/screen";
   };
 
   meta.doc = ./weechat.xml;
