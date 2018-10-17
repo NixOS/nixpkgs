@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://getpolarized.io/;
     description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation.";
-    license = stdenv.lib.licenses.gpl1Plus;
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.noneucat ];
   };
