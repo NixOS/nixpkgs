@@ -1,12 +1,13 @@
-{ lib, buildPythonPackage, pythonOlder, fetchurl, aiodns, pyasn1, pyasn1-modules, gnupg }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, fetchurl, aiodns, pyasn1, pyasn1-modules, gnupg }:
+
 buildPythonPackage rec {
-  name = "slixmpp-${version}";
+  pname = "slixmpp";
   version = "1.4.0";
 
   disabled = pythonOlder "3.4";
 
-  src = fetchurl {
-    url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "155qxx4xlkkjb4hphc09nsi2mi4xi3m2akg0z7064kj3nbzkwjn2";
   };
 
