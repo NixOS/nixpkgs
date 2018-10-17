@@ -2985,24 +2985,7 @@ in {
 
   nose-cover3 = callPackage ../development/python-modules/nose-cover3 { };
 
-  nosexcover = buildPythonPackage (rec {
-    name = "nosexcover-1.0.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nosexcover/${name}.tar.gz";
-      sha256 = "f5b3a7c936c4f703f15418c1f325775098184b69fa572f868edb8a99f8f144a8";
-    };
-
-    propagatedBuildInputs = with self; [ coverage nose ];
-
-    meta = {
-      description = "Extends nose.plugins.cover to add Cobertura-style XML reports";
-
-      homepage = https://github.com/cmheisel/nose-xcover/;
-
-      license = licenses.bsd3;
-    };
-  });
+  nosexcover = callPackage ../development/python-modules/nosexcover { };
 
   nosejs = buildPythonPackage {
     name = "nosejs-0.9.4";
