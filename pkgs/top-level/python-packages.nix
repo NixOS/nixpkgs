@@ -2951,7 +2951,7 @@ in {
 
   sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
-  slixmpp = callPackage ../development/python-modules/slixmpp {};
+  slixmpp = callPackage ../development/python-modules/slixmpp { };
 
   netaddr = buildPythonPackage rec {
     pname = "netaddr";
