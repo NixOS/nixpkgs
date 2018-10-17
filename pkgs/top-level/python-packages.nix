@@ -2887,23 +2887,7 @@ in {
 
   pympler = callPackage ../development/python-modules/pympler { };
 
-  pymysqlsa = self.buildPythonPackage rec {
-    name = "pymysqlsa-${version}";
-    version = "1.0";
-
-    propagatedBuildInputs = with self; [ pymysql sqlalchemy ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pymysql_sa/pymysql_sa-1.0.tar.gz";
-      sha256 = "a2676bce514a29b2d6ab418812259b0c2f7564150ac53455420a20bd7935314a";
-    };
-
-    meta = {
-      description = "PyMySQL dialect for SQL Alchemy";
-      homepage = https://pypi.python.org/pypi/pymysql_sa;
-      license = licenses.mit;
-    };
-  };
+  pymysqlsa = callPackage ../development/python-modules/pymysqlsa { };
 
   monosat = disabledIf (!isPy3k) (pkgs.monosat.python { inherit buildPythonPackage; inherit (self) cython; });
 
