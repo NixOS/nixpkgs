@@ -46,6 +46,24 @@ rec {
       # Misc boolean options
       useAndroidPrebuilt = false;
       useiOSPrebuilt = false;
+
+      # Output from uname
+      uname = {
+        # uname -s
+        system = if final.isLinux then "Linux"
+                 else if final.isDarwin then "Darwin"
+                 else if final.isWindows then "Windows"
+                 else if final.isFreeBSD then "FreeBSD"
+                 else if final.isNetBSD then "NetBSD"
+                 else if final.isOpenBSD then "OpenBSD"
+                 else null;
+
+         # uname -p
+         processor = final.parsed.cpu.name;
+
+         # uname -r
+         release = null;
+      };
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
       // args;
   in assert final.useAndroidPrebuilt -> final.isAndroid;
