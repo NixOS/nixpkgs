@@ -2978,30 +2978,7 @@ in {
 
   oauth = callPackage ../development/python-modules/oauth { };
 
-  oauth2 = buildPythonPackage (rec {
-    name = "oauth2-${version}";
-    version = "1.9.0.post1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oauth2/${name}.tar.gz";
-      sha256 = "c006a85e7c60107c7cc6da1b184b5c719f6dd7202098196dfa6e55df669b59bf";
-    };
-
-    propagatedBuildInputs = with self; [ httplib2 ];
-
-    buildInputs = with self; [ mock coverage ];
-
-    # ServerNotFoundError: Unable to find the server at oauth-sandbox.sevengoslings.net
-    doCheck = false;
-
-    meta = {
-      homepage = "https://github.com/simplegeo/python-oauth2";
-      description = "Library for OAuth version 1.0";
-      license = licenses.mit;
-      maintainers = with maintainers; [ garbas ];
-      platforms = platforms.linux;
-    };
-  });
+  oauth2 = callPackage ../development/python-modules/oauth2 { };
 
   oauth2client = callPackage ../development/python-modules/oauth2client { };
 
