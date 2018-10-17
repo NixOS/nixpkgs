@@ -197,12 +197,12 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     #   , modifier : Defaulted
     #   , returnShellEnv : Defaulted
     #   } -> NixShellAwareDerivation
-    # Given a path to a haskell package directory whose cabal file is
-    # named the same as the directory name, an optional set of
-    # source overrides as appropriate for the 'packageSourceOverrides'
-    # function, an optional set of arbitrary overrides, and an optional
-    # haskell package modifier,  return a derivation appropriate
-    # for nix-build or nix-shell to build that package.
+    # Given a path to a haskell package directory, an optional package name
+    # which defaults to the base name of the path, an optional set of source
+    # overrides as appropriate for the 'packageSourceOverrides' function, an
+    # optional set of arbitrary overrides, and an optional haskell package
+    # modifier, return a derivation appropriate for nix-build or nix-shell to
+    # build that package.
     developPackage =
       { root
       , name ? builtins.baseNameOf root
