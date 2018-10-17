@@ -50,13 +50,14 @@ rec {
       # Output from uname
       uname = {
         # uname -s
-        system = if final.isLinux then "Linux"
-                 else if final.isDarwin then "Darwin"
-                 else if final.isWindows then "Windows"
-                 else if final.isFreeBSD then "FreeBSD"
-                 else if final.isNetBSD then "NetBSD"
-                 else if final.isOpenBSD then "OpenBSD"
-                 else null;
+        system = {
+          "linux" = "Linux";
+          "windows" = "Windows";
+          "darwin" = "Darwin";
+          "netbsd" = "NetBSD";
+          "freebsd" = "FreeBSD";
+          "openbsd" = "OpenBSD";
+        }.${final.parsed.kernel.name} or null;
 
          # uname -p
          processor = final.parsed.cpu.name;
