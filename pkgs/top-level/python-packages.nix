@@ -3039,15 +3039,7 @@ in {
 
   nine = callPackage ../development/python-modules/nine { };
 
-  logutils = buildPythonPackage rec {
-    name = "logutils-${version}";
-    version = "0.3.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/logutils/${name}.tar.gz";
-      sha256 = "173w55fg3hp5dhx7xvssmgqkcv5fjlaik11w5dah2fxygkjvhhj0";
-    };
-  };
+  logutils = callPackage ../development/python-modules/logutils { };
 
   ldappool = callPackage ../development/python-modules/ldappool { };
 
