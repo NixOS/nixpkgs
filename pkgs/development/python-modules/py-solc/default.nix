@@ -16,7 +16,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ solc semantic-version ];
 
-  doCheck = true;
+  # checks are disabled because test suite seem to be broken:
+  # see here: https://github.com/ethereum/py-solc/issues/60
+  doCheck = false;
 
   meta = with lib; {
     description = "Python wrapper around the solc binary";
