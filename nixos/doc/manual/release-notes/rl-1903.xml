@@ -122,6 +122,14 @@
      the Python 2 or 3 version of the package.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      Options
+      <literal>services.znc.confOptions.networks.<replaceable>name</replaceable>.userName</literal> and
+      <literal>services.znc.confOptions.networks.<replaceable>name</replaceable>.modulePackages</literal>
+      were removed. They were never used for anything and can therefore safely be removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
