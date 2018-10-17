@@ -16005,32 +16005,7 @@ EOF
     };
   };
 
-  poezio = buildPythonApplication rec {
-    name = "poezio-${version}";
-    version = "0.12";
-
-    disabled = pythonOlder "3.4";
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 cffi ];
-    nativeBuildInputs = with pkgs; [ pkgconfig ];
-
-    src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/129/${name}.tar.gz";
-      sha256 = "11n9x82xyjwbqk28lsfnvqwn8qc9flv6w2c64camh6j3148ykpvz";
-    };
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Free console XMPP client";
-      homepage = https://poez.io;
-      license = licenses.mit;
-      maintainers = [ maintainers.lsix ];
-    };
-  };
+  poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
   potr = callPackage ../development/python-modules/potr {};
 
