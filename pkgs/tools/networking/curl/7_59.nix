@@ -77,7 +77,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}"
        # For the 'urandom', maybe it should be a cross-system option
     ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       "--with-random=/dev/urandom";
+       "--with-random=/dev/urandom"
+    ++ stdenv.lib.optionals stdenv.hostPlatform.isWindows [
+      "--disable-shared"
+      "--enable-static"
+    ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
