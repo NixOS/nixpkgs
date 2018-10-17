@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "restic-${version}";
-  version = "0.9.2";
+  version = "0.9.3";
 
   goPackagePath = "github.com/restic/restic";
 
@@ -10,12 +10,13 @@ buildGoPackage rec {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "0kl8yk636i3y7f2kd43pydjh4pv7hhq09p5k54jlysnrbf2kjb4h";
+    sha256 = "0l35pdrq1hhcz3cb2qm267m6846mxfwbl1adk2kp748b2q55pdma";
   };
+
 
   buildPhase = ''
     cd go/src/${goPackagePath}
-    go run build.go
+    GO111MODULE=on GOCACHE=`mktemp -d` go run -mod=vendor build.go
   '';
 
   installPhase = ''
