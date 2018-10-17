@@ -2957,20 +2957,7 @@ in {
 
   netifaces = callPackage ../development/python-modules/netifaces { };
 
-  hpack = buildPythonPackage rec {
-    name = "hpack-${version}";
-    version = "2.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hpack/hpack-${version}.tar.gz";
-      sha256 = "1ad0fx4d7a52zf441qzhjc7vwy9v3qdrk1zyf06ikz8y2nl9mgai";
-    };
-
-    meta = with stdenv.lib; {
-      description = "========================================";
-      homepage = "http://hyper.rtfd.org";
-    };
-  };
+  hpack = callPackage ../development/python-modules/hpack { };
 
   nevow = callPackage ../development/python-modules/nevow { };
 
