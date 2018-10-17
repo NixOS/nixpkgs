@@ -172,6 +172,7 @@ let
     badPlatforms = platforms;
     # Hydra build timeout
     timeout = int;
+    isHook = bool;
   };
 
   checkMetaAttr = k: v:
