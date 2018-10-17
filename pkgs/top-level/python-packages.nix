@@ -8246,6 +8246,8 @@ in {
     propagatedBuildInputs = [ self.cffi ];
   };
 
+  safe = callPackage ../development/python-modules/safe { };
+
   sampledata = callPackage ../development/python-modules/sampledata { };
 
   sasmodels = callPackage ../development/python-modules/sasmodels { };
