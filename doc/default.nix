@@ -18,16 +18,6 @@ pkgs.stdenv.mkDerivation {
   XSL = "${pkgs.docbook_xsl_ns}/xml/xsl";
   RNG = "${pkgs.docbook5}/xml/rng/docbook/docbook.rng";
   XMLFORMAT_CONFIG = ../nixos/doc/xmlformat.conf;
-  xsltFlags = lib.concatStringsSep " " [
-    "--param section.autolabel 1"
-    "--param section.label.includes.component.label 1"
-    "--stringparam html.stylesheet 'style.css overrides.css highlightjs/mono-blue.css'"
-    "--stringparam html.script './highlightjs/highlight.pack.js ./highlightjs/loader.js'"
-    "--param xref.with.number.and.title 1"
-    "--param toc.section.depth 3"
-    "--stringparam admon.style ''"
-    "--stringparam callout.graphics.extension .svg"
-  ];
 
   postPatch = ''
     rm -rf ./functions/library/locations.xml

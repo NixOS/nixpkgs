@@ -21,17 +21,21 @@ fix-misc-xml:
 clean:
 	rm -f ${MD_TARGETS} .version manual-full.xml functions/library/locations.xml
 	rm -rf ./out/ ./highlightjs
+	rm _build/xsl
 
 .PHONY: validate
 validate: manual-full.xml
 	jing "$$RNG" manual-full.xml
 
-out/html/index.html: manual-full.xml style.css highlightjs
+_build/xsl:
+	ln -s "$$XSL" "_build/xsl"
+
+out/html/index.html: _build/xsl manual-full.xml style.css highlightjs
 	mkdir -p out/html
-	xsltproc ${xsltFlags} \
+	xsltproc \
 		--nonet --xinclude \
 		--output $@ \
-		"$$XSL/docbook/xhtml/docbook.xsl" \
+		./_build/build-html.xsl \
 		./manual-full.xml
 
 	mkdir -p out/html/highlightjs/
@@ -44,11 +48,11 @@ out/html/index.html: manual-full.xml style.css highlightjs
 	cp "$$XSL/docbook/images/callouts/"*.svg out/html/images/callouts/
 	chmod u+w -R out/html/
 
-out/epub/manual.epub: manual-full.xml
+out/epub/manual.epub: _build/xsl manual-full.xml
 	mkdir -p out/epub/scratch
-	xsltproc ${xsltFlags} --nonet \
+	xsltproc --nonet \
 		--output out/epub/scratch/ \
-		"$$XSL/docbook/epub/docbook.xsl" \
+		./_build/build-epub.xsl \
 		./manual-full.xml
 
 	cp ./overrides.css out/epub/scratch/OEBPS
