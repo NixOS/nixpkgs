@@ -2972,36 +2972,7 @@ in {
 
   langcodes = callPackage ../development/python-modules/langcodes { };
 
-  livestreamer = buildPythonPackage rec {
-    version = "1.12.2";
-    name = "livestreamer-${version}";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/chrippa/livestreamer/archive/v${version}.tar.gz";
-      sha256 = "1fp3d3z2grb1ls97smjkraazpxnvajda2d1g1378s6gzmda2jvjd";
-    };
-
-    buildInputs = [ pkgs.makeWrapper ];
-
-    propagatedBuildInputs = with self; [ pkgs.rtmpdump pycrypto requests ]
-      ++ optionals isPy27 [ singledispatch futures ]
-      ++ optionals isPy33 [ singledispatch ];
-
-    postInstall = ''
-      wrapProgram $out/bin/livestreamer --prefix PATH : ${pkgs.rtmpdump}/bin
-    '';
-
-    meta = {
-      homepage = http://livestreamer.tanuki.se;
-      description = ''
-        Livestreamer is CLI program that extracts streams from various
-        services and pipes them into a video player of choice.
-      '';
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ fuuzetsu ];
-    };
-  };
+  livestreamer = callPackage ../development/python-modules/livestreamer { };
 
   livestreamer-curses = buildPythonPackage rec {
     version = "1.5.2";
