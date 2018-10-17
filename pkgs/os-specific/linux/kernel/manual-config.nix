@@ -36,6 +36,8 @@ in {
   allowImportFromDerivation ? false,
   # ignored
   features ? null,
+
+  shellHook ? ""
 }:
 
 let
@@ -268,6 +270,8 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
+
+  inherit shellHook;
 
   # Absolute paths for compilers avoid any PATH-clobbering issues.
   makeFlags = commonMakeFlags ++ [
