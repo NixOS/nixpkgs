@@ -23,12 +23,12 @@ _doStrip() {
         if [[ "$dontStrip" || "$flag" ]] || ! type -f "$stripCmd" 2>/dev/null
         then continue; fi
 
-        stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
+        stripDebugList=${stripDebugList:-lib lib32 lib64}
         if [ -n "$stripDebugList" ]; then
             stripDirs "$stripCmd" "$stripDebugList" "${stripDebugFlags:--S}"
         fi
 
-        stripAllList=${stripAllList:-}
+        stripAllList=${stripAllList:-libexec bin sbin}
         if [ -n "$stripAllList" ]; then
             stripDirs "$stripCmd" "$stripAllList" "${stripAllFlags:--s}"
         fi
