@@ -2942,26 +2942,7 @@ in {
 
   notify2 = callPackage ../development/python-modules/notify2 {};
 
-  notmuch = buildPythonPackage rec {
-    name = "python-${pkgs.notmuch.name}";
-
-    src = pkgs.notmuch.src;
-
-    sourceRoot = pkgs.notmuch.pythonSourceRoot;
-
-    buildInputs = with self; [ python pkgs.notmuch ];
-
-    postPatch = ''
-      sed -i -e '/CDLL/s@"libnotmuch\.@"${pkgs.notmuch}/lib/libnotmuch.@' \
-        notmuch/globals.py
-    '';
-
-    meta = {
-      description = "A Python wrapper around notmuch";
-      homepage = https://notmuchmail.org/;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  notmuch = callPackage ../development/python-modules/notmuch { };
 
   emoji = callPackage ../development/python-modules/emoji { };
 
