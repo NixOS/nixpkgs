@@ -2756,24 +2756,7 @@ in {
 
   milksnake = callPackage ../development/python-modules/milksnake { };
 
-  minimock = buildPythonPackage rec {
-    version = "1.2.8";
-    name = "minimock-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://bitbucket.org/jab/minimock/get/${version}.zip";
-      sha256 = "c88fa8a7120623f23990a7f086a9657f6ced09025a55e3be8649a30b4945441a";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    checkPhase = "./test";
-
-    meta = {
-      description = "A minimalistic mocking library for python";
-      homepage = https://pypi.python.org/pypi/MiniMock;
-    };
-  };
+  minimock = callPackage ../development/python-modules/minimock { };
 
   moviepy = callPackage ../development/python-modules/moviepy { };
 
