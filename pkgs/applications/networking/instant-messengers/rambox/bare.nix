@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     inherit src;
 
     nodejs = nodejs-8_x;
-    sha256 = "0mg1ilz65qyxgh5zg1f8fhx7ygz10w8ifamflpwbk8mrvqpkjlvr";
+    sha256 = "0hbw47653wh159c34f0rlj3p7xy0lvsyp0wh2hl35kv3fnsfbbm0";
   };
 
   patches = [ ./isDev.patch ];
