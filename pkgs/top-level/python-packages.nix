@@ -3035,15 +3035,7 @@ in {
 
   FormEncode = callPackage ../development/python-modules/FormEncode { };
 
-  pycountry = buildPythonPackage rec {
-    name = "pycountry-${version}";
-    version = "1.17";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pycountry/${name}.tar.gz";
-      sha256 = "1qvhq0c9xsh6d4apcvjphfzl6xnwhnk4jvhr8x2fdfnmb034lc26";
-    };
-  };
+  pycountry = callPackage ../development/python-modules/pycountry { };
 
   nine = buildPythonPackage rec {
     name = "nine-${version}";
