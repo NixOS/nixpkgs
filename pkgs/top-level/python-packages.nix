@@ -1925,27 +1925,7 @@ in {
 
   dogpile_core = callPackage ../development/python-modules/dogpile.core { };
 
-  dopy = buildPythonPackage rec {
-    version = "2016-01-04";
-    name = "dopy-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "Wiredcraft";
-      repo = "dopy";
-      rev = "cb443214166a4e91b17c925f40009ac883336dc3";
-      sha256 ="0ams289qcgna96aak96jbz6wybs6qb95h2gn8lb4lmx2p5sq4q56";
-    };
-
-    propagatedBuildInputs = with self; [ requests six ];
-
-    meta = {
-      description = "Digital Ocean API python wrapper";
-      homepage = "https://github.com/Wiredcraft/dopy";
-      license = licenses.mit;
-      maintainers = with maintainers; [ lihop ];
-      platforms = platforms.all;
-    };
-  };
+  dopy = callPackage ../development/python-modules/dopy { };
 
   dpkt = callPackage ../development/python-modules/dpkt {};
 
@@ -2835,26 +2815,7 @@ in {
     };
   };
 
-  jsonrpclib = buildPythonPackage rec {
-    name = "jsonrpclib-${version}";
-    version = "0.1.7";
-
-    disabled = !isPy27;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jsonrpclib/${name}.tar.gz";
-      sha256 = "02vgirw2bcgvpcxhv5hf3yvvb4h5wzd1lpjx8na5psdmaffj6l3z";
-    };
-
-    propagatedBuildInputs = with self; [ cjson ];
-
-    meta = {
-      description = "JSON RPC client library";
-      homepage = https://pypi.python.org/pypi/jsonrpclib/;
-      license = stdenv.lib.licenses.asl20;
-      maintainers = [ stdenv.lib.maintainers.joachifm ];
-    };
-  };
+  jsonrpclib = callPackage ../development/python-modules/jsonrpclib { };
 
   jsonrpclib-pelix = callPackage ../development/python-modules/jsonrpclib-pelix {};
 

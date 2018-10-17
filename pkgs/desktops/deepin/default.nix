@@ -13,6 +13,7 @@ let
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
     deepin-image-viewer = callPackage ./deepin-image-viewer { };
     deepin-menu = callPackage ./deepin-menu { };
+    deepin-metacity = callPackage ./deepin-metacity { };
     deepin-mutter = callPackage ./deepin-mutter { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
@@ -21,6 +22,7 @@ let
       wnck = pkgs.libwnck3;
     };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
+    deepin-wm = callPackage ./deepin-wm { };
     dtkcore = callPackage ./dtkcore { };
     dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };

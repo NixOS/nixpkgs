@@ -387,6 +387,14 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "ISC License";
   };
 
+  # Proprietary binaries; free to redistribute without modification.
+  issl = {
+    fullName = "Intel Simplified Software License";
+    url = https://software.intel.com/en-us/license/intel-simplified-software-license;
+    free = false;
+  };
+
+
   lgpl2 = spdx {
     spdxId = "LGPL-2.0";
     fullName = "GNU Library General Public License v2 only";

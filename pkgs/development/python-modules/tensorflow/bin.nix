@@ -22,6 +22,8 @@
 , zlib
 , python
 , symlinkJoin
+, keras-applications
+, keras-preprocessing
 }:
 
 # We keep this binary build for two reasons:
@@ -39,7 +41,7 @@ let
 
 in buildPythonPackage rec {
   pname = "tensorflow";
-  version = "1.9.0";
+  version = "1.11.0";
   format = "wheel";
 
   src = let
@@ -48,12 +50,11 @@ in buildPythonPackage rec {
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyver}_${unit}";
-    dls = import ./tf1.9.0-hashes.nix;
+    dls = import ./tf1.11.0-hashes.nix;
   in fetchurl dls.${key};
 
-  propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-tensorboard ]
-                 ++ lib.optional (!isPy3k) mock
-                 ++ lib.optionals (pythonOlder "3.4") [ backports_weakref enum34 ];
+  propagatedBuildInputs = [  protobuf numpy termcolor grpcio six astor absl-py gast tensorflow-tensorboard keras-applications keras-preprocessing ]
+                 ++ lib.optional (!isPy3k) mock;
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propageted input tensorflow-tensorboard which causes environment collisions.

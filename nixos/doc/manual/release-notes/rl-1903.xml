@@ -106,12 +106,12 @@
     </para>
    </listitem>
    <listitem>
-     <para>
-       The <literal>light</literal> module no longer uses setuid binaries, but
-       udev rules. As a consequence users of that module have to belong to the
-       <literal>video</literal> group in order to use the executable
-       (i.e. <literal>users.users.yourusername.extraGroups = ["video"];</literal>).
-     </para>
+    <para>
+     The <literal>light</literal> module no longer uses setuid binaries, but
+     udev rules. As a consequence users of that module have to belong to the
+     <literal>video</literal> group in order to use the executable (i.e.
+     <literal>users.users.yourusername.extraGroups = ["video"];</literal>).
+    </para>
    </listitem>
    <listitem>
     <para>
@@ -120,6 +120,14 @@
      <option>services.buildbot-master.package</option> and
      <option>services.buildbot-worker.package</option> can be used to select
      the Python 2 or 3 version of the package.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Options
+      <literal>services.znc.confOptions.networks.<replaceable>name</replaceable>.userName</literal> and
+      <literal>services.znc.confOptions.networks.<replaceable>name</replaceable>.modulePackages</literal>
+      were removed. They were never used for anything and can therefore safely be removed.
     </para>
    </listitem>
   </itemizedlist>
