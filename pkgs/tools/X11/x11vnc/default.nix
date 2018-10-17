@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
         --replace '"/bin/true"' '"${coreutils}/bin/true"'
 
     sed -i -e '/#!\/bin\/sh/a"PATH=${xorg.xdpyinfo}\/bin:${xorg.xauth}\/bin:$PATH\\n"' -e 's|/bin/su|/run/wrappers/bin/su|g' src/ssltools.h
+    sed -i -e '/^\tXdummy.c\ \\$/,$d' -e 's/\tx11vnc_loop\ \\/\tx11vnc_loop/' misc/Makefile.am
   '';
 
   meta = with stdenv.lib; {
