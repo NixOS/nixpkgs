@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, gflags, glog, libsodium, protobuf }:
+{ stdenv, fetchFromGitHub, cmake, gflags, libsodium, protobuf }:
 
 stdenv.mkDerivation rec {
   name = "eternal-terminal-${version}";
-  version = "4.1.2";
+  version = "5.1.6";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTCP";
     rev = "refs/tags/et-v${version}";
-    sha256 = "1zy30ccsddgs2wqwxphnx5i00j4gf69lr68mzg9x6imqfz0sbcjz";
+    sha256 = "0df573c5hi3hxa0d3m02zf2iyh841540dklj9lmp6faik8cp39jz";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ gflags glog libsodium protobuf ];
+  buildInputs = [ gflags libsodium protobuf ];
 
   enableParallelBuilding = true;
 
