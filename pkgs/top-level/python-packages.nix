@@ -2879,23 +2879,7 @@ in {
 
   pyte = callPackage ../development/python-modules/pyte { };
 
-  graphviz = buildPythonPackage rec {
-    name = "graphviz-${version}";
-    version = "0.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/graphviz/${name}.zip";
-      sha256 = "14r9brj4r31b3qy1nnn34v3l4h0n39bqxg9sn2fz4p3pp5mglnl6";
-    };
-
-    propagatedBuildInputs = [ pkgs.graphviz ];
-
-    meta = {
-      description = "Simple Python interface for Graphviz";
-      homepage = https://github.com/xflr6/graphviz;
-      license = licenses.mit;
-    };
-  };
+  graphviz = callPackage ../development/python-modules/graphviz { };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { };
 
