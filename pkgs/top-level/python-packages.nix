@@ -2981,19 +2981,7 @@ in {
 
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
-  nose2 = buildPythonPackage rec {
-    name = "nose2-0.5.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nose2/${name}.tar.gz";
-      sha256 = "0595rh6b6dncbj0jigsyrgrh6h8fsl6w1fr69h76mxv9nllv0rlr";
-    };
-    meta = {
-      description = "nose2 is the next generation of nicer testing for Python";
-    };
-    propagatedBuildInputs = with self; [ six ];
-    # AttributeError: 'module' object has no attribute 'collector'
-    doCheck = false;
-  };
+  nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose-cover3 = buildPythonPackage rec {
     name = "nose-cover3-${version}";
