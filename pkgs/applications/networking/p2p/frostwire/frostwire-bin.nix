@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "6.7.2";
+  version = "6.7.4";
   name = "frostwire-${version}";
 
   src = fetchurl {
     url = "https://dl.frostwire.com/frostwire/${version}/frostwire-${version}.noarch.tar.gz";
-    sha256 = "1dxk2cmwbn4ahkmr8qpiq1dpkkyswg5wz1cnv36izafpr87lxfvj";
+    sha256 = "03vxg0qas4mz5ggrmi396nkz44x1kgq8bfbhbr9mnal9ay9qmi8m";
   };
 
   nativeBuildInputs = [ makeWrapper ];

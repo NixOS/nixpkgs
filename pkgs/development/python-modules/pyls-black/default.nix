@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "pyls-black";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "rupert";
     repo = "pyls-black";
     rev = "v${version}";
-    sha256 = "0xa3iv8nhnj0lw0dh41qb0dqp55sb6rdxalbk60v8jll6qyc0si8";
+    sha256 = "1pagbafb9r9glzy7nbvrq19msjy4wqahrvmc0wll0a0r4msqpi1d";
   };
 
   disabled = !isPy3k;
@@ -18,9 +18,6 @@ buildPythonPackage rec {
   checkPhase = ''
     pytest
   '';
-
-  # Enable when https://github.com/rupert/pyls-black/pull/6 is merged.
-  doCheck = false;
 
   checkInputs = [ pytest ];
 

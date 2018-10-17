@@ -6,13 +6,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "rspamd-${version}";
-  version = "1.7.9";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "rspamd";
     rev = version;
-    sha256 = "1qfkmcrcswh7k7bvr1ki1n83lnjmfd9h0281qgia0dlam7y81bcy";
+    sha256 = "02q1id9kv5d6w1b1ifa2m6qrnbsja787dn0ywwi0yrsaqwk63wk7";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];

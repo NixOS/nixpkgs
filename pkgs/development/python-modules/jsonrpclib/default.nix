@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , cjson
@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "jsonrpclib";
   version = "0.1.7";
+
   disabled = isPy3k;
 
   src = fetchPypi {
@@ -17,10 +18,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cjson ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JSON RPC client library";
     homepage = https://pypi.python.org/pypi/jsonrpclib/;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.joachifm ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.joachifm ];
   };
 }

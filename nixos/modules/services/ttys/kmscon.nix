@@ -4,6 +4,8 @@ let
 
   cfg = config.services.kmscon;
 
+  autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
+
   configDir = pkgs.writeTextFile { name = "kmscon-config"; destination = "/kmscon.conf"; text = cfg.extraConfig; };
 in {
   options = {
@@ -39,6 +41,15 @@ in {
         default = "";
         example = "--term xterm-256color";
       };
+
+      autologinUser = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Username of the account that will be automatically logged in at the console.
+          If unspecified, a login prompt is shown as usual.
+        '';
+      };
     };
   };
 
@@ -61,7 +72,7 @@ in {
 
       [Service]
       ExecStart=
-      ExecStart=${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p
+      ExecStart=${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
       UtmpIdentifier=%I
       TTYPath=/dev/%I
       TTYReset=yes

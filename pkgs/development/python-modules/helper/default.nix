@@ -1,23 +1,18 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, mock
-, pyyaml
-}:
+{ stdenv, buildPythonPackage, fetchPypi, pyyaml, mock }:
 
 buildPythonPackage rec {
   pname = "helper";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e33dde42ad4df30fb7790689f93d77252cff26a565610d03ff2e434865a53a2";
+    sha256 = "0p56dvjpaz9wnr0ik2wmvgqjf9ji180bhjky7q272l5dan94lgd6";
   };
 
-  buildInputs = [ mock ];
+  checkInputs = [ mock ];
   propagatedBuildInputs = [ pyyaml ];
 
-  # No tests
+  # No tests in the pypi tarball
   doCheck = false;
 
   meta = with stdenv.lib; {
@@ -25,5 +20,4 @@ buildPythonPackage rec {
     homepage = https://helper.readthedocs.org/;
     license = licenses.bsd3;
   };
-
 }

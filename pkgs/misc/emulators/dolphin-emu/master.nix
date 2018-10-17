@@ -71,9 +71,9 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://dolphin-emu.org";
-    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
-    license = licenses.gpl2;
+    homepage = "https://dolphin-emu.org";
+    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MP2E ];
     branch = "master";
     # x86_32 is an unsupported platform.
