@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "theme-obsidian2-${version}";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "madmaxms";
     repo = "theme-obsidian-2";
     rev = "v${version}";
-    sha256 = "1bb629y11j79h0rxi36iszki6m6l59iwlcraygr472gf44a2xp11";
+    sha256 = "0my3q7xvi6m257x489wync0y5n8n1kig4xg5gfrb905avhxj5frs";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
