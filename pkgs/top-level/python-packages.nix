@@ -3031,39 +3031,7 @@ in {
 
   zake = callPackage ../development/python-modules/zake { };
 
-  kazoo = buildPythonPackage rec {
-    name = "kazoo-${version}";
-    version = "2.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kazoo/${name}.tar.gz";
-      sha256 = "10pb864if9qi2pq9lfb9m8f7z7ss6rml80gf1d9h64lap5crjnjj";
-    };
-
-    propagatedBuildInputs = with self; [
-      six
-    ];
-    buildInputs = with self; [
-      eventlet gevent nose mock coverage pkgs.openjdk8
-    ];
-
-    # not really needed
-    preBuild = ''
-      sed -i '/flake8/d' setup.py
-    '';
-
-    preCheck = ''
-      sed -i 's/test_unicode_auth/noop/' kazoo/tests/test_client.py
-    '';
-
-    # tests take a long time to run and leave threads hanging
-    doCheck = false;
-    #ZOOKEEPER_PATH = "${pkgs.zookeeper}";
-
-    meta = with stdenv.lib; {
-      homepage = "https://kazoo.readthedocs.org";
-    };
-  };
+  kazoo = callPackage ../development/python-modules/kazoo { };
 
   FormEncode = callPackage ../development/python-modules/FormEncode { };
 
