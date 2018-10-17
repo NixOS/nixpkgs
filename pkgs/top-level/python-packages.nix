@@ -2990,16 +2990,7 @@ in {
 
   odo = callPackage ../development/python-modules/odo { };
 
-  offtrac = buildPythonPackage rec {
-    name = "offtrac-0.1.0";
-    meta.maintainers = with maintainers; [ ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/offtrac/${name}.tar.gz";
-      sha256 = "06vd010pa1z7lyfj1na30iqzffr4kzj2k2sba09spik7drlvvl56";
-    };
-    doCheck = false;
-  };
+  offtrac = callPackage ../development/python-modules/offtrac { };
 
   openpyxl = callPackage ../development/python-modules/openpyxl { };
 
