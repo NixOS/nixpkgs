@@ -4,7 +4,7 @@
 
 let
   pname = "gst-python";
-  version = "1.14.2";
+  version = "1.14.4";
   name = "${pname}-${version}";
 in buildPythonPackage rec {
   inherit pname version;
@@ -15,7 +15,7 @@ in buildPythonPackage rec {
       "${meta.homepage}/src/gst-python/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "08nb011acyvlz48fqh8c084k0dlssz9b7wha7zzk797inidbwh6w";
+    sha256 = "06ssx19fs6pg4d32p9ph9w4f0xwmxaw2dxfj17rqkn5njd7v5zfh";
   };
 
   outputs = [ "out" "dev" ];
