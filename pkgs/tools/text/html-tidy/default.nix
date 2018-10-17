@@ -13,9 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake libxslt/*manpage*/ ];
 
-  cmakeFlags = stdenv.lib.optional
-    (stdenv.hostPlatform.libc or null == "msvcrt") "-DCMAKE_SYSTEM_NAME=Windows";
-
   # ATM bin/tidy is statically linked, as upstream provides no other option yet.
   # https://github.com/htacg/tidy-html5/issues/326#issuecomment-160322107
 
