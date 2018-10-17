@@ -1896,4 +1896,62 @@ lib.attrsets.overrideExisting
    </para>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.getOutput">
+  <title><function>lib.attrsets.getOutput</function></title>
+
+  <subtitle><literal>getOutput :: String -> Derivation -> Path</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.getOutput" />
+
+  <para>
+   Get a package output. If no output is found, fallback to
+   <literal>out</literal> then to the default.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>output</varname>
+    </term>
+    <listitem>
+     <para>
+      The name of the package output.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>pkg</varname>
+    </term>
+    <listitem>
+     <para>
+      The derivation to get the path for <varname>output</varname> from.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.getOutput-example">
+   <title>Getting the dev output</title>
+   <para>
+<programlisting role="context">
+{
+  pkgs.hello = {
+    outputUnspecified = true;
+    dev = "/nix/store/00000000000000000000000000000000-hello-2.10-dev";
+  };
+}
+</programlisting>
+<programlisting role="input"><![CDATA[
+lib.attrsets.getOutput "dev" pkgs.hello
+]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+"/nix/store/00000000000000000000000000000000-hello-2.10-dev"
+]]></programlisting>
+   </para>
+  </example>
+ </section>
 </section>
