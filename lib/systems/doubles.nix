@@ -15,6 +15,8 @@ let
 
     "x86_64-cygwin" "x86_64-darwin" "x86_64-freebsd" "x86_64-linux"
     "x86_64-netbsd" "x86_64-openbsd" "x86_64-solaris"
+
+    "x86_64-mingw32" "i686-mingw32"
   ];
 
   allParsed = map parse.mkSystemFromString all;
@@ -43,6 +45,7 @@ in rec {
   netbsd  = filterDoubles predicates.isNetBSD;
   openbsd = filterDoubles predicates.isOpenBSD;
   unix    = filterDoubles predicates.isUnix;
+  windows = filterDoubles predicates.isWindows;
 
   mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" "armv5tel-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" "powerpc64le-linux"];
 }
