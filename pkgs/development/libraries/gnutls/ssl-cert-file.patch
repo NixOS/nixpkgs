@@ -1,0 +1,36 @@
+From 53091092876e668a4c43a4944d1b821015dea7a3 Mon Sep 17 00:00:00 2001
+From: Yegor Timoshenko <yegortimoshenko@riseup.net>
+Date: Wed, 17 Oct 2018 07:48:34 +0000
+Subject: [PATCH] Handle SSL_CERT_FILE environment variable
+
+---
+ lib/system/certs.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/lib/system/certs.c b/lib/system/certs.c
+index 53eb561d0..6adb960e3 100644
+--- a/lib/system/certs.c
++++ b/lib/system/certs.c
+@@ -137,6 +137,19 @@ add_system_trust(gnutls_x509_trust_list_t list,
+ 		r += ret;
+ #endif
+ 
++	char *env = secure_getenv("SSL_CERT_FILE");
++
++	if (env != NULL) {
++		ret =
++		    gnutls_x509_trust_list_add_trust_file(list,
++							  env,
++							  crl_file,
++							  GNUTLS_X509_FMT_PEM,
++							  tl_flags, tl_vflags);
++		if (ret > 0)
++			r += ret;
++	}
++
+ #ifdef DEFAULT_BLACKLIST_FILE
+ 	ret = gnutls_x509_trust_list_remove_trust_file(list, DEFAULT_BLACKLIST_FILE, GNUTLS_X509_FMT_PEM);
+ 	if (ret < 0) {
+-- 
+2.19.0
+

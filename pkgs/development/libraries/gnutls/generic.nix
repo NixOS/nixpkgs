@@ -6,7 +6,7 @@
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
 , buildInputs ? []
-, ...}:
+, ... }:
 
 assert guileBindings -> guile != null;
 let
@@ -15,10 +15,12 @@ let
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4"
       && stdenv.buildPlatform == stdenv.hostPlatform;
 in
+
 stdenv.mkDerivation {
   name = "gnutls-${version}";
+  inherit src version;
 
-  inherit src patches;
+  patches = patches ++ [ ./ssl-cert-file.patch ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   outputInfo = "devdoc";
