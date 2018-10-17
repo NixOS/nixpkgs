@@ -2976,24 +2976,7 @@ in {
 
   livestreamer-curses = callPackage ../development/python-modules/livestreamer-curses { };
 
-  oauth = buildPythonPackage (rec {
-    name = "oauth-1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oauth/oauth-1.0.1.tar.gz";
-      sha256 = "0pdgi35hczsslil4890xqawnbpdazkgf2v1443847h5hy2gq2sg7";
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    meta = {
-      homepage = http://code.google.com/p/oauth;
-      description = "Library for OAuth version 1.0a";
-      license = licenses.mit;
-      platforms = platforms.all;
-    };
-  });
+  oauth = callPackage ../development/python-modules/oauth { };
 
   oauth2 = buildPythonPackage (rec {
     name = "oauth2-${version}";
