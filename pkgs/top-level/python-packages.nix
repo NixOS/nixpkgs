@@ -3029,25 +3029,7 @@ in {
 
   WSME = callPackage ../development/python-modules/WSME { };
 
-  zake = buildPythonPackage rec {
-    name = "zake-${version}";
-    version = "0.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zake/${name}.tar.gz";
-      sha256 = "1rp4xxy7qp0s0wnq3ig4ji8xsl31g901qkdp339ndxn466cqal2s";
-    };
-
-    propagatedBuildInputs = with self; [ kazoo six ];
-    buildInputs = with self; [ testtools ];
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover zake/tests
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/yahoo/Zake";
-    };
-  };
+  zake = callPackage ../development/python-modules/zake { };
 
   kazoo = buildPythonPackage rec {
     name = "kazoo-${version}";
