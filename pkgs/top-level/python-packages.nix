@@ -2893,29 +2893,7 @@ in {
 
   monotonic = callPackage ../development/python-modules/monotonic { };
 
-  MySQL_python = buildPythonPackage rec {
-    name = "MySQL-python-1.2.5";
-
-    disabled = isPy3k;
-
-    # plenty of failing tests
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/M/MySQL-python/${name}.zip";
-      sha256 = "0x0c2jg0bb3pp84njaqiic050qkyd7ymwhfvhipnimg58yv40441";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    propagatedBuildInputs = with self; [ pkgs.mysql.connector-c ];
-
-    meta = {
-      description = "MySQL database binding for Python";
-
-      homepage = https://sourceforge.net/projects/mysql-python;
-    };
-  };
+  MySQL_python = callPackage ../development/python-modules/mysql_python { };
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
