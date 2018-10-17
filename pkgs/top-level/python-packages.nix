@@ -3000,30 +3000,7 @@ in {
 
   orderedset = callPackage ../development/python-modules/orderedset { };
 
-  python-otr = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "python-otr";
-    version = "1.2.0";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "AGProjects";
-      repo = pname;
-      rev = "release-" + version;
-      sha256 = "0p3b1n8jlxwd65gbk2k5007fkhdyjwcvr4982s42hncivxvabzzy";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface cryptography application gmpy2 ];
-
-    meta = {
-      description = "A pure python implementation of OTR";
-      homepage = https://github.com/AGProjects/otr;
-      license = licenses.lgpl21Plus;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  };
+  python-otr = callPackage ../development/python-modules/python-otr { };
 
   plone-testing = callPackage ../development/python-modules/plone-testing { };
 
