@@ -1812,4 +1812,88 @@ lib.attrsets.matchAttrs
    </para>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.overrideExisting">
+  <title><function>lib.attrsets.overrideExisting</function></title>
+
+  <subtitle><literal>overrideExisting :: AttrSet -> AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.overrideExisting" />
+
+  <para>
+   Override only the attributes that are already present in the old set. Useful
+   for deep-overriding.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>old</varname>
+    </term>
+    <listitem>
+     <para>
+      The source attribute set which is to be overridden.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>new</varname>
+    </term>
+    <listitem>
+     <para>
+      Attributes to set in the <varname>old</varname> attribute set. Only
+      attribute names set in the <varname>old</varname> attribute set will be
+      overridden by values in the <varname>new</varname> attribute set.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.overrideExisting-example-empty">
+   <title>Overriding an empty attribute set changes nothing</title>
+   <para>
+<programlisting role="input"><![CDATA[
+lib.attrsets.overrideExisting
+  { }
+  { b = 2; }
+       ]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+{}
+       ]]></programlisting>
+   </para>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.overrideExisting-example-no-overlap">
+   <title>Overriding an attribute set with no overlapping attribute names changes nothing</title>
+   <para>
+<programlisting role="input"><![CDATA[
+lib.attrsets.overrideExisting
+  { a = 1; }
+  { b = 2; }
+]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+{ a = 1; }
+]]></programlisting>
+   </para>
+  </example>
+
+  <example xml:id="function-library-lib.attrsets.overrideExisting-example-overlap">
+   <title>Overriding an attribute set with overlap updates the attribute set</title>
+   <para>
+<programlisting role="input"><![CDATA[
+lib.attrsets.overrideExisting
+  { a = 1; b = 2; }
+  { b = 3; }
+]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+{ a = 1; b = 3; }
+]]></programlisting>
+   </para>
+  </example>
+ </section>
 </section>
