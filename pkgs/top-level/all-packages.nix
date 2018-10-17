@@ -8851,7 +8851,7 @@ with pkgs;
 
   sparse = callPackage ../development/tools/analysis/sparse { };
 
-  speedtest-cli = callPackage ../tools/networking/speedtest-cli { };
+  speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 
   spin = callPackage ../development/tools/analysis/spin { };
 
