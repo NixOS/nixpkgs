@@ -12,6 +12,12 @@ with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 let
   nativePlatforms = all;
 
+  embedded = {
+    buildPackages.binutils = nativePlatforms;
+    buildPackages.gcc = nativePlatforms;
+    libcCross = nativePlatforms;
+  };
+
   common = {
     buildPackages.binutils = nativePlatforms;
     gmp = nativePlatforms;
@@ -133,6 +139,11 @@ in
   /* Linux on Aarch64 */
   android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
   });
+
+  avr = mapTestOnCross lib.systems.examples.avr embedded;
+  arm-embedded = mapTestOnCross lib.systems.examples.arm-embedded embedded;
+  powerpc-embedded = mapTestOnCross lib.systems.examples.powerpc-embedded embedded;
+  aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
