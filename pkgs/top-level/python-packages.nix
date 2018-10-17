@@ -2987,19 +2987,7 @@ in {
 
   nosexcover = callPackage ../development/python-modules/nosexcover { };
 
-  nosejs = buildPythonPackage {
-    name = "nosejs-0.9.4";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/N/NoseJS/NoseJS-0.9.4.tar.gz;
-      sha256 = "0qrhkd3sga56qf6k0sqyhwfcladwi05gl6aqmr0xriiq1sgva5dy";
-    };
-    buildInputs = with self; [ nose ];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-  };
+  nosejs = callPackage ../development/python-modules/nosejs { };
 
   nose-cprof = buildPythonPackage rec {
     name = "nose-cprof-${version}";
