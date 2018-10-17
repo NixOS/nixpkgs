@@ -2984,34 +2984,7 @@ in {
 
   oauthlib = callPackage ../development/python-modules/oauthlib { };
 
-  obfsproxy = buildPythonPackage ( rec {
-    name = "obfsproxy-${version}";
-    version = "0.2.13";
-
-    src = pkgs.fetchgit {
-      url = meta.repositories.git;
-      rev = "refs/tags/${name}";
-      sha256 = "04ja1cl8xzqnwrd2gi6nlnxbmjri141bzwa5gybvr44d8h3k2nfa";
-    };
-
-    postPatch = ''
-      substituteInPlace setup.py --replace "version=versioneer.get_version()" "version='${version}'"
-      substituteInPlace setup.py --replace "argparse" ""
-    '';
-
-    propagatedBuildInputs = with self;
-      [ pyptlib argparse twisted pycrypto pyyaml ];
-
-    # No tests in archive
-    doCheck = false;
-
-    meta = {
-      description = "A pluggable transport proxy";
-      homepage = https://www.torproject.org/projects/obfsproxy;
-      repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
-      maintainers = with maintainers; [ phreedom thoughtpolice ];
-    };
-  });
+  obfsproxy = callPackage ../development/python-modules/obfsproxy { };
 
   objgraph = buildPythonPackage rec {
     name = "objgraph-${version}";
