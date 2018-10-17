@@ -135,7 +135,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ which ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
     ++ optional stdenv.isDarwin fixDarwinDylibNames
