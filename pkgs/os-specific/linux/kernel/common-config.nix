@@ -116,6 +116,7 @@ let
       CLS_U32_MARK       = yes;
       BPF_JIT            = when (stdenv.hostPlatform.system == "x86_64-linux") yes;
       WAN                = yes;
+      TCP_CONG_ADVANCED  = yes;
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
       CGROUP_NET_PRIO             = yes; # Required by systemd
