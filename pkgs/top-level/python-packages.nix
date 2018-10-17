@@ -2949,34 +2949,7 @@ in {
 
   nbxmpp = callPackage ../development/python-modules/nbxmpp { };
 
-  sleekxmpp = buildPythonPackage rec {
-    name = "sleekxmpp-${version}";
-    version = "1.3.3";
-
-    patches = [
-      # Fix https://github.com/etingof/pyasn1/issues/112
-      (pkgs.fetchpatch {
-        url = "https://github.com/kdschlosser/SleekXMPP/commit/597014ba5ca258763e96ee37729ac933c5af1602.patch";
-        sha256 = "176v3f3pr0bx48wv1kf9jn2pwxdn7qpqyc2chwv1m8gbppsfaikf";
-      })
-    ];
-
-    propagatedBuildInputs = with self; [ dnspython pyasn1 pyasn1-modules gevent ];
-    checkInputs = [ pkgs.gnupg ];
-    checkPhase = "${python.interpreter} testall.py";
-    doCheck = false; # Tests failed all this time and upstream doesn't seem to care.
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sleekxmpp/${name}.tar.gz";
-      sha256 = "0samiq1d97kk8g9pszfbrbfw9zc41zp6017dbkwha9frf7gc24yj";
-    };
-
-    meta = {
-      description = "XMPP library for Python";
-      license = licenses.mit;
-      homepage = http://sleekxmpp.com/;
-    };
-  };
+  sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
   slixmpp = callPackage ../development/python-modules/slixmpp {};
 
