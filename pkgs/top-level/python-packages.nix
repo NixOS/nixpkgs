@@ -2983,26 +2983,7 @@ in {
 
   nose2 = callPackage ../development/python-modules/nose2 { };
 
-  nose-cover3 = buildPythonPackage rec {
-    name = "nose-cover3-${version}";
-    version = "0.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nose-cover3/${name}.tar.gz";
-      sha256 = "1la4hhc1yszjpcchvkqk5xmzlb2g1b3fgxj9wwc58qc549whlcc1";
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-
-    # No tests included
-    doCheck = false;
-
-    meta = {
-      description = "Coverage 3.x support for Nose";
-      homepage = https://github.com/ask/nosecover3;
-      license = licenses.lgpl21;
-    };
-  };
+  nose-cover3 = callPackage ../development/python-modules/nose-cover3 { };
 
   nosexcover = buildPythonPackage (rec {
     name = "nosexcover-1.0.10";
