@@ -3025,23 +3025,7 @@ in {
 
   kaitaistruct = callPackage ../development/python-modules/kaitaistruct { };
 
-  Kajiki = buildPythonPackage rec {
-    name = "Kajiki-${version}";
-    version = "0.5.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/K/Kajiki/${name}.tar.gz";
-      sha256 = "effcae388e25c3358eb0bbd733448509d11a1ec500e46c69241fc673021f0517";
-    };
-
-    propagatedBuildInputs = with self; [
-      Babel pytz nine
-    ];
-    meta = with stdenv.lib; {
-      description = "Kajiki provides fast well-formed XML templates";
-      homepage = "https://github.com/nandoflorestan/kajiki";
-    };
-  };
+  Kajiki = callPackage ../development/python-modules/kajiki { };
 
   WSME = callPackage ../development/python-modules/WSME { };
 
