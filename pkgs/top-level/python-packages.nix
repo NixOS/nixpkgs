@@ -2857,25 +2857,7 @@ in {
 
   mutagen = callPackage ../development/python-modules/mutagen { };
 
-
-  muttils = buildPythonPackage (rec {
-    name = "muttils-1.3";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = https://www.blacktrash.org/hg/muttils/archive/8bb26094df06.tar.bz2;
-      sha256 = "1a4kxa0fpgg6rdj5p4kggfn8xpniqh8v5kbiaqc6wids02m7kag6";
-    };
-
-    # Tests don't work
-    doCheck = false;
-
-    meta = {
-      description = "Utilities for use with console mail clients, like mutt";
-      homepage = https://www.blacktrash.org/hg/muttils;
-      license = licenses.gpl2Plus;
-    };
-  });
+  muttils = callPackage ../development/python-modules/muttils { };
 
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
 
