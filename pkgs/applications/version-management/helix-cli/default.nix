@@ -9,19 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "770c38fbd3726bd11abfd450900d492b41b5bd6049703a063fca20d1a70ecdc6";
   };
 
-  buildCommand = ''
-    mkdir -p $out/bin/
-    cp $src $out/bin/p4
-    chmod +x $out/bin/p4
+  dontBuild = true;
+  phases = [ "installPhase" ];
 
-    chmod +w $out/bin/p4
+  installPhase = ''
+    install -D -m755 $src $out/bin/p4
 
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath $libPath \
       $out/bin/p4
-
-    chmod -w $out/bin/p4
-  '';
+    '';
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.libc ];
