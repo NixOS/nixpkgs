@@ -24,15 +24,19 @@ stdenv.mkDerivation rec {
       libvncserver
     ];
 
-  preConfigure = ''
-    configureFlags="--mandir=$out/share/man"
-
+  postPatch = ''
     substituteInPlace src/unixpw.c \
         --replace '"/bin/su"' '"/run/wrappers/bin/su"' \
         --replace '"/bin/true"' '"${coreutils}/bin/true"'
 
     sed -i -e '/#!\/bin\/sh/a"PATH=${xorg.xdpyinfo}\/bin:${xorg.xauth}\/bin:$PATH\\n"' -e 's|/bin/su|/run/wrappers/bin/su|g' src/ssltools.h
+
+    # Xdummy script is currently broken, so we avoid building it. This removes everything Xdummy-related from the affected Makefile
     sed -i -e '/^\tXdummy.c\ \\$/,$d' -e 's/\tx11vnc_loop\ \\/\tx11vnc_loop/' misc/Makefile.am
+  '';
+
+  preConfigure = ''
+    configureFlags="--mandir=$out/share/man"
   '';
 
   meta = with stdenv.lib; {
