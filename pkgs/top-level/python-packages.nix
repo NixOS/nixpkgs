@@ -2989,21 +2989,7 @@ in {
 
   nosejs = callPackage ../development/python-modules/nosejs { };
 
-  nose-cprof = buildPythonPackage rec {
-    name = "nose-cprof-${version}";
-    version = "0.1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nose-cprof/${name}.tar.gz";
-      sha256 = "0ayy5mbjly9aa9dkgpz0l06flspnxmnj6wxdl6zr59byrrr8fqhw";
-    };
-
-    meta = {
-      description = "A python nose plugin to profile using cProfile rather than the default Hotshot profiler";
-    };
-
-    buildInputs = with self; [ nose ];
-  };
+  nose-cprof = callPackage ../development/python-modules/nose-cprof { };
 
   nose_warnings_filters = callPackage ../development/python-modules/nose_warnings_filters { };
 
