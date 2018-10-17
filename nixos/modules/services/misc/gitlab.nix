@@ -53,6 +53,7 @@ let
     repos_path: "${cfg.statePath}/repositories"
     secret_file: "${cfg.statePath}/config/gitlab_shell_secret"
     log_file: "${cfg.statePath}/log/gitlab-shell.log"
+    custom_hooks_dir: "${cfg.statePath}/custom_hooks"
     redis:
       bin: ${pkgs.redis}/bin/redis-cli
       host: 127.0.0.1
@@ -562,6 +563,9 @@ in {
         mkdir -p ${cfg.statePath}/shell
         mkdir -p ${cfg.statePath}/db
         mkdir -p ${cfg.statePath}/uploads
+        mkdir -p ${cfg.statePath}/custom_hooks/pre-receive.d
+        mkdir -p ${cfg.statePath}/custom_hooks/post-receive.d
+        mkdir -p ${cfg.statePath}/custom_hooks/update.d
 
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config

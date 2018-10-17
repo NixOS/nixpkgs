@@ -149,6 +149,7 @@
   ./security/duosec.nix
   ./security/hidepid.nix
   ./security/lock-kernel-modules.nix
+  ./security/misc.nix
   ./security/oath.nix
   ./security/pam.nix
   ./security/pam_usb.nix
@@ -634,7 +635,7 @@
   ./services/networking/zerobin.nix
   ./services/networking/zeronet.nix
   ./services/networking/zerotierone.nix
-  ./services/networking/znc.nix
+  ./services/networking/znc/default.nix
   ./services/printing/cupsd.nix
   ./services/scheduling/atd.nix
   ./services/scheduling/chronos.nix

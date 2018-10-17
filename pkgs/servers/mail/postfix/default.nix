@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre
+, withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
 , withMySQL ? false, mysql
 , withSQLite ? false, sqlite
-, withLDAP ? false, openldap
 }:
 
 let

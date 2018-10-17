@@ -5,10 +5,10 @@
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
-    sha256 = "0fpv8k16s14g0r552mhbh0mkr716cqy41d2znyrvks6qfphkgir4";
+    sha256 = "1x4a8r4m68m93q52ffxvaip9nnwx9yqvd1m90v80777c11s20a4n";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
@@ -21,8 +21,11 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [ file ];
-  doCheck = false; # fails with "zstd: --list does not support reading from standard input"
-                   # probably a bug
+  doCheck = true;
+  preCheck = ''
+    substituteInPlace tests/playTests.sh \
+      --replace 'MD5SUM="md5 -r"' 'MD5SUM="md5sum"'
+  '';
 
   installFlags = [
     "PREFIX=$(out)"

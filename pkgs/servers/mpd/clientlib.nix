@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, meson, ninja, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  version = "2.15";
+  version = "2.16";
   name = "libmpdclient-${version}";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "libmpdclient";
     rev    = "v${version}";
-    sha256 = "18x6drzh867afwaakyfb8hcx37pnxxwvvpcs3n2fimnfa6vxgwaa";
+    sha256 = "0kd76pcf8pvmzl4k3cbq68c16imwaak2zljsa1wwwgk6idyw6gb1";
   };
 
   nativeBuildInputs = [ meson ninja ]

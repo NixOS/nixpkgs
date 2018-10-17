@@ -134,13 +134,16 @@ let
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported.
     pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
-      localSystem = {
+      inherit overlays config;
+      ${if stdenv.hostPlatform == stdenv.buildPlatform
+        then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
           abi = {
             "gnu" = lib.systems.parse.abis.musl;
             "gnueabi" = lib.systems.parse.abis.musleabi;
             "gnueabihf" = lib.systems.parse.abis.musleabihf;
-          }.${stdenv.hostPlatform.parsed.abi.name} or lib.systems.parse.abis.musl;
+          }.${stdenv.hostPlatform.parsed.abi.name}
+            or lib.systems.parse.abis.musl;
         };
       };
     } else throw "Musl libc only supports Linux systems.";
@@ -148,7 +151,9 @@ let
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux = assert stdenv.hostPlatform.isLinux; nixpkgsFun {
-      localSystem = {
+      inherit overlays config;
+      ${if stdenv.hostPlatform == stdenv.buildPlatform
+        then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.i686;
         };
