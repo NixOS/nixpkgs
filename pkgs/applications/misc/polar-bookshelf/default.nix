@@ -5,7 +5,7 @@
 , libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver
 , nss, nspr, alsaLib, cups, fontconfig, expat
-, libudev0-shim, glibc, curl, openssl, nghttp2, gsettings_desktop_schemas }:
+, libudev0-shim, glibc, curl, openssl, nghttp2, gnome3 }:
 
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    gsettings_desktop_schemas
+    gnome3.gsettings_desktop_schemas
     glib
     gtk3
   ];
