@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpcap, pkgconfig, openssl, lua
+{ stdenv, fetchurl, libpcap, pkgconfig, openssl, lua5_3
 , graphicalSupport ? false
 , libX11 ? null
 , gtk2 ? null
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
         --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  configureFlags = [ "--with-liblua=${lua}" ]
+  configureFlags = [ "--with-liblua=${lua5_3}" ]
     ++ optional (!pythonSupport) "--without-ndiff"
     ++ optional (!graphicalSupport) "--without-zenmap"
     ;
