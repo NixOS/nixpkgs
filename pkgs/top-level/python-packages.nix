@@ -2974,24 +2974,7 @@ in {
 
   livestreamer = callPackage ../development/python-modules/livestreamer { };
 
-  livestreamer-curses = buildPythonPackage rec {
-    version = "1.5.2";
-    name = "livestreamer-curses-${version}";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/gapato/livestreamer-curses/archive/v${version}.tar.gz";
-      sha256 = "1v49sym6mrci9dxy0a7cpbp4bv6fg2ijj6rwk4wzg18c2x4qzkhn";
-    };
-
-    propagatedBuildInputs = with self; [ livestreamer ];
-
-    meta = {
-      homepage = https://github.com/gapato/livestreamer-curses;
-      description = "Curses frontend for livestreamer";
-      license = licenses.mit;
-    };
-  };
+  livestreamer-curses = callPackage ../development/python-modules/livestreamer-curses { };
 
   oauth = buildPythonPackage (rec {
     name = "oauth-1.0.1";
