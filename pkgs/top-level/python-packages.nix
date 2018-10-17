@@ -4326,30 +4326,7 @@ in {
     };
   };
 
-  slixmpp = buildPythonPackage rec {
-    name = "slixmpp-${version}";
-    version = "1.2.4.post1";
-
-    disabled = pythonOlder "3.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
-      sha256 = "0v6430dczai8a2nmznhja2dxl6pxa8c5j20nhc5737bqjg7245jk";
-    };
-
-    patchPhase = ''
-      substituteInPlace slixmpp/thirdparty/gnupg.py \
-        --replace "gpgbinary='gpg'" "gpgbinary='${pkgs.gnupg1}/bin/gpg'"
-    '';
-
-    propagatedBuildInputs = with self ; [ aiodns pyasn1 pkgs.gnupg1 pyasn1-modules];
-
-    meta = {
-      description = "Elegant Python library for XMPP";
-      license = licenses.mit;
-      homepage = https://dev.louiz.org/projects/slixmpp;
-    };
-  };
+  slixmpp = callPackage ../development/python-modules/slixmpp {};
 
   netaddr = buildPythonPackage rec {
     pname = "netaddr";
@@ -12331,35 +12308,7 @@ EOF
     };
   };
 
-  poezio = buildPythonApplication rec {
-    name = "poezio-${version}";
-    version = "0.11";
-
-    disabled = pythonOlder "3.4";
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
-
-    src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/118/${name}.tar.gz";
-      sha256 = "07cn3717swarjv47yw8x95bvngz4nvlyyy9m7ck9fhycjgdy82r0";
-    };
-
-    patches = [
-      ../development/python-modules/poezio/fix_gnupg_import.patch
-    ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Free console XMPP client";
-      homepage = https://poez.io;
-      license = licenses.mit;
-      maintainers = [ maintainers.lsix ];
-    };
-  };
+  poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
   potr = callPackage ../development/python-modules/potr {};
 
