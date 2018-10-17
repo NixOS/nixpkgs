@@ -2885,32 +2885,7 @@ in {
 
   pymc3 = callPackage ../development/python-modules/pymc3 { };
 
-  pympler = buildPythonPackage rec {
-    pname = "Pympler";
-    version = "0.4.3";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/${pname}/${name}.tar.gz";
-      sha256 = "0mhyxqlkha98y8mi5zqcjg23r30mgdjdzs05lghbmqfdyvzjh1a3";
-    };
-
-  # Remove test asizeof.flatsize(), broken and can be missed as
-  # test is only useful on python 2.5, see https://github.com/pympler/pympler/issues/22
-   patchPhase = ''
-     substituteInPlace ./test/asizeof/test_asizeof.py --replace "n, e = test_flatsize" "#n, e = test_flatsize"
-     substituteInPlace ./test/asizeof/test_asizeof.py --replace "self.assert_(n," "#self.assert_(n,"
-     substituteInPlace ./test/asizeof/test_asizeof.py --replace "self.assert_(not e" "#self.assert_(not e"
-    '';
-
-    doCheck = stdenv.hostPlatform.isLinux;
-
-    meta = {
-      description = "Tool to measure, monitor and analyze memory behavior";
-      homepage = https://pythonhosted.org/Pympler/;
-      license = licenses.asl20;
-    };
-  };
+  pympler = callPackage ../development/python-modules/pympler { };
 
   pymysqlsa = self.buildPythonPackage rec {
     name = "pymysqlsa-${version}";
