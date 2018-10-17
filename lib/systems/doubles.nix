@@ -16,7 +16,7 @@ let
     "x86_64-cygwin" "x86_64-darwin" "x86_64-freebsd" "x86_64-linux"
     "x86_64-netbsd" "x86_64-openbsd" "x86_64-solaris"
 
-    "x86_64-mingw32" "i686-mingw32"
+    "x86_64-windows" "i686-windows"
   ];
 
   allParsed = map parse.mkSystemFromString all;
