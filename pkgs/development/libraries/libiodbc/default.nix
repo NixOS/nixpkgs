@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS_BEFORE="-rpath $out/lib"
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "iODBC driver manager";
     homepage = http://www.iodbc.org;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.bsd3;
   };
 }

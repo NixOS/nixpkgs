@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # since glib-2.46
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "Library for managing accounts which can be used from GLib applications";
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
   };
 }
