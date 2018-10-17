@@ -40,6 +40,12 @@ in stdenv.mkDerivation rec {
     ++ optional (!graphicalSupport) "--without-zenmap"
     ;
 
+  makeFlags = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.bintools.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"
+    "CC=${stdenv.cc.targetPrefix}gcc"
+  ];
+
   postInstall = optionalString pythonSupport ''
       wrapProgram $out/bin/ndiff --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH"
   '' + optionalString graphicalSupport ''
