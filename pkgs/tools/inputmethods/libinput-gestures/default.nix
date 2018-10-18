@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper,
-  libinput, wmctrl,
+  libinput, wmctrl, python3,
   xdotool ? null,
   extraUtilsPath ? lib.optional (xdotool != null) xdotool
 }:
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3 ];
 
   postPatch =
     ''
