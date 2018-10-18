@@ -1,7 +1,6 @@
 { stdenv
 , runCommand
 , fetchFromGitHub
-, libpulseaudio
 , pulseaudio
 , pkgconfig
 , ffmpeg_4
@@ -44,7 +43,6 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libpulseaudio
     pulseaudio
     ffmpeg_4
     libtool
@@ -67,7 +65,7 @@ in stdenv.mkDerivation rec {
     for so in $out/lib/pulse-${pulseaudio.version}/modules/*.so; do
       orig_rpath=$(patchelf --print-rpath "$so")
       patchelf \
-        --set-rpath "$orig_rpath:${lib.getLib ffmpeg_4}/lib:$out/lib/pulse-${pulseaudio.version}/modules" \
+        --set-rpath "${lib.getLib ffmpeg_4}/lib:$out/lib/pulse-${pulseaudio.version}/modules:$orig_rpath" \
         "$so"
     done
   '';
