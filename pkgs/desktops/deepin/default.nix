@@ -6,6 +6,7 @@ let
     dbus-factory = callPackage ./dbus-factory { };
     dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
+    dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     deepin-desktop-base = callPackage ./deepin-desktop-base { };
     deepin-desktop-schemas = callPackage ./deepin-desktop-schemas { };
@@ -25,6 +26,7 @@ let
     };
     deepin-wallpapers = callPackage ./deepin-wallpapers { };
     deepin-wm = callPackage ./deepin-wm { };
+    dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
     dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };
