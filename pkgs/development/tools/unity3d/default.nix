@@ -37,12 +37,7 @@ in stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  unpackPhase = ''
-    tar xJf $src
-  '';
-
   buildPhase = ''
-
     cd Editor
 
     $CC -fPIC -shared -o libunity-nosuid.so $nosuidLib -ldl
