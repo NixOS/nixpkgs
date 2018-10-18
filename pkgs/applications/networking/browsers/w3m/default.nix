@@ -15,13 +15,13 @@ assert mouseSupport -> gpm-ncurses != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "w3m-0.5.3+git20161120";
+  name = "w3m-0.5.3+git20180125";
 
   src = fetchFromGitHub {
     owner = "tats";
     repo = "w3m";
-    rev = "v0.5.3+git20161120";
-    sha256 = "06n5a9jdyihkd4xdjmyci32dpqp1k2l5awia5g9ng0bn256bacdc";
+    rev = "v0.5.3+git20180125";
+    sha256 = "0dafdfx1yhrvhbqzslkcapj09dvf64m2jadz3wl2icni0k4msq90";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";
