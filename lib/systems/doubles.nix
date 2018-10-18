@@ -39,7 +39,7 @@ in rec {
   darwin  = filterDoubles predicates.isDarwin;
   freebsd = filterDoubles predicates.isFreeBSD;
   # Should be better, but MinGW is unclear.
-  gnu     = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; });
+  gnu     = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; }) ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabi; }) ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabihf; });
   illumos = filterDoubles predicates.isSunOS;
   linux   = filterDoubles predicates.isLinux;
   netbsd  = filterDoubles predicates.isNetBSD;
