@@ -194,7 +194,7 @@ let
                      optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkFrameworkDepends);
 
 
-  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs ++ depsBuildBuild;
+  allBuildInputs = propagatedBuildInputs ++ otherBuildInputs ++ depsBuildBuild ++ nativeBuildInputs;
   isHaskellPartition =
     stdenv.lib.partition isHaskellPkg allBuildInputs;
 
