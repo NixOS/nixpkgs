@@ -111,8 +111,8 @@ let
 
         postPatch = if isRuby25 then ''
           sed -i configure.ac -e '/config.guess/d'
-          cp ${config}/config.guess tool/
-          cp ${config}/config.sub tool/
+          cp --remove-destination ${config}/config.guess tool/
+          cp --remove-destination ${config}/config.sub tool/
         ''
         else opString useRailsExpress ''
           sed -i configure.in -e '/config.guess/d'
@@ -218,10 +218,10 @@ in {
   };
 
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "1" "";
+    version = rubyVersion "2" "5" "2" "";
     sha256 = {
-      src = "1c99k0fjaq7k09104h1b1cqx6mrk2b14ic1jjnxc6yav68i1ij6s";
-      git = "1j0fd16aq9x98n0kq9c3kfp2sh6xcsq8q4733p0wfqjh3vz50kyj";
+      src = "0wgl1697sdiqh6ksgv40v627jp5557j1zi462krwnzhc9bk408xk";
+      git = "00xy323q2f2v102hfgsj9k20vggvvmyhd6byfhbc1qwz2vyrvc47";
     };
   };
 }
