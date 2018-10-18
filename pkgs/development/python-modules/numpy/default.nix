@@ -1,5 +1,7 @@
 { stdenv, lib, fetchPypi, python, buildPythonPackage, isPyPy, gfortran, pytest, blas }:
 
+let blasImplementation = stdenv.lib.nameFromURL blas.name "-";
+in
 buildPythonPackage rec {
   pname = "numpy";
   version = "1.15.1";
@@ -38,7 +40,16 @@ buildPythonPackage rec {
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
   '';
 
-  preBuild = ''
+  preBuild = if blasImplementation == "mkl" then ''
+    echo "Creating site.cfg file..."
+    cat << EOF > site.cfg
+    [mkl]
+    include_dirs = ${blas}/include
+    library_dirs = ${blas}/lib
+    mkl_libs = mkl_rt
+  	lapack_libs =
+    EOF
+  '' else ''
     echo "Creating site.cfg file..."
     cat << EOF > site.cfg
     [openblas]

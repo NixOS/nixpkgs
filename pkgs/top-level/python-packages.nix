@@ -8111,6 +8111,10 @@ in {
     blas = pkgs.openblasCompat;
   };
 
+  numpy-mkl = callPackage ../development/python-modules/numpy {
+    blas = pkgs.mkl;
+  };
+
   numpydoc = callPackage ../development/python-modules/numpydoc { };
 
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
