@@ -923,9 +923,9 @@ self: super: {
   text-icu = dontCheck super.text-icu;
 
   # https://github.com/haskell/cabal/issues/4969
-  haddock-api = (super.haddock-api.overrideScope (self: super: {
-    haddock-library = self.haddock-library_1_6_0;
-  })).override { hspec = self.hspec_2_4_8; };
+  # haddock-api = (super.haddock-api.overrideScope (self: super: {
+  #   haddock-library = self.haddock-library_1_6_0;
+  # })).override { hspec = self.hspec_2_4_8; };
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
   # Jailbreak "graphviz >=2999.18.1 && <2999.20".
@@ -1060,7 +1060,7 @@ self: super: {
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
-  haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
+  # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
   # The tool needs a newer hpack version than the one mandated by LTS-12.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
