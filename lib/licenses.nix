@@ -585,6 +585,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Ruby License";
   };
 
+  sendmail = spdx {
+    spdxId = "Sendmail";
+    fullName = "Sendmail License";
+  };
+
   sgi-b-20 = spdx {
     spdxId = "SGI-B-2.0";
     fullName = "SGI Free Software License B v2.0";
