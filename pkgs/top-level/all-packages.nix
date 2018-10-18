@@ -22699,4 +22699,7 @@ with pkgs;
   };
 
   tsung = callPackage ../applications/networking/tsung {};
+
+  jack-tools = callPackage ../tools/audio/jack-tools {};
+
 }
