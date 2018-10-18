@@ -8280,7 +8280,7 @@ with pkgs;
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
   cquery = callPackage ../development/tools/misc/cquery {
-    llvmPackages = llvmPackages_6;
+    llvmPackages = llvmPackages_7;
   };
 
   creduce = callPackage ../development/tools/misc/creduce {
