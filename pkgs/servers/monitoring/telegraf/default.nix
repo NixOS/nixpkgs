@@ -19,7 +19,7 @@ buildGoPackage rec {
     -X main.version=${version}
   '' ];
 
-  goDeps = ./. + builtins.toPath "/deps-${version}.nix";
+  goDeps = ./. + "/deps-${version}.nix";
 
   meta = with lib; {
     description = "The plugin-driven server agent for collecting & reporting metrics.";

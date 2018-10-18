@@ -4,7 +4,6 @@
 args @ {config, lib, pkgs}: with args; with pkgs;
 let
   gitBase = callPackage ./git {
-    texinfo = texinfo5;
     svnSupport = false;         # for git-svn support
     guiSupport = false;         # requires tcl/tk
     sendEmailSupport = false;   # requires plenty of perl libraries
@@ -30,6 +29,8 @@ let
   ghq = callPackage ./ghq { };
 
   git = appendToName "minimal" gitBase;
+
+  git-appraise = callPackage ./git-appraise {};
 
   git-fame = callPackage ./git-fame {};
 
@@ -112,6 +113,8 @@ let
   hubUnstable = throw "use gitAndTools.hub instead";
 
   pre-commit = callPackage ./pre-commit { };
+
+  pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 
   qgit = qt5.callPackage ./qgit { };
 

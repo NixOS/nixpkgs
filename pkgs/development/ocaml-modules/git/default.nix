@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune
 , astring, decompress, fmt, hex, logs, mstruct, ocaml_lwt, ocamlgraph, uri
 , alcotest, mtime, nocrypto
 }:
@@ -14,16 +14,16 @@ stdenv.mkDerivation rec {
 		sha256 = "0r1bxpxjjnl9hh8xbabsxl7svzvd19hfy73a2y1m4kljmw64dpfh";
 	};
 
-	buildInputs = [ ocaml findlib jbuilder alcotest mtime nocrypto ];
+	buildInputs = [ ocaml findlib dune alcotest mtime nocrypto ];
 
 	propagatedBuildInputs = [ astring decompress fmt hex logs mstruct ocaml_lwt ocamlgraph uri ];
 
-	buildPhase = "jbuilder build -p git";
+	buildPhase = "dune build -p git";
 
-	inherit (jbuilder) installPhase;
+	inherit (dune) installPhase;
 
 	doCheck = true;
-	checkPhase = "jbuilder runtest -p git";
+	checkPhase = "dune runtest -p git";
 
 	meta = {
 		description = "Git format and protocol in pure OCaml";

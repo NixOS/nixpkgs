@@ -1,0 +1,105 @@
+--- a/whipper/program/arc.py
++++ b/whipper/program/arc.py
+@@ -3,8 +3,8 @@
+ import logging
+ logger = logging.getLogger(__name__)
+ 
+-ARB = 'accuraterip-checksum'
+-FLAC = 'flac'
++ARB = '@accurateripChecksum@/bin/accuraterip-checksum'
++FLAC = '@flac@/bin/flac'
+ 
+ 
+ def _execute(cmd, **redirects):
+--- a/whipper/program/cdparanoia.py
++++ b/whipper/program/cdparanoia.py
+@@ -280,10 +280,10 @@
+ 
+         bufsize = 1024
+         if self._overread:
+-            argv = ["cd-paranoia", "--stderr-progress",
++            argv = ["@cdparanoia@/bin/cdparanoia", "--stderr-progress",
+                     "--sample-offset=%d" % self._offset, "--force-overread", ]
+         else:
+-            argv = ["cd-paranoia", "--stderr-progress",
++            argv = ["@cdparanoia@/bin/cdparanoia", "--stderr-progress",
+                     "--sample-offset=%d" % self._offset, ]
+         if self._device:
+             argv.extend(["--force-cdrom-device", self._device, ])
+@@ -560,7 +560,7 @@
+ 
+ def getCdParanoiaVersion():
+     getter = common.VersionGetter('cd-paranoia',
+-                                  ["cd-paranoia", "-V"],
++                                  ["@cdparanoia@/bin/cdparanoia", "-V"],
+                                   _VERSION_RE,
+                                   "%(version)s %(release)s")
+ 
+@@ -585,7 +585,7 @@
+     def __init__(self, device=None):
+         # cdparanoia -A *always* writes cdparanoia.log
+         self.cwd = tempfile.mkdtemp(suffix='.whipper.cache')
+-        self.command = ['cd-paranoia', '-A']
++        self.command = ['@cdparanoia@/bin/cdparanoia', '-A']
+         if device:
+             self.command += ['-d', device]
+ 
+--- a/whipper/program/cdrdao.py
++++ b/whipper/program/cdrdao.py
+@@ -9,7 +9,7 @@
+ import logging
+ logger = logging.getLogger(__name__)
+ 
+-CDRDAO = 'cdrdao'
++CDRDAO = '@cdrdao@/bin/cdrdao'
+ 
+ 
+ def read_toc(device, fast_toc=False):
+--- a/whipper/program/sox.py
++++ b/whipper/program/sox.py
+@@ -4,7 +4,7 @@
+ import logging
+ logger = logging.getLogger(__name__)
+ 
+-SOX = 'sox'
++SOX = '@sox@/bin/sox'
+ 
+ 
+ def peak_level(track_path):
+--- a/whipper/program/soxi.py
++++ b/whipper/program/soxi.py
+@@ -6,7 +6,7 @@
+ import logging
+ logger = logging.getLogger(__name__)
+ 
+-SOXI = 'soxi'
++SOXI = '@sox@/bin/soxi'
+ 
+ 
+ class AudioLengthTask(ctask.PopenTask):
+--- a/whipper/program/utils.py
++++ b/whipper/program/utils.py
+@@ -9,7 +9,7 @@
+     Eject the given device.
+     """
+     logger.debug("ejecting device %s", device)
+-    os.system('eject %s' % device)
++    os.system('@utillinux@/bin/eject %s' % device)
+ 
+ 
+ def load_device(device):
+@@ -17,7 +17,7 @@
+     Load the given device.
+     """
+     logger.debug("loading (eject -t) device %s", device)
+-    os.system('eject -t %s' % device)
++    os.system('@utillinux@/bin/eject -t %s' % device)
+ 
+ 
+ def unmount_device(device):
+@@ -32,4 +32,4 @@
+     proc = open('/proc/mounts').read()
+     if device in proc:
+         print 'Device %s is mounted, unmounting' % device
+-        os.system('umount %s' % device)
++        os.system('@utillinux@/bin/umount %s' % device)

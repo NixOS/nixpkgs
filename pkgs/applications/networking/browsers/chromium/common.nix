@@ -1,4 +1,4 @@
-{ stdenv, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
+{ stdenv, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -14,7 +14,7 @@
 , glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2
+, ffmpeg, libxslt, libxml2, at-spi2-core
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -129,7 +129,8 @@ let
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optional (versionAtLeast version "71") at-spi2-core;
 
     patches = [
       # As major versions are added, you can trawl the gentoo and arch repos at
@@ -139,14 +140,27 @@ let
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
       ./patches/fix-freetype.patch
       ./patches/nix_plugin_paths_68.patch
-    ]  ++ optionals (versionRange "68" "69") [
-      ./patches/remove-webp-include-68.patch
-      (githubPatch "4d10424f9e2a06978cdd6cdf5403fcaef18e49fc" "11la1jycmr5b5rw89mzcdwznmd2qh28sghvz9klr1qhmsmw1vzjc")
-      (githubPatch "56cb5f7da1025f6db869e840ed34d3b98b9ab899" "04mp5r1yvdvdx6m12g3lw3z51bzh7m3gr73mhblkn4wxdbvi3dcs")
-    ]  ++ optionals (versionAtLeast version "69") [
       ./patches/remove-webp-include-69.patch
-    ] ++ optional enableWideVine ./patches/widevine.patch;
-
+    ] ++ optional enableWideVine ./patches/widevine.patch
+      ++ optional ((versionRange "69" "70") && stdenv.isAarch64)
+           (fetchpatch {
+              url    = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/0001-vpx_sum_squares_2d_i16_neon-Make-s2-a-uint64x1_t.patch;
+              sha256 = "0f37rsjx7jcvdngkj8y6600091nwgn4jci0ny7bxlapq0zx2a4x7";
+            })
+      ++ optional stdenv.isAarch64
+           (if (versionOlder version "71") then
+              fetchpatch {
+                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
+                sha256    = "0dkchqair8cy2f5a5p5vi24r9b4d28pgn2bfvm1568lypbjw6iab";
+              }
+            else
+              fetchpatch {
+                url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
+                postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
+                sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
+              }
+            );
+            
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -219,7 +233,6 @@ let
       is_clang = false;
       clang_use_chrome_plugins = false;
       remove_webcore_debug_symbols = true;
-      use_gtk3 = true;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
@@ -230,6 +243,8 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
       google_default_client_id = "404761575300.apps.googleusercontent.com";
       google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
+    } // optionalAttrs (versionRange "60" "70") {
+      use_gtk3 = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -243,15 +258,11 @@ let
     configurePhase = ''
       runHook preConfigure
 
-      # Build gn
-      python tools/gn/bootstrap/bootstrap.py -v -s --no-clean
-      PATH="$PWD/out/Release:$PATH"
-
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
-      gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      ${gn}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1

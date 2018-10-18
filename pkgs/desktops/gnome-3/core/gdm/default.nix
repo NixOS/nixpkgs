@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.28.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gdm/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "12d1cp2dyca8rwh9y9cg8xn6grdp8nmxkkqwg4xpkr8i8ml65n88";
   };
 
@@ -37,13 +37,27 @@ stdenv.mkDerivation rec {
 
   # Disable Access Control because our X does not support FamilyServerInterpreted yet
   patches = [
+    # Change hardcoded paths to nix store paths.
     (substituteAll {
       src = ./fix-paths.patch;
       inherit coreutils plymouth xwayland;
     })
+
+    # The following patches implement certain environment variables in GDM which are set by
+    # the gdm configuration module (nixos/modules/services/x11/display-managers/gdm.nix).
+
+    # Look for session definition files in the directory specified by GDM_SESSIONS_DIR.
     ./sessions_dir.patch
+
+    # Allow specifying X server arguments with GDM_X_SERVER_EXTRA_ARGS.
     ./gdm-x-session_extra_args.patch
-    ./gdm-session-worker_xserver-path.patch
+
+    # Allow specifying a wrapper for running the session command.
+    ./gdm-x-session_session-wrapper.patch
+
+    # Forwards certain environment variables to the gdm-x-session child process
+    # to ensure that the above two patches actually work.
+    ./gdm-session-worker_forward-vars.patch
   ];
 
   installFlags = [

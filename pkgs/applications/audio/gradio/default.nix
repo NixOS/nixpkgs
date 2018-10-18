@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+    glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 
   patches = [ ./0001-Remove-post-install-script-that-hardcodes-paths.patch ];

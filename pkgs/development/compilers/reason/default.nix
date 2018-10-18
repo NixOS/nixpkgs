@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune
 , menhir, merlin_extend, ppx_tools_versioned, utop
 }:
 
@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
 
-  buildInputs = [ makeWrapper ocaml findlib jbuilder utop menhir ];
+  buildInputs = [ makeWrapper ocaml findlib dune utop menhir ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
   installPhase = ''
     for p in reason rtop
     do
-      ${jbuilder.installPhase} $p.install
+      ${dune.installPhase} $p.install
     done
 
     wrapProgram $out/bin/rtop \

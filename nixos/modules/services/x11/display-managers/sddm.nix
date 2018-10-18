@@ -20,6 +20,7 @@ let
   Xsetup = pkgs.writeScript "Xsetup" ''
     #!/bin/sh
     ${cfg.setupScript}
+    ${dmcfg.setupCommands}
   '';
 
   Xstop = pkgs.writeScript "Xstop" ''
@@ -137,7 +138,8 @@ in
           xrandr --auto
         '';
         description = ''
-          A script to execute when starting the display server.
+          A script to execute when starting the display server. DEPRECATED, please
+          use <option>services.xserver.displayManager.setupCommands</option>.
         '';
       };
 
@@ -263,7 +265,9 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
-    environment.pathsToLink = [ "/share/sddm/themes" ];
+    environment.pathsToLink = [ 
+      "/share/sddm" 
+    ];
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 

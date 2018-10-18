@@ -1,13 +1,8 @@
 { config, pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
-  # Convert a version to branch (3.26.18 → 3.26)
-  # Used for finding packages on GNOME mirrors
-  versionBranch = version: builtins.concatStringsSep "." (lib.take 2 (lib.splitString "." version));
-
   updateScript = callPackage ./update.nix { };
 
-  version = "3.26";
   maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
 
   corePackages = with gnome3; [
@@ -215,6 +210,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   };
 
   rest = callPackage ./core/rest { };
+
+  rygel = callPackage ./core/rygel { };
 
   simple-scan = callPackage ./core/simple-scan { };
 

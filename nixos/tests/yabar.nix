@@ -8,18 +8,26 @@ with lib;
     maintainers = [ ma27 ];
   };
 
-  nodes.yabar = {
+  machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
 
     services.xserver.displayManager.auto.user = "bob";
 
     programs.yabar.enable = true;
+    programs.yabar.bars = {
+      top.indicators.date.exec = "YABAR_DATE";
+    };
   };
 
   testScript = ''
-    $yabar->start;
-    $yabar->waitForX;
+    $machine->start;
+    $machine->waitForX;
 
-    $yabar->waitForUnit("yabar.service", "bob");
+    # confirm proper startup
+    $machine->waitForUnit("yabar.service", "bob");
+    $machine->sleep(10);
+    $machine->waitForUnit("yabar.service", "bob");
+
+    $machine->screenshot("top_bar");
   '';
 })

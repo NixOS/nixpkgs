@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder, ocaml_lwt
+{ stdenv, fetchurl, ocaml, findlib, dune, ocaml_lwt
 , lwt_ppx, ocaml-migrate-parsetree, ppx_tools_versioned, csv, ocaml_sqlite3
 }:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   sha256 = "0z0bkzi1mh0m39alzr2ds7hjpfxffx6azpfsj2wpaxrg64ks8ypd";
   };
 
-  buildInputs = [ ocaml findlib jbuilder lwt_ppx ocaml-migrate-parsetree ppx_tools_versioned ];
+  buildInputs = [ ocaml findlib dune lwt_ppx ocaml-migrate-parsetree ppx_tools_versioned ];
 
   propagatedBuildInputs = [ ocaml_lwt csv ocaml_sqlite3 ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "dune runtest -p sqlexpr";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "Type-safe, convenient SQLite database access";

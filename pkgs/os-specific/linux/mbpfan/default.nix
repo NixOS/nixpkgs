@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "mbpfan-${version}";
-  version = "2.0.2";
+  version = "2.1.0";
   src = fetchFromGitHub {
     owner = "dgraziotin";
     repo = "mbpfan";
     rev = "v${version}";
-    sha256 = "1l8fj92jxfp0sldvznsdsm3pn675b35clq3371h6d5wk4jx67fvg";
+    sha256 = "1gysq778rkl6dvvj9a1swxcl15wvz0bng5bn4nwq118cl8p8pask";
   };
   installPhase = ''
     mkdir -p $out/bin $out/etc

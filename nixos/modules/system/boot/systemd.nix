@@ -747,6 +747,7 @@ in
 
       "systemd/journald.conf".text = ''
         [Journal]
+        Storage=persistent
         RateLimitInterval=${config.services.journald.rateLimitInterval}
         RateLimitBurst=${toString config.services.journald.rateLimitBurst}
         ${optionalString (config.services.journald.console != "") ''
@@ -782,19 +783,6 @@ in
     });
 
     services.dbus.enable = true;
-
-    system.activationScripts.systemd = stringAfter [ "groups" ]
-      ''
-        mkdir -m 0755 -p /var/lib/udev
-
-        if ! [ -e /etc/machine-id ]; then
-          ${systemd}/bin/systemd-machine-id-setup
-        fi
-
-        # Keep a persistent journal. Note that systemd-tmpfiles will
-        # set proper ownership/permissions.
-        mkdir -m 0700 -p /var/log/journal
-      '';
 
     users.users.systemd-network.uid = config.ids.uids.systemd-network;
     users.groups.systemd-network.gid = config.ids.gids.systemd-network;
@@ -886,6 +874,9 @@ in
     #systemd.services.systemd-logind.restartTriggers = [ config.environment.etc."systemd/logind.conf".source ];
     systemd.services.systemd-logind.restartIfChanged = false;
     systemd.services.systemd-logind.stopIfChanged = false;
+    # The user-runtime-dir@ service is managed by systemd-logind we should not touch it or else we break the users' sessions.
+    systemd.services."user-runtime-dir@".stopIfChanged = false;
+    systemd.services."user-runtime-dir@".restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
     systemd.services.systemd-journald.stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;

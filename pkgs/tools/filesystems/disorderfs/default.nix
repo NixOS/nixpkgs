@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "disorderfs-${version}";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchurl {
     url = "http://http.debian.net/debian/pool/main/d/disorderfs/disorderfs_${version}.orig.tar.gz";
-    sha256 = "1zx6248cwfcci5555sk9iwl9lz6x8kzc9qgiq4jv04zjiapivdnq";
+    sha256 = "0rp789qll5nmzw0jffx36ppcl9flr6hvdz84ah080mvghqkfdq8y";
   };
 
   nativeBuildInputs = [ pkgconfig asciidoc ];

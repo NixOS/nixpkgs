@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.28.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-taquin/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-taquin/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "096a32nhcz243na56iq2wxixd4f3lbj33a5h718r3j6yppqazjx9";
   };
 

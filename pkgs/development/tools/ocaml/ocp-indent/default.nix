@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, jbuilder, ocp-build, cmdliner }:
+{ stdenv, fetchzip, ocaml, findlib, dune, ocp-build, cmdliner }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast; in
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ ocp-build ];
   buildInputs = [ ocaml findlib cmdliner ];
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
     homepage = http://typerex.ocamlpro.com/ocp-indent.html;

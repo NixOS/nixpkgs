@@ -5,8 +5,8 @@
 } :
 
 let
-  version = "20180529";
-  gitLabRev = "b6b9ceffccae0dd7f14c099468334fee0b1071fc";
+  version = "18.09";
+  gitLabRev = "v${version}";
 
   python = python3.withPackages (ps : with ps; [ six pyparsing ]);
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
     owner = "Molcas";
     repo = "OpenMolcas";
     rev = gitLabRev;
-    sha256 = "1wbjjdv07lg1x4kdnf28anyrjgy33gdgrd5d7zi1c97nz7vhdjaz";
+    sha256 = "1di1ygifx7ycfpwh25mv76xlv15wqfdmqzjsg5nani2d5z0arri2";
   };
 
   nativeBuildInputs = [ perl cmake texlive.combined.scheme-minimal makeWrapper ];

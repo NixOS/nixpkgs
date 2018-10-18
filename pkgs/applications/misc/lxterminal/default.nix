@@ -2,14 +2,14 @@
 , libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs
 }:
 
-let version = "0.3.1"; in
+let version = "0.3.2"; in
 
 stdenv.mkDerivation rec {
   name = "lxterminal-${version}";
 
   src = fetchurl {
     url = "https://github.com/lxde/lxterminal/archive/${version}.tar.gz";
-    sha256 = "e91f15c8a726d5c13227263476583137a2639d4799c021ca0726c9805021b54c";
+    sha256 = "1iafqmccsm3nnzwp6pb2c04iniqqnscj83bq1rvf58ppzk0bvih3";
   };
 
   configureFlags = [

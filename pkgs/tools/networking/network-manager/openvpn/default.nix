@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkgconfig, networkmanager, libsecret
+{ stdenv, fetchurl, substituteAll, openvpn, intltool, libxml2, pkgconfig, file, networkmanager, libsecret
 , withGnome ? true, gnome3, kmod }:
 
 let
   pname = "NetworkManager-openvpn";
-  version = "1.8.4";
+  version = "1.8.6";
 in stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0gyrv46h9k17qym48qacq4zpxbap6hi17shn921824zm98m2bdvr";
+    sha256 = "1ksij9438f2lrwkg287qjlfaxja6jgmqxqap96585r3nf5zj69ch";
   };
 
   patches = [
@@ -22,12 +22,13 @@ in stdenv.mkDerivation rec {
   buildInputs = [ openvpn networkmanager ]
     ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret gnome3.networkmanagerapplet ];
 
-  nativeBuildInputs = [ intltool pkgconfig libxml2 ];
+  nativeBuildInputs = [ intltool pkgconfig file libxml2 ];
 
   configureFlags = [
     "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--localstatedir=/" # needed for the management socket under /run/NetworkManager
+    "--enable-absolute-paths"
   ];
 
   passthru = {

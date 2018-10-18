@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "0dpvv13mrid8l5zkjlz18qvirz3nr0v98agx9bcvkqbiahlfgjli";
   };
 
-  makeFlags = [ "CONFIGURE_LDFLAGS='-shared'" ];
+  # Override linker with cc (symlink to either gcc or clang)
+  # Library expects to use cc for linking
+  configureFlags = [ "LD=${stdenv.cc.targetPrefix}cc" ];
 
   meta = {
     description = "Dynamic types for data description and in-memory computations";

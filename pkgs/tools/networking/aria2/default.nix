@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, autoreconfHook
 , openssl, c-ares, libxml2, sqlite, zlib, libssh2
 , cppunit
 , Security
@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
     rev = "release-${version}";
     sha256 = "0hwqnjyszasr6049vr5mn48slb48v5kw39cbpbxa68ggmhj9bw6m";
   };
+
+  patches = [
+    # Remove with 1.35.0.
+    (fetchpatch {
+      url = https://github.com/aria2/aria2/commit/e8e04d6f22a507e8374651d3d2343cd9fb986993.patch;
+      sha256 = "1v27nqbsdjgg3ga4n0v9daq21m3cmdpy7d08kp32200pzag87f4y";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 

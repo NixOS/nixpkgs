@@ -36,18 +36,18 @@ rec {
 
   /* bitwise “and” */
   bitAnd = builtins.bitAnd
-    or import ./zip-int-bits.nix
-      (a: b: if a==1 && b==1 then 1 else 0);
+    or (import ./zip-int-bits.nix
+        (a: b: if a==1 && b==1 then 1 else 0));
 
   /* bitwise “or” */
   bitOr = builtins.bitOr
-    or import ./zip-int-bits.nix
-      (a: b: if a==1 || b==1 then 1 else 0);
+    or (import ./zip-int-bits.nix
+        (a: b: if a==1 || b==1 then 1 else 0));
 
   /* bitwise “xor” */
   bitXor = builtins.bitXor
-    or import ./zip-int-bits.nix
-      (a: b: if a!=b then 1 else 0);
+    or (import ./zip-int-bits.nix
+        (a: b: if a!=b then 1 else 0));
 
   /* bitwise “not” */
   bitNot = builtins.sub (-1);
@@ -104,6 +104,16 @@ rec {
     in if pathExists suffixFile
     then lib.strings.fileContents suffixFile
     else "pre-git";
+
+  # Attempt to get the revision nixpkgs is from
+  revisionWithDefault = default:
+    let
+      revisionFile = "${toString ./..}/.git-revision";
+      gitRepo      = "${toString ./..}/.git";
+    in if lib.pathIsDirectory gitRepo
+       then lib.commitIdFromGitRepo gitRepo
+       else if lib.pathExists revisionFile then lib.fileContents revisionFile
+       else default;
 
   nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
@@ -171,7 +181,7 @@ rec {
     builtins.fromJSON (builtins.readFile path);
 
 
-  ## Warnings and asserts
+  ## Warnings
 
   /* See https://github.com/NixOS/nix/issues/749. Eventually we'd like these
      to expand to Nix builtins that carry metadata so that Nix can filter out

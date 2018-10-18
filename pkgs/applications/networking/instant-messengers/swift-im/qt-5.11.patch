@@ -1,0 +1,10 @@
+--- a/Swift/QtUI/UserSearch/QtUserSearchWindow.h
++++ b/Swift/QtUI/UserSearch/QtUserSearchWindow.h
+@@ -8,6 +8,7 @@
+
+ #include <set>
+
++#include <QAbstractItemModel>
+ #include <QWizard>
+
+ #include <Swiften/Base/Override.h>

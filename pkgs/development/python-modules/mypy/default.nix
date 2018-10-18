@@ -1,20 +1,21 @@
-{ stdenv, fetchPypi, buildPythonPackage, lxml, typed-ast, psutil, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, lxml, typed-ast, psutil, isPy3k
+,mypy_extensions }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "0.620";
+  version = "0.630";
 
   # Tests not included in pip package.
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c770605a579fdd4a014e9f0a34b6c7a36ce69b08100ff728e96e27445cef3b3c";
+    sha256 = "1p8rnap4ngczfm2q4035mcmn5nsprbljnhksx2jxzxrb9immh137";
   };
 
   disabled = !isPy3k;
 
-  propagatedBuildInputs = [ lxml typed-ast psutil ];
+  propagatedBuildInputs = [ lxml typed-ast psutil mypy_extensions ];
 
   meta = with stdenv.lib; {
     description = "Optional static typing for Python";

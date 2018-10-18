@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://fredrik.hubbe.net/x2vnc.html;
     description = "A program to control a remote VNC server";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.gpl2;
   };
 }

@@ -2,7 +2,7 @@
 , file, which
 , autoreconfHook
 , git
-, texinfo5
+, texinfo
 , qtbase ? null
 , withPython ? false, swig2 ? null, python ? null
 }:
@@ -14,11 +14,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "gpgme-${version}";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "0vxx5xaag3rhp4g2arp5qm77gvz4kj0m3hnpvhkdvqyjfhbi26rd";
+    sha256 = "1n4c1q2ls7sqx1vpr3p5n8vbjkw6kqp8jxqa28p0x9j36wf9bp5l";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo5 ]
+  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
   ++ lib.optionals withPython [ python swig2 which ];
 
   postPatch =''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ which ];
 
-  doCheck = false; # fails 8 out of 26 tests with "GPGME: Decryption failed". Spooky!
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://gnupg.org/software/gpgme/index.html;

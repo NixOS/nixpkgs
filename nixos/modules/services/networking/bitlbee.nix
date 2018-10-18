@@ -7,9 +7,10 @@ let
   cfg = config.services.bitlbee;
   bitlbeeUid = config.ids.uids.bitlbee;
 
-  bitlbeePkg = if cfg.libpurple_plugins == []
-  then pkgs.bitlbee
-  else pkgs.bitlbee.override { enableLibPurple = true; };
+  bitlbeePkg = pkgs.bitlbee.override {
+    enableLibPurple = cfg.libpurple_plugins != [];
+    enablePam = cfg.authBackend == "pam";
+  };
 
   bitlbeeConfig = pkgs.writeText "bitlbee.conf"
     ''
@@ -20,6 +21,7 @@ let
     DaemonInterface = ${cfg.interface}
     DaemonPort = ${toString cfg.portNumber}
     AuthMode = ${cfg.authMode}
+    AuthBackend = ${cfg.authBackend}
     Plugindir = ${pkgs.bitlbee-plugins cfg.plugins}/lib/bitlbee
     ${lib.optionalString (cfg.hostName != "") "HostName = ${cfg.hostName}"}
     ${lib.optionalString (cfg.protocols != "") "Protocols = ${cfg.protocols}"}
@@ -67,6 +69,16 @@ in
         default = 6667;
         description = ''
           Number of the port BitlBee will be listening to.
+        '';
+      };
+
+      authBackend = mkOption {
+        default = "storage";
+        type = types.enum [ "storage" "pam" ];
+        description = ''
+          How users are authenticated
+            storage -- save passwords internally
+            pam -- Linux PAM authentication
         '';
       };
 
@@ -147,23 +159,22 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.bitlbee.enable {
-
-    users.users = singleton
-      { name = "bitlbee";
+  config =  mkMerge [
+    (mkIf config.services.bitlbee.enable {
+      users.users = singleton {
+        name = "bitlbee";
         uid = bitlbeeUid;
         description = "BitlBee user";
         home = "/var/lib/bitlbee";
         createHome = true;
       };
 
-    users.groups = singleton
-      { name = "bitlbee";
+      users.groups = singleton {
+        name = "bitlbee";
         gid = config.ids.gids.bitlbee;
       };
 
-    systemd.services.bitlbee =
-      {
+      systemd.services.bitlbee = {
         environment.PURPLE_PLUGIN_PATH = purple_plugin_path;
         description = "BitlBee IRC to other chat networks gateway";
         after = [ "network.target" ];
@@ -172,8 +183,12 @@ in
         serviceConfig.ExecStart = "${bitlbeePkg}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
       };
 
-    environment.systemPackages = [ bitlbeePkg ];
+      environment.systemPackages = [ bitlbeePkg ];
 
-  };
+    })
+    (mkIf (config.services.bitlbee.authBackend == "pam") {
+      security.pam.services.bitlbee = {};
+    })
+  ];
 
 }

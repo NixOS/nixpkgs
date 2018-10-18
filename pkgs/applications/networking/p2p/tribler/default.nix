@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, makeWrapper, libtorrentRasterbar, imagemagick
+{ stdenv, fetchurl, pythonPackages, makeWrapper, imagemagick
 , enablePlayer ? true, vlc ? null, qt5 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   pythonPath = [
-    libtorrentRasterbar
+    pythonPackages.libtorrentRasterbar
     pythonPackages.apsw
     pythonPackages.twisted
     pythonPackages.netifaces

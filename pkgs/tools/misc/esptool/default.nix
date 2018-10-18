@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    sha256 = "0cvxapcln1xcz8hy0hidw6g8q61s5j3q03j3wrviagbh0zip8jdx";
+    sha256 = "19l3b1fqg1n3ch484dcibbi5a3nbmjq086has5pwqn348h4k57mh";
   };
 
   checkInputs = with python3.pkgs; [ flake8 flake8-future-import flake8-import-order ];

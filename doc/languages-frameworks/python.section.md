@@ -186,7 +186,7 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 `toolz` package.
 
 ```nix
-{ # ...
+{ lib, buildPythonPackage, fetchPypi }:
 
   toolz = buildPythonPackage rec {
     pname = "toolz";
@@ -199,8 +199,8 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 
     doCheck = false;
 
-    meta = {
-      homepage = "https://github.com/pytoolz/toolz/";
+    meta = with lib; {
+      homepage = https://github.com/pytoolz/toolz;
       description = "List processing tools and functional utilities";
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
@@ -267,12 +267,13 @@ that we introduced with the `let` expression.
 
 #### Handling dependencies
 
-Our example, `toolz`, does not have any dependencies on other Python
-packages or system libraries. According to the manual,  `buildPythonPackage`
-uses the arguments `buildInputs` and `propagatedBuildInputs` to specify dependencies. If something is
-exclusively a build-time dependency, then the dependency should be included as a
-`buildInput`, but if it is (also) a runtime dependency, then it should be added
-to `propagatedBuildInputs`. Test dependencies are considered build-time dependencies.
+Our example, `toolz`, does not have any dependencies on other Python packages or
+system libraries. According to the manual, `buildPythonPackage` uses the
+arguments `buildInputs` and `propagatedBuildInputs` to specify dependencies. If
+something is exclusively a build-time dependency, then the dependency should be
+included as a `buildInput`, but if it is (also) a runtime dependency, then it
+should be added to `propagatedBuildInputs`. Test dependencies are considered
+build-time dependencies and passed to `checkInputs`.
 
 The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
@@ -292,7 +293,7 @@ order to build [`datashape`](https://github.com/blaze/datashape).
     checkInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
 
-    meta = {
+    meta = with lib; {
       homepage = https://github.com/ContinuumIO/datashape;
       description = "A data description language";
       license = licenses.bsd2;
@@ -326,7 +327,7 @@ when building the bindings and are therefore added as `buildInputs`.
 
     buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
 
-    meta = {
+    meta = with lib; {
       description = "Pythonic binding for the libxml2 and libxslt libraries";
       homepage = https://lxml.de;
       license = licenses.bsd3;
@@ -370,9 +371,9 @@ and `CFLAGS`.
       export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
     '';
 
-    meta = {
+    meta = with lib; {
       description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
-      homepage = http://hgomersall.github.com/pyFFTW/;
+      homepage = http://hgomersall.github.com/pyFFTW;
       license = with licenses; [ bsd2 bsd3 ];
       maintainers = with maintainers; [ fridh ];
     };
@@ -478,8 +479,6 @@ don't explicitly define which `python` derivation should be used. In the above
 example we use `buildPythonPackage` that is part of the set `python35Packages`,
 and in this case the `python35` interpreter is automatically used.
 
-
-
 ## Reference
 
 ### Interpreters
@@ -549,31 +548,31 @@ The `buildPythonPackage` function is implemented in
 
 The following is an example:
 ```nix
+{ lib, buildPythonPackage, fetchPypi, hypothesis, setuptools_scm, attrs, py, setuptools, six, pluggy }:
 
 buildPythonPackage rec {
-  version = "3.3.1";
   pname = "pytest";
-
-  preCheck = ''
-    # don't test bash builtins
-    rm testing/test_argcomplete.py
-  '';
+  version = "3.3.1";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "cf8436dc59d8695346fcd3ab296de46425ecab00d64096cebe79fb51ecb2eb93";
   };
 
+  postPatch = ''
+    # don't test bash builtins
+    rm testing/test_argcomplete.py
+  '';
+
   checkInputs = [ hypothesis ];
   buildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
     description = "Framework for writing tests";
   };
 }
-
 ```
 
 The `buildPythonPackage` mainly does four things:
@@ -654,6 +653,39 @@ modules won't be made available.
 Another difference is that `buildPythonPackage` by default prefixes the names of
 the packages with the version of the interpreter. Because this is irrelevant for
 applications, the prefix is omitted.
+
+When packaging a python application with `buildPythonApplication`, it should be
+called with `callPackage` and passed `python` or `pythonPackages` (possibly
+specifying an interpreter version), like this:
+
+```nix
+{ lib, python3Packages }:
+
+python3Packages.buildPythonApplication rec {
+  pname = "luigi";
+  version = "2.7.9";
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
+  };
+
+  propagatedBuildInputs = with python3Packages; [ tornado_4 pythondaemon ];
+
+  meta = with lib; {
+    ...
+  };
+}
+```
+
+This is then added to `all-packages.nix` just as any other application would be.
+
+```nix
+luigi = callPackage ../applications/networking/cluster/luigi { };
+```
+
+Since the package is an application, a consumer doesn't need to care about
+python versions or modules, which is why they don't go in `pythonPackages`.
 
 #### `toPythonApplication` function
 
