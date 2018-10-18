@@ -998,7 +998,7 @@
     "sensor.sochain" = ps: with ps; [  ];
     "sensor.socialblade" = ps: with ps; [  ];
     "sensor.sonarr" = ps: with ps; [  ];
-    "sensor.speedtest" = ps: with ps; [  ];
+    "sensor.speedtest" = ps: with ps; [ speedtest-cli ];
     "sensor.spotcrime" = ps: with ps; [  ];
     "sensor.sql" = ps: with ps; [ sqlalchemy ];
     "sensor.startca" = ps: with ps; [ xmltodict ];

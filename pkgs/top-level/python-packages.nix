@@ -577,12 +577,16 @@ in {
 
   python-lz4 = callPackage ../development/python-modules/python-lz4 { };
 
+  python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
+
   python-igraph = callPackage ../development/python-modules/python-igraph {
     pkgconfig = pkgs.pkgconfig;
     igraph = pkgs.igraph;
   };
 
   python3-openid = callPackage ../development/python-modules/python3-openid { };
+
+  python-packer = callPackage ../development/python-modules/python-packer { };
 
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
@@ -826,6 +830,8 @@ in {
   backports_abc = callPackage ../development/python-modules/backports_abc { };
 
   backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
+
+  backports_os = callPackage ../development/python-modules/backports_os { };
 
   backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
@@ -1850,6 +1856,10 @@ in {
 
   pycassa = callPackage ../development/python-modules/pycassa { };
 
+  lirc = disabledIf isPy27 (toPythonModule (pkgs.lirc.override {
+    python3 = python;
+  }));
+
   pyblake2 = callPackage ../development/python-modules/pyblake2 { };
 
   pybluez = callPackage ../development/python-modules/pybluez { };
@@ -2164,6 +2174,8 @@ in {
 
   docker_compose = callPackage ../development/python-modules/docker_compose {};
 
+  pyftpdlib = callPackage ../development/python-modules/pyftpdlib { };
+
   fdroidserver = callPackage ../development/python-modules/fdroidserver { };
 
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
@@ -2306,38 +2318,6 @@ in {
   foolscap = callPackage ../development/python-modules/foolscap { };
 
   forbiddenfruit = callPackage ../development/python-modules/forbiddenfruit { };
-
-  fs = buildPythonPackage rec {
-    name = "fs-0.5.4";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/f/fs/${name}.tar.gz";
-      sha256 = "ba2cca8773435a7c86059d57cb4b8ea30fda40f8610941f7822d1ce3ffd36197";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = [ pkgs.glibcLocales ];
-    propagatedBuildInputs = [ self.six ];
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
-    # Because 2to3 is used the tests in $out need to be run.
-    # Both when using unittest and pytest this resulted in many errors,
-    # some Python byte/str errors, and others specific to resources tested.
-    # Failing tests due to the latter is to be expected with this type of package.
-    # Tests are therefore disabled.
-    doCheck = false;
-
-    meta = {
-      description = "Filesystem abstraction";
-      homepage    = https://pypi.python.org/pypi/fs;
-      license     = licenses.bsd3;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
 
   fusepy = callPackage ../development/python-modules/fusepy { };
 
@@ -2615,6 +2595,8 @@ in {
   python_openzwave = callPackage ../development/python-modules/python_openzwave { };
 
   python-Levenshtein = callPackage ../development/python-modules/python-levenshtein { };
+
+  fs = callPackage ../development/python-modules/fs { };
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
@@ -9455,6 +9437,8 @@ EOF
       maintainers = with maintainers; [ matejc ];
     };
   };
+
+  speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
 
   pushbullet = callPackage ../development/python-modules/pushbullet { };
 

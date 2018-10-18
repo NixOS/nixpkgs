@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     homepage    = https://gnunet.org/gnurl;
     maintainers = with maintainers; [ falsifian vrthra ];
     platforms = platforms.linux;
+    license = with licenses; [ bsdOriginal mit ];
   };
 }
