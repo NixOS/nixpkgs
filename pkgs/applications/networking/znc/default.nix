@@ -5,6 +5,7 @@
 , withCyrus ? true, cyrus_sasl
 , withUnicode ? true, icu
 , withIPv6 ? true
+, withDebug ? false
 }:
 
 with stdenv.lib;
@@ -33,7 +34,8 @@ stdenv.mkDerivation rec {
     (stdenv.lib.enableFeature withTcl "tcl")
     (stdenv.lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
     (stdenv.lib.enableFeature withCyrus "cyrus")
-  ] ++ optional (!withIPv6) [ "--disable-ipv6" ];
+  ] ++ optional (!withIPv6) [ "--disable-ipv6" ]
+    ++ optional withDebug [ "--enable-debug" ];
 
   meta = with stdenv.lib; {
     description = "Advanced IRC bouncer";
