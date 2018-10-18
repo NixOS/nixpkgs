@@ -15,7 +15,7 @@ let
     (stdenv.hostPlatform != stdenv.buildPlatform)
     "--enable-malloc0returnsnull";
 in
-super: self:
+self: super:
 {
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ self.xproto self.fontsproto ];

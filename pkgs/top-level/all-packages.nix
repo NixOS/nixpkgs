@@ -13576,7 +13576,7 @@ with pkgs;
   # so as not to have the newly bound xorg items already in scope,  which would
   # have created a cycle.
   xorg = recurseIntoAttrs ((lib.callPackageWith __splicedPackages ../servers/x11/xorg {
-  }).overrideScope (lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
+  }).overrideScope' (lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
     inherit (darwin) apple_sdk;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     python = python2; # Incompatible with Python 3x
