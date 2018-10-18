@@ -3,6 +3,7 @@
 , withPython ? false, python3
 , withTcl ? false, tcl
 , withCyrus ? true, cyrus_sasl
+, withUnicode ? true, icu
 }:
 
 with stdenv.lib;
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
     ++ optional withPerl perl
     ++ optional withPython python3
     ++ optional withTcl tcl
-    ++ optional withCyrus cyrus_sasl;
+    ++ optional withCyrus cyrus_sasl
+    ++ optional withUnicode icu;
 
   configureFlags = [
     (stdenv.lib.enableFeature withPerl "perl")
