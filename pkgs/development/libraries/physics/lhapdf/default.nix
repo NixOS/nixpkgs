@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0bi02xcmq5as0wf0jn6i3hx0qy0hj61m02sbrbzd1gwjhpccwmvd";
   };
 
+  patches = [
+    # Fixes Fortran initpdfset interface to respect LHAPDF_DATA_PATH environment variable
+    ./join.patch
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python2 ];
 

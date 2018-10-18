@@ -1,0 +1,12 @@
+diff --git a/include/LHAPDF/Utils.h b/include/LHAPDF/Utils.h
+--- a/include/LHAPDF/Utils.h
++++ b/include/LHAPDF/Utils.h
+@@ -85,7 +85,7 @@ namespace LHAPDF {
+     string rtn;
+     for (size_t i = 0; i < svec.size(); ++i) {
+       rtn += svec[i];
+-      if (i < svec.size()-1) rtn += ", ";
++      if (i < svec.size()-1) rtn += sep;
+     }
+     return rtn;
+   }
