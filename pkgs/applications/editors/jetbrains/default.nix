@@ -130,7 +130,8 @@ let
         longDescription = ''
           IDE for Java SE, Groovy & Scala development Powerful
           environment for building Google Android apps Integration
-          with JUnit, TestNG, popular SCMs, Ant & Maven.
+          with JUnit, TestNG, popular SCMs, Ant & Maven. Also known
+          as IntelliJ.
         '';
         maintainers = with maintainers; [ edwtjo ];
         platforms = platforms.linux;

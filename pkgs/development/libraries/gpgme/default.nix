@@ -2,7 +2,7 @@
 , file, which
 , autoreconfHook
 , git
-, texinfo5
+, texinfo
 , qtbase ? null
 , withPython ? false, swig2 ? null, python ? null
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     [ libgpgerror glib libassuan pth ]
     ++ lib.optional (qtbase != null) qtbase;
 
-  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo5 ]
+  nativeBuildInputs = [ file pkgconfig gnupg autoreconfHook git texinfo ]
   ++ lib.optionals withPython [ python swig2 which ];
 
   postPatch =''

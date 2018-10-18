@@ -1,4 +1,11 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper }:
+{ stdenv
+, lib
+, buildEnv
+, buildGoPackage
+, fetchFromGitHub
+, makeWrapper
+, terraform-providers
+}:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -34,7 +41,7 @@ let
         description = "Tool for building, changing, and versioning infrastructure";
         homepage = https://www.terraform.io/;
         license = licenses.mpl20;
-        maintainers = with maintainers; [ jgeerds zimbatm peterhoeg ];
+        maintainers = with maintainers; [ jgeerds zimbatm peterhoeg kalbasit ];
       };
     } // attrs');
 
@@ -75,7 +82,7 @@ let
             });
     in withPlugins (_: []);
 
-  plugins = import ./providers { inherit lib buildGoPackage fetchFromGitHub; };
+  plugins = removeAttrs terraform-providers ["override" "overrideDerivation" "recurseForDerivations"];
 in rec {
   terraform_0_8_5 = generic {
     version = "0.8.5";

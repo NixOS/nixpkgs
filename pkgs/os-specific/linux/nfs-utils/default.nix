@@ -38,9 +38,11 @@ in stdenv.mkDerivation rec {
     [ "--enable-gss"
       "--with-statedir=/var/lib/nfs"
       "--with-krb5=${kerberosEnv}"
-      "--with-systemd=${placeholder "out"}/etc/systemd/system"
+      "--with-systemd=$(out)/etc/systemd/system"
       "--enable-libmount-mount"
-      "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
+      # need an absolute path to lib output here.
+      # TODO: use ${placeholder lib} when nix 1.1 is no longer supported
+      "--with-pluginpath=@lib@/lib/libnfsidmap" # this installs libnfsidmap
     ]
     ++ lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc.bin}/bin/rpcgen";
 
@@ -73,6 +75,11 @@ in stdenv.mkDerivation rec {
       sed '1i#include <stdint.h>' -i support/nsm/rpc.c
     '';
 
+  # TODO: remove when placeholders are allowed (see configureFlags)
+  postConfigure = ''
+    substituteInPlace support/include/config.h --replace '@lib@' "$lib"
+  '';
+
   makeFlags = [
     "sbindir=$(out)/bin"
     "generator_dir=$(out)/etc/systemd/system-generators"
@@ -82,6 +89,8 @@ in stdenv.mkDerivation rec {
     "statedir=$(TMPDIR)"
     "statdpath=$(TMPDIR)"
   ];
+
+  stripDebugList = [ "lib" "libexec" "bin" "etc/systemd/system-generators" ];
 
   postInstall =
     ''

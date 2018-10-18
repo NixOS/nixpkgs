@@ -2,6 +2,7 @@
 , fetchPypi
 , flask
 , pymongo
+, vcversioner
 , lib
 , pytest
 }:
@@ -18,13 +19,13 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   checkPhase = ''
-    py.test tests
+    py.test
   '';
 
   # Tests seem to hang
   doCheck = false;
 
-  propagatedBuildInputs = [ flask pymongo ];
+  propagatedBuildInputs = [ flask pymongo vcversioner ];
 
   meta = {
     homepage = "http://flask-pymongo.readthedocs.org/";

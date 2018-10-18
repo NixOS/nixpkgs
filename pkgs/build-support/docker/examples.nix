@@ -141,4 +141,13 @@ rec {
     runAsRoot = ''echo "(runAsRoot)" > runAsRoot'';
     extraCommands = ''echo "(extraCommand)" > extraCommands'';
   };
+
+  # 9. Ensure that setting created to now results in a date which
+  # isn't the epoch + 1
+  unstableDate = pkgs.dockerTools.buildImage {
+    name = "unstable-date";
+    tag = "latest";
+    contents = [ pkgs.coreutils ];
+    created = "now";
+  };
 }

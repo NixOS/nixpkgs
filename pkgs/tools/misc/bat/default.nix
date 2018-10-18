@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
+  postInstall = ''
+    install -m 444 -Dt $out/share/man/man1 doc/bat.1
+  '';
+
   meta = with stdenv.lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage    = https://github.com/sharkdp/bat;

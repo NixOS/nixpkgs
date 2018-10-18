@@ -43,6 +43,7 @@ stdenv.mkDerivation rec{
     homepage = https://bitcoinxt.software/;
     maintainers = with maintainers; [ jefdaj ];
     license = licenses.mit;
+    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

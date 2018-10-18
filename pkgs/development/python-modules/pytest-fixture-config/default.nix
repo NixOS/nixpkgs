@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi
-, setuptools-git, pytest, six }:
+, setuptools-git, pytest }:
 
 buildPythonPackage rec {
   pname = "pytest-fixture-config";
@@ -14,11 +14,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  checkInputs = [ six ];
-
-  checkPhase = ''
-    py.test
-  '';
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables aren’t set.";

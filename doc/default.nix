@@ -1,6 +1,7 @@
+{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
-  pkgs = import ./.. { };
   lib = pkgs.lib;
+  locationsXml = import ./lib-function-locations.nix { inherit pkgs nixpkgs; };
 in
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
@@ -29,6 +30,8 @@ pkgs.stdenv.mkDerivation {
   ];
 
   postPatch = ''
+    rm -rf ./functions/library/locations.xml
+    ln -s ${locationsXml} ./functions/library/locations.xml
     echo ${lib.version} > .version
   '';
 

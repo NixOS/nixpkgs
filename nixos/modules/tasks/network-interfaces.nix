@@ -341,7 +341,7 @@ in
         You should try to make this ID unique among your machines. You can
         generate a random 32-bit ID using the following commands:
 
-        <literal>cksum /etc/machine-id | while read c rest; do printf "%x" $c; done</literal>
+        <literal>head -c 8 /etc/machine-id</literal>
 
         (this derives it from the machine-id that systemd generates) or
 

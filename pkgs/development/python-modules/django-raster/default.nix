@@ -1,10 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi,
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k,
   numpy, django_colorful, pillow, psycopg2,
-  pyparsing, django, celery
+  pyparsing, django_2_1, celery, boto3
 }:
 buildPythonPackage rec {
   version = "0.6";
   pname = "django-raster";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -15,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ numpy django_colorful pillow psycopg2
-                            pyparsing django celery ];
+                            pyparsing django_2_1 celery boto3 ];
 
   meta = with stdenv.lib; {
     description = "Basic raster data integration for Django";

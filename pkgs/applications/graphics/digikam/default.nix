@@ -34,7 +34,8 @@
 , libqtav
 , libusb1
 , marble
-, libGLU_combined
+, libGL
+, libGLU
 , opencv3
 , pcre
 , threadweaver
@@ -75,7 +76,8 @@ mkDerivation rec {
     liblqr1
     libqtav
     libusb1
-    libGLU_combined
+    libGL
+    libGLU
     opencv3
     pcre
 

@@ -9,7 +9,7 @@
   lib,
   pkgs,
   pigz,
-  nixUnstable,
+  nix,
   perl,
   runCommand,
   rsync,
@@ -40,7 +40,7 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? "x86_64"
+    , arch ? "amd64"
       # This used to set a tag to the pulled image
     , finalImageTag ? "latest"
     , name ? fixName "docker-image-${imageName}-${finalImageTag}.tar"
@@ -258,7 +258,7 @@ rec {
     '';
 
   nixRegistration = contents: runCommand "nix-registration" {
-    buildInputs = [ nixUnstable perl ];
+    buildInputs = [ nix perl ];
     # For obtaining the closure of `contents'.
     exportReferencesGraph =
       let contentsList = if builtins.isList contents then contents else [ contents ];
@@ -450,11 +450,18 @@ rec {
       baseName = baseNameOf name;
 
       # Create a JSON blob of the configuration. Set the date to unix zero.
-      baseJson = writeText "${baseName}-config.json" (builtins.toJSON {
-        inherit created config;
-        architecture = "amd64";
-        os = "linux";
-      });
+      baseJson = let
+          pure = writeText "${baseName}-config.json" (builtins.toJSON {
+            inherit created config;
+            architecture = "amd64";
+            os = "linux";
+          });
+          impure = runCommand "${baseName}-config.json"
+            { buildInputs = [ jq ]; }
+            ''
+               jq ".created = \"$(TZ=utc date --iso-8601="seconds")\"" ${pure} > $out
+            '';
+        in if created == "now" then impure else pure;
 
       layer =
         if runAsRoot == null
@@ -577,7 +584,7 @@ rec {
         currentID=$layerID
         while [[ -n "$currentID" ]]; do
           layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f1)
-          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"${created}\"}] + .")
+          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"$(jq -r .created ${baseJson})\"}] + .")
           imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
           manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$currentID/layer.tar\"] + .")
 
@@ -619,7 +626,7 @@ rec {
         echo "         be better to only have one layer that contains a nix store."
         # This requires Nix 1.12 or higher
         export NIX_REMOTE=local?root=$PWD
-        ${nixUnstable}/bin/nix-store --load-db < ${nixRegistration contents}/db.dump
+        ${nix}/bin/nix-store --load-db < ${nixRegistration contents}/db.dump
 
         # We fill the store in order to run the 'verify' command that
         # generates hash and size of output paths.
@@ -630,7 +637,7 @@ rec {
         storePaths=$(cat ${nixRegistration contents}/storePaths)
         echo "Copying everything to /nix/store (will take a while)..."
         cp -prd $storePaths nix/store/
-        ${nixUnstable}/bin/nix-store --verify --check-contents
+        ${nix}/bin/nix-store --verify --check-contents
 
         mkdir -p nix/var/nix/gcroots/docker/
         for i in ${lib.concatStringsSep " " contents}; do

@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchgit, fetchFromGitHub, makeWrapper, git
-, python3, sshfs-fuse, torsocks, sshuttle, conntrack-tools
-, openssh, which, coreutils, iptables, bash }:
+{ lib, stdenv, pythonPackages, fetchgit, fetchFromGitHub, makeWrapper, git
+, sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
+, iptables, bash }:
 
 let
   sshuttle-telepresence = lib.overrideDerivation sshuttle (p: {
@@ -15,46 +15,34 @@ let
     postPatch = "rm sshuttle/tests/client/test_methods_nat.py";
     postInstall = "mv $out/bin/sshuttle $out/bin/sshuttle-telepresence";
   });
-in stdenv.mkDerivation rec {
+in pythonPackages.buildPythonPackage rec {
   pname = "telepresence";
-  version = "0.85";
-  name = "${pname}-${version}";
+  version = "0.93";
 
   src = fetchFromGitHub {
     owner = "datawire";
     repo = "telepresence";
     rev = version;
-    sha256 = "1iypqrx9pnhaz3p5bvl6g0c0c3d1799dv0xdjrzc1z5wa8diawvj";
+    sha256 = "1x8yjcqj8v35a5pxy2rxaixbznb4vk8ll958b4l46gnkfxf1kh1d";
   };
 
-  buildInputs = [ makeWrapper python3 ];
+  buildInputs = [ makeWrapper ];
 
-  phases = ["unpackPhase" "installPhase"];
-
-  installPhase = ''
-    mkdir -p $out/libexec $out/bin
-
-    export PREFIX=$out
-    substituteInPlace ./install.sh \
-      --replace "#!/bin/bash" "#!${stdenv.shell}" \
-      --replace '"''${VENVDIR}/bin/pip" -q install "git+https://github.com/datawire/sshuttle.git@telepresence"' "" \
-      --replace '"''${VENVDIR}/bin/sshuttle-telepresence"' '"${sshuttle-telepresence}/bin/sshuttle-telepresence"'
-    ./install.sh
-
+  postInstall = ''
     wrapProgram $out/bin/telepresence \
       --prefix PATH : ${lib.makeBinPath [
-        python3
         sshfs-fuse
         torsocks
         conntrack-tools
         sshuttle-telepresence
         openssh
-        which
         coreutils
         iptables
         bash
       ]}
   '';
+
+  doCheck = false;
 
   meta = {
     homepage = https://www.telepresence.io/;
