@@ -35,7 +35,7 @@ For pull-requests, please rebase onto nixpkgs `master`.
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
 * [Tests for 18.09 release](https://hydra.nixos.org/job/nixos/release-18.09/tested#tabs-constituents)
 
-Communication:
+# Communication:
 
 * [Discourse Forum](https://discourse.nixos.org/)
 * [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)
