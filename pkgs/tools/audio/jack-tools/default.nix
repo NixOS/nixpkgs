@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = http://rd.slavepianos.org/r/d/darcsweb.cgi?r=rju;
     description = "jackd utilities";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ ikervagyok fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ hark ];
   };
 }
