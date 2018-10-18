@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "Utility to split mp3, ogg vorbis and FLAC files without decoding";
     maintainers = with maintainers; [ bosu ];
     platforms   = platforms.unix;
+    license = licenses.gpl2;
   };
 }
