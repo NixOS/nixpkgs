@@ -1684,6 +1684,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  bento4 = callPackage ../tools/video/bento4 { };
+
   bepasty = callPackage ../tools/misc/bepasty { };
 
   bettercap = callPackage ../tools/security/bettercap { };
