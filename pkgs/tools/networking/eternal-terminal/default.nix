@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gflags, libsodium, protobuf }:
+{ stdenv, fetchFromGitHub, cmake, ninja, gflags, libsodium, protobuf }:
 
 stdenv.mkDerivation rec {
   name = "eternal-terminal-${version}";
@@ -11,10 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0df573c5hi3hxa0d3m02zf2iyh841540dklj9lmp6faik8cp39jz";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ gflags libsodium protobuf ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Remote shell that automatically reconnects without interrupting the session";
