@@ -21199,6 +21199,8 @@ with pkgs;
 
   ### PHYSICS
 
+  mcfm = callPackage ../applications/science/physics/MCFM { stdenv = gccStdenv; };
+
   sacrifice = callPackage ../applications/science/physics/sacrifice {};
 
   sherpa = callPackage ../applications/science/physics/sherpa {};
