@@ -10,12 +10,9 @@
  </para>
 
  <para>
-  These overriding functions let you focus on one part of Nixpkgs and give you
-  back the requested variation. This is orthogonal but related to overlays and
-  the extending functions. Those also let you make modifications but return the
-  whole package set instead of just what you modified. When used together, the
-  override functions make the changes and overlays or extending functions add
-  those changes to the package sets.
+  These functions are used to make changes to packages, returning only single
+  packages. Overlays, on the other hand, can be used to combine the overridden
+  packages across the entire package set of Nixpkgs.
  </para>
 
  <section xml:id="sec-pkg-override">
