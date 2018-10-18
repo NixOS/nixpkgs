@@ -101,21 +101,17 @@ stdenv.mkDerivation {
 
   inherit src;
 
-  patchFlags = optionalString (stdenv.hostPlatform.libc == "msvcrt") "-p0";
+  patchFlags = "";
+
   patches = patches
-    ++ optional stdenv.isDarwin ./darwin-no-system-python.patch
-    ++ optional (stdenv.hostPlatform.libc == "msvcrt") (fetchurl {
-      url = "https://svn.boost.org/trac/boost/raw-attachment/tickaet/7262/"
-          + "boost-mingw.patch";
-      sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
-    });
+    ++ optional stdenv.isDarwin ./darwin-no-system-python.patch;
 
   meta = {
     homepage = http://boost.org/;
     description = "Collection of C++ libraries";
     license = stdenv.lib.licenses.boost;
 
-    platforms = (if versionOlder version "1.59" then remove "aarch64-linux" else id) platforms.unix;
+    platforms = (if versionOlder version "1.59" then remove "aarch64-linux" else id) (platforms.unix ++ platforms.windows);
     maintainers = with maintainers; [ peti wkennington ];
   };
 
@@ -139,7 +135,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ which ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
     ++ optional stdenv.isDarwin fixDarwinDylibNames
