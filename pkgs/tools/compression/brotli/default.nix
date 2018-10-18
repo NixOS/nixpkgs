@@ -15,8 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = stdenv.lib.optional
-    (stdenv.hostPlatform.libc == "msvcrt") "-DCMAKE_SYSTEM_NAME=Windows";
+  cmakeFlags = [];
 
   outputs = [ "out" "dev" "lib" ];
 
@@ -59,4 +58,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-
