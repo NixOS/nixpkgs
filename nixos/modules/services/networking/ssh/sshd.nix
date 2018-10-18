@@ -374,6 +374,8 @@ in
                 '')}
               '';
 
+            # restart sshd on "/etc/ssh/sshd_config" content change. this does not abort established connections
+            restartTriggers = [ (builtins.hashString "sha256" config.environment.etc."ssh/sshd_config".text) ];
             serviceConfig =
               { ExecStart =
                   (optionalString cfg.startWhenNeeded "-") +
