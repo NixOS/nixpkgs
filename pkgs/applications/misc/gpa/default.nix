@@ -1,11 +1,11 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk2, gpgme, libgpgerror, libassuan }:
 
 stdenv.mkDerivation rec {
-  name = "gpa-0.9.10";
+  name = "gpa-0.10.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpa/${name}.tar.bz2";
-    sha256 = "09xphbi2456qynwqq5n0yh0zdmdi2ggrj3wk4hsyh5lrzlvcrff3";
+    sha256 = "1cbpc45f8qbdkd62p12s3q2rdq6fa5xdzwmcwd3xrj55bzkspnwm";
   };
 
   nativeBuildInputs = [ intltool pkgconfig ];

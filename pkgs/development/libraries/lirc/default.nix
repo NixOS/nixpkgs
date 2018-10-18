@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, alsaLib, help2man, pkgconfig, xlibsWrapper, python3
-, libxslt, systemd, libusb, libftdi1 }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, help2man, python3,
+  alsaLib, xlibsWrapper, libxslt, systemd, libusb, libftdi1 }:
 
 stdenv.mkDerivation rec {
   name = "lirc-0.10.1";
@@ -8,6 +8,12 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/lirc/${name}.tar.bz2";
     sha256 = "1whlyifvvc7w04ahq07nnk1h18wc8j7c6wnvlb6mszravxh3qxcb";
   };
+
+  # Fix installation of Python bindings
+  patches = [ (fetchpatch {
+    url = "https://sourceforge.net/p/lirc/tickets/339/attachment/0001-Fix-Python-bindings.patch";
+    sha256 = "088a39x8c1qd81qwvbiqd6crb2lk777wmrs8rdh1ga06lglyvbly";
+  }) ];
 
   postPatch = ''
     patchShebangs .
@@ -24,17 +30,17 @@ stdenv.mkDerivation rec {
     touch lib/lirc/input_map.inc
   '';
 
-  nativeBuildInputs = [ pkgconfig help2man ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig help2man
+    (python3.withPackages (p: with p; [ pyyaml setuptools ])) ];
 
-  buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb libftdi1 ]
-  ++ (with python3.pkgs; [ python pyyaml setuptools ]);
+  buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb libftdi1 ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
-    "--enable-uinput" # explicite activation because build env has no uinput
-    "--enable-devinput" # explicite activation because build env has not /dev/input
+    "--enable-uinput" # explicit activation because build env has no uinput
+    "--enable-devinput" # explicit activation because build env has no /dev/input
   ];
 
   installFlags = [

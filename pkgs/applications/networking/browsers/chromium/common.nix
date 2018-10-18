@@ -14,7 +14,7 @@
 , glib, gtk2, gtk3, dbus-glib
 , libXScrnSaver, libXcursor, libXtst, libGLU_combined
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2
+, ffmpeg, libxslt, libxml2, at-spi2-core
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -129,7 +129,8 @@ let
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optional (versionAtLeast version "71") at-spi2-core;
 
     patches = [
       # As major versions are added, you can trawl the gentoo and arch repos at
@@ -232,7 +233,6 @@ let
       is_clang = false;
       clang_use_chrome_plugins = false;
       remove_webcore_debug_symbols = true;
-      use_gtk3 = true;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
@@ -243,6 +243,8 @@ let
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
       google_default_client_id = "404761575300.apps.googleusercontent.com";
       google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
+    } // optionalAttrs (versionRange "60" "70") {
+      use_gtk3 = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;

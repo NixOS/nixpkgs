@@ -3115,6 +3115,11 @@
     github = "olynch";
     name = "Owen Lynch";
   };
+  OPNA2608 = {
+    email = "christoph.neidahl@gmail.com";
+    github = "OPNA2608";
+    name = "Christoph Neidahl";
+  };
   orbekk = {
     email = "kjetil.orbekk@gmail.com";
     github = "orbekk";
