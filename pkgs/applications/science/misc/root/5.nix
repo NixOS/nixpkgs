@@ -73,5 +73,8 @@ stdenv.mkDerivation rec {
     description = "A data analysis framework";
     platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
+    # needs to be adapted to work with modern glibc
+    # it works on darwin by impurely picking up system's libc headers
+    broken = stdenv.isLinux;
   };
 }
