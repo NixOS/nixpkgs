@@ -24,6 +24,6 @@ stdenv.mkDerivation {
     description = "Provides a Qt implementation of the DBusMenu spec";
     inherit homepage;
     inherit (qt4.meta) platforms;
-    license = licenses.gpl2;
+    license = licenses.lgpl2;
   };
 }
