@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt5,cmake  }:
+{ stdenv, fetchFromGitHub, cmake, qtbase }:
 
 stdenv.mkDerivation rec {
   name = "rclone-browser-${version}";
@@ -7,16 +7,19 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mmozeiko";
     repo = "RcloneBrowser";
-    rev = "${version}";
+    rev = version;
     sha256 = "1ldradd5c606mfkh46y4mhcvf9kbjhamw0gahksp9w43h5dh3ir7";
   };
-  
-  buildInputs = [ qt5.qtbase cmake ];
+
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ qtbase ];
+
   meta = with stdenv.lib; {
+    inherit (src.meta) homepage;
     description = "Graphical Frontend to Rclone written in Qt";
-    homepage = https://github.com/mmozeiko/RcloneBrowser;
     license = licenses.unlicense;
     platforms = platforms.linux;
-    maintainers = [];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }
