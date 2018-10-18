@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, file, getopt
+{ stdenv, lib, fetchurl, makeWrapper, coreutils, file, getopt, gnugrep, gnused
 , gtk2, gdk_pixbuf, glib, libGLU, nss, nspr, udev, tbb
 , alsaLib, GConf, cups, libcap, fontconfig, freetype, pango
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   nosuidLib = ./unity-nosuid.c;
 
-  nativeBuildInputs = [ makeWrapper file getopt ];
+  nativeBuildInputs = [ makeWrapper coreutils file getopt gnugrep gnused ];
 
   outputs = [ "out" ];
 
@@ -70,9 +70,9 @@ in stdenv.mkDerivation rec {
           intp="$(cat $NIX_CC/nix-support/dynamic-linker)"
         fi
 
-        oldRpath="$(patchelf --print-rpath "$1")"
-        # Always search at least for libraries in origin directory.
-        rpath="''${oldRpath:-\$ORIGIN}:$rpath"
+        # Save origin-relative parts of rpath.
+        originRpath="$(patchelf --print-rpath "$1" | sed "s/:/\n/g" | grep "^\$ORIGIN" | paste -sd ":" - || echo "")"
+        rpath="$originRpath:$rpath"
         if [[ "$ftype" =~ LSB\ shared ]]; then
           patchelf \
             --set-rpath "$rpath" \
