@@ -74,6 +74,7 @@ self: super: {
   tagged = self.tagged_0_8_6;
   vty = self.vty_5_25;
   wizards = doJailbreak super.wizards;
+  wl-pprint-extras = doJailbreak super.wl-pprint-extras;
   yaml = self.yaml_0_11_0_0;
 
   # https://github.com/tibbe/unordered-containers/issues/214
