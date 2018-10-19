@@ -107,4 +107,7 @@ self: super: {
     sha256 = "0gnsgga8x2yxyg27pya6rhmxfsxf167vsi4xdj98fn8v0j7zz1v1";
   });
 
+  # https://github.com/jgm/pandoc/issues/4974
+  pandoc = doJailbreak super.pandoc_2_3_1;
+
 }
