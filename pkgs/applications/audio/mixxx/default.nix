@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, chromaprint, fetchpatch
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
+, opusfile
 , pkgconfig, portaudio, portmidi, protobuf, qt4, rubberband, scons, sqlite
 , taglib, upower, vampSDK
 }:
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout libsndfile
-    libusb1 libvorbis pkgconfig portaudio portmidi protobuf qt4
+    libusb1 libvorbis opusfile pkgconfig portaudio portmidi protobuf qt4
     rubberband scons sqlite taglib upower vampSDK
   ];
 
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     "build=release"
     "qtdir=${qt4}"
     "faad=1"
+    "opus=1"
   ];
 
   buildPhase = ''
