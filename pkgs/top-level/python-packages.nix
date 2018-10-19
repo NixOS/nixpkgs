@@ -2248,6 +2248,8 @@ in {
 
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
 
+  django-crispy-forms = callPackage ../development/python-modules/django-crispy-forms { };
+
   django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
   django_environ = callPackage ../development/python-modules/django_environ { };
