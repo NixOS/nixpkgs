@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper
 , perl, libassuan, libgcrypt
-, perlPackages, lockfileProgs, gnupg
+, perlPackages, lockfileProgs, gnupg, coreutils
 # For the tests:
 , bash, openssh, which, socat, cpio, hexdump
 }:
@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
 
   patches = [ ./monkeysphere.patch ];
 
+  postPatch = ''
+    sed -i "s,/usr/bin/env,${coreutils}/bin/env," src/share/ma/update_users
+  '';
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl libassuan libgcrypt ]
     ++ stdenv.lib.optional doCheck
-      ([ gnupg openssh which socat cpio hexdump ] ++
+      ([ gnupg openssh which socat cpio hexdump lockfileProgs ] ++
       (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
   makeFlags = ''
@@ -31,10 +35,8 @@ stdenv.mkDerivation rec {
   # entropy (apparently GnuPG still uses /dev/random).
   doCheck = false;
   preCheck = ''
-    patchShebangs tests/keytrans
-    patchShebangs src/share/keytrans
-    patchShebangs src/share/checkperms
-    sed -i "s,/usr/bin/env\ bash,${bash}/bin/bash," tests/basic
+    patchShebangs tests/
+    patchShebangs src/
     sed -i "s,/usr/sbin/sshd,${openssh}/bin/sshd," tests/basic
     sed -i "s/<(hd/<(hexdump/" tests/keytrans
   '';
