@@ -3720,7 +3720,9 @@ with pkgs;
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
-  matrix-synapse = callPackage ../servers/matrix-synapse { };
+  matrix-synapse = callPackage ../servers/matrix-synapse {
+    python = python2;
+  };
 
   mdbook = callPackage ../tools/text/mdbook {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
