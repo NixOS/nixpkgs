@@ -118,4 +118,7 @@ self: super: {
   # https://github.com/jgm/pandoc/issues/4974
   pandoc = doJailbreak super.pandoc_2_3_1;
 
+  # Break out of "yaml >=0.10.4.0 && <0.11".
+  stack = doJailbreak super.stack;
+
 }
