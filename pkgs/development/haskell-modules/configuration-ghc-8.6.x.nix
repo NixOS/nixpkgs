@@ -50,6 +50,8 @@ self: super: {
   free = self.free_5_1;
   haddock-library = dontCheck super.haddock-library_1_7_0;
   hpack = self.hpack_0_31_0;
+  hslua = self.hslua_1_0_1;
+  hslua-module-text = self.hslua-module-text_0_2_0;
   hspec = self.hspec_2_5_8;
   hspec-core = self.hspec-core_2_5_8;
   hspec-discover = self.hspec-discover_2_5_8;
