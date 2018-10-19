@@ -51,6 +51,7 @@ self: super: {
   contravariant = self.contravariant_1_5;
   free = self.free_5_1;
   haddock-library = dontCheck super.haddock-library_1_7_0;
+  hledger-lib = doJailbreak super.hledger-lib;
   hpack = self.hpack_0_31_0;
   hslua = self.hslua_1_0_1;
   hslua-module-text = self.hslua-module-text_0_2_0;
