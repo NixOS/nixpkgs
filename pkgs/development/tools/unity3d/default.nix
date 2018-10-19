@@ -73,16 +73,9 @@ in stdenv.mkDerivation rec {
         # Save origin-relative parts of rpath.
         originRpath="$(patchelf --print-rpath "$1" | sed "s/:/\n/g" | grep "^\$ORIGIN" | paste -sd ":" - || echo "")"
         rpath="$originRpath:$rpath"
-        if [[ "$ftype" =~ LSB\ shared ]]; then
-          patchelf \
-            --set-rpath "$rpath" \
-            "$1"
-        elif [[ "$ftype" =~ LSB\ executable ]]; then
-          patchelf \
-            --set-rpath "$rpath" \
-            --interpreter "$intp" \
-            "$1"
-        fi
+
+        patchelf --set-rpath "$rpath" "$1"
+        patchelf --set-interpreter "$intp" "$1" 2> /dev/null || true
       fi
     }
 
