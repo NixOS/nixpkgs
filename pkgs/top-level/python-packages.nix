@@ -5159,6 +5159,8 @@ in {
 
   aiohue = callPackage ../development/python-modules/aiohue { };
 
+  akismet = callPackage ../development/python-modules/akismet { };
+
   PyMVGLive = callPackage ../development/python-modules/pymvglive { };
 
   coinmarketcap = callPackage ../development/python-modules/coinmarketcap { };
