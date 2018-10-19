@@ -12916,6 +12916,8 @@ in
     enableIntrospection = false;
   };
 
+  weblate = callPackage ../servers/web-apps/weblate { };
+
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
   webrtc-audio-processing = callPackage ../development/libraries/webrtc-audio-processing { };
