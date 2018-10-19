@@ -4376,6 +4376,8 @@ in {
 
   smartdc = callPackage ../development/python-modules/smartdc { };
 
+  social-auth-app-django = callPackage ../development/python-modules/social-auth-app-django { };
+
   social-auth-core = callPackage ../development/python-modules/social-auth-core {
     inherit (pkgs) xmlsec;
   };
