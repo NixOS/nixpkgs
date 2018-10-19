@@ -19204,6 +19204,7 @@ with pkgs;
   winswitch = callPackage ../tools/X11/winswitch { };
 
   wings = callPackage ../applications/graphics/wings {
+    esdl = esdl.override { erlang = erlangR18; };
     erlang = erlangR18;
   };
 
