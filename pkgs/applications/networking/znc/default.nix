@@ -4,6 +4,7 @@
 , withTcl ? false, tcl
 , withCyrus ? true, cyrus_sasl
 , withUnicode ? true, icu
+, withZlib ? true, zlib
 , withIPv6 ? true
 , withDebug ? false
 }:
@@ -26,7 +27,8 @@ stdenv.mkDerivation rec {
     ++ optional withPython python3
     ++ optional withTcl tcl
     ++ optional withCyrus cyrus_sasl
-    ++ optional withUnicode icu;
+    ++ optional withUnicode icu
+    ++ optional withZlib zlib;
 
   configureFlags = [
     (stdenv.lib.enableFeature withPerl "perl")
