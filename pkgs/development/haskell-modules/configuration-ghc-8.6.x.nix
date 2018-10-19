@@ -59,7 +59,7 @@ self: super: {
   hspec-meta = self.hspec-meta_2_5_6;
   JuicyPixels = self.JuicyPixels_3_3_2;
   lens = self.lens_4_17;
-  megaparsec = dontCheck super.megaparsec_7_0_1;
+  megaparsec = dontCheck (doJailbreak super.megaparsec);
   neat-interpolation = dontCheck super.neat-interpolation_0_3_2_4;  # test suite depends on broken HTF
   patience = markBrokenVersion "0.1.1" super.patience;
   primitive = self.primitive_0_6_4_0;
