@@ -69,6 +69,7 @@ self: super: {
   QuickCheck = self.QuickCheck_2_12_6_1;
   semigroupoids = self.semigroupoids_5_3_1;
   tagged = self.tagged_0_8_6;
+  wizards = doJailbreak super.wizards;
   yaml = self.yaml_0_11_0_0;
 
   # https://github.com/tibbe/unordered-containers/issues/214
