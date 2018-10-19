@@ -7178,10 +7178,6 @@ with pkgs;
 
   manticore = callPackage ../development/compilers/manticore { };
 
-  mentorToolchains = recurseIntoAttrs (
-    pkgsi686Linux.callPackage ../development/compilers/mentor {}
-  );
-
   mercury = callPackage ../development/compilers/mercury { };
 
   microscheme = callPackage ../development/compilers/microscheme { };
