@@ -46,6 +46,7 @@ self: super: {
 
   # LTS-12.x versions do not compile.
   base-orphans = self.base-orphans_0_8;
+  config-ini = doJailbreak super.config-ini;   # https://github.com/aisamanra/config-ini/issues/18
   contravariant = self.contravariant_1_5;
   free = self.free_5_1;
   haddock-library = dontCheck super.haddock-library_1_7_0;
