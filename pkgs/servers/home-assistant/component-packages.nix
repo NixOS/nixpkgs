@@ -664,7 +664,7 @@
     "media_player.russound_rnet" = ps: with ps; [  ];
     "media_player.samsungtv" = ps: with ps; [ wakeonlan ];
     "media_player.sisyphus" = ps: with ps; [  ];
-    "media_player.snapcast" = ps: with ps; [  ];
+    "media_player.snapcast" = ps: with ps; [ snapcast ];
     "media_player.songpal" = ps: with ps; [  ];
     "media_player.sonos" = ps: with ps; [  ];
     "media_player.soundtouch" = ps: with ps; [ libsoundtouch ];
