@@ -1,47 +1,74 @@
-{ stdenv, fetchFromGitHub, qmake4Hook, qt4, protobuf, boost155, tinyxml2, libgcrypt, sqlite, gsasl, curl, SDL, SDL_mixer, libircclient }:
+{ stdenv, fetchFromGitHub, runCommand, fetchpatch, patchutils, qmake, qtbase
+, SDL, SDL_mixer, boost, curl, gsasl, libgcrypt, libircclient, protobuf, sqlite
+, tinyxml2, target ? "client" }:
 
-let boost = boost155;
-in stdenv.mkDerivation rec {
-  name            = "${pname}-${version}";
-  pname           = "pokerth";
-  version         = "1.1.2";
+with stdenv.lib;
 
-  src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "0m74jyd9h3yaly3avy65zw7r2iv5b62c2dqizbxsagjsr9a3g0cg";
+let
+  hiDPI = fetchpatch {
+    url = https://github.com/pokerth/pokerth/commit/ad8c9cabfb85d8293720d0f14840278d38b5feeb.patch;
+    sha256 = "192x3lqvd1fanasb95shdygn997qfrpk1k62k1f4j3s5chkwvjig";
   };
 
-  buildInputs = [ qmake4Hook qt4 protobuf boost tinyxml2 libgcrypt sqlite gsasl curl SDL SDL_mixer libircclient ];
+  revertPatch = patch: runCommand "revert-${patch.name}" {} ''
+    ${patchutils}/bin/interdiff ${patch} /dev/null > $out
+  '';
+in
 
-  outputs = [ "out" "server" ];
+stdenv.mkDerivation rec {
+  name = "pokerth-${target}-${version}";
+  version = "1.1.2";
 
-  qmakeFlags = [ "pokerth.pro" "DEFINES+=_WEBSOCKETPP_NOEXCEPT_TOKEN_=noexcept" ];
+  src = fetchFromGitHub {
+    owner = "pokerth";
+    repo = "pokerth";
+    rev = "f5688e01b0efb37035e3b0e3a432200185b9a0c5";
+    sha256 = "0la8d036pbscjnbxf8lkrqjfq8a4ywsfwxil452fhlays6mr19h0";
+  };
+
+  patches = [
+    (revertPatch hiDPI)
+  ];
+
+  postPatch = ''
+    for f in *.pro; do
+      substituteInPlace $f \
+        --replace '$$'{PREFIX}/include/libircclient ${libircclient.dev}/include/libircclient \
+        --replace 'LIB_DIRS =' 'LIB_DIRS = ${boost.out}/lib' \
+        --replace /opt/gsasl ${gsasl}
+    done
+  '';
+
+  nativeBuildInputs = [ qmake ];
+
+  buildInputs = [
+    SDL
+    SDL_mixer
+    boost
+    curl
+    gsasl
+    libgcrypt
+    libircclient
+    protobuf
+    qtbase
+    sqlite
+    tinyxml2
+  ];
+
+  qmakeFlags = [
+    "CONFIG+=${target}"
+    "pokerth.pro"
+  ];
 
   NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
 
-  postPatch = ''
-    for f in connectivity.pro load.pro pokerth_game.pro pokerth_server.pro
-    do
-      substituteInPlace $f \
-        --replace 'LIB_DIRS =' 'LIB_DIRS = ${boost.out}/lib' \
-        --replace '/opt/gsasl/' '${gsasl}/'
-    done
-    substituteInPlace pokerth_server.pro --replace '$$'{PREFIX}/include/libircclient '${libircclient.dev}/include/libircclient'
-  '';
-
   enableParallelBuilding = true;
 
-  postInstall = ''
-    install -D -m755 bin/pokerth_server $server/bin/pokerth_server
-  '';
-
-  meta = with stdenv.lib; {
-    homepage    = https://www.pokerth.net;
-    description = "Open Source Poker client and server";
-    license     = licenses.gpl3;
-    maintainers = with maintainers; [ obadz ];
-    platforms   = platforms.all;
+  meta = {
+    homepage = https://www.pokerth.net;
+    description = "Poker game ${target}";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ obadz yegortimoshenko ];
+    platforms = platforms.all;
   };
 }
