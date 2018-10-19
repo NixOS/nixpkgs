@@ -3,7 +3,7 @@
 {
   imports = [
     ../../../common/cpu/intel
-    ../acpi_call.nix
+    ../../../common/pc/laptop/acpi_call.nix
     ../.
   ];
 }

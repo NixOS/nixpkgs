@@ -7,8 +7,8 @@
 {
   imports = [
     ../.
-    ../../cpu-throttling-bug.nix
-    ../../acpi_call.nix
+    ../../../../common/pc/laptop/acpi_call.nix
+    ../../../../common/pc/laptop/cpu-throttling-bug.nix
   ];
 
   # See https://linrunner.de/en/tlp/docs/tlp-faq.html#battery
