@@ -9743,7 +9743,8 @@ with pkgs;
     /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
     else if name == "bionic" then targetPackages.bionic
     else if name == "uclibc" then targetPackages.uclibcCross
-    else if name == "avrlibc" then targetPackages.avrlibcCross
+    else if name == "avrlibc" then targetPackages.avrlibcCross or avrlibcCross
+    else if name == "newlib" then targetPackages.newlibCross or newlibCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries
@@ -22836,4 +22837,9 @@ with pkgs;
   };
 
   tsung = callPackage ../applications/networking/tsung {};
+
+  newlib = callPackage ../development/misc/newlib { };
+  newlibCross = callPackage ../development/misc/newlib {
+    stdenv = crossLibcStdenv;
+  };
 }
