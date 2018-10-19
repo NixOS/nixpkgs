@@ -2012,6 +2012,8 @@ in {
 
   phe = callPackage ../development/python-modules/phe { };
 
+  phply = callPackage ../development/python-modules/phply { };
+
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
   plaid-python = callPackage ../development/python-modules/plaid-python { };
