@@ -148,8 +148,8 @@ let self = stdenv.mkDerivation {
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl/*or another sha1 provider*/
     valgrind-light python2 python2.pkgs.Mako
-  ] ++ lib.optionals stdenv.isLinux [ wayland wayland-protocols
-                                      libomxil-bellagio libva-minimal ];
+  ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
+    ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ];
 
   enableParallelBuilding = true;
   doCheck = false;
