@@ -81,7 +81,7 @@ self: super: {
 
   # https://github.com/haskell/fgl/issues/79
   # https://github.com/haskell/fgl/issues/81
-  fgl = appendPatch super.fgl ./patches/fgl-monad-fail.patch;
+  fgl = appendPatch (overrideCabal super.fgl (drv: { editedCabalFile = null; })) ./patches/fgl-monad-fail.patch;
 
   # Test suite does not compile.
   cereal = dontCheck super.cereal;
