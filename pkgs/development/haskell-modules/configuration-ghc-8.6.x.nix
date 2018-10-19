@@ -79,6 +79,7 @@ self: super: {
   data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
   Diff = dontCheck super.Diff;
   http-api-data = doJailbreak super.http-api-data;
+  lucid = doJailbreak super.lucid;
   persistent-sqlite = dontCheck super.persistent-sqlite;
   psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
