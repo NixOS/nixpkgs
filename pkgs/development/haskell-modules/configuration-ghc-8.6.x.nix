@@ -89,6 +89,7 @@ self: super: {
   psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
+  monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
 
   # https://github.com/bmillwood/haskell-src-meta/pull/80
   haskell-src-meta = doJailbreak super.haskell-src-meta;
