@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, coreutils, file, getopt, gnugrep, gnused
+{ stdenv, lib, fetchurl, makeWrapper, file, getopt
 , gtk2, gdk_pixbuf, glib, libGLU, nss, nspr, udev, tbb
 , alsaLib, GConf, cups, libcap, fontconfig, freetype, pango
 , cairo, dbus, expat, zlib, libpng12, nodejs, gnutar, gcc, gcc_32bit
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   nosuidLib = ./unity-nosuid.c;
 
-  nativeBuildInputs = [ makeWrapper coreutils file getopt gnugrep gnused ];
+  nativeBuildInputs = [ makeWrapper file getopt ];
 
   outputs = [ "out" ];
 
