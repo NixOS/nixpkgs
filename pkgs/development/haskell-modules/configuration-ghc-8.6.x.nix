@@ -76,6 +76,7 @@ self: super: {
 
   # Test suite does not compile.
   cereal = dontCheck super.cereal;
+  data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
   Diff = dontCheck super.Diff;
   http-api-data = doJailbreak super.http-api-data;
   persistent-sqlite = dontCheck super.persistent-sqlite;
