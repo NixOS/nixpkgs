@@ -3818,6 +3818,8 @@ in {
 
   pytzdata = callPackage ../development/python-modules/pytzdata { };
 
+  pyuca = callPackage ../development/python-modules/pyuca { };
+
   pyutil = callPackage ../development/python-modules/pyutil { };
 
   pywal = callPackage ../development/python-modules/pywal { };
