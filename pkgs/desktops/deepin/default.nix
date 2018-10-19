@@ -20,6 +20,7 @@ let
     deepin-gtk-theme = callPackage ./deepin-gtk-theme { };
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
     deepin-image-viewer = callPackage ./deepin-image-viewer { };
+    deepin-manual = callPackage ./deepin-manual { };
     deepin-menu = callPackage ./deepin-menu { };
     deepin-metacity = callPackage ./deepin-metacity { };
     deepin-movie-reborn = callPackage ./deepin-movie-reborn { };
