@@ -1,16 +1,15 @@
 { stdenv, fetchFromGitLab, cmake, pkgconfig, wrapGAppsHook
 , glib, gtk3, gettext, libxkbfile, libgnome-keyring, libX11
 , freerdp, libssh, libgcrypt, gnutls, makeDesktopItem
-, pcre, webkitgtk, libdbusmenu-gtk3, libappindicator-gtk3
+, pcre, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
-, libsecret, spice-protocol, spice-gtk, epoxy, at-spi2-core
+, libsecret, libsoup, spice-protocol, spice-gtk, epoxy, at-spi2-core
 , openssl, gsettings-desktop-schemas, json-glib
 # The themes here are soft dependencies; only icons are missing without them.
 , hicolor-icon-theme, adwaita-icon-theme
 }:
 
 let
-  version = "1.2.32";
 
   desktopItem = makeDesktopItem {
     name = "remmina";
@@ -22,8 +21,9 @@ let
     categories = "GTK;GNOME;X-GNOME-NetworkSettings;Network;";
   };
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "remmina-${version}";
+  version = "1.2.32";
 
   src = fetchFromGitLab {
     owner  = "Remmina";
@@ -36,9 +36,9 @@ in stdenv.mkDerivation {
   buildInputs = [ cmake wrapGAppsHook gsettings-desktop-schemas
                   glib gtk3 gettext libxkbfile libgnome-keyring libX11
                   freerdp libssh libgcrypt gnutls
-                  pcre webkitgtk libdbusmenu-gtk3 libappindicator-gtk3
+                  pcre libdbusmenu-gtk3 libappindicator-gtk3
                   libvncserver libpthreadstubs libXdmcp libxkbcommon
-                  libsecret spice-protocol spice-gtk epoxy at-spi2-core
+                  libsecret libsoup spice-protocol spice-gtk epoxy at-spi2-core
                   openssl hicolor-icon-theme adwaita-icon-theme json-glib ];
 
   cmakeFlags = [
