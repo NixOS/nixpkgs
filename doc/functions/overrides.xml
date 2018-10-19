@@ -11,8 +11,9 @@
 
  <para>
   These functions are used to make changes to packages, returning only single
-  packages. Overlays, on the other hand, can be used to combine the overridden
-  packages across the entire package set of Nixpkgs.
+  packages. <link xlink:href="#chap-overlays">Overlays</link>, on the other
+  hand, can be used to combine the overridden packages across the entire
+  package set of Nixpkgs.
  </para>
 
  <section xml:id="sec-pkg-override">
