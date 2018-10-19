@@ -1156,4 +1156,7 @@ self: super: {
   # https://github.com/yesodweb/yesod/issues/1563
   yesod-core = dontCheck super.yesod-core;
 
+  # https://github.com/danfran/cabal-macosx/issues/13
+  cabal-macosx = dontCheck super.cabal-macosx;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
