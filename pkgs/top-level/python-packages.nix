@@ -4196,6 +4196,10 @@ in {
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
 
+  xmlsec = callPackage ../development/python-modules/xmlsec {
+    inherit (pkgs) libtool libxml2 libxslt xmlsec;
+  };
+
   xmltodict = callPackage ../development/python-modules/xmltodict { };
 
   xarray = callPackage ../development/python-modules/xarray { };
