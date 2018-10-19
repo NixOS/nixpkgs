@@ -101,4 +101,10 @@ self: super: {
   #
   skylighting-core = dontCheck super.skylighting-core;
 
+  # https://github.com/joelburget/easytest/issues/12
+  easytest = appendPatch super.easytest (pkgs.fetchpatch {
+    url = https://github.com/joelburget/easytest/pull/13.patch;
+    sha256 = "0gnsgga8x2yxyg27pya6rhmxfsxf167vsi4xdj98fn8v0j7zz1v1";
+  });
+
 }
