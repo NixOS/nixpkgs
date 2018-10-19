@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, camlp5_strict
+{ stdenv, fetchFromGitHub, ocaml, findlib, camlp5
 , ppx_tools_versioned, ppx_deriving, re
 }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-elpi-${version}";
-  version = "1.0.5";
+  version = "1.1.0";
   src = fetchFromGitHub {
     owner = "LPCIC";
     repo = "elpi";
     rev = "v${version}";
-    sha256 = "1n1m183l4ms949m2l24w0887m1rmvc9b3j8alnbw8ckn6wwnhpmk";
+    sha256 = "1fd4mqggdcnbhqwrg8r0ikb1j2lv0fc9hv9xfbyjzbzxbjggf5zc";
   };
 
   buildInputs = [ ocaml findlib ppx_tools_versioned ];
 
-  propagatedBuildInputs = [ camlp5_strict ppx_deriving re ];
+  propagatedBuildInputs = [ camlp5 ppx_deriving re ];
 
   createFindlibDestdir = true;
 

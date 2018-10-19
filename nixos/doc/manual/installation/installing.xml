@@ -115,10 +115,17 @@
      </listitem>
      <listitem>
       <para>
-       Add a <emphasis>swap</emphasis> partition. The size required will vary
-       according to needs, here a 8GiB one is created. The space left in front
-       (512MiB) will be used by the boot partition.
-<screen language="commands"># parted /dev/sda -- mkpart primary linux-swap 512MiB 8.5GiB</screen>
+       Add the <emphasis>root</emphasis> partition. This will fill the disk
+       except for the end part, where the swap will live, and the space left in
+       front (512MiB) which will be used by the boot partition.
+<screen language="commands"># parted /dev/sda -- mkpart primary 512MiB -8GiB</screen>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Next, add a <emphasis>swap</emphasis> partition. The size required will
+       vary according to needs, here a 8GiB one is created.
+<screen language="commands"># parted /dev/sda -- mkpart primary linux-swap -8GiB 100%</screen>
        <note>
         <para>
          The swap partition size rules are no different than for other Linux
@@ -129,18 +136,11 @@
      </listitem>
      <listitem>
       <para>
-       Next, add the <emphasis>root</emphasis> partition. This will fill the
-       remainder ending part of the disk.
-<screen language="commands"># parted /dev/sda -- mkpart primary 8.5GiB -1MiB</screen>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
        Finally, the <emphasis>boot</emphasis> partition. NixOS by default uses
        the ESP (EFI system partition) as its <emphasis>/boot</emphasis>
        partition. It uses the initially reserved 512MiB at the start of the
        disk.
-<screen language="commands"># parted /dev/sda -- mkpart ESP fat32 1M 512MiB
+<screen language="commands"># parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
 # parted /dev/sda -- set 3 boot on</screen>
       </para>
      </listitem>
@@ -177,22 +177,22 @@
      </listitem>
      <listitem>
       <para>
-       Add a <emphasis>swap</emphasis> partition. The size required will vary
-       according to needs, here a 8GiB one is created.
-<screen language="commands"># parted /dev/sda -- mkpart primary linux-swap 1M 8GiB</screen>
+       Add the <emphasis>root</emphasis> partition. This will fill the the disk
+       except for the end part, where the swap will live.
+<screen language="commands"># parted /dev/sda -- mkpart primary 1MiB -8GiB</screen>
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       Finally, add a <emphasis>swap</emphasis> partition. The size required
+       will vary according to needs, here a 8GiB one is created.
+<screen language="commands"># parted /dev/sda -- mkpart primary linux-swap -8GiB 100%</screen>
        <note>
         <para>
          The swap partition size rules are no different than for other Linux
          distributions.
         </para>
        </note>
-      </para>
-     </listitem>
-     <listitem>
-      <para>
-       Finally, add the <emphasis>root</emphasis> partition. This will fill the
-       remainder of the disk.
-<screen language="commands"># parted /dev/sda -- mkpart primary 8GiB -1s</screen>
       </para>
      </listitem>
     </orderedlist>
@@ -486,17 +486,17 @@ $ nix-env -i w3m</screen>
    <title>Example partition schemes for NixOS on <filename>/dev/sda</filename> (MBR)</title>
 <screen language="commands">
 # parted /dev/sda -- mklabel msdos
-# parted /dev/sda -- mkpart primary linux-swap 1M 8GiB
-# parted /dev/sda -- mkpart primary 8GiB -1s</screen>
+# parted /dev/sda -- mkpart primary 1MiB -8GiB
+# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%</screen>
   </example>
 
   <example xml:id="ex-partition-scheme-UEFI">
    <title>Example partition schemes for NixOS on <filename>/dev/sda</filename> (UEFI)</title>
 <screen language="commands">
 # parted /dev/sda -- mklabel gpt
-# parted /dev/sda -- mkpart primary linux-swap 512MiB 8.5GiB
-# parted /dev/sda -- mkpart primary 8.5GiB -1MiB
-# parted /dev/sda -- mkpart ESP fat32 1M 512MiB
+# parted /dev/sda -- mkpart primary 512MiB -8GiB
+# parted /dev/sda -- mkpart primary linux-swap -8GiB 100%
+# parted /dev/sda -- mkpart ESP fat32 1MiB 512MiB
 # parted /dev/sda -- set 3 boot on</screen>
   </example>
 

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ./remove-rust-buildstep.patch
   ];
   preConfigure = ''
-    sed -i -e 's|rust-stracciatella|${libstracciatella}/bin/libstracciatella.so|g' CMakeLists.txt
+    sed -i -e 's|rust-stracciatella|${libstracciatella}/lib/libstracciatella.so|g' CMakeLists.txt
     cmakeFlagsArray+=("-DEXTRA_DATA_DIR=$out/share/ja2")
   '';
 

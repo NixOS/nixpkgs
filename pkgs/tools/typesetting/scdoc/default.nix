@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "scdoc-${version}";
-  version = "1.4.2";
+  version = "1.5.1";
 
   src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/scdoc/snapshot/scdoc-${version}.tar.xz";
-    sha256 = "1hhvg9cifx1v8b5i91lgq5cjdcskzl3rz7vwmwdq7ad0nqnykz82";
+    url = "https://git.sr.ht/~sircmpwn/scdoc/archive/${version}.tar.gz";
+    sha256 = "0hcwpyy97afwq40qn8jq75f1b2p0172lil1v0hs9a0rislpqk5nm";
   };
 
   postPatch = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       scdoc is a simple man page generator written for POSIX systems written in
       C99.
     '';
-    homepage = https://git.sr.ht/~sircmpwn/scdoc/;
+    homepage = https://git.sr.ht/~sircmpwn/scdoc;
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

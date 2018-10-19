@@ -126,6 +126,9 @@ stdenv.mkDerivation {
         --prefix LD_LIBRARY_PATH : "$librarypath" \
         --prefix PATH : "${gnome3.zenity}/bin"
 
+      # fix Icon line in the desktop file (#48062)
+      sed -i "s:^Icon=.*:Icon=spotify-client:" "$out/share/spotify/spotify.desktop"
+
       # Desktop file
       mkdir -p "$out/share/applications/"
       cp "$out/share/spotify/spotify.desktop" "$out/share/applications/"

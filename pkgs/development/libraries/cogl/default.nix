@@ -31,6 +31,8 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig libintl ];
 
   configureFlags = [

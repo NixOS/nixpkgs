@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pcapfix-1.1.2";
+  name = "pcapfix-1.1.3";
 
   src = fetchurl {
     url = "https://f00l.de/pcapfix/${name}.tar.gz";
-    sha256 = "0dl6pgqw6d8i5rhn6xwdx7sny16lpf771sn45c3p0l8z4mfzg6ay";
+    sha256 = "0f9g6yh1dc7x1n28xs4lcwlk6sa3mpz0rbw0ddhajqidag2k07sr";
   };
 
   postPatch = ''sed -i "s|/usr|$out|" Makefile'';

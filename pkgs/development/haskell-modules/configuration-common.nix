@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "09rhss1s6gxmqvb8k2l0f55mv38igyvikmm6d07zxkw6049q3maz";
+      sha256 = "069w4gdb104lc3vp48k3wywmgql56yc5g2g2i240xrr88in3qvqw";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -103,18 +103,12 @@ self: super: {
   };
 
   # Fix test trying to access /home directory
-  shell-conduit = (overrideCabal super.shell-conduit (drv: {
+  shell-conduit = overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
 
     # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
     # see: https://github.com/psibi/shell-conduit/issues/12
     doCheck = !pkgs.stdenv.isDarwin;
-  })).overrideScope (self: super: {
-    # shell-conduit doesn't build with conduit 1.3
-    # see https://github.com/psibi/shell-conduit/issues/15
-    conduit = self.conduit_1_2_13_1;
-    conduit-extra = self.conduit-extra_1_2_3_2;
-    resourcet = self.resourcet_1_1_11;
   });
 
   # https://github.com/froozen/kademlia/issues/2
@@ -338,7 +332,7 @@ self: super: {
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
-  language-nix = if pkgs.stdenv.isi686 then dontCheck super.language-nix else super.language-nix;
+  language-nix = if (pkgs.stdenv.hostPlatform.isAarch64 || pkgs.stdenv.hostPlatform.isi686) then dontCheck super.language-nix else super.language-nix; # aarch64: https://ghc.haskell.org/trac/ghc/ticket/15275
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
@@ -682,8 +676,13 @@ self: super: {
   # https://github.com/goldfirere/singletons/issues/122
   singletons = dontCheck super.singletons;
 
-  # https://github.com/fpco/stackage/issues/838
-  cryptonite = dontCheck super.cryptonite;
+  # Fix an aarch64 issue with cryptonite-0.25:
+  # https://github.com/haskell-crypto/cryptonite/issues/234
+  # This has been committed upstream, but there is, as of yet, no new release.
+  cryptonite = appendPatch super.cryptonite (pkgs.fetchpatch {
+    url = https://github.com/haskell-crypto/cryptonite/commit/4622e5fc8ece82f4cf31358e31cd02cf020e558e.patch;
+    sha256 = "1m2d47ni4jbrpvxry50imj91qahr3r7zkqm157clrzlmw6gzpgnq";
+  });
 
   # We cannot build this package w/o the C library from <http://www.phash.org/>.
   phash = markBroken super.phash;
@@ -703,9 +702,6 @@ self: super: {
     if pkgs.stdenv.isDarwin
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
-
-  # vaultenv is not available from Hackage.
-  vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
@@ -947,9 +943,6 @@ self: super: {
   # Tries to read a file it is not allowed to in the test suite
   load-env = dontCheck super.load-env;
 
-  # Add support for https://github.com/haskell-hvr/multi-ghc-travis.
-  multi-ghc-travis = self.callPackage ../tools/haskell/multi-ghc-travis {};
-
   # https://github.com/yesodweb/Shelly.hs/issues/162
   shelly = dontCheck super.shelly;
 
@@ -1072,7 +1065,11 @@ self: super: {
   # The tool needs a newer hpack version than the one mandated by LTS-12.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
     hpack = self.hpack_0_31_0;
-    yaml = self.yaml_0_10_2_0;
+    yaml = self.yaml_0_11_0_0;
+  });
+  stack2nix = super.stack2nix.overrideScope (self: super: {
+    hpack = self.hpack_0_31_0;
+    yaml = self.yaml_0_11_0_0;
   });
 
   # Break out of "aeson <1.3, temporary <1.3".
@@ -1153,4 +1150,13 @@ self: super: {
   });
 
   xmonad-extras = doJailbreak super.xmonad-extras;
+
+  arbtt = doJailbreak super.arbtt;
+
+  # https://github.com/yesodweb/yesod/issues/1563
+  yesod-core = dontCheck super.yesod-core;
+
+  # https://github.com/danfran/cabal-macosx/issues/13
+  cabal-macosx = dontCheck super.cabal-macosx;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

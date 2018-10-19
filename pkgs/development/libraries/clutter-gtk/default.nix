@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "01ibniy4ich0fgpam53q252idm7f4fn5xg5qvizcfww90gn9652j";
   };
 
+  outputs = [ "out" "dev" ];
+
   propagatedBuildInputs = [ clutter gtk3 ];
   nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
 

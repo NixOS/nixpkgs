@@ -140,7 +140,7 @@ in
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi
-          
+
           ${config.environment.extraSetup}
         '';
     };

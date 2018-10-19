@@ -145,8 +145,12 @@ let cfg = config.ec2; in
     environment.systemPackages = [ pkgs.cryptsetup ];
 
     boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];
-    
+
     # EC2 has its own NTP server provided by the hypervisor
     networking.timeServers = [ "169.254.169.123" ];
+
+    # udisks has become too bloated to have in a headless system
+    # (e.g. it depends on GTK+).
+    services.udisks2.enable = false;
   };
 }

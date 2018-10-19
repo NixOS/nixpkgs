@@ -65,6 +65,10 @@ in {
 
       serviceConfig = {
         RuntimeDirectory = "lirc";
+
+        # socket lives in runtime directory; we have to keep is available
+        RuntimeDirectoryPreserve = true;
+
         ExecStart = ''
           ${pkgs.lirc}/bin/lircd --nodaemon \
             ${escapeShellArgs cfg.extraArguments} \

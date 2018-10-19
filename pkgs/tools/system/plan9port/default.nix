@@ -2,24 +2,23 @@
 , xproto ? null
 , xextproto ? null
 , libXext ? null
+, zlib ? null
   # For building web manuals
 , perl ? null
 , samChordingSupport ? true #from 9front
 }:
 
 stdenv.mkDerivation rec {
-  name = "plan9port-2016-04-18";
+  name = "plan9port-2018-09-20";
 
   src = fetchgit {
     # Latest, same as on github, google code is old
-    url = "https://plan9port.googlesource.com/plan9";
-    rev = "35d43924484b88b9816e40d2f6bff4547f3eec47";
-    sha256 = "1dvg580rkav09fra2gnrzh271b4fw6bgqfv4ib7ds5k3j55ahcdc";
+    url = "https://github.com/9fans/plan9port.git";
+    rev = "a82a8b6368274d77d42f526e379b74e79c137e26";
+    sha256 = "1icywcnqv0dz1mkm7giakii536nycp0ajxnmzkx4944dxsmhcwq1";
   };
 
-  patches = [
-    ./fontsrv.patch
-  ] ++ stdenv.lib.optionals samChordingSupport [ ./sam_chord_9front.patch ];
+  patches = stdenv.lib.optionals samChordingSupport [ ./sam_chord_9front.patch ];
 
   postPatch = ''
     #hardcoded path
@@ -59,11 +58,24 @@ stdenv.mkDerivation rec {
     homepage = http://swtch.com/plan9port/;
     description = "Plan 9 from User Space";
     license = licenses.lpl-102;
-    maintainers = with maintainers; [ ftrvxmtrx kovirobi ];
+    maintainers = with maintainers; [ bbarker ftrvxmtrx kovirobi ];
     platforms = platforms.unix;
   };
-
+  
+  libX11_dev = libX11.dev;
   libXt_dev = libXt.dev;
+  libXext_dev = libXext.dev;
   fontconfig_dev = fontconfig.dev;
   freetype_dev = freetype.dev;
+  zlib_dev = zlib.dev;
+  
+  xproto_exp = xproto;
+  xextproto_exp = xextproto;
+  libX11_exp = libX11;
+  libXt_exp = libXt;
+  libXext_exp = libXext;
+  freetype_exp = freetype;
+  zlib_exp = zlib;
+
+  fontconfig_lib = fontconfig.lib;
 }

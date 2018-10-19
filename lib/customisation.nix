@@ -196,7 +196,7 @@ rec {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
           overrideScope = g: lib.warn
-            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: self: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
+            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
             (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
           overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
           packages = f;

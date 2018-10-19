@@ -20,10 +20,6 @@ build-idris-package  {
     sha256 = "0rbx0yqa0fb7h7qfsvqvirc5q85z51rcwbivn6351jgn3a0inmhf";
   };
 
-  postUnpack = ''
-    rm source/test.ipkg
-  '';
-
   meta = {
     description = "Recursion schemes for Idris";
     homepage = https://github.com/vmchale/recursion_schemes;

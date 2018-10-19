@@ -303,6 +303,8 @@ EOF
     disable_test t0028-working-tree-encoding
   '';
 
+  stripDebugList = [ "lib" "libexec" "bin" "share/git/contrib/credential/libsecret" ];
+
 
   meta = {
     homepage = https://git-scm.com/;

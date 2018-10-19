@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
     homepage    = http://live.gnome.org/GObjectIntrospection;
     maintainers = with maintainers; [ lovek323 lethalman ];
     platforms   = platforms.unix;
+    license = with licenses; [ gpl2 lgpl2 ];
 
     longDescription = ''
       GObject introspection is a middleware layer between C libraries (using

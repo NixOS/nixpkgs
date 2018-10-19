@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
     (fetchAlpinePatch "remove-U64-typedef.patch" "1msxyhcqkvhqa03dwb50288g7f6nbrcd9cs036m9xc8jdgjb8k8j")
+    ./CVE-2018-18065.patch
   ];
 
   preConfigure =

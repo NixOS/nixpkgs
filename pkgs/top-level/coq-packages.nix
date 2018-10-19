@@ -1,6 +1,5 @@
 { lib, callPackage, newScope, recurseIntoAttrs
 , gnumake3
-, ocamlPackages_3_12_1
 , ocamlPackages_4_02
 , ocamlPackages_4_05
 }:
@@ -56,15 +55,8 @@ in rec {
     let self = mkCoqPackages' self coq; in
     filterCoqPackages coq self;
 
-  coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
-    make = gnumake3;
-    inherit (ocamlPackages_3_12_1) ocaml findlib;
-    camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
-    lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
-  };
   coq_8_4 = callPackage ../applications/science/logic/coq/8.4.nix {
-    inherit (ocamlPackages_4_02) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages_4_02.camlp5_transitional;
+    inherit (ocamlPackages_4_02) ocaml findlib lablgtk camlp5;
   };
   coq_8_5 = callPackage ../applications/science/logic/coq {
     ocamlPackages = ocamlPackages_4_05;

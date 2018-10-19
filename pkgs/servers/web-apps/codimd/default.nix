@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch { # fixes for configurable paths
       url = "https://patch-diff.githubusercontent.com/raw/hackmdio/codimd/pull/940.patch";
-      sha256 = "0n9lfaxirngywx8m5f0nqzykqdjzc8f3cl10ir1g7s5kq4zc7hhn";
+      sha256 = "0w1cvnp3k1n8690gzlrfijisn182i0v8psjs3df394rfx2347xyp";
     })
   ];
 

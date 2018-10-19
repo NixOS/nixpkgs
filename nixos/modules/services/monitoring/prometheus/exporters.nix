@@ -30,6 +30,7 @@ let
     postfix   = import ./exporters/postfix.nix   { inherit config lib pkgs; };
     snmp      = import ./exporters/snmp.nix      { inherit config lib pkgs; };
     surfboard = import ./exporters/surfboard.nix { inherit config lib pkgs; };
+    tor       = import ./exporters/tor.nix       { inherit config lib pkgs; };
     unifi     = import ./exporters/unifi.nix     { inherit config lib pkgs; };
     varnish   = import ./exporters/varnish.nix   { inherit config lib pkgs; };
   };
@@ -123,15 +124,13 @@ let
       systemd.services."prometheus-${name}-exporter" = mkMerge ([{
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        serviceConfig = {
-          Restart = mkDefault "always";
-          PrivateTmp = mkDefault true;
-          WorkingDirectory = mkDefault /tmp;
-        } // mkIf (!(serviceOpts.serviceConfig.DynamicUser or false)) {
-          User = conf.user;
-          Group = conf.group;
-        };
-      } serviceOpts ]);
+        serviceConfig.Restart = mkDefault "always";
+        serviceConfig.PrivateTmp = mkDefault true;
+        serviceConfig.WorkingDirectory = mkDefault /tmp;
+      } serviceOpts ] ++ optional (serviceOpts.serviceConfig.DynamicUser or false) {
+        serviceConfig.User = conf.user;
+        serviceConfig.Group = conf.group;
+      });
   };
 in
 {
@@ -172,5 +171,8 @@ in
     }) exporterOpts)
   );
 
-  meta.doc = ./exporters.xml;
+  meta = {
+    doc = ./exporters.xml;
+    maintainers = [ maintainers.willibutz ];
+  };
 }

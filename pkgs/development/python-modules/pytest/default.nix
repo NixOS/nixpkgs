@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, attrs, hypothesis, py
+{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
 , atomicwrites, mock, writeText, pathlib2
 }:
@@ -19,7 +19,8 @@ buildPythonPackage rec {
   checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites]
-    ++ stdenv.lib.optionals (!isPy3k) [ funcsigs pathlib2 ];
+    ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
+    ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
   checkPhase = ''
     runHook preCheck
@@ -37,8 +38,10 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
-    platforms = platforms.unix;
+    homepage = https://docs.pytest.org;
     description = "Framework for writing tests";
+    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

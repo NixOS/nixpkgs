@@ -602,7 +602,7 @@ in
             target = "postfix";
           };
 
-        # This makes comfortable for root to run 'postqueue' for example.
+        # This makes it comfortable to run 'postqueue/postdrop' for example.
         systemPackages = [ pkgs.postfix ];
       };
 
@@ -611,6 +611,22 @@ in
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";
         source = "${pkgs.postfix}/bin/sendmail";
+        group = setgidGroup;
+        setuid = false;
+        setgid = true;
+      };
+
+      security.wrappers.postqueue = {
+        program = "postqueue";
+        source = "${pkgs.postfix}/bin/postqueue";
+        group = setgidGroup;
+        setuid = false;
+        setgid = true;
+      };
+
+      security.wrappers.postdrop = {
+        program = "postdrop";
+        source = "${pkgs.postfix}/bin/postdrop";
         group = setgidGroup;
         setuid = false;
         setgid = true;

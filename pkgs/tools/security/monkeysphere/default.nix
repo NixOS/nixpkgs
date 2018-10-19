@@ -1,25 +1,44 @@
 { stdenv, fetchurl, makeWrapper
 , perl, libassuan, libgcrypt
-, perlPackages, lockfileProgs, gnupg
+, perlPackages, lockfileProgs, gnupg, coreutils
+# For the tests:
+, bash, openssh, which, socat, cpio, hexdump
 }:
 
 stdenv.mkDerivation rec {
   name = "monkeysphere-${version}";
-  version = "0.41";
+  version = "0.42";
 
   src = fetchurl {
     url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${version}.orig.tar.gz";
-    sha256 = "0jz7kwkwgylqprnl8bwvl084s5gjrilza77ln18i3f6x48b2y6li";
+    sha256 = "1haqgjxm8v2xnhc652lx79p2cqggb9gxgaf19w9l9akar2qmdjf1";
   };
 
   patches = [ ./monkeysphere.patch ];
 
+  postPatch = ''
+    sed -i "s,/usr/bin/env,${coreutils}/bin/env," src/share/ma/update_users
+  '';
+
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl libassuan libgcrypt ];
+  buildInputs = [ perl libassuan libgcrypt ]
+    ++ stdenv.lib.optional doCheck
+      ([ gnupg openssh which socat cpio hexdump lockfileProgs ] ++
+      (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
   makeFlags = ''
     PREFIX=/
     DESTDIR=$(out)
+  '';
+
+  # Not all checks pass yet (NixOS specific problems) and the tests "drain"
+  # entropy (apparently GnuPG still uses /dev/random).
+  doCheck = false;
+  preCheck = ''
+    patchShebangs tests/
+    patchShebangs src/
+    sed -i "s,/usr/sbin/sshd,${openssh}/bin/sshd," tests/basic
+    sed -i "s/<(hd/<(hexdump/" tests/keytrans
   '';
 
   postFixup =

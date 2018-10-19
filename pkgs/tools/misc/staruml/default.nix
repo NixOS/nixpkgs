@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then fetchurl {
-      url = "http://staruml.io/download/release/v${version}/StarUML-v${version}-32-bit.deb";
+      url = "https://s3.amazonaws.com/staruml-bucket/releases-v2/StarUML-v${version}-32-bit.deb";
       sha256 = "0vb3k9m3l6pmsid4shlk0xdjsriq3gxzm8q7l04didsppg0vvq1n";
     } else fetchurl {
-      url = "http://staruml.io/download/release/v${version}/StarUML-v${version}-64-bit.deb";
+      url = "https://s3.amazonaws.com/staruml-bucket/releases-v2/StarUML-v${version}-64-bit.deb";
       sha256 = "05gzrnlssjkhyh0wv019d4r7p40lxnsa1sghazll6f233yrqmxb0";
     };
 

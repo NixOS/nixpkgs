@@ -27,7 +27,6 @@ let
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
   }."${version}";
   coq-version = builtins.substring 0 3 version;
-  camlp5 = ocamlPackages.camlp5_strict;
   ideFlags = if buildIde then "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
@@ -37,8 +36,8 @@ self = stdenv.mkDerivation {
   name = "coq-${version}";
 
   passthru = {
-    inherit coq-version camlp5;
-    inherit (ocamlPackages) ocaml findlib num;
+    inherit coq-version;
+    inherit (ocamlPackages) ocaml camlp5 findlib num;
     emacsBufferSetup = pkgs: ''
       ; Propagate coq paths to children
       (inherit-local-permanent coq-prog-name "${self}/bin/coqtop")
@@ -93,7 +92,7 @@ self = stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib camlp5 ncurses ocamlPackages.num ]
+  buildInputs = [ ncurses ] ++ (with ocamlPackages; [ ocaml findlib camlp5 num ])
   ++ stdenv.lib.optional buildIde ocamlPackages.lablgtk;
 
   postPatch = ''

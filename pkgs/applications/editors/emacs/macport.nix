@@ -9,8 +9,6 @@ stdenv.mkDerivation rec {
   macportVersion = "7.2";
   name = "emacs-mac-${emacsVersion}-${macportVersion}";
 
-  builder = ./builder.sh;
-
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
     sha256 = "0b6k1wq44rc8gkvxhi1bbjxbz3cwg29qbq8mklq2az6p1hjgrx0w";

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "07anqypf7c719x9y683qz65cxllmzlgmlab2hlahrqcj4bq2k99c";
   };
 
+  outputs = [ "out" "dev" ];
+
   postPatch = ''
     sed '1i#include <stdint.h>' -i src/xdr_sizeof.c
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
