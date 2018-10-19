@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, cmake, pkgconfig, wrapGAppsHook
-, glib, gtk3, gettext, libxkbfile, libgnome-keyring, libX11
+, glib, gtk3, gettext, libxkbfile, libX11
 , freerdp, libssh, libgcrypt, gnutls, makeDesktopItem
 , pcre, libdbusmenu-gtk3, libappindicator-gtk3
 , libvncserver, libpthreadstubs, libXdmcp, libxkbcommon
@@ -7,7 +7,10 @@
 , openssl, gsettings-desktop-schemas, json-glib
 # The themes here are soft dependencies; only icons are missing without them.
 , hicolor-icon-theme, adwaita-icon-theme
+, gnomeSupport ? true, libgnome-keyring
 }:
+
+with stdenv.lib;
 
 let
 
@@ -34,12 +37,18 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake wrapGAppsHook gsettings-desktop-schemas
-                  glib gtk3 gettext libxkbfile libgnome-keyring libX11
+                  glib gtk3 gettext libxkbfile libX11
                   freerdp libssh libgcrypt gnutls
                   pcre libdbusmenu-gtk3 libappindicator-gtk3
                   libvncserver libpthreadstubs libXdmcp libxkbcommon
                   libsecret libsoup spice-protocol spice-gtk epoxy at-spi2-core
-                  openssl hicolor-icon-theme adwaita-icon-theme json-glib ];
+                  openssl hicolor-icon-theme adwaita-icon-theme json-glib ]
+  ++ optional gnomeSupport libgnome-keyring;
+
+  preConfigure = optionalString (!gnomeSupport) ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory(remmina-plugins-gnome)" ""
+  '';
 
   cmakeFlags = [
     "-DWITH_VTE=OFF"
@@ -62,7 +71,7 @@ in stdenv.mkDerivation rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     license = stdenv.lib.licenses.gpl2;
     homepage = https://gitlab.com/Remmina/Remmina;
     description = "Remote desktop client written in GTK+";
