@@ -706,6 +706,8 @@ in {
 
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
 
+  python3-saml = callPackage ../development/python-modules/python3-saml { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
