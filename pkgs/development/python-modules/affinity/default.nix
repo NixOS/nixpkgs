@@ -5,7 +5,7 @@ buildPythonPackage rec {
   version = "0.1.0";
 
   # syntax error
-  disabled = isPy3k;
+  doCheck = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
