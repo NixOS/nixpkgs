@@ -1,8 +1,19 @@
-{ stdenv, fetchurl, dpkg, gettext, gawk, perl, wget, coreutils }:
-
+{ stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, utillinux
+, gnugrep, gnutar, gnused, gzip, makeWrapper }:
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
-stdenv.mkDerivation rec {
+let binPath = stdenv.lib.makeBinPath [
+    coreutils
+    dpkg
+    gawk
+    gnugrep
+    gnused
+    gnutar
+    gzip
+    perl
+    wget
+  ];
+in stdenv.mkDerivation rec {
   name = "debootstrap-${version}";
   version = "1.0.109";
 
@@ -13,63 +24,43 @@ stdenv.mkDerivation rec {
     sha256 = "117xgrv6mpszyndmsvkn4ynh57b2s40qc68bpmfmxggw58j42klw";
   };
 
-  buildInputs = [ dpkg gettext gawk perl wget ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
 
-  # If you have to update the patch for functions a vim regex like this
-  # can help you identify which lines are used to write scripts on TARGET and
-  # which should /bin/ paths should be replaced:
-  # \<echo\>\|\/bin\/\|^\s*\<cat\>\|EOF\|END
   installPhase = ''
-    sed -i \
-      -e 's@/usr/bin/id@id@' \
-      -e 's@/usr/bin/dpkg@${dpkg}/bin/dpkg@' \
-      -e 's@/usr/bin/sha@${coreutils}/bin/sha@' \
-      -e 's@/bin/sha@${coreutils}/bin/sha@' \
-      debootstrap
+    runHook preInstall
 
-    for file in functions debootstrap; do
-      substituteInPlace "$file" \
-        --subst-var-by gunzip "$(type -p gunzip)" \
-        --subst-var-by bunzip "$(type -p bunzip)" \
-        --subst-var-by gettext "$(type -p gettext)" \
-        --subst-var-by dpkg "$(type -p dpkg)" \
-        --subst-var-by udpkg "$(type -p udpkg)" \
-        --subst-var-by id "$(type -p id)" \
-        --subst-var-by perl "$(type -p perl)" \
-        --subst-var-by uname "$(type -p uname)" \
-        --subst-var-by wget "$(type -p wget)"
-    done
-
-
-    sed -i  \
-      -e 's@\<wget\>@${wget}/bin/wget@' \
-      functions
+    substituteInPlace debootstrap \
+      --replace 'CHROOT_CMD="chroot '  'CHROOT_CMD="${coreutils}/bin/chroot ' \
+      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${utillinux}/bin/unshare ' \
+      --replace /usr/bin/dpkg ${dpkg}/bin/dpkg \
+      --replace '#!/bin/sh' '#!/bin/bash' \
+      --subst-var-by VERSION ${version}
 
     d=$out/share/debootstrap
     mkdir -p $out/{share/debootstrap,bin}
 
+    mv debootstrap $out/bin
+
     cp -r . $d
 
-    cat >> $out/bin/debootstrap << EOF
-    #!/bin/sh
-    export DEBOOTSTRAP_DIR="''${DEBOOTSTRAP_DIR:-$d}"
-    # mount and other tools must be found in chroot. So add default debain paths!
-    # TODO only add paths which are required by the scripts!
-    export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-    exec $d/debootstrap "\$@"
-    EOF
-    chmod +x $out/bin/debootstrap
+    wrapProgram $out/bin/debootstrap \
+      --set PATH ${binPath} \
+      --set-default DEBOOTSTRAP_DIR $d
 
     mkdir -p $out/man/man8
     mv debootstrap.8 $out/man/man8
+
+    rm -rf $d/debian
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Tool to create a Debian system in a chroot";
-    homepage = http://packages.debian.org/de/lenny/debootstrap; # http://code.erisian.com.au/Wiki/debootstrap
-    license = stdenv.lib.licenses.gpl2; # gentoo says so.. ?
+    homepage = https://wiki.debian.org/Debootstrap;
+    license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
