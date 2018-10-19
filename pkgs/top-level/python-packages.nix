@@ -642,6 +642,8 @@ in {
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
+  snapcast = callPackage ../development/python-modules/snapcast { };
+
   spglib = callPackage ../development/python-modules/spglib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
