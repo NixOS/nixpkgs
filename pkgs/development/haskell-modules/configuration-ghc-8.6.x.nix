@@ -57,7 +57,7 @@ self: super: {
   JuicyPixels = self.JuicyPixels_3_3_2;
   lens = self.lens_4_17;
   megaparsec = dontCheck super.megaparsec_7_0_1;
-  neat-interpolation = self.neat-interpolation_0_3_2_4;
+  neat-interpolation = dontCheck super.neat-interpolation_0_3_2_4;  # test suite depends on broken HTF
   patience = markBrokenVersion "0.1.1" super.patience;
   primitive = self.primitive_0_6_4_0;
   QuickCheck = self.QuickCheck_2_12_6_1;
@@ -89,5 +89,8 @@ self: super: {
     url = https://github.com/bergmark/polyparse/commit/8a69ee7e57db798c106d8b56dce05b1dfc4fed37.patch;
     sha256 = "11r73wx1w6bfrkrnk6r9k7rfzp6qrvkdikb2by37ld06c0w6nn57";
   });
+
+  # https://github.com/skogsbaer/HTF/issues/69
+  HTF = markBrokenVersion "0.13.2.4" super.HTF;
 
 }
