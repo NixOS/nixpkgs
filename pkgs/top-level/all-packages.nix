@@ -17726,6 +17726,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) vmnet;
   };
 
+  minishift = callPackage ../applications/networking/cluster/minishift { };
+
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
   mimic = callPackage ../applications/audio/mimic {
