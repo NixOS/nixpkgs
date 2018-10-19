@@ -12164,6 +12164,8 @@ with pkgs;
 
   shibboleth-sp = callPackage ../development/libraries/shibboleth-sp { };
 
+  skaffold = callPackage ../development/tools/skaffold { };
+
   skalibs = skawarePackages.skalibs;
 
   skawarePackages = recurseIntoAttrs {
