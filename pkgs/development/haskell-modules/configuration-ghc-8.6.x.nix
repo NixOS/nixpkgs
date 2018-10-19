@@ -98,4 +98,7 @@ self: super: {
   # https://github.com/jgm/pandoc-types/issues/52
   pandoc-types = doJailbreak super.pandoc-types;
 
+  #
+  skylighting-core = dontCheck super.skylighting-core;
+
 }
