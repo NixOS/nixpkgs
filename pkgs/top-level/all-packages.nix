@@ -449,6 +449,8 @@ in
 
   actkbd = callPackage ../tools/system/actkbd { };
 
+  acts = callPackage ../tools/backup/acts { };
+
   adafruit-ampy = callPackage ../tools/misc/adafruit-ampy { };
 
   adlplug = callPackage ../applications/audio/adlplug { };
