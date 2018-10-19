@@ -52,6 +52,7 @@ self: super: {
   contravariant = self.contravariant_1_5;
   free = self.free_5_1;
   haddock-library = dontCheck super.haddock-library_1_7_0;
+  HaTeX = doJailbreak super.HaTeX;
   hledger = doJailbreak super.hledger;
   hledger-lib = doJailbreak super.hledger-lib;
   hledger-ui = doJailbreak super.hledger-ui;
