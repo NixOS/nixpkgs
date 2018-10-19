@@ -22356,7 +22356,7 @@ with pkgs;
   unity3d = callPackage ../development/tools/unity3d {
     stdenv = stdenv_32bit;
     gcc_32bit = pkgsi686Linux.gcc;
-    inherit (gnome2) GConf libgnomeui gnome_vfs;
+    inherit (gnome2) GConf;
   };
 
   urbit = callPackage ../misc/urbit { };
