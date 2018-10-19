@@ -115,10 +115,8 @@ in buildPythonApplication rec {
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://ankisrs.net/;
+      homepage = "https://apps.ankiweb.net/";
       description = "Spaced repetition flashcard program";
-      license = licenses.gpl3;
-
       longDescription = ''
         Anki is a program which makes remembering things easy. Because it is a lot
         more efficient than traditional study methods, you can either greatly
@@ -131,8 +129,9 @@ in buildPythonApplication rec {
         people's names and faces, brushing up on geography, mastering long poems,
         or even practicing guitar chords!
       '';
-
-      maintainers = with maintainers; [ the-kenny ];
+      license = licenses.agpl3Plus;
+      broken = stdenv.hostPlatform.isAarch64;
       platforms = platforms.mesaPlatforms;
+      maintainers = with maintainers; [ the-kenny ];
     };
 }
