@@ -4376,6 +4376,10 @@ in {
 
   smartdc = callPackage ../development/python-modules/smartdc { };
 
+  social-auth-core = callPackage ../development/python-modules/social-auth-core {
+    inherit (pkgs) xmlsec;
+  };
+
   socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };

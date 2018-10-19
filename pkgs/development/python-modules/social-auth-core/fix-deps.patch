@@ -1,0 +1,207 @@
+diff --git a/social_core/tests/actions/actions.py b/social_core/tests/actions/actions.py
+index 291b313..063ed6f 100644
+--- a/social_core/tests/actions/actions.py
++++ b/social_core/tests/actions/actions.py
+@@ -1,6 +1,6 @@
+ import json
+ import requests
+-import unittest2 as unittest
++import unittest
+ 
+ from httpretty import HTTPretty
+ 
+diff --git a/social_core/tests/backends/base.py b/social_core/tests/backends/base.py
+index b348f9d..03bb97a 100644
+--- a/social_core/tests/backends/base.py
++++ b/social_core/tests/backends/base.py
+@@ -1,4 +1,4 @@
+-import unittest2 as unittest
++import unittest
+ import requests
+ 
+ from httpretty import HTTPretty
+diff --git a/social_core/tests/backends/open_id_connect.py b/social_core/tests/backends/open_id_connect.py
+index 3b73631..29f744d 100644
+--- a/social_core/tests/backends/open_id_connect.py
++++ b/social_core/tests/backends/open_id_connect.py
+@@ -5,7 +5,7 @@
+ import sys
+ import json
+ import datetime
+-import unittest2
++import unittest
+ 
+ try:
+     from jwkest.jwk import RSAKey, KEYS
+@@ -129,38 +129,38 @@
+         with self.assertRaisesRegexp(AuthTokenError, expected_message):
+             self.do_login()
+ 
+-    @unittest2.skipIf(NO_JWKEST, 'No Jwkest installed')
++    @unittest.skipIf(NO_JWKEST, 'No Jwkest installed')
+     def test_invalid_signature(self):
+         self.authtoken_raised(
+             'Token error: Signature verification failed',
+             tamper_message=True
+         )
+ 
+-    @unittest2.skipIf(NO_JWKEST, 'No Jwkest installed')
++    @unittest.skipIf(NO_JWKEST, 'No Jwkest installed')
+     def test_expired_signature(self):
+         expiration_datetime = datetime.datetime.utcnow() - \
+                               datetime.timedelta(seconds=30)
+         self.authtoken_raised('Token error: Signature has expired',
+                               expiration_datetime=expiration_datetime)
+ 
+-    @unittest2.skipIf(NO_JWKEST, 'No Jwkest installed')
++    @unittest.skipIf(NO_JWKEST, 'No Jwkest installed')
+     def test_invalid_issuer(self):
+         self.authtoken_raised('Token error: Invalid issuer',
+                               issuer='someone-else')
+ 
+-    @unittest2.skipIf(NO_JWKEST, 'No Jwkest installed')
++    @unittest.skipIf(NO_JWKEST, 'No Jwkest installed')
+     def test_invalid_audience(self):
+         self.authtoken_raised('Token error: Invalid audience',
+                               client_key='someone-else')
+ 
+-    @unittest2.skipIf(NO_JWKEST, 'No Jwkest installed')
++    @unittest.skipIf(NO_JWKEST, 'No Jwkest installed')
+     def test_invalid_issue_time(self):
+         expiration_datetime = datetime.datetime.utcnow() - \
+                               datetime.timedelta(hours=1)
+         self.authtoken_raised('Token error: Incorrect id_token: iat',
+                               issue_datetime=expiration_datetime)
+ 
+-    @unittest2.skipIf(NO_JWKEST, 'No Jwkest installed')
++    @unittest.skipIf(NO_JWKEST, 'No Jwkest installed')
+     def test_invalid_nonce(self):
+         self.authtoken_raised(
+             'Token error: Incorrect id_token: nonce',
+diff --git a/social_core/tests/backends/test_broken.py b/social_core/tests/backends/test_broken.py
+index 7af0638..341f932 100644
+--- a/social_core/tests/backends/test_broken.py
++++ b/social_core/tests/backends/test_broken.py
+@@ -1,4 +1,4 @@
+-import unittest2 as unittest
++import unittest
+ 
+ from ...backends.base import BaseAuth
+ from ..strategy import TestStrategy
+diff --git a/social_core/tests/backends/test_google.py b/social_core/tests/backends/test_google.py
+index c4d3423..9de62a8 100644
+--- a/social_core/tests/backends/test_google.py
++++ b/social_core/tests/backends/test_google.py
+@@ -1,6 +1,6 @@
+ import datetime
+ import json
+-import unittest2
++import unittest
+ 
+ from httpretty import HTTPretty
+ 
+@@ -236,7 +236,7 @@
+         do_disconnect(self.backend, user)
+ 
+ 
+-@unittest2.skipIf(NO_JWKEST, 'No Jwkest installed')
++@unittest.skipIf(NO_JWKEST, 'No Jwkest installed')
+ class GoogleOpenIdConnectTest(OpenIdConnectTestMixin, GoogleOAuth2Test):
+     backend_path = \
+         'social_core.backends.google_openidconnect.GoogleOpenIdConnect'
+diff --git a/social_core/tests/backends/test_saml.py b/social_core/tests/backends/test_saml.py
+index 775decf..4b0819c 100644
+--- a/social_core/tests/backends/test_saml.py
++++ b/social_core/tests/backends/test_saml.py
+@@ -1,7 +1,7 @@
+ import re
+ import json
+ import sys
+-import unittest2
++import unittest
+ import requests
+ import os
+ from os import path
+@@ -28,10 +28,10 @@
+ DATA_DIR = path.join(path.dirname(__file__), 'data')
+ 
+ 
+-@unittest2.skipIf('TRAVIS' in os.environ,
++@unittest.skipIf('TRAVIS' in os.environ,
+                   'Travis-ci segfaults probably due to a bad '
+                   'dependencies build')
+-@unittest2.skipIf('__pypy__' in sys.builtin_module_names,
++@unittest.skipIf('__pypy__' in sys.builtin_module_names,
+                   'dm.xmlsec not compatible with pypy')
+ class SAMLTest(BaseBackendTest):
+     backend_path = 'social_core.backends.saml.SAMLAuth'
+diff --git a/social_core/tests/backends/test_utils.py b/social_core/tests/backends/test_utils.py
+index 9eeed48..b2e0dc2 100644
+--- a/social_core/tests/backends/test_utils.py
++++ b/social_core/tests/backends/test_utils.py
+@@ -1,4 +1,4 @@
+-import unittest2 as unittest
++import unittest
+ 
+ from ..models import TestStorage
+ from ..strategy import TestStrategy
+diff --git a/social_core/tests/requirements-base.txt b/social_core/tests/requirements-base.txt
+index 50f78e1..4853591 100644
+--- a/social_core/tests/requirements-base.txt
++++ b/social_core/tests/requirements-base.txt
+@@ -1,4 +1,4 @@
+-httpretty==0.6.5
++httpretty>=0.6.5
+ coverage>=3.6
+ nose>=1.2.1
+ rednose>=0.4.1
+diff --git a/social_core/tests/requirements-python3.txt b/social_core/tests/requirements-python3.txt
+index b41e8a2..eee6463 100644
+--- a/social_core/tests/requirements-python3.txt
++++ b/social_core/tests/requirements-python3.txt
+@@ -1,2 +1 @@
+ -r requirements-base.txt
+-unittest2py3k==0.5.1
+diff --git a/social_core/tests/test_exceptions.py b/social_core/tests/test_exceptions.py
+index d38176e..2943e3d 100644
+--- a/social_core/tests/test_exceptions.py
++++ b/social_core/tests/test_exceptions.py
+@@ -1,4 +1,4 @@
+-import unittest2 as unittest
++import unittest
+ 
+ from ..exceptions import SocialAuthBaseException, WrongBackend, \
+                          AuthFailed, AuthTokenError, \
+diff --git a/social_core/tests/test_partial.py b/social_core/tests/test_partial.py
+index 350a35f..e239204 100644
+--- a/social_core/tests/test_partial.py
++++ b/social_core/tests/test_partial.py
+@@ -1,4 +1,4 @@
+-import unittest2 as unittest
++import unittest
+ try:
+     from mock import Mock, patch
+ except ImportError:
+diff --git a/social_core/tests/test_storage.py b/social_core/tests/test_storage.py
+index 680d0b5..dfce239 100644
+--- a/social_core/tests/test_storage.py
++++ b/social_core/tests/test_storage.py
+@@ -1,6 +1,6 @@
+ import six
+ import random
+-import unittest2 as unittest
++import unittest
+ 
+ from ..strategy import BaseStrategy
+ from ..storage import UserMixin, NonceMixin, AssociationMixin, \
+diff --git a/social_core/tests/test_utils.py b/social_core/tests/test_utils.py
+index 874a2cf..4f85b2b 100644
+--- a/social_core/tests/test_utils.py
++++ b/social_core/tests/test_utils.py
+@@ -1,5 +1,5 @@
+ import sys
+-import unittest2 as unittest
++import unittest
+ 
+ try:
+     from unittest.mock import Mock
