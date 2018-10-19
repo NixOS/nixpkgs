@@ -63,7 +63,7 @@ self: super: {
   JuicyPixels = self.JuicyPixels_3_3_2;
   lens = self.lens_4_17;
   megaparsec = dontCheck (doJailbreak super.megaparsec);
-  neat-interpolation = dontCheck super.neat-interpolation_0_3_2_4;  # test suite depends on broken HTF
+  neat-interpolation = dontCheck super.neat-interpolation;  # test suite depends on broken HTF
   patience = markBrokenVersion "0.1.1" super.patience;
   primitive = self.primitive_0_6_4_0;
   QuickCheck = self.QuickCheck_2_12_6_1;
