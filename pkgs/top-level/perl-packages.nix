@@ -11250,10 +11250,10 @@ let
   };
 
   NetPing = buildPerlPackage {
-    name = "Net-Ping-2.70";
+    name = "Net-Ping-2.71";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.70.tar.gz;
-      sha256 = "41400089736f528cfa1196083905d4bbd313c4653a03fab8578cebd5b5b6aa5a";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/Net-Ping-2.71.tar.gz;
+      sha256 = "0819d0aa87b173e98ecb3ccfd92272ce53c7fc9e86f962f64602a6fa477f7d4f";
     };
     meta = {
       description = "Check a remote host for reachability";
