@@ -39,6 +39,7 @@ let
     "-alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
     "-alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
     (optionalString (cfg.alertmanagerURL != []) "-alertmanager.url=${concatStringsSep "," cfg.alertmanagerURL}")
+    (optionalString (cfg.webExternalUrl != null) "-web.external-url=${cfg.webExternalUrl}")
   ];
 
   promTypes.globalConfig = types.submodule {
@@ -465,6 +466,16 @@ in {
         default = 10;
         description = ''
           Alert manager HTTP API timeout (in seconds).
+        '';
+      };
+
+      webExternalUrl = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "https://example.com/";
+        description = ''
+          The URL under which Prometheus is externally reachable (for example,
+          if Prometheus is served via a reverse proxy).
         '';
       };
     };
