@@ -16,6 +16,7 @@ let
     dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
     dde-session-ui = callPackage ./dde-session-ui { };
+    deepin-anything = callPackage ./deepin-anything { };
     deepin-desktop-base = callPackage ./deepin-desktop-base { };
     deepin-desktop-schemas = callPackage ./deepin-desktop-schemas { };
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
