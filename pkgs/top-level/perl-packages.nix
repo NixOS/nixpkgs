@@ -2305,6 +2305,43 @@ let
      };
   };
 
+  ClusterSSH = buildPerlPackage rec {
+    name = "App-ClusterSSH-4.13.2";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DU/DUNCS/App-ClusterSSH-v4.13.2.tar.gz;
+      sha256 = "0rmk2p3f2wz1h092anidjclh212rv3gxyk0c641qk3frlrjnw6mp";
+    };
+    propagatedBuildInputs = [
+      ExceptionClass FilePath GetoptLong LocaleMaketext Tk TryTiny X11Protocol
+      X11ProtocolOther pkgs.coreutils pkgs.openssh pkgs.xterm
+    ];
+    buildInputs = [
+      FileSlurp FileTemp FileWhich CPANChanges TestPerlTidy TestPod
+      TestPodCoverage Readonly TestDifferences TestDistManifest TestTrap
+    ];
+    preConfigure = ''
+      for fn in bin_PL/* t/external_cluster_command ; do
+        patchShebangs "$fn"
+      done
+    '';
+    postInstall = ''
+      mkdir -p $out/etc/bash_completion.d
+      mv $out/bin/clusterssh_bash_completion.dist \
+         $out/etc/bash_completion.d/clusterssh_bash_completion
+      substituteInPlace $out/etc/bash_completion.d/clusterssh_bash_completion \
+         --replace '/bin/true' '${pkgs.coreutils}/bin/true' \
+         --replace 'grep' '${pkgs.gnugrep}/bin/grep' \
+         --replace 'sed' '${pkgs.gnused}/bin/sed'
+    '';
+    meta = {
+      description = "Cluster administration tool";
+      platforms = [ "x86_64-linux" ];
+      broken = stdenv.lib.versionAtLeast perl.version "5.29";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.aither ];
+    };
+  };
+
   CodeTidyAll = buildPerlPackage rec {
      name = "Code-TidyAll-0.73";
      src = fetchurl {
