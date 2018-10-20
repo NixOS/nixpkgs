@@ -502,9 +502,12 @@ rec {
        => false
   */
   isStorePath = x:
-       isCoercibleToString x
-    && builtins.substring 0 1 (toString x) == "/"
-    && dirOf x == builtins.storeDir;
+    if isCoercibleToString x then
+      let str = toString x; in
+      builtins.substring 0 1 str == "/"
+      && dirOf str == builtins.storeDir
+    else
+      false;
 
   /* Convert string to int
      Obviously, it is a bit hacky to use fromJSON that way.
