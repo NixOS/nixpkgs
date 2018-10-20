@@ -197,6 +197,11 @@
     github = "aij";
     name = "Ivan Jager";
   };
+  aither = {
+    email = "aither@havefun.cz";
+    github = "aither64";
+    name = "Jakub Skokan";
+  };
   ajgrf = {
     email = "a@ajgrf.com";
     github = "ajgrf";
