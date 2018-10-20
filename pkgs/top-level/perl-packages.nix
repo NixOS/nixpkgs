@@ -895,10 +895,10 @@ let
   };
 
   BusinessISMN = buildPerlPackage rec {
-    name = "Business-ISMN-1.132";
+    name = "Business-ISMN-1.201";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
-      sha256 = "009dbkjx1s918qn6hm5qmc0rlqagiazhwg3m7rrfci7mw80hyb6g";
+      sha256 = "1cpcfyaz1fl6fnm076jx2jsphw147wj6aszj2yzqrgsncjhk2cja";
     };
     propagatedBuildInputs = [ TieCycle ];
     meta = {
