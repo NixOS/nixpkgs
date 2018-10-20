@@ -766,10 +766,10 @@ let
   };
 
   bignum = buildPerlPackage rec {
-    name = "bignum-0.50";
+    name = "bignum-0.51";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "82f88a0acbbfa9c4c69f620316b37da8f4b3d2895208e6aad6121a8f0203a94f";
+      sha256 = "8ac0f6efe0b6f24804690e53908bdc5346613667f1c0590d8cf808ec090e9c47";
     };
     meta = {
       description = "Transparent BigNumber support for Perl";
