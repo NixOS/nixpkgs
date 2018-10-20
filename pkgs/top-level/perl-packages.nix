@@ -13371,8 +13371,8 @@ let
       url = "mirror://cpan/authors/id/Y/YV/YVES/${name}.tar.gz";
       sha256 = "0lnczrf311pl9b2x75r0ffsszv5aspfb8x6jdvgr3rgqp7nbm1wr";
     };
-    buildInputs = [ TestDeep TestDifferences TestWarn TestLongString ];
-    propagatedBuildInputs = [ SerealEncoder SerealDecoder ];
+    buildInputs = [ TestLongString TestWarn ];
+    propagatedBuildInputs = [ SerealDecoder SerealEncoder ];
     meta = {
       homepage = https://github.com/Sereal/Sereal;
       description = "Fast, compact, powerful binary deserialization";
