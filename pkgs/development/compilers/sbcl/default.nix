@@ -87,6 +87,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
+  ''
+  + stdenv.lib.optionalString (!purgeNixReferences) ''
+    cp -r src $out/lib/sbcl
+    cp -r contrib $out/lib/sbcl
+    cat >$out/lib/sbcl/sbclrc <<EOF
+     (setf (logical-pathname-translations "SYS")
+       '(("SYS:SRC;**;*.*.*" #P"$out/lib/sbcl/src/**/*.*")
+         ("SYS:CONTRIB;**;*.*.*" #P"$out/lib/sbcl/contrib/**/*.*")))
+    EOF
   '';
 
   # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
