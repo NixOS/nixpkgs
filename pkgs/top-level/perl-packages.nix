@@ -4278,10 +4278,10 @@ let
   };
 
   DevelFindPerl = buildPerlPackage rec {
-    name = "Devel-FindPerl-0.014";
+    name = "Devel-FindPerl-0.015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
-      sha256 = "0ns95dsgmr8s0f1dfwd1cyv32vmd22w0vs51ppnnzp5zyi499581";
+      sha256 = "1z1xfj3178w632mqddyklk355a19bsgzkilznrng3rvg4bfbfxaj";
     };
     meta = {
       description = "Find the path to your perl";
