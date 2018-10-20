@@ -98,13 +98,12 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
-  setupHook = writeText "setupHook.sh" ''
+  setupHook = stdenv.lib.optional purgeNixReferences (writeText "setupHook.sh" ''
     addEnvHooks "$targetOffset" _setSbclHome
     _setSbclHome() {
       export SBCL_HOME='@out@/lib/sbcl/'
     }
-  '';
+  '');
 
   meta = sbclBootstrap.meta // {
     inherit version;
