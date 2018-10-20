@@ -15758,10 +15758,10 @@ let
   };
 
   TestScript = buildPerlPackage rec {
-    name = "Test-Script-1.23";
+    name = "Test-Script-1.25";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
-      sha256 = "1ca4mwcghgpdrpcg6xc0iwp3ga9c94qni9zf4hhqq8lpjwdyg89k";
+      sha256 = "199s78hh77zwwqba6pa1ngzjnzrdj2ka6qv5w0i286aafh93705n";
     };
 
     buildInputs = [ Test2Suite ];
