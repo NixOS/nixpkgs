@@ -3068,6 +3068,7 @@ let
       license = stdenv.lib.licenses.artistic2;
       maintainers = [ maintainers.thoughtpolice ];
     };
+    buildInputs = [ CanaryStability ];
   };
 
   CryptSSLeay = buildPerlPackage rec {
