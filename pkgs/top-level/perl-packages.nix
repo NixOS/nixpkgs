@@ -9943,7 +9943,7 @@ let
       url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
       sha256 = "14ypg679dk9yvgq67mp7lzs131cxhbgcmrpx5f4ddqcrs1bzq5rb";
     };
-    propagatedBuildInputs = [ Mojolicious IPCShareLite BSDResource Sereal ];
+    propagatedBuildInputs = [ BSDResource IPCShareLite Mojolicious Sereal ];
     meta = {
       homepage = https://github.com/mojolicious/mojo-status;
       description = "Mojolicious server status plugin";
