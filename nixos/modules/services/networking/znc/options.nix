@@ -239,6 +239,7 @@ in
         IPv4 = mkDefault true;
         IPv6 = mkDefault true;
         SSL = mkDefault c.useSSL;
+        URIPrefix = c.uriPrefix;
       };
       User.${c.userName} = {
         Admin = mkDefault true;
