@@ -5971,11 +5971,11 @@ let
     };
   };
 
-  FileRemove = buildPerlPackage rec {
-    name = "File-Remove-1.57";
+  FileRemove = buildPerlModule rec {
+    name = "File-Remove-1.58";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/File-Remove-1.57.tar.gz;
-      sha256 = "1b814lw181kkqh6c1n4p2zlzzsq6ic5pfpr831nphf2w2rhcvgmk";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/File-Remove-1.58.tar.gz;
+      sha256 = "1n6h5w3sp2bs4cfrifdx2z15cfpb4r536179mx1a12xbmj1yrxl1";
     };
   };
 
