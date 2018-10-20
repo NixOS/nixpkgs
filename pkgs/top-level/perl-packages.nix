@@ -11530,10 +11530,10 @@ let
   };
 
   ObjectSignature = buildPerlPackage {
-    name = "Object-Signature-1.07";
+    name = "Object-Signature-1.08";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AD/ADAMK/Object-Signature-1.07.tar.gz;
-      sha256 = "0c8l7195bjvx0v6zmkgdnxvwg7yj2zq8hi7xd25a3iikd12dc4f6";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Object-Signature-1.08.tar.gz;
+      sha256 = "12k90c19ly93ib1p6sm3k7sbnr2h5dbywkdmnff2ngm99p4m68c4";
     };
     meta = {
       description = "Generate cryptographic signatures for objects";
