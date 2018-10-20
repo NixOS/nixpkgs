@@ -2,7 +2,7 @@
   gtk2, wrapGAppsHook, libXScrnSaver, libxkbfile, libsecret }:
 
 let
-  version = "1.28.0";
+  version = "1.28.2";
   channel = "stable";
 
   plat = {
@@ -12,9 +12,9 @@ let
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    "i686-linux" = "0f54py00lmw96x47nk823gwxxc9kr9haaa821ggi974ycr54af0y";
-    "x86_64-linux" = "07bbzm1159k2gkajj6z7dsr0kmadd5gx721w92r252i5hcwg5sx4";
-    "x86_64-darwin" = "019cl2rswls3gwwa8y70cllc4jnd8xj0y2m9rvg2rz695snp6rcm";
+    "i686-linux" = "13zgx80qzq1wvss3byh56rvp2bdxywc4xmhhljsqrxf17g86g2zr";
+    "x86_64-linux" = "1z50hkr9mcf76hlr1jb80nbvpxbpm2bh0l63yh9yqpalmz66xbfy";
+    "x86_64-darwin" = "0n7lavpylg1q89qa64z4z1v7pgmwb2kidc57cgpvjnhjg8idys33";
   }.${stdenv.hostPlatform.system};
 
   archive_fmt = if stdenv.hostPlatform.system == "x86_64-darwin" then "zip" else "tar.gz";

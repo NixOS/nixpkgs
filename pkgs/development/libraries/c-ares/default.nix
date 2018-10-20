@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vnwmbvymw677k780kpb6sb8i3szdp89rzy8mz1fwg1657yw3ls5";
   };
 
+  configureFlags = if stdenv.hostPlatform.isWindows then [ "--disable-shared" "--enable-static" ] else null;
+
   # ares_android.h header is missing
   # see issue https://github.com/c-ares/c-ares/issues/216
   postPatch = if stdenv.hostPlatform.isAndroid then ''

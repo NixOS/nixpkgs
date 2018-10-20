@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     description = "C library implementing the OAuth secure authentication protocol";
     homepage = http://liboauth.sourceforge.net/;
     repositories.git = https://github.com/x42/liboauth.git;
+    license = licenses.mit;
   };
 
 }

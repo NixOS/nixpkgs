@@ -41,6 +41,7 @@ rec {
 
     # Configure Phase
     , configureFlags ? []
+    , cmakeFlags ? []
     , # Target is not included by default because most programs don't care.
       # Including it then would cause needless mass rebuilds.
       #
@@ -225,6 +226,17 @@ rec {
           inherit doCheck doInstallCheck;
 
           inherit outputs;
+        } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+          cmakeFlags =
+            (/**/ if lib.isString cmakeFlags then [cmakeFlags]
+             else if cmakeFlags == null      then []
+             else                                     cmakeFlags)
+          ++ lib.optional (stdenv.hostPlatform.uname.system != null) "-DCMAKE_SYSTEM_NAME=${stdenv.hostPlatform.uname.system}"
+          ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+          ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.release}"
+          ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
+          ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
+          ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}";
         } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
           enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {

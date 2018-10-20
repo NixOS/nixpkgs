@@ -56,4 +56,8 @@ self: super: {
           };
     in appendPatch super.hadoop-rpc patch;
 
+  # Version 1.9.1 needs Cabal 2.4.x or later, so
+  # we use the one from the ghc-8.6.1 package set.
+  stack = markBroken super.stack;
+
 }
