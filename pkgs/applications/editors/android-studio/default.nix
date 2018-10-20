@@ -12,7 +12,11 @@ let
     build = "181.5056338";
     sha256Hash = "117skqjax1xz9plarhdnrw2rwprjpybdc7mx7wggxapyy920vv5r";
   };
-  betaVersion = stableVersion;
+  betaVersion = {
+    version = "3.3.0.13"; # "Android Studio 3.3 Beta 1"
+    build = "182.5073496";
+    sha256Hash = "0bg1h0msd6mpkvirkg4pssa1ak32smv2rlxxsjdm3p29p8gg59px";
+  };
   latestVersion = { # canary & dev
     version = "3.3.0.12"; # "Android Studio 3.3 Canary 13"
     build = "182.5035453";
