@@ -17365,6 +17365,19 @@ let
     doCheck = false; # requires an X server
   };
 
+  X11ProtocolOther = buildPerlPackage rec {
+    name = "X11-Protocol-Other-30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KR/KRYDE/${name}.tar.gz";
+      sha256 = "1mambi57cdkj82wiw1l8y2f70a60qsamdas0165hlj10drryfgrj";
+    };
+    buildInputs = [ X11Protocol ];
+    meta = {
+      description = "Window manager things for client programs";
+      license = stdenv.lib.licenses.gpl3;
+    };
+  };
+
   X11GUITest = buildPerlPackage rec {
     name = "X11-GUITest-0.28";
     src = fetchurl {
