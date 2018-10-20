@@ -6242,10 +6242,10 @@ let
   };
 
   ForksSuper = buildPerlPackage {
-    name = "Forks-Super-0.96";
+    name = "Forks-Super-0.97";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.96.tar.gz;
-      sha256 = "0vzxfxdgxjk83cwg9p5dzvfydrah53xcxkickznrrd5rhp1rasqx";
+      url = mirror://cpan/authors/id/M/MO/MOB/Forks-Super-0.97.tar.gz;
+      sha256 = "0kias11b4zchxy5x9ns2wwjzvzxlzsbap8sq587z9micw5bl7nrk";
     };
     doCheck = false;
     meta = {
