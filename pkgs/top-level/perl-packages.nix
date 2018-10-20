@@ -13522,10 +13522,10 @@ let
   };
 
   Socket6 = buildPerlPackage rec {
-    name = "Socket6-0.28";
+    name = "Socket6-0.29";
     src = fetchurl {
       url = "mirror://cpan/authors/id/U/UM/UMEMOTO/${name}.tar.gz";
-      sha256 = "bfd49ab99f3197c99285fed4683c4edc06277c1e4453f593e694d7bff0974586";
+      sha256 = "468915fa3a04dcf6574fc957eff495915e24569434970c91ee8e4e1459fc9114";
     };
     setOutputFlags = false;
     buildInputs = [ pkgs.which ];
