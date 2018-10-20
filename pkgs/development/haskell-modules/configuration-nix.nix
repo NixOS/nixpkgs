@@ -543,4 +543,8 @@ self: super: builtins.intersectAttrs super {
           --set NIX_CFLAGS_LINK "-L${ocl-icd}/lib"
       '';
     });
+
+  # The test suite has undeclared dependencies on git.
+  githash = dontCheck super.githash;
+
 }

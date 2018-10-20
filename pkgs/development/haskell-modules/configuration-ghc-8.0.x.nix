@@ -85,4 +85,7 @@ self: super: {
   # GHC 8.0 doesn't have semigroups included by default
   ListLike = addBuildDepend super.ListLike self.semigroups;
 
+  # Add missing build depedency for this compiler.
+  base-compat-batteries = addBuildDepend super.base-compat-batteries self.bifunctors;
+
 }

@@ -631,6 +631,8 @@ in
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
+    environment.pathsToLink = [ "/share/X11" ];
+
     xdg = { 
       autostart.enable = true;
       menus.enable = true;

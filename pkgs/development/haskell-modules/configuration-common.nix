@@ -923,9 +923,9 @@ self: super: {
   text-icu = dontCheck super.text-icu;
 
   # https://github.com/haskell/cabal/issues/4969
-  haddock-api = (super.haddock-api.overrideScope (self: super: {
-    haddock-library = self.haddock-library_1_6_0;
-  })).override { hspec = self.hspec_2_4_8; };
+  # haddock-api = (super.haddock-api.overrideScope (self: super: {
+  #   haddock-library = self.haddock-library_1_6_0;
+  # })).override { hspec = self.hspec_2_4_8; };
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
   # Jailbreak "graphviz >=2999.18.1 && <2999.20".
@@ -1060,7 +1060,7 @@ self: super: {
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
-  haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
+  # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
 
   # The tool needs a newer hpack version than the one mandated by LTS-12.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
@@ -1071,9 +1071,6 @@ self: super: {
     hpack = self.hpack_0_31_0;
     yaml = self.yaml_0_11_0_0;
   });
-
-  # Break out of "aeson <1.3, temporary <1.3".
-  stack = doJailbreak super.stack;
 
   # https://github.com/pikajude/stylish-cabal/issues/11
   stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
@@ -1107,9 +1104,6 @@ self: super: {
 
   # Can be removed once yi-language >= 0.18 is in the LTS
   yi-core = super.yi-core.overrideScope (self: super: { yi-language = self.yi-language_0_18_0; });
-
-  # https://github.com/MarcWeber/hasktags/issues/52
-  hasktags = dontCheck super.hasktags;
 
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
@@ -1154,6 +1148,9 @@ self: super: {
   arbtt = doJailbreak super.arbtt;
 
   # https://github.com/yesodweb/yesod/issues/1563
-  yesod-core = dontCheck super.yesod-core;
+  yesod-core = self.yesod-core_1_6_8_1;
+
+  # https://github.com/danfran/cabal-macosx/issues/13
+  cabal-macosx = dontCheck super.cabal-macosx;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

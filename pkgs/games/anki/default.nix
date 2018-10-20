@@ -16,6 +16,7 @@
 , pytest
 , glibcLocales
 , nose
+, send2trash
 # This little flag adds a huge number of dependencies, but we assume that
 # everyone wants Anki to draw plots with statistics by default.
 , plotsSupport ? true
@@ -40,7 +41,7 @@ in buildPythonApplication rec {
       sha256 = "0yjyxgpk79rplz9z2r93kmlk09ari6xxfrz1cfm2yl9v8zfw1n6l";
     };
 
-    propagatedBuildInputs = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 ]
+    propagatedBuildInputs = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 send2trash ]
                             ++ lib.optional plotsSupport matplotlib;
 
     checkInputs = [ pytest glibcLocales nose ];
@@ -108,16 +109,14 @@ in buildPythonApplication rec {
       cp -v anki.xml $out/share/mime/packages/
       cp -v anki.{png,xpm} $out/share/pixmaps/
       cp -rv locale $out/share/
-      cp -rv anki aqt thirdparty/send2trash $pp/
+      cp -rv anki aqt $pp/
 
       wrapPythonPrograms
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://ankisrs.net/;
+      homepage = "https://apps.ankiweb.net/";
       description = "Spaced repetition flashcard program";
-      license = licenses.gpl3;
-
       longDescription = ''
         Anki is a program which makes remembering things easy. Because it is a lot
         more efficient than traditional study methods, you can either greatly
@@ -130,8 +129,9 @@ in buildPythonApplication rec {
         people's names and faces, brushing up on geography, mastering long poems,
         or even practicing guitar chords!
       '';
-
-      maintainers = with maintainers; [ the-kenny ];
+      license = licenses.agpl3Plus;
+      broken = stdenv.hostPlatform.isAarch64;
       platforms = platforms.mesaPlatforms;
+      maintainers = with maintainers; [ the-kenny ];
     };
 }
