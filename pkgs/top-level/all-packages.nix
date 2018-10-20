@@ -9167,6 +9167,8 @@ with pkgs;
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
+  ndn-cpp = callPackage ../development/libraries/ndn-cpp { };
+
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
   cddlib = callPackage ../development/libraries/cddlib {};
