@@ -9171,10 +9171,10 @@ let
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999813";
+    name = "Math-BigInt-1.999814";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "67a10a10a806bd7add463acc1557554381052426cbcb04b1ffbeccfb6775be3d";
+      sha256 = "19fbabee89e4d3a5c4775cc07006b7488ebb4f70ea79d915f1a5f0130e0d3e22";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
