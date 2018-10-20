@@ -7608,15 +7608,16 @@ let
     };
   };
 
-  IOHandleUtil = buildPerlPackage rec {
-     name = "IO-Handle-Util-0.01";
+  IOHandleUtil = buildPerlModule rec {
+     name = "IO-Handle-Util-0.02";
      src = fetchurl {
-       url = mirror://cpan/authors/id/N/NU/NUFFIN/IO-Handle-Util-0.01.tar.gz;
-       sha256 = "1g7746gh3y9a9df3xb3l504czgwrrzr7lp87j7jwm2mklarrig6k";
+       url = mirror://cpan/authors/id/E/ET/ETHER/IO-Handle-Util-0.02.tar.gz;
+       sha256 = "1vncvsx53iiw1yy3drlk44hzx2pk5cial0h74djf9i6s2flndfcd";
      };
      propagatedBuildInputs = [ IOString SubExporter asa ];
      meta = {
      };
+    buildInputs = [ ModuleBuildTiny TestSimple13 ];
   };
 
   IOInteractive = buildPerlPackage {
