@@ -35,12 +35,6 @@ buildPythonApplication rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace docs/Makefile \
-      --replace 'python3 .. +launch :sphinx-build' \
-                'PYTHONPATH=$PYTHONPATH:.. HOME=$TMPDIR/nowhere sphinx-build'
-    '';
-
   buildPhase = ''
     python3 setup.py linux-package
   '';
