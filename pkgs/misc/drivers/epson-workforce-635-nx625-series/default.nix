@@ -91,8 +91,8 @@ in stdenv.mkDerivation rec {
         };
     '';
     downloadPage = https://download.ebz.epson.net/dsc/du/02/DriverDownloadInfo.do?LG2=EN&CN2=&DSCMI=16857&DSCCHK=4334d3487503d7f916ccf5d58071b05b7687294f;
-    license = with licenses; [ lgpl21 epson ];
-    maintainers = [ maintainers.jorsn ];
+    license = with lib.licenses; [ lgpl21 epson ];
+    maintainers = [ lib.maintainers.jorsn ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
