@@ -32,6 +32,12 @@ let
     LANG=${config.i18n.defaultLocale}\
     LOCALE_ARCHIVE=${config.i18n.glibcLocales}/lib/locale/locale-archive
     ' $out/sesman.ini
+
+    ${concatStringsSep "\n"
+      (mapAttrsToList (outFilename: inFilePath: ''
+         ${pkgs.coreutils}/bin/cp -f "${inFilePath}" "$out/${outFilename}"
+        '') cfg.extraKeymapFiles)
+    }
   '';
 in
 {
@@ -88,6 +94,22 @@ in
         description = ''
           The script to run when user log in, usually a window manager, e.g. "icewm", "xfce4-session"
           This is per-user overridable, if file ~/startwm.sh exists it will be used instead.
+        '';
+      };
+
+      extraKeymapFiles = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        example = literalExample ''
+          { "km-00000c0c.ini" = ./custom_km_files/km-00000c0c.ini;
+            "xrdp_keyboard.ini" = ./custom_km_files/xrdp_keyboard.ini;
+          }
+        '';
+        description = ''
+          Allow one to add some extra keymap files. Useful for machines with
+          non english keymaps. Those files are generated using the
+          <literal>/my/xrdp/prefix/sbin/xrdp-genkeymap</literal> utility. More info at:
+          <literal>https://www.mankier.com/8/xrdp-genkeymap</literal>.
         '';
       };
 
