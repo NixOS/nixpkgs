@@ -17623,10 +17623,10 @@ let
   };
 
   XMLXPath = buildPerlPackage rec {
-    name = "XML-XPath-1.42";
+    name = "XML-XPath-1.44";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/${name}.tar.gz";
-      sha256 = "9e6ac67c2cead5f918a060b8b9ccdbdcaa6d610be8517bba42a96cd56748b512";
+      sha256 = "1cc9110705165dc09dd09974dd7c0b6709c9351d6b6b1cef5a711055f891dd0f";
     };
     buildInputs = [ PathTiny ];
     propagatedBuildInputs = [ XMLParser ];
