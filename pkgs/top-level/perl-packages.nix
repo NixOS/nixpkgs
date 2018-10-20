@@ -17308,10 +17308,10 @@ let
   };
 
   WWWMechanize = buildPerlPackage {
-    name = "WWW-Mechanize-1.88";
+    name = "WWW-Mechanize-1.89";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-1.88.tar.gz;
-      sha256 = "0yd8a1zsfpbv5wr79x3iqmik9gvcd10iam9dfrdan4dri9vpxn9n";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-1.89.tar.gz;
+      sha256 = "1mxx362vqiniw8vi6k3j7v9b1s7012irhfcblcz1p6jz9cjqi7mh";
     };
     propagatedBuildInputs = [ HTMLForm HTMLTree LWP ];
     doCheck = false;
