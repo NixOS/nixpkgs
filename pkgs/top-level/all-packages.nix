@@ -20253,6 +20253,8 @@ in
 
   epeg = callPackage ../applications/graphics/epeg { };
 
+  epgstation = callPackage ../applications/video/epgstation { };
+
   inherit (gnome3) epiphany;
 
   ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
