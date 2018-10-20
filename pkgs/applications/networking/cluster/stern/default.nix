@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "stern-${version}";
-  version = "1.8.0";
+  version = "1.10.0";
 
   goPackagePath = "github.com/wercker/stern";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "wercker";
     repo = "stern";
     rev = "${version}";
-    sha256 = "14ccgb41ca2gym7wab0q02ap8g94nhfaihs41qky4wnsfv6j1zc8";
+    sha256 = "05wsif0pwh2v4rw4as36f1d9r149zzp2nyc0z4jwnj9nx58nfpll";
   };
 
   goDeps = ./deps.nix;
