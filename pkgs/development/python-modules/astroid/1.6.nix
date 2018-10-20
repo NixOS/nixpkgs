@@ -1,25 +1,33 @@
 { lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy
-, lazy-object-proxy, six, wrapt, typing, typed-ast
-, pytestrunner, pytest
+, lazy-object-proxy, six, wrapt, enum34, singledispatch, backports_functools_lru_cache
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.0.4";
-
-  disabled = pythonOlder "3.4";
+  version = "1.6.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7013d119ec95eb626f7a2011f0b63d0c9a095df9ad06d8507b37084eada1a8d";
+    sha256 = "0fir4b67sm7shcacah9n61pvq313m523jb4q80sycrh3p8nmi6zw";
   };
 
   # From astroid/__pkginfo__.py
-  propagatedBuildInputs = [ lazy-object-proxy six wrapt ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optional (pythonOlder "3.7" && !isPyPy) typed-ast;
+  propagatedBuildInputs = [
+    lazy-object-proxy
+    six
+    wrapt
+    enum34
+    singledispatch
+    backports_functools_lru_cache
+  ];
 
-  checkInputs = [ pytestrunner pytest ];
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    # test_builtin_help is broken
+    pytest -k "not test_builtin_help" astroid
+  '';
 
   meta = with lib; {
     description = "An abstract syntax tree for Python with inference support";

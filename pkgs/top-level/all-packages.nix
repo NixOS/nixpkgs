@@ -13586,21 +13586,19 @@ with pkgs;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
 
-  xorg = recurseIntoAttrs (lib.callPackagesWith pkgs ../servers/x11/xorg {
-    inherit clangStdenv fetchurl fetchgit fetchpatch stdenv intltool freetype fontconfig
-      libxslt expat libpng zlib perl mesa_drivers spice-protocol libunwind
-      dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
-      autoconf automake libtool mtdev pixman libGL libGLU
-      cairo epoxy;
-    inherit (buildPackages) pkgconfig xmlto asciidoc flex bison;
-    inherit (darwin) apple_sdk cf-private libobjc;
+  # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
+  # so as not to have the newly bound xorg items already in scope,  which would
+  # have created a cycle.
+  xorg = recurseIntoAttrs ((lib.callPackageWith __splicedPackages ../servers/x11/xorg {
+  }).overrideScope' (lib.callPackageWith __splicedPackages ../servers/x11/xorg/overrides.nix {
+    inherit (darwin) apple_sdk;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
     abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
       or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
-  } // { inherit xlibsWrapper; } );
+  }) // { inherit xlibsWrapper; } );
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
@@ -17197,7 +17195,6 @@ with pkgs;
 
   krita = libsForQt5.callPackage ../applications/graphics/krita {
     openjpeg = openjpeg_1;
-    poppler_qt5 = libsForQt5.poppler;
   };
 
   krusader = libsForQt5.callPackage ../applications/misc/krusader { };
@@ -19206,6 +19203,7 @@ with pkgs;
   winswitch = callPackage ../tools/X11/winswitch { };
 
   wings = callPackage ../applications/graphics/wings {
+    esdl = esdl.override { erlang = erlangR18; };
     erlang = erlangR18;
   };
 
@@ -21962,11 +21960,6 @@ with pkgs;
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers {}
   );
-
-  terraform-provider-libvirt = callPackage ../applications/networking/cluster/terraform-provider-libvirt {};
-
-  terraform-provider-ibm = callPackage ../applications/networking/cluster/terraform-provider-ibm {};
-
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
