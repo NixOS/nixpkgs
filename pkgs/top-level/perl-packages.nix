@@ -16456,10 +16456,10 @@ let
   };
 
   TestTrap = buildPerlModule rec {
-    name = "Test-Trap-0.3.3";
+    name = "Test-Trap-0.3.4";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EB/EBHANSSEN/Test-Trap-v0.3.3.tar.gz;
-      sha256 = "1676gqjyk0zig3yyqv053y5j1pajp2af08ffmgx94n414whbhm5c";
+      url = mirror://cpan/authors/id/E/EB/EBHANSSEN/Test-Trap-v0.3.4.tar.gz;
+      sha256 = "1qjs2080kcc66s4d7499br5lw2qmhr9gxky4xsl6vjdn6dpna10b";
     };
     propagatedBuildInputs = [ DataDump ];
     meta = {
