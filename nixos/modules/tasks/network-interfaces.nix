@@ -692,6 +692,46 @@ in
       });
     };
 
+    networking.ipvlans = mkOption {
+      default = { };
+      example = literalExample {
+        wan = {
+          interface = "enp2s0";
+          mode = "vepa";
+        };
+      };
+      description = ''
+        This option allows you to define ipvlan interfaces which should
+        be automatically created.
+      '';
+      type = with types; attrsOf (submodule {
+        options = {
+
+          interface = mkOption {
+            example = "enp4s0";
+            type = types.str;
+            description = "The interface the ipvlan will transmit packets through.";
+          };
+
+          mode = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            example = "L3S";
+            description = "The mode of the ipvlan device.";
+          };
+
+          flags = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            example = "vepa";
+            description = "The mode flags of the ipvlan device.";
+          };
+
+        };
+
+      });
+    };
+
     networking.sits = mkOption {
       default = { };
       example = literalExample {

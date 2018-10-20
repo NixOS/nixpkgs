@@ -110,6 +110,10 @@ let
         extraFlags+=" --network-macvlan=$iface"
       done
 
+      for iface in $IPVLANS; do
+        extraFlags+=" --network-ipvlan=$iface"
+      done
+
       # If the host is 64-bit and the container is 32-bit, add a
       # --personality flag.
       ${optionalString (config.nixpkgs.localSystem.system == "x86_64-linux") ''
@@ -526,6 +530,17 @@ in
               '';
             };
 
+            ipvlans = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = [ "eth1" "eth2" ];
+              description = ''
+                The list of host interfaces from which ipvlans will be
+                created. For each interface specified, an ipvlan interface
+                will be created and moved to the container.
+              '';
+            };
+
             extraVeths = mkOption {
               type = with types; attrsOf (submodule { options = networkOptions; });
               default = {};
@@ -722,6 +737,7 @@ in
             ''}
             INTERFACES="${toString cfg.interfaces}"
             MACVLANS="${toString cfg.macvlans}"
+            IPVLANS="${toString cfg.ipvlans}"
             ${optionalString cfg.autoStart ''
               AUTO_START=1
             ''}

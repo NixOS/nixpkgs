@@ -184,6 +184,23 @@ in
           macvlan = [ name ];
         } ]);
       })))
+      (mkMerge (flip mapAttrsToList cfg.ipvlans (name: ipvlan: {
+        netdevs."40-${name}" = {
+          netdevConfig = {
+            Name = name;
+            Kind = "ipvlan";
+          };
+          ipvlanConfig =
+            (optionalAttrs (ipvlan.mode != null) {
+              Mode = toUpper ipvlan.mode;
+            }) // (optionalAttrs (ipvlan.flags != null) {
+              Flags = ipvlan.flags;
+            });
+        };
+        networks."40-${ipvlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+          ipvlan = [ name ];
+        } ]);
+      })))
       (mkMerge (flip mapAttrsToList cfg.sits (name: sit: {
         netdevs."40-${name}" = {
           netdevConfig = {

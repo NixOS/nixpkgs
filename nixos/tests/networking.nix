@@ -368,6 +368,78 @@ let
           $router->waitUntilSucceeds("ping -c 1 192.168.1.3");
         '';
     };
+    ipvlan = {
+      name = "IPVLAN";
+      nodes.router = router;
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
+        environment.systemPackages = [ pkgs.iptables ]; # to debug firewall rules
+        virtualisation.vlans = [ 1 ];
+        networking = {
+          useNetworkd = networkd;
+          firewall.logReversePathDrops = true; # to debug firewall rules
+          # reverse path filtering rules for the ipvlan interface seem
+          # to be incorrect, causing the test to fail. Disable temporarily.
+          firewall.checkReversePath = false;
+          firewall.allowPing = true;
+          useDHCP = true;
+          ipvlans.ipvlan = {
+            interface = "eth1";
+            mode = "l2";
+            flags = "bridge";
+          };
+          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
+          dhcpcd = mkIf (!networkd) {
+            extraConfig = ''
+              duid
+              interface eth1
+              iaid 00:00:00:00
+              interface ipvlan
+              broadcast true
+              iaid 00:00:00:01
+            '';
+          };
+        };
+        systemd.network.networks = mkIf networkd {
+          "40-ipvlan" = {
+            matchConfig.Name = "ipvlan";
+            networkConfig.DHCP = "yes";
+            dhcpConfig.RequestBroadcast = true;
+          };
+        };
+      };
+      testScript = { ... }:
+        ''
+          startAll;
+
+          # Wait for networking to come up
+          $client->waitForUnit("network.target");
+          $router->waitForUnit("network.target");
+
+          # Wait until we have an ip address on each interface
+          $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q '192.168.1'");
+          $client->waitUntilSucceeds("ip addr show dev ipvlan | grep -q '192.168.1'");
+
+          # Print lots of diagnostic information
+          $router->log('**********************************************');
+          $router->succeed("ip addr >&2");
+          $router->succeed("ip route >&2");
+          $router->execute("iptables-save >&2");
+          $client->log('==============================================');
+          $client->succeed("ip addr >&2");
+          $client->succeed("ip route >&2");
+          $client->execute("iptables-save >&2");
+          $client->log('##############################################');
+
+          # Test ipvlan creates routable ips
+          $client->waitUntilSucceeds("ping -c 1 192.168.1.1");
+          $client->waitUntilSucceeds("ping -c 1 192.168.1.2");
+          $client->waitUntilSucceeds("ping -c 1 192.168.1.3");
+
+          $router->waitUntilSucceeds("ping -c 1 192.168.1.1");
+          $router->waitUntilSucceeds("ping -c 1 192.168.1.2");
+          $router->waitUntilSucceeds("ping -c 1 192.168.1.3");
+        '';
+    };
     sit = let
       node = { address4, remote, address6 }: { pkgs, ... }: with pkgs.lib; {
         virtualisation.vlans = [ 1 ];

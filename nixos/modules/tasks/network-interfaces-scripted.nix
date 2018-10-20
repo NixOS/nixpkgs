@@ -12,6 +12,7 @@ let
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
     ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches)
     ++ concatMap (i: [i.interface]) (attrValues cfg.macvlans)
+    ++ concatMap (i: [i.interface]) (attrValues cfg.ipvlans)
     ++ concatMap (i: [i.interface]) (attrValues cfg.vlans);
 
   # We must escape interfaces due to the systemd interpretation
@@ -65,6 +66,7 @@ let
              (hasAttr dev cfg.bridges) ||
              (hasAttr dev cfg.bonds) ||
              (hasAttr dev cfg.macvlans) ||
+             (hasAttr dev cfg.ipvlans) ||
              (hasAttr dev cfg.sits) ||
              (hasAttr dev cfg.vlans) ||
              (hasAttr dev cfg.vswitches)
@@ -408,7 +410,7 @@ let
           (let
             deps = deviceDependency v.interface;
           in
-          { description = "Vlan Interface ${n}";
+          { description = "Macvlan Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
@@ -422,6 +424,32 @@ let
               ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
               ip link add link "${v.interface}" name "${n}" type macvlan \
                 ${optionalString (v.mode != null) "mode ${v.mode}"}
+              ip link set "${n}" up
+            '';
+            postStop = ''
+              ip link delete "${n}" || true
+            '';
+          });
+
+        createIpvlanDevice = n: v: nameValuePair "${n}-netdev"
+          (let
+            deps = deviceDependency v.interface;
+          in
+          { description = "Ipvlan Interface ${n}";
+            wantedBy = [ "network-setup.service" (subsystemDevice n) ];
+            bindsTo = deps;
+            partOf = [ "network-setup.service" ];
+            after = [ "network-pre.target" ] ++ deps;
+            before = [ "network-setup.service" ];
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute ];
+            script = ''
+              # Remove Dead Interfaces
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+              ip link add link "${v.interface}" name "${n}" type ipvlan \
+                ${optionalString (v.mode != null) "mode ${toLower v.mode}"} \
+                ${optionalString (v.flags != null) v.flags}
               ip link set "${n}" up
             '';
             postStop = ''
@@ -493,6 +521,7 @@ let
          // mapAttrs' createVswitchDevice cfg.vswitches
          // mapAttrs' createBondDevice cfg.bonds
          // mapAttrs' createMacvlanDevice cfg.macvlans
+         // mapAttrs' createIpvlanDevice cfg.ipvlans
          // mapAttrs' createSitDevice cfg.sits
          // mapAttrs' createVlanDevice cfg.vlans
          // {
