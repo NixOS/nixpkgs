@@ -14749,10 +14749,10 @@ let
   };
 
   TermVT102Boundless = buildPerlPackage {
-    name = "Term-VT102-Boundless-0.04";
+    name = "Term-VT102-Boundless-0.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NU/NUFFIN/Term-VT102-Boundless-0.04.tar.gz;
-      sha256 = "5bb88b5aecb44ebf56d3ac7240be80cd26def9dcf1ebeb4e77d9983dfc7a8f19";
+      url = mirror://cpan/authors/id/F/FB/FBARRIOS/Term-VT102-Boundless-0.05.tar.gz;
+      sha256 = "e1ded85ae3d76b59c03b8697f4a6cb01ae31bd62a9354f5bb7d18f9e927b485f";
     };
     propagatedBuildInputs = [ TermVT102 ];
     meta = {
