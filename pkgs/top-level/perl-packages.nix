@@ -11372,7 +11372,7 @@ let
       url = "mirror://cpan/authors/id/I/IV/IVAN/${name}.tar.gz";
       sha256 = "7c71c7c3cbe953234dfe25bcc1ad7edb0e1f5a0578601f5523bc6070262a3817";
     };
-    propagatedBuildInputs = [ pkgs.openssl Exporter IO ];
+    propagatedBuildInputs = [ pkgs.openssl ];
     patchPhase = ''
       sed -i 's|$ssh = "ssh";|$ssh = "${pkgs.openssh}/bin/ssh";|' SSH.pm
     '';
