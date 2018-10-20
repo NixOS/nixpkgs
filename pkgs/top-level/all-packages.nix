@@ -21136,8 +21136,9 @@ with pkgs;
   sageWithDoc = sage.override { withDoc = true; };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
-  suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};
-  suitesparse = suitesparse_4_4;
+  suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse/4.4.nix {};
+  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {};
+  suitesparse = suitesparse_5_3;
 
   superlu = callPackage ../development/libraries/science/math/superlu {};
 
