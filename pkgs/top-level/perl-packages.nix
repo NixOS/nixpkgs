@@ -6430,10 +6430,10 @@ let
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.327";
+    name = "Glib-1.328";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0n7hjhbh5xhagvb0qjwzg21j22ks0csah0chgk98g4wnfllxjl0k";
+      sha256 = "1mb40h76kk1wfcl0dqd1r8wfsn4ik29jln3mcsjhmadasynw5725";
     };
     buildInputs = [ pkgs.glib ];
     meta = {
