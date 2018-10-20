@@ -16,17 +16,11 @@ in
 
     services.eternal-terminal = {
 
-      enable = mkOption {
-        default = false;
-        type = types.bool;
-        description = ''
-          Enable the Eternal Terminal server.
-        '';
-      };
+      enable = mkEnableOption "Eternal Terminal server";
 
       port = mkOption {
-        default = null;
-        type = types.nullOr types.int;
+        default = 2022;
+        type = types.int;
         description = ''
           The port the server should listen on. Will use the server's default (2022) if not specified.
         '';
@@ -34,17 +28,17 @@ in
 
       verbosity = mkOption {
         default = 0;
-        type = types.int;
+        type = types.enum (lib.range 0 9);
         description = ''
           The verbosity level (0-9).
         '';
       };
 
-      silence = mkOption {
-        default = 0;
-        type = types.int;
+      silent = mkOption {
+        default = false;
+        type = types.bool;
         description = ''
-          Silence.
+          If enabled, disables all logging.
         '';
       };
 
@@ -78,13 +72,12 @@ in
             ; et.cfg : Config file for Eternal Terminal
             ;
 
-            ${optionalString (cfg.port != null) ''
-              [Networking]
-              port = ${toString cfg.port}
-            ''}
+            [Networking]
+            port = ${toString cfg.port}
+
             [Debug]
             verbose = ${toString cfg.verbosity}
-            silent = ${toString cfg.silence}
+            silent = ${if cfg.silent then "true" else "false"}
             logsize = ${toString cfg.logSize}
           ''}";
           Restart = "on-failure";
