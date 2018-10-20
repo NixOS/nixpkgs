@@ -13340,8 +13340,7 @@ let
       url = "mirror://cpan/authors/id/Y/YV/YVES/${name}.tar.gz";
       sha256 = "17syqbq17qw6ajg3w88q9ljdm4c2b7zadq9pwshxxgyijg8dlfh4";
     };
-    buildInputs = [ TestDeep TestDifferences TestWarn TestLongString ];
-    propagatedBuildInputs = [ XSLoader ];
+    buildInputs = [ TestDeep TestDifferences TestLongString TestWarn ];
     preBuild = ''ls'';
     meta = {
       homepage = https://github.com/Sereal/Sereal;
