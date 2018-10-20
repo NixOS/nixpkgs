@@ -11721,10 +11721,10 @@ let
   };
 
   ParallelForkManager = buildPerlPackage rec {
-    name = "Parallel-ForkManager-1.20";
+    name = "Parallel-ForkManager-2.02";
     src = fetchurl {
       url = "mirror://cpan/authors/id/Y/YA/YANICK/${name}.tar.gz";
-      sha256 = "7cc4c1c3b0e676b61ffa90f82f4128e8057327449ca86a9beb2f39217023f289";
+      sha256 = "c1b2970a8bb666c3de7caac4a8f4dbcc043ab819bbc337692ec7bf27adae4404";
     };
     buildInputs = [ TestWarn ];
     meta = {
@@ -11732,6 +11732,7 @@ let
       description = "A simple parallel processing fork manager";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ Moo ];
   };
 
   ParallelPrefork = buildPerlPackage {
