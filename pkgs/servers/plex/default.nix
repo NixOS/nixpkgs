@@ -37,6 +37,7 @@ in stdenv.mkDerivation rec {
     # Now we need to patch up the executables and libraries to work on Nix.
     # Side note: PLEASE don't put spaces in your binary names. This is stupid.
     for bin in "Plex Media Server"              \
+               "Plex Commercial Skipper"        \
                "Plex DLNA Server"               \
                "Plex Media Scanner"             \
                "Plex Relay"                     \
