@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/25316
     # https://github.com/python/cpython/pull/7476
     ./patches/python-5755-hotpatch.patch
+
+    # Revert the commit that made the sphinx build fork even in the single thread
+    # case. For some yet unknown reason, that breaks the docbuild on nix and archlinux.
+    # See https://groups.google.com/forum/#!msg/sage-packaging/VU4h8IWGFLA/mrmCMocYBwAJ.
+    ./patches/revert-sphinx-always-fork.patch
   ];
 
   packageUpgradePatches = [
