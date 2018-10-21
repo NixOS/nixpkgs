@@ -13,7 +13,7 @@ let
   python' = python.override { inherit packageOverrides; };
 
   packageOverrides = self: super: {
-    sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
+    sqlalchemy = super.sqlalchemy.overrideArgs (old: rec {
       version = "1.1.10";
       src = old.src.override {
         inherit version;
@@ -21,7 +21,7 @@ let
       };
     });
 
-    guessit = super.guessit.overridePythonAttrs (old: rec {
+    guessit = super.guessit.overrideArgs (old: rec {
       version = "2.1.4";
       src = old.src.override {
         inherit version;

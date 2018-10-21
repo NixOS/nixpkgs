@@ -7,7 +7,7 @@ let
         packageOverrides = self: super: {
 
           # https://github.com/platformio/platformio-core/issues/349
-          click = super.click.overridePythonAttrs (oldAttrs: rec {
+          click = super.click.overrideArgs (oldAttrs: rec {
             version = "5.1";
             src = oldAttrs.src.override {
               inherit version;

@@ -4,7 +4,7 @@ let
   python = python3.override {
     packageOverrides = self: super: {
 
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
+      aiohttp = super.aiohttp.overrideArgs (oldAttrs: rec {
         version = "2.3.10";
         src = oldAttrs.src.override {
           inherit version;
@@ -12,7 +12,7 @@ let
         };
       });
 
-      yarl = super.yarl.overridePythonAttrs (oldAttrs: rec {
+      yarl = super.yarl.overrideArgs (oldAttrs: rec {
         version = "1.1.0";
         src = oldAttrs.src.override {
           inherit version;
@@ -20,7 +20,7 @@ let
         };
       });
 
-      aiohttp-jinja2 = super.aiohttp-jinja2.overridePythonAttrs (oldAttrs: rec {
+      aiohttp-jinja2 = super.aiohttp-jinja2.overrideArgs (oldAttrs: rec {
         version = "0.15.0";
         src = oldAttrs.src.override {
           inherit version;

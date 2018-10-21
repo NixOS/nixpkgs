@@ -2,28 +2,28 @@
 
 let newPython = python3.override {
   packageOverrides = self: super: {
-    distro = super.distro.overridePythonAttrs (oldAttrs: rec {
+    distro = super.distro.overrideArgs (oldAttrs: rec {
       version = "1.1.0";
       src = oldAttrs.src.override {
         inherit version;
         sha256 = "1vn1db2akw98ybnpns92qi11v94hydwp130s8753k6ikby95883j";
       };
     });
-    node-semver = super.node-semver.overridePythonAttrs (oldAttrs: rec {
+    node-semver = super.node-semver.overrideArgs (oldAttrs: rec {
       version = "0.2.0";
       src = oldAttrs.src.override {
         inherit version;
         sha256 = "1080pdxrvnkr8i7b7bk0dfx6cwrkkzzfaranl7207q6rdybzqay3";
       };
     });
-    astroid = super.astroid.overridePythonAttrs (oldAttrs: rec {
+    astroid = super.astroid.overrideArgs (oldAttrs: rec {
       version = "1.6.5";
       src = oldAttrs.src.override {
         inherit version;
         sha256 = "fc9b582dba0366e63540982c3944a9230cbc6f303641c51483fa547dcc22393a";
       };
     });
-    pylint = super.pylint.overridePythonAttrs (oldAttrs: rec {
+    pylint = super.pylint.overrideArgs (oldAttrs: rec {
       version = "1.8.4";
       src = oldAttrs.src.override {
         inherit version;

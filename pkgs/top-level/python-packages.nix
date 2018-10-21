@@ -36,17 +36,17 @@ let
   bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
-  # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
+  # This function introduces `overrideArgs` and it overrides the call to `buildPythonPackage`.
   makeOverridablePythonPackage = f: origArgs:
     let
       ff = f origArgs;
       overrideWith = newArgs: origArgs // (if pkgs.lib.isFunction newArgs then newArgs origArgs else newArgs);
     in
       if builtins.isAttrs ff then (ff // {
-        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+        overrideArgs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
       })
       else if builtins.isFunction ff then {
-        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+        overrideArgs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
         __functor = self: ff;
       }
       else ff;
@@ -1138,7 +1138,7 @@ in {
 
   CommonMark = callPackage ../development/python-modules/commonmark { };
 
-  CommonMark_54 = self.CommonMark.overridePythonAttrs (oldAttrs: rec {
+  CommonMark_54 = self.CommonMark.overrideArgs (oldAttrs: rec {
     version = "0.5.4";
     src = oldAttrs.src.override {
       inherit version;
@@ -1582,7 +1582,7 @@ in {
 
   fudge = callPackage ../development/python-modules/fudge { };
 
-  fudge_9 = self.fudge.overridePythonAttrs (old: rec {
+  fudge_9 = self.fudge.overrideArgs (old: rec {
      version = "0.9.6";
 
      src = fetchPypi {
@@ -2326,7 +2326,7 @@ in {
   fusepy = callPackage ../development/python-modules/fusepy { };
 
   future = callPackage ../development/python-modules/future { };
-  future15 = self.future.overridePythonAttrs (old: rec {
+  future15 = self.future.overrideArgs (old: rec {
     name = "future-${version}";
     version = "0.15.2";
     src = fetchPypi {
@@ -2805,7 +2805,7 @@ in {
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy {};
 
-  msgpack-python = self.msgpack.overridePythonAttrs {
+  msgpack-python = self.msgpack.overrideArgs {
     pname = "msgpack-python";
     postPatch = ''
       substituteInPlace setup.py --replace "TRANSITIONAL = False" "TRANSITIONAL = True"
@@ -6850,7 +6850,7 @@ in {
 
   sphinx = callPackage ../development/python-modules/sphinx { };
 
-  sphinx_1_2 = self.sphinx.overridePythonAttrs rec {
+  sphinx_1_2 = self.sphinx.overrideArgs rec {
     name = "sphinx-1.2.3";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinx/sphinx-1.2.3.tar.gz";
