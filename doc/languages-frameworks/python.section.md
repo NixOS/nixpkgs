@@ -1079,8 +1079,7 @@ To modify only a Python package set instead of a whole Python derivation, use th
 Use the following overlay template:
 
 ```nix
-self: super:
-{
+self: super: {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
       zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
@@ -1090,6 +1089,25 @@ self: super:
           sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
         };
       });
+    };
+  };
+}
+```
+
+### How to use Intel's MKL with numpy and scipy?
+
+A `site.cfg` is created that configures BLAS based on the `blas` parameter
+of the `numpy` derivation. By passing in `mkl`, `numpy` and packages depending
+on `numpy` will be built with `mkl`.
+
+The following is an overlay that configures `numpy` to use `mkl`:
+```nix
+self: super: {
+  python36 = super.python36.override {
+    packageOverrides = python-self: python-super: {
+      numpy = python-super.numpy.override {
+        blas = super.pkgs.mkl;
+      };
     };
   };
 }

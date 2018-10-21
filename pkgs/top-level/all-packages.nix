@@ -15493,6 +15493,8 @@ with pkgs;
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
 
+  weather-icons = callPackage ../data/fonts/weather-icons { };
+
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
@@ -17719,6 +17721,8 @@ with pkgs;
   minikube = callPackage ../applications/networking/cluster/minikube {
     inherit (darwin.apple_sdk.frameworks) vmnet;
   };
+
+  minishift = callPackage ../applications/networking/cluster/minishift { };
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
@@ -20342,11 +20346,9 @@ with pkgs;
 
   pong3d = callPackage ../games/pong3d { };
 
-  pokerth = callPackage ../games/pokerth {
-    protobuf = protobuf3_4;
-  };
+  pokerth = libsForQt5.callPackage ../games/pokerth { };
 
-  pokerth-server = pokerth.server;
+  pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
 
   prboom = callPackage ../games/prboom { };
 
@@ -21132,8 +21134,9 @@ with pkgs;
   sageWithDoc = sage.override { withDoc = true; };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
-  suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};
-  suitesparse = suitesparse_4_4;
+  suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse/4.4.nix {};
+  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {};
+  suitesparse = suitesparse_5_3;
 
   superlu = callPackage ../development/libraries/science/math/superlu {};
 
