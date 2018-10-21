@@ -13648,7 +13648,6 @@ with pkgs;
   });
 
   samba4Full = lowPrio (samba4.override {
-    enableInfiniband = true;
     enableLDAP = true;
     enablePrinting = true;
     enableMDNS = true;
@@ -18595,7 +18594,7 @@ with pkgs;
   rclone = callPackage ../applications/networking/sync/rclone { };
 
   rclone-browser = libsForQt5.callPackage ../applications/networking/sync/rclone/browser.nix { };
-  
+
   rcs = callPackage ../applications/version-management/rcs { };
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
