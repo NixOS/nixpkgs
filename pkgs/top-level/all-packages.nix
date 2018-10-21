@@ -12329,6 +12329,8 @@ with pkgs;
     '';
   });
 
+  dqlite = callPackage ../development/libraries/dqlite { };
+
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
     readline = null;
     ncurses = null;
