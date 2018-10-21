@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
     mobile-broadband-provider-info
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "GOSITE_DIR=$(out)/share/go"
+  ];
 
   meta = with stdenv.lib; {
     description = "Go bindings for Deepin Desktop Environment development";
