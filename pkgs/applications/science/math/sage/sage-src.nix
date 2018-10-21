@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     # case. For some yet unknown reason, that breaks the docbuild on nix and archlinux.
     # See https://groups.google.com/forum/#!msg/sage-packaging/VU4h8IWGFLA/mrmCMocYBwAJ.
     ./patches/revert-sphinx-always-fork.patch
+
+    # Make sure py2/py3 tests are only run when their expected context (all "sage"
+    # tests) are also run. That is necessary to test dochtml individually. See
+    # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
+    ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
   ];
 
   packageUpgradePatches = [
