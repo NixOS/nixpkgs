@@ -2,29 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "tikzit-${version}";
-  version = "2.0-rc2";
+  version = "2.0-rc3";
 
   src = fetchFromGitHub {
     owner = "tikzit";
     repo = "tikzit";
-    rev = "v${version}";
-    sha256 = "119cc8p82cf78rha711zxm4pzmazwgiv81w2qbwwwxd2mkhjwflx";
+    rev = "24fbb3b7aca8dd5b957397a046d3cb71a00b324c";
+    sha256 = "03wycizv1d42zrb8irj2zqkqhdsvwkjcwxympqqcg11apicqv252";
   };
 
   nativeBuildInputs = [ qmake qttools flex bison ];
   buildInputs = [ qtbase ];
 
   preBuild = ''
-    sed -i '/DESTDIR/d' tikzit.pro
-    echo "DESTDIR = build" >> tikzit.pro
-    qmake
-  '';
-
-  # The default installPhase tries to install under
-  # /nix/store/*-qtbase-*-dev/tests/tikzit. This is not what we want.
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r $srcdir/build/source/build/* $out/bin/
+    PREFIX=$out qmake
   '';
 
   meta = with stdenv.lib; {
