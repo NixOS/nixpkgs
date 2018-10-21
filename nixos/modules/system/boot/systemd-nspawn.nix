@@ -112,9 +112,6 @@ in {
 
       environment.etc."systemd/nspawn".source = generateUnits "nspawn" units [] [];
 
-      systemd.services."systemd-nspawn@" = {
-        wantedBy = [ "machine.target" ];
-      };
   };
 
 }
