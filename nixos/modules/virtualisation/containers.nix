@@ -243,6 +243,9 @@ let
 
     Restart = "on-failure";
 
+    Slice = "machine.slice";
+    Delegate = true;
+
     # Hack: we don't want to kill systemd-nspawn, since we call
     # "machinectl poweroff" in preStop to shut down the
     # container cleanly. But systemd requires sending a signal
@@ -657,6 +660,8 @@ in
       serviceConfig = serviceDirectives dummyConfig;
     };
   in {
+    systemd.targets."multi-user".wants = [ "machines.target" ];
+
     systemd.services = listToAttrs (filter (x: x.value != null) (
       # The generic container template used by imperative containers
       [{ name = "container@"; value = unit; }]
@@ -680,7 +685,7 @@ in
           } // (
           if config.autoStart then
             {
-              wantedBy = [ "multi-user.target" ];
+              wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
               after = [ "network.target" ];
               restartTriggers = [ config.path ];
