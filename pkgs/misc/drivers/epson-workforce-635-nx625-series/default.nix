@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
   name = "epson-inkjet-printer-workforce-635-nx625-series";
   version = "1.0.1";
 
-  src = builtins.fetchurl {
+  src = fetchurl {
     url = "https://download.ebz.epson.net/dsc/op/stable/SRPMS/${name}-${version}-1lsb3.2.src.rpm";
     sha256 = "19nb2h0y9rvv6rg7j262f8sqap9kjvz8kmisxnjg1w0v19zb9zf2";
   };
