@@ -4,14 +4,14 @@
 , nose, requests }:
 
 buildPythonPackage rec {
-  version = "2.1.2";
+  version = "2.1.3";
   pname = "beancount";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d0d5f7088cb6b699cc4d030dad42d20b8228232cdb445bb1330d4ef5e3581f52";
+    sha256 = "4b7b0d3633c82ca88d3cb3d31ad2fd2e45a42401cfa94eaa1cb938ffece34f22";
   };
 
   checkInputs = [ nose ];

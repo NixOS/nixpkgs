@@ -54,6 +54,7 @@ mapAliases ({
   buildbot-pkg = pythonPackages.buildbot-pkg; # added 2018-10-11
   buildbot-ui = pythonPackages.buildbot-ui; # added 2018-10-11
   buildbot-worker = pythonPackages.buildbot-worker; # added 2018-10-11
+  buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
@@ -209,6 +210,8 @@ mapAliases ({
   p11_kit = p11-kit; # added 2018-02-25
   parquet-cpp = arrow-cpp; # added 2018-09-08
   pass-otp = pass.withExtensions (ext: [ext.pass-otp]); # added 2018-05-04
+  perlXMLParser = perlPackages.XMLParser; # added 2018-10-12
+  perlArchiveCpio = perlPackages.ArchiveCpio; # added 2018-10-12
   pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
