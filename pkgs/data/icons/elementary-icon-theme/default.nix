@@ -1,23 +1,31 @@
-{ stdenv, fetchurl, cmake, gtk3 }:
+{ stdenv, fetchFromGitHub, meson, ninja, python3, gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "elementary-icon-theme-${version}";
-  version = "4.3.1";
+  version = "5.0";
 
-  src = fetchurl {
-    url = "https://launchpad.net/elementaryicons/4.x/${version}/+download/${name}.tar.xz";
-    sha256 = "1rp22igvnx71l94j5a6px142329djhk2psm1wfgbhdxbj23hw9kb";
+  src = fetchFromGitHub {
+    owner = "elementary";
+    repo = "icons";
+    rev = version;
+    sha256 = "146s26q4bb5sag35iv42hrnbdciam2ajl7s5s5jayli5vp8bw08w";
   };
 
-  nativeBuildInputs = [ cmake gtk3 ];
+  nativeBuildInputs = [ meson ninja python3 gtk3 ];
 
-  postPatch = "cat > volumeicon/CMakeLists.txt";
-  postFixup = "gtk-update-icon-cache $out/share/icons/elementary";
+  postPatch = ''
+    chmod +x meson/symlink.py
+    patchShebangs .
+    sed -i volumeicon/meson.build -e "s,'/','$out',"
+  '';
 
+  postFixup = ''
+    gtk-update-icon-cache $out/share/icons/elementary
+  '';
 
   meta = with stdenv.lib; {
-    description = "Elementary icon theme";
-    homepage = https://launchpad.net/elementaryicons;
+    description = "Icons from the Elementary Project";
+    homepage = https://github.com/elementary/icons;
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ simonvandel ];

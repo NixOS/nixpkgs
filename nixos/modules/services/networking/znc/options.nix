@@ -239,6 +239,7 @@ in
         IPv4 = mkDefault true;
         IPv6 = mkDefault true;
         SSL = mkDefault c.useSSL;
+        URIPrefix = c.uriPrefix;
       };
       User.${c.userName} = {
         Admin = mkDefault true;
@@ -254,8 +255,9 @@ in
             listToAttrs (map (n: nameValuePair "#${n}" (mkDefault {})) net.channels);
           extraConfig = if net.extraConf == "" then mkDefault null else net.extraConf;
         }) c.networks;
-        extraConfig = [ c.passBlock ] ++ optional (c.extraZncConf != "") c.extraZncConf;
+        extraConfig = [ c.passBlock ];
       };
+      extraConfig = optional (c.extraZncConf != "") c.extraZncConf;
     };
   };
 
