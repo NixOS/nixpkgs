@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 ];
     description = "A TURN server";
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # 2018-10-21
     maintainers = [ maintainers.ralith ];
   };
 }
