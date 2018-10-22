@@ -2001,6 +2001,8 @@ in {
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
+  sievelib = callPackage ../development/python-modules/sievelib { };
+
   watchdog = callPackage ../development/python-modules/watchdog { };
 
   zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
