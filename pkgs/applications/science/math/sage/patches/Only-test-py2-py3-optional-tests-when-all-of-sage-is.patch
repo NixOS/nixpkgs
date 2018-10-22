@@ -1,14 +1,14 @@
-From c8edfefbbec87ca776d3cf84ee895aac200dda40 Mon Sep 17 00:00:00 2001
+From 8218bd4fdeb4c92de8af0d3aabec55980fc4fb3d Mon Sep 17 00:00:00 2001
 From: Timo Kaufmann <timokau@zoho.com>
 Date: Sun, 21 Oct 2018 17:52:40 +0200
 Subject: [PATCH] Only test py2/py3 optional tests when all of sage is tested
 
 ---
- src/sage/doctest/control.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ src/sage/doctest/control.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/src/sage/doctest/control.py b/src/sage/doctest/control.py
-index bf18df8b2b..b04af0e2e8 100644
+index bf18df8b2b..935c67abf7 100644
 --- a/src/sage/doctest/control.py
 +++ b/src/sage/doctest/control.py
 @@ -362,7 +362,8 @@ class DocTestController(SageObject):
@@ -20,6 +20,15 @@ index bf18df8b2b..b04af0e2e8 100644
 +                    options.optional |= auto_optional_tags
  
          self.options = options
+ 
+@@ -765,7 +766,7 @@ class DocTestController(SageObject):
+             sage: DC = DocTestController(DD, [dirname])
+             sage: DC.expand_files_into_sources()
+             sage: sorted(DC.sources[0].options.optional)  # abs tol 1
+-            ['guava', 'magma', 'py2']
++            ['guava', 'magma']
+ 
+         We check that files are skipped appropriately::
  
 -- 
 2.18.1
