@@ -109,10 +109,7 @@ self: super: {
   # https://github.com/skogsbaer/HTF/issues/69
   HTF = markBrokenVersion "0.13.2.4" super.HTF;
 
-  # https://github.com/jgm/pandoc-types/issues/52
-  pandoc-types = doJailbreak super.pandoc-types;
-
-  #
+  # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
 
   # https://github.com/joelburget/easytest/issues/12
