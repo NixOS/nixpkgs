@@ -17273,6 +17273,8 @@ with pkgs;
 
   hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
 
+  homely = callPackage ../applications/misc/homely {};
+
   howl = callPackage ../applications/editors/howl { };
 
   ht = callPackage ../applications/editors/ht { };
