@@ -1147,9 +1147,6 @@ self: super: {
 
   arbtt = doJailbreak super.arbtt;
 
-  # https://github.com/yesodweb/yesod/issues/1563
-  yesod-core = self.yesod-core_1_6_8_1;
-
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
 
