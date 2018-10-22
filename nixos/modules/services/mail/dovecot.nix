@@ -311,7 +311,7 @@ in
       { name = "dovenull";
         uid = config.ids.uids.dovenull2;
         description = "Dovecot user for untrusted logins";
-        group = cfg.group;
+        group = "dovenull";
       }
     ] ++ optional (cfg.user == "dovecot2")
          { name = "dovecot2";
@@ -332,6 +332,10 @@ in
       }
     ++ optional (cfg.createMailUser && cfg.mailGroup != null)
       { name = cfg.mailGroup;
+      }
+    ++ singleton
+      { name = "dovenull";
+        gid = config.ids.gids.dovenull2;
       };
 
     environment.etc."dovecot/modules".source = modulesDir;
