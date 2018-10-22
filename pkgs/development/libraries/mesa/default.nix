@@ -4,7 +4,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau, valgrind-light, python2
 , libglvnd
-, enableRadv ? true
+, enableRadv ? true, enableLLVM ? true, enableValgrindHints ? true
 , galliumDrivers ? null
 , driDrivers ? null
 , vulkanDrivers ? null
@@ -116,22 +116,23 @@ let self = stdenv.mkDerivation {
     "--enable-driglx-direct"
     "--enable-gles1"
     "--enable-gles2"
-    "--enable-glx"
+    (enableFeature (elem "x11" eglPlatforms) "--enable-glx")
     # https://bugs.freedesktop.org/show_bug.cgi?id=35268
     (enableFeature (!stdenv.hostPlatform.isMusl) "glx-tls")
     # used by wine
     (enableFeature (elem "swrast" galliumDrivers) "gallium-osmesa")
-    "--enable-llvm"
     (enableFeature stdenv.isLinux "egl")
     (enableFeature stdenv.isLinux "xa") # used in vmware driver
     (enableFeature stdenv.isLinux "gbm")
     "--enable-xvmc"
     "--enable-vdpau"
     "--enable-shared-glapi"
-    "--enable-llvm-shared-libs"
     (enableFeature stdenv.isLinux "omx-bellagio")
     (enableFeature stdenv.isLinux "va")
     "--disable-opencl"
+  ] ++ optionals enableLLVM [
+    "--enable-llvm"
+    "--enable-llvm-shared-libs"
   ];
 
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig file ];
@@ -142,14 +143,16 @@ let self = stdenv.mkDerivation {
     ++ optionals stdenv.isDarwin [ OpenGL Xplugin ];
 
   buildInputs = with xorg; [
-    expat llvmPackages.llvm libglvnd
+    expat libglvnd
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl/*or another sha1 provider*/
-    valgrind-light python2 python2.pkgs.Mako
+    python2 python2.pkgs.Mako
   ] ++ lib.optionals stdenv.isLinux [ wayland wayland-protocols
-                                      libomxil-bellagio libva-minimal ];
+                                      libomxil-bellagio libva-minimal ]
+    ++ lib.optional enableLLVM [ llvmPackages.llvm ]
+    ++ lib.optional enableValgrindHints [ valgrind-light ];
 
   enableParallelBuilding = true;
   doCheck = false;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, libgpgerror }:
+{ stdenv, fetchurl, gettext, libgpgerror, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "libksba-1.3.5";
@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext ];
   propagatedBuildInputs = [ libgpgerror ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  configureFlags = [ "--with-gpg-error-prefix=${libgpgerror.dev}" ];
 
   postInstall = ''
     mkdir -p $dev/bin

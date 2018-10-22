@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, libGL
-, libX11, pkgconfig, OpenGL
+{ stdenv, fetchurl, libjpeg, libpng, libmng, lcms1, libtiff, openexr, libGL ? null
+, libX11 ? null, pkgconfig, OpenGL
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr libGL libX11 ]
+  buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr ]
+    ++ stdenv.lib.optional (!(builtins.isNull libGL)) [ libGL ]
+    ++ stdenv.lib.optional (!(builtins.isNull libX11)) [ libX11 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ OpenGL ];
   nativeBuildInputs = [ pkgconfig ];
 

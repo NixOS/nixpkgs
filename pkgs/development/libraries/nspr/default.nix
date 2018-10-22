@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, autoreconfHook, buildPackages
 , CoreServices ? null }:
 
 let version = "4.20"; in
@@ -13,6 +13,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   preConfigure = ''
     cd nspr
@@ -21,10 +22,23 @@ stdenv.mkDerivation {
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
 
+  preAutoreconf = ''
+    ls
+    cd nspr
+  '';
+
+  postAutoreconf = "cd ..";
+
+  # NSPR uses a non-standard host/build/target convention
   configureFlags = [
     "--enable-optimize"
     "--disable-debug"
+    "--host=${stdenv.buildPlatform.config}"
+    "--build=${stdenv.hostPlatform.config}"
+    "--target=${stdenv.targetPlatform.config}"
   ] ++ stdenv.lib.optional stdenv.is64bit "--enable-64bit";
+
+  configurePlatforms = [];
 
   postInstall = ''
     find $out -name "*.a" -delete
@@ -32,6 +46,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;
 

@@ -1,6 +1,7 @@
 { stdenv, fetchurl
 , pkgconfig, which, makeWrapper
 , zlib, bzip2, libpng, gnumake, glib
+, buildPackages
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
@@ -40,6 +41,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig which makeWrapper ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   patches =
     [ ./enable-table-validation.patch
@@ -52,6 +54,7 @@ in stdenv.mkDerivation rec {
 
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = optionalString stdenv.isAarch32 "-std=gnu99";
+  CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
 
   enableParallelBuilding = true;
 

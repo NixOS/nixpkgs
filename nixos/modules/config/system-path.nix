@@ -19,7 +19,9 @@ let
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      pkgs.glibc # for ldd, getent
+      (if pkgs.stdenv.hostPlatform.isMusl
+       then pkgs.musl-utils
+       else pkgs.glibc) # for ldd, getent
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
@@ -62,6 +64,14 @@ in
           configuration.  (The latter is the main difference with
           installing them in the default profile,
           <filename>/nix/var/nix/profiles/default</filename>.
+        '';
+      };
+
+      minimal = mkOption {
+        type = types.boolean;
+        default = false;
+        description = ''
+          Attempt to reduce the amount of built-in packages as much as possible
         '';
       };
 

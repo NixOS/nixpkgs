@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
+{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light,
+  testsSupport ? false }:
 
 stdenv.mkDerivation rec {
   name = "libdrm-2.4.94";
@@ -11,8 +12,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "bin" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpthreadstubs libpciaccess valgrind-light ];
+  buildInputs = [ libpthreadstubs libpciaccess ] ++ stdenv.lib.optional testsSupport valgrind-light;
     # libdrm as of 2.4.70 does not actually do anything with udev.
+
+  doCheck = testsSupport;
 
   patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
 
