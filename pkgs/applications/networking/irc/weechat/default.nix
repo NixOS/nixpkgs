@@ -6,7 +6,7 @@
 , asciidoctor # manpages
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
-, perlSupport ? true, perl
+, perlSupport ? true, perl, perlPackages
 , pythonSupport ? true, pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
@@ -108,6 +108,12 @@ in if configure == null then weechat else
           extraEnv = ''
             export PATH="${perlInterpreter}/bin:$PATH"
           '';
+          withPackages = pkgsFun: (perl // {
+            extraEnv = ''
+              ${perl.extraEnv}
+              export PERL5LIB=${lib.makeFullPerlPath (pkgsFun perlPackages)}
+            '';
+          });
         };
         tcl = simplePlugin "tcl";
         ruby = simplePlugin "ruby";
