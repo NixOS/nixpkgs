@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, pam, groff, sssd
+{ stdenv, fetchurl, coreutils, pam, groff, sssd, autoreconfHook, buildPackages
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , withInsults ? false
 , withSssd ? false
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     # do not set sticky bit in nix store
     substituteInPlace src/Makefile.in --replace 04755 0755
   '';
+
+  patches = [ ./sudo-1.8.25p1-cross-compile.patch ];
 
   configureFlags = [
     "--with-env-editor"
@@ -51,8 +53,9 @@ stdenv.mkDerivation rec {
     installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy"
     '';
 
-  nativeBuildInputs = [ groff ];
+  nativeBuildInputs = [ groff autoreconfHook ];
   buildInputs = [ pam ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   enableParallelBuilding = true;
 

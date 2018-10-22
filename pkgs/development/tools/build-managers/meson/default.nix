@@ -45,7 +45,8 @@ python3Packages.buildPythonApplication rec {
 
   setupHook = ./setup-hook.sh;
 
-  crossFile = writeTextDir "cross-file.conf" ''
+  crossFile =
+    writeTextDir "cross-file.conf" ''
     [binaries]
     c = '${stdenv.cc.targetPrefix}cc'
     cpp = '${stdenv.cc.targetPrefix}c++'
