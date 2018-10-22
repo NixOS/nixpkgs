@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/26315
     ./patches/giac-1.5.0.patch
 
+
     # https://trac.sagemath.org/ticket/26326
     # needs to be split because there is a merge commit in between
     (fetchSageDiff {
@@ -95,6 +96,14 @@ stdenv.mkDerivation rec {
       base = "626485bbe5f33bf143d6dfba4de9c242f757f59b~1";
       rev = "db10d327ade93711da735a599a67580524e6f7b4";
       sha256 = "09v87id25fa5r9snfn4mv79syhc77jxfawj5aizmdpwdmpgxjk1f";
+    })
+
+    # https://trac.sagemath.org/ticket/26451
+    (fetchSageDiff {
+      name = "sphinx-1.8.1.patch";
+      base = "8.4";
+      rev = "19b29e552caf792bbd5eb1e335b6072f2125a981";
+      sha256 = "0ja15iz2vcgcz96p8l4il4xs0bg0l4bny0rcc66l00368pb6mz56";
     })
   ];
 

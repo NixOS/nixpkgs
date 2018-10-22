@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "sagenb";
-  version = "2018-06-26"; # not 1.0.1 because of new flask syntax
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sagenb";
-    rev = "b360a0172e15501fb0163d02dce713a561fee2af";
-    sha256 = "12anydw0v9w23rbc0a94bqmjhjdir9h820c5zdhipw9ccdcc2jlf";
+    rev = version;
+    sha256 = "1a0zk1i6c8j3blhqnk1rk91sb99mvshv7pnklyj2g6sxpbdhllhg";
   };
 
   propagatedBuildInputs = [
@@ -40,10 +40,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   patches = [
-    # work with latest flask-babel
+    # https://github.com/sagemath/sagenb/pull/461
     (fetchpatch {
-      url = "https://github.com/sagemath/sagenb/commit/ba065eca63dd34a383e4c7ba7561430a90fcd087.patch";
-      sha256 = "1lamzsrgymdd618imrasjp6ivhw2aynh83gkybsd7pm1rzjcq4x8";
+      name = "sphinx-1.8.1.patch";
+      url = "https://github.com/sagemath/sagenb/pull/461/commits/3f458f8260a3624927b6519f1e35576d72a4beec.patch";
+      sha256 = "1s19dk35i0yvxb49d6l76xq861sivn9gqj0r1jb2gyah60n62inr";
     })
   ];
 
