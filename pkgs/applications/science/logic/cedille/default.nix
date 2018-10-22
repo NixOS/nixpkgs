@@ -32,9 +32,12 @@ stdenv.mkDerivation rec {
     chmod -R 755 ial
   '';
 
+  outputs = ["out" "lib"];
+
   installPhase = ''
     mkdir -p $out/bin
     mv cedille $out/bin/cedille
+    mv lib $lib
   '';
 
   meta = {
