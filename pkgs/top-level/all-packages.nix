@@ -17190,7 +17190,9 @@ with pkgs;
   wlroots = callPackage ../development/libraries/wlroots { };
   rootston = wlroots.bin;
   orbment = callPackage ../applications/window-managers/orbment { };
-  sway = callPackage ../applications/window-managers/sway { };
+  swayPkgs = callPackage ../applications/window-managers/sway { };
+
+  inherit (swayPkgs) sway sway-beta;
 
   velox = callPackage ../applications/window-managers/velox {
     stConf = config.st.conf or null;
