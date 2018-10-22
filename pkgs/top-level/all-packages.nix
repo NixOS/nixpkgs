@@ -22724,4 +22724,6 @@ with pkgs;
   };
 
   tsung = callPackage ../applications/networking/tsung {};
+
+  homely = callPackage ../applications/misc/homely {};
 }

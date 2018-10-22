@@ -1819,6 +1819,11 @@
     github = "infinisil";
     name = "Silvan Mosberger";
   };
+  lokke = {
+    email = "lokke@lokke.me";
+    github = "lokke-me";
+    name = "Grischa Wende";
+  };
   ironpinguin = {
     email = "michele@catalano.de";
     github = "ironpinguin";
