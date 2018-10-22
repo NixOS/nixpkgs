@@ -7266,6 +7266,8 @@ with pkgs;
 
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
 
+  ocamlformat = callPackage ../development/tools/ocaml/ocamlformat { };
+
   orc = callPackage ../development/compilers/orc { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
