@@ -8571,6 +8571,8 @@ with pkgs;
 
   kubectx = callPackage ../development/tools/kubectx { };
 
+  kube-prompt = callPackage ../development/tools/kube-prompt { };
+
   kustomize = callPackage ../development/tools/kustomize { };
 
   kythe = callPackage ../development/tools/kythe { };
