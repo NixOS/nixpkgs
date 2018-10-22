@@ -199,9 +199,6 @@ in
         # /etc/protocols: IP protocol numbers.
         "protocols".source  = pkgs.iana-etc + "/etc/protocols";
 
-        # /etc/rpc: RPC program numbers.
-        "rpc".source = pkgs.glibc.out + "/etc/rpc";
-
         # /etc/hosts: Hostname-to-IP mappings.
         "hosts".text =
           let oneToString = set : ip : ip + " " + concatStringsSep " " ( getAttr ip set );
@@ -251,6 +248,9 @@ in
         "resolv.conf".source = "${pkgs.systemd}/lib/systemd/resolv.conf";
       } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
+      } // optionalAttrs (!pkgs.stdenv.hostPlatform.isMusl) {
+        # /etc/rpc: RPC program numbers.
+        "rpc".source = pkgs.glibc.out + "/etc/rpc";
       };
 
       networking.proxy.envVars =

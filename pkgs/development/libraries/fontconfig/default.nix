@@ -1,5 +1,6 @@
 { stdenv, substituteAll, fetchurl
 , pkgconfig, freetype, expat, libxslt, gperf, dejavu_fonts
+, buildPackages
 }:
 
 /** Font configuration scheme
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd "$out/etc/fonts"
-    "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${dejavu_fonts.minimal}" \
+    ${buildPackages.libxslt}/bin/xsltproc --stringparam fontDirectories "${dejavu_fonts.minimal}" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
