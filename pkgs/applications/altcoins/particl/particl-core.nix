@@ -16,11 +16,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "particl-core-${version}";
-  version     = "0.16.2.0";
+  version     = "0.17.0.2";
 
   src = fetchurl {
     url = "https://github.com/particl/particl-core/archive/v${version}.tar.gz";
-    sha256 = "1d2vvg7avlhsg0rcpd5pbzafnk1w51a2y29xjjkpafi6iqs2l617";
+    sha256 = "0bkxdayl0jrfhgz8qzqqpwzv0yavz3nwsn6c8k003jnbcw65fkhx";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
@@ -29,12 +29,17 @@ stdenv.mkDerivation rec {
     unixtools.hexdump
   ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
+  configureFlags = [
+    "--disable-bench"
+    "--enable-tests=no"
+    "--with-boost-libdir=${boost.out}/lib"
+  ];
 
   meta = {
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
     longDescription= ''
       An open source, decentralized privacy platform built for global person to person eCommerce.
+      RPC daemon and CLI client only.
     '';
     homepage = https://particl.io/;
     maintainers = with maintainers; [ demyanrogozhin ];
