@@ -7,16 +7,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tikzit";
     repo = "tikzit";
-    rev = "24fbb3b7aca8dd5b957397a046d3cb71a00b324c";
-    sha256 = "03wycizv1d42zrb8irj2zqkqhdsvwkjcwxympqqcg11apicqv252";
+    rev = "fcc77f8b47882a77a9fced1e131fc6db092db749";
+    sha256 = "0xlk7k464s0f06bnkdj7jzdrhmxxsr0304zi7rgl6x5mgs022jk1";
   };
 
   nativeBuildInputs = [ qmake qttools flex bison ];
   buildInputs = [ qtbase ];
-
-  preBuild = ''
-    PREFIX=$out qmake
-  '';
 
   meta = with stdenv.lib; {
     description = "A graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
