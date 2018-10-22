@@ -17586,6 +17586,19 @@ let
     propagatedBuildInputs = [ XMLRegExp libxml_perl ];
   };
 
+  XMLFeedPP = buildPerlPackage rec {
+    name = "XML-FeedPP-0.95";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
+      sha256 = "1x5806xwmbqxr1dkdhalb6d7n31s3ya776klkai7c2x6y6drbhwh";
+    };
+    propagatedBuildInputs = [ XMLTreePP ];
+    meta = {
+      description = "Parse/write/merge/edit RSS/RDF/Atom syndication feeds";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   XMLFilterBufferText = buildPerlPackage {
     name = "XML-Filter-BufferText-1.01";
     src = fetchurl {
