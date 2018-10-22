@@ -17103,6 +17103,8 @@ with pkgs;
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
+  gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
+
   hackrf = callPackage ../applications/misc/hackrf { };
 
   hakuneko = callPackage ../tools/misc/hakuneko { };
