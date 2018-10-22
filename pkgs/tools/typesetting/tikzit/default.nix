@@ -11,6 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "0xlk7k464s0f06bnkdj7jzdrhmxxsr0304zi7rgl6x5mgs022jk1";
   };
 
+  # TikZiT checks for updates by fetching a certain HTTP URL.
+  # The security impact of not fetching over HTTPS is minimal, since TikZiT
+  # uses the response only to display an information box, but it's probably
+  # still better to follow best practices and fetch over HTTPS.
+  #
+  # This fix is not yet contained in upstream because of difficulties with Qt
+  # and SSL on Ubuntu, see https://github.com/tikzit/tikzit/pull/34.
+  preBuild = ''
+    sed -ie 's+http://tikzit.github.io/+https://tikzit.github.io/+' src/tikzit.cpp
+  '';
+
   nativeBuildInputs = [ qmake qttools flex bison ];
   buildInputs = [ qtbase ];
 
