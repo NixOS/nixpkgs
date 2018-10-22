@@ -60,11 +60,13 @@ let
     };
     getconf = {
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.glibc
+              else if stdenv.hostPlatform.libc == "musl" then pkgs.musl-utils
               else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.glibc
+              else if stdenv.hostPlatform.libc == "musl" then pkgs.musl-utils
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
     };

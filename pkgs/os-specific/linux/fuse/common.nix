@@ -33,6 +33,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = if isFuse3
     then [ meson ninja pkgconfig ]
     else [ autoreconfHook gettext ];
+  buildInputs = if isFuse3 then [ meson.setupHook ] else meson;
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
 

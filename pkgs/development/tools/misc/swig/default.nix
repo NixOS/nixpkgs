@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, tcl }:
+{ stdenv, fetchurl, boost, tcl, pcre }:
 
 stdenv.mkDerivation rec {
   name = "swig-1.3.40";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isCygwin;
   # 'make check' uses boost and tcl
   buildInputs = stdenv.lib.optionals doCheck [ boost tcl ];
+  nativeBuildInputs = [ pcre ];
 
   configureFlags = [ "--disable-ccache" ];
 

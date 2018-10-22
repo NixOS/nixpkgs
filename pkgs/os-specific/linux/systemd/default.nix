@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
       patchelf getent m4
     ];
   buildInputs =
-    [ linuxHeaders libcap kmod xz pam acl
+    [ linuxHeaders libcap.dev kmod xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
       libmicrohttpd pcre2 ] ++
       stdenv.lib.optional withKexectools kexectools ++
