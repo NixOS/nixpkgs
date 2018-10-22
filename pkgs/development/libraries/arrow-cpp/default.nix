@@ -1,4 +1,4 @@
-{ stdenv, symlinkJoin, fetchurl, fetchFromGitHub, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, which, zlib, zstd }:
+{ stdenv, symlinkJoin, fetchurl, fetchFromGitHub, boost, brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl, python, rapidjson, snappy, thrift, which, zlib }:
 
 let
   parquet-testing = fetchFromGitHub {
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
   SNAPPY_HOME = symlinkJoin { name="snappy-wrap"; paths = [ snappy snappy.dev ]; };
   THRIFT_HOME = thrift;
   ZLIB_HOME = symlinkJoin { name="zlib-wrap"; paths = [ zlib zlib.dev ]; };
-  ZSTD_HOME = zstd;
 
   cmakeFlags = [
     "-DARROW_PYTHON=ON"
     "-DARROW_PARQUET=ON"
+    "-DARROW_WITH_ZSTD=OFF" # broken after upgrade to zstd 1.3.6
   ];
 
   doInstallCheck = true;
