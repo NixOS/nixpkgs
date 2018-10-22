@@ -36,12 +36,8 @@ rec {
     patches = lib.optional (kernel.meta.branch == "4.19") ./drm_mode_connector.patch;
   };
 
-  beta = generic {
-    version = "410.57";
-    sha256_64bit = "08534rv3wcmzslbwq11kd3s7cxm72p48dia6540c0586xwgjwg2w";
-    settingsSha256 = "1phhhzlc8n3rqdhrn757mnlqmsp616d079a6h1qjpa6jba9z9915";
-    persistencedSha256 = "1z7c1ff0y486yp9i5w0siwh9dnprml22x2avarbjfgqwm4f652lw";
-  };
+  # No active beta right now
+  beta = stable;
 
   legacy_340 = generic {
     version = "340.104";
