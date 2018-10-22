@@ -250,6 +250,8 @@ in {
 
   bayespy = callPackage ../development/python-modules/bayespy { };
 
+  bitarray = callPackage ../development/python-modules/bitarray { };
+
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
