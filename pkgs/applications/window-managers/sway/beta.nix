@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub
 , meson, ninja
-, pkgconfig, asciidoc, libxslt, docbook_xsl
-, wayland, wlc, libxkbcommon, pcre, json_c, dbus
-, pango, cairo, libinput, libcap, pam, gdk_pixbuf, libpthreadstubs
-, libXdmcp, wlroots, wayland-protocols
+, pkgconfig, scdoc
+, wayland, libxkbcommon, pcre, json_c, dbus
+, pango, cairo, libinput, libcap, pam, gdk_pixbuf
+, wlroots, wayland-protocols
 , buildDocs ? true
 }:
 
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig meson ninja
-  ] ++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl ];
+  ] ++ stdenv.lib.optional buildDocs scdoc;
 
   buildInputs = [
-    wayland wlc libxkbcommon pcre json_c dbus
-    pango cairo libinput libcap pam gdk_pixbuf libpthreadstubs
-    libXdmcp wlroots wayland-protocols
+    wayland libxkbcommon pcre json_c dbus
+    pango cairo libinput libcap pam gdk_pixbuf
+    wlroots wayland-protocols
   ];
 
   enableParallelBuilding = true;
