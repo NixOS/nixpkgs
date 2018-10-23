@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "i3-compatible window manager for Wayland";
-    homepage    = http://swaywm.org;
+    homepage    = https://swaywm.org;
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ]; # Trying to keep it up-to-date.
