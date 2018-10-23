@@ -71,8 +71,6 @@ in buildPythonPackage rec {
     inherit blasImplementation cfg;
   };
 
-  doCheck = blasImplementation != "mkl";
-
   # Disable two tests
   # - test_f2py: f2py isn't yet on path.
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space

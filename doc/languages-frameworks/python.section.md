@@ -1104,7 +1104,7 @@ on `numpy` will be built with `mkl`.
 The following is an overlay that configures `numpy` to use `mkl`:
 ```nix
 self: super: {
-  python36 = super.python36.override {
+  python37 = super.python37.override {
     packageOverrides = python-self: python-super: {
       numpy = python-super.numpy.override {
         blas = super.pkgs.mkl;
@@ -1113,6 +1113,15 @@ self: super: {
   };
 }
 ```
+
+`mkl` requires an `openmp` implementation when running with multiple processors.
+By default, `mkl` will use Intel's `iomp` implementation if no other is
+specified, but this is a runtime-only dependency and binary compatible with the
+LLVM implementation. To use that one instead, Intel recommends users set it with
+`LD_PRELOAD`.
+
+Note that `mkl` is only available on `x86_64-{linux,darwin}` platforms;
+moreover, Hydra is not building and distributing pre-compiled binaries using it.
 
 ## Contributing
 
