@@ -93,6 +93,8 @@ in
 
     services.timesyncd.enable = mkForce false;
 
+    systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service"; };
+
     systemd.services.chronyd =
       { description = "chrony NTP daemon";
 
