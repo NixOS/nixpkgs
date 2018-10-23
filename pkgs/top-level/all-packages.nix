@@ -11260,6 +11260,7 @@ with pkgs;
 
   mu = callPackage ../tools/networking/mu {
     texinfo = texinfo4;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
   mueval = callPackage ../development/tools/haskell/mueval { };
