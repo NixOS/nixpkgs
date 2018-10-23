@@ -13684,7 +13684,6 @@ with pkgs;
   });
 
   samba4Full = lowPrio (samba4.override {
-    enableInfiniband = true;
     enableLDAP = true;
     enablePrinting = true;
     enableMDNS = true;
