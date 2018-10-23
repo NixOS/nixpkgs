@@ -37,14 +37,14 @@ let
       pkgconfig
     ] ++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl
     ] ++ stdenv.lib.optional cmakeBuild [ cmake
-    ] ++ stdenv.lib.optional mesonBuild [ meson ninja
+    ] ++ stdenv.lib.optional mesonBuild [ meson ninja git
     ];
 
 
     buildInputs = [
       wayland wlc libxkbcommon pcre json_c dbus
       pango cairo libinput libcap pam gdk_pixbuf libpthreadstubs
-      libXdmcp wlroots wayland-protocols git
+      libXdmcp wlroots wayland-protocols
     ];
 
     enableParallelBuilding = true;
