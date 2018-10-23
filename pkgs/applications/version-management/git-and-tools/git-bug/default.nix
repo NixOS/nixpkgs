@@ -19,6 +19,7 @@ buildGoPackage rec {
     cd go/src/${goPackagePath}
     install -D -m 0644 misc/bash_completion/git-bug "$bin/etc/bash_completion.d/git-bug"
     install -D -m 0644 misc/zsh_completion/git-bug "$bin/share/zsh/site-functions/git-bug"
+    install -D -m 0644 -t "$bin/share/man/man1" doc/man/*
   '';
 
   meta = with stdenv.lib; {
