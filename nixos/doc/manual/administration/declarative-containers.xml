@@ -15,7 +15,7 @@ containers.database =
   { config =
       { config, pkgs, ... }:
       { <xref linkend="opt-services.postgresql.enable"/> = true;
-      <xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql96;
+      <xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_9_6;
       };
   };
 </programlisting>

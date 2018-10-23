@@ -225,7 +225,11 @@ mapAliases ({
   piwik = matomo; # added 2018-01-16
   pltScheme = racket; # just to be sure
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
-  postgresql100 = throw "deprecated 2018-10-21: use postgresql10 instead";
+  postgresql93 = postgresql_9_3;
+  postgresql94 = postgresql_9_4;
+  postgresql95 = postgresql_9_5;
+  postgresql96 = postgresql_9_6;
+  postgresql100 = throw "deprecated 2018-10-21: use postgresql_10 instead";
   procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
