@@ -5610,6 +5610,8 @@ with pkgs;
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
+  tikzit = libsForQt5.callPackage ../applications/graphics/tikzit { };
+
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
   timemachine = callPackage ../applications/audio/timemachine { };
