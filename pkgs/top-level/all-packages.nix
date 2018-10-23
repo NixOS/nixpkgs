@@ -577,6 +577,8 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
+  avldrums-lv2 = callPackage ../applications/audio/avldrums-lv2 { };
+
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator {};
 
   awscli = callPackage ../tools/admin/awscli { };
@@ -21123,7 +21125,7 @@ with pkgs;
   liblapackWithAtlas = liblapack;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
-  
+
   lrs = callPackage ../development/libraries/science/math/lrs { };
 
   m4ri = callPackage ../development/libraries/science/math/m4ri { };
