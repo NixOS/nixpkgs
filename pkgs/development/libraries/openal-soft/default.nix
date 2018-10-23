@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake
+{ stdenv, fetchFromGitHub, cmake
 , alsaSupport ? !stdenv.isDarwin, alsaLib ? null
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio ? null
 , CoreServices, AudioUnit, AudioToolbox
@@ -10,12 +10,14 @@ assert alsaSupport -> alsaLib != null;
 assert pulseSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
-  version = "1.19.0";
+  version = "1.19.1";
   name = "openal-soft-${version}";
 
-  src = fetchurl {
-    url = "http://kcat.strangesoft.net/openal-releases/${name}.tar.bz2";
-    sha256 = "1mhf5bsb58s1xk6hvxl7ly7rd4rpl9z8h07xl1q94brywykg7bgi";
+  src = fetchFromGitHub {
+    owner = "kcat";
+    repo = "openal-soft";
+    rev = name;
+    sha256 = "0b0g0q1c36nfb289xcaaj3cmyfpiswvvgky3qyalsf9n4dj7vnzi";
   };
 
   nativeBuildInputs = [ cmake ];
