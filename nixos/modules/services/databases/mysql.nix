@@ -353,7 +353,7 @@ in
               ${concatMapStrings (database: ''
                 echo "CREATE DATABASE IF NOT EXISTS ${database};"
               '') cfg.ensureDatabases}
-              ) | ${mysql}/bin/mysql -u root -N
+              ) | ${mysql}/bin/mysql -u root -p${cfg.rootPassword} -N
             ''}
 
             ${concatMapStrings (user:
@@ -362,7 +362,7 @@ in
                   ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
                   echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
                   '') user.ensurePermissions)}
-                ) | ${mysql}/bin/mysql -u root -N
+                ) | ${mysql}/bin/mysql -u root -p${cfg.rootPassword} -N
               '') cfg.ensureUsers}
 
           ''; # */
