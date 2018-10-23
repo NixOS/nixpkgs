@@ -7,7 +7,7 @@
 , mpeg2dec, systemd, gnutls, avahi, libcddb, libjack2, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
 , libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
-, libvdpau, libsamplerate, live555, fluidsynth, wayland, wayland-protocols
+, libvdpau, libsamplerate, fluidsynth, wayland, wayland-protocols
 , onlyLibVLC ? false
 , withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null
 , jackSupport ? false
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     systemd gnutls avahi libcddb SDL SDL_image libmtp unzip taglib libarchive
     libkate libtiger libv4l samba liboggz libass libdvbpsi libva
     xorg.xlibsWrapper xorg.libXv xorg.libXvMC xorg.libXpm xorg.xcbutilkeysyms
-    libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate live555
+    libdc1394 libraw1394 libopus libebml libmatroska libvdpau libsamplerate
     fluidsynth wayland wayland-protocols
   ] ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
     ++ optional jackSupport libjack2;
@@ -45,8 +45,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook perl pkgconfig ];
 
   enableParallelBuilding = true;
-
-  LIVE555_PREFIX = live555;
 
   # vlc depends on a c11-gcc wrapper script which we don't have so we need to
   # set the path to the compiler
