@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libtool, groff, perl, pkgconfig, python2, zlib, gnutls, libidn }:
+{ stdenv, fetchurl, libtool, groff, perl, pkgconfig, python2, zlib, gnutls,
+  libidn2, libunistring, nghttp2 }:
 
 stdenv.mkDerivation rec {
   version = "7.61.1";
@@ -6,13 +7,13 @@ stdenv.mkDerivation rec {
   name = "libgnurl-${version}";
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/gnunet/gnurl-${version}.tar.gz";
+    url = "mirror://gnu/gnunet/gnurl-${version}.tar.gz";
     sha256 = "0y56k15vp3m2r8q6mnc6ivflwq9lv6npdhbbvxxcf4r8vwjhv91q";
   };
 
   nativeBuildInputs = [ libtool groff perl pkgconfig python2 ];
     
-  buildInputs = [ gnutls zlib libidn ];
+  buildInputs = [ gnutls zlib libidn2 libunistring nghttp2 ];
 
   configureFlags = [
     "--disable-ntlm-wb"
