@@ -152,6 +152,20 @@
      has been renamed to <varname>postgresql_9_6</varname>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      Slurm introduces the new option
+      <literal>services.slurm.stateSaveLocation</literal>,
+      which is now set to <literal>/var/spool/slurm</literal> by default
+      (instead of <literal>/var/spool</literal>).
+      Make sure to move all files to the new directory or to set the option accordingly.
+    </para>
+    <para>
+      The slurmctld now runs as user <literal>slurm</literal> instead of <literal>root</literal>.
+      If you want to keep slurmctld running as <literal>root</literal>, set
+      <literal>services.slurm.user = root</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
