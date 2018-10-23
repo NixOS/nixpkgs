@@ -40,6 +40,7 @@
   ./hardware/digitalbitbox.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
+  ./hardware/ledger-nano-s.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
   ./hardware/nitrokey.nix
