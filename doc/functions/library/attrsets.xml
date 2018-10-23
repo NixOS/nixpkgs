@@ -1794,7 +1794,7 @@ lib.attrsets.matchAttrs
 </programlisting>
     returns:
 <programlisting role="output">
-  true
+true
 </programlisting>
    </para>
   </example>
@@ -1946,6 +1946,150 @@ lib.attrsets.overrideExisting
 </programlisting>
 <programlisting role="input"><![CDATA[
 lib.attrsets.getOutput "dev" pkgs.hello
+]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+"/nix/store/00000000000000000000000000000000-hello-2.10-dev"
+]]></programlisting>
+   </para>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.getBin">
+  <title><function>lib.attrsets.getBin</function></title>
+
+  <subtitle><literal>getBin :: Derivation -> Path</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.getBin" />
+
+  <para>
+   Get a package's <literal>bin</literal> output. If no <literal>bin</literal>
+   output exists, fallback to <literal>out</literal> then to the default.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pkg</varname>
+    </term>
+    <listitem>
+     <para>
+      The derivation to get the <literal>bin</literal> output path from.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.getBin-example">
+   <title>Getting the bin output</title>
+   <para>
+<programlisting role="context">
+{
+  pkgs.hello = {
+    outputUnspecified = true;
+    bin = "/nix/store/00000000000000000000000000000000-hello-2.10-bin";
+  };
+}
+</programlisting>
+<programlisting role="input"><![CDATA[
+lib.attrsets.getBin pkgs.hello
+]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+"/nix/store/00000000000000000000000000000000-hello-2.10-bin"
+]]></programlisting>
+   </para>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.getLib">
+  <title><function>lib.attrsets.getLib</function></title>
+
+  <subtitle><literal>getLib :: Derivation -> Path</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.getLib" />
+
+  <para>
+   Get a package's <literal>lib</literal> output. If no <literal>lib</literal>
+   output exists, fallback to <literal>out</literal> then to the default.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pkg</varname>
+    </term>
+    <listitem>
+     <para>
+      The derivation to get the <literal>lib</literal> output path from.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.getLib-example">
+   <title>Getting the lib output</title>
+   <para>
+<programlisting role="context">
+{
+  pkgs.hello = {
+    outputUnspecified = true;
+    lib = "/nix/store/00000000000000000000000000000000-hello-2.10-lib";
+  };
+}
+</programlisting>
+<programlisting role="input"><![CDATA[
+lib.attrsets.getLib pkgs.hello
+]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+"/nix/store/00000000000000000000000000000000-hello-2.10-lib"
+]]></programlisting>
+   </para>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.getDev">
+  <title><function>lib.attrsets.getDev</function></title>
+
+  <subtitle><literal>getDev :: Derivation -> Path</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.getDev" />
+
+  <para>
+   Get a package's <literal>dev</literal> output. If no <literal>dev</literal>
+   output exists, fallback to <literal>out</literal> then to the default.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pkg</varname>
+    </term>
+    <listitem>
+     <para>
+      The derivation to get the <literal>dev</literal> output path from.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.getDev-example">
+   <title>Getting the dev output</title>
+   <para>
+<programlisting role="context">
+{
+  pkgs.hello = {
+    outputUnspecified = true;
+    dev = "/nix/store/00000000000000000000000000000000-hello-2.10-dev";
+  };
+}
+</programlisting>
+<programlisting role="input"><![CDATA[
+lib.attrsets.getDev pkgs.hello
 ]]></programlisting>
     returns:
 <programlisting role="output"><![CDATA[
