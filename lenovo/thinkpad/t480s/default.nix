@@ -3,8 +3,8 @@
 {
   imports = [
     ../../../common/cpu/intel
-    ../acpi_call.nix
-    ../cpu-throttling-bug.nix
+    ../../../common/pc/laptop/acpi_call.nix
+    ../../../common/pc/laptop/cpu-throttling-bug.nix
     ../.
   ];
 }
