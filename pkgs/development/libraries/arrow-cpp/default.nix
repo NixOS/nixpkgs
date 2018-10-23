@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
 
     # patch to fix python-test
     ./darwin.patch
+
+    # facebook/zstd#1385
+    ./zstd136.patch
     ];
 
   nativeBuildInputs = [ cmake ];
