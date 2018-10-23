@@ -13610,7 +13610,7 @@ with pkgs;
     postgresql94
     postgresql95
     postgresql96
-    postgresql100;
+    postgresql10;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 

@@ -123,7 +123,7 @@ in {
     sha256 = "09l4zqs74fqnazdsyln9x657mq3wsbgng9wpvq71yh26cv2sq5c6";
   };
 
-  postgresql100 = common {
+  postgresql10 = common {
     version = "10.5";
     psqlSchema = "10.0";
     sha256 = "04a07jkvc5s6zgh6jr78149kcjmsxclizsqabjw44ld4j5n633kc";
