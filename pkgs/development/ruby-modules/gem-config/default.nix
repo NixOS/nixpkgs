@@ -22,7 +22,7 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
-, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick, libcxx
+, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf, zeromq, graphicsmagick, libcxx, file
 }@args:
 
 let
@@ -216,6 +216,14 @@ in
       "--with-xml2-lib=${libxml2.out}/lib"
       "--with-xml2-include=${libxml2.dev}/include/libxml2"
     ];
+  };
+
+  magic = attrs: {
+    buildInputs = [ file ];
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      sed -e 's@ENV\["MAGIC_LIB"\] ||@ENV\["MAGIC_LIB"\] || "${file}/lib/libmagic.so" ||@' -i $installPath/lib/magic/api.rb
+    '';
   };
 
   msgpack = attrs: {
