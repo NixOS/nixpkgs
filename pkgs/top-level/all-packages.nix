@@ -3459,6 +3459,8 @@ with pkgs;
 
   jira-cli = callPackage ../development/tools/jira_cli { };
 
+  jitterentropy = callPackage ../development/libraries/jitterentropy { };
+
   jl = haskellPackages.callPackage ../development/tools/jl { };
 
   jmespath = callPackage ../development/tools/jmespath { };
