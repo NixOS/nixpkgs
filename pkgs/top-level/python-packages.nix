@@ -4435,6 +4435,8 @@ in {
     };
   };
 
+  owslib = callPackage ../development/python-modules/owslib { };
+
   PyICU = buildPythonPackage rec {
     name = "PyICU-2.0.3";
 
