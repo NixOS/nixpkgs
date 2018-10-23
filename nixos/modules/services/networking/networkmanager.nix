@@ -34,6 +34,8 @@ let
 
     [device]
     wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
+    ${optionalString (cfg.backend == "iwd")
+      ''wifi.backend=iwd''}
 
     ${cfg.extraConfig}
   '';
@@ -186,6 +188,14 @@ in {
         description = ''
           A list of name servers that should be inserted before
           the ones configured in NetworkManager or received by DHCP.
+        '';
+      };
+
+      backend = mkOption {
+        type = types.enum [ "wpa_supplicant" "iwd" ];
+        default = "wpa_supplicant";
+        description = ''
+          Sets the tool used for the wifi backend.
         '';
       };
 
@@ -502,9 +512,11 @@ in {
 
     # Turn off NixOS' network management
     networking = {
-      useDHCP = false;
+      useDHCP = cfg.backend == "iwd";
       # use mkDefault to trigger the assertion about the conflict above
       wireless.enable = lib.mkDefault false;
+
+      wireless.iwd.enable = cfg.backend == "iwd";
     };
 
     security.polkit.extraConfig = polkitConf;
