@@ -5085,7 +5085,7 @@ with pkgs;
     inherit (pythonPackages) sphinx;
   };
 
-  rng_tools = callPackage ../tools/security/rng-tools { };
+  rng-tools = callPackage ../tools/security/rng-tools { };
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
