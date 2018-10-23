@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  pname = "sway-beta";
+  pname = "sway";
   version = "1.0-beta.1";
 
   src = fetchFromGitHub {
