@@ -28,6 +28,9 @@ in buildPythonPackage rec {
   nativeBuildInputs = [ gfortran pytest ];
   buildInputs = [ blas ];
 
+  # If the blas imlementation is MKL, we need to propagate it for the setup-hook.
+  propagatedBuildInputs = [ ] ++ lib.optional (blasImplementation == "mkl") blas;
+
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
     # Patching of numpy.distutils is needed to prevent it from undoing the
@@ -70,8 +73,6 @@ in buildPythonPackage rec {
     blas = blas;
     inherit blasImplementation cfg;
   };
-
-  doCheck = blasImplementation != "mkl";
 
   # Disable two tests
   # - test_f2py: f2py isn't yet on path.

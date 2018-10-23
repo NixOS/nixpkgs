@@ -21190,7 +21190,11 @@ with pkgs;
 
   m4rie = callPackage ../development/libraries/science/math/m4rie { };
 
-  mkl = callPackage ../development/libraries/science/math/mkl { };
+  mkl-pkgs = callPackage ../development/libraries/science/math/mkl {
+    inherit (llvmPackages) openmp;
+  };
+
+  inherit (mkl-pkgs) mkl mkl-unwrapped;
 
   nasc = callPackage ../applications/science/math/nasc { };
 
