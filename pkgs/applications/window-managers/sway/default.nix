@@ -4,7 +4,7 @@
 , pkgconfig, asciidoc, libxslt, docbook_xsl
 , wayland, wlc, libxkbcommon, pcre, json_c, dbus
 , pango, cairo, libinput, libcap, pam, gdk_pixbuf, libpthreadstubs
-, libXdmcp, wlroots, wayland-protocols, git
+, libXdmcp, wlroots, wayland-protocols
 , buildDocs ? true
 }:
 
@@ -50,6 +50,7 @@ let
     enableParallelBuilding = true;
 
     cmakeFlags = "-DVERSION=${version} -DLD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib:";
+    mesonFlags = "-Dsway-version=${version}";
 
     meta = with stdenv.lib; {
       description = "i3-compatible window manager for Wayland";
