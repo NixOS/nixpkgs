@@ -17710,6 +17710,8 @@ with pkgs;
 
   makeself = callPackage ../applications/misc/makeself { };
 
+  mako = callPackage ../applications/misc/mako { };
+
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
   marathon = callPackage ../applications/networking/cluster/marathon { };
