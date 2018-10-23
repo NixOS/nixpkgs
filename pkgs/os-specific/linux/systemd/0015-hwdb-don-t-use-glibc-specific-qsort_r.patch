@@ -1,0 +1,58 @@
+From 17536339a151c6affd944f7d17c1bc4420e1a427 Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 20 Feb 2015 01:10:48 +0000
+Subject: [PATCH 15/31] hwdb: don't use glibc-specific qsort_r
+
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ src/hwdb/hwdb.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/src/hwdb/hwdb.c b/src/hwdb/hwdb.c
+index 446de3a..f844597 100644
+--- a/src/hwdb/hwdb.c
++++ b/src/hwdb/hwdb.c
+@@ -142,13 +142,12 @@ static void trie_free(struct trie *trie) {
+ 
+ DEFINE_TRIVIAL_CLEANUP_FUNC(struct trie*, trie_free);
+ 
+-static int trie_values_cmp(const void *v1, const void *v2, void *arg) {
++static struct trie *trie_node_add_value_trie;
++static int trie_values_cmp(const void *v1, const void *v2) {
+         const struct trie_value_entry *val1 = v1;
+         const struct trie_value_entry *val2 = v2;
+-        struct trie *trie = arg;
+-
+-        return strcmp(trie->strings->buf + val1->key_off,
+-                      trie->strings->buf + val2->key_off);
++        return strcmp(trie_node_add_value_trie->strings->buf + val1->key_off,
++                      trie_node_add_value_trie->strings->buf + val2->key_off);
+ }
+ 
+ static int trie_node_add_value(struct trie *trie, struct trie_node *node,
+@@ -169,7 +168,10 @@ static int trie_node_add_value(struct trie *trie, struct trie_node *node,
+                         .value_off = v,
+                 };
+ 
+-                val = xbsearch_r(&search, node->values, node->values_count, sizeof(struct trie_value_entry), trie_values_cmp, trie);
++                trie_node_add_value_trie = trie;
++                val = bsearch(&search, node->values, node->values_count, sizeof(struct trie_value_entry), trie_values_cmp);
++                trie_node_add_value_trie = NULL;
++
+                 if (val) {
+                         /* replace existing earlier key with new value */
+                         val->value_off = v;
+@@ -186,7 +188,9 @@ static int trie_node_add_value(struct trie *trie, struct trie_node *node,
+         node->values[node->values_count].key_off = k;
+         node->values[node->values_count].value_off = v;
+         node->values_count++;
+-        qsort_r(node->values, node->values_count, sizeof(struct trie_value_entry), trie_values_cmp, trie);
++        trie_node_add_value_trie = trie;
++        qsort(node->values, node->values_count, sizeof(struct trie_value_entry), trie_values_cmp);
++        trie_node_add_value_trie = NULL;
+         return 0;
+ }
+ 
+-- 
+2.5.2
+

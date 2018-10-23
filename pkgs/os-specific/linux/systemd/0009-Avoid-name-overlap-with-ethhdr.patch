@@ -1,0 +1,56 @@
+From 52839a5720d7ee8a8c70623b2a6f2f4bfa45402c Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 19:38:45 -0700
+Subject: [PATCH 09/13] Avoid name overlap with ethhdr
+
+---
+ src/basic/missing.h         | 2 ++
+ src/network/netdev/tuntap.c | 2 ++
+ src/systemd/sd-netlink.h    | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/src/basic/missing.h b/src/basic/missing.h
+index 114aa3960..484e0378d 100644
+--- a/src/basic/missing.h
++++ b/src/basic/missing.h
+@@ -16,7 +16,9 @@
+ #include <linux/oom.h>
+ #include <linux/rtnetlink.h>
+ #include <linux/stat.h>
++#define ethhdr ethhdr_gcc
+ #include <net/ethernet.h>
++#undef ethhdr
+ #include <stdlib.h>
+ #include <sys/resource.h>
+ #include <sys/socket.h>
+diff --git a/src/network/netdev/tuntap.c b/src/network/netdev/tuntap.c
+index 21fb7ab06..d59027134 100644
+--- a/src/network/netdev/tuntap.c
++++ b/src/network/netdev/tuntap.c
+@@ -4,7 +4,9 @@
+ #include <fcntl.h>
+ #include <linux/if_tun.h>
+ #include <net/if.h>
++#define ethhdr ethhdr_gcc
+ #include <netinet/if_ether.h>
++#undef ethhdr
+ #include <sys/ioctl.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
+diff --git a/src/systemd/sd-netlink.h b/src/systemd/sd-netlink.h
+index 51f0fa16b..d2cb5dc6c 100644
+--- a/src/systemd/sd-netlink.h
++++ b/src/systemd/sd-netlink.h
+@@ -18,7 +18,9 @@
+ ***/
+ 
+ #include <inttypes.h>
++#define ethhdr ethhdr_gcc
+ #include <netinet/ether.h>
++#undef ethhdr
+ #include <netinet/in.h>
+ #include <linux/rtnetlink.h>
+ #include <linux/neighbour.h>
+-- 
+2.16.4
+

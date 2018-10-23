@@ -1,0 +1,27 @@
+From bd6f961347d9f83abf9b34c078babafaec7fb1f8 Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 22:19:24 -0700
+Subject: [PATCH 13/13] add ULONG_LONG_MAX
+
+---
+ src/basic/missing.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/basic/missing.h b/src/basic/missing.h
+index cbd781c7c..0ccb69211 100644
+--- a/src/basic/missing.h
++++ b/src/basic/missing.h
+@@ -1150,6 +1150,10 @@ struct input_mask {
+ #define AUDIT_NLGRP_READLOG 1
+ #endif
+ 
++#ifndef ULONG_LONG_MAX
++#define ULONG_LONG_MAX ((unsigned long long) (((unsigned long long) 0) - 1))
++#endif
++
+ #ifndef CAP_MAC_OVERRIDE
+ #define CAP_MAC_OVERRIDE 32
+ #endif
+-- 
+2.16.4
+

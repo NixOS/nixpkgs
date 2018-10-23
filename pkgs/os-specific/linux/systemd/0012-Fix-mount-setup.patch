@@ -1,0 +1,44 @@
+From 7c0e63b6a0f76c596f078115317b853bb6f1f179 Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 20:58:09 -0700
+Subject: [PATCH 12/13] Fix mount-setup
+
+---
+ src/basic/missing.h    | 1 +
+ src/core/mount-setup.c | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/src/basic/missing.h b/src/basic/missing.h
+index 484e0378d..cbd781c7c 100644
+--- a/src/basic/missing.h
++++ b/src/basic/missing.h
+@@ -599,6 +599,7 @@ struct btrfs_ioctl_quota_ctl_args {
+ #endif
+ 
+ #if ! HAVE_FTW_STOP
++#define FTW_CONTINUE 0
+ #define FTW_STOP 1
+ #define FTW_ACTIONRETVAL 0
+ #endif
+diff --git a/src/core/mount-setup.c b/src/core/mount-setup.c
+index 16880e615..ebcc217ee 100644
+--- a/src/core/mount-setup.c
++++ b/src/core/mount-setup.c
+@@ -359,12 +359,14 @@ static int nftw_cb(
+ 
+         (void) label_fix(fpath, 0);
+ 
++#if HAVE_FTW_STOP
+         /* /run/initramfs is static data and big, no need to
+          * dynamically relabel its contents at boot... */
+         if (_unlikely_(ftwbuf->level == 1 &&
+                       tflag == FTW_D &&
+                       streq(fpath, "/run/initramfs")))
+                 return FTW_SKIP_SUBTREE;
++#endif
+ 
+         return FTW_CONTINUE;
+ };
+-- 
+2.16.4
+

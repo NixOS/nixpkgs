@@ -1,0 +1,45 @@
+From 25589c8ca7b2509f0915cbc1a7f516bc50bb6bbc Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 19:11:54 -0700
+Subject: [PATCH 07/13] Don't use GLOB_ALTDIRFUNC
+
+---
+ src/basic/glob-util.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/basic/glob-util.c b/src/basic/glob-util.c
+index 9fac676f2..81d19d40d 100644
+--- a/src/basic/glob-util.c
++++ b/src/basic/glob-util.c
+@@ -18,6 +18,7 @@ static void closedir_wrapper(void* v) {
+ int safe_glob(const char *path, int flags, glob_t *pglob) {
+         int k;
+ 
++#ifdef GLOB_ALTDIRFUNC
+         /* We want to set GLOB_ALTDIRFUNC ourselves, don't allow it to be set. */
+         assert(!(flags & GLOB_ALTDIRFUNC));
+ 
+@@ -34,6 +35,9 @@ int safe_glob(const char *path, int flags, glob_t *pglob) {
+ 
+         errno = 0;
+         k = glob(path, flags | GLOB_ALTDIRFUNC, NULL, pglob);
++#else
++        k = glob(path, flags, NULL, pglob);
++#endif
+ 
+         if (k == GLOB_NOMATCH)
+                 return -ENOENT;
+@@ -47,6 +51,10 @@ int safe_glob(const char *path, int flags, glob_t *pglob) {
+         return 0;
+ }
+ 
++#ifndef GLOB_BRACE
++#define GLOB_BRACE 0
++#endif
++
+ int glob_exists(const char *path) {
+         _cleanup_globfree_ glob_t g = {};
+         int k;
+-- 
+2.16.4
+

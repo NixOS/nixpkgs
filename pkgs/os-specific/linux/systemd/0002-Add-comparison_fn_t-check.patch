@@ -1,0 +1,57 @@
+From deaa345ba610c824fd9d2e702c25f00c4a636f04 Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 18:18:15 -0700
+Subject: [PATCH 02/13] Add comparison_fn_t check
+
+---
+ meson.build      | 2 ++
+ src/basic/util.h | 6 ++++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index a7e08067e..e04f240a9 100644
+--- a/meson.build
++++ b/meson.build
+@@ -426,6 +426,7 @@ decl_headers = '''
+ #include <linux/fib_rules.h>
+ #include <linux/stat.h>
+ #include <sys/stat.h>
++#include <stdlib.h>
+ '''
+ # FIXME: key_serial_t is only defined in keyutils.h, this is bound to fail
+ 
+@@ -435,6 +436,7 @@ foreach decl : ['char16_t',
+                 'struct ethtool_link_settings',
+                 'struct fib_rule_uid_range',
+                 'struct statx',
++                'comparison_fn_t'
+                ]
+ 
+         # We get -1 if the size cannot be determined
+diff --git a/src/basic/util.h b/src/basic/util.h
+index aa77e4cc8..3d6f6d017 100644
+--- a/src/basic/util.h
++++ b/src/basic/util.h
+@@ -72,6 +72,11 @@ void *xbsearch_r(const void *key, const void *base, size_t nmemb, size_t size,
+                  int (*compar) (const void *, const void *, void *),
+                  void *arg);
+ 
++#if ! HAVE_COMPARISON_FN_T
++typedef int(*comparison_fn_t)(const void *, const void *);
++typedef comparison_fn_t __compar_fn_t;
++#endif
++
+ /**
+  * Normal bsearch requires base to be nonnull. Here were require
+  * that only if nmemb > 0.
+@@ -85,6 +90,7 @@ static inline void* bsearch_safe(const void *key, const void *base,
+         return bsearch(key, base, nmemb, size, compar);
+ }
+ 
++
+ /**
+  * Normal qsort requires base to be nonnull. Here were require
+  * that only if nmemb > 0.
+-- 
+2.16.4
+

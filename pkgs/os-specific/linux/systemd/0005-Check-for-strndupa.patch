@@ -1,0 +1,49 @@
+From 14c7b3a2d4e5cd0e8206a93f34188d95f3a993d0 Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 18:45:54 -0700
+Subject: [PATCH 05/13] Check for strndupa
+
+---
+ meson.build         |  3 ++-
+ src/basic/missing.h | 11 +++++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 771aa596a..932bf9712 100644
+--- a/meson.build
++++ b/meson.build
+@@ -503,7 +503,8 @@ foreach ident : [
+                                  #include <unistd.h>'''],
+         ['explicit_bzero' ,   '''#include <string.h>'''],
+         ['reallocarray',      '''#include <malloc.h>'''],
+-        ['parse_printf_format', '''#include <printf.h>''']
++        ['parse_printf_format', '''#include <printf.h>'''],
++        ['strndupa',          '''#include <string.h>''']
+ ]
+ 
+         have = cc.has_function(ident[0], prefix : ident[1], args : '-D_GNU_SOURCE')
+diff --git a/src/basic/missing.h b/src/basic/missing.h
+index 0e33abb9f..63e96b58f 100644
+--- a/src/basic/missing.h
++++ b/src/basic/missing.h
+@@ -596,6 +596,17 @@ struct btrfs_ioctl_quota_ctl_args {
+ #  endif
+ #endif
+ 
++#if ! HAVE_STRNDUPA
++#define strndupa(s, n)                          \
++        ({                                      \
++                const char *__old = (s);        \
++                size_t __len = strnlen(__old, (n));     \
++                char *__new = (char *)alloca(__len + 1);        \
++                __new[__len] = '\0';                            \
++                (char *)memcpy(__new, __old, __len);            \
++        })
++#endif
++
+ #ifndef CIFS_MAGIC_NUMBER
+ #  define CIFS_MAGIC_NUMBER 0xFF534D42
+ #endif
+-- 
+2.16.4
+

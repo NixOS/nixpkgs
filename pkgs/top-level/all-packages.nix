@@ -1477,6 +1477,7 @@ with pkgs;
   opendune = callPackage ../games/opendune { };
 
   meson = callPackage ../development/tools/build-managers/meson { };
+  mesonBuilder = callPackage ../development/tools/build-managers/meson/builder.nix { };
 
   metabase = callPackage ../servers/metabase { };
 

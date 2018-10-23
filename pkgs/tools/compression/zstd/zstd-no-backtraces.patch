@@ -1,0 +1,30 @@
+diff -ruN zstd.orig/programs/fileio.c zstd/programs/fileio.c
+--- zstd.orig/programs/fileio.c	2018-10-22 15:48:59.436884842 -0700
++++ zstd/programs/fileio.c	2018-10-22 20:38:53.095521738 -0700
+@@ -37,7 +37,7 @@
+ #include <assert.h>
+ #include <errno.h>      /* errno */
+ #include <signal.h>
+-#ifdef BACKTRACES_ENABLE
++#if BACKTRACES_ENABLE
+ #  include <execinfo.h>   /* backtrace, backtrace_symbols */
+ #endif
+ 
+@@ -167,7 +167,7 @@
+ /*-*********************************************************
+ *  Termination signal trapping (Print debug stack trace)
+ ***********************************************************/
+-#ifdef BACKTRACES_ENABLE
++#if BACKTRACES_ENABLE
+ 
+ #define MAX_STACK_FRAMES    50
+ 
+@@ -208,7 +208,7 @@
+ 
+ void FIO_addAbortHandler()
+ {
+-#ifdef BACKTRACES_ENABLE
++#if BACKTRACES_ENABLE
+     signal(SIGABRT, ABRThandler);
+     signal(SIGFPE, ABRThandler);
+     signal(SIGILL, ABRThandler);

@@ -1,0 +1,35 @@
+From cc998253278d27090f250a71beecc5be5b0e9b01 Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 18:50:51 -0700
+Subject: [PATCH 06/13] Don't include gshadow.h when disabled
+
+---
+ src/basic/user-util.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/basic/user-util.h b/src/basic/user-util.h
+index b74f16885..c66fd29f1 100644
+--- a/src/basic/user-util.h
++++ b/src/basic/user-util.h
+@@ -2,7 +2,9 @@
+ #pragma once
+ 
+ #include <grp.h>
++#if ENABLE_GSHADOW
+ #include <gshadow.h>
++#endif
+ #include <pwd.h>
+ #include <shadow.h>
+ #include <stdbool.h>
+@@ -102,7 +104,7 @@ int fgetgrent_sane(FILE *stream, struct group **gr);
+ int putpwent_sane(const struct passwd *pw, FILE *stream);
+ int putspent_sane(const struct spwd *sp, FILE *stream);
+ int putgrent_sane(const struct group *gr, FILE *stream);
+-#ifdef ENABLE_GSHADOW
++#if ENABLE_GSHADOW
+ int fgetsgent_sane(FILE *stream, struct sgrp **sg);
+ int putsgent_sane(const struct sgrp *sg, FILE *stream);
+ #endif
+-- 
+2.16.4
+

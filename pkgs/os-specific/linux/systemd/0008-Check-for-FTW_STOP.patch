@@ -1,0 +1,41 @@
+From e9a44c27dc155bf9613895efbeaaa27c0ebb13be Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 19:18:07 -0700
+Subject: [PATCH 08/13] Check for FTW_STOP
+
+---
+ meson.build         | 1 +
+ src/basic/missing.h | 5 +++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 932bf9712..827e07f3f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -469,6 +469,7 @@ foreach decl : [['IFLA_INET6_ADDR_GEN_MODE',         'linux/if_link.h'],
+                 ['FRA_UID_RANGE',                    'linux/fib_rules.h'],
+                 ['LO_FLAGS_PARTSCAN',                'linux/loop.h'],
+                 ['VXCAN_INFO_PEER',                  'linux/can/vxcan.h'],
++                ['FTW_STOP',                         'ftw.h']
+                ]
+         prefix = decl.length() > 2 ? decl[2] : ''
+         have = cc.has_header_symbol(decl[1], decl[0], prefix : prefix)
+diff --git a/src/basic/missing.h b/src/basic/missing.h
+index 63e96b58f..114aa3960 100644
+--- a/src/basic/missing.h
++++ b/src/basic/missing.h
+@@ -596,6 +596,11 @@ struct btrfs_ioctl_quota_ctl_args {
+ #  endif
+ #endif
+ 
++#if ! HAVE_FTW_STOP
++#define FTW_STOP 1
++#define FTW_ACTIONRETVAL 0
++#endif
++
+ #if ! HAVE_STRNDUPA
+ #define strndupa(s, n)                          \
+         ({                                      \
+-- 
+2.16.4
+

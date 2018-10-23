@@ -1,0 +1,25 @@
+From 46bff6b7b77669e5621fe356fa8c77d3bc69dbf6 Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 18:22:32 -0700
+Subject: [PATCH 03/13] Use getenv when secure versions are not available
+
+---
+ src/basic/missing.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/basic/missing.h b/src/basic/missing.h
+index 71a07d057..0e33abb9f 100644
+--- a/src/basic/missing.h
++++ b/src/basic/missing.h
+@@ -592,7 +592,7 @@ struct btrfs_ioctl_quota_ctl_args {
+ #  if HAVE___SECURE_GETENV
+ #    define secure_getenv __secure_getenv
+ #  else
+-#    error "neither secure_getenv nor __secure_getenv are available"
++#    define secure_getenv getenv
+ #  endif
+ #endif
+ 
+-- 
+2.16.4
+

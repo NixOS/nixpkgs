@@ -1,0 +1,26 @@
+From 7525597ea6e06eee45df76e9b5c225bff25820b0 Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 19:38:45 -0700
+Subject: [PATCH 10/13] Avoid name overlap with ethhdr
+
+---
+ src/basic/missing.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/basic/missing.h b/src/basic/missing.h
+index 114aa3960..484e0378d 100644
+--- a/src/basic/missing.h
++++ b/src/basic/missing.h
+@@ -16,7 +16,9 @@
+ #include <linux/oom.h>
+ #include <linux/rtnetlink.h>
+ #include <linux/stat.h>
++#define ethhdr ethhdr_gcc
+ #include <net/ethernet.h>
++#undef ethhdr
+ #include <stdlib.h>
+ #include <sys/resource.h>
+ #include <sys/socket.h>
+-- 
+2.16.4
+

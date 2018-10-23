@@ -6,9 +6,8 @@ mesonConfigurePhase() {
     fi
 
     # Build release by default.
-    echo "Meson target $targetOffset"
     if [ -n "@isCross@" ]; then
-      echo "meson is cross-compiling this package"
+      echo "meson is cross-compiling this package with @crossFile@/cross-file.conf"
       crossMesonFlags="--cross-file=@crossFile@/cross-file.conf"
     fi
 

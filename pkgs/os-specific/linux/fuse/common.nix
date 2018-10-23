@@ -2,7 +2,7 @@
 
 { stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, utillinux, gettext
-, meson, ninja, pkgconfig
+, meson, mesonBuilder, ninja, pkgconfig
 , autoreconfHook
 , python3Packages, which
 }:
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = if isFuse3
     then [ meson ninja pkgconfig ]
     else [ autoreconfHook gettext ];
-  buildInputs = if isFuse3 then [ meson.setupHook ] else meson;
+  buildInputs = if isFuse3 then [ mesonBuilder ] else [];
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
 

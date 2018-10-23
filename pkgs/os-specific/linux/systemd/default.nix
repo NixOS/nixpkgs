@@ -5,13 +5,14 @@
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
 , iptables, gnu-efi
 , gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
-, ninja, meson, python3Packages, glibcLocales
+, ninja, meson, mesonBuilder, python3Packages, glibcLocales
 , patchelf
 , getent
 , buildPackages
 , withSelinux ? false, libselinux
 , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
 , withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
+, enableHibernate ? true, enableBacklight ? true, enableRFKill ? true, enableKmod ? true, enableUtmp ? true
 }:
 
 let
@@ -30,21 +31,37 @@ in stdenv.mkDerivation rec {
     sha256 = "1xci0491j95vdjgs397n618zii3sgwnvanirkblqqw6bcvcjvir1";
   };
 
+  patches = lib.optional stdenv.hostPlatform.isMusl [
+    ./0001-Add-qsort_r-when-not-available.patch
+    ./0002-Add-comparison_fn_t-check.patch
+    ./0003-Use-getenv-when-secure-versions-are-not-available.patch
+    ./0004-Check-for-printf.h.patch
+    ./0005-Check-for-strndupa.patch
+    ./0006-Don-t-include-gshadow.h-when-disabled.patch
+    ./0007-Don-t-use-GLOB_ALTDIRFUNC.patch
+    ./0008-Check-for-FTW_STOP.patch
+    ./0009-Avoid-name-overlap-with-ethhdr.patch
+    ./0010-Allow-option-to-disable-pid-cache.patch
+    ./0011-Include-missing.h-in-uid-range.c.patch
+    ./0012-Fix-mount-setup.patch
+    ./0013-add-ULONG_LONG_MAX.patch
+  ];
+
   outputs = [ "out" "lib" "man" "dev" ];
 
   nativeBuildInputs =
     [ pkgconfig intltool gperf libxslt gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
       ninja meson
-      coreutils # meson calls date, stat etc.
       glibcLocales
       patchelf getent m4
     ];
   buildInputs =
-    [ linuxHeaders libcap.dev kmod xz pam acl
+    [ linuxHeaders libcap.dev xz pam acl
       /* cryptsetup */ libuuid glib libgcrypt libgpgerror libidn2
-      libmicrohttpd pcre2 ] ++
+      libmicrohttpd pcre2 mesonBuilder ] ++
       stdenv.lib.optional withKexectools kexectools ++
       stdenv.lib.optional withLibseccomp libseccomp ++
+      stdenv.lib.optional enableKmod kmod ++
     [ libffi audit lz4 bzip2 libapparmor
       iptables gnu-efi
       # This is actually native, but we already pull it from buildPackages
@@ -66,7 +83,6 @@ in stdenv.mkDerivation rec {
     "-Dtimesyncd=true"
     "-Dfirstboot=false"
     "-Dlocaled=true"
-    "-Dresolve=true"
     "-Dsplit-usr=false"
     "-Dlibcurl=false"
     "-Dlibidn=false"
@@ -91,7 +107,26 @@ in stdenv.mkDerivation rec {
     "-Dsulogin-path=${utillinux}/bin/sulogin"
     "-Dmount-path=${utillinux}/bin/mount"
     "-Dumount-path=${utillinux}/bin/umount"
-  ];
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
+          "-Dgshadow=false"
+          "-Didn=false"
+          "-Dpidcache=false" # musl has no pid cache
+          "-Dmyhostname=false" # requires nsswitch
+          "-Dnss-systemd=false" # requires nsswitch
+          "-Dmachined=false" # requires nsswitch
+          "-Dresolve=false" # requires nsswitch
+          "-Dportabled=false"
+          "-Dtmpfiles=false" # requires irregular globbing
+          "-Dtests=false"
+       ]
+    ++ stdenv.lib.optional (!stdenv.hostPlatform.isMusl) [
+          "-Dresolve=true"
+    ]
+    ++ stdenv.lib.optional (!enableHibernate) "-Dhibernate=false"
+    ++ stdenv.lib.optional (!enableBacklight) "-Dbacklight=false"
+    ++ stdenv.lib.optional (!enableRFKill) "-Drfkill=false"
+    ++ stdenv.lib.optional (!enableKmod) "-Dkmod=false"
+    ++ stdenv.lib.optional (!enableUtmp) "-Dutmp=false";
 
   preConfigure = ''
     mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
@@ -164,10 +199,12 @@ in stdenv.mkDerivation rec {
     # systemd-tmpfiles-setup.service. This interferes with NixOps's
     # send-keys feature (since sshd.service depends indirectly on
     # sysinit.target).
-    mv $out/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev.service $out/lib/systemd/system/multi-user.target.wants/
+    ${stdenv.lib.optionalString (!stdenv.hostPlatform.isMusl) "mv $out/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev.service $out/lib/systemd/system/multi-user.target.wants/"}
 
     mkdir -p $out/example/systemd
-    mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
+    mv $out/lib/{binfmt.d,sysctl.d} $out/example
+    ${stdenv.lib.optionalString (!stdenv.hostPlatform.isMusl) "mv $out/lib/tmpfiles.d $out/example"}
+    ${stdenv.lib.optionalString enableKmod "mv $out/lib/modules-load.d $out/example"}
     mv $out/lib/systemd/{system,user} $out/example/systemd
 
     rm -rf $out/etc/systemd/system

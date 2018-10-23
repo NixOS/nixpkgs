@@ -1,4 +1,4 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll }:
+{ lib, python3Packages, stdenv, substituteAll }:
 
 python3Packages.buildPythonApplication rec {
   version = "0.46.1";
@@ -43,35 +43,12 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  setupHook = ./setup-hook.sh;
-
-  crossFile =
-    writeTextDir "cross-file.conf" ''
-    [binaries]
-    c = '${stdenv.cc.targetPrefix}cc'
-    cpp = '${stdenv.cc.targetPrefix}c++'
-    ar = '${stdenv.cc.bintools.targetPrefix}ar'
-    strip = '${stdenv.cc.bintools.targetPrefix}strip'
-    pkgconfig = 'pkg-config'
-
-    [properties]
-    needs_exe_wrapper = true
-
-    [host_machine]
-    system = '${stdenv.targetPlatform.parsed.kernel.name}'
-    cpu_family = '${stdenv.targetPlatform.parsed.cpu.family}'
-    cpu = '${stdenv.targetPlatform.parsed.cpu.name}'
-    endian = ${if stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
-  '';
-
   # 0.45 update enabled tests but they are failing
   doCheck = false;
   # checkInputs = [ ninja pkgconfig ];
   # checkPhase = "python ./run_project_tests.py";
 
   inherit (stdenv) cc;
-
-  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;

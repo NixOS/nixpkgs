@@ -1,0 +1,63 @@
+From b5aef0f3d38385e18c75470b098eaec5d5464420 Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 19:57:45 -0700
+Subject: [PATCH 10/13] Allow option to disable pid cache
+
+---
+ meson.build              | 3 ++-
+ meson_options.txt        | 3 +++
+ src/basic/process-util.c | 6 ++++++
+ 3 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 827e07f3f..ce28f9702 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1229,7 +1229,8 @@ foreach term : ['utmp',
+                 'smack',
+                 'gshadow',
+                 'idn',
+-                'nss-systemd']
++                'nss-systemd',
++                'pidcache']
+         have = get_option(term)
+         name = 'ENABLE_' + term.underscorify().to_upper()
+         conf.set10(name, have)
+diff --git a/meson_options.txt b/meson_options.txt
+index 16c1f2b2f..c2dd3361b 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -315,3 +315,6 @@ option('oss-fuzz', type : 'boolean', value : 'false',
+        description : 'build against oss-fuzz')
+ option('llvm-fuzz', type : 'boolean', value : 'false',
+        description : 'build against LLVM libFuzzer')
++
++option('pidcache', type : 'boolean', value: 'true',
++       description : 'whether to enable the pid cache')
+diff --git a/src/basic/process-util.c b/src/basic/process-util.c
+index 0a4f917cb..4be1eb73e 100644
+--- a/src/basic/process-util.c
++++ b/src/basic/process-util.c
+@@ -1156,6 +1156,7 @@ void reset_cached_pid(void) {
+ extern int __register_atfork(void (*prepare) (void), void (*parent) (void), void (*child) (void), void * __dso_handle);
+ extern void* __dso_handle __attribute__ ((__weak__));
+ 
++#if ENABLE_PIDCACHE
+ pid_t getpid_cached(void) {
+         static bool installed = false;
+         pid_t current_value;
+@@ -1203,6 +1204,11 @@ pid_t getpid_cached(void) {
+                 return current_value;
+         }
+ }
++#else
++pid_t getpid_cached(void) {
++        return raw_getpid();
++}
++#endif
+ 
+ int must_be_root(void) {
+ 
+-- 
+2.16.4
+

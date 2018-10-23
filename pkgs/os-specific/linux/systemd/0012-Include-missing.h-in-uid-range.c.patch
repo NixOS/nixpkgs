@@ -1,0 +1,24 @@
+From e9064dc2b1cd012633814e273f449271b93d97e2 Mon Sep 17 00:00:00 2001
+From: Travis Athougies <iammisc@gmail.com>
+Date: Mon, 22 Oct 2018 20:43:08 -0700
+Subject: [PATCH 12/13] Include missing.h in uid-range.c
+
+---
+ src/shared/uid-range.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/shared/uid-range.c b/src/shared/uid-range.c
+index 434ce6ff4..04640c804 100644
+--- a/src/shared/uid-range.c
++++ b/src/shared/uid-range.c
+@@ -4,6 +4,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ 
++#include "missing.h"
+ #include "alloc-util.h"
+ #include "macro.h"
+ #include "uid-range.h"
+-- 
+2.16.4
+
