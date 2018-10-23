@@ -2544,6 +2544,8 @@ with pkgs;
 
   fdm = callPackage ../tools/networking/fdm {};
 
+  featherpad = callPackage ../applications/editors/featherpad {};
+
   feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
 
   ferm = callPackage ../tools/networking/ferm { };
