@@ -183,7 +183,7 @@ in
       };
 
       procTrackType = mkOption {
-        type = types.string;
+        type = types.str;
         default = "proctrack/linuxproc";
         description = ''
           Plugin to be used for process tracking on a job step basis.
