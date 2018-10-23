@@ -5864,6 +5864,9 @@ with pkgs;
 
   vimer = callPackage ../tools/misc/vimer { };
 
+  visidata = (newScope python3Packages) ../applications/misc/visidata {
+  };
+
   vit = callPackage ../applications/misc/vit { };
 
   vnc2flv = callPackage ../tools/video/vnc2flv {};
