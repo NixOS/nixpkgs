@@ -29,6 +29,16 @@ buildPythonPackage rec {
 
     # fix the hardcoded value
     substituteInPlace cmake_modules/FindParquet.cmake --replace 'set(PARQUET_ABI_VERSION "1.0.0")' 'set(PARQUET_ABI_VERSION "${_parquet-cpp.version}")'
+
+cp pyarrow/__init__.py pyarrow/__init__.py.bak
+cat >pyarrow/__init__.py <<EOF
+import sys
+print(sys.path)
+import os
+os.getcwd()
+
+EOF
+cat pyarrow/__init__.py.bak >> pyarrow/__init__.py
   '';
 
   preCheck = ''
@@ -57,6 +67,14 @@ cat nix_run_setup
 
   installCheckPhase = ''
     runHook preCheck
+cat >test.py <<EOF
+print(1)
+import pyarrow
+print(2)
+import pyarrow.lib
+print(3)
+EOF
+    ${python.interpreter} test.py
     ${python.interpreter} setup.py test
     runHook postCheck
   '';
