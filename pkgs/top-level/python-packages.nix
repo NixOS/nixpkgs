@@ -1285,9 +1285,9 @@ in {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
-  pytest = self.pytest_37;
+  pytest = self.pytest_39;
 
-  pytest_37 = callPackage ../development/python-modules/pytest {
+  pytest_39 = callPackage ../development/python-modules/pytest {
     # hypothesis tests require pytest that causes dependency cycle
     hypothesis = self.hypothesis.override { doCheck = false; };
   };

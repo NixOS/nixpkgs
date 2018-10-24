@@ -3,7 +3,7 @@
 , atomicwrites, mock, writeText, pathlib2
 }:
 buildPythonPackage rec {
-  version = "3.7.4";
+  version = "3.9.2";
   pname = "pytest";
 
   preCheck = ''
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d7c49e931316cc7d1638a3e5f54f5d7b4e5225972b3c9838f3584788d27f349";
+    sha256 = "212be78a6fa5352c392738a49b18f74ae9aeec1040f47c81cadbfd8d1233c310";
   };
 
   checkInputs = [ hypothesis mock ];
