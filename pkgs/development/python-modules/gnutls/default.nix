@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "python-gnutls";
-  version = "3.0.0";
+  version = "3.1.1";
 
   # https://github.com/AGProjects/python-gnutls/issues/2
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
+    sha256 = "0ncsz72i6vrhvxpd90y9k74qdfw3pfcj39pvn5dxp6m834ani4l8";
   };
 
   propagatedBuildInputs = [ pkgs.gnutls ];

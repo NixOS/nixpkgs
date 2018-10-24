@@ -1,9 +1,9 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gocode-${version}";
-  version = "20180727-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "00e7f5ac290aeb20a3d8d31e737ae560a191a1d5";
+  name = "gocode-unstable-${version}";
+  version = "2018-10-22";
+  rev = "e893215113e5f7594faa3a8eb176c2700c921276";
 
   goPackagePath = "github.com/mdempsky/gocode";
 
@@ -13,11 +13,14 @@ buildGoPackage rec {
   allowGoReference = true;
 
   src = fetchFromGitHub {
+    inherit rev;
+
     owner = "mdempsky";
     repo = "gocode";
-    inherit rev;
-    sha256 = "0vrwjq4r90za47hm88yx5h2mvkv7y4yaj2xbx3skg62wq2drsq31";
+    sha256 = "1zsll7yghv64890k7skl0g2lg9rsaiisgrfnb8kshsxrcxi1kc2l";
   };
+
+  goDeps = ./deps.nix;
 
   preBuild = ''
     # getting an error building the testdata because they contain invalid files

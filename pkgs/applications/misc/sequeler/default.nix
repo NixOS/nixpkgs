@@ -4,7 +4,7 @@
 
 
 let
-  version = "0.6.2";
+  version = "0.6.3";
   sqlGda = libgda.override {
     mysqlSupport = true;
     postgresSupport = true;
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     owner = "Alecaddd";
     repo = "sequeler";
     rev = "v${version}";
-    sha256 = "0j5z3z34jc1acclmlkjpv7fcs4f2gf0bcfnvcpn3zdzw9fzj0sw7";
+    sha256 = "14a0i9y003m4pvdfp4ax7jfxvyzvyfg45zhln44rm08rfngb0f7k";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig vala gobjectIntrospection gettext wrapGAppsHook python3 desktop-file-utils ];

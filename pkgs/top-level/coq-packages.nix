@@ -40,6 +40,7 @@ let
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       tlc = callPackage ../development/coq-modules/tlc {};
+      Velisarios = callPackage ../development/coq-modules/Velisarios {};
     };
 
   filterCoqPackages = coq:

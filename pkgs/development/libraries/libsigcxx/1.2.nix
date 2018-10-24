@@ -11,10 +11,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ m4];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://libsigcplusplus.github.io/libsigcplusplus/;
     description = "A typesafe callback system for standard C++";
     branch = "1.2";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = licenses.lgpl3;
   };
 }

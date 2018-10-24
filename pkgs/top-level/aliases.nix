@@ -322,6 +322,9 @@ mapAliases ({
   xpraGtk3 = xpra; # added 2018-09-13
   youtubeDL = youtube-dl;  # added 2014-10-26
 
+  # TODO(ekleog): add ‘wasm’ alias to ‘ocamlPackages.wasm’ after 19.03
+  # branch-off
+
   # added 2017-05-27
   wineMinimal = winePackages.minimal;
   wineFull = winePackages.full;
