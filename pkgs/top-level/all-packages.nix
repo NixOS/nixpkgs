@@ -21193,6 +21193,8 @@ with pkgs;
     mpi = openmpi;
   };
 
+  QuadProgpp = callPackage ../development/libraries/science/math/QuadProgpp { };
+
   scs = callPackage ../development/libraries/science/math/scs {
     liblapack = liblapackWithoutAtlas;
   };
