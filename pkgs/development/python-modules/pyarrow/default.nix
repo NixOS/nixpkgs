@@ -49,11 +49,10 @@ buildPythonPackage rec {
     rm pyarrow/tests/deserialize_buffer.py
     substituteInPlace pyarrow/tests/test_feather.py --replace "test_deserialize_buffer_in_different_process" "_disabled"
 
-    # remove $out from PYTHON_PATH
-    sed -i '1iimport sys; print(sys.path.pop(0))' nix_run_setup
+    # remove pwd from PYTHONPATH
+    export PYTHONPATH=$(printf "$PYTHONPATH" | sed "s|$TMP||")
+echo $PYTHONPATH
   '';
-
-PYTHONVERBOSE=1;
 
   ARROW_HOME = _arrow-cpp;
   PARQUET_HOME = _parquet-cpp;
