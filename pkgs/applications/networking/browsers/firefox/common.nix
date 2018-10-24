@@ -9,7 +9,8 @@
 , yasm, libGLU_combined, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, icu, libpng, jemalloc, glib
-, autoconf213, which, gnused, cargo, rustc, llvmPackages
+, autoconf213, which, gnused, cargo, rustc, rust_1_29, llvmPackages
+, rust-cbindgen, nodejs-8_x
 , debugBuild ? false
 
 ### optionals
@@ -96,7 +97,11 @@ stdenv.mkDerivation (rec {
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 
   nativeBuildInputs =
-    [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
+    [ autoconf213 which gnused pkgconfig perl python2 ]
+    # >= 63 requires at least rust version 1.28 and a matching cargo version
+    ++ (if lib.versionAtLeast version "63" then [
+      rust_1_29.rustc rust_1_29.cargo rust-cbindgen nodejs-8_x
+    ] else [rustc cargo])
     ++ lib.optional gtk3Support wrapGAppsHook ++ extraNativeBuildInputs;
 
   preConfigure = ''
@@ -160,8 +165,9 @@ stdenv.mkDerivation (rec {
     "--enable-webrender=build"
   ]
 
-  # TorBrowser patches these
-  ++ lib.optionals (!isTorBrowserLike) [
+  # TorBrowser patches these and for version <63.0 we still use our own nss &
+  # nspr, for newer ones we do just use whatever firefox ships
+  ++ lib.optionals (!isTorBrowserLike && (lib.versionOlder version "63")) [
     "--with-system-nss"
     "--with-system-nspr"
   ]
@@ -196,6 +202,10 @@ stdenv.mkDerivation (rec {
                            "--enable-strip" ])
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
   ++ extraConfigureFlags;
+
+  postPatch = lib.optionalString (lib.versionAtLeast version "63.0" && !isTorBrowserLike) ''
+    substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
+  '';
 
   # Before 58 we have to run `make -f client.mk configure-files` at
   # the top level, and then run `./configure` in the obj-* dir (see
