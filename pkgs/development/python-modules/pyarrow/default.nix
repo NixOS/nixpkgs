@@ -50,7 +50,7 @@ buildPythonPackage rec {
     substituteInPlace pyarrow/tests/test_feather.py --replace "test_deserialize_buffer_in_different_process" "_disabled"
 
     # remove $out from PYTHON_PATH
-    sed -i '1iimport sys; sys.path.pop(0)' nix_run_setup
+    sed -i '1iimport sys; print(sys.path.pop(0))' nix_run_setup
   '';
 
   ARROW_HOME = _arrow-cpp;
