@@ -48,7 +48,13 @@ buildPythonPackage rec {
     # when it is not intended to be imported at all
     rm pyarrow/tests/deserialize_buffer.py
     substituteInPlace pyarrow/tests/test_feather.py --replace "test_deserialize_buffer_in_different_process" "_disabled"
+
+set -x
+env
+cat nix_run_setup
   '';
+
+#  preFixup = "set -x";
 
   ARROW_HOME = _arrow-cpp;
   PARQUET_HOME = _parquet-cpp;
@@ -59,7 +65,7 @@ buildPythonPackage rec {
     description = "A cross-language development platform for in-memory data";
     homepage = https://arrow.apache.org/;
     license = lib.licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.darwin;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }
