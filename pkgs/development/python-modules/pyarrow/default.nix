@@ -55,7 +55,7 @@ pwd
 cat nix_run_setup
   '';
 
-  installCheckPhase = attrs.checkPhase or ''
+  installCheckPhase = ''
     runHook preCheck
     ${python.interpreter} setup.py test
     runHook postCheck
