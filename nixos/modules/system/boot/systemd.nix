@@ -327,6 +327,7 @@ let
           '' else ""}
           ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
           ${attrsToSection def.serviceConfig}
+          ${optionalString (def.extraConfigService != null) def.extraConfigService}
         '';
     };
 

@@ -354,6 +354,19 @@ in rec {
       apply = v: if isList v then v else [ v ];
     };
 
+    extraConfigService = mkOption {
+      type = types.lines;
+      default = "";
+      example = ''
+        PrivateTmp=true
+        LimitMEMLOCK=infinity
+        LimitNOFILE=65535
+      '';
+      description = ''
+        Extra configuration to add to the [Service] section.
+      '';
+    };
+
   };
 
 
