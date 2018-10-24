@@ -10534,6 +10534,8 @@ with pkgs;
 
   libsignal-protocol-c = callPackage ../development/libraries/libsignal-protocol-c { };
 
+  libsignon-glib = callPackage ../development/libraries/libsignon-glib { };
+
   libsoundio = callPackage ../development/libraries/libsoundio {
     inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
