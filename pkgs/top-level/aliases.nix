@@ -234,6 +234,7 @@ mapAliases ({
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
+  rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
   rssglx = rss-glx; #added 2015-03-25
   ruby_2_0_0 = throw "deprecated 2018-0213: use a newer version of ruby";
