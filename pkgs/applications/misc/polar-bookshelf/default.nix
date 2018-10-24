@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, fetchurl
-, dpkg, wrapGAppsHook
+, dpkg, wrapGAppsHook, autoPatchelfHook
 , gtk3, cairo, gnome2, atk, gdk_pixbuf, glib
 , at-spi2-atk, dbus, libX11, libxcb, libXi
 , libXcursor, libXdamage, libXrandr, libXcomposite
@@ -22,41 +22,38 @@ stdenv.mkDerivation rec {
     gnome3.gsettings_desktop_schemas
     glib
     gtk3
+    cairo
+    gnome2.pango
+    atk
+    gdk_pixbuf
+    glib
+    at-spi2-atk
+    dbus
+    libX11
+    libxcb
+    libXi
+    libXcursor
+    libXdamage
+    libXrandr
+    libXcomposite
+    libXext
+    libXfixes
+    libXrender
+    libXtst
+    libXScrnSaver
+    nss
+    nspr
+    alsaLib
+    cups
+    fontconfig
+    expat
   ];
 
   nativeBuildInputs = [ 
     wrapGAppsHook
+    autoPatchelfHook
     makeWrapper 
     dpkg
-  ];
-
-  libPath = lib.makeLibraryPath [
-      gtk3
-      cairo
-      gnome2.pango
-      atk
-      gdk_pixbuf
-      glib
-      at-spi2-atk
-      dbus
-      libX11
-      libxcb
-      libXi
-      libXcursor
-      libXdamage
-      libXrandr
-      libXcomposite
-      libXext
-      libXfixes
-      libXrender
-      libXtst
-      libXScrnSaver
-      nss
-      nspr
-      alsaLib
-      cups
-      fontconfig
-      expat
   ];
 
   runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl nghttp2 ];
@@ -77,14 +74,6 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    for lib in $out/lib/*.so; do
-      patchelf --set-rpath "$out/lib:${libPath}" $lib
-    done
-
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-             --set-rpath "$out/lib:${libPath}" \
-             $out/bin/polar-bookshelf 
-
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${runtimeLibs}" )
   '';
 
