@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     homepage = https://bitcoinclassic.com/;
     maintainers = with maintainers; [ jefdaj ];
     license = licenses.mit;
+    broken = stdenv.isDarwin;
     platforms = platforms.unix;
   };
 }

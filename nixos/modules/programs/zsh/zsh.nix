@@ -70,7 +70,7 @@ in
       promptInit = mkOption {
         default = ''
           if [ "$TERM" != dumb ]; then
-            autoload -U promptinit && promptinit && prompt walters
+              autoload -U promptinit && promptinit && prompt walters
           fi
         '';
         description = ''
@@ -116,7 +116,9 @@ in
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
         export __ETC_ZSHENV_SOURCED=1
 
-        ${config.system.build.setEnvironment.text}
+        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+            . ${config.system.build.setEnvironment}
+        fi
 
         ${cfge.shellInit}
 
@@ -124,7 +126,7 @@ in
 
         # Read system-wide modifications.
         if test -f /etc/zshenv.local; then
-          . /etc/zshenv.local
+            . /etc/zshenv.local
         fi
       '';
 
@@ -143,7 +145,7 @@ in
 
         # Read system-wide modifications.
         if test -f /etc/zprofile.local; then
-          . /etc/zprofile.local
+            . /etc/zprofile.local
         fi
       '';
 
@@ -169,7 +171,7 @@ in
 
         # Tell zsh how to find installed completions
         for p in ''${(z)NIX_PROFILES}; do
-          fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
+            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
         done
 
         ${optionalString cfg.enableGlobalCompInit "autoload -U compinit && compinit"}
@@ -184,7 +186,7 @@ in
 
         # Read system-wide modifications.
         if test -f /etc/zshrc.local; then
-          . /etc/zshrc.local
+            . /etc/zshrc.local
         fi
       '';
 

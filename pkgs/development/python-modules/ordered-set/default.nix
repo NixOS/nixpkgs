@@ -1,10 +1,10 @@
-{ buildPythonPackage, fetchPypi, lib, pytest }:
+{ buildPythonPackage, fetchPypi, lib, pytest, pytestrunner }:
 
 buildPythonPackage rec {
   pname = "ordered-set";
   version = "3.0.1";
 
-  buildInputs = [ pytest ];
+  buildInputs = [ pytest pytestrunner ];
 
   src = fetchPypi {
     inherit pname version;
@@ -21,6 +21,3 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.MostAwesomeDude ];
   };
 }
-
-
-

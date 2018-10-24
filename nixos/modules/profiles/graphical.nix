@@ -11,5 +11,5 @@
     libinput.enable = true; # for touchpad support on many laptops
   };
 
-  environment.systemPackages = [ pkgs.glxinfo ];
+  environment.systemPackages = [ pkgs.glxinfo pkgs.firefox ];
 }

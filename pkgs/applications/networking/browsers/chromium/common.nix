@@ -1,4 +1,4 @@
-{ stdenv, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
+{ stdenv, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -139,11 +139,6 @@ let
     # (gentooPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000")
       ./patches/fix-freetype.patch
       ./patches/nix_plugin_paths_68.patch
-    ]  ++ optionals (versionRange "68" "69") [
-      ./patches/remove-webp-include-68.patch
-      (githubPatch "4d10424f9e2a06978cdd6cdf5403fcaef18e49fc" "11la1jycmr5b5rw89mzcdwznmd2qh28sghvz9klr1qhmsmw1vzjc")
-      (githubPatch "56cb5f7da1025f6db869e840ed34d3b98b9ab899" "04mp5r1yvdvdx6m12g3lw3z51bzh7m3gr73mhblkn4wxdbvi3dcs")
-    ]  ++ optionals (versionAtLeast version "69") [
       ./patches/remove-webp-include-69.patch
     ] ++ optional enableWideVine ./patches/widevine.patch;
 
@@ -243,15 +238,11 @@ let
     configurePhase = ''
       runHook preConfigure
 
-      # Build gn
-      python tools/gn/bootstrap/bootstrap.py -v -s --no-clean
-      PATH="$PWD/out/Release:$PATH"
-
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"
       python build/linux/unbundle/replace_gn_files.py \
         --system-libraries ${toString gnSystemLibraries}
-      gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
+      ${gn}/bin/gn gen --args=${escapeShellArg gnFlags} out/Release | tee gn-gen-outputs.txt
 
       # Fail if `gn gen` contains a WARNING.
       grep -o WARNING gn-gen-outputs.txt && echo "Found gn WARNING, exiting nix build" && exit 1

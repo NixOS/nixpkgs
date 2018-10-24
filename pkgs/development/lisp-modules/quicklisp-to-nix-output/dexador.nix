@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''dexador'';
-  version = ''20180328-git'';
+  version = ''20180831-git'';
 
   description = ''Yet another HTTP client for Common Lisp'';
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."chipz" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-cookie" args."cl-fad" args."cl-ppcre" args."cl-reexport" args."cl-utilities" args."fast-http" args."fast-io" args."flexi-streams" args."local-time" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."usocket" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/dexador/2018-03-28/dexador-20180328-git.tgz'';
-    sha256 = ''13kqm1knm13rskgqyvabj284nxi68f8h3grq54snly0imw6s0ikb'';
+    url = ''http://beta.quicklisp.org/archive/dexador/2018-08-31/dexador-20180831-git.tgz'';
+    sha256 = ''1isc4srz2ijg92lpws79ik8vgn9l2pzx4w3aqgri7n3pzfvfn6bs'';
   };
 
   packageName = "dexador";
@@ -18,9 +18,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM dexador DESCRIPTION Yet another HTTP client for Common Lisp SHA256
-    13kqm1knm13rskgqyvabj284nxi68f8h3grq54snly0imw6s0ikb URL
-    http://beta.quicklisp.org/archive/dexador/2018-03-28/dexador-20180328-git.tgz
-    MD5 27eaa0c3c15e6e12e5d6046d62e4394f NAME dexador FILENAME dexador DEPS
+    1isc4srz2ijg92lpws79ik8vgn9l2pzx4w3aqgri7n3pzfvfn6bs URL
+    http://beta.quicklisp.org/archive/dexador/2018-08-31/dexador-20180831-git.tgz
+    MD5 f2859026d90e63e79e8e4728168fab13 NAME dexador FILENAME dexador DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
@@ -48,4 +48,4 @@ rec {
      fast-http fast-io flexi-streams local-time proc-parse quri smart-buffer
      split-sequence static-vectors trivial-features trivial-garbage
      trivial-gray-streams trivial-mimes usocket xsubseq)
-    VERSION 20180328-git SIBLINGS (dexador-test) PARASITES NIL) */
+    VERSION 20180831-git SIBLINGS (dexador-test) PARASITES NIL) */

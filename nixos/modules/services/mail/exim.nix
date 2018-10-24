@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkIf mkOption singleton types;
-  inherit (pkgs) coreutils exim;
+  inherit (pkgs) coreutils;
   cfg = config.services.exim;
 in
 
@@ -57,6 +57,16 @@ in
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.exim;
+        defaultText = "pkgs.exim";
+        description = ''
+          The Exim derivation to use.
+          This can be used to enable features such as LDAP or PAM support.
+        '';
+      };
+
     };
 
   };
@@ -74,7 +84,7 @@ in
         spool_directory = ${cfg.spoolDir}
         ${cfg.config}
       '';
-      systemPackages = [ exim ];
+      systemPackages = [ cfg.package ];
     };
 
     users.users = singleton {
@@ -89,14 +99,14 @@ in
       gid = config.ids.gids.exim;
     };
 
-    security.wrappers.exim.source = "${exim}/bin/exim";
+    security.wrappers.exim.source = "${cfg.package}/bin/exim";
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
-        ExecStart   = "${exim}/bin/exim -bdf -q30m";
+        ExecStart   = "${cfg.package}/bin/exim -bdf -q30m";
         ExecReload  = "${coreutils}/bin/kill -HUP $MAINPID";
       };
       preStart = ''

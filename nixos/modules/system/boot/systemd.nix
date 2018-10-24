@@ -886,6 +886,9 @@ in
     #systemd.services.systemd-logind.restartTriggers = [ config.environment.etc."systemd/logind.conf".source ];
     systemd.services.systemd-logind.restartIfChanged = false;
     systemd.services.systemd-logind.stopIfChanged = false;
+    # The user-runtime-dir@ service is managed by systemd-logind we should not touch it or else we break the users' sessions.
+    systemd.services."user-runtime-dir@".stopIfChanged = false;
+    systemd.services."user-runtime-dir@".restartIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
     systemd.services.systemd-journald.stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;

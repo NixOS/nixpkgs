@@ -1,12 +1,14 @@
 { buildPythonPackage
 , fetchPypi
 , zope_interface
+, sphinx, manuel
 }:
 
 buildPythonPackage rec {
   pname = "persistent";
   version = "4.4.2";
 
+  nativeBuildInputs = [ sphinx manuel ];
   propagatedBuildInputs = [ zope_interface ];
 
   src = fetchPypi {

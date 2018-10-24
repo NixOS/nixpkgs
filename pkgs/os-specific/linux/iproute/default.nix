@@ -1,6 +1,4 @@
-{ fetchurl, stdenv, config, flex, bash, bison, db, iptables, pkgconfig
-, libelf
-}:
+{ fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf }:
 
 stdenv.mkDerivation rec {
   name = "iproute2-${version}";
@@ -28,9 +26,8 @@ stdenv.mkDerivation rec {
     "HDRDIR=$(TMPDIR)/include/iproute2" # Don't install headers
   ];
 
-  # enable iproute2 module if you want this folder to be created
   buildFlags = [
-    "CONFDIR=${config.iproute2.confDir or "/run/iproute2"}"
+    "CONFDIR=/etc/iproute2"
   ];
 
   installFlags = [
