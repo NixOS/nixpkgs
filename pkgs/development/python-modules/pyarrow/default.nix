@@ -33,10 +33,11 @@ buildPythonPackage rec {
 cp pyarrow/__init__.py pyarrow/__init__.py.bak
 cat >pyarrow/__init__.py <<EOF
 import sys
-print(sys.path)
 import os
 os.getcwd()
 print("sys.path.pop(0) {}".format(sys.path.pop(0)))
+print(sys.path)
+from .lib import cpu_count, set_cpu_count
 EOF
 cat pyarrow/__init__.py.bak >> pyarrow/__init__.py
   '';
@@ -63,6 +64,7 @@ set -x
 env
 pwd
 cat nix_run_setup
+find "$out" -print0 | xargs -0 touch -t 7001010000
 ls -laR "$out"
 echo -------------------------------------
 echo -------------------------------------
@@ -78,12 +80,15 @@ echo -------------------------------------
 echo -------------------------------------
 echo -------------------------------------
 #rm pyarrow/__init__.py
+find . -print0 | xargs -0 touch -t 7001010000
 ls -laR .
   '';
 
   checkPhase = ''
     runHook preCheck
 cat >test.py <<EOF
+import sys
+print("test.py: sys.path.pop(0) {}".format(sys.path.pop(0)))
 print(1)
 import pyarrow
 print(2)
