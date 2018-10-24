@@ -6013,11 +6013,6 @@ with pkgs;
     libpng = libpng12;
   };
 
-  truecrypt = callPackage ../applications/misc/truecrypt {
-    stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
-    wxGUI = config.truecrypt.wxGUI or true;
-  };
-
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
   ttwatch = callPackage ../tools/misc/ttwatch { };
@@ -21137,7 +21132,7 @@ with pkgs;
   liblapackWithAtlas = liblapack;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
-  
+
   lrs = callPackage ../development/libraries/science/math/lrs { };
 
   m4ri = callPackage ../development/libraries/science/math/m4ri { };
