@@ -36,7 +36,7 @@ import sys
 print(sys.path)
 import os
 os.getcwd()
-
+print("sys.path.pop(0) {}".format(sys.path.pop(0)))
 EOF
 cat pyarrow/__init__.py.bak >> pyarrow/__init__.py
   '';
@@ -63,16 +63,32 @@ set -x
 env
 pwd
 cat nix_run_setup
+ls -laR "$out"
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+#rm pyarrow/__init__.py
+ls -laR .
   '';
 
-  installCheckPhase = ''
+  checkPhase = ''
     runHook preCheck
 cat >test.py <<EOF
 print(1)
 import pyarrow
 print(2)
-import pyarrow.lib
-print(3)
+#import pyarrow.lib
+#print(3)
 EOF
     ${python.interpreter} test.py
     ${python.interpreter} setup.py test
