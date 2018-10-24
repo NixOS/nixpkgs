@@ -158,6 +158,11 @@
     github = "alexanderkjeldaas";
     name = "Alexander Kjeldaas";
   };
+  akavel = {
+    email = "czapkofan@gmail.com";
+    github = "akavel";
+    name = "Mateusz Czapliński";
+  };
   akaWolf = {
     email = "akawolf0@gmail.com";
     github = "akaWolf";
@@ -3636,6 +3641,11 @@
     github = "roosemberth";
     name = "Roosembert (Roosemberth) Palacios";
   };
+  royneary = {
+    email = "christian@ulrich.earth";
+    github = "royneary";
+    name = "Christian Ulrich";
+  };
   rprospero = {
     email = "rprospero+nix@gmail.com";
     github = "rprospero";
@@ -4147,11 +4157,6 @@
     email = "mail@tazj.in";
     github = "tazjin";
     name = "Vincent Ambo";
-  };
-  TealG = {
-    email = "~@Teal.Gr";
-    github = "TealG";
-    name = "Teal Gaure";
   };
   teh = {
     email = "tehunger@gmail.com";

@@ -555,8 +555,6 @@ let
     };
   };
 
-  ArchiveZip_1_53 = ArchiveZip;
-
   AudioScan = buildPerlPackage rec {
     name = "Audio-Scan-1.01";
     src = fetchurl {
@@ -4474,7 +4472,6 @@ let
     };
   };
 
-  DigestHMAC_SHA1 = DigestHMAC;
   DigestJHash = buildPerlPackage rec {
     name = "Digest-JHash-0.10";
     src = fetchurl {
@@ -12116,7 +12113,7 @@ let
       sha256 = "18wxvp7psqrx0zdvg47azrals572hv9fx1s3p0q65s87lnk3q63l";
     };
     outputs = [ "out" ];
-    buildInputs = [ DBDmysql DBI DigestMD5 IOSocketSSL TermReadKey TimeHiRes ];
+    buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey TimeHiRes ];
     meta = {
       description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
       homepage = http://www.percona.com/software/percona-toolkit;
@@ -14141,7 +14138,7 @@ let
       sha256 = "1y9lfhxgwyysybing72n3hng2db5njpk2dbb80vskdz75r7ffqjp";
     };
 
-    buildInputs = [ ArchiveZip_1_53 pkgs.file ];
+    buildInputs = [ ArchiveZip pkgs.file ];
     meta.broken = true;
   };
 
@@ -14155,7 +14152,7 @@ let
       sha256 = "1y9lfhxgwyysybing72n3hng2db5njpk2dbb80vskdz75r7ffqjp";
     };
 
-    buildInputs = [ ArchiveZip_1_53 libfile-stripnondeterminism pkgs.file ];
+    buildInputs = [ ArchiveZip libfile-stripnondeterminism pkgs.file ];
 
     meta = with stdenv.lib; {
       description = "A Perl module for stripping bits of non-deterministic information";
@@ -14221,7 +14218,6 @@ let
     };
   };
 
-  SubExporterUtil = SubExporter;
   SubIdentify = buildPerlPackage rec {
     name = "Sub-Identify-0.14";
     src = fetchurl {
@@ -17589,6 +17585,19 @@ let
       sha256 = "0phpkc4li43m2g44hdcvyxzy9pymqwlqhh5hwp2xc0cv8l5lp8lb";
     };
     propagatedBuildInputs = [ XMLRegExp libxml_perl ];
+  };
+
+  XMLFeedPP = buildPerlPackage rec {
+    name = "XML-FeedPP-0.95";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
+      sha256 = "1x5806xwmbqxr1dkdhalb6d7n31s3ya776klkai7c2x6y6drbhwh";
+    };
+    propagatedBuildInputs = [ XMLTreePP ];
+    meta = {
+      description = "Parse/write/merge/edit RSS/RDF/Atom syndication feeds";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   XMLFilterBufferText = buildPerlPackage {
