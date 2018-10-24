@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "kerberos";
-  version = "1.2.4";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11q9jhzdl88jh8jgn7cycq034m36g2ncxds7mr3vqkngpcirkx6n";
+    sha256 = "19663qxmma0i8bfbjc2iwy5hgq0g4pfb75r023v5dps68zfvffgh";
   };
 
   buildInputs = [ pkgs.kerberos ];
