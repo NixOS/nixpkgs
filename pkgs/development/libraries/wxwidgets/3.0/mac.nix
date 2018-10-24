@@ -1,10 +1,8 @@
 { stdenv, fetchurl, fetchpatch, expat, libiconv, libjpeg, libpng, libtiff, zlib
 # darwin only attributes
-, derez, rez, setfile
+, cf-private, derez, rez, setfile
 , AGL, Cocoa, Kernel
 }:
-
-with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "3.0.2";
@@ -55,6 +53,10 @@ stdenv.mkDerivation rec {
     expat libiconv libjpeg libpng libtiff zlib
     derez rez setfile
     Cocoa Kernel
+
+    # Needed for CFURLGetFSRef, etc. which have deen deprecated
+    # since 10.9 and are not part of swift-corelibs CoreFoundation.
+    cf-private
   ];
 
   propagatedBuildInputs = [ AGL ];
@@ -98,7 +100,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     platforms = platforms.darwin;
     license = licenses.wxWindows;
     maintainers = [ maintainers.lnl7 ];
