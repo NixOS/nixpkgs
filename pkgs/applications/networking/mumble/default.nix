@@ -118,12 +118,21 @@ let
       sha256 = "1s60vaici3v034jzzi20x23hsj6mkjlc0glipjq4hffrg9qgnizh";
     };
 
-    # Fix compile error against boost 1.66 (#33655):
-    patches = singleton (fetchpatch {
-      url = "https://github.com/mumble-voip/mumble/commit/"
-          + "ea861fe86743c8402bbad77d8d1dd9de8dce447e.patch";
-      sha256 = "1r50dc8dcl6jmbj4abhnay9div7y56kpmajzqd7ql0pm853agwbh";
-    });
+    patches = [
+      # Fix compile error against boost 1.66 (#33655):
+      (fetchpatch {
+        url = "https://github.com/mumble-voip/mumble/commit/"
+            + "ea861fe86743c8402bbad77d8d1dd9de8dce447e.patch";
+        sha256 = "1r50dc8dcl6jmbj4abhnay9div7y56kpmajzqd7ql0pm853agwbh";
+      })
+      # Fixes hang on reconfiguring audio (often including startup)
+      # https://github.com/mumble-voip/mumble/pull/3418
+      (fetchpatch {
+        url = "https://github.com/mumble-voip/mumble/commit/"
+            + "fbbdf2e8ab7d93ed6f7680268ad0689b7eaa71ad.patch";
+        sha256 = "1yhj62mlwm6q42i4aclbia645ha97d3j4ycxhgafr46dbjs0gani";
+      })
+    ];
   };
 
   gitSource = rec {

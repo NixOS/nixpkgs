@@ -130,6 +130,13 @@
       were removed. They were never used for anything and can therefore safely be removed.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Package <literal>wasm</literal> has been renamed <literal>proglodyte-wasm</literal>. The package
+     <literal>wasm</literal> will be pointed to <literal>ocamlPackages.wasm</literal> in 19.09, so
+     make sure to update your configuration if you want to keep <literal>proglodyte-wasm</literal>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

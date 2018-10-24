@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, libjack2, libGL, pkgconfig, xorg }:
+{ stdenv, fetchFromGitHub, libjack2, libGL, pkgconfig, xorg }:
 
 stdenv.mkDerivation rec {
   name = "dragonfly-reverb-${src.rev}";
 
-  src = fetchgit {
-    url = "https://github.com/michaelwillis/dragonfly-reverb";
-    rev = "0.9.1";
-    sha256 = "1dbykx044h768bbzabdagl4jh65gqgfsxsrarjrkp07sqnhlnhpd";
+  src = fetchFromGitHub {
+    owner = "michaelwillis";
+    repo = "dragonfly-reverb";
+    rev = "0.9.4";
+    sha256 = "0lc45jybjwg4wrcz4s9lvzpvqawgj825rkqhz2xxvalfbvjazi53";
+    fetchSubmodules = true;
   };
 
   patchPhase = ''

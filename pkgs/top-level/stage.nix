@@ -56,7 +56,7 @@
 , # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
   overlays
-}:
+} @args:
 
 let
   stdenvAdapters = self: super:
@@ -159,6 +159,19 @@ let
         };
       };
     };
+
+    # Extend the package set with zero or more overlays. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    appendOverlays = extraOverlays:
+      import ./stage.nix (args // { overlays = args.overlays ++ extraOverlays; });
+
+    # Extend the package set with a single overlay. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    # Prefer appendOverlays if used repeatedly.
+    extend = f: self.appendOverlays [f];
+
   };
 
   # The complete chain of package set builders, applied from top to bottom.
