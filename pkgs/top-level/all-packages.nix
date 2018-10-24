@@ -4154,6 +4154,8 @@ with pkgs;
 
   modemmanager = callPackage ../tools/networking/modem-manager {};
 
+  modem-manager-gui = callPackage ../applications/networking/modem-manager-gui {};
+
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
 
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
