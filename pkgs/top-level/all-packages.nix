@@ -17153,6 +17153,8 @@ with pkgs;
     gtk = gtk3;
   };
 
+  homely = callPackage ../applications/misc/homely {};
+
   howl = callPackage ../applications/editors/howl { };
 
   ht = callPackage ../applications/editors/ht { };
@@ -22772,4 +22774,5 @@ with pkgs;
   };
 
   tsung = callPackage ../applications/networking/tsung {};
+
 }
