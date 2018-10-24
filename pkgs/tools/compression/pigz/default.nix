@@ -28,9 +28,10 @@ stdenv.mkDerivation {
       install -Dm755 pigz.pdf "$out/share/doc/pigz/pigz.pdf"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.zlib.net/pigz/;
     description = "A parallel implementation of gzip for multi-core machines";
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.zlib;
+    platforms = platforms.unix;
   };
 }

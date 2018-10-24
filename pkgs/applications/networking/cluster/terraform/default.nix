@@ -1,4 +1,13 @@
-{ stdenv, lib, buildEnv, buildGoPackage, fetchFromGitHub, makeWrapper }:
+{ stdenv
+, lib
+, buildEnv
+, buildGoPackage
+, fetchFromGitHub
+, makeWrapper
+, runCommand
+, writeText
+, terraform-providers
+}:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -34,7 +43,7 @@ let
         description = "Tool for building, changing, and versioning infrastructure";
         homepage = https://www.terraform.io/;
         license = licenses.mpl20;
-        maintainers = with maintainers; [ jgeerds zimbatm peterhoeg ];
+        maintainers = with maintainers; [ jgeerds zimbatm peterhoeg kalbasit ];
       };
     } // attrs');
 
@@ -75,7 +84,7 @@ let
             });
     in withPlugins (_: []);
 
-  plugins = import ./providers { inherit lib buildGoPackage fetchFromGitHub; };
+  plugins = removeAttrs terraform-providers ["override" "overrideDerivation" "recurseForDerivations"];
 in rec {
   terraform_0_8_5 = generic {
     version = "0.8.5";
@@ -111,4 +120,25 @@ in rec {
   });
 
   terraform_0_11-full = terraform_0_11.withPlugins lib.attrValues;
+
+  # Tests that the plugins are being used. Terraform looks at the specific
+  # file pattern and if the plugin is not found it will try to download it
+  # from the Internet. With sandboxing enable this test will fail if that is
+  # the case.
+  terraform_plugins_test = let
+    mainTf = writeText "main.tf" ''
+      resource "random_id" "test" {}
+    '';
+    terraform = terraform_0_11.withPlugins (p: [ p.random ]);
+    test = runCommand "terraform-plugin-test" { buildInputs = [terraform]; }
+      ''
+        set -e
+        # make it fail outside of sandbox
+        export HTTP_PROXY=http://127.0.0.1:0 HTTPS_PROXY=https://127.0.0.1:0
+        cp ${mainTf} main.tf
+        terraform init
+        touch $out
+      '';
+  in test;
+
 }

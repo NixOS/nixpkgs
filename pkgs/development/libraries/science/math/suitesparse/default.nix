@@ -1,31 +1,32 @@
-{ stdenv, fetchurl, gfortran, openblas
+{ stdenv, fetchurl, gfortran, openblas, cmake
 , enableCuda  ? false, cudatoolkit
 }:
 
 let
-  version = "4.4.4";
+  version = "5.3.0";
   name = "suitesparse-${version}";
 
-  int_t = if openblas.blas64 then "int64_t" else "int32_t";
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   inherit name;
 
   src = fetchurl {
     url = "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${version}.tar.gz";
-    sha256 = "1zdn1y0ij6amj7smmcslkqgbqv9yy5cwmbyzqc9v6drzdzllgbpj";
+    sha256 = "0gcn1xj3z87wpp26gxn11k8073bxv6jswfd8jmddlm64v09rgrlh";
   };
+
+  dontUseCmakeConfigure = true;
 
   preConfigure = ''
     mkdir -p $out/lib
     mkdir -p $out/include
+    mkdir -p $out/share/doc/${name}
 
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
         -e 's/METIS .*$/METIS =/' \
         -e 's/METIS_PATH .*$/METIS_PATH =/' \
-        -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION -DLONGBLAS=${int_t}/' \
-        -e '/UMFPACK_CONFIG/ s/$/-DLONGBLAS=${int_t}/'
+        -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION/'
   ''
   + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
@@ -47,48 +48,56 @@ stdenv.mkDerivation {
         -e 's|^[[:space:]]*\(NVCCFLAGS     =\)|NVCCFLAGS = $(NV20) -O3 -gencode=arch=compute_20,code=sm_20 -gencode=arch=compute_30,code=sm_30 -gencode=arch=compute_35,code=sm_35 -gencode=arch=compute_60,code=sm_60|'
   '';
 
-  makeFlags = [
-    "PREFIX=\"$(out)\""
-    "INSTALL_LIB=$(out)/lib"
-    "INSTALL_INCLUDE=$(out)/include"
-    "BLAS=-lopenblas"
-    "LAPACK="
-  ];
-
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin " -DNTIMER";
 
-  postInstall = ''
-    # Build and install shared library
+  buildPhase = ''
+    runHook preBuild
+
+    # Build individual shared libraries
+    make library        \
+        BLAS=-lopenblas \
+        LAPACK=""       \
+        ${stdenv.lib.optionalString openblas.blas64 "CFLAGS=-DBLAS64"}
+
+    # Build libsuitesparse.so which bundles all the individual libraries.
+    # Bundling is done by building the static libraries, extracting objects from
+    # them and combining the objects into one shared library.
+    mkdir -p static
+    make static AR_TARGET=$(pwd)/static/'$(LIBRARY).a'
     (
-        cd "$(mktemp -d)"
-        for i in "$out"/lib/lib*.a; do
+        cd static
+        for i in lib*.a; do
           ar -x $i
         done
-        ${if enableCuda then cudatoolkit else stdenv.cc.outPath}/bin/${if enableCuda then "nvcc" else "cc"} *.o ${if stdenv.isDarwin then "-dynamiclib" else "--shared"} -o "$out/lib/libsuitesparse${SHLIB_EXT}" -lopenblas ${stdenv.lib.optionalString enableCuda "-lcublas"}
     )
-    for i in umfpack cholmod amd camd colamd spqr; do
-      ln -s libsuitesparse${SHLIB_EXT} "$out"/lib/lib$i${SHLIB_EXT}
-    done
+    ${if enableCuda then "${cudatoolkit}/bin/nvcc" else "${stdenv.cc.outPath}/bin/cc"} \
+        static/*.o                                                                     \
+        ${if stdenv.isDarwin then "-dynamiclib" else "--shared"}                       \
+        -o "lib/libsuitesparse${SHLIB_EXT}"                                            \
+        -lopenblas                                                                     \
+        ${stdenv.lib.optionalString enableCuda "-lcublas"}
 
-    # Install documentation
-    outdoc=$out/share/doc/${name}
-    mkdir -p $outdoc
-    cp -r AMD/Doc $outdoc/amd
-    cp -r BTF/Doc $outdoc/bft
-    cp -r CAMD/Doc $outdoc/camd
-    cp -r CCOLAMD/Doc $outdoc/ccolamd
-    cp -r CHOLMOD/Doc $outdoc/cholmod
-    cp -r COLAMD/Doc $outdoc/colamd
-    cp -r CXSparse/Doc $outdoc/cxsparse
-    cp -r KLU/Doc $outdoc/klu
-    cp -r LDL/Doc $outdoc/ldl
-    cp -r RBio/Doc $outdoc/rbio
-    cp -r SPQR/Doc $outdoc/spqr
-    cp -r UMFPACK/Doc $outdoc/umfpack
+    runHook postBuild
   '';
 
-  nativeBuildInputs = [ gfortran ];
-  buildInputs = [ openblas ];
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out
+    cp -r lib $out/
+    cp -r include $out/
+    cp -r share $out/
+
+    # Fix rpaths
+    cd $out
+    find -name \*.so\* -type f -exec \
+      patchelf --set-rpath "$out/lib:${stdenv.lib.makeLibraryPath buildInputs}" {} \;
+
+    runHook postInstall
+  '';
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ openblas gfortran.cc.lib ] ++ stdenv.lib.optionals enableCuda [cudatoolkit];
 
   meta = with stdenv.lib; {
     homepage = http://faculty.cse.tamu.edu/davis/suitesparse.html;

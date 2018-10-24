@@ -4,6 +4,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:str="http://exslt.org/strings"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:nixos="tag:nixos.org"
                 xmlns="http://docbook.org/ns/docbook"
                 extension-element-prefixes="str"
                 >
@@ -30,10 +31,12 @@
 
             <listitem>
 
-              <para>
-                <xsl:value-of disable-output-escaping="yes"
-                              select="attr[@name = 'description']/string/@value" />
-              </para>
+              <nixos:option-description>
+                <para>
+                  <xsl:value-of disable-output-escaping="yes"
+                                select="attr[@name = 'description']/string/@value" />
+                </para>
+              </nixos:option-description>
 
               <xsl:if test="attr[@name = 'type']">
                 <para>

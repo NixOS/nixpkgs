@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.7";
+  version = "1.4.12";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "1wmxly94pn8527092hyzg5mq58mg7qlc46nm31f268wb2dm67rvm";
+    sha256 = "0maa4h5zdykq050hdqk5wd74dhl6k7br3qrhfd4f2387skk8ky7a";
   };
 
   patchPhase = ''
@@ -87,15 +87,23 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
+  ''
+  + stdenv.lib.optionalString (!purgeNixReferences) ''
+    cp -r src $out/lib/sbcl
+    cp -r contrib $out/lib/sbcl
+    cat >$out/lib/sbcl/sbclrc <<EOF
+     (setf (logical-pathname-translations "SYS")
+       '(("SYS:SRC;**;*.*.*" #P"$out/lib/sbcl/src/**/*.*")
+         ("SYS:CONTRIB;**;*.*.*" #P"$out/lib/sbcl/contrib/**/*.*")))
+    EOF
   '';
 
-  # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
-  setupHook = writeText "setupHook.sh" ''
+  setupHook = stdenv.lib.optional purgeNixReferences (writeText "setupHook.sh" ''
     addEnvHooks "$targetOffset" _setSbclHome
     _setSbclHome() {
       export SBCL_HOME='@out@/lib/sbcl/'
     }
-  '';
+  '');
 
   meta = sbclBootstrap.meta // {
     inherit version;

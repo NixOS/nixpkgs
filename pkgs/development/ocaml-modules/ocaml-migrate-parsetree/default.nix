@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, jbuilder, result }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, dune, result }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "ocaml-migrate-parsetree is not available for OCaml ${ocaml.version}"
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
      sha256 = "05kbgs9n1x64fk6g3wbjnwjd17w10k3k8dzglnc45xg4hr7z651n";
    };
 
-   buildInputs = [ ocaml findlib ocamlbuild jbuilder ];
+   buildInputs = [ ocaml findlib ocamlbuild dune ];
    propagatedBuildInputs = [ result ];
 
-   inherit (jbuilder) installPhase;
+   inherit (dune) installPhase;
 
    meta = {
      description = "Convert OCaml parsetrees between different major versions";

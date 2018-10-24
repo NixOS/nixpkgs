@@ -3,8 +3,8 @@
 , factorio-utils
 , releaseType
 , mods ? []
-, username ? "" , password ? ""
-, experimental ? false
+, username ? "", token ? "" # get/reset token at https://factorio.com/profile
+, experimental ? false # true means to always use the latest branch
 }:
 
 assert releaseType == "alpha"
@@ -13,59 +13,103 @@ assert releaseType == "alpha"
 
 let
 
-  # NB If you nix-prefetch-url any of these, be sure to add a --name arg,
-  #    where the ultimate "_" (before the version) is changed to a "-".
+  helpMsg = ''
+
+    ===FETCH FAILED===
+    Please ensure you have set the username and token with config.nix, or
+    /etc/nix/nixpkgs-config.nix if on NixOS.
+
+    Your token can be seen at https://factorio.com/profile (after logging in). It is
+    not as sensitive as your password, but should still be safeguarded. There is a
+    link on that page to revoke/invalidate the token, if you believe it has been
+    leaked or wish to take precautions.
+
+    Example:
+    {
+      packageOverrides = pkgs: {
+        factorio = pkgs.factorio.override {
+          username = "FactorioPlayer1654";
+          token = "d5ad5a8971267c895c0da598688761";
+        };
+      };
+    }
+
+    Alternatively, instead of providing the username+token, you may manually
+    download the release through https://factorio.com/download , then add it to
+    the store using e.g.:
+
+      releaseType=alpha
+      version=0.16.51
+      nix-prefetch-url file://$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
+
+    Note the ultimate "_" is replaced with "-" in the --name arg!
+  '';
+
   branch = if experimental then "experimental" else "stable";
+
+  # NB `experimental` directs us to take the latest build, regardless of its branch;
+  # hence the (stable, experimental) pairs may sometimes refer to the same distributable.
   binDists = {
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
       alpha = {
-        stable        = bdist { sha256 = "0b4hbpdcrh5hgip9q5dkmw22p66lcdhnr0kmb0w5dw6yi7fnxxh0"; fetcher = authenticatedFetch; };
-        experimental  = bdist { sha256 = "1qwfivl5wf0ii8c4prdl4yili23qimsh2cj874r37q3ygpjk3bd3"; version = "0.16.50"; fetcher = authenticatedFetch; };
+        stable        = bdist { sha256 = "0b4hbpdcrh5hgip9q5dkmw22p66lcdhnr0kmb0w5dw6yi7fnxxh0"; version = "0.16.51"; withAuth = true; };
+        experimental  = bdist { sha256 = "0b4hbpdcrh5hgip9q5dkmw22p66lcdhnr0kmb0w5dw6yi7fnxxh0"; version = "0.16.51"; withAuth = true; };
       };
       headless = {
-        stable        = bdist { sha256 = "0zrnpg2js0ysvx9y50h3gajldk16mv02dvrwnkazh5kzr1d9zc3c"; };
-        experimental  = bdist { sha256 = "00691kr85p58qpxf3889p20nrgsvsyspx3c8yd11dkg46wly06z1"; version = "0.16.50"; };
+        stable        = bdist { sha256 = "0zrnpg2js0ysvx9y50h3gajldk16mv02dvrwnkazh5kzr1d9zc3c"; version = "0.16.51"; };
+        experimental  = bdist { sha256 = "0zrnpg2js0ysvx9y50h3gajldk16mv02dvrwnkazh5kzr1d9zc3c"; version = "0.16.51"; };
       };
       demo = {
         stable        = bdist { sha256 = "0zf61z8937yd8pyrjrqdjgd0rjl7snwrm3xw86vv7s7p835san6a"; version = "0.16.51"; };
-        experimental  = bdist { };
       };
     };
     i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
       alpha = {
-        stable        = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; nameMut = asGz; };
-        experimental  = bdist { };
-      };
-      headless = {
-        stable        = bdist { };
-        experimental  = bdist { };
-      };
-      demo = {
-        stable        = bdist { };
-        experimental  = bdist { };
+        stable        = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; withAuth = true; nameMut = asGz; };
       };
     };
   };
-  actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio: unsupported platform");
 
-  bdistForArch = arch: { sha256 ? null
-                       , version ? "0.16.51"
-                       , fetcher ? fetchurl
+  actual = binDists.${stdenv.hostPlatform.system}.${releaseType}.${branch} or (throw "Factorio ${releaseType}-${branch} binaries for ${stdenv.hostPlatform.system} are not available for download.");
+
+  bdistForArch = arch: { version
+                       , sha256
+                       , withAuth ? false
                        , nameMut ? x: x
                        }:
-    if sha256 == null then
-      throw "Factorio ${releaseType}-${arch.inTar} binaries are not (and were never?) available to download"
-    else {
+    let
+      url = "https://factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
+      name = nameMut "factorio_${releaseType}_${arch.inTar}-${version}.tar.xz";
+    in {
       inherit version arch;
-      src = fetcher {
-        inherit sha256;
-        url = "https://www.factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
-        name = nameMut "factorio_${releaseType}_${arch.inTar}-${version}.tar.xz";
-      };
+      src =
+        if withAuth then
+          (stdenv.lib.overrideDerivation
+            (fetchurl {
+              inherit name url sha256;
+              curlOpts = [
+                "--get"
+                "--data-urlencode" "username@username"
+                "--data-urlencode" "token@token"
+              ];
+            })
+            (_: { # This preHook hides the credentials from /proc
+                  preHook = ''
+                    echo -n "${username}" >username
+                    echo -n "${token}"    >token
+                  '';
+                  failureHook = ''
+                    cat <<EOF
+                    ${helpMsg}
+                    EOF
+                  '';
+            })
+          )
+        else
+          fetchurl { inherit name url sha256; };
     };
-  authenticatedFetch = callPackage ./fetch.nix { inherit username password; };
-  asGz = builtins.replaceStrings [".xz"] [".gz"];
 
+  asGz = builtins.replaceStrings [".xz"] [".gz"];
 
   configBaseCfg = ''
     use-system-read-write-data-directories=false

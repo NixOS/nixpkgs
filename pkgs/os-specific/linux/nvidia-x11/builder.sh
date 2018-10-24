@@ -26,32 +26,44 @@ buildPhase() {
     fi
 }
 
-    
+
 installPhase() {
     # Install libGL and friends.
+
+    # since version 391, 32bit libraries are bundled in the 32/ sub-directory
+    if [ "$i686bundled" = "1" ]; then
+        mkdir -p "$lib32/lib"
+        cp -prd 32/*.so.* 32/tls "$lib32/lib/"
+    fi
+
     mkdir -p "$out/lib"
     cp -prd *.so.* tls "$out/lib/"
-    rm $out/lib/lib{glx,nvidia-wfb}.so.* # handled separately
-    rm -f $out/lib/libnvidia-gtk* # built from source
-    if [ "$useGLVND" = "1" ]; then
-        # Pre-built libglvnd
-        rm $out/lib/lib{GL,GLX,EGL,GLESv1_CM,GLESv2,OpenGL,GLdispatch}.so.*
-    fi
-    # Use ocl-icd instead
-    rm $out/lib/libOpenCL.so*
-    # Move VDPAU libraries to their place
-    mkdir $out/lib/vdpau
-    mv $out/lib/libvdpau* $out/lib/vdpau
 
-    # Install ICDs.
-    install -Dm644 nvidia.icd $out/etc/OpenCL/vendors/nvidia.icd
-    if [ -e nvidia_icd.json.template ]; then
-        sed "s#__NV_VK_ICD__#libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
-        install -Dm644 nvidia_icd.json $out/share/vulkan/icd.d/nvidia.json
-    fi
-    if [ "$useGLVND" = "1" ]; then
-        install -Dm644 10_nvidia.json $out/share/glvnd/egl_vendor.d/nvidia.json
-    fi
+    for i in $lib32 $out; do
+        rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately
+        rm -f $i/lib/libnvidia-gtk* # built from source
+        if [ "$useGLVND" = "1" ]; then
+            # Pre-built libglvnd
+            rm $i/lib/lib{GL,GLX,EGL,GLESv1_CM,GLESv2,OpenGL,GLdispatch}.so.*
+        fi
+        # Use ocl-icd instead
+        rm -f $i/lib/libOpenCL.so*
+        # Move VDPAU libraries to their place
+        mkdir $i/lib/vdpau
+        mv $i/lib/libvdpau* $i/lib/vdpau
+
+        # Install ICDs.
+        install -Dm644 nvidia.icd $i/etc/OpenCL/vendors/nvidia.icd
+        if [ -e nvidia_icd.json.template ]; then
+            sed "s#__NV_VK_ICD__#libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
+            install -Dm644 nvidia_icd.json $i/share/vulkan/icd.d/nvidia.json
+        fi
+        if [ "$useGLVND" = "1" ]; then
+            install -Dm644 10_nvidia.json $i/share/glvnd/egl_vendor.d/nvidia.json
+        fi
+
+    done
+
 
     if [ -n "$bin" ]; then
         # Install the X drivers.
@@ -60,7 +72,7 @@ installPhase() {
         mkdir -p $bin/lib/xorg/modules/drivers
         cp -p nvidia_drv.so $bin/lib/xorg/modules/drivers
         mkdir -p $bin/lib/xorg/modules/extensions
-        cp -p libglx.so.* $bin/lib/xorg/modules/extensions
+        cp -p libglx*.so* $bin/lib/xorg/modules/extensions
 
         # Install the kernel module.
         mkdir -p $bin/lib/modules/$kernelVersion/misc
@@ -78,7 +90,7 @@ installPhase() {
     fi
 
     # All libs except GUI-only are installed now, so fixup them.
-    for libname in `find "$out/lib/" -name '*.so.*'` `test -z "$bin" || find "$bin/lib/" -name '*.so.*'`
+    for libname in $(find "$out/lib/" $(test -n "$lib32" && echo "$lib32/lib/") $(test -n "$bin" && echo "$bin/lib/") -name '*.so.*')
     do
       # I'm lazy to differentiate needed libs per-library, as the closure is the same.
       # Unfortunately --shrink-rpath would strip too much.

@@ -1,29 +1,33 @@
 { lib
 , pkgs
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pytest
 }:
 
 buildPythonPackage rec {
   pname   = "DendroPy";
   version = "4.4.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f0a0e2ce78b3ed213d6c1791332d57778b7f63d602430c1548a5d822acf2799c";
+  # tests are incorrectly packaged in pypi version
+  src = fetchFromGitHub {
+    owner = "jeetsukumaran";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "097hfyv2kaf4x92i4rjx0paw2cncxap48qivv8zxng4z7nhid0x9";
   };
-
-  prePatch = ''
-    # Test removed/disabled and reported upstream: https://github.com/jeetsukumaran/DendroPy/issues/74
-    rm -f dendropy/test/test_dataio_nexml_reader_tree_list.py
-  '';
 
   preCheck = ''
     # Needed for unicode python tests
     export LC_ALL="en_US.UTF-8"
+    cd tests  # to find the 'support' module
   '';
 
-  checkInputs = [ pkgs.glibcLocales ];
+  checkInputs = [ pytest pkgs.glibcLocales ];
+
+  checkPhase = ''
+    pytest -k 'not test_dataio_nexml_reader_tree_list and not test_pscores_with'
+  '';
 
   meta = {
     homepage = http://dendropy.org/;

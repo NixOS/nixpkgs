@@ -5,6 +5,7 @@
 , pkgconfig
 , granite
 , vala_0_40
+, python3
 , gnome3
 , libxml2
 , gettext
@@ -37,6 +38,7 @@ in stdenv.mkDerivation rec {
     ninja
     pkgconfig
     vala_0_40
+    python3
     wrapGAppsHook
   ];
 

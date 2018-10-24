@@ -44,9 +44,22 @@ in
       enable = mkEnableOption "yabar";
 
       package = mkOption {
-        default = pkgs.yabar;
-        example = literalExample "pkgs.yabar-unstable";
+        default = pkgs.yabar-unstable;
+        example = literalExample "pkgs.yabar";
         type = types.package;
+
+        # `yabar-stable` segfaults under certain conditions.
+        apply = x: if x == pkgs.yabar-unstable then x else flip warn x ''
+          It's not recommended to use `yabar' with `programs.yabar', the (old) stable release
+          tends to segfault under certain circumstances:
+
+          * https://github.com/geommer/yabar/issues/86
+          * https://github.com/geommer/yabar/issues/68
+          * https://github.com/geommer/yabar/issues/143
+
+          Most of them don't occur on master anymore, until a new release is published, it's recommended
+          to use `yabar-unstable'.
+        '';
 
         description = ''
           The package which contains the `yabar` binary.

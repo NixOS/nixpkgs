@@ -17,10 +17,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libndtypes ];
 
-  configureFlags = [ "XND_INCLUDE='-I${libndtypes}/include'"
-                     "XND_LINK='-L${libndtypes}/lib'" ];
-
-  makeFlags = [ "CONFIGURE_LDFLAGS='-shared'" ];
+  # Override linker with cc (symlink to either gcc or clang)
+  # Library expects to use cc for linking
+  configureFlags = [ "LD=${stdenv.cc.targetPrefix}cc" ];
 
   meta = {
     description = "General container that maps a wide range of Python values directly to memory";

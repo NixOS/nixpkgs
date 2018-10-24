@@ -5,9 +5,9 @@
 let
   ## fetchgit info
   url = git://sourceware.org/git/systemtap.git;
-  rev = "4051c70c9318c837981384cbb23f3e9eb1bd0892";
-  sha256 = "0sd8n3j3rishks3gyqj2jyqhps7hmlfjyz8i0w8v98cczhhh04rq";
-  version = "2017.10.18";
+  rev = "release-${version}";
+  sha256 = "0hckbmrlcz5nj438409fmdjjaaqzf68r2242v10lkssw5daia1gj";
+  version = "3.3";
 
   inherit (kernel) stdenv;
   inherit (stdenv) lib;
@@ -18,12 +18,6 @@ let
     src = fetchgit { inherit url rev sha256; };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
-    # FIXME: Workaround for bug in kbuild, where quoted -I"/foo" flags would get mangled in out-of-tree kbuild dirs
-    postPatch = ''
-      substituteInPlace buildrun.cxx --replace \
-        'o << "EXTRA_CFLAGS += -I\"" << s.runtime_path << "\"" << endl;' \
-        'o << "EXTRA_CFLAGS += -I" << s.runtime_path << endl;'
-    '';
     enableParallelBuilding = true;
   };
 
@@ -53,7 +47,7 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   };
 } ''
   mkdir -p $out/bin
-  for bin in $stapBuild/bin/*; do # hello emacs */
+  for bin in $stapBuild/bin/*; do
     ln -s $bin $out/bin
   done
   rm $out/bin/stap $out/bin/dtrace

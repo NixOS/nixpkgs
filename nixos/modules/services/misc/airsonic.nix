@@ -73,6 +73,24 @@ in {
           ${cfg.home}/transcoders.
         '';
       };
+
+      jvmOptions = mkOption {
+        description = ''
+          Extra command line options for the JVM running AirSonic.
+          Useful for sending jukebox output to non-default alsa
+          devices.
+        '';
+        default = [
+        ];
+        type = types.listOf types.str;
+        example = [
+          "-Djavax.sound.sampled.Clip='#CODEC [plughw:1,0]'"
+          "-Djavax.sound.sampled.Port='#Port CODEC [hw:1]'"
+          "-Djavax.sound.sampled.SourceDataLine='#CODEC [plughw:1,0]'"
+          "-Djavax.sound.sampled.TargetDataLine='#CODEC [plughw:1,0]'"
+        ];
+      };
+
     };
   };
 
@@ -98,6 +116,7 @@ in {
           -Dserver.port=${toString cfg.port} \
           -Dairsonic.contextPath=${cfg.contextPath} \
           -Djava.awt.headless=true \
+          ${toString cfg.jvmOptions} \
           -verbose:gc \
           -jar ${pkgs.airsonic}/webapps/airsonic.war
         '';

@@ -31,10 +31,7 @@ in
     libcxxabi = pkgs.libcxxabi;
   };
 
-  cf-private = callPackage ../os-specific/darwin/cf-private {
-    inherit (apple-source-releases) CF;
-    inherit (darwin) osx_private_sdk;
-  };
+  cf-private = callPackage ../os-specific/darwin/cf-private { inherit (darwin) CF apple_sdk; };
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 
@@ -76,7 +73,10 @@ in
 
   CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication { };
 
-  swift-corelibs = callPackages ../os-specific/darwin/swift-corelibs { };
+  CF = callPackage ../os-specific/darwin/swift-corelibs/corefoundation.nix { inherit (darwin) objc4 ICU; };
+  
+  # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
+  # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { inherit (darwin) apple_sdk_sierra xnu; };
 
   darling = callPackage ../os-specific/darwin/darling/default.nix { };
 

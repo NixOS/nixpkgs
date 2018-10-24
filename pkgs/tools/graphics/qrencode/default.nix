@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     homepage = https://fukuchi.org/works/qrencode/;
     description = "QR code encoder";
     platforms = platforms.all;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ yegortimoshenko ];
   };
 }

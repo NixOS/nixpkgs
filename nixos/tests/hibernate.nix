@@ -35,8 +35,8 @@ import ./make-test.nix (pkgs: {
       $machine->waitForOpenPort(4444);
       $machine->succeed("systemctl hibernate &");
       $machine->waitForShutdown;
+      $probe->waitForUnit("multi-user.target");
       $machine->start;
-      $probe->waitForUnit("network.target");
       $probe->waitUntilSucceeds("echo test | nc machine 4444 -N");
     '';
 

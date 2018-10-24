@@ -1,12 +1,10 @@
 { qtModule, stdenv, lib, fetchurl
-, qtbase, qtdeclarative, qtlocation, qtsensors, qtwebchannel
+, qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
 , fontconfig, gdk_pixbuf, gtk2, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
 , bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin
 , flashplayerFix ? false
-, src ? null
-, version ? null
 }:
 
 let
@@ -25,7 +23,9 @@ let
 in
 qtModule {
   name = "qtwebkit";
-  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ qtwebchannel ];
+  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors ]
+    ++ optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
+    ++ optional (lib.versionAtLeast qtbase.version "5.11.0") qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
     ++ optionals (stdenv.isDarwin) (with darwin.apple_sdk.frameworks; [ OpenGL ])
     ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ hyphen ];
@@ -34,9 +34,6 @@ qtModule {
   ] ++ optionals (lib.versionAtLeast qtbase.version "5.11.0") [ cmake ];
 
   cmakeFlags = optionals (lib.versionAtLeast qtbase.version "5.11.0") [ "-DPORT=Qt" ];
-
-  inherit src;
-  inherit version;
 
   __impureHostDeps = optionals (stdenv.isDarwin) [
     "/usr/lib/libicucore.dylib"

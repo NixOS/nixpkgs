@@ -6,8 +6,10 @@
 # compiler and the linker just "work".
 
 { name ? ""
-, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, stdenvNoCC
 , cc ? null, libc ? null, bintools, coreutils ? null, shell ? stdenvNoCC.shell
+, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, propagateDoc ? cc != null && cc ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
@@ -75,7 +77,7 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
 
   inherit cc libc_bin libc_dev libc_lib bintools coreutils_bin;
-  shell = getBin shell + stdenv.lib.optionalString (stdenv ? shellPath) stdenv.shellPath;
+  shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   inherit targetPrefix infixSalt;

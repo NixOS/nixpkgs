@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # TODO: Change back once tests/bug753605-atsize.jpg is part of the dist tarball
   # src = fetchurl {
-  #   url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
+  #   url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
   #   sha256 = "0d534ysa6n9prd17wwzisq7mj6qkhwh8wcf8qgin1ar3hbs5ry7z";
   # };
   src = fetchFromGitLab {

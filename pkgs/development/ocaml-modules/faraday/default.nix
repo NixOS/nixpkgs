@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, alcotest }:
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, alcotest }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
 then throw "faraday is not available for OCaml ${ocaml.version}"
@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "1kql0il1frsbx6rvwqd7ahi4m14ik6la5an6c2w4x7k00ndm4d7n";
   };
 
-  buildInputs = [ ocaml findlib jbuilder alcotest ];
+  buildInputs = [ ocaml findlib dune alcotest ];
 
-  buildPhase = "jbuilder build -p faraday";
+  buildPhase = "dune build -p faraday";
 
   doCheck = true;
   checkPhase = "jbuilder runtest";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "Serialization library built for speed and memory efficiency";

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation  rec {
   name = "fluidsynth-${version}";
-  version = "1.1.10";
+  version = "1.1.11";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     rev = "v${version}";
-    sha256 = "04jlgq1d1hd8r9cnmkl3lgf1fgm7kgy4hh9nfddap41fm1wp121p";
+    sha256 = "0n75jq3xgq46hfmjkaaxz3gic77shs4fzajq40c8gk043i84xbdh";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];

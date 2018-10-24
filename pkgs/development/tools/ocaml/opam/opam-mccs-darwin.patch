@@ -1,0 +1,18 @@
+diff --git a/src_ext/patches/mccs/build-on-darwin.patch b/src_ext/patches/mccs/build-on-darwin.patch
+new file mode 100644
+index 00000000..157e2094
+--- /dev/null
++++ b/src_ext/patches/mccs/build-on-darwin.patch
+@@ -0,0 +1,12 @@
++diff --git a/src/context_flags.ml b/src/context_flags.ml
++index 7470030..6e07370 100644
++--- a/src/context_flags.ml
+++++ b/src/context_flags.ml
++@@ -24,6 +24,7 @@ let ifc c x = if c then x else []
++ 
++ let cxxflags =
++   let flags =
+++    (ifc (Config.system = "macosx") ["-x"; "c++"]) @
++     (ifc (Sys.win32 && Config.ccomp_type = "msvc") ["/EHsc"]) @
++     (ifc useGLPK ["-DUSEGLPK"]) @
++     (ifc useCOIN ["-DUSECOIN"]) @

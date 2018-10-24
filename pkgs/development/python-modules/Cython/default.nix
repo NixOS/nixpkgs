@@ -25,11 +25,11 @@ let
 
 in buildPythonPackage rec {
   pname = "Cython";
-  version = "0.28.3";
+  version = "0.28.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1aae6d6e9858888144cea147eb5e677830f45faaff3d305d77378c3cba55f526";
+    sha256 = "b64575241f64f6ec005a4d4137339fb0ba5e156e826db2fdb5f458060d9979e0";
   };
 
   nativeBuildInputs = [
@@ -49,15 +49,6 @@ in buildPythonPackage rec {
   '';
 
   doCheck = !stdenv.isDarwin;
-
-  patches = [
-    # The following is in GitHub in 0.28.3 but not in the `sdist`.
-    # https://github.com/cython/cython/issues/2319
-    (fetchpatch {
-      url = https://github.com/cython/cython/commit/c485b1b77264c3c75d090a3c526de24966830d42.patch;
-      sha256 = "1p6jj9rb097kqvhs5j5127sj5zy18l7x9v0p478cjyzh41khh9r0";
-    })
-  ];
 
   meta = {
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";

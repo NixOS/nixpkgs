@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch
-, zlib, xz, python2, findXMLCatalogs
+, zlib, xz, python2, ncurses, findXMLCatalogs
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
@@ -37,6 +37,7 @@ in stdenv.mkDerivation rec {
   propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
 
   buildInputs = lib.optional pythonSupport python
+    ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.

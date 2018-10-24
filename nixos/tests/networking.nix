@@ -467,7 +467,7 @@ let
 
         # Wait for networking to come up
         $machine->start;
-        $machine->waitForUnit("network.target");
+        $machine->waitForUnit("network-online.target");
 
         # Test interfaces set up
         my $list = $machine->succeed("ip tuntap list | sort");
@@ -479,7 +479,9 @@ let
 
         # Test interfaces clean up
         $machine->succeed("systemctl stop network-addresses-tap0");
+        $machine->sleep(10);
         $machine->succeed("systemctl stop network-addresses-tun0");
+        $machine->sleep(10);
         my $residue = $machine->succeed("ip tuntap list");
         $residue eq "" or die(
           "Some virtual interface has not been properly cleaned:\n",

@@ -6,6 +6,7 @@
 , pretend
 , freezegun
 , simplejson
+, six
 }:
 
 buildPythonPackage rec {
@@ -25,8 +26,8 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytest pretend freezegun ];
-  propagatedBuildInputs = [ simplejson ];
+  checkInputs = [ pytest pretend freezegun simplejson ];
+  propagatedBuildInputs = [ six ];
 
   checkPhase = ''
     rm tests/test_twisted.py*

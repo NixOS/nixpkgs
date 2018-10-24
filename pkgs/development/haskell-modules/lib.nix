@@ -299,12 +299,7 @@ rec {
     overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
   # Get all of the build inputs of a haskell package, divided by category.
-  getBuildInputs = p:
-    (overrideCabal p (args: {
-      passthru = (args.passthru or {}) // {
-        _getBuildInputs = extractBuildInputs p.compiler args;
-      };
-    }))._getBuildInputs;
+  getBuildInputs = p: p.getBuildInputs;
 
   # Extract the haskell build inputs of a haskell package.
   # This is useful to build environments for developing on that
@@ -338,55 +333,6 @@ rec {
                   , doBenchmark ? false
                   , ...
                   }: { inherit doCheck doBenchmark; };
-
-  # Divide the build inputs of the package into useful sets.
-  extractBuildInputs = ghc:
-    { setupHaskellDepends ? [], extraLibraries ? []
-    , librarySystemDepends ? [], executableSystemDepends ? []
-    , pkgconfigDepends ? [], libraryPkgconfigDepends ? []
-    , executablePkgconfigDepends ? [], testPkgconfigDepends ? []
-    , benchmarkPkgconfigDepends ? [], testDepends ? []
-    , testHaskellDepends ? [], testSystemDepends ? []
-    , testToolDepends ? [], benchmarkDepends ? []
-    , benchmarkHaskellDepends ? [], benchmarkSystemDepends ? []
-    , benchmarkToolDepends ? [], buildDepends ? []
-    , libraryHaskellDepends ? [], executableHaskellDepends ? []
-    , ...
-    }@args:
-    let inherit (ghcInfo ghc) isGhcjs nativeGhc;
-        inherit (controlPhases ghc args) doCheck doBenchmark;
-        isHaskellPkg = x: x ? isHaskellLibrary;
-        allPkgconfigDepends =
-          pkgconfigDepends ++ libraryPkgconfigDepends ++
-          executablePkgconfigDepends ++
-          lib.optionals doCheck testPkgconfigDepends ++
-          lib.optionals doBenchmark benchmarkPkgconfigDepends;
-        otherBuildInputs =
-          setupHaskellDepends ++ extraLibraries ++
-          librarySystemDepends ++ executableSystemDepends ++
-          allPkgconfigDepends ++
-          lib.optionals doCheck ( testDepends ++ testHaskellDepends ++
-                                  testSystemDepends ++ testToolDepends
-                                ) ++
-          # ghcjs's hsc2hs calls out to the native hsc2hs
-          lib.optional isGhcjs nativeGhc ++
-          lib.optionals doBenchmark ( benchmarkDepends ++
-                                      benchmarkHaskellDepends ++
-                                      benchmarkSystemDepends ++
-                                      benchmarkToolDepends
-                                    );
-        propagatedBuildInputs =
-          buildDepends ++ libraryHaskellDepends ++
-          executableHaskellDepends;
-        allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
-        isHaskellPartition =
-          lib.partition isHaskellPkg allBuildInputs;
-    in
-      { haskellBuildInputs = isHaskellPartition.right;
-        systemBuildInputs = isHaskellPartition.wrong;
-        inherit propagatedBuildInputs otherBuildInputs
-          allPkgconfigDepends;
-      };
 
   # Utility to convert a directory full of `cabal2nix`-generated files into a
   # package override set

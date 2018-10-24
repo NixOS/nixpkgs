@@ -14,6 +14,7 @@ let
     gcc.cc
     nss
     nspr
+    xorg.libxcb
   ]);
 
   allPkgs = overridePkgs ++ [ steam-runtime ];

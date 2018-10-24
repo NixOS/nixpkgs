@@ -6,6 +6,7 @@
 , enableAsioLib ? false, boost ? null
 , enableGetAssets ? false, libxml2 ? null
 , enableJemalloc ? false, jemalloc ? null
+, enableApp ? !stdenv.hostPlatform.isWindows
 }:
 
 assert enableHpack -> jansson != null;
@@ -35,8 +36,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--with-spdylay=no" "--disable-examples" "--disable-python-bindings" "--enable-app" ]
-    ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib";
+  configureFlags = [
+    "--with-spdylay=no"
+    "--disable-examples"
+    "--disable-python-bindings"
+    (stdenv.lib.enableFeature enableApp "app")
+  ] ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib";
 
   #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
 

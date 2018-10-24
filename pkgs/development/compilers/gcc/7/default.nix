@@ -56,7 +56,8 @@ let version = "7.3.0";
         sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
       })
       ++ optional langFortran ../gfortran-driving.patch
-      ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch;
+      ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
+      ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -189,9 +190,7 @@ stdenv.mkDerivation ({
         )
     else "");
 
-  # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
-  crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
-  inherit noSysDirs staticCompiler
+  inherit noSysDirs staticCompiler crossStageStatic
     libcCross crossMingw;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -219,9 +218,7 @@ stdenv.mkDerivation ({
     ++ (optional hostPlatform.isDarwin targetPackages.stdenv.cc.bintools)
     ;
 
-  # TODO: Use optionalString with next rebuild.
-  ${if (stdenv.cc.isClang && langFortran) then "NIX_CFLAGS_COMPILE" else null} = "-Wno-unused-command-line-argument";
-
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
   NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
 
   preConfigure = stdenv.lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
@@ -292,7 +289,12 @@ stdenv.mkDerivation ({
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
     ]
-    ++ optional (targetPlatform == hostPlatform && targetPlatform.libc == "musl") "--disable-libsanitizer"
+    ++ optionals (targetPlatform == hostPlatform && targetPlatform.libc == "musl") [
+      "--disable-libsanitizer"
+      "--disable-symvers"
+      "libat_cv_have_ifunc=no"
+      "--disable-gnu-indirect-function"
+    ]
     ++ optional (targetPlatform.isAarch64) "--enable-fix-cortex-a53-843419"
   ;
 

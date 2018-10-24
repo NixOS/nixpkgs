@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "git-imerge-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "mhagger";
     repo = "git-imerge";
     rev = "v${version}";
-    sha256 = "1ylzxmbjfrzzxmcrbqzy1wv21npqj1r6cgl77a9n2zvsrz8zdb74";
+    sha256 = "0vi1w3f0yk4gqhxj2hzqafqq28rihyhyfnp8x7xzib96j2si14a4";
   };
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython ];

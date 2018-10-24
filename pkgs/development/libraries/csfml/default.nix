@@ -25,7 +25,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.zlib;
     maintainers = [ maintainers.jpdoyle ];
-
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
   };
 }

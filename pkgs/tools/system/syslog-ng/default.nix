@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = https://www.balabit.com/network-security/syslog-ng/;
     description = "Next-generation syslogd with advanced networking and filtering capabilities";

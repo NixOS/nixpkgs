@@ -8,7 +8,31 @@ with lib.strings;
 
 rec {
 
+  # Returns true when the given argument is an option
+  #
+  # Examples:
+  #   isOption 1             // => false
+  #   isOption (mkOption {}) // => true
   isOption = lib.isType "option";
+
+  # Creates an Option attribute set. mkOption accepts an attribute set with the following keys:
+  #
+  #  default:     Default value used when no definition is given in the configuration.
+  #  defaultText: Textual representation of the default, for in the manual.
+  #  example:     Example value used in the manual.
+  #  description: String describing the option.
+  #  type:        Option type, providing type-checking and value merging.
+  #  apply:       Function that converts the option value to something else.
+  #  internal:    Whether the option is for NixOS developers only.
+  #  visible:     Whether the option shows up in the manual.
+  #  readOnly:    Whether the option can be set only once
+  #  options:     Obsolete, used by types.optionSet.
+  #
+  # All keys default to `null` when not given.
+  #
+  # Examples:
+  #   mkOption { }  // => { _type = "option"; }
+  #   mkOption { defaultText = "foo"; } // => { _type = "option"; defaultText = "foo"; }
   mkOption =
     { default ? null # Default value used when no definition is given in the configuration.
     , defaultText ? null # Textual representation of the default, for in the manual.
@@ -24,6 +48,10 @@ rec {
     } @ attrs:
     attrs // { _type = "option"; };
 
+  # Creates a Option attribute set for a boolean value option i.e an option to be toggled on or off:
+  #
+  # Examples:
+  #   mkEnableOption "foo" // => { _type = "option"; default = false; description = "Whether to enable foo."; example = true; type = { ... }; }
   mkEnableOption = name: mkOption {
     default = false;
     example = true;
@@ -74,7 +102,18 @@ rec {
       else
         val) (head defs).value defs;
 
+  # Extracts values of all "value" keys of the given list
+  #
+  # Examples:
+  #   getValues [ { value = 1; } { value = 2; } ] // => [ 1 2 ]
+  #   getValues [ ]                               // => [ ]
   getValues = map (x: x.value);
+
+  # Extracts values of all "file" keys of the given list
+  #
+  # Examples:
+  #   getFiles [ { file = "file1"; } { file = "file2"; } ] // => [ "file1" "file2" ]
+  #   getFiles [ ]                                         // => [ ]
   getFiles = map (x: x.file);
 
   # Generate documentation template from the list of option declaration like

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       set of physical devices (tracker, etc.) used in a virtual-reality
       (VR) system.
     '';
-    homepage    = http://www.vrpn.org/;
+    homepage    = https://github.com/vrpn/vrpn;
     license     = licenses.boost; # see https://github.com/vrpn/vrpn/wiki/License
     platforms   = platforms.linux;
     maintainers = with maintainers; [ ludo ];
