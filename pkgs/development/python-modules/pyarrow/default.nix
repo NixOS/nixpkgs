@@ -29,6 +29,17 @@ buildPythonPackage rec {
 
     # fix the hardcoded value
     substituteInPlace cmake_modules/FindParquet.cmake --replace 'set(PARQUET_ABI_VERSION "1.0.0")' 'set(PARQUET_ABI_VERSION "${_parquet-cpp.version}")'
+
+cp pyarrow/__init__.py pyarrow/__init__.py.bak
+cat >pyarrow/__init__.py <<EOF
+import sys
+import os
+os.getcwd()
+print("sys.path.pop(0) {}".format(sys.path.pop(0)))
+print(sys.path)
+from .lib import cpu_count, set_cpu_count
+EOF
+cat pyarrow/__init__.py.bak >> pyarrow/__init__.py
   '';
 
   preCheck = ''
@@ -49,9 +60,46 @@ buildPythonPackage rec {
     rm pyarrow/tests/deserialize_buffer.py
     substituteInPlace pyarrow/tests/test_feather.py --replace "test_deserialize_buffer_in_different_process" "_disabled"
 
-    # remove pwd from PYTHONPATH
-    export PYTHONPATH=$(printf "$PYTHONPATH" | sed "s|$TMP||")
-echo $PYTHONPATH
+set -x
+env
+pwd
+cat nix_run_setup
+find "$out" -print0 | xargs -0 touch -t 7001010000
+ls -laR "$out"
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+echo -------------------------------------
+#rm pyarrow/__init__.py
+find . -print0 | xargs -0 touch -t 7001010000
+ls -laR .
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+cat >test.py <<EOF
+import sys
+print("test.py: sys.path.pop(0) {}".format(sys.path.pop(0)))
+print(1)
+import pyarrow
+print(2)
+#import pyarrow.lib
+#print(3)
+EOF
+sed -i '1iimport sys; sys.path.pop(0)' setup.py
+head setup.py
+    ${python.interpreter} test.py
+    ${python.interpreter} setup.py test
+    runHook postCheck
   '';
 
   ARROW_HOME = _arrow-cpp;
