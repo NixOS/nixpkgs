@@ -51,6 +51,14 @@ with pkgs;
   # inside the set for derivations.
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
+  # Similarly to the above, but optional.
+  recurseIntoAttrsMaybe = name: let
+    allow = e: lib.elem e (config.recurseIntoAttrs or []);
+  in if allow "all" || allow name then recurseIntoAttrs else (attrs: attrs);
+
+  # for documentation purposes
+  dontRecurseIntoAttrs = x: x;
+
   stringsWithDeps = lib.stringsWithDeps;
 
   ### Evaluating the entire Nixpkgs naively will fail, make failure fast
@@ -2376,7 +2384,7 @@ with pkgs;
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
-  emscriptenfastcompPackages = callPackage ../development/compilers/emscripten/fastcomp { };
+  emscriptenfastcompPackages = recurseIntoAttrs (callPackage ../development/compilers/emscripten/fastcomp { });
 
   emscriptenfastcomp = emscriptenfastcompPackages.emscriptenfastcomp;
 
@@ -2702,9 +2710,9 @@ with pkgs;
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
-  fdbPackages = callPackage ../servers/foundationdb {
+  fdbPackages = recurseIntoAttrs (callPackage ../servers/foundationdb {
     stdenv49 = overrideCC stdenv gcc49;
-  };
+  });
 
   inherit (fdbPackages)
     foundationdb51
@@ -3765,19 +3773,19 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  nodePackages_10_x = callPackage ../development/node-packages/default-v10.nix {
+  nodePackages_10_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
-  };
+  });
 
-  nodePackages_8_x = callPackage ../development/node-packages/default-v8.nix {
+  nodePackages_8_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v8.nix {
     nodejs = pkgs.nodejs-8_x;
-  };
+  });
 
-  nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
+  nodePackages_6_x = dontRecurseIntoAttrs (callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
-  };
+  });
 
-  nodePackages = nodePackages_8_x;
+  nodePackages = recurseIntoAttrsMaybe "nodePackages" nodePackages_8_x;
 
   npm2nix = nodePackages.npm2nix;
 
@@ -4762,7 +4770,7 @@ with pkgs;
 
   plan9port = callPackage ../tools/system/plan9port { };
 
-  platformioPackages = callPackage ../development/arduino/platformio { };
+  platformioPackages = recurseIntoAttrs (callPackage ../development/arduino/platformio { });
   platformio = platformioPackages.platformio-chrootenv;
 
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
@@ -6838,9 +6846,9 @@ with pkgs;
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc843.override {
+  haskellPackages = recurseIntoAttrsMaybe "haskellPackages" (haskell.packages.ghc843.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
-  };
+  });
 
   inherit (haskellPackages) ghc;
 
@@ -6928,9 +6936,9 @@ with pkgs;
 
   icedtea_web = icedtea8_web;
 
-  idrisPackages = callPackage ../development/idris-modules {
+  idrisPackages = recurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
-  };
+  });
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
@@ -8821,7 +8829,7 @@ with pkgs;
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
-  sconsPackages = callPackage ../development/tools/build-managers/scons { };
+  sconsPackages = recurseIntoAttrs (callPackage ../development/tools/build-managers/scons { });
   scons = sconsPackages.scons_3_0_1;
   scons_2_5_1 = sconsPackages.scons_2_5_1;
 
@@ -9770,7 +9778,7 @@ with pkgs;
   # A GMP fork
   mpir = callPackage ../development/libraries/mpir {};
 
-  gns3Packages = callPackage ../applications/networking/gns3 { };
+  gns3Packages = recurseIntoAttrs (callPackage ../applications/networking/gns3 { });
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
@@ -12982,9 +12990,9 @@ with pkgs;
   quicklispPackagesFor = clwrapper: callPackage ../development/lisp-modules/quicklisp-to-nix.nix {
     inherit clwrapper;
   };
-  quicklispPackagesClisp = quicklispPackagesFor (wrapLisp clisp);
-  quicklispPackagesSBCL = quicklispPackagesFor (wrapLisp sbcl);
-  quicklispPackages = quicklispPackagesSBCL;
+  quicklispPackagesClisp = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp clisp));
+  quicklispPackagesSBCL = dontRecurseIntoAttrs (quicklispPackagesFor (wrapLisp sbcl));
+  quicklispPackages = recurseIntoAttrsMaybe "quicklispPackages" quicklispPackagesSBCL;
   quicklispPackages_asdf_3_1 = quicklispPackagesFor
     ((wrapLisp sbcl).override { asdf = asdf_3_1; });
 
@@ -13049,9 +13057,9 @@ with pkgs;
     packages = [];
   };
 
-  rPackages = callPackage ../development/r-modules {
+  rPackages = recurseIntoAttrsMaybe "rPackages" (callPackage ../development/r-modules {
     overrides = (config.rPackageOverrides or (p: {})) pkgs;
-  };
+  });
 
   ### SERVERS
 
@@ -13086,7 +13094,7 @@ with pkgs;
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
   };
 
-  apacheHttpdPackages_2_4 = apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4;
+  apacheHttpdPackages_2_4 = recurseIntoAttrs (apacheHttpdPackagesFor pkgs.apacheHttpd_2_4 pkgs.apacheHttpdPackages_2_4);
   apacheHttpdPackages = apacheHttpdPackages_2_4;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
@@ -14030,9 +14038,9 @@ with pkgs;
     inherit (linuxPackages) kernel;
   };
 
-  fusePackages = callPackage ../os-specific/linux/fuse {
+  fusePackages = recurseIntoAttrs (callPackage ../os-specific/linux/fuse {
     utillinux = utillinuxMinimal;
-  };
+  });
   fuse = lowPrio fusePackages.fuse_2;
   fuse3 = fusePackages.fuse_3;
   fuse-common = hiPrio fusePackages.fuse_3.common;
@@ -14367,7 +14375,7 @@ with pkgs;
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidiaPackages = callPackage ../os-specific/linux/nvidia-x11 { };
+    nvidiaPackages = recurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
 
     nvidia_x11_legacy304 = nvidiaPackages.legacy_304;
     nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
@@ -15476,12 +15484,12 @@ with pkgs;
 
   source-han-code-jp = callPackage ../data/fonts/source-han-code-jp { };
 
-  sourceHanSansPackages = callPackage ../data/fonts/source-han-sans { };
+  sourceHanSansPackages = recurseIntoAttrs (callPackage ../data/fonts/source-han-sans { });
   source-han-sans-japanese = sourceHanSansPackages.japanese;
   source-han-sans-korean = sourceHanSansPackages.korean;
   source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
   source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
-  sourceHanSerifPackages = callPackage ../data/fonts/source-han-serif { };
+  sourceHanSerifPackages = recurseIntoAttrs (callPackage ../data/fonts/source-han-serif { });
   source-han-serif-japanese = sourceHanSerifPackages.japanese;
   source-han-serif-korean = sourceHanSerifPackages.korean;
   source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
@@ -15682,7 +15690,7 @@ with pkgs;
     gconf = gnome2.GConf;
   };
 
-  atomPackages = callPackage ../applications/editors/atom { };
+  atomPackages = recurseIntoAttrs (callPackage ../applications/editors/atom { });
 
   inherit (atomPackages) atom atom-beta;
 
@@ -16450,8 +16458,8 @@ with pkgs;
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
-  emacs25Packages = emacsPackagesFor emacs25 pkgs.emacs25Packages;
-  emacs26Packages = emacsPackagesFor emacs26 pkgs.emacs26Packages;
+  emacs25Packages = recurseIntoAttrsMaybe "emacsPackages" (emacsPackagesFor emacs25 pkgs.emacs25Packages);
+  emacs26Packages = recurseIntoAttrsMaybe "emacsPackages" (emacsPackagesFor emacs26 pkgs.emacs26Packages);
 
   emacsPackagesNgFor = emacs: import ./emacs-packages.nix {
     inherit lib newScope stdenv;
@@ -16475,9 +16483,10 @@ with pkgs;
     };
   };
 
-  emacs25PackagesNg = emacsPackagesNgFor emacs25;
+  emacs25PackagesNg = recurseIntoAttrsMaybe "emacsPackages" (emacsPackagesNgFor emacs25);
+  emacs26PackagesNg = recurseIntoAttrsMaybe "emacsPackages" (emacsPackagesNgFor emacs26);
+
   emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
-  emacs26PackagesNg = emacsPackagesNgFor emacs26;
   emacs26WithPackages = emacs26PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
@@ -19113,7 +19122,7 @@ with pkgs;
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  tdesktopPackages = callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
+  tdesktopPackages = recurseIntoAttrs (callPackage ../applications/networking/instant-messengers/telegram/tdesktop { });
   tdesktop = tdesktopPackages.stable;
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
@@ -20551,7 +20560,7 @@ with pkgs;
 
   stockfish = callPackage ../games/stockfish { };
 
-  steamPackages = callPackage ../games/steam { };
+  steamPackages = recurseIntoAttrs (callPackage ../games/steam { });
 
   steam = steamPackages.steam-chrootenv.override {
     # DEPRECATED
@@ -20655,7 +20664,7 @@ with pkgs;
 
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
-  ut2004Packages = callPackage ../games/ut2004 { };
+  ut2004Packages = recurseIntoAttrs (callPackage ../games/ut2004 { });
 
   ut2004demo = self.ut2004Packages.ut2004 [ self.ut2004Packages.ut2004-demo ];
 
@@ -20764,9 +20773,9 @@ with pkgs;
 
   keen4 = callPackage ../games/keen4 { };
 
-  zeroadPackages = callPackage ../games/0ad {
+  zeroadPackages = recurseIntoAttrs (callPackage ../games/0ad {
     wxGTK = wxGTK30;
-  };
+  });
 
   zeroad = zeroadPackages.zeroad;
 
