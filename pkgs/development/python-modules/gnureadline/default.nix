@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "6.3.3";
+  version = "6.3.8";
   pname = "gnureadline";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ghck2zz4xbqa3wz73brgjhrqj55p9hc1fq6c9zb09dnyhwb0nd2";
+    sha256 = "0ddhj98x2nv45iz4aadk4b9m0b1kpsn1xhcbypn5cd556knhiqjq";
   };
 
   buildInputs = [ pkgs.ncurses ];
