@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "zope.deprecation";
-  version = "4.1.2";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fed622b51ffc600c13cc5a5b6916b8514c115f34f7ea2730409f30c061eb0b78";
+    sha256 = "0f6prwp9xkjhaj12pyickxnhgfyd06mg3l9yr0i7pdw8afxwacpz";
   };
 
   buildInputs = [ zope_testing ];
