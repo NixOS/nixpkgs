@@ -3641,6 +3641,11 @@
     github = "roosemberth";
     name = "Roosembert (Roosemberth) Palacios";
   };
+  royneary = {
+    email = "christian@ulrich.earth";
+    github = "royneary";
+    name = "Christian Ulrich";
+  };
   rprospero = {
     email = "rprospero+nix@gmail.com";
     github = "rprospero";
