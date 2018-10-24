@@ -53,6 +53,8 @@ buildPythonPackage rec {
     sed -i '1iimport sys; print(sys.path.pop(0))' nix_run_setup
   '';
 
+PYTHONVERBOSE=1;
+
   ARROW_HOME = _arrow-cpp;
   PARQUET_HOME = _parquet-cpp;
 
@@ -62,7 +64,7 @@ buildPythonPackage rec {
     description = "A cross-language development platform for in-memory data";
     homepage = https://arrow.apache.org/;
     license = lib.licenses.asl20;
-    platforms = platforms.unix;
+    platforms = platforms.darwin;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }
