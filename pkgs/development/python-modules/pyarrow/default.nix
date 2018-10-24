@@ -51,10 +51,15 @@ buildPythonPackage rec {
 
 set -x
 env
+pwd
 cat nix_run_setup
   '';
 
-#  preFixup = "set -x";
+  installCheckPhase = attrs.checkPhase or ''
+    runHook preCheck
+    ${python.interpreter} setup.py test
+    runHook postCheck
+  '';
 
   ARROW_HOME = _arrow-cpp;
   PARQUET_HOME = _parquet-cpp;
