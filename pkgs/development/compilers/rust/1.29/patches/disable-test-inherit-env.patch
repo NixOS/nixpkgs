@@ -1,0 +1,10 @@
+--- rustc-1.26.2-src.org/src/libstd/process.rs	2018-06-01 21:40:11.000000000 +0100
++++ rustc-1.26.2-src/src/libstd/process.rs	2018-06-08 07:50:23.023828658 +0100
+@@ -1745,6 +1745,7 @@
+     }
+ 
+     #[test]
++    #[ignore]
+     fn test_inherit_env() {
+         use env;
+ 
