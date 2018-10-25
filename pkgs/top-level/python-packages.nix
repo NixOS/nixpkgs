@@ -2055,6 +2055,8 @@ in {
 
   django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
 
+  django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
+
   django_environ = callPackage ../development/python-modules/django_environ { };
 
   django_evolution = callPackage ../development/python-modules/django_evolution { };
