@@ -22247,7 +22247,7 @@ with pkgs;
   /*
    * Run a NixOS VM network test.
    *
-   * This is equivalent to  import ./make-test.nix  from the NixOS manual
+   * This is equivalent to `import ./make-test.nix` from the NixOS manual
    * For details see https://nixos.org/nixos/manual/index.html#sec-nixos-tests
    *
    * Parameter:
