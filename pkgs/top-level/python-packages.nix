@@ -6835,24 +6835,7 @@ in {
 
   subprocess32 = callPackage ../development/python-modules/subprocess32 { };
 
-  spark_parser = buildPythonPackage (rec {
-    name = "${pname}-${version}";
-    pname = "spark_parser";
-    version = "1.4.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
-      sha256 = "1r7d07kw4asgajvhq1gzln4g1qi2r13jw0s8c7d5z3g4kp8y0br8";
-    };
-    buildInputs = with self; [nose];
-    propagatedBuildInputs = [];
-    meta = {
-      description = ''An Early-Algorithm Context-free grammar Parser'';
-      homepage = "https://github.com/rocky/python-spark";
-      license = licenses.mit;
-      maintainers = with maintainers; [raskin];
-      platforms = platforms.all;
-    };
-  });
+  spark_parser = callPackage ../development/python-modules/spark_parser { };
 
   sphinx = callPackage ../development/python-modules/sphinx { };
 
