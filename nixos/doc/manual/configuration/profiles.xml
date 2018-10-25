@@ -31,4 +31,5 @@
  <xi:include href="profiles/demo.xml" />
  <xi:include href="profiles/docker-container.xml" />
  <xi:include href="profiles/graphical.xml" />
+ <xi:include href="profiles/hardened.xml" />
 </chapter>
