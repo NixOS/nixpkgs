@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake qttools flex bison ];
   buildInputs = [ qtbase ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A graphical tool for rapidly creating graphs and diagrams using PGF/TikZ";
     longDescription = ''
@@ -22,8 +24,8 @@ stdenv.mkDerivation rec {
       can be included directly in papers typeset using LaTeX.
     '';
     homepage = https://tikzit.github.io/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
     maintainers = [ maintainers.iblech maintainers.mgttlinger ];
   };
 }
