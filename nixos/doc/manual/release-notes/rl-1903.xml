@@ -165,6 +165,12 @@
       If you want to keep slurmctld running as <literal>root</literal>, set
       <literal>services.slurm.user = root</literal>.
     </para>
+    <para>
+      The options <literal>services.slurm.nodeName</literal> and
+      <literal>services.slurm.partitionName</literal> are now sets of
+      strings to correctly reflect that fact that each of these
+      options can occour more than once in the configuration.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

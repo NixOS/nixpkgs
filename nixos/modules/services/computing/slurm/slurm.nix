@@ -16,8 +16,8 @@ let
       SlurmUser=${cfg.user}
       ${optionalString (cfg.controlMachine != null) ''controlMachine=${cfg.controlMachine}''}
       ${optionalString (cfg.controlAddr != null) ''controlAddr=${cfg.controlAddr}''}
-      ${optionalString (cfg.nodeName != null) ''nodeName=${cfg.nodeName}''}
-      ${optionalString (cfg.partitionName != null) ''partitionName=${cfg.partitionName}''}
+      ${toString (map (x: "NodeName=${x}\n") cfg.nodeName)}
+      ${toString (map (x: "PartitionName=${x}\n") cfg.partitionName)}
       PlugStackConfig=${plugStackConfig}
       ProctrackType=${cfg.procTrackType}
       ${cfg.extraConfig}
@@ -149,9 +149,9 @@ in
       };
 
       nodeName = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "linux[1-32] CPUs=1 State=UNKNOWN";
+        type = types.listOf types.str;
+        default = [];
+        example = literalExample ''[ "linux[1-32] CPUs=1 State=UNKNOWN" ];'';
         description = ''
           Name that SLURM uses to refer to a node (or base partition for BlueGene
           systems). Typically this would be the string that "/bin/hostname -s"
@@ -160,9 +160,9 @@ in
       };
 
       partitionName = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        example = "debug Nodes=linux[1-32] Default=YES MaxTime=INFINITE State=UP";
+        type = types.listOf types.str;
+        default = [];
+        example = literalExample ''[ "debug Nodes=linux[1-32] Default=YES MaxTime=INFINITE State=UP" ];'';
         description = ''
           Name by which the partition may be referenced. Note that now you have
           to write the partition's parameters after the name.
