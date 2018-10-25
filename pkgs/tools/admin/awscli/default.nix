@@ -7,7 +7,7 @@
 let
   py = python.override {
     packageOverrides = self: super: {
-      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+      colorama = super.colorama.overrideArgs (oldAttrs: rec {
         version = "0.3.7";
         src = oldAttrs.src.override {
           inherit version;

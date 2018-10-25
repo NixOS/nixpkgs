@@ -7,7 +7,7 @@
 , extraPackages ? ps: []
 
 # Override Python packages using
-# self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
+# self: super: { pkg = super.pkg.overrideArgs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
 , packageOverrides ? self: super: { }
 
@@ -52,7 +52,7 @@ let
 
   mkOverride = attrname: version: sha256:
     self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+      ${attrname} = super.${attrname}.overrideArgs (oldAttrs: {
         inherit version;
         src = oldAttrs.src.override {
           inherit version sha256;

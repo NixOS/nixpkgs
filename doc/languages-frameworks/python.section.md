@@ -616,7 +616,7 @@ All parameters from `stdenv.mkDerivation` function are still supported. The foll
 
 ##### Overriding Python packages
 
-The `buildPythonPackage` function has a `overridePythonAttrs` method that
+The `buildPythonPackage` function has a `overrideArgs` method that
 can be used to override the package. In the following example we create an
 environment where we have the `blaze` package using an older version of `pandas`.
 We override first the Python interpreter and pass
@@ -628,7 +628,7 @@ with import <nixpkgs> {};
 (let
   python = let
     packageOverrides = self: super: {
-      pandas = super.pandas.overridePythonAttrs(old: rec {
+      pandas = super.pandas.overrideArgs(old: rec {
         version = "0.19.1";
         src =  super.fetchPypi {
           pname = "pandas";
@@ -894,7 +894,7 @@ with import <nixpkgs> {};
 (let
   python = let
     packageOverrides = self: super: {
-      pandas = super.pandas.overridePythonAttrs(old: {name="foo";});
+      pandas = super.pandas.overrideArgs(old: {name="foo";});
     };
   in pkgs.python35.override {inherit packageOverrides;};
 

@@ -4,7 +4,7 @@ let
 
   pythonPackages = python2.pkgs.override {
     overrides = self: super: with self; {
-      backports_ssl_match_hostname = super.backports_ssl_match_hostname.overridePythonAttrs (oldAttrs: rec {
+      backports_ssl_match_hostname = super.backports_ssl_match_hostname.overrideArgs (oldAttrs: rec {
         version = "3.4.0.2";
         src = oldAttrs.src.override {
           inherit version;
@@ -12,7 +12,7 @@ let
         };
       });
 
-      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+      flask = super.flask.overrideArgs (oldAttrs: rec {
         version = "0.12.4";
         src = oldAttrs.src.override {
           inherit version;
@@ -63,7 +63,7 @@ let
         doCheck = false;
       };
 
-      pylru = super.pylru.overridePythonAttrs (oldAttrs: rec {
+      pylru = super.pylru.overrideArgs (oldAttrs: rec {
         version = "1.0.9";
         src = oldAttrs.src.override {
           inherit version;

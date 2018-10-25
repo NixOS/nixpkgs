@@ -5,7 +5,7 @@ let
     packageOverrides = self: super: {
 
       # https://github.com/pimutils/khal/issues/780
-      python-dateutil = super.python-dateutil.overridePythonAttrs (oldAttrs: rec {
+      python-dateutil = super.python-dateutil.overrideArgs (oldAttrs: rec {
         version = "2.6.1";
         src = oldAttrs.src.override {
           inherit version;

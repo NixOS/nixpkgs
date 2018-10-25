@@ -2,7 +2,7 @@
 
 let python = python2.override {
   packageOverrides = self: super: {
-    misaka = super.misaka.overridePythonAttrs (old: rec {
+    misaka = super.misaka.overrideArgs (old: rec {
       version = "1.0.2";
       src = old.src.override {
         inherit version;
@@ -10,7 +10,7 @@ let python = python2.override {
       };
       propagatedBuildInputs = [ ];
     });
-    html5lib = super.html5lib.overridePythonAttrs (old: rec {
+    html5lib = super.html5lib.overrideArgs (old: rec {
       version = "0.9999999";
       src = old.src.override {
         inherit version;

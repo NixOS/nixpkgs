@@ -15,7 +15,7 @@
     # Need to override the attribute used by simp_le, which is python3Packages
     python3Packages = (super.python3.override {
       packageOverrides = lib.const (pysuper: {
-        certifi = pysuper.certifi.overridePythonAttrs (attrs: {
+        certifi = pysuper.certifi.overrideArgs (attrs: {
           postPatch = (attrs.postPatch or "") + ''
             cat "${self.cacert}/etc/ssl/certs/ca-bundle.crt" \
               > certifi/cacert.pem

@@ -5,7 +5,7 @@
 let
 
   # Needed for celery
-  pytest_32 = pytest.overridePythonAttrs( oldAttrs: rec {
+  pytest_32 = pytest.overrideArgs( oldAttrs: rec {
     version = "3.2.5";
     src = oldAttrs.src.override {
       inherit version;

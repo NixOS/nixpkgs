@@ -4,7 +4,7 @@ let
   # see: https://github.com/linkcheck/linkchecker/issues/76
   python2Packages = (python2.override {
     packageOverrides = self: super: {   
-      requests = super.requests.overridePythonAttrs(oldAttrs: rec {
+      requests = super.requests.overrideArgs(oldAttrs: rec {
         version = "2.14.2";
         src = oldAttrs.src.override {
           inherit version;

@@ -4,7 +4,7 @@ let
   python3Packages = (python3.override {
     packageOverrides = self: super: {
       # https://github.com/pubs/pubs/issues/131
-      pyfakefs = super.pyfakefs.overridePythonAttrs (oldAttrs: rec {
+      pyfakefs = super.pyfakefs.overrideArgs (oldAttrs: rec {
         version = "3.3";
         src = self.fetchPypi {
           pname = "pyfakefs";

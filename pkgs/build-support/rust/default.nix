@@ -3,100 +3,105 @@ let
   fetchcargo = import ./fetchcargo.nix {
     inherit stdenv cacert git rust cargo-vendor python3;
   };
-in
-{ name, cargoSha256 ? "unset"
-, src ? null
-, srcs ? null
-, cargoPatches ? []
-, patches ? []
-, sourceRoot ? null
-, logLevel ? ""
-, buildInputs ? []
-, cargoUpdateHook ? ""
-, cargoDepsHook ? ""
-, cargoBuildFlags ? []
 
-, cargoVendorDir ? null
-, ... } @ args:
+  buildRustPackage =
+    { name, cargoSha256 ? "unset"
+    , src ? null
+    , srcs ? null
+    , cargoPatches ? []
+    , patches ? []
+    , sourceRoot ? null
+    , logLevel ? ""
+    , buildInputs ? []
+    , cargoUpdateHook ? ""
+    , cargoDepsHook ? ""
+    , cargoBuildFlags ? []
 
-assert cargoVendorDir == null -> cargoSha256 != "unset";
+    , cargoVendorDir ? null
+    , ... } @ args:
 
-let
-  cargoDeps = if cargoVendorDir == null
-    then fetchcargo {
-        inherit name src srcs sourceRoot cargoUpdateHook;
-        patches = cargoPatches;
-        sha256 = cargoSha256;
-      }
-    else null;
+    assert cargoVendorDir == null -> cargoSha256 != "unset";
 
-  setupVendorDir = if cargoVendorDir == null
-    then ''
-      unpackFile "$cargoDeps"
-      cargoDepsCopy=$(stripHash $(basename $cargoDeps))
-      chmod -R +w "$cargoDepsCopy"
-    ''
-    else ''
-      cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
-    '';
+    let
+      cargoDeps = if cargoVendorDir == null
+        then fetchcargo {
+            inherit name src srcs sourceRoot cargoUpdateHook;
+            patches = cargoPatches;
+            sha256 = cargoSha256;
+          }
+        else null;
 
-in stdenv.mkDerivation (args // {
-  inherit cargoDeps;
+      setupVendorDir = if cargoVendorDir == null
+        then ''
+          unpackFile "$cargoDeps"
+          cargoDepsCopy=$(stripHash $(basename $cargoDeps))
+          chmod -R +w "$cargoDepsCopy"
+        ''
+        else ''
+          cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
+        '';
 
-  patchRegistryDeps = ./patch-registry-deps;
+    in stdenv.mkDerivation (args // {
+      inherit cargoDeps;
 
-  buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
+      patchRegistryDeps = ./patch-registry-deps;
 
-  patches = cargoPatches ++ patches;
+      buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
 
-  configurePhase = args.configurePhase or ''
-    runHook preConfigure
-    # noop
-    runHook postConfigure
-  '';
+      patches = cargoPatches ++ patches;
 
-  postUnpack = ''
-    eval "$cargoDepsHook"
+      configurePhase = args.configurePhase or ''
+        runHook preConfigure
+        # noop
+        runHook postConfigure
+      '';
 
-    ${setupVendorDir}
+      postUnpack = ''
+        eval "$cargoDepsHook"
 
-    mkdir .cargo
-    config="$(pwd)/$cargoDepsCopy/.cargo/config";
-    if [[ ! -e $config ]]; then
-      config=${./fetchcargo-default-config.toml};
-    fi;
-    substitute $config .cargo/config \
-    --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
+        ${setupVendorDir}
 
-    unset cargoDepsCopy
+        mkdir .cargo
+        config="$(pwd)/$cargoDepsCopy/.cargo/config";
+        if [[ ! -e $config ]]; then
+          config=${./fetchcargo-default-config.toml};
+        fi;
+        substitute $config .cargo/config \
+        --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
-    export RUST_LOG=${logLevel}
-  '' + (args.postUnpack or "");
+        unset cargoDepsCopy
 
-  buildPhase = with builtins; args.buildPhase or ''
-    runHook preBuild
-    echo "Running cargo build --release ${concatStringsSep " " cargoBuildFlags}"
-    cargo build --release --frozen ${concatStringsSep " " cargoBuildFlags}
-    runHook postBuild
-  '';
+        export RUST_LOG=${logLevel}
+      '' + (args.postUnpack or "");
 
-  checkPhase = args.checkPhase or ''
-    runHook preCheck
-    echo "Running cargo test"
-    cargo test
-    runHook postCheck
-  '';
+      buildPhase = with builtins; args.buildPhase or ''
+        runHook preBuild
+        echo "Running cargo build --release ${concatStringsSep " " cargoBuildFlags}"
+        cargo build --release --frozen ${concatStringsSep " " cargoBuildFlags}
+        runHook postBuild
+      '';
 
-  doCheck = args.doCheck or true;
+      checkPhase = args.checkPhase or ''
+        runHook preCheck
+        echo "Running cargo test"
+        cargo test
+        runHook postCheck
+      '';
 
-  installPhase = args.installPhase or ''
-    runHook preInstall
-    mkdir -p $out/bin $out/lib
-    find target/release -maxdepth 1 -type f -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) -print0 | xargs -r -0 cp -t $out/bin
-    find target/release -maxdepth 1 -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" -print0 | xargs -r -0 cp -t $out/lib
-    rmdir --ignore-fail-on-non-empty $out/lib $out/bin
-    runHook postInstall
-  '';
+      doCheck = args.doCheck or true;
 
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
-})
+      installPhase = args.installPhase or ''
+        runHook preInstall
+        mkdir -p $out/bin $out/lib
+        find target/release -maxdepth 1 -type f -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) -print0 | xargs -r -0 cp -t $out/bin
+        find target/release -maxdepth 1 -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" -print0 | xargs -r -0 cp -t $out/lib
+        rmdir --ignore-fail-on-non-empty $out/lib $out/bin
+        runHook postInstall
+      '';
+
+      passthru = { inherit cargoDeps; } // (args.passthru or {});
+    }) // {
+      overrideArgs = f: buildRustPackage (args // (f args));
+    };
+
+in buildRustPackage
