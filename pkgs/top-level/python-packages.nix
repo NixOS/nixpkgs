@@ -2047,6 +2047,8 @@ in {
 
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
+  django-configurations = callPackage ../development/python-modules/django-configurations { };
+
   django_compressor = callPackage ../development/python-modules/django_compressor { };
 
   django_compat = callPackage ../development/python-modules/django-compat { };
