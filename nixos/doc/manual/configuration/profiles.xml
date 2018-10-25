@@ -34,4 +34,5 @@
  <xi:include href="profiles/hardened.xml" />
  <xi:include href="profiles/headless.xml" />
  <xi:include href="profiles/installation-device.xml" />
+ <xi:include href="profiles/minimal.xml" />
 </chapter>
