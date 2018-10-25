@@ -11590,8 +11590,8 @@ with pkgs;
   openh264 = callPackage ../development/libraries/openh264 { };
 
   openjpeg_1 = callPackage ../development/libraries/openjpeg/1.x.nix { };
-  openjpeg_2_1 = callPackage ../development/libraries/openjpeg/2.1.nix { };
-  openjpeg = openjpeg_2_1;
+  openjpeg_2 = callPackage ../development/libraries/openjpeg/2.x.nix { };
+  openjpeg = openjpeg_2;
 
   openpa = callPackage ../development/libraries/openpa { };
 
