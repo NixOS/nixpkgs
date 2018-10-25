@@ -2,7 +2,7 @@
 #! nix-shell -i bash -p yarn2nix
 
 # Usage:
-#    NIX_PATH=nixpkgs=<your local nixpkgs checkout> ./update.sh
+#    NIX_PATH=nixpkgs=<your local nixpkgs checkout> ./update-yarn-nix.sh
 
 # Download an unpack URL
 src="$(nix-build '<nixpkgs>' -A vault.src --no-out-link)"

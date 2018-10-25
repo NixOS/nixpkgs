@@ -7,7 +7,10 @@ import ./make-test.nix ({ pkgs, ... }:
   machine = { pkgs, ... }: {
     environment.systemPackages = [ pkgs.vault ];
     environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
-    services.vault.enable = true;
+    services.vault = {
+      enable = true;
+      ui = true;
+    };
   };
 
   testScript =
@@ -19,5 +22,6 @@ import ./make-test.nix ({ pkgs, ... }:
       $machine->waitForOpenPort(8200);
       $machine->succeed('vault operator init');
       $machine->succeed('vault status | grep Sealed | grep true');
+      $machine->succeed('curl --fail http://127.0.0.1:8200/ui/vault/auth | grep "<title>Vault"');
     '';
 })

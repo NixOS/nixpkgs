@@ -25,6 +25,7 @@ let
           ${cfg.telemetryConfig}
         }
       ''}
+    ${optionalString cfg.ui "ui = true"}
     ${cfg.extraConfig}
   '';
 in
@@ -39,6 +40,12 @@ in
         default = pkgs.vault;
         defaultText = "pkgs.vault";
         description = "This option specifies the vault package to use.";
+      };
+
+      ui = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enables the Vault Web UI";
       };
 
       address = mkOption {
