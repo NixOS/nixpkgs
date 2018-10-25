@@ -29,4 +29,5 @@
  <xi:include href="profiles/base.xml" />
  <xi:include href="profiles/clone-config.xml" />
  <xi:include href="profiles/demo.xml" />
+ <xi:include href="profiles/docker-container.xml" />
 </chapter>
