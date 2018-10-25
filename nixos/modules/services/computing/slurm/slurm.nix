@@ -55,6 +55,8 @@ in
 
   ###### interface
 
+  meta.maintainers = [ maintainers.markuskowa ];
+
   options = {
 
     services.slurm = {

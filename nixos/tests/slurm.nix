@@ -1,4 +1,4 @@
-import ./make-test.nix ({ ... }:
+import ./make-test.nix ({ lib, ... }:
 let
     mungekey = "mungeverryweakkeybuteasytointegratoinatest";
 
@@ -13,6 +13,8 @@ let
     };
 in {
   name = "slurm";
+
+  meta.maintainers = [ lib.maintainers.markuskowa ];
 
   nodes =
     let
