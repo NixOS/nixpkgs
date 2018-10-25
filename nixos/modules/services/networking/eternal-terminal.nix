@@ -77,7 +77,7 @@ in
 
             [Debug]
             verbose = ${toString cfg.verbosity}
-            silent = ${if cfg.silent then "true" else "false"}
+            silent = ${if cfg.silent then "1" else "0"}
             logsize = ${toString cfg.logSize}
           ''}";
           Restart = "on-failure";
