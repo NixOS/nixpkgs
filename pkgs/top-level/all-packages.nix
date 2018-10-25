@@ -118,6 +118,10 @@ with pkgs;
 
   corgi = callPackage ../development/tools/corgi { };
 
+  concourse = callPackage ../development/tools/continuous-integration/concourse { };
+
+  garden-runc = callPackage ../development/tools/continuous-integration/concourse/garden-runc { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
@@ -14658,8 +14662,9 @@ with pkgs;
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
 
-  go-protobuf = callPackage ../development/tools/go-protobuf { };
+  go-packr = callPackage ../development/tools/go-packr { };
 
+  go-protobuf = callPackage ../development/tools/go-protobuf { };
 
   go-symbols = callPackage ../development/tools/go-symbols { };
 
