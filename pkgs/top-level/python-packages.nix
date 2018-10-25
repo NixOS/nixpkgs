@@ -2462,6 +2462,8 @@ in {
 
   icalendar = callPackage ../development/python-modules/icalendar { };
 
+  ifaddr = callPackage ../development/python-modules/ifaddr { };
+
   imageio = callPackage ../development/python-modules/imageio { };
 
   imgaug = callPackage ../development/python-modules/imgaug { };
