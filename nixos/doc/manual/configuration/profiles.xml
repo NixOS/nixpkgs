@@ -26,4 +26,5 @@
   profile. Detailing each option configured by each one is out of scope.
  </para>
  <xi:include href="profiles/all-hardware.xml" />
+ <xi:include href="profiles/base.xml" />
 </chapter>
