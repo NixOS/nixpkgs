@@ -331,6 +331,11 @@
     github = "ardumont";
     name = "Antoine R. Dumont";
   };
+  arianvp = {
+    email = "arian.vanputten@gmail.com";
+    github = "arianvp";
+    name = "Arian van Putten";
+  };
   aristid = {
     email = "aristidb@gmail.com";
     github = "aristidb";
