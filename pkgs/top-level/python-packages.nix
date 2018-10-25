@@ -2128,6 +2128,8 @@ in {
 
   dj-database-url = callPackage ../development/python-modules/dj-database-url { };
 
+  dj-email-url = callPackage ../development/python-modules/dj-email-url { };
+
   dj-search-url = callPackage ../development/python-modules/dj-search-url { };
 
   djmail = callPackage ../development/python-modules/djmail { };
