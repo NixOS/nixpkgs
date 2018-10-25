@@ -6,18 +6,19 @@
 , requests_toolbelt
 , tqdm
 , pyblake2
+, readme_renderer
 }:
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "1.11.0";
+  version = "1.12.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09cz9v63f8mrs4znbjapjj2z3wdfryq8q364zm0wzjhbzzcs9n9g";
+    sha256 = "7d89bc6acafb31d124e6e5b295ef26ac77030bf098960c2a4c4e058335827c5c";
   };
 
-  propagatedBuildInputs = [ pkginfo requests requests_toolbelt tqdm pyblake2 ];
+  propagatedBuildInputs = [ pkginfo requests requests_toolbelt tqdm pyblake2 readme_renderer ];
 
   # Requires network
   doCheck = false;
