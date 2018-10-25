@@ -2100,7 +2100,7 @@ someVar=$(stripHash $name)
 
   <para>
    In order to alleviate this burden, the <firstterm>setup
-   hook></firstterm>mechanism was written, where any package can include a
+   hook</firstterm>mechanism was written, where any package can include a
    shell script that [by convention rather than enforcement by Nix], any
    downstream reverse-dependency will source as part of its build process. That
    allows the downstream dependency to merely specify its dependencies, and
