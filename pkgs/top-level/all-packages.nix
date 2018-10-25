@@ -7549,6 +7549,8 @@ with pkgs;
 
   dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
+  dhallPackages = import ../development/dhall-modules { inherit pkgs; };
+
   duktape = callPackage ../development/interpreters/duktape { };
 
   beam = callPackage ./beam-packages.nix { };
