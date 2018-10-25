@@ -596,6 +596,8 @@ in {
 
   python-prctl = callPackage ../development/python-modules/python-prctl { };
 
+  python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
