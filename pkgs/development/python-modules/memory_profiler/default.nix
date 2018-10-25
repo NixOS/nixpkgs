@@ -1,19 +1,27 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, psutil
+, python
 }:
 
 buildPythonPackage rec {
   pname = "memory_profiler";
-  version = "0.41";
+  version = "0.54.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dce6e931c281662a500b142595517d095267216472c2926e5ec8edab89898d10";
+    sha256 = "d64342a23f32e105f4929b408a8b89d9222c3ce8afbbb3359817555811448d1a";
   };
 
+  propagatedBuildInputs = [ psutil ];
+
+  checkPhase = ''
+    make test PYTHON=${python.interpreter}
+  '';
+
   # Tests don't import profile
-  doCheck = false;
+  # doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A module for monitoring memory usage of a python program";
