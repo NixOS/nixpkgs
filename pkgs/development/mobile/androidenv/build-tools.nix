@@ -1,4 +1,4 @@
-{stdenv, stdenv_32bit, fetchurl, unzip, zlib_32bit, ncurses_32bit, file, zlib, ncurses}:
+{stdenv, stdenv_32bit, fetchurl, unzip, zlib_32bit, ncurses_32bit, file, zlib, ncurses, coreutils}:
 
 stdenv.mkDerivation rec {
   version = "28.0.3";
@@ -20,9 +20,14 @@ stdenv.mkDerivation rec {
     unzip $src
     mv android-* ${version}
 
+    cd ${version}
+
+    for f in $(grep -Rl /bin/ls .); do
+      sed -i -e "s|/bin/ls|${coreutils}/bin/ls|" "$f"
+    done
+
     ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux")
       ''
-        cd ${version}
 
         ln -s ${ncurses.out}/lib/libncurses.so.5 `pwd`/lib64/libtinfo.so.5
 
