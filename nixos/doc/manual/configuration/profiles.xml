@@ -32,4 +32,5 @@
  <xi:include href="profiles/docker-container.xml" />
  <xi:include href="profiles/graphical.xml" />
  <xi:include href="profiles/hardened.xml" />
+ <xi:include href="profiles/headless.xml" />
 </chapter>
