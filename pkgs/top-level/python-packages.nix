@@ -7952,6 +7952,8 @@ in {
 
   uproot = callPackage ../development/python-modules/uproot {};
 
+  uproot-methods = callPackage ../development/python-modules/uproot-methods { };
+
   uptime = buildPythonPackage rec {
     name = "uptime-${version}";
     version = "3.0.1";
