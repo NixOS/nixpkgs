@@ -10,6 +10,7 @@
 , hunspell, libevent, libstartup_notification, libvpx
 , icu, libpng, jemalloc, glib
 , autoconf213, which, gnused, cargo, rustc, llvmPackages
+, rust-cbindgen, nodejs
 , debugBuild ? false
 
 ### optionals
@@ -111,7 +112,6 @@ stdenv.mkDerivation rec {
     "-I${glib.dev}/include/gio-unix-2.0"
   ]
   ++ lib.optionals (!isTorBrowserLike) [
-    "-I${nspr.dev}/include/nspr"
     "-I${nss.dev}/include/nss"
   ]
   ++ lib.optional stdenv.isDarwin [
@@ -121,12 +121,15 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace js/src/jsmath.cpp --replace 'defined(HAVE___SINCOS)' 0
+  '' + lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
+    substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
   '';
 
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
+    ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ rust-cbindgen nodejs ]
     ++ extraNativeBuildInputs;
 
   preConfigure = ''
