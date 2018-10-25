@@ -27,4 +27,5 @@
  </para>
  <xi:include href="profiles/all-hardware.xml" />
  <xi:include href="profiles/base.xml" />
+ <xi:include href="profiles/clone-config.xml" />
 </chapter>
