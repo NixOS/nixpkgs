@@ -5286,6 +5286,8 @@ with pkgs;
 
   signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
 
+  signify = callPackage ../tools/security/signify { };
+
   # aka., pgp-tools
   signing-party = callPackage ../tools/security/signing-party { };
 
