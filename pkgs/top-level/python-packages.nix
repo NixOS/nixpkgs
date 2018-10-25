@@ -2045,6 +2045,8 @@ in {
 
   django_colorful = callPackage ../development/python-modules/django_colorful { };
 
+  django-cache-url = callPackage ../development/python-modules/django-cache-url { };
+
   django_compressor = callPackage ../development/python-modules/django_compressor { };
 
   django_compat = callPackage ../development/python-modules/django-compat { };
