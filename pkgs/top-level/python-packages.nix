@@ -3223,31 +3223,7 @@ in {
 
   py = callPackage ../development/python-modules/py { };
 
-  pyacoustid = buildPythonPackage rec {
-    name = "pyacoustid-1.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyacoustid/${name}.tar.gz";
-      sha256 = "0117039cb116af245e6866e8e8bf3c9c8b2853ad087142bd0c2dfc0acc09d452";
-    };
-
-    propagatedBuildInputs = with self; [ requests audioread ];
-
-    patches = [ ../development/python-modules/pyacoustid-py3.patch ];
-
-    postPatch = ''
-      sed -i \
-          -e '/^FPCALC_COMMAND *=/s|=.*|= "${pkgs.chromaprint}/bin/fpcalc"|' \
-          acoustid.py
-    '';
-
-    meta = {
-      description = "Bindings for Chromaprint acoustic fingerprinting";
-      homepage = "https://github.com/sampsyo/pyacoustid";
-      license = licenses.mit;
-    };
-  };
-
+  pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 
   pyalgotrade = buildPythonPackage {
     name = "pyalgotrade-0.16";
