@@ -3231,25 +3231,7 @@ in {
 
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
-  pyaudio = buildPythonPackage rec {
-    name = "python-pyaudio-${version}";
-    version = "0.2.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyAudio/PyAudio-${version}.tar.gz";
-      sha256 = "bfd694272b3d1efc51726d0c27650b3c3ba1345f7f8fdada7e86c9751ce0f2a1";
-    };
-
-    disabled = isPyPy;
-
-    buildInputs = with self; [ pkgs.portaudio ];
-
-    meta = {
-      description = "Python bindings for PortAudio";
-      homepage = "http://people.csail.mit.edu/hubert/pyaudio/";
-      license = licenses.mit;
-    };
-  };
+  pyaudio = callPackage ../development/python-modules/pyaudio { };
 
   pysam = callPackage ../development/python-modules/pysam { };
 
