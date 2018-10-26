@@ -3180,27 +3180,7 @@ in {
 
   python3pika = callPackage ../development/python-modules/python3pika { };
 
-  python-jenkins = buildPythonPackage rec {
-    name = "python-jenkins-${version}";
-    version = "0.4.14";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-jenkins/${name}.tar.gz";
-      sha256 = "1n8ikvd9jf4dlki7nqlwjlsn8wpsx4x7wg4h3d6bkvyvhwwf8yqf";
-    };
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-
-    buildInputs = with self; [ mock ];
-    propagatedBuildInputs = with self; [ pbr pyyaml six multi_key_dict testtools
-     testscenarios testrepository kerberos ];
-
-    meta = {
-      description = "Python bindings for the remote Jenkins API";
-      homepage = https://pypi.python.org/pypi/python-jenkins;
-      license = licenses.bsd3;
-    };
-  };
+  python-jenkins = callPackage ../development/python-modules/python-jenkins { };
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
