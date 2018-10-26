@@ -3053,29 +3053,7 @@ in {
 
   fasteners = callPackage ../development/python-modules/fasteners { };
 
-  aioeventlet = buildPythonPackage rec {
-    name = "aioeventlet-${version}";
-    version = "0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/aioeventlet/aioeventlet-0.4.tar.gz";
-      sha256 = "19krvycaiximchhv1hcfhz81249m3w3jrbp2h4apn1yf4yrc4y7y";
-    };
-
-    propagatedBuildInputs = with self; [ eventlet trollius asyncio ];
-    buildInputs = with self; [ mock ];
-
-    # 2 tests error out
-    doCheck = false;
-    checkPhase = ''
-      ${python.interpreter} runtests.py
-    '';
-
-    meta = with stdenv.lib; {
-      description = "aioeventlet implements the asyncio API (PEP 3156) on top of eventlet. It makes";
-      homepage = http://aioeventlet.readthedocs.org/;
-    };
-  };
+  aioeventlet = callPackage ../development/python-modules/aioeventlet { };
 
   olefile = callPackage ../development/python-modules/olefile { };
 
