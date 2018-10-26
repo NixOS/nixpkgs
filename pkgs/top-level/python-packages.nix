@@ -708,6 +708,8 @@ in {
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 
+  aiohttp-remotes = callPackage ../development/python-modules/aiohttp-remotes { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   ajpy = callPackage ../development/python-modules/ajpy { };
