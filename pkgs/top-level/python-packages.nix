@@ -3047,22 +3047,7 @@ in {
 
   ldappool = callPackage ../development/python-modules/ldappool { };
 
-  lz4 = buildPythonPackage rec {
-    name = "lz4-0.8.2";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/b5/f0/e1de2bb7feb54011f3c4dcf35b7cca3536e19526764db051b50ea26b58e7/lz4-0.8.2.tar.gz";
-      sha256 = "1irad4sq4hdr30fr53smvv3zzk4rddcf9b4jx19w8s9xsxhr1x3b";
-    };
-
-    buildInputs= with self; [ nose ];
-
-    meta = with stdenv.lib; {
-      description = "Compression library";
-      homepage = https://github.com/python-lz4/python-lz4;
-      license = licenses.bsd3;
-    };
-  };
+  lz4 = callPackage ../development/python-modules/lz4 { };
 
  retrying = buildPythonPackage rec {
     name = "retrying-${version}";
