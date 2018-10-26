@@ -3275,21 +3275,7 @@ in {
 
   pyblock = callPackage ../development/python-modules/pyblock { };
 
-  pybcrypt = buildPythonPackage rec {
-    pname = "pybcrypt";
-    version = "0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/py-bcrypt/py-bcrypt-${version}.tar.gz";
-      sha256 = "5fa13bce551468350d66c4883694850570f3da28d6866bb638ba44fe5eabda78";
-    };
-
-    meta = {
-      description = "bcrypt password hashing and key derivation";
-      homepage = https://code.google.com/p/py-bcrypt2;
-      license = "BSD";
-    };
-  };
+  pybcrypt = callPackage ../development/python-modules/pybcrypt { };
 
   pyblosxom = buildPythonPackage rec {
     name = "pyblosxom-${version}";
