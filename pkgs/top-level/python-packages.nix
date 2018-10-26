@@ -3089,28 +3089,7 @@ in {
 
   paramz = callPackage ../development/python-modules/paramz { };
 
-  parsel = buildPythonPackage rec {
-    name = "parsel-${version}";
-    version = "1.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/parsel/${name}.tar.gz";
-      sha256 = "0a34d1c0bj1fzb5dk5744m2ag6v3b8glk4xp0amqxdan9ldbcd97";
-    };
-
-    buildInputs = with self; [ pytest pytestrunner ];
-    propagatedBuildInputs = with self; [ six w3lib lxml cssselect ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      homepage = "https://github.com/scrapy/parsel";
-      description = "Parsel is a library to extract data from HTML and XML using XPath and CSS selectors";
-      license = licenses.bsd3;
-    };
-  };
+  parsel = callPackage ../development/python-modules/parsel { };
 
   parso = callPackage ../development/python-modules/parso { };
 
