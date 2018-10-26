@@ -16182,6 +16182,8 @@ with pkgs;
     inherit (python3Packages) buildPythonApplication requests;
   };
 
+  dmrconfig = callPackage ../applications/misc/dmrconfig { };
+
   dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
   };
 
