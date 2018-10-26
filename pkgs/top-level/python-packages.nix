@@ -3550,17 +3550,7 @@ in {
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
   requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
 
-  retry_decorator = buildPythonPackage rec {
-    name = "retry_decorator-1.0.0";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/r/retry_decorator/retry_decorator-1.0.0.tar.gz;
-      sha256 = "086zahyb6yn7ggpc58909c5r5h3jz321i1694l1c28bbpaxnlk88";
-    };
-    meta = {
-      homepage = https://github.com/pnpnpn/retry-decorator;
-      license = licenses.mit;
-    };
-  };
+  retry_decorator = callPackage ../development/python-modules/retry_decorator { };
 
   quandl = callPackage ../development/python-modules/quandl { };
   # alias for an older package which did not support Python 3
