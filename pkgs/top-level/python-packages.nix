@@ -3461,21 +3461,7 @@ in {
 
   pyplatec = callPackage ../development/python-modules/pyplatec { };
 
-  purepng = buildPythonPackage rec {
-    name = "purepng-${version}";
-    version = "0.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/purepng/${name}.tar.gz";
-      sha256 = "1kcl7a6d7d59360fbz2jwfk6ha6pmqgn396962p4s62j893d2r0d";
-    };
-
-    meta = {
-      description = "Pure Python library for PNG image encoding/decoding";
-      homepage    = https://github.com/scondo/purepng;
-      license     = licenses.mit;
-    };
-  };
+  purepng = callPackage ../development/python-modules/purepng { };
 
   pymaging = buildPythonPackage rec {
     name = "pymaging-unstable-2016-11-16";
