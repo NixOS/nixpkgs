@@ -3265,26 +3265,7 @@ in {
 
   vobject = callPackage ../development/python-modules/vobject { };
 
-  pycarddav = buildPythonPackage rec {
-    version = "0.7.0";
-    name = "pycarddav-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyCardDAV/pyCardDAV-${version}.tar.gz";
-      sha256 = "0avkrcpisfvhz103v7vmq2jd83hvmpqrb4mlbx6ikkk1wcvclsx8";
-    };
-
-    disabled = isPy3k || isPyPy;
-
-    propagatedBuildInputs = with self; [ vobject lxml requests urwid pyxdg ];
-
-    meta = {
-      description = "Command-line interface carddav client";
-      homepage = http://lostpackets.de/pycarddav;
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  pycarddav = callPackage ../development/python-modules/pycarddav { };
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
