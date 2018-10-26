@@ -3727,25 +3727,8 @@ in {
   sqlobject = callPackage ../development/python-modules/sqlobject { };
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
-  pgpdump = self.buildPythonPackage rec {
-    pname = "pgpdump";
-    version = "1.5";
-    name = "${pname}-${version}";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0s4nh8h7qsdj2yf29bspjs1zvxd4lcd11r6g11dp7fppgf2h0iqw";
-    };
-
-    # Disabling check because of: https://github.com/toofishes/python-pgpdump/issues/18
-    doCheck = false;
-
-    meta = {
-      description = "Python library for parsing PGP packets";
-      homepage = https://github.com/toofishes/python-pgpdump;
-      license = licenses.bsd3;
-    };
-  };
+  pgpdump = callPackage ../development/python-modules/pgpdump { };
 
   spambayes = callPackage ../development/python-modules/spambayes { };
 
