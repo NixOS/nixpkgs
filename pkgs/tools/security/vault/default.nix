@@ -22,6 +22,8 @@ in stdenv.mkDerivation rec {
 
 
   ui = yarn2nix.mkYarnPackage {
+    pname = "vault";
+    inherit version;
     src = "${src}/ui";
     yarnNix = ./yarn.nix;
     extraBuildInputs = [ nodePackages.node-gyp-build ];
