@@ -3285,34 +3285,7 @@ in {
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
-  pyenchant = buildPythonPackage rec {
-    name = "pyenchant-1.6.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyenchant/pyenchant-1.6.6.tar.gz";
-      sha256 = "25c9d2667d512f8fc4410465fdd2e868377ca07eb3d56e2b6e534a86281d64d3";
-    };
-
-    propagatedBuildInputs = [ pkgs.enchant ];
-
-    patchPhase = let
-      path_hack_script = "s|LoadLibrary(e_path)|LoadLibrary('${pkgs.enchant}/lib/' + e_path)|";
-    in ''
-      sed -i "${path_hack_script}" enchant/_enchant.py
-
-      # They hardcode a bad path for Darwin in their library search code
-      substituteInPlace enchant/_enchant.py --replace '/opt/local/lib/' ""
-    '';
-
-    # dictionaries needed for tests
-    doCheck = false;
-
-    meta = {
-      description = "pyenchant: Python bindings for the Enchant spellchecker";
-      homepage = https://pythonhosted.org/pyenchant/;
-      license = licenses.lgpl21;
-    };
-  };
+  pyenchant = callPackage ../development/python-modules/pyenchant { };
 
   pyev = callPackage ../development/python-modules/pyev { };
 
