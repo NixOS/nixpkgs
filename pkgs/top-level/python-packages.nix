@@ -3598,27 +3598,7 @@ in {
 
   robotframework = callPackage ../development/python-modules/robotframework { };
 
-  robotframework-selenium2library = buildPythonPackage rec {
-    version = "1.6.0";
-    name = "robotframework-selenium2library-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/robotframework-selenium2library/${name}.tar.gz";
-      sha256 = "1asdwrpb4s7q08bx641yrh3yicgba14n3hxmsqs58mqf86ignwly";
-    };
-
-    # error: invalid command 'test'
-    #doCheck = false;
-
-    propagatedBuildInputs = with self; [ robotframework selenium docutils decorator ];
-
-    meta = {
-      description = "";
-      homepage = http://robotframework.org/;
-      license = licenses.asl20;
-    };
-  };
-
+  robotframework-selenium2library = callPackage ../development/python-modules/robotframework-selenium2library { };
 
   robotframework-tools = buildPythonPackage rec {
     version = "0.1a115";
