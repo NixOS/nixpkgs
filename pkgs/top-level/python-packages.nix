@@ -3136,26 +3136,7 @@ in {
     glibcLocales = pkgs.glibcLocales;
   };
 
-  pika = buildPythonPackage rec {
-    name = "pika-${version}";
-    version = "0.10.0";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pika/${name}.tar.gz";
-      sha256 = "0nb4h08di432lv7dy2v9kpwgk0w92f24sqc2hw2s9vwr5b8v8xvj";
-    };
-
-    # Tests require twisted which is only availalble for python-2.x
-    doCheck = !isPy3k;
-
-    buildInputs = with self; [ nose mock pyyaml unittest2 pyev ] ++ optionals (!isPy3k) [ twisted tornado ];
-
-    meta = {
-      description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
-      homepage = https://pika.readthedocs.org;
-      license = licenses.bsd3;
-    };
-  };
+  pika = callPackage ../development/python-modules/pika { };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
 
