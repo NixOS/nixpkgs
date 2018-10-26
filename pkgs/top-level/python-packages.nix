@@ -3283,31 +3283,7 @@ in {
 
   pydot_ng = callPackage ../development/python-modules/pydot_ng { };
 
-  pyelftools = buildPythonPackage rec {
-    pname = "pyelftools";
-    version = "0.24";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "17259kf6hwwsmizr5myp9jv3k9g5i3dvmnl8m646pfd5hpb9gpg9";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} test/all_tests.py
-    '';
-    # Tests cannot pass against system-wide readelf
-    # https://github.com/eliben/pyelftools/issues/65
-    doCheck = false;
-
-    meta = {
-      description = "A library for analyzing ELF files and DWARF debugging information";
-      homepage = https://github.com/eliben/pyelftools;
-      license = licenses.publicDomain;
-      platforms = platforms.all;
-      maintainers = [ maintainers.igsha ];
-    };
-  };
+  pyelftools = callPackage ../development/python-modules/pyelftools { };
 
   pyenchant = buildPythonPackage rec {
     name = "pyenchant-1.6.6";
