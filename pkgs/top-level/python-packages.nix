@@ -3463,33 +3463,7 @@ in {
 
   pyreadability = callPackage ../development/python-modules/pyreadability { };
 
-  pyscss = buildPythonPackage rec {
-    name = "pyScss-${version}";
-    version = "1.3.5";
-
-    src = pkgs.fetchFromGitHub {
-      sha256 = "0lfsan74vcw6dypb196gmbprvlbran8p7w6czy8hyl2b1l728mhz";
-      rev = "v1.3.5";
-      repo = "pyScss";
-      owner = "Kronuz";
-    };
-
-    checkInputs = with self; [ pytest ];
-
-    propagatedBuildInputs = with self; [ six ]
-      ++ (optionals (pythonOlder "3.4") [ enum34 pathlib ])
-      ++ (optionals (pythonOlder "2.7") [ ordereddict ]);
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "A Scss compiler for Python";
-      homepage = http://pyscss.readthedocs.org/en/latest/;
-      license = licenses.mit;
-    };
-  };
+  pyscss = callPackage ../development/python-modules/pyscss { };
 
   pyserial = callPackage ../development/python-modules/pyserial {};
 
