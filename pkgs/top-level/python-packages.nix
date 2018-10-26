@@ -3067,16 +3067,7 @@ in {
 
   wrapt = callPackage ../development/python-modules/wrapt { };
 
-  pagerduty = buildPythonPackage rec {
-    name = "pagerduty-${version}";
-    version = "0.2.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-        url = "mirror://pypi/p/pagerduty/pagerduty-${version}.tar.gz";
-        sha256 = "e8c237239d3ffb061069aa04fc5b3d8ae4fb0af16a9713fe0977f02261d323e9";
-    };
-  };
+  pagerduty = callPackage ../development/python-modules/pagerduty { };
 
   pandas = callPackage ../development/python-modules/pandas { };
 
