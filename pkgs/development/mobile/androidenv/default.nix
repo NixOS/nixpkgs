@@ -222,7 +222,37 @@ rec {
     useInstantApps = true;
   };
 
-  androidsdk_latest = androidsdk_8_0;
+  androidsdk_8_1 = androidsdk {
+    platformVersions = [ "27" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_8_1_extras = androidsdk {
+    platformVersions = [ "27" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+    useInstantApps = true;
+  };
+
+  androidsdk_9_0 = androidsdk {
+    platformVersions = [ "28" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_9_0_extras = androidsdk {
+    platformVersions = [ "28" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+    useInstantApps = true;
+  };
+
+  androidsdk_latest = androidsdk_9_0;
 
   androidndk_10e = pkgs.callPackage ./androidndk.nix {
     inherit (buildPackages)
