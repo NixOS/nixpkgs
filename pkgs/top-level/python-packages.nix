@@ -3235,43 +3235,7 @@ in {
 
   pysam = callPackage ../development/python-modules/pysam { };
 
-  pysaml2 = buildPythonPackage rec {
-    name = "pysaml2-${version}";
-    version = "3.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pysaml2/${name}.tar.gz";
-      sha256 = "0y2iw1dddcvi13xjh3l52z1mvnrbc41ik9k4nn7lwj8x5kimnk9n";
-    };
-
-    patches = [
-      (pkgs.fetchpatch {
-        name = "CVE-2016-10127.patch";
-        url = "https://sources.debian.net/data/main/p/python-pysaml2/3.0.0-5/debian/patches/fix-xxe-in-xml-parsing.patch";
-        sha256 = "184lkwdayjqiahzsn4yp15parqpmphjsb1z7zwd636jvarxqgs2q";
-      })
-    ];
-
-    propagatedBuildInputs = with self; [
-      repoze_who paste cryptography pycrypto pyopenssl ipaddress six cffi idna
-      enum34 pytz setuptools zope_interface dateutil requests pyasn1 webob decorator pycparser
-      defusedxml
-    ];
-    buildInputs = with self; [
-      Mako pytest memcached pymongo mongodict pkgs.xmlsec
-    ];
-
-    preConfigure = ''
-      sed -i 's/pymongo==3.0.1/pymongo/' setup.py
-    '';
-
-    # 16 failed, 427 passed, 17 error in 88.85 seconds
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/rohe/pysaml2";
-    };
-  };
+  pysaml2 = callPackage ../development/python-modules/pysaml2 { };
 
   python-pushover = callPackage ../development/python-modules/pushover {};
 
