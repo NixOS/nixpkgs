@@ -3081,24 +3081,7 @@ in {
 
   pamqp = callPackage ../development/python-modules/pamqp { };
 
-  parsedatetime = buildPythonPackage rec {
-    name = "parsedatetime-${version}";
-    version = "2.3";
-
-    meta = {
-      description = "Parse human-readable date/time text";
-      homepage = "https://github.com/bear/parsedatetime";
-      license = licenses.asl20;
-    };
-
-    buildInputs = with self; [ pytest pytestrunner ];
-    propagatedBuildInputs = with self; [ future ];
-
-    src = pkgs.fetchurl {
-        url = "mirror://pypi/p/parsedatetime/${name}.tar.gz";
-        sha256 = "1vkrmd398s11h1zn3zaqqsiqhj9lwy1ikcg6irx2lrgjzjg3rjll";
-    };
-  };
+  parsedatetime = callPackage ../development/python-modules/parsedatetime { };
 
   paramiko = callPackage ../development/python-modules/paramiko { };
 
