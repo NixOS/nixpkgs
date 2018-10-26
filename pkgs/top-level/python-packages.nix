@@ -1856,6 +1856,8 @@ in {
 
   poyo = callPackage ../development/python-modules/poyo { };
 
+  priority = callPackage ../development/python-modules/priority { };
+
   prov = callPackage ../development/python-modules/prov { };
 
   pudb = callPackage ../development/python-modules/pudb { };
