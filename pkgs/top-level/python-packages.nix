@@ -3708,30 +3708,7 @@ in {
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
-  setuptoolsDarcs = buildPythonPackage rec {
-    name = "setuptools_darcs-${version}";
-    version = "1.2.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/setuptools_darcs/${name}.tar.gz";
-      sha256 = "1wsh0g1fn10msqk87l5jrvzs0yj5mp6q9ld3gghz6zrhl9kqzdn1";
-    };
-
-    # In order to break the dependency on darcs -> ghc, we don't add
-    # darcs as a propagated build input.
-    propagatedBuildInputs = with self; [ darcsver ];
-
-    # ugly hack to specify version that should otherwise come from darcs
-    patchPhase = ''
-      substituteInPlace setup.py --replace "name=PKG" "name=PKG, version='${version}'"
-    '';
-
-    meta = {
-      description = "Setuptools plugin for the Darcs version control system";
-      homepage = http://allmydata.org/trac/setuptools_darcs;
-      license = "BSD";
-    };
-  };
+  setuptoolsDarcs = callPackage ../development/python-modules/setuptoolsdarcs { };
 
   setuptoolsTrial = buildPythonPackage rec {
     name = "${pname}-${version}";
