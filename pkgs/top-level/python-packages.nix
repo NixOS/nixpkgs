@@ -3085,23 +3085,7 @@ in {
 
   paste = callPackage ../development/python-modules/paste { };
 
-  PasteDeploy = buildPythonPackage rec {
-    version = "1.5.2";
-    name = "paste-deploy-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PasteDeploy/PasteDeploy-${version}.tar.gz";
-      sha256 = "d5858f89a255e6294e63ed46b73613c56e3b9a2d82a42f1df4d06c8421a9e3cb";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      description = "Load, configure, and compose WSGI applications and servers";
-      homepage = http://pythonpaste.org/deploy/;
-      platforms = platforms.all;
-    };
-  };
+   PasteDeploy = callPackage ../development/python-modules/pastedeploy { };
 
    pasteScript = buildPythonPackage rec {
     version = "1.7.5";
