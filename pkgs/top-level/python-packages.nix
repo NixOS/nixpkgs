@@ -3504,25 +3504,7 @@ in {
 
   pyyaml = callPackage ../development/python-modules/pyyaml { };
 
-  rabbitpy = buildPythonPackage rec {
-    version = "0.26.2";
-    name = "rabbitpy-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rabbitpy/${name}.tar.gz";
-      sha256 = "0pgijv7mgxc4sm7p9s716dhl600l8isisxzyg4hz7ng1sk09p1w3";
-    };
-
-    buildInputs = with self; [ mock nose ];
-
-    propagatedBuildInputs = with self; [ pamqp ];
-
-    meta = {
-      description = "A pure python, thread-safe, minimalistic and pythonic RabbitMQ client library";
-      homepage = https://pypi.python.org/pypi/rabbitpy;
-      license = licenses.bsd3;
-    };
-  };
+  rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
 
