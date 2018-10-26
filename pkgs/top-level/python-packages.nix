@@ -3413,25 +3413,7 @@ in {
 
   pynzb = callPackage ../development/python-modules/pynzb { };
 
-  process-tests = buildPythonPackage rec {
-    pname = "process-tests";
-    name = "${pname}-${version}";
-    version = "1.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "65c9d7a0260f31c15b4a22a851757e61f7072d0557db5f8a976112fbe81ff7e9";
-    };
-
-    # No tests
-    doCheck = false;
-
-    meta = {
-      description = "Tools for testing processes";
-      license = licenses.bsd2;
-      homepage = https://github.com/ionelmc/python-process-tests;
-    };
-  };
+  process-tests = callPackage ../development/python-modules/process-tests { };
 
   progressbar = callPackage ../development/python-modules/progressbar {};
 
