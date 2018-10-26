@@ -3390,27 +3390,7 @@ in {
 
   pyptlib = callPackage ../development/python-modules/pyptlib { };
 
-  pyqtgraph = buildPythonPackage rec {
-    name = "pyqtgraph-${version}";
-    version = "0.9.10";
-
-    doCheck = false;  # "PyQtGraph requires either PyQt4 or PySide; neither package could be imported."
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyqtgraph/${name}.tar.gz";
-      sha256 = "188pcxf3sxxjf0aipjn820lx2rf9f42zzp0sibmcl90955a3ipf1";
-    };
-
-    propagatedBuildInputs = with self; [ scipy numpy pyqt4 pyopengl ];
-
-    meta = {
-      description = "Scientific Graphics and GUI Library for Python";
-      homepage = http://www.pyqtgraph.org/;
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
   PyStemmer = callPackage ../development/python-modules/pystemmer {};
 
