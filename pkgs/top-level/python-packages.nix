@@ -3061,23 +3061,7 @@ in {
 
   paho-mqtt = callPackage ../development/python-modules/paho-mqtt { };
 
-  pamqp = buildPythonPackage rec {
-    version = "1.6.1";
-    name = "pamqp-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pamqp/${name}.tar.gz";
-      sha256 = "1vmyvynqzx5zvbipaxff4fnzy3h3dvl3zicyr15yb816j93jl2ca";
-    };
-
-    buildInputs = with self; [ mock nose pep8 pylint mccabe ];
-
-    meta = {
-      description = "RabbitMQ Focused AMQP low-level library";
-      homepage = https://pypi.python.org/pypi/pamqp;
-      license = licenses.bsd3;
-    };
-  };
+  pamqp = callPackage ../development/python-modules/pamqp { };
 
   parsedatetime = buildPythonPackage rec {
     name = "parsedatetime-${version}";
