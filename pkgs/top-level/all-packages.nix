@@ -16874,7 +16874,7 @@ with pkgs;
       inherit (darwin.apple_sdk.frameworks) CoreMedia ExceptionHandling
                                             Kerberos AVFoundation MediaToolbox
                                             CoreLocation Foundation AddressBook;
-      inherit (darwin) libobjc;
+      inherit (darwin) cf-private libobjc;
     };
   });
 

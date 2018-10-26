@@ -42,7 +42,7 @@
 
 # macOS dependencies
 , xcbuild, CoreMedia, ExceptionHandling, Kerberos, AVFoundation, MediaToolbox
-, CoreLocation, Foundation, AddressBook, libobjc, cups, rsync
+, CoreLocation, Foundation, AddressBook, cf-private, libobjc, cups, rsync
 
 ## other
 
@@ -103,9 +103,15 @@ stdenv.mkDerivation rec {
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
-  ++ lib.optionals stdenv.isDarwin [ CoreMedia ExceptionHandling Kerberos
-                                     AVFoundation MediaToolbox CoreLocation
-                                     Foundation libobjc AddressBook cups ];
+  ++ lib.optionals stdenv.isDarwin [
+    CoreMedia ExceptionHandling Kerberos
+    AVFoundation MediaToolbox CoreLocation
+    Foundation AddressBook libobjc cups
+
+    # Needed for CFURLGetFSRef, etc. which have deen deprecated
+    # since 10.9 and are not part of swift-corelibs CoreFoundation.
+    cf-private
+  ];
 
   NIX_CFLAGS_COMPILE = [
     "-I${glib.dev}/include/gio-unix-2.0"
