@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Remote shell that automatically reconnects without interrupting the session";
     license = licenses.asl20;
     homepage = https://mistertea.github.io/EternalTCP/;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.dezgeg ];
   };
 }
