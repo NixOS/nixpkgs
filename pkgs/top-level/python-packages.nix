@@ -3437,25 +3437,7 @@ in {
 
   pylibgen = callPackage ../development/python-modules/pylibgen { };
 
-  pyliblo = buildPythonPackage rec {
-    name = "pyliblo-${version}";
-    version = "0.9.2";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "http://das.nasophon.de/download/${name}.tar.gz";
-      sha256 = "382ee7360aa00aeebf1b955eef65f8491366657a626254574c647521b36e0eb0";
-    };
-
-    propagatedBuildInputs = with self ; [ pkgs.liblo ];
-
-    meta = {
-      homepage = http://das.nasophon.de/pyliblo/;
-      description = "Python wrapper for the liblo OSC library";
-      license = licenses.lgpl21;
-    };
-  };
+  pyliblo = callPackage ../development/python-modules/pyliblo { };
 
   pypcap = callPackage ../development/python-modules/pypcap {};
 
