@@ -702,6 +702,8 @@ in {
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
+  aioh2 = callPackage ../development/python-modules/aioh2 { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp/cors.nix { };
