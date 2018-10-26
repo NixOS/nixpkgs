@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://podofo.sourceforge.net;
     description = "A library to work with the PDF file format";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ ];
+    platforms = platforms.all;
+    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

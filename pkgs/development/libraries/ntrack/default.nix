@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr\(/lib/ntrack/modules/\)@$out&@" -i common/ntrack.c
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Network Connectivity Tracking library for Desktop Applications";
     homepage = https://launchpad.net/ntrack;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ ];
+    platforms = platforms.linux;
+    license = licenses.lgpl3Plus;
   };
 }
