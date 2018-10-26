@@ -3077,28 +3077,7 @@ in {
 
   partd = callPackage ../development/python-modules/partd { };
 
-  patch = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    version = "1.16";
-    pname = "patch";
-
-    src = pkgs.fetchzip {
-      url = "mirror://pypi/p/${pname}/${name}.zip";
-      sha256 = "1nj55hvyvzax4lxq7vkyfbw91pianzr3hp7ka7j12pgjxccac50g";
-      stripRoot = false;
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    meta = {
-      description = "A library to parse and apply unified diffs";
-      homepage = https://github.com/techtonik/python-patch/;
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = [ maintainers.igsha ];
-    };
-  };
+  patch = callPackage ../development/python-modules/patch { };
 
   pathos = buildPythonPackage rec {
     name = "pathos-${version}";
