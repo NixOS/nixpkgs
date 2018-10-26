@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, automake, autoconf, pkgconfig, gettext
+, autoreconfHook, pkgconfig, gettext
 , vim, glib, libxml2, openssl, ncurses, popt, screen
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig automake autoconf gettext
+    pkgconfig autoreconfHook gettext
   ];
 
   buildInputs = [
