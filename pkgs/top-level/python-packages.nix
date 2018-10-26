@@ -3742,31 +3742,7 @@ in {
 
   sqlite3dbm = callPackage ../development/python-modules/sqlite3dbm { };
 
-  sqlobject = buildPythonPackage rec {
-    pname = "SQLObject";
-    version = "3.3.0";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0p2dxrxh7xrv5yys09v5z95d0z40w22aq3xc01ghdidd7hr79xy9";
-    };
-
-    checkInputs = with self; [ pytest ];
-
-    propagatedBuildInputs = with self; [
-      FormEncode
-      PasteDeploy
-      paste
-      pydispatcher
-    ];
-
-    meta = {
-      description = "Object Relational Manager for providing an object interface to your database";
-      homepage = "http://www.sqlobject.org/";
-      license = licenses.lgpl21;
-    };
-  };
+  sqlobject = callPackage ../development/python-modules/sqlobject { };
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
   pgpdump = self.buildPythonPackage rec {
