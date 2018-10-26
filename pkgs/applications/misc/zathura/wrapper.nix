@@ -1,17 +1,13 @@
 { symlinkJoin, lib, makeWrapper, zathura_core, plugins ? [] }:
-
-let
-  pluginsPath = lib.makeSearchPath "lib/zathura" plugins;
-
-in symlinkJoin {
+symlinkJoin {
   name = "zathura-with-plugins-${zathura_core.version}";
 
-  paths = [ zathura_core ];
+  paths = [ zathura_core ] ++ plugins;
 
   buildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/zathura --add-flags --plugins-dir=${pluginsPath}
+    wrapProgram $out/bin/zathura --add-flags --plugins-dir="''${out}/lib/zathura"
   '';
 
   meta = with lib; {
