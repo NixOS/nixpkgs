@@ -3449,25 +3449,7 @@ in {
 
   pymaging_png = callPackage ../development/python-modules/pymaging_png { };
 
-  pyPdf = buildPythonPackage rec {
-    name = "pyPdf-1.13";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyPdf/${name}.tar.gz";
-      sha256 = "3aede4c3c9c6ad07c98f059f90db0b09ed383f7c791c46100f649e1cabda0e3b";
-    };
-
-    buildInputs = with self; [ ];
-
-    # Not supported. Package is no longer maintained.
-    disabled = isPy3k;
-
-    meta = {
-      description = "Pure-Python PDF toolkit";
-      homepage = "http://pybrary.net/pyPdf/";
-      license = licenses.bsd3;
-    };
-  };
+  pyPdf = callPackage ../development/python-modules/pypdf { };
 
   pypdf2 = buildPythonPackage rec {
     name = "PyPDF2-${version}";
