@@ -3378,28 +3378,7 @@ in {
 
   Pyro = callPackage ../development/python-modules/pyro { };
 
-  pyrsistent = buildPythonPackage (rec {
-    name = "pyrsistent-0.11.12";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyrsistent/${name}.tar.gz";
-      sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
-    };
-
-    propagatedBuildInputs = with self; [ six ];
-    buildInputs = with self; [ pytest hypothesis ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      homepage = https://github.com/tobgu/pyrsistent/;
-      description = "Persistent/Functional/Immutable data structures";
-      license = licenses.mit;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  });
+  pyrsistent = callPackage ../development/python-modules/pyrsistent { };
 
   PyRSS2Gen = buildPythonPackage (rec {
     pname = "PyRSS2Gen";
