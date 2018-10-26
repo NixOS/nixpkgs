@@ -3360,48 +3360,7 @@ in {
 
   mmpython = callPackage ../development/python-modules/mmpython { };
 
-  kaa-base = buildPythonPackage rec {
-    version = "0.99.2dev-384-2b73caca";
-    name = "kaa-base-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kaa-base/kaa-base-0.99.2dev-384-2b73caca.tar.gz";
-      sha256 = "0k3zzz84wzz9q1fl3vvqr2ys96z9pcf4viq9q6s2a63zaysmcfd2";
-    };
-
-    doCheck = false;
-
-    disabled = isPyPy || isPy3k;
-
-    # Same as in buildPythonPackage except that it does not pass --old-and-unmanageable
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-
-      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-      ${python}/bin/${python.executable} setup.py install \
-        --install-lib=$out/lib/${python.libPrefix}/site-packages \
-        --prefix="$out"
-
-      eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
-      if [ -e "$eapth" ]; then
-          mv "$eapth" $(dirname "$eapth")/${name}.pth
-      fi
-
-      rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
-
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "Generic application framework, providing the foundation for other modules";
-      homepage = https://github.com/freevo/kaa-base;
-      license = licenses.lgpl21;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  kaa-base = callPackage ../development/python-modules/kaa-base { };
 
   kaa-metadata = buildPythonPackage rec {
     version = "0.7.8dev-r4569-20111003";
