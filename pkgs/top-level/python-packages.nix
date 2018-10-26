@@ -3628,23 +3628,7 @@ in {
 
   rpy2 = callPackage ../development/python-modules/rpy2 {};
 
-  rpyc = buildPythonPackage rec {
-    name = "rpyc-${version}";
-    version = "3.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rpyc/${name}.tar.gz";
-      sha256 = "43fa845314f0bf442f5f5fab15bb1d1b5fe2011a8fc603f92d8022575cef8b4b";
-    };
-
-    propagatedBuildInputs = with self; [ nose plumbum ];
-
-    meta = {
-      description = "Remote Python Call (RPyC), a transparent and symmetric RPC library";
-      homepage = http://rpyc.readthedocs.org;
-      license = licenses.mit;
-    };
-  };
+  rpyc = callPackage ../development/python-modules/rpyc { };
 
   rsa = buildPythonPackage rec {
     name = "rsa-${version}";
