@@ -3055,21 +3055,7 @@ in {
 
   pandas_0_17_1 = callPackage ../development/python-modules/pandas/0.17.1.nix { };
 
-  xlrd = buildPythonPackage rec {
-    name = "xlrd-${version}";
-
-    version = "0.9.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xlrd/xlrd-${version}.tar.gz";
-      sha256 = "8e8d3359f39541a6ff937f4030db54864836a06e42988c452db5b6b86d29ea72";
-    };
-
-    buildInputs = with self; [ nose ];
-    checkPhase = ''
-      nosetests -v
-    '';
-
-  };
+  xlrd = callPackage ../development/python-modules/xlrd { };
 
   bottleneck = callPackage ../development/python-modules/bottleneck { };
 
