@@ -3636,21 +3636,7 @@ in {
 
   squaremap = callPackage ../development/python-modules/squaremap { };
 
-  ruamel_base = buildPythonPackage rec {
-    name = "ruamel.base-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/ruamel.base/${name}.tar.gz";
-      sha256 = "1wswxrn4givsm917mfl39rafgadimf1sldpbjdjws00g1wx36hf0";
-    };
-
-    meta = {
-      description = "Common routines for ruamel packages";
-      homepage = https://bitbucket.org/ruamel/base;
-      license = licenses.mit;
-    };
-  };
+  ruamel_base = callPackage ../development/python-modules/ruamel_base { };
 
   ruamel_ordereddict = buildPythonPackage rec {
     name = "ruamel.ordereddict-${version}";
