@@ -3584,32 +3584,7 @@ in {
 
   restview = callPackage ../development/python-modules/restview { };
 
-  readme = buildPythonPackage rec {
-    name = "readme-${version}";
-    version = "0.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/readme/readme-${version}.tar.gz";
-      sha256 = "08j2w67nilczn1i5r7h22vag9673i6vnfhyq2rv27r1bdmi5a30m";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [
-      six docutils pygments bleach html5lib
-    ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    # Tests fail, possibly broken.
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      description = "Readme";
-      homepage = "https://github.com/pypa/readme";
-    };
-  };
+  readme = callPackage ../development/python-modules/readme { };
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
