@@ -3135,23 +3135,9 @@ in {
 
   pdfkit = callPackage ../development/python-modules/pdfkit { };
 
-    periodictable = callPackage ../development/python-modules/periodictable { };
+  periodictable = callPackage ../development/python-modules/periodictable { };
 
-  pg8000 = buildPythonPackage rec {
-    name = "pg8000-1.10.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pg8000/${name}.tar.gz";
-      sha256 = "188658db63c2ca931ae1bf0167b34efaac0ecc743b707f0118cc4b87e90ce488";
-    };
-
-    propagatedBuildInputs = with self; [ pytz ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.linux;
-    };
-  };
+  pg8000 = callPackage ../development/python-modules/pg8000 { };
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
