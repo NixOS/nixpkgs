@@ -3370,22 +3370,7 @@ in {
 
   pyparted = callPackage ../development/python-modules/pyparted { };
 
-  pyptlib = buildPythonPackage (rec {
-    name = "pyptlib-${version}";
-    disabled = isPyPy || isPy3k;
-    version = "0.0.6";
-
-    doCheck = false;  # No such file or directory errors on 32bit
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyptlib/pyptlib-${version}.tar.gz";
-      sha256 = "01y6vbwncqb0hxlnin6whd9wrrm5my4qzjhk76fnix78v7ip515r";
-    };
-    meta = {
-      description = "A python implementation of the Pluggable Transports for Circumvention specification for Tor";
-      license = licenses.bsd2;
-    };
-  });
+  pyptlib = callPackage ../development/python-modules/pyptlib { };
 
   pyqtgraph = buildPythonPackage rec {
     name = "pyqtgraph-${version}";
