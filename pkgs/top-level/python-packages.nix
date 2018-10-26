@@ -5987,27 +5987,7 @@ in {
 
   typeguard = callPackage ../development/python-modules/typeguard { };
 
-  ruamel_yaml = buildPythonPackage rec {
-    name = "ruamel.yaml-${version}";
-    version = "0.15.35";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/ruamel.yaml/${name}.tar.gz";
-      sha256 = "0xggyfaj6vprggahf7cq8kp9j79rb7hn8ndk3bxj2sxvwhhliiwd";
-    };
-
-    # Tests cannot load the module to test
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ ruamel_base typing ] ++
-    (optional (!isPy3k) self.ruamel_ordereddict);
-
-    meta = {
-      description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
-      homepage = https://bitbucket.org/ruamel/yaml;
-      license = licenses.mit;
-    };
-  };
+  ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
 
   runsnakerun = buildPythonPackage rec {
     name = "runsnakerun-2.0.4";
