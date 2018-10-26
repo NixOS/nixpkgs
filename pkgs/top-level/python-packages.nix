@@ -3079,26 +3079,7 @@ in {
 
   patch = callPackage ../development/python-modules/patch { };
 
-  pathos = buildPythonPackage rec {
-    name = "pathos-${version}";
-    version = "0.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pathos/${name}.tgz";
-      sha256 = "e35418af733bf434da83746d46acca94375d6e306b3df330b2a1808db026a188";
-    };
-
-    propagatedBuildInputs = with self; [ dill pox ppft multiprocess ];
-
-    # Require network
-    doCheck = false;
-
-    meta = {
-      description = "Parallel graph management and execution in heterogeneous computing";
-      homepage = http://www.cacr.caltech.edu/~mmckerns/pathos.htm;
-      license = licenses.bsd3;
-    };
-  };
+  pathos = callPackage ../development/python-modules/pathos { };
 
   patsy = callPackage ../development/python-modules/patsy { };
 
