@@ -3243,27 +3243,7 @@ in {
 
   mongodict = callPackage ../development/python-modules/mongodict { };
 
-  repoze_who = buildPythonPackage rec {
-    name = "repoze.who-${version}";
-    version = "2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/repoze.who/${name}.tar.gz";
-      sha256 = "12wsviar45nwn35w2y4i8b929dq2219vmwz8013wx7bpgkn2j9ij";
-    };
-
-    propagatedBuildInputs = with self; [
-      zope_interface webob
-    ];
-    buildInputs = with self; [
-
-    ];
-
-    meta = with stdenv.lib; {
-      description = "WSGI Authentication Middleware / API";
-      homepage = "http://www.repoze.org";
-    };
-  };
+  repoze_who = callPackage ../development/python-modules/repoze_who { };
 
   vobject = callPackage ../development/python-modules/vobject { };
 
