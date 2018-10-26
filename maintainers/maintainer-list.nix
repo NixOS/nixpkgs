@@ -1942,6 +1942,11 @@
     github = "jfrankenau";
     name = "Johannes Frankenau";
   };
+  jfroche = {
+    email = "jfroche@affinitic.be";
+    github = "jfroche";
+    name = "Jean-François Roche";
+  };
   jgeerds = {
     email = "jascha@geerds.org";
     github = "jgeerds";

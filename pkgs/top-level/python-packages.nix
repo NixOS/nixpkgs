@@ -11054,6 +11054,11 @@ EOF
     inherit python;
   })).python;
 
+  importlib-metadata = callPackage ../development/python-modules/importlib-metadata { };
+  importlib-resources = callPackage ../development/python-modules/importlib-resources { };
+  setuptools-markdown = callPackage ../development/python-modules/setuptools-markdown { };
+  pre-commit = callPackage ../development/python-modules/pre-commit { };
+
 });
 
 in fix' (extends overrides packages)
