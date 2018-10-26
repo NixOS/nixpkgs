@@ -3722,21 +3722,7 @@ in {
 
   sphfile = callPackage ../development/python-modules/sphfile { };
 
-  sqlite3dbm = buildPythonPackage rec {
-    name = "sqlite3dbm-0.1.4";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sqlite3dbm/${name}.tar.gz";
-      sha256 = "4721607e0b817b89efdba7e79cab881a03164b94777f4cf796ad5dd59a7612c5";
-    };
-
-    meta = {
-      description = "sqlite-backed dictionary";
-      homepage = https://github.com/Yelp/sqlite3dbm;
-      license = licenses.asl20;
-    };
-  };
+  sqlite3dbm = callPackage ../development/python-modules/sqlite3dbm { };
 
   sqlobject = buildPythonPackage rec {
     pname = "SQLObject";
