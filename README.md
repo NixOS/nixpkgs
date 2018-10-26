@@ -8,7 +8,7 @@ build daemon as so-called channels. To get channel information via git, add
 [nixpkgs-channels](https://github.com/NixOS/nixpkgs-channels.git) as a remote:
 
 ```
-% git remote add channels https://github.com/NixOS/nixpkgs-channels.git
+% git remote add channels HTTPS://github.com/NixOS/nixpkgs-channels.git
 ```
 
 For stability and maximum binary package support, it is recommended to maintain
@@ -40,7 +40,7 @@ Communication:
 * [Discourse Forum](https://discourse.nixos.org/)
 * [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)
 
-Note: MIT license does not apply to the packages built by Nixpkgs, merely to
+Note: MIT License does not apply to the packages built by Nixpkgs, merely to
 the package descriptions (Nix expressions, build scripts, and so on). It also
 might not apply to patches included in Nixpkgs, which may be derivative works
 of the packages to which they apply. The aforementioned artifacts are all
