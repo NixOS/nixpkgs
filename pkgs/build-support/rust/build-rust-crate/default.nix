@@ -16,7 +16,7 @@ let
     makeDeps = dependencies:
       (lib.concatMapStringsSep " " (dep:
         let extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName; in
-        (if dep.crateType == "lib" then
+        (if lib.lists.any (x: x == "lib") dep.crateType then
            " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}.rlib"
          else
            " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
@@ -130,9 +130,9 @@ stdenv.mkDerivation (rec {
     crateVersion = crate.version;
     crateAuthors = if crate ? authors && lib.isList crate.authors then crate.authors else [];
     crateType =
-      if lib.attrByPath ["procMacro"] false crate then "proc-macro" else
-      if lib.attrByPath ["plugin"] false crate then "dylib" else
-      (crate.type or "lib");
+      if lib.attrByPath ["procMacro"] false crate then ["proc-macro"] else
+      if lib.attrByPath ["plugin"] false crate then ["dylib"] else
+        (crate.type or ["lib"]);
     colors = lib.attrByPath [ "colors" ] "always" crate;
     extraLinkFlags = builtins.concatStringsSep " " (crate.extraLinkFlags or []);
     configurePhase = configureCrate {
