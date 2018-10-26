@@ -2099,13 +2099,13 @@ someVar=$(stripHash $name)
   </para>
 
   <para>
-   In order to alleviate this burden, the <firstterm>setup
-   hook</firstterm> mechanism was written, where any package can include a
-   shell script that [by convention rather than enforcement by Nix], any
-   downstream reverse-dependency will source as part of its build process. That
-   allows the downstream dependency to merely specify its dependencies, and
-   lets those dependencies effectively initialize themselves. No boilerplate
-   mirroring the list of dependencies is needed.
+   In order to alleviate this burden, the <firstterm>setup hook</firstterm>
+   mechanism was written, where any package can include a shell script that [by
+   convention rather than enforcement by Nix], any downstream
+   reverse-dependency will source as part of its build process. That allows the
+   downstream dependency to merely specify its dependencies, and lets those
+   dependencies effectively initialize themselves. No boilerplate mirroring the
+   list of dependencies is needed.
   </para>
 
   <para>
