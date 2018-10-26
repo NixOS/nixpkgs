@@ -3720,24 +3720,7 @@ in {
 
   simplegeneric = callPackage ../development/python-modules/simplegeneric { };
 
-  shortuuid = buildPythonPackage rec {
-    name = "shortuuid-${version}";
-    version = "0.4.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/shortuuid/${name}.tar.gz";
-      sha256 = "4606dbb19124d98109c00e2cafae2df8117aec02115623e18fb2abe3f766d293";
-    };
-
-    buildInputs = with self; [pep8];
-
-    meta = {
-      description = "A generator library for concise, unambiguous and URL-safe UUIDs";
-      homepage = https://github.com/stochastic-technologies/shortuuid/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ zagy ];
-    };
-  };
+  shortuuid = callPackage ../development/python-modules/shortuuid { };
 
   shouldbe = buildPythonPackage rec {
     version = "0.1.0";
