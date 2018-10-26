@@ -3083,29 +3083,7 @@ in {
 
   patsy = callPackage ../development/python-modules/patsy { };
 
-  paste = buildPythonPackage rec {
-    name = "paste-${version}";
-    version = "2.0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Paste/Paste-${version}.tar.gz";
-      sha256 = "062jk0nlxf6lb2wwj6zc20rlvrwsnikpkh90y0dn8cjch93s6ii3";
-    };
-
-    checkInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ six ];
-
-    # Certain tests require network
-    checkPhase = ''
-      NOSE_EXCLUDE=test_ok,test_form,test_error,test_stderr,test_paste_website nosetests
-    '';
-
-    meta = {
-      description = "Tools for using a Web Server Gateway Interface stack";
-      homepage = http://pythonpaste.org/;
-    };
-  };
-
+  paste = callPackage ../development/python-modules/paste { };
 
   PasteDeploy = buildPythonPackage rec {
     version = "1.5.2";
