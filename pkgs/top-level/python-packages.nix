@@ -3457,19 +3457,7 @@ in {
 
   pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
-  pyquery = buildPythonPackage rec {
-    name = "pyquery-${version}";
-    version = "1.2.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyquery/${name}.zip";
-      sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
-    };
-
-    propagatedBuildInputs = with self; [ cssselect lxml webob ];
-    # circular dependency on webtest
-    doCheck = false;
-  };
+  pyquery = callPackage ../development/python-modules/pyquery { };
 
   pyreport = buildPythonPackage (rec {
     name = "pyreport-0.3.4c";
