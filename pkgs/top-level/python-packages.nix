@@ -3049,24 +3049,7 @@ in {
 
   lz4 = callPackage ../development/python-modules/lz4 { };
 
- retrying = buildPythonPackage rec {
-    name = "retrying-${version}";
-    version = "1.3.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/retrying/retrying-1.3.3.tar.gz";
-      sha256 = "0fwp86xv0rvkncjdvy2mwcvbglw4w9k0fva25i7zx8kd19b3kh08";
-    };
-
-    propagatedBuildInputs = with self; [ six ];
-
-    # doesn't ship tests in tarball
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      homepage = https://github.com/rholder/retrying;
-    };
-  };
+  retrying = callPackage ../development/python-modules/retrying { };
 
   fasteners = buildPythonPackage rec {
     name = "fasteners-${version}";
