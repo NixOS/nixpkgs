@@ -1136,8 +1136,6 @@ with pkgs;
 
   consul = callPackage ../servers/consul { };
 
-  consul-ui = callPackage ../servers/consul/ui.nix { };
-
   consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
 
   consul-template = callPackage ../tools/system/consul-template { };
