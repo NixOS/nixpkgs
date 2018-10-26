@@ -3469,24 +3469,7 @@ in {
 
   pymongo = callPackage ../development/python-modules/pymongo {};
 
-  pymongo_2_9_1 = buildPythonPackage rec {
-    name = "pymongo-2.9.1";
-    version = "2.9.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pymongo/${name}.tar.gz";
-      sha256 = "1nrr1fxyrlxd69bgxl7bvaj2j4z7v3zaciij5sbhxg0vqiz6ny50";
-    };
-
-    # Tests call a running mongodb instance
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/mongodb/mongo-python-driver;
-      license = licenses.asl20;
-      description = "Python driver for MongoDB ";
-    };
-  };
+  pymongo_2_9_1 = callPackage ../development/python-modules/pymongo/2_9_1.nix { };
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
 
