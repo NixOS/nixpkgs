@@ -3540,23 +3540,7 @@ in {
 
   qscintilla = callPackage ../development/python-modules/qscintilla { };
 
-  qserve = buildPythonPackage rec {
-    name = "qserve-0.2.8";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/q/qserve/${name}.zip";
-      sha256 = "0b04b2d4d11b464ff1efd42a9ea9f8136187d59f4076f57c9ba95361d41cd7ed";
-    };
-
-    buildInputs = with self; [ ];
-
-    meta = {
-      description = "Job queue server";
-      homepage = "https://github.com/pediapress/qserve";
-      license = licenses.bsd3;
-    };
-  };
+  qserve = callPackage ../development/python-modules/qserve { };
 
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 
