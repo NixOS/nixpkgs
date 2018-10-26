@@ -3344,52 +3344,7 @@ in {
 
   kaa-base = callPackage ../development/python-modules/kaa-base { };
 
-  kaa-metadata = buildPythonPackage rec {
-    version = "0.7.8dev-r4569-20111003";
-    name = "kaa-metadata-${version}";
-
-    doCheck = false;
-
-    buildInputs = [ pkgs.libdvdread ];
-
-    disabled = isPyPy || isPy3k;
-
-    # Same as in buildPythonPackage except that it does not pass --old-and-unmanageable
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-
-      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-      ${python}/bin/${python.executable} setup.py install \
-        --install-lib=$out/lib/${python.libPrefix}/site-packages \
-        --prefix="$out"
-
-      eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
-      if [ -e "$eapth" ]; then
-          mv "$eapth" $(dirname "$eapth")/${name}.pth
-      fi
-
-      rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
-
-      runHook postInstall
-    '';
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kaa-metadata/kaa-metadata-0.7.8dev-r4569-20111003.tar.gz";
-      sha256 = "0bkbzfgxvmby8lvzkqjp86anxvv3vjd9nksv2g4l7shsk1n7y27a";
-    };
-
-    propagatedBuildInputs = with self; [ kaa-base ];
-
-    meta = {
-      description = "Python library for parsing media metadata, which can extract metadata (e.g., such as id3 tags) from a wide range of media files";
-      homepage = https://github.com/freevo/kaa-metadata;
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  kaa-metadata = callPackage ../development/python-modules/kaa-metadata { };
 
   PyICU = buildPythonPackage rec {
     name = "PyICU-2.0.3";
