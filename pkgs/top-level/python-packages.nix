@@ -3178,22 +3178,7 @@ in {
 
   pysoundfile = callPackage ../development/python-modules/pysoundfile { };
 
-  python3pika = buildPythonPackage {
-    name = "python3-pika-0.9.14";
-    disabled = !isPy3k;
-
-    # Unit tests adds dependencies on pyev, tornado and twisted (and twisted is disabled for Python 3)
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = mirror://pypi/p/python3-pika/python3-pika-0.9.14.tar.gz;
-      sha256 = "1c3hifwvn04kvlja88iawf0awyz726jynwnpcb6gn7376b4nfch7";
-    };
-    buildInputs = with self; [ nose mock pyyaml ];
-
-    propagatedBuildInputs = with self; [ unittest2 ];
-  };
-
+  python3pika = callPackage ../development/python-modules/python3pika { };
 
   python-jenkins = buildPythonPackage rec {
     name = "python-jenkins-${version}";
