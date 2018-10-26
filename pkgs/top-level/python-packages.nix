@@ -3287,32 +3287,7 @@ in {
 
   pycosat = callPackage ../development/python-modules/pycosat { };
 
-  pycryptopp = buildPythonPackage (rec {
-    name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
-    disabled = isPy3k || isPyPy;  # see https://bitbucket.org/pypy/pypy/issue/1190/
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pycryptopp/${name}.tar.gz";
-      sha256 = "0n90h1yg7bfvlbhnc54xb6dbqm286ykaksyg04kxlhyjgf8mhq8i";
-    };
-
-    # Prefer crypto++ library from the Nix store over the one that's included
-    # in the pycryptopp distribution.
-    preConfigure = "export PYCRYPTOPP_DISABLE_EMBEDDED_CRYPTOPP=1";
-
-    buildInputs = with self; [ setuptoolsDarcs darcsver pkgs.cryptopp ];
-
-    meta = {
-      homepage = http://allmydata.org/trac/pycryptopp;
-
-      description = "Python wrappers for the Crypto++ library";
-
-      license = licenses.gpl2Plus;
-
-      maintainers = [ ];
-      platforms = platforms.linux;
-    };
-  });
+  pycryptopp = callPackage ../development/python-modules/pycryptopp { };
 
   pycups = callPackage ../development/python-modules/pycups { };
 
