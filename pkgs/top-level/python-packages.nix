@@ -3451,32 +3451,7 @@ in {
 
   pyPdf = callPackage ../development/python-modules/pypdf { };
 
-  pypdf2 = buildPythonPackage rec {
-    name = "PyPDF2-${version}";
-    version = "1.26.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyPDF2/${name}.tar.gz";
-      sha256 = "11a3aqljg4sawjijkvzhs3irpw0y67zivqpbjpm065ha5wpr13z2";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = [ pkgs.glibcLocales ];
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s Tests
-    '';
-
-    # Tests broken on Python 3.x
-    doCheck = !(isPy3k);
-
-    meta = {
-      description = "A Pure-Python library built as a PDF toolkit";
-      homepage = "http://mstamy2.github.com/PyPDF2/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ desiderius vrthra ];
-    };
-  };
+  pypdf2 = callPackage ../development/python-modules/pypdf2 { };
 
   pyopengl = buildPythonPackage rec {
     name = "pyopengl-${version}";
