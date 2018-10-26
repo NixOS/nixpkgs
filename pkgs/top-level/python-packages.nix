@@ -3606,27 +3606,7 @@ in {
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
-  isodate = buildPythonPackage rec {
-    name = "isodate-${version}";
-    version = "0.5.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/isodate/${name}.tar.gz";
-      sha256 = "42105c41d037246dc1987e36d96f3752ffd5c0c24834dd12e4fdbe1e79544e31";
-    };
-
-    # Judging from SyntaxError
-    doCheck = !(isPy3k);
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s src/isodate/tests
-    '';
-
-    meta = {
-      description = "ISO 8601 date/time parser";
-      homepage = http://cheeseshop.python.org/pypi/isodate;
-    };
-  };
+  isodate = callPackage ../development/python-modules/isodate { };
 
   resampy = buildPythonPackage rec {
     pname = "resampy";
