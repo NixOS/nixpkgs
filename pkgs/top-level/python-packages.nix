@@ -3411,24 +3411,7 @@ in {
   python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {};
   python_simple_hipchat = self.python-simple-hipchat;
 
-  python_keyczar = buildPythonPackage rec {
-    name = "python-keyczar-0.71c";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/p/python-keyczar/${name}.tar.gz";
-      sha256 = "18mhiwqq6vp65ykmi8x3i5l3gvrvrrr8z2kv11z1rpixmyr7sw1p";
-    };
-
-    meta = {
-      description = "Toolkit for safe and simple cryptography";
-      homepage    = https://pypi.python.org/pypi/python-keyczar;
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-
-    buildInputs = with self; [ pyasn1 pycrypto ];
-  };
+  python_keyczar = callPackage ../development/python-modules/python_keyczar { };
 
   python-language-server = callPackage ../development/python-modules/python-language-server {};
 
