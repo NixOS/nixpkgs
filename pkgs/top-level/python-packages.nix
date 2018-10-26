@@ -3103,27 +3103,9 @@ in {
 
   paste = callPackage ../development/python-modules/paste { };
 
-   PasteDeploy = callPackage ../development/python-modules/pastedeploy { };
+  PasteDeploy = callPackage ../development/python-modules/pastedeploy { };
 
-   pasteScript = buildPythonPackage rec {
-    version = "1.7.5";
-    name = "PasteScript-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PasteScript/${name}.tar.gz";
-      sha256 = "2b685be69d6ac8bc0fe6f558f119660259db26a15e16a4943c515fbee8093539";
-    };
-
-    doCheck = false;
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ six paste PasteDeploy cheetah argparse ];
-
-    meta = {
-      description = "A pluggable command-line frontend, including commands to setup package file layouts";
-      homepage = http://pythonpaste.org/script/;
-      platforms = platforms.all;
-    };
-  };
+  pasteScript = callPackage ../development/python-modules/pastescript { };
 
   patator = callPackage ../development/python-modules/patator { };
 
