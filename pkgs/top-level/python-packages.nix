@@ -3580,23 +3580,7 @@ in {
 
   django-haystack = callPackage ../development/python-modules/django-haystack { };
 
-  geoalchemy2 = buildPythonPackage rec {
-    name = "GeoAlchemy2-${version}";
-    version = "0.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/G/GeoAlchemy2/${name}.tar.gz";
-      sha256 = "0p2h1kgl5b0jz8wadx485vjh1mmm5s67p71yxh9lhp1441hkfswf";
-    };
-
-    propagatedBuildInputs = with self ; [ sqlalchemy shapely ];
-
-    meta = {
-      homepage =  http://geoalchemy.org/;
-      license = licenses.mit;
-      description = "Toolkit for working with spatial databases";
-    };
-  };
+  geoalchemy2 = callPackage ../development/python-modules/geoalchemy2 { };
 
   geopy = buildPythonPackage rec {
     name = "geopy-${version}";
