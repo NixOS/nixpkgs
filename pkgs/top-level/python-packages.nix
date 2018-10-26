@@ -3386,23 +3386,7 @@ in {
 
   pysnmp = callPackage ../development/python-modules/pysnmp { };
 
-  pysocks = buildPythonPackage rec {
-    name = "pysocks-${version}";
-    version = "1.6.6";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/P/PySocks/PySocks-${version}.tar.gz";
-      sha256 = "0h9zwr8z9j6l313ns335irjrkk6qnk4qzvwmjqygrp7mbwi9lh82";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "SOCKS module for Python";
-      license     = licenses.bsd3;
-      maintainers = with maintainers; [ thoughtpolice ];
-    };
-  };
+  pysocks = callPackage ../development/python-modules/pysocks { };
 
   python_fedora = callPackage ../development/python-modules/python_fedora {};
 
