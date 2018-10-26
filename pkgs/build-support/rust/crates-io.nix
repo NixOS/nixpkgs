@@ -312,62 +312,62 @@ rec {
   ];
 
 
-  crates.carnix."0.8.10" = deps: { features?(features_.carnix."0.8.10" deps {}) }: buildRustCrate {
+  crates.carnix."0.8.11" = deps: { features?(features_.carnix."0.8.11" deps {}) }: buildRustCrate {
     crateName = "carnix";
-    version = "0.8.10";
+    version = "0.8.11";
     authors = [ "pe@pijul.org <pe@pijul.org>" ];
-    sha256 = "1mn1gzrbv01wn2vgjghah1hzbh6ancx14brb53calj3lrvgb7885";
+    sha256 = "1i5iz51mradd3vishc19cd0nfh9r2clbmiq94f83npny65dnp6ch";
     crateBin =
       [{  name = "cargo-generate-nixfile";  path = "src/cargo-generate-nixfile.rs"; }] ++
       [{  name = "carnix";  path = "src/main.rs"; }];
     dependencies = mapFeatures features ([
-      (crates."clap"."${deps."carnix"."0.8.10"."clap"}" deps)
-      (crates."dirs"."${deps."carnix"."0.8.10"."dirs"}" deps)
-      (crates."env_logger"."${deps."carnix"."0.8.10"."env_logger"}" deps)
-      (crates."error_chain"."${deps."carnix"."0.8.10"."error_chain"}" deps)
-      (crates."itertools"."${deps."carnix"."0.8.10"."itertools"}" deps)
-      (crates."log"."${deps."carnix"."0.8.10"."log"}" deps)
-      (crates."nom"."${deps."carnix"."0.8.10"."nom"}" deps)
-      (crates."regex"."${deps."carnix"."0.8.10"."regex"}" deps)
-      (crates."rusqlite"."${deps."carnix"."0.8.10"."rusqlite"}" deps)
-      (crates."serde"."${deps."carnix"."0.8.10"."serde"}" deps)
-      (crates."serde_derive"."${deps."carnix"."0.8.10"."serde_derive"}" deps)
-      (crates."serde_json"."${deps."carnix"."0.8.10"."serde_json"}" deps)
-      (crates."tempdir"."${deps."carnix"."0.8.10"."tempdir"}" deps)
-      (crates."toml"."${deps."carnix"."0.8.10"."toml"}" deps)
+      (crates."clap"."${deps."carnix"."0.8.11"."clap"}" deps)
+      (crates."dirs"."${deps."carnix"."0.8.11"."dirs"}" deps)
+      (crates."env_logger"."${deps."carnix"."0.8.11"."env_logger"}" deps)
+      (crates."error_chain"."${deps."carnix"."0.8.11"."error_chain"}" deps)
+      (crates."itertools"."${deps."carnix"."0.8.11"."itertools"}" deps)
+      (crates."log"."${deps."carnix"."0.8.11"."log"}" deps)
+      (crates."nom"."${deps."carnix"."0.8.11"."nom"}" deps)
+      (crates."regex"."${deps."carnix"."0.8.11"."regex"}" deps)
+      (crates."rusqlite"."${deps."carnix"."0.8.11"."rusqlite"}" deps)
+      (crates."serde"."${deps."carnix"."0.8.11"."serde"}" deps)
+      (crates."serde_derive"."${deps."carnix"."0.8.11"."serde_derive"}" deps)
+      (crates."serde_json"."${deps."carnix"."0.8.11"."serde_json"}" deps)
+      (crates."tempdir"."${deps."carnix"."0.8.11"."tempdir"}" deps)
+      (crates."toml"."${deps."carnix"."0.8.11"."toml"}" deps)
     ]);
   };
-  features_.carnix."0.8.10" = deps: f: updateFeatures f (rec {
-    carnix."0.8.10".default = (f.carnix."0.8.10".default or true);
-    clap."${deps.carnix."0.8.10".clap}".default = true;
-    dirs."${deps.carnix."0.8.10".dirs}".default = true;
-    env_logger."${deps.carnix."0.8.10".env_logger}".default = true;
-    error_chain."${deps.carnix."0.8.10".error_chain}".default = true;
-    itertools."${deps.carnix."0.8.10".itertools}".default = true;
-    log."${deps.carnix."0.8.10".log}".default = true;
-    nom."${deps.carnix."0.8.10".nom}".default = true;
-    regex."${deps.carnix."0.8.10".regex}".default = true;
-    rusqlite."${deps.carnix."0.8.10".rusqlite}".default = true;
-    serde."${deps.carnix."0.8.10".serde}".default = true;
-    serde_derive."${deps.carnix."0.8.10".serde_derive}".default = true;
-    serde_json."${deps.carnix."0.8.10".serde_json}".default = true;
-    tempdir."${deps.carnix."0.8.10".tempdir}".default = true;
-    toml."${deps.carnix."0.8.10".toml}".default = true;
+  features_.carnix."0.8.11" = deps: f: updateFeatures f (rec {
+    carnix."0.8.11".default = (f.carnix."0.8.11".default or true);
+    clap."${deps.carnix."0.8.11".clap}".default = true;
+    dirs."${deps.carnix."0.8.11".dirs}".default = true;
+    env_logger."${deps.carnix."0.8.11".env_logger}".default = true;
+    error_chain."${deps.carnix."0.8.11".error_chain}".default = true;
+    itertools."${deps.carnix."0.8.11".itertools}".default = true;
+    log."${deps.carnix."0.8.11".log}".default = true;
+    nom."${deps.carnix."0.8.11".nom}".default = true;
+    regex."${deps.carnix."0.8.11".regex}".default = true;
+    rusqlite."${deps.carnix."0.8.11".rusqlite}".default = true;
+    serde."${deps.carnix."0.8.11".serde}".default = true;
+    serde_derive."${deps.carnix."0.8.11".serde_derive}".default = true;
+    serde_json."${deps.carnix."0.8.11".serde_json}".default = true;
+    tempdir."${deps.carnix."0.8.11".tempdir}".default = true;
+    toml."${deps.carnix."0.8.11".toml}".default = true;
   }) [
-    (features_.clap."${deps."carnix"."0.8.10"."clap"}" deps)
-    (features_.dirs."${deps."carnix"."0.8.10"."dirs"}" deps)
-    (features_.env_logger."${deps."carnix"."0.8.10"."env_logger"}" deps)
-    (features_.error_chain."${deps."carnix"."0.8.10"."error_chain"}" deps)
-    (features_.itertools."${deps."carnix"."0.8.10"."itertools"}" deps)
-    (features_.log."${deps."carnix"."0.8.10"."log"}" deps)
-    (features_.nom."${deps."carnix"."0.8.10"."nom"}" deps)
-    (features_.regex."${deps."carnix"."0.8.10"."regex"}" deps)
-    (features_.rusqlite."${deps."carnix"."0.8.10"."rusqlite"}" deps)
-    (features_.serde."${deps."carnix"."0.8.10"."serde"}" deps)
-    (features_.serde_derive."${deps."carnix"."0.8.10"."serde_derive"}" deps)
-    (features_.serde_json."${deps."carnix"."0.8.10"."serde_json"}" deps)
-    (features_.tempdir."${deps."carnix"."0.8.10"."tempdir"}" deps)
-    (features_.toml."${deps."carnix"."0.8.10"."toml"}" deps)
+    (features_.clap."${deps."carnix"."0.8.11"."clap"}" deps)
+    (features_.dirs."${deps."carnix"."0.8.11"."dirs"}" deps)
+    (features_.env_logger."${deps."carnix"."0.8.11"."env_logger"}" deps)
+    (features_.error_chain."${deps."carnix"."0.8.11"."error_chain"}" deps)
+    (features_.itertools."${deps."carnix"."0.8.11"."itertools"}" deps)
+    (features_.log."${deps."carnix"."0.8.11"."log"}" deps)
+    (features_.nom."${deps."carnix"."0.8.11"."nom"}" deps)
+    (features_.regex."${deps."carnix"."0.8.11"."regex"}" deps)
+    (features_.rusqlite."${deps."carnix"."0.8.11"."rusqlite"}" deps)
+    (features_.serde."${deps."carnix"."0.8.11"."serde"}" deps)
+    (features_.serde_derive."${deps."carnix"."0.8.11"."serde_derive"}" deps)
+    (features_.serde_json."${deps."carnix"."0.8.11"."serde_json"}" deps)
+    (features_.tempdir."${deps."carnix"."0.8.11"."tempdir"}" deps)
+    (features_.toml."${deps."carnix"."0.8.11"."toml"}" deps)
   ];
 
 

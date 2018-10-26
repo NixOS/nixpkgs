@@ -43,7 +43,8 @@
        lib_src=$1
        echo_build_heading $lib_src ${libName}
 
-       noisily rustc --crate-name $CRATE_NAME $lib_src --crate-type ${crateType} \
+       noisily rustc --crate-name $CRATE_NAME $lib_src \
+         ${lib.strings.concatStrings (map (x: " --crate-type ${x}") crateType)}  \
          ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/lib \
          --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow \
          $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
