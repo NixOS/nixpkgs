@@ -3259,25 +3259,7 @@ in {
 
   pystemd = callPackage ../development/python-modules/pystemd { systemd = pkgs.systemd; };
 
-  mongodict = buildPythonPackage rec {
-    name = "mongodict-${version}";
-    version = "0.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mongodict/${name}.tar.gz";
-      sha256 = "0nv5amfs337m0gbxpjb0585s20rndqfc3mfrzq1iwgnds5gxcrlw";
-    };
-
-    propagatedBuildInputs = with self; [
-      pymongo
-    ];
-
-    meta = with stdenv.lib; {
-      description = "MongoDB-backed Python dict-like interface";
-      homepage = "https://github.com/turicas/mongodict/";
-    };
-  };
-
+  mongodict = callPackage ../development/python-modules/mongodict { };
 
   repoze_who = buildPythonPackage rec {
     name = "repoze.who-${version}";
