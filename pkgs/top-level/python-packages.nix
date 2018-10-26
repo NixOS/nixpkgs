@@ -3616,24 +3616,7 @@ in {
 
   ropper = callPackage ../development/python-modules/ropper { };
 
-  routes = buildPythonPackage rec {
-    pname = "Routes";
-    version = "2.4.1";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1zamff3m0kc4vyfniyhxpkkcqv1rrgnmh37ykxv34nna1ws47vi6";
-    };
-
-    propagatedBuildInputs = with self; [ repoze_lru six webob ];
-
-    checkInputs = with self; [ coverage webtest ];
-
-    meta = {
-      description = "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
-      homepage = http://routes.groovie.org/;
-    };
-  };
+  routes = callPackage ../development/python-modules/routes { };
 
   rpkg = callPackage ../development/python-modules/rpkg {};
 
