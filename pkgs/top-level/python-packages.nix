@@ -3261,30 +3261,7 @@ in {
 
   pyblosxom = callPackage ../development/python-modules/pyblosxom { };
 
-  pycapnp = buildPythonPackage rec {
-    name = "pycapnp-0.5.1";
-    disabled = isPyPy || isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pycapnp/${name}.tar.gz";
-      sha256 = "1kp97il34419gcrhn866n6a10lvh8qr13bnllnnh9473n4cq0cvk";
-    };
-
-    buildInputs = with pkgs; [ capnproto self.cython ];
-
-    # import setuptools as soon as possible, to minimize monkeypatching mayhem.
-    postConfigure = ''
-      sed -i '3iimport setuptools' setup.py
-    '';
-
-    meta = {
-      maintainers = with maintainers; [ cstrahan ];
-      license = licenses.bsd2;
-      platforms = platforms.all;
-      homepage = "http://jparyani.github.io/pycapnp/index.html";
-      broken = true; # 2018-04-11
-    };
-  };
+  pycapnp = callPackage ../development/python-modules/pycapnp { };
 
   pycaption = callPackage ../development/python-modules/pycaption { };
 
