@@ -3411,27 +3411,7 @@ in {
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 {};
 
-  pynzb = buildPythonPackage (rec {
-    name = "pynzb-0.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pynzb/${name}.tar.gz";
-      sha256 = "0735b3889a1174bbb65418ee503629d3f5e4a63f04b16f46ffba18253ec3ef17";
-    };
-
-    # Can't get them working
-    doCheck = false;
-    checkPhase = ''
-      ${python.interpreter} -m unittest -s pynzb -t .
-    '';
-
-    meta = {
-      homepage = https://github.com/ericflo/pynzb;
-      description = "Unified API for parsing NZB files";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  });
+  pynzb = callPackage ../development/python-modules/pynzb { };
 
   process-tests = buildPythonPackage rec {
     pname = "process-tests";
