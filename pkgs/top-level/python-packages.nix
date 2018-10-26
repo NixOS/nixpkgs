@@ -3338,26 +3338,7 @@ in {
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
-  pyx = buildPythonPackage rec {
-    name = "pyx-${version}";
-    version = "0.14.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyX/PyX-${version}.tar.gz";
-      sha256 = "05d1b7fc813379d2c12fcb5bd0195cab522b5aabafac88f72913f1d47becd912";
-    };
-
-    disabled = !isPy3k;
-
-    # No tests in archive
-    doCheck = false;
-
-    meta = {
-      description = "Python package for the generation of PostScript, PDF, and SVG files";
-      homepage = http://pyx.sourceforge.net/;
-      license = with licenses; [ gpl2 ];
-    };
-  };
+  pyx = callPackage ../development/python-modules/pyx { };
 
   mmpython = buildPythonPackage rec {
     version = "0.4.10";
