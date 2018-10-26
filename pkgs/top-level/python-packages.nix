@@ -3704,27 +3704,7 @@ in {
 
   shortuuid = callPackage ../development/python-modules/shortuuid { };
 
-  shouldbe = buildPythonPackage rec {
-    version = "0.1.0";
-    name = "shouldbe-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/shouldbe/${name}.tar.gz";
-      sha256 = "07pchxpv1xvjbck0xy44k3a1jrvklg0wbyccn14w0i7d135d4174";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    propagatedBuildInputs = with self; [ forbiddenfruit ];
-
-    doCheck = false;  # Segmentation fault on py 3.5
-
-    meta = {
-      description = "Python Assertion Helpers inspired by Shouldly";
-      homepage =  https://pypi.python.org/pypi/shouldbe/;
-      license = licenses.mit;
-    };
-  };
+  shouldbe = callPackage ../development/python-modules/shouldbe { };
 
   simplejson = callPackage ../development/python-modules/simplejson { };
 
