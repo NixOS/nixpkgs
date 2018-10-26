@@ -19122,6 +19122,8 @@ with pkgs;
 
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
+  tabula = callPackage ../applications/misc/tabula { };
+
   tasknc = callPackage ../applications/misc/tasknc { };
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
