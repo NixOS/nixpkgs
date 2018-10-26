@@ -3656,22 +3656,7 @@ in {
 
   ruamel_base = callPackage ../development/python-modules/ruamel_base { };
 
-  ruamel_ordereddict = buildPythonPackage rec {
-    name = "ruamel.ordereddict-${version}";
-    version = "0.4.9";
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/ruamel.ordereddict/${name}.tar.gz";
-      sha256 = "1xmkl8v9l9inm2pyxgc1fm5005yxm7fkd5gv74q7lj1iy5qc8n3h";
-    };
-
-    meta = {
-      description = "A version of dict that keeps keys in insertion resp. sorted order";
-      homepage = https://bitbucket.org/ruamel/ordereddict;
-      license = licenses.mit;
-    };
-  };
+  ruamel_ordereddict = callPackage ../development/python-modules/ruamel_ordereddict { };
 
   typing = callPackage ../development/python-modules/typing { };
 
