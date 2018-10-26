@@ -10588,6 +10588,8 @@ with pkgs;
 
   libsignal-protocol-c = callPackage ../development/libraries/libsignal-protocol-c { };
 
+  libsignon-glib = callPackage ../development/libraries/libsignon-glib { };
+
   libsoundio = callPackage ../development/libraries/libsoundio {
     inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
@@ -12845,6 +12847,17 @@ with pkgs;
   zita-resampler = callPackage ../development/libraries/audio/zita-resampler { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
+
+  gsignond = callPackage ../development/libraries/gsignond {
+    plugins = [];
+  };
+
+  gsignondPlugins = {
+    sasl = callPackage ../development/libraries/gsignond/plugins/sasl.nix { };
+    oauth = callPackage ../development/libraries/gsignond/plugins/oauth.nix { };
+    lastfm = callPackage ../development/libraries/gsignond/plugins/lastfm.nix { };
+    mail = callPackages ../development/libraries/gsignond/plugins/mail.nix { };
+  };
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
