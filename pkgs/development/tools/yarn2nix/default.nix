@@ -6,6 +6,8 @@ let
 
   yarn2nix = mkYarnPackage {
     src = ./.;
+    pname = "yarn2nix";
+    version = "0.1.0";
     yarnNix = ./yarn.nix;
 
     passthru = {
@@ -120,6 +122,8 @@ let
     name ? null,
     src,
     packageJSON ? src + "/package.json",
+    pname,
+    version,
     yarnLock ? src + "/yarn.lock",
     yarnNix ? mkYarnNix yarnLock,
     yarnFlags ? defaultYarnFlags,
@@ -130,9 +134,6 @@ let
     ...
   }@attrs:
     let
-      package = lib.importJSON packageJSON;
-      pname = package.name;
-      version = package.version;
       deps = mkYarnModules {
         name = "${pname}-modules-${version}";
         preBuild = yarnPreBuild;
@@ -190,7 +191,7 @@ let
       '';
 
       passthru = {
-        inherit package deps;
+        inherit deps;
       } // (attrs.passthru or {});
 
       # TODO: populate meta automatically
