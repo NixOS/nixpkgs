@@ -3756,29 +3756,7 @@ in {
 
   soco = callPackage ../development/python-modules/soco { };
 
-  sopel = buildPythonPackage rec {
-    name = "sopel-6.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sopel/${name}.tar.gz";
-      sha256 = "1swvw7xw8n5anb8ah8jilk4vk1y30y62fkibfd9vm9fbk45d1q48";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ praw xmltodict pytz pyenchant pygeoip ];
-
-    disabled = isPyPy || isPy27;
-
-    checkPhase = ''
-    ${python.interpreter} test/*.py                                         #*/
-    '';
-    meta = {
-      description = "Simple and extensible IRC bot";
-      homepage = "http://sopel.chat";
-      license = licenses.efl20;
-      maintainers = with maintainers; [ mog ];
-    };
-  };
+  sopel = callPackage ../development/python-modules/sopel { };
 
   sounddevice = callPackage ../development/python-modules/sounddevice { };
 
