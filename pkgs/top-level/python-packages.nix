@@ -3666,22 +3666,7 @@ in {
 
   ruamel_yaml = callPackage ../development/python-modules/ruamel_yaml { };
 
-  runsnakerun = buildPythonPackage rec {
-    name = "runsnakerun-2.0.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/R/RunSnakeRun/RunSnakeRun-2.0.4.tar.gz";
-      sha256 = "61d03a13f1dcb3c1829f5a146da1fe0cc0e27947558a51e848b6d469902815ef";
-    };
-
-    propagatedBuildInputs = with self; [ squaremap wxPython ];
-
-    meta = {
-      description = "GUI Viewer for Python profiling runs";
-      homepage = http://www.vrplumber.com/programming/runsnakerun/;
-      license = licenses.bsd3;
-    };
-  };
+  runsnakerun = callPackage ../development/python-modules/runsnakerun { };
 
   s3transfer = callPackage ../development/python-modules/s3transfer { };
 
