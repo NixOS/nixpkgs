@@ -3125,25 +3125,7 @@ in {
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
-  piep = buildPythonPackage rec {
-    version = "0.8.0";
-    name = "piep-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/piep/piep-${version}.tar.gz";
-      sha256 = "1wgkg1kc28jpya5k4zvbc9jmpa60b3d5c3gwxfbp15hw6smyqirj";
-    };
-
-    propagatedBuildInputs = with self; [pygments];
-
-    meta = {
-      description = "Bringing the power of python to stream editing";
-      homepage = https://github.com/timbertson/piep;
-      maintainers = with maintainers; [ timbertson ];
-      license = licenses.gpl3;
-    };
-  };
+  piep = callPackage ../development/python-modules/piep { };
 
   piexif = callPackage ../development/python-modules/piexif { };
 
