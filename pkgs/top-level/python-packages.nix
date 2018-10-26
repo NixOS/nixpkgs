@@ -3654,25 +3654,7 @@ in {
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
 
-  pysendfile = buildPythonPackage rec {
-    name = "pysendfile-${version}";
-    version = "2.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pysendfile/pysendfile-${version}.tar.gz";
-      sha256 = "05qf0m32isflln1zjgxlpw0wf469lj86vdwwqyizp1h94x5l22ji";
-    };
-
-    checkPhase = ''
-      # this test takes too long
-      sed -i 's/test_big_file/noop/' test/test_sendfile.py
-      ${self.python.executable} test/test_sendfile.py
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/giampaolo/pysendfile";
-    };
-  };
+  pysendfile = callPackage ../development/python-modules/pysendfile { };
 
   qpid-python = buildPythonPackage rec {
     name = "qpid-python-${version}";
