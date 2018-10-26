@@ -3512,28 +3512,7 @@ in {
 
   pyutil = callPackage ../development/python-modules/pyutil { };
 
-  pywebkitgtk = buildPythonPackage rec {
-    name = "pywebkitgtk-${version}";
-    version = "1.1.8";
-    format = "other";
-
-    src = pkgs.fetchurl {
-      url = "http://pywebkitgtk.googlecode.com/files/${name}.tar.bz2";
-      sha256 = "1svlwyl61rvbqbcbalkg6pbf38yjyv7qkq9sx4x35yk69lscaac2";
-    };
-
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [
-      pkgs.gtk2 self.pygtk pkgs.libxml2
-      pkgs.libxslt pkgs.libsoup pkgs.webkitgtk24x-gtk2 pkgs.icu
-    ];
-
-    meta = {
-      homepage = "https://code.google.com/p/pywebkitgtk/";
-      description = "Python bindings for the WebKit GTK+ port";
-      license = licenses.lgpl2Plus;
-    };
-  };
+  pywebkitgtk = callPackage ../development/python-modules/pywebkitgtk { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
 
