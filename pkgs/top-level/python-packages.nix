@@ -3656,20 +3656,7 @@ in {
 
   pysendfile = callPackage ../development/python-modules/pysendfile { };
 
-  qpid-python = buildPythonPackage rec {
-    name = "qpid-python-${version}";
-    version = "0.32";
-    disabled = isPy3k;  # not supported
-
-    src = pkgs.fetchurl {
-      url = "http://www.us.apache.org/dist/qpid/${version}/${name}.tar.gz";
-      sha256 = "09hdfjgk8z4s3dr8ym2r6xn97j1f9mkb2743pr6zd0bnj01vhsv4";
-    };
-
-    # needs a broker running and then ./qpid-python-test
-    doCheck = false;
-
-  };
+  qpid-python = callPackage ../development/python-modules/qpid-python { };
 
   xattr = buildPythonPackage rec {
     name = "xattr-0.7.8";
