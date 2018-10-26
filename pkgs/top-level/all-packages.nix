@@ -9801,9 +9801,7 @@ with pkgs;
 
   gnonlin = callPackage ../development/libraries/gstreamer/legacy/gnonlin {};
 
-  gusb = callPackage ../development/libraries/gusb {
-    inherit (gnome2) gtkdoc;
-  };
+  gusb = callPackage ../development/libraries/gusb { };
 
   qt-mobility = callPackage ../development/libraries/qt-mobility {};
 
