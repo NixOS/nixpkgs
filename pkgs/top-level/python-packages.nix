@@ -3618,24 +3618,7 @@ in {
 
   robotframework-selenium2library = callPackage ../development/python-modules/robotframework-selenium2library { };
 
-  robotframework-tools = buildPythonPackage rec {
-    version = "0.1a115";
-    name = "robotframework-tools-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/robotframework-tools/${name}.tar.gz";
-      sha256 = "04gkn1zpf3rsvbqdxrrjqqi8sa0md9gqwh6n5w2m03fdwjg4lc7q";
-    };
-
-    propagatedBuildInputs = with self; [ robotframework moretools pathpy six setuptools ];
-
-    meta = {
-      description = "Python Tools for Robot Framework and Test Libraries";
-      homepage = https://bitbucket.org/userzimmermann/robotframework-tools;
-      license = licenses.gpl3;
-      platforms = platforms.linux;
-    };
-  };
+  robotframework-tools = callPackage ../development/python-modules/robotframework-tools { };
 
   robotsuite = callPackage ../development/python-modules/robotsuite { };
 
