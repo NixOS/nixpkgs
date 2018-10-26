@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DE-IBH";
     repo = "apt-dater";
-    rev = "v1.0.3";
+    rev = "v${version}";
     sha256 = "1flr6cm72cywmwp5h7pbmmpq057xsi9shkczyplxqaqrb2gns5fl";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       number of remote hosts using SSH. It supports Debian-based managed hosts
       as well as rug (e.g. openSUSE) and yum (e.g. CentOS) based systems.
     '';
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ enko ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ c0bw3b ];
   };
 }
