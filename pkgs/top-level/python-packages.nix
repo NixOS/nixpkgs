@@ -3225,24 +3225,7 @@ in {
 
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 
-  pyalgotrade = buildPythonPackage {
-    name = "pyalgotrade-0.16";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/PyAlgoTrade/PyAlgoTrade-0.16.tar.gz";
-      sha256 = "a253617254194b91cfebae7bfd184cb109d4e48a8c70051b9560000a2c0f94b3";
-    };
-
-    propagatedBuildInputs = with self; [ numpy scipy pytz ];
-
-    meta = {
-      description = "Python Algorithmic Trading";
-      homepage = http://gbeced.github.io/pyalgotrade/;
-      license = licenses.asl20;
-    };
-  };
-
+  pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };
 
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
 
