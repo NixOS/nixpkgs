@@ -3459,24 +3459,7 @@ in {
 
   pyquery = callPackage ../development/python-modules/pyquery { };
 
-  pyreport = buildPythonPackage (rec {
-    name = "pyreport-0.3.4c";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyreport/${name}.tar.gz";
-      sha256 = "1584607596b7b310bf0b6ce79f424bd44238a017fd870aede11cd6732dbe0d4d";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/pyreport;
-      license = "BSD";
-      description = "Pyreport makes notes out of a python script";
-    };
-  });
+  pyreport = callPackage ../development/python-modules/pyreport { };
 
   pyreadability = callPackage ../development/python-modules/pyreadability { };
 
