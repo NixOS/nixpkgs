@@ -3648,24 +3648,7 @@ in {
 
   rpyc = callPackage ../development/python-modules/rpyc { };
 
-  rsa = buildPythonPackage rec {
-    name = "rsa-${version}";
-    version = "3.4.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rsa/${name}.tar.gz";
-      sha256 = "1dcxvszbikgzh99ybdc7jq0zb9wspy2ds8z9mjsqiyv3q884xpr5";
-    };
-
-    nativeBuildInputs = with self; [ unittest2 ];
-    propagatedBuildInputs = with self; [ pyasn1 ];
-
-    meta = {
-      homepage = https://stuvel.eu/rsa;
-      license = licenses.asl20;
-      description = "A pure-Python RSA implementation";
-    };
-  };
+  rsa = callPackage ../development/python-modules/rsa { };
 
   Rtree = callPackage ../development/python-modules/Rtree { inherit (pkgs) libspatialindex; };
 
