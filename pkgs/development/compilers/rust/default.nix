@@ -1,4 +1,5 @@
 { stdenv, callPackage, recurseIntoAttrs, makeRustPlatform, llvm, fetchurl
+, CoreFoundation, Security
 , targets ? []
 , targetToolchains ? []
 , targetPatches ? []
@@ -44,8 +45,7 @@ in rec {
 
   cargo = callPackage ./cargo.nix rec {
     version = cargoVersion;
-    inherit src;
-    inherit stdenv;
+    inherit src stdenv CoreFoundation Security;
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo
   };
