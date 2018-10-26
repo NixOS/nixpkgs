@@ -3510,25 +3510,7 @@ in {
 
   recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
-  rbtools = buildPythonPackage rec {
-    name = "rbtools-0.7.2";
-
-    src = pkgs.fetchurl {
-      url = "http://downloads.reviewboard.org/releases/RBTools/0.7/RBTools-0.7.2.tar.gz";
-      sha256 = "1ng8l8cx81cz23ls7fq9wz4ijs0zbbaqh4kj0mj6plzcqcf8na4i";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ six ];
-
-    checkPhase = "nosetests";
-
-    disabled = isPy3k;
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  rbtools = callPackage ../development/python-modules/rbtools { };
 
   rencode = buildPythonPackage rec {
     name = "rencode-${version}";
