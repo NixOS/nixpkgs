@@ -3634,21 +3634,7 @@ in {
 
   Rtree = callPackage ../development/python-modules/Rtree { inherit (pkgs) libspatialindex; };
 
-  squaremap = buildPythonPackage rec {
-    name = "squaremap-1.0.4";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SquareMap/SquareMap-1.0.4.tar.gz";
-      sha256 = "feab6cb3b222993df68440e34825d8a16de2c74fdb290ae3974c86b1d5f3eef8";
-    };
-
-    meta = {
-      description = "Hierarchic visualization control for wxPython";
-      homepage = https://launchpad.net/squaremap;
-      license = licenses.bsd3;
-    };
-  };
+  squaremap = callPackage ../development/python-modules/squaremap { };
 
   ruamel_base = buildPythonPackage rec {
     name = "ruamel.base-${version}";
