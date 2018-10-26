@@ -372,7 +372,7 @@ let f(h, h + 1, i) = i + h
       They are programs/libraries used at build time that furthermore produce
       programs/libraries also used at build time. If the dependency doesn't
       care about the target platform (i.e. isn't a compiler or similar tool),
-      put it in <varname>nativeBuildInputs</varname>instead. The most common
+      put it in <varname>nativeBuildInputs</varname> instead. The most common
       use for this <literal>buildPackages.stdenv.cc</literal>, the default C
       compiler for this role. That example crops up more than one might think
       in old commonly used C libraries.
@@ -2100,7 +2100,7 @@ someVar=$(stripHash $name)
 
   <para>
    In order to alleviate this burden, the <firstterm>setup
-   hook></firstterm>mechanism was written, where any package can include a
+   hook</firstterm> mechanism was written, where any package can include a
    shell script that [by convention rather than enforcement by Nix], any
    downstream reverse-dependency will source as part of its build process. That
    allows the downstream dependency to merely specify its dependencies, and
