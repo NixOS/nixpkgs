@@ -3600,23 +3600,7 @@ in {
 
   geoalchemy2 = callPackage ../development/python-modules/geoalchemy2 { };
 
-  geopy = buildPythonPackage rec {
-    name = "geopy-${version}";
-    version = "1.11.0";
-    disabled = !isPy27;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/geopy/geopy-${version}.tar.gz";
-      sha256 = "04j1lxcsfyv03h0n0q7p2ig7a4n13x4x20fzxn8bkazpx6lyal22";
-    };
-
-    doCheck = false;  # too much
-
-    buildInputs = with self; [ mock tox pylint ];
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/geopy/geopy";
-    };
-  };
+  geopy = callPackage ../development/python-modules/geopy { };
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
