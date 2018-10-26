@@ -3726,26 +3726,7 @@ in {
 
   simplejson = callPackage ../development/python-modules/simplejson { };
 
-  simpleparse = buildPythonPackage rec {
-    version = "2.1.1";
-    name = "simpleparse-${version}";
-
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SimpleParse/SimpleParse-${version}.tar.gz";
-      sha256 = "1n8msk71lpl3kv086xr2sv68ppgz6228575xfnbszc6p1mwr64rg";
-    };
-
-    doCheck = false;  # weird error
-
-    meta = {
-      description = "A Parser Generator for Python";
-      homepage = https://pypi.python.org/pypi/SimpleParse;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  simpleparse = callPackage ../development/python-modules/simpleparse { };
 
   slimit = callPackage ../development/python-modules/slimit { };
 
