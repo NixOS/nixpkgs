@@ -3508,21 +3508,7 @@ in {
 
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
 
-  recaptcha_client = buildPythonPackage rec {
-    name = "recaptcha-client-1.0.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/recaptcha-client/${name}.tar.gz";
-      sha256 = "28c6853c1d13d365b7dc71a6b05e5ffb56471f70a850de318af50d3d7c0dea2f";
-    };
-
-    disabled = isPy35 || isPy36;
-
-    meta = {
-      description = "A CAPTCHA for Python using the reCAPTCHA service";
-      homepage = http://recaptcha.net/;
-    };
-  };
+  recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
   rbtools = buildPythonPackage rec {
     name = "rbtools-0.7.2";
