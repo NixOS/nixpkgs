@@ -1,18 +1,20 @@
 { lib, buildGoPackage, fetchFromGitHub, ... }:
 
-let version = "0.3.1"; in
-
-buildGoPackage {
-  name = "hetzner-kube-${version}";
+buildGoPackage rec {
+  name = "${pname}-${version}";
+  pname = "hetzner-kube";
+  version = "0.3.2-rc1";
 
   src = fetchFromGitHub {
     owner = "xetys";
     repo = "hetzner-kube";
-    rev = "${version}";
-    sha256 = "1xldh1ca8ym8cg3w5cxizmhqxwi5kmiin28f320mxdr28fzljc2w";
+    rev = version;
+    sha256 = "16pzcpcr98rcrv5k57fa7h9a82wiv4p2ckhkmisynkr7f1xk60mw";
   };
 
   goPackagePath = "github.com/xetys/hetzner-kube";
+  subPackages = ["."];
+  goDeps = ./deps.nix;
 
   meta = {
     description = "A CLI tool for provisioning Kubernetes clusters on Hetzner Cloud";
