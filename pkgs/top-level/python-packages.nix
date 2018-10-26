@@ -3402,28 +3402,7 @@ in {
 
   pysmi = callPackage ../development/python-modules/pysmi { };
 
-  pysnmp = buildPythonPackage rec {
-    version = "4.3.2";
-    name = "pysnmp-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pysnmp/${name}.tar.gz";
-      sha256 = "0xw925f3p02vdpb3f0ls60qj59w44aiyfs3s0nhdr9vsy4fxhavw";
-    };
-
-    # NameError: name 'mibBuilder' is not defined
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pyasn1 pycrypto pysmi ];
-
-    meta = {
-      homepage = http://pysnmp.sf.net;
-      description = "A pure-Python SNMPv1/v2c/v3 library";
-      license = licenses.bsd2;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  pysnmp = callPackage ../development/python-modules/pysnmp { };
 
   pysocks = buildPythonPackage rec {
     name = "pysocks-${version}";
