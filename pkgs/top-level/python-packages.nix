@@ -3890,24 +3890,7 @@ in {
 
   sphinxcontrib_plantuml = callPackage ../development/python-modules/sphinxcontrib_plantuml { };
 
-  sphinxcontrib-spelling = buildPythonPackage (rec {
-    name = "${pname}-${version}";
-    pname = "sphinxcontrib-spelling";
-    version = "2.2.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
-      sha256 = "1f0fymrk4kvhqs0vj9gay4lhacxkfrlrpj4gvg0p4wjdczplxd3z";
-    };
-    propagatedBuildInputs = with self; [ sphinx pyenchant pbr ];
-    # No tests included
-    doCheck = false;
-    meta = {
-      description = "Sphinx spelling extension";
-      homepage = https://bitbucket.org/dhellmann/sphinxcontrib-spelling;
-      maintainers = with maintainers; [ nand0p ];
-      license = licenses.bsd2;
-    };
-  });
+  sphinxcontrib-spelling = callPackage ../development/python-modules/sphinxcontrib-spelling { };
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
