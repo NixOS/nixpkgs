@@ -37,7 +37,7 @@ in
         example = "rm -f /var/log/messages";
         type = types.lines;
         description = ''
-          Shell commands to be executed just before systemd is started.
+          Shell commands to be executed just before the init system is started.
         '';
       };
 

@@ -23,7 +23,6 @@ stdenv.mkDerivation {
   '';
 
   preAutoreconf = ''
-    ls
     cd nspr
   '';
 

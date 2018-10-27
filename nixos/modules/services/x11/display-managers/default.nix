@@ -48,7 +48,7 @@ let
 
       ${optionalString cfg.startDbusSession ''
         if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$@"
+          exec ${config.services.dbus.package.dbus-launch} --exit-with-session "$0" "$@"
         fi
       ''}
 

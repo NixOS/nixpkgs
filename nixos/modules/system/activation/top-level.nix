@@ -266,6 +266,14 @@ in
 
   config = {
 
+    assertions = [
+       { assertion = lib.xor config.systemd.enable config.runit.enable;
+         message = "At least one and only one init system must be enabled for boot"; }
+    ];
+
+    warnings = optional (!config.services.udev.enable)
+      "Without any hotplug system, some devices may not be recognized";
+
     system.extraSystemBuilderCmds =
       optionalString
         config.system.copySystemConfiguration

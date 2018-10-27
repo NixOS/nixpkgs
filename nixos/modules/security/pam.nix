@@ -375,7 +375,7 @@ let
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
           ${optionalString cfg.otpwAuth
               "session optional ${pkgs.otpw}/lib/security/pam_otpw.so"}
-          ${optionalString cfg.startSession
+          ${optionalString (cfg.startSession && config.systemd.enable)
               "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
           ${optionalString cfg.forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}

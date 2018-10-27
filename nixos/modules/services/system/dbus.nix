@@ -35,6 +35,25 @@ in
         '';
       };
 
+      forceSystemd = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If NixOS is using another init system, then D-Bus will be
+          built without systemd support. Set this to true if you want
+          to include it anyway.
+        '';
+      };
+
+      package = mkOption {
+        type = types.bool;
+        default = pkgs.dbus;
+        defaultText = "pkgs.dbus";
+        description = ''
+          Which D-Bus package to use
+        '';
+      };
+
       packages = mkOption {
         type = types.listOf types.path;
         default = [ ];
@@ -62,9 +81,10 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = let dbus = config.services.dbus.package;
+  in mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
+    environment.systemPackages = [ dbus.daemon dbus ];
 
     environment.etc = singleton
       { source = configDir;
@@ -80,10 +100,10 @@ in
 
     users.groups.messagebus.gid = config.ids.gids.messagebus;
 
-    systemd.packages = [ pkgs.dbus.daemon ];
+    systemd.packages = [ dbus.daemon ];
 
     security.wrappers.dbus-daemon-launch-helper = {
-      source = "${pkgs.dbus.daemon}/libexec/dbus-daemon-launch-helper";
+      source = "${dbus.daemon}/libexec/dbus-daemon-launch-helper";
       owner = "root";
       group = "messagebus";
       setuid = true;
@@ -91,8 +111,13 @@ in
       permissions = "u+rx,g+rx,o-rx";
     };
 
+    services.dbus.package =
+      if config.systemd.enable || config.services.dbus.forceSystemd
+      then pkgs.dbus
+      else pkgs.dbus.override { systemdSupport = false; };
+
     services.dbus.packages = [
-      pkgs.dbus.out
+      dbus.out
       config.system.path
     ];
 

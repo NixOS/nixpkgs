@@ -4,9 +4,9 @@ with lib;
 
 let
 
-  udev = config.systemd.package;
-
   cfg = config.services.udev;
+
+  udev = cfg.package;
 
   extraUdevRules = pkgs.writeTextFile {
     name = "extra-udev-rules";
@@ -180,6 +180,17 @@ in
 
     services.udev = {
 
+      package = mkOption {
+        type = types.nullOr types.package;
+        description = "Default udev package to use";
+      };
+
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether or not to enable udev";
+      };
+
       packages = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -274,7 +285,10 @@ in
 
   ###### implementation
 
-  config = mkIf (!config.boot.isContainer) {
+
+  config = mkIf (config.services.udev.enable && !config.boot.isContainer) {
+
+    services.udev.package = mkIf config.systemd.enable config.systemd.package;
 
     services.udev.extraRules = nixosRules;
 

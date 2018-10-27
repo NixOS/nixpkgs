@@ -403,6 +403,12 @@ in
 
   options = {
 
+    systemd.enable = mkOption {
+      default = true;
+      type = types.bool;
+      description = "Whether to use systemd as the init system. This is a good default";
+    };
+
     systemd.package = mkOption {
       default = pkgs.systemd;
       defaultText = "pkgs.systemd";
@@ -715,7 +721,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf config.systemd.enable {
 
     warnings = concatLists (mapAttrsToList (name: service:
       optional (service.serviceConfig.Type or "" == "oneshot" && service.serviceConfig.Restart or "no" != "no")

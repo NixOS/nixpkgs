@@ -49,6 +49,9 @@ rec {
     or (import ./zip-int-bits.nix
         (a: b: if a!=b then 1 else 0));
 
+  /* boolean xor */
+  xor = a: b: (a || b) && (!(a && b));
+
   /* bitwise “not” */
   bitNot = builtins.sub (-1);
 
