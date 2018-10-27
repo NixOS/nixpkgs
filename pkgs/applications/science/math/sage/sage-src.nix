@@ -75,6 +75,12 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch/?h=f77de1d0e7f90ee12761140500cb8cbbb789ab20";
       sha256 = "14wrpy8jgbnpza1j8a2nx8y2r946y82pll1fv3cn6gpfmm6640l3";
     })
+    # https://trac.sagemath.org/ticket/26360
+    (fetchpatch {
+      name = "arb-2.15.1.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=30cc778d46579bd0c7537ed33e8d7a4f40fd5c31";
+      sha256 = "13vc2q799dh745sm59xjjabllfj0sfjzcacf8k59kwj04x755d30";
+    })
   ];
 
   patches = nixPatches ++ packageUpgradePatches ++ [
