@@ -58,6 +58,13 @@ stdenv.mkDerivation rec {
       url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/sagemath-lcalc-c++11.patch?h=packages/sagemath&id=0e31ae526ab7c6b5c0bfacb3f8b1c4fd490035aa";
       sha256 = "0p5wnvbx65i7cp0bjyaqgp4rly8xgnk12pqwaq3dqby0j2bk6ijb";
     })
+
+    # https://trac.sagemath.org/ticket/26360
+    (fetchpatch {
+      name = "arb-2.15.1.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?id=30cc778d46579bd0c7537ed33e8d7a4f40fd5c31";
+      sha256 = "13vc2q799dh745sm59xjjabllfj0sfjzcacf8k59kwj04x755d30";
+    })
   ];
 
   patches = nixPatches ++ packageUpgradePatches ++ [
