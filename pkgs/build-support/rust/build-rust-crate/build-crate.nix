@@ -2,7 +2,7 @@
 { crateName,
   dependencies,
   crateFeatures, libName, release, libPath,
-  crateType, metadata, crateBin,
+  crateType, metadata, crateBin, hasCrateBin,
   extraRustcOpts, verbose, colors }:
 
   let
@@ -13,6 +13,17 @@
             (if release then "-C opt-level=3" else "-C debuginfo=2")
             (["-C codegen-units=1"] ++ extraRustcOpts);
         rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
+
+    # Some platforms have different names for rustc.
+    rustPlatform =
+      with stdenv.hostPlatform.parsed;
+      let cpu_ = if cpu.name == "armv7a" then "armv7"
+                 else cpu.name;
+          vendor_ = vendor.name;
+          kernel_ = kernel.name;
+          abi_ = abi.name;
+      in
+      "${cpu_}-${vendor_}-${kernel_}-${abi_}";
   in ''
     runHook preBuild
     norm=""
@@ -32,7 +43,8 @@
        lib_src=$1
        echo_build_heading $lib_src ${libName}
 
-       noisily rustc --crate-name $CRATE_NAME $lib_src --crate-type ${crateType} \
+       noisily rustc --crate-name $CRATE_NAME $lib_src \
+         ${lib.strings.concatStrings (map (x: " --crate-type ${x}") crateType)}  \
          ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/lib \
          --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow \
          $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
@@ -54,7 +66,8 @@
       noisily rustc --crate-name $crate_name_ $main_file --crate-type bin ${rustcOpts}\
         ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps \
         $LINK ${deps}$EXTRA_LIB --cap-lints allow \
-        $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
+        $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors} \
+        ${if stdenv.hostPlatform != stdenv.buildPlatform then "--target ${rustPlatform} -C linker=${stdenv.hostPlatform.config}-gcc" else ""}
       if [ "$crate_name_" != "$crate_name" ]; then
         mv target/bin/$crate_name_ target/bin/$crate_name
       fi
@@ -103,9 +116,9 @@
        tr '\n' ' ' < target/link > target/link_
        LINK=$(cat target/link_)
     fi
-
-    mkdir -p target/bin
+    ${lib.optionalString (crateBin != "") ''
     printf "%s\n" "${crateBin}" | head -n1 | tr -s ',' '\n' | while read -r BIN_NAME BIN_PATH; do
+      mkdir -p target/bin
       # filter empty entries / empty "lines"
       if [[ -z "$BIN_NAME" ]]; then
            continue
@@ -141,13 +154,15 @@
       fi
       build_bin "$BIN_NAME" "$BIN_PATH"
     done
+    ''}
 
-
-    ${lib.optionalString (crateBin == "") ''
+    ${lib.optionalString (crateBin == "" && !hasCrateBin) ''
       if [[ -e src/main.rs ]]; then
+        mkdir -p target/bin
         build_bin ${crateName} src/main.rs
       fi
       for i in src/bin/*.rs; do #*/
+        mkdir -p target/bin
         build_bin "$(basename $i .rs)" "$i"
       done
     ''}
