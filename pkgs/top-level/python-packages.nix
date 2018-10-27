@@ -3908,32 +3908,7 @@ in {
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
-  sqlparse = buildPythonPackage rec {
-    name = "sqlparse-${version}";
-    version = "0.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sqlparse/${name}.tar.gz";
-      sha256 = "08dszglfhf1c4rwqinkbp4x55v0b90rgm1fxc1l4dy965imjjinl";
-    };
-
-    buildInputs = with self; [ pytest ];
-    checkPhase = ''
-      py.test
-    '';
-
-    # Package supports 3.x, but tests are clearly 2.x only.
-    doCheck = !isPy3k;
-
-    meta = {
-      description = "Non-validating SQL parser for Python";
-      longDescription = ''
-        Provides support for parsing, splitting and formatting SQL statements.
-      '';
-      homepage = https://github.com/andialbrecht/sqlparse;
-      license = licenses.bsd3;
-    };
-  };
+  sqlparse = callPackage ../development/python-modules/sqlparse { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
