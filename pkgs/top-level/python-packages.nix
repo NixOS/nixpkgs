@@ -3821,25 +3821,7 @@ in {
 
   semantic = callPackage ../development/python-modules/semantic { };
 
-  sandboxlib = buildPythonPackage rec {
-    name = "sandboxlib-${version}";
-    version = "0.31";
-
-    disabled = isPy3k;
-
-    buildInputs = [ self.pbr ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sandboxlib/sandboxlib-0.3.1.tar.gz";
-      sha256 = "0csj8hbpylqdkxcpqkcfs73dfvdqkyj23axi8m9drqdi4dhxb41h";
-    };
-
-    meta = {
-      description = "Sandboxing Library for Python";
-      homepage = https://pypi.python.org/pypi/sandboxlib/0.3.1;
-      license = licenses.gpl2;
-    };
-  };
+  sandboxlib = callPackage ../development/python-modules/sandboxlib { };
 
   scales = buildPythonPackage rec {
     name = "scales-${version}";
