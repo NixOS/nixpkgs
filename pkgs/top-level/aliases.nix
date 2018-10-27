@@ -235,6 +235,7 @@ mapAliases ({
   s6Networking = s6-networking; # added 2018-07-23
   s6LinuxUtils = s6-linux-utils; # added 2018-07-23
   s6PortableUtils = s6-portable-utils; # added 2018-07-23
+  sagemath = sage; # added 2018-10-27
   sam = deadpixi-sam; # added 2018-04-25
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
