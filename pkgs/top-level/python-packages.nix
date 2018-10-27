@@ -3878,31 +3878,7 @@ in {
 
   sphinxcontrib-bibtex = callPackage ../development/python-modules/sphinxcontrib-bibtex {};
 
-  sphinxcontrib-blockdiag = buildPythonPackage (rec {
-    name = "${pname}-${version}";
-    pname = "sphinxcontrib-blockdiag";
-    version = "1.5.5";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
-      sha256 = "1w7q2hhpzk159wd35hlbwkh80hnglqa475blcd9vjwpkv1kgkpvw";
-    };
-
-    buildInputs = with self; [ mock sphinx-testing ];
-    propagatedBuildInputs = with self; [ sphinx blockdiag ];
-
-    # Seems to look for files in the wrong dir
-    doCheck = false;
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s tests
-    '';
-
-    meta = {
-      description = "Sphinx blockdiag extension";
-      homepage = "https://github.com/blockdiag/sphinxcontrib-blockdiag";
-      maintainers = with maintainers; [ nand0p ];
-      license = licenses.bsd2;
-    };
-  });
+  sphinxcontrib-blockdiag = callPackage ../development/python-modules/sphinxcontrib-blockdiag { };
 
   sphinxcontrib-openapi = buildPythonPackage (rec {
     name = "sphinxcontrib-openapi-0.3.0";
