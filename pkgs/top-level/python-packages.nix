@@ -3784,26 +3784,7 @@ in {
 
   tidylib = callPackage ../development/python-modules/pytidylib { };
 
-  tilestache = self.buildPythonPackage rec {
-    name = "tilestache-${version}";
-    version = "1.50.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/TileStache/TileStache-${version}.tar.gz";
-      sha256 = "1z1j35pz77lhhjdn69sq5rmz62b5m444507d8zjnp0in5xqaj6rj";
-    };
-
-    disabled = !isPy27;
-
-    propagatedBuildInputs = with self;
-      [ modestmaps pillow pycairo python-mapnik simplejson werkzeug ];
-
-    meta = {
-      description = "A tile server for rendered geographic data";
-      homepage = http://tilestache.org;
-      license = licenses.bsd3;
-    };
-  };
+  tilestache = callPackage ../development/python-modules/tilestache { };
 
   timelib = buildPythonPackage rec {
     name = "timelib-0.2.4";
