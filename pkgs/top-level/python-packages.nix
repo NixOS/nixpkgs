@@ -3076,6 +3076,8 @@ in {
 
   nose-cprof = callPackage ../development/python-modules/nose-cprof { };
 
+  nose-pattern-exclude = callPackage ../development/python-modules/nose-pattern-exclude { };
+
   nose_warnings_filters = callPackage ../development/python-modules/nose_warnings_filters { };
 
   notebook = callPackage ../development/python-modules/notebook { };
