@@ -276,7 +276,7 @@ in {
 
         serviceConfig =
           { ExecStart = "${cfg.package}/bin/buildkite-agent start --config ${cfg.dataDir}/buildkite-agent.cfg";
-            User = "buildkite-agent";
+            User = cfg.fullName;
             RestartSec = 5;
             Restart = "on-failure";
             TimeoutSec = 10;
