@@ -31,12 +31,13 @@
 , upstream-info
 }:
 
+assert stdenv.cc.isClang -> (stdenv == llvmPackages.stdenv);
+
 buildFun:
 
 with stdenv.lib;
 
 # see http://www.linuxfromscratch.org/blfs/view/cvs/xsoft/chromium.html
-
 let
   # The additional attributes for creating derivations based on the chromium
   # source tree.
