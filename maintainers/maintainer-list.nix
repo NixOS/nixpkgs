@@ -4797,4 +4797,10 @@
     github = "zzamboni";
     name = "Diego Zamboni";
   };
+  hark = {
+    email = "hark@puscii.nl";
+    github = "whohoho";
+    name = "hark";
+  };
+
 }

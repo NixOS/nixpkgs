@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 41feb23..695fb5a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -7,7 +7,7 @@ LDLIBS=c-common/lib-c-common.a -ljack -lpthread -lm
+ all: $(bin)
+ 
+ jack-transport: jack-transport.c
+-	gcc $(CFLAGS) -o jack-transport jack-transport.c $(LDLIBS) -lcurses
++	gcc $(CFLAGS) -o jack-transport jack-transport.c $(LDLIBS) -lncurses
+ 
+ jack-dl: jack-dl.c
+ 	gcc $(CFLAGS) -o jack-dl jack-dl.c $(LDLIBS) -ldl -llo
