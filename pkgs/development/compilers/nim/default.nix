@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
 
   patchPhase =
     let disableTest = ''sed -i '1i discard \"\"\"\n  disabled: true\n\"\"\"\n\n' '';
+        disableStdLibTest = ''sed -i -e '/^when isMainModule/,/^END$/{s/^/#/}' '';
         disableCompile = ''sed -i -e 's/^/#/' '';
     in ''
       substituteInPlace ./tests/async/tioselectors.nim --replace "/bin/sleep" "sleep"
@@ -66,6 +67,9 @@ stdenv.mkDerivation rec {
 
       # disable tests requiring network access (not available in the build container)
       ${disableTest} ./tests/stdlib/thttpclient.nim
+    '' + lib.optionalString stdenv.isAarch64 ''
+      # disable test supposedly broken on aarch64
+      ${disableStdLibTest} ./lib/pure/stats.nim
     '';
 
   checkPhase = ''
