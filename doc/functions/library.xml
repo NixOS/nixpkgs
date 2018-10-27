@@ -15,5 +15,7 @@
 
  <xi:include href="./library/strings.xml" />
 
+ <xi:include href="./library/lists.xml" />
+
  <xi:include href="./library/trivial.xml" />
 </section>
