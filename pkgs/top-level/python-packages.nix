@@ -3888,25 +3888,7 @@ in {
 
   sphinxcontrib_newsfeed = callPackage ../development/python-modules/sphinxcontrib_newsfeed { };
 
-  sphinxcontrib_plantuml = buildPythonPackage (rec {
-    name = "sphinxcontrib-plantuml-0.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sphinxcontrib-plantuml/${name}.tar.gz";
-      sha256 = "011yprqf41dcm1824zgk2w8vi9115286pmli6apwhlrsxc6b6cwv";
-    };
-
-    # No tests included.
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [sphinx plantuml];
-
-    meta = {
-      description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
-      homepage = https://bitbucket.org/birkenfeld/sphinx-contrib;
-      license = with licenses; [ bsd2 ];
-    };
-  });
+  sphinxcontrib_plantuml = callPackage ../development/python-modules/sphinxcontrib_plantuml { };
 
   sphinxcontrib-spelling = buildPythonPackage (rec {
     name = "${pname}-${version}";
