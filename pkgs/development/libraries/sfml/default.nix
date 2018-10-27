@@ -13,14 +13,18 @@ stdenv.mkDerivation rec {
     url = "https://github.com/SFML/SFML/archive/${version}.tar.gz";
     sha256 = "11f7w5l87b7g07a0g844hm43qdfs2j3rzxf6haga32nc2ylr3323";
   };
-  buildInputs = [ cmake libX11 freetype libjpeg openal flac libvorbis glew
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libX11 freetype libjpeg openal flac libvorbis glew
                   libXrandr libXrender xcbutilimage
                 ] ++ stdenv.lib.optional stdenv.isLinux udev
                   ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit Foundation AppKit OpenAL ];
+
   cmakeFlags = [ "-DSFML_INSTALL_PKGCONFIG_FILES=yes"
                  "-DSFML_MISC_INSTALL_PREFIX=share/SFML"
                  "-DSFML_BUILD_FRAMEWORKS=no"
                  "-DSFML_USE_SYSTEM_DEPS=yes" ];
+
   meta = with stdenv.lib; {
     homepage = http://www.sfml-dev.org/;
     description = "Simple and fast multimedia library";
