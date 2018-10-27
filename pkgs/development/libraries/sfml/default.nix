@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, libX11, freetype, libjpeg, openal, flac, libvorbis
+{ stdenv, fetchzip, cmake, libX11, freetype, libjpeg, openal, flac, libvorbis
 , glew, libXrandr, libXrender, udev, xcbutilimage
 , IOKit, Foundation, AppKit, OpenAL
 }:
@@ -9,9 +9,10 @@ in
 
 stdenv.mkDerivation rec {
   name = "sfml-${version}";
-  src = fetchurl {
+
+  src = fetchzip {
     url = "https://github.com/SFML/SFML/archive/${version}.tar.gz";
-    sha256 = "11f7w5l87b7g07a0g844hm43qdfs2j3rzxf6haga32nc2ylr3323";
+    sha256 = "0abr8ri2ssfy9ylpgjrr43m6rhrjy03wbj9bn509zqymifvq5pay";
   };
 
   nativeBuildInputs = [ cmake ];
