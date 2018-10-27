@@ -3924,24 +3924,7 @@ in {
 
   structlog = callPackage ../development/python-modules/structlog { };
 
-  svgwrite = buildPythonPackage rec {
-    name = "svgwrite-${version}";
-    version = "1.1.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/svgwrite/${name}.tar.gz";
-      sha256 = "1f018813072aa4d7e95e58f133acb3f68fa7de0a0d89ec9402cc38406a0ec5b8";
-    };
-
-    buildInputs = with self; [ setuptools ];
-    propagatedBuildInputs = with self; [ pyparsing ];
-
-    meta = {
-      description = "A Python library to create SVG drawings";
-      homepage = https://bitbucket.org/mozman/svgwrite;
-      license = licenses.mit;
-    };
-  };
+  svgwrite = callPackage ../development/python-modules/svgwrite { };
 
   freezegun = buildPythonPackage rec {
     name = "freezegun-${version}";
