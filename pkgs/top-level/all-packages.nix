@@ -2369,6 +2369,8 @@ with pkgs;
 
   carp = callPackage ../development/compilers/carp { };
 
+  cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
+
   emscriptenVersion = "1.37.36";
 
   emscripten = callPackage ../development/compilers/emscripten { };
@@ -5039,9 +5041,7 @@ with pkgs;
     gsettings-desktop-schemas = gnome3.gsettings-desktop-schemas;
   };
 
-  rename = callPackage ../tools/misc/rename {
-    inherit (perlPackages) buildPerlPackage;
-  };
+  rename = callPackage ../tools/misc/rename { };
 
   renameutils = callPackage ../tools/misc/renameutils { };
 
@@ -12965,13 +12965,9 @@ with pkgs;
   });
 
   perlPackages = perl528Packages;
-  inherit (perlPackages) perl buildPerlPackage;
-
-  perlXMLParser = perlPackages.XMLParser;
+  inherit (perlPackages) perl;
 
   ack = perlPackages.ack;
-
-  perlArchiveCpio = perlPackages.ArchiveCpio;
 
   perlcritic = perlPackages.PerlCritic;
 
@@ -15501,6 +15497,8 @@ with pkgs;
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
 
+  weather-icons = callPackage ../data/fonts/weather-icons { };
+
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
@@ -17727,6 +17725,8 @@ with pkgs;
   minikube = callPackage ../applications/networking/cluster/minikube {
     inherit (darwin.apple_sdk.frameworks) vmnet;
   };
+
+  minishift = callPackage ../applications/networking/cluster/minishift { };
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
@@ -20350,11 +20350,9 @@ with pkgs;
 
   pong3d = callPackage ../games/pong3d { };
 
-  pokerth = callPackage ../games/pokerth {
-    protobuf = protobuf3_4;
-  };
+  pokerth = libsForQt5.callPackage ../games/pokerth { };
 
-  pokerth-server = pokerth.server;
+  pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
 
   prboom = callPackage ../games/prboom { };
 
@@ -20443,6 +20441,12 @@ with pkgs;
   };
 
   scummvm = callPackage ../games/scummvm { };
+
+  inherit (callPackage ../games/scummvm/games.nix { })
+    beneath-a-steel-sky
+    drascula-the-vampire-strikes-back
+    flight-of-the-amazon-queen
+    lure-of-the-temptress;
 
   scorched3d = callPackage ../games/scorched3d { };
 
@@ -21140,8 +21144,9 @@ with pkgs;
   sageWithDoc = sage.override { withDoc = true; };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
-  suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};
-  suitesparse = suitesparse_4_4;
+  suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse/4.4.nix {};
+  suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {};
+  suitesparse = suitesparse_5_3;
 
   superlu = callPackage ../development/libraries/science/math/superlu {};
 

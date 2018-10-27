@@ -3339,6 +3339,11 @@
     github = "pmyjavec";
     name = "Pauly Myjavec";
   };
+  pnelson = {
+    email = "me@pnelson.ca";
+    github = "pnelson";
+    name = "Philip Nelson";
+  };
   pneumaticat = {
     email = "kevin@potatofrom.space";
     github = "pneumaticat";
@@ -4142,11 +4147,6 @@
     email = "mail@tazj.in";
     github = "tazjin";
     name = "Vincent Ambo";
-  };
-  TealG = {
-    email = "~@Teal.Gr";
-    github = "TealG";
-    name = "Teal Gaure";
   };
   teh = {
     email = "tehunger@gmail.com";

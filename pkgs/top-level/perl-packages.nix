@@ -95,6 +95,34 @@ let
     };
   };
 
+  AlienBuild = buildPerlPackage {
+    name = "Alien-Build-1.48";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-1.48.tar.gz;
+      sha256 = "1sv4544g2qhwigpj1x2qycafab04p2b0vdr2x07wzriq5fqgsspp";
+    };
+    propagatedBuildInputs = [ CaptureTiny FFICheckLib FileWhich Filechdir PathTiny Test2Suite ];
+    buildInputs = [ DevelHide PkgConfig ];
+    meta = {
+      description = "Build external dependencies for use in CPAN";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  AlienGMP = buildPerlPackage {
+    name = "Alien-GMP-1.14";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-GMP-1.14.tar.gz;
+      sha256 = "116vvh1b0d1ykkklqgfxfn89g3bw90a4cj3qrvsnkw1kk5cmn60a";
+    };
+    propagatedBuildInputs = [ AlienBuild ];
+    buildInputs = [ pkgs.gmp DevelChecklib ];
+    meta = {
+      description = "Alien package for the GNU Multiple Precision library.";
+      license = with stdenv.lib.licenses; [ lgpl3Plus ];
+    };
+  };
+
   aliased = buildPerlModule rec {
     name = "aliased-0.34";
     src = fetchurl {
@@ -526,8 +554,6 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
-
-  ArchiveZip_1_53 = ArchiveZip;
 
   AudioScan = buildPerlPackage rec {
     name = "Audio-Scan-1.01";
@@ -2857,6 +2883,18 @@ let
     };
   };
 
+  CryptCurve25519 = buildPerlPackage {
+    name = "Crypt-Curve25519-0.06";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AJ/AJGB/Crypt-Curve25519-0.06.tar.gz;
+      sha256 = "1ir0gfxm8i7r9zyfs2zvil5jgwirl7j6cb9cm1p2kjpfnhyp0j4z";
+    };
+    meta = {
+      description = "Generate shared secret using elliptic-curve Diffie-Hellman function";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CryptDES = buildPerlPackage rec {
     name = "Crypt-DES-2.07";
     src = fetchurl {
@@ -2892,6 +2930,14 @@ let
       sha256 = "3cc7126d5841107237a9be2dc5c7fbc167cf3c4b4ce34678a8448b850757014c";
     };
     propagatedBuildInputs = [ ClassMix ];
+  };
+
+  CryptIDEA = buildPerlPackage {
+    name = "Crypt-IDEA-1.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DP/DPARIS/Crypt-IDEA-1.10.tar.gz;
+      sha256 = "0690lzlyjqgmnb94dq7dm5n6pgybg10fkpgfycgzr814370pig9k";
+    };
   };
 
   CryptJWT = buildPerlPackage rec {
@@ -4425,7 +4471,6 @@ let
     };
   };
 
-  DigestHMAC_SHA1 = DigestHMAC;
   DigestJHash = buildPerlPackage rec {
     name = "Digest-JHash-0.10";
     src = fetchurl {
@@ -5586,6 +5631,19 @@ let
     meta = {
       description = "A perl-based FastCGI process manager";
       license = "unknown";
+    };
+  };
+
+  FFICheckLib = buildPerlPackage {
+    name = "FFI-CheckLib-0.20";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/FFI-CheckLib-0.20.tar.gz;
+      sha256 = "1pggqj5cs77myp4g62jzkld95a286vwkygi7i0hbqjgwf3w3f5gl";
+    };
+    buildInputs = [ Test2Suite ];
+    meta = {
+      description = "Check that a library is available for FFI";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -8011,7 +8069,7 @@ let
       sha256 = "0nlgdzy40q26z8qhwngsd461glyai8dpwaccyhiljmrkaqwdjxz2";
     };
     # Do not abort cross-compilation on failure to load native JSON module into host perl
-    preConfigure = ''
+    preConfigure = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Makefile.PL --replace "exit 0;" ""
     '';
     buildInputs = [ TestPod ];
@@ -9235,6 +9293,21 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SM/SMUELLER/Math-ConvexHull-MonotoneChain-0.01.tar.gz;
       sha256 = "1xcl7cz62ydddji9qzs4xsfxss484jqjlj4iixa4aci611cw92r8";
+    };
+  };
+
+  MathGMP = buildPerlPackage {
+    name = "Math-GMP-2.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Math-GMP-2.19.tar.gz;
+      sha256 = "1c07521m4d38hy2yx21hkwz22n2672bvrc4i21ldc68h85qy1q8i";
+    };
+    buildInputs = [ pkgs.gmp AlienGMP ];
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
+    meta = {
+      description = "High speed arbitrary size integer math";
+      license = with stdenv.lib.licenses; [ lgpl21Plus ];
     };
   };
 
@@ -11280,7 +11353,7 @@ let
       url = "mirror://cpan/authors/id/I/IV/IVAN/${name}.tar.gz";
       sha256 = "88a9b2df69e769e5855a408b19f61915b82e8fe070ab5cf4d525dd3b8bbe31c1";
     };
-    propagatedBuildInputs = [ pkgs.openssl Carp Exporter IO NetSSH StringShellQuote ];
+    propagatedBuildInputs = [ pkgs.openssl Carp IO NetSSH StringShellQuote ];
     patchPhase = ''
       sed -i 's|$scp = "scp";|$scp = "${pkgs.openssh}/bin/scp";|' SCP.pm
     '';
@@ -11373,12 +11446,26 @@ let
       url = "mirror://cpan/authors/id/I/IV/IVAN/${name}.tar.gz";
       sha256 = "7c71c7c3cbe953234dfe25bcc1ad7edb0e1f5a0578601f5523bc6070262a3817";
     };
-    propagatedBuildInputs = [ pkgs.openssl Exporter IO ];
+    propagatedBuildInputs = [ pkgs.openssl IO ];
     patchPhase = ''
       sed -i 's|$ssh = "ssh";|$ssh = "${pkgs.openssh}/bin/ssh";|' SSH.pm
     '';
     meta = {
       description = "Simple wrappers around ssh commands.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  NetSSHPerl = buildPerlPackage rec {
+    name = "Net-SSH-Perl-2.14";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SC/SCHWIGON/Net-SSH-Perl-2.14.tar.gz;
+      sha256 = "2b5d1bb13590b5870116704e7f1dce9a9823c4f80ff5461b97bb26a317393017";
+    };
+    propagatedBuildInputs = [ CryptCurve25519 CryptIDEA CryptX FileHomeDir MathGMP StringCRC32 ];
+    preCheck = "export HOME=$TMPDIR";
+    meta = {
+      description = "Perl client Interface to SSH";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -12024,7 +12111,7 @@ let
       sha256 = "18wxvp7psqrx0zdvg47azrals572hv9fx1s3p0q65s87lnk3q63l";
     };
     outputs = [ "out" ];
-    buildInputs = [ DBDmysql DBI DigestMD5 IOSocketSSL TermReadKey TimeHiRes ];
+    buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey TimeHiRes ];
     meta = {
       description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
       homepage = http://www.percona.com/software/percona-toolkit;
@@ -13341,7 +13428,6 @@ let
       sha256 = "17syqbq17qw6ajg3w88q9ljdm4c2b7zadq9pwshxxgyijg8dlfh4";
     };
     buildInputs = [ TestDeep TestDifferences TestWarn TestLongString ];
-    propagatedBuildInputs = [ XSLoader ];
     preBuild = ''ls'';
     meta = {
       homepage = https://github.com/Sereal/Sereal;
@@ -13358,7 +13444,7 @@ let
       sha256 = "02hbk5dwq7fpnyb3vp7xxhb41ra48xhghl13p9pjq9lzsqlb6l19";
     };
     buildInputs = [ TestDeep TestDifferences TestWarn TestLongString ];
-    propagatedBuildInputs = [ XSLoader SerealDecoder ];
+    propagatedBuildInputs = [ SerealDecoder ];
     meta = {
       homepage = https://github.com/Sereal/Sereal;
       description = "Fast, compact, powerful binary deserialization";
@@ -14051,7 +14137,7 @@ let
       sha256 = "1y9lfhxgwyysybing72n3hng2db5njpk2dbb80vskdz75r7ffqjp";
     };
 
-    buildInputs = [ ArchiveZip_1_53 pkgs.file ];
+    buildInputs = [ ArchiveZip pkgs.file ];
     meta.broken = true;
   };
 
@@ -14065,7 +14151,7 @@ let
       sha256 = "1y9lfhxgwyysybing72n3hng2db5njpk2dbb80vskdz75r7ffqjp";
     };
 
-    buildInputs = [ ArchiveZip_1_53 libfile-stripnondeterminism pkgs.file ];
+    buildInputs = [ ArchiveZip libfile-stripnondeterminism pkgs.file ];
 
     meta = with stdenv.lib; {
       description = "A Perl module for stripping bits of non-deterministic information";
@@ -14131,7 +14217,6 @@ let
     };
   };
 
-  SubExporterUtil = SubExporter;
   SubIdentify = buildPerlPackage rec {
     name = "Sub-Identify-0.14";
     src = fetchurl {

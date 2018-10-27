@@ -332,7 +332,11 @@ mountFS() {
     # Filter out x- options, which busybox doesn't do yet.
     local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
 
-    echo "$device /mnt-root$mountPoint $fsType $optionsFiltered" >> /etc/fstab
+    if [ -z "$optionsFiltered" ]; then
+        optionsFiltered="defaults"
+    fi
+
+    echo "$device /mnt-root$mountPoint $fsType $optionsFiltered 0 0" >> /etc/fstab
 
     checkFS "$device" "$fsType"
 

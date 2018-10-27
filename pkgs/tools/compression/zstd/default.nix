@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
-  ];
+  ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl
+        "CFLAGS=\"-O3 -DBACKTRACES_ENABLE=0\"";
 
   preBuild = stdenv.lib.optionalString stdenv.targetPlatform.isMusl ''
     makeFlagsArray+=(CFLAGS="-O3 -DBACKTRACES_ENABLE=0")

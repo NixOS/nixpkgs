@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, buildEnv
+, buildEnv, python3
 }:
 
 let
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
     libuuid keyutils kerberos tcp_wrappers
+    python3
   ];
 
   enableParallelBuilding = true;
