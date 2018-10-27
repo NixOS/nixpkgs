@@ -3,6 +3,7 @@
 pkgs.substituteAll {
   src = ./extlinux-conf-builder.sh;
   isExecutable = true;
-  path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-  inherit (pkgs) bash;
+  path = with pkgs.buildPackages;
+    [ coreutils gnused gnugrep ];
+  inherit (pkgs.buildPackages) bash;
 }
