@@ -10,13 +10,14 @@
 , zeromq
 , zlib
 , unixtools
+, python3
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "particl-core-${version}";
-  version     = "0.17.0.2";
+  version = "0.17.0.2";
 
   src = fetchurl {
     url = "https://github.com/particl/particl-core/archive/v${version}.tar.gz";
@@ -24,16 +25,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [
-    openssl db48 boost zlib miniupnpc libevent zeromq
-    unixtools.hexdump
-  ];
+  buildInputs = [ openssl db48 boost zlib miniupnpc libevent zeromq unixtools.hexdump python3 ];
 
   configureFlags = [
     "--disable-bench"
-    "--enable-tests=no"
     "--with-boost-libdir=${boost.out}/lib"
+  ] ++ optionals (!doCheck) [
+    "--enable-tests=no"
   ];
+
+  # Always check during Hydra builds
+  doCheck = true;
+  preCheck = "patchShebangs test";
+  enableParallelBuilding = true;
 
   meta = {
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
