@@ -19,8 +19,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/lib
+    mkdir -p $out/lib/pkgconfig
     cp -v googlemock/gtest/libgtest.a googlemock/gtest/libgtest_main.a googlemock/libgmock.a googlemock/libgmock_main.a $out/lib
+    cp -v googlemock/gtest/generated/gmock_main.pc googlemock/gtest/generated/gmock.pc googlemock/gtest/generated/gtest_main.pc googlemock/gtest/generated/gtest.pc $out/lib/pkgconfig
     ln -s $out/lib/libgmock.a $out/lib/libgoogletest.a
     mkdir -p $out/include
     cp -v -r ../googlemock/include/gmock $out/include
