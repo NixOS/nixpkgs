@@ -3845,23 +3845,7 @@ in {
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
 
-  sorl_thumbnail = buildPythonPackage rec {
-    name = "sorl-thumbnail-11.12";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sorl-thumbnail/${name}.tar.gz";
-      sha256 = "050b9kzbx7jvs3qwfxxshhis090hk128maasy8pi5wss6nx5kyw4";
-    };
-
-    # Disabled due to an improper configuration error when tested against django. This looks like something broken in the test cases for sorl.
-    doCheck = false;
-
-    meta = {
-      homepage = http://sorl-thumbnail.readthedocs.org/en/latest/;
-      description = "Thumbnails for Django";
-      license = licenses.bsd3;
-    };
-  };
+  sorl_thumbnail = callPackage ../development/python-modules/sorl_thumbnail { };
 
   supervisor = callPackage ../development/python-modules/supervisor {};
 
