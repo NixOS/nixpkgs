@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText }:
+{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText, withLibvirt ? false, libvirt, pkgconfig }:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
@@ -15,7 +15,7 @@ let
     inherit ruby;
     gemfile = writeText "Gemfile" "";
     lockfile = writeText "Gemfile.lock" "";
-    gemset = lib.recursiveUpdate (import ./gemset.nix) {
+    gemset = lib.recursiveUpdate (import ./gemset.nix) ({
       vagrant = {
         source = {
           type = "url";
@@ -23,7 +23,7 @@ let
         };
         inherit version;
       };
-    };
+    } // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix));
   };
 
 in buildRubyGem rec {
@@ -35,6 +35,8 @@ in buildRubyGem rec {
   dontBuild = false;
   src = fetchurl { inherit url sha256; };
 
+  buildInputs = lib.optional withLibvirt [ libvirt pkgconfig ];
+
   patches = [
     ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
@@ -45,7 +47,12 @@ in buildRubyGem rec {
   postInstall = ''
     wrapProgram "$out/bin/vagrant" \
       --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
-      --prefix PATH ':' "${lib.getBin libarchive}/bin"
+      --prefix PATH ':' "${lib.getBin libarchive}/bin" \
+      ${lib.optionalString withLibvirt ''
+        --prefix PATH ':' "${pkgconfig}/bin" \
+        --prefix PKG_CONFIG_PATH ':' \
+          "${lib.makeSearchPath "lib/pkgconfig" [ libvirt ]}"
+      ''}
   '';
 
   installCheckPhase = ''
