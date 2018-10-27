@@ -3807,27 +3807,7 @@ in {
 
   sympy = callPackage ../development/python-modules/sympy { };
 
-  pilkit = buildPythonPackage rec {
-    name = "pilkit-1.1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pilkit/${name}.tar.gz";
-      sha256 = "e00585f5466654ea2cdbf7decef9862cb00e16fd363017fa7ef6623a16b0d2c7";
-    };
-
-    preConfigure = ''
-      substituteInPlace setup.py --replace 'nose==1.2.1' 'nose'
-    '';
-
-    # tests fail, see https://github.com/matthewwithanm/pilkit/issues/9
-    doCheck = false;
-
-    buildInputs = with self; [ pillow nose_progressive nose mock blessings ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  pilkit = callPackage ../development/python-modules/pilkit { };
 
   clint = buildPythonPackage rec {
     name = "clint-0.5.1";
