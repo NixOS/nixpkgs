@@ -72,6 +72,11 @@ stdenv.mkDerivation rec {
     "--with-kde-solid=$out/share/apps/solid/actions"
   ] ++ optional onlyLibVLC "--disable-vlc";
 
+  # Remove runtime dependencies on libraries
+  postConfigure = ''
+    sed -i 's|^#define CONFIGURE_LINE.*$|#define CONFIGURE_LINE "<removed>"|g' config.h
+  '';
+
   meta = with stdenv.lib; {
     description = "Cross-platform media player and streaming server";
     homepage = http://www.videolan.org/vlc/;
