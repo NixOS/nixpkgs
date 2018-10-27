@@ -28,6 +28,7 @@
 , "emojione"
 , { "fast-cli": "1.x" }
 , "fetch-bower"
+, "fkill-cli"
 , "forever"
 , "git-run"
 , "git-ssb"
