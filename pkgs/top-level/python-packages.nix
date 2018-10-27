@@ -3811,25 +3811,7 @@ in {
 
   clint = callPackage ../development/python-modules/clint { };
 
-  argh = buildPythonPackage rec {
-    name = "argh-0.26.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/argh/${name}.tar.gz";
-      sha256 = "1nqham81ihffc9xmw85dz3rg3v90rw7h0dp3dy0bh3qkp4n499q6";
-    };
-
-    checkPhase = ''
-      export LANG="en_US.UTF-8"
-      py.test
-    '';
-
-    buildInputs = with self; [ pytest py mock pkgs.glibcLocales ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  argh = callPackage ../development/python-modules/argh { };
 
   nose_progressive = buildPythonPackage rec {
     name = "nose-progressive-1.5.1";
