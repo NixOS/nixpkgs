@@ -6,7 +6,7 @@
 , includeSources
 , licenseAccepted
 }:
-{ platformVersions, abiVersions, useGoogleAPIs, useExtraSupportLibs ? false
+{ platformVersions, abiVersions, useGoogleAPIs, buildToolsVersions ? [], useExtraSupportLibs ? false
 , useGooglePlayServices ? false, useInstantApps ? false }:
 
 if !licenseAccepted then throw ''
@@ -120,8 +120,16 @@ stdenv.mkDerivation rec {
 
     cd ..
     ln -s ${platformTools}/platform-tools
-    ln -s ${buildTools}/build-tools
     ln -s ${support}/support
+
+    mkdir -p build-tools
+    cd build-tools
+
+    ${stdenv.lib.concatMapStrings
+       (v: "ln -s ${builtins.getAttr "v${builtins.replaceStrings ["."] ["_"] v}" buildTools}/build-tools/*")
+       (if (builtins.length buildToolsVersions) == 0 then platformVersions else buildToolsVersions)}
+
+    cd ..
 
     # Symlink required Google API add-ons
 
