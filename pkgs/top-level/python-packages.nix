@@ -3790,26 +3790,7 @@ in {
 
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
 
-  pid = buildPythonPackage rec {
-    name = "pid-${version}";
-    version = "2.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pid/${name}.tar.gz";
-      sha256 = "0cylj8p25nwkdfgy4pzai21wyzmrxdqlwwbzqag9gb5qcjfdwk05";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    # No tests included
-    doCheck = false;
-
-    meta = {
-      description = "Pidfile featuring stale detection and file-locking";
-      homepage = https://github.com/trbs/pid/;
-      license = licenses.asl20;
-    };
-  };
+  pid = callPackage ../development/python-modules/pid { };
 
   pip2nix = buildPythonPackage rec {
     name = "pip2nix-${version}";
