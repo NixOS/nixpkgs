@@ -71,7 +71,10 @@ let
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation. This also
           # applies to openntpd.
-          ${config.systemd.package}/bin/systemctl try-reload-or-restart ntpd.service openntpd.service || true
+          # TODO: polymorphic init systems
+          ${lib.optionalString config.systemd.enable ''
+            ${config.systemd.package}/bin/systemctl try-reload-or-restart ntpd.service openntpd.service || true
+            ''}
       fi
 
       ${cfg.runHook}

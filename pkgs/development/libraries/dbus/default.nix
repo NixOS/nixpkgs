@@ -48,14 +48,12 @@ self = stdenv.mkDerivation {
       "--with-session-socket-dir=/tmp"
       "--with-system-pid-file=/run/dbus/pid"
       "--with-system-socket=/run/dbus/system_bus_socket"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+      "--with-systemduserunitdir=$(out)/etc/systemd/user"
       "--enable-user-session"
       "--datadir=/etc"
       "--libexecdir=$(out)/libexec"
-    ] ++ lib.optional (!x11Support) "--without-x"
-      ++ lib.optionals systemdSupport [
-           "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-           "--with-systemduserunitdir=$(out)/etc/systemd/user"
-         ];
+    ] ++ lib.optional (!x11Support) "--without-x";
 
     # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
     # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.

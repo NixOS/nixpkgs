@@ -26,6 +26,12 @@ in
           '';
       };
 
+      initResumeCommands = mkOption {
+        type = types.lines;
+        description = "Commands executed by the init system after the system resumes from suspend-to-RAM";
+        internal = true;
+      };
+
       resumeCommands = mkOption {
         type = types.lines;
         default = "";
@@ -94,7 +100,7 @@ in
         after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
         script =
           ''
-            ${config.systemd.package}/bin/systemctl try-restart post-resume.target
+            ${cfg.initResumeCommands}
             ${cfg.resumeCommands}
             ${cfg.powerUpCommands}
           '';

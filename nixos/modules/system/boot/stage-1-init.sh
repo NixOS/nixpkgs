@@ -207,7 +207,7 @@ echo "running udev..."
 mkdir -p /etc/udev
 ln -sfn @udevRules@ /etc/udev/rules.d
 mkdir -p /dev/.mdadm
-systemd-udevd --daemon
+@udevd@ --daemon
 udevadm trigger --action=add
 udevadm settle
 

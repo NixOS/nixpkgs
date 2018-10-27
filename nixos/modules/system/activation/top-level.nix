@@ -69,10 +69,8 @@ let
 
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
-      ln -s "$systemd" $out/systemd
 
       echo -n "$configurationName" > $out/configuration-name
-      echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosLabel" > $out/nixos-version
       echo -n "${pkgs.stdenv.hostPlatform.system}" > $out/system
 
@@ -90,6 +88,7 @@ let
 
       echo -n "${toString config.system.extraDependencies}" > $out/extra-dependencies
 
+      ${config.system.init.extraSystemBuilderCmds}
       ${config.system.extraSystemBuilderCmds}
     '';
 
@@ -98,7 +97,7 @@ let
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
   # makes it bootable.
-  baseSystem = pkgs.stdenvNoCC.mkDerivation {
+  baseSystem = pkgs.stdenvNoCC.mkDerivation ({
     name = let hn = config.networking.hostName;
                nn = if (hn != "") then hn else "unnamed";
         in "nixos-system-${nn}-${config.system.nixos.label}";
@@ -107,7 +106,6 @@ let
     buildCommand = systemBuilder;
 
     inherit (pkgs) utillinux coreutils;
-    systemd = config.systemd.package;
     shell = "${pkgs.bash}/bin/sh";
     su = "${pkgs.shadow.su}/bin/su";
 
@@ -124,7 +122,7 @@ let
     # Needed by switch-to-configuration.
 
     perl = "${pkgs.perl}/bin/perl " + (concatMapStringsSep " " (lib: "-I${lib}/${pkgs.perl.libPrefix}") (with pkgs.perlPackages; [ FileSlurp NetDBus XMLParser XMLTwig ]));
-  };
+  } // config.system.init.extraBaseSystemAttrs);
 
   # Handle assertions and warnings
 

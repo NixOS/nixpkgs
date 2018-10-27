@@ -7,6 +7,7 @@ let
   cfg = config.services.udev;
 
   udev = cfg.package;
+  nativeUdev = cfg.package.nativeDrv;
 
   extraUdevRules = pkgs.writeTextFile {
     name = "extra-udev-rules";
@@ -181,14 +182,32 @@ in
     services.udev = {
 
       package = mkOption {
-        type = types.nullOr types.package;
+        type = types.package;
         description = "Default udev package to use";
+      };
+
+      udevd = mkOption {
+        type = types.string;
+        internal = true;
+        description = "Name of udevd executable provided by system";
+      };
+
+      udevdPath = mkOption {
+        type = types.string;
+        internal = true;
+        description = "Path to udev binary in the nix store";
       };
 
       enable = mkOption {
         type = types.bool;
         default = true;
         description = "Whether or not to enable udev";
+      };
+
+      builtinUdevRulesCommands = mkOption {
+        type = types.lines;
+        description = "Commands to copy the builtin udev rules from the derivation to the initial ramdisk";
+        internal = true;
       };
 
       packages = mkOption {

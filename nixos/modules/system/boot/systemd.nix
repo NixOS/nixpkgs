@@ -907,6 +907,30 @@ in
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
+    boot.kernel.sysctl."kernel.poweroff_cmd" = "${config.systemd.package}/sbin/poweroff";
+
+    powerManagement.initResumeCommands = "${config.systemd.package}/bin/systemctl try-restart post-resume.target";
+
+    system.init.extraBaseSystemAttrs = { systemd = "${cfg.package}"; };
+    system.init.extraSystemBuilderCmds = ''
+      ln -s "$systemd" $out/systemd
+      echo -n "systemd ${toString cfg.package.interfaceVersion}" > $out/init-interface-version
+    '';
+    services.udev.udevd = "systemd-udevd";
+    services.udev.udevdPath = "${config.services.udev.package}/lib/systemd/systemd-udevd";
+    services.udev.builtinUdevRulesCommands = ''
+      cp -v ${config.services.udev.package}/lib/udev/rules.d/60-cdrom_id.rules $out/
+      cp -v ${config.services.udev.package}/lib/udev/rules.d/60-persistent-storage.rules $out/
+      cp -v ${config.services.udev.package}/lib/udev/rules.d/80-drivers.rules $out/
+    '';
+
+    boot.startInitCommands = ''
+      # Start systemd.
+      echo "starting systemd..."
+      PATH="/run/current-system/systemd/lib/systemd:$PATH" \
+          LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
+          exec systemd
+    '';
   };
 
   # FIXME: Remove these eventually.

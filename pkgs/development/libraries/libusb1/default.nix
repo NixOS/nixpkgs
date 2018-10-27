@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, systemd ? null, libobjc, IOKit }:
+{ stdenv, lib, fetchurl, pkgconfig, systemd ? null, udev ? null, libobjc, IOKit
+, systemdSupport ? stdenv.isLinux }:
 
 stdenv.mkDerivation rec {
   name = "libusb-1.0.22";
@@ -12,13 +13,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    stdenv.lib.optional stdenv.isLinux systemd ++
+    stdenv.lib.optional systemdSupport systemd ++
+    lib.optional (!(isNull udev)) udev ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    sed 's,-ludev,-L${systemd.lib}/lib -ludev,' -i $out/lib/libusb-1.0.la
+    sed 's,-ludev,-L${lib.getLib udev}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
   meta = with stdenv.lib; {

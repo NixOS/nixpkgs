@@ -164,9 +164,4 @@ ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 exec 1>&$logOutFd 2>&$logErrFd
 exec {logOutFd}>&- {logErrFd}>&-
 
-
-# Start systemd.
-echo "starting systemd..."
-PATH=/run/current-system/systemd/lib/systemd:@fsPackagesPath@ \
-    LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
-    exec systemd
+PATH=@fsPackagesPath@ @shell@ @startInitCommands@

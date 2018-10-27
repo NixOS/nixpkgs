@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, systemd, udev, utillinux, libuuid
-, thin-provisioning-tools, enable_dmeventd ? false }:
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, systemd, udev, utillinux, libuuid
+, thin-provisioning-tools, enable_dmeventd ? false, enable_systemd ? true }:
 
 let
   version = "2.02.177";
@@ -31,8 +31,10 @@ stdenv.mkDerivation {
 
   preConfigure =
     ''
-      substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/bin/udevadm ${systemd}/bin/udevadm
+      ${lib.optionalString enable_systemd ''
+         substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
+            --replace /usr/bin/udevadm ${systemd}/bin/udevadm
+        ''}
 
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
@@ -72,10 +74,12 @@ stdenv.mkDerivation {
       substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
         --replace $out/sbin/blkid ${utillinux}/sbin/blkid
 
-      # Systemd stuff
-      mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
-      cp scripts/blk_availability_systemd_red_hat.service $out/etc/systemd/system
-      cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
+      ${lib.optionalString enable_systemd ''
+        # Systemd stuff
+        mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators
+        cp scripts/blk_availability_systemd_red_hat.service $out/etc/systemd/system
+        cp scripts/lvm2_activation_generator_systemd_red_hat $out/lib/systemd/system-generators
+       ''}
     '';
 
   meta = with stdenv.lib; {

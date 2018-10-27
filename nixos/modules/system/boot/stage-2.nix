@@ -23,6 +23,11 @@ let
         ${config.boot.postBootCommands}
         ${config.powerManagement.powerUpCommands}
       '';
+
+    startInitCommands = pkgs.writeText "start-init"
+      ''
+        ${config.boot.startInitCommands}
+      '';
   };
 
 in
@@ -31,6 +36,13 @@ in
   options = {
 
     boot = {
+      startInitCommands = mkOption {
+        type = types.lines;
+        description = ''
+          Shell commands to launch the init program (usually systemd)
+        '';
+        internal = true;
+      };
 
       postBootCommands = mkOption {
         default = "";
