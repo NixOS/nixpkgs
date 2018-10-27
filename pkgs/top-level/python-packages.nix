@@ -204,6 +204,8 @@ in {
 
   automat = callPackage ../development/python-modules/automat { };
 
+  awkward = callPackage ../development/python-modules/awkward { };
+
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
@@ -249,6 +251,8 @@ in {
   bash_kernel = callPackage ../development/python-modules/bash_kernel { };
 
   bayespy = callPackage ../development/python-modules/bayespy { };
+
+  bitarray = callPackage ../development/python-modules/bitarray { };
 
   bitcoinlib = callPackage ../development/python-modules/bitcoinlib { };
 
@@ -593,6 +597,8 @@ in {
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
   python-prctl = callPackage ../development/python-modules/python-prctl { };
+
+  python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
 
   python-sql = callPackage ../development/python-modules/python-sql { };
 
@@ -2041,11 +2047,17 @@ in {
 
   django_colorful = callPackage ../development/python-modules/django_colorful { };
 
+  django-cache-url = callPackage ../development/python-modules/django-cache-url { };
+
+  django-configurations = callPackage ../development/python-modules/django-configurations { };
+
   django_compressor = callPackage ../development/python-modules/django_compressor { };
 
   django_compat = callPackage ../development/python-modules/django-compat { };
 
   django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
+
+  django-discover-runner = callPackage ../development/python-modules/django-discover-runner { };
 
   django_environ = callPackage ../development/python-modules/django_environ { };
 
@@ -2119,6 +2131,10 @@ in {
   django_pipeline = callPackage ../development/python-modules/django-pipeline { };
 
   dj-database-url = callPackage ../development/python-modules/dj-database-url { };
+
+  dj-email-url = callPackage ../development/python-modules/dj-email-url { };
+
+  dj-search-url = callPackage ../development/python-modules/dj-search-url { };
 
   djmail = callPackage ../development/python-modules/djmail { };
 
@@ -2461,6 +2477,8 @@ in {
   httpretty = callPackage ../development/python-modules/httpretty { };
 
   icalendar = callPackage ../development/python-modules/icalendar { };
+
+  ifaddr = callPackage ../development/python-modules/ifaddr { };
 
   imageio = callPackage ../development/python-modules/imageio { };
 
@@ -6829,24 +6847,7 @@ in {
 
   subprocess32 = callPackage ../development/python-modules/subprocess32 { };
 
-  spark_parser = buildPythonPackage (rec {
-    name = "${pname}-${version}";
-    pname = "spark_parser";
-    version = "1.4.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
-      sha256 = "1r7d07kw4asgajvhq1gzln4g1qi2r13jw0s8c7d5z3g4kp8y0br8";
-    };
-    buildInputs = with self; [nose];
-    propagatedBuildInputs = [];
-    meta = {
-      description = ''An Early-Algorithm Context-free grammar Parser'';
-      homepage = "https://github.com/rocky/python-spark";
-      license = licenses.mit;
-      maintainers = with maintainers; [raskin];
-      platforms = platforms.all;
-    };
-  });
+  spark_parser = callPackage ../development/python-modules/spark_parser { };
 
   sphinx = callPackage ../development/python-modules/sphinx { };
 
@@ -7947,6 +7948,8 @@ in {
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
   uproot = callPackage ../development/python-modules/uproot {};
+
+  uproot-methods = callPackage ../development/python-modules/uproot-methods { };
 
   uptime = buildPythonPackage rec {
     name = "uptime-${version}";

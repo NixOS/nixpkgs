@@ -372,7 +372,7 @@ let f(h, h + 1, i) = i + h
       They are programs/libraries used at build time that furthermore produce
       programs/libraries also used at build time. If the dependency doesn't
       care about the target platform (i.e. isn't a compiler or similar tool),
-      put it in <varname>nativeBuildInputs</varname>instead. The most common
+      put it in <varname>nativeBuildInputs</varname> instead. The most common
       use for this <literal>buildPackages.stdenv.cc</literal>, the default C
       compiler for this role. That example crops up more than one might think
       in old commonly used C libraries.
@@ -2099,13 +2099,13 @@ someVar=$(stripHash $name)
   </para>
 
   <para>
-   In order to alleviate this burden, the <firstterm>setup
-   hook></firstterm>mechanism was written, where any package can include a
-   shell script that [by convention rather than enforcement by Nix], any
-   downstream reverse-dependency will source as part of its build process. That
-   allows the downstream dependency to merely specify its dependencies, and
-   lets those dependencies effectively initialize themselves. No boilerplate
-   mirroring the list of dependencies is needed.
+   In order to alleviate this burden, the <firstterm>setup hook</firstterm>
+   mechanism was written, where any package can include a shell script that [by
+   convention rather than enforcement by Nix], any downstream
+   reverse-dependency will source as part of its build process. That allows the
+   downstream dependency to merely specify its dependencies, and lets those
+   dependencies effectively initialize themselves. No boilerplate mirroring the
+   list of dependencies is needed.
   </para>
 
   <para>
@@ -2442,6 +2442,28 @@ addEnvHooks "$hostOffset" myBashFunction
        use <citerefentry>
        <refentrytitle>dlopen</refentrytitle>
        <manvolnum>3</manvolnum> </citerefentry> to load libraries at runtime.
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>
+      breakpointHook
+     </term>
+     <listitem>
+      <para>
+       This hook will make a build pause instead of stopping when a failure
+       happen. It prevents nix to cleanup the build environment immediatly and
+       allows the user to attach to a build environment using the
+       <command>cntr</command> command. On build error it will print the
+       instruction that are neccessary for <command>cntr</command>. Installing
+       cntr and running the command will provide shell access to the build
+       sandbox of failed build. At <filename>/var/lib/cntr</filename> the
+       sandbox filesystem is mounted. All commands and files of the system are
+       still accessible within the shell. To execute commands from the sandbox
+       use the cntr exec subcommand. Note that <command>cntr</command> also
+       needs to be executed on the machine that is doing the build, which might
+       be not the case when remote builders are enabled.
+       <command>cntr</command> is only supported on linux based platforms.
       </para>
      </listitem>
     </varlistentry>

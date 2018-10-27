@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
   name = "hwdata-${version}";
-  version = "0.314";
+  version = "0.316";
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
     rev = "v${version}";
-    sha256 = "12k466ndg152fqld1w5v1zfdyv000yypazcwy75ywlxvlknv4y90";
+    sha256 = "0k3fypykbq9943cnxlmmpk0xp9nhhf46pfdhkgm99iaa27b8s1gb";
   };
 
   preConfigure = "patchShebangs ./configure";
 
-  configureFlags = [ "--datadir=$(prefix)/data" ];
+  configureFlags = [ "--datadir=${placeholder "out"}/share" ];
 
   doCheck = false; # this does build machine-specific checks (e.g. enumerates PCI bus)
 
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
-  outputHash = "1w00y5kj8rd8slzydw1gw8cablxlkham4vq786kdd8zga286zabb";
+  outputHash = "0g2w4jr4p1hykracp2za7jb0rcr51kks1m43pzcaf7g99x8669ww";
 
   meta = {
     homepage = https://github.com/vcrhonek/hwdata;

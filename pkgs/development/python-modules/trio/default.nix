@@ -9,22 +9,24 @@
 , pyopenssl
 , trustme
 , sniffio
+, jedi
+, pylint
 }:
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.7.0";
+  version = "0.9.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0df152qnj4xgxrxzd8619f8h77mzry7z8sp4m76fi21gnrcr297n";
+    sha256 = "6d905d950dfa1db3fad6b5ef5637c221947123fd2b0e112033fecfc582318c3b";
   };
 
-  checkInputs = [ pytest pyopenssl trustme ];
+  checkInputs = [ pytest pyopenssl trustme jedi pylint ];
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
   checkPhase = ''
-    py.test -k 'not test_getnameinfo and not test_SocketType_resolve and not test_getprotobyname'
+    HOME="$(mktemp -d)" py.test -k 'not test_getnameinfo and not test_SocketType_resolve and not test_getprotobyname and not test_waitpid'
   '';
   propagatedBuildInputs = [
     attrs
