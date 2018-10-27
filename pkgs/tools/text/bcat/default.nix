@@ -4,6 +4,7 @@ bundlerApp {
   pname = "bcat";
   gemdir = ./.;
   exes = [ "bcat" "btee" "a2h" ];
+  manpages = [ "man/bcat.1" "man/btee.1" "man/a2h.1" ];
 
   meta = with lib; {
     description = "Pipe to browser utility";
