@@ -63,7 +63,6 @@ let
       "systemd-logind.service"
       "autovt@.service"
       "systemd-user-sessions.service"
-      "dbus-org.freedesktop.machine1.service"
       "user@.service"
       "user-runtime-dir@.service"
 
@@ -79,10 +78,6 @@ let
       # SysV init compatibility.
       "systemd-initctl.socket"
       "systemd-initctl.service"
-
-      # Kernel module loading.
-      "systemd-modules-load.service"
-      "kmod-static-nodes.service"
 
       # Filesystems.
       "systemd-fsck@.service"
@@ -101,17 +96,10 @@ let
 
       # Maintaining state across reboots.
       "systemd-random-seed.service"
-      "systemd-backlight@.service"
-      "systemd-rfkill.service"
-      "systemd-rfkill.socket"
 
       # Hibernate / suspend.
-      "hibernate.target"
       "suspend.target"
       "sleep.target"
-      "hybrid-sleep.target"
-      "systemd-hibernate.service"
-      "systemd-hybrid-sleep.service"
       "systemd-suspend.service"
 
       # Reboot stuff.
@@ -126,27 +114,12 @@ let
       "final.target"
       "kexec.target"
       "systemd-kexec.service"
-      "systemd-update-utmp.service"
 
       # Password entry.
       "systemd-ask-password-console.path"
       "systemd-ask-password-console.service"
       "systemd-ask-password-wall.path"
       "systemd-ask-password-wall.service"
-
-      # Slices / containers.
-      "slices.target"
-      "user.slice"
-      "machine.slice"
-      "machines.target"
-      "systemd-machined.service"
-      "systemd-nspawn@.service"
-
-      # Temporary file creation / cleanup.
-      "systemd-tmpfiles-clean.service"
-      "systemd-tmpfiles-clean.timer"
-      "systemd-tmpfiles-setup.service"
-      "systemd-tmpfiles-setup-dev.service"
 
       # Misc.
       "systemd-sysctl.service"
@@ -162,6 +135,38 @@ let
     ] ++ optionals config.services.journald.enableHttpGateway [
       "systemd-journal-gatewayd.socket"
       "systemd-journal-gatewayd.service"
+    ] ++ optionals (!config.systemd.minimal) [
+      "dbus-org.freedesktop.machine1.service"
+      # Slices / containers.
+      "slices.target"
+      "user.slice"
+      "machine.slice"
+      "machines.target"
+      "systemd-machined.service"
+      "systemd-nspawn@.service"
+
+      # Kernel module loading.
+      "kmod-static-nodes.service"
+      "systemd-modules-load.service"
+
+      # Maintaining state across reboots
+      "systemd-backlight@.service"
+      "systemd-rfkill.service"
+      "systemd-rfkill.socket"
+
+      "hibernate.target"
+      "systemd-hibernate.service"
+      "hybrid-sleep.target"
+      "systemd-hybrid-sleep.service"
+
+      # Temporary file creation / cleanup.
+      "systemd-tmpfiles-clean.service"
+      "systemd-tmpfiles-clean.timer"
+      "systemd-tmpfiles-setup.service"
+      "systemd-tmpfiles-setup-dev.service"
+
+      # Reboot stuff
+      "systemd-update-utmp.service"
     ] ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
@@ -694,6 +699,14 @@ in
       example = [ "debug-shell.service" "systemd-quotacheck.service" ];
       description = ''
         Additional units shipped with systemd that shall be enabled.
+      '';
+    };
+
+    systemd.minimal = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        If true, make systemd as small as possible. This disables machined, for example
       '';
     };
 
