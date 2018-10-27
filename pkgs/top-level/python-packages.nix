@@ -611,6 +611,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  pyssim = callPackage ../development/python-modules/pyssim { };
+
   pystache = callPackage ../development/python-modules/pystache { };
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
