@@ -31,6 +31,7 @@ in stdenv.mkDerivation {
   };
 
   postPatch = ''
+    mv -v *.ppd ppd/
     substituteInPlace src/pstoqpdl.cpp \
       --replace "RASTERDIR \"/\" RASTERTOQPDL" "\"$out/lib/cups/filter/rastertoqpdl\"" \
       --replace "RASTERDIR" "\"${cups-filters}/lib/cups/filter\"" \
