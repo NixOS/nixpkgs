@@ -1174,6 +1174,8 @@ with pkgs;
 
   coursier = callPackage ../development/tools/coursier {};
 
+  cppclean = callPackage ../development/tools/cppclean {};
+
   cri-tools = callPackage ../tools/virtualization/cri-tools {};
 
   crip = callPackage ../applications/audio/crip { };
