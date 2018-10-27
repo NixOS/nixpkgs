@@ -3831,21 +3831,7 @@ in {
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
-  sexpdata = buildPythonPackage rec {
-    name = "sexpdata-0.0.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sexpdata/${name}.tar.gz";
-      sha256 = "eb696bc66b35def5fb356de09481447dff4e9a3ed926823134e1d0f35eade428";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "S-expression parser for Python";
-      homepage = "https://github.com/tkf/sexpdata";
-    };
-  };
-
+  sexpdata = callPackage ../development/python-modules/sexpdata { };
 
   sh = buildPythonPackage rec {
     name = "sh-1.11";
