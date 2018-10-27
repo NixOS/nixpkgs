@@ -6935,6 +6935,8 @@ with pkgs;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
+  go-junit-report = callPackage ../development/tools/go-junit-report { };
+
   gox = callPackage ../development/tools/gox { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
