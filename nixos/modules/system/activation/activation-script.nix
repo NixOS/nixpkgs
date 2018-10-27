@@ -21,9 +21,7 @@ let
     [ coreutils
       gnugrep
       findutils
-      (if pkgs.stdenv.hostPlatform.isMusl
-       then pkgs.musl-utils
-       else glibc) # needed for getent
+      glibc # needed for getent
       shadow
       nettools # needed for hostname
       utillinux # needed for mount and mountpoint
