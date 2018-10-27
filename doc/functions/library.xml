@@ -13,5 +13,7 @@
 
  <xi:include href="./library/attrsets.xml" />
 
+ <xi:include href="./library/strings.xml" />
+
  <xi:include href="./library/trivial.xml" />
 </section>
