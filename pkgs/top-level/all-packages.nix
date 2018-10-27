@@ -8990,6 +8990,7 @@ with pkgs;
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
 
   vagrant = callPackage ../development/tools/vagrant {};
+  vagrant-libvirt = self.vagrant.override { withLibvirt = true; };
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
 
