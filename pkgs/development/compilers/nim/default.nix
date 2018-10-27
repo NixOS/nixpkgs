@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   phases = [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" "checkPhase" ];
 
   buildPhase = ''
-    # use gcc to trigger the linker since calling ld in build.sh causes an error 
-    LD=gcc
+    # use $CC to trigger the linker since calling ld in build.sh causes an error
+    LD=$CC
     # build.sh wants to write to $HOME/.cache
     HOME=$TMPDIR
     sh build.sh
