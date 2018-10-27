@@ -3904,36 +3904,7 @@ in {
 
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
-  SQLAlchemy-ImageAttach = buildPythonPackage rec {
-    pname = "SQLAlchemy-ImageAttach";
-    version = "1.0.0";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      repo = "sqlalchemy-imageattach";
-      owner = "dahlia";
-      rev = "${version}";
-      sha256 = "0ba97pn5dh00qvxyjbr0mr3pilxqw5kb3a6jd4wwbsfcv6nngqig";
-    };
-
-    checkInputs = with self; [ pytest Wand.imagemagick webob ];
-    propagatedBuildInputs = with self; [ sqlalchemy Wand ];
-
-    checkPhase = ''
-      cd tests
-      export MAGICK_HOME="${pkgs.imagemagick.dev}"
-      export PYTHONPATH=$PYTHONPATH:../
-      py.test
-      cd ..
-    '';
-    doCheck = !isPyPy;  # failures due to sqla version mismatch
-
-    meta = {
-      homepage = https://github.com/dahlia/sqlalchemy-imageattach;
-      description = "SQLAlchemy extension for attaching images to entity objects";
-      license = licenses.mit;
-    };
-  };
+  SQLAlchemy-ImageAttach = callPackage ../development/python-modules/sqlalchemy-imageattach { };
 
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
