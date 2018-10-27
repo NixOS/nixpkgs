@@ -732,6 +732,8 @@ with pkgs;
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
 
+  goku = callPackage ../os-specific/darwin/goku { };
+
   kwakd = callPackage ../servers/kwakd { };
 
   kwm = callPackage ../os-specific/darwin/kwm { };

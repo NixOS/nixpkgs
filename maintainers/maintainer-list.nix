@@ -2967,6 +2967,11 @@
     github = "nequissimus";
     name = "Tim Steinbach";
   };
+  nikitavoloboev = {
+    email = "nikita.voloboev@gmail.com";
+    github = "nikitavoloboev";
+    name = "Nikita Voloboev";
+  };
   nfjinjing = {
     email = "nfjinjing@gmail.com";
     github = "nfjinjing";
