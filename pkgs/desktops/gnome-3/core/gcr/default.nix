@@ -24,10 +24,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool gobjectIntrospection libxslt makeWrapper vala ];
 
-  buildInputs = let
-    gpg = gnupg.override { guiSupport = false; }; # prevent build cycle with pinentry_gnome
-  in [
-    gpg libgcrypt libtasn1 dbus-glib pango gdk_pixbuf atk
+  buildInputs = [
+    gnupg libgcrypt libtasn1 dbus-glib pango gdk_pixbuf atk
   ];
 
   propagatedBuildInputs = [ glib gtk p11-kit ];

@@ -2894,10 +2894,12 @@ with pkgs;
   gnupg1compat = callPackage ../tools/security/gnupg/1compat.nix { };
   gnupg1 = gnupg1compat;    # use config.packageOverrides if you prefer original gnupg1
   gnupg20 = callPackage ../tools/security/gnupg/20.nix {
-    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry;
+    guiSupport = stdenv.isDarwin;
+    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry_gtk2;
   };
   gnupg22 = callPackage ../tools/security/gnupg/22.nix {
-    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry;
+    guiSupport = stdenv.isDarwin;
+    pinentry = if stdenv.isDarwin then pinentry_mac else pinentry_gtk2;
   };
   gnupg = gnupg22;
 
