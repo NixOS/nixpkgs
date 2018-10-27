@@ -51,12 +51,11 @@ let
       hashed-mirrors =
       connect-timeout = 1
     '';
-    services.udisks2.enable = lib.mkForce false;
   };
   # /etc/nixos/configuration.nix for the vm
   configFile = pkgs.writeText "configuration.nix"  ''
     {config, pkgs, ...}: ({
-    imports = 
+    imports =
           [ ./hardware-configuration.nix
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
