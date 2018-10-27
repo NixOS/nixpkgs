@@ -3841,18 +3841,7 @@ in {
 
   smartdc = callPackage ../development/python-modules/smartdc { };
 
-  socksipy-branch = buildPythonPackage rec {
-    name = "SocksiPy-branch-1.01";
-    src = pkgs.fetchurl {
-      url = mirror://pypi/S/SocksiPy-branch/SocksiPy-branch-1.01.tar.gz;
-      sha256 = "01l41v4g7fy9fzvinmjxy6zcbhgqaif8dhdqm4w90fwcw9h51a8p";
-    };
-    meta = {
-      homepage = http://code.google.com/p/socksipy-branch/;
-      description = "This Python module allows you to create TCP connections through a SOCKS proxy without any special effort";
-      license = licenses.bsd3;
-    };
-  };
+  socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
 
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
 
