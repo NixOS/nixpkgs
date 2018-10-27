@@ -5521,34 +5521,15 @@ in
 
   phodav = callPackage ../tools/networking/phodav { };
 
-  pinentry = callPackage ../tools/security/pinentry {
+  pinentry = libsForQt5.callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
-    gcr = null;
-    qt4 = null;
-    qt5 = null;
   };
 
-  pinentry_ncurses = res.pinentry.override {
-    gtk2 = null;
-  };
-
-  pinentry_emacs = res.pinentry.override {
-    enableEmacs = true;
-  };
-
-  pinentry_gnome = res.pinentry.override {
-    inherit gcr;
-  };
-
-  pinentry_qt4 = res.pinentry.override {
-    gtk2 = null;
-    inherit qt4;
-  };
-
-  pinentry_qt5 = res.pinentry.override {
-    gtk2 = null;
-    inherit qt5;
-  };
+  pinentry_curses = (stdenv.lib.getOutput "curses" pinentry);
+  pinentry_emacs = (stdenv.lib.getOutput "emacs" pinentry);
+  pinentry_gtk2 = (stdenv.lib.getOutput "gtk2" pinentry);
+  pinentry_qt = (stdenv.lib.getOutput "qt" pinentry);
+  pinentry_gnome = (stdenv.lib.getOutput "gnome" pinentry);
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
