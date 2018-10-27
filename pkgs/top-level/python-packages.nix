@@ -3886,22 +3886,7 @@ in {
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree {};
 
-  sphinxcontrib_newsfeed = buildPythonPackage (rec {
-    name = "sphinxcontrib-newsfeed-${version}";
-    version = "0.1.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sphinxcontrib-newsfeed/${name}.tar.gz";
-      sha256 = "1d7gam3mn8v4in4p16yn3v10vps7nnaz6ilw99j4klij39dqd37p";
-    };
-
-    propagatedBuildInputs = with self; [sphinx];
-
-    meta = {
-      description = "Extension for adding a simple Blog, News or Announcements section to a Sphinx website";
-      homepage = https://bitbucket.org/prometheus/sphinxcontrib-newsfeed;
-      license = licenses.bsd2;
-    };
-  });
+  sphinxcontrib_newsfeed = callPackage ../development/python-modules/sphinxcontrib_newsfeed { };
 
   sphinxcontrib_plantuml = buildPythonPackage (rec {
     name = "sphinxcontrib-plantuml-0.7";
