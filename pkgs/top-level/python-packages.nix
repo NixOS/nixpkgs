@@ -3894,22 +3894,7 @@ in {
 
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
-  sphinx_pypi_upload = buildPythonPackage (rec {
-    name = "Sphinx-PyPI-upload-0.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Sphinx-PyPI-upload/${name}.tar.gz";
-      sha256 = "5f919a47ce7a7e6028dba809de81ae1297ac192347cf6fc54efca919d4865159";
-    };
-
-    meta = {
-      description = "Setuptools command for uploading Sphinx documentation to PyPI";
-
-      homepage = https://bitbucket.org/jezdez/sphinx-pypi-upload/;
-
-      license = "BSD";
-    };
-  });
+  sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
 
   splinter = callPackage ../development/python-modules/splinter { };
 
