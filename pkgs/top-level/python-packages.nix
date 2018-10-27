@@ -4849,6 +4849,8 @@ in {
 
   yamllint = callPackage ../development/python-modules/yamllint { };
 
+  yanc = callPackage ../development/python-modules/yanc { };
+
   yarl = callPackage ../development/python-modules/yarl { };
 
   suseapi = callPackage ../development/python-modules/suseapi { };
