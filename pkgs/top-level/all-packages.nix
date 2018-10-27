@@ -22245,10 +22245,14 @@ with pkgs;
 
 
   /*
-   * Run a NixOS VM network test.
+   * Run a NixOS VM network test using this evaluation of Nixpkgs.
    *
-   * This is equivalent to `import ./make-test.nix` from the NixOS manual
-   * For details see https://nixos.org/nixos/manual/index.html#sec-nixos-tests
+   * It is mostly equivalent to `import ./make-test.nix` from the
+   * NixOS manual[1], except that your `pkgs` will be used instead of
+   * letting NixOS invoke Nixpkgs again. If a test machine needs to
+   * set NixOS options under `nixpkgs`, it must set only the
+   * `nixpkgs.pkgs` option. For the details, see the Nixpkgs
+   * `pkgs.nixos` documentation.
    *
    * Parameter:
    *   A NixOS VM test network, or path to it. Example:
@@ -22264,8 +22268,8 @@ with pkgs;
    * Result:
    *   A derivation that runs the VM test.
    *
-   * For the interaction between Nixpkgs and NixOS configuration
-   * consult the pkgs.nixos function documentation.
+   * [1]: For writing NixOS tests, see
+   *      https://nixos.org/nixos/manual/index.html#sec-nixos-tests
    */
   nixosTest =
     let
