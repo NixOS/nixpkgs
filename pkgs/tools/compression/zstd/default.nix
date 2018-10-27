@@ -14,10 +14,16 @@ stdenv.mkDerivation rec {
     owner = "facebook";
   };
 
+  outputs = [ "bin" "out" "dev" "man" ];
+
   buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   makeFlags = [
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
+    "PREFIX=$(out)"
+    "BINDIR=$(bin)/bin"
+    "INCLUDEDIR=$(dev)/include"
+    "PKGCONFIGDIR=$(dev)/lib/pkgconfig"
   ];
 
   checkInputs = [ file ];
@@ -26,10 +32,6 @@ stdenv.mkDerivation rec {
     substituteInPlace tests/playTests.sh \
       --replace 'MD5SUM="md5 -r"' 'MD5SUM="md5sum"'
   '';
-
-  installFlags = [
-    "PREFIX=$(out)"
-  ];
 
   preInstall = ''
     substituteInPlace programs/zstdgrep \
