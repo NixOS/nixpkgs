@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "06mm2x4b01k3m7wnrxblk9j0mybyr4pfz28ml7944xhjx6fy2w7j";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [
     ./Use-stdlib-uint-instead-of-u_int.patch
   ];
