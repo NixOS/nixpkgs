@@ -3819,27 +3819,7 @@ in {
 
   secretstorage = callPackage ../development/python-modules/secretstorage { };
 
-  semantic = buildPythonPackage rec {
-    name = "semantic-1.0.3";
-
-    disabled = isPy3k;
-
-    propagatedBuildInputs = with self; [ quantities numpy ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/semantic/semantic-1.0.3.tar.gz";
-      sha256 = "bbc47dad03dddb1ba5895612fdfa1e43cfb3c497534976cebacd4f3684b505b4";
-    };
-
-    # strange setuptools error (can not import semantic.test)
-    doCheck = false;
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Common Natural Language Processing Tasks for Python";
-      homepage = https://github.com/crm416/semantic;
-      license = licenses.mit;
-    };
-  };
+  semantic = callPackage ../development/python-modules/semantic { };
 
   sandboxlib = buildPythonPackage rec {
     name = "sandboxlib-${version}";
