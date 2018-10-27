@@ -227,7 +227,7 @@ in {
 
   config.users.users = mapAgents (name: cfg: {
     "${cfg.fullName}" =
-      { name = "buildkite-agent";
+      { name = cfg.fullName;
         home = cfg.dataDir;
         createHome = true;
         description = "Buildkite agent user";
