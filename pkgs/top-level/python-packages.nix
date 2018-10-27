@@ -3920,29 +3920,7 @@ in {
 
   subunit = callPackage ../development/python-modules/subunit { };
 
-  sure = buildPythonPackage rec {
-    name = "sure-${version}";
-    version = "1.2.24";
-
-    LC_ALL="en_US.UTF-8";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sure/${name}.tar.gz";
-      sha256 = "1lyjq0rvkbv585dppjdq90lbkm6gyvag3wgrggjzyh7cpyh5c12w";
-    };
-
-    buildInputs = with self; [ nose pkgs.glibcLocales ];
-
-    propagatedBuildInputs = with self; [ six mock ];
-
-    meta = {
-      description = "Utility belt for automated testing";
-      homepage = https://falcao.it/sure/;
-      license = licenses.gpl3Plus;
-    };
-  };
+  sure = callPackage ../development/python-modules/sure { };
 
   structlog = callPackage ../development/python-modules/structlog { };
 
