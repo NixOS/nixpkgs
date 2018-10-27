@@ -105,7 +105,8 @@ rec {
   };
 
   # 6. nix example to play with the container nix store
-  # docker run -it --rm nix nix-store -qR $(nix-build '<nixpkgs>' -A nix)
+  # docker load < $(nix-build '<nixpkgs>' -A dockerTools.examples.nix)
+  # docker run -it --rm nix /bin/bash
   nix = buildImageWithNixDb {
     name = "nix";
     tag = "latest";
@@ -114,6 +115,7 @@ rec {
       # the image env variable NIX_PAGER.
       pkgs.coreutils
       pkgs.nix
+      pkgs.bash
     ];
     config = {
       Env = [ "NIX_PAGER=cat" ];
