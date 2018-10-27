@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0x6d53fbrcmzvhv461575fzsv3373427p4srz646w2wcagqk82xz";
   };
 
+  outputs = [ "bin" "out" "dev" "man" ];
+
   nativeBuildInputs = [
     pkgconfig asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt python3 python3Packages.setuptools
   ];
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
   postPatch = "sed -i s/-O1/-O2/ configure";
 
   postInstall = ''
-    install -v -m 444 -D btrfs-completion $out/etc/bash_completion.d/btrfs
+    install -v -m 444 -D btrfs-completion $bin/etc/bash_completion.d/btrfs
   '';
 
   configureFlags = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
