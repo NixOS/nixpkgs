@@ -3066,6 +3066,8 @@ in {
 
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
+  nose-focus = callPackage ../development/python-modules/nose-focus { };
+
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose-cover3 = callPackage ../development/python-modules/nose-cover3 { };
