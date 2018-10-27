@@ -3809,28 +3809,7 @@ in {
 
   pilkit = callPackage ../development/python-modules/pilkit { };
 
-  clint = buildPythonPackage rec {
-    name = "clint-0.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/clint/${name}.tar.gz";
-      sha256 = "1an5lkkqk1zha47198p42ji3m94xmzx1a03dn7866m87n4r4q8h5";
-    };
-
-
-    LC_ALL="en_US.UTF-8";
-
-    checkPhase = ''
-      ${python.interpreter} test_clint.py
-    '';
-
-    buildInputs = with self; [ mock blessings nose nose_progressive pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ pillow blessings args ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  clint = callPackage ../development/python-modules/clint { };
 
   argh = buildPythonPackage rec {
     name = "argh-0.26.1";
