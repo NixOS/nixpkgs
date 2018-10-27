@@ -19,6 +19,9 @@
     pkgs.cryptsetup # needed for dm-crypt volumes
     pkgs.mkpasswd # for generating password files
 
+    # Some text editors.
+    pkgs.vim
+
     # Some networking tools.
     pkgs.fuse
     pkgs.fuse3
