@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.nixpkgs;
+  opt = options.nixpkgs;
 
   isConfig = x:
     builtins.isAttrs x || lib.isFunction x;
@@ -54,6 +55,12 @@ let
     check = builtins.isAttrs;
   };
 
+  defaultPkgs = import ../../.. {
+    inherit (cfg) config overlays localSystem crossSystem;
+  };
+
+  finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
+
 in
 
 {
@@ -65,9 +72,6 @@ in
             inherit (cfg) config overlays localSystem crossSystem;
           }
         '';
-      default = import ../../.. {
-        inherit (cfg) config overlays localSystem crossSystem;
-      };
       type = pkgsType;
       example = literalExample ''import <nixpkgs> {}'';
       description = ''
@@ -128,12 +132,14 @@ in
       description = ''
         List of overlays to use with the Nix Packages collection.
         (For details, see the Nixpkgs documentation.)  It allows
-        you to override packages globally. This is a function that
+        you to override packages globally. Each function in the list
         takes as an argument the <emphasis>original</emphasis> Nixpkgs.
         The first argument should be used for finding dependencies, and
         the second should be used for overriding recipes.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        If <code>nixpkgs.pkgs</code> is set, overlays specified here
+        will be applied after the overlays that were already present
+        in <code>nixpkgs.pkgs</code>.
       '';
     };
 
@@ -207,8 +213,8 @@ in
 
   config = {
     _module.args = {
-      pkgs = cfg.pkgs;
-      pkgs_i686 = cfg.pkgs.pkgsi686Linux;
+      pkgs = finalPkgs;
+      pkgs_i686 = finalPkgs.pkgsi686Linux;
     };
   };
 }

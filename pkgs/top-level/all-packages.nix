@@ -22091,7 +22091,7 @@ with pkgs;
    *            The result can be extended in the modules by defining
    *            extra options in system.build.
    *
-   * Unlike in plain NixOS, the nixpkgs.config, nixpkgs.overlays and
+   * Unlike in plain NixOS, the nixpkgs.config and
    * nixpkgs.system options will be ignored by default. Instead,
    * nixpkgs.pkgs will have the default value of pkgs as it was
    * constructed right after invoking the nixpkgs function (e.g. the
