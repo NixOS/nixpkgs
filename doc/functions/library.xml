@@ -12,4 +12,6 @@
  <xi:include href="./library/asserts.xml" />
 
  <xi:include href="./library/attrsets.xml" />
+
+ <xi:include href="./library/trivial.xml" />
 </section>
