@@ -3882,28 +3882,7 @@ in {
 
   sphinxcontrib-openapi = callPackage ../development/python-modules/sphinxcontrib-openapi { };
 
-  sphinxcontrib_httpdomain = buildPythonPackage (rec {
-    name = "sphinxcontrib-httpdomain-1.5.0";
-
-    # Check is disabled due to this issue:
-    # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sphinxcontrib-httpdomain/${name}.tar.gz";
-      sha256 = "0srg8lwf4m1hyhz942fcdfxh689xphndngiidb575qmfbi89gc7a";
-    };
-
-    propagatedBuildInputs = with self; [sphinx];
-
-    meta = {
-      description = "Provides a Sphinx domain for describing RESTful HTTP APIs";
-
-      homepage = https://bitbucket.org/birkenfeld/sphinx-contrib;
-
-      license = "BSD";
-    };
-  });
+  sphinxcontrib_httpdomain = callPackage ../development/python-modules/sphinxcontrib_httpdomain { };
 
   sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree {};
 
