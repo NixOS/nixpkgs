@@ -3815,23 +3815,7 @@ in {
 
   nose_progressive = callPackage ../development/python-modules/nose_progressive { };
 
-  blessings = buildPythonPackage rec {
-    name = "blessings-1.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/blessings/${name}.tar.gz";
-      sha256 = "01rhgn2c3xjf9h1lxij9m05iwf2ba6d0vd7nic26c2gic4q73igd";
-    };
-
-    # 4 failing tests, 2to3
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  blessings = callPackage ../development/python-modules/blessings { };
 
   secretstorage = callPackage ../development/python-modules/secretstorage { };
 
