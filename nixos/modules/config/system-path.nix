@@ -67,14 +67,6 @@ in
         '';
       };
 
-      minimal = mkOption {
-        type = types.boolean;
-        default = false;
-        description = ''
-          Attempt to reduce the amount of built-in packages as much as possible
-        '';
-      };
-
       pathsToLink = mkOption {
         type = types.listOf types.str;
         # Note: We need `/lib' to be among `pathsToLink' for NSS modules
