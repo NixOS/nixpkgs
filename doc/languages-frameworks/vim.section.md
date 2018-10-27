@@ -23,6 +23,7 @@ Adding custom .vimrc lines can be done using the following code:
 
 ```
 vim_configurable.customize {
+  # `name` specifies the name of the executable and package
   name = "vim-with-plugins";
 
   vimrcConfig.customRC = ''
@@ -30,6 +31,8 @@ vim_configurable.customize {
   '';
 }
 ```
+
+This configuration is used when vim is invoked with the command specified as name, in this case `vim-with-plugins`.
 
 For Neovim the `configure` argument can be overridden to achieve the same:
 
@@ -83,6 +86,7 @@ The resulting package can be added to `packageOverrides` in `~/.nixpkgs/config.n
 {
   packageOverrides = pkgs: with pkgs; {
     myVim = vim_configurable.customize {
+      # `name` specifies the name of the executable and package
       name = "vim-with-plugins";
       # add here code from the example section
     };

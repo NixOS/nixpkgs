@@ -12,8 +12,8 @@
 
  <para>
   Some extensions (plugins) might require OCaml and sometimes other OCaml
-  packages. The <literal>coq.ocamlPackages</literal> attribute can be used
-  to depend on the same package set Coq was built against.
+  packages. The <literal>coq.ocamlPackages</literal> attribute can be used to
+  depend on the same package set Coq was built against.
  </para>
 
  <para>
