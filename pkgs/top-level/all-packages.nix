@@ -4362,6 +4362,8 @@ with pkgs;
 
   nms = callPackage ../tools/misc/nms { };
 
+  nomachine-client = callPackage ../tools/admin/nomachine-client { };
+
   notify-desktop = callPackage ../tools/misc/notify-desktop {};
 
   nkf = callPackage ../tools/text/nkf {};
