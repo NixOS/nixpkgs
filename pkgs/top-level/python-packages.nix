@@ -3839,22 +3839,7 @@ in {
 
   six = callPackage ../development/python-modules/six { };
 
-  smartdc = buildPythonPackage rec {
-    name = "smartdc-0.1.12";
-
-    src = pkgs.fetchurl {
-      url = mirror://pypi/s/smartdc/smartdc-0.1.12.tar.gz;
-      sha256 = "36206f4fddecae080c66faf756712537e650936b879abb23a8c428731d2415fe";
-    };
-
-    propagatedBuildInputs = with self; [ requests http_signature ];
-
-    meta = {
-      description = "Joyent SmartDataCenter CloudAPI connector using http-signature authentication via Requests";
-      homepage = https://github.com/atl/py-smartdc;
-      license = licenses.mit;
-    };
-  };
+  smartdc = callPackage ../development/python-modules/smartdc { };
 
   socksipy-branch = buildPythonPackage rec {
     name = "SocksiPy-branch-1.01";
