@@ -271,7 +271,7 @@ in {
             ${cfg.extraConfig}
             EOF
             ${cfg.extraSetup}
-            chown -R buildkite-agent ${cfg.dataDir}
+            chown -R ${cfg.fullName} ${cfg.dataDir}
           '';
 
         serviceConfig =
