@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     sed -i $lib/lib/libarchive.la \
       -e 's|-lcrypto|-L${openssl.out}/lib -lcrypto|' \
-      -e 's|-llzo2|-L${lzo}/lib -llzo2|'
+      -e 's|-llzo2|-L${lzo.out}/lib -llzo2|'
   '';
 
   enableParallelBuilding = true;

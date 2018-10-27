@@ -8,11 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "0wm04519pd3g8hqpjqhfr72q8qmbiwqaxcs3cndny9h86aa95y60";
   };
 
+  outputs = [ "out" "dev" "doc" ];
+
   configureFlags = [ "--enable-shared" ];
 
   enableParallelBuilding = true;
 
-  doCheck = true; # not cross;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Real-time data (de)compression library";

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ lzo openssl zlib yacc flex ];
 
   configureFlags = [
-    "--with-lzo-headers=${lzo}/include/lzo"
+    "--with-lzo-headers=${lzo.dev}/include/lzo"
     "--with-ssl-headers=${openssl.dev}/include/openssl"
     "--with-blowfish-headers=${openssl.dev}/include/openssl"
   ];
