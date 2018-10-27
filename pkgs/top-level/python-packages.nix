@@ -3912,25 +3912,7 @@ in {
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
-  python_statsd = buildPythonPackage rec {
-    name = "python-statsd-${version}";
-    version = "1.6.0";
-    disabled = isPy3k;  # next release will be py3k compatible
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-statsd/${name}.tar.gz";
-      sha256 = "3d2fc153e0d894aa9983531ef47d20d75bd4ee9fd0e46a9d82f452dde58a0a71";
-    };
-
-    buildInputs = with self; [ mock nose coverage ];
-
-    meta = {
-      description = "A client for Etsy's node-js statsd server";
-      homepage = https://github.com/WoLpH/python-statsd;
-      license = licenses.bsd3;
-    };
-  };
-
+  python_statsd = callPackage ../development/python-modules/python_statsd { };
 
   stompclient = buildPythonPackage (rec {
     name = "stompclient-0.3.2";
