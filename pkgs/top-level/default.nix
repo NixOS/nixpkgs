@@ -43,7 +43,6 @@ let # Rename the function arguments
   crossSystem0 = crossSystem;
 
 in let
-  lib = import ../../lib;
 
   # Allow both:
   # { /* the config */ } and
@@ -52,6 +51,10 @@ in let
     if lib.isFunction configExpr
     then configExpr { inherit pkgs; }
     else configExpr;
+
+  lib = (import ../../lib).extend (self: super: {
+    inherit config;
+  });
 
   # From a minimum of `system` or `config` (actually a target triple, *not*
   # nixpkgs configuration), infer the other one and platform as needed.

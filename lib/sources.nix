@@ -73,7 +73,7 @@ rec {
   # Get the commit id of a git repo
   # Example: commitIdFromGitRepo <nixpkgs/.git>
   commitIdFromGitRepo =
-    let readCommitFromFile = path: file:
+    let readCommitFromFile = file: path:
       with builtins;
         let fileName       = toString path + "/" + file;
             packedRefsName = toString path + "/packed-refs";
@@ -85,7 +85,7 @@ rec {
                  matchRef    = match "^ref: (.*)$" fileContent;
              in if   isNull matchRef
                 then fileContent
-                else readCommitFromFile path (lib.head matchRef)
+                else readCommitFromFile (lib.head matchRef) path
            # Sometimes, the file isn't there at all and has been packed away in the
            # packed-refs file, so we have to grep through it:
            else if lib.pathExists packedRefsName
@@ -96,7 +96,7 @@ rec {
                 then throw ("Could not find " + file + " in " + packedRefsName)
                 else lib.head matchRef
            else throw ("Not a .git directory: " + path);
-    in lib.flip readCommitFromFile "HEAD";
+    in readCommitFromFile "HEAD";
 
   pathHasContext = builtins.hasContext or (lib.hasPrefix builtins.storeDir);
 

@@ -11,6 +11,12 @@ let
     callLibs = file: import file { lib = self; };
   in with self; {
 
+    # Configuration of lib, can be set by doing
+    #   lib.extend (self: super: { config = ...; })
+    # One can get this value through lib.config
+    # The Nixpkgs configuration will be passed like this
+    config = {};
+
     # often used, or depending on very little
     trivial = callLibs ./trivial.nix;
     fixedPoints = callLibs ./fixed-points.nix;
@@ -38,7 +44,7 @@ let
     systems = callLibs ./systems;
 
     # misc
-    asserts = callLibs ./asserts.nix;
+    logging = callLibs ./logging.nix;
     debug = callLibs ./debug.nix;
     generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
@@ -59,7 +65,7 @@ let
       stringLength sub substring tail;
     inherit (trivial) id const concat or and bitAnd bitOr bitXor bitNot
       boolToString mergeAttrs flip mapNullable inNixShell min max
-      importJSON warn info nixpkgsVersion version mod compare
+      importJSON nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction;
     inherit (fixedPoints) fix fix' extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
@@ -117,13 +123,14 @@ let
       unknownModule mkOption;
     inherit (types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
-    inherit (asserts)
-      assertMsg assertOneOf;
-    inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
+    inherit (logging) /* debug */ info warn fail deprecate
+      assertMsg assertOneOf
+      traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
       traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal
       traceShowValMarked showVal traceCall traceCall2 traceCall3
-      traceValIfNot runTests testAllTrue traceCallXml attrNamesToStr;
+      traceValIfNot traceCallXml;
+    inherit (debug) runTests testAllTrue addErrorContextToAttrs attrNamesToStr;
     inherit (misc) maybeEnv defaultMergeArg defaultMerge foldArgs
       defaultOverridableDelayableArgs composedArgsAndFun
       maybeAttrNullable maybeAttr ifEnable checkFlag getValue
