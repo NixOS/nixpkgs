@@ -3813,24 +3813,7 @@ in {
 
   argh = callPackage ../development/python-modules/argh { };
 
-  nose_progressive = buildPythonPackage rec {
-    name = "nose-progressive-1.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nose-progressive/${name}.tar.gz";
-      sha256 = "0mfbjv3dcg23q0a130670g7xpfyvgza4wxkj991xxh8w9hs43ga4";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ pillow blessings ];
-
-    # fails with obscure error
-    doCheck = !isPy3k;
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  nose_progressive = callPackage ../development/python-modules/nose_progressive { };
 
   blessings = buildPythonPackage rec {
     name = "blessings-1.6";
