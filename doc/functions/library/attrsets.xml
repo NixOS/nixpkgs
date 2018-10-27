@@ -2098,4 +2098,81 @@ lib.attrsets.getDev pkgs.hello
    </para>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.chooseDevOutputs">
+  <title><function>lib.attrsets.chooseDevOutputs</function></title>
+
+  <subtitle><literal>chooseDevOutputs :: [ Derivation ] -> [ Path ]</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.chooseDevOutputs" />
+
+  <para>
+   Get the <literal>dev</literal> output for a list of derivations.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>pkgs</varname>
+    </term>
+    <listitem>
+     <para>
+       A list of derivation to get the <literal>dev</literal> output
+       path from.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.chooseDevOutputs-example">
+   <title>Getting the dev output</title>
+   <para>
+<programlisting role="context">
+{
+  pkgs.hello = {
+    outputUnspecified = true;
+    dev = "/nix/store/00000000000000000000000000000000-hello-2.10-dev";
+  };
+  pkgs.bash = {
+    outputUnspecified = true;
+    dev = "/nix/store/00000000000000000000000000000000-bash-4.4.0-dev";
+  };
+}
+</programlisting>
+<programlisting role="input"><![CDATA[
+lib.attrsets.chooseDevOutputs [ pkgs.hello pkgs.bash ]
+]]></programlisting>
+    returns:
+<programlisting role="output"><![CDATA[
+[
+  "/nix/store/00000000000000000000000000000000-hello-2.10-dev"
+  "/nix/store/00000000000000000000000000000000-bash-4.4.0-dev"
+]
+]]></programlisting>
+   </para>
+  </example>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.zipWithNames">
+  <title><function>lib.attrsets.zipWithNames</function></title>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.zipWithNames" />
+
+  <para>
+   Deprecated, see
+   <xref linkend="function-library-lib.attrsets.zipAttrsWithNames" />.
+  </para>
+ </section>
+
+ <section xml:id="function-library-lib.attrsets.zip">
+  <title><function>lib.attrsets.zip</function></title>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.zip" />
+
+  <para>
+   Deprecated, see
+   <xref linkend="function-library-lib.attrsets.zipAttrsWith" />.
+  </para>
+ </section>
 </section>
