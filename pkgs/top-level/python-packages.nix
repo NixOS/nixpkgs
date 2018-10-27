@@ -585,6 +585,8 @@ in {
 
   pyparser = callPackage ../development/python-modules/pyparser { };
 
+  pyres = callPackage ../development/python-modules/pyres { };
+
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
   };
