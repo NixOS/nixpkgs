@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "0r84kwa5fl0sjdashcn4vh7hgfm7ahdcysig3mcjvpmkzi7p9g8h";
   };
 
+  outputs = [ "out" "dev" "man" "doc" ];
+
   buildInputs = [ ncurses ]
     ++ lib.optional withSystemd systemd;
   nativeBuildInputs = [ pkgconfig ];
