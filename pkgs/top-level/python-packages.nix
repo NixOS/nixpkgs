@@ -3914,25 +3914,7 @@ in {
 
   python_statsd = callPackage ../development/python-modules/python_statsd { };
 
-  stompclient = buildPythonPackage (rec {
-    name = "stompclient-0.3.2";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/stompclient/${name}.tar.gz";
-      sha256 = "95a4e98dd0bba348714439ea11a25ee8a74acb8953f95a683924b5bf2a527e4e";
-    };
-
-    buildInputs = with self; [ mock nose ];
-
-    # XXX: Ran 0 tests in 0.217s
-
-    meta = {
-      description = "Lightweight and extensible STOMP messaging client";
-      homepage = https://bitbucket.org/hozn/stompclient;
-      license = licenses.asl20;
-    };
-  });
+  stompclient = callPackage ../development/python-modules/stompclient { };
 
   subdownloader = buildPythonPackage rec {
     version = "2.0.18";
