@@ -6,6 +6,19 @@ let
 
   cfg = config.programs.gnupg;
 
+  xserverCfg = config.services.xserver;
+
+  defaultPinentryFlavour =
+    if xserverCfg.desktopManager.gnome3.enable then
+      "gnome3"
+    else if xserverCfg.desktopManager.lxqt.enable
+         || xserverCfg.desktopManager.plasma5.enable then
+      "qt"
+    else if xserverCfg.xserver.enable then
+      "gtk2"
+    else
+      null;
+
 in
 
 {
@@ -45,6 +58,17 @@ in
       '';
     };
 
+    agent.pinentryFlavour = mkOption {
+      type = types.nullOr (types.enum pkgs.pinentry.flavours);
+      example = "gtk2";
+      description = ''
+        Which pinentry interface to use. If not null, the path to the
+        pinentry binary will be passed to gpg-agent via commandline and
+        thus overrides the pinentry option in gpg-agent.conf in the user's
+        home directory.
+      '';
+    };
+
     dirmngr.enable = mkOption {
       type = types.bool;
       default = false;
@@ -55,6 +79,16 @@ in
   };
 
   config = mkIf cfg.agent.enable {
+    programs.gnupg.agent.pinentryFlavour = mkDefault defaultPinentryFlavour;
+
+    # This overrides the systemd user unit shipped with the gnupg package
+    systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavour != null) {
+      serviceConfig.ExecStart = [ "" ''
+        ${pkgs.gnupg}/bin/gpg-agent --supervised \
+          --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavour}}/bin/pinentry
+      '' ];
+    };
+
     systemd.user.sockets.gpg-agent = {
       wantedBy = [ "sockets.target" ];
     };
