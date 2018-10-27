@@ -1,13 +1,41 @@
 { fetchurl, fetchpatch, stdenv, lib, pkgconfig
-, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null,  gtk2 ? null, gcr ? null, qt ? null
-, enableEmacs ? false
+, libgpgerror, libassuan
+, ncurses, gtk2, qt
+, libcap ? null, libsecret ? null, gcr ? null
+, flavours ? [ "curses" "tty" "gtk2" "qt" "gnome3" "emacs" ]
 }:
 
+with stdenv.lib;
+
+assert isList flavours && flavours != [];
+
 let
-  mkFlag = pfxTrue: pfxFalse: cond: name: "--${if cond then pfxTrue else pfxFalse}-${name}";
+  mkFlag = pfxTrue: pfxFalse: cond: name:
+    "--${if cond then pfxTrue else pfxFalse}-${name}";
   mkEnable = mkFlag "enable" "disable";
   mkWith = mkFlag "with" "without";
+
+  mkEnablePinentry = f:
+    let
+      info = flavourInfo.${f};
+      inputs = info.buildInputs or [];
+      flag = flavourInfo.${f}.flag or null;
+      inputsSatifsfied = inputs == [] || all (f: !(isNull f)) inputs;
+    in
+      optionalString (flag != null)
+        (mkEnable (elem f flavours && inputsSatifsfied) ("pinentry-" + flag));
+
+  flavourInfo = {
+    curses = { bin = "curses"; buildInputs = [ ncurses ]; };
+    tty = { bin = "tty"; flag = "tty"; };
+    gtk2 = { bin = "gtk-2"; flag = "gtk2"; buildInputs = [ gtk2 ]; };
+    gnome3 = { bin = "gnome3"; flag = "gnome3"; buildInputs = [ gcr ]; };
+    qt = { bin = "qt"; flag = "qt"; buildInputs = [ qt ]; };
+    emacs = { bin = "emacs"; flag = "emacs"; buildInputs = []; };
+  };
+
 in
+
 stdenv.mkDerivation rec {
   name = "pinentry-1.1.0";
 
@@ -16,13 +44,11 @@ stdenv.mkDerivation rec {
     sha256 = "0w35ypl960pczg5kp6km3dyr000m1hf0vpwwlh72jjkjza36c1v8";
   };
 
-  buildInputs = [ libgpgerror libassuan libcap libsecret gtk2 gcr ncurses qt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgpgerror libassuan libcap libsecret ]
+    ++ flatten (flip map flavours (f: flavourInfo.${f}.buildInputs or []));
 
-  prePatch = ''
-    substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
-  '';
-
-  patches = lib.optionals (gtk2 != null) [
+  patches = optionals (elem "gtk2" flavours) [
     (fetchpatch {
       url = https://sources.debian.org/data/main/p/pinentry/1.1.0-1/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
       sha256 = "15r1axby3fdlzz9wg5zx7miv7gqx2jy4immaw4xmmw5skiifnhfd";
@@ -32,15 +58,24 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (mkWith   (libcap != null)    "libcap")
     (mkEnable (libsecret != null) "libsecret")
-    (mkEnable (ncurses != null)   "pinentry-curses")
-    (mkEnable true                "pinentry-tty")
-    (mkEnable enableEmacs         "pinentry-emacs")
-    (mkEnable (gtk2 != null)      "pinentry-gtk2")
-    (mkEnable (gcr != null)       "pinentry-gnome3")
-    (mkEnable (qt != null)        "pinentry-qt")
-  ];
+  ] ++ (map mkEnablePinentry (attrNames flavourInfo));
 
-  nativeBuildInputs = [ pkgconfig ];
+  postInstall =
+    concatStrings (flip map flavours (f:
+      let
+        binary = "pinentry-" + flavourInfo.${f}.bin;
+        outputVar = "$" + f;
+      in ''
+        moveToOutput bin/${binary} ${outputVar}
+        ln -sf ${outputVar}/bin/${binary} ${outputVar}/bin/pinentry
+      ''))
+    + ''
+      ln -sf ${head flavours}/bin/pinentry-${flavourInfo.${head flavours}.bin} $out/bin/pinentry
+    '';
+
+  outputs = [ "out" ] ++ flavours;
+
+  passthru = { inherit flavours; };
 
   meta = with stdenv.lib; {
     homepage = http://gnupg.org/aegypten2/;
@@ -51,6 +86,6 @@ stdenv.mkDerivation rec {
       Pinentry provides a console and (optional) GTK+ and Qt GUIs allowing users
       to enter a passphrase when `gpg' or `gpg2' is run and needs it.
     '';
-    maintainers = [ maintainers.ttuegel ];
+    maintainers = with maintainers; [ ttuegel fpletz ];
   };
 }

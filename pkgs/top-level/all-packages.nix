@@ -4735,26 +4735,19 @@ with pkgs;
 
   pinentry = callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
-  };
-
-  pinentry_ncurses = self.pinentry.override {
-    gtk2 = null;
-  };
-
-  pinentry_emacs = self.pinentry.override {
-    enableEmacs = true;
-  };
-
-  pinentry_gnome = self.pinentry.override {
+    qt = qt5.qtbase;
     gcr = gnome3.gcr;
   };
 
-  pinentry_qt4 = self.pinentry.override {
-    qt = qt4;
-  };
+  pinentry_curses = pinentry.curses;
+  pinentry_emacs = pinentry.emacs;
+  pinentry_gtk2 = pinentry.gtk2;
+  pinentry_qt = pinentry.qt;
+  pinentry_gnome = pinentry.gnome3;
 
-  pinentry_qt5 = self.pinentry.override {
-    qt = qt5.qtbase;
+  pinentry_qt4 = pinentry.override {
+    qt = qt4;
+    flavours = [ "qt" "curses" "tty" ];
   };
 
   pinentry_mac = callPackage ../tools/security/pinentry/mac.nix {
