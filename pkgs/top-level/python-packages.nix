@@ -3880,18 +3880,7 @@ in {
 
   sphinxcontrib-blockdiag = callPackage ../development/python-modules/sphinxcontrib-blockdiag { };
 
-  sphinxcontrib-openapi = buildPythonPackage (rec {
-    name = "sphinxcontrib-openapi-0.3.0";
-
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sphinxcontrib-openapi/${name}.tar.gz";
-      sha256 = "0fyniq37nnmhrk4j7mzvg6vfcpb624hb9x70g6mccyw4xrnhadv6";
-    };
-
-    propagatedBuildInputs = with self; [setuptools_scm pyyaml jsonschema sphinxcontrib_httpdomain];
-  });
+  sphinxcontrib-openapi = callPackage ../development/python-modules/sphinxcontrib-openapi { };
 
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
     name = "sphinxcontrib-httpdomain-1.5.0";
