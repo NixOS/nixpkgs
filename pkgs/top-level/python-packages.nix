@@ -3800,18 +3800,7 @@ in {
     let
       py3 = callPackage ../development/python-modules/py3dns { };
 
-      py2 = buildPythonPackage rec {
-        name = "${pname}-${version}";
-        pname = "pydns";
-        version = "2.3.6";
-
-        src = fetchPypi {
-          inherit pname version;
-          sha256 = "0qnv7i9824nb5h9psj0rwzjyprwgfiwh5s5raa9avbqazy5hv5pi";
-        };
-
-        doCheck = false;
-      };
+      py2 = callPackage ../development/python-modules/pydns { };
     in if isPy3k then py3 else py2;
 
   pythondaemon = callPackage ../development/python-modules/python-daemon { };
