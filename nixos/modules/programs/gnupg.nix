@@ -76,7 +76,7 @@ in
         thus overrides the pinentry option in gpg-agent.conf in the user's
         home directory.
         If not set at all, it'll pick an appropriate flavor depending on the
-        system configuration (qt3 flavor for lxqt and plasma5, gtk2 for xfce
+        system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce
         4.12, gnome3 on all other systems with X enabled, ncurses otherwise).
       '';
     };

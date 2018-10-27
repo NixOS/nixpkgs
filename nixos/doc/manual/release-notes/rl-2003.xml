@@ -85,7 +85,14 @@
 
   <itemizedlist>
    <listitem>
-    <para />
+    <para>
+      GnuPG is now built without support for a graphical passphrase entry
+      by default. Please enable the <literal>gpg-agent</literal> user service
+      via the NixOS option <literal>programs.gnupg.agent.enable</literal>.
+      Note that upstream recommends using <literal>gpg-agent</literal> and
+      will spawn a <literal>gpg-agent</literal> on the first invocation of
+      GnuPG anyway.
+    </para>
    </listitem>
   </itemizedlist>
  </section>
