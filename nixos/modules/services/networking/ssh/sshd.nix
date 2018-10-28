@@ -54,6 +54,22 @@ let
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
 
+  prepareKeysScript = ''
+    mkdir -m 0755 -p /etc/ssh
+
+    ${flip concatMapStrings cfg.hostKeys (k: ''
+      if ! [ -f "${k.path}" ]; then
+          ssh-keygen \
+            -t "${k.type}" \
+            ${if k ? bits then "-b ${toString k.bits}" else ""} \
+            ${if k ? rounds then "-a ${toString k.rounds}" else ""} \
+            ${if k ? comment then "-C '${k.comment}'" else ""} \
+            ${if k ? openSSHFormat && k.openSSHFormat then "-o" else ""} \
+            -f "${k.path}" \
+            -N ""
+      fi
+    '')}
+  '';
 in
 
 {
@@ -342,6 +358,21 @@ in
         "ssh/sshd_config".text = cfg.extraConfig;
       };
 
+    runit.services.sshd = {
+      environment.LD_LIBRARY_PATH = nssModulesPath;
+
+      logging = {
+        enable = true;
+        redirectStderr = true;
+      };
+
+      script = ''
+        ${prepareKeysScript}
+
+        exec ${cfgc.package}/bin/sshd -f /etc/ssh/sshd_config
+      '';
+    };
+
     systemd =
       let
         service =
@@ -358,20 +389,7 @@ in
                 # socket activation, it goes to the remote side (#19589).
                 exec >&2
 
-                mkdir -m 0755 -p /etc/ssh
-
-                ${flip concatMapStrings cfg.hostKeys (k: ''
-                  if ! [ -f "${k.path}" ]; then
-                      ssh-keygen \
-                        -t "${k.type}" \
-                        ${if k ? bits then "-b ${toString k.bits}" else ""} \
-                        ${if k ? rounds then "-a ${toString k.rounds}" else ""} \
-                        ${if k ? comment then "-C '${k.comment}'" else ""} \
-                        ${if k ? openSSHFormat && k.openSSHFormat then "-o" else ""} \
-                        -f "${k.path}" \
-                        -N ""
-                  fi
-                '')}
+                ${prepareKeysScript}
               '';
 
             serviceConfig =

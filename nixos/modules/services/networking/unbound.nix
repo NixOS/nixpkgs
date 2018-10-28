@@ -42,6 +42,17 @@ let
     ${forward}
   '';
 
+  preStartScript =  ''
+    mkdir -m 0755 -p ${stateDir}/dev/
+    cp ${confFile} ${stateDir}/unbound.conf
+    ${optionalString cfg.enableRootTrustAnchor ''
+      ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
+      chown unbound ${stateDir} ${rootTrustAnchorFile}
+    ''}
+    touch ${stateDir}/dev/random
+    ${pkgs.utillinux}/bin/mount --bind -n /dev/urandom ${stateDir}/dev/random
+  '';
+
 in
 
 {
@@ -108,16 +119,7 @@ in
       wants = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        mkdir -m 0755 -p ${stateDir}/dev/
-        cp ${confFile} ${stateDir}/unbound.conf
-        ${optionalString cfg.enableRootTrustAnchor ''
-          ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile} || echo "Root anchor updated!"
-          chown unbound ${stateDir} ${rootTrustAnchorFile}
-        ''}
-        touch ${stateDir}/dev/random
-        ${pkgs.utillinux}/bin/mount --bind -n /dev/urandom ${stateDir}/dev/random
-      '';
+      preStart = preStartScript;
 
       serviceConfig = {
         ExecStart = "${pkgs.unbound}/bin/unbound -d -c ${stateDir}/unbound.conf";
@@ -129,6 +131,19 @@ in
         Restart = "always";
         RestartSec = "5s";
       };
+    };
+
+    runit.services.unbound = {
+      logging.enable = true;
+      script = ''
+        ${preStartScript}
+
+        exec ${pkgs.unbound}/bin/unbound -d -c ${stateDir}/unbound.conf
+      '';
+
+      stop = ''
+        ${pkgs.utillinux}/bin/umount ${stateDir}/dev/random
+      '';
     };
 
     # If networkmanager is enabled, ask it to interface with unbound.

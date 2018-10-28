@@ -19,9 +19,9 @@ let
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      (if pkgs.stdenv.hostPlatform.isMusl
-       then pkgs.musl-utils
-       else pkgs.glibc) # for ldd, getent
+      pkgs.getent
+      pkgs.getconf
+      pkgs.stdenv.cc.libc # For ld
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused

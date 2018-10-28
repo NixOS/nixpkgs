@@ -309,12 +309,13 @@ let
     ];
 
     # override defaults to prevent infinite recursion
-    nativeBuildInputs = [ nbBuildPackages.makeMinimal ];
+    nativeBuildInputs = [ nbBuildPackages.makeMinimal zlib ];
     buildInputs = [ zlib ];
 
     # temporarily use gnuinstall for bootstrapping
     # bsdinstall will be built later
     makeFlags = [ "INSTALL=${buildPackages.coreutils}/bin/install" ];
+    configureFlags = [ "--cache-file=config.cache" ];
     installFlags = [];
     RENAME = "-D";
 

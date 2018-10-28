@@ -164,4 +164,4 @@ ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 exec 1>&$logOutFd 2>&$logErrFd
 exec {logOutFd}>&- {logErrFd}>&-
 
-PATH=@fsPackagesPath@ @shell@ @startInitCommands@
+PATH=@fsPackagesPath@ exec @shell@ @startInitCommands@

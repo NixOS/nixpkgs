@@ -7,6 +7,18 @@ let
   autologinArg = optionalString (config.services.mingetty.autologinUser != null) "--autologin ${config.services.mingetty.autologinUser}";
   gettyCmd = extraArgs: "@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login ${autologinArg} ${extraArgs}";
 
+  runitGettyCmd = extraArgs: "${pkgs.utillinux}/sbin/agetty --login-program ${pkgs.shadow}/bin/login ${autologinArg} ${extraArgs}";
+
+  terminalConfig = {
+    options = {
+      type = mkOption {
+        type = types.string;
+        description = "terminfo terminal type";
+        default = "linux";
+      };
+    };
+  };
+
 in
 
 {
@@ -55,6 +67,14 @@ in
         '';
       };
 
+      manualConsole = mkOption {
+        type = types.attrsOf (types.submodule terminalConfig);
+        default = { };
+        description = ''
+          Consoles to configure manually. Needed by some inits, like runit
+        '';
+      };
+
     };
 
   };
@@ -66,6 +86,23 @@ in
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.mingetty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
+
+    runit.services =
+      listToAttrs (mapAttrsToList
+        (name: term:
+           { name = "getty-${name}";
+             value =
+              let speeds = concatStringsSep "," (map toString config.services.mingetty.serialSpeed);
+              in {
+                 logging.enable = false;
+                 script = ''
+                   echo "Run getty ${name}"
+                   ls -l /dev/${name}
+                   ${(runitGettyCmd " ${name} ${speeds} ${term.type}")}
+                 '';
+#                 requires = [ "udev" ];
+              };
+           }) config.services.mingetty.manualConsole);
 
     systemd.services."getty@" =
       { serviceConfig.ExecStart = [

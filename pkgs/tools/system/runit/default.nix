@@ -1,10 +1,26 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, lib
 
 # Build runit-init as a static binary
 , static ? false
 }:
 
-stdenv.mkDerivation rec {
+let commands = [
+      "chpst"
+      "runit"
+      "runit-init"
+      "runsv"
+      "runsvstat"
+      "runsvctrl"
+      "runsvchdir"
+      "runsvdir"
+      "sv"
+      "svlogd"
+      "utmpset"
+
+      "svwaitup"
+      "svwaitdown"
+    ];
+in stdenv.mkDerivation rec {
   name = "runit-${version}";
   version = "2.1.2";
 
@@ -40,11 +56,13 @@ stdenv.mkDerivation rec {
     # Both of these are originally hard-coded to gcc
     echo ${stdenv.cc.targetPrefix}cc > conf-cc
     echo ${stdenv.cc.targetPrefix}cc > conf-ld
+
+    makeFlagsArray+=("IT=${lib.concatStringsSep " " commands}")
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -t $out/bin $(< ../package/commands)
+    cp -t $out/bin ${lib.concatStringsSep " " commands}
 
     mkdir -p $man/share/man
     cp -r ../man $man/share/man/man8

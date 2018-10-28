@@ -307,6 +307,19 @@ in
 
   config = mkIf (config.services.udev.enable && !config.boot.isContainer) {
 
+    runit.services.udev = {
+      name = "udev";
+      logging = {
+        enable = true;
+      };
+      script = ''
+        ${config.services.udev.package}/bin/udevd
+      '';
+      check = ''
+        exec ${config.services.udev.package}/bin/udevadm settle
+      '';
+    };
+
     services.udev.package = mkIf config.systemd.enable config.systemd.package;
 
     services.udev.extraRules = nixosRules;
