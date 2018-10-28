@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0f3pb61wg58g8f3wcnp1h4gpmnwmp7bq0cnqdfwldmh9cs0dqyfk";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
 
-  buildInputs = [ makeWrapper ocaml findlib dune utop menhir ];
+  buildInputs = [ ocaml findlib dune utop menhir ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
