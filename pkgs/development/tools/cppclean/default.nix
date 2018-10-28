@@ -24,7 +24,7 @@ buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Finds problems in C++ source that slow development of large code bases";
     homepage    = https://github.com/myint/cppclean;
-    license     = "Apache-2.0";
+    license     = licenses.asl20;
     maintainers = with maintainers; [ nthorne ];
     platforms   = platforms.linux;
   };
