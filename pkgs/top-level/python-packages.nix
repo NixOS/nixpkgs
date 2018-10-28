@@ -714,6 +714,10 @@ in {
 
   alembic = callPackage ../development/python-modules/alembic {};
 
+  almost = callPackage ../development/python-modules/almost {
+    inherit (self) pytest distribute;
+  };
+
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
   ansicolors = callPackage ../development/python-modules/ansicolors {};
