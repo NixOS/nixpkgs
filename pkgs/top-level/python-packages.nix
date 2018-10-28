@@ -324,6 +324,10 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  distribute = callPackage ../development/python-modules/distribute {
+    inherit (self) setuptools;
+  };
+
   distributed = callPackage ../development/python-modules/distributed { };
 
   docutils = callPackage ../development/python-modules/docutils { };
