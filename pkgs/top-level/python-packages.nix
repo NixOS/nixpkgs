@@ -4047,24 +4047,9 @@ in {
 
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
-    unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
+  unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
-    uritemplate_py = buildPythonPackage rec {
-    name = "uritemplate.py-${version}";
-    version = "3.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/uritemplate.py/${name}.tar.gz";
-      sha256 = "1k5zvc5fyyrgv33mi3p86a9jn5n0pqffs9cviz92fw6q1kf7zvmr";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = https://github.com/uri-templates/uritemplate-py;
-      description = "Python implementation of URI Template";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ pSub ];
-    };
-  };
+  uritemplate_py = callPackage ../development/python-modules/uritemplate_py { };
 
   uritools = callPackage ../development/python-modules/uritools { };
 
