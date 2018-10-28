@@ -19,7 +19,9 @@ let
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      pkgs.glibc # for ldd, getent
+      pkgs.getent
+      pkgs.getconf
+      pkgs.ldd
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
