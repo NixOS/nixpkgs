@@ -55,7 +55,7 @@ let
     check = builtins.isAttrs;
   };
 
-  defaultPkgs = import ../../.. {
+  defaultPkgs = import ../../../pkgs/top-level/default.nix {
     inherit (cfg) config overlays localSystem crossSystem;
   };
 
@@ -68,7 +68,7 @@ in
 
     pkgs = mkOption {
       defaultText = literalExample
-        ''import "''${nixos}/.." {
+        ''import "''${nixos}/../pkgs/top-level" {
             inherit (cfg) config overlays localSystem crossSystem;
           }
         '';
