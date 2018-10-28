@@ -4013,25 +4013,7 @@ in {
 
   twitter = callPackage ../development/python-modules/twitter { };
 
-  twitter-common-collections = buildPythonPackage rec {
-    pname   = "twitter.common.collections";
-    version = "0.3.9";
-    name    = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "0wf8ks6y2kalx2inzayq0w4kh3kg25daik1ac7r6y79i03fslsc5";
-    };
-
-    propagatedBuildInputs = with self; [ twitter-common-lang ];
-
-    meta = {
-      description = "Twitter's common collections";
-      homepage    = "https://twitter.github.io/commons/";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ copumpkin ];
-    };
-  };
+  twitter-common-collections = callPackage ../development/python-modules/twitter-common-collections { };
 
   twitter-common-confluence = buildPythonPackage rec {
     pname   = "twitter.common.confluence";
