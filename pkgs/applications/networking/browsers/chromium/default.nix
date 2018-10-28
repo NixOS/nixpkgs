@@ -1,6 +1,5 @@
-{ newScope, makeWrapper, makeDesktopItem, ed
+{ newScope, stdenv, llvmPackages, makeWrapper, makeDesktopItem, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
-, stdenv, llvmPackages_7, gcc8Stdenv
 
 # package customization
 , channel ? "stable"
@@ -10,16 +9,17 @@
 , proprietaryCodecs ? true
 , enablePepperFlash ? false
 , enableWideVine ? false
-, buildWithGcc ? false
 , cupsSupport ? true
 , pulseSupport ? false
 , commandLineArgs ? ""
 }:
 
+assert stdenv.cc.isClang -> (stdenv == llvmPackages.stdenv);
 let
   callPackage = newScope chromium;
 
   chromium = {
+    inherit stdenv llvmPackages;
 
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
@@ -34,12 +34,7 @@ let
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash enableWideVine;
     };
-  } // (if buildWithGcc then {
-          stdenv = gcc8Stdenv;
-        } else {
-          llvmPackages = llvmPackages_7;
-          stdenv = llvmPackages_7.stdenv;
-        });
+  };
 
   desktopItem = makeDesktopItem {
     name = "chromium-browser";
