@@ -7343,8 +7343,9 @@ with pkgs;
   inherit (rust) cargo rustc;
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
+  buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
   buildRustCrateTests = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { }).tests;
-
+  cratesIO = callPackage ../build-support/rust/crates-io.nix { };
   cargo-vendor = callPackage ../build-support/rust/cargo-vendor { };
 
   cargo-web = callPackage ../development/tools/cargo-web {
@@ -7386,7 +7387,9 @@ with pkgs;
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
-  rust-cbindgen = callPackage ../development/tools/rust/cbindgen { };
+  rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7399,6 +7402,7 @@ with pkgs;
   scala_2_12 = callPackage ../development/compilers/scala { jre = jre8; };
   scala = scala_2_12;
 
+  scalafix = callPackage ../development/tools/scalafix { };
   scalafmt = callPackage ../development/tools/scalafmt { };
 
   sdcc = callPackage ../development/compilers/sdcc {
@@ -11499,7 +11503,9 @@ with pkgs;
   };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins {};
+  nix-plugins = callPackage ../development/libraries/nix-plugins {
+    nix = nixUnstable;
+  };
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 

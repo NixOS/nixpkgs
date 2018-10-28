@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "022iw4cq0c009wvqn7wd815jc0nv8198lq3cawn8h6c28hw2mhs1";
+    sha256 = "139kzapas1l61w1in9f7c6ybricid4fzryfnvsrfhpaqh83ydn2c";
   };
 
   propagatedBuildInputs = with python3Packages; [
