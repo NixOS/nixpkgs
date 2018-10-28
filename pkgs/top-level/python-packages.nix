@@ -4021,25 +4021,7 @@ in {
 
   twitter-common-lang = callPackage ../development/python-modules/twitter-common-lang { };
 
-  twitter-common-log = buildPythonPackage rec {
-    pname   = "twitter.common.log";
-    version = "0.3.9";
-    name    = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "1bdzbxx2bxwpf57xaxfz1nblzgfvhlidz8xqd7s84c62r3prh02v";
-    };
-
-    propagatedBuildInputs = with self; [ twitter-common-options twitter-common-dirutil ];
-
-    meta = {
-      description = "Twitter's common logging library";
-      homepage    = "https://twitter.github.io/commons/";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ copumpkin ];
-    };
-  };
+  twitter-common-log = callPackage ../development/python-modules/twitter-common-log { };
 
   twitter-common-options = buildPythonPackage rec {
     pname   = "twitter.common.options";
