@@ -4077,26 +4077,7 @@ in {
 
   user-agents = callPackage ../development/python-modules/user-agents { };
 
-  pyuv = buildPythonPackage rec {
-    name = "pyuv-1.2.0";
-    disabled = isPyPy;  # see https://github.com/saghul/pyuv/issues/49
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/saghul/pyuv/archive/${name}.tar.gz";
-      sha256 = "19yl1l5l6dq1xr8xcv6dhx1avm350nr4v2358iggcx4ma631rycx";
-    };
-
-    patches = [ ../development/python-modules/pyuv-external-libuv.patch ];
-
-    buildInputs = with self; [ pkgs.libuv ];
-
-    meta = {
-      description = "Python interface for libuv";
-      homepage = https://github.com/saghul/pyuv;
-      repositories.git = git://github.com/saghul/pyuv.git;
-      license = licenses.mit;
-    };
-  };
+  pyuv = callPackage ../development/python-modules/pyuv { };
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
