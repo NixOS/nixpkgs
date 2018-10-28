@@ -3945,21 +3945,7 @@ in {
 
   terminado = callPackage ../development/python-modules/terminado { };
 
-  terminaltables = buildPythonPackage rec {
-    name = "terminaltables-${version}";
-    version = "3.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/terminaltables/${name}.tar.gz";
-      sha256 = "f3eb0eb92e3833972ac36796293ca0906e998dc3be91fbe1f8615b331b853b81";
-    };
-
-    meta = {
-      description = "Display simple tables in terminals";
-      homepage = "https://github.com/Robpol86/terminaltables";
-      license = licenses.mit;
-    };
-  };
+  terminaltables = callPackage ../development/python-modules/terminaltables { };
 
   testscenarios = buildPythonPackage rec {
     name = "testscenarios-${version}";
