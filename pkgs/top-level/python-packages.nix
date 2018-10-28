@@ -4011,23 +4011,7 @@ in {
 
   twill = callPackage ../development/python-modules/twill { };
 
-  twitter = buildPythonPackage rec {
-    name = "twitter-${version}";
-    version = "1.15.0";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/t/twitter/${name}.tar.gz";
-      sha256 = "1m6b17irb9klc345k8174pni724jzy2973z2x2jg69h83hipjw2c";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "Twitter API library";
-      license     = licenses.mit;
-      maintainers = with maintainers; [ thoughtpolice ];
-    };
-  };
+  twitter = callPackage ../development/python-modules/twitter { };
 
   twitter-common-collections = buildPythonPackage rec {
     pname   = "twitter.common.collections";
