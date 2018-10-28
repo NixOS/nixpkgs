@@ -10976,6 +10976,8 @@ with pkgs;
 
   libosip_3 = callPackage ../development/libraries/osip/3.nix {};
 
+  libosmium = callPackage ../development/libraries/libosmium { };
+
   libosmocore = callPackage ../applications/misc/libosmocore { };
 
   libosmpbf = callPackage ../development/libraries/libosmpbf {};
