@@ -3999,24 +3999,7 @@ in {
 
   transaction = callPackage ../development/python-modules/transaction { };
 
-
-  transmissionrpc = buildPythonPackage rec {
-    name = "transmissionrpc-${version}";
-    version = "0.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/transmissionrpc/${name}.tar.gz";
-      sha256 = "ec43b460f9fde2faedbfa6d663ef495b3fd69df855a135eebe8f8a741c0dde60";
-    };
-
-    propagatedBuildInputs = with self; [ six ];
-
-    meta = {
-      description = "Python implementation of the Transmission bittorent client RPC protocol";
-      homepage = https://pypi.python.org/pypi/transmissionrpc/;
-      license = licenses.mit;
-    };
-  };
+  transmissionrpc = callPackage ../development/python-modules/transmissionrpc { };
 
   eggdeps  = buildPythonPackage rec {
      name = "eggdeps-${version}";
