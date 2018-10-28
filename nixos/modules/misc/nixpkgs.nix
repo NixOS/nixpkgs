@@ -140,6 +140,9 @@ in
         If <code>nixpkgs.pkgs</code> is set, overlays specified here
         will be applied after the overlays that were already present
         in <code>nixpkgs.pkgs</code>.
+
+        Note that other options such as <code>nixpkgs.config</code> will
+        be ignored when <code>nixpkgs.pkgs</code> is set.
       '';
     };
 
