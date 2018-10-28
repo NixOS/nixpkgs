@@ -18267,6 +18267,8 @@ with pkgs;
 
   osmctools = callPackage ../applications/misc/osmctools { };
 
+  osmium-tool = callPackage ../applications/misc/osmium-tool { };
+
   owamp = callPackage ../applications/networking/owamp { };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
