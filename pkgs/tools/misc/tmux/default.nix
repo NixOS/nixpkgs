@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "0n8sjddy00xgh1rvvw968hh72pyslg1gahmzajfc4b3xax87drpi";
+    sha256 = "1fy87wvxn7r7jzqapvjisc1iizic3kxqk2lv83giqmw1y4g3s7rl";
   };
 
   postPatch = ''
