@@ -88,6 +88,10 @@ in
     propagatedBuildInputs = [ Security ];
   };
 
+  serde_derive = attrs: {
+    buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  };
+
   thrussh-libsodium = attrs: {
     buildInputs = [ pkgconfig libsodium ];
   };
