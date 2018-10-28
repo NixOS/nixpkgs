@@ -4053,24 +4053,7 @@ in {
 
   uritools = callPackage ../development/python-modules/uritools { };
 
-  traceback2 = buildPythonPackage rec {
-    version = "1.4.0";
-    name = "traceback2-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/traceback2/traceback2-${version}.tar.gz";
-      sha256 = "0c1h3jas1jp1fdbn9z2mrgn3jj0hw1x3yhnkxp7jw34q15xcdb05";
-    };
-
-    propagatedBuildInputs = with self; [ pbr linecache2 ];
-    # circular dependencies for tests
-    doCheck = false;
-
-    meta = {
-      description = "A backport of traceback to older supported Pythons";
-      homepage = https://pypi.python.org/pypi/traceback2/;
-    };
-  };
+  traceback2 = callPackage ../development/python-modules/traceback2 { };
 
   linecache2 = buildPythonPackage rec {
     name = "linecache2-${version}";
