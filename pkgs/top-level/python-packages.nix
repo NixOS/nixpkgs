@@ -4057,28 +4057,7 @@ in {
 
   linecache2 = callPackage ../development/python-modules/linecache2 { };
 
-  upass = buildPythonPackage rec {
-    version = "0.1.4";
-    name = "upass-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/Kwpolska/upass/archive/v${version}.tar.gz";
-      sha256 = "0f2lyi7xhvb60pvzx82dpc13ksdj5k92ww09czclkdz8k0dxa7hb";
-    };
-
-    propagatedBuildInputs = with self; [
-      pyperclip
-      urwid
-    ];
-
-    doCheck = false;
-
-    meta = {
-      description = "Console UI for pass";
-      homepage = https://github.com/Kwpolska/upass;
-      license = licenses.bsd3;
-    };
-  };
+  upass = callPackage ../development/python-modules/upass { };
 
   update_checker = callPackage ../development/python-modules/update_checker {};
 
