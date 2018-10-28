@@ -1140,6 +1140,8 @@ in {
 
   cairocffi = callPackage ../development/python-modules/cairocffi {};
 
+  cairosvg1 = callPackage ../development/python-modules/cairosvg/1_x.nix {};
+
   cairosvg = callPackage ../development/python-modules/cairosvg {};
 
   carrot = callPackage ../development/python-modules/carrot {};
