@@ -3961,25 +3961,7 @@ in {
 
   transitions = callPackage ../development/python-modules/transitions { };
 
-  python_mimeparse = buildPythonPackage rec {
-    name = "python-mimeparse-${version}";
-    version = "0.1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-mimeparse/${name}.tar.gz";
-      sha256 = "1hyxg09kaj02ri0rmwjqi86wk4nd1akvv7n0dx77azz76wga4s9w";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      description = "A module provides basic functions for parsing mime-type names and matching them against a list of media-ranges";
-      homepage = https://code.google.com/p/mimeparse/;
-      license = licenses.mit;
-    };
-  };
-
+  python_mimeparse = callPackage ../development/python-modules/python_mimeparse { };
 
   extras = callPackage ../development/python-modules/extras { };
 
