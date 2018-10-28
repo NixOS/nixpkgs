@@ -4623,6 +4623,11 @@
     github = "wucke13";
     name = "Wucke";
   };
+  wykurz = {
+    email = "wykurz@gmail.com";
+    github = "wykurz";
+    name = "Mateusz Wykurz";
+  };
   wyvie = {
     email = "elijahrum@gmail.com";
     github = "wyvie";
