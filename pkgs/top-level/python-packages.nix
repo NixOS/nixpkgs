@@ -4001,25 +4001,7 @@ in {
 
   transmissionrpc = callPackage ../development/python-modules/transmissionrpc { };
 
-  eggdeps  = buildPythonPackage rec {
-     name = "eggdeps-${version}";
-     version = "0.4";
-
-     src = pkgs.fetchurl {
-       url = "mirror://pypi/t/tl.eggdeps/tl.${name}.tar.gz";
-       sha256 = "a99de5e4652865224daab09b2e2574a4f7c1d0d9a267048f9836aa914a2caf3a";
-     };
-
-     # tests fail, see http://hydra.nixos.org/build/4316603/log/raw
-     doCheck = false;
-
-     propagatedBuildInputs = with self; [ zope_interface zope_testing ];
-     meta = {
-       description = "A tool which computes a dependency graph between active Python eggs";
-       homepage = http://thomas-lotze.de/en/software/eggdeps/;
-       license = licenses.zpl20;
-     };
-   };
+  eggdeps = callPackage ../development/python-modules/eggdeps { };
 
   TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
