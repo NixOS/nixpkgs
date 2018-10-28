@@ -4023,23 +4023,7 @@ in {
 
   twitter-common-log = callPackage ../development/python-modules/twitter-common-log { };
 
-  twitter-common-options = buildPythonPackage rec {
-    pname   = "twitter.common.options";
-    version = "0.3.9";
-    name    = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "0d1czag5mcxg0vcnlklspl2dvdab9kmznsycj04d3vggi158ljrd";
-    };
-
-    meta = {
-      description = "Twitter's optparse wrapper";
-      homepage    = "https://twitter.github.io/commons/";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ copumpkin ];
-    };
-  };
+  twitter-common-options = callPackage ../development/python-modules/twitter-common-options { };
 
   twine = callPackage ../development/python-modules/twine { };
 
