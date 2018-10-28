@@ -4055,24 +4055,7 @@ in {
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
-  linecache2 = buildPythonPackage rec {
-    name = "linecache2-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/linecache2/${name}.tar.gz";
-      sha256 = "0z79g3ds5wk2lvnqw0y2jpakjf32h95bd9zmnvp7dnqhf57gy9jb";
-    };
-
-    buildInputs = with self; [ pbr ];
-    # circular dependencies for tests
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      description = "A backport of linecache to older supported Pythons";
-      homepage = "https://github.com/testing-cabal/linecache2";
-    };
-  };
+  linecache2 = callPackage ../development/python-modules/linecache2 { };
 
   upass = buildPythonPackage rec {
     version = "0.1.4";
