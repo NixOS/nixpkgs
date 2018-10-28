@@ -4073,25 +4073,7 @@ in {
 
   urwid = callPackage ../development/python-modules/urwid {};
 
-  urwidtrees = buildPythonPackage rec {
-    name = "urwidtrees-${rev}";
-    rev = "1.0";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "pazz";
-      repo = "urwidtrees";
-      inherit rev;
-      sha256 = "03gpcdi45z2idy1fd9zv8v9naivmpfx65hshm8r984k9wklv1dsa";
-    };
-
-    propagatedBuildInputs = with self; [ urwid ];
-
-    meta = {
-      description = "Tree widgets for urwid";
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  urwidtrees = callPackage ../development/python-modules/urwidtrees { };
 
   user-agents = callPackage ../development/python-modules/user-agents { };
 
