@@ -137,6 +137,14 @@
      make sure to update your configuration if you want to keep <literal>proglodyte-wasm</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     OpenSMTPD has been upgraded to version 6.4.0p1. This release makes
+     backwards-incompatible changes to the configuration file format. See
+     <command>man smtpd.conf</command> for more information on the new file
+     format.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
