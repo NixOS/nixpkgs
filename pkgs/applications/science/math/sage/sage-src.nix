@@ -39,7 +39,19 @@ stdenv.mkDerivation rec {
     ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
   ];
 
-  packageUpgradePatches = [
+  packageUpgradePatches = let
+    # fetch a diff between base and rev on sage's git server
+    # used to fetch trac tickets by setting the base to the release and the
+    # revision to the last commit that should be included
+    fetchSageDiff = { base, rev, ...}@args: (
+      fetchpatch ({
+        url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
+        # We don't care about sage's own build system (which builds all its dependencies).
+        # Exclude build system changes to avoid conflicts.
+        excludes = [ "build/*" ];
+      } // builtins.removeAttrs args [ "rev" "base" ])
+    );
+  in [
     # New glpk version has new warnings, filter those out until upstream sage has found a solution
     # https://trac.sagemath.org/ticket/24824
     ./patches/pari-stackwarn.patch # not actually necessary since tha pari upgrade, but necessary for the glpk patch to apply
