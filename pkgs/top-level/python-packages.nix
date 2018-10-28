@@ -3939,35 +3939,7 @@ in {
 
   tabulate = callPackage ../development/python-modules/tabulate { };
 
-  taskw = buildPythonPackage rec {
-    version = "1.0.3";
-    name = "taskw-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/taskw/${name}.tar.gz";
-      sha256 = "1fa7bv5996ppfbryv02lpnlhk5dra63lhlwrb1i4ifqbziqfqh5n";
-    };
-
-    patches = [ ../development/python-modules/taskw/use-template-for-taskwarrior-install-path.patch ];
-    postPatch = ''
-      substituteInPlace taskw/warrior.py \
-        --replace '@@taskwarrior@@' '${pkgs.taskwarrior}'
-    '';
-
-    # https://github.com/ralphbean/taskw/issues/98
-    doCheck = false;
-
-    buildInputs = with self; [ nose pkgs.taskwarrior tox ];
-    propagatedBuildInputs = with self; [ six dateutil pytz ];
-
-    meta = {
-      homepage =  https://github.com/ralphbean/taskw;
-      description = "Python bindings for your taskwarrior database";
-      license = licenses.gpl3Plus;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ pierron ];
-    };
-  };
+  taskw = callPackage ../development/python-modules/taskw { };
 
   tempita = callPackage ../development/python-modules/tempita { };
 
