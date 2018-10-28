@@ -13537,6 +13537,8 @@ with pkgs;
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
+  miniflux = callPackage ../servers/miniflux { };
+
   nagios = callPackage ../servers/monitoring/nagios { };
 
   munin = callPackage ../servers/monitoring/munin { };
