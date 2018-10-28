@@ -3981,24 +3981,7 @@ in {
 
   tlslite = callPackage ../development/python-modules/tlslite { };
 
-  qrcode = buildPythonPackage rec {
-    name = "qrcode-${version}";
-    version = "5.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/q/qrcode/${name}.tar.gz";
-      sha256 = "0kljfrfq0c2rmxf8am57333ia41kd0snbm2rnqbdy816hgpcq5a1";
-    };
-
-    propagatedBuildInputs = with self; [ six pillow pymaging_png ];
-    checkInputs = [ self.mock ];
-
-    meta = {
-      description = "Quick Response code generation for Python";
-      homepage = "https://pypi.python.org/pypi/qrcode";
-      license = licenses.bsd3;
-    };
-  };
+  qrcode = callPackage ../development/python-modules/qrcode { };
 
   tmdb3 = callPackage ../development/python-modules/tmdb3 { };
 
