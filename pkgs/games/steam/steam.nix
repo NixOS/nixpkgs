@@ -12,6 +12,11 @@ in stdenv.mkDerivation rec {
     sha256 = "01jgp909biqf4rr56kb08jkl7g5xql6r2g4ch6lc71njgcsbn5fs";
   };
 
+  patches = [
+    # Fix https://github.com/ValveSoftware/steam-for-linux/issues/4794
+    ./0001-udev-fix.patch
+  ];
+
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   postInstall = ''

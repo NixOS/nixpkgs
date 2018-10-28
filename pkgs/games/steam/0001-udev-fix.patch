@@ -1,0 +1,13 @@
+diff --git a/lib/udev/rules.d/60-steam-input.rules b/lib/udev/rules.d/60-steam-input.rules
+index 99c115b..590cff7 100644
+--- a/lib/udev/rules.d/60-steam-input.rules
++++ b/lib/udev/rules.d/60-steam-input.rules
+@@ -1,7 +1,7 @@
+ # Valve USB devices
+ SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
+ # Steam Controller udev write access
+-KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess"
++KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"
+ 
+ # Valve HID devices over USB hidraw
+ KERNEL=="hidraw*", ATTRS{idVendor}=="28de", MODE="0666"
