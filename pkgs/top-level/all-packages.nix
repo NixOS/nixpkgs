@@ -9739,6 +9739,12 @@ with pkgs;
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
 
+  ldd = {
+    "glibc" = glibc;
+    "musl" = musl;
+  }.${stdenv.hostPlatform.libc} or (throw
+    "Cannot find a ldd implementation for ${stdenv.targetPlatform.libc}");
+
   # Only supported on Linux, using glibc
   glibcLocales = if stdenv.hostPlatform.libc == "glibc" then callPackage ../development/libraries/glibc/locales.nix { } else null;
 
