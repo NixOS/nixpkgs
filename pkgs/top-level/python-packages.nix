@@ -3926,26 +3926,7 @@ in {
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
-  freezegun = buildPythonPackage rec {
-    name = "freezegun-${version}";
-    version = "0.3.8";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/freezegun/freezegun-${version}.tar.gz";
-      sha256 = "1sf38d3ibv1jhhvr52x7dhrsiyqk1hm165dfv8w8wh0fhmgxg151";
-    };
-
-    propagatedBuildInputs = with self; [
-      dateutil six
-    ];
-    buildInputs = [ self.mock self.nose ];
-
-    meta = with stdenv.lib; {
-      description = "FreezeGun: Let your Python tests travel through time";
-      homepage = "https://github.com/spulec/freezegun";
-      license = licenses.asl20;
-    };
-  };
+  freezegun = callPackage ../development/python-modules/freezegun { };
 
   sybil = callPackage ../development/python-modules/sybil { };
 
