@@ -4043,24 +4043,7 @@ in {
 
   umemcache = callPackage ../development/python-modules/umemcache {};
 
-  unicodecsv = buildPythonPackage rec {
-    version = "0.14.1";
-    name = "unicodecsv-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/unicodecsv/${name}.tar.gz";
-      sha256 = "1z7pdwkr6lpsa7xbyvaly7pq3akflbnz8gq62829lr28gl1hi301";
-    };
-
-    # ImportError: No module named runtests
-    doCheck = false;
-
-    meta = {
-      description = "Drop-in replacement for Python2's stdlib csv module, with unicode support";
-      homepage = https://github.com/jdunck/python-unicodecsv;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
   unittest2 = buildPythonPackage rec {
     version = "1.1.0";
