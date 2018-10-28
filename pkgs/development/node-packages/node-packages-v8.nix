@@ -22058,13 +22058,13 @@ let
         sha1 = "4f3152e09540fde28c76f44b19bbcd1d5a42478d";
       };
     };
-    "nanobus-4.3.4" = {
+    "nanobus-4.3.5" = {
       name = "nanobus";
       packageName = "nanobus";
-      version = "4.3.4";
+      version = "4.3.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/nanobus/-/nanobus-4.3.4.tgz";
-        sha512 = "N1IBreECNaxmsaOLMqqm01K7XIp+sMvoVX8mvmT/p1VjM2FLcBU0lj0FalKooi2/2i+ph9WsEoEogOJevqQ6LQ==";
+        url = "https://registry.npmjs.org/nanobus/-/nanobus-4.3.5.tgz";
+        sha512 = "6UlqagLV9/ADqcTU60mipAPEd16WDbO+a9WeeGVn9RucHKNDTcPt9MOf8ZmAvbA3V2CV+EJS28eupNalg4YF8Q==";
       };
     };
     "nanoid-1.3.1" = {
@@ -32673,7 +32673,7 @@ let
       packageName = "to-vfile";
       version = "1.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/to-vfile/-/to-vfile-1.0.0.tgz";
+        url = "http://registry.npmjs.org/to-vfile/-/to-vfile-1.0.0.tgz";
         sha1 = "88defecd43adb2ef598625f0e3d59f7f342941ba";
       };
     };
@@ -34545,7 +34545,7 @@ let
       packageName = "vfile";
       version = "1.4.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/vfile/-/vfile-1.4.0.tgz";
+        url = "http://registry.npmjs.org/vfile/-/vfile-1.4.0.tgz";
         sha1 = "c0fd6fa484f8debdb771f68c31ed75d88da97fe7";
       };
     };
@@ -34554,7 +34554,7 @@ let
       packageName = "vfile-find-down";
       version = "1.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/vfile-find-down/-/vfile-find-down-1.0.0.tgz";
+        url = "http://registry.npmjs.org/vfile-find-down/-/vfile-find-down-1.0.0.tgz";
         sha1 = "84a4d66d03513f6140a84e0776ef0848d4f0ad95";
       };
     };
@@ -34563,7 +34563,7 @@ let
       packageName = "vfile-find-up";
       version = "1.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/vfile-find-up/-/vfile-find-up-1.0.0.tgz";
+        url = "http://registry.npmjs.org/vfile-find-up/-/vfile-find-up-1.0.0.tgz";
         sha1 = "5604da6fe453b34350637984eb5fe4909e280390";
       };
     };
@@ -34572,7 +34572,7 @@ let
       packageName = "vfile-reporter";
       version = "1.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/vfile-reporter/-/vfile-reporter-1.5.0.tgz";
+        url = "http://registry.npmjs.org/vfile-reporter/-/vfile-reporter-1.5.0.tgz";
         sha1 = "21a7009bfe55e24df8ff432aa5bf6f6efa74e418";
       };
     };
@@ -38854,7 +38854,7 @@ in
       sources."mutexify-1.2.0"
       sources."nan-2.11.1"
       sources."nanoassert-1.1.0"
-      sources."nanobus-4.3.4"
+      sources."nanobus-4.3.5"
       sources."nanoscheduler-1.0.3"
       sources."nanotiming-7.3.1"
       sources."ncp-1.0.1"
