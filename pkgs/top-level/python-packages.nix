@@ -4015,25 +4015,7 @@ in {
 
   twitter-common-collections = callPackage ../development/python-modules/twitter-common-collections { };
 
-  twitter-common-confluence = buildPythonPackage rec {
-    pname   = "twitter.common.confluence";
-    version = "0.3.9";
-    name    = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "1i2fjn23cmms81f1fhvvkg6hgzqpw07dlqg3ydz6cqv2glw7zq26";
-    };
-
-    propagatedBuildInputs = with self; [ twitter-common-log ];
-
-    meta = {
-      description = "Twitter's API to the confluence wiki";
-      homepage    = "https://twitter.github.io/commons/";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ copumpkin ];
-    };
-  };
+  twitter-common-confluence = callPackage ../development/python-modules/twitter-common-confluence { };
 
   twitter-common-dirutil = buildPythonPackage rec {
     pname   = "twitter.common.dirutil";
