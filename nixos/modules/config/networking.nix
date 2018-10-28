@@ -248,7 +248,7 @@ in
         "resolv.conf".source = "${pkgs.systemd}/lib/systemd/resolv.conf";
       } // optionalAttrs (config.services.resolved.enable && dnsmasqResolve) {
         "dnsmasq-resolv.conf".source = "/run/systemd/resolve/resolv.conf";
-      } // optionalAttrs (!pkgs.stdenv.hostPlatform.isMusl) {
+      } // optionalAttrs (pkgs.stdenv.hostPlatform.libc == "glibc") {
         # /etc/rpc: RPC program numbers.
         "rpc".source = pkgs.glibc.out + "/etc/rpc";
       };
