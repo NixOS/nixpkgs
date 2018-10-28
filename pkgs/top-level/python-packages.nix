@@ -4039,27 +4039,7 @@ in {
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
-  umalqurra = buildPythonPackage rec {
-    name = "umalqurra-${version}";
-    version = "0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/umalqurra/umalqurra-0.2.tar.gz";
-      sha256 = "719f6a36f908ada1c29dae0d934dd0f1e1f6e3305784edbec23ad719397de678";
-    };
-
-    # No tests included
-    doCheck = false;
-
-    # See for license
-    # https://github.com/tytkal/python-hijiri-ummalqura/issues/4
-    meta = {
-      description = "Date Api that support Hijri Umalqurra calendar";
-      homepage = https://github.com/tytkal/python-hijiri-ummalqura;
-      license = with licenses; [ publicDomain ];
-    };
-
-  };
+  umalqurra = callPackage ../development/python-modules/umalqurra { };
 
   umemcache = callPackage ../development/python-modules/umemcache {};
 
