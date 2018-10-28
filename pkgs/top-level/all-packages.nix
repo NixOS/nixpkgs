@@ -22225,6 +22225,8 @@ with pkgs;
     enableTomcatWebApplication = config.disnix.enableTomcatWebApplication or false;
   };
 
+  dydisnix = callPackage ../tools/package-management/disnix/dydisnix { };
+
   disnixos = callPackage ../tools/package-management/disnix/disnixos { };
 
   DisnixWebService = callPackage ../tools/package-management/disnix/DisnixWebService { };
