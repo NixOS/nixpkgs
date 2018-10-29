@@ -4635,17 +4635,7 @@ in {
 
   hypchat = callPackage ../development/python-modules/hypchat { };
 
-  pivy = buildPythonPackage rec {
-    version = "20101207";
-    name = "pivy-${version}";
-    src = pkgs.fetchhg {
-      url = "https://bitbucket.org/Coin3D/pivy";
-      rev = "8eab90908f2a3adcc414347566f4434636202344";
-      sha256 = "18n14ha2d3j3ghg2f2aqnf2mks94nn7ma9ii7vkiwcay93zm82cf";
-    };
-    disabled = isPy3k; # Judging from SyntaxError
-    buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.libGLU_combined pkgs.xorg.libXi ];
-  };
+  pivy = callPackage ../development/python-modules/pivy { };
 
   smugpy = callPackage ../development/python-modules/smugpy { };
 
