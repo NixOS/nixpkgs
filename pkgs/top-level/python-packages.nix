@@ -4294,16 +4294,7 @@ in {
 
   txamqp = callPackage ../development/python-modules/txamqp { };
 
-  versiontools = buildPythonPackage rec {
-    name = "versiontools-1.9.1";
-    doCheck = (!isPy3k);
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/v/versiontools/${name}.tar.gz";
-      sha256 = "1xhl6kl7f4srgnw6zw4lr8j2z5vmrbaa83nzn2c9r2m1hwl36sd9";
-    };
-
-  };
+  versiontools = callPackage ../development/python-modules/versiontools { };
 
   veryprettytable = buildPythonPackage rec {
     name = "veryprettytable-${version}";
