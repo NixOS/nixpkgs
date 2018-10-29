@@ -50,4 +50,14 @@ in
     srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.tgz";
     sha256 = "1rfmdd2v47p83fm3sfyvik31gci0q17qs6kjng6mvcsd6akmvb8y";
   };
+
+  cudnn_7_3_cudatoolkit_9_0 = generic rec {
+    version = "7.3.1.20";
+    cudatoolkit = cudatoolkit_9_0;
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v${version}.tgz";
+    sha256 = "15miqnyp8i204y8ay7qf0fyhz51i4rxa1fa3y3lfd9v36v6q0ygw"; # Download won't work
+    # This version must be downloaded from nvidia manually. Use then nix-prefetch-url file:<absolute-path>
+  };
+
+
 }

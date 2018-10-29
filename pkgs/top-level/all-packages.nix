@@ -2065,7 +2065,8 @@ with pkgs;
     cudnn6_cudatoolkit_8
     cudnn_cudatoolkit_8
     cudnn_cudatoolkit_9
-    cudnn_cudatoolkit_9_0;
+    cudnn_cudatoolkit_9_0
+    cudnn_7_3_cudatoolkit_9_0;
 
   cudnn = cudnn_cudatoolkit_9;
 
