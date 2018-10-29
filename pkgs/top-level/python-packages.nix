@@ -4397,22 +4397,7 @@ in {
 
   weboob = callPackage ../development/python-modules/weboob { };
 
-  datadiff = buildPythonPackage rec {
-    name = "datadiff-1.1.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/datadiff/datadiff-1.1.6.zip";
-      sha256 = "f1402701063998f6a70609789aae8dc05703f3ad0a34882f6199653654c55543";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      description = "DataDiff";
-      homepage = https://sourceforge.net/projects/datadiff/;
-      license = licenses.asl20;
-    };
-  };
+  datadiff = callPackage ../development/python-modules/datadiff { };
 
   termcolor = buildPythonPackage rec {
     name = "termcolor-1.1.0";
