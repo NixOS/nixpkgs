@@ -8793,7 +8793,11 @@ in
 
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
-  cquery = callPackage ../development/tools/misc/cquery { };
+  cquery = callPackage ../development/tools/misc/cquery {
+    # 7 is the default, but only on Linux, so keep this for now
+    llvmPackages = llvmPackages_7;
+  };
+
 
   ccls = callPackage ../development/tools/misc/ccls {
     llvmPackages = llvmPackages_7;
@@ -11950,6 +11954,7 @@ in
   libGLSupported = lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms;
 
   mesa_noglu = callPackage ../development/libraries/mesa {
+    # 7 is the default, but only on Linux, so keep this for now
     llvmPackages = llvmPackages_7;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
