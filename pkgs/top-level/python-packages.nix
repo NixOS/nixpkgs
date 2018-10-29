@@ -4192,19 +4192,6 @@ in {
 
   zope_contenttype = callPackage ../development/python-modules/zope_contenttype { };
 
-  zope_dottedname = buildPythonPackage rec {
-    name = "zope.dottedname-3.4.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.dottedname/${name}.tar.gz";
-      sha256 = "331d801d98e539fa6c5d50c3835ecc144c429667f483281505de53fc771e6bf5";
-    };
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
-
   zope_event = buildPythonPackage rec {
     name = "zope.event-${version}";
     version = "4.0.3";
@@ -4221,6 +4208,7 @@ in {
       maintainers = with maintainers; [ goibhniu ];
     };
   };
+  zope_dottedname = callPackage ../development/python-modules/zope_dottedname { };
 
 
   zope_exceptions = buildPythonPackage rec {
