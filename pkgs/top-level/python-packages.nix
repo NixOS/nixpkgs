@@ -4469,26 +4469,7 @@ in {
 
   mailcap-fix = callPackage ../development/python-modules/mailcap-fix { };
 
-  maildir-deduplicate = buildPythonPackage rec {
-    name = "maildir-deduplicate-${version}";
-    version = "1.0.2";
-
-    disabled = !isPy27;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/maildir-deduplicate/${name}.tar.gz";
-      sha256 = "1xy5z756alrjgpl9qx2gdx898rw1mryrqkwmipbh39mgrvkl3fz9";
-    };
-
-    propagatedBuildInputs = with self; [ click ];
-
-    meta = with stdenv.lib; {
-      description = "Command-line tool to deduplicate mails from a set of maildir folders";
-      homepage = "https://github.com/kdeldycke/maildir-deduplicate";
-      license = licenses.gpl2;
-    };
-  };
-
+  maildir-deduplicate = callPackage ../development/python-modules/maildir-deduplicate { };
 
   mps-youtube = buildPythonPackage rec {
     name = "mps-youtube-${version}";
