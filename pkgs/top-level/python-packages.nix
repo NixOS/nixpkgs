@@ -4593,24 +4593,7 @@ in {
 
   word2vec = callPackage ../development/python-modules/word2vec { };
 
-  tvdb_api = buildPythonPackage rec {
-    name = "tvdb_api-${version}";
-    version = "1.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tvdb_api/${name}.tar.gz";
-      sha256 = "0hq887yb3rwc0rcw32lh7xdkk9bbrqy274aspzqkd6f7dyhp73ih";
-    };
-
-    propagatedBuildInputs = with self; [ requests-cache ];
-
-    meta = {
-      description = "Simple to use TVDB (thetvdb.com) API in Python.";
-      homepage = "https://github.com/dbr/tvdb_api";
-      license = licenses.unlicense;
-      maintainers = with maintainers; [ peterhoeg ];
-    };
-  };
+  tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
   tvnamer = buildPythonPackage rec {
     name = "tvnamer-${version}";
