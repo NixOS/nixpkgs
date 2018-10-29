@@ -4607,15 +4607,7 @@ in {
 
   pygments-markdown-lexer = callPackage ../development/python-modules/pygments-markdown-lexer { };
 
-  telegram = buildPythonPackage rec {
-    name = "telegram-${version}";
-    version = "0.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/telegram/${name}.tar.gz";
-      sha256 = "1495l2ml8mg120wfvqhikqkfczhwwaby40vdmsz8v2l69jps01fl";
-    };
-  };
+  telegram = callPackage ../development/python-modules/telegram { };
 
   python-telegram-bot = callPackage ../development/python-modules/python-telegram-bot { };
 
