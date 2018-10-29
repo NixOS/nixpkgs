@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "1.0.0";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a18341ea030e2cc0743acdf4aa72302bdf6b820938b36ce4bd76e43faa2276a3";
+    sha256 = "0h4fxw5drrhfyslzmfpljk0qnnpbhhb20hnnndzahhbwylyw1x1n";
   };
 
   propagatedBuildInputs = [ pkgs.c-ares ];
