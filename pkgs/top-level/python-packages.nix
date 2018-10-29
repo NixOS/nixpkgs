@@ -4186,27 +4186,7 @@ in {
 
   zope_broken = callPackage ../development/python-modules/zope_broken { };
 
-  zope_component = buildPythonPackage rec {
-    name = "zope.component-4.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.component/zope.component-4.2.1.tar.gz";
-      sha256 = "1gzbr0j6c2h0cqnpi2cjss38wrz1bcwx8xahl3vykgz5laid15l6";
-    };
-
-    propagatedBuildInputs = with self; [
-      zope_configuration zope_event zope_i18nmessageid zope_interface
-      zope_testing
-    ];
-
-    # ignore tests because of a circular dependency on zope_security
-    doCheck = false;
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_component = callPackage ../development/python-modules/zope_component { };
 
   zope_configuration = buildPythonPackage rec {
     name = "zope.configuration-4.0.3";
