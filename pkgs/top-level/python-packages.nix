@@ -4316,29 +4316,7 @@ in {
 
   gdata = callPackage ../development/python-modules/gdata { };
 
-  IMAPClient = buildPythonPackage rec {
-    name = "IMAPClient-${version}";
-    version = "0.13";
-    disabled = isPy34 || isPy35;
-
-    src = pkgs.fetchurl {
-      url = "http://freshfoo.com/projects/IMAPClient/${name}.tar.gz";
-      sha256 = "0v7kd1crdbff0rmh4ddm5qszkis6hpk9084qh94al8h7g4y9l3is";
-    };
-
-    buildInputs = with self; [ mock ];
-
-    preConfigure = ''
-      sed -i '/distribute_setup/d' setup.py
-      substituteInPlace setup.py --replace "mock==0.8.0" "mock"
-    '';
-
-    meta = {
-      homepage = http://imapclient.freshfoo.com/;
-      description = "Easy-to-use, Pythonic and complete IMAP client library";
-      license = licenses.bsd3;
-    };
-  };
+  IMAPClient = callPackage ../development/python-modules/imapclient { };
 
   Logbook = callPackage ../development/python-modules/Logbook { };
 
