@@ -6,9 +6,9 @@
 
 let
   pname = "PyQt";
-  version = "5.10.1";
+  version = "5.11.3";
 
-  inherit (pythonPackages) buildPythonPackage python dbus-python sip;
+  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python sip enum34;
 
 in buildPythonPackage {
   pname = pname;
@@ -25,7 +25,7 @@ in buildPythonPackage {
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "1vz9c4v0k8azk2b08swwybrshzw32x8djjpq13mf9v15x1qyjclr";
+    sha256 = "0wqh4srqkcc03rvkwrcshaa028psrq58xkys6npnyhqxc0apvdf9";
   };
 
   outputs = [ "out" "dev" ];
@@ -36,7 +36,7 @@ in buildPythonPackage {
 
   propagatedBuildInputs = [
     sip qtbase qtsvg qtwebkit qtwebengine
-  ] ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
+  ] ++ lib.optional (!isPy3k) enum34 ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
 
   configurePhase = ''
     runHook preConfigure
@@ -63,27 +63,6 @@ in buildPythonPackage {
 
     runHook postConfigure
   '';
-
-  patches = [
-    # This patch from Arch Linux fixes Cura segfaulting on startup
-    # https://github.com/Ultimaker/Cura/issues/3438
-    # It can probably removed on 5.10.3
-    (fetchpatch {
-      name = "pyqt5-cura-crash.patch";
-      url = https://git.archlinux.org/svntogit/packages.git/plain/repos/extra-x86_64/pyqt5-cura-crash.patch?id=6cfe64a3d1827e0ed9cc62f1683a53b582315f4f;
-      sha256 = "02a0mw1z8p9hhqhl4bgjrmf1xq82xjmpivn5bg6r4yv6pidsh7ck";
-    })
-    (fetchpatch {
-      name = "pyqt-qt5.11.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/pyqt-qt5.11.patch?h=packages/pyqt5&id=d01240b801203d3865b2f61fa19090cc20e55a97";
-      sha256 = "0qa7w1agjg9da99lvnqwwxnm3pp7qd683h7zggq4c269y2km812h";
-    })
-    (fetchpatch {
-      name = "pyqt-support-new-qt.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/pyqt-support-new-qt.patch?h=packages/pyqt5&id=d01240b801203d3865b2f61fa19090cc20e55a97";
-      sha256 = "1nkl96f4bki37zw6iwvd4vq8z8gg45q5m1cbkbaw72395i0m7p5j";
-    })
-  ];
 
   postInstall = ''
     for i in $out/bin/*; do
