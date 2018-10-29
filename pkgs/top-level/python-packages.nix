@@ -4487,20 +4487,7 @@ in {
 
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
 
-  xlsx2csv = buildPythonPackage rec {
-    name = "xlsx2csv-${version}";
-    version = "0.7.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xlsx2csv/${name}.tar.gz";
-      sha256 = "7c6c8fa6c2774224d03a6a96049e116822484dccfa3634893397212ebcd23866";
-    };
-    meta = {
-      homepage = https://github.com/bitprophet/alabaster;
-      description = "Convert xlsx to csv";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ jb55 ];
-    };
-  };
+  xlsx2csv = callPackage ../development/python-modules/xlsx2csv { };
 
   xmpppy = callPackage ../development/python-modules/xmpppy {};
 
