@@ -4214,27 +4214,7 @@ in {
 
   zope_size = callPackage ../development/python-modules/zope_size { };
 
-  zope_testing = buildPythonPackage rec {
-    name = "zope.testing-${version}";
-    version = "4.6.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.testing/${name}.tar.gz";
-      sha256 = "1vvxhjmzl7vw2i1akfj1xbggwn36270ym7f2ic9xwbaswfw1ap56";
-    };
-
-    doCheck = !isPyPy;
-
-    propagatedBuildInputs = with self; [ zope_interface zope_exceptions zope_location ];
-
-    meta = {
-      description = "Zope testing helpers";
-      homepage =  http://pypi.python.org/pypi/zope.testing;
-      license = licenses.zpl20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_testing = callPackage ../development/python-modules/zope_testing { };
 
   zope_testrunner = callPackage ../development/python-modules/zope_testrunner { };
 
