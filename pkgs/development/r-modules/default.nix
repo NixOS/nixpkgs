@@ -278,7 +278,6 @@ let
     kza = [ pkgs.fftw.dev ];
     libamtrack = [ pkgs.gsl_1 ];
     magick = [ pkgs.imagemagick.dev ];
-    mixcat = [ pkgs.gsl_1 ];
     mvabund = [ pkgs.gsl_1 ];
     mwaved = [ pkgs.fftw.dev ];
     ncdf4 = [ pkgs.netcdf ];
@@ -353,7 +352,6 @@ let
     sf = [ pkgs.gdal pkgs.proj pkgs.geos ];
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype.dev ];
     simplexreg = [ pkgs.gsl_1 ];
-    SOD = [ pkgs.opencl-headers ];
     spate = [ pkgs.fftw.dev ];
     ssanv = [ pkgs.proj ];
     stsm = [ pkgs.gsl_1 ];
@@ -602,11 +600,9 @@ let
     "RcmdrPlugin_coin"
     "RcmdrPlugin_depthTools"
     "RcmdrPlugin_DoE"
-    "RcmdrPlugin_doex"
     "RcmdrPlugin_EACSPIR"
     "RcmdrPlugin_EBM"
     "RcmdrPlugin_EcoVirtual"
-    "RcmdrPlugin_epack"
     "RcmdrPlugin_EZR"
     "RcmdrPlugin_FactoMineR"
     "RcmdrPlugin_HH"
@@ -624,7 +620,6 @@ let
     "RcmdrPlugin_sampling"
     "RcmdrPlugin_SCDA"
     "RcmdrPlugin_SLC"
-    "RcmdrPlugin_SM"
     "RcmdrPlugin_sos"
     "RcmdrPlugin_steepness"
     "RcmdrPlugin_survival"
@@ -641,7 +636,6 @@ let
     "rich"
     "rioja"
     "ripa"
-    "rite"
     "RNCEP"
     "RQDA"
     "RSDA"
