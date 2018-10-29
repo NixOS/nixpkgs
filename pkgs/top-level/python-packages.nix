@@ -4336,21 +4336,7 @@ in {
 
   flaskbabel = callPackage ../development/python-modules/flaskbabel { };
 
-  speaklater = buildPythonPackage rec {
-    name = "speaklater-1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/speaklater/${name}.tar.gz";
-      sha256 = "1ab5dbfzzgz6cnz4xlwx79gz83id4bhiw67k1cgqrlzfs0va7zjr";
-    };
-
-    meta = {
-      description = "Implements a lazy string for python useful for use with gettext";
-      homepage = https://github.com/mitsuhiko/speaklater;
-      license = "bsd";
-      maintainers = with maintainers; [ matejc ];
-    };
-  };
+  speaklater = callPackage ../development/python-modules/speaklater { };
 
   speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
 
