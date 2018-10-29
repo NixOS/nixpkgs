@@ -4477,29 +4477,7 @@ in {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
-  willow = buildPythonPackage rec {
-    name = "willow-${version}";
-    version = "0.2.2";
-    disabled = pythonOlder "2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/W/Willow/Willow-${version}.tar.gz";
-      sha256 = "111c82fbfcda2710ce6201b0b7e0cfa1ff3c4f2f0dc788cc8dfc8db933c39c73";
-    };
-
-    propagatedBuildInputs = with self; [ six pillow ];
-
-    # Test data is not included
-    # https://github.com/torchbox/Willow/issues/34
-    doCheck = false;
-
-    meta = {
-      description = "A Python image library that sits on top of Pillow, Wand and OpenCV";
-      homepage = https://github.com/torchbox/Willow/;
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  };
+  willow = callPackage ../development/python-modules/willow { };
 
   importmagic = buildPythonPackage rec {
     simpleName = "importmagic";
