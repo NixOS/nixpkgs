@@ -4296,23 +4296,7 @@ in {
 
   versiontools = callPackage ../development/python-modules/versiontools { };
 
-  veryprettytable = buildPythonPackage rec {
-    name = "veryprettytable-${version}";
-    version = "0.8.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/v/veryprettytable/${name}.tar.gz";
-      sha256 = "1k1rifz8x6qcicmx2is9vgxcj0qb2f5pvzrp7zhmvbmci3yack3f";
-    };
-
-    propagatedBuildInputs = [ self.termcolor self.colorama ];
-
-    meta = {
-      description = "A simple Python library for easily displaying tabular data in a visually appealing ASCII table format";
-      homepage = https://github.com/smeggingsmegger/VeryPrettyTable;
-      license = licenses.free;
-    };
-  };
+  veryprettytable = callPackage ../development/python-modules/veryprettytable { };
 
   graphite-web = callPackage ../development/python-modules/graphite-web { };
 
