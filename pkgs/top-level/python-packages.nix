@@ -4258,26 +4258,7 @@ in {
 
   titlecase = callPackage ../development/python-modules/titlecase { };
 
-  tracing = buildPythonPackage rec {
-    name = "tracing-${version}";
-    version = "0.8";
-
-    src = pkgs.fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_${version}.orig.tar.gz";
-      sha256 = "1l4ybj5rvrrcxf8csyq7qx52izybd502pmx70zxp46gxqm60d2l0";
-    };
-
-    buildInputs = with self; [ sphinx ];
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://liw.fi/tracing/;
-      description = "Python debug logging helper";
-      maintainers = with maintainers; [ rickynils ];
-    };
-  };
+  tracing = callPackage ../development/python-modules/tracing { };
 
   translationstring = buildPythonPackage rec {
     name = "translationstring-1.3";
