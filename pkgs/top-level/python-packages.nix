@@ -4087,26 +4087,7 @@ in {
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
-  virtualenv-clone = buildPythonPackage rec {
-    name = "virtualenv-clone-0.2.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/v/virtualenv-clone/${name}.tar.gz";
-      sha256 = "7087ba4eb48acfd5209a3fd03e15d072f28742619127c98333057e32748d91c4";
-    };
-
-    buildInputs = with self; [pytest];
-    propagatedBuildInputs = with self; [virtualenv];
-
-    # needs tox to run the tests
-    doCheck = false;
-
-    meta = {
-      description = "Script to clone virtualenvs";
-      license = licenses.mit;
-      platforms = platforms.all;
-    };
-  };
+  virtualenv-clone = callPackage ../development/python-modules/virtualenv-clone { };
 
   virtualenvwrapper = buildPythonPackage (rec {
     name = "virtualenvwrapper-4.3";
