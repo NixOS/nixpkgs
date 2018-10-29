@@ -2,6 +2,7 @@
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata
+, coreutils
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 }:
@@ -67,6 +68,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
+
+  # For some test failures R just lists the test failure in the log without giving
+  # details. That makes debugging hard, so we show the relevant log files on failure.
+  failureHook = ''
+    if [[ -n "$checkTarget" ]]; then # if this is the check phase
+      echo "Some tests failed. Here are the last 100 lines of their outputs:" >&2
+      for f in tests/*.Rout.fail; do
+        echo "====================" >&2
+        echo "$f:" >&2
+        ${coreutils}/bin/tail -n100 "$f" >&2
+      done
+      exit "$exitCode" # $exitCode variable is set before failureHook is called
+    fi
+  '';
 
   enableParallelBuilding = true;
 
