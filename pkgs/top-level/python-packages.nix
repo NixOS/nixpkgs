@@ -4095,21 +4095,7 @@ in {
 
   vultr = callPackage ../development/python-modules/vultr { };
 
-  waitress = buildPythonPackage rec {
-    name = "waitress-1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/waitress/${name}.tar.gz";
-      sha256 = "0pw6yyxi348r2xpq3ykqnf7gwi881azv2422d2ixb0xi5jws2ky7";
-    };
-
-    doCheck = false;
-
-    meta = {
-       maintainers = with maintainers; [ garbas domenkozar ];
-       platforms = platforms.all;
-    };
-  };
+  waitress = callPackage ../development/python-modules/waitress { };
 
   waitress-django = callPackage ../development/python-modules/waitress-django { };
 
