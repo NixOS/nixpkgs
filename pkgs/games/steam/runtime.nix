@@ -1,11 +1,22 @@
 { stdenv, steamArch, fetchurl, writeText, python2, dpkg }:
 
-let input = builtins.getAttr steamArch (import ./runtime-generated.nix { inherit fetchurl; });
+let
+  generated = stdenv.lib.importJSON ./runtime-generated.json;
+  input = map (x: with x; {
+      inherit name;
+      source = fetchurl {
+        inherit sha256;
+        url = "mirror://steamrt/" + path;
+        name = shortName;
+      };
+  }) (builtins.getAttr steamArch generated);
 
-    inputFile = writeText "steam-runtime.json" (builtins.toJSON input);
+  inputFile = writeText "steam-runtime.json" (builtins.toJSON input);
+  version = generated.date;
 
 in stdenv.mkDerivation {
-  name = "steam-runtime-2016-08-13";
+  inherit version;
+  name = "steam-runtime-${version}";
 
   nativeBuildInputs = [ python2 dpkg stdenv.cc.bintools ];
 
