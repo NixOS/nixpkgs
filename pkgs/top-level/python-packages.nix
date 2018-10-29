@@ -4447,39 +4447,7 @@ in {
 
   jenkinsapi = callPackage ../development/python-modules/jenkinsapi { };
 
-  jenkins-job-builder = buildPythonPackage rec {
-    name = "jenkins-job-builder-2.0.0.0b2";
-    disabled = !isPy27;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jenkins-job-builder/${name}.tar.gz";
-      sha256 = "1y0yl2w6c9c91f9xbjkvff1ag8p72r24nzparrzrw9sl8kn9632x";
-    };
-
-    patchPhase = ''
-      export HOME=$TMPDIR
-    '';
-
-    buildInputs = with self; [
-      pip
-    ];
-
-    propagatedBuildInputs = with self; [
-      pbr
-      mock
-      python-jenkins
-      pyyaml
-      six
-      stevedore
-    ];
-
-    meta = {
-      description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
-      homepage = "https://docs.openstack.org/infra/system-config/jjb.html";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  jenkins-job-builder = callPackage ../development/python-modules/jenkins-job-builder { };
 
   dot2tex = buildPythonPackage rec {
     name = "dot2tex-2.9.0";
