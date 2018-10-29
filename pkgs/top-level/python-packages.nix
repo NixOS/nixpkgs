@@ -4413,21 +4413,7 @@ in {
 
   ofxhome = callPackage ../development/python-modules/ofxhome { };
 
-  ofxparse = buildPythonPackage rec {
-    name = "ofxparse-0.14";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/ofxparse/${name}.tar.gz";
-      sha256 = "d8c486126a94d912442d040121db44fbc4a646ea70fa935df33b5b4dbfbbe42a";
-    };
-
-    propagatedBuildInputs = with self; [ six beautifulsoup4 ];
-
-    meta = {
-      homepage = "http://sites.google.com/site/ofxparse";
-      description = "Tools for working with the OFX (Open Financial Exchange) file format";
-      license = licenses.mit;
-    };
-  };
+  ofxparse = callPackage ../development/python-modules/ofxparse { };
 
   ofxtools = buildPythonPackage rec {
     name = "ofxtools-0.3.8";
