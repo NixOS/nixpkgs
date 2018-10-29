@@ -4198,21 +4198,7 @@ in {
 
   zope_exceptions = callPackage ../development/python-modules/zope_exceptions { };
 
-  zope_filerepresentation = buildPythonPackage rec {
-    name = "zope.filerepresentation-3.6.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.filerepresentation/${name}.tar.gz";
-      sha256 = "d775ebba4aff7687e0381f050ebda4e48ce50900c1438f3f7e901220634ed3e0";
-    };
-
-    propagatedBuildInputs = with self; [ zope_schema ];
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_filerepresentation = callPackage ../development/python-modules/zope_filerepresentation { };
 
   zope_i18n = buildPythonPackage rec {
     name = "zope.i18n-3.8.0";
