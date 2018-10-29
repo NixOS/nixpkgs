@@ -4292,23 +4292,7 @@ in {
 
   txrequests = callPackage ../development/python-modules/txrequests { };
 
-  txamqp = buildPythonPackage rec {
-    name = "txamqp-${version}";
-    version = "0.3";
-
-    src = pkgs.fetchurl rec {
-      url = "https://launchpad.net/txamqp/trunk/${version}/+download/python-txamqp_${version}.orig.tar.gz";
-      sha256 = "1r2ha0r7g14i4b5figv2spizjrmgfpspdbl1m031lw9px2hhm463";
-    };
-
-    buildInputs = with self; [ twisted ];
-
-    meta = {
-      homepage = https://launchpad.net/txamqp;
-      description = "Library for communicating with AMQP peers and brokers using Twisted";
-      maintainers = with maintainers; [ rickynils ];
-    };
-  };
+  txamqp = callPackage ../development/python-modules/txamqp { };
 
   versiontools = buildPythonPackage rec {
     name = "versiontools-1.9.1";
