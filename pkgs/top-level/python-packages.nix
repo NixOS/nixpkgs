@@ -10616,7 +10616,7 @@ EOF
       cudaSupport = pkgs.config.cudaSupport or false;
       inherit (pkgs.linuxPackages) nvidia_x11;
       cudatoolkit = pkgs.cudatoolkit_9_0;
-      cudnn = pkgs.cudnn_cudatoolkit_9_0;
+      cudnn = pkgs.cudnn_7_3_cudatoolkit_9_0;
     };
 
   tensorflowWithoutCuda = self.tensorflow.override {
