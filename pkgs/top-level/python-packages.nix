@@ -4113,27 +4113,7 @@ in {
 
   wcwidth = callPackage ../development/python-modules/wcwidth { };
 
-  web = buildPythonPackage rec {
-    version = "0.37";
-    name = "web.py-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/web.py/web.py-${version}.tar.gz";
-      sha256 = "748c7e99ad9e36f62ea19f7965eb7dd7860b530e8f563ed60ce3e53e7409a550";
-    };
-
-    meta = {
-      description = "Makes web apps";
-      longDescription = ''
-        Think about the ideal way to write a web app.
-        Write the code to make it happen.
-      '';
-      homepage = "http://webpy.org/";
-      license = licenses.publicDomain;
-      maintainers = with maintainers; [ layus ];
-    };
-  };
+  web = callPackage ../development/python-modules/web { };
 
   webob = buildPythonPackage rec {
     pname = "WebOb";
