@@ -4365,16 +4365,7 @@ in {
 
   WSGIProxy = callPackage ../development/python-modules/wsgiproxy { };
 
-  blist = buildPythonPackage rec {
-    name = "blist-${version}";
-    version = "1.3.6";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/blist/blist-${version}.tar.gz";
-      sha256 = "1hqz9pqbwx0czvq9bjdqjqh5bwfksva1is0anfazig81n18c84is";
-    };
-  };
+  blist = callPackage ../development/python-modules/blist { };
 
   canonicaljson = callPackage ../development/python-modules/canonicaljson { };
 
