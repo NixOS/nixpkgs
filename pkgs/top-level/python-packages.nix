@@ -4351,21 +4351,7 @@ in {
 
   tlsh = callPackage ../development/python-modules/tlsh { };
 
-  toposort = buildPythonPackage rec {
-    name = "toposort-${version}";
-    version = "1.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/toposort/toposort-1.1.tar.gz";
-      sha256 = "1izmirbwmd9xrk7rq83p486cvnsslfa5ljvl7rijj1r64zkcnf3a";
-    };
-    meta = {
-      description = "A topological sort algorithm";
-      homepage = https://pypi.python.org/pypi/toposort/1.1;
-      maintainers = with maintainers; [ tstrobel ];
-      platforms = platforms.linux;
-      #license = licenses.apache;
-    };
-  };
+  toposort = callPackage ../development/python-modules/toposort { };
 
   snapperGUI = buildPythonPackage rec {
     name = "Snapper-GUI";
