@@ -4184,21 +4184,7 @@ in {
 
   zetup = callPackage ../development/python-modules/zetup { };
 
-  zope_broken = buildPythonPackage rec {
-    name = "zope.broken-3.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.broken/${name}.zip";
-      sha256 = "b9b8776002da4f7b6b12dfcce77eb642ae62b39586dbf60e1d9bdc992c9f2999";
-    };
-
-    buildInputs = with self; [ zope_interface ];
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_broken = callPackage ../development/python-modules/zope_broken { };
 
   zope_component = buildPythonPackage rec {
     name = "zope.component-4.2.1";
