@@ -4682,8 +4682,6 @@ in {
 
   PyStemmer = callPackage ../development/python-modules/pystemmer {};
 
-  Pyro = callPackage ../development/python-modules/pyro { };
-
   serpent = callPackage ../development/python-modules/serpent { };
 
   selectors34 = callPackage ../development/python-modules/selectors34 { };
