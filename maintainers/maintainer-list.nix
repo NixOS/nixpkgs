@@ -4812,4 +4812,9 @@
     github = "zzamboni";
     name = "Diego Zamboni";
   };
+ rakeshub4 = {
+    email = "rakeshub4@gmail.com";
+    github = "rakeshub4";
+    name = "Rakesh B";
+  };
 }
