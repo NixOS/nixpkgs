@@ -4168,35 +4168,7 @@ in {
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
-  zfec = buildPythonPackage (rec {
-    name = "zfec-1.4.24";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zfec/${name}.tar.gz";
-      sha256 = "1ks94zlpy7n8sb8380gf90gx85qy0p9073wi1wngg6mccxp9xsg3";
-    };
-
-    buildInputs = with self; [ setuptoolsDarcs ];
-    propagatedBuildInputs = with self; [ pyutil argparse ];
-
-    meta = {
-      homepage = http://allmydata.org/trac/zfec;
-
-      description = "Zfec, a fast erasure codec which can be used with the command-line, C, Python, or Haskell";
-
-      longDescription = ''
-        Fast, portable, programmable erasure coding a.k.a. "forward
-        error correction": the generation of redundant blocks of
-        information such that if some blocks are lost then the
-        original data can be recovered from the remaining blocks. The
-        zfec package includes command-line tools, C API, Python API,
-        and Haskell API.
-      '';
-
-      license = licenses.gpl2Plus;
-    };
-  });
+  zfec = callPackage ../development/python-modules/zfec { };
 
   zipstream = callPackage ../development/python-modules/zipstream { };
 
