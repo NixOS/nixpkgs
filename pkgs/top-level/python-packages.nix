@@ -4212,21 +4212,7 @@ in {
 
   zope_schema = callPackage ../development/python-modules/zope_schema { };
 
-  zope_size = buildPythonPackage rec {
-    name = "zope.size-3.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.size/${name}.tar.gz";
-      sha256 = "006xfkhvmypwd3ww9gbba4zly7n9w30bpp1h74d53la7l7fiqk2f";
-    };
-
-    propagatedBuildInputs = with self; [ zope_i18nmessageid zope_interface ];
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_size = callPackage ../development/python-modules/zope_size { };
 
   zope_testing = buildPythonPackage rec {
     name = "zope.testing-${version}";
