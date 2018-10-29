@@ -8793,9 +8793,7 @@ in
 
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
-  cquery = callPackage ../development/tools/misc/cquery {
-    llvmPackages = llvmPackages_latest;
-  };
+  cquery = callPackage ../development/tools/misc/cquery { };
 
   ccls = callPackage ../development/tools/misc/ccls {
     llvmPackages = llvmPackages_7;
