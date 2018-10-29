@@ -4141,20 +4141,7 @@ in {
     wxGTK = pkgs.wxGTK30;
   };
 
-  xcaplib = buildPythonPackage rec {
-    pname = "python-xcaplib";
-    name = "${pname}-${version}";
-    version = "1.2.0";
-    disabled = isPy3k;
-
-    src = pkgs.fetchdarcs {
-      url = "http://devel.ag-projects.com/repositories/${pname}";
-      rev = "release-${version}";
-      sha256 = "0vna5r4ihv7z1yx6r93954jqskcxky77znzy1m9dg9vna1dgwfdn";
-    };
-
-    propagatedBuildInputs = with self; [ eventlib application ];
-  };
+  xcaplib = callPackage ../development/python-modules/xcaplib { };
 
   xlib = buildPythonPackage (rec {
     name = "xlib-${version}";
