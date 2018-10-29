@@ -4334,23 +4334,7 @@ in {
 
   first = callPackage ../development/python-modules/first {};
 
-  flaskbabel = buildPythonPackage rec {
-    name = "Flask-Babel-0.11.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Babel/${name}.tar.gz";
-      sha256 = "16b80cipdba9xj3jlaiaq6wgrgpjb70w3j01jjy9hbp4k71kd6yj";
-    };
-
-    propagatedBuildInputs = with self; [ flask jinja2 speaklater Babel pytz ];
-
-    meta = {
-      description = "Adds i18n/l10n support to Flask applications";
-      homepage = https://github.com/mitsuhiko/flask-babel;
-      license = "bsd";
-      maintainers = with maintainers; [ matejc ];
-    };
-  };
+  flaskbabel = callPackage ../development/python-modules/flaskbabel { };
 
   speaklater = buildPythonPackage rec {
     name = "speaklater-1.3";
