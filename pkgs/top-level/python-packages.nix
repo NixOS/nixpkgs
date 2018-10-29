@@ -4541,24 +4541,7 @@ in {
 
   w3lib = callPackage ../development/python-modules/w3lib { };
 
-  queuelib = buildPythonPackage rec {
-    name = "queuelib-${version}";
-    version = "1.4.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/q/queuelib/${name}.tar.gz";
-      sha256 = "a6829918157ed433fafa87b0bb1e93e3e63c885270166db5884a02c34c86f914";
-    };
-
-    buildInputs = with self ; [ pytest ];
-
-    meta = {
-      description = "A collection of persistent (disk-based) queues for Python";
-      homepage = "https://github.com/scrapy/queuelib";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ drewkett ];
-    };
-  };
+  queuelib = callPackage ../development/python-modules/queuelib { };
 
   scrapy = callPackage ../development/python-modules/scrapy { };
 
