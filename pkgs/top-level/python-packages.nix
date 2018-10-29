@@ -4200,21 +4200,7 @@ in {
 
   zope_filerepresentation = callPackage ../development/python-modules/zope_filerepresentation { };
 
-  zope_i18n = buildPythonPackage rec {
-    name = "zope.i18n-3.8.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.i18n/${name}.tar.gz";
-      sha256 = "045nnimmshibcq71yym2d8yrs6wzzhxq5gl7wxjnkpyjm5y0hfkm";
-    };
-
-    propagatedBuildInputs = with self; [ pytz zope_component ];
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_i18n = callPackage ../development/python-modules/zope_i18n { };
 
   zope_i18nmessageid = buildPythonPackage rec {
     name = "zope.i18nmessageid-4.0.3";
