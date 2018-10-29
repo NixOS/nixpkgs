@@ -4264,28 +4264,7 @@ in {
 
   ttystatus = callPackage ../development/python-modules/ttystatus { };
 
-  larch = buildPythonPackage rec {
-    name = "larch-${version}";
-    version = "1.20131130";
-
-    src = pkgs.fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_${version}.orig.tar.gz";
-      sha256 = "1hfanp9l6yc5348i3f5sb8c5s4r43y382hflnbl6cnz4pm8yh5r7";
-    };
-
-    buildInputs = with self; [ sphinx ];
-    propagatedBuildInputs = with self; [ tracing ttystatus cliapp ];
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://liw.fi/larch/;
-      description = "Python B-tree library";
-      maintainers = with maintainers; [ rickynils ];
-    };
-  };
-
+  larch = callPackage ../development/python-modules/larch { };
 
   websocket_client = callPackage ../development/python-modules/websockets_client { };
 
