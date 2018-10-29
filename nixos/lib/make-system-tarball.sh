@@ -1,9 +1,9 @@
-source $stdenv/setup
+source "$stdenv/setup"
 
 sources_=($sources)
 targets_=($targets)
 
-echo $objects
+echo "$objects"
 objects=($objects)
 symlinks=($symlinks)
 
@@ -26,7 +26,7 @@ done
 
 # Add the closures of the top-level store objects.
 mkdir -p nix/store
-storePaths=$(perl $pathsFromGraph closure-*)
+storePaths=$(perl "$pathsFromGraph" closure-*)
 for i in $storePaths; do
     cp -a "$i" "${i:1}"
 done
@@ -35,26 +35,26 @@ done
 # TODO tar ruxo
 # Also include a manifest of the closures in a format suitable for
 # nix-store --load-db.
-printRegistration=1 perl $pathsFromGraph closure-* > nix-path-registration
+printRegistration=1 perl "$pathsFromGraph" closure-* > nix-path-registration
 
 # Add symlinks to the top-level store objects.
 for ((n = 0; n < ${#objects[*]}; n++)); do
     object=${objects[$n]}
     symlink=${symlinks[$n]}
     if test "$symlink" != "none"; then
-        mkdir -p $(dirname ./$symlink)
-        ln -s $object ./$symlink
+        mkdir -p $(dirname ./"$symlink")
+        ln -s $object ./"$symlink"
     fi
 done
 
-$extraCommands
+"$extraCommands"
 
-mkdir -p $out/tarball
+mkdir -p "$out/tarball"
 
 rm env-vars
 
-time tar --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner -c * $extraArgs | $compressCommand > $out/tarball/$fileName.tar${extension}
+time tar --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner -c * "$extraArgs" | "$compressCommand" > "$out/tarball/$fileName.tar${extension}"
 
 mkdir -p $out/nix-support
-echo $system > $out/nix-support/system
-echo "file system-tarball $out/tarball/$fileName.tar${extension}" > $out/nix-support/hydra-build-products
+echo "$system" > $out/nix-support/system
+echo "file system-tarball $out/tarball/$fileName.tar${extension}" > "$out/nix-support/hydra-build-products"
