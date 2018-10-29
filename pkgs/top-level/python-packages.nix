@@ -4557,31 +4557,7 @@ in {
 
   keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
 
-  Lasagne = buildPythonPackage rec {
-    name = "Lasagne-${version}";
-    version = "0.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/lasagne/${name}.tar.gz";
-      sha256 = "0cqj86rdm6c7y5vq3i13qy76fg5xi3yjp4r0hpqy8hvynv54wqrw";
-    };
-
-    propagatedBuildInputs = with self; [
-      numpy
-      Theano
-    ];
-
-    # there are no tests
-    doCheck = false;
-
-    meta = {
-      description = "Lightweight library to build and train neural networks in Theano";
-      homepage = "https://github.com/Lasagne/Lasagne";
-      maintainers = with maintainers; [ NikolaMandic ];
-      license = licenses.mit;
-    };
-  };
+  Lasagne = callPackage ../development/python-modules/lasagne { };
 
   send2trash = callPackage ../development/python-modules/send2trash { };
 
