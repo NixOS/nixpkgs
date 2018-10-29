@@ -4371,18 +4371,7 @@ in {
 
   daemonize = callPackage ../development/python-modules/daemonize { };
 
-  pydenticon = buildPythonPackage rec {
-    name = "pydenticon-${version}";
-    version = "0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pydenticon/pydenticon-0.2.tar.gz";
-      sha256 = "035dawcspgjw2rksbnn863s7b0i9ac8cc1nshshvd1l837ir1czp";
-    };
-    propagatedBuildInputs = with self; [
-      pillow mock
-    ];
-  };
+  pydenticon = callPackage ../development/python-modules/pydenticon { };
 
   pynac = buildPythonPackage rec {
     name = "pynac-${version}";
