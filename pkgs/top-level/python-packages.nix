@@ -4479,25 +4479,7 @@ in {
 
   willow = callPackage ../development/python-modules/willow { };
 
-  importmagic = buildPythonPackage rec {
-    simpleName = "importmagic";
-    name = "${simpleName}-${version}";
-    version = "0.1.3";
-    doCheck = false;  # missing json file from tarball
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/${simpleName}/${name}.tar.gz";
-      sha256 = "194bl8l8sc2ibwi6g5kz6xydkbngdqpaj6r2gcsaw1fc73iswwrj";
-    };
-
-    propagatedBuildInputs = with self; [ six ];
-
-    meta = {
-      description = "Python Import Magic - automagically add, remove and manage imports";
-      homepage = https://github.com/alecthomas/importmagic;
-      license = "bsd";
-    };
-  };
+  importmagic = callPackage ../development/python-modules/importmagic { };
 
   xgboost = callPackage ../development/python-modules/xgboost {
     xgboost = pkgs.xgboost;
