@@ -4342,23 +4342,7 @@ in {
 
   pushbullet = callPackage ../development/python-modules/pushbullet { };
 
-  power = buildPythonPackage rec {
-    name = "power-1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/power/${name}.tar.gz";
-      sha256 = "7d7d60ec332acbe3a7d00379b45e39abf650bf7ee311d61da5ab921f52f060f0";
-    };
-
-    # Tests can't work because there is no power information available.
-    doCheck = false;
-
-    meta = {
-      description = "Cross-platform system power status information";
-      homepage = https://github.com/Kentzo/Power;
-      license = licenses.mit;
-    };
-  };
+  power = callPackage ../development/python-modules/power { };
 
   # added 2018-05-23, can be removed once 18.09 is branched off
   udiskie = throw "pythonPackages.udiskie has been replaced by udiskie";
