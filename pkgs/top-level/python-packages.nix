@@ -4425,22 +4425,7 @@ in {
 
   evernote = callPackage ../development/python-modules/evernote { };
 
-  setproctitle = buildPythonPackage rec {
-    name = "python-setproctitle-${version}";
-    version = "1.1.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/setproctitle/setproctitle-${version}.tar.gz";
-      sha256 = "1mqadassxcm0m9r1l02m5vr4bbandn48xz8gifvxmb4wiz8i8d0w";
-    };
-
-    meta = {
-      description = "Allows a process to change its title (as displayed by system tools such as ps and top)";
-      homepage =  https://github.com/dvarrazzo/py-setproctitle;
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ exi ];
-    };
-  };
+  setproctitle = callPackage ../development/python-modules/setproctitle { };
 
   thrift = buildPythonPackage rec {
     name = "thrift-${version}";
