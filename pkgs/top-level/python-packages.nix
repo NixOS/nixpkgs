@@ -4369,15 +4369,7 @@ in {
 
   canonicaljson = callPackage ../development/python-modules/canonicaljson { };
 
-  daemonize = buildPythonPackage rec {
-    name = "daemonize-${version}";
-    version = "2.4.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/daemonize/daemonize-${version}.tar.gz";
-      sha256 = "0y139sq657bpzfv6k0aqm4071z4s40i6ybpni9qvngvdcz6r86n2";
-    };
-  };
+  daemonize = callPackage ../development/python-modules/daemonize { };
 
   pydenticon = buildPythonPackage rec {
     name = "pydenticon-${version}";
