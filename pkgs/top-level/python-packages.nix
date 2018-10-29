@@ -4210,26 +4210,7 @@ in {
 
   zope_proxy = callPackage ../development/python-modules/zope_proxy { };
 
-  zope_schema = buildPythonPackage rec {
-    name = "zope.schema-4.4.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.schema/${name}.tar.gz";
-      sha256 = "1p943jdxb587dh7php4vx04qvn7b2877hr4qs5zyckvp5afhhank";
-    };
-
-    propagatedBuildInputs = with self; [ zope_location zope_event zope_interface zope_testing ];
-
-    # ImportError: No module named 'zope.event'
-    # even though zope_event has been included.
-    # Package seems to work fine.
-    doCheck = false;
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_schema = callPackage ../development/python-modules/zope_schema { };
 
   zope_size = buildPythonPackage rec {
     name = "zope.size-3.5.0";
