@@ -4314,24 +4314,7 @@ in {
 
   ws4py = callPackage ../development/python-modules/ws4py {};
 
-  gdata = buildPythonPackage rec {
-    name = "gdata-${version}";
-    version = "2.0.18";
-
-    src = pkgs.fetchurl {
-      url = "https://gdata-python-client.googlecode.com/files/${name}.tar.gz";
-      sha256 = "1dpxl5hwyyqd71avpm5vkvw8fhlvf9liizmhrq9jphhrx0nx5rsn";
-    };
-
-    # Fails with "error: invalid command 'test'"
-    doCheck = false;
-
-    meta = {
-      homepage = https://code.google.com/p/gdata-python-client/;
-      description = "Python client library for Google data APIs";
-      license = licenses.asl20;
-    };
-  };
+  gdata = callPackage ../development/python-modules/gdata { };
 
   IMAPClient = buildPythonPackage rec {
     name = "IMAPClient-${version}";
