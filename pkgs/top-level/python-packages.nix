@@ -4387,17 +4387,7 @@ in {
 
   signedjson = callPackage ../development/python-modules/signedjson { };
 
-  unpaddedbase64 = buildPythonPackage rec {
-    name = "unpaddedbase64-${version}";
-    version = "1.1.0";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/python-unpaddedbase64.git";
-      rev = "refs/tags/v${version}";
-      sha256 = "0if3fjfxga0bwdq47v77fs9hrcqpmwdxry2i2a7pdqsp95258nxd";
-    };
-  };
-
+  unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
   thumbor = callPackage ../development/python-modules/thumbor { };
 
