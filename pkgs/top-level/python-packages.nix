@@ -4393,33 +4393,7 @@ in {
 
   thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 
-  pync = buildPythonPackage rec {
-    version  = "1.4";
-    baseName = "pync";
-    name     = "${baseName}-${version}";
-    disabled = ! isPy27;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${baseName}/${name}.tar.gz";
-      sha256 = "0lc1x0pai85avm1r452xnvxc12wijnhz87xv20yp3is9fs6rnkrh";
-    };
-
-    buildInputs = with self; [ pkgs.coreutils ];
-
-    propagatedBuildInputs = with self; [ dateutil ];
-
-    preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.terminal-notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
-    '';
-
-    meta = {
-      description = "Python Wrapper for Mac OS 10.8 Notification Center";
-      homepage    = https://pypi.python.org/pypi/pync/1.4;
-      license     = licenses.mit;
-      platforms   = platforms.darwin;
-      maintainers = with maintainers; [ lovek323 ];
-    };
-  };
+  pync = callPackage ../development/python-modules/pync { };
 
   weboob = callPackage ../development/python-modules/weboob { };
 
