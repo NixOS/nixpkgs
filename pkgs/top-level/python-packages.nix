@@ -4529,28 +4529,7 @@ in {
 
   trezor = callPackage ../development/python-modules/trezor { };
 
-  trezor_agent = buildPythonPackage rec{
-    name = "${pname}-${version}";
-    pname = "trezor_agent";
-    version = "0.9.0";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1i5cdamlf3c0ym600pjklij74p8ifj9cv7xrpnrfl1b8nkadswbz";
-    };
-
-    propagatedBuildInputs = with self; [
-      trezor libagent ecdsa ed25519
-      mnemonic keepkey semver
-    ];
-
-    meta = {
-      description = "Using Trezor as hardware SSH agent";
-      homepage = https://github.com/romanz/trezor-agent;
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ np ];
-    };
-  };
+  trezor_agent = callPackage ../development/python-modules/trezor_agent { };
 
   x11_hash = buildPythonPackage rec{
     version = "1.4";
