@@ -4115,25 +4115,7 @@ in {
 
   web = callPackage ../development/python-modules/web { };
 
-  webob = buildPythonPackage rec {
-    pname = "WebOb";
-    version = "1.7.3";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "10vjp2rvqiyvw157fk3sy7yds1gknzw97z4gk0qv1raskx5s2p76";
-    };
-
-    propagatedBuildInputs = with self; [ nose pytest ];
-
-    meta = {
-      description = "WSGI request and response object";
-      homepage = http://pythonpaste.org/webob/;
-      platforms = platforms.all;
-    };
-  };
-
+  webob = callPackage ../development/python-modules/webob { };
 
   websockify = buildPythonPackage rec {
     version = "0.7.0";
