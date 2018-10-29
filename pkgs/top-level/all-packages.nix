@@ -8309,9 +8309,7 @@ with pkgs;
 
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
-  cquery = callPackage ../development/tools/misc/cquery {
-    llvmPackages = llvmPackages_7;
-  };
+  cquery = callPackage ../development/tools/misc/cquery { };
 
   creduce = callPackage ../development/tools/misc/creduce {
     inherit (perlPackages) perl
@@ -12835,9 +12833,7 @@ with pkgs;
 
   zmqpp = callPackage ../development/libraries/zmqpp { };
 
-  zig = callPackage ../development/compilers/zig {
-    llvmPackages = llvmPackages_7;
-  };
+  zig = callPackage ../development/compilers/zig { };
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
