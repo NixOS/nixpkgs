@@ -4595,28 +4595,7 @@ in {
 
   tvdb_api = callPackage ../development/python-modules/tvdb_api { };
 
-  tvnamer = buildPythonPackage rec {
-    name = "tvnamer-${version}";
-    version = "2.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tvnamer/${name}.tar.gz";
-      sha256 = "10iizmwna2xpyc2694hsrvny68y3bdq576p8kxsvg5gj2spnsxav";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ tvdb_api ];
-
-    # a ton of tests fail with: IOError: tvnamer/main.py could not be found in . or ..
-    doCheck = false;
-
-    meta = {
-      description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
-      homepage = "https://github.com/dbr/tvnamer";
-      license = licenses.unlicense;
-      maintainers = with maintainers; [ peterhoeg ];
-    };
-  };
+  tvnamer = callPackage ../development/python-modules/tvnamer { };
 
   threadpool = buildPythonPackage rec {
     name = "threadpool-${version}";
