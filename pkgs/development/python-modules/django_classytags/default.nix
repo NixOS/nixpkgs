@@ -15,8 +15,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  # tests appear to be broken on 0.8.0 at least
-  doCheck = ( version != "0.8.0" );
+  # pypi version doesn't include runtest.py, needed to run tests
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Class based template tags for Django";
