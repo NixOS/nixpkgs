@@ -4531,22 +4531,7 @@ in {
 
   trezor_agent = callPackage ../development/python-modules/trezor_agent { };
 
-  x11_hash = buildPythonPackage rec{
-    version = "1.4";
-    name = "x11_hash-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/x11_hash/${name}.tar.gz";
-      sha256 = "172skm9xbbrivy1p4xabxihx9lsnzi53hvzryfw64m799k2fmp22";
-    };
-
-    meta = {
-      description = "Binding for X11 proof of work hashing";
-      homepage = https://github.com/mazaclub/x11_hash;
-      license = licenses.mit;
-      maintainers = with maintainers; [ np ];
-    };
-  };
+  x11_hash = callPackage ../development/python-modules/x11_hash { };
 
   termstyle = callPackage ../development/python-modules/termstyle { };
 
