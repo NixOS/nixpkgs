@@ -4290,29 +4290,7 @@ in {
 
   txgithub = callPackage ../development/python-modules/txgithub { };
 
-  txrequests = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "txrequests";
-    version = "0.9.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-      sha256 = "0kkxxd17ar5gyjkz9yrrdr15a64qw6ym60ndi0zbwx2s634yfafw";
-    };
-    propagatedBuildInputs = with self; [ twisted requests cryptography ];
-
-    # Require network access
-    doCheck = false;
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-    meta = {
-      description = "Asynchronous Python HTTP for Humans.";
-      homepage    = "https://github.com/tardyp/txrequests";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-  };
+  txrequests = callPackage ../development/python-modules/txrequests { };
 
   txamqp = buildPythonPackage rec {
     name = "txamqp-${version}";
