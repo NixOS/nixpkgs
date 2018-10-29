@@ -12,7 +12,7 @@ rec {
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
   mkDerivation =
-    { name ? if builtins.hasAttr "pname" attrs && builtins.hasAttr "version" attrs
+    { name ? if attrs ? pname && attrs ? version
         then "${attrs.pname}-${attrs.version}"
         else ""
 
