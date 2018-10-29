@@ -4605,19 +4605,7 @@ in {
 
   ansi = callPackage ../development/python-modules/ansi { };
 
-  pygments-markdown-lexer = buildPythonPackage rec {
-    name = "pygments-markdown-lexer-${version}";
-    version = "0.1.0.dev39";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pygments-markdown-lexer/${name}.zip";
-      sha256 = "1pzb5wy23q3fhs0rqzasjnw6hdzwjngpakb73i98cn0b8lk8q4jc";
-    };
-
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pygments ];
-  };
+  pygments-markdown-lexer = callPackage ../development/python-modules/pygments-markdown-lexer { };
 
   telegram = buildPythonPackage rec {
     name = "telegram-${version}";
