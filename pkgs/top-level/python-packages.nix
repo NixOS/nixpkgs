@@ -4093,30 +4093,7 @@ in {
 
   vmprof = callPackage ../development/python-modules/vmprof { };
 
-  vultr = buildPythonPackage rec {
-    version = "0.1.2";
-    name = "vultr-${version}";
-
-    src = pkgs.fetchFromGitHub {
-        owner = "spry-group";
-        repo = "python-vultr";
-        rev = "${version}";
-        sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
-    };
-
-    propagatedBuildInputs = with self; [ requests ];
-
-    # Tests disabled. They fail because they try to access the network
-    doCheck = false;
-
-    meta = {
-      description = "Vultr.com API Client";
-      homepage = "https://github.com/spry-group/python-vultr";
-      license = licenses.mit;
-      maintainers = with maintainers; [ lihop ];
-      platforms = platforms.all;
-    };
-  };
+  vultr = callPackage ../development/python-modules/vultr { };
 
   waitress = buildPythonPackage rec {
     name = "waitress-1.0.2";
