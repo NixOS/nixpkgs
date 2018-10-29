@@ -4439,23 +4439,7 @@ in {
 
   typogrify = callPackage ../development/python-modules/typogrify { };
 
-  smartypants = buildPythonPackage rec {
-    version = "1.8.6";
-    name = "smartypants-${version}";
-    src = pkgs.fetchhg {
-      url = "https://bitbucket.org/livibetter/smartypants.py";
-      rev = "v${version}";
-      sha256 = "1cmzz44d2hm6y8jj2xcq1wfr26760gi7iq92ha8xbhb1axzd7nq6";
-    };
-    disabled = isPyPy;
-    buildInputs = with self; [ ]; #docutils pygments ];
-    meta = {
-      description = "Python with the SmartyPants";
-      homepage = "https://bitbucket.org/livibetter/smartypants.py";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  smartypants = callPackage ../development/python-modules/smartypants { };
 
   pypeg2 = buildPythonPackage rec {
     version = "2.15.2";
