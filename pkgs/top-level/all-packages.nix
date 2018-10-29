@@ -7243,16 +7243,6 @@ with pkgs;
   mono5 = mono58;
   mono4 = mono48;
 
-  mono40 = lowPrio (callPackage ../development/compilers/mono/4.0.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
-
-  mono44 = lowPrio (callPackage ../development/compilers/mono/4.4.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
-
   mono46 = lowPrio (callPackage ../development/compilers/mono/4.6.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
@@ -19175,6 +19165,8 @@ with pkgs;
 
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
+  tabula = callPackage ../applications/misc/tabula { };
+
   tasknc = callPackage ../applications/misc/tasknc { };
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
@@ -22155,6 +22147,8 @@ with pkgs;
     }).config.system.build;
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
+
+  nixdoc = callPackage ../tools/nix/nixdoc {};
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { };
 
