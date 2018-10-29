@@ -4405,24 +4405,7 @@ in {
 
   pychart = callPackage ../development/python-modules/pychart {};
 
-  parsimonious = buildPythonPackage rec {
-    version = "0.7.0";
-    name = "parsimonious-${version}";
-    src = pkgs.fetchFromGitHub {
-      repo = "parsimonious";
-      owner = "erikrose";
-      rev = version;
-      sha256 = "087npc8ccryrxabmqifcz56w4wd0hzmv0mc91wrbhc1sil196j0a";
-    };
-
-    propagatedBuildInputs = with self; [ nose six ];
-
-    meta = {
-      homepage = "https://github.com/erikrose/parsimonious";
-      description = "Fast arbitrary-lookahead parser written in pure Python";
-      license = licenses.mit;
-    };
-  };
+  parsimonious = callPackage ../development/python-modules/parsimonious { };
 
   networkx = callPackage ../development/python-modules/networkx { };
 
