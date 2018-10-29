@@ -4328,21 +4328,7 @@ in {
     inherit (pkgs) libvirt;
   };
 
-  rpdb = buildPythonPackage rec {
-    name = "rpdb-0.1.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rpdb/${name}.tar.gz";
-      sha256 = "0rql1hq3lziwcql0h3dy05w074cn866p397ng9bv6qbz85ifw1bk";
-    };
-
-    meta = {
-      description = "pdb wrapper with remote access via tcp socket";
-      homepage = https://github.com/tamentis/rpdb;
-      license = licenses.bsd2;
-    };
-  };
-
+  rpdb = callPackage ../development/python-modules/rpdb { };
 
   grequests = buildPythonPackage rec {
     pname = "grequests";
