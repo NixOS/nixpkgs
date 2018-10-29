@@ -4260,20 +4260,7 @@ in {
 
   tracing = callPackage ../development/python-modules/tracing { };
 
-  translationstring = buildPythonPackage rec {
-    name = "translationstring-1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/translationstring/${name}.tar.gz";
-      sha256 = "4ee44cfa58c52ade8910ea0ebc3d2d84bdcad9fa0422405b1801ec9b9a65b72d";
-    };
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
+  translationstring = callPackage ../development/python-modules/translationstring { };
 
   ttystatus = buildPythonPackage rec {
     name = "ttystatus-${version}";
