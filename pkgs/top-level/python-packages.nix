@@ -4192,24 +4192,9 @@ in {
 
   zope_contenttype = callPackage ../development/python-modules/zope_contenttype { };
 
-  zope_event = buildPythonPackage rec {
-    name = "zope.event-${version}";
-    version = "4.0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.event/${name}.tar.gz";
-      sha256 = "1w858k9kmgzfj36h65kp27m9slrmykvi5cjq6c119xqnaz5gdzgm";
-    };
-
-    meta = {
-      description = "An event publishing system";
-      homepage = https://pypi.python.org/pypi/zope.event;
-      license = licenses.zpl20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
   zope_dottedname = callPackage ../development/python-modules/zope_dottedname { };
 
+  zope_event = callPackage ../development/python-modules/zope_event { };
 
   zope_exceptions = buildPythonPackage rec {
      name = "zope.exceptions-${version}";
