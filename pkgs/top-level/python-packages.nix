@@ -4262,27 +4262,7 @@ in {
 
   translationstring = callPackage ../development/python-modules/translationstring { };
 
-  ttystatus = buildPythonPackage rec {
-    name = "ttystatus-${version}";
-    version = "0.23";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_${version}.orig.tar.gz";
-      sha256 = "0ymimviyjyh2iizqilg88g4p26f5vpq1zm3cvg7dr7q4y3gmik8y";
-    };
-
-    buildInputs = with self; [ sphinx ];
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://liw.fi/ttystatus/;
-      description = "Progress and status updates on terminals for Python";
-      maintainers = with maintainers; [ rickynils ];
-    };
-  };
+  ttystatus = callPackage ../development/python-modules/ttystatus { };
 
   larch = buildPythonPackage rec {
     name = "larch-${version}";
