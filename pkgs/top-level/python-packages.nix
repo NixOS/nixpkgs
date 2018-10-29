@@ -4601,17 +4601,7 @@ in {
 
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot {  };
 
-  Yapsy = buildPythonPackage rec {
-    name = "Yapsy-${version}";
-    version = "1.11.223";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/y/yapsy/${name}.tar.gz";
-      sha256 = "19pjsnqizswnczhlav4lb7zlzs0n73ijrsgksy4374b14jkkkfs5";
-    };
-
-    doCheck = false;
-  };
+  Yapsy = callPackage ../development/python-modules/yapsy { };
 
   ansi = callPackage ../development/python-modules/ansi { };
 
