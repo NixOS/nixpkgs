@@ -4160,26 +4160,7 @@ in {
     phantomjsSupport = false;
   };
 
-  zbase32 = buildPythonPackage (rec {
-    name = "zbase32-1.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zbase32/${name}.tar.gz";
-      sha256 = "2f44b338f750bd37b56e7887591bf2f1965bfa79f163b6afcbccf28da642ec56";
-    };
-
-    # Tests require `pyutil' so disable them to avoid circular references.
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ setuptoolsDarcs ];
-
-    meta = {
-      description = "zbase32, a base32 encoder/decoder";
-      homepage = https://pypi.python.org/pypi/zbase32;
-      license = "BSD";
-    };
-  });
-
+  zbase32 = callPackage ../development/python-modules/zbase32 { };
 
   zconfig = callPackage ../development/python-modules/zconfig { };
 
