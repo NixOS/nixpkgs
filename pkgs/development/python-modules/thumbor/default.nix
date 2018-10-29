@@ -22,6 +22,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace "setup.py" \
       --replace '"argparse",' "" ${lib.optionalString isPy3k ''--replace '"futures",' ""''}
+    substituteInPlace "setup.py" \
+      --replace "piexif>=1.0.13,<1.1.0" "piexif>=1.0.13"
     substituteInPlace "tests/test_utils.py" \
       --replace "/bin/ls" "${coreutils}/bin/ls"
     substituteInPlace "tests/detectors/test_face_detector.py" \
