@@ -4117,23 +4117,7 @@ in {
 
   webob = callPackage ../development/python-modules/webob { };
 
-  websockify = buildPythonPackage rec {
-    version = "0.7.0";
-    name = "websockify-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/websockify/websockify-${version}.tar.gz";
-      sha256 = "1v6pmamjprv2x55fvbdaml26ppxdw8v6xz8p0sav3368ajwwgcqc";
-    };
-
-    propagatedBuildInputs = with self; [ numpy ];
-
-    meta = {
-      description = "WebSockets support for any application/server";
-      homepage = https://github.com/kanaka/websockify;
-    };
-  };
-
+  websockify = callPackage ../development/python-modules/websockify { };
 
   webtest = buildPythonPackage rec {
     version = "2.0.20";
