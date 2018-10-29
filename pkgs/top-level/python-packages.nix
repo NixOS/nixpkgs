@@ -4278,23 +4278,7 @@ in {
 
   carbon = callPackage ../development/python-modules/carbon { };
 
-  ujson = buildPythonPackage rec {
-    name = "ujson-1.35";
-
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/ujson/${name}.tar.gz";
-      sha256 = "11jz5wi7mbgqcsz52iqhpyykiaasila4lq8cmc2d54bfa3jp6q7n";
-    };
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/ujson;
-      description = "Ultra fast JSON encoder and decoder for Python";
-      license = licenses.bsd3;
-    };
-  };
-
+  ujson = callPackage ../development/python-modules/ujson { };
 
   unidecode = callPackage ../development/python-modules/unidecode {};
 
