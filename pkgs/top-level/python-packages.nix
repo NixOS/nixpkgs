@@ -4133,22 +4133,7 @@ in {
 
   magic-wormhole-transit-relay = callPackage ../development/python-modules/magic-wormhole-transit-relay { };
 
-  wsgiproxy2 = buildPythonPackage rec {
-    name = "WSGIProxy2-0.4.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/W/WSGIProxy2/${name}.zip";
-      sha256 = "13kf9bdxrc95y9vriaz0viry3ah11nz4rlrykcfvb8nlqpx3dcm4";
-    };
-
-    # circular dep on webtest
-    doCheck = false;
-    propagatedBuildInputs = with self; [ six webob ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-    };
-  };
+  wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
   wxPython = self.wxPython30;
 
