@@ -4143,30 +4143,7 @@ in {
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
-  xlib = buildPythonPackage (rec {
-    name = "xlib-${version}";
-    version = "0.17";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "python-xlib";
-      repo = "python-xlib";
-      rev = "${version}";
-      sha256 = "1iiz2nq2hq9x6laavngvfngnmxbgnwh54wdbq6ncx4va7v98liyi";
-    };
-
-    # Tests require `pyutil' so disable them to avoid circular references.
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ six setuptools_scm pkgs.xorg.libX11 ];
-
-    meta = {
-      description = "Fully functional X client library for Python programs";
-
-      homepage = http://python-xlib.sourceforge.net/;
-
-      license = licenses.gpl2Plus;
-    };
-  });
+  xlib = callPackage ../development/python-modules/xlib { };
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
 
