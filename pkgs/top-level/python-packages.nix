@@ -4545,25 +4545,7 @@ in {
 
   scrapy = callPackage ../development/python-modules/scrapy { };
 
-  pandocfilters = buildPythonPackage rec{
-    version = "1.4.1";
-    pname = "pandocfilters";
-    name = pname + "-${version}";
-
-    src = fetchPypi{
-      inherit pname version;
-      sha256 = "ec8bcd100d081db092c57f93462b1861bcfa1286ef126f34da5cb1d969538acd";
-    };
-    # No tests available
-    doCheck = false;
-
-    meta = {
-      description = "A python module for writing pandoc filters, with a collection of examples";
-      homepage = https://github.com/jgm/pandocfilters;
-      license = licenses.mit;
-      maintainers = with maintainers; [];
-    };
-  };
+  pandocfilters = callPackage ../development/python-modules/pandocfilters { };
 
   htmltreediff = callPackage ../development/python-modules/htmltreediff { };
 
