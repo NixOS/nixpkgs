@@ -4539,24 +4539,7 @@ in {
 
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
 
-  w3lib = buildPythonPackage rec {
-    name = "w3lib-${version}";
-    version = "1.17.0";
-
-    buildInputs = with self ; [ six pytest ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/w3lib/${name}.tar.gz";
-      sha256 = "0vshh300ay5wn5hwl9qcb32m71pz5s6miy0if56vm4nggy159inq";
-    };
-
-    meta = {
-      description = "A library of web-related functions";
-      homepage = "https://github.com/scrapy/w3lib";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ drewkett ];
-    };
-  };
+  w3lib = callPackage ../development/python-modules/w3lib { };
 
   queuelib = buildPythonPackage rec {
     name = "queuelib-${version}";
