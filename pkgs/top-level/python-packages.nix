@@ -708,6 +708,8 @@ in {
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 
+  aioprocessing = callPackage ../development/python-modules/aioprocessing { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   alabaster = callPackage ../development/python-modules/alabaster {};
@@ -4682,7 +4684,11 @@ in {
 
   PyStemmer = callPackage ../development/python-modules/pystemmer {};
 
-  Pyro = callPackage ../development/python-modules/pyro { };
+  serpent = callPackage ../development/python-modules/serpent { };
+
+  selectors34 = callPackage ../development/python-modules/selectors34 { };
+
+  Pyro4 = callPackage ../development/python-modules/pyro4 { };
 
   pyrsistent = buildPythonPackage (rec {
     name = "pyrsistent-0.11.12";
