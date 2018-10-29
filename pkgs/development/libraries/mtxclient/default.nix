@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "mtxclient-${version}";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "mujx";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "0i58y45diysayjzy5ick15356972z67dfxm0w41ay88nm42x1imp";
+    sha256 = "19v1qa6mzvc65m7wy7x0g4i24bcg9xk31y1grwvd3zr0l4v6xcgs";
   };
 
   postPatch = ''

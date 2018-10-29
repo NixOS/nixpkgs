@@ -105,6 +105,16 @@ rec {
     then lib.strings.fileContents suffixFile
     else "pre-git";
 
+  # Attempt to get the revision nixpkgs is from
+  revisionWithDefault = default:
+    let
+      revisionFile = "${toString ./..}/.git-revision";
+      gitRepo      = "${toString ./..}/.git";
+    in if lib.pathIsDirectory gitRepo
+       then lib.commitIdFromGitRepo gitRepo
+       else if lib.pathExists revisionFile then lib.fileContents revisionFile
+       else default;
+
   nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
   # Whether we're being called by nix-shell.

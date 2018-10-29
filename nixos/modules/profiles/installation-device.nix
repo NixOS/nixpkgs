@@ -22,9 +22,10 @@ with lib;
   config = {
 
     # Enable in installer, even if the minimal profile disables it.
-    services.nixosManual.enable = mkForce true;
+    documentation.enable = mkForce true;
 
     # Show the manual.
+    documentation.nixos.enable = mkForce true;
     services.nixosManual.showManual = true;
 
     # Let the user play Rogue on TTY 8 during the installation.
@@ -85,9 +86,6 @@ with lib;
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
     networking.firewall.logRefusedConnections = mkDefault false;
-
-    environment.systemPackages = [ pkgs.vim ];
-
 
     # Allow the user to log in as root without a password.
     users.users.root.initialHashedPassword = "";

@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     maintainers = with maintainers; [ obadz ];
+    license = licenses.mit;
   };
 }

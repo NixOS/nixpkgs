@@ -4,6 +4,8 @@
 , postBuild ? ""
 , ignoreCollisions ? false
 , requiredPythonModules
+# Wrap executables with the given argument.
+, makeWrapperArgs ? []
 , }:
 
 # Create a python executable that knows about additional packages.
@@ -32,7 +34,7 @@ let
             if [ -f "$prg" ]; then
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set PYTHONHOME "$out" --set PYTHONNOUSERSITE "true"
+                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set PYTHONHOME "$out" --set PYTHONNOUSERSITE "true" ${stdenv.lib.concatStringsSep " " makeWrapperArgs}
               fi
             fi
           done

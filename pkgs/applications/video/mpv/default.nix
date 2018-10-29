@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchurl, fetchFromGitHub, makeWrapper
+{ stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , docutils, perl, pkgconfig, python3, which, ffmpeg_4
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, luasocket, libuchardet, libiconv ? null, darwin
@@ -89,21 +89,14 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.29.0";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "0i2nl65diqsjyz28dj07h6d8gq6ix72ysfm0nhs8514hqccaihs3";
+    sha256 = "138921kx8g6qprim558xin09xximjhsj9ss8b71ifg2m6kclym8m";
   };
-
-  # FIXME: Remove this patch for building on macOS if it gets released in
-  # the future.
-  patches = optional stdenv.isDarwin (fetchpatch {
-    url = https://github.com/mpv-player/mpv/commit/dc553c8cf4349b2ab5d2a373ad2fac8bdd229ebb.patch;
-    sha256 = "0pa8vlb8rsxvd1s39c4iv7gbaqlkn3hx21a6xnpij99jdjkw3pg8";
-  });
 
   postPatch = ''
     patchShebangs ./TOOLS/

@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libxcb,
   xcbutilkeysyms , xcbutilimage, pam, libX11, libev, cairo, libxkbcommon,
-  libxkbfile, libjpeg_turbo
+  libxkbfile, libjpeg_turbo, xcbutilxrm
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.11-c";
+  version = "2.12.c";
   name = "i3lock-color-${version}";
 
   src = fetchFromGitHub {
     owner = "PandorasFox";
     repo = "i3lock-color";
     rev = version;
-    sha256 = "1myq9fazkwd776agrnj27bm5nwskvss9v9a5qb77n037dv8d0rdw";
+    sha256 = "08fhnchf187b73h52xgzb86g6byzxz085zs9galsvl687g5zxk34";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libxcb xcbutilkeysyms xcbutilimage pam libX11
-    libev cairo libxkbcommon libxkbfile libjpeg_turbo ];
+    libev cairo libxkbcommon libxkbfile libjpeg_turbo xcbutilxrm ];
 
   makeFlags = "all";
   preInstall = ''

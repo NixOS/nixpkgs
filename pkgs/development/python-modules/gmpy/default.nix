@@ -19,6 +19,6 @@ buildPythonPackage {
 
   meta = {
     description = "GMP or MPIR interface to Python 2.4+ and 3.x";
-    homepage = http://code.google.com/p/gmpy/;
+    homepage = https://github.com/aleaxit/gmpy/;
   };
 }

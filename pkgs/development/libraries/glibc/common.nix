@@ -133,12 +133,16 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ];
-  buildInputs = lib.optionals withGd [ gd libpng ];
+  # TODO make linuxHeaders unconditional next mass rebuild
+  buildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) linuxHeaders
+    ++ lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
+
+  passthru = { inherit version; };
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //

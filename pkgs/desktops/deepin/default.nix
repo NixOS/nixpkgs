@@ -4,13 +4,20 @@ let
   packages = self: with self; {
 
     dbus-factory = callPackage ./dbus-factory { };
+    dde-api = callPackage ./dde-api { };
     dde-calendar = callPackage ./dde-calendar { };
+    dde-polkit-agent = callPackage ./dde-polkit-agent { };
     dde-qt-dbus-factory = callPackage ./dde-qt-dbus-factory { };
+    dde-session-ui = callPackage ./dde-session-ui { };
+    deepin-desktop-base = callPackage ./deepin-desktop-base { };
+    deepin-desktop-schemas = callPackage ./deepin-desktop-schemas { };
     deepin-gettext-tools = callPackage ./deepin-gettext-tools { };
     deepin-gtk-theme = callPackage ./deepin-gtk-theme { };
     deepin-icon-theme = callPackage ./deepin-icon-theme { };
     deepin-image-viewer = callPackage ./deepin-image-viewer { };
     deepin-menu = callPackage ./deepin-menu { };
+    deepin-metacity = callPackage ./deepin-metacity { };
+    deepin-movie-reborn = callPackage ./deepin-movie-reborn { };
     deepin-mutter = callPackage ./deepin-mutter { };
     deepin-shortcut-viewer = callPackage ./deepin-shortcut-viewer { };
     deepin-sound-theme = callPackage ./deepin-sound-theme { };
@@ -18,6 +25,9 @@ let
       inherit (pkgs.gnome3) libgee vte;
       wnck = pkgs.libwnck3;
     };
+    deepin-wallpapers = callPackage ./deepin-wallpapers { };
+    deepin-wm = callPackage ./deepin-wm { };
+    dpa-ext-gnomekeyring = callPackage ./dpa-ext-gnomekeyring { };
     dtkcore = callPackage ./dtkcore { };
     dtkwm = callPackage ./dtkwm { };
     dtkwidget = callPackage ./dtkwidget { };

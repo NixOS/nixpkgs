@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
     description = "A cryptographic library that implements the SSL and TLS protocols";
     platforms = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.cstrahan ];
+    license = licenses.openssl;
     priority = 10; # resolves collision with ‘man-pages’
   };
 }

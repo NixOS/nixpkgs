@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   name = "folks-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/folks/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/folks/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "16hqh2gxlbx0b0hgq216hndr1m72vj54jvryzii9zqkk0g9kxc57";
   };
 

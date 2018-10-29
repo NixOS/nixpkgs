@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, file, less
+{ stdenv, lib, fetchFromGitHub, python3Packages, file, less, highlight
 , imagePreviewSupport ? true, w3m ? null}:
 
 with stdenv.lib;
@@ -24,6 +24,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   preConfigure = ''
+    ${lib.optionalString (highlight != null) ''
+      sed -i -e 's|^\s*highlight\b|${highlight}/bin/highlight|' \
+        ranger/data/scope.sh
+    ''}
+
     substituteInPlace ranger/data/scope.sh \
       --replace "/bin/echo" "echo"
 
@@ -36,7 +41,7 @@ python3Packages.buildPythonApplication rec {
 
     # give file previews out of the box
     substituteInPlace ranger/config/rc.conf \
-      --replace "set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
+      --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
   '' + optionalString imagePreviewSupport ''
     substituteInPlace ranger/ext/img_display.py \
       --replace /usr/lib/w3m ${w3m}/libexec/w3m
@@ -46,7 +51,7 @@ python3Packages.buildPythonApplication rec {
       --replace "set preview_images false" "set preview_images true"
   '';
 
-  meta =  with stdenv.lib; {
+  meta =  with lib; {
     description = "File manager with minimalistic curses interface";
     homepage = http://ranger.github.io/;
     license = licenses.gpl3;

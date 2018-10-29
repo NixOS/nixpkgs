@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pytest
 , pytest-repeat
 , pytest-faulthandler
@@ -26,14 +26,12 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "1.22.1";
+  version = "1.23.3";
 
   # get full repository need conftest.py to run tests
-  src = fetchFromGitHub {
-    owner = "dask";
-    repo = pname;
-    rev = version;
-    sha256 = "0xvx55rhbhlyys3kjndihwq6y6260qzy9mr3miclh5qddaiw2d5z";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "2d48a4de280fd7243ca76f9b12db5fe2486fc89dcdb510c77fa51f51733a04cc";
   };
 
   checkInputs = [ pytest pytest-repeat pytest-faulthandler pytest-timeout mock joblib ];

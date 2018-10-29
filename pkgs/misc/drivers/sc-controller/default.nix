@@ -2,7 +2,7 @@
 , gtk3, gobjectIntrospection, libappindicator-gtk3, librsvg
 , evdev, pygobject3, pylibacl, pytest, bluez
 , linuxHeaders
-, libX11, libXext, libXfixes, libusb1, libudev
+, libX11, libXext, libXfixes, libusb1, udev
 }:
 
 buildPythonApplication rec {
@@ -34,7 +34,7 @@ buildPythonApplication rec {
     substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 libudev bluez ];
+  LD_LIBRARY_PATH = lib.makeLibraryPath [ libX11 libXext libXfixes libusb1 udev bluez ];
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")

@@ -165,6 +165,11 @@ stdenv.mkDerivation rec {
       ${installExtraFiles face}
     '');
 
+  postConfigure = ''
+    [ -e modules/core/version_string.inc ]
+    echo '"(build info elided)"' > modules/core/version_string.inc
+  '';
+
   buildInputs =
        [ zlib pcre hdf5 glog boost google-gflags protobuf ]
     ++ lib.optional enablePython pythonPackages.python

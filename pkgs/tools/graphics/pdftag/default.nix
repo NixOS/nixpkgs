@@ -4,23 +4,17 @@
 stdenv.mkDerivation rec {
   pname = "pdftag";
   name = "${pname}-${version}";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "arrufat";
     repo = pname;
-    rev = version;
-    sha256 = "17zk42h0n33b4p8fqlq2riqwcdi8y9m5n0ccydnk6a4x8rli97b3";
+    rev = "v${version}";
+    sha256 = "1paj8hs27akzsivn01a30fl3zx5gfn1h89wxg2m72fd806hk0hql";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja wrapGAppsHook ];
-  buildInputs = [ gtk3 poppler vala ];
-
-  patchPhase = ''substituteInPlace meson.build \
-    --replace "install_dir: '/usr" "install_dir: '$out"
-  '';
-
-  preInstall = "mkdir -p $out/share/licenses/${pname}";
+  nativeBuildInputs = [ pkgconfig meson ninja wrapGAppsHook vala ];
+  buildInputs = [ gtk3 poppler ];
 
   meta = with stdenv.lib; {
     description = "Edit metadata found in PDFs";

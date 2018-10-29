@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder, ocaml-migrate-parsetree }:
+{ stdenv, fetchurl, ocaml, findlib, dune, ocaml-migrate-parsetree }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib jbuilder ocaml-migrate-parsetree ];
+  buildInputs = [ ocaml findlib dune ocaml-migrate-parsetree ];
 
-  buildPhase = "jbuilder build -p ppx_gen_rec";
+  buildPhase = "dune build -p ppx_gen_rec";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/flowtype/ocaml-ppx_gen_rec;

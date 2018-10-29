@@ -4,7 +4,7 @@
 , libuuid, json-glib, meson, gperf, ninja
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.12";
+  name = "appstream-glib-0.7.13";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
-    sha256 = "0kqhm3j0nmf9pp9mpykzs2hg3nr6126ibrq1ap21hpasnq4rzlax";
+    sha256 = "0r1gb806p68axspzwvpn1ygmd6pfc17mncg3i6yazk3n10k5cl06";
   };
 
   nativeBuildInputs = [

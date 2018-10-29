@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, wrapGAppsHook, gtk2, gnome2, gnome3,
-  libstartup_notification, libgtop, perl, perlXMLParser,
+  libstartup_notification, libgtop, perlPackages,
   autoreconfHook, intltool, docbook_xsl, xauth
 }:
 
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk2 gnome2.GConf libstartup_notification
-    gnome3.libgnome-keyring libgtop gnome2.libglade perl perlXMLParser
-  ];
+    gnome3.libgnome-keyring libgtop gnome2.libglade
+  ] ++ (with perlPackages; [ perl XMLParser ]);
 
   enableParallelBuilding = true;
 
@@ -30,26 +30,26 @@ stdenv.mkDerivation rec {
         # Patches from the gentoo ebuild
 
         # Fix compilation on bsdc
-	./libgksu-2.0.0-fbsd.patch
+        ./libgksu-2.0.0-fbsd.patch
 
         # Fix wrong usage of LDFLAGS, gentoo bug #226837
-	./libgksu-2.0.7-libs.patch
+        ./libgksu-2.0.7-libs.patch
 
         # Use po/LINGUAS
-	./libgksu-2.0.7-polinguas.patch
+        ./libgksu-2.0.7-polinguas.patch
 
         # Don't forkpty; gentoo bug #298289
-	./libgksu-2.0.12-revert-forkpty.patch
+        ./libgksu-2.0.12-revert-forkpty.patch
 
         # Make this gmake-3.82 compliant, gentoo bug #333961
-	./libgksu-2.0.12-fix-make-3.82.patch
+        ./libgksu-2.0.12-fix-make-3.82.patch
 
         # Do not build test programs that are never executed; also fixes gentoo bug #367397 (underlinking issues).
-	./libgksu-2.0.12-notests.patch
+        ./libgksu-2.0.12-notests.patch
 
         # Fix automake-1.11.2 compatibility, gentoo bug #397411
-	./libgksu-2.0.12-automake-1.11.2.patch
-	];
+        ./libgksu-2.0.12-automake-1.11.2.patch
+  ];
 
   postPatch = ''
     # gentoo bug #467026

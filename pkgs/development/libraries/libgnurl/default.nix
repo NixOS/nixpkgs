@@ -1,31 +1,24 @@
-{ stdenv, fetchurl, autoreconfHook, perl, zlib, gnutls, gss, openssl
-, libidn }:
+{ stdenv, fetchurl, libtool, groff, perl, pkgconfig, python2, zlib, gnutls,
+  libidn2, libunistring, nghttp2 }:
 
 stdenv.mkDerivation rec {
-  version = "7.54.1";
+  version = "7.61.1";
 
   name = "libgnurl-${version}";
 
   src = fetchurl {
-    url = "https://gnunet.org/sites/default/files/gnurl-${version}.tar.bz2";
-    sha256 = "0szbj352h95sgc9kbx9wzkgjksmg3g5k6cvlc7hz3wrbdh5gb0a4";
+    url = "mirror://gnu/gnunet/gnurl-${version}.tar.gz";
+    sha256 = "0y56k15vp3m2r8q6mnc6ivflwq9lv6npdhbbvxxcf4r8vwjhv91q";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ perl gnutls gss openssl zlib libidn ];
-
-  preConfigure = ''
-    sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
-  '';
+  nativeBuildInputs = [ libtool groff perl pkgconfig python2 ];
+    
+  buildInputs = [ gnutls zlib libidn2 libunistring nghttp2 ];
 
   configureFlags = [
-    "--enable-ipv6" "--with-gnutls" "--without-libmetalink" "--without-winidn"
-    "--without-librtmp" "--without-nghttp2" "--without-nss" "--without-cyassl"
-    "--without-polarssl" "--without-ssl" "--without-winssl"
-    "--without-darwinssl" "--disable-sspi" "--disable-ntlm-wb" "--disable-ldap"
-    "--disable-rtsp" "--disable-dict" "--disable-telnet" "--disable-tftp"
-    "--disable-pop3" "--disable-imap" "--disable-smtp" "--disable-gopher"
-    "--disable-file" "--disable-ftp" "--disable-smb"
+    "--disable-ntlm-wb"
+    "--without-ca-bundle"
+    "--with-ca-fallback"
   ];
 
   meta = with stdenv.lib; {
@@ -33,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage    = https://gnunet.org/gnurl;
     maintainers = with maintainers; [ falsifian vrthra ];
     platforms = platforms.linux;
+    license = licenses.curl;
   };
 }

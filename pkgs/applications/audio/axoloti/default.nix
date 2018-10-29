@@ -2,14 +2,14 @@
 , gnumake, gcc-arm-embedded, dfu-util-axoloti, jdk, ant, libfaketime }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.12-1";
+  version = "1.0.12-2";
   name = "axoloti-${version}";
 
   src = fetchFromGitHub {
     owner = "axoloti";
     repo = "axoloti";
     rev = "${version}";
-    sha256 = "13njmv8zac0kaaxgkv4y4zfjcclafn9cw0m8lj2k4926wnwjmf50";
+    sha256 = "1qffis277wshldr3i939b0r2x3a2mlr53samxqmr2nk1sfm2b4w9";
   };
 
   chibi_version = "2.6.9";
@@ -96,6 +96,6 @@ stdenv.mkDerivation rec {
       <literal>SUBSYSTEM=="usb", ATTR{idVendor}=="16c0", ATTR{idProduct}=="0442", OWNER="someuser", GROUP="somegroup"</literal>
     '';
     license = licenses.gpl3;
-    maintainers = with maintainers; [ TealG ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, jbuilder, configurator, cstruct }:
+{ stdenv, fetchzip, ocaml, findlib, dune, configurator, cstruct }:
 
 let version = "2.0.1"; in
 
@@ -10,10 +10,10 @@ stdenv.mkDerivation {
     sha256 = "1rw04dwrlx5hah5dkjf7d63iff82j9cifr8ifjis5pdwhgwcff8i";
   };
 
-  buildInputs = [ ocaml findlib jbuilder configurator ];
+  buildInputs = [ ocaml findlib dune configurator ];
   propagatedBuildInputs = [ cstruct ];
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     homepage = https://github.com/mirage/io-page;

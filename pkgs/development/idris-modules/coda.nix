@@ -6,6 +6,8 @@ build-idris-package  {
   name = "coda";
   version = "2018-01-25";
 
+  ipkgName = "Coda";
+
   src = fetchFromGitHub {
     owner = "ostera";
     repo = "idris-coda";

@@ -53,12 +53,15 @@ in lib.init bootStages ++ [
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs
+        ++ lib.optionals
+             (hostPlatform.isLinux && !buildPlatform.isLinux)
+             [ buildPackages.patchelf buildPackages.paxctl ]
+        ++ lib.optional
+             (let f = p: !p.isx86 || p.libc == "musl"; in f hostPlatform && !(f buildPlatform))
+             buildPackages.updateAutotoolsGnuConfigScriptsHook
            # without proper `file` command, libtool sometimes fails
            # to recognize 64-bit DLLs
         ++ lib.optional (hostPlatform.config == "x86_64-w64-mingw32") buildPackages.file
-        ++ lib.optional
-             (hostPlatform.isAarch64 || hostPlatform.isMips || hostPlatform.libc == "musl")
-             buildPackages.updateAutotoolsGnuConfigScriptsHook
         ;
     });
   })

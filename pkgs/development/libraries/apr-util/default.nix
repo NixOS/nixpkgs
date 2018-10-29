@@ -61,10 +61,11 @@ stdenv.mkDerivation rec {
     inherit sslSupport bdbSupport ldapSupport;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://apr.apache.org/;
     description = "A companion library to APR, the Apache Portable Runtime";
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.unix;
+    license = licenses.asl20;
   };
 }

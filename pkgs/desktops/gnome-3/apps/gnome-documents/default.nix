@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "3.28.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-documents/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-documents/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0aannnq39gjg6jnjm4kr8fqigg5npjvd8dyxw7k4hy4ny0ffxwjq";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.dev}/bin/gapplication"
+    substituteInPlace $out/bin/gnome-documents --replace gapplication "${glib.bin}/bin/gapplication"
   '';
 
   passthru = {

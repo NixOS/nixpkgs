@@ -5,7 +5,7 @@
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
-, withLibseccomp ? libseccomp.meta.available, libseccomp
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
 , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 }:
 
@@ -148,10 +148,10 @@ in rec {
   }) // { perl-bindings = nix1; };
 
   nixStable = (common rec {
-    name = "nix-2.1.1";
+    name = "nix-2.1.3";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "63b1d49ea678162ada6996e42abb62cbc6e65cfefa4faa5436ae37100504720b";
+      sha256 = "5d22dad058d5c800d65a115f919da22938c50dd6ba98c5e3a183172d149840a4";
     };
   }) // { perl-bindings = perl-bindings {
     nix = nixStable;
@@ -159,13 +159,13 @@ in rec {
   }; };
 
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-2.1${suffix}";
-    suffix = "pre6377_954d1f4d";
+    name = "nix-2.2${suffix}";
+    suffix = "pre6520_18b4c53f";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "954d1f4d0a35063ff431b258beebadf753cb9efe";
-      sha256 = "0wnljxljvcwmniydgxlsjqmbgghmljs75m6083y2nkjql7dnrm7g";
+      rev = "18b4c53f71dfc626f5f5ffa0282afd1b9faad6a4";
+      sha256 = "1hn7bjrf6x7024nald7nk1c9m8fyddkzhazl7pwf6ssmiv12apxh";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings {

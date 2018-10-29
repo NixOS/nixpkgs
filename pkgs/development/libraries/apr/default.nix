@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "apr-1.6.3";
+  name = "apr-1.6.5";
 
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    sha256 = "0wiik6amxn6lkc55fv9yz5i3kbxnqbp36alrzabx1avsdp8hc7qk";
+    sha256 = "01d1n1ql66bxsjx0wyzazmkqdqdmr0is6a7lwyy5kzy4z7yajz56";
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = http://apr.apache.org/;
     description = "The Apache Portable Runtime library";
     platforms = platforms.all;
+    license = licenses.asl20;
     maintainers = [ maintainers.eelco ];
   };
 }

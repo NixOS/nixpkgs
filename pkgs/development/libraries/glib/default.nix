@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   name = "glib-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1iqgi90fmpl3l23jm2iv44qp7hqsxvnv7978s18933bvx4bnxvzc";
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       ./gobject_init_on_demand.patch
     ] ++ [ ./schema-override-variable.patch ];
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   setupHook = ./setup-hook.sh;
@@ -104,12 +104,16 @@ stdenv.mkDerivation rec {
   DETERMINISTIC_BUILD = 1;
 
   postInstall = ''
+    mkdir -p $bin/bin
+    for app in gapplication gdbus gio gsettings; do
+      mv "$dev/bin/$app" "$bin/bin"
+    done
+
     moveToOutput "share/glib-2.0" "$dev"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
-  ''
-  # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
-  + ''
+
+    # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
     sed '1i#line 1 "${name}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
   '';

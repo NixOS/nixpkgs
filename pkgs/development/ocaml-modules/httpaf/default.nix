@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune
 , angstrom, faraday, alcotest
 }:
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i2r004ihj00hd97475y8nhjqjln58xx087zcjl0dfp0n7q80517";
   };
 
-  buildInputs = [ ocaml findlib jbuilder alcotest ];
+  buildInputs = [ ocaml findlib dune alcotest ];
   propagatedBuildInputs = [ angstrom faraday ];
 
   buildPhase = "dune build -p httpaf";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "dune runtest -p httpaf";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "A high-performance, memory-efficient, and scalable web server for OCaml";

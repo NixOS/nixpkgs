@@ -1,35 +1,7 @@
-diff -ru3 cmake-2.8.12.2/Modules/Platform/Linux.cmake cmake-2.8.12.2-new/Modules/Platform/Linux.cmake
---- cmake-2.8.12.2/Modules/Platform/Linux.cmake	2014-01-16 21:15:08.000000000 +0400
-+++ cmake-2.8.12.2-new/Modules/Platform/Linux.cmake	2016-04-13 22:00:32.928575740 +0300
-@@ -36,22 +36,11 @@
-   # checking the platform every time.  This option is advanced enough
-   # that only package maintainers should need to adjust it.  They are
-   # capable of providing a setting on the command line.
--  if(EXISTS "/etc/debian_version")
--    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
--      "Install .so files without execute permission.")
--  else()
--    set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
--      "Install .so files without execute permission.")
--  endif()
-+  set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
-+    "Install .so files without execute permission.")
- endif()
- 
- # Match multiarch library directory names.
- set(CMAKE_LIBRARY_ARCHITECTURE_REGEX "[a-z0-9_]+(-[a-z0-9_]+)?-linux-gnu[a-z0-9_]*")
- 
- include(Platform/UnixPaths)
--
--# Debian has lib64 paths only for compatibility so they should not be
--# searched.
--if(EXISTS "/etc/debian_version")
--  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
--endif()
-diff -ru3 cmake-2.8.12.2/Modules/Platform/UnixPaths.cmake cmake-2.8.12.2-new/Modules/Platform/UnixPaths.cmake
---- cmake-2.8.12.2/Modules/Platform/UnixPaths.cmake	2014-01-16 21:15:08.000000000 +0400
-+++ cmake-2.8.12.2-new/Modules/Platform/UnixPaths.cmake	2016-04-14 00:09:10.106362636 +0300
-@@ -32,9 +32,6 @@
+diff -ur cmake-3.9.1/Modules/Platform/UnixPaths.cmake cmake-3.9.1-mod/Modules/Platform/UnixPaths.cmake
+--- cmake-3.9.1/Modules/Platform/UnixPaths.cmake	2017-08-10 13:36:32.000000000 +0000
++++ cmake-3.9.1-mod/Modules/Platform/UnixPaths.cmake	2017-09-03 01:24:31.901473539 +0000
+@@ -22,9 +22,6 @@
  # List common installation prefixes.  These will be used for all
  # search types.
  list(APPEND CMAKE_SYSTEM_PREFIX_PATH
@@ -38,45 +10,31 @@ diff -ru3 cmake-2.8.12.2/Modules/Platform/UnixPaths.cmake cmake-2.8.12.2-new/Mod
 -
    # CMake install location
    "${_CMAKE_INSTALL_DIR}"
+   )
+@@ -43,31 +40,26 @@
  
-@@ -44,44 +41,26 @@
+ # Non "standard" but common install prefixes
+ list(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-  /usr/X11R6
+-  /usr/pkg
+-  /opt
+   )
  
  # List common include file locations not under the common prefixes.
  list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
--  # Windows API on Cygwin
--  /usr/include/w32api
--
 -  # X11
--  /usr/X11R6/include /usr/include/X11
--
--  # Other
--  /usr/pkg/include
--  /opt/csw/include /opt/include
--  /usr/openwin/include
+-  /usr/include/X11
 +  @libc_dev@/include
    )
  
  list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
--  # Windows API on Cygwin
--  /usr/lib/w32api
--
 -  # X11
--  /usr/X11R6/lib /usr/lib/X11
--
--  # Other
--  /usr/pkg/lib
--  /opt/csw/lib /opt/lib
--  /usr/openwin/lib
+-  /usr/lib/X11
 +  @libc_lib@/lib
    )
  
- list(APPEND CMAKE_SYSTEM_PROGRAM_PATH
--  /usr/pkg/bin
-+  @libc_bin@/bin
-   )
- 
  list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
--  /lib /usr/lib /usr/lib32 /usr/lib64
+-  /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
 +  @libc_lib@/lib
    )
  
@@ -89,4 +47,16 @@ diff -ru3 cmake-2.8.12.2/Modules/Platform/UnixPaths.cmake cmake-2.8.12.2-new/Mod
 +  @libc_dev@/include
    )
  
- # Enable use of lib64 search path variants by default.
+ # Enable use of lib32 and lib64 search path variants by default.
+diff -ur cmake-3.9.1/Modules/Platform/WindowsPaths.cmake cmake-3.9.1-mod/Modules/Platform/WindowsPaths.cmake
+--- cmake-3.9.1/Modules/Platform/WindowsPaths.cmake	2017-08-10 13:36:32.000000000 +0000
++++ cmake-3.9.1-mod/Modules/Platform/WindowsPaths.cmake	2017-09-03 01:19:32.808355986 +0000
+@@ -66,7 +66,7 @@
+ 
+ if(CMAKE_CROSSCOMPILING AND NOT CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
+   # MinGW (useful when cross compiling from linux with CMAKE_FIND_ROOT_PATH set)
+-  list(APPEND CMAKE_SYSTEM_PREFIX_PATH /)
++  # list(APPEND CMAKE_SYSTEM_PREFIX_PATH /)
+ endif()
+ 
+ list(APPEND CMAKE_SYSTEM_INCLUDE_PATH

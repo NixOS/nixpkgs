@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "sg3_utils-1.42";
+  name = "sg3_utils-1.44";
 
   src = fetchurl {
     url = "http://sg.danny.cz/sg/p/${name}.tgz";
-    sha256 = "1wwy7iiz1lvc32c777yd4vp0c0dqfdlm5jrsm3aa62xx141pmjqx";
+    sha256 = "0yxfbkd48mbzipwmggcvpq60zybsb6anrca878si26z7496nibld";
   };
 
   meta = with stdenv.lib; {

@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
   name = "bijiben-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/bijiben/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/bijiben/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0lg92fl6dmrybkxs3gqhyr8rq945y64k51l6s72yiads7pqabli2";
   };
 

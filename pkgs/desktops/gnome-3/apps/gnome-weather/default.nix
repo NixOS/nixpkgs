@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.26.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-weather/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-weather/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "965cc0d1b4d4e53c06d494db96f0b124d232af5c0e731ca900edd10f77a74c78";
   };
 

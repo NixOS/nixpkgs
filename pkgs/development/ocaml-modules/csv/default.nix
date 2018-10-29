@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder }:
+{ stdenv, fetchurl, ocaml, findlib, dune }:
 
 stdenv.mkDerivation rec {
 	version = "2.1";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
 
 	unpackCmd = "tar -xjf $src";
 
-	buildInputs = [ ocaml findlib jbuilder ];
+	buildInputs = [ ocaml findlib dune ];
 
-	buildPhase = "jbuilder build -p csv";
+	buildPhase = "dune build -p csv";
 
-	inherit (jbuilder) installPhase;
+	inherit (dune) installPhase;
 
 	meta = {
 		description = "A pure OCaml library to read and write CSV files";

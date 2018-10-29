@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   name = "eolie-${version}";
-  version = "0.9.36";
+  version = "0.9.45";
 
   format = "other";
   doCheck = false;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     url = "https://gitlab.gnome.org/World/eolie";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "1pqs6lddkj7nvxdwf0yncwdcr7683mpvx3912vn7b1f2q2zkp1fv";
+    sha256 = "0x6f2qqqxpjf28mqxs4jlrz2z8wa9nvb9h24nf8qwmzavjjbraqg";
   };
 
   nativeBuildInputs = [

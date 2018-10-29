@@ -309,6 +309,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "GNU General Public License v2.0 only";
   };
 
+  gpl2Classpath = {
+    spdxId = "GPL-2.0-with-classpath-exception";
+    fullName = "GNU General Public License v2.0 only (with Classpath exception)";
+    url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
+  };
+
   gpl2ClasspathPlus = {
     fullName = "GNU General Public License v2.0 or later (with Classpath exception)";
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
@@ -386,6 +392,14 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     spdxId = "ISC";
     fullName = "ISC License";
   };
+
+  # Proprietary binaries; free to redistribute without modification.
+  issl = {
+    fullName = "Intel Simplified Software License";
+    url = https://software.intel.com/en-us/license/intel-simplified-software-license;
+    free = false;
+  };
+
 
   lgpl2 = spdx {
     spdxId = "LGPL-2.0";
@@ -500,6 +514,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Non-Profit Open Software License 3.0";
   };
 
+  ocamlpro_nc = {
+    fullName = "OCamlPro Non Commercial license version 1";
+    url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-2.2.0/OCamlPro-Non-Commercial-License.pdf";
+    free = false;
+  };
+
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
@@ -569,6 +589,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   ruby = spdx {
     spdxId = "Ruby";
     fullName = "Ruby License";
+  };
+
+  sendmail = spdx {
+    spdxId = "Sendmail";
+    fullName = "Sendmail License";
   };
 
   sgi-b-20 = spdx {

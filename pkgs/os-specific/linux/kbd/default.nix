@@ -25,6 +25,19 @@ stdenv.mkDerivation rec {
       # Add Neo keymap subdirectory
       sed -i -e 's,^KEYMAPSUBDIRS *= *,&i386/neo ,' data/Makefile.am
 
+      # Renaming keymaps with name clashes, because loadkeys just picks
+      # the first keymap it sees. The clashing names lead to e.g.
+      # "loadkeys no" defaulting to a norwegian dvorak map instead of
+      # the much more common qwerty one.
+      pushd data/keymaps/i386
+      mv qwertz/cz{,-qwertz}.map
+      mv olpc/es{,-olpc}.map
+      mv olpc/pt{,-olpc}.map
+      mv dvorak/{no.map,dvorak-no.map}
+      mv fgGIod/trf{,-fgGIod}.map
+      mv colemak/{en-latin9,colemak}.map
+      popd
+
       # Fix the path to gzip/bzip2.
       substituteInPlace src/libkeymap/findfile.c \
         --replace gzip ${gzip}/bin/gzip \

@@ -9,9 +9,8 @@ assert x11Support -> xlibsWrapper != null;
 assert cupsSupport -> cups != null;
 let
   version = "9.${ver_min}";
-  ver_min = "24";
-  # ghostscript*.tar.xz in https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9xx/SHA512SUMS
-  sha512 = "dcbeeb5d3dd5ccaf949dc4be68363c50b1d35e647be4790a50b1bbf5f259f1d9181f705be27bfca708c4d270f945ff4b24e3db10b57800c1ee0ea7a40931c547";
+  ver_min = "25";
+  sha512 = "18pcqzva7pq2a9mmqf9pq8x4winb6qmzni49vq2qx50k60rwyv1kdmixik3ym2bpj5p1j8g0vb47w7w2cf4lba5q583ylpd8rshn73s";
 
   fonts = stdenv.mkDerivation {
     name = "ghostscript-fonts";

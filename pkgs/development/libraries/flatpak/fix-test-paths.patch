@@ -1,6 +1,6 @@
 --- a/tests/libtest.sh
 +++ b/tests/libtest.sh
-@@ -315,7 +315,7 @@
+@@ -296,7 +296,7 @@
          # running installed-tests: assume we know what we're doing
          :
      elif ! "$FLATPAK_BWRAP" --unshare-ipc --unshare-net --unshare-pid \
@@ -9,16 +9,7 @@
          sed -e 's/^/# /' < bwrap-result
          echo "1..0 # SKIP Cannot run bwrap"
          exit 0
-@@ -323,7 +323,7 @@
- }
- 
- skip_without_python2 () {
--    if ! test -f /usr/bin/python2 || ! /usr/bin/python2 -c "import sys; sys.exit(0 if sys.version_info >= (2, 7) else 1)" ; then
-+    if ! test -f @python2@/bin/python2 || ! @python2@/bin/python2 -c "import sys; sys.exit(0 if sys.version_info >= (2, 7) else 1)" ; then
-         echo "1..0 # SKIP this test requires /usr/bin/python2 (2.7) support"
-         exit 0
-     fi
-@@ -335,12 +335,12 @@
+@@ -309,12 +309,12 @@
  export DBUS_SESSION_BUS_ADDRESS="$(cat dbus-session-bus-address)"
  DBUS_SESSION_BUS_PID="$(cat dbus-session-bus-pid)"
  
@@ -43,7 +34,7 @@
  mkdir -p ${DIR}/usr/bin
  mkdir -p ${DIR}/usr/lib
  ln -s ../lib ${DIR}/usr/lib64
-@@ -35,73 +36,27 @@
+@@ -35,48 +36,27 @@
  else
      cp `which ldconfig` ${DIR}/usr/bin
  fi
@@ -73,31 +64,6 @@
  for i in $@; do
 -    I=`which $i`
 -    add_bin $I
--    if test $i == python2; then
--        mkdir -p ${DIR}/usr/lib/python2.7/lib-dynload
--        # This is a hardcoded minimal set of modules we need in the current tests.
--        # Pretty hacky stuff. Add modules as needed.
--        PYDIR=/usr/lib/python2.7
--        if test -d /usr/lib64/python2.7; then PYDIR=/usr/lib64/python2.7; fi
--        for py in site os stat posixpath genericpath warnings \
--                       linecache types UserDict abc _abcoll \
--                       _weakrefset copy_reg traceback sysconfig \
--                       re sre_compile sre_parse sre_constants \
--                       _sysconfigdata ; do
--            cp ${PYDIR}/$py.py ${DIR}/usr/lib/python2.7
--        done
--        # These might not exist, depending how Python was configured; and the
--        # part after ${so} might be "module" or ".x86_64-linux-gnu" or
--        # something else
--        for so in _locale strop ; do
--            cp ${PYDIR}/lib-dynload/${so}*.so ${DIR}/usr/lib/python2.7/lib-dynload || :
--        done
--        for plat in $( cd ${PYDIR} && echo plat-* ); do
--            test -e ${PYDIR}/${plat} || continue
--            mkdir -p ${DIR}/usr/lib/python2.7/${plat}
--            cp ${PYDIR}/${plat}/*.py ${DIR}/usr/lib/python2.7/${plat}/
--        done
--    fi
 -done
 -for i in `cat $BINS`; do
 -    echo Adding binary $i 1>&2

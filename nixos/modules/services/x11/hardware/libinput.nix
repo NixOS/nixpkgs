@@ -205,7 +205,7 @@ in {
       })
     ];
 
-    services.udev.packages = [ pkgs.libinput ];
+    services.udev.packages = [ pkgs.libinput.out ];
 
     services.xserver.config =
       ''

@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
     homepage = http://www.opencascade.org/;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = [ maintainers.viric ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
   };
 }

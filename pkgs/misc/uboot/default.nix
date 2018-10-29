@@ -14,11 +14,11 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2018.07";
+    version = "2018.09";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "1m7nw64mxflpc6sqvnz2kb5fxfkb4mrpy8b1wi15dcwipj4dy44z";
+      sha256 = "0s122kyz1svvs2yjzj4j9qravl3ra4vn0fjqgski7rlczqyg56w3";
     };
 
     patches = [
@@ -155,6 +155,13 @@ in rec {
   ubootOrangePiPc = buildUBoot rec {
     defconfig = "orangepi_pc_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePiZeroPlus2H5 = buildUBoot rec {
+    defconfig = "orangepi_zero_plus2_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 

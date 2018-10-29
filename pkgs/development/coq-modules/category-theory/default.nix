@@ -1,21 +1,25 @@
-{ stdenv, fetchgit, coq, ssreflect }:
+{ stdenv, fetchgit, coq, ssreflect, equations }:
 
-let param =
-  {
-    "8.6" = {
+let
+  params =
+    let
+    v20180709 = {
       version = "20180709";
       rev = "3b9ba7b26a64d49a55e8b6ccea570a7f32c11ead";
       sha256 = "0f2nr8dgn1ab7hr7jrdmr1zla9g9h8216q4yf4wnff9qkln8sbbs";
     };
-
-    "8.7" = {
-      version = "20180709";
-      rev = "3b9ba7b26a64d49a55e8b6ccea570a7f32c11ead";
-      sha256 = "0f2nr8dgn1ab7hr7jrdmr1zla9g9h8216q4yf4wnff9qkln8sbbs";
+    v20181016 = {
+      version = "20181016";
+      rev = "8049479c5aee00ed0b92e5edc7c8996aebf48208";
+      sha256 = "14f9rlwh8vgmcl6njykvsiwxx0jn623375afixk26mzpy12zdcph";
     };
-
-  }."${coq.coq-version}"
-; in
+  in {
+    "8.6" = v20180709;
+    "8.7" = v20180709;
+    "8.8" = v20181016;
+  };
+  param = params."${coq.coq-version}";
+in
 
 stdenv.mkDerivation rec {
 
@@ -26,8 +30,8 @@ stdenv.mkDerivation rec {
     inherit (param) rev sha256;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 coq.findlib ];
-  propagatedBuildInputs = [ coq ssreflect ];
+  buildInputs = [ coq ] ++ (with coq.ocamlPackages; [ ocaml camlp5 findlib ]);
+  propagatedBuildInputs = [ ssreflect equations ];
 
   enableParallelBuilding = false;
 
@@ -43,7 +47,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" ];
+    compatibleCoqVersions = v: builtins.hasAttr v params;
   };
 
 }

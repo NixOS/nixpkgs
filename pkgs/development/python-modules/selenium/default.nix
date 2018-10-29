@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , geckodriver
+, urllib3
 , xorg
 }:
 
@@ -22,17 +23,17 @@ in
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "3.8.1";
+  version = "3.14.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lqm2md84g11g7lqi94xqb5lydm93vgmlznfhf27g6sy9ayjvgcs";
+    sha256 = "ab192cd046164c40fabcf44b47c66c8b12495142f4a69dcc55ea6eeef096e614";
   };
 
   buildInputs = [xorg.libX11];
 
   propagatedBuildInputs = [
-    geckodriver
+    geckodriver urllib3
   ];
 
   patchPhase = stdenv.lib.optionalString stdenv.isLinux ''

@@ -42,8 +42,7 @@ let
   allowUnsupportedSystem = config.allowUnsupportedSystem or false
     || builtins.getEnv "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM" == "1";
 
-  isUnfree = licenses: lib.lists.any (l:
-    !l.free or true || l == "unfree" || l == "unfree-redistributable") licenses;
+  isUnfree = licenses: lib.lists.any (l: !l.free or true) licenses;
 
   # Alow granular checks to allow only some unfree packages
   # Example:
@@ -56,7 +55,7 @@ let
 
   # Check whether unfree packages are allowed and if not, whether the
   # package has an unfree license and is not explicitely allowed by the
-  # `allowUNfreePredicate` function.
+  # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense = attrs:
     !allowUnfree &&
     hasLicense attrs &&
@@ -81,6 +80,7 @@ let
     unsupported = remediate_whitelist "UnsupportedSystem";
     blacklisted = x: "";
     insecure = remediate_insecure;
+    broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
   };
   remediate_whitelist = allow_attr: attrs:
@@ -124,6 +124,20 @@ let
              }
 
       '';
+
+  remediateOutputsToInstall = attrs: let
+      expectedOutputs = attrs.meta.outputsToInstall or [];
+      actualOutputs = attrs.outputs or [ "out" ];
+      missingOutputs = builtins.filter (output: ! builtins.elem output actualOutputs) expectedOutputs;
+    in ''
+      The package ${attrs.name} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
+
+      however ${attrs.name} only has the outputs: ${builtins.concatStringsSep ", " actualOutputs}
+
+      and is missing the following ouputs:
+
+      ${lib.concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
+    '';
 
   handleEvalIssue = attrs: { reason , errormsg ? "" }:
     let
@@ -185,6 +199,14 @@ let
     in  anyMatch (attrs.meta.platforms or lib.platforms.all) &&
       ! anyMatch (attrs.meta.badPlatforms or []);
 
+  checkOutputsToInstall = attrs: let
+      expectedOutputs = attrs.meta.outputsToInstall or [];
+      actualOutputs = attrs.outputs or [ "out" ];
+      missingOutputs = builtins.filter (output: ! builtins.elem output actualOutputs) expectedOutputs;
+    in if shouldCheckMeta
+       then builtins.length missingOutputs > 0
+       else false;
+
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
   #
@@ -202,6 +224,8 @@ let
       { valid = false; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.config}’"; }
     else if !(hasAllowedInsecure attrs) then
       { valid = false; reason = "insecure"; errormsg = "is marked as insecure"; }
+    else if checkOutputsToInstall attrs then
+      { valid = false; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
     else let res = checkMeta (attrs.meta or {}); in if res != [] then
       { valid = false; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
     else { valid = true; };

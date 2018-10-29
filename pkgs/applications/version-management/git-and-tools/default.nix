@@ -4,7 +4,6 @@
 args @ {config, lib, pkgs}: with args; with pkgs;
 let
   gitBase = callPackage ./git {
-    texinfo = texinfo5;
     svnSupport = false;         # for git-svn support
     guiSupport = false;         # requires tcl/tk
     sendEmailSupport = false;   # requires plenty of perl libraries
@@ -31,6 +30,8 @@ let
 
   git = appendToName "minimal" gitBase;
 
+  git-appraise = callPackage ./git-appraise {};
+
   git-fame = callPackage ./git-fame {};
 
   # The full-featured Git.
@@ -55,6 +56,8 @@ let
   git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
 
   git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
+
+  git-bug = callPackage ./git-bug { };
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
@@ -112,6 +115,8 @@ let
   hubUnstable = throw "use gitAndTools.hub instead";
 
   pre-commit = callPackage ./pre-commit { };
+
+  pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 
   qgit = qt5.callPackage ./qgit { };
 

@@ -14,16 +14,16 @@ stdenv.mkDerivation rec{
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ cmake perl ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library to implement a test protocol";
     longDescription = ''
       libtap is a library to implement the Test Anything Protocol for
       C originally created by Nik Clayton. This is a maintenance
       branch by Shlomi Fish.
     '';
-    homepage = http://www.shlomifish.org/open-source/projects/libtap/;
+    homepage = https://www.shlomifish.org/open-source/projects/libtap/;
     license = licenses.bsd3;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }
