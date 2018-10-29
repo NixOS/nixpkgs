@@ -4353,27 +4353,7 @@ in {
 
   toposort = callPackage ../development/python-modules/toposort { };
 
-  snapperGUI = buildPythonPackage rec {
-    name = "Snapper-GUI";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/ricardomv/snapper-gui";
-      rev = "11d98586b122180c75a86fccda45c4d7e3137591";
-      sha256 = "7a9f86fc17dbf130526e70c3e925eac30e2c74d6b932efbf7e7cd9fbba6dc4b1";
-    };
-
-    # no tests available
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pygobject3 dbus-python ];
-
-    meta = {
-      homepage = https://github.com/ricardomv/snapper-gui;
-      description = "Graphical frontend for snapper";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ tstrobel ];
-    };
-  };
+  snapperGUI = callPackage ../development/python-modules/snappergui { };
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
