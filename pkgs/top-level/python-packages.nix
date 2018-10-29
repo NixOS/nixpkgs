@@ -4415,26 +4415,7 @@ in {
 
   ofxparse = callPackage ../development/python-modules/ofxparse { };
 
-  ofxtools = buildPythonPackage rec {
-    name = "ofxtools-0.3.8";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/ofxtools/${name}.tar.gz";
-      sha256 = "88f289a60f4312a1599c38a8fb3216e2b46d10cc34476f9a16a33ac8aac7ec35";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s ofxtools
-    '';
-
-    buildInputs = with self; [ sqlalchemy ];
-
-    meta = {
-      homepage = "https://github.com/csingley/ofxtools";
-      description = "Library for working with Open Financial Exchange (OFX) formatted data used by financial institutions";
-      license = licenses.mit;
-      broken = true;
-    };
-  };
+  ofxtools = callPackage ../development/python-modules/ofxtools { };
 
   basemap = buildPythonPackage rec {
     name = "basemap-1.0.7";
