@@ -4310,26 +4310,7 @@ in {
 
   pyspotify = callPackage ../development/python-modules/pyspotify { };
 
-  pykka = buildPythonPackage rec {
-    name = "pykka-${version}";
-
-    version = "1.2.0";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/jodal/pykka.git";
-      rev = "refs/tags/v${version}";
-      sha256 = "0qlfw1054ap0cha1m6dbnq51kjxqxaf338g7jwnwy33b3gr8x0hg";
-    };
-
-    # There are no tests
-    doCheck = false;
-
-    meta = {
-      homepage = http://www.pykka.org;
-      description = "A Python implementation of the actor model";
-      maintainers = with maintainers; [ rickynils ];
-    };
-  };
+  pykka = callPackage ../development/python-modules/pykka { };
 
   ws4py = callPackage ../development/python-modules/ws4py {};
 
