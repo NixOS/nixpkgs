@@ -4208,24 +4208,7 @@ in {
 
   zope_location = callPackage ../development/python-modules/zope_location { };
 
-  zope_proxy = buildPythonPackage rec {
-    name = "zope.proxy-4.1.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.proxy/${name}.tar.gz";
-      sha256 = "0pqwwmvm1prhwv1ziv9lp8iirz7xkwb6n2kyj36p2h0ppyyhjnm4";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface ];
-
-    # circular deps
-    doCheck = false;
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_proxy = callPackage ../development/python-modules/zope_proxy { };
 
   zope_schema = buildPythonPackage rec {
     name = "zope.schema-4.4.2";
