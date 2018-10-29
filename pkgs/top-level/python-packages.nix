@@ -4234,24 +4234,7 @@ in {
 
   tunigo = callPackage ../development/python-modules/tunigo { };
 
-  tarman = buildPythonPackage rec {
-    version = "0.1.3";
-    name = "tarman-${version}";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tarman/tarman-${version}.zip";
-      sha256 = "0ri6gj883k042xaxa2d5ymmhbw2bfcxdzhh4bz7700ibxwxxj62h";
-    };
-
-    buildInputs = with self; [ unittest2 nose mock ];
-    propagatedBuildInputs = with self; [ libarchive ];
-
-    # tests are still failing
-    doCheck = false;
-  };
-
+  tarman = callPackage ../development/python-modules/tarman { };
 
   libarchive = self.python-libarchive; # The latter is the name upstream uses
   python-libarchive = buildPythonPackage rec {
