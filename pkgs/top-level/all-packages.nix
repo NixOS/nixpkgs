@@ -1529,6 +1529,8 @@ with pkgs;
 
   patdiff = callPackage ../tools/misc/patdiff { };
 
+  pbpst = callPackage ../applications/misc/pbpst { };
+
   pbzx = callPackage ../tools/compression/pbzx { };
 
   pev = callPackage ../development/tools/analysis/pev { };
