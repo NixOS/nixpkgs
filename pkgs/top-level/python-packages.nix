@@ -4254,21 +4254,7 @@ in {
 
   testfixtures = callPackage ../development/python-modules/testfixtures {};
 
-  tissue = buildPythonPackage rec {
-    name = "tissue-0.9.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tissue/${name}.tar.gz";
-      sha256 = "7e34726c3ec8fae358a7faf62de172db15716f5582e5192a109e33348bd76c2e";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ pep8 ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
+  tissue = callPackage ../development/python-modules/tissue { };
 
   titlecase = callPackage ../development/python-modules/titlecase { };
 
