@@ -4204,21 +4204,7 @@ in {
 
   zope_i18nmessageid = callPackage ../development/python-modules/zope_i18nmessageid { };
 
-  zope_lifecycleevent = buildPythonPackage rec {
-    name = "zope.lifecycleevent-3.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.lifecycleevent/${name}.tar.gz";
-      sha256 = "0s5brphqzzz89cykg61gy7zcmz0ryq1jj2va7gh2n1b3cccllp95";
-    };
-
-    propagatedBuildInputs = with self; [ zope_event zope_component ];
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_lifecycleevent = callPackage ../development/python-modules/zope_lifecycleevent { };
 
   zope_location = buildPythonPackage rec {
     name = "zope.location-4.0.3";
