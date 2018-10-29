@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "tribler-${version}";
-  version = "7.0.2";
+  version = "7.1.2";
 
   src = fetchurl {
-    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
-    sha256 = "1p0d0l0sa0nrnbyx2gg50nklkljwvl581i9w3z5qbkfzc7jsdy42";
+    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.gz";
+    sha256 = "1ayzqx4358qlx56hsnsn5s8xl6mzdb6nw4kwsalmp86dw6vmmis8";
   };
 
   buildInputs = [
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     pythonPackages.psutil
     pythonPackages.meliae
     pythonPackages.sip
+    pythonPackages.pillow
+    pythonPackages.networkx
   ];
 
   postPatch = ''
