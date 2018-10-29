@@ -4196,28 +4196,7 @@ in {
 
   zope_event = callPackage ../development/python-modules/zope_event { };
 
-  zope_exceptions = buildPythonPackage rec {
-     name = "zope.exceptions-${version}";
-     version = "4.0.8";
-
-     src = pkgs.fetchurl {
-       url = "mirror://pypi/z/zope.exceptions/${name}.tar.gz";
-       sha256 = "0zwxaaa66sqxg5k7zcrvs0fbg9ym1njnxnr28dfmchzhwjvwnfzl";
-     };
-
-     propagatedBuildInputs = with self; [ zope_interface ];
-
-     # circular deps
-     doCheck = false;
-
-     meta = {
-       description = "Exception interfaces and implementations";
-       homepage = https://pypi.python.org/pypi/zope.exceptions;
-       license = licenses.zpl20;
-       maintainers = with maintainers; [ goibhniu ];
-     };
-   };
-
+  zope_exceptions = callPackage ../development/python-modules/zope_exceptions { };
 
   zope_filerepresentation = buildPythonPackage rec {
     name = "zope.filerepresentation-3.6.1";
