@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "4.19.8";
+  version = "4.19.13";
   format = "other";
 
   disabled = isPyPy;
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/sip/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1g4pq9vj753r2s061jc4y9ydzgb48ibhc9bdvmb8mlyllwp7mbvy";
+    sha256 = "0pniq03jk1n5bs90yjihw3s3rsmjd8m89y9zbnymzgwrcl2sflz3";
   };
 
   configurePhase = ''
