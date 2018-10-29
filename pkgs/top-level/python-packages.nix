@@ -4485,25 +4485,7 @@ in {
     xgboost = pkgs.xgboost;
   };
 
-  xkcdpass = buildPythonPackage rec {
-    name = "xkcdpass-${version}";
-    version = "1.4.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xkcdpass/xkcdpass-1.4.2.tar.gz";
-      sha256 = "4c1f8bee886820c42ccc64c15c3a2275dc6d01028cf6af7c481ded87267d8269";
-    };
-
-    # No tests included
-    # https://github.com/redacted/XKCD-password-generator/issues/32
-    doCheck = false;
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/xkcdpass/;
-      description = "Generate secure multiword passwords/passphrases, inspired by XKCD";
-      license = licenses.bsd3;
-      maintainers = [ ];
-    };
-  };
+  xkcdpass = callPackage ../development/python-modules/xkcdpass { };
 
   xlsx2csv = buildPythonPackage rec {
     name = "xlsx2csv-${version}";
