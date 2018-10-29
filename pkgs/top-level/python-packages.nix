@@ -4401,20 +4401,7 @@ in {
 
   termcolor = callPackage ../development/python-modules/termcolor { };
 
-  html2text = buildPythonPackage rec {
-    name = "html2text-2016.9.19";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/html2text/${name}.tar.gz";
-      sha256 = "554ef5fd6c6cf6e3e4f725a62a3e9ec86a0e4d33cd0928136d1c79dbeb7b2d55";
-    };
-
-    meta = {
-      description = "Turn HTML into equivalent Markdown-structured text";
-      homepage = https://github.com/Alir3z4/html2text/;
-      license = licenses.gpl3;
-    };
-  };
+  html2text = callPackage ../development/python-modules/html2text { };
 
   pychart = callPackage ../development/python-modules/pychart {};
 
