@@ -4565,32 +4565,7 @@ in {
 
   clize = callPackage ../development/python-modules/clize { };
 
-  zerobin = buildPythonPackage rec {
-    name = "zerobin-${version}";
-    version = "20160108";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "sametmax";
-      repo = "0bin";
-      rev = "7da1615";
-      sha256 = "1pzcwy454kn5216pvwjqzz311s6jbh7viw9s6kw4xps6f5h44bid";
-    };
-
-    propagatedBuildInputs = with self; [
-      cherrypy
-      bottle
-      lockfile
-      clize
-    ];
-    # zerobin doesn't have any tests, but includes a copy of cherrypy which
-    # can wrongly fail the check phase.
-    doCheck = false;
-    meta = {
-      description = "A client side encrypted pastebin";
-      homepage = https://0bin.net/;
-      license = licenses.wtfpl;
-    };
-  };
+  zerobin = callPackage ../development/python-modules/zerobin { };
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
