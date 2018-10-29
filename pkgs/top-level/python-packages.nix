@@ -4399,20 +4399,7 @@ in {
 
   datadiff = callPackage ../development/python-modules/datadiff { };
 
-  termcolor = buildPythonPackage rec {
-    name = "termcolor-1.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/termcolor/termcolor-1.1.0.tar.gz";
-      sha256 = "1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b";
-    };
-
-    meta = {
-      description = "Termcolor";
-      homepage = https://pypi.python.org/pypi/termcolor;
-      license = licenses.mit;
-    };
-  };
+  termcolor = callPackage ../development/python-modules/termcolor { };
 
   html2text = buildPythonPackage rec {
     name = "html2text-2016.9.19";
