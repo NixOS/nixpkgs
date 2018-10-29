@@ -4597,15 +4597,7 @@ in {
 
   tvnamer = callPackage ../development/python-modules/tvnamer { };
 
-  threadpool = buildPythonPackage rec {
-    name = "threadpool-${version}";
-    version = "1.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/threadpool/${name}.tar.bz2";
-      sha256 = "197gzrxn9lbk0q1v079814c6s05cr4rwzyl6c1m6inkyif4yzr6c";
-    };
-  };
+  threadpool = callPackage ../development/python-modules/threadpool { };
 
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot {  };
 
