@@ -4357,24 +4357,7 @@ in {
 
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
-  funcy = buildPythonPackage rec {
-    name = "funcy-1.6";
-
-    src = pkgs.fetchurl {
-        url = "mirror://pypi/f/funcy/${name}.tar.gz";
-        sha256 = "511495db0c5660af18d3151b008c6ce698ae7fbf60887278e79675e35eed1f01";
-    };
-
-    # No tests
-    doCheck = false;
-
-    meta = {
-      description = "Collection of fancy functional tools focused on practicality";
-      homepage = "http://funcy.readthedocs.org/";
-      license = licenses.bsd3;
-
-    };
-  };
+  funcy = callPackage ../development/python-modules/funcy { };
 
   vxi11 = callPackage ../development/python-modules/vxi11 { };
 
