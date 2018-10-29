@@ -4188,25 +4188,7 @@ in {
 
   zope_component = callPackage ../development/python-modules/zope_component { };
 
-  zope_configuration = buildPythonPackage rec {
-    name = "zope.configuration-4.0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.configuration/zope.configuration-4.0.3.tar.gz";
-      sha256 = "1x9dfqypgympnlm25p9m43xh4qv3p7d75vksv9pzqibrb4cggw5n";
-    };
-
-    propagatedBuildInputs = with self; [ zope_i18nmessageid zope_schema ];
-
-    # Trouble with implicit namespace packages on Python3
-    # see https://github.com/pypa/setuptools/issues/912
-    doCheck = !isPy3k;
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_configuration = callPackage ../development/python-modules/zope_configuration { };
 
   zope_contenttype = buildPythonPackage rec {
     name = "zope.contenttype-4.0.1";
