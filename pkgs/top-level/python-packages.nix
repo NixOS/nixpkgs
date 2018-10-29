@@ -4435,37 +4435,7 @@ in {
 
   neovim = callPackage ../development/python-modules/neovim {};
 
-  neovim_gui = buildPythonPackage rec {
-    name = "neovim-pygui-${self.neovim.version}";
-    version = "0.1.3";
-    disabled = !isPy27;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "neovim";
-      repo = "python-gui";
-      rev = version;
-      sha256 = "1vpvr3zm3f9sxg1z1cl7f7gi8v1xksjdvxj62qnw65aqj3zqxnkz";
-    };
-
-    propagatedBuildInputs = [
-      self.neovim
-      self.click
-      self.pygobject3
-      pkgs.gobjectIntrospection
-      pkgs.makeWrapper
-      pkgs.gtk3
-    ];
-
-    patchPhase = ''
-      sed -i -e "s|entry_points=entry_points,|entry_points=dict(console_scripts=['pynvim=neovim.ui.cli:main [GUI]']),|" setup.py
-    '';
-
-    postInstall = ''
-      wrapProgram $out/bin/pynvim \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix PYTHONPATH : "${self.pygobject3}/lib/python2.7/site-packages:$PYTHONPATH"
-    '';
-  };
+  neovim_gui = callPackage ../development/python-modules/neovim_gui { };
 
   typogrify = buildPythonPackage rec {
     name = "typogrify-2.0.7";
