@@ -4240,27 +4240,7 @@ in {
 
   python-libarchive = callPackage ../development/python-modules/python-libarchive { };
 
-  libarchive-c = buildPythonPackage rec {
-    name = "libarchive-c-${version}";
-    version = "2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/libarchive-c/${name}.tar.gz";
-      sha256 = "011bfsmqpcwd6920kckllh7zhw2y4rrasgmddb7wjzn2hg1xpsjn";
-    };
-
-    LC_ALL="en_US.UTF-8";
-
-    postPatch = ''
-      substituteInPlace libarchive/ffi.py --replace \
-        "find_library('archive')" "'${pkgs.libarchive.lib}/lib/libarchive.so'"
-    '';
-    checkPhase = ''
-      py.test tests -k 'not test_check_archiveentry_with_unicode_entries_and_name_zip and not test_check_archiveentry_using_python_testtar'
-    '';
-
-    buildInputs = with self; [ pytest pkgs.glibcLocales ];
-  };
+  libarchive-c = callPackage ../development/python-modules/libarchive-c { };
 
   libasyncns = callPackage ../development/python-modules/libasyncns {
     inherit (pkgs) libasyncns pkgconfig;
