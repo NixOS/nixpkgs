@@ -4221,23 +4221,7 @@ in {
 
   zope_interface = callPackage ../development/python-modules/zope_interface { };
 
-
-  hgsvn = buildPythonPackage rec {
-    name = "hgsvn-0.3.11";
-    src = pkgs.fetchurl rec {
-      url = "mirror://pypi/h/hgsvn/${name}-hotfix.zip";
-      sha256 = "0yvhwdh8xx8rvaqd3pnnyb99hfa0zjdciadlc933p27hp9rf880p";
-    };
-    disabled = isPy3k || isPyPy;
-    doCheck = false;  # too many assumptions
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ hglib ];
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/hgsvn;
-    };
-  };
+  hgsvn = callPackage ../development/python-modules/hgsvn { };
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
