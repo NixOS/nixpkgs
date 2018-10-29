@@ -4385,20 +4385,7 @@ in {
 
   service-identity = callPackage ../development/python-modules/service_identity { };
 
-  signedjson = buildPythonPackage rec {
-    name = "signedjson-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/matrix-org/python-signedjson.git";
-      rev = "refs/tags/v${version}";
-      sha256 = "0b8xxhc3npd4567kqapfp4gs7m0h057xam3an7424az262ind82n";
-    };
-
-    propagatedBuildInputs = with self; [
-      canonicaljson unpaddedbase64 pynacl
-    ];
-  };
+  signedjson = callPackage ../development/python-modules/signedjson { };
 
   unpaddedbase64 = buildPythonPackage rec {
     name = "unpaddedbase64-${version}";
