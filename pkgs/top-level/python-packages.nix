@@ -4363,26 +4363,7 @@ in {
 
   svg2tikz = callPackage ../development/python-modules/svg2tikz { };
 
-  WSGIProxy = buildPythonPackage rec {
-    name = "WSGIProxy-${version}";
-    version = "0.2.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/W/WSGIProxy/WSGIProxy-${version}.tar.gz";
-      sha256 = "0wqz1q8cvb81a37gb4kkxxpv4w7k8192a08qzyz67rn68ln2wcig";
-    };
-
-    propagatedBuildInputs = with self; [
-      paste six
-    ];
-
-    disabled = isPy3k; # Judging from SyntaxError
-
-    meta = with stdenv.lib; {
-      description = "WSGIProxy gives tools to proxy arbitrary(ish) WSGI requests to other";
-      homepage = "http://pythonpaste.org/wsgiproxy/";
-    };
-  };
+  WSGIProxy = callPackage ../development/python-modules/wsgiproxy { };
 
   blist = buildPythonPackage rec {
     name = "blist-${version}";
