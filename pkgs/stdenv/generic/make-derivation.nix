@@ -82,6 +82,10 @@ rec {
 
     , ... } @ attrs:
 
+    # Check that the name is consistent with pname and version:
+    assert lib.lists.all (name: builtins.hasAttr name attrs) ["name" "pname" "version"]
+      -> lib.strings.hasSuffix "${attrs.pname}-${attrs.version}" attrs.name;
+
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
       # no package has `doCheck = true`.
