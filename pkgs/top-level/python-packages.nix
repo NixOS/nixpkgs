@@ -4237,19 +4237,8 @@ in {
   tarman = callPackage ../development/python-modules/tarman { };
 
   libarchive = self.python-libarchive; # The latter is the name upstream uses
-  python-libarchive = buildPythonPackage rec {
-    version = "3.1.2-1";
-    name = "libarchive-${version}";
-    disabled = isPy3k;
 
-    src = pkgs.fetchurl {
-      url = "http://python-libarchive.googlecode.com/files/python-libarchive-${version}.tar.gz";
-      sha256 = "0j4ibc4mvq64ljya9max8832jafi04jciff9ia9qy0xhhlwkcx8x";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.libarchive.lib ];
-    meta.broken = true;
-  };
+  python-libarchive = callPackage ../development/python-modules/python-libarchive { };
 
   libarchive-c = buildPythonPackage rec {
     name = "libarchive-c-${version}";
