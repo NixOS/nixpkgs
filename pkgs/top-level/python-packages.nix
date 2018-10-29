@@ -4465,29 +4465,7 @@ in {
 
   suds = callPackage ../development/python-modules/suds { };
 
-  suds-jurko = buildPythonPackage rec {
-    name = "suds-jurko-${version}";
-    version = "0.6";
-    disabled = isPyPy;  # lots of failures
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/suds-jurko/${name}.zip";
-      sha256 = "1s4radwf38kdh3jrn5acbidqlr66sx786fkwi0rgq61hn4n2bdqw";
-    };
-
-    buildInputs = [ self.pytest ];
-
-    preBuild = ''
-      # fails
-      substituteInPlace tests/test_transport_http.py \
-        --replace "test_sending_unicode_data" "noop"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Lightweight SOAP client (Jurko's fork)";
-      homepage = https://bitbucket.org/jurko/suds;
-    };
-  };
+  suds-jurko = callPackage ../development/python-modules/suds-jurko { };
 
   mailcap-fix = buildPythonPackage rec {
     name = "mailcap-fix-${version}";
