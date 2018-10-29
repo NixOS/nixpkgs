@@ -9,23 +9,37 @@ rec {
 
      Type: id :: a -> a
   */
-  id = x: x;
+  id =
+    # The value to return
+    x: x;
 
   /* The constant function
-     Ignores the second argument.
-     Or: Construct a function that always returns a static value.
+
+     Ignores the second argument. If called with only one argument,
+     constructs a function that always returns a static value.
 
      Type: const :: a -> b -> a
      Example:
        let f = const 5; in f 10
        => 5
   */
-  const = x: y: x;
+  const =
+    # Value to return
+    x:
+    # Value to ignore
+    y: x;
 
 
   ## Named versions corresponding to some builtin operators.
 
-  /* Concatenate two lists */
+  /* Concatenate two lists
+
+     Type: concat :: [a] -> [a] -> [a]
+
+     Example:
+       concat [ 1 2 ] [ 3 4 ]
+       => [ 1 2 3 4 ]
+  */
   concat = x: y: x ++ y;
 
   /* boolean “or” */
@@ -53,19 +67,32 @@ rec {
   bitNot = builtins.sub (-1);
 
   /* Convert a boolean to a string.
-     Note that toString on a bool returns "1" and "".
+
+     This function uses the strings "true" and "false" to represent
+     boolean values. Calling `toString` on a bool instead returns "1"
+     and "" (sic!).
+
+     Type: boolToString :: bool -> string
   */
   boolToString = b: if b then "true" else "false";
 
   /* Merge two attribute sets shallowly, right side trumps left
 
+     mergeAttrs :: attrs -> attrs -> attrs
+
      Example:
        mergeAttrs { a = 1; b = 2; } { b = 3; c = 4; }
        => { a = 1; b = 3; c = 4; }
   */
-  mergeAttrs = x: y: x // y;
+  mergeAttrs =
+    # Left attribute set
+    x:
+    # Right attribute set (higher precedence for equal keys)
+    y: x // y;
 
   /* Flip the order of the arguments of a binary function.
+
+     Type: flip :: (a -> b -> c) -> (b -> a -> c)
 
      Example:
        flip concat [1] [2]
@@ -73,7 +100,7 @@ rec {
   */
   flip = f: a: b: f b a;
 
-  /* Apply function if argument is non-null.
+  /* Apply function if the supplied argument is non-null.
 
      Example:
        mapNullable (x: x+1) null
@@ -81,7 +108,11 @@ rec {
        mapNullable (x: x+1) 22
        => 23
   */
-  mapNullable = f: a: if isNull a then a else f a;
+  mapNullable =
+    # Function to call
+    f:
+    # Argument to check for null before passing it to `f`
+    a: if isNull a then a else f a;
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
@@ -92,21 +123,27 @@ rec {
 
   ## nixpks version strings
 
-  # The current full nixpkgs version number.
+  /* Returns the current full nixpkgs version number. */
   version = release + versionSuffix;
 
-  # The current nixpkgs version number as string.
+  /* Returns the current nixpkgs release number as string. */
   release = lib.strings.fileContents ../.version;
 
-  # The current nixpkgs version suffix as string.
+  /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
     let suffixFile = ../.version-suffix;
     in if pathExists suffixFile
     then lib.strings.fileContents suffixFile
     else "pre-git";
 
-  # Attempt to get the revision nixpkgs is from
-  revisionWithDefault = default:
+  /* Attempts to return the the current revision of nixpkgs and
+     returns the supplied default value otherwise.
+
+     Type: revisionWithDefault :: string -> string
+  */
+  revisionWithDefault =
+    # Default value to return if revision can not be determined
+    default:
     let
       revisionFile = "${toString ./..}/.git-revision";
       gitRepo      = "${toString ./..}/.git";
@@ -117,14 +154,20 @@ rec {
 
   nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
-  # Whether we're being called by nix-shell.
+  /* Determine whether the function is being called from inside a Nix
+     shell.
+
+     Type: inNixShell :: bool
+  */
   inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
 
 
   ## Integer operations
 
-  # Return minimum/maximum of two numbers.
+  /* Return minimum of two numbers. */
   min = x: y: if x < y then x else y;
+
+  /* Return maximum of two numbers. */
   max = x: y: if x > y then x else y;
 
   /* Integer modulus
@@ -158,8 +201,9 @@ rec {
      second subtype, compare elements of a single subtype with `yes`
      and `no` respectively.
 
-     Example:
+     Type: (a -> bool) -> (a -> a -> int) -> (a -> a -> int) -> (a -> a -> int)
 
+     Example:
        let cmp = splitByAndCompare (hasPrefix "foo") compare compare; in
 
        cmp "a" "z" => -1
@@ -170,31 +214,44 @@ rec {
        # while
        compare "fooa" "a" => 1
   */
-  splitByAndCompare = p: yes: no: a: b:
+  splitByAndCompare =
+    # Predicate
+    p:
+    # Comparison function if predicate holds for both values
+    yes:
+    # Comparison function if predicate holds for neither value
+    no:
+    # First value to compare
+    a:
+    # Second value to compare
+    b:
     if p a
     then if p b then yes a b else -1
     else if p b then 1 else no a b;
 
 
-  /* Reads a JSON file. */
+  /* Reads a JSON file.
+
+     Type :: path -> any
+  */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
 
   ## Warnings
 
-  /* See https://github.com/NixOS/nix/issues/749. Eventually we'd like these
-     to expand to Nix builtins that carry metadata so that Nix can filter out
-     the INFO messages without parsing the message string.
+  # See https://github.com/NixOS/nix/issues/749. Eventually we'd like these
+  # to expand to Nix builtins that carry metadata so that Nix can filter out
+  # the INFO messages without parsing the message string.
+  #
+  # Usage:
+  # {
+  #   foo = lib.warn "foo is deprecated" oldFoo;
+  # }
+  #
+  # TODO: figure out a clever way to integrate location information from
+  # something like __unsafeGetAttrPos.
 
-     Usage:
-     {
-       foo = lib.warn "foo is deprecated" oldFoo;
-     }
-
-     TODO: figure out a clever way to integrate location information from
-     something like __unsafeGetAttrPos.
-  */
   warn = msg: builtins.trace "WARNING: ${msg}";
   info = msg: builtins.trace "INFO: ${msg}";
 
