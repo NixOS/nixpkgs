@@ -4206,28 +4206,7 @@ in {
 
   zope_lifecycleevent = callPackage ../development/python-modules/zope_lifecycleevent { };
 
-  zope_location = buildPythonPackage rec {
-    name = "zope.location-4.0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.location/zope.location-4.0.3.tar.gz";
-      sha256 = "1nj9da4ksiyv3h8n2vpzwd0pb03mdsh7zy87hfpx72b6p2zcwg74";
-    };
-
-    propagatedBuildInputs = with self; [ zope_proxy ];
-
-    # ignore circular dependency on zope_schema
-    preBuild = ''
-      sed -i '/zope.schema/d' setup.py
-    '';
-
-    doCheck = false;
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zope_location = callPackage ../development/python-modules/zope_location { };
 
   zope_proxy = buildPythonPackage rec {
     name = "zope.proxy-4.1.6";
