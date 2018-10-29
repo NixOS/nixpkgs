@@ -4423,25 +4423,7 @@ in {
 
   markdown2 = callPackage ../development/python-modules/markdown2 { };
 
-  evernote = buildPythonPackage rec {
-    name = "evernote-${version}";
-    version = "1.25.0";
-    disabled = ! isPy27; #some dependencies do not work with py3
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/evernote/${name}.tar.gz";
-      sha256 = "1lwlg6fpi3530245jzham1400a5b855bm4sbdyck229h9kg1v02d";
-    };
-
-     propagatedBuildInputs = with self; [ oauth2 ];
-
-     meta = {
-      description = "Evernote SDK for Python";
-      homepage = http://dev.evernote.com;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ hbunke ];
-     };
-  };
+  evernote = callPackage ../development/python-modules/evernote { };
 
   setproctitle = buildPythonPackage rec {
     name = "python-setproctitle-${version}";
