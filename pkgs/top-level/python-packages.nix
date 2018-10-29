@@ -4225,26 +4225,7 @@ in {
 
   cliapp = callPackage ../development/python-modules/cliapp { };
 
-  cmdtest = buildPythonPackage rec {
-    name = "cmdtest-${version}";
-    version = "0.18";
-    disabled = isPy3k || isPyPy;
-
-    propagatedBuildInputs = with self; [ cliapp ttystatus markdown ];
-
-    # TODO: cmdtest tests must be run before the buildPhase
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "http://code.liw.fi/debian/pool/main/c/cmdtest/cmdtest_0.18.orig.tar.xz";
-      sha256 = "068f24k8ad520hcf8g3gj7wvq1wspyd46ay0k9xa360jlb4dv2mn";
-    };
-
-    meta = {
-      homepage = http://liw.fi/cmdtest/;
-      description = "Black box tests Unix command line tools";
-    };
-  };
+  cmdtest = callPackage ../development/python-modules/cmdtest { };
 
   tornado = callPackage ../development/python-modules/tornado { };
   tornado_4 = callPackage ../development/python-modules/tornado { version = "4.5.3"; };
