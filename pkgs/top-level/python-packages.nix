@@ -4164,31 +4164,9 @@ in {
 
   zconfig = callPackage ../development/python-modules/zconfig { };
 
-
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
-  zdaemon = buildPythonPackage rec {
-    name = "zdaemon-${version}";
-    version = "4.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zdaemon/${name}.tar.gz";
-      sha256 = "82d7eaa4d831ff1ecdcffcb274f3457e095c0cc86e630bc72009a863c341ab9f";
-    };
-
-    propagatedBuildInputs = [ self.zconfig ];
-
-    # too many deps..
-    doCheck = false;
-
-    meta = {
-      description = "A daemon process control library and tools for Unix-based systems";
-      homepage = https://pypi.python.org/pypi/zdaemon;
-      license = licenses.zpl20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zdaemon = callPackage ../development/python-modules/zdaemon { };
 
   zfec = buildPythonPackage (rec {
     name = "zfec-1.4.24";
