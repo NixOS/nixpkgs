@@ -27,7 +27,9 @@ let
   bins = [ "bin" "usr/bin" ];
 
 in stdenv.mkDerivation rec {
-  name = "steam-runtime-wrapped";
+  inherit (steam-runtime) version;
+  name = "steam-runtime-wrapped-${steam-runtime.version}";
+
 
   nativeBuildInputs = [ perl ];
 
