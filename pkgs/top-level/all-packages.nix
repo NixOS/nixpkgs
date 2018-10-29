@@ -8309,7 +8309,11 @@ with pkgs;
 
   cpplint = callPackage ../development/tools/analysis/cpplint { };
 
-  cquery = callPackage ../development/tools/misc/cquery { };
+  cquery = callPackage ../development/tools/misc/cquery {
+    # 7 is the default, but only on Linux, so keep this for now
+    llvmPackages = llvmPackages_7;
+  };
+
 
   creduce = callPackage ../development/tools/misc/creduce {
     inherit (perlPackages) perl
@@ -11365,6 +11369,8 @@ with pkgs;
   libGLSupported = lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms;
 
   mesa_noglu = callPackage ../development/libraries/mesa {
+    # 7 is the default, but only on Linux, so keep this for now
+    llvmPackages = llvmPackages_7;
     inherit (darwin.apple_sdk.frameworks) OpenGL;
     inherit (darwin.apple_sdk.libs) Xplugin;
   };
@@ -12833,7 +12839,10 @@ with pkgs;
 
   zmqpp = callPackage ../development/libraries/zmqpp { };
 
-  zig = callPackage ../development/compilers/zig { };
+  zig = callPackage ../development/compilers/zig {
+    # 7 is the default, but only on Linux, so keep this for now
+    llvmPackages = llvmPackages_7;
+  };
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
