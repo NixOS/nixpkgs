@@ -139,6 +139,21 @@
      make sure to update your configuration if you want to keep <literal>proglodyte-wasm</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     OpenSMTPD has been upgraded to version 6.4.0p1. This release makes
+     backwards-incompatible changes to the configuration file format. See
+     <command>man smtpd.conf</command> for more information on the new file
+     format.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The versioned <varname>postgresql</varname> have been renamed to use
+     underscore number seperators. For example, <varname>postgresql96</varname>
+     has been renamed to <varname>postgresql_9_6</varname>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -155,6 +170,15 @@
      The <option>services.matomo</option> module gained the option
      <option>services.matomo.package</option> which determines the used
      Matomo version.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The deprecated <literal>truecrypt</literal> package has been removed
+     and <literal>truecrypt</literal> attribute is now an alias for
+     <literal>veracrypt</literal>. VeraCrypt is backward-compatible with
+     TrueCrypt volumes. Note that <literal>cryptsetup</literal> also
+     supports loading TrueCrypt volumes.
     </para>
    </listitem>
   </itemizedlist>

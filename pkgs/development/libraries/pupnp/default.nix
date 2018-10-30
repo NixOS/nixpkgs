@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     rev = "release-${version}";
     sha256 = "1daml02z4rs9cxls95p2v24jvwcsp43a0gqv06s84ay5yn6r47wx";
   };
+  outputs = [ "dev" "out" ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

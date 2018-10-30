@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, fetchurl, makeWrapper, unzip
-, gnumake, gcc-arm-embedded, dfu-util-axoloti, jdk, ant, libfaketime }:
+, gnumake, gcc-arm-embedded, binutils-arm-embedded
+, dfu-util-axoloti, jdk, ant, libfaketime }:
 
 stdenv.mkDerivation rec {
   version = "1.0.12-2";
@@ -20,7 +21,15 @@ stdenv.mkDerivation rec {
     sha256 = "0lb5s8pkj80mqhsy47mmq0lqk34s2a2m3xagzihalvabwd0frhlj";
   };
 
-  buildInputs = [ makeWrapper unzip gcc-arm-embedded dfu-util-axoloti jdk ant libfaketime ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    gcc-arm-embedded
+    binutils-arm-embedded
+    dfu-util-axoloti
+    ant
+  ];
+  buildInputs = [jdk libfaketime ];
 
   patchPhase = ''
     unzip ${chibios}

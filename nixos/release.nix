@@ -399,6 +399,7 @@ in rec {
   tests.radicale = callTest tests/radicale.nix {};
   tests.redmine = callTest tests/redmine.nix {};
   tests.rspamd = callSubTests tests/rspamd.nix {};
+  tests.rsyslogd = callSubTests tests/rsyslogd.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
   tests.rxe = callTest tests/rxe.nix {};
   tests.samba = callTest tests/samba.nix {};
@@ -467,7 +468,7 @@ in rec {
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
         services.postgresql.enable = true;
-        services.postgresql.package = pkgs.postgresql93;
+        services.postgresql.package = pkgs.postgresql_9_3;
         environment.systemPackages = [ pkgs.php ];
       });
   };

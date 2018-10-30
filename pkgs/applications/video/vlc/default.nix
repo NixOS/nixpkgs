@@ -12,6 +12,7 @@
 , withQt5 ? true, qtbase ? null, qtsvg ? null, qtx11extras ? null
 , jackSupport ? false
 , fetchpatch
+, removeReferencesTo
 }:
 
 with stdenv.lib;
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals withQt5    [ qtbase qtsvg qtx11extras ]
     ++ optional jackSupport libjack2;
 
-  nativeBuildInputs = [ autoreconfHook perl pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook perl pkgconfig removeReferencesTo ];
 
   enableParallelBuilding = true;
 
@@ -60,10 +61,14 @@ stdenv.mkDerivation rec {
       /usr/share/fonts/truetype/freefont ${freefont_ttf}/share/fonts/truetype
   '';
 
-  # https://github.com/NixOS/nixpkgs/pull/35124#issuecomment-370552830
+  # - Touch plugins (plugins cache keyed off mtime and file size:
+  #     https://github.com/NixOS/nixpkgs/pull/35124#issuecomment-370552830
+  # - Remove references to the Qt development headers (used in error messages)
   postFixup = ''
     find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
     $out/lib/vlc/vlc-cache-gen $out/vlc/plugins
+
+    remove-references-to -t "${qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
 
   # Most of the libraries are auto-detected so we don't need to set a bunch of
@@ -71,6 +76,11 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-kde-solid=$out/share/apps/solid/actions"
   ] ++ optional onlyLibVLC "--disable-vlc";
+
+  # Remove runtime dependencies on libraries
+  postConfigure = ''
+    sed -i 's|^#define CONFIGURE_LINE.*$|#define CONFIGURE_LINE "<removed>"|g' config.h
+  '';
 
   meta = with stdenv.lib; {
     description = "Cross-platform media player and streaming server";

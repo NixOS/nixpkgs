@@ -49,6 +49,10 @@ nodePackages // {
     buildInputs = [ pkgs.phantomjs2 ];
   };
 
+  git-ssb = nodePackages.git-ssb.override {
+    buildInputs = [ nodePackages.node-gyp-build ];
+  };
+
   node-inspector = nodePackages.node-inspector.override {
     buildInputs = [ nodePackages.node-pre-gyp ];
   };

@@ -830,7 +830,10 @@ with pkgs;
     libssl = openssl;
   };
 
-  axoloti = callPackage ../applications/audio/axoloti { };
+  axoloti = callPackage ../applications/audio/axoloti {
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
   dfu-util-axoloti = callPackage ../applications/audio/axoloti/dfu-util.nix { };
   libusb1-axoloti = callPackage ../applications/audio/axoloti/libusb1.nix {
     inherit (darwin) libobjc;
@@ -1528,6 +1531,8 @@ with pkgs;
   optar = callPackage ../tools/graphics/optar {};
 
   patdiff = callPackage ../tools/misc/patdiff { };
+
+  pbpst = callPackage ../applications/misc/pbpst { };
 
   pbzx = callPackage ../tools/compression/pbzx { };
 
@@ -4502,8 +4507,6 @@ with pkgs;
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
-  openopc = callPackage ../tools/misc/openopc { };
-
   openresolv = callPackage ../tools/networking/openresolv { };
 
   opensc = callPackage ../tools/security/opensc {
@@ -4543,7 +4546,7 @@ with pkgs;
 
   opae = callPackage ../development/libraries/opae { };
 
-  opentracing-cpp = callPackages ../development/libraries/opentracing-cpp { };
+  opentracing-cpp = callPackage ../development/libraries/opentracing-cpp { };
 
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
@@ -6030,11 +6033,6 @@ with pkgs;
     libpng = libpng12;
   };
 
-  truecrypt = callPackage ../applications/misc/truecrypt {
-    stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
-    wxGUI = config.truecrypt.wxGUI or true;
-  };
-
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
   ttwatch = callPackage ../tools/misc/ttwatch { };
@@ -6139,7 +6137,7 @@ with pkgs;
   };
 
   veracrypt = callPackage ../applications/misc/veracrypt {
-    wxGUI = true;
+    wxGTK = wxGTK30;
   };
 
   vlan = callPackage ../tools/networking/vlan { };
@@ -6430,6 +6428,23 @@ with pkgs;
   ### DEVELOPMENT / COMPILERS
 
   abcl = callPackage ../development/compilers/abcl {};
+
+  adoptopenjdk-bin-11-packages-linux = import ../development/compilers/adoptopenjdk-bin/jdk11-linux.nix;
+  adoptopenjdk-bin-11-packages-darwin = import ../development/compilers/adoptopenjdk-bin/jdk11-darwin.nix;
+
+  adoptopenjdk-hotspot-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jdk-hotspot {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-hotspot {};
+  adoptopenjdk-jre-hotspot-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jre-hotspot {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jre-hotspot {};
+
+  # no OpenJ9 for Darwin
+  adoptopenjdk-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages-linux.jdk-openj9 {};
+  adoptopenjdk-jre-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {};
+
+  adoptopenjdk-bin = adoptopenjdk-hotspot-bin-11;
+  adoptopenjdk-jre-bin = adoptopenjdk-jre-hotspot-bin-11;
 
   aldor = callPackage ../development/compilers/aldor { };
 
@@ -6816,36 +6831,6 @@ with pkgs;
 
   gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
 
-  gcc-arm-embedded-4_7 = pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
-    version = "4.7-2013q3-20130916";
-    releaseType = "update";
-    sha256 = "1bd9bi9q80xn2rpy0rn1vvj70rh15kb7dmah0qs4q2rv78fqj40d";
-    ncurses = pkgsi686Linux.ncurses5;
-  };
-  gcc-arm-embedded-4_8 = pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
-    version = "4.8-2014q1-20140314";
-    releaseType = "update";
-    sha256 = "ce92859550819d4a3d1a6e2672ea64882b30afa2c08cf67fa8e1d93788c2c577";
-    ncurses = pkgsi686Linux.ncurses5;
-  };
-  gcc-arm-embedded-4_9 = pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
-    version = "4.9-2015q1-20150306";
-    releaseType = "update";
-    sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
-    ncurses = pkgsi686Linux.ncurses5;
-  };
-  gcc-arm-embedded-5 = pkgs.pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
-    dirName = "5.0";
-    subdirName = "5-2016-q2-update";
-    version = "5.4-2016q2-20160622";
-    releaseType = "update";
-    sha256 = "1r0rqbnw7rf94f5bsa3gi8bick4xb7qnp1dkvdjfbvqjvysvc44r";
-    ncurses = pkgsi686Linux.ncurses5;
-  };
-  gcc-arm-embedded-6 = callPackage ../development/compilers/gcc-arm-embedded/6 {};
-  gcc-arm-embedded-7 = callPackage ../development/compilers/gcc-arm-embedded/7 {};
-  gcc-arm-embedded = gcc-arm-embedded-7;
-
   gforth = callPackage ../development/compilers/gforth {};
 
   gtk-server = callPackage ../development/interpreters/gtk-server {};
@@ -7185,10 +7170,6 @@ with pkgs;
 
   manticore = callPackage ../development/compilers/manticore { };
 
-  mentorToolchains = recurseIntoAttrs (
-    pkgsi686Linux.callPackage ../development/compilers/mentor {}
-  );
-
   mercury = callPackage ../development/compilers/mercury { };
 
   microscheme = callPackage ../development/compilers/microscheme { };
@@ -7220,16 +7201,6 @@ with pkgs;
   mono  = mono5;
   mono5 = mono58;
   mono4 = mono48;
-
-  mono40 = lowPrio (callPackage ../development/compilers/mono/4.0.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
-
-  mono44 = lowPrio (callPackage ../development/compilers/mono/4.4.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  });
 
   mono46 = lowPrio (callPackage ../development/compilers/mono/4.6.nix {
     inherit (darwin) libobjc;
@@ -7338,8 +7309,9 @@ with pkgs;
   inherit (rust) cargo rustc;
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
+  buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
   buildRustCrateTests = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { }).tests;
-
+  cratesIO = callPackage ../build-support/rust/crates-io.nix { };
   cargo-vendor = callPackage ../build-support/rust/cargo-vendor { };
 
   cargo-web = callPackage ../development/tools/cargo-web {
@@ -7376,12 +7348,15 @@ with pkgs;
   cargo-asm = callPackage ../development/tools/rust/cargo-asm { };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
+  pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
   rustracerd = callPackage ../development/tools/rust/racerd { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
-  rust-cbindgen = callPackage ../development/tools/rust/cbindgen { };
+  rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7394,6 +7369,7 @@ with pkgs;
   scala_2_12 = callPackage ../development/compilers/scala { jre = jre8; };
   scala = scala_2_12;
 
+  scalafix = callPackage ../development/tools/scalafix { };
   scalafmt = callPackage ../development/tools/scalafmt { };
 
   sdcc = callPackage ../development/compilers/sdcc {
@@ -7977,17 +7953,17 @@ with pkgs;
 
   amtk = callPackage ../development/libraries/amtk { };
 
-  avrgcclibc = throw "avrgcclibs are now separate packages, install avrbinutils, avrgcc and avrlibc";
-
-  avrbinutils = callPackage ../development/misc/avr/binutils {};
-
-  avrgcc      = callPackage ../development/misc/avr/gcc {};
-
-  avrlibc     = callPackage ../development/misc/avr/libc {};
+  avrlibc      = callPackage ../development/misc/avr/libc {};
+  avrlibcCross = callPackage ../development/misc/avr/libc {
+    stdenv = crossLibcStdenv;
+  };
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
-  betaflight = callPackage ../development/misc/stm32/betaflight { };
+  betaflight = callPackage ../development/misc/stm32/betaflight {
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
 
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
@@ -8023,7 +7999,10 @@ with pkgs;
     guile = guile_2_0;
   };
 
-  inav = callPackage ../development/misc/stm32/inav { };
+  inav = callPackage ../development/misc/stm32/inav {
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
 
   pharo-vms = callPackage ../development/pharo/vm { };
   pharo = pharo-vms.multi-vm-wrapper;
@@ -8181,6 +8160,8 @@ with pkgs;
 
   blackmagic = callPackage ../development/tools/misc/blackmagic {
     stdenv = overrideCC stdenv gcc6;
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
 
   bloaty = callPackage ../development/tools/bloaty { };
@@ -8975,10 +8956,6 @@ with pkgs;
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind {};
 
-  verasco = ocaml-ng.ocamlPackages_4_02.verasco.override {
-    coq = coq_8_4;
-  };
-
   visualvm = callPackage ../development/tools/java/visualvm { };
 
   vultr = callPackage ../development/tools/vultr { };
@@ -9732,6 +9709,8 @@ with pkgs;
     /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
     else if name == "bionic" then targetPackages.bionic
     else if name == "uclibc" then targetPackages.uclibcCross
+    else if name == "avrlibc" then targetPackages.avrlibcCross or avrlibcCross
+    else if name == "newlib" then targetPackages.newlibCross or newlibCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries
@@ -11494,7 +11473,9 @@ with pkgs;
   };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins {};
+  nix-plugins = callPackage ../development/libraries/nix-plugins {
+    nix = nixUnstable;
+  };
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
@@ -12191,7 +12172,11 @@ with pkgs;
 
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
-  simavr = callPackage ../development/tools/simavr { };
+  simavr = callPackage ../development/tools/simavr {
+    avrgcc = pkgsCross.avr.buildPackages.gcc;
+    avrbinutils = pkgsCross.avr.buildPackages.binutils;
+    avrlibc = pkgsCross.avr.libcCross;
+  };
 
   simgear = callPackage ../development/libraries/simgear { };
 
@@ -13529,6 +13514,8 @@ with pkgs;
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
+  miniflux = callPackage ../servers/miniflux { };
+
   nagios = callPackage ../servers/monitoring/nagios { };
 
   munin = callPackage ../servers/monitoring/munin { };
@@ -13582,22 +13569,23 @@ with pkgs;
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
-  pgpool93 = pgpool.override { postgresql = postgresql93; };
-  pgpool94 = pgpool.override { postgresql = postgresql94; };
+  pgpool93 = pgpool.override { postgresql = postgresql_9_3; };
+  pgpool94 = pgpool.override { postgresql = postgresql_9_4; };
 
   pgpool = callPackage ../servers/sql/pgpool {
     pam = if stdenv.isLinux then pam else null;
     libmemcached = null; # Detection is broken upstream
   };
 
-  postgresql = postgresql96;
+  postgresql = postgresql_9_6;
 
   inherit (callPackages ../servers/sql/postgresql { })
-    postgresql93
-    postgresql94
-    postgresql95
-    postgresql96
-    postgresql100;
+    postgresql_9_3
+    postgresql_9_4
+    postgresql_9_5
+    postgresql_9_6
+    postgresql_10
+    postgresql_11;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
@@ -15988,13 +15976,18 @@ with pkgs;
 
   bookworm = callPackage ../applications/office/bookworm { };
 
-  chromium = callPackage ../applications/networking/browsers/chromium {
+  chromium = callPackage ../applications/networking/browsers/chromium ({
     channel = "stable";
     pulseSupport = config.pulseaudio or true;
     enablePepperFlash = config.chromium.enablePepperFlash or false;
     enableWideVine = config.chromium.enableWideVine or false;
-    gnome = gnome2;
-  };
+  } // (if stdenv.isAarch64 then {
+          stdenv = gcc8Stdenv;
+        } else {
+          llvmPackages = llvmPackages_7;
+          stdenv = llvmPackages_7.stdenv;
+        })
+   );
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
@@ -17457,6 +17450,8 @@ with pkgs;
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
+  jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
+
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
     stdenv = overrideCC stdenv gcc6;
@@ -18279,7 +18274,10 @@ with pkgs;
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
 
-  opentx = callPackage ../applications/misc/opentx { };
+  opentx = callPackage ../applications/misc/opentx {
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
 
   opera = callPackage ../applications/networking/browsers/opera {};
 
@@ -19022,6 +19020,8 @@ with pkgs;
     apiKey = config.libspotify.apiKey or null;
   };
 
+  sourcetrail = callPackage ../development/tools/sourcetrail { };
+
   spotifywm = callPackage ../applications/audio/spotifywm { };
 
   squeezelite = callPackage ../applications/audio/squeezelite { };
@@ -19141,6 +19141,8 @@ with pkgs;
   taskell = callPackage ../applications/misc/taskell { };
 
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
+
+  tabula = callPackage ../applications/misc/tabula { };
 
   tasknc = callPackage ../applications/misc/tasknc { };
 
@@ -21344,7 +21346,7 @@ with pkgs;
                        ocamlPackages_4_05
     ;
   }) mkCoqPackages
-    coq_8_4 coq_8_5 coq_8_6 coq_8_7 coq_8_8
+    coq_8_5 coq_8_6 coq_8_7 coq_8_8
     coqPackages_8_5 coqPackages_8_6 coqPackages_8_7 coqPackages_8_8
     coqPackages coq
   ;
@@ -21958,14 +21960,9 @@ with pkgs;
   gnome-breeze = callPackage ../misc/themes/gnome-breeze { };
 
   gnuk = callPackage ../misc/gnuk {
-    gcc-arm-embedded = gcc-arm-embedded-4_9;
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
-  gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix {
-    gcc-arm-embedded = gcc-arm-embedded-4_9;
-  });
-  gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix {
-    gcc-arm-embedded = gcc-arm-embedded-4_9;
-  });
 
   greybird = callPackage ../misc/themes/greybird { };
 
@@ -22122,6 +22119,8 @@ with pkgs;
     }).config.system.build;
 
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
+
+  nixdoc = callPackage ../tools/nix/nixdoc {};
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { };
 
@@ -22698,9 +22697,7 @@ with pkgs;
 
   tomb = callPackage ../os-specific/linux/tomb {};
 
-  tomboy = callPackage ../applications/misc/tomboy {
-    mono = mono46;
-  };
+  tomboy = callPackage ../applications/misc/tomboy { };
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
@@ -22811,4 +22808,16 @@ with pkgs;
   };
 
   tsung = callPackage ../applications/networking/tsung {};
+
+  qmk_firmware = callPackage ../development/misc/qmk_firmware {
+    avrgcc = pkgsCross.avr.buildPackages.gcc;
+    avrbinutils = pkgsCross.avr.buildPackages.binutils;
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
+
+  newlib = callPackage ../development/misc/newlib { };
+  newlibCross = callPackage ../development/misc/newlib {
+    stdenv = crossLibcStdenv;
+  };
 }

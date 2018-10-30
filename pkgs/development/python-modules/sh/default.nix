@@ -1,23 +1,24 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-}:
+{ stdenv, buildPythonPackage, fetchPypi, coverage }:
 
 buildPythonPackage rec {
   pname = "sh";
-  version = "1.11";
+  version = "1.12.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "590fb9b84abf8b1f560df92d73d87965f1e85c6b8330f8a5f6b336b36f0559a4";
+    sha256 = "1z2hx357xp3v4cv44xmqp7lli3frndqpyfmpbxf7n76h7s1zaaxm";
   };
 
-  doCheck = false;
+  checkInputs = [ coverage ];
 
-  meta = with stdenv.lib; {
+  # A test needs the HOME directory to be different from $TMPDIR.
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
+
+  meta = {
     description = "Python subprocess interface";
     homepage = https://pypi.python.org/pypi/sh/;
-    license = licenses.mit;
+    license = stdenv.lib.licenses.mit;
   };
-
 }
