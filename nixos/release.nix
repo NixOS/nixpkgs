@@ -468,7 +468,7 @@ in rec {
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
         services.postgresql.enable = true;
-        services.postgresql.package = pkgs.postgresql93;
+        services.postgresql.package = pkgs.postgresql_9_3;
         environment.systemPackages = [ pkgs.php ];
       });
   };

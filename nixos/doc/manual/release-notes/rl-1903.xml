@@ -145,6 +145,13 @@
      format.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The versioned <varname>postgresql</varname> have been renamed to use
+     underscore number seperators. For example, <varname>postgresql96</varname>
+     has been renamed to <varname>postgresql_9_6</varname>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
