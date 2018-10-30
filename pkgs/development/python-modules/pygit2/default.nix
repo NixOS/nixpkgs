@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, isPyPy, libgit2_0_27, six, cffi, pycparser }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, isPyPy, libgit2_0_27, six, cffi }:
 
 buildPythonPackage rec {
   pname = "pygit2";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "18x1fpmywhjjr4lvakwmy34zpxfqi8pqqj48g1wcib39lh3s7l4f";
   }) ];
 
-  propagatedBuildInputs = [ libgit2_0_27 six pycparser ] ++ lib.optional (!isPyPy) cffi;
+  propagatedBuildInputs = [ libgit2_0_27 six ] ++ lib.optional (!isPyPy) cffi;
 
   preCheck = ''
     # disable tests that require networking
