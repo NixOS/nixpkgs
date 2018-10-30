@@ -17475,6 +17475,8 @@ with pkgs;
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
+  jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
+
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
     stdenv = overrideCC stdenv gcc6;
