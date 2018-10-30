@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "0gj2xxv45gh7wr5ry3mcsi46kdsyq9nbd7znssn34kapiv40ixcx";
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  postPatch = ''
+    sed -i -e 's:/share/gocode:/share/go:' Makefile
+  '';
 
   meta = with stdenv.lib; {
     description = "GoLang DBus factory for the Deepin Desktop Environment";
