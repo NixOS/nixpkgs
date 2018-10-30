@@ -73,7 +73,9 @@ in
             manage = "desktop";
             start = d.start
             + optionalString (needBGCond d) ''
-              if [ -e $HOME/.background-image ]; then
+              if [ -x $HOME/.background-image ]; then
+                $HOME/.background-image
+              elif [ -r $HOME/.background-image ]; then
                 ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
               else
                 # Use a solid black background as fallback
