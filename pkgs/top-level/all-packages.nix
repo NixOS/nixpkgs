@@ -22259,9 +22259,7 @@ with pkgs;
 
   tomb = callPackage ../os-specific/linux/tomb {};
 
-  tomboy = callPackage ../applications/misc/tomboy {
-    mono = mono46;
-  };
+  tomboy = callPackage ../applications/misc/tomboy { };
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
