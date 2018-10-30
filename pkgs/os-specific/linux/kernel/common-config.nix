@@ -638,6 +638,7 @@ let
       MEGARAID_NEWGEN       = yes;
 
       MLX4_EN_VXLAN = whenOlder "4.8" yes;
+      MLX5_CORE_EN       = option yes;
 
       MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
