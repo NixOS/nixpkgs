@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, flex, bison }:
 let
-  version = "2.2.0";
+  version = "2.2.1";
 in
 stdenv.mkDerivation {
   name = "minizinc-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     rev = "${version}";
     owner = "MiniZinc";
     repo = "libminizinc";
-    sha256 = "05is1r5y06jfqwvka90dn2ffxnvbgyswaxl00aqz6455hnggnxvm";
+    sha256 = "1i11lan7fqs3lg0s6jfr8sflzwn5nk1ln5j6afjrkrdb08291dr7";
   };
 
   # meta is all the information about the package..

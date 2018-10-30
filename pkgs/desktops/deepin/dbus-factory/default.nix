@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
     go-dbus-generator
   ];
 
-  makeFlags = [ "GOPATH=$(out)/share/gocode" ];
+  makeFlags = [ "GOPATH=$(out)/share/go" ];
+
+  postPatch = ''
+    sed -i -e 's:/share/gocode:/share/go:' Makefile
+  '';
 
   meta = with stdenv.lib; {
     description = "Generates static DBus bindings for Golang and QML at build-time";

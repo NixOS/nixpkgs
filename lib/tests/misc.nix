@@ -112,7 +112,7 @@ runTests {
         storePathAppendix = isStorePath
           "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
-        asPath = isStorePath goodPath;
+        asPath = isStorePath (/. + goodPath);
         otherPath = isStorePath "/something/else";
         otherVals = {
           attrset = isStorePath {};

@@ -46,7 +46,7 @@ let
 
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
-    error_log stderr;
+    error_log ${cfg.logError};
     daemon off;
 
     ${cfg.config}
@@ -341,6 +341,35 @@ in
         ";
       };
 
+      logError = mkOption {
+        default = "stderr";
+        description = "
+          Configures logging.
+          The first parameter defines a file that will store the log. The
+          special value stderr selects the standard error file. Logging to
+          syslog can be configured by specifying the “syslog:” prefix.
+          The second parameter determines the level of logging, and can be
+          one of the following: debug, info, notice, warn, error, crit,
+          alert, or emerg. Log levels above are listed in the order of
+          increasing severity. Setting a certain log level will cause all
+          messages of the specified and more severe log levels to be logged.
+          If this parameter is omitted then error is used.
+        ";
+      };
+
+      preStart =  mkOption {
+        type = types.lines;
+        default = ''
+          test -d ${cfg.stateDir}/logs || mkdir -m 750 -p ${cfg.stateDir}/logs  
+          test `stat -c %a ${cfg.stateDir}` = "750" || chmod 750 ${cfg.stateDir}
+          test `stat -c %a ${cfg.stateDir}/logs` = "750" || chmod 750 ${cfg.stateDir}/logs
+          chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
+        '';
+        description = "
+          Shell commands executed before the service's nginx is started.
+        ";
+      };
+
       config = mkOption {
         default = "";
         description = "
@@ -608,9 +637,7 @@ in
       stopIfChanged = false;
       preStart =
         ''
-        mkdir -p ${cfg.stateDir}/logs
-        chmod 700 ${cfg.stateDir}
-        chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
+        ${cfg.preStart}
         ${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir} -t
         '';
       serviceConfig = {

@@ -56,9 +56,6 @@ in rec {
     let self = mkCoqPackages' self coq; in
     filterCoqPackages coq self;
 
-  coq_8_4 = callPackage ../applications/science/logic/coq/8.4.nix {
-    inherit (ocamlPackages_4_02) ocaml findlib lablgtk camlp5;
-  };
   coq_8_5 = callPackage ../applications/science/logic/coq {
     ocamlPackages = ocamlPackages_4_05;
     version = "8.5pl3";

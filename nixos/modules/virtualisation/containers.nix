@@ -606,7 +606,7 @@ in
               { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
-                    services.postgresql.package = pkgs.postgresql96;
+                    services.postgresql.package = pkgs.postgresql_9_6;
 
                     system.stateVersion = "17.03";
                   };

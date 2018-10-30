@@ -36,7 +36,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "7.0"; # always change at once with ./minimal.nix
+  version = "7.1"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
     fetchurl rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     inherit name;
-    sha256 = "1glv5amsp9xp480d4yr63hhm9kkyav06yl3a6p489nkr4cln0j9a";
+    sha256 = "180z0z6srzyipi9wfnbh61nbvzxr5d1cls7wxapv6fw92y52jwz9";
   };
 
   FONTCONFIG_FILE = fontsConf;

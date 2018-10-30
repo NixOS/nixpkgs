@@ -708,6 +708,8 @@ in {
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 
+  aioprocessing = callPackage ../development/python-modules/aioprocessing { };
+
   ajpy = callPackage ../development/python-modules/ajpy { };
 
   alabaster = callPackage ../development/python-modules/alabaster {};
@@ -971,12 +973,8 @@ in {
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
-  dlib = buildPythonPackage rec {
-    inherit (pkgs.dlib) name src nativeBuildInputs meta buildInputs;
-
-    patches = [ ../development/python-modules/dlib/build-cores.patch ];
-
-    checkInputs = with self; [ pytest ];
+  dlib = callPackage ../development/python-modules/dlib {
+    inherit (pkgs) dlib;
   };
 
   datadog = callPackage ../development/python-modules/datadog {};
@@ -4682,7 +4680,11 @@ in {
 
   PyStemmer = callPackage ../development/python-modules/pystemmer {};
 
-  Pyro = callPackage ../development/python-modules/pyro { };
+  serpent = callPackage ../development/python-modules/serpent { };
+
+  selectors34 = callPackage ../development/python-modules/selectors34 { };
+
+  Pyro4 = callPackage ../development/python-modules/pyro4 { };
 
   pyrsistent = buildPythonPackage (rec {
     name = "pyrsistent-0.11.12";
@@ -6745,23 +6747,7 @@ in {
     };
   };
 
-
-  sh = buildPythonPackage rec {
-    name = "sh-1.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sh/${name}.tar.gz";
-      sha256 = "590fb9b84abf8b1f560df92d73d87965f1e85c6b8330f8a5f6b336b36f0559a4";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "Python subprocess interface";
-      homepage = https://pypi.python.org/pypi/sh/;
-    };
-  };
-
+  sh = callPackage ../development/python-modules/sh { };
 
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";

@@ -495,6 +495,11 @@
     github = "bennofs";
     name = "Benno Fünfstück";
   };
+  benpye = {
+    email = "ben@curlybracket.co.uk";
+    github = "benpye";
+    name = "Ben Pye";
+  };
   benwbooth = {
     email = "benwbooth@gmail.com";
     github = "benwbooth";
@@ -2967,6 +2972,11 @@
     github = "nequissimus";
     name = "Tim Steinbach";
   };
+  nikitavoloboev = {
+    email = "nikita.voloboev@gmail.com";
+    github = "nikitavoloboev";
+    name = "Nikita Voloboev";
+  };
   nfjinjing = {
     email = "nfjinjing@gmail.com";
     github = "nfjinjing";
@@ -4617,6 +4627,11 @@
     email = "info@wucke13.de";
     github = "wucke13";
     name = "Wucke";
+  };
+  wykurz = {
+    email = "wykurz@gmail.com";
+    github = "wykurz";
+    name = "Mateusz Wykurz";
   };
   wyvie = {
     email = "elijahrum@gmail.com";
