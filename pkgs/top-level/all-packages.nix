@@ -8984,10 +8984,6 @@ with pkgs;
 
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind {};
 
-  verasco = ocaml-ng.ocamlPackages_4_02.verasco.override {
-    coq = coq_8_4;
-  };
-
   visualvm = callPackage ../development/tools/java/visualvm { };
 
   vultr = callPackage ../development/tools/vultr { };
@@ -21368,7 +21364,7 @@ with pkgs;
                        ocamlPackages_4_05
     ;
   }) mkCoqPackages
-    coq_8_4 coq_8_5 coq_8_6 coq_8_7 coq_8_8
+    coq_8_5 coq_8_6 coq_8_7 coq_8_8
     coqPackages_8_5 coqPackages_8_6 coqPackages_8_7 coqPackages_8_8
     coqPackages coq
   ;
