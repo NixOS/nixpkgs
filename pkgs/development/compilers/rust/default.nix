@@ -29,7 +29,7 @@ in rec {
       ./patches/disable-test-inherit-env.patch
     ];
 
-    forceBundledLLVM = true;
+    withBundledLLVM = false;
 
     configureFlags = [ "--release-channel=stable" ];
 
