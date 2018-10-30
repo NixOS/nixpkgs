@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "dmrconfig-${version}";
-  version = "2018-10-20";
+  version = "2018-10-29";
 
   src = fetchFromGitHub {
     owner = "sergev";
     repo = "dmrconfig";
-    rev = "a4c5f893d2749727493427320c7f01768966ba51";
-    sha256 = "0h7hv6fv6v5g922nvgrb0w7hsqbhaw7xmdc6vydh2p3l7sp31vg2";
+    rev = "4924d00283c3c81a4b8251669e42aecd96b6145a";
+    sha256 = "00a4hmbr71g0d4faskb8q96y6z212g2r4n533yvp88z8rq8vbxxn";
   };
 
   buildInputs = [
