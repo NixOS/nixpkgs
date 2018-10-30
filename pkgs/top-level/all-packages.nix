@@ -1154,6 +1154,8 @@ with pkgs;
 
   clipster = callPackage ../tools/misc/clipster { };
 
+  clustergit = callPackage ../tools/misc/clustergit { };
+
   coprthr = callPackage ../development/libraries/coprthr {
     flex = flex_2_5_35;
   };

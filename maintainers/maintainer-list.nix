@@ -1600,6 +1600,11 @@
     github = "globin";
     name = "Robin Gloster";
   };
+  gmarmstrong = {
+    email = "guthrie.armstrong@gmail.com";
+    github = "gmarmstrong";
+    name = "Guthrie McAfee Armstrong";
+  };
   gnidorah = {
     email = "gnidorah@yandex.com";
     github = "gnidorah";
