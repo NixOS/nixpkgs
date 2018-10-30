@@ -15,15 +15,19 @@ in {
 
   # Create the tarball
   system.build.tarball = pkgs.callPackage ../../lib/make-system-tarball.nix {
-    contents = [];
+    contents = [
+      {
+        source = "${config.system.build.toplevel}/.";
+        target = "./";
+      }
+    ];
     extraArgs = "--owner=0";
 
     # Add init script to image
-    storeContents = [
-      { object = config.system.build.toplevel + "/init";
-        symlink = "/init";
-      }
-    ] ++ (pkgs2storeContents [ pkgs.stdenv ]);
+    storeContents = pkgs2storeContents [
+      config.system.build.toplevel
+      pkgs.stdenv
+    ];
 
     # Some container managers like lxc need these
     extraCommands = "mkdir -p proc sys dev";
