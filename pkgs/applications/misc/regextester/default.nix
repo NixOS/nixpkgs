@@ -3,8 +3,9 @@
 , gettext
 , libxml2
 , pkgconfig
-, gtk3
+, glib
 , granite
+, gtk3
 , gnome3
 , meson
 , ninja
@@ -35,10 +36,10 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
   buildInputs = [
-    gtk3
+    glib
     granite
+    gtk3
     gnome3.defaultIconTheme
-    gnome3.glib
     gnome3.libgee
     gsettings-desktop-schemas
   ];
