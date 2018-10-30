@@ -1003,7 +1003,7 @@ configurePhase() {
             echo "Configure failed. The contents of all config.log files follows to aid debugging"
             find . -ignore_readdir_race -name config.log -print -exec cat {} \;
             echo "configure failed" 1>&2
-	        exit 1
+            exit 1
         fi
         set -e
 
