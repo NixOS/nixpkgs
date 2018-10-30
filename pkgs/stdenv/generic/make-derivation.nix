@@ -86,7 +86,8 @@ rec {
     assert lib.assertMsg
       (lib.lists.all (name: builtins.hasAttr name attrs) ["name" "pname" "version"]
         -> lib.strings.hasSuffix "${attrs.pname}-${attrs.version}" attrs.name)
-      "mkDerivation: `name` must be consistent with `pname-version`";
+      ("mkDerivation: `name` (\"${attrs.name}\") must be consistent " +
+       "with `pname-version` \"${attrs.pname}-${attrs.version}\"");
 
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
