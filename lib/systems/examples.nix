@@ -118,6 +118,16 @@ rec {
     libc = "newlib";
   };
 
+  i686-embedded = {
+    config = "i686-elf";
+    libc = "newlib";
+  };
+
+  x86_64-embedded = {
+    config = "x86_64-elf";
+    libc = "newlib";
+  };
+
   #
   # Darwin
   #

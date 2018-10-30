@@ -267,6 +267,8 @@ rec {
         then { cpu = elemAt l 0;                      kernel = "windows";  abi = "cygnus";   }
       else if (elemAt l 1 == "eabi")
         then { cpu = elemAt l 0; vendor = "none"; kernel = "none"; abi = elemAt l 1; }
+      else if (elemAt l 1 == "elf")
+        then { cpu = elemAt l 0; vendor = "none"; kernel = "none"; abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
     "3" = # Awkwards hacks, beware!
       if elemAt l 1 == "apple"

@@ -144,6 +144,8 @@ in
   arm-embedded = mapTestOnCross lib.systems.examples.arm-embedded embedded;
   powerpc-embedded = mapTestOnCross lib.systems.examples.powerpc-embedded embedded;
   aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
+  i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
+  x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
 
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
