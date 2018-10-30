@@ -4,6 +4,7 @@
 , configparser
 , pytest
 , isPy3k
+, isPy27
 }:
 
 buildPythonPackage rec {
@@ -19,8 +20,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional (!isPy3k) configparser;
 
+  # On python2 with pytest 3.9.2 (not with pytest 3.7.4) the test_bad
+  # test fails. It tests that a warning (exectly one) is thrown on a "bad"
+  # path. The pytest upgrade added some warning, resulting in two warnings
+  # being thrown.
+  # upstream: https://github.com/takluyver/entrypoints/issues/23
+  pyTestArgs = if isPy27 then "-k 'not test_bad'" else "";
+
   checkPhase = ''
-    py.test tests
+    py.test ${pyTestArgs} tests
   '';
 
   meta = {
