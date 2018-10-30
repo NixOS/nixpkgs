@@ -57,8 +57,6 @@ let version = "6.5.0";
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch
-      ++ [ ../struct-ucontext.patch ../struct-sigaltstack.patch ] # glibc-2.26
-      ++ optional langJava [ ../struct-ucontext-libjava.patch ] # glibc-2.26
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
       ;
 
