@@ -3,18 +3,22 @@
   meson, ninja, pkgconfig,
   zlib, ispc,
   protobuf, protobufc, gtest,
-  buildBackends ? true,
-  useCUDA ? false, cudatoolkit ? null, cudnn ? null,
+  useCUDA ? false, cudatoolkit ? null, cudnn ? null, symlinkJoin,
   useOpenCL ? false, opencl-headers ? null, ocl-icd ? null,
   useOpenBLAS ? false, openblas ? null
 }:
 let
   pname = "lc0";
-  version = "0.18.0-rc1";
+  version = "0.18.1";
   optionals = stdenv.lib.optionals;
+  buildBackends = useCUDA || useOpenBLAS || useOpenCL;
+
+  cuda-combined = symlinkJoin {
+    name = "cuda-combined";
+    paths = [ cudatoolkit cudnn cudatoolkit.lib ];
+  };
 in
 
-assert buildBackends -> useCUDA || useOpenBLAS || useOpenCL;
 assert useCUDA -> cudatoolkit != null && cudnn != null;
 assert (useOpenBLAS || useOpenCL) -> openblas != null;
 assert useOpenCL -> opencl-headers != null && ocl-icd != null;
@@ -28,7 +32,7 @@ stdenv.mkDerivation {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "18m5hmhc770b0m1p2ni8pl4dy9q81120cjxz9sag25inwn5vybc0";
+    sha256 = "05ipriwrm22zf3vkfibi45saji7aikgvfgw89lxs815k00qcv2fs";
   };
 
   nativeBuildInputs = [
@@ -45,20 +49,21 @@ stdenv.mkDerivation {
   ] ++ optionals useCUDA [
     # Cuda needs cudalibdirs set to a merger of the two cuda packages. Broken for now.
     "-Dcuda=true"
-    "-Dcudnn_libdirs=${cudatoolkit}/lib"
+    "-Dcudnn_libdirs=${cuda-combined}/lib"
+    "-Dcudnn_include=${cuda-combined}/include"
   ] ++ optionals useOpenBLAS [
     "-Dblas=true"
   ] ++ optionals (useOpenCL || useOpenBLAS) [
     "-Dopenblas_libdirs=${openblas}/lib"
+    "-Dopencl_include=${opencl-headers}/include"
   ] ++ optionals useOpenCL [
     "-Dopencl=true"
     "-Dopencl_libdirs=${ocl-icd}/lib"
-    "-Dopencl_include=${opencl-headers}/include"
   ];
 
   doCheck = gtest != null;
   checkPhase = ''
-    for test in /build/source/build/*_test
+    for test in ./*_test
     do
       $test
     done
@@ -73,6 +78,8 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     maintainers = with maintainers; [ synthetica ];
     platforms = platforms.linux;
-    broken = useCUDA;
+    # You shouldn't really use the random-backend build, but it is possible.
+    # cuDNN has to be updated before this works, 7.1.1 shoudl be enough.
+    broken = (useCUDA && stdenv.lib.versionOlder cudnn.version "7.1.1") || !buildBackends;
   };
 }

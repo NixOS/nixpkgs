@@ -20350,25 +20350,25 @@ with pkgs;
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
 
-  lc0-cuda = callPackage ../games/lc0 {
+  lc0 = callPackage ../games/lc0 { };
+
+  lc0-cuda = lc0.override {
     useCUDA = true;
     cudatoolkit = cudatoolkit;
     cudnn = cudnn;
   };
 
-  lc0-openblas = callPackage ../games/lc0 {
+  lc0-openblas = lc0.override {
     useOpenBLAS = true;
     inherit openblas;
   };
 
-  lc0-opencl = callPackage ../games/lc0 {
+  lc0-opencl = lc0.override {
     useOpenCL = true;
     inherit opencl-headers ocl-icd;
   };
 
-  lc0-random = callPackage ../games/lc0 {
-    buildBackends = false;
-  };
+  lc0-random = lc0;
 
 
   lgogdownloader = callPackage ../games/lgogdownloader { };
