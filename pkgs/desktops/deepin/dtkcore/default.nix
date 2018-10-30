@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages }:
+{ stdenv, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Deepin tool kit core modules";

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, deepin-wallpapers }:
+{ stdenv, fetchFromGitHub, deepin-wallpapers, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     # Make a symlink for deepin-version
     ln -s ../lib/deepin/desktop-version $out/etc/deepin-version
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";

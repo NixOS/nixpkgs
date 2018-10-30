@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, gnome3, xorg,
   libcanberra-gtk3, upower, xkeyboard_config, libxkbcommon,
-  libstartup_notification, libinput, cogl, clutter, systemd
-}:
+  libstartup_notification, libinput, cogl, clutter, systemd, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -50,6 +49,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     NOCONFIGURE=1 ./autogen.sh
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Base window manager for deepin, fork of gnome mutter";

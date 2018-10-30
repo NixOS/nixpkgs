@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, qtmultimedia,
   qtsvg, qtx11extras, librsvg, libstartup_notification, gsettings-qt,
-  dde-qt-dbus-factory, dtkcore
-}:
+  dde-qt-dbus-factory, dtkcore, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -40,6 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Deepin graphical user interface library";

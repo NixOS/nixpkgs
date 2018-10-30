@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qtsvg, qttools,
   qtx11extras, xkeyboard_config, xorg, lightdm_qt, gsettings-qt,
   dde-qt-dbus-factory, deepin-gettext-tools, dtkcore, dtkwidget,
-  hicolor-icon-theme }:
+  hicolor-icon-theme, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     # fix default background url
     sed -i widgets/*.cpp boxframe/*.cpp -e 's,/usr/share/backgrounds/default_background.jpg,/usr/share/backgrounds/deepin/desktop.jpg,'
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Deepin desktop-environment - Session UI module";

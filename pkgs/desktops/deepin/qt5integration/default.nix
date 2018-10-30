@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, mtdev, gsettings-qt
-, lxqt, qtx11extras, qtmultimedia, qtsvg, fontconfig, freetype
-, qt5dxcb-plugin, qtstyleplugins, dtkcore, dtkwidget
-}:
+{ stdenv, fetchFromGitHub, pkgconfig, qmake, mtdev, gsettings-qt ,
+  lxqt, qtx11extras, qtmultimedia, qtsvg, fontconfig, freetype ,
+  qt5dxcb-plugin, qtstyleplugins, dtkcore, dtkwidget, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -41,6 +40,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugins for DDE";

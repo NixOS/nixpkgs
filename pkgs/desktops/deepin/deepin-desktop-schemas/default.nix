@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, python, deepin-gtk-theme,
-deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, gnome3 }:
+  deepin-icon-theme, deepin-sound-theme, deepin-wallpapers, gnome3,
+  deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -32,6 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "GSettings deepin desktop-wide schemas";

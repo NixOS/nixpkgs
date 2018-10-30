@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, libSM, mtdev, cairo }:
+{ stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, libSM,
+  mtdev, cairo, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -29,6 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugin for DDE";

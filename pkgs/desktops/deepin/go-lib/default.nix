@@ -1,6 +1,5 @@
 { stdenv, fetchFromGitHub, glib, xorg, gdk_pixbuf, pulseaudio,
-  mobile-broadband-provider-info
-}:
+  mobile-broadband-provider-info, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -26,6 +25,8 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "GOSITE_DIR=$(out)/share/go"
   ];
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Go bindings for Deepin Desktop Environment development";

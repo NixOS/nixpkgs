@@ -2,6 +2,7 @@
 
 let
   packages = self: with self; {
+    updateScript = callPackage ./update.nix { };
 
     dbus-factory = callPackage ./dbus-factory { };
     dde-api = callPackage ./dde-api { };

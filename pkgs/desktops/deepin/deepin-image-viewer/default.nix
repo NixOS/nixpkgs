@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, qtsvg,
   qtx11extras, dtkcore, dtkwidget, qt5integration, freeimage, libraw,
-  libexif
+  libexif, deepin
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
     sed -i viewer/com.deepin.ImageViewer.service \
       -e "s,/usr,$out,"
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Image Viewer for Deepin Desktop Environment";

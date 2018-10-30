@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, papirus-icon-theme }:
+{ stdenv, fetchFromGitHub, gtk3, papirus-icon-theme, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     # keep icon-theme.cache
     sed -i -e 's|\(-rm -f .*/icon-theme.cache\)|# \1|g' Makefile
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Icons for the Deepin Desktop Environment";

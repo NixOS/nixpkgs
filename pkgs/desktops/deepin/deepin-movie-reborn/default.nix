@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
   dtkcore, dtkwidget, ffmpeg, ffmpegthumbnailer, mpv, pulseaudio,
-  libdvdnav, libdvdread, xorg }:
+  libdvdnav, libdvdread, xorg, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     sed -i src/CMakeLists.txt -e "s,/usr/lib/dtk2,${dtkcore}/lib/dtk2,"
     sed -i src/libdmr/libdmr.pc.in -e "s,/usr,$out," -e 's,libdir=''${prefix}/,libdir=,'
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Deepin movie player";

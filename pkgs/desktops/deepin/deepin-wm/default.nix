@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, libtool, vala, gnome3,
   bamf, clutter-gtk, granite, libcanberra-gtk3, libwnck3,
   deepin-mutter, deepin-wallpapers, deepin-desktop-schemas,
-  hicolor-icon-theme }:
+  hicolor-icon-theme, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -47,6 +47,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Deepin Window Manager";

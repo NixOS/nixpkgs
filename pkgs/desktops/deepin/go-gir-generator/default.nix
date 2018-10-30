@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, go, gobjectIntrospection, libgudev }:
+{ stdenv, fetchFromGitHub, pkgconfig, go, gobjectIntrospection,
+  libgudev, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "GOCACHE=off"
   ];
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Generate static golang bindings for GObject";

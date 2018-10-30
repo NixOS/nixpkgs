@@ -2,7 +2,7 @@
   dbus-factory, go-dbus-factory, go-gir-generator, go-lib,
   deepin-gettext-tools, dde-api, alsaLib, glib, gtk3, libinput, libnl,
   librsvg, linux-pam, networkmanager, pulseaudio, xorg, gnome3,
-  python3Packages, hicolor-icon-theme, go }:
+  python3Packages, hicolor-icon-theme, go, deepin }:
 
 buildGoPackage rec {
   name = "${pname}-${version}";
@@ -79,6 +79,8 @@ buildGoPackage rec {
     make install PREFIX="$out" -C go/src/${goPackagePath}
     remove-references-to -t ${go} $out/lib/deepin-daemon/*
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Daemon for handling Deepin Desktop Environment session settings";

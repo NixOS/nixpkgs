@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, polkit-qt,
-dtkcore, dtkwidget, dde-qt-dbus-factory }:
+  dtkcore, dtkwidget, dde-qt-dbus-factory, deepin }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     sed -i pluginmanager.cpp \
       -e "s,/usr/lib/polkit-1-dde/plugins,/run/current-system/sw/lib/polkit-1-dde/plugins,"
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "PolicyKit agent for Deepin Desktop Environment";

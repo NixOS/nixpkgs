@@ -1,10 +1,11 @@
 { stdenv, fetchurl, fetchFromGitHub, pkgconfig, gtk3, vala, cmake,
   ninja, vte, libgee, wnck, zssh, gettext, librsvg, libsecret,
-  json-glib, gobjectIntrospection, deepin-menu, deepin-shortcut-viewer
-}:
+  json-glib, gobjectIntrospection, deepin-menu,
+  deepin-shortcut-viewer, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "deepin-terminal-${version}";
+  name = "${pname}-${version}";
+  pname = "deepin-terminal";
   version = "3.0.3";
 
   src = fetchFromGitHub {
@@ -49,6 +50,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "The default terminal emulation for Deepin";

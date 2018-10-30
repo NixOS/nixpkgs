@@ -1,6 +1,7 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig,
-go-gir-generator, glib, gtk3, poppler, librsvg, pulseaudio, alsaLib,
-libcanberra, gnome3, deepin-gettext-tools, go }:
+{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig ,
+  go-gir-generator, glib, gtk3, poppler, librsvg, pulseaudio, alsaLib,
+  libcanberra, gnome3, deepin-gettext-tools, go, deepin
+}:
 
 buildGoPackage rec {
   name = "${pname}-${version}";
@@ -49,6 +50,8 @@ buildGoPackage rec {
     mv $bin/share/gocode $out/share/go
     remove-references-to -t ${go} $bin/bin/* $bin/lib/deepin-api/*
   '';
+
+  passthru.updateScript = deepin.updateScript { inherit name; };
 
   meta = with stdenv.lib; {
     description = "Go-lang bindings for dde-daemon";
