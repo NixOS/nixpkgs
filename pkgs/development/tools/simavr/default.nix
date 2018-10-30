@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, avrbinutils, avrgcc, avrlibc, libelf, which, git, pkgconfig, freeglut
+{ stdenv, fetchFromGitHub, libelf, which, git, pkgconfig, freeglut
+, avrbinutils, avrgcc, avrlibc
 , libGLU_combined }:
 
 stdenv.mkDerivation rec {
@@ -15,14 +16,10 @@ stdenv.mkDerivation rec {
   # ld: cannot find -lsimavr
   enableParallelBuilding = false;
 
-  preConfigure = ''
-    substituteInPlace Makefile.common --replace "-I../simavr/sim/avr -I../../simavr/sim/avr" \
-    "-I${avrlibc}/avr/include -L${avrlibc}/avr/lib/avr5  -B${avrlibc}/avr/lib -I../simavr/sim/avr -I../../simavr/sim/avr"
-  '';
   buildFlags = "AVR_ROOT=${avrlibc}/avr SIMAVR_VERSION=${version}";
   installFlags = buildFlags + " DESTDIR=$(out)";
 
-  
+
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
 
@@ -31,8 +28,8 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ which git avrbinutils avrgcc avrlibc libelf freeglut libGLU_combined ];
+  nativeBuildInputs = [ which git pkgconfig avrgcc avrbinutils ];
+  buildInputs = [ libelf freeglut libGLU_combined ];
 
   meta = with stdenv.lib; {
     description = "A lean and mean Atmel AVR simulator";
@@ -43,4 +40,3 @@ stdenv.mkDerivation rec {
   };
 
 }
-

@@ -830,7 +830,10 @@ with pkgs;
     libssl = openssl;
   };
 
-  axoloti = callPackage ../applications/audio/axoloti { };
+  axoloti = callPackage ../applications/audio/axoloti {
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
   dfu-util-axoloti = callPackage ../applications/audio/axoloti/dfu-util.nix { };
   libusb1-axoloti = callPackage ../applications/audio/axoloti/libusb1.nix {
     inherit (darwin) libobjc;
@@ -6833,36 +6836,6 @@ with pkgs;
 
   gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
 
-  gcc-arm-embedded-4_7 = pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
-    version = "4.7-2013q3-20130916";
-    releaseType = "update";
-    sha256 = "1bd9bi9q80xn2rpy0rn1vvj70rh15kb7dmah0qs4q2rv78fqj40d";
-    ncurses = pkgsi686Linux.ncurses5;
-  };
-  gcc-arm-embedded-4_8 = pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
-    version = "4.8-2014q1-20140314";
-    releaseType = "update";
-    sha256 = "ce92859550819d4a3d1a6e2672ea64882b30afa2c08cf67fa8e1d93788c2c577";
-    ncurses = pkgsi686Linux.ncurses5;
-  };
-  gcc-arm-embedded-4_9 = pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
-    version = "4.9-2015q1-20150306";
-    releaseType = "update";
-    sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
-    ncurses = pkgsi686Linux.ncurses5;
-  };
-  gcc-arm-embedded-5 = pkgs.pkgsi686Linux.callPackage ../development/compilers/gcc-arm-embedded {
-    dirName = "5.0";
-    subdirName = "5-2016-q2-update";
-    version = "5.4-2016q2-20160622";
-    releaseType = "update";
-    sha256 = "1r0rqbnw7rf94f5bsa3gi8bick4xb7qnp1dkvdjfbvqjvysvc44r";
-    ncurses = pkgsi686Linux.ncurses5;
-  };
-  gcc-arm-embedded-6 = callPackage ../development/compilers/gcc-arm-embedded/6 {};
-  gcc-arm-embedded-7 = callPackage ../development/compilers/gcc-arm-embedded/7 {};
-  gcc-arm-embedded = gcc-arm-embedded-7;
-
   gforth = callPackage ../development/compilers/gforth {};
 
   gtk-server = callPackage ../development/interpreters/gtk-server {};
@@ -7201,10 +7174,6 @@ with pkgs;
   });
 
   manticore = callPackage ../development/compilers/manticore { };
-
-  mentorToolchains = recurseIntoAttrs (
-    pkgsi686Linux.callPackage ../development/compilers/mentor {}
-  );
 
   mercury = callPackage ../development/compilers/mercury { };
 
@@ -7989,17 +7958,17 @@ with pkgs;
 
   amtk = callPackage ../development/libraries/amtk { };
 
-  avrgcclibc = throw "avrgcclibs are now separate packages, install avrbinutils, avrgcc and avrlibc";
-
-  avrbinutils = callPackage ../development/misc/avr/binutils {};
-
-  avrgcc      = callPackage ../development/misc/avr/gcc {};
-
-  avrlibc     = callPackage ../development/misc/avr/libc {};
+  avrlibc      = callPackage ../development/misc/avr/libc {};
+  avrlibcCross = callPackage ../development/misc/avr/libc {
+    stdenv = crossLibcStdenv;
+  };
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
-  betaflight = callPackage ../development/misc/stm32/betaflight { };
+  betaflight = callPackage ../development/misc/stm32/betaflight {
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
 
   sourceFromHead = callPackage ../build-support/source-from-head-fun.nix {};
 
@@ -8035,7 +8004,10 @@ with pkgs;
     guile = guile_2_0;
   };
 
-  inav = callPackage ../development/misc/stm32/inav { };
+  inav = callPackage ../development/misc/stm32/inav {
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
 
   pharo-vms = callPackage ../development/pharo/vm { };
   pharo = pharo-vms.multi-vm-wrapper;
@@ -8193,6 +8165,8 @@ with pkgs;
 
   blackmagic = callPackage ../development/tools/misc/blackmagic {
     stdenv = overrideCC stdenv gcc6;
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
 
   bloaty = callPackage ../development/tools/bloaty { };
@@ -9740,6 +9714,8 @@ with pkgs;
     /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
     else if name == "bionic" then targetPackages.bionic
     else if name == "uclibc" then targetPackages.uclibcCross
+    else if name == "avrlibc" then targetPackages.avrlibcCross or avrlibcCross
+    else if name == "newlib" then targetPackages.newlibCross or newlibCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries
@@ -12201,7 +12177,11 @@ with pkgs;
 
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
-  simavr = callPackage ../development/tools/simavr { };
+  simavr = callPackage ../development/tools/simavr {
+    avrgcc = pkgsCross.avr.buildPackages.gcc;
+    avrbinutils = pkgsCross.avr.buildPackages.binutils;
+    avrlibc = pkgsCross.avr.libcCross;
+  };
 
   simgear = callPackage ../development/libraries/simgear { };
 
@@ -18299,7 +18279,10 @@ with pkgs;
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
 
-  opentx = callPackage ../applications/misc/opentx { };
+  opentx = callPackage ../applications/misc/opentx {
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
 
   opera = callPackage ../applications/networking/browsers/opera {};
 
@@ -21982,14 +21965,9 @@ with pkgs;
   gnome-breeze = callPackage ../misc/themes/gnome-breeze { };
 
   gnuk = callPackage ../misc/gnuk {
-    gcc-arm-embedded = gcc-arm-embedded-4_9;
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
-  gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix {
-    gcc-arm-embedded = gcc-arm-embedded-4_9;
-  });
-  gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix {
-    gcc-arm-embedded = gcc-arm-embedded-4_9;
-  });
 
   greybird = callPackage ../misc/themes/greybird { };
 
@@ -22835,4 +22813,16 @@ with pkgs;
   };
 
   tsung = callPackage ../applications/networking/tsung {};
+
+  qmk_firmware = callPackage ../development/misc/qmk_firmware {
+    avrgcc = pkgsCross.avr.buildPackages.gcc;
+    avrbinutils = pkgsCross.avr.buildPackages.binutils;
+    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
+    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
+  };
+
+  newlib = callPackage ../development/misc/newlib { };
+  newlibCross = callPackage ../development/misc/newlib {
+    stdenv = crossLibcStdenv;
+  };
 }
