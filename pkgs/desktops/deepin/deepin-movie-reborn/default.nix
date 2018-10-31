@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-movie-reborn";
-  version = "3.2.10";
+  version = "3.2.14";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0lqmbvl9yyxgkiipd9r8mgmxl2sm34l3gr3hkwlc7r2l6kc32933";
+    sha256 = "1i9sdg2p6qp57rqzrnjbxnqj3mg1qggzyq3yykw271vs8h85a707";
   };
 
   nativeBuildInputs = [
