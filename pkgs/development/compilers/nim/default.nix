@@ -27,8 +27,11 @@ stdenv.mkDerivation rec {
   #    used for bootstrapping, but koch insists on moving the nim compiler around
   #    as part of building it, so it cannot be read-only
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper nodejs-slim-8_x tzdata coreutils
+  ];
+
+  buildInputs = [
     openssl pcre readline boehmgc sfml
   ];
 
