@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1l5rir8d73x97p3p1x4l8cawjc9m2adnippnb27fmrbcd3rfaxbl";
   };
 
+  patches = [ ./fix-stream-operator.patch /* can't fetchpatch during bootstrap */ ];
+
   outputs = [ "bin" "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
