@@ -6188,6 +6188,8 @@ with pkgs;
 
   wol = callPackage ../tools/networking/wol { };
 
+  wolf-shaper = callPackage ../applications/audio/wolf-shaper { };
+
   wring = nodePackages.wring;
 
   wrk = callPackage ../tools/networking/wrk { };
