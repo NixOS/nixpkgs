@@ -2378,6 +2378,8 @@ in
 
   s-tar = callPackage ../tools/archivers/s-tar {};
 
+  sonota = callPackage ../tools/misc/sonota { };
+
   tealdeer = callPackage ../tools/misc/tealdeer { };
 
   teamocil = callPackage ../tools/misc/teamocil { };
