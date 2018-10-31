@@ -708,11 +708,15 @@ in {
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
+  aioh2 = callPackage ../development/python-modules/aioh2 { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp/cors.nix { };
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
+
+  aiohttp-remotes = callPackage ../development/python-modules/aiohttp-remotes { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
@@ -1857,6 +1861,8 @@ in {
   };
 
   poyo = callPackage ../development/python-modules/poyo { };
+
+  priority = callPackage ../development/python-modules/priority { };
 
   prov = callPackage ../development/python-modules/prov { };
 
