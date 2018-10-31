@@ -2,6 +2,8 @@
 
 [![Code Triagers Badge](https://www.codetriage.com/nixos/nixpkgs/badges/users.svg)](https://www.codetriage.com/nixos/nixpkgs)
 
+This is the change.
+
 Nixpkgs is a collection of packages for the [Nix](https://nixos.org/nix/) package
 manager. It is periodically built and tested by the [Hydra](https://hydra.nixos.org/)
 build daemon as so-called channels. To get channel information via git, add
