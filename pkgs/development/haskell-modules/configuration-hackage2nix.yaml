@@ -2586,6 +2586,7 @@ dont-distribute-packages:
   fltkhs-demos:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   fltkhs-fluid-demos:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
   fltkhs-hello-world:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
+  fltkhs-themes:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghcjs-dom-hello:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   ghcjs-dom-webkit:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
   gi-javascriptcore:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
