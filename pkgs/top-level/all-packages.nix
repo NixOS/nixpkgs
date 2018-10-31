@@ -801,6 +801,8 @@ with pkgs;
   };
   aria = aria2;
 
+  asmfmt = callPackage ../development/tools/asmfmt { };
+
   aspcud = callPackage ../tools/misc/aspcud { };
 
   at = callPackage ../tools/system/at { };
