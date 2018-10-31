@@ -14,11 +14,11 @@ let
     ];
 in
 stdenv.mkDerivation rec {
-  name = "shutter-0.94";
+  name = "shutter-0.94.2";
 
   src = fetchurl {
-    url = "https://launchpad.net/shutter/0.9x/0.94/+download/shutter-0.94.tar.gz";
-    sha256 = "943152cdf9e1b2096d38e3da9622d8bf97956a08eda747c3e7fcc564a3f0f40d";
+    url = "https://launchpad.net/shutter/0.9x/0.94.2/+download/shutter-0.94.2.tar.gz";
+    sha256 = "0mas7npm935j4rhqqjn226822s9sa4bsxrkp0b5fjj3z096k6vw0";
   };
 
   buildInputs = [ perl makeWrapper gdk_pixbuf librsvg ] ++ perlModules;
