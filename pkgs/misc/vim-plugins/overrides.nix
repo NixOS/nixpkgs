@@ -9,6 +9,12 @@
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
+
+# vim-go denpencies
+, asmfmt, delve, errcheck, godef, golint
+, gomodifytags, gotags, gotools, motion
+, gnused, reftools, gogetdoc, gometalinter
+, impl, iferr
 }:
 
 let
@@ -245,6 +251,34 @@ with generated;
 
   vim-easytags = vim-easytags.overrideAttrs(old: {
     dependencies = ["vim-misc"];
+  });
+
+  # change the go_bin_path to point to a path in the nix store. See the code in
+  # fatih/vim-go here
+  # https://github.com/fatih/vim-go/blob/155836d47052ea9c9bac81ba3e937f6f22c8e384/autoload/go/path.vim#L154-L159
+  vim-go = vim-go.overrideAttrs(old: let
+    binPath = lib.makeBinPath [
+      asmfmt
+      delve
+      errcheck
+      godef
+      gogetdoc
+      golint
+      gometalinter
+      gomodifytags
+      gotags
+      gotools
+      iferr
+      impl
+      motion
+      reftools
+    ];
+    in {
+    postPatch = ''
+      ${gnused}/bin/sed \
+        -Ee 's@let go_bin_path = go#path#BinPath\(\)@let go_bin_path = "${binPath}"@g' \
+        -i autoload/go/path.vim
+    '';
   });
 
   vim-grammarous = vim-grammarous.overrideAttrs(old: {
