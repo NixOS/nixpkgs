@@ -73,11 +73,12 @@ stdenv.mkDerivation rec {
         --prefix PATH : ${jdk}/bin \
         --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ glib gtk2 libXtst ]}
 
-      # The emulators need additional libraries, which are dynamically loaded => let's wrap them
 
       ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
         for i in emulator emulator-check
         do
+            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
+            # The emulators need additional libraries, which are dynamically loaded => let's wrap them
             wrapProgram `pwd`/$i \
               --prefix PATH : ${stdenv.lib.makeBinPath [ file glxinfo ]} \
               --suffix LD_LIBRARY_PATH : `pwd`/lib:${makeLibraryPath [ stdenv.cc.cc libX11 libxcb libXau libXdmcp libXext libGLU_combined alsaLib zlib libpulseaudio dbus.lib ]} \
