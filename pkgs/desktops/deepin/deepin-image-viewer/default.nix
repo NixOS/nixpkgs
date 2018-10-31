@@ -6,13 +6,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-image-viewer";
-  version = "1.2.23";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1n1b3j65in6v7q5bxgkiam8qy56kjn9prld3sjrbc2mqzff8sm3q";
+    sha256 = "0dxdvm6hzj6izfxka35za8y7vacd06nksfgzx6xsv7ywzagri4k5";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/linuxdeepin/deepin-image-viewer;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    badPlatforms = [ "aarch64-linux" ]; # See https://github.com/NixOS/nixpkgs/pull/46463#issuecomment-420274189
     maintainers = with maintainers; [ romildo ];
   };
 }
