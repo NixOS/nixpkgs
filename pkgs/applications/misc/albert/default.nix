@@ -48,7 +48,7 @@ mkDerivation rec {
     homepage    = https://albertlauncher.github.io/;
     description = "Desktop agnostic launcher";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = with maintainers; [ ericsagnes synthetica ];
     platforms   = platforms.linux;
   };
 }
