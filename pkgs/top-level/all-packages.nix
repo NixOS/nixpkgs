@@ -3780,6 +3780,18 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+  nodejs-11_x = callPackage ../development/web/nodejs/v11.nix {
+    openssl = openssl_1_1;
+  };
+  nodejs-slim-11_x = callPackage ../development/web/nodejs/v11.nix {
+    enableNpm = false;
+    openssl = openssl_1_1;
+  };
+
+  nodePackages_11_x = callPackage ../development/node-packages/default-v11.nix {
+    nodejs = pkgs.nodejs-11_x;
+  };
+
   nodePackages_10_x = callPackage ../development/node-packages/default-v10.nix {
     nodejs = pkgs.nodejs-10_x;
   };
