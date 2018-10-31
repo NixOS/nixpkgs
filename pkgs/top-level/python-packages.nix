@@ -212,6 +212,8 @@ in {
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
+  atomman = callPackage ../development/python-modules/atomman { };
+
   # packages defined elsewhere
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
@@ -283,6 +285,8 @@ in {
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
   btchip = callPackage ../development/python-modules/btchip { };
+
+  datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   dbf = callPackage ../development/python-modules/dbf { };
 
@@ -427,6 +431,8 @@ in {
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
+
+  numericalunits = callPackage ../development/python-modules/numericalunits { };
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
@@ -6554,7 +6560,7 @@ in {
       };
     in if isPy3k then py3 else py2;
 
-  pythondaemon = callPackage ../development/python-modules/python-daemon { };
+  python-daemon = callPackage ../development/python-modules/python-daemon { };
 
   sympy = callPackage ../development/python-modules/sympy { };
 

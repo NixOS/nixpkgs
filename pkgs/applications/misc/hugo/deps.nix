@@ -555,8 +555,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/spf13/jwalterweatherman";
-      rev = "4a4406e478ca";
-      sha256 = "093fmmvavv84pv4q84hav7ph3fmrq87bvspjj899q0qsx37yvdr8";
+      rev = "94f6ae3ed3bc";
+      sha256 = "1ywmkwci5zyd88ijym6f30fj5c0k2yayxarkmnazf5ybljv50q7b";
     };
   }
 
@@ -605,8 +605,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/tdewolff/minify";
-      rev = "v2.3.5";
-      sha256 = "0x67kgjhc6mfzjhr4xmw0j3qapzhkgwwahvv5b44rb449ml2qx5m";
+      rev = "v2.3.6";
+      sha256 = "0p4v4ab49lm5y438k5aks06fpiagbjw2j2x7i8jaa273mkgicrbb";
     };
   }
 
@@ -615,8 +615,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/tdewolff/parse";
-      rev = "v2.3.3";
-      sha256 = "190y2jykp8qyp6y58ky1v1fvmaqjnrsr1ksbqrrspf1gpjy69i94";
+      rev = "fced451e0bed";
+      sha256 = "1n6wcapk8xbck2zjxd4l5cgfn1v12rr7znrdpd5y2xp1nc3739c3";
     };
   }
 
@@ -625,8 +625,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/tdewolff/test";
-      rev = "265427085153";
-      sha256 = "1h0cmsjjia92w50dzr06c5h10zd5c7snhpixqjv94wbl7dv80yp0";
+      rev = "v1.0.0";
+      sha256 = "10vyp4bhanzg3yl9k8zqfdrxpsmx8yc53xv4lqxfymd7jjyqgssj";
     };
   }
 

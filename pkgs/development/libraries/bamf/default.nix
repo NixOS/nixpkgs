@@ -1,53 +1,65 @@
-{ stdenv, fetchurl, libgtop, libwnck3, glib, vala, pkgconfig
-, libstartup_notification, gobjectIntrospection, gtk-doc
+{ stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
+, libstartup_notification, gobjectIntrospection, gtk-doc, docbook_xsl
 , xorgserver, dbus, python2 }:
 
 stdenv.mkDerivation rec {
-  pname = "bamf";
-  version = "0.5.3";
-  name = "${pname}-${version}";
+  name = "bamf-2018-02-07";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchurl {
-    url = "https://launchpad.net/${pname}/0.5/${version}/+download/${name}.tar.gz";
-    sha256 = "051vib8ndp09ph5bfwkgmzda94varzjafwxf6lqx7z1s8rd7n39l";
+  src = fetchgit {
+    url = https://git.launchpad.net/~unity-team/bamf;
+    rev = "0.5.3+18.04.20180207.2-0ubuntu1";
+    sha256 = "0hvbgzi0mzzzvcamd9mi1ykbk2l6zxffspyk5fpik8bij56nhzym";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    gtk-doc
+    autoconf
+    automake
+    docbook_xsl
+    gnome3.gnome-common
     gobjectIntrospection
+    gtk-doc
+    libtool
+    pkgconfig
     vala
+    which
     # Tests
-    xorgserver
+    python2
+    python2.pkgs.libxslt
+    python2.pkgs.libxml2
     dbus
-    (python2.withPackages (pkgs: with pkgs; [ libxslt libxml2 ]))
+    xorgserver
   ];
 
   buildInputs = [
-    libgtop
-    libwnck3
-    libstartup_notification
     glib
+    libgtop
+    libstartup_notification
+    libwnck3
   ];
 
   # Fix hard-coded path
   # https://bugs.launchpad.net/bamf/+bug/1780557
   postPatch = ''
-    substituteInPlace data/Makefile.in \
+    substituteInPlace data/Makefile.am \
       --replace '/usr/lib/systemd/user' '@prefix@/lib/systemd/user'
   '';
 
   configureFlags = [
     "--enable-headless-tests"
+    "--enable-gtk-doc"
   ];
 
   # fix paths
   makeFlags = [
-    "INTROSPECTION_GIRDIR=$(dev)/share/gir-1.0/"
-    "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
+    "INTROSPECTION_GIRDIR=${placeholder ''dev''}/share/gir-1.0/"
+    "INTROSPECTION_TYPELIBDIR=${placeholder ''out''}/lib/girepository-1.0"
   ];
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   # TODO: Requires /etc/machine-id
   doCheck = false;

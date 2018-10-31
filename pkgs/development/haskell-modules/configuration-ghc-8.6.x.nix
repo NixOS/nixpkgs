@@ -99,31 +99,16 @@ self: super: {
   # https://github.com/bmillwood/haskell-src-meta/pull/80
   haskell-src-meta = doJailbreak super.haskell-src-meta;
 
-  # The official 1.12 release is broken and unmaintained.
-  polyparse = appendPatch (overrideCabal super.polyparse (drv: { editedCabalFile = null; })) (pkgs.fetchpatch {
-    url = https://github.com/bergmark/polyparse/commit/8a69ee7e57db798c106d8b56dce05b1dfc4fed37.patch;
-    sha256 = "11r73wx1w6bfrkrnk6r9k7rfzp6qrvkdikb2by37ld06c0w6nn57";
-  });
-
   # https://github.com/skogsbaer/HTF/issues/69
   HTF = markBrokenVersion "0.13.2.4" super.HTF;
 
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
 
-  # https://github.com/joelburget/easytest/issues/12
-  easytest = appendPatch super.easytest (pkgs.fetchpatch {
-    url = https://github.com/joelburget/easytest/pull/13.patch;
-    sha256 = "0gnsgga8x2yxyg27pya6rhmxfsxf167vsi4xdj98fn8v0j7zz1v1";
-  });
-
   # https://github.com/jgm/pandoc/issues/4974
   pandoc = doJailbreak super.pandoc_2_3_1;
 
   # Break out of "yaml >=0.10.4.0 && <0.11".
   stack = doJailbreak super.stack;
-
-  # https://github.com/vimus/libmpd-haskell/issues/109
-  xmobar = disableCabalFlag (super.xmobar.override { libmpd = null; }) "with_mpd";
 
 }
