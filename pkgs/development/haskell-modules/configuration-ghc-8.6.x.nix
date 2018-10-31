@@ -117,7 +117,4 @@ self: super: {
   # Break out of "yaml >=0.10.4.0 && <0.11".
   stack = doJailbreak super.stack;
 
-  # https://github.com/vimus/libmpd-haskell/issues/109
-  xmobar = disableCabalFlag (super.xmobar.override { libmpd = null; }) "with_mpd";
-
 }
