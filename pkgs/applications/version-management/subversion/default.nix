@@ -125,4 +125,10 @@ in {
     sha256 = "1z6r3n91a4znsh68rl3jisfr7k4faymhbpalmmvsmvsap34al3cz";
     extraBuildInputs = [ lz4 utf8proc ];
   };
+
+  subversion_1_11 = common {
+    version = "1.11.0";
+    sha256 = "0miyz3xsxxp56iczxv6yqd8p06av3vxpb5nasyg2xb3ln1247i47";
+    extraBuildInputs = [ lz4 utf8proc ];
+  };
 }
