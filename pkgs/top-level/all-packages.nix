@@ -1313,6 +1313,8 @@ with pkgs;
 
   envsubst = callPackage ../tools/misc/envsubst { };
 
+  errcheck = callPackage ../development/tools/errcheck { };
+
   eschalot = callPackage ../tools/security/eschalot { };
 
   esptool = callPackage ../tools/misc/esptool { };
