@@ -2282,20 +2282,8 @@ in {
 
   grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
 
-  pytorch = let
-    # Fails with CUDA 9.1 and GCC 6.4:
-    # https://github.com/pytorch/pytorch/issues/5831
-    # https://devtalk.nvidia.com/default/topic/1028112
-    # We should be able to remove this when CUDA 9.2 is released.
-    cudatoolkit_9 = pkgs.cudatoolkit_9.override {
-      gcc6 = pkgs.gcc5;
-    };
-  in callPackage ../development/python-modules/pytorch {
+  pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = cudatoolkit_9;
-    cudnn = pkgs.cudnn_cudatoolkit_9.override {
-      inherit cudatoolkit_9;
-    };
   };
 
   pytorchWithCuda = self.pytorch.override {
