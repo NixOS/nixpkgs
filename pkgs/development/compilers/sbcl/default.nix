@@ -5,6 +5,7 @@
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
 , purgeNixReferences ? false
+, texinfo
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,8 @@ stdenv.mkDerivation rec {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
     sha256 = "0maa4h5zdykq050hdqk5wd74dhl6k7br3qrhfd4f2387skk8ky7a";
   };
+
+  buildInputs = [texinfo];
 
   patchPhase = ''
     echo '"${version}.nixos"' > version.lisp-expr
@@ -83,6 +86,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     sh make.sh --prefix=$out --xc-host="${sbclBootstrapHost}"
+    (cd doc/manual ; make info)
   '';
 
   installPhase = ''
