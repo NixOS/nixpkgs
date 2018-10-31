@@ -1,4 +1,4 @@
-{ mkXfceDerivation, gtk3, libxfce4ui, vte }:
+{ mkXfceDerivation, gtk3, libxfce4ui, wrapGAppsHook, vte }:
 
 mkXfceDerivation rec {
   category = "apps";
@@ -8,6 +8,7 @@ mkXfceDerivation rec {
   sha256 = "1s1dq560icg602jjb2ja58x7hxg4ikp3jrrf74v3qgi0ir950k2y";
 
   buildInputs = [ gtk3 libxfce4ui vte ];
+  nativeBuildInputs = [ wrapGAppsHook ];
 
   meta = {
     description = "A modern terminal emulator";
