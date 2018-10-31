@@ -3,7 +3,7 @@
   meson, ninja, pkgconfig,
   zlib, ispc,
   protobuf, protobufc, gtest,
-  useCUDA ? false, cudatoolkit ? null, cudnn ? null, symlinkJoin,
+  useCUDA ? false, cudnn ? null, symlinkJoin,
   useOpenCL ? false, opencl-headers ? null, ocl-icd ? null,
   useOpenBLAS ? false, openblas ? null
 }:
@@ -12,6 +12,7 @@ let
   version = "0.18.1";
   optionals = stdenv.lib.optionals;
   buildBackends = useCUDA || useOpenBLAS || useOpenCL;
+  cudatoolkit = cudnn.cudotoolkit or null;
 
   cuda-combined = symlinkJoin {
     name = "cuda-combined";

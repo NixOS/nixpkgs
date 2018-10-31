@@ -20354,7 +20354,6 @@ with pkgs;
 
   lc0-cuda = lc0.override {
     useCUDA = true;
-    cudatoolkit = cudatoolkit;
     cudnn = cudnn;
   };
 
