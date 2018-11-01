@@ -266,7 +266,8 @@ in
     ... # For hash agility
   }@args: assert private -> !fetchSubmodules;
   let
-    baseUrl = "https://${githubBase}/${owner}/${repo}";
+    nakedUrl = "${githubBase}/${owner}/${repo}";
+    baseUrl = "https://${nakedUrl}";
     passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
     varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
     # We prefer fetchzip in cases we don't need submodules as the hash
@@ -290,7 +291,7 @@ in
         then { inherit rev fetchSubmodules; url = "${baseUrl}.git"; }
         else ({ url = "${baseUrl}/archive/${rev}.tar.gz"; } // privateAttrs)
       ) // passthruAttrs // { inherit name; };
-  in fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; };
+  in fetcher fetcherArgs // { meta.homepage = baseUrl; inherit nakedUrl rev; };
 
   fetchFromBitbucket = {
     owner, repo, rev, name ? "source",
