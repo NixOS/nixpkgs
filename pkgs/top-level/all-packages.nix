@@ -3296,6 +3296,8 @@ with pkgs;
 
   hwinfo = callPackage ../tools/system/hwinfo { };
 
+  hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
+
   hylafaxplus = callPackage ../servers/hylafaxplus { };
 
   i2c-tools = callPackage ../os-specific/linux/i2c-tools { };
