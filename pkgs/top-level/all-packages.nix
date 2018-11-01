@@ -2445,9 +2445,7 @@ with pkgs;
 
   entr = callPackage ../tools/misc/entr { };
 
-  envoy = callPackage ../tools/networking/envoy {
-    bazel = bazel_0_4;
-  };
+  envoy = callPackage ../tools/networking/envoy { };
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 

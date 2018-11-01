@@ -216,13 +216,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "envoy-${version}";
-  version = "1.3.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "lyft";
     repo = "envoy";
     rev = "v${version}";
-    sha256 = "0j1c9lyvncyhiq3kyhx91ckcjd2h68x56js7xb6ni6bzxinv6zb6";
+    sha256 = "1j8dms27ssf3cc5g0gg8c1i459mg0sj7gvkan84rrfhsiyqxwb2c";
   };
 
   nativeBuildInputs = [
@@ -231,7 +231,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = allDeps;
 
-  patches = [ ./nixos.patch ];
+  # patches = [ ./nixos.patch ];
 
   hardeningDisable = [ "all" ];
   dontPatchELF = true;
