@@ -4,11 +4,11 @@
 }:
 
 let
-  version = "1.25.0";
+  version = "1.26.1";
 
   # Update these on version bumps according to Makefile
   b2dIsoVersion = "v1.3.0";
-  centOsIsoVersion = "v1.12.0";
+  centOsIsoVersion = "v1.13.0";
   openshiftVersion = "v3.11.0";
 
 in buildGoPackage rec {
@@ -19,7 +19,7 @@ in buildGoPackage rec {
     owner = "minishift";
     repo = "minishift";
     rev = "v${version}";
-    sha256 = "12a1irj92lplzkr88g049blpjsdsfwfihs2xix971cq7v0w38fkf";
+    sha256 = "1nh31j58hk6rpcb25ivdi1h2skgpdzm02whcccz0wmr8z6yma1a0";
   };
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
@@ -60,7 +60,7 @@ in buildGoPackage rec {
       or develop with it, day-to-day, on your local host.
     '';
     homepage = https://github.com/minishift/minishift;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz vdemeester ];
     platforms = platforms.linux;
     license = licenses.asl20;
   };
