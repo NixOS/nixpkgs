@@ -14021,6 +14021,8 @@ with pkgs;
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
+  dropwatch = callPackage ../os-specific/linux/dropwatch { };
+
   dstat = callPackage ../os-specific/linux/dstat { };
 
   # unstable until the first 1.x release
