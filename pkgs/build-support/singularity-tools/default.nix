@@ -8,6 +8,7 @@
 , vmTools
 , gawk
 , utillinux
+, strace
 , e2fsprogs }:
 
 rec {
@@ -47,7 +48,7 @@ rec {
         runScriptFile = shellScript "run-script.sh" runScript;
         result = vmTools.runInLinuxVM (
           runCommand "singularity-image-${name}.img" {
-            buildInputs = [ singularity e2fsprogs utillinux gawk ];
+            buildInputs = [ singularity e2fsprogs utillinux gawk strace ];
             layerClosure = writeReferencesToFile layer;
             preVM = vmTools.createEmptyImage {
               size = diskSize;
@@ -84,19 +85,14 @@ rec {
             # Create runScript
             ln -s ${runScriptFile} singularity
 
-            # Size calculation
-            cd ..
-            umount disk
-            size=$(resize2fs -P /dev/${vmTools.hd} | awk '{print $NF}')
-            mount /dev/${vmTools.hd} disk
-            cd disk
+            # Fill out .singularity.d
+            mkdir -p .singularity.d/env
+            touch .singularity.d/env/94-appsbase.sh
 
-            export PATH=$PATH:${e2fsprogs}/bin/
-            echo creating
-            singularity image.create -s $((1 + size * 4 / 1024 + ${toString extraSpace})) $out
-            echo importing
+            cd ..
             mkdir -p /var/singularity/mnt/{container,final,overlay,session,source}
-            tar -c . | singularity image.import $out
+            echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
+            singularity build $out ./disk
           '');
 
     in result;
