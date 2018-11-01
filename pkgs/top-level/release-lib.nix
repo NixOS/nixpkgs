@@ -61,13 +61,12 @@ rec {
       });
     native = mkPkgsFor null;
   in crossSystem: let
-    errorMsg = "unsupported crossSystem: ${toString crossSystem.config or "<something without config>"}";
-    candidate = examplesByConfig.${crossSystem.config} or (throw errorMsg);
+    candidate = examplesByConfig.${crossSystem.config} or null;
   in if crossSystem == null
       then native
-    else if lib.matchAttrs crossSystem candidate.crossSystem
+    else if candidate != null && lib.matchAttrs crossSystem candidate.crossSystem
       then candidate.pkgsFor
-    else throw errorMsg;
+    else mkPkgsFor crossSystem; # uncached fallback
 
 
   # Given a list of 'meta.platforms'-style patterns, return the sublist of
