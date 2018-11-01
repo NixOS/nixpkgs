@@ -30,6 +30,7 @@
 "github:ctrlpvim/ctrlp.vim"
 "github:dag/vim2hs"
 "github:dannyob/quickfixstatus"
+"github:davidhalter/jedi-vim"
 "github:derekelkins/agda-vim"
 "github:derekwyatt/vim-scala"
 "github:dhruvasagar/vim-table-mode"
