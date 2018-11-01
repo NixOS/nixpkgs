@@ -33,16 +33,16 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "ad16773da21e34e258970bf5740d1634a36c8202ac72c6925d960308ef1c58cf";
+    sha256 = "c32d9139566cc8147c39196a18c317accd1f0b2ef8e6c0ff31bddd4bc0f80bd3";
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp aiohttp-jinja2 astral bcrypt daemonize feedparser iso8601
-    jinja2 pyyaml requests sseclient voluptuous websocket_client yarl
+    daemonize astral requests sseclient websocket_client aiohttp yarl jinja2
+    aiohttp-jinja2 pyyaml voluptuous feedparser iso8601 bcrypt paho-mqtt
   ];
 
   # no tests implemented
