@@ -14808,8 +14808,6 @@ with pkgs;
 
   pmutils = callPackage ../os-specific/linux/pm-utils { };
 
-  pmtools = callPackage ../os-specific/linux/pmtools { };
-
   policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
 
   semodule-utils = callPackage ../os-specific/linux/semodule-utils { };
