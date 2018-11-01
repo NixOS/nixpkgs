@@ -11605,6 +11605,7 @@ with pkgs;
   opensaml-cpp = callPackage ../development/libraries/opensaml-cpp { };
 
   openscenegraph = callPackage ../development/libraries/openscenegraph { };
+  openscenegraph_3_4 = callPackage ../development/libraries/openscenegraph/3.4.0.nix { };
 
   openslp = callPackage ../development/libraries/openslp {};
 
@@ -12190,7 +12191,7 @@ with pkgs;
     avrlibc = pkgsCross.avr.libcCross;
   };
 
-  simgear = callPackage ../development/libraries/simgear { };
+  simgear = callPackage ../development/libraries/simgear { openscenegraph = openscenegraph_3_4; };
 
   simp_le = callPackage ../tools/admin/simp_le { };
 
@@ -20236,7 +20237,7 @@ with pkgs;
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
-  flightgear = libsForQt5.callPackage ../games/flightgear { };
+  flightgear = libsForQt5.callPackage ../games/flightgear { openscenegraph = openscenegraph_3_4; };
 
   flock = callPackage ../development/tools/flock { };
 
@@ -20678,6 +20679,7 @@ with pkgs;
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
     libpng = libpng12;
+    openscenegraph = openscenegraph_3_4;
   };
 
   torcs = callPackage ../games/torcs { };
