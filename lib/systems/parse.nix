@@ -80,7 +80,7 @@ rec {
     armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
     armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; };
     aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; };
-    aarch64_be = { bits = 64; significantByte = bigEndian; family = "arm" version = "8"; };
+    aarch64_be = { bits = 64; significantByte = bigEndian; family = "arm"; version = "8"; };
 
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
