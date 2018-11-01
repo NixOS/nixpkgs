@@ -21,8 +21,7 @@
 , dia, tetex ? null, ghostscript ? null, texlive ? null
 
 # generates python bindings
-# TODO turn false afterwards
-, pythonSupport ? true, ncurses ? null
+, pythonSupport ? false, ncurses ? null
 
 # All modules can be enabled by choosing 'all_modules'.
 # we include here the DCE mandatory ones
@@ -40,7 +39,7 @@ in
 stdenv.mkDerivation rec {
 
   name = "ns-3.${version}";
-  version = "28";
+  version = "29";
 
   # the all in one https://www.nsnam.org/release/ns-allinone-3.27.tar.bz2;
   # fetches everything (netanim, etc), this package focuses on ns3-core
@@ -48,21 +47,17 @@ stdenv.mkDerivation rec {
     owner  = "nsnam";
     repo   = "ns-3-dev-git";
     rev    = name;
-    sha256 = "17kzfjpgw2mvyx1c9bxccnvw67jpk09fxmcnlkqx9xisk10qnhng";
+    sha256 = "17h5qm9y0qp24ggajyz4shck3ngrc1j5c3amcimz2kfhqw5k50xs";
   };
+
+  outputs = [ "out" ] ++ lib.optional pythonSupport "py";
 
   # ncurses is a hidden dependency of waf when checking python
   buildInputs = lib.optionals pythonSupport [ castxml ncurses ]
-    ++ stdenv.lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
-    ++ stdenv.lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
+    ++ lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
+    ++ lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
 
-  propagatedBuildInputs = [
-    # stdenv.cc ?
-    pythonEnv
-    # llvmPackages.libcxx
-  ];
-
-
+  propagatedBuildInputs = [ gcc6 pythonEnv ];
 
   postPatch = ''
     patchShebangs ./waf
@@ -93,6 +88,15 @@ stdenv.mkDerivation rec {
   ;
 
   doCheck = true;
+
+  postInstall = ''
+    set -x
+    echo $PWD
+    moveToOutput "${pythonEnv.libPrefix}" "$py"
+    set +x
+
+    # mv "${pythonEnv.libPrefix}" "$py"
+  '';
 
   # we need to specify the proper interpreter else ns3 can check against a
   # different version even though we

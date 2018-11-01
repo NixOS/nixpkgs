@@ -70,25 +70,30 @@ let
 
     nativeBuildInputs = [ pkgconfig ];
 
-    doCheck = false;
+    doCheck = true;
 
     patchPhase = ''
       patchShebangs test.py
     '';
+    configurePhase = ''
+      runHook preConfigure
 
+      ${pythonEnv.interpreter} ./waf configure --prefix=$out \
+      --with-ns3=${ns3forDce} --with-python=${pythonEnv.interpreter} \
+        ${stdenv.lib.optionalString (!withExamples) "--disable-examples "} ${stdenv.lib.optionalString (!doCheck) " --disable-tests" };
 
-    configureScript = "${pythonEnv.interpreter} ./waf configure";
+      runHook postConfigure
+    '';
 
-    configureFlags = with stdenv.lib; [
-      "--with-ns3=${ns3forDce}"
-      # is it really needed ?
-      "--with-python=${pythonEnv.interpreter}"
-    ]
-    ++ lib.optional (!withExamples) "--disable-examples"
-    ++ lib.optional (!doCheck) "--disable-tests"
-    ;
+    buildPhase=''
+      ${pythonEnv.interpreter} ./waf build
+    '';
 
     hardeningDisable = [ "all" ];
+
+    # shellHook= stdenv.lib.optionalString withExamples ''
+    #   export DCE_PATH=${iperf-dce}/bin
+    # '';
 
     meta = {
       homepage = https://www.nsnam.org/overview/projects/direct-code-execution;
