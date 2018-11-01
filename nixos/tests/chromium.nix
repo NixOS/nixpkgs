@@ -12,8 +12,10 @@ with pkgs.lib;
 
 mapAttrs (channel: chromiumPkg: makeTest rec {
   name = "chromium-${channel}";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aszlig ];
+  meta = {
+    maintainers = with maintainers; [ aszlig ];
+    # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
+    inherit (chromiumPkg.meta) timeout;
   };
 
   enableOCR = true;
