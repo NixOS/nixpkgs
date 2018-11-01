@@ -12103,19 +12103,19 @@ let
   };
 
   PerconaToolkit = buildPerlPackage rec {
-    name = "Percona-Toolkit-3.0.11";
+    name = "Percona-Toolkit-3.0.12";
     src = fetchFromGitHub {
       owner = "percona";
       repo = "percona-toolkit";
-      rev = "6e5c5c5e6db0a32c6951c8f798c4547539cdab87";
-      sha256 = "18wxvp7psqrx0zdvg47azrals572hv9fx1s3p0q65s87lnk3q63l";
+      rev = "3.0.12";
+      sha256 = "0xk4h4dzl80kf97lbx0nznx9ajrb6kkg7k3iwca3rj6f3rqggv9y";
     };
     outputs = [ "out" ];
     buildInputs = [ DBDmysql DBI IOSocketSSL TermReadKey TimeHiRes ];
     meta = {
       description = ''Collection of advanced command-line tools to perform a variety of MySQL and system tasks.'';
       homepage = http://www.percona.com/software/percona-toolkit;
-      license = with stdenv.lib.licenses; [ lgpl2 ];
+      license = with stdenv.lib.licenses; [ gpl2 ];
       platforms = stdenv.lib.platforms.linux;
       maintainers = with stdenv.lib.maintainers; [ izorkin ];
     };
