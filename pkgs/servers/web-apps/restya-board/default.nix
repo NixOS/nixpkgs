@@ -15,12 +15,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "rstya-board-${version}";
-  version = "0.6";
+  name = "restya-board-${version}";
+  version = "0.6.6";
 
   src = fetchurl {
     url = "https://github.com/RestyaPlatform/board/releases/download/v${version}/board-v${version}.zip";
-    sha256 = "1js8c69qmga7bikp66fqhch3n2vw49918z32q88lz3havqzai8gd";
+    sha256 = "0qx0bsl99hyag8n4kvv3rcs103gwc0ibnyn5sa4m1fvasg7zhpi3";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     unzip -d $out $src
 
     cd $out
-    patch -p1 < ${./fix_request-uri.patch}
 
     chmod +x $out/server/php/shell/*.sh
 
