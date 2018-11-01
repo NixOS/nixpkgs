@@ -207,6 +207,9 @@ clone(){
     # Initialize the repository.
     init_remote "$url"
 
+    # Append extra config.
+    echo "${extraConfig}" >> .git/config
+
     # Download data from the repository.
     checkout_ref "$hash" "$ref" ||
     checkout_hash "$hash" "$ref" || (

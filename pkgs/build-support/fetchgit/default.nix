@@ -20,6 +20,8 @@ in
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
 , preferLocalBuild ? true
+, # Extra configuration appended to the repo's local configuration file.
+  extraConfig ? ""
 }:
 
 /* NOTE:
@@ -59,7 +61,7 @@ stdenvNoCC.mkDerivation {
   outputHashMode = "recursive";
   outputHash = sha256;
 
-  inherit url rev leaveDotGit fetchSubmodules deepClone branchName postFetch;
+  inherit url rev leaveDotGit fetchSubmodules deepClone branchName postFetch extraConfig;
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
