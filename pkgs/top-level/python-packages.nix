@@ -10903,6 +10903,10 @@ EOF
 
   todoist = callPackage ../development/python-modules/todoist { };
 
+  zstd = callPackage ../development/python-modules/zstd {
+    inherit (pkgs) zstd pkgconfig;
+  };
+
   zxcvbn-python = callPackage ../development/python-modules/zxcvbn-python { };
 
   incremental = callPackage ../development/python-modules/incremental { };
