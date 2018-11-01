@@ -32,12 +32,12 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 ];
+  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ];
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsaLib curl libvpx pam xorriso makeself perl
-      libXmu libpng patchelfUnstable python ]
+      libXmu libpng python ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio

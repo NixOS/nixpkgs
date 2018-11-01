@@ -56,7 +56,7 @@
 , # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
   overlays
-}:
+} @args:
 
 let
   stdenvAdapters = self: super:
@@ -79,17 +79,11 @@ let
 
   # The old identifiers for cross-compiling. These should eventually be removed,
   # and the packages that rely on them refactored accordingly.
-  platformCompat = self: super: {
-    buildPlatform = lib.warn
-      "top-level `buildPlatform` is deprecated since 18.09. Please use `stdenv.buildPlatform`."
-      super.stdenv.buildPlatform;
-    hostPlatform = lib.warn
-      "top-level `hostPlatform` is deprecated since 18.09. Please use `stdenv.hostPlatform`."
-      super.stdenv.hostPlatform;
-    targetPlatform = lib.warn
-      "top-level `targetPlatform` is deprecated since 18.09. Please use `stdenv.targetPlatform`."
-      super.stdenv.targetPlatform;
-    inherit (super.stdenv.hostPlatform) system;
+  platformCompat = self: super: let
+    inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
+  in {
+    inherit buildPlatform hostPlatform targetPlatform;
+    inherit (hostPlatform) system;
   };
 
   splice = self: super: import ./splice.nix lib self (buildPackages != null);
@@ -140,13 +134,16 @@ let
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported.
     pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
-      localSystem = {
+      inherit overlays config;
+      ${if stdenv.hostPlatform == stdenv.buildPlatform
+        then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
           abi = {
             "gnu" = lib.systems.parse.abis.musl;
             "gnueabi" = lib.systems.parse.abis.musleabi;
             "gnueabihf" = lib.systems.parse.abis.musleabihf;
-          }.${stdenv.hostPlatform.parsed.abi.name} or lib.systems.parse.abis.musl;
+          }.${stdenv.hostPlatform.parsed.abi.name}
+            or lib.systems.parse.abis.musl;
         };
       };
     } else throw "Musl libc only supports Linux systems.";
@@ -154,12 +151,27 @@ let
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
     pkgsi686Linux = assert stdenv.hostPlatform.isLinux; nixpkgsFun {
-      localSystem = {
+      inherit overlays config;
+      ${if stdenv.hostPlatform == stdenv.buildPlatform
+        then "localSystem" else "crossSystem"} = {
         parsed = stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.i686;
         };
       };
     };
+
+    # Extend the package set with zero or more overlays. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    appendOverlays = extraOverlays:
+      import ./stage.nix (args // { overlays = args.overlays ++ extraOverlays; });
+
+    # Extend the package set with a single overlay. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    # Prefer appendOverlays if used repeatedly.
+    extend = f: self.appendOverlays [f];
+
   };
 
   # The complete chain of package set builders, applied from top to bottom.

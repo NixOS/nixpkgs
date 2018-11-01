@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ocaml, ocamlbuild, findlib
-, jbuilder, sexplib, ppx_sexp_conv
+, dune, sexplib, ppx_sexp_conv
 }:
 
 stdenv.mkDerivation rec {
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1amb1pbm9ybpxy6190qygpj6nmbzzs2r6vx4xh5r6v89szx9rfxw";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild jbuilder ];
+  buildInputs = [ ocaml findlib ocamlbuild dune ];
   propagatedBuildInputs = [ ppx_sexp_conv sexplib ];
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mirage/ocaml-ipaddr;

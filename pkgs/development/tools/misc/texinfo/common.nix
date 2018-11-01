@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  patches = optional (version == "6.5") ./perl.patch;
+
   # We need a native compiler to build perl XS extensions
   # when cross-compiling.
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];

@@ -1,16 +1,17 @@
 diff --git a/kded/engine/backends/encfs/encfsbackend.cpp b/kded/engine/backends/encfs/encfsbackend.cpp
-index 47bb237..4ff064d 100644
+index 628af7b..6edd38e 100644
 --- a/kded/engine/backends/encfs/encfsbackend.cpp
 +++ b/kded/engine/backends/encfs/encfsbackend.cpp
-@@ -132,17 +132,16 @@ bool EncFsBackend::isInitialized(const Device &device) const
+@@ -137,7 +137,7 @@ QProcess *EncFsBackend::encfs(const QStringList &arguments) const
+     auto config = KSharedConfig::openConfig(PLASMAVAULT_CONFIG_FILE);
+     KConfigGroup backendConfig(config, "EncfsBackend");
  
- QProcess *EncFsBackend::encfs(const QStringList &arguments) const
- {
--    return process("encfs", arguments, {});
-+    return process(NIXPKGS_ENCFS, arguments, {});
+-    return process("encfs",
++    return process(NIXPKGS_ENCFS,
+                    arguments + backendConfig.readEntry("extraMountOptions", QStringList{}),
+                    {});
  }
- 
- 
+@@ -146,7 +146,7 @@ QProcess *EncFsBackend::encfs(const QStringList &arguments) const
  
  QProcess *EncFsBackend::encfsctl(const QStringList &arguments) const
  {
@@ -19,6 +20,3 @@ index 47bb237..4ff064d 100644
  }
  
  
- 
- } // namespace PlasmaVault
--

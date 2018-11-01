@@ -1,15 +1,16 @@
 { stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
 , pyperclip, six, pyparsing, vim, wcwidth, colorama
-, contextlib2 ? null, setuptools_scm
-, pytest, mock, which, glibcLocales
+, contextlib2 ? null, typing ? null, setuptools_scm
+, pytest, mock ? null, pytest-mock
+, which, glibcLocales
 }:
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.9.4";
+  version = "0.9.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0037dcf92331c63ae43e7e644536e646fff8be2fd5a83da06b3482f910f929c6";
+    sha256 = "0279p76n6yny6psys9fc6yjdrqiisbpmrl59a2vxy56hi7094kaw";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -23,12 +24,6 @@ buildPythonPackage rec {
     export PATH=$(realpath bin):$PATH
   '';
 
-  checkInputs= [ pytest mock which vim glibcLocales ];
-  checkPhase = ''
-    # test_path_completion_user_expansion might be fixed in the next release
-    py.test -k 'not test_path_completion_user_expansion'
-  '';
-  doCheck = !stdenv.isDarwin;
   disabled = !isPy3k;
 
   buildInputs = [
@@ -42,8 +37,19 @@ buildPythonPackage rec {
     pyparsing
     wcwidth
   ]
-  ++ stdenv.lib.optional (pythonOlder "3.5") contextlib2
+  ++ stdenv.lib.optionals (pythonOlder "3.5") [contextlib2 typing]
   ;
+
+
+  doCheck = !stdenv.isDarwin;
+  # pytest-cov
+  # argcomplete  will generate errors
+  checkInputs= [ pytest mock which vim glibcLocales pytest-mock ]
+        ++ stdenv.lib.optional (pythonOlder "3.6") [ mock ];
+  checkPhase = ''
+    # test_path_completion_user_expansion might be fixed in the next release
+    py.test -k 'not test_path_completion_user_expansion'
+  '';
 
   meta = with stdenv.lib; {
     description = "Enhancements for standard library's cmd module";

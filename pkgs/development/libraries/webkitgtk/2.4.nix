@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, perl, python, ruby, bison, gperf, flex
-, pkgconfig, which, gettext, gobjectIntrospection
+, pkgconfig, which, gettext, gobjectIntrospection, pruneLibtoolFiles
 , gtk2, gtk3, wayland, libwebp, enchant, sqlite
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, xorg
 , gst-plugins-base, libobjc
@@ -77,13 +77,16 @@ stdenv.mkDerivation rec {
     "--disable-credential-storage"
   ];
 
-  NIX_CFLAGS_COMPILE = "-DU_NOEXCEPT=";
+  NIX_CFLAGS_COMPILE = [
+    "-DU_NOEXCEPT="
+    "-Wno-expansion-to-defined"
+  ];
 
   dontAddDisableDepTrack = true;
 
   nativeBuildInputs = [
     perl python ruby bison gperf flex
-    pkgconfig which gettext gobjectIntrospection
+    pkgconfig which gettext gobjectIntrospection pruneLibtoolFiles
   ];
 
   buildInputs = [

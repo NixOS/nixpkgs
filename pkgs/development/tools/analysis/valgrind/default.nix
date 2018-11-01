@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   enableParallelBuilding = true;
+  separateDebugInfo = stdenv.isLinux;
 
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''

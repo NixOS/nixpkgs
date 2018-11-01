@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "duc-${version}";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "zevv";
     repo = "duc";
     rev = "${version}";
-    sha256 = "1h7vll8a78ijan9bmnimmsviywmc39x8h9iikx8vm98kwyxi4xif";
+    sha256 = "1i7ry25xzy027g6ysv6qlf09ax04q4vy0kikl8h0aq5jbxsl9q52";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

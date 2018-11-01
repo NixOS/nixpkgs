@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext python3 ];
 
   meta = with stdenv.lib; {
-    homepage = http://pkg-isocodes.alioth.debian.org/;
+    homepage = https://salsa.debian.org/iso-codes-team/iso-codes;
     description = "Various ISO codes packaged as XML files";
-    maintainers = [ ];
+    license = licenses.lgpl21;
     platforms = platforms.all;
   };
 }

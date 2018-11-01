@@ -211,7 +211,7 @@ isELF() {
     exec {fd}< "$fn"
     read -r -n 4 -u "$fd" magic
     exec {fd}<&-
-    if [[ "$magic" =~ ELF ]]; then return 0; else return 1; fi
+    if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
 
 # Return success if the specified file is a script (i.e. starts with
@@ -257,9 +257,17 @@ shopt -s nullglob
 
 # Set up the initial path.
 PATH=
+HOST_PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH "$i/bin"
+
+    # For backward compatibility, we add initial path to HOST_PATH so
+    # it can be used in auto patch-shebangs. Unfortunately this will
+    # not work with cross compilation.
+    if [ -z "${strictDeps-}" ]; then
+        addToSearchPath HOST_PATH "$i/bin"
+    fi
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
@@ -271,7 +279,6 @@ fi
 if [ -z "${SHELL:-}" ]; then echo "SHELL not set"; exit 1; fi
 BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
-
 
 # Dummy implementation of the paxmark function. On Linux, this is
 # overwritten by paxctl's setup hook.
@@ -1044,7 +1051,7 @@ checkPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
             ${checkTarget}
@@ -1176,7 +1183,7 @@ installCheckPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelChecking:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $installCheckFlags ${installCheckFlagsArray+"${installCheckFlagsArray[@]}"}
             ${installCheckTarget:-installcheck}

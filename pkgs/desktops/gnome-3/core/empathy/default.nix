@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "3.25.90";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/empathy/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/empathy/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "0sn10fcymc6lyrabk7vx8lpvlaxxkqnmcwj9zdkfa8qf3388k4nc";
   };
 

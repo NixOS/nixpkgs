@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.ncftp.com/ncftp/;
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.unix;
+    license = licenses.clArtistic;
   };
 }

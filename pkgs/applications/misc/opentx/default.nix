@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, cmake, gcc-arm-embedded, python
+, cmake, gcc-arm-embedded, binutils-arm-embedded, python
 , qt5, SDL, gmock
 , dfu-util, avrdude
 }:
@@ -21,10 +21,12 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    gcc-arm-embedded binutils-arm-embedded
+  ];
 
   buildInputs = with qt5; [
-    gcc-arm-embedded
     python python.pkgs.pyqt4
     qtbase qtmultimedia qttranslations
     SDL gmock

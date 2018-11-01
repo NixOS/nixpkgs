@@ -1,0 +1,204 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03">
+ <title>Release 19.03 (“Koi”, 2019/03/??)</title>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03-highlights">
+  <title>Highlights</title>
+
+  <para>
+   In addition to numerous new and upgraded packages, this release has the
+   following highlights:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03-new-services">
+  <title>New Services</title>
+
+  <para>
+   The following new services were added since the last release:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para />
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03-incompatibilities">
+  <title>Backward Incompatibilities</title>
+
+  <para>
+   When upgrading from a previous release, please be aware of the following
+   incompatible changes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     The minimum version of Nix required to evaluate Nixpkgs is now 2.0.
+    </para>
+    <itemizedlist>
+     <listitem>
+      <para>
+       For users of NixOS 18.03 and 19.03, NixOS defaults to Nix 2.0, but
+       supports using Nix 1.11 by setting <literal>nix.package =
+       pkgs.nix1;</literal>. If this option is set to a Nix 1.11 package, you
+       will need to either unset the option or upgrade it to Nix 2.0.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of NixOS 17.09, you will first need to upgrade Nix by setting
+       <literal>nix.package = pkgs.nixStable2;</literal> and run
+       <command>nixos-rebuild switch</command> as the <literal>root</literal>
+       user.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of a daemon-less Nix installation on Linux or macOS, you can
+       upgrade Nix by running <command>curl https://nixos.org/nix/install |
+       sh</command>, or prior to doing a channel update, running
+       <command>nix-env -iA nix</command>.
+      </para>
+      <para>
+       If you have already run a channel update and Nix is no longer able to
+       evaluate Nixpkgs, the error message printed should provide adequate
+       directions for upgrading Nix.
+      </para>
+     </listitem>
+     <listitem>
+      <para>
+       For users of the Nix daemon on macOS, you can upgrade Nix by running
+       <command>sudo -i sh -c 'nix-channel --update &amp;&amp; nix-env -iA
+       nixpkgs.nix'; sudo launchctl stop org.nixos.nix-daemon; sudo launchctl
+       start org.nixos.nix-daemon</command>.
+      </para>
+     </listitem>
+    </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+     Package <varname>rabbitmq_server</varname> is renamed to
+     <varname>rabbitmq-server</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>light</literal> module no longer uses setuid binaries, but
+     udev rules. As a consequence users of that module have to belong to the
+     <literal>video</literal> group in order to use the executable (i.e.
+     <literal>users.users.yourusername.extraGroups = ["video"];</literal>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Buildbot now supports Python 3 and its packages have been moved to
+     <literal>pythonPackages</literal>. The options
+     <option>services.buildbot-master.package</option> and
+     <option>services.buildbot-worker.package</option> can be used to select
+     the Python 2 or 3 version of the package.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Options
+      <literal>services.znc.confOptions.networks.<replaceable>name</replaceable>.userName</literal> and
+      <literal>services.znc.confOptions.networks.<replaceable>name</replaceable>.modulePackages</literal>
+      were removed. They were never used for anything and can therefore safely be removed.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Package <literal>wasm</literal> has been renamed <literal>proglodyte-wasm</literal>. The package
+     <literal>wasm</literal> will be pointed to <literal>ocamlPackages.wasm</literal> in 19.09, so
+     make sure to update your configuration if you want to keep <literal>proglodyte-wasm</literal>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     OpenSMTPD has been upgraded to version 6.4.0p1. This release makes
+     backwards-incompatible changes to the configuration file format. See
+     <command>man smtpd.conf</command> for more information on the new file
+     format.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The versioned <varname>postgresql</varname> have been renamed to use
+     underscore number seperators. For example, <varname>postgresql96</varname>
+     has been renamed to <varname>postgresql_9_6</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Slurm introduces the new option
+      <literal>services.slurm.stateSaveLocation</literal>,
+      which is now set to <literal>/var/spool/slurm</literal> by default
+      (instead of <literal>/var/spool</literal>).
+      Make sure to move all files to the new directory or to set the option accordingly.
+    </para>
+    <para>
+      The slurmctld now runs as user <literal>slurm</literal> instead of <literal>root</literal>.
+      If you want to keep slurmctld running as <literal>root</literal>, set
+      <literal>services.slurm.user = root</literal>.
+    </para>
+    <para>
+      The options <literal>services.slurm.nodeName</literal> and
+      <literal>services.slurm.partitionName</literal> are now sets of
+      strings to correctly reflect that fact that each of these
+      options can occour more than once in the configuration.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+
+ <section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-19.03-notable-changes">
+  <title>Other Notable Changes</title>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     The <option>services.matomo</option> module gained the option
+     <option>services.matomo.package</option> which determines the used
+     Matomo version.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The deprecated <literal>truecrypt</literal> package has been removed
+     and <literal>truecrypt</literal> attribute is now an alias for
+     <literal>veracrypt</literal>. VeraCrypt is backward-compatible with
+     TrueCrypt volumes. Note that <literal>cryptsetup</literal> also
+     supports loading TrueCrypt volumes.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </section>
+</section>

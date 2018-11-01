@@ -20,7 +20,8 @@ stdenv.mkDerivation {
       --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux gawk coreutils ]}
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }

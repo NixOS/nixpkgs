@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPerlPackage }:
+{ stdenv, fetchurl, perlPackages }:
 
-buildPerlPackage rec {
+perlPackages.buildPerlPackage rec {
   name = "egypt-${version}";
   version = "1.10";
 

@@ -22,6 +22,8 @@ in {
 
     systemd.packages = [ pkgs.iwd ];
 
+    systemd.services.iwd.wantedBy = [ "multi-user.target" ];
+
     systemd.tmpfiles.rules = [
       "d /var/lib/iwd 0700 root root -"
     ];

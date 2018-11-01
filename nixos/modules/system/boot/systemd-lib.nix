@@ -63,7 +63,7 @@ in rec {
 
   assertValueOneOf = name: values: group: attr:
     optional (attr ? ${name} && !elem attr.${name} values)
-      "Systemd ${group} field `${name}' cannot have value `${attr.${name}}'.";
+      "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
 
   assertHasField = name: group: attr:
     optional (!(attr ? ${name}))

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, jbuilder, jsonm, hex, sexplib }:
+{ stdenv, fetchzip, ocaml, findlib, dune, jsonm, hex, sexplib }:
 
 let version = "0.6.0"; in
 
@@ -10,12 +10,12 @@ stdenv.mkDerivation {
     sha256 = "18g64lhai0bz65b9fil12vlgfpwa9b5apj7x6d7n4zzm18qfazvj";
   };
 
-  buildInputs = [ ocaml findlib jbuilder ];
+  buildInputs = [ ocaml findlib dune ];
   propagatedBuildInputs = [ jsonm hex sexplib ];
 
-  buildPhase = "jbuilder build -p ezjsonm";
+  buildPhase = "dune build -p ezjsonm";
 
-  inherit (jbuilder) installPhase;
+  inherit (dune) installPhase;
 
   meta = {
     description = "An easy interface on top of the Jsonm library";

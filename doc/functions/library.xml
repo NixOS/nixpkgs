@@ -1,0 +1,15 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xml:id="sec-functions-library">
+ <title>Nixpkgs Library Functions</title>
+
+ <para>
+  Nixpkgs provides a standard library at <varname>pkgs.lib</varname>, or
+  through <code>import &lt;nixpkgs/lib&gt;</code>.
+ </para>
+
+ <xi:include href="./library/asserts.xml" />
+
+ <xi:include href="./library/attrsets.xml" />
+</section>

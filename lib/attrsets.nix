@@ -435,12 +435,15 @@ rec {
     useful for deep-overriding.
 
     Example:
-      x = { a = { b = 4; c = 3; }; }
-      overrideExisting x { a = { b = 6; d = 2; }; }
-      => { a = { b = 6; d = 2; }; }
+      overrideExisting {} { a = 1; }
+      => {}
+      overrideExisting { b = 2; } { a = 1; }
+      => { b = 2; }
+      overrideExisting { a = 3; b = 2; } { a = 1; }
+      => { a = 1; b = 2; }
   */
   overrideExisting = old: new:
-    old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] old.${attr} new)) (attrNames old));
+    mapAttrs (name: value: new.${name} or value) old;
 
   /* Get a package output.
      If no output is found, fallback to `.out` and then to the default.

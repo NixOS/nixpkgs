@@ -5,7 +5,7 @@
 let
   pname = "grilo-plugins";
   version = "0.3.7";
-  major = gnome3.versionBranch version;
+  major = stdenv.lib.versions.majorMinor version;
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 

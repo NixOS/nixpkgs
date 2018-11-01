@@ -2,7 +2,7 @@
 */
 
 { # The platforms *from* which we cross compile.
-  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
+  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 }:
@@ -10,7 +10,13 @@
 with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
-  nativePlatforms = linux;
+  nativePlatforms = all;
+
+  embedded = {
+    buildPackages.binutils = nativePlatforms;
+    buildPackages.gcc = nativePlatforms;
+    libcCross = nativePlatforms;
+  };
 
   common = {
     buildPackages.binutils = nativePlatforms;
@@ -134,12 +140,19 @@ in
   android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
   });
 
+  avr = mapTestOnCross lib.systems.examples.avr embedded;
+  arm-embedded = mapTestOnCross lib.systems.examples.arm-embedded embedded;
+  powerpc-embedded = mapTestOnCross lib.systems.examples.powerpc-embedded embedded;
+  aarch64-embedded = mapTestOnCross lib.systems.examples.aarch64-embedded embedded;
+  i686-embedded = mapTestOnCross lib.systems.examples.i686-embedded embedded;
+  x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
+
   /* Cross-built bootstrap tools for every supported platform */
   bootstrapTools = let
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
     maintainers = [ lib.maintainers.dezgeg ];
     mkBootstrapToolsJob = drv:
-      assert lib.elem drv.system (supportedSystems ++ [ "aarch64-linux" ]);
+      assert lib.elem drv.system supportedSystems;
       hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
   in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
 }

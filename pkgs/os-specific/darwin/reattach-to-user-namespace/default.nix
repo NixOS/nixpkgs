@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "reattach-to-user-namespace-${version}";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchurl {
-    url = "https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard/archive/v2.6.tar.gz";
-    sha256 = "1d8ynzkdlxyyky9f88f7z50g9lwdydkpb2n7gkw3jgl2ac569xc0";
+    url = "https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard/archive/v${version}.tar.gz";
+    sha256 = "00mjyj8yicrpnlm46rlbkvxgl5381l8xawh7rmjk10p3zrm56jbv";
   };
 
   buildFlags = "ARCHES=x86_64";

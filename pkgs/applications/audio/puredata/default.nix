@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation  rec {
   name = "puredata-${version}";
-  version = "0.48-0";
+  version = "0.49-0";
 
   src = fetchurl {
     url = "http://msp.ucsd.edu/Software/pd-${version}.src.tar.gz";
-    sha256 = "0wy9kl2v00fl27x4mfzhbca415hpaisp6ls8a6mkl01qbw20krny";
+    sha256 = "18rzqbpgnnvyslap7k0ly87aw1bbxkb0rk5agpr423ibs9slxq6j";
   };
 
   nativeBuildInputs = [ autoreconfHook gettext makeWrapper ];
@@ -20,10 +20,8 @@ stdenv.mkDerivation  rec {
     "--enable-jack"
     "--enable-fftw"
     "--disable-portaudio"
+    "--disable-oss"
   ];
-
-  # https://github.com/pure-data/pure-data/issues/188
-  # --disable-oss
 
   postInstall = ''
     wrapProgram $out/bin/pd --prefix PATH : ${tk}/bin

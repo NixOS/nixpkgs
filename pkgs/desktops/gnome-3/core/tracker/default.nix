@@ -5,15 +5,15 @@
 
 let
   pname = "tracker";
-  version = "2.1.2";
+  version = "2.1.4";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${gnome3.versionBranch version}/${name}.tar.xz";
-    sha256 = "1sf923f3ya3gj5s90da8qkqqvjj3fdll7xrjgscpb6yhgv0kzqsi";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    sha256 = "0xf58zld6pnfa8k7k70rv8ya8g7zqgahz6q4sapwxs6k97d2fgsx";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   passthru = {

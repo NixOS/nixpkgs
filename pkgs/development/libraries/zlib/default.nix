@@ -82,4 +82,6 @@ stdenv.mkDerivation (rec {
   preConfigure = ''
     export CHOST=${stdenv.hostPlatform.config}
   '';
+} // stdenv.lib.optionalAttrs (stdenv.hostPlatform.libc == "msvcrt") {
+  configurePhase = ":";
 })

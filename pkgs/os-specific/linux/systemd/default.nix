@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
@@ -10,15 +10,15 @@
 , getent
 , buildPackages
 , withSelinux ? false, libselinux
-, withLibseccomp ? libseccomp.meta.available, libseccomp
-, withKexectools ? kexectools.meta.available, kexectools
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
 let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation rec {
-  version = "239";
+  version = "239.20181031";
   name = "systemd-${version}";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -26,8 +26,8 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "67c553805a9ebee2dce7c3a350b4abd4d7a489c2";
-    sha256 = "114vq71gcddi4qm2hyrj5jsas9599s0h5mg65jfpvxhfyaw54cpv";
+    rev = "nixos-v${version}";
+    sha256 = "1rzl0iqrpa4ajvama5k3cb3yc7893c55kzcxkl3cyavpdzsw5505";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -91,6 +91,7 @@ in stdenv.mkDerivation rec {
     "-Dsulogin-path=${utillinux}/bin/sulogin"
     "-Dmount-path=${utillinux}/bin/mount"
     "-Dumount-path=${utillinux}/bin/umount"
+    "-Ddns-over-tls=false"
   ];
 
   preConfigure = ''

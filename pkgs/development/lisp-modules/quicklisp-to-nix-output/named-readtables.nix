@@ -1,4 +1,4 @@
-{ fetchurl, ... }:
+args @ { fetchurl, ... }:
 rec {
   baseName = ''named-readtables'';
   version = ''20180131-git'';

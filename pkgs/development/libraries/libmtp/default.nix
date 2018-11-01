@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # tried to install files to /lib/udev, hopefully OK
   configureFlags = [ "--with-udev=$$bin/lib/udev" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://libmtp.sourceforge.net;
     description = "An implementation of Microsoft's Media Transfer Protocol";
     longDescription = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       in the form of a library suitable primarily for POSIX compliant operating
       systems. We implement MTP Basic, the stuff proposed for standardization.
       '';
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ ];
+    platforms = platforms.unix;
+    license = licenses.lgpl21;
   };
 }

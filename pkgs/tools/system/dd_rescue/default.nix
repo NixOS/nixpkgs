@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace "\$(DESTDIR)/usr" "$out" \
       --replace "-o root" "" \
-      --replace "-g root" "" 
+      --replace "-g root" ""
   '';
   makeFlags = [ "LIBDIR=$out" ];
 
@@ -29,12 +29,13 @@ stdenv.mkDerivation rec {
     tar xf "${dd_rhelp_src}" -C "$out/share/dd_rescue"
     cp "$out/share/dd_rescue"/dd_rhelp*/dd_rhelp "$out/bin"
   '';
-      
+
   meta = with stdenv.lib; {
     description = "A tool to copy data from a damaged block device";
     maintainers = with maintainers; [ raskin domenkozar ];
     platforms = platforms.linux;
-    downloadPage = "http://www.garloff.de/kurt/linux/ddrescue/";
+    homepage = "http://www.garloff.de/kurt/linux/ddrescue/";
+    license = licenses.gpl2Plus;
     inherit version;
     updateWalker = true;
   };

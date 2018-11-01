@@ -4,7 +4,7 @@
 } :
 
 let
-  version = "18.06.0";
+  version = "18.10.0";
 
 in stdenv.mkDerivation {
   name = "limesuite-${version}";
@@ -13,8 +13,10 @@ in stdenv.mkDerivation {
     owner = "myriadrf";
     repo = "LimeSuite";
     rev = "v${version}";
-    sha256 = "0j6mxlvij2k6ib1d9jwzvilmqgm1h0q7wy9sf8a6bvidwlphvy25";
+    sha256 = "0nbyvcdwvfvln1wic9qwb7y221v3jv454gp5v6ms9112a41zj46h";
   };
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake ];
 
@@ -36,10 +38,6 @@ in stdenv.mkDerivation {
 
     mkdir -p $out/share/limesuite
     cp bin/Release/lms7suite_mcu/* $out/share/limesuite
-
-    cp bin/dualRXTX $out/bin
-    cp bin/basicRX $out/bin
-    cp bin/singleRX $out/bin
   '';
 
   meta = with stdenv.lib; {

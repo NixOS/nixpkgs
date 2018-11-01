@@ -8,20 +8,26 @@
 }:
 buildPythonPackage rec {
   pname = "preshed";
-  version = "1.0.1";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7b99ace606143a922163a7ff7ad4969b296288f5b20b9c9bda328caec3b92f71";
+    sha256 = "1rd943zp4gyspajqm5qxzndxziyh51grx0zcw23w8r9r65s1rq6s";
   };
 
   propagatedBuildInputs = [
    cython
    cymem
   ];
+
   buildInputs = [
     pytest
   ];
+
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.31.0"
+  '';
 
   checkPhase = ''
     ${python.interpreter} setup.py test

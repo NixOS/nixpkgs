@@ -2,11 +2,11 @@
 , python, perl, gdk_pixbuf, libiconv, libintl }:
 
 stdenv.mkDerivation rec {
-  name = "libgsf-1.14.42";
+  name = "libgsf-1.14.44";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/libgsf/1.14/${name}.tar.xz";
-    sha256 = "1hhdz0ymda26q6bl5ygickkgrh998lxqq4z9i8dzpcvqna3zpzr9";
+    sha256 = "1ppzfk3zmmgrg9jh8vc4dacddbfngjslq2wpj94pcr3i0c8dxgk8";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];

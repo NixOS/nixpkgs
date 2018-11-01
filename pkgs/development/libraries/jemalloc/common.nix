@@ -12,11 +12,7 @@ stdenv.mkDerivation (rec {
   # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--with-jemalloc-prefix="
-                   # jemalloc is unable to correctly detect transparent hugepage support on
-                   # ARM (https://github.com/jemalloc/jemalloc/issues/526), and the default
-                   # kernel ARMv6/7 kernel does not enable it, so we explicitly disable support
-                   ++ stdenv.lib.optional stdenv.isAarch32 "--disable-thp";
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--with-jemalloc-prefix=";
   doCheck = true;
 
   enableParallelBuilding = true;

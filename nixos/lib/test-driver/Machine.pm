@@ -155,8 +155,10 @@ sub start {
         $ENV{USE_TMPDIR} = 1;
         $ENV{QEMU_OPTS} =
             ($self->{allowReboot} ? "" : "-no-reboot ") .
-            "-monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
-            "-device virtio-serial -device virtconsole,chardev=shell " .
+            "-monitor unix:./monitor " .
+            "-chardev socket,id=shell,path=./shell -device virtio-serial -device virtconsole,chardev=shell " .
+            # socket backdoor, see "Debugging NixOS tests" section in NixOS manual
+            "-chardev socket,id=backdoor,path=./backdoor,server,nowait -device virtio-serial -device virtconsole,chardev=backdoor " .
             "-device virtio-rng-pci " .
             ($showGraphics ? "-serial stdio" : "-nographic") . " " . ($ENV{QEMU_OPTS} || "");
         chdir $self->{stateDir} or die;
@@ -248,7 +250,8 @@ sub connect {
         $self->start;
 
         local $SIG{ALRM} = sub { die "timed out waiting for the VM to connect\n"; };
-        alarm 300;
+        # 50 minutes -- increased as a test, see #49441
+        alarm 3000;
         readline $self->{socket} or die "the VM quit before connecting\n";
         alarm 0;
 

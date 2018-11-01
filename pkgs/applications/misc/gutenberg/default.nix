@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "gutenberg-${version}";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "Keats";
     repo = "gutenberg";
     rev = "v${version}";
-    sha256 = "0is7156aim2ad8xg2f5068crc4gfvm89x8gxa25vc25p0yr1bpla";
+    sha256 = "0kzxz26khk5rwb9mz0wi9r8y7r93w4n2dbq6v2qr07cy5h14pa6w";
   };
 
-  cargoSha256 = "146vlr85n9d06am5ki76fh1vb5r8a4lzx5b7dmgi292kc3dsn41z";
+  cargoSha256 = "0n4ji06chybmcvg5yz6cnhzqh162zhh5xpbz374a796dwp1132m8";
 
   nativeBuildInputs = [ cmake pkgconfig openssl ];
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices cf-private ];

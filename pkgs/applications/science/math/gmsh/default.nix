@@ -1,14 +1,14 @@
 { stdenv, fetchurl, cmake, blas, liblapack, gfortran, gmm, fltk, libjpeg
 , zlib, libGLU_combined, libGLU, xorg }:
 
-let version = "4.0.0"; in
+let version = "4.0.2"; in
 
 stdenv.mkDerivation {
   name = "gmsh-${version}";
 
   src = fetchurl {
     url = "http://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "0pqm0ippj0j07919hld3f3rgq0p1x4j32fxb2m1nyp226zx8l37v";
+    sha256 = "03aw3sbz4x998rk29az7mgm0mrdb6614aqnppg81p5jkh5097jgk";
   };
 
   # The original CMakeLists tries to use some version of the Lapack lib

@@ -3,18 +3,18 @@
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
 , kio, kcrash
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
-, openjpeg, opencolorio, vc, poppler_qt5, curl, ilmbase
+, openjpeg, opencolorio, vc, poppler, curl, ilmbase
 , qtmultimedia, qtx11extras
 , python3
 }:
 
 mkDerivation rec {
   name = "krita-${version}";
-  version = "4.1.1";
+  version = "4.1.5";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/krita/${version}/${name}.tar.gz";
-    sha256 = "1qz9bjvnwa5gc2b0063i2p72jq6y1b6kgqdj39599acp7ws11asw";
+    sha256 = "1by8p8ifdp03f05bhg8ygdd1j036anfpjjnzbx63l2fbmy9k6q10";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
@@ -23,7 +23,7 @@ mkDerivation rec {
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
     ki18n kitemmodels kitemviews kwindowsystem kio kcrash
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
-    openjpeg opencolorio poppler_qt5 curl ilmbase
+    openjpeg opencolorio poppler curl ilmbase
     qtmultimedia qtx11extras
     python3
   ] ++ lib.optional (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) vc;
