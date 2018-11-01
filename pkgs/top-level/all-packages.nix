@@ -7984,6 +7984,8 @@ with pkgs;
 
   jython = callPackage ../development/interpreters/jython {};
 
+  gImageReader = callPackage ../applications/misc/gImageReader { };
+
   guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
