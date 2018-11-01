@@ -201,19 +201,19 @@ in with pkgs; rec {
 
   bootstrapTools = if (stdenv.hostPlatform.libc == "glibc") then
     import ./bootstrap-tools {
-      inherit (stdenv.hostPlatform) system;
+      inherit (stdenv.buildPlatform) system; # Used to determine where to build
       inherit bootstrapFiles;
     }
     else if (stdenv.hostPlatform.libc == "musl") then
     import ./bootstrap-tools-musl {
-      inherit (stdenv.hostPlatform) system;
+      inherit (stdenv.buildPlatform) system; # Used to determine where to build
       inherit bootstrapFiles;
     }
     else throw "unsupported libc";
 
   test = derivation {
     name = "test-bootstrap-tools";
-    inherit (stdenv.hostPlatform) system;
+    inherit (stdenv.hostPlatform) system; # We cannot "cross test"
     builder = bootstrapFiles.busybox;
     args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
 
