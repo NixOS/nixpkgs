@@ -2506,6 +2506,8 @@ in {
 
   google_cloud_videointelligence = callPackage ../development/python-modules/google_cloud_videointelligence { };
 
+  google_cloud_vision = callPackage ../development/python-modules/google_cloud_vision { };
+
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
   gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; });
