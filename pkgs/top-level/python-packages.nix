@@ -2484,6 +2484,8 @@ in {
 
   google_cloud_resource_manager = callPackage ../development/python-modules/google_cloud_resource_manager { };
 
+  google_cloud_runtimeconfig = callPackage ../development/python-modules/google_cloud_runtimeconfig { };
+
   google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
 
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
