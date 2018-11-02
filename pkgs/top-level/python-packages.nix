@@ -2828,6 +2828,8 @@ in {
 
   colored = callPackage ../development/python-modules/colored { };
 
+  xapian-bindings = callPackage ../development/libraries/xapian/bindings/python.nix { };
+
   xdis = callPackage ../development/python-modules/xdis { };
 
   xnd = callPackage ../development/python-modules/xnd { };
