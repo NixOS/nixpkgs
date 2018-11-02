@@ -2502,6 +2502,8 @@ in {
 
   google_cloud_trace = callPackage ../development/python-modules/google_cloud_trace { };
 
+  google_cloud_translate = callPackage ../development/python-modules/google_cloud_translate { };
+
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
   gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; });
