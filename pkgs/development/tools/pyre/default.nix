@@ -77,7 +77,7 @@ let
     description = "A performant type-checker for Python 3";
     homepage = https://pyre-check.org;
     license = licenses.mit;
-    platforms = with platforms; linux;
+    platforms = ocamlPackages.ocaml.meta.platforms;
     maintainers = with maintainers; [ teh ];
   };
 };
