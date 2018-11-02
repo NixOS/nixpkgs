@@ -4163,6 +4163,11 @@
     github = "taku0";
     name = "Takuo Yonezawa";
   };
+  talyz = {
+    email = "kim.lindberger@gmail.com";
+    github = "talyz";
+    name = "Kim Lindberger";
+  };
   tari = {
     email = "peter@taricorp.net";
     github = "tari";
