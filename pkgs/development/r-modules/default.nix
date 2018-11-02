@@ -942,6 +942,10 @@ let
       PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -L${pkgs.cyrus_sasl.out}/lib -L${pkgs.zlib.out}/lib -lssl -lcrypto -lsasl2 -lz";
     });
 
+    ps = old.ps.overrideDerivation (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
     rlang = old.rlang.overrideDerivation (attrs: {
       preConfigure = "patchShebangs configure";
     });
