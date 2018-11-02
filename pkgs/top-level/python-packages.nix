@@ -2498,6 +2498,8 @@ in {
 
   google_cloud_testutils = callPackage ../development/python-modules/google_cloud_testutils { };
 
+  google_cloud_texttospeech = callPackage ../development/python-modules/google_cloud_texttospeech { };
+
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
   gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; });
