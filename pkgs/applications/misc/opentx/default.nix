@@ -42,6 +42,7 @@ in stdenv.mkDerivation {
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
+    "-DNANO=OFF"
   ];
 
   meta = with stdenv.lib; {
