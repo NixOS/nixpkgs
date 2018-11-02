@@ -6949,6 +6949,8 @@ with pkgs;
 
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
+  gogetdoc = callPackage ../development/tools/gogetdoc { };
+
   gox = callPackage ../development/tools/gox { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
