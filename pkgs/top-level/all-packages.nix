@@ -2349,6 +2349,8 @@ with pkgs;
 
   easyrsa2 = callPackage ../tools/networking/easyrsa/2.x.nix { };
 
+  easysnap = callPackage ../tools/backup/easysnap { };
+
   ebook_tools = callPackage ../tools/text/ebook-tools { };
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
