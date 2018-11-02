@@ -1,19 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, bison, flex }:
 
 stdenv.mkDerivation rec {
   name = "oidentd-${version}";
-  version = "2.2.2";
-
-  CFLAGS = [ "--std=gnu89" ];
+  version = "2.3.1";
+  nativeBuildInputs = [ bison flex ];
 
   src = fetchurl {
-    url = "https://ftp.janikrabe.com/pub/oidentd/releases/${version}/${name}.tar.gz";
-    sha256 = "1svj7ymljp4s17d7jlx6602n9081714qsj5yymmv1s9wagzjqyn9";
+    url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/${name}.tar.gz";
+    sha256 = "1sljid4jyz9gjyx8wy3xd6bq4624dxs422nqd3mcxnsvgxr6d6zd";
   };
 
-  meta = {
-    homepage = http://ojnk.sourceforge.net/;
-    description = "An implementation of the IDENT protocol";
-    platforms = stdenv.lib.platforms.linux;
+  meta = with stdenv.lib; {
+    description = "Configurable Ident protocol server";
+    homepage = https://oidentd.janikrabe.com/;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }
