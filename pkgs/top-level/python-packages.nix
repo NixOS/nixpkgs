@@ -2466,6 +2466,8 @@ in {
 
   grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
 
+  grpc_google_iam_v1 = callPackage ../development/python-modules/grpc_google_iam_v1 { };
+
   gspread = callPackage ../development/python-modules/gspread { };
 
   gyp = callPackage ../development/python-modules/gyp { };
