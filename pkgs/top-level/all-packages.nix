@@ -5095,6 +5095,8 @@ with pkgs;
 
   recoverjpeg = callPackage ../tools/misc/recoverjpeg { };
 
+  reftools = callPackage ../development/tools/reftools { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
