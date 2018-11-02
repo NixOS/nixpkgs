@@ -11,7 +11,7 @@ diff --git a/utils/build-presets.ini b/utils/build-presets.ini
 index 7ee57ad2df..e6b0af3581 100644
 --- a/utils/build-presets.ini
 +++ b/utils/build-presets.ini
-@@ -686,7 +686,7 @@ swiftpm
+@@ -717,7 +717,7 @@ swiftpm
  xctest
  dash-dash
  
