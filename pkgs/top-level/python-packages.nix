@@ -2464,6 +2464,8 @@ in {
 
   google_cloud_dns = callPackage ../development/python-modules/google_cloud_dns { };
 
+  google_cloud_error_reporting = callPackage ../development/python-modules/google_cloud_error_reporting { };
+
   google_cloud_kms = callPackage ../development/python-modules/google_cloud_kms { };
 
   google_cloud_logging = callPackage ../development/python-modules/google_cloud_logging { };
