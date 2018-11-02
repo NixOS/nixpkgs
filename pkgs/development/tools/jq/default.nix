@@ -13,10 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ oniguruma ];
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-strptime-test.patch;
-
-  patchFlags = [ "-p2" ]; # `src` subdir was introduced after v1.5 was released
-
   configureFlags =
     [
     "--bindir=\${bin}/bin"
