@@ -3131,6 +3131,8 @@ with pkgs;
 
   pgf_graphics = callPackage ../tools/graphics/pgf { };
 
+  pgFormatter = callPackage ../development/tools/pgFormatter { };
+
   pgjwt = callPackage ../servers/sql/postgresql/pgjwt {};
 
   cstore_fdw = callPackage ../servers/sql/postgresql/cstore_fdw {};
