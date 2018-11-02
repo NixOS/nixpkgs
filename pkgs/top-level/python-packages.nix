@@ -2494,6 +2494,8 @@ in {
 
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
 
+  google_cloud_tasks = callPackage ../development/python-modules/google_cloud_tasks { };
+
   google_cloud_testutils = callPackage ../development/python-modules/google_cloud_testutils { };
 
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
