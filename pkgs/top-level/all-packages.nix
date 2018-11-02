@@ -8059,6 +8059,7 @@ with pkgs;
     ansible_2_4
     ansible_2_5
     ansible_2_6
+    ansible_2_7
     ansible2
     ansible;
 
