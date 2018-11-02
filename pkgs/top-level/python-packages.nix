@@ -2452,6 +2452,8 @@ in {
 
   google_cloud_bigtable = callPackage ../development/python-modules/google_cloud_bigtable { };
 
+  google_cloud_container = callPackage ../development/python-modules/google_cloud_container { };
+
   google_cloud_kms = callPackage ../development/python-modules/google_cloud_kms { };
 
   google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
