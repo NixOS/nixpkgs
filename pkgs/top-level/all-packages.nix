@@ -21364,13 +21364,14 @@ with pkgs;
   boogie = dotnetPackages.Boogie;
 
   inherit (callPackage ./coq-packages.nix {
-    inherit (ocaml-ng) ocamlPackages_4_02
-                       ocamlPackages_4_05
-    ;
+    inherit (ocaml-ng) ocamlPackages_4_05;
   }) mkCoqPackages
-    coq_8_5 coq_8_6 coq_8_7 coq_8_8
-    coqPackages_8_5 coqPackages_8_6 coqPackages_8_7 coqPackages_8_8
-    coqPackages coq
+    coqPackages_8_5  coq_8_5
+    coqPackages_8_6  coq_8_6
+    coqPackages_8_7  coq_8_7
+    coqPackages_8_8  coq_8_8
+    coqPackages_8_9  coq_8_9
+    coqPackages      coq
   ;
 
   coq2html = callPackage ../applications/science/logic/coq2html {
