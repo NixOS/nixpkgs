@@ -2488,6 +2488,8 @@ in {
 
   google_cloud_securitycenter = callPackage ../development/python-modules/google_cloud_securitycenter { };
 
+  google_cloud_spanner = callPackage ../development/python-modules/google_cloud_spanner { };
+
   google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
 
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
