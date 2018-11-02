@@ -2482,6 +2482,8 @@ in {
 
   google_cloud_redis = callPackage ../development/python-modules/google_cloud_redis { };
 
+  google_cloud_resource_manager = callPackage ../development/python-modules/google_cloud_resource_manager { };
+
   google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
 
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
