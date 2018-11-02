@@ -196,7 +196,7 @@ in {
 
   astropy = callPackage ../development/python-modules/astropy { };
 
-  astroquery = callPackage ../development/python-modules/astroquery { }; 
+  astroquery = callPackage ../development/python-modules/astroquery { };
 
   atom = callPackage ../development/python-modules/atom { };
 
@@ -2444,10 +2444,9 @@ in {
 
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
 
-  gpgme = toPythonModule (pkgs.gpgme.override {
-    pythonSupport = true;
-    inherit (self) python;
-  });
+  google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
+
+  gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; });
 
   gphoto2 = callPackage ../development/python-modules/gphoto2 {
     inherit (pkgs) pkgconfig;
