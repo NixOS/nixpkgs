@@ -2444,6 +2444,8 @@ in {
 
   google_cloud_kms = callPackage ../development/python-modules/google_cloud_kms { };
 
+  google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
+
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
 
   google_cloud_testutils = callPackage ../development/python-modules/google_cloud_testutils { };
