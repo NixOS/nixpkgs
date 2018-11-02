@@ -2500,6 +2500,8 @@ in {
 
   google_cloud_texttospeech = callPackage ../development/python-modules/google_cloud_texttospeech { };
 
+  google_cloud_trace = callPackage ../development/python-modules/google_cloud_trace { };
+
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
   gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; });
