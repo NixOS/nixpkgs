@@ -63,17 +63,7 @@ stdenv.mkDerivation rec {
         --replace "ps -U" "${procps}/bin/ps -U"
 
     sed -i '/ask_to_continue/d' lib/tasks/gitlab/two_factor.rake
-
-    # required for some gems:
-    cat > config/database.yml <<EOF
-      production:
-        adapter: <%= ENV["GITLAB_DATABASE_ADAPTER"] || sqlite %>
-        database: gitlab
-        host: <%= ENV["GITLAB_DATABASE_HOST"] || "127.0.0.1" %>
-        password: <%= ENV["GITLAB_DATABASE_PASSWORD"] || "blerg" %>
-        username: gitlab
-        encoding: utf8
-    EOF
+    sed -ri -e '/log_level/a config.logger = Logger.new(STDERR)' config/environments/production.rb
   '';
 
   buildPhase = ''
