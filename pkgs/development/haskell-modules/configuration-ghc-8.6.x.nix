@@ -46,7 +46,7 @@ self: super: {
 
   # LTS-12.x versions do not compile.
   base-orphans = self.base-orphans_0_8;
-  brick = doJailbreak super.brick_0_41_2;      # https://github.com/jtdaugherty/brick/pull/188
+  brick = self.brick_0_41_2;
   cassava-megaparsec = doJailbreak super.cassava-megaparsec;
   config-ini = doJailbreak super.config-ini;   # https://github.com/aisamanra/config-ini/issues/18
   contravariant = self.contravariant_1_5;
