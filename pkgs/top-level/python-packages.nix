@@ -2508,6 +2508,8 @@ in {
 
   google_cloud_vision = callPackage ../development/python-modules/google_cloud_vision { };
 
+  google_cloud_websecurityscanner = callPackage ../development/python-modules/google_cloud_websecurityscanner { };
+
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
   gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; });
