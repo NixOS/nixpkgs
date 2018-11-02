@@ -2478,6 +2478,8 @@ in {
 
   google_cloud_monitoring = callPackage ../development/python-modules/google_cloud_monitoring { };
 
+  google_cloud_pubsub = callPackage ../development/python-modules/google_cloud_pubsub { };
+
   google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
 
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
