@@ -2442,6 +2442,8 @@ in {
 
   google_cloud_core = callPackage ../development/python-modules/google_cloud_core { };
 
+  google_cloud_bigquery = callPackage ../development/python-modules/google_cloud_bigquery { };
+
   google_cloud_kms = callPackage ../development/python-modules/google_cloud_kms { };
 
   google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
