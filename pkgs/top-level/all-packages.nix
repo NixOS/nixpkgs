@@ -5491,6 +5491,10 @@ in
 
   pythonSexy = pythonPackages.libsexy;
 
+  pyditz = callPackage ../applications/misc/pyditz {
+    pythonPackages = python27Packages;
+  };
+
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   pywal = with python3Packages; toPythonApplication pywal;

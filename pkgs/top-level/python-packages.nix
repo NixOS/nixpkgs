@@ -1673,6 +1673,8 @@ in {
 
   cerberus = callPackage ../development/python-modules/cerberus { };
 
+  cerberus11 = callPackage ../development/python-modules/cerberus11 { };
+
   certifi = callPackage ../development/python-modules/certifi { };
 
   characteristic = callPackage ../development/python-modules/characteristic { };
