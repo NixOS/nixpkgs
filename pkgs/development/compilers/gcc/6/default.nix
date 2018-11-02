@@ -48,7 +48,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "6.4.0";
+let version = "6.5.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -57,8 +57,6 @@ let version = "6.4.0";
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch
-      ++ [ ../struct-ucontext.patch ../struct-sigaltstack.patch ] # glibc-2.26
-      ++ optional langJava [ ../struct-ucontext-libjava.patch ] # glibc-2.26
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
       ;
 
@@ -168,7 +166,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "1m0lr7938lw5d773dkvwld90hjlcq2282517d1gwvrfzmwgg42w5";
+    sha256 = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
   };
 
   inherit patches;
