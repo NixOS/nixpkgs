@@ -3910,6 +3910,11 @@
     github = "sjagoe";
     name = "Simon Jagoe";
   };
+  sjau = {
+    email = "nixos@sjau.ch";
+    github = "sjau";
+    name = "Stephan Jau";
+  };
   sjmackenzie = {
     email = "setori88@gmail.com";
     github = "sjmackenzie";

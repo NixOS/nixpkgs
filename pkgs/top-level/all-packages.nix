@@ -2349,6 +2349,8 @@ with pkgs;
 
   easyrsa2 = callPackage ../tools/networking/easyrsa/2.x.nix { };
 
+  easysnap = callPackage ../tools/backup/easysnap { };
+
   ebook_tools = callPackage ../tools/text/ebook-tools { };
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
@@ -6854,7 +6856,7 @@ with pkgs;
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc843.override {
+  haskellPackages = haskell.packages.ghc844.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   };
 

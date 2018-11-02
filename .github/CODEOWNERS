@@ -97,3 +97,9 @@
 /pkgs/desktops/plasma-5 @ttuegel
 /pkgs/development/libraries/kde-frameworks @ttuegel
 /pkgs/development/libraries/qt-5 @ttuegel
+
+# PostgreSQL and related stuff
+/pkgs/servers/sql/postgresql @thoughtpolice
+/nixos/modules/services/databases/postgresql.xml @thoughtpolice
+/nixos/modules/services/databases/postgresql.nix @thoughtpolice
+/nixos/tests/postgresql.nix @thoughtpolice
