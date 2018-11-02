@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ocamlPackages, makeWrapper, writeScript
-, dune, python3, rsync, fetchpatch }:
+, dune, python3, rsync, fetchpatch, buck }:
 let
   # Manually set version - the setup script requires
   # hg and git + keeping the .git directory around.
@@ -120,6 +120,10 @@ in python3.pkgs.buildPythonApplication rec {
     substituteInPlace scripts/build-pypi-package.sh \
         --replace 'NIX_BINARY_FILE' '${pyre-bin}/bin/pyre.bin' \
         --replace 'BUILD_ROOT="$(mktemp -d)"' "BUILD_ROOT=$(pwd)/build"
+    substituteInPlace client/buck.py \
+        --replace '"buck"' '"${buck}/bin/buck"'
+    substituteInPlace client/tests/buck_test.py \
+        --replace '"buck"' '"${buck}/bin/buck"'
   '';
 
   buildInputs = [ pyre-bin rsync ];
@@ -128,6 +132,8 @@ in python3.pkgs.buildPythonApplication rec {
     bash scripts/build-pypi-package.sh --version ${pyre-version} --bundle-typeshed ${typeshed}
     cp -r build/dist dist
   '';
-
-  doCheck = false; # can't open file 'nix_run_setup':
+  checkPhase = ''
+    sed -i 's/which python3/command -v python3/g' scripts/run-python-tests.sh
+    bash scripts/run-python-tests.sh
+  '';
 }
