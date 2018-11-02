@@ -87,11 +87,11 @@ in
     # good idea lest there be some irrelevant pass-through debug attrs that
     # cause false negatives.
     testEqualOne = path: system: let
-      f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
+      f = path: crossSystem: system: builtins.toString (lib.getAttrFromPath path (pkgsForCross crossSystem system));
     in assertTrue (
-        f path { inherit system; }
+        f path null system
         ==
-        f (["buildPackages"] ++ path) { inherit system crossSystem; }
+        f (["buildPackages"] ++ path) crossSystem system
       );
 
     testEqual = path: systems: forMatchingSystems systems (testEqualOne path);
@@ -152,7 +152,7 @@ in
     tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
     maintainers = [ lib.maintainers.dezgeg ];
     mkBootstrapToolsJob = drv:
-      assert lib.elem drv.system (supportedSystems ++ [ "aarch64-linux" ]);
+      assert lib.elem drv.system supportedSystems;
       hydraJob' (lib.addMetaAttrs { inherit maintainers; } drv);
   in lib.mapAttrsRecursiveCond (as: !lib.isDerivation as) (name: mkBootstrapToolsJob) tools;
 }

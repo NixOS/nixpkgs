@@ -212,6 +212,8 @@ in {
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
+  atomman = callPackage ../development/python-modules/atomman { };
+
   # packages defined elsewhere
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
@@ -283,6 +285,8 @@ in {
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
   btchip = callPackage ../development/python-modules/btchip { };
+
+  datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   dbf = callPackage ../development/python-modules/dbf { };
 
@@ -427,6 +431,8 @@ in {
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
+
+  numericalunits = callPackage ../development/python-modules/numericalunits { };
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
@@ -664,6 +670,8 @@ in {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
+  trueskill = callPackage ../development/python-modules/trueskill { };
+
   trustme = callPackage ../development/python-modules/trustme {};
 
   trio = callPackage ../development/python-modules/trio {};
@@ -702,11 +710,15 @@ in {
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
+  aioh2 = callPackage ../development/python-modules/aioh2 { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp/cors.nix { };
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
+
+  aiohttp-remotes = callPackage ../development/python-modules/aiohttp-remotes { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
@@ -1852,6 +1864,8 @@ in {
 
   poyo = callPackage ../development/python-modules/poyo { };
 
+  priority = callPackage ../development/python-modules/priority { };
+
   prov = callPackage ../development/python-modules/prov { };
 
   pudb = callPackage ../development/python-modules/pudb { };
@@ -2282,20 +2296,8 @@ in {
 
   grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
 
-  pytorch = let
-    # Fails with CUDA 9.1 and GCC 6.4:
-    # https://github.com/pytorch/pytorch/issues/5831
-    # https://devtalk.nvidia.com/default/topic/1028112
-    # We should be able to remove this when CUDA 9.2 is released.
-    cudatoolkit_9 = pkgs.cudatoolkit_9.override {
-      gcc6 = pkgs.gcc5;
-    };
-  in callPackage ../development/python-modules/pytorch {
+  pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = cudatoolkit_9;
-    cudnn = pkgs.cudnn_cudatoolkit_9.override {
-      inherit cudatoolkit_9;
-    };
   };
 
   pytorchWithCuda = self.pytorch.override {
@@ -4009,7 +4011,7 @@ in {
       py2 = callPackage ../development/python-modules/pydns { };
     in if isPy3k then py3 else py2;
 
-  pythondaemon = callPackage ../development/python-modules/python-daemon { };
+  python-daemon = callPackage ../development/python-modules/python-daemon { };
 
   sympy = callPackage ../development/python-modules/sympy { };
 
@@ -4723,6 +4725,10 @@ in {
   zipfile36 = callPackage ../development/python-modules/zipfile36 { };
 
   todoist = callPackage ../development/python-modules/todoist { };
+
+  zstd = callPackage ../development/python-modules/zstd {
+    inherit (pkgs) zstd pkgconfig;
+  };
 
   zxcvbn-python = callPackage ../development/python-modules/zxcvbn-python { };
 

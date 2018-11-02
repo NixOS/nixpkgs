@@ -28,7 +28,10 @@ with lib;
       (config:
         let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
         in if enabled then [ pkgs.gutenprint ] else [ ]))
-    (mkRenamedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ])
+    (mkChangedOptionModule [ "services" "ddclient" "domain" ] [ "services" "ddclient" "domains" ]
+      (config:
+        let value = getAttrFromPath [ "services" "ddclient" "domain" ] config;
+        in if value != "" then [ value ] else []))
     (mkRemovedOptionModule [ "services" "ddclient" "homeDir" ] "")
     (mkRenamedOptionModule [ "services" "elasticsearch" "host" ] [ "services" "elasticsearch" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "api" "host" ] [ "services" "graphite" "api" "listenAddress" ])
