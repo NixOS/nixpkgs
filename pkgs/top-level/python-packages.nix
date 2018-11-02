@@ -2458,6 +2458,8 @@ in {
 
   google_cloud_datastore = callPackage ../development/python-modules/google_cloud_datastore { };
 
+  google_cloud_dlp = callPackage ../development/python-modules/google_cloud_dlp { };
+
   google_cloud_kms = callPackage ../development/python-modules/google_cloud_kms { };
 
   google_cloud_storage = callPackage ../development/python-modules/google_cloud_storage { };
