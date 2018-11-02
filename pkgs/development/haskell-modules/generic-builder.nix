@@ -463,6 +463,11 @@ stdenv.mkDerivation ({
     };
 
     testrun = runCommandNoCC "${pname}-test" { src = drv.src; } ''
+      ${optionalString (!stdenv.isDarwin) ''
+      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+      export LC_ALL=en_US.UTF-8
+      export LANG=en_US.UTF-8
+      ''}
       unpackPhase
       sourceRoot=$(realpath $sourceRoot)
       mkdir $out
