@@ -2440,6 +2440,8 @@ in {
 
   google_auth = callPackage ../development/python-modules/google_auth { };
 
+  google_cloud_asset = callPackage ../development/python-modules/google_cloud_asset { };
+
   google_cloud_core = callPackage ../development/python-modules/google_cloud_core { };
 
   google_cloud_bigquery = callPackage ../development/python-modules/google_cloud_bigquery { };
