@@ -89,11 +89,11 @@ let
     };
 
     meta = with lib; {
-      homepage = https://www.postgresql.org;
+      homepage    = https://www.postgresql.org;
       description = "A powerful, open source object-relational database system";
-      license = licenses.postgresql;
-      maintainers = [ maintainers.ocharles ];
-      platforms = platforms.unix;
+      license     = licenses.postgresql;
+      maintainers = with maintainers; [ ocharles thoughtpolice ];
+      platforms   = platforms.unix;
     };
   });
 
