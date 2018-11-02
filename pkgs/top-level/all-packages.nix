@@ -19091,7 +19091,7 @@ with pkgs;
       saslSupport = false;
       sasl = cyrus_sasl;
     })
-    subversion18 subversion19 subversion_1_10 subversion_1_11;
+    subversion19 subversion_1_10 subversion_1_11;
 
   subversion = subversion_1_10;
 
