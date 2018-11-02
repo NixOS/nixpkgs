@@ -2468,6 +2468,8 @@ in {
 
   google_cloud_firestore = callPackage ../development/python-modules/google_cloud_firestore { };
 
+  google_cloud_iot = callPackage ../development/python-modules/google_cloud_iot { };
+
   google_cloud_kms = callPackage ../development/python-modules/google_cloud_kms { };
 
   google_cloud_logging = callPackage ../development/python-modules/google_cloud_logging { };
