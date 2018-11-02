@@ -716,6 +716,8 @@ in {
 
   vidstab = callPackage ../development/python-modules/vidstab { };
 
+  webapp2 = callPackage ../development/python-modules/webapp2 { };
+
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
   WazeRouteCalculator = callPackage ../development/python-modules/WazeRouteCalculator { };
