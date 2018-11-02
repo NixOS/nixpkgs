@@ -281,7 +281,7 @@ let
     mvabund = [ pkgs.gsl_1 ];
     mwaved = [ pkgs.fftw.dev ];
     ncdf4 = [ pkgs.netcdf ];
-    nloptr = [ pkgs.nlopt ];
+    nloptr = [ pkgs.nlopt pkgs.pkgconfig ];
     odbc = [ pkgs.unixODBC ];
     outbreaker = [ pkgs.gsl_1 ];
     pander = [ pkgs.pandoc pkgs.which ];
@@ -855,10 +855,9 @@ let
     });
 
     nloptr = old.nloptr.overrideDerivation (attrs: {
-      configureFlags = [
-        "--with-nlopt-cflags=-I${pkgs.nlopt}/include"
-        "--with-nlopt-libs='-L${pkgs.nlopt}/lib -lnlopt_cxx -lm'"
-      ];
+      # Drop bundled nlopt source code. Probably unnecessary, but I want to be
+      # sure we're using the system library, not this one.
+      preConfigure = "rm -r src/nlopt_src";
     });
 
     V8 = old.V8.overrideDerivation (attrs: {
