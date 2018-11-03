@@ -14739,6 +14739,8 @@ with pkgs;
 
   govendor = callPackage ../development/tools/govendor { };
 
+  go-tools = callPackage ../development/tools/go-tools { };
+
   gotools = callPackage ../development/tools/gotools { };
 
   gotop = callPackage ../tools/system/gotop { };
