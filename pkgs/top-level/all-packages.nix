@@ -6326,9 +6326,12 @@ with pkgs;
     then callPackage adoptopenjdk-bin-11-packages-linux.jre-hotspot {}
     else callPackage adoptopenjdk-bin-11-packages-darwin.jre-hotspot {};
 
-  # no OpenJ9 for Darwin
-  adoptopenjdk-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages-linux.jdk-openj9 {};
-  adoptopenjdk-jre-openj9-bin-11 = callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {};
+  adoptopenjdk-openj9-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jdk-openj9 {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jdk-openj9 {};
+  adoptopenjdk-jre-openj9-bin-11 = if stdenv.isLinux
+    then callPackage adoptopenjdk-bin-11-packages-linux.jre-openj9 {}
+    else callPackage adoptopenjdk-bin-11-packages-darwin.jre-openj9 {};
 
   adoptopenjdk-bin = adoptopenjdk-hotspot-bin-11;
   adoptopenjdk-jre-bin = adoptopenjdk-jre-hotspot-bin-11;
