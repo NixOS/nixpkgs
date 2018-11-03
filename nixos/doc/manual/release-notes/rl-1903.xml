@@ -137,6 +137,14 @@
      make sure to update your configuration if you want to keep <literal>proglodyte-wasm</literal>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     When the <literal>nixpkgs.pkgs</literal> option is set, NixOS will no
+     longer ignore the <literal>nixpkgs.overlays</literal> option. The old
+     behavior can be recovered by setting <literal>nixpkgs.overlays =
+     lib.mkForce [];</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
