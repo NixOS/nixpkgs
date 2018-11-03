@@ -70,10 +70,10 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.2.2esr";
+    ffversion = "60.3.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "2h2naaxx4lv90bjpcrsma4sdhl4mvsisx3zi09vakjwv2lad91gy41cmcpqprpcbsmlvpqf8yiv52ah4d02a8d9335xhw2ajw6asjc1";
+      sha512 = "36ipksq4408mfkyzna7kkjyg70nqx0hzg8zp34kmsynl42whvsqhsfl198c34shsx9zhfsag3hzx2ihhfnj8ph8b0xdgyrmi2ijbvbx";
     };
 
     patches = nixpkgsPatches ++ [
