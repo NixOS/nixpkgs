@@ -1,6 +1,6 @@
 # This module provides the proprietary NVIDIA X11 / OpenGL drivers.
 
-{ stdenv, config, lib, pkgs, pkgs_i686, ... }:
+{ stdenv, config, lib, pkgs, ... }:
 
 with lib;
 
@@ -25,7 +25,7 @@ let
   nvidia_x11 = nvidiaForKernel config.boot.kernelPackages;
   nvidia_libs32 =
     if versionOlder nvidia_x11.version "391" then
-      ((nvidiaForKernel pkgs_i686.linuxPackages).override { libsOnly = true; kernel = null; }).out
+      ((nvidiaForKernel pkgs.pkgsi686Linux.linuxPackages).override { libsOnly = true; kernel = null; }).out
     else
       (nvidiaForKernel config.boot.kernelPackages).lib32;
 
