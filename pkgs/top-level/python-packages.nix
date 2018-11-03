@@ -362,6 +362,8 @@ in {
 
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
+  gin-config = callPackage ../development/python-modules/gin-config { };
+
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
