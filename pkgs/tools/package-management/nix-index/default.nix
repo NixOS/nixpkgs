@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl curl ]
     ++ stdenv.lib.optional stdenv.isDarwin Security;
 
+  doCheck = !stdenv.isDarwin;
+
   postInstall = ''
     mkdir -p $out/etc/profile.d
     cp ./command-not-found.sh $out/etc/profile.d/command-not-found.sh
