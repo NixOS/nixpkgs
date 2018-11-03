@@ -15528,6 +15528,8 @@ with pkgs;
 
   interfacer = callPackage ../development/tools/interfacer { };
 
+  maligned = callPackage ../development/tools/maligned { };
+
   inter-ui = callPackage ../data/fonts/inter-ui { };
 
   siji = callPackage ../data/fonts/siji { };
