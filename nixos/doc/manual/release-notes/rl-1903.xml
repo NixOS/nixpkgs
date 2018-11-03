@@ -182,6 +182,13 @@
       options can occour more than once in the configuration.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>solr</literal> package has been upgraded from 4.10.3 to 7.5.0 and has undergone
+      some major changes. The <literal>services.solr</literal> module has been updated to reflect
+      these changes. Please review http://lucene.apache.org/solr/ carefully before upgrading.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
