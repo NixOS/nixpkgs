@@ -17,10 +17,5 @@ in
     boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
     boot.initrd.availableKernelModules = mkIf inInitrd [ "bcachefs" ];
 
-    boot.initrd.extraUtilsCommands = mkIf inInitrd
-      ''
-        copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/fsck.bcachefs
-      '';
-
   };
 }
