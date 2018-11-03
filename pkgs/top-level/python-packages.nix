@@ -2726,11 +2726,18 @@ in {
 
   mathics = callPackage ../development/python-modules/mathics { };
 
-  matplotlib = callPackage ../development/python-modules/matplotlib {
-    stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
-    enableGhostscript = true;
-    inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
-  };
+  matplotlib =
+    if isPy3k then
+      callPackage ../development/python-modules/matplotlib {
+        stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
+        enableGhostscript = true;
+        inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa; }
+    else
+      # matplotlib >= 3.0.0 does not support Python2k
+      callPackage ../development/python-modules/matplotlib/2.2.3.nix {
+        stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
+        enableGhostscript = true;
+        inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa; };
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
