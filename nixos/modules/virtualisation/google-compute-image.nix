@@ -144,7 +144,6 @@ in
     path = with pkgs; [ iproute ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_network_daemon --debug";
-      Type = "oneshot";
     };
   };
 
