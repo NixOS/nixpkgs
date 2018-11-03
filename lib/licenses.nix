@@ -400,6 +400,10 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     free = false;
   };
 
+  jasper = spdx {
+    spdxId = "JasPer-2.0";
+    fullName = "JasPer License";
+  };
 
   lgpl2 = spdx {
     spdxId = "LGPL-2.0";

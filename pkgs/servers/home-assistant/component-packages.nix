@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.81.1";
+  version = "0.81.5";
   components = {
     "abode" = ps: with ps; [  ];
     "ads" = ps: with ps; [  ];
@@ -322,14 +322,13 @@
     "device_tracker" = ps: with ps; [  ];
     "device_tracker.actiontec" = ps: with ps; [  ];
     "device_tracker.aruba" = ps: with ps; [ pexpect ];
-    "device_tracker.asuswrt" = ps: with ps; [  ];
+    "device_tracker.asuswrt" = ps: with ps; [ pexpect ];
     "device_tracker.automatic" = ps: with ps; [ aiohttp-cors ];
     "device_tracker.bbox" = ps: with ps; [  ];
     "device_tracker.bluetooth_le_tracker" = ps: with ps; [  ];
     "device_tracker.bluetooth_tracker" = ps: with ps; [  ];
     "device_tracker.bmw_connected_drive" = ps: with ps; [  ];
     "device_tracker.bt_home_hub_5" = ps: with ps; [  ];
-    "device_tracker.bt_smarthub" = ps: with ps; [  ];
     "device_tracker.cisco_ios" = ps: with ps; [ pexpect ];
     "device_tracker.ddwrt" = ps: with ps; [  ];
     "device_tracker.demo" = ps: with ps; [  ];
@@ -868,7 +867,7 @@
     "sensor.bme680" = ps: with ps; [  ];
     "sensor.bmw_connected_drive" = ps: with ps; [  ];
     "sensor.bom" = ps: with ps; [  ];
-    "sensor.broadlink" = ps: with ps; [  ];
+    "sensor.broadlink" = ps: with ps; [ broadlink ];
     "sensor.buienradar" = ps: with ps; [  ];
     "sensor.canary" = ps: with ps; [  ];
     "sensor.cert_expiry" = ps: with ps; [  ];
@@ -1097,7 +1096,7 @@
     "sensor.twitch" = ps: with ps; [  ];
     "sensor.uber" = ps: with ps; [  ];
     "sensor.uk_transport" = ps: with ps; [  ];
-    "sensor.upnp" = ps: with ps; [  ];
+    "sensor.upnp" = ps: with ps; [ aiohttp-cors ];
     "sensor.ups" = ps: with ps; [  ];
     "sensor.uptime" = ps: with ps; [  ];
     "sensor.uscis" = ps: with ps; [  ];
@@ -1125,6 +1124,7 @@
     "sensor.xbox_live" = ps: with ps; [  ];
     "sensor.xiaomi_aqara" = ps: with ps; [  ];
     "sensor.xiaomi_miio" = ps: with ps; [ construct ];
+    "sensor.yahoo_finance" = ps: with ps; [  ];
     "sensor.yr" = ps: with ps; [ xmltodict ];
     "sensor.yweather" = ps: with ps; [ yahooweather ];
     "sensor.zabbix" = ps: with ps; [  ];
@@ -1166,7 +1166,7 @@
     "switch.arduino" = ps: with ps; [  ];
     "switch.arest" = ps: with ps; [  ];
     "switch.bbb_gpio" = ps: with ps; [  ];
-    "switch.broadlink" = ps: with ps; [  ];
+    "switch.broadlink" = ps: with ps; [ broadlink ];
     "switch.command_line" = ps: with ps; [  ];
     "switch.deconz" = ps: with ps; [  ];
     "switch.deluge" = ps: with ps; [ deluge-client ];
@@ -1298,7 +1298,7 @@
     "unifi.errors" = ps: with ps; [  ];
     "upcloud" = ps: with ps; [  ];
     "updater" = ps: with ps; [ distro ];
-    "upnp" = ps: with ps; [  ];
+    "upnp" = ps: with ps; [ aiohttp-cors ];
     "upnp.config_flow" = ps: with ps; [  ];
     "upnp.const" = ps: with ps; [  ];
     "upnp.device" = ps: with ps; [  ];

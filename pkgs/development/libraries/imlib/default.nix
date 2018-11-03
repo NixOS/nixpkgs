@@ -15,7 +15,9 @@ stdenv.mkDerivation {
 
   buildInputs = [libjpeg libXext libX11 xextproto libtiff libungif libpng];
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    description = "An image loading and rendering library for X11";
+    platforms = platforms.unix;
+    license = with licenses; [ gpl2 lgpl2 ];
   };
 }

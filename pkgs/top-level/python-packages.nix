@@ -212,6 +212,8 @@ in {
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
+  atomman = callPackage ../development/python-modules/atomman { };
+
   # packages defined elsewhere
 
   amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
@@ -264,6 +266,8 @@ in {
 
   brotli = callPackage ../development/python-modules/brotli { };
 
+  broadlink = callPackage ../development/python-modules/broadlink { };
+
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
@@ -283,6 +287,8 @@ in {
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
   btchip = callPackage ../development/python-modules/btchip { };
+
+  datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   dbf = callPackage ../development/python-modules/dbf { };
 
@@ -333,6 +339,8 @@ in {
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
   eradicate = callPackage ../development/python-modules/eradicate {  };
+
+  fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
@@ -427,6 +435,8 @@ in {
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
+
+  numericalunits = callPackage ../development/python-modules/numericalunits { };
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
@@ -664,6 +674,8 @@ in {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
+  trueskill = callPackage ../development/python-modules/trueskill { };
+
   trustme = callPackage ../development/python-modules/trustme {};
 
   trio = callPackage ../development/python-modules/trio {};
@@ -702,11 +714,15 @@ in {
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
+  aioh2 = callPackage ../development/python-modules/aioh2 { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp/cors.nix { };
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
+
+  aiohttp-remotes = callPackage ../development/python-modules/aiohttp-remotes { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
@@ -973,12 +989,8 @@ in {
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
-  dlib = buildPythonPackage rec {
-    inherit (pkgs.dlib) name src nativeBuildInputs meta buildInputs;
-
-    patches = [ ../development/python-modules/dlib/build-cores.patch ];
-
-    checkInputs = with self; [ pytest ];
+  dlib = callPackage ../development/python-modules/dlib {
+    inherit (pkgs) dlib;
   };
 
   datadog = callPackage ../development/python-modules/datadog {};
@@ -1856,6 +1868,8 @@ in {
 
   poyo = callPackage ../development/python-modules/poyo { };
 
+  priority = callPackage ../development/python-modules/priority { };
+
   prov = callPackage ../development/python-modules/prov { };
 
   pudb = callPackage ../development/python-modules/pudb { };
@@ -2286,20 +2300,8 @@ in {
 
   grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
 
-  pytorch = let
-    # Fails with CUDA 9.1 and GCC 6.4:
-    # https://github.com/pytorch/pytorch/issues/5831
-    # https://devtalk.nvidia.com/default/topic/1028112
-    # We should be able to remove this when CUDA 9.2 is released.
-    cudatoolkit_9 = pkgs.cudatoolkit_9.override {
-      gcc6 = pkgs.gcc5;
-    };
-  in callPackage ../development/python-modules/pytorch {
+  pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
-    cudatoolkit = cudatoolkit_9;
-    cudnn = pkgs.cudnn_cudatoolkit_9.override {
-      inherit cudatoolkit_9;
-    };
   };
 
   pytorchWithCuda = self.pytorch.override {
@@ -4456,21 +4458,21 @@ in {
   };
 
   PyICU = buildPythonPackage rec {
-    name = "PyICU-2.0.3";
+    name = "PyICU-2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyICU/${name}.tar.gz";
-      sha256 = "0pzss3l0b0vcsyr7wlqdd6pkcqldspajfgd9k2iijf6r152d2ln4";
+      sha256 = "0wq9y5fi1ighgf5aws9nr87vi1w44p7q1k83rx2y3qj5d2xyhspa";
     };
 
     patches = [
       (pkgs.fetchpatch {
-        url = https://sources.debian.org/data/main/p/pyicu/2.0.3-1/debian/patches/icu_test.patch;
+        url = https://sources.debian.org/data/main/p/pyicu/2.2-1/debian/patches/icu_test.patch;
         sha256 = "1iavdkyqixm9i753svl17barla93b7jzgkw09dn3hnggamx7zwx9";
       })
     ];
 
-    buildInputs = [ pkgs.icu self.pytest ];
+    buildInputs = [ pkgs.icu60 self.pytest ];
 
     propagatedBuildInputs = [ self.six ];
 
@@ -6558,7 +6560,7 @@ in {
       };
     in if isPy3k then py3 else py2;
 
-  pythondaemon = callPackage ../development/python-modules/python-daemon { };
+  python-daemon = callPackage ../development/python-modules/python-daemon { };
 
   sympy = callPackage ../development/python-modules/sympy { };
 
@@ -10906,6 +10908,10 @@ EOF
   zipfile36 = callPackage ../development/python-modules/zipfile36 { };
 
   todoist = callPackage ../development/python-modules/todoist { };
+
+  zstd = callPackage ../development/python-modules/zstd {
+    inherit (pkgs) zstd pkgconfig;
+  };
 
   zxcvbn-python = callPackage ../development/python-modules/zxcvbn-python { };
 

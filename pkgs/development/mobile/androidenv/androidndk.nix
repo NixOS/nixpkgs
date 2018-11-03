@@ -89,6 +89,16 @@ let
       do
           wrapProgram "$(pwd)/$i" --prefix PATH : "${runtime_paths}"
       done
+
+      ${stdenv.lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+        for i in ${pkg_path}/prebuilt/linux-x86_64/bin/*
+        do
+            if ! isELF $i; then continue; fi
+            patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
+            patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64 $i
+        done
+      ''}
+
       # make some executables available in PATH
       mkdir -pv ${bin_path}
       for i in \
