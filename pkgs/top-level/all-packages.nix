@@ -10142,6 +10142,8 @@ with pkgs;
 
   imlibsetroot = callPackage ../applications/graphics/imlibsetroot { libXinerama = xorg.libXinerama; } ;
 
+  ineffassign = callPackage ../development/tools/ineffassign { };
+
   ijs = callPackage ../development/libraries/ijs { };
 
   incrtcl = callPackage ../development/libraries/incrtcl { };
