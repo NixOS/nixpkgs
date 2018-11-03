@@ -101,6 +101,7 @@ fi
 # Set the system profile to point to the configuration. TODO: combine
 # this with the previous step once we have a nix-env replacement with
 # a progress bar.
+echo "installing system..."
 nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
         -p $mountPoint/nix/var/nix/profiles/system --set "$system"
