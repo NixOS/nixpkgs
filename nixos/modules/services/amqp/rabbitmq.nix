@@ -95,7 +95,7 @@ in {
 
           If you do need to express nested data structures, you can use
           <literal>config</literal> option. Configuration from <literal>config</literal>
-          will be merged into the these options by RabbitMQ at runtime to
+          will be merged into these options by RabbitMQ at runtime to
           form the final configuration.
 
           See http://www.rabbitmq.com/configure.html#config-items
@@ -110,7 +110,7 @@ in {
           Verbatim advanced configuration file contents using the Erlang syntax.
           This is also known as the <literal>advanced.config</literal> file or the old config format.
 
-          Where possible, the use <literal>configItems</literal> is preferred. However, nested
+          <literal>configItems</literal> is preferred whenever possible. However, nested
           data structures can only be expressed properly using the <literal>config</literal> option.
 
           The contents of this option will be merged into the <literal>configItems</literal>
