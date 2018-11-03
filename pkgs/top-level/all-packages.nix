@@ -16054,6 +16054,8 @@ with pkgs;
     pulseaudioSupport = config.pulseaudio or false;
   };
 
+  cmusfm = callPackage ../applications/audio/cmusfm { };
+
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
 
