@@ -340,6 +340,8 @@ in {
 
   eradicate = callPackage ../development/python-modules/eradicate {  };
 
+  fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
+
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
   filterpy = callPackage ../development/python-modules/filterpy { };
