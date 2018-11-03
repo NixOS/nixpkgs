@@ -14375,6 +14375,8 @@ with pkgs;
       python = python3;
     };
 
+    bpftrace = callPackage ../os-specific/linux/bpftrace { };
+
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
     beegfs-module = callPackage ../os-specific/linux/beegfs/kernel-module.nix { };
