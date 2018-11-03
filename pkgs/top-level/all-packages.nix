@@ -14739,6 +14739,8 @@ with pkgs;
 
   golangci-lint = callPackage ../development/tools/golangci-lint { };
 
+  gocyclo = callPackage ../development/tools/gocyclo { };
+
   godef = callPackage ../development/tools/godef { };
 
   gopkgs = callPackage ../development/tools/gopkgs { };
