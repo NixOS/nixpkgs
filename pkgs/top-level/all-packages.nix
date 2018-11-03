@@ -6520,11 +6520,6 @@ with pkgs;
     name = "clang-wrapper-with-reexport-hack";
     bintools = darwin.binutils.override {
       useMacosReexportHack = true;
-      bintools = darwin.binutils.bintools.override {
-        cctools = darwin.cctools.override {
-          enableDumpNormalizedLibArgs = true;
-        };
-      };
     };
   };
 
@@ -7765,7 +7760,7 @@ with pkgs;
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python = python2;
   python2 = python27;
-  python3 = python36;
+  python3 = python37;
   pypy = pypy27;
 
   # Python interpreter that is build with all modules, including tkinter.
@@ -7815,8 +7810,8 @@ with pkgs;
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
   python34Packages = python34.pkgs;
   python35Packages = python35.pkgs;
-  python36Packages = recurseIntoAttrs python36.pkgs;
-  python37Packages = python37.pkgs;
+  python36Packages = python36.pkgs;
+  python37Packages = recurseIntoAttrs python37.pkgs;
   pypyPackages = pypy.pkgs;
 
   # Should eventually be moved inside Python interpreters.
