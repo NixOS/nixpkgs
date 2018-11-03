@@ -19012,6 +19012,8 @@ in
     python = python3;
   } // (config.profanity or {}));
 
+  properties-cpp = callPackage ../development/libraries/properties-cpp { };
+
   protonmail-bridge = libsForQt511.callPackage ../applications/networking/protonmail-bridge { };
 
   psi = callPackage ../applications/networking/instant-messengers/psi { };
