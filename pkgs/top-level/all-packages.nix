@@ -14767,6 +14767,8 @@ with pkgs;
 
   gotests = callPackage ../development/tools/gotests { };
 
+  impl = callPackage ../development/tools/impl { };
+
   quicktemplate = callPackage ../development/tools/quicktemplate { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
