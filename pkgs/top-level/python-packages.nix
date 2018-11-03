@@ -266,6 +266,8 @@ in {
 
   brotli = callPackage ../development/python-modules/brotli { };
 
+  broadlink = callPackage ../development/python-modules/broadlink { };
+
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
