@@ -770,6 +770,8 @@ with pkgs;
 
   adb-sync = callPackage ../development/mobile/adb-sync { };
 
+  anbox = callPackage ../os-specific/linux/anbox { };
+
   androidenv = callPackage ../development/mobile/androidenv {
     pkgs_i686 = pkgsi686Linux;
     licenseAccepted = (config.android_sdk.accept_license or false);
