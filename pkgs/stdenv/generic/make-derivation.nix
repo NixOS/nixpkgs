@@ -93,7 +93,9 @@ rec {
                                       ++ depsTargetTarget ++ depsTargetTargetPropagated) == 0;
       runtimeSensativeIfFixedOutput = fixedOutputDrv -> !noNonNativeDeps;
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
-      defaultHardeningFlags = lib.remove "pie" supportedHardeningFlags;
+      defaultHardeningFlags = if stdenv.targetPlatform.isMusl
+                              then supportedHardeningFlags
+                              else lib.remove "pie" supportedHardeningFlags;
       enabledHardeningOptions =
         if builtins.elem "all" hardeningDisable
         then []
