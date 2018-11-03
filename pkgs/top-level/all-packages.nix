@@ -659,6 +659,8 @@ with pkgs;
 
   cconv = callPackage ../tools/text/cconv { };
 
+  go-check = callPackage ../development/tools/check { };
+
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
