@@ -26,6 +26,9 @@ in stdenv.mkDerivation rec {
     sed -ri "s/REVISION.*=.*shell git.*/REVISION = ${builtins.substring 0 10 src.rev}/" Makefile # Simulate abbrev'd rev.
     sed -ri "s/-j *[0-9]+//" Makefile # Eliminate parallel build args in submakes
     sed -ri "s/binary hex/hex/" Makefile # No need for anything besides .hex
+
+    substitutateInPlace Makefile \
+      --replace "--specs=nano.specs" ""
   '';
 
   enableParallelBuilding = true;

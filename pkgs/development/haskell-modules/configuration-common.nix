@@ -1150,4 +1150,7 @@ self: super: {
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
 
+  # https://github.com/DanielG/cabal-helper/issues/59
+  cabal-helper = doJailbreak super.cabal-helper;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

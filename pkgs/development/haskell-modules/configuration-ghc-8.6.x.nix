@@ -69,6 +69,7 @@ self: super: {
   megaparsec = dontCheck (doJailbreak super.megaparsec);
   neat-interpolation = dontCheck super.neat-interpolation;  # test suite depends on broken HTF
   patience = markBrokenVersion "0.1.1" super.patience;
+  polyparse = self.polyparse_1_12_1;
   primitive = self.primitive_0_6_4_0;
   QuickCheck = self.QuickCheck_2_12_6_1;
   semigroupoids = self.semigroupoids_5_3_1;
