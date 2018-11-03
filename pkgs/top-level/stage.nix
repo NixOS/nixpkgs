@@ -150,7 +150,7 @@ let
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = assert stdenv.hostPlatform.isLinux; nixpkgsFun {
+    pkgsi686Linux = assert stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86; nixpkgsFun {
       inherit overlays config;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
