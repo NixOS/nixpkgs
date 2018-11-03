@@ -14718,12 +14718,13 @@ with pkgs;
 
   easyjson = callPackage ../development/tools/easyjson { };
 
+  iferr = callPackage ../development/tools/iferr { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
 
   go-protobuf = callPackage ../development/tools/go-protobuf { };
-
 
   go-symbols = callPackage ../development/tools/go-symbols { };
 
