@@ -828,6 +828,7 @@
   ./tasks/trackpoint.nix
   ./tasks/powertop.nix
   ./testing/service-runner.nix
+  ./virtualisation/anbox.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/docker.nix
