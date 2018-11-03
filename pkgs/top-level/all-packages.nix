@@ -16730,6 +16730,8 @@ with pkgs;
     python = python3;
   };
 
+  googletest = callPackage ../development/libraries/googletest { };
+
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
   gopherclient = libsForQt5.callPackage ../applications/networking/gopher/gopherclient { };
@@ -18529,6 +18531,8 @@ with pkgs;
     autoAwaySupport = config.profanity.autoAwaySupport or true;
     python = python3;
   };
+
+  properties-cpp = callPackage ../development/libraries/properties-cpp { };
 
   protonmail-bridge = libsForQt5.callPackage ../applications/networking/protonmail-bridge { };
 
