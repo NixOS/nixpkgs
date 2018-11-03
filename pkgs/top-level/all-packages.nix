@@ -15526,6 +15526,8 @@ with pkgs;
 
   hasklig = callPackage ../data/fonts/hasklig {};
 
+  interfacer = callPackage ../development/tools/interfacer { };
+
   inter-ui = callPackage ../data/fonts/inter-ui { };
 
   siji = callPackage ../data/fonts/siji { };
