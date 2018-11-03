@@ -22121,7 +22121,10 @@ with pkgs;
                # ...
              };
 
-             # This exports a runner for nginx
+             # Use config.system.build to exports relevant parts of a
+             # configuration. The runner attribute should not be
+             # considered a fully general replacement for systemd
+             # functionality.
              config.system.build.run-nginx = config.systemd.services.nginx.runner;
            });
          in
