@@ -5,36 +5,17 @@
 with lib;
 
 let
-
-  drivers = config.services.xserver.videoDrivers;
-
-  # FIXME: should introduce an option like
-  # ‘hardware.video.nvidia.package’ for overriding the default NVIDIA
-  # driver.
-  nvidiaForKernel = kernelPackages:
-    if elem "nvidia" drivers then
-        kernelPackages.nvidia_x11
-    else if elem "nvidiaBeta" drivers then
-        kernelPackages.nvidia_x11_beta
-    else if elem "nvidiaVulkanBeta" drivers then
-        kernelPackages.nvidia_x11_vulkan_beta
-    else if elem "nvidiaLegacy304" drivers then
-      kernelPackages.nvidia_x11_legacy304
-    else if elem "nvidiaLegacy340" drivers then
-      kernelPackages.nvidia_x11_legacy340
-    else if elem "nvidiaLegacy390" drivers then
-      kernelPackages.nvidia_x11_legacy390
-    else null;
-
-  nvidia_x11 = nvidiaForKernel config.boot.kernelPackages;
-  nvidia_libs32 =
-    if versionOlder nvidia_x11.version "391" then
-      ((nvidiaForKernel pkgs.pkgsi686Linux.linuxPackages).override { libsOnly = true; kernel = null; }).out
-    else
-      (nvidiaForKernel config.boot.kernelPackages).lib32;
+  nvidia_x11 = let
+    drivers = config.services.xserver.videoDrivers;
+    isDeprecated = str: (hasPrefix "nvidia" str) && (str != "nvidia");
+    hasDeprecated = drivers: any isDeprecated drivers;
+  in if (hasDeprecated drivers) then
+    throw ''
+      Selecting an nvidia driver has been modified for NixOS 19.03. The version is now set using `hardware.nvidia.package`.
+    ''
+  else if (elem "nvidia" drivers) then cfg.package else null;
 
   enabled = nvidia_x11 != null;
-
   cfg = config.hardware.nvidia;
 
   pCfg = cfg.prime;
@@ -170,6 +151,16 @@ in
         GPUs stay awake even during headless mode.
       '';
     };
+
+    hardware.nvidia.package = lib.mkOption {
+      type = lib.types.package;
+      default = config.boot.kernelPackages.nvidiaPackages.stable;
+      defaultText = "config.boot.kernelPackages.nvidiaPackages.stable";
+      description = ''
+        The NVIDIA X11 derivation to use.
+      '';
+      example = "config.boot.kernelPackages.nvidiaPackages.legacy340";
+    };
   };
 
   config = let
@@ -271,9 +262,9 @@ in
     };
 
     hardware.opengl.package = mkIf (!offloadCfg.enable) nvidia_x11.out;
-    hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_libs32;
+    hardware.opengl.package32 = mkIf (!offloadCfg.enable) nvidia_x11.lib32;
     hardware.opengl.extraPackages = optional offloadCfg.enable nvidia_x11.out;
-    hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_libs32;
+    hardware.opengl.extraPackages32 = optional offloadCfg.enable nvidia_x11.lib32;
 
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ optionals nvidiaPersistencedEnabled [ nvidia_x11.persistenced ];
