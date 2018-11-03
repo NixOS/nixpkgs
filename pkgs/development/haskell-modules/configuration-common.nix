@@ -248,9 +248,11 @@ self: super: {
   #   This is due to GenList having been removed from generic-random in 1.2.0.0
   # doJailbreak: Can be removed once https://github.com/haskell-nix/hnix/pull/329 is in (5.2 probably)
   #   This is due to hnix currently having an upper bound of <0.5 on deriving-compat, works just fine with our current version 0.5.1 though
-  hnix = dontCheck (doJailbreak (overrideCabal super.hnix (old: {
-    testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
-  })));
+  hnix =
+    generateOptparseApplicativeCompletion "hnix" (
+    dontCheck (doJailbreak (overrideCabal super.hnix (old: {
+      testHaskellDepends = old.testHaskellDepends or [] ++ [ pkgs.nix ];
+  }))));
 
   # Fails for non-obvious reasons while attempting to use doctest.
   search = dontCheck super.search;
@@ -715,7 +717,9 @@ self: super: {
   });
 
   # The standard libraries are compiled separately
-  idris = doJailbreak (dontCheck super.idris);
+  idris = generateOptparseApplicativeCompletion "idris" (
+    doJailbreak (dontCheck super.idris)
+  );
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -1058,7 +1062,20 @@ self: super: {
   vector-algorithms = dontCheck super.vector-algorithms;
 
   # The test suite attempts to use the network.
-  dhall = dontCheck super.dhall;
+  dhall =
+    generateOptparseApplicativeCompletion "dhall" (
+      dontCheck super.dhall
+  );
+
+  dhall-json =
+    generateOptparseApplicativeCompletions ["dhall-to-json" "dhall-to-yaml"] (
+      super.dhall-json
+  );
+
+  dhall-nix =
+    generateOptparseApplicativeCompletion "dhall-to-nix" (
+      super.dhall-nix
+  );
 
   # https://github.com/well-typed/cborg/issues/174
   cborg = doJailbreak super.cborg;
@@ -1079,15 +1096,17 @@ self: super: {
   hpack = super.hpack_0_29_7;
 
   # The test suite does not know how to find the 'cabal2nix' binary.
-  cabal2nix = overrideCabal super.cabal2nix (drv: {
-    preCheck = ''
-      export PATH="$PWD/dist/build/cabal2nix:$PATH"
-      export HOME="$TMPDIR/home"
-    '';
-  });
+  # Also generate shell completions.
+  cabal2nix = generateOptparseApplicativeCompletion "cabal2nix"
+    (overrideCabal super.cabal2nix (drv: {
+      preCheck = ''
+        export PATH="$PWD/dist/build/cabal2nix:$PATH"
+        export HOME="$TMPDIR/home"
+      '';
+    }));
 
   # Break out of "aeson <1.3, temporary <1.3".
-  stack = doJailbreak super.stack;
+  stack = generateOptparseApplicativeCompletion "stack" (doJailbreak super.stack);
 
   # https://github.com/pikajude/stylish-cabal/issues/11
   stylish-cabal = super.stylish-cabal.override { hspec = self.hspec_2_4_8; hspec-core = self.hspec-core_2_4_8; };
@@ -1130,4 +1149,8 @@ self: super: {
 
   # https://github.com/snapframework/xmlhtml/pull/37
   xmlhtml = doJailbreak super.xmlhtml;
+
+  # Generate shell completions
+  purescript = generateOptparseApplicativeCompletion "purs" super.purescript;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
