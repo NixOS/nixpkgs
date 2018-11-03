@@ -4388,6 +4388,8 @@ with pkgs;
 
   nms = callPackage ../tools/misc/nms { };
 
+  nomachine-client = callPackage ../tools/admin/nomachine-client { };
+
   notify-desktop = callPackage ../tools/misc/notify-desktop {};
 
   nkf = callPackage ../tools/text/nkf {};
@@ -7350,7 +7352,9 @@ with pkgs;
   cargo-tree = callPackage ../tools/package-management/cargo-tree { };
   cargo-update = callPackage ../tools/package-management/cargo-update { };
 
-  cargo-asm = callPackage ../development/tools/rust/cargo-asm { };
+  cargo-asm = callPackage ../development/tools/rust/cargo-asm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
@@ -16044,6 +16048,8 @@ with pkgs;
 
     pulseaudioSupport = config.pulseaudio or false;
   };
+
+  cmusfm = callPackage ../applications/audio/cmusfm { };
 
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
