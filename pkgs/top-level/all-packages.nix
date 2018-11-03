@@ -14727,6 +14727,8 @@ with pkgs;
 
   gocode = callPackage ../development/tools/gocode { };
 
+  goconst = callPackage ../development/tools/goconst { };
+
   goconvey = callPackage ../development/tools/goconvey { };
 
   gotags = callPackage ../development/tools/gotags { };
