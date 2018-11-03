@@ -24,6 +24,6 @@ buildPythonPackage rec {
     homepage = https://github.com/google/gin-config;
     description = "Gin provides a lightweight configuration framework for Python, based on dependency injection.";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jethrokuan ];
+    maintainers = with maintainers; [ jethro ];
   };
 }
