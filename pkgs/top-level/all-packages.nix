@@ -12535,6 +12535,8 @@ with pkgs;
     vala = vala_0_40;
   };
 
+  unconvert = callPackage ../development/tools/unconvert { };
+
   unibilium = callPackage ../development/libraries/unibilium { };
 
   unicap = callPackage ../development/libraries/unicap {};
