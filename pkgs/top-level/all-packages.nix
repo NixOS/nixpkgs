@@ -577,6 +577,8 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
+  avldrums-lv2 = callPackage ../applications/audio/avldrums-lv2 { };
+
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator {};
 
   awscli = callPackage ../tools/admin/awscli { };
@@ -2062,8 +2064,12 @@ with pkgs;
     cudatoolkit_7
     cudatoolkit_7_5
     cudatoolkit_8
+    cudatoolkit_9
     cudatoolkit_9_0
-    cudatoolkit_9;
+    cudatoolkit_9_1
+    cudatoolkit_9_2
+    cudatoolkit_10
+    cudatoolkit_10_0;
 
   cudatoolkit = cudatoolkit_9;
 
@@ -2073,7 +2079,11 @@ with pkgs;
     cudnn6_cudatoolkit_8
     cudnn_cudatoolkit_8
     cudnn_cudatoolkit_9
-    cudnn_cudatoolkit_9_0;
+    cudnn_cudatoolkit_9_0
+    cudnn_cudatoolkit_9_1
+    cudnn_cudatoolkit_9_2
+    cudnn_cudatoolkit_10
+    cudnn_cudatoolkit_10_0;
 
   cudnn = cudnn_cudatoolkit_9;
 
@@ -2338,6 +2348,8 @@ with pkgs;
   easyrsa = callPackage ../tools/networking/easyrsa { };
 
   easyrsa2 = callPackage ../tools/networking/easyrsa/2.x.nix { };
+
+  easysnap = callPackage ../tools/backup/easysnap { };
 
   ebook_tools = callPackage ../tools/text/ebook-tools { };
 
@@ -3285,6 +3297,8 @@ with pkgs;
   hubicfuse = callPackage ../tools/filesystems/hubicfuse { };
 
   hwinfo = callPackage ../tools/system/hwinfo { };
+
+  hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
 
   hylafaxplus = callPackage ../servers/hylafaxplus { };
 
@@ -4373,6 +4387,8 @@ with pkgs;
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
   nms = callPackage ../tools/misc/nms { };
+
+  nomachine-client = callPackage ../tools/admin/nomachine-client { };
 
   notify-desktop = callPackage ../tools/misc/notify-desktop {};
 
@@ -6847,7 +6863,7 @@ with pkgs;
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc843.override {
+  haskellPackages = haskell.packages.ghc844.override {
     overrides = config.haskellPackageOverrides or haskell.packageOverrides;
   };
 
@@ -6968,11 +6984,11 @@ with pkgs;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk10 =
+  openjdk11 =
     if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk/darwin/10.nix { }
+      callPackage ../development/compilers/openjdk/darwin/11.nix { }
     else
-      callPackage ../development/compilers/openjdk/10.nix {
+      callPackage ../development/compilers/openjdk/11.nix {
         inherit (gnome2) GConf gnome_vfs;
       };
 
@@ -6992,17 +7008,14 @@ with pkgs;
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk8.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
-  jdk10 = openjdk10 // { outputs = [ "out" ]; };
-  jre10 = lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}"
-    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-      (openjdk10.jre // { outputs = [ "jre" ]; }));
-  jre10_headless =
+  jdk11 = openjdk11 // { outputs = [ "out" ]; };
+  jdk11_headless =
     if stdenv.isDarwin then
-      jre10
+      jdk11
     else
-      lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}-headless"
-        (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
-          ((openjdk10.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
+      lib.setName "openjdk-${lib.getVersion pkgs.openjdk11}-headless"
+        (lib.addMetaAttrs {}
+          ((openjdk11.override { minimal = true; }) // {}));
 
   jdk = jdk8;
   jre = jre8;
@@ -7020,17 +7033,11 @@ with pkgs;
 
   oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
 
-  oraclejdk10 = pkgs.oraclejdk10distro "JDK" false;
-
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
 
   oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
-
-  oraclejre10 = lowPrio (pkgs.oraclejdk10distro "JRE" false);
-
-  oracleserverjre10 = lowPrio (pkgs.oraclejdk10distro "ServerJRE" false);
 
   jrePlugin = jre8Plugin;
 
@@ -7045,9 +7052,6 @@ with pkgs;
   oraclejdk8psu_distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk pluginSupport; });
-
-  oraclejdk10distro = packageType: _:
-      (callPackage ../development/compilers/oraclejdk/jdk10-linux.nix { inherit packageType; });
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
@@ -7353,7 +7357,9 @@ with pkgs;
   cargo-tree = callPackage ../tools/package-management/cargo-tree { };
   cargo-update = callPackage ../tools/package-management/cargo-update { };
 
-  cargo-asm = callPackage ../development/tools/rust/cargo-asm { };
+  cargo-asm = callPackage ../development/tools/rust/cargo-asm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
   pyo3-pack = callPackage ../development/tools/rust/pyo3-pack { };
@@ -7979,6 +7985,8 @@ with pkgs;
 
   jython = callPackage ../development/interpreters/jython {};
 
+  gImageReader = callPackage ../applications/misc/gImageReader { };
+
   guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
@@ -8125,10 +8133,10 @@ with pkgs;
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
   };
-  bazel_jdk10 = callPackage ../development/tools/build-managers/bazel {
+  bazel_jdk11 = callPackage ../development/tools/build-managers/bazel {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    runJdk = jdk10;
+    runJdk = jdk11;
   };
 
   bazel-buildtools = callPackage ../development/tools/build-managers/bazel/buildtools { };
@@ -9717,13 +9725,13 @@ with pkgs;
     # libc is hackily often used from the previous stage. This `or`
     # hack fixes the hack, *sigh*.
     /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
-    else if name == "bionic" then targetPackages.bionic
-    else if name == "uclibc" then targetPackages.uclibcCross
+    else if name == "bionic" then targetPackages.bionic or bionic
+    else if name == "uclibc" then targetPackages.uclibcCross or uclibcCross
     else if name == "avrlibc" then targetPackages.avrlibcCross or avrlibcCross
     else if name == "newlib" then targetPackages.newlibCross or newlibCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
-    else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries
+    else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then targetPackages.darwin.xcode
     else throw "Unknown libc";
 
@@ -11603,6 +11611,7 @@ with pkgs;
   opensaml-cpp = callPackage ../development/libraries/opensaml-cpp { };
 
   openscenegraph = callPackage ../development/libraries/openscenegraph { };
+  openscenegraph_3_4 = callPackage ../development/libraries/openscenegraph/3.4.0.nix { };
 
   openslp = callPackage ../development/libraries/openslp {};
 
@@ -12188,7 +12197,7 @@ with pkgs;
     avrlibc = pkgsCross.avr.libcCross;
   };
 
-  simgear = callPackage ../development/libraries/simgear { };
+  simgear = callPackage ../development/libraries/simgear { openscenegraph = openscenegraph_3_4; };
 
   simp_le = callPackage ../tools/admin/simp_le { };
 
@@ -13187,6 +13196,8 @@ with pkgs;
 
   dex-oidc = callPackage ../servers/dex { };
 
+  doh-proxy = callPackage ../servers/dns/doh-proxy { };
+
   dgraph = callPackage ../servers/dgraph { };
 
   dico = callPackage ../servers/dico { };
@@ -13586,6 +13597,8 @@ with pkgs;
     pam = if stdenv.isLinux then pam else null;
     libmemcached = null; # Detection is broken upstream
   };
+
+  timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
   postgresql = postgresql_9_6;
 
@@ -14013,6 +14026,8 @@ with pkgs;
   };
 
   drbd = callPackage ../os-specific/linux/drbd { };
+
+  dropwatch = callPackage ../os-specific/linux/dropwatch { };
 
   dstat = callPackage ../os-specific/linux/dstat { };
 
@@ -14794,8 +14809,6 @@ with pkgs;
   pmount = callPackage ../os-specific/linux/pmount { };
 
   pmutils = callPackage ../os-specific/linux/pm-utils { };
-
-  pmtools = callPackage ../os-specific/linux/pmtools { };
 
   policycoreutils = callPackage ../os-specific/linux/policycoreutils { };
 
@@ -16041,6 +16054,8 @@ with pkgs;
     pulseaudioSupport = config.pulseaudio or false;
   };
 
+  cmusfm = callPackage ../applications/audio/cmusfm { };
+
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
 
@@ -16275,7 +16290,7 @@ with pkgs;
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
-    jdk = jdk10;
+    jdk = jdk11;
   });
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
@@ -20234,7 +20249,7 @@ with pkgs;
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
-  flightgear = libsForQt5.callPackage ../games/flightgear { };
+  flightgear = libsForQt5.callPackage ../games/flightgear { openscenegraph = openscenegraph_3_4; };
 
   flock = callPackage ../development/tools/flock { };
 
@@ -20676,6 +20691,7 @@ with pkgs;
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
     libpng = libpng12;
+    openscenegraph = openscenegraph_3_4;
   };
 
   torcs = callPackage ../games/torcs { };

@@ -3,46 +3,50 @@
 , gettext
 , libxml2
 , pkgconfig
-, gtk3
+, glib
 , granite
+, gtk3
 , gnome3
-, cmake
+, meson
 , ninja
-, vala
-, elementary-cmake-modules
+, gobjectIntrospection
+, gsettings-desktop-schemas
+, vala_0_40
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "regextester-${version}";
-  version = "0.1.7";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
     repo = "regextester";
     rev = version;
-    sha256 = "07shdm10dc7jz2hka5dc51yp81a0dgc47nmkrp6fs6r9wqx0j30n";
+    sha256 = "1xwwv1hccni1mrbl58f7ly4qfq6738vn24bcbl2q346633cd7kx3";
   };
-
-  XDG_DATA_DIRS = stdenv.lib.concatStringsSep ":" [
-    "${granite}/share"
-    "${gnome3.libgee}/share"
-  ];
 
   nativeBuildInputs = [
     pkgconfig
-    wrapGAppsHook
-    vala
-    cmake
+    meson
     ninja
     gettext
+    gobjectIntrospection
     libxml2
-    elementary-cmake-modules
+    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
+    wrapGAppsHook
   ];
   buildInputs = [
-    gtk3
+    glib
     granite
+    gtk3
+    gnome3.defaultIconTheme
     gnome3.libgee
+    gsettings-desktop-schemas
   ];
+
+  postInstall = ''
+    ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
 
   meta = with stdenv.lib; {
     description = "A desktop application to test regular expressions interactively";

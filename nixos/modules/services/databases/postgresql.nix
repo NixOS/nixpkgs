@@ -271,5 +271,5 @@ in
   };
 
   meta.doc = ./postgresql.xml;
-
+  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 }

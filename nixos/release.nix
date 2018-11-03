@@ -283,6 +283,7 @@ in rec {
   tests.docker-tools = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools.nix {};
   tests.docker-tools-overlay = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools-overlay.nix {};
   tests.docker-edge = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-edge.nix {};
+  tests.docker-preloader = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-preloader.nix {};
   tests.docker-registry = callTest tests/docker-registry.nix {};
   tests.dovecot = callTest tests/dovecot.nix {};
   tests.dnscrypt-proxy = callTestOnMatchingSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
@@ -300,7 +301,7 @@ in rec {
   tests.fsck = callTest tests/fsck.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   tests.gdk-pixbuf = callTest tests/gdk-pixbuf.nix {};
-  #tests.gitlab = callTest tests/gitlab.nix {};
+  tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
   tests.gjs = callTest tests/gjs.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};

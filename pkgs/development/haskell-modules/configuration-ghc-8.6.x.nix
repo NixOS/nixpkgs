@@ -46,7 +46,7 @@ self: super: {
 
   # LTS-12.x versions do not compile.
   base-orphans = self.base-orphans_0_8;
-  brick = doJailbreak super.brick_0_41_2;      # https://github.com/jtdaugherty/brick/pull/188
+  brick = self.brick_0_41_2;
   cassava-megaparsec = doJailbreak super.cassava-megaparsec;
   config-ini = doJailbreak super.config-ini;   # https://github.com/aisamanra/config-ini/issues/18
   contravariant = self.contravariant_1_5;
@@ -69,6 +69,7 @@ self: super: {
   megaparsec = dontCheck (doJailbreak super.megaparsec);
   neat-interpolation = dontCheck super.neat-interpolation;  # test suite depends on broken HTF
   patience = markBrokenVersion "0.1.1" super.patience;
+  polyparse = self.polyparse_1_12_1;
   primitive = self.primitive_0_6_4_0;
   QuickCheck = self.QuickCheck_2_12_6_1;
   semigroupoids = self.semigroupoids_5_3_1;
