@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "WebOb";
-  version = "1.7.3";
+  version = "1.8.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10vjp2rvqiyvw157fk3sy7yds1gknzw97z4gk0qv1raskx5s2p76";
+    sha256 = "b0853dad347ca3777755b6d0659bb45efbeea71f995d8a395291ef6ad5d4f8b2";
   };
 
   propagatedBuildInputs = [ nose pytest ];
