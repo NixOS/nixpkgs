@@ -17240,6 +17240,8 @@ with pkgs;
 
   slack-cli = callPackage ../tools/networking/slack-cli { };
 
+  slack-term = callPackage ../applications/networking/instant-messengers/slack-term { };
+
   singularity = callPackage ../applications/virtualization/singularity { };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
