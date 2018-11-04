@@ -5,10 +5,18 @@ with lib;
 let
   cfg = config.services.prometheus.alertmanager;
   mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
-  alertmanagerYml =
-    if cfg.configText != null then
-      pkgs.writeText "alertmanager.yml" cfg.configText
-    else mkConfigFile;
+
+  checkedConfig = file: pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
+    ln -s ${file} $out
+    amtool check-config $out
+  '';
+
+  alertmanagerYml = let
+    yml = if cfg.configText != null then
+        pkgs.writeText "alertmanager.yml" cfg.configText
+        else mkConfigFile;
+    in checkedConfig yml;
+
   cmdlineArgs = cfg.extraFlags ++ [
     "--config.file ${alertmanagerYml}"
     "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
