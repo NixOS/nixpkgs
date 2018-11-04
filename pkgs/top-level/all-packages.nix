@@ -134,6 +134,8 @@ with pkgs;
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
+  dockd = callPackage ../applications/misc/dockd { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   dotnetenv = callPackage ../build-support/dotnetenv {

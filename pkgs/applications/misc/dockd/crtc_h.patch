@@ -1,0 +1,15 @@
+diff --git a/crtc.h b/crtc.h
+index 2c56ad3..17782aa 100644
+--- a/crtc.h
++++ b/crtc.h
+@@ -8,8 +8,8 @@ using ThinkPad::Utilities::Ini::Ini;
+ using ThinkPad::Utilities::Ini::IniKeypair;
+ using ThinkPad::Utilities::Ini::IniSection;
+ 
+-#define CONFIG_LOCATION_DOCKED "/etc/dockd/docked.conf"
+-#define CONFIG_LOCATION_UNDOCKED "/etc/dockd/undocked.conf"
++#define CONFIG_LOCATION_DOCKED "@DOCKED_CONF_PATH@"
++#define CONFIG_LOCATION_UNDOCKED "@UNDOCKED_CONF_PATH@"
+ 
+ typedef struct _crtc {
+ 

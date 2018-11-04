@@ -1,0 +1,22 @@
+diff --git a/hooks.cpp b/hooks.cpp
+index 2fddb6c..d137ad3 100644
+--- a/hooks.cpp
++++ b/hooks.cpp
+@@ -5,7 +5,7 @@
+ 
+ void Hooks::executeDockHook()
+ {
+-	int ret = system("/etc/dockd/dock.hook");
++	int ret = system("@DOCK_HOOK_PATH@");
+ 
+ 	if (ret == -1)
+ 		syslog(LOG_ERR, "Failed to execute dock hook");
+@@ -15,7 +15,7 @@ void Hooks::executeDockHook()
+ 
+ void Hooks::executeUndockHook()
+ {
+-	int ret = system("/etc/dockd/undock.hook");
++	int ret = system("@UNDOCK_HOOK_PATH@");
+ 
+ 	if (ret == -1)
+ 		syslog(LOG_ERR, "Failed to execute undock hook");

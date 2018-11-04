@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 58756e2..df07ccc 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -23,9 +23,9 @@ target_link_libraries(${PROJECT_NAME} X11 Xrandr thinkpad)
+ install(TARGETS ${PROJECT_NAME}
+         RUNTIME DESTINATION bin)
+ 
+-install(FILES dockd.desktop DESTINATION /etc/xdg/autostart)
+-install(FILES dock.hook DESTINATION /etc/dockd)
+-install(FILES undock.hook DESTINATION /etc/dockd)
++install(FILES dockd.desktop DESTINATION $ENV{out}/etc/xdg/autostart)
++install(FILES dock.hook DESTINATION $ENV{out}/etc/dockd)
++install(FILES undock.hook DESTINATION $ENV{out}/etc/dockd)
+ 
+ set(CPACK_PACKAGE_VENDOR "Ognjen Galic")
+ set(CPACK_PACKAGE_VERSION_MAJOR 1)
