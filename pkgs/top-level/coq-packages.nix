@@ -1,8 +1,4 @@
-{ lib, callPackage, newScope, recurseIntoAttrs
-, gnumake3
-, ocamlPackages_4_02
-, ocamlPackages_4_05
-}:
+{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05 }:
 
 let
   mkCoqPackages' = self: coq:
@@ -70,11 +66,15 @@ in rec {
   coq_8_8 = callPackage ../applications/science/logic/coq {
     version = "8.8.2";
   };
+  coq_8_9 = callPackage ../applications/science/logic/coq {
+    version = "8.9+beta1";
+  };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
+  coqPackages_8_9 = mkCoqPackages coq_8_9;
   coqPackages = coqPackages_8_8;
   coq = coqPackages.coq;
 

@@ -24,7 +24,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    $out/bin/py.test -x testing/
+    # Re-enable warnings because the test suite relies on it.
+    PYTHONWARNINGS= $out/bin/py.test -x testing/
     runHook postCheck
   '';
 
