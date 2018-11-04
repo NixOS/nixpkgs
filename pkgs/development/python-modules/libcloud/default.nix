@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "apache-libcloud";
-  version = "1.2.1";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qlhyz5f32xg8i10biyzqscks8d28vklk63hvj45vzy1amw60kqz";
+    sha256 = "0e2eee3802163bd0605975ed1e284cafc23203919bfa80c0cc5d3cd2543aaf97";
   };
 
   buildInputs = [ mock ];
