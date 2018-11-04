@@ -31,10 +31,25 @@ in
         '';
       };
 
+      purifyOnStart = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Clear the `baseDir` directory on startup before populating it.
+          (Only `logs` and `work` subdirectories are preserved.)
+          This prevents interference from remainders of an old configuration
+          (libraries, webapps, etc.), so it's recommended to enable this option.
+        '';
+      };
+
       baseDir = mkOption {
         type = lib.types.path;
         default = "/var/tomcat";
-        description = "Location where Tomcat stores configuration files, webapplications and logfiles";
+        description = ''
+          Location where Tomcat stores configuration files, web applications
+          and logfiles. Note that it is mostly cleared on each service startup
+          if `purifyOnStart` is enabled.
+        '';
       };
 
       logDirs = mkOption {
@@ -197,6 +212,13 @@ in
       after = [ "network.target" ];
 
       preStart = ''
+        ${lib.optionalString cfg.purifyOnStart ''
+          # Delete everything except `logs` and `work` from the existing
+          # base directory, to get rid of remainders of an old configuration.
+          find ${cfg.baseDir} -mindepth 1 -maxdepth 1 -not '(' -name logs -or -name work ')' \
+                              -exec rm -rf '{}' '+'
+        ''}
+
         # Create the base directory
         mkdir -p \
           ${cfg.baseDir}/{conf,virtualhosts,logs,temp,lib,shared/lib,webapps,work}
