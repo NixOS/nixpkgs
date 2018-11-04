@@ -166,6 +166,14 @@
    </listitem>
    <listitem>
     <para>
+     Package <literal>consul-ui</literal> and passthrough <literal>consul.ui</literal> have been removed.
+     The package <literal>consul</literal> now uses upstream releases that vendor the UI into the binary.
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/48714#issuecomment-433454834">#48714</link>
+     for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       Slurm introduces the new option
       <literal>services.slurm.stateSaveLocation</literal>,
       which is now set to <literal>/var/spool/slurm</literal> by default

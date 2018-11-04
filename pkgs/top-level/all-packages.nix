@@ -1136,8 +1136,6 @@ with pkgs;
 
   consul = callPackage ../servers/consul { };
 
-  consul-ui = callPackage ../servers/consul/ui.nix { };
-
   consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
 
   consul-template = callPackage ../tools/system/consul-template { };
@@ -8056,6 +8054,7 @@ with pkgs;
     ansible_2_4
     ansible_2_5
     ansible_2_6
+    ansible_2_7
     ansible2
     ansible;
 
@@ -14208,14 +14207,6 @@ with pkgs;
 
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
-  linux_beagleboard = callPackage ../os-specific/linux/kernel/linux-beagleboard.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.cpu-cgroup-v2."4.11"
-        kernelPatches.modinst_arg_list_too_long
-      ];
-  };
-
   linux_mptcp = linux_mptcp_94;
   linux_mptcp_94 = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches =
@@ -14370,6 +14361,8 @@ with pkgs;
       python = python3;
     };
 
+    bpftrace = callPackage ../os-specific/linux/bpftrace { };
+
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
     beegfs-module = callPackage ../os-specific/linux/beegfs/kernel-module.nix { };
@@ -14504,7 +14497,6 @@ with pkgs;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_beagleboard = linuxPackagesFor pkgs.linux_beagleboard;
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4);
@@ -19744,6 +19736,8 @@ with pkgs;
     wxGTK = wxGTK28;
     gtk = gtk2;
   };
+
+  x11basic = callPackage ../development/compilers/x11basic { };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
 
