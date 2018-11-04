@@ -56,7 +56,7 @@ self: super: {
   hledger = doJailbreak super.hledger;
   hledger-lib = doJailbreak super.hledger-lib;
   hledger-ui = doJailbreak super.hledger-ui;
-  hpack = self.hpack_0_31_0;
+  hpack = self.hpack_0_31_1;
   hslua = self.hslua_1_0_1;
   hslua-module-text = self.hslua-module-text_0_2_0;
   hspec = self.hspec_2_5_8;
