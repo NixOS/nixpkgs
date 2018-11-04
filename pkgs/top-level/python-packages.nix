@@ -182,6 +182,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
+
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
   asana = callPackage ../development/python-modules/asana { };
