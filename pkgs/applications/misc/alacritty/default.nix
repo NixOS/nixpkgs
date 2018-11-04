@@ -73,7 +73,10 @@ in buildRustPackage rec {
   buildInputs = rpathLibs
              ++ lib.optionals stdenv.isDarwin darwinFrameworks;
 
- outputs = [ "out" "terminfo" ];
+  outputs = [ "out" "terminfo" ];
+
+  # https://github.com/NixOS/nixpkgs/issues/49693
+  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \

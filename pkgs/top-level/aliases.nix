@@ -224,7 +224,13 @@ mapAliases ({
   pidginwindowmerge = pidgin-window-merge; # added 2018-01-08
   piwik = matomo; # added 2018-01-16
   pltScheme = racket; # just to be sure
+  pmtools = acpica-tools; # added 2018-11-01
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  postgresql93 = postgresql_9_3;
+  postgresql94 = postgresql_9_4;
+  postgresql95 = postgresql_9_5;
+  postgresql96 = postgresql_9_6;
+  postgresql100 = throw "deprecated 2018-10-21: use postgresql_10 instead";
   procps-ng = procps; # added 2018-06-08
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   pulseaudioLight = pulseaudio; # added 2018-04-25
@@ -250,6 +256,7 @@ mapAliases ({
   s6Networking = s6-networking; # added 2018-07-23
   s6LinuxUtils = s6-linux-utils; # added 2018-07-23
   s6PortableUtils = s6-portable-utils; # added 2018-07-23
+  sagemath = sage; # added 2018-10-27
   sam = deadpixi-sam; # added 2018-04-25
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
@@ -300,6 +307,7 @@ mapAliases ({
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
+  truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12

@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=$(out)"
-    "GOPATH=$(GGOPATH):${go-lib}/share/gocode"
-    "HOME=$(TMP)"
+    "GOCACHE=off"
   ];
 
   meta = with stdenv.lib; {

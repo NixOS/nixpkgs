@@ -126,6 +126,7 @@
   ./programs/udevil.nix
   ./programs/venus.nix
   ./programs/vim.nix
+  ./programs/wavemon.nix
   ./programs/way-cooler.nix
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
@@ -432,6 +433,7 @@
   ./services/monitoring/hdaps.nix
   ./services/monitoring/heapster.nix
   ./services/monitoring/incron.nix
+  ./services/monitoring/kapacitor.nix
   ./services/monitoring/longview.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix

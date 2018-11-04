@@ -86,7 +86,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "069w4gdb104lc3vp48k3wywmgql56yc5g2g2i240xrr88in3qvqw";
+      sha256 = "0mgmxcr36b86jh56my3vhp9y4cravi0hbppa463q3c21a1cmjc19";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -370,6 +370,7 @@ self: super: {
   safecopy = dontCheck super.safecopy;
   sai-shape-syb = dontCheck super.sai-shape-syb;
   scp-streams = dontCheck super.scp-streams;
+  sdl2 = dontCheck super.sdl2; # the test suite needs an x server
   sdl2-ttf = dontCheck super.sdl2-ttf; # as of version 0.2.1, the test suite requires user intervention
   separated = dontCheck super.separated;
   shadowsocks = dontCheck super.shadowsocks;
@@ -1149,5 +1150,8 @@ self: super: {
 
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
+
+  # https://github.com/DanielG/cabal-helper/issues/59
+  cabal-helper = doJailbreak super.cabal-helper;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

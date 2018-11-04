@@ -143,6 +143,11 @@
     github = "ahmedtd";
     name = "Taahir Ahmed";
   };
+  ahuzik = {
+    email = "ales.guzik@gmail.com";
+    github = "alesguzik";
+    name = "Ales Huzik";
+  };
   aij = {
     email = "aij+git@mrph.org";
     github = "aij";
@@ -401,6 +406,11 @@
     github = "AveryLychee";
     name = "Avery Lychee";
   };
+  averelld = {
+    email = "averell+nixos@rxd4.com";
+    github = "averelld";
+    name = "averelld";
+  };
   avnik = {
     email = "avn@avnik.info";
     github = "avnik";
@@ -494,6 +504,11 @@
     email = "benno.fuenfstueck@gmail.com";
     github = "bennofs";
     name = "Benno Fünfstück";
+  };
+  benpye = {
+    email = "ben@curlybracket.co.uk";
+    github = "benpye";
+    name = "Ben Pye";
   };
   benwbooth = {
     email = "benwbooth@gmail.com";
@@ -2967,6 +2982,11 @@
     github = "nequissimus";
     name = "Tim Steinbach";
   };
+  nikitavoloboev = {
+    email = "nikita.voloboev@gmail.com";
+    github = "nikitavoloboev";
+    name = "Nikita Voloboev";
+  };
   nfjinjing = {
     email = "nfjinjing@gmail.com";
     github = "nfjinjing";
@@ -3895,6 +3915,11 @@
     github = "sjagoe";
     name = "Simon Jagoe";
   };
+  sjau = {
+    email = "nixos@sjau.ch";
+    github = "sjau";
+    name = "Stephan Jau";
+  };
   sjmackenzie = {
     email = "setori88@gmail.com";
     github = "sjmackenzie";
@@ -4142,6 +4167,11 @@
     email = "mxxouy6x3m_github@tatapa.org";
     github = "taku0";
     name = "Takuo Yonezawa";
+  };
+  talyz = {
+    email = "kim.lindberger@gmail.com";
+    github = "talyz";
+    name = "Kim Lindberger";
   };
   tari = {
     email = "peter@taricorp.net";
@@ -4617,6 +4647,11 @@
     email = "info@wucke13.de";
     github = "wucke13";
     name = "Wucke";
+  };
+  wykurz = {
+    email = "wykurz@gmail.com";
+    github = "wykurz";
+    name = "Mateusz Wykurz";
   };
   wyvie = {
     email = "elijahrum@gmail.com";

@@ -129,6 +129,7 @@ let
       kontact = callPackage ./kontact.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
       konquest = callPackage ./konquest.nix {};
+      konqueror = callPackage ./konqueror.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};

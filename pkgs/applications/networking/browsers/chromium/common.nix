@@ -1,4 +1,4 @@
-{ stdenv, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
+{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchurl, fetchpatch, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -130,14 +130,16 @@ let
     patches = optional enableWideVine ./patches/widevine.patch ++ [
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
+
       # Unfortunately, chromium regularly breaks on major updates and
-      # then needs various patches backported. Good sources for such patches and other hints:
+      # then needs various patches backported in order to be compiled with GCC.
+      # Good sources for such patches and other hints:
       # - https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
       # - https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # - https://github.com/chromium/chromium/search?q=GCC&s=committer-date&type=Commits
       #
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
-    ]  ++ optionals (versionOlder version "71") [
+    ] ++ optionals (!stdenv.cc.isClang && (versionRange "70" "71")) [
        ( githubPatch "cbdb8bd6567c8143dc8c1e5e86a21a8ea064eea4" "0258qlffp6f6izswczb11p8zdpn550z5yqa9z7gdg2rg5171n5i8" )
        ( githubPatch "e98f8ef8b2f236ecbb01df8c39e6ee1c8fbe8d7d" "1ky5xrzch6aya87kn0bgb31lksl3g8kh2v8k676ks7pdl2v132p9" )
        ( githubPatch "a4de8da116585357c123d71e5f54d1103824c6df" "1y7afnjrsz6j2l3vy1ms8mrkbb51xhcafw9r371algi48il7rajm" )
@@ -159,7 +161,7 @@ let
                 sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
               }
             );
-            
+
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -207,13 +209,21 @@ let
     '' + optionalString stdenv.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+    '' + optionalString stdenv.cc.isClang ''
+      mkdir -p third_party/llvm-build/Release+Asserts/bin
+      ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
+      ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
+      ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
     '';
 
     gnFlags = mkGnFlags ({
       linux_use_bundled_binutils = false;
+      use_lld = false;
       use_gold = true;
       gold_path = "${stdenv.cc}/bin";
       is_debug = false;
+      # at least 2X compilation speedup
+      use_jumbo_build = true;
 
       proprietary_codecs = false;
       use_sysroot = false;
@@ -224,7 +234,7 @@ let
       use_cups = cupsSupport;
 
       treat_warnings_as_errors = false;
-      is_clang = false;
+      is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       remove_webcore_debug_symbols = true;
       enable_swiftshader = false;
