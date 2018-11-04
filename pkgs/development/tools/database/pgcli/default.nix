@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    cli-helpers click configobj humanize prompt_toolkit_2 psycopg2
+    cli-helpers click configobj humanize prompt_toolkit psycopg2
     pygments sqlparse pgspecial setproctitle keyring
   ];
 

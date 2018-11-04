@@ -57,7 +57,7 @@ in pythonPackages.buildPythonPackage rec {
     ++ (with pythonPackages; [
       yarl aiohttp multidict
       jinja2 psutil zipstream raven jsonschema typing
-      prompt_toolkit
+      prompt_toolkit_1
     ]);
 
   # Requires network access

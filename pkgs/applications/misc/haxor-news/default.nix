@@ -16,7 +16,7 @@ buildPythonApplication rec {
     colorama
     requests
     pygments
-    prompt_toolkit
+    prompt_toolkit_1
     six
   ];
 
