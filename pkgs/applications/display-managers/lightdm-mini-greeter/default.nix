@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "lightdm-mini-greeter-${version}";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "prikhi";
     repo = "lightdm-mini-greeter";
     rev = version;
-    sha256 = "1xlj5wqagp765rqw40ci4wir21qwyszasynk82x8308k5d3asvwb";
+    sha256 = "1qi0bsqi8z2zv3303ww0kd7bciz6qx8na5bkvgrqlwyvq31czai5";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

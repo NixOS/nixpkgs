@@ -552,10 +552,9 @@ in {
         gnupg
       ];
       preStart = ''
-        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
-
         cp -rf ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
-        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        rm -rf ${cfg.statePath}/config
+        mkdir ${cfg.statePath}/config
         if [ -e ${cfg.statePath}/lib ]; then
           rm ${cfg.statePath}/lib
         fi
@@ -569,6 +568,8 @@ in {
           ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
         ''}
         cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         # JSON is a subset of YAML
         ln -sf ${pkgs.writeText "gitlab.yml" (builtins.toJSON gitlabConfig)} ${cfg.statePath}/config/gitlab.yml

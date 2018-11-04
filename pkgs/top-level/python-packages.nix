@@ -266,6 +266,8 @@ in {
 
   brotli = callPackage ../development/python-modules/brotli { };
 
+  broadlink = callPackage ../development/python-modules/broadlink { };
+
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
@@ -337,6 +339,8 @@ in {
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
   eradicate = callPackage ../development/python-modules/eradicate {  };
+
+  fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
 
   fido2 = callPackage ../development/python-modules/fido2 {  };
 
