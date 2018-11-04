@@ -29,7 +29,7 @@ let
   v8 = v8_3_16_14;
 
   rainbow_rake = buildRubyGem {
-    name = "rake";
+    pname = "rake";
     gemName = "rake";
     source.sha256 = "01j8fc9bqjnrsxbppncai05h43315vmz9fwg28qdsgcjw9ck1d7n";
     type = "gem";

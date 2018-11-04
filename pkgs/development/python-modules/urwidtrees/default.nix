@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "urwidtrees";
+  pname = "urwidtrees";
   version  = "1.0";
 
   src = fetchFromGitHub {

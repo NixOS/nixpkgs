@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "pymaging";
+  pname = "pymaging";
   version = "unstable-2016-11-16";
 
   src = fetchFromGitHub {
