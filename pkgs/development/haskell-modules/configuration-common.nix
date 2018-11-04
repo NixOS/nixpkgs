@@ -893,6 +893,9 @@ self: super: {
   # https://github.com/aisamanra/config-ini/issues/12
   config-ini = dontCheck super.config-ini;
 
+  # We've remove cpython 3.4 from nixpkgs
+  cpython = null;
+
   # doctest >=0.9 && <0.12
   genvalidity-property = doJailbreak super.genvalidity-property;
   path = dontCheck super.path;
