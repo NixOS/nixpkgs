@@ -175,7 +175,7 @@
       dnsmasq = 141;
       uhub = 142;
       yandexdisk = 143;
-      #collectd = 144; #unused
+      mxisd = 144; # was once collectd
       consul = 145;
       mailpile = 146;
       redmine = 147;
@@ -476,7 +476,7 @@
       #dnsmasq = 141; # unused
       uhub = 142;
       #yandexdisk = 143; # unused
-      #collectd = 144; # unused
+      mxisd = 144; # was once collectd
       #consul = 145; # unused
       mailpile = 146;
       redmine = 147;
