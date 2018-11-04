@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "paste";
-  version = "2.0.3";
+  version = "3.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "062jk0nlxf6lb2wwj6zc20rlvrwsnikpkh90y0dn8cjch93s6ii3";
+    sha256 = "96b06ff055c4f22a4e5c164551179ed1fa8263bc3ce69b4347c617cd0fcf51f4";
   };
 
   checkInputs = [ nose ];
