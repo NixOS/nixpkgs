@@ -557,6 +557,8 @@ let
 
     opti = callPackage ../development/ocaml-modules/opti { };
 
+    optint = callPackage ../development/ocaml-modules/optint { };
+
     otfm = callPackage ../development/ocaml-modules/otfm { };
 
     otr = callPackage ../development/ocaml-modules/otr { };
