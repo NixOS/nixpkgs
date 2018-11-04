@@ -410,6 +410,7 @@ in rec {
   tests.slurm = callTest tests/slurm.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
+  tests.solr = callTest tests/solr.nix {};
   #tests.statsd = callTest tests/statsd.nix {}; # statsd is broken: #45946
   tests.strongswan-swanctl = callTest tests/strongswan-swanctl.nix {};
   tests.sudo = callTest tests/sudo.nix {};
