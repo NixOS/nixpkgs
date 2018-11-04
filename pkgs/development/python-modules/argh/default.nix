@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "argh";
-  version = "0.26.1";
+  version = "0.26.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nqham81ihffc9xmw85dz3rg3v90rw7h0dp3dy0bh3qkp4n499q6";
+    sha256 = "e9535b8c84dc9571a48999094fda7f33e63c3f1b74f3e5f3ac0105a58405bb65";
   };
 
   buildInputs = [ pytest py mock pkgs.glibcLocales ];
