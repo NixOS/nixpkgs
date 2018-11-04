@@ -8,6 +8,7 @@ stdenv.mkDerivation {
 
   buildCommand = ''
     cc ${./chrootenv.c} $(pkg-config --cflags --libs glib-2.0) -o $out
+    ${stdenv.cc.bintools.bintools}/bin/strip $out
   '';
 
   meta = with stdenv.lib; {
