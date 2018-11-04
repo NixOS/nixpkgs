@@ -51,7 +51,7 @@ let
     paths = vscodeExtensions;
   };
 
-  wrappedExeName = "code";
+  wrappedExeName = builtins.substring 2 (builtins.stringLength wrappedPkgName) wrappedPkgName;
   exeName = wrappedExeName;
 
   wrapperExeFile = writeScript "${exeName}" ''
@@ -75,7 +75,7 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   mkdir -p "$out/share/applications"
   mkdir -p "$out/share/pixmaps"
 
-  ln -sT "${vscode}/share/applications/code.desktop" "$out/share/applications/code.desktop"
+  ln -sT "${vscode}/share/applications/${wrappedExeName}.desktop" "$out/share/applications/${exeName}.desktop"
   ln -sT "${vscode}/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
   ${if [] == vscodeExtensions
     then ''
