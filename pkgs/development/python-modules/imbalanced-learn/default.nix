@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.3.3";
+  version = "0.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r5js9kw6rvmfvxxkfjlcxv5xn5h19qvg7d41byilxwq9kd515g4";
+    sha256 = "f830ebc2042b642648bfe48a9253b45019ab15a5d0ac0bbdd7261e304e71609d";
   };
 
   propagatedBuildInputs = [ scikitlearn ];
