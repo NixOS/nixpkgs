@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, pythonPackages, ansible }:
+{ stdenv, fetchFromGitHub, python3Packages, ansible }:
 
-pythonPackages.buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "ansible-lint";
   version = "3.4.23";
 
@@ -11,9 +11,9 @@ pythonPackages.buildPythonPackage rec {
     sha256 = "0cnfgxh5m7alzm811hc95jigbca5vc1pf8fjazmsakmhdjyfbpb7";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ pyyaml six ] ++ [ ansible ];
+  propagatedBuildInputs = with python3Packages; [ pyyaml six ] ++ [ ansible ];
 
-  checkInputs = [ pythonPackages.nose ];
+  checkInputs = [ python3Packages.nose ];
 
   postPatch = ''
     patchShebangs bin/ansible-lint

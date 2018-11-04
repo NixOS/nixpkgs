@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, python2
+{ stdenv, fetchurl, python3
 , windowsSupport ? false
 }:
 
 let
-  generic = { version, sha256, py ? python2 }: py.pkgs.buildPythonPackage rec {
+  generic = { version, sha256, py ? python3 }: py.pkgs.buildPythonPackage rec {
     pname = "ansible";
     inherit version;
 

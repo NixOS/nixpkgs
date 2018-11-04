@@ -4,13 +4,12 @@
 , ansible
 , pytest
 , mock
-, isPy3k
+, python3Packages
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   version = "2.0.1";
   pname = "pytest-ansible";
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,7 +23,7 @@ buildPythonPackage rec {
   # requires pandoc < 2.0
   # buildInputs = [ setuptools-markdown ];
   checkInputs =  [ mock ];
-  propagatedBuildInputs = [ ansible pytest ];
+  propagatedBuildInputs = [ python3Packages.pytest ansible ];
 
   # tests not included with release
   doCheck = false;
