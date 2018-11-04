@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "hupper";
-  version = "1.3.1";
+  version = "1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "899a1da85b71b62d903b5732703cad7454425b4ba9a6453930ad9168ec08ae0e";
+    sha256 = "f9d9ab2457fdd01ee20278d3d7dfc91c49cae329863f47571a4a2e78d90fa738";
   };
 
   checkPhase = ''
