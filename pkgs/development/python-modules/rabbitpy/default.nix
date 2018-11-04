@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.26.2";
+  version = "1.0.0";
   pname = "rabbitpy";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pgijv7mgxc4sm7p9s716dhl600l8isisxzyg4hz7ng1sk09p1w3";
+    sha256 = "54d33746d0c6a686417cd354346803945df0740b39fb92842d259387100db126";
   };
 
   buildInputs = [ mock nose ];
