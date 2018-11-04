@@ -11699,7 +11699,9 @@ with pkgs;
   pgroonga = callPackage ../servers/sql/postgresql/pgroonga {};
 
   plv8 = callPackage ../servers/sql/postgresql/plv8 {
-    v8 = v8_6_x;
+    v8 = callPackage ../development/libraries/v8/plv8_6_x.nix {
+      inherit (python2Packages) python;
+    };
   };
 
   phonon = callPackage ../development/libraries/phonon {};
