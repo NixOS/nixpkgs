@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "aioeventlet";
-  version = "0.4";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19krvycaiximchhv1hcfhz81249m3w3jrbp2h4apn1yf4yrc4y7y";
+    sha256 = "cecb51ea220209e33b53cfb95124d90e4fcbee3ff8ba8a179a57120b8624b16a";
   };
 
   propagatedBuildInputs = [ eventlet trollius asyncio ];
