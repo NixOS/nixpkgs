@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "2.10.3";
+  version = "2.12.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ace45039e9d71713b4bb09ea199644797a7d884fbdd940e4c02559b4bccb01a1";
+    sha256 = "64609a2194d18c03e2348f1ea2fb97208b3455dfb76a16900143813aa61b6d3c";
   };
 
   propagatedBuildInputs = [ intervaltree pyflakes requests lxml ];
