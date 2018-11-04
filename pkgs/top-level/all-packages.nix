@@ -11138,6 +11138,8 @@ with pkgs;
   giflib_4_1 = callPackage ../development/libraries/giflib/4.1.nix { };
   giflib_5_1 = callPackage ../development/libraries/giflib/5.1.nix { };
 
+  libunarr = callPackage ../development/libraries/libunarr { };
+
   libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
   libunibreak = callPackage ../development/libraries/libunibreak { };
@@ -22646,6 +22648,8 @@ with pkgs;
     freeglut = null;
     openal = null;
   };
+
+  yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
 
   yadm = callPackage ../applications/version-management/yadm { };
 
