@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, python36Packages }:
 
 stdenv.mkDerivation rec {
   name = "bashdb-${version}";
@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     url =  "mirror://sourceforge/bashdb/${name}.tar.bz2";
     sha256 = "0p7i7bpzs6q1i7swnkr89kxqgzr146xw8d2acmqwqbslzm9dqlml";
   };
+
+  propagatedBuildInputs = [ python36Packages.pygments ];
 
   meta = {
     description = "Bash script debugger";
