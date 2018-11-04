@@ -4275,7 +4275,9 @@ in {
 
   python-libarchive = callPackage ../development/python-modules/python-libarchive { };
 
-  libarchive-c = callPackage ../development/python-modules/libarchive-c { };
+  libarchive-c = callPackage ../development/python-modules/libarchive-c {
+    inherit (pkgs) libarchive;
+  };
 
   libasyncns = callPackage ../development/python-modules/libasyncns {
     inherit (pkgs) libasyncns pkgconfig;
