@@ -17,11 +17,11 @@
 
 buildPythonPackage rec {
   pname = "github3.py";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cxaqdqmz9w2afc0cw2jyv783fp0grydbik0frzj79azzkhyg4gf";
+    sha256 = "35fea5bf3567a8e88d3660686d83f96ef164e698ce6fb30f9e2b0edded7357af";
   };
 
   buildInputs = [ unittest2 pytest mock betamax betamax-matchers dateutil ];
