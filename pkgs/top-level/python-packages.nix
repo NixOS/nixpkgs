@@ -2438,6 +2438,8 @@ in {
 
   html5lib = callPackage ../development/python-modules/html5lib { };
 
+  httmock = callPackage ../development/python-modules/httmock { };
+
   http_signature = callPackage ../development/python-modules/http_signature { };
 
   httpbin = callPackage ../development/python-modules/httpbin { };
