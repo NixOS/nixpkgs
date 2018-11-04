@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "itsdangerous";
-  version = "0.24";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06856q6x675ly542ig0plbqcyab6ksfzijlyf1hzhgg3sgwgrcyb";
+    sha256 = "321b033d07f2a4136d3ec762eac9f16a10ccd60f53c0c91af90217ace7ba1f19";
   };
 
   meta = with stdenv.lib; {
