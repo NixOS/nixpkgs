@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "wsproto";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "092qk4pbyaxx8b81hv9p7pc3ww54bwfqybhya4madka3pgv19wh2";
+    sha256 = "1fcb726d448f1b9bcbea884e26621af5ddd01d2d502941a024f4c727828b6009";
   };
 
   propagatedBuildInputs = [ h11 enum34 ];
