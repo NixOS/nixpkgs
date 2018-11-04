@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "goobook";
-  version = "1.9";
+  version = "3.1";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02xmq8sjavza17av44ks510934wrshxnsm6lvhvazs45s92b671i";
+    sha256 = "139a98d646d5c5963670944d5cfcc1a107677ee11fa98329221bd600457fda6d";
   };
 
   propagatedBuildInputs = [ oauth2client gdata simplejson httplib2 keyring six rsa ];
