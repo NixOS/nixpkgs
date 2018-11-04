@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.9";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "14r9brj4r31b3qy1nnn34v3l4h0n39bqxg9sn2fz4p3pp5mglnl6";
+    sha256 = "d311be4fddfe832a56986ac5e1d6e8715d7fcb0208560da79d1bb0f72abef41f";
   };
 
   propagatedBuildInputs = [ pkgs.graphviz ];
