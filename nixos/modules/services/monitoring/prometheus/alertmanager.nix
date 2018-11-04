@@ -23,6 +23,15 @@ in {
     services.prometheus.alertmanager = {
       enable = mkEnableOption "Prometheus Alertmanager";
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.prometheus-alertmanager;
+        defaultText = "pkgs.alertmanager";
+        description = ''
+          Package that should be used for alertmanager.
+        '';
+      };
+
       user = mkOption {
         type = types.str;
         default = "nobody";
@@ -127,7 +136,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
       script = ''
-        ${pkgs.prometheus-alertmanager.bin}/bin/alertmanager \
+        ${cfg.package}/bin/alertmanager \
           ${concatStringsSep " \\\n  " cmdlineArgs}
       '';
 
