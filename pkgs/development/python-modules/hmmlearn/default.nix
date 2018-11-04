@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "hmmlearn";
-  version = "0.2.0";
+  version = "0.2.1";
   name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/h/hmmlearn/${name}.tar.gz";
-    sha256 = "0qc3fkdyrgfg31y1a8jzs83dxkjw78pqkdm44lll1iib63w4cik9";
+    sha256 = "d43f5b25f9019ef5d01914d0972a5fa0594e82ab75d2c6aec26d682e47bd553c";
   };
 
   propagatedBuildInputs = [ numpy ];
