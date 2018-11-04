@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
     pname = "ZODB";
-    version = "5.4.0";
+    version = "5.5.1";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0b306042f4f0d558a477d65c34b0dd6e7604c6e583f55dfda52befa2fa13e076";
+      sha256 = "20155942fa326e89ad8544225bafd74237af332ce9d7c7105a22318fe8269666";
     };
 
     patches = [
