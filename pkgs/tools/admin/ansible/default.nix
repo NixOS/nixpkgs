@@ -47,11 +47,6 @@ let
 in rec {
   # We will carry all the supported versions
 
-  ansible_2_4 = generic {
-    version = "2.4.4.0";
-    sha256  = "0n1k6h0h6av74nw8vq98fmh6q4pq6brpwmx45282vh3bkdmpa0ib";
-  };
-
   ansible_2_5 = generic {
     version = "2.5.11";
     sha256  = "07rhgkl3a2ba59rqh9pyz1p661gc389shlwa2sw1m6wwifg4lm24";

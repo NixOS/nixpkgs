@@ -8066,7 +8066,6 @@ with pkgs;
   augeas = callPackage ../tools/system/augeas { };
 
   inherit (callPackages ../tools/admin/ansible {})
-    ansible_2_4
     ansible_2_5
     ansible_2_6
     ansible_2_7
