@@ -2,7 +2,7 @@
   stdenv, makeWrapper, lib, fetchurl, fetchpatch, buildPackages,
 
   automake, autoconf, libtool, intltool, mtdev, libevdev, libinput,
-  python, freetype, tradcpp, fontconfig,
+  freetype, tradcpp, fontconfig,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, epoxy, openssl, pkgconfig, llvm_6,
@@ -85,13 +85,8 @@ self: super:
   });
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ python ];
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
-  });
-
-  xcbproto = super.xcbproto.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ python ];
   });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
