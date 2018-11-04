@@ -270,6 +270,7 @@
   ./services/hardware/actkbd.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/brltty.nix
+  ./services/hardware/dockd.nix
   ./services/hardware/freefall.nix
   ./services/hardware/fwupd.nix
   ./services/hardware/illum.nix
