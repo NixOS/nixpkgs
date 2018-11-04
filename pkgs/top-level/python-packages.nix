@@ -184,6 +184,8 @@ in {
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
+  ansible-runner = callPackage ../development/python-modules/ansible-runner { };
+
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
   asana = callPackage ../development/python-modules/asana { };
