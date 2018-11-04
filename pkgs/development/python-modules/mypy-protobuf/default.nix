@@ -2,11 +2,11 @@
 
 buildPythonApplication rec {
   pname = "mypy-protobuf";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bmpd82qm7rjnzc4i275lm18mmz8anhrjhwq2ci179l64hrfr0nb";
+    sha256 = "00b030f9558454ec237576def2de9b7e50517ae039e03d84482b6ddf1bd1d54d";
   };
 
   propagatedBuildInputs = [ protobuf ];
