@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "python-keyczar";
-  version = "0.71c";
+  version = "0.716";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18mhiwqq6vp65ykmi8x3i5l3gvrvrrr8z2kv11z1rpixmyr7sw1p";
+    sha256 = "f9b614112dc8248af3d03b989da4aeca70e747d32fe7e6fce9512945365e3f83";
   };
 
   buildInputs = [ pyasn1 pycrypto ];
