@@ -1459,6 +1459,8 @@ with pkgs;
 
   libndtypes = callPackage ../development/libraries/libndtypes { };
 
+  libthinkpad = callPackage ../development/libraries/libthinkpad { };
+
   libxnd = callPackage ../development/libraries/libxnd { };
 
   link-grammar = callPackage ../tools/text/link-grammar { };
