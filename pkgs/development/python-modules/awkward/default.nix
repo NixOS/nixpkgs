@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.3.0";
+  version = "0.4.3";
   pname = "awkward";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc3080c66987f2a03aa9ba0809e51227eb7aa34198da4b1ee4deb95356409693";
+    sha256 = "41cca910df0faaa30bb9a7682826f3d6f099cb1fd2af452f45a1dd99305db579";
   };
 
   propagatedBuildInputs = [ numpy ];
