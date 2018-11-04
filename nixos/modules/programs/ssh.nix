@@ -84,6 +84,21 @@ in
         '';
       };
 
+
+      agentPkcs11Whitelist = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+          List of whitelisted packages from which pkcs11 modules may be loaded with
+          the <command>ssh-add -s [path]</command> and <command>ssh-add -e [path]</command> commands.
+
+          Example usage
+        '';
+        example = literalExample ''
+          [ pkgs.opensc pkgs.yubico-piv-tool ]
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -204,7 +219,6 @@ in
     environment.etc."ssh/ssh_config".text =
       ''
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
-
         ${optionalString cfg.setXAuthLocation ''
           XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
         ''}
@@ -228,6 +242,7 @@ in
             ExecStart =
                 "${cfg.package}/bin/ssh-agent " +
                 optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
+                optionalString (cfg.agentPkcs11Whitelist != []) "-P ${concatStringsSep "," (map (x: x + "/*") cfg.agentPkcs11Whitelist)} " + 
                 "-a %t/ssh-agent";
             StandardOutput = "null";
             Type = "forking";
