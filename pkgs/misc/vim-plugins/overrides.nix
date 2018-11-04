@@ -9,6 +9,12 @@
 , languagetool
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
+
+# vim-go denpencies
+, asmfmt, delve, errcheck, godef, golint
+, gomodifytags, gotags, gotools, motion
+, gnused, reftools, gogetdoc, gometalinter
+, impl, iferr
 }:
 
 let
@@ -247,6 +253,34 @@ with generated;
     dependencies = ["vim-misc"];
   });
 
+  # change the go_bin_path to point to a path in the nix store. See the code in
+  # fatih/vim-go here
+  # https://github.com/fatih/vim-go/blob/155836d47052ea9c9bac81ba3e937f6f22c8e384/autoload/go/path.vim#L154-L159
+  vim-go = vim-go.overrideAttrs(old: let
+    binPath = lib.makeBinPath [
+      asmfmt
+      delve
+      errcheck
+      godef
+      gogetdoc
+      golint
+      gometalinter
+      gomodifytags
+      gotags
+      gotools
+      iferr
+      impl
+      motion
+      reftools
+    ];
+    in {
+    postPatch = ''
+      ${gnused}/bin/sed \
+        -Ee 's@let go_bin_path = go#path#BinPath\(\)@let go_bin_path = "${binPath}"@g' \
+        -i autoload/go/path.vim
+    '';
+  });
+
   vim-grammarous = vim-grammarous.overrideAttrs(old: {
     # use `:GrammarousCheck` to initialize checking
     # In neovim, you also want to use set
@@ -331,6 +365,15 @@ with generated;
       license = stdenv.lib.licenses.gpl3;
       maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
       platforms = stdenv.lib.platforms.unix;
+    };
+  });
+
+  jedi-vim = jedi-vim.overrideAttrs(old: {
+    # checking for python3 support in vim would be neat, too, but nobody else seems to care
+    buildInputs = [ python3Packages.jedi ];
+    meta = {
+      description = "code-completion for python using python-jedi";
+      license = stdenv.lib.licenses.mit;
     };
   });
 

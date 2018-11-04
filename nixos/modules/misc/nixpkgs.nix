@@ -217,7 +217,6 @@ in
   config = {
     _module.args = {
       pkgs = finalPkgs;
-      pkgs_i686 = finalPkgs.pkgsi686Linux;
     };
   };
 }

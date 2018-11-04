@@ -662,6 +662,8 @@ in {
 
   spglib = callPackage ../development/python-modules/spglib { };
 
+  sslib = callPackage ../development/python-modules/sslib { };
+
   statistics = callPackage ../development/python-modules/statistics { };
 
   sumo = callPackage ../development/python-modules/sumo { };
@@ -1646,6 +1648,8 @@ in {
     inherit (pkgs.gitAndTools) git-annex;
   };
 
+  python-gitlab = callPackage ../development/python-modules/python-gitlab { };
+
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
   google-cloud-sdk-gce = callPackage ../tools/admin/google-cloud-sdk { with-gce=true; };
 
@@ -2457,6 +2461,8 @@ in {
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
 
   html5lib = callPackage ../development/python-modules/html5lib { };
+
+  httmock = callPackage ../development/python-modules/httmock { };
 
   http_signature = callPackage ../development/python-modules/http_signature { };
 
