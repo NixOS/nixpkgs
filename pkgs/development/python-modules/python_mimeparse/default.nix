@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "python-mimeparse";
-  version = "0.1.4";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hyxg09kaj02ri0rmwjqi86wk4nd1akvv7n0dx77azz76wga4s9w";
+    sha256 = "76e4b03d700a641fd7761d3cd4fdbbdcd787eade1ebfac43f877016328334f78";
   };
 
   # error: invalid command 'test'
