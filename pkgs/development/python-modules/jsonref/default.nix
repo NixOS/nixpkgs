@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "jsonref";
-  version = "0.1";
+  version = "0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lqa8dy1sr1bxi00ri79lmbxvzxi84ki8p46zynyrgcqhwicxq2n";
+    sha256 = "f3c45b121cf6257eafabdc3a8008763aed1cd7da06dbabc59a9e4d2a5e4e6697";
   };
 
   buildInputs = [ pytest mock ];
