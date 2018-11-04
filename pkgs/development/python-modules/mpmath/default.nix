@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "mpmath";
-  version = "0.19";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08ijsr4ifrqv3cjc26mkw0dbvyygsa99in376hr4b96ddm1gdpb8";
+    sha256 = "04d14803b6875fe6d69e6dccea87d5ae5599802e4b1df7997bddd2024001050c";
   };
 
   # error: invalid command 'test'
