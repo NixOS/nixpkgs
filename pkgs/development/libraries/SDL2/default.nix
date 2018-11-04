@@ -21,11 +21,11 @@ assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
 
 stdenv.mkDerivation rec {
   name = "SDL2-${version}";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "1v4js1gkr75hzbxzhwzzif0sf9g07234sd23x1vdaqc661bprizd";
+    sha256 = "1c94ndagzkdfqaa838yqg589p1nnqln8mv0hpwfhrkbfczf8cl95";
   };
 
   outputs = [ "out" "dev" ];
