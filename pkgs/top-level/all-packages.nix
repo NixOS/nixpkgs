@@ -22859,4 +22859,6 @@ with pkgs;
   };
 
   slurp = callPackage ../applications/misc/slurp {};
+
+  grim = callPackage ../applications/misc/grim {};
 }
