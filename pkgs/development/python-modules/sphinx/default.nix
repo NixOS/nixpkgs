@@ -25,7 +25,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "Sphinx";
+  pname = "sphinx";
   version = "1.7.9";
   src = fetchPypi {
     inherit pname version;
