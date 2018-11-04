@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "httpretty";
-  version = "0.8.10";
+  version = "0.9.5";
   doCheck = false;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1nmdk6d89z14x3wg4yxywlxjdip16zc8bqnfb471z1365mr74jj7";
+    sha256 = "543fa2bd9c319bfa1e1de9e37d7c9c08fa926a692b65b0be5df4b2f069fd0ad7";
   };
 
   buildInputs = [ tornado requests httplib2 sure nose coverage certifi ];
