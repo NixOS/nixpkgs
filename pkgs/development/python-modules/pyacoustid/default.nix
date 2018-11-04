@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyacoustid";
-  version = "1.1.0";
+  version = "1.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0117039cb116af245e6866e8e8bf3c9c8b2853ad087142bd0c2dfc0acc09d452";
+    sha256 = "efb6337a470c9301a108a539af7b775678ff67aa63944e9e04ce4216676cc777";
   };
 
   propagatedBuildInputs = [ requests audioread ];
