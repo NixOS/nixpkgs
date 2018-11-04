@@ -101,6 +101,10 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
   '' + attrs.postFixup or '''';
 
+  # Print fewer warnings so we have less noise in our logs
+  # The amount of warnings also caused builds to be terminated.
+  PYTHONWARNINGS="once";
+
   meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
