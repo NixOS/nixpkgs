@@ -218,5 +218,24 @@ in
     _module.args = {
       pkgs = finalPkgs;
     };
+
+    assertions = [
+      (
+        let
+          nixosExpectedSystem =
+            if config.nixpkgs.crossSystem != null
+            then config.nixpkgs.crossSystem.system
+            else config.nixpkgs.localSystem.system;
+          nixosOption =
+            if config.nixpkgs.crossSystem != null
+            then "nixpkgs.crossSystem"
+            else "nixpkgs.localSystem";
+          pkgsSystem = finalPkgs.stdenv.targetPlatform.system;
+        in {
+          assertion = nixosExpectedSystem == pkgsSystem;
+          message = "The NixOS nixpkgs.pkgs option was set to a Nixpkgs invocation that compiles to target system ${pkgsSystem} but NixOS was configured for system ${nixosExpectedSystem} via NixOS option ${nixosOption}. The NixOS system settings must match the Nixpkgs target system.";
+        }
+      )
+    ];
   };
 }
