@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "daemonize";
-  version = "2.4.2";
+  version = "2.4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y139sq657bpzfv6k0aqm4071z4s40i6ybpni9qvngvdcz6r86n2";
+    sha256 = "c0194e861826be456c7c69985825ac7b79632d8ac7ad4cde8e12fee7971468c8";
   };
 
   meta = with stdenv.lib; {
