@@ -2,24 +2,25 @@
   # Build inputs
   dateutil, six, text-unidecode, ipaddress ? null,
   # Test inputs
-  email_validator, nose, mock, ukpostcodeparser }:
+  email_validator, mock, ukpostcodeparser, pytestrunner, pytest}:
 
 assert pythonOlder "3.3" -> ipaddress != null;
 
 buildPythonPackage rec {
   pname = "Faker";
-  version = "0.8.18";
+  version = "0.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0184fa252f86214308bb6bed344f96294f2e3528fbffafc727890cf2a86d6027";
+    sha256 = "2621643b80a10b91999925cfd20f64d2b36f20bf22136bbdc749bb57d6ffe124";
   };
 
   checkInputs = [
     email_validator
-    nose
     mock
     ukpostcodeparser
+    pytestrunner
+    pytest
   ];
 
   propagatedBuildInputs = [
