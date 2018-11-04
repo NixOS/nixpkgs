@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pluggy";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95eb8364a4708392bae89035f45341871286a333f749c3141c20573d2b3876e1";
+    sha256 = "447ba94990e8014ee25ec853339faf7b0fc8050cdc3289d4d71f7f410fb90095";
   };
 
   checkPhase = ''
