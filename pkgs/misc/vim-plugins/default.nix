@@ -3414,6 +3414,19 @@ self = rec {
 
   };
 
+  jedi-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "jedi-vim-2018-10-14";
+    src = fetchgit {
+      url = "https://github.com/davidhalter/jedi-vim";
+      rev = "b6dfc5fd49c26d4dbe9f54c814956567a7a9b3a8";
+      sha256 = "11wvynjl1m23vdp4wvirhmm7vnpji5affbyhwz67yjkvh6c42xqa";
+    };
+    dependencies = [];
+    # it'd be nice to check for python3 support in vim, but nobody else seems to care
+    buildInputs = [python3Packages.jedi];
+
+  };
+
 } // lib.optionalAttrs (config.allowAliases or true) (with self; {
 
   # aliasess
