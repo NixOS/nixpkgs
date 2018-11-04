@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "munch";
-  version = "2.0.4";
+  version = "2.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1420683a94f3a2ffc77935ddd28aa9ccb540dd02b75e02ed7ea863db437ab8b2";
+    sha256 = "6ae3d26b837feacf732fb8aa5b842130da1daf221f5af9f9d4b2a0a6414b0d51";
   };
 
   meta = with stdenv.lib; {
