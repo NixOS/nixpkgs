@@ -183,6 +183,11 @@ in rec {
         --replace '<zlib.h>' '<${zlib.dev}/include/zlib.h>'
       substituteInPlace substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/image/CCLinkerInvocation.java \
         --replace 'cmd.add("-v");' 'cmd.add("-v"); cmd.add("-L${zlib}/lib");'
+      substituteInPlace substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/c/codegen/CCompilerInvoker.java \
+        --replace 'command.add(Platform.includedIn(Platform.WINDOWS.class) ? "CL" : "gcc");' \
+          'command.add(Platform.includedIn(Platform.WINDOWS.class) ? "CL" : "${stdenv.cc}/bin/gcc");'
+      substituteInPlace substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/image/CCLinkerInvocation.java \
+        --replace 'protected String compilerCommand = "cc";' 'protected String compilerCommand = "${stdenv.cc}/bin/cc";'
     '';
     buildPhase = ''
       # make a copy of jvmci8
