@@ -6,16 +6,15 @@
 let
 unwrapped = stdenv.mkDerivation rec {
   pname = "gsignond";
-  version = "39022c86ddb5062a10fb0503ad9d81a8e532d527";
+  version = "unstable-2018-10-04";
 
-  name = "${pname}-2018-10-04";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     owner = "accounts-sso";
     repo = pname;
-    rev = version;
+    rev = "39022c86ddb5062a10fb0503ad9d81a8e532d527";
     sha256 = "1gw8vbj3j6wxqy759z97arm8lnqhmraw9s2frv3ar6crnfhlidff";
   };
 
