@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.3.3";
+  version = "0.4.12";
   pname = "vmprof";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "991bc2f1dc824c63e9b399f9e8606deded92a52378d0e449f258807d7556b039";
+    sha256 = "d6fa566512de1e17c9b585feae6e6997119e0d43c41c8461a9a2e8a8276618a4";
   };
 
   propagatedBuildInputs = [ requests six];
