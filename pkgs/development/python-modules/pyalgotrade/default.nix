@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pyalgotrade";
-  version = "0.16";
+  version = "0.20";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a253617254194b91cfebae7bfd184cb109d4e48a8c70051b9560000a2c0f94b3";
+    sha256 = "7927c87af202869155280a93ff6ee934bb5b46cdb1f20b70f7407337f8541cbd";
   };
 
   propagatedBuildInputs = [ numpy scipy pytz ];
