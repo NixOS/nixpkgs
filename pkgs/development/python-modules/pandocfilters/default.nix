@@ -4,12 +4,12 @@
 }:
 
 buildPythonPackage rec{
-  version = "1.4.1";
+  version = "1.4.2";
   pname = "pandocfilters";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ec8bcd100d081db092c57f93462b1861bcfa1286ef126f34da5cb1d969538acd";
+    sha256 = "b3dd70e169bb5449e6bc6ff96aea89c5eea8c5f6ab5e207fc2f521a2cf4a0da9";
   };
 
   # No tests available
