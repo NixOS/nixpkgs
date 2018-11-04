@@ -138,6 +138,8 @@ let
 
     cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
+    checkseum = callPackage ../development/ocaml-modules/checkseum { };
+
     cil = callPackage ../development/ocaml-modules/cil { };
 
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
