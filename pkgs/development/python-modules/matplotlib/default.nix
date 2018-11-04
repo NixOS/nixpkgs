@@ -21,12 +21,12 @@ assert enableTk -> (tcl != null)
 assert enableQt -> pyqt4 != null;
 
 buildPythonPackage rec {
-  version = "2.2.3";
+  version = "3.0.1";
   pname = "matplotlib";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7355bf757ecacd5f0ac9dd9523c8e1a1103faadf8d33c22664178e17533f8ce5";
+    sha256 = "70f8782c50ac2c7617aad0fa5ba59fc49f690a851d6afc0178813c49767644dd";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
