@@ -22857,4 +22857,6 @@ with pkgs;
   newlibCross = callPackage ../development/misc/newlib {
     stdenv = crossLibcStdenv;
   };
+
+  slurp = callPackage ../applications/misc/slurp {};
 }
