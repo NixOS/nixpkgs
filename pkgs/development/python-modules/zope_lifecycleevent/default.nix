@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "zope.lifecycleevent";
-  version = "3.7.0";
+  version = "4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0s5brphqzzz89cykg61gy7zcmz0ryq1jj2va7gh2n1b3cccllp95";
+    sha256 = "7ec39087cc1524e55557e7d9dc6295eb1b95b09b125e293c0e2dd068574f0aee";
   };
 
   propagatedBuildInputs = [ zope_event zope_component ];
