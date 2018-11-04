@@ -1796,7 +1796,10 @@ in {
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
-  jupyter_console = callPackage ../development/python-modules/jupyter_console { };
+  jupyter_console = if pythonOlder "3.5" then
+       callPackage ../development/python-modules/jupyter_console/5.nix { }
+     else
+       callPackage ../development/python-modules/jupyter_console { };
 
   jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
 
