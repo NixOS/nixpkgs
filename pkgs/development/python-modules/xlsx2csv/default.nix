@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "xlsx2csv";
-  version = "0.7.2";
+  version = "0.7.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7c6c8fa6c2774224d03a6a96049e116822484dccfa3634893397212ebcd23866";
+    sha256 = "6ce45a87b61af6d3c24fed4221642de9115dc9cb9ea65887b0926fd0fab0a597";
   };
 
   meta = with stdenv.lib; {
