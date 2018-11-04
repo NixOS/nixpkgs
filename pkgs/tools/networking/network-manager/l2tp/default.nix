@@ -2,9 +2,10 @@
 , networkmanager, ppp, xl2tpd, strongswan, libsecret
 , withGnome ? true, gnome3, networkmanagerapplet }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+let
   pname = "NetworkManager-l2tp";
+in stdenv.mkDerivation rec {
+  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   version = "1.2.10";
 
   src = fetchFromGitHub {
