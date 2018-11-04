@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "astunparse";
-  version =  "1.5.0";
+  version =  "1.6.1";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kc9lm2jvfcip3z8snj04dar5a9jh857a704m6lvcv4xclm3rpsm";
+    sha256 = "d27b16fb33dea0778c5a2c01801554eae0d3f8a8d6f604f15627589c3d6f11ca";
   };
   propagatedBuildInputs = [ six ];
   doCheck = false; # no tests
