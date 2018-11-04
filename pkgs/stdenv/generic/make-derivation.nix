@@ -12,9 +12,7 @@ rec {
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
   mkDerivation =
-    { name ? if attrs ? pname && attrs ? version
-        then "${attrs.pname}-${attrs.version}"
-        else ""
+    { name ? ""
 
     # These types of dependencies are all exhaustively documented in
     # the "Specifying Dependencies" section of the "Standard
@@ -67,8 +65,6 @@ rec {
     , pos ? # position used in error messages and for meta.position
         (if attrs.meta.description or null != null
           then builtins.unsafeGetAttrPos "description" attrs.meta
-          else if attrs.version or null != null
-          then builtins.unsafeGetAttrPos "version" attrs
           else builtins.unsafeGetAttrPos "name" attrs)
     , separateDebugInfo ? false
     , outputs ? [ "out" ]
@@ -81,13 +77,6 @@ rec {
     , hardeningDisable ? []
 
     , ... } @ attrs:
-
-    # Check that the name is consistent with pname and version:
-    assert lib.assertMsg
-      (lib.lists.all (name: builtins.hasAttr name attrs) ["name" "pname" "version"]
-        -> lib.strings.hasSuffix "${attrs.pname}-${attrs.version}" attrs.name)
-      ("mkDerivation: `name` (\"${attrs.name}\") must be consistent " +
-       "with `pname-version` \"${attrs.pname}-${attrs.version}\"");
 
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
