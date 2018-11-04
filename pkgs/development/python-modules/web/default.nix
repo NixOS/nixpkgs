@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.37";
+  version = "0.39";
   pname = "web.py";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "748c7e99ad9e36f62ea19f7965eb7dd7860b530e8f563ed60ce3e53e7409a550";
+    sha256 = "7e7224493a51f6fbf02f3ce7f2011bcd9e5ebdfce0ee25e5921fdf665ba07542";
   };
 
   meta = with stdenv.lib; {
