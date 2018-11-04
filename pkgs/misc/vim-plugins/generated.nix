@@ -718,6 +718,17 @@
     };
   };
 
+  jedi-vim = buildVimPluginFrom2Nix {
+    name = "jedi-vim-2018-10-14";
+    src = fetchFromGitHub {
+      owner = "davidhalter";
+      repo = "jedi-vim";
+      rev = "b6dfc5fd49c26d4dbe9f54c814956567a7a9b3a8";
+      sha256 = "11wvynjl1m23vdp4wvirhmm7vnpji5affbyhwz67yjkvh6c42xqa";
+      fetchSubmodules = true;
+    };
+  };
+
   Jenkinsfile-vim-syntax = buildVimPluginFrom2Nix {
     name = "Jenkinsfile-vim-syntax-2018-09-25";
     src = fetchFromGitHub {

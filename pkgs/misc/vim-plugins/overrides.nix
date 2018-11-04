@@ -334,4 +334,13 @@ with generated;
     };
   });
 
+  jedi-vim = jedi-vim.overrideAttrs(old: {
+    # checking for python3 support in vim would be neat, too, but nobody else seems to care
+    buildInputs = [ python3Packages.jedi ];
+    meta = {
+      description = "code-completion for python using python-jedi";
+      license = stdenv.lib.licenses.mit;
+    };
+  });
+
 }
