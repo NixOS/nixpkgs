@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "13.2.1";
+  version = "16.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6364bb8c233f28538df4928576f4e051229e0451651073ab20b315488da16a58";
+    sha256 = "8a9b0c2c2abc3e7326559f840e1f05e6d010ccaf397d09f450485920ba08e443";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
