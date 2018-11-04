@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pysocks";
-  version = "1.6.6";
+  version = "1.6.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h9zwr8z9j6l313ns335irjrkk6qnk4qzvwmjqygrp7mbwi9lh82";
+    sha256 = "3fe52c55890a248676fd69dc9e3c4e811718b777834bcaab7a8125cf9deac672";
   };
 
   doCheck = false;
