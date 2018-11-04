@@ -7788,7 +7788,6 @@ with pkgs;
   python2Full = python2.override{x11Support=true;};
   python27Full = python27.override{x11Support=true;};
   python3Full = python3.override{x11Support=true;};
-  python34Full = python34.override{x11Support=true;};
   python35Full = python35.override{x11Support=true;};
   python36Full = python36.override{x11Support=true;};
   python37Full = python37.override{x11Support=true;};
@@ -7801,10 +7800,6 @@ with pkgs;
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
     inherit (darwin) CF configd;
-  };
-  python34 = callPackage ../development/interpreters/python/cpython/3.4 {
-    inherit (darwin) CF configd;
-    self = python34;
   };
   python35 = callPackage ../development/interpreters/python/cpython/3.5 {
     inherit (darwin) CF configd;
@@ -7827,7 +7822,6 @@ with pkgs;
 
   # Python package sets.
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
-  python34Packages = python34.pkgs;
   python35Packages = python35.pkgs;
   python36Packages = recurseIntoAttrs python36.pkgs;
   python37Packages = python37.pkgs;
