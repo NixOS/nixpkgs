@@ -2539,7 +2539,10 @@ in {
 
   ipy = callPackage ../development/python-modules/IPy { };
 
-  ipykernel = callPackage ../development/python-modules/ipykernel { };
+  ipykernel = if pythonOlder "3.4" then
+      callPackage ../development/python-modules/ipykernel/4.nix { }
+    else
+      callPackage ../development/python-modules/ipykernel { };
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
