@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "cvxopt";
-  version = "1.2.1";
+  version = "1.2.2";
 
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12e3cfda982576b0b9b597d297aaf3172efa765a20fbed6f3c066aa0c48ee817";
+    sha256 = "0038962d489bb1b2cdbcffad862b7b8394e45ff053b307e9411b2729a98937a6";
   };
 
   # similar to Gsl, glpk, fftw there is also a dsdp interface
