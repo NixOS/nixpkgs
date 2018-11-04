@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "uritemplate.py";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k5zvc5fyyrgv33mi3p86a9jn5n0pqffs9cviz92fw6q1kf7zvmr";
+    sha256 = "e0cdeb0f55ec18e1580974e8017cd188549aacc2aba664ae756adb390b9d45b4";
   };
 
   meta = with stdenv.lib; {
