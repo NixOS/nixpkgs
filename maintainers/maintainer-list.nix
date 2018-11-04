@@ -927,6 +927,11 @@
     github = "cwoac";
     name = "Oliver Matthews";
   };
+  cyraxjoe = {
+    email = "rivera@joel.mx";
+    github = "cyraxjoe";
+    name = "Joel Rivera";
+  };
   DamienCassou = {
     email = "damien@cassou.me";
     github = "DamienCassou";
