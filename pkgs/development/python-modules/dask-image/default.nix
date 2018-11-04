@@ -10,12 +10,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.1.2";
+  version = "0.2.0";
   pname = "dask-image";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "401e2c345a582eb2859a4a2a4a6fcfbc85beece59705f3ead9b6708a0cd183e7";
+    sha256 = "bece2ea347f963dc0168c7d5fdfd11e51b47d9c857d3bc56144d7c146964a23f";
   };
 
   checkInputs = [ pytest scikitimage ];
