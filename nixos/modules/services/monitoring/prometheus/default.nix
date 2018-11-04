@@ -376,6 +376,15 @@ in {
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.prometheus;
+        defaultText = "pkgs.prometheus";
+        description = ''
+          The prometheus package that should be used.
+        '';
+      };
+
       listenAddress = mkOption {
         type = types.str;
         default = "0.0.0.0:9090";
@@ -495,7 +504,7 @@ in {
       after    = [ "network.target" ];
       script = ''
         #!/bin/sh
-        exec ${pkgs.prometheus}/bin/prometheus \
+        exec ${cfg.package}/bin/prometheus \
           ${concatStringsSep " \\\n  " cmdlineArgs}
       '';
       serviceConfig = {
