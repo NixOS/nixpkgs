@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "ruamel.yaml";
-  version = "0.15.35";
+  version = "0.15.76";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xggyfaj6vprggahf7cq8kp9j79rb7hn8ndk3bxj2sxvwhhliiwd";
+    sha256 = "9dc2a9869f45ace93bb8ecc83a308498ecf9aabd4e54561280c33d29f1f3546d";
   };
 
   # Tests cannot load the module to test
