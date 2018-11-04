@@ -1,22 +1,18 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, dune
-, bos, cmdliner, doc-ock-html, doc-ock-xml
+{ stdenv, fetchFromGitHub, ocaml, findlib, dune, cppo
+, bos, cmdliner, tyxml
 }:
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-odoc-${version}";
-  version = "1.2.0";
+  version = "1.3.0";
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "odoc";
-    rev = "v${version}";
-    sha256 = "0ixnhfpm1nw4bvjj8qhcyy283pdr5acqpg5wxwq3n1l4mad79cgh";
+    rev = version;
+    sha256 = "0hjan5aj5zk8j8qyagv9r4hqm469mh207cv2m6kxwgnw0c3cz7sy";
   };
 
-  buildInputs = [ ocaml findlib dune cmdliner ];
-
-  propagatedBuildInputs = [ bos doc-ock-html doc-ock-xml ];
-
-  configurePhase = "ocaml bin/set-etc bin/odoc_etc.ml $out/etc/odoc";
+  buildInputs = [ ocaml findlib dune cppo bos cmdliner tyxml ];
 
   inherit (dune) installPhase;
 
