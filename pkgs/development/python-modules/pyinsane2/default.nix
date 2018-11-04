@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyinsane2";
-  version = "2.0.10";
+  version = "2.0.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00d1wqb3w9bn1rxb2dwmdqbar2lr96izq855l5vzprc17dkgip3j";
+    sha256 = "0d519531d552e4512776225eb400a6a4a9bfc83a08918ec7fea19cb2fa7ec4ee";
   };
 
   # This is needed by setup.py regardless of whether tests are enabled.
