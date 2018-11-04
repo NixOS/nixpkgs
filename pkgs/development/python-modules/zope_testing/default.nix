@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "zope.testing";
-  version = "4.6.1";
+  version = "4.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vvxhjmzl7vw2i1akfj1xbggwn36270ym7f2ic9xwbaswfw1ap56";
+    sha256 = "d66be8d1de37e8536ca58a1d9f4d89a68c9cc75cc0e788a175c8a20ae26003ea";
   };
 
   doCheck = !isPyPy;
