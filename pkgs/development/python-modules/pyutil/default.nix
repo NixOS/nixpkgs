@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pyutil";
-  version = "2.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fsg9yz5mi2sb0h6c1vvcqchx56i89nbvdb5gfgv1ia3b2w5ra8c";
+    sha256 = "8e254aa0a3b59e90515f7bca7ebc467b20a8d3fd2e26b63d196655c075da8d38";
   };
 
   buildInputs = [ setuptoolsDarcs setuptoolsTrial ] ++ (if doCheck then [ simplejson ] else []);
