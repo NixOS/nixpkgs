@@ -11,6 +11,7 @@ let
                                   install -D ${fetchurl { inherit url sha1; }} $out/${name}
                                   echo -n ${sha1} > $out/${name}.sha1
                                 '') list}
+        find $out -exec touch -c -m -r '{}' --date="1980-01-01" '{}' \;
       '';
     };
 
@@ -61,13 +62,13 @@ let
 in rec {
 
   mx = stdenv.mkDerivation rec {
-    version = "5.176.4";
+    version = "5.192.0";
     name = "mx";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "mx";
       rev    = version;
-      sha256 = "0xmx4hpnd6m9hk49lgwnvwd0q11s2m4d8axwq7zzc8wm10d692xw";
+      sha256 = "04gdf1gzlc8a6li8lcnrs2j9zicj11fs1vqqf7cmhb4pm2h72hml";
     };
     nativeBuildInputs = [ makeWrapper ];
     buildPhase = ''
@@ -86,6 +87,7 @@ in rec {
       wrapProgram $out/bin/mx \
         --prefix PATH : ${lib.makeBinPath [ python27 mercurial ]} \
         --set    FINDBUGS_HOME ${findbugs}
+      find $out -exec touch -c -m -r '{}' --date="1980-01-01" '{}' \;
     '';
     meta = with stdenv.lib; {
       homepage = https://github.com/graalvm/mx;
@@ -97,9 +99,9 @@ in rec {
 
   # copy of pkgs.oraclejvm8 with JVMCI interface (TODO: it should work with pkgs.openjdk8 too)
   jvmci8 = stdenv.mkDerivation rec {
-    version = "0.45";
+    version = "0.49";
     name = let
-             n = "jvmci8u171-${version}";
+             n = "jvmci8u191-${version}";
            in if (lib.stringLength n) == (lib.stringLength oraclejdk8.name) then
                 n
               else
@@ -108,7 +110,7 @@ in rec {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
       rev    = "jvmci-${version}";
-      sha256 = "1nppk9dpamisiadss1iy82i3rf6igndbf1vax85w9lz310kh0d12";
+      sha256 = "1zgin0w1qa7wmfhcisx470fhnmddfxxp5nyyix31yaa7dznql82k";
     };
     buildInputs = [ mx mercurial ];
     postUnpack = ''
@@ -132,6 +134,7 @@ in rec {
 
       export MX_ALT_OUTPUT_ROOT=$NIX_BUILD_TOP/mxbuild
       export MX_CACHE_DIR=${makeMxCache jvmci8-mxcache}
+      find $NIX_BUILD_TOP -exec touch -c -m -r '{}' --date="1980-01-01" '{}' \;
       mx --java-home $(pwd)/writable-copy-of-jdk build
     '';
     installPhase = ''
@@ -146,7 +149,7 @@ in rec {
   };
 
   graalvm8 = stdenv.mkDerivation rec {
-    version = "1.0.0-rc3";
+    version = "1.0.0-rc8";
     name = let
              n = "graal-${version}";
            in if (lib.stringLength n) == (lib.stringLength jvmci8.name) then
@@ -157,7 +160,7 @@ in rec {
       owner  = "oracle";
       repo   = "graal";
       rev    = "vm-${version}";
-      sha256 = "1hcs4m6ailapgi3bikav1i517vqn5pn595cyqqjfvlnkjwihbnc3";
+      sha256 = "1fada4awrr8bhw294xdiq4bagvgrlcr44mw6338gaal0ky3vkm0p";
     };
     buildInputs = [ mx zlib mercurial jvmci8 ];
     postUnpack = ''
@@ -178,6 +181,7 @@ in rec {
 
       export MX_ALT_OUTPUT_ROOT=$NIX_BUILD_TOP/mxbuild
       export MX_CACHE_DIR=${makeMxCache graal-mxcache}
+
       ( cd substratevm
 
         mkdir -p clibraries
