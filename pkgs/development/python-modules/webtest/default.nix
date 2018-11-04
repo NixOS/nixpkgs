@@ -14,12 +14,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.20";
+  version = "2.0.32";
   pname = "webtest";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bv0qhdjakdsdgj4sk21gnpp8xp8bga4x03p6gjb83ihrsb7n4xv";
+    sha256 = "4221020d502ff414c5fba83c1213985b83219cb1cc611fe58aa4feaf96b5e062";
   };
 
   preConfigure = ''
