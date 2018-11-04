@@ -5,7 +5,8 @@ buildPythonPackage rec {
   version = "7.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "Click";
+    inherit version;
     sha256 = "5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7";
   };
 
