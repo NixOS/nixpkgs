@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pilkit";
-  version = "1.1.4";
+  version = "2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e00585f5466654ea2cdbf7decef9862cb00e16fd363017fa7ef6623a16b0d2c7";
+    sha256 = "ddb30c2f0198a147e56b151476c3bb9fe045fbfd5b0a0fa2a3148dba62d1559f";
   };
 
   preConfigure = ''
