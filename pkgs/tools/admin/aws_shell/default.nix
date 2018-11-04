@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , awscli
-, prompt_toolkit
+, prompt_toolkit_1
 , boto3
 , configobj
 , pygments
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   # Why does it propagate packages that are used for testing?
   propagatedBuildInputs = [
     awscli
-    prompt_toolkit
+    prompt_toolkit_1
     boto3
     configobj
     pygments
