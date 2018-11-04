@@ -662,6 +662,8 @@ in {
 
   spglib = callPackage ../development/python-modules/spglib { };
 
+  sslib = callPackage ../development/python-modules/sslib { };
+
   statistics = callPackage ../development/python-modules/statistics { };
 
   sumo = callPackage ../development/python-modules/sumo { };
