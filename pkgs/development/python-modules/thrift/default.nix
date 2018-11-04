@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "thrift";
-  version = "0.9.3";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dfbc3d3bd19d396718dab05abaf46d93ae8005e2df798ef02e32793cd963877e";
+    sha256 = "7d59ac4fdcb2c58037ebd4a9da5f9a49e3e034bf75b3f26d9fe48ba3d8806e6b";
   };
 
   # No tests. Breaks when not disabling.
