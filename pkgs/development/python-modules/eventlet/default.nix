@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.20.0";
+  version = "0.24.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15bq5ybbigxnp5xwkps53zyhlg15lmcnq3ny2dppj0r0bylcs5rf";
+    sha256 = "d9d31a3c8dbcedbcce5859a919956d934685b17323fc80e1077cb344a2ffa68d";
   };
 
   buildInputs = [ nose httplib2 pyopenssl ];
