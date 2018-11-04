@@ -122,6 +122,8 @@ with pkgs;
     inherit dhall-nix;
   };
 
+  deadcode = callPackage ../development/tools/deadcode { };
+
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
@@ -657,6 +659,8 @@ with pkgs;
 
   cconv = callPackage ../tools/text/cconv { };
 
+  go-check = callPackage ../development/tools/check { };
+
   chkcrontab = callPackage ../tools/admin/chkcrontab { };
 
   cozy = callPackage ../applications/audio/cozy-audiobooks { };
@@ -800,6 +804,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   aria = aria2;
+
+  asmfmt = callPackage ../development/tools/asmfmt { };
 
   aspcud = callPackage ../tools/misc/aspcud { };
 
@@ -1308,6 +1314,8 @@ with pkgs;
   envconsul = callPackage ../tools/system/envconsul { };
 
   envsubst = callPackage ../tools/misc/envsubst { };
+
+  errcheck = callPackage ../development/tools/errcheck { };
 
   eschalot = callPackage ../tools/security/eschalot { };
 
@@ -5089,6 +5097,8 @@ with pkgs;
 
   recoverjpeg = callPackage ../tools/misc/recoverjpeg { };
 
+  reftools = callPackage ../development/tools/reftools { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
@@ -6940,6 +6950,10 @@ with pkgs;
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
   go-junit-report = callPackage ../development/tools/go-junit-report { };
+
+  gogetdoc = callPackage ../development/tools/gogetdoc { };
+
+  gometalinter = callPackage ../development/tools/gometalinter { };
 
   gox = callPackage ../development/tools/gox { };
 
@@ -10135,6 +10149,8 @@ with pkgs;
 
   imlibsetroot = callPackage ../applications/graphics/imlibsetroot { libXinerama = xorg.libXinerama; } ;
 
+  ineffassign = callPackage ../development/tools/ineffassign { };
+
   ijs = callPackage ../development/libraries/ijs { };
 
   incrtcl = callPackage ../development/libraries/incrtcl { };
@@ -12528,6 +12544,8 @@ with pkgs;
     vala = vala_0_40;
   };
 
+  unconvert = callPackage ../development/tools/unconvert { };
+
   unibilium = callPackage ../development/libraries/unibilium { };
 
   unicap = callPackage ../development/libraries/unicap {};
@@ -14677,18 +14695,21 @@ with pkgs;
 
   easyjson = callPackage ../development/tools/easyjson { };
 
+  iferr = callPackage ../development/tools/iferr { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
 
   go-protobuf = callPackage ../development/tools/go-protobuf { };
 
-
   go-symbols = callPackage ../development/tools/go-symbols { };
 
   go-outline = callPackage ../development/tools/go-outline { };
 
   gocode = callPackage ../development/tools/gocode { };
+
+  goconst = callPackage ../development/tools/goconst { };
 
   goconvey = callPackage ../development/tools/goconvey { };
 
@@ -14698,13 +14719,19 @@ with pkgs;
 
   golangci-lint = callPackage ../development/tools/golangci-lint { };
 
+  gocyclo = callPackage ../development/tools/gocyclo { };
+
   godef = callPackage ../development/tools/godef { };
 
   gopkgs = callPackage ../development/tools/gopkgs { };
 
+  gosec = callPackage ../development/tools/gosec { };
+
   govers = callPackage ../development/tools/govers { };
 
   govendor = callPackage ../development/tools/govendor { };
+
+  go-tools = callPackage ../development/tools/go-tools { };
 
   gotools = callPackage ../development/tools/gotools { };
 
@@ -14717,6 +14744,8 @@ with pkgs;
   };
 
   gotests = callPackage ../development/tools/gotests { };
+
+  impl = callPackage ../development/tools/impl { };
 
   quicktemplate = callPackage ../development/tools/quicktemplate { };
 
@@ -15480,6 +15509,10 @@ with pkgs;
   roboto-slab = callPackage ../data/fonts/roboto-slab { };
 
   hasklig = callPackage ../data/fonts/hasklig {};
+
+  interfacer = callPackage ../development/tools/interfacer { };
+
+  maligned = callPackage ../development/tools/maligned { };
 
   inter-ui = callPackage ../data/fonts/inter-ui { };
 
