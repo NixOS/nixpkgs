@@ -1,9 +1,8 @@
 { stdenv, buildPythonPackage, isPy3k, fetchPypi, nose }:
 
 buildPythonPackage rec {
-  pname = "Metaphone";
+  pname = "metaphone";
   version = "0.6";
-  name  = "metaphone-${version}";
 
   src = fetchPypi {
     inherit pname version;
