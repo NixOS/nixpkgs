@@ -57,8 +57,8 @@ in {
       };
 
       configuration = mkOption {
-        type = types.attrs;
-        default = {};
+        type = types.nullOr types.attrs;
+        default = null;
         description = ''
           Alertmanager configuration as nix attribute set.
         '';
@@ -136,26 +136,34 @@ in {
     };
   };
 
-
-  config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
-
-    systemd.services.alertmanager = {
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
-      script = ''
-        ${cfg.package}/bin/alertmanager \
-          ${concatStringsSep " \\\n  " cmdlineArgs}
-      '';
-
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        Restart  = "always";
-        PrivateTmp = true;
-        WorkingDirectory = "/tmp";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+  config = mkMerge [
+    (mkIf cfg.enable {
+      assertions = singleton {
+        assertion = cfg.configuration != null || cfg.configText != null;
+        message = "Can not enable alertmanager without a configuration. "
+         + "Set either the `configuration` or `configText` attribute.";
       };
-    };
-  };
+    })
+    (mkIf cfg.enable {
+      networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
+
+      systemd.services.alertmanager = {
+        wantedBy = [ "multi-user.target" ];
+        after    = [ "network.target" ];
+        script = ''
+          ${cfg.package}/bin/alertmanager \
+            ${concatStringsSep " \\\n  " cmdlineArgs}
+        '';
+
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          Restart  = "always";
+          PrivateTmp = true;
+          WorkingDirectory = "/tmp";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        };
+      };
+    })
+  ];
 }
