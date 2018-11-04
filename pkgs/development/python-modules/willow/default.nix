@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "0.2.2";
+  version = "1.1";
   disabled = pythonOlder "2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "111c82fbfcda2710ce6201b0b7e0cfa1ff3c4f2f0dc788cc8dfc8db933c39c73";
+    sha256 = "818ee11803c90a0a6d49c94b0453d6266be1ef83ae00de72731c45fae4d3e78c";
   };
 
   propagatedBuildInputs = [ six pillow ];
