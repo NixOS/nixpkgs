@@ -149,6 +149,18 @@ checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-long-list.ni
 # Check loaOf with many merges of lists.
 checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-many-list-merges.nix
 
+# Check writeOnly options
+
+#  * default error
+checkConfigError "The option \`shy' is writeOnly. Its value should only be used in the defining module." config.shy ./declare-writeOnly-options.nix ./define-writeOnly-options.nix
+
+#  * custom error
+checkConfigError "The option \`notRecommended' is writeOnly. Read from the recommended option instead." config.notRecommended ./declare-writeOnly-options.nix ./define-writeOnly-options.nix
+
+#  * use internalValue
+checkConfigOutput "<silence>" options.shy.internalValue ./declare-writeOnly-options.nix ./define-writeOnly-options.nix
+
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

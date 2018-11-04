@@ -48,6 +48,12 @@ rec {
     visible ? null,
     # Whether the option can be set only once
     readOnly ? null,
+    # Whether the option value should be used in the defining module only,
+    # where it is available as options.<...>.writeOnly.
+    # This is not enforced.
+    writeOnly ? null,
+    # Optional error message to show when writeOnly option is accessed
+    writeOnlyErrorMessage ? null,
     # Obsolete, used by types.optionSet.
     options ? null
     } @ attrs:

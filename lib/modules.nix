@@ -324,7 +324,7 @@ rec {
       # Check whether the option is defined, and apply the ‘apply’
       # function to the merged value.  This allows options to yield a
       # value computed from the definitions.
-      value =
+      internalValue =
         if !res.isDefined then
           throw "The option `${showOption loc}' is used but not defined."
         else if opt ? apply then
@@ -332,8 +332,15 @@ rec {
         else
           res.mergedValue;
 
+      writeOnlyError =
+        throw "The option `${showOption loc}' is writeOnly. ${opt.writeOnlyErrorMessage or "Its value should only be used in the defining module."}";
+
+      value = if opt.writeOnly or false then writeOnlyError else internalValue;
+
     in opt //
       { value = builtins.addErrorContext "while evaluating the option `${showOption loc}':" value;
+        # Only use this in the defining module.
+        inherit internalValue;
         inherit (res.defsFinal') highestPrio;
         definitions = map (def: def.value) res.defsFinal;
         files = map (def: def.file) res.defsFinal;
