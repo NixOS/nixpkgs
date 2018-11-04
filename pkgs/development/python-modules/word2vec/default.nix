@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "word2vec";
-  version = "0.9.1";
+  version = "0.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a811e3e98a8e6dfe7bc851ebbbc2d6e5ab5142f2a134dd3c03daac997b546faa";
+    sha256 = "40f6f30a5f113ffbfc24c5ad5de23bfac897f4c1210fb93685b7fca5c4dee7db";
   };
 
   propagatedBuildInputs = [ cython numpy ];
