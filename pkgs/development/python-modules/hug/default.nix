@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "hug";
-  version = "2.1.2";
+  version = "2.4.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "93325e13706594933a9afb0d4f0b0748134494299038f07df41152baf6f89f4c";
+    sha256 = "7b633ebbed95f4c264a745cf91450007fe7004e1eaa5b02bf9b3ad28fdd62d08";
   };
 
   propagatedBuildInputs = [ falcon requests ];
