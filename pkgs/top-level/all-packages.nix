@@ -22772,4 +22772,6 @@ with pkgs;
   };
 
   tsung = callPackage ../applications/networking/tsung {};
+
+  slurp = callPackage ../applications/misc/slurp {};
 }
