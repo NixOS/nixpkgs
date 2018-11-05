@@ -45,7 +45,7 @@ default-package-overrides:
   - base-compat-batteries ==0.10.1
   # Newer versions don't work in LTS-12.x
   - cassava-megaparsec < 2
-  # LTS Haskell 12.16
+  # LTS Haskell 12.17
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -73,7 +73,7 @@ default-package-overrides:
   - aeson-typescript ==0.1.1.0
   - aeson-utils ==0.3.0.2
   - aeson-yak ==0.1.1.3
-  - Agda ==2.5.4.1
+  - Agda ==2.5.4.2
   - al ==0.1.4.2
   - alarmclock ==0.5.0.2
   - alerts ==0.1.0.0
@@ -731,8 +731,8 @@ default-package-overrides:
   - fileplow ==0.1.0.0
   - filter-logger ==0.6.0.0
   - filtrable ==0.1.1.0
-  - Fin ==0.2.6.0
   - fin ==0.0.1
+  - Fin ==0.2.6.0
   - FindBin ==0.0.5
   - find-clumpiness ==0.2.3.1
   - fingertree ==0.1.4.1
@@ -842,9 +842,9 @@ default-package-overrides:
   - gi-glib ==2.0.17
   - gi-gobject ==2.0.16
   - gi-gtk ==3.0.25
-  - gi-gtk-hs ==0.3.6.2
+  - gi-gtk-hs ==0.3.6.3
   - gi-gtksource ==3.0.16
-  - gi-javascriptcore ==4.0.15
+  - gi-javascriptcore ==4.0.16
   - gio ==0.13.5.0
   - gi-pango ==1.0.16
   - giphy-api ==0.6.0.1
@@ -1056,7 +1056,7 @@ default-package-overrides:
   - html-entity-map ==0.1.0.0
   - htoml ==1.0.0.3
   - HTTP ==4000.3.12
-  - http2 ==1.6.3
+  - http2 ==1.6.4
   - http-api-data ==0.3.8.1
   - http-client ==0.5.13.1
   - http-client-openssl ==0.2.2.0
@@ -1091,7 +1091,7 @@ default-package-overrides:
   - hw-mquery ==0.1.0.1
   - hworker ==0.1.0.1
   - hw-parser ==0.0.0.3
-  - hw-prim ==0.6.2.17
+  - hw-prim ==0.6.2.18
   - hw-rankselect ==0.10.0.3
   - hw-rankselect-base ==0.3.2.1
   - hw-string-parse ==0.0.0.4
@@ -1448,6 +1448,7 @@ default-package-overrides:
   - network-anonymous-i2p ==0.10.0
   - network-anonymous-tor ==0.11.0
   - network-attoparsec ==0.12.2
+  - network-byte-order ==0.0.0.0
   - network-conduit-tls ==1.3.2
   - network-house ==0.1.0.2
   - network-info ==0.2.0.10
@@ -1787,12 +1788,12 @@ default-package-overrides:
   - sample-frame ==0.0.3
   - sample-frame-np ==0.0.4.1
   - sampling ==0.3.3
-  - sandi ==0.4.2
+  - sandi ==0.4.3
   - sandman ==0.2.0.1
   - say ==0.1.0.1
   - sbp ==2.3.17
-  - scalendar ==1.2.0
   - SCalendar ==1.1.0
+  - scalendar ==1.2.0
   - scalpel ==0.5.1
   - scalpel-core ==0.5.1
   - scanner ==0.2
@@ -1877,11 +1878,11 @@ default-package-overrides:
   - siggy-chardust ==1.0.0
   - signal ==0.1.0.4
   - silently ==1.2.5
-  - simple-cmd ==0.1.1
+  - simple-cmd ==0.1.2
   - simple-reflect ==0.3.3
   - simple-sendfile ==0.2.27
   - simplest-sqlite ==0.1.0.0
-  - simple-vec3 ==0.4.0.8
+  - simple-vec3 ==0.4.0.9
   - since ==0.0.0
   - singleton-bool ==0.1.4
   - singleton-nats ==0.4.2
@@ -2212,7 +2213,7 @@ default-package-overrides:
   - vec ==0.1
   - vector ==0.12.0.1
   - vector-algorithms ==0.7.0.4
-  - vector-binary-instances ==0.2.5
+  - vector-binary-instances ==0.2.5.1
   - vector-buffer ==0.4.1
   - vector-builder ==0.3.6
   - vector-bytes-instances ==0.1.1
@@ -2307,10 +2308,10 @@ default-package-overrides:
   - X11 ==1.9
   - X11-xft ==0.3.1
   - x11-xim ==0.0.9.0
-  - x509 ==1.7.4
-  - x509-store ==1.6.6
+  - x509 ==1.7.5
+  - x509-store ==1.6.7
   - x509-system ==1.6.6
-  - x509-validation ==1.6.10
+  - x509-validation ==1.6.11
   - Xauth ==0.1
   - xdg-basedir ==0.2.2
   - xeno ==0.3.4
