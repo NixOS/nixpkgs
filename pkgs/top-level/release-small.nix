@@ -18,7 +18,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
 
   aspell = all;
   at = linux;
-  atlas = linux;
   autoconf = all;
   automake = all;
   avahi = unix; # Cygwin builds fail
