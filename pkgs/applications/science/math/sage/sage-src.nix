@@ -9,14 +9,14 @@
 # all get the same sources with the same patches applied.
 
 stdenv.mkDerivation rec {
-  version = "8.4";
+  version = "8.5.beta0";
   name = "sage-src-${version}";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "0gips1hagiz9m7s21bg5as8hrrm2x5k47h1bsq0pc46iplfwmv2d";
+    sha256 = "0kc8fqwz97dwyf4hxz5yr9sjwh5q0jr7a9g1yrdaz66m5805r859";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
@@ -75,9 +75,6 @@ stdenv.mkDerivation rec {
       sha256 = "0b9293v73wb4x13wv5zwyjgclc01zn16msccfzzi6znswklgvddp";
       stripLen = 1;
     })
-
-    # https://trac.sagemath.org/ticket/25260
-    ./patches/numpy-1.15.1.patch
 
     # needed for ntl update
     # https://trac.sagemath.org/ticket/25532
