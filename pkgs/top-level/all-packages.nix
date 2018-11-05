@@ -571,7 +571,10 @@ with pkgs;
     gsl = gsl_1;
   };
 
-  atomicparsley = callPackage ../tools/video/atomicparsley { };
+  atomicparsley = callPackage ../tools/video/atomicparsley {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   autoflake = callPackage ../development/tools/analysis/autoflake { };
 
