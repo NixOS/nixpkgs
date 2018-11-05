@@ -11,7 +11,7 @@ let
     libva1
     libvdpau
     vulkan-loader
-    gcc.cc
+    gcc.cc.lib
     nss
     nspr
     xorg.libxcb
