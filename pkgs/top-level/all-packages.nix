@@ -2367,6 +2367,8 @@ with pkgs;
     # customConfig = builtins.readFile ./dvtm.config.h;
   };
 
+  dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix {};
+
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
   e2tools = callPackage ../tools/filesystems/e2tools { };
