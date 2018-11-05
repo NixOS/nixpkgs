@@ -139,7 +139,7 @@ let
       }
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
-        worker ${optionalString (value.name != "normal" && value.name != "controller") "${value.name}"} {
+        worker "${value.type}" {
           type = "${value.type}";
           ${optionalString (value.enable != null)
             "enabled = ${if value.enable != false then "yes" else "no"};"}

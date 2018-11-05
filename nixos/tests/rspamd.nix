@@ -28,6 +28,8 @@ let
       ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "660" }
       sleep 10;
       $machine->log($machine->succeed("cat /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"));
       $machine->log($machine->succeed("systemctl cat rspamd.service"));
       $machine->log($machine->succeed("curl http://localhost:11334/auth"));
       $machine->log($machine->succeed("curl http://127.0.0.1:11334/auth"));
@@ -56,6 +58,8 @@ in
       ${checkSocket "/run/rspamd.sock" "root" "root" "600" }
       ${checkSocket "/run/rspamd-worker.sock" "root" "root" "666" }
       $machine->log($machine->succeed("cat /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"));
       $machine->log($machine->succeed("rspamc -h /run/rspamd-worker.sock stat"));
       $machine->log($machine->succeed("curl --unix-socket /run/rspamd-worker.sock http://localhost/ping"));
     '';
@@ -78,6 +82,15 @@ in
           owner = "root";
           group = "root";
         }];
+        workers.controller2 = {
+          type = "controller";
+          bindSockets = [ "0.0.0.0:11335" ];
+          extraConfig = ''
+            static_dir = "''${WWWDIR}";
+            secure_ip = null;
+            password = "verysecretpassword";
+          '';
+        };
       };
     };
 
@@ -87,8 +100,13 @@ in
       ${checkSocket "/run/rspamd.sock" "root" "root" "600" }
       ${checkSocket "/run/rspamd-worker.sock" "root" "root" "666" }
       $machine->log($machine->succeed("cat /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'verysecretpassword' /etc/rspamd/rspamd.conf"));
+      $machine->waitUntilSucceeds("journalctl -u rspamd | grep -i 'starting controller process' >&2");
       $machine->log($machine->succeed("rspamc -h /run/rspamd-worker.sock stat"));
       $machine->log($machine->succeed("curl --unix-socket /run/rspamd-worker.sock http://localhost/ping"));
+      $machine->log($machine->succeed("curl http://localhost:11335/ping"));
     '';
   };
   customLuaRules = makeTest {
