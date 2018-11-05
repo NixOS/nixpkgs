@@ -4,6 +4,7 @@
 , x11Support ? stdenv.hostPlatform == stdenv.buildPlatform, libXext, libICE, libXrandr
 , pulseaudioSupport ? true, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
+, cf-private
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -41,7 +42,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ]
     ++ optional (!stdenv.hostPlatform.isMinGW) audiofile
-    ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
+    ++ optionals stdenv.isDarwin [
+      AudioUnit CoreAudio CoreServices Kernel OpenGL
+      # Needed for NSDefaultRunLoopMode symbols.
+      cf-private
+    ];
 
   configureFlags = [
     "--disable-oss"
