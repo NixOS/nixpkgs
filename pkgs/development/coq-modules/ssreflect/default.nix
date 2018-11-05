@@ -2,26 +2,20 @@
 , graphviz, withDoc ? false
 }:
 
-let params =
+let param =
 
-  let param_1_7 = {
+  if stdenv.lib.versionAtLeast coq.coq-version "8.6" then
+  {
     version = "1.7.0";
     sha256 = "05zgyi4wmasi1rcyn5jq42w0bi9713q9m8dl1fdgl66nmacixh39";
-  }; in
-
+  }
+  else if stdenv.lib.versionAtLeast coq.coq-version "8.5" then
   {
-    "8.5" =  {
-      version = "1.6.1";
-      sha256 = "1j9ylggjzrxz1i2hdl2yhsvmvy5z6l4rprwx7604401080p5sgjw";
-    };
+    version = "1.6.1";
+    sha256 = "1j9ylggjzrxz1i2hdl2yhsvmvy5z6l4rprwx7604401080p5sgjw";
+  }
+  else throw "No version of SSReflect is available for Coq ${coq.coq-version}";
 
-    "8.6" = param_1_7;
-    "8.7" = param_1_7;
-    "8.8" = param_1_7;
-    "8.9" = param_1_7;
-
-  };
-  param = params."${coq.coq-version}";
 in
 
 stdenv.mkDerivation {
@@ -60,7 +54,7 @@ stdenv.mkDerivation {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.hasAttr v params;
+    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.5";
   };
 
 }
