@@ -9,9 +9,21 @@ else
 
 stdenv.mkDerivation ({
 
-  buildPhase = "dune build -p ${pname}";
-  checkPhase = "dune runtest -p ${pname}";
-  inherit (dune) installPhase;
+  buildPhase = ''
+    runHook preBuild
+    dune build -p ${pname}
+    runHook postBuild
+  '';
+  checkPhase = ''
+    runHook preCheck
+    dune runtest -p ${pname}
+    runHook postCheck
+  '';
+  installPhase = ''
+    runHook preInstall
+    ${dune.installPhase}
+    runHook postInstall
+  '';
 
   meta.platform = ocaml.meta.platform;
 
