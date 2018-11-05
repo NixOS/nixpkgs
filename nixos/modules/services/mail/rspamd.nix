@@ -58,7 +58,7 @@ let
       };
       type = mkOption {
         type = types.nullOr (types.enum [
-          "normal" "controller" "fuzzy_storage" "proxy" "lua"
+          "normal" "controller" "fuzzy_storage" "rspamd_proxy" "lua"
         ]);
         description = "The type of this worker";
       };
@@ -99,19 +99,21 @@ let
         description = "Additional entries to put verbatim into worker section of rspamd config file.";
       };
     };
-    config = mkIf (name == "normal" || name == "controller" || name == "fuzzy") {
+    config = mkIf (name == "normal" || name == "controller" || name == "fuzzy" || name == "rspamd_proxy") {
       type = mkDefault name;
-      includes = mkDefault [ "$CONFDIR/worker-${name}.inc" ];
-      bindSockets = mkDefault (if name == "normal"
-        then [{
-              socket = "/run/rspamd/rspamd.sock";
-              mode = "0660";
-              owner = cfg.user;
-              group = cfg.group;
-            }]
-        else if name == "controller"
-        then [ "localhost:11334" ]
-        else [] );
+      includes = mkDefault [ "$CONFDIR/worker-${if name == "rspamd_proxy" then "proxy" else name}.inc" ];
+      bindSockets =
+        let
+          unixSocket = name: {
+            mode = "0660";
+            socket = "/run/rspamd/${name}.sock";
+            owner = cfg.user;
+            group = cfg.group;
+          };
+        in mkDefault (if name == "normal" then [(unixSocket "rspamd")]
+          else if name == "controller" then [ "localhost:11334" ]
+          else if name == "rspamd_proxy" then [ (unixSocket "proxy") ]
+          else [] );
     };
   };
 
@@ -284,7 +286,7 @@ in
         description = ''
           User to use when no root privileges are required.
         '';
-       };
+      };
 
       group = mkOption {
         type = types.string;
