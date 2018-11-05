@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
-, openglSupport ? false, libGL, libGLU
-, alsaSupport ? true, alsaLib
-, x11Support ? stdenv.hostPlatform == stdenv.buildPlatform, libXext, libICE, libXrandr
-, pulseaudioSupport ? true, libpulseaudio
+{ stdenv, config, libGLSupported, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
+, openglSupport ? libGLSupported, libGL, libGLU
+, alsaSupport ? stdenv.isLinux, alsaLib
+, x11Support ? !stdenv.isCygwin, libXext, libICE, libXrandr
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 , cf-private
 }:
@@ -10,7 +10,7 @@
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
-with lib;
+with stdenv.lib;
 
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null && libGLU != null);
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for lib in $out/lib/*.so* ; do
       if [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${lib.makeLibraryPath propagatedBuildInputs}" "$lib"
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${makeLibraryPath propagatedBuildInputs}" "$lib"
       fi
     done
   '';
