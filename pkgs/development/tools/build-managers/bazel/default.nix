@@ -192,7 +192,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    mv output/bazel $out/bin
+    cp scripts/packages/bazel.sh $out/bin/bazel
+    mv output/bazel $out/bin/bazel-real
     wrapProgram "$out/bin/bazel" --set JAVA_HOME "${runJdk}"
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv output/bazel-complete.bash $out/share/bash-completion/completions/bazel
