@@ -6,6 +6,7 @@ let
 
   cfg = config.services.rspamd;
   opts = options.services.rspamd;
+  postfixCfg = config.services.postfix;
 
   bindSocketOpts = {options, config, ... }: {
     options = {
@@ -309,7 +310,30 @@ in
         description = ''
           Group to use when no root privileges are required.
         '';
-       };
+      };
+
+      postfix = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Add rspamd milter to postfix main.conf";
+        };
+
+        config = mkOption {
+          type = with types; attrsOf (either bool (either str (listOf str)));
+          description = ''
+            Addon to postfix configuration
+          '';
+          default = {
+            smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
+            non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
+          };
+          example = {
+            smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
+            non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
+          };
+        };
+      };
     };
   };
 
@@ -318,6 +342,24 @@ in
 
   config = mkIf cfg.enable {
     services.rspamd.overrides = configOverrides;
+    services.rspamd.workers = mkIf cfg.postfix.enable {
+      controller = {};
+      rspamd_proxy = {
+        bindSockets = [ {
+          mode = "0660";
+          socket = "/run/rspamd/rspamd-milter.sock";
+          owner = cfg.user;
+          group = postfixCfg.group;
+        } ];
+        extraConfig = ''
+          upstream "local" {
+            default = yes; # Self-scan upstreams are always default
+            self_scan = yes; # Enable self-scan
+          }
+        '';
+      };
+    };
+    services.postfix.config = mkIf cfg.postfix.enable cfg.postfix.config;
 
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];

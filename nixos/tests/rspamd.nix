@@ -181,4 +181,48 @@ in
       $machine->log($machine->succeed("cat /etc/tests/muh.eml | rspamc -h 127.0.0.1:11334 symbols | grep NO_MUH"));
     '';
   };
+  postfixIntegration = makeTest {
+    name = "rspamd-postfix-integration";
+    machine = {
+      environment.systemPackages = with pkgs; [ msmtp ];
+      environment.etc."tests/gtube.eml".text = ''
+        From: Sheep1<bah@example.com>
+        To: Sheep2<tester@example.com>
+        Subject: Evil cows
+
+        I find cows to be evil don't you?
+
+        XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X
+      '';
+      environment.etc."tests/example.eml".text = ''
+        From: Sheep1<bah@example.com>
+        To: Sheep2<tester@example.com>
+        Subject: Evil cows
+
+        I find cows to be evil don't you?
+      '';
+      users.users.tester.password = "test";
+      services.postfix = {
+        enable = true;
+        destination = ["example.com"];
+      };
+      services.rspamd = {
+        enable = true;
+        postfix.enable = true;
+      };
+    };
+    testScript = ''
+      ${initMachine}
+      $machine->waitForOpenPort(11334);
+      $machine->waitForOpenPort(25);
+      ${checkSocket "/run/rspamd/rspamd-milter.sock" "rspamd" "postfix" "660" }
+      $machine->log($machine->succeed("rspamc -h 127.0.0.1:11334 stat"));
+      $machine->log($machine->succeed("msmtp --host=localhost -t --read-envelope-from < /etc/tests/example.eml"));
+      $machine->log($machine->fail("msmtp --host=localhost -t --read-envelope-from < /etc/tests/gtube.eml"));
+
+      $machine->waitUntilFails('[ "$(postqueue -p)" != "Mail queue is empty" ]');
+      $machine->fail("journalctl -u postfix | grep -i error >&2");
+      $machine->fail("journalctl -u postfix | grep -i warning >&2");
+    '';
+  };
 }
