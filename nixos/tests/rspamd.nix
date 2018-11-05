@@ -102,7 +102,8 @@ in
       $machine->log($machine->succeed("cat /etc/rspamd/rspamd.conf"));
       $machine->log($machine->succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf"));
       $machine->log($machine->succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"));
-      $machine->log($machine->succeed("grep 'verysecretpassword' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'LOCAL_CONFDIR/override.d/worker-controller2.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'verysecretpassword' /etc/rspamd/override.d/worker-controller2.inc"));
       $machine->waitUntilSucceeds("journalctl -u rspamd | grep -i 'starting controller process' >&2");
       $machine->log($machine->succeed("rspamc -h /run/rspamd-worker.sock stat"));
       $machine->log($machine->succeed("curl --unix-socket /run/rspamd-worker.sock http://localhost/ping"));

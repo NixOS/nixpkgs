@@ -140,7 +140,10 @@ let
         .include(try=true; priority=10) "$LOCAL_CONFDIR/override.d/logging.inc"
       }
 
-      ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
+      ${concatStringsSep "\n" (mapAttrsToList (name: value: let
+          includeName = if name == "rspamd_proxy" then "proxy" else name;
+          tryOverride = if value.extraConfig == "" then "true" else "false";
+        in ''
         worker "${value.type}" {
           type = "${value.type}";
           ${optionalString (value.enable != null)
@@ -148,11 +151,14 @@ let
           ${mkBindSockets value.enable value.bindSockets}
           ${optionalString (value.count != null) "count = ${toString value.count};"}
           ${concatStringsSep "\n  " (map (each: ".include \"${each}\"") value.includes)}
-          ${value.extraConfig}
+          .include(try=true; priority=1,duplicate=merge) "$LOCAL_CONFDIR/local.d/worker-${includeName}.inc"
+          .include(try=${tryOverride}; priority=10) "$LOCAL_CONFDIR/override.d/worker-${includeName}.inc"
         }
       '') cfg.workers)}
 
-      ${cfg.extraConfig}
+      ${optionalString (cfg.extraConfig != "") ''
+        .include(priority=10) "$LOCAL_CONFDIR/override.d/extra-config.inc"
+      ''}
    '';
 
   rspamdDir = pkgs.linkFarm "etc-rspamd-dir" (
@@ -190,6 +196,15 @@ let
         in mkDefault (pkgs.writeText name' config.text));
     };
   };
+
+  configOverrides =
+    (mapAttrs' (n: v: nameValuePair "worker-${if n == "rspamd_proxy" then "proxy" else n}.inc" {
+      text = v.extraConfig;
+    })
+    (filterAttrs (n: v: v.extraConfig != "") cfg.workers))
+    // (if cfg.extraConfig == "" then {} else {
+      "extra-config.inc".text = cfg.extraConfig;
+    });
 in
 
 {
@@ -302,6 +317,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    services.rspamd.overrides = configOverrides;
 
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];
