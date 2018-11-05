@@ -59,9 +59,9 @@ self: super: {
   hpack = self.hpack_0_31_1;
   hslua = self.hslua_1_0_1;
   hslua-module-text = self.hslua-module-text_0_2_0;
-  hspec = self.hspec_2_5_9;
-  hspec-core = self.hspec-core_2_5_9;
-  hspec-discover = self.hspec-discover_2_5_9;
+  hspec = self.hspec_2_6_0;
+  hspec-core = self.hspec-core_2_6_0;
+  hspec-discover = self.hspec-discover_2_6_0;
   hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x
   hspec-meta = self.hspec-meta_2_5_6;
   JuicyPixels = self.JuicyPixels_3_3_2;
