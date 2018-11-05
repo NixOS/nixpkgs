@@ -74,7 +74,7 @@ self: super: {
   QuickCheck = self.QuickCheck_2_12_6_1;
   semigroupoids = self.semigroupoids_5_3_1;
   tagged = self.tagged_0_8_6;
-  vty = self.vty_5_25;
+  vty = self.vty_5_25_1;
   wizards = doJailbreak super.wizards;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras;
   yaml = self.yaml_0_11_0_0;
