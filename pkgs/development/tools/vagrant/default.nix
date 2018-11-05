@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText, withLibvirt ? false, libvirt, pkgconfig }:
+{ lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive, writeText, withLibvirt ? true, libvirt, pkgconfig }:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
