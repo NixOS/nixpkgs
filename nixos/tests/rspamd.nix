@@ -110,16 +110,33 @@ in
       '';
       services.rspamd = {
         enable = true;
-        locals."groups.conf".text = ''
-          group "cows" {
-            symbol {
-              NO_MUH = {
-                weight = 1.0;
-                description = "Mails should not muh";
+        locals = {
+          "antivirus.conf" = mkIf false { text = ''
+              clamav {
+                action = "reject";
+                symbol = "CLAM_VIRUS";
+                type = "clamav";
+                log_clean = true;
+                servers = "/run/clamav/clamd.ctl";
+              }
+            '';};
+          "redis.conf" = {
+            enable = false;
+            text = ''
+              servers = "127.0.0.1";
+            '';
+          };
+          "groups.conf".text = ''
+            group "cows" {
+              symbol {
+                NO_MUH = {
+                  weight = 1.0;
+                  description = "Mails should not muh";
+                }
               }
             }
-          }
-        '';
+          '';
+        };
         localLuaRules = pkgs.writeText "rspamd.local.lua" ''
           local rspamd_logger = require "rspamd_logger"
           rspamd_config.NO_MUH = {
@@ -152,6 +169,10 @@ in
       $machine->log($machine->succeed("cat /etc/rspamd/rspamd.conf"));
       $machine->log($machine->succeed("cat /etc/rspamd/rspamd.local.lua"));
       $machine->log($machine->succeed("cat /etc/rspamd/local.d/groups.conf"));
+      # Verify that redis.conf was not written
+      $machine->fail("cat /etc/rspamd/local.d/redis.conf >&2");
+      # Verify that antivirus.conf was not written
+      $machine->fail("cat /etc/rspamd/local.d/antivirus.conf >&2");
       ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "660" }
       $machine->log($machine->succeed("curl --unix-socket /run/rspamd/rspamd.sock http://localhost/ping"));
       $machine->log($machine->succeed("rspamc -h 127.0.0.1:11334 stat"));

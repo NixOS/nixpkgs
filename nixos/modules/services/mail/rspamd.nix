@@ -153,9 +153,10 @@ let
       ${cfg.extraConfig}
    '';
 
+  filterFiles = files: filterAttrs (n: v: v.enable) files;
   rspamdDir = pkgs.linkFarm "etc-rspamd-dir" (
-    (mapAttrsToList (name: file: { name = "local.d/${name}"; path = file.source; }) cfg.locals) ++
-    (mapAttrsToList (name: file: { name = "override.d/${name}"; path = file.source; }) cfg.overrides) ++
+    (mapAttrsToList (name: file: { name = "local.d/${name}"; path = file.source; }) (filterFiles cfg.locals)) ++
+    (mapAttrsToList (name: file: { name = "override.d/${name}"; path = file.source; }) (filterFiles cfg.overrides)) ++
     (optional (cfg.localLuaRules != null) { name = "rspamd.local.lua"; path = cfg.localLuaRules; }) ++
     [ { name = "rspamd.conf"; path = rspamdConfFile; } ]
   );
@@ -207,7 +208,7 @@ in
       };
 
       locals = mkOption {
-        type = with types; loaOf (submodule (configFileModule "locals"));
+        type = with types; attrsOf (submodule (configFileModule "locals"));
         default = {};
         description = ''
           Local configuration files, written into <filename>/etc/rspamd/local.d/{name}</filename>.
@@ -220,7 +221,7 @@ in
       };
 
       overrides = mkOption {
-        type = with types; loaOf (submodule (configFileModule "overrides"));
+        type = with types; attrsOf (submodule (configFileModule "overrides"));
         default = {};
         description = ''
           Overridden configuration files, written into <filename>/etc/rspamd/override.d/{name}</filename>.
