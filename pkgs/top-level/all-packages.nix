@@ -3417,6 +3417,8 @@ with pkgs;
 
   ip2location = callPackage ../tools/networking/ip2location { };
 
+  ip2unix = callPackage ../tools/networking/ip2unix { };
+
   ipad_charge = callPackage ../tools/misc/ipad_charge { };
 
   iperf2 = callPackage ../tools/networking/iperf/2.nix { };
