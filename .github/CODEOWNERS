@@ -113,3 +113,7 @@
 /nixos/modules/services/databases/postgresql.xml @thoughtpolice
 /nixos/modules/services/databases/postgresql.nix @thoughtpolice
 /nixos/tests/postgresql.nix @thoughtpolice
+
+# Dhall
+/pkgs/development/dhall-modules      @Gabriel439 @Profpatsch
+/pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch
