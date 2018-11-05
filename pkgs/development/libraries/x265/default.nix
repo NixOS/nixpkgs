@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "http://get.videolan.org/x265/x265_${version}.tar.gz"
+      "https://get.videolan.org/x265/x265_${version}.tar.gz"
       "https://github.com/videolan/x265/archive/${version}.tar.gz"
     ];
     sha256 = "090hp4216isis8q5gb7bwzia8rfyzni54z21jnwm97x3hiy6ibpb";
