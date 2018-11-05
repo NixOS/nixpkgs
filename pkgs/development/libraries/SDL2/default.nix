@@ -8,7 +8,7 @@
 , ibusSupport ? false, ibus
 , pulseaudioSupport ? true, libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, audiofile, libiconv
+, audiofile, cf-private, libiconv
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -54,7 +54,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ audiofile libiconv ]
     ++ dlopenBuildInputs
     ++ optional  ibusSupport ibus
-    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+    ++ optionals stdenv.isDarwin [
+      AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL
+      # Needed for NSDefaultRunLoopMode symbols.
+      cf-private
+    ];
 
   # /build/SDL2-2.0.7/src/video/wayland/SDL_waylandevents.c:41:10: fatal error:
   #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory
