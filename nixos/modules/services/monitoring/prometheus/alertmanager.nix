@@ -4,23 +4,24 @@ with lib;
 
 let
   cfg = config.services.prometheus.alertmanager;
-  mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
-  alertmanagerYml =
-    if cfg.configText != null then
-      pkgs.writeText "alertmanager.yml" cfg.configText
-    else mkConfigFile;
-  cmdlineArgs = cfg.extraFlags ++ [
-    "--config.file ${alertmanagerYml}"
-    "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
-    "--log.level ${cfg.logLevel}"
-    ] ++ (optional (cfg.webExternalUrl != null)
-      "--web.external-url ${cfg.webExternalUrl}"
-    ) ++ (optional (cfg.logFormat != null)
-      "--log.format ${cfg.logFormat}"
-  );
-in {
-  options = {
-    services.prometheus.alertmanager = {
+  cfg2 = config.services.prometheus2.alertmanager;
+  mkConfigFile = amCfg:
+    pkgs.writeText "alertmanager.yml" (builtins.toJSON amCfg.configuration);
+  mkAlertmanagerYml = amCfg:
+    if amCfg.configText != null then
+      pkgs.writeText "alertmanager.yml" amCfg.configText
+    else mkConfigFile amCfg;
+  mkCmdlineArgs = amCfg:
+    amCfg.extraFlags ++ [
+    "--config.file ${mkAlertmanagerYml amCfg}"
+    "--web.listen-address ${amCfg.listenAddress}:${toString amCfg.port}"
+    "--log.level ${amCfg.logLevel}"
+    ] ++ (optional (amCfg.webExternalUrl != null)
+      "--web.external-url ${amCfg.webExternalUrl}"
+    ) ++ (optional (amCfg.logFormat != null)
+      "--log.format ${amCfg.logFormat}"
+    );
+    amOptions = {
       enable = mkEnableOption "Prometheus Alertmanager";
 
       user = mkOption {
@@ -117,28 +118,36 @@ in {
         '';
       };
     };
-  };
+    mkAMConfig = amCfg: amVersion:
+      mkIf amCfg.enable {
+        networking.firewall.allowedTCPPorts = optional amCfg.openFirewall amCfg.port;
 
+        systemd.services."alertmanager${amVersion}" = {
+          wantedBy = [ "multi-user.target" ];
+          after    = [ "network.target" ];
+          script = ''
+            ${pkgs.prometheus-alertmanager.bin}/bin/alertmanager \
+              ${concatStringsSep " \\\n  " (mkCmdlineArgs amCfg)}
+          '';
 
-  config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
-
-    systemd.services.alertmanager = {
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
-      script = ''
-        ${pkgs.prometheus-alertmanager.bin}/bin/alertmanager \
-          ${concatStringsSep " \\\n  " cmdlineArgs}
-      '';
-
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        Restart  = "always";
-        PrivateTmp = true;
-        WorkingDirectory = "/tmp";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-      };
+          serviceConfig = {
+            User = amCfg.user;
+            Group = amCfg.group;
+            Restart  = "always";
+            PrivateTmp = true;
+            WorkingDirectory = "/tmp";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          };
+        };
     };
+in {
+  options = {
+    services.prometheus.alertmanager = amOptions;
+    services.prometheus2.alertmanager = amOptions;
   };
+
+  config = mkMerge [
+    (mkAMConfig cfg "")
+    (mkAMConfig cfg2 "2")
+  ];
 }
