@@ -200,6 +200,29 @@ stdenv.mkDerivation rec {
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    export TEST_TMPDIR=$(pwd)
+
+    mkdir -p tools
+    touch tools/bazel
+    chmod +x tools/bazel
+
+    echo "#!/bin/bash -e" > tools/bazel
+    echo "exit 1" >> tools/bazel
+
+    ! $out/bin/bazel test --test_output=errors \
+        examples/cpp:hello-success_test \
+        examples/java-native/src/test/java/com/example/myproject:hello
+
+    echo "#!/bin/bash -e" > tools/bazel
+    echo "exec \"\$BAZEL_REAL\" \"\$@\"" >> tools/bazel
+
+    $out/bin/bazel test --test_output=errors \
+        examples/cpp:hello-success_test \
+        examples/java-native/src/test/java/com/example/myproject:hello
+  '';
+
   # Save paths to hardcoded dependencies so Nix can detect them.
   postFixup = ''
     mkdir -p $out/nix-support
