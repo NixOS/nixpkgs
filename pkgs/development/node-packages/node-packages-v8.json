@@ -2,6 +2,7 @@
   "alloy"
 , "asar"
 , "azure-cli"
+, "azure-functions-core-tools"
 , "bower"
 , "bower2nix"
 , "browserify"
