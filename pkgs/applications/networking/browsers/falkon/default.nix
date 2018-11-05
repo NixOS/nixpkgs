@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, qmake
-, libpthreadstubs, libxcb, libXdmcp, qtsvg, qttools, qtwebengine, qtx11extras, kwallet }:
+{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig, qmake
+, libpthreadstubs, libxcb, libXdmcp
+, qtsvg, qttools, qtwebengine, qtx11extras
+, qtwayland
+, kwallet
+}:
 
 stdenv.mkDerivation rec {
   name = "falkon-${version}";
@@ -21,9 +25,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpthreadstubs libxcb libXdmcp
+    qtsvg qttools qtwebengine qtx11extras
     kwallet
-    qtsvg qtwebengine qtx11extras
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qmake qttools ];
 
