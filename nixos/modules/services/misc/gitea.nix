@@ -15,7 +15,7 @@ let
 
     [database]
     DB_TYPE = ${cfg.database.type}
-    HOST = ${cfg.database.host}:${toString cfg.database.port}
+    HOST = ${if cfg.database.socket != null then cfg.database.socket else cfg.database.host + ":" + toString cfg.database.port}
     NAME = ${cfg.database.name}
     USER = ${cfg.database.user}
     PASSWD = #dbpass#
@@ -147,6 +147,13 @@ in
             A file containing the password corresponding to
             <option>database.user</option>.
           '';
+        };
+
+        socket = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "/run/mysqld/mysqld.sock";
+          description = "Path to the unix socket file to use for authentication.";
         };
 
         path = mkOption {
