@@ -1,4 +1,4 @@
-{ lib, python, fetchFromGitHub }:
+{ lib, python, fetchFromGitHub, markdown }:
 
 python.pkgs.buildPythonPackage rec {
   pname = "klaus";
@@ -17,7 +17,7 @@ python.pkgs.buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    six flask pygments dulwich httpauth humanize
+    six flask pygments dulwich httpauth humanize markdown
   ];
 
   checkInputs = with python.pkgs; [
