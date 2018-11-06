@@ -103,10 +103,10 @@
   rack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "03w1ri5l91q800f1bdcdl5rbagy7s4kml136b42s2lmxmznxhr07";
+      sha256 = "1g9926ln2lw12lfxm4ylq1h6nl0rafl10za3xvjzc87qvnqic87f";
       type = "gem";
     };
-    version = "1.6.9";
+    version = "1.6.11";
   };
   rack-protection = {
     dependencies = ["rack"];

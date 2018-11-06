@@ -29,7 +29,7 @@ GEM
       sinatra (~> 1.4, >= 1.4.6)
       sinatra-contrib (~> 1.4, >= 1.4.6)
     puma (3.11.3)
-    rack (1.6.9)
+    rack (1.6.11)
     rack-protection (1.5.5)
       rack
     rack-test (1.0.0)
@@ -66,4 +66,4 @@ DEPENDENCIES
   oxidized-web
 
 BUNDLED WITH
-   1.14.6
+   1.16.4
