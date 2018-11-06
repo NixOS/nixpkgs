@@ -276,8 +276,8 @@ with generated;
     in {
     postPatch = ''
       ${gnused}/bin/sed \
-        -Ee 's@let go_bin_path = go#path#BinPath\(\)@let go_bin_path = "${binPath}"@g' \
-        -i autoload/go/path.vim
+        -Ee 's@"go_bin_path", ""@"go_bin_path", "${binPath}"@g' \
+        -i autoload/go/config.vim
     '';
   });
 
