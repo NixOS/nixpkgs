@@ -1,27 +1,32 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gocode-unstable-${version}";
-  version = "2018-11-05";
-  rev = "0af7a86943a6e0237c90f8aeb74a882e1862c898";
+  name = "gocode-gomod-unstable-${version}";
+  version = "2018-10-16";
+  rev = "12640289f65065d652cc942ffa01a52bece1dd53";
 
-  goPackagePath = "github.com/mdempsky/gocode";
-  excludedPackages = ''internal/suggest/testdata'';
+  goPackagePath = "github.com/stamblerre/gocode";
 
   # we must allow references to the original `go` package,
   # because `gocode` needs to dig into $GOROOT to provide completions for the
   # standard packages.
   allowGoReference = true;
 
+  excludedPackages = ''internal/suggest/testdata'';
+
   src = fetchFromGitHub {
     inherit rev;
 
-    owner = "mdempsky";
+    owner = "stamblerre";
     repo = "gocode";
-    sha256 = "0fxqn0v6dbwarn444lc1xrx5vfkcidi73f4ba7l4clsb9qdqgyam";
+    sha256 = "1avv0b5p2l8pv38m5gg97k57ndr5k9yy0rfkmmwjq96pa221hs1q";
   };
 
   goDeps = ./deps.nix;
+
+  postInstall = ''
+    mv $bin/bin/gocode $bin/bin/gocode-gomod
+  '';
 
   meta = with stdenv.lib; {
     description = "An autocompletion daemon for the Go programming language";
@@ -37,7 +42,7 @@ buildGoPackage rec {
       Typical autocompletion time with warm cache is 30ms, which is barely
       noticeable.
     '';
-    homepage = https://github.com/mdempsky/gocode;
+    homepage = https://github.com/stamblerre/gocode;
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ kalbasit ];

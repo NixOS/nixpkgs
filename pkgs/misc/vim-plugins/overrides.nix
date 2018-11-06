@@ -14,7 +14,7 @@
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, motion
 , gnused, reftools, gogetdoc, gometalinter
-, impl, iferr
+, impl, iferr, gocode, gocode-gomod, go-tools
 }:
 
 let
@@ -261,6 +261,9 @@ with generated;
       asmfmt
       delve
       errcheck
+      go-tools
+      gocode
+      gocode-gomod
       godef
       gogetdoc
       golint
@@ -276,8 +279,8 @@ with generated;
     in {
     postPatch = ''
       ${gnused}/bin/sed \
-        -Ee 's@let go_bin_path = go#path#BinPath\(\)@let go_bin_path = "${binPath}"@g' \
-        -i autoload/go/path.vim
+        -Ee 's@"go_bin_path", ""@"go_bin_path", "${binPath}"@g' \
+        -i autoload/go/config.vim
     '';
   });
 

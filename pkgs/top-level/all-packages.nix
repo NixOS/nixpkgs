@@ -14698,6 +14698,8 @@ with pkgs;
 
   gocode = callPackage ../development/tools/gocode { };
 
+  gocode-gomod = callPackage ../development/tools/gocode-gomod { };
+
   goconst = callPackage ../development/tools/goconst { };
 
   goconvey = callPackage ../development/tools/goconvey { };
