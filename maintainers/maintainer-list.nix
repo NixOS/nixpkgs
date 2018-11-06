@@ -2234,6 +2234,11 @@
     github = "knedlsepp";
     name = "Josef Kemetmüller";
   };
+  knl = {
+    email = "nikola@knezevic.co";
+    github = "knl";
+    name = "Nikola Knežević";
+  };
   konimex = {
     email = "herdiansyah@netc.eu";
     github = "konimex";
