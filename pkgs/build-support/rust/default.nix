@@ -80,10 +80,14 @@ in stdenv.mkDerivation (args // {
     runHook postBuild
   '';
 
-  checkPhase = args.checkPhase or ''
+  checkPhase = let
+    # Temporary work around for failing doc tests on Darwin:
+    # https://github.com/NixOS/nixpkgs/issues/49693#issuecomment-435617384
+    cargoTest = if stdenv.isDarwin then "cargo test --lib" else "cargo test";
+  in args.checkPhase or ''
     runHook preCheck
     echo "Running cargo test"
-    cargo test
+    ${cargoTest}
     runHook postCheck
   '';
 
