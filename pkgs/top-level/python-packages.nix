@@ -1140,6 +1140,8 @@ in {
 
   click-plugins = callPackage ../development/python-modules/click-plugins {};
 
+  click-repl = callPackage ../development/python-modules/click-repl { };
+
   click-threading = callPackage ../development/python-modules/click-threading {};
 
   cligj = callPackage ../development/python-modules/cligj { };
