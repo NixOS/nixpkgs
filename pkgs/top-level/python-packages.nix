@@ -202,6 +202,8 @@ in {
 
   autograd = callPackage ../development/python-modules/autograd { };
 
+  autologging = callPackage ../development/python-modules/autologging { };
+
   automat = callPackage ../development/python-modules/automat { };
 
   awkward = callPackage ../development/python-modules/awkward { };
