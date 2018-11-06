@@ -374,6 +374,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  libmr = callPackage ../development/python-modules/libmr { };
+
   lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   logster = callPackage ../development/python-modules/logster { };
