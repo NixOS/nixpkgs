@@ -11,7 +11,7 @@
  </para>
  <para>
   This includes a hardened kernel, and limiting the system information
-  available to procesess via de <filename>/sys</filename> and
+  available to processes through the <filename>/sys</filename> and
   <filename>/proc</filename> filesystems. It also disables the User Namespaces
   feature of the kernel, which stops Nix from being able to build anything
   (this particular setting can be overriden via
