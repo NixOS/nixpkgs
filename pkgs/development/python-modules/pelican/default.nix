@@ -30,13 +30,12 @@ buildPythonPackage rec {
     git
     mock
     nose
-    markdown
     typogrify
   ];
 
   propagatedBuildInputs = [
     jinja2 pygments docutils pytz unidecode six dateutil feedgenerator
-    blinker pillow beautifulsoup4 markupsafe lxml
+    blinker pillow beautifulsoup4 markupsafe lxml markdown
   ];
 
   postPatch= ''
