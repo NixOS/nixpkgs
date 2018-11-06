@@ -1,4 +1,4 @@
-import ./make-test.nix ({pkgs, ...}: rec {
+import ./make-test.nix ({pkgs, lib, ...}: rec {
   name = "All-in-one-basic-ceph-cluster";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ lejonet ];
@@ -51,6 +51,9 @@ import ./make-test.nix ({pkgs, ...}: rec {
         enable = true;
         daemons = [ "0" "1" ];
       };
+
+      # So that we don't have to battle systemd when bootstraping
+      systemd.targets.ceph.wantedBy = lib.mkForce [];
     };
   };
 
@@ -69,7 +72,6 @@ import ./make-test.nix ({pkgs, ...}: rec {
 
     # Bootstrap ceph-mon daemon
     $aio->mustSucceed(
-      "mkdir -p /var/lib/ceph/bootstrap-osd && chown ceph:ceph /var/lib/ceph/bootstrap-osd",
       "sudo -u ceph ceph-authtool --create-keyring /tmp/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'",
       "ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --set-uid=0 --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow *' --cap mgr 'allow *'",
       "ceph-authtool /tmp/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring",
@@ -90,6 +92,7 @@ import ./make-test.nix ({pkgs, ...}: rec {
     );
     $aio->waitForUnit("ceph-mgr-aio");
     $aio->waitUntilSucceeds("ceph -s | grep 'quorum aio'");
+    $aio->waitUntilSucceeds("ceph -s | grep 'mgr: aio(active)'");
 
     # Bootstrap both OSDs
     $aio->mustSucceed(
@@ -135,5 +138,23 @@ import ./make-test.nix ({pkgs, ...}: rec {
       "ceph osd pool ls | grep 'aio-test'",
       "ceph osd pool delete aio-other-test aio-other-test --yes-i-really-really-mean-it"
     );
+
+    # As we disable the target in the config, we still want to test that it works as intended
+    $aio->mustSucceed(
+      "systemctl stop ceph-osd-0",
+      "systemctl stop ceph-osd-1",
+      "systemctl stop ceph-mgr-aio",
+      "systemctl stop ceph-mon-aio"
+    );
+    $aio->succeed("systemctl start ceph.target");
+    $aio->waitForUnit("ceph-mon-aio");
+    $aio->waitForUnit("ceph-mgr-aio");
+    $aio->waitForUnit("ceph-osd-0");
+    $aio->waitForUnit("ceph-osd-1");
+    $aio->succeed("ceph -s | grep 'mon: 1 daemons'");
+    $aio->waitUntilSucceeds("ceph -s | grep 'quorum aio'");
+    $aio->waitUntilSucceeds("ceph osd stat | grep '2 osds: 2 up, 2 in'");
+    $aio->waitUntilSucceeds("ceph -s | grep 'mgr: aio(active)'");
+    $aio->waitUntilSucceeds("ceph -s | grep 'HEALTH_OK'");
   '';
 })
