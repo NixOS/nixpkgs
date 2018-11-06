@@ -82,7 +82,7 @@ let
   };
 };
 typeshed = stdenv.mkDerivation {
-  name = "typeshed";
+  pname = "typeshed";
   version = pyre-version;
   src = fetchFromGitHub {
     owner = "python";

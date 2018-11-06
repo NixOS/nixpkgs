@@ -3,14 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bookworm";
-  version = "4f7b118281667d22f1b3205edf0b775341fa49cb";
-
-  name = "${pname}-2018-10-21";
+  version = "unstable-2018-10-21";
 
   src = fetchFromGitHub {
     owner = "babluboy";
     repo = pname;
-    rev = version;
+    rev = "4f7b118281667d22f1b3205edf0b775341fa49cb";
     sha256 = "0bcyim87zk4b4xmgfs158lnds3y8jg7ppzw54kjpc9rh66fpn3b9";
   };
 

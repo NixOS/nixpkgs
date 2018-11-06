@@ -26,7 +26,7 @@ in
 
 let plugins = {
   x770 =   stdenv.mkDerivation rec {
-    name = "iscan-gt-x770-bundle";
+    pname = "iscan-gt-x770-bundle";
     version = "1.0.1";
     pluginVersion = "2.1.2-1";
 
@@ -58,7 +58,7 @@ let plugins = {
     meta = common_meta // { description = "iscan esci x770 plugin for "+passthru.hw; };
     };
   f720 = stdenv.mkDerivation rec {
-    name = "iscan-gt-f720-bundle";
+    pname = "iscan-gt-f720-bundle";
     version = "1.0.1";
     pluginVersion = "0.1.1-2";
 

@@ -3,8 +3,9 @@
 , libzip, rtaudio, rtmidi, speex }:
 
 let
-  glfw-git = glfw.overrideAttrs (oldAttrs: {
-    name = "glfw-git-20180529";
+  glfw-git = glfw.overrideAttrs (oldAttrs: rec {
+    name = "glfw-git-${version}";
+    version = "unstable-2018-05-29";
     src = fetchFromGitHub {
       owner = "glfw";
       repo = "glfw";
