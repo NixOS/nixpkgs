@@ -14329,13 +14329,6 @@ with pkgs;
       ];
   };
 
-  linux_riscv = callPackage ../os-specific/linux/kernel/linux-riscv.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.modinst_arg_list_too_long
-    ];
-  };
-
   linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
