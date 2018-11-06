@@ -22,7 +22,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "http://stabyourself.net/dl.php?file=${pname}/${pname}-source.zip";

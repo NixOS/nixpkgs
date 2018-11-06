@@ -11,7 +11,7 @@ else
 
 stdenv.mkDerivation {
 
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "http://src.fedoraproject.org/repo/pkgs/ocaml-omake/${pname}-${version}.tar.gz/fe39a476ef4e33b7ba2ca77a6bcaded2/${pname}-${version}.tar.gz";

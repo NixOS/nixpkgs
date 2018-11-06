@@ -216,7 +216,7 @@ in stdenv.lib.fix (drv:
 assert allPkgconfigDepends != [] -> pkgconfig != null;
 
 stdenv.mkDerivation ({
-  name = "${pname}-${version}";
+  inherit pname version;
 
   outputs = [ "out" ] ++ (optional enableSeparateDataOutput "data") ++ (optional enableSeparateDocOutput "doc");
   setOutputFlags = false;

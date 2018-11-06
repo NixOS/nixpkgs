@@ -5,7 +5,7 @@ let
   pname = "nas";
   version = "1.9.4";
 in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.src.tar.gz";

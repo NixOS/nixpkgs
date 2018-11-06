@@ -6,7 +6,6 @@ in
 buildPythonApplication rec {
   pname = "todoman";
   version = "3.4.1";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

@@ -6,7 +6,7 @@ let
   pname = "libcloudproviders";
   version = "0.2.5";
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://gitlab.gnome.org/Incubator/${pname}/repository/archive.tar.gz?ref=${version}";

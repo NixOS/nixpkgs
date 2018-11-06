@@ -15,7 +15,6 @@ let
 in stdenv.mkDerivation rec {
   pname = "signing-party";
   version = "2.7";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/s/${pname}/${pname}_${version}.orig.tar.gz";

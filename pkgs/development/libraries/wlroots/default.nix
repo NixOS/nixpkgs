@@ -22,7 +22,7 @@ let
       oldAttrs.patches;
   });
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "swaywm";

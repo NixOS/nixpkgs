@@ -4,7 +4,7 @@ let
   pname = "cxxtest";
   version = "4.4";
 in python2Packages.buildPythonApplication rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "CxxTest";

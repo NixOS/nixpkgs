@@ -6,7 +6,6 @@ let
 in stdenv.mkDerivation rec {
   version = "2.3.3";
   pname = "sabnzbd";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = pname;

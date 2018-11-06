@@ -6,7 +6,7 @@ let
   version = "0.14.22";
 in
 mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";

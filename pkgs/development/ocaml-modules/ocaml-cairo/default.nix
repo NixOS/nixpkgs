@@ -9,7 +9,7 @@ then throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname;
   version = "1.2.0";
 
   src = fetchurl {

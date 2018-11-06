@@ -22,7 +22,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/SimonLarsen/90-Second-Portraits/releases/download/${version}/${pname}-${version}.love";

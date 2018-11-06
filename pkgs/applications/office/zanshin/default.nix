@@ -10,7 +10,6 @@
 mkDerivation rec {
   pname = "zanshin";
   version = "2017-11-25";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "KDE";

@@ -21,7 +21,7 @@ let
   };
 
   core = stdenv.mkDerivation rec {
-    name = "${pname}-${version}";
+    inherit pname version;
     inherit src;
     buildInputs = [ cmake zlib gmp jdk8 ];
 

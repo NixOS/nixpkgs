@@ -6,7 +6,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "http://gdome2.cs.unibo.it/tarball/${pname}-${version}.tar.gz";

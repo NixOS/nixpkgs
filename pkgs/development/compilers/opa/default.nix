@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "opa";
   version = "4310";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "MLstate";
@@ -24,7 +23,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
     (
     cat ./compiler/buildinfos/buildInfos.ml.pre
-    ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt 
+    ./compiler/buildinfos/generate_buildinfos.sh . --release --version ./compiler/buildinfos/version_major.txt
     echo let opa_git_version = ${version}
     echo 'let opa_git_sha = "xxxx"'
     cat ./compiler/buildinfos/buildInfos.ml.post

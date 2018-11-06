@@ -7,8 +7,6 @@ stdenv.mkDerivation rec {
   pname = "libplist";
   version = "2018-07-25";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;

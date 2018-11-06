@@ -36,7 +36,7 @@ let
   withUdisks = (withTaglib && withDevices);
 
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner  = "CDrummond";

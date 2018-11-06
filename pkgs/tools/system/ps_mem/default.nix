@@ -4,7 +4,7 @@ let
   version = "3.9";
   pname = "ps_mem";
 in pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "pixelb";

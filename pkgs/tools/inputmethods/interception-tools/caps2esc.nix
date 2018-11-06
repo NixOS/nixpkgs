@@ -4,7 +4,7 @@ let
   version = "0.1.0";
   pname = "interception-tools-caps2esc";
 in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://gitlab.com/interception/linux/plugins/caps2esc/repository/v${version}/archive.tar.gz";

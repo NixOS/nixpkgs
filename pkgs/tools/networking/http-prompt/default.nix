@@ -3,7 +3,6 @@
 pythonPackages.buildPythonApplication rec {
   pname = "http-prompt";
   version = "0.11.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";

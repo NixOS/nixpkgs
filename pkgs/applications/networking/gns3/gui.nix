@@ -6,7 +6,7 @@ let
   pythonPackages = python3Packages;
 
 in pythonPackages.buildPythonPackage rec {
-  name = "${pname}-${version}";
+  inherit version;
   pname = "gns3-gui";
 
   src = fetchFromGitHub {

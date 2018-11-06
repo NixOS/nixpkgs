@@ -19,7 +19,7 @@ let
   pname = "Transporter";
   version = "1.3.3";
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "bleakgrey";

@@ -5,8 +5,6 @@ stdenv.mkDerivation rec {
   pname = "notejot";
   version = "1.4.7";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;

@@ -6,7 +6,7 @@ let
   sha256 = "1yx1hr8z4cvlb3yi24dwafs0nxq41k4q477jc9q24w61a0g662ps";
 
 in pythonPackages.buildPythonApplication {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "kpcyrd";

@@ -9,7 +9,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
   src = fetchFromBitbucket {
     owner = "rude";
     repo = "love";

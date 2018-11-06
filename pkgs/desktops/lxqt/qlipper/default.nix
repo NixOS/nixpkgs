@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, qt5 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "qlipper";
   version = "5.1.1";
 

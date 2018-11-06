@@ -6,7 +6,7 @@ let
   version = "0.5.1";
 
 in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchgit {
     url = "https://github.com/stellar/stellar-core.git";

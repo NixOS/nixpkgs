@@ -3,12 +3,8 @@
 if stdenv.lib.versionAtLeast ocaml.version "4.03"
 then throw "mlgmp is not available for OCaml ${ocaml.version}" else
 
-let
-  pname = "mlgmp";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "mlgmp";
   version = "20120224";
 
   src = fetchurl {
@@ -16,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "3ce1a53fa452ff5a9ba618864d3bc46ef32190b57202d1e996ca7df837ad4f24";
   };
 
-  makeFlags = [ 
+  makeFlags = [
     "DESTDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/gmp"
   ];
 

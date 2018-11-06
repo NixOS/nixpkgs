@@ -12,7 +12,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://bitbucket.org/camlspotter/camlimages/get/${version}.tar.bz2";

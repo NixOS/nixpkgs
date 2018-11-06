@@ -1,13 +1,8 @@
 { stdenv, fetchurl, gmp, m4 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "ecm";
   version = "7.0.4";
-  name = "${pname}-${version}";
-in
-
-stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
     url = "http://gforge.inria.fr/frs/download.php/file/36224/ecm-${version}.tar.gz";

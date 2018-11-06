@@ -7,7 +7,7 @@ let
   pname = "FeedReader";
   version = "2.2";
 in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "jangernert";

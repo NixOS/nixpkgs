@@ -2,12 +2,11 @@
 
 let
   inherit (pythonPackages) python;
-  pname = "honcho";
 
 in
 
 pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
+  pname = "honcho";
   version = "1.0.1";
   namePrefix = "";
 

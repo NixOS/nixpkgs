@@ -13,7 +13,7 @@ let
   let
     name' = "${stdenv.lib.replaceStrings [ "-" ] [ "_" ] "${pname}"}-${version}";
   in perl.stdenv.mkDerivation {
-    name = "${pname}-${version}";
+    inherit pname version;
 
     src = fetchurl {
       url = "https://labs.consol.de/assets/downloads/nagios/${name'}.tar.gz";

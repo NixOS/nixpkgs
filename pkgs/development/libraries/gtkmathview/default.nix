@@ -6,7 +6,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "http://helm.cs.unibo.it/mml-widget/sources/${pname}-${version}.tar.gz";

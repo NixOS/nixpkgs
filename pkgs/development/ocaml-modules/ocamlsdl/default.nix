@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, pkgconfig, findlib, SDL, SDL_image, SDL_mixer, SDL_ttf, SDL_gfx, lablgl }: 
+{stdenv, fetchurl, ocaml, pkgconfig, findlib, SDL, SDL_image, SDL_mixer, SDL_ttf, SDL_gfx, lablgl }:
 
 let
   pname = "ocamlsdl";
@@ -9,10 +9,10 @@ then throw "${pname} is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname;
   version = "0.9.1";
 
-  src = fetchurl { 
+  src = fetchurl {
     url = "mirror://sourceforge/project/ocamlsdl/OCamlSDL/ocamlsdl-0.9.1/ocamlsdl-0.9.1.tar.gz";
     sha256 = "abfb295b263dc11e97fffdd88ea1a28b46df8cc2b196777093e4fe7f509e4f8f";
   };

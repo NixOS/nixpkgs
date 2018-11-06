@@ -1,14 +1,10 @@
 {stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU_combined, freeglut, camlp4 } :
 
-let
-  pname = "lablgl";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "lablgl";
   version = "1.05";
 
-  src = fetchurl { 
+  src = fetchurl {
     url = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/dist/lablgl-${version}.tar.gz";
     sha256 = "0qabydd219i4ak7hxgc67496qnnscpnydya2m4ijn3cpbgih7zyq";
   };

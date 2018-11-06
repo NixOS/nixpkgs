@@ -6,7 +6,7 @@ let
   pname = "pyside-generatorrunner";
   version = "0.6.16";
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/PySide/Generatorrunner/archive/0.6.16.tar.gz";

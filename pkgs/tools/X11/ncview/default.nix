@@ -7,7 +7,7 @@ let
   version = "2.1.8";
 
 in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url    = "ftp://cirrus.ucsd.edu/pub/ncview/ncview-2.1.8.tar.gz";

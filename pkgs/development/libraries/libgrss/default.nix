@@ -5,7 +5,7 @@ let
   pname = "libgrss";
 in
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   outputs = [ "out" "dev" "devdoc" ];
 

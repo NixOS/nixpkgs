@@ -9,7 +9,7 @@ let
   pname = "tootle";
   version = "0.2.0";
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "bleakgrey";

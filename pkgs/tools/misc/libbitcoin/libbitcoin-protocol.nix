@@ -6,7 +6,7 @@ let
   version = "3.5.0";
 
 in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "libbitcoin";

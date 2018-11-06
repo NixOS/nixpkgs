@@ -14,7 +14,7 @@ let
     else  variant;
 
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";

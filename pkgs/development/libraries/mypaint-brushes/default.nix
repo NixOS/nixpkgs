@@ -4,7 +4,7 @@ let
   pname = "mypaint-brushes";
   version = "1.3.0";
 in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "Jehan";

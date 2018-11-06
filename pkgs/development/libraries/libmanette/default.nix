@@ -6,7 +6,7 @@ let
   pname = "libmanette";
 in
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   outputs = [ "out" "dev" ];
 

@@ -1,10 +1,7 @@
 { stdenv, fetchurl, gnustep, unzip, bzip2, zlib, icu, openssl }:
 
-let
+stdenv.mkDerivation rec {
   pname = "unar";
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   version = "1.10.1";
 
   src = fetchurl {

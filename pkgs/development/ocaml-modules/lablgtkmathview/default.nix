@@ -1,11 +1,7 @@
 {stdenv, fetchurl, pkgconfig, ocaml, findlib, gmetadom, gtkmathview, lablgtk }:
 
-let
-  pname = "lablgtkmathview";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "lablgtkmathview";
   version = "0.7.2";
 
   src = fetchurl {

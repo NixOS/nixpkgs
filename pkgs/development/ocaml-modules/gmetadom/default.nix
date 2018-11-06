@@ -1,11 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib, gdome2, libxslt, pkgconfig}:
 
-let
-  pname = "gmetadom";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "gmetadom";
   version = "0.2.6";
 
   src = fetchurl {

@@ -8,7 +8,6 @@ let
   sha256 = "0fb90v43d30whhyjlgb9mmy93ccbpr01pz97kp5hrg3wfd7703b1";
 
   deps = bundlerEnv rec {
-    name = "${pname}-${version}";
     pname = "vagrant";
     inherit version;
 

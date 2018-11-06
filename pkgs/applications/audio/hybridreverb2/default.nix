@@ -10,7 +10,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   impulseDB = fetchzip {
     url = "https://github.com/${owner}/${pname}-impulse-response-database/archive/v${DBversion}.zip";

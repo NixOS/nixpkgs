@@ -5,7 +5,7 @@ let
 in
 stdenv.mkDerivation {
 
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchzip {
     url = "https://github.com/mjambon/${pname}/archive/v${version}.tar.gz";

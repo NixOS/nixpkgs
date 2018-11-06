@@ -24,7 +24,6 @@ in
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
   version = "1.2.10";
-  name = "${pname}-${version}";
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then

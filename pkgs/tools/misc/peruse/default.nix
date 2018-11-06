@@ -9,7 +9,7 @@ let
   version = "1.2.20180816";
 
 in mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   # The last formal release from 2016 uses kirigami1 which is deprecated
   src = fetchFromGitHub {

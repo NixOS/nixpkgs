@@ -10,7 +10,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  inherit pname version;
   version = "0.9.1";
 
   src = fetchurl {

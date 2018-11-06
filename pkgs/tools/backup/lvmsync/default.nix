@@ -7,7 +7,7 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "${pname}-${version}";
+  inherit pname version;
 
   env = bundlerEnv {
     name = "${pname}-${version}-gems";

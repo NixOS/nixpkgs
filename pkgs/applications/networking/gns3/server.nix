@@ -32,7 +32,6 @@ let
       rec {
         pname = "aiohttp-cors";
         version = "0.5.3";
-        name = "${pname}-${version}";
         src = pythonPackages.fetchPypi {
           inherit pname version;
           sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
@@ -43,7 +42,7 @@ let
                pythonPackages.typing;
       }));
 in pythonPackages.buildPythonPackage rec {
-  name = "${pname}-${version}";
+  inherit version;
   pname = "gns3-server";
 
   src = fetchFromGitHub {

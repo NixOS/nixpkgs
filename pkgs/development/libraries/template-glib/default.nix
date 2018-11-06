@@ -4,7 +4,7 @@ let
   pname = "template-glib";
 in
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   outputs = [ "out" "dev" "devdoc" ];
 
