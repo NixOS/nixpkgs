@@ -62,7 +62,7 @@ with lib;
     # Tell the Nix evaluator to garbage collect more aggressively.
     # This is desirable in memory-constrained environments that don't
     # (yet) have swap set up.
-    environment.variables.GC_INITIAL_HEAP_SIZE = "100000";
+    environment.variables.GC_INITIAL_HEAP_SIZE = "1M";
 
     # Make the installer more likely to succeed in low memory
     # environments.  The kernel's overcommit heustistics bite us
