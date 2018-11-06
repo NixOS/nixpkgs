@@ -97,9 +97,6 @@ self: super: {
   unicode-transforms = dontCheck super.unicode-transforms;
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
 
-  # https://github.com/bmillwood/haskell-src-meta/pull/80
-  haskell-src-meta = doJailbreak super.haskell-src-meta;
-
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
 
