@@ -64,6 +64,7 @@ self: super: {
   hspec-discover = self.hspec-discover_2_6_0;
   hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x
   hspec-meta = self.hspec-meta_2_5_6;
+  HTF = dontCheck super.HTF_0_13_2_5; # https://github.com/skogsbaer/HTF/issues/74
   JuicyPixels = self.JuicyPixels_3_3_2;
   lens = self.lens_4_17;
   megaparsec = dontCheck (doJailbreak super.megaparsec);
@@ -98,9 +99,6 @@ self: super: {
 
   # https://github.com/bmillwood/haskell-src-meta/pull/80
   haskell-src-meta = doJailbreak super.haskell-src-meta;
-
-  # https://github.com/skogsbaer/HTF/issues/69
-  HTF = markBrokenVersion "0.13.2.4" super.HTF;
 
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
