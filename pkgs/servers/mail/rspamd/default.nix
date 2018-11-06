@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, perl
-, file, glib, libevent, luajit, openssl, pcre, pkgconfig, sqlite, ragel, icu, libfann }:
+{ stdenv, lib, fetchFromGitHub, cmake, perl
+, file, glib, libevent, luajit, openssl, pcre, pkgconfig, sqlite, ragel, icu
+, libfann, gd
+, withFann ? true
+, withGd ? false
+}:
 
 let libmagic = file;  # libmagic provided by file package ATM
 in
@@ -16,7 +20,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ glib libevent libmagic luajit openssl pcre sqlite ragel icu libfann ];
+  buildInputs = [ glib libevent libmagic luajit openssl pcre sqlite ragel icu ]
+    ++ lib.optional withFann libfann
+    ++ lib.optional withGd gd;
 
   cmakeFlags = [
     "-DDEBIAN_BUILD=ON"
@@ -24,7 +30,8 @@ stdenv.mkDerivation rec {
     "-DDBDIR=/var/lib/rspamd"
     "-DLOGDIR=/var/log/rspamd"
     "-DLOCAL_CONFDIR=/etc/rspamd"
-  ];
+  ] ++ lib.optional withFann "-DENABLE_FANN=ON"
+    ++ lib.optional withGd "-DENABLE_GD=ON";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/vstakhov/rspamd;
