@@ -9,6 +9,6 @@
   This profile is used in installer images.
   It provides an editable configuration.nix that imports all the modules that
   were also used when creating the image in the first place.
-  As a result it allow users to edit and rebuild the live-system.
+  As a result it allows users to edit and rebuild the live-system.
  </para>
 </section>
