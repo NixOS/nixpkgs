@@ -46,7 +46,7 @@ let
   # in the same directory as slurm.conf
   etcSlurm = pkgs.symlinkJoin {
     name = "etc-slurm";
-    paths = [ configFile cgroupConfig plugStackConfig ];
+    paths = [ configFile cgroupConfig plugStackConfig ] ++ cfg.extraConfigPaths;
   };
 
 in
@@ -236,6 +236,17 @@ in
         description = ''
           Extra configuration for <literal>cgroup.conf</literal>. This file is
           used when <literal>procTrackType=proctrack/cgroup</literal>.
+        '';
+      };
+
+      extraConfigPaths = mkOption {
+        type = with types; listOf path;
+        default = [];
+        description = ''
+          Slurm expects config files for plugins in the same path
+          as <literal>slurm.conf</literal>. Add extra nix store
+          paths that should be merged into same directory as
+          <literal>slurm.conf</literal>.
         '';
       };
 
