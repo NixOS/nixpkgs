@@ -18,8 +18,11 @@ let param =
 
 in
 
-stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-mathcomp-${param.version}";
+stdenv.mkDerivation rec {
+  name = "coq${coq.coq-version}-mathcomp-${version}";
+
+  # used in ssreflect
+  inherit (param) version;
 
   src = fetchFromGitHub {
     owner = "math-comp";
@@ -35,10 +38,11 @@ stdenv.mkDerivation {
 
   buildFlags = stdenv.lib.optionalString withDoc "doc";
 
+  COQBIN = "${coq}/bin/";
+
   preBuild = ''
     patchShebangs etc/utils/ssrcoqdep || true
     cd mathcomp
-    export COQBIN=${coq}/bin/
   '';
 
   installPhase = ''
