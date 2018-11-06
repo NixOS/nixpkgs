@@ -4973,10 +4973,6 @@ with pkgs;
   esteidfirefoxplugin = callPackage ../applications/networking/browsers/mozilla-plugins/esteidfirefoxplugin { };
 
 
-  qgifer = callPackage ../applications/video/qgifer {
-    giflib = giflib_4_1;
-  };
-
   qhull = callPackage ../development/libraries/qhull { };
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
