@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, perl
 , file, glib, libevent, luajit, openssl, pcre, pkgconfig, sqlite, ragel, icu
-, libfann, gd
+, libfann, gd, jemalloc
 , withFann ? true
 , withGd ? false
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ glib libevent libmagic luajit openssl pcre sqlite ragel icu ]
+  buildInputs = [ glib libevent libmagic luajit openssl pcre sqlite ragel icu jemalloc ]
     ++ lib.optional withFann libfann
     ++ lib.optional withGd gd;
 
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     "-DDBDIR=/var/lib/rspamd"
     "-DLOGDIR=/var/log/rspamd"
     "-DLOCAL_CONFDIR=/etc/rspamd"
+    "-DENABLE_JEMALLOC=ON"
   ] ++ lib.optional withFann "-DENABLE_FANN=ON"
     ++ lib.optional withGd "-DENABLE_GD=ON";
 
