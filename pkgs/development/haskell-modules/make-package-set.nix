@@ -125,6 +125,7 @@ let
       name = "cabal2nix-${name}";
       nativeBuildInputs = [ pkgs.buildPackages.cabal2nix ];
       preferLocalBuild = true;
+      allowSubstitutes = false;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = pkgs.lib.optionalString (buildPlatform.libc == "glibc") "${buildPackages.glibcLocales}/lib/locale/locale-archive";
