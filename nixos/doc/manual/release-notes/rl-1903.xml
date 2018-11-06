@@ -224,6 +224,19 @@
      supports loading TrueCrypt volumes.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The Kubernetes DNS addons, kube-dns, has been replaced with CoreDNS.
+      This change is made in accordance with Kubernetes making CoreDNS the official default
+      starting from
+      <link xlink:href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#sig-cluster-lifecycle">Kubernetes v1.11</link>.
+      Please beware that upgrading DNS-addon on existing clusters might induce
+      minor downtime while the DNS-addon terminates and re-initializes.
+      Also note that the DNS-service now runs with 2 pod replicas by default.
+      The desired number of replicas can be configured using:
+      <option>services.kubernetes.addons.dns.replicas</option>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
