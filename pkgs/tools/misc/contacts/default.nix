@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xcbuildHook, Foundation, AddressBook }:
+{ stdenv, fetchurl, xcbuildHook, cf-private, Foundation, AddressBook }:
 
 stdenv.mkDerivation rec {
   version = "1.1a-3";
@@ -10,15 +10,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ Foundation AddressBook ];
+
+  buildInputs = [
+    Foundation AddressBook
+    # Needed for OBJC_CLASS_$_NSArray symbols.
+    cf-private
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp Products/Default/contacts $out/bin
   '';
-
-  ## FIXME: the framework setup hook isn't adding these correctly
-  NIX_LDFLAGS = " -F${Foundation}/Library/Frameworks/ -F${AddressBook}/Library/Frameworks/";
 
   meta = with stdenv.lib; {
     description = "Access contacts from the Mac address book from command-line";
