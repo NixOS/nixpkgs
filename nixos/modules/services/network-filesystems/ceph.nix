@@ -58,7 +58,6 @@ let
         partOf = [ "ceph.target" ];
         wantedBy = [ "ceph.target" ];
         before = [ "ceph.target" ];
-        wantedBy = [ "ceph.target" ];
       };
     }
   );

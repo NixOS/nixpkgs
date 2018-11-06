@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, ensureNewerSourcesHook, cmake, pkgconfig
+{ stdenv, runCommand, fetchurl
+, ensureNewerSourcesHook
+, cmake, pkgconfig
 , which, git
 , boost, python2Packages
 , libxml2, zlib, lz4
-, openldap, lttngUst
+, openldap, lttng-ust
 , babeltrace, gperf
 , cunit, snappy
 , rocksdb, makeWrapper
@@ -10,7 +12,7 @@
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
-, curl ? null, fuse ? null,
+, curl ? null, fuse ? null
 , libedit ? null, libatomic_ops ? null, kinetic-cpp-client ? null
 , libs3 ? null
 
@@ -74,7 +76,6 @@ let
   ceph-python-env = python2Packages.python.withPackages (ps: [
     ps.sphinx
     ps.flask
-    ps.argparse
     ps.cython
     ps.setuptools
     ps.virtualenv
@@ -87,87 +88,101 @@ let
     ps.bcrypt
   ]);
 
-  version = "13.2.2";
-in
-stdenv.mkDerivation {
-  name="ceph-${version}";
+  version = "13.2.4";
+in rec {
+  ceph = stdenv.mkDerivation {
+    name="ceph-${version}";
 
-  src = fetchurl {
-    url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    sha256 = "0h483n9iy0fkbqrhf7k0dzspwdpcaswkjwmc5n5c600fr6s1v9pk";
+    src = fetchurl {
+      url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
+      sha256 = "0g2mc6rp84ia44vz8kl449820m9hmfavzfmwn8fy6li14xr8a00w";
+    };
+
+    patches = [
+      ./0000-fix-SPDK-build-env.patch
+      # TODO: remove when https://github.com/ceph/ceph/pull/21289 is merged
+      ./0000-ceph-volume-allow-loop.patch
+    ];
+
+    nativeBuildInputs = [
+      cmake
+      pkgconfig which git python2Packages.wrapPython makeWrapper
+      (ensureNewerSourcesHook { year = "1980"; })
+    ];
+
+    buildInputs = cryptoLibsMap.${cryptoStr} ++ [
+      boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
+      malloc zlib openldap lttng-ust babeltrace gperf cunit
+      snappy rocksdb lz4 oathToolkit leveldb
+      optKinetic-cpp-client
+    ] ++ optionals stdenv.isLinux [
+      linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
+    ] ++ optionals hasRadosgw [
+      optFcgi optExpat optCurl optFuse optLibedit
+    ];
+
+    preConfigure =''
+      substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
+      substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
+      # Since Boost 1.67 this seems to have changed
+      substituteInPlace CMakeLists.txt --replace "list(APPEND BOOST_COMPONENTS python)" "list(APPEND BOOST_COMPONENTS python27)"
+      substituteInPlace src/CMakeLists.txt --replace "Boost::python " "Boost::python27 "
+
+      # for pybind/rgw to find internal dep
+      export LD_LIBRARY_PATH="$PWD/build/lib:$LD_LIBRARY_PATH"
+      # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
+      export PYTHONPATH=$lib/lib/python2.7/site-packages/:$out/lib/python2.7/site-packages/
+
+      patchShebangs src/spdk
+    '';
+
+    cmakeFlags = [
+      "-DWITH_SYSTEM_ROCKSDB=ON"
+      "-DROCKSDB_INCLUDE_DIR=${rocksdb}/include/rocksdb"
+      "-DWITH_SYSTEM_BOOST=ON"
+      "-DWITH_SYSTEMD=OFF"
+      "-DWITH_TESTS=OFF"
+      # TODO breaks with sandbox, tries to download stuff with npm
+      "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
+    ];
+
+    postFixup = ''
+      wrapPythonPrograms
+      wrapProgram $out/bin/ceph-mgr --prefix PYTHONPATH ":" "$lib/lib/ceph/mgr:$out/lib/python2.7/site-packages/"
+    '';
+
+    enableParallelBuilding = true;
+
+    outputs = [ "out" "lib" "dev" "doc" "man" ];
+
+    meta = {
+      homepage = https://ceph.com/;
+      description = "Distributed storage system";
+      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
+      maintainers = with maintainers; [ adev ak krav ];
+      platforms = platforms.unix;
+    };
+
+    passthru.version = version;
   };
 
-  patches = [
-    ./0000-fix-SPDK-build-env.patch
-
-    # TODO: remove when https://github.com/ceph/ceph/pull/21289 is merged
-    ./0000-ceph-volume-allow-loop.patch
-    # TODO: remove when https://github.com/ceph/ceph/pull/20938 is merged
-    ./0000-dont-hardcode-bin-paths.patch
-  ];
-
-  nativeBuildInputs = [
-    cmake
-    pkgconfig which git python2Packages.wrapPython makeWrapper
-    (ensureNewerSourcesHook { year = "1980"; })
-  ];
-
-  buildInputs = cryptoLibsMap.${cryptoStr} ++ [
-    boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
-    malloc zlib openldap lttngUst babeltrace gperf cunit
-    snappy rocksdb lz4 oathToolkit leveldb
-    optKinetic-cpp-client
-  ] ++ optionals stdenv.isLinux [
-    linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
-  ] ++ optionals hasRadosgw [
-    optFcgi optExpat optCurl optFuse optLibedit
-  ];
-
-  preConfigure =''
-    # require LD_LIBRARY_PATH for pybind/rgw to find internal dep
-    export LD_LIBRARY_PATH="$PWD/build/lib:$LD_LIBRARY_PATH"
-    patchShebangs src/spdk
-  '';
-
-  cmakeFlags = [
-    "-DWITH_SYSTEM_ROCKSDB=ON"
-    "-DROCKSDB_INCLUDE_DIR=${rocksdb}/include/rocksdb"
-    "-DWITH_SYSTEM_BOOST=OFF"
-    "-DWITH_SYSTEMD=OFF"
-    "-DWITH_TESTS=OFF"
-    # TODO breaks with sandbox, tries to download stuff with npm
-    "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
-  ];
-
-  postInstall = ''
-    mkdir -p $client/{bin,etc,lib/python2.7/site-packages}
-    mv $out/bin/{ceph,rados,rbd,rbdmap} $client/bin
-    mv $out/bin/ceph-{authtool,conf,dencoder,post-file,rbdnamer,syn} $client/bin
-    mv $out/bin/rbd-replay* $client/bin
-    mv $out/lib/python2.7/site-packages/ceph_{argparse,daemon}.py $client/lib/python2.7/site-packages
-    mv $out/etc/bash_completion.d $client/etc
-    mkdir -p $man/share
-    mv $out/share/man $man/share
-  '';
-
-  postFixup = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
-    wrapPythonProgramsIn "$client/bin" "$client $out $pythonPath"
-    wrapProgram $out/bin/ceph-mgr --prefix PYTHONPATH ":" "$out/lib/ceph/mgr:$out/lib/python2.7/site-packages/"
-  '';
-
-  enableParallelBuilding = true;
-
-  outputs = [ "out" "lib" "dev" "doc" "client" "man" ];
-
-  meta = {
-    homepage = https://ceph.com/;
-    description = "Distributed storage system";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ adev ak wkennington ];
-    platforms = platforms.unix;
-    outputsToInstall = [ "out" "client" ];
-  };
-
-  passthru.version = version;
+  ceph-client = runCommand "ceph-client-${version}" {
+     meta = {
+        homepage = https://ceph.com/;
+        description = "Tools needed to mount Ceph's RADOS Block Devices";
+        license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
+        maintainers = with maintainers; [ adev ak krav ];
+        platforms = platforms.unix;
+      };
+    } ''
+      mkdir -p $out/{bin,etc,lib/python2.7/site-packages}
+      cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
+      cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
+      cp -r ${ceph}/bin/rbd-replay* $out/bin
+      cp -r ${ceph}/lib/python2.7/site-packages $out/lib/python2.7/
+      cp -r ${ceph}/etc/bash_completion.d $out/etc
+      # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
+      substituteInPlace $out/bin/ceph          --replace ${ceph} $out
+      substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out
+   '';
 }
