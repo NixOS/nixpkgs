@@ -35,4 +35,5 @@
  <xi:include href="profiles/headless.xml" />
  <xi:include href="profiles/installation-device.xml" />
  <xi:include href="profiles/minimal.xml" />
+ <xi:include href="profiles/qemu-guest.xml" />
 </chapter>
