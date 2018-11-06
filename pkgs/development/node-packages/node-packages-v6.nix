@@ -1881,17 +1881,17 @@ let
       packageName = "tar";
       version = "2.2.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/tar/-/tar-2.2.1.tgz";
+        url = "http://registry.npmjs.org/tar/-/tar-2.2.1.tgz";
         sha1 = "8e4d2a256c0e2185c6b18ad694aec968b83cb1d1";
       };
     };
-    "tar-4.4.6" = {
+    "tar-4.4.7" = {
       name = "tar";
       packageName = "tar";
-      version = "4.4.6";
+      version = "4.4.7";
       src = fetchurl {
-        url = "https://registry.npmjs.org/tar/-/tar-4.4.6.tgz";
-        sha512 = "tMkTnh9EdzxyfW+6GK6fCahagXsnYk6kE6S9Gr9pjVdys769+laCTbodXDhPAjzVtEBazRgP0gYqOjnk9dQzLg==";
+        url = "https://registry.npmjs.org/tar/-/tar-4.4.7.tgz";
+        sha512 = "mR3MzsCdN0IEWjZRuF/J9gaWHnTwOvzjqPTcvi1xXgfKTDQRp39gRETPQEfPByAdEOGmZfx1HrRsn8estaEvtA==";
       };
     };
     "to-object-path-0.3.0" = {
@@ -2575,7 +2575,7 @@ in
       sources."string_decoder-1.1.1"
       sources."strip-ansi-3.0.1"
       sources."strip-json-comments-2.0.1"
-      sources."tar-4.4.6"
+      sources."tar-4.4.7"
       sources."util-deprecate-1.0.2"
       sources."wide-align-1.1.3"
       sources."wrappy-1.0.2"
