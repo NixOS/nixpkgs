@@ -303,6 +303,7 @@ in
 
       serviceConfig = {
         Type = "forking";
+        KillMode = "process";
         ExecStart = "${wrappedSlurm}/bin/slurmd";
         PIDFile = "/run/slurmd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
