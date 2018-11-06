@@ -69,7 +69,9 @@ in rec {
             mkdir -p $out/coverage-data
             mv $i $out/coverage-data/$(dirname $(dirname $i))
           done
-        ''; # */
+        '';
+
+        meta.needsVMSupport = true;
     };
 
 

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, libressl, db, pam
+, libasr, libevent, zlib, libressl, db, pam, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -61,5 +61,8 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rickynils obadz ekleog ];
+    tests = {
+      basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
+    };
   };
 }

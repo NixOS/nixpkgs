@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
 , bzip2, zlib, lz4, inotify-tools, pam, libcap
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
+, nixosTests
 # Auth modules
 , withMySQL ? false, mysql
 , withPgSQL ? false, postgresql
@@ -74,5 +75,8 @@ stdenv.mkDerivation rec {
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz ];
     platforms = stdenv.lib.platforms.unix;
+    tests = {
+      opensmtpd-interaction = nixosTests.opensmtpd;
+    };
   };
 }
