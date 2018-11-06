@@ -5,7 +5,6 @@
 let
   # These are attributes in compiler and packages that don't support integer-simple.
   integerSimpleExcludes = [
-    "ghc7103Binary"
     "ghc821Binary"
     "ghc844"
     "ghcjs"
@@ -43,7 +42,6 @@ in {
 
   compiler = {
 
-    ghc7103Binary = callPackage ../development/compilers/ghc/7.10.3-binary.nix { };
     ghc821Binary = callPackage ../development/compilers/ghc/8.2.1-binary.nix { };
 
     ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix {
@@ -102,12 +100,6 @@ in {
   # Always get compilers from `buildPackages`
   packages = let bh = buildPackages.haskell; in {
 
-    ghc7103Binary = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc7103Binary;
-      ghc = bh.compiler.ghc7103Binary;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
-      packageSetConfig = bootstrapPackageSet;
-    };
     ghc821Binary = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc821Binary;
       ghc = bh.compiler.ghc821Binary;
