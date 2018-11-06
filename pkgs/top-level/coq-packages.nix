@@ -1,8 +1,4 @@
-{ lib, callPackage, newScope, recurseIntoAttrs
-, gnumake3
-, ocamlPackages_4_02
-, ocamlPackages_4_05
-}:
+{ lib, callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05 }:
 
 let
   mkCoqPackages' = self: coq:
@@ -40,6 +36,7 @@ let
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
       stdpp = callPackage ../development/coq-modules/stdpp { };
       tlc = callPackage ../development/coq-modules/tlc {};
+      Velisarios = callPackage ../development/coq-modules/Velisarios {};
     };
 
   filterCoqPackages = coq:
@@ -51,13 +48,19 @@ let
 
 in rec {
 
+  /* The function `mkCoqPackages` takes as input a derivation for Coq and produces
+   * a set of libraries built with that specific Coq. More libraries are known to
+   * this function than what is compatible with that version of Coq. Therefore,
+   * libraries that are not known to be compatible are removed (filtered out) from
+   * the resulting set. For meta-programming purposes (inpecting the derivations
+   * rather than building the libraries) this filtering can be disabled by setting
+   * a `dontFilter` attribute into the Coq derivation.
+   */
   mkCoqPackages = coq:
     let self = mkCoqPackages' self coq; in
-    filterCoqPackages coq self;
+    if coq.dontFilter or false then self
+    else filterCoqPackages coq self;
 
-  coq_8_4 = callPackage ../applications/science/logic/coq/8.4.nix {
-    inherit (ocamlPackages_4_02) ocaml findlib lablgtk camlp5;
-  };
   coq_8_5 = callPackage ../applications/science/logic/coq {
     ocamlPackages = ocamlPackages_4_05;
     version = "8.5pl3";
@@ -72,11 +75,15 @@ in rec {
   coq_8_8 = callPackage ../applications/science/logic/coq {
     version = "8.8.2";
   };
+  coq_8_9 = callPackage ../applications/science/logic/coq {
+    version = "8.9+beta1";
+  };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
   coqPackages_8_7 = mkCoqPackages coq_8_7;
   coqPackages_8_8 = mkCoqPackages coq_8_8;
+  coqPackages_8_9 = mkCoqPackages coq_8_9;
   coqPackages = coqPackages_8_8;
   coq = coqPackages.coq;
 

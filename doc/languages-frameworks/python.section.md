@@ -483,8 +483,8 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.4, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
-respectively `python27`, `python34`, `python35` and `python36`. The PyPy interpreter
+Versions 2.7, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
+respectively `python27`, `python35` and `python36`. The PyPy interpreter
 is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
 `python35`. The default interpreter, `python`, maps to `python2`.
 The Nix expressions for the interpreters can be found in
@@ -507,7 +507,7 @@ Each interpreter has the following attributes:
 - `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
-- `executable`. Name of the interpreter executable, e.g. `python3.4`.
+- `executable`. Name of the interpreter executable, e.g. `python3.7`.
 - `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
 
 ### Building packages and applications
@@ -529,7 +529,6 @@ attribute set is created for each available Python interpreter. The available
 sets are
 
 * `pkgs.python27Packages`
-* `pkgs.python34Packages`
 * `pkgs.python35Packages`
 * `pkgs.python36Packages`
 * `pkgs.python37Packages`
@@ -670,7 +669,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "035w8gqql36zlan0xjrzz9j4lh9hs0qrsgnbyw07qs7lnkvbdv9x";
   };
 
-  propagatedBuildInputs = with python3Packages; [ tornado_4 pythondaemon ];
+  propagatedBuildInputs = with python3Packages; [ tornado_4 python-daemon ];
 
   meta = with lib; {
     ...
@@ -837,7 +836,7 @@ community to help save time. No tool is preferred at the moment.
 
 ### Deterministic builds
 
-Python 2.7, 3.5 and 3.6 are now built deterministically and 3.4 mostly.
+The Python interpreters are now built deterministically.
 Minor modifications had to be made to the interpreters in order to generate
 deterministic bytecode. This has security implications and is relevant for
 those using Python in a `nix-shell`.

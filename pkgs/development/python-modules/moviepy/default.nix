@@ -4,6 +4,7 @@
 , numpy
 , decorator
 , imageio
+, isPy3k
 , tqdm
 }:
 

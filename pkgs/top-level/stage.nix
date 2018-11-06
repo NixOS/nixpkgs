@@ -56,7 +56,7 @@
 , # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
   overlays
-}:
+} @args:
 
 let
   stdenvAdapters = self: super:
@@ -150,7 +150,7 @@ let
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = assert stdenv.hostPlatform.isLinux; nixpkgsFun {
+    pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
       inherit overlays config;
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
@@ -158,7 +158,20 @@ let
           cpu = lib.systems.parse.cpuTypes.i686;
         };
       };
-    };
+    } else throw "i686 Linux package set can only be used with the x86 family.";
+
+    # Extend the package set with zero or more overlays. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    appendOverlays = extraOverlays:
+      import ./stage.nix (args // { overlays = args.overlays ++ extraOverlays; });
+
+    # Extend the package set with a single overlay. This preserves
+    # preexisting overlays. Prefer to initialize with the right overlays
+    # in one go when calling Nixpkgs, for performance and simplicity.
+    # Prefer appendOverlays if used repeatedly.
+    extend = f: self.appendOverlays [f];
+
   };
 
   # The complete chain of package set builders, applied from top to bottom.

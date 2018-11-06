@@ -15,11 +15,11 @@ let
 
 in buildPythonPackage rec {
   pname = "celery";
-  version = "4.2.0";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff727c115533edbc7b81b2b4ba1ec88d1c2fc4836e1e2f4c3c33a76ff53e5d7f";
+    sha256 = "0y66rz7z8dfcgs3s0qxmdddlaq57bzbgxgfz896nbp14grkv9nkp";
   };
 
   # Skip test_RedisBackend.test_timeouts_in_url_coerced

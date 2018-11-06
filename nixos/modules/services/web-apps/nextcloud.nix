@@ -70,7 +70,15 @@ in {
       '';
     };
 
-    nginx.enable = mkEnableOption "nginx vhost management";
+    nginx.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable nginx virtual host management.
+        Further nginx configuration can be done by adapting <literal>services.nginx.virtualHosts.&lt;name&gt;</literal>.
+        See <xref linkend="opt-services.nginx.virtualHosts"/> for further information.
+      '';
+    };
 
     webfinger = mkOption {
       type = types.bool;
@@ -184,7 +192,7 @@ in {
         type = types.nullOr types.str;
         default = null;
         description = ''
-          Database password.  Use <literal>adminpassFile</literal> to avoid this
+          Admin password.  Use <literal>adminpassFile</literal> to avoid this
           being world-readable in the <literal>/nix/store</literal>.
         '';
       };

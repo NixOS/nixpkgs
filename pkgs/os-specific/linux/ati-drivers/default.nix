@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url =
     "https://www2.ati.com/drivers/linux/radeon-crimson-15.12-15.302-151217a-297685e.zip";
-    sha256 = "0n0ynqmjkjp5dl5q07as7ps3rlyyn63hq4mlwgd7c7v82ky2skvh";
-    curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux+x86_64";
+    sha256 = "704f2dfc14681f76dae3b4120c87b1ded33cf43d5a1d800b6de5ca292bb61e58";
+    curlOpts = "--referer https://www.amd.com/en/support";
   };
 
   hardeningDisable = [ "pic" "format" ];

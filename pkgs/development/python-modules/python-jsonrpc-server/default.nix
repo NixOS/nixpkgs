@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "python-jsonrpc-server";
-  version = "0.0.1";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-jsonrpc-server";
     rev = version;
-    sha256 = "0p5dj1hxx3yz8vjk59dcp3h6ci1hrjkbzf9lr3vviy0xw327409k";
+    sha256 = "1xp6xipslw8d1yv05mjmhql07kz04ibci5psjrv6rapqi6jp4bgk";
   };
 
   checkInputs = [

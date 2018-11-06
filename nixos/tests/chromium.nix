@@ -12,8 +12,10 @@ with pkgs.lib;
 
 mapAttrs (channel: chromiumPkg: makeTest rec {
   name = "chromium-${channel}";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aszlig ];
+  meta = {
+    maintainers = with maintainers; [ aszlig ];
+    # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
+    inherit (chromiumPkg.meta) timeout;
   };
 
   enableOCR = true;
@@ -166,7 +168,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
       my $clipboard = $machine->succeed(ru "${pkgs.xclip}/bin/xclip -o");
       die "sandbox not working properly: $clipboard"
-      unless $clipboard =~ /namespace sandbox.*yes/mi
+      unless $clipboard =~ /layer 1 sandbox.*namespace/mi
           && $clipboard =~ /pid namespaces.*yes/mi
           && $clipboard =~ /network namespaces.*yes/mi
           && $clipboard =~ /seccomp.*sandbox.*yes/mi
@@ -184,7 +186,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
       my $clipboard = $machine->succeed(ru "${pkgs.xclip}/bin/xclip -o");
       die "copying twice in a row does not work properly: $clipboard"
-      unless $clipboard =~ /namespace sandbox.*yes/mi
+      unless $clipboard =~ /layer 1 sandbox.*namespace/mi
           && $clipboard =~ /pid namespaces.*yes/mi
           && $clipboard =~ /network namespaces.*yes/mi
           && $clipboard =~ /seccomp.*sandbox.*yes/mi

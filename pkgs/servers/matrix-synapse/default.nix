@@ -1,4 +1,6 @@
-{ stdenv, python2Packages, fetchurl, fetchFromGitHub }:
+{ lib, stdenv, python2Packages, fetchurl, fetchFromGitHub
+, enableSystemd ? true
+}:
 let
   matrix-angular-sdk = python2Packages.buildPythonPackage rec {
     name = "matrix-angular-sdk-${version}";
@@ -26,13 +28,13 @@ let
   };
 in python2Packages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.33.6";
+  version = "0.33.8";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "0c1dr09f1msv6xvpmdlncx7yyj6qxnpihd93lqckd115fds12g5h";
+    sha256 = "122ba09xkc1x35qaajcynkjikg342259rgy81m8abz0l8mcg4mkm";
   };
 
   patches = [
@@ -40,16 +42,41 @@ in python2Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python2Packages; [
-    blist canonicaljson daemonize dateutil frozendict pillow pyasn1
-    pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests
-    signedjson systemd twisted ujson unpaddedbase64 pyyaml prometheus_client
-    matrix-angular-sdk bleach netaddr jinja2 psycopg2
-    psutil msgpack-python lxml matrix-synapse-ldap3
-    phonenumbers jsonschema affinity bcrypt sortedcontainers treq
-  ];
+    bcrypt
+    bleach
+    canonicaljson
+    daemonize
+    dateutil
+    frozendict
+    jinja2
+    jsonschema
+    lxml
+    matrix-angular-sdk
+    matrix-synapse-ldap3
+    msgpack-python
+    netaddr
+    phonenumbers
+    pillow
+    prometheus_client
+    psutil
+    psycopg2
+    pyasn1
+    pydenticon
+    pymacaroons-pynacl
+    pynacl
+    pyopenssl
+    pysaml2
+    pyyaml
+    requests
+    signedjson
+    sortedcontainers
+    treq
+    twisted
+    unpaddedbase64
+  ] ++ lib.optional enableSystemd systemd;
 
-  # Checks fail because of Tox.
-  doCheck = false;
+  doCheck = true;
+  checkPhase = "python -m twisted.trial test";
 
   buildInputs = with python2Packages; [
     mock setuptoolsTrial

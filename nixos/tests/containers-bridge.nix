@@ -42,7 +42,6 @@ import ./make-test.nix ({ pkgs, ...} : {
             { services.httpd.enable = true;
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
-              networking.firewall.allowPing = true;
             };
         };
 

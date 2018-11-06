@@ -33,7 +33,7 @@ let
          ++ lib.optional enableTWBT twbt.art
          ++ [ dwarf-fortress ];
 
-  fixup = lib.singleton (runCommand "fixup" {} ''
+  fixup = lib.singleton (runCommand "fixup" {} (''
     mkdir -p $out/data/init
     cp ${dwarf-fortress}/data/init/init.txt $out/data/init/init.txt
   '' + lib.optionalString enableDFHack ''
@@ -60,7 +60,7 @@ let
       --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
       --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
       --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]'
-  '');
+  ''));
 
   env = buildEnv {
     name = "dwarf-fortress-env-${dwarf-fortress.dfVersion}";

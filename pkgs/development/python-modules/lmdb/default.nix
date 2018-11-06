@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "0.92";
+  version = "0.94";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01nw6r08jkipx6v92kw49z34wmwikrpvc5j9xawdiyg1n2526wrx";
+    sha256 = "1zh38gvkqw1jm5105if6rr7ccbgyxr7k2rm5ygb9ab3bq82pyaww";
   };
 
   # Some sort of mysterious failure with lmdb.tool

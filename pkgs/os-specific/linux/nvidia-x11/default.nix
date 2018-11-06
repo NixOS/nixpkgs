@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl }:
+{ lib, callPackage, fetchurl, stdenv }:
 
 let
   generic = args: callPackage (import ./generic.nix args) { };
@@ -16,7 +16,17 @@ let
 in
 rec {
   # Policy: use the highest stable version as the default (on our master).
-  stable = generic {
+  stable = if stdenv.hostPlatform.system == "x86_64-linux" then stable_410 else stable_390;
+
+  stable_410 = generic {
+    version = "410.73";
+    sha256_64bit = "07pzq8rvbsx3v8rgz98amyw0k1mn5mkygpd1q5gfn6r0h7vrrg5y";
+    settingsSha256 = "19xc10b0c074wb9fv9n04dvmi8hrwl6srvvyrjfyj92gch49x6hw";
+    persistencedSha256 = "0vhr7pysv4vk7v96yima0i9zsvvgxaxihjzxlfifpsdki57n2jz7";
+  };
+
+  # Last one supporting x86
+  stable_390 = generic {
     version = "390.87";
     sha256_32bit = "0rlr1f4lnpb8c4qz4w5r8xw5gdy9bzz26qww45qyl1qav3wwaaaw";
     sha256_64bit = "07k1kq8lkgbvjyr2dnbxcz6nppcwpq17wf925w8kfq78345hla9q";
@@ -26,12 +36,8 @@ rec {
     patches = lib.optional (kernel.meta.branch == "4.19") ./drm_mode_connector.patch;
   };
 
-  beta = generic {
-    version = "410.57";
-    sha256_64bit = "08534rv3wcmzslbwq11kd3s7cxm72p48dia6540c0586xwgjwg2w";
-    settingsSha256 = "1phhhzlc8n3rqdhrn757mnlqmsp616d079a6h1qjpa6jba9z9915";
-    persistencedSha256 = "1z7c1ff0y486yp9i5w0siwh9dnprml22x2avarbjfgqwm4f652lw";
-  };
+  # No active beta right now
+  beta = stable;
 
   legacy_340 = generic {
     version = "340.104";

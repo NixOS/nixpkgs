@@ -215,7 +215,7 @@ stdenv.mkDerivation (rec {
     inherit enableShared;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc-8.4.3";
+    haskellCompilerName = "ghc-8.6.1";
   };
 
   meta = {

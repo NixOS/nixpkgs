@@ -97,6 +97,16 @@
        start org.nixos.nix-daemon</command>.
       </para>
      </listitem>
+     <listitem>
+      <para>
+        The Syncthing state and configuration data has been moved from
+        <varname>services.syncthing.dataDir</varname> to the newly defined
+        <varname>services.syncthing.configDir</varname>, which default to
+        <literal>/var/lib/syncthing/.config/syncthing</literal>.
+        This change makes possible to share synced directories using ACLs
+        without Syncthing resetting the permission on every start.
+      </para>
+     </listitem>
     </itemizedlist>
    </listitem>
    <listitem>
@@ -139,6 +149,56 @@
    </listitem>
    <listitem>
     <para>
+     OpenSMTPD has been upgraded to version 6.4.0p1. This release makes
+     backwards-incompatible changes to the configuration file format. See
+     <command>man smtpd.conf</command> for more information on the new file
+     format.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The versioned <varname>postgresql</varname> have been renamed to use
+     underscore number seperators. For example, <varname>postgresql96</varname>
+     has been renamed to <varname>postgresql_9_6</varname>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Package <literal>consul-ui</literal> and passthrough <literal>consul.ui</literal> have been removed.
+     The package <literal>consul</literal> now uses upstream releases that vendor the UI into the binary.
+     See <link xlink:href="https://github.com/NixOS/nixpkgs/pull/48714#issuecomment-433454834">#48714</link>
+     for details.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Slurm introduces the new option
+      <literal>services.slurm.stateSaveLocation</literal>,
+      which is now set to <literal>/var/spool/slurm</literal> by default
+      (instead of <literal>/var/spool</literal>).
+      Make sure to move all files to the new directory or to set the option accordingly.
+    </para>
+    <para>
+      The slurmctld now runs as user <literal>slurm</literal> instead of <literal>root</literal>.
+      If you want to keep slurmctld running as <literal>root</literal>, set
+      <literal>services.slurm.user = root</literal>.
+    </para>
+    <para>
+      The options <literal>services.slurm.nodeName</literal> and
+      <literal>services.slurm.partitionName</literal> are now sets of
+      strings to correctly reflect that fact that each of these
+      options can occour more than once in the configuration.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>solr</literal> package has been upgraded from 4.10.3 to 7.5.0 and has undergone
+      some major changes. The <literal>services.solr</literal> module has been updated to reflect
+      these changes. Please review http://lucene.apache.org/solr/ carefully before upgrading.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Package <literal>ckb</literal> is renamed to <literal>ckb-next</literal>,
      and options <literal>hardware.ckb.*</literal> are renamed to
      <literal>hardware.ckb-next.*</literal>.
@@ -160,6 +220,15 @@
      The <option>services.matomo</option> module gained the option
      <option>services.matomo.package</option> which determines the used
      Matomo version.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The deprecated <literal>truecrypt</literal> package has been removed
+     and <literal>truecrypt</literal> attribute is now an alias for
+     <literal>veracrypt</literal>. VeraCrypt is backward-compatible with
+     TrueCrypt volumes. Note that <literal>cryptsetup</literal> also
+     supports loading TrueCrypt volumes.
     </para>
    </listitem>
   </itemizedlist>
