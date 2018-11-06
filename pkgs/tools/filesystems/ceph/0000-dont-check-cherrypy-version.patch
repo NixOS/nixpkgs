@@ -1,0 +1,33 @@
+diff --git a/src/pybind/mgr/dashboard/module.py b/src/pybind/mgr/dashboard/module.py
+index 0b53743d74..2e17ce1168 100644
+--- a/src/pybind/mgr/dashboard/module.py
++++ b/src/pybind/mgr/dashboard/module.py
+@@ -28,28 +28,6 @@ except ImportError:
+     # To be picked up and reported by .can_run()
+     cherrypy = None
+ 
+-
+-# The SSL code in CherryPy 3.5.0 is buggy.  It was fixed long ago,
+-# but 3.5.0 is still shipping in major linux distributions
+-# (Fedora 27, Ubuntu Xenial), so we must monkey patch it to get SSL working.
+-if cherrypy is not None:
+-    v = StrictVersion(cherrypy.__version__)
+-    # It was fixed in 3.7.0.  Exact lower bound version is probably earlier,
+-    # but 3.5.0 is what this monkey patch is tested on.
+-    if v >= StrictVersion("3.5.0") and v < StrictVersion("3.7.0"):
+-        from cherrypy.wsgiserver.wsgiserver2 import HTTPConnection,\
+-                                                    CP_fileobject
+-
+-        def fixed_init(hc_self, server, sock, makefile=CP_fileobject):
+-            hc_self.server = server
+-            hc_self.socket = sock
+-            hc_self.rfile = makefile(sock, "rb", hc_self.rbufsize)
+-            hc_self.wfile = makefile(sock, "wb", hc_self.wbufsize)
+-            hc_self.requests_seen = 0
+-
+-        HTTPConnection.__init__ = fixed_init
+-
+-
+ if 'COVERAGE_ENABLED' in os.environ:
+     import coverage
+     _cov = coverage.Coverage(config_file="{}/.coveragerc".format(os.path.dirname(__file__)))
