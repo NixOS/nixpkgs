@@ -8,7 +8,7 @@
  <para>
   This is the profile from which the Docker images are generated. It prepares a
   working system by importing the <link linkend="sec-profile-minimal">Minimal</link> and
-  <link linkend="sec-profile-clone-config">Clone Config</link> profiles, and setting appropiate
+  <link linkend="sec-profile-clone-config">Clone Config</link> profiles, and setting appropriate
   configutation options that are useful inside a container context, like
   <xref linkend="opt-boot.isContainer"/>.
  </para>
