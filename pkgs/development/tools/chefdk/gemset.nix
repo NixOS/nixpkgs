@@ -791,10 +791,10 @@
   rack = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1kczgp2zwcrvp257dl8j4y3mnyqflxr7rn4vl9w1rwblznx9n74c";
+      sha256 = "1pcgv8dv4vkaczzlix8q3j68capwhk420cddzijwqgi2qb4lm1zm";
       type = "gem";
     };
-    version = "2.0.3";
+    version = "2.0.6";
   };
   rainbow = {
     dependencies = ["rake"];
