@@ -14,7 +14,7 @@
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, motion
 , gnused, reftools, gogetdoc, gometalinter
-, impl, iferr
+, impl, iferr, gocode, gocode-gomod, go-tools
 }:
 
 let
@@ -261,6 +261,9 @@ with generated;
       asmfmt
       delve
       errcheck
+      go-tools
+      gocode
+      gocode-gomod
       godef
       gogetdoc
       golint
