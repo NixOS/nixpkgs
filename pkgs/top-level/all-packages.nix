@@ -17209,6 +17209,8 @@ with pkgs;
     gtk = gtk3;
   };
 
+  hovercraft = python3Packages.callPackage ../applications/misc/hovercraft { };
+
   howl = callPackage ../applications/editors/howl { };
 
   ht = callPackage ../applications/editors/ht { };

@@ -1686,8 +1686,6 @@ in {
 
   hupper = callPackage ../development/python-modules/hupper {};
 
-  hovercraft = callPackage ../development/python-modules/hovercraft { };
-
   hsaudiotag = callPackage ../development/python-modules/hsaudiotag { };
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
