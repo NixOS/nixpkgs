@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, dune }:
+{ stdenv, fetchurl, ocaml, findlib, dune, opaline }:
 
 { pname, version, buildInputs ? [], ... }@args:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation ({
   '';
   installPhase = ''
     runHook preInstall
-    ${dune.installPhase}
+    ${opaline}/bin/opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
     runHook postInstall
   '';
 
