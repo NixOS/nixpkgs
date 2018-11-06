@@ -6,6 +6,7 @@ let
   cfg = config.services.gitea;
   gitea = cfg.package;
   pg = config.services.postgresql;
+  useMysql = cfg.database.type == "mysql";
   usePostgresql = cfg.database.type == "postgres";
   configFile = pkgs.writeText "app.ini" ''
     APP_NAME = ${cfg.appName}
@@ -253,7 +254,7 @@ in
 
     systemd.services.gitea = {
       description = "gitea";
-      after = [ "network.target" "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [ gitea.bin ];
 
