@@ -2564,6 +2564,8 @@ in {
 
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
+  ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
+
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
   ipywebrtc = callPackage ../development/python-modules/ipywebrtc { };
