@@ -725,6 +725,8 @@ with pkgs;
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
+  gucci = callPackage ../tools/text/gucci { };
+
   grc = callPackage ../tools/misc/grc { };
 
   green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
