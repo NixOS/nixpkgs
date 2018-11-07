@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, pkgconfig
+{ stdenv, makeWrapper, fetchurl, which, pkgconfig
 , ocamlPackages
 , libao, portaudio, alsaLib, libpulseaudio, libjack2
 , libsamplerate, libmad, taglib, lame, libogg
@@ -31,10 +31,14 @@ stdenv.mkDerivation {
     sed ${toString packageFilters} PACKAGES.default > PACKAGES
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/liquidsoap --set LIQ_LADSPA_PATH /run/current-system/sw/lib/ladspa
+  '';
+
   configureFlags = [ "--localstatedir=/var" ];
 
   buildInputs =
-    [ which ocamlPackages.ocaml ocamlPackages.findlib pkgconfig
+    [ makeWrapper which ocamlPackages.ocaml ocamlPackages.findlib pkgconfig
       libao portaudio alsaLib libpulseaudio libjack2
       libsamplerate libmad taglib lame libogg
       libvorbis speex libtheora libopus fdk_aac
