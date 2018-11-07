@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, libGL, libXrandr, libXinerama, libXcursor, libX11
-, darwin, fixDarwinDylibNames
+, cf-private, Cocoa, Kernel, fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libX11 libXrandr libXinerama libXcursor
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Cocoa Kernel fixDarwinDylibNames ]);
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa Kernel fixDarwinDylibNames
+    # Needed for NSDefaultRunLoopMode symbols.
+    cf-private
+  ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
