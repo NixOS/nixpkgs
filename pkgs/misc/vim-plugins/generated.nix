@@ -3491,6 +3491,17 @@
     };
   };
 
+  yats-vim = buildVimPluginFrom2Nix {
+    name = "yats-vim-2018-10-17";
+    src = fetchFromGitHub {
+      owner = "HerringtonDarkholme";
+      repo = "yats.vim";
+      rev = "4675d7ff4b04aa5c5eabd5a1d862fcf78a7cd759";
+      sha256 = "1hb36d4lb79dzn4idmar8zq1w4ya4a52a5gpzksj9x9k4fx6gakr";
+      fetchSubmodules = true;
+    };
+  };
+
   youcompleteme = buildVimPluginFrom2Nix {
     name = "youcompleteme-2018-10-14";
     src = fetchFromGitHub {
