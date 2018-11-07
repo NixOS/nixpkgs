@@ -617,6 +617,8 @@ in {
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
+  pytest-tornado5 = callPackage ../development/python-modules/pytest-tornado5 { };
+
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-hosts = callPackage ../development/python-modules/python-hosts { };
