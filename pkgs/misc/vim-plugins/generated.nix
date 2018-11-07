@@ -1940,6 +1940,16 @@
     };
   };
 
+  vim-colemak = buildVimPluginFrom2Nix {
+    name = "vim-colemak-2016-10-16";
+    src = fetchFromGitHub {
+      owner = "kalbasit";
+      repo = "vim-colemak";
+      rev = "6ac1c0bf362845355c65dfeab9a9987c1b4dc7ec";
+      sha256 = "1li7yc5vglrhf7w7i7gs2i7ihdb1bhx85basmpgqlf7790lv1599";
+    };
+  };
+
   vim-colors-solarized = buildVimPluginFrom2Nix {
     name = "vim-colors-solarized-2011-05-09";
     src = fetchFromGitHub {
