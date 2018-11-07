@@ -5,7 +5,7 @@
 , libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver
 , nss, nspr, alsaLib, cups, fontconfig, expat
-, libudev0-shim, glibc, curl, openssl, nghttp2, gnome3 }:
+, libudev0-shim, glibc, curl, openssl, libnghttp2, gnome3 }:
 
 
 stdenv.mkDerivation rec {
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     gnome2.pango
     atk
     gdk_pixbuf
-    glib
     at-spi2-atk
     dbus
     libX11
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
     dpkg
   ];
 
-  runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl nghttp2 ];
+  runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl libnghttp2 ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -79,8 +78,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://getpolarized.io/;
-    description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation.";
-    license = stdenv.lib.licenses.gpl2Plus;
+    description = "Personal knowledge repository for PDF and web content supporting incremental reading and document annotation";
+    license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.noneucat ];
   };
