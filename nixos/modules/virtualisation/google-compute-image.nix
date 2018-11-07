@@ -8,17 +8,17 @@ in
 {
   imports = [ ../profiles/headless.nix ../profiles/qemu-guest.nix ];
 
-  system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
+  system.build.googleComputeImage = lib.customisation.makeOverridable (import ../../lib/make-disk-image.nix) {
     name = "google-compute-image";
     postVM = ''
-      PATH=$PATH:${pkgs.stdenv.lib.makeBinPath [ pkgs.gnutar pkgs.gzip ]}
+      PATH=$PATH:${with pkgs; stdenv.lib.makeBinPath [ gnutar gzip ]}
       pushd $out
       mv $diskImage disk.raw
       tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw.tar.gz disk.raw
       rm $out/disk.raw
       popd
     '';
-    configFile = <nixpkgs/nixos/modules/virtualisation/google-compute-config.nix>;
+    configFile = ./google-compute-config.nix;
     format = "raw";
     inherit diskSize;
     inherit config lib pkgs;
