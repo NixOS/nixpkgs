@@ -278,8 +278,8 @@ in rec {
     # enables patchShebangs above. Unfortunately, patchShebangs ignores our $SHELL setting
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
-    extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = [ pkgs.darwin.CF ];
+    extraNativeBuildInputs = with pkgs; [ xz ];
+    extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
     libcxx = pkgs.libcxx;
 
     extraPreHook = ''
@@ -335,8 +335,8 @@ in rec {
     };
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
-    extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = [ pkgs.darwin.CF ];
+    extraNativeBuildInputs = with pkgs; [ xz ];
+    extraBuildInputs = [ pkgs.darwin.CF pkgs.bash ];
     libcxx = pkgs.libcxx;
 
     extraPreHook = ''

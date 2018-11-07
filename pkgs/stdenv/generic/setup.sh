@@ -257,17 +257,9 @@ shopt -s nullglob
 
 # Set up the initial path.
 PATH=
-HOST_PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH "$i/bin"
-
-    # For backward compatibility, we add initial path to HOST_PATH so
-    # it can be used in auto patch-shebangs. Unfortunately this will
-    # not work with cross compilation.
-    if [ -z "${strictDeps-}" ]; then
-        addToSearchPath HOST_PATH "$i/bin"
-    fi
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
