@@ -72,7 +72,7 @@ in buildPythonPackage rec {
   ] ++ lib.optional (pythonOlder "3.5") typing;
 
   checkPhase = ''
-    ${cudaStubEnv}python test/run_test.py --exclude dataloader sparse torch utils
+    ${cudaStubEnv}python test/run_test.py --exclude dataloader sparse torch utils distributed
   '';
 
   meta = {
