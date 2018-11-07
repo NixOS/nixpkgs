@@ -1520,6 +1520,16 @@
     };
   };
 
+  traces-vim = buildVimPluginFrom2Nix {
+    name = "traces-vim-2018-10-14";
+    src = fetchFromGitHub {
+      owner = "markonm";
+      repo = "traces.vim";
+      rev = "9520ed3837340028b871a9e497dd0d0b07cb4953";
+      sha256 = "0dfm04c4v0qk2f7fycpkwhbws0m5q383bizyaslflb1mmx3jnc48";
+    };
+  };
+
   tslime-vim = buildVimPluginFrom2Nix {
     name = "tslime-vim-2018-07-23";
     src = fetchFromGitHub {

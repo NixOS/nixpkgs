@@ -166,6 +166,7 @@ MarcWeber/vim-addon-sql
 MarcWeber/vim-addon-syntax-checker
 MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
+markonm/traces.vim
 martinda/Jenkinsfile-vim-syntax
 mattn/emmet-vim
 mattn/gist-vim
