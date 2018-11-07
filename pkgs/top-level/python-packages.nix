@@ -3757,8 +3757,11 @@ in {
     };
   };
 
+  prompt_toolkit = self.prompt_toolkit_1;
 
-  prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit { };
+  prompt_toolkit_1 = callPackage ../development/python-modules/prompt_toolkit/1.nix { };
+
+  prompt_toolkit_2 = callPackage ../development/python-modules/prompt_toolkit { };
 
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
