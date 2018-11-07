@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
 , freeglut, libGLU_combined, libjpeg, zlib, libXft, libpng
-, darwin, libtiff, freetype
+, libtiff, freetype, cf-private, Cocoa, AGL, GLUT
 }:
 
 let
@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
 
   propagatedBuildInputs = [ inputproto ]
     ++ (if stdenv.isDarwin
-        then (with darwin.apple_sdk.frameworks; [Cocoa AGL GLUT freetype libtiff])
+        then [ Cocoa AGL GLUT freetype libtiff cf-private  /* Needed for NSDefaultRunLoopMode */ ]
         else [ xlibsWrapper libXi freeglut ]);
 
   enableParallelBuilding = true;

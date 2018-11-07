@@ -9574,7 +9574,10 @@ with pkgs;
 
   flite = callPackage ../development/libraries/flite { };
 
-  fltk13 = callPackage ../development/libraries/fltk { };
+  fltk13 = callPackage ../development/libraries/fltk {
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AGL GLUT;
+  };
   fltk = self.fltk13;
 
   flyway = callPackage ../development/tools/flyway { };
