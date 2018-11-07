@@ -167,6 +167,7 @@ MarcWeber/vim-addon-syntax-checker
 MarcWeber/vim-addon-toggle-buffer
 MarcWeber/vim-addon-xdebug
 martinda/Jenkinsfile-vim-syntax
+mattn/emmet-vim
 mattn/gist-vim
 mattn/webapi-vim
 mbbill/undotree

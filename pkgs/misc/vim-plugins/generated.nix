@@ -477,6 +477,17 @@
     };
   };
 
+  emmet-vim = buildVimPluginFrom2Nix {
+    name = "emmet-vim-2018-10-06";
+    src = fetchFromGitHub {
+      owner = "mattn";
+      repo = "emmet-vim";
+      rev = "7a4bf3463ef1e2c08393218fc67a8729c00948a5";
+      sha256 = "15y5h7b6ll7nngaq9i44xb88rw2jg5ahbvybdn7kdf0nq1m3z409";
+      fetchSubmodules = true;
+    };
+  };
+
   ensime-vim = buildVimPluginFrom2Nix {
     name = "ensime-vim-2018-10-10";
     src = fetchFromGitHub {
