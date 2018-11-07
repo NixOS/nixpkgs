@@ -1880,6 +1880,16 @@
     };
   };
 
+  vim-better-whitespace = buildVimPluginFrom2Nix {
+    name = "vim-better-whitespace-2018-06-11";
+    src = fetchFromGitHub {
+      owner = "ntpeters";
+      repo = "vim-better-whitespace";
+      rev = "70a38fa9683e8cd0635264dd1b69c6ccbee4e3e7";
+      sha256 = "1w16mrvydbvj9msi8p4ym1vasjx6kr4yd8jdhndz0pr3qasn2ix9";
+    };
+  };
+
   vim-buffergator = buildVimPluginFrom2Nix {
     name = "vim-buffergator-2018-05-02";
     src = fetchFromGitHub {
