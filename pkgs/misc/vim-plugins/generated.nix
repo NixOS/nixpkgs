@@ -1170,6 +1170,16 @@
     };
   };
 
+  PreserveNoEOL = buildVimPluginFrom2Nix {
+    name = "PreserveNoEOL-2013-06-14";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "PreserveNoEOL";
+      rev = "940e3ce90e54d8680bec1135a21dcfbd6c9bfb62";
+      sha256 = "1726jpr2zf6jrb00pp082ikbx4mll3a877pnzs6i18f9fgpaqqgd";
+    };
+  };
+
   psc-ide-vim = buildVimPluginFrom2Nix {
     name = "psc-ide-vim-2018-03-11";
     src = fetchFromGitHub {
