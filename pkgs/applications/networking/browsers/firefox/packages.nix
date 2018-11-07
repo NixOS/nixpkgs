@@ -8,12 +8,6 @@ let
     ./env_var_for_system_dir.patch
   ];
 
-  firefox60_aarch64_skia_patch = fetchpatch {
-    name = "aarch64-skia.patch";
-    url = https://src.fedoraproject.org/rpms/firefox/raw/8cff86d95da3190272d1beddd45b41de3148f8ef/f/build-aarch64-skia.patch;
-    sha256 = "11acb0ms4jrswp7268nm2p8g8l4lv8zc666a5bqjbb09x9k6b78k";
-  };
-
 in
 
 rec {
@@ -70,10 +64,10 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.2.2esr";
+    ffversion = "60.3.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "2h2naaxx4lv90bjpcrsma4sdhl4mvsisx3zi09vakjwv2lad91gy41cmcpqprpcbsmlvpqf8yiv52ah4d02a8d9335xhw2ajw6asjc1";
+      sha512 = "36ipksq4408mfkyzna7kkjyg70nqx0hzg8zp34kmsynl42whvsqhsfl198c34shsx9zhfsag3hzx2ihhfnj8ph8b0xdgyrmi2ijbvbx";
     };
 
     patches = nixpkgsPatches ++ [
@@ -82,7 +76,7 @@ rec {
       # this one is actually an omnipresent bug
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
       ./fix-pa-context-connect-retval.patch
-    ] ++ lib.optional stdenv.isAarch64 firefox60_aarch64_skia_patch;
+    ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
