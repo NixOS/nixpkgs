@@ -618,7 +618,7 @@ let f(h, h + 1, i) = i + h
   </variablelist>
 
   <variablelist>
-   <title>Variables affecting build properties</title>
+   <title>Attributes affecting build properties</title>
    <varlistentry>
     <term>
      <varname>enableParallelBuilding</varname>
@@ -634,21 +634,6 @@ let f(h, h + 1, i) = i + h
       support for parallel building including <literal>cmake</literal>,
       <literal>meson</literal>, and <literal>qmake</literal> will set it to
       <literal>true</literal>.
-     </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>
-     <varname>preferLocalBuild</varname>
-    </term>
-    <listitem>
-     <para>
-      If set, specifies that the package is so lightweight in terms of build
-      operations (e.g. write a text file from a Nix string to the store) that
-      there's no need to look for it in binary caches -- it's faster to just
-      build it locally. It also tells Hydra and other facilities that this
-      package doesn't need to be exported in binary caches (noone would use it,
-      after all).
      </para>
     </listitem>
    </varlistentry>
