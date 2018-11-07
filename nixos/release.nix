@@ -45,6 +45,7 @@ let
       system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
     };
 
+  makeModules = module: rest: [ configuration versionModule module rest ];
 
   makeIso =
     { module, type, system, ... }:
@@ -53,7 +54,9 @@ let
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
-      modules = [ configuration module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
+      modules = makeModules module {
+        isoImage.isoBaseName = "nixos-${type}";
+      };
     }).config.system.build.isoImage);
 
 
@@ -64,7 +67,7 @@ let
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
-      modules = [ configuration module versionModule ];
+      modules = makeModules module {};
     }).config.system.build.sdImage);
 
 
@@ -77,7 +80,7 @@ let
 
       config = (import lib/eval-config.nix {
         inherit system;
-        modules = [ configuration module versionModule ];
+        modules = makeModules module {};
       }).config;
 
       tarball = config.system.build.tarball;
@@ -97,7 +100,7 @@ let
 
   buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
-    modules = [ configuration module versionModule ] ++ singleton
+    modules = makeModules module
       ({ ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
@@ -108,7 +111,7 @@ let
     let
       configEvaled = import lib/eval-config.nix {
         inherit system;
-        modules = [ module versionModule ];
+        modules = makeModules module {};
       };
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
