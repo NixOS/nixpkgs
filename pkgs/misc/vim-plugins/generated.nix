@@ -436,6 +436,16 @@
     };
   };
 
+  direnv-vim = buildVimPluginFrom2Nix {
+    name = "direnv-vim-2017-12-29";
+    src = fetchFromGitHub {
+      owner = "direnv";
+      repo = "direnv.vim";
+      rev = "4d6271f0facd57a478c0d02895775dc01f577c5c";
+      sha256 = "1vfg4hrxbqc96w694cn9gzjvwkscd111fp6dqlh7wpd2z3ciw07h";
+    };
+  };
+
   echodoc-vim = buildVimPluginFrom2Nix {
     name = "echodoc-vim-2018-10-20";
     src = fetchFromGitHub {
