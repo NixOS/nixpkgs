@@ -18518,6 +18518,8 @@ with pkgs;
 
   pmenu = callPackage ../applications/misc/pmenu { };
 
+  polar-bookshelf = callPackage ../applications/misc/polar-bookshelf { };
+
   poezio = python3Packages.poezio;
 
   pommed = callPackage ../os-specific/linux/pommed {};
