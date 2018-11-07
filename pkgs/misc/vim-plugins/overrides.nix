@@ -162,6 +162,10 @@ with generated;
     dependencies = ["self"];
   });
 
+  gist-vim = gist-vim.overrideAttrs(old: {
+    dependencies = ["webapi-vim"];
+  });
+
   gitv = gitv.overrideAttrs(old: {
     dependencies = ["gitv"];
   });
