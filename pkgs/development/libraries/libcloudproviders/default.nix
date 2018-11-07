@@ -2,11 +2,9 @@
 
 # TODO: Add installed tests once https://gitlab.gnome.org/Incubator/libcloudproviders/issues/4 is fixed
 
-let
+stdenv.mkDerivation rec {
   pname = "libcloudproviders";
   version = "0.2.5";
-in stdenv.mkDerivation rec {
-  inherit pname version;
 
   src = fetchurl {
     url = "https://gitlab.gnome.org/Incubator/${pname}/repository/archive.tar.gz?ref=${version}";

@@ -1,13 +1,8 @@
 { stdenv, bundlerEnv, ruby, makeWrapper }:
 
-let
-
+stdenv.mkDerivation rec {
   pname = "lvmsync";
   version = (import ./gemset.nix)."${pname}".version;
-
-in stdenv.mkDerivation rec {
-
-  inherit pname version;
 
   env = bundlerEnv {
     name = "${pname}-${version}-gems";

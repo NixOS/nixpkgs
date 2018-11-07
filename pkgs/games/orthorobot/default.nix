@@ -2,7 +2,6 @@
 
 let
   pname = "orthorobot";
-  version = "1.1.1";
 
   icon = fetchurl {
     url = "http://stabyourself.net/images/screenshots/orthorobot-5.png";
@@ -22,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  inherit pname version;
+  inherit pname;
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Stabyourself";

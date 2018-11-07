@@ -3,14 +3,13 @@
   epoxy, at-spi2-core, dbus, curl, fftwFloat }:
 
 let
-  pname = "HybridReverb2";
-  version = "2.1.1";
   owner = "jpcima";
   DBversion = "1.0.0";
 in
 
 stdenv.mkDerivation rec {
-  inherit pname version;
+  pname = "HybridReverb2";
+  version = "2.1.1";
 
   impulseDB = fetchzip {
     url = "https://github.com/${owner}/${pname}-impulse-response-database/archive/v${DBversion}.zip";

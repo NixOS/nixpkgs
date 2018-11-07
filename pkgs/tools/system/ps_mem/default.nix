@@ -1,10 +1,8 @@
 { stdenv, pythonPackages, fetchFromGitHub }:
 
-let
+pythonPackages.buildPythonApplication rec {
   version = "3.9";
   pname = "ps_mem";
-in pythonPackages.buildPythonApplication rec {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "pixelb";

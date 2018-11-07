@@ -4,12 +4,9 @@
   baloo, karchive, kconfig, kcrash, kfilemetadata, kinit, kirigami2, knewstuff, plasma-framework
 }:
 
-let
+mkDerivation rec {
   pname = "peruse";
   version = "1.2.20180816";
-
-in mkDerivation rec {
-  inherit pname version;
 
   # The last formal release from 2016 uses kirigami1 which is deprecated
   src = fetchFromGitHub {

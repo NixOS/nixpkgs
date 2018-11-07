@@ -2,7 +2,6 @@
 
 let
   pname = "90secondportraits";
-  version = "1.01b";
 
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/90secondportraits.png";
@@ -22,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  inherit pname version;
+  inherit pname;
+  version = "1.01b";
 
   src = fetchurl {
     url = "https://github.com/SimonLarsen/90-Second-Portraits/releases/download/${version}/${pname}-${version}.love";

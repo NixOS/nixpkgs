@@ -2,7 +2,6 @@
 
 let
   pname = "rimshot";
-  version = "1.0";
 
   icon = fetchurl {
     url = "http://stabyourself.net/images/screenshots/rimshot-2.png";
@@ -22,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  inherit pname version;
+  inherit pname;
+  version = "1.0";
 
   src = fetchurl {
     url = "http://stabyourself.net/dl.php?file=${pname}/${pname}-source.zip";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     unzip -j $src
-  '';  
+  '';
 
   installPhase =
   ''

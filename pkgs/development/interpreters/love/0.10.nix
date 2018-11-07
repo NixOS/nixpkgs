@@ -3,13 +3,10 @@
   libtheora, which, autoconf, automake, libtool
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "love";
   version = "0.10.2";
-in
 
-stdenv.mkDerivation rec {
-  inherit pname version;
   src = fetchFromBitbucket {
     owner = "rude";
     repo = "love";

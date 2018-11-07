@@ -4,13 +4,10 @@
 , softhsm
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "tlspool";
   version = "20180227";
-in
 
-stdenv.mkDerivation rec {
-  inherit pname version;
   src = fetchFromGitHub {
     owner = "arpa2";
     repo = "tlspool";

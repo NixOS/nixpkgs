@@ -5,11 +5,9 @@
 , json-glib, glib, glib-networking
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "tootle";
   version = "0.2.0";
-in stdenv.mkDerivation rec {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "bleakgrey";

@@ -2,7 +2,6 @@
 
 let
   pname = "duckmarines";
-  version = "1.0c";
 
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/duckmarines.png";
@@ -22,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  inherit pname version;
+  inherit pname;
+  version = "1.0c";
 
   src = fetchurl {
     url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-1.0-love.zip";

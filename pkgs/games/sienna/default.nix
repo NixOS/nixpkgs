@@ -2,7 +2,6 @@
 
 let
   pname = "sienna";
-  version = "1.0c";
 
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/sienna.png";
@@ -13,7 +12,7 @@ let
     name = "sienna";
     exec = "${pname}";
     icon = "${icon}";
-    comment = "Fast-paced one button platformer"; 
+    comment = "Fast-paced one button platformer";
     desktopName = "Sienna";
     genericName = "sienna";
     categories = "Game;";
@@ -22,7 +21,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  inherit pname version;
+  inherit pname;
+  version = "1.0c";
 
   src = fetchurl {
     url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";

@@ -7,14 +7,11 @@ with stdenv.lib;
 
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
-let
+stdenv.mkDerivation rec {
   version = "8.42";
   pname = if (variant == null) then "pcre"
     else  if (variant == "cpp") then "pcre-cpp"
     else  variant;
-
-in stdenv.mkDerivation rec {
-  inherit pname version;
 
   src = fetchurl {
     url = "https://ftp.pcre.org/pub/pcre/pcre-${version}.tar.bz2";

@@ -15,11 +15,9 @@
 , magic-wormhole
 , wrapGAppsHook }:
 
-let
+stdenv.mkDerivation rec {
   pname = "Transporter";
   version = "1.3.3";
-in stdenv.mkDerivation rec {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "bleakgrey";

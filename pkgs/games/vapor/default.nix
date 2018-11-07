@@ -2,7 +2,6 @@
 
 let
   pname = "vapor";
-  version = "0.2.3";
   commitid = "dbf509f";
 
   icon = fetchurl {
@@ -14,16 +13,17 @@ let
     name = "Vapor";
     exec = "${pname}";
     icon = "${icon}";
-    comment = "LÖVE Distribution Client"; 
+    comment = "LÖVE Distribution Client";
     desktopName = "Vapor";
     genericName = "vapor";
     categories = "Game;";
   };
 
-in 
+in
 
 stdenv.mkDerivation rec {
-  inherit pname version;
+  inherit pname;
+  version = "0.2.3";
 
   src = fetchurl {
     url =

@@ -28,15 +28,14 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "2.3.2";
-  pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
 
   withUdisks = (withTaglib && withDevices);
 
 in stdenv.mkDerivation rec {
-  inherit pname version;
+  version = "2.3.2";
+  pname = "cantata";
 
   src = fetchFromGitHub {
     owner  = "CDrummond";

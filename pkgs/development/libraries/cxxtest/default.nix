@@ -1,10 +1,8 @@
 { stdenv, fetchFromGitHub, python2Packages}:
 
-let
-  pname = "cxxtest";
+python2Packages.buildPythonApplication rec {
   version = "4.4";
-in python2Packages.buildPythonApplication rec {
-  inherit pname version;
+  pname = "cxxtest";
 
   src = fetchFromGitHub {
     owner = "CxxTest";

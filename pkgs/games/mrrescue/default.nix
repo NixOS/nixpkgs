@@ -2,7 +2,6 @@
 
 let
   pname = "mrrescue";
-  version = "1.02d";
 
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/mrrescue.png";
@@ -13,16 +12,18 @@ let
     name = "mrrescue";
     exec = "${pname}";
     icon = "${icon}";
-    comment = "Arcade-style fire fighting game"; 
+    comment = "Arcade-style fire fighting game";
     desktopName = "Mr. Rescue";
     genericName = "mrrescue";
     categories = "Game;";
   };
 
-in 
+in
 
 stdenv.mkDerivation rec {
-  inherit pname version;
+  inherit pname;
+
+  version = "1.02d";
 
   src = fetchurl {
     url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-${version}.love";

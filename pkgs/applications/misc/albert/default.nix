@@ -1,12 +1,9 @@
 { mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase,
   qtdeclarative, qtsvg, qtx11extras, muparser, cmake, python3 }:
 
-let
+mkDerivation rec {
   pname = "albert";
   version = "0.14.22";
-in
-mkDerivation rec {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";

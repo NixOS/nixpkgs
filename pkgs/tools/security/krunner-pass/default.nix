@@ -4,12 +4,9 @@
 
   pass, pass-otp ? null, krunner,
 }:
-let
+mkDerivation rec {
   pname = "krunner-pass";
   version = "1.3.0";
-in
-mkDerivation rec {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "akermu";
