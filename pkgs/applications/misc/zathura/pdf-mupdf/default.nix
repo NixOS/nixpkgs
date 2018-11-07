@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-pdf-mupdf";
-    rev = "0.3.4";
+    rev = version;
     sha256 = "1m4w4jrybpjmx6pi33a5saxzmfd8rrym2k13jpd1fv543s17d9dy";
   };
 
