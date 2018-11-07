@@ -184,6 +184,7 @@ mileszs/ack.vim
 mindriot101/vim-yapf
 mkasa/lushtags
 morhetz/gruvbox
+motus/pig.vim
 mpickering/hlint-refactor-vim
 nathanaelkane/vim-indent-guides
 nbouscal/vim-stylish-haskell

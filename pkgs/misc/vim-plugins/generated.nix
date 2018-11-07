@@ -1150,6 +1150,16 @@
     };
   };
 
+  pig-vim = buildVimPluginFrom2Nix {
+    name = "pig-vim-2017-06-08";
+    src = fetchFromGitHub {
+      owner = "motus";
+      repo = "pig.vim";
+      rev = "60d8a0883d3e474e61af46b581a5ce3af65e9bb5";
+      sha256 = "0az48a3slpzljb69d60cpahkshmdbss0snc8lmvf4yrc1gx8yncv";
+    };
+  };
+
   pony-vim-syntax = buildVimPluginFrom2Nix {
     name = "pony-vim-syntax-2017-09-26";
     src = fetchFromGitHub {
