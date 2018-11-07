@@ -15,7 +15,9 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildFlags = "--tags release";
+  buildFlagsArray = ''
+    -ldflags=-X main.AppVersion=${version}
+  '';
 
   meta = with stdenv.lib; {
     description = "A simple CLI templating tool written in golang";
