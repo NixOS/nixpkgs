@@ -18,8 +18,8 @@ let
   garden_src = fetchgit {
     rev = "v${version}";
     url = "https://github.com/cloudfoundry/garden-runc-release.git";
-    sha256 = "0470f3bxsqdy6npvpa87ga74s7h7955g9fdkb9g8gxh0mm6jxqqg";
-    deepClone = true;
+    sha256 = "1rk0k04r8mwabsj6pd63sc7653ahjbxs4bxmnihzsr5naihaxd4n";
+    fetchSubmodules = true;
   };
 
   nstar = callPackage ./nstar.nix { inherit garden_src; };
