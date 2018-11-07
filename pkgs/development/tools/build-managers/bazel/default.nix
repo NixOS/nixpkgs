@@ -192,9 +192,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
+
+    # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
+    # if it can’t find something in tools, it calls $out/bin/bazel-real
     cp scripts/packages/bazel.sh $out/bin/bazel
     mv output/bazel $out/bin/bazel-real
+
     wrapProgram "$out/bin/bazel" --set JAVA_HOME "${runJdk}"
+
+    # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv output/bazel-complete.bash $out/share/bash-completion/completions/bazel
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
@@ -204,23 +210,31 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 
+    hello_test () {
+      $out/bin/bazel test --test_output=errors \
+        examples/cpp:hello-success_test \
+        examples/java-native/src/test/java/com/example/myproject:hello
+    }
+
+    # test whether $WORKSPACE_ROOT/tools/bazel works
+
     mkdir -p tools
-    touch tools/bazel
+    cat > tools/bazel <<"EOF"
+    #!${stdenv.shell} -e
+    exit 1
+    EOF
     chmod +x tools/bazel
 
-    echo "#!/bin/bash -e" > tools/bazel
-    echo "exit 1" >> tools/bazel
+    # first call should fail if tools/bazel is used
+    ! hello_test
 
-    ! $out/bin/bazel test --test_output=errors \
-        examples/cpp:hello-success_test \
-        examples/java-native/src/test/java/com/example/myproject:hello
+    cat > tools/bazel <<"EOF"
+    #!${stdenv.shell} -e
+    exec "$BAZEL_REAL" "$@"
+    EOF
 
-    echo "#!/bin/bash -e" > tools/bazel
-    echo "exec \"\$BAZEL_REAL\" \"\$@\"" >> tools/bazel
-
-    $out/bin/bazel test --test_output=errors \
-        examples/cpp:hello-success_test \
-        examples/java-native/src/test/java/com/example/myproject:hello
+    # second call succeeds because it defers to $out/bin/bazel-real
+    hello_test
   '';
 
   # Save paths to hardcoded dependencies so Nix can detect them.
