@@ -3541,4 +3541,14 @@
       sha256 = "1zp1bz3fzcwvdw3qgiyvmd5imrzjh7rnpnjpxm8mma0kxi2bnl3g";
     };
   };
+
+  zoomwintab-vim = buildVimPluginFrom2Nix {
+    name = "zoomwintab-vim-2018-04-14";
+    src = fetchFromGitHub {
+      owner = "troydm";
+      repo = "zoomwintab.vim";
+      rev = "5bbbd1f79e40839a34803627e11f9e662f639fe0";
+      sha256 = "04pv7mmlz9ccgzfg8sycqxplaxpbyh7pmhwcw47b2xwnazjz49d6";
+    };
+  };
 }
