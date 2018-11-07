@@ -136,6 +136,15 @@ in
       '';
     };
 
+    networking.dhcpcd.extraFlags = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "--ipv6only" ];
+      description = ''
+         Additional command line flags to be passed to the dhcpcd daemon.
+      '';
+    };
+
     networking.dhcpcd.runHook = mkOption {
       type = types.lines;
       default = "";
@@ -177,7 +186,7 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd -w --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd -w --quiet ${optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf} ${toString cfg.extraFlags}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
           };
