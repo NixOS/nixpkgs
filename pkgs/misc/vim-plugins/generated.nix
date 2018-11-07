@@ -3401,6 +3401,16 @@
     };
   };
 
+  vissort-vim = buildVimPluginFrom2Nix {
+    name = "vissort-vim-2014-01-31";
+    src = fetchFromGitHub {
+      owner = "navicore";
+      repo = "vissort.vim";
+      rev = "75a5b08b64d2f762206bffd294066533891fa03c";
+      sha256 = "0a71b22apkhicca9nkd06jlcnqkf583mlpfh2mvl4d474viavqfn";
+    };
+  };
+
   vundle = buildVimPluginFrom2Nix {
     name = "vundle-2018-02-03";
     src = fetchFromGitHub {
