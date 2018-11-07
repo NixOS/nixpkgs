@@ -27523,6 +27523,8 @@ in
 
   betaflight-configurator = callPackage ../applications/science/robotics/betaflight-configurator { };
 
+  mission-planner = callPackage ../applications/science/robotics/mission-planner { };
+
   ### MISC
 
   acpilight = callPackage ../misc/acpilight { };
