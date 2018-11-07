@@ -967,6 +967,11 @@
     github = "danielfullmer";
     name = "Daniel Fullmer";
   };
+  das-g = {
+    email = "nixpkgs@raphael.dasgupta.ch";
+    github = "das-g";
+    name = "Raphael Das Gupta";
+  };
   das_j = {
     email = "janne@hess.ooo";
     github = "dasJ";

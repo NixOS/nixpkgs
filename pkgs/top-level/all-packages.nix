@@ -11025,6 +11025,8 @@ with pkgs;
 
   libosip_3 = callPackage ../development/libraries/osip/3.nix {};
 
+  libosmium = callPackage ../development/libraries/libosmium { };
+
   libosmocore = callPackage ../applications/misc/libosmocore { };
 
   libosmpbf = callPackage ../development/libraries/libosmpbf {};
@@ -11825,6 +11827,8 @@ with pkgs;
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
+
+  protozero = callPackage ../development/libraries/protozero { };
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
@@ -18340,6 +18344,8 @@ with pkgs;
   };
 
   osmctools = callPackage ../applications/misc/osmctools { };
+
+  osmium-tool = callPackage ../applications/misc/osmium-tool { };
 
   owamp = callPackage ../applications/networking/owamp { };
 
