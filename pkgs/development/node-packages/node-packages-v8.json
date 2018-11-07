@@ -69,6 +69,7 @@
 , "meguca"
 , "mocha"
 , "multi-file-swagger"
+, "neovim"
 , "nijs"
 , "node2nix"
 , "node-gyp"
