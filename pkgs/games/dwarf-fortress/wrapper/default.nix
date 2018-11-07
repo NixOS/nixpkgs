@@ -35,8 +35,11 @@ let
 
   fixup = lib.singleton (runCommand "fixup" {} (''
     mkdir -p $out/data/init
+  '' + (if (theme != null) then ''
+    cp ${lib.head themePkg}/data/init/init.txt $out/data/init/init.txt
+  '' else ''
     cp ${dwarf-fortress}/data/init/init.txt $out/data/init/init.txt
-  '' + lib.optionalString enableDFHack ''
+  '') + lib.optionalString enableDFHack ''
     mkdir -p $out/hack
 
     # Patch the MD5
