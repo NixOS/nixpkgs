@@ -78,6 +78,7 @@ google/vim-jsonnet
 google/vim-maktaba
 gregsexton/gitv
 guns/xterm-color-table.vim
+hashivim/vim-terraform
 haya14busa/incsearch-easymotion.vim
 haya14busa/incsearch.vim
 heavenshell/vim-jsdoc

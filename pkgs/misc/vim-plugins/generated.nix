@@ -3090,6 +3090,16 @@
     };
   };
 
+  vim-terraform = buildVimPluginFrom2Nix {
+    name = "vim-terraform-2018-08-02";
+    src = fetchFromGitHub {
+      owner = "hashivim";
+      repo = "vim-terraform";
+      rev = "7c11252da45c6508524e022d1f2588134902d8d1";
+      sha256 = "1qnjjcin934i7yd2fd0xapraindrpavnik1fasv10x5dw8yzxyrs";
+    };
+  };
+
   vim-test = buildVimPluginFrom2Nix {
     name = "vim-test-2018-10-24";
     src = fetchFromGitHub {
