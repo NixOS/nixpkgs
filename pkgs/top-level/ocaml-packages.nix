@@ -737,6 +737,8 @@ let
 
     vg = callPackage ../development/ocaml-modules/vg { };
 
+    visitors = callPackage ../development/ocaml-modules/visitors { };
+
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
