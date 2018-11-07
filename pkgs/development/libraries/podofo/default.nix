@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "dev" "lib" ];
+
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng
@@ -31,6 +33,11 @@ stdenv.mkDerivation rec {
     "-DPODOFO_BUILD_STATIC=OFF"
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
+
+  postInstall = ''
+    moveToOutput lib "$lib"
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://podofo.sourceforge.net;
     description = "A library to work with the PDF file format";
