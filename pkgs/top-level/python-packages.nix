@@ -2566,6 +2566,8 @@ in {
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
+  ipyvolume = callPackage ../development/python-modules/ipyvolume { };
+
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
   ipywebrtc = callPackage ../development/python-modules/ipywebrtc { };
