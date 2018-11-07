@@ -10253,6 +10253,8 @@ with pkgs;
 
   iniparser = callPackage ../development/libraries/iniparser { };
 
+  intel-gmmlib = callPackage ../development/libraries/intel-gmmlib { };
+
   intltool = callPackage ../development/tools/misc/intltool { };
 
   ios-cross-compile = callPackage ../development/compilers/ios-cross-compile/9.2.nix {};
