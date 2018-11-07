@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
   '';
 
-  preInstall = ''
-    mkdir -p $out/bin
+  installPhase = ''
+    mkdir -p $out/bin $out/lib/udev/rules.d
+    make install
+    install 99-dmr.rules $out/lib/udev/rules.d/99-dmr.rules
   '';
 
   meta = with stdenv.lib; {
