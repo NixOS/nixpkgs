@@ -2562,6 +2562,8 @@ in {
 
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
+  ipywebrtc = callPackage ../development/python-modules/ipywebrtc { };
+
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
   ipaddress = callPackage ../development/python-modules/ipaddress { };
