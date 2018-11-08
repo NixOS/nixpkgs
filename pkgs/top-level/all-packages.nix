@@ -19014,6 +19014,8 @@ with pkgs;
 
   lightdm-mini-greeter = callPackage ../applications/display-managers/lightdm-mini-greeter { };
 
+  ly = callPackage ../applications/display-managers/ly { }; 
+
   slic3r = callPackage ../applications/misc/slic3r { };
 
   slic3r-prusa3d = callPackage ../applications/misc/slic3r/prusa3d.nix { };
