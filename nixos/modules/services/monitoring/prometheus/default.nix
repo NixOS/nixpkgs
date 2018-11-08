@@ -19,7 +19,7 @@ let
 
   # Pretty-print JSON to a file
   writePrettyJSON = name: x:
-    pkgs.runCommand name { } ''
+    pkgs.runCommand name { preferLocalBuild = true; } ''
       echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
     '';
 

@@ -98,6 +98,7 @@ let
 
   configFile = pkgs.runCommand "config.toml" {
     buildInputs = [ pkgs.remarshal ];
+    preferLocalBuild = true;
   } ''
     remarshal -if json -of toml \
       < ${pkgs.writeText "config.json" (builtins.toJSON configOptions)} \
