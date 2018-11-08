@@ -182,7 +182,7 @@ stdenv.mkDerivation ({
 
   libc_dev = stdenv.cc.libc_dev;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
