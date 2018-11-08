@@ -5980,6 +5980,16 @@ with pkgs;
     openssl = null;
   };
 
+  openconnect-globalprotect = openconnect-globalprotect_gnutls;
+
+  openconnect-globalprotect_openssl = callPackage ../tools/networking/openconnect-globalprotect {
+    gnutls = null;
+  };
+
+  openconnect-globalprotect_gnutls = callPackage ../tools/networking/openconnect-globalprotect {
+    openssl = null;
+  };
+
   ding-libs = callPackage ../tools/misc/ding-libs { };
 
   sssd = callPackage ../os-specific/linux/sssd {
