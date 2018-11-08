@@ -151,6 +151,16 @@ in
         '';
       };
 
+      extraFlags = mkOption {
+        default = [];
+        type = with types; listOf str;
+        example = [ "vault-insecure-skip-verify" ];
+        description = ''
+          Specifies the extra flags supplied to `concourse web` invocation.
+          These flags are command line arguments that does not supply any value and acts like switches.
+        '';
+      };
+
       environment = mkOption {
         default = {};
         type = with types; attrsOf str;
@@ -170,6 +180,8 @@ in
   #### implementation
   config =
   let
+    extraFlags =
+      map (flag: "--${flag}") cfg.extraFlags;
     extraArgs =
       concatMap
         (x: x)
@@ -198,7 +210,7 @@ in
           [ "--postgres-socket" cfg.postgres-socket ]
       )
       ++ optionals (!isNull cfg.postgres-password) [ "--postgres-password" cfg.postgres-password ];
-    args = concatStringsSep " " (map escapeShellArgs [regularArgs extraArgs]);
+    args = concatStringsSep " " (map escapeShellArgs [regularArgs extraArgs extraFlags]);
   in
     mkIf cfg.enable {
       users.groups = optional (cfg.group == "concourse") {
