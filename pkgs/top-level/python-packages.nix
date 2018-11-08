@@ -166,6 +166,10 @@ in {
 
   agate-dbf = callPackage ../development/python-modules/agate-dbf { };
 
+  alerta = callPackage ../development/python-modules/alerta { };
+
+  alerta-server = callPackage ../development/python-modules/alerta-server { };
+
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
   agate-excel = callPackage ../development/python-modules/agate-excel { };
