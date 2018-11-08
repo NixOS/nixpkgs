@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "SDL2_image-${version}";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_image/release/${name}.tar.gz";
-    sha256 = "0s13dmakn21q6yw8avl67d4zkxzl1wap6l5nwf6cvzrmlxfw441m";
+    sha256 = "1b6f7002bm007y3zpyxb5r6ag0lml51jyvx1pwpj9sq24jfc8kp7";
   };
 
   buildInputs = [ SDL2 libpng libjpeg libtiff libungif libXpm zlib ]
