@@ -17,9 +17,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-
-  buildInputs =
-    [ openssl zlib pcre libxml2 libxslt gd geoip ]
+  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip ]
     ++ concatMap (mod: mod.inputs or []) modules;
 
   configureFlags = [
