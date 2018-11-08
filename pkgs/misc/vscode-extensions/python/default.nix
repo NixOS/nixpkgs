@@ -20,8 +20,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2018.7.0";
-    sha256 = "0ab6ce722b23274a8f70d156f55d02123dd3b686397b11d4eec0831ec69dbec5";
+    version = "2018.9.1";
+    sha256 = "050r1rb0xyfikfa6iq741s368xz600pqdk74w6cxszxpy8kl2hng";
   };
 
   postPatch = ''

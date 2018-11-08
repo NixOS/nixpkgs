@@ -2,16 +2,17 @@
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.15.1";
+  version = "1.15.2";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7b9e37f194f8bcdca8e9e6af92e2cbad79e360542effc2dd6b98d63955d8d8a3";
+    sha256 = "27a0d018f608a3fe34ac5e2b876f4c23c47e38295c47dd0775cc294cd2614bc1";
   };
 
   disabled = isPyPy;
-  buildInputs = [ gfortran pytest blas ];
+  nativeBuildInputs = [ gfortran pytest ];
+  buildInputs = [ blas ];
 
   patches = lib.optionals (python.hasDistutilsCxxPatch or false) [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585

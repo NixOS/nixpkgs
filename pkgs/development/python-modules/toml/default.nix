@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "toml";
-  version = "0.9.4";
+  version = "0.9.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bdbpbip67wdm6c7xwc6mmbmskyradj4cdxn1iibj4fcx1nbv1lf";
+    sha256 = "380178cde50a6a79f9d2cf6f42a62a5174febe5eea4126fe4038785f1d888d42";
   };
 
   # This package has a test script (built for Travis) that involves a)

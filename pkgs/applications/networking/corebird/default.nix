@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, glib, gtk3, json-glib, sqlite, libsoup, gettext, vala_0_40
 , meson, ninja, pkgconfig, gnome3, gst_all_1, wrapGAppsHook, gobjectIntrospection
-, glib-networking }:
+, glib-networking, python3 }:
 
 stdenv.mkDerivation rec {
   version = "1.7.4";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja vala_0_40 pkgconfig wrapGAppsHook
+    meson ninja vala_0_40 pkgconfig wrapGAppsHook python3
     gobjectIntrospection # for setup hook
   ];
 

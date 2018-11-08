@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     })
     else throw "Architecture not supported";
 
-  buildInputs = [ patchelf ];
+  nativeBuildInputs = [ patchelf ];
 
   installPhase = ''
     RPATH=${libusb.out}/lib:${stdenv.cc.libc.out}/lib

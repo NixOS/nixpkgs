@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight C++ GUI toolkit for embedded Linux systems";
-    homepage = http://ilixi.org/;
+    homepage = https://github.com/ilixi/ilixi;
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

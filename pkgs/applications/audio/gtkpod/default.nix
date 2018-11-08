@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, wrapGAppsHook, intltool, libgpod, curl, flac,
-  gnome3, gtk3, gettext, perl, perlXMLParser, flex, libid3tag,
+  gnome3, gtk3, gettext, perlPackages, flex, libid3tag,
   libvorbis, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
   buildInputs = [
-    curl gettext perl perlXMLParser
+    curl gettext
     flex libgpod libid3tag flac libvorbis gtk3 gdk_pixbuf
     gnome3.gdl gnome3.defaultIconTheme gnome3.anjuta
-  ];
+  ] ++ (with perlPackages; [ perl XMLParser ]);
 
   patchPhase = ''
     sed -i 's/which/type -P/' scripts/*.sh

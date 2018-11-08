@@ -9,9 +9,11 @@ stdenv.mkDerivation rec
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [fuse glib neon];
-  meta = {
+
+  meta = with stdenv.lib; {
     homepage = http://noedler.de/projekte/wdfs/;
+    license = licenses.gpl2;
     description = "User-space filesystem that allows to mount a webdav share";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

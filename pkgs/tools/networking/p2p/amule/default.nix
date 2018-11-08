@@ -22,6 +22,9 @@ mkDerivation rec {
     ++ lib.optional httpServer libpng
     ++ lib.optional client libX11;
 
+  # See: https://github.com/amule-project/amule/issues/126
+  patches = [ ./upnp-1.8.patch ];
+
   enableParallelBuilding = true;
 
   configureFlags = [

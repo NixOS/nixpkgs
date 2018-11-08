@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     # Provides the mig command used by the build scripts
     ++ optional stdenv.isDarwin bootstrap_cmds;
   buildInputs = [ openssl ]
-    ++ optionals (stdenv.hostPlatform.isLinux) [ keyutils ]
+    ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic") [ keyutils ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
   preConfigure = "cd ./src";

@@ -7,49 +7,39 @@
 , gnome3
 , cmake
 , ninja
-, vala
+, vala_0_40
 , libqalculate
 , gobjectIntrospection
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "nasc-${version}";
-  version = "0.4.7";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "parnold-x";
     repo = "nasc";
     rev = version;
-    sha256 = "0p74953pdgsijvqj3msssqiwm6sc1hzp68dlmjamqrqirwgqv5aa";
+    sha256 = "1rrp3djsv7lrgsqjn7x50msv0c5ffhz90lj1v11di0kp05m6q9j9";
   };
-
-  patches = [
-    # Install libqalculatenasc.so
-    (fetchpatch {
-      url = https://github.com/parnold-x/nasc/commit/93a799f9afb3e32f3f1a54e056b59570aae2e437.patch;
-      sha256 = "1m32w2zaswzxnzbr7p3lf8s6fac4mjvfhm8v9k59b4jyzmvrl631";
-    })
-    (fetchpatch {
-      url = https://github.com/parnold-x/nasc/commit/570b49169326de154af2cf43c5f12268fff1dc6d.patch;
-      sha256 = "1y3w6rxn0453iscx2xg427wy1bd5kv4z1c41hhbjmg614ycp6bka";
-    })
-  ];
 
   nativeBuildInputs = [
     pkgconfig
     wrapGAppsHook
-    vala
+    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
     cmake
     ninja
     gobjectIntrospection # for setup-hook
   ];
+  
   buildInputs = [
-    libqalculate
-    gtk3
-    granite
+    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
+    gnome3.gtksourceview
     gnome3.libgee
     gnome3.libsoup
-    gnome3.gtksourceview
+    granite
+    gtk3
+    libqalculate
   ];
 
   meta = with stdenv.lib; {

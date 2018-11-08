@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , requests
 , pytz
 , tzlocal
@@ -18,11 +19,13 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.12";
+  version = "3.13";
+  
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c9ef49f72c2d83976d2841ab7e70faee3c77f4d7dbb2d3390ef0f0509473ea9a";
+    sha256 = "b4262db0b3b181fbf1a44679cd817c1cf0126ec34b3537550e294208f413daac";
   };
+
   doCheck = false;
   propagatedBuildInputs = [ pytz requests tzlocal ];
   buildInputs = [ file ];

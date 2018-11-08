@@ -6,9 +6,10 @@
 # compiler and the linker just "work".
 
 { name ? ""
-, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, bintools ? null, libc ? null
-, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, stdenvNoCC
+, bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , buildPackages ? {}
 , useMacosReexportHack ? false
@@ -185,6 +186,7 @@ stdenv.mkDerivation {
         }.${targetPlatform.parsed.cpu.name}
       else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
       else if targetPlatform.isSparc then "sparc"
+      else if targetPlatform.isAvr then "avr"
       else throw "unknown emulation for platform: " + targetPlatform.config;
     in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
 
@@ -208,7 +210,7 @@ stdenv.mkDerivation {
       ## General libc support
       ##
 
-      echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
+      echo "-L${libc_lib}${libc.libdir or "/lib"}" > $out/nix-support/libc-ldflags
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
@@ -289,6 +291,16 @@ stdenv.mkDerivation {
 
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
+    ''
+
+    + optionalString targetPlatform.isAvr ''
+      hardening_unsupported_flags+=" relro bindnow"
+    ''
+
+    + optionalString (libc != null && targetPlatform.isAvr) ''
+      for isa in avr5 avr3 avr4 avr6 avr25 avr31 avr35 avr51 avrxmega2 avrxmega4 avrxmega5 avrxmega6 avrxmega7 tiny-stack; do
+        echo "-L${getLib libc}/avr/lib/$isa" >> $out/nix-support/libc-cflags
+      done
     ''
 
     + ''

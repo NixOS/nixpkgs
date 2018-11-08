@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools, qtx11extras, poppler_qt5 }:
+{ stdenv, fetchFromGitHub, pkgconfig, cmake, qtbase, qttools, qtx11extras, poppler }:
 
 stdenv.mkDerivation rec {
   name = "qcomicbook-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase qttools qtx11extras poppler_qt5
+    qtbase qttools qtx11extras poppler
   ];
 
   postInstall = ''

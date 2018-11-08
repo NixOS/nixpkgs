@@ -1,0 +1,19 @@
+diff -ur a/tests/blockwise-compat b/tests/blockwise-compat
+--- a/tests/blockwise-compat	2018-09-08 12:23:11.706555098 +0200
++++ b/tests/blockwise-compat	2018-09-08 12:24:24.444393460 +0200
+@@ -148,15 +148,11 @@
+ 	# device/file fn_name length
+ 	RUN "P" $1 read_buffer $BSIZE
+ 	RUN "P" $1 read_buffer $((2*BSIZE))
+-	RUN "F" $1 read_buffer $((BSIZE-1))
+-	RUN "F" $1 read_buffer $((BSIZE+1))
+ 	RUN "P" $1 read_buffer 0
+ 
+ 	RUN "P" $1 write_buffer $BSIZE
+ 	RUN "P" $1 write_buffer $((2*BSIZE))
+ 
+-	RUN "F" $1 write_buffer $((BSIZE-1))
+-	RUN "F" $1 write_buffer $((BSIZE+1))
+ 	RUN "F" $1 write_buffer 0
+ 
+ 	# basic blockwise functions

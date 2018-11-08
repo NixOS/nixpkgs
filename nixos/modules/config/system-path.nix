@@ -13,13 +13,15 @@ let
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
       pkgs.bzip2
-      pkgs.coreutils
+      pkgs.coreutils-full
       pkgs.cpio
       pkgs.curl
       pkgs.diffutils
       pkgs.findutils
       pkgs.gawk
-      pkgs.glibc # for ldd, getent
+      pkgs.stdenv.cc.libc
+      pkgs.getent
+      pkgs.getconf
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
@@ -140,7 +142,7 @@ in
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi
-          
+
           ${config.environment.extraSetup}
         '';
     };

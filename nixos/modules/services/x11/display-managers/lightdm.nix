@@ -46,6 +46,7 @@ let
         greeters-directory = ${cfg.greeter.package}
       ''}
       sessions-directory = ${dmcfg.session.desktops}/share/xsessions
+      ${cfg.extraConfig}
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
@@ -61,6 +62,12 @@ let
       ${optionalString hasDefaultUserSession ''
         user-session=${defaultSessionName}
       ''}
+      ${optionalString (dmcfg.setupCommands != "") ''
+        display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
+          #!${pkgs.bash}/bin/bash
+          ${dmcfg.setupCommands}
+        ''}
+      ''}
       ${cfg.extraSeatDefaults}
     '';
 
@@ -73,6 +80,7 @@ in
   imports = [
     ./lightdm-greeters/gtk.nix
     ./lightdm-greeters/mini.nix
+    ./lightdm-greeters/enso-os.nix
   ];
 
   options = {
@@ -111,6 +119,15 @@ in
             in the 'package' option.
           '';
         };
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          user-authority-in-system-dir = true
+        '';
+        description = "Extra lines to append to LightDM section.";
       };
 
       background = mkOption {
@@ -197,7 +214,7 @@ in
       # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
       execCmd = ''
         export PATH=${lightdm}/sbin:$PATH
-        exec ${lightdm}/sbin/lightdm --log-dir=/var/log --run-dir=/run
+        exec ${lightdm}/sbin/lightdm
       '';
     };
 
@@ -246,11 +263,18 @@ in
     '';
 
     users.users.lightdm = {
-      createHome = true;
-      home = "/var/lib/lightdm-data";
+      home = "/var/lib/lightdm";
       group = "lightdm";
       uid = config.ids.uids.lightdm;
     };
+
+    systemd.tmpfiles.rules = [
+      "d /run/lightdm 0711 lightdm lightdm 0"
+      "d /var/cache/lightdm 0711 root lightdm -"
+      "d /var/lib/lightdm 1770 lightdm lightdm -"
+      "d /var/lib/lightdm-data 1775 lightdm lightdm -"
+      "d /var/log/lightdm 0711 root lightdm -"
+    ];
 
     users.groups.lightdm.gid = config.ids.gids.lightdm;
     services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..

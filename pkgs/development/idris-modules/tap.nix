@@ -7,6 +7,7 @@ build-idris-package  {
   name = "tap";
   version = "2017-04-08";
 
+  ipkgName = "TAP";
   idrisDeps = [ contrib ];
 
   src = fetchFromGitHub {
@@ -15,10 +16,6 @@ build-idris-package  {
     rev = "0d019333e1883c1d60e151af1acb02e2b531e72f";
     sha256 = "0fhlmmivq9xv89r7plrnhmvay1j7bapz3wh7y8lygwvcrllh9zxs";
   };
-
-  postUnpack = ''
-    rm source/Draft.ipkg
-  '';
 
   meta = {
     description = "A simple TAP producer and consumer/reporter for Idris";

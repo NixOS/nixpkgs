@@ -172,6 +172,7 @@ let
     packages ? null,
     vam ? null,
     pathogen ? null,
+    plug ? null,
     customRC ? ""
   }:
 
@@ -192,6 +193,18 @@ let
       ''
         let &rtp.=(empty(&rtp)?"":',')."${vimPlugins.pathogen.rtp}"
         execute pathogen#infect('${pluginsEnv}/{}')
+      '');
+
+      /* vim-plug is an extremely popular vim plugin manager.
+      */
+      plugImpl = lib.optionalString (plug != null)
+      (''
+        source ${vimPlugins.vim-plug.rtp}/plug.vim
+        call plug#begin('/dev/null')
+
+        '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
+
+        call plug#end()
       '');
 
       /*
@@ -302,6 +315,7 @@ let
 
   ${vamImpl}
   ${pathogenImpl}
+  ${plugImpl}
   ${vundleImpl}
   ${neobundleImpl}
   ${nativeImpl}
@@ -427,7 +441,8 @@ rec {
     packages ? {},
     givenKnownPlugins ? null,
     vam ? null,
-    pathogen ? null, ...
+    pathogen ? null,
+    plug ? null, ...
   }:
     let
       # This is probably overcomplicated, but I don't understand this well enough to know what's necessary.
@@ -439,7 +454,7 @@ rec {
       vamNames = findDependenciesRecursively { inherit knownPlugins; names = lib.concatMap toNames vam.pluginDictionaries; };
       names = (lib.optionals (pathogen != null) pathogenNames) ++
               (lib.optionals (vam != null) vamNames);
-      nonNativePlugins = map (name: knownPlugins.${name}) names;
+      nonNativePlugins = map (name: knownPlugins.${name}) names ++ (lib.optionals (plug != null) plug.plugins);
       nativePluginsConfigs = lib.attrsets.attrValues packages;
       nativePlugins = lib.concatMap ({start?[], opt?[]}: start++opt) nativePluginsConfigs;
     in
@@ -447,18 +462,23 @@ rec {
 
 
   # test cases:
-  test_vim_with_vim_addon_nix_using_vam = vim_configurable.customize {
+  test_vim_with_vim_nix_using_vam = vim_configurable.customize {
    name = "vim-with-vim-addon-nix-using-vam";
-    vimrcConfig.vam.pluginDictionaries = [{name = "vim-addon-nix"; }];
+    vimrcConfig.vam.pluginDictionaries = [{name = "vim-nix"; }];
   };
 
-  test_vim_with_vim_addon_nix_using_pathogen = vim_configurable.customize {
+  test_vim_with_vim_nix_using_pathogen = vim_configurable.customize {
     name = "vim-with-vim-addon-nix-using-pathogen";
-    vimrcConfig.pathogen.pluginNames = [ "vim-addon-nix" ];
+    vimrcConfig.pathogen.pluginNames = [ "vim-nix" ];
   };
 
-  test_vim_with_vim_addon_nix = vim_configurable.customize {
+  test_vim_with_vim_nix_using_plug = vim_configurable.customize {
+    name = "vim-with-vim-addon-nix-using-plug";
+    vimrcConfig.plug.plugins = with vimPlugins; [ vim-nix ];
+  };
+
+  test_vim_with_vim_nix = vim_configurable.customize {
     name = "vim-with-vim-addon-nix";
-    vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-addon-nix ];
+    vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
   };
 }

@@ -2,10 +2,12 @@
   stdenv, makeWrapper, lib, fetchurl, fetchpatch,
 
   automake, autoconf, libtool, intltool, mtdev, libevdev, libinput,
-  python, freetype, apple_sdk, tradcpp, fontconfig, mesa_drivers,
+  python, freetype, tradcpp, fontconfig,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa_noglu, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig }:
+  mcpp, epoxy, openssl, pkgconfig, llvm_6,
+  cf-private, ApplicationServices, Carbon, Cocoa, Xplugin
+}:
 
 let
   inherit (stdenv) lib isDarwin;
@@ -108,9 +110,9 @@ self: super:
   });
 
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ apple_sdk.frameworks.ApplicationServices ];
+    buildInputs = attrs.buildInputs ++ [ ApplicationServices ];
     preConfigure = ''
-      substituteInPlace src/Makefile.in --replace -F/System -F${apple_sdk.frameworks.ApplicationServices}
+      substituteInPlace src/Makefile.in --replace -F/System -F${ApplicationServices}
     '';
   });
 
@@ -346,10 +348,10 @@ self: super:
   });
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: rec {
-    name = "xf86-input-libinput-0.26.0";
+    name = "xf86-input-libinput-0.28.0";
     src = fetchurl {
       url = "mirror://xorg/individual/driver/${name}.tar.bz2";
-      sha256 = "0yrqs88b7yn9nljwlxzn76jfmvf0sh939kzij5b2jvr2qa7mbjmb";
+      sha256 = "189h8vl0005yizwrs4d0sng6j8lwkd3xi1zwqg8qavn2bw34v691";
     };
     outputs = [ "out" "dev" ];
     buildInputs = attrs.buildInputs ++ [ libinput ];
@@ -394,7 +396,7 @@ self: super:
   });
 
   xf86videovmware = super.xf86videovmware.overrideAttrs (attrs: {
-    buildInputs =  attrs.buildInputs ++ [ mesa_drivers ]; # for libxatracker
+    buildInputs =  attrs.buildInputs ++ [ mesa_noglu llvm_6 ]; # for libxatracker
     meta = attrs.meta // {
       platforms = ["i686-linux" "x86_64-linux"];
     };
@@ -466,7 +468,11 @@ self: super:
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
             nativeBuildInputs = [ pkgconfig ];
-            buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+            buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ]
+              ++ stdenv.lib.optionals stdenv.isDarwin [
+                # Needed for NSDefaultRunLoopMode symbols.
+                cf-private
+              ];
             postPatch = stdenv.lib.optionalString stdenv.isLinux "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
         } else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
@@ -538,9 +544,7 @@ self: super:
         nativeBuildInputs = attrs.nativeBuildInputs ++ [ autoreconfHook self.utilmacros self.fontutil ];
         buildInputs = commonBuildInputs ++ [
           bootstrap_cmds automake autoconf
-          apple_sdk.libs.Xplugin
-          apple_sdk.frameworks.Carbon
-          apple_sdk.frameworks.Cocoa
+          Xplugin Carbon Cocoa
         ];
         propagatedBuildInputs = commonPropagatedBuildInputs ++ [
           libAppleWM applewmproto
@@ -582,7 +586,7 @@ self: super:
         preConfigure = ''
           mkdir -p $out/Applications
           export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-error"
-          substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${apple_sdk.frameworks.ApplicationServices}
+          substituteInPlace hw/xquartz/pbproxy/Makefile.in --replace -F/System -F${ApplicationServices}
         '';
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled

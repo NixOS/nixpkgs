@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Set of I2C tools for Linux";
-    homepage = http://www.lm-sensors.org/wiki/I2CTools;
+    homepage = https://i2c.wiki.kernel.org/index.php/I2C_Tools;
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

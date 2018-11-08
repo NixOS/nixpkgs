@@ -35,20 +35,20 @@
 }:
 
 let
-  version = "3.4.2";
+  version = "3.4.3";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0q752s1ir6iyqbp3pn425fi215fi7bzjl4aa3arvgh6sridda9lx";
+    sha256 = "138q3wiv4g4xvqzsp93xaqayv7kz7bl2vrgppp8jm8w6m25cd4i2";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1fbgbf9xdby9a5yy6bmnkzchdsfii0jagfd373y015cjpr1mrlvz";
+    sha256 = "1f334glf39nk42mpqq6j732h3ql2mpz89jd4mcl678s8n73nfjh2";
   };
 
   # Contrib must be built in order to enable Tesseract support:
@@ -145,11 +145,6 @@ stdenv.mkDerivation rec {
     cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
   '';
 
-  # TODO: remove the following patch once commit
-  # https://github.com/opencv/opencv/commit/e2b5d112909b9dfd764f14833b82e38e4bc2f81f
-  # is released.
-  patches = [ ./fix-dnn.patch ];
-
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
   # Also, work around https://github.com/NixOS/nixpkgs/issues/26304 with
@@ -169,6 +164,11 @@ stdenv.mkDerivation rec {
       ${installExtraFiles boostdesc}
       ${installExtraFiles face}
     '');
+
+  postConfigure = ''
+    [ -e modules/core/version_string.inc ]
+    echo '"(build info elided)"' > modules/core/version_string.inc
+  '';
 
   buildInputs =
        [ zlib pcre hdf5 glog boost google-gflags protobuf ]

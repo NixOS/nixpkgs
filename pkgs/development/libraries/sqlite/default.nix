@@ -79,6 +79,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.sqlite.org/;
     license = licenses.publicDomain;
     maintainers = with maintainers; [ eelco np ];
-    platforms = platforms.unix;
+    platforms = platforms.unix ++ platforms.windows;
   };
 }

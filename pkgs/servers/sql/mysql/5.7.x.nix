@@ -7,11 +7,11 @@
 let
 self = stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.7.23";
+  version = "5.7.24";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${name}.tar.gz";
-    sha256 = "0rbc3xsc11lq2dm0ip6gxa16c06hi74scb97x5cw7yhbabaz4c07";
+    sha256 = "11qz8cc4zyi7sxs66c5zlap6fd3vra1srwgzcxdzhz59qs90rgq5";
   };
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''

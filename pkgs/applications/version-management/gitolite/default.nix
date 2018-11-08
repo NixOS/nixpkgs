@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gitolite-${version}";
-  version = "3.6.7";
+  version = "3.6.10";
 
   src = fetchFromGitHub {
     owner = "sitaramc";
     repo = "gitolite";
-    rev = "9123ae44b14b9df423a7bf1e693e05865ca320ac";
-    sha256 = "0rmyzr66lxh2ildf3h1nh3hh2ndwk21rjdin50r5vhwbdd7jg8vb";
+    rev = "v${version}";
+    sha256 = "0p2697mn6rwm03ndlv7q137zczai82n41aplq1g006ii7f12xy8h";
   };
 
   buildInputs = [ git nettools perl ];

@@ -1,11 +1,10 @@
-{ stdenv, fetchurl, ocaml, findlib, jbuilder }:
+{ stdenv, fetchurl, buildDunePackage }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
-
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "dtoa";
-  name = "ocaml-${pname}-${version}";
   version = "0.3.1";
+
+  minimumOCamlVersion = "4.01";
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
@@ -14,19 +13,12 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib jbuilder ];
-
-  buildPhase = "jbuilder build -p dtoa";
-
-  inherit (jbuilder) installPhase;
-
   hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/flowtype/ocaml-dtoa;
     description = "Converts OCaml floats into strings (doubles to ascii, \"d to a\"), using the efficient Grisu3 algorithm.";
     license = licenses.mit;
-    platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.eqyiel ];
   };
 }

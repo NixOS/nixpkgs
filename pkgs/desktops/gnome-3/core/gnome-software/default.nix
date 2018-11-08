@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "3.28.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-software/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gnome-software/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "1s19p50nrkvxg4sb7bkn9ccajgaj251y9iz20bkn31ysq19ih03w";
   };
 

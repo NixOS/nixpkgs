@@ -12,7 +12,7 @@ assert postgresSupport -> postgresql != null;
   version = "5.2.4";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgda/${gnome3.versionBranch version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/libgda/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
     sha256 = "2cee38dd583ccbaa5bdf6c01ca5f88cc08758b9b144938a51a478eb2684b765e";
   };
 

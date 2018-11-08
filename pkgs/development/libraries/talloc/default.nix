@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, pkgconfig, readline, libxslt
-, docbook_xsl, docbook_xml_dtd_42
+, docbook_xsl, docbook_xml_dtd_42, fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation rec {
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1kk76dyav41ip7ddbbf04yfydb4jvywzi2ps0z2vla56aqkn11di";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig fixDarwinDylibNames ];
   buildInputs = [
     python readline libxslt docbook_xsl docbook_xml_dtd_42
   ];
 
-  preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
+  prePatch = ''
+    patchShebangs buildtools/bin/waf
   '';
 
   configureFlags = [

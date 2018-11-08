@@ -1,4 +1,4 @@
-{ config, lib, pkgs, pkgs_i686, ... }:
+{ config, lib, pkgs, ... }:
 
 with pkgs;
 with lib;
@@ -19,7 +19,7 @@ let
 
   # Forces 32bit pulseaudio and alsaPlugins to be built/supported for apps
   # using 32bit alsa on 64bit linux.
-  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs_i686.alsaLib != null && pkgs_i686.libpulseaudio != null);
+  enable32BitAlsaPlugins = cfg.support32Bit && stdenv.isx86_64 && (pkgs.pkgsi686Linux.alsaLib != null && pkgs.pkgsi686Linux.libpulseaudio != null);
 
 
   myConfigFile =
@@ -63,7 +63,7 @@ let
     pcm_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
+     "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so ;"}
     }
     pcm.!default {
       type pulse
@@ -72,7 +72,7 @@ let
     ctl_type.pulse {
       libs.native = ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;
       ${lib.optionalString enable32BitAlsaPlugins
-     "libs.32Bit = ${pkgs_i686.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
+     "libs.32Bit = ${pkgs.pkgsi686Linux.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so ;"}
     }
     ctl.!default {
       type pulse
@@ -151,6 +151,18 @@ in {
           The PulseAudio derivation to use.  This can be used to enable
           features (such as JACK support, Bluetooth) via the
           <literal>pulseaudioFull</literal> package.
+        '';
+      };
+
+      extraModules = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.pulseaudio-modules-bt ]";
+        description = ''
+          Extra pulseaudio modules to use. This is intended for out-of-tree
+          pulseaudio modules like extra bluetooth codecs.
+
+          Extra modules take precedence over built-in pulseaudio modules.
         '';
       };
 
@@ -234,6 +246,18 @@ in {
       security.rtkit.enable = true;
 
       systemd.packages = [ overriddenPackage ];
+    })
+
+    (mkIf (cfg.extraModules != []) {
+      hardware.pulseaudio.daemon.config.dl-search-path = let
+        overriddenModules = builtins.map
+          (drv: drv.override { pulseaudio = overriddenPackage; })
+          cfg.extraModules;
+        modulePaths = builtins.map
+          (drv: "${drv}/lib/pulse-${overriddenPackage.version}/modules")
+          # User-provided extra modules take precedence
+          (overriddenModules ++ [ overriddenPackage ]);
+      in lib.concatStringsSep ":" modulePaths;
     })
 
     (mkIf hasZeroconf {

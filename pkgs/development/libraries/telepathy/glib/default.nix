@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
 
   passthru.python = python2;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://telepathy.freedesktop.org;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    license = with licenses; [ bsd2 bsd3 lgpl21Plus ];
   };
 }

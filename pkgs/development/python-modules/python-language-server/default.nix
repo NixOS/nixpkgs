@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
-, configparser, futures, future, jedi, pluggy
+, configparser, futures, future, jedi, pluggy, python-jsonrpc-server
 , pytest, mock, pytestcov, coverage
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
@@ -20,13 +20,13 @@ in
 
 buildPythonPackage rec {
   pname = "python-language-server";
-  version = "0.19.0";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
-    sha256 = "0glnhnjmsnnh1vs73n9dglknfkhcgp03nkjbpz0phh1jlqrkrwm6";
+    sha256 = "11fvrpv1kymj2fzh8fhys4qk1xc64j1rbdrz252awyab7b3509i7";
   };
 
   # The tests require all the providers, disable otherwise.
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     HOME=$TEMPDIR pytest
   '';
 
-  propagatedBuildInputs = [ jedi pluggy future ]
+  propagatedBuildInputs = [ jedi pluggy future python-jsonrpc-server ]
     ++ stdenv.lib.optional (withProvider "autopep8") autopep8
     ++ stdenv.lib.optional (withProvider "mccabe") mccabe
     ++ stdenv.lib.optional (withProvider "pycodestyle") pycodestyle

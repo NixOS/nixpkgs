@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, pkgconfig, intltool, gperf, libcap, kmod
 , xz, pam, acl, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libidn2, libapparmor
 , audit, lz4, bzip2, libmicrohttpd, pcre2
@@ -10,8 +10,8 @@
 , getent
 , buildPackages
 , withSelinux ? false, libselinux
-, withLibseccomp ? libseccomp.meta.available, libseccomp
-, withKexectools ? kexectools.meta.available, kexectools
+, withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+, withKexectools ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) kexectools.meta.platforms, kexectools
 }:
 
 let
@@ -26,9 +26,25 @@ in stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "67c553805a9ebee2dce7c3a350b4abd4d7a489c2";
-    sha256 = "114vq71gcddi4qm2hyrj5jsas9599s0h5mg65jfpvxhfyaw54cpv";
+    rev = "31859ddd35fc3fa82a583744caa836d356c31d7f";
+    sha256 = "1xci0491j95vdjgs397n618zii3sgwnvanirkblqqw6bcvcjvir1";
   };
+
+  prePatch = let
+      # Upstream's maintenance branches are still too intrusive:
+      # https://github.com/systemd/systemd-stable/tree/v239-stable
+      patches-deb = fetchurl {
+        # When the URL disappears, it typically means that Debian has new patches
+        # (probably security) and updating to new tarball will apply them as well.
+        name = "systemd-debian-patches.tar.xz";
+        url = mirror://debian/pool/main/s/systemd/systemd_239-11~bpo9+1.debian.tar.xz;
+        sha256 = "136f6p4jbi4z94mf4g099dfcacwka8jwhza0wxxw2q5l5q3xiysh";
+      };
+      # Note that we skip debian-specific patches, i.e. ./debian/patches/debian/*
+    in ''
+      tar xf ${patches-deb}
+      patches="$patches $(cat debian/patches/series | grep -v '^debian/' | sed 's|^|debian/patches/|')"
+    '';
 
   outputs = [ "out" "lib" "man" "dev" ];
 

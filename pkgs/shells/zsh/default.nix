@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, ncurses, pcre }:
+{ stdenv, fetchurl, ncurses, pcre, fetchpatch }:
 
 let
-  version = "5.5.1";
+  version = "5.6.2";
 
   documentation = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.gz";
-    sha256 = "0bm9n7lycdzvw5hmgi4a920pqbb5yxvmyhfxx8jbign2hzgf7g01";
+    url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.xz";
+    sha256 = "05014rg6hkwiv1p56iij8wn2rghmwjxs5qsj3d3xigbwaikk55wq";
   };
 
 in
@@ -14,9 +14,18 @@ stdenv.mkDerivation {
   name = "zsh-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
-    sha256 = "10705qnnr3p416bwfjaip9r7yw187vczzjrk60yg79dfwy4slk3p";
+    url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
+    sha256 = "17iffliqcj4hv91g0bd2sxsyfcz51mfyh97sp2iyrs2p0mndc2x5";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "search-xdg-data-dirs.patch";
+      url = https://github.com/zsh-users/zsh/commit/624219e0e4cbfdfb286e707bd2853f2d7b6a4a7d.patch;
+      sha256 = "0i0g7dc0px57vpklm1f4w20vyc92nv15y09r5clvib2kjkxjy2cf";
+      excludes = [ "ChangeLog" ];
+    })
+  ];
 
   buildInputs = [ ncurses pcre ];
 

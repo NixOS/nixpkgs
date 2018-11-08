@@ -3,6 +3,9 @@
 , buildPythonPackage
 , arb
 , openblasCompat
+, openblas-blas-pc
+, openblas-cblas-pc
+, openblas-lapack-pc
 , brial
 , cliquer
 , cypari2
@@ -44,6 +47,8 @@
 , singular
 , pip
 , jupyter_core
+, libhomfly
+, libbraiding
 }:
 
 buildPythonPackage rec {
@@ -56,7 +61,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     iml
     perl
-    openblasCompat
+    openblas-blas-pc
+    openblas-cblas-pc
+    openblas-lapack-pc
     jupyter_core
   ];
 
@@ -104,6 +111,8 @@ buildPythonPackage rec {
     pip
     cython
     cysignals
+    libhomfly
+    libbraiding
   ];
 
   buildPhase = ''

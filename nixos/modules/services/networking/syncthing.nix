@@ -16,6 +16,14 @@ in {
         available on http://127.0.0.1:8384/.
       '';
 
+      guiAddress = mkOption {
+        type = types.str;
+        default = "127.0.0.1:8384";
+        description = ''
+          Address to serve the GUI.
+        '';
+      };
+
       systemService = mkOption {
         type = types.bool;
         default = true;
@@ -23,7 +31,7 @@ in {
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = defaultUser;
         description = ''
           Syncthing will be run under this user (user will be created if it doesn't exist.
@@ -32,7 +40,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "nogroup";
         description = ''
           Syncthing will be run under this group (group will not be created if it doesn't exist.
@@ -41,7 +49,7 @@ in {
       };
 
       all_proxy = mkOption {
-        type = types.nullOr types.string;
+        type = with types; nullOr str;
         default = null;
         example = "socks5://address.com:1234";
         description = ''
@@ -55,8 +63,20 @@ in {
         type = types.path;
         default = "/var/lib/syncthing";
         description = ''
+          Path where synced directories will exist.
+        '';
+      };
+
+      configDir = mkOption {
+        type = types.path;
+        description = ''
           Path where the settings and keys will exist.
         '';
+        default =
+          let
+            nixos = config.system.stateVersion;
+            cond  = versionAtLeast nixos "19.03";
+          in cfg.dataDir + (optionalString cond "/.config/syncthing");
       };
 
       openDefaultPorts = mkOption {
@@ -132,7 +152,12 @@ in {
           User = cfg.user;
           Group = cfg.group;
           PermissionsStartOnly = true;
-          ExecStart = "${cfg.package}/bin/syncthing -no-browser -home=${cfg.dataDir}";
+          ExecStart = ''
+            ${cfg.package}/bin/syncthing \
+              -no-browser \
+              -gui-address=${cfg.guiAddress} \
+              -home=${cfg.configDir}
+          '';
         };
       };
 
