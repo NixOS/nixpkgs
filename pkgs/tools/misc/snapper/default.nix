@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "snapper-${version}";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1dm1kf4wrbcaaagxgbc8q0f5j9dq3bmp6ycl7zx8p70s4nv3xnbc";
+    sha256 = "1blllmkwh13pnf3hxi1p2az5i77arbm2661n0rd0569s6kf5brb7";
   };
 
   nativeBuildInputs = [
