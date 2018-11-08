@@ -4003,6 +4003,11 @@
     github = "spacefrogg";
     name = "Michael Raitza";
   };
+  spacekookie = {
+    email = "kookie@spacekookie.de";
+    github = "spacekookie";
+    name = "Katharina Fey";
+  };
   spencerjanssen = {
     email = "spencerjanssen@gmail.com";
     github = "spencerjanssen";
