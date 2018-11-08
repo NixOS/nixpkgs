@@ -8,16 +8,16 @@ in
 stdenv.mkDerivation rec {
 
   name = "ber-metaocaml-${version}";
-  version = "104";
+  version = "107";
 
   src = fetchurl {
-    url = "https://caml.inria.fr/pub/distrib/ocaml-4.04/ocaml-4.04.0.tar.gz";
-    sha256 = "1pi2hdm9lxhn45qvfqfss1hpa4jijm14qgmrgajsadxqdiplhqyb";
+    url = "https://caml.inria.fr/pub/distrib/ocaml-4.07/ocaml-4.07.1.tar.gz";
+    sha256 = "1x4sln131mcspisr22qc304590rvg720rbl7g2i4xiymgvhkpm1a";
   };
 
   metaocaml = fetchurl {
-    url = "http://okmij.org/ftp/ML/ber-metaocaml-104.tar.gz";
-    sha256 = "1gmwlxairxqcmqa2r6kbf8b4dxc7pfhfbh48g1s14d3z20rj8nib";
+    url = "http://okmij.org/ftp/ML/ber-metaocaml-107.tar.gz";
+    sha256 = "0xy6n0yj1f53pk612zfmn49pn04bd75qa40xgmr0w0lzx6dqsfmm";
   };
 
   # Needed to avoid a SIGBUS on the final executable on mips
