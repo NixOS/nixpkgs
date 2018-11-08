@@ -20,6 +20,8 @@ let
 
   llvmShared = llvm.override { enableSharedLibraries = true; };
 
+  prefixedJemalloc = jemalloc.override { stripPrefix = false; };
+
   target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
 in
 
@@ -43,6 +45,7 @@ stdenv.mkDerivation {
   NIX_LDFLAGS =
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
        optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
+    ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
     ++ optional stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
   # Enable nightly features in stable compiles (used for
@@ -59,7 +62,7 @@ stdenv.mkDerivation {
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath"
                      "--enable-vendor"
-                     "--jemalloc-root=${jemalloc}/lib"
+                     "--jemalloc-root=${prefixedJemalloc}/lib"
                      "--default-linker=${targetPackages.stdenv.cc}/bin/cc" ]
                 ++ optional (!withBundledLLVM) [ "--enable-llvm-link-shared" "--llvm-root=${llvmShared}" ]
                 ++ optional (targets != []) "--target=${target}";
