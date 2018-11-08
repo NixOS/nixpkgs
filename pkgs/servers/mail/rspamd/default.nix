@@ -1,8 +1,9 @@
 { stdenv, lib, fetchFromGitHub, cmake, perl
 , file, glib, libevent, luajit, openssl, pcre, pkgconfig, sqlite, ragel, icu
-, libfann, gd, jemalloc
+, libfann, gd, jemalloc, openblas
 , withFann ? true
 , withGd ? false
+, withBlas ? true
 }:
 
 let libmagic = file;  # libmagic provided by file package ATM
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig perl ];
   buildInputs = [ glib libevent libmagic luajit openssl pcre sqlite ragel icu jemalloc ]
     ++ lib.optional withFann libfann
-    ++ lib.optional withGd gd;
+    ++ lib.optional withGd gd
+    ++ lib.optional withBlas openblas;
 
   cmakeFlags = [
     "-DDEBIAN_BUILD=ON"
