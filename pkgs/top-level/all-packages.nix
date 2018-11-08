@@ -10201,6 +10201,8 @@ with pkgs;
 
   hyena = callPackage ../development/libraries/hyena { mono = mono4; };
 
+  hyperscan = callPackage ../development/libraries/hyperscan { };
+
   icu58 = callPackage (import ../development/libraries/icu/58.nix fetchurl) ({
     nativeBuildRoot = buildPackages.icu58.override { buildRootOnly = true; };
   } //
