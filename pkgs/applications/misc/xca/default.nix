@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   name = "xca-${version}";
-  version = "2.1.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner  = "chris2511";
     repo   = "xca";
     rev    = "RELEASE.${version}";
-    sha256 = "1d09329a80axwqhxixwasd8scsmh23vsq1076amy5c8173s4ambi";
+    sha256 = "0slfqmz0b01lwmrv4h78hmrsdrhcyc7sjzsxcw05ylgmhvdq3dw9";
   };
 
   postPatch = ''
