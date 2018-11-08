@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     url = "http://tango.freedesktop.org/releases/${name}.tar.gz";
     sha256 = "071fj2jm5kydlz02ic5sylhmw6h2p3cgrm3gwdfabinqkqcv4jh4";
   };
-  
+
   buildInputs = [perl XMLSimple librsvg];
 
   postInstall =
@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://tango.freedesktop.org/Standard_Icon_Naming_Specification;
     platforms = with platforms; linux ++ darwin;
+    license = licenses.gpl2;
   };
 }
