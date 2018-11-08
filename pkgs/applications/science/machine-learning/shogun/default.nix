@@ -4,7 +4,7 @@
 # maths
 , openblasCompat, eigen, nlopt, lp_solve, colpack
 # libraries
-, libarchive, liblapack, libxml2
+, libarchive, libxml2
 # extra support
 , pythonSupport ? true, pythonPackages ? null
 , opencvSupport ? false, opencv ? null
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with lib; [
       openblasCompat bzip2 ccache cmake colpack curl ctags eigen hdf5 json_c lp_solve lzma lzo
-      protobuf nlopt snappy swig (libarchive.dev) liblapack libxml2
+      protobuf nlopt snappy swig (libarchive.dev) libxml2
     ]
     ++ optionals (pythonSupport) (with pythonPackages; [ python ply numpy ])
     ++ optional  (opencvSupport) opencv;
