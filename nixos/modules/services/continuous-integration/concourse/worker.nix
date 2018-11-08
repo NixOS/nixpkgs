@@ -123,6 +123,16 @@ in
         '';
       };
 
+      extraFlags = mkOption {
+        default = [];
+        type = with types; listOf str;
+        example = [ "garden-dns-proxy-enable" ];
+        description = ''
+          Specifies the extra flags supplied to `concourse worker` invocation.
+          These flags are command line arguments that does not supply any value and acts like switches.
+        '';
+      };
+
       environment = mkOption {
         default = {};
         type = with types; attrsOf str;
@@ -145,6 +155,8 @@ in
     garden-runc = pkgs.garden-runc.override {
       extractDir = cfg.asset-dir;
     };
+    extraFlags =
+      map (flag: "--${flag}") cfg.extraFlags;
     extraArgs =
       concatMap
         (x: x)
@@ -175,7 +187,7 @@ in
         "--garden-bin" "${garden-runc}/bin/gdn"
         "--resource-types" "${pkgs.concourse.resourceDir}"
       ];
-    args = concatStringsSep " " (map escapeShellArgs [regularArgs extraArgs]);
+    args = concatStringsSep " " (map escapeShellArgs [regularArgs extraArgs extraFlags]);
   in
     mkIf cfg.enable {
       systemd.services.concourse-worker = {
