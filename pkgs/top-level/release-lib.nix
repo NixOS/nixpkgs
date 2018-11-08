@@ -11,8 +11,6 @@ in with lib;
 
 rec {
 
-  allPackages = args: packageSet (args // nixpkgsArgs);
-
   pkgs = packageSet (lib.recursiveUpdate { system = "x86_64-linux"; config.allowUnsupportedSystem = true; } nixpkgsArgs);
   inherit lib;
 
@@ -23,29 +21,52 @@ rec {
   /* !!! Hack: poor man's memoisation function.  Necessary to prevent
      Nixpkgs from being evaluated again and again for every
      job/platform pair. */
-  pkgsFor = system:
-    if system == "x86_64-linux" then pkgs_x86_64_linux
-    else if system == "i686-linux" then pkgs_i686_linux
-    else if system == "aarch64-linux" then pkgs_aarch64_linux
-    else if system == "armv6l-linux" then pkgs_armv6l_linux
-    else if system == "armv7l-linux" then pkgs_armv7l_linux
-    else if system == "x86_64-darwin" then pkgs_x86_64_darwin
-    else if system == "x86_64-freebsd" then pkgs_x86_64_freebsd
-    else if system == "i686-freebsd" then pkgs_i686_freebsd
-    else if system == "i686-cygwin" then pkgs_i686_cygwin
-    else if system == "x86_64-cygwin" then pkgs_x86_64_cygwin
-    else abort "unsupported system type: ${system}";
+  mkPkgsFor = crossSystem: let
+    packageSet' = args: packageSet (args // { inherit crossSystem; } // nixpkgsArgs);
 
-  pkgs_x86_64_linux = allPackages { system = "x86_64-linux"; };
-  pkgs_i686_linux = allPackages { system = "i686-linux"; };
-  pkgs_aarch64_linux = allPackages { system = "aarch64-linux"; };
-  pkgs_armv6l_linux = allPackages { system = "armv6l-linux"; };
-  pkgs_armv7l_linux = allPackages { system = "armv7l-linux"; };
-  pkgs_x86_64_darwin = allPackages { system = "x86_64-darwin"; };
-  pkgs_x86_64_freebsd = allPackages { system = "x86_64-freebsd"; };
-  pkgs_i686_freebsd = allPackages { system = "i686-freebsd"; };
-  pkgs_i686_cygwin = allPackages { system = "i686-cygwin"; };
-  pkgs_x86_64_cygwin = allPackages { system = "x86_64-cygwin"; };
+    pkgs_x86_64_linux = packageSet' { system = "x86_64-linux"; };
+    pkgs_i686_linux = packageSet' { system = "i686-linux"; };
+    pkgs_aarch64_linux = packageSet' { system = "aarch64-linux"; };
+    pkgs_armv6l_linux = packageSet' { system = "armv6l-linux"; };
+    pkgs_armv7l_linux = packageSet' { system = "armv7l-linux"; };
+    pkgs_x86_64_darwin = packageSet' { system = "x86_64-darwin"; };
+    pkgs_x86_64_freebsd = packageSet' { system = "x86_64-freebsd"; };
+    pkgs_i686_freebsd = packageSet' { system = "i686-freebsd"; };
+    pkgs_i686_cygwin = packageSet' { system = "i686-cygwin"; };
+    pkgs_x86_64_cygwin = packageSet' { system = "x86_64-cygwin"; };
+
+    in system:
+      if system == "x86_64-linux" then pkgs_x86_64_linux
+      else if system == "i686-linux" then pkgs_i686_linux
+      else if system == "aarch64-linux" then pkgs_aarch64_linux
+      else if system == "armv6l-linux" then pkgs_armv6l_linux
+      else if system == "armv7l-linux" then pkgs_armv7l_linux
+      else if system == "x86_64-darwin" then pkgs_x86_64_darwin
+      else if system == "x86_64-freebsd" then pkgs_x86_64_freebsd
+      else if system == "i686-freebsd" then pkgs_i686_freebsd
+      else if system == "i686-cygwin" then pkgs_i686_cygwin
+      else if system == "x86_64-cygwin" then pkgs_x86_64_cygwin
+      else abort "unsupported system type: ${system}";
+
+  pkgsFor = pkgsForCross null;
+
+
+  # More poor man's memoisation
+  pkgsForCross = let
+    examplesByConfig = lib.flip lib.mapAttrs'
+      (builtins.removeAttrs lib.systems.examples [ "riscv" ])
+      (_: crossSystem: nameValuePair crossSystem.config {
+        inherit crossSystem;
+        pkgsFor = mkPkgsFor crossSystem;
+      });
+    native = mkPkgsFor null;
+  in crossSystem: let
+    candidate = examplesByConfig.${crossSystem.config} or null;
+  in if crossSystem == null
+      then native
+    else if candidate != null && lib.matchAttrs crossSystem candidate.crossSystem
+      then candidate.pkgsFor
+    else mkPkgsFor crossSystem; # uncached fallback
 
 
   # Given a list of 'meta.platforms'-style patterns, return the sublist of
@@ -90,30 +111,32 @@ rec {
      platform as an argument .  We return an attribute set containing
      a derivation for each supported platform, i.e. ‘{ x86_64-linux =
      f pkgs_x86_64_linux; i686-linux = f pkgs_i686_linux; ... }’. */
-  testOn = metaPatterns: f: forMatchingSystems metaPatterns
-    (system: hydraJob' (f (pkgsFor system)));
+  testOn = testOnCross null;
 
 
   /* Similar to the testOn function, but with an additional
-     'crossSystem' parameter for allPackages, defining the target
+     'crossSystem' parameter for packageSet', defining the target
      platform for cross builds. */
   testOnCross = crossSystem: metaPatterns: f: forMatchingSystems metaPatterns
-    (system: hydraJob' (f (allPackages { inherit system crossSystem; })));
+    (system: hydraJob' (f (pkgsForCross crossSystem system)));
 
 
   /* Given a nested set where the leaf nodes are lists of platforms,
      map each leaf node to `testOn [platforms...] (pkgs:
      pkgs.<attrPath>)'. */
-  mapTestOn = mapAttrsRecursive
-    (path: metaPatterns: testOn metaPatterns (pkgs: getAttrFromPath path pkgs));
+  mapTestOn = _mapTestOnHelper id null;
+
+
+  _mapTestOnHelper = f: crossSystem: mapAttrsRecursive
+    (path: metaPatterns: testOnCross crossSystem metaPatterns
+      (pkgs: f (getAttrFromPath path pkgs)));
 
 
   /* Similar to the testOn function, but with an additional 'crossSystem'
-   * parameter for allPackages, defining the target platform for cross builds,
-   * and triggering the build of the host derivation (cross built - crossDrv). */
-  mapTestOnCross = crossSystem: mapAttrsRecursive
-    (path: metaPatterns: testOnCross crossSystem metaPatterns
-      (pkgs: addMetaAttrs { maintainers = crossMaintainers; } (getAttrFromPath path pkgs)));
+   * parameter for packageSet', defining the target platform for cross builds,
+   * and triggering the build of the host derivation. */
+  mapTestOnCross = _mapTestOnHelper
+    (addMetaAttrs { maintainers = crossMaintainers; });
 
 
   /* Recursively map a (nested) set of derivations to an isomorphic

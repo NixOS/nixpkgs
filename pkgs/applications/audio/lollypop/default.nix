@@ -4,7 +4,7 @@
 , gobjectIntrospection, wrapGAppsHook }:
 
 python3.pkgs.buildPythonApplication rec  {
-  version = "0.9.605";
+  version = "0.9.610";
   name = "lollypop-${version}";
 
   format = "other";
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "10d9k7ssh4snrrjy1hb3y39by6175493cmn50aq88xby2mdy3p74";
+    sha256 = "0nn4cjw0c2ysd3y2a7l08ybcd21v993wsz99f7w0881jhws3q5p4";
   };
 
   nativeBuildInputs = with python3.pkgs; [

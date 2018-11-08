@@ -8,28 +8,16 @@ let
     ./env_var_for_system_dir.patch
   ];
 
-  firefox60_aarch64_skia_patch = fetchpatch {
-    name = "aarch64-skia.patch";
-    url = https://src.fedoraproject.org/rpms/firefox/raw/8cff86d95da3190272d1beddd45b41de3148f8ef/f/build-aarch64-skia.patch;
-    sha256 = "11acb0ms4jrswp7268nm2p8g8l4lv8zc666a5bqjbb09x9k6b78k";
-  };
-
-  firefox60_triplet_patch = fetchpatch {
-    name = "triplet.patch";
-    url = https://hg.mozilla.org/releases/mozilla-release/raw-rev/bc651d3d910c;
-    sha256 = "0iybkadsgsf6a3pq3jh8z1p110vmpkih8i35jfj8micdkhxzi89g";
-  };
-
 in
 
 rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "62.0.3";
+    ffversion = "63.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0kvb664s47bmmdq2ppjsnyqy8yaiig1xj81r25s36c3i8igfq3zxvws10k2dlmmmrwyc5k4g9i9imgkxj7r3xwwqxc72dl429wvfys8";
+      sha512 = "095nn50g72l4ihbv26qqqs2jg4ahnmd54vxvm7nxwrnkx901aji7pph6c91zfpf7df26ib1b0pqyir9vsac40sdxc8yrzm6d0lyl1m2";
     };
 
     patches = nixpkgsPatches ++ [
@@ -76,10 +64,10 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.2.2esr";
+    ffversion = "60.3.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "2h2naaxx4lv90bjpcrsma4sdhl4mvsisx3zi09vakjwv2lad91gy41cmcpqprpcbsmlvpqf8yiv52ah4d02a8d9335xhw2ajw6asjc1";
+      sha512 = "36ipksq4408mfkyzna7kkjyg70nqx0hzg8zp34kmsynl42whvsqhsfl198c34shsx9zhfsag3hzx2ihhfnj8ph8b0xdgyrmi2ijbvbx";
     };
 
     patches = nixpkgsPatches ++ [
@@ -88,7 +76,7 @@ rec {
       # this one is actually an omnipresent bug
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
       ./fix-pa-context-connect-retval.patch
-    ] ++ lib.optional stdenv.isAarch64 firefox60_aarch64_skia_patch;
+    ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
@@ -116,8 +104,7 @@ rec {
       find . -exec touch -d'2010-01-01 00:00' {} \;
     '';
 
-    patches = nixpkgsPatches
-      ++ lib.optional (args.tbversion == "8.0.2") firefox60_triplet_patch;
+    patches = nixpkgsPatches;
 
     meta = {
       description = "A web browser built from TorBrowser source tree";
@@ -173,16 +160,16 @@ in rec {
   };
 
   tor-browser-8-0 = tbcommon rec {
-    ffversion = "60.2.1esr";
-    tbversion = "8.0.2";
+    ffversion = "60.3.0esr";
+    tbversion = "8.0.3";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-60.2.1esr-8.0-1-slnos"
-      rev   = "4f71403a3e6203baa349a8f81d8664782c5ea548";
-      sha256 = "0zxdi162gpnfca7g77hc0rw4wkmxhfzp9hfmw6dpn97d5kn1zqq3";
+      # branch "tor-browser-60.3.0esr-8.0-1-slnos"
+      rev   = "bd512ad9c40069adfc983f4f03dbd9d220cdf2f9";
+      sha256 = "1j349aqiqrf58zrx8pkqvh292w41v1vwr7x7dmd74hq4pi2iwpn8";
     };
   };
 

@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     rm -vf BUILD
   '';
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";
+
   enableParallelBuilds = true;
 
   meta = with stdenv.lib; {

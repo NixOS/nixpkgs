@@ -13,7 +13,7 @@ in
       sha256 = "1lpbfa298c61aarlzgp7vghrmxg1274pzxh1j9isv8x758gk6mfn";
     };
 
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cmake ] ++
       (if backend == "darwin" then [darwin.apple_sdk.frameworks.Cocoa]
        else if backend == "unix" then [gtk3]
@@ -22,10 +22,6 @@ in
     preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
       sed -i 's/set(CMAKE_OSX_DEPLOYMENT_TARGET "10.8")//' ./CMakeLists.txt
     '';
-    cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [
-      "-DCMAKE_OSX_SYSROOT="
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET="
-    ];
 
     installPhase = ''
       mkdir -p $out/{include,lib}

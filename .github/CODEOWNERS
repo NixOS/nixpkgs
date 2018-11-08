@@ -12,7 +12,7 @@
 
 # Libraries
 /lib                        @edolstra @nbp
-/lib/systems                @nbp @ericson2314
+/lib/systems                @nbp @ericson2314 @matthewbauer
 /lib/generators.nix         @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
 
@@ -20,9 +20,11 @@
 /default.nix                          @nbp
 /pkgs/top-level/default.nix           @nbp @Ericson2314
 /pkgs/top-level/impure.nix            @nbp @Ericson2314
-/pkgs/top-level/stage.nix             @nbp @Ericson2314
-/pkgs/stdenv/generic                  @Ericson2314
-/pkgs/stdenv/cross                    @Ericson2314
+/pkgs/top-level/stage.nix             @nbp @Ericson2314 @matthewbauer
+/pkgs/top-level/splice.nix            @Ericson2314 @matthewbauer
+/pkgs/top-level/release-cross.nix     @Ericson2314 @matthewbauer
+/pkgs/stdenv/generic                  @Ericson2314 @matthewbauer
+/pkgs/stdenv/cross                    @Ericson2314 @matthewbauer
 /pkgs/build-support/cc-wrapper        @Ericson2314 @orivej
 /pkgs/build-support/bintools-wrapper  @Ericson2314 @orivej
 /pkgs/build-support/setup-hooks       @Ericson2314
@@ -74,6 +76,14 @@
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers
 /pkgs/os-specific/darwin    @NixOS/darwin-maintainers
 
+# C compilers
+/pkgs/development/compilers/gcc @matthewbauer
+/pkgs/development/compilers/llvm @matthewbauer
+
+# Compatibility stuff
+/pkgs/top-level/unix-tools.nix @matthewbauer
+/pkgs/development/tools/xcbuild @matthewbauer
+
 # Beam-related (Erlang, Elixir, LFE, etc)
 /pkgs/development/beam-modules                  @gleber
 /pkgs/development/interpreters/erlang           @gleber
@@ -97,3 +107,13 @@
 /pkgs/desktops/plasma-5 @ttuegel
 /pkgs/development/libraries/kde-frameworks @ttuegel
 /pkgs/development/libraries/qt-5 @ttuegel
+
+# PostgreSQL and related stuff
+/pkgs/servers/sql/postgresql @thoughtpolice
+/nixos/modules/services/databases/postgresql.xml @thoughtpolice
+/nixos/modules/services/databases/postgresql.nix @thoughtpolice
+/nixos/tests/postgresql.nix @thoughtpolice
+
+# Dhall
+/pkgs/development/dhall-modules      @Gabriel439 @Profpatsch
+/pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch

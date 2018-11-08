@@ -92,15 +92,15 @@ stdenv.mkDerivation {
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
     # Disable fragile tests.
-    rm -vr src/test/run-make/linker-output-non-utf8 || true
-    rm -vr src/test/run-make/issue-26092 || true
+    rm -vr src/test/run-make-fulldeps/linker-output-non-utf8 || true
+    rm -vr src/test/run-make-fulldeps/issue-26092 || true
 
     # Remove test targeted at LLVM 3.9 - https://github.com/rust-lang/rust/issues/36835
-    rm -vr src/test/run-pass/issue-36023.rs || true
+    rm -vr src/test/ui/run-pass/issue-36023.rs || true
 
     # Disable test getting stuck on hydra - possible fix:
     # https://reviews.llvm.org/rL281650
-    rm -vr src/test/run-pass/issue-36474.rs || true
+    rm -vr src/test/ui/run-pass/issue-36474.rs || true
 
     # On Hydra: `TcpListener::bind(&addr)`: Address already in use (os error 98)'
     sed '/^ *fn fast_rebind()/i#[ignore]' -i src/libstd/net/tcp.rs
@@ -116,18 +116,18 @@ stdenv.mkDerivation {
     # Disable all lldb tests.
     # error: Can't run LLDB test because LLDB's python path is not set
     rm -vr src/test/debuginfo/*
-    rm -v src/test/run-pass/backtrace-debuginfo.rs
+    rm -v src/test/run-pass/backtrace-debuginfo.rs || true
 
     # error: No such file or directory
-    rm -v src/test/run-pass/issue-45731.rs
+    rm -v src/test/ui/run-pass/issues/issue-45731.rs || true
 
     # Disable tests that fail when sandboxing is enabled.
     substituteInPlace src/libstd/sys/unix/ext/net.rs \
         --replace '#[test]' '#[test] #[ignore]'
     substituteInPlace src/test/run-pass/env-home-dir.rs \
         --replace 'home_dir().is_some()' true
-    rm -v src/test/run-pass/fds-are-cloexec.rs  # FIXME: pipes?
-    rm -v src/test/run-pass/sync-send-in-std.rs  # FIXME: ???
+    rm -v src/test/run-pass/fds-are-cloexec.rs || true  # FIXME: pipes?
+    rm -v src/test/ui/run-pass/threads-sendsync/sync-send-in-std.rs || true  # FIXME: ???
   '';
 
   # rustc unfortunately need cmake for compiling llvm-rt but doesn't

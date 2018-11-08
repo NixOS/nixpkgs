@@ -32,6 +32,7 @@ rec {
         else if final.isUClibc              then "uclibc"
         else if final.isAndroid             then "bionic"
         else if final.isLinux /* default */ then "glibc"
+        else if final.isAvr                 then "avrlibc"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
       extensions = {

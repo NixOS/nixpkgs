@@ -22,8 +22,10 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "WMF library from wvWare";
-    platforms = stdenv.lib.platforms.unix;
+    homepage = http://wvware.sourceforge.net/libwmf.html;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

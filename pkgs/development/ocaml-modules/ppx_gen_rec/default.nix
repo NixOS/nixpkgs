@@ -1,11 +1,10 @@
-{ stdenv, fetchurl, ocaml, findlib, dune, ocaml-migrate-parsetree }:
+{ stdenv, fetchurl, buildDunePackage, ocaml-migrate-parsetree }:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
-
-stdenv.mkDerivation rec {
+buildDunePackage rec {
   pname = "ppx_gen_rec";
-  name = "ocaml${ocaml.version}-${pname}-${version}";
   version = "1.0.0";
+
+  minimumOCamlVersion = "4.01";
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
@@ -14,17 +13,12 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib dune ocaml-migrate-parsetree ];
-
-  buildPhase = "dune build -p ppx_gen_rec";
-
-  inherit (dune) installPhase;
+  buildInputs = [ ocaml-migrate-parsetree ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/flowtype/ocaml-ppx_gen_rec;
     description = "ocaml preprocessor that generates a recursive module";
     license = licenses.mit;
-    platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.frontsideair ];
   };
 }

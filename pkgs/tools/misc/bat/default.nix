@@ -20,6 +20,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
 
+  # https://github.com/NixOS/nixpkgs/issues/49642
+  doCheck = !stdenv.isDarwin;
+
   postInstall = ''
     install -m 444 -Dt $out/share/man/man1 doc/bat.1
 
