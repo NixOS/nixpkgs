@@ -6,9 +6,10 @@ let
   dataDir = "/var/lib/consul";
   cfg = config.services.consul;
 
-  configOptions = { data_dir = dataDir; } //
-    (if cfg.webUi then { ui_dir = "${cfg.package.ui}"; } else { }) //
-    cfg.extraConfig;
+  configOptions = {
+    data_dir = dataDir;
+    ui = cfg.webUi;
+  } // cfg.extraConfig;
 
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
     ++ cfg.extraConfigFiles;

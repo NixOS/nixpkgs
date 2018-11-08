@@ -66,7 +66,7 @@ let
               jobs.inkscape.x86_64-darwin
               # jobs.gimp.x86_64-darwin
               jobs.emacs.x86_64-darwin
-              # jobs.wireshark.x86_64-darwin
+              jobs.wireshark.x86_64-darwin
               jobs.transmission-gtk.x86_64-darwin
 
               # Tests

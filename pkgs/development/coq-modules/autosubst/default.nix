@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "06pcjbngzwqyncvfwzz88j33wvdj9kizxyg5adp7y6186h8an341";
   };
 
+  buildInputs = [ coq ];
   propagatedBuildInputs = [ mathcomp ];
 
   patches = [./0001-changes-to-work-with-Coq-8.6.patch];

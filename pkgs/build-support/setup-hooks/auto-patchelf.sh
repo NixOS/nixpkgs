@@ -7,7 +7,16 @@ gatherLibraries() {
 addEnvHooks "$targetOffset" gatherLibraries
 
 isExecutable() {
-    readelf -h "$1" 2> /dev/null | grep -q '^ *Type: *EXEC\>'
+    # For dynamically linked ELF files it would be enough to check just for the
+    # INTERP section. However, we won't catch statically linked executables as
+    # they only have an ELF type of EXEC but no INTERP.
+    #
+    # So what we do here is just check whether *either* the ELF type is EXEC
+    # *or* there is an INTERP section. This also catches position-independent
+    # executables, as they typically have an INTERP section but their ELF type
+    # is DYN.
+    LANG=C readelf -h -l "$1" 2> /dev/null \
+        | grep -q '^ *Type: *EXEC\>\|^ *INTERP\>'
 }
 
 # We cache dependencies so that we don't need to search through all of them on
@@ -157,7 +166,7 @@ autoPatchelf() {
       isELF "$file" || continue
       if isExecutable "$file"; then
           # Skip if the executable is statically linked.
-          readelf -l "$file" | grep -q "^ *INTERP\\>" || continue
+          LANG=C readelf -l "$file" | grep -q "^ *INTERP\\>" || continue
       fi
       autoPatchelfFile "$file"
     done < <(find "$prefix" -type f -print0)

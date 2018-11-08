@@ -1,31 +1,31 @@
-{ stdenv, lib, fetchurl, pkgconfig, pruneLibtoolFiles
-, openglSupport ? false, libGL
-, alsaSupport ? true, alsaLib
-, x11Support ? true, libX11, xproto, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
-, waylandSupport ? true, wayland, wayland-protocols, libxkbcommon
-, dbusSupport ? false, dbus
+{ stdenv, config, libGLSupported, fetchurl, pkgconfig, pruneLibtoolFiles
+, openglSupport ? libGLSupported, libGL
+, alsaSupport ? stdenv.isLinux, alsaLib
+, x11Support ? !stdenv.isCygwin, libX11, xproto, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
+, waylandSupport ? stdenv.isLinux, wayland, wayland-protocols, libxkbcommon
+, dbusSupport ? stdenv.isLinux, dbus
 , udevSupport ? false, udev
 , ibusSupport ? false, ibus
-, pulseaudioSupport ? true, libpulseaudio
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, audiofile, libiconv
+, audiofile, cf-private, libiconv
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 
-with lib;
+with stdenv.lib;
 
 assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
 assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
 
 stdenv.mkDerivation rec {
   name = "SDL2-${version}";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "1v4js1gkr75hzbxzhwzzif0sf9g07234sd23x1vdaqc661bprizd";
+    sha256 = "1c94ndagzkdfqaa838yqg589p1nnqln8mv0hpwfhrkbfczf8cl95";
   };
 
   outputs = [ "out" "dev" ];
@@ -54,7 +54,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ audiofile libiconv ]
     ++ dlopenBuildInputs
     ++ optional  ibusSupport ibus
-    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
+    ++ optionals stdenv.isDarwin [
+      AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL
+      # Needed for NSDefaultRunLoopMode symbols.
+      cf-private
+    ];
 
   # /build/SDL2-2.0.7/src/video/wayland/SDL_waylandevents.c:41:10: fatal error:
   #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory

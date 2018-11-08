@@ -1,4 +1,4 @@
-{ stdenv, gcc-arm-embedded, makeWrapper
+{ stdenv, gcc-arm-embedded, binutils-arm-embedded, makeWrapper
 , python, pythonPackages
 
 # Extra options
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   inherit src;
 
-  nativeBuildInputs = [ gcc-arm-embedded makeWrapper ];
+  nativeBuildInputs = [ gcc-arm-embedded binutils-arm-embedded makeWrapper ];
   buildInputs = [ python ] ++ (with pythonPackages; [ pyusb colorama ]);
 
   configurePhase = ''

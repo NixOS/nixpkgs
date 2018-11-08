@@ -170,4 +170,6 @@ in {
       '';
     }) cfg.params;
   };
+
+  meta.maintainers = with lib.maintainers; [ ekleog ];
 }

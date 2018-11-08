@@ -12,25 +12,27 @@
 , ninja
 , libgudev
 , libevdev
-, vala
+, libsoup
+, vala_0_40
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "spice-up-${version}";
-  version = "1.3.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Spice-up";
     rev = version;
-    sha256 = "087cdi7na93pgz7vf046h94v5ydvpiccpwhllq85ix8g4pa5rp85";
+    sha256 = "1qb1hlw7g581dmgg5mh832ixjkcgqm3lqzj6xma2cz8wdncwwjaq";
   };
+
   USER = "nix-build-user";
 
   nativeBuildInputs = [
     pkgconfig
     wrapGAppsHook
-    vala
+    vala_0_40 # should be `elementary.vala` when elementary attribute set is merged
     cmake
     ninja
     gettext
@@ -38,12 +40,14 @@ stdenv.mkDerivation rec {
     gobjectIntrospection # For setup hook
   ];
   buildInputs = [
-    gtk3
-    granite
+    gnome3.defaultIconTheme # should be `elementary.defaultIconTheme`when elementary attribute set is merged
     gnome3.libgee
+    granite
+    gtk3
     json-glib
-    libgudev
     libevdev
+    libgudev
+    libsoup
   ];
 
   meta = with stdenv.lib; {

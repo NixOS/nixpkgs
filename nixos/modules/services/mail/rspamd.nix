@@ -127,11 +127,15 @@ let
       options {
         pidfile = "$RUNDIR/rspamd.pid";
         .include "$CONFDIR/options.inc"
+        .include(try=true; priority=1,duplicate=merge) "$LOCAL_CONFDIR/local.d/options.inc"
+        .include(try=true; priority=10) "$LOCAL_CONFDIR/override.d/options.inc"
       }
 
       logging {
         type = "syslog";
         .include "$CONFDIR/logging.inc"
+        .include(try=true; priority=1,duplicate=merge) "$LOCAL_CONFDIR/local.d/logging.inc"
+        .include(try=true; priority=10) "$LOCAL_CONFDIR/override.d/logging.inc"
       }
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
@@ -149,6 +153,42 @@ let
       ${cfg.extraConfig}
    '';
 
+  filterFiles = files: filterAttrs (n: v: v.enable) files;
+  rspamdDir = pkgs.linkFarm "etc-rspamd-dir" (
+    (mapAttrsToList (name: file: { name = "local.d/${name}"; path = file.source; }) (filterFiles cfg.locals)) ++
+    (mapAttrsToList (name: file: { name = "override.d/${name}"; path = file.source; }) (filterFiles cfg.overrides)) ++
+    (optional (cfg.localLuaRules != null) { name = "rspamd.local.lua"; path = cfg.localLuaRules; }) ++
+    [ { name = "rspamd.conf"; path = rspamdConfFile; } ]
+  );
+
+  configFileModule = prefix: { name, config, ... }: {
+    options = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether this file ${prefix} should be generated.  This
+          option allows specific ${prefix} files to be disabled.
+        '';
+      };
+
+      text = mkOption {
+        default = null;
+        type = types.nullOr types.lines;
+        description = "Text of the file.";
+      };
+
+      source = mkOption {
+        type = types.path;
+        description = "Path of the source file.";
+      };
+    };
+    config = {
+      source = mkIf (config.text != null) (
+        let name' = "rspamd-${prefix}-" + baseNameOf name;
+        in mkDefault (pkgs.writeText name' config.text));
+    };
+  };
 in
 
 {
@@ -165,6 +205,41 @@ in
         type = types.bool;
         default = false;
         description = "Whether to run the rspamd daemon in debug mode.";
+      };
+
+      locals = mkOption {
+        type = with types; attrsOf (submodule (configFileModule "locals"));
+        default = {};
+        description = ''
+          Local configuration files, written into <filename>/etc/rspamd/local.d/{name}</filename>.
+        '';
+        example = literalExample ''
+          { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
+            "arc.conf".text = "allow_envfrom_empty = true;";
+          }
+        '';
+      };
+
+      overrides = mkOption {
+        type = with types; attrsOf (submodule (configFileModule "overrides"));
+        default = {};
+        description = ''
+          Overridden configuration files, written into <filename>/etc/rspamd/override.d/{name}</filename>.
+        '';
+        example = literalExample ''
+          { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
+            "arc.conf".text = "allow_envfrom_empty = true;";
+          }
+        '';
+      };
+
+      localLuaRules = mkOption {
+        default = null;
+        type = types.nullOr types.path;
+        description = ''
+          Path of file to link to <filename>/etc/rspamd/rspamd.local.lua</filename> for local
+          rules written in Lua
+        '';
       };
 
       workers = mkOption {
@@ -242,16 +317,17 @@ in
       gid = config.ids.gids.rspamd;
     };
 
-    environment.etc."rspamd.conf".source = rspamdConfFile;
+    environment.etc."rspamd".source = rspamdDir;
 
     systemd.services.rspamd = {
       description = "Rspamd Service";
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
+      restartTriggers = [ rspamdDir ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -c ${rspamdConfFile} -f";
+        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -c /etc/rspamd/rspamd.conf -f";
         Restart = "always";
         RuntimeDirectory = "rspamd";
         PrivateTmp = true;

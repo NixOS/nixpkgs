@@ -20,7 +20,6 @@ with lib;
       KERNEL=="random", TAG+="systemd"
       SUBSYSTEM=="cpu", ENV{MODALIAS}=="cpu:type:x86,*feature:*009E*", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
       KERNEL=="hw_random", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
-      ${if config.services.tcsd.enable then "" else ''KERNEL=="tpm0", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"''}
     '';
 
     systemd.services.rngd = {
@@ -30,8 +29,7 @@ with lib;
 
       description = "Hardware RNG Entropy Gatherer Daemon";
 
-      serviceConfig.ExecStart = "${pkgs.rng_tools}/sbin/rngd -f -v" +
-        (if config.services.tcsd.enable then " --no-tpm=1" else "");
+      serviceConfig.ExecStart = "${pkgs.rng-tools}/sbin/rngd -f";
     };
   };
 }

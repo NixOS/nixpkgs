@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-gssapi-impl=mit" ];
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "GNU SASL, Simple Authentication and Security Layer library";

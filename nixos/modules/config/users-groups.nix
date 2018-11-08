@@ -266,7 +266,7 @@ let
         (mkIf config.isNormalUser {
           group = mkDefault "users";
           createHome = mkDefault true;
-          home = mkDefault "/home/${name}";
+          home = mkDefault "/home/${config.name}";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })

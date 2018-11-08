@@ -22,6 +22,8 @@ let
       "51afec6ffa50a9da4cdef188971a802beb1ca8e8edb40fa429e5e529db3475fa")
     (mkOverride "astral" "1.6.1"
       "ab0c08f2467d35fcaeb7bad15274743d3ac1ad18b5391f64a0058a9cd192d37d")
+    (mkOverride "async-timeout" "3.0.1"
+      "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f")
     (mkOverride "attrs" "18.2.0"
       "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69")
     (mkOverride "bcrypt" "3.1.4"
@@ -32,8 +34,8 @@ let
       "8d10113ca826a4c29d5b85b2c4e045ffa8bad74fb525ee0eceb1d38d4c70dfd6")
     (mkOverride "cryptography_vectors" "2.3.1" # required by cryptography==2.3.1
       "bf4d9b61dce69c49e830950aa36fad194706463b0b6dfe81425b9e0bc6644d46")
-    (mkOverride "requests" "2.19.1"
-      "ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a")
+    (mkOverride "requests" "2.20.0"
+      "99dcfdaaeb17caf6e526f32b6a7b780461512ab3f1d992187801694cba42770c")
     (mkOverride "voluptuous" "0.11.5"
       "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
     (mkOverride "voluptuous-serialize" "2.0.0"
@@ -77,7 +79,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.80.3";
+  hassVersion = "0.81.5";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -92,7 +94,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "0fjkw8kg0vsyrkcrx9jhqrh5nzxx5wphj6zglqgai2d635m8j2dg";
+    sha256 = "1fgf9hrv7q7g8s561sir951vd27a459mh3k685xzfnhkh4si47g4";
   };
 
   propagatedBuildInputs = [

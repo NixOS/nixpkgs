@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     makeWrapper "${jre}/bin/java" "$out/bin/apktool" \
         --add-flags "-jar $out/libexec/apktool/apktool.jar" \
-        --prefix PATH : "${buildTools}/build-tools/25.0.1/"
+        --prefix PATH : "${buildTools.v25_0_1}/build-tools/25.0.1/"
   '';
 
   meta = with stdenv.lib; {

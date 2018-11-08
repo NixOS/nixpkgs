@@ -33,10 +33,13 @@ let
          ++ lib.optional enableTWBT twbt.art
          ++ [ dwarf-fortress ];
 
-  fixup = lib.singleton (runCommand "fixup" {} ''
+  fixup = lib.singleton (runCommand "fixup" {} (''
     mkdir -p $out/data/init
+  '' + (if (theme != null) then ''
+    cp ${lib.head themePkg}/data/init/init.txt $out/data/init/init.txt
+  '' else ''
     cp ${dwarf-fortress}/data/init/init.txt $out/data/init/init.txt
-  '' + lib.optionalString enableDFHack ''
+  '') + lib.optionalString enableDFHack ''
     mkdir -p $out/hack
 
     # Patch the MD5
@@ -60,7 +63,7 @@ let
       --replace '[INTRO:YES]' '[INTRO:${unBool enableIntro}]' \
       --replace '[TRUETYPE:YES]' '[TRUETYPE:${unBool enableTruetype}]' \
       --replace '[FPS:NO]' '[FPS:${unBool enableFPS}]'
-  '');
+  ''));
 
   env = buildEnv {
     name = "dwarf-fortress-env-${dwarf-fortress.dfVersion}";

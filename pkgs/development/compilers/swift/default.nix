@@ -32,11 +32,10 @@
 , makeWrapper
 , gnumake
 , file
-#, systemtap
 }:
 
 let
-  v_base = "4.1.3";
+  v_base = "4.2.1";
   version = "${v_base}-RELEASE";
   version_friendly = "${v_base}";
 
@@ -54,15 +53,15 @@ let
     # For more inforation, see: https://github.com/apple/swift/pull/3594#issuecomment-234169759
     clang = fetch {
       repo = "swift-clang";
-      sha256 = "0j8bi6jv4m4hqiib02q5cvnxd9j6bwiri853x6px86vai3mdff0h";
+      sha256 = "0l6w4xzpl3w2nax9a0b885nfzhfj38p2g99158nb5bzfd4s0man7";
     };
     llvm = fetch {
       repo = "swift-llvm";
-      sha256 = "0q5cv4iydm8c1kcax32573y3q2cbpihwgj5aa8ws1fnpy4jvq934";
+      sha256 = "1664zwxbq0a1cmxr9n5a0vw6vdk6ygr7rpglpdsfc7ki857vpsyv";
     };
     compilerrt = fetch {
       repo = "swift-compiler-rt";
-      sha256 = "1wkymmxi2v759xkwlzfrq9rivndjfvp6ikrzz10mvvrvyvrgwqnl";
+      sha256 = "19s6qxn4i0kxpf39xjp2i7zg427iinbmaxqkbb1p91g616y367sf";
     };
     cmark = fetch {
       repo = "swift-cmark";
@@ -70,32 +69,32 @@ let
     };
     lldb = fetch {
       repo = "swift-lldb";
-      sha256 = "1d0pa7xm289bjb6r52hkkmlngkqkwbwgixnmm30bin2q18mkxk7s";
+      sha256 = "00kz0xhj1p6ckyandj2gs1yfl29kxv84x9pfph00r8crbkd2jz7b";
     };
     llbuild = fetch {
       repo = "swift-llbuild";
-      sha256 = "04y0ihfyam2n671vmpk9gy0gb9lb3ivh6mr19862p5kg5bmrcic1";
+      sha256 = "1mkkhydshhxr28igbldzr0hhqvb6ql43cpf3ba5vglfkbcz6wh6q";
     };
     pm = fetch {
       repo = "swift-package-manager";
-      sha256 = "08d87fc29qq7m92jaxkiczsa7b567pwbibiwwkzdrj6a0gr11qn3";
+      sha256 = "1aqvmgq9g5zs4k2qnkvw3h3mar66d690hqq6g2dmrapsyb321j9l";
     };
     xctest = fetch {
       repo = "swift-corelibs-xctest";
-      sha256 = "1alkgxx8jsr2jjv2kchnjaaddb1byjwim015m1z3qxh6lknqm0k5";
+      sha256 = "1n4w7bfgy73vjzbvbphlwayy0dw73bbrayrpkqq8lbidg0x9lam8";
     };
     foundation = fetch {
       repo = "swift-corelibs-foundation";
-      sha256 = "1bhrag63rmz41bg2g6ap01qrdpq37hislgf5hg6myy2v69q7mahx";
+      sha256 = "1bfnkj8s3v327cy0czkngz0ryzmz7amjzkkxbsg2zyrhf9a9f0f7";
     };
     libdispatch = fetch {
       repo = "swift-corelibs-libdispatch";
-      sha256 = "198vskbajch8s168a649qz5an92i2mxmmmzcjlgxlzh38fgxri0n";
+      sha256 = "0fibrx54nbaawhsgd7cbr356ji9qvf8y8ahd5bdx28fpj6q0cnwc";
       fetchSubmodules = true;
     };
     swift = fetch {
       repo = "swift";
-      sha256 = "1ydx11pkvaasgjbr29lnha0lpnak758gd5l0aqzmp3q6mcyvfm7a";
+      sha256 = "0y277wi0m6zp1yph9s14mmc65m21q5fm6lgzkn2rkrbaz25fdzak";
     };
   };
 
@@ -111,7 +110,6 @@ let
     ncurses
     sqlite
     swig
-    #    systemtap?
   ];
 
   cmakeFlags = [
@@ -215,8 +213,11 @@ stdenv.mkDerivation rec {
 
     substituteInPlace swift/stdlib/public/Platform/CMakeLists.txt \
       --replace '/usr/include' "${stdenv.cc.libc.dev}/include"
+    substituteInPlace swift-corelibs-libdispatch/src/CMakeLists.txt \
+      --replace '/usr/include' "${stdenv.cc.libc.dev}/include"
     substituteInPlace swift/utils/build-script-impl \
       --replace '/usr/include/c++' "${clang.cc.gcc}/include/c++"
+    patch -p1 -d swift -i ${./patches/glibc-arch-headers.patch}
   '' + stdenv.lib.optionalString stdenv.needsPax ''
     patch -p1 -d swift -i ${./patches/build-script-pax.patch}
   '' + ''
@@ -228,24 +229,24 @@ stdenv.mkDerivation rec {
       -e 's/^test-installable-package$/# \0/' \
       -e 's/^test$/# \0/' \
       -e 's/^validation-test$/# \0/' \
-      -e 's/^long-test$/# \0/'
+      -e 's/^long-test$/# \0/' \
+      -e 's/^stress-test$/# \0/' \
+      -e 's/^test-optimized$/# \0/'
 
     # https://bugs.swift.org/browse/SR-5779
     sed -i -e 's|"-latomic"|"-Wl,-rpath,${clang.cc.gcc.lib}/lib" "-L${clang.cc.gcc.lib}/lib" "-latomic"|' swift/cmake/modules/AddSwift.cmake
 
     substituteInPlace clang/lib/Driver/ToolChains/Linux.cpp \
-      --replace '  addPathIfExists(D, SysRoot + "/usr/lib", Paths);' \
-                '  addPathIfExists(D, SysRoot + "/usr/lib", Paths); addPathIfExists(D, "${glibc}/lib", Paths);'
+      --replace 'SysRoot + "/usr/lib' '"${glibc}/lib" "'
+    patch -p1 -d clang -i ${./patches/llvm-include-dirs.patch}
     patch -p1 -d clang -i ${./purity.patch}
 
     # Workaround hardcoded dep on "libcurses" (vs "libncurses"):
     sed -i 's,curses,ncurses,' llbuild/*/*/CMakeLists.txt
 
-    # This test fails on one of my machines, not sure why.
-    # Disabling for now.
-    rm llbuild/tests/Examples/buildsystem-capi.llbuild
-
     PREFIX=''${out/#\/}
+    substituteInPlace swift-corelibs-foundation/build.py \
+      --replace usr/lib "$PREFIX/lib"
     substituteInPlace swift-corelibs-xctest/build_script.py \
       --replace usr "$PREFIX"
     substituteInPlace swiftpm/Utilities/bootstrap \
@@ -263,6 +264,7 @@ stdenv.mkDerivation rec {
     # Extract the generated tarball into the store
     PREFIX=''${out/#\/}
     tar xf $INSTALLABLE_PACKAGE -C $out --strip-components=3 $PREFIX
+    find $out -type d -empty -delete
 
     paxmark pmr $out/bin/swift
     paxmark pmr $out/bin/*
@@ -290,4 +292,3 @@ stdenv.mkDerivation rec {
     broken = stdenv.isAarch64; # 2018-09-04, never built on Hydra
   };
 }
-

@@ -45,6 +45,7 @@ let
       system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
     };
 
+  makeModules = module: rest: [ configuration versionModule module rest ];
 
   makeIso =
     { module, type, system, ... }:
@@ -53,7 +54,9 @@ let
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
-      modules = [ configuration module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
+      modules = makeModules module {
+        isoImage.isoBaseName = "nixos-${type}";
+      };
     }).config.system.build.isoImage);
 
 
@@ -64,7 +67,7 @@ let
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
-      modules = [ configuration module versionModule ];
+      modules = makeModules module {};
     }).config.system.build.sdImage);
 
 
@@ -77,7 +80,7 @@ let
 
       config = (import lib/eval-config.nix {
         inherit system;
-        modules = [ configuration module versionModule ];
+        modules = makeModules module {};
       }).config;
 
       tarball = config.system.build.tarball;
@@ -97,7 +100,7 @@ let
 
   buildFromConfig = module: sel: forAllSystems (system: hydraJob (sel (import ./lib/eval-config.nix {
     inherit system;
-    modules = [ configuration module versionModule ] ++ singleton
+    modules = makeModules module
       ({ ... }:
       { fileSystems."/".device  = mkDefault "/dev/sda1";
         boot.loader.grub.device = mkDefault "/dev/sda";
@@ -108,7 +111,7 @@ let
     let
       configEvaled = import lib/eval-config.nix {
         inherit system;
-        modules = [ module versionModule ];
+        modules = makeModules module {};
       };
       build = configEvaled.config.system.build;
       kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
@@ -283,6 +286,7 @@ in rec {
   tests.docker-tools = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools.nix {};
   tests.docker-tools-overlay = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-tools-overlay.nix {};
   tests.docker-edge = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-edge.nix {};
+  tests.docker-preloader = callTestOnMatchingSystems ["x86_64-linux"] tests/docker-preloader.nix {};
   tests.docker-registry = callTest tests/docker-registry.nix {};
   tests.dovecot = callTest tests/dovecot.nix {};
   tests.dnscrypt-proxy = callTestOnMatchingSystems ["x86_64-linux"] tests/dnscrypt-proxy.nix {};
@@ -300,7 +304,7 @@ in rec {
   tests.fsck = callTest tests/fsck.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   tests.gdk-pixbuf = callTest tests/gdk-pixbuf.nix {};
-  #tests.gitlab = callTest tests/gitlab.nix {};
+  tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
   tests.gjs = callTest tests/gjs.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
@@ -399,6 +403,7 @@ in rec {
   tests.radicale = callTest tests/radicale.nix {};
   tests.redmine = callTest tests/redmine.nix {};
   tests.rspamd = callSubTests tests/rspamd.nix {};
+  tests.rsyslogd = callSubTests tests/rsyslogd.nix {};
   tests.runInMachine = callTest tests/run-in-machine.nix {};
   tests.rxe = callTest tests/rxe.nix {};
   tests.samba = callTest tests/samba.nix {};
@@ -408,6 +413,7 @@ in rec {
   tests.slurm = callTest tests/slurm.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
+  tests.solr = callTest tests/solr.nix {};
   #tests.statsd = callTest tests/statsd.nix {}; # statsd is broken: #45946
   tests.strongswan-swanctl = callTest tests/strongswan-swanctl.nix {};
   tests.sudo = callTest tests/sudo.nix {};
@@ -467,7 +473,7 @@ in rec {
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
         services.postgresql.enable = true;
-        services.postgresql.package = pkgs.postgresql93;
+        services.postgresql.package = pkgs.postgresql_9_3;
         environment.systemPackages = [ pkgs.php ];
       });
   };

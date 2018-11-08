@@ -50,6 +50,9 @@ let
     rec { sha1 = "280c265b789e041c02e5c97815793dfc283fb1e6"; name = "LIBFFI_${sha1}/libffi.tar.gz";                                                    url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/libffi-3.2.1.tar.gz; }
     rec { sha1 = "8819cea8bfe22c9c63f55465e296b3855ea41786"; name = "TruffleJSON_${sha1}/trufflejson.jar";                                             url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/trufflejson-20180130.jar; }
     rec { sha1 = "9712a8124c40298015f04a74f61b3d81a51513af"; name = "CHECKSTYLE_8.8_${sha1}/checkstyle-8.8.jar";                                       url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/checkstyle-8.8-all.jar; }
+    rec { sha1 = "a828a4f32caf9ac0b74f2548f87310959558c526"; name = "VISUALVM_COMMON_${sha1}/visualvm-common.tar.gz";                                  url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-612.tar.gz; }
+    rec { sha1 = "7ac829f0c9a37f5cc39afd2265588a365480720d"; name = "VISUALVM_PLATFORM_SPECIFIC_${sha1}/visualvm-platform-specific.tar.gz";            url = https://lafo.ssw.uni-linz.ac.at/pub/graal-external-deps/visualvm-612-linux-amd64.tar.gz; }
+    rec { sha1 = "e6e60889b7211a80b21052a249bd7e0f88f79fee"; name = "Java-WebSocket_${sha1}/java-websocket.jar";                                       url = mirror://maven/org/java-websocket/Java-WebSocket/1.3.9/Java-WebSocket-1.3.9.jar; }
   ];
 
   findbugs = fetchzip {
@@ -61,13 +64,13 @@ let
 in rec {
 
   mx = stdenv.mkDerivation rec {
-    version = "5.176.4";
+    version = "5.192.0";
     name = "mx";
     src = fetchFromGitHub {
       owner  = "graalvm";
       repo   = "mx";
       rev    = version;
-      sha256 = "0xmx4hpnd6m9hk49lgwnvwd0q11s2m4d8axwq7zzc8wm10d692xw";
+      sha256 = "04gdf1gzlc8a6li8lcnrs2j9zicj11fs1vqqf7cmhb4pm2h72hml";
     };
     nativeBuildInputs = [ makeWrapper ];
     buildPhase = ''
@@ -79,6 +82,11 @@ in rec {
         'def download(path, urls, verbose=False, abortOnError=True, verifyOnly=False):
           print("FAKE download(path={} urls={} verbose={} abortOnError={} verifyOnly={})".format(path, urls, verbose, abortOnError, verifyOnly))
           return True'
+
+      # avoid crash with 'ValueError: ZIP does not support timestamps before 1980'
+      substituteInPlace mx.py --replace \
+        'zipfile.ZipInfo(arcname, time.localtime(os.path.getmtime(join(root, f)))[:6])' \
+        'zipfile.ZipInfo(arcname, time.strptime ("1 Jan 1980", "%d %b %Y"       )[:6])'
     '';
     installPhase = ''
       mkdir -p $out/bin
@@ -97,9 +105,9 @@ in rec {
 
   # copy of pkgs.oraclejvm8 with JVMCI interface (TODO: it should work with pkgs.openjdk8 too)
   jvmci8 = stdenv.mkDerivation rec {
-    version = "0.45";
+    version = "0.49";
     name = let
-             n = "jvmci8u171-${version}";
+             n = "jvmci${/*"8u191"*/ lib.removePrefix "oraclejdk-" oraclejdk8.name}-${version}";
            in if (lib.stringLength n) == (lib.stringLength oraclejdk8.name) then
                 n
               else
@@ -108,7 +116,7 @@ in rec {
       owner  = "graalvm";
       repo   = "graal-jvmci-8";
       rev    = "jvmci-${version}";
-      sha256 = "1nppk9dpamisiadss1iy82i3rf6igndbf1vax85w9lz310kh0d12";
+      sha256 = "1zgin0w1qa7wmfhcisx470fhnmddfxxp5nyyix31yaa7dznql82k";
     };
     buildInputs = [ mx mercurial ];
     postUnpack = ''
@@ -146,7 +154,7 @@ in rec {
   };
 
   graalvm8 = stdenv.mkDerivation rec {
-    version = "1.0.0-rc3";
+    version = "1.0.0-rc8";
     name = let
              n = "graal-${version}";
            in if (lib.stringLength n) == (lib.stringLength jvmci8.name) then
@@ -157,7 +165,7 @@ in rec {
       owner  = "oracle";
       repo   = "graal";
       rev    = "vm-${version}";
-      sha256 = "1hcs4m6ailapgi3bikav1i517vqn5pn595cyqqjfvlnkjwihbnc3";
+      sha256 = "1fada4awrr8bhw294xdiq4bagvgrlcr44mw6338gaal0ky3vkm0p";
     };
     buildInputs = [ mx zlib mercurial jvmci8 ];
     postUnpack = ''
@@ -170,6 +178,17 @@ in rec {
         hg checkout ${lib.escapeShellArg src.rev}
       )
     '';
+    postPatch = ''
+      substituteInPlace substratevm/src/com.oracle.svm.core.posix/src/com/oracle/svm/core/posix/headers/PosixDirectives.java \
+        --replace '<zlib.h>' '<${zlib.dev}/include/zlib.h>'
+      substituteInPlace substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/image/CCLinkerInvocation.java \
+        --replace 'cmd.add("-v");' 'cmd.add("-v"); cmd.add("-L${zlib}/lib");'
+      substituteInPlace substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/c/codegen/CCompilerInvoker.java \
+        --replace 'command.add(Platform.includedIn(Platform.WINDOWS.class) ? "CL" : "gcc");' \
+          'command.add(Platform.includedIn(Platform.WINDOWS.class) ? "CL" : "${stdenv.cc}/bin/gcc");'
+      substituteInPlace substratevm/src/com.oracle.svm.hosted/src/com/oracle/svm/hosted/image/CCLinkerInvocation.java \
+        --replace 'protected String compilerCommand = "cc";' 'protected String compilerCommand = "${stdenv.cc}/bin/cc";'
+    '';
     buildPhase = ''
       # make a copy of jvmci8
       cp -dpR ${jvmci8} $out
@@ -178,13 +197,14 @@ in rec {
 
       export MX_ALT_OUTPUT_ROOT=$NIX_BUILD_TOP/mxbuild
       export MX_CACHE_DIR=${makeMxCache graal-mxcache}
+
       ( cd substratevm
 
         mkdir -p clibraries
         mx --java-home $out build
 
         # bootstrap native-image (that was removed from mx build in https://github.com/oracle/graal/commit/140d7a7edf54ec5872a8ff45869cd1ae499efde4)
-        mx --java-home $out native-image -cp $MX_ALT_OUTPUT_ROOT/substratevm/dists/svm-driver.jar com.oracle.svm.driver.NativeImage
+        mx --java-home $out native-image -cp $MX_ALT_OUTPUT_ROOT/substratevm/dists/jdk1.8/svm-driver.jar com.oracle.svm.driver.NativeImage
       )
       ( cd tools
         mx --java-home $out build
@@ -195,17 +215,17 @@ in rec {
       mkdir -p $out/jre/tools/{profiler,chromeinspector,truffle/builder} $out/jre/lib/{graal,include,truffle/include}
       cp -vpLR substratevm/svmbuild/native-image-root/lib/*                         $out/jre/lib/           || true # ignore "same file" error when dereferencing symlinks
       cp -vp   $MX_ALT_OUTPUT_ROOT/truffle/linux-amd64/truffle-nfi-native/bin/*     $out/jre/lib/amd64/
-      cp -vp   $MX_ALT_OUTPUT_ROOT/compiler/dists/graal-*processor*.jar             $out/jre/lib/graal/
+      cp -vp   $MX_ALT_OUTPUT_ROOT/compiler/dists/jdk1.8/graal-*processor*.jar      $out/jre/lib/graal/
       cp -vp   $MX_ALT_OUTPUT_ROOT/truffle/linux-amd64/truffle-nfi-native/include/* $out/jre/lib/include/
-      cp -vp   $MX_ALT_OUTPUT_ROOT/compiler/dists/graal-management.jar              $out/jre/lib/jvmci/
+      cp -vp   $MX_ALT_OUTPUT_ROOT/compiler/dists/jdk1.8/graal-management.jar       $out/jre/lib/jvmci/
       cp -vdpR $out/jre/lib/svm/clibraries                                          $out/jre/lib/svm/builder/
-      cp -vpR  $MX_ALT_OUTPUT_ROOT/truffle/dists/*                                  $out/jre/lib/truffle/
+      cp -vpR  $MX_ALT_OUTPUT_ROOT/truffle/dists/jdk1.8/*                           $out/jre/lib/truffle/
       cp -vp   $MX_ALT_OUTPUT_ROOT/truffle/linux-amd64/truffle-nfi-native/include/* $out/jre/lib/truffle/include/
       cp -vpLR substratevm/svmbuild/native-image-root/tools/*                       $out/jre/tools/
       cp -vpR  $MX_ALT_OUTPUT_ROOT/tools/dists/chromeinspector*                     $out/jre/tools/chromeinspector/
       cp -vpR  $MX_ALT_OUTPUT_ROOT/tools/dists/truffle-profiler*                    $out/jre/tools/profiler/
       cp -vpR  $MX_ALT_OUTPUT_ROOT/truffle/linux-amd64/truffle-nfi-native/*         $out/jre/tools/truffle/
-      cp -vp   $MX_ALT_OUTPUT_ROOT/truffle/dists/truffle-nfi.jar                    $out/jre/tools/truffle/builder/
+      cp -vp   $MX_ALT_OUTPUT_ROOT/truffle/dists/jdk1.8/truffle-nfi.jar             $out/jre/tools/truffle/builder/
 
       echo "name=GraalVM ${version}"                                              > $out/jre/lib/amd64/server/vm.properties
       echo -n "graal"                                                             > $out/jre/lib/jvmci/compiler-name

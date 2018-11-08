@@ -87,7 +87,7 @@ let
       # check if pods are running
       $machine1->waitUntilSucceeds("kubectl get pod redis | grep Running");
       $machine1->waitUntilSucceeds("kubectl get pod probe | grep Running");
-      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'kube-dns.*3/3'");
+      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'coredns.*1/1'");
 
       # check dns on host (dnsmasq)
       $machine1->succeed("host redis.default.svc.cluster.local");
@@ -111,7 +111,7 @@ let
       # check if pods are running
       $machine1->waitUntilSucceeds("kubectl get pod redis | grep Running");
       $machine1->waitUntilSucceeds("kubectl get pod probe | grep Running");
-      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'kube-dns.*3/3'");
+      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'coredns.*1/1'");
 
       # check dns on hosts (dnsmasq)
       $machine1->succeed("host redis.default.svc.cluster.local");

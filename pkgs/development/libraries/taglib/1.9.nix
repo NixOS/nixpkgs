@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://developer.kde.org/~wheeler/taglib.html;
     repositories.git = git://github.com/taglib/taglib.git;
-
     description = "A library for reading and editing the meta-data of several popular audio formats";
     inherit (cmake.meta) platforms;
-    maintainers = [ ];
+    license = with stdenv.lib.licenses; [ lgpl21 mpl11 ];
   };
 }
