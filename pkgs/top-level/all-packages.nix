@@ -22829,6 +22829,8 @@ with pkgs;
 
   chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
 
+  chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing {};
+
   NSPlist = callPackage ../development/libraries/NSPlist {};
 
   PlistCpp = callPackage ../development/libraries/PlistCpp {};
