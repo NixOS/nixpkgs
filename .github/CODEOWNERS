@@ -123,3 +123,6 @@
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
+
+# Bazel
+/pkgs/development/tools/build-managers/bazel @mboes @Profpatsch
