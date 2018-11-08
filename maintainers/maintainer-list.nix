@@ -3820,6 +3820,11 @@
     github = "scolobb";
     name = "Sergiu Ivanov";
   };
+  screendriver = {
+    email = "nix@echooff.de";
+    github = "screendriver";
+    name = "Christian Rackerseder";
+  };
   Scriptkiddi = {
     email = "nixos@scriptkiddi.de";
     github = "scriptkiddi";
