@@ -3,19 +3,19 @@
 
 rustPlatform.buildRustPackage rec {
   name = "dwm-status-${version}";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Gerschtli";
     repo = "dwm-status";
     rev = version;
-    sha256 = "1nyi0p9snx9hddb4hliihskj4gdp933xs0f8kydyiprckikwiyjk";
+    sha256 = "0bv1jkqkf509akg3dvdy8b2q1kh8i75vw4n6a9rjvslx9s9nh6ca";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk_pixbuf libnotify xorg.libX11 ];
 
-  cargoSha256 = "1ngdzzxnv4y6xprmkawf6s2696zgwiwgb6ykj5adb4knlx5c634d";
+  cargoSha256 = "0wbbbk99hxxlrkm389iqni9aqvw2laarwk6hhwsr4ph3y278qhi8";
 
   postInstall = lib.optionalString enableAlsaUtils ''
     wrapProgram $out/bin/dwm-status \
