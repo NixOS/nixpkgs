@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre, gnused
+{ stdenv, lib, fetchurl, makeWrapper, jre, gnused, nixosTests
 , disableRemoteLogging ? true
 }:
 
@@ -39,5 +39,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.nequissimus ];
+    tests = {
+      smoke-test = nixosTests.ammonite;
+    };
   };
 }

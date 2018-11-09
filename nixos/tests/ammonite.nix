@@ -2,6 +2,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   name = "ammonite";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ nequissimus ];
+    timeout = 40;
   };
 
   nodes = {

@@ -249,8 +249,9 @@ in rec {
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
   # ‘nix-build tests/login.nix -A result’.
-  tests.atd = callTest tests/atd.nix {};
   tests.acme = callTest tests/acme.nix {};
+  tests.ammonite = callTest tests/ammonite.nix {};
+  tests.atd = callTest tests/atd.nix {};
   tests.avahi = callTest tests/avahi.nix {};
   tests.beegfs = callTest tests/beegfs.nix {};
   tests.upnp = callTest tests/upnp.nix {};
