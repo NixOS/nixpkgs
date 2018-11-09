@@ -651,4 +651,11 @@
       version = "0.0.1";
       sha256  = "00vz6qjq1pk39iqg4356b8g3c6slla9jifkv2knk46gc9q93q0lf";
     };
+  sumologic =
+    {
+      owner   = "sumologic";
+      repo    = "sumologic-terraform-provider";
+      version = "0.1.0";
+      sha256  = "1pdxgadx82k2vw6da6h564lbkdg5ss39d4bcj014fsk2jwsd03mw";
+    };
 }

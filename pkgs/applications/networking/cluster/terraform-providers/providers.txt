@@ -14,3 +14,6 @@ coreos/terraform-provider-matchbox
 
 # include terraform-provider-nixos
 tweag/terraform-provider-nixos
+
+# include sumologic-terraform-provider
+sumologic/sumologic-terraform-provider
