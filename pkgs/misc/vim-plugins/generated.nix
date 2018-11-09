@@ -92,6 +92,16 @@
     };
   };
 
+  autoload_cscope-vim = buildVimPluginFrom2Nix {
+    name = "autoload_cscope-vim-2011-01-28";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "autoload_cscope.vim";
+      rev = "26f428f400d96d25a9d633e6314f6e1760923db1";
+      sha256 = "150h6k4nd1msa21c0zxl68nwwq3qdmqi0d8h4as98rrz0b0lghn7";
+    };
+  };
+
   awesome-vim-colorschemes = buildVimPluginFrom2Nix {
     name = "awesome-vim-colorschemes-2018-10-30";
     src = fetchFromGitHub {

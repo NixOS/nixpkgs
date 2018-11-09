@@ -321,6 +321,7 @@ vim-pandoc/vim-pandoc-syntax
 vim-ruby/vim-ruby
 vim-scripts/align
 vim-scripts/argtextobj.vim
+vim-scripts/autoload_cscope.vim
 vim-scripts/a.vim
 vim-scripts/bats.vim
 vim-scripts/changeColorScheme.vim
