@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pyotp";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69";
+    sha256 = "00p69nw431f0s2ilg0hnd77p1l22m06p9rq4f8zfapmavnmzw3xy";
   };
 
   meta = with lib; {
