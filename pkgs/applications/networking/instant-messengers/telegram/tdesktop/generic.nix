@@ -97,7 +97,9 @@ mkDerivation rec {
     sed -i Telegram/ThirdParty/libtgvoip/libtgvoip.gyp \
       -e "/-msse2/d"
 
-    gyp \
+    gyp ${lib.optionalString (!stable) ''
+        -Dapi_id=17349 \
+        -Dapi_hash=344583e45741c457fe1862106095a5eb ''}\
       -Dbuild_defines=${GYP_DEFINES} \
       -Gconfig=Release \
       --depth=Telegram/gyp \
