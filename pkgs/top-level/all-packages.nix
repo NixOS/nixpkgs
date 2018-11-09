@@ -5,7 +5,7 @@
  * to merges. Please use the full-text search of your editor. ;)
  * Hint: ### starts category names.
  */
-{ lib, noSysDirs, config}:
+{ lib, noSysDirs, config }:
 self: pkgs:
 
 with pkgs;
@@ -75,8 +75,7 @@ with pkgs;
 
   nixosTests =
     let
-      # TODO(Ericson2314,ekleog): Check this will work correctly with cross-
-      system = builtins.currentSystem;
+      system = hostPlatform.system;
       rawTests = (import ../../nixos/release.nix {
         nixpkgs = pkgs;
       }).tests;
