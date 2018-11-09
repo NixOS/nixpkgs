@@ -1,11 +1,11 @@
 { stdenv, fetchurl, buildPackages }:
 
-let version = "3.0.0";
+let version = "3.0.0.20180802";
 in stdenv.mkDerivation {
   name = "newlib-${version}";
   src = fetchurl {
     url = "ftp://sourceware.org/pub/newlib/newlib-${version}.tar.gz";
-    sha256 = "0chka3szh50krcz2dcxcsr1v1i000jylwnsrp2pgrrblxqsn6mn8";
+    sha256 = "1xk3h9b28z7yfalckw28lvszf4hxr0xq35gjr78pi5ipy514ni45";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
