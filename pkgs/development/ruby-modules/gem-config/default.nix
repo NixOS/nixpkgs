@@ -230,6 +230,12 @@ in
     '';
   };
 
+  metasploit-framework = attrs: {
+    preInstall = ''
+      export HOME=$TMPDIR
+    '';
+  };
+
   msgpack = attrs: {
     buildInputs = [ msgpack ];
   };
