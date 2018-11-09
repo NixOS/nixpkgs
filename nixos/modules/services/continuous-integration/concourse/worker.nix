@@ -110,7 +110,7 @@ in
 
       extraArgs = mkOption {
         default = {};
-        type = with types; attrsOf str;
+        type = with types; attrsOf (either (listOf str) str);
         example = ''
           {
             tsa-host = "127.0.0.1";
@@ -155,14 +155,21 @@ in
     garden-runc = pkgs.garden-runc.override {
       extractDir = cfg.asset-dir;
     };
+
+    tryEvalListArg = name: value:
+      if isList value then
+        concatMap (value: [ "--${name}" value ]) value
+      else
+        [ "--${name}" value ];
+
     extraFlags =
       map (flag: "--${flag}") cfg.extraFlags;
+
     extraArgs =
       concatMap
         (x: x)
-        (mapAttrsToList
-          (name: value: [ "--${name}" value ])
-          cfg.extraArgs);
+        (mapAttrsToList tryEvalListArg cfg.extraArgs);
+
     maybeArgs =
       concatMap
         (arg: optionals (!isNull cfg.${arg}) [ "--${arg}" cfg.${arg} ])
@@ -170,6 +177,7 @@ in
           "name"
           "team"
         ];
+
     regularArgs =
       concatMap
         (arg: [ "--${arg}" cfg.${arg} ])
@@ -187,6 +195,7 @@ in
         "--garden-bin" "${garden-runc}/bin/gdn"
         "--resource-types" "${pkgs.concourse.resourceDir}"
       ];
+
     args = concatStringsSep " " (map escapeShellArgs [regularArgs extraArgs extraFlags]);
   in
     mkIf cfg.enable {

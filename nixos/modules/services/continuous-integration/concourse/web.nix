@@ -138,7 +138,7 @@ in
 
       extraArgs = mkOption {
         default = {};
-        type = with types; attrsOf str;
+        type = with types; attrsOf (either (listOf str) str);
         example = ''
           {
             tsa-bind-ip = "0.0.0.0";
@@ -180,14 +180,20 @@ in
   #### implementation
   config =
   let
+    tryEvalListArg = name: value:
+      if isList value then
+        concatMap (value: [ "--${name}" value ]) value
+      else
+        [ "--${name}" value ];
+
     extraFlags =
       map (flag: "--${flag}") cfg.extraFlags;
+
     extraArgs =
       concatMap
         (x: x)
-        (mapAttrsToList
-          (name: value: [ "--${name}" value])
-          cfg.extraArgs);
+        (mapAttrsToList tryEvalListArg cfg.extraArgs);
+
     regularArgs =
       concatMap
         (arg: [ "--${arg}" cfg.${arg} ])
