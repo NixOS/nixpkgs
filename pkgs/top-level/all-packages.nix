@@ -3592,6 +3592,8 @@ with pkgs;
 
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
+  kexpand = callPackage ../development/tools/kexpand { };
+
   keybase = callPackage ../tools/security/keybase {
     # Reasoning for the inherited apple_sdk.frameworks:
     # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
