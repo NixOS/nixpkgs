@@ -3781,7 +3781,9 @@ in {
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 {};
 
-  ptpython = callPackage ../development/python-modules/ptpython {};
+  ptpython = callPackage ../development/python-modules/ptpython {
+    prompt_toolkit = self.prompt_toolkit_2;
+  };
 
   publicsuffix = callPackage ../development/python-modules/publicsuffix {};
 
