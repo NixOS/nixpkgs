@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   };
 
-  propogatedBuildInputs = [ six enum34 tensorflow ];
+  propogatedBuildInputs = [ six enum34 ];
   checkInputs = [ absl-py tensorflow ];
 
   meta = with lib; {
