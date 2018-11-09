@@ -2036,7 +2036,7 @@ with pkgs;
 
   checkbashisms = callPackage ../development/tools/misc/checkbashisms { };
 
-  ckb = libsForQt5.callPackage ../tools/misc/ckb { };
+  ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
   clamav = callPackage ../tools/security/clamav { };
 

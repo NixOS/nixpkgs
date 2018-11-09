@@ -3,17 +3,17 @@
 with lib;
 
 let
-  cfg = config.hardware.ckb;
+  cfg = config.hardware.ckb-next;
 
 in
   {
-    options.hardware.ckb = {
+    options.hardware.ckb-next = {
       enable = mkEnableOption "the Corsair keyboard/mouse driver";
 
       package = mkOption {
         type = types.package;
-        default = pkgs.ckb;
-        defaultText = "pkgs.ckb";
+        default = pkgs.ckb-next;
+        defaultText = "pkgs.ckb-next";
         description = ''
           The package implementing the Corsair keyboard/mouse driver.
         '';
@@ -23,12 +23,12 @@ in
     config = mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
 
-      systemd.services.ckb = {
-        description = "Corsair Keyboard Daemon";
+      systemd.services.ckb-next = {
+        description = "Corsair Keyboards and Mice Daemon";
         wantedBy = ["multi-user.target"];
-        script = "${cfg.package}/bin/ckb-daemon";
+        script = "exec ${cfg.package}/bin/ckb-next-daemon";
         serviceConfig = {
-          Restart = "always";
+          Restart = "on-failure";
           StandardOutput = "syslog";
         };
       };

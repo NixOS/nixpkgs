@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, substituteAll, udev
-, pkgconfig, qtbase, qmake, zlib, kmod }:
+, pkgconfig, qtbase, cmake, zlib, kmod }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.9";
+  version = "0.3.2";
   name = "ckb-next-${version}";
 
   src = fetchFromGitHub {
     owner = "ckb-next";
     repo = "ckb-next";
     rev = "v${version}";
-    sha256 = "0hl41znyhp3k5l9rcgz0gig36gsg95ivrs1dyngv45q9jkr6fchm";
+    sha256 = "0ri5n7r1vhsgk6s64abvqcdrs5fmlwprw0rxiwfy0j8a9qcic1dr";
   };
 
   buildInputs = [
@@ -20,28 +20,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    qmake
+    cmake
   ];
 
   patches = [
-    ./ckb-animations-location.patch
+    ./install-dirs.patch
+    ./systemd-service.patch
     (substituteAll {
-      name = "ckb-modprobe.patch";
-      src = ./ckb-modprobe.patch;
+      name = "ckb-next-modprobe.patch";
+      src = ./modprobe.patch;
       inherit kmod;
     })
   ];
-
-  doCheck = false;
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D --mode 0755 --target-directory $out/bin bin/ckb-daemon bin/ckb
-    install -D --mode 0755 --target-directory $out/libexec/ckb-animations bin/ckb-animations/*
-
-    runHook postInstall
-  '';
 
   meta = with stdenv.lib; {
     description = "Driver and configuration tool for Corsair keyboards and mice";
