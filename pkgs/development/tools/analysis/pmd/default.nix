@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "An extensible cross-language static code analyzer.";
+    description = "An extensible cross-language static code analyzer";
     homepage = https://pmd.github.io/;
     platforms = platforms.unix;
     license = with licenses; [ bsdOriginal asl20 ];
