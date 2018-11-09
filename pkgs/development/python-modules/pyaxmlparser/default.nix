@@ -1,12 +1,12 @@
 { buildPythonPackage, stdenv, lxml, click, fetchPypi }:
 
 buildPythonPackage rec {
-  version = "0.3.11";
+  version = "0.3.13";
   pname = "pyaxmlparser";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dbe5ca9ddcf2f5041f6e5e3acc81d2940c696db89de4f840535a256e78f5e489";
+    sha256 = "1mzdrifnaky57vkmdvg0rgjss55xkxaramci3wpv4h65lmk95988";
   };
 
   propagatedBuildInputs = [ lxml click ];
