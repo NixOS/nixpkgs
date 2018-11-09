@@ -9,10 +9,21 @@ let
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
   '';
-
+  configDirectory = pkgs.runCommand "netdata-config-d" {} ''
+    mkdir -p $out
+    cp -r ${pkgs.netdata}/etc/netdata/* $out
+    chmod -R +w $out
+    ${concatStringsSep "\n" (mapAttrsToList (file: text: ''
+        mkdir -p $out/$(dirname ${file})
+        cat >$out/${file} <<EOF
+        ${text}
+        EOF
+      '') cfg.configDir)}
+  '';
   localConfig = {
     global = {
       "plugins directory" = "${wrappedPlugins}/libexec/netdata/plugins.d ${pkgs.netdata}/libexec/netdata/plugins.d";
+      "config directory" = "${configDirectory}";
     };
     web = {
       "web files owner" = "root";
@@ -56,7 +67,7 @@ in {
       config = mkOption {
         type = types.attrsOf types.attrs;
         default = {};
-        description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
+        description = "netdata.conf configuration as nix attributes. Cannot be combined with configText.";
         example = literalExample ''
           global = {
             "debug log" = "syslog";
@@ -64,6 +75,24 @@ in {
             "error log" = "syslog";
           };
         '';
+        };
+        configDir = mkOption {
+          type = types.attrsOf types.lines;
+          default = {};
+          description = ''
+            Complete netdata config directory except netdata.conf. Cannot be
+            combined with configText and will be ignored if used together. Each
+            top-level attribute denotes a file in the configuration directory as
+            in environment.etc. Its value is the file content.
+          '';
+          example = literalExample ''
+            "health_alarm_notify.conf" = '''
+              sendmail="/path/to/sendmail"
+            ''';
+            "health.d/apache.conf" = '''
+              template: apache_last_collected_secs
+            ''';
+          '';
         };
       };
     };
