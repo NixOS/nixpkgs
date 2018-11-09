@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   pname = "shippai";
   # Please make sure that vdirsyncer still builds if you update this package.
-  version = "0.2.4";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "87cc9899212d917031853becd7cb14808181289c3c329b1418e9b4b6aae93c80";
+    sha256 = "088rwff3jx23h1glcd29sacd9znxrx5qwq3sbrx0jlmqc2z9syxz";
   };
 
   meta = with stdenv.lib; {
