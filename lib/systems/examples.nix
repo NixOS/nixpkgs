@@ -116,7 +116,7 @@ rec {
   aarch64be-embedded = {
     config = "aarch64_be-none-elf";
     libc = "newlib";
-  }
+  };
 
   ppc-embedded = {
     config = "powerpc-none-eabi";
@@ -131,7 +131,7 @@ rec {
   alpha-embedded = {
     config = "alpha-elf";
     libc = "newlib";
-  }
+  };
 
   i686-embedded = {
     config = "i686-elf";
