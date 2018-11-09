@@ -3,7 +3,7 @@
 
 rustPlatform.buildRustPackage rec {
   name = "xidlehook-${version}";
-  version = "0.5.0";
+  version = "0.6.0";
 
   doCheck = false;
 
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     repo = "xidlehook";
     rev = version;
 
-    sha256 = "1qrjwk91i31rww5lwgp84hc4h3b1prm60y45jm1f28g2bbv2qy19";
+    sha256 = "0rmc0g5cizyzwpk4yyh7bda70x9ybaivc6iw441k6abxmzbh358g";
   };
 
   cargoBuildFlags = lib.optionals (!stdenv.isLinux) ["--no-default-features" "--features" "pulse"];
