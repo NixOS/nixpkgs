@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, bison, flex, pam
+{ stdenv, fetchurl, fetchpatch, bison, flex, pam, nixosTests
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , atWrapperPath ? "/run/wrappers/bin/at"
 }:
@@ -55,5 +55,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = https://packages.qa.debian.org/at;
     platforms = stdenv.lib.platforms.linux;
+    tests = {
+      nixos-module = nixosTests.atd;
+    };
   };
 }

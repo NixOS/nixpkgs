@@ -4,6 +4,7 @@ import ./make-test.nix ({ pkgs, ... }:
   name = "atd";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ bjornfor ];
+    timeout = 200;
   };
 
   machine =
