@@ -780,6 +780,8 @@ in {
 
   asgiref = callPackage ../development/python-modules/asgiref { };
 
+  asteval = callPackage ../development/python-modules/asteval { };
+
   python-editor = callPackage ../development/python-modules/python-editor { };
 
   python-gnupg = callPackage ../development/python-modules/python-gnupg {};
