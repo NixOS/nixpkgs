@@ -1341,13 +1341,13 @@ let
   };
 
   CatalystRuntime = buildPerlPackage rec {
-    name = "Catalyst-Runtime-5.90120";
+    name = "Catalyst-Runtime-5.90122";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Catalyst-Runtime-5.90120.tar.gz;
-      sha256 = "e3f791b75dfec668cb52fbe1c1596c051cc44de6c16eb333c79982d5e4822584";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Runtime-5.90122.tar.gz;
+      sha256 = "88d2ab5e6a5bebf0f78cfd43fb984c04d32898940f6aeec68ab7e10f14ade7c7";
     };
     buildInputs = [ TestFatal TypeTiny ];
-    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT DataDump HTTPBody ModulePluggable MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StringRewritePrefix TaskWeaken TextSimpleTable TreeSimpleVisitorFactory URIws ];
+    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT DataDump HTTPBody ModulePluggable MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass PerlIOutf8_strict PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StringRewritePrefix TaskWeaken TextSimpleTable TreeSimpleVisitorFactory URIws ];
     meta = {
       homepage = http://dev.catalyst.perl.org/;
       description = "The Catalyst Framework Runtime";
