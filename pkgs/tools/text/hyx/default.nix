@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hyx-0.1.4";
+  name = "hyx-0.1.5";
 
   src = fetchurl {
     url = "https://yx7.cc/code/hyx/${name}.tar.xz";
-    sha256 = "049r610hyrrfa62vpiqyb3rh99bpy8cnqy4nd4sih01733cmdhyx";
+    sha256 = "0gd8fbdyw12jwffa5dgcql4ry22xbdhqdds1qwzk1rkcrkgnc1mg";
   };
 
   installPhase = ''
