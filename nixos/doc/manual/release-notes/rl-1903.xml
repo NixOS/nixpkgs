@@ -197,6 +197,13 @@
       these changes. Please review http://lucene.apache.org/solr/ carefully before upgrading.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       The <varname>services.nscd.enable</varname> option now defaults to <literal>false</literal>,
+       since it can cause some obscure name resolution errors. If you want to use nscd, please
+       enable it explicitly.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
