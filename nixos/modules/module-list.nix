@@ -90,6 +90,7 @@
   ./programs/criu.nix
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
+  ./programs/dmrconfig.nix
   ./programs/environment.nix
   ./programs/firejail.nix
   ./programs/fish.nix
