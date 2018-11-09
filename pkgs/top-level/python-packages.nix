@@ -1806,6 +1806,8 @@ in {
 
   lightning = callPackage ../development/python-modules/lightning { };
 
+  jupytext = callPackage ../development/python-modules/jupytext { };
+
   jupyter = callPackage ../development/python-modules/jupyter { };
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
