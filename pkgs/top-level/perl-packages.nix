@@ -8210,10 +8210,10 @@ let
   };
 
   libintl_perl = buildPerlPackage rec {
-    name = "libintl-perl-1.29";
+    name = "libintl-perl-1.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GU/GUIDO/libintl-perl-1.29.tar.gz;
-      sha256 = "1cgvrgh4axd8jlr6497ndgphgvgnqc1axd306460hskdvc85z4vq";
+      url = mirror://cpan/authors/id/G/GU/GUIDO/libintl-perl-1.30.tar.gz;
+      sha256 = "021iz53v9h367jphs3d30jy6v6d5n4674mp83djy1vijazxprp0c";
     };
     meta = {
       maintainers = with maintainers; [ ];
