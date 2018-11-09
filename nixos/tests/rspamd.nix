@@ -28,6 +28,8 @@ let
       ${checkSocket "/run/rspamd/rspamd.sock" "rspamd" "rspamd" "660" }
       sleep 10;
       $machine->log($machine->succeed("cat /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"));
       $machine->log($machine->succeed("systemctl cat rspamd.service"));
       $machine->log($machine->succeed("curl http://localhost:11334/auth"));
       $machine->log($machine->succeed("curl http://127.0.0.1:11334/auth"));
@@ -56,6 +58,8 @@ in
       ${checkSocket "/run/rspamd.sock" "root" "root" "600" }
       ${checkSocket "/run/rspamd-worker.sock" "root" "root" "666" }
       $machine->log($machine->succeed("cat /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"));
       $machine->log($machine->succeed("rspamc -h /run/rspamd-worker.sock stat"));
       $machine->log($machine->succeed("curl --unix-socket /run/rspamd-worker.sock http://localhost/ping"));
     '';
@@ -78,6 +82,15 @@ in
           owner = "root";
           group = "root";
         }];
+        workers.controller2 = {
+          type = "controller";
+          bindSockets = [ "0.0.0.0:11335" ];
+          extraConfig = ''
+            static_dir = "''${WWWDIR}";
+            secure_ip = null;
+            password = "verysecretpassword";
+          '';
+        };
       };
     };
 
@@ -87,8 +100,14 @@ in
       ${checkSocket "/run/rspamd.sock" "root" "root" "600" }
       ${checkSocket "/run/rspamd-worker.sock" "root" "root" "666" }
       $machine->log($machine->succeed("cat /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-controller.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'CONFDIR/worker-normal.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'LOCAL_CONFDIR/override.d/worker-controller2.inc' /etc/rspamd/rspamd.conf"));
+      $machine->log($machine->succeed("grep 'verysecretpassword' /etc/rspamd/override.d/worker-controller2.inc"));
+      $machine->waitUntilSucceeds("journalctl -u rspamd | grep -i 'starting controller process' >&2");
       $machine->log($machine->succeed("rspamc -h /run/rspamd-worker.sock stat"));
       $machine->log($machine->succeed("curl --unix-socket /run/rspamd-worker.sock http://localhost/ping"));
+      $machine->log($machine->succeed("curl http://localhost:11335/ping"));
     '';
   };
   customLuaRules = makeTest {
@@ -181,6 +200,50 @@ in
       $machine->waitUntilSucceeds("journalctl -u rspamd | grep -i muh >&2");
       $machine->log($machine->fail("cat /etc/tests/no-muh.eml | rspamc -h 127.0.0.1:11334 symbols | grep NO_MUH"));
       $machine->log($machine->succeed("cat /etc/tests/muh.eml | rspamc -h 127.0.0.1:11334 symbols | grep NO_MUH"));
+    '';
+  };
+  postfixIntegration = makeTest {
+    name = "rspamd-postfix-integration";
+    machine = {
+      environment.systemPackages = with pkgs; [ msmtp ];
+      environment.etc."tests/gtube.eml".text = ''
+        From: Sheep1<bah@example.com>
+        To: Sheep2<tester@example.com>
+        Subject: Evil cows
+
+        I find cows to be evil don't you?
+
+        XJS*C4JDBQADN1.NSBN3*2IDNEN*GTUBE-STANDARD-ANTI-UBE-TEST-EMAIL*C.34X
+      '';
+      environment.etc."tests/example.eml".text = ''
+        From: Sheep1<bah@example.com>
+        To: Sheep2<tester@example.com>
+        Subject: Evil cows
+
+        I find cows to be evil don't you?
+      '';
+      users.users.tester.password = "test";
+      services.postfix = {
+        enable = true;
+        destination = ["example.com"];
+      };
+      services.rspamd = {
+        enable = true;
+        postfix.enable = true;
+      };
+    };
+    testScript = ''
+      ${initMachine}
+      $machine->waitForOpenPort(11334);
+      $machine->waitForOpenPort(25);
+      ${checkSocket "/run/rspamd/rspamd-milter.sock" "rspamd" "postfix" "660" }
+      $machine->log($machine->succeed("rspamc -h 127.0.0.1:11334 stat"));
+      $machine->log($machine->succeed("msmtp --host=localhost -t --read-envelope-from < /etc/tests/example.eml"));
+      $machine->log($machine->fail("msmtp --host=localhost -t --read-envelope-from < /etc/tests/gtube.eml"));
+
+      $machine->waitUntilFails('[ "$(postqueue -p)" != "Mail queue is empty" ]');
+      $machine->fail("journalctl -u postfix | grep -i error >&2");
+      $machine->fail("journalctl -u postfix | grep -i warning >&2");
     '';
   };
 }

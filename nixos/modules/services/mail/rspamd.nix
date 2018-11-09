@@ -6,6 +6,7 @@ let
 
   cfg = config.services.rspamd;
   opts = options.services.rspamd;
+  postfixCfg = config.services.postfix;
 
   bindSocketOpts = {options, config, ... }: {
     options = {
@@ -58,7 +59,7 @@ let
       };
       type = mkOption {
         type = types.nullOr (types.enum [
-          "normal" "controller" "fuzzy_storage" "proxy" "lua"
+          "normal" "controller" "fuzzy_storage" "rspamd_proxy" "lua"
         ]);
         description = "The type of this worker";
       };
@@ -99,19 +100,21 @@ let
         description = "Additional entries to put verbatim into worker section of rspamd config file.";
       };
     };
-    config = mkIf (name == "normal" || name == "controller" || name == "fuzzy") {
+    config = mkIf (name == "normal" || name == "controller" || name == "fuzzy" || name == "rspamd_proxy") {
       type = mkDefault name;
-      includes = mkDefault [ "$CONFDIR/worker-${name}.inc" ];
-      bindSockets = mkDefault (if name == "normal"
-        then [{
-              socket = "/run/rspamd/rspamd.sock";
-              mode = "0660";
-              owner = cfg.user;
-              group = cfg.group;
-            }]
-        else if name == "controller"
-        then [ "localhost:11334" ]
-        else [] );
+      includes = mkDefault [ "$CONFDIR/worker-${if name == "rspamd_proxy" then "proxy" else name}.inc" ];
+      bindSockets =
+        let
+          unixSocket = name: {
+            mode = "0660";
+            socket = "/run/rspamd/${name}.sock";
+            owner = cfg.user;
+            group = cfg.group;
+          };
+        in mkDefault (if name == "normal" then [(unixSocket "rspamd")]
+          else if name == "controller" then [ "localhost:11334" ]
+          else if name == "rspamd_proxy" then [ (unixSocket "proxy") ]
+          else [] );
     };
   };
 
@@ -138,19 +141,25 @@ let
         .include(try=true; priority=10) "$LOCAL_CONFDIR/override.d/logging.inc"
       }
 
-      ${concatStringsSep "\n" (mapAttrsToList (name: value: ''
-        worker ${optionalString (value.name != "normal" && value.name != "controller") "${value.name}"} {
+      ${concatStringsSep "\n" (mapAttrsToList (name: value: let
+          includeName = if name == "rspamd_proxy" then "proxy" else name;
+          tryOverride = if value.extraConfig == "" then "true" else "false";
+        in ''
+        worker "${value.type}" {
           type = "${value.type}";
           ${optionalString (value.enable != null)
             "enabled = ${if value.enable != false then "yes" else "no"};"}
           ${mkBindSockets value.enable value.bindSockets}
           ${optionalString (value.count != null) "count = ${toString value.count};"}
           ${concatStringsSep "\n  " (map (each: ".include \"${each}\"") value.includes)}
-          ${value.extraConfig}
+          .include(try=true; priority=1,duplicate=merge) "$LOCAL_CONFDIR/local.d/worker-${includeName}.inc"
+          .include(try=${tryOverride}; priority=10) "$LOCAL_CONFDIR/override.d/worker-${includeName}.inc"
         }
       '') cfg.workers)}
 
-      ${cfg.extraConfig}
+      ${optionalString (cfg.extraConfig != "") ''
+        .include(priority=10) "$LOCAL_CONFDIR/override.d/extra-config.inc"
+      ''}
    '';
 
   filterFiles = files: filterAttrs (n: v: v.enable) files;
@@ -189,6 +198,15 @@ let
         in mkDefault (pkgs.writeText name' config.text));
     };
   };
+
+  configOverrides =
+    (mapAttrs' (n: v: nameValuePair "worker-${if n == "rspamd_proxy" then "proxy" else n}.inc" {
+      text = v.extraConfig;
+    })
+    (filterAttrs (n: v: v.extraConfig != "") cfg.workers))
+    // (if cfg.extraConfig == "" then {} else {
+      "extra-config.inc".text = cfg.extraConfig;
+    });
 in
 
 {
@@ -285,7 +303,7 @@ in
         description = ''
           User to use when no root privileges are required.
         '';
-       };
+      };
 
       group = mkOption {
         type = types.string;
@@ -293,7 +311,30 @@ in
         description = ''
           Group to use when no root privileges are required.
         '';
-       };
+      };
+
+      postfix = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Add rspamd milter to postfix main.conf";
+        };
+
+        config = mkOption {
+          type = with types; attrsOf (either bool (either str (listOf str)));
+          description = ''
+            Addon to postfix configuration
+          '';
+          default = {
+            smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
+            non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
+          };
+          example = {
+            smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
+            non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
+          };
+        };
+      };
     };
   };
 
@@ -301,6 +342,25 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    services.rspamd.overrides = configOverrides;
+    services.rspamd.workers = mkIf cfg.postfix.enable {
+      controller = {};
+      rspamd_proxy = {
+        bindSockets = [ {
+          mode = "0660";
+          socket = "/run/rspamd/rspamd-milter.sock";
+          owner = cfg.user;
+          group = postfixCfg.group;
+        } ];
+        extraConfig = ''
+          upstream "local" {
+            default = yes; # Self-scan upstreams are always default
+            self_scan = yes; # Enable self-scan
+          }
+        '';
+      };
+    };
+    services.postfix.config = mkIf cfg.postfix.enable cfg.postfix.config;
 
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];
