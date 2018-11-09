@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "6.4.0p1";
+  version = "6.4.0p2";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib libressl db pam ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "1qxxhnlsmpfh9v4azgl0634955r085gsic1c66jdll21bd5w2mq8";
+    sha256 = "1y7snhsrcdi56vaa23iwjpybhyrnnh2f6dxrfnacn7xgy5xwzbvn";
   };
 
   patches = [
