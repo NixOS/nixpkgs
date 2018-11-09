@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, bash }:
+{ stdenv, python3Packages, bash, nixosTests }:
 
 python3Packages.buildPythonApplication rec {
   pname = "simp_le-client";
@@ -30,5 +30,8 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ gebner makefu ];
     platforms = platforms.linux;
+    tests = {
+      acme = nixosTests.acme;
+    };
   };
 }

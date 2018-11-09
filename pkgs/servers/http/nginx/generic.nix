@@ -1,5 +1,6 @@
 { stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
 , gd, geoip
+, nixosTests
 , withDebug ? false
 , withStream ? true
 , withMail ? false
@@ -76,5 +77,8 @@ stdenv.mkDerivation {
     license     = licenses.bsd2;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice raskin fpletz ];
+    tests = {
+      acme = nixosTests.acme;
+    };
   };
 }

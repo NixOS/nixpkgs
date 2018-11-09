@@ -36,4 +36,6 @@ in import ./make-test.nix {
     $client->waitForUnit("default.target");
     $client->succeed('curl https://example.com/ | grep -qF "hello world"');
   '';
+
+  meta.timeout = 120;
 }
