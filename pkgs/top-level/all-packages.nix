@@ -22104,8 +22104,6 @@ with pkgs;
     lilypond = lilypond-unstable;
   };
 
-  lollypop-portal = callPackage ../misc/lollypop-portal { };
-
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
   mailcore2 = callPackage ../development/libraries/mailcore2 {
