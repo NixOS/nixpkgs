@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "deepin-desktop-base";
-  version = "2018.7.23";
+  version = "2018.10.29";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1n1bjkvhgq138jcg3zkwg55r41056x91mh191mirlpvpic574ydc";
+    sha256 = "0l2zb7rpag2q36lqsgvirhjgmj7w243nsi1rywkypf2xm7g2v235";
   };
 
   buildInputs = [ deepin-wallpapers ];
