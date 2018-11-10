@@ -1816,6 +1816,10 @@ in {
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
 
+  jupyterlab-git = callPackage ../development/python-modules/jupyterlab-git { };
+
+  jupyterlab-latex = callPackage ../development/python-modules/jupyterlab-latex { };
+
   jupyterlab_launcher = callPackage ../development/python-modules/jupyterlab_launcher { };
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
