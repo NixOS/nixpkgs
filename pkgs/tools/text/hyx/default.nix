@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = https://yx7.cc/code/;
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
