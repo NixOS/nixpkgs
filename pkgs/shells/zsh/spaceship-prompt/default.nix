@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zsh }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec{
   name = "spaceship-prompt-${version}";
