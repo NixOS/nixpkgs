@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gd8fbdyw12jwffa5dgcql4ry22xbdhqdds1qwzk1rkcrkgnc1mg";
   };
 
+  patches = [ ./no-wall-by-default.patch ];
+
   installPhase = ''
     install -vD hyx $out/bin/hyx
   '';
