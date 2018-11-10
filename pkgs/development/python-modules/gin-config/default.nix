@@ -4,7 +4,6 @@
 , six
 , enum34
 , absl-py
-, tensorflow
 }:
 
 buildPythonPackage rec {
@@ -18,7 +17,9 @@ buildPythonPackage rec {
   };
 
   propogatedBuildInputs = [ six enum34 ];
-  checkInputs = [ absl-py tensorflow ];
+
+  # PyPI archive does not ship with tests
+  doCheck= false;
 
   meta = with lib; {
     homepage = https://github.com/google/gin-config;
