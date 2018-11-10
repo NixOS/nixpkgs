@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
         # The monitor requires some more patching
 
         cd lib/monitor-x86
-        patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux.so.2 monitor
+        patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 monitor
         patchelf --set-rpath ${makeLibraryPath [ libX11 libXext libXrender freetype fontconfig ]} libcairo-swt.so
 
         wrapProgram `pwd`/monitor \
