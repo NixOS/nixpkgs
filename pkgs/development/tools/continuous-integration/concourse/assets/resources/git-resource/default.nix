@@ -21,7 +21,7 @@ let
     paths = with pkgs; [
       bashInteractive
       cacert
-      coreutils
+      busybox
       docker
       gawk
       git
@@ -39,14 +39,6 @@ let
     postBuild = ''
       mkdir -p $out/root $out/opt/resource
       cp -a ${src}/assets/. $out/opt/resource/
-
-      cat >$out/etc/gitconfig <<EOF
-      [user]
-        email = git@localhost
-        name = git
-      [http]
-        sslcainfo = ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
-      EOF
     '';
   };
 
@@ -60,6 +52,26 @@ let
         "GIT_SSL_CAINFO=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
         "SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
       ];
+      extraCommands = ''
+        chmod +w etc
+
+        cat >etc/gitconfig <<EOF
+        [user]
+          email = git@localhost
+          name = git
+        [http]
+          sslcainfo = ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+        EOF
+        cat >etc/passwd <<EOF
+        root:x:0:0::/root:/bin/sh
+        EOF
+        cat >etc/group <<EOF
+        root:x:0:
+        EOF
+        cat >etc/nsswitch.conf <<EOF
+        hosts: files dns
+        EOF
+      '';
     };
 
   dir =
