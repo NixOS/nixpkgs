@@ -21,7 +21,7 @@ with lib;
   services.xserver.videoDrivers = mkOverride 40 [ "virtualbox" "vmware" "cirrus" "vesa" "modesetting" ];
 
   powerManagement.enable = false;
-  system.stateVersion = mkDefault "18.03";
+  system.stateEpoch = mkDefault "18.03";
 
   installer.cloneConfigExtra = ''
   # Let demo build as a trusted user.
@@ -58,6 +58,6 @@ with lib;
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  system.stateVersion = mkDefault "18.03";
+  system.stateEpoch = mkDefault "18.03";
   '';
 }

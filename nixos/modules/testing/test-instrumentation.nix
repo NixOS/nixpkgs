@@ -131,8 +131,8 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
 
     services.xserver.displayManager.job.logToJournal = true;
 
-    # set default stateVersion to avoid warnings during eval
-    system.stateVersion = mkDefault "18.03";
+    # set default stateEpoch to avoid warnings during eval
+    system.stateEpoch = mkDefault "18.03";
   };
 
 }

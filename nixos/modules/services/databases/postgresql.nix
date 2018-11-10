@@ -146,7 +146,7 @@ in
       };
       superUser = mkOption {
         type = types.str;
-        default= if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root";
+        default= if versionAtLeast config.system.stateEpoch "17.09" then "postgres" else "root";
         internal = true;
         description = ''
           NixOS traditionally used 'root' as superuser, most other distros use 'postgres'.
@@ -165,14 +165,14 @@ in
 
     services.postgresql.package =
       # Note: when changing the default, make it conditional on
-      # ‘system.stateVersion’ to maintain compatibility with existing
+      # ‘system.stateEpoch’ to maintain compatibility with existing
       # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then pkgs.postgresql_9_6
-            else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
+      mkDefault (if versionAtLeast config.system.stateEpoch "17.09" then pkgs.postgresql_9_6
+            else if versionAtLeast config.system.stateEpoch "16.03" then pkgs.postgresql_9_5
             else pkgs.postgresql_9_4);
 
     services.postgresql.dataDir =
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"
+      mkDefault (if versionAtLeast config.system.stateEpoch "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"
                  else "/var/db/postgresql");
 
     services.postgresql.authentication = mkAfter

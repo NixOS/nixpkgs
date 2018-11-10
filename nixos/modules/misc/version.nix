@@ -46,7 +46,7 @@ in
       description = "The NixOS release code name (e.g. <literal>Emu</literal>).";
     };
 
-    stateVersion = mkOption {
+    stateEpoch = mkOption {
       type = types.str;
       default = cfg.release;
       description = ''

@@ -231,6 +231,8 @@ with lib;
     (mkRenamedOptionModule [ "system" "nixosRevision" ] [ "system" "nixos" "revision" ])
     (mkRenamedOptionModule [ "system" "nixosLabel" ] [ "system" "nixos" "label" ])
 
+    (mkRenamedOptionModule [ "system" "stateVersion" ] [ "system" "stateEpoch" ])
+
     # Users
     (mkAliasOptionModule [ "users" "extraUsers" ] [ "users" "users" ])
     (mkAliasOptionModule [ "users" "extraGroups" ] [ "users" "groups" ])

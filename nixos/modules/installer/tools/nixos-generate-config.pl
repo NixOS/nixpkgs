@@ -638,7 +638,7 @@ $bootLoaderConfig
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "${\(qw(@release@))}"; # Did you read the comment?
+  system.stateEpoch = "${\(qw(@release@))}"; # Did you read the comment?
 
 }
 EOF
