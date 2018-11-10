@@ -3,7 +3,6 @@
 , fetchPypi
 , six
 , enum34
-, absl-py
 }:
 
 buildPythonPackage rec {
@@ -16,7 +15,7 @@ buildPythonPackage rec {
 
   };
 
-  propogatedBuildInputs = [ six enum34 ];
+  buildInputs = [ six enum34 ];
 
   # PyPI archive does not ship with tests
   doCheck= false;
