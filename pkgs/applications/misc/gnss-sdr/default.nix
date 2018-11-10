@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGFlags_ROOT_DIR=${google-gflags}/lib"
     "-DGLOG_INCLUDE_DIR=${glog}/include"
+    "-DENABLE_UNIT_TESTING=OFF"
 
     # gnss-sdr doesn't truly depend on BLAS or LAPACK, as long as
     # armadillo is built using both, so skip checking for them.
