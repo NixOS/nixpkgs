@@ -11,14 +11,14 @@
 
 buildPythonApplication rec {
   name = "google-compute-engine-${version}";
-  version = "20180905";
+  version = "20181011";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
     rev = version;
-    sha256 = "0095f000kgk2lc5p1y4080sbc0r7ly60a7i9id8hydfnkhqqz75n";
+    sha256 = "1b3wyr412qh113xvs671dqnacidil61gisfvg79wbq6wrdwswkp8";
   };
 
   postPatch = ''
