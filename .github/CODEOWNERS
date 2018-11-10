@@ -117,3 +117,6 @@
 # Dhall
 /pkgs/development/dhall-modules      @Gabriel439 @Profpatsch
 /pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch
+
+# Idris
+/pkgs/development/idris-modules @Infinisil
