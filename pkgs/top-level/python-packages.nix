@@ -2565,6 +2565,8 @@ in {
 
   ipyleaflet = callPackage ../development/python-modules/ipyleaflet { };
 
+  ipympl = callPackage ../development/python-modules/ipympl { };
+
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
   # Newer versions of IPython no longer support Python 2.7.
