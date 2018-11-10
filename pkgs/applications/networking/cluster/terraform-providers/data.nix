@@ -39,8 +39,8 @@
     {
       owner   = "terraform-providers";
       repo    = "terraform-provider-aws";
-      version = "1.43.0";
-      sha256  = "0d9g95rldlvv6cx0vnhc9h4wpwlrif3xzv5gskz4aif7w9rhn37b";
+      version = "1.43.1";
+      sha256  = "0fhw07kqcykfzlfhqh3wdz43kkhz3c63xkymnpw68kqx2vxx8ncv";
     };
   azurerm =
     {
