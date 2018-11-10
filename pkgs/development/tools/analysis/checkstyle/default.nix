@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "11lpyjh0rbz8821q0gcrll5ichf8hrmlfy66ary5jjiyxc85z762";
   };
 
-  nativeBuildInputs = [ makeWrapper jre ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre ];
 
   unpackPhase = ":";
 
