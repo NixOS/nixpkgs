@@ -336,6 +336,7 @@ in rec {
   tests.plasma5 = callTest tests/plasma5.nix {};
   tests.plotinus = callTest tests/plotinus.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
+  tests.incron = callTest tests/incron.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kafka = callSubTests tests/kafka.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
