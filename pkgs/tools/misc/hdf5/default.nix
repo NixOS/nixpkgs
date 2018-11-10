@@ -16,11 +16,11 @@ assert !cpp || mpi == null;
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.3";
+  version = "1.10.4";
   name = "hdf5-${version}";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
-    sha256 = "1a85v6812afi6k3gmfdcj80f6ys9kc80v7ysz39pz9948z7dqp66";
+    sha256 = "1pr85fa1sh2ky6ai2hs3f21lp252grl2cq3wbyi4rh7dm83gyrqj";
  };
 
   passthru = {
