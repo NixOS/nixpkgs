@@ -2222,8 +2222,6 @@ in {
 
   pyfribidi = callPackage ../development/python-modules/pyfribidi { };
 
-  docker_compose = callPackage ../development/python-modules/docker_compose {};
-
   pyftpdlib = callPackage ../development/python-modules/pyftpdlib { };
 
   fdroidserver = callPackage ../development/python-modules/fdroidserver { };
