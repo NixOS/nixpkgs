@@ -116,6 +116,8 @@ in with py.pkgs; buildPythonApplication rec {
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
   meta = with lib; {
+    # home-assistant should be installed from unstable channel anyway
+    knownVulnerabilities = [ "https://github.com/home-assistant/home-assistant/pull/17978" ];
     homepage = https://home-assistant.io/;
     description = "Open-source home automation platform running on Python 3";
     license = licenses.asl20;
