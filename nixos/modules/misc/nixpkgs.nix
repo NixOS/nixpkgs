@@ -75,11 +75,18 @@ in
       type = pkgsType;
       example = literalExample ''import <nixpkgs> {}'';
       description = ''
-        This is the evaluation of Nixpkgs that will be provided to
-        all NixOS modules. Defining this option has the effect of
-        ignoring the other options that would otherwise be used to
-        evaluate Nixpkgs, because those are arguments to the default
-        value. The default value imports the Nixpkgs source files
+        If set, the pkgs argument to all NixOS modules is the value of
+        this option, extended with <code>nixpkgs.overlays</code>, if
+        that is also set. Either <code>nixpkgs.crossSystem</code> or
+        <code>nixpkgs.localSystem</code> will be used in an assertion
+        to check that the NixOS and Nixpkgs architectures match. Any
+        other options in <code>nixpkgs.*</code>, notably <code>config</code>,
+        will be ignored.
+
+        If unset, the pkgs argument to all NixOS modules is determined
+        as shown in the default value for this option.
+
+        The default value imports the Nixpkgs source files
         relative to the location of this NixOS module, because
         NixOS and Nixpkgs are distributed together for consistency,
         so the <code>nixos</code> in the default value is in fact a
@@ -140,9 +147,6 @@ in
         If <code>nixpkgs.pkgs</code> is set, overlays specified here
         will be applied after the overlays that were already present
         in <code>nixpkgs.pkgs</code>.
-
-        Note that other options such as <code>nixpkgs.config</code> will
-        be ignored when <code>nixpkgs.pkgs</code> is set.
       '';
     };
 
