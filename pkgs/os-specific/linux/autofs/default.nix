@@ -2,14 +2,14 @@
 , libxml2, kerberos, kmod, openldap, sssd, cyrus_sasl, openssl }:
 
 let
-  version = "5.1.4";
+  version = "5.1.5";
   name = "autofs-${version}";
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://kernel/linux/daemons/autofs/v5/${name}.tar.xz";
-    sha256 = "08hpphawzcdibwbhw0r3y7hnfczlazpp90sf3bz2imgza7p31klg";
+    sha256 = "1nn0z60f49zchpv8yw67fk8hmbjszpnczs0bj2ql2vgxwbcxmbr3";
   };
 
   preConfigure = ''
