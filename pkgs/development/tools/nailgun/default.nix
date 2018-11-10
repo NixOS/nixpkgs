@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   name = "nailgun-${version}";
 
   src = fetchFromGitHub {
-    owner = "martylamb";
+    owner = "facebook";
     repo = "nailgun";
     rev = "nailgun-all-v${version}";
     sha256 = "1syyk4ss5vq1zf0ma00svn56lal53ffpikgqgzngzbwyksnfdlh6";
