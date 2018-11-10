@@ -7,6 +7,10 @@ let
 
   gitRepo      = "${toString pkgs.path}/.git";
   gitCommitId  = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
+
+  # Monotonically increasing number, representing the current
+  # "epoch" for configuration files for a freshly installed system.
+  stateEpoch = 100;
 in
 
 {
@@ -48,17 +52,18 @@ in
 
     stateEpoch = mkOption {
       type = types.str;
-      default = cfg.release;
+      default = stateEpoch;
       description = ''
         Every once in a while, a new NixOS release may change
         configuration defaults in a way incompatible with stateful
         data. For instance, if the default version of PostgreSQL
         changes, the new version will probably be unable to read your
-        existing databases. To prevent such breakage, you can set the
-        value of this option to the NixOS release with which you want
-        to be compatible. The effect is that NixOS will option
-        defaults corresponding to the specified release (such as using
-        an older version of PostgreSQL).
+        existing databases. To prevent such breakage, when generating
+        the system configuration, the current value is saved in the
+        configuration to prevent such changes from happening.
+        The effect is that NixOS will use defaults corresponding
+        to the specified moment in time (such as using a specific
+        version of PostgreSQL, or stateful data directories).
       '';
     };
 
