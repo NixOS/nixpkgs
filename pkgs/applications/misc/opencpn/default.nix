@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A concise ChartPlotter/Navigator";
     maintainers = [ stdenv.lib.maintainers.kragniz ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl2;
     homepage = https://opencpn.org/;
   };
