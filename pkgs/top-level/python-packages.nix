@@ -2563,6 +2563,8 @@ in {
 
   ipykernel = callPackage ../development/python-modules/ipykernel { };
 
+  ipyleaflet = callPackage ../development/python-modules/ipyleaflet { };
+
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
   # Newer versions of IPython no longer support Python 2.7.
