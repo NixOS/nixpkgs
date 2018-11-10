@@ -1108,6 +1108,8 @@ with pkgs;
 
   catch = callPackage ../development/libraries/catch { };
 
+  catch2 = callPackage ../development/libraries/catch2 { };
+
   catdoc = callPackage ../tools/text/catdoc { };
 
   catdocx = callPackage ../tools/text/catdocx { };
