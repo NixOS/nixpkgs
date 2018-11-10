@@ -40,8 +40,8 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Kernel-based automounter";
-    homepage = http://www.linux-consulting.com/Amd_AutoFS/autofs.html;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = https://www.kernel.org/pub/linux/daemons/autofs/;
+    license = stdenv.lib.licenses.gpl2Plus;
     executables = [ "automount" ];
     platforms = stdenv.lib.platforms.linux;
   };
