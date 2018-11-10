@@ -41,6 +41,19 @@ let
         "GIT_SSL_CAINFO=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
         "SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
       ];
+      extraCommands = ''
+        chmod +w etc
+
+        cat >etc/passwd <<EOF
+        root:x:0:0::/root:/bin/sh
+        EOF
+        cat >etc/group <<EOF
+        root:x:0:
+        EOF
+        cat >etc/nsswitch.conf <<EOF
+        hosts: files dns
+        EOF
+      '';
     };
 
   dir =
