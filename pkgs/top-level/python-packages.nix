@@ -2468,6 +2468,8 @@ in {
 
   hetzner = callPackage ../development/python-modules/hetzner { };
 
+  homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
+
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
 
   html5lib = callPackage ../development/python-modules/html5lib { };
