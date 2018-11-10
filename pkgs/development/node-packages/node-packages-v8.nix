@@ -12462,6 +12462,15 @@ let
         sha1 = "b88673c42009f8821fac2926e99720acee924fae";
       };
     };
+    "fkill-5.3.0" = {
+      name = "fkill";
+      packageName = "fkill";
+      version = "5.3.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/fkill/-/fkill-5.3.0.tgz";
+        sha512 = "AHe4x/k9xHlSNPRya0FOCd42qa6ggmW4gtdy6mR0R1vdWtNq9zMd8nmMR5LB7fTNOA1f1nOU+uqaQHP7NMWmVA==";
+      };
+    };
     "flagged-respawn-1.0.0" = {
       name = "flagged-respawn";
       packageName = "flagged-respawn";
