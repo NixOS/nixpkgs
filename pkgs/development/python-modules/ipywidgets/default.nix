@@ -24,6 +24,10 @@ buildPythonPackage rec {
   # Tests are not distributed
   # doCheck = false;
 
+  passthru = {
+    jupyterlabExtensions = [ "@jupyter-widgets/jupyterlab-manager" ];
+  };
+
   buildInputs = [ nose pytest mock ];
   propagatedBuildInputs = [
     ipython
