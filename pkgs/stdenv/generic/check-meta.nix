@@ -165,6 +165,16 @@ let
     platforms = listOf (either str lib.systems.parsedPlatform.types.system);
     hydraPlatforms = listOf str;
     broken = bool;
+    # TODO: refactor once something like Profpatsch's types-simple will land
+    tests = attrsOf (mkOptionType {
+      name = "test";
+      check = x: isDerivation x &&
+        x ? meta.timeout &&
+        x ? meta.needsVMSupport;
+      merge = lib.options.mergeOneOption;
+    });
+    needsVMSupport = bool;
+    timeout = int;
 
     # Weirder stuff that doesn't appear in the documentation?
     knownVulnerabilities = listOf str;
@@ -184,8 +194,6 @@ let
     isIbusEngine = bool;
     isGutenprint = bool;
     badPlatforms = platforms;
-    # Hydra build timeout
-    timeout = int;
   };
 
   checkMetaAttr = k: v:

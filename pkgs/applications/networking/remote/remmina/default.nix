@@ -11,7 +11,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "remmina-${version}";
   version = "1.2.32";
 

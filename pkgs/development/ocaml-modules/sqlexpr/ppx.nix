@@ -1,15 +1,11 @@
-{ stdenv, ocaml, findlib, dune, sqlexpr, ounit
+{ stdenv, buildDunePackage, sqlexpr, ounit
 , ppx_core, ppx_tools_versioned, re, lwt_ppx
 }:
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-ppx_sqlexpr-${version}";
-  inherit (sqlexpr) version src installPhase meta;
+buildDunePackage {
+  pname = "ppx_sqlexpr";
+  inherit (sqlexpr) version src meta;
 
-  buildInputs = [ ocaml findlib dune sqlexpr ounit ppx_core ppx_tools_versioned re lwt_ppx ];
-
-  buildPhase = "dune build -p ppx_sqlexpr";
-
+  buildInputs = [ sqlexpr ounit ppx_core ppx_tools_versioned re lwt_ppx ];
   doCheck = true;
-  checkPhase = "dune runtest -p ppx_sqlexpr";
 }

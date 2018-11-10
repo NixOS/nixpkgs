@@ -153,10 +153,10 @@
     dependencies = ["CFPropertyList" "addressable" "babosa" "colored" "commander-fastlane" "dotenv" "emoji_regex" "excon" "faraday" "faraday-cookie_jar" "faraday_middleware" "fastimage" "gh_inspector" "google-api-client" "highline" "json" "mini_magick" "multi_json" "multi_xml" "multipart-post" "plist" "public_suffix" "rubyzip" "security" "simctl" "slack-notifier" "terminal-notifier" "terminal-table" "tty-screen" "tty-spinner" "word_wrap" "xcodeproj" "xcpretty" "xcpretty-travis-formatter"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1fq1zqvwim939klkx2893cbm1v4gi3a991qrj8933l3qg1y41fx2";
+      sha256 = "1d3jv7ik3rivmhxzcapia2lzf9xjmjgi4yxkl60ly6pcbbvhl48w";
       type = "gem";
     };
-    version = "2.105.2";
+    version = "2.107.0";
   };
   gh_inspector = {
     source = {
@@ -179,10 +179,10 @@
     dependencies = ["faraday" "jwt" "memoist" "multi_json" "os" "signet"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1747p1dhpvz76i98xnjrvaj785y1232svm0nc8g9by6pz835gp2l";
+      sha256 = "1yj7j1rnyamxpn5ybgdgbiw89v9bq2r0h85s2y2jzvqanvm7iflq";
       type = "gem";
     };
-    version = "0.6.6";
+    version = "0.6.7";
   };
   highline = {
     source = {
@@ -367,10 +367,10 @@
     dependencies = ["addressable" "faraday" "jwt" "multi_json"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "14rhv3riz6ki4ix4l79b6ckq7d015673gxkxvzdcxjl1h8plpdcy";
+      sha256 = "1f5d3bz5bjc4b0r2jmqd15qf07lgsqkgd25f0h46jihrf9l5fsi4";
       type = "gem";
     };
-    version = "0.10.0";
+    version = "0.11.0";
   };
   simctl = {
     dependencies = ["CFPropertyList" "naturally"];
@@ -476,10 +476,10 @@
     dependencies = ["CFPropertyList" "atomos" "claide" "colored2" "nanaimo"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1f4shbzff3wsk1jq0v9bs10496qdx69k2jfpf11p4q2ik3jdnsv7";
+      sha256 = "1hy2ihcqfjlsrnf8qkm51m1kk154yp0l0007f269ky8j9z5lyw3p";
       type = "gem";
     };
-    version = "1.6.0";
+    version = "1.7.0";
   };
   xcpretty = {
     dependencies = ["rouge"];

@@ -56,25 +56,25 @@ self: super: {
   hledger = doJailbreak super.hledger;
   hledger-lib = doJailbreak super.hledger-lib;
   hledger-ui = doJailbreak super.hledger-ui;
-  hpack = self.hpack_0_31_0;
+  hpack = self.hpack_0_31_1;
   hslua = self.hslua_1_0_1;
   hslua-module-text = self.hslua-module-text_0_2_0;
-  hspec = self.hspec_2_5_8;
-  hspec-core = self.hspec-core_2_5_8;
-  hspec-discover = self.hspec-discover_2_5_8;
+  hspec = self.hspec_2_6_0;
+  hspec-core = self.hspec-core_2_6_0;
+  hspec-discover = self.hspec-discover_2_6_0;
   hspec-megaparsec = doJailbreak super.hspec-megaparsec;  # newer versions need megaparsec 7.x
   hspec-meta = self.hspec-meta_2_5_6;
+  HTF = dontCheck super.HTF_0_13_2_5; # https://github.com/skogsbaer/HTF/issues/74
   JuicyPixels = self.JuicyPixels_3_3_2;
   lens = self.lens_4_17;
   megaparsec = dontCheck (doJailbreak super.megaparsec);
-  neat-interpolation = dontCheck super.neat-interpolation;  # test suite depends on broken HTF
   patience = markBrokenVersion "0.1.1" super.patience;
   polyparse = self.polyparse_1_12_1;
   primitive = self.primitive_0_6_4_0;
   QuickCheck = self.QuickCheck_2_12_6_1;
   semigroupoids = self.semigroupoids_5_3_1;
   tagged = self.tagged_0_8_6;
-  vty = self.vty_5_25;
+  vty = self.vty_5_25_1;
   wizards = doJailbreak super.wizards;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras;
   yaml = self.yaml_0_11_0_0;
@@ -97,17 +97,11 @@ self: super: {
   unicode-transforms = dontCheck super.unicode-transforms;
   monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
 
-  # https://github.com/bmillwood/haskell-src-meta/pull/80
-  haskell-src-meta = doJailbreak super.haskell-src-meta;
-
-  # https://github.com/skogsbaer/HTF/issues/69
-  HTF = markBrokenVersion "0.13.2.4" super.HTF;
-
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
 
   # https://github.com/jgm/pandoc/issues/4974
-  pandoc = doJailbreak super.pandoc_2_3_1;
+  pandoc = doJailbreak super.pandoc_2_4;
 
   # Break out of "yaml >=0.10.4.0 && <0.11".
   stack = doJailbreak super.stack;

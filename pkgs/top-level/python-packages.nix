@@ -166,6 +166,10 @@ in {
 
   agate-dbf = callPackage ../development/python-modules/agate-dbf { };
 
+  alerta = callPackage ../development/python-modules/alerta { };
+
+  alerta-server = callPackage ../development/python-modules/alerta-server { };
+
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
   agate-excel = callPackage ../development/python-modules/agate-excel { };
@@ -201,6 +205,8 @@ in {
   authres = callPackage ../development/python-modules/authres { };
 
   autograd = callPackage ../development/python-modules/autograd { };
+
+  autologging = callPackage ../development/python-modules/autologging { };
 
   automat = callPackage ../development/python-modules/automat { };
 
@@ -660,7 +666,11 @@ in {
 
   slicerator = callPackage ../development/python-modules/slicerator { };
 
+  snapcast = callPackage ../development/python-modules/snapcast { };
+
   spglib = callPackage ../development/python-modules/spglib { };
+
+  sslib = callPackage ../development/python-modules/sslib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
 
@@ -1646,6 +1656,8 @@ in {
     inherit (pkgs.gitAndTools) git-annex;
   };
 
+  python-gitlab = callPackage ../development/python-modules/python-gitlab { };
+
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
   google-cloud-sdk-gce = callPackage ../tools/admin/google-cloud-sdk { with-gce=true; };
 
@@ -2457,6 +2469,8 @@ in {
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
 
   html5lib = callPackage ../development/python-modules/html5lib { };
+
+  httmock = callPackage ../development/python-modules/httmock { };
 
   http_signature = callPackage ../development/python-modules/http_signature { };
 
@@ -3612,6 +3626,8 @@ in {
   rdflib = callPackage ../development/python-modules/rdflib { };
 
   isodate = callPackage ../development/python-modules/isodate { };
+
+  owslib = callPackage ../development/python-modules/owslib { };
 
   resampy = callPackage ../development/python-modules/resampy { };
 

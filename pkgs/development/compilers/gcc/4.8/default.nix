@@ -177,13 +177,13 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
+  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
+
   outputs = [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
-
-  hardeningDisable = [ "format" ];
 
   postPatch =
     if targetPlatform != hostPlatform || stdenv.cc.libc != null then

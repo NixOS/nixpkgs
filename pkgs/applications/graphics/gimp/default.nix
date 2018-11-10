@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
+{ stdenv, fetchurl, substituteAll, pkgconfig, intltool, babl, gegl, gtk2, glib, gdk_pixbuf, isocodes
 , pango, cairo, freetype, fontconfig, lcms, libpng, libjpeg, poppler, poppler_data, libtiff
 , libmng, librsvg, libwmf, zlib, libzip, ghostscript, aalib, shared-mime-info
 , python2Packages, libexif, gettext, xorg, glib-networking, libmypaint, gexiv2
@@ -35,6 +35,15 @@ in stdenv.mkDerivation rec {
     # The check runs before glib-networking is registered
     export GIO_EXTRA_MODULES="${glib-networking}/lib/gio/modules:$GIO_EXTRA_MODULES"
   '';
+
+  patches = [
+    # to remove compiler from the runtime closure, reference was retained via
+    # gimp --version --verbose output
+    (substituteAll {
+      src = ./remove-cc-reference.patch;
+      cc_version = stdenv.cc.cc.name;
+    })
+  ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/lib/gimp/${passthru.majorVersion}/plug-ins/

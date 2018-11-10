@@ -48,9 +48,18 @@ let
 
 in rec {
 
+  /* The function `mkCoqPackages` takes as input a derivation for Coq and produces
+   * a set of libraries built with that specific Coq. More libraries are known to
+   * this function than what is compatible with that version of Coq. Therefore,
+   * libraries that are not known to be compatible are removed (filtered out) from
+   * the resulting set. For meta-programming purposes (inpecting the derivations
+   * rather than building the libraries) this filtering can be disabled by setting
+   * a `dontFilter` attribute into the Coq derivation.
+   */
   mkCoqPackages = coq:
     let self = mkCoqPackages' self coq; in
-    filterCoqPackages coq self;
+    if coq.dontFilter or false then self
+    else filterCoqPackages coq self;
 
   coq_8_5 = callPackage ../applications/science/logic/coq {
     ocamlPackages = ocamlPackages_4_05;

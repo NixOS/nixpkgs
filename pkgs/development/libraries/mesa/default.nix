@@ -25,20 +25,20 @@
 
 with stdenv.lib;
 
-if ! lists.elem stdenv.hostPlatform.system platforms.mesaPlatforms then
+if ! elem stdenv.hostPlatform.system platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
 let
   defaultGalliumDrivers =
-    optionals (builtins.elem "drm" eglPlatforms)
+    optionals (elem "drm" eglPlatforms)
     (if stdenv.isAarch32
     then ["virgl" "nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
     then ["virgl" "nouveau" "vc4" ]
     else ["virgl" "svga" "i915" "r300" "r600" "radeonsi" "nouveau"]);
   defaultDriDrivers =
-    optionals (builtins.elem "drm" eglPlatforms)
+    optionals (elem "drm" eglPlatforms)
     (if (stdenv.isAarch32 || stdenv.isAarch64)
     then ["nouveau"]
     else ["i915" "i965" "nouveau" "radeon" "r200"]);
