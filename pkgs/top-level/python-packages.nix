@@ -8149,13 +8149,13 @@ in {
 
   slixmpp = buildPythonPackage rec {
     name = "slixmpp-${version}";
-    version = "1.2.4.post1";
+    version = "1.4.0";
 
     disabled = pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
-      sha256 = "0v6430dczai8a2nmznhja2dxl6pxa8c5j20nhc5737bqjg7245jk";
+      sha256 = "155qxx4xlkkjb4hphc09nsi2mi4xi3m2akg0z7064kj3nbzkwjn2";
     };
 
     patchPhase = ''
@@ -16264,21 +16264,18 @@ EOF
 
   poezio = buildPythonApplication rec {
     name = "poezio-${version}";
-    version = "0.11";
+    version = "0.12";
 
     disabled = pythonOlder "3.4";
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
+    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 cffi ];
+    nativeBuildInputs = with pkgs; [ pkgconfig ];
 
     src = pkgs.fetchurl {
-      url = "http://dev.louiz.org/attachments/download/118/${name}.tar.gz";
-      sha256 = "07cn3717swarjv47yw8x95bvngz4nvlyyy9m7ck9fhycjgdy82r0";
+      url = "http://dev.louiz.org/attachments/download/129/${name}.tar.gz";
+      sha256 = "11n9x82xyjwbqk28lsfnvqwn8qc9flv6w2c64camh6j3148ykpvz";
     };
-
-    patches = [
-      ../development/python-modules/poezio/fix_gnupg_import.patch
-    ];
 
     checkPhase = ''
       py.test

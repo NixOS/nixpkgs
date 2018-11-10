@@ -10,11 +10,6 @@ buildPerlPackage rec {
     sha256 = "0szp5zkmx2b5lncsijf97asjnl73fyijkbgbwkl1i7p8qnqrb4mp";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/Logitech/slimserver/pull/204.patch";
-    sha256 = "0n1c8nsbvqkmwj5ivkcxh1wkqqm1lwymmfz9i47ih6ifj06hkpxk";
-  } ) ];
-
   buildInputs = [
     makeWrapper
     perl
@@ -72,6 +67,10 @@ buildPerlPackage rec {
     rm -rf CPAN
     rm -rf Bin
     touch Makefile.PL
+
+    # relax audio scan version constraints
+    substituteInPlace lib/Audio/Scan.pm --replace "0.93" "1.01"
+    substituteInPlace modules.conf --replace "Audio::Scan 0.93 0.95" "Audio::Scan 0.93"
     '';
 
   preConfigurePhase = "";

@@ -2,7 +2,7 @@
 */
 
 { # The platforms *from* which we cross compile.
-  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
+  supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
 , # Strip most of attributes when evaluating to spare memory usage
   scrubJobs ? true
 }:
@@ -10,7 +10,7 @@
 with import ./release-lib.nix { inherit supportedSystems scrubJobs; };
 
 let
-  nativePlatforms = linux;
+  nativePlatforms = all;
 
   common = {
     buildPackages.binutils = nativePlatforms;
@@ -81,11 +81,11 @@ in
     # good idea lest there be some irrelevant pass-through debug attrs that
     # cause false negatives.
     testEqualOne = path: system: let
-      f = path: attrs: builtins.toString (lib.getAttrFromPath path (allPackages attrs));
+      f = path: crossSystem: system: builtins.toString (lib.getAttrFromPath path (pkgsForCross crossSystem system));
     in assertTrue (
-        f path { inherit system; }
+        f path null system
         ==
-        f (["buildPackages"] ++ path) { inherit system crossSystem; }
+        f (["buildPackages"] ++ path) crossSystem system
       );
 
     testEqual = path: systems: forMatchingSystems systems (testEqualOne path);

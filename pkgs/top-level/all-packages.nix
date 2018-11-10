@@ -365,6 +365,8 @@ with pkgs;
 
   nukeReferences = callPackage ../build-support/nuke-references { };
 
+  referencesByPopularity = callPackage ../build-support/references-by-popularity { };
+
   removeReferencesTo = callPackage ../build-support/remove-references-to { };
 
   vmTools = callPackage ../build-support/vm { };
@@ -959,6 +961,9 @@ with pkgs;
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
 
+  breakpointHook = assert stdenv.isLinux;
+    makeSetupHook { } ../build-support/setup-hooks/breakpoint-hook.sh;
+
   bsod = callPackage ../misc/emulators/bsod { };
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
@@ -1001,10 +1006,10 @@ with pkgs;
 
   cue2pops = callPackage ../tools/cd-dvd/cue2pops { };
 
-  cabal2nix = haskell.lib.overrideCabal haskellPackages.cabal2nix (drv: {
+  cabal2nix = haskell.lib.overrideCabal (haskell.lib.addOptparseApplicativeCompletionScripts "cabal2nix" haskellPackages.cabal2nix) (drv: {
     isLibrary = false;
     enableSharedExecutables = false;
-    executableToolDepends = [ makeWrapper ];
+    executableToolDepends = (drv.executableToolDepends or []) ++ [ makeWrapper ];
     postInstall = ''
       exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
       install -D $out/bin/${drv.pname} $exe
@@ -1012,11 +1017,7 @@ with pkgs;
       makeWrapper $exe $out/bin/${drv.pname} \
         --prefix PATH ":" "${nix}/bin" \
         --prefix PATH ":" "${nix-prefetch-scripts}/bin"
-      mkdir -p $out/share/{bash-completion/completions,zsh/vendor-completions,fish/completions}
-      $exe --bash-completion-script $exe >$out/share/bash-completion/completions/${drv.pname}
-      $exe --zsh-completion-script $exe >$out/share/zsh/vendor-completions/_${drv.pname}
-      $exe --fish-completion-script $exe >$out/share/fish/completions/${drv.pname}.fish
-    '';
+    '' + (drv.postInstall or "");
   });
 
   stack2nix = with haskell.lib; overrideCabal (justStaticExecutables haskellPackages.stack2nix) (drv: {
@@ -3364,7 +3365,7 @@ with pkgs;
   jaaa = callPackage ../applications/audio/jaaa { };
 
   jackett = callPackage ../servers/jackett {
-    mono = mono5;
+    mono = mono514;
   };
 
   jade = callPackage ../tools/text/sgml/jade { };
@@ -4449,6 +4450,8 @@ with pkgs;
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
   opae = callPackage ../development/libraries/opae { };
+
+  opentracing-cpp = callPackages ../development/libraries/opentracing-cpp { };
 
   openvswitch = callPackage ../os-specific/linux/openvswitch { };
 
@@ -7172,6 +7175,11 @@ with pkgs;
     });
   inherit (rust) cargo rustc;
 
+  rust_1_29 = callPackage ../development/compilers/rust/1.29
+    (stdenv.lib.optionalAttrs (stdenv.cc.isGNU && stdenv.hostPlatform.isi686) {
+      stdenv = overrideCC stdenv gcc6; # with gcc-7: undefined reference to `__divmoddi4'
+    });
+
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
 
   cargo-vendor = callPackage ../build-support/rust/cargo-vendor { };
@@ -8862,6 +8870,8 @@ with pkgs;
 
   acl = callPackage ../development/libraries/acl { };
 
+  acsccid = callPackage ../tools/security/acsccid { };
+
   activemq = callPackage ../development/libraries/apache-activemq { };
 
   adns = callPackage ../development/libraries/adns { };
@@ -9548,11 +9558,11 @@ with pkgs;
     # libc is hackily often used from the previous stage. This `or`
     # hack fixes the hack, *sigh*.
     /**/ if name == "glibc" then targetPackages.glibcCross or glibcCross
-    else if name == "bionic" then targetPackages.bionic
-    else if name == "uclibc" then targetPackages.uclibcCross
+    else if name == "bionic" then targetPackages.bionic or bionic
+    else if name == "uclibc" then targetPackages.uclibcCross or uclibcCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
-    else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries
+    else if stdenv.targetPlatform.useiOSPrebuilt then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
     else if name == "libSystem" then targetPackages.darwin.xcode
     else throw "Unknown libc";
 
@@ -11260,6 +11270,7 @@ with pkgs;
 
   mu = callPackage ../tools/networking/mu {
     texinfo = texinfo4;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
   mueval = callPackage ../development/tools/haskell/mueval { };
@@ -12136,6 +12147,29 @@ with pkgs;
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
   sqlite-jdbc = callPackage ../servers/sql/sqlite/jdbc { };
+
+  sqlite-replication = sqlite.overrideAttrs (oldAttrs: rec {
+    name = "sqlite-${version}";
+    version = "3.24.0+replication3";
+    src = pkgs.fetchFromGitHub {
+      owner = "CanonicalLtd";
+      repo = "sqlite";
+      rev = "version-${version}";
+      sha256 = "19557b7aick1pxk0gw013cf5jy42i7539qn1ziza8dzy16a6zs8b";
+    };
+    nativeBuildInputs = [ pkgs.tcl ];
+    configureFlags = oldAttrs.configureFlags ++ [
+      "--enable-replication"
+      "--disable-amalgamation"
+      "--disable-tcl"
+    ];
+    preConfigure = ''
+      echo "D 2018-08-01T13:22:18" > manifest
+      echo -n "c94dbda1a570c1ab180e7694afd3cc7116268c06" > manifest.uuid
+    '';
+  });
+
+  dqlite = callPackage ../development/libraries/dqlite { };
 
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
     readline = null;
@@ -14005,11 +14039,6 @@ with pkgs;
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-        # https://github.com/NixOS/nixpkgs/issues/42755
-        # Remove these xen-netfront patches once they're included in
-        # upstream! Fixes https://github.com/NixOS/nixpkgs/issues/42755
-        kernelPatches.xen-netfront_fix_mismatched_rtnl_unlock
-        kernelPatches.xen-netfront_update_features_after_registering_netdev
       ];
   };
 
@@ -14133,6 +14162,8 @@ with pkgs;
     nvidia_x11           = nvidiaPackages.stable;
 
     ply = callPackage ../os-specific/linux/ply { };
+
+    r8168 = callPackage ../os-specific/linux/r8168 { };
 
     rtl8192eu = callPackage ../os-specific/linux/rtl8192eu { };
 
@@ -15724,6 +15755,8 @@ with pkgs;
   cni = callPackage ../applications/networking/cluster/cni {};
   cni-plugins = callPackage ../applications/networking/cluster/cni/plugins.nix {};
 
+  cntr = callPackage ../applications/virtualization/cntr { };
+
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
   confclerk = callPackage ../applications/misc/confclerk { };
@@ -15866,10 +15899,10 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_18_06;
+    docker_18_09;
 
-  docker = docker_18_06;
-  docker-edge = docker_18_06;
+  docker = docker_18_09;
+  docker-edge = docker_18_09;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -18687,9 +18720,9 @@ with pkgs;
       saslSupport = false;
       sasl = cyrus_sasl;
     })
-    subversion18 subversion19 subversion_1_10;
+    subversion18 subversion19 subversion_1_10 subversion_1_11;
 
-  subversion = subversion_1_10;
+  subversion = subversion_1_11;
 
   subversionClient = appendToName "client" (pkgs.subversion.override {
     bdbSupport = false;
@@ -21689,7 +21722,9 @@ with pkgs;
   nix-info = callPackage ../tools/nix/info { };
   nix-info-tested = nix-info.override { doCheck = true; };
 
-  nix-index = callPackage ../tools/package-management/nix-index { };
+  nix-index = callPackage ../tools/package-management/nix-index {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
@@ -22240,9 +22275,7 @@ with pkgs;
 
   tomb = callPackage ../os-specific/linux/tomb {};
 
-  tomboy = callPackage ../applications/misc/tomboy {
-    mono = mono46;
-  };
+  tomboy = callPackage ../applications/misc/tomboy { };
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
@@ -22284,6 +22317,8 @@ with pkgs;
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
   chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
+
+  chrome-token-signing = libsForQt5.callPackage ../tools/security/chrome-token-signing {};
 
   NSPlist = callPackage ../development/libraries/NSPlist {};
 

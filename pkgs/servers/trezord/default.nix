@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "trezord-go-${version}";
-  version = "2.0.19";
+  version = "2.0.24";
 
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
   hardeningDisable = [ "fortify" ];
@@ -13,7 +13,7 @@ buildGoPackage rec {
     owner  = "trezor";
     repo   = "trezord-go";
     rev    = "v${version}";
-    sha256 = "19am5zs2mx36w2f8b5001i1sg6v72y1nq5cagnw6rza8qxyw83qs";
+    sha256 = "1fl2d57qqrrwl995w4b2d57rvl2cxxy6afjmcp648hhb3dnmp7c3";
   };
 
   meta = with stdenv.lib; {

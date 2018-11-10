@@ -82,6 +82,9 @@ stdenv.mkDerivation rec {
   doInstallCheck = doCheck;
 
   preFixup = ''
+    for f in $out/bin/*; do
+       substituteInPlace $f --replace 'exec $replacement' 'exec ${glib.dev}/bin/$replacement'
+    done
     for f in $out/libexec/*; do
       wrapProgram $f \
         ${stdenv.lib.optionalString gnomeSupport "--prefix GIO_EXTRA_MODULES : \"${stdenv.lib.getLib gnome.dconf}/lib/gio/modules\""} \

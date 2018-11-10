@@ -296,7 +296,8 @@ in rec {
   tests.fsck = callTest tests/fsck.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   tests.gdk-pixbuf = callTest tests/gdk-pixbuf.nix {};
-  #tests.gitlab = callTest tests/gitlab.nix {};
+  tests.gitea = callSubTests tests/gitea.nix {};
+  tests.gitlab = callTest tests/gitlab.nix {};
   tests.gitolite = callTest tests/gitolite.nix {};
   tests.gjs = callTest tests/gjs.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
@@ -359,6 +360,7 @@ in rec {
   tests.netdata = callTest tests/netdata.nix { };
   tests.networking.networkd = callSubTests tests/networking.nix { networkd = true; };
   tests.networking.scripted = callSubTests tests/networking.nix { networkd = false; };
+  tests.nextcloud = callSubTests tests/nextcloud { };
   # TODO: put in networking.nix after the test becomes more complete
   tests.networkingProxy = callTest tests/networking-proxy.nix {};
   tests.nexus = callTest tests/nexus.nix { };
