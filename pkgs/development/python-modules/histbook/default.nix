@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "histbook";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "864b2943005d6be0c889504c6e1090fea2036c9557837e06ca83d06590037c49";
+    sha256 = "76d1f143f8abccf5539029fbef8133db84f377fc7752ac9e7e6d19ac9a277967";
   };
 
   propagatedBuildInputs = [ numpy pandas ];
