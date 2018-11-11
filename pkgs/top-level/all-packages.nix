@@ -9792,9 +9792,7 @@ in
 
   ffmpeg-sixel = callPackage ../development/libraries/ffmpeg-sixel { };
 
-  ffms = callPackage ../development/libraries/ffms {
-    ffmpeg = ffmpeg_2;
-  };
+  ffms = callPackage ../development/libraries/ffms { };
 
   fftw = callPackage ../development/libraries/fftw { };
   fftwSinglePrec = fftw.override { precision = "single"; };
