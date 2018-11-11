@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "cufflinks";
-  version = "0.14.5";
+  version = "0.14.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "304f9a30b753e36a9d398133543c9b48214fcf0535d971871894fc3058799c5f";
+    sha256 = "4188324361cc584214150aadaeb28ed07e9d150adb714b53c5f09d5b3fcdd28a";
   };
 
   propagatedBuildInputs = [ pandas plotly colorlover ];
