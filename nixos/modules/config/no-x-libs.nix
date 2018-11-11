@@ -27,6 +27,11 @@ with lib;
     fonts.fontconfig.enable = false;
 
     nixpkgs.overlays = singleton (const (super: {
+      cairo = super.cairo.override { glSupport = false; };
+      libdevil = super.libdevil.override { libGL = null; libX11 = null; };
+      gnupg22 = super.gnupg22.override { guiSupport = false; };
+      gnupg = self.gnupg22;
+
       dbus = super.dbus.override { x11Support = false; };
       networkmanager-fortisslvpn = super.networkmanager-fortisslvpn.override { withGnome = false; };
       networkmanager-l2tp = super.networkmanager-l2tp.override { withGnome = false; };
