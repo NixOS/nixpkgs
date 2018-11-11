@@ -1,6 +1,12 @@
-{ system ? builtins.currentSystem, enableUnfree ? false }:
-with import ../lib/testing.nix { inherit system; };
+{ system ? builtins.currentSystem,
+  config ? {},
+  pkgs ? import ../.. { inherit system config; },
+  enableUnfree ? false
+}:
+
+with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
+
 let
   esUrl = "http://localhost:9200";
 
