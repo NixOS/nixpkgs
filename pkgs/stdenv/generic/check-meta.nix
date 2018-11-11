@@ -168,9 +168,11 @@ let
     # TODO: refactor once something like Profpatsch's types-simple will land
     tests = attrsOf (mkOptionType {
       name = "test";
-      check = x: isDerivation x &&
+      check = x: x == {} || ( # Accept {} for tests that are unsupported
+        isDerivation x &&
         x ? meta.timeout &&
-        x ? meta.needsVMSupport;
+        x ? meta.needsVMSupport
+      );
       merge = lib.options.mergeOneOption;
     });
     needsVMSupport = bool;
