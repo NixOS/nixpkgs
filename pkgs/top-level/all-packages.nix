@@ -1882,9 +1882,7 @@ in
 
   certmgr = callPackage ../tools/security/certmgr { };
 
-  cfdg = callPackage ../tools/graphics/cfdg {
-    ffmpeg = ffmpeg_2;
-  };
+  cfdg = callPackage ../tools/graphics/cfdg { };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
