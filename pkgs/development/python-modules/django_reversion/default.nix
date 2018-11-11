@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "django-reversion";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "98cb09c2227b14a0f88faaf4f747a716a5b1f183768959fe6035cbc12c3adbfe";
+    sha256 = "9b8a245917e1bae131d3210c9ca7efbc066e60f32efa436e391c9803c3f4b61b";
   };
 
   propagatedBuildInputs = [ django ];
