@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "Flask-Cors";
-  version = "3.0.6";
+  version = "3.0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ecc016c5b32fa5da813ec8d272941cfddf5f6bba9060c405a70285415cbf24c9";
+    sha256 = "7e90bf225fdf163d11b84b59fb17594d0580a16b97ab4e1146b1fb2737c1cfec";
   };
 
   buildInputs = [ nose ];
