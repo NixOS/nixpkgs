@@ -12360,6 +12360,8 @@ with pkgs;
 
   spandsp = callPackage ../development/libraries/spandsp {};
 
+  spaceship-prompt = callPackage ../shells/zsh/spaceship-prompt {};
+
   spatialite_tools = callPackage ../development/libraries/spatialite-tools { };
 
   spdk = callPackage ../development/libraries/spdk { };
