@@ -14577,9 +14577,9 @@ with pkgs;
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
   linuxPackages_testing = linuxPackagesFor pkgs.linux_testing;
 
-  linuxPackages_custom = { version, src, configfile, allowImportFromDerivation ? true }:
+  linuxPackages_custom = { version, src, configfile, allowImportFromDerivation ? true, kernelPatches ? [] }:
     recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit version src configfile stdenv allowImportFromDerivation;
+      inherit version src configfile stdenv allowImportFromDerivation kernelPatches;
     }));
 
   # This serves as a test for linuxPackages_custom
