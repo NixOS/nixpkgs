@@ -11076,6 +11076,8 @@ EOF
     inherit python;
   })).python;
 
+  scour = callPackage ../development/python-modules/scour { };
+
 });
 
 in fix' (extends overrides packages)

@@ -1585,7 +1585,7 @@ with pkgs;
 
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
-  scour = callPackage ../tools/graphics/scour { };
+  scour = with python3Packages; toPythonApplication scour;
 
   s2png = callPackage ../tools/graphics/s2png { };
 
