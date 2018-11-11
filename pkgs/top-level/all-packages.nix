@@ -73,23 +73,11 @@ with pkgs;
 
   ### Push NixOS tests inside the fixed point
 
-  nixosTests =
-    let
-      # TODO(Ericson2314,ekleog): Check this will work correctly with cross-
-      system = builtins.currentSystem;
-      rawTests = (import ../../nixos/release.nix {
-        nixpkgs = pkgs;
-      }).tests;
-      testNames = builtins.attrNames rawTests;
-      filteredList = builtins.filter
-        (test: rawTests.${test} ? ${system})
-        testNames;
-      finalList = map
-        (test: { name = test; value = rawTests.${test}.${system}; })
-        filteredList;
-      finalTests = builtins.listToAttrs finalList;
-    in
-    finalTests;
+  nixosTests = import ../../nixos/tests/all-tests.nix {
+    inherit pkgs;
+    system = stdenv.hostPlatform.system;
+    callTest = t: t.test;
+  };
 
   ### BUILD SUPPORT
 
