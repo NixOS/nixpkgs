@@ -20362,7 +20362,7 @@ with pkgs;
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
   gargoyle = callPackage ../games/gargoyle {
-    libtool = darwin.cctools;
+    inherit (darwin) cctools cf-private;
   };
 
   gav = callPackage ../games/gav { };
